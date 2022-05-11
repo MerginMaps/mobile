@@ -145,50 +145,45 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="515"/>
+        <location filename="../attributes/attributecontroller.cpp" line="518"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>%1:%2의 기본값 표현식에 파서 오류가 있습니다: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="525"/>
+        <location filename="../attributes/attributecontroller.cpp" line="528"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>%1:%2의 기본값 표현식에 평가 오류가 있습니다: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="536"/>
+        <location filename="../attributes/attributecontroller.cpp" line="539"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>&quot;%1&quot; %4 값을 %2(%3) 필드에 대해 호환되는 값으로 변환할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="788"/>
+        <location filename="../attributes/attributecontroller.cpp" line="792"/>
         <source>Cannot delete feature</source>
         <translation>피처를 삭제할 수 없습니다</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="480"/>
-        <location filename="../attributes/attributecontroller.cpp" line="809"/>
+        <location filename="../attributes/attributecontroller.cpp" line="816"/>
         <source>Feature could not be added</source>
         <translation>피처를 추가할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="840"/>
+        <location filename="../attributes/attributecontroller.cpp" line="854"/>
         <source>Cannot update feature</source>
         <translation>피처를 업데이트할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="854"/>
+        <location filename="../attributes/attributecontroller.cpp" line="868"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>커밋 후 %1 피처를 가져올 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="871"/>
+        <location filename="../attributes/attributecontroller.cpp" line="890"/>
         <source>Cannot start editing</source>
         <translation>편집을 시작할 수 없습니다</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="888"/>
-        <source>Could not save changes. Rolling back.</source>
-        <translation>변경사항을 저장할 수 없습니다. 롤백.</translation>
     </message>
 </context>
 <context>
@@ -335,22 +330,22 @@
 <context>
     <name>ExternalResourceBundle</name>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="191"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="192"/>
         <source>Open Image</source>
         <translation>이미지 열기</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="193"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="194"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>이미지 파일 (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="205"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="206"/>
         <source>Remove photo reference</source>
         <translation>사진 참조 제거</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="206"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="207"/>
         <source>Also permanently delete photo from device?</source>
         <translation>또한 장치에서 사진을 영구 삭제하시겠습니까?</translation>
     </message>
@@ -358,12 +353,12 @@
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="150"/>
+        <location filename="../qml/form/FeatureForm.qml" line="155"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>양식을 저장할 수 없습니다. 유효성 검사 오류가 있습니다</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="151"/>
+        <location filename="../qml/form/FeatureForm.qml" line="156"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>피처를 저장할 수 없습니다. 필요한 모든 필드를 확인하세요</translation>
     </message>
@@ -386,24 +381,34 @@
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="196"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Delete feature</source>
         <translation>피처 삭제</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>이 피처를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="217"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Unsaved changes</source>
         <translation>변경사항 저장되지 않음</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
         <source>Do you want to save changes?</source>
         <translation>변경사항을 저장하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureFormPage.qml" line="242"/>
+        <source>Saving failed</source>
+        <translation>저장 실패</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureFormPage.qml" line="243"/>
+        <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
+        <translation>변경 사항을 저장하지 못했습니다. 이 문제는 정상적으로 발생하지 않아야 합니다. 앱을 재시작하고 다시 시도하세요 — 그래도 문제가 해결되지 않으면 지원팀에 문의하세요.</translation>
     </message>
 </context>
 <context>
@@ -610,109 +615,109 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="162"/>
+        <location filename="../inpututils.cpp" line="163"/>
         <source>just now</source>
         <translation>지금 당장</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
+        <location filename="../inpututils.cpp" line="168"/>
         <source>%1 minutes ago</source>
         <translation>%1 분 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
+        <location filename="../inpututils.cpp" line="168"/>
         <source>%1 minute ago</source>
         <translation>%1 분 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="173"/>
         <source>%1 hours ago</source>
         <translation>%1 시간 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="173"/>
         <source>%1 hour ago</source>
         <translation>%1 시간 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="176"/>
-        <location filename="../inpututils.cpp" line="181"/>
+        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="182"/>
         <source>%1 days ago</source>
         <translation>%1 일 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="176"/>
-        <location filename="../inpututils.cpp" line="181"/>
+        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="182"/>
         <source>%1 day ago</source>
         <translation>%1 일 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="186"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 weeks ago</source>
         <translation>%1 주 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="186"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 week ago</source>
         <translation>%1 주 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 months ago</source>
         <translation>%1 개월 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 month ago</source>
         <translation>%1 개월 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="197"/>
         <source>%1 years ago</source>
         <translation>%1 년 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="197"/>
         <source>%1 year ago</source>
         <translation>%1 년 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1212"/>
+        <location filename="../inpututils.cpp" line="1213"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>화면 해상도: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1213"/>
+        <location filename="../inpututils.cpp" line="1214"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>화면 DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1214"/>
+        <location filename="../inpututils.cpp" line="1215"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>화면 크기: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1215"/>
+        <location filename="../inpututils.cpp" line="1216"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>기록상 장치 화소 비율: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1216"/>
+        <location filename="../inpututils.cpp" line="1217"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>계산상 장치 화소 비율 :%1 
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1217"/>
+        <location filename="../inpututils.cpp" line="1218"/>
         <source>used dp scale: %1</source>
         <translation>사용된 dp 배율: %1</translation>
     </message>
@@ -887,7 +892,7 @@ Won&apos;t be added to the project.</source>
     <name>MapWrapper</name>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="85"/>
-        <location filename="../qml/map/MapWrapper.qml" line="977"/>
+        <location filename="../qml/map/MapWrapper.qml" line="979"/>
         <source>GPS currently unavailable.</source>
         <translation>현재 GPS를 사용할 수 없습니다.</translation>
     </message>
@@ -922,22 +927,22 @@ Won&apos;t be added to the project.</source>
         <translation>낮은 GPS 위치 정확도 (%1 m)&lt;br&gt;&lt;br&gt;하늘이 잘 보이는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="744"/>
+        <location filename="../qml/map/MapWrapper.qml" line="746"/>
         <source>Details</source>
         <translation>세부 사항</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="827"/>
+        <location filename="../qml/map/MapWrapper.qml" line="829"/>
         <source>Connecting to %1</source>
         <translation>%1 연결 중</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="841"/>
+        <location filename="../qml/map/MapWrapper.qml" line="843"/>
         <source>Connected, no position</source>
         <translation>연결됨, 위치 없음</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="845"/>
+        <location filename="../qml/map/MapWrapper.qml" line="847"/>
         <source>Unknown accuracy</source>
         <translation>알 수 없는 정확도</translation>
     </message>
@@ -1457,7 +1462,7 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>QgsQuickMapCanvasMap</name>
     <message>
-        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="172"/>
+        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="175"/>
         <source>Rendering</source>
         <translation>렌더링</translation>
     </message>
