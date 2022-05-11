@@ -2491,7 +2491,7 @@ void TestMerginApi::testAccountDelete()
   mApi->deleteAccount();
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QList<QVariant> arguments = spyDelete.takeFirst();
-  QVERIFY(arguments.at(0).toBool() == true);
+  QVERIFY( arguments.at( 0 ).toBool() == true );
 }
 
 void TestMerginApi::testExcludeFromSync()
