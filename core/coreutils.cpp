@@ -214,7 +214,12 @@ QString CoreUtils::generateConflictedCopyFileName( const QString &file, const QS
 
   QFileInfo f( file );
 
-  return QString( "%1/%2 (conflicted copy, %3 v%4).%5" ).arg( f.path(), f.baseName(), username, QString::number( version ), f.completeSuffix() );
+  QString suffix = f.completeSuffix();
+  if ( hasProjectFileExtension( file ) )
+  {
+    suffix += "~";
+  }
+  return QString( "%1/%2 (conflicted copy, %3 v%4).%5" ).arg( f.path(), f.baseName(), username, QString::number( version ), suffix );
 }
 
 QString CoreUtils::generateEditConflictFileName( const QString &file, const QString &username, int version )
@@ -224,4 +229,9 @@ QString CoreUtils::generateEditConflictFileName( const QString &file, const QStr
 
   QFileInfo f( file );
   return QString( "%1/%2 (edit conflict, %3 v%4).json" ).arg( f.path(), f.baseName(), username, QString::number( version ) );
+}
+
+bool CoreUtils::hasProjectFileExtension( const QString filePath )
+{
+  return filePath.contains( ".qgs", Qt::CaseInsensitive ) || filePath.contains( ".qgz", Qt::CaseInsensitive );
 }

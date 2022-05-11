@@ -79,6 +79,9 @@ class CoreUtils
      */
     static void log( const QString &topic, const QString &info );
 
+    //! Checks whether file path has a QGIS project suffix (qgs or qgz)
+    static bool hasProjectFileExtension( const QString filePath );
+
   private:
     static QString sLogFile;
     static void appendLog( const QByteArray &data, const QString &path );
