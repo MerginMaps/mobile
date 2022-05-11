@@ -10,6 +10,8 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtGraphicalEffects 1.14
+import QtQuick.Layouts 1.12
+import QtQuick.Dialogs 1.3 as Dialogs
 import lc 1.0
 import "."  // import InputStyle singleton
 import "./components"
@@ -19,6 +21,7 @@ Page {
   signal managePlansClicked
   signal signOutClicked
   signal restorePurchasesClicked
+  signal accountDeleted
   property color bgColor: "white"
   property real fieldHeight: InputStyle.rowHeight
 
@@ -303,6 +306,8 @@ Page {
             color: root.bgColor
           }
 
+          onClicked: accountDeleteDialog.open()
+
           contentItem: Text {
             text: deleteAccountButton.text
             font: deleteAccountButton.font
@@ -313,6 +318,68 @@ Page {
           }
         }
 
+      }
+    }
+
+    Dialog {
+      id: accountDeleteDialog
+      visible: false
+      title: qsTr( "Delete account?" )
+
+      ColumnLayout {
+        id: column
+        width: parent.width
+        Label {
+          id: label
+          text: qsTr("This will remove all local projects from the device and your Mergin Maps account." +
+                     "If you have an Apple subscription you should cancel it manually.\n\n" +
+                     "To continue enter your username in the field below and click Yes.")
+          Layout.fillWidth: true
+          wrapMode: Text.WordWrap
+        }
+        TextField {
+          id: usernameField
+          placeholderText: qsTr("Enter username")
+          Layout.fillWidth: true
+          onTextEdited: {
+            buttons.standardButton(Dialog.Yes).enabled = (text == username)
+          }
+        }
+      }
+
+      footer: DialogButtonBox {
+        id: buttons
+        standardButtons: Dialog.Yes | Dialog.No
+      }
+
+      onAboutToShow: {
+        buttons.standardButton(Dialog.Yes).enabled = false;
+      }
+
+      onAboutToHide: {
+        usernameField.clear()
+      }
+
+      onAccepted: {
+         close()
+      }
+      onRejected: {
+        close()
+      }
+    }
+
+    Dialogs.MessageDialog {
+      id: accountDeletionFailedDialog
+
+      property string messageText
+
+      visible: false
+      title: qsTr( "Failed to remove account" )
+      text: messageText
+      icon: StandardIcon.Warning
+      standardButtons: StandardButton.Close
+      onRejected: {
+        close()
       }
     }
   }
