@@ -2478,7 +2478,6 @@ void TestMerginApi::testAccountDelete()
   QString username = "test_" + quiteRandom;
   QString email = username + "@nonexistant.email.com";
 
-  qDebug() << "username:" << username;
   // do not want to be authorized
   mApi->clearAuth();
 

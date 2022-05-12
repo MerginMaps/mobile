@@ -29,7 +29,7 @@ Item {
 
   function openPanel() {
     root.visible = true
-    stackView.visible = true  
+    stackView.visible = true
     getServiceInfo() // ensure attention banner status is refreshed
   }
 
@@ -548,7 +548,6 @@ Item {
         __purchasing.restore()
       }
       onAccountDeleted: {
-        console.log("DELETE ACCOUNT - OK!")
         stackView.popOnePageOrClose()
         root.resetView()
       }
