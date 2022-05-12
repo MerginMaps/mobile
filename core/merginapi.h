@@ -491,7 +491,7 @@ class MerginApi: public QObject
     void projectAlreadyOnLatestVersion( const QString &projectFullName );
     void missingAuthorizationError( const QString &projectFullName );
     void accountDeleted( bool result );
-    void userIsAnOrgOwner();
+    void userIsAnOrgOwnerError();
 
   private slots:
     void listProjectsReplyFinished( QString requestId );

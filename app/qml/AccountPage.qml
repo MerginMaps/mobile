@@ -388,7 +388,7 @@ Page {
     Connections {
       target: __merginApi
 
-      onUserIsAnOrgOwner: {
+      onUserIsAnOrgOwnerError: {
         console.log("Can not close account because user is the only owner of organisation.")
         accountDeletionFailedDialog.messageText = qsTr("Can not close account because user is the only owner of organisation.\n\n" +
                                                        "Please go to the Mergin Maps <a href='%1'>dashboard</a> to remove it manually.".arg(__merginApi.apiRoot()))

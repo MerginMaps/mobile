@@ -3042,7 +3042,7 @@ void MerginApi::deleteAccountFinished()
     CoreUtils::log( "delete account " + mUserAuth->username(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
     if ( statusCode == 422 )
     {
-      emit userIsAnOrgOwner();
+      emit userIsAnOrgOwnerError();
     }
     else
     {
