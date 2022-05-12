@@ -145,50 +145,45 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="515"/>
+        <location filename="../attributes/attributecontroller.cpp" line="518"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>לערך ביטוי ברירת המחדל  עבור %1:%2 קיימת שגיאת ניתוח: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="525"/>
+        <location filename="../attributes/attributecontroller.cpp" line="528"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>לערך ביטוי ברירת המחדל עבור %1:%2 קיימת שגיאת הערכה: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="536"/>
+        <location filename="../attributes/attributecontroller.cpp" line="539"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>לא ניתן להמיר את הערך &quot;%1&quot; %4 לערך מתאים עבור שדה %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="788"/>
+        <location filename="../attributes/attributecontroller.cpp" line="792"/>
         <source>Cannot delete feature</source>
         <translation>לא ניתן למחוק את הרשומה</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="480"/>
-        <location filename="../attributes/attributecontroller.cpp" line="809"/>
+        <location filename="../attributes/attributecontroller.cpp" line="816"/>
         <source>Feature could not be added</source>
         <translation>לא ניתן להוסיף את הרשומה</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="840"/>
+        <location filename="../attributes/attributecontroller.cpp" line="854"/>
         <source>Cannot update feature</source>
         <translation>לא ניתן לעדכן את הרשומה</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="854"/>
+        <location filename="../attributes/attributecontroller.cpp" line="868"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>רשומה %1 לא ניתנת לגישה לאחר ביצוע הכתיבה</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="871"/>
+        <location filename="../attributes/attributecontroller.cpp" line="890"/>
         <source>Cannot start editing</source>
         <translation>לא ניתן להתחיל בעריכה</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="888"/>
-        <source>Could not save changes. Rolling back.</source>
-        <translation>לא ניתן לשמור את השינויים. מחזיר את השכבה למצבה הקודם.</translation>
     </message>
 </context>
 <context>
@@ -335,22 +330,22 @@
 <context>
     <name>ExternalResourceBundle</name>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="191"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="192"/>
         <source>Open Image</source>
         <translation>פתיחת תמונה</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="193"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="194"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>קבצי תמונה (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="205"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="206"/>
         <source>Remove photo reference</source>
         <translation>הסר קישור לתמונה</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="206"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="207"/>
         <source>Also permanently delete photo from device?</source>
         <translation>האם גם למחוק את התמונה לצמיתות מהמכשיר?</translation>
     </message>
@@ -358,12 +353,12 @@
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="150"/>
+        <location filename="../qml/form/FeatureForm.qml" line="155"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>לא ניתן לשמור את הטופס, ישנן שגיאות אימות</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="151"/>
+        <location filename="../qml/form/FeatureForm.qml" line="156"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>לא ניתן לשמור את הישות, נא לבדוק את כל השדות הנדרשים</translation>
     </message>
@@ -386,24 +381,34 @@
         <translation>שמירה</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="196"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Delete feature</source>
         <translation>מחיקת רשומה</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>האם את\ה בטוח\ה שברצונך למחוק את הישות?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="217"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Unsaved changes</source>
         <translation>שינויים שלא נשמרו</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
         <source>Do you want to save changes?</source>
         <translation>האם לשמור את השינויים?</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureFormPage.qml" line="242"/>
+        <source>Saving failed</source>
+        <translation>השמירה נכשלה</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureFormPage.qml" line="243"/>
+        <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
+        <translation>שמירת השינויים נכשלה. זה לא אמור לקרות בדרך כלל. נא לסגור ולפתוח את האפליקציה מחדש ולנסות שוב — אם זה לא יעזור, נא לפנות לתמיכה.</translation>
     </message>
 </context>
 <context>
@@ -610,109 +615,109 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="162"/>
+        <location filename="../inpututils.cpp" line="163"/>
         <source>just now</source>
         <translation>הרגע</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
+        <location filename="../inpututils.cpp" line="168"/>
         <source>%1 minutes ago</source>
         <translation>לפני %1 דקות</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
+        <location filename="../inpututils.cpp" line="168"/>
         <source>%1 minute ago</source>
         <translation>לפני דקה %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="173"/>
         <source>%1 hours ago</source>
         <translation>לפני %1 שעות</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="173"/>
         <source>%1 hour ago</source>
         <translation>לפני שעה %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="176"/>
-        <location filename="../inpututils.cpp" line="181"/>
+        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="182"/>
         <source>%1 days ago</source>
         <translation>לפני %1 ימים</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="176"/>
-        <location filename="../inpututils.cpp" line="181"/>
+        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="182"/>
         <source>%1 day ago</source>
         <translation>לפני יום %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="186"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 weeks ago</source>
         <translation>לפני %1 שבועות</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="186"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 week ago</source>
         <translation>לפני שבוע %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 months ago</source>
         <translation>לפני %1 חודשים</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 month ago</source>
         <translation>לפני חודש %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="197"/>
         <source>%1 years ago</source>
         <translation>לפני %1 שנים</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="197"/>
         <source>%1 year ago</source>
         <translation>לפני שנה %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1212"/>
+        <location filename="../inpututils.cpp" line="1213"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>רזולוצית מסך: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1213"/>
+        <location filename="../inpututils.cpp" line="1214"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI מסך: %1x%2 
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1214"/>
+        <location filename="../inpututils.cpp" line="1215"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>גודל מסך: %1x%2 מ&quot;מ
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1215"/>
+        <location filename="../inpututils.cpp" line="1216"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>דווח יחס הפיקסלים של המכשיר: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1216"/>
+        <location filename="../inpututils.cpp" line="1217"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>חושב יחס הפיקסלים של המכשיר: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1217"/>
+        <location filename="../inpututils.cpp" line="1218"/>
         <source>used dp scale: %1</source>
         <translation>קנה מידה dp בשימוש: %1</translation>
     </message>
@@ -887,7 +892,7 @@ Won&apos;t be added to the project.</source>
     <name>MapWrapper</name>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="85"/>
-        <location filename="../qml/map/MapWrapper.qml" line="977"/>
+        <location filename="../qml/map/MapWrapper.qml" line="979"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS אינו זמין כרגע.</translation>
     </message>
@@ -922,22 +927,22 @@ Won&apos;t be added to the project.</source>
         <translation>דיוק מיקום GPS נמוך (%1מ&apos;)&lt;br&gt;&lt;br&gt;נא ודאו שיש לכם תצפית טובה של השמיים.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="744"/>
+        <location filename="../qml/map/MapWrapper.qml" line="746"/>
         <source>Details</source>
         <translation>פרטים</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="827"/>
+        <location filename="../qml/map/MapWrapper.qml" line="829"/>
         <source>Connecting to %1</source>
         <translation>מתחבר ל%1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="841"/>
+        <location filename="../qml/map/MapWrapper.qml" line="843"/>
         <source>Connected, no position</source>
         <translation>מחובר, אין מיקום</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="845"/>
+        <location filename="../qml/map/MapWrapper.qml" line="847"/>
         <source>Unknown accuracy</source>
         <translation>דיוק לא ידוע</translation>
     </message>
@@ -1457,7 +1462,7 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>QgsQuickMapCanvasMap</name>
     <message>
-        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="172"/>
+        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="175"/>
         <source>Rendering</source>
         <translation>בביצוע</translation>
     </message>
