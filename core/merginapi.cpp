@@ -3002,22 +3002,11 @@ QSet<QString> MerginApi::listFiles( const QString &path )
 
 void MerginApi::deleteAccount()
 {
-  qDebug() << "CALLED deleteAccount";
-
-  // delete account itself
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
 
-  // first remove all local projects from the device
-  LocalProjectsList projects = mLocalProjects.projects();
-  for ( const LocalProject &info : projects )
-  {
-    mLocalProjects.removeLocalProject( info.id() );
-  }
-
-  // then remove account itself
   QNetworkRequest request = getDefaultRequest();
   QUrl url( mApiRoot + QStringLiteral( "/v1/user" ) );
   request.setUrl( url );
@@ -3034,6 +3023,16 @@ void MerginApi::deleteAccountFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "delete account " + mUserAuth->username(), QStringLiteral( "Success" ) );
+
+    // remove all local projects from the device
+    LocalProjectsList projects = mLocalProjects.projects();
+    for ( const LocalProject &info : projects )
+    {
+      mLocalProjects.removeLocalProject( info.id() );
+    }
+
+    clearAuth();
+
     emit accountDeleted( true );
   }
   else
@@ -3053,7 +3052,6 @@ void MerginApi::deleteAccountFinished()
     emit accountDeleted( false );
   }
 
-  clearAuth();
   r->deleteLater();
 }
 
