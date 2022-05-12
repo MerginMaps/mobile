@@ -324,15 +324,19 @@ Page {
     Dialog {
       id: accountDeleteDialog
       visible: false
+      modal: true
+      spacing: InputStyle.panelSpacing
+      anchors.centerIn: parent
+      leftMargin: InputStyle.panelMargin
+      rightMargin: InputStyle.panelMargin
       title: qsTr( "Delete account?" )
 
       contentItem: ColumnLayout {
         id: column
-        width: parent.width
         Label {
           id: label
           text: qsTr("This action will delete your Mergin Maps account with all your projects, " +
-                     "both on the device and on the server. This action cannot be undone." +
+                     "both on the device and on the server. This action cannot be undone. " +
                      "If you have an Apple subscription you need to cancel it manually.\n\n" +
                      "In order to delete your account, enter your username in the field below and click Yes.")
           Layout.fillWidth: true
