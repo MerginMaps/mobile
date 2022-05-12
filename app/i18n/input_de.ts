@@ -145,50 +145,45 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="515"/>
+        <location filename="../attributes/attributecontroller.cpp" line="518"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Standardwertausdruck für %1:%2 hat Parserfehler: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="525"/>
+        <location filename="../attributes/attributecontroller.cpp" line="528"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Standardwertausdruck für %1:%2 hat Auswertungsfehler: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="536"/>
+        <location filename="../attributes/attributecontroller.cpp" line="539"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Wert &quot;%1&quot; %4 konnte nicht in einen kompatiblen Wert für Feld %2(%3) konvertiert werden.</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="788"/>
+        <location filename="../attributes/attributecontroller.cpp" line="792"/>
         <source>Cannot delete feature</source>
         <translation>Kann Feature nicht löschen</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="480"/>
-        <location filename="../attributes/attributecontroller.cpp" line="809"/>
+        <location filename="../attributes/attributecontroller.cpp" line="816"/>
         <source>Feature could not be added</source>
         <translation>Feature konnte nicht hinzugefügt werden</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="840"/>
+        <location filename="../attributes/attributecontroller.cpp" line="854"/>
         <source>Cannot update feature</source>
         <translation>Kann Feature nicht aktualisieren</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="854"/>
+        <location filename="../attributes/attributecontroller.cpp" line="868"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>Feature %1 konnte nach dem Commit nicht geholt werden</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="871"/>
+        <location filename="../attributes/attributecontroller.cpp" line="890"/>
         <source>Cannot start editing</source>
         <translation>Kann Bearbeiten nicht starten</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="888"/>
-        <source>Could not save changes. Rolling back.</source>
-        <translation>Konnte Änderungen nicht speichern. Mache Rückgängig.</translation>
     </message>
 </context>
 <context>
@@ -335,22 +330,22 @@
 <context>
     <name>ExternalResourceBundle</name>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="191"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="192"/>
         <source>Open Image</source>
         <translation>Bild öffnen</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="193"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="194"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Bilddateien (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="205"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="206"/>
         <source>Remove photo reference</source>
         <translation>Quellenangabe des Fotos entfernen</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="206"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="207"/>
         <source>Also permanently delete photo from device?</source>
         <translation>Foto auch vom Gerät dauerhaft löschen?</translation>
     </message>
@@ -358,12 +353,12 @@
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="150"/>
+        <location filename="../qml/form/FeatureForm.qml" line="155"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>Formular kann nicht gespeichert werden, es gibt Validierungsfehler</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="151"/>
+        <location filename="../qml/form/FeatureForm.qml" line="156"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Feature konnte nicht gespeichert werden, bitte überprüfen Sie alle Pflichtfelder</translation>
     </message>
@@ -386,24 +381,34 @@
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="196"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Delete feature</source>
         <translation>Lösche Feature</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="198"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Möchten Sie dieses Feature wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="217"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Unsaved changes</source>
         <translation>Nicht gespeicherte Änderungen</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="219"/>
         <source>Do you want to save changes?</source>
         <translation>Änderungen speichern?</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureFormPage.qml" line="242"/>
+        <source>Saving failed</source>
+        <translation>Speichern fehlgeschlagen</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureFormPage.qml" line="243"/>
+        <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
+        <translation>Das Speichern der Änderungen schlug fehl. Dies sollte nicht normalerweise nicht passieren. Bitte die App neustarten und nochmal probieren - wenn dies auch nicht hilft, kontaktieren Sie den Support.</translation>
     </message>
 </context>
 <context>
@@ -610,109 +615,109 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="162"/>
+        <location filename="../inpututils.cpp" line="163"/>
         <source>just now</source>
         <translation>gerade jetzt</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
+        <location filename="../inpututils.cpp" line="168"/>
         <source>%1 minutes ago</source>
         <translation>vor %1 Minuten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="167"/>
+        <location filename="../inpututils.cpp" line="168"/>
         <source>%1 minute ago</source>
         <translation>vor %1 Minute</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="173"/>
         <source>%1 hours ago</source>
         <translation>vor %1 Stunden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="172"/>
+        <location filename="../inpututils.cpp" line="173"/>
         <source>%1 hour ago</source>
         <translation>vor %1 Stunde</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="176"/>
-        <location filename="../inpututils.cpp" line="181"/>
+        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="182"/>
         <source>%1 days ago</source>
         <translation>vor %1 Tagen</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="176"/>
-        <location filename="../inpututils.cpp" line="181"/>
+        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="182"/>
         <source>%1 day ago</source>
         <translation>vor %1 Tag</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="186"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 weeks ago</source>
         <translation>vor %1 Wochen</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="186"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 week ago</source>
         <translation>vor %1 Woche</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 months ago</source>
         <translation>vor %1 Monaten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 month ago</source>
         <translation>vor %1 Monat</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="197"/>
         <source>%1 years ago</source>
         <translation>vor %1 Jahren</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="197"/>
         <source>%1 year ago</source>
         <translation>vor %1 Jahr</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1212"/>
+        <location filename="../inpututils.cpp" line="1213"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>Bildschirmauflösung: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1213"/>
+        <location filename="../inpututils.cpp" line="1214"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>Bildschirm DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1214"/>
+        <location filename="../inpututils.cpp" line="1215"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>Bildschirmgröße: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1215"/>
+        <location filename="../inpututils.cpp" line="1216"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>Gemeldetes Gerätepixelverhältnis: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1216"/>
+        <location filename="../inpututils.cpp" line="1217"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>Berechnetes Gerätepixelverhältnis: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1217"/>
+        <location filename="../inpututils.cpp" line="1218"/>
         <source>used dp scale: %1</source>
         <translation>verwendete DP-Skala: %1</translation>
     </message>
@@ -781,8 +786,8 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <name>LoginForm</name>
     <message>
         <location filename="../qml/LoginForm.qml" line="70"/>
-        <source>%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.</source>
-        <translation>%1Mergin%2 ermöglicht eine Cloud-basierte Synchronisation zwischen Handy und PC. Es kann auch verwendet werden, um Deine Projekte mit anderen zu teilen und gemeinsam daran zu arbeiten.</translation>
+        <source>Sync projects with your desktop computer and work collaboratively with others by logging in to your %1Mergin Maps%2 account.</source>
+        <translation>Synchronisiere Projekte mit deinem Computer und arbeite gemeinsam mit anderen indem du dich in dein %1Mergin Maps%2 Konto einloggst.</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="113"/>
@@ -887,7 +892,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <name>MapWrapper</name>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="85"/>
-        <location filename="../qml/map/MapWrapper.qml" line="977"/>
+        <location filename="../qml/map/MapWrapper.qml" line="979"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS ist derzeit nicht verfügbar.</translation>
     </message>
@@ -922,22 +927,22 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <translation>Niedrige GPS-Positionsgenauigkeit (%1 m).&lt;br&gt;&lt;br&gt;Bitte stellen Sie sicher, dass Sie eine gute Sicht zum Himmel haben.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="744"/>
+        <location filename="../qml/map/MapWrapper.qml" line="746"/>
         <source>Details</source>
         <translation>Details</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="827"/>
+        <location filename="../qml/map/MapWrapper.qml" line="829"/>
         <source>Connecting to %1</source>
         <translation>Verbindet mit %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="841"/>
+        <location filename="../qml/map/MapWrapper.qml" line="843"/>
         <source>Connected, no position</source>
         <translation>Verbunden, keine Position</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="845"/>
+        <location filename="../qml/map/MapWrapper.qml" line="847"/>
         <source>Unknown accuracy</source>
         <translation>Unbekannte Genauigkeit</translation>
     </message>
@@ -1457,7 +1462,7 @@ Klicken Sie auf &quot;Ja&quot;, um es hochzuladen.</translation>
 <context>
     <name>QgsQuickMapCanvasMap</name>
     <message>
-        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="172"/>
+        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="175"/>
         <source>Rendering</source>
         <translation>Darstellung</translation>
     </message>
@@ -1469,6 +1474,14 @@ Klicken Sie auf &quot;Ja&quot;, um es hochzuladen.</translation>
         <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="273"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
         <translation>Drehung des Kartenausschnitts wird nicht unterstützt. Reset von %1 zu 0.</translation>
+    </message>
+</context>
+<context>
+    <name>RebrandingBanner</name>
+    <message>
+        <location filename="../qml/misc/RebrandingBanner.qml" line="52"/>
+        <source>%1Input%2 is becoming part of</source>
+        <translation>%1Input%2 wird Teil von</translation>
     </message>
 </context>
 <context>
@@ -1693,19 +1706,19 @@ Klicken Sie auf &quot;Ja&quot;, um es hochzuladen.</translation>
         <translation>Mitglied werden</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="96"/>
-        <location filename="../qml/SubscribePage.qml" line="138"/>
+        <location filename="../qml/SubscribePage.qml" line="97"/>
+        <location filename="../qml/SubscribePage.qml" line="139"/>
         <source>Individual</source>
         <translation>Individuell</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="113"/>
-        <location filename="../qml/SubscribePage.qml" line="147"/>
+        <location filename="../qml/SubscribePage.qml" line="114"/>
+        <location filename="../qml/SubscribePage.qml" line="148"/>
         <source>Professional</source>
         <translation>Professionell</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="163"/>
+        <location filename="../qml/SubscribePage.qml" line="164"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
         <translation>Dein Mergin Mitgliedschaftsplan wird automatisch verlängert. Du kannst ihn jederzeit kündigen oder ändern. %1Erfahre mehr%2</translation>
     </message>
