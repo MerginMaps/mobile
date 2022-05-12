@@ -326,14 +326,15 @@ Page {
       visible: false
       title: qsTr( "Delete account?" )
 
-      ColumnLayout {
+      contentItem: ColumnLayout {
         id: column
         width: parent.width
         Label {
           id: label
-          text: qsTr("This will remove all local projects from the device and your Mergin Maps account." +
-                     "If you have an Apple subscription you should cancel it manually.\n\n" +
-                     "To continue enter your username in the field below and click Yes.")
+          text: qsTr("This action will delete your Mergin Maps account with all your projects, " +
+                     "both on the device and on the server. This action cannot be undone." +
+                     "If you have an Apple subscription you need to cancel it manually.\n\n" +
+                     "In order to delete your account, enter your username in the field below and click Yes.")
           Layout.fillWidth: true
           wrapMode: Text.WordWrap
         }
