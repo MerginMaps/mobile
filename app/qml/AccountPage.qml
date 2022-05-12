@@ -366,8 +366,9 @@ Page {
       }
 
       onAccepted: {
-         __merginApi.deleteAccount()
          close()
+         accountDeleteIndicator.running = true
+         __merginApi.deleteAccount()
       }
       onRejected: {
         close()
@@ -390,15 +391,27 @@ Page {
       }
     }
 
+    BusyIndicator {
+      id: accountDeleteIndicator
+      width: root.width/8
+      height: width
+      running: false
+      visible: running
+      anchors.centerIn: parent
+      z: root.z + 1
+    }
+
     Connections {
       target: __merginApi
 
       onUserIsAnOrgOwnerError: {
+        accountDeleteIndicator.running = false
         accountDeletionFailedDialog.messageText = qsTr("Can not close account because user is the only owner of organisation.\n\n" +
                                                        "Please go to the Mergin Maps <a href='%1'>dashboard</a> to remove it manually.".arg(__merginApi.apiRoot()))
         accountDeletionFailedDialog.open()
       }
       onAccountDeleted: {
+        accountDeleteIndicator.running = false
         if ( result ) {
             accountDeleted()
         }
