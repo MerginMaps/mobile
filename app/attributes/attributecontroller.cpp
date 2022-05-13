@@ -787,7 +787,7 @@ bool AttributeController::deleteFeature()
   bool isDeleted = mFeatureLayerPair.layer()->deleteFeature( mFeatureLayerPair.feature().id() );
   rv = commit();
 
-  if ( !isDeleted || !rv )
+  if ( !isDeleted )
   {
     QgsMessageLog::logMessage( tr( "Cannot delete feature" ),
                                QStringLiteral( "Input" ),
