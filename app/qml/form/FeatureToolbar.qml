@@ -27,16 +27,19 @@ Item {
             name: "edit"
             PropertyChanges { target: editRow; visible: true }
             PropertyChanges { target: readOnlyRow; visible: false }
+            PropertyChanges { target: addRow; visible: false }
         }
         ,State {
             name: "add"
-            PropertyChanges { target: editRow; visible: true }
+            PropertyChanges { target: editRow; visible: false }
             PropertyChanges { target: readOnlyRow; visible: false }
+            PropertyChanges { target: addRow; visible: true }
         }
         ,State {
             name: "readOnly"
             PropertyChanges { target: editRow; visible: false }
             PropertyChanges { target: readOnlyRow; visible: true }
+            PropertyChanges { target: addRow; visible: false }
         }
     ]
 
@@ -106,4 +109,28 @@ Item {
             }
         }
     }
+
+    Row {
+        id: addRow
+        height: parent.height
+        width: parent.width
+        anchors.fill: parent
+
+        Item {
+            width: parent.width/parent.children.length
+            height: parent.height
+
+            MainPanelButton {
+                width: toolbar.itemSize
+                text: qsTr("Edit geometry")
+                imageSource: InputStyle.editIcon
+                enabled: isFeaturePoint
+
+                onActivated: {
+                    toolbar.editGeometryClicked()
+                }
+            }
+        }
+    }
+
 }
