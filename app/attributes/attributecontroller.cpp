@@ -912,6 +912,7 @@ bool AttributeController::commit()
   }
   else
   {
+    mFeatureLayerPair.layer()->triggerRepaint();
     return true;
   }
 }
