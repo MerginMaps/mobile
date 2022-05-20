@@ -24,13 +24,13 @@ Item {
 
     states: [
         State {
-            name: "edit"
+            name: "edit" // edit existing feature
             PropertyChanges { target: editRow; visible: true }
             PropertyChanges { target: readOnlyRow; visible: false }
             PropertyChanges { target: addRow; visible: false }
         }
         ,State {
-            name: "add"
+            name: "add" // add new feature
             PropertyChanges { target: editRow; visible: false }
             PropertyChanges { target: readOnlyRow; visible: false }
             PropertyChanges { target: addRow; visible: true }
