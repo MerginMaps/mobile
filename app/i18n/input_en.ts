@@ -415,17 +415,18 @@
 <context>
     <name>FeatureToolbar</name>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="61"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="64"/>
         <source>Edit</source>
         <translation>Edit</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="83"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="86"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="99"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="102"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="125"/>
         <source>Edit geometry</source>
         <translation>Edit geometry</translation>
     </message>
