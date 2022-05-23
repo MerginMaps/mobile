@@ -2488,7 +2488,7 @@ void TestMerginApi::testAccountDelete()
   // now delete user
   QSignalSpy spyDelete( mApi,  &MerginApi::accountDeleted );
   mApi->deleteAccount();
-  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QList<QVariant> arguments = spyDelete.takeFirst();
   QVERIFY( arguments.at( 0 ).toBool() == true );
 }
