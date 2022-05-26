@@ -79,13 +79,9 @@ bool InputUtils::copyFile( const QString &srcPath, const QString &dstPath )
   }
 
   QFileInfo fi( dstPath );
-  QDir dir = fi.absoluteDir();
-  if ( !dir.exists() )
+  if ( !InputUtils::createDirectory( fi.absoluteDir().path() ) )
   {
-    if ( !dir.mkpath( dir.path() ) )
-    {
-      return false;
-    }
+    return false;
   }
 
   // https://github.com/lutraconsulting/input/issues/418
