@@ -2466,10 +2466,9 @@ void TestMerginApi::testRegisterAndDelete()
   mApi->registerUser( username, email, password, password, true );
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
 
+  QSignalSpy spyAuth( mApi->userAuth(),  &MerginUserAuth::authChanged );
   mApi->authorize( username, password );
-  int i = 0;
-  while ( !mApi->userAuth()->hasAuthData() && i++ < 50 )
-    QTest::qWait( 250 );
+  QVERIFY( spyAuth.wait( TestUtils::LONG_REPLY * 5 ) );
 
   // now delete user
   QSignalSpy spyDelete( mApi,  &MerginApi::accountDeleted );
