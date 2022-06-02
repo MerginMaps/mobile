@@ -14,7 +14,7 @@ on:
       - published
 
 env:
-  TEST_MERGIN_URL: https://test.dev.cloudmergin.com/
+  TEST_MERGIN_URL: https://test.dev.merginmaps.com/
   QT_VERSION: 5.14.2
   QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.15.0
   INPUT_SDK_VERSION: mac-20220422-69
