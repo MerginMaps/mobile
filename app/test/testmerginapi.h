@@ -79,8 +79,7 @@ class TestMerginApi: public QObject
     void testAutosync();
     void testAutosyncFailure();
 
-    void testRegister();
-    void testAccountDelete();
+    void testRegisterAndDelete();
 
     // mergin functions
     void testExcludeFromSync();

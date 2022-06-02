@@ -2450,12 +2450,10 @@ void TestMerginApi::testAutosyncFailure()
   // Will be added with incremental requests
 }
 
-void TestMerginApi::testRegister()
+void TestMerginApi::testRegisterAndDelete()
 {
   QString password = mApi->userAuth()->password();
 
-  // we do not have a method to delete existing user in the mApi, so for now just make sure
-  // the name does not exists
   QString quiteRandom = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
   QString username = "test_" + quiteRandom;
   QString email = username + "@nonexistant.email.com";
@@ -2467,28 +2465,16 @@ void TestMerginApi::testRegister()
   QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
   mApi->registerUser( username, email, password, password, true );
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
-}
 
-void TestMerginApi::testAccountDelete()
-{
-  QString password = mApi->userAuth()->password();
-
-  // create random user
-  QString quiteRandom = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
-  QString username = "test_" + quiteRandom;
-  QString email = username + "@nonexistant.email.com";
-
-  // do not want to be authorized
-  mApi->clearAuth();
-
-  QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
-  mApi->registerUser( username, email, password, password, true );
-  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
+  mApi->authorize( username, password );
+  int i = 0;
+  while ( !mApi->userAuth()->hasAuthData() && i++ < 50 )
+    QTest::qWait( 250 );
 
   // now delete user
   QSignalSpy spyDelete( mApi,  &MerginApi::accountDeleted );
   mApi->deleteAccount();
-  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
+  QVERIFY( spyDelete.wait( TestUtils::LONG_REPLY ) );
   QList<QVariant> arguments = spyDelete.takeFirst();
   QVERIFY( arguments.at( 0 ).toBool() == true );
 }
