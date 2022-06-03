@@ -30,7 +30,7 @@
 
 const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" );
 const QString MerginApi::sMerginConfigFile = QStringLiteral( "mergin-config.json" );
-const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://public.cloudmergin.com/" );
+const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://app.merginmaps.com/" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
 const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
