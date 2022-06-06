@@ -19,7 +19,7 @@ Citation link:
 
 [![DOI](https://zenodo.org/badge/46554390.svg)](https://zenodo.org/badge/latestdoi/46554390)
 
-Input makes surveying of geospatial data easy. You can design your survey project in QGIS with custom forms.
+Mergin Maps Input app makes surveying of geospatial data easy. You can design your survey project in QGIS with custom forms.
 
 ## Download
 Click below to download the app on your mobile device:
@@ -40,23 +40,23 @@ For more information on how to use the app, see [Documentation](https://merginma
 
 ## How to help/contribute?
 
-- Help with translations, join [Input App Transifex Team](https://www.transifex.com/lutra-consulting/input)
+- Help with translations, join [Mergin Maps Input app Transifex Team](https://www.transifex.com/lutra-consulting/input)
 - Write a review of the application on App Store or Android Google Play
 - Test the application and report the bugs
 - Write a blog post or case study or create a youtube video. We are happy to help to promote it or co-author and place on our websites
 - Software developer? Code and prepare a pull request. We will help you with setup of the development environment and answer your questions.
-- Donate or [subscribe](https://app.merginmaps.com/) to the Mergin Maps cloud service to help us maintain the project.
+- Donate or [subscribe](https://merginmaps.com/) to the Mergin Maps cloud service to help us maintain the project.
 
 <div><img align="left" width="45" height="45" src="https://raw.githubusercontent.com/MerginMaps/docs/main/src/.vuepress/public/slack.svg"><a href="https://merginmaps.com/community/join">Join our community chat</a><br/>and ask questions!</div>
 
 ## Features
 
-Input features touch optimised GUI components based on Qt Quick (based on QGIS core library).
+Mergin Maps Input app features touch optimised GUI components based on Qt Quick (based on QGIS core library).
 
 * Mapping components - map canvas, GPS position, scale bar, markers
 * Support for capturing of new geometries
 * Display and editing of feature forms
-* Built-in service for storing and synchronising data ([Mergin Maps](https://app.merginmaps.com/))
+* Built-in service for storing and synchronising data ([Mergin Maps](https://merginmaps.com/))
 * Translated to several [languages](https://www.transifex.com/lutra-consulting/input)
 
 <p float="left">
@@ -70,13 +70,9 @@ Input features touch optimised GUI components based on Qt Quick (based on QGIS c
 
 Read more about the app [https://merginmaps.com/docs](https://merginmaps.com/docs)
 
-## Questions and Answers by the community
-
-See [GIS Stack Exchange](https://gis.stackexchange.com/questions/tagged/inputapp) with **inputapp** tag to ask questions and see other users' answers.
-
 ## Developers
 
-For more information on building Input please have a look in [developer documentation](docs/developers/README.md).
+For more information on building Mergin Maps Input app please have a look in [developer documentation](docs/developers/README.md).
 
 ## Privacy policy
 Read more about the app privacy policy [here](https://merginmaps.com/docs/reference/privacy/)
