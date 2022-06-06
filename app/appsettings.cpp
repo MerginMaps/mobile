@@ -31,7 +31,6 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   bool legacyFolderMigrated = settings.value( QStringLiteral( "legacyFolderMigrated" ), false ).toBool();
   QString activeProviderId = settings.value( QStringLiteral( "activePositionProviderId" ) ).toString();
   bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
-  bool rebrandingDismissed = settings.value( QStringLiteral( "rebrandingDismissed" ), false ).toBool();
   settings.endGroup();
 
   setDefaultProject( path );
@@ -46,7 +45,6 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setLegacyFolderMigrated( legacyFolderMigrated );
   setActivePositionProviderId( activeProviderId );
   setAutosyncAllowed( autosync );
-  setRebrandingBannerDismissed( rebrandingDismissed );
 }
 
 QString AppSettings::defaultLayer() const
@@ -321,19 +319,4 @@ void AppSettings::setAutosyncAllowed( bool newAutosyncAllowed )
   mAutosyncAllowed = newAutosyncAllowed;
   setValue( QStringLiteral( "autosyncAllowed" ), newAutosyncAllowed );
   emit autosyncAllowedChanged( mAutosyncAllowed );
-}
-
-bool AppSettings::rebrandingBannerDismissed() const
-{
-  return mRebrandingBannerDismissed;
-}
-
-void AppSettings::setRebrandingBannerDismissed( bool dismissed )
-{
-  if ( mRebrandingBannerDismissed == dismissed )
-    return;
-
-  mRebrandingBannerDismissed = dismissed;
-  setValue( QStringLiteral( "rebrandingDismissed" ), dismissed );
-  emit rebrandingBannerDismissedChanged( mRebrandingBannerDismissed );
 }
