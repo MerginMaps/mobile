@@ -52,7 +52,22 @@ class InputUtils: public QObject
     explicit InputUtils( AndroidUtils *au, QObject *parent = nullptr );
     ~InputUtils() override = default;
 
+    /**
+     * Copies file from srcPath to dstPath. If destination directory is
+     * not exists — tries to create it first.
+     * \param srcPath Absolute path to a source file.
+     * \param dstPath Absolute path to a destination file.
+     * \result True on success, False otherwise.
+     */
     Q_INVOKABLE static bool copyFile( const QString &srcPath, const QString &dstPath );
+
+    /**
+     * Creates the directory path. It will also create all parent
+     * directories necessary to create the directory.
+     * \param path directory path to create.
+     * \result True on success, False otherwise.
+     */
+    Q_INVOKABLE static bool createDirectory( const QString &path );
 
     Q_INVOKABLE QString getFileName( const QString &filePath );
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
@@ -218,7 +233,6 @@ class InputUtils: public QObject
      * 3. use project home folder
      */
     Q_INVOKABLE static QString resolveTargetDir( const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, QgsProject *activeProject );
-
 
     /**
      * Function used for resolving path of an image for a field with ExternalResource widget type.

@@ -29,6 +29,13 @@ Item {
          */
         property var capturePhoto: function capturePhoto(itemWidget) {
           externalResourceHandler.itemWidget = itemWidget
+          if ( !__inputUtils.createDirectory( itemWidget.targetDir ) )
+          {
+            __inputUtils.log("Capture photo", "Could not create directory " + itemWidget.targetDir);
+            errorDialog.errorText = qsTr( "Could not create directory %1." ).arg( itemWidget.targetDir )
+            errorDialog.open()
+          }
+
           if (__androidUtils.isAndroid) {
               __androidUtils.callCamera(itemWidget.targetDir)
           } else if (__iosUtils.isIos) {
@@ -117,7 +124,9 @@ Item {
             var success = __inputUtils.copyFile(imagePath, absolutePath)
             if (!success)
             {
-                console.log("error: Unable to copy file " + imagePath + " to the project directory")
+              __inputUtils.log("Select image", "Failed to copy image file to " + absolutePath);
+              errorDialog.errorText = qsTr( "Failed to copy image file to %1." ).arg( absolutePath )
+              errorDialog.open()
             }
           }
           externalResourceHandler.confirmImage(externalResourceHandler.itemWidget, externalResourceHandler.itemWidget.prefixToRelativePath, absolutePath)
@@ -221,6 +230,18 @@ Item {
         }
     }
 
+    MessageDialog {
+        property string errorText
+
+        id: errorDialog
+        visible: false
+        title: qsTr( "Failed to copy image" )
+        text: errorText
+        icon: StandardIcon.Warning
+        standardButtons: StandardButton.Ok
+        onAccepted: {
+            externalResourceHandler.itemWidget.editorValueChanged("", false)
+            visible = false
+        }
+    }
 }
-
-

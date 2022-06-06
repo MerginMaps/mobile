@@ -78,11 +78,23 @@ bool InputUtils::copyFile( const QString &srcPath, const QString &dstPath )
     modSrcPath = modSrcPath.replace( "file://", "" );
   }
 
+  QFileInfo fi( dstPath );
+  if ( !InputUtils::createDirectory( fi.absoluteDir().path() ) )
+  {
+    return false;
+  }
+
   // https://github.com/lutraconsulting/input/issues/418
   // does not work for iOS files with format
   // file:assets-library://asset/asset.PNG%3Fid=A53AB989-6354-433A-9CB9-958179B7C14D&ext=PNG
 
   return QFile::copy( modSrcPath, dstPath );
+}
+
+bool InputUtils::createDirectory( const QString &path )
+{
+  QDir dir;
+  return dir.mkpath( path );
 }
 
 QString InputUtils::getFileName( const QString &filePath )
@@ -748,8 +760,6 @@ QString InputUtils::resolveTargetDir( const QString &homePath, const QVariantMap
       return defaultRoot;
     }
   }
-
-
 }
 
 QString InputUtils::resolvePrefixForRelativePath( int relativeStorageMode, const QString &homePath, const QString &targetDir )
