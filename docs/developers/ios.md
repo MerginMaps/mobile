@@ -46,8 +46,8 @@ https://deciphertools.com/blog/2014_11_19_how_to_find_your_iphone_udid/
   -> creates `CertificateSigningRequest.certSigningRequest` file
 - click + on https://developer.apple.com/account/resources/certificates/list and create new iOS Distribution Certificate
 - Download it (`ios_distribution.cer`) and double click to open in Keychain Access
-- In Keychain Access, right click and export p12 file (`iPhone Distribution: LUTRA CONSULTING LIMITED (xxxxxxxxx)`), with passport (IOS_CERT_KEY)
-- Store request and cer file, p12 in passbolt.lutraconsulting.co.uk
+- In Keychain Access, right click and export p12 file (`iPhone Distribution: LUTRA CONSULTING LIMITED (xxxxxxxxx)`), with passport (IOS_CERT_KEY). You need to have it imported to "login" or personal space to be able to export p12 file.
+- Store request and cer file, p12 in passbolt.lutraconsulting.co.uk (files in google drive https://drive.google.com/drive/u/0/folders/1GxkyyUxV1VmrGP_Tr0aOiq5v2aHZXO07)
 
 2. Create/Update provisioning profile
 - Go to https://developer.apple.com/account/resources/profiles
