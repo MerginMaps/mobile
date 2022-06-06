@@ -9,9 +9,10 @@ Platform builds:
 
 Other Checks:
 
-[![InputApp Code Layout](https://github.com/lutraconsulting/input/workflows/Code%20Layout/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22Code+Layout%22)
 [![macOS Build (Auto Tests)](https://github.com/lutraconsulting/input/actions/workflows/macos.yml/badge.svg)](https://github.com/lutraconsulting/input/actions/workflows/macos.yml)
 [![linux Build](https://github.com/lutraconsulting/input/actions/workflows/linux.yml/badge.svg)](https://github.com/lutraconsulting/input/actions/workflows/linux.yml)
+
+[![InputApp Code Layout](https://github.com/lutraconsulting/input/workflows/Code%20Layout/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22Code+Layout%22)
 [![Coverage Status](https://img.shields.io/coveralls/lutraconsulting/input.svg)](https://coveralls.io/github/lutraconsulting/input?branch=master)
 [![QgsQuick](https://github.com/lutraconsulting/input/workflows/QgsQuick/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22QgsQuick%22)
 [![Translations](https://github.com/lutraconsulting/input/actions/workflows/i18n.yml/badge.svg)](https://github.com/lutraconsulting/input/actions/workflows/i18n.yml)
