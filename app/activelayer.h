@@ -17,7 +17,7 @@
 #include "qgsvectorlayer.h"
 
 /**
- * @brief The ActiveLayer class holds information about current active layer for recording.
+ * @brief ActiveLayer class holds information about current active layer for recording.
  * It supports setting active layer by layer and offers information about layer.
  *
  * Registered for qml as __activeLayer
