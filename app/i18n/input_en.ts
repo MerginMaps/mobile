@@ -12,59 +12,87 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../qml/AccountPage.qml" line="167"/>
+        <location filename="../qml/AccountPage.qml" line="170"/>
         <source>Your subscription was cancelled on %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="48"/>
+        <location filename="../qml/AccountPage.qml" line="51"/>
         <source>My Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="136"/>
+        <location filename="../qml/AccountPage.qml" line="139"/>
         <source>Your subscription will not auto-renew after %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="146"/>
+        <location filename="../qml/AccountPage.qml" line="149"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="157"/>
+        <location filename="../qml/AccountPage.qml" line="160"/>
         <source>Your next bill will be for %1 on %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="192"/>
+        <location filename="../qml/AccountPage.qml" line="195"/>
         <source>Using %1 / %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="210"/>
+        <location filename="../qml/AccountPage.qml" line="213"/>
         <source>Manage Subscription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="210"/>
+        <location filename="../qml/AccountPage.qml" line="213"/>
         <source>Working...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="210"/>
+        <location filename="../qml/AccountPage.qml" line="213"/>
         <source>Subscription plans</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="246"/>
+        <location filename="../qml/AccountPage.qml" line="249"/>
         <source>You can also %1restore%2 your purchases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="270"/>
+        <location filename="../qml/AccountPage.qml" line="278"/>
         <source>Sign out</source>
         <translation>Sign out</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="301"/>
+        <source>Delete account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="332"/>
+        <source>Delete account?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="338"/>
+        <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
+
+In order to delete your account, enter your username in the field below and click Yes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="347"/>
+        <source>Enter username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="384"/>
+        <location filename="../qml/AccountPage.qml" line="419"/>
+        <source>Failed to remove account</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -331,23 +359,38 @@
 <context>
     <name>ExternalResourceBundle</name>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="192"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="35"/>
+        <source>Could not create directory %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ExternalResourceBundle.qml" line="128"/>
+        <source>Failed to copy image file to %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ExternalResourceBundle.qml" line="201"/>
         <source>Open Image</source>
         <translation>Open Image</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="194"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="203"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Image files (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="206"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="215"/>
         <source>Remove photo reference</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="207"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="216"/>
         <source>Also permanently delete photo from device?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ExternalResourceBundle.qml" line="238"/>
+        <source>Failed to copy image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -616,107 +659,107 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="163"/>
+        <location filename="../inpututils.cpp" line="175"/>
         <source>just now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="168"/>
+        <location filename="../inpututils.cpp" line="180"/>
         <source>%1 minutes ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="168"/>
+        <location filename="../inpututils.cpp" line="180"/>
         <source>%1 minute ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="173"/>
+        <location filename="../inpututils.cpp" line="185"/>
         <source>%1 hours ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="173"/>
+        <location filename="../inpututils.cpp" line="185"/>
         <source>%1 hour ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="177"/>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="189"/>
+        <location filename="../inpututils.cpp" line="194"/>
         <source>%1 days ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="177"/>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="189"/>
+        <location filename="../inpututils.cpp" line="194"/>
         <source>%1 day ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="199"/>
         <source>%1 weeks ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="199"/>
         <source>%1 week ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="192"/>
+        <location filename="../inpututils.cpp" line="204"/>
         <source>%1 months ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="192"/>
+        <location filename="../inpututils.cpp" line="204"/>
         <source>%1 month ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="197"/>
+        <location filename="../inpututils.cpp" line="209"/>
         <source>%1 years ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="197"/>
+        <location filename="../inpututils.cpp" line="209"/>
         <source>%1 year ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1213"/>
+        <location filename="../inpututils.cpp" line="1223"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation type="unfinished">screen resolution: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1214"/>
+        <location filename="../inpututils.cpp" line="1224"/>
         <source>screen DPI: %1x%2
 </source>
         <translation type="unfinished">screen DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1215"/>
+        <location filename="../inpututils.cpp" line="1225"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation type="unfinished">screen size: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1216"/>
+        <location filename="../inpututils.cpp" line="1226"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1217"/>
+        <location filename="../inpututils.cpp" line="1227"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1218"/>
+        <location filename="../inpututils.cpp" line="1228"/>
         <source>used dp scale: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1471,14 +1514,6 @@ Click &apos;Yes&apos; to upload it.</source>
         <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="273"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
         <translation>Map Canvas rotation is not supported. Resetting from %1 to 0.</translation>
-    </message>
-</context>
-<context>
-    <name>RebrandingBanner</name>
-    <message>
-        <location filename="../qml/misc/RebrandingBanner.qml" line="52"/>
-        <source>%1Input%2 is becoming part of</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
