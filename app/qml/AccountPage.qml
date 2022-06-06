@@ -10,6 +10,8 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtGraphicalEffects 1.14
+import QtQuick.Layouts 1.14
+import QtQuick.Dialogs 1.3 as Dialogs
 import lc 1.0
 import "."  // import InputStyle singleton
 import "./components"
@@ -19,6 +21,7 @@ Page {
   signal managePlansClicked
   signal signOutClicked
   signal restorePurchasesClicked
+  signal accountDeleted
   property color bgColor: "white"
   property real fieldHeight: InputStyle.rowHeight
 
@@ -259,35 +262,164 @@ Page {
     // Footer
     Item {
       id: footer
-      height: InputStyle.rowHeight
+      height: InputStyle.rowHeight * 2
       width: parent.width
       anchors.bottom: parent.bottom
       anchors.horizontalCenter: parent.horizontalCenter
 
-      Button {
-        id: signOutButton
-        height: InputStyle.rowHeightHeader
-        text: qsTr("Sign out")
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        font.bold: true
+      Column {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        background: Rectangle {
-          color: root.bgColor
+        spacing: 5
+
+        Button {
+          id: signOutButton
+          height: InputStyle.rowHeightHeader
+          text: qsTr("Sign out")
+          font.pixelSize: InputStyle.fontPixelSizeNormal
+          font.bold: true
+          anchors.horizontalCenter: parent.horizontalCenter
+          background: Rectangle {
+            color: root.bgColor
+          }
+
+          onClicked: signOutClicked()
+
+          contentItem: Text {
+            text: signOutButton.text
+            font: signOutButton.font
+            color: InputStyle.highlightColor
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+          }
         }
 
-        onClicked: signOutClicked()
+        Button {
+          id: deleteAccountButton
+          height: InputStyle.rowHeightHeader
+          text: qsTr("Delete account")
+          font.pixelSize: InputStyle.fontPixelSizeNormal
+          font.bold: true
+          anchors.horizontalCenter: parent.horizontalCenter
+          background: Rectangle {
+            color: root.bgColor
+          }
 
-        contentItem: Text {
-          text: signOutButton.text
-          font: signOutButton.font
-          color: InputStyle.highlightColor
-          horizontalAlignment: Text.AlignHCenter
-          verticalAlignment: Text.AlignVCenter
-          elide: Text.ElideRight
+          onClicked: accountDeleteDialog.open()
+
+          contentItem: Text {
+            text: deleteAccountButton.text
+            font: deleteAccountButton.font
+            color: InputStyle.invalidButtonColor
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+          }
+        }
+
+      }
+    }
+
+    Dialog {
+      id: accountDeleteDialog
+      visible: false
+      modal: true
+      spacing: InputStyle.panelSpacing
+      anchors.centerIn: parent
+      leftMargin: InputStyle.panelMargin
+      rightMargin: InputStyle.panelMargin
+      title: qsTr( "Delete account?" )
+
+      contentItem: ColumnLayout {
+        id: column
+        Label {
+          id: label
+          text: qsTr("This action will delete your Mergin Maps account with all your projects, " +
+                     "both on the device and on the server. This action cannot be undone. " +
+                     "If you have an Apple subscription you need to cancel it manually.\n\n" +
+                     "In order to delete your account, enter your username in the field below and click Yes.")
+          Layout.fillWidth: true
+          wrapMode: Text.WordWrap
+        }
+        TextField {
+          id: usernameField
+          placeholderText: qsTr("Enter username")
+          Layout.fillWidth: true
+          onTextEdited: {
+            buttons.standardButton(Dialog.Yes).enabled = (text == username)
+          }
+        }
+      }
+
+      footer: DialogButtonBox {
+        id: buttons
+        standardButtons: Dialog.Yes | Dialog.No
+      }
+
+      onAboutToShow: {
+        buttons.standardButton(Dialog.Yes).enabled = false;
+      }
+
+      onAboutToHide: {
+        usernameField.clear()
+      }
+
+      onAccepted: {
+         close()
+         accountDeleteIndicator.running = true
+         __merginApi.deleteAccount()
+      }
+      onRejected: {
+        close()
+      }
+    }
+
+    Dialogs.MessageDialog {
+      id: accountDeletionFailedDialog
+
+      property string messageText
+
+      visible: false
+      title: qsTr( "Failed to remove account" )
+      text: messageText
+      icon: Dialogs.StandardIcon.Warning
+      standardButtons: Dialogs.StandardButton.Close
+      onRejected: {
+        close()
+        accountDeleted()
+      }
+    }
+
+    BusyIndicator {
+      id: accountDeleteIndicator
+      width: root.width/8
+      height: width
+      running: false
+      visible: running
+      anchors.centerIn: parent
+      z: root.z + 1
+    }
+
+    Connections {
+      target: __merginApi
+
+      onUserIsAnOrgOwnerError: {
+        accountDeleteIndicator.running = false
+        accountDeletionFailedDialog.messageText = qsTr("Can not close account because user is the only owner of organisation.\n\n" +
+                                                       "Please go to the Mergin Maps <a href='%1'>dashboard</a> to remove it manually.".arg(__merginApi.apiRoot()))
+        accountDeletionFailedDialog.open()
+      }
+      onAccountDeleted: {
+        accountDeleteIndicator.running = false
+        if ( result ) {
+            accountDeleted()
+        }
+        else {
+          accountDeletionFailedDialog.messageText = qsTr( "Failed to remove account" )
+          accountDeletionFailedDialog.open()
         }
       }
     }
   }
 }
-

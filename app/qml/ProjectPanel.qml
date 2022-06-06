@@ -29,7 +29,7 @@ Item {
 
   function openPanel() {
     root.visible = true
-    stackView.visible = true  
+    stackView.visible = true
     getServiceInfo() // ensure attention banner status is refreshed
   }
 
@@ -546,6 +546,10 @@ Item {
       }
       onRestorePurchasesClicked: {
         __purchasing.restore()
+      }
+      onAccountDeleted: {
+        stackView.popOnePageOrClose()
+        root.resetView()
       }
     }
   }
