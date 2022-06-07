@@ -36,4 +36,17 @@ sed -i.orig -E "s|VERSIONMINOR=[0-9]+|VERSIONMINOR=$MINOR|g" $WIN_FILE
 sed -i.orig -E "s|VERSIONBUILD=[0-9]+|VERSIONBUILD=$BUILD|g" $WIN_FILE
 rm -f $WIN_FILE.orig
 
+# .zenodo.json
+ZENODO_FILE=$DIR/../.zenodo.json
+echo "patching $ZENODO_FILE"
+sed -i.orig -E "s|\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"|\"version\": \"$MAJOR\.$MINOR\.$BUILD\"|g" $ZENODO_FILE
+sed -i.orig -E "s|https://github.com/MerginMaps/input/tree/[0-9]+\.[0-9]+\.[0-9]|https://github.com/MerginMaps/input/tree/$MAJOR\.$MINOR\.$BUILD|g" $ZENODO_FILE
+rm -f $ZENODO_FILE.orig
+
+# CITATION.cff
+CITATION_FILE=$DIR/../CITATION.cff
+echo "patching $CITATION_FILE"
+sed -i.orig -E "s|cff-version: [0-9]+\.[0-9]+\.[0-9]+|cff-version: $MAJOR\.$MINOR\.$BUILD|g" $CITATION_FILE
+rm -f $CITATION_FILE.orig
+
 echo "patching done"
