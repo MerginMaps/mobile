@@ -36,6 +36,7 @@ appsettings.cpp \
 androidutils.cpp \
 inputexpressionfunctions.cpp \
 inpututils.cpp \
+imageutils.cpp \
 purchasing.cpp \
 variablesmanager.cpp \
 ios/iosimagepicker.cpp \
@@ -73,6 +74,7 @@ autosynccontroller.h \
 bluetoothdiscoverymodel.h \
 featurelayerpair.h \
 identifykit.h \
+imageutils.h \
 scalebarkit.h \
 synchronizationerror.h \
 synchronizationmanager.h \
