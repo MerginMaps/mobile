@@ -126,10 +126,15 @@ jobs:
           echo -e "unix:!macx:!android {"  >> ./input/app/config.pri
           echo -e "  INPUT_SDK_PATH = ${{ github.workspace }}/input-sdk"  >> ./input/app/config.pri
           echo -e "  QGIS_QUICK_DATA_PATH = ${{ github.workspace }}/input/app/android/assets/qgis-data"  >> ./input/app/config.pri
-          echo -e "  QMAKE_CXX = ccache \$\$Qt5_DIR/bin/qmake \ "  >> ./input/app/config.pri
+          echo -e "  QMAKE_CXX = ccache \$\$Qt5_DIR/bin/qmake "  >> ./input/app/config.pri
           echo -e "}"  >> ./input/app/config.pri
           cat ./input/app/config.pri
-
+          
+          env
+          ls $Qt5_DIR
+          ls $Qt5_DIR/bin
+          which qmake
+          
       - name: build Input
         run: |
           mkdir -p build-Input
