@@ -17,7 +17,7 @@ env:
   CCACHE_DIR: ~/.ccache
   INPUT_SDK_VERSION: ubuntu-2004-20220422-47
   QT_VERSION: '5.14.2'
-  CACHE_VERSION: 1
+  CACHE_VERSION: 2
 
 concurrency:
   group: ci-${{github.ref}}-linux
@@ -54,6 +54,7 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           version: ${{ env.QT_VERSION }}
+          setup-python: 'false'
           dir: ${{ github.workspace }}
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
@@ -129,7 +130,7 @@ jobs:
           echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX "  >> ./input/app/config.pri
           echo -e "}"  >> ./input/app/config.pri
           cat ./input/app/config.pri
-
+          
       - name: build Input
         run: |
           mkdir -p build-Input
