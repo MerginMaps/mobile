@@ -23,7 +23,7 @@ Steps to build and run Input:
 
 2. Get Input SDK - it contains pre-built dependencies of libraries used by Input
 
-   - Download the latest Input SDK for Ubuntu - go to https://github.com/lutraconsulting/input-sdk/releases and download the built SDK. For `ubuntu-2004-20211201-34` the asset to download is `input-sdk-ubuntu-2004-20211201-34.tar.gz`.
+   - Download the latest Input SDK for Ubuntu - go to https://github.com/merginmaps/input-sdk/releases and download the built SDK. For `ubuntu-2004-20211201-34` the asset to download is `input-sdk-ubuntu-2004-20211201-34.tar.gz`.
 
    - Unpack the downloaded .tar.gz to `~/input-sdk-ubuntu-2004-20211201-34`
 

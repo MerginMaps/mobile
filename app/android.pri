@@ -85,7 +85,7 @@ android {
     # B) see https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md#Unwinding
     # note: may not be needed with NDK r23+ (we use r21 ATM)
     # without this it crashes in PROJ's c_locale_stod on start
-    # https://github.com/lutraconsulting/input/issues/1824
+    # https://github.com/MerginMaps/input/issues/1824
     equals ( QT_ARCH, 'armeabi-v7a' ) {
         LIBS += -lunwind
     }

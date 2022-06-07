@@ -25,7 +25,7 @@ concurrency:
 
 jobs:
   linux_build:
-    if: ( github.repository == 'lutraconsulting/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout Input
@@ -114,7 +114,7 @@ jobs:
         run: |
           wget -O \
             ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/lutraconsulting/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-${{ env.INPUT_SDK_VERSION }}.tar.gz
+            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-${{ env.INPUT_SDK_VERSION }}.tar.gz
           mkdir -p ${{ github.workspace }}/input-sdk
           cd ${{ github.workspace }}/input-sdk
           tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz

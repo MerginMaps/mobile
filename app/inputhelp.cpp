@@ -23,8 +23,8 @@
 
 const QString helpRoot = QStringLiteral( "https://merginmaps.com/docs" );
 const QString reportLogUrl = QStringLiteral( "https://g4pfq226j0.execute-api.eu-west-1.amazonaws.com/mergin_client_log_submit" );
-const QString helpDeskMail = QStringLiteral( "info@lutraconsulting.co.uk" );
-const QString inputWeb = QStringLiteral( "https://inputapp.io" );
+const QString helpDeskMail = QStringLiteral( "support@merginmaps.com" );
+const QString inputWeb = QStringLiteral( "https://merginmaps.com" );
 
 const QString utmTagHelp = QStringLiteral( "?utm_source=input-help&utm_medium=help&utm_campaign=input" );
 const QString utmTagSubscription = QStringLiteral( "?utm_source=input-subs&utm_medium=subs&utm_campaign=input" );

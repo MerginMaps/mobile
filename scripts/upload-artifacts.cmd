@@ -1,5 +1,5 @@
 @echo on
-set APPVEYOR_REPO_NAME=lutraconsulting/input
+set APPVEYOR_REPO_NAME=MerginMaps/input
 set DROPBOX_FOLDER="win"
 
 if [%APPVEYOR_REPO_TAG%]==[true] (

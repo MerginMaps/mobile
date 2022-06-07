@@ -1,8 +1,8 @@
 !define APPNAME "InputApp"
 !define COMPANYNAME "Lutra Consulting Ltd."
 !define DESCRIPTION "Survey made easy"
-!define HELPURL "https://github.com/lutraconsulting/input/blob/master/docs/users/introduction.md"
-!define UPDATEURL "https://github.com/lutraconsulting/input/releases"
+!define HELPURL "https://github.com/MerginMaps/input/blob/master/docs/users/introduction.md"
+!define UPDATEURL "https://github.com/MerginMaps/input/releases"
 !define ABOUTURL "https://inputapp.io/" 
  
 RequestExecutionLevel admin ;Require admin rights on NT6+ (When UAC is turned on)

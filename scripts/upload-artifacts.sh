@@ -14,7 +14,7 @@ else
     export SIGNED="debug"
     export SECURE_ENV_VARS="false"
 fi
-export GITHUB_REPO=lutraconsulting/input
+export GITHUB_REPO=MerginMaps/input
 
 # If we have secure env vars and are in either a pull request or a tag, we need to upload artifacts
 if [[ "${SECURE_ENV_VARS}" = "true" ]];

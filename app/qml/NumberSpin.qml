@@ -66,7 +66,7 @@ Item {
         rotation: imageIncrease.rotation
     }
 
-//  Mouse areas enlarging clickable areas for arrows, see https://github.com/lutraconsulting/input/pull/1055
+//  Mouse areas enlarging clickable areas for arrows, see https://github.com/MerginMaps/input/pull/1055
     MouseArea {
       y: imageDecrease.y - imageDecrease.height
       x: imageDecrease.x - imageDecrease.width

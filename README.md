@@ -4,18 +4,18 @@
 
 Platform builds:
 
-[![InputApp Android Build](https://github.com/lutraconsulting/input/workflows/Android/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22Android%22)
-[![InputApp iOS Build](https://github.com/lutraconsulting/input/workflows/iOS%20Build/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22iOS+Build%22)
+[![InputApp Android Build](https://github.com/MerginMaps/input/workflows/Android/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22Android%22)
+[![InputApp iOS Build](https://github.com/MerginMaps/input/workflows/iOS%20Build/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22iOS+Build%22)
 
 Other Checks:
 
-[![macOS Build (Auto Tests)](https://github.com/lutraconsulting/input/actions/workflows/macos.yml/badge.svg)](https://github.com/lutraconsulting/input/actions/workflows/macos.yml)
-[![linux Build](https://github.com/lutraconsulting/input/actions/workflows/linux.yml/badge.svg)](https://github.com/lutraconsulting/input/actions/workflows/linux.yml)
+[![macOS Build (Auto Tests)](https://github.com/MerginMaps/input/actions/workflows/macos.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/macos.yml)
+[![linux Build](https://github.com/MerginMaps/input/actions/workflows/linux.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/linux.yml)
 
-[![InputApp Code Layout](https://github.com/lutraconsulting/input/workflows/Code%20Layout/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22Code+Layout%22)
-[![Coverage Status](https://img.shields.io/coveralls/lutraconsulting/input.svg)](https://coveralls.io/github/lutraconsulting/input?branch=master)
-[![QgsQuick](https://github.com/lutraconsulting/input/workflows/QgsQuick/badge.svg)](https://github.com/lutraconsulting/input/actions?query=workflow%3A%22QgsQuick%22)
-[![Translations](https://github.com/lutraconsulting/input/actions/workflows/i18n.yml/badge.svg)](https://github.com/lutraconsulting/input/actions/workflows/i18n.yml)
+[![InputApp Code Layout](https://github.com/MerginMaps/input/workflows/Code%20Layout/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22Code+Layout%22)
+[![Coverage Status](https://coveralls.io/repos/github/MerginMaps/input/badge.svg?branch=master)](https://coveralls.io/github/MerginMaps/input?branch=master)
+[![QgsQuick](https://github.com/MerginMaps/input/workflows/QgsQuick/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22QgsQuick%22)
+[![Translations](https://github.com/MerginMaps/input/actions/workflows/i18n.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/i18n.yml)
 
 Citation link:
 
@@ -62,10 +62,10 @@ Mergin Maps Input app features touch optimised GUI components based on Qt Quick 
 * Translated to several [languages](https://www.transifex.com/lutra-consulting/input)
 
 <p float="left">
-    <img align="centre" src="https://github.com/lutraconsulting/input/blob/master/images/screen1.jpg" width="20%">
-    <img align="centre" src="https://github.com/lutraconsulting/input/blob/master/images/screen2.jpg" width="20%">
-    <img align="centre" src="https://github.com/lutraconsulting/input/blob/master/images/screen3.jpg" width="20%">
-    <img align="centre" src="https://github.com/lutraconsulting/input/blob/master/images/screen4.jpg" width="20%">
+    <img align="centre" src="https://github.com/MerginMaps/input/blob/master/images/screen1.jpg" width="20%">
+    <img align="centre" src="https://github.com/MerginMaps/input/blob/master/images/screen2.jpg" width="20%">
+    <img align="centre" src="https://github.com/MerginMaps/input/blob/master/images/screen3.jpg" width="20%">
+    <img align="centre" src="https://github.com/MerginMaps/input/blob/master/images/screen4.jpg" width="20%">
 </p>
 
 ## Documentation
