@@ -87,6 +87,7 @@
 #include "relationreferencefeaturesmodel.h"
 #include "fieldvalidator.h"
 #include "valuerelationfeaturesmodel.h"
+#include "snaputils.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -283,6 +284,7 @@ void initDeclarative()
   qmlRegisterType< PositionKit >( "lc", 1, 0, "PositionKit" );
   qmlRegisterType< MapPosition >( "lc", 1, 0, "MapPosition" );
   qmlRegisterType< ScaleBarKit >( "lc", 1, 0, "ScaleBarKit" );
+  qmlRegisterType< SnapUtils >( "lc", 1, 0, "SnapUtils" );
   qmlRegisterType< FeaturesModel >( "lc", 1, 0, "FeaturesModel" );
   qmlRegisterType< RelationFeaturesModel >( "lc", 1, 0, "RelationFeaturesModel" );
   qmlRegisterType< ValueRelationFeaturesModel >( "lc", 1, 0, "ValueRelationFeaturesModel" );

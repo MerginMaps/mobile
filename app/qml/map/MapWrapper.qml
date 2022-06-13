@@ -100,7 +100,7 @@ Item {
   function findRecordedPoint() {
     return _digitizingController.useGpsPoint ?
           __positionKit.positionCoordinate : // WGS84
-          _map.mapSettings.screenToCoordinate( _crosshair.center ) // map CRS
+          _map.mapSettings.screenToCoordinate( _crosshair.recordPoint ) // map CRS
   }
 
   function processRecordedPair( pair ) {
@@ -254,7 +254,7 @@ Item {
   onStateChanged: {
     switch ( state ) {
       case "recordFeature": {
-        root.centerToPosition()
+//        root.centerToPosition()
         break
       }
       case "recordInLayerFeature": {
@@ -355,10 +355,9 @@ Item {
 
     onLongPressed: {
       // Alter position of simulated provider
-
       if ( __positionKit.positionProvider && __positionKit.positionProvider.id() === "simulated" )
       {
-        __positionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), _map.mapSettings ) )
+//        __positionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), _map.mapSettings ) )
       }
     }
 
@@ -501,14 +500,6 @@ Item {
     onUseGpsPointChanged: __variablesManager.useGpsPoint = _digitizingController.useGpsPoint
   }
 
-  RecordCrosshair {
-    id: _crosshair
-
-    width: root.width
-    height: root.height
-    visible: _digitizingController.manualRecording && root.isInRecordState
-  }
-
   Highlight {
     id: _digitizingHighlight
     anchors.fill: _map
@@ -532,6 +523,18 @@ Item {
     markerAnchorY: _highlightIdentified.markerAnchorY
     recordingInProgress: _digitizingController.recording
     guideLineAllowed: _digitizingController.manualRecording && root.isInRecordState
+  }
+
+  RecordCrosshair {
+    id: _crosshair
+
+    width: root.width
+    height: root.height
+
+    qgsProject: __activeProject.qgsProject
+    mapsettings: _map.mapSettings
+
+    visible: _digitizingController.manualRecording && root.isInRecordState
   }
 
   AutoHideBanner {

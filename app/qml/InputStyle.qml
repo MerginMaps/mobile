@@ -120,7 +120,8 @@ QtObject {
     property string vectorPolygonIcon: "qrc:/mIconPolygonLayer.svg"
 
     property string recordIcon: "qrc:/dot-circle.svg"
-    property string crosshairIcon: "qrc:/crosshair.svg"
+    property string crosshairCenterIcon: "qrc:/crosshair-square-center.svg"
+    property string crosshairBorderIcon: "qrc:/crosshair-square-border.svg"
     property string undoIcon: "qrc:/undo.svg"
     property string accountIcon: "qrc:/account.svg"
     property string accountMultiIcon: "qrc:/account-multi.svg"

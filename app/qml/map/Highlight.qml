@@ -83,6 +83,7 @@ Item {
   }
 
   function crosshairPoint() {
+    // TODO: needs to be updated within snaputils
     let crosshairCoord = Qt.point( highlight.width / 2, highlight.height / 2 )
     crosshairCoord = mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
 

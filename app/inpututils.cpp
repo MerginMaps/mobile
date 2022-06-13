@@ -32,6 +32,8 @@
 #include "qgsdatetimefieldformatter.h"
 #include "qgslayertree.h"
 #include "qgsprojectviewsettings.h"
+#include "qgssnappingutils.h"
+#include "qgspointlocator.h"
 
 #include "featurelayerpair.h"
 #include "qgsquickmapsettings.h"
@@ -1582,4 +1584,37 @@ bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
 {
   int quality = activeProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoQuality" ), 0 );
   return ImageUtils::rescale( path, quality );
+}
+
+QPoint InputUtils::snapPoint( QgsQuickMapSettings *canvas )
+{
+
+//  QgsSnappingUtils snap;
+//  snap.setMapSettings( canvas->mapSettings() );
+//  qDebug() << snap.dump();
+
+//  QgsPointLocator::Match match = snap.snapToMap( mapCoords );
+//  qDebug() << match.point();
+
+//  snap.toggleEnabled();
+
+//  QgsPointLocator::Match match2 = snap.snapToMap( mapCoords );
+//  qDebug() << match2.point();
+
+  for ( QgsMapLayer *layer : QgsProject::instance()->mapLayers() )
+  {
+    if ( layer->id() == "Disallowed_areas_e72952c5_2284_450e_aeda_9ff02f0092d7" )
+    {
+      QgsVectorLayer *v = qobject_cast<QgsVectorLayer *>( layer );
+      QgsFeature f = v->getFeature( 2 );
+
+      QgsGeometry fg = f.geometry();
+      QgsPoint vx = fg.vertexAt( 1 );
+      QgsPointXY mvx = canvas->mapSettings().layerToMapCoordinates( layer, vx );
+      QPointF vxf = canvas->coordinateToScreen( QgsPoint( mvx.x(), mvx.y() ) );
+      qDebug() << "Found vertex:" << vxf;
+      return vxf.toPoint();
+    }
+  }
+  return QPoint();
 }

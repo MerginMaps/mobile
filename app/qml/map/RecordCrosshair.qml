@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 import QtQuick 2.14
+import QtGraphicalEffects 1.14
 
 import lc 1.0
 import ".."
@@ -15,16 +16,68 @@ import ".."
 Item {    
     id: root
 
-    property real size: 100 * __dp
+    /*required*/ property var qgsProject
+    /*required*/ property var mapsettings
 
     property point center: Qt.point( root.width / 2, root.height / 2 )
 
+    property point recordPoint: snapUtils.snapped ? snapUtils.snappedPosition : center
+
+    property real size: 50 * __dp
+
+    SnapUtils {
+      id: snapUtils
+
+      mapSettings: root.mapsettings
+      qgsProject: root.qgsProject
+
+      centerPosition: root.center
+    }
+
     Image {
-        anchors.centerIn: parent
-        height: root.size
-        width: height
-        source: InputStyle.crosshairIcon
-        sourceSize.width: width
-        sourceSize.height: height
+      id: crossBorder
+
+      anchors.centerIn: parent
+      height: root.size
+      width: height
+      source: InputStyle.crosshairBorderIcon
+      sourceSize.width: width
+      sourceSize.height: height
+    }
+
+    Image {
+      id: crossCenter
+
+      x: root.recordPoint.x - width / 2
+      y: root.recordPoint.y - height / 2
+
+      Behavior on x {
+        PropertyAnimation {
+          properties: "x"
+          duration: 100
+          easing.type: Easing.InOutQuad
+        }
+      }
+
+      Behavior on y {
+        PropertyAnimation {
+          properties: "y"
+          duration: 100
+          easing.type: Easing.InOutQuad
+        }
+      }
+
+      height: root.size
+      width: height
+      sourceSize.width: width
+      sourceSize.height: height
+
+      source: InputStyle.crosshairCenterIcon
+    }
+
+    ColorOverlay {
+      anchors.fill: crossCenter
+      source: crossCenter
+      color: snapUtils.snapped ? "#8a2be2" : InputStyle.fontColor
     }
 }

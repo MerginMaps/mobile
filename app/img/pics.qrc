@@ -75,5 +75,8 @@
         <file>dot-circle.svg</file>
         <file>mm_logo_vert_pos.svg</file>
         <file>mm_logo_hor_pos.svg</file>
+        <file>crosshair-square.svg</file>
+        <file>crosshair-square-border.svg</file>
+        <file>crosshair-square-center.svg</file>
     </qresource>
 </RCC>
