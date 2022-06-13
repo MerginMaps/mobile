@@ -55,7 +55,7 @@ Item {
         PropertyAnimation {
           properties: "x"
           duration: 100
-          easing.type: Easing.InOutQuad
+          easing.type: Easing.InQuad
         }
       }
 
@@ -63,7 +63,7 @@ Item {
         PropertyAnimation {
           properties: "y"
           duration: 100
-          easing.type: Easing.InOutQuad
+          easing.type: Easing.InQuad
         }
       }
 
