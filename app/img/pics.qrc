@@ -78,5 +78,6 @@
         <file>crosshair-square.svg</file>
         <file>crosshair-square-border.svg</file>
         <file>crosshair-square-center.svg</file>
+        <file>crosshair-alt.svg</file>
     </qresource>
 </RCC>

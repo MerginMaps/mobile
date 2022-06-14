@@ -37,12 +37,38 @@ Item {
     Image {
       id: crossBorder
 
-      anchors.centerIn: parent
+//      anchors.centerIn: parent
+
+      x: root.recordPoint.x - width / 2
+      y: root.recordPoint.y - height / 2
+
+      Behavior on x {
+        PropertyAnimation {
+          properties: "x"
+          duration: 50
+          easing.type: Easing.InQuad
+        }
+      }
+
+      Behavior on y {
+        PropertyAnimation {
+          properties: "y"
+          duration: 50
+          easing.type: Easing.InQuad
+        }
+      }
+
       height: root.size
       width: height
-      source: InputStyle.crosshairBorderIcon
+      source: InputStyle.crosshairAltIcon
       sourceSize.width: width
       sourceSize.height: height
+    }
+
+    ColorOverlay {
+      anchors.fill: crossBorder
+      source: crossBorder
+      color: snapUtils.snapped ? "#8a2be2" : InputStyle.fontColor
     }
 
     Image {
@@ -54,7 +80,7 @@ Item {
       Behavior on x {
         PropertyAnimation {
           properties: "x"
-          duration: 100
+          duration: 50
           easing.type: Easing.InQuad
         }
       }
@@ -62,7 +88,7 @@ Item {
       Behavior on y {
         PropertyAnimation {
           properties: "y"
-          duration: 100
+          duration: 50
           easing.type: Easing.InQuad
         }
       }
@@ -72,6 +98,8 @@ Item {
       sourceSize.width: width
       sourceSize.height: height
 
+      visible: false
+
       source: InputStyle.crosshairCenterIcon
     }
 
@@ -79,5 +107,7 @@ Item {
       anchors.fill: crossCenter
       source: crossCenter
       color: snapUtils.snapped ? "#8a2be2" : InputStyle.fontColor
+
+      visible: snapUtils.snapped
     }
 }
