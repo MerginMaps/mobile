@@ -1,3 +1,5 @@
+> Some parts of this doc are outdated, for more recent version look at the `development procedures` in Clickup
+
 # Bump versions
 
 run `scripts/update_all_versions.bash MAJOR.MINOR.BUILD` to 
