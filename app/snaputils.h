@@ -27,9 +27,18 @@ class SnapUtils : public QObject
     Q_PROPERTY( QPoint centerPosition READ centerPosition WRITE centerPosition NOTIFY centerPositionChanged )
     Q_PROPERTY( bool snapped READ snapped WRITE setSnapped NOTIFY snappedChanged )
     Q_PROPERTY( QPoint snappedPosition READ snappedPosition WRITE setSnappedPosition NOTIFY snappedPositionChanged )
+    Q_PROPERTY( SnapType snapType READ snapType WRITE setSnapType NOTIFY snapTypeChanged )
 
   public:
     SnapUtils( QObject *parent = nullptr );
+
+    enum SnapType
+    {
+      Vertex = 0,
+      Segment,
+      Other,
+    };
+    Q_ENUM( SnapType );
 
     QgsProject *qgsProject() const;
     void setQgsProject( QgsProject *newQgsProject );
@@ -50,6 +59,9 @@ class SnapUtils : public QObject
     bool snapped() const;
     void setSnapped( bool newSnapped );
 
+    const SnapUtils::SnapType &snapType() const;
+    void setSnapType( const SnapUtils::SnapType &newSnapType );
+
   signals:
 
     void qgsProjectChanged( QgsProject *qgsProject );
@@ -61,13 +73,16 @@ class SnapUtils : public QObject
 
     void snappedChanged( bool snapped );
 
+    void snapTypeChanged( const SnapUtils::SnapType &snapType );
+
   private:
-    QgsProject *mQgsProject;
-    QgsQuickMapSettings *mMapSettings;
+    QgsProject *mQgsProject = nullptr;
+    QgsQuickMapSettings *mMapSettings = nullptr;
     QgsSnappingUtils mSnappingUtils;
     QPoint mCenterPosition = QPoint( -1, -1 );
     QPoint mSnappedPosition = QPoint( -1, -1 );
     bool mSnapped;
+    SnapType mSnapType = SnapUtils::Vertex;
 };
 
 #endif // SNAPUTILS_H

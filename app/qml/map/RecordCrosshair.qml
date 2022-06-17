@@ -23,7 +23,8 @@ Item {
 
     property point recordPoint: snapUtils.snapped ? snapUtils.snappedPosition : center
 
-    property real size: 50 * __dp
+    property real outerSize: 60 * __dp
+    property real innerDotSize: 10 * __dp
 
     SnapUtils {
       id: snapUtils
@@ -35,9 +36,7 @@ Item {
     }
 
     Image {
-      id: crossBorder
-
-//      anchors.centerIn: parent
+      id: crosshairBackground // white background of the crosshair
 
       x: root.recordPoint.x - width / 2
       y: root.recordPoint.y - height / 2
@@ -58,21 +57,52 @@ Item {
         }
       }
 
-      height: root.size
+      height: root.outerSize
       width: height
-      source: InputStyle.crosshairAltIcon
+
+      source: InputStyle.crosshairBakcgroundIcon
+      sourceSize.width: width
+      sourceSize.height: height
+    }
+
+    Image {
+      id: crosshairForeground // green / purple outer circle of the crosshair
+
+      x: root.recordPoint.x - width / 2
+      y: root.recordPoint.y - height / 2
+
+      Behavior on x {
+        PropertyAnimation {
+          properties: "x"
+          duration: 50
+          easing.type: Easing.InQuad
+        }
+      }
+
+      Behavior on y {
+        PropertyAnimation {
+          properties: "y"
+          duration: 50
+          easing.type: Easing.InQuad
+        }
+      }
+
+      height: root.outerSize
+      width: height
+
+      source: InputStyle.crosshairForegroundIcon
       sourceSize.width: width
       sourceSize.height: height
     }
 
     ColorOverlay {
-      anchors.fill: crossBorder
-      source: crossBorder
+      anchors.fill: crosshairForeground
+      source: crosshairForeground
       color: snapUtils.snapped ? "#8a2be2" : InputStyle.fontColor
     }
 
     Image {
-      id: crossCenter
+      id: crossCenterDot // Center dot - visible when not snapped
 
       x: root.recordPoint.x - width / 2
       y: root.recordPoint.y - height / 2
@@ -93,21 +123,111 @@ Item {
         }
       }
 
-      height: root.size
+      opacity: snapUtils.snapped ? 0 : 100
+
+      Behavior on opacity {
+        PropertyAnimation {
+          properties: "opacity"
+          duration: 100
+          easing.type: Easing.InQuad
+        }
+      }
+
+      height: root.innerDotSize
       width: height
       sourceSize.width: width
       sourceSize.height: height
 
-      visible: false
-
-      source: InputStyle.crosshairCenterIcon
+      source: InputStyle.crosshairCenterDotIcon
     }
 
-    ColorOverlay {
-      anchors.fill: crossCenter
-      source: crossCenter
-      color: snapUtils.snapped ? "#8a2be2" : InputStyle.fontColor
+    Image {
+      id: crossCenterPlus // Center dot - visible when not snapped
 
-      visible: snapUtils.snapped
+      x: root.recordPoint.x - width / 2
+      y: root.recordPoint.y - height / 2
+
+      Behavior on x {
+        PropertyAnimation {
+          properties: "x"
+          duration: 50
+          easing.type: Easing.InQuad
+        }
+      }
+
+      Behavior on y {
+        PropertyAnimation {
+          properties: "y"
+          duration: 50
+          easing.type: Easing.InQuad
+        }
+      }
+
+      opacity: snapUtils.snapped && ( snapUtils.snapType === SnapUtils.Vertex || snapUtils.snapType === SnapUtils.Other ) ? 100 : 0
+
+      Behavior on opacity {
+        PropertyAnimation {
+          properties: "opacity"
+          duration: 100
+          easing.type: Easing.InQuad
+        }
+      }
+
+      rotation: snapUtils.snapType === SnapUtils.Other ? 0 : 45
+
+      Behavior on rotation {
+        PropertyAnimation {
+          properties: "rotation"
+          duration: 50
+          easing.type: Easing.InQuad
+        }
+      }
+
+      height: root.innerDotSize * 2
+      width: height
+      sourceSize.width: width
+      sourceSize.height: height
+
+      source: InputStyle.crosshairCenterPlusIcon
+    }
+
+    Image {
+      id: crossCenterCircle // Center circle - visible when snapped to segment
+
+      x: root.recordPoint.x - width / 2
+      y: root.recordPoint.y - height / 2
+
+      Behavior on x {
+        PropertyAnimation {
+          properties: "x"
+          duration: 50
+          easing.type: Easing.InQuad
+        }
+      }
+
+      Behavior on y {
+        PropertyAnimation {
+          properties: "y"
+          duration: 50
+          easing.type: Easing.InQuad
+        }
+      }
+
+      opacity: snapUtils.snapped && snapUtils.snapType === SnapUtils.Segment ? 100 : 0
+
+      Behavior on opacity {
+        PropertyAnimation {
+          properties: "opacity"
+          duration: 100
+          easing.type: Easing.InQuad
+        }
+      }
+
+      height: root.innerDotSize * 2
+      width: height
+      sourceSize.width: width
+      sourceSize.height: height
+
+      source: InputStyle.crosshairCenterCircleIcon
     }
 }

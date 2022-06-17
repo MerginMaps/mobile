@@ -65,6 +65,20 @@ void SnapUtils::getsnap( QPoint mapPoint )
   {
     snappoint = mMapSettings->coordinateToScreen( QgsPoint( snap.point().x(), snap.point().y() ) ).toPoint();
     setSnappedPosition( snappoint );
+
+    if ( snap.hasVertex() )
+    {
+      setSnapType( SnapUtils::Vertex );
+    }
+    else if ( snap.hasArea() || snap.hasCentroid() || snap.hasMiddleSegment() )
+    {
+      setSnapType( SnapUtils::Other );
+    }
+    else
+    {
+      setSnapType( SnapUtils::Segment );
+    }
+
     setSnapped( true );
   }
   else
@@ -119,4 +133,17 @@ void SnapUtils::setSnapped( bool newSnapped )
     return;
   mSnapped = newSnapped;
   emit snappedChanged( mSnapped );
+}
+
+const SnapUtils::SnapType &SnapUtils::snapType() const
+{
+  return mSnapType;
+}
+
+void SnapUtils::setSnapType( const SnapUtils::SnapType &newSnapType )
+{
+  if ( mSnapType == newSnapType )
+    return;
+  mSnapType = newSnapType;
+  emit snapTypeChanged( mSnapType );
 }

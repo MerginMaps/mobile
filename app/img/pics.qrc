@@ -26,7 +26,6 @@
         <file>account.svg</file>
         <file>account-multi.svg</file>
         <file>link.svg</file>
-        <file>crosshair.svg</file>
         <file>plus.svg</file>
         <file>undo.svg</file>
         <file>lutra_logo.svg</file>
@@ -75,9 +74,10 @@
         <file>dot-circle.svg</file>
         <file>mm_logo_vert_pos.svg</file>
         <file>mm_logo_hor_pos.svg</file>
-        <file>crosshair-square.svg</file>
-        <file>crosshair-square-border.svg</file>
-        <file>crosshair-square-center.svg</file>
-        <file>crosshair-alt.svg</file>
+        <file>crosshair-background.svg</file>
+        <file>crosshair-center.svg</file>
+        <file>crosshair-foreground.svg</file>
+        <file>crosshair-plus.svg</file>
+        <file>crosshair-circle.svg</file>
     </qresource>
 </RCC>
