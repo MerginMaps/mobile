@@ -92,10 +92,6 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-      window.width = 386
-      window.height = 597
-      window.x = 915
-      window.y = 77
 
       // load default project
       if ( __appSettings.defaultProject ) {

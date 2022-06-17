@@ -254,7 +254,7 @@ Item {
   onStateChanged: {
     switch ( state ) {
       case "recordFeature": {
-//        root.centerToPosition()
+        root.centerToPosition()
         break
       }
       case "recordInLayerFeature": {
