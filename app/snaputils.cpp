@@ -27,7 +27,7 @@ void SnapUtils::setQgsProject( QgsProject *newQgsProject )
   mQgsProject = newQgsProject;
   emit qgsProjectChanged( mQgsProject );
 
-  mSnappingUtils.setConfig( mQgsProject->snappingConfig() );
+  setupSnapping();
 }
 
 QgsQuickMapSettings *SnapUtils::mapSettings() const
@@ -99,7 +99,7 @@ void SnapUtils::getsnap( QPointF mapPoint )
 void SnapUtils::setup()
 {
   mSnappingUtils.setMapSettings( mMapSettings->mapSettings() );
-  mSnappingUtils.setConfig( mQgsProject->snappingConfig() );
+  setupSnapping();
 
   getsnap( mCenterPosition );
 }
@@ -154,4 +154,32 @@ void SnapUtils::setSnapType( const SnapUtils::SnapType &newSnapType )
     return;
   mSnapType = newSnapType;
   emit snapTypeChanged( mSnapType );
+}
+
+void SnapUtils::setupSnapping()
+{
+  int mode = mQgsProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Snapping" ), 0 );
+  switch( mode )
+  {
+    case 0: break;
+    case 1:
+    {
+      QgsSnappingConfig config;
+      config.setMode( QgsSnappingConfig::AllLayers );
+      config.setTypeFlag( QgsSnappingConfig::VertexFlag | QgsSnappingConfig::SegmentFlag );
+      config.setTolerance( 20.0 );
+      config.setTolerance( QgsTolerance::Pixels );
+      config.setEnabled( true );
+
+      mSnappingUtils.setConfig( config );
+      mSnappingUtils.setEnableSnappingForInvisibleFeature( false );
+      mSnappingUtils.setIndexingStrategy( QgsSnappingUtils::IndexExtent );
+      break;
+    }
+    case 2:
+    {
+      mSnappingUtils.setConfig( mQgsProject->snappingConfig() );
+      break;
+    }
+  }
 }

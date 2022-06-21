@@ -76,12 +76,15 @@ class SnapUtils : public QObject
     void snapTypeChanged( const SnapUtils::SnapType &snapType );
 
   private:
+    void setupSnapping();
+
     QgsProject *mQgsProject = nullptr;
     QgsQuickMapSettings *mMapSettings = nullptr;
     QgsSnappingUtils mSnappingUtils;
     QPointF mCenterPosition = QPointF( -1, -1 );
     QPointF mSnappedPosition = QPointF( -1, -1 );
     bool mSnapped;
+    bool enabled = false;
     SnapType mSnapType = SnapUtils::Vertex;
 };
 
