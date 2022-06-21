@@ -12,6 +12,8 @@ import QtQuick.Shapes 1.11
 
 import QgsQuick 0.1 as QgsQuick
 
+import lc 1.0
+
 Item {
   id: highlight
 
@@ -72,6 +74,16 @@ Item {
   property real refTransformOffsetX: 0
   property real refTransformOffsetY: 0
 
+  SnapUtils {
+    id: snapUtils
+
+    mapSettings: root.mapsettings
+    qgsProject: root.qgsProject
+    useSnapping: root.digitizingController.manualRecording == true && root.digitizingController.useGpsPoint == false
+
+    centerPosition: root.center
+  }
+
   Connections {
       target: mapSettings
       onVisibleExtentChanged: {
@@ -83,8 +95,7 @@ Item {
   }
 
   function crosshairPoint() {
-    // TODO: needs to be updated within snaputils
-    let crosshairCoord = Qt.point( highlight.width / 2, highlight.height / 2 )
+    let crosshairCoord = snapUtils.snapped ? snapUtils.snappedPosition : Qt.point( highlight.width / 2, highlight.height / 2 )
     crosshairCoord = mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
 
     return crosshairCoord
