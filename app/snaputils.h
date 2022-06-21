@@ -23,8 +23,8 @@ class SnapUtils : public QObject
     Q_OBJECT
 
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE mapSettings NOTIFY mapSettingsChanged )
-    Q_PROPERTY( QPoint centerPosition READ centerPosition WRITE centerPosition NOTIFY centerPositionChanged )
+    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( QPoint centerPosition READ centerPosition WRITE setCenterPosition NOTIFY centerPositionChanged )
     Q_PROPERTY( bool snapped READ snapped WRITE setSnapped NOTIFY snappedChanged )
     Q_PROPERTY( QPoint snappedPosition READ snappedPosition WRITE setSnappedPosition NOTIFY snappedPositionChanged )
     Q_PROPERTY( SnapType snapType READ snapType WRITE setSnapType NOTIFY snapTypeChanged )
@@ -44,14 +44,14 @@ class SnapUtils : public QObject
     void setQgsProject( QgsProject *newQgsProject );
 
     QgsQuickMapSettings *mapSettings() const;
-    void mapSettings( QgsQuickMapSettings *newMapSettings );
+    void setMapSettings( QgsQuickMapSettings *newMapSettings );
 
     Q_INVOKABLE void getsnap( QPoint mapPoint );
 
     void setup();
 
     QPoint centerPosition() const;
-    void centerPosition( QPoint newCenterPosition );
+    void setCenterPosition( QPoint newCenterPosition );
 
     QPoint snappedPosition() const;
     void setSnappedPosition( QPoint newSnappedPosition );

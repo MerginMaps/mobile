@@ -35,7 +35,7 @@ QgsQuickMapSettings *SnapUtils::mapSettings() const
   return mMapSettings;
 }
 
-void SnapUtils::mapSettings( QgsQuickMapSettings *newMapSettings )
+void SnapUtils::setMapSettings( QgsQuickMapSettings *newMapSettings )
 {
   if ( mMapSettings == newMapSettings )
     return;
@@ -101,7 +101,7 @@ QPoint SnapUtils::centerPosition() const
   return mCenterPosition;
 }
 
-void SnapUtils::centerPosition( QPoint newCenterPosition )
+void SnapUtils::setCenterPosition( QPoint newCenterPosition )
 {
   if ( mCenterPosition == newCenterPosition )
     return;
