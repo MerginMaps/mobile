@@ -55,15 +55,15 @@ void SnapUtils::setMapSettings( QgsQuickMapSettings *newMapSettings )
   mSnappingUtils.setMapSettings( mMapSettings->mapSettings() );
 }
 
-void SnapUtils::getsnap( QPoint mapPoint )
+void SnapUtils::getsnap( QPointF mapPoint )
 {
   QgsPoint mapCoords = mMapSettings->screenToCoordinate( mapPoint );
-  QPoint snappoint = mCenterPosition; // by default show crosshair in center, no snap
+  QPointF snappoint = mCenterPosition; // by default show crosshair in center, no snap
 
   QgsPointLocator::Match snap = mSnappingUtils.snapToMap( QgsPointXY( mapCoords.x(), mapCoords.y() ) );
   if ( snap.isValid() )
   {
-    snappoint = mMapSettings->coordinateToScreen( QgsPoint( snap.point().x(), snap.point().y() ) ).toPoint();
+    snappoint = mMapSettings->coordinateToScreen( QgsPoint( snap.point().x(), snap.point().y() ) );
     setSnappedPosition( snappoint );
 
     if ( snap.hasVertex() )
@@ -96,12 +96,12 @@ void SnapUtils::setup()
   getsnap( mCenterPosition );
 }
 
-QPoint SnapUtils::centerPosition() const
+QPointF SnapUtils::centerPosition() const
 {
   return mCenterPosition;
 }
 
-void SnapUtils::setCenterPosition( QPoint newCenterPosition )
+void SnapUtils::setCenterPosition( QPointF newCenterPosition )
 {
   if ( mCenterPosition == newCenterPosition )
     return;
@@ -109,12 +109,12 @@ void SnapUtils::setCenterPosition( QPoint newCenterPosition )
   emit centerPositionChanged( mCenterPosition );
 }
 
-QPoint SnapUtils::snappedPosition() const
+QPointF SnapUtils::snappedPosition() const
 {
   return mSnappedPosition;
 }
 
-void SnapUtils::setSnappedPosition( QPoint newSnappedPosition )
+void SnapUtils::setSnappedPosition( QPointF newSnappedPosition )
 {
   if ( mSnappedPosition == newSnappedPosition )
     return;

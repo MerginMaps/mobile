@@ -24,9 +24,9 @@ class SnapUtils : public QObject
 
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
-    Q_PROPERTY( QPoint centerPosition READ centerPosition WRITE setCenterPosition NOTIFY centerPositionChanged )
+    Q_PROPERTY( QPointF centerPosition READ centerPosition WRITE setCenterPosition NOTIFY centerPositionChanged )
     Q_PROPERTY( bool snapped READ snapped WRITE setSnapped NOTIFY snappedChanged )
-    Q_PROPERTY( QPoint snappedPosition READ snappedPosition WRITE setSnappedPosition NOTIFY snappedPositionChanged )
+    Q_PROPERTY( QPointF snappedPosition READ snappedPosition WRITE setSnappedPosition NOTIFY snappedPositionChanged )
     Q_PROPERTY( SnapType snapType READ snapType WRITE setSnapType NOTIFY snapTypeChanged )
 
   public:
@@ -46,15 +46,15 @@ class SnapUtils : public QObject
     QgsQuickMapSettings *mapSettings() const;
     void setMapSettings( QgsQuickMapSettings *newMapSettings );
 
-    Q_INVOKABLE void getsnap( QPoint mapPoint );
+    Q_INVOKABLE void getsnap( QPointF mapPoint );
 
     void setup();
 
-    QPoint centerPosition() const;
-    void setCenterPosition( QPoint newCenterPosition );
+    QPointF centerPosition() const;
+    void setCenterPosition( QPointF newCenterPosition );
 
-    QPoint snappedPosition() const;
-    void setSnappedPosition( QPoint newSnappedPosition );
+    QPointF snappedPosition() const;
+    void setSnappedPosition( QPointF newSnappedPosition );
 
     bool snapped() const;
     void setSnapped( bool newSnapped );
@@ -67,9 +67,9 @@ class SnapUtils : public QObject
     void qgsProjectChanged( QgsProject *qgsProject );
     void mapSettingsChanged( QgsQuickMapSettings *mapSettings );
 
-    void centerPositionChanged( QPoint centerPosition );
+    void centerPositionChanged( QPointF centerPosition );
 
-    void snappedPositionChanged( QPoint snappedPosition );
+    void snappedPositionChanged( QPointF snappedPosition );
 
     void snappedChanged( bool snapped );
 
@@ -79,8 +79,8 @@ class SnapUtils : public QObject
     QgsProject *mQgsProject = nullptr;
     QgsQuickMapSettings *mMapSettings = nullptr;
     QgsSnappingUtils mSnappingUtils;
-    QPoint mCenterPosition = QPoint( -1, -1 );
-    QPoint mSnappedPosition = QPoint( -1, -1 );
+    QPointF mCenterPosition = QPointF( -1, -1 );
+    QPointF mSnappedPosition = QPointF( -1, -1 );
     bool mSnapped;
     SnapType mSnapType = SnapUtils::Vertex;
 };
