@@ -383,7 +383,7 @@ class InputUtils: public QObject
     static const QgsEditorWidgetSetup getEditorWidgetSetup( const QgsField &field );
     static const QgsEditorWidgetSetup getEditorWidgetSetup( const QgsField &field, const QString &widgetType, const QVariantMap &additionalArgs = QVariantMap() );
 
-    // Returns geometry type represented as string (point/linestring/polygon/nullGeo); returns empty string is geometry is unknown or layer is invalid.
+    // Returns geometry type represented as string (point/linestring/polygon/nullGeo); returns empty string if geometry is unknown or layer is invalid.
     Q_INVOKABLE static QString geometryFromLayer( QgsVectorLayer *layer );
 
     // Returns a point geometry from point feature
