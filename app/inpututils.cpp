@@ -838,11 +838,6 @@ void InputUtils::log( const QString &context, const QString &message )
   CoreUtils::log( context, message );
 }
 
-FeatureLayerPair InputUtils::featureFactory( const QgsFeature &feature, QgsVectorLayer *layer )
-{
-  return FeatureLayerPair( feature, layer );
-}
-
 const QUrl InputUtils::getThemeIcon( const QString &name )
 {
   QString path = QStringLiteral( "qrc:/%1.svg" ).arg( name );
@@ -1234,18 +1229,6 @@ QString InputUtils::dumpScreenInfo() const
   return msg;
 }
 
-QVariantMap InputUtils::createValueRelationCache( const QVariantMap &config, const QgsFeature &formFeature )
-{
-  QVariantMap valueMap;
-  const QgsValueRelationFieldFormatter::ValueRelationCache cache = QgsValueRelationFieldFormatter::createCache( config, formFeature );
-
-  for ( const QgsValueRelationFieldFormatter::ValueRelationItem &item : cache )
-  {
-    valueMap.insert( item.key.toString(), item.value );
-  }
-  return valueMap;
-}
-
 QString InputUtils::evaluateExpression( const FeatureLayerPair &pair, QgsProject *activeProject, const QString &expression )
 {
   QList<QgsExpressionContextScope *> scopes;
@@ -1257,14 +1240,6 @@ QString InputUtils::evaluateExpression( const FeatureLayerPair &pair, QgsProject
   context.setFeature( pair.feature() );
   QgsExpression expr( expression );
   return expr.evaluate( &context ).toString();
-}
-
-void InputUtils::selectFeaturesInLayer( QgsVectorLayer *layer, const QList<int> &fids, Qgis::SelectBehavior behavior )
-{
-  QgsFeatureIds qgsFids;
-  for ( const int &fid : fids )
-    qgsFids << fid;
-  layer->selectByIds( qgsFids, behavior );
 }
 
 QString InputUtils::fieldType( const QgsField &field )
@@ -1292,43 +1267,9 @@ QString InputUtils::dateTimeFieldFormat( const QString &fieldFormat )
   }
 }
 
-QModelIndex InputUtils::invalidIndex()
-{
-  return QModelIndex();
-}
-
 bool InputUtils::isFeatureIdValid( qint64 featureId )
 {
   return !FID_IS_NEW( featureId ) && !FID_IS_NULL( featureId );
-}
-
-QgsQuickMapSettings *InputUtils::setupMapSettings( QgsProject *project, QgsQuickMapSettings *settings )
-{
-  if ( !project || !settings )
-  {
-    return nullptr;
-  }
-
-  QgsLayerTree *root = project->layerTreeRoot();
-
-  // Get list of all visible and valid layers in the project
-  QList< QgsMapLayer * > allLayers;
-  foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
-  {
-    if ( nodeLayer->isVisible() )
-    {
-      QgsMapLayer *layer = nodeLayer->layer();
-      if ( layer && layer->isValid() )
-      {
-        allLayers << layer;
-      }
-    }
-  }
-
-  settings->setLayers( allLayers );
-  settings->setTransformContext( project->transformContext() );
-
-  return settings;
 }
 
 QgsRectangle InputUtils::stakeoutPathExtent(
