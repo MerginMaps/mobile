@@ -28,6 +28,7 @@ class SnapUtils : public QObject
     Q_PROPERTY( bool snapped READ snapped WRITE setSnapped NOTIFY snappedChanged )
     Q_PROPERTY( QPointF snappedPosition READ snappedPosition WRITE setSnappedPosition NOTIFY snappedPositionChanged )
     Q_PROPERTY( SnapType snapType READ snapType WRITE setSnapType NOTIFY snapTypeChanged )
+    Q_PROPERTY( bool useSnapping READ useSnapping WRITE setUseSnapping )
 
   public:
     SnapUtils( QObject *parent = nullptr );
@@ -59,6 +60,9 @@ class SnapUtils : public QObject
     bool snapped() const;
     void setSnapped( bool newSnapped );
 
+    bool useSnapping() const;
+    void setUseSnapping( bool useSnapping );
+
     const SnapUtils::SnapType &snapType() const;
     void setSnapType( const SnapUtils::SnapType &newSnapType );
 
@@ -84,8 +88,8 @@ class SnapUtils : public QObject
     QPointF mCenterPosition = QPointF( -1, -1 );
     QPointF mSnappedPosition = QPointF( -1, -1 );
     bool mSnapped;
-    bool enabled = false;
     SnapType mSnapType = SnapUtils::Vertex;
+    bool mUseSnapping;
 };
 
 #endif // SNAPUTILS_H

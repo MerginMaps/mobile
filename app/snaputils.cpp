@@ -68,6 +68,14 @@ void SnapUtils::getsnap( QPointF mapPoint )
   QgsPoint mapCoords = mMapSettings->screenToCoordinate( mapPoint );
   QPointF snappoint = mCenterPosition; // by default show crosshair in center, no snap
 
+  // do no snap in the streaming mode
+  if ( !mUseSnapping )
+  {
+    setSnappedPosition( mCenterPosition );
+    setSnapped( false );
+    return;
+  }
+
   QgsPointLocator::Match snap = mSnappingUtils.snapToMap( QgsPointXY( mapCoords.x(), mapCoords.y() ) );
   if ( snap.isValid() )
   {
@@ -154,6 +162,16 @@ void SnapUtils::setSnapType( const SnapUtils::SnapType &newSnapType )
     return;
   mSnapType = newSnapType;
   emit snapTypeChanged( mSnapType );
+}
+
+bool SnapUtils::useSnapping() const
+{
+  return mUseSnapping;
+}
+
+void SnapUtils::setUseSnapping( bool useSnapping )
+{
+  mUseSnapping = useSnapping;
 }
 
 void SnapUtils::setupSnapping()

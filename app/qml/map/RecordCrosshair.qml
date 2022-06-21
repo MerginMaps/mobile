@@ -13,7 +13,7 @@ import QtGraphicalEffects 1.14
 import lc 1.0
 import ".."
 
-Item {    
+Item {
     id: root
 
     /*required*/ property var qgsProject
@@ -31,6 +31,7 @@ Item {
 
       mapSettings: root.mapsettings
       qgsProject: root.qgsProject
+      useSnapping: root.digitizingController.manualRecording == true && root.digitizingController.useGpsPoint == false
 
       centerPosition: root.center
     }
@@ -229,5 +230,11 @@ Item {
       sourceSize.height: height
 
       source: InputStyle.crosshairCenterCircleIcon
+    }
+
+    Connections {
+      target: _digitizingController
+      onManualRecordingChanged: snapUtils.useSnapping = _digitizingController.manualRecording == true && _digitizingController.useGpsPoint == false
+      onUseGpsPointChanged: snapUtils.useSnapping = _digitizingController.manualRecording == true && _digitizingController.useGpsPoint == false
     }
 }
