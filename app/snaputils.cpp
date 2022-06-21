@@ -40,10 +40,17 @@ void SnapUtils::setMapSettings( QgsQuickMapSettings *newMapSettings )
   if ( mMapSettings == newMapSettings )
     return;
 
-  // TODO: disconnect from previous map settings! (project reload)
+  if ( mMapSettings )
+  {
+    disconnect( mMapSettings, &QgsQuickMapSettings::extentChanged, this, &SnapUtils::setup );
+    disconnect( mMapSettings, &QgsQuickMapSettings::destinationCrsChanged, this, &SnapUtils::setup );
+    disconnect( mMapSettings, &QgsQuickMapSettings::mapUnitsPerPixelChanged, this, &SnapUtils::setup );
+    disconnect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &SnapUtils::setup );
+    disconnect( mMapSettings, &QgsQuickMapSettings::outputSizeChanged, this, &SnapUtils::setup );
+    disconnect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &SnapUtils::setup );
+  }
 
   mMapSettings = newMapSettings;
-  emit mapSettingsChanged( mMapSettings );
 
   connect( mMapSettings, &QgsQuickMapSettings::extentChanged, this, &SnapUtils::setup );
   connect( mMapSettings, &QgsQuickMapSettings::destinationCrsChanged, this, &SnapUtils::setup );
@@ -53,6 +60,7 @@ void SnapUtils::setMapSettings( QgsQuickMapSettings *newMapSettings )
   connect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &SnapUtils::setup );
 
   mSnappingUtils.setMapSettings( mMapSettings->mapSettings() );
+  emit mapSettingsChanged( mMapSettings );
 }
 
 void SnapUtils::getsnap( QPointF mapPoint )
