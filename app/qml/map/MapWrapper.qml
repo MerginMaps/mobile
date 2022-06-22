@@ -255,6 +255,9 @@ Item {
     switch ( state ) {
       case "recordFeature": {
         root.centerToPosition()
+        // we set project here as at this point it is surely valid and
+        // snapping settings can be read
+        _crosshair.qgsProject = __activeProject.qgsProject
         break
       }
       case "recordInLayerFeature": {

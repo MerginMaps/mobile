@@ -22,8 +22,11 @@ QgsProject *SnapUtils::qgsProject() const
 
 void SnapUtils::setQgsProject( QgsProject *newQgsProject )
 {
-  if ( mQgsProject == newQgsProject )
+  if ( newQgsProject->homePath().isEmpty() || mQgsProject == newQgsProject )
+  {
     return;
+  }
+
   mQgsProject = newQgsProject;
   emit qgsProjectChanged( mQgsProject );
 
@@ -102,7 +105,6 @@ void SnapUtils::getsnap( QPointF mapPoint )
 void SnapUtils::setup()
 {
   mSnappingUtils.setMapSettings( mMapSettings->mapSettings() );
-  setupSnapping();
 
   getsnap( mCenterPosition );
 }
