@@ -59,7 +59,7 @@ class DigitizingController : public QObject
     //! Creates a new QgsFeature without geometry in layer. If layer is null, it creates the feature on currently edited layer
     Q_INVOKABLE FeatureLayerPair featureWithoutGeometry( QgsVectorLayer *layer = nullptr );
     //! Returns (point geom) featurePair coords in map coordinates.
-    Q_INVOKABLE QgsPoint pointFeatureMapCoordinates( FeatureLayerPair pair );
+
     //! Changes point geometry of given pair according given point.
     Q_INVOKABLE FeatureLayerPair changePointGeometry( FeatureLayerPair pair, QgsPoint point, bool isGpsPoint );
 
@@ -102,7 +102,7 @@ class DigitizingController : public QObject
 
   private:
     void fixZ( QgsPoint &point ) const; // add/remove Z coordinate based on layer wkb type
-    QgsCoordinateTransform transformer() const;
+
     bool hasEnoughPoints() const;
 
     bool mRecording = false;

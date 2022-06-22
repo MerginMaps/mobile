@@ -109,18 +109,6 @@ void DigitizingController::fixZ( QgsPoint &point ) const
   }
 }
 
-QgsCoordinateTransform DigitizingController::transformer() const
-{
-  QgsCoordinateTransformContext context;
-  if ( mMapSettings )
-    context = mMapSettings->transformContext();
-
-  QgsCoordinateTransform transform( QgsCoordinateReferenceSystem( "EPSG:4326" ),
-                                    featureLayerPair().layer()->crs(),
-                                    context );
-  return transform;
-}
-
 bool DigitizingController::hasEnoughPoints() const
 {
   if ( hasLineGeometry( featureLayerPair().layer() ) )
@@ -317,15 +305,6 @@ FeatureLayerPair DigitizingController::lineOrPolygonFeature()
 FeatureLayerPair DigitizingController::featureWithoutGeometry( QgsVectorLayer *layer )
 {
   return createFeatureLayerPair( QgsGeometry(), layer );
-}
-
-QgsPoint DigitizingController::pointFeatureMapCoordinates( FeatureLayerPair pair )
-{
-  if ( !pair.layer() )
-    return QgsPoint();
-
-  QgsPointXY res = mMapSettings->mapSettings().layerToMapCoordinates( pair.layer(), QgsPoint( pair.feature().geometry().asPoint() ) );
-  return QgsPoint( res );
 }
 
 FeatureLayerPair DigitizingController::changePointGeometry( FeatureLayerPair pair, QgsPoint point, bool isGpsPoint )

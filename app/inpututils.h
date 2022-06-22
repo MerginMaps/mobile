@@ -161,9 +161,6 @@ class InputUtils: public QObject
     /** Formats coordinates from point into degrees format with minutes, seconds and hemisphere */
     Q_INVOKABLE static QString degreesString( const QgsPoint &point );
 
-    //! Creates and registers custom expression functions to Input, so they can be used in default value definitions.
-    static void registerInputExpressionFunctions();
-
     /**
      * @brief Creates formatted string of difference for given tMin and tMax datetimes (in minutes, hours, ... ago).
      * Note, that tMin < tMax, otherwise arguments are invalid.
@@ -275,13 +272,6 @@ class InputUtils: public QObject
     Q_INVOKABLE static void log( const QString &context, const QString &message );
 
     /**
-      * FeatureLayerPair factory for tuple of QgsFeature and QgsVectorLayer used in QgsQUick library.
-      * \param feature QgsFeature linked to new Feature instance.
-      * \param layer QgsVectorLayer which the feature belongs to, optional.
-      */
-    Q_INVOKABLE static FeatureLayerPair featureFactory( const QgsFeature &feature, QgsVectorLayer *layer = nullptr );
-
-    /**
       * Returns QUrl to image from library's /images folder.
       */
     Q_INVOKABLE static const QUrl getThemeIcon( const QString &name );
@@ -357,16 +347,6 @@ class InputUtils: public QObject
     QString dumpScreenInfo() const;
 
     /**
-     * Creates a cache for a value relation field.
-     * This can be used to keep the value map in the local memory
-     * if doing multiple lookups in a loop.
-     * \param config The widget configuration
-     * \param formFeature The feature currently being edited with current attribute values
-     * \return A kvp list of values for the widget
-     */
-    Q_INVOKABLE static QVariantMap createValueRelationCache( const QVariantMap &config, const QgsFeature &formFeature = QgsFeature() );
-
-    /**
      * Evaluates expression.
      * \param pair Used to define a context scope.
      * \param activeProject Used to define a context scope.
@@ -374,15 +354,6 @@ class InputUtils: public QObject
      * \return Evaluated expression
      */
     Q_INVOKABLE static QString evaluateExpression( const FeatureLayerPair &pair, QgsProject *activeProject, const QString &expression );
-
-    /**
-     * Selects features in a layer
-     * This method is required since QML cannot perform the conversion of a feature ID to a QgsFeatureId (i.e. a qint64)
-     * \param layer the vector layer
-     * \param fids the list of feature IDs
-     * \param behavior the selection behavior
-     */
-    Q_INVOKABLE static void selectFeaturesInLayer( QgsVectorLayer *layer, const QList<int> &fids, Qgis::SelectBehavior behavior = Qgis::SelectBehavior::SetSelection );
 
 
     /**
@@ -392,7 +363,6 @@ class InputUtils: public QObject
     */
     Q_INVOKABLE static QString fieldType( const QgsField &field );
 
-
     /**
     * Returns field format's name for given string representing field format defined in QgsDateTimeFieldFormatter.
     * \param fieldFormat string representing formats from QgsDateTimeFieldFormatter.
@@ -400,20 +370,9 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString dateTimeFieldFormat( const QString &fieldFormat );
 
     /**
-     * \brief invalidIndex returns invalid index
-     */
-    Q_INVOKABLE static QModelIndex invalidIndex();
-
-    /**
      * Returns if provided Id is valid ( >= 0 )
      */
     Q_INVOKABLE static bool isFeatureIdValid( qint64 featureId );
-
-    /**
-     * \brief setupMapSettings sets visible layers and transform context for map settings based on project
-     * \return map settings with layers and transform context set
-     */
-    Q_INVOKABLE static QgsQuickMapSettings *setupMapSettings( QgsProject *project, QgsQuickMapSettings *settings );
 
     /**
      * Returns widget setup according the field type - supports only basic types.
@@ -424,7 +383,7 @@ class InputUtils: public QObject
     static const QgsEditorWidgetSetup getEditorWidgetSetup( const QgsField &field );
     static const QgsEditorWidgetSetup getEditorWidgetSetup( const QgsField &field, const QString &widgetType, const QVariantMap &additionalArgs = QVariantMap() );
 
-    // Returns geometry type in form that qml understands
+    // Returns geometry type represented as string (point/linestring/polygon/nullGeo); returns empty string if geometry is unknown or layer is invalid.
     Q_INVOKABLE static QString geometryFromLayer( QgsVectorLayer *layer );
 
     // Returns a point geometry from point feature
