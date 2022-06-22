@@ -172,7 +172,7 @@ void SnapUtils::setUseSnapping( bool useSnapping )
 void SnapUtils::setupSnapping()
 {
   int mode = mQgsProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Snapping" ), 0 );
-  switch( mode )
+  switch ( mode )
   {
     case 0:
     {
