@@ -533,6 +533,7 @@ Item {
 
     qgsProject: __activeProject.qgsProject
     mapsettings: _map.mapSettings
+    shouldUseSnapping: _digitizingController.manualRecording && !_digitizingController.useGpsPoint
 
     visible: _digitizingController.manualRecording && root.isInRecordState
   }

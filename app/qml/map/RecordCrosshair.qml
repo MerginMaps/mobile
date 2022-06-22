@@ -18,6 +18,7 @@ Item {
 
     /*required*/ property var qgsProject
     /*required*/ property var mapsettings
+    property bool shouldUseSnapping
 
     property point center: Qt.point( root.width / 2, root.height / 2 )
 
@@ -31,7 +32,7 @@ Item {
 
       mapSettings: root.mapsettings
       qgsProject: root.qgsProject
-      useSnapping: root.digitizingController.manualRecording == true && root.digitizingController.useGpsPoint == false
+      useSnapping: root.shouldUseSnapping
 
       centerPosition: root.center
     }
@@ -230,11 +231,5 @@ Item {
       sourceSize.height: height
 
       source: InputStyle.crosshairCenterCircleIcon
-    }
-
-    Connections {
-      target: _digitizingController
-      onManualRecordingChanged: snapUtils.useSnapping = _digitizingController.manualRecording == true && _digitizingController.useGpsPoint == false
-      onUseGpsPointChanged: snapUtils.useSnapping = _digitizingController.manualRecording == true && _digitizingController.useGpsPoint == false
     }
 }
