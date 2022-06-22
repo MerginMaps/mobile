@@ -73,9 +73,6 @@ class PositionKit : public QObject
     //! Creates new position kit
     explicit PositionKit( QObject *parent = nullptr );
 
-    // Coordinate reference system of position - WGS84 (constant)
-    Q_INVOKABLE QgsCoordinateReferenceSystem positionCRS() const;
-
     Q_INVOKABLE void startUpdates();
     Q_INVOKABLE void stopUpdates();
 
@@ -107,6 +104,9 @@ class PositionKit : public QObject
     void setPositionProvider( AbstractPositionProvider *newPositionProvider );
 
     double hdop() const;
+
+    // Coordinate reference system of position - WGS84 (constant)
+    Q_INVOKABLE static QgsCoordinateReferenceSystem positionCRS();
 
     Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
     Q_INVOKABLE static AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );

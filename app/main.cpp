@@ -99,6 +99,8 @@
 #include "synchronizationmanager.h"
 #include "synchronizationerror.h"
 
+#include "maptools/abstractmaptool.h"
+#include "maptools/recordingmaptool.h"
 
 #ifndef NDEBUG
 // #include <QQmlDebuggingEnabler>
@@ -299,6 +301,10 @@ void initDeclarative()
   qmlRegisterType< QgsQuickCoordinateTransformer >( "QgsQuick", 0, 1, "CoordinateTransformer" );
 
   qmlRegisterUncreatableType< AbstractPositionProvider >( "lc", 1, 0, "PositionProvider", "Must be instantiated via its construct method" );
+
+  // map tools
+  qmlRegisterUncreatableType< AbstractMapTool >( "lc", 1, 0, "AbstractMapTool", "Instantiate one of child map tools instead" );
+  qmlRegisterType< RecordingMapTool >( "lc", 1, 0, "RecordingMapTool" );
 
   qmlRegisterType( QUrl( "qrc:/qgsquickmapcanvas.qml" ), "QgsQuick", 0, 1, "MapCanvas" );
 }

@@ -29,7 +29,7 @@ PositionKit::PositionKit( QObject *parent )
 {
 }
 
-QgsCoordinateReferenceSystem PositionKit::positionCRS() const
+QgsCoordinateReferenceSystem PositionKit::positionCRS()
 {
   return QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
 }
