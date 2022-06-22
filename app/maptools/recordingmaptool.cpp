@@ -161,7 +161,7 @@ void RecordingMapTool::onPositionChanged()
   else
   {
     // TODO: DigitizingController previously updated last point's position
-    // when has not yet timeouted.. do we need it?
+    // when RecordingInterval has not yet timeouted.. do we need it?
   }
 }
 

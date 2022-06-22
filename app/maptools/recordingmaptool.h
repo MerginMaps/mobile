@@ -50,7 +50,8 @@ class RecordingMapTool : public AbstractMapTool
     //! Adds point to the end of the recorded geometry; updates recordedGeometry afterwards
     Q_INVOKABLE void addPoint( const QPointF &point );
 
-    /** Removes last point from recorded geometry if there is at least one point
+    /**
+     *  Removes last point from recorded geometry if there is at least one point
      *  Updates recordedGeometry afterwards
      */
     Q_INVOKABLE void removePoint();
