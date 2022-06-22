@@ -190,7 +190,6 @@ void SnapUtils::setupSnapping()
 
       mSnappingUtils.setConfig( config );
       mSnappingUtils.setEnableSnappingForInvisibleFeature( false );
-      mSnappingUtils.setIndexingStrategy( QgsSnappingUtils::IndexExtent );
       break;
     }
     case 2:
@@ -199,4 +198,5 @@ void SnapUtils::setupSnapping()
       break;
     }
   }
+  mSnappingUtils.setIndexingStrategy( QgsSnappingUtils::IndexExtent );
 }
