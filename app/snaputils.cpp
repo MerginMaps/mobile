@@ -42,12 +42,7 @@ void SnapUtils::setMapSettings( QgsQuickMapSettings *newMapSettings )
 
   if ( mMapSettings )
   {
-    disconnect( mMapSettings, &QgsQuickMapSettings::extentChanged, this, &SnapUtils::setup );
-    disconnect( mMapSettings, &QgsQuickMapSettings::destinationCrsChanged, this, &SnapUtils::setup );
-    disconnect( mMapSettings, &QgsQuickMapSettings::mapUnitsPerPixelChanged, this, &SnapUtils::setup );
-    disconnect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &SnapUtils::setup );
-    disconnect( mMapSettings, &QgsQuickMapSettings::outputSizeChanged, this, &SnapUtils::setup );
-    disconnect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &SnapUtils::setup );
+    disconnect( mMapSettings, nullptr, this, nullptr );
   }
 
   mMapSettings = newMapSettings;
@@ -179,7 +174,11 @@ void SnapUtils::setupSnapping()
   int mode = mQgsProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Snapping" ), 0 );
   switch( mode )
   {
-    case 0: break;
+    case 0:
+    {
+      mUseSnapping = false;
+      break;
+    }
     case 1:
     {
       QgsSnappingConfig config;
