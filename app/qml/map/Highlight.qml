@@ -159,7 +159,7 @@ Item {
         }
 
         if ( recordingInProgress && guideLineAllowed ) { // construct a guide line / polygon
-          let centerPoint = mapSettings.screenToCoordinate( centerPoint )
+          let centerPoint = centerPoint
           let centerX = transformX( centerPoint.x )
           let centerY = transformY( centerPoint.y )
 
