@@ -52,6 +52,8 @@ Item {
 
   property bool guideLineAllowed: false
 
+  property point centerPoint: Qt.point( highlight.width / 2, highlight.height / 2 )
+
   //
   // internal properties not meant to be modified from outside
   //
@@ -74,16 +76,6 @@ Item {
   property real refTransformOffsetX: 0
   property real refTransformOffsetY: 0
 
-  SnapUtils {
-    id: snapUtils
-
-    mapSettings: root.mapsettings
-    qgsProject: root.qgsProject
-    useSnapping: root.digitizingController.manualRecording == true && root.digitizingController.useGpsPoint == false
-
-    centerPosition: root.center
-  }
-
   Connections {
       target: mapSettings
       onVisibleExtentChanged: {
@@ -92,13 +84,6 @@ Item {
           mapTransformOffsetY = __inputUtils.mapSettingsOffsetY(mapSettings)
           displayDevicePixelRatio = __inputUtils.mapSettingsDPR( mapSettings )
       }
-  }
-
-  function crosshairPoint() {
-    let crosshairCoord = snapUtils.snapped ? snapUtils.snappedPosition : Qt.point( highlight.width / 2, highlight.height / 2 )
-    crosshairCoord = mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
-
-    return crosshairCoord
   }
 
   // Transforms X coordinate from map CRS to screen XY with regards to scale and HighDPI
@@ -174,7 +159,7 @@ Item {
         }
 
         if ( recordingInProgress && guideLineAllowed ) { // construct a guide line / polygon
-          let centerPoint = crosshairPoint()
+          let centerPoint = mapSettings.screenToCoordinate( centerPoint )
           let centerX = transformX( centerPoint.x )
           let centerY = transformY( centerPoint.y )
 
