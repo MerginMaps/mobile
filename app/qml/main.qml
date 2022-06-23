@@ -30,6 +30,7 @@ ApplicationWindow {
     visibility: __appwindowvisibility
     title: "Input" // Do not translate
 
+
     Item {
         id: stateManager
         state: "view"
@@ -91,6 +92,7 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
+
       // load default project
       if ( __appSettings.defaultProject ) {
         let path = __appSettings.defaultProject

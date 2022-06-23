@@ -100,7 +100,7 @@ Item {
   function findRecordedPoint() {
     return _digitizingController.useGpsPoint ?
           __positionKit.positionCoordinate : // WGS84
-          _map.mapSettings.screenToCoordinate( _crosshair.center ) // map CRS
+          _crosshair.recordPoint // map CRS
   }
 
   function processRecordedPair( pair ) {
@@ -255,6 +255,9 @@ Item {
     switch ( state ) {
       case "recordFeature": {
         root.centerToPosition()
+        // we set project here as at this point it is surely valid and
+        // snapping settings can be read
+        _crosshair.qgsProject = __activeProject.qgsProject
         break
       }
       case "recordInLayerFeature": {
@@ -355,7 +358,6 @@ Item {
 
     onLongPressed: {
       // Alter position of simulated provider
-
       if ( __positionKit.positionProvider && __positionKit.positionProvider.id() === "simulated" )
       {
         __positionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), _map.mapSettings ) )
@@ -501,14 +503,6 @@ Item {
     onUseGpsPointChanged: __variablesManager.useGpsPoint = _digitizingController.useGpsPoint
   }
 
-  RecordCrosshair {
-    id: _crosshair
-
-    width: root.width
-    height: root.height
-    visible: _digitizingController.manualRecording && root.isInRecordState
-  }
-
   Highlight {
     id: _digitizingHighlight
     anchors.fill: _map
@@ -516,6 +510,8 @@ Item {
     hasPolygon: featureLayerPair !== null ? _digitizingController.hasPolygonGeometry( featureLayerPair.layer ) : false
 
     mapSettings: _map.mapSettings
+
+    crosshairPoint: _crosshair.screenPoint
 
     lineColor: _highlightIdentified.lineColor
     lineWidth: _highlightIdentified.lineWidth
@@ -532,6 +528,19 @@ Item {
     markerAnchorY: _highlightIdentified.markerAnchorY
     recordingInProgress: _digitizingController.recording
     guideLineAllowed: _digitizingController.manualRecording && root.isInRecordState
+  }
+
+  RecordCrosshair {
+    id: _crosshair
+
+    width: root.width
+    height: root.height
+
+    qgsProject: __activeProject.qgsProject
+    mapsettings: _map.mapSettings
+    shouldUseSnapping: _digitizingController.manualRecording && !_digitizingController.useGpsPoint
+
+    visible: _digitizingController.manualRecording && root.isInRecordState
   }
 
   AutoHideBanner {

@@ -12,6 +12,8 @@ import QtQuick.Shapes 1.11
 
 import QgsQuick 0.1 as QgsQuick
 
+import lc 1.0
+
 Item {
   id: highlight
 
@@ -50,6 +52,8 @@ Item {
 
   property bool guideLineAllowed: false
 
+  property point crosshairPoint: Qt.point( highlight.width / 2, highlight.height / 2 )
+
   //
   // internal properties not meant to be modified from outside
   //
@@ -80,13 +84,6 @@ Item {
           mapTransformOffsetY = __inputUtils.mapSettingsOffsetY(mapSettings)
           displayDevicePixelRatio = __inputUtils.mapSettingsDPR( mapSettings )
       }
-  }
-
-  function crosshairPoint() {
-    let crosshairCoord = Qt.point( highlight.width / 2, highlight.height / 2 )
-    crosshairCoord = mapSettings.screenToCoordinate( crosshairCoord )  // map CRS
-
-    return crosshairCoord
   }
 
   // Transforms X coordinate from map CRS to screen XY with regards to scale and HighDPI
@@ -162,7 +159,7 @@ Item {
         }
 
         if ( recordingInProgress && guideLineAllowed ) { // construct a guide line / polygon
-          let centerPoint = crosshairPoint()
+          let centerPoint = crosshairPoint
           let centerX = transformX( centerPoint.x )
           let centerY = transformY( centerPoint.y )
 

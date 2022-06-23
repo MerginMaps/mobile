@@ -23,6 +23,7 @@ identifykit.cpp \
 scalebarkit.cpp \
 synchronizationerror.cpp \
 synchronizationmanager.cpp \
+snaputils.cpp \
 inputhelp.cpp \
 activelayer.cpp \
 fieldsmodel.cpp \
@@ -79,6 +80,7 @@ scalebarkit.h \
 synchronizationerror.h \
 synchronizationmanager.h \
 synchronizationoptions.h \
+snaputils.h \
 inputhelp.h \
 activelayer.h \
 fieldsmodel.h \
