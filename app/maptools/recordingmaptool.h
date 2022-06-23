@@ -21,7 +21,6 @@ class PositionKit;
 class VariablesManager;
 class QgsVectorLayer;
 
-
 class RecordingMapTool : public AbstractMapTool
 {
     Q_OBJECT
@@ -34,6 +33,9 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
 
     Q_PROPERTY( QgsGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
+
+    // When editing geometry - set this as the geometry to start with
+    Q_PROPERTY( QgsGeometry initialGeometry READ initialGeometry WRITE setInitialGeometry NOTIFY initialGeometryChanged )
 
   public:
 
@@ -78,6 +80,10 @@ class RecordingMapTool : public AbstractMapTool
     const QgsGeometry &recordedGeometry() const;
     void setRecordedGeometry( const QgsGeometry &newRecordedGeometry );
 
+    const QgsGeometry &initialGeometry() const;
+    // Fills mPoints array with points from the geometry
+    void setInitialGeometry( const QgsGeometry &newInitialGeometry );
+
   signals:
     void layerChanged( QgsVectorLayer *layer );
     void centeredToGPSChanged( bool centeredToGPS );
@@ -85,6 +91,8 @@ class RecordingMapTool : public AbstractMapTool
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
     void recordingIntervalChanged( int lineRecordingInterval );
     void recordingTypeChanged( const RecordingMapTool::RecordingType &recordingType );
+
+    void initialGeometryChanged( const QgsGeometry &initialGeometry );
 
   public slots:
     void onPositionChanged();
@@ -98,7 +106,8 @@ class RecordingMapTool : public AbstractMapTool
 
   private:
     QVector<QgsPoint> mPoints;
-    QgsGeometry mRecordedGeometry = QgsGeometry();
+    QgsGeometry mRecordedGeometry;
+    QgsGeometry mInitialGeometry;
 
     bool mCenteredToGPS;
     int mRecordingInterval;  // in seconds for the StreamingMode

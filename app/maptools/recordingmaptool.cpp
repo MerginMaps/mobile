@@ -9,8 +9,6 @@
 
 #include "recordingmaptool.h"
 
-#include <QDebug>
-
 #include "qgsvectorlayer.h"
 #include "qgspolygon.h"
 #include "qgsvectorlayerutils.h"
@@ -250,4 +248,27 @@ void RecordingMapTool::setRecordedGeometry( const QgsGeometry &newRecordedGeomet
     return;
   mRecordedGeometry = newRecordedGeometry;
   emit recordedGeometryChanged( mRecordedGeometry );
+}
+
+const QgsGeometry &RecordingMapTool::initialGeometry() const
+{
+  return mInitialGeometry;
+}
+
+void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry )
+{
+  if ( mInitialGeometry.equals( newInitialGeometry ) )
+    return;
+
+  // We currently only support editing of points
+  if ( mLayer->geometryType() == QgsWkbTypes::PointGeometry )
+  {
+    QgsPoint point = QgsPoint( mInitialGeometry.asPoint() );
+    fixZ( point );
+
+    mPoints.clear();
+    mPoints.push_back( point );
+  }
+
+  emit initialGeometryChanged( mInitialGeometry );
 }
