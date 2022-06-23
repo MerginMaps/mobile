@@ -9,6 +9,7 @@ attributes/attributetabproxymodel.cpp \
 attributes/rememberattributescontroller.cpp \
 attributes/fieldvalidator.cpp \
 maptools/abstractmaptool.cpp \
+maptools/splittingmaptool.cpp \
 maptools/recordingmaptool.cpp \
 position/abstractpositionprovider.cpp \
 position/internalpositionprovider.cpp \
@@ -65,6 +66,7 @@ attributes/attributetabproxymodel.h \
 attributes/rememberattributescontroller.h \
 attributes/fieldvalidator.h \
 maptools/abstractmaptool.h \
+maptools/splittingmaptool.h \
 maptools/recordingmaptool.h \
 position/abstractpositionprovider.h \
 position/internalpositionprovider.h \

@@ -101,6 +101,7 @@
 
 #include "maptools/abstractmaptool.h"
 #include "maptools/recordingmaptool.h"
+#include "maptools/splittingmaptool.h""
 
 #ifndef NDEBUG
 // #include <QQmlDebuggingEnabler>
@@ -305,6 +306,7 @@ void initDeclarative()
   // map tools
   qmlRegisterUncreatableType< AbstractMapTool >( "lc", 1, 0, "AbstractMapTool", "Instantiate one of child map tools instead" );
   qmlRegisterType< RecordingMapTool >( "lc", 1, 0, "RecordingMapTool" );
+  qmlRegisterType< SplittingMapTool >( "lc", 1, 0, "SplittingMapTool" );
 
   qmlRegisterType( QUrl( "qrc:/qgsquickmapcanvas.qml" ), "QgsQuick", 0, 1, "MapCanvas" );
 }
