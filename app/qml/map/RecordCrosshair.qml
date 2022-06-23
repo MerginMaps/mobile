@@ -23,6 +23,7 @@ Item {
     property point center: Qt.point( root.width / 2, root.height / 2 )
 
     property point recordPoint: snapUtils.snapped ? snapUtils.snappedPosition : center
+    property var recordMapPoint: snapUtils.snapped ? snapUtils.mapPoint : root.mapsettings.screenToCoordinate(center)
 
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp

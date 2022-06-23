@@ -82,8 +82,7 @@ void SnapUtils::getsnap( QPointF mapPoint )
   QgsPointLocator::Match snap = mSnappingUtils.snapToMap( QgsPointXY( mapCoords.x(), mapCoords.y() ) );
   if ( snap.isValid() )
   {
-    snappoint = mMapSettings->coordinateToScreen( QgsPoint( snap.point().x(), snap.point().y() ) );
-    setSnappedPosition( snappoint );
+    setMapPoint( QgsPoint( snap.point() ) );
 
     if ( snap.hasVertex() )
     {
@@ -102,7 +101,7 @@ void SnapUtils::getsnap( QPointF mapPoint )
   }
   else
   {
-    setSnappedPosition( snappoint );
+    setMapPoint( mMapSettings->screenToCoordinate( snappoint ) );
     setSnapped( false );
   }
 }
@@ -137,6 +136,21 @@ void SnapUtils::setSnappedPosition( QPointF newSnappedPosition )
   if ( mSnappedPosition == newSnappedPosition )
     return;
   mSnappedPosition = newSnappedPosition;
+  emit snappedPositionChanged( mSnappedPosition );
+}
+
+QgsPoint SnapUtils::mapPoint() const
+{
+  return mMapPoint;
+}
+
+void SnapUtils::setMapPoint( QgsPoint newMapPoint )
+{
+  if ( mMapPoint == newMapPoint )
+    return;
+  mMapPoint = newMapPoint;
+  mSnappedPosition = mMapSettings->coordinateToScreen( mMapPoint );
+  emit mapPointChanged( mMapPoint );
   emit snappedPositionChanged( mSnappedPosition );
 }
 
