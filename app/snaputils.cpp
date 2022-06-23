@@ -69,12 +69,12 @@ void SnapUtils::setMapSettings( QgsQuickMapSettings *newMapSettings )
 void SnapUtils::getsnap( QPointF mapPoint )
 {
   QgsPoint mapCoords = mMapSettings->screenToCoordinate( mapPoint );
-  QPointF snappoint = mCenterPosition; // by default show crosshair in center, no snap
+  QgsPoint snappoint = mMapSettings->screenToCoordinate( mCenterPosition ); // by default show crosshair in center, no snap
 
   // do no snap in the streaming mode
   if ( !mUseSnapping )
   {
-    setSnappedPosition( mCenterPosition );
+    setSnappedPosition( snappoint );
     setSnapped( false );
     return;
   }
@@ -82,7 +82,7 @@ void SnapUtils::getsnap( QPointF mapPoint )
   QgsPointLocator::Match snap = mSnappingUtils.snapToMap( QgsPointXY( mapCoords.x(), mapCoords.y() ) );
   if ( snap.isValid() )
   {
-    setMapPoint( QgsPoint( snap.point() ) );
+    setSnappedPosition( QgsPoint( snap.point() ) );
 
     if ( snap.hasVertex() )
     {
@@ -101,7 +101,7 @@ void SnapUtils::getsnap( QPointF mapPoint )
   }
   else
   {
-    setMapPoint( mMapSettings->screenToCoordinate( snappoint ) );
+    setSnappedPosition( snappoint );
     setSnapped( false );
   }
 }
@@ -126,31 +126,16 @@ void SnapUtils::setCenterPosition( QPointF newCenterPosition )
   emit centerPositionChanged( mCenterPosition );
 }
 
-QPointF SnapUtils::snappedPosition() const
+QgsPoint SnapUtils::snappedPosition() const
 {
   return mSnappedPosition;
 }
 
-void SnapUtils::setSnappedPosition( QPointF newSnappedPosition )
+void SnapUtils::setSnappedPosition( QgsPoint newSnappedPosition )
 {
   if ( mSnappedPosition == newSnappedPosition )
     return;
   mSnappedPosition = newSnappedPosition;
-  emit snappedPositionChanged( mSnappedPosition );
-}
-
-QgsPoint SnapUtils::mapPoint() const
-{
-  return mMapPoint;
-}
-
-void SnapUtils::setMapPoint( QgsPoint newMapPoint )
-{
-  if ( mMapPoint == newMapPoint )
-    return;
-  mMapPoint = newMapPoint;
-  mSnappedPosition = mMapSettings->coordinateToScreen( mMapPoint );
-  emit mapPointChanged( mMapPoint );
   emit snappedPositionChanged( mSnappedPosition );
 }
 

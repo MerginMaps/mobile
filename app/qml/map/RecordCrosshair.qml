@@ -22,8 +22,8 @@ Item {
 
     property point center: Qt.point( root.width / 2, root.height / 2 )
 
-    property point recordPoint: snapUtils.snapped ? snapUtils.snappedPosition : center
-    property var recordMapPoint: snapUtils.snapped ? snapUtils.mapPoint : root.mapsettings.screenToCoordinate(center)
+    property var recordPoint: snapUtils.snappedPosition
+    property point screenPoint: root.mapsettings.coordinateToScreen(recordPoint)
 
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp
@@ -41,8 +41,8 @@ Item {
     Image {
       id: crosshairBackground // white background of the crosshair
 
-      x: root.recordPoint.x - width / 2
-      y: root.recordPoint.y - height / 2
+      x: root.screenPoint.x - width / 2
+      y: root.screenPoint.y - height / 2
 
       Behavior on x {
         PropertyAnimation {
@@ -71,8 +71,8 @@ Item {
     Image {
       id: crosshairForeground // green / purple outer circle of the crosshair
 
-      x: root.recordPoint.x - width / 2
-      y: root.recordPoint.y - height / 2
+      x: root.screenPoint.x - width / 2
+      y: root.screenPoint.y - height / 2
 
       Behavior on x {
         PropertyAnimation {
@@ -107,8 +107,8 @@ Item {
     Image {
       id: crossCenterDot // Center dot - visible when not snapped
 
-      x: root.recordPoint.x - width / 2
-      y: root.recordPoint.y - height / 2
+      x: root.screenPoint.x - width / 2
+      y: root.screenPoint.y - height / 2
 
       Behavior on x {
         PropertyAnimation {
@@ -147,8 +147,8 @@ Item {
     Image {
       id: crossCenterPlus // Center dot - visible when not snapped
 
-      x: root.recordPoint.x - width / 2
-      y: root.recordPoint.y - height / 2
+      x: root.screenPoint.x - width / 2
+      y: root.screenPoint.y - height / 2
 
       Behavior on x {
         PropertyAnimation {
@@ -197,8 +197,8 @@ Item {
     Image {
       id: crossCenterCircle // Center circle - visible when snapped to segment
 
-      x: root.recordPoint.x - width / 2
-      y: root.recordPoint.y - height / 2
+      x: root.screenPoint.x - width / 2
+      y: root.screenPoint.y - height / 2
 
       Behavior on x {
         PropertyAnimation {

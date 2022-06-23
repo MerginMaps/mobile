@@ -27,8 +27,7 @@ class SnapUtils : public QObject
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
     Q_PROPERTY( QPointF centerPosition READ centerPosition WRITE setCenterPosition NOTIFY centerPositionChanged )
     Q_PROPERTY( bool snapped READ snapped WRITE setSnapped NOTIFY snappedChanged )
-    Q_PROPERTY( QPointF snappedPosition READ snappedPosition WRITE setSnappedPosition NOTIFY snappedPositionChanged )
-    Q_PROPERTY( QgsPoint mapPoint READ mapPoint WRITE setMapPoint NOTIFY mapPointChanged )
+    Q_PROPERTY( QgsPoint snappedPosition READ snappedPosition WRITE setSnappedPosition NOTIFY snappedPositionChanged )
     Q_PROPERTY( SnapType snapType READ snapType WRITE setSnapType NOTIFY snapTypeChanged )
     Q_PROPERTY( bool useSnapping READ useSnapping WRITE setUseSnapping )
 
@@ -54,11 +53,8 @@ class SnapUtils : public QObject
     QPointF centerPosition() const;
     void setCenterPosition( QPointF newCenterPosition );
 
-    QPointF snappedPosition() const;
-    void setSnappedPosition( QPointF newSnappedPosition );
-
-    QgsPoint mapPoint() const;
-    void setMapPoint( QgsPoint newMapPoint );
+    QgsPoint snappedPosition() const;
+    void setSnappedPosition( QgsPoint newSnappedPosition );
 
     bool snapped() const;
     void setSnapped( bool newSnapped );
@@ -80,8 +76,7 @@ class SnapUtils : public QObject
 
     void centerPositionChanged( QPointF centerPosition );
 
-    void snappedPositionChanged( QPointF snappedPosition );
-    void mapPointChanged( QgsPoint mapPoint );
+    void snappedPositionChanged( QgsPoint snappedPosition );
 
     void snappedChanged( bool snapped );
 
@@ -94,8 +89,7 @@ class SnapUtils : public QObject
     QgsQuickMapSettings *mMapSettings = nullptr;
     QgsSnappingUtils mSnappingUtils;
     QPointF mCenterPosition = QPointF( -1, -1 );
-    QPointF mSnappedPosition = QPointF( -1, -1 );
-    QgsPoint mMapPoint = QgsPoint( -1, -1 );
+    QgsPoint mSnappedPosition = QgsPoint( -1, -1 );
     bool mSnapped;
     SnapType mSnapType = SnapUtils::Vertex;
     bool mUseSnapping;
