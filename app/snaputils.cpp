@@ -22,6 +22,11 @@ QgsProject *SnapUtils::qgsProject() const
 
 void SnapUtils::setQgsProject( QgsProject *newQgsProject )
 {
+  if ( !newQgsProject )
+  {
+    return;
+  }
+
   if ( newQgsProject->homePath().isEmpty() || mQgsProject == newQgsProject )
   {
     return;
@@ -40,7 +45,7 @@ QgsQuickMapSettings *SnapUtils::mapSettings() const
 
 void SnapUtils::setMapSettings( QgsQuickMapSettings *newMapSettings )
 {
-  if ( mMapSettings == newMapSettings )
+  if ( !newMapSettings || mMapSettings == newMapSettings )
     return;
 
   if ( mMapSettings )
@@ -50,12 +55,12 @@ void SnapUtils::setMapSettings( QgsQuickMapSettings *newMapSettings )
 
   mMapSettings = newMapSettings;
 
-  connect( mMapSettings, &QgsQuickMapSettings::extentChanged, this, &SnapUtils::setup );
-  connect( mMapSettings, &QgsQuickMapSettings::destinationCrsChanged, this, &SnapUtils::setup );
-  connect( mMapSettings, &QgsQuickMapSettings::mapUnitsPerPixelChanged, this, &SnapUtils::setup );
-  connect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &SnapUtils::setup );
-  connect( mMapSettings, &QgsQuickMapSettings::outputSizeChanged, this, &SnapUtils::setup );
-  connect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &SnapUtils::setup );
+  connect( mMapSettings, &QgsQuickMapSettings::extentChanged, this, &SnapUtils::onMapSettingsUpdated );
+  connect( mMapSettings, &QgsQuickMapSettings::destinationCrsChanged, this, &SnapUtils::onMapSettingsUpdated );
+  connect( mMapSettings, &QgsQuickMapSettings::mapUnitsPerPixelChanged, this, &SnapUtils::onMapSettingsUpdated );
+  connect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &SnapUtils::onMapSettingsUpdated );
+  connect( mMapSettings, &QgsQuickMapSettings::outputSizeChanged, this, &SnapUtils::onMapSettingsUpdated );
+  connect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &SnapUtils::onMapSettingsUpdated );
 
   mSnappingUtils.setMapSettings( mMapSettings->mapSettings() );
   emit mapSettingsChanged( mMapSettings );
@@ -102,7 +107,7 @@ void SnapUtils::getsnap( QPointF mapPoint )
   }
 }
 
-void SnapUtils::setup()
+void SnapUtils::onMapSettingsUpdated()
 {
   mSnappingUtils.setMapSettings( mMapSettings->mapSettings() );
 

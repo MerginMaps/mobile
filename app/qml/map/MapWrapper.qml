@@ -511,7 +511,7 @@ Item {
 
     mapSettings: _map.mapSettings
 
-    centerPoint: _crosshair.recordPoint
+    crosshairPoint: _crosshair.recordPoint
 
     lineColor: _highlightIdentified.lineColor
     lineWidth: _highlightIdentified.lineWidth

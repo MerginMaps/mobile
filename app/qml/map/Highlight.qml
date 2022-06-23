@@ -52,7 +52,7 @@ Item {
 
   property bool guideLineAllowed: false
 
-  property point centerPoint: Qt.point( highlight.width / 2, highlight.height / 2 )
+  property point crosshairPoint: Qt.point( highlight.width / 2, highlight.height / 2 )
 
   //
   // internal properties not meant to be modified from outside
@@ -159,7 +159,7 @@ Item {
         }
 
         if ( recordingInProgress && guideLineAllowed ) { // construct a guide line / polygon
-          let centerPoint = centerPoint
+          let centerPoint = crosshairPoint
           let centerX = transformX( centerPoint.x )
           let centerY = transformY( centerPoint.y )
 

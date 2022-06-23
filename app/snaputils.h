@@ -49,8 +49,6 @@ class SnapUtils : public QObject
 
     Q_INVOKABLE void getsnap( QPointF mapPoint );
 
-    void setup();
-
     QPointF centerPosition() const;
     void setCenterPosition( QPointF newCenterPosition );
 
@@ -65,6 +63,10 @@ class SnapUtils : public QObject
 
     const SnapUtils::SnapType &snapType() const;
     void setSnapType( const SnapUtils::SnapType &newSnapType );
+
+  public slots:
+
+    void onMapSettingsUpdated();
 
   signals:
 
