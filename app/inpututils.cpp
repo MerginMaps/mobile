@@ -32,6 +32,7 @@
 #include "qgsdatetimefieldformatter.h"
 #include "qgslayertree.h"
 #include "qgsprojectviewsettings.h"
+#include "qgsvectorlayerutils.h"
 
 #include "featurelayerpair.h"
 #include "qgsquickmapsettings.h"
@@ -39,6 +40,7 @@
 #include "qgsfeatureid.h"
 
 #include "imageutils.h"
+#include "variablesmanager.h"
 
 #include <Qt>
 #include <QDir>
@@ -647,6 +649,11 @@ QgsPoint InputUtils::point( double x, double y, double z, double m )
   return QgsPoint( x, y, z, m );
 }
 
+QgsGeometry InputUtils::emptyGeometry()
+{
+  return QgsGeometry();
+}
+
 QgsPoint InputUtils::coordinateToPoint( const QGeoCoordinate &coor )
 {
   return QgsPoint( coor.longitude(), coor.latitude(), coor.altitude() );
@@ -994,6 +1001,26 @@ QString InputUtils::geometryFromLayer( QgsVectorLayer *layer )
     }
   }
   return QString();
+}
+
+bool InputUtils::isPointLayer( QgsVectorLayer *layer )
+{
+  return geometryFromLayer( layer ) == "point";
+}
+
+bool InputUtils::isLineLayer( QgsVectorLayer *layer )
+{
+  return geometryFromLayer( layer ) == "linestring";
+}
+
+bool InputUtils::isPolygonLayer( QgsVectorLayer *layer )
+{
+  return geometryFromLayer( layer ) == "polygon";
+}
+
+bool InputUtils::isNoGeometryLayer( QgsVectorLayer *layer )
+{
+  return geometryFromLayer( layer ) == "nullGeo";
 }
 
 qreal InputUtils::calculateScreenDpr()
@@ -1485,6 +1512,21 @@ QString InputUtils::featureTitle( const FeatureLayerPair &pair, QgsProject *proj
     title = QStringLiteral( "Feature %1" ).arg( pair.feature().id() );
 
   return title;
+}
+
+FeatureLayerPair InputUtils::createFeatureLayerPair( QgsVectorLayer *layer, const QgsGeometry &geometry, VariablesManager *variablesmanager )
+{
+  if ( !layer )
+    return FeatureLayerPair();
+
+  QgsAttributes attrs( layer->fields().count() );
+  QgsExpressionContext context = layer->createExpressionContext();
+
+  if ( variablesmanager )
+    context << variablesmanager->positionScope();
+
+  QgsFeature feat = QgsVectorLayerUtils::createFeature( layer, geometry, attrs.toMap(), &context );
+  return FeatureLayerPair( feat, layer );
 }
 
 QgsPointXY InputUtils::extractPointFromFeature( const FeatureLayerPair &feature )

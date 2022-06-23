@@ -44,6 +44,8 @@ class QgsFeature;
 class QgsVectorLayer;
 class QgsCoordinateReferenceSystem;
 
+class VariablesManager;
+
 class InputUtils: public QObject
 {
     Q_OBJECT
@@ -184,6 +186,11 @@ class InputUtils: public QObject
       * Creates QgsPoint in QML
       */
     Q_INVOKABLE static QgsPoint point( double x, double y, double z = std::numeric_limits<double>::quiet_NaN(), double m = std::numeric_limits<double>::quiet_NaN() );
+
+    /**
+     * Creates empty geometry
+     */
+    Q_INVOKABLE static QgsGeometry emptyGeometry();
 
     /**
       * Converts QGeoCoordinate to QgsPoint
@@ -385,6 +392,10 @@ class InputUtils: public QObject
 
     // Returns geometry type represented as string (point/linestring/polygon/nullGeo); returns empty string if geometry is unknown or layer is invalid.
     Q_INVOKABLE static QString geometryFromLayer( QgsVectorLayer *layer );
+    Q_INVOKABLE static bool isPointLayer( QgsVectorLayer *layer );
+    Q_INVOKABLE static bool isLineLayer( QgsVectorLayer *layer );
+    Q_INVOKABLE static bool isPolygonLayer( QgsVectorLayer *layer );
+    Q_INVOKABLE static bool isNoGeometryLayer( QgsVectorLayer *layer );
 
     // Returns a point geometry from point feature
     Q_INVOKABLE static QgsPointXY extractPointFromFeature( const FeatureLayerPair &feature );
@@ -403,6 +414,9 @@ class InputUtils: public QObject
 
     // Returns the title of the feature
     Q_INVOKABLE static QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );
+
+    //! Creates featureLayerPair from geometry and layer, evaluates its expressions and returns it.
+    Q_INVOKABLE static FeatureLayerPair createFeatureLayerPair( QgsVectorLayer *layer, const QgsGeometry &geometry, VariablesManager *variablesmanager );
 
     // Calculates real screen DPR based on DPI
     static qreal calculateScreenDpr();
