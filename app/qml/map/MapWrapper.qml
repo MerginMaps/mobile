@@ -101,7 +101,6 @@ Item {
     return _digitizingController.useGpsPoint ?
           __positionKit.positionCoordinate : // WGS84
           _crosshair.recordMapPoint // map CRS
-          //_map.mapSettings.screenToCoordinate( _crosshair.recordPoint ) // map CRS
   }
 
   function processRecordedPair( pair ) {
