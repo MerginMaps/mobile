@@ -96,6 +96,7 @@ Item {
 
       case "recordInLayer": {
         recordInLayerFeatureStarted()
+        hideHighlight()
         break
       }
 
@@ -748,12 +749,12 @@ Item {
         else if ( root.state === "edit" )
         {
           let editedFeaturePair = __inputUtils.changeFeaturePairGeometry( internal.featurePairToEdit, geometry )
-          root.editingGeometryCanceled( editedFeaturePair )
+          root.editingGeometryFinished( editedFeaturePair )
         }
         else if ( root.state === "recordInLayer" )
         {
           let newFeaturePair = __inputUtils.createFeatureLayerPair( __activeLayer.vectorLayer, geometry, __variablesManager )
-          root.recordInLayerFeatureCanceled( newFeaturePair )
+          root.recordInLayerFeatureFinished( newFeaturePair )
         }
 
         root.state = "view"
