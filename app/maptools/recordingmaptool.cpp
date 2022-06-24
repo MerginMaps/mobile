@@ -106,9 +106,8 @@ void RecordingMapTool::rebuildGeometry()
   }
   else if ( mLayer->geometryType() == QgsWkbTypes::PolygonGeometry )
   {
-    // TODO: possible place for crashes!
-
     QgsLineString *linestring = new QgsLineString;
+
     Q_FOREACH ( const QgsPoint &pt, mPoints )
       linestring->addVertex( pt );
 
@@ -158,8 +157,25 @@ void RecordingMapTool::onPositionChanged()
   }
   else
   {
-    // TODO: DigitizingController previously updated last point's position
-    // when RecordingInterval has not yet timeouted.. do we need it?
+    if ( !mPoints.isEmpty() )
+    {
+      // update the last point of the geometry
+      // so that it is placed on user's current position
+      QgsPoint position = mPositionKit->positionCoordinate();
+
+      QgsPointXY transformed = InputUtils::transformPoint(
+                                 PositionKit::positionCRS(),
+                                 mLayer->sourceCrs(),
+                                 mLayer->transformContext(),
+                                 position
+                               );
+
+      mPoints.last().setX( transformed.x() );
+      mPoints.last().setY( transformed.y() );
+      mPoints.last().setZ( position.z() );
+
+      rebuildGeometry();
+    }
   }
 }
 

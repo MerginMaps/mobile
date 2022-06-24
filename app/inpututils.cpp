@@ -311,6 +311,29 @@ double InputUtils::mapSettingsDPR( QgsQuickMapSettings *ms )
   return ms->devicePixelRatio();
 }
 
+QgsGeometry InputUtils::extractGeometry( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings )
+{
+  if ( !mapSettings || !pair.isValid() )
+    return QgsGeometry();
+
+  QgsGeometry g = pair.feature().geometry();
+
+  QgsCoordinateTransform ct( pair.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext() );
+  if ( !ct.isShortCircuited() )
+  {
+    try
+    {
+      g.transform( ct );
+    }
+    catch ( QgsCsException &e )
+    {
+      Q_UNUSED( e )
+      return QgsGeometry();
+    }
+  }
+
+  return g;
+}
 
 static void addLineString( const QgsLineString *line, QVector<double> &data )
 {
@@ -376,31 +399,15 @@ static void addSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::Geo
   }
 }
 
-QVector<double> InputUtils::extractGeometryCoordinates( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings )
+QVector<double> InputUtils::extractGeometryCoordinates( const QgsGeometry &geometry, QgsQuickMapSettings *mapSettings )
 {
-  if ( !mapSettings || !pair.isValid() )
+  if ( !mapSettings || geometry.isNull() )
     return QVector<double>();
-
-  QgsGeometry g = pair.feature().geometry();
-
-  QgsCoordinateTransform ct( pair.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext() );
-  if ( !ct.isShortCircuited() )
-  {
-    try
-    {
-      g.transform( ct );
-    }
-    catch ( QgsCsException &e )
-    {
-      Q_UNUSED( e )
-      return QVector<double>();
-    }
-  }
 
   QVector<double> data;
 
-  const QgsAbstractGeometry *geom = g.constGet();
-  QgsWkbTypes::GeometryType geomType = g.type();
+  const QgsAbstractGeometry *geom = geometry.constGet();
+  QgsWkbTypes::GeometryType geomType = geometry.type();
   const QgsGeometryCollection *collection = qgsgeometry_cast<const QgsGeometryCollection *>( geom );
   if ( collection && !collection->isEmpty() )
   {

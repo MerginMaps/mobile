@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -7,52 +7,44 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Shapes 1.11
+import QtQuick 2.14
+import QtQuick.Shapes 1.14
 
 import QgsQuick 0.1 as QgsQuick
 
 import lc 1.0
 
+import ".."
+
 Item {
   id: highlight
 
-  signal positionChanged()
+  // geometry to highlight
+  property var geometry
 
   // color for line geometries
-  property color lineColor: "black"
+  property color lineColor: InputStyle.highlightLineColor
   // width for line geometries
-  property real lineWidth: 2 * __dp
+  property real lineWidth: InputStyle.highlightLineWidth
 
   // color for polygon geometries
-  property color fillColor: "red"
+  property color fillColor: InputStyle.highlightFillColor
 
   // width for outlines of lines and polygons
-  property real outlinePenWidth: 1 * __dp
+  property real outlinePenWidth: InputStyle.highlightOutlinePenWidth
   // color for outlines of lines and polygons
-  property color outlineColor: "black"
+  property color outlineColor: InputStyle.highlightOutlineColor
 
-  property string markerType: "circle"   // "circle" or "image"
+  property string markerType: "image"   // "circle" or "image"
   property color markerColor: "grey"
-  property real markerWidth: 30 * __dp
-  property real markerHeight: 30 * __dp
-  property real markerAnchorX: markerWidth/2
-  property real markerAnchorY: markerHeight/2
-  property url markerImageSource   // e.g. "file:///home/martin/all_the_things.jpg"
-
-  // feature+layer pair which determines what geometry is highlighted
-  property var featureLayerPair: null
-  property bool hasPolygon: false
+  property real markerWidth: InputStyle.mapMarkerWidth
+  property real markerHeight: InputStyle.mapMarkerHeight
+  property real markerAnchorX: markerWidth / 2
+  property real markerAnchorY: InputStyle.mapMarkerAnchorY
+  property url markerImageSource: InputStyle.mapMarkerIcon
 
   // for transformation of the highlight to the correct location on the map
   property QgsQuick.MapSettings mapSettings
-
-  property bool recordingInProgress: false
-  property color guideLineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )
-
-  property bool guideLineAllowed: false
-
-  property point crosshairPoint: Qt.point( highlight.width / 2, highlight.height / 2 )
 
   //
   // internal properties not meant to be modified from outside
@@ -86,6 +78,8 @@ Item {
       }
   }
 
+  onGeometryChanged: constructHighlights()
+
   // Transforms X coordinate from map CRS to screen XY with regards to scale and HighDPI
   function transformX( xcoord )
   {
@@ -100,13 +94,13 @@ Item {
 
   function constructHighlights()
   {
-    if ( !featureLayerPair || !mapSettings ) return
+    if ( !geometry || !mapSettings ) return
 
     refTransformOffsetX = mapTransformOffsetX
     refTransformOffsetY = mapTransformOffsetY
     refTransformScale = mapTransformScale
 
-    let data = __inputUtils.extractGeometryCoordinates( featureLayerPair, mapSettings )
+    let data = __inputUtils.extractGeometryCoordinates( highlight.geometry, mapSettings )
 
     let newMarkerItems = []
     let newLineElements = []
@@ -125,7 +119,7 @@ Item {
       else // line or polygon
       {
         // place temporary point marker if this is the first point in line / polygon
-        if ( ( recordingInProgress ) && data.length < dataStartIndex + 3 )
+        if ( data.length < dataStartIndex + 3 )
         {
           newMarkerItems.push( componentMarker.createObject( highlight, {
                                                               "posX": data[ dataStartIndex ],
@@ -157,30 +151,6 @@ Item {
           }
           i = k
         }
-
-        if ( recordingInProgress && guideLineAllowed ) { // construct a guide line / polygon
-          let centerPoint = crosshairPoint
-          let centerX = transformX( centerPoint.x )
-          let centerY = transformY( centerPoint.y )
-
-          if ( geometryType === 2 && elements.length > 2 )
-          {
-            // For polygons we need to pass current center point as "one before last" point in the geometry
-            // because for polygon with points ABC the geometry looks like [A, B, C, A]. We add the center point
-            // between C and A like: [A, B, C, CENTER, A]
-            newGuideLineElements = Array.from( elements ) // shallow copy
-            let firstPoint = newGuideLineElements.pop()
-
-            newGuideLineElements.push( componentLineTo.createObject( guideLine, { "x": centerX, "y": centerY } ) )
-            newGuideLineElements.push( firstPoint )
-          }
-          else
-          {
-            // For lines we only create guideline from last recorded point and current center
-            newGuideLineElements.push( componentMoveTo.createObject( guideLine, { "x": elements[ elements.length - 1 ].x, "y": elements[ elements.length - 1 ].y } ) )
-            newGuideLineElements.push( componentLineTo.createObject( guideLine, { "x": centerX, "y": centerY } ) )
-          }
-        }
       }
     }
 
@@ -190,25 +160,11 @@ Item {
       newLineElements.push( componentMoveTo.createObject( lineShapePath ) )
     if ( newPolygonElements.length === 0 )
       newPolygonElements.push( componentMoveTo.createObject( polygonShapePath ) )
-    if ( newGuideLineElements.length === 0 )
-      newGuideLineElements.push( componentMoveTo.createObject( guideLine ) )
 
     markerItems = newMarkerItems
     polygonShapePath.pathElements = newPolygonElements
     lineShapePath.pathElements = newLineElements
     lineOutlineShapePath.pathElements = newLineElements
-    guideLine.pathElements = newGuideLineElements
-  }
-
-  onFeatureLayerPairChanged: constructHighlights()
-
-  onGuideLineAllowedChanged: constructHighlights()
-
-  onPositionChanged: {
-    if ( highlight.recordingInProgress )
-    {
-      constructHighlights()
-    }
   }
 
   // keeps list of currently displayed marker items (an internal property)
@@ -304,15 +260,6 @@ Item {
       strokeWidth: highlight.outlinePenWidth / shapeTransform.scale  // negate scaling from the transform
       fillColor: highlight.fillColor
       capStyle: ShapePath.FlatCap
-      joinStyle: ShapePath.BevelJoin
-    }
-
-    ShapePath {
-      id: guideLine // also used for guide polygon
-      fillColor: hasPolygon ? guideLineColor : "transparent"
-      strokeColor: guideLineColor
-      strokeWidth: (highlight.lineWidth - highlight.outlinePenWidth*2) / shapeTransform.scale  // negate scaling from the transform
-      capStyle: ShapePath.RoundCap
       joinStyle: ShapePath.BevelJoin
     }
   }

@@ -104,8 +104,9 @@ class RecordingMapTool : public AbstractMapTool
     //! Unifies Z coordinate of the point with current layer - drops / adds it
     void fixZ( QgsPoint &point ) const;
 
-  private:
     QVector<QgsPoint> mPoints;
+
+  private:
     QgsGeometry mRecordedGeometry;
     QgsGeometry mInitialGeometry;
 

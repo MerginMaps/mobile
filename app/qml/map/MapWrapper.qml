@@ -20,21 +20,15 @@ import "../banners"
 Item {
   id: root
 
-  property var featurePairToEdit // we are editing geometry of this feature layer pair
-  property var targetLayerToUse // layer used in digitizing when recording in specific layer
-
   // mapExtentOffset represents a height (or a portion) of canvas which is occupied by some other component
   // like preview panel or stakeout panel. Map extent thus must be calculated regarding to this
   // offset in order to not highlight features in the occupied area, but rather move canvas
   property real mapExtentOffset
 
-  readonly property alias gpsIndicatorColor: _gpsState.indicatorColor
-  readonly property alias digitizingController: _digitizingController
-  readonly property alias mapSettings: _map.mapSettings
-  readonly property alias compass: _compass
+  readonly property alias gpsIndicatorColor: gpsStateGroup.indicatorColor
 
-  property bool isInRecordState
-  property var extentBeforeStakeout
+  readonly property alias mapSettings: mapCanvas.mapSettings
+  readonly property alias compass: deviceCompass
 
   // Determines if canvas is auto centered to stakeout line
   property bool autoFollowStakeoutPath: true
@@ -54,6 +48,10 @@ Item {
   signal recordInLayerFeatureFinished( var pair )
   signal recordInLayerFeatureCanceled()
 
+  signal splittingStarted()
+  signal splittingFinished()
+  signal splittingCanceled()
+
   signal notify( string message )
 
   signal stakeoutStarted( var pair )
@@ -62,225 +60,63 @@ Item {
   signal signInRequested()
   signal localChangesPanelRequested()
 
-  function centerToPair( pair, considerMapExtentOffset = false ) {
-    if ( considerMapExtentOffset )
-      var mapExtentOffsetRatio = mapExtentOffset / _map.height
-    else
-      mapExtentOffsetRatio = 0
-
-    __inputUtils.setExtentToFeature( pair, _map.mapSettings, mapExtentOffsetRatio )
-  }
-
-  function highlightPair( pair ) {
-    _highlightIdentified.featureLayerPair = pair
-    _highlightIdentified.visible = true
-  }
-
-  function centerToPosition() {
-    if ( __positionKit.hasPosition ) {
-      _map.mapSettings.setCenter( _mapPosition.mapPosition )
-      _digitizingController.useGpsPoint = true
-    }
-    else {
-      showMessage( qsTr( "GPS currently unavailable." ) )
-    }
-  }
-
-  function hideHighlight() {
-    _highlightIdentified.visible = false
-    _digitizingHighlight.visible = false
-  }
-
-  function createFeature( layer ) {
-    // creates feature without geometry in layer
-    return _digitizingController.featureWithoutGeometry( layer )
-  }
-
-  //! Returns point from GPS (WGS84) or center screen point in map CRS
-  function findRecordedPoint() {
-    return _digitizingController.useGpsPoint ?
-          __positionKit.positionCoordinate : // WGS84
-          _crosshair.recordPoint // map CRS
-  }
-
-  function processRecordedPair( pair ) {
-    if ( _digitizingController.isPairValid( pair ) ) {
-      if ( root.state === "recordFeature" ) {
-        root.recordingFinished( pair )
-      }
-      else {
-        root.recordInLayerFeatureFinished( pair )
-      }
-    }
-    else {
-      root.notify( qsTr( "Recorded feature is not valid" ) )
-      if ( root.state === "recordFeature" ) {
-        root.recordingCanceled()
-      }
-      else {
-        root.recordInLayerFeatureCanceled()
-      }
-    }
-    root.state = "view"
-  }
-
-  function addRecordPoint() {
-    let recordedPoint = findRecordedPoint()
-
-    let isPointGeometry = _digitizingController.hasPointGeometry( _digitizingController.layer )
-    let isUsingGPS = _digitizingController.useGpsPoint
-    let hasAssignedValidPair = root.featurePairToEdit && root.featurePairToEdit.valid
-
-    if ( root.state === "recordFeature" || root.state === "recordInLayerFeature" ) {
-      if ( isPointGeometry ) {
-        let newPair = _digitizingController.pointFeatureFromPoint( recordedPoint, isUsingGPS )
-        processRecordedPair( newPair )
-        return
-      }
-
-      if ( !_digitizingController.recording )
-        _digitizingController.startRecording()
-
-      _digitizingController.addRecordPoint( recordedPoint, isUsingGPS )
-    }
-    else if ( root.state === "editGeometry" ) {
-      if ( isPointGeometry && hasAssignedValidPair ) {
-        let changed = _digitizingController.changePointGeometry( root.featurePairToEdit, recordedPoint, isUsingGPS )
-        _digitizingHighlight.featureLayerPair = changed
-        root.editingGeometryFinished( changed )
-        return
-      }
-    }
-  }
-
-  function isPositionOutOfExtent() {
-    let border = InputStyle.mapOutOfExtentBorder
-    return ( ( _mapPosition.screenPosition.x < border ) ||
-            ( _mapPosition.screenPosition.y < border ) ||
-            ( _mapPosition.screenPosition.x > _map.width - border ) ||
-            ( _mapPosition.screenPosition.y > _map.height - border )
-            )
-  }
-
-  function updatePosition() {
-    if ( root.isInRecordState && _digitizingController.useGpsPoint )
-    {
-      centerToPosition()
-    }
-    else if ( root.state === "stakeout" )
-    {
-      if ( root.autoFollowStakeoutPath )
-      {
-        _map.mapSettings.extent = __inputUtils.stakeoutPathExtent( _mapPosition, _stakeoutHighlight.destinationPair, _map.mapSettings, mapExtentOffset )
-      }
-    }
-    else if ( root.state === "view" )
-    {
-      if ( __appSettings.autoCenterMapChecked && isPositionOutOfExtent() )
-      {
-        centerToPosition()
-      }
-    }
-
-    _digitizingHighlight.positionChanged()
-  }
-
-  function clear() {
-    // clear all previous references to old project (if we don't clear references to the previous project,
-    // highlights may end up with dangling pointers to map layers and cause crashes)
-    _highlightIdentified.featureLayerPair = null
-    _digitizingHighlight.featureLayerPair = null
-    _stakeoutHighlight.destinationPair = null
-  }
-
-  function stakeout( feature )
-  {
-    _stakeoutHighlight.destinationPair = feature
-    state = "stakeout"
-    root.autoFollowStakeoutPath = true
-    root.extentBeforeStakeout = _map.mapSettings.extent
-    updatePosition()
-    stakeoutStarted( feature )
-  }
-
-  function stopStakeout()
-  {
-    // go back to "view" state and highlight the target pair
-    let pair = _stakeoutHighlight.destinationPair
-    state = "view"
-
-    // return map extent to position it was before starting stakeout
-    _map.mapSettings.extent = root.extentBeforeStakeout
-    highlightPair( pair )
-    _stakeoutHighlight.destinationPair = null
-  }
-
-  onAutoFollowStakeoutPathChanged: {
-    if ( autoFollowStakeoutPath )
-    {
-      updatePosition()
-    }
-  }
-
   states: [
     State {
       name: "view"
-      PropertyChanges { target: root; isInRecordState: false }
     },
     State {
-      name: "recordFeature"
-      PropertyChanges { target: root; isInRecordState: true }
+      name: "record"
     },
     State {
-      // recording feature in specific layer without option to change the digitized layer.
-      // can be used to create linked features in relations, value relations and browse data
-      name: "recordInLayerFeature"
-      PropertyChanges { target: root; isInRecordState: true }
+      // recording feature in specific layer without option to change the recording layer,
+      // used to create linked features in relations, value relations and browse data
+      name: "recordInLayer"
     },
     State {
-      name: "editGeometry" // of existing feature
-      PropertyChanges { target: root; isInRecordState: true }
+      name: "edit" // of existing feature
+    },
+    State {
+      name: "split" // of existing feature
     },
     State {
       name: "stakeout"
-      PropertyChanges { target: root; isInRecordState: false }
     },
     State {
       name: "inactive" // covered by other element
-      PropertyChanges { target: root; isInRecordState: false }
     }
   ]
 
   onStateChanged: {
     switch ( state ) {
-      case "recordFeature": {
+
+      case "record": {
         root.centerToPosition()
-        // we set project here as at this point it is surely valid and
-        // snapping settings can be read
-        _crosshair.qgsProject = __activeProject.qgsProject
+        recordingStarted()
         break
       }
-      case "recordInLayerFeature": {
-        __activeProject.setActiveLayer( root.targetLayerToUse )
-        root.recordInLayerFeatureStarted()
+
+      case "recordInLayer": {
+        __activeProject.setActiveLayer( internal.targetLayerToUse )
+        recordInLayerFeatureStarted()
         break
       }
-      case "editGeometry": {
-        __activeProject.setActiveLayer( root.featurePairToEdit.layer )
-        _digitizingHighlight.featureLayerPair = root.featurePairToEdit
-        _digitizingHighlight.visible = true
-        root.editingGeometryStarted()
+
+      case "edit": {
+        __activeProject.setActiveLayer( internal.featurePairToEdit.layer )
+        centerToPair( internal.featurePairToEdit )
+        editingGeometryStarted()
         break
       }
+
+      case "split": {
+        __activeProject.setActiveLayer( internal.featurePairToEdit.layer )
+        centerToPair( internal.featurePairToEdit )
+        splittingStarted()
+        break
+      }
+
       case "view": {
-        if ( _digitizingHighlight.visible )
-          _digitizingHighlight.visible = false
-
-        if ( _highlightIdentified.visible )
-          _highlightIdentified.visible = false
-
-        if ( _digitizingController.recording )
-          _digitizingController.stopRecording()
+        hideHighlight()
 
         // Stop/Start sync animation when user goes to map
         if ( __syncManager.hasPendingSync( __activeProject.projectFullName() ) )
@@ -294,15 +130,20 @@ Item {
 
         break
       }
+
       case "stakeout": {
-        if ( _digitizingHighlight.visible )
-          _digitizingHighlight.visible = false
+        // TODO: STAKEOUT FIXME
+        //        _stakeoutHighlight.destinationPair = feature
 
-        if ( _highlightIdentified.visible )
-          _highlightIdentified.visible = false
+        autoFollowStakeoutPath = true
 
+        updatePosition()
+        hideHighlight()
+
+        stakeoutStarted( feature )
         break
       }
+
       case "inactive": {
         break
       }
@@ -311,6 +152,13 @@ Item {
 
   state: "view"
 
+  onAutoFollowStakeoutPathChanged: {
+    if ( autoFollowStakeoutPath )
+    {
+      updatePosition()
+    }
+  }
+
   Rectangle {
     // background
     color: InputStyle.clrPanelMain
@@ -318,7 +166,7 @@ Item {
   }
 
   QgsQuick.MapCanvas {
-    id: _map
+    id: mapCanvas
 
     height: root.height
     width: root.width
@@ -327,30 +175,26 @@ Item {
     mapSettings.project: __activeProject.qgsProject
 
     IdentifyKit {
-      id: _identifyKit
+      id: identifyKit
 
-      mapSettings: _map.mapSettings
+      mapSettings: mapCanvas.mapSettings
       identifyMode: IdentifyKit.TopDownAll
     }
-
-    onIsRenderingChanged: _loadingIndicator.visible = isRendering
 
     onClicked: {
       if ( root.state === "view" )
       {
         let screenPoint = Qt.point( point.x, point.y )
-        let pair = _identifyKit.identifyOne( screenPoint )
+        let pair = identifyKit.identifyOne( screenPoint )
 
         if ( pair.valid )
         {
-          centerToPair( pair, true )
-          highlightPair( pair )
+          root.select( pair )
           root.featureIdentified( pair )
         }
         else
         {
-          _highlightIdentified.featureLayerPair = null
-          _highlightIdentified.visible = false
+          root.hideHighlight()
           root.nothingIdentified()
         }
       }
@@ -360,7 +204,7 @@ Item {
       // Alter position of simulated provider
       if ( __positionKit.positionProvider && __positionKit.positionProvider.id() === "simulated" )
       {
-        __positionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), _map.mapSettings ) )
+        __positionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), mapCanvas.mapSettings ) )
       }
     }
 
@@ -373,40 +217,39 @@ Item {
   }
 
   MapPosition {
-    id: _mapPosition
+    id: mapPositioning
 
-    mapSettings: _map.mapSettings
+    mapSettings: mapCanvas.mapSettings
     positionKit: __positionKit
     onScreenPositionChanged: updatePosition()
   }
 
-  Compass { id: _compass }
+  Compass { id: deviceCompass }
 
-  StakeoutHighlight {
-    id: _stakeoutHighlight
-    anchors.fill: _map
-    visible: root.state === "stakeout"
+  // TODO: move to stakeout component, remove stakeout highlight
+  //  StakeoutHighlight {
+  //    id: _stakeoutHighlight
+  //    anchors.fill: mapCanvas
+  //    visible: root.state === "stakeout"
 
-    mapSettings: _map.mapSettings
+  //    mapSettings: mapCanvas.mapSettings
 
-    lineColor: InputStyle.highlightLineColor
-    lineWidth: InputStyle.highlightLineWidth * 2
+  //    lineColor: InputStyle.highlightLineColor
+  //    lineWidth: InputStyle.highlightLineWidth * 2
 
-    fillColor: InputStyle.highlightFillColor
+  //    fillColor: InputStyle.highlightFillColor
 
-    outlinePenWidth: InputStyle.highlightOutlinePenWidth
-    outlineColor: InputStyle.highlightOutlineColor
-  }
+  //    outlinePenWidth: InputStyle.highlightOutlinePenWidth
+  //    outlineColor: InputStyle.highlightOutlineColor
+  //  }
 
   PositionMarker {
-    id: _positionMarker
-
-    mapPosition: _mapPosition
-    compass: _compass
+    mapPosition: mapPositioning
+    compass: deviceCompass
   }
 
   StateGroup {
-    id: _gpsState
+    id: gpsStateGroup
 
     property color indicatorColor: InputStyle.softRed
 
@@ -415,7 +258,7 @@ Item {
         name: "good" // GPS provides position AND horizontal accuracy is below set tolerance (threshold)
         when: __positionKit.hasPosition && __positionKit.horizontalAccuracy > 0 && __positionKit.horizontalAccuracy <= __appSettings.gpsAccuracyTolerance
         PropertyChanges {
-          target: _gpsState
+          target: gpsStateGroup
           indicatorColor: InputStyle.softGreen
         }
       },
@@ -423,7 +266,7 @@ Item {
         name: "low" // below accuracy tolerance OR GPS does not provide horizontal accuracy
         when: __positionKit.hasPosition &&  (__positionKit.horizontalAccuracy < 0 || __positionKit.horizontalAccuracy > __appSettings.gpsAccuracyTolerance )
         PropertyChanges {
-          target: _gpsState
+          target: gpsStateGroup
           indicatorColor: InputStyle.softOrange
         }
       },
@@ -431,7 +274,7 @@ Item {
         name: "unavailable" // GPS does not provide position
         when: !__positionKit.hasPosition
         PropertyChanges {
-          target: _gpsState
+          target: gpsStateGroup
           indicatorColor: InputStyle.softRed
         }
       }
@@ -439,17 +282,16 @@ Item {
   }
 
   LoadingIndicator {
-    id: _loadingIndicator
-
-    visible: root.state !== "inactive"
-    width: _map.width
+    width: mapCanvas.width
     height: InputStyle.mapLoadingIndicatorHeight
+
+    visible: mapCanvas.isRendering && root.state !== "inactive"
   }
 
   ScaleBar {
-    id: _scaleBar
+    id: scaleBar
 
-    mapSettings: _map.mapSettings
+    mapSettings: mapCanvas.mapSettings
 
     height: InputStyle.scaleBarHeight
     preferredWidth: Math.min( window.width, 180 * __dp )
@@ -460,93 +302,18 @@ Item {
   }
 
   Highlight {
-    id: _highlightIdentified
+    id: identifyHighlight
 
-    anchors.fill: _map
+    anchors.fill: mapCanvas
 
-    property bool hasPolygon: featureLayerPair !== null ? _digitizingController.hasPolygonGeometry( featureLayerPair.layer ) : false
-
-    mapSettings: _map.mapSettings
-
-    lineColor: InputStyle.highlightLineColor
-    lineWidth: InputStyle.highlightLineWidth
-
-    fillColor: InputStyle.highlightFillColor
-
-    outlinePenWidth: InputStyle.highlightOutlinePenWidth
-    outlineColor: InputStyle.highlightOutlineColor
-
-    markerType: "image"
-    markerImageSource: InputStyle.mapMarkerIcon
-    markerWidth: InputStyle.mapMarkerWidth
-    markerHeight: InputStyle.mapMarkerHeight
-    markerAnchorY: InputStyle.mapMarkerAnchorY
+    mapSettings: mapCanvas.mapSettings
   }
 
-  DigitizingController  {
-    id: _digitizingController
-
-    positionKit: __positionKit
-    layer: __activeLayer.vectorLayer
-    mapSettings: _map.mapSettings
-
-    lineRecordingInterval: __appSettings.lineRecordingInterval
-    variablesManager: __variablesManager
-
-    onFeatureLayerPairChanged: {
-      if ( recording ) {
-        _digitizingHighlight.visible = true
-        _digitizingHighlight.featureLayerPair = featureLayerPair
-      }
-    }
-
-    onUseGpsPointChanged: __variablesManager.useGpsPoint = _digitizingController.useGpsPoint
-  }
-
-  Highlight {
-    id: _digitizingHighlight
-    anchors.fill: _map
-
-    hasPolygon: featureLayerPair !== null ? _digitizingController.hasPolygonGeometry( featureLayerPair.layer ) : false
-
-    mapSettings: _map.mapSettings
-
-    crosshairPoint: _crosshair.screenPoint
-
-    lineColor: _highlightIdentified.lineColor
-    lineWidth: _highlightIdentified.lineWidth
-
-    fillColor: _highlightIdentified.fillColor
-
-    outlinePenWidth: _highlightIdentified.outlinePenWidth
-    outlineColor: _highlightIdentified.outlineColor
-
-    markerType: _highlightIdentified.markerType
-    markerImageSource: _highlightIdentified.markerImageSource
-    markerWidth: _highlightIdentified.markerWidth
-    markerHeight: _highlightIdentified.markerHeight
-    markerAnchorY: _highlightIdentified.markerAnchorY
-    recordingInProgress: _digitizingController.recording
-    guideLineAllowed: _digitizingController.manualRecording && root.isInRecordState
-  }
-
-  RecordCrosshair {
-    id: _crosshair
-
-    width: root.width
-    height: root.height
-
-    qgsProject: __activeProject.qgsProject
-    mapsettings: _map.mapSettings
-    shouldUseSnapping: _digitizingController.manualRecording && !_digitizingController.useGpsPoint
-
-    visible: _digitizingController.manualRecording && root.isInRecordState
-  }
 
   AutoHideBanner {
     id: syncSuccessfulBanner
 
-    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    width: parent.width - InputStyle.innerFieldMargin * 2
     height: InputStyle.rowHeight
 
     bgColor: InputStyle.clrPanelBackground
@@ -560,7 +327,7 @@ Item {
   AutoHideBanner {
     id: upToDateBanner
 
-    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    width: parent.width - InputStyle.innerFieldMargin * 2
     height: InputStyle.rowHeight
 
     bgColor: InputStyle.secondaryBackgroundColor
@@ -574,7 +341,7 @@ Item {
   AutoHideBanner {
     id: anotherProcessIsRunningBanner
 
-    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    width: parent.width - InputStyle.innerFieldMargin * 2
     height: InputStyle.rowHeight
 
     text: qsTr( "Somebody else is syncing, we will try again later" )
@@ -583,7 +350,7 @@ Item {
   AutoHideBanner {
     id: retryableSyncErrorBanner
 
-    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
+    width: parent.width - InputStyle.innerFieldMargin * 2
     height: InputStyle.rowHeight
 
     visibleInterval: 10000
@@ -592,33 +359,6 @@ Item {
     onClicked: syncFailedDialog.open()
   }
 
-  Banner {
-    id: _gpsAccuracyBanner
-
-    property bool shouldShowAccuracyWarning: {
-      let isLowAccuracy = _gpsState.state === "low" || _gpsState.state === "unavailable"
-      let isBannerAllowed = __appSettings.gpsAccuracyWarning
-      let isRecording = root.isInRecordState
-      let isUsingPosition = _digitizingController.useGpsPoint || !_digitizingController.manualRecording
-      let isGpsWorking = __positionKit.hasPosition
-
-      return isLowAccuracy  &&
-          isBannerAllowed   &&
-          isRecording       &&
-          isGpsWorking      &&
-          isUsingPosition
-    }
-
-    width: parent.width - _gpsAccuracyBanner.anchors.margins * 2
-    height: InputStyle.rowHeight * 2
-
-    text: qsTr( "Low GPS position accuracy (%1 m)<br><br>Please make sure you have good view of the sky." )
-    .arg( __inputUtils.formatNumber( __positionKit.horizontalAccuracy ) )
-    withLink: true
-    link: __inputHelp.gpsAccuracyHelpLink
-
-    showBanner: shouldShowAccuracyWarning
-  }
 
   MissingAuthDialog {
     id: missingAuthDialog
@@ -647,7 +387,7 @@ Item {
     // based on distance between them
     function wouldCollideWithAccBtn()
     {
-      let accBtnRightMostX = _accuracyButton.x + _accuracyButton.width
+      let accBtnRightMostX = accuracyButton.x + accuracyButton.width
       let syncBtnLeftMostX = syncButton.x
       let distance = syncBtnLeftMostX - accBtnRightMostX
       return distance < InputStyle.smallGap / 2
@@ -659,7 +399,7 @@ Item {
     maxWidth: InputStyle.mapBtnHeight
     withImplicitMargins: false
 
-    anchors.bottom: wouldCollideWithAccBtn() ? _accuracyButton.top : parent.bottom
+    anchors.bottom: wouldCollideWithAccBtn() ? accuracyButton.top : parent.bottom
     anchors.bottomMargin: root.mapExtentOffset + InputStyle.smallGap
     anchors.right: parent.right
     anchors.rightMargin: InputStyle.smallGap
@@ -720,7 +460,7 @@ Item {
             // just banner
             syncSuccessfulBanner.show()
             // refresh canvas
-            _map.refresh()
+            mapCanvas.refresh()
           }
         }
       }
@@ -739,7 +479,7 @@ Item {
         {
           if ( errorType === SyncError.NotAMerginProject )
           {
-             migrateToMerginDialog.open()
+            migrateToMerginDialog.open()
           }
           else if ( errorType === SyncError.NoPermissions )
           {
@@ -790,7 +530,7 @@ Item {
   }
 
   MapFloatButton {
-    id: _accuracyButton
+    id: accuracyButton
 
     property int accuracyPrecision: __positionKit.horizontalAccuracy > 1 ? 1 : 2
 
@@ -798,7 +538,7 @@ Item {
 
     maxWidth: parent.width - ( InputStyle.panelMargin * 2 )
 
-    anchors.bottom: root.state === "recordFeature" ? _activeLayerButton.top : parent.bottom
+    anchors.bottom: root.state === "record" ? activeLayerButton.top : parent.bottom
     anchors.bottomMargin: root.mapExtentOffset + InputStyle.smallGap
     anchors.horizontalCenter: parent.horizontalCenter
 
@@ -813,7 +553,7 @@ Item {
         // even when the GPS receiver is not sending position data
         return true
       }
-      else return ( _gpsState.state !== "unavailable" )
+      else return ( gpsStateGroup.state !== "unavailable" )
     }
 
     content: Item {
@@ -855,7 +595,7 @@ Item {
           {
             return qsTr( "Unknown accuracy" )
           }
-          return __inputUtils.formatNumber( __positionKit.horizontalAccuracy, _accuracyButton.accuracyPrecision ) + " m"
+          return __inputUtils.formatNumber( __positionKit.horizontalAccuracy, accuracyButton.accuracyPrecision ) + " m"
         }
         elide: Text.ElideRight
         wrapMode: Text.NoWrap
@@ -879,23 +619,23 @@ Item {
         anchors.leftMargin: InputStyle.tinyGap
         anchors.topMargin: InputStyle.tinyGap
         anchors.top: parent.top
-        color: _gpsState.indicatorColor
+        color: gpsStateGroup.indicatorColor
       }
     }
   }
 
   MapFloatButton {
-    id: _activeLayerButton
+    id: activeLayerButton
 
-    onClicked: _activeLayerPanel.openPanel()
+    onClicked: activeLayerPanel.openPanel()
 
     maxWidth: parent.width * 0.8
 
     anchors.bottom: parent.bottom
     anchors.bottomMargin: InputStyle.smallGap
-    anchors.horizontalCenter: _accuracyButton.horizontalCenter
+    anchors.horizontalCenter: accuracyButton.horizontalCenter
 
-    visible: root.state === "recordFeature"
+    visible: root.state === "record"
 
     content: Item {
 
@@ -916,7 +656,7 @@ Item {
       Text {
         id: layername
 
-        property real maxTextWidth: _activeLayerButton.maxWidth - ( layericon.width + InputStyle.tinyGap + leftPadding ) // used offsets
+        property real maxTextWidth: activeLayerButton.maxWidth - ( layericon.width + InputStyle.tinyGap + leftPadding ) // used offsets
 
         text: textmetrics.elidedText
         elide: Text.ElideRight
@@ -951,7 +691,7 @@ Item {
   }
 
   ActiveLayerPanel {
-    id: _activeLayerPanel
+    id: activeLayerPanel
 
     height: window.height/2
     width: window.width
@@ -960,77 +700,129 @@ Item {
     onActiveLayerChangeRequested: __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
   }
 
-  RecordToolbar {
-    id: _recordToolbar
-
-    width: parent.width
-    height: InputStyle.rowHeightHeader
-    y: parent.height
-
-    visible: root.isInRecordState
-
-    gpsIndicatorColor: _gpsState.indicatorColor
-    manualRecording: _digitizingController.manualRecording
-    pointLayerSelected: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "point"
-
-    // reset manualRecording after opening
-    onVisibleChanged: {
-      if ( visible ) _digitizingController.manualRecording = true
-      if ( _gpsAccuracyBanner.showBanner ) {
-        _gpsAccuracyBanner.state = visible ? "show" : "fade"
-      }
+  Connections {
+    target: mapCanvas.mapSettings
+    onExtentChanged: {
+      scaleBar.visible = true
     }
+  }
 
-    onAddClicked: root.addRecordPoint()
+  QtObject {
+    id: internal
 
-    onGpsSwitchClicked: {
-      if ( _gpsState.state === "unavailable" ) {
-        showMessage( qsTr( "GPS currently unavailable." ) )
-        return
-      }
-      _map.mapSettings.setCenter( _mapPosition.mapPosition )
+    property var featurePairToEdit // we are editing geometry of this feature layer pair
+    property var targetLayerToUse // layer used in digitizing when recording in specific layer
+
+    property var extentBeforeStakeout // extent that we return to once stakeout finishes
+    property var stakeoutTarget
+
+    property bool isInRecordState: root.state === "record" || root.state === "recordInLayer" || root.state === "edit"
+  }
+
+  function select( featurepair ) {
+    centerToPair( featurepair, true )
+    highlightPair( featurepair )
+  }
+
+  function record() {
+    state = "record"
+  }
+
+  function recordInLayer( layer, parentpair ) {
+    internal.targetLayerToUse = layer
+    centerToPair( parentpair )
+    state = "recordInLayer"
+  }
+
+  function edit( featurepair ) {
+    internal.featurePairToEdit = featurepair
+    state = "edit"
+  }
+
+  function split( featurepair ) {
+    internal.featurePairToEdit = featurepair
+    state = "split"
+  }
+
+  function stakeout( featurepair )
+  {
+    internal.extentBeforeStakeout = mapCanvas.mapSettings.extent
+    internal.stakeoutTarget = featurepair
+    state = "stakeout"
+  }
+
+  function stopStakeout()
+  {
+    state = "view"
+
+    // go back to state before starting stakeout
+    highlightPair( internal.stakeoutTarget )
+    mapCanvas.mapSettings.extent = internal.extentBeforeStakeout
+  }
+
+  function centerToPair( pair, considerMapExtentOffset = false ) {
+    if ( considerMapExtentOffset )
+      var mapExtentOffsetRatio = mapExtentOffset / mapCanvas.height
+    else
+      mapExtentOffsetRatio = 0
+
+    __inputUtils.setExtentToFeature( pair, mapCanvas.mapSettings, mapExtentOffsetRatio )
+  }
+
+  function highlightPair( pair ) {
+    identifyHighlight.geometry = __inputUtils.extractGeometry( pair, mapCanvas.mapSettings )
+    identifyHighlight.visible = true
+  }
+
+  function hideHighlight() {
+    identifyHighlight.geometry = null
+    identifyHighlight.visible = false
+  }
+
+  function centerToPosition() {
+    if ( __positionKit.hasPosition ) {
+      mapCanvas.mapSettings.setCenter( mapPositioning.mapPosition )
       _digitizingController.useGpsPoint = true
     }
+    else {
+      showMessage( qsTr( "GPS currently unavailable." ) )
+    }
+  }
 
-    onManualRecordingClicked: {
-      _digitizingController.manualRecording = !_digitizingController.manualRecording
+  function isPositionOutOfExtent() {
+    let border = InputStyle.mapOutOfExtentBorder
+    return ( ( mapPositioning.screenPosition.x < border ) ||
+            ( mapPositioning.screenPosition.y < border ) ||
+            ( mapPositioning.screenPosition.x > mapCanvas.width - border ) ||
+            ( mapPositioning.screenPosition.y > mapCanvas.height - border )
+            )
+  }
 
-      if ( !_digitizingController.manualRecording && root.isInRecordState ) {
-        _digitizingController.startRecording()
-        _digitizingController.useGpsPoint = true
-
-        updatePosition()
-
-        root.addRecordPoint() // record point immediately after turning on the streaming mode
+  function updatePosition() {
+    if ( internal.isInRecordState && _digitizingController.useGpsPoint )
+    {
+      centerToPosition()
+    }
+    else if ( root.state === "stakeout" )
+    {
+      if ( root.autoFollowStakeoutPath )
+      {
+        mapCanvas.mapSettings.extent = __inputUtils.stakeoutPathExtent( mapPositioning, internal.stakeoutTarget, mapCanvas.mapSettings, mapExtentOffset )
       }
     }
-
-    onCancelClicked: {
-      if ( root.state === "recordFeature" )
-        root.recordingCanceled()
-      else if ( root.state === "editGeometry" )
-        root.editingGeometryCanceled()
-      else if ( root.state === "recordInLayerFeature" )
-        root.recordInLayerFeatureCanceled()
-
-      root.state = "view"
-    }
-
-    onRemovePointClicked: _digitizingController.removeLastPoint()
-
-    onStopRecordingClicked: {
-      if ( root.state === "recordFeature" || root.state === "recordInLayerFeature" ) {
-        var newPair = _digitizingController.lineOrPolygonFeature();
-        root.processRecordedPair( newPair )
+    else if ( root.state === "view" )
+    {
+      if ( __appSettings.autoCenterMapChecked && isPositionOutOfExtent() )
+      {
+        centerToPosition()
       }
     }
   }
 
-  Connections {
-    target: _map.mapSettings
-    onExtentChanged: {
-      _digitizingController.useGpsPoint = false
-      _scaleBar.visible = true
-    }
+  function clear() {
+    // clear all previous references to old project (if we don't clear references to the previous project,
+    // highlights may end up with dangling pointers to map layers and cause crashes)
+
+    identifyHighlight.geometry = null
   }
 }

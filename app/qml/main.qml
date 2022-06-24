@@ -55,7 +55,7 @@ ApplicationWindow {
               map.state = "view"
             }
             else if ( stateManager.state === "record" ) {
-              map.state = "recordFeature";
+              // pass
             }
             else if ( stateManager.state === "projects" ) {
               projectPanel.openPanel()
@@ -85,8 +85,7 @@ ApplicationWindow {
         formsStackManager.openForm( pair, "readOnly", "form" )
       }
       else if ( pair.valid ) {
-        map.centerToPair( pair, true )
-        map.highlightPair( pair )
+        map.select( pair )
         formsStackManager.openForm( pair, "readOnly", "preview")
       }
     }
@@ -321,7 +320,7 @@ ApplicationWindow {
       onFeatureSelectRequested: selectFeature( pair )
 
       onCreateFeatureRequested: {
-        let newPair = map.createFeature( selectedLayer )
+        let newPair = __inputUtils.createFeatureLayerPair( selectedLayer, __inputUtils.emptyGeometry(), __variablesManager )
         formsStackManager.openForm( newPair, "add", "form" )
       }
 
@@ -473,25 +472,21 @@ ApplicationWindow {
       project: __activeProject.qgsProject
 
       onCreateLinkedFeatureRequested: {
-        let isNoGeoLayer = __inputUtils.geometryFromLayer( targetLayer ) === "nullGeo"
-
-        if ( isNoGeoLayer ) {
-          let newPair = map.createFeature( targetLayer )
+        if ( __inputUtils.isNoGeometryLayer( targetLayer) ) {
+          let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
           recordInLayerFinished( newPair, true )
         }
         else { // we will record geometry
           stateManager.state = "record"
-          map.targetLayerToUse = targetLayer
-          map.state = "recordInLayerFeature"
-          map.centerToPair( parentPair )
+          map.recordInLayer( targetLayer, parentPair )
         }
       }
 
       onEditGeometryRequested: {
         stateManager.state = "record"
-        map.featurePairToEdit = pair
-        map.centerToPair( pair )
-        map.state = "editGeometry"
+        map.edit( pair )
+      }
+
       }
 
       onClosed: {

@@ -86,7 +86,13 @@ class InputUtils: public QObject
     Q_INVOKABLE double mapSettingsDPR( QgsQuickMapSettings *ms );
 
     /**
-     * Extract geometry coordinates from the given feature.
+     * Function extracts QgsGeometry from the given pair.
+     * If layer's CRS does not match canvas CRS, geometry is transformed to canvas CRS.
+     */
+    Q_INVOKABLE static QgsGeometry extractGeometry( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
+
+    /**
+     * Extract geometry coordinates from the given geometry.
      *
      * The output can encode also multi-part geometries or even geometry collections.
      * We pass a single array out of the function, so this is the encoding of coordinates:
@@ -95,12 +101,12 @@ class InputUtils: public QObject
      * - polygon: <value 2> <number of points> <x1> <y1> ... <xn> <yn>
      *
      * The output is a chain of sub-geometries. Polygon's holes (interior rings) are treated just
-     * like exterior ring because when we create a singla path, Qt automatically detects which rings
+     * like exterior ring because when we create a single path, Qt automatically detects which rings
      * are holes by using even-odd fill rule.
      *
-     * If the layer's CRS is not the same as map CRS, the geometry will be first transformed to map CRS.
+     * Geometry passed to this function must have the same CRS as mapsettings' canvas CRS.
      */
-    Q_INVOKABLE QVector<double> extractGeometryCoordinates( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE QVector<double> extractGeometryCoordinates( const QgsGeometry &geometry, QgsQuickMapSettings *mapSettings );
 
     /**
      * Renames a file located at a given path with a dateTime. Tend to be use to avoid name conflicts.
