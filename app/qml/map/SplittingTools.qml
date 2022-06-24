@@ -9,7 +9,7 @@
 
 import QtQuick 2.14
 
-import lc 0.1
+import lc 1.0
 
 import "../"
 

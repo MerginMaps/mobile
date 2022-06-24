@@ -85,11 +85,14 @@ class InputUtils: public QObject
     Q_INVOKABLE double mapSettingsOffsetY( QgsQuickMapSettings *ms );
     Q_INVOKABLE double mapSettingsDPR( QgsQuickMapSettings *ms );
 
+    //! Converts geometry to map canvas CRS if not already
+    Q_INVOKABLE static QgsGeometry convertGeometryToMapCRS( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, QgsQuickMapSettings *targetSettings );
+
     /**
      * Function extracts QgsGeometry from the given pair.
      * If layer's CRS does not match canvas CRS, geometry is transformed to canvas CRS.
      */
-    Q_INVOKABLE static QgsGeometry extractGeometry( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE static QgsGeometry extractGeometry( const FeatureLayerPair &pair );
 
     /**
      * Extract geometry coordinates from the given geometry.
@@ -423,6 +426,10 @@ class InputUtils: public QObject
 
     //! Creates featureLayerPair from geometry and layer, evaluates its expressions and returns it.
     Q_INVOKABLE static FeatureLayerPair createFeatureLayerPair( QgsVectorLayer *layer, const QgsGeometry &geometry, VariablesManager *variablesmanager );
+
+    //! Changes featureLayerPair's geometry to passed geometry
+    //! Geometry must be in the same CRS as the layer
+    Q_INVOKABLE static FeatureLayerPair changeFeaturePairGeometry( FeatureLayerPair &featurePair, const QgsGeometry &geometry );
 
     // Calculates real screen DPR based on DPI
     static qreal calculateScreenDpr();

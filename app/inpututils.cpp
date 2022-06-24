@@ -311,14 +311,11 @@ double InputUtils::mapSettingsDPR( QgsQuickMapSettings *ms )
   return ms->devicePixelRatio();
 }
 
-QgsGeometry InputUtils::extractGeometry( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings )
+QgsGeometry InputUtils::convertGeometryToMapCRS( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, QgsQuickMapSettings *targetSettings )
 {
-  if ( !mapSettings || !pair.isValid() )
-    return QgsGeometry();
+  QgsGeometry g( geometry );
 
-  QgsGeometry g = pair.feature().geometry();
-
-  QgsCoordinateTransform ct( pair.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext() );
+  QgsCoordinateTransform ct( sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() );
   if ( !ct.isShortCircuited() )
   {
     try
@@ -333,6 +330,14 @@ QgsGeometry InputUtils::extractGeometry( const FeatureLayerPair &pair, QgsQuickM
   }
 
   return g;
+}
+
+QgsGeometry InputUtils::extractGeometry( const FeatureLayerPair &pair )
+{
+  if ( !pair.isValid() )
+    return QgsGeometry();
+
+  return pair.feature().geometry();
 }
 
 static void addLineString( const QgsLineString *line, QVector<double> &data )
@@ -1534,6 +1539,17 @@ FeatureLayerPair InputUtils::createFeatureLayerPair( QgsVectorLayer *layer, cons
 
   QgsFeature feat = QgsVectorLayerUtils::createFeature( layer, geometry, attrs.toMap(), &context );
   return FeatureLayerPair( feat, layer );
+}
+
+FeatureLayerPair InputUtils::changeFeaturePairGeometry( FeatureLayerPair &featurePair, const QgsGeometry &geometry )
+{
+  // So far we only support editing of point geometries
+  if ( geometry.type() == QgsWkbTypes::PointGeometry )
+  {
+    featurePair.featureRef().setGeometry( geometry );
+  }
+
+  return featurePair;
 }
 
 QgsPointXY InputUtils::extractPointFromFeature( const FeatureLayerPair &feature )

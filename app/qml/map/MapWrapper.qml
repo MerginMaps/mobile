@@ -90,26 +90,21 @@ Item {
     switch ( state ) {
 
       case "record": {
-        root.centerToPosition()
         recordingStarted()
         break
       }
 
       case "recordInLayer": {
-        __activeProject.setActiveLayer( internal.targetLayerToUse )
         recordInLayerFeatureStarted()
         break
       }
 
       case "edit": {
-        __activeProject.setActiveLayer( internal.featurePairToEdit.layer )
-        centerToPair( internal.featurePairToEdit )
         editingGeometryStarted()
         break
       }
 
       case "split": {
-        __activeProject.setActiveLayer( internal.featurePairToEdit.layer )
         centerToPair( internal.featurePairToEdit )
         splittingStarted()
         break
@@ -301,6 +296,17 @@ Item {
     anchors.topMargin: InputStyle.smallGap
   }
 
+  Loader {
+    id: recordingToolsLoader
+
+    anchors.fill: parent
+
+    asynchronous: true
+    active: internal.isInRecordState
+
+    sourceComponent: recordingToolsComponent
+  }
+
   Highlight {
     id: identifyHighlight
 
@@ -358,7 +364,6 @@ Item {
 
     onClicked: syncFailedDialog.open()
   }
-
 
   MissingAuthDialog {
     id: missingAuthDialog
@@ -707,11 +712,76 @@ Item {
     }
   }
 
+  Component {
+    id: recordingToolsComponent
+
+    RecordingTools {
+      anchors.fill: parent
+
+      map: mapCanvas
+      gpsState: gpsStateGroup
+      initialGeometry: root.state === "edit" ? internal.featurePairToEdit : null
+
+      onCanceled: {
+        if ( root.state === "record" )
+        {
+          root.recordingCanceled()
+        }
+        else if ( root.state === "edit" )
+        {
+          root.editingGeometryCanceled()
+        }
+        else if ( root.state === "recordInLayer" )
+        {
+          root.recordInLayerFeatureCanceled()
+        }
+
+        root.state = "view"
+      }
+
+      onDone: {
+        if ( root.state === "record" )
+        {
+          let newFeaturePair = __inputUtils.createFeatureLayerPair( __activeLayer.vectorLayer, geometry, __variablesManager )
+          root.recordingFinished( newFeaturePair )
+        }
+        else if ( root.state === "edit" )
+        {
+          let editedFeaturePair = __inputUtils.changeFeaturePairGeometry( internal.featurePairToEdit, geometry )
+          root.editingGeometryCanceled( editedFeaturePair )
+        }
+        else if ( root.state === "recordInLayer" )
+        {
+          let newFeaturePair = __inputUtils.createFeatureLayerPair( __activeLayer.vectorLayer, geometry, __variablesManager )
+          root.recordInLayerFeatureCanceled( newFeaturePair )
+        }
+
+        root.state = "view"
+      }
+    }
+  }
+
+  Component {
+    id: stakeoutToolsComponent
+
+    Highlight {
+
+    }
+  }
+
+  Component {
+    id: splittingToolsComponent
+
+    SplittingTools {
+
+    }
+  }
+
   QtObject {
     id: internal
+    // private properties - not accessible by other components
 
     property var featurePairToEdit // we are editing geometry of this feature layer pair
-    property var targetLayerToUse // layer used in digitizing when recording in specific layer
 
     property var extentBeforeStakeout // extent that we return to once stakeout finishes
     property var stakeoutTarget
@@ -729,12 +799,15 @@ Item {
   }
 
   function recordInLayer( layer, parentpair ) {
-    internal.targetLayerToUse = layer
+    __activeProject.setActiveLayer( layer )
     centerToPair( parentpair )
     state = "recordInLayer"
   }
 
   function edit( featurepair ) {
+    __activeProject.setActiveLayer( featurepair.layer )
+    centerToPair( featurepair )
+
     internal.featurePairToEdit = featurepair
     state = "edit"
   }
@@ -770,7 +843,8 @@ Item {
   }
 
   function highlightPair( pair ) {
-    identifyHighlight.geometry = __inputUtils.extractGeometry( pair, mapCanvas.mapSettings )
+    let geometry = __inputUtils.extractGeometry( pair, mapCanvas.mapSettings )
+    identifyHighlight.geometry = __inputUtils.convertGeometryToMapCRS( geometry, pair.layer, mapCanvas.mapSettings )
     identifyHighlight.visible = true
   }
 
@@ -782,7 +856,6 @@ Item {
   function centerToPosition() {
     if ( __positionKit.hasPosition ) {
       mapCanvas.mapSettings.setCenter( mapPositioning.mapPosition )
-      _digitizingController.useGpsPoint = true
     }
     else {
       showMessage( qsTr( "GPS currently unavailable." ) )
@@ -799,11 +872,7 @@ Item {
   }
 
   function updatePosition() {
-    if ( internal.isInRecordState && _digitizingController.useGpsPoint )
-    {
-      centerToPosition()
-    }
-    else if ( root.state === "stakeout" )
+    if ( root.state === "stakeout" )
     {
       if ( root.autoFollowStakeoutPath )
       {

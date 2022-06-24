@@ -239,7 +239,8 @@ ApplicationWindow {
         onOpenBrowseDataClicked: browseDataPanel.visible = true
         onRecordClicked: {
             if ( __recordingLayersModel.rowCount() > 0 ) {
-                stateManager.state = "record"
+              stateManager.state = "record"
+              map.record()
             } else {
                 showMessage( qsTr( "No editable layers found." ) )
             }

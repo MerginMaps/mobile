@@ -21,7 +21,7 @@ import "../"
 Item {
   id: root
 
-  /*required*/ property var mapSettings
+  /*required*/ property var map
   /*required*/ property var gpsState
 
   property var initialGeometry
@@ -40,7 +40,6 @@ Item {
     property bool shouldShowAccuracyWarning: {
       let isLowAccuracy = gpsState.state === "low" || gpsState.state === "unavailable"
       let isBannerAllowed = __appSettings.gpsAccuracyWarning
-//      let isRecording = root.isInRecordState
       let isUsingPosition = mapTool.isUsingPosition
       let isGpsWorking = __positionKit.hasPosition
 
@@ -48,7 +47,6 @@ Item {
           isBannerAllowed   &&
           isGpsWorking      &&
           isUsingPosition
-//          isRecording       &&
     }
 
     width: parent.width - InputStyle.innerFieldMargin * 2
@@ -68,7 +66,7 @@ Item {
     property bool isUsingPosition: centeredToGPS || mapTool.recordingType == RecordingMapTool.StreamMode
 
     centeredToGPS: false
-    mapSettings: root.mapSettings
+    mapSettings: root.map.mapSettings
 
     recordingType: RecordingMapTool.Manual
     recordingInterval: __appSettings.lineRecordingInterval
@@ -83,71 +81,115 @@ Item {
     anchors.fill: parent
 
     qgsProject: __activeProject.qgsProject
-    mapSettings: root.mapSettings
+    mapSettings: root.map.mapSettings
     shouldUseSnapping: !mapTool.isUsingPosition
-
-    // Might be needed vv
-    // TODO: move to record tools
-    // we set project here as at this point it is surely valid and
-    // snapping settings can be read
-//    _crosshair.qgsProject = __activeProject.qgsProject
   }
 
   Highlight {
     id: highlight
 
-    anchors.fill: parent
+    height: root.map.height
+    width: root.map.width
 
-    mapSettings: root.mapSettings
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
   }
+
+  // TODO: Highlight guideline
 
   RecordToolbar {
     id: toolbar
 
     y: parent.height
+
     width: parent.width
     height: InputStyle.rowHeightHeader
 
-    gpsIndicatorColor: root.gpsIndicatorColor
-
-    manualRecording: {}
-
+    gpsIndicatorColor: root.gpsState.indicatorColor
     pointLayerSelected: __inputUtils.isPointLayer( __activeLayer.vectorLayer )
 
-    onAddClicked: {}
+    manualRecording: mapTool.recordingType === RecordingMapTool.Manual
 
     onGpsSwitchClicked: {
-      if ( _gpsState.state === "unavailable" ) {
+      if ( root.gpsState.state === "unavailable" ) {
         showMessage( qsTr( "GPS currently unavailable." ) )
         return
       }
-      mapCanvas.mapSettings.setCenter( mapPositioning.mapPosition )
 
-      {}
+      mapTool.centeredToGPS = true
+      root.map.mapSettings.setCenter( mapPositioning.mapPosition )
     }
 
-    onManualRecordingClicked: { /* record point immediately after turning on the streaming mode */ }
+    onGpsSwithHeld: {
+      // start / stop streaming mode
+      if ( mapTool.recordingType === RecordingMapTool.Manual )
+      {
+        mapTool.recordingType = RecordingMapTool.StreamMode
 
-    onCancelClicked: {
-      if ( root.state === "recordFeature" )
-        root.recordingCanceled()
-      else if ( root.state === "editGeometry" )
-        root.editingGeometryCanceled()
-      else if ( root.state === "recordInLayerFeature" )
-        root.recordInLayerFeatureCanceled()
-
-      root.state = "view"
+        // add first point immediately
+        mapTool.addPoint( crosshair.recordPoint )
+        root.map.mapSettings.setCenter( mapPositioning.mapPosition )
+      }
+      else
+      {
+        mapTool.recordingType = RecordingMapTool.Manual
+      }
     }
 
-    onRemovePointClicked: {}
+    onAddClicked: {
+      mapTool.addPoint( crosshair.recordPoint )
 
-    onStopRecordingClicked: {}
+      if ( pointLayerSelected )
+      {
+        // finish recording
+        root.done( mapTool.recordedGeometry )
+      }
+    }
+
+    onRemovePointClicked: mapTool.removePoint()
+
+    onDoneClicked: {
+      if ( mapTool.hasValidGeometry() )
+      {
+        root.done( mapTool.recordedGeometry )
+      }
+      else
+      {
+        showMessage( qsTr( "You need to add at least %1 points." ).arg( __inputUtils.isLineLayer( mapTool.layer ) ? 2 : 3 ) )
+      }
+    }
+
+    onCancelClicked: root.canceled()
+  }
+
+  MapPosition {
+    id: mapPositioning
+
+    mapSettings: root.map.mapSettings
+    positionKit: __positionKit
+    onScreenPositionChanged: {
+      if ( mapTool.isUsingPosition )
+      {
+        root.map.mapSettings.setCenter( mapPositioning.mapPosition )
+      }
+    }
   }
 
   Connections {
-    target: mapCanvas.mapSettings
-    onExtentChanged: {
+    target: map
+    function onUserInteractedWithMap() {
       mapTool.centeredToGPS = false
     }
+  }
+
+  Component.onCompleted: {
+    // center to GPS
+    if ( root.gpsState.state === "unavailable" ) {
+      showMessage( qsTr( "GPS currently unavailable." ) )
+      return
+    }
+
+    mapTool.centeredToGPS = true
+    root.map.mapSettings.setCenter( mapPositioning.mapPosition )
   }
 }
