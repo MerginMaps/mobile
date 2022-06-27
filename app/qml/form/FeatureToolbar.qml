@@ -21,6 +21,7 @@ Item {
     signal editClicked()
     signal deleteClicked()
     signal editGeometryClicked()
+    signal splitGeometryClicked()
 
     states: [
         State {
@@ -106,6 +107,21 @@ Item {
                 onActivated: {
                     toolbar.editGeometryClicked()
                 }
+            }
+        }
+
+        Item {
+            width: parent.width/parent.children.length
+            height: parent.height
+
+            MainPanelButton {
+
+                width: toolbar.itemSize
+                text: qsTr("Split geometry")
+                imageSource: InputStyle.scissorsIcon
+                enabled: !isFeaturePoint
+
+                onActivated: toolbar.splitGeometryClicked()
             }
         }
     }

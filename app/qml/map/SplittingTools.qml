@@ -8,18 +8,75 @@
  ***************************************************************************/
 
 import QtQuick 2.14
+import QtQuick.Layouts 1.14
 
+import QgsQuick 0.1
 import lc 1.0
 
 import "../"
 
 /**
-  * SplittingTools is a set of tools that are used during splitting of a geometry.
-  * These tools can be instantiated just for the time of splitting and then destroyed.
+  * RecordingTools is a set of tools that are used during recording/editing of a geometry.
+  * These tools can be instantiated just for the time of recording and then destroyed.
   */
 Item {
   id: root
 
-  property var mapSettings
+  /*required*/ property var map
+  /*required*/ property var featureToSplit
 
+  signal canceled()
+  signal done( bool success )
+
+  SplittingMapTool {
+    id: mapTool
+
+    featureToSplit: root.featureToSplit
+    mapSettings: root.map.mapSettings
+  }
+
+  Highlight {
+    id: highlight
+
+    height: root.map.height
+    width: root.map.width
+
+    markerColor: "black"
+
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+  }
+
+  // TODO: Highlight guideline
+
+  Crosshair {
+    id: crosshair
+
+    anchors.fill: parent
+
+    qgsProject: __activeProject.qgsProject
+    mapSettings: root.map.mapSettings
+  }
+
+  SplittingToolbar {
+    y: parent.height
+
+    width: parent.width
+    height: InputStyle.rowHeightHeader
+
+    onAddClicked: mapTool.addPoint( crosshair.recordPoint )
+    onRemoveClicked: mapTool.removePoint()
+    onDoneClicked: {
+      if ( mapTool.hasValidGeometry() )
+      {
+        let result = mapTool.commitSplit()
+        root.done( result )
+      }
+      else
+      {
+        showMessage( qsTr( "You need to add at least 2 points." ) )
+      }
+    }
+    onCancelClicked: root.canceled()
+  }
 }

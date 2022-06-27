@@ -93,7 +93,7 @@ Item {
 
   // TODO: Highlight guideline
 
-  RecordToolbar {
+  RecordingToolbar {
     id: toolbar
 
     y: parent.height

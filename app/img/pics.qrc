@@ -79,5 +79,6 @@
         <file>crosshair-foreground.svg</file>
         <file>crosshair-plus.svg</file>
         <file>crosshair-circle.svg</file>
+        <file>scissors.svg</file>
     </qresource>
 </RCC>

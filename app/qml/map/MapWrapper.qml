@@ -104,6 +104,7 @@ Item {
 
       case "split": {
         centerToPair( internal.featurePairToEdit )
+        howtoSplittingBanner.show()
         splittingStarted()
         break
       }
@@ -256,6 +257,14 @@ Item {
     anchors.topMargin: InputStyle.smallGap
   }
 
+  Highlight {
+    id: identifyHighlight
+
+    anchors.fill: mapCanvas
+
+    mapSettings: mapCanvas.mapSettings
+  }
+
   Loader {
     id: recordingToolsLoader
 
@@ -278,14 +287,16 @@ Item {
     sourceComponent: stakeoutToolsComponent
   }
 
-  Highlight {
-    id: identifyHighlight
+  Loader {
+    id: splittingLoader
 
-    anchors.fill: mapCanvas
+    anchors.fill: parent
 
-    mapSettings: mapCanvas.mapSettings
+    asynchronous: true
+    active: root.state === "split"
+
+    sourceComponent: splittingToolsComponent
   }
-
 
   AutoHideBanner {
     id: syncSuccessfulBanner
@@ -336,6 +347,38 @@ Item {
     onClicked: syncFailedDialog.open()
   }
 
+  AutoHideBanner {
+    id: splittingDoneBanner
+
+    width: parent.width - InputStyle.innerFieldMargin * 2
+    height: InputStyle.rowHeight
+
+    bgColor: InputStyle.darkGreen
+    fontColor: "white"
+
+    source: InputStyle.yesIcon
+
+    visibleInterval: 2000
+
+    text: qsTr( "Splitting done successfully" )
+  }
+
+  AutoHideBanner {
+    id: howtoSplittingBanner
+
+    width: parent.width - InputStyle.innerFieldMargin * 2
+    height: InputStyle.rowHeight
+
+    bgColor: InputStyle.secondaryBackgroundColor
+    fontColor: "white"
+
+    source: InputStyle.infoIcon
+
+    visibleInterval: 10000
+
+    text: qsTr( "Create line to split the selected feature" )
+  }
+
   MissingAuthDialog {
     id: missingAuthDialog
 
@@ -354,6 +397,10 @@ Item {
 
   NoPermissionsDialog {
     id: noPermissionsDialog
+  }
+
+  SplittingFailedDialog {
+    id: splittingFailedDialog
   }
 
   MapFloatButton {
@@ -751,7 +798,38 @@ Item {
     id: splittingToolsComponent
 
     SplittingTools {
+      anchors.fill: parent
 
+      map: mapCanvas
+      featureToSplit: internal.featurePairToEdit
+
+      onDone: {
+        // close all feature forms, show banner if it went fine or not
+        howtoSplittingBanner.hide()
+
+        if ( success )
+        {
+          splittingDoneBanner.show()
+        }
+        else
+        {
+          splittingFailedDialog.open()
+        }
+
+
+        root.splittingFinished()
+
+        root.state = "view"
+      }
+
+      onCanceled: {
+        // go back to feature form
+        howtoSplittingBanner.hide()
+
+        root.splittingCanceled()
+
+        root.state = "view"
+      }
     }
   }
 

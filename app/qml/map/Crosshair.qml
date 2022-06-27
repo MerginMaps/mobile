@@ -18,7 +18,7 @@ Item {
 
     /*required*/ property var qgsProject
     /*required*/ property var mapSettings
-    property bool shouldUseSnapping
+    property bool shouldUseSnapping: false
 
     property point center: Qt.point( root.width / 2, root.height / 2 )
 

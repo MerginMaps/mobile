@@ -64,6 +64,7 @@ ApplicationWindow {
         }
     }
 
+    //! Must stay in main.qml, it is used from different nested components
     function showMessage(message) {
         if ( !__androidUtils.isAndroid ) {
             popup.text = message
@@ -132,10 +133,10 @@ ApplicationWindow {
           // if stakeout panel is opened
           return stakeoutPanelLoader.item.panelHeight - mainPanel.height
         }
-        else if ( formsStackManager.takenPanelsSpace > 0 )
+        else if ( formsStackManager.takenVerticalSpace > 0 )
         {
           // if feature preview panel is opened
-          return formsStackManager.takenPanelsSpace - mainPanel.height
+          return formsStackManager.takenVerticalSpace - mainPanel.height
         }
         return 0
       }
@@ -161,13 +162,23 @@ ApplicationWindow {
         stateManager.state = "view"
       }
 
-      onRecordInLayerFeatureStarted: formsStackManager.recordInLayerStarted()
+      onRecordInLayerFeatureStarted: formsStackManager.geometryEditingStarted()
       onRecordInLayerFeatureFinished: {
         formsStackManager.recordInLayerFinished( pair )
         stateManager.state = "view"
       }
       onRecordInLayerFeatureCanceled: {
         formsStackManager.recordInLayerFinished( null, false )
+        stateManager.state = "view"
+      }
+
+      onSplittingStarted: formsStackManager.hideAll()
+      onSplittingFinished: {
+        formsStackManager.closeAll()
+        stateManager.state = "view"
+      }
+      onSplittingCanceled: {
+        formsStackManager.reopenAll()
         stateManager.state = "view"
       }
 
@@ -488,6 +499,9 @@ ApplicationWindow {
         map.edit( pair )
       }
 
+      onSplitGeometryRequested: {
+        stateManager.state = "record"
+        map.split( pair )
       }
 
       onClosed: {

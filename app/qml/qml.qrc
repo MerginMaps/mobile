@@ -73,6 +73,7 @@
         <file>dialogs/MigrateToMerginDialog.qml</file>
         <file>dialogs/MissingAuthDialog.qml</file>
         <file>dialogs/NoPermissionsDialog.qml</file>
+        <file>dialogs/SplittingFailedDialog.qml</file>
         <file>dialogs/SyncFailedDialog.qml</file>
         <file>editor/AbstractEditor.qml</file>
         <file>editor/RelationPhotoDelegate.qml</file>
@@ -104,9 +105,10 @@
         <file>map/LoadingIndicator.qml</file>
         <file>map/MapWrapper.qml</file>
         <file>map/PositionMarker.qml</file>
-        <file>map/RecordToolbar.qml</file>
+        <file>map/RecordingToolbar.qml</file>
         <file>map/RecordingTools.qml</file>
         <file>map/ScaleBar.qml</file>
+        <file>map/SplittingToolbar.qml</file>
         <file>map/SplittingTools.qml</file>
         <file>map/StakeoutHighlight.qml</file>
         <file>map/StakeoutTools.qml</file>
