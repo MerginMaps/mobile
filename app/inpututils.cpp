@@ -1384,6 +1384,19 @@ QgsRectangle InputUtils::stakeoutPathExtent(
   return extent;
 }
 
+QgsGeometry InputUtils::stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, QgsQuickMapSettings *mapSettings )
+{
+  if ( !mapSettings || !target.isValid() )
+    return QgsGeometry();
+
+  QgsPointXY targetInLayerCoordinates = target.feature().geometry().asPoint();
+  QgsPointXY t = transformPoint( target.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext(), targetInLayerCoordinates );
+
+  QVector<QgsPoint> points { mapPosition, QgsPoint( t ) };
+
+  return QgsGeometry::fromPolyline( points );
+}
+
 qreal InputUtils::distanceToScale( qreal distance )
 {
   // Stakeout extent scale is computed based on these (empirically found) conditions:

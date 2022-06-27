@@ -430,7 +430,7 @@ ApplicationWindow {
           stakeoutPanelLoader.active = false
         }
 
-        onAutoFollowClicked: map.autoFollowStakeoutPath = true
+        onAutoFollowClicked: map.autoFollowStakeoutPath()
         onPanelHeightUpdated: map.updatePosition()
       }
     }

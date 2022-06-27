@@ -20,6 +20,7 @@ Item {
   id: highlight
 
   // geometry to highlight
+  // geometry must be in map canvas CRS!
   property var geometry
 
   // color for line geometries

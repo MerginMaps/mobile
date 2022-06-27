@@ -30,9 +30,6 @@ Item {
   readonly property alias mapSettings: mapCanvas.mapSettings
   readonly property alias compass: deviceCompass
 
-  // Determines if canvas is auto centered to stakeout line
-  property bool autoFollowStakeoutPath: true
-
   signal featureIdentified( var pair )
   signal nothingIdentified()
 
@@ -128,15 +125,8 @@ Item {
       }
 
       case "stakeout": {
-        // TODO: STAKEOUT FIXME
-        //        _stakeoutHighlight.destinationPair = feature
-
-        autoFollowStakeoutPath = true
-
-        updatePosition()
         hideHighlight()
-
-        stakeoutStarted( feature )
+        stakeoutStarted( internal.stakeoutTarget )
         break
       }
 
@@ -147,13 +137,6 @@ Item {
   }
 
   state: "view"
-
-  onAutoFollowStakeoutPathChanged: {
-    if ( autoFollowStakeoutPath )
-    {
-      updatePosition()
-    }
-  }
 
   Rectangle {
     // background
@@ -203,13 +186,6 @@ Item {
         __positionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), mapCanvas.mapSettings ) )
       }
     }
-
-    onUserInteractedWithMap: {
-      if ( root.state === "stakeout" )
-      {
-        root.autoFollowStakeoutPath = false
-      }
-    }
   }
 
   MapPosition {
@@ -221,23 +197,6 @@ Item {
   }
 
   Compass { id: deviceCompass }
-
-  // TODO: move to stakeout component, remove stakeout highlight
-  //  StakeoutHighlight {
-  //    id: _stakeoutHighlight
-  //    anchors.fill: mapCanvas
-  //    visible: root.state === "stakeout"
-
-  //    mapSettings: mapCanvas.mapSettings
-
-  //    lineColor: InputStyle.highlightLineColor
-  //    lineWidth: InputStyle.highlightLineWidth * 2
-
-  //    fillColor: InputStyle.highlightFillColor
-
-  //    outlinePenWidth: InputStyle.highlightOutlinePenWidth
-  //    outlineColor: InputStyle.highlightOutlineColor
-  //  }
 
   PositionMarker {
     mapPosition: mapPositioning
@@ -306,6 +265,17 @@ Item {
     active: internal.isInRecordState
 
     sourceComponent: recordingToolsComponent
+  }
+
+  Loader {
+    id: stakeoutLoader
+
+    anchors.fill: mapCanvas
+
+    asynchronous: true
+    active: root.state === "stakeout"
+
+    sourceComponent: stakeoutToolsComponent
   }
 
   Highlight {
@@ -767,8 +737,13 @@ Item {
   Component {
     id: stakeoutToolsComponent
 
-    Highlight {
+    StakeoutTools {
+      anchors.fill: parent
 
+      map: mapCanvas
+      mapExtentOffset: root.mapExtentOffset
+
+      target: internal.stakeoutTarget
     }
   }
 
@@ -827,6 +802,14 @@ Item {
     state = "stakeout"
   }
 
+  function autoFollowStakeoutPath()
+  {
+    if ( state === "stakeout" )
+    {
+      stakeoutLoader.item.autoFollow()
+    }
+  }
+
   function stopStakeout()
   {
     state = "view"
@@ -875,14 +858,7 @@ Item {
   }
 
   function updatePosition() {
-    if ( root.state === "stakeout" )
-    {
-      if ( root.autoFollowStakeoutPath )
-      {
-        mapCanvas.mapSettings.extent = __inputUtils.stakeoutPathExtent( mapPositioning, internal.stakeoutTarget, mapCanvas.mapSettings, mapExtentOffset )
-      }
-    }
-    else if ( root.state === "view" )
+    if ( root.state === "view" )
     {
       if ( __appSettings.autoCenterMapChecked && isPositionOutOfExtent() )
       {

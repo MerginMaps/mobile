@@ -109,6 +109,7 @@
         <file>map/ScaleBar.qml</file>
         <file>map/SplittingTools.qml</file>
         <file>map/StakeoutHighlight.qml</file>
+        <file>map/StakeoutTools.qml</file>
         <file>misc/AddPositionProviderPage.qml</file>
         <file>misc/AttentionBanner.qml</file>
         <file>misc/GpsDataPage.qml</file>
