@@ -15,6 +15,7 @@
 
 #include "qgspoint.h"
 #include "qgsproject.h"
+#include "qgscoordinatereferencesystem.h"
 #include "qgsquickmapsettings.h"
 
 #include "qgssnappingutils.h"
@@ -30,6 +31,7 @@ class SnapUtils : public QObject
     Q_PROPERTY( QgsPoint snappedPosition READ snappedPosition WRITE setSnappedPosition NOTIFY snappedPositionChanged )
     Q_PROPERTY( SnapType snapType READ snapType WRITE setSnapType NOTIFY snapTypeChanged )
     Q_PROPERTY( bool useSnapping READ useSnapping WRITE setUseSnapping )
+    Q_PROPERTY( QgsCoordinateReferenceSystem destinationCrs READ destinationCrs WRITE setDestinationCrs )
 
   public:
     SnapUtils( QObject *parent = nullptr );
@@ -65,6 +67,9 @@ class SnapUtils : public QObject
     const SnapUtils::SnapType &snapType() const;
     void setSnapType( const SnapUtils::SnapType &newSnapType );
 
+    QgsCoordinateReferenceSystem destinationCrs() const;
+    void setDestinationCrs( QgsCoordinateReferenceSystem crs );
+
   public slots:
 
     void onMapSettingsUpdated();
@@ -93,6 +98,7 @@ class SnapUtils : public QObject
     bool mSnapped;
     SnapType mSnapType = SnapUtils::Vertex;
     bool mUseSnapping;
+    QgsCoordinateReferenceSystem mDestinationCrs;
 };
 
 #endif // SNAPUTILS_H

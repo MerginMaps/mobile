@@ -34,6 +34,7 @@ Item {
       mapSettings: root.mapSettings
       qgsProject: root.qgsProject
       useSnapping: root.shouldUseSnapping
+      destinationCrs: root.activeLayerCrs
 
       centerPosition: root.center
     }

@@ -83,7 +83,44 @@ void SnapUtils::getsnap( QPointF mapPoint )
   QgsPointLocator::Match snap = mSnappingUtils.snapToMap( QgsPointXY( mapCoords.x(), mapCoords.y() ) );
   if ( snap.isValid() )
   {
-    setSnappedPosition( QgsPoint( snap.point() ) );
+    QgsPoint layerPoint;
+
+    // if snapped to vertex or line start/end point we get point coordinates from the
+    // geometry of the feature to which we have snapped. Otherwise get point found by
+    // the QgsPointLocator
+    if ( snap.hasVertex() || snap.hasLineEndpoint() )
+    {
+      QgsFeature f;
+      QgsFeatureRequest request;
+      request.setFilterFid( snap.featureId() );
+      const bool fetched = snap.layer()->getFeatures( request ).nextFeature( f );
+      if ( fetched )
+      {
+        QgsVertexId vId;
+        if ( !f.geometry().vertexIdFromVertexNr( snap.vertexIndex(), vId ) )
+        {
+          setSnappedPosition( snappoint );
+          setSnapped( false );
+          return;
+        }
+        const QgsGeometry geom( f.geometry() );
+        layerPoint = geom.constGet()->vertexAt( vId );
+      }
+    }
+    else
+    {
+      layerPoint = QgsPoint( snap.point() );
+    }
+
+    if ( snap.layer()->crs() != mDestinationCrs )
+    {
+      QgsCoordinateTransform transform( snap.layer()->crs(), mDestinationCrs, mQgsProject->transformContext() );
+      setSnappedPosition( QgsPoint( transform.transform( layerPoint.x(), layerPoint.y() ) ) );
+    }
+    else
+    {
+      setSnappedPosition( layerPoint );
+    }
 
     if ( snap.hasVertex() )
     {
@@ -172,6 +209,19 @@ bool SnapUtils::useSnapping() const
 void SnapUtils::setUseSnapping( bool useSnapping )
 {
   mUseSnapping = useSnapping;
+}
+
+QgsCoordinateReferenceSystem SnapUtils::destinationCrs() const
+{
+  return mDestinationCrs;
+}
+
+void SnapUtils::setDestinationCrs( QgsCoordinateReferenceSystem crs )
+{
+  if ( mDestinationCrs == crs )
+    return;
+
+  mDestinationCrs = crs;
 }
 
 void SnapUtils::setupSnapping()
