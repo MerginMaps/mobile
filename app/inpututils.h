@@ -444,6 +444,7 @@ class InputUtils: public QObject
     static bool equals( const QPointF &a, const QPointF &b, double epsilon = 0.001 );
     // Convinient comparison function with possibility to pass custom epsilon value (not possible in QGIS API)
     static bool equals( const QgsPointXY &a, const QgsPointXY &b, double epsilon = 0.001 );
+    static bool equals( const QgsPoint &a, const QgsPoint &b, double epsilon = 0.001 );
 
     // Returns whether geometry of the feature is an actual Point feature (Used because some )
     Q_INVOKABLE static bool isPointLayerFeature( const FeatureLayerPair &pair );

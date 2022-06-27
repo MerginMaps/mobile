@@ -1084,6 +1084,16 @@ bool InputUtils::equals( const QgsPointXY &a, const QgsPointXY &b, double epsilo
   return qgsDoubleNear( a.x(), b.x(), epsilon ) && qgsDoubleNear( a.y(), b.y(), epsilon );
 }
 
+bool InputUtils::equals( const QgsPoint &a, const QgsPoint &b, double epsilon )
+{
+  if ( a.isEmpty() && b.isEmpty() )
+    return true;
+  if ( a.isEmpty() != b.isEmpty() )
+    return false;
+
+  return qgsDoubleNear( a.x(), b.x(), epsilon ) && qgsDoubleNear( a.y(), b.y(), epsilon );
+}
+
 QString InputUtils::formatPoint(
   const QgsPoint &point,
   QgsCoordinateFormatter::Format format,

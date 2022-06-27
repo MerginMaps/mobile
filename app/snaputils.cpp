@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 #include "snaputils.h"
+#include "inpututils.h"
 
 SnapUtils::SnapUtils( QObject *parent )
   : QObject{parent}
@@ -133,8 +134,6 @@ QgsPoint SnapUtils::snappedPosition() const
 
 void SnapUtils::setSnappedPosition( QgsPoint newSnappedPosition )
 {
-  if ( mSnappedPosition == newSnappedPosition )
-    return;
   mSnappedPosition = newSnappedPosition;
   emit snappedPositionChanged( mSnappedPosition );
 }
@@ -190,8 +189,8 @@ void SnapUtils::setupSnapping()
       QgsSnappingConfig config;
       config.setMode( QgsSnappingConfig::AllLayers );
       config.setTypeFlag( QgsSnappingConfig::VertexFlag | QgsSnappingConfig::SegmentFlag );
-      config.setTolerance( 20.0 );
-      config.setTolerance( QgsTolerance::Pixels );
+      config.setTolerance( 20.0 * InputUtils::calculateDpRatio() );
+      config.setUnits( QgsTolerance::Pixels );
       config.setEnabled( true );
 
       mSnappingUtils.setConfig( config );
@@ -200,7 +199,12 @@ void SnapUtils::setupSnapping()
     }
     case 2:
     {
-      mSnappingUtils.setConfig( mQgsProject->snappingConfig() );
+      QgsSnappingConfig config = mQgsProject->snappingConfig();
+      if ( config.units() == QgsTolerance::Pixels )
+      {
+        config.setTolerance( config.tolerance() * InputUtils::calculateDpRatio() );
+      }
+      mSnappingUtils.setConfig( config );
       break;
     }
   }
