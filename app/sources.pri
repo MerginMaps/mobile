@@ -34,7 +34,6 @@ layersmodel.cpp \
 layersproxymodel.cpp \
 main.cpp \
 projectwizard.cpp \
-digitizingcontroller.cpp \
 mapthemesmodel.cpp \
 appsettings.cpp \
 androidutils.cpp \
@@ -93,7 +92,6 @@ fieldsmodel.h \
 layersmodel.h \
 layersproxymodel.h \
 projectwizard.h \
-digitizingcontroller.h \
 mapthemesmodel.h \
 appsettings.h \
 androidutils.h \

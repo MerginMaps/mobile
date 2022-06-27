@@ -34,7 +34,6 @@
 #include "coreutils.h"
 #include "position/positiondirection.h"
 #include "mapthemesmodel.h"
-#include "digitizingcontroller.h"
 #include "merginapi.h"
 #include "merginapistatus.h"
 #include "merginsubscriptioninfo.h"
@@ -245,7 +244,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
   qmlRegisterUncreatableType<LayersProxyModel>( "lc", 1, 0, "LayersProxyModel", "" );
   qmlRegisterUncreatableType<ActiveLayer>( "lc", 1, 0, "ActiveLayer", "" );
-  qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<Compass>( "lc", 1, 0, "Compass" );
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
