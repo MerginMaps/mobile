@@ -723,6 +723,8 @@ Item {
       gpsState: gpsStateGroup
       initialGeometry: root.state === "edit" ? internal.featurePairToEdit : null
 
+      centerToGPSOnStartup: root.state !== "edit"
+
       onCanceled: {
         if ( root.state === "record" )
         {

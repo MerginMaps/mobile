@@ -23,7 +23,7 @@ Item {
     property point center: Qt.point( root.width / 2, root.height / 2 )
 
     property var recordPoint: snapUtils.snappedPosition // QgsPoint with MapCRS
-    property point screenPoint: root.mapSettings.coordinateToScreen( recordPoint )
+    property point screenPoint: snapUtils.snapped ? root.mapSettings.coordinateToScreen( recordPoint ) : center
 
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp

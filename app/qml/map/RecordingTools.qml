@@ -25,17 +25,13 @@ Item {
   /*required*/ property var gpsState
 
   property var initialGeometry
+  property bool centerToGPSOnStartup: false
 
   signal canceled()
   signal done( var geometry )
 
   Banner {
     id: gpsAccuracyBanner
-
-    // potentially might miss this code (when started/ended recording):
-//    if ( _gpsAccuracyBanner.showBanner ) {
-//      _gpsAccuracyBanner.state = visible ? "show" : "fade"
-//    }
 
     property bool shouldShowAccuracyWarning: {
       let isLowAccuracy = gpsState.state === "low" || gpsState.state === "unavailable"
@@ -183,13 +179,16 @@ Item {
   }
 
   Component.onCompleted: {
-    // center to GPS
-    if ( root.gpsState.state === "unavailable" ) {
-      showMessage( qsTr( "GPS currently unavailable." ) )
-      return
-    }
+    if ( root.centerToGPSOnStartup )
+    {
+      // center to GPS
+      if ( root.gpsState.state === "unavailable" ) {
+        showMessage( qsTr( "GPS currently unavailable." ) )
+        return
+      }
 
-    mapTool.centeredToGPS = true
-    root.map.mapSettings.setCenter( mapPositioning.mapPosition )
+      mapTool.centeredToGPS = true
+      root.map.mapSettings.setCenter( mapPositioning.mapPosition )
+    }
   }
 }
