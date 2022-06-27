@@ -1541,7 +1541,7 @@ FeatureLayerPair InputUtils::createFeatureLayerPair( QgsVectorLayer *layer, cons
   return FeatureLayerPair( feat, layer );
 }
 
-FeatureLayerPair InputUtils::changeFeaturePairGeometry( FeatureLayerPair &featurePair, const QgsGeometry &geometry )
+FeatureLayerPair InputUtils::changeFeaturePairGeometry( FeatureLayerPair featurePair, const QgsGeometry &geometry )
 {
   // So far we only support editing of point geometries
   if ( geometry.type() == QgsWkbTypes::PointGeometry )

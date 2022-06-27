@@ -429,7 +429,7 @@ class InputUtils: public QObject
 
     //! Changes featureLayerPair's geometry to passed geometry
     //! Geometry must be in the same CRS as the layer
-    Q_INVOKABLE static FeatureLayerPair changeFeaturePairGeometry( FeatureLayerPair &featurePair, const QgsGeometry &geometry );
+    Q_INVOKABLE static FeatureLayerPair changeFeaturePairGeometry( FeatureLayerPair featurePair, const QgsGeometry &geometry );
 
     // Calculates real screen DPR based on DPI
     static qreal calculateScreenDpr();
