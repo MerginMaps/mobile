@@ -109,7 +109,7 @@ class InputUtils: public QObject
      *
      * Geometry passed to this function must have the same CRS as mapsettings' canvas CRS.
      */
-    Q_INVOKABLE QVector<double> extractGeometryCoordinates( const QgsGeometry &geometry, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE static QVector<double> extractGeometryCoordinates( const QgsGeometry &geometry );
 
     /**
      * Renames a file located at a given path with a dateTime. Tend to be use to avoid name conflicts.

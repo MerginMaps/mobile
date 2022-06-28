@@ -87,6 +87,7 @@
 #include "fieldvalidator.h"
 #include "valuerelationfeaturesmodel.h"
 #include "snaputils.h"
+#include "guidelinecontroller.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -101,7 +102,7 @@
 
 #include "maptools/abstractmaptool.h"
 #include "maptools/recordingmaptool.h"
-#include "maptools/splittingmaptool.h""
+#include "maptools/splittingmaptool.h"
 
 #ifndef NDEBUG
 // #include <QQmlDebuggingEnabler>
@@ -286,6 +287,7 @@ void initDeclarative()
   qmlRegisterType< MapPosition >( "lc", 1, 0, "MapPosition" );
   qmlRegisterType< ScaleBarKit >( "lc", 1, 0, "ScaleBarKit" );
   qmlRegisterType< SnapUtils >( "lc", 1, 0, "SnapUtils" );
+  qmlRegisterType< GuidelineController >( "lc", 1, 0, "GuidelineController" );
   qmlRegisterType< FeaturesModel >( "lc", 1, 0, "FeaturesModel" );
   qmlRegisterType< RelationFeaturesModel >( "lc", 1, 0, "RelationFeaturesModel" );
   qmlRegisterType< ValueRelationFeaturesModel >( "lc", 1, 0, "ValueRelationFeaturesModel" );

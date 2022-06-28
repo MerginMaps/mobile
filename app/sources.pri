@@ -22,6 +22,7 @@ activeproject.cpp \
 autosynccontroller.cpp \
 bluetoothdiscoverymodel.cpp \
 featurelayerpair.cpp \
+guidelinecontroller.cpp \
 identifykit.cpp \
 scalebarkit.cpp \
 synchronizationerror.cpp \
@@ -79,6 +80,7 @@ activeproject.h \
 autosynccontroller.h \
 bluetoothdiscoverymodel.h \
 featurelayerpair.h \
+guidelinecontroller.h \
 identifykit.h \
 imageutils.h \
 scalebarkit.h \

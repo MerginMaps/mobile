@@ -404,9 +404,9 @@ static void addSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::Geo
   }
 }
 
-QVector<double> InputUtils::extractGeometryCoordinates( const QgsGeometry &geometry, QgsQuickMapSettings *mapSettings )
+QVector<double> InputUtils::extractGeometryCoordinates( const QgsGeometry &geometry )
 {
-  if ( !mapSettings || geometry.isNull() )
+  if ( geometry.isNull() )
     return QVector<double>();
 
   QVector<double> data;

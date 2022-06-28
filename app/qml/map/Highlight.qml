@@ -101,7 +101,7 @@ Item {
     refTransformOffsetY = mapTransformOffsetY
     refTransformScale = mapTransformScale
 
-    let data = __inputUtils.extractGeometryCoordinates( highlight.geometry, mapSettings )
+    let data = __inputUtils.extractGeometryCoordinates( highlight.geometry )
 
     let newMarkerItems = []
     let newLineElements = []

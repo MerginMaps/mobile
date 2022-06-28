@@ -47,7 +47,22 @@ Item {
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
   }
 
-  // TODO: Highlight guideline
+  GuidelineController {
+    id: guidelineController
+
+    realGeometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+    crosshairPosition: crosshair.recordPoint
+  }
+
+  Highlight {
+    id: guideline
+
+    height: root.map.height
+    width: root.map.width
+
+    mapSettings: root.map.mapSettings
+    geometry: guidelineController.guidelineGeometry
+  }
 
   Crosshair {
     id: crosshair
