@@ -88,7 +88,7 @@ void SnapUtils::getsnap( QPointF mapPoint )
     // if snapped to vertex or line start/end point we get point coordinates from the
     // geometry of the feature to which we have snapped. Otherwise get point found by
     // the QgsPointLocator
-    if ( snap.hasVertex() || snap.hasLineEndpoint() )
+    if ( snap.layer() && ( snap.hasVertex() || snap.hasLineEndpoint() ) )
     {
       QgsFeature f;
       QgsFeatureRequest request;
