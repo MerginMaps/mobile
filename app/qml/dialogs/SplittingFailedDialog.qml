@@ -8,31 +8,13 @@
  ***************************************************************************/
 
 import QtQuick 2.14
-import ".."
+import QtQuick.Dialogs 1.3
 
-Banner {
+MessageDialog {
   id: root
 
-  property int visibleInterval: 3000 // [ms]
+  title: qsTr( "We could not split the feature" )
+  text: qsTr( "Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it." )
 
-  function show()
-  {
-    hideTimer.interval = root.visibleInterval
-    hideTimer.start()
-  }
-
-  function hide()
-  {
-    hideTimer.stop()
-  }
-
-  showBanner: hideTimer.running
-
-  Timer {
-    id: hideTimer
-
-    interval: 3000
-    running: false
-    repeat: false
-  }
+  standardButtons: StandardButton.Ok
 }

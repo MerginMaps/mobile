@@ -311,6 +311,34 @@ double InputUtils::mapSettingsDPR( QgsQuickMapSettings *ms )
   return ms->devicePixelRatio();
 }
 
+QgsGeometry InputUtils::convertGeometryToMapCRS( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, QgsQuickMapSettings *targetSettings )
+{
+  QgsGeometry g( geometry );
+
+  QgsCoordinateTransform ct( sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() );
+  if ( !ct.isShortCircuited() )
+  {
+    try
+    {
+      g.transform( ct );
+    }
+    catch ( QgsCsException &e )
+    {
+      Q_UNUSED( e )
+      return QgsGeometry();
+    }
+  }
+
+  return g;
+}
+
+QgsGeometry InputUtils::extractGeometry( const FeatureLayerPair &pair )
+{
+  if ( !pair.isValid() )
+    return QgsGeometry();
+
+  return pair.feature().geometry();
+}
 
 static void addLineString( const QgsLineString *line, QVector<double> &data )
 {
@@ -376,31 +404,15 @@ static void addSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::Geo
   }
 }
 
-QVector<double> InputUtils::extractGeometryCoordinates( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings )
+QVector<double> InputUtils::extractGeometryCoordinates( const QgsGeometry &geometry )
 {
-  if ( !mapSettings || !pair.isValid() )
+  if ( geometry.isNull() )
     return QVector<double>();
-
-  QgsGeometry g = pair.feature().geometry();
-
-  QgsCoordinateTransform ct( pair.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext() );
-  if ( !ct.isShortCircuited() )
-  {
-    try
-    {
-      g.transform( ct );
-    }
-    catch ( QgsCsException &e )
-    {
-      Q_UNUSED( e )
-      return QVector<double>();
-    }
-  }
 
   QVector<double> data;
 
-  const QgsAbstractGeometry *geom = g.constGet();
-  QgsWkbTypes::GeometryType geomType = g.type();
+  const QgsAbstractGeometry *geom = geometry.constGet();
+  QgsWkbTypes::GeometryType geomType = geometry.type();
   const QgsGeometryCollection *collection = qgsgeometry_cast<const QgsGeometryCollection *>( geom );
   if ( collection && !collection->isEmpty() )
   {
@@ -1372,6 +1384,19 @@ QgsRectangle InputUtils::stakeoutPathExtent(
   return extent;
 }
 
+QgsGeometry InputUtils::stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, QgsQuickMapSettings *mapSettings )
+{
+  if ( !mapSettings || !target.isValid() )
+    return QgsGeometry();
+
+  QgsPointXY targetInLayerCoordinates = target.feature().geometry().asPoint();
+  QgsPointXY t = transformPoint( target.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext(), targetInLayerCoordinates );
+
+  QVector<QgsPoint> points { mapPosition, QgsPoint( t ) };
+
+  return QgsGeometry::fromPolyline( points );
+}
+
 qreal InputUtils::distanceToScale( qreal distance )
 {
   // Stakeout extent scale is computed based on these (empirically found) conditions:
@@ -1527,6 +1552,17 @@ FeatureLayerPair InputUtils::createFeatureLayerPair( QgsVectorLayer *layer, cons
 
   QgsFeature feat = QgsVectorLayerUtils::createFeature( layer, geometry, attrs.toMap(), &context );
   return FeatureLayerPair( feat, layer );
+}
+
+FeatureLayerPair InputUtils::changeFeaturePairGeometry( FeatureLayerPair featurePair, const QgsGeometry &geometry )
+{
+  // So far we only support editing of point geometries
+  if ( geometry.type() == QgsWkbTypes::PointGeometry )
+  {
+    featurePair.featureRef().setGeometry( geometry );
+  }
+
+  return featurePair;
 }
 
 QgsPointXY InputUtils::extractPointFromFeature( const FeatureLayerPair &feature )

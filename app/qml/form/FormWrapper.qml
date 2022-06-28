@@ -38,6 +38,7 @@ Item {
 
   signal closed()
   signal editGeometry( var pair )
+  signal splitGeometry( var pair )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var targetLayer, var parentPair )
   signal stakeoutFeature( var feature )
@@ -156,6 +157,10 @@ Item {
         root.controllerToApply = parentController
         root.relationToApply = relation
         root.createLinkedFeature( relation.referencingLayer, root.featureLayerPair )
+      }
+      onSplitGeometryClicked: {
+        root.panelState = "hidden"
+        root.splitGeometry( root.featureLayerPair )
       }
     }
   }

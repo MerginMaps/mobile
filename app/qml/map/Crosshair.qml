@@ -17,13 +17,13 @@ Item {
     id: root
 
     /*required*/ property var qgsProject
-    /*required*/ property var mapsettings
-    property bool shouldUseSnapping
+    /*required*/ property var mapSettings
+    property bool shouldUseSnapping: false
 
     property point center: Qt.point( root.width / 2, root.height / 2 )
 
-    property var recordPoint: snapUtils.snappedPosition
-    property point screenPoint: root.mapsettings.coordinateToScreen(recordPoint)
+    property var recordPoint: snapUtils.snappedPosition // QgsPoint with MapCRS
+    property point screenPoint: snapUtils.snapped ? root.mapSettings.coordinateToScreen( recordPoint ) : center
 
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp
@@ -31,7 +31,7 @@ Item {
     SnapUtils {
       id: snapUtils
 
-      mapSettings: root.mapsettings
+      mapSettings: root.mapSettings
       qgsProject: root.qgsProject
       useSnapping: root.shouldUseSnapping
 

@@ -28,10 +28,36 @@ Item {
 
   property int activeFormIndex: formsStack.depth - 1
 
-  property real takenPanelsSpace: 0
+  property real takenVerticalSpace: {
+    // let's automatically find out how much vertical space is taken
+    // by opened forms / previews
+    if ( root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth )
+      return 0;
+
+    let highestOpened = "none"
+
+    for ( let i = 0; i <= root.activeFormIndex; i++ ) {
+      let form = formsStack.get( i )
+      if ( form ) {
+        if ( form.panelState === "form" ) {
+          return root.height
+        }
+        else if ( form.panelState === "preview" ) {
+          highestOpened = "preview"
+        }
+      }
+    }
+
+    if ( highestOpened === "preview" ) {
+      return root.previewHeight
+    }
+
+    return 0;
+  }
 
   signal closed()
   signal editGeometryRequested( var pair )
+  signal splitGeometryRequested( var pair )
   signal createLinkedFeatureRequested( var targetLayer, var parentPair )
   signal stakeoutFeature( var feature );
 
@@ -53,7 +79,6 @@ Item {
       latest.formState = formState
       latest.panelState = panelState
     }
-    takenPanelsSpace = previewHeight
   }
 
   function _getActiveForm() {
@@ -76,6 +101,38 @@ Item {
 
     if ( form )
       form.openDrawer()
+  }
+
+  function hideAll() {
+    // close form drawers so that user can see map
+    applyOnForms( function ( form ) {
+      if ( form && typeof form.closeDrawer === "function" ) {
+        form.panelState = "hidden"
+        form.closeDrawer()
+      }
+    })
+  }
+
+  function closeAll() {
+    // close permanetly all drawers (not only hide)
+    let form = formsStack.get( 0 )
+    formsStack.pop( form )
+  }
+
+  function reopenAll() {
+    // open form drawers back
+    if ( root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth ) {
+      console.error( "FormsStackManager: Invalid active index" )
+      return
+    }
+
+    for ( let i = 0; i <= root.activeFormIndex; i++ ) {
+      let form = formsStack.get( i )
+
+      if ( form && typeof form.openDrawer === "function" ) {
+        form.openDrawer()
+      }
+    }
   }
 
   function reload() {
@@ -190,7 +247,6 @@ Item {
       if ( formsStack.depth <= 1 )
       {
         root.closed() // this is the top most form, we want to keep it instantiated, just invisible
-        takenPanelsSpace = 0
       }
     }
 
@@ -215,6 +271,7 @@ Item {
         }
       }
       onEditGeometry: root.editGeometryRequested( pair )
+      onSplitGeometry: root.splitGeometryRequested( pair )
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
       onCreateLinkedFeature: root.createLinkedFeatureRequested( targetLayer, parentPair )
       onStakeoutFeature: root.stakeoutFeature( feature )

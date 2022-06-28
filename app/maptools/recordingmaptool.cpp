@@ -24,35 +24,34 @@ RecordingMapTool::RecordingMapTool( QObject *parent )
 
 RecordingMapTool::~RecordingMapTool() = default;
 
-void RecordingMapTool::addPoint( const QPointF &point )
+void RecordingMapTool::addPoint( const QgsPoint &point )
 {
-  QgsPoint addPoint( point );
+  QgsPoint pointToAdd( point );
 
   if ( mPositionKit && ( mCenteredToGPS || mRecordingType == StreamMode ) )
   {
     // we want to use GPS point here instead of the point from map
-    addPoint = mPositionKit->positionCoordinate();
+    pointToAdd = mPositionKit->positionCoordinate();
 
     QgsPointXY transformed = InputUtils::transformPoint(
                                PositionKit::positionCRS(),
                                mLayer->sourceCrs(),
                                mLayer->transformContext(),
-                               addPoint
+                               pointToAdd
                              );
 
-    addPoint.setX( transformed.x() );
-    addPoint.setY( transformed.y() );
+    pointToAdd.setX( transformed.x() );
+    pointToAdd.setY( transformed.y() );
   }
   else
   {
-    // convert from device x/y screen pixels -> map CRS -> layer's CRS
-    addPoint = mapSettings()->screenToCoordinate( addPoint.toQPointF() );
-    addPoint = mapSettings()->mapSettings().mapToLayerCoordinates( mLayer, addPoint );
+    // convert from map CRS -> layer's CRS
+    pointToAdd = mapSettings()->mapSettings().mapToLayerCoordinates( mLayer, pointToAdd );
   }
 
-  fixZ( addPoint );
+  fixZ( pointToAdd );
 
-  mPoints.push_back( addPoint );
+  mPoints.push_back( pointToAdd );
   rebuildGeometry();
 }
 
@@ -106,9 +105,8 @@ void RecordingMapTool::rebuildGeometry()
   }
   else if ( mLayer->geometryType() == QgsWkbTypes::PolygonGeometry )
   {
-    // TODO: possible place for crashes!
-
     QgsLineString *linestring = new QgsLineString;
+
     Q_FOREACH ( const QgsPoint &pt, mPoints )
       linestring->addVertex( pt );
 
@@ -154,12 +152,30 @@ void RecordingMapTool::onPositionChanged()
 
   if ( mLastTimeRecorded.addSecs( mRecordingInterval ) <= QDateTime::currentDateTime() )
   {
-    addPoint( QPointF() ); // addPoint will take point from GPS
+    addPoint( QgsPoint() ); // addPoint will take point from GPS
+    mLastTimeRecorded = QDateTime::currentDateTime();
   }
   else
   {
-    // TODO: DigitizingController previously updated last point's position
-    // when RecordingInterval has not yet timeouted.. do we need it?
+    if ( !mPoints.isEmpty() )
+    {
+      // update the last point of the geometry
+      // so that it is placed on user's current position
+      QgsPoint position = mPositionKit->positionCoordinate();
+
+      QgsPointXY transformed = InputUtils::transformPoint(
+                                 PositionKit::positionCRS(),
+                                 mLayer->sourceCrs(),
+                                 mLayer->transformContext(),
+                                 position
+                               );
+
+      mPoints.last().setX( transformed.x() );
+      mPoints.last().setY( transformed.y() );
+      mPoints.last().setZ( position.z() );
+
+      rebuildGeometry();
+    }
   }
 }
 
@@ -235,6 +251,10 @@ void RecordingMapTool::setLayer( QgsVectorLayer *newLayer )
     return;
   mLayer = newLayer;
   emit layerChanged( mLayer );
+
+  // we need to clear all recorded points and recalculate the geometry
+  mPoints.clear();
+  rebuildGeometry();
 }
 
 const QgsGeometry &RecordingMapTool::recordedGeometry() const

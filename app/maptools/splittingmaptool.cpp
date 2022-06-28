@@ -19,14 +19,13 @@ SplittingMapTool::SplittingMapTool( QObject *parent )
 
 SplittingMapTool::~SplittingMapTool() = default;
 
-void SplittingMapTool::addPoint( const QPointF &point )
+void SplittingMapTool::addPoint( const QgsPoint &point )
 {
   if ( !mapSettings() || !mFeatureToSplit.isValid() )
     return;
 
-  // convert from device x/y screen pixels -> map CRS -> layer's CRS
-  QgsPoint transformed = mapSettings()->screenToCoordinate( point );
-  transformed = mapSettings()->mapSettings().mapToLayerCoordinates( mFeatureToSplit.layer(), transformed );
+  // convert from map CRS -> layer's CRS
+  QgsPoint transformed = mapSettings()->mapSettings().mapToLayerCoordinates( mFeatureToSplit.layer(), point );
 
   mPoints.push_back( transformed );
   rebuildGeometry();
@@ -75,7 +74,7 @@ void SplittingMapTool::rebuildGeometry()
 {
   QgsGeometry geometry;
 
-  if ( mPoints.count() > 1 )
+  if ( mPoints.count() > 0 )
   {
     geometry = QgsGeometry::fromPolyline( mPoints );
   }

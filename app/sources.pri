@@ -22,6 +22,7 @@ activeproject.cpp \
 autosynccontroller.cpp \
 bluetoothdiscoverymodel.cpp \
 featurelayerpair.cpp \
+guidelinecontroller.cpp \
 identifykit.cpp \
 scalebarkit.cpp \
 synchronizationerror.cpp \
@@ -34,7 +35,6 @@ layersmodel.cpp \
 layersproxymodel.cpp \
 main.cpp \
 projectwizard.cpp \
-digitizingcontroller.cpp \
 mapthemesmodel.cpp \
 appsettings.cpp \
 androidutils.cpp \
@@ -80,6 +80,7 @@ activeproject.h \
 autosynccontroller.h \
 bluetoothdiscoverymodel.h \
 featurelayerpair.h \
+guidelinecontroller.h \
 identifykit.h \
 imageutils.h \
 scalebarkit.h \
@@ -93,7 +94,6 @@ fieldsmodel.h \
 layersmodel.h \
 layersproxymodel.h \
 projectwizard.h \
-digitizingcontroller.h \
 mapthemesmodel.h \
 appsettings.h \
 androidutils.h \

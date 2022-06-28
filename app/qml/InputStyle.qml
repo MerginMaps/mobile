@@ -39,6 +39,7 @@ QtObject {
     property color darkOrange: "#FD9626"
     property color softGreen: "#32AA3A"
     property color darkGreen: "#006146"
+    property color guidelineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )
 
     property int fontPixelSizeSmall: scaleFont(15)
     property int fontPixelSizeNormal: scaleFont(18)
@@ -136,6 +137,7 @@ QtObject {
     property string lockIcon: "qrc:/lock.svg"
     property string searchIcon: "qrc:/search.svg"
     property string loadingIndicatorIcon: "qrc:/loadingindicator.svg"
+    property string scissorsIcon: "qrc:/scissors.svg"
 
     property string linkIcon: "qrc:/link-rotated.svg"
     property string unlinkIcon: "qrc:/unlink.svg"

@@ -28,6 +28,7 @@ Item {
 
   signal close()
   signal editGeometryClicked()
+  signal splitGeometryClicked()
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentController, var relation )
 
@@ -188,6 +189,7 @@ Item {
         onEditClicked: root.formState = "edit"
         onDeleteClicked: deleteDialog.visible = true
         onEditGeometryClicked: root.editGeometryClicked()
+        onSplitGeometryClicked: root.splitGeometryClicked()
       }
 
       MessageDialog {

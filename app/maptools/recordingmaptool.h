@@ -50,7 +50,7 @@ class RecordingMapTool : public AbstractMapTool
     virtual ~RecordingMapTool();
 
     //! Adds point to the end of the recorded geometry; updates recordedGeometry afterwards
-    Q_INVOKABLE void addPoint( const QPointF &point );
+    Q_INVOKABLE void addPoint( const QgsPoint &point );
 
     /**
      *  Removes last point from recorded geometry if there is at least one point
@@ -104,8 +104,9 @@ class RecordingMapTool : public AbstractMapTool
     //! Unifies Z coordinate of the point with current layer - drops / adds it
     void fixZ( QgsPoint &point ) const;
 
-  private:
     QVector<QgsPoint> mPoints;
+
+  private:
     QgsGeometry mRecordedGeometry;
     QgsGeometry mInitialGeometry;
 

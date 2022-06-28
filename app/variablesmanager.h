@@ -29,7 +29,7 @@ class VariablesManager : public QObject
     //! Source of direction
     Q_PROPERTY( Compass *compass READ compass WRITE setCompass NOTIFY compassChanged )
     /**
-     * Property binded with DigitizingController::useGpsPoint. If true, the DigitizingController has used current position to create or edit geometry
+     * Property binded with RecordingMapTool. If true, the RecordingMapTool has used current position to create or edit geometry
      * for a feature. Therefore current position information matches geometry for that feature.
      **/
     Q_PROPERTY( bool useGpsPoint READ useGpsPoint WRITE setUseGpsPoint NOTIFY useGpsPointChanged )

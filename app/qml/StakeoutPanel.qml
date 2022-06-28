@@ -167,8 +167,6 @@ Item {
           Layout.preferredHeight: parent.height
           Layout.preferredWidth: parent.height
 
-          visible: mapCanvas.autoFollowStakeoutPath === false
-
           Components.Symbol {
             source: InputStyle.gpsFixedIcon
             iconSize: parent.height / 2
