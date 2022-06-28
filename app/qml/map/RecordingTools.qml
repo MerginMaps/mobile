@@ -74,16 +74,6 @@ Item {
     onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition
   }
 
-  Highlight {
-    id: highlight
-
-    height: root.map.height
-    width: root.map.width
-
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
-  }
-
   GuidelineController {
     id: guidelineController
 
@@ -97,8 +87,24 @@ Item {
     height: root.map.height
     width: root.map.width
 
+    lineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )
+
+    property bool guideLineAllowed: false
+
+    property point crosshairPoint: Qt.point( highlight.width / 2, highlight.height / 2 )
+
     mapSettings: root.map.mapSettings
     geometry: guidelineController.guidelineGeometry
+  }
+
+  Highlight {
+    id: highlight
+
+    height: root.map.height
+    width: root.map.width
+
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
   }
 
   Crosshair {

@@ -27,6 +27,8 @@ Item {
   property color lineColor: InputStyle.highlightLineColor
   // width for line geometries
   property real lineWidth: InputStyle.highlightLineWidth
+  // stroke style for line geometries (solid line / dashed line)
+  property int lineStrokeStyle: ShapePath.SolidLine
 
   // color for polygon geometries
   property color fillColor: InputStyle.highlightFillColor
@@ -249,6 +251,7 @@ Item {
     ShapePath {
       id: lineShapePath
       strokeColor: highlight.lineColor
+      strokeStyle: highlight.lineStrokeStyle
       strokeWidth: (highlight.lineWidth - highlight.outlinePenWidth*2) / shapeTransform.scale  // negate scaling from the transform
       fillColor: "transparent"
       capStyle: ShapePath.RoundCap

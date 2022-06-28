@@ -9,6 +9,7 @@
 
 import QtQuick 2.14
 import QtQuick.Layouts 1.14
+import QtQuick.Shapes 1.14
 
 import QgsQuick 0.1
 import lc 1.0
@@ -35,18 +36,6 @@ Item {
     mapSettings: root.map.mapSettings
   }
 
-  Highlight {
-    id: highlight
-
-    height: root.map.height
-    width: root.map.width
-
-    markerColor: "black"
-
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
-  }
-
   GuidelineController {
     id: guidelineController
 
@@ -60,8 +49,28 @@ Item {
     height: root.map.height
     width: root.map.width
 
+    lineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )
+
+    property bool guideLineAllowed: false
+
+    property point crosshairPoint: Qt.point( highlight.width / 2, highlight.height / 2 )
+
     mapSettings: root.map.mapSettings
     geometry: guidelineController.guidelineGeometry
+  }
+
+  Highlight {
+    id: highlight
+
+    height: root.map.height
+    width: root.map.width
+
+    markerColor: "black"
+    lineColor: "black"
+    lineStrokeStyle: ShapePath.DashLine
+
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
   }
 
   Crosshair {
