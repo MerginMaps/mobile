@@ -718,7 +718,7 @@ QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
     if ( ct.isValid() )
     {
       const QgsPointXY transformed = ct.transform( srcPoint.x(), srcPoint.y() );
-      const QgsPoint pt( transformed.x(), transformed.y(), srcPoint.z(), srcPoint.m() ) );
+      const QgsPoint pt( transformed.x(), transformed.y(), srcPoint.z(), srcPoint.m() );
       return pt;
     }
   }
