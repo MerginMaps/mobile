@@ -55,7 +55,7 @@ ApplicationWindow {
               map.state = "view"
             }
             else if ( stateManager.state === "record" ) {
-              map.state = "recordFeature";
+              // pass
             }
             else if ( stateManager.state === "projects" ) {
               projectPanel.openPanel()
@@ -64,6 +64,7 @@ ApplicationWindow {
         }
     }
 
+    //! Must stay in main.qml, it is used from different nested components
     function showMessage(message) {
         if ( !__androidUtils.isAndroid ) {
             popup.text = message
@@ -85,8 +86,7 @@ ApplicationWindow {
         formsStackManager.openForm( pair, "readOnly", "form" )
       }
       else if ( pair.valid ) {
-        map.centerToPair( pair, true )
-        map.highlightPair( pair )
+        map.select( pair )
         formsStackManager.openForm( pair, "readOnly", "preview")
       }
     }
@@ -133,10 +133,10 @@ ApplicationWindow {
           // if stakeout panel is opened
           return stakeoutPanelLoader.item.panelHeight - mainPanel.height
         }
-        else if ( formsStackManager.takenPanelsSpace > 0 )
+        else if ( formsStackManager.takenVerticalSpace > 0 )
         {
           // if feature preview panel is opened
-          return formsStackManager.takenPanelsSpace - mainPanel.height
+          return formsStackManager.takenVerticalSpace - mainPanel.height
         }
         return 0
       }
@@ -162,13 +162,23 @@ ApplicationWindow {
         stateManager.state = "view"
       }
 
-      onRecordInLayerFeatureStarted: formsStackManager.recordInLayerStarted()
+      onRecordInLayerFeatureStarted: formsStackManager.geometryEditingStarted()
       onRecordInLayerFeatureFinished: {
         formsStackManager.recordInLayerFinished( pair )
         stateManager.state = "view"
       }
       onRecordInLayerFeatureCanceled: {
         formsStackManager.recordInLayerFinished( null, false )
+        stateManager.state = "view"
+      }
+
+      onSplittingStarted: formsStackManager.hideAll()
+      onSplittingFinished: {
+        formsStackManager.closeAll()
+        stateManager.state = "view"
+      }
+      onSplittingCanceled: {
+        formsStackManager.reopenAll()
         stateManager.state = "view"
       }
 
@@ -240,7 +250,8 @@ ApplicationWindow {
         onOpenBrowseDataClicked: browseDataPanel.visible = true
         onRecordClicked: {
             if ( __recordingLayersModel.rowCount() > 0 ) {
-                stateManager.state = "record"
+              stateManager.state = "record"
+              map.record()
             } else {
                 showMessage( qsTr( "No editable layers found." ) )
             }
@@ -321,7 +332,7 @@ ApplicationWindow {
       onFeatureSelectRequested: selectFeature( pair )
 
       onCreateFeatureRequested: {
-        let newPair = map.createFeature( selectedLayer )
+        let newPair = __inputUtils.createFeatureLayerPair( selectedLayer, __inputUtils.emptyGeometry(), __variablesManager )
         formsStackManager.openForm( newPair, "add", "form" )
       }
 
@@ -430,7 +441,7 @@ ApplicationWindow {
           stakeoutPanelLoader.active = false
         }
 
-        onAutoFollowClicked: map.autoFollowStakeoutPath = true
+        onAutoFollowClicked: map.autoFollowStakeoutPath()
         onPanelHeightUpdated: map.updatePosition()
       }
     }
@@ -473,25 +484,24 @@ ApplicationWindow {
       project: __activeProject.qgsProject
 
       onCreateLinkedFeatureRequested: {
-        let isNoGeoLayer = __inputUtils.geometryFromLayer( targetLayer ) === "nullGeo"
-
-        if ( isNoGeoLayer ) {
-          let newPair = map.createFeature( targetLayer )
+        if ( __inputUtils.isNoGeometryLayer( targetLayer) ) {
+          let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
           recordInLayerFinished( newPair, true )
         }
         else { // we will record geometry
           stateManager.state = "record"
-          map.targetLayerToUse = targetLayer
-          map.state = "recordInLayerFeature"
-          map.centerToPair( parentPair )
+          map.recordInLayer( targetLayer, parentPair )
         }
       }
 
       onEditGeometryRequested: {
         stateManager.state = "record"
-        map.featurePairToEdit = pair
-        map.centerToPair( pair )
-        map.state = "editGeometry"
+        map.edit( pair )
+      }
+
+      onSplitGeometryRequested: {
+        stateManager.state = "record"
+        map.split( pair )
       }
 
       onClosed: {

@@ -7,32 +7,25 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import ".."
+#include "abstractmaptool.h"
 
-Banner {
-  id: root
+AbstractMapTool::AbstractMapTool( QObject *parent )
+  : QObject{parent}
+{
 
-  property int visibleInterval: 3000 // [ms]
+}
 
-  function show()
-  {
-    hideTimer.interval = root.visibleInterval
-    hideTimer.start()
-  }
+AbstractMapTool::~AbstractMapTool() = default;
 
-  function hide()
-  {
-    hideTimer.stop()
-  }
+QgsQuickMapSettings *AbstractMapTool::mapSettings() const
+{
+  return mMapSettings;
+}
 
-  showBanner: hideTimer.running
-
-  Timer {
-    id: hideTimer
-
-    interval: 3000
-    running: false
-    repeat: false
-  }
+void AbstractMapTool::setMapSettings( QgsQuickMapSettings *newMapSettings )
+{
+  if ( mMapSettings == newMapSettings )
+    return;
+  mMapSettings = newMapSettings;
+  emit mapSettingsChanged( mMapSettings );
 }

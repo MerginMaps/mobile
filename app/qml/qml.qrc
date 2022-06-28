@@ -21,10 +21,12 @@
         <file>MainPanel.qml</file>
         <file>MapThemePanel.qml</file>
         <file>Notification.qml</file>
+        <file>NotificationBanner.qml</file>
         <file>NumberSpin.qml</file>
         <file>PanelItem.qml</file>
         <file>PanelTabButton.qml</file>
         <file>PhotoPanel.qml</file>
+        <file>ProjectIssuesPanel.qml</file>
         <file>ProjectListPage.qml</file>
         <file>ProjectLoadingScreen.qml</file>
         <file>ProjectPanel.qml</file>
@@ -34,20 +36,27 @@
         <file>RoundIndicator.qml</file>
         <file>SearchBar.qml</file>
         <file>SettingsPanel.qml</file>
+        <file>StakeoutPanel.qml</file>
         <file>StorageLimitDialog.qml</file>
         <file>SubscribePage.qml</file>
         <file>SubscribePlanItem.qml</file>
+        <file>banners/AutoHideBanner.qml</file>
+        <file>components/BluetoothConnectionDialog.qml</file>
         <file>components/CheckboxComponent.qml</file>
+        <file>components/DateTimePicker.qml</file>
         <file>components/DelegateButton.qml</file>
         <file>components/ExtendedMenuItem.qml</file>
         <file>components/FieldRow.qml</file>
         <file>components/IconTextItem.qml</file>
         <file>components/InputComboBox.qml</file>
+        <file>components/InputText.qml</file>
         <file>components/InputTextField.qml</file>
         <file>components/LayerList.qml</file>
         <file>components/LeftCheckBox.qml</file>
         <file>components/LoadingSpinner.qml</file>
         <file>components/MainPanelButton.qml</file>
+        <file>components/MapFloatButton.qml</file>
+        <file>components/NumberInputField.qml</file>
         <file>components/PanelHeader.qml</file>
         <file>components/PasswordField.qml</file>
         <file>components/ProjectDelegateItem.qml</file>
@@ -59,7 +68,13 @@
         <file>components/Switch.qml</file>
         <file>components/Symbol.qml</file>
         <file>components/TextHyperlink.qml</file>
+        <file>components/TextRowWithTitle.qml</file>
         <file>components/TextWithIcon.qml</file>
+        <file>dialogs/MigrateToMerginDialog.qml</file>
+        <file>dialogs/MissingAuthDialog.qml</file>
+        <file>dialogs/NoPermissionsDialog.qml</file>
+        <file>dialogs/SplittingFailedDialog.qml</file>
+        <file>dialogs/SyncFailedDialog.qml</file>
         <file>editor/AbstractEditor.qml</file>
         <file>editor/RelationPhotoDelegate.qml</file>
         <file>editor/RelationPhotoFooterDelegate.qml</file>
@@ -85,33 +100,22 @@
         <file>form/PreviewPanel.qml</file>
         <file>main.qml</file>
         <file>map/ActiveLayerPanel.qml</file>
+        <file>map/Crosshair.qml</file>
         <file>map/Highlight.qml</file>
         <file>map/LoadingIndicator.qml</file>
         <file>map/MapWrapper.qml</file>
         <file>map/PositionMarker.qml</file>
-        <file>map/RecordCrosshair.qml</file>
-        <file>map/RecordToolbar.qml</file>
+        <file>map/RecordingToolbar.qml</file>
+        <file>map/RecordingTools.qml</file>
         <file>map/ScaleBar.qml</file>
-        <file>qmldir</file>
-        <file>misc/LegacyFolderMigration.qml</file>
-        <file>misc/AttentionBanner.qml</file>
-        <file>components/MapFloatButton.qml</file>
-        <file>misc/GpsDataPage.qml</file>
-        <file>components/TextRowWithTitle.qml</file>
-        <file>components/NumberInputField.qml</file>
-        <file>components/DateTimePicker.qml</file>
-        <file>NotificationBanner.qml</file>
-        <file>ProjectIssuesPanel.qml</file>
-        <file>StakeoutPanel.qml</file>
-        <file>map/StakeoutHighlight.qml</file>
-        <file>misc/PositionProviderPage.qml</file>
+        <file>map/SplittingToolbar.qml</file>
+        <file>map/SplittingTools.qml</file>
+        <file>map/StakeoutTools.qml</file>
         <file>misc/AddPositionProviderPage.qml</file>
-        <file>components/BluetoothConnectionDialog.qml</file>
-        <file>components/InputText.qml</file>
-        <file>dialogs/SyncFailedDialog.qml</file>
-        <file>dialogs/MissingAuthDialog.qml</file>
-        <file>dialogs/MigrateToMerginDialog.qml</file>
-        <file>dialogs/NoPermissionsDialog.qml</file>
-        <file>banners/AutoHideBanner.qml</file>
+        <file>misc/AttentionBanner.qml</file>
+        <file>misc/GpsDataPage.qml</file>
+        <file>misc/LegacyFolderMigration.qml</file>
+        <file>misc/PositionProviderPage.qml</file>
+        <file>qmldir</file>
     </qresource>
 </RCC>

@@ -23,18 +23,17 @@ Item {
     signal addClicked
     signal cancelClicked
     signal gpsSwitchClicked
-    signal manualRecordingClicked
-    signal stopRecordingClicked
+    signal gpsSwithHeld
+    signal doneClicked
     signal removePointClicked
-    signal close
 
-    property int rowHeight: InputStyle.rowHeightHeader
-    property int itemSize: rowHeight * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
     property bool manualRecording: false
 
-    onClose: visible = false
+    property int itemSize: rowHeight * 0.8
+    property int rowHeight: InputStyle.rowHeightHeader
+
     focus: true
 
     Keys.onReleased: {
@@ -70,7 +69,7 @@ Item {
                 text: qsTr("GPS")
                 imageSource: InputStyle.gpsFixedIcon
                 onActivated: root.gpsSwitchClicked()
-                onActivatedOnHold: root.manualRecordingClicked()
+                onActivatedOnHold: root.gpsSwithHeld()
 
                 RoundIndicator {
                     width: parent.height/4
@@ -124,7 +123,7 @@ Item {
                 text: qsTr("Done")
                 imageSource: InputStyle.checkIcon
 
-                onActivated: root.stopRecordingClicked()
+                onActivated: root.doneClicked()
             }
         }
 

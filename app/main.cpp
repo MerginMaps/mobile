@@ -34,7 +34,6 @@
 #include "coreutils.h"
 #include "position/positiondirection.h"
 #include "mapthemesmodel.h"
-#include "digitizingcontroller.h"
 #include "merginapi.h"
 #include "merginapistatus.h"
 #include "merginsubscriptioninfo.h"
@@ -88,6 +87,7 @@
 #include "fieldvalidator.h"
 #include "valuerelationfeaturesmodel.h"
 #include "snaputils.h"
+#include "guidelinecontroller.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -100,6 +100,9 @@
 #include "synchronizationmanager.h"
 #include "synchronizationerror.h"
 
+#include "maptools/abstractmaptool.h"
+#include "maptools/recordingmaptool.h"
+#include "maptools/splittingmaptool.h"
 
 #ifndef NDEBUG
 // #include <QQmlDebuggingEnabler>
@@ -242,7 +245,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
   qmlRegisterUncreatableType<LayersProxyModel>( "lc", 1, 0, "LayersProxyModel", "" );
   qmlRegisterUncreatableType<ActiveLayer>( "lc", 1, 0, "ActiveLayer", "" );
-  qmlRegisterType<DigitizingController>( "lc", 1, 0, "DigitizingController" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<Compass>( "lc", 1, 0, "Compass" );
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
@@ -285,6 +287,7 @@ void initDeclarative()
   qmlRegisterType< MapPosition >( "lc", 1, 0, "MapPosition" );
   qmlRegisterType< ScaleBarKit >( "lc", 1, 0, "ScaleBarKit" );
   qmlRegisterType< SnapUtils >( "lc", 1, 0, "SnapUtils" );
+  qmlRegisterType< GuidelineController >( "lc", 1, 0, "GuidelineController" );
   qmlRegisterType< FeaturesModel >( "lc", 1, 0, "FeaturesModel" );
   qmlRegisterType< RelationFeaturesModel >( "lc", 1, 0, "RelationFeaturesModel" );
   qmlRegisterType< ValueRelationFeaturesModel >( "lc", 1, 0, "ValueRelationFeaturesModel" );
@@ -301,6 +304,11 @@ void initDeclarative()
   qmlRegisterType< QgsQuickCoordinateTransformer >( "QgsQuick", 0, 1, "CoordinateTransformer" );
 
   qmlRegisterUncreatableType< AbstractPositionProvider >( "lc", 1, 0, "PositionProvider", "Must be instantiated via its construct method" );
+
+  // map tools
+  qmlRegisterUncreatableType< AbstractMapTool >( "lc", 1, 0, "AbstractMapTool", "Instantiate one of child map tools instead" );
+  qmlRegisterType< RecordingMapTool >( "lc", 1, 0, "RecordingMapTool" );
+  qmlRegisterType< SplittingMapTool >( "lc", 1, 0, "SplittingMapTool" );
 
   qmlRegisterType( QUrl( "qrc:/qgsquickmapcanvas.qml" ), "QgsQuick", 0, 1, "MapCanvas" );
 }

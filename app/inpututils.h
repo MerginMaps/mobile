@@ -44,6 +44,8 @@ class QgsFeature;
 class QgsVectorLayer;
 class QgsCoordinateReferenceSystem;
 
+class VariablesManager;
+
 class InputUtils: public QObject
 {
     Q_OBJECT
@@ -83,8 +85,17 @@ class InputUtils: public QObject
     Q_INVOKABLE double mapSettingsOffsetY( QgsQuickMapSettings *ms );
     Q_INVOKABLE double mapSettingsDPR( QgsQuickMapSettings *ms );
 
+    //! Converts geometry to map canvas CRS if not already
+    Q_INVOKABLE static QgsGeometry convertGeometryToMapCRS( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, QgsQuickMapSettings *targetSettings );
+
     /**
-     * Extract geometry coordinates from the given feature.
+     * Function extracts QgsGeometry from the given pair.
+     * If layer's CRS does not match canvas CRS, geometry is transformed to canvas CRS.
+     */
+    Q_INVOKABLE static QgsGeometry extractGeometry( const FeatureLayerPair &pair );
+
+    /**
+     * Extract geometry coordinates from the given geometry.
      *
      * The output can encode also multi-part geometries or even geometry collections.
      * We pass a single array out of the function, so this is the encoding of coordinates:
@@ -93,12 +104,12 @@ class InputUtils: public QObject
      * - polygon: <value 2> <number of points> <x1> <y1> ... <xn> <yn>
      *
      * The output is a chain of sub-geometries. Polygon's holes (interior rings) are treated just
-     * like exterior ring because when we create a singla path, Qt automatically detects which rings
+     * like exterior ring because when we create a single path, Qt automatically detects which rings
      * are holes by using even-odd fill rule.
      *
-     * If the layer's CRS is not the same as map CRS, the geometry will be first transformed to map CRS.
+     * Geometry passed to this function must have the same CRS as mapsettings' canvas CRS.
      */
-    Q_INVOKABLE QVector<double> extractGeometryCoordinates( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE static QVector<double> extractGeometryCoordinates( const QgsGeometry &geometry );
 
     /**
      * Renames a file located at a given path with a dateTime. Tend to be use to avoid name conflicts.
@@ -184,6 +195,11 @@ class InputUtils: public QObject
       * Creates QgsPoint in QML
       */
     Q_INVOKABLE static QgsPoint point( double x, double y, double z = std::numeric_limits<double>::quiet_NaN(), double m = std::numeric_limits<double>::quiet_NaN() );
+
+    /**
+     * Creates empty geometry
+     */
+    Q_INVOKABLE static QgsGeometry emptyGeometry();
 
     /**
       * Converts QGeoCoordinate to QgsPoint
@@ -385,12 +401,19 @@ class InputUtils: public QObject
 
     // Returns geometry type represented as string (point/linestring/polygon/nullGeo); returns empty string if geometry is unknown or layer is invalid.
     Q_INVOKABLE static QString geometryFromLayer( QgsVectorLayer *layer );
+    Q_INVOKABLE static bool isPointLayer( QgsVectorLayer *layer );
+    Q_INVOKABLE static bool isLineLayer( QgsVectorLayer *layer );
+    Q_INVOKABLE static bool isPolygonLayer( QgsVectorLayer *layer );
+    Q_INVOKABLE static bool isNoGeometryLayer( QgsVectorLayer *layer );
 
     // Returns a point geometry from point feature
     Q_INVOKABLE static QgsPointXY extractPointFromFeature( const FeatureLayerPair &feature );
 
     // Returns an extent for stakeout based on distance between gps position and target feature
     Q_INVOKABLE QgsRectangle stakeoutPathExtent( MapPosition *mapPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings, double mapExtentOffset );
+
+    //! Returns geometry created out of the two points and converts it to map canvas screen pixels.
+    Q_INVOKABLE static QgsGeometry stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, QgsQuickMapSettings *mapSettings );
 
     // Translates distance to target point into scale factor that should be used for map canvas during stakeout
     qreal distanceToScale( qreal distance );
@@ -403,6 +426,13 @@ class InputUtils: public QObject
 
     // Returns the title of the feature
     Q_INVOKABLE static QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );
+
+    //! Creates featureLayerPair from geometry and layer, evaluates its expressions and returns it.
+    Q_INVOKABLE static FeatureLayerPair createFeatureLayerPair( QgsVectorLayer *layer, const QgsGeometry &geometry, VariablesManager *variablesmanager );
+
+    //! Changes featureLayerPair's geometry to passed geometry
+    //! Geometry must be in the same CRS as the layer
+    Q_INVOKABLE static FeatureLayerPair changeFeaturePairGeometry( FeatureLayerPair featurePair, const QgsGeometry &geometry );
 
     // Calculates real screen DPR based on DPI
     static qreal calculateScreenDpr();

@@ -8,6 +8,9 @@ attributes/attributetabmodel.cpp \
 attributes/attributetabproxymodel.cpp \
 attributes/rememberattributescontroller.cpp \
 attributes/fieldvalidator.cpp \
+maptools/abstractmaptool.cpp \
+maptools/splittingmaptool.cpp \
+maptools/recordingmaptool.cpp \
 position/abstractpositionprovider.cpp \
 position/internalpositionprovider.cpp \
 position/mapposition.cpp \
@@ -19,6 +22,7 @@ activeproject.cpp \
 autosynccontroller.cpp \
 bluetoothdiscoverymodel.cpp \
 featurelayerpair.cpp \
+guidelinecontroller.cpp \
 identifykit.cpp \
 scalebarkit.cpp \
 synchronizationerror.cpp \
@@ -31,7 +35,6 @@ layersmodel.cpp \
 layersproxymodel.cpp \
 main.cpp \
 projectwizard.cpp \
-digitizingcontroller.cpp \
 mapthemesmodel.cpp \
 appsettings.cpp \
 androidutils.cpp \
@@ -63,6 +66,9 @@ attributes/attributetabmodel.h \
 attributes/attributetabproxymodel.h \
 attributes/rememberattributescontroller.h \
 attributes/fieldvalidator.h \
+maptools/abstractmaptool.h \
+maptools/splittingmaptool.h \
+maptools/recordingmaptool.h \
 position/abstractpositionprovider.h \
 position/internalpositionprovider.h \
 position/mapposition.h \
@@ -74,6 +80,7 @@ activeproject.h \
 autosynccontroller.h \
 bluetoothdiscoverymodel.h \
 featurelayerpair.h \
+guidelinecontroller.h \
 identifykit.h \
 imageutils.h \
 scalebarkit.h \
@@ -87,7 +94,6 @@ fieldsmodel.h \
 layersmodel.h \
 layersproxymodel.h \
 projectwizard.h \
-digitizingcontroller.h \
 mapthemesmodel.h \
 appsettings.h \
 androidutils.h \
