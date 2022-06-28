@@ -134,9 +134,9 @@ void TestUtilsFunctions::transformedPoint()
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
 
   QgsPoint transformedPoint =  mUtils->transformPoint( crsGPS,
-                                 crs3857,
-                                 QgsCoordinateTransformContext(),
-                                 point );
+                               crs3857,
+                               QgsCoordinateTransformContext(),
+                               point );
   COMPARENEAR( transformedPoint.x(), 5554843, 1.0 );
   COMPARENEAR( transformedPoint.y(), 1839491, 1.0 );
 

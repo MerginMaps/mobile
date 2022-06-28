@@ -672,9 +672,9 @@ QgsPoint InputUtils::coordinateToPoint( const QGeoCoordinate &coor )
 }
 
 QgsPointXY InputUtils::transformPointXY( const QgsCoordinateReferenceSystem &srcCrs,
-                                       const QgsCoordinateReferenceSystem &destCrs,
-                                       const QgsCoordinateTransformContext &context,
-                                       const QgsPointXY &srcPoint )
+    const QgsCoordinateReferenceSystem &destCrs,
+    const QgsCoordinateTransformContext &context,
+    const QgsPointXY &srcPoint )
 {
   // we do not want to transform empty points,
   // QGIS would convert them to a valid (0, 0) points
