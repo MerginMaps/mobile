@@ -85,7 +85,7 @@ void TestUtilsFunctions::screenUnitsToMeters()
   COMPARENEAR( sutm, 213.5, 1.0 );
 }
 
-void TestUtilsFunctions::transformedPoint()
+void TestUtilsFunctions::transformedPointXY()
 {
   QgsPointXY pointXY = mUtils->pointXY( 49.9, 16.3 );
   COMPARENEAR( pointXY.x(), 49.9, 1e-4 );
@@ -101,10 +101,42 @@ void TestUtilsFunctions::transformedPoint()
   QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
 
-  QgsPointXY transformedPoint =  mUtils->transformPoint( crsGPS,
+  QgsPointXY transformedPoint =  mUtils->transformPointXY( crsGPS,
                                  crs3857,
                                  QgsCoordinateTransformContext(),
                                  pointXY );
+  COMPARENEAR( transformedPoint.x(), 5554843, 1.0 );
+  COMPARENEAR( transformedPoint.y(), 1839491, 1.0 );
+
+  // Check transformation within the same CRS
+  transformedPoint = mUtils->transformPointXY(
+                       crsGPS,
+                       crsGPS,
+                       QgsCoordinateTransformContext(),
+                       pointXY
+                     );
+
+  QVERIFY( !transformedPoint.isEmpty() );
+  COMPARENEAR( transformedPoint.x(), 49.9, 1e-4 );
+  COMPARENEAR( transformedPoint.y(), 16.3, 1e-4 );
+}
+
+void TestUtilsFunctions::transformedPoint()
+{
+  QgsPoint point = mUtils->point( 49.9, 16.3 );
+  COMPARENEAR( point.x(), 49.9, 1e-4 );
+  COMPARENEAR( point.y(), 16.3, 1e-4 );
+
+  QgsCoordinateReferenceSystem crs3857 = QgsCoordinateReferenceSystem::fromEpsgId( 3857 );
+  QVERIFY( crs3857.authid() == "EPSG:3857" );
+
+  QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
+  QVERIFY( crsGPS.authid() == "EPSG:4326" );
+
+  QgsPoint transformedPoint =  mUtils->transformPoint( crsGPS,
+                                 crs3857,
+                                 QgsCoordinateTransformContext(),
+                                 point );
   COMPARENEAR( transformedPoint.x(), 5554843, 1.0 );
   COMPARENEAR( transformedPoint.y(), 1839491, 1.0 );
 
@@ -113,7 +145,7 @@ void TestUtilsFunctions::transformedPoint()
                        crsGPS,
                        crsGPS,
                        QgsCoordinateTransformContext(),
-                       pointXY
+                       point
                      );
 
   QVERIFY( !transformedPoint.isEmpty() );

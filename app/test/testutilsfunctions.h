@@ -24,6 +24,7 @@ class TestUtilsFunctions: public QObject
     void testFormatDuration();
     void dump_screen_info();
     void screenUnitsToMeters();
+    void transformedPointXY();
     void transformedPoint();
     void formatPoint();
     void formatDistance();

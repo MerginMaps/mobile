@@ -671,7 +671,7 @@ QgsPoint InputUtils::coordinateToPoint( const QGeoCoordinate &coor )
   return QgsPoint( coor.longitude(), coor.latitude(), coor.altitude() );
 }
 
-QgsPointXY InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
+QgsPointXY InputUtils::transformPointXY( const QgsCoordinateReferenceSystem &srcCrs,
                                        const QgsCoordinateReferenceSystem &destCrs,
                                        const QgsCoordinateTransformContext &context,
                                        const QgsPointXY &srcPoint )
@@ -698,6 +698,35 @@ QgsPointXY InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCr
   }
 
   return QgsPointXY();
+}
+
+QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
+                                     const QgsCoordinateReferenceSystem &destCrs,
+                                     const QgsCoordinateTransformContext &context,
+                                     const QgsPoint &srcPoint )
+{
+  // we do not want to transform empty points,
+  // QGIS would convert them to a valid (0, 0) points
+  if ( srcPoint.isEmpty() )
+  {
+    return QgsPoint();
+  }
+
+  try
+  {
+    QgsCoordinateTransform ct( srcCrs, destCrs, context );
+    if ( ct.isValid() )
+    {
+      const QgsPoint pt( ct.transform( srcPoint.x(), srcPoint.y() ) );
+      return pt;
+    }
+  }
+  catch ( QgsCsException &cse )
+  {
+    Q_UNUSED( cse )
+  }
+
+  return QgsPoint();
 }
 
 double InputUtils::screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels )

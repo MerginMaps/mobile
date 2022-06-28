@@ -104,23 +104,15 @@ void SnapUtils::getsnap( QPointF mapPoint )
           return;
         }
         const QgsGeometry geom( f.geometry() );
-        layerPoint = geom.constGet()->vertexAt( vId );
+        layerPoint = InputUtils::transformPoint( snap.layer()->crs(), mDestinationCrs, mQgsProject->transformContext(), geom.constGet()->vertexAt( vId ) );
       }
     }
     else
     {
-      layerPoint = QgsPoint( snap.point() );
+      layerPoint = InputUtils::transformPoint( mMapSettings->destinationCrs(), mDestinationCrs, mQgsProject->transformContext(), QgsPoint( snap.point() ) );
     }
 
-    if ( snap.layer()->crs() != mDestinationCrs )
-    {
-      QgsCoordinateTransform transform( snap.layer()->crs(), mDestinationCrs, mQgsProject->transformContext() );
-      setSnappedPosition( QgsPoint( transform.transform( layerPoint.x(), layerPoint.y() ) ) );
-    }
-    else
-    {
-      setSnappedPosition( layerPoint );
-    }
+    setSnappedPosition( layerPoint );
 
     if ( snap.hasVertex() )
     {

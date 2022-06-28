@@ -210,10 +210,19 @@ class InputUtils: public QObject
       * Transforms point between different crs
       * Return empty QgsPointXY if the transformation could not be applied or srcPoint is empty
       */
-    Q_INVOKABLE static QgsPointXY transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
+    Q_INVOKABLE static QgsPointXY transformPointXY( const QgsCoordinateReferenceSystem &srcCrs,
         const QgsCoordinateReferenceSystem &destCrs,
         const QgsCoordinateTransformContext &context,
         const QgsPointXY &srcPoint );
+
+    /**
+      * Transforms point between different crs
+      * Return empty QgsPoint if the transformation could not be applied or srcPoint is empty
+      */
+    Q_INVOKABLE static QgsPoint transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
+        const QgsCoordinateReferenceSystem &destCrs,
+        const QgsCoordinateTransformContext &context,
+        const QgsPoint &srcPoint );
 
     /**
       * Calculates the distance in meter representing baseLengthPixels pixels on the screen based on the current map settings.
