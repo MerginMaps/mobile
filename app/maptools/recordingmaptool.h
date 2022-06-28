@@ -49,7 +49,10 @@ class RecordingMapTool : public AbstractMapTool
     explicit RecordingMapTool( QObject *parent = nullptr );
     virtual ~RecordingMapTool();
 
-    //! Adds point to the end of the recorded geometry; updates recordedGeometry afterwards
+    /**
+     * Adds point to the end of the recorded geometry; updates recordedGeometry afterwards
+     * Passed point needs to be in active vector layer CRS
+     */
     Q_INVOKABLE void addPoint( const QgsPoint &point );
 
     /**

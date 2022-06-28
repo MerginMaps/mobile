@@ -67,27 +67,32 @@ void SnapUtils::setMapSettings( QgsQuickMapSettings *newMapSettings )
   emit mapSettingsChanged( mMapSettings );
 }
 
-void SnapUtils::getsnap( QPointF mapPoint )
+void SnapUtils::getsnap()
 {
-  QgsPoint mapCoords = mMapSettings->screenToCoordinate( mapPoint );
-  QgsPoint snappoint = mMapSettings->screenToCoordinate( mCenterPosition ); // by default show crosshair in center, no snap
+  if ( !mDestinationLayer || !mMapSettings )
+  {
+    setRecordPoint( QgsPoint() );
+    setSnapped( false );
+    return;
+  }
+
+  // by default show crosshair in center, no snap
+  QgsPoint recordpoint = mMapSettings->screenToCoordinate( mCenterPosition );
+  QgsPoint centerPoint = InputUtils::transformPoint(
+                           mMapSettings->destinationCrs(),
+                           mDestinationLayer->crs(),
+                           mDestinationLayer->transformContext(),
+                           recordpoint );
 
   // do no snap in the streaming mode
   if ( !mUseSnapping )
   {
-    setSnappedPosition( snappoint );
+    setRecordPoint( centerPoint );
     setSnapped( false );
     return;
   }
 
-  if ( !mDestinationLayer )
-  {
-    setSnappedPosition( snappoint );
-    setSnapped( false );
-    return;
-  }
-
-  QgsPointLocator::Match snap = mSnappingUtils.snapToMap( QgsPointXY( mapCoords.x(), mapCoords.y() ) );
+  QgsPointLocator::Match snap = mSnappingUtils.snapToMap( QgsPointXY( recordpoint.x(), recordpoint.y() ) );
   if ( snap.isValid() )
   {
     QgsPoint layerPoint;
@@ -106,7 +111,7 @@ void SnapUtils::getsnap( QPointF mapPoint )
         QgsVertexId vId;
         if ( !f.geometry().vertexIdFromVertexNr( snap.vertexIndex(), vId ) )
         {
-          setSnappedPosition( snappoint );
+          setRecordPoint( centerPoint );
           setSnapped( false );
           return;
         }
@@ -119,7 +124,7 @@ void SnapUtils::getsnap( QPointF mapPoint )
       layerPoint = InputUtils::transformPoint( mMapSettings->destinationCrs(), mDestinationLayer->crs(), mQgsProject->transformContext(), QgsPoint( snap.point() ) );
     }
 
-    setSnappedPosition( layerPoint );
+    setRecordPoint( layerPoint );
 
     if ( snap.hasVertex() )
     {
@@ -138,7 +143,7 @@ void SnapUtils::getsnap( QPointF mapPoint )
   }
   else
   {
-    setSnappedPosition( snappoint );
+    setRecordPoint( centerPoint );
     setSnapped( false );
   }
 }
@@ -147,7 +152,7 @@ void SnapUtils::onMapSettingsUpdated()
 {
   mSnappingUtils.setMapSettings( mMapSettings->mapSettings() );
 
-  getsnap( mCenterPosition );
+  getsnap();
 }
 
 QPointF SnapUtils::centerPosition() const
@@ -163,15 +168,15 @@ void SnapUtils::setCenterPosition( QPointF newCenterPosition )
   emit centerPositionChanged( mCenterPosition );
 }
 
-QgsPoint SnapUtils::snappedPosition() const
+QgsPoint SnapUtils::recordPoint() const
 {
-  return mSnappedPosition;
+  return mRecordPoint;
 }
 
-void SnapUtils::setSnappedPosition( QgsPoint newSnappedPosition )
+void SnapUtils::setRecordPoint( QgsPoint newRecordPoint )
 {
-  mSnappedPosition = newSnappedPosition;
-  emit snappedPositionChanged( mSnappedPosition );
+  mRecordPoint = newRecordPoint;
+  emit recordPointChanged( mRecordPoint );
 }
 
 bool SnapUtils::snapped() const

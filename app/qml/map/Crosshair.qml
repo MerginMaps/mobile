@@ -22,9 +22,9 @@ Item {
 
     property point center: Qt.point( root.width / 2, root.height / 2 )
 
-    property var recordPoint: snapUtils.snappedPosition
+    property var recordPoint: snapUtils.recordPoint
 
-    property point screenPoint: snapUtils.snapped ? __inputUtils.transformPointToScreenCoordinates(recordPoint) : center
+    property point screenPoint: snapUtils.snapped ? __inputUtils.transformPointToScreenCoordinates(__activeLayer.vectorLayer.crs, mapSettings, recordPoint) : center
 
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp

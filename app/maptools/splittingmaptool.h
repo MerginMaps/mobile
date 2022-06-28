@@ -28,7 +28,10 @@ class SplittingMapTool : public AbstractMapTool
     explicit SplittingMapTool( QObject *parent = nullptr );
     virtual ~SplittingMapTool();
 
-    //! Adds point to the end of the recorded geometry; updates recordedGeometry afterwards
+    /**
+     * Adds point to the end of the recorded geometry; updates recordedGeometry afterwards
+     * Passed point needs to be in active vector layer CRS
+     */
     Q_INVOKABLE void addPoint( const QgsPoint &point );
 
     /**

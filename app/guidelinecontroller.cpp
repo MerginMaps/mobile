@@ -20,7 +20,7 @@ GuidelineController::GuidelineController( QObject *parent )
 void GuidelineController::buildGuideline()
 {
   // take the existing geometry and add crosshair position to it
-  if ( mCrosshairPosition.isEmpty() || mRealGeometry.isNull() || mRealGeometry.isEmpty() )
+  if ( !mMapSettings || mCrosshairPosition.isNull() || mRealGeometry.isNull() || mRealGeometry.isEmpty() )
   {
     setGuidelineGeometry( QgsGeometry() );
     return;
@@ -32,10 +32,12 @@ void GuidelineController::buildGuideline()
     return;
   }
 
+  QgsPoint crosshair = mMapSettings->screenToCoordinate( mCrosshairPosition );
+
   if ( mRealGeometry.type() == QgsWkbTypes::LineGeometry )
   {
     QgsPolylineXY points = mRealGeometry.asPolyline();
-    points.append( mCrosshairPosition );
+    points.append( crosshair );
 
     setGuidelineGeometry( QgsGeometry::fromPolylineXY( points ) );
   }
@@ -46,13 +48,13 @@ void GuidelineController::buildGuideline()
     if ( poly[0].count() < 2 )
     {
       // if it is not yet a polygon, create line guideline
-      poly[0].append( mCrosshairPosition );
+      poly[0].append( crosshair );
       setGuidelineGeometry( QgsGeometry::fromPolylineXY( poly[0] ) );
     }
     else
     {
       // let's add the crosshair as one-before-last vertex
-      poly[0].insert( poly[0].count() - 1, mCrosshairPosition );
+      poly[0].insert( poly[0].count() - 1, crosshair );
       setGuidelineGeometry( QgsGeometry::fromPolygonXY( poly ) );
     }
   }
@@ -71,12 +73,12 @@ void GuidelineController::setGuidelineGeometry( const QgsGeometry &newGuidelineG
   emit guidelineGeometryChanged( mGuidelineGeometry );
 }
 
-QgsPoint GuidelineController::crosshairPosition() const
+QPointF GuidelineController::crosshairPosition() const
 {
   return mCrosshairPosition;
 }
 
-void GuidelineController::setCrosshairPosition( QgsPoint newCrosshairPosition )
+void GuidelineController::setCrosshairPosition( QPointF newCrosshairPosition )
 {
   if ( mCrosshairPosition == newCrosshairPosition )
     return;
@@ -99,4 +101,31 @@ void GuidelineController::setRealGeometry( const QgsGeometry &newRealGeometry )
   emit realGeometryChanged( mRealGeometry );
 
   buildGuideline();
+}
+
+QgsQuickMapSettings *GuidelineController::mapSettings() const
+{
+  return mMapSettings;
+}
+
+void GuidelineController::setMapSettings( QgsQuickMapSettings *newMapSettings )
+{
+  if ( !newMapSettings || mMapSettings == newMapSettings )
+    return;
+
+  if ( mMapSettings )
+  {
+    disconnect( mMapSettings, nullptr, this, nullptr );
+  }
+
+  mMapSettings = newMapSettings;
+
+  connect( mMapSettings, &QgsQuickMapSettings::extentChanged, this, &GuidelineController::buildGuideline );
+  connect( mMapSettings, &QgsQuickMapSettings::destinationCrsChanged, this, &GuidelineController::buildGuideline );
+  connect( mMapSettings, &QgsQuickMapSettings::mapUnitsPerPixelChanged, this, &GuidelineController::buildGuideline );
+  connect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &GuidelineController::buildGuideline );
+  connect( mMapSettings, &QgsQuickMapSettings::outputSizeChanged, this, &GuidelineController::buildGuideline );
+  connect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &GuidelineController::buildGuideline );
+
+  emit mapSettingsChanged( mMapSettings );
 }

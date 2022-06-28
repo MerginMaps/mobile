@@ -43,11 +43,6 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     pointToAdd.setX( transformed.x() );
     pointToAdd.setY( transformed.y() );
   }
-  else
-  {
-    // convert from map CRS -> layer's CRS
-    pointToAdd = mapSettings()->mapSettings().mapToLayerCoordinates( mLayer, pointToAdd );
-  }
 
   fixZ( pointToAdd );
 

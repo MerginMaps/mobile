@@ -1453,7 +1453,7 @@ QgsGeometry InputUtils::stakeoutGeometry( const QgsPoint &mapPosition, const Fea
     return QgsGeometry();
 
   QgsPointXY targetInLayerCoordinates = target.feature().geometry().asPoint();
-  QgsPointXY t = transformPoint( target.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext(), targetInLayerCoordinates );
+  QgsPointXY t = transformPointXY( target.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext(), targetInLayerCoordinates );
 
   QVector<QgsPoint> points { mapPosition, QgsPoint( t ) };
 

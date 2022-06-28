@@ -24,10 +24,7 @@ void SplittingMapTool::addPoint( const QgsPoint &point )
   if ( !mapSettings() || !mFeatureToSplit.isValid() )
     return;
 
-  // convert from map CRS -> layer's CRS
-  QgsPoint transformed = mapSettings()->mapSettings().mapToLayerCoordinates( mFeatureToSplit.layer(), point );
-
-  mPoints.push_back( transformed );
+  mPoints.push_back( point );
   rebuildGeometry();
 }
 
