@@ -77,8 +77,9 @@ Item {
   GuidelineController {
     id: guidelineController
 
+    mapSettings: root.map.mapSettings
+    crosshairPosition: crosshair.screenPoint
     realGeometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
-    crosshairPosition: crosshair.recordPoint
   }
 
   Highlight {

@@ -104,8 +104,8 @@ void MapPosition::recalculateMapPosition()
     if ( !geoposition.isEmpty() )
     {
       QgsPointXY srcPoint = QgsPointXY( geoposition.x(), geoposition.y() );
-      QgsPointXY mapPositionXY = InputUtils::transformPoint(
-                                   PositionKit::positionCRS(),
+      QgsPointXY mapPositionXY = InputUtils::transformPointXY(
+                                   mPositionKit->positionCRS(),
                                    mMapSettings->destinationCrs(),
                                    mMapSettings->transformContext(),
                                    srcPoint

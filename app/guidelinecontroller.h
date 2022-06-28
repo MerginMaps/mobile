@@ -22,7 +22,8 @@ class GuidelineController : public QObject
 
     // input properties (geometry of real feature and curent crosshair position in map CRS)
     Q_PROPERTY( QgsGeometry realGeometry READ realGeometry WRITE setRealGeometry NOTIFY realGeometryChanged )
-    Q_PROPERTY( QgsPoint crosshairPosition READ crosshairPosition WRITE setCrosshairPosition NOTIFY crosshairPositionChanged )
+    Q_PROPERTY( QPointF crosshairPosition READ crosshairPosition WRITE setCrosshairPosition NOTIFY crosshairPositionChanged )
+    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     // output properties (real geometry + crosshair position ) in map CRS
     Q_PROPERTY( QgsGeometry guidelineGeometry READ guidelineGeometry WRITE setGuidelineGeometry NOTIFY guidelineGeometryChanged )
@@ -33,25 +34,31 @@ class GuidelineController : public QObject
     const QgsGeometry &guidelineGeometry() const;
     void setGuidelineGeometry( const QgsGeometry &newGuidelineGeometry );
 
-    QgsPoint crosshairPosition() const;
-    void setCrosshairPosition( QgsPoint newCrosshairPosition );
+    QPointF crosshairPosition() const;
+    void setCrosshairPosition( QPointF newCrosshairPosition );
 
     const QgsGeometry &realGeometry() const;
     void setRealGeometry( const QgsGeometry &newRealGeometry );
 
+    QgsQuickMapSettings *mapSettings() const;
+    void setMapSettings( QgsQuickMapSettings *newMapSettings );
+
   signals:
 
     void guidelineGeometryChanged( const QgsGeometry &guidelineGeometry );
-    void crosshairPositionChanged( QgsPoint crosshairPosition );
+    void crosshairPositionChanged( QPointF crosshairPosition );
 
     void realGeometryChanged( const QgsGeometry &realGeometry );
+
+    void mapSettingsChanged( QgsQuickMapSettings *mapSettings );
 
   private:
     void buildGuideline();
 
     QgsGeometry mGuidelineGeometry;
-    QgsPoint mCrosshairPosition;
+    QPointF mCrosshairPosition;
     QgsGeometry mRealGeometry;
+    QgsQuickMapSettings *mMapSettings = nullptr; // not owned
 };
 
 #endif // GUIDELINECONTROLLER_H

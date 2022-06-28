@@ -210,10 +210,28 @@ class InputUtils: public QObject
       * Transforms point between different crs
       * Return empty QgsPointXY if the transformation could not be applied or srcPoint is empty
       */
-    Q_INVOKABLE static QgsPointXY transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
+    Q_INVOKABLE static QgsPointXY transformPointXY( const QgsCoordinateReferenceSystem &srcCrs,
         const QgsCoordinateReferenceSystem &destCrs,
         const QgsCoordinateTransformContext &context,
         const QgsPointXY &srcPoint );
+
+    /**
+      * Transforms point between different crs
+      * Return empty QgsPoint if the transformation could not be applied or srcPoint is empty
+      */
+    Q_INVOKABLE static QgsPoint transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
+        const QgsCoordinateReferenceSystem &destCrs,
+        const QgsCoordinateTransformContext &context,
+        const QgsPoint &srcPoint );
+
+    /**
+      * Transforms point between CRS and screen pixels
+      * Return empty QgsPoint if the transformation could not be applied or srcPoint is empty
+      */
+    Q_INVOKABLE static QPointF transformPointToScreenCoordinates(
+      const QgsCoordinateReferenceSystem &srcCrs,
+      QgsQuickMapSettings *mapSettings,
+      const QgsPoint &srcPoint );
 
     /**
       * Calculates the distance in meter representing baseLengthPixels pixels on the screen based on the current map settings.
@@ -444,6 +462,7 @@ class InputUtils: public QObject
     static bool equals( const QPointF &a, const QPointF &b, double epsilon = 0.001 );
     // Convinient comparison function with possibility to pass custom epsilon value (not possible in QGIS API)
     static bool equals( const QgsPointXY &a, const QgsPointXY &b, double epsilon = 0.001 );
+    static bool equals( const QgsPoint &a, const QgsPoint &b, double epsilon = 0.001 );
 
     // Returns whether geometry of the feature is an actual Point feature (Used because some )
     Q_INVOKABLE static bool isPointLayerFeature( const FeatureLayerPair &pair );

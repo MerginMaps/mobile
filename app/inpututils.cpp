@@ -671,10 +671,10 @@ QgsPoint InputUtils::coordinateToPoint( const QGeoCoordinate &coor )
   return QgsPoint( coor.longitude(), coor.latitude(), coor.altitude() );
 }
 
-QgsPointXY InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
-                                       const QgsCoordinateReferenceSystem &destCrs,
-                                       const QgsCoordinateTransformContext &context,
-                                       const QgsPointXY &srcPoint )
+QgsPointXY InputUtils::transformPointXY( const QgsCoordinateReferenceSystem &srcCrs,
+    const QgsCoordinateReferenceSystem &destCrs,
+    const QgsCoordinateTransformContext &context,
+    const QgsPointXY &srcPoint )
 {
   // we do not want to transform empty points,
   // QGIS would convert them to a valid (0, 0) points
@@ -688,8 +688,15 @@ QgsPointXY InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCr
     QgsCoordinateTransform ct( srcCrs, destCrs, context );
     if ( ct.isValid() )
     {
-      const QgsPointXY pt = ct.transform( srcPoint );
-      return pt;
+      if ( !ct.isShortCircuited() )
+      {
+        const QgsPointXY pt = ct.transform( srcPoint );
+        return pt;
+      }
+      else
+      {
+        return srcPoint;
+      }
     }
   }
   catch ( QgsCsException &cse )
@@ -698,6 +705,52 @@ QgsPointXY InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCr
   }
 
   return QgsPointXY();
+}
+
+QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
+                                     const QgsCoordinateReferenceSystem &destCrs,
+                                     const QgsCoordinateTransformContext &context,
+                                     const QgsPoint &srcPoint )
+{
+  // we do not want to transform empty points,
+  // QGIS would convert them to a valid (0, 0) points
+  if ( srcPoint.isEmpty() )
+  {
+    return QgsPoint();
+  }
+
+  try
+  {
+    QgsCoordinateTransform ct( srcCrs, destCrs, context );
+    if ( ct.isValid() )
+    {
+      if ( !ct.isShortCircuited() )
+      {
+        const QgsPointXY transformed = ct.transform( srcPoint.x(), srcPoint.y() );
+        const QgsPoint pt( transformed.x(), transformed.y(), srcPoint.z(), srcPoint.m() );
+        return pt;
+      }
+      else
+      {
+        return srcPoint;
+      }
+    }
+  }
+  catch ( QgsCsException &cse )
+  {
+    Q_UNUSED( cse )
+  }
+
+  return QgsPoint();
+}
+
+QPointF InputUtils::transformPointToScreenCoordinates( const QgsCoordinateReferenceSystem &srcCrs, QgsQuickMapSettings *mapSettings, const QgsPoint &srcPoint )
+{
+  if ( !mapSettings || srcPoint.isEmpty() )
+    return QPointF();
+
+  QgsPoint mapcrsPoint = transformPoint( srcCrs, mapSettings->destinationCrs(), mapSettings->transformContext(), srcPoint );
+  return mapSettings->coordinateToScreen( mapcrsPoint );
 }
 
 double InputUtils::screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels )
@@ -1084,6 +1137,16 @@ bool InputUtils::equals( const QgsPointXY &a, const QgsPointXY &b, double epsilo
   return qgsDoubleNear( a.x(), b.x(), epsilon ) && qgsDoubleNear( a.y(), b.y(), epsilon );
 }
 
+bool InputUtils::equals( const QgsPoint &a, const QgsPoint &b, double epsilon )
+{
+  if ( a.isEmpty() && b.isEmpty() )
+    return true;
+  if ( a.isEmpty() != b.isEmpty() )
+    return false;
+
+  return qgsDoubleNear( a.x(), b.x(), epsilon ) && qgsDoubleNear( a.y(), b.y(), epsilon );
+}
+
 QString InputUtils::formatPoint(
   const QgsPoint &point,
   QgsCoordinateFormatter::Format format,
@@ -1390,7 +1453,7 @@ QgsGeometry InputUtils::stakeoutGeometry( const QgsPoint &mapPosition, const Fea
     return QgsGeometry();
 
   QgsPointXY targetInLayerCoordinates = target.feature().geometry().asPoint();
-  QgsPointXY t = transformPoint( target.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext(), targetInLayerCoordinates );
+  QgsPointXY t = transformPointXY( target.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext(), targetInLayerCoordinates );
 
   QVector<QgsPoint> points { mapPosition, QgsPoint( t ) };
 

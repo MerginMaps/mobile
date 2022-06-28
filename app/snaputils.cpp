@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 #include "snaputils.h"
+#include "inpututils.h"
 
 SnapUtils::SnapUtils( QObject *parent )
   : QObject{parent}
@@ -66,23 +67,64 @@ void SnapUtils::setMapSettings( QgsQuickMapSettings *newMapSettings )
   emit mapSettingsChanged( mMapSettings );
 }
 
-void SnapUtils::getsnap( QPointF mapPoint )
+void SnapUtils::getsnap()
 {
-  QgsPoint mapCoords = mMapSettings->screenToCoordinate( mapPoint );
-  QgsPoint snappoint = mMapSettings->screenToCoordinate( mCenterPosition ); // by default show crosshair in center, no snap
-
-  // do no snap in the streaming mode
-  if ( !mUseSnapping )
+  if ( !mDestinationLayer || !mMapSettings )
   {
-    setSnappedPosition( snappoint );
+    setRecordPoint( QgsPoint() );
     setSnapped( false );
     return;
   }
 
-  QgsPointLocator::Match snap = mSnappingUtils.snapToMap( QgsPointXY( mapCoords.x(), mapCoords.y() ) );
+  // by default show crosshair in center, no snap
+  QgsPoint recordpoint = mMapSettings->screenToCoordinate( mCenterPosition );
+  QgsPoint centerPoint = InputUtils::transformPoint(
+                           mMapSettings->destinationCrs(),
+                           mDestinationLayer->crs(),
+                           mDestinationLayer->transformContext(),
+                           recordpoint );
+
+  // do no snap in the streaming mode
+  if ( !mUseSnapping )
+  {
+    setRecordPoint( centerPoint );
+    setSnapped( false );
+    return;
+  }
+
+  QgsPointLocator::Match snap = mSnappingUtils.snapToMap( QgsPointXY( recordpoint.x(), recordpoint.y() ) );
   if ( snap.isValid() )
   {
-    setSnappedPosition( QgsPoint( snap.point() ) );
+    QgsPoint layerPoint;
+
+    // if snapped to vertex or line start/end point we get point coordinates from the
+    // geometry of the feature to which we have snapped. Otherwise get point found by
+    // the QgsPointLocator
+    if ( snap.layer() && ( snap.hasVertex() || snap.hasLineEndpoint() ) )
+    {
+      QgsFeature f;
+      QgsFeatureRequest request;
+      request.setFilterFid( snap.featureId() );
+      const bool fetched = snap.layer()->getFeatures( request ).nextFeature( f );
+      if ( fetched )
+      {
+        QgsVertexId vId;
+        if ( !f.geometry().vertexIdFromVertexNr( snap.vertexIndex(), vId ) )
+        {
+          setRecordPoint( centerPoint );
+          setSnapped( false );
+          return;
+        }
+        const QgsGeometry geom( f.geometry() );
+        layerPoint = InputUtils::transformPoint( snap.layer()->crs(), mDestinationLayer->crs(), mQgsProject->transformContext(), geom.constGet()->vertexAt( vId ) );
+      }
+    }
+    else
+    {
+      layerPoint = InputUtils::transformPoint( mMapSettings->destinationCrs(), mDestinationLayer->crs(), mQgsProject->transformContext(), QgsPoint( snap.point() ) );
+    }
+
+    setRecordPoint( layerPoint );
 
     if ( snap.hasVertex() )
     {
@@ -101,7 +143,7 @@ void SnapUtils::getsnap( QPointF mapPoint )
   }
   else
   {
-    setSnappedPosition( snappoint );
+    setRecordPoint( centerPoint );
     setSnapped( false );
   }
 }
@@ -110,7 +152,7 @@ void SnapUtils::onMapSettingsUpdated()
 {
   mSnappingUtils.setMapSettings( mMapSettings->mapSettings() );
 
-  getsnap( mCenterPosition );
+  getsnap();
 }
 
 QPointF SnapUtils::centerPosition() const
@@ -126,17 +168,15 @@ void SnapUtils::setCenterPosition( QPointF newCenterPosition )
   emit centerPositionChanged( mCenterPosition );
 }
 
-QgsPoint SnapUtils::snappedPosition() const
+QgsPoint SnapUtils::recordPoint() const
 {
-  return mSnappedPosition;
+  return mRecordPoint;
 }
 
-void SnapUtils::setSnappedPosition( QgsPoint newSnappedPosition )
+void SnapUtils::setRecordPoint( QgsPoint newRecordPoint )
 {
-  if ( mSnappedPosition == newSnappedPosition )
-    return;
-  mSnappedPosition = newSnappedPosition;
-  emit snappedPositionChanged( mSnappedPosition );
+  mRecordPoint = newRecordPoint;
+  emit recordPointChanged( mRecordPoint );
 }
 
 bool SnapUtils::snapped() const
@@ -172,7 +212,11 @@ bool SnapUtils::useSnapping() const
 
 void SnapUtils::setUseSnapping( bool useSnapping )
 {
+  if ( mUseSnapping == useSnapping )
+    return;
+
   mUseSnapping = useSnapping;
+  emit useSnappingChanged( mUseSnapping );
 }
 
 void SnapUtils::setupSnapping()
@@ -190,8 +234,8 @@ void SnapUtils::setupSnapping()
       QgsSnappingConfig config;
       config.setMode( QgsSnappingConfig::AllLayers );
       config.setTypeFlag( QgsSnappingConfig::VertexFlag | QgsSnappingConfig::SegmentFlag );
-      config.setTolerance( 20.0 );
-      config.setTolerance( QgsTolerance::Pixels );
+      config.setTolerance( 20.0 * InputUtils::calculateDpRatio() );
+      config.setUnits( QgsTolerance::Pixels );
       config.setEnabled( true );
 
       mSnappingUtils.setConfig( config );
@@ -200,9 +244,27 @@ void SnapUtils::setupSnapping()
     }
     case 2:
     {
-      mSnappingUtils.setConfig( mQgsProject->snappingConfig() );
+      QgsSnappingConfig config = mQgsProject->snappingConfig();
+      if ( config.units() == QgsTolerance::Pixels )
+      {
+        config.setTolerance( config.tolerance() * InputUtils::calculateDpRatio() );
+      }
+      mSnappingUtils.setConfig( config );
       break;
     }
   }
   mSnappingUtils.setIndexingStrategy( QgsSnappingUtils::IndexExtent );
+}
+
+QgsVectorLayer *SnapUtils::destinationLayer() const
+{
+  return mDestinationLayer;
+}
+
+void SnapUtils::setDestinationLayer( QgsVectorLayer *newDestinationLayer )
+{
+  if ( mDestinationLayer == newDestinationLayer )
+    return;
+  mDestinationLayer = newDestinationLayer;
+  emit destinationLayerChanged( mDestinationLayer );
 }
