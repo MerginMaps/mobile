@@ -225,6 +225,15 @@ class InputUtils: public QObject
         const QgsPoint &srcPoint );
 
     /**
+      * Transforms point between CRS and screen pixels
+      * Return empty QgsPoint if the transformation could not be applied or srcPoint is empty
+      */
+    Q_INVOKABLE static QPointF transformPointToScreenCoordinates(
+      const QgsCoordinateReferenceSystem &srcCrs,
+      QgsQuickMapSettings *mapSettings,
+      const QgsPoint &srcPoint );
+
+    /**
       * Calculates the distance in meter representing baseLengthPixels pixels on the screen based on the current map settings.
       */
     Q_INVOKABLE static double screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels );

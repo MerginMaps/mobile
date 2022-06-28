@@ -688,8 +688,15 @@ QgsPointXY InputUtils::transformPointXY( const QgsCoordinateReferenceSystem &src
     QgsCoordinateTransform ct( srcCrs, destCrs, context );
     if ( ct.isValid() )
     {
-      const QgsPointXY pt = ct.transform( srcPoint );
-      return pt;
+      if ( !ct.isShortCircuited() )
+      {
+        const QgsPointXY pt = ct.transform( srcPoint );
+        return pt;
+      }
+      else
+      {
+        return srcPoint;
+      }
     }
   }
   catch ( QgsCsException &cse )
@@ -717,9 +724,16 @@ QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
     QgsCoordinateTransform ct( srcCrs, destCrs, context );
     if ( ct.isValid() )
     {
-      const QgsPointXY transformed = ct.transform( srcPoint.x(), srcPoint.y() );
-      const QgsPoint pt( transformed.x(), transformed.y(), srcPoint.z(), srcPoint.m() );
-      return pt;
+      if ( !ct.isShortCircuited() )
+      {
+        const QgsPointXY transformed = ct.transform( srcPoint.x(), srcPoint.y() );
+        const QgsPoint pt( transformed.x(), transformed.y(), srcPoint.z(), srcPoint.m() );
+        return pt;
+      }
+      else
+      {
+        return srcPoint;
+      }
     }
   }
   catch ( QgsCsException &cse )
@@ -728,6 +742,15 @@ QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
   }
 
   return QgsPoint();
+}
+
+QPointF InputUtils::transformPointToScreenCoordinates( const QgsCoordinateReferenceSystem &srcCrs, QgsQuickMapSettings *mapSettings, const QgsPoint &srcPoint )
+{
+  if ( !mapSettings || srcPoint.isEmpty() )
+    return QPointF();
+
+  QgsPoint mapcrsPoint = transformPoint( srcCrs, mapSettings->destinationCrs(), mapSettings->transformContext(), srcPoint );
+  return mapSettings->coordinateToScreen( mapcrsPoint );
 }
 
 double InputUtils::screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels )

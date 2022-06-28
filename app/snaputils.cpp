@@ -80,6 +80,13 @@ void SnapUtils::getsnap( QPointF mapPoint )
     return;
   }
 
+  if ( !mDestinationLayer )
+  {
+    setSnappedPosition( snappoint );
+    setSnapped( false );
+    return;
+  }
+
   QgsPointLocator::Match snap = mSnappingUtils.snapToMap( QgsPointXY( mapCoords.x(), mapCoords.y() ) );
   if ( snap.isValid() )
   {
@@ -104,12 +111,12 @@ void SnapUtils::getsnap( QPointF mapPoint )
           return;
         }
         const QgsGeometry geom( f.geometry() );
-        layerPoint = InputUtils::transformPoint( snap.layer()->crs(), mDestinationCrs, mQgsProject->transformContext(), geom.constGet()->vertexAt( vId ) );
+        layerPoint = InputUtils::transformPoint( snap.layer()->crs(), mDestinationLayer->crs(), mQgsProject->transformContext(), geom.constGet()->vertexAt( vId ) );
       }
     }
     else
     {
-      layerPoint = InputUtils::transformPoint( mMapSettings->destinationCrs(), mDestinationCrs, mQgsProject->transformContext(), QgsPoint( snap.point() ) );
+      layerPoint = InputUtils::transformPoint( mMapSettings->destinationCrs(), mDestinationLayer->crs(), mQgsProject->transformContext(), QgsPoint( snap.point() ) );
     }
 
     setSnappedPosition( layerPoint );
@@ -200,20 +207,11 @@ bool SnapUtils::useSnapping() const
 
 void SnapUtils::setUseSnapping( bool useSnapping )
 {
-  mUseSnapping = useSnapping;
-}
-
-QgsCoordinateReferenceSystem SnapUtils::destinationCrs() const
-{
-  return mDestinationCrs;
-}
-
-void SnapUtils::setDestinationCrs( QgsCoordinateReferenceSystem crs )
-{
-  if ( mDestinationCrs == crs )
+  if ( mUseSnapping == useSnapping )
     return;
 
-  mDestinationCrs = crs;
+  mUseSnapping = useSnapping;
+  emit useSnappingChanged( mUseSnapping );
 }
 
 void SnapUtils::setupSnapping()
@@ -251,4 +249,17 @@ void SnapUtils::setupSnapping()
     }
   }
   mSnappingUtils.setIndexingStrategy( QgsSnappingUtils::IndexExtent );
+}
+
+QgsVectorLayer *SnapUtils::destinationLayer() const
+{
+  return mDestinationLayer;
+}
+
+void SnapUtils::setDestinationLayer( QgsVectorLayer *newDestinationLayer )
+{
+  if ( mDestinationLayer == newDestinationLayer )
+    return;
+  mDestinationLayer = newDestinationLayer;
+  emit destinationLayerChanged( mDestinationLayer );
 }

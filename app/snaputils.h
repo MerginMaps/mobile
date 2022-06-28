@@ -30,8 +30,8 @@ class SnapUtils : public QObject
     Q_PROPERTY( bool snapped READ snapped WRITE setSnapped NOTIFY snappedChanged )
     Q_PROPERTY( QgsPoint snappedPosition READ snappedPosition WRITE setSnappedPosition NOTIFY snappedPositionChanged )
     Q_PROPERTY( SnapType snapType READ snapType WRITE setSnapType NOTIFY snapTypeChanged )
-    Q_PROPERTY( bool useSnapping READ useSnapping WRITE setUseSnapping )
-    Q_PROPERTY( QgsCoordinateReferenceSystem destinationCrs READ destinationCrs WRITE setDestinationCrs )
+    Q_PROPERTY( bool useSnapping READ useSnapping WRITE setUseSnapping NOTIFY useSnappingChanged )
+    Q_PROPERTY( QgsVectorLayer *destinationLayer READ destinationLayer WRITE setDestinationLayer NOTIFY destinationLayerChanged )
 
   public:
     SnapUtils( QObject *parent = nullptr );
@@ -70,6 +70,9 @@ class SnapUtils : public QObject
     QgsCoordinateReferenceSystem destinationCrs() const;
     void setDestinationCrs( QgsCoordinateReferenceSystem crs );
 
+    QgsVectorLayer *destinationLayer() const;
+    void setDestinationLayer( QgsVectorLayer *newDestinationLayer );
+
   public slots:
 
     void onMapSettingsUpdated();
@@ -83,9 +86,13 @@ class SnapUtils : public QObject
 
     void snappedPositionChanged( QgsPoint snappedPosition );
 
+    void useSnappingChanged( bool useSnapping );
+
     void snappedChanged( bool snapped );
 
     void snapTypeChanged( const SnapUtils::SnapType &snapType );
+
+    void destinationLayerChanged( QgsVectorLayer *destinationLayer );
 
   private:
     void setupSnapping();
@@ -98,7 +105,7 @@ class SnapUtils : public QObject
     bool mSnapped;
     SnapType mSnapType = SnapUtils::Vertex;
     bool mUseSnapping;
-    QgsCoordinateReferenceSystem mDestinationCrs;
+    QgsVectorLayer *mDestinationLayer = nullptr;
 };
 
 #endif // SNAPUTILS_H
