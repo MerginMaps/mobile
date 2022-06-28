@@ -87,11 +87,7 @@ Item {
     height: root.map.height
     width: root.map.width
 
-    lineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )
-
-    property bool guideLineAllowed: false
-
-    property point crosshairPoint: Qt.point( highlight.width / 2, highlight.height / 2 )
+    lineColor: InputStyle.guidelineColor
 
     mapSettings: root.map.mapSettings
     geometry: guidelineController.guidelineGeometry

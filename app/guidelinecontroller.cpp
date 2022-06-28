@@ -8,7 +8,6 @@
  ***************************************************************************/
 
 #include "guidelinecontroller.h"
-#include "qdebug.h"
 #include "inpututils.h"
 #include "qgspolygon.h"
 

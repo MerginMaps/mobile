@@ -17,7 +17,7 @@ import lc 1.0
 import "../"
 
 /**
-  * RecordingTools is a set of tools that are used during recording/editing of a geometry.
+  * SplittingTools is a set of tools that are used during recording/editing of a geometry.
   * These tools can be instantiated just for the time of recording and then destroyed.
   */
 Item {
@@ -49,11 +49,7 @@ Item {
     height: root.map.height
     width: root.map.width
 
-    lineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )
-
-    property bool guideLineAllowed: false
-
-    property point crosshairPoint: Qt.point( highlight.width / 2, highlight.height / 2 )
+    lineColor: InputStyle.guidelineColor
 
     mapSettings: root.map.mapSettings
     geometry: guidelineController.guidelineGeometry
