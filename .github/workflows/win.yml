@@ -25,10 +25,6 @@ jobs:
     
     env:
       QT_VERSION: 5.14.2
-      ARCH: "win64"
-      VS_VERSION: "2022"
-      CMAKE_GENERATOR: "Visual Studio 17 2022"
-      CMAKE_ARCH: "x64"
       INPUT_SDK_VERSION: win64-20220629-55
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
       CACHE_VERSION: 0
@@ -142,28 +138,17 @@ jobs:
           echo -e "}"  >> ./input/app/config.pri
           cat ./input/app/config.pri
       
-      - name: set compiler environment
+      - name: Developer Command Prompt for Microsoft Visual C++
+        uses: ilammy/msvc-dev-cmd@v1
+        
+      - name: Build Input
         shell: cmd
         run: |
-            CALL "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=${{ env.CMAKE_ARCH }}
-            
-      - name: Build Input
-        shell: pwsh
-        run: |
-          $ErrorActionPreference = 'continue'
-          function exec
-          {
-              param ( [ScriptBlock] $ScriptBlock )
-              & $ScriptBlock 2>&1 | ForEach-Object -Process { "$_" }
-              if ($LastExitCode -ne 0) { exit $LastExitCode }
-          }
-          
           mkdir $env:GITHUB_WORKSPACE\build-Input -ea 0
           cd $env:GITHUB_WORKSPACE\build-Input
-          exec { 
-            qmake  $env:GITHUB_WORKSPACE\input\app CONFIG+=Release CONFIG+=qtquickcompiler
-          }
-          exec { nmake }
+          qmake  $env:GITHUB_WORKSPACE\input\app CONFIG+=Release CONFIG+=qtquickcompiler
+          nmake
+          IF NOT EXIST release\Input.exe (echo err_INPUT_BUILD & exit /b 1)
                     
       - name: Get TimeStamp
         id: time
