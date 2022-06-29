@@ -17,9 +17,13 @@ win32 {
   LIBS += -L$${INPUT_SDK_PATH}/lib
   
   LIBS += -lqgis_core
+  LIBS += -lgdal_i
   LIBS += -lgeodiff
   LIBS += -lproj
-
+  LIBS += -lsqlite3  
+  LIBS += -lexiv2 -lexiv2-xmp
+  LIBS += -lzxing
+  
   QT += printsupport
   QT += widgets
   QT += multimedia

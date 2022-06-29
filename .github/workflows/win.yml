@@ -114,13 +114,13 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v4-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v5-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         shell: bash
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
-          wget -O \
+          curl -fsSL --connect-timeout 60 -o \
             input-sdk.tar.gz \
             https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.zip
           mkdir -p input-sdk
@@ -129,15 +129,6 @@ jobs:
           cd ..
           ls -la input-sdk
           
-      - name: Install Input-SDK
-        shell: cmd
-        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
-        run: |
-          mkdir input-sdk
-          curl -fsSL --connect-timeout 60 -o input-sdk-download.zip "https://github.com/MerginMaps/input-sdk/releases/download/%INPUT_SDK_VERSION%/input-sdk-qt-%QT_VERSION%-%INPUT_SDK_VERSION%.zip"
-          7z x input-sdk-download.zip -o input-sdk/
-          dir input-sdk/
-
       # Build Input App
       - name: Export app/config.pri
         shell: bash
