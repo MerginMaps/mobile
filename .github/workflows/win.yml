@@ -117,7 +117,7 @@ jobs:
           key: ${{ runner.os }}-input-sdk-v3-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
-        cmd: bash
+        shell: bash
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
           wget -O \
