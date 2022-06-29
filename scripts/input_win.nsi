@@ -1,19 +1,19 @@
-!define APPNAME "InputApp"
+!define APPNAME "MerginMapsInput"
 !define COMPANYNAME "Lutra Consulting Ltd."
 !define DESCRIPTION "Survey made easy"
-!define HELPURL "https://github.com/MerginMaps/input/blob/master/docs/users/introduction.md"
+!define HELPURL "https://merginmaps.com/docs"
 !define UPDATEURL "https://github.com/MerginMaps/input/releases"
-!define ABOUTURL "https://inputapp.io/" 
+!define ABOUTURL "https://merginmaps.com"
  
 RequestExecutionLevel admin ;Require admin rights on NT6+ (When UAC is turned on)
  
 InstallDir "$PROGRAMFILES64\${COMPANYNAME}\${APPNAME}"
 
-LicenseData "C:\projects\input\x86_64\stage\license.txt"
+LicenseData "C:\input-package\stage\license.txt"
 # This will be in the installer/uninstaller's title bar
 Name "${COMPANYNAME} - ${APPNAME}"
-Icon "C:\projects\input\x86_64\stage\images\AppIcon.ico"
-outFile "C:\projects\input\x86_64\inputapp-win-x86_64.exe"
+Icon "C:\input-package\stage\images\AppIcon.ico"
+outFile "C:\input-package\inputapp-win-x86_64.exe"
  
 !include LogicLib.nsh
  
@@ -38,7 +38,7 @@ functionEnd
  
 section "install"
 	setOutPath $INSTDIR
-	File /r "C:\projects\input\x86_64\stage\*"
+	File /r "C:\input-package\input\x86_64\stage\*"
  
 	writeUninstaller "$INSTDIR\uninstall.exe"
  

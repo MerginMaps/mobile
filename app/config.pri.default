@@ -32,6 +32,10 @@ ios {
 }
 
 win32 {
-  // Currently not maintained
+  # path to vcpkg_installed/x64-windows
   INPUT_SDK_PATH=<SDK_PATH>
-}
+  
+  # Definition needed by QGIS_QUICK to work properly.
+  # The value is NOT used to find app folder
+  QGIS_QUICK_DATA_PATH = INPUT
+} 
