@@ -6,6 +6,7 @@ Platform builds:
 
 [![InputApp Android Build](https://github.com/MerginMaps/input/workflows/Android/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22Android%22)
 [![InputApp iOS Build](https://github.com/MerginMaps/input/workflows/iOS%20Build/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22iOS+Build%22)
+[![InputApp win64](https://github.com/MerginMaps/input/actions/workflows/win.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/win.yml)
 
 Other Checks:
 

@@ -53,7 +53,8 @@ jobs:
         run: |
             choco install ccache
             where ccache
-            dir C:/
+            dir C:
+            where openssl
           
       - name: Extract Mergin API_KEY
         shell: cmd
@@ -61,7 +62,7 @@ jobs:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
           cd input/core/
-          Win64OpenSSL-1_1_1p.exe  aes-256-cbc -d  -in merginsecrets.cpp.enc  -out merginsecrets.cpp  -k "%MERGINSECRETS_DECRYPT_KEY%" -md md5
+          Win64OpenSSL-1_1_1p.exe aes-256-cbc -d  -in merginsecrets.cpp.enc  -out merginsecrets.cpp  -k "%MERGINSECRETS_DECRYPT_KEY%" -md md5
           
       - name: Prepare build cache for pull request
         uses: pat-s/always-upload-cache@v2.1.5
