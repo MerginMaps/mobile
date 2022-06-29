@@ -114,7 +114,7 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v3-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v4-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         shell: bash
@@ -165,7 +165,7 @@ jobs:
           mkdir $env:GITHUB_WORKSPACE\build-Input -ea 0
           cd $env:GITHUB_WORKSPACE\build-Input
           exec { 
-            qmake  $env:GITHUB_WORKSPACE\app CONFIG+=Release CONFIG+=qtquickcompiler
+            qmake  $env:GITHUB_WORKSPACE\input\app CONFIG+=Release CONFIG+=qtquickcompiler
           }
           exec { nmake }
                     
