@@ -164,7 +164,7 @@ jobs:
             mkdir C:\input-package\stage
             set INPUT_BUILD_DIR="%GITHUB_WORKSPACE%\build-Input"
             set INPUT_SOURCE_DIR="%GITHUB_WORKSPACE%\input"
-            %GITHUB_WORKSPACE%\scripts\package_win.cmd
+            scripts\package_win.cmd
             dir C:\input-package\stage
             
       - name: create package
