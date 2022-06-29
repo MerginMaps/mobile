@@ -190,15 +190,15 @@ jobs:
           split-by: '-'
 
       - name: Create build system with qmake
+        env:
+          VERSIONS_MIN: 2 # min version to start CF_BUNDLE_VERSION with, as previously we differentiated the number based on branch name
         run: |
           INPUT_DIR=`pwd`
 
           # patch the Info.plist
           CF_BUNDLE_SHORT_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" $INPUT_DIR/app/ios/Info.plist`
           TIMESTAMP=`date "+%y%m%d%H%M%S"`
-          GIT_BRANCH_NAME=`git rev-parse --abbrev-ref HEAD`
-          BRANCH_NUMBER=`if [ "X$GIT_BRANCH_NAME" == "Xmaster" ]; then echo "2"; else echo "1"; fi`
-          CF_BUNDLE_VERSION=${BRANCH_NUMBER}.${{ steps.split.outputs._2 }}.${TIMESTAMP}
+          CF_BUNDLE_VERSION=${VERSIONS_MIN}.${{ steps.split.outputs._2 }}.${TIMESTAMP}
 
           echo "Building version: $CF_BUNDLE_VERSION"
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $CF_BUNDLE_VERSION" "$INPUT_DIR/app/ios/Info.plist"
