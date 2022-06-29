@@ -104,11 +104,6 @@ jobs:
           target: desktop
           dir: ${{ github.workspace }}
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
-
-      - name: set compiler environment
-        shell: cmd
-        run: |
-            CALL "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=${{ env.CMAKE_ARCH }}
  
        # Input SDK
       - name: Cache Input-SDK
@@ -116,7 +111,7 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v6-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v7-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         shell: bash
@@ -146,7 +141,12 @@ jobs:
           echo -e "  CONFIG += sdk_no_version_check"  >> ./input/app/config.pri
           echo -e "}"  >> ./input/app/config.pri
           cat ./input/app/config.pri
-
+      
+      - name: set compiler environment
+        shell: cmd
+        run: |
+            CALL "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=${{ env.CMAKE_ARCH }}
+            
       - name: Build Input
         shell: pwsh
         run: |
@@ -185,8 +185,9 @@ jobs:
       - name: create package
         shell: cmd
         run: |
-            makensis.exe input\scripts\input_win.nsi 
-            xcopy %PACKAGE_DIR%\inputapp-win-x86_64.exe $env:GITHUB_WORKSPACE\mergin-maps-input-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.exe /Y
+            scripts\version.cmd
+            makensis.exe input\scripts\input_win.nsi
+            xcopy %PACKAGE_DIR%\inputapp-win-x86_64.exe $env:GITHUB_WORKSPACE\mergin-maps-input-%VERSIONMAJOR%.%VERSIONMINOR%.%VERSIONBUILD%-win64-${{ steps.time.outputs.time }}.exe /Y
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v2
