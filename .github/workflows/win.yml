@@ -117,6 +117,19 @@ jobs:
           key: ${{ runner.os }}-input-sdk-v3-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
+        cmd: bash
+        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
+        run: |
+          wget -O \
+            input-sdk.tar.gz \
+            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.zip
+          mkdir -p input-sdk
+          cd input-sdk
+          unzip ${{ github.workspace }}/input-sdk.tar.gz -d .
+          cd ..
+          ls -la input-sdk
+          
+      - name: Install Input-SDK
         shell: cmd
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
