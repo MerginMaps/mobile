@@ -28,7 +28,7 @@ ApplicationWindow {
     width:  __appwindowwidth
     height: __appwindowheight
     visibility: __appwindowvisibility
-    title: "Input" // Do not translate
+    title: "Mergin Maps" // Do not translate
 
 
     Item {
