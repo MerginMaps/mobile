@@ -144,9 +144,9 @@ jobs:
       - name: Build Input
         shell: cmd
         run: |
-          mkdir $env:GITHUB_WORKSPACE\build-Input -ea 0
-          cd $env:GITHUB_WORKSPACE\build-Input
-          qmake  $env:GITHUB_WORKSPACE\input\app CONFIG+=Release CONFIG+=qtquickcompiler
+          mkdir build-Input -ea 0
+          cd build-Input
+          qmake ..\input\app CONFIG+=Release CONFIG+=qtquickcompiler
           nmake
           IF NOT EXIST release\Input.exe (echo err_INPUT_BUILD & exit /b 1)
                     
