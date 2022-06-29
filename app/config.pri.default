@@ -38,4 +38,7 @@ win32 {
   # Definition needed by QGIS_QUICK to work properly.
   # The value is NOT used to find app folder
   QGIS_QUICK_DATA_PATH = INPUT
+  
+  # for rel-with-debug 
+  # CONFIG += force_debug_info
 } 

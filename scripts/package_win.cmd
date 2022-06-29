@@ -25,7 +25,8 @@ if not exist %STAGE_PATH%\share mkdir %STAGE_PATH%\share
 
 if not exist %STAGE_PATH%\images mkdir %STAGE_PATH%\images
 xcopy %INPUT_SOURCE_DIR%\images\AppIcon.ico %STAGE_PATH%\images\ /Y
-xcopy %INPUT_SOURCE_DIR%\LICENSE %STAGE_PATH%\license.txt /Y
+
+echo GNU GENERAL PUBLIC LICENSE Version 2 > %STAGE_PATH%\license.txt
 
 xcopy %INPUT_SDK_DIR%\bin\*.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\bin\Qca\crypto\*.dll %STAGE_PATH%\ /Y
