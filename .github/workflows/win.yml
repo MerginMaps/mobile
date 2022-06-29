@@ -28,7 +28,6 @@ jobs:
       INPUT_SDK_VERSION: win64-20220629-55
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
       CACHE_VERSION: 0
-      PACKAGE_DIR: "C:/input-package" # should be same as in scripts/input_win.nsi
       
     steps:
       - name: Checkout Input
@@ -160,19 +159,19 @@ jobs:
       - name: create package folder
         shell: cmd
         run: |
-            echo "preparing package dir: %PACKAGE_DIR%\stage"
-            mkdir %PACKAGE_DIR%\stage
-            set INPUT_BUILD_DIR="$env:GITHUB_WORKSPACE\build-Input"
-            set INPUT_SOURCE_DIR="$env:GITHUB_WORKSPACE\input"
-            $env:GITHUB_WORKSPACE\scripts\package_win.cmd
-            dir %PACKAGE_DIR%\stage
+            echo "preparing package dir: C:\input-package\stage"
+            mkdir C:\input-package\stage
+            set INPUT_BUILD_DIR="%GITHUB_WORKSPACE%\build-Input"
+            set INPUT_SOURCE_DIR="%GITHUB_WORKSPACE%\input"
+            %GITHUB_WORKSPACE%\scripts\package_win.cmd
+            dir C:\input-package\stage
             
       - name: create package
         shell: cmd
         run: |
             scripts\version.cmd
             makensis.exe input\scripts\input_win.nsi
-            xcopy %PACKAGE_DIR%\inputapp-win-x86_64.exe $env:GITHUB_WORKSPACE\mergin-maps-input-%VERSIONMAJOR%.%VERSIONMINOR%.%VERSIONBUILD%-win64-${{ steps.time.outputs.time }}.exe /Y
+            xcopy C:\input-package\inputapp-win-x86_64.exe $env:GITHUB_WORKSPACE\mergin-maps-input-%VERSIONMAJOR%.%VERSIONMINOR%.%VERSIONBUILD%-win64-${{ steps.time.outputs.time }}.exe /Y
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v2
