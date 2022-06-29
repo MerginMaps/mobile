@@ -103,9 +103,9 @@ class SnapUtils : public QObject
     QgsSnappingUtils mSnappingUtils;
     QPointF mCenterPosition = QPointF( -1, -1 );
     QgsPoint mRecordPoint = QgsPoint( -1, -1 );
-    bool mSnapped;
+    bool mSnapped = false;
     SnapType mSnapType = SnapUtils::Vertex;
-    bool mUseSnapping;
+    bool mUseSnapping = false;
     QgsVectorLayer *mDestinationLayer = nullptr;
 };
 
