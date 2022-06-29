@@ -147,6 +147,7 @@ jobs:
           cd build-Input
           qmake ..\input\app CONFIG+=Release CONFIG+=qtquickcompiler
           nmake
+          
           IF NOT EXIST release\Input.exe (echo err_INPUT_BUILD & exit /b 1)
                     
       - name: Get TimeStamp
