@@ -32,7 +32,7 @@ jobs:
       INPUT_SDK_VERSION: win64-20220629-53
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
       CACHE_VERSION: 0
-      PACKAGE_DIR: "C:\input-package" # should be same as in scripts/input_win.nsi
+      PACKAGE_DIR: "C:/input-package" # should be same as in scripts/input_win.nsi
       
     steps:
       - name: Checkout Input
