@@ -32,7 +32,7 @@ jobs:
       INPUT_SDK_VERSION: win64-20220629-53
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
       CACHE_VERSION: 0
-
+      PACKAGE_DIR: "C:\input-package" # should be same as in scripts/input_win.nsi
       
     steps:
       - name: Checkout Input
@@ -52,8 +52,10 @@ jobs:
         shell: cmd
         run: |
             choco install ccache
+            choco install nsis
             where ccache
             where openssl
+            where makensis
           
       - name: Extract Mergin API_KEY
         shell: cmd
@@ -170,15 +172,22 @@ jobs:
           timeZone: 8
           format: 'YYYYMMDD'
 
-      - name: Create package
-        uses: vimtor/action-zip@v1
-        with:
-          files: ${{ github.workspace }}/build-Input
-          dest: input-qt-${{ env.QT_VERSION }}-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.zip
-          
+      - name: create package folder
+        shell: cmd
+        run: |
+            echo "preparing package dir: %PACKAGE_DIR%\stage"
+            mkdir %PACKAGE_DIR%\stage
+            $env:GITHUB_WORKSPACE\scripts\package_win.cmd
+            
+      - name: create package
+        shell: cmd
+        run: |
+            makensis.exe input\scripts\input_win.nsi 
+            xcopy %PACKAGE_DIR%\inputapp-win-x86_64.exe $env:GITHUB_WORKSPACE\mergin-maps-input-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.exe /Y
+
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v2
         with:
-          path: ${{ github.workspace }}/input-qt-${{ env.QT_VERSION }}-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.zip
+          path: mergin-maps-input-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.exe
           if-no-files-found: error
 
