@@ -13,6 +13,7 @@
 #include <QObject>
 #include <QHash>
 #include <QVariant>
+#include <QString>
 
 class AppSettings: public QObject
 {
@@ -79,7 +80,7 @@ class AppSettings: public QObject
     bool autosyncAllowed() const;
     void setAutosyncAllowed( bool newAutosyncAllowed );
 
-    static const QString GROUP_NAME;
+    static const QString INPUTAPP_GROUP_NAME;
     static const QString POSITION_PROVIDERS_GROUP;
 
   public slots:

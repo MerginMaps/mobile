@@ -1,0 +1,177 @@
+name: Build win64
+
+on:
+  push:
+    paths:
+    - 'app/**'
+    - 'core/**'
+    - 'images/**'
+    - 'qgsquick/**'
+    - 'scripts/**'
+    - '.github/workflows/win.yml'
+ 
+  release:
+    types:
+      - published
+ 
+concurrency:
+  group: ci-${{github.ref}}-windows
+  cancel-in-progress: true
+  
+jobs:
+  win64_build:
+    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    runs-on: windows-2022
+    
+    env:
+      QT_VERSION: 5.14.2
+      ARCH: "win64"
+      VS_VERSION: "2022"
+      CMAKE_GENERATOR: "Visual Studio 17 2022"
+      CMAKE_ARCH: "x64"
+      INPUT_SDK_VERSION: win64-20220629-53
+      CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
+      CACHE_VERSION: 0
+
+      
+    steps:
+      - name: Checkout Input
+        uses: actions/checkout@v2
+        with:
+          path: input
+ 
+      - name: Prepare vars
+        id: vars
+        shell: bash
+        run: |
+          WORKSPACE_DIR=$(cygpath -m "${{ github.workspace }}")
+          echo "::set-output name=WORKSPACE_DIR::$WORKSPACE_DIR"
+          echo "WORKSPACE_DIR: $WORKSPACE_DIR"
+          
+      - name: Install ccache
+        shell: cmd
+        run: |
+            choco install ccache
+            where ccache
+            dir C:/
+          
+      - name: Extract Mergin API_KEY
+        shell: cmd
+        env:
+          MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
+        run: |
+          cd input/core/
+          Win64OpenSSL-1_1_1p.exe  aes-256-cbc -d  -in merginsecrets.cpp.enc  -out merginsecrets.cpp  -k "%MERGINSECRETS_DECRYPT_KEY%" -md md5
+          
+      - name: Prepare build cache for pull request
+        uses: pat-s/always-upload-cache@v2.1.5
+        if: github.event_name == 'pull_request'
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: build-win64-ccache-${{ github.actor }}-${{ github.head_ref }}-${{ github.sha }}
+          # The head_ref or source branch of the pull request in a workflow run.
+          # The base_ref or target branch of the pull request in a workflow run.
+          restore-keys: |
+            build-win64-ccache-${{ github.actor }}-${{ github.head_ref }}-
+            build-win64-ccache-refs/heads/${{ github.base_ref }}-
+            build-win64-ccache-refs/heads/master-
+
+      - name: Prepare build cache for branch/tag
+        # use a fork of actions/cache@v2 to upload cache even when the build or test failed
+        uses: pat-s/always-upload-cache@v2.1.5
+        if: github.event_name != 'pull_request'
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          # The branch or tag ref that triggered the workflow run. For branches this in the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
+          key: build-win64-ccache-${{ github.ref }}-${{ github.sha }}
+          restore-keys: |
+            build-win64-ccache-${{ github.ref }}-
+            build-win64-ccache-refs/heads/master-
+          
+      - name: Cache Qt
+        id: cache-qt
+        uses: pat-s/always-upload-cache@v2.1.5
+        with:
+          path: ${{ github.workspace }}/Qt
+          key: ${{ runner.os }}-QtCache-${{ env.QT_VERSION }}-win64
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: ${{ env.QT_VERSION }}
+          target: desktop
+          dir: ${{ github.workspace }}
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+
+      - name: set compiler environment
+        shell: cmd
+        run: |
+            CALL "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=${{ env.CMAKE_ARCH }}
+ 
+       # Input SDK
+      - name: Cache Input-SDK
+        id: cache-input-sdk
+        uses: pat-s/always-upload-cache@v2.1.5
+        with:
+          path: ${{ github.workspace }}/input-sdk
+          key: ${{ runner.os }}-input-sdk-v3-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
+
+      - name: Install Input-SDK
+        shell: cmd
+        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
+        run: |
+          mkdir input-sdk
+          curl -fsSL --connect-timeout 60 -o input-sdk-download.zip "https://github.com/MerginMaps/input-sdk/releases/download/%INPUT_SDK_VERSION%/input-sdk-qt-%QT_VERSION%-%INPUT_SDK_VERSION%.zip"
+          7z x input-sdk-download.zip -o input-sdk/
+          dir input-sdk/
+
+      # Build Input App
+      - name: Export app/config.pri
+        shell: bash
+        run: |
+          touch ./input/app/config.pri
+          echo -e "win32 {"  >> ./input/app/config.pri
+          echo -e "  INPUT_SDK_PATH = ${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk"  >> ./input/app/config.pri
+          echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./input/app/config.pri
+          echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX"  >> ./input/app/config.pri
+          echo -e "  CONFIG += sdk_no_version_check"  >> ./input/app/config.pri
+          echo -e "}"  >> ./input/app/config.pri
+          cat ./input/app/config.pri
+
+      - name: Build Input
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'continue'
+          function exec
+          {
+              param ( [ScriptBlock] $ScriptBlock )
+              & $ScriptBlock 2>&1 | ForEach-Object -Process { "$_" }
+              if ($LastExitCode -ne 0) { exit $LastExitCode }
+          }
+          
+          mkdir $env:GITHUB_WORKSPACE\build-Input -ea 0
+          cd $env:GITHUB_WORKSPACE\build-Input
+          exec { 
+            qmake  $env:GITHUB_WORKSPACE\app CONFIG+=Release CONFIG+=qtquickcompiler
+          }
+          exec { nmake }
+                    
+      - name: Get TimeStamp
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: 8
+          format: 'YYYYMMDD'
+
+      - name: Create package
+        uses: vimtor/action-zip@v1
+        with:
+          files: ${{ github.workspace }}/build-Input
+          dest: input-qt-${{ env.QT_VERSION }}-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.zip
+          
+      - name: Upload Sdk in Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ github.workspace }}/input-qt-${{ env.QT_VERSION }}-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.zip
+          if-no-files-found: error
+

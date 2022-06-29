@@ -13,13 +13,13 @@
 #include <QSettings>
 #include <QFileInfo>
 
-const QString AppSettings::GROUP_NAME = QStringLiteral( "inputApp" );
+const QString AppSettings::INPUTAPP_GROUP_NAME = QStringLiteral( "inputApp" );
 const QString AppSettings::POSITION_PROVIDERS_GROUP = QStringLiteral( "inputApp/positionProviders" );
 
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
   QSettings settings;
-  settings.beginGroup( GROUP_NAME );
+  settings.beginGroup( INPUTAPP_GROUP_NAME );
   QString path = settings.value( "defaultProject", "" ).toString();
   QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
   bool autoCenter = settings.value( "autoCenter", false ).toBool();
@@ -291,7 +291,7 @@ void AppSettings::savePositionProviders( const QVariantList &providers )
 void AppSettings::setValue( const QString &key, const QVariant &value )
 {
   QSettings settings;
-  settings.beginGroup( GROUP_NAME );
+  settings.beginGroup( INPUTAPP_GROUP_NAME );
   settings.setValue( key, value );
   settings.endGroup();
 }
@@ -299,7 +299,7 @@ void AppSettings::setValue( const QString &key, const QVariant &value )
 QVariant AppSettings::value( const QString &key, const QVariant &defaultValue )
 {
   QSettings settings;
-  settings.beginGroup( GROUP_NAME );
+  settings.beginGroup( INPUTAPP_GROUP_NAME );
   QVariant value = settings.value( key, defaultValue );
   settings.endGroup();
 
