@@ -1,13 +1,14 @@
 @echo on
 
 call %~dp0\version.cmd
-echo Building InputApp: %VERSIONMAJOR%.%VERSIONMINOR%.%VERSIONBUILD%
+echo Building Mergin Maps Input: %VERSIONMAJOR%.%VERSIONMINOR%.%VERSIONBUILD%
 
 set OLD_PATH=%PATH%
 
 rem TODO: maybe input-sdk-win-x86_64-%WINSDK_VER% can be dropped for next SDK
 set INPUT_SDK_DIR=C:\projects\input-sdk\x86_64\stage\input-sdk-win-x86_64-%WINSDK_VER%
 if not exist %INPUT_SDK_DIR% (echo missing_sdk & goto error)
+echo "INPUT SDK: INPUT_SDK_DIR"
 rem TODO: rename cmake/qgis to qgis/cmake so we do not need this workaround
 robocopy %INPUT_SDK_DIR%\cmake\qgis %INPUT_SDK_DIR%\cmake\cmake /E /NFL
 

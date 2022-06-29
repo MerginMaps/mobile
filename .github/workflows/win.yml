@@ -114,15 +114,18 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v5-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v6-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         shell: bash
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
+          URL="https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.zip"
+          echo "downloading: $URL"
           curl -fsSL --connect-timeout 60 -o \
             input-sdk.tar.gz \
-            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.zip
+            ${URL}
+            
           mkdir -p input-sdk
           cd input-sdk
           unzip ${{ github.workspace }}/input-sdk.tar.gz -d .
