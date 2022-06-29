@@ -177,7 +177,10 @@ jobs:
         run: |
             echo "preparing package dir: %PACKAGE_DIR%\stage"
             mkdir %PACKAGE_DIR%\stage
+            set INPUT_BUILD_DIR="$env:GITHUB_WORKSPACE\build-Input"
+            set INPUT_SOURCE_DIR="$env:GITHUB_WORKSPACE\input"
             $env:GITHUB_WORKSPACE\scripts\package_win.cmd
+            dir %PACKAGE_DIR%\stage
             
       - name: create package
         shell: cmd
