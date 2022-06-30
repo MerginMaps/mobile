@@ -62,9 +62,11 @@ xcopy %Qt5_Dir%\bin\Qt5XmlPatterns.dll %STAGE_PATH%\ /Y
 xcopy %Qt5_Dir%\bin\Qt5QuickShapes.dll %STAGE_PATH%\ /Y
 xcopy %Qt5_Dir%\bin\Qt5Qml.dll %STAGE_PATH%\ /Y
 xcopy %Qt5_Dir%\bin\Qt5Network.dll %STAGE_PATH%\ /Y
+xcopy %Qt5_Dir%\bin\Qt5QmlWorkerScript.dll %STAGE_PATH%\ /Y
 
 robocopy %INPUT_SOURCE_DIR%\app\android\assets\qgis-data %STAGE_PATH%\qgis-data /E /NFL
 robocopy %INPUT_SOURCE_DIR%\app\android\assets\demo-projects %STAGE_PATH%\demo-projects /E /NFL
+
 
 cd %CWD%
 
