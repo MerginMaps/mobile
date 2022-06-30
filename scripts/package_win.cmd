@@ -1,7 +1,5 @@
 @echo on
 
-rem should be started from build-Input folder
-rem PACKAGE_DIR variable should be defined
 set STAGE_PATH=%PACKAGE_DIR%\stage
 set CWD=%cd%
 echo "Packaging Win64 Mergin Maps Input release"
