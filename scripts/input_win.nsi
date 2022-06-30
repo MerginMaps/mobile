@@ -36,10 +36,17 @@ function .onInit
 	!insertmacro VerifyUserIsAdmin
 functionEnd
  
+section "Visual Studio Runtime"
+  SetOutPath "$INSTDIR"
+  File "C:\input-package\stage\vc_redist.x64.exe"
+  ExecWait "$INSTDIR\vc_redist.x64.exe"
+sectionEnd
+
 section "install"
 	setOutPath $INSTDIR
-	File /r "C:\input-package\stage\*"
- 
+	
+    File /r "C:\input-package\stage\*"
+    
 	writeUninstaller "$INSTDIR\uninstall.exe"
  
 	# Start Menu
