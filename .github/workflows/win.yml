@@ -172,9 +172,8 @@ jobs:
       - name: create package
         shell: cmd
         run: |
-            scripts\version.cmd
             makensis.exe input\scripts\input_win.nsi
-            xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-input-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.exe /Y
+            xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-input-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.exe* /Y
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v2

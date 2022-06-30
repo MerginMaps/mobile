@@ -28,14 +28,6 @@ sed -i.orig -E "s|VERSION_MINOR = [0-9]+|VERSION_MINOR = $MINOR|g" $ANDROID_FILE
 sed -i.orig -E "s|VERSION_FIX = [0-9]+|VERSION_FIX = $BUILD|g" $ANDROID_FILE
 rm -f $ANDROID_FILE.orig
 
-# win: scripts/version.cmd
-WIN_FILE=$DIR/version.cmd
-echo "patching $WIN_FILE"
-sed -i.orig -E "s|VERSIONMAJOR=[0-9]+|VERSIONMAJOR=$MAJOR|g" $WIN_FILE
-sed -i.orig -E "s|VERSIONMINOR=[0-9]+|VERSIONMINOR=$MINOR|g" $WIN_FILE
-sed -i.orig -E "s|VERSIONBUILD=[0-9]+|VERSIONBUILD=$BUILD|g" $WIN_FILE
-rm -f $WIN_FILE.orig
-
 # .zenodo.json
 ZENODO_FILE=$DIR/../.zenodo.json
 echo "patching $ZENODO_FILE"
