@@ -162,11 +162,14 @@ jobs:
         run: |
             mkdir C:\input-package
             mkdir C:\input-package\stage
+            C: 
+            cd C:\input-package\stage 
             set INPUT_BUILD_DIR="%GITHUB_WORKSPACE%\build-Input"
             set INPUT_SOURCE_DIR="%GITHUB_WORKSPACE%\input"
             set PACKAGE_DIR=C:\input-package
             set INPUT_SDK_DIR=%GITHUB_WORKSPACE%\input-sdk
-            input\scripts\package_win.cmd
+            set Qt5_Dir=%GITHUB_WORKSPACE%\Qt\%QT_VERSION%\msvc2017_64
+            %GITHUB_WORKSPACE%\input\scripts\package_win.cmd
             dir C:\input-package\stage
             
       - name: create package
