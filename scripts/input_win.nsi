@@ -1,4 +1,4 @@
-!define APPNAME "MerginMapsInput"
+!define APPNAME "Mergin Maps Input"
 !define COMPANYNAME "Lutra Consulting Ltd."
 !define DESCRIPTION "Survey made easy"
 !define HELPURL "https://merginmaps.com/docs"
@@ -38,7 +38,7 @@ functionEnd
  
 section "install"
 	setOutPath $INSTDIR
-	File /r "C:\input-package\input\x86_64\stage\*"
+	File /r "C:\input-package\stage\*"
  
 	writeUninstaller "$INSTDIR\uninstall.exe"
  

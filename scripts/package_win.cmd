@@ -1,5 +1,5 @@
-rem should be started from build-Input folder
-rem PACKAGE_DIR variable should be defined
+@echo on
+
 set STAGE_PATH=%PACKAGE_DIR%\stage
 set CWD=%cd%
 echo "Packaging Win64 Mergin Maps Input release"
@@ -21,15 +21,15 @@ windeployqt --release Input.exe
 
 robocopy %INPUT_SOURCE_DIR%\app\android\assets\qgis-data %STAGE_PATH%\qgis-data /E /NFL
 robocopy %INPUT_SOURCE_DIR%\app\android\assets\demo-projects %STAGE_PATH%\demo-projects /E /NFL
+if not exist %STAGE_PATH%\share mkdir %STAGE_PATH%\share
 
 if not exist %STAGE_PATH%\images mkdir %STAGE_PATH%\images
 xcopy %INPUT_SOURCE_DIR%\images\AppIcon.ico %STAGE_PATH%\images\ /Y
-more /P %INPUT_SOURCE_DIR%\LICENSE > %STAGE_PATH%\license.txt
+
+echo GNU GENERAL PUBLIC LICENSE Version 2 > %STAGE_PATH%\license.txt
 
 xcopy %INPUT_SDK_DIR%\bin\*.dll %STAGE_PATH%\ /Y
 xcopy %INPUT_SDK_DIR%\bin\Qca\crypto\*.dll %STAGE_PATH%\ /Y
-
-
 xcopy %INPUT_SDK_DIR%\plugins\*provider.dll %STAGE_PATH%\ /Y
 
 rem Qt5
