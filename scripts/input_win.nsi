@@ -38,7 +38,7 @@ functionEnd
  
 section "install"
 	setOutPath $INSTDIR
-	File /r "C:\input-package\input\x86_64\stage\*"
+	File /r "C:\input-package\stage\*"
  
 	writeUninstaller "$INSTDIR\uninstall.exe"
  
