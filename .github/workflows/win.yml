@@ -161,6 +161,7 @@ jobs:
         shell: cmd
         run: |
             echo "preparing package dir: C:\input-package\stage"
+            mkdir C:\input-package
             mkdir C:\input-package\stage
             set INPUT_BUILD_DIR="%GITHUB_WORKSPACE%\build-Input"
             set INPUT_SOURCE_DIR="%GITHUB_WORKSPACE%\input"
@@ -172,7 +173,7 @@ jobs:
         run: |
             scripts\version.cmd
             makensis.exe input\scripts\input_win.nsi
-            xcopy C:\input-package\inputapp-win-x86_64.exe $env:GITHUB_WORKSPACE\mergin-maps-input-%VERSIONMAJOR%.%VERSIONMINOR%.%VERSIONBUILD%-win64-${{ steps.time.outputs.time }}.exe /Y
+            xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-input-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.exe /Y
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v2
