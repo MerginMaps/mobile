@@ -1,4 +1,4 @@
-!define APPNAME "MerginMapsInput"
+!define APPNAME "Mergin Maps Input"
 !define COMPANYNAME "Lutra Consulting Ltd."
 !define DESCRIPTION "Survey made easy"
 !define HELPURL "https://merginmaps.com/docs"

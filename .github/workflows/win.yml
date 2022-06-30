@@ -165,6 +165,7 @@ jobs:
             set INPUT_BUILD_DIR="%GITHUB_WORKSPACE%\build-Input"
             set INPUT_SOURCE_DIR="%GITHUB_WORKSPACE%\input"
             set PACKAGE_DIR=C:\input-package
+            set INPUT_SDK_DIR=%GITHUB_WORKSPACE%\input-sdk
             input\scripts\package_win.cmd
             dir C:\input-package\stage
             
