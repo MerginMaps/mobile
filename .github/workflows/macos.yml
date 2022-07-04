@@ -4,7 +4,6 @@ on:
     paths:
     - 'app/**'
     - 'core/**'
-    - 'images/**'
     - 'qgsquick/**'
     - 'scripts/**'
     - '.github/workflows/macos.yml'
