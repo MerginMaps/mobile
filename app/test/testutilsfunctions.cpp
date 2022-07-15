@@ -751,3 +751,28 @@ void TestUtilsFunctions::testGeometryIcons()
     QCOMPARE( mUtils->loadIconFromFeature( test.first ), test.second );
   }
 }
+
+void TestUtilsFunctions::testExtractVertices()
+{
+  QgsGeometry geometry;
+
+  QgsPolygon *polygon = new QgsPolygon( new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) << QgsPoint( 0, 0 ) ) );
+  geometry.set( polygon );
+  QgsGeometry vertices = InputUtils::extractGeometryVertices( geometry );
+  QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
+  QCOMPARE( vertices.constGet()->partCount(), 4 );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 1, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 0, 0 ) );
+
+  QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) << QgsPoint( 2, 2 ) );
+  geometry.set( line );
+  vertices = InputUtils::extractGeometryVertices( geometry );
+  QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
+  QCOMPARE( vertices.constGet()->partCount(), 4 );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 1, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 2, 2 ) );
+}
