@@ -656,6 +656,30 @@ void TestUtilsFunctions::testEquals()
   {
     QCOMPARE( InputUtils::equals( test.a, test.b, test.epsilon ), test.shouldEqual );
   }
+
+  struct testcaseQgsPoint
+  {
+    QgsPoint a;
+    QgsPoint b;
+    qreal epsilon;
+    bool shouldEqual;
+  };
+
+  QVector<testcaseQgsPoint> testcasesQgsPoint =
+  {
+    { QgsPoint(),        QgsPoint(),        0.0001, true  },
+    { QgsPoint(),        QgsPoint( 1, 6 ),  0.0001, false },
+    { QgsPoint( -5, 5 ), QgsPoint(),        0.0001, false },
+    { QgsPoint( -5, 5 ), QgsPoint( -5, 5 ), 0.0001, true  },
+    { QgsPoint( -5, 5 ), QgsPoint( 5, 5 ),  0.1,    false },
+    { QgsPoint( 1.15005, 5 ), QgsPoint( 1.15, 5 ), 0.001,   true  },
+    { QgsPoint( 1.15005, 5 ), QgsPoint( 1.15, 5 ), 0.00001, false },
+  };
+
+  for ( const auto &test : testcasesQgsPoint )
+  {
+    QCOMPARE( InputUtils::equals( test.a, test.b, test.epsilon ), test.shouldEqual );
+  }
 }
 
 void TestUtilsFunctions::testGeometryIcons()
