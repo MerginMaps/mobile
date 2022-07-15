@@ -33,6 +33,7 @@
 #include "qgslayertree.h"
 #include "qgsprojectviewsettings.h"
 #include "qgsvectorlayerutils.h"
+#include "qgsmultipoint.h"
 
 #include "featurelayerpair.h"
 #include "qgsquickmapsettings.h"
@@ -1723,4 +1724,13 @@ bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
 {
   int quality = activeProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoQuality" ), 0 );
   return ImageUtils::rescale( path, quality );
+}
+
+QgsGeometry InputUtils::extractGeometryVertices( const QgsGeometry &geom )
+{
+  QgsMultiPoint *multiPoint = new QgsMultiPoint();
+  QgsGeometry outputGeom( multiPoint );
+  for ( auto pointIt = geom.vertices_begin(); pointIt != geom.vertices_end(); ++pointIt )
+    multiPoint->addGeometry( ( *pointIt ).clone() );
+  return outputGeom;
 }

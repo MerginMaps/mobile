@@ -477,6 +477,11 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static bool rescaleImage( const QString &path, QgsProject *activeProject );
 
+    /**
+     * Create a multi-point geometry that can be used to highlight vertices of a feature
+     */
+    Q_INVOKABLE static QgsGeometry extractGeometryVertices( const QgsGeometry &geom );
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
