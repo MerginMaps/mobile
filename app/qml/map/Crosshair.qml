@@ -235,4 +235,20 @@ Item {
 
       source: InputStyle.crosshairCenterCircleIcon
     }
+
+    Connections {
+      target: __activeProject
+
+      function onProjectWillBeReloaded() {
+        snapUtils.clear()
+      }
+
+      function onProjectReloaded() {
+        // We need to re-assign qgs project to snaputils, because
+        // even though we loaded a different project,
+        // internally we keep the same pointer for QgsProject.
+        snapUtils.qgsProject = __activeProject.qgsProject
+        snapUtils.mapSettings = root.mapSettings
+      }
+    }
 }

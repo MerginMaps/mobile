@@ -112,9 +112,9 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   {
     emit projectWillBeReloaded();
 
-    mQgsProject->clear();
-    mLocalProject = LocalProject();
     whileBlocking( &mActiveLayer )->resetActiveLayer();
+    mLocalProject = LocalProject();
+    mQgsProject->clear();
 
     emit localProjectChanged( mLocalProject );
     emit projectReloaded( mQgsProject );
@@ -150,8 +150,8 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   if ( mQgsProject->fileName() != filePath || force )
   {
     emit projectWillBeReloaded();
-    res = mQgsProject->read( filePath );
     mActiveLayer.resetActiveLayer();
+    res = mQgsProject->read( filePath );
     mMapThemeModel.reloadMapThemes( mQgsProject );
     mLocalProject = mLocalProjectsManager.projectFromProjectFilePath( filePath );
 
