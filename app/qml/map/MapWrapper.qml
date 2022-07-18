@@ -98,6 +98,8 @@ Item {
       }
 
       case "edit": {
+        centerToPair( internal.featurePairToEdit )
+        howtoEditingBanner.show()
         editingGeometryStarted()
         break
       }
@@ -377,6 +379,22 @@ Item {
     visibleInterval: 10000
 
     text: qsTr( "Create line to split the selected feature" )
+  }
+
+  AutoHideBanner {
+    id: howtoEditingBanner
+
+    width: parent.width - InputStyle.innerFieldMargin * 2
+    height: InputStyle.rowHeight
+
+    bgColor: InputStyle.secondaryBackgroundColor
+    fontColor: "white"
+
+    source: InputStyle.infoIcon
+
+    visibleInterval: 10000
+
+    text: qsTr( "Select some point to start editing the geometry" )
   }
 
   MissingAuthDialog {

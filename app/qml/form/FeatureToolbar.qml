@@ -102,7 +102,6 @@ Item {
                 width: toolbar.itemSize
                 text: qsTr("Edit geometry")
                 imageSource: InputStyle.editIcon
-                enabled: isFeaturePoint
 
                 onActivated: {
                     toolbar.editGeometryClicked()
