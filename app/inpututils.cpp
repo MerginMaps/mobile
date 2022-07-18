@@ -1754,6 +1754,17 @@ QgsGeometry InputUtils::extractMidSegmentVertices( const QgsGeometry &geometry )
       p = QgsGeometryUtils::midpoint( line->pointN( i ), line->pointN( i + 1 ) );
       multiPoint->addGeometry( p.clone() );
     }
+
+    // if input geometry is a line we need to add virtual nodes and the beginning
+    // and at the end of the line. They will be used to extend line
+    if ( geometry.type() == QgsWkbTypes::LineGeometry)
+    {
+      p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( 0 ), line->pointN( 1 ), -0.1 );
+      multiPoint->insertGeometry( p.clone(), 0 );
+      p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( line->numPoints() - 2 ), line->pointN( line->numPoints() - 1 ), 1.1 );
+      multiPoint->addGeometry( p.clone() );
+    }
+
     delete line;
   }
   return outputGeom;

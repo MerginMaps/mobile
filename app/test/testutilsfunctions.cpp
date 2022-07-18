@@ -804,9 +804,11 @@ void TestUtilsFunctions::testExtractMidSegmentVertices()
   geometry.set( line );
   vertices = InputUtils::extractMidSegmentVertices( geometry );
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
-  QCOMPARE( vertices.constGet()->partCount(), 2 );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0.5 ) );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0.5, 1 ) );
+  QCOMPARE( vertices.constGet()->partCount(), 4 );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, -0.1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 0.5 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 0.5, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 1.1, 1 ) );
 
   geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
   vertices = InputUtils::extractMidSegmentVertices( geometry );
