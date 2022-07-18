@@ -1731,11 +1731,35 @@ bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
   return ImageUtils::rescale( path, quality );
 }
 
-QgsGeometry InputUtils::extractGeometryVertices( const QgsGeometry &geom )
+QgsGeometry InputUtils::extractGeometryVertices( const QgsGeometry &geometry )
 {
   QgsMultiPoint *multiPoint = new QgsMultiPoint();
   QgsGeometry outputGeom( multiPoint );
-  for ( auto pointIt = geom.vertices_begin(); pointIt != geom.vertices_end(); ++pointIt )
+  for ( auto pointIt = geometry.vertices_begin(); pointIt != geometry.vertices_end(); ++pointIt )
     multiPoint->addGeometry( ( *pointIt ).clone() );
+  return outputGeom;
+}
+
+QgsGeometry InputUtils::extractMidSegmentVertices( const QgsGeometry &geometry )
+{
+  if ( geometry.type() == QgsWkbTypes::PointGeometry )
+  {
+    return QgsGeometry();
+  }
+
+  QgsMultiPoint *multiPoint = new QgsMultiPoint();
+  QgsGeometry outputGeom( multiPoint );
+  QgsPoint p;
+
+  const QVector< QgsLineString * > lines = QgsGeometryUtils::extractLineStrings( geometry.constGet() );
+  for ( QgsLineString *line : lines )
+  {
+    for ( int i = 0; i < line->numPoints() - 1; ++i )
+    {
+      p = QgsGeometryUtils::midpoint( line->pointN( i ), line->pointN( i + 1 ) );
+      multiPoint->addGeometry( p.clone() );
+    }
+    delete line;
+  }
   return outputGeom;
 }
