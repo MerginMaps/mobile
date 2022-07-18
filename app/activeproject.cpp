@@ -350,21 +350,6 @@ void ActiveProject::setActiveMapTheme( int index )
   setMapSettingsLayers();
 }
 
-void ActiveProject::setActiveLayerByName( QString layerName ) const
-{
-  if ( !layerName.isEmpty() )
-  {
-    QList<QgsMapLayer *> layersByName = QgsProject::instance()->mapLayersByName( layerName );
-
-    if ( !layersByName.isEmpty() )
-    {
-      return setActiveLayer( layersByName.at( 0 ) );
-    }
-  }
-
-  setActiveLayer( nullptr );
-}
-
 void ActiveProject::setActiveLayer( QgsMapLayer *layer ) const
 {
   if ( !layer || !layer->isValid() )

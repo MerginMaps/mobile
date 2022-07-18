@@ -68,11 +68,6 @@ class ActiveProject: public QObject
     Q_INVOKABLE void setActiveMapTheme( int index );
 
     /**
-     * setActiveLayer sets active layer from layer name
-     */
-    void setActiveLayerByName( QString layerName ) const;
-
-    /**
      * setActiveLayer sets active layer from layer
      */
     Q_INVOKABLE void setActiveLayer( QgsMapLayer *layer ) const;
