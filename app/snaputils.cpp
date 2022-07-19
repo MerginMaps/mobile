@@ -229,6 +229,8 @@ void SnapUtils::setUseSnapping( bool useSnapping )
 
   mUseSnapping = useSnapping;
   emit useSnappingChanged( mUseSnapping );
+
+  getsnap();
 }
 
 void SnapUtils::setupSnapping()

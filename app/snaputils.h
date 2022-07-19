@@ -70,9 +70,6 @@ class SnapUtils : public QObject
     const SnapUtils::SnapType &snapType() const;
     void setSnapType( const SnapUtils::SnapType &newSnapType );
 
-    QgsCoordinateReferenceSystem destinationCrs() const;
-    void setDestinationCrs( QgsCoordinateReferenceSystem crs );
-
     QgsVectorLayer *destinationLayer() const;
     void setDestinationLayer( QgsVectorLayer *newDestinationLayer );
 
