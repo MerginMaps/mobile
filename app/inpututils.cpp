@@ -34,6 +34,7 @@
 #include "qgsprojectviewsettings.h"
 #include "qgsvectorlayerutils.h"
 #include "qgsmultipoint.h"
+#include "qgsmultilinestring.h"
 
 #include "featurelayerpair.h"
 #include "qgsquickmapsettings.h"
@@ -1767,5 +1768,34 @@ QgsGeometry InputUtils::extractMidSegmentVertices( const QgsGeometry &geometry )
 
     delete line;
   }
+  return outputGeom;
+}
+
+QgsGeometry InputUtils::createHandles( const QgsGeometry &geometry )
+{
+  if ( geometry.type() != QgsWkbTypes::LineGeometry )
+  {
+    return QgsGeometry();
+  }
+
+  QgsMultiLineString *multiLine = new QgsMultiLineString();
+  QgsGeometry outputGeom( multiLine );
+  QgsPoint p;
+  QgsLineString handle;
+
+  const QVector< QgsLineString * > lines = QgsGeometryUtils::extractLineStrings( geometry.constGet() );
+  for ( QgsLineString *line : lines )
+  {
+    p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( 0 ), line->pointN( 1 ), -0.1 );
+    handle = QgsLineString( p, line->pointN( 0 ) );
+    multiLine->addGeometry( handle.clone() );
+
+    p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( line->numPoints() - 2 ), line->pointN( line->numPoints() - 1 ), 1.1 );
+    handle = QgsLineString( line->pointN( line->numPoints() - 1 ), p );
+    multiLine->addGeometry( handle.clone() );
+
+    delete line;
+  }
+
   return outputGeom;
 }

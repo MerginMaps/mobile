@@ -812,5 +812,28 @@ void TestUtilsFunctions::testExtractMidSegmentVertices()
 
   geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
   vertices = InputUtils::extractMidSegmentVertices( geometry );
-  QCOMPARE( vertices.isNull(), true );
+  QVERIFY( vertices.isNull() );
+}
+
+void TestUtilsFunctions::testCreateHandles()
+{
+  QgsGeometry geometry;
+
+  QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) );
+  geometry.set( line );
+  QgsGeometry handles = InputUtils::createHandles( geometry );
+  QCOMPARE( handles.wkbType(), QgsWkbTypes::MultiLineString );
+  QCOMPARE( handles.constGet()->partCount(), 2 );
+
+  QVector<QgsGeometry> expected =
+  {
+    QgsGeometry::fromWkt( "LINESTRING(0 -0.1, 0 0)" ),
+    QgsGeometry::fromWkt( "LINESTRING(1 1, 1.1 1)" ),
+  };
+
+  const QVector<QgsGeometry> parts = handles.asGeometryCollection();
+  for ( int i = 0; i < parts.count(); i++ )
+  {
+    QVERIFY( parts.at( i ).equals( expected.at( i ) ) );
+  }
 }

@@ -45,6 +45,7 @@ class TestUtilsFunctions: public QObject
     void testGeometryIcons();
     void testExtractVertices();
     void testExtractMidSegmentVertices();
+    void testCreateHandles();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );
