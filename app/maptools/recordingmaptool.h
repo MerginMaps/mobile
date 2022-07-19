@@ -64,6 +64,24 @@ class RecordingMapTool : public AbstractMapTool
     //! Returns true if the captured geometry has enought points for the specified layer
     Q_INVOKABLE bool hasValidGeometry() const;
 
+    /**
+     * Create a multi-point geometry that can be used to highlight vertices of a feature
+     */
+    Q_INVOKABLE static QgsGeometry extractGeometryVertices( const QgsGeometry &geometry );
+
+    /**
+     * Create a multi-point geometry that can be used to highlight "virtual" nodes representing
+     * the middle of segments. For lines also creates "virtual" nodes at the beginning and end
+     * of the line.
+     */
+    Q_INVOKABLE static QgsGeometry extractMidSegmentVertices( const QgsGeometry &geometry );
+
+    /**
+     * Create "handles" at the beginnig and end of the line geometry. Returns null geometry for
+     * other geometry types.
+     */
+    Q_INVOKABLE static QgsGeometry createHandles( const QgsGeometry &geometry );
+
     // Getters / setters
     bool centeredToGPS() const;
     void setCenteredToGPS( bool newCenteredToGPS );

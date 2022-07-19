@@ -12,6 +12,8 @@
 #include "qgsvectorlayer.h"
 #include "qgspolygon.h"
 #include "qgsvectorlayerutils.h"
+#include "qgsmultipoint.h"
+#include "qgsmultilinestring.h"
 
 #include "position/positionkit.h"
 #include "variablesmanager.h"
@@ -286,4 +288,78 @@ void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry
   }
 
   emit initialGeometryChanged( mInitialGeometry );
+}
+
+
+QgsGeometry RecordingMapTool::extractGeometryVertices( const QgsGeometry &geometry )
+{
+  QgsMultiPoint *multiPoint = new QgsMultiPoint();
+  QgsGeometry outputGeom( multiPoint );
+  for ( auto pointIt = geometry.vertices_begin(); pointIt != geometry.vertices_end(); ++pointIt )
+    multiPoint->addGeometry( ( *pointIt ).clone() );
+  return outputGeom;
+}
+
+QgsGeometry RecordingMapTool::extractMidSegmentVertices( const QgsGeometry &geometry )
+{
+  if ( geometry.type() == QgsWkbTypes::PointGeometry )
+  {
+    return QgsGeometry();
+  }
+
+  QgsMultiPoint *multiPoint = new QgsMultiPoint();
+  QgsGeometry outputGeom( multiPoint );
+  QgsPoint p;
+
+  const QVector< QgsLineString * > lines = QgsGeometryUtils::extractLineStrings( geometry.constGet() );
+  for ( QgsLineString *line : lines )
+  {
+    for ( int i = 0; i < line->numPoints() - 1; ++i )
+    {
+      p = QgsGeometryUtils::midpoint( line->pointN( i ), line->pointN( i + 1 ) );
+      multiPoint->addGeometry( p.clone() );
+    }
+
+    // if input geometry is a line we need to add virtual nodes and the beginning
+    // and at the end of the line. They will be used to extend line
+    if ( geometry.type() == QgsWkbTypes::LineGeometry)
+    {
+      p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( 0 ), line->pointN( 1 ), -0.1 );
+      multiPoint->insertGeometry( p.clone(), 0 );
+      p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( line->numPoints() - 2 ), line->pointN( line->numPoints() - 1 ), 1.1 );
+      multiPoint->addGeometry( p.clone() );
+    }
+
+    delete line;
+  }
+  return outputGeom;
+}
+
+QgsGeometry RecordingMapTool::createHandles( const QgsGeometry &geometry )
+{
+  if ( geometry.type() != QgsWkbTypes::LineGeometry )
+  {
+    return QgsGeometry();
+  }
+
+  QgsMultiLineString *multiLine = new QgsMultiLineString();
+  QgsGeometry outputGeom( multiLine );
+  QgsPoint p;
+  QgsLineString handle;
+
+  const QVector< QgsLineString * > lines = QgsGeometryUtils::extractLineStrings( geometry.constGet() );
+  for ( QgsLineString *line : lines )
+  {
+    p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( 0 ), line->pointN( 1 ), -0.1 );
+    handle = QgsLineString( p, line->pointN( 0 ) );
+    multiLine->addGeometry( handle.clone() );
+
+    p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( line->numPoints() - 2 ), line->pointN( line->numPoints() - 1 ), 1.1 );
+    handle = QgsLineString( line->pointN( line->numPoints() - 1 ), p );
+    multiLine->addGeometry( handle.clone() );
+
+    delete line;
+  }
+
+  return outputGeom;
 }

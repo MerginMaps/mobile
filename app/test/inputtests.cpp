@@ -26,6 +26,7 @@
 #include "test/testmodels.h"
 #include "test/testcoreutils.h"
 #include "test/testimageutils.h"
+#include "test/testrecordingtool.h"
 
 #if not defined APPLE_PURCHASING
 #include "test/testpurchasing.h"
@@ -165,6 +166,11 @@ int InputTests::runTest() const
   {
     TestImageUtils imageUtilsTest;
     nFailed = QTest::qExec( &imageUtilsTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testRecordingTool" )
+  {
+    TestRecordingTool recordingToolTest;
+    nFailed = QTest::qExec( &recordingToolTest, mTestArgs );
   }
 #if not defined APPLE_PURCHASING
   else if ( mTestRequested == "--testPurchasing" )

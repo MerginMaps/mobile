@@ -101,7 +101,7 @@ Item {
     width: root.map.width
 
     mapSettings: root.map.mapSettings
-    geometry: __inputUtils.convertGeometryToMapCRS( __inputUtils.extractGeometryVertices( mapTool.recordedGeometry ), __activeLayer.vectorLayer, root.map.mapSettings )
+    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.extractGeometryVertices( mapTool.recordedGeometry ), __activeLayer.vectorLayer, root.map.mapSettings )
   }
 
   Highlight {
@@ -111,7 +111,7 @@ Item {
     width: root.map.width
 
     mapSettings: root.map.mapSettings
-    geometry: __inputUtils.convertGeometryToMapCRS( __inputUtils.extractMidSegmentVertices( mapTool.recordedGeometry ), __activeLayer.vectorLayer, root.map.mapSettings )
+    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.extractMidSegmentVertices( mapTool.recordedGeometry ), __activeLayer.vectorLayer, root.map.mapSettings )
   }
 
   Highlight {
