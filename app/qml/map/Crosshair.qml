@@ -24,7 +24,7 @@ Item {
 
     property var recordPoint: snapUtils.recordPoint
 
-    property point screenPoint: snapUtils.snapped ? __inputUtils.transformPointToScreenCoordinates(__activeLayer.vectorLayer.crs, mapSettings, recordPoint) : center
+    property point screenPoint: snapUtils.snapped && __activeLayer.vectorLayer ? __inputUtils.transformPointToScreenCoordinates(__activeLayer.vectorLayer.crs, mapSettings, recordPoint) : center
 
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp

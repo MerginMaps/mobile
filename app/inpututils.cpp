@@ -315,6 +315,11 @@ QgsGeometry InputUtils::convertGeometryToMapCRS( const QgsGeometry &geometry, Qg
 {
   QgsGeometry g( geometry );
 
+  if ( !sourceLayer || !targetSettings )
+  {
+    return QgsGeometry();
+  }
+
   QgsCoordinateTransform ct( sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() );
   if ( !ct.isShortCircuited() )
   {
