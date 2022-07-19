@@ -57,6 +57,9 @@ NFAILURES=$(($NFAILURES+$?))
 $INPUT_EXECUTABLE --testMapTools
 NFAILURES=$(($NFAILURES+$?))
 
+$INPUT_EXECUTABLE --testRecrodingTool
+NFAILURES=$(($NFAILURES+$?))
+
 echo "Total $NFAILURES failures found in testing"
 
 exit $NFAILURES

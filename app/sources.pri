@@ -146,7 +146,8 @@ contains(DEFINES, INPUT_TEST) {
       test/testmodels.cpp \
       test/testcoreutils.cpp \
       test/testimageutils.cpp \
-      test/testmaptools.cpp
+      test/testmaptools.cpp \
+      test/testrecordingtool.cpp
 
   HEADERS += \
       test/inputtests.h \
@@ -167,7 +168,8 @@ contains(DEFINES, INPUT_TEST) {
       test/testmodels.h \
       test/testcoreutils.h \
       test/testimageutils.h \
-      test/testmaptools.h
+      test/testmaptools.h \
+      test/testrecordingtool.h
 }
 
 contains(DEFINES, APPLE_PURCHASING) {

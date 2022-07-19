@@ -27,6 +27,7 @@
 #include "test/testcoreutils.h"
 #include "test/testimageutils.h"
 #include "test/testmaptools.h"
+#include "test/testrecordingtool.h"
 
 #if not defined APPLE_PURCHASING
 #include "test/testpurchasing.h"
@@ -171,6 +172,11 @@ int InputTests::runTest() const
   {
     TestMapTools maptoolsTest;
     nFailed = QTest::qExec( &maptoolsTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testRecordingTool" )
+  {
+    TestRecordingTool recordingToolTest;
+    nFailed = QTest::qExec( &recordingToolTest, mTestArgs );
   }
 #if not defined APPLE_PURCHASING
   else if ( mTestRequested == "--testPurchasing" )

@@ -95,27 +95,7 @@ Item {
   }
 
   Highlight {
-    id: highlightNodes
-
-    height: root.map.height
-    width: root.map.width
-
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.convertGeometryToMapCRS( __inputUtils.extractGeometryVertices( mapTool.recordedGeometry ), __activeLayer.vectorLayer, root.map.mapSettings )
-  }
-
-  Highlight {
-    id: highlightMidNodes
-
-    height: root.map.height
-    width: root.map.width
-
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.convertGeometryToMapCRS( __inputUtils.extractMidSegmentVertices( mapTool.recordedGeometry ), __activeLayer.vectorLayer, root.map.mapSettings )
-  }
-
-  Highlight {
-    id: highlightGeometry
+    id: highlight
 
     height: root.map.height
     width: root.map.width

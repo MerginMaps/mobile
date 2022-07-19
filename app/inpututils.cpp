@@ -33,7 +33,6 @@
 #include "qgslayertree.h"
 #include "qgsprojectviewsettings.h"
 #include "qgsvectorlayerutils.h"
-#include "qgsmultipoint.h"
 
 #include "featurelayerpair.h"
 #include "qgsquickmapsettings.h"
@@ -1729,37 +1728,4 @@ bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
 {
   int quality = activeProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoQuality" ), 0 );
   return ImageUtils::rescale( path, quality );
-}
-
-QgsGeometry InputUtils::extractGeometryVertices( const QgsGeometry &geometry )
-{
-  QgsMultiPoint *multiPoint = new QgsMultiPoint();
-  QgsGeometry outputGeom( multiPoint );
-  for ( auto pointIt = geometry.vertices_begin(); pointIt != geometry.vertices_end(); ++pointIt )
-    multiPoint->addGeometry( ( *pointIt ).clone() );
-  return outputGeom;
-}
-
-QgsGeometry InputUtils::extractMidSegmentVertices( const QgsGeometry &geometry )
-{
-  if ( geometry.type() == QgsWkbTypes::PointGeometry )
-  {
-    return QgsGeometry();
-  }
-
-  QgsMultiPoint *multiPoint = new QgsMultiPoint();
-  QgsGeometry outputGeom( multiPoint );
-  QgsPoint p;
-
-  const QVector< QgsLineString * > lines = QgsGeometryUtils::extractLineStrings( geometry.constGet() );
-  for ( QgsLineString *line : lines )
-  {
-    for ( int i = 0; i < line->numPoints() - 1; ++i )
-    {
-      p = QgsGeometryUtils::midpoint( line->pointN( i ), line->pointN( i + 1 ) );
-      multiPoint->addGeometry( p.clone() );
-    }
-    delete line;
-  }
-  return outputGeom;
 }
