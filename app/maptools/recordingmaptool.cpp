@@ -277,14 +277,12 @@ void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry
   if ( mInitialGeometry.equals( newInitialGeometry ) )
     return;
 
-  // We currently only support editing of points
-  if ( mLayer->geometryType() == QgsWkbTypes::PointGeometry )
-  {
-    QgsPoint point = QgsPoint( mInitialGeometry.asPoint() );
-    fixZ( point );
+  mInitialGeometry = newInitialGeometry;
 
-    mPoints.clear();
-    mPoints.push_back( point );
+  mPoints.clear();
+  for ( auto pointIt = mInitialGeometry.vertices_begin(); pointIt != mInitialGeometry.vertices_end(); ++pointIt )
+  {
+    mPoints.push_back( QgsPoint( *pointIt ) );
   }
 
   emit initialGeometryChanged( mInitialGeometry );
