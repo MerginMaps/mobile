@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "testrecording.h"
+#include "testmaptools.h"
 
 #include "QtTest/QtTest"
 #include <QSignalSpy>
@@ -24,17 +24,17 @@
 
 #include "featurelayerpair.h"
 
-void TestRecording::init()
+void TestMapTools::init()
 {
 
 }
 
-void TestRecording::cleanup()
+void TestMapTools::cleanup()
 {
 
 }
 
-void TestRecording::testSnapping()
+void TestMapTools::testSnapping()
 {
   SnapUtils su;
 
@@ -87,7 +87,7 @@ void TestRecording::testSnapping()
   delete project;
 }
 
-void TestRecording::testSplitting()
+void TestMapTools::testSplitting()
 {
   SplittingMapTool *splitTool = new SplittingMapTool();
 
@@ -161,7 +161,7 @@ void TestRecording::testSplitting()
   delete splitTool;
 }
 
-void TestRecording::testRecording()
+void TestMapTools::testRecording()
 {
   RecordingMapTool *recordTool = new RecordingMapTool();
 

@@ -7,13 +7,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TESTRECORDING_H
-#define TESTRECORDING_H
+#ifndef TESTMAPTOOLS_H
+#define TESTMAPTOOLS_H
 
 #include <QObject>
 #include <qglobal.h>
 
-class TestRecording : public QObject
+class TestMapTools : public QObject
 {
     Q_OBJECT
 
@@ -26,4 +26,4 @@ class TestRecording : public QObject
     void testRecording();
 };
 
-#endif // TESTRECORDING_H
+#endif // TESTMAPTOOLS_H
