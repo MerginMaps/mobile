@@ -285,6 +285,10 @@ void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry
     mPoints.push_back( QgsPoint( *pointIt ) );
   }
 
+  setExistingVertices( extractGeometryVertices( mInitialGeometry ) );
+  setMidPoints( extractMidSegmentVertices( mInitialGeometry ) );
+  setHandles( createHandles( mInitialGeometry ) );
+
   emit initialGeometryChanged( mInitialGeometry );
 }
 

@@ -70,20 +70,20 @@ class RecordingMapTool : public AbstractMapTool
     /**
      * Create a multi-point geometry that can be used to highlight vertices of a feature
      */
-    Q_INVOKABLE static QgsGeometry extractGeometryVertices( const QgsGeometry &geometry );
+    Q_INVOKABLE QgsGeometry extractGeometryVertices( const QgsGeometry &geometry );
 
     /**
      * Create a multi-point geometry that can be used to highlight "virtual" nodes representing
      * the middle of segments. For lines also creates "virtual" nodes at the beginning and end
      * of the line.
      */
-    Q_INVOKABLE static QgsGeometry extractMidSegmentVertices( const QgsGeometry &geometry );
+    Q_INVOKABLE QgsGeometry extractMidSegmentVertices( const QgsGeometry &geometry );
 
     /**
      * Create "handles" at the beginnig and end of the line geometry. Returns null geometry for
      * other geometry types.
      */
-    Q_INVOKABLE static QgsGeometry createHandles( const QgsGeometry &geometry );
+    Q_INVOKABLE QgsGeometry createHandles( const QgsGeometry &geometry );
 
     // Getters / setters
     bool centeredToGPS() const;

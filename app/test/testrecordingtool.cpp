@@ -29,13 +29,13 @@ void TestRecordingTool::cleanup()
 
 void TestRecordingTool::testExtractVertices()
 {
-  RecordingMapTool mapTool;
+  RecordingMapTool *mapTool = new RecordingMapTool();
 
   QgsGeometry geometry;
 
   QgsPolygon *polygon = new QgsPolygon( new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) << QgsPoint( 0, 0 ) ) );
   geometry.set( polygon );
-  QgsGeometry vertices = mapTool.extractGeometryVertices( geometry );
+  QgsGeometry vertices = mapTool->extractGeometryVertices( geometry );
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
@@ -45,7 +45,7 @@ void TestRecordingTool::testExtractVertices()
 
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) << QgsPoint( 2, 2 ) );
   geometry.set( line );
-  vertices = mapTool.extractGeometryVertices( geometry );
+  vertices = mapTool->extractGeometryVertices( geometry );
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
@@ -54,7 +54,7 @@ void TestRecordingTool::testExtractVertices()
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 2, 2 ) );
 
   geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
-  vertices = mapTool.extractGeometryVertices( geometry );
+  vertices = mapTool->extractGeometryVertices( geometry );
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 3 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
@@ -64,14 +64,14 @@ void TestRecordingTool::testExtractVertices()
 
 void TestRecordingTool::testExtractMidSegmentVertices()
 {
-  RecordingMapTool mapTool;
+  RecordingMapTool *mapTool = new RecordingMapTool();
 
   QgsGeometry geometry;
 
   QgsPolygon *polygon = new QgsPolygon( new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 2 ) << QgsPoint( 2, 2 ) << QgsPoint( 2, 0 ) << QgsPoint( 0, 0 ) ) );
   geometry.set( polygon );
 
-  QgsGeometry vertices = mapTool.extractMidSegmentVertices( geometry );
+  QgsGeometry vertices = mapTool->extractMidSegmentVertices( geometry );
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 1 ) );
@@ -81,7 +81,7 @@ void TestRecordingTool::testExtractMidSegmentVertices()
 
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) );
   geometry.set( line );
-  vertices = mapTool.extractMidSegmentVertices( geometry );
+  vertices = mapTool->extractMidSegmentVertices( geometry );
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, -0.1 ) );
@@ -90,19 +90,19 @@ void TestRecordingTool::testExtractMidSegmentVertices()
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 1.1, 1 ) );
 
   geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
-  vertices = mapTool.extractMidSegmentVertices( geometry );
+  vertices = mapTool->extractMidSegmentVertices( geometry );
   QVERIFY( vertices.isNull() );
 }
 
 void TestRecordingTool::testCreateHandles()
 {
-  RecordingMapTool mapTool;
+  RecordingMapTool *mapTool = new RecordingMapTool();
 
   QgsGeometry geometry;
 
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) );
   geometry.set( line );
-  QgsGeometry handles = mapTool.createHandles( geometry );
+  QgsGeometry handles = mapTool->createHandles( geometry );
   QCOMPARE( handles.wkbType(), QgsWkbTypes::MultiLineString );
   QCOMPARE( handles.constGet()->partCount(), 2 );
 
