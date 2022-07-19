@@ -69,7 +69,6 @@ Item {
 
     positionKit: __positionKit
     layer: __activeLayer.vectorLayer
-    initialGeometry: root.initialGeometry.feature.geometry
 
     // Bind variables manager to know if we are centered to GPS or not when evaluating position variables
     onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition

@@ -33,8 +33,6 @@
 #include "qgslayertree.h"
 #include "qgsprojectviewsettings.h"
 #include "qgsvectorlayerutils.h"
-#include "qgsmultipoint.h"
-#include "qgsmultilinestring.h"
 
 #include "featurelayerpair.h"
 #include "qgsquickmapsettings.h"

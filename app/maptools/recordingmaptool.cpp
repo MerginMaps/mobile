@@ -320,7 +320,7 @@ QgsGeometry RecordingMapTool::extractMidSegmentVertices( const QgsGeometry &geom
 
     // if input geometry is a line we need to add virtual nodes and the beginning
     // and at the end of the line. They will be used to extend line
-    if ( geometry.type() == QgsWkbTypes::LineGeometry )
+    if ( geometry.type() == QgsWkbTypes::LineGeometry && line->numPoints() >= 2 )
     {
       p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( 0 ), line->pointN( 1 ), -0.1 );
       multiPoint->insertGeometry( p.clone(), 0 );
@@ -348,14 +348,16 @@ QgsGeometry RecordingMapTool::createHandles( const QgsGeometry &geometry )
   const QVector< QgsLineString * > lines = QgsGeometryUtils::extractLineStrings( geometry.constGet() );
   for ( QgsLineString *line : lines )
   {
-    p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( 0 ), line->pointN( 1 ), -0.1 );
-    handle = QgsLineString( p, line->pointN( 0 ) );
-    multiLine->addGeometry( handle.clone() );
+    if ( line->numPoints() >= 2 )
+    {
+      p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( 0 ), line->pointN( 1 ), -0.1 );
+      handle = QgsLineString( p, line->pointN( 0 ) );
+      multiLine->addGeometry( handle.clone() );
 
-    p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( line->numPoints() - 2 ), line->pointN( line->numPoints() - 1 ), 1.1 );
-    handle = QgsLineString( line->pointN( line->numPoints() - 1 ), p );
-    multiLine->addGeometry( handle.clone() );
-
+      p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( line->numPoints() - 2 ), line->pointN( line->numPoints() - 1 ), 1.1 );
+      handle = QgsLineString( line->pointN( line->numPoints() - 1 ), p );
+      multiLine->addGeometry( handle.clone() );
+    }
     delete line;
   }
 
