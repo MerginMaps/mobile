@@ -54,6 +54,9 @@ NFAILURES=$(($NFAILURES+$?))
 $INPUT_EXECUTABLE --testImageUtils
 NFAILURES=$(($NFAILURES+$?))
 
+$INPUT_EXECUTABLE --testRecording
+NFAILURES=$(($NFAILURES+$?))
+
 echo "Total $NFAILURES failures found in testing"
 
 exit $NFAILURES
