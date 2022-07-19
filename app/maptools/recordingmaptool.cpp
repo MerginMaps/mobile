@@ -363,3 +363,42 @@ QgsGeometry RecordingMapTool::createHandles( const QgsGeometry &geometry )
 
   return outputGeom;
 }
+
+const QgsGeometry &RecordingMapTool::existingVertices() const
+{
+  return mExistingVertices;
+}
+
+void RecordingMapTool::setExistingVertices( const QgsGeometry &newExistingVertices )
+{
+  if ( mExistingVertices.equals( newExistingVertices ) )
+    return;
+  mExistingVertices = newExistingVertices;
+  emit existingVerticesChanged( mExistingVertices );
+}
+
+const QgsGeometry &RecordingMapTool::midPoints() const
+{
+  return mMidPoints;
+}
+
+void RecordingMapTool::setMidPoints( const QgsGeometry &newMidPoints )
+{
+  if ( mMidPoints.equals( newMidPoints ) )
+    return;
+  mMidPoints = newMidPoints;
+  emit midPointsChanged( mMidPoints );
+}
+
+const QgsGeometry &RecordingMapTool::handles() const
+{
+  return mHandles;
+}
+
+void RecordingMapTool::setHandles( const QgsGeometry &newHandles )
+{
+  if ( mHandles.equals( newHandles ) )
+    return;
+  mHandles = newHandles;
+  emit handlesChanged( mHandles );
+}

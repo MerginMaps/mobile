@@ -33,6 +33,9 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
 
     Q_PROPERTY( QgsGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
+    Q_PROPERTY( QgsGeometry existingVertices READ existingVertices WRITE setExistingVertices NOTIFY existingVerticesChanged )
+    Q_PROPERTY( QgsGeometry midPoints READ midPoints WRITE setMidPoints NOTIFY midPointsChanged )
+    Q_PROPERTY( QgsGeometry handles READ handles WRITE setHandles NOTIFY handlesChanged )
 
     // When editing geometry - set this as the geometry to start with
     Q_PROPERTY( QgsGeometry initialGeometry READ initialGeometry WRITE setInitialGeometry NOTIFY initialGeometryChanged )
@@ -105,6 +108,15 @@ class RecordingMapTool : public AbstractMapTool
     // Fills mPoints array with points from the geometry
     void setInitialGeometry( const QgsGeometry &newInitialGeometry );
 
+    const QgsGeometry &existingVertices() const;
+    void setExistingVertices( const QgsGeometry &newExistingVertices );
+
+    const QgsGeometry &midPoints() const;
+    void setMidPoints( const QgsGeometry &newMidPoints );
+
+    const QgsGeometry &handles() const;
+    void setHandles( const QgsGeometry &newHandles );
+
   signals:
     void layerChanged( QgsVectorLayer *layer );
     void centeredToGPSChanged( bool centeredToGPS );
@@ -114,6 +126,12 @@ class RecordingMapTool : public AbstractMapTool
     void recordingTypeChanged( const RecordingMapTool::RecordingType &recordingType );
 
     void initialGeometryChanged( const QgsGeometry &initialGeometry );
+
+    void existingVerticesChanged( const QgsGeometry &existingVertices );
+
+    void midPointsChanged( const QgsGeometry &midPoints );
+
+    void handlesChanged( const QgsGeometry &handles );
 
   public slots:
     void onPositionChanged();
@@ -139,6 +157,9 @@ class RecordingMapTool : public AbstractMapTool
 
     QgsVectorLayer *mLayer = nullptr; // not owned
     PositionKit *mPositionKit = nullptr; // not owned
+    QgsGeometry mExistingVertices;
+    QgsGeometry mMidPoints;
+    QgsGeometry mHandles;
 };
 
 #endif // RECORDINGMAPTOOL_H
