@@ -24,7 +24,7 @@ Item {
 
     property var recordPoint: snapUtils.recordPoint
 
-    property point screenPoint: snapUtils.snapped ? __inputUtils.transformPointToScreenCoordinates(__activeLayer.vectorLayer.crs, mapSettings, recordPoint) : center
+    property point screenPoint: snapUtils.snapped && __activeLayer.vectorLayer ? __inputUtils.transformPointToScreenCoordinates(__activeLayer.vectorLayer.crs, mapSettings, recordPoint) : center
 
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp
@@ -234,5 +234,21 @@ Item {
       sourceSize.height: height
 
       source: InputStyle.crosshairCenterCircleIcon
+    }
+
+    Connections {
+      target: __activeProject
+
+      function onProjectWillBeReloaded() {
+        snapUtils.clear()
+      }
+
+      function onProjectReloaded() {
+        // We need to re-assign qgs project to snaputils, because
+        // even though we loaded a different project,
+        // internally we keep the same pointer for QgsProject.
+        snapUtils.qgsProject = __activeProject.qgsProject
+        snapUtils.mapSettings = root.mapSettings
+      }
     }
 }

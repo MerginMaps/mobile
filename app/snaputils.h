@@ -53,6 +53,8 @@ class SnapUtils : public QObject
 
     Q_INVOKABLE void getsnap();
 
+    Q_INVOKABLE void clear();
+
     QPointF centerPosition() const;
     void setCenterPosition( QPointF newCenterPosition );
 
@@ -67,9 +69,6 @@ class SnapUtils : public QObject
 
     const SnapUtils::SnapType &snapType() const;
     void setSnapType( const SnapUtils::SnapType &newSnapType );
-
-    QgsCoordinateReferenceSystem destinationCrs() const;
-    void setDestinationCrs( QgsCoordinateReferenceSystem crs );
 
     QgsVectorLayer *destinationLayer() const;
     void setDestinationLayer( QgsVectorLayer *newDestinationLayer );
@@ -98,15 +97,18 @@ class SnapUtils : public QObject
   private:
     void setupSnapping();
 
-    QgsProject *mQgsProject = nullptr;
-    QgsQuickMapSettings *mMapSettings = nullptr;
     QgsSnappingUtils mSnappingUtils;
+
+    QgsProject *mQgsProject = nullptr; // not owned
+    QgsQuickMapSettings *mMapSettings = nullptr; // not owned
+    QgsVectorLayer *mDestinationLayer = nullptr; // not owned
+
     QPointF mCenterPosition = QPointF( -1, -1 );
     QgsPoint mRecordPoint = QgsPoint( -1, -1 );
+
     bool mSnapped = false;
-    SnapType mSnapType = SnapUtils::Vertex;
     bool mUseSnapping = false;
-    QgsVectorLayer *mDestinationLayer = nullptr;
+    SnapType mSnapType = SnapUtils::Vertex;
 };
 
 #endif // SNAPUTILS_H

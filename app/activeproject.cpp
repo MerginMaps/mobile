@@ -112,9 +112,9 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   {
     emit projectWillBeReloaded();
 
-    mQgsProject->clear();
-    mLocalProject = LocalProject();
     whileBlocking( &mActiveLayer )->resetActiveLayer();
+    mLocalProject = LocalProject();
+    mQgsProject->clear();
 
     emit localProjectChanged( mLocalProject );
     emit projectReloaded( mQgsProject );
@@ -150,8 +150,8 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   if ( mQgsProject->fileName() != filePath || force )
   {
     emit projectWillBeReloaded();
-    res = mQgsProject->read( filePath );
     mActiveLayer.resetActiveLayer();
+    res = mQgsProject->read( filePath );
     mMapThemeModel.reloadMapThemes( mQgsProject );
     mLocalProject = mLocalProjectsManager.projectFromProjectFilePath( filePath );
 
@@ -348,21 +348,6 @@ void ActiveProject::setActiveMapTheme( int index )
     setActiveLayer( mRecordingLayerPM.firstUsableLayer() );
 
   setMapSettingsLayers();
-}
-
-void ActiveProject::setActiveLayerByName( QString layerName ) const
-{
-  if ( !layerName.isEmpty() )
-  {
-    QList<QgsMapLayer *> layersByName = QgsProject::instance()->mapLayersByName( layerName );
-
-    if ( !layersByName.isEmpty() )
-    {
-      return setActiveLayer( layersByName.at( 0 ) );
-    }
-  }
-
-  setActiveLayer( nullptr );
 }
 
 void ActiveProject::setActiveLayer( QgsMapLayer *layer ) const
