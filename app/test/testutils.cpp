@@ -60,8 +60,8 @@ void TestUtils::mergin_auth( MerginApi *api, QString &apiRoot, QString &username
 QString TestUtils::generateUsername()
 {
   QDateTime time = QDateTime::currentDateTime();
-  QString uniqename = time.toString( QStringLiteral( "ddMMyyyy-hhmmss-z" ) );
-  return QStringLiteral( "mergin+autotest+%1" ).arg( uniqename );
+  QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss" ) );
+  return QStringLiteral( "mergin+test+%1" ).arg( uniqename );
 }
 
 QString TestUtils::generatePassword()
