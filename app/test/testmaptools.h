@@ -25,9 +25,9 @@ class TestMapTools : public QObject
     void testSplitting();
     void testRecording();
 
-    void testExtractVertices();
-    void testExtractMidSegmentVertices();
-    void testCreateHandles();
+    void testExistingVertices();
+    void testMidSegmentVertices();
+    void testHandles();
 };
 
 #endif // TESTMAPTOOLS_H

@@ -245,7 +245,7 @@ void TestMapTools::testRecording()
   delete recordTool;
 }
 
-void TestMapTools::testExtractVertices()
+void TestMapTools::testExistingVertices()
 {
   RecordingMapTool *mapTool = new RecordingMapTool();
 
@@ -253,7 +253,8 @@ void TestMapTools::testExtractVertices()
 
   QgsPolygon *polygon = new QgsPolygon( new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) << QgsPoint( 0, 0 ) ) );
   geometry.set( polygon );
-  QgsGeometry vertices = mapTool->extractGeometryVertices( geometry );
+  mapTool->setInitialGeometry( geometry );
+  QgsGeometry vertices = mapTool->existingVertices();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
@@ -263,7 +264,8 @@ void TestMapTools::testExtractVertices()
 
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) << QgsPoint( 2, 2 ) );
   geometry.set( line );
-  vertices = mapTool->extractGeometryVertices( geometry );
+  mapTool->setInitialGeometry( geometry );
+  vertices = mapTool->existingVertices();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
@@ -272,7 +274,8 @@ void TestMapTools::testExtractVertices()
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 2, 2 ) );
 
   geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
-  vertices = mapTool->extractGeometryVertices( geometry );
+  mapTool->setInitialGeometry( geometry );
+  vertices = mapTool->existingVertices();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 3 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
@@ -282,7 +285,7 @@ void TestMapTools::testExtractVertices()
   delete mapTool;
 }
 
-void TestMapTools::testExtractMidSegmentVertices()
+void TestMapTools::testMidSegmentVertices()
 {
   RecordingMapTool *mapTool = new RecordingMapTool();
 
@@ -291,7 +294,8 @@ void TestMapTools::testExtractMidSegmentVertices()
   QgsPolygon *polygon = new QgsPolygon( new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 2 ) << QgsPoint( 2, 2 ) << QgsPoint( 2, 0 ) << QgsPoint( 0, 0 ) ) );
   geometry.set( polygon );
 
-  QgsGeometry vertices = mapTool->extractMidSegmentVertices( geometry );
+  mapTool->setInitialGeometry( geometry );
+  QgsGeometry vertices = mapTool->midPoints();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 1 ) );
@@ -301,22 +305,24 @@ void TestMapTools::testExtractMidSegmentVertices()
 
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) );
   geometry.set( line );
-  vertices = mapTool->extractMidSegmentVertices( geometry );
+  mapTool->setInitialGeometry( geometry );
+  vertices = mapTool->midPoints();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, -0.1 ) );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 0.5 ) );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 0.5, 1 ) );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 1.1, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0.5 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, -0.1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 1.1, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 0.5, 1 ) );
 
   geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
-  vertices = mapTool->extractMidSegmentVertices( geometry );
-  QVERIFY( vertices.isNull() );
+  mapTool->setInitialGeometry( geometry );
+  vertices = mapTool->midPoints();
+  QVERIFY( vertices.constGet()->vertexCount() == 0 );
 
   delete mapTool;
 }
 
-void TestMapTools::testCreateHandles()
+void TestMapTools::testHandles()
 {
   RecordingMapTool *mapTool = new RecordingMapTool();
 
@@ -324,7 +330,8 @@ void TestMapTools::testCreateHandles()
 
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) );
   geometry.set( line );
-  QgsGeometry handles = mapTool->createHandles( geometry );
+  mapTool->setInitialGeometry( geometry );
+  QgsGeometry handles = mapTool->handles();
   QCOMPARE( handles.wkbType(), QgsWkbTypes::MultiLineString );
   QCOMPARE( handles.constGet()->partCount(), 2 );
 
