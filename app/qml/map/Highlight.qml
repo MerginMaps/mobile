@@ -117,7 +117,21 @@ Item {
     {
       if ( geometryType === 0 ) // point
       {
-        newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[dataStartIndex], "posY": data[dataStartIndex + 1] } ) )
+        if ( data.length === 3 )
+        {
+          newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[dataStartIndex], "posY": data[dataStartIndex + 1] } ) )
+        }
+        else
+        {
+          // this is multipoint [0, x1, y1, 0, x2, y2, 0, x3, y3, 0,..]
+          for ( let k = dataStartIndex; k < data.length; k += 3 )
+          {
+            newMarkerItems.push( componentMarker.createObject( highlight, {
+                                                                "posX": data[k],
+                                                                "posY": data[k + 1]
+                                                              } ) )
+          }
+        }
       }
       else // line or polygon
       {
