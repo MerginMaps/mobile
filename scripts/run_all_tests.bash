@@ -57,7 +57,7 @@ NFAILURES=$(($NFAILURES+$?))
 $INPUT_EXECUTABLE --testMapTools
 NFAILURES=$(($NFAILURES+$?))
 
-$INPUT_EXECUTABLE --testRecrodingTool
+$INPUT_EXECUTABLE --testRecordingTool
 NFAILURES=$(($NFAILURES+$?))
 
 echo "Total $NFAILURES failures found in testing"
