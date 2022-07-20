@@ -40,6 +40,9 @@ class RecordingMapTool : public AbstractMapTool
     // When editing geometry - set this as the geometry to start with
     Q_PROPERTY( QgsGeometry initialGeometry READ initialGeometry WRITE setInitialGeometry NOTIFY initialGeometryChanged )
 
+    Q_PROPERTY( QString state READ state WRITE setState NOTIFY stateChanged )
+
+
   public:
 
     enum RecordingType
@@ -117,6 +120,9 @@ class RecordingMapTool : public AbstractMapTool
     const QgsGeometry &handles() const;
     void setHandles( const QgsGeometry &newHandles );
 
+    const QString &state() const;
+    void setState( const QString &newState );
+
   signals:
     void layerChanged( QgsVectorLayer *layer );
     void centeredToGPSChanged( bool centeredToGPS );
@@ -132,6 +138,8 @@ class RecordingMapTool : public AbstractMapTool
     void midPointsChanged( const QgsGeometry &midPoints );
 
     void handlesChanged( const QgsGeometry &handles );
+
+    void stateChanged( const QString &state );
 
   public slots:
     void onPositionChanged();
@@ -160,6 +168,8 @@ class RecordingMapTool : public AbstractMapTool
     QgsGeometry mExistingVertices;
     QgsGeometry mMidPoints;
     QgsGeometry mHandles;
+
+    QString mState = "view";
 };
 
 #endif // RECORDINGMAPTOOL_H

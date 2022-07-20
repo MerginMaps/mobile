@@ -406,3 +406,16 @@ void RecordingMapTool::setHandles( const QgsGeometry &newHandles )
   mHandles = newHandles;
   emit handlesChanged( mHandles );
 }
+
+const QString &RecordingMapTool::state() const
+{
+  return mState;
+}
+
+void RecordingMapTool::setState( const QString &newState )
+{
+  if ( mState == newState )
+    return;
+  mState = newState;
+  emit stateChanged( mState );
+}
