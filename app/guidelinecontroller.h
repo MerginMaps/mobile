@@ -16,6 +16,8 @@
 #include "qgsgeometry.h"
 #include "qgsquickmapsettings.h"
 
+#include "qgsvertexid.h"
+
 class GuidelineController : public QObject
 {
     Q_OBJECT
@@ -24,6 +26,8 @@ class GuidelineController : public QObject
     Q_PROPERTY( QgsGeometry realGeometry READ realGeometry WRITE setRealGeometry NOTIFY realGeometryChanged )
     Q_PROPERTY( QPointF crosshairPosition READ crosshairPosition WRITE setCrosshairPosition NOTIFY crosshairPositionChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+
+    Q_PROPERTY( QgsPoint name READ name WRITE setName NOTIFY nameChanged )
 
     // output properties (real geometry + crosshair position ) in map CRS
     Q_PROPERTY( QgsGeometry guidelineGeometry READ guidelineGeometry WRITE setGuidelineGeometry NOTIFY guidelineGeometryChanged )

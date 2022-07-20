@@ -32,31 +32,48 @@ void GuidelineController::buildGuideline()
     return;
   }
 
-  QgsPoint crosshair = mMapSettings->screenToCoordinate( mCrosshairPosition );
-
-  if ( mRealGeometry.type() == QgsWkbTypes::LineGeometry )
+  if ( !mActiveVertexId.isValid() )
   {
-    QgsPolylineXY points = mRealGeometry.asPolyline();
-    points.append( crosshair );
+    // we add current crosshair to the end of geometry - creating new point
 
-    setGuidelineGeometry( QgsGeometry::fromPolylineXY( points ) );
+    QgsPoint crosshair = mMapSettings->screenToCoordinate( mCrosshairPosition );
+
+    if ( mRealGeometry.type() == QgsWkbTypes::LineGeometry )
+    {
+      QgsPolylineXY points = mRealGeometry.asPolyline();
+      points.append( crosshair );
+
+      setGuidelineGeometry( QgsGeometry::fromPolylineXY( points ) );
+    }
+    else if ( mRealGeometry.type() == QgsWkbTypes::PolygonGeometry )
+    {
+      QgsPolygonXY poly = mRealGeometry.asPolygon();
+
+      if ( poly[0].count() < 2 )
+      {
+        // if it is not yet a polygon, create line guideline
+        poly[0].append( crosshair );
+        setGuidelineGeometry( QgsGeometry::fromPolylineXY( poly[0] ) );
+      }
+      else
+      {
+        // let's add the crosshair as one-before-last vertex
+        poly[0].insert( poly[0].count() - 1, crosshair );
+        setGuidelineGeometry( QgsGeometry::fromPolygonXY( poly ) );
+      }
+    }
   }
-  else if ( mRealGeometry.type() == QgsWkbTypes::PolygonGeometry )
+  else
   {
-    QgsPolygonXY poly = mRealGeometry.asPolygon();
+    // we add current crosshair in place of active vertex id
 
-    if ( poly[0].count() < 2 )
-    {
-      // if it is not yet a polygon, create line guideline
-      poly[0].append( crosshair );
-      setGuidelineGeometry( QgsGeometry::fromPolylineXY( poly[0] ) );
-    }
-    else
-    {
-      // let's add the crosshair as one-before-last vertex
-      poly[0].insert( poly[0].count() - 1, crosshair );
-      setGuidelineGeometry( QgsGeometry::fromPolygonXY( poly ) );
-    }
+    QgsPoint crosshair = mMapSettings->screenToCoordinate( mCrosshairPosition );
+
+    QgsGeometry g( mRealGeometry );
+
+    g.moveVertex( crosshair, g.vertexNrFromVertexId( mActiveVertexId ) );
+
+    setGuidelineGeometry( g );
   }
 }
 
@@ -128,4 +145,19 @@ void GuidelineController::setMapSettings( QgsQuickMapSettings *newMapSettings )
   connect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &GuidelineController::buildGuideline );
 
   emit mapSettingsChanged( mMapSettings );
+}
+
+const QgsVertexId &GuidelineController::activeVertexId() const
+{
+  return mActiveVertexId;
+}
+
+void GuidelineController::setActiveVertexId( const QgsVertexId &newActiveVertexId )
+{
+  if ( mActiveVertexId == newActiveVertexId )
+    return;
+  mActiveVertexId = newActiveVertexId;
+  emit activeVertexIdChanged( mActiveVertexId );
+
+  buildGuideline();
 }
