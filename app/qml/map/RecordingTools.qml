@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 import QtQuick 2.14
+import QtQuick.Shapes 1.14
 
 import QgsQuick 0.1
 import lc 1.0
@@ -70,6 +71,8 @@ Item {
     positionKit: __positionKit
     layer: __activeLayer.vectorLayer
 
+    initialGeometry: root.initialGeometry ? root.initialGeometry : __inputUtils.emptyGeometry()
+
     // Bind variables manager to know if we are centered to GPS or not when evaluating position variables
     onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition
   }
@@ -102,6 +105,49 @@ Item {
 
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+  }
+
+  Highlight {
+    id: handlesHighlight
+
+    height: root.map.height
+    width: root.map.width
+
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
+
+    lineColor: InputStyle.guidelineColor
+    lineStrokeStyle: ShapePath.DashLine
+  }
+
+  Highlight {
+    id: midSegmentsHighlight
+
+    height: root.map.height
+    width: root.map.width
+
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
+
+    markerType: "circleWithIcon"
+    markerColor: InputStyle.mapMarkerMidVertexColor
+    markerCircleSize: InputStyle.mapMarkerMidVertexSize
+    markerCircleIconSource: InputStyle.plusIcon
+  }
+
+  Highlight {
+    id: existingVerticesHighlight
+
+    height: root.map.height
+    width: root.map.width
+
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
+
+    markerType: "circleWithIcon"
+    markerColor: InputStyle.mapMarkerExistingVertexColor
+    markerCircleSize: InputStyle.mapMarkerExistingVertexSize
+    markerCircleIconSource: InputStyle.mapMarkerMoveIcon
   }
 
   Crosshair {
