@@ -1788,7 +1788,10 @@ void MerginApi::pushFileReplyFinished()
     int chunkNo = currentFile.chunks.indexOf( chunkID );
     if ( chunkNo < currentFile.chunks.size() - 1 )
     {
-      pushFile( projectFullName, transactionUUID, currentFile, chunkNo + 1 );
+      QTimer::singleShot( 10000, this, [this, projectFullName, transactionUUID, currentFile, chunkNo]()
+      {
+        pushFile( projectFullName, transactionUUID, currentFile, chunkNo + 1 );
+      } );
     }
     else
     {
@@ -1800,11 +1803,17 @@ void MerginApi::pushFileReplyFinished()
       if ( !transaction.pushQueue.isEmpty() )
       {
         MerginFile nextFile = transaction.pushQueue.first();
-        pushFile( projectFullName, transactionUUID, nextFile );
+        QTimer::singleShot( 10000, this, [this, projectFullName, transactionUUID, nextFile]()
+        {
+          pushFile( projectFullName, transactionUUID, nextFile );
+        } );
       }
       else
       {
-        pushFinish( projectFullName, transactionUUID );
+        QTimer::singleShot( 10000, this, [this, projectFullName, transactionUUID]()
+        {
+          pushFinish( projectFullName, transactionUUID );
+        } );
       }
     }
   }
