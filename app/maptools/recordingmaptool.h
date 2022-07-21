@@ -15,6 +15,7 @@
 #include <QObject>
 #include <qglobal.h>
 
+#include "qgsvertexid.h"
 #include "qgsgeometry.h"
 
 class PositionKit;

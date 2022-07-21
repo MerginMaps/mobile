@@ -247,12 +247,27 @@ void TestMapTools::testRecording()
 
 void TestMapTools::testExistingVertices()
 {
+  QString projectDir = TestUtils::testDataDir() + "/planes";
+  QString projectName = "quickapp_project.qgs";
+  QgsProject *project = new QgsProject();
+  QVERIFY( project->read( projectDir + "/" + projectName ) );
+  QgsMapLayer *polyL = project->mapLayersByName( QStringLiteral( "FlySector" ) ).at( 0 );
+  QgsVectorLayer *polygonLayer = static_cast<QgsVectorLayer *>( polyL );
+  QVERIFY( polygonLayer && polygonLayer->isValid() );
+  QgsMapLayer *lineL = project->mapLayersByName( QStringLiteral( "Roads" ) ).at( 0 );
+  QgsVectorLayer *lineLayer = static_cast<QgsVectorLayer *>( lineL );
+  QVERIFY( lineLayer && lineLayer->isValid() );
+  QgsMapLayer *pointL = project->mapLayersByName( QStringLiteral( "Planes" ) ).at( 0 );
+  QgsVectorLayer *pointLayer = static_cast<QgsVectorLayer *>( pointL );
+  QVERIFY( pointLayer && pointLayer->isValid() );
+
   RecordingMapTool *mapTool = new RecordingMapTool();
 
   QgsGeometry geometry;
 
   QgsPolygon *polygon = new QgsPolygon( new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) << QgsPoint( 0, 0 ) ) );
   geometry.set( polygon );
+  mapTool->setLayer( polygonLayer );
   mapTool->setInitialGeometry( geometry );
   QgsGeometry vertices = mapTool->existingVertices();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
@@ -264,6 +279,7 @@ void TestMapTools::testExistingVertices()
 
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) << QgsPoint( 2, 2 ) );
   geometry.set( line );
+  mapTool->setLayer( lineLayer );
   mapTool->setInitialGeometry( geometry );
   vertices = mapTool->existingVertices();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
@@ -274,6 +290,7 @@ void TestMapTools::testExistingVertices()
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 2, 2 ) );
 
   geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
+  mapTool->setLayer( pointLayer );
   mapTool->setInitialGeometry( geometry );
   vertices = mapTool->existingVertices();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
@@ -287,13 +304,27 @@ void TestMapTools::testExistingVertices()
 
 void TestMapTools::testMidSegmentVertices()
 {
+  QString projectDir = TestUtils::testDataDir() + "/planes";
+  QString projectName = "quickapp_project.qgs";
+  QgsProject *project = new QgsProject();
+  QVERIFY( project->read( projectDir + "/" + projectName ) );
+  QgsMapLayer *polyL = project->mapLayersByName( QStringLiteral( "FlySector" ) ).at( 0 );
+  QgsVectorLayer *polygonLayer = static_cast<QgsVectorLayer *>( polyL );
+  QVERIFY( polygonLayer && polygonLayer->isValid() );
+  QgsMapLayer *lineL = project->mapLayersByName( QStringLiteral( "Roads" ) ).at( 0 );
+  QgsVectorLayer *lineLayer = static_cast<QgsVectorLayer *>( lineL );
+  QVERIFY( lineLayer && lineLayer->isValid() );
+  QgsMapLayer *pointL = project->mapLayersByName( QStringLiteral( "Planes" ) ).at( 0 );
+  QgsVectorLayer *pointLayer = static_cast<QgsVectorLayer *>( pointL );
+  QVERIFY( pointLayer && pointLayer->isValid() );
+
   RecordingMapTool *mapTool = new RecordingMapTool();
 
   QgsGeometry geometry;
 
   QgsPolygon *polygon = new QgsPolygon( new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 2 ) << QgsPoint( 2, 2 ) << QgsPoint( 2, 0 ) << QgsPoint( 0, 0 ) ) );
   geometry.set( polygon );
-
+  mapTool->setLayer( polygonLayer );
   mapTool->setInitialGeometry( geometry );
   QgsGeometry vertices = mapTool->midPoints();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
@@ -305,6 +336,7 @@ void TestMapTools::testMidSegmentVertices()
 
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) );
   geometry.set( line );
+  mapTool->setLayer( lineLayer );
   mapTool->setInitialGeometry( geometry );
   vertices = mapTool->midPoints();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
@@ -315,6 +347,7 @@ void TestMapTools::testMidSegmentVertices()
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 0.5, 1 ) );
 
   geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
+  mapTool->setLayer( pointLayer );
   mapTool->setInitialGeometry( geometry );
   vertices = mapTool->midPoints();
   QVERIFY( vertices.constGet()->vertexCount() == 0 );
@@ -324,12 +357,21 @@ void TestMapTools::testMidSegmentVertices()
 
 void TestMapTools::testHandles()
 {
+  QString projectDir = TestUtils::testDataDir() + "/planes";
+  QString projectName = "quickapp_project.qgs";
+  QgsProject *project = new QgsProject();
+  QVERIFY( project->read( projectDir + "/" + projectName ) );
+  QgsMapLayer *lineL = project->mapLayersByName( QStringLiteral( "Roads" ) ).at( 0 );
+  QgsVectorLayer *lineLayer = static_cast<QgsVectorLayer *>( lineL );
+  QVERIFY( lineLayer && lineLayer->isValid() );
+
   RecordingMapTool *mapTool = new RecordingMapTool();
 
   QgsGeometry geometry;
 
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) );
   geometry.set( line );
+  mapTool->setLayer( lineLayer );
   mapTool->setInitialGeometry( geometry );
   QgsGeometry handles = mapTool->handles();
   QCOMPARE( handles.wkbType(), QgsWkbTypes::MultiLineString );
@@ -352,6 +394,14 @@ void TestMapTools::testHandles()
 
 void TestMapTools::testLookForVertex()
 {
+  QString projectDir = TestUtils::testDataDir() + "/planes";
+  QString projectName = "quickapp_project.qgs";
+  QgsProject *project = new QgsProject();
+  QVERIFY( project->read( projectDir + "/" + projectName ) );
+  QgsMapLayer *lineL = project->mapLayersByName( QStringLiteral( "Roads" ) ).at( 0 );
+  QgsVectorLayer *lineLayer = static_cast<QgsVectorLayer *>( lineL );
+  QVERIFY( lineLayer && lineLayer->isValid() );
+
   QgsQuickMapCanvasMap canvas;
   QgsQuickMapSettings *ms = canvas.mapSettings();
   ms->setDestinationCrs( QgsCoordinateReferenceSystem( QStringLiteral( "EPSG:4326" ) ) );
@@ -362,6 +412,7 @@ void TestMapTools::testLookForVertex()
   QgsGeometry geometry;
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) );
   geometry.set( line );
+  mapTool->setLayer( lineLayer );
   mapTool->setInitialGeometry( geometry );
 
   // start point

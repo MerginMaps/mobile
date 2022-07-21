@@ -285,8 +285,8 @@ void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry
     mPoints.push_back( QgsPoint( *pointIt ) );
   }
 
-  createNodesAndHandles();
   rebuildGeometry();
+  createNodesAndHandles();
 
   emit initialGeometryChanged( mInitialGeometry );
 }
