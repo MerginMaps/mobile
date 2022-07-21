@@ -197,6 +197,13 @@ Item {
     function onUserInteractedWithMap() {
       mapTool.centeredToGPS = false
     }
+
+    function onClicked( point ) {
+      let screenPoint = Qt.point( point.x, point.y )
+
+      // TODO: pass the screenpoint to RecordingMapTool
+      // mapTool.lookForVertex( screenPoint )
+    }
   }
 
   Component.onCompleted: {
