@@ -459,3 +459,36 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
 
   setClickedVertexId( vertexId );
 }
+
+void RecordingMapTool::removeVertex( QgsVertexId id )
+{
+  QgsGeometry geometry;
+  QgsAbstractGeometry *geom = mInitialGeometry.get()->clone();
+
+  if ( geom->deleteVertex( id ) )
+    geometry.set( geom );
+
+  setRecordedGeometry( geometry );
+}
+
+void RecordingMapTool::insertVertex( QgsVertexId id, const QgsPoint &point )
+{
+  QgsGeometry geometry;
+  QgsAbstractGeometry *geom = mInitialGeometry.get()->clone();
+
+  if ( geom->insertVertex( id, point ) )
+    geometry.set( geom );
+
+  setRecordedGeometry( geometry );
+}
+
+void RecordingMapTool::updateVertex( QgsVertexId id, const QgsPoint &point )
+{
+  QgsGeometry geometry;
+  QgsAbstractGeometry *geom = mInitialGeometry.get()->clone();
+
+  if ( geom->moveVertex( id, point ) )
+    geometry.set( geom );
+
+  setRecordedGeometry( geometry );
+}
