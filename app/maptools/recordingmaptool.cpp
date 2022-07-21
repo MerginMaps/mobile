@@ -286,6 +286,7 @@ void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry
   }
 
   createNodesAndHandles();
+  rebuildGeometry();
 
   emit initialGeometryChanged( mInitialGeometry );
 }
@@ -296,7 +297,7 @@ void RecordingMapTool::createNodesAndHandles()
 
   QgsPoint vertex;
   QgsVertexId vertexId;
-  const QgsAbstractGeometry *geom = mInitialGeometry.constGet();
+  const QgsAbstractGeometry *geom = mRecordedGeometry.constGet();
 
   QgsMultiPoint *existingVertices = new QgsMultiPoint();
   mExistingVertices.set( existingVertices );
@@ -316,7 +317,7 @@ void RecordingMapTool::createNodesAndHandles()
     mVertexIds.push_back( qMakePair( vertexId, vertex ) );
 
     // for lines and polygons create midpoints
-    if ( mInitialGeometry.type() != QgsWkbTypes::PointGeometry && vertexId.vertex < geom->vertexCount( vertexId.part, vertexId.ring ) - 1 )
+    if ( mRecordedGeometry.type() != QgsWkbTypes::PointGeometry && vertexId.vertex < geom->vertexCount( vertexId.part, vertexId.ring ) - 1 )
     {
       QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
       QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
@@ -325,7 +326,7 @@ void RecordingMapTool::createNodesAndHandles()
     }
 
     // for lines also create start/end points and handles
-    if ( mInitialGeometry.type() == QgsWkbTypes::LineGeometry && ( vertexId.part != currentPart && vertexId.ring != currentRing ) )
+    if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry && ( vertexId.part != currentPart && vertexId.ring != currentRing ) )
     {
       int vertexCount = geom->vertexCount( vertexId.part, vertexId.ring );
       if ( vertexCount >= 2 )
@@ -463,7 +464,7 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
 void RecordingMapTool::removeVertex( QgsVertexId id )
 {
   QgsGeometry geometry;
-  QgsAbstractGeometry *geom = mInitialGeometry.get()->clone();
+  QgsAbstractGeometry *geom = mRecordedGeometry.get()->clone();
 
   if ( geom->deleteVertex( id ) )
     geometry.set( geom );
@@ -474,7 +475,7 @@ void RecordingMapTool::removeVertex( QgsVertexId id )
 void RecordingMapTool::insertVertex( QgsVertexId id, const QgsPoint &point )
 {
   QgsGeometry geometry;
-  QgsAbstractGeometry *geom = mInitialGeometry.get()->clone();
+  QgsAbstractGeometry *geom = mRecordedGeometry.get()->clone();
 
   if ( geom->insertVertex( id, point ) )
     geometry.set( geom );
@@ -485,7 +486,7 @@ void RecordingMapTool::insertVertex( QgsVertexId id, const QgsPoint &point )
 void RecordingMapTool::updateVertex( QgsVertexId id, const QgsPoint &point )
 {
   QgsGeometry geometry;
-  QgsAbstractGeometry *geom = mInitialGeometry.get()->clone();
+  QgsAbstractGeometry *geom = mRecordedGeometry.get()->clone();
 
   if ( geom->moveVertex( id, point ) )
     geometry.set( geom );
