@@ -209,6 +209,10 @@ Item {
       }
     }
 
+    onReleaseClicked: {
+      // TODO
+    }
+
     onRemovePointClicked: mapTool.removePoint()
 
     onDoneClicked: {
