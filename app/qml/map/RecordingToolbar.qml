@@ -21,6 +21,7 @@ Item {
     id: root
 
     signal addClicked
+    signal releaseClicked
     signal cancelClicked
     signal gpsSwitchClicked
     signal gpsSwithHeld
@@ -89,7 +90,7 @@ Item {
             MainPanelButton {
                 id: removePointButton
                 width: root.itemSize
-                text: qsTr("Undo")
+                text: qsTr("Remove")
                 imageSource: InputStyle.undoIcon
                 enabled: manualRecording
 
@@ -104,7 +105,7 @@ Item {
             MainPanelButton {
                 id: addButton
                 width: root.itemSize
-                text: qsTr("Add Point")
+                text: qsTr("Add")
                 imageSource: InputStyle.plusIcon
                 enabled: manualRecording
 
@@ -113,9 +114,24 @@ Item {
         }
 
         Item {
+            height: parent.height
+            Layout.fillWidth: true
+            visible: false
+
+            MainPanelButton {
+                id: releaseButton
+                width: root.itemSize
+                text: qsTr("Release")
+                imageSource: InputStyle.plusIcon
+                enabled: manualRecording
+
+                onActivated: root.releaseClicked()
+            }
+        }
+
+        Item {
             Layout.fillWidth: true
             height: parent.height
-            visible: root.pointLayerSelected ? false : true
 
             MainPanelButton {
                 id: finishButton
