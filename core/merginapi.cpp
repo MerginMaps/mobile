@@ -1686,8 +1686,8 @@ void MerginApi::pushStartReplyFinished()
         transactionUUID = docObj.value( QStringLiteral( "transaction" ) ).toString();
         transaction.transactionUUID = transactionUUID;
       }
-      qDebug() << "Response:" << data;
-      qDebug() << "JSON ERROR:" << error.errorString() << error.error;
+      CoreUtils::log( "Response:", data );
+      CoreUtils::log( "JSON ERROR:", error.errorString() + error.error );
 
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Push request accepted. Transaction ID: " ) + transactionUUID );
 
