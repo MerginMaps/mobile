@@ -77,19 +77,21 @@ class RecordingMapTool : public AbstractMapTool
     Q_INVOKABLE void lookForVertex( const QPointF &clickedPoint, double searchRadius = 0.001 );
 
     /**
-     *  Removes vertex with given id from the geometry and updates recordedGeometry
+     * Removes vertex with given id from the geometry and updates recordedGeometry
      */
-    Q_INVOKABLE void removeVertex( QgsVertexId id );
+    Q_INVOKABLE void removeVertex();
 
     /**
-     *  Inserts new vertex at the given position and updates recordedGeometry
+     * Inserts new vertex at the active vertex position and updates recordedGeometry
+     * Passed point needs to be in active vector layer CRS
      */
-    Q_INVOKABLE void insertVertex( QgsVertexId id, const QgsPoint &point );
+    Q_INVOKABLE void insertVertex( const QgsPoint &point );
 
     /**
-     *  Updates vertex at the given position and updates recordedGeometry
+     * Updates vertex at the active vertex position and updates recordedGeometry
+     * Passed point needs to be in active vector layer CRS
      */
-    Q_INVOKABLE void updateVertex( QgsVertexId id, const QgsPoint &point );
+    Q_INVOKABLE void updateVertex( const QgsPoint &point );
 
     // Getters / setters
     bool centeredToGPS() const;

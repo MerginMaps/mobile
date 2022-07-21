@@ -461,34 +461,49 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   setClickedVertexId( vertexId );
 }
 
-void RecordingMapTool::removeVertex( QgsVertexId id )
+void RecordingMapTool::removeVertex()
 {
-  QgsGeometry geometry;
-  QgsAbstractGeometry *geom = mRecordedGeometry.get()->clone();
+  if ( !mClickedVertexId.isValid() )
+  {
+    return;
+  }
 
-  if ( geom->deleteVertex( id ) )
+  QgsGeometry geometry;
+  QgsAbstractGeometry *geom = mRecordedGeometry.get();
+
+  if ( geom->deleteVertex( mClickedVertexId ) )
     geometry.set( geom );
 
   setRecordedGeometry( geometry );
 }
 
-void RecordingMapTool::insertVertex( QgsVertexId id, const QgsPoint &point )
+void RecordingMapTool::insertVertex( const QgsPoint &point )
 {
-  QgsGeometry geometry;
-  QgsAbstractGeometry *geom = mRecordedGeometry.get()->clone();
+  if ( !mClickedVertexId.isValid() )
+  {
+    return;
+  }
 
-  if ( geom->insertVertex( id, point ) )
+  QgsGeometry geometry;
+  QgsAbstractGeometry *geom = mRecordedGeometry.get();
+
+  if ( geom->insertVertex( mClickedVertexId, point ) )
     geometry.set( geom );
 
   setRecordedGeometry( geometry );
 }
 
-void RecordingMapTool::updateVertex( QgsVertexId id, const QgsPoint &point )
+void RecordingMapTool::updateVertex( const QgsPoint &point )
 {
-  QgsGeometry geometry;
-  QgsAbstractGeometry *geom = mRecordedGeometry.get()->clone();
+  if ( !mClickedVertexId.isValid() )
+  {
+    return;
+  }
 
-  if ( geom->moveVertex( id, point ) )
+  QgsGeometry geometry;
+  QgsAbstractGeometry *geom = mRecordedGeometry.get();
+
+  if ( geom->moveVertex( mClickedVertexId, point ) )
     geometry.set( geom );
 
   setRecordedGeometry( geometry );
