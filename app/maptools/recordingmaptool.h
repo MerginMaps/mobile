@@ -15,6 +15,7 @@
 #include <QObject>
 #include <qglobal.h>
 
+#include "qgsvertexid.h"
 #include "qgsgeometry.h"
 
 class PositionKit;
@@ -39,6 +40,9 @@ class RecordingMapTool : public AbstractMapTool
 
     // When editing geometry - set this as the geometry to start with
     Q_PROPERTY( QgsGeometry initialGeometry READ initialGeometry WRITE setInitialGeometry NOTIFY initialGeometryChanged )
+
+    Q_PROPERTY( QString state READ state WRITE setState NOTIFY stateChanged )
+    Q_PROPERTY( QgsVertexId clickedVertexId READ clickedVertexId WRITE setClickedVertexId NOTIFY clickedVertexIdChanged )
 
   public:
 
@@ -68,22 +72,24 @@ class RecordingMapTool : public AbstractMapTool
     Q_INVOKABLE bool hasValidGeometry() const;
 
     /**
-     * Create a multi-point geometry that can be used to highlight vertices of a feature
+     * Finds vertex id which matches given screen coordinates.
      */
-    Q_INVOKABLE QgsGeometry extractGeometryVertices( const QgsGeometry &geometry );
+    Q_INVOKABLE void lookForVertex( const QPointF &clickedPoint, double searchRadius = 0.001 );
 
     /**
-     * Create a multi-point geometry that can be used to highlight "virtual" nodes representing
-     * the middle of segments. For lines also creates "virtual" nodes at the beginning and end
-     * of the line.
+     *  Removes vertex with given id from the geometry and updates recordedGeometry
      */
-    Q_INVOKABLE QgsGeometry extractMidSegmentVertices( const QgsGeometry &geometry );
+    Q_INVOKABLE void removeVertex( QgsVertexId id );
 
     /**
-     * Create "handles" at the beginnig and end of the line geometry. Returns null geometry for
-     * other geometry types.
+     *  Inserts new vertex at the given position and updates recordedGeometry
      */
-    Q_INVOKABLE QgsGeometry createHandles( const QgsGeometry &geometry );
+    Q_INVOKABLE void insertVertex( QgsVertexId id, const QgsPoint &point );
+
+    /**
+     *  Updates vertex at the given position and updates recordedGeometry
+     */
+    Q_INVOKABLE void updateVertex( QgsVertexId id, const QgsPoint &point );
 
     // Getters / setters
     bool centeredToGPS() const;
@@ -117,6 +123,12 @@ class RecordingMapTool : public AbstractMapTool
     const QgsGeometry &handles() const;
     void setHandles( const QgsGeometry &newHandles );
 
+    const QString &state() const;
+    void setState( const QString &newState );
+
+    QgsVertexId &clickedVertexId();
+    void setClickedVertexId( QgsVertexId newId );
+
   signals:
     void layerChanged( QgsVectorLayer *layer );
     void centeredToGPSChanged( bool centeredToGPS );
@@ -133,6 +145,10 @@ class RecordingMapTool : public AbstractMapTool
 
     void handlesChanged( const QgsGeometry &handles );
 
+    void stateChanged( const QString &state );
+
+    void clickedVertexIdChanged( QgsVertexId id );
+
   public slots:
     void onPositionChanged();
 
@@ -146,6 +162,12 @@ class RecordingMapTool : public AbstractMapTool
     QVector<QgsPoint> mPoints;
 
   private:
+    /**
+     * Creates geometries represeinting existing nodes, midpoints (for lines and polygons),
+     * start/end points and "handles" (for lines). Also fills nodes index.
+     */
+    void createNodesAndHandles();
+
     QgsGeometry mRecordedGeometry;
     QgsGeometry mInitialGeometry;
 
@@ -160,6 +182,10 @@ class RecordingMapTool : public AbstractMapTool
     QgsGeometry mExistingVertices;
     QgsGeometry mMidPoints;
     QgsGeometry mHandles;
+
+    QString mState = "view";
+    QVector< QPair<QgsVertexId, QgsPoint> > mVertexIds;
+    QgsVertexId mClickedVertexId;
 };
 
 #endif // RECORDINGMAPTOOL_H

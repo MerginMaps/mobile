@@ -285,87 +285,83 @@ void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry
     mPoints.push_back( QgsPoint( *pointIt ) );
   }
 
-  setExistingVertices( extractGeometryVertices( mInitialGeometry ) );
-  setMidPoints( extractMidSegmentVertices( mInitialGeometry ) );
-  setHandles( createHandles( mInitialGeometry ) );
+  rebuildGeometry();
+  createNodesAndHandles();
 
   emit initialGeometryChanged( mInitialGeometry );
 }
 
-
-QgsGeometry RecordingMapTool::extractGeometryVertices( const QgsGeometry &geometry )
+void RecordingMapTool::createNodesAndHandles()
 {
-  QgsMultiPoint *multiPoint = new QgsMultiPoint();
-  QgsGeometry outputGeom( multiPoint );
-  for ( auto pointIt = geometry.vertices_begin(); pointIt != geometry.vertices_end(); ++pointIt )
-    multiPoint->addGeometry( ( *pointIt ).clone() );
-  return outputGeom;
-}
+  mVertexIds.clear();
 
-QgsGeometry RecordingMapTool::extractMidSegmentVertices( const QgsGeometry &geometry )
-{
-  if ( geometry.type() == QgsWkbTypes::PointGeometry )
+  QgsPoint vertex;
+  QgsVertexId vertexId;
+  const QgsAbstractGeometry *geom = mRecordedGeometry.constGet();
+
+  QgsMultiPoint *existingVertices = new QgsMultiPoint();
+  mExistingVertices.set( existingVertices );
+
+  QgsMultiPoint *midPoints = new QgsMultiPoint();
+  mMidPoints.set( midPoints );
+
+  QgsMultiLineString *handles = new QgsMultiLineString();
+  mHandles.set( handles );
+
+  int currentPart = -1;
+  int currentRing = -1;
+
+  while ( geom->nextVertex( vertexId, vertex ) )
   {
-    return QgsGeometry();
-  }
+    existingVertices->addGeometry( vertex.clone() );
+    mVertexIds.push_back( qMakePair( vertexId, vertex ) );
 
-  QgsMultiPoint *multiPoint = new QgsMultiPoint();
-  QgsGeometry outputGeom( multiPoint );
-  QgsPoint p;
-
-  const QVector< QgsLineString * > lines = QgsGeometryUtils::extractLineStrings( geometry.constGet() );
-  for ( QgsLineString *line : lines )
-  {
-    for ( int i = 0; i < line->numPoints() - 1; ++i )
+    // for lines and polygons create midpoints
+    if ( mRecordedGeometry.type() != QgsWkbTypes::PointGeometry && vertexId.vertex < geom->vertexCount( vertexId.part, vertexId.ring ) - 1 )
     {
-      p = QgsGeometryUtils::midpoint( line->pointN( i ), line->pointN( i + 1 ) );
-      multiPoint->addGeometry( p.clone() );
+      QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
+      QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
+      midPoints->addGeometry( midPoint.clone() );
+      mVertexIds.push_back( qMakePair( id, midPoint ) );
     }
 
-    // if input geometry is a line we need to add virtual nodes and the beginning
-    // and at the end of the line. They will be used to extend line
-    if ( geometry.type() == QgsWkbTypes::LineGeometry && line->numPoints() >= 2 )
+    // for lines also create start/end points and handles
+    if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry && ( vertexId.part != currentPart && vertexId.ring != currentRing ) )
     {
-      p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( 0 ), line->pointN( 1 ), -0.1 );
-      multiPoint->insertGeometry( p.clone(), 0 );
-      p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( line->numPoints() - 2 ), line->pointN( line->numPoints() - 1 ), 1.1 );
-      multiPoint->addGeometry( p.clone() );
+      int vertexCount = geom->vertexCount( vertexId.part, vertexId.ring );
+      if ( vertexCount >= 2 )
+      {
+        // start point and handle
+        QgsVertexId startId( vertexId.part, vertexId.ring, 0 );
+        QgsVertexId endId( vertexId.part, vertexId.ring, 1 );
+        QgsPoint point = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -0.1 );
+
+        midPoints->addGeometry( point.clone() );
+        mVertexIds.push_back( qMakePair( startId, point ) );
+
+        QgsLineString handle( point, geom->vertexAt( startId ) );
+        handles->addGeometry( handle.clone() );
+
+        // end point and handle
+        startId.vertex = vertexCount - 2;
+        endId.vertex = vertexCount - 1;
+        point = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), 1.1 );
+
+        handle = QgsLineString( geom->vertexAt( endId ), point );
+        handles->addGeometry( handle.clone() );
+
+        midPoints->addGeometry( point.clone() );
+        endId.vertex = vertexCount;
+        mVertexIds.push_back( qMakePair( endId, point ) );
+      }
+      currentPart = vertexId.part;
+      currentRing = vertexId.ring;
     }
-
-    delete line;
-  }
-  return outputGeom;
-}
-
-QgsGeometry RecordingMapTool::createHandles( const QgsGeometry &geometry )
-{
-  if ( geometry.type() != QgsWkbTypes::LineGeometry )
-  {
-    return QgsGeometry();
   }
 
-  QgsMultiLineString *multiLine = new QgsMultiLineString();
-  QgsGeometry outputGeom( multiLine );
-  QgsPoint p;
-  QgsLineString handle;
-
-  const QVector< QgsLineString * > lines = QgsGeometryUtils::extractLineStrings( geometry.constGet() );
-  for ( QgsLineString *line : lines )
-  {
-    if ( line->numPoints() >= 2 )
-    {
-      p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( 0 ), line->pointN( 1 ), -0.1 );
-      handle = QgsLineString( p, line->pointN( 0 ) );
-      multiLine->addGeometry( handle.clone() );
-
-      p = QgsGeometryUtils::interpolatePointOnLine( line->pointN( line->numPoints() - 2 ), line->pointN( line->numPoints() - 1 ), 1.1 );
-      handle = QgsLineString( line->pointN( line->numPoints() - 1 ), p );
-      multiLine->addGeometry( handle.clone() );
-    }
-    delete line;
-  }
-
-  return outputGeom;
+  emit existingVerticesChanged( mExistingVertices );
+  emit midPointsChanged( mMidPoints );
+  emit handlesChanged( mHandles );
 }
 
 const QgsGeometry &RecordingMapTool::existingVertices() const
@@ -405,4 +401,95 @@ void RecordingMapTool::setHandles( const QgsGeometry &newHandles )
     return;
   mHandles = newHandles;
   emit handlesChanged( mHandles );
+}
+
+const QString &RecordingMapTool::state() const
+{
+  return mState;
+}
+
+void RecordingMapTool::setState( const QString &newState )
+{
+  if ( mState == newState )
+    return;
+  mState = newState;
+  emit stateChanged( mState );
+}
+
+QgsVertexId &RecordingMapTool::clickedVertexId()
+{
+  return mClickedVertexId;
+}
+
+void RecordingMapTool::setClickedVertexId( QgsVertexId newId )
+{
+  if ( mClickedVertexId == newId )
+    return;
+  mClickedVertexId.part = newId.part;
+  mClickedVertexId.ring = newId.ring;
+  mClickedVertexId.vertex = newId.vertex;
+  emit clickedVertexIdChanged( mClickedVertexId );
+}
+
+void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double searchRadius )
+{
+  double minDistance = std::numeric_limits<double>::max();
+  double currentDistance = 0;
+  QgsPoint point;
+  QgsVertexId vertexId;
+
+  QgsPoint pnt = mapSettings()->screenToCoordinate( clickedPoint );
+
+  if ( mRecordedGeometry.isEmpty() )
+  {
+    setClickedVertexId( vertexId );
+    return;
+  }
+
+  for ( QPair<QgsVertexId, QgsPoint> pair : mVertexIds )
+  {
+    currentDistance = QgsGeometryUtils::sqrDistance2D( pnt, pair.second );
+    if ( currentDistance <= minDistance && currentDistance <= searchRadius )
+    {
+      minDistance = currentDistance;
+      vertexId.part = pair.first.part;
+      vertexId.ring = pair.first.ring;
+      vertexId.vertex = pair.first.vertex;
+    }
+  }
+
+  setClickedVertexId( vertexId );
+}
+
+void RecordingMapTool::removeVertex( QgsVertexId id )
+{
+  QgsGeometry geometry;
+  QgsAbstractGeometry *geom = mRecordedGeometry.get()->clone();
+
+  if ( geom->deleteVertex( id ) )
+    geometry.set( geom );
+
+  setRecordedGeometry( geometry );
+}
+
+void RecordingMapTool::insertVertex( QgsVertexId id, const QgsPoint &point )
+{
+  QgsGeometry geometry;
+  QgsAbstractGeometry *geom = mRecordedGeometry.get()->clone();
+
+  if ( geom->insertVertex( id, point ) )
+    geometry.set( geom );
+
+  setRecordedGeometry( geometry );
+}
+
+void RecordingMapTool::updateVertex( QgsVertexId id, const QgsPoint &point )
+{
+  QgsGeometry geometry;
+  QgsAbstractGeometry *geom = mRecordedGeometry.get()->clone();
+
+  if ( geom->moveVertex( id, point ) )
+    geometry.set( geom );
+
+  setRecordedGeometry( geometry );
 }
