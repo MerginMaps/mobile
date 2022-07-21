@@ -440,7 +440,7 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
 
   QgsPoint pnt = mapSettings()->screenToCoordinate( clickedPoint );
 
-  if ( mInitialGeometry.isEmpty() )
+  if ( mRecordedGeometry.isEmpty() )
   {
     setClickedVertexId( vertexId );
     return;
