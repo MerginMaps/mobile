@@ -1678,13 +1678,16 @@ void MerginApi::pushStartReplyFinished()
     if ( !files.isEmpty() )
     {
       QString transactionUUID;
-      QJsonDocument doc = QJsonDocument::fromJson( data );
+      QJsonParseError error;
+      QJsonDocument doc = QJsonDocument::fromJson( data, &error );
       if ( doc.isObject() )
       {
         QJsonObject docObj = doc.object();
         transactionUUID = docObj.value( QStringLiteral( "transaction" ) ).toString();
         transaction.transactionUUID = transactionUUID;
       }
+      qDebug() << "Response:" << data;
+      qDebug() << "JSON ERROR:" << error.errorString() << error.error;
 
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Push request accepted. Transaction ID: " ) + transactionUUID );
 
