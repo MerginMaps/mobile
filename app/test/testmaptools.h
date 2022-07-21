@@ -28,6 +28,7 @@ class TestMapTools : public QObject
     void testExistingVertices();
     void testMidSegmentVertices();
     void testHandles();
+    void testLookForVertex();
 };
 
 #endif // TESTMAPTOOLS_H

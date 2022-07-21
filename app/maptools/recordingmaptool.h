@@ -41,7 +41,7 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( QgsGeometry initialGeometry READ initialGeometry WRITE setInitialGeometry NOTIFY initialGeometryChanged )
 
     Q_PROPERTY( QString state READ state WRITE setState NOTIFY stateChanged )
-
+    Q_PROPERTY( QgsVertexId clickedVertexId READ clickedVertexId WRITE setClickedVertexId NOTIFY clickedVertexIdChanged )
 
   public:
 
@@ -69,6 +69,11 @@ class RecordingMapTool : public AbstractMapTool
 
     //! Returns true if the captured geometry has enought points for the specified layer
     Q_INVOKABLE bool hasValidGeometry() const;
+
+    /**
+     * Finds vertex id which matches given screen coordinates.
+     */
+    Q_INVOKABLE void lookForVertex( const QPointF &clickedPoint, double searchRadius = 0.001 );
 
     // Getters / setters
     bool centeredToGPS() const;
@@ -105,6 +110,9 @@ class RecordingMapTool : public AbstractMapTool
     const QString &state() const;
     void setState( const QString &newState );
 
+    QgsVertexId &clickedVertexId();
+    void setClickedVertexId( QgsVertexId newId );
+
   signals:
     void layerChanged( QgsVectorLayer *layer );
     void centeredToGPSChanged( bool centeredToGPS );
@@ -122,6 +130,8 @@ class RecordingMapTool : public AbstractMapTool
     void handlesChanged( const QgsGeometry &handles );
 
     void stateChanged( const QString &state );
+
+    void clickedVertexIdChanged( QgsVertexId id );
 
   public slots:
     void onPositionChanged();
@@ -159,6 +169,7 @@ class RecordingMapTool : public AbstractMapTool
 
     QString mState = "view";
     QVector< QPair<QgsVertexId, QgsPoint> > mVertexIds;
+    QgsVertexId mClickedVertexId;
 };
 
 #endif // RECORDINGMAPTOOL_H

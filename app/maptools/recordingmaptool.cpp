@@ -321,7 +321,7 @@ void RecordingMapTool::createNodesAndHandles()
       QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
       QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
       midPoints->addGeometry( midPoint.clone() );
-      mVertexIds.push_back( qMakePair( id, vertex ) );
+      mVertexIds.push_back( qMakePair( id, midPoint ) );
     }
 
     // for lines also create start/end points and handles
@@ -351,7 +351,7 @@ void RecordingMapTool::createNodesAndHandles()
 
         midPoints->addGeometry( point.clone() );
         endId.vertex = vertexCount;
-        mVertexIds.push_back( qMakePair( endId , point ) );
+        mVertexIds.push_back( qMakePair( endId, point ) );
       }
       currentPart = vertexId.part;
       currentRing = vertexId.ring;
@@ -413,4 +413,49 @@ void RecordingMapTool::setState( const QString &newState )
     return;
   mState = newState;
   emit stateChanged( mState );
+}
+
+QgsVertexId &RecordingMapTool::clickedVertexId()
+{
+  return mClickedVertexId;
+}
+
+void RecordingMapTool::setClickedVertexId( QgsVertexId newId )
+{
+  if ( mClickedVertexId == newId )
+    return;
+  mClickedVertexId.part = newId.part;
+  mClickedVertexId.ring = newId.ring;
+  mClickedVertexId.vertex = newId.vertex;
+  emit clickedVertexIdChanged( mClickedVertexId );
+}
+
+void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double searchRadius )
+{
+  double minDistance = std::numeric_limits<double>::max();
+  double currentDistance = 0;
+  QgsPoint point;
+  QgsVertexId vertexId;
+
+  QgsPoint pnt = mapSettings()->screenToCoordinate( clickedPoint );
+
+  if ( mInitialGeometry.isEmpty() )
+  {
+    setClickedVertexId( vertexId );
+    return;
+  }
+
+  for ( QPair<QgsVertexId, QgsPoint> pair : mVertexIds )
+  {
+    currentDistance = QgsGeometryUtils::sqrDistance2D( pnt, pair.second );
+    if ( currentDistance <= minDistance && currentDistance <= searchRadius )
+    {
+      minDistance = currentDistance;
+      vertexId.part = pair.first.part;
+      vertexId.ring = pair.first.ring;
+      vertexId.vertex = pair.first.vertex;
+    }
+  }
+
+  setClickedVertexId( vertexId );
 }

@@ -349,3 +349,47 @@ void TestMapTools::testHandles()
 
   delete mapTool;
 }
+
+void TestMapTools::testLookForVertex()
+{
+  QgsQuickMapCanvasMap canvas;
+  QgsQuickMapSettings *ms = canvas.mapSettings();
+  ms->setDestinationCrs( QgsCoordinateReferenceSystem( QStringLiteral( "EPSG:4326" ) ) );
+
+  RecordingMapTool *mapTool = new RecordingMapTool();
+  mapTool->setMapSettings( ms );
+
+  QgsGeometry geometry;
+  QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) );
+  geometry.set( line );
+  mapTool->setInitialGeometry( geometry );
+
+  // start point
+  QPointF screenPoint = ms->coordinateToScreen( QgsPoint( -0.05, -0.13 ) );
+  mapTool->lookForVertex( screenPoint, 0.05 );
+  QVERIFY( mapTool->clickedVertexId().isValid() );
+  QCOMPARE( mapTool->clickedVertexId().part, 0 );
+  QCOMPARE( mapTool->clickedVertexId().ring, 0 );
+  QCOMPARE( mapTool->clickedVertexId().vertex, 0 );
+
+  // first point
+  screenPoint = ms->coordinateToScreen( QgsPoint( -0.01, 0.1 ) );
+  mapTool->lookForVertex( screenPoint, 0.05 );
+  QVERIFY( mapTool->clickedVertexId().isValid() );
+  QCOMPARE( mapTool->clickedVertexId().part, 0 );
+  QCOMPARE( mapTool->clickedVertexId().ring, 0 );
+  QCOMPARE( mapTool->clickedVertexId().vertex, 0 );
+
+  // midpoint
+  screenPoint = ms->coordinateToScreen( QgsPoint( 0.6, 1.2 ) );
+  mapTool->lookForVertex( screenPoint, 0.05 );
+  QVERIFY( mapTool->clickedVertexId().isValid() );
+  QCOMPARE( mapTool->clickedVertexId().part, 0 );
+  QCOMPARE( mapTool->clickedVertexId().ring, 0 );
+  QCOMPARE( mapTool->clickedVertexId().vertex, 2 );
+
+  // distant point. should return invalid vertex id
+  screenPoint = ms->coordinateToScreen( QgsPoint( 3, 2 ) );
+  mapTool->lookForVertex( screenPoint, 0.05 );
+  QVERIFY( !mapTool->clickedVertexId().isValid() );
+}
