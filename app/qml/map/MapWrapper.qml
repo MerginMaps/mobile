@@ -756,7 +756,7 @@ Item {
 
       map: mapCanvas
       gpsState: gpsStateGroup
-      initialGeometry: root.state === "edit" ? internal.featurePairToEdit : null
+      initialGeometry: root.state === "edit" ? internal.featurePairToEdit.feature.geometry : null
 
       centerToGPSOnStartup: root.state !== "edit"
 

@@ -41,6 +41,11 @@ QtObject {
     property color darkGreen: "#006146"
     property color guidelineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )
 
+    property real mapMarkerExistingVertexSize: 41 * __dp
+    property color mapMarkerExistingVertexColor: "#D9D9D9"
+    property real mapMarkerMidVertexSize: 30 * __dp
+    property color mapMarkerMidVertexColor: "#BBD9D9D9"
+
     property int fontPixelSizeSmall: scaleFont(15)
     property int fontPixelSizeNormal: scaleFont(18)
     property int fontPixelSizeBig: scaleFont(21)
@@ -104,6 +109,7 @@ QtObject {
 
     property string moreMenuIcon: "qrc:/more_menu.svg"
     property string mapMarkerIcon: "qrc:/marker.svg"
+    property string mapMarkerMoveIcon: "qrc:/arrows-move.svg"
 
     property string projectIcon: "qrc:/project.svg"
     property string zoomToProjectIcon: "qrc:/zoom_to_project.svg"

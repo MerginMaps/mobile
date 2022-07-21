@@ -40,11 +40,14 @@ Item {
 
   property string markerType: "image"   // "circle" or "image"
   property color markerColor: "grey"
+  property color markerOutlineColor: "black"
+  property real markerOutlineWidth: 1 * __dp < 1 ? 1 : 1 * __dp
   property real markerWidth: InputStyle.mapMarkerWidth
   property real markerHeight: InputStyle.mapMarkerHeight
   property real markerAnchorX: markerWidth / 2
   property real markerAnchorY: InputStyle.mapMarkerAnchorY
   property url markerImageSource: InputStyle.mapMarkerIcon
+  property url markerCircleIconSource: InputStyle.noIcon
 
   // for transformation of the highlight to the correct location on the map
   property QgsQuick.MapSettings mapSettings
@@ -57,10 +60,10 @@ Item {
 
   // properties used by markers (not able to use values directly from mapTransform
   // (no direct access to matrix no mapSettings' visible extent)
-  property real mapTransformScale: 1
-  property real mapTransformOffsetX: 0
-  property real mapTransformOffsetY: 0
-  property real displayDevicePixelRatio: 1
+  property real mapTransformScale: __inputUtils.mapSettingsScale(mapSettings)
+  property real mapTransformOffsetX: __inputUtils.mapSettingsOffsetX(mapSettings)
+  property real mapTransformOffsetY: __inputUtils.mapSettingsOffsetY(mapSettings)
+  property real displayDevicePixelRatio: __inputUtils.mapSettingsDPR( mapSettings )
 
   // Reference view settings used for transformation of coordinates (needed for lines and polygons).
   // We convert their coordinates to screen coordinates of the current view, and then as user pans/zooms
@@ -117,7 +120,22 @@ Item {
     {
       if ( geometryType === 0 ) // point
       {
-        newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[dataStartIndex], "posY": data[dataStartIndex + 1] } ) )
+        if ( data.length === 3 )
+        {
+          newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[dataStartIndex], "posY": data[dataStartIndex + 1] } ) )
+        }
+        else
+        {
+          let it = 0;
+          // this is multipoint [0, x1, y1, 0, x2, y2, 0, x3, y3, 0,..]
+          for ( it = dataStartIndex; it < data.length; it += 3 )
+          {
+            newMarkerItems.push( componentMarker.createObject( highlight, {
+                                                                "posX": data[it],
+                                                                "posY": data[it + 1]
+                                                              } ) )
+          }
+        }
       }
       else // line or polygon
       {
@@ -194,7 +212,7 @@ Item {
       height: highlight.markerHeight
 
       Rectangle {
-          visible: markerType == "circle"
+          visible: markerType === "circle"
           anchors {
             centerIn: parent
             verticalCenterOffset: highlight.markerOffsetY
@@ -205,8 +223,38 @@ Item {
           radius: width/2
       }
 
+      Rectangle {
+        visible: markerType === "circleWithIcon"
+
+        anchors {
+          centerIn: parent
+          verticalCenterOffset: highlight.markerOffsetY
+        }
+
+        width: markerCircleSize
+        height: markerCircleSize
+
+        color: highlight.markerColor
+
+        radius: width / 2
+
+        border.color: highlight.markerOutlineColor
+        border.width: highlight.markerOutlineWidth
+
+        Image {
+          anchors.centerIn: parent
+
+          source: highlight.markerCircleIconSource
+
+          width: parent.width - parent.width / 5
+          height: parent.height - parent.height / 5
+          sourceSize.width: width
+          sourceSize.height: height
+        }
+      }
+
       Image {
-          visible: markerType == "image"
+          visible: markerType === "image"
           anchors.fill: parent
           source: highlight.markerImageSource
           sourceSize.width: width
