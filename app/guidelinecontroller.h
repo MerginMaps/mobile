@@ -27,7 +27,7 @@ class GuidelineController : public QObject
     Q_PROPERTY( QPointF crosshairPosition READ crosshairPosition WRITE setCrosshairPosition NOTIFY crosshairPositionChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
-    Q_PROPERTY( QgsPoint name READ name WRITE setName NOTIFY nameChanged )
+    Q_PROPERTY( QgsVertexId activeVertexId READ activeVertexId WRITE setActiveVertexId NOTIFY activeVertexIdChanged )
 
     // output properties (real geometry + crosshair position ) in map CRS
     Q_PROPERTY( QgsGeometry guidelineGeometry READ guidelineGeometry WRITE setGuidelineGeometry NOTIFY guidelineGeometryChanged )
@@ -47,6 +47,9 @@ class GuidelineController : public QObject
     QgsQuickMapSettings *mapSettings() const;
     void setMapSettings( QgsQuickMapSettings *newMapSettings );
 
+    const QgsVertexId &activeVertexId() const;
+    void setActiveVertexId( const QgsVertexId &newActiveVertexId );
+
   signals:
 
     void guidelineGeometryChanged( const QgsGeometry &guidelineGeometry );
@@ -56,6 +59,8 @@ class GuidelineController : public QObject
 
     void mapSettingsChanged( QgsQuickMapSettings *mapSettings );
 
+    void activeVertexIdChanged( const QgsVertexId &activeVertexId );
+
   private:
     void buildGuideline();
 
@@ -63,6 +68,7 @@ class GuidelineController : public QObject
     QPointF mCrosshairPosition;
     QgsGeometry mRealGeometry;
     QgsQuickMapSettings *mMapSettings = nullptr; // not owned
+    QgsVertexId mActiveVertexId;
 };
 
 #endif // GUIDELINECONTROLLER_H
