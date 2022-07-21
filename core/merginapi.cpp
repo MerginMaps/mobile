@@ -426,7 +426,7 @@ void MerginApi::pushFile( const QString &projectFullName, const QString &transac
   }
 
   QNetworkRequest request = getDefaultRequest();
-  QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/chunk/%1/%2" ).arg( transactionUUID ).arg( chunkID ) );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/chunk/%1/%2" ).arg( transactionUUID, chunkID ) );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/octet-stream" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
@@ -1689,10 +1689,20 @@ void MerginApi::pushStartReplyFinished()
       CoreUtils::log( "Response:", data );
       CoreUtils::log( "JSON ERROR:", error.errorString() + error.error );
 
+      if ( transaction.transactionUUID.isEmpty() )
+      {
+        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Fail! Could not acquire transaction ID" ) );
+        finishProjectSync( projectFullName, false );
+      }
+
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Push request accepted. Transaction ID: " ) + transactionUUID );
 
       MerginFile file = files.first();
-      pushFile( projectFullName, transactionUUID, file );
+
+      QTimer::singleShot( 10000, this, [this, projectFullName, transactionUUID, file]()
+      {
+        pushFile( projectFullName, transactionUUID, file );
+      } );
       emit pushFilesStarted();
     }
     else  // pushing only files to be removed
