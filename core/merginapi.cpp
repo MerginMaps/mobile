@@ -1679,16 +1679,13 @@ void MerginApi::pushStartReplyFinished()
     if ( !files.isEmpty() )
     {
       QString transactionUUID;
-      QJsonParseError error;
-      QJsonDocument doc = QJsonDocument::fromJson( data, &error );
+      QJsonDocument doc = QJsonDocument::fromJson( data );
       if ( doc.isObject() )
       {
         QJsonObject docObj = doc.object();
         transactionUUID = docObj.value( QStringLiteral( "transaction" ) ).toString();
         transaction.transactionUUID = transactionUUID;
       }
-      CoreUtils::log( "Response:", data );
-      CoreUtils::log( "JSON ERROR:", error.errorString() + error.error );
 
       if ( transaction.transactionUUID.isEmpty() )
       {
@@ -1699,7 +1696,6 @@ void MerginApi::pushStartReplyFinished()
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Push request accepted. Transaction ID: " ) + transactionUUID );
 
       MerginFile file = files.first();
-
       pushFile( projectFullName, transactionUUID, file );
       emit pushFilesStarted();
     }
@@ -2539,16 +2535,6 @@ ProjectDiff MerginApi::compareProjectFiles(
 {
   ProjectDiff diff;
   QHash<QString, MerginFile> oldServerFilesMap, newServerFilesMap;
-
-  qDebug() << "--- \n old server files:";
-  foreach ( MerginFile f, oldServerFiles )
-    qDebug() << f.path;
-
-  qDebug() << "--- \n local files:";
-  foreach ( MerginFile f, localFiles )
-    qDebug() << f.path;
-
-  qDebug() << "---";
 
   for ( MerginFile file : newServerFiles )
   {
