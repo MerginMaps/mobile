@@ -2947,7 +2947,7 @@ void MerginApi::createPathIfNotExists( const QString &filePath )
 
 bool MerginApi::isInIgnore( const QFileInfo &info )
 {
-  return sIgnoreExtensions.contains( info.suffix() ) || sIgnoreFiles.contains( info.fileName() ) || info.filePath().startsWith( "/" + sMetadataFolder );
+  return sIgnoreExtensions.contains( info.suffix() ) || sIgnoreFiles.contains( info.fileName() ) || info.filePath().contains( sMetadataFolder + "/" );
 }
 
 bool MerginApi::excludeFromSync( const QString &filePath, const MerginConfig &config )
