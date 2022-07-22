@@ -477,6 +477,12 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static bool rescaleImage( const QString &path, QgsProject *activeProject );
 
+    /**
+     * Creates an empty geometry matching layer WKB type
+     */
+    Q_INVOKABLE static QgsGeometry createGeometryForLayer( QgsVectorLayer *layer );
+
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 

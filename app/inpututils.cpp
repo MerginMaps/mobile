@@ -33,6 +33,11 @@
 #include "qgslayertree.h"
 #include "qgsprojectviewsettings.h"
 #include "qgsvectorlayerutils.h"
+#include "qgslinestring.h"
+#include "qgspolygon.h"
+#include "qgsmultipoint.h"
+#include "qgsmultilinestring.h"
+#include "qgsmultipolygon.h"
 
 #include "featurelayerpair.h"
 #include "qgsquickmapsettings.h"
@@ -1728,4 +1733,65 @@ bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
 {
   int quality = activeProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoQuality" ), 0 );
   return ImageUtils::rescale( path, quality );
+}
+
+
+QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
+{
+  QgsGeometry geometry;
+
+  if ( !layer )
+  {
+    return geometry;
+  }
+
+  switch ( layer->wkbType() )
+  {
+    case QgsWkbTypes::Point:
+    {
+      QgsPoint *point = new QgsPoint();
+      geometry.set( point );
+      break;
+    }
+
+    case QgsWkbTypes::LineString:
+    {
+      QgsLineString *line = new QgsLineString();
+      geometry.set( line );
+      break;
+    }
+
+    case QgsWkbTypes::Polygon:
+    {
+      QgsPolygon *polygon = new QgsPolygon();
+      geometry.set( polygon );
+      break;
+    }
+
+    case QgsWkbTypes::MultiPoint:
+    {
+      QgsMultiPoint *multiPoint = new QgsMultiPoint();
+      geometry.set( multiPoint );
+      break;
+    }
+
+    case QgsWkbTypes::MultiLineString:
+    {
+      QgsMultiLineString *multiLine = new QgsMultiLineString();
+      geometry.set( multiLine );
+      break;
+    }
+
+    case QgsWkbTypes::MultiPolygon:
+    {
+      QgsMultiPolygon *multiPolygon = new QgsMultiPolygon();
+      geometry.set( multiPolygon );
+      break;
+    }
+
+    default:
+      break;
+  }
+
+  return geometry;
 }

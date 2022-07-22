@@ -155,13 +155,8 @@ class RecordingMapTool : public AbstractMapTool
     void onPositionChanged();
 
   protected:
-    //! Takes the captured points and builds a QgsGeometry from it, based on layer wkb type
-    void rebuildGeometry();
-
     //! Unifies Z coordinate of the point with current layer - drops / adds it
     void fixZ( QgsPoint &point ) const;
-
-    QVector<QgsPoint> mPoints;
 
   private:
     /**
