@@ -29,6 +29,7 @@
 #include <geodiff.h>
 
 const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" );
+const QString MerginApi::sMetadataFolder = QStringLiteral( ".mergin" );
 const QString MerginApi::sMerginConfigFile = QStringLiteral( "mergin-config.json" );
 const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://app.merginmaps.com/" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
@@ -2960,7 +2961,7 @@ void MerginApi::createPathIfNotExists( const QString &filePath )
 
 bool MerginApi::isInIgnore( const QFileInfo &info )
 {
-  return sIgnoreExtensions.contains( info.suffix() ) || sIgnoreFiles.contains( info.fileName() );
+  return sIgnoreExtensions.contains( info.suffix() ) || sIgnoreFiles.contains( info.fileName() ) || info.filePath().startsWith( "/" + sMetadataFolder );
 }
 
 bool MerginApi::excludeFromSync( const QString &filePath, const MerginConfig &config )
