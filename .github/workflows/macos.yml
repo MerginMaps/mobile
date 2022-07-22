@@ -27,7 +27,7 @@ concurrency:
 jobs:
   macos_build:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - name: Checkout Input
         uses: actions/checkout@v2

@@ -19,7 +19,7 @@ concurrency:
 jobs:
   android_build:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-10.15
+    runs-on: macos-11
     env:
       QT_VERSION: '5.14.2'
       ANDROIDAPI: 24
