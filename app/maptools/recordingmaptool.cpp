@@ -50,7 +50,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
   fixZ( pointToAdd );
 
   QgsVertexId id( 0, 0, 0 );
-  if ( mRecordedGeometry.wkbType() == QgsWkbTypes::Unknown )
+  if ( mRecordedGeometry.isEmpty() )
   {
     mRecordedGeometry = InputUtils::createGeometryForLayer( mLayer );
   }
@@ -61,17 +61,15 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
   mRecordedGeometry.get()->insertVertex( id, pointToAdd );
   emit recordedGeometryChanged( mRecordedGeometry );
-  //createNodesAndHandles();
 }
 
 void RecordingMapTool::removePoint()
 {
-  if ( !mRecordedGeometry.isEmpty() )
+  if ( mRecordedGeometry.constGet()->vertexCount() > 0 )
   {
     QgsVertexId id( 0, 0, mRecordedGeometry.constGet()->vertexCount() - 1 );
     mRecordedGeometry.get()->deleteVertex( id );
     emit recordedGeometryChanged( mRecordedGeometry );
-    //createNodesAndHandles();
   }
 }
 
@@ -150,7 +148,6 @@ void RecordingMapTool::onPositionChanged()
       QgsVertexId id( 0, 0, mRecordedGeometry.constGet()->vertexCount() - 1 );
       mRecordedGeometry.get()->moveVertex( id, p );
       emit recordedGeometryChanged( mRecordedGeometry );
-      //createNodesAndHandles();
     }
   }
 }
@@ -242,7 +239,6 @@ void RecordingMapTool::setRecordedGeometry( const QgsGeometry &newRecordedGeomet
   if ( mRecordedGeometry.equals( newRecordedGeometry ) )
     return;
   mRecordedGeometry = newRecordedGeometry;
-  createNodesAndHandles();
   emit recordedGeometryChanged( mRecordedGeometry );
 }
 
@@ -259,7 +255,6 @@ void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry
   mInitialGeometry = newInitialGeometry;
 
   setRecordedGeometry( newInitialGeometry );
-  createNodesAndHandles();
 
   emit initialGeometryChanged( mInitialGeometry );
 }
@@ -412,6 +407,17 @@ void RecordingMapTool::setClickedVertexId( QgsVertexId newId )
   emit clickedVertexIdChanged( mClickedVertexId );
 }
 
+QgsPoint &RecordingMapTool::clickedPoint()
+{
+  return mClickedPoint;
+}
+
+void RecordingMapTool::setClickedPoint( QgsPoint newPoint )
+{
+  mClickedPoint = newPoint;
+  emit clickedPointChanged( mClickedPoint );
+}
+
 void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double searchRadius )
 {
   double minDistance = std::numeric_limits<double>::max();
@@ -436,10 +442,12 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
       vertexId.part = pair.first.part;
       vertexId.ring = pair.first.ring;
       vertexId.vertex = pair.first.vertex;
+      point = pair.second;
     }
   }
 
   setClickedVertexId( vertexId );
+  setClickedPoint( point );
 }
 
 void RecordingMapTool::removeVertex()

@@ -1763,7 +1763,8 @@ QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
 
     case QgsWkbTypes::Polygon:
     {
-      QgsPolygon *polygon = new QgsPolygon();
+      QgsLineString *line = new QgsLineString();
+      QgsPolygon *polygon = new QgsPolygon( line );
       geometry.set( polygon );
       break;
     }

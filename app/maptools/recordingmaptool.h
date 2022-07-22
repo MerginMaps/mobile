@@ -43,6 +43,7 @@ class RecordingMapTool : public AbstractMapTool
 
     Q_PROPERTY( QString state READ state WRITE setState NOTIFY stateChanged )
     Q_PROPERTY( QgsVertexId clickedVertexId READ clickedVertexId WRITE setClickedVertexId NOTIFY clickedVertexIdChanged )
+    Q_PROPERTY( QgsPoint clickedPoint READ clickedPoint WRITE setClickedPoint NOTIFY clickedPointChanged )
 
   public:
 
@@ -131,6 +132,9 @@ class RecordingMapTool : public AbstractMapTool
     QgsVertexId &clickedVertexId();
     void setClickedVertexId( QgsVertexId newId );
 
+    QgsPoint &clickedPoint();
+    void setClickedPoint( QgsPoint newPoint );
+
   signals:
     void layerChanged( QgsVectorLayer *layer );
     void centeredToGPSChanged( bool centeredToGPS );
@@ -150,6 +154,7 @@ class RecordingMapTool : public AbstractMapTool
     void stateChanged( const QString &state );
 
     void clickedVertexIdChanged( QgsVertexId id );
+    void clickedPointChanged( QgsPoint point );
 
   public slots:
     void onPositionChanged();
@@ -183,6 +188,7 @@ class RecordingMapTool : public AbstractMapTool
     QString mState = "view";
     QVector< QPair<QgsVertexId, QgsPoint> > mVertexIds;
     QgsVertexId mClickedVertexId;
+    QgsPoint mClickedPoint;
 };
 
 #endif // RECORDINGMAPTOOL_H

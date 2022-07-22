@@ -75,6 +75,13 @@ Item {
 
     // Bind variables manager to know if we are centered to GPS or not when evaluating position variables
     onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition
+
+    onClickedVertexIdChanged: {
+      if ( mapTool.clickedVertexId.isValid() )
+      {
+        root.map.mapSettings.setCenter( mapTool.clickedPoint );
+      }
+    }
   }
 
   GuidelineController {
