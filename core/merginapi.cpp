@@ -2539,6 +2539,16 @@ ProjectDiff MerginApi::compareProjectFiles(
   ProjectDiff diff;
   QHash<QString, MerginFile> oldServerFilesMap, newServerFilesMap;
 
+  qDebug() << "--- \n old server files:";
+  foreach ( MerginFile f, oldServerFiles )
+    qDebug() << f.path;
+
+  qDebug() << "--- \n local files:";
+  foreach ( MerginFile f, localFiles )
+    qDebug() << f.path;
+
+  qDebug() << "---";
+
   for ( MerginFile file : newServerFiles )
   {
     newServerFilesMap.insert( file.path, file );
