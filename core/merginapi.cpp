@@ -1699,10 +1699,7 @@ void MerginApi::pushStartReplyFinished()
 
       MerginFile file = files.first();
 
-      QTimer::singleShot( 10000, this, [this, projectFullName, transactionUUID, file]()
-      {
-        pushFile( projectFullName, transactionUUID, file );
-      } );
+      pushFile( projectFullName, transactionUUID, file );
       emit pushFilesStarted();
     }
     else  // pushing only files to be removed
@@ -1788,10 +1785,7 @@ void MerginApi::pushFileReplyFinished()
     int chunkNo = currentFile.chunks.indexOf( chunkID );
     if ( chunkNo < currentFile.chunks.size() - 1 )
     {
-      QTimer::singleShot( 10000, this, [this, projectFullName, transactionUUID, currentFile, chunkNo]()
-      {
-        pushFile( projectFullName, transactionUUID, currentFile, chunkNo + 1 );
-      } );
+      pushFile( projectFullName, transactionUUID, currentFile, chunkNo + 1 );
     }
     else
     {
@@ -1803,17 +1797,11 @@ void MerginApi::pushFileReplyFinished()
       if ( !transaction.pushQueue.isEmpty() )
       {
         MerginFile nextFile = transaction.pushQueue.first();
-        QTimer::singleShot( 10000, this, [this, projectFullName, transactionUUID, nextFile]()
-        {
-          pushFile( projectFullName, transactionUUID, nextFile );
-        } );
+        pushFile( projectFullName, transactionUUID, nextFile );
       }
       else
       {
-        QTimer::singleShot( 10000, this, [this, projectFullName, transactionUUID]()
-        {
-          pushFinish( projectFullName, transactionUUID );
-        } );
+        pushFinish( projectFullName, transactionUUID );
       }
     }
   }
