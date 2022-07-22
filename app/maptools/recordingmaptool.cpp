@@ -279,6 +279,9 @@ void RecordingMapTool::createNodesAndHandles()
 
   if ( mRecordedGeometry.isEmpty() )
   {
+    emit existingVerticesChanged( mExistingVertices );
+    emit midPointsChanged( mMidPoints );
+    emit handlesChanged( mHandles );
     return;
   }
 
