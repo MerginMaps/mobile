@@ -59,6 +59,26 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     id.vertex = mRecordedGeometry.constGet()->vertexCount();
   }
 
+  if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+  {
+    // if it is a polygon and ring is not correctly defined yet (e.g. only
+    // contains 1 point or not closed) we add point directly to the ring
+    // and close it
+    QgsLineString *r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->exteriorRing() );
+    if ( r->nCoordinates() < 2 )
+    {
+      r->addVertex( pointToAdd );
+      r->close();
+      emit recordedGeometryChanged( mRecordedGeometry );
+      return;
+    }
+    else
+    {
+      // as rings are closed, we need to insert before last vertex
+      id.vertex = mRecordedGeometry.constGet()->vertexCount() - 1;
+    }
+  }
+
   mRecordedGeometry.get()->insertVertex( id, pointToAdd );
   emit recordedGeometryChanged( mRecordedGeometry );
 }
