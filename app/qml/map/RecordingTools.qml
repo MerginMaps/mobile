@@ -75,6 +75,13 @@ Item {
 
     // Bind variables manager to know if we are centered to GPS or not when evaluating position variables
     onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition
+
+    onClickedVertexIdChanged: {
+      if ( mapTool.clickedVertexId.isValid() )
+      {
+        root.map.mapSettings.setCenter( mapTool.clickedPoint );
+      }
+    }
   }
 
   GuidelineController {
@@ -209,6 +216,10 @@ Item {
       }
     }
 
+    onReleaseClicked: {
+      // TODO
+    }
+
     onRemovePointClicked: mapTool.removePoint()
 
     onDoneClicked: {
@@ -247,8 +258,7 @@ Item {
     function onClicked( point ) {
       let screenPoint = Qt.point( point.x, point.y )
 
-      // TODO: pass the screenpoint to RecordingMapTool
-      // mapTool.lookForVertex( screenPoint )
+      mapTool.lookForVertex( screenPoint )
     }
   }
 

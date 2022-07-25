@@ -22,6 +22,7 @@
 RecordingMapTool::RecordingMapTool( QObject *parent )
   : AbstractMapTool{parent}
 {
+  connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::createNodesAndHandles );
 }
 
 RecordingMapTool::~RecordingMapTool() = default;
@@ -48,16 +49,27 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
   fixZ( pointToAdd );
 
-  mPoints.push_back( pointToAdd );
-  rebuildGeometry();
+  QgsVertexId id( 0, 0, 0 );
+  if ( mRecordedGeometry.isEmpty() )
+  {
+    mRecordedGeometry = InputUtils::createGeometryForLayer( mLayer );
+  }
+  else
+  {
+    id.vertex = mRecordedGeometry.constGet()->vertexCount();
+  }
+
+  mRecordedGeometry.get()->insertVertex( id, pointToAdd );
+  emit recordedGeometryChanged( mRecordedGeometry );
 }
 
 void RecordingMapTool::removePoint()
 {
-  if ( !mPoints.isEmpty() )
+  if ( mRecordedGeometry.constGet()->vertexCount() > 0 )
   {
-    mPoints.pop_back();
-    rebuildGeometry();
+    QgsVertexId id( 0, 0, mRecordedGeometry.constGet()->vertexCount() - 1 );
+    mRecordedGeometry.get()->deleteVertex( id );
+    emit recordedGeometryChanged( mRecordedGeometry );
   }
 }
 
@@ -67,52 +79,18 @@ bool RecordingMapTool::hasValidGeometry() const
   {
     if ( mLayer->geometryType() == QgsWkbTypes::PointGeometry )
     {
-      return mPoints.count() == 1;
+      return mRecordedGeometry.constGet()->nCoordinates() == 1;
     }
     else if ( mLayer->geometryType() == QgsWkbTypes::LineGeometry )
     {
-      return mPoints.count() >= 2;
+      return mRecordedGeometry.constGet()->nCoordinates() >= 2;
     }
     else if ( mLayer->geometryType() == QgsWkbTypes::PolygonGeometry )
     {
-      return mPoints.count() >= 3;
+      return mRecordedGeometry.constGet()->nCoordinates() >= 3;
     }
   }
   return false;
-}
-
-void RecordingMapTool::rebuildGeometry()
-{
-  if ( !mLayer )
-    return;
-
-  QgsGeometry geometry;
-
-  if ( mPoints.count() < 1 )
-  {
-    // pass
-  }
-  else if ( mLayer->geometryType() == QgsWkbTypes::PointGeometry )
-  {
-    geometry = QgsGeometry( mPoints[0].clone() );
-  }
-  else if ( mLayer->geometryType() == QgsWkbTypes::LineGeometry )
-  {
-    geometry = QgsGeometry::fromPolyline( mPoints );
-  }
-  else if ( mLayer->geometryType() == QgsWkbTypes::PolygonGeometry )
-  {
-    QgsLineString *linestring = new QgsLineString;
-
-    Q_FOREACH ( const QgsPoint &pt, mPoints )
-      linestring->addVertex( pt );
-
-    QgsPolygon *polygon = new QgsPolygon();
-    polygon->setExteriorRing( linestring );
-    geometry = QgsGeometry( polygon );
-  }
-
-  setRecordedGeometry( geometry );
 }
 
 void RecordingMapTool::fixZ( QgsPoint &point ) const
@@ -154,7 +132,7 @@ void RecordingMapTool::onPositionChanged()
   }
   else
   {
-    if ( !mPoints.isEmpty() )
+    if ( !mRecordedGeometry.isEmpty() )
     {
       // update the last point of the geometry
       // so that it is placed on user's current position
@@ -166,12 +144,10 @@ void RecordingMapTool::onPositionChanged()
                                  mLayer->transformContext(),
                                  position
                                );
-
-      mPoints.last().setX( transformed.x() );
-      mPoints.last().setY( transformed.y() );
-      mPoints.last().setZ( position.z() );
-
-      rebuildGeometry();
+      QgsPoint p( transformed.x(), transformed.y(), position.z() );
+      QgsVertexId id( 0, 0, mRecordedGeometry.constGet()->vertexCount() - 1 );
+      mRecordedGeometry.get()->moveVertex( id, p );
+      emit recordedGeometryChanged( mRecordedGeometry );
     }
   }
 }
@@ -250,8 +226,7 @@ void RecordingMapTool::setLayer( QgsVectorLayer *newLayer )
   emit layerChanged( mLayer );
 
   // we need to clear all recorded points and recalculate the geometry
-  mPoints.clear();
-  rebuildGeometry();
+  setRecordedGeometry( QgsGeometry() );
 }
 
 const QgsGeometry &RecordingMapTool::recordedGeometry() const
@@ -279,14 +254,7 @@ void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry
 
   mInitialGeometry = newInitialGeometry;
 
-  mPoints.clear();
-  for ( auto pointIt = mInitialGeometry.vertices_begin(); pointIt != mInitialGeometry.vertices_end(); ++pointIt )
-  {
-    mPoints.push_back( QgsPoint( *pointIt ) );
-  }
-
-  rebuildGeometry();
-  createNodesAndHandles();
+  setRecordedGeometry( newInitialGeometry );
 
   emit initialGeometryChanged( mInitialGeometry );
 }
@@ -294,10 +262,6 @@ void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry
 void RecordingMapTool::createNodesAndHandles()
 {
   mVertexIds.clear();
-
-  QgsPoint vertex;
-  QgsVertexId vertexId;
-  const QgsAbstractGeometry *geom = mRecordedGeometry.constGet();
 
   QgsMultiPoint *existingVertices = new QgsMultiPoint();
   mExistingVertices.set( existingVertices );
@@ -307,6 +271,18 @@ void RecordingMapTool::createNodesAndHandles()
 
   QgsMultiLineString *handles = new QgsMultiLineString();
   mHandles.set( handles );
+
+  if ( mRecordedGeometry.isEmpty() )
+  {
+    emit existingVerticesChanged( mExistingVertices );
+    emit midPointsChanged( mMidPoints );
+    emit handlesChanged( mHandles );
+    return;
+  }
+
+  QgsPoint vertex;
+  QgsVertexId vertexId;
+  const QgsAbstractGeometry *geom = mRecordedGeometry.constGet();
 
   int currentPart = -1;
   int currentRing = -1;
@@ -431,6 +407,17 @@ void RecordingMapTool::setClickedVertexId( QgsVertexId newId )
   emit clickedVertexIdChanged( mClickedVertexId );
 }
 
+QgsPoint &RecordingMapTool::clickedPoint()
+{
+  return mClickedPoint;
+}
+
+void RecordingMapTool::setClickedPoint( QgsPoint newPoint )
+{
+  mClickedPoint = newPoint;
+  emit clickedPointChanged( mClickedPoint );
+}
+
 void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double searchRadius )
 {
   double minDistance = std::numeric_limits<double>::max();
@@ -455,41 +442,43 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
       vertexId.part = pair.first.part;
       vertexId.ring = pair.first.ring;
       vertexId.vertex = pair.first.vertex;
+      point = pair.second;
     }
   }
 
   setClickedVertexId( vertexId );
+  setClickedPoint( point );
 }
 
-void RecordingMapTool::removeVertex( QgsVertexId id )
+void RecordingMapTool::removeVertex()
 {
-  QgsGeometry geometry;
-  QgsAbstractGeometry *geom = mRecordedGeometry.get()->clone();
+  if ( !mClickedVertexId.isValid() )
+  {
+    return;
+  }
 
-  if ( geom->deleteVertex( id ) )
-    geometry.set( geom );
-
-  setRecordedGeometry( geometry );
+  if ( mRecordedGeometry.get()->deleteVertex( mClickedVertexId ) )
+    emit recordedGeometryChanged( mRecordedGeometry );
 }
 
-void RecordingMapTool::insertVertex( QgsVertexId id, const QgsPoint &point )
+void RecordingMapTool::insertVertex( const QgsPoint &point )
 {
-  QgsGeometry geometry;
-  QgsAbstractGeometry *geom = mRecordedGeometry.get()->clone();
+  if ( !mClickedVertexId.isValid() )
+  {
+    return;
+  }
 
-  if ( geom->insertVertex( id, point ) )
-    geometry.set( geom );
-
-  setRecordedGeometry( geometry );
+  if ( mRecordedGeometry.get()->insertVertex( mClickedVertexId, point ) )
+    emit recordedGeometryChanged( mRecordedGeometry );
 }
 
-void RecordingMapTool::updateVertex( QgsVertexId id, const QgsPoint &point )
+void RecordingMapTool::updateVertex( const QgsPoint &point )
 {
-  QgsGeometry geometry;
-  QgsAbstractGeometry *geom = mRecordedGeometry.get()->clone();
+  if ( !mClickedVertexId.isValid() )
+  {
+    return;
+  }
 
-  if ( geom->moveVertex( id, point ) )
-    geometry.set( geom );
-
-  setRecordedGeometry( geometry );
+  if ( mRecordedGeometry.get()->moveVertex( mClickedVertexId, point ) )
+    emit recordedGeometryChanged( mRecordedGeometry );
 }

@@ -43,6 +43,7 @@ class RecordingMapTool : public AbstractMapTool
 
     Q_PROPERTY( QString state READ state WRITE setState NOTIFY stateChanged )
     Q_PROPERTY( QgsVertexId clickedVertexId READ clickedVertexId WRITE setClickedVertexId NOTIFY clickedVertexIdChanged )
+    Q_PROPERTY( QgsPoint clickedPoint READ clickedPoint WRITE setClickedPoint NOTIFY clickedPointChanged )
 
   public:
 
@@ -77,19 +78,21 @@ class RecordingMapTool : public AbstractMapTool
     Q_INVOKABLE void lookForVertex( const QPointF &clickedPoint, double searchRadius = 0.001 );
 
     /**
-     *  Removes vertex with given id from the geometry and updates recordedGeometry
+     * Removes vertex with given id from the geometry and updates recordedGeometry
      */
-    Q_INVOKABLE void removeVertex( QgsVertexId id );
+    Q_INVOKABLE void removeVertex();
 
     /**
-     *  Inserts new vertex at the given position and updates recordedGeometry
+     * Inserts new vertex at the active vertex position and updates recordedGeometry
+     * Passed point needs to be in active vector layer CRS
      */
-    Q_INVOKABLE void insertVertex( QgsVertexId id, const QgsPoint &point );
+    Q_INVOKABLE void insertVertex( const QgsPoint &point );
 
     /**
-     *  Updates vertex at the given position and updates recordedGeometry
+     * Updates vertex at the active vertex position and updates recordedGeometry
+     * Passed point needs to be in active vector layer CRS
      */
-    Q_INVOKABLE void updateVertex( QgsVertexId id, const QgsPoint &point );
+    Q_INVOKABLE void updateVertex( const QgsPoint &point );
 
     // Getters / setters
     bool centeredToGPS() const;
@@ -129,6 +132,9 @@ class RecordingMapTool : public AbstractMapTool
     QgsVertexId &clickedVertexId();
     void setClickedVertexId( QgsVertexId newId );
 
+    QgsPoint &clickedPoint();
+    void setClickedPoint( QgsPoint newPoint );
+
   signals:
     void layerChanged( QgsVectorLayer *layer );
     void centeredToGPSChanged( bool centeredToGPS );
@@ -148,18 +154,14 @@ class RecordingMapTool : public AbstractMapTool
     void stateChanged( const QString &state );
 
     void clickedVertexIdChanged( QgsVertexId id );
+    void clickedPointChanged( QgsPoint point );
 
   public slots:
     void onPositionChanged();
 
   protected:
-    //! Takes the captured points and builds a QgsGeometry from it, based on layer wkb type
-    void rebuildGeometry();
-
     //! Unifies Z coordinate of the point with current layer - drops / adds it
     void fixZ( QgsPoint &point ) const;
-
-    QVector<QgsPoint> mPoints;
 
   private:
     /**
@@ -186,6 +188,7 @@ class RecordingMapTool : public AbstractMapTool
     QString mState = "view";
     QVector< QPair<QgsVertexId, QgsPoint> > mVertexIds;
     QgsVertexId mClickedVertexId;
+    QgsPoint mClickedPoint;
 };
 
 #endif // RECORDINGMAPTOOL_H
