@@ -22,6 +22,13 @@ class PositionKit;
 class VariablesManager;
 class QgsVectorLayer;
 
+struct Vertex
+{
+  QgsVertexId id;
+  QgsPoint point;
+  bool isVirtual;
+};
+
 class RecordingMapTool : public AbstractMapTool
 {
     Q_OBJECT
@@ -186,7 +193,7 @@ class RecordingMapTool : public AbstractMapTool
     QgsGeometry mHandles;
 
     QString mState = "view";
-    QVector< QPair<QgsVertexId, QgsPoint> > mVertexIds;
+    QVector< Vertex > mVertices;
     QgsVertexId mClickedVertexId;
     QgsPoint mClickedPoint;
 };

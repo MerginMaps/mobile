@@ -261,7 +261,7 @@ void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry
 
 void RecordingMapTool::createNodesAndHandles()
 {
-  mVertexIds.clear();
+  mVertices.clear();
 
   QgsMultiPoint *existingVertices = new QgsMultiPoint();
   mExistingVertices.set( existingVertices );
@@ -290,7 +290,11 @@ void RecordingMapTool::createNodesAndHandles()
   while ( geom->nextVertex( vertexId, vertex ) )
   {
     existingVertices->addGeometry( vertex.clone() );
-    mVertexIds.push_back( qMakePair( vertexId, vertex ) );
+    Vertex v;
+    v.id = vertexId;
+    v.point = vertex;
+    v.isVirtual = false;
+    mVertices.push_back( v );
 
     // for lines and polygons create midpoints
     if ( mRecordedGeometry.type() != QgsWkbTypes::PointGeometry && vertexId.vertex < geom->vertexCount( vertexId.part, vertexId.ring ) - 1 )
@@ -298,7 +302,11 @@ void RecordingMapTool::createNodesAndHandles()
       QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
       QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
       midPoints->addGeometry( midPoint.clone() );
-      mVertexIds.push_back( qMakePair( id, midPoint ) );
+      Vertex v;
+      v.id = id;
+      v.point = midPoint;
+      v.isVirtual = true;
+      mVertices.push_back( v );
     }
 
     // for lines also create start/end points and handles
@@ -313,7 +321,11 @@ void RecordingMapTool::createNodesAndHandles()
         QgsPoint point = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -0.1 );
 
         midPoints->addGeometry( point.clone() );
-        mVertexIds.push_back( qMakePair( startId, point ) );
+        Vertex vStart;
+        vStart.id = startId;
+        vStart.point = point;
+        vStart.isVirtual = true;
+        mVertices.push_back( vStart );
 
         QgsLineString handle( point, geom->vertexAt( startId ) );
         handles->addGeometry( handle.clone() );
@@ -328,7 +340,11 @@ void RecordingMapTool::createNodesAndHandles()
 
         midPoints->addGeometry( point.clone() );
         endId.vertex = vertexCount;
-        mVertexIds.push_back( qMakePair( endId, point ) );
+        Vertex vEnd;
+        vEnd.id = endId;
+        vEnd.point = point;
+        vEnd.isVirtual = true;
+        mVertices.push_back( vEnd );
       }
       currentPart = vertexId.part;
       currentRing = vertexId.ring;
@@ -433,16 +449,16 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     return;
   }
 
-  for ( QPair<QgsVertexId, QgsPoint> pair : mVertexIds )
+  for ( int i = 0; i < mVertices.count(); i++ )
   {
-    currentDistance = QgsGeometryUtils::sqrDistance2D( pnt, pair.second );
+    currentDistance = QgsGeometryUtils::sqrDistance2D( pnt, mVertices.at( i ).point );
     if ( currentDistance <= minDistance && currentDistance <= searchRadius )
     {
       minDistance = currentDistance;
-      vertexId.part = pair.first.part;
-      vertexId.ring = pair.first.ring;
-      vertexId.vertex = pair.first.vertex;
-      point = pair.second;
+      vertexId.part = mVertices.at( i ).id.part;
+      vertexId.ring = mVertices.at( i ).id.ring;
+      vertexId.vertex = mVertices.at( i ).id.vertex;
+      point = mVertices.at( i ).point;
     }
   }
 
