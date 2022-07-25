@@ -31,7 +31,7 @@ jobs:
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
-      CACHE_VERSION: 1
+      CACHE_VERSION: 2
 
     steps:
       - uses: actions/checkout@v2

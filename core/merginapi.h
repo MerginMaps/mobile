@@ -335,6 +335,7 @@ class MerginApi: public QObject
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const QString sMetadataFile;
+    static const QString sMetadataFolder;
     static const QString sMerginConfigFile;
     static const QString sDefaultApiRoot;
 
@@ -406,7 +407,7 @@ class MerginApi: public QObject
     QString apiRoot() const;
     void setApiRoot( const QString &apiRoot );
 
-    QString merginUserName() const; // TODO: replace (can be replaced with userInfo->username)
+    QString merginUserName() const;
 
     MerginApiStatus::VersionStatus apiVersionStatus() const;
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
@@ -414,6 +415,7 @@ class MerginApi: public QObject
     //! Returns details about currently active transactions (both push and pull). Useful for tests
     Transactions transactions() const { return mTransactionalStatus; }
 
+    // Returns true for files that are under .mergin folder or contains ignored extension from sIgnoreExtensions
     static bool isInIgnore( const QFileInfo &info );
 
     /**

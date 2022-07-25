@@ -29,6 +29,7 @@
 #include <geodiff.h>
 
 const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" );
+const QString MerginApi::sMetadataFolder = QStringLiteral( ".mergin" );
 const QString MerginApi::sMerginConfigFile = QStringLiteral( "mergin-config.json" );
 const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://app.merginmaps.com/" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
@@ -426,7 +427,7 @@ void MerginApi::pushFile( const QString &projectFullName, const QString &transac
   }
 
   QNetworkRequest request = getDefaultRequest();
-  QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/chunk/%1/%2" ).arg( transactionUUID ).arg( chunkID ) );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/chunk/%1/%2" ).arg( transactionUUID, chunkID ) );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/octet-stream" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
@@ -1686,6 +1687,12 @@ void MerginApi::pushStartReplyFinished()
         transaction.transactionUUID = transactionUUID;
       }
 
+      if ( transaction.transactionUUID.isEmpty() )
+      {
+        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Fail! Could not acquire transaction ID" ) );
+        finishProjectSync( projectFullName, false );
+      }
+
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Push request accepted. Transaction ID: " ) + transactionUUID );
 
       MerginFile file = files.first();
@@ -2940,7 +2947,7 @@ void MerginApi::createPathIfNotExists( const QString &filePath )
 
 bool MerginApi::isInIgnore( const QFileInfo &info )
 {
-  return sIgnoreExtensions.contains( info.suffix() ) || sIgnoreFiles.contains( info.fileName() );
+  return sIgnoreExtensions.contains( info.suffix() ) || sIgnoreFiles.contains( info.fileName() ) || info.filePath().contains( sMetadataFolder + "/" );
 }
 
 bool MerginApi::excludeFromSync( const QString &filePath, const MerginConfig &config )
