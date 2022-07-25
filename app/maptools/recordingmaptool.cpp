@@ -440,6 +440,7 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   double currentDistance = 0;
   QgsPoint point;
   QgsVertexId vertexId;
+  bool isVirtual;
 
   QgsPoint pnt = mapSettings()->screenToCoordinate( clickedPoint );
 
@@ -459,9 +460,11 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
       vertexId.ring = mVertices.at( i ).id.ring;
       vertexId.vertex = mVertices.at( i ).id.vertex;
       point = mVertices.at( i ).point;
+      isVirtual = mVertices.at( i ).isVirtual;
     }
   }
 
+  setState( isVirtual ? QStringLiteral( "create" ) : QStringLiteral( "update" ) );
   setClickedVertexId( vertexId );
   setClickedPoint( point );
 }
