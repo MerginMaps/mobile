@@ -66,6 +66,11 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     // and close it
     QgsLineString *r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->exteriorRing() );
 
+    if ( !r )
+    {
+      return;
+    }
+
     if ( r->nCoordinates() < 2 )
     {
       r->addVertex( pointToAdd );
@@ -92,6 +97,11 @@ void RecordingMapTool::removePoint()
     if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
     {
       QgsLineString *r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->exteriorRing() );
+      if ( !r )
+      {
+        return;
+      }
+
       if ( r->nCoordinates() == 4 )
       {
         // this is the smallest possible closed ring (first and last vertex are equal),
