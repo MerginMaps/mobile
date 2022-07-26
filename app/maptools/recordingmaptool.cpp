@@ -36,12 +36,12 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     // we want to use GPS point here instead of the point from map
     pointToAdd = mPositionKit->positionCoordinate();
 
-    QgsPointXY transformed = InputUtils::transformPoint(
-                               PositionKit::positionCRS(),
-                               mLayer->sourceCrs(),
-                               mLayer->transformContext(),
-                               pointToAdd
-                             );
+    QgsPoint transformed = InputUtils::transformPoint(
+                             PositionKit::positionCRS(),
+                             mLayer->sourceCrs(),
+                             mLayer->transformContext(),
+                             pointToAdd
+                           );
 
     pointToAdd.setX( transformed.x() );
     pointToAdd.setY( transformed.y() );
@@ -435,8 +435,6 @@ QgsVertexId &RecordingMapTool::clickedVertexId()
 
 void RecordingMapTool::setClickedVertexId( QgsVertexId newId )
 {
-  if ( mClickedVertexId == newId )
-    return;
   mClickedVertexId.part = newId.part;
   mClickedVertexId.ring = newId.ring;
   mClickedVertexId.vertex = newId.vertex;
@@ -463,10 +461,13 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   bool isVirtual;
 
   QgsPoint pnt = mapSettings()->screenToCoordinate( clickedPoint );
+  pnt = InputUtils::transformPoint( mapSettings()->destinationCrs(), mLayer->crs(), mLayer->transformContext(), pnt );
 
   if ( mRecordedGeometry.isEmpty() )
   {
+    setState( QStringLiteral( "view" ) );
     setClickedVertexId( vertexId );
+    setClickedPoint( point );
     return;
   }
 

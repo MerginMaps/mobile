@@ -31,6 +31,7 @@ Item {
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
     property bool manualRecording: false
+    property string toolMode: "view"
 
     property int itemSize: rowHeight * 0.8
     property int rowHeight: InputStyle.rowHeightHeader
@@ -101,6 +102,7 @@ Item {
         Item {
             height: parent.height
             Layout.fillWidth: true
+            visible: root.toolMode == "view" || root.toolMode == "create"
 
             MainPanelButton {
                 id: addButton
@@ -116,7 +118,7 @@ Item {
         Item {
             height: parent.height
             Layout.fillWidth: true
-            visible: false
+            visible: root.toolMode == "update"
 
             MainPanelButton {
                 id: releaseButton

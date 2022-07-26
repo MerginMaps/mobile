@@ -77,7 +77,7 @@ Item {
     onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition
 
     onClickedVertexIdChanged: {
-      if ( mapTool.clickedVertexId.isValid() )
+      if ( mapTool.clickedPoint.isValid )
       {
         root.map.mapSettings.setCenter( mapTool.clickedPoint );
       }
@@ -258,7 +258,7 @@ Item {
     function onClicked( point ) {
       let screenPoint = Qt.point( point.x, point.y )
 
-      mapTool.lookForVertex( screenPoint )
+      mapTool.lookForVertex( screenPoint, 0.01 )
     }
   }
 
