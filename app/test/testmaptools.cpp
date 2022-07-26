@@ -231,7 +231,7 @@ void TestMapTools::testRecording()
   recordTool->addPoint( pointsToAdd[0] );
   recordTool->addPoint( pointsToAdd[1] );
 
-  QVERIFY( !recordTool->hasValidGeometry() );
+  QVERIFY( recordTool->hasValidGeometry() );
 
   recordTool->addPoint( pointsToAdd[2] );
 
@@ -405,7 +405,8 @@ void TestMapTools::testLookForVertex()
 
   QgsQuickMapCanvasMap canvas;
   QgsQuickMapSettings *ms = canvas.mapSettings();
-  ms->setDestinationCrs( QgsCoordinateReferenceSystem( QStringLiteral( "EPSG:4326" ) ) );
+  ms->setProject( project );
+  ms->setDestinationCrs( project->crs() );
 
   RecordingMapTool *mapTool = new RecordingMapTool();
   mapTool->setMapSettings( ms );
