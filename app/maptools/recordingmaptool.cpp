@@ -485,9 +485,17 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     }
   }
 
-  setState( isVirtual ? QStringLiteral( "create" ) : QStringLiteral( "update" ) );
+  if ( vertexId.isValid() )
+  {
+    setState( isVirtual ? QStringLiteral( "create" ) : QStringLiteral( "update" ) );
+    // convert point to map coordinates so we can center map
+    setClickedPoint( InputUtils::transformPoint( mLayer->crs(), mapSettings()->destinationCrs(), mLayer->transformContext(), point ) );
+  }
+  else
+  {
+    setState( QStringLiteral( "view" ) );
+  }
   setClickedVertexId( vertexId );
-  setClickedPoint( point );
 }
 
 void RecordingMapTool::removeVertex()
