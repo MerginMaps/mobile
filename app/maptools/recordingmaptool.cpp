@@ -510,6 +510,9 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     vertexId.part = mVertices.at( idx ).id.part;
     vertexId.ring = mVertices.at( idx ).id.ring;
     vertexId.vertex = mVertices.at( idx ).id.vertex;
+
+    // TODO: CREATE THIS POINT IF VIRTUAL
+
     setState( mVertices.at( idx ).isVirtual ? QStringLiteral( "create" ) : QStringLiteral( "update" ) );
     // convert point to map coordinates so we can center map
     setClickedPoint( InputUtils::transformPoint( mLayer->crs(), mapSettings()->destinationCrs(), mLayer->transformContext(), mVertices.at( idx ).point ) );

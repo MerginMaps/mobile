@@ -99,7 +99,11 @@ Item {
     height: root.map.height
     width: root.map.width
 
+//    TODO: visible: mapTool.state !== "view"
+
     lineColor: InputStyle.guidelineColor
+
+    lineStrokeStyle: ShapePath.DashLine
 
     mapSettings: root.map.mapSettings
     geometry: guidelineController.guidelineGeometry
@@ -162,6 +166,8 @@ Item {
     id: crosshair
 
     anchors.fill: parent
+
+//  TODO:  visible: mapTool.state !== "view"
 
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
@@ -261,6 +267,7 @@ Item {
     function onClicked( point ) {
       let screenPoint = Qt.point( point.x, point.y )
 
+//    TODO:  mapTool.release()
       mapTool.lookForVertex( screenPoint )
     }
   }

@@ -68,13 +68,13 @@ class RecordingMapTool : public AbstractMapTool
      * Adds point to the end of the recorded geometry; updates recordedGeometry afterwards
      * Passed point needs to be in active vector layer CRS
      */
-    Q_INVOKABLE void addPoint( const QgsPoint &point );
+    Q_INVOKABLE void addPoint( const QgsPoint &point ); // TODO: unify
 
     /**
      *  Removes last point from recorded geometry if there is at least one point
      *  Updates recordedGeometry afterwards
      */
-    Q_INVOKABLE void removePoint();
+    Q_INVOKABLE void removePoint(); // TODO: unify
 
     //! Returns true if the captured geometry has enought points for the specified layer
     Q_INVOKABLE bool hasValidGeometry() const;
@@ -87,13 +87,13 @@ class RecordingMapTool : public AbstractMapTool
     /**
      * Removes vertex with given id from the geometry and updates recordedGeometry
      */
-    Q_INVOKABLE void removeVertex();
+    Q_INVOKABLE void removeVertex(); // TODO: unify
 
     /**
      * Inserts new vertex at the active vertex position and updates recordedGeometry
      * Passed point needs to be in active vector layer CRS
      */
-    Q_INVOKABLE void insertVertex( const QgsPoint &point );
+    Q_INVOKABLE void insertVertex( const QgsPoint &point ); // TODO: unify
 
     /**
      * Updates vertex at the active vertex position and updates recordedGeometry

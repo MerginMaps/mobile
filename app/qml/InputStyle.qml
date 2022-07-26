@@ -39,7 +39,7 @@ QtObject {
     property color darkOrange: "#FD9626"
     property color softGreen: "#32AA3A"
     property color darkGreen: "#006146"
-    property color guidelineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )
+    property color guidelineColor: Qt.rgba( 1, 0.2, 0.2, 0.8 )
 
     property real mapMarkerExistingVertexSize: 41 * __dp
     property color mapMarkerExistingVertexColor: "#D9D9D9"
