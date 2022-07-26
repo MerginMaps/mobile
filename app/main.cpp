@@ -273,6 +273,7 @@ void initDeclarative()
   qRegisterMetaType< QgsCoordinateFormatter::FormatFlags >( "QgsCoordinateFormatter::FormatFlags" );
   qRegisterMetaType< QgsCoordinateFormatter::Format >( "QgsCoordinateFormatter::Format" );
   qRegisterMetaType< QVariant::Type >( "QVariant::Type" );
+  qRegisterMetaType< QgsVertexId >( "QgsVertexId" );
 
   qmlRegisterUncreatableType< FormItem >( "lc", 1, 0, "FormItem", "Only enums from FormItem can be used" );
   qmlRegisterUncreatableType< AttributeFormModel >( "lc", 1, 0, "AttributeFormModel", "Created by AttributeController" );

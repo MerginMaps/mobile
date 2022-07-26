@@ -177,6 +177,11 @@ class RecordingMapTool : public AbstractMapTool
      */
     void createNodesAndHandles();
 
+    /**
+     * Add vertex to the mVertices list
+     */
+    void addVertex( QgsVertexId id, QgsPoint &point, bool isVirtual );
+
     QgsGeometry mRecordedGeometry;
     QgsGeometry mInitialGeometry;
 
