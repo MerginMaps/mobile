@@ -77,9 +77,10 @@ Item {
     onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition
 
     onClickedVertexIdChanged: {
-      if ( mapTool.clickedVertexId.isValid() )
+      if ( !isNaN(mapTool.clickedPoint.x) && !isNaN(mapTool.clickedPoint.y) )
       {
-        root.map.mapSettings.setCenter( mapTool.clickedPoint );
+        root.map.mapSettings.setCenter( mapTool.clickedPoint )
+        guidelineController.activeVertexId = mapTool.clickedVertexId
       }
     }
   }
@@ -179,6 +180,8 @@ Item {
     pointLayerSelected: __inputUtils.isPointLayer( __activeLayer.vectorLayer )
 
     manualRecording: mapTool.recordingType === RecordingMapTool.Manual
+
+    toolMode: mapTool.state
 
     onGpsSwitchClicked: {
       if ( root.gpsState.state === "unavailable" ) {

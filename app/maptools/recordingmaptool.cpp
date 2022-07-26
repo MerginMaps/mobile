@@ -36,12 +36,12 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     // we want to use GPS point here instead of the point from map
     pointToAdd = mPositionKit->positionCoordinate();
 
-    QgsPointXY transformed = InputUtils::transformPoint(
-                               PositionKit::positionCRS(),
-                               mLayer->sourceCrs(),
-                               mLayer->transformContext(),
-                               pointToAdd
-                             );
+    QgsPoint transformed = InputUtils::transformPoint(
+                             PositionKit::positionCRS(),
+                             mLayer->sourceCrs(),
+                             mLayer->transformContext(),
+                             pointToAdd
+                           );
 
     pointToAdd.setX( transformed.x() );
     pointToAdd.setY( transformed.y() );
@@ -59,6 +59,32 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     id.vertex = mRecordedGeometry.constGet()->vertexCount();
   }
 
+  if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+  {
+    // if it is a polygon and ring is not correctly defined yet (e.g. only
+    // contains 1 point or not closed) we add point directly to the ring
+    // and close it
+    QgsLineString *r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->exteriorRing() );
+
+    if ( !r )
+    {
+      return;
+    }
+
+    if ( r->nCoordinates() < 2 )
+    {
+      r->addVertex( pointToAdd );
+      r->close();
+      emit recordedGeometryChanged( mRecordedGeometry );
+      return;
+    }
+    else
+    {
+      // as rings are closed, we need to insert before last vertex
+      id.vertex = mRecordedGeometry.constGet()->vertexCount() - 1;
+    }
+  }
+
   mRecordedGeometry.get()->insertVertex( id, pointToAdd );
   emit recordedGeometryChanged( mRecordedGeometry );
 }
@@ -68,6 +94,41 @@ void RecordingMapTool::removePoint()
   if ( mRecordedGeometry.constGet()->vertexCount() > 0 )
   {
     QgsVertexId id( 0, 0, mRecordedGeometry.constGet()->vertexCount() - 1 );
+    if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+    {
+      QgsLineString *r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->exteriorRing() );
+      if ( !r )
+      {
+        return;
+      }
+
+      if ( r->nCoordinates() == 4 )
+      {
+        // this is the smallest possible closed ring (first and last vertex are equal),
+        // we need to remove two last vertices in order to get correct linestring
+        r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
+        r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
+        emit recordedGeometryChanged( mRecordedGeometry );
+        return;
+      }
+      else if ( r->nCoordinates() <= 2 )
+      {
+        // if we remove last vertex directly the geometry will be cleared
+        // but we want to keep start point, so instead of removing vertex
+        // from the linestring we remove item from the QgsPointSequence.
+        QgsPointSequence points;
+        r->points( points );
+        points.takeLast();
+        r->setPoints( points );
+        emit recordedGeometryChanged( mRecordedGeometry );
+        return;
+      }
+      else
+      {
+        id.vertex = mRecordedGeometry.constGet()->vertexCount() - 2;
+      }
+    }
+
     mRecordedGeometry.get()->deleteVertex( id );
     emit recordedGeometryChanged( mRecordedGeometry );
   }
@@ -261,7 +322,7 @@ void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry
 
 void RecordingMapTool::createNodesAndHandles()
 {
-  mVertexIds.clear();
+  mVertices.clear();
 
   QgsMultiPoint *existingVertices = new QgsMultiPoint();
   mExistingVertices.set( existingVertices );
@@ -290,7 +351,7 @@ void RecordingMapTool::createNodesAndHandles()
   while ( geom->nextVertex( vertexId, vertex ) )
   {
     existingVertices->addGeometry( vertex.clone() );
-    mVertexIds.push_back( qMakePair( vertexId, vertex ) );
+    addVertex( vertexId, vertex, false );
 
     // for lines and polygons create midpoints
     if ( mRecordedGeometry.type() != QgsWkbTypes::PointGeometry && vertexId.vertex < geom->vertexCount( vertexId.part, vertexId.ring ) - 1 )
@@ -298,7 +359,7 @@ void RecordingMapTool::createNodesAndHandles()
       QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
       QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
       midPoints->addGeometry( midPoint.clone() );
-      mVertexIds.push_back( qMakePair( id, midPoint ) );
+      addVertex( id, midPoint, true );
     }
 
     // for lines also create start/end points and handles
@@ -313,7 +374,7 @@ void RecordingMapTool::createNodesAndHandles()
         QgsPoint point = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -0.1 );
 
         midPoints->addGeometry( point.clone() );
-        mVertexIds.push_back( qMakePair( startId, point ) );
+        addVertex( startId, point, true );
 
         QgsLineString handle( point, geom->vertexAt( startId ) );
         handles->addGeometry( handle.clone() );
@@ -328,7 +389,7 @@ void RecordingMapTool::createNodesAndHandles()
 
         midPoints->addGeometry( point.clone() );
         endId.vertex = vertexCount;
-        mVertexIds.push_back( qMakePair( endId, point ) );
+        addVertex( endId, point, true );
       }
       currentPart = vertexId.part;
       currentRing = vertexId.ring;
@@ -399,8 +460,6 @@ QgsVertexId &RecordingMapTool::clickedVertexId()
 
 void RecordingMapTool::setClickedVertexId( QgsVertexId newId )
 {
-  if ( mClickedVertexId == newId )
-    return;
   mClickedVertexId.part = newId.part;
   mClickedVertexId.ring = newId.ring;
   mClickedVertexId.vertex = newId.vertex;
@@ -422,32 +481,44 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
 {
   double minDistance = std::numeric_limits<double>::max();
   double currentDistance = 0;
-  QgsPoint point;
-  QgsVertexId vertexId;
 
   QgsPoint pnt = mapSettings()->screenToCoordinate( clickedPoint );
+  pnt = InputUtils::transformPoint( mapSettings()->destinationCrs(), mLayer->crs(), mLayer->transformContext(), pnt );
 
   if ( mRecordedGeometry.isEmpty() )
   {
-    setClickedVertexId( vertexId );
+    setState( QStringLiteral( "view" ) );
+    setClickedVertexId( QgsVertexId() );
+    setClickedPoint( QgsPoint() );
     return;
   }
 
-  for ( QPair<QgsVertexId, QgsPoint> pair : mVertexIds )
+  int idx = -1;
+  for ( int i = 0; i < mVertices.count(); i++ )
   {
-    currentDistance = QgsGeometryUtils::sqrDistance2D( pnt, pair.second );
+    currentDistance = QgsGeometryUtils::sqrDistance2D( pnt, mVertices.at( i ).point );
     if ( currentDistance <= minDistance && currentDistance <= searchRadius )
     {
       minDistance = currentDistance;
-      vertexId.part = pair.first.part;
-      vertexId.ring = pair.first.ring;
-      vertexId.vertex = pair.first.vertex;
-      point = pair.second;
+      idx = i;
     }
   }
 
+  QgsVertexId vertexId;
+  if ( idx >= 0 )
+  {
+    vertexId.part = mVertices.at( idx ).id.part;
+    vertexId.ring = mVertices.at( idx ).id.ring;
+    vertexId.vertex = mVertices.at( idx ).id.vertex;
+    setState( mVertices.at( idx ).isVirtual ? QStringLiteral( "create" ) : QStringLiteral( "update" ) );
+    // convert point to map coordinates so we can center map
+    setClickedPoint( InputUtils::transformPoint( mLayer->crs(), mapSettings()->destinationCrs(), mLayer->transformContext(), mVertices.at( idx ).point ) );
+  }
+  else
+  {
+    setState( QStringLiteral( "view" ) );
+  }
   setClickedVertexId( vertexId );
-  setClickedPoint( point );
 }
 
 void RecordingMapTool::removeVertex()
@@ -481,4 +552,13 @@ void RecordingMapTool::updateVertex( const QgsPoint &point )
 
   if ( mRecordedGeometry.get()->moveVertex( mClickedVertexId, point ) )
     emit recordedGeometryChanged( mRecordedGeometry );
+}
+
+void RecordingMapTool::addVertex( QgsVertexId id, QgsPoint &point, bool isVirtual )
+{
+  Vertex v;
+  v.id = id;
+  v.point = point;
+  v.isVirtual = isVirtual;
+  mVertices.push_back( v );
 }
