@@ -234,8 +234,11 @@ void RecordingMapTool::onPositionChanged()
 
 void RecordingMapTool::prepareEditing()
 {
-  setState( MapToolState::View );
-  setRecordedGeometry( mInitialGeometry );
+  if ( !mInitialGeometry.isEmpty() )
+  {
+    setState( MapToolState::View );
+    setRecordedGeometry( mInitialGeometry );
+  }
 }
 
 void RecordingMapTool::createNodesAndHandles()
