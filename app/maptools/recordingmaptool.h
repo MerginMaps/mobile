@@ -252,7 +252,7 @@ class RecordingMapTool : public AbstractMapTool
     QgsGeometry mMidPoints;
     QgsGeometry mHandles;
 
-    MapToolState mState = MapToolState::View;
+    MapToolState mState = MapToolState::Record;
 
     Vertex mActiveVertex;
     QVector< Vertex > mVertices;
