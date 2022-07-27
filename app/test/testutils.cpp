@@ -36,7 +36,7 @@ void TestUtils::mergin_auth( MerginApi *api, QString &apiRoot, QString &username
     // we need to register new user for tests and assign its credentials to env vars
     username = generateUsername();
     password = generatePassword();
-    QString email = username + "@autotest.xy";
+    QString email = generateEmail();
 
     qDebug() << "REGISTERING NEW TEST USER:" << username;
 
@@ -60,8 +60,15 @@ void TestUtils::mergin_auth( MerginApi *api, QString &apiRoot, QString &username
 QString TestUtils::generateUsername()
 {
   QDateTime time = QDateTime::currentDateTime();
-  QString uniqename = time.toString( QStringLiteral( "ddMMyyyy-hhmmss-z" ) );
+  QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
   return QStringLiteral( "input-%1" ).arg( uniqename );
+}
+
+QString TestUtils::generateEmail()
+{
+  QDateTime time = QDateTime::currentDateTime();
+  QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
+  return QStringLiteral( "mergin+autotest+%1@lutraconsulting.co.uk" ).arg( uniqename );
 }
 
 QString TestUtils::generatePassword()

@@ -23,6 +23,7 @@ namespace TestUtils
   void mergin_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password );
 
   QString generateUsername();
+  QString generateEmail();
   QString generatePassword();
 
   QString testDataDir();

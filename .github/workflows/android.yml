@@ -19,7 +19,7 @@ concurrency:
 jobs:
   android_build:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-10.15
+    runs-on: macos-11
     env:
       QT_VERSION: '5.14.2'
       ANDROIDAPI: 24
@@ -31,7 +31,7 @@ jobs:
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
-      CACHE_VERSION: 1
+      CACHE_VERSION: 2
 
     steps:
       - uses: actions/checkout@v2
