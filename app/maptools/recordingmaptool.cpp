@@ -359,6 +359,7 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     }
     else if ( mActiveVertex.type() == Vertex::Handle )
     {
+      mActiveVertex = Vertex();
       setState( MapToolState::Record );
     }
 
