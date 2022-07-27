@@ -135,9 +135,9 @@ class RecordingMapTool : public AbstractMapTool
     Q_INVOKABLE bool hasValidGeometry() const;
 
     /**
-     * Finds vertex id which matches given screen coordinates.
+     * Finds vertex id which matches given screen coordinates. Search radius defined in pixels
      */
-    Q_INVOKABLE void lookForVertex( const QPointF &clickedPoint, double searchRadius = 0.001 );
+    Q_INVOKABLE void lookForVertex( const QPointF &clickedPoint, double searchRadius = 5 );
 
     /**
      * Updates vertex at the active vertex position and updates recordedGeometry
@@ -236,6 +236,8 @@ class RecordingMapTool : public AbstractMapTool
      * start/end points and "handles" (for lines). Also fills nodes index.
      */
     void createNodesAndHandles();
+
+    double pixelsToMapUnits( double numPixels );
 
     QgsGeometry mRecordedGeometry;
     QgsGeometry mInitialGeometry;

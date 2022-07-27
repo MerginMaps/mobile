@@ -14,6 +14,7 @@
 #include "qgsvectorlayerutils.h"
 #include "qgsmultipoint.h"
 #include "qgsmultilinestring.h"
+#include "qgsrendercontext.h"
 
 #include "position/positionkit.h"
 #include "variablesmanager.h"
@@ -322,9 +323,10 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
 {
   double minDistance = std::numeric_limits<double>::max();
   double currentDistance = 0;
+  QgsRenderContext context = QgsRenderContext::fromMapSettings( mapSettings()->mapSettings() );
+  double searchDistance = pixelsToMapUnits( searchRadius );
 
   QgsPoint pnt = mapSettings()->screenToCoordinate( clickedPoint );
-  pnt = InputUtils::transformPoint( mapSettings()->destinationCrs(), mLayer->crs(), mLayer->transformContext(), pnt );
 
   if ( mRecordedGeometry.isEmpty() )
   {
@@ -336,8 +338,10 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   int idx = -1;
   for ( int i = 0; i < mVertices.count(); i++ )
   {
-    currentDistance = QgsGeometryUtils::sqrDistance2D( pnt, mVertices.at( i ).coordinates() );
-    if ( currentDistance <= minDistance && currentDistance <= searchRadius )
+    QgsPoint vertex( mVertices.at( i ).coordinates() );
+    vertex.transform( mapSettings()->mapSettings().layerTransform( mLayer ) );
+    currentDistance = pnt.distance( vertex );
+    if ( currentDistance < minDistance && currentDistance <= searchDistance )
     {
       minDistance = currentDistance;
       idx = i;
@@ -413,6 +417,12 @@ void RecordingMapTool::cancelGrab()
 
   setState( MapToolState::View );
   setActiveVertex( Vertex() );
+}
+
+double RecordingMapTool::pixelsToMapUnits( double numPixels )
+{
+  QgsRenderContext context = QgsRenderContext::fromMapSettings( mapSettings()->mapSettings() );
+  return numPixels * context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
 }
 
 Vertex::Vertex()
