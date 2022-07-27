@@ -420,29 +420,29 @@ void TestMapTools::testLookForVertex()
   // start point
   QPointF screenPoint = ms->coordinateToScreen( QgsPoint( -0.05, -0.13 ) );
   mapTool->lookForVertex( screenPoint, 0.05 );
-  QVERIFY( mapTool->clickedVertexId().isValid() );
-  QCOMPARE( mapTool->clickedVertexId().part, 0 );
-  QCOMPARE( mapTool->clickedVertexId().ring, 0 );
-  QCOMPARE( mapTool->clickedVertexId().vertex, 0 );
+  QVERIFY( mapTool->activeVertex().isValid() );
+  QCOMPARE( mapTool->activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool->activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool->activeVertex().vertexId().vertex, 0 );
 
   // first point
   screenPoint = ms->coordinateToScreen( QgsPoint( -0.01, 0.1 ) );
   mapTool->lookForVertex( screenPoint, 0.05 );
-  QVERIFY( mapTool->clickedVertexId().isValid() );
-  QCOMPARE( mapTool->clickedVertexId().part, 0 );
-  QCOMPARE( mapTool->clickedVertexId().ring, 0 );
-  QCOMPARE( mapTool->clickedVertexId().vertex, 0 );
+  QVERIFY( mapTool->activeVertex().isValid() );
+  QCOMPARE( mapTool->activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool->activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool->activeVertex().vertexId().vertex, 0 );
 
   // midpoint
   screenPoint = ms->coordinateToScreen( QgsPoint( 0.6, 1.2 ) );
   mapTool->lookForVertex( screenPoint, 0.05 );
-  QVERIFY( mapTool->clickedVertexId().isValid() );
-  QCOMPARE( mapTool->clickedVertexId().part, 0 );
-  QCOMPARE( mapTool->clickedVertexId().ring, 0 );
-  QCOMPARE( mapTool->clickedVertexId().vertex, 2 );
+  QVERIFY( mapTool->activeVertex().isValid() );
+  QCOMPARE( mapTool->activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool->activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool->activeVertex().vertexId().vertex, 2 );
 
   // distant point. should return invalid vertex id
   screenPoint = ms->coordinateToScreen( QgsPoint( 3, 2 ) );
   mapTool->lookForVertex( screenPoint, 0.05 );
-  QVERIFY( !mapTool->clickedVertexId().isValid() );
+  QVERIFY( !mapTool->activeVertex().isValid() );
 }

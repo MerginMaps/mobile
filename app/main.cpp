@@ -275,6 +275,8 @@ void initDeclarative()
   qRegisterMetaType< QVariant::Type >( "QVariant::Type" );
   qRegisterMetaType< QgsVertexId >( "QgsVertexId" );
 
+  qRegisterMetaType< Vertex >( "Vertex" );
+
   qmlRegisterUncreatableType< FormItem >( "lc", 1, 0, "FormItem", "Only enums from FormItem can be used" );
   qmlRegisterUncreatableType< AttributeFormModel >( "lc", 1, 0, "AttributeFormModel", "Created by AttributeController" );
   qmlRegisterUncreatableType< AttributeFormProxyModel >( "lc", 1, 0, "AttributeFormProxyModel", "Created by AttributeController" );

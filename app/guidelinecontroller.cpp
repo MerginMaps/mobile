@@ -20,7 +20,7 @@ GuidelineController::GuidelineController( QObject *parent )
 void GuidelineController::buildGuideline()
 {
   // take the existing geometry and add crosshair position to it
-  if ( !mMapSettings || mCrosshairPosition.isNull() || mRealGeometry.isNull() || mRealGeometry.isEmpty() )
+  if ( !mAllowed || !mMapSettings || mCrosshairPosition.isNull() || mRealGeometry.isNull() || mRealGeometry.isEmpty() )
   {
     setGuidelineGeometry( QgsGeometry() );
     return;
@@ -160,4 +160,17 @@ void GuidelineController::setActiveVertexId( const QgsVertexId &newActiveVertexI
   emit activeVertexIdChanged( mActiveVertexId );
 
   buildGuideline();
+}
+
+bool GuidelineController::allowed() const
+{
+  return mAllowed;
+}
+
+void GuidelineController::setAllowed( bool newAllowed )
+{
+  if ( mAllowed == newAllowed )
+    return;
+  mAllowed = newAllowed;
+  emit allowedChanged( mAllowed );
 }

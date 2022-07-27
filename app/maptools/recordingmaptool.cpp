@@ -22,6 +22,7 @@
 RecordingMapTool::RecordingMapTool( QObject *parent )
   : AbstractMapTool{parent}
 {
+  connect( this, &RecordingMapTool::initialGeometryChanged, this, &RecordingMapTool::prepareEditing );
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::createNodesAndHandles );
 }
 
@@ -49,12 +50,12 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
   fixZ( pointToAdd );
 
-  if ( mClickedVertexId.isValid() )
+  if ( mActiveVertex.isValid() ) // if Grab
   {
-    if ( mRecordedGeometry.get()->insertVertex( mClickedVertexId, pointToAdd ) )
+    if ( mRecordedGeometry.get()->insertVertex( mActiveVertex.vertexId(), pointToAdd ) )
       emit recordedGeometryChanged( mRecordedGeometry );
   }
-  else
+  else if ( mState == MapToolState::Record )
   {
     QgsVertexId id( 0, 0, 0 );
     if ( mRecordedGeometry.isEmpty() )
@@ -98,12 +99,14 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
 void RecordingMapTool::removePoint()
 {
-  if ( mClickedVertexId.isValid() )
+  if ( mActiveVertex.isValid() ) // if Grab
   {
-    if ( mRecordedGeometry.get()->deleteVertex( mClickedVertexId ) )
+    if ( mRecordedGeometry.get()->deleteVertex( mActiveVertex.vertexId() ) )
       emit recordedGeometryChanged( mRecordedGeometry );
+
+    // TODO: grab previous vertex
   }
-  else
+  else if ( mState == MapToolState::Record )
   {
     if ( mRecordedGeometry.constGet()->vertexCount() > 0 )
     {
@@ -228,6 +231,212 @@ void RecordingMapTool::onPositionChanged()
   }
 }
 
+void RecordingMapTool::prepareEditing()
+{
+  setState( MapToolState::View );
+  setRecordedGeometry( mInitialGeometry );
+}
+
+void RecordingMapTool::createNodesAndHandles()
+{
+  mVertices.clear();
+
+  QgsMultiPoint *existingVertices = new QgsMultiPoint();
+  mExistingVertices.set( existingVertices );
+
+  QgsMultiPoint *midPoints = new QgsMultiPoint();
+  mMidPoints.set( midPoints );
+
+  QgsMultiLineString *handles = new QgsMultiLineString();
+  mHandles.set( handles );
+
+  if ( mRecordedGeometry.isEmpty() )
+  {
+    emit existingVerticesChanged( mExistingVertices );
+    emit midPointsChanged( mMidPoints );
+    emit handlesChanged( mHandles );
+    return;
+  }
+
+  QgsPoint vertex;
+  QgsVertexId vertexId;
+  const QgsAbstractGeometry *geom = mRecordedGeometry.constGet();
+
+  int currentPart = -1;
+  int currentRing = -1;
+
+  while ( geom->nextVertex( vertexId, vertex ) )
+  {
+    existingVertices->addGeometry( vertex.clone() );
+    mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
+
+    // for lines and polygons create midpoints
+    if ( mRecordedGeometry.type() != QgsWkbTypes::PointGeometry && vertexId.vertex < geom->vertexCount( vertexId.part, vertexId.ring ) - 1 )
+    {
+      QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
+      QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
+      midPoints->addGeometry( midPoint.clone() );
+      mVertices.push_back( Vertex( id, midPoint, Vertex::MidPoint ) );
+    }
+
+    // for lines also create start/end points and handles
+    if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry && ( vertexId.part != currentPart && vertexId.ring != currentRing ) )
+    {
+      int vertexCount = geom->vertexCount( vertexId.part, vertexId.ring );
+      if ( vertexCount >= 2 )
+      {
+        // start point and handle
+        QgsVertexId startId( vertexId.part, vertexId.ring, 0 );
+        QgsVertexId endId( vertexId.part, vertexId.ring, 1 );
+        QgsPoint point = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -0.1 );
+
+        midPoints->addGeometry( point.clone() );
+        mVertices.push_back( Vertex( startId, point, Vertex::Handle ) );
+
+        QgsLineString handle( point, geom->vertexAt( startId ) );
+        handles->addGeometry( handle.clone() );
+
+        // end point and handle
+        startId.vertex = vertexCount - 2;
+        endId.vertex = vertexCount - 1;
+        point = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), 1.1 );
+
+        handle = QgsLineString( geom->vertexAt( endId ), point );
+        handles->addGeometry( handle.clone() );
+
+        midPoints->addGeometry( point.clone() );
+        endId.vertex = vertexCount;
+        mVertices.push_back( Vertex( endId, point, Vertex::Handle ) );
+      }
+      currentPart = vertexId.part;
+      currentRing = vertexId.ring;
+    }
+  }
+
+  emit existingVerticesChanged( mExistingVertices );
+  emit midPointsChanged( mMidPoints );
+  emit handlesChanged( mHandles );
+}
+
+void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double searchRadius )
+{
+  double minDistance = std::numeric_limits<double>::max();
+  double currentDistance = 0;
+
+  QgsPoint pnt = mapSettings()->screenToCoordinate( clickedPoint );
+  pnt = InputUtils::transformPoint( mapSettings()->destinationCrs(), mLayer->crs(), mLayer->transformContext(), pnt );
+
+  if ( mRecordedGeometry.isEmpty() )
+  {
+    setState( MapToolState::View );
+    setActiveVertex( Vertex() );
+    return;
+  }
+
+  int idx = -1;
+  for ( int i = 0; i < mVertices.count(); i++ )
+  {
+    currentDistance = QgsGeometryUtils::sqrDistance2D( pnt, mVertices.at( i ).coordinates() );
+    if ( currentDistance <= minDistance && currentDistance <= searchRadius )
+    {
+      minDistance = currentDistance;
+      idx = i;
+    }
+  }
+
+  if ( idx >= 0 )
+  {
+    mActiveVertex = mVertices.at( idx );
+
+    if ( mActiveVertex.type() == Vertex::Existing )
+    {
+      setState( MapToolState::Grab );
+    }
+    else if ( mActiveVertex.type() == Vertex::MidPoint )
+    {
+      addPoint( mActiveVertex.coordinates() );
+      setState( MapToolState::Grab );
+    }
+    else if ( mActiveVertex.type() == Vertex::Handle )
+    {
+      setState( MapToolState::Record );
+    }
+
+    emit activeVertexChanged( mActiveVertex );
+  }
+  else
+  {
+    // We did not select any point, but if some point was selected previously
+    // we need to update its position first
+    if ( mState == MapToolState::Grab )
+    {
+      updateVertex( mRecordPoint );
+    }
+
+    setActiveVertex( Vertex() );
+    setState( MapToolState::View );
+  }
+}
+
+void RecordingMapTool::updateVertex( const QgsPoint &point )
+{
+  if ( !mActiveVertex.isValid() )
+  {
+    return;
+  }
+
+  if ( mRecordedGeometry.get()->moveVertex( mActiveVertex.vertexId(), point ) )
+    emit recordedGeometryChanged( mRecordedGeometry );
+
+  setState( MapToolState::View );
+  setActiveVertex( Vertex() );
+}
+
+QgsPoint RecordingMapTool::vertexMapCoors( const Vertex &vertex ) const
+{
+  if ( vertex.isValid() && mLayer && mapSettings() )
+  {
+    return InputUtils::transformPoint( mLayer->crs(), mapSettings()->destinationCrs(), mLayer->transformContext(), vertex.coordinates() );
+  }
+
+  return QgsPoint();
+}
+
+void RecordingMapTool::cancelGrab()
+{
+  QgsPoint activeVertexPosition = vertexMapCoors( mActiveVertex );
+  if ( !activeVertexPosition.isEmpty() )
+  {
+    mapSettings()->setCenter( activeVertexPosition );
+  }
+
+  setState( MapToolState::View );
+  setActiveVertex( Vertex() );
+}
+
+Vertex::Vertex()
+{
+
+}
+
+Vertex::Vertex( QgsVertexId id, QgsPoint coordinates, VertexType type )
+  : mVertexId( id )
+  , mCoordinates( coordinates )
+  , mType( type )
+{
+
+}
+
+Vertex::~Vertex()
+{
+
+}
+
+bool Vertex::isValid() const
+{
+  return mVertexId.isValid();
+}
+
 // Getters / setters
 bool RecordingMapTool::centeredToGPS() const
 {
@@ -330,90 +539,7 @@ void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry
 
   mInitialGeometry = newInitialGeometry;
 
-  setRecordedGeometry( newInitialGeometry );
-
   emit initialGeometryChanged( mInitialGeometry );
-}
-
-void RecordingMapTool::createNodesAndHandles()
-{
-  mVertices.clear();
-
-  QgsMultiPoint *existingVertices = new QgsMultiPoint();
-  mExistingVertices.set( existingVertices );
-
-  QgsMultiPoint *midPoints = new QgsMultiPoint();
-  mMidPoints.set( midPoints );
-
-  QgsMultiLineString *handles = new QgsMultiLineString();
-  mHandles.set( handles );
-
-  if ( mRecordedGeometry.isEmpty() )
-  {
-    emit existingVerticesChanged( mExistingVertices );
-    emit midPointsChanged( mMidPoints );
-    emit handlesChanged( mHandles );
-    return;
-  }
-
-  QgsPoint vertex;
-  QgsVertexId vertexId;
-  const QgsAbstractGeometry *geom = mRecordedGeometry.constGet();
-
-  int currentPart = -1;
-  int currentRing = -1;
-
-  while ( geom->nextVertex( vertexId, vertex ) )
-  {
-    existingVertices->addGeometry( vertex.clone() );
-    addVertex( vertexId, vertex, false );
-
-    // for lines and polygons create midpoints
-    if ( mRecordedGeometry.type() != QgsWkbTypes::PointGeometry && vertexId.vertex < geom->vertexCount( vertexId.part, vertexId.ring ) - 1 )
-    {
-      QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
-      QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
-      midPoints->addGeometry( midPoint.clone() );
-      addVertex( id, midPoint, true );
-    }
-
-    // for lines also create start/end points and handles
-    if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry && ( vertexId.part != currentPart && vertexId.ring != currentRing ) )
-    {
-      int vertexCount = geom->vertexCount( vertexId.part, vertexId.ring );
-      if ( vertexCount >= 2 )
-      {
-        // start point and handle
-        QgsVertexId startId( vertexId.part, vertexId.ring, 0 );
-        QgsVertexId endId( vertexId.part, vertexId.ring, 1 );
-        QgsPoint point = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -0.1 );
-
-        midPoints->addGeometry( point.clone() );
-        addVertex( startId, point, true );
-
-        QgsLineString handle( point, geom->vertexAt( startId ) );
-        handles->addGeometry( handle.clone() );
-
-        // end point and handle
-        startId.vertex = vertexCount - 2;
-        endId.vertex = vertexCount - 1;
-        point = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), 1.1 );
-
-        handle = QgsLineString( geom->vertexAt( endId ), point );
-        handles->addGeometry( handle.clone() );
-
-        midPoints->addGeometry( point.clone() );
-        endId.vertex = vertexCount;
-        addVertex( endId, point, true );
-      }
-      currentPart = vertexId.part;
-      currentRing = vertexId.ring;
-    }
-  }
-
-  emit existingVerticesChanged( mExistingVertices );
-  emit midPointsChanged( mMidPoints );
-  emit handlesChanged( mHandles );
 }
 
 const QgsGeometry &RecordingMapTool::existingVertices() const
@@ -455,12 +581,12 @@ void RecordingMapTool::setHandles( const QgsGeometry &newHandles )
   emit handlesChanged( mHandles );
 }
 
-const QString &RecordingMapTool::state() const
+RecordingMapTool::MapToolState RecordingMapTool::state() const
 {
   return mState;
 }
 
-void RecordingMapTool::setState( const QString &newState )
+void RecordingMapTool::setState( const MapToolState &newState )
 {
   if ( mState == newState )
     return;
@@ -468,93 +594,74 @@ void RecordingMapTool::setState( const QString &newState )
   emit stateChanged( mState );
 }
 
-QgsVertexId &RecordingMapTool::clickedVertexId()
+QgsPoint RecordingMapTool::recordPoint() const
 {
-  return mClickedVertexId;
+  return mRecordPoint;
 }
 
-void RecordingMapTool::setClickedVertexId( QgsVertexId newId )
+void RecordingMapTool::setRecordPoint( QgsPoint newRecordPoint )
 {
-  mClickedVertexId.part = newId.part;
-  mClickedVertexId.ring = newId.ring;
-  mClickedVertexId.vertex = newId.vertex;
-  emit clickedVertexIdChanged( mClickedVertexId );
-}
-
-QgsPoint &RecordingMapTool::clickedPoint()
-{
-  return mClickedPoint;
-}
-
-void RecordingMapTool::setClickedPoint( QgsPoint newPoint )
-{
-  mClickedPoint = newPoint;
-  emit clickedPointChanged( mClickedPoint );
-}
-
-void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double searchRadius )
-{
-  double minDistance = std::numeric_limits<double>::max();
-  double currentDistance = 0;
-
-  QgsPoint pnt = mapSettings()->screenToCoordinate( clickedPoint );
-  pnt = InputUtils::transformPoint( mapSettings()->destinationCrs(), mLayer->crs(), mLayer->transformContext(), pnt );
-
-  if ( mRecordedGeometry.isEmpty() )
-  {
-    setState( QStringLiteral( "view" ) );
-    setClickedVertexId( QgsVertexId() );
-    setClickedPoint( QgsPoint() );
+  if ( mRecordPoint == newRecordPoint )
     return;
-  }
-
-  int idx = -1;
-  for ( int i = 0; i < mVertices.count(); i++ )
-  {
-    currentDistance = QgsGeometryUtils::sqrDistance2D( pnt, mVertices.at( i ).point );
-    if ( currentDistance <= minDistance && currentDistance <= searchRadius )
-    {
-      minDistance = currentDistance;
-      idx = i;
-    }
-  }
-
-  QgsVertexId vertexId;
-  if ( idx >= 0 )
-  {
-    vertexId.part = mVertices.at( idx ).id.part;
-    vertexId.ring = mVertices.at( idx ).id.ring;
-    vertexId.vertex = mVertices.at( idx ).id.vertex;
-
-    // TODO: CREATE THIS POINT IF VIRTUAL
-
-    setState( mVertices.at( idx ).isVirtual ? QStringLiteral( "create" ) : QStringLiteral( "update" ) );
-    // convert point to map coordinates so we can center map
-    setClickedPoint( InputUtils::transformPoint( mLayer->crs(), mapSettings()->destinationCrs(), mLayer->transformContext(), mVertices.at( idx ).point ) );
-  }
-  else
-  {
-    setState( QStringLiteral( "view" ) );
-  }
-  setClickedVertexId( vertexId );
+  mRecordPoint = newRecordPoint;
+  emit recordPointChanged( mRecordPoint );
 }
 
-void RecordingMapTool::updateVertex( const QgsPoint &point )
+const QgsVertexId &Vertex::vertexId() const
 {
-  if ( !mClickedVertexId.isValid() )
-  {
+  return mVertexId;
+}
+
+void Vertex::setVertexId( const QgsVertexId &newVertexId )
+{
+  if ( mVertexId == newVertexId )
     return;
-  }
-
-  if ( mRecordedGeometry.get()->moveVertex( mClickedVertexId, point ) )
-    emit recordedGeometryChanged( mRecordedGeometry );
+  mVertexId = newVertexId;
+//  emit vertexIdChanged(mVertexId);
 }
 
-void RecordingMapTool::addVertex( QgsVertexId id, QgsPoint &point, bool isVirtual )
+QgsPoint Vertex::coordinates() const
 {
-  Vertex v;
-  v.id = id;
-  v.point = point;
-  v.isVirtual = isVirtual;
-  mVertices.push_back( v );
+  return mCoordinates;
+}
+
+void Vertex::setCoordinates( QgsPoint newCoordinates )
+{
+  if ( mCoordinates == newCoordinates )
+    return;
+  mCoordinates = newCoordinates;
+//  emit coordinatesChanged(mCoordinates);
+}
+
+const Vertex::VertexType &Vertex::type() const
+{
+  return mType;
+}
+
+void Vertex::setType( const VertexType &newType )
+{
+  if ( mType == newType )
+    return;
+  mType = newType;
+//  emit typeChanged(mType);
+}
+
+//void Vertex::set(const Vertex &other)
+//{
+//  setType( other.type() );
+//  setVertexId( other.vertexId() );
+//  setCoordinates( other.coordinates() );
+//}
+
+const Vertex &RecordingMapTool::activeVertex() const
+{
+  return mActiveVertex;
+}
+
+void RecordingMapTool::setActiveVertex( const Vertex &newActiveVertex )
+{
+  if ( mActiveVertex == newActiveVertex )
+    return;
+  mActiveVertex = newActiveVertex;
+  emit activeVertexChanged( mActiveVertex );
 }

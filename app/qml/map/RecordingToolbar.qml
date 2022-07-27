@@ -31,7 +31,7 @@ Item {
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
     property bool manualRecording: false
-    property string toolMode: "view"
+    property int toolMode
 
     property int itemSize: rowHeight * 0.8
     property int rowHeight: InputStyle.rowHeightHeader
@@ -93,7 +93,7 @@ Item {
                 width: root.itemSize
                 text: qsTr("Remove")
                 imageSource: InputStyle.undoIcon
-                enabled: manualRecording
+                enabled: manualRecording || root.toolMode === RecordingMapTool.View
 
                 onActivated: root.removePointClicked()
             }
@@ -102,14 +102,14 @@ Item {
         Item {
             height: parent.height
             Layout.fillWidth: true
-            visible: root.toolMode == "view" || root.toolMode == "create"
+            visible: root.toolMode === RecordingMapTool.View || root.toolMode === RecordingMapTool.Record
 
             MainPanelButton {
                 id: addButton
                 width: root.itemSize
                 text: qsTr("Add")
                 imageSource: InputStyle.plusIcon
-                enabled: manualRecording
+                enabled: manualRecording || root.toolMode !== RecordingMapTool.View
 
                 onActivated: root.addClicked()
             }
@@ -118,14 +118,13 @@ Item {
         Item {
             height: parent.height
             Layout.fillWidth: true
-            visible: root.toolMode == "update"
+            visible: root.toolMode === RecordingMapTool.Grab
 
             MainPanelButton {
                 id: releaseButton
                 width: root.itemSize
                 text: qsTr("Release")
                 imageSource: InputStyle.plusIcon
-                enabled: manualRecording
 
                 onActivated: root.releaseClicked()
             }

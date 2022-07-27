@@ -22,11 +22,56 @@ class PositionKit;
 class VariablesManager;
 class QgsVectorLayer;
 
-struct Vertex
+class Vertex
 {
-  QgsVertexId id;
-  QgsPoint point;
-  bool isVirtual;
+    Q_GADGET
+
+    Q_PROPERTY( QgsVertexId vertexId READ vertexId WRITE setVertexId )
+    Q_PROPERTY( QgsPoint coordinates READ coordinates WRITE setCoordinates )
+    Q_PROPERTY( VertexType type READ type WRITE setType )
+
+  public:
+
+    enum VertexType
+    {
+      Existing = 0, // Existing vertex in geometry
+      MidPoint, // Node between two existing vertices
+      Handle // Node before begin / after end of line
+    };
+    Q_ENUM( VertexType );
+
+    Vertex();
+    Vertex( QgsVertexId id, QgsPoint coordinates, VertexType type );
+
+    virtual ~Vertex();
+
+    Q_INVOKABLE bool isValid() const;
+
+    const QgsVertexId &vertexId() const;
+    void setVertexId( const QgsVertexId &newVertexId );
+
+    QgsPoint coordinates() const;
+    void setCoordinates( QgsPoint newCoordinates );
+
+    const VertexType &type() const;
+    void setType( const VertexType &newType );
+
+//    void set( const Vertex &other );
+
+    bool operator==( const Vertex &other )
+    {
+      return other.vertexId() == mVertexId && other.type() == mType;
+    }
+
+    bool operator!=( const Vertex &other )
+    {
+      return !( *this == other );
+    }
+
+  private:
+    QgsVertexId mVertexId;
+    QgsPoint mCoordinates;
+    VertexType mType = VertexType::Existing;
 };
 
 class RecordingMapTool : public AbstractMapTool
@@ -45,12 +90,14 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( QgsGeometry midPoints READ midPoints WRITE setMidPoints NOTIFY midPointsChanged )
     Q_PROPERTY( QgsGeometry handles READ handles WRITE setHandles NOTIFY handlesChanged )
 
+    Q_PROPERTY( Vertex activeVertex READ activeVertex WRITE setActiveVertex NOTIFY activeVertexChanged )
+
     // When editing geometry - set this as the geometry to start with
     Q_PROPERTY( QgsGeometry initialGeometry READ initialGeometry WRITE setInitialGeometry NOTIFY initialGeometryChanged )
 
-    Q_PROPERTY( QString state READ state WRITE setState NOTIFY stateChanged )
-    Q_PROPERTY( QgsVertexId clickedVertexId READ clickedVertexId WRITE setClickedVertexId NOTIFY clickedVertexIdChanged )
-    Q_PROPERTY( QgsPoint clickedPoint READ clickedPoint WRITE setClickedPoint NOTIFY clickedPointChanged )
+    Q_PROPERTY( MapToolState state READ state WRITE setState NOTIFY stateChanged )
+
+    Q_PROPERTY( QgsPoint recordPoint READ recordPoint WRITE setRecordPoint NOTIFY recordPointChanged )
 
   public:
 
@@ -60,6 +107,14 @@ class RecordingMapTool : public AbstractMapTool
       Manual
     };
     Q_ENUM( RecordingType );
+
+    enum MapToolState
+    {
+      Record = 0, // No point selected, show crosshair and guideline
+      Grab, // Existing point selected, show crosshair and guideline
+      View // No point selected, hide crosshair and guideline [start of editing]
+    };
+    Q_ENUM( MapToolState );
 
     explicit RecordingMapTool( QObject *parent = nullptr );
     virtual ~RecordingMapTool();
@@ -89,6 +144,10 @@ class RecordingMapTool : public AbstractMapTool
      * Passed point needs to be in active vector layer CRS
      */
     Q_INVOKABLE void updateVertex( const QgsPoint &point );
+
+    Q_INVOKABLE QgsPoint vertexMapCoors( const Vertex &vertex ) const;
+
+    Q_INVOKABLE void cancelGrab();
 
     // Getters / setters
     bool centeredToGPS() const;
@@ -122,14 +181,17 @@ class RecordingMapTool : public AbstractMapTool
     const QgsGeometry &handles() const;
     void setHandles( const QgsGeometry &newHandles );
 
-    const QString &state() const;
-    void setState( const QString &newState );
+    MapToolState state() const;
+    void setState( const MapToolState &newState );
 
-    QgsVertexId &clickedVertexId();
-    void setClickedVertexId( QgsVertexId newId );
+    QPointF crosshairPosition() const;
+    void setCrosshairPosition( QPointF newCrosshairPosition );
 
-    QgsPoint &clickedPoint();
-    void setClickedPoint( QgsPoint newPoint );
+    QgsPoint recordPoint() const;
+    void setRecordPoint( QgsPoint newRecordPoint );
+
+    const Vertex &activeVertex() const;
+    void setActiveVertex( const Vertex &newActiveVertex );
 
   signals:
     void layerChanged( QgsVectorLayer *layer );
@@ -147,13 +209,22 @@ class RecordingMapTool : public AbstractMapTool
 
     void handlesChanged( const QgsGeometry &handles );
 
-    void stateChanged( const QString &state );
+    void stateChanged( const RecordingMapTool::MapToolState &state );
 
     void clickedVertexIdChanged( QgsVertexId id );
     void clickedPointChanged( QgsPoint point );
 
+    void crosshairPositionChanged( QPointF crosshairPosition );
+
+    void recordPointChanged( QgsPoint recordPoint );
+
+    void activeVertexChanged( const Vertex &activeVertex );
+
   public slots:
     void onPositionChanged();
+
+  private slots:
+    void prepareEditing();
 
   protected:
     //! Unifies Z coordinate of the point with current layer - drops / adds it
@@ -165,11 +236,6 @@ class RecordingMapTool : public AbstractMapTool
      * start/end points and "handles" (for lines). Also fills nodes index.
      */
     void createNodesAndHandles();
-
-    /**
-     * Add vertex to the mVertices list
-     */
-    void addVertex( QgsVertexId id, QgsPoint &point, bool isVirtual );
 
     QgsGeometry mRecordedGeometry;
     QgsGeometry mInitialGeometry;
@@ -186,10 +252,12 @@ class RecordingMapTool : public AbstractMapTool
     QgsGeometry mMidPoints;
     QgsGeometry mHandles;
 
-    QString mState = "view";
+    MapToolState mState = MapToolState::View;
+
+    Vertex mActiveVertex;
     QVector< Vertex > mVertices;
-    QgsVertexId mClickedVertexId;
-    QgsPoint mClickedPoint;
+
+    QgsPoint mRecordPoint;
 };
 
 #endif // RECORDINGMAPTOOL_H

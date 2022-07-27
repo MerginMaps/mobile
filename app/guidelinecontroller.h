@@ -29,6 +29,8 @@ class GuidelineController : public QObject
 
     Q_PROPERTY( QgsVertexId activeVertexId READ activeVertexId WRITE setActiveVertexId NOTIFY activeVertexIdChanged )
 
+    Q_PROPERTY( bool allowed READ allowed WRITE setAllowed NOTIFY allowedChanged )
+
     // output properties (real geometry + crosshair position ) in map CRS
     Q_PROPERTY( QgsGeometry guidelineGeometry READ guidelineGeometry WRITE setGuidelineGeometry NOTIFY guidelineGeometryChanged )
 
@@ -50,6 +52,9 @@ class GuidelineController : public QObject
     const QgsVertexId &activeVertexId() const;
     void setActiveVertexId( const QgsVertexId &newActiveVertexId );
 
+    bool allowed() const;
+    void setAllowed( bool newAllowed );
+
   signals:
 
     void guidelineGeometryChanged( const QgsGeometry &guidelineGeometry );
@@ -61,6 +66,8 @@ class GuidelineController : public QObject
 
     void activeVertexIdChanged( const QgsVertexId &activeVertexId );
 
+    void allowedChanged( bool allowed );
+
   private:
     void buildGuideline();
 
@@ -69,6 +76,7 @@ class GuidelineController : public QObject
     QgsGeometry mRealGeometry;
     QgsQuickMapSettings *mMapSettings = nullptr; // not owned
     QgsVertexId mActiveVertexId;
+    bool mAllowed;
 };
 
 #endif // GUIDELINECONTROLLER_H

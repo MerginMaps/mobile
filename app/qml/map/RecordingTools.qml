@@ -65,6 +65,8 @@ Item {
     centeredToGPS: false
     mapSettings: root.map.mapSettings
 
+    recordPoint: crosshair.recordPoint
+
     recordingType: RecordingMapTool.Manual
     recordingInterval: __appSettings.lineRecordingInterval
 
@@ -76,11 +78,16 @@ Item {
     // Bind variables manager to know if we are centered to GPS or not when evaluating position variables
     onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition
 
-    onClickedVertexIdChanged: {
-      if ( !isNaN(mapTool.clickedPoint.x) && !isNaN(mapTool.clickedPoint.y) )
+    onActiveVertexChanged: {
+      if ( activeVertex.isValid() )
       {
-        root.map.mapSettings.setCenter( mapTool.clickedPoint )
-        guidelineController.activeVertexId = mapTool.clickedVertexId
+        // Center to clicked vertex
+        let newCenter = mapTool.vertexMapCoors( activeVertex )
+
+        if ( !isNaN( newCenter.x ) && !isNaN( newCenter.y ) )
+        {
+          root.map.mapSettings.setCenter( newCenter )
+        }
       }
     }
   }
@@ -88,9 +95,13 @@ Item {
   GuidelineController {
     id: guidelineController
 
+    allowed: mapTool.state !== RecordingMapTool.View
+
     mapSettings: root.map.mapSettings
     crosshairPosition: crosshair.screenPoint
     realGeometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+
+    activeVertexId: mapTool.activeVertex.vertexId
   }
 
   Highlight {
@@ -98,8 +109,6 @@ Item {
 
     height: root.map.height
     width: root.map.width
-
-//    TODO: visible: mapTool.state !== "view"
 
     lineColor: InputStyle.guidelineColor
 
@@ -167,7 +176,7 @@ Item {
 
     anchors.fill: parent
 
-//  TODO:  visible: mapTool.state !== "view"
+    visible: mapTool.state !== RecordingMapTool.View
 
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
@@ -226,7 +235,7 @@ Item {
     }
 
     onReleaseClicked: {
-      // TODO
+      mapTool.updateVertex( crosshair.recordPoint )
     }
 
     onRemovePointClicked: mapTool.removePoint()
@@ -234,6 +243,12 @@ Item {
     onDoneClicked: {
       if ( mapTool.hasValidGeometry() )
       {
+        // If we currently grab a point
+        if ( mapTool.state == RecordingMapTool.Grab )
+        {
+          mapTool.updateVertex( crosshair.recordPoint )
+        }
+
         root.done( mapTool.recordedGeometry )
       }
       else
@@ -242,7 +257,15 @@ Item {
       }
     }
 
-    onCancelClicked: root.canceled()
+    onCancelClicked: {
+      if ( mapTool.state == RecordingMapTool.Grab )
+      {
+        mapTool.cancelGrab()
+        return;
+      }
+
+      root.canceled()
+    }
   }
 
   MapPosition {
@@ -267,7 +290,6 @@ Item {
     function onClicked( point ) {
       let screenPoint = Qt.point( point.x, point.y )
 
-//    TODO:  mapTool.release()
       mapTool.lookForVertex( screenPoint )
     }
   }
