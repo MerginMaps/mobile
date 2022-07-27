@@ -15,6 +15,7 @@
 
 #include <QObject>
 
+
 /**
  * ValueRelationFeaturesModel class lists features from a specific layer regarding to a filterExpression of value relations.
  * It is used as a model in ValueRelations QML editors.
