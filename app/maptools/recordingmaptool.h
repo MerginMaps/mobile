@@ -56,8 +56,6 @@ class Vertex
     const VertexType &type() const;
     void setType( const VertexType &newType );
 
-//    void set( const Vertex &other );
-
     bool operator==( const Vertex &other )
     {
       return other.vertexId() == mVertexId && other.type() == mType;
@@ -145,6 +143,9 @@ class RecordingMapTool : public AbstractMapTool
      */
     Q_INVOKABLE void updateVertex( const QgsPoint &point );
 
+    /**
+     * Returns coordinates of the active vertex in map CRS
+     */
     Q_INVOKABLE QgsPoint vertexMapCoors( const Vertex &vertex ) const;
 
     Q_INVOKABLE void cancelGrab();
@@ -202,17 +203,10 @@ class RecordingMapTool : public AbstractMapTool
     void recordingTypeChanged( const RecordingMapTool::RecordingType &recordingType );
 
     void initialGeometryChanged( const QgsGeometry &initialGeometry );
-
     void existingVerticesChanged( const QgsGeometry &existingVertices );
-
     void midPointsChanged( const QgsGeometry &midPoints );
-
     void handlesChanged( const QgsGeometry &handles );
-
     void stateChanged( const RecordingMapTool::MapToolState &state );
-
-    void clickedVertexIdChanged( QgsVertexId id );
-    void clickedPointChanged( QgsPoint point );
 
     void crosshairPositionChanged( QPointF crosshairPosition );
 

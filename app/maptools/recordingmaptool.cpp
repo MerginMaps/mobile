@@ -354,7 +354,6 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   if ( idx >= 0 )
   {
     toggleSelectedVertexVisibility( idx );
-    //mActiveVertex = mVertices.at( idx );
 
     if ( mActiveVertex.type() == Vertex::Existing )
     {
@@ -651,6 +650,20 @@ void RecordingMapTool::setRecordPoint( QgsPoint newRecordPoint )
   emit recordPointChanged( mRecordPoint );
 }
 
+const Vertex &RecordingMapTool::activeVertex() const
+{
+  return mActiveVertex;
+}
+
+void RecordingMapTool::setActiveVertex( const Vertex &newActiveVertex )
+{
+  if ( mActiveVertex == newActiveVertex )
+    return;
+  mActiveVertex = newActiveVertex;
+  emit activeVertexChanged( mActiveVertex );
+}
+
+
 const QgsVertexId &Vertex::vertexId() const
 {
   return mVertexId;
@@ -661,7 +674,6 @@ void Vertex::setVertexId( const QgsVertexId &newVertexId )
   if ( mVertexId == newVertexId )
     return;
   mVertexId = newVertexId;
-//  emit vertexIdChanged(mVertexId);
 }
 
 QgsPoint Vertex::coordinates() const
@@ -674,7 +686,6 @@ void Vertex::setCoordinates( QgsPoint newCoordinates )
   if ( mCoordinates == newCoordinates )
     return;
   mCoordinates = newCoordinates;
-//  emit coordinatesChanged(mCoordinates);
 }
 
 const Vertex::VertexType &Vertex::type() const
@@ -687,25 +698,4 @@ void Vertex::setType( const VertexType &newType )
   if ( mType == newType )
     return;
   mType = newType;
-//  emit typeChanged(mType);
-}
-
-//void Vertex::set(const Vertex &other)
-//{
-//  setType( other.type() );
-//  setVertexId( other.vertexId() );
-//  setCoordinates( other.coordinates() );
-//}
-
-const Vertex &RecordingMapTool::activeVertex() const
-{
-  return mActiveVertex;
-}
-
-void RecordingMapTool::setActiveVertex( const Vertex &newActiveVertex )
-{
-  if ( mActiveVertex == newActiveVertex )
-    return;
-  mActiveVertex = newActiveVertex;
-  emit activeVertexChanged( mActiveVertex );
 }
