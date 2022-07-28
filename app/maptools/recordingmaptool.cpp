@@ -451,6 +451,46 @@ void RecordingMapTool::toggleSelectedVertexVisibility( int vertexIndex )
   }
 }
 
+void RecordingMapTool::toggleHandleVisibility()
+{
+  double minDistance = std::numeric_limits<double>::max();
+  double currentDistance = 0;
+
+  if ( !mHandles.isEmpty() && mActiveVertex.isValid() )
+  {
+    // add previously hidden handle back
+    if ( !mHiddenHandle.isEmpty() )
+    {
+      QgsMultiLineString *lines = qgsgeometry_cast<QgsMultiLineString *>( mHandles.get() );
+      lines->addGeometry( mHiddenHandle.clone() );
+      mHiddenHandle = QgsGeometry();
+    }
+
+    // find part containing active vertex and hide it
+    QgsVertexId id;
+    QgsPoint point;
+    int part = -1;
+    const QgsAbstractGeometry *geom = mHandles.constGet();
+    while ( geom->nextVertex( id, point ) )
+    {
+      currentDistance = point.distance( mActiveVertex.coordinates() );
+      if ( currentDistance < minDistance )
+      {
+        minDistance = currentDistance;
+        part = id.part;
+      }
+    }
+
+    if ( part != -1 )
+    {
+      mmHiddenHandle.set( geom->lineStringN( part ).clone() );
+      mHandles.deletePart( part );
+    }
+  }
+
+  emit handlesChanged( mHandles );
+}
+
 double RecordingMapTool::pixelsToMapUnits( double numPixels )
 {
   QgsRenderContext context = QgsRenderContext::fromMapSettings( mapSettings()->mapSettings() );

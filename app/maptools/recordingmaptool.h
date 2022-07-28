@@ -233,6 +233,7 @@ class RecordingMapTool : public AbstractMapTool
     double pixelsToMapUnits( double numPixels );
 
     void toggleSelectedVertexVisibility( int vertexIndex );
+    void toggleHandleVisibility();
 
     QgsGeometry mRecordedGeometry;
     QgsGeometry mInitialGeometry;
@@ -248,6 +249,7 @@ class RecordingMapTool : public AbstractMapTool
     QgsGeometry mExistingVertices;
     QgsGeometry mMidPoints;
     QgsGeometry mHandles;
+    QgsGeometry mHiddenHandle;
 
     MapToolState mState = MapToolState::Record;
 
