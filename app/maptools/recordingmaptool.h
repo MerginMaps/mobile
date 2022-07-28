@@ -231,7 +231,11 @@ class RecordingMapTool : public AbstractMapTool
 
   private:
     double pixelsToMapUnits( double numPixels );
-    //void toggleHandleVisibility();
+
+    /**
+     * Check whether given point should be used for creating markers/handles
+     */
+    bool shouldUseVertex( QgsPoint point );
 
     QgsGeometry mRecordedGeometry;
     QgsGeometry mInitialGeometry;
