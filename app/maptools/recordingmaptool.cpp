@@ -326,7 +326,6 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
 {
   double minDistance = std::numeric_limits<double>::max();
   double currentDistance = 0;
-  QgsRenderContext context = QgsRenderContext::fromMapSettings( mapSettings()->mapSettings() );
   double searchDistance = pixelsToMapUnits( searchRadius );
 
   QgsPoint pnt = mapSettings()->screenToCoordinate( clickedPoint );
@@ -494,7 +493,7 @@ void RecordingMapTool::toggleHandleVisibility()
 double RecordingMapTool::pixelsToMapUnits( double numPixels )
 {
   QgsRenderContext context = QgsRenderContext::fromMapSettings( mapSettings()->mapSettings() );
-  return numPixels * context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
+  return numPixels * InputUtils::calculateDpRatio() * context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
 }
 
 Vertex::Vertex()
