@@ -520,6 +520,10 @@ QLocale InputUtils::fixLocaleCountry( QLocale applocale )
   {
     out = QLocale( QLocale::Italian, QLocale::AnyCountry );
   }
+  else if ( applocale.language() == QLocale::Spanish )
+  {
+    out = QLocale( QLocale::Spanish, QLocale::AnyCountry );
+  }
   else if ( applocale.language() == QLocale::Turkish )
   {
     out = QLocale( QLocale::Turkish, QLocale::AnyCountry );
