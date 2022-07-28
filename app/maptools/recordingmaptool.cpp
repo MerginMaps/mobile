@@ -25,6 +25,7 @@ RecordingMapTool::RecordingMapTool( QObject *parent )
 {
   connect( this, &RecordingMapTool::initialGeometryChanged, this, &RecordingMapTool::prepareEditing );
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::createNodesAndHandles );
+  connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::createNodesAndHandles );
 }
 
 RecordingMapTool::~RecordingMapTool() = default;
@@ -271,7 +272,15 @@ void RecordingMapTool::createNodesAndHandles()
 
   while ( geom->nextVertex( vertexId, vertex ) )
   {
-    existingVertices->addGeometry( vertex.clone() );
+    if ( mActiveVertex.isValid() )
+    {
+      if ( !InputUtils::equals( vertex, mActiveVertex.coordinates(), 1e-16 ) )
+        existingVertices->addGeometry( vertex.clone() );
+    }
+    else
+    {
+      existingVertices->addGeometry( vertex.clone() );
+    }
     mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
 
     // for lines and polygons create midpoints
@@ -352,7 +361,7 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
 
   if ( idx >= 0 )
   {
-    toggleSelectedVertexVisibility( idx );
+    mActiveVertex = mVertices.at( idx );
 
     if ( mActiveVertex.type() == Vertex::Existing )
     {
@@ -366,6 +375,7 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     else if ( mActiveVertex.type() == Vertex::Handle )
     {
       mActiveVertex = Vertex();
+      createNodesAndHandles();
       setState( MapToolState::Record );
     }
 
@@ -380,7 +390,6 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
       updateVertex( mRecordPoint );
     }
 
-    toggleSelectedVertexVisibility( -1 );
     setActiveVertex( Vertex() );
     setState( MapToolState::View );
   }
@@ -419,37 +428,10 @@ void RecordingMapTool::cancelGrab()
   }
 
   setState( MapToolState::View );
-  toggleSelectedVertexVisibility( -1 );
   setActiveVertex( Vertex() );
 }
 
-void RecordingMapTool::toggleSelectedVertexVisibility( int vertexIndex )
-{
-  if ( !mExistingVertices.isEmpty() )
-  {
-    // add currently selected vertex back to the mExistingVertices in order
-    // to make it visible again
-    if ( mActiveVertex.isValid() )
-    {
-      QgsMultiPoint *points = qgsgeometry_cast<QgsMultiPoint *>( mExistingVertices.get() );
-      points->addGeometry( mActiveVertex.coordinates().clone() );
-    }
-
-    if ( vertexIndex != -1 )
-    {
-      mActiveVertex = mVertices.at( vertexIndex );
-
-      // remove newly selected vertex from the mExistingVertices
-      QgsPoint p = mActiveVertex.coordinates();
-      mExistingVertices.filterVertices( [p]( const QgsPoint & point )->bool
-      {
-        return !InputUtils::equals( point, p, 1e-16 );
-      } );
-    }
-    emit existingVerticesChanged( mExistingVertices );
-  }
-}
-
+/*
 void RecordingMapTool::toggleHandleVisibility()
 {
   double minDistance = std::numeric_limits<double>::max();
@@ -489,7 +471,7 @@ void RecordingMapTool::toggleHandleVisibility()
 
   emit handlesChanged( mHandles );
 }
-
+*/
 double RecordingMapTool::pixelsToMapUnits( double numPixels )
 {
   QgsRenderContext context = QgsRenderContext::fromMapSettings( mapSettings()->mapSettings() );

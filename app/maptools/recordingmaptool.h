@@ -231,9 +231,7 @@ class RecordingMapTool : public AbstractMapTool
 
   private:
     double pixelsToMapUnits( double numPixels );
-
-    void toggleSelectedVertexVisibility( int vertexIndex );
-    void toggleHandleVisibility();
+    //void toggleHandleVisibility();
 
     QgsGeometry mRecordedGeometry;
     QgsGeometry mInitialGeometry;
