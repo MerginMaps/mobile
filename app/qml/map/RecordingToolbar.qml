@@ -93,7 +93,7 @@ Item {
                 width: root.itemSize
                 text: qsTr("Remove")
                 imageSource: InputStyle.undoIcon
-                enabled: manualRecording || root.toolMode === RecordingMapTool.View
+                enabled: manualRecording && root.toolMode !== RecordingMapTool.View
 
                 onActivated: root.removePointClicked()
             }
@@ -109,7 +109,7 @@ Item {
                 width: root.itemSize
                 text: qsTr("Add")
                 imageSource: InputStyle.plusIcon
-                enabled: manualRecording || root.toolMode !== RecordingMapTool.View
+                enabled: manualRecording && root.toolMode !== RecordingMapTool.View
 
                 onActivated: root.addClicked()
             }

@@ -417,17 +417,15 @@ void TestMapTools::testLookForVertex()
   mapTool->setLayer( lineLayer );
   mapTool->setInitialGeometry( geometry );
 
-  // start point
+  // start point, should be invalid vertex as we are switching to the
+  // recording state are reset selection
   QPointF screenPoint = ms->coordinateToScreen( QgsPoint( -0.05, -0.13 ) );
-  mapTool->lookForVertex( screenPoint, 0.05 );
-  QVERIFY( mapTool->activeVertex().isValid() );
-  QCOMPARE( mapTool->activeVertex().vertexId().part, 0 );
-  QCOMPARE( mapTool->activeVertex().vertexId().ring, 0 );
-  QCOMPARE( mapTool->activeVertex().vertexId().vertex, 0 );
+  mapTool->lookForVertex( screenPoint );
+  QVERIFY( !mapTool->activeVertex().isValid() );
 
   // first point
   screenPoint = ms->coordinateToScreen( QgsPoint( -0.01, 0.1 ) );
-  mapTool->lookForVertex( screenPoint, 0.05 );
+  mapTool->lookForVertex( screenPoint );
   QVERIFY( mapTool->activeVertex().isValid() );
   QCOMPARE( mapTool->activeVertex().vertexId().part, 0 );
   QCOMPARE( mapTool->activeVertex().vertexId().ring, 0 );
@@ -435,7 +433,7 @@ void TestMapTools::testLookForVertex()
 
   // midpoint
   screenPoint = ms->coordinateToScreen( QgsPoint( 0.6, 1.2 ) );
-  mapTool->lookForVertex( screenPoint, 0.05 );
+  mapTool->lookForVertex( screenPoint );
   QVERIFY( mapTool->activeVertex().isValid() );
   QCOMPARE( mapTool->activeVertex().vertexId().part, 0 );
   QCOMPARE( mapTool->activeVertex().vertexId().ring, 0 );
@@ -443,6 +441,6 @@ void TestMapTools::testLookForVertex()
 
   // distant point. should return invalid vertex id
   screenPoint = ms->coordinateToScreen( QgsPoint( 3, 2 ) );
-  mapTool->lookForVertex( screenPoint, 0.05 );
+  mapTool->lookForVertex( screenPoint );
   QVERIFY( !mapTool->activeVertex().isValid() );
 }

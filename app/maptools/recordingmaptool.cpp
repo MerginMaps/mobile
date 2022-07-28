@@ -14,6 +14,7 @@
 #include "qgsvectorlayerutils.h"
 #include "qgsmultipoint.h"
 #include "qgsmultilinestring.h"
+#include "qgsrendercontext.h"
 
 #include "position/positionkit.h"
 #include "variablesmanager.h"
@@ -24,6 +25,7 @@ RecordingMapTool::RecordingMapTool( QObject *parent )
 {
   connect( this, &RecordingMapTool::initialGeometryChanged, this, &RecordingMapTool::prepareEditing );
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::createNodesAndHandles );
+  connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::createNodesAndHandles );
 }
 
 RecordingMapTool::~RecordingMapTool() = default;
@@ -233,8 +235,11 @@ void RecordingMapTool::onPositionChanged()
 
 void RecordingMapTool::prepareEditing()
 {
-  setState( MapToolState::View );
-  setRecordedGeometry( mInitialGeometry );
+  if ( !mInitialGeometry.isEmpty() )
+  {
+    setState( MapToolState::View );
+    setRecordedGeometry( mInitialGeometry );
+  }
 }
 
 void RecordingMapTool::createNodesAndHandles()
@@ -267,8 +272,11 @@ void RecordingMapTool::createNodesAndHandles()
 
   while ( geom->nextVertex( vertexId, vertex ) )
   {
-    existingVertices->addGeometry( vertex.clone() );
-    mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
+    if ( shouldUseVertex( vertex ) )
+    {
+      existingVertices->addGeometry( vertex.clone() );
+      mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
+    }
 
     // for lines and polygons create midpoints
     if ( mRecordedGeometry.type() != QgsWkbTypes::PointGeometry && vertexId.vertex < geom->vertexCount( vertexId.part, vertexId.ring ) - 1 )
@@ -288,25 +296,31 @@ void RecordingMapTool::createNodesAndHandles()
         // start point and handle
         QgsVertexId startId( vertexId.part, vertexId.ring, 0 );
         QgsVertexId endId( vertexId.part, vertexId.ring, 1 );
-        QgsPoint point = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -0.1 );
+        if ( shouldUseVertex( geom->vertexAt( startId ) ) )
+        {
+          QgsPoint point = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -0.1 );
 
-        midPoints->addGeometry( point.clone() );
-        mVertices.push_back( Vertex( startId, point, Vertex::Handle ) );
+          midPoints->addGeometry( point.clone() );
+          mVertices.push_back( Vertex( startId, point, Vertex::Handle ) );
 
-        QgsLineString handle( point, geom->vertexAt( startId ) );
-        handles->addGeometry( handle.clone() );
+          QgsLineString handle( point, geom->vertexAt( startId ) );
+          handles->addGeometry( handle.clone() );
+        }
 
         // end point and handle
         startId.vertex = vertexCount - 2;
         endId.vertex = vertexCount - 1;
-        point = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), 1.1 );
+        if ( shouldUseVertex( geom->vertexAt( endId ) ) )
+        {
+          QgsPoint point = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), 1.1 );
 
-        handle = QgsLineString( geom->vertexAt( endId ), point );
-        handles->addGeometry( handle.clone() );
+          QgsLineString handle = QgsLineString( geom->vertexAt( endId ), point );
+          handles->addGeometry( handle.clone() );
 
-        midPoints->addGeometry( point.clone() );
-        endId.vertex = vertexCount;
-        mVertices.push_back( Vertex( endId, point, Vertex::Handle ) );
+          midPoints->addGeometry( point.clone() );
+          endId.vertex = vertexCount;
+          mVertices.push_back( Vertex( endId, point, Vertex::Handle ) );
+        }
       }
       currentPart = vertexId.part;
       currentRing = vertexId.ring;
@@ -322,9 +336,9 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
 {
   double minDistance = std::numeric_limits<double>::max();
   double currentDistance = 0;
+  double searchDistance = pixelsToMapUnits( searchRadius );
 
   QgsPoint pnt = mapSettings()->screenToCoordinate( clickedPoint );
-  pnt = InputUtils::transformPoint( mapSettings()->destinationCrs(), mLayer->crs(), mLayer->transformContext(), pnt );
 
   if ( mRecordedGeometry.isEmpty() )
   {
@@ -336,8 +350,10 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   int idx = -1;
   for ( int i = 0; i < mVertices.count(); i++ )
   {
-    currentDistance = QgsGeometryUtils::sqrDistance2D( pnt, mVertices.at( i ).coordinates() );
-    if ( currentDistance <= minDistance && currentDistance <= searchRadius )
+    QgsPoint vertex( mVertices.at( i ).coordinates() );
+    vertex.transform( mapSettings()->mapSettings().layerTransform( mLayer ) );
+    currentDistance = pnt.distance( vertex );
+    if ( currentDistance < minDistance && currentDistance <= searchDistance )
     {
       minDistance = currentDistance;
       idx = i;
@@ -360,6 +376,7 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     else if ( mActiveVertex.type() == Vertex::Handle )
     {
       mActiveVertex = Vertex();
+      createNodesAndHandles();
       setState( MapToolState::Record );
     }
 
@@ -413,6 +430,17 @@ void RecordingMapTool::cancelGrab()
 
   setState( MapToolState::View );
   setActiveVertex( Vertex() );
+}
+
+double RecordingMapTool::pixelsToMapUnits( double numPixels )
+{
+  QgsRenderContext context = QgsRenderContext::fromMapSettings( mapSettings()->mapSettings() );
+  return numPixels * InputUtils::calculateDpRatio() * context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
+}
+
+bool RecordingMapTool::shouldUseVertex( const QgsPoint point )
+{
+  return !mActiveVertex.isValid() || ( mActiveVertex.isValid() && !InputUtils::equals( point, mActiveVertex.coordinates(), 1e-16 ) );
 }
 
 Vertex::Vertex()
@@ -608,6 +636,20 @@ void RecordingMapTool::setRecordPoint( QgsPoint newRecordPoint )
   emit recordPointChanged( mRecordPoint );
 }
 
+const Vertex &RecordingMapTool::activeVertex() const
+{
+  return mActiveVertex;
+}
+
+void RecordingMapTool::setActiveVertex( const Vertex &newActiveVertex )
+{
+  if ( mActiveVertex == newActiveVertex )
+    return;
+  mActiveVertex = newActiveVertex;
+  emit activeVertexChanged( mActiveVertex );
+}
+
+
 const QgsVertexId &Vertex::vertexId() const
 {
   return mVertexId;
@@ -618,7 +660,6 @@ void Vertex::setVertexId( const QgsVertexId &newVertexId )
   if ( mVertexId == newVertexId )
     return;
   mVertexId = newVertexId;
-//  emit vertexIdChanged(mVertexId);
 }
 
 QgsPoint Vertex::coordinates() const
@@ -631,7 +672,6 @@ void Vertex::setCoordinates( QgsPoint newCoordinates )
   if ( mCoordinates == newCoordinates )
     return;
   mCoordinates = newCoordinates;
-//  emit coordinatesChanged(mCoordinates);
 }
 
 const Vertex::VertexType &Vertex::type() const
@@ -644,25 +684,4 @@ void Vertex::setType( const VertexType &newType )
   if ( mType == newType )
     return;
   mType = newType;
-//  emit typeChanged(mType);
-}
-
-//void Vertex::set(const Vertex &other)
-//{
-//  setType( other.type() );
-//  setVertexId( other.vertexId() );
-//  setCoordinates( other.coordinates() );
-//}
-
-const Vertex &RecordingMapTool::activeVertex() const
-{
-  return mActiveVertex;
-}
-
-void RecordingMapTool::setActiveVertex( const Vertex &newActiveVertex )
-{
-  if ( mActiveVertex == newActiveVertex )
-    return;
-  mActiveVertex = newActiveVertex;
-  emit activeVertexChanged( mActiveVertex );
 }

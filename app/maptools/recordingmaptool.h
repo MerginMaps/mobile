@@ -56,8 +56,6 @@ class Vertex
     const VertexType &type() const;
     void setType( const VertexType &newType );
 
-//    void set( const Vertex &other );
-
     bool operator==( const Vertex &other )
     {
       return other.vertexId() == mVertexId && other.type() == mType;
@@ -135,9 +133,9 @@ class RecordingMapTool : public AbstractMapTool
     Q_INVOKABLE bool hasValidGeometry() const;
 
     /**
-     * Finds vertex id which matches given screen coordinates.
+     * Finds vertex id which matches given screen coordinates. Search radius defined in pixels
      */
-    Q_INVOKABLE void lookForVertex( const QPointF &clickedPoint, double searchRadius = 0.001 );
+    Q_INVOKABLE void lookForVertex( const QPointF &clickedPoint, double searchRadius = 5 );
 
     /**
      * Updates vertex at the active vertex position and updates recordedGeometry
@@ -145,6 +143,9 @@ class RecordingMapTool : public AbstractMapTool
      */
     Q_INVOKABLE void updateVertex( const QgsPoint &point );
 
+    /**
+     * Returns coordinates of the active vertex in map CRS
+     */
     Q_INVOKABLE QgsPoint vertexMapCoors( const Vertex &vertex ) const;
 
     Q_INVOKABLE void cancelGrab();
@@ -202,17 +203,10 @@ class RecordingMapTool : public AbstractMapTool
     void recordingTypeChanged( const RecordingMapTool::RecordingType &recordingType );
 
     void initialGeometryChanged( const QgsGeometry &initialGeometry );
-
     void existingVerticesChanged( const QgsGeometry &existingVertices );
-
     void midPointsChanged( const QgsGeometry &midPoints );
-
     void handlesChanged( const QgsGeometry &handles );
-
     void stateChanged( const RecordingMapTool::MapToolState &state );
-
-    void clickedVertexIdChanged( QgsVertexId id );
-    void clickedPointChanged( QgsPoint point );
 
     void crosshairPositionChanged( QPointF crosshairPosition );
 
@@ -225,17 +219,23 @@ class RecordingMapTool : public AbstractMapTool
 
   private slots:
     void prepareEditing();
+    /**
+     * Creates geometries represeinting existing nodes, midpoints (for lines and polygons),
+     * start/end points and "handles" (for lines). Also fills nodes index.
+     */
+    void createNodesAndHandles();
 
   protected:
     //! Unifies Z coordinate of the point with current layer - drops / adds it
     void fixZ( QgsPoint &point ) const;
 
   private:
+    double pixelsToMapUnits( double numPixels );
+
     /**
-     * Creates geometries represeinting existing nodes, midpoints (for lines and polygons),
-     * start/end points and "handles" (for lines). Also fills nodes index.
+     * Check whether given point should be used for creating markers/handles
      */
-    void createNodesAndHandles();
+    bool shouldUseVertex( QgsPoint point );
 
     QgsGeometry mRecordedGeometry;
     QgsGeometry mInitialGeometry;
@@ -251,8 +251,9 @@ class RecordingMapTool : public AbstractMapTool
     QgsGeometry mExistingVertices;
     QgsGeometry mMidPoints;
     QgsGeometry mHandles;
+    QgsGeometry mHiddenHandle;
 
-    MapToolState mState = MapToolState::View;
+    MapToolState mState = MapToolState::Record;
 
     Vertex mActiveVertex;
     QVector< Vertex > mVertices;
