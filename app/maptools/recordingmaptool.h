@@ -36,7 +36,8 @@ class Vertex
     {
       Existing = 0, // Existing vertex in geometry
       MidPoint, // Node between two existing vertices
-      Handle // Node before begin / after end of line
+      HandleStart, // Node before beginning of line
+      HandleEnd // Node after end of line
     };
     Q_ENUM( VertexType );
 
@@ -114,6 +115,13 @@ class RecordingMapTool : public AbstractMapTool
     };
     Q_ENUM( MapToolState );
 
+    enum NewVertexOrder
+    {
+      End = 0, // Default, new vertices are appended to the end of geometry
+      Start // Vertices will be added to the beggining of geometry (when clicked on continue line from start)
+    };
+    Q_ENUM( NewVertexOrder );
+
     explicit RecordingMapTool( QObject *parent = nullptr );
     virtual ~RecordingMapTool();
 
@@ -123,11 +131,15 @@ class RecordingMapTool : public AbstractMapTool
      */
     Q_INVOKABLE void addPoint( const QgsPoint &point );
 
+    void addPointAtPosition( const QgsPoint &point, Vertex vertex );
+
     /**
      *  Removes last point from recorded geometry if there is at least one point
      *  Updates recordedGeometry afterwards
      */
     Q_INVOKABLE void removePoint();
+
+    void removePointAtPosition( Vertex vertex );
 
     //! Returns true if the captured geometry has enought points for the specified layer
     Q_INVOKABLE bool hasValidGeometry() const;
@@ -254,6 +266,7 @@ class RecordingMapTool : public AbstractMapTool
     QgsGeometry mHiddenHandle;
 
     MapToolState mState = MapToolState::Record;
+    NewVertexOrder mNewVertexOrder = NewVertexOrder::End;
 
     Vertex mActiveVertex;
     QVector< Vertex > mVertices;
