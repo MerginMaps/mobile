@@ -91,8 +91,18 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
       id.vertex = mRecordedGeometry.constGet()->vertexCount() - 1;
     }
   }
-
-  mRecordedGeometry.get()->insertVertex( id, pointToAdd );
+  else if ( mRecordedGeometry.wkbType() == QgsWkbTypes::Point )
+  {
+    mRecordedGeometry.set( pointToAdd.clone() );
+  }
+  else if ( mRecordedGeometry.wkbType() == QgsWkbTypes::MultiPoint )
+  {
+    mRecordedGeometry.addPart( pointToAdd.clone() );
+  }
+  else
+  {
+    mRecordedGeometry.get()->insertVertex( id, pointToAdd );
+  }
 
   emit recordedGeometryChanged( mRecordedGeometry );
 }
