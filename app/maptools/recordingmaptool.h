@@ -225,19 +225,20 @@ class RecordingMapTool : public AbstractMapTool
 
   private slots:
     void prepareEditing();
-
-  protected:
-    //! Unifies Z coordinate of the point with current layer - drops / adds it
-    void fixZ( QgsPoint &point ) const;
-
-  private:
     /**
      * Creates geometries represeinting existing nodes, midpoints (for lines and polygons),
      * start/end points and "handles" (for lines). Also fills nodes index.
      */
     void createNodesAndHandles();
 
+  protected:
+    //! Unifies Z coordinate of the point with current layer - drops / adds it
+    void fixZ( QgsPoint &point ) const;
+
+  private:
     double pixelsToMapUnits( double numPixels );
+
+    void toggleSelectedVertexVisibility( int vertexIndex );
 
     QgsGeometry mRecordedGeometry;
     QgsGeometry mInitialGeometry;

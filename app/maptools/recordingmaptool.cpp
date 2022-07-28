@@ -353,7 +353,8 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
 
   if ( idx >= 0 )
   {
-    mActiveVertex = mVertices.at( idx );
+    toggleSelectedVertexVisibility( idx );
+    //mActiveVertex = mVertices.at( idx );
 
     if ( mActiveVertex.type() == Vertex::Existing )
     {
@@ -381,6 +382,7 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
       updateVertex( mRecordPoint );
     }
 
+    toggleSelectedVertexVisibility( -1 );
     setActiveVertex( Vertex() );
     setState( MapToolState::View );
   }
@@ -419,7 +421,35 @@ void RecordingMapTool::cancelGrab()
   }
 
   setState( MapToolState::View );
+  toggleSelectedVertexVisibility( -1 );
   setActiveVertex( Vertex() );
+}
+
+void RecordingMapTool::toggleSelectedVertexVisibility( int vertexIndex )
+{
+  if ( !mExistingVertices.isEmpty() )
+  {
+    // add currently selected vertex back to the mExistingVertices in order
+    // to make it visible again
+    if ( mActiveVertex.isValid() )
+    {
+      QgsMultiPoint *points = qgsgeometry_cast<QgsMultiPoint *>( mExistingVertices.get() );
+      points->addGeometry( mActiveVertex.coordinates().clone() );
+    }
+
+    if ( vertexIndex != -1 )
+    {
+      mActiveVertex = mVertices.at( vertexIndex );
+
+      // remove newly selected vertex from the mExistingVertices
+      QgsPoint p = mActiveVertex.coordinates();
+      mExistingVertices.filterVertices( [p]( const QgsPoint & point )->bool
+      {
+        return !InputUtils::equals( point, p, 1e-16 );
+      } );
+    }
+    emit existingVerticesChanged( mExistingVertices );
+  }
 }
 
 double RecordingMapTool::pixelsToMapUnits( double numPixels )
