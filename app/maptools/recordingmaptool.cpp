@@ -118,12 +118,12 @@ void RecordingMapTool::removePoint()
     if ( removedVertexId - 1 >= 0 )
     {
       mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, removedVertexId - 1 ) );
-      // TODO: change coordinates
+      mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
       emit activeVertexChanged( mActiveVertex );
     }
     else if ( removedVertexId < mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring ) )
     {
-      // TODO: change coordinates
+      mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
       emit activeVertexChanged( mActiveVertex );
     }
     else
