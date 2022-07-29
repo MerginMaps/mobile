@@ -146,11 +146,11 @@ void RecordingMapTool::removePoint()
   else if ( mState == MapToolState::Record )
   {
     // select first/last existing vertex as active and change state to GRAB
-    if ( mNewVertexOrder = NewVertexOrder::End )
+    if ( mNewVertexOrder == NewVertexOrder::End )
     {
       mActiveVertex.setVertexId( QgsVertexId( 0, 0,  mRecordedGeometry.constGet()->vertexCount() - 1 ) );
     }
-    else if ( mNewVertexOrder = NewVertexOrder::Start )
+    else if ( mNewVertexOrder == NewVertexOrder::Start )
     {
       mActiveVertex.setVertexId( QgsVertexId( 0, 0, 1 ) );
     }
