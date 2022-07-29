@@ -145,9 +145,20 @@ void RecordingMapTool::removePoint()
   }
   else if ( mState == MapToolState::Record )
   {
-    // TODO: select first/last existing vertex as active
-    // TODO: change state to GRAB
+    // select first/last existing vertex as active and change state to GRAB
+    if ( mNewVertexOrder = NewVertexOrder::End )
+    {
+      mActiveVertex.setVertexId( QgsVertexId( 0, 0,  mRecordedGeometry.constGet()->vertexCount() - 1 ) );
+    }
+    else if ( mNewVertexOrder = NewVertexOrder::Start )
+    {
+      mActiveVertex.setVertexId( QgsVertexId( 0, 0, 1 ) );
+    }
+    mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
+    emit activeVertexChanged( mActiveVertex );
+    setState( MapToolState::Grab );
 
+/*
     if ( mRecordedGeometry.constGet()->vertexCount() > 0 )
     {
       QgsVertexId id( 0, 0, mRecordedGeometry.constGet()->vertexCount() - 1 );
@@ -194,6 +205,7 @@ void RecordingMapTool::removePoint()
       mRecordedGeometry.get()->deleteVertex( id );
       emit recordedGeometryChanged( mRecordedGeometry );
     }
+*/
   }
 }
 
