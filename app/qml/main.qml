@@ -110,9 +110,19 @@ ApplicationWindow {
       }
       else projectPanel.openPanel()
 
-        // get focus when any project is active, otherwise let focus to merginprojectpanel
-        if ( __appSettings.activeProject )
-          mainPanel.forceActiveFocus()
+      // get focus when any project is active, otherwise let focus to merginprojectpanel
+      if ( __appSettings.activeProject )
+        mainPanel.forceActiveFocus()
+
+
+      // Catch back button click (if no other component catched it so far)
+      // to prevent QT from quitting the APP immediately
+      contentItem.Keys.released.connect( function( event ) {
+        if ( event.key === Qt.Key_Back ) {
+          event.accepted = true
+          window.backButtonPressed()
+        }
+      } )
 
         console.log("Application initialized!")
     }
@@ -605,5 +615,24 @@ ApplicationWindow {
 
       z: 1000 // unfortunatelly we need this hack because some parts of application still sets z coord
       anchors.fill: parent
+    }
+
+    Timer {
+      id: closeAppTimer
+
+      interval: 3000
+      running: false
+      repeat: false
+    }
+
+    function backButtonPressed() {
+
+      if ( closeAppTimer.running ) {
+        __inputUtils.quitApp()
+      }
+      else {
+        closeAppTimer.start()
+        showMessage( qsTr( "Press back again to quit the app" ) )
+      }
     }
 }

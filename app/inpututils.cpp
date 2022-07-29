@@ -497,7 +497,14 @@ void InputUtils::turnBluetoothOn()
 
 void InputUtils::quitApp()
 {
-  QCoreApplication::quit();
+  if ( appPlatform() == QStringLiteral( "android" ) )
+  {
+    AndroidUtils::quitApp();
+  }
+  else
+  {
+    QCoreApplication::quit();
+  }
 }
 
 QLocale InputUtils::fixLocaleCountry( QLocale applocale )
