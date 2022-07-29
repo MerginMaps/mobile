@@ -32,10 +32,9 @@ void GuidelineController::buildGuideline()
     return;
   }
 
-  if ( !mActiveVertexId.isValid() )
+  if ( !mActiveVertex.isValid() )
   {
     // we add current crosshair to the end of geometry - creating new point
-
     QgsPoint crosshair = mMapSettings->screenToCoordinate( mCrosshairPosition );
 
     if ( mRealGeometry.type() == QgsWkbTypes::LineGeometry )
@@ -65,13 +64,26 @@ void GuidelineController::buildGuideline()
   }
   else
   {
-    // we add current crosshair in place of active vertex id
-
     QgsPoint crosshair = mMapSettings->screenToCoordinate( mCrosshairPosition );
-
     QgsGeometry g( mRealGeometry );
 
-    g.moveVertex( crosshair, g.vertexNrFromVertexId( mActiveVertexId ) );
+    // for handles we insert new vertex at the beginning or end of the line
+    if ( mActiveVertex.type() == Vertex::VertexType::HandleStart )
+    {
+      QgsVertexId id( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, 0 );
+      g.insertVertex( crosshair, g.vertexNrFromVertexId( id ) );
+    }
+    if ( mActiveVertex.type() == Vertex::VertexType::HandleEnd )
+    {
+      int index = g.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
+      QgsVertexId id( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, index );
+      g.insertVertex( crosshair, g.vertexNrFromVertexId( id ) );
+    }
+    else
+    {
+      // we add current crosshair in place of active vertex id
+      g.moveVertex( crosshair, g.vertexNrFromVertexId( mActiveVertex.vertexId() ) );
+    }
 
     setGuidelineGeometry( g );
   }
@@ -147,17 +159,17 @@ void GuidelineController::setMapSettings( QgsQuickMapSettings *newMapSettings )
   emit mapSettingsChanged( mMapSettings );
 }
 
-const QgsVertexId &GuidelineController::activeVertexId() const
+const Vertex &GuidelineController::activeVertex() const
 {
-  return mActiveVertexId;
+  return mActiveVertex;
 }
 
-void GuidelineController::setActiveVertexId( const QgsVertexId &newActiveVertexId )
+void GuidelineController::setActiveVertex( const Vertex &newActiveVertex )
 {
-  if ( mActiveVertexId == newActiveVertexId )
+  if ( mActiveVertex == newActiveVertex )
     return;
-  mActiveVertexId = newActiveVertexId;
-  emit activeVertexIdChanged( mActiveVertexId );
+  mActiveVertex = newActiveVertex;
+  emit activeVertexChanged( mActiveVertex );
 
   buildGuideline();
 }

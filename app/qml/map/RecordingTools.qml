@@ -101,7 +101,7 @@ Item {
     crosshairPosition: crosshair.screenPoint
     realGeometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
 
-    activeVertexId: mapTool.activeVertex.vertexId
+    activeVertex: mapTool.activeVertex
   }
 
   Highlight {
