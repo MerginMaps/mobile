@@ -158,54 +158,54 @@ void RecordingMapTool::removePoint()
     emit activeVertexChanged( mActiveVertex );
     setState( MapToolState::Grab );
 
-/*
-    if ( mRecordedGeometry.constGet()->vertexCount() > 0 )
-    {
-      QgsVertexId id( 0, 0, mRecordedGeometry.constGet()->vertexCount() - 1 );
-      if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
-      {
-        QgsLineString *r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->exteriorRing() );
-        if ( !r )
+    /*
+        if ( mRecordedGeometry.constGet()->vertexCount() > 0 )
         {
-          return;
-        }
+          QgsVertexId id( 0, 0, mRecordedGeometry.constGet()->vertexCount() - 1 );
+          if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+          {
+            QgsLineString *r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->exteriorRing() );
+            if ( !r )
+            {
+              return;
+            }
 
-        if ( r->nCoordinates() == 4 )
-        {
-          // this is the smallest possible closed ring (first and last vertex are equal),
-          // we need to remove two last vertices in order to get correct linestring
-          r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
-          r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
+            if ( r->nCoordinates() == 4 )
+            {
+              // this is the smallest possible closed ring (first and last vertex are equal),
+              // we need to remove two last vertices in order to get correct linestring
+              r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
+              r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
+              emit recordedGeometryChanged( mRecordedGeometry );
+              return;
+            }
+            else if ( r->nCoordinates() <= 2 )
+            {
+              // if we remove last vertex directly the geometry will be cleared
+              // but we want to keep start point, so instead of removing vertex
+              // from the linestring we remove item from the QgsPointSequence.
+              QgsPointSequence points;
+              r->points( points );
+              points.takeLast();
+              r->setPoints( points );
+              emit recordedGeometryChanged( mRecordedGeometry );
+              return;
+            }
+            else
+            {
+              id.vertex = mRecordedGeometry.constGet()->vertexCount() - 2;
+            }
+          }
+
+          if ( mNewVertexOrder == Start )
+          {
+            id.vertex = 0;
+          }
+
+          mRecordedGeometry.get()->deleteVertex( id );
           emit recordedGeometryChanged( mRecordedGeometry );
-          return;
         }
-        else if ( r->nCoordinates() <= 2 )
-        {
-          // if we remove last vertex directly the geometry will be cleared
-          // but we want to keep start point, so instead of removing vertex
-          // from the linestring we remove item from the QgsPointSequence.
-          QgsPointSequence points;
-          r->points( points );
-          points.takeLast();
-          r->setPoints( points );
-          emit recordedGeometryChanged( mRecordedGeometry );
-          return;
-        }
-        else
-        {
-          id.vertex = mRecordedGeometry.constGet()->vertexCount() - 2;
-        }
-      }
-
-      if ( mNewVertexOrder == Start )
-      {
-        id.vertex = 0;
-      }
-
-      mRecordedGeometry.get()->deleteVertex( id );
-      emit recordedGeometryChanged( mRecordedGeometry );
-    }
-*/
+    */
   }
 }
 
