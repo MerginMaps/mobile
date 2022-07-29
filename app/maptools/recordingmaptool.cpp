@@ -59,11 +59,15 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
   }
   else
   {
+    if ( mActiveVertex.isValid() )
+    {
+      id = mActiveVertex.vertexId();
+    }
+
     if ( mNewVertexOrder == NewVertexOrder::End )
     {
       id.vertex = mRecordedGeometry.constGet()->vertexCount();
     }
-    // else - index keep zero
   }
 
   if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
@@ -91,7 +95,8 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
       id.vertex = mRecordedGeometry.constGet()->vertexCount() - 1;
     }
   }
-  else if ( mRecordedGeometry.wkbType() == QgsWkbTypes::Point )
+
+  if ( mRecordedGeometry.wkbType() == QgsWkbTypes::Point )
   {
     mRecordedGeometry.set( pointToAdd.clone() );
   }
@@ -107,11 +112,14 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
   emit recordedGeometryChanged( mRecordedGeometry );
 }
 
-void RecordingMapTool::addPointAtPosition( const QgsPoint &point, Vertex vertex )
+void RecordingMapTool::addPointAtPosition( Vertex vertex, const QgsPoint &point )
 {
-  if ( mRecordedGeometry.get()->insertVertex( vertex.vertexId(), point ) )
+  if ( vertex.isValid() )
   {
-    emit recordedGeometryChanged( mRecordedGeometry );
+    if ( mRecordedGeometry.get()->insertVertex( vertex.vertexId(), point ) )
+    {
+      emit recordedGeometryChanged( mRecordedGeometry );
+    }
   }
 }
 
@@ -121,8 +129,116 @@ void RecordingMapTool::removePoint()
   {
     int removedVertexId = mActiveVertex.vertexId().vertex;
 
-    if ( mRecordedGeometry.get()->deleteVertex( mActiveVertex.vertexId() ) )
+    if ( mRecordedGeometry.constGet()->vertexCount() > 0 )
+    {
+      QgsVertexId id( 0, 0, removedVertexId );
+      if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+      {
+        QgsLineString *r;
+
+        if ( mActiveVertex.vertexId().ring == 0 )
+        {
+          r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->exteriorRing() );
+        }
+        else
+        {
+          r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->interiorRing( mActiveVertex.vertexId().ring ) );
+        }
+
+        if ( !r )
+        {
+          return;
+        }
+
+        if ( r->nCoordinates() == 4 )
+        {
+          // this is the smallest possible closed ring (first and last vertex are equal),
+          // we need to remove two last vertices in order to get correct linestring
+
+          if ( removedVertexId == 0 || removedVertexId == r->nCoordinates() - 1 )
+          {
+            r->deleteVertex( QgsVertexId( 0, 0, 0 ) );
+            r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
+          }
+          else
+          {
+            r->deleteVertex( QgsVertexId( 0, 0, removedVertexId ) );
+            r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
+          }
+
+          emit recordedGeometryChanged( mRecordedGeometry );
+
+          // Grab previous vertex if there is any, otherwise grab next one if there is any, otherwise go to record
+          if ( removedVertexId - 1 >= 0 )
+          {
+            mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, removedVertexId - 1 ) );
+            mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
+            emit activeVertexChanged( mActiveVertex );
+          }
+          else if ( removedVertexId < mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring ) )
+          {
+            mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
+            emit activeVertexChanged( mActiveVertex );
+          }
+          else
+          {
+            // geometry is now empty
+            setActiveVertex( Vertex() );
+            setState( MapToolState::Record );
+          }
+
+          return;
+        }
+        else if ( r->nCoordinates() <= 2 )
+        {
+          // if we remove last vertex directly the geometry will be cleared
+          // but we want to keep start point, so instead of removing vertex
+          // from the linestring we remove item from the QgsPointSequence.
+          QgsPointSequence points;
+          r->points( points );
+
+          points.removeAt( removedVertexId );
+
+
+          r->setPoints( points );
+          emit recordedGeometryChanged( mRecordedGeometry );
+
+          // Grab previous vertex if there is any, otherwise grab next one if there is any, otherwise go to record
+          if ( removedVertexId - 1 >= 0 )
+          {
+            mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, removedVertexId - 1 ) );
+            mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
+            emit activeVertexChanged( mActiveVertex );
+          }
+          else if ( removedVertexId < mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring ) )
+          {
+            mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
+            emit activeVertexChanged( mActiveVertex );
+          }
+          else
+          {
+            // geometry is now empty
+            setActiveVertex( Vertex() );
+            setState( MapToolState::Record );
+          }
+
+          return;
+        }
+        else
+        {
+          id.vertex = mActiveVertex.vertexId().vertex;
+        }
+      }
+
+      if ( mNewVertexOrder == Start )
+      {
+        id.vertex = 0;
+      }
+
+      mRecordedGeometry.get()->deleteVertex( id );
+
       emit recordedGeometryChanged( mRecordedGeometry );
+    }
 
     // Grab previous vertex if there is any, otherwise grab next one if there is any, otherwise go to record
     if ( removedVertexId - 1 >= 0 )
@@ -148,70 +264,37 @@ void RecordingMapTool::removePoint()
     // select first/last existing vertex as active and change state to GRAB
     if ( mNewVertexOrder == NewVertexOrder::End )
     {
-      mActiveVertex.setVertexId( QgsVertexId( 0, 0,  mRecordedGeometry.constGet()->vertexCount() - 1 ) );
+      mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, mRecordedGeometry.constGet()->vertexCount() - 1 ) );
+
+      if ( InputUtils::isPolygonLayer( mLayer ) )
+      {
+        // if the ring is closed, we need to jump -2 vertices
+        if ( mRecordedGeometry.constGet()->nCoordinates() >= 4 )
+        {
+          mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, mRecordedGeometry.constGet()->vertexCount() - 2 ) );
+        }
+      }
     }
     else if ( mNewVertexOrder == NewVertexOrder::Start )
     {
-      mActiveVertex.setVertexId( QgsVertexId( 0, 0, 0 ) );
+      mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, 0 ) );
     }
+
+    if ( mActiveVertex.vertexId().part < 0 )
+    {
+      mActiveVertex.setVertexId( QgsVertexId( 0, mActiveVertex.vertexId().ring, mActiveVertex.vertexId().vertex ) );
+    }
+
+    if ( mActiveVertex.vertexId().ring < 0 )
+    {
+      mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, 0, mActiveVertex.vertexId().vertex ) );
+    }
+
     mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
+
     emit activeVertexChanged( mActiveVertex );
     setState( MapToolState::Grab );
-
-    /*
-        if ( mRecordedGeometry.constGet()->vertexCount() > 0 )
-        {
-          QgsVertexId id( 0, 0, mRecordedGeometry.constGet()->vertexCount() - 1 );
-          if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
-          {
-            QgsLineString *r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->exteriorRing() );
-            if ( !r )
-            {
-              return;
-            }
-
-            if ( r->nCoordinates() == 4 )
-            {
-              // this is the smallest possible closed ring (first and last vertex are equal),
-              // we need to remove two last vertices in order to get correct linestring
-              r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
-              r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
-              emit recordedGeometryChanged( mRecordedGeometry );
-              return;
-            }
-            else if ( r->nCoordinates() <= 2 )
-            {
-              // if we remove last vertex directly the geometry will be cleared
-              // but we want to keep start point, so instead of removing vertex
-              // from the linestring we remove item from the QgsPointSequence.
-              QgsPointSequence points;
-              r->points( points );
-              points.takeLast();
-              r->setPoints( points );
-              emit recordedGeometryChanged( mRecordedGeometry );
-              return;
-            }
-            else
-            {
-              id.vertex = mRecordedGeometry.constGet()->vertexCount() - 2;
-            }
-          }
-
-          if ( mNewVertexOrder == Start )
-          {
-            id.vertex = 0;
-          }
-
-          mRecordedGeometry.get()->deleteVertex( id );
-          emit recordedGeometryChanged( mRecordedGeometry );
-        }
-    */
   }
-}
-
-void RecordingMapTool::removePointAtPosition( Vertex vertex )
-{
-
 }
 
 bool RecordingMapTool::hasValidGeometry() const
@@ -422,14 +505,12 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
 {
   double minDistance = std::numeric_limits<double>::max();
   double currentDistance = 0;
-  double searchDistance = pixelsToMapUnits( searchRadius );
+  double searchDistance = pixelsToMapUnits( searchRadius ); // TODO: make sure the conversion is correct (dp?)
 
   QgsPoint pnt = mapSettings()->screenToCoordinate( clickedPoint );
 
   if ( mRecordedGeometry.isEmpty() )
   {
-    setState( MapToolState::View );
-    setActiveVertex( Vertex() );
     return;
   }
 
@@ -438,6 +519,7 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   {
     QgsPoint vertex( mVertices.at( i ).coordinates() );
     vertex.transform( mapSettings()->mapSettings().layerTransform( mLayer ) );
+
     currentDistance = pnt.distance( vertex );
     if ( currentDistance < minDistance && currentDistance <= searchDistance )
     {
@@ -446,8 +528,16 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     }
   }
 
+  // Update the previously grabbed point's position
+  if ( mState == MapToolState::Grab )
+  {
+    updateVertex( mActiveVertex, mRecordPoint );
+  }
+
   if ( idx >= 0 )
   {
+    // we found a point
+
     mActiveVertex = mVertices.at( idx );
 
     if ( mActiveVertex.type() == Vertex::Existing )
@@ -456,18 +546,16 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     }
     else if ( mActiveVertex.type() == Vertex::MidPoint )
     {
-      addPointAtPosition( mActiveVertex.coordinates(), mActiveVertex );
+      addPointAtPosition( mActiveVertex, mActiveVertex.coordinates() );
       setState( MapToolState::Grab );
     }
     else if ( mActiveVertex.type() == Vertex::HandleStart )
     {
-      qDebug() << "START HANDLE FOUND";
       mNewVertexOrder = NewVertexOrder::Start;
       setState( MapToolState::Record );
     }
     else if ( mActiveVertex.type() == Vertex::HandleEnd )
     {
-      qDebug() << "END HANDLE FOUND";
       mNewVertexOrder = NewVertexOrder::End;
       setState( MapToolState::Record );
     }
@@ -476,30 +564,35 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   }
   else
   {
-    // We did not select any point, but if some point was selected previously
-    // we need to update its position first
-    if ( mState == MapToolState::Grab )
-    {
-      updateVertex( mRecordPoint );
-    }
+    // nothing found
 
     setActiveVertex( Vertex() );
     setState( MapToolState::View );
   }
 }
 
-void RecordingMapTool::updateVertex( const QgsPoint &point )
+void RecordingMapTool::releaseVertex( const QgsPoint &point )
 {
   if ( !mActiveVertex.isValid() )
   {
     return;
   }
 
-  if ( mRecordedGeometry.get()->moveVertex( mActiveVertex.vertexId(), point ) )
-    emit recordedGeometryChanged( mRecordedGeometry );
+  updateVertex( mActiveVertex, point );
 
   setState( MapToolState::View );
   setActiveVertex( Vertex() );
+}
+
+void RecordingMapTool::updateVertex( const Vertex &vertex, const QgsPoint &point )
+{
+  if ( vertex.isValid() )
+  {
+    if ( mRecordedGeometry.get()->moveVertex( vertex.vertexId(), point ) )
+    {
+      emit recordedGeometryChanged( mRecordedGeometry );
+    }
+  }
 }
 
 QgsPoint RecordingMapTool::vertexMapCoors( const Vertex &vertex ) const

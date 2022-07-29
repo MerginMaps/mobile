@@ -131,15 +131,13 @@ class RecordingMapTool : public AbstractMapTool
      */
     Q_INVOKABLE void addPoint( const QgsPoint &point );
 
-    void addPointAtPosition( const QgsPoint &point, Vertex vertex );
+    void addPointAtPosition( Vertex vertex, const QgsPoint &point );
 
     /**
      *  Removes last point from recorded geometry if there is at least one point
      *  Updates recordedGeometry afterwards
      */
     Q_INVOKABLE void removePoint();
-
-    void removePointAtPosition( Vertex vertex );
 
     //! Returns true if the captured geometry has enought points for the specified layer
     Q_INVOKABLE bool hasValidGeometry() const;
@@ -153,7 +151,9 @@ class RecordingMapTool : public AbstractMapTool
      * Updates vertex at the active vertex position and updates recordedGeometry
      * Passed point needs to be in active vector layer CRS
      */
-    Q_INVOKABLE void updateVertex( const QgsPoint &point );
+    Q_INVOKABLE void releaseVertex( const QgsPoint &point );
+
+    void updateVertex( const Vertex &vertex, const QgsPoint &point );
 
     /**
      * Returns coordinates of the active vertex in map CRS

@@ -235,7 +235,7 @@ Item {
     }
 
     onReleaseClicked: {
-      mapTool.updateVertex( crosshair.recordPoint )
+      mapTool.releaseVertex( crosshair.recordPoint )
     }
 
     onRemovePointClicked: mapTool.removePoint()
@@ -246,7 +246,7 @@ Item {
         // If we currently grab a point
         if ( mapTool.state == RecordingMapTool.Grab )
         {
-          mapTool.updateVertex( crosshair.recordPoint )
+          mapTool.releaseVertex( crosshair.recordPoint )
         }
 
         root.done( mapTool.recordedGeometry )
