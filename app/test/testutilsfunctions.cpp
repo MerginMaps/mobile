@@ -10,6 +10,7 @@
 #include "testutilsfunctions.h"
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QLocale>
 
 #include "qgsapplication.h"
 #include "qgscoordinatereferencesystem.h"
@@ -725,5 +726,33 @@ void TestUtilsFunctions::testGeometryIcons()
   for ( const auto &test : testcases_features )
   {
     QCOMPARE( mUtils->loadIconFromFeature( test.first ), test.second );
+  }
+}
+
+void TestUtilsFunctions::testFixCountryCode()
+{
+  QVector< QPair< QLocale, QLocale > > testcases =
+  {
+    { QLocale( QLocale::English, QLocale::Canada ), QLocale( QLocale::English, QLocale::AnyCountry ) },
+    { QLocale( QLocale::English, QLocale::UnitedStates ), QLocale( QLocale::English, QLocale::AnyCountry ) },
+    { QLocale( QLocale::English, QLocale::UnitedKingdom ), QLocale( QLocale::English, QLocale::AnyCountry ) },
+    { QLocale( QLocale::English, QLocale::Australia ), QLocale( QLocale::English, QLocale::AnyCountry ) },
+    { QLocale( QLocale::English, QLocale::NewZealand ), QLocale( QLocale::English, QLocale::AnyCountry ) },
+
+    { QLocale( QLocale::French, QLocale::Canada ), QLocale( QLocale::French, QLocale::AnyCountry ) },
+    { QLocale( QLocale::French, QLocale::France ), QLocale( QLocale::French, QLocale::AnyCountry ) },
+    { QLocale( QLocale::French, QLocale::Belgium ), QLocale( QLocale::French, QLocale::AnyCountry ) },
+
+    { QLocale( QLocale::Spanish, QLocale::Spain ), QLocale( QLocale::Spanish, QLocale::AnyCountry ) },
+    { QLocale( QLocale::Spanish, QLocale::Mexico ), QLocale( QLocale::Spanish, QLocale::AnyCountry ) },
+
+    { QLocale( QLocale::Slovak, QLocale::Slovakia ), QLocale( QLocale::Slovak, QLocale::AnyCountry ) },
+
+    { QLocale( QLocale::Polish, QLocale::Poland ), QLocale( QLocale::Polish, QLocale::AnyCountry ) }
+  };
+
+  for ( const auto &test : testcases )
+  {
+    QCOMPARE( mUtils->fixLocaleCountry( test.first ), test.second );
   }
 }
