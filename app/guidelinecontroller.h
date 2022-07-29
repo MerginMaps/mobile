@@ -16,7 +16,8 @@
 #include "qgsgeometry.h"
 #include "qgsquickmapsettings.h"
 
-#include "qgsvertexid.h"
+#include "maptools/recordingmaptool.h"
+
 
 class GuidelineController : public QObject
 {
@@ -27,7 +28,7 @@ class GuidelineController : public QObject
     Q_PROPERTY( QPointF crosshairPosition READ crosshairPosition WRITE setCrosshairPosition NOTIFY crosshairPositionChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
-    Q_PROPERTY( QgsVertexId activeVertexId READ activeVertexId WRITE setActiveVertexId NOTIFY activeVertexIdChanged )
+    Q_PROPERTY( Vertex activeVertex READ activeVertex WRITE setActiveVertex NOTIFY activeVertexChanged )
 
     Q_PROPERTY( bool allowed READ allowed WRITE setAllowed NOTIFY allowedChanged )
 
@@ -49,8 +50,8 @@ class GuidelineController : public QObject
     QgsQuickMapSettings *mapSettings() const;
     void setMapSettings( QgsQuickMapSettings *newMapSettings );
 
-    const QgsVertexId &activeVertexId() const;
-    void setActiveVertexId( const QgsVertexId &newActiveVertexId );
+    const Vertex &activeVertex() const;
+    void setActiveVertex( const Vertex &newActiveVertex );
 
     bool allowed() const;
     void setAllowed( bool newAllowed );
@@ -64,7 +65,7 @@ class GuidelineController : public QObject
 
     void mapSettingsChanged( QgsQuickMapSettings *mapSettings );
 
-    void activeVertexIdChanged( const QgsVertexId &activeVertexId );
+    void activeVertexChanged( const Vertex &activeVertex );
 
     void allowedChanged( bool allowed );
 
@@ -75,7 +76,7 @@ class GuidelineController : public QObject
     QPointF mCrosshairPosition;
     QgsGeometry mRealGeometry;
     QgsQuickMapSettings *mMapSettings = nullptr; // not owned
-    QgsVertexId mActiveVertexId;
+    Vertex mActiveVertex;
     bool mAllowed;
 };
 
