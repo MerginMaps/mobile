@@ -117,7 +117,7 @@ void RecordingMapTool::addPointAtPosition( const QgsPoint &point, Vertex vertex 
 
 void RecordingMapTool::removePoint()
 {
-  if ( mActiveVertex.isValid() ) // if Grab
+  if ( mActiveVertex.isValid() && mState == MapToolState::Grab ) // if Grab
   {
     int removedVertexId = mActiveVertex.vertexId().vertex;
 
@@ -152,7 +152,7 @@ void RecordingMapTool::removePoint()
     }
     else if ( mNewVertexOrder == NewVertexOrder::Start )
     {
-      mActiveVertex.setVertexId( QgsVertexId( 0, 0, 1 ) );
+      mActiveVertex.setVertexId( QgsVertexId( 0, 0, 0 ) );
     }
     mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
     emit activeVertexChanged( mActiveVertex );
@@ -376,7 +376,7 @@ void RecordingMapTool::createNodesAndHandles()
           QgsVertexId startId( vertexId.part, vertexId.ring, 0 );
           QgsVertexId endId( vertexId.part, vertexId.ring, 1 );
 
-          QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -0.1 );
+          QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -1 );
 
           if ( shouldUseVertex( geom->vertexAt( startId ) ) && shouldUseVertex( handlePoint ) )
           {
@@ -394,7 +394,7 @@ void RecordingMapTool::createNodesAndHandles()
           QgsVertexId startId( vertexId.part, vertexId.ring, vertexCount - 2 );
           QgsVertexId endId( vertexId.part, vertexId.ring, vertexCount - 1 );
 
-          QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), 1.1 );
+          QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), 1 );
 
           if ( shouldUseVertex( geom->vertexAt( endId ) ) && shouldUseVertex( handlePoint ) )
           {
@@ -461,11 +461,13 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     }
     else if ( mActiveVertex.type() == Vertex::HandleStart )
     {
+      qDebug() << "START HANDLE FOUND";
       mNewVertexOrder = NewVertexOrder::Start;
       setState( MapToolState::Record );
     }
     else if ( mActiveVertex.type() == Vertex::HandleEnd )
     {
+      qDebug() << "END HANDLE FOUND";
       mNewVertexOrder = NewVertexOrder::End;
       setState( MapToolState::Record );
     }
