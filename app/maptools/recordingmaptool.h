@@ -237,6 +237,11 @@ class RecordingMapTool : public AbstractMapTool
      */
     void createNodesAndHandles();
 
+    /**
+     * Grabs next vertex after the removal of the currently selected vertex
+     */
+    void grabNextVertex( const int removedVertexId );
+
   protected:
     //! Unifies Z coordinate of the point with current layer - drops / adds it
     void fixZ( QgsPoint &point ) const;

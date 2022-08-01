@@ -129,9 +129,9 @@ void RecordingMapTool::removePoint()
   {
     int removedVertexId = mActiveVertex.vertexId().vertex;
 
-    if ( mRecordedGeometry.constGet()->vertexCount() > 0 )
+    if ( mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part,  mActiveVertex.vertexId().ring ) > 0 )
     {
-      QgsVertexId id( 0, 0, removedVertexId );
+      QgsVertexId id = mActiveVertex.vertexId();
       if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
       {
         QgsLineString *r;
@@ -154,7 +154,6 @@ void RecordingMapTool::removePoint()
         {
           // this is the smallest possible closed ring (first and last vertex are equal),
           // we need to remove two last vertices in order to get correct linestring
-
           if ( removedVertexId == 0 || removedVertexId == r->nCoordinates() - 1 )
           {
             r->deleteVertex( QgsVertexId( 0, 0, 0 ) );
@@ -199,29 +198,11 @@ void RecordingMapTool::removePoint()
 
           points.removeAt( removedVertexId );
 
-
           r->setPoints( points );
           emit recordedGeometryChanged( mRecordedGeometry );
 
           // Grab previous vertex if there is any, otherwise grab next one if there is any, otherwise go to record
-          if ( removedVertexId - 1 >= 0 )
-          {
-            mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, removedVertexId - 1 ) );
-            mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
-            emit activeVertexChanged( mActiveVertex );
-          }
-          else if ( removedVertexId < mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring ) )
-          {
-            mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
-            emit activeVertexChanged( mActiveVertex );
-          }
-          else
-          {
-            // geometry is now empty
-            setActiveVertex( Vertex() );
-            setState( MapToolState::Record );
-          }
-
+          grabNextVertex( removedVertexId );
           return;
         }
         else
@@ -241,23 +222,7 @@ void RecordingMapTool::removePoint()
     }
 
     // Grab previous vertex if there is any, otherwise grab next one if there is any, otherwise go to record
-    if ( removedVertexId - 1 >= 0 )
-    {
-      mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, removedVertexId - 1 ) );
-      mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
-      emit activeVertexChanged( mActiveVertex );
-    }
-    else if ( removedVertexId < mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring ) )
-    {
-      mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
-      emit activeVertexChanged( mActiveVertex );
-    }
-    else
-    {
-      // geometry is now empty
-      setActiveVertex( Vertex() );
-      setState( MapToolState::Record );
-    }
+    grabNextVertex( removedVertexId );
   }
   else if ( mState == MapToolState::Record )
   {
@@ -630,6 +595,28 @@ double RecordingMapTool::pixelsToMapUnits( double numPixels )
 bool RecordingMapTool::shouldUseVertex( const QgsPoint point )
 {
   return !mActiveVertex.isValid() || ( mActiveVertex.isValid() && !InputUtils::equals( point, mActiveVertex.coordinates(), 1e-16 ) );
+}
+
+void RecordingMapTool::grabNextVertex( const int removedVertexId )
+{
+  // Grab previous vertex if there is any, otherwise grab next one if there is any, otherwise go to record
+  if ( removedVertexId - 1 >= 0 )
+  {
+    mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, removedVertexId - 1 ) );
+    mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
+    emit activeVertexChanged( mActiveVertex );
+  }
+  else if ( removedVertexId < mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring ) )
+  {
+    mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
+    emit activeVertexChanged( mActiveVertex );
+  }
+  else
+  {
+    // geometry is now empty
+    setActiveVertex( Vertex() );
+    setState( MapToolState::Record );
+  }
 }
 
 Vertex::Vertex()
