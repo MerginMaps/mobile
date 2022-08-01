@@ -123,6 +123,7 @@ Item {
 
     height: root.map.height
     width: root.map.width
+    visible: !__inputUtils.isPointLayer(__activeLayer.vectorLayer)
 
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
