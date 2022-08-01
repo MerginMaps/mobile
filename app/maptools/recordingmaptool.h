@@ -145,7 +145,7 @@ class RecordingMapTool : public AbstractMapTool
     /**
      * Finds vertex id which matches given screen coordinates. Search radius defined in pixels
      */
-    Q_INVOKABLE void lookForVertex( const QPointF &clickedPoint, double searchRadius = 5 );
+    Q_INVOKABLE void lookForVertex( const QPointF &clickedPoint, double searchRadius = 3 );
 
     /**
      * Updates vertex at the active vertex position and updates recordedGeometry
@@ -236,6 +236,11 @@ class RecordingMapTool : public AbstractMapTool
      * start/end points and "handles" (for lines). Also fills nodes index.
      */
     void createNodesAndHandles();
+
+    /**
+     * Grabs next vertex after the removal of the currently selected vertex
+     */
+    void grabNextVertex( const int removedVertexId );
 
   protected:
     //! Unifies Z coordinate of the point with current layer - drops / adds it
