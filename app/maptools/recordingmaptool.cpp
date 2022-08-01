@@ -425,9 +425,13 @@ void RecordingMapTool::createNodesAndHandles()
     if ( mRecordedGeometry.type() != QgsWkbTypes::PointGeometry && vertexId.vertex < geom->vertexCount( vertexId.part, vertexId.ring ) - 1 )
     {
       QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
-      QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
-      midPoints->addGeometry( midPoint.clone() );
-      mVertices.push_back( Vertex( id, midPoint, Vertex::MidPoint ) );
+      // hide midpoints on the left and right side of the selected node
+      if ( shouldUseVertex( geom->vertexAt( vertexId ) ) && shouldUseVertex( geom->vertexAt( id ) ) )
+      {
+        QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
+        midPoints->addGeometry( midPoint.clone() );
+        mVertices.push_back( Vertex( id, midPoint, Vertex::MidPoint ) );
+      }
     }
 
     //
