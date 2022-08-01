@@ -77,7 +77,7 @@ void GuidelineController::buildGuideline()
     {
       int index = g.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
       QgsVertexId id( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, index );
-      g.insertVertex( crosshair, g.vertexNrFromVertexId( id ) );
+      g.get()->insertVertex( id, crosshair );
     }
     else
     {
