@@ -100,7 +100,26 @@ Item {
 
   function constructHighlights()
   {
-    if ( !geometry || !mapSettings ) return
+    if ( !mapSettings ) return
+
+    if ( !geometry )
+    {
+      // trigger repaint for empty geometries
+      markerItems = markerItems.map( function (marker) { return marker.destroy() } )
+
+      let newLineElements = [];
+      newLineElements.push( componentMoveTo.createObject( lineShapePath ) )
+
+      let newPolygonElements = [];
+      newPolygonElements.push( componentMoveTo.createObject( polygonShapePath ) )
+
+      markerItems = [];
+      lineShapePath.pathElements = newLineElements
+      polygonShapePath.pathElements = newPolygonElements
+      lineOutlineShapePath.pathElements = newLineElements
+
+      return;
+    }
 
     refTransformOffsetX = mapTransformOffsetX
     refTransformOffsetY = mapTransformOffsetY

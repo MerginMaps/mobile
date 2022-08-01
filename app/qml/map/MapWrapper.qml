@@ -101,6 +101,7 @@ Item {
         centerToPair( internal.featurePairToEdit )
         howtoEditingBanner.show()
         editingGeometryStarted()
+        hideHighlight()
         break
       }
 
@@ -262,6 +263,7 @@ Item {
   Highlight {
     id: identifyHighlight
 
+    visible: root.state === "view"
     anchors.fill: mapCanvas
 
     mapSettings: mapCanvas.mapSettings
@@ -927,12 +929,10 @@ Item {
   function highlightPair( pair ) {
     let geometry = __inputUtils.extractGeometry( pair, mapCanvas.mapSettings )
     identifyHighlight.geometry = __inputUtils.convertGeometryToMapCRS( geometry, pair.layer, mapCanvas.mapSettings )
-    identifyHighlight.visible = true
   }
 
   function hideHighlight() {
     identifyHighlight.geometry = null
-    identifyHighlight.visible = false
   }
 
   function centerToPosition() {

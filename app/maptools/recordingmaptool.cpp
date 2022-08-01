@@ -210,6 +210,10 @@ void RecordingMapTool::removePoint()
           id.vertex = mActiveVertex.vertexId().vertex;
         }
       }
+      else if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
+      {
+        // TODO: line handling - when there are 2, 1, no points left
+      }
 
       if ( mNewVertexOrder == Start )
       {
