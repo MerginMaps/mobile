@@ -610,7 +610,7 @@ void RecordingMapTool::cancelGrab()
 double RecordingMapTool::pixelsToMapUnits( double numPixels )
 {
   QgsRenderContext context = QgsRenderContext::fromMapSettings( mapSettings()->mapSettings() );
-  return numPixels * InputUtils::calculateDpRatio() * context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
+  return numPixels * context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
 }
 
 bool RecordingMapTool::shouldUseVertex( const QgsPoint point )
