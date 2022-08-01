@@ -168,24 +168,7 @@ void RecordingMapTool::removePoint()
           emit recordedGeometryChanged( mRecordedGeometry );
 
           // Grab previous vertex if there is any, otherwise grab next one if there is any, otherwise go to record
-          if ( removedVertexId - 1 >= 0 )
-          {
-            mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, removedVertexId - 1 ) );
-            mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
-            emit activeVertexChanged( mActiveVertex );
-          }
-          else if ( removedVertexId < mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring ) )
-          {
-            mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
-            emit activeVertexChanged( mActiveVertex );
-          }
-          else
-          {
-            // geometry is now empty
-            setActiveVertex( Vertex() );
-            setState( MapToolState::Record );
-          }
-
+          grabNextVertex( removedVertexId );
           return;
         }
         else if ( r->nCoordinates() <= 2 )
@@ -212,7 +195,41 @@ void RecordingMapTool::removePoint()
       }
       else if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
       {
-        // TODO: line handling - when there are 2, 1, no points left
+        QgsLineString *r;
+        if ( mRecordedGeometry.constGet()->partCount() > 1 )
+        {
+          QgsMultiLineString *ml = qgsgeometry_cast<QgsMultiLineString *>( mRecordedGeometry.get() );
+          r = ml->lineStringN( mActiveVertex.vertexId().part );
+        }
+        else
+        {
+          r = qgsgeometry_cast<QgsLineString *>( mRecordedGeometry.get() );
+        }
+
+        if ( !r )
+        {
+          return;
+        }
+
+        if ( mRecordedGeometry.constGet()->vertexCount() == 2 )
+        {
+          // if we remove second vertex directly the geometry will be cleared
+          // but we want to keep start point, so instead of removing vertex
+          // from the linestring we remove item from the QgsPointSequence.
+          QgsPointSequence points;
+          r->points( points );
+          points.removeAt( removedVertexId );
+          r->setPoints( points );
+          emit recordedGeometryChanged( mRecordedGeometry );
+
+          // Grab previous vertex if there is any, otherwise grab next one if there is any, otherwise go to record
+          grabNextVertex( removedVertexId );
+          return;
+        }
+        else
+        {
+          id.vertex = mActiveVertex.vertexId().vertex;
+        }
       }
 
       if ( mNewVertexOrder == Start )
@@ -593,7 +610,7 @@ void RecordingMapTool::cancelGrab()
 double RecordingMapTool::pixelsToMapUnits( double numPixels )
 {
   QgsRenderContext context = QgsRenderContext::fromMapSettings( mapSettings()->mapSettings() );
-  return numPixels * InputUtils::calculateDpRatio() * context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
+  return numPixels * context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
 }
 
 bool RecordingMapTool::shouldUseVertex( const QgsPoint point )
