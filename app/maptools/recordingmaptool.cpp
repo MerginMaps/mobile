@@ -428,7 +428,7 @@ void RecordingMapTool::createNodesAndHandles()
           QgsVertexId startId( vertexId.part, vertexId.ring, 0 );
           QgsVertexId endId( vertexId.part, vertexId.ring, 1 );
 
-          QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -1 );
+          QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -0.5 );
 
           if ( shouldUseVertex( geom->vertexAt( startId ) ) && shouldUseVertex( handlePoint ) )
           {
@@ -446,7 +446,7 @@ void RecordingMapTool::createNodesAndHandles()
           QgsVertexId startId( vertexId.part, vertexId.ring, vertexCount - 2 );
           QgsVertexId endId( vertexId.part, vertexId.ring, vertexCount - 1 );
 
-          QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), 1 );
+          QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), 1.5 );
 
           if ( shouldUseVertex( geom->vertexAt( endId ) ) && shouldUseVertex( handlePoint ) )
           {
