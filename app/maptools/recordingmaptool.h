@@ -145,7 +145,7 @@ class RecordingMapTool : public AbstractMapTool
     /**
      * Finds vertex id which matches given screen coordinates. Search radius defined in pixels
      */
-    Q_INVOKABLE void lookForVertex( const QPointF &clickedPoint, double searchRadius = 5 );
+    Q_INVOKABLE void lookForVertex( const QPointF &clickedPoint, double searchRadius = 3 );
 
     /**
      * Updates vertex at the active vertex position and updates recordedGeometry
