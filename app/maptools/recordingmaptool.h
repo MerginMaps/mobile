@@ -258,7 +258,7 @@ class RecordingMapTool : public AbstractMapTool
     /**
      * Check whether given point should be used for creating markers/handles
      */
-    bool shouldUseVertex( QgsPoint point );
+    bool shouldBeVisible( QgsPoint point );
 
     QgsGeometry mRecordedGeometry;
     QgsGeometry mInitialGeometry;

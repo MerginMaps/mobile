@@ -406,22 +406,25 @@ void RecordingMapTool::createNodesAndHandles()
 
   while ( geom->nextVertex( vertexId, vertex ) )
   {
-    if ( shouldUseVertex( vertex ) )
+    mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
+
+    if ( shouldBeVisible( vertex ) )
     {
       existingVertices->addGeometry( vertex.clone() );
-      mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
     }
 
     // for lines and polygons create midpoints
     if ( mRecordedGeometry.type() != QgsWkbTypes::PointGeometry && vertexId.vertex < geom->vertexCount( vertexId.part, vertexId.ring ) - 1 )
     {
       QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
+
+      QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
+      mVertices.push_back( Vertex( id, midPoint, Vertex::MidPoint ) );
+
       // hide midpoints on the left and right side of the selected node
-      if ( shouldUseVertex( geom->vertexAt( vertexId ) ) && shouldUseVertex( geom->vertexAt( id ) ) )
+      if ( shouldBeVisible( geom->vertexAt( vertexId ) ) && shouldBeVisible( geom->vertexAt( id ) ) )
       {
-        QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
         midPoints->addGeometry( midPoint.clone() );
-        mVertices.push_back( Vertex( id, midPoint, Vertex::MidPoint ) );
       }
     }
 
@@ -456,11 +459,14 @@ void RecordingMapTool::createNodesAndHandles()
 
           QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -0.5 );
 
-          if ( shouldUseVertex( geom->vertexAt( startId ) ) && shouldUseVertex( handlePoint ) )
-          {
-            midPoints->addGeometry( handlePoint.clone() );
-            mVertices.push_back( Vertex( startId, handlePoint, Vertex::HandleStart ) );
+          mVertices.push_back( Vertex( startId, handlePoint, Vertex::HandleStart ) );
 
+          if ( shouldBeVisible( geom->vertexAt( startId ) ) && shouldBeVisible( handlePoint ) )
+          {
+            // Add handle start point to midPoints
+            midPoints->addGeometry( handlePoint.clone() );
+
+            // Add line to start point handle
             QgsLineString handle( handlePoint, geom->vertexAt( startId ) );
             handles->addGeometry( handle.clone() );
           }
@@ -474,14 +480,16 @@ void RecordingMapTool::createNodesAndHandles()
 
           QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), 1.5 );
 
-          if ( shouldUseVertex( geom->vertexAt( endId ) ) && shouldUseVertex( handlePoint ) )
+          mVertices.push_back( Vertex( endId, handlePoint, Vertex::HandleEnd ) );
+
+          if ( shouldBeVisible( geom->vertexAt( endId ) ) && shouldBeVisible( handlePoint ) )
           {
+            // Add handle end point to midPoints
+            midPoints->addGeometry( handlePoint.clone() );
+
+            // Add line to end point handle
             QgsLineString handle = QgsLineString( geom->vertexAt( endId ), handlePoint );
             handles->addGeometry( handle.clone() );
-
-            midPoints->addGeometry( handlePoint.clone() );
-            endId.vertex = vertexCount;
-            mVertices.push_back( Vertex( endId, handlePoint, Vertex::HandleEnd ) );
           }
         }
       }
@@ -500,7 +508,7 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
 {
   double minDistance = std::numeric_limits<double>::max();
   double currentDistance = 0;
-  double searchDistance = pixelsToMapUnits( searchRadius ); // TODO: make sure the conversion is correct (dp?)
+  double searchDistance = pixelsToMapUnits( searchRadius );
 
   QgsPoint pnt = mapSettings()->screenToCoordinate( clickedPoint );
 
@@ -540,8 +548,17 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     }
     else if ( mActiveVertex.type() == Vertex::MidPoint )
     {
-      addPointAtPosition( mActiveVertex, mActiveVertex.coordinates() );
-      setState( MapToolState::Grab );
+      // We need to invalidate activeVertex so that
+      // next construction of midpoints and handles contains all points
+      Vertex lastActiveVertex = mActiveVertex;
+      mActiveVertex = Vertex();
+
+      addPointAtPosition( lastActiveVertex, lastActiveVertex.coordinates() );
+
+      // After adding new point to the position, we need to
+      // search again, because mVertices now includes more points.
+      // Search should find the created vertex as Existing.
+      return lookForVertex( clickedPoint, searchRadius );
     }
     else if ( mActiveVertex.type() == Vertex::HandleStart )
     {
@@ -673,7 +690,7 @@ double RecordingMapTool::pixelsToMapUnits( double numPixels )
   return numPixels * context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
 }
 
-bool RecordingMapTool::shouldUseVertex( const QgsPoint point )
+bool RecordingMapTool::shouldBeVisible( const QgsPoint point )
 {
   return !mActiveVertex.isValid() || ( mActiveVertex.isValid() && !InputUtils::equals( point, mActiveVertex.coordinates(), 1e-16 ) );
 }
