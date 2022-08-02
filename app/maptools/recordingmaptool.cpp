@@ -568,9 +568,19 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
     return;
   }
 
-  updateVertex( mActiveVertex, point );
-
-  setState( MapToolState::View );
+  if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry && mRecordedGeometry.constGet()->nCoordinates() == 2 )
+  {
+    setState( MapToolState::Record );
+  }
+  else if ( mRecordedGeometry.constGet()->nCoordinates() == 1 )
+  {
+    updateVertex( mActiveVertex, point );
+    setState( MapToolState::Record );
+  }
+  else
+  {
+    setState( MapToolState::View );
+  }
   setActiveVertex( Vertex() );
 }
 
