@@ -98,6 +98,7 @@ Item {
     allowed: mapTool.state !== RecordingMapTool.View
 
     mapSettings: root.map.mapSettings
+    newVertexOrder: mapTool.newVertexOrder
     crosshairPosition: crosshair.screenPoint
     realGeometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
 

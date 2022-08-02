@@ -29,6 +29,7 @@ class GuidelineController : public QObject
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     Q_PROPERTY( Vertex activeVertex READ activeVertex WRITE setActiveVertex NOTIFY activeVertexChanged )
+    Q_PROPERTY( RecordingMapTool::NewVertexOrder newVertexOrder READ newVertexOrder WRITE setNewVertexOrder NOTIFY newVertexOrderChanged )
 
     Q_PROPERTY( bool allowed READ allowed WRITE setAllowed NOTIFY allowedChanged )
 
@@ -56,6 +57,9 @@ class GuidelineController : public QObject
     bool allowed() const;
     void setAllowed( bool newAllowed );
 
+    const RecordingMapTool::NewVertexOrder &newVertexOrder() const;
+    void setNewVertexOrder( const RecordingMapTool::NewVertexOrder &newNewVertexOrder );
+
   signals:
 
     void guidelineGeometryChanged( const QgsGeometry &guidelineGeometry );
@@ -69,8 +73,12 @@ class GuidelineController : public QObject
 
     void allowedChanged( bool allowed );
 
-  private:
+    void newVertexOrderChanged( const RecordingMapTool::NewVertexOrder &newVertexOrder );
+
+  private slots:
     void buildGuideline();
+
+  private:
 
     QgsGeometry mGuidelineGeometry;
     QPointF mCrosshairPosition;
@@ -78,6 +86,7 @@ class GuidelineController : public QObject
     QgsQuickMapSettings *mMapSettings = nullptr; // not owned
     Vertex mActiveVertex;
     bool mAllowed;
+    RecordingMapTool::NewVertexOrder mNewVertexOrder;
 };
 
 #endif // GUIDELINECONTROLLER_H

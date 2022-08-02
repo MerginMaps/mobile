@@ -14,7 +14,10 @@
 GuidelineController::GuidelineController( QObject *parent )
   : QObject{parent}
 {
-
+  connect( this, &GuidelineController::allowedChanged, this, &GuidelineController::buildGuideline );
+  connect( this, &GuidelineController::activeVertexChanged, this, &GuidelineController::buildGuideline );
+  connect( this, &GuidelineController::realGeometryChanged, this, &GuidelineController::buildGuideline );
+  connect( this, &GuidelineController::crosshairPositionChanged, this, &GuidelineController::buildGuideline );
 }
 
 void GuidelineController::buildGuideline()
@@ -39,10 +42,22 @@ void GuidelineController::buildGuideline()
 
     if ( mRealGeometry.type() == QgsWkbTypes::LineGeometry )
     {
-      QgsPolylineXY points = mRealGeometry.asPolyline();
-      points.append( crosshair );
+      QgsGeometry guideline;
 
-      setGuidelineGeometry( QgsGeometry::fromPolylineXY( points ) );
+      if ( mNewVertexOrder == RecordingMapTool::Start )
+      {
+        // add crosshair to the begginning
+        QgsPoint firstPoint = mRealGeometry.vertexAt( 0 );
+        guideline = QgsGeometry::fromPolyline( { firstPoint, crosshair } );
+      }
+      else
+      {
+        // add crosshair to the end of the geometry
+        QgsPoint lastPoint = mRealGeometry.vertexAt( mRealGeometry.constGet()->nCoordinates() - 1 );
+        guideline = QgsGeometry::fromPolyline( { lastPoint, crosshair } );
+      }
+
+      setGuidelineGeometry( guideline );
     }
     else if ( mRealGeometry.type() == QgsWkbTypes::PolygonGeometry )
     {
@@ -113,8 +128,6 @@ void GuidelineController::setCrosshairPosition( QPointF newCrosshairPosition )
     return;
   mCrosshairPosition = newCrosshairPosition;
   emit crosshairPositionChanged( mCrosshairPosition );
-
-  buildGuideline();
 }
 
 const QgsGeometry &GuidelineController::realGeometry() const
@@ -128,8 +141,6 @@ void GuidelineController::setRealGeometry( const QgsGeometry &newRealGeometry )
     return;
   mRealGeometry = newRealGeometry;
   emit realGeometryChanged( mRealGeometry );
-
-  buildGuideline();
 }
 
 QgsQuickMapSettings *GuidelineController::mapSettings() const
@@ -170,8 +181,6 @@ void GuidelineController::setActiveVertex( const Vertex &newActiveVertex )
     return;
   mActiveVertex = newActiveVertex;
   emit activeVertexChanged( mActiveVertex );
-
-  buildGuideline();
 }
 
 bool GuidelineController::allowed() const
@@ -185,4 +194,17 @@ void GuidelineController::setAllowed( bool newAllowed )
     return;
   mAllowed = newAllowed;
   emit allowedChanged( mAllowed );
+}
+
+const RecordingMapTool::NewVertexOrder &GuidelineController::newVertexOrder() const
+{
+  return mNewVertexOrder;
+}
+
+void GuidelineController::setNewVertexOrder( const RecordingMapTool::NewVertexOrder &newNewVertexOrder )
+{
+  if ( mNewVertexOrder == newNewVertexOrder )
+    return;
+  mNewVertexOrder = newNewVertexOrder;
+  emit newVertexOrderChanged( mNewVertexOrder );
 }

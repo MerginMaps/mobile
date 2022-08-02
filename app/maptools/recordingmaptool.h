@@ -90,6 +90,7 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( QgsGeometry handles READ handles WRITE setHandles NOTIFY handlesChanged )
 
     Q_PROPERTY( Vertex activeVertex READ activeVertex WRITE setActiveVertex NOTIFY activeVertexChanged )
+    Q_PROPERTY( NewVertexOrder newVertexOrder READ newVertexOrder WRITE setNewVertexOrder NOTIFY newVertexOrderChanged )
 
     // When editing geometry - set this as the geometry to start with
     Q_PROPERTY( QgsGeometry initialGeometry READ initialGeometry WRITE setInitialGeometry NOTIFY initialGeometryChanged )
@@ -206,6 +207,9 @@ class RecordingMapTool : public AbstractMapTool
     const Vertex &activeVertex() const;
     void setActiveVertex( const Vertex &newActiveVertex );
 
+    const NewVertexOrder &newVertexOrder() const;
+    void setNewVertexOrder( const NewVertexOrder &newNewVertexOrder );
+
   signals:
     void layerChanged( QgsVectorLayer *layer );
     void centeredToGPSChanged( bool centeredToGPS );
@@ -225,6 +229,8 @@ class RecordingMapTool : public AbstractMapTool
     void recordPointChanged( QgsPoint recordPoint );
 
     void activeVertexChanged( const Vertex &activeVertex );
+
+    void newVertexOrderChanged( const RecordingMapTool::NewVertexOrder &newVertexOrder );
 
   public slots:
     void onPositionChanged();

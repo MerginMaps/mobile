@@ -545,12 +545,12 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     }
     else if ( mActiveVertex.type() == Vertex::HandleStart )
     {
-      mNewVertexOrder = NewVertexOrder::Start;
+      setNewVertexOrder( NewVertexOrder::Start );
       setState( MapToolState::Record );
     }
     else if ( mActiveVertex.type() == Vertex::HandleEnd )
     {
-      mNewVertexOrder = NewVertexOrder::End;
+      setNewVertexOrder( NewVertexOrder::End );
       setState( MapToolState::Record );
     }
 
@@ -616,14 +616,14 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
   {
     if ( mActiveVertex.type() == Vertex::Existing && mActiveVertex.vertexId().vertex == 0 )
     {
-      mNewVertexOrder = NewVertexOrder::Start;
+      setNewVertexOrder( NewVertexOrder::Start );
       setState( MapToolState::Record );
       setActiveVertex( Vertex() );
       return;
     }
     else if ( mActiveVertex.type() == Vertex::Existing && mActiveVertex.vertexId().vertex == vertexCount - 1 )
     {
-      mNewVertexOrder = NewVertexOrder::End;
+      setNewVertexOrder( NewVertexOrder::End );
       setActiveVertex( Vertex() );
       setState( MapToolState::Record );
       return;
@@ -941,4 +941,17 @@ void Vertex::setType( const VertexType &newType )
   if ( mType == newType )
     return;
   mType = newType;
+}
+
+const RecordingMapTool::NewVertexOrder &RecordingMapTool::newVertexOrder() const
+{
+  return mNewVertexOrder;
+}
+
+void RecordingMapTool::setNewVertexOrder( const NewVertexOrder &newNewVertexOrder )
+{
+  if ( mNewVertexOrder == newNewVertexOrder )
+    return;
+  mNewVertexOrder = newNewVertexOrder;
+  emit newVertexOrderChanged( mNewVertexOrder );
 }
