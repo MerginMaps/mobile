@@ -31,7 +31,7 @@ Item {
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
     property bool manualRecording: false
-    property var mapTool
+    property var recordingMapTool
 
     property int itemSize: rowHeight * 0.8
     property int rowHeight: InputStyle.rowHeightHeader
@@ -96,8 +96,8 @@ Item {
 
                 enabled: {
                   if ( !manualRecording ) return false;
-                  if ( root.mapTool.state === RecordingMapTool.View ) return false;
-                  if ( __inputUtils.isEmptyGeometry( root.mapTool.recordedGeometry ) ) return false;
+                  if ( root.recordingMapTool.state === RecordingMapTool.View ) return false;
+                  if ( __inputUtils.isEmptyGeometry( root.recordingMapTool.recordedGeometry ) ) return false;
 
                   return true;
                 }
@@ -109,14 +109,14 @@ Item {
         Item {
             height: parent.height
             Layout.fillWidth: true
-            visible: root.mapTool.state === RecordingMapTool.View || root.mapTool.state === RecordingMapTool.Record
+            visible: root.recordingMapTool.state === RecordingMapTool.View || root.recordingMapTool.state === RecordingMapTool.Record
 
             MainPanelButton {
                 id: addButton
                 width: root.itemSize
                 text: qsTr("Add")
                 imageSource: InputStyle.plusIcon
-                enabled: manualRecording && root.mapTool.state !== RecordingMapTool.View
+                enabled: manualRecording && root.recordingMapTool.state !== RecordingMapTool.View
 
                 onActivated: root.addClicked()
             }
@@ -125,7 +125,7 @@ Item {
         Item {
             height: parent.height
             Layout.fillWidth: true
-            visible: root.mapTool.state === RecordingMapTool.Grab
+            visible: root.recordingMapTool.state === RecordingMapTool.Grab
 
             MainPanelButton {
                 id: releaseButton
