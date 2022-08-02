@@ -570,7 +570,14 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
 
   updateVertex( mActiveVertex, point );
 
-  setState( MapToolState::View );
+  if ( mRecordedGeometry.constGet()->nCoordinates() == 1 )
+  {
+    setState( MapToolState::Record );
+  }
+  else
+  {
+    setState( MapToolState::View );
+  }
   setActiveVertex( Vertex() );
 }
 
