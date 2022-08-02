@@ -202,6 +202,11 @@ class InputUtils: public QObject
     Q_INVOKABLE static QgsGeometry emptyGeometry();
 
     /**
+     * Returns true for null or empty geometry
+     */
+    Q_INVOKABLE static bool isEmptyGeometry( const QgsGeometry &geometry );
+
+    /**
       * Converts QGeoCoordinate to QgsPoint
       */
     Q_INVOKABLE static QgsPoint coordinateToPoint( const QGeoCoordinate &coor );

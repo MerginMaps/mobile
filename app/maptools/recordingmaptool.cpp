@@ -125,6 +125,11 @@ void RecordingMapTool::addPointAtPosition( Vertex vertex, const QgsPoint &point 
 
 void RecordingMapTool::removePoint()
 {
+  if ( mRecordedGeometry.isEmpty() )
+  {
+    return;
+  }
+
   if ( mActiveVertex.isValid() && mState == MapToolState::Grab ) // if Grab
   {
     int removedVertexId = mActiveVertex.vertexId().vertex;

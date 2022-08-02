@@ -197,7 +197,7 @@ Item {
 
     manualRecording: mapTool.recordingType === RecordingMapTool.Manual
 
-    toolMode: mapTool.state
+    mapTool: mapTool
 
     onGpsSwitchClicked: {
       if ( root.gpsState.state === "unavailable" ) {

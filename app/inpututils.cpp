@@ -676,6 +676,11 @@ QgsGeometry InputUtils::emptyGeometry()
   return QgsGeometry();
 }
 
+bool InputUtils::isEmptyGeometry( const QgsGeometry &geometry )
+{
+  return geometry.isEmpty();
+}
+
 QgsPoint InputUtils::coordinateToPoint( const QGeoCoordinate &coor )
 {
   return QgsPoint( coor.longitude(), coor.latitude(), coor.altitude() );
