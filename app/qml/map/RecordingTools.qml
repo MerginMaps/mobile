@@ -86,7 +86,7 @@ Item {
 
         if ( !isNaN( newCenter.x ) && !isNaN( newCenter.y ) )
         {
-          root.map.mapSettings.setCenter( newCenter )
+          root.map.jump( crosshair.screenPoint, root.map.mapSettings.coordinateToScreen( newCenter ) )
         }
       }
     }
