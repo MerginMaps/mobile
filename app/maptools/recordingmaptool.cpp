@@ -554,7 +554,6 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   else
   {
     // nothing found
-
     setActiveVertex( Vertex() );
     setState( MapToolState::View );
   }
@@ -610,14 +609,14 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
   // if it is a first or last vertex of the line we go to the recording mode
   if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
   {
-    if ( mActiveVertex.vertexId().vertex == 0 )
+    if ( mActiveVertex.type() != Vertex::Existing && mActiveVertex.vertexId().vertex == 0 )
     {
       setState( MapToolState::Record );
       mActiveVertex.setCoordinates( QgsPoint() );
       emit activeVertexChanged( mActiveVertex );
       return;
     }
-    else if ( mActiveVertex.vertexId().vertex == vertexCount - 1 )
+    else if ( mActiveVertex.type() != Vertex::Existing && mActiveVertex.vertexId().vertex == vertexCount - 1 )
     {
       QgsVertexId id = mActiveVertex.vertexId();
       id.vertex += 1;
