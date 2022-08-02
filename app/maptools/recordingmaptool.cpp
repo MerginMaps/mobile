@@ -568,10 +568,13 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
     return;
   }
 
-  updateVertex( mActiveVertex, point );
-
-  if ( mRecordedGeometry.constGet()->nCoordinates() == 1 )
+  if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry && mRecordedGeometry.constGet()->nCoordinates() == 2 )
   {
+    setState( MapToolState::Record );
+  }
+  else if ( mRecordedGeometry.constGet()->nCoordinates() == 1 )
+  {
+    updateVertex( mActiveVertex, point );
     setState( MapToolState::Record );
   }
   else
