@@ -527,7 +527,6 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   if ( idx >= 0 )
   {
     // we found a point
-
     mActiveVertex = mVertices.at( idx );
 
     if ( mActiveVertex.type() == Vertex::Existing )
@@ -568,19 +567,69 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
     return;
   }
 
-  if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry && mRecordedGeometry.constGet()->nCoordinates() == 2 )
+  int vertexCount = mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
+
+  if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
   {
-    setState( MapToolState::Record );
+    QgsLineString *r;
+
+    if ( mActiveVertex.vertexId().ring == 0 )
+    {
+      r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->exteriorRing() );
+    }
+    else
+    {
+      r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->interiorRing( mActiveVertex.vertexId().ring ) );
+    }
+
+    if ( !r )
+    {
+      return;
+    }
+
+    if ( vertexCount == 2 )
+    {
+      r->close();
+      emit recordedGeometryChanged( mRecordedGeometry );
+
+      setState( MapToolState::Record );
+      setActiveVertex( Vertex() );
+      return;
+    }
+    else if ( vertexCount == 1 )
+    {
+      updateVertex( mActiveVertex, point );
+      setState( MapToolState::Record );
+      setActiveVertex( Vertex() );
+      return;
+    }
   }
-  else if ( mRecordedGeometry.constGet()->nCoordinates() == 1 )
+
+  updateVertex( mActiveVertex, point );
+
+  // if it is a first or last vertex of the line we go to the recording mode
+  if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
   {
-    updateVertex( mActiveVertex, point );
-    setState( MapToolState::Record );
+    if ( mActiveVertex.vertexId().vertex == 0 )
+    {
+      setState( MapToolState::Record );
+      mActiveVertex.setCoordinates( QgsPoint() );
+      emit activeVertexChanged( mActiveVertex );
+      return;
+    }
+    else if ( mActiveVertex.vertexId().vertex == vertexCount - 1 )
+    {
+      QgsVertexId id = mActiveVertex.vertexId();
+      id.vertex += 1;
+      mActiveVertex.setVertexId( id );
+      mActiveVertex.setCoordinates( QgsPoint() );
+      setState( MapToolState::Record );
+      emit activeVertexChanged( mActiveVertex );
+      return;
+    }
   }
-  else
-  {
-    setState( MapToolState::View );
-  }
+
+  setState( MapToolState::View );
   setActiveVertex( Vertex() );
 }
 
