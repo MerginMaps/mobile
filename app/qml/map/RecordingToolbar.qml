@@ -92,7 +92,7 @@ Item {
                 id: removePointButton
                 width: root.itemSize
                 text: qsTr("Remove")
-                imageSource: InputStyle.undoIcon
+                imageSource: InputStyle.minusIcon
                 enabled: manualRecording && root.toolMode !== RecordingMapTool.View
 
                 onActivated: root.removePointClicked()

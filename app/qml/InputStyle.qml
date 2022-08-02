@@ -87,6 +87,7 @@ QtObject {
     property string backIcon: "qrc:/back.svg"
     property string checkIcon: "qrc:/check.svg"
     property string plusIcon: "qrc:/plus.svg"
+    property string minusIcon: "qrc:/minus.svg"
     property string noIcon: "qrc:/no.svg"
     property string yesIcon: "qrc:/yes.svg"
     property string editIcon: "qrc:/edit.svg"
@@ -154,7 +155,7 @@ QtObject {
 
     property string closeIcon: "qrc:/ic_clear_black.svg"
     property string stakeoutIcon: "qrc:/stakeout.png"
-    
+
     property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
 
     // map related styling constats
