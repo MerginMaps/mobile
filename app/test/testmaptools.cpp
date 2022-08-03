@@ -294,11 +294,10 @@ void TestMapTools::testExistingVertices()
   mapTool->setInitialGeometry( geometry );
   vertices = mapTool->existingVertices();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
-  // FIXME: multiparts are not supported yet
-  //QCOMPARE( vertices.constGet()->partCount(), 3 );
+  QCOMPARE( vertices.constGet()->partCount(), 3 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
-  //QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 1, 1 ) );
-  //QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 2, 2 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 1, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 2, 2 ) );
 
   delete mapTool;
 }
@@ -343,9 +342,10 @@ void TestMapTools::testMidSegmentVertices()
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0.5 ) );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, -0.1 ) );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 1.1, 1 ) );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 0.5, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0.5, 1 ) );
+  // handle points added after all midpoints of the specific part/ring
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 0, -0.5 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 1.5, 1 ) );
 
   geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
   mapTool->setLayer( pointLayer );
@@ -378,10 +378,12 @@ void TestMapTools::testHandles()
   QCOMPARE( handles.wkbType(), QgsWkbTypes::MultiLineString );
   QCOMPARE( handles.constGet()->partCount(), 2 );
 
+  // handle segments first point is a handle point and second point is
+  // an existing vertex (start/end of the line)
   QVector<QgsGeometry> expected =
   {
-    QgsGeometry::fromWkt( "LINESTRING(0 -0.1, 0 0)" ),
-    QgsGeometry::fromWkt( "LINESTRING(1 1, 1.1 1)" ),
+    QgsGeometry::fromWkt( "LINESTRING(0 -0.5, 0 0)" ),
+    QgsGeometry::fromWkt( "LINESTRING(1.5 1, 1 1)" ),
   };
 
   const QVector<QgsGeometry> parts = handles.asGeometryCollection();
@@ -417,30 +419,49 @@ void TestMapTools::testLookForVertex()
   mapTool->setLayer( lineLayer );
   mapTool->setInitialGeometry( geometry );
 
-  // start point, should be invalid vertex as we are switching to the
-  // recording state are reset selection
-  QPointF screenPoint = ms->coordinateToScreen( QgsPoint( -0.05, -0.13 ) );
+  // when initial geometry set we start in View state
+  QCOMPARE( mapTool->state(), RecordingMapTool::MapToolState::View );
+
+  // Start handle point. Active vertex is invalid, state changes to Record
+  QPointF screenPoint = ms->coordinateToScreen( QgsPoint( -0.05, -0.53 ) );
   mapTool->lookForVertex( screenPoint );
   QVERIFY( !mapTool->activeVertex().isValid() );
+  QCOMPARE( mapTool->state(), RecordingMapTool::MapToolState::Record );
 
-  // first point
+  // reset state to View
+  mapTool->setState( RecordingMapTool::MapToolState::View );
+
+  // Existing geometry vertex (first point). Active vertex is valid, state changes to Grab
   screenPoint = ms->coordinateToScreen( QgsPoint( -0.01, 0.1 ) );
   mapTool->lookForVertex( screenPoint );
   QVERIFY( mapTool->activeVertex().isValid() );
+  QCOMPARE( mapTool->activeVertex().type(), Vertex::Existing );
   QCOMPARE( mapTool->activeVertex().vertexId().part, 0 );
   QCOMPARE( mapTool->activeVertex().vertexId().ring, 0 );
   QCOMPARE( mapTool->activeVertex().vertexId().vertex, 0 );
 
-  // midpoint
+  // reset state to View
+  mapTool->setState( RecordingMapTool::MapToolState::View );
+
+  // Midpoint between 2nd and 3rd existing vertices (0.5, 1).
+  // This creates new point with the midpoint coordinates and triggers
+  // rebuild of the vertex cache (new exsting vertex will be added).
+  // Active vertex is valid, state changes to Grab.
   screenPoint = ms->coordinateToScreen( QgsPoint( 0.6, 1.2 ) );
   mapTool->lookForVertex( screenPoint );
   QVERIFY( mapTool->activeVertex().isValid() );
+  QCOMPARE( mapTool->activeVertex().type(), Vertex::Existing );
   QCOMPARE( mapTool->activeVertex().vertexId().part, 0 );
   QCOMPARE( mapTool->activeVertex().vertexId().ring, 0 );
   QCOMPARE( mapTool->activeVertex().vertexId().vertex, 2 );
+  QCOMPARE( mapTool->activeVertex().coordinates(), QgsPoint( 0.5, 1 ) );
 
-  // distant point. should return invalid vertex id
-  screenPoint = ms->coordinateToScreen( QgsPoint( 3, 2 ) );
+  // reset state to View
+  mapTool->setState( RecordingMapTool::MapToolState::View );
+
+  // Distant point. Active vertex is invalid (nothing found), View state
+  screenPoint = ms->coordinateToScreen( QgsPoint( 15, 13 ) );
   mapTool->lookForVertex( screenPoint );
   QVERIFY( !mapTool->activeVertex().isValid() );
+  QCOMPARE( mapTool->state(), RecordingMapTool::MapToolState::View );
 }

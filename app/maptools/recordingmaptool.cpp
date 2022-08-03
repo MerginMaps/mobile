@@ -557,31 +557,31 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   if ( idx >= 0 )
   {
     // we found a point
-    Vertex lastActiveVertex = mActiveVertex;
+    Vertex clickedVertex = mVertices.at( idx );
     mActiveVertex = Vertex();
 
-    if ( mActiveVertex.type() == Vertex::Existing )
+    if ( clickedVertex.type() == Vertex::Existing )
     {
       mActiveVertex = mVertices.at( idx );
       setState( MapToolState::Grab );
     }
-    else if ( mActiveVertex.type() == Vertex::MidPoint )
+    else if ( clickedVertex.type() == Vertex::MidPoint )
     {
       // We need to invalidate activeVertex so that
       // next construction of midpoints and handles contains all points
-      addPointAtPosition( lastActiveVertex, lastActiveVertex.coordinates() );
+      addPointAtPosition( clickedVertex, clickedVertex.coordinates() );
 
       // After adding new point to the position, we need to
       // search again, because mVertices now includes more points.
       // Search should find the created vertex as Existing.
       return lookForVertex( clickedPoint, searchRadius );
     }
-    else if ( mActiveVertex.type() == Vertex::HandleStart )
+    else if ( clickedVertex.type() == Vertex::HandleStart )
     {
       setNewVertexOrder( NewVertexOrder::Start );
       setState( MapToolState::Record );
     }
-    else if ( mActiveVertex.type() == Vertex::HandleEnd )
+    else if ( clickedVertex.type() == Vertex::HandleEnd )
     {
       setNewVertexOrder( NewVertexOrder::End );
       setState( MapToolState::Record );
