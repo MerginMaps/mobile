@@ -26,6 +26,7 @@ RecordingMapTool::RecordingMapTool( QObject *parent )
   connect( this, &RecordingMapTool::initialGeometryChanged, this, &RecordingMapTool::prepareEditing );
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::collectVertices );
   connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::updateNodesAndHandles );
+  connect( this, &RecordingMapTool::stateChanged, this, &RecordingMapTool::updateNodesAndHandles );
 }
 
 RecordingMapTool::~RecordingMapTool() = default;
@@ -406,20 +407,20 @@ void RecordingMapTool::collectVertices()
       mVertices.push_back( Vertex( id, midPoint, Vertex::MidPoint ) );
     }
 
-    // for lines also create start/end points and handles
+    // for lines also create start/end handle points
     if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry && ( vertexId.part != currentPart && vertexId.ring != currentRing ) )
     {
       int vertexCount = geom->vertexCount( vertexId.part, vertexId.ring );
       if ( vertexCount >= 2 )
       {
-        // start point and handle
+        // start handle point
         QgsVertexId startId( vertexId.part, vertexId.ring, 0 );
         QgsVertexId endId( vertexId.part, vertexId.ring, 1 );
 
         QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -0.5 );
         mVertices.push_back( Vertex( startId, handlePoint, Vertex::HandleStart ) );
 
-        // end point and handle
+        // end handle point
         startId = QgsVertexId( vertexId.part, vertexId.ring, vertexCount - 2 );
         endId = QgsVertexId( vertexId.part, vertexId.ring, vertexCount - 1 );
 
@@ -477,11 +478,11 @@ void RecordingMapTool::updateNodesAndHandles()
   }
 
   // Go through handle points and check if the handle should be visible.
-  // If yes, add points to the mMidPoints list and create corresponding handle line
-  // Handles (both point and line) are visible if:
+  // If yes, add points to the mMidPoints list and create corresponding handle segment
+  // Handles (both point and segment) are visible if:
   //  - no point is selected
   //  - existing vertex is selected, but it is not the first/last vertex of the line
-  // Handles (both point and line) are not visible if:
+  // Handles (both point and segment) are not visible if:
   //  - handle point is selected
   //  - first/last vertex of the line is selected
   for ( auto vertexA : handlePoints )
