@@ -279,7 +279,7 @@ class RecordingMapTool : public AbstractMapTool
     QgsGeometry mRecordedGeometry;
     QgsGeometry mInitialGeometry;
 
-    bool mCenteredToGPS;
+    bool mCenteredToGPS = false;
     int mRecordingInterval;  // in seconds for the StreamingMode
     RecordingType mRecordingType = Manual;
 
