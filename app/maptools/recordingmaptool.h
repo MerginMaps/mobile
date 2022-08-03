@@ -237,11 +237,19 @@ class RecordingMapTool : public AbstractMapTool
 
   private slots:
     void prepareEditing();
+
+    /**
+     * Creates nodes index. Extracts existing geometry vertices and generates virtual
+     * vertices representing midpoints (for lines and polygons) and start/end points
+     * (for lines).
+     */
+    void collectVertices();
+
     /**
      * Creates geometries represeinting existing nodes, midpoints (for lines and polygons),
-     * start/end points and "handles" (for lines). Also fills nodes index.
+     * start/end points and "handles" (for lines) from the nodes index.
      */
-    void createNodesAndHandles();
+    void updateNodesAndHandles();
 
     /**
      * Grabs next vertex after the removal of the currently selected vertex
