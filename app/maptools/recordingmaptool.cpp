@@ -28,7 +28,7 @@ RecordingMapTool::RecordingMapTool( QObject *parent )
   connect( this, &RecordingMapTool::initialGeometryChanged, this, &RecordingMapTool::prepareEditing );
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::collectVertices );
   connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::updateVisibleItems );
-  //~ connect( this, &RecordingMapTool::stateChanged, this, &RecordingMapTool::updateVisibleItems );
+  connect( this, &RecordingMapTool::stateChanged, this, &RecordingMapTool::updateVisibleItems );
 }
 
 RecordingMapTool::~RecordingMapTool() = default;
@@ -623,8 +623,8 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
 
     if ( clickedVertex.type() == Vertex::Existing )
     {
-      mActiveVertex = mVertices.at( idx );
-      //setActiveVertex( mVertices.at( idx ) );
+      //mActiveVertex = mVertices.at( idx );
+      setActiveVertex( mVertices.at( idx ) );
       setState( MapToolState::Grab );
     }
     else if ( clickedVertex.type() == Vertex::MidPoint )
@@ -1087,4 +1087,9 @@ void RecordingMapTool::setActivePart( int newActivePart )
     return;
   mActivePart = newActivePart;
   emit activePartChanged( mActivePart );
+}
+
+const QVector< Vertex > &RecordingMapTool::vertices() const
+{
+  return mVertices;
 }
