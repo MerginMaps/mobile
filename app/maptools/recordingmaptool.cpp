@@ -434,10 +434,12 @@ void RecordingMapTool::collectVertices()
         // actual vertex
         mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
 
-        // midpoint
-        QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
-        QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
-        mVertices.push_back( Vertex( id, midPoint, Vertex::MidPoint ) );
+        if ( vertexCount > 2 )
+        {
+          QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
+          QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
+          mVertices.push_back( Vertex( id, midPoint, Vertex::MidPoint ) );
+        }
       }
       // ignore the closing vertex in polygon
       else if ( vertexId.vertex == vertexCount - 1 )
