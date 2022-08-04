@@ -392,7 +392,6 @@ void RecordingMapTool::collectVertices()
   const QgsAbstractGeometry *geom = mRecordedGeometry.constGet();
 
   int currentPart = -1;
-  int currentRing = -1;
 
   while ( geom->nextVertex( vertexId, vertex ) )
   {
@@ -408,7 +407,7 @@ void RecordingMapTool::collectVertices()
     }
 
     // for lines also create start/end handle points
-    if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry && ( vertexId.part != currentPart && vertexId.ring != currentRing ) )
+    if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry && vertexId.part != currentPart )
     {
       int vertexCount = geom->vertexCount( vertexId.part, vertexId.ring );
       if ( vertexCount >= 2 )
@@ -429,7 +428,6 @@ void RecordingMapTool::collectVertices()
       }
 
       currentPart = vertexId.part;
-      currentRing = vertexId.ring;
     }
   }
 
