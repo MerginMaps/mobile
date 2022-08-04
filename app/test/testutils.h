@@ -12,6 +12,7 @@
 
 #include <QString>
 #include <qtestcase.h>
+#include "qgsproject.h"
 #include "merginapi.h"
 
 namespace TestUtils
@@ -27,6 +28,8 @@ namespace TestUtils
   QString generatePassword();
 
   QString testDataDir();
+
+  QgsProject *loadPlanesTestProject();
 
   /**
    * Generates files and folders in rootPath based on json structure.
