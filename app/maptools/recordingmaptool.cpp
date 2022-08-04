@@ -393,105 +393,106 @@ void RecordingMapTool::collectVertices()
   QgsVertexId vertexId;
   const QgsAbstractGeometry *geom = mRecordedGeometry.constGet();
 
-  int currentPart = -1;
+  int startPart = -1;
+  int endPart = -1;
 
-  // A -> B -> C
-  // mVertices
-  // vA, mA, hS, hE, vB, mB, vC
-
-  // part1: A -> B -> C | part 2: D->E
-  // vA, mA, hS1, hE1, vB, mB, vC, vD, mD, hS2, hE2, vE
-
-  // polygon: A -> B -> C (->A)
-  // vA, mA, vB, mB, vC, mC, vA
-
-  // mpolygon: part1: A -> B -> C (->A), ring1: D->E->F(->D) | part2: X -> Y -> Z (-> X)
-  // vA, mA, vB, mB, vC, mC, vA, vD, mD, vE, mE, vF, mF, vD, vX, mX, vY, mY, vZ, mZ, vX
-
-  // --------
-  // --------
-
-  // mVertices
-  // LINE
-
-  // A -> B -> C
-  // hS, vA, mA, vB, mB, vC, hE
-  // vA = mVertices[indx + 1]
-  // vC = mVertices[indx - 1]
-
-  // part1: A -> B -> C | part 2: D->E | part 3: X
-  // hS1, vA, mA, vB, mB, vC, hE1, hS2, vD, mD, vE, hE2, vX
-  // hS1 should be visible? if we are recording from beginning **in part1** || vA is active
-
-  // mA -> vA is active or vB is active
-
-  // POLYGONS
-
-  // polygon: A -> B -> C (->A)
-  // vA, mA, vB, mB, vC, mC
-  // vA is active
-  // mA should be visible - if indx - 1 is active or index + 1 is active
-
-  // mpolygon: part1: A -> B -> C (->A), ring1: D->E->F(->D) | part2: X -> Y -> Z (-> X) | part3: G -> H | part 4: J
-  // vA, mA, vB, mB, vC, mC, vD, mD, vE, mE, vF, mF, vX, mX, vY, mY, vZ, mZ, vG, mG, vH, vJ
-  // vA is active
-  // mA should be visible - if indx - 1 is active or index + 1 is active
-  // mD should be visible - if indx - 1 is active or index + 1 is active (+ also check if it is from the same ring; if not, check is the first vertex in that ring&part is active)
-
+  /**
+   * Extracts existing geometry vertices and generates virtual vertices representing
+   * midpoints (for lines and polygons) and start/end handles (for lines).
+   *
+   * For lines each part extracted in the following order: start handle, first vertex,
+   * midPointN, vertexN, …, last vertex, end handle. So, for simple line containing
+   * just 3 points we will get the following sequence of vertices (h — handle,
+   * v — exisiting vertex, m — midpoint):
+   * LINE: A -> B -> C
+   * VERTICES: hS, vA, mA, vB, mB, vC, hE
+   *
+   * Similarly for multiparts:
+   * LINE: part1: A -> B -> C | part 2: D -> E | part 3: X
+   * VERTICES: hS1, vA, mA, vB, mB, vC, hE1, hS2, vD, mD, vE, hE2, vX
+   *
+   * For polygons each part extracted in the following order: first vertex, midPointN,
+   * vertexN, …. Last closing vertex (which has the same coordinates as the first one)
+   * is ignored. Interior rings (holes) are extracted in the same way and go right
+   * after the correspoinding inrerior ring. So for simple polygon containing 4 points
+   * (first and last point are the same) we will get following sequence of vertices:
+   * POLYGON: A -> B -> C -> A
+   * VERTICES vA, mA, vB, mB, vC, mC
+   *
+   * Similarly for multiparts:
+   * POLYGON: part1: A -> B -> C -> A, ring1: D -> E -> F ->D | part2: X -> Y -> Z -> X | part3: G -> H | part 4: J
+   * VERTICES: vA, mA, vB, mB, vC, mC, vD, mD, vE, mE, vF, mF, vX, mX, vY, mY, vZ, mZ, vG, mG, vH, vJ
+   */
   while ( geom->nextVertex( vertexId, vertex ) )
   {
-    if ( geom->geometryType() == QgsWkbTypes::PolygonGeometry )
+    int vertexCount = geom->vertexCount( vertexId.part, vertexId.ring );
+
+    if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
     {
+      if ( vertexId.vertex < vertexCount - 1 )
+      {
+        // actual vertex
+        mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
+
+        // midpoint
+        QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
+        QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
+        mVertices.push_back( Vertex( id, midPoint, Vertex::MidPoint ) );
+      }
       // ignore the closing vertex in polygon
-      if ( vertexId.vertex == geom->vertexCount( vertexId.part, vertexId.ring ) - 1 )
+      else if ( vertexId.vertex == vertexCount - 1 )
       {
         continue;
       }
     }
-
-    // if this is firt point in line (or part)
-    // push handle start
-
-    // push actual vertex
-
-    // push midpoint if this is not the end
-
-    mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
-
-    // for lines and polygons create segment midpoints
-    if ( mRecordedGeometry.type() != QgsWkbTypes::PointGeometry && vertexId.vertex < geom->vertexCount( vertexId.part, vertexId.ring ) - 1 )
+    else if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
     {
-      QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
-
-      QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
-      mVertices.push_back( Vertex( id, midPoint, Vertex::MidPoint ) );
-    }
-
-    // for lines also create start/end handle points
-    if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry && vertexId.part != currentPart )
-    {
-      int vertexCount = geom->vertexCount( vertexId.part, vertexId.ring );
-      if ( vertexCount >= 2 )
+      // if this is firt point in line (or part) we add handle start point first
+      if ( vertexId.vertex == 0 && vertexId.part != startPart )
       {
+        // next line point. needed to get calculate handle point coordinates
+        QgsVertexId id( vertexId.part, vertexId.ring, 1 );
+
         // start handle point
-        QgsVertexId startId( vertexId.part, vertexId.ring, 0 );
-        QgsVertexId endId( vertexId.part, vertexId.ring, 1 );
-
-        QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), -0.5 );
-        mVertices.push_back( Vertex( startId, handlePoint, Vertex::HandleStart ) );
-
-        // end handle point
-        startId = QgsVertexId( vertexId.part, vertexId.ring, vertexCount - 2 );
-        endId = QgsVertexId( vertexId.part, vertexId.ring, vertexCount - 1 );
-
-        handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( startId ), geom->vertexAt( endId ), 1.5 );
-        mVertices.push_back( Vertex( endId, handlePoint, Vertex::HandleEnd ) );
+        QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( vertexId ), geom->vertexAt( id ), -0.5 );
+        mVertices.push_back( Vertex( vertexId, handlePoint, Vertex::HandleStart ) );
+        startPart = vertexId.part;
       }
 
-      currentPart = vertexId.part;
+      // add actual vertex and midpoint if this is not the last vertex of the line
+      if ( vertexId.vertex < vertexCount - 1 )
+      {
+        // actual vertex
+        mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
+
+        // midpoint
+        QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
+        QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
+        mVertices.push_back( Vertex( id, midPoint, Vertex::MidPoint ) );
+      }
+
+      // if this is last point in line (or part) we save actual vertex first
+      // and then handle end point
+      if ( vertexId.vertex == vertexCount - 1 && vertexId.part != endPart )
+      {
+        // last vertex of the line
+        mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
+
+        // previous line point. needed to get calculate handle point coordinates
+        QgsVertexId id( vertexId.part, vertexId.ring, vertexCount - 2 );
+
+        // end handle point
+        QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( id ), geom->vertexAt( vertexId ), 1.5 );
+        mVertices.push_back( Vertex( vertexId, handlePoint, Vertex::HandleEnd ) );
+        endPart = vertexId.part;
+      }
+    }
+    else
+    {
+      // for points and multipoints we just add existing vertices
+      mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
     }
   }
-
   updateVisibleItems();
 }
 
@@ -514,63 +515,46 @@ void RecordingMapTool::updateVisibleItems()
     return;
   }
 
-  QVector< Vertex > handlePoints;
-
-  for ( auto vertex : mVertices )
+  Vertex v;
+  for ( int i = 0; i < mVertices.count(); i++ )
   {
-    if ( shouldBeVisible( vertex.coordinates() ) )
+    v = mVertices.at( i );
+
+    if ( v.type() == Vertex::Existing && v != mActiveVertex )
     {
-      if ( vertex.type() == Vertex::Existing )
+      // show existing vertex if it is not an active one
+      existingVertices->addGeometry( v.coordinates().clone() );
+    }
+    else if ( v.type() == Vertex::MidPoint )
+    {
+      midPoints->addGeometry( v.coordinates().clone() );
+    }
+    else if ( v.type() == Vertex::HandleStart )
+    {
+      // start handle is visible if we are not recording from start and first vertex is not active
+      Vertex lineStart = mVertices.at( i + 1 );
+      if ( !( mState == MapToolState::Record && mNewVertexOrder == NewVertexOrder::Start ) && mActiveVertex != lineStart )
       {
-        existingVertices->addGeometry( vertex.coordinates().clone() );
-      }
-      else if ( vertex.type() == Vertex::MidPoint )
-      {
-        midPoints->addGeometry( vertex.coordinates().clone() );
-      }
-      else if ( vertex.type() == Vertex::HandleStart || vertex.type() == Vertex::HandleEnd )
-      {
-        // for now we only collect handle points which should be visible
-        handlePoints.push_back( vertex );
+        // start handle point
+        midPoints->addGeometry( v.coordinates().clone() );
+
+        // start handle line
+        QgsLineString handle( v.coordinates(), lineStart.coordinates() );
+        handles->addGeometry( handle.clone() );
       }
     }
-  }
-
-  // Go through handle points and check if the handle should be visible.
-  // If yes, add points to the mMidPoints list and create corresponding handle segment
-  // Handles (both point and segment) are visible if:
-  //  - no point is selected
-  //  - existing vertex is selected, but it is not the first/last vertex of the line
-  // Handles (both point and segment) are not visible if:
-  //  - handle point is selected
-  //  - first/last vertex of the line is selected
-  for ( auto vertexA : handlePoints )
-  {
-    for ( auto vertexB : mVertices )
+    else if ( v.type() == Vertex::HandleEnd )
     {
-      // Handle segments are constructed from handle point and existing vertex
-      // with the same vertex id as handle point.
-      // If existing vertex from the handle is selected we don't want to show
-      // handle point and segment
-      if ( vertexB.type() == Vertex::Existing && vertexA.vertexId() == vertexB.vertexId() && shouldBeVisible( vertexB.coordinates() ) )
+      // end handle is visible if we are not recording from end and last vertex is not active
+      Vertex lineEnd = mVertices.at( i - 1 );
+      if ( !( mState == MapToolState::Record && mNewVertexOrder == NewVertexOrder::End ) && mActiveVertex != lineEnd )
       {
-        // start point and handle
-        if ( !( mState == Record && mNewVertexOrder == Start ) && vertexA.type() == Vertex::HandleStart )
-        {
-          midPoints->addGeometry( vertexA.coordinates().clone() );
+        // end handle point
+        midPoints->addGeometry( v.coordinates().clone() );
 
-          QgsLineString handle( vertexA.coordinates(), vertexB.coordinates() );
-          handles->addGeometry( handle.clone() );
-        }
-
-        // end point and handle
-        if ( !( mState == Record && mNewVertexOrder == End ) && vertexA.type() == Vertex::HandleEnd )
-        {
-          midPoints->addGeometry( vertexA.coordinates().clone() );
-
-          QgsLineString handle( vertexA.coordinates(), vertexB.coordinates() );
-          handles->addGeometry( handle.clone() );
-        }
+        // end handle line
+        QgsLineString handle( lineEnd.coordinates(), v.coordinates() );
+        handles->addGeometry( handle.clone() );
       }
     }
   }
