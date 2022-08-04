@@ -98,6 +98,7 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( MapToolState state READ state WRITE setState NOTIFY stateChanged )
 
     Q_PROPERTY( QgsPoint recordPoint READ recordPoint WRITE setRecordPoint NOTIFY recordPointChanged )
+    Q_PROPERTY( int activePart READ activePart WRITE setActivePart NOTIFY activePartChanged )
 
   public:
 
@@ -210,6 +211,9 @@ class RecordingMapTool : public AbstractMapTool
     const NewVertexOrder &newVertexOrder() const;
     void setNewVertexOrder( const NewVertexOrder &newNewVertexOrder );
 
+    int activePart() const;
+    void setActivePart( int newActivePart );
+
   signals:
     void layerChanged( QgsVectorLayer *layer );
     void centeredToGPSChanged( bool centeredToGPS );
@@ -231,6 +235,8 @@ class RecordingMapTool : public AbstractMapTool
     void activeVertexChanged( const Vertex &activeVertex );
 
     void newVertexOrderChanged( const RecordingMapTool::NewVertexOrder &newVertexOrder );
+
+    void activePartChanged( int activePart );
 
   public slots:
     void onPositionChanged();
@@ -291,6 +297,8 @@ class RecordingMapTool : public AbstractMapTool
     QVector< Vertex > mVertices;
 
     QgsPoint mRecordPoint;
+
+    int mActivePart = 0;
 };
 
 #endif // RECORDINGMAPTOOL_H

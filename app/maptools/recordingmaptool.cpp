@@ -53,7 +53,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
   fixZ( pointToAdd );
 
-  QgsVertexId id( 0, 0, 0 );
+  QgsVertexId id( mActivePart, 0, 0 );
   if ( mRecordedGeometry.isEmpty() )
   {
     mRecordedGeometry = InputUtils::createGeometryForLayer( mLayer );
@@ -67,7 +67,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
     if ( mNewVertexOrder == NewVertexOrder::End )
     {
-      id.vertex = mRecordedGeometry.constGet()->vertexCount();
+      id.vertex = mRecordedGeometry.constGet()->vertexCount( mActivePart, 0 );
     }
   }
 
@@ -93,7 +93,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     else
     {
       // as rings are closed, we need to insert before last vertex
-      id.vertex = mRecordedGeometry.constGet()->vertexCount() - 1;
+      id.vertex = mRecordedGeometry.constGet()->vertexCount( mActivePart, 0 ) - 1;
     }
   }
 
@@ -205,7 +205,7 @@ void RecordingMapTool::removePoint()
         if ( mRecordedGeometry.constGet()->partCount() > 1 )
         {
           QgsMultiLineString *ml = qgsgeometry_cast<QgsMultiLineString *>( mRecordedGeometry.get() );
-          r = ml->lineStringN( mActiveVertex.vertexId().part );
+          r = ml->lineStringN( mActiveVertex.vertexId().part ); // mActivePart?
         }
         else
         {
@@ -217,7 +217,7 @@ void RecordingMapTool::removePoint()
           return;
         }
 
-        if ( mRecordedGeometry.constGet()->vertexCount() == 2 )
+        if ( r->nCoordinates() == 2 )
         {
           // if we remove second vertex directly the geometry will be cleared
           // but we want to keep start point, so instead of removing vertex
@@ -256,14 +256,14 @@ void RecordingMapTool::removePoint()
     // select first/last existing vertex as active and change state to GRAB
     if ( mNewVertexOrder == NewVertexOrder::End )
     {
-      mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, mRecordedGeometry.constGet()->vertexCount() - 1 ) );
+      mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring ) - 1 ) );
 
       if ( InputUtils::isPolygonLayer( mLayer ) )
       {
         // if the ring is closed, we need to jump -2 vertices
         if ( mRecordedGeometry.constGet()->nCoordinates() >= 4 )
         {
-          mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, mRecordedGeometry.constGet()->vertexCount() - 2 ) );
+          mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring ) - 2 ) );
         }
       }
     }
@@ -556,6 +556,8 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   {
     // we found a point
     Vertex clickedVertex = mVertices.at( idx );
+    setActivePart( clickedVertex.vertexId().part );
+
     mActiveVertex = Vertex();
 
     if ( clickedVertex.type() == Vertex::Existing )
@@ -590,8 +592,9 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   else
   {
     // nothing found
-    setActiveVertex( Vertex() );
     setState( MapToolState::View );
+    setActivePart( 0 );
+    setActiveVertex( Vertex() );
   }
 }
 
@@ -628,6 +631,7 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
       emit recordedGeometryChanged( mRecordedGeometry );
 
       setState( MapToolState::Record );
+      setActivePart( mActiveVertex.vertexId().part );
       setActiveVertex( Vertex() );
       return;
     }
@@ -635,6 +639,7 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
     {
       updateVertex( mActiveVertex, point );
       setState( MapToolState::Record );
+      setActivePart( mActiveVertex.vertexId().part );
       setActiveVertex( Vertex() );
       return;
     }
@@ -650,6 +655,7 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
       // Note: Order matters - we rebuild visible geometry when active vertex is changed
       setNewVertexOrder( NewVertexOrder::Start );
       setState( MapToolState::Record );
+      setActivePart( mActiveVertex.vertexId().part );
       setActiveVertex( Vertex() );
       return;
     }
@@ -658,12 +664,14 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
       // Note: Order matters - we rebuild visible geometry when active vertex is changed
       setNewVertexOrder( NewVertexOrder::End );
       setState( MapToolState::Record );
+      setActivePart( mActiveVertex.vertexId().part );
       setActiveVertex( Vertex() );
       return;
     }
   }
 
   setState( MapToolState::View );
+  setActivePart( 0 );
   setActiveVertex( Vertex() );
 }
 
@@ -697,6 +705,7 @@ void RecordingMapTool::cancelGrab()
   }
 
   setState( MapToolState::View );
+  setActivePart( 0 );
   setActiveVertex( Vertex() );
 }
 
@@ -719,19 +728,22 @@ void RecordingMapTool::grabNextVertex( const int removedVertexId )
     mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, removedVertexId - 1 ) );
     mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
     mActiveVertex.setType( Vertex::Existing );
+    setActivePart( mActiveVertex.vertexId().part );
     emit activeVertexChanged( mActiveVertex );
   }
   else if ( removedVertexId < mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring ) )
   {
     mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
     mActiveVertex.setType( Vertex::Existing );
+    setActivePart( mActiveVertex.vertexId().part );
     emit activeVertexChanged( mActiveVertex );
   }
   else
   {
     // geometry is now empty
-    setActiveVertex( Vertex() );
     setState( MapToolState::Record );
+    setActivePart( mActiveVertex.vertexId().part );
+    setActiveVertex( Vertex() );
   }
 }
 
@@ -989,4 +1001,17 @@ void RecordingMapTool::setNewVertexOrder( const NewVertexOrder &newNewVertexOrde
     return;
   mNewVertexOrder = newNewVertexOrder;
   emit newVertexOrderChanged( mNewVertexOrder );
+}
+
+int RecordingMapTool::activePart() const
+{
+  return mActivePart;
+}
+
+void RecordingMapTool::setActivePart( int newActivePart )
+{
+  if ( mActivePart == newActivePart )
+    return;
+  mActivePart = newActivePart;
+  emit activePartChanged( mActivePart );
 }

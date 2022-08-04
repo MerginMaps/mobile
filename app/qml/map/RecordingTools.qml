@@ -103,6 +103,7 @@ Item {
     realGeometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
 
     activeVertex: mapTool.activeVertex
+    activePart: mapTool.activePart
   }
 
   Highlight {
