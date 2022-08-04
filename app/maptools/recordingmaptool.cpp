@@ -395,8 +395,67 @@ void RecordingMapTool::collectVertices()
 
   int currentPart = -1;
 
+  // A -> B -> C
+  // mVertices
+  // vA, mA, hS, hE, vB, mB, vC
+
+  // part1: A -> B -> C | part 2: D->E
+  // vA, mA, hS1, hE1, vB, mB, vC, vD, mD, hS2, hE2, vE
+
+  // polygon: A -> B -> C (->A)
+  // vA, mA, vB, mB, vC, mC, vA
+
+  // mpolygon: part1: A -> B -> C (->A), ring1: D->E->F(->D) | part2: X -> Y -> Z (-> X)
+  // vA, mA, vB, mB, vC, mC, vA, vD, mD, vE, mE, vF, mF, vD, vX, mX, vY, mY, vZ, mZ, vX
+
+  // --------
+  // --------
+
+  // mVertices
+  // LINE
+
+  // A -> B -> C
+  // hS, vA, mA, vB, mB, vC, hE
+  // vA = mVertices[indx + 1]
+  // vC = mVertices[indx - 1]
+
+  // part1: A -> B -> C | part 2: D->E | part 3: X
+  // hS1, vA, mA, vB, mB, vC, hE1, hS2, vD, mD, vE, hE2, vX
+  // hS1 should be visible? if we are recording from beginning **in part1** || vA is active
+
+  // mA -> vA is active or vB is active
+
+  // POLYGONS
+
+  // polygon: A -> B -> C (->A)
+  // vA, mA, vB, mB, vC, mC
+  // vA is active
+  // mA should be visible - if indx - 1 is active or index + 1 is active
+
+  // mpolygon: part1: A -> B -> C (->A), ring1: D->E->F(->D) | part2: X -> Y -> Z (-> X) | part3: G -> H | part 4: J
+  // vA, mA, vB, mB, vC, mC, vD, mD, vE, mE, vF, mF, vX, mX, vY, mY, vZ, mZ, vG, mG, vH, vJ
+  // vA is active
+  // mA should be visible - if indx - 1 is active or index + 1 is active
+  // mD should be visible - if indx - 1 is active or index + 1 is active (+ also check if it is from the same ring; if not, check is the first vertex in that ring&part is active)
+
   while ( geom->nextVertex( vertexId, vertex ) )
   {
+    if ( geom->geometryType() == QgsWkbTypes::PolygonGeometry )
+    {
+      // ignore the closing vertex in polygon
+      if ( vertexId.vertex == geom->vertexCount( vertexId.part, vertexId.ring ) - 1 )
+      {
+        continue;
+      }
+    }
+
+    // if this is firt point in line (or part)
+    // push handle start
+
+    // push actual vertex
+
+    // push midpoint if this is not the end
+
     mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
 
     // for lines and polygons create segment midpoints
