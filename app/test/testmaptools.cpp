@@ -270,12 +270,12 @@ void TestMapTools::testExistingVertices()
   mapTool->setLayer( polygonLayer );
   mapTool->setInitialGeometry( geometry );
   QgsGeometry vertices = mapTool->existingVertices();
+
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
-  QCOMPARE( vertices.constGet()->partCount(), 4 );
+  QCOMPARE( vertices.constGet()->partCount(), 3 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 1 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 1, 1 ) );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 0, 0 ) );
 
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) << QgsPoint( 2, 2 ) );
   geometry.set( line );
@@ -341,10 +341,9 @@ void TestMapTools::testMidSegmentVertices()
   vertices = mapTool->midPoints();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0.5 ) );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0.5, 1 ) );
-  // handle points added after all midpoints of the specific part/ring
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 0, -0.5 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, -0.5 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 0.5 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 0.5, 1 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 1.5, 1 ) );
 
   geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
@@ -383,7 +382,7 @@ void TestMapTools::testHandles()
   QVector<QgsGeometry> expected =
   {
     QgsGeometry::fromWkt( "LINESTRING(0 -0.5, 0 0)" ),
-    QgsGeometry::fromWkt( "LINESTRING(1.5 1, 1 1)" ),
+    QgsGeometry::fromWkt( "LINESTRING(1 1, 1.5 1)" ),
   };
 
   const QVector<QgsGeometry> parts = handles.asGeometryCollection();
