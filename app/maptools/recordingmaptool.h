@@ -255,7 +255,7 @@ class RecordingMapTool : public AbstractMapTool
      * Creates geometries represeinting existing nodes, midpoints (for lines and polygons),
      * start/end points and "handles" (for lines) from the nodes index.
      */
-    void updateNodesAndHandles();
+    void updateVisibleItems();
 
     /**
      * Grabs next vertex after the removal of the currently selected vertex

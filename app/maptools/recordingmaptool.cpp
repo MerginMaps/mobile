@@ -27,8 +27,8 @@ RecordingMapTool::RecordingMapTool( QObject *parent )
 {
   connect( this, &RecordingMapTool::initialGeometryChanged, this, &RecordingMapTool::prepareEditing );
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::collectVertices );
-  connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::updateNodesAndHandles );
-  //~ connect( this, &RecordingMapTool::stateChanged, this, &RecordingMapTool::updateNodesAndHandles );
+  connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::updateVisibleItems );
+  //~ connect( this, &RecordingMapTool::stateChanged, this, &RecordingMapTool::updateVisibleItems );
 }
 
 RecordingMapTool::~RecordingMapTool() = default;
@@ -492,10 +492,10 @@ void RecordingMapTool::collectVertices()
     }
   }
 
-  updateNodesAndHandles();
+  updateVisibleItems();
 }
 
-void RecordingMapTool::updateNodesAndHandles()
+void RecordingMapTool::updateVisibleItems()
 {
   QgsMultiPoint *existingVertices = new QgsMultiPoint();
   mExistingVertices.set( existingVertices );
