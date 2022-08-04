@@ -39,6 +39,7 @@ class TestMapTools : public QObject
     void testUpdateVertex();
     void testRemoveVertex();
     void testLookForVertexV2();
+    void testVerticesStructure();
 };
 
 #endif // TESTMAPTOOLS_H

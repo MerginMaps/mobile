@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1225,4 +1225,413 @@ void TestMapTools::testLookForVertexV2()
   // - part vertex
   // -
 
+}
+
+void TestMapTools::testVerticesStructure()
+{
+  //
+  // mVertices array inside RecordingMapTool should have structure depending on
+  // a type of geometry, as follows:
+  //
+  //
+  // For Points:
+  //
+  // point: A
+  // structure: vA
+  //
+  // where vA is an existing vertex A
+  //
+  // For MultiPoints:
+  //
+  // point: part1: A | part2: B | part3: C
+  // structure: vA, vB, vC
+  //
+  //
+  // For LineStrings:
+  //
+  // linestring: A -> B -> C
+  // structure: hS, vA, mA, vB, mB, vC, hE
+  //
+  // where:
+  //    - hS is handle start,
+  //    - hE is handle end,
+  //    - mA is midpoint between two existing vertices A and B
+  //
+  // For LineString with parts:
+  //
+  // linestring: part1: A -> B -> C | part 2: D->E | part 3: X
+  // structure: hS1, vA, mA, vB, mB, vC, hE1, hS2, vD, mD, vE, hE2, vX
+  //
+  //
+  // For Polygons:
+  //
+  // polygon: A -> B -> C (->A)
+  // structure: vA, mA, vB, mB, vC, mC
+  //
+  // For MultiPolygons with rings:
+  //
+  // polygon: part1: A -> B -> C (->A), ring1: D->E->F(->D) | part2: X -> Y -> Z (-> X) | part3: G -> H | part 4: J
+  // structure: vA, mA, vB, mB, vC, mC, vD, mD, vE, mE, vF, mF, vX, mX, vY, mY, vZ, mZ, vG, mG, vH, vJ
+  //
+
+  RecordingMapTool mapTool;
+
+  //
+  // point
+  //
+
+  QgsPointXY pointdata = QgsPointXY( 10, 20 );
+  QgsGeometry pointdataGEO = QgsGeometry::fromPointXY( pointdata );
+  QVERIFY( pointdataGEO.wkbType() == QgsWkbTypes::Point );
+
+  mapTool.setInitialGeometry( pointdataGEO );
+
+  QCOMPARE( mapTool.collectedVertices().length(), 1 );
+  QVERIFY( mapTool.collectedVertices().at( 0 ).type() == Vertex::Existing );
+  QCOMPARE( mapTool.collectedVertices().at( 0 ).coordinates(), pointdata );
+
+  //
+  // multipoint
+  //
+
+  QgsMultiPointXY multipointdata =
+  {
+    QgsPointXY( 10, 20 ),
+    QgsPointXY( 20, 30 ),
+    QgsPointXY( 30, 40 )
+  };
+  QgsGeometry multipointdataGEO = QgsGeometry::fromMultiPointXY( multipointdata );
+  QVERIFY( multipointdataGEO.wkbType() == QgsWkbTypes::MultiPoint );
+
+  mapTool.setInitialGeometry( multipointdataGEO );
+
+  const QVector<Vertex> verticesmp = mapTool.collectedVertices();
+
+  QCOMPARE( verticesmp.length(), 3 );
+
+  QVERIFY( verticesmp.at( 0 ).type() == Vertex::Existing );
+  QVERIFY( verticesmp.at( 1 ).type() == Vertex::Existing );
+  QVERIFY( verticesmp.at( 2 ).type() == Vertex::Existing );
+
+  QCOMPARE( verticesmp.at( 0 ).coordinates(), multipointdata.at( 0 ) );
+  QCOMPARE( verticesmp.at( 1 ).coordinates(), multipointdata.at( 1 ) );
+  QCOMPARE( verticesmp.at( 2 ).coordinates(), multipointdata.at( 2 ) );
+
+  //
+  // linestring
+  //
+
+  QgsPolylineXY linestringdata =
+  {
+    QgsPointXY( -10, -20 ),
+    QgsPointXY( -20, 30 ),
+    QgsPointXY( 30, 40 )
+  };
+  QgsGeometry linestrindataGEO = QgsGeometry::fromPolylineXY( linestringdata );
+  QVERIFY( linestrindataGEO.wkbType() == QgsWkbTypes::LineString );
+
+  mapTool.setInitialGeometry( linestrindataGEO );
+
+  const QVector<Vertex> verticesl = mapTool.collectedVertices();
+
+  // structure should have 7 points: handle start, v1, m1, v2, m2, v3, end handle
+  QCOMPARE( verticesl.length(), 7 );
+
+  QVERIFY( verticesl.at( 0 ).type() == Vertex::HandleStart );
+  QVERIFY( verticesl.at( 1 ).type() == Vertex::Existing );
+  QVERIFY( verticesl.at( 2 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesl.at( 3 ).type() == Vertex::Existing );
+  QVERIFY( verticesl.at( 4 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesl.at( 5 ).type() == Vertex::Existing );
+  QVERIFY( verticesl.at( 6 ).type() == Vertex::HandleEnd );
+
+  QCOMPARE( verticesl.at( 1 ).coordinates(), linestringdata.at( 0 ) );
+  QCOMPARE( verticesl.at( 3 ).coordinates(), linestringdata.at( 1 ) );
+  QCOMPARE( verticesl.at( 5 ).coordinates(), linestringdata.at( 2 ) );
+
+  //
+  // multilinestring
+  //
+
+  QgsMultiPolylineXY multilinestringdata =
+  {
+    {
+      // part 1
+      QgsPointXY( -10, -20 ),
+      QgsPointXY( -20, 30 ),
+      QgsPointXY( 30, 40 )
+    },
+    {
+      // part 2
+      QgsPointXY( -10, -20 ),
+      QgsPointXY( -15, 10 )
+    },
+    {
+      // part 3 - only one point so far
+      QgsPointXY( 10, 20 )
+    }
+  };
+
+  QgsGeometry multilinestringdataGEO = QgsGeometry::fromMultiPolylineXY( multilinestringdata );
+  QVERIFY( multilinestringdataGEO.wkbType() == QgsWkbTypes::MultiLineString );
+
+  mapTool.setInitialGeometry( multilinestringdataGEO );
+
+  const QVector<Vertex> verticesml = mapTool.collectedVertices();
+
+  // should have 13 points: hs, v1, m1, v2, m2, v3, he, |<new part>| hs, v4, m4, v5, he, |<new part>| v6
+  QCOMPARE( verticesml.length(), 13 );
+
+  QVERIFY( verticesml.at( 0 ).type() == Vertex::HandleStart );
+  QVERIFY( verticesml.at( 1 ).type() == Vertex::Existing );
+  QVERIFY( verticesml.at( 2 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesml.at( 3 ).type() == Vertex::Existing );
+  QVERIFY( verticesml.at( 4 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesml.at( 5 ).type() == Vertex::Existing );
+  QVERIFY( verticesml.at( 6 ).type() == Vertex::HandleEnd );
+  QVERIFY( verticesml.at( 7 ).type() == Vertex::HandleStart );
+  QVERIFY( verticesml.at( 8 ).type() == Vertex::Existing );
+  QVERIFY( verticesml.at( 9 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesml.at( 10 ).type() == Vertex::Existing );
+  QVERIFY( verticesml.at( 11 ).type() == Vertex::HandleEnd );
+  QVERIFY( verticesml.at( 12 ).type() == Vertex::Existing );
+
+  QCOMPARE( verticesml.at( 1 ).coordinates(), multilinestringdata.at( 0 ).at( 0 ) );
+  QCOMPARE( verticesml.at( 3 ).coordinates(), multilinestringdata.at( 0 ).at( 1 ) );
+  QCOMPARE( verticesml.at( 5 ).coordinates(), multilinestringdata.at( 0 ).at( 2 ) );
+  QCOMPARE( verticesml.at( 8 ).coordinates(), multilinestringdata.at( 1 ).at( 0 ) );
+  QCOMPARE( verticesml.at( 10 ).coordinates(), multilinestringdata.at( 1 ).at( 1 ) );
+  QCOMPARE( verticesml.at( 12 ).coordinates(), multilinestringdata.at( 2 ).at( 0 ) );
+
+  QCOMPARE( verticesml.at( 0 ).vertexId().part, 0 );
+  QCOMPARE( verticesml.at( 7 ).vertexId().part, 1 );
+  QCOMPARE( verticesml.at( 12 ).vertexId().part, 2 );
+
+  //
+  // polygon
+  //
+
+  QgsPolygonXY simplepolygondata =
+  {
+    {
+      // exterior ring
+      QgsPointXY( -10, -20 ),
+      QgsPointXY( 0, -20 ),
+      QgsPointXY( 0, 0 ),
+      QgsPointXY( -10, 0 )
+    }
+  };
+  QgsGeometry simplepolygondataGEO = QgsGeometry::fromPolygonXY( simplepolygondata );
+  QVERIFY( simplepolygondataGEO.wkbType() == QgsWkbTypes::Polygon );
+
+  mapTool.setInitialGeometry( simplepolygondataGEO );
+
+  const QVector<Vertex> verticesspn = mapTool.collectedVertices();
+
+  // should have 8 points: v1, m1, v2, m2, v3, m3, v4, m4
+  QCOMPARE( verticesspn.length(), 8 );
+
+  QVERIFY( verticesspn.at( 0 ).type() == Vertex::Existing );
+  QVERIFY( verticesspn.at( 1 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesspn.at( 2 ).type() == Vertex::Existing );
+  QVERIFY( verticesspn.at( 3 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesspn.at( 4 ).type() == Vertex::Existing );
+  QVERIFY( verticesspn.at( 5 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesspn.at( 6 ).type() == Vertex::Existing );
+  QVERIFY( verticesspn.at( 7 ).type() == Vertex::MidPoint );
+
+  QCOMPARE( verticesspn.at( 0 ).coordinates(), multilinestringdata.at( 0 ).at( 0 ) );
+  QCOMPARE( verticesspn.at( 2 ).coordinates(), multilinestringdata.at( 0 ).at( 1 ) );
+  QCOMPARE( verticesspn.at( 4 ).coordinates(), multilinestringdata.at( 0 ).at( 2 ) );
+  QCOMPARE( verticesspn.at( 6 ).coordinates(), multilinestringdata.at( 0 ).at( 3 ) );
+
+  //
+  // polygon (with hole)
+  //
+
+  QgsPolygonXY polygondata =
+  {
+    {
+      // exterior ring
+      QgsPointXY( -10, -20 ),
+      QgsPointXY( 0, -20 ),
+      QgsPointXY( 0, 0 ),
+      QgsPointXY( -10, 0 )
+    },
+    {
+      // interior ring - hole
+      QgsPointXY( -8, -10 ),
+      QgsPointXY( -4, -10 ),
+      QgsPointXY( -4, -5 )
+    }
+  };
+  QgsGeometry polygondataGEO = QgsGeometry::fromPolygonXY( polygondata );
+  QVERIFY( polygondataGEO.wkbType() == QgsWkbTypes::Polygon );
+
+  mapTool.setInitialGeometry( polygondataGEO );
+
+  const QVector<Vertex> verticespn = mapTool.collectedVertices();
+
+  // should have 14 points: v1, m1, v2, m2, v3, m3, v4, m4, |<new ring>| v5, m5, v6, m6, v7, m7
+  QCOMPARE( verticespn.length(), 14 );
+
+  QVERIFY( verticespn.at( 0 ).type() == Vertex::Existing );
+  QVERIFY( verticespn.at( 1 ).type() == Vertex::MidPoint );
+  QVERIFY( verticespn.at( 2 ).type() == Vertex::Existing );
+  QVERIFY( verticespn.at( 3 ).type() == Vertex::MidPoint );
+  QVERIFY( verticespn.at( 4 ).type() == Vertex::Existing );
+  QVERIFY( verticespn.at( 5 ).type() == Vertex::MidPoint );
+  QVERIFY( verticespn.at( 6 ).type() == Vertex::Existing );
+  QVERIFY( verticespn.at( 7 ).type() == Vertex::MidPoint );
+  QVERIFY( verticespn.at( 8 ).type() == Vertex::Existing );
+  QVERIFY( verticespn.at( 9 ).type() == Vertex::MidPoint );
+  QVERIFY( verticespn.at( 10 ).type() == Vertex::Existing );
+  QVERIFY( verticespn.at( 11 ).type() == Vertex::MidPoint );
+  QVERIFY( verticespn.at( 12 ).type() == Vertex::Existing );
+  QVERIFY( verticespn.at( 13 ).type() == Vertex::MidPoint );
+
+  QCOMPARE( verticespn.at( 0 ).coordinates(), multilinestringdata.at( 0 ).at( 0 ) );
+  QCOMPARE( verticespn.at( 2 ).coordinates(), multilinestringdata.at( 0 ).at( 1 ) );
+  QCOMPARE( verticespn.at( 4 ).coordinates(), multilinestringdata.at( 0 ).at( 2 ) );
+  QCOMPARE( verticespn.at( 6 ).coordinates(), multilinestringdata.at( 0 ).at( 3 ) );
+  QCOMPARE( verticespn.at( 8 ).coordinates(), multilinestringdata.at( 1 ).at( 0 ) );
+  QCOMPARE( verticespn.at( 10 ).coordinates(), multilinestringdata.at( 1 ).at( 1 ) );
+  QCOMPARE( verticespn.at( 12 ).coordinates(), multilinestringdata.at( 1 ).at( 2 ) );
+
+  QCOMPARE( verticespn.at( 0 ).vertexId().part, 0 );
+  QCOMPARE( verticespn.at( 7 ).vertexId().part, 0 );
+
+  QCOMPARE( verticespn.at( 0 ).vertexId().ring, 0 );
+  QCOMPARE( verticespn.at( 7 ).vertexId().ring, 0 );
+  QCOMPARE( verticespn.at( 8 ).vertexId().ring, 1 );
+  QCOMPARE( verticespn.at( 10 ).vertexId().ring, 1 );
+  QCOMPARE( verticespn.at( 13 ).vertexId().ring, 1 );
+
+  //
+  // multipolygon with holes
+  //
+
+  QgsMultiPolygonXY multipolygonringsdata =
+  {
+    {
+      // part 1
+      {
+        // exterior ring
+        QgsPointXY( -10, -20 ),
+        QgsPointXY( 0, -20 ),
+        QgsPointXY( 0, 0 ),
+        QgsPointXY( -10, 0 )
+      }
+    },
+    {
+      // part 2
+      {
+        // exterior ring
+        QgsPointXY( 40, 40 ),
+        QgsPointXY( 50, 40 ),
+        QgsPointXY( 50, 50 ),
+        QgsPointXY( 40, 50 )
+      },
+      {
+        // hole (interior ring)
+        QgsPointXY( 42, 42 ),
+        QgsPointXY( 48, 43 ),
+        QgsPointXY( 45, 48 )
+      }
+    },
+    {
+      // part 3
+      {
+        // exterior ring
+        QgsPointXY( 10, 20 ),
+        QgsPointXY( 0, 20 )
+      }
+    }
+  };
+  QgsGeometry multipolygonringsdataGEO = QgsGeometry::fromMultiPolygonXY( multipolygonringsdata );
+  QVERIFY( multipolygonringsdataGEO.wkbType() == QgsWkbTypes::MultiPolygon );
+
+  mapTool.setInitialGeometry( multipolygonringsdataGEO );
+
+  const QVector<Vertex> verticesmpr = mapTool.collectedVertices();
+
+  // should have 25 points:
+  // v1, m1, ... v4, m4,
+  // |<new part>| v5, m5, ... v8, m8, |<new ring>| v9, m9, ... v11, m11,
+  // |<new part>| v12, m12, v13
+
+  QCOMPARE( verticesmpr.length(), 25 );
+
+  // part 1
+  QVERIFY( verticesmpr.at( 0 ).type() == Vertex::Existing );
+  QVERIFY( verticesmpr.at( 1 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesmpr.at( 2 ).type() == Vertex::Existing );
+  QVERIFY( verticesmpr.at( 3 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesmpr.at( 4 ).type() == Vertex::Existing );
+  QVERIFY( verticesmpr.at( 5 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesmpr.at( 6 ).type() == Vertex::Existing );
+  QVERIFY( verticesmpr.at( 7 ).type() == Vertex::MidPoint );
+  // part 2 - ext
+  QVERIFY( verticesmpr.at( 8 ).type() == Vertex::Existing );
+  QVERIFY( verticesmpr.at( 9 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesmpr.at( 10 ).type() == Vertex::Existing );
+  QVERIFY( verticesmpr.at( 11 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesmpr.at( 12 ).type() == Vertex::Existing );
+  QVERIFY( verticesmpr.at( 13 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesmpr.at( 14 ).type() == Vertex::Existing );
+  QVERIFY( verticesmpr.at( 15 ).type() == Vertex::MidPoint );
+  // part 2 - hole
+  QVERIFY( verticesmpr.at( 16 ).type() == Vertex::Existing );
+  QVERIFY( verticesmpr.at( 17 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesmpr.at( 18 ).type() == Vertex::Existing );
+  QVERIFY( verticesmpr.at( 19 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesmpr.at( 20 ).type() == Vertex::Existing );
+  QVERIFY( verticesmpr.at( 21 ).type() == Vertex::MidPoint );
+  // part 3
+  QVERIFY( verticesmpr.at( 22 ).type() == Vertex::Existing );
+  QVERIFY( verticesmpr.at( 23 ).type() == Vertex::MidPoint );
+  QVERIFY( verticesmpr.at( 24 ).type() == Vertex::Existing );
+
+  // part 1
+  QCOMPARE( verticesmpr.at( 0 ).coordinates(), multilinestringdata.at( 0 ).at( 0 ) );
+  QCOMPARE( verticesmpr.at( 2 ).coordinates(), multilinestringdata.at( 0 ).at( 1 ) );
+  QCOMPARE( verticesmpr.at( 4 ).coordinates(), multilinestringdata.at( 0 ).at( 2 ) );
+  QCOMPARE( verticesmpr.at( 6 ).coordinates(), multilinestringdata.at( 0 ).at( 3 ) );
+  // part 2 - ext
+  QCOMPARE( verticesmpr.at( 8 ).coordinates(), multilinestringdata.at( 1 ).at( 0 ) );
+  QCOMPARE( verticesmpr.at( 10 ).coordinates(), multilinestringdata.at( 1 ).at( 1 ) );
+  QCOMPARE( verticesmpr.at( 12 ).coordinates(), multilinestringdata.at( 1 ).at( 2 ) );
+  QCOMPARE( verticesmpr.at( 14 ).coordinates(), multilinestringdata.at( 1 ).at( 3 ) );
+  // part 2 - hole
+  QCOMPARE( verticesmpr.at( 16 ).coordinates(), multilinestringdata.at( 1 ).at( 0 ) );
+  QCOMPARE( verticesmpr.at( 18 ).coordinates(), multilinestringdata.at( 1 ).at( 1 ) );
+  QCOMPARE( verticesmpr.at( 20 ).coordinates(), multilinestringdata.at( 1 ).at( 2 ) );
+  // part 3
+  QCOMPARE( verticesmpr.at( 22 ).coordinates(), multilinestringdata.at( 2 ).at( 0 ) );
+  QCOMPARE( verticesmpr.at( 24 ).coordinates(), multilinestringdata.at( 2 ).at( 1 ) );
+
+  QCOMPARE( verticesmpr.at( 1 ).vertexId().part, 0 );
+  QCOMPARE( verticesmpr.at( 3 ).vertexId().part, 0 );
+  QCOMPARE( verticesmpr.at( 5 ).vertexId().part, 0 );
+  QCOMPARE( verticesmpr.at( 9 ).vertexId().part, 1 );
+  QCOMPARE( verticesmpr.at( 11 ).vertexId().part, 1 );
+  QCOMPARE( verticesmpr.at( 13 ).vertexId().part, 1 );
+  QCOMPARE( verticesmpr.at( 17 ).vertexId().part, 1 );
+  QCOMPARE( verticesmpr.at( 19 ).vertexId().part, 1 );
+  QCOMPARE( verticesmpr.at( 21 ).vertexId().part, 1 );
+  QCOMPARE( verticesmpr.at( 22 ).vertexId().part, 2 );
+  QCOMPARE( verticesmpr.at( 23 ).vertexId().part, 2 );
+  QCOMPARE( verticesmpr.at( 24 ).vertexId().part, 2 );
+
+  QCOMPARE( verticesmpr.at( 0 ).vertexId().ring, 0 );
+  QCOMPARE( verticesmpr.at( 7 ).vertexId().ring, 0 );
+  QCOMPARE( verticesmpr.at( 8 ).vertexId().ring, 0 );
+  QCOMPARE( verticesmpr.at( 10 ).vertexId().ring, 0 );
+  QCOMPARE( verticesmpr.at( 13 ).vertexId().ring, 0 );
+  QCOMPARE( verticesmpr.at( 15 ).vertexId().ring, 0 );
+  QCOMPARE( verticesmpr.at( 16 ).vertexId().ring, 1 );
+  QCOMPARE( verticesmpr.at( 19 ).vertexId().ring, 1 );
+  QCOMPARE( verticesmpr.at( 21 ).vertexId().ring, 1 );
+  QCOMPARE( verticesmpr.at( 22 ).vertexId().ring, 0 );
+  QCOMPARE( verticesmpr.at( 24 ).vertexId().ring, 0 );
 }
