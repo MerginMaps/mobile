@@ -196,7 +196,7 @@ class RecordingMapTool : public AbstractMapTool
     const QgsGeometry &handles() const;
     void setHandles( const QgsGeometry &newHandles );
 
-    const QVector< Vertex > &vertices() const;
+    const QVector< Vertex > &collectedVertices() const;
 
     MapToolState state() const;
     void setState( const MapToolState &newState );

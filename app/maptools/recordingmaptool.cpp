@@ -1076,7 +1076,7 @@ void RecordingMapTool::setActivePart( int newActivePart )
   emit activePartChanged( mActivePart );
 }
 
-const QVector< Vertex > &RecordingMapTool::vertices() const
+const QVector< Vertex > &RecordingMapTool::collectedVertices() const
 {
   return mVertices;
 }
