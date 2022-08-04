@@ -12,6 +12,7 @@
 #include "qgslinestring.h"
 #include "qgsmultilinestring.h"
 #include "qgspolygon.h"
+#include "qgsmultipolygon.h"
 
 GuidelineController::GuidelineController( QObject *parent )
   : QObject{parent}
@@ -25,7 +26,7 @@ GuidelineController::GuidelineController( QObject *parent )
 void GuidelineController::buildGuideline()
 {
   // take the existing geometry and add crosshair position to it
-  if ( !mAllowed || !mMapSettings || mCrosshairPosition.isNull() || mRealGeometry.isNull() || mRealGeometry.isEmpty() )
+  if ( !mAllowed || !mMapSettings || mCrosshairPosition.isNull() || mRealGeometry.isEmpty() )
   {
     setGuidelineGeometry( QgsGeometry() );
     return;
@@ -42,7 +43,6 @@ void GuidelineController::buildGuideline()
   if ( !mActiveVertex.isValid() ) // recording
   {
     // we add current crosshair to the end of geometry - creating new point
-
     if ( mRealGeometry.type() == QgsWkbTypes::LineGeometry )
     {
       QgsGeometry guideline;
@@ -75,7 +75,17 @@ void GuidelineController::buildGuideline()
     }
     else if ( mRealGeometry.type() == QgsWkbTypes::PolygonGeometry )
     {
-      QgsPolygonXY poly = mRealGeometry.asPolygon();
+      QgsPolygonXY poly;
+
+      if ( mRealGeometry.isMultipart() )
+      {
+        QgsMultiPolygon *multiPolygon = qgsgeometry_cast<QgsMultiPolygon *>( mRealGeometry.constGet() );
+        poly = QgsGeometry( multiPolygon->polygonN( mActivePart ) ).asPolygon();
+      }
+      else
+      {
+        poly = mRealGeometry.asPolygon();
+      }
 
       if ( poly[0].count() < 2 )
       {
@@ -115,6 +125,7 @@ void GuidelineController::buildGuideline()
 //    g.moveVertex( crosshair, g.vertexNrFromVertexId( mActiveVertex.vertexId() ) );
 //    }
 
+    //g.get()->moveVertex( mActiveVertex.vertexId(), crosshair );
     g.moveVertex( crosshair, g.vertexNrFromVertexId( mActiveVertex.vertexId() ) );
     setGuidelineGeometry( g );
   }

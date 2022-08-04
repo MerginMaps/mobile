@@ -14,6 +14,8 @@
 #include "qgsvectorlayerutils.h"
 #include "qgsmultipoint.h"
 #include "qgsmultilinestring.h"
+#include "qgspolygon.h"
+#include "qgsmultipolygon.h"
 #include "qgsrendercontext.h"
 
 #include "position/positionkit.h"
@@ -26,7 +28,7 @@ RecordingMapTool::RecordingMapTool( QObject *parent )
   connect( this, &RecordingMapTool::initialGeometryChanged, this, &RecordingMapTool::prepareEditing );
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::collectVertices );
   connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::updateNodesAndHandles );
-  connect( this, &RecordingMapTool::stateChanged, this, &RecordingMapTool::updateNodesAndHandles );
+  //~ connect( this, &RecordingMapTool::stateChanged, this, &RecordingMapTool::updateNodesAndHandles );
 }
 
 RecordingMapTool::~RecordingMapTool() = default;
@@ -563,6 +565,7 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     if ( clickedVertex.type() == Vertex::Existing )
     {
       mActiveVertex = mVertices.at( idx );
+      //setActiveVertex( mVertices.at( idx ) );
       setState( MapToolState::Grab );
     }
     else if ( clickedVertex.type() == Vertex::MidPoint )
@@ -609,25 +612,36 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
 
   if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
   {
-    QgsLineString *r;
+    QgsPolygon *polygon;
+    QgsLineString *ring;
 
-    if ( mActiveVertex.vertexId().ring == 0 )
+    if ( mRecordedGeometry.isMultipart() )
     {
-      r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->exteriorRing() );
+      QgsMultiPolygon *multiPolygon = qgsgeometry_cast<QgsMultiPolygon *>( mRecordedGeometry.get() );
+      polygon = multiPolygon->polygonN( mActiveVertex.vertexId().part );
     }
     else
     {
-      r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->interiorRing( mActiveVertex.vertexId().ring ) );
+      polygon = qgsgeometry_cast<QgsPolygon *>( mRecordedGeometry.get() );
     }
 
-    if ( !r )
+    if ( mActiveVertex.vertexId().ring == 0 )
+    {
+      ring = qgsgeometry_cast<QgsLineString *>( polygon->exteriorRing() );
+    }
+    else
+    {
+      ring = qgsgeometry_cast<QgsLineString *>( polygon->interiorRing( mActiveVertex.vertexId().ring ) );
+    }
+
+    if ( !ring )
     {
       return;
     }
 
     if ( vertexCount == 2 )
     {
-      r->close();
+      ring->close();
       emit recordedGeometryChanged( mRecordedGeometry );
 
       setState( MapToolState::Record );
