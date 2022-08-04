@@ -1183,7 +1183,27 @@ void TestMapTools::testAddVertexMultiPolygonLayer()
 
 void TestMapTools::testUpdateVertex()
 {
+  //
+  // Take some initial geometry and update existing vertices position.
+  // It should work only when tool is in GRAB state
+  //
 
+  RecordingMapTool mapTool;
+
+  QgsGeometry line = QgsGeometry::fromPolyline(
+  {
+    QgsPoint( 10, 20 ),
+    QgsPoint( 20, 30 ),
+    QgsPoint( 30, 40 ),
+  } );
+
+  mapTool.setInitialGeometry( line );
+
+  Vertex updateVertexId = Vertex( QgsVertexId( 0, 0, 1 ), QgsPoint( 20, 30 ), Vertex::Existing );
+
+  mapTool.updateVertex( updateVertexId, QgsPoint( 50, 50 ) );
+
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), QgsPoint( 50, 50 ) );
 }
 
 void TestMapTools::testRemoveVertex()
