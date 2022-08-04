@@ -9,7 +9,10 @@
 
 #include "guidelinecontroller.h"
 #include "inpututils.h"
+#include "qgslinestring.h"
+#include "qgsmultilinestring.h"
 #include "qgspolygon.h"
+#include "qgsmultipolygon.h"
 
 GuidelineController::GuidelineController( QObject *parent )
   : QObject{parent}
@@ -23,7 +26,7 @@ GuidelineController::GuidelineController( QObject *parent )
 void GuidelineController::buildGuideline()
 {
   // take the existing geometry and add crosshair position to it
-  if ( !mAllowed || !mMapSettings || mCrosshairPosition.isNull() || mRealGeometry.isNull() || mRealGeometry.isEmpty() )
+  if ( !mAllowed || !mMapSettings || mCrosshairPosition.isNull() || mRealGeometry.isEmpty() )
   {
     setGuidelineGeometry( QgsGeometry() );
     return;
@@ -40,21 +43,31 @@ void GuidelineController::buildGuideline()
   if ( !mActiveVertex.isValid() ) // recording
   {
     // we add current crosshair to the end of geometry - creating new point
-
     if ( mRealGeometry.type() == QgsWkbTypes::LineGeometry )
     {
       QgsGeometry guideline;
+      QgsLineString *line;
+
+      if ( mRealGeometry.isMultipart() )
+      {
+        QgsMultiLineString *multiLine = qgsgeometry_cast<QgsMultiLineString *>( mRealGeometry.constGet() );
+        line = multiLine->lineStringN( mActivePart );
+      }
+      else
+      {
+        line = qgsgeometry_cast<QgsLineString *>( mRealGeometry.constGet() );
+      }
 
       if ( mNewVertexOrder == RecordingMapTool::Start )
       {
         // add crosshair to the begginning
-        QgsPoint firstPoint = mRealGeometry.vertexAt( 0 );
+        QgsPoint firstPoint = line->pointN( 0 );
         guideline = QgsGeometry::fromPolyline( { firstPoint, crosshair } );
       }
       else
       {
         // add crosshair to the end of the geometry
-        QgsPoint lastPoint = mRealGeometry.vertexAt( mRealGeometry.constGet()->nCoordinates() - 1 );
+        QgsPoint lastPoint = line->pointN( line->vertexCount() - 1 );
         guideline = QgsGeometry::fromPolyline( { lastPoint, crosshair } );
       }
 
@@ -62,7 +75,17 @@ void GuidelineController::buildGuideline()
     }
     else if ( mRealGeometry.type() == QgsWkbTypes::PolygonGeometry )
     {
-      QgsPolygonXY poly = mRealGeometry.asPolygon();
+      QgsPolygonXY poly;
+
+      if ( mRealGeometry.isMultipart() )
+      {
+        QgsMultiPolygon *multiPolygon = qgsgeometry_cast<QgsMultiPolygon *>( mRealGeometry.constGet() );
+        poly = QgsGeometry( multiPolygon->polygonN( mActivePart ) ).asPolygon();
+      }
+      else
+      {
+        poly = mRealGeometry.asPolygon();
+      }
 
       if ( poly[0].count() < 2 )
       {
@@ -102,6 +125,7 @@ void GuidelineController::buildGuideline()
 //    g.moveVertex( crosshair, g.vertexNrFromVertexId( mActiveVertex.vertexId() ) );
 //    }
 
+    //g.get()->moveVertex( mActiveVertex.vertexId(), crosshair );
     g.moveVertex( crosshair, g.vertexNrFromVertexId( mActiveVertex.vertexId() ) );
     setGuidelineGeometry( g );
   }
@@ -210,4 +234,17 @@ void GuidelineController::setNewVertexOrder( const RecordingMapTool::NewVertexOr
     return;
   mNewVertexOrder = newNewVertexOrder;
   emit newVertexOrderChanged( mNewVertexOrder );
+}
+
+int GuidelineController::activePart() const
+{
+  return mActivePart;
+}
+
+void GuidelineController::setActivePart( int newActivePart )
+{
+  if ( mActivePart == newActivePart )
+    return;
+  mActivePart = newActivePart;
+  emit activePartChanged( mActivePart );
 }

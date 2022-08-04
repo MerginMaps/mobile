@@ -98,6 +98,7 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( MapToolState state READ state WRITE setState NOTIFY stateChanged )
 
     Q_PROPERTY( QgsPoint recordPoint READ recordPoint WRITE setRecordPoint NOTIFY recordPointChanged )
+    Q_PROPERTY( int activePart READ activePart WRITE setActivePart NOTIFY activePartChanged )
 
   public:
 
@@ -195,6 +196,8 @@ class RecordingMapTool : public AbstractMapTool
     const QgsGeometry &handles() const;
     void setHandles( const QgsGeometry &newHandles );
 
+    const QVector< Vertex > &vertices() const;
+
     MapToolState state() const;
     void setState( const MapToolState &newState );
 
@@ -209,6 +212,9 @@ class RecordingMapTool : public AbstractMapTool
 
     const NewVertexOrder &newVertexOrder() const;
     void setNewVertexOrder( const NewVertexOrder &newNewVertexOrder );
+
+    int activePart() const;
+    void setActivePart( int newActivePart );
 
   signals:
     void layerChanged( QgsVectorLayer *layer );
@@ -232,16 +238,26 @@ class RecordingMapTool : public AbstractMapTool
 
     void newVertexOrderChanged( const RecordingMapTool::NewVertexOrder &newVertexOrder );
 
+    void activePartChanged( int activePart );
+
   public slots:
     void onPositionChanged();
 
   private slots:
     void prepareEditing();
+
+    /**
+     * Creates nodes index. Extracts existing geometry vertices and generates virtual
+     * vertices representing midpoints (for lines and polygons) and start/end points
+     * (for lines).
+     */
+    void collectVertices();
+
     /**
      * Creates geometries represeinting existing nodes, midpoints (for lines and polygons),
-     * start/end points and "handles" (for lines). Also fills nodes index.
+     * start/end points and "handles" (for lines) from the nodes index.
      */
-    void createNodesAndHandles();
+    void updateVisibleItems();
 
     /**
      * Grabs next vertex after the removal of the currently selected vertex
@@ -283,6 +299,8 @@ class RecordingMapTool : public AbstractMapTool
     QVector< Vertex > mVertices;
 
     QgsPoint mRecordPoint;
+
+    int mActivePart = 0;
 };
 
 #endif // RECORDINGMAPTOOL_H
