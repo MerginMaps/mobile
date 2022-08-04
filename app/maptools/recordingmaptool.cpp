@@ -448,7 +448,7 @@ void RecordingMapTool::collectVertices()
     else if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
     {
       // if this is firt point in line (or part) we add handle start point first
-      if ( vertexId.vertex == 0 && vertexId.part != startPart )
+      if ( vertexId.vertex == 0 && vertexId.part != startPart && vertexCount >= 2 )
       {
         // next line point. needed to get calculate handle point coordinates
         QgsVertexId id( vertexId.part, vertexId.ring, 1 );
@@ -478,13 +478,16 @@ void RecordingMapTool::collectVertices()
         // last vertex of the line
         mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
 
-        // previous line point. needed to get calculate handle point coordinates
-        QgsVertexId id( vertexId.part, vertexId.ring, vertexCount - 2 );
+        if ( vertexCount >= 2 )
+        {
+          // previous line point. needed to get calculate handle point coordinates
+          QgsVertexId id( vertexId.part, vertexId.ring, vertexCount - 2 );
 
-        // end handle point
-        QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( id ), geom->vertexAt( vertexId ), 1.5 );
-        mVertices.push_back( Vertex( vertexId, handlePoint, Vertex::HandleEnd ) );
-        endPart = vertexId.part;
+          // end handle point
+          QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( id ), geom->vertexAt( vertexId ), 1.5 );
+          mVertices.push_back( Vertex( vertexId, handlePoint, Vertex::HandleEnd ) );
+          endPart = vertexId.part;
+        }
       }
     }
     else
