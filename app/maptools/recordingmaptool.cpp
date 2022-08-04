@@ -207,7 +207,7 @@ void RecordingMapTool::removePoint()
         if ( mRecordedGeometry.constGet()->partCount() > 1 )
         {
           QgsMultiLineString *ml = qgsgeometry_cast<QgsMultiLineString *>( mRecordedGeometry.get() );
-          r = ml->lineStringN( mActiveVertex.vertexId().part ); // mActivePart?
+          r = ml->lineStringN( mActiveVertex.vertexId().part );
         }
         else
         {
