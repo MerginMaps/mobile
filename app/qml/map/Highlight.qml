@@ -178,6 +178,13 @@ Item {
         {
           let geomType = data[ i++ ];
           let pointsCount = data[ i++ ];
+
+          // skip this part/ring if it is empty
+          if ( pointsCount === 0 )
+          {
+            continue
+          }
+
           // Move to the first point
           let x0 = transformX( data[i] )
           let y0 = transformY( data[i+1] )
