@@ -91,8 +91,17 @@ void GuidelineController::buildGuideline()
     QgsVertexId current = mActiveVertex.vertexId();
     QgsPoint previous, next;
 
-    previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, current.vertex - 1 ) );
     next = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, current.vertex + 1 ) );
+    previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, current.vertex - 1 ) );
+
+    // fix closed polygons rings
+    if ( geotype == QgsWkbTypes::PolygonGeometry )
+    {
+      if ( current.vertex == 0 && nVertices >= 4 )
+      {
+        previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, nVertices - 2 ) );
+      }
+    }
 
     if ( !previous.isEmpty() )
     {
