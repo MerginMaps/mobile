@@ -104,6 +104,7 @@ Item {
 
     activeVertex: mapTool.activeVertex
     activePart: mapTool.activePart
+    activeRing: mapTool.activeRing
   }
 
   Highlight {

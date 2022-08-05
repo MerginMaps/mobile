@@ -98,7 +98,8 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( MapToolState state READ state WRITE setState NOTIFY stateChanged )
 
     Q_PROPERTY( QgsPoint recordPoint READ recordPoint WRITE setRecordPoint NOTIFY recordPointChanged )
-    Q_PROPERTY( int activePart READ activePart WRITE setActivePart NOTIFY activePartChanged )
+    Q_PROPERTY( int activePart READ activePart NOTIFY activePartChanged )
+    Q_PROPERTY( int activeRing READ activeRing NOTIFY activeRingChanged )
 
   public:
 
@@ -214,7 +215,8 @@ class RecordingMapTool : public AbstractMapTool
     void setInsertPolicy( const InsertPolicy &insertPolicy );
 
     int activePart() const;
-    void setActivePart( int newActivePart );
+    int activeRing() const;
+    void setActivePartAndRing( int newActivePart, int newActiveRing );
 
   signals:
     void layerChanged( QgsVectorLayer *layer );
@@ -230,8 +232,6 @@ class RecordingMapTool : public AbstractMapTool
     void handlesChanged( const QgsGeometry &handles );
     void stateChanged( const RecordingMapTool::MapToolState &state );
 
-    void crosshairPositionChanged( QPointF crosshairPosition );
-
     void recordPointChanged( QgsPoint recordPoint );
 
     void activeVertexChanged( const Vertex &activeVertex );
@@ -239,6 +239,7 @@ class RecordingMapTool : public AbstractMapTool
     void insertPolicyChanged( const RecordingMapTool::InsertPolicy &insertPolicy );
 
     void activePartChanged( int activePart );
+    void activeRingChanged( int activeRing );
 
   public slots:
     void onPositionChanged();
@@ -298,7 +299,7 @@ class RecordingMapTool : public AbstractMapTool
 
     QVector< Vertex > mVertices;
 
-    QgsPoint mRecordPoint; // TODO: maybe pass from QML?
+    QgsPoint mRecordPoint;
 
     // ActiveVertex is set only when we grab a point,
     // it is the grabbed point, contains its coordinates and index

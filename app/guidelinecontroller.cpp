@@ -137,13 +137,19 @@ void GuidelineController::buildGuideline()
         line = qgsgeometry_cast<QgsLineString *>( mRealGeometry.constGet() );
       }
 
+      if ( !line )
+      {
+        setGuidelineGeometry( guideline );
+        return;
+      }
+
       if ( mInsertPolicy == RecordingMapTool::Start )
       {
         // add crosshair to the begginning
         QgsPoint firstPoint = line->pointN( 0 );
         guideline = QgsGeometry::fromPolyline( { crosshair, firstPoint } );
       }
-      else
+      else if ( line->vertexCount() > 0 )
       {
         // add crosshair to the end of the geometry
         QgsPoint lastPoint = line->pointN( line->vertexCount() - 1 );
@@ -154,7 +160,7 @@ void GuidelineController::buildGuideline()
     }
     else if ( geotype == QgsWkbTypes::PolygonGeometry )
     {
-      int nVertices = mRealGeometry.constGet()->vertexCount( mActivePart, 0 /*TODO: add active ring*/ );
+      int nVertices = mRealGeometry.constGet()->vertexCount( mActivePart, mActiveRing );
       if ( nVertices == 0 )
       {
         // we hold the only point
@@ -164,14 +170,14 @@ void GuidelineController::buildGuideline()
       else if ( nVertices == 1 )
       {
         // build line
-        QgsPointXY previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, 0 /*TODO: add active ring*/, 0 ) );
+        QgsPointXY previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, mActiveRing, 0 ) );
         setGuidelineGeometry( QgsGeometry::fromPolylineXY( { previous, crosshair } ) );
       }
       else
       {
         // build a polygon
-        QgsPointXY first = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, 0 /*TODO: add active ring*/, 0 ) );
-        QgsPointXY last = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, 0 /*TODO: add active ring*/, nVertices - 2 ) );
+        QgsPointXY first = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, mActiveRing, 0 ) );
+        QgsPointXY last = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, mActiveRing, nVertices - 2 ) );
         setGuidelineGeometry( QgsGeometry::fromPolygonXY( { { first, crosshair, last } } ) );
       }
     }
@@ -294,4 +300,17 @@ void GuidelineController::setActivePart( int newActivePart )
     return;
   mActivePart = newActivePart;
   emit activePartChanged( mActivePart );
+}
+
+int GuidelineController::activeRing() const
+{
+  return mActiveRing;
+}
+
+void GuidelineController::setActiveRing( int newActiveRing )
+{
+  if ( mActiveRing == newActiveRing )
+    return;
+  mActiveRing = newActiveRing;
+  emit activeRingChanged( mActiveRing );
 }

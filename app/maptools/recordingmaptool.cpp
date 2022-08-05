@@ -55,21 +55,16 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
   fixZ( pointToAdd );
 
-  QgsVertexId id( mActivePart, 0, 0 );
+  QgsVertexId id( mActivePart, mActiveRing, 0 );
   if ( mRecordedGeometry.isEmpty() )
   {
     mRecordedGeometry = InputUtils::createGeometryForLayer( mLayer );
   }
   else
   {
-    if ( mActiveVertex.isValid() )
-    {
-      id = mActiveVertex.vertexId();
-    }
-
     if ( mInsertPolicy == InsertPolicy::End )
     {
-      id.vertex = mRecordedGeometry.constGet()->vertexCount( mActivePart, 0 );
+      id.vertex = mRecordedGeometry.constGet()->vertexCount( mActivePart, mActiveRing );
     }
   }
 
@@ -78,12 +73,40 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     // if it is a polygon and ring is not correctly defined yet (e.g. only
     // contains 1 point or not closed) we add point directly to the ring
     // and close it
-    QgsLineString *r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->exteriorRing() );
+
+    QgsLineString *r;
+    const QgsPolygon *poly;
+
+    if ( mRecordedGeometry.isMultipart() )
+    {
+      poly = qgsgeometry_cast<const QgsMultiPolygon *>( mRecordedGeometry.constGet() )->polygonN( mActivePart );
+    }
+    else
+    {
+      poly = qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() );
+    }
+
+    if ( !poly )
+    {
+      return;
+    }
+
+    if ( mActiveRing == 0 )
+    {
+      r = qgsgeometry_cast<QgsLineString *>( poly->exteriorRing() );
+    }
+    else
+    {
+      // interior rings starts indexing from 0
+      r = qgsgeometry_cast<QgsLineString *>( poly->interiorRing( mActiveRing - 1 ) );
+    }
 
     if ( !r )
     {
       return;
     }
+
+    // TODO: create part if all were removed and this is multipolygon geometry
 
     if ( r->nCoordinates() < 2 )
     {
@@ -95,7 +118,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     else
     {
       // as rings are closed, we need to insert before last vertex
-      id.vertex = mRecordedGeometry.constGet()->vertexCount( mActivePart, 0 ) - 1;
+      id.vertex = mRecordedGeometry.constGet()->vertexCount( mActivePart, mActiveRing ) - 1;
     }
   }
 
@@ -109,7 +132,17 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
   }
   else
   {
-    mRecordedGeometry.get()->insertVertex( id, pointToAdd );
+    // create part if it does not exist
+    if ( mRecordedGeometry.isMultipart() && id.part >= mRecordedGeometry.constGet()->partCount() )
+    {
+      QgsLineString line;
+      line.addVertex( pointToAdd );
+      mRecordedGeometry.addPart( line.clone(), QgsWkbTypes::LineGeometry );
+    }
+    else
+    {
+      mRecordedGeometry.get()->insertVertex( id, pointToAdd );
+    }
   }
 
   emit recordedGeometryChanged( mRecordedGeometry );
@@ -133,169 +166,169 @@ void RecordingMapTool::removePoint()
     return;
   }
 
-  if ( mActiveVertex.isValid() && mState == MapToolState::Grab ) // if Grab
+  if ( mState == MapToolState::Grab )
   {
-    int removedVertexId = mActiveVertex.vertexId().vertex;
+    // we are removing existing vertex selected by ActiveVertex
 
-    if ( mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part,  mActiveVertex.vertexId().ring ) > 0 )
+    if ( !mActiveVertex.isValid() )
     {
-      QgsVertexId id = mActiveVertex.vertexId();
-      if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
-      {
-        QgsLineString *r;
-
-        if ( mActiveVertex.vertexId().ring == 0 )
-        {
-          r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->exteriorRing() );
-        }
-        else
-        {
-          r = qgsgeometry_cast<QgsLineString *>( qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() )->interiorRing( mActiveVertex.vertexId().ring ) );
-        }
-
-        if ( !r )
-        {
-          return;
-        }
-
-        if ( r->nCoordinates() == 4 )
-        {
-          // this is the smallest possible closed ring (first and last vertex are equal),
-          // we need to remove two last vertices in order to get correct linestring
-          if ( removedVertexId == 0 || removedVertexId == r->nCoordinates() - 1 )
-          {
-            r->deleteVertex( QgsVertexId( 0, 0, 0 ) );
-            r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
-          }
-          else
-          {
-            r->deleteVertex( QgsVertexId( 0, 0, removedVertexId ) );
-            r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
-          }
-
-          emit recordedGeometryChanged( mRecordedGeometry );
-
-          // Grab previous vertex if there is any, otherwise grab next one if there is any, otherwise go to record
-          grabNextVertex();
-          return;
-        }
-        else if ( r->nCoordinates() <= 2 )
-        {
-          // if we remove last vertex directly the geometry will be cleared
-          // but we want to keep start point, so instead of removing vertex
-          // from the linestring we remove item from the QgsPointSequence.
-          QgsPointSequence points;
-          r->points( points );
-
-          points.removeAt( removedVertexId );
-
-          r->setPoints( points );
-          emit recordedGeometryChanged( mRecordedGeometry );
-
-          // Grab previous vertex if there is any, otherwise grab next one if there is any, otherwise go to record
-          grabNextVertex();
-          return;
-        }
-        else
-        {
-          id.vertex = mActiveVertex.vertexId().vertex;
-        }
-      }
-      else if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
-      {
-        QgsLineString *r;
-        if ( mRecordedGeometry.constGet()->partCount() > 1 )
-        {
-          QgsMultiLineString *ml = qgsgeometry_cast<QgsMultiLineString *>( mRecordedGeometry.get() );
-          r = ml->lineStringN( mActiveVertex.vertexId().part );
-        }
-        else
-        {
-          r = qgsgeometry_cast<QgsLineString *>( mRecordedGeometry.get() );
-        }
-
-        if ( !r )
-        {
-          return;
-        }
-
-        if ( r->nCoordinates() == 2 )
-        {
-          // if we remove second vertex directly the geometry will be cleared
-          // but we want to keep start point, so instead of removing vertex
-          // from the linestring we remove item from the QgsPointSequence.
-          QgsPointSequence points;
-          r->points( points );
-          points.removeAt( removedVertexId );
-          r->setPoints( points );
-          emit recordedGeometryChanged( mRecordedGeometry );
-
-          // Grab previous vertex if there is any, otherwise grab next one if there is any, otherwise go to record
-          grabNextVertex();
-          return;
-        }
-        else
-        {
-          id.vertex = mActiveVertex.vertexId().vertex;
-        }
-      }
-
-      if ( mInsertPolicy == Start )
-      {
-        id.vertex = 0;
-      }
-
-      mRecordedGeometry.get()->deleteVertex( id );
-
-      emit recordedGeometryChanged( mRecordedGeometry );
+      return;
     }
 
-    // Grab previous vertex if there is any, otherwise grab next one if there is any, otherwise go to record
+    QgsVertexId current = mActiveVertex.vertexId();
+
+    if ( mRecordedGeometry.constGet()->vertexCount( current.part,  current.ring ) < 1 )
+    {
+      return;
+    }
+
+    if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+    {
+      QgsLineString *r;
+      const QgsPolygon *poly;
+
+      if ( mRecordedGeometry.isMultipart() )
+      {
+        poly = qgsgeometry_cast<const QgsMultiPolygon *>( mRecordedGeometry.constGet() )->polygonN( current.part );
+      }
+      else
+      {
+        poly = qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() );
+      }
+
+      if ( !poly )
+      {
+        return;
+      }
+
+      if ( current.ring == 0 )
+      {
+        r = qgsgeometry_cast<QgsLineString *>( poly->exteriorRing() );
+      }
+      else
+      {
+        // interior rings starts indexing from 0
+        r = qgsgeometry_cast<QgsLineString *>( poly->interiorRing( current.ring - 1 ) );
+      }
+
+      if ( !r )
+      {
+        return;
+      }
+
+      if ( r->nCoordinates() == 4 )
+      {
+        // this is the smallest possible closed ring (first and last vertex are equal),
+        // we need to remove two last vertices in order to get correct linestring
+        if ( current.vertex == 0 || current.vertex == r->nCoordinates() - 1 )
+        {
+          r->deleteVertex( QgsVertexId( 0, 0, 0 ) );
+          r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
+        }
+        else
+        {
+          r->deleteVertex( QgsVertexId( 0, 0, current.vertex ) );
+          r->deleteVertex( QgsVertexId( 0, 0, r->nCoordinates() - 1 ) );
+        }
+      }
+      else if ( r->nCoordinates() <= 2 )
+      {
+        // if we remove last vertex directly the geometry will be cleared
+        // but we want to keep start point, so instead of removing vertex
+        // from the linestring we remove item from the QgsPointSequence.
+        QgsPointSequence points;
+        r->points( points );
+
+        points.removeAt( current.vertex );
+
+        r->setPoints( points );
+      }
+      else
+      {
+        mRecordedGeometry.get()->deleteVertex( current );
+      }
+    }
+    else if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
+    {
+      QgsLineString *r;
+
+      if ( mRecordedGeometry.isMultipart() )
+      {
+        QgsMultiLineString *ml = qgsgeometry_cast<QgsMultiLineString *>( mRecordedGeometry.get() );
+        r = ml->lineStringN( current.part );
+      }
+      else
+      {
+        r = qgsgeometry_cast<QgsLineString *>( mRecordedGeometry.get() );
+      }
+
+      if ( !r )
+      {
+        return;
+      }
+
+      if ( r->nCoordinates() == 2 )
+      {
+        // if we remove second vertex directly the geometry will be cleared
+        // but we want to keep start point, so instead of removing vertex
+        // from the linestring we remove item from the QgsPointSequence.
+        QgsPointSequence points;
+        r->points( points );
+
+        points.removeAt( current.vertex );
+        r->setPoints( points );
+      }
+      else
+      {
+        mRecordedGeometry.get()->deleteVertex( current );
+      }
+    }
+    else
+    {
+      // points / multipoints
+      mRecordedGeometry.get()->deleteVertex( current );
+    }
+
+    emit recordedGeometryChanged( mRecordedGeometry );
+
     grabNextVertex();
+
   }
   else if ( mState == MapToolState::Record )
   {
     // select first/last existing vertex as active and change state to GRAB
-
-    // TODO:
-    if ( mInsertPolicy == InsertPolicy::End )
+    int nVertices = mRecordedGeometry.constGet()->vertexCount( mActivePart, mActiveRing );
+    if ( nVertices < 1 )
     {
-      mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring ) - 1 ) );
+      return;
+    }
 
-      if ( InputUtils::isPolygonLayer( mLayer ) )
+    int vertexToGrab = nVertices - 1;
+
+    if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+    {
+      if ( nVertices >= 4 )
       {
-        // if the ring is closed, we need to jump -2 vertices
-        if ( mRecordedGeometry.constGet()->nCoordinates() >= 4 )
-        {
-          mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring ) - 2 ) );
-        }
+        // skip ring close vertex
+        vertexToGrab = nVertices - 2;
       }
     }
     else if ( mInsertPolicy == InsertPolicy::Start )
     {
-      mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, 0 ) );
+      vertexToGrab = 0;
     }
 
-    if ( mActiveVertex.vertexId().part < 0 )
-    {
-      mActiveVertex.setVertexId( QgsVertexId( 0, mActiveVertex.vertexId().ring, mActiveVertex.vertexId().vertex ) );
-    }
+    QgsVertexId target( mActivePart, mActiveRing, vertexToGrab );
+    QgsPoint targetPosition = mRecordedGeometry.constGet()->vertexAt( target );
 
-    if ( mActiveVertex.vertexId().ring < 0 )
-    {
-      mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, 0, mActiveVertex.vertexId().vertex ) );
-    }
-
-    mActiveVertex.setCoordinates( mRecordedGeometry.constGet()->vertexAt( mActiveVertex.vertexId() ) );
-    mActiveVertex.setType( Vertex::Existing );
-
-    emit activeVertexChanged( mActiveVertex );
+    setActiveVertex( Vertex( target, targetPosition, Vertex::Existing ) );
     setState( MapToolState::Grab );
   }
 }
 
 bool RecordingMapTool::hasValidGeometry() const
 {
+  // TODO: fix for working with multipart geometries (and rings - polygons)
   if ( mLayer )
   {
     if ( mLayer->geometryType() == QgsWkbTypes::PointGeometry )
@@ -366,7 +399,7 @@ void RecordingMapTool::onPositionChanged()
                                  position
                                );
       QgsPoint p( transformed.x(), transformed.y(), position.z() );
-      QgsVertexId id( 0, 0, mRecordedGeometry.constGet()->vertexCount() - 1 );
+      QgsVertexId id( mActivePart, mActiveRing, mRecordedGeometry.constGet()->vertexCount() - 1 );
       mRecordedGeometry.get()->moveVertex( id, p );
       emit recordedGeometryChanged( mRecordedGeometry );
     }
@@ -609,13 +642,11 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   {
     // we found a point
     Vertex clickedVertex = mVertices.at( idx );
-    setActivePart( clickedVertex.vertexId().part );
 
     mActiveVertex = Vertex();
 
     if ( clickedVertex.type() == Vertex::Existing )
     {
-      //mActiveVertex = mVertices.at( idx );
       setActiveVertex( mVertices.at( idx ) );
       setState( MapToolState::Grab );
     }
@@ -633,11 +664,13 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     else if ( clickedVertex.type() == Vertex::HandleStart )
     {
       setInsertPolicy( InsertPolicy::Start );
+      setActivePartAndRing( clickedVertex.vertexId().part, clickedVertex.vertexId().ring );
       setState( MapToolState::Record );
     }
     else if ( clickedVertex.type() == Vertex::HandleEnd )
     {
       setInsertPolicy( InsertPolicy::End );
+      setActivePartAndRing( clickedVertex.vertexId().part, clickedVertex.vertexId().ring );
       setState( MapToolState::Record );
     }
 
@@ -647,7 +680,7 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   {
     // nothing found
     setState( MapToolState::View );
-    setActivePart( 0 );
+    setActivePartAndRing( 0, 0 );
     setActiveVertex( Vertex() );
   }
 }
@@ -682,7 +715,7 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
     }
     else
     {
-      ring = qgsgeometry_cast<QgsLineString *>( polygon->interiorRing( mActiveVertex.vertexId().ring ) );
+      ring = qgsgeometry_cast<QgsLineString *>( polygon->interiorRing( mActiveVertex.vertexId().ring - 1 ) );
     }
 
     if ( !ring )
@@ -695,8 +728,9 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
       ring->close();
       emit recordedGeometryChanged( mRecordedGeometry );
 
+      updateVertex( mActiveVertex, point );
       setState( MapToolState::Record );
-      setActivePart( mActiveVertex.vertexId().part );
+      setActivePartAndRing( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
       setActiveVertex( Vertex() );
       return;
     }
@@ -704,7 +738,7 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
     {
       updateVertex( mActiveVertex, point );
       setState( MapToolState::Record );
-      setActivePart( mActiveVertex.vertexId().part );
+      setActivePartAndRing( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
       setActiveVertex( Vertex() );
       return;
     }
@@ -720,7 +754,7 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
       // Note: Order matters - we rebuild visible geometry when active vertex is changed
       setInsertPolicy( InsertPolicy::Start );
       setState( MapToolState::Record );
-      setActivePart( mActiveVertex.vertexId().part );
+      setActivePartAndRing( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
       setActiveVertex( Vertex() );
       return;
     }
@@ -729,14 +763,14 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
       // Note: Order matters - we rebuild visible geometry when active vertex is changed
       setInsertPolicy( InsertPolicy::End );
       setState( MapToolState::Record );
-      setActivePart( mActiveVertex.vertexId().part );
+      setActivePartAndRing( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
       setActiveVertex( Vertex() );
       return;
     }
   }
 
   setState( MapToolState::View );
-  setActivePart( 0 );
+  setActivePartAndRing( 0, 0 );
   setActiveVertex( Vertex() );
 }
 
@@ -770,7 +804,7 @@ void RecordingMapTool::cancelGrab()
   }
 
   setState( MapToolState::View );
-  setActivePart( 0 );
+  setActivePartAndRing( 0, 0 );
   setActiveVertex( Vertex() );
 }
 
@@ -814,10 +848,21 @@ void RecordingMapTool::grabNextVertex()
   }
   else
   {
-    // no more points in this ring/part, start recording there
-    setActivePart( current.part );
-    setActiveVertex( Vertex() );
-    setState( MapToolState::Record );
+    // jump to other part if there is any
+    if ( mRecordedGeometry.constGet()->partCount() > 1 )
+    {
+      QgsVertexId nextRingVertex( 0, 0, 0 );
+      QgsPoint nextRingVertexPosition = mRecordedGeometry.constGet()->vertexAt( nextRingVertex );
+      setActiveVertex( Vertex( nextRingVertex, nextRingVertexPosition, Vertex::Existing ) );
+      setState( MapToolState::Grab );
+    }
+    else
+    {
+      // no more points in this ring/part, start recording
+      setActivePartAndRing( 0, current.ring );
+      setState( MapToolState::Record );
+      setActiveVertex( Vertex() );
+    }
   }
 }
 
@@ -1082,15 +1127,38 @@ int RecordingMapTool::activePart() const
   return mActivePart;
 }
 
-void RecordingMapTool::setActivePart( int newActivePart )
+void RecordingMapTool::setActivePartAndRing( int newActivePart, int newActiveRing )
 {
-  if ( mActivePart == newActivePart )
-    return;
-  mActivePart = newActivePart;
-  emit activePartChanged( mActivePart );
+  bool partChanged = false, ringChanged = false;
+
+  if ( mActivePart != newActivePart )
+  {
+    mActivePart = newActivePart;
+    partChanged = true;
+  }
+
+  if ( mActiveRing != newActiveRing )
+  {
+    mActiveRing = newActiveRing;
+    ringChanged = true;
+  }
+
+  if ( partChanged )
+  {
+    emit activePartChanged( mActivePart );
+  }
+  if ( ringChanged )
+  {
+    emit activeRingChanged( mActiveRing );
+  }
 }
 
 const QVector< Vertex > &RecordingMapTool::collectedVertices() const
 {
   return mVertices;
+}
+
+int RecordingMapTool::activeRing() const
+{
+  return mActiveRing;
 }

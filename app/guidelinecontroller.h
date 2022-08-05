@@ -30,7 +30,9 @@ class GuidelineController : public QObject
 
     Q_PROPERTY( Vertex activeVertex READ activeVertex WRITE setActiveVertex NOTIFY activeVertexChanged )
     Q_PROPERTY( RecordingMapTool::InsertPolicy insertPolicy READ insertPolicy WRITE setInsertPolicy NOTIFY insertPolicyChanged )
+
     Q_PROPERTY( int activePart READ activePart WRITE setActivePart NOTIFY activePartChanged )
+    Q_PROPERTY( int activeRing READ activeRing WRITE setActiveRing NOTIFY activeRingChanged )
 
     Q_PROPERTY( bool allowed READ allowed WRITE setAllowed NOTIFY allowedChanged )
 
@@ -64,6 +66,8 @@ class GuidelineController : public QObject
     int activePart() const;
     void setActivePart( int newActivePart );
 
+    int activeRing() const;
+    void setActiveRing( int newActiveRing );
 
   signals:
 
@@ -82,6 +86,8 @@ class GuidelineController : public QObject
 
     void insertPolicyChanged( const RecordingMapTool::InsertPolicy &insertPolicy );
 
+    void activeRingChanged( int activeRing );
+
   private slots:
     void buildGuideline();
 
@@ -95,6 +101,7 @@ class GuidelineController : public QObject
     bool mAllowed;
     RecordingMapTool::InsertPolicy mInsertPolicy;
     int mActivePart = 0;
+    int mActiveRing = 0;
 };
 
 #endif // GUIDELINECONTROLLER_H
