@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,7 +59,7 @@ class Vertex
 
     bool operator==( const Vertex &other )
     {
-      return other.vertexId() == mVertexId && other.type() == mType;
+      return other.vertexId() == mVertexId && other.coordinates() == mCoordinates && other.type() == mType;
     }
 
     bool operator!=( const Vertex &other )
@@ -262,7 +262,7 @@ class RecordingMapTool : public AbstractMapTool
     /**
      * Grabs next vertex after the removal of the currently selected vertex
      */
-    void grabNextVertex( const int removedVertexId );
+    void grabNextVertex();
 
   protected:
     //! Unifies Z coordinate of the point with current layer - drops / adds it
@@ -280,13 +280,14 @@ class RecordingMapTool : public AbstractMapTool
     QgsGeometry mInitialGeometry;
 
     bool mCenteredToGPS = false;
-    int mRecordingInterval;  // in seconds for the StreamingMode
     RecordingType mRecordingType = Manual;
+    int mRecordingInterval;  // in seconds for the StreamingMode
 
     QDateTime mLastTimeRecorded;
 
     QgsVectorLayer *mLayer = nullptr; // not owned
     PositionKit *mPositionKit = nullptr; // not owned
+
     QgsGeometry mExistingVertices;
     QgsGeometry mMidPoints;
     QgsGeometry mHandles;
@@ -295,11 +296,17 @@ class RecordingMapTool : public AbstractMapTool
     MapToolState mState = MapToolState::Record;
     InsertPolicy mInsertPolicy = InsertPolicy::End;
 
-    Vertex mActiveVertex;
     QVector< Vertex > mVertices;
 
-    QgsPoint mRecordPoint;
+    QgsPoint mRecordPoint; // TODO: maybe pass from QML?
 
+    // ActiveVertex is set only when we grab a point,
+    // it is the grabbed point, contains its coordinates and index
+    Vertex mActiveVertex;
+
+    // ActiveRing and ActivePart are set only when we record,
+    // in order to know where to insert the points
+    int mActiveRing = 0;
     int mActivePart = 0;
 };
 
