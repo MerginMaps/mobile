@@ -74,45 +74,45 @@ void GuidelineController::buildGuideline()
     return;
   }
 
-
-  if ( geotype == QgsWkbTypes::LineGeometry )
+  if ( mActiveVertex.isValid() )
   {
-    if ( mActiveVertex.isValid() )
+    // we grab an existing point
+
+    int nVertices = mRealGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
+    if ( nVertices <= 1 )
     {
-      // we grab an existing point
-
-      int nVertices = mRealGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
-      if ( nVertices == 1 )
-      {
-        // we hold the only point
-        setGuidelineGeometry( QgsGeometry() );
-        return;
-      }
-
-      QgsPolylineXY guideline;
-
-      QgsVertexId current = mActiveVertex.vertexId();
-      QgsPoint previous, next;
-
-      previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, current.vertex - 1 ) );
-      next = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, current.vertex + 1 ) );
-
-      if ( !previous.isEmpty() )
-      {
-        guideline.push_back( previous );
-      }
-
-      guideline.push_back( crosshair );
-
-      if ( !next.isEmpty() )
-      {
-        guideline.push_back( next );
-      }
-
-      setGuidelineGeometry( QgsGeometry::fromPolylineXY( guideline ) );
-      return; // so far, must be removed later
+      // we hold the only point or there is no point
+      setGuidelineGeometry( QgsGeometry() );
+      return;
     }
-    else
+
+    QgsPolylineXY guideline;
+
+    QgsVertexId current = mActiveVertex.vertexId();
+    QgsPoint previous, next;
+
+    previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, current.vertex - 1 ) );
+    next = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, current.vertex + 1 ) );
+
+    if ( !previous.isEmpty() )
+    {
+      guideline.push_back( previous );
+    }
+
+    guideline.push_back( crosshair );
+
+    if ( !next.isEmpty() )
+    {
+      guideline.push_back( next );
+    }
+
+    setGuidelineGeometry( QgsGeometry::fromPolylineXY( guideline ) );
+  }
+  else
+  {
+    // recording new points
+
+    if ( geotype == QgsWkbTypes::LineGeometry )
     {
       // we are adding new point to the end/beginning
       QgsGeometry guideline;
@@ -142,11 +142,31 @@ void GuidelineController::buildGuideline()
       }
 
       setGuidelineGeometry( guideline );
-      return; // so far, must be removed later
+    }
+    else if ( geotype == QgsWkbTypes::PolygonGeometry )
+    {
+      int nVertices = mRealGeometry.constGet()->vertexCount( mActivePart, 0 /*TODO: add active ring*/ );
+      if ( nVertices == 0 )
+      {
+        // we hold the only point
+        setGuidelineGeometry( QgsGeometry() );
+        return;
+      }
+      else if ( nVertices == 1 )
+      {
+        // build line
+        QgsPointXY previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, 0 /*TODO: add active ring*/, 0 ) );
+        setGuidelineGeometry( QgsGeometry::fromPolylineXY( { previous, crosshair } ) );
+      }
+      else
+      {
+        // build a polygon
+        QgsPointXY first = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, 0 /*TODO: add active ring*/, 0 ) );
+        QgsPointXY last = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, 0 /*TODO: add active ring*/, nVertices - 2 ) );
+        setGuidelineGeometry( QgsGeometry::fromPolygonXY( { { first, crosshair, last } } ) );
+      }
     }
   }
-
-  setGuidelineGeometry( QgsGeometry() );
 
 
 
