@@ -15,6 +15,8 @@
 #include "qgspoint.h"
 #include "qgslinestring.h"
 #include "qgspolygon.h"
+#include "qgsmultipolygon.h"
+#include "qgslinestring.h"
 #include "qgsgeometry.h"
 
 #include "qgsquickmapcanvasmap.h"
@@ -1556,6 +1558,17 @@ void TestMapTools::testVerticesStructure()
     }
   };
   QgsGeometry multipolygonringsdataGEO = QgsGeometry::fromMultiPolygonXY( multipolygonringsdata );
+  // We want to test case when last part is a line, not polygon.
+  // As QGIS automatically close unclosed rings we need to alter geometry
+  // manually and remove one point from the exterior ring of the part 3.
+  QgsMultiPolygon *multiPolygon = qgsgeometry_cast<QgsMultiPolygon *>( multipolygonringsdataGEO.constGet() );
+  QgsPolygon *poly = multiPolygon->polygonN( 2 );
+  QgsLineString *ring = qgsgeometry_cast<QgsLineString *>( poly->exteriorRing() );
+  QgsPointSequence points;
+  ring->points( points );
+  points.removeLast();
+  ring->setPoints( points );
+
   QVERIFY( multipolygonringsdataGEO.wkbType() == QgsWkbTypes::MultiPolygon );
 
   mapTool.setInitialGeometry( multipolygonringsdataGEO );
@@ -1683,6 +1696,15 @@ void TestMapTools::testVerticesStructure()
     }
   };
   QgsGeometry multipolygoninvaliddataGEO = QgsGeometry::fromMultiPolygonXY( multipolygoninvaliddata );
+  // We want to test case when 2nd part is a line, not polygon.
+  // As QGIS automatically close unclosed rings we need to alter geometry
+  multiPolygon = qgsgeometry_cast<QgsMultiPolygon *>( multipolygoninvaliddataGEO.constGet() );
+  poly = multiPolygon->polygonN( 1 );
+  ring = qgsgeometry_cast<QgsLineString *>( poly->exteriorRing() );
+  ring->points( points );
+  points.removeLast();
+  ring->setPoints( points );
+
   QVERIFY( multipolygoninvaliddataGEO.wkbType() == QgsWkbTypes::MultiPolygon );
 
   mapTool.setInitialGeometry( multipolygoninvaliddataGEO );
@@ -1735,7 +1757,7 @@ void TestMapTools::testVerticesStructure()
   QCOMPARE( verticesmpi.at( 1 ).vertexId().part, 0 );
   QCOMPARE( verticesmpi.at( 3 ).vertexId().part, 0 );
   QCOMPARE( verticesmpi.at( 5 ).vertexId().part, 0 );
-  QCOMPARE( verticesmpi.at( 6 ).vertexId().part, 0 );
+  QCOMPARE( verticesmpi.at( 6 ).vertexId().part, 1 );
   QCOMPARE( verticesmpi.at( 9 ).vertexId().part, 1 );
   QCOMPARE( verticesmpi.at( 11 ).vertexId().part, 1 );
   QCOMPARE( verticesmpi.at( 13 ).vertexId().part, 1 );

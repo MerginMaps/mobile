@@ -465,17 +465,28 @@ void RecordingMapTool::collectVertices()
 
     if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
     {
+      if ( vertexCount == 1 )
+      {
+        // Edge case! Sometimes we want to have invalid polygon, which is in fact
+        // single point, in such case we keep this point
+        mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
+        continue;
+      }
+
       if ( vertexId.vertex < vertexCount - 1 )
       {
         // actual vertex
         mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
 
-        if ( vertexCount > 2 )
-        {
-          QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
-          QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
-          mVertices.push_back( Vertex( id, midPoint, Vertex::MidPoint ) );
-        }
+        QgsVertexId id( vertexId.part, vertexId.ring, vertexId.vertex + 1 );
+        QgsPoint midPoint = QgsGeometryUtils::midpoint( geom->vertexAt( vertexId ), geom->vertexAt( id ) );
+        mVertices.push_back( Vertex( id, midPoint, Vertex::MidPoint ) );
+      }
+      else if ( vertexCount == 2 && vertexId.vertex == vertexCount - 1 )
+      {
+        // Edge case! Sometimes we want to have invalid polygon, which is in fact
+        // just a line segment, in such case last vertex should be kept
+        mVertices.push_back( Vertex( vertexId, vertex, Vertex::Existing ) );
       }
       // ignore the closing vertex in polygon
       else if ( vertexId.vertex == vertexCount - 1 )
