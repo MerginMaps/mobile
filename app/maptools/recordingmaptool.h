@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -90,7 +90,7 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( QgsGeometry handles READ handles WRITE setHandles NOTIFY handlesChanged )
 
     Q_PROPERTY( Vertex activeVertex READ activeVertex WRITE setActiveVertex NOTIFY activeVertexChanged )
-    Q_PROPERTY( NewVertexOrder newVertexOrder READ newVertexOrder WRITE setNewVertexOrder NOTIFY newVertexOrderChanged )
+    Q_PROPERTY( InsertPolicy insertPolicy READ insertPolicy WRITE setInsertPolicy NOTIFY insertPolicyChanged )
 
     // When editing geometry - set this as the geometry to start with
     Q_PROPERTY( QgsGeometry initialGeometry READ initialGeometry WRITE setInitialGeometry NOTIFY initialGeometryChanged )
@@ -117,12 +117,12 @@ class RecordingMapTool : public AbstractMapTool
     };
     Q_ENUM( MapToolState );
 
-    enum NewVertexOrder
+    enum InsertPolicy
     {
       End = 0, // Default, new vertices are appended to the end of geometry
       Start // Vertices will be added to the beggining of geometry (when clicked on continue line from start)
     };
-    Q_ENUM( NewVertexOrder );
+    Q_ENUM( InsertPolicy );
 
     explicit RecordingMapTool( QObject *parent = nullptr );
     virtual ~RecordingMapTool();
@@ -210,8 +210,8 @@ class RecordingMapTool : public AbstractMapTool
     const Vertex &activeVertex() const;
     void setActiveVertex( const Vertex &newActiveVertex );
 
-    const NewVertexOrder &newVertexOrder() const;
-    void setNewVertexOrder( const NewVertexOrder &newNewVertexOrder );
+    const InsertPolicy &insertPolicy() const;
+    void setInsertPolicy( const InsertPolicy &insertPolicy );
 
     int activePart() const;
     void setActivePart( int newActivePart );
@@ -236,7 +236,7 @@ class RecordingMapTool : public AbstractMapTool
 
     void activeVertexChanged( const Vertex &activeVertex );
 
-    void newVertexOrderChanged( const RecordingMapTool::NewVertexOrder &newVertexOrder );
+    void insertPolicyChanged( const RecordingMapTool::InsertPolicy &insertPolicy );
 
     void activePartChanged( int activePart );
 
@@ -293,7 +293,7 @@ class RecordingMapTool : public AbstractMapTool
     QgsGeometry mHiddenHandle;
 
     MapToolState mState = MapToolState::Record;
-    NewVertexOrder mNewVertexOrder = NewVertexOrder::End;
+    InsertPolicy mInsertPolicy = InsertPolicy::End;
 
     Vertex mActiveVertex;
     QVector< Vertex > mVertices;

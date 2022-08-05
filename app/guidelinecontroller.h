@@ -29,7 +29,7 @@ class GuidelineController : public QObject
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     Q_PROPERTY( Vertex activeVertex READ activeVertex WRITE setActiveVertex NOTIFY activeVertexChanged )
-    Q_PROPERTY( RecordingMapTool::NewVertexOrder newVertexOrder READ newVertexOrder WRITE setNewVertexOrder NOTIFY newVertexOrderChanged )
+    Q_PROPERTY( RecordingMapTool::InsertPolicy insertPolicy READ insertPolicy WRITE setInsertPolicy NOTIFY insertPolicyChanged )
     Q_PROPERTY( int activePart READ activePart WRITE setActivePart NOTIFY activePartChanged )
 
     Q_PROPERTY( bool allowed READ allowed WRITE setAllowed NOTIFY allowedChanged )
@@ -58,11 +58,12 @@ class GuidelineController : public QObject
     bool allowed() const;
     void setAllowed( bool newAllowed );
 
-    const RecordingMapTool::NewVertexOrder &newVertexOrder() const;
-    void setNewVertexOrder( const RecordingMapTool::NewVertexOrder &newNewVertexOrder );
+    const RecordingMapTool::InsertPolicy &insertPolicy() const;
+    void setInsertPolicy( const RecordingMapTool::InsertPolicy &insertPolicy );
 
     int activePart() const;
     void setActivePart( int newActivePart );
+
 
   signals:
 
@@ -77,9 +78,9 @@ class GuidelineController : public QObject
 
     void allowedChanged( bool allowed );
 
-    void newVertexOrderChanged( const RecordingMapTool::NewVertexOrder &newVertexOrder );
-
     void activePartChanged( int activePart );
+
+    void insertPolicyChanged( const RecordingMapTool::InsertPolicy &insertPolicy );
 
   private slots:
     void buildGuideline();
@@ -92,7 +93,7 @@ class GuidelineController : public QObject
     QgsQuickMapSettings *mMapSettings = nullptr; // not owned
     Vertex mActiveVertex;
     bool mAllowed;
-    RecordingMapTool::NewVertexOrder mNewVertexOrder;
+    RecordingMapTool::InsertPolicy mInsertPolicy;
     int mActivePart = 0;
 };
 

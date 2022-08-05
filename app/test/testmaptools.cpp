@@ -748,7 +748,7 @@ void TestMapTools::testAddVertexLineLayer()
   // Let's try to add point from beginning
   //
 
-  mapTool.setNewVertexOrder( RecordingMapTool::Start );
+  mapTool.setInsertPolicy( RecordingMapTool::Start );
 
   mapTool.addPoint( pointsToAdd[4] );
 
@@ -763,7 +763,7 @@ void TestMapTools::testAddVertexLineLayer()
   // Let's add point to the middle of line
   //
 
-  mapTool.setNewVertexOrder( RecordingMapTool::End );
+  mapTool.setInsertPolicy( RecordingMapTool::End );
 
   Vertex addPosition = Vertex( QgsVertexId( 0, 0, 3 ), pointsToAdd[3], Vertex::Existing );
   mapTool.addPointAtPosition( addPosition, pointsToAdd[5] );
@@ -888,7 +888,7 @@ void TestMapTools::testAddVertexMultiLineLayer()
   // Let's try to add point from beginning
   //
 
-  mapTool.setNewVertexOrder( RecordingMapTool::Start );
+  mapTool.setInsertPolicy( RecordingMapTool::Start );
 
   mapTool.addPoint( pointsToAdd[4] );
 
@@ -903,7 +903,7 @@ void TestMapTools::testAddVertexMultiLineLayer()
   // Let's add point to the middle of line
   //
 
-  mapTool.setNewVertexOrder( RecordingMapTool::End );
+  mapTool.setInsertPolicy( RecordingMapTool::End );
 
   Vertex addPosition = Vertex( QgsVertexId( 0, 0, 3 ), pointsToAdd[3], Vertex::Existing );
   mapTool.addPointAtPosition( addPosition, pointsToAdd[5] );

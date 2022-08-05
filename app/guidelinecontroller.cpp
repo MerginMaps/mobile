@@ -128,7 +128,7 @@ void GuidelineController::buildGuideline()
         line = qgsgeometry_cast<QgsLineString *>( mRealGeometry.constGet() );
       }
 
-      if ( mNewVertexOrder == RecordingMapTool::Start )
+      if ( mInsertPolicy == RecordingMapTool::Start )
       {
         // add crosshair to the begginning
         QgsPoint firstPoint = line->pointN( 0 );
@@ -351,17 +351,17 @@ void GuidelineController::setAllowed( bool newAllowed )
   emit allowedChanged( mAllowed );
 }
 
-const RecordingMapTool::NewVertexOrder &GuidelineController::newVertexOrder() const
+const RecordingMapTool::InsertPolicy &GuidelineController::insertPolicy() const
 {
-  return mNewVertexOrder;
+  return mInsertPolicy;
 }
 
-void GuidelineController::setNewVertexOrder( const RecordingMapTool::NewVertexOrder &newNewVertexOrder )
+void GuidelineController::setInsertPolicy( const RecordingMapTool::InsertPolicy &insertPolicy )
 {
-  if ( mNewVertexOrder == newNewVertexOrder )
+  if ( mInsertPolicy == insertPolicy )
     return;
-  mNewVertexOrder = newNewVertexOrder;
-  emit newVertexOrderChanged( mNewVertexOrder );
+  mInsertPolicy = insertPolicy;
+  emit insertPolicyChanged( mInsertPolicy );
 }
 
 int GuidelineController::activePart() const

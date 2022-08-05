@@ -67,7 +67,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
       id = mActiveVertex.vertexId();
     }
 
-    if ( mNewVertexOrder == NewVertexOrder::End )
+    if ( mInsertPolicy == InsertPolicy::End )
     {
       id.vertex = mRecordedGeometry.constGet()->vertexCount( mActivePart, 0 );
     }
@@ -256,7 +256,9 @@ void RecordingMapTool::removePoint()
   else if ( mState == MapToolState::Record )
   {
     // select first/last existing vertex as active and change state to GRAB
-    if ( mNewVertexOrder == NewVertexOrder::End )
+
+    // TODO:
+    if ( mInsertPolicy == InsertPolicy::End )
     {
       mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring ) - 1 ) );
 
@@ -269,7 +271,7 @@ void RecordingMapTool::removePoint()
         }
       }
     }
-    else if ( mNewVertexOrder == NewVertexOrder::Start )
+    else if ( mInsertPolicy == InsertPolicy::Start )
     {
       mActiveVertex.setVertexId( QgsVertexId( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, 0 ) );
     }
@@ -538,7 +540,7 @@ void RecordingMapTool::updateVisibleItems()
     {
       // start handle is visible if we are not recording from start and first vertex is not active
       Vertex lineStart = mVertices.at( i + 1 );
-      if ( !( mState == MapToolState::Record && mNewVertexOrder == NewVertexOrder::Start ) && mActiveVertex != lineStart )
+      if ( !( mState == MapToolState::Record && mInsertPolicy == InsertPolicy::Start ) && mActiveVertex != lineStart )
       {
         // start handle point
         midPoints->addGeometry( v.coordinates().clone() );
@@ -552,7 +554,7 @@ void RecordingMapTool::updateVisibleItems()
     {
       // end handle is visible if we are not recording from end and last vertex is not active
       Vertex lineEnd = mVertices.at( i - 1 );
-      if ( !( mState == MapToolState::Record && mNewVertexOrder == NewVertexOrder::End ) && mActiveVertex != lineEnd )
+      if ( !( mState == MapToolState::Record && mInsertPolicy == InsertPolicy::End ) && mActiveVertex != lineEnd )
       {
         // end handle point
         midPoints->addGeometry( v.coordinates().clone() );
@@ -629,12 +631,12 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     }
     else if ( clickedVertex.type() == Vertex::HandleStart )
     {
-      setNewVertexOrder( NewVertexOrder::Start );
+      setInsertPolicy( InsertPolicy::Start );
       setState( MapToolState::Record );
     }
     else if ( clickedVertex.type() == Vertex::HandleEnd )
     {
-      setNewVertexOrder( NewVertexOrder::End );
+      setInsertPolicy( InsertPolicy::End );
       setState( MapToolState::Record );
     }
 
@@ -715,7 +717,7 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
     if ( mActiveVertex.type() == Vertex::Existing && mActiveVertex.vertexId().vertex == 0 )
     {
       // Note: Order matters - we rebuild visible geometry when active vertex is changed
-      setNewVertexOrder( NewVertexOrder::Start );
+      setInsertPolicy( InsertPolicy::Start );
       setState( MapToolState::Record );
       setActivePart( mActiveVertex.vertexId().part );
       setActiveVertex( Vertex() );
@@ -724,7 +726,7 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
     else if ( mActiveVertex.type() == Vertex::Existing && mActiveVertex.vertexId().vertex == vertexCount - 1 )
     {
       // Note: Order matters - we rebuild visible geometry when active vertex is changed
-      setNewVertexOrder( NewVertexOrder::End );
+      setInsertPolicy( InsertPolicy::End );
       setState( MapToolState::Record );
       setActivePart( mActiveVertex.vertexId().part );
       setActiveVertex( Vertex() );
@@ -1052,17 +1054,17 @@ void Vertex::setType( const VertexType &newType )
   mType = newType;
 }
 
-const RecordingMapTool::NewVertexOrder &RecordingMapTool::newVertexOrder() const
+const RecordingMapTool::InsertPolicy &RecordingMapTool::insertPolicy() const
 {
-  return mNewVertexOrder;
+  return mInsertPolicy;
 }
 
-void RecordingMapTool::setNewVertexOrder( const NewVertexOrder &newNewVertexOrder )
+void RecordingMapTool::setInsertPolicy( const InsertPolicy &insertPolicy )
 {
-  if ( mNewVertexOrder == newNewVertexOrder )
+  if ( mInsertPolicy == insertPolicy )
     return;
-  mNewVertexOrder = newNewVertexOrder;
-  emit newVertexOrderChanged( mNewVertexOrder );
+  mInsertPolicy = insertPolicy;
+  emit insertPolicyChanged( mInsertPolicy );
 }
 
 int RecordingMapTool::activePart() const
