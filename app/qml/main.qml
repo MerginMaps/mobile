@@ -513,6 +513,11 @@ ApplicationWindow {
         map.split( pair )
       }
 
+      onRedrawGeometryRequested: {
+        stateManager.state = "record"
+        map.redraw( pair )
+      }
+
       onClosed: {
         if ( browseDataPanel.visible ) {
           browseDataPanel.refreshFeaturesData()

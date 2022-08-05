@@ -80,6 +80,7 @@
         <file>crosshair-plus.svg</file>
         <file>crosshair-circle.svg</file>
         <file>scissors.svg</file>
+        <file>eraser.svg</file>
         <file>arrows-move.svg</file>
     </qresource>
 </RCC>
