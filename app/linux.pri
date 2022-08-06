@@ -60,6 +60,7 @@
     LIBS += -lspatialindex -lgeos -lgeos_c
     LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
     LIBS += -lsqlite3 -lz -lzip
+    LIBS += -ltiff
     LIBS += -lwebp
 
     # TESTING stuff (only desktop)

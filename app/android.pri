@@ -72,6 +72,7 @@ android {
     LIBS += -lspatialindex -lgeos_c -lgeos
     LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
     LIBS += -lsqlite3 -liconv -lz -lzip
+    LIBS += -ltiff
     LIBS += -lwebp -lcurl
     
     QT += multimedia

@@ -27,11 +27,11 @@ jobs:
       NDK_VERSION: r21
       SDK_PLATFORM: android-30
       SDK_BUILD_TOOLS: 28.0.3
-      INPUT_SDK_VERSION: android-macOS-20220422-72
+      INPUT_SDK_VERSION: android-macOS-20220806-87
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
-      CACHE_VERSION: 2
+      CACHE_VERSION: 3
 
     steps:
       - uses: actions/checkout@v2

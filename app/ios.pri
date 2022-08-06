@@ -71,6 +71,7 @@ ios {
     LIBS += -lspatialindex -lgeos -lgeos_c
     LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
     LIBS += -lsqlite3 -liconv -lz -lzip
+    LIBS += -ltiff
     LIBS += -lwebp -lcurl
     
     LIBS += -framework Security -framework CoreFoundation -framework SystemConfiguration

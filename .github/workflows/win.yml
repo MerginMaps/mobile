@@ -24,9 +24,9 @@ jobs:
     
     env:
       QT_VERSION: 5.14.2
-      INPUT_SDK_VERSION: win64-20220629-55
+      INPUT_SDK_VERSION: win64-20220806-70
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
-      CACHE_VERSION: 0
+      CACHE_VERSION: 1
       
     steps:
       - name: Checkout Input
