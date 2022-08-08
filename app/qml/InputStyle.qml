@@ -145,6 +145,7 @@ QtObject {
     property string searchIcon: "qrc:/search.svg"
     property string loadingIndicatorIcon: "qrc:/loadingindicator.svg"
     property string scissorsIcon: "qrc:/scissors.svg"
+    property string eraserIcon: "qrc:/eraser.svg"
 
     property string linkIcon: "qrc:/link-rotated.svg"
     property string unlinkIcon: "qrc:/unlink.svg"

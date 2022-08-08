@@ -29,6 +29,7 @@ Item {
   signal close()
   signal editGeometryClicked()
   signal splitGeometryClicked()
+  signal redrawGeometryClicked()
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentController, var relation )
 
@@ -190,6 +191,7 @@ Item {
         onDeleteClicked: deleteDialog.visible = true
         onEditGeometryClicked: root.editGeometryClicked()
         onSplitGeometryClicked: root.splitGeometryClicked()
+        onRedrawGeometryClicked: root.redrawGeometryClicked()
       }
 
       MessageDialog {

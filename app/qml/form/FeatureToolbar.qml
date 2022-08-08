@@ -22,6 +22,7 @@ Item {
     signal deleteClicked()
     signal editGeometryClicked()
     signal splitGeometryClicked()
+    signal redrawGeometryClicked()
 
     states: [
         State {
@@ -114,13 +115,15 @@ Item {
             height: parent.height
 
             MainPanelButton {
+              id: menuBtn
+              width: toolbar.itemSize
+              text: qsTr("Advanced")
+              imageSource: InputStyle.moreMenuIcon
 
-                width: toolbar.itemSize
-                text: qsTr("Split geometry")
-                imageSource: InputStyle.scissorsIcon
-                enabled: !isFeaturePoint
-
-                onActivated: toolbar.splitGeometryClicked()
+              onActivated: {
+                if ( !rootMenu.visible ) rootMenu.open()
+                else rootMenu.close()
+              }
             }
         }
     }
@@ -147,5 +150,51 @@ Item {
             }
         }
     }
+
+    Menu {
+        id: rootMenu
+        title: qsTr("Advanced")
+        x:parent.width - rootMenu.width
+        y: -rootMenu.height
+        width: parent.width < 300 * __dp ? parent.width : 300 * __dp
+        closePolicy: Popup.CloseOnReleaseOutsideParent | Popup.CloseOnEscape
+
+        MenuItem {
+            width: parent.width
+            height: toolbar.itemSize
+
+            ExtendedMenuItem {
+                height: toolbar.itemSize
+                rowHeight: height
+                width: parent.width
+                enabled: !isFeaturePoint
+                contentText: qsTr("Split geometry")
+                imageSource: InputStyle.scissorsIcon
+            }
+
+            onClicked: {
+                toolbar.splitGeometryClicked()
+                rootMenu.close()
+            }
+        }
+
+        MenuItem {
+            width: parent.width
+            height: toolbar.itemSize
+
+            ExtendedMenuItem {
+                height: toolbar.itemSize
+                rowHeight: height
+                width: parent.width
+                contentText: qsTr("Redraw geometry")
+                imageSource: InputStyle.eraserIcon
+            }
+
+            onClicked: {
+                toolbar.redrawGeometryClicked()
+                rootMenu.close()
+            }
+        }
+   }
 
 }

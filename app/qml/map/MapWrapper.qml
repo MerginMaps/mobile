@@ -98,15 +98,12 @@ Item {
       }
 
       case "edit": {
-        centerToPair( internal.featurePairToEdit )
-        howtoEditingBanner.show()
         editingGeometryStarted()
         hideHighlight()
         break
       }
 
       case "split": {
-        centerToPair( internal.featurePairToEdit )
         howtoSplittingBanner.show()
         splittingStarted()
         break
@@ -397,6 +394,22 @@ Item {
     visibleInterval: 10000
 
     text: qsTr( "Select some point to start editing the geometry" )
+  }
+
+  AutoHideBanner {
+    id: redrawGeometryBanner
+
+    width: parent.width - InputStyle.innerFieldMargin * 2
+    height: InputStyle.rowHeight
+
+    bgColor: InputStyle.secondaryBackgroundColor
+    fontColor: "white"
+
+    source: InputStyle.infoIcon
+
+    visibleInterval: 10000
+
+    text: qsTr( "Record new geometry for the feature" )
   }
 
   MissingAuthDialog {
@@ -758,7 +771,7 @@ Item {
 
       map: mapCanvas
       gpsState: gpsStateGroup
-      initialGeometry: root.state === "edit" ? internal.featurePairToEdit.feature.geometry : null
+      initialGeometry: root.state === "edit" && !internal.startEditingFromScratch ? internal.featurePairToEdit.feature.geometry : null
 
       centerToGPSOnStartup: root.state !== "edit"
 
@@ -777,6 +790,7 @@ Item {
         }
 
         root.state = "view"
+        internal.startEditingFromScratch = false
       }
 
       onDone: {
@@ -797,6 +811,7 @@ Item {
         }
 
         root.state = "view"
+        internal.startEditingFromScratch = false
       }
     }
   }
@@ -858,6 +873,7 @@ Item {
     // private properties - not accessible by other components
 
     property var featurePairToEdit // we are editing geometry of this feature layer pair
+    property bool startEditingFromScratch: false // set to true when redrawing geometry
 
     property var extentBeforeStakeout // extent that we return to once stakeout finishes
     property var stakeoutTarget
@@ -883,12 +899,25 @@ Item {
   function edit( featurepair ) {
     __activeProject.setActiveLayer( featurepair.layer )
     centerToPair( featurepair )
+    howtoEditingBanner.show()
 
     internal.featurePairToEdit = featurepair
     state = "edit"
   }
 
+  function redraw( featurepair ) {
+    __activeProject.setActiveLayer( featurepair.layer )
+    centerToPair( featurepair )
+    redrawGeometryBanner.show()
+
+    internal.featurePairToEdit = featurepair
+    internal.startEditingFromScratch = true
+    state = "edit"
+  }
+
   function split( featurepair ) {
+    centerToPair( featurepair )
+
     internal.featurePairToEdit = featurepair
     state = "split"
   }
