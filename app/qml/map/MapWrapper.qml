@@ -912,7 +912,6 @@ Item {
 
     internal.featurePairToEdit = featurepair
     internal.startEditingFromScratch = true
-    __inputUtils.changeFeaturePairGeometry( internal.featurePairToEdit, __inputUtils.emptyGeometry() )
     state = "edit"
   }
 
