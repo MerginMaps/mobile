@@ -782,10 +782,6 @@ Item {
         }
         else if ( root.state === "edit" )
         {
-          if ( internal.oldGeometry )
-          {
-            __inputUtils.changeFeaturePairGeometry( internal.featurePairToEdit, internal.oldGeometry )
-          }
           root.editingGeometryCanceled()
         }
         else if ( root.state === "recordInLayer" )
@@ -878,7 +874,6 @@ Item {
 
     property var featurePairToEdit // we are editing geometry of this feature layer pair
     property bool startEditingFromScratch: false // set to true when redrawing geometry
-    property var oldGeometry // old geometry of the feature
 
     property var extentBeforeStakeout // extent that we return to once stakeout finishes
     property var stakeoutTarget
@@ -907,8 +902,6 @@ Item {
     howtoEditingBanner.show()
 
     internal.featurePairToEdit = featurepair
-    internal.oldGeometry = featurepair.feature.geometry
-    __inputUtils.changeFeaturePairGeometry( internal.featurePairToEdit, __inputUtils.emptyGeometry() )
     state = "edit"
   }
 
