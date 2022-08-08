@@ -18,6 +18,8 @@
 #include "qgsvertexid.h"
 #include "qgsgeometry.h"
 
+#include "inpututils.h"
+
 class PositionKit;
 class VariablesManager;
 class QgsVectorLayer;
@@ -59,7 +61,7 @@ class Vertex
 
     bool operator==( const Vertex &other )
     {
-      return other.vertexId() == mVertexId && other.coordinates() == mCoordinates && other.type() == mType;
+      return other.vertexId() == mVertexId && InputUtils::equals( other.coordinates(), mCoordinates ) && other.type() == mType;
     }
 
     bool operator!=( const Vertex &other )

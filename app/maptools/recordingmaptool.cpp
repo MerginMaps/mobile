@@ -20,7 +20,6 @@
 
 #include "position/positionkit.h"
 #include "variablesmanager.h"
-#include "inpututils.h"
 
 RecordingMapTool::RecordingMapTool( QObject *parent )
   : AbstractMapTool{parent}
