@@ -790,6 +790,7 @@ Item {
         }
 
         root.state = "view"
+        internal.startEditingFromScratch = false
       }
 
       onDone: {
@@ -810,6 +811,7 @@ Item {
         }
 
         root.state = "view"
+        internal.startEditingFromScratch = false
       }
     }
   }
@@ -900,7 +902,6 @@ Item {
     howtoEditingBanner.show()
 
     internal.featurePairToEdit = featurepair
-    internal.startEditingFromScratch = false
     state = "edit"
   }
 
