@@ -25,26 +25,105 @@ GuidelineController::GuidelineController( QObject *parent )
 
 void GuidelineController::buildGuideline()
 {
-  // take the existing geometry and add crosshair position to it
-  if ( !mAllowed || !mMapSettings || mCrosshairPosition.isNull() || mRealGeometry.isEmpty() )
+  if ( !mAllowed || !mMapSettings || mCrosshairPosition.isNull() )
   {
     setGuidelineGeometry( QgsGeometry() );
     return;
   }
 
-  if ( mRealGeometry.type() == QgsWkbTypes::PointGeometry )
+  if ( mRealGeometry.isEmpty() )
   {
     setGuidelineGeometry( QgsGeometry() );
     return;
   }
 
   QgsPoint crosshair = mMapSettings->screenToCoordinate( mCrosshairPosition );
-
-  if ( !mActiveVertex.isValid() ) // recording
+  if ( crosshair.isEmpty() )
   {
-    // we add current crosshair to the end of geometry - creating new point
-    if ( mRealGeometry.type() == QgsWkbTypes::LineGeometry )
+    setGuidelineGeometry( QgsGeometry() );
+    return;
+  }
+
+  /**
+   * How guideline is built
+   *
+   * Point / MultiPoint
+   * No guideline
+   *
+   * LineString / MultiLineString
+   * Differentiate between recording and grabbing state.
+   * If recording - create simple line from the beggining/end of the active part's point to crosshair position
+   * If grab - create line consisting of three points (one before active*, crosshair, one after active*)
+   *    * ~ if such vertex does not exist, skip it - we move first or last point
+   *
+   * Polygon / MultiPolygon
+   * Differentiate between recording and grabbing state.
+   * If grab - if we hold the only existing vertex - do not draw guideline
+   *         - line consisting of three points (one before active*, crosshair, one after active*)
+   *    * ~ if such vertex does not exist, skip it - we move first or last point
+   *
+   * If recording - create line if there is only one vertex - between vertex and crosshair
+   *              - create polygon between first point, crosshair and last added point (make sure it is not the first one)
+   */
+
+  QgsWkbTypes::GeometryType geotype = mRealGeometry.type();
+
+  if ( geotype == QgsWkbTypes::PointGeometry )
+  {
+    setGuidelineGeometry( QgsGeometry() );
+    return;
+  }
+
+  if ( mActiveVertex.isValid() )
+  {
+    // we grab an existing point
+
+    int nVertices = mRealGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
+    if ( nVertices <= 1 )
     {
+      // we hold the only point or there is no point
+      setGuidelineGeometry( QgsGeometry() );
+      return;
+    }
+
+    QgsPolylineXY guideline;
+
+    QgsVertexId current = mActiveVertex.vertexId();
+    QgsPoint previous, next;
+
+    next = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, current.vertex + 1 ) );
+    previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, current.vertex - 1 ) );
+
+    // fix closed polygons rings
+    if ( geotype == QgsWkbTypes::PolygonGeometry )
+    {
+      if ( current.vertex == 0 && nVertices >= 4 )
+      {
+        previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, nVertices - 2 ) );
+      }
+    }
+
+    if ( !previous.isEmpty() )
+    {
+      guideline.push_back( previous );
+    }
+
+    guideline.push_back( crosshair );
+
+    if ( !next.isEmpty() )
+    {
+      guideline.push_back( next );
+    }
+
+    setGuidelineGeometry( QgsGeometry::fromPolylineXY( guideline ) );
+  }
+  else
+  {
+    // recording new points
+
+    if ( geotype == QgsWkbTypes::LineGeometry )
+    {
+      // we are adding new point to the end/beginning
       QgsGeometry guideline;
       QgsLineString *line;
 
@@ -58,13 +137,19 @@ void GuidelineController::buildGuideline()
         line = qgsgeometry_cast<QgsLineString *>( mRealGeometry.constGet() );
       }
 
-      if ( mNewVertexOrder == RecordingMapTool::Start )
+      if ( !line )
+      {
+        setGuidelineGeometry( guideline );
+        return;
+      }
+
+      if ( mInsertPolicy == RecordingMapTool::Start )
       {
         // add crosshair to the begginning
         QgsPoint firstPoint = line->pointN( 0 );
-        guideline = QgsGeometry::fromPolyline( { firstPoint, crosshair } );
+        guideline = QgsGeometry::fromPolyline( { crosshair, firstPoint } );
       }
-      else
+      else if ( line->vertexCount() > 0 )
       {
         // add crosshair to the end of the geometry
         QgsPoint lastPoint = line->pointN( line->vertexCount() - 1 );
@@ -73,61 +158,29 @@ void GuidelineController::buildGuideline()
 
       setGuidelineGeometry( guideline );
     }
-    else if ( mRealGeometry.type() == QgsWkbTypes::PolygonGeometry )
+    else if ( geotype == QgsWkbTypes::PolygonGeometry )
     {
-      QgsPolygonXY poly;
-
-      if ( mRealGeometry.isMultipart() )
+      int nVertices = mRealGeometry.constGet()->vertexCount( mActivePart, mActiveRing );
+      if ( nVertices == 0 )
       {
-        QgsMultiPolygon *multiPolygon = qgsgeometry_cast<QgsMultiPolygon *>( mRealGeometry.constGet() );
-        poly = QgsGeometry( multiPolygon->polygonN( mActivePart ) ).asPolygon();
+        // we hold the only point
+        setGuidelineGeometry( QgsGeometry() );
+        return;
+      }
+      else if ( nVertices == 1 )
+      {
+        // build line
+        QgsPointXY previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, mActiveRing, 0 ) );
+        setGuidelineGeometry( QgsGeometry::fromPolylineXY( { previous, crosshair } ) );
       }
       else
       {
-        poly = mRealGeometry.asPolygon();
-      }
-
-      if ( poly[0].count() < 2 )
-      {
-        // if it is not yet a polygon, create line guideline
-        poly[0].append( crosshair );
-        setGuidelineGeometry( QgsGeometry::fromPolylineXY( poly[0] ) );
-      }
-      else
-      {
-        // let's add the crosshair as one-before-last vertex
-        poly[0].insert( poly[0].count() - 1, crosshair );
-        setGuidelineGeometry( QgsGeometry::fromPolygonXY( poly ) );
+        // build a polygon
+        QgsPointXY first = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, mActiveRing, 0 ) );
+        QgsPointXY last = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, mActiveRing, nVertices - 2 ) );
+        setGuidelineGeometry( QgsGeometry::fromPolygonXY( { { first, crosshair, last } } ) );
       }
     }
-  }
-  else // we are in grab state
-  {
-    QgsGeometry g( mRealGeometry );
-
-//    // for handles we insert new vertex at the beginning or end of the line
-//    if ( mActiveVertex.type() == Vertex::VertexType::HandleStart )
-//    {
-//      qDebug() << "HANDLE START";
-//      QgsVertexId id( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, 0 );
-//      g.insertVertex( crosshair, g.vertexNrFromVertexId( id ) );
-//    }
-//    if ( mActiveVertex.type() == Vertex::VertexType::HandleEnd )
-//    {
-//      qDebug() << "HANDLE END";
-//      int index = g.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
-//      QgsVertexId id( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring, index );
-//      g.get()->insertVertex( id, crosshair );
-//    }
-//    else
-//    {
-    // we add current crosshair in place of active vertex id
-//    g.moveVertex( crosshair, g.vertexNrFromVertexId( mActiveVertex.vertexId() ) );
-//    }
-
-    //g.get()->moveVertex( mActiveVertex.vertexId(), crosshair );
-    g.moveVertex( crosshair, g.vertexNrFromVertexId( mActiveVertex.vertexId() ) );
-    setGuidelineGeometry( g );
   }
 }
 
@@ -223,17 +276,17 @@ void GuidelineController::setAllowed( bool newAllowed )
   emit allowedChanged( mAllowed );
 }
 
-const RecordingMapTool::NewVertexOrder &GuidelineController::newVertexOrder() const
+const RecordingMapTool::InsertPolicy &GuidelineController::insertPolicy() const
 {
-  return mNewVertexOrder;
+  return mInsertPolicy;
 }
 
-void GuidelineController::setNewVertexOrder( const RecordingMapTool::NewVertexOrder &newNewVertexOrder )
+void GuidelineController::setInsertPolicy( const RecordingMapTool::InsertPolicy &insertPolicy )
 {
-  if ( mNewVertexOrder == newNewVertexOrder )
+  if ( mInsertPolicy == insertPolicy )
     return;
-  mNewVertexOrder = newNewVertexOrder;
-  emit newVertexOrderChanged( mNewVertexOrder );
+  mInsertPolicy = insertPolicy;
+  emit insertPolicyChanged( mInsertPolicy );
 }
 
 int GuidelineController::activePart() const
@@ -247,4 +300,17 @@ void GuidelineController::setActivePart( int newActivePart )
     return;
   mActivePart = newActivePart;
   emit activePartChanged( mActivePart );
+}
+
+int GuidelineController::activeRing() const
+{
+  return mActiveRing;
+}
+
+void GuidelineController::setActiveRing( int newActiveRing )
+{
+  if ( mActiveRing == newActiveRing )
+    return;
+  mActiveRing = newActiveRing;
+  emit activeRingChanged( mActiveRing );
 }

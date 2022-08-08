@@ -18,6 +18,8 @@
 #include "qgsvertexid.h"
 #include "qgsgeometry.h"
 
+#include "inpututils.h"
+
 class PositionKit;
 class VariablesManager;
 class QgsVectorLayer;
@@ -59,7 +61,7 @@ class Vertex
 
     bool operator==( const Vertex &other )
     {
-      return other.vertexId() == mVertexId && other.type() == mType;
+      return other.vertexId() == mVertexId && InputUtils::equals( other.coordinates(), mCoordinates ) && other.type() == mType;
     }
 
     bool operator!=( const Vertex &other )
@@ -90,7 +92,7 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( QgsGeometry handles READ handles WRITE setHandles NOTIFY handlesChanged )
 
     Q_PROPERTY( Vertex activeVertex READ activeVertex WRITE setActiveVertex NOTIFY activeVertexChanged )
-    Q_PROPERTY( NewVertexOrder newVertexOrder READ newVertexOrder WRITE setNewVertexOrder NOTIFY newVertexOrderChanged )
+    Q_PROPERTY( InsertPolicy insertPolicy READ insertPolicy WRITE setInsertPolicy NOTIFY insertPolicyChanged )
 
     // When editing geometry - set this as the geometry to start with
     Q_PROPERTY( QgsGeometry initialGeometry READ initialGeometry WRITE setInitialGeometry NOTIFY initialGeometryChanged )
@@ -98,7 +100,8 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( MapToolState state READ state WRITE setState NOTIFY stateChanged )
 
     Q_PROPERTY( QgsPoint recordPoint READ recordPoint WRITE setRecordPoint NOTIFY recordPointChanged )
-    Q_PROPERTY( int activePart READ activePart WRITE setActivePart NOTIFY activePartChanged )
+    Q_PROPERTY( int activePart READ activePart NOTIFY activePartChanged )
+    Q_PROPERTY( int activeRing READ activeRing NOTIFY activeRingChanged )
 
   public:
 
@@ -117,12 +120,12 @@ class RecordingMapTool : public AbstractMapTool
     };
     Q_ENUM( MapToolState );
 
-    enum NewVertexOrder
+    enum InsertPolicy
     {
       End = 0, // Default, new vertices are appended to the end of geometry
       Start // Vertices will be added to the beggining of geometry (when clicked on continue line from start)
     };
-    Q_ENUM( NewVertexOrder );
+    Q_ENUM( InsertPolicy );
 
     explicit RecordingMapTool( QObject *parent = nullptr );
     virtual ~RecordingMapTool();
@@ -210,11 +213,12 @@ class RecordingMapTool : public AbstractMapTool
     const Vertex &activeVertex() const;
     void setActiveVertex( const Vertex &newActiveVertex );
 
-    const NewVertexOrder &newVertexOrder() const;
-    void setNewVertexOrder( const NewVertexOrder &newNewVertexOrder );
+    const InsertPolicy &insertPolicy() const;
+    void setInsertPolicy( const InsertPolicy &insertPolicy );
 
     int activePart() const;
-    void setActivePart( int newActivePart );
+    int activeRing() const;
+    void setActivePartAndRing( int newActivePart, int newActiveRing );
 
   signals:
     void layerChanged( QgsVectorLayer *layer );
@@ -230,15 +234,14 @@ class RecordingMapTool : public AbstractMapTool
     void handlesChanged( const QgsGeometry &handles );
     void stateChanged( const RecordingMapTool::MapToolState &state );
 
-    void crosshairPositionChanged( QPointF crosshairPosition );
-
     void recordPointChanged( QgsPoint recordPoint );
 
     void activeVertexChanged( const Vertex &activeVertex );
 
-    void newVertexOrderChanged( const RecordingMapTool::NewVertexOrder &newVertexOrder );
+    void insertPolicyChanged( const RecordingMapTool::InsertPolicy &insertPolicy );
 
     void activePartChanged( int activePart );
+    void activeRingChanged( int activeRing );
 
   public slots:
     void onPositionChanged();
@@ -262,7 +265,7 @@ class RecordingMapTool : public AbstractMapTool
     /**
      * Grabs next vertex after the removal of the currently selected vertex
      */
-    void grabNextVertex( const int removedVertexId );
+    void grabNextVertex();
 
   protected:
     //! Unifies Z coordinate of the point with current layer - drops / adds it
@@ -280,26 +283,33 @@ class RecordingMapTool : public AbstractMapTool
     QgsGeometry mInitialGeometry;
 
     bool mCenteredToGPS = false;
-    int mRecordingInterval;  // in seconds for the StreamingMode
     RecordingType mRecordingType = Manual;
+    int mRecordingInterval;  // in seconds for the StreamingMode
 
     QDateTime mLastTimeRecorded;
 
     QgsVectorLayer *mLayer = nullptr; // not owned
     PositionKit *mPositionKit = nullptr; // not owned
+
     QgsGeometry mExistingVertices;
     QgsGeometry mMidPoints;
     QgsGeometry mHandles;
     QgsGeometry mHiddenHandle;
 
     MapToolState mState = MapToolState::Record;
-    NewVertexOrder mNewVertexOrder = NewVertexOrder::End;
+    InsertPolicy mInsertPolicy = InsertPolicy::End;
 
-    Vertex mActiveVertex;
     QVector< Vertex > mVertices;
 
     QgsPoint mRecordPoint;
 
+    // ActiveVertex is set only when we grab a point,
+    // it is the grabbed point, contains its coordinates and index
+    Vertex mActiveVertex;
+
+    // ActiveRing and ActivePart are set only when we record,
+    // in order to know where to insert the points
+    int mActiveRing = 0;
     int mActivePart = 0;
 };
 

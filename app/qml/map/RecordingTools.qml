@@ -98,12 +98,13 @@ Item {
     allowed: mapTool.state !== RecordingMapTool.View
 
     mapSettings: root.map.mapSettings
-    newVertexOrder: mapTool.newVertexOrder
+    insertPolicy: mapTool.insertPolicy
     crosshairPosition: crosshair.screenPoint
     realGeometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
 
     activeVertex: mapTool.activeVertex
     activePart: mapTool.activePart
+    activeRing: mapTool.activeRing
   }
 
   Highlight {
