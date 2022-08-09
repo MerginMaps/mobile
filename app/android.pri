@@ -73,7 +73,7 @@ android {
     LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
     LIBS += -lsqlite3 -liconv -lz -lzip
     LIBS += -ltiff
-    LIBS += -lwebp -lcurl
+    LIBS += -lwebp -lcurl -ljpeg
     
     QT += multimedia
     QT += printsupport

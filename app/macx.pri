@@ -58,7 +58,7 @@ macx:!android {
     LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
     LIBS += -ltiff
     LIBS += -lsqlite3 -liconv -lz -lzip
-    LIBS += -lwebp -lcurl 
+    LIBS += -lwebp -lcurl -ljpeg
     
     LIBS += -framework Security -framework CoreFoundation -framework SystemConfiguration
 
