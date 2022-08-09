@@ -716,7 +716,8 @@ QgsPointXY InputUtils::transformPointXY( const QgsCoordinateReferenceSystem &src
   }
   catch ( QgsCsException &cse )
   {
-    Q_UNUSED( cse )
+    qDebug() << "EXCEPTION" << cse.what();
+    //Q_UNUSED( cse )
   }
 
   return QgsPointXY();

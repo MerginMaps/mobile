@@ -101,10 +101,12 @@ void TestUtilsFunctions::transformedPointXY()
   QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
 
+  qDebug() << "IN POINT" << pointXY.asWkt();
   QgsPointXY transformedPoint =  mUtils->transformPointXY( crsGPS,
                                  crs3857,
                                  QgsCoordinateTransformContext(),
                                  pointXY );
+  qDebug() << "OUT POINT" << transformedPoint.asWkt();
   COMPARENEAR( transformedPoint.x(), 5554843, 1.0 );
   COMPARENEAR( transformedPoint.y(), 1839491, 1.0 );
 
