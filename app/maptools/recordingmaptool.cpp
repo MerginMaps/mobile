@@ -105,7 +105,21 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
       return;
     }
 
-    // TODO: create part if all were removed and this is multipolygon geometry
+    // create part if all were removed and this is multipolygon geometry
+    if ( mRecordedGeometry.isMultipart() && id.part >= mRecordedGeometry.constGet()->partCount() )
+    {
+      QgsLineString ring;
+      ring.addVertex( pointToAdd );
+      QgsPolygon poly( &ring );
+      // ring will be closed automatically, bur we need to keep only one point,
+      // so we remove end point
+      QgsLineString *r = qgsgeometry_cast<QgsLineString *>( poly.exteriorRing() );
+      QgsPointSequence points;
+      r->points( points );
+      points.removeLast();
+      r->setPoints( points );
+      mRecordedGeometry.addPart( poly.clone(), QgsWkbTypes::PolygonGeometry );
+    }
 
     if ( r->nCoordinates() < 2 )
     {
