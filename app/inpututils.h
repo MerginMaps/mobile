@@ -425,6 +425,7 @@ class InputUtils: public QObject
     // Returns geometry type represented as string (point/linestring/polygon/nullGeo); returns empty string if geometry is unknown or layer is invalid.
     Q_INVOKABLE static QString geometryFromLayer( QgsVectorLayer *layer );
     Q_INVOKABLE static bool isPointLayer( QgsVectorLayer *layer );
+    Q_INVOKABLE static bool isMultiPointLayer( QgsVectorLayer *layer );
     Q_INVOKABLE static bool isLineLayer( QgsVectorLayer *layer );
     Q_INVOKABLE static bool isPolygonLayer( QgsVectorLayer *layer );
     Q_INVOKABLE static bool isNoGeometryLayer( QgsVectorLayer *layer );

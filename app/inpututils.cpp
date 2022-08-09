@@ -1088,6 +1088,11 @@ bool InputUtils::isPointLayer( QgsVectorLayer *layer )
   return geometryFromLayer( layer ) == "point";
 }
 
+bool InputUtils::isMultiPointLayer( QgsVectorLayer *layer )
+{
+  return geometryFromLayer( layer ) == "point" && QgsWkbTypes::isMultiType( layer->wkbType() );
+}
+
 bool InputUtils::isLineLayer( QgsVectorLayer *layer )
 {
   return geometryFromLayer( layer ) == "linestring";
