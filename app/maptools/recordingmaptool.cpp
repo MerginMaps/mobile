@@ -114,6 +114,10 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
       // ring will be closed automatically, bur we need to keep only one point,
       // so we remove end point
       QgsLineString *r = qgsgeometry_cast<QgsLineString *>( poly.exteriorRing() );
+      if ( !r )
+      {
+        return;
+      }
       QgsPointSequence points;
       r->points( points );
       points.removeLast();
