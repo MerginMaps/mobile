@@ -1103,6 +1103,15 @@ bool InputUtils::isNoGeometryLayer( QgsVectorLayer *layer )
   return geometryFromLayer( layer ) == "nullGeo";
 }
 
+bool InputUtils::isMultiPartLayer( QgsVectorLayer *layer )
+{
+  if ( !layer )
+  {
+    return false;
+  }
+  return QgsWkbTypes::isMultiType( layer->wkbType() );
+}
+
 qreal InputUtils::calculateScreenDpr()
 {
   const QList<QScreen *> screens = QGuiApplication::screens();

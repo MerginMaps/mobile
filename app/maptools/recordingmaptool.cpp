@@ -105,7 +105,25 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
       return;
     }
 
-    // TODO: create part if all were removed and this is multipolygon geometry
+    // create part if all were removed and this is multipolygon geometry
+    if ( mRecordedGeometry.isMultipart() && id.part >= mRecordedGeometry.constGet()->partCount() )
+    {
+      QgsLineString ring;
+      ring.addVertex( pointToAdd );
+      QgsPolygon poly( &ring );
+      // ring will be closed automatically, bur we need to keep only one point,
+      // so we remove end point
+      QgsLineString *r = qgsgeometry_cast<QgsLineString *>( poly.exteriorRing() );
+      if ( !r )
+      {
+        return;
+      }
+      QgsPointSequence points;
+      r->points( points );
+      points.removeLast();
+      r->setPoints( points );
+      mRecordedGeometry.addPart( poly.clone(), QgsWkbTypes::PolygonGeometry );
+    }
 
     if ( r->nCoordinates() < 2 )
     {
@@ -327,7 +345,6 @@ void RecordingMapTool::removePoint()
 
 bool RecordingMapTool::hasValidGeometry() const
 {
-  // TODO: fix for working with multipart geometries (and rings - polygons)
   if ( mLayer )
   {
     if ( mLayer->geometryType() == QgsWkbTypes::PointGeometry )
@@ -336,11 +353,41 @@ bool RecordingMapTool::hasValidGeometry() const
     }
     else if ( mLayer->geometryType() == QgsWkbTypes::LineGeometry )
     {
-      return mRecordedGeometry.constGet()->nCoordinates() >= 2;
+      if ( mRecordedGeometry.isMultipart() )
+      {
+        const QgsAbstractGeometry *geom = mRecordedGeometry.constGet();
+        for ( auto it = geom->const_parts_begin(); it != geom->const_parts_end(); ++it )
+        {
+          if ( ( *it )->nCoordinates() < 2 )
+          {
+            return false;
+          }
+        }
+        return true;
+      }
+      else
+      {
+        return mRecordedGeometry.constGet()->nCoordinates() >= 2;
+      }
     }
     else if ( mLayer->geometryType() == QgsWkbTypes::PolygonGeometry )
     {
-      return mRecordedGeometry.constGet()->nCoordinates() >= 3;
+      if ( mRecordedGeometry.isMultipart() )
+      {
+        const QgsAbstractGeometry *geom = mRecordedGeometry.constGet();
+        for ( auto it = geom->const_parts_begin(); it != geom->const_parts_end(); ++it )
+        {
+          if ( ( *it )->nCoordinates() < 4 )
+          {
+            return false;
+          }
+        }
+        return true;
+      }
+      else
+      {
+        return mRecordedGeometry.constGet()->nCoordinates() >= 4;
+      }
     }
   }
   return false;

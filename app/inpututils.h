@@ -428,6 +428,7 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool isLineLayer( QgsVectorLayer *layer );
     Q_INVOKABLE static bool isPolygonLayer( QgsVectorLayer *layer );
     Q_INVOKABLE static bool isNoGeometryLayer( QgsVectorLayer *layer );
+    Q_INVOKABLE static bool isMultiPartLayer( QgsVectorLayer *layer );
 
     // Returns a point geometry from point feature
     Q_INVOKABLE static QgsPointXY extractPointFromFeature( const FeatureLayerPair &feature );
