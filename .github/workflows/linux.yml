@@ -49,13 +49,14 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v1-${{ env.QT_VERSION }}-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
           version: ${{ env.QT_VERSION }}
           setup-python: 'false'
+          py7zrversion: '==0.18.1'
           dir: ${{ github.workspace }}
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
