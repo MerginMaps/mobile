@@ -373,7 +373,7 @@ bool RecordingMapTool::hasValidGeometry() const
         const QgsAbstractGeometry *geom = mRecordedGeometry.constGet();
         for ( auto it = geom->const_parts_begin(); it != geom->const_parts_end(); ++it )
         {
-          if ( ( *it )->nCoordinates() < 3 )
+          if ( ( *it )->nCoordinates() < 4 )
           {
             return false;
           }
@@ -382,7 +382,7 @@ bool RecordingMapTool::hasValidGeometry() const
       }
       else
       {
-        return mRecordedGeometry.constGet()->nCoordinates() >= 3;
+        return mRecordedGeometry.constGet()->nCoordinates() >= 4;
       }
     }
   }

@@ -1088,11 +1088,6 @@ bool InputUtils::isPointLayer( QgsVectorLayer *layer )
   return geometryFromLayer( layer ) == "point";
 }
 
-bool InputUtils::isMultiPointLayer( QgsVectorLayer *layer )
-{
-  return geometryFromLayer( layer ) == "point" && QgsWkbTypes::isMultiType( layer->wkbType() );
-}
-
 bool InputUtils::isLineLayer( QgsVectorLayer *layer )
 {
   return geometryFromLayer( layer ) == "linestring";
@@ -1106,6 +1101,11 @@ bool InputUtils::isPolygonLayer( QgsVectorLayer *layer )
 bool InputUtils::isNoGeometryLayer( QgsVectorLayer *layer )
 {
   return geometryFromLayer( layer ) == "nullGeo";
+}
+
+bool InputUtils::isMultiPartLayer( QgsVectorLayer *layer )
+{
+  return QgsWkbTypes::isMultiType( layer->wkbType() );
 }
 
 qreal InputUtils::calculateScreenDpr()

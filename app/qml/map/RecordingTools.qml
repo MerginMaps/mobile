@@ -196,7 +196,7 @@ Item {
     height: InputStyle.rowHeightHeader
 
     gpsIndicatorColor: root.gpsState.indicatorColor
-    pointLayerSelected: __inputUtils.isPointLayer( __activeLayer.vectorLayer ) && !__inputUtils.isMultiPointLayer( __activeLayer.vectorLayer )
+    pointLayerSelected: __inputUtils.isPointLayer( __activeLayer.vectorLayer ) && !__inputUtils.isMultiPartLayer( __activeLayer.vectorLayer )
 
     manualRecording: mapTool.recordingType === RecordingMapTool.Manual
 
