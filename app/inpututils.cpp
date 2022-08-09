@@ -713,12 +713,10 @@ QgsPointXY InputUtils::transformPointXY( const QgsCoordinateReferenceSystem &src
         return srcPoint;
       }
     }
-    qDebug() << "CT IS NOT VALID";
   }
   catch ( QgsCsException &cse )
   {
-    qDebug() << "EXCEPTION" << cse.what();
-    //Q_UNUSED( cse )
+    Q_UNUSED( cse )
   }
 
   return QgsPointXY();
