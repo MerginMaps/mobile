@@ -16,9 +16,9 @@ env:
   TEST_MERGIN_URL: https://test.dev.merginmaps.com/
   QT_VERSION: 5.14.2
   QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.15.0
-  INPUT_SDK_VERSION: mac-20220809-94
+  INPUT_SDK_VERSION: mac-20220810-95
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 3
+  CACHE_VERSION: 4
 
 concurrency:
   group: ci-${{github.ref}}-macos
@@ -89,13 +89,15 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v1-${{ env.QT_VERSION }}
+          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
           version: ${{ env.QT_VERSION }}
           dir: ${{ github.workspace }}
+          setup-python: 'false'
+          py7zrversion: '==0.18.1'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
       # Input SDK
