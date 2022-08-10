@@ -10,59 +10,89 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../qml/AccountPage.qml" line="167"/>
+        <location filename="../qml/AccountPage.qml" line="170"/>
         <source>Your subscription was cancelled on %1</source>
         <translation>Twoja subskrypcja została anulowana %1</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="48"/>
+        <location filename="../qml/AccountPage.qml" line="51"/>
         <source>My Account</source>
         <translation>Moje konto</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="136"/>
+        <location filename="../qml/AccountPage.qml" line="139"/>
         <source>Your subscription will not auto-renew after %1</source>
         <translation>Twoja subskrypcja nie zostanie automatycznie odnowiona po %1</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="146"/>
+        <location filename="../qml/AccountPage.qml" line="149"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
         <translation>Proszę możliwie szybko uaktualnić swoje %1dane płatności%2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="157"/>
+        <location filename="../qml/AccountPage.qml" line="160"/>
         <source>Your next bill will be for %1 on %2</source>
         <translation>Twoja kolejna płatność to %1 w dniu %2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="192"/>
+        <location filename="../qml/AccountPage.qml" line="195"/>
         <source>Using %1 / %2</source>
         <translation>Wykorzystane %1 / %2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="210"/>
+        <location filename="../qml/AccountPage.qml" line="213"/>
         <source>Manage Subscription</source>
         <translation>Zarządzaj subskrypcją</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="210"/>
+        <location filename="../qml/AccountPage.qml" line="213"/>
         <source>Working...</source>
         <translation>Działam...</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="210"/>
+        <location filename="../qml/AccountPage.qml" line="213"/>
         <source>Subscription plans</source>
         <translation>Plany subskrypcji</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="246"/>
+        <location filename="../qml/AccountPage.qml" line="249"/>
         <source>You can also %1restore%2 your purchases</source>
         <translation>Możesz również %1przywrócić%2 swój zakup</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="270"/>
+        <location filename="../qml/AccountPage.qml" line="278"/>
         <source>Sign out</source>
         <translation>Wypisz się</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="301"/>
+        <source>Delete account</source>
+        <translation>Usuń konto</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="332"/>
+        <source>Delete account?</source>
+        <translation>Usunąć konto?</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="338"/>
+        <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
+
+In order to delete your account, enter your username in the field below and click Yes.</source>
+        <translation>Spowoduje to usunięcie twojego konta Mergin Maps wraz ze wszystkimi twoimi projektami zarówno na urządzeniu jak i na serwerze. Nie można tego cofnąć. Jeśli posiadasz subskrypcję Apple, będziesz musiał zakończyć ją samodzielnie.
+
+W celu usunięcia konta podaj swoją nazwę użytkownika w polu poniżej i naciśnij Tak.</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="347"/>
+        <source>Enter username</source>
+        <translation>Podaj nazwę użytkownika</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="384"/>
+        <location filename="../qml/AccountPage.qml" line="419"/>
+        <source>Failed to remove account</source>
+        <translation>Nie udało się usunąć konta</translation>
     </message>
 </context>
 <context>
@@ -114,22 +144,22 @@
         <translation>Bez uprawnień dostępu do plików nie będzie można uzyskać dostępu do wcześniejszych projektów.</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="321"/>
+        <location filename="../androidutils.cpp" line="331"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>Uprawnienia dostępu do plików zostały trwale wycofane. Proszę zezwolić na dostęp do plików w ustawieniach, aby móc ładować obrazy z galerii</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="325"/>
+        <location filename="../androidutils.cpp" line="335"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
         <translation>Ładowanie obrazów z galerii w Input wymaga uprawnień dostępu do plików</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="343"/>
+        <location filename="../androidutils.cpp" line="353"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Aplikacja nie ma uprawnień do korzystania z aparatu, proszę na to zezwolić w ustawieniach</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="347"/>
+        <location filename="../androidutils.cpp" line="357"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Uprawnienia do korzystania z aparatu są konieczne do robienia zdjęć</translation>
     </message>
@@ -145,50 +175,45 @@
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="515"/>
+        <location filename="../attributes/attributecontroller.cpp" line="518"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Wyrażenie wartości domyślnej dla %1:%2 ma błąd składni: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="525"/>
+        <location filename="../attributes/attributecontroller.cpp" line="528"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Wyrażenie wartości domyślnej dla %1:%2 zwraca błąd obliczeń: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="536"/>
+        <location filename="../attributes/attributecontroller.cpp" line="539"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Nie można skonwertować &quot;%1&quot; %4 do typu odpowiedniego dla pola %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="788"/>
+        <location filename="../attributes/attributecontroller.cpp" line="792"/>
         <source>Cannot delete feature</source>
         <translation>Nie można usunąć obiektu</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="480"/>
-        <location filename="../attributes/attributecontroller.cpp" line="809"/>
+        <location filename="../attributes/attributecontroller.cpp" line="816"/>
         <source>Feature could not be added</source>
         <translation>Nie można dodać obiektu</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="840"/>
+        <location filename="../attributes/attributecontroller.cpp" line="854"/>
         <source>Cannot update feature</source>
         <translation>Nie można zaktualizować obiektu</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="854"/>
+        <location filename="../attributes/attributecontroller.cpp" line="868"/>
         <source>Feature %1 could not be fetched after commit</source>
         <translation>Nie można pobrać obiektu %1 po przesłaniu zmian</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="871"/>
+        <location filename="../attributes/attributecontroller.cpp" line="890"/>
         <source>Cannot start editing</source>
         <translation>Nie można rozpocząć edycji</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="888"/>
-        <source>Could not save changes. Rolling back.</source>
-        <translation>Nie można zapisać zmian. Wycofuję zmiany.</translation>
     </message>
 </context>
 <context>
@@ -217,9 +242,9 @@
 <context>
     <name>Banner</name>
     <message>
-        <location filename="../qml/Banner.qml" line="82"/>
-        <source>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Learn more&lt;/a&gt;</source>
-        <translation>%1&lt;br&gt;&lt;a href=&apos;%2&apos; style=&quot;color: %3;&quot;&gt;Dowiedz się więcej&lt;/a&gt;</translation>
+        <location filename="../qml/Banner.qml" line="36"/>
+        <source>Learn more</source>
+        <translation>Dowiedz się więcej</translation>
     </message>
 </context>
 <context>
@@ -314,7 +339,7 @@
 <context>
     <name>CodeReader</name>
     <message>
-        <location filename="../qml/CodeReader.qml" line="62"/>
+        <location filename="../qml/CodeReader.qml" line="64"/>
         <source>Scan code</source>
         <translation>Skanuj kod</translation>
     </message>
@@ -335,35 +360,50 @@
 <context>
     <name>ExternalResourceBundle</name>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="191"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="35"/>
+        <source>Could not create directory %1.</source>
+        <translation>Nie udało się utworzyć katalogu %1.</translation>
+    </message>
+    <message>
+        <location filename="../qml/ExternalResourceBundle.qml" line="128"/>
+        <source>Failed to copy image file to %1.</source>
+        <translation>Nie udało się skopiować pliku obrazu do %1.</translation>
+    </message>
+    <message>
+        <location filename="../qml/ExternalResourceBundle.qml" line="201"/>
         <source>Open Image</source>
         <translation>Otwórz obraz</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="193"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="203"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Pliki obrazów (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="205"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="215"/>
         <source>Remove photo reference</source>
         <translation>Usuń odnośnik do obrazu</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="206"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="216"/>
         <source>Also permanently delete photo from device?</source>
         <translation>Usunąć z urządzenia również sam obraz?</translation>
+    </message>
+    <message>
+        <location filename="../qml/ExternalResourceBundle.qml" line="238"/>
+        <source>Failed to copy image</source>
+        <translation>Nie udało się skopiować obrazu</translation>
     </message>
 </context>
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="150"/>
+        <location filename="../qml/form/FeatureForm.qml" line="155"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>Nie można zapisać formularza ze względu na błędy walidacji</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="151"/>
+        <location filename="../qml/form/FeatureForm.qml" line="156"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Nie można zapisać obiektu, sprawdź wymagane pola</translation>
     </message>
@@ -371,57 +411,73 @@
 <context>
     <name>FeatureFormPage</name>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="82"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
         <source>Edit Feature</source>
         <translation>Edytuj obiekt</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="82"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
         <source>Feature</source>
         <translation>Obiekt</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="92"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="93"/>
         <source>Save</source>
         <translation>Zapisz</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="196"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
         <source>Delete feature</source>
         <translation>Usuń obiekt</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="200"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Czy jesteś pewny, że chcesz usunąć ten obiekt?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="217"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
         <source>Unsaved changes</source>
         <translation>Niezapisane zmiany</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="221"/>
         <source>Do you want to save changes?</source>
         <translation>Czy chcesz zapisać zmiany?</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureFormPage.qml" line="244"/>
+        <source>Saving failed</source>
+        <translation>Zapis się nie powiódł</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
+        <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
+        <translation>Nie udało się zapisać zmian. W normalnej sytuacji nie powinno się to zdarzyć. Proszę zrestartować apkę i spróbować ponownie - jeśli to nie pomoże,  proszę skontaktować się z działem pomocy technicznej.</translation>
     </message>
 </context>
 <context>
     <name>FeatureToolbar</name>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="61"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="65"/>
         <source>Edit</source>
         <translation>Edytuj</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="83"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="87"/>
         <source>Delete</source>
         <translation>Usuń</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="99"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="103"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="141"/>
         <source>Edit geometry</source>
         <translation>Edytuj geometrię</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureToolbar.qml" line="120"/>
+        <source>Split geometry</source>
+        <translation>Rozdziel geometrię</translation>
     </message>
 </context>
 <context>
@@ -610,109 +666,109 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="161"/>
+        <location filename="../inpututils.cpp" line="177"/>
         <source>just now</source>
         <translation>przed chwilą</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="166"/>
+        <location filename="../inpututils.cpp" line="182"/>
         <source>%1 minutes ago</source>
         <translation>%1 minut temu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="166"/>
+        <location filename="../inpututils.cpp" line="182"/>
         <source>%1 minute ago</source>
         <translation>%1 minutę temu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="171"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 hours ago</source>
         <translation>%1 godzin temu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="171"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 hour ago</source>
         <translation>%1 godzinę temu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="175"/>
-        <location filename="../inpututils.cpp" line="180"/>
+        <location filename="../inpututils.cpp" line="191"/>
+        <location filename="../inpututils.cpp" line="196"/>
         <source>%1 days ago</source>
         <translation>%1 dni temu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="175"/>
-        <location filename="../inpututils.cpp" line="180"/>
+        <location filename="../inpututils.cpp" line="191"/>
+        <location filename="../inpututils.cpp" line="196"/>
         <source>%1 day ago</source>
         <translation>%1 dzień temu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="185"/>
+        <location filename="../inpututils.cpp" line="201"/>
         <source>%1 weeks ago</source>
         <translation>%1 tygodni temu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="185"/>
+        <location filename="../inpututils.cpp" line="201"/>
         <source>%1 week ago</source>
         <translation>%1 tydzień temu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="190"/>
+        <location filename="../inpututils.cpp" line="206"/>
         <source>%1 months ago</source>
         <translation>%1 miesięcy temu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="190"/>
+        <location filename="../inpututils.cpp" line="206"/>
         <source>%1 month ago</source>
         <translation>%1 miesiąc temu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="195"/>
+        <location filename="../inpututils.cpp" line="211"/>
         <source>%1 years ago</source>
         <translation>%1 lat temu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="195"/>
+        <location filename="../inpututils.cpp" line="211"/>
         <source>%1 year ago</source>
         <translation>%1 rok temu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1194"/>
+        <location filename="../inpututils.cpp" line="1378"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rozdzielczość ekranu: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1195"/>
+        <location filename="../inpututils.cpp" line="1379"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI ekranu: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1196"/>
+        <location filename="../inpututils.cpp" line="1380"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>rozmiar ekranu: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1197"/>
+        <location filename="../inpututils.cpp" line="1381"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>zgłaszany stosunek wielkości piksela na urządzeniu: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1198"/>
+        <location filename="../inpututils.cpp" line="1382"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>obliczony stosunek wielkości piksela na urządzeniu: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1199"/>
+        <location filename="../inpututils.cpp" line="1383"/>
         <source>used dp scale: %1</source>
         <translation>używana skala dp: %1</translation>
     </message>
@@ -781,8 +837,8 @@ Nie będzie ono dodane do projektu.</translation>
     <name>LoginForm</name>
     <message>
         <location filename="../qml/LoginForm.qml" line="70"/>
-        <source>%1Mergin%2 provides cloud-based sync between your mobile and desktop. Also use it to share your projects with others and work collaboratively.</source>
-        <translation>%1Mergin%2, umożliwia synchronizację danych pomiędzy twoją komórka a komputerem stacjonarnym. Pozwala również na współdzielenie projektu z innymi i wspólną pracę. </translation>
+        <source>Sync projects with your desktop computer and work collaboratively with others by logging in to your %1Mergin Maps%2 account.</source>
+        <translation>Synchronizuj swoje projekty ze swoim komputerem biurkowym i współpracuj z innymi poprzez zalogowanie się do twojego konta %1Mergin Maps%2.</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="113"/>
@@ -808,58 +864,64 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>MainPanel</name>
     <message>
-        <location filename="../qml/MainPanel.qml" line="61"/>
-        <location filename="../qml/MainPanel.qml" line="240"/>
+        <location filename="../qml/MainPanel.qml" line="62"/>
+        <location filename="../qml/MainPanel.qml" line="259"/>
         <source>Projects</source>
         <translation>Projekty</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="81"/>
-        <location filename="../qml/MainPanel.qml" line="259"/>
+        <location filename="../qml/MainPanel.qml" line="82"/>
+        <location filename="../qml/MainPanel.qml" line="278"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="116"/>
-        <location filename="../qml/MainPanel.qml" line="288"/>
+        <location filename="../qml/MainPanel.qml" line="117"/>
+        <location filename="../qml/MainPanel.qml" line="307"/>
         <source>Record</source>
         <translation>Rejestruj</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="136"/>
-        <location filename="../qml/MainPanel.qml" line="307"/>
+        <location filename="../qml/MainPanel.qml" line="137"/>
+        <location filename="../qml/MainPanel.qml" line="326"/>
         <source>Zoom to project</source>
         <translation>Powiększ do projektu</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="155"/>
+        <location filename="../qml/MainPanel.qml" line="345"/>
+        <source>Local changes</source>
+        <translation>Zmiany lokalne</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainPanel.qml" line="174"/>
         <source>Browse data</source>
         <translation>Przeglądaj dane</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="175"/>
-        <location filename="../qml/MainPanel.qml" line="345"/>
+        <location filename="../qml/MainPanel.qml" line="194"/>
+        <location filename="../qml/MainPanel.qml" line="383"/>
         <source>Map themes</source>
         <translation>Motywy map</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="195"/>
-        <location filename="../qml/MainPanel.qml" line="364"/>
+        <location filename="../qml/MainPanel.qml" line="214"/>
+        <location filename="../qml/MainPanel.qml" line="402"/>
         <source>Settings</source>
         <translation>Ustawienia</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="212"/>
+        <location filename="../qml/MainPanel.qml" line="231"/>
         <source>More</source>
         <translation>Więcej</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="225"/>
+        <location filename="../qml/MainPanel.qml" line="244"/>
         <source>Menu</source>
         <translation>Menu</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="326"/>
+        <location filename="../qml/MainPanel.qml" line="364"/>
         <source>Browse features</source>
         <translation>Przeglądaj obiekty</translation>
     </message>
@@ -880,35 +942,100 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="76"/>
-        <location filename="../qml/map/MapWrapper.qml" line="714"/>
+        <location filename="../qml/map/MapWrapper.qml" line="925"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS obecnie niedostępny</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="107"/>
-        <source>Recorded feature is not valid</source>
-        <translation>Rejestrowany obiekt jest niepoprawny</translation>
+        <location filename="../qml/map/MapWrapper.qml" line="312"/>
+        <source>Successfully synchronized</source>
+        <translation>Synchronizacja udana</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="511"/>
-        <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
-        <translation>Niska dokładność pozycji GPS (%1 m)&lt;br&gt;&lt;br&gt;Czy jesteś pod otwartym niebem?</translation>
+        <location filename="../qml/map/MapWrapper.qml" line="326"/>
+        <source>Up to date</source>
+        <translation>Aktualne</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="564"/>
+        <location filename="../qml/map/MapWrapper.qml" line="335"/>
+        <source>Somebody else is syncing, we will try again later</source>
+        <translation>Właśnie ktoś inny się synchronizuje. Za chwilę spróbujemy ponownie.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="345"/>
+        <source>There was an issue during synchronization, we will try again. Click to learn more</source>
+        <translation>W czasie synchronizacji wystąpił problem. Za chwilę spróbujemy ponownie. Kliknij, żeby dowiedzieć się więcej.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="363"/>
+        <source>Splitting done successfully</source>
+        <translation>Rozdzielanie zakończone pomyślnie</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="379"/>
+        <source>Create line to split the selected feature</source>
+        <translation>Narysuj linię rozdzielającą zaznaczony obiekt</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="518"/>
+        <source>Details</source>
+        <translation>Szczegóły</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="601"/>
         <source>Connecting to %1</source>
         <translation>Podłączanie %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="578"/>
+        <location filename="../qml/map/MapWrapper.qml" line="615"/>
         <source>Connected, no position</source>
         <translation>Połączony, brak pozycji</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="582"/>
+        <location filename="../qml/map/MapWrapper.qml" line="619"/>
         <source>Unknown accuracy</source>
         <translation>Nieznana dokładność</translation>
+    </message>
+</context>
+<context>
+    <name>MigrateToMerginDialog</name>
+    <message>
+        <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="18"/>
+        <source>Upload project to Mergin?</source>
+        <translation>Przesłać projekt do Mergin?</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="19"/>
+        <source>This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration. 
+Click &apos;Yes&apos; to upload it.</source>
+        <translation>Ten projekt nie został przesłany do Mergin. Prześlij go do Mergin, aby móc go synchronizować i pracować nad nim wspólnie z innymi. 
+Kliknij &apos;Tak&apos;, aby przesłać projekt. </translation>
+    </message>
+</context>
+<context>
+    <name>MissingAuthDialog</name>
+    <message>
+        <location filename="../qml/dialogs/MissingAuthDialog.qml" line="18"/>
+        <source>Sign in to Mergin</source>
+        <translation>Wpisz się do Mergin</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MissingAuthDialog.qml" line="19"/>
+        <source>You need to be signed in to your Mergin account in order to synchronize a project. Hit &apos;Yes&apos; to sign in.</source>
+        <translation>Aby móc synchronizować projekty, musisz być zapisany do Mergin. Naciśnij &apos;Tak&apos;, żeby się wpisać.</translation>
+    </message>
+</context>
+<context>
+    <name>NoPermissionsDialog</name>
+    <message>
+        <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="16"/>
+        <source>No rights to access the project</source>
+        <translation>Nie masz prawa dostępu do tego projektu</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="17"/>
+        <source>You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard.</source>
+        <translation>Nie możesz synchronizować swoich zmian. Skontaktuj się z właścicielem projektu Mergin, aby przydzielił ci odpowiednie prawa. Jeśli jesteś właścicielem projektu, zaloguj się na stronie Mergin.</translation>
     </message>
 </context>
 <context>
@@ -1042,6 +1169,11 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>ProjectIssuesPanel</name>
     <message>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="24"/>
+        <source>The following layers failed loading</source>
+        <translation>Nie udało się pobrać następujących warstw</translation>
+    </message>
+    <message>
         <location filename="../qml/ProjectIssuesPanel.qml" line="71"/>
         <source>Project Issues</source>
         <translation>Problemy</translation>
@@ -1055,53 +1187,53 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>ProjectList</name>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="133"/>
-        <location filename="../qml/components/ProjectList.qml" line="188"/>
+        <location filename="../qml/components/ProjectList.qml" line="134"/>
+        <location filename="../qml/components/ProjectList.qml" line="189"/>
         <source>Create project</source>
         <translation>Utwórz projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="163"/>
+        <location filename="../qml/components/ProjectList.qml" line="164"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
         <translation>Nie ma pobranych projektów.%1Zobacz %2jak tworzyć projekty%3 i %4pobierać je%3 na twoje urządzenie.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="179"/>
+        <location filename="../qml/components/ProjectList.qml" line="180"/>
         <source>You can also create new project by clicking button below.</source>
         <translation>Możesz też utworzyć nowy projekt klikając poniższy przycisk.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="201"/>
+        <location filename="../qml/components/ProjectList.qml" line="202"/>
         <source>Unable to get the list of projects.</source>
         <translation>Nie można pobrać listy projektów.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="201"/>
+        <location filename="../qml/components/ProjectList.qml" line="202"/>
         <source>No projects found!</source>
         <translation>Nie ma żadnych projektów!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="232"/>
+        <location filename="../qml/components/ProjectList.qml" line="233"/>
         <source>Retry</source>
         <translation>Ponów</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="260"/>
+        <location filename="../qml/components/ProjectList.qml" line="261"/>
         <source>Remove project</source>
         <translation>Usuń projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="261"/>
+        <location filename="../qml/components/ProjectList.qml" line="262"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Wszystkie niezsynchronizowane zmiany zostaną utracone.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="296"/>
+        <location filename="../qml/components/ProjectList.qml" line="297"/>
         <source>Download project</source>
         <translation>Pobierz projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="297"/>
+        <location filename="../qml/components/ProjectList.qml" line="298"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>Czy chcesz pobrać ten projekt
@@ -1119,37 +1251,37 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="135"/>
+        <location filename="../qml/ProjectPanel.qml" line="71"/>
         <source>No Changes</source>
         <translation>Nie ma zmian</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="160"/>
+        <location filename="../qml/ProjectPanel.qml" line="171"/>
         <source>Projects</source>
         <translation>Projekty</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="357"/>
+        <location filename="../qml/ProjectPanel.qml" line="368"/>
         <source>Home</source>
         <translation>Start</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="379"/>
+        <location filename="../qml/ProjectPanel.qml" line="390"/>
         <source>My projects</source>
         <translation>Moje projekty</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="403"/>
+        <location filename="../qml/ProjectPanel.qml" line="414"/>
         <source>Shared with me</source>
         <translation>Przydzielone</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="403"/>
+        <location filename="../qml/ProjectPanel.qml" line="414"/>
         <source>Shared</source>
         <translation>Wspólne</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="423"/>
+        <location filename="../qml/ProjectPanel.qml" line="434"/>
         <source>Explore</source>
         <translation>Eksploruj</translation>
     </message>
@@ -1211,8 +1343,8 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>ProjectsModel</name>
     <message>
-        <location filename="../projectsmodel.cpp" line="90"/>
-        <location filename="../projectsmodel.cpp" line="94"/>
+        <location filename="../projectsmodel.cpp" line="98"/>
+        <location filename="../projectsmodel.cpp" line="102"/>
         <source>Updated %1</source>
         <translation>Zaktualizowano %1</translation>
     </message>
@@ -1380,7 +1512,7 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>QgsQuickMapCanvasMap</name>
     <message>
-        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="172"/>
+        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="175"/>
         <source>Rendering</source>
         <translation>Wyświetlanie</translation>
     </message>
@@ -1395,31 +1527,50 @@ Nie będzie ono dodane do projektu.</translation>
     </message>
 </context>
 <context>
-    <name>RecordToolbar</name>
+    <name>RecordingToolbar</name>
     <message>
-        <location filename="../qml/map/RecordToolbar.qml" line="70"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="69"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordToolbar.qml" line="93"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="92"/>
         <source>Undo</source>
         <translation>Cofnij</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordToolbar.qml" line="108"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="107"/>
         <source>Add Point</source>
         <translation>Dodaj punkt</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordToolbar.qml" line="124"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="123"/>
         <source>Done</source>
-        <translation>Zakończ</translation>
+        <translation>Zrobione</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordToolbar.qml" line="138"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="137"/>
         <source>Cancel</source>
-        <translation>Porzuć</translation>
+        <translation>Skasuj</translation>
+    </message>
+</context>
+<context>
+    <name>RecordingTools</name>
+    <message>
+        <location filename="../qml/map/RecordingTools.qml" line="51"/>
+        <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
+        <translation>Niska dokładność pozycji GPS (%1 m)&lt;br&gt;&lt;br&gt;Czy jesteś pod otwartym niebem?</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/RecordingTools.qml" line="132"/>
+        <location filename="../qml/map/RecordingTools.qml" line="207"/>
+        <source>GPS currently unavailable.</source>
+        <translation>GPS obecnie niedostępny</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/RecordingTools.qml" line="175"/>
+        <source>You need to add at least %1 points.</source>
+        <translation>Musisz dodać przynajmniej %1 punktów.</translation>
     </message>
 </context>
 <context>
@@ -1519,27 +1670,32 @@ Nie będzie ono dodane do projektu.</translation>
         <translation>Wykorzystaj powtórnie poprzednią wartość</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="292"/>
+        <location filename="../qml/SettingsPanel.qml" line="287"/>
+        <source>Automatically sync changes</source>
+        <translation>Synchronizuj zmiany automatycznie</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="311"/>
         <source>About</source>
         <translation>O aplikacji</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="301"/>
+        <location filename="../qml/SettingsPanel.qml" line="320"/>
         <source>Help</source>
         <translation>Pomoc</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="310"/>
+        <location filename="../qml/SettingsPanel.qml" line="329"/>
         <source>Privacy policy</source>
         <translation>Polityka prywatności</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="319"/>
+        <location filename="../qml/SettingsPanel.qml" line="338"/>
         <source>Mergin terms of service</source>
         <translation>Warunki korzystania z Mergin</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="328"/>
+        <location filename="../qml/SettingsPanel.qml" line="347"/>
         <source>Diagnostic log</source>
         <translation>Dziennik diagnostyczny</translation>
     </message>
@@ -1553,19 +1709,63 @@ Nie będzie ono dodane do projektu.</translation>
     </message>
 </context>
 <context>
+    <name>SplittingFailedDialog</name>
+    <message>
+        <location filename="../qml/dialogs/SplittingFailedDialog.qml" line="16"/>
+        <source>We could not split the feature</source>
+        <translation>Nie można było rozdzielić obiektu</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/SplittingFailedDialog.qml" line="17"/>
+        <source>Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it.</source>
+        <translation>Proszę się upewnić, czy linia rozdzielająca przecina obiekt. Geometria obiektu musi być poprawna, aby można było ją rozdzielić.</translation>
+    </message>
+</context>
+<context>
+    <name>SplittingToolbar</name>
+    <message>
+        <location filename="../qml/map/SplittingToolbar.qml" line="61"/>
+        <source>Undo</source>
+        <translation>Cofnij</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/SplittingToolbar.qml" line="75"/>
+        <source>Add Point</source>
+        <translation>Dodaj punkt</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/SplittingToolbar.qml" line="89"/>
+        <source>Done</source>
+        <translation>Zrobione</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/SplittingToolbar.qml" line="103"/>
+        <source>Cancel</source>
+        <translation>Skasuj</translation>
+    </message>
+</context>
+<context>
+    <name>SplittingTools</name>
+    <message>
+        <location filename="../qml/map/SplittingTools.qml" line="98"/>
+        <source>You need to add at least 2 points.</source>
+        <translation>Musisz dodać przynajmniej 2 punkty.</translation>
+    </message>
+</context>
+<context>
     <name>StakeoutPanel</name>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="196"/>
+        <location filename="../qml/StakeoutPanel.qml" line="153"/>
         <source>Stake out</source>
         <translation>Tyczenie</translation>
     </message>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="270"/>
+        <location filename="../qml/StakeoutPanel.qml" line="227"/>
         <source>Feature</source>
         <translation>Obiekt</translation>
     </message>
     <message>
-        <location filename="../qml/StakeoutPanel.qml" line="280"/>
+        <location filename="../qml/StakeoutPanel.qml" line="242"/>
         <source>Distance</source>
         <translation>Odległość</translation>
     </message>
@@ -1611,19 +1811,19 @@ Nie będzie ono dodane do projektu.</translation>
         <translation>Subskrybuj</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="96"/>
-        <location filename="../qml/SubscribePage.qml" line="138"/>
+        <location filename="../qml/SubscribePage.qml" line="97"/>
+        <location filename="../qml/SubscribePage.qml" line="139"/>
         <source>Individual</source>
         <translation>Prywatnie</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="113"/>
-        <location filename="../qml/SubscribePage.qml" line="147"/>
+        <location filename="../qml/SubscribePage.qml" line="114"/>
+        <location filename="../qml/SubscribePage.qml" line="148"/>
         <source>Professional</source>
         <translation>Zawodowo</translation>
     </message>
     <message>
-        <location filename="../qml/SubscribePage.qml" line="163"/>
+        <location filename="../qml/SubscribePage.qml" line="164"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
         <translation>Twoja subskrypcja Mergin zostanie automatycznie odnowiona. Możesz ją przerwać bądź zmienić w dowolnej chwili. %1Dowiedz się więcej%2</translation>
     </message>
@@ -1649,6 +1849,19 @@ Nie będzie ono dodane do projektu.</translation>
         <location filename="../qml/SubscribePlanItem.qml" line="73"/>
         <source>Email support</source>
         <translation>Wsparcie emailowe</translation>
+    </message>
+</context>
+<context>
+    <name>SyncFailedDialog</name>
+    <message>
+        <location filename="../qml/dialogs/SyncFailedDialog.qml" line="22"/>
+        <source>Failed to synchronize your changes</source>
+        <translation>Nie udało się zsynchronizować twoich zmian</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/SyncFailedDialog.qml" line="23"/>
+        <source>Your changes could not be sent to server, make sure you are connected to internet and have write access to this project.</source>
+        <translation>Twoje zmiany nie mogły zostać przesłane na serwer. Upewnij się, że jesteś podłączony do internetu i masz prawa zapisu do tego projektu.</translation>
     </message>
 </context>
 <context>
@@ -1706,42 +1919,48 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="217"/>
+        <location filename="../qml/main.qml" line="220"/>
+        <location filename="../qml/main.qml" line="277"/>
+        <source>No Changes</source>
+        <translation>Nie ma zmian</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="251"/>
         <source>GPS auto-center mode on</source>
         <translation>Tryb autocentrowania GPS jest włączony</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="217"/>
+        <location filename="../qml/main.qml" line="251"/>
         <source>GPS auto-center mode off</source>
         <translation>Tryb autocentrowania GPS jest wyłączony</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="231"/>
+        <location filename="../qml/main.qml" line="266"/>
         <source>No editable layers found.</source>
         <translation>Nie znaleziono warstw do edycji.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="494"/>
+        <location filename="../qml/main.qml" line="536"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Tyczenie wyłączone z powodu braku ustalonej pozycji!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="513"/>
+        <location filename="../qml/main.qml" line="557"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Błąd połączenia z Mergin.%1Sprawdź swoje połączenie sieciowe.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="559"/>
+        <location filename="../qml/main.qml" line="604"/>
         <source>There were issues loading the project.</source>
         <translation>Wystąpiły problemy w czasie ładowania projektu.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="433"/>
-        <source>Communication error</source>
-        <translation>Błąd komunikacji</translation>
+        <location filename="../qml/main.qml" line="635"/>
+        <source>Press back again to quit the app</source>
+        <translation>Naciśnij Cofnij jeszcze raz, żeby wyjść z aplikacji</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="439"/>
+        <location filename="../qml/main.qml" line="482"/>
         <source>PROJ Error</source>
         <translation>Błąd PROJ</translation>
     </message>
