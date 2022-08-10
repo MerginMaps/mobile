@@ -17,6 +17,7 @@
 #include "qgspolygon.h"
 #include "qgsmultipolygon.h"
 #include "qgsrendercontext.h"
+#include "qgsvectorlayereditbuffer.h"
 
 #include "position/positionkit.h"
 #include "variablesmanager.h"
@@ -940,8 +941,9 @@ void RecordingMapTool::completeEditOperation()
 {
   if ( mFeatureLayerPair.isValid() && mFeatureLayerPair.layer()->isEditCommandActive() )
   {
-    bool res = mFeatureLayerPair.layer()->changeGeometry( mFeatureLayerPair.feature().id(), mRecordedGeometry );
+    mFeatureLayerPair.layer()->changeGeometry( mFeatureLayerPair.feature().id(), mRecordedGeometry );
     mFeatureLayerPair.layer()->endEditCommand();
+    mFeatureLayerPair.layer()->triggerRepaint();
   }
 }
 
@@ -950,6 +952,16 @@ void RecordingMapTool::undo()
   if ( mFeatureLayerPair.isValid() && mFeatureLayerPair.layer()->undoStack() )
   {
     mFeatureLayerPair.layer()->undoStack()->undo();
+    QgsGeometry geom = mFeatureLayerPair.layer()->editBuffer()->changedGeometries()[ mFeatureLayerPair.feature().id() ];
+    if ( !geom.isEmpty() )
+    {
+      setRecordedGeometry( geom );
+    }
+    else
+    {
+      setRecordedGeometry( mFeatureLayerPair.feature().geometry() );
+    }
+    mFeatureLayerPair.layer()->triggerRepaint();
   }
 }
 
