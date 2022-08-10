@@ -14,13 +14,13 @@ on:
 
 env:
   QT_VERSION: 5.14.2
-  INPUT_SDK_VERSION: ios-20220422-45
+  INPUT_SDK_VERSION: ios-20220810-59
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   XC_VERSION: ${{ '13.2.1' }}
   IOS_MIN_SDK_VERSION: ${{ '14.0' }}
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 1
+  CACHE_VERSION: 4
 
 concurrency:
   group: ci-${{github.ref}}-ios
@@ -133,7 +133,7 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-${{ env.QT_VERSION }}-ios-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-QtCache-v1-${{ env.QT_VERSION }}-ios-${{ env.CACHE_VERSION }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
@@ -141,6 +141,8 @@ jobs:
           version: ${{ env.QT_VERSION }}
           target: ios
           dir: ${{ github.workspace }}
+          setup-python: 'false'
+          py7zrversion: '==0.18.1'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
       # Do this only until we move from 5.14.2!!
