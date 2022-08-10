@@ -1,4 +1,5 @@
-filters:
+git:
+    filters:
     - filter_type: file
       file_format: qt
       source_language: en
