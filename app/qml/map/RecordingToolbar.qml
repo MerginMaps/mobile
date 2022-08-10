@@ -27,6 +27,7 @@ Item {
     signal releaseClicked
     signal doneClicked
     signal cancelClicked
+    signal undoClicked
 
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
@@ -89,7 +90,28 @@ Item {
             visible: root.pointLayerSelected ? false : true
 
             MainPanelButton {
-                id: removePointButton
+                id: undoButton
+                width: root.itemSize
+                text: qsTr("Undo")
+                imageSource: InputStyle.undoIcon
+
+                enabled: {
+                  if ( !manualRecording ) return false;
+
+                  return true;
+                }
+
+                onActivated: root.undoClicked()
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+            height: parent.height
+            visible: root.pointLayerSelected ? false : true
+
+            MainPanelButton {
+                id: removeButton
                 width: root.itemSize
                 text: qsTr("Remove")
                 imageSource: InputStyle.minusIcon

@@ -244,6 +244,10 @@ Item {
 
     onRemoveClicked: mapTool.removePoint()
 
+    onUndoClicked: {
+      // TODO: revert last change
+    }
+
     onDoneClicked: {
       if ( mapTool.hasValidGeometry() )
       {
