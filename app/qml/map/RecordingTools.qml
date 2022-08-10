@@ -242,7 +242,7 @@ Item {
       mapTool.releaseVertex( crosshair.recordPoint )
     }
 
-    onRemovePointClicked: mapTool.removePoint()
+    onRemoveClicked: mapTool.removePoint()
 
     onDoneClicked: {
       if ( mapTool.hasValidGeometry() )

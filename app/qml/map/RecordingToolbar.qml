@@ -20,13 +20,13 @@ import "../components"
 Item {
     id: root
 
-    signal addClicked
-    signal releaseClicked
-    signal cancelClicked
     signal gpsSwitchClicked
     signal gpsSwithHeld
+    signal removeClicked
+    signal addClicked
+    signal releaseClicked
     signal doneClicked
-    signal removePointClicked
+    signal cancelClicked
 
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
@@ -102,7 +102,7 @@ Item {
                   return true;
                 }
 
-                onActivated: root.removePointClicked()
+                onActivated: root.removeClicked()
             }
         }
 
