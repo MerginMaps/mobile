@@ -197,7 +197,6 @@ Item {
       if ( form && typeof form.openDrawer === "function" ) {
         if ( success && i === root.activeFormIndex ) {
           form.featureLayerPair = pair
-          form.updateFeatureGeometry()
         }
         form.openDrawer()
       }
