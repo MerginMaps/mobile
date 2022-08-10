@@ -1,0 +1,6 @@
+filters:
+    - filter_type: file
+      file_format: qt
+      source_language: en
+      source_file: app/i18n/input_en.ts
+      translation_files_expression: 'app/i18n/input_<lang>.ts'
