@@ -7,7 +7,7 @@ on:
       - master
 
 jobs:
-  code_style:
+  check_translation_files:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: ubuntu-latest
     env:

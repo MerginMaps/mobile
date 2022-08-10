@@ -27,11 +27,11 @@ jobs:
       NDK_VERSION: r21
       SDK_PLATFORM: android-30
       SDK_BUILD_TOOLS: 28.0.3
-      INPUT_SDK_VERSION: android-macOS-20220422-72
+      INPUT_SDK_VERSION: android-macOS-20220810-90
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
-      CACHE_VERSION: 2
+      CACHE_VERSION: 4
 
     steps:
       - uses: actions/checkout@v2
@@ -229,19 +229,16 @@ jobs:
       - name: Calculate version code
         if: ${{ env.GIT_BRANCH }} == "master"
         env:
-          COMMIT_OFFSET: 1639 # number of commits since beginning. We use this number as offset to start counting from one
-          VERSIONS_MIN: 101005 # max VERSION_CODE number we had when we used version name in code. We iterate from this number by a number of commits
+          START_VERSION_OFFSET: 110000 # offset for build version number - due to previous builds
         run: |
             cd input-history
 
-            NUM_OF_COMMITS=`git rev-list --count HEAD`
-            echo "Number of commits: $NUM_OF_COMMITS, with offset: $((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))"
-
-            NUM_OF_COMMITS_WITH_OFFSET=$((NUM_OF_COMMITS - ${{ env.COMMIT_OFFSET }}))
-            VERSION_CODE=$((VERSIONS_MIN + NUM_OF_COMMITS_WITH_OFFSET))
+            NUM_OF_COMMITS=`git rev-list --count --all`
+            
+            VERSION_CODE=$((START_VERSION_OFFSET + NUM_OF_COMMITS))
 
             echo "CI_VERSION_CODE=${VERSION_CODE}" >> $GITHUB_ENV
-            echo "CALCULATED VERSION CODE: ${VERSION_CODE}"
+            echo "Building version: ${VERSION_CODE}"
 
       - name: Build AAB
         if: ${{ env.GIT_BRANCH }} == "master"

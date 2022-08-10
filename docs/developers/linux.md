@@ -49,8 +49,11 @@ Steps to build and run Input:
    ~/Qt/5.14.2/gcc_64/bin/qmake ../app/input.pro
    make -j4
    ```
+   
+6. PROJ
+   if you do not have proj9.0.1+ on your system, you may need to overwrite `app/android/assets/proj` with your version or PROJ `share/proj`
 
-6. Run Input
+7. Run Input
 
    ```
    LD_LIBRARY_PATH=~/Qt/5.14.2/gcc_64/lib ./Input

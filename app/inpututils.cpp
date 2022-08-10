@@ -502,7 +502,60 @@ void InputUtils::turnBluetoothOn()
 
 void InputUtils::quitApp()
 {
-  QCoreApplication::quit();
+  if ( appPlatform() == QStringLiteral( "android" ) )
+  {
+    AndroidUtils::quitApp();
+  }
+  else
+  {
+    QCoreApplication::quit();
+  }
+}
+
+QLocale InputUtils::fixLocaleCountry( QLocale applocale )
+{
+  QLocale out = applocale;
+
+  if ( applocale.language() == QLocale::English )
+  {
+    out = QLocale( QLocale::English, QLocale::AnyCountry );
+  }
+  else if ( applocale.language() == QLocale::German || applocale.language() == QLocale::LowGerman || applocale.language() == QLocale::SwissGerman )
+  {
+    out = QLocale( QLocale::German, QLocale::AnyCountry );
+  }
+  else if ( applocale.language() == QLocale::French )
+  {
+    out = QLocale( QLocale::French, QLocale::AnyCountry );
+  }
+  else if ( applocale.language() == QLocale::Italian )
+  {
+    out = QLocale( QLocale::Italian, QLocale::AnyCountry );
+  }
+  else if ( applocale.language() == QLocale::Spanish )
+  {
+    out = QLocale( QLocale::Spanish, QLocale::AnyCountry );
+  }
+  else if ( applocale.language() == QLocale::Turkish )
+  {
+    out = QLocale( QLocale::Turkish, QLocale::AnyCountry );
+  }
+  else if ( applocale.language() == QLocale::Polish )
+  {
+    out = QLocale( QLocale::Polish, QLocale::AnyCountry );
+  }
+  else if ( applocale.language() == QLocale::Slovak )
+  {
+    out = QLocale( QLocale::Slovak, QLocale::AnyCountry );
+  }
+  else if ( applocale.language() == QLocale::Croatian )
+  {
+    out = QLocale( QLocale::Croatian, QLocale::AnyCountry );
+  }
+
+  CoreUtils::log( QStringLiteral( "Locale" ), QStringLiteral( "Converting %1 locale to simple %2" ).arg( applocale.name(), out.name() ) );
+
+  return out;
 }
 
 QString InputUtils::appPlatform()

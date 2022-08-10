@@ -43,6 +43,7 @@ class TestUtilsFunctions: public QObject
     void testMapPointToGps();
     void testEquals();
     void testGeometryIcons();
+    void testFixCountryCode();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );

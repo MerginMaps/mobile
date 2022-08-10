@@ -309,6 +309,16 @@ bool AndroidUtils::isBluetoothTurnedOn()
 #endif
 }
 
+void AndroidUtils::quitApp()
+{
+#ifdef ANDROID
+  QtAndroid::androidActivity().callMethod<void>( "quitGracefully", "()V" );
+
+  // If quitGracefully failed or this device is not of specified manufacturer, let's exit via QT
+  QCoreApplication::quit();
+#endif
+}
+
 bool AndroidUtils::requestStoragePermission()
 {
 #ifdef ANDROID

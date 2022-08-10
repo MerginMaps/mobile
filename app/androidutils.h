@@ -59,6 +59,8 @@ class AndroidUtils: public QObject
     void turnBluetoothOn();
     bool isBluetoothTurnedOn();
 
+    static void quitApp();
+
     /**
       * Starts ACTION_PICK activity which opens a gallery. If an image is selected,
       * handler of the activity emits imageSelected signal.
