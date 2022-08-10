@@ -27,6 +27,7 @@ Item {
 
   property var initialGeometry
   property bool centerToGPSOnStartup: false
+  property var featureLayerPair
 
   signal canceled()
   signal done( var geometry )
@@ -72,6 +73,7 @@ Item {
 
     positionKit: __positionKit
     layer: __activeLayer.vectorLayer
+    featureLayerPair: root.featureLayerPair ? root.featureLayerPair : null
 
     initialGeometry: root.initialGeometry ? root.initialGeometry : __inputUtils.emptyGeometry()
 
@@ -245,7 +247,7 @@ Item {
     onRemoveClicked: mapTool.removePoint()
 
     onUndoClicked: {
-      // TODO: revert last change
+      mapTool.undo()
     }
 
     onDoneClicked: {

@@ -103,6 +103,8 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( int activePart READ activePart NOTIFY activePartChanged )
     Q_PROPERTY( int activeRing READ activeRing NOTIFY activeRingChanged )
 
+    Q_PROPERTY( FeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
+
   public:
 
     enum RecordingType
@@ -157,6 +159,11 @@ class RecordingMapTool : public AbstractMapTool
      * Passed point needs to be in active vector layer CRS
      */
     Q_INVOKABLE void releaseVertex( const QgsPoint &point );
+
+    /**
+     * Reverts last change from the layer undo stack.
+     */
+    Q_INVOKABLE void undo();
 
     void updateVertex( const Vertex &vertex, const QgsPoint &point );
 
@@ -220,6 +227,9 @@ class RecordingMapTool : public AbstractMapTool
     int activeRing() const;
     void setActivePartAndRing( int newActivePart, int newActiveRing );
 
+    const FeatureLayerPair &featureLayerPair() const;
+    void setFeatureLayerPair( const FeatureLayerPair &newFeatureLayerPair );
+
   signals:
     void layerChanged( QgsVectorLayer *layer );
     void centeredToGPSChanged( bool centeredToGPS );
@@ -242,6 +252,8 @@ class RecordingMapTool : public AbstractMapTool
 
     void activePartChanged( int activePart );
     void activeRingChanged( int activeRing );
+
+    void featureLayerPairChanged( const FeatureLayerPair &featureLayerPair );
 
   public slots:
     void onPositionChanged();
@@ -266,6 +278,11 @@ class RecordingMapTool : public AbstractMapTool
      * Grabs next vertex after the removal of the currently selected vertex
      */
     void grabNextVertex();
+
+    /**
+     * Ends layer editing command and puts it into layer undo stack
+     */
+    void completeEditOperation();
 
   protected:
     //! Unifies Z coordinate of the point with current layer - drops / adds it
@@ -311,6 +328,8 @@ class RecordingMapTool : public AbstractMapTool
     // in order to know where to insert the points
     int mActiveRing = 0;
     int mActivePart = 0;
+
+    FeatureLayerPair mFeatureLayerPair;
 };
 
 #endif // RECORDINGMAPTOOL_H
