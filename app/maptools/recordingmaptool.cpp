@@ -760,9 +760,6 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
     return;
   }
 
-  // start edit command
-  mFeatureLayerPair.layer()->beginEditCommand( QStringLiteral( "Moving vertex" ) );
-
   int vertexCount = mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
 
   if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
@@ -796,6 +793,8 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
 
     if ( vertexCount == 2 )
     {
+      // start edit command
+      mFeatureLayerPair.layer()->beginEditCommand( QStringLiteral( "Closing ring" ) );
       ring->close();
       emit recordedGeometryChanged( mRecordedGeometry );
 
@@ -849,6 +848,9 @@ void RecordingMapTool::updateVertex( const Vertex &vertex, const QgsPoint &point
 {
   if ( vertex.isValid() )
   {
+    // start edit command
+    mFeatureLayerPair.layer()->beginEditCommand( QStringLiteral( "Moving vertex" ) );
+
     if ( mRecordedGeometry.get()->moveVertex( vertex.vertexId(), point ) )
     {
       emit recordedGeometryChanged( mRecordedGeometry );
