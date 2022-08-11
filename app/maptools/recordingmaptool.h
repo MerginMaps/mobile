@@ -104,6 +104,7 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( int activeRing READ activeRing NOTIFY activeRingChanged )
 
     Q_PROPERTY( FeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
+    Q_PROPERTY( bool canUndo READ canUndo WRITE setCanUndo NOTIFY canUndoChanged )
 
   public:
 
@@ -230,6 +231,9 @@ class RecordingMapTool : public AbstractMapTool
     const FeatureLayerPair &featureLayerPair() const;
     void setFeatureLayerPair( const FeatureLayerPair &newFeatureLayerPair );
 
+    bool canUndo() const;
+    void setCanUndo( bool newCanUndo );
+
   signals:
     void layerChanged( QgsVectorLayer *layer );
     void centeredToGPSChanged( bool centeredToGPS );
@@ -254,6 +258,7 @@ class RecordingMapTool : public AbstractMapTool
     void activeRingChanged( int activeRing );
 
     void featureLayerPairChanged( const FeatureLayerPair &featureLayerPair );
+    void canUndoChanged( bool canUndo );
 
   public slots:
     void onPositionChanged();
@@ -330,6 +335,7 @@ class RecordingMapTool : public AbstractMapTool
     int mActivePart = 0;
 
     FeatureLayerPair mFeatureLayerPair;
+    bool mCanUndo = false;
 };
 
 #endif // RECORDINGMAPTOOL_H

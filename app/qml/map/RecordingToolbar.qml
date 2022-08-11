@@ -95,11 +95,7 @@ Item {
                 text: qsTr("Undo")
                 imageSource: InputStyle.undoIcon
 
-                enabled: {
-                  if ( !manualRecording ) return false;
-
-                  return true;
-                }
+                enabled: root.recordingMapTool.canUndo
 
                 onActivated: root.undoClicked()
             }

@@ -944,6 +944,7 @@ void RecordingMapTool::completeEditOperation()
     mFeatureLayerPair.layer()->changeGeometry( mFeatureLayerPair.feature().id(), mRecordedGeometry );
     mFeatureLayerPair.layer()->endEditCommand();
     mFeatureLayerPair.layer()->triggerRepaint();
+    setCanUndo( mFeatureLayerPair.layer()->undoStack()->canUndo() );
   }
 }
 
@@ -962,6 +963,7 @@ void RecordingMapTool::undo()
       setRecordedGeometry( mFeatureLayerPair.feature().geometry() );
     }
     mFeatureLayerPair.layer()->triggerRepaint();
+    setCanUndo( mFeatureLayerPair.layer()->undoStack()->canUndo() );
   }
 }
 
@@ -1284,4 +1286,17 @@ void RecordingMapTool::setFeatureLayerPair( const FeatureLayerPair &newFeatureLa
   mFeatureLayerPair.layer()->startEditing();
 
   emit featureLayerPairChanged( mFeatureLayerPair );
+}
+
+bool RecordingMapTool::canUndo() const
+{
+  return mCanUndo;
+}
+
+void RecordingMapTool::setCanUndo( bool newCanUndo )
+{
+  if ( mCanUndo == newCanUndo )
+    return;
+  mCanUndo = newCanUndo;
+  emit canUndoChanged( mCanUndo );
 }
