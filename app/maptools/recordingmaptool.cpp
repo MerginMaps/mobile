@@ -56,9 +56,6 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
   fixZ( pointToAdd );
 
-  // start edit command
-  mFeatureLayerPair.layer()->beginEditCommand( QStringLiteral( "Adding vertex" ) );
-
   QgsVertexId id( mActivePart, mActiveRing, 0 );
   if ( mRecordedGeometry.isEmpty() )
   {
@@ -174,9 +171,6 @@ void RecordingMapTool::addPointAtPosition( Vertex vertex, const QgsPoint &point 
 {
   if ( vertex.isValid() )
   {
-    // start edit command
-    mFeatureLayerPair.layer()->beginEditCommand( QStringLiteral( "Adding vertex" ) );
-
     if ( mRecordedGeometry.get()->insertVertex( vertex.vertexId(), point ) )
     {
       emit recordedGeometryChanged( mRecordedGeometry );
@@ -190,9 +184,6 @@ void RecordingMapTool::removePoint()
   {
     return;
   }
-
-  // start edit command
-  mFeatureLayerPair.layer()->beginEditCommand( QStringLiteral( "Removing vertex" ) );
 
   if ( mState == MapToolState::Grab )
   {
@@ -793,8 +784,6 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
 
     if ( vertexCount == 2 )
     {
-      // start edit command
-      mFeatureLayerPair.layer()->beginEditCommand( QStringLiteral( "Closing ring" ) );
       ring->close();
       emit recordedGeometryChanged( mRecordedGeometry );
 
@@ -848,9 +837,6 @@ void RecordingMapTool::updateVertex( const Vertex &vertex, const QgsPoint &point
 {
   if ( vertex.isValid() )
   {
-    // start edit command
-    mFeatureLayerPair.layer()->beginEditCommand( QStringLiteral( "Moving vertex" ) );
-
     if ( mRecordedGeometry.get()->moveVertex( vertex.vertexId(), point ) )
     {
       emit recordedGeometryChanged( mRecordedGeometry );
@@ -941,8 +927,9 @@ void RecordingMapTool::grabNextVertex()
 
 void RecordingMapTool::completeEditOperation()
 {
-  if ( mFeatureLayerPair.isValid() && mFeatureLayerPair.layer()->isEditCommandActive() )
+  if ( mFeatureLayerPair.isValid() )
   {
+    mFeatureLayerPair.layer()->beginEditCommand( QStringLiteral( "Change geometry" ) );
     mFeatureLayerPair.layer()->changeGeometry( mFeatureLayerPair.feature().id(), mRecordedGeometry );
     mFeatureLayerPair.layer()->endEditCommand();
     mFeatureLayerPair.layer()->triggerRepaint();
