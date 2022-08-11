@@ -14,13 +14,13 @@ on:
 
 env:
   QT_VERSION: 5.14.2
-  INPUT_SDK_VERSION: ios-20220422-45
+  INPUT_SDK_VERSION: ios-20220810-59
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   XC_VERSION: ${{ '13.2.1' }}
   IOS_MIN_SDK_VERSION: ${{ '14.0' }}
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 2
+  CACHE_VERSION: 4
 
 concurrency:
   group: ci-${{github.ref}}-ios
@@ -133,7 +133,7 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-${{ env.QT_VERSION }}-ios-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-QtCache-v1-${{ env.QT_VERSION }}-ios-${{ env.CACHE_VERSION }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
@@ -141,6 +141,8 @@ jobs:
           version: ${{ env.QT_VERSION }}
           target: ios
           dir: ${{ github.workspace }}
+          setup-python: 'false'
+          py7zrversion: '==0.18.1'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
       # Do this only until we move from 5.14.2!!
@@ -180,26 +182,32 @@ jobs:
             exit 1
           fi
 
-      # Parse Input-SDK version run number - it is used as middle integer in version number in CF_BUNDLE_VERSION
-      - name: Parse SDK version run number
-        uses: rishabhgupta/split-by@v1
-        id: split
+      - name: Download repo history
+        uses: actions/checkout@v2
         with:
-          string: ${{ env.INPUT_SDK_VERSION }}
-          split-by: '-'
+          path: input-history
+          fetch-depth: 0 # fetch all history
 
       - name: Create build system with qmake
         env:
-          VERSIONS_MIN: 2 # min version to start CF_BUNDLE_VERSION with, as previously we differentiated the number based on branch name
+          START_VERSION_OFFSET: 110000 # offset for build version number - due to previous builds
         run: |
           INPUT_DIR=`pwd`
 
+          # calculate CF_BUNDLE_VERSION
+          cd input-history
+          NUM_OF_COMMITS=`git rev-list --count --all`
+          cd ..
+
+          VERSION_CODE=$((START_VERSION_OFFSET + NUM_OF_COMMITS))
+          TIMESTAMP=`date "+%y.%m"`
+
+          CF_BUNDLE_VERSION=${TIMESTAMP}.${VERSION_CODE}
+
           # patch the Info.plist
           CF_BUNDLE_SHORT_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" $INPUT_DIR/app/ios/Info.plist`
-          TIMESTAMP=`date "+%y%m%d%H%M%S"`
-          CF_BUNDLE_VERSION=${VERSIONS_MIN}.${{ steps.split.outputs._2 }}.${TIMESTAMP}
 
-          echo "Building version: $CF_BUNDLE_VERSION"
+          echo "Building version: $CF_BUNDLE_SHORT_VERSION ($CF_BUNDLE_VERSION)"
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $CF_BUNDLE_VERSION" "$INPUT_DIR/app/ios/Info.plist"
 
           mkdir -p build-INPUT

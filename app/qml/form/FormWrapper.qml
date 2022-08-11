@@ -44,10 +44,6 @@ Item {
   signal createLinkedFeature( var targetLayer, var parentPair )
   signal stakeoutFeature( var feature )
 
-  function updateFeatureGeometry() {
-    formContainer.updateFeatureGeometry()
-  }
-
   function openDrawer() {
     root.panelState = "form"
   }

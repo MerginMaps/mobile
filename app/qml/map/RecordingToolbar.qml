@@ -20,13 +20,14 @@ import "../components"
 Item {
     id: root
 
-    signal addClicked
-    signal releaseClicked
-    signal cancelClicked
     signal gpsSwitchClicked
     signal gpsSwithHeld
+    signal removeClicked
+    signal addClicked
+    signal releaseClicked
     signal doneClicked
-    signal removePointClicked
+    signal cancelClicked
+    signal undoClicked
 
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
@@ -89,7 +90,24 @@ Item {
             visible: root.pointLayerSelected ? false : true
 
             MainPanelButton {
-                id: removePointButton
+                id: undoButton
+                width: root.itemSize
+                text: qsTr("Undo")
+                imageSource: InputStyle.undoIcon
+
+                enabled: root.recordingMapTool.canUndo
+
+                onActivated: root.undoClicked()
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+            height: parent.height
+            visible: root.pointLayerSelected ? false : true
+
+            MainPanelButton {
+                id: removeButton
                 width: root.itemSize
                 text: qsTr("Remove")
                 imageSource: InputStyle.minusIcon
@@ -102,7 +120,7 @@ Item {
                   return true;
                 }
 
-                onActivated: root.removePointClicked()
+                onActivated: root.removeClicked()
             }
         }
 
