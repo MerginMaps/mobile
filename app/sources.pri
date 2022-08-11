@@ -56,7 +56,6 @@ relationfeaturesmodel.cpp \
 relationreferencefeaturesmodel.cpp \
 valuerelationfeaturesmodel.cpp
 
-
 HEADERS += \
 attributes/attributecontroller.h \
 attributes/attributedata.h \
