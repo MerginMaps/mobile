@@ -316,7 +316,6 @@ class RecordingMapTool : public AbstractMapTool
     QgsGeometry mExistingVertices;
     QgsGeometry mMidPoints;
     QgsGeometry mHandles;
-    QgsGeometry mHiddenHandle;
 
     MapToolState mState = MapToolState::Record;
     InsertPolicy mInsertPolicy = InsertPolicy::End;
