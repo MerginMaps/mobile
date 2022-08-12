@@ -184,7 +184,6 @@ void TestMapTools::testSplitting()
 
 void TestMapTools::testRecording()
 {
-/*
   QSKIP( "testRecording will be enabled later; ENABLE WHEN PUSHING TO MASTER" );
   RecordingMapTool *recordTool = new RecordingMapTool();
 
@@ -219,7 +218,8 @@ void TestMapTools::testRecording()
   recordTool->setMapSettings( ms );
 
   recordTool->setCenteredToGPS( false );
-  recordTool->setLayer( flySectorLayer );
+  recordTool->setActiveLayer( flySectorLayer );
+  recordTool->setActiveFeature( QgsFeature() );
 
   QCOMPARE( recordTool->recordingType(), RecordingMapTool::Manual );
 
@@ -261,7 +261,6 @@ void TestMapTools::testRecording()
 
   delete project;
   delete recordTool;
-*/
 }
 
 void TestMapTools::testExistingVertices()
