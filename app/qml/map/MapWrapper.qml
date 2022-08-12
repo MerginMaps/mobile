@@ -782,6 +782,12 @@ Item {
         }
         else if ( root.state === "edit" )
         {
+          if ( internal.oldGeometry )
+          {
+            let pair = __inputUtils.changeFeaturePairGeometry( internal.featurePairToEdit, internal.oldGeometry )
+            internal.oldGeometry = null
+            // FIXME: commit these changes
+          }
           root.editingGeometryCanceled()
         }
         else if ( root.state === "recordInLayer" )
@@ -876,6 +882,7 @@ Item {
     property var stakeoutTarget
 
     property bool isInRecordState: root.state === "record" || root.state === "recordInLayer" || root.state === "edit"
+    property var oldGeometry = null // geometry of the feature before redraw
   }
 
   function select( featurepair ) {
@@ -907,7 +914,12 @@ Item {
     centerToPair( featurepair )
     redrawGeometryBanner.show()
 
-    internal.featurePairToEdit = featurepair
+    // save existing geometry, so we can restore it on cancel
+    internal.oldGeometry = featurepair.feature.geometry
+
+    // clear feature geometry
+    internal.featurePairToEdit = __inputUtils.changeFeaturePairGeometry( featurepair, __inputUtils.emptyGeometry() )
+
     state = "edit"
   }
 

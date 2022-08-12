@@ -476,14 +476,14 @@ void RecordingMapTool::onPositionChanged()
 
 void RecordingMapTool::prepareEditing()
 {
-  if ( mActiveLayer && mActiveFeature.isValid() )
+  if ( mActiveLayer && mActiveFeature.isValid() && !mActiveFeature.geometry().isEmpty() )
   {
     mActiveLayer->startEditing();
 
     setState( MapToolState::View );
     setRecordedGeometry( mActiveFeature.geometry() );
   }
-  else if ( !mActiveFeature.isValid() )
+  else if ( !mActiveFeature.isValid() || mActiveFeature.geometry().isEmpty() )
   {
     setRecordedGeometry( QgsGeometry() );
   }
