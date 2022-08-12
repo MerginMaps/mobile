@@ -279,7 +279,7 @@ void TestMapTools::testExistingVertices()
   QgsGeometry geometry;
 
   // polygon
-  QgsVectorLayer *polygonLayer = new QgsVectorLayer( QStringLiteral("Polygon?crs=epsg:4326"), QString(), QStringLiteral( "memory" ) );
+  QgsVectorLayer *polygonLayer = new QgsVectorLayer( QStringLiteral( "Polygon?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
   QgsPolygon *polygon = new QgsPolygon( new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) << QgsPoint( 0, 0 ) ) );
   geometry.set( polygon );
 
@@ -300,7 +300,7 @@ void TestMapTools::testExistingVertices()
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 1, 1 ) );
 
   // line
-  QgsVectorLayer *lineLayer = new QgsVectorLayer( QStringLiteral("LineString?crs=epsg:4326"), QString(), QStringLiteral( "memory" ) );
+  QgsVectorLayer *lineLayer = new QgsVectorLayer( QStringLiteral( "LineString?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) << QgsPoint( 2, 2 ) );
   geometry.set( line );
 
@@ -322,7 +322,7 @@ void TestMapTools::testExistingVertices()
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 2, 2 ) );
 
   // multipoint
-  QgsVectorLayer *pointLayer = new QgsVectorLayer( QStringLiteral("MultiPoint?crs=epsg:4326"), QString(), QStringLiteral( "memory" ) );
+  QgsVectorLayer *pointLayer = new QgsVectorLayer( QStringLiteral( "MultiPoint?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
   geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
 
   QgsFeature pointFeature;
@@ -1270,29 +1270,29 @@ void TestMapTools::testAddVertexMultiPolygonLayer()
 
 void TestMapTools::testUpdateVertex()
 {
-/*
-  //
-  // Take some initial geometry and update existing vertices position.
-  // It should work only when tool is in GRAB state
-  //
+  /*
+    //
+    // Take some initial geometry and update existing vertices position.
+    // It should work only when tool is in GRAB state
+    //
 
-  RecordingMapTool mapTool;
+    RecordingMapTool mapTool;
 
-  QgsGeometry line = QgsGeometry::fromPolyline(
-  {
-    QgsPoint( 10, 20 ),
-    QgsPoint( 20, 30 ),
-    QgsPoint( 30, 40 ),
-  } );
+    QgsGeometry line = QgsGeometry::fromPolyline(
+    {
+      QgsPoint( 10, 20 ),
+      QgsPoint( 20, 30 ),
+      QgsPoint( 30, 40 ),
+    } );
 
-  mapTool.setInitialGeometry( line );
+    mapTool.setInitialGeometry( line );
 
-  Vertex updateVertexId = Vertex( QgsVertexId( 0, 0, 1 ), QgsPoint( 20, 30 ), Vertex::Existing );
+    Vertex updateVertexId = Vertex( QgsVertexId( 0, 0, 1 ), QgsPoint( 20, 30 ), Vertex::Existing );
 
-  mapTool.updateVertex( updateVertexId, QgsPoint( 50, 50 ) );
+    mapTool.updateVertex( updateVertexId, QgsPoint( 50, 50 ) );
 
-  QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), QgsPoint( 50, 50 ) );
-*/
+    QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), QgsPoint( 50, 50 ) );
+  */
 }
 
 void TestMapTools::testRemoveVertex()
