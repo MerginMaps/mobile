@@ -275,16 +275,6 @@ void TestMapTools::testExistingVertices()
   QgsProject *project = new QgsProject();
   QVERIFY( project->read( projectTempDir + "/" + projectName ) );
 
-  //~ QgsMapLayer *polyL = project->mapLayersByName( QStringLiteral( "FlySector" ) ).at( 0 );
-  //~ QgsVectorLayer *polygonLayer = static_cast<QgsVectorLayer *>( polyL );
-  //~ QVERIFY( polygonLayer && polygonLayer->isValid() );
-  //~ QgsMapLayer *lineL = project->mapLayersByName( QStringLiteral( "Roads" ) ).at( 0 );
-  //~ QgsVectorLayer *lineLayer = static_cast<QgsVectorLayer *>( lineL );
-  //~ QVERIFY( lineLayer && lineLayer->isValid() );
-  //~ QgsMapLayer *pointL = project->mapLayersByName( QStringLiteral( "Planes" ) ).at( 0 );
-  //~ QgsVectorLayer *pointLayer = static_cast<QgsVectorLayer *>( pointL );
-  //~ QVERIFY( pointLayer && pointLayer->isValid() );
-
   RecordingMapTool *mapTool = new RecordingMapTool();
 
   // polygon
