@@ -57,6 +57,26 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
   fixZ( pointToAdd );
 
   QgsVertexId id( mActivePart, mActiveRing, 0 );
+
+  if ( !mActiveFeature.isValid() )
+  {
+    QgsAttributes attrs( mActiveLayer->fields().count() );
+    QgsExpressionContext context = mActiveLayer->createExpressionContext();
+    if ( mVariablesManager )
+    {
+      context << mVariablesManager->positionScope();
+    }
+
+    QgsGeometry geometry = InputUtils::createGeometryForLayer( mActiveLayer );
+    mActiveFeature = QgsVectorLayerUtils::createFeature( mActiveLayer, geometry, attrs.toMap(), &context );
+    mRecordedGeometry = mActiveFeature.geometry();
+
+    mActiveLayer->startEditing();
+    mActiveLayer->beginEditCommand( QStringLiteral( "Add new feature" ) );
+    mActiveLayer->addFeature( mActiveFeature );
+    mActiveLayer->endEditCommand();
+  }
+
   if ( mRecordedGeometry.isEmpty() )
   {
     mRecordedGeometry = InputUtils::createGeometryForLayer( mActiveLayer );
@@ -456,10 +476,16 @@ void RecordingMapTool::onPositionChanged()
 
 void RecordingMapTool::prepareEditing()
 {
-  if ( mActiveFeature.isValid() )
+  if ( mActiveLayer && mActiveFeature.isValid() )
   {
+    mActiveLayer->startEditing();
+
     setState( MapToolState::View );
     setRecordedGeometry( mActiveFeature.geometry() );
+  }
+  else if ( !mActiveFeature.isValid() )
+  {
+    setRecordedGeometry( QgsGeometry() );
   }
 }
 
@@ -942,15 +968,34 @@ void RecordingMapTool::undo()
   if ( mActiveLayer && mActiveLayer->undoStack() )
   {
     mActiveLayer->undoStack()->undo();
-    QgsGeometry geom = mActiveLayer->editBuffer()->changedGeometries()[ mActiveFeature.id() ];
-    if ( !geom.isEmpty() )
+
+    if ( mActiveFeature.id() < 0 )
     {
-      setRecordedGeometry( geom );
+      // new feature not commited
+      QgsGeometry geom = mActiveLayer->editBuffer()->addedFeatures()[ mActiveFeature.id() ].geometry();
+      if ( !geom.isEmpty() ) // && geom.isGeosValid() )
+      {
+        setRecordedGeometry( geom );
+      }
+      else
+      {
+        mActiveLayer->rollBack();
+        setActiveFeature( QgsFeature() );
+      }
     }
     else
     {
-      setRecordedGeometry( mActiveFeature.geometry() );
+      QgsGeometry geom = mActiveLayer->editBuffer()->changedGeometries()[ mActiveFeature.id() ];
+      if ( !geom.isEmpty() )
+      {
+        setRecordedGeometry( geom );
+      }
+      else
+      {
+        setRecordedGeometry( mActiveFeature.geometry() );
+      }
     }
+
     mActiveLayer->triggerRepaint();
     setCanUndo( mActiveLayer->undoStack()->canUndo() );
   }
@@ -1270,4 +1315,19 @@ void RecordingMapTool::setActiveFeature( const QgsFeature &newActiveFeature )
     return;
   mActiveFeature = newActiveFeature;
   emit activeFeatureChanged( mActiveFeature );
+}
+
+VariablesManager *RecordingMapTool::variablesManager() const
+{
+  return mVariablesManager;
+}
+
+void RecordingMapTool::setVariablesManager( VariablesManager *newVariablesManager )
+{
+  if ( mVariablesManager == newVariablesManager )
+    return;
+
+  mVariablesManager = newVariablesManager;
+
+  emit variablesManagerChanged( mVariablesManager );
 }
