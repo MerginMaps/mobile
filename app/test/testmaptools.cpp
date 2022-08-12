@@ -562,7 +562,6 @@ void TestMapTools::testLookForVertex()
 
 void TestMapTools::testAddVertexPointLayer()
 {
-/*
   QSKIP( "testAddVertexPointLayer will be enabled later; ENABLE WHEN PUSHING TO MASTER" );
   RecordingMapTool mapTool;
 
@@ -582,7 +581,8 @@ void TestMapTools::testAddVertexPointLayer()
 
   mapTool.setState( RecordingMapTool::Record );
 
-  mapTool.setLayer( pointLayer );
+  mapTool.setActiveLayer( pointLayer );
+  mapTool.setActiveFeature( QgsFeature() );
 
   QVector<QgsPoint> pointsToAdd =
   {
@@ -619,8 +619,8 @@ void TestMapTools::testAddVertexPointLayer()
   QVERIFY( mapTool.recordedGeometry().wkbType() == QgsWkbTypes::Point );
 
   // if maptool is in GRAB and VIEW state, no point should be added
-  mapTool.setLayer( nullptr );
-  mapTool.setLayer( pointLayer );
+  mapTool.setActiveLayer( nullptr );
+  mapTool.setActiveLayer( pointLayer );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
@@ -644,7 +644,6 @@ void TestMapTools::testAddVertexPointLayer()
   delete project;
   delete ms;
   delete pointLayer;
-*/
 }
 
 void TestMapTools::testAddVertexMultiPointLayer()
