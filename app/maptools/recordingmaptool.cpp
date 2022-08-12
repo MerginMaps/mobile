@@ -1040,17 +1040,17 @@ void RecordingMapTool::setPositionKit( PositionKit *newPositionKit )
   emit positionKitChanged( mPositionKit );
 }
 
-QgsVectorLayer *RecordingMapTool::layer() const
+QgsVectorLayer *RecordingMapTool::activeLayer() const
 {
-  return mLayer;
+  return mActiveLayer;
 }
 
-void RecordingMapTool::setLayer( QgsVectorLayer *newLayer )
+void RecordingMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
 {
-  if ( mLayer == newLayer )
+  if ( mActiveLayer == newActiveLayer )
     return;
-  mLayer = newLayer;
-  emit layerChanged( mLayer );
+  mActiveLayer = newActiveLayer;
+  emit activeLayerChanged( mActiveLayer );
 
   // we need to clear all recorded points and recalculate the geometry
   setRecordedGeometry( QgsGeometry() );

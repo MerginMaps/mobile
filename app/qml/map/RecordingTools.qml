@@ -72,7 +72,7 @@ Item {
     recordingInterval: __appSettings.lineRecordingInterval
 
     positionKit: __positionKit
-    layer: __activeLayer.vectorLayer
+    activeLayer: __activeLayer.vectorLayer
     featureLayerPair: root.featureLayerPair ? root.featureLayerPair : null
 
     initialGeometry: root.initialGeometry ? root.initialGeometry : __inputUtils.emptyGeometry()

@@ -83,7 +83,7 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( RecordingType recordingType READ recordingType WRITE setRecordingType NOTIFY recordingTypeChanged )
     Q_PROPERTY( int recordingInterval READ recordingInterval WRITE setRecordingInterval NOTIFY recordingIntervalChanged )
 
-    Q_PROPERTY( QgsVectorLayer *layer READ layer WRITE setLayer NOTIFY layerChanged )
+    Q_PROPERTY( QgsVectorLayer *activeLayer READ activeLayer WRITE setActiveLayer NOTIFY activeLayerChanged )
     Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
 
     Q_PROPERTY( QgsGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
@@ -188,8 +188,8 @@ class RecordingMapTool : public AbstractMapTool
     PositionKit *positionKit() const;
     void setPositionKit( PositionKit *newPositionKit );
 
-    QgsVectorLayer *layer() const;
-    void setLayer( QgsVectorLayer *newLayer );
+    QgsVectorLayer *activeLayer() const;
+    void setActiveLayer( QgsVectorLayer *newActiveLayer );
 
     const QgsGeometry &recordedGeometry() const;
     void setRecordedGeometry( const QgsGeometry &newRecordedGeometry );
@@ -235,7 +235,7 @@ class RecordingMapTool : public AbstractMapTool
     void setCanUndo( bool newCanUndo );
 
   signals:
-    void layerChanged( QgsVectorLayer *layer );
+    void activeLayerChanged( QgsVectorLayer *activeLayer );
     void centeredToGPSChanged( bool centeredToGPS );
     void positionKitChanged( PositionKit *positionKit );
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
@@ -310,7 +310,7 @@ class RecordingMapTool : public AbstractMapTool
 
     QDateTime mLastTimeRecorded;
 
-    QgsVectorLayer *mLayer = nullptr; // not owned
+    QgsVectorLayer *mActiveLayer = nullptr; // not owned
     PositionKit *mPositionKit = nullptr; // not owned
 
     QgsGeometry mExistingVertices;
