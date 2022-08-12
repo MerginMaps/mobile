@@ -351,29 +351,34 @@ void TestMapTools::testExistingVertices()
 
 void TestMapTools::testMidSegmentVertices()
 {
-/*
   QString projectDir = TestUtils::testDataDir() + "/planes";
+  QString projectTempDir = QDir::tempPath() + "/" + QUuid::createUuid().toString();
   QString projectName = "quickapp_project.qgs";
+
+  // copy the test project away because we will change it
+  QVERIFY( InputUtils::cpDir( projectDir, projectTempDir ) );
+
   QgsProject *project = new QgsProject();
-  QVERIFY( project->read( projectDir + "/" + projectName ) );
-  QgsMapLayer *polyL = project->mapLayersByName( QStringLiteral( "FlySector" ) ).at( 0 );
-  QgsVectorLayer *polygonLayer = static_cast<QgsVectorLayer *>( polyL );
-  QVERIFY( polygonLayer && polygonLayer->isValid() );
-  QgsMapLayer *lineL = project->mapLayersByName( QStringLiteral( "Roads" ) ).at( 0 );
-  QgsVectorLayer *lineLayer = static_cast<QgsVectorLayer *>( lineL );
-  QVERIFY( lineLayer && lineLayer->isValid() );
-  QgsMapLayer *pointL = project->mapLayersByName( QStringLiteral( "Planes" ) ).at( 0 );
-  QgsVectorLayer *pointLayer = static_cast<QgsVectorLayer *>( pointL );
-  QVERIFY( pointLayer && pointLayer->isValid() );
+  QVERIFY( project->read( projectTempDir + "/" + projectName ) );
 
   RecordingMapTool *mapTool = new RecordingMapTool();
 
+  // polygon
+  QgsVectorLayer polygonLayer( QStringLiteral( "Polygon" ), QString(), QStringLiteral( "memory" ) );
   QgsGeometry geometry;
-
   QgsPolygon *polygon = new QgsPolygon( new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 2 ) << QgsPoint( 2, 2 ) << QgsPoint( 2, 0 ) << QgsPoint( 0, 0 ) ) );
   geometry.set( polygon );
-  mapTool->setLayer( polygonLayer );
-  mapTool->setInitialGeometry( geometry );
+
+  QgsFeature polyFeature;
+  polyFeature.setGeometry( geometry );
+  polygonLayer.dataProvider()->addFeature( polyFeature );
+  QVERIFY( polygonLayer.isValid() );
+
+  project->addMapLayer( &polygonLayer );
+
+  mapTool->setActiveLayer( &polygonLayer );
+  mapTool->setActiveFeature( polyFeature );
+
   QgsGeometry vertices = mapTool->midPoints();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
@@ -382,10 +387,21 @@ void TestMapTools::testMidSegmentVertices()
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 2, 1 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 1, 0 ) );
 
+  // line
+  QgsVectorLayer lineLayer( QStringLiteral( "LineString" ), QString(), QStringLiteral( "memory" ) );
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) );
   geometry.set( line );
-  mapTool->setLayer( lineLayer );
-  mapTool->setInitialGeometry( geometry );
+
+  QgsFeature lineFeature;
+  lineFeature.setGeometry( geometry );
+  lineLayer.dataProvider()->addFeature( lineFeature );
+  QVERIFY( lineLayer.isValid() );
+
+  project->addMapLayer( &lineLayer );
+
+  mapTool->setActiveLayer( &lineLayer );
+  mapTool->setActiveFeature( lineFeature );
+
   vertices = mapTool->midPoints();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
@@ -394,14 +410,22 @@ void TestMapTools::testMidSegmentVertices()
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 0.5, 1 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 1.5, 1 ) );
 
+  // multipoint
+  QgsVectorLayer pointLayer( QStringLiteral( "MultiPoint" ), QString(), QStringLiteral( "memory" ) );
   geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
-  mapTool->setLayer( pointLayer );
-  mapTool->setInitialGeometry( geometry );
+  QgsFeature pointFeature;
+  pointFeature.setGeometry( geometry );
+  pointLayer.dataProvider()->addFeature( pointFeature );
+  QVERIFY( pointLayer.isValid() );
+
+  project->addMapLayer( &pointLayer );
+
+  mapTool->setActiveLayer( &pointLayer );
+  mapTool->setActiveFeature( pointFeature );
   vertices = mapTool->midPoints();
   QVERIFY( vertices.constGet()->vertexCount() == 0 );
 
   delete mapTool;
-*/
 }
 
 void TestMapTools::testHandles()
