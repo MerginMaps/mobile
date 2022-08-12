@@ -735,7 +735,6 @@ void TestMapTools::testAddVertexMultiPointLayer()
 
 void TestMapTools::testAddVertexLineLayer()
 {
-/*
   QSKIP( "testAddVertexLineLayer will be enabled later; ENABLE WHEN PUSHING TO MASTER" );
   RecordingMapTool mapTool;
 
@@ -755,7 +754,8 @@ void TestMapTools::testAddVertexLineLayer()
 
   mapTool.setState( RecordingMapTool::Record );
 
-  mapTool.setLayer( lineLayer );
+  mapTool.setActiveLayer( lineLayer );
+  mapTool.setActiveFeature( QgsFeature() );
 
   //
   // ----------- Linestring layer ----------
@@ -861,7 +861,6 @@ void TestMapTools::testAddVertexLineLayer()
   delete project;
   delete ms;
   delete lineLayer;
-*/
 }
 
 void TestMapTools::testAddVertexMultiLineLayer()
