@@ -648,7 +648,6 @@ void TestMapTools::testAddVertexPointLayer()
 
 void TestMapTools::testAddVertexMultiPointLayer()
 {
-/*
   QSKIP( "testAddVertexMultiPointLayer will be enabled later; ENABLE WHEN PUSHING TO MASTER" );
   RecordingMapTool mapTool;
 
@@ -668,7 +667,8 @@ void TestMapTools::testAddVertexMultiPointLayer()
 
   mapTool.setState( RecordingMapTool::Record );
 
-  mapTool.setLayer( multiPointLayer );
+  mapTool.setActiveLayer( multiPointLayer );
+  mapTool.setActiveFeature( QgsFeature() );
 
   // ----------- MultiPoint layer ----------
   // Same as point layer, adds point only when geometry is empty
@@ -706,8 +706,8 @@ void TestMapTools::testAddVertexMultiPointLayer()
   // if maptool is in GRAB and VIEW state, no point should be added
 
   // clear recorded geometry
-  mapTool.setLayer( nullptr );
-  mapTool.setLayer( multiPointLayer );
+  mapTool.setActiveLayer( nullptr );
+  mapTool.setActiveLayer( multiPointLayer );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
@@ -731,7 +731,6 @@ void TestMapTools::testAddVertexMultiPointLayer()
   delete project;
   delete ms;
   delete multiPointLayer;
-*/
 }
 
 void TestMapTools::testAddVertexLineLayer()
