@@ -882,7 +882,7 @@ Item {
     property var stakeoutTarget
 
     property bool isInRecordState: root.state === "record" || root.state === "recordInLayer" || root.state === "edit"
-    property var oldGeometry = null // geometry of the feature before redraw
+    property var oldGeometry: null // geometry of the feature before redraw
   }
 
   function select( featurepair ) {
