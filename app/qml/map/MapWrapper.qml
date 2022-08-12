@@ -771,8 +771,6 @@ Item {
 
       map: mapCanvas
       gpsState: gpsStateGroup
-      initialGeometry: root.state === "edit" && !internal.startEditingFromScratch ? internal.featurePairToEdit.feature.geometry : null
-      featureLayerPair: root.state === "edit" && !internal.startEditingFromScratch ? internal.featurePairToEdit : null
       activeFeature: root.state === "edit" ? internal.featurePairToEdit.feature : __inputUtils.emptyFeature()
 
       centerToGPSOnStartup: root.state !== "edit"
@@ -792,7 +790,6 @@ Item {
         }
 
         root.state = "view"
-        internal.startEditingFromScratch = false
       }
 
       onDone: {
@@ -813,7 +810,6 @@ Item {
         }
 
         root.state = "view"
-        internal.startEditingFromScratch = false
       }
     }
   }
@@ -875,7 +871,6 @@ Item {
     // private properties - not accessible by other components
 
     property var featurePairToEdit // we are editing geometry of this feature layer pair
-    property bool startEditingFromScratch: false // set to true when redrawing geometry
 
     property var extentBeforeStakeout // extent that we return to once stakeout finishes
     property var stakeoutTarget
@@ -913,7 +908,6 @@ Item {
     redrawGeometryBanner.show()
 
     internal.featurePairToEdit = featurepair
-    internal.startEditingFromScratch = true
     state = "edit"
   }
 
