@@ -1140,7 +1140,6 @@ void TestMapTools::testAddVertexPolygonLayer()
 
 void TestMapTools::testAddVertexMultiPolygonLayer()
 {
-/*
   QSKIP( "testAddVertexMultiPolygonLayer will be enabled later; ENABLE WHEN PUSHING TO MASTER" );
   RecordingMapTool mapTool;
 
@@ -1159,7 +1158,8 @@ void TestMapTools::testAddVertexMultiPolygonLayer()
   QgsVectorLayer *polygonLayer = new QgsVectorLayer( "Polygon?crs=epsg:4326", "polygonlayer", "memory" );
 
   mapTool.setState( RecordingMapTool::Record );
-  mapTool.setLayer( polygonLayer );
+  mapTool.setActiveLayer( polygonLayer );
+  mapTool.setActiveFeature( QgsFeature() );
 
   //
   // ----------- Polygon layer ----------
@@ -1272,7 +1272,6 @@ void TestMapTools::testAddVertexMultiPolygonLayer()
   delete project;
   delete ms;
   delete polygonLayer;
-*/
 }
 
 void TestMapTools::testUpdateVertex()
