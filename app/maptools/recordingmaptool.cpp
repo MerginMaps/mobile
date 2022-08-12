@@ -927,7 +927,7 @@ void RecordingMapTool::grabNextVertex()
 
 void RecordingMapTool::completeEditOperation()
 {
-  if ( mFeatureLayerPair.isValid() )
+  if ( mFeatureLayerPair.isValid() && mFeatureLayerPair.layer()->isEditable() )
   {
     mFeatureLayerPair.layer()->beginEditCommand( QStringLiteral( "Change geometry" ) );
     mFeatureLayerPair.layer()->changeGeometry( mFeatureLayerPair.feature().id(), mRecordedGeometry );
