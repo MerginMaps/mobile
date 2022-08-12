@@ -1289,3 +1289,16 @@ void RecordingMapTool::setCanUndo( bool newCanUndo )
   mCanUndo = newCanUndo;
   emit canUndoChanged( mCanUndo );
 }
+
+const QgsFeature &RecordingMapTool::activeFeature() const
+{
+  return mActiveFeature;
+}
+
+void RecordingMapTool::setActiveFeature( const QgsFeature &newActiveFeature )
+{
+  if ( mActiveFeature == newActiveFeature )
+    return;
+  mActiveFeature = newActiveFeature;
+  emit activeFeatureChanged( mActiveFeature );
+}

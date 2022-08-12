@@ -773,6 +773,7 @@ Item {
       gpsState: gpsStateGroup
       initialGeometry: root.state === "edit" && !internal.startEditingFromScratch ? internal.featurePairToEdit.feature.geometry : null
       featureLayerPair: root.state === "edit" && !internal.startEditingFromScratch ? internal.featurePairToEdit : null
+      activeFeature: root.state === "edit" ? internal.featurePairToEdit.feature : __inputUtils.emptyFeature()
 
       centerToGPSOnStartup: root.state !== "edit"
 
