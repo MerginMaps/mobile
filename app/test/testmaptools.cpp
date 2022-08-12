@@ -480,14 +480,15 @@ void TestMapTools::testHandles()
 
 void TestMapTools::testLookForVertex()
 {
-/*
   QString projectDir = TestUtils::testDataDir() + "/planes";
+  QString projectTempDir = QDir::tempPath() + "/" + QUuid::createUuid().toString();
   QString projectName = "quickapp_project.qgs";
+
+  // copy the test project away because we will change it
+  QVERIFY( InputUtils::cpDir( projectDir, projectTempDir ) );
+
   QgsProject *project = new QgsProject();
-  QVERIFY( project->read( projectDir + "/" + projectName ) );
-  QgsMapLayer *lineL = project->mapLayersByName( QStringLiteral( "Roads" ) ).at( 0 );
-  QgsVectorLayer *lineLayer = static_cast<QgsVectorLayer *>( lineL );
-  QVERIFY( lineLayer && lineLayer->isValid() );
+  QVERIFY( project->read( projectTempDir + "/" + projectName ) );
 
   QgsQuickMapCanvasMap canvas;
   QgsQuickMapSettings *ms = canvas.mapSettings();
@@ -498,10 +499,19 @@ void TestMapTools::testLookForVertex()
   mapTool->setMapSettings( ms );
 
   QgsGeometry geometry;
+  QgsVectorLayer lineLayer( QStringLiteral( "LineString" ), QString(), QStringLiteral( "memory" ) );
   QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) );
   geometry.set( line );
-  mapTool->setLayer( lineLayer );
-  mapTool->setInitialGeometry( geometry );
+
+  QgsFeature lineFeature;
+  lineFeature.setGeometry( geometry );
+  lineLayer.dataProvider()->addFeature( lineFeature );
+  QVERIFY( lineLayer.isValid() );
+
+  project->addMapLayer( &lineLayer );
+
+  mapTool->setActiveLayer( &lineLayer );
+  mapTool->setActiveFeature( lineFeature );
 
   // when initial geometry set we start in View state
   QCOMPARE( mapTool->state(), RecordingMapTool::MapToolState::View );
@@ -548,7 +558,6 @@ void TestMapTools::testLookForVertex()
   mapTool->lookForVertex( screenPoint );
   QVERIFY( !mapTool->activeVertex().isValid() );
   QCOMPARE( mapTool->state(), RecordingMapTool::MapToolState::View );
-*/
 }
 
 void TestMapTools::testAddVertexPointLayer()
