@@ -865,7 +865,6 @@ void TestMapTools::testAddVertexLineLayer()
 
 void TestMapTools::testAddVertexMultiLineLayer()
 {
-/*
   QSKIP( "testAddVertexMultiLineLayer will be enabled later; ENABLE WHEN PUSHING TO MASTER" );
   RecordingMapTool mapTool;
 
@@ -884,7 +883,8 @@ void TestMapTools::testAddVertexMultiLineLayer()
   QgsVectorLayer *multiLineLayer = new QgsVectorLayer( "MultiLineString?crs=epsg:4326", "mlinelayer", "memory" );
 
   mapTool.setState( RecordingMapTool::Record );
-  mapTool.setLayer( multiLineLayer );
+  mapTool.setActiveLayer( multiLineLayer );
+  mapTool.setActiveFeature( QgsFeature() );
 
   //
   // ----------- MultiLinestring layer ----------
@@ -1002,7 +1002,6 @@ void TestMapTools::testAddVertexMultiLineLayer()
   delete project;
   delete ms;
   delete multiLineLayer;
-*/
 }
 
 void TestMapTools::testAddVertexPolygonLayer()
