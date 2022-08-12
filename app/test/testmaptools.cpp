@@ -1318,7 +1318,6 @@ void TestMapTools::testLookForVertexV2()
 
 void TestMapTools::testVerticesStructure()
 {
-/*
   //
   // mVertices array inside RecordingMapTool should have structure depending on
   // a type of geometry, as follows:
@@ -1366,15 +1365,32 @@ void TestMapTools::testVerticesStructure()
 
   RecordingMapTool mapTool;
 
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+
+  QgsQuickMapCanvasMap canvas;
+  QgsQuickMapSettings *ms = canvas.mapSettings();
+  setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
+
+  mapTool.setMapSettings( ms );
+
   //
   // point
   //
+
+  QgsVectorLayer *pointLayer = new QgsVectorLayer( QStringLiteral( "Point?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
+  project->addMapLayer( pointLayer );
 
   QgsPointXY pointdata = QgsPointXY( 10, 20 );
   QgsGeometry pointdataGEO = QgsGeometry::fromPointXY( pointdata );
   QVERIFY( pointdataGEO.wkbType() == QgsWkbTypes::Point );
 
-  mapTool.setInitialGeometry( pointdataGEO );
+  QgsFeature pointFeature;
+  pointFeature.setGeometry( pointdataGEO );
+  pointLayer->dataProvider()->addFeature( pointFeature );
+
+  mapTool.setActiveLayer( pointLayer );
+  mapTool.setActiveFeature( pointFeature );
 
   QCOMPARE( mapTool.collectedVertices().length(), 1 );
   QVERIFY( mapTool.collectedVertices().at( 0 ).type() == Vertex::Existing );
@@ -1383,6 +1399,8 @@ void TestMapTools::testVerticesStructure()
   //
   // multipoint
   //
+  QgsVectorLayer *multiPointLayer = new QgsVectorLayer( QStringLiteral( "MultiPoint?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
+  project->addMapLayer( multiPointLayer );
 
   QgsMultiPointXY multipointdata =
   {
@@ -1393,7 +1411,12 @@ void TestMapTools::testVerticesStructure()
   QgsGeometry multipointdataGEO = QgsGeometry::fromMultiPointXY( multipointdata );
   QVERIFY( multipointdataGEO.wkbType() == QgsWkbTypes::MultiPoint );
 
-  mapTool.setInitialGeometry( multipointdataGEO );
+  QgsFeature multiPointFeature;
+  multiPointFeature.setGeometry( multipointdataGEO );
+  multiPointLayer->dataProvider()->addFeature( multiPointFeature );
+
+  mapTool.setActiveLayer( multiPointLayer );
+  mapTool.setActiveFeature( multiPointFeature );
 
   const QVector<Vertex> verticesmp = mapTool.collectedVertices();
 
@@ -1410,6 +1433,8 @@ void TestMapTools::testVerticesStructure()
   //
   // linestring
   //
+  QgsVectorLayer *lineLayer = new QgsVectorLayer( QStringLiteral( "LineString?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
+  project->addMapLayer( lineLayer );
 
   QgsPolylineXY linestringdata =
   {
@@ -1420,7 +1445,12 @@ void TestMapTools::testVerticesStructure()
   QgsGeometry linestrindataGEO = QgsGeometry::fromPolylineXY( linestringdata );
   QVERIFY( linestrindataGEO.wkbType() == QgsWkbTypes::LineString );
 
-  mapTool.setInitialGeometry( linestrindataGEO );
+  QgsFeature lineFeature;
+  lineFeature.setGeometry( linestrindataGEO );
+  lineLayer->dataProvider()->addFeature( lineFeature );
+
+  mapTool.setActiveLayer( lineLayer );
+  mapTool.setActiveFeature( lineFeature );
 
   const QVector<Vertex> verticesl = mapTool.collectedVertices();
 
@@ -1442,6 +1472,8 @@ void TestMapTools::testVerticesStructure()
   //
   // multilinestring
   //
+  QgsVectorLayer *multiLineLayer = new QgsVectorLayer( QStringLiteral( "MultiLineString?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
+  project->addMapLayer( multiLineLayer );
 
   QgsMultiPolylineXY multilinestringdata =
   {
@@ -1465,7 +1497,12 @@ void TestMapTools::testVerticesStructure()
   QgsGeometry multilinestringdataGEO = QgsGeometry::fromMultiPolylineXY( multilinestringdata );
   QVERIFY( multilinestringdataGEO.wkbType() == QgsWkbTypes::MultiLineString );
 
-  mapTool.setInitialGeometry( multilinestringdataGEO );
+  QgsFeature multiLineFeature;
+  multiLineFeature.setGeometry( multilinestringdataGEO );
+  multiLineLayer->dataProvider()->addFeature( multiLineFeature );
+
+  mapTool.setActiveLayer( multiLineLayer );
+  mapTool.setActiveFeature( multiLineFeature );
 
   const QVector<Vertex> verticesml = mapTool.collectedVertices();
 
@@ -1500,6 +1537,8 @@ void TestMapTools::testVerticesStructure()
   //
   // polygon
   //
+  QgsVectorLayer *polygonLayer = new QgsVectorLayer( QStringLiteral( "Polygon?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
+  project->addMapLayer( polygonLayer );
 
   QgsPolygonXY simplepolygondata =
   {
@@ -1514,7 +1553,12 @@ void TestMapTools::testVerticesStructure()
   QgsGeometry simplepolygondataGEO = QgsGeometry::fromPolygonXY( simplepolygondata );
   QVERIFY( simplepolygondataGEO.wkbType() == QgsWkbTypes::Polygon );
 
-  mapTool.setInitialGeometry( simplepolygondataGEO );
+  QgsFeature simplepolygonFeature;
+  simplepolygonFeature.setGeometry( simplepolygondataGEO );
+  polygonLayer->dataProvider()->addFeature( simplepolygonFeature );
+
+  mapTool.setActiveLayer( polygonLayer );
+  mapTool.setActiveFeature( simplepolygonFeature );
 
   const QVector<Vertex> verticesspn = mapTool.collectedVertices();
 
@@ -1558,7 +1602,12 @@ void TestMapTools::testVerticesStructure()
   QgsGeometry polygondataGEO = QgsGeometry::fromPolygonXY( polygondata );
   QVERIFY( polygondataGEO.wkbType() == QgsWkbTypes::Polygon );
 
-  mapTool.setInitialGeometry( polygondataGEO );
+  QgsFeature polygonFeature;
+  polygonFeature.setGeometry( polygondataGEO );
+  polygonLayer->dataProvider()->addFeature( polygonFeature );
+
+  mapTool.setActiveLayer( polygonLayer );
+  mapTool.setActiveFeature( polygonFeature );
 
   const QVector<Vertex> verticespn = mapTool.collectedVertices();
 
@@ -1600,6 +1649,8 @@ void TestMapTools::testVerticesStructure()
   //
   // multipolygon with holes
   //
+  QgsVectorLayer *multiPolygonLayer = new QgsVectorLayer( QStringLiteral( "MultiPolygon?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
+  project->addMapLayer( multiPolygonLayer );
 
   QgsMultiPolygonXY multipolygonringsdata =
   {
@@ -1652,7 +1703,12 @@ void TestMapTools::testVerticesStructure()
 
   QVERIFY( multipolygonringsdataGEO.wkbType() == QgsWkbTypes::MultiPolygon );
 
-  mapTool.setInitialGeometry( multipolygonringsdataGEO );
+  QgsFeature multipolygonringsFeature;
+  multipolygonringsFeature.setGeometry( multipolygonringsdataGEO );
+  multiPolygonLayer->dataProvider()->addFeature( multipolygonringsFeature );
+
+  mapTool.setActiveLayer( multiPolygonLayer );
+  mapTool.setActiveFeature( multipolygonringsFeature );
 
   const QVector<Vertex> verticesmpr = mapTool.collectedVertices();
 
@@ -1788,7 +1844,12 @@ void TestMapTools::testVerticesStructure()
 
   QVERIFY( multipolygoninvaliddataGEO.wkbType() == QgsWkbTypes::MultiPolygon );
 
-  mapTool.setInitialGeometry( multipolygoninvaliddataGEO );
+  QgsFeature multipolygoninvalidFeature;
+  multipolygoninvalidFeature.setGeometry( multipolygoninvaliddataGEO );
+  multiPolygonLayer->dataProvider()->addFeature( multipolygoninvalidFeature );
+
+  mapTool.setActiveLayer( multiPolygonLayer );
+  mapTool.setActiveFeature( multipolygoninvalidFeature );
 
   const QVector<Vertex> verticesmpi = mapTool.collectedVertices();
 
@@ -1852,5 +1913,4 @@ void TestMapTools::testVerticesStructure()
   QCOMPARE( verticesmpi.at( 9 ).vertexId().ring, 1 );
   QCOMPARE( verticesmpi.at( 14 ).vertexId().ring, 1 );
   QCOMPARE( verticesmpi.at( 15 ).vertexId().ring, 0 );
-*/
 }
