@@ -784,9 +784,9 @@ Item {
         {
           if ( internal.oldGeometry )
           {
-            let pair = __inputUtils.changeFeaturePairGeometry( internal.featurePairToEdit, internal.oldGeometry )
+            let editedFeaturePair = __inputUtils.changeFeaturePairGeometry( internal.featurePairToEdit, internal.oldGeometry )
             internal.oldGeometry = null
-            // FIXME: commit these changes
+            root.editingGeometryFinished( editedFeaturePair )
           }
           root.editingGeometryCanceled()
         }
