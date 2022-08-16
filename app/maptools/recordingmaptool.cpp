@@ -151,6 +151,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     {
       r->addVertex( pointToAdd );
       r->close();
+      mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
       emit recordedGeometryChanged( mRecordedGeometry );
       return;
     }
@@ -184,6 +185,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     }
   }
 
+  mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
   emit recordedGeometryChanged( mRecordedGeometry );
 }
 
@@ -191,6 +193,7 @@ void RecordingMapTool::addPointAtPosition( Vertex vertex, const QgsPoint &point 
 {
   if ( vertex.isValid() )
   {
+    mActiveLayer->beginEditCommand( QStringLiteral( "Add point at position" ) );
     if ( mRecordedGeometry.get()->insertVertex( vertex.vertexId(), point ) )
     {
       emit recordedGeometryChanged( mRecordedGeometry );
@@ -328,6 +331,7 @@ void RecordingMapTool::removePoint()
       mRecordedGeometry.get()->deleteVertex( current );
     }
 
+    mActiveLayer->beginEditCommand( QStringLiteral( "Delete vertex" ) );
     emit recordedGeometryChanged( mRecordedGeometry );
 
     grabNextVertex();
@@ -861,8 +865,9 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
 
 void RecordingMapTool::updateVertex( const Vertex &vertex, const QgsPoint &point )
 {
-  if ( vertex.isValid() )
+  if ( vertex.isValid() && !InputUtils::equals( point, vertex.coordinates(), 1e-8 ) )
   {
+    mActiveLayer->beginEditCommand( QStringLiteral( "Move vertex" ) );
     if ( mRecordedGeometry.get()->moveVertex( vertex.vertexId(), point ) )
     {
       emit recordedGeometryChanged( mRecordedGeometry );
@@ -953,9 +958,8 @@ void RecordingMapTool::grabNextVertex()
 
 void RecordingMapTool::completeEditOperation()
 {
-  if ( mActiveLayer && mActiveLayer->isEditable() )
+  if ( mActiveLayer && mActiveLayer->isEditCommandActive() )
   {
-    mActiveLayer->beginEditCommand( QStringLiteral( "Change geometry" ) );
     mActiveLayer->changeGeometry( mActiveFeature.id(), mRecordedGeometry );
     mActiveLayer->endEditCommand();
     mActiveLayer->triggerRepaint();
