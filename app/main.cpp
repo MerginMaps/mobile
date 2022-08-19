@@ -517,7 +517,6 @@ int main( int argc, char *argv[] )
   {
     Q_UNUSED( successfully );
     Q_UNUSED( version );
-    Q_UNUSED( reloadNeeded );
     if ( reloadNeeded && activeProject.projectFullName() == projectFullName )
     {
       activeProject.reloadProject( activeProject.qgsProject()->homePath() );

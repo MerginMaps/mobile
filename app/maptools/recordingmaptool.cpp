@@ -36,6 +36,11 @@ RecordingMapTool::~RecordingMapTool() = default;
 
 void RecordingMapTool::addPoint( const QgsPoint &point )
 {
+  if ( !mActiveLayer )
+  {
+    return;
+  }
+
   QgsPoint pointToAdd( point );
 
   if ( mPositionKit && ( mCenteredToGPS || mRecordingType == StreamMode ) )
@@ -191,6 +196,11 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
 void RecordingMapTool::addPointAtPosition( Vertex vertex, const QgsPoint &point )
 {
+  if ( !mActiveLayer )
+  {
+    return;
+  }
+
   if ( vertex.isValid() )
   {
     mActiveLayer->beginEditCommand( QStringLiteral( "Add point at position" ) );
@@ -203,6 +213,11 @@ void RecordingMapTool::addPointAtPosition( Vertex vertex, const QgsPoint &point 
 
 void RecordingMapTool::removePoint()
 {
+  if ( !mActiveLayer )
+  {
+    return;
+  }
+
   if ( mRecordedGeometry.isEmpty() )
   {
     return;
@@ -445,6 +460,11 @@ void RecordingMapTool::fixZ( QgsPoint &point ) const
 
 void RecordingMapTool::onPositionChanged()
 {
+  if ( !mActiveLayer )
+  {
+    return;
+  }
+
   if ( mRecordingType != StreamMode )
     return;
 
@@ -696,6 +716,11 @@ void RecordingMapTool::updateVisibleItems()
 
 void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double searchRadius )
 {
+  if ( !mActiveLayer )
+  {
+    return;
+  }
+
   double minDistance = std::numeric_limits<double>::max();
   double currentDistance = 0;
   double searchDistance = pixelsToMapUnits( searchRadius );
@@ -865,6 +890,11 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
 
 void RecordingMapTool::updateVertex( const Vertex &vertex, const QgsPoint &point )
 {
+  if ( !mActiveLayer )
+  {
+    return;
+  }
+
   if ( vertex.isValid() && !InputUtils::equals( point, vertex.coordinates(), 1e-8 ) )
   {
     mActiveLayer->beginEditCommand( QStringLiteral( "Move vertex" ) );
