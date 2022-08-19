@@ -693,7 +693,28 @@ void RecordingMapTool::updateVisibleItems()
     }
     else if ( v.type() == Vertex::MidPoint )
     {
-      midPoints->addGeometry( v.coordinates().clone() );
+      // for lines show midpoint if previous or next vertex is not active
+      if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
+      {
+        Vertex prevVertex = mVertices.at( i - 1 );
+        Vertex nextVertex = mVertices.at( i + 1 );
+        if ( prevVertex != mActiveVertex && nextVertex != mActiveVertex )
+        {
+          midPoints->addGeometry( v.coordinates().clone() );
+        }
+      }
+
+      if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+      {
+        if ( mRecordedGeometry.isMultipart() )
+        {
+        }
+        else
+        {
+        }
+        midPoints->addGeometry( v.coordinates().clone() );
+      }
+
     }
     else if ( v.type() == Vertex::HandleStart )
     {
