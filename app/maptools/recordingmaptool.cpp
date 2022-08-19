@@ -704,15 +704,32 @@ void RecordingMapTool::updateVisibleItems()
         }
       }
 
+      // for polygons show midpoint if previous or next vertex is not active
       if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
       {
-        if ( mRecordedGeometry.isMultipart() )
+        Vertex prevVertex = mVertices.at( i - 1 );
+
+        // next vertex should be the either the next vertex in the sequence
+        // if this midpoint is a first or middle midpoint of the ring or
+        // it should be the first vertex of the correspoding ring is this
+        // midpoint is the last midpoint of the ring
+        Vertex nextVertex = mVertices.at( i + 1 );
+        if ( nextVertex.vertexId().part != v.vertexId().part || nextVertex.vertexId().ring != v.vertexId().ring )
         {
+          for ( int j = 0 ; j < mVertices.count(); j++ )
+          {
+            nextVertex = mVertices.at( j );
+            if ( nextVertex.vertexId().part == v.vertexId().part && nextVertex.vertexId().ring == v.vertexId().ring )
+            {
+              break;
+            }
+          }
         }
-        else
+
+        if ( prevVertex != mActiveVertex && nextVertex != mActiveVertex )
         {
+          midPoints->addGeometry( v.coordinates().clone() );
         }
-        midPoints->addGeometry( v.coordinates().clone() );
       }
 
     }
