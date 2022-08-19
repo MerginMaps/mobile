@@ -1852,7 +1852,10 @@ QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
 
     case QgsWkbTypes::MultiPolygon:
     {
+      QgsLineString *line = new QgsLineString();
+      QgsPolygon *polygon = new QgsPolygon( line );
       QgsMultiPolygon *multiPolygon = new QgsMultiPolygon();
+      multiPolygon->addGeometry( polygon );
       geometry.set( multiPolygon );
       break;
     }
