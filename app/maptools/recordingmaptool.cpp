@@ -712,42 +712,47 @@ void RecordingMapTool::updateVisibleItems()
       // for lines show midpoint if previous or next vertex is not active
       if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
       {
-        Vertex prevVertex = mVertices.at( i - 1 );
-        Vertex nextVertex = mVertices.at( i + 1 );
-        if ( prevVertex != mActiveVertex && nextVertex != mActiveVertex )
+        if ( i > 0 && i < mVertices.count() - 1 )
         {
-          midPoints->addGeometry( v.coordinates().clone() );
+          Vertex prevVertex = mVertices.at( i - 1 );
+          Vertex nextVertex = mVertices.at( i + 1 );
+          if ( prevVertex != mActiveVertex && nextVertex != mActiveVertex )
+          {
+            midPoints->addGeometry( v.coordinates().clone() );
+          }
         }
       }
 
       // for polygons show midpoint if previous or next vertex is not active
       if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
       {
-        Vertex prevVertex = mVertices.at( i - 1 );
-
-        // next vertex should be the either the next vertex in the sequence
-        // if this midpoint is a first or middle midpoint of the ring or
-        // it should be the first vertex of the correspoding ring is this
-        // midpoint is the last midpoint of the ring
-        Vertex nextVertex = mVertices.at( i + 1 );
-        if ( nextVertex.vertexId().part != v.vertexId().part || nextVertex.vertexId().ring != v.vertexId().ring )
+        if ( i > 0 && i < mVertices.count() - 1 )
         {
-          for ( int j = 0 ; j < mVertices.count(); j++ )
+          Vertex prevVertex = mVertices.at( i - 1 );
+
+          // next vertex should be the either the next vertex in the sequence
+          // if this midpoint is a first or middle midpoint of the ring or
+          // it should be the first vertex of the correspoding ring is this
+          // midpoint is the last midpoint of the ring
+          Vertex nextVertex = mVertices.at( i + 1 );
+          if ( nextVertex.vertexId().part != v.vertexId().part || nextVertex.vertexId().ring != v.vertexId().ring )
           {
-            nextVertex = mVertices.at( j );
-            if ( nextVertex.vertexId().part == v.vertexId().part && nextVertex.vertexId().ring == v.vertexId().ring )
+            for ( int j = 0 ; j < mVertices.count(); j++ )
             {
-              break;
+              nextVertex = mVertices.at( j );
+              if ( nextVertex.vertexId().part == v.vertexId().part && nextVertex.vertexId().ring == v.vertexId().ring )
+              {
+                break;
+              }
             }
           }
-        }
 
-        if ( prevVertex != mActiveVertex && nextVertex != mActiveVertex )
-        {
-          midPoints->addGeometry( v.coordinates().clone() );
+          if ( prevVertex != mActiveVertex && nextVertex != mActiveVertex )
+          {
+            midPoints->addGeometry( v.coordinates().clone() );
+          }
         }
       }
-
     }
     else if ( v.type() == Vertex::HandleStart )
     {
@@ -1110,6 +1115,10 @@ void RecordingMapTool::updateActiveVertexGeometry()
   if ( mActiveVertex.isValid() )
   {
     setActiveVertexGeometry( QgsGeometry( mActiveVertex.coordinates().clone() ) );
+  }
+  else
+  {
+    setActiveVertexGeometry( QgsGeometry() );
   }
 }
 

@@ -104,6 +104,7 @@ Item {
         Item {
             Layout.fillWidth: true
             height: parent.height
+            visible: root.pointLayerSelected ? false : true
 
             MainPanelButton {
                 id: removeButton
