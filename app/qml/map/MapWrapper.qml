@@ -771,8 +771,7 @@ Item {
 
       map: mapCanvas
       gpsState: gpsStateGroup
-      initialGeometry: root.state === "edit" && !internal.startEditingFromScratch ? internal.featurePairToEdit.feature.geometry : null
-      featureLayerPair: root.state === "edit" && !internal.startEditingFromScratch ? internal.featurePairToEdit : null
+      activeFeature: root.state === "edit" ? internal.featurePairToEdit.feature : __inputUtils.emptyFeature()
 
       centerToGPSOnStartup: root.state !== "edit"
 
@@ -783,6 +782,12 @@ Item {
         }
         else if ( root.state === "edit" )
         {
+          if ( internal.oldGeometry )
+          {
+            let editedFeaturePair = __inputUtils.changeFeaturePairGeometry( internal.featurePairToEdit, internal.oldGeometry )
+            internal.oldGeometry = null
+            root.editingGeometryFinished( editedFeaturePair )
+          }
           root.editingGeometryCanceled()
         }
         else if ( root.state === "recordInLayer" )
@@ -791,7 +796,6 @@ Item {
         }
 
         root.state = "view"
-        internal.startEditingFromScratch = false
       }
 
       onDone: {
@@ -812,7 +816,6 @@ Item {
         }
 
         root.state = "view"
-        internal.startEditingFromScratch = false
       }
     }
   }
@@ -874,12 +877,12 @@ Item {
     // private properties - not accessible by other components
 
     property var featurePairToEdit // we are editing geometry of this feature layer pair
-    property bool startEditingFromScratch: false // set to true when redrawing geometry
 
     property var extentBeforeStakeout // extent that we return to once stakeout finishes
     property var stakeoutTarget
 
     property bool isInRecordState: root.state === "record" || root.state === "recordInLayer" || root.state === "edit"
+    property var oldGeometry: null // geometry of the feature before redraw
   }
 
   function select( featurepair ) {
@@ -911,8 +914,12 @@ Item {
     centerToPair( featurepair )
     redrawGeometryBanner.show()
 
-    internal.featurePairToEdit = featurepair
-    internal.startEditingFromScratch = true
+    // save existing geometry, so we can restore it on cancel
+    internal.oldGeometry = featurepair.feature.geometry
+
+    // clear feature geometry
+    internal.featurePairToEdit = __inputUtils.changeFeaturePairGeometry( featurepair, __inputUtils.emptyGeometry() )
+
     state = "edit"
   }
 

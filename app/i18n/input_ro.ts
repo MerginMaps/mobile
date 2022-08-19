@@ -1,10 +1,10 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="es_ES">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ro">
 <context>
     <name>AboutPanel</name>
     <message>
         <location filename="../qml/AboutPanel.qml" line="122"/>
         <source>Developed by</source>
-        <translation>Desarrollado por</translation>
+        <translation>Dezvoltat de</translation>
     </message>
 </context>
 <context>
@@ -12,87 +12,87 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="170"/>
         <source>Your subscription was cancelled on %1</source>
-        <translation>Tu suscripción fue anulada el %1</translation>
+        <translation>Abonamentul dumnevoastră a fost încheiat pe data de %1</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="51"/>
         <source>My Account</source>
-        <translation>Mi cuenta</translation>
+        <translation>Contul meu</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="139"/>
         <source>Your subscription will not auto-renew after %1</source>
-        <translation>Tu suscripción no se renovará automáticamente después del %1</translation>
+        <translation>Abonamentul dumnevoastră nu se va reînoi automat după data de %1</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="149"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
-        <translation>Por favor, actualiza tus %1datos de facturación%2 lo antes posible</translation>
+        <translation>Vă rog actualizațivă %1informațiile de plată%2 cât mai curând</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="160"/>
         <source>Your next bill will be for %1 on %2</source>
-        <translation>Recibirás tu próxima factura por el total de %1 el %2</translation>
+        <translation>Următoarea plată va fi %1 pe data de %2</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="195"/>
         <source>Using %1 / %2</source>
-        <translation>%1 / %2 usado</translation>
+        <translation>Utilizați %1 / %2</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="213"/>
         <source>Manage Subscription</source>
-        <translation>Gestionar suscripción</translation>
+        <translation>Administrați Abonamentul</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="213"/>
         <source>Working...</source>
-        <translation>Trabajando...</translation>
+        <translation>Procesează...</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="213"/>
         <source>Subscription plans</source>
-        <translation>Planes de suscripción</translation>
+        <translation>Planuri de abonamente</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="249"/>
         <source>You can also %1restore%2 your purchases</source>
-        <translation>Puedes %1restaurar%2 tus compras</translation>
+        <translation>Puteți, de asemenea, să vă %1restaurați%2 achizițiile anterioare</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="278"/>
         <source>Sign out</source>
-        <translation>Cerrar sesión</translation>
+        <translation>Deconectare</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="301"/>
         <source>Delete account</source>
-        <translation>Eliminar cuenta</translation>
+        <translation>Șterge cont</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="332"/>
         <source>Delete account?</source>
-        <translation>¿Desea eliminar esta cuenta?</translation>
+        <translation>Vrei să îți stergi contul?</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="338"/>
         <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
 
 In order to delete your account, enter your username in the field below and click Yes.</source>
-        <translation>Esta acción eliminará su cuenta de Mergin Maps con todos sus proyectos, tanto en el dispositivo como en el servidor. Esta acción no se puede deshacer. Si tiene una suscripción de Apple, debe cancelarla manualmente.
+        <translation>Această acțiune va șterge contul dumnevoastră de Mergin Maps și toate proiectele existente, atât pe dispozitiv cât și pe server. Acestă acțiune este ireversibilă. Dacă aveți un abonament Apple, trebuie să îl anulați manual
 
-Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuación y haga clic en Sí.</translation>
+Pentru a vă șterge contul, introduceți numele de utilizator în câmpul de mai jos și apăsați pe Da.</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="347"/>
         <source>Enter username</source>
-        <translation>Introduzca su nombre de usuario</translation>
+        <translation>Introduceți numele de utilizator</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="384"/>
         <location filename="../qml/AccountPage.qml" line="419"/>
         <source>Failed to remove account</source>
-        <translation>No se pudo eliminar la cuenta</translation>
+        <translation> Nu s-a putut elimina contul</translation>
     </message>
 </context>
 <context>
@@ -100,12 +100,12 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../qml/map/ActiveLayerPanel.qml" line="51"/>
         <source>Choose Active Layer</source>
-        <translation>Seleccionar capa activa</translation>
+        <translation>Alegeți un Strat Activ</translation>
     </message>
     <message>
         <location filename="../qml/map/ActiveLayerPanel.qml" line="63"/>
         <source>Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.</source>
-        <translation>No se ha encontrado ninguna capa editable en el proyecto. Ver %1cómo activar la digitalización en tu proyecto%2</translation>
+        <translation>Nu s-au putut găsi straturi editabile în proiect. Vezi %1cum să activezi digitizarea în proiect%2</translation>
     </message>
 </context>
 <context>
@@ -113,27 +113,27 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="32"/>
         <source>Connect to bluetooth device</source>
-        <translation>Conectar al dispositivo bluetooth</translation>
+        <translation> Conectați-vă la dispozitivul bluetooth</translation>
     </message>
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="86"/>
         <source>You need to enable Bluetooth in order to connect new GPS receiver</source>
-        <translation>Es necesario habilitar el Bluetooth para conectar un nuevo receptor GPS</translation>
+        <translation>Trebuie să activați funcția Bluetooth pentru a conecta un nou reciever GPS</translation>
     </message>
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="117"/>
         <source>Unknown device</source>
-        <translation>Dispositivo desconocido</translation>
+        <translation>Dispozitiv necunoscut</translation>
     </message>
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="209"/>
         <source>Looking for more devices</source>
-        <translation>Buscando más dispositivos</translation>
+        <translation>Căută mai multe dispozitive</translation>
     </message>
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="209"/>
         <source>Looking for devices</source>
-        <translation>Buscando dispositivos</translation>
+        <translation>Caută dispozitive</translation>
     </message>
 </context>
 <context>
@@ -141,27 +141,27 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../androidutils.cpp" line="233"/>
         <source>Without storage permission you will not be able to access previous projects</source>
-        <translation>Sin permiso de almacenamiento no se prodrá acceder a proyectos anteriores</translation>
+        <translation>Fără permisiunea de stocare nu veți putea accesa proiecte anterioare</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="331"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
-        <translation>El permiso de almacenamiento está denegado permanentemente, por favor permítalo en ajustes para cargar imágenes de la galería</translation>
+        <translation>Permisiunea de stocare este blocată permanent, vă rugăm să o activați din setări pentru a încărca imagini</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="335"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
-        <translation>Input necesita permiso de almacenamiento para cargar imágenes de la galería</translation>
+        <translation>Input are nevoie de permisiunea de stocare pentru a încărca imagini din galerie</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="353"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
-        <translation>Permiso de la cámara denegado permanentemente, habilítelo en configuración</translation>
+        <translation>Permisiunea de utilizare a camerei foto este blocată, vă rugăm să o activați din setări</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="357"/>
         <source>We need a camera permission in order to take a photo</source>
-        <translation>Necesitamos permiso de la cámara para poder tomar fotos</translation>
+        <translation>Avem nevoie de permisiunea camerie foto pentru a face o fotografie</translation>
     </message>
 </context>
 <context>
@@ -169,7 +169,7 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../qml/misc/AttentionBanner.qml" line="26"/>
         <source>Your attention is required. Please visit the %1Mergin dashboard%2.</source>
-        <translation>Se requiere su atención. Por favor visite el %1Panel de Mergin%2.</translation>
+        <translation>Atenție! Vizitați tabloul de bord %1Mergin%2.</translation>
     </message>
 </context>
 <context>
@@ -177,43 +177,43 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="518"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
-        <translation>Expresión de valor predeterminado para %1:%2 tiene un error del analizador: %3</translation>
+        <translation> Expresia valorii implicite pentru% 1:% 2 are o eroare de parser:% 3</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="528"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
-        <translation>Expresión de valor predeterminado para %1:%2 tiene un error de evaluación: %3</translation>
+        <translation>Expresia valorii implicite pentru %1:%2 are o eroare de evaluare:% 3</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="539"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
-        <translation>El valor &quot;%1&quot; %4 no se ha podido convertir en un valor compatible para el campo %2(%3)</translation>
+        <translation>Valoarea „% 1”% 4 nu a putut fi convertită la o valoare compatibilă pentru câmpul% 2(% 3).</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="792"/>
         <source>Cannot delete feature</source>
-        <translation>No se puede eliminar el objeto</translation>
+        <translation>Elementul nu a putut fi șters</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="480"/>
         <location filename="../attributes/attributecontroller.cpp" line="816"/>
         <source>Feature could not be added</source>
-        <translation>No se ha podido añadir el objeto</translation>
+        <translation>Elementul nu a putut fi adăugat</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="854"/>
         <source>Cannot update feature</source>
-        <translation>No se puede actualizar el objeto</translation>
+        <translation>Elementul nu a putut fi actualizat</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="868"/>
         <source>Feature %1 could not be fetched after commit</source>
-        <translation>Objeto %1 no se ha podido cargar después de guardar</translation>
+        <translation>Elementul %1 nu a putut fi preluat după commit</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="890"/>
         <source>Cannot start editing</source>
-        <translation>No se puede iniciar la edición</translation>
+        <translation>Nu se poate porni editarea</translation>
     </message>
 </context>
 <context>
@@ -221,22 +221,22 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../qml/AuthPanel.qml" line="80"/>
         <source>Login</source>
-        <translation>Iniciar sesión</translation>
+        <translation>Autentificare</translation>
     </message>
     <message>
         <location filename="../qml/AuthPanel.qml" line="80"/>
         <source>Register</source>
-        <translation>Registrarse</translation>
+        <translation>Înregistrare</translation>
     </message>
     <message>
         <location filename="../qml/AuthPanel.qml" line="130"/>
         <source>Please update Input to use the latest Mergin features.</source>
-        <translation>Para usar las últimas herramientas de Mergin, por favor actualiza Input </translation>
+        <translation>Vă rugăm să actualizați aplicația Input pentru a utiliza cele mai recente funcții Mergin.</translation>
     </message>
     <message>
         <location filename="../qml/AuthPanel.qml" line="134"/>
         <source>Mergin is currently unavailable - please try again later.</source>
-        <translation>Actualmente, Mergin no está disponible - por favor, inténtalo de nuevo más tarde</translation>
+        <translation>Aplicația Mergin este momentan indisponibilă - Încercați din nou mai târziu.</translation>
     </message>
 </context>
 <context>
@@ -244,7 +244,7 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../qml/Banner.qml" line="36"/>
         <source>Learn more</source>
-        <translation>Aprende más</translation>
+        <translation>Află mai multe</translation>
     </message>
 </context>
 <context>
@@ -252,39 +252,39 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../qml/components/BluetoothConnectionDialog.qml" line="23"/>
         <source>Connecting to</source>
-        <translation>Conectando a</translation>
+        <translation>Se conctează la</translation>
     </message>
     <message>
         <location filename="../qml/components/BluetoothConnectionDialog.qml" line="27"/>
         <source>Connected</source>
-        <translation>Conectado</translation>
+        <translation>Conectat</translation>
     </message>
     <message>
         <location filename="../qml/components/BluetoothConnectionDialog.qml" line="32"/>
         <source>Failed to connect to</source>
-        <translation>No se pudo conectar a</translation>
+        <translation>Conectare eșuată la</translation>
     </message>
     <message>
         <location filename="../qml/components/BluetoothConnectionDialog.qml" line="39"/>
         <source>You might be asked to pair your device during this process.</source>
-        <translation>Es posible que se le solicite emparejar su dispositivo durante este proceso.</translation>
+        <translation>Este posibil să vi se solicite asocierea dispozitivului în timpul acestui proces.</translation>
     </message>
     <message>
         <location filename="../qml/components/BluetoothConnectionDialog.qml" line="48"/>
         <source>You can close this message, we will try to repeatedly connect to your device.%1 If you need more help, %2click here%3</source>
-        <translation>Puede cerrar este mensaje, intentaremos conectar repetidamente a su dispositivo.%1 Si necesita más ayuda, %2pulse aquí%3</translation>
+        <translation>Puteți închide acest mesaj, vom încerca să conectarea în mod repetat la dispozitivul dvs.%1 Dacă aveți nevoie de mai mult ajutor, %2apăsați aici%3</translation>
     </message>
     <message>
         <location filename="../qml/components/BluetoothConnectionDialog.qml" line="56"/>
         <source>We were not able to connect to the specified device.
         Please make sure your device is powered on and can be connected to.%1 %2Learn more here%3.</source>
-        <translation>No se pudo conectar al dispositivo especificado.
-Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %2Saber más%3.</translation>
+        <translation>Nu am putut să ne conectăm la dispozitivul specificat.
+        Asigurați-vă că dispozitivul este pornit și poate fi conectat la.%1 %2Citește mai multe aici%3.</translation>
     </message>
     <message>
         <location filename="../qml/components/BluetoothConnectionDialog.qml" line="288"/>
         <source>Close</source>
-        <translation>Cerrar</translation>
+        <translation>Închide</translation>
     </message>
 </context>
 <context>
@@ -293,34 +293,34 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
         <location filename="../position/bluetoothpositionprovider.cpp" line="43"/>
         <location filename="../position/bluetoothpositionprovider.cpp" line="164"/>
         <source>No connection</source>
-        <translation>Sin conexión</translation>
+        <translation>Fără conexiune</translation>
     </message>
     <message>
         <location filename="../position/bluetoothpositionprovider.cpp" line="84"/>
         <source>Reconnecting</source>
-        <translation>Reconectando</translation>
+        <translation>Reconectare</translation>
     </message>
     <message>
         <location filename="../position/bluetoothpositionprovider.cpp" line="116"/>
         <location filename="../position/bluetoothpositionprovider.cpp" line="124"/>
         <source>No connection, reconnecting in (%1)</source>
-        <translation>Sin conexión, reconectando en (%1)</translation>
+        <translation>Fără conexiune, reconectare în (%1)</translation>
     </message>
     <message>
         <location filename="../position/bluetoothpositionprovider.cpp" line="141"/>
         <source>Could not connect to device, not paired</source>
-        <translation>No se pudo conectar al dispositivo, no emparejado.</translation>
+        <translation>Nu s-a putut conecta la dispozitiv, nu s-a asociat</translation>
     </message>
     <message>
         <location filename="../position/bluetoothpositionprovider.cpp" line="156"/>
         <source>Connecting to %1</source>
-        <translation>Conectando a %1</translation>
+        <translation>Conectare la %1</translation>
     </message>
     <message>
         <location filename="../position/bluetoothpositionprovider.cpp" line="160"/>
         <location filename="../position/bluetoothpositionprovider.cpp" line="178"/>
         <source>Connected</source>
-        <translation>Conectado</translation>
+        <translation>Conectat</translation>
     </message>
 </context>
 <context>
@@ -328,12 +328,12 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/BrowseDataLayersPanel.qml" line="32"/>
         <source>Layers</source>
-        <translation>Capas</translation>
+        <translation>Straturi</translation>
     </message>
     <message>
         <location filename="../qml/BrowseDataLayersPanel.qml" line="47"/>
         <source>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</source>
-        <translation>Ninguna capa ha sido configurada para permitir explorar sus entidades. Ver %1cómo modificar tu proyecto%2.</translation>
+        <translation>Nu au fost configurate straturile pentru a permite căutarea elementelor. Vezi %1cum să-ți modifici proiectul%2.</translation>
     </message>
 </context>
 <context>
@@ -341,7 +341,7 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/CodeReader.qml" line="64"/>
         <source>Scan code</source>
-        <translation>Escanear código</translation>
+        <translation>Cod de scanare</translation>
     </message>
 </context>
 <context>
@@ -349,7 +349,7 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/components/DateTimePicker.qml" line="108"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Anulați</translation>
     </message>
     <message>
         <location filename="../qml/components/DateTimePicker.qml" line="203"/>
@@ -362,37 +362,37 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="35"/>
         <source>Could not create directory %1.</source>
-        <translation>No se pudo crear el directorio %1.</translation>
+        <translation>Nu s-a putut crea directorul %1</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="128"/>
         <source>Failed to copy image file to %1.</source>
-        <translation>Error al copiar el archivo de imagen a %1.</translation>
+        <translation>Nu s-a putut copia imaginea la %1.</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="201"/>
         <source>Open Image</source>
-        <translation>Abrir imagen</translation>
+        <translation>Deschide imaginea</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="203"/>
         <source>Image files (*.gif *.png *.jpg)</source>
-        <translation>Archivos de imagen (*.gif *.png *.jpg) </translation>
+        <translation>Imagini (*.gif *.png *.jpg)</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="215"/>
         <source>Remove photo reference</source>
-        <translation>Eliminar referencia de la foto</translation>
+        <translation>Elimină referința foto</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="216"/>
         <source>Also permanently delete photo from device?</source>
-        <translation>¿Eliminar permanentemente la foto también del dispositivo?</translation>
+        <translation>De asemenea, ștergeți permanent imaginea de pe dispozitiv?</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="238"/>
         <source>Failed to copy image</source>
-        <translation>No se pudo copiar la imagen</translation>
+        <translation>Nu s-a putut copia imaginea</translation>
     </message>
 </context>
 <context>
@@ -400,12 +400,12 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="155"/>
         <source>Can not save the form, there are validation errors</source>
-        <translation>No se puede guardar el formulario, hay errores de validación</translation>
+        <translation>Nu se poate salva formularul, există erori de validare</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="156"/>
         <source>Feature could not be saved, please check all required fields</source>
-        <translation>El objeto no se ha podido guardar, por favor compruebe todos los campos requeridos.</translation>
+        <translation>Caracteristica nu a putut fi salvată, verificați toate câmpurile necesare</translation>
     </message>
 </context>
 <context>
@@ -413,47 +413,47 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
         <source>Edit Feature</source>
-        <translation>Editar Objeto</translation>
+        <translation>Editare element</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
         <source>Feature</source>
-        <translation>Objeto</translation>
+        <translation>Element</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="93"/>
         <source>Save</source>
-        <translation>Guardar</translation>
+        <translation>Salvează</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
         <source>Delete feature</source>
-        <translation>Borrar objeto</translation>
+        <translation>Șterge element</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="200"/>
         <source>Are you sure you want to delete this feature?</source>
-        <translation>¿Está seguro de que quiere eliminar este objeto?</translation>
+        <translation>Sigur doriți să ștergeți acest element?</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
         <source>Unsaved changes</source>
-        <translation>Cambios no guardados</translation>
+        <translation>Modificări nesalvate</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="221"/>
         <source>Do you want to save changes?</source>
-        <translation>¿Desea guardar los cambios?</translation>
+        <translation>Doriți să salvați modificările?</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="244"/>
         <source>Saving failed</source>
-        <translation>Error al guardar</translation>
+        <translation>Salvarea a eșuat</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
-        <translation>Error al guardar los cambios. Esto no debería pasar normalmente. Por favor, reinicie la aplicación y pruebe otra vez — si eso no lo soluciona, por favor contacte con soporte.</translation>
+        <translation>Salvarea modificărilor nu a reușit. Acest lucru nu ar trebui să se întâmple în mod normal. Vă rugăm să reporniți aplicația și să încercați din nou — dacă acest lucru nu ajută, vă rugăm să ne contactați.</translation>
     </message>
 </context>
 <context>
@@ -461,23 +461,23 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/form/FeatureToolbar.qml" line="65"/>
         <source>Edit</source>
-        <translation>Editar</translation>
+        <translation>Editare</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureToolbar.qml" line="87"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation>Șterge</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureToolbar.qml" line="103"/>
         <location filename="../qml/form/FeatureToolbar.qml" line="141"/>
         <source>Edit geometry</source>
-        <translation>Editar geometría</translation>
+        <translation>Editează geometrie</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureToolbar.qml" line="120"/>
         <source>Split geometry</source>
-        <translation>Separar geometría</translation>
+        <translation>Împarte geometria</translation>
     </message>
 </context>
 <context>
@@ -485,7 +485,7 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/FeaturesListPage.qml" line="59"/>
         <source>Showing only the first %1 features</source>
-        <translation>Se muestran solo los primeros %1 objetos</translation>
+        <translation>Arată doar primul %1 element</translation>
     </message>
 </context>
 <context>
@@ -493,17 +493,17 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/FeaturesListPageToolbar.qml" line="53"/>
         <source>Add Feature</source>
-        <translation>Añadir Objeto</translation>
+        <translation>Adaugă Element</translation>
     </message>
     <message>
         <location filename="../qml/FeaturesListPageToolbar.qml" line="69"/>
         <source>Done</source>
-        <translation>Hecho</translation>
+        <translation>Gata</translation>
     </message>
     <message>
         <location filename="../qml/FeaturesListPageToolbar.qml" line="85"/>
         <source>Remove link</source>
-        <translation>Remover enlace</translation>
+        <translation>Elimină link</translation>
     </message>
 </context>
 <context>
@@ -511,18 +511,19 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../fieldsmodel.cpp" line="16"/>
         <source>Please fill a name of previous field before adding a new field.</source>
-        <translation>Por favor, rellena el campo precedente antes de añadir un nuevo campo.</translation>
+        <translation>Vă rugăm să completați numele câmpului anterior înainte de a adăuga un câmp nou.</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="20"/>
         <source>Field %1 already exists.</source>
-        <translation>Campo %1 ya existe.</translation>
+        <translation>Câmpul %1 există deja.</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="118"/>
         <source>Field %1 already exists. 
 Won&apos;t be added to the project.</source>
-        <translation>Campo %1 ya existe. No se añadirá al proyecto.</translation>
+        <translation>Câmpul %1 există deja. 
+Nu va fi adăugat la proiect.</translation>
     </message>
 </context>
 <context>
@@ -530,37 +531,37 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="67"/>
         <source>GPS info</source>
-        <translation>Información de GPS</translation>
+        <translation>Informații GPS</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="235"/>
         <source>Altitude</source>
-        <translation>Altitud</translation>
+        <translation>Altitudine</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="137"/>
         <source>Longitude</source>
-        <translation>Longitud</translation>
+        <translation>Longitudine</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="109"/>
         <source>Source</source>
-        <translation>Fuente</translation>
+        <translation>Sursă</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="110"/>
         <source>No receiver</source>
-        <translation>No hay receptor</translation>
+        <translation>Fără reciever</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="126"/>
         <source>Status</source>
-        <translation>Estado</translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="156"/>
         <source>Latitude</source>
-        <translation>Latitud</translation>
+        <translation>Latitudine</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="175"/>
@@ -575,12 +576,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="205"/>
         <source>Horizontal accuracy</source>
-        <translation>Precisión horizontal</translation>
+        <translation>Acuratețe pe orizontală</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="339"/>
         <source>Manage GPS receivers</source>
-        <translation>Gestionar receptores GPS</translation>
+        <translation>Gestionează dispozitive GPS</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="140"/>
@@ -603,17 +604,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="220"/>
         <source>Vertical accuracy</source>
-        <translation>Precisión vertical</translation>
+        <translation>Acuratețe pe verticală</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="251"/>
         <source>Fix quality</source>
-        <translation>Calidad del posicionamiento</translation>
+        <translation>Repară calitatea</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="266"/>
         <source>Satellites (in use/view)</source>
-        <translation>Satélites (en uso / vista)</translation>
+        <translation>Sateliți (în utilizare/vizualizare)</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="284"/>
@@ -623,12 +624,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="299"/>
         <source>Speed</source>
-        <translation>Velocidad</translation>
+        <translation>Viteză</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="314"/>
         <source>Last fix</source>
-        <translation>Última solución</translation>
+        <translation>Ultimul update</translation>
     </message>
 </context>
 <context>
@@ -636,12 +637,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../inputhelp.cpp" line="232"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
-        <translation>Informe enviado. %1Por favor, envíanos un e-mail a%1%2</translation>
+        <translation>Observația a fost trimisă.%1Vă rugam contactați-ne la%1%2</translation>
     </message>
     <message>
         <location filename="../inputhelp.cpp" line="237"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
-        <translation>Error al enviar el informe. %1Por favor, comprueba tu conexión de internet</translation>
+        <translation>Nu s-a putut trimite observația.%1Vă rugăm verificați-vă conexiunea la internet.</translation>
     </message>
 </context>
 <context>
@@ -649,18 +650,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../inputprojutils.cpp" line="78"/>
         <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Input.</source>
-        <translation>Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto descargado reinicia Input, por favor.</translation>
+        <translation>Lipsă grila de modificare a datelor PROJ necesară: %1. Pentru proiectul recent descărcat, reporniți Input.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="99"/>
         <source>Error creating custom PROJ operation. For newly downloaded project please restart Input.</source>
-        <translation>Error al crear operación PROJ personalizada. Para un nuevo proyecto descargado reinicia Input, por favor.</translation>
+        <translation>Eroare la crearea unei operații PROJ personalizate. Pentru proiectul recent descărcat, reporniți Input.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="109"/>
         <source>Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Input.</source>
-        <translation> 
-Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto descargado reinicia Input, por favor.</translation>
+        <translation>Lipsesc rgrilele de modificare a datelor PROJ necesare:% 1. Pentru proiectul recent descărcat, reporniți Input.</translation>
     </message>
 </context>
 <context>
@@ -668,109 +668,109 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../inpututils.cpp" line="177"/>
         <source>just now</source>
-        <translation>ahora</translation>
+        <translation>În acest moment</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="182"/>
         <source>%1 minutes ago</source>
-        <translation>Hace %1 minutos</translation>
+        <translation>Acum %1 minute</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="182"/>
         <source>%1 minute ago</source>
-        <translation>Hace %1 minuto</translation>
+        <translation>Acum %1 minut</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="187"/>
         <source>%1 hours ago</source>
-        <translation>Hace %1 horas</translation>
+        <translation>Acum %1 ore</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="187"/>
         <source>%1 hour ago</source>
-        <translation>Hace %1 hora</translation>
+        <translation>Acum %1 oră</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="191"/>
         <location filename="../inpututils.cpp" line="196"/>
         <source>%1 days ago</source>
-        <translation>Hace %1 días</translation>
+        <translation>Acum %1 zile</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="191"/>
         <location filename="../inpututils.cpp" line="196"/>
         <source>%1 day ago</source>
-        <translation>Hace %1 día</translation>
+        <translation>Acum %1 zi</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="201"/>
         <source>%1 weeks ago</source>
-        <translation>Hace %1 semanas</translation>
+        <translation>Acum %1 săptămâni</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="201"/>
         <source>%1 week ago</source>
-        <translation>Hace %1 semana</translation>
+        <translation>Acum %1 săptămână</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="206"/>
         <source>%1 months ago</source>
-        <translation>Hace %1 meses</translation>
+        <translation>Acum %1 luni</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="206"/>
         <source>%1 month ago</source>
-        <translation>Hace %1 mes</translation>
+        <translation>Acum %1 lună</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="211"/>
         <source>%1 years ago</source>
-        <translation>Hace %1 años</translation>
+        <translation>Acum %1 ani</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="211"/>
         <source>%1 year ago</source>
-        <translation>Hace %1 año</translation>
+        <translation>Acum %1 an</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1378"/>
         <source>screen resolution: %1x%2 px
 </source>
-        <translation>resolución de pantalla: %1x%2 px
+        <translation>rezoluția ecranului: %1x%2 px
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1379"/>
         <source>screen DPI: %1x%2
 </source>
-        <translation>PPP de pantalla: %1x%2
+        <translation>DPI ecran: %1x%2
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1380"/>
         <source>screen size: %1x%2 mm
 </source>
-        <translation>tamaño de pantalla %1x%2 mm
+        <translation>Dimensiunea ecranului: %1x%2 mm
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1381"/>
         <source>reported device pixel ratio: %1
 </source>
-        <translation>La relación de píxeles del dispositivo ha sido informado: %1
+        <translation>raport pixel dispozitiv specificat: %1
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1382"/>
         <source>calculated device pixel ratio: %1
 </source>
-        <translation>La relación de píxeles del dispositivo ha sido calculada: %1
+        <translation>raport dispozitiv pixel calculat: %1
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1383"/>
         <source>used dp scale: %1</source>
-        <translation>escala de dp utilizada: %1</translation>
+        <translation>scara dp folosită: %1</translation>
     </message>
 </context>
 <context>
@@ -779,7 +779,7 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
         <location filename="../position/internalpositionprovider.cpp" line="33"/>
         <location filename="../position/internalpositionprovider.cpp" line="110"/>
         <source>Connected</source>
-        <translation>Conectado</translation>
+        <translation>Conectat</translation>
     </message>
 </context>
 <context>
@@ -787,27 +787,27 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="29"/>
         <source>Insufficient space left on device</source>
-        <translation>Espacio insuficiente en el dispositivo</translation>
+        <translation>Spațiu de stocare insuficient pe dispozitiv</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="31"/>
         <source>Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue.</source>
-        <translation>El dispositivo se está quedando sin espacio, necesita %1 de espacio libre para ver sus proyectos. Elimine algunos archivos y vuelva aquí o pulse Ayuda para ver otras formas de resolver este problema.</translation>
+        <translation>Dispozitivul dumnevoastră rămâne fără spațiu de stocare, aveți nevoie de %1  spațiu liber pentru a vă vedea proiectele. Eliminați unele fișiere și reveniți sau apăsați pe butonul de ajutor pentru a vedea alte modalități de rezolvare a acestei probleme.</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="40"/>
         <source>An error occured during update</source>
-        <translation>Se ha producido un error durante la actualización</translation>
+        <translation>A intervenit o eroare în timpul actualizării</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="43"/>
         <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
-        <translation>Su dispositivo encontró un problema mientras se realizaba una actualización.  No podrá ver sus proyectos. Pulse Ayuda para ver cómo resolver este problema. </translation>
+        <translation>Dispozitivul dumnevoastră întâmpină o  problemă în timpul actualizării. Nu veți putea vizualiza proiectele. Apăsați pe butonul de ajutor pentru a vedea cum să rezolvați această problemă.</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
         <source>We are working on an important update, please do not close the application</source>
-        <translation>Estamos trabajando en un actualización importante, por favor no cierre la aplicación</translation>
+        <translation>Lucrăm la o actualizare importantă, vă rugăm să nu închideți aplicația</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="117"/>
@@ -820,17 +820,17 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/LogPanel.qml" line="52"/>
         <source>Diagnostic Log</source>
-        <translation>Registro de diagnóstico</translation>
+        <translation>Jurnal diagnostic</translation>
     </message>
     <message>
         <location filename="../qml/LogPanel.qml" line="89"/>
         <source>Sending...</source>
-        <translation>Enviando...</translation>
+        <translation>Se trimite...</translation>
     </message>
     <message>
         <location filename="../qml/LogPanel.qml" line="89"/>
         <source>Send to Developers</source>
-        <translation>Enviar a los Desarrolladores</translation>
+        <translation>Trimite Dezvoltatorilor</translation>
     </message>
 </context>
 <context>
@@ -838,27 +838,27 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/LoginForm.qml" line="70"/>
         <source>Sync projects with your desktop computer and work collaboratively with others by logging in to your %1Mergin Maps%2 account.</source>
-        <translation>Sincronice proyectos con su computadora de escritorio y trabaje en colaboración con otros iniciando sesión en su cuenta de %1Mergin Maps%2.</translation>
+        <translation>Sincronizați proiectele cu computerul desktop și lucrați colaborativ împreună cu alții conectându-vă la contul dumnevoastră de %1Mergin Maps%2.</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="113"/>
         <source>Username</source>
-        <translation>Nombre de usuario</translation>
+        <translation>Nume utilizator</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="157"/>
         <source>Sign in</source>
-        <translation>Iniciar sesión</translation>
+        <translation>Conectare</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="223"/>
         <source>Sign up for free</source>
-        <translation>Regístrate gratis</translation>
+        <translation>Înregistrați-vă gratuit</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="245"/>
         <source>Forgot password?</source>
-        <translation>¿Has olvidado tu contraseña?</translation>
+        <translation>Ați uitat parola?</translation>
     </message>
 </context>
 <context>
@@ -867,7 +867,7 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
         <location filename="../qml/MainPanel.qml" line="62"/>
         <location filename="../qml/MainPanel.qml" line="259"/>
         <source>Projects</source>
-        <translation>Proyectos</translation>
+        <translation>Proiecte</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="82"/>
@@ -879,51 +879,51 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
         <location filename="../qml/MainPanel.qml" line="117"/>
         <location filename="../qml/MainPanel.qml" line="307"/>
         <source>Record</source>
-        <translation>Registrar</translation>
+        <translation>Adaugă</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="137"/>
         <location filename="../qml/MainPanel.qml" line="326"/>
         <source>Zoom to project</source>
-        <translation>Hacer zoom al proyecto</translation>
+        <translation>Zoom pe proiect</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="155"/>
         <location filename="../qml/MainPanel.qml" line="345"/>
         <source>Local changes</source>
-        <translation>Cambios locales</translation>
+        <translation>Modificări locale</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="174"/>
         <source>Browse data</source>
-        <translation>Explorar datos</translation>
+        <translation>Caută date</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="194"/>
         <location filename="../qml/MainPanel.qml" line="383"/>
         <source>Map themes</source>
-        <translation>Temas de mapa</translation>
+        <translation>Tematici hartă</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="214"/>
         <location filename="../qml/MainPanel.qml" line="402"/>
         <source>Settings</source>
-        <translation>Configuración</translation>
+        <translation>Setări</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="231"/>
         <source>More</source>
-        <translation>Más</translation>
+        <translation>Mai multe</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="244"/>
         <source>Menu</source>
-        <translation>Menú</translation>
+        <translation>Meniu</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="364"/>
         <source>Browse features</source>
-        <translation>Explorar entidades</translation>
+        <translation>Caută elemente</translation>
     </message>
 </context>
 <context>
@@ -931,12 +931,12 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/MapThemePanel.qml" line="44"/>
         <source>Map Themes</source>
-        <translation>Temas de mapa</translation>
+        <translation>Tematici hartă</translation>
     </message>
     <message>
         <location filename="../qml/MapThemePanel.qml" line="69"/>
         <source>Project has no themes defined. See %1how to setup themes%2.</source>
-        <translation>Proyecto no tiene temas definidos. Ver %1cómo configurar temas%2.</translation>
+        <translation>Proiectul nu are nici o tematică definită. Vezi %1cum să îți setezi tematica%2.</translation>
     </message>
 </context>
 <context>
@@ -944,57 +944,57 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="925"/>
         <source>GPS currently unavailable.</source>
-        <translation>GPS no disponible actualmente.</translation>
+        <translation>GPS temporar indisponibil.</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="312"/>
         <source>Successfully synchronized</source>
-        <translation>Sincronizado correctamente</translation>
+        <translation>Sincronizare cu succes</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="326"/>
         <source>Up to date</source>
-        <translation>Actualizado</translation>
+        <translation>Actualizat la zi</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="335"/>
         <source>Somebody else is syncing, we will try again later</source>
-        <translation>Alguien más está sincronizando, lo intentaremos de nuevo más tarde</translation>
+        <translation>Altcineva se sincronizează, o să reincercăm mai târziu</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="345"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
-        <translation>There was an issue during synchronization, we will try again. Click to learn more</translation>
+        <translation>A fost o problemă în timpul sincronizării, vom încerca din nou. Apăsați pentru a afla mai multe</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="363"/>
         <source>Splitting done successfully</source>
-        <translation>División realizada con éxito</translation>
+        <translation>Separare efectuată cu succes</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="379"/>
         <source>Create line to split the selected feature</source>
-        <translation>Crear línea para dividir el objeto seleccionada</translation>
+        <translation>Desenați o linie pentru a împărți elementrul selectat</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="518"/>
         <source>Details</source>
-        <translation>Detalles</translation>
+        <translation>Detalii</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="601"/>
         <source>Connecting to %1</source>
-        <translation>Conectando a %1</translation>
+        <translation>Conectare la %1</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="615"/>
         <source>Connected, no position</source>
-        <translation>Conectado, sin posición</translation>
+        <translation>Conectat, fără poziție</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="619"/>
         <source>Unknown accuracy</source>
-        <translation>Precisión desconocida</translation>
+        <translation>Acuratețe necunoscută</translation>
     </message>
 </context>
 <context>
@@ -1002,14 +1002,14 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="18"/>
         <source>Upload project to Mergin?</source>
-        <translation>¿Subir proyecto a Mergin?</translation>
+        <translation>Încarcăm proiectul pe Mergin?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="19"/>
         <source>This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration. 
 Click &apos;Yes&apos; to upload it.</source>
-        <translation>Este proyecto actualmente no está cargado en Merging. Súbelo a Merging para activar la sincronización y la colaboración. 
-Haga clic en &apos;Sí&apos; para cargarlo.</translation>
+        <translation>În prezent, acest proiect nu este încărcat pe Mergin. Uploadți-l pe Mergin pentru a activa sincronizarea și colaborarea.
+Apăsați pe &apos;Da&apos; pentru începe încărcarea.</translation>
     </message>
 </context>
 <context>
@@ -1017,12 +1017,12 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/dialogs/MissingAuthDialog.qml" line="18"/>
         <source>Sign in to Mergin</source>
-        <translation>Iniciar sesión en Mergin</translation>
+        <translation>Contectați-vă pe Mergin</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MissingAuthDialog.qml" line="19"/>
         <source>You need to be signed in to your Mergin account in order to synchronize a project. Hit &apos;Yes&apos; to sign in.</source>
-        <translation>Debe iniciar sesión en su cuenta de Mergin para sincronizar un proyecto. Presiona &apos;Sí&apos; para iniciar sesión.</translation>
+        <translation>Trebuie să fiți conectat la contul de Mergin pentru a sincroniza un proiect. Apăsați &quot;Da&quot; pentru conectare.</translation>
     </message>
 </context>
 <context>
@@ -1030,12 +1030,12 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="16"/>
         <source>No rights to access the project</source>
-        <translation>Sin derechos de acceso al proyecto.</translation>
+        <translation>Nu aveți drepturile necesare pentru a accesa proiectul</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="17"/>
         <source>You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard.</source>
-        <translation>No se le permite sincronizar sus cambios. Póngase en contacto con el propietario del proyecto Mergin para que le asigne el permiso correcto. Si es el propietario del proyecto, inicie sesión en el panel de control de Mergin.</translation>
+        <translation>Nu aveți dreptul să sincronizați modificările. Contactați proprietarul proiectului Mergin pentru a vă atribui permisiunea corectă. Dacă sunteți proprietarul proiectului, conectați-vă la tabloul de bord Mergin.</translation>
     </message>
 </context>
 <context>
@@ -1043,7 +1043,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/components/PanelHeader.qml" line="20"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Anulați</translation>
     </message>
 </context>
 <context>
@@ -1051,7 +1051,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/components/PasswordField.qml" line="15"/>
         <source>Password</source>
-        <translation>Contraseña</translation>
+        <translation>Parolă</translation>
     </message>
 </context>
 <context>
@@ -1059,47 +1059,47 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/misc/PositionProviderPage.qml" line="60"/>
         <source>GPS receivers</source>
-        <translation>Receptores GPS</translation>
+        <translation>Receptoare GPS</translation>
     </message>
     <message>
         <location filename="../qml/misc/PositionProviderPage.qml" line="89"/>
         <source>Internal receivers</source>
-        <translation>Receptores internos</translation>
+        <translation>Receptoare interne</translation>
     </message>
     <message>
         <location filename="../qml/misc/PositionProviderPage.qml" line="89"/>
         <source>External receivers</source>
-        <translation>Receptores externos</translation>
+        <translation>Receptoare externe</translation>
     </message>
     <message>
         <location filename="../qml/misc/PositionProviderPage.qml" line="168"/>
         <source>Unknown device</source>
-        <translation>Dispositivo desconocido</translation>
+        <translation>Dispozitiv necunoscut</translation>
     </message>
     <message>
         <location filename="../qml/misc/PositionProviderPage.qml" line="268"/>
         <source>Connect new receiver</source>
-        <translation>Conectar nuevo receptor</translation>
+        <translation>Conectați noul receptor</translation>
     </message>
     <message>
         <location filename="../qml/misc/PositionProviderPage.qml" line="299"/>
         <source>Connecting to receivers via Bluetooth directly in Input is not possible on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. Input will still think it is the internal GPS of your phone/tablet.%1%2Click here to learn more.%3</source>
-        <translation>En iOS no es posible conectarse a receptores via Bluetooth directamente en Input. Es posible que su proveedor de hardware le proporcione una app que conecte con el receptor y fije la posición. Input pensará que se trata del GPS interno del móvil/tablet.%1%2Pulse aquí para saber más. %3</translation>
+        <translation>Conectarea la receptoare prin Bluetooth direct în Input nu este posibilă pe iOS. Furnizorul dvs. de hardware poate furniza o aplicație personalizată care se conectează la receptor și setează poziția. Input va considera în continuare că este vorba de GPS-ul intern al telefonului / tabletei.%1%2Apăsați aici pentru a afla mai multe.%3</translation>
     </message>
     <message>
         <location filename="../qml/misc/PositionProviderPage.qml" line="366"/>
         <source>Remove receiver</source>
-        <translation>Eliminar receptor</translation>
+        <translation>Eliminați receptorul</translation>
     </message>
     <message>
         <location filename="../qml/misc/PositionProviderPage.qml" line="367"/>
         <source>Do you want to remove receiver from the list of recent receivers?</source>
-        <translation>¿Desea eliminar el receptor de la lista de receptores recientes?</translation>
+        <translation> Doriți să eliminați receptorul din lista receptoarelor recente?</translation>
     </message>
     <message>
         <location filename="../qml/misc/PositionProviderPage.qml" line="380"/>
         <source>Internal</source>
-        <translation>Interno</translation>
+        <translation>Intern</translation>
     </message>
 </context>
 <context>
@@ -1107,22 +1107,22 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../position/positionprovidersmodel.cpp" line="25"/>
         <source>Internal</source>
-        <translation>Interno</translation>
+        <translation>Intern</translation>
     </message>
     <message>
         <location filename="../position/positionprovidersmodel.cpp" line="26"/>
         <source>GPS receiver of this device</source>
-        <translation>Receptor GPS de este dispositivo</translation>
+        <translation>Receptor GPS din acest dispozitiv</translation>
     </message>
     <message>
         <location filename="../position/positionprovidersmodel.cpp" line="115"/>
         <source> Bluetooth device</source>
-        <translation>Dispositivo Bluetooth</translation>
+        <translation>Dispozitiv bluetooth</translation>
     </message>
     <message>
         <location filename="../position/positionprovidersmodel.cpp" line="171"/>
         <source>Bluetooth device</source>
-        <translation>Dispositivo Bluetooth</translation>
+        <translation>Dispozitiv bluetooth</translation>
     </message>
 </context>
 <context>
@@ -1130,7 +1130,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/form/PreviewPanel.qml" line="158"/>
         <source>No map tip available.</source>
-        <translation>No hay información del mapa.</translation>
+        <translation>Nu este disponibil niciun sfat pentru această hartă.</translation>
     </message>
 </context>
 <context>
@@ -1138,32 +1138,32 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="95"/>
         <source>Synchronize project</source>
-        <translation>Sincronizar proyecto</translation>
+        <translation>Sincronizați proiectul</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="100"/>
         <source>Local changes</source>
-        <translation>Cambios locales</translation>
+        <translation>Modificări locale</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="105"/>
         <source>Remove from device</source>
-        <translation>Eliminar del dispositivo</translation>
+        <translation>Eliminați din dispozitiv</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="110"/>
         <source>Upload to Mergin</source>
-        <translation>Subir a Mergin</translation>
+        <translation>Încărcați pe Mergin</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="115"/>
         <source>Download from Mergin</source>
-        <translation>Descargar de Mergin</translation>
+        <translation>Descărcați din Mergin</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="248"/>
         <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
-        <translation>No se ha podido sincronizar el proyecto, por favor asegúrese que ha iniciado sesión y tiene suficientes permisos.</translation>
+        <translation>Nu s-a putut sincroniza proiectul, vă rugăm să vă asigurați că sunteți conectat și că aveți drepturile necesare.</translation>
     </message>
 </context>
 <context>
@@ -1171,17 +1171,17 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/ProjectIssuesPanel.qml" line="24"/>
         <source>The following layers failed loading</source>
-        <translation>Las siguientes capas no se cargaron</translation>
+        <translation>Aceste straturi au eșuat la încărcare</translation>
     </message>
     <message>
         <location filename="../qml/ProjectIssuesPanel.qml" line="71"/>
         <source>Project Issues</source>
-        <translation>Errores del Proyecto</translation>
+        <translation>Erorile Proiectului</translation>
     </message>
     <message>
         <location filename="../qml/ProjectIssuesPanel.qml" line="157"/>
         <source>QGIS log</source>
-        <translation>Log de QGIS</translation>
+        <translation>Jurnal QGIS</translation>
     </message>
 </context>
 <context>
@@ -1190,53 +1190,53 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
         <location filename="../qml/components/ProjectList.qml" line="134"/>
         <location filename="../qml/components/ProjectList.qml" line="189"/>
         <source>Create project</source>
-        <translation>Crear proyecto</translation>
+        <translation>Creați un proiect</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="164"/>
         <source>No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device.</source>
-        <translation>No hay proyectos descargados.%1Aprende %2cómo crear proyectos%3 y %4descargarlos%3 en tu dispositivo.</translation>
+        <translation>Nu au fost găsite proiecte descărcate.%1Aflați %2cum să creați proiecte%3 și să le %4descărcați %3 pe dispozitiv.</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="180"/>
         <source>You can also create new project by clicking button below.</source>
-        <translation>También puedes crear un nuevo proyecto pulsando el botón inferior</translation>
+        <translation>Puteți creea un proiect nou apăsând pe butonul de mai jos.</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="202"/>
         <source>Unable to get the list of projects.</source>
-        <translation>No se ha podido obtener la lista de proyectos.</translation>
+        <translation>Nu am putut încărca lista cu proiecte.</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="202"/>
         <source>No projects found!</source>
-        <translation>¡No se encontraron proyectos!</translation>
+        <translation>Nici un proiect nu a fost găsit!</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="233"/>
         <source>Retry</source>
-        <translation>Reintentar</translation>
+        <translation>Reîncercați</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="261"/>
         <source>Remove project</source>
-        <translation>Eliminar proyecto</translation>
+        <translation>Eliminați proiectul</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="262"/>
         <source>Any unsynchronized changes will be lost.</source>
-        <translation>Los cambios no sincronizados se perderán.</translation>
+        <translation>Orice modificare nesincronizată o să fie pierdută.</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="297"/>
         <source>Download project</source>
-        <translation>Descargar proyecto</translation>
+        <translation>Descărcați proiectul</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="298"/>
         <source>Would you like to download the project
  %1 ?</source>
-        <translation>Desea descargar el proyecto
+        <translation>Doriți să descărcați proiectul
 %1 ?</translation>
     </message>
 </context>
@@ -1245,7 +1245,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/ProjectLoadingScreen.qml" line="31"/>
         <source>Opening project ...</source>
-        <translation>Abriendo proyecto...</translation>
+        <translation>Se deschide proiectul...</translation>
     </message>
 </context>
 <context>
@@ -1253,37 +1253,37 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="71"/>
         <source>No Changes</source>
-        <translation>Sin cambios</translation>
+        <translation>Nici o modificare</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="171"/>
         <source>Projects</source>
-        <translation>Proyectos</translation>
+        <translation>Proiecte</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="368"/>
         <source>Home</source>
-        <translation>Inicio</translation>
+        <translation>Acasă</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="390"/>
         <source>My projects</source>
-        <translation>Mis proyectos</translation>
+        <translation>Proiectele mele</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="414"/>
         <source>Shared with me</source>
-        <translation>Compartido conmigo</translation>
+        <translation>Partajate cu mine</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="414"/>
         <source>Shared</source>
-        <translation>Compartido</translation>
+        <translation>Partajat</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="434"/>
         <source>Explore</source>
-        <translation>Explorar</translation>
+        <translation>Explorați</translation>
     </message>
 </context>
 <context>
@@ -1291,12 +1291,12 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/ProjectStatusPanel.qml" line="26"/>
         <source>No Changes</source>
-        <translation>Sin cambios</translation>
+        <translation>Nici o modificare</translation>
     </message>
     <message>
         <location filename="../qml/ProjectStatusPanel.qml" line="42"/>
         <source>Project Status</source>
-        <translation>Estado del proyecto</translation>
+        <translation>Statusul Proiectului</translation>
     </message>
 </context>
 <context>
@@ -1304,7 +1304,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../projectwizard.cpp" line="119"/>
         <source>Project %1 created</source>
-        <translation>Proyecto %1 creado</translation>
+        <translation>Proiectul %1 a fost creat</translation>
     </message>
 </context>
 <context>
@@ -1312,32 +1312,32 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="51"/>
         <source>Create Project</source>
-        <translation>Crear proyecto</translation>
+        <translation>Creați un Proiect</translation>
     </message>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="76"/>
         <source>Project name</source>
-        <translation>Nombre del proyecto</translation>
+        <translation>Numele proiectului</translation>
     </message>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="91"/>
         <source>Fields</source>
-        <translation>Campos</translation>
+        <translation>Câmpuri</translation>
     </message>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="125"/>
         <source>Add field</source>
-        <translation>Añadir campo</translation>
+        <translation>Adăugați câmp</translation>
     </message>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="166"/>
         <source>Create project</source>
-        <translation>Crear proyecto</translation>
+        <translation>Creați un Proiect</translation>
     </message>
     <message>
         <location filename="../qml/ProjectWizardPage.qml" line="172"/>
         <source>Empty project name</source>
-        <translation>Nombre del proyecto vacío</translation>
+        <translation>Numele proiectului este necompletat</translation>
     </message>
 </context>
 <context>
@@ -1346,7 +1346,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
         <location filename="../projectsmodel.cpp" line="98"/>
         <location filename="../projectsmodel.cpp" line="102"/>
         <source>Updated %1</source>
-        <translation>Actualizado %1</translation>
+        <translation>Actualizat %1</translation>
     </message>
 </context>
 <context>
@@ -1354,27 +1354,27 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../purchasing.cpp" line="520"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
-        <translation>No se ha podido tramitar el pago.%1Suscripción no comprada.</translation>
+        <translation> Nu s-au putut procesa detaliile de plată.%1 Abonamentul nu a fost achiziționat.</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="528"/>
         <source>Successfully restored your subscription</source>
-        <translation>Tu suscripción ha sido restaurada correctamente</translation>
+        <translation>Ați restabilit cu succes abonamentul</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="530"/>
         <source>Successfully purchased subscription</source>
-        <translation>Tu suscripción ha sido comprada correctamente</translation>
+        <translation>Abonament achiziționat cu succes</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="542"/>
         <source>Failed to purchase subscription</source>
-        <translation>No se ha podido comprar suscripción</translation>
+        <translation>Achiziționarea abonamentului a eșuat</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="540"/>
         <source>Unable to restore your subscription</source>
-        <translation>No se ha podido restaurar tu suscripción</translation>
+        <translation>Nu se poate restaura abonamentul</translation>
     </message>
 </context>
 <context>
@@ -1382,22 +1382,22 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../purchasing.cpp" line="120"/>
         <source>Monthly subscription</source>
-        <translation>Suscripción mensual</translation>
+        <translation>Abonament lunar</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="124"/>
         <source>Annual subscription</source>
-        <translation>Suscripción anual</translation>
+        <translation>Abonament anual</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="129"/>
         <source>month</source>
-        <translation>mes</translation>
+        <translation>lună</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="133"/>
         <source>year</source>
-        <translation>año</translation>
+        <translation>an</translation>
     </message>
 </context>
 <context>
@@ -1405,108 +1405,108 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="57"/>
         <source>Value must be a number</source>
-        <translation>El valor debe ser un número</translation>
+        <translation>Valorea trebuie să fie un număr</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="58"/>
         <source>Value must be lower than %1</source>
-        <translation>El valor debe ser menor que %1</translation>
+        <translation>Valoarea trebuie sa fie mai mică decât %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="59"/>
         <source>Value must be higher than %1</source>
-        <translation>El valor debe ser mayor que %1</translation>
+        <translation>Valoarea trebuie sa fie mai mare decât %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value is too large</source>
-        <translation>El valor es demasiado grande</translation>
+        <translation>Valoarea este prea mare</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Field can not contain decimal places</source>
-        <translation>El campo no puede contener decimales</translation>
+        <translation>Câmpul nu poate conține zecimale</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Can not be longer than %1 characters</source>
-        <translation>No puede ser más largo de %1 caracteres</translation>
+        <translation>Numărul maxim de litere este %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="65"/>
         <source>Field should not be empty</source>
-        <translation>El campo no debería estar vacío</translation>
+        <translation>Câmpul nu trebuie să fie necompletat</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="66"/>
         <source>Field must not be empty</source>
-        <translation>El campo no puede estar vacío</translation>
+        <translation>Câmpul nu poate să fie necompletat</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="67"/>
         <source>Value should be unique</source>
-        <translation>El valor debería ser único</translation>
+        <translation>Valoare ar trebui să fie unică</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Value must be unique</source>
-        <translation>El valor tiene que ser único</translation>
+        <translation>Valoare trebuie să fie unică</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="69"/>
         <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Unmet QGIS expression constraint</source>
-        <translation>Restricción de expresión de QGIS no cumplida</translation>
+        <translation>Constrângera expresiei QGIS neîndeplinită</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Not a valid value</source>
-        <translation>No es un valor valido</translation>
+        <translation>Nu este o valoare validă</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="192"/>
         <source>No data</source>
-        <translation>Sin datos</translation>
+        <translation>Nici un fel de date</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="195"/>
         <source>No fix</source>
-        <translation>Sin posicionamiento</translation>
+        <translation>Nu s-a rezolvat</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="198"/>
         <source>GPS fix, no correction data</source>
-        <translation>Posicionamiento GPS, sin datos de corrección</translation>
+        <translation>GPS rezolvat, nici o corecție de date</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="203"/>
         <source>DGPS fix</source>
-        <translation>Posicionamiento DGPS</translation>
+        <translation>DGPS rezolvat</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="206"/>
         <source>PPS fix</source>
-        <translation>Posicionamiento PPS</translation>
+        <translation>PPS rezolvat</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="209"/>
         <source>RTK fix</source>
-        <translation>Posicionamiento RTK</translation>
+        <translation>RTK rezolvat</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="212"/>
         <source>RTK float</source>
-        <translation> Float RTK</translation>
+        <translation>RTK float</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="215"/>
         <source>Estimated fix (dead reckoning)</source>
-        <translation>Posicionamiento estimado (navegación por estima)</translation>
+        <translation>Rezolvare estimată(...)</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="218"/>
         <source>Unknown fix</source>
-        <translation>Posicionamiento desconocido</translation>
+        <translation>Rezolvare necunoscută</translation>
     </message>
 </context>
 <context>
@@ -1514,7 +1514,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="175"/>
         <source>Rendering</source>
-        <translation>Representación</translation>
+        <translation>Rendering</translation>
     </message>
 </context>
 <context>
@@ -1523,7 +1523,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
         <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="244"/>
         <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="273"/>
         <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
-        <translation>Rotación del lienzo del mapa no soportada. Restableciendo de 1% a 0.</translation>
+        <translation>Rotația planului hărții nu este acceptată. Resetăm de la %1 la 0.</translation>
     </message>
 </context>
 <context>
@@ -1531,27 +1531,27 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/map/RecordingToolbar.qml" line="69"/>
         <source>GPS</source>
-        <translation>GNSS</translation>
+        <translation>GPS</translation>
     </message>
     <message>
         <location filename="../qml/map/RecordingToolbar.qml" line="92"/>
         <source>Undo</source>
-        <translation>Deshacer</translation>
+        <translation>Restaurați</translation>
     </message>
     <message>
         <location filename="../qml/map/RecordingToolbar.qml" line="107"/>
         <source>Add Point</source>
-        <translation>Adicionar punto</translation>
+        <translation>Adăugați Punct</translation>
     </message>
     <message>
         <location filename="../qml/map/RecordingToolbar.qml" line="123"/>
         <source>Done</source>
-        <translation>Hecho</translation>
+        <translation>Efectuat</translation>
     </message>
     <message>
         <location filename="../qml/map/RecordingToolbar.qml" line="137"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Anulați</translation>
     </message>
 </context>
 <context>
@@ -1559,18 +1559,18 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/map/RecordingTools.qml" line="51"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
-        <translation>Baja precisión de la posición del GNSS (%1 m) &lt;br&gt;&lt;br&gt;Por favor asegúrese que tenga una vista clara del cielo.</translation>
+        <translation>Precizie scăzută a poziției GPS (%1 m)&lt;br&gt;&lt;br&gt;Asigurați-vă că aveți o vedere clară către cer.</translation>
     </message>
     <message>
         <location filename="../qml/map/RecordingTools.qml" line="132"/>
         <location filename="../qml/map/RecordingTools.qml" line="207"/>
         <source>GPS currently unavailable.</source>
-        <translation>GNSS no disponible actualmente.</translation>
+        <translation>GPS momentan indisponibil</translation>
     </message>
     <message>
         <location filename="../qml/map/RecordingTools.qml" line="175"/>
         <source>You need to add at least %1 points.</source>
-        <translation>Se requiere adicionar  por lo menos %1 puntos.</translation>
+        <translation>Trebuie adăugate minim %1 puncte.</translation>
     </message>
 </context>
 <context>
@@ -1578,27 +1578,27 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="92"/>
         <source>Username</source>
-        <translation>Nombre de usuario</translation>
+        <translation>Nume utilizator</translation>
     </message>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="147"/>
         <source>Email</source>
-        <translation>Correo electrónico</translation>
+        <translation>Email</translation>
     </message>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="189"/>
         <source>Confirm password</source>
-        <translation>Confirma la contraseña</translation>
+        <translation>Confirmați parola</translation>
     </message>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="214"/>
         <source>I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>Acepto las %1condiciones de uso%3 y %2la política de privacidad%3 de Mergin</translation>
+        <translation>Accept %1Termenii și Condițiile%3 și %2Politica de Confidențialitate%3 Mergin</translation>
     </message>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="236"/>
         <source>Sign up</source>
-        <translation>Registrarse</translation>
+        <translation>Înregistrați-vă</translation>
     </message>
 </context>
 <context>
@@ -1606,7 +1606,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/editor/RelationPhotoFooterDelegate.qml" line="94"/>
         <source>Add</source>
-        <translation>Añadir</translation>
+        <translation>Adăugați</translation>
     </message>
 </context>
 <context>
@@ -1614,7 +1614,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/SearchBar.qml" line="72"/>
         <source>SEARCH</source>
-        <translation>BUSCAR</translation>
+        <translation>CĂUTARE</translation>
     </message>
 </context>
 <context>
@@ -1622,7 +1622,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="75"/>
         <source>Settings</source>
-        <translation>Configuración</translation>
+        <translation>Setări</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="100"/>
@@ -1632,72 +1632,72 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="108"/>
         <source>Follow GPS with map</source>
-        <translation>Seguir GPS con mapa</translation>
+        <translation>Urmăriți GPS-ul cu harta</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="127"/>
         <source>GPS accuracy</source>
-        <translation>Precisión GPS</translation>
+        <translation>Acuratețe GPS</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="182"/>
         <source>Accuracy threshold</source>
-        <translation>Umbral de precisión</translation>
+        <translation>Prag de acuratețe</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="208"/>
         <source>Show accuracy warning</source>
-        <translation>Mostrar aviso de precisión</translation>
+        <translation>Arată avertizarea de acuratețe</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="227"/>
         <source>Select GPS receiver</source>
-        <translation>Selecciona receptor GPS</translation>
+        <translation>Selectează recieverul GPS</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="239"/>
         <source>Recording</source>
-        <translation>Grabando</translation>
+        <translation>Înregistrare</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="246"/>
         <source>Line rec. interval</source>
-        <translation>Intervalo de registro de línea</translation>
+        <translation>Interval înregistrare linii</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="268"/>
         <source>Reuse last value option</source>
-        <translation>Reusar el último valor</translation>
+        <translation>Refolosiți opțiunile selectate precedent</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="287"/>
         <source>Automatically sync changes</source>
-        <translation>Sincronizar cambios automáticamente</translation>
+        <translation>Sincronizarea automată a modificărilor</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="311"/>
         <source>About</source>
-        <translation>Acerca de</translation>
+        <translation>Despre</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="320"/>
         <source>Help</source>
-        <translation>Ayuda</translation>
+        <translation>Ajutor</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="329"/>
         <source>Privacy policy</source>
-        <translation>Política de privacidad</translation>
+        <translation>Politica de confidențialitate</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="338"/>
         <source>Mergin terms of service</source>
-        <translation>Términos de servicio de Mergin</translation>
+        <translation>Termeni și condiții Mergin</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="347"/>
         <source>Diagnostic log</source>
-        <translation>Registro de diagnóstico</translation>
+        <translation>Jurnal diagnostic</translation>
     </message>
 </context>
 <context>
@@ -1705,7 +1705,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../position/simulatedpositionprovider.cpp" line="60"/>
         <source>Connected</source>
-        <translation>Conectado</translation>
+        <translation>Conectat</translation>
     </message>
 </context>
 <context>
@@ -1713,12 +1713,12 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/dialogs/SplittingFailedDialog.qml" line="16"/>
         <source>We could not split the feature</source>
-        <translation>No se puede separar el objeto</translation>
+        <translation>Nu am putut împărți elementul</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/SplittingFailedDialog.qml" line="17"/>
         <source>Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it.</source>
-        <translation>Asegúrese de que la línea divisoria cruce su objeto. La acción requiere una geometría válida para poder dividirla.</translation>
+        <translation>Vă rugăm să vă asigurați că linia divizată traversează elementul dorit. Elementul trebuie să aibă o geometrie validă pentru a o împărți.</translation>
     </message>
 </context>
 <context>
@@ -1726,22 +1726,22 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/map/SplittingToolbar.qml" line="61"/>
         <source>Undo</source>
-        <translation>Deshacer</translation>
+        <translation>Restaurați</translation>
     </message>
     <message>
         <location filename="../qml/map/SplittingToolbar.qml" line="75"/>
         <source>Add Point</source>
-        <translation>Añadir punto</translation>
+        <translation>Adăugați Punct</translation>
     </message>
     <message>
         <location filename="../qml/map/SplittingToolbar.qml" line="89"/>
         <source>Done</source>
-        <translation>Hecho</translation>
+        <translation>Efectuat</translation>
     </message>
     <message>
         <location filename="../qml/map/SplittingToolbar.qml" line="103"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Anulați</translation>
     </message>
 </context>
 <context>
@@ -1749,7 +1749,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/map/SplittingTools.qml" line="98"/>
         <source>You need to add at least 2 points.</source>
-        <translation>Se requiere adicionar  por lo menos 2 puntos.</translation>
+        <translation>Trebuie să adăugați cel puțin 2 puncte.</translation>
     </message>
 </context>
 <context>
@@ -1757,17 +1757,17 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/StakeoutPanel.qml" line="153"/>
         <source>Stake out</source>
-        <translation>Replantear</translation>
+        <translation>Supraveghere</translation>
     </message>
     <message>
         <location filename="../qml/StakeoutPanel.qml" line="227"/>
         <source>Feature</source>
-        <translation>Objeto</translation>
+        <translation>Element</translation>
     </message>
     <message>
         <location filename="../qml/StakeoutPanel.qml" line="242"/>
         <source>Distance</source>
-        <translation>Distancia</translation>
+        <translation>Distanță</translation>
     </message>
 </context>
 <context>
@@ -1775,17 +1775,17 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="19"/>
         <source>You have reached a data limit</source>
-        <translation>Has alcanzado un límite de datos</translation>
+        <translation>Ați atins limita de date</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="59"/>
         <source>Data to sync: %1</source>
-        <translation>Datos para sincronizar:% 1</translation>
+        <translation>Date de sincronizat: %1</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="85"/>
         <source>Using %1 / %2</source>
-        <translation>En uso %1 / %2</translation>
+        <translation>Utilizănd %1 / %2</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="95"/>
@@ -1795,12 +1795,12 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="108"/>
         <source>Manage subscriptions</source>
-        <translation>Administrar Suscripciones</translation>
+        <translation>Gestionați abonamentele</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="124"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Anulați</translation>
     </message>
 </context>
 <context>
@@ -1808,7 +1808,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/SubscribePage.qml" line="61"/>
         <source>Subscribe</source>
-        <translation>Suscribirse</translation>
+        <translation>Abonează-te</translation>
     </message>
     <message>
         <location filename="../qml/SubscribePage.qml" line="97"/>
@@ -1825,7 +1825,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/SubscribePage.qml" line="164"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
-        <translation>Tu fórmula de suscripción de Mergin se renovará automáticamente. Puedes cancelarla o cambiarla en cualquier momento. %1Descubre más%2</translation>
+        <translation>Abonamentul dvs. Mergin se va reînnoi automat. Puteți anula sau modifica în orice moment.  %1Aflați mai multe%2</translation>
     </message>
 </context>
 <context>
@@ -1838,17 +1838,17 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="59"/>
         <source>Unlimited collaborators</source>
-        <translation>Colaboradores ilimitados</translation>
+        <translation>Număr de colaboratori nelimitat</translation>
     </message>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="66"/>
         <source>Unlimited projects</source>
-        <translation>Proyectos ilimitados</translation>
+        <translation>Număr de proiecte nelimitat</translation>
     </message>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="73"/>
         <source>Email support</source>
-        <translation>Asistencia por correo electrónico</translation>
+        <translation>Asistență prin email</translation>
     </message>
 </context>
 <context>
@@ -1856,12 +1856,12 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/dialogs/SyncFailedDialog.qml" line="22"/>
         <source>Failed to synchronize your changes</source>
-        <translation>Error al sincronizar tus cambios</translation>
+        <translation>Sincronizarea modificărilor a eșuat</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/SyncFailedDialog.qml" line="23"/>
         <source>Your changes could not be sent to server, make sure you are connected to internet and have write access to this project.</source>
-        <translation>Sus cambios no se pudieron enviar al servidor, asegúrese de estar conectado a Internet y tener acceso de escritura a este proyecto.</translation>
+        <translation>Modificările nu au putut fi trimise către server, asigurați-vă că sunteți conectat la internet și că aveți dreptul de a edita acest proiect.</translation>
     </message>
 </context>
 <context>
@@ -1869,17 +1869,17 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
         <source>Take a photo</source>
-        <translation>Toma una foto</translation>
+        <translation>Faceți o fotografie</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="276"/>
         <source>From gallery</source>
-        <translation>De la galería</translation>
+        <translation>Din galerie</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="297"/>
         <source>Image is not available: </source>
-        <translation>La imagen no está disponible:</translation>
+        <translation>Imaginea nu este disponibilă:</translation>
     </message>
 </context>
 <context>
@@ -1887,17 +1887,17 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/editor/inputrelation.qml" line="119"/>
         <source>%1 more</source>
-        <translation>%1 más</translation>
+        <translation>Încă %1</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputrelation.qml" line="134"/>
         <source>Add</source>
-        <translation>Añadir</translation>
+        <translation>Adăugați</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputrelation.qml" line="190"/>
         <source>Linked features</source>
-        <translation>Funciones vinculadas</translation>
+        <translation>Elemente cu legătură</translation>
     </message>
 </context>
 <context>
@@ -1905,7 +1905,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/editor/inputrelationreference.qml" line="93"/>
         <source>Change link</source>
-        <translation>Cambiar enlace</translation>
+        <translation>Schimbați link-ul</translation>
     </message>
 </context>
 <context>
@@ -1913,7 +1913,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/editor/inputvaluerelationpage.qml" line="129"/>
         <source>Features</source>
-        <translation>Entidades</translation>
+        <translation>Elemente</translation>
     </message>
 </context>
 <context>
@@ -1922,47 +1922,47 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
         <location filename="../qml/main.qml" line="220"/>
         <location filename="../qml/main.qml" line="277"/>
         <source>No Changes</source>
-        <translation>Sin cambios</translation>
+        <translation>Nici o modificare</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="251"/>
         <source>GPS auto-center mode on</source>
-        <translation>Modo centrado automático GPS encendido</translation>
+        <translation>Modul de centrare automată a GPS-ului este activat</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="251"/>
         <source>GPS auto-center mode off</source>
-        <translation>Modo centrado automático GPS apagado</translation>
+        <translation>Modul de centrare automată a GPS-ului este dezactivat</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="266"/>
         <source>No editable layers found.</source>
-        <translation>No se han encontrado ningunas capas editables.</translation>
+        <translation>Nici un strat modificabil nu a fost găsit.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="536"/>
         <source>Stake out is disabled because location is unavailable!</source>
-        <translation>¡El replanteo está desactivado porque la ubicación no está disponible!</translation>
+        <translation>Supravegherea este dezactivată deoarece locația nu este disponibilă!</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="557"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
-        <translation>Error al comunicar con Mergin.%1Intenta mejorar tu conexión a internet.</translation>
+        <translation>Nu a reușit să comunice cu Mergin.%1Încercați să vă îmbunătățiți conexiunea la rețea.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="604"/>
         <source>There were issues loading the project.</source>
-        <translation>Hay problemas para cargar el proyecto</translation>
+        <translation>Au fost probleme cu încărcarea proiectului.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="635"/>
         <source>Press back again to quit the app</source>
-        <translation>Para salir de la aplicación presiona nuevamente atrás</translation>
+        <translation>Apăsați din nou pentru a părăsi aplicația</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="482"/>
         <source>PROJ Error</source>
-        <translation>Error en PROJ</translation>
+        <translation>Eroare PROJ</translation>
     </message>
 </context>
 </TS>

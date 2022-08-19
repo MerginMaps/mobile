@@ -25,9 +25,8 @@ Item {
   /*required*/ property var map
   /*required*/ property var gpsState
 
-  property var initialGeometry
   property bool centerToGPSOnStartup: false
-  property var featureLayerPair
+  property var activeFeature
 
   signal canceled()
   signal done( var geometry )
@@ -72,10 +71,9 @@ Item {
     recordingInterval: __appSettings.lineRecordingInterval
 
     positionKit: __positionKit
-    layer: __activeLayer.vectorLayer
-    featureLayerPair: root.featureLayerPair ? root.featureLayerPair : null
-
-    initialGeometry: root.initialGeometry ? root.initialGeometry : __inputUtils.emptyGeometry()
+    activeLayer: __activeLayer.vectorLayer
+    activeFeature: root.activeFeature
+    variablesManager: __variablesManager
 
     // Bind variables manager to know if we are centered to GPS or not when evaluating position variables
     onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition

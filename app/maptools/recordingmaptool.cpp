@@ -25,7 +25,7 @@
 RecordingMapTool::RecordingMapTool( QObject *parent )
   : AbstractMapTool{parent}
 {
-  connect( this, &RecordingMapTool::initialGeometryChanged, this, &RecordingMapTool::prepareEditing );
+  connect( this, &RecordingMapTool::activeFeatureChanged, this, &RecordingMapTool::prepareEditing );
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::completeEditOperation );
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::collectVertices );
   connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::updateVisibleItems );
@@ -36,6 +36,11 @@ RecordingMapTool::~RecordingMapTool() = default;
 
 void RecordingMapTool::addPoint( const QgsPoint &point )
 {
+  if ( !mActiveLayer )
+  {
+    return;
+  }
+
   QgsPoint pointToAdd( point );
 
   if ( mPositionKit && ( mCenteredToGPS || mRecordingType == StreamMode ) )
@@ -45,8 +50,8 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
     QgsPoint transformed = InputUtils::transformPoint(
                              PositionKit::positionCRS(),
-                             mFeatureLayerPair.layer()->sourceCrs(),
-                             mFeatureLayerPair.layer()->transformContext(),
+                             mActiveLayer->sourceCrs(),
+                             mActiveLayer->transformContext(),
                              pointToAdd
                            );
 
@@ -57,9 +62,29 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
   fixZ( pointToAdd );
 
   QgsVertexId id( mActivePart, mActiveRing, 0 );
+
+  if ( !mActiveFeature.isValid() )
+  {
+    QgsAttributes attrs( mActiveLayer->fields().count() );
+    QgsExpressionContext context = mActiveLayer->createExpressionContext();
+    if ( mVariablesManager )
+    {
+      context << mVariablesManager->positionScope();
+    }
+
+    QgsGeometry geometry = InputUtils::createGeometryForLayer( mActiveLayer );
+    mActiveFeature = QgsVectorLayerUtils::createFeature( mActiveLayer, geometry, attrs.toMap(), &context );
+    mRecordedGeometry = mActiveFeature.geometry();
+
+    mActiveLayer->startEditing();
+    mActiveLayer->beginEditCommand( QStringLiteral( "Add new feature" ) );
+    mActiveLayer->addFeature( mActiveFeature );
+    mActiveLayer->endEditCommand();
+  }
+
   if ( mRecordedGeometry.isEmpty() )
   {
-    mRecordedGeometry = InputUtils::createGeometryForLayer( mFeatureLayerPair.layer() );
+    mRecordedGeometry = InputUtils::createGeometryForLayer( mActiveLayer );
   }
   else
   {
@@ -131,6 +156,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     {
       r->addVertex( pointToAdd );
       r->close();
+      mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
       emit recordedGeometryChanged( mRecordedGeometry );
       return;
     }
@@ -164,13 +190,20 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     }
   }
 
+  mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
   emit recordedGeometryChanged( mRecordedGeometry );
 }
 
 void RecordingMapTool::addPointAtPosition( Vertex vertex, const QgsPoint &point )
 {
+  if ( !mActiveLayer )
+  {
+    return;
+  }
+
   if ( vertex.isValid() )
   {
+    mActiveLayer->beginEditCommand( QStringLiteral( "Add point at position" ) );
     if ( mRecordedGeometry.get()->insertVertex( vertex.vertexId(), point ) )
     {
       emit recordedGeometryChanged( mRecordedGeometry );
@@ -180,6 +213,11 @@ void RecordingMapTool::addPointAtPosition( Vertex vertex, const QgsPoint &point 
 
 void RecordingMapTool::removePoint()
 {
+  if ( !mActiveLayer )
+  {
+    return;
+  }
+
   if ( mRecordedGeometry.isEmpty() )
   {
     return;
@@ -308,6 +346,7 @@ void RecordingMapTool::removePoint()
       mRecordedGeometry.get()->deleteVertex( current );
     }
 
+    mActiveLayer->beginEditCommand( QStringLiteral( "Delete vertex" ) );
     emit recordedGeometryChanged( mRecordedGeometry );
 
     grabNextVertex();
@@ -347,13 +386,13 @@ void RecordingMapTool::removePoint()
 
 bool RecordingMapTool::hasValidGeometry() const
 {
-  if ( mFeatureLayerPair.isValid() )
+  if ( mActiveLayer )
   {
-    if ( mFeatureLayerPair.layer()->geometryType() == QgsWkbTypes::PointGeometry )
+    if ( mActiveLayer->geometryType() == QgsWkbTypes::PointGeometry )
     {
       return mRecordedGeometry.constGet()->nCoordinates() == 1;
     }
-    else if ( mFeatureLayerPair.layer()->geometryType() == QgsWkbTypes::LineGeometry )
+    else if ( mActiveLayer->geometryType() == QgsWkbTypes::LineGeometry )
     {
       if ( mRecordedGeometry.isMultipart() )
       {
@@ -372,7 +411,7 @@ bool RecordingMapTool::hasValidGeometry() const
         return mRecordedGeometry.constGet()->nCoordinates() >= 2;
       }
     }
-    else if ( mFeatureLayerPair.layer()->geometryType() == QgsWkbTypes::PolygonGeometry )
+    else if ( mActiveLayer->geometryType() == QgsWkbTypes::PolygonGeometry )
     {
       if ( mRecordedGeometry.isMultipart() )
       {
@@ -397,10 +436,10 @@ bool RecordingMapTool::hasValidGeometry() const
 
 void RecordingMapTool::fixZ( QgsPoint &point ) const
 {
-  if ( !mFeatureLayerPair.isValid() )
+  if ( !mActiveLayer )
     return;
 
-  bool layerIs3D = QgsWkbTypes::hasZ( mFeatureLayerPair.layer()->wkbType() );
+  bool layerIs3D = QgsWkbTypes::hasZ( mActiveLayer->wkbType() );
   bool pointIs3D = QgsWkbTypes::hasZ( point.wkbType() );
 
   if ( layerIs3D )
@@ -421,6 +460,11 @@ void RecordingMapTool::fixZ( QgsPoint &point ) const
 
 void RecordingMapTool::onPositionChanged()
 {
+  if ( !mActiveLayer )
+  {
+    return;
+  }
+
   if ( mRecordingType != StreamMode )
     return;
 
@@ -442,8 +486,8 @@ void RecordingMapTool::onPositionChanged()
 
       QgsPointXY transformed = InputUtils::transformPoint(
                                  PositionKit::positionCRS(),
-                                 mFeatureLayerPair.layer()->sourceCrs(),
-                                 mFeatureLayerPair.layer()->transformContext(),
+                                 mActiveLayer->sourceCrs(),
+                                 mActiveLayer->transformContext(),
                                  position
                                );
       QgsPoint p( transformed.x(), transformed.y(), position.z() );
@@ -456,10 +500,16 @@ void RecordingMapTool::onPositionChanged()
 
 void RecordingMapTool::prepareEditing()
 {
-  if ( !mInitialGeometry.isEmpty() )
+  if ( mActiveLayer && mActiveFeature.isValid() && !mActiveFeature.geometry().isEmpty() )
   {
+    mActiveLayer->startEditing();
+
     setState( MapToolState::View );
-    setRecordedGeometry( mInitialGeometry );
+    setRecordedGeometry( mActiveFeature.geometry() );
+  }
+  else if ( !mActiveFeature.isValid() || mActiveFeature.geometry().isEmpty() )
+  {
+    setRecordedGeometry( QgsGeometry() );
   }
 }
 
@@ -666,6 +716,11 @@ void RecordingMapTool::updateVisibleItems()
 
 void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double searchRadius )
 {
+  if ( !mActiveLayer )
+  {
+    return;
+  }
+
   double minDistance = std::numeric_limits<double>::max();
   double currentDistance = 0;
   double searchDistance = pixelsToMapUnits( searchRadius );
@@ -681,7 +736,7 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
   for ( int i = 0; i < mVertices.count(); i++ )
   {
     QgsPoint vertex( mVertices.at( i ).coordinates() );
-    vertex.transform( mapSettings()->mapSettings().layerTransform( mFeatureLayerPair.layer() ) );
+    vertex.transform( mapSettings()->mapSettings().layerTransform( mActiveLayer ) );
 
     currentDistance = pnt.distance( vertex );
     if ( currentDistance < minDistance && currentDistance <= searchDistance )
@@ -835,8 +890,14 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
 
 void RecordingMapTool::updateVertex( const Vertex &vertex, const QgsPoint &point )
 {
-  if ( vertex.isValid() )
+  if ( !mActiveLayer )
   {
+    return;
+  }
+
+  if ( vertex.isValid() && !InputUtils::equals( point, vertex.coordinates(), 1e-8 ) )
+  {
+    mActiveLayer->beginEditCommand( QStringLiteral( "Move vertex" ) );
     if ( mRecordedGeometry.get()->moveVertex( vertex.vertexId(), point ) )
     {
       emit recordedGeometryChanged( mRecordedGeometry );
@@ -846,9 +907,9 @@ void RecordingMapTool::updateVertex( const Vertex &vertex, const QgsPoint &point
 
 QgsPoint RecordingMapTool::vertexMapCoors( const Vertex &vertex ) const
 {
-  if ( vertex.isValid() && mFeatureLayerPair.isValid() && mapSettings() )
+  if ( vertex.isValid() && mActiveLayer && mapSettings() )
   {
-    return InputUtils::transformPoint( mFeatureLayerPair.layer()->crs(), mapSettings()->destinationCrs(), mFeatureLayerPair.layer()->transformContext(), vertex.coordinates() );
+    return InputUtils::transformPoint( mActiveLayer->crs(), mapSettings()->destinationCrs(), mActiveLayer->transformContext(), vertex.coordinates() );
   }
 
   return QgsPoint();
@@ -927,32 +988,50 @@ void RecordingMapTool::grabNextVertex()
 
 void RecordingMapTool::completeEditOperation()
 {
-  if ( mFeatureLayerPair.isValid() )
+  if ( mActiveLayer && mActiveLayer->isEditCommandActive() )
   {
-    mFeatureLayerPair.layer()->beginEditCommand( QStringLiteral( "Change geometry" ) );
-    mFeatureLayerPair.layer()->changeGeometry( mFeatureLayerPair.feature().id(), mRecordedGeometry );
-    mFeatureLayerPair.layer()->endEditCommand();
-    mFeatureLayerPair.layer()->triggerRepaint();
-    setCanUndo( mFeatureLayerPair.layer()->undoStack()->canUndo() );
+    mActiveLayer->changeGeometry( mActiveFeature.id(), mRecordedGeometry );
+    mActiveLayer->endEditCommand();
+    mActiveLayer->triggerRepaint();
+    setCanUndo( mActiveLayer->undoStack()->canUndo() );
   }
 }
 
 void RecordingMapTool::undo()
 {
-  if ( mFeatureLayerPair.isValid() && mFeatureLayerPair.layer()->undoStack() )
+  if ( mActiveLayer && mActiveLayer->undoStack() )
   {
-    mFeatureLayerPair.layer()->undoStack()->undo();
-    QgsGeometry geom = mFeatureLayerPair.layer()->editBuffer()->changedGeometries()[ mFeatureLayerPair.feature().id() ];
-    if ( !geom.isEmpty() )
+    mActiveLayer->undoStack()->undo();
+
+    if ( mActiveFeature.id() < 0 )
     {
-      setRecordedGeometry( geom );
+      // new feature not commited
+      QgsGeometry geom = mActiveLayer->editBuffer()->addedFeatures()[ mActiveFeature.id() ].geometry();
+      if ( !geom.isEmpty() ) // && geom.isGeosValid() )
+      {
+        setRecordedGeometry( geom );
+      }
+      else
+      {
+        mActiveLayer->rollBack();
+        setActiveFeature( QgsFeature() );
+      }
     }
     else
     {
-      setRecordedGeometry( mFeatureLayerPair.feature().geometry() );
+      QgsGeometry geom = mActiveLayer->editBuffer()->changedGeometries()[ mActiveFeature.id() ];
+      if ( !geom.isEmpty() )
+      {
+        setRecordedGeometry( geom );
+      }
+      else
+      {
+        setRecordedGeometry( mActiveFeature.geometry() );
+      }
     }
-    mFeatureLayerPair.layer()->triggerRepaint();
-    setCanUndo( mFeatureLayerPair.layer()->undoStack()->canUndo() );
+
+    mActiveLayer->triggerRepaint();
+    setCanUndo( mActiveLayer->undoStack()->canUndo() );
   }
 }
 
@@ -1040,20 +1119,28 @@ void RecordingMapTool::setPositionKit( PositionKit *newPositionKit )
   emit positionKitChanged( mPositionKit );
 }
 
-QgsVectorLayer *RecordingMapTool::layer() const
+QgsVectorLayer *RecordingMapTool::activeLayer() const
 {
-  return mLayer;
+  return mActiveLayer;
 }
 
-void RecordingMapTool::setLayer( QgsVectorLayer *newLayer )
+void RecordingMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
 {
-  if ( mLayer == newLayer )
+  if ( mActiveLayer == newActiveLayer )
     return;
-  mLayer = newLayer;
-  emit layerChanged( mLayer );
+
+  if ( mActiveLayer && mActiveLayer->isEditable() )
+  {
+    mActiveLayer->rollBack();
+  }
+
+  mActiveLayer = newActiveLayer;
+  emit activeLayerChanged( mActiveLayer );
 
   // we need to clear all recorded points and recalculate the geometry
   setRecordedGeometry( QgsGeometry() );
+
+  mActiveLayer->startEditing();
 }
 
 const QgsGeometry &RecordingMapTool::recordedGeometry() const
@@ -1067,21 +1154,6 @@ void RecordingMapTool::setRecordedGeometry( const QgsGeometry &newRecordedGeomet
     return;
   mRecordedGeometry = newRecordedGeometry;
   emit recordedGeometryChanged( mRecordedGeometry );
-}
-
-const QgsGeometry &RecordingMapTool::initialGeometry() const
-{
-  return mInitialGeometry;
-}
-
-void RecordingMapTool::setInitialGeometry( const QgsGeometry &newInitialGeometry )
-{
-  if ( mInitialGeometry.equals( newInitialGeometry ) )
-    return;
-
-  mInitialGeometry = newInitialGeometry;
-
-  emit initialGeometryChanged( mInitialGeometry );
 }
 
 const QgsGeometry &RecordingMapTool::existingVertices() const
@@ -1253,30 +1325,6 @@ int RecordingMapTool::activeRing() const
   return mActiveRing;
 }
 
-const FeatureLayerPair &RecordingMapTool::featureLayerPair() const
-{
-  return mFeatureLayerPair;
-}
-
-void RecordingMapTool::setFeatureLayerPair( const FeatureLayerPair &newFeatureLayerPair )
-{
-  if ( mFeatureLayerPair == newFeatureLayerPair )
-    return;
-
-  if ( mFeatureLayerPair.isValid() && mFeatureLayerPair.layer()->isEditable() )
-  {
-    // rollback any changes and stop editing of the previously used layer
-    mFeatureLayerPair.layer()->rollBack();
-  }
-
-  mFeatureLayerPair = newFeatureLayerPair;
-
-  // start editing
-  mFeatureLayerPair.layer()->startEditing();
-
-  emit featureLayerPairChanged( mFeatureLayerPair );
-}
-
 bool RecordingMapTool::canUndo() const
 {
   return mCanUndo;
@@ -1288,4 +1336,32 @@ void RecordingMapTool::setCanUndo( bool newCanUndo )
     return;
   mCanUndo = newCanUndo;
   emit canUndoChanged( mCanUndo );
+}
+
+const QgsFeature &RecordingMapTool::activeFeature() const
+{
+  return mActiveFeature;
+}
+
+void RecordingMapTool::setActiveFeature( const QgsFeature &newActiveFeature )
+{
+  if ( mActiveFeature == newActiveFeature )
+    return;
+  mActiveFeature = newActiveFeature;
+  emit activeFeatureChanged( mActiveFeature );
+}
+
+VariablesManager *RecordingMapTool::variablesManager() const
+{
+  return mVariablesManager;
+}
+
+void RecordingMapTool::setVariablesManager( VariablesManager *newVariablesManager )
+{
+  if ( mVariablesManager == newVariablesManager )
+    return;
+
+  mVariablesManager = newVariablesManager;
+
+  emit variablesManagerChanged( mVariablesManager );
 }

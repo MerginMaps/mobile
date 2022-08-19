@@ -729,6 +729,11 @@ QgsGeometry InputUtils::emptyGeometry()
   return QgsGeometry();
 }
 
+QgsFeature InputUtils::emptyFeature()
+{
+  return QgsFeature();
+}
+
 bool InputUtils::isEmptyGeometry( const QgsGeometry &geometry )
 {
   return geometry.isEmpty();

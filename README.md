@@ -45,7 +45,7 @@ For more information on how to use the app, see [Documentation](https://merginma
 
 ## How to help/contribute?
 
-- Help with translations, join [Mergin Maps Input app Transifex Team](https://www.transifex.com/lutra-consulting/input)
+- Help with translations, join [Mergin Maps Input app Transifex Team](https://explore.transifex.com/lutra-consulting/mergin-maps-input/)
 - Write a review of the application on App Store or Android Google Play
 - Test the application and report the bugs
 - Write a blog post or case study or create a youtube video. We are happy to help to promote it or co-author and place on our websites

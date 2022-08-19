@@ -205,6 +205,11 @@ class InputUtils: public QObject
     Q_INVOKABLE static QgsGeometry emptyGeometry();
 
     /**
+     * Creates empty feature
+     */
+    Q_INVOKABLE static QgsFeature emptyFeature();
+
+    /**
      * Returns true for null or empty geometry
      */
     Q_INVOKABLE static bool isEmptyGeometry( const QgsGeometry &geometry );

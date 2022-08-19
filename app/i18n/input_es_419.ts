@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="es_ES">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="es_419">
 <context>
     <name>AboutPanel</name>
     <message>
@@ -12,27 +12,27 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="170"/>
         <source>Your subscription was cancelled on %1</source>
-        <translation>Tu suscripción fue anulada el %1</translation>
+        <translation>Su suscripción fue cancelada en %1</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="51"/>
         <source>My Account</source>
-        <translation>Mi cuenta</translation>
+        <translation>Mi Cuenta</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="139"/>
         <source>Your subscription will not auto-renew after %1</source>
-        <translation>Tu suscripción no se renovará automáticamente después del %1</translation>
+        <translation>Su suscripción no se auto renovara después del %1</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="149"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
-        <translation>Por favor, actualiza tus %1datos de facturación%2 lo antes posible</translation>
+        <translation>Por favor, actualiza tus %1datos de facturación%2 lo más antes posible</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="160"/>
         <source>Your next bill will be for %1 on %2</source>
-        <translation>Recibirás tu próxima factura por el total de %1 el %2</translation>
+        <translation>Su próxima factura será por %1 el %2</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="195"/>
@@ -42,12 +42,12 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="213"/>
         <source>Manage Subscription</source>
-        <translation>Gestionar suscripción</translation>
+        <translation>Administrar Suscripción</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="213"/>
         <source>Working...</source>
-        <translation>Trabajando...</translation>
+        <translation>Procesando...</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="213"/>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="249"/>
         <source>You can also %1restore%2 your purchases</source>
-        <translation>Puedes %1restaurar%2 tus compras</translation>
+        <translation>Puedes también %1restaurar%2 tus compras</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="278"/>
@@ -72,27 +72,27 @@
     <message>
         <location filename="../qml/AccountPage.qml" line="332"/>
         <source>Delete account?</source>
-        <translation>¿Desea eliminar esta cuenta?</translation>
+        <translation>¿Eliminar cuenta?</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="338"/>
         <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
 
 In order to delete your account, enter your username in the field below and click Yes.</source>
-        <translation>Esta acción eliminará su cuenta de Mergin Maps con todos sus proyectos, tanto en el dispositivo como en el servidor. Esta acción no se puede deshacer. Si tiene una suscripción de Apple, debe cancelarla manualmente.
+        <translation>Esta acción eliminará tu cuenta de Mergin Maps con todos tus proyectos, tanto en el dispositivo como en el servidor. Esta acción no tiene vuelta atrás. Si tiene una suscripción de Apple debe cancelarlo manualmente.
 
-Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuación y haga clic en Sí.</translation>
+ Con el fin de eliminar su cuenta, introduzca su nombre de usuario en el campo a continuación y presione en Sí.</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="347"/>
         <source>Enter username</source>
-        <translation>Introduzca su nombre de usuario</translation>
+        <translation>Introduzca nombre de usuario</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="384"/>
         <location filename="../qml/AccountPage.qml" line="419"/>
         <source>Failed to remove account</source>
-        <translation>No se pudo eliminar la cuenta</translation>
+        <translation>Fallo al eliminar su cuenta</translation>
     </message>
 </context>
 <context>
@@ -100,7 +100,7 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../qml/map/ActiveLayerPanel.qml" line="51"/>
         <source>Choose Active Layer</source>
-        <translation>Seleccionar capa activa</translation>
+        <translation>Elija una capa activa</translation>
     </message>
     <message>
         <location filename="../qml/map/ActiveLayerPanel.qml" line="63"/>
@@ -113,12 +113,12 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="32"/>
         <source>Connect to bluetooth device</source>
-        <translation>Conectar al dispositivo bluetooth</translation>
+        <translation>Conectar el dispositivo Bluetooth</translation>
     </message>
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="86"/>
         <source>You need to enable Bluetooth in order to connect new GPS receiver</source>
-        <translation>Es necesario habilitar el Bluetooth para conectar un nuevo receptor GPS</translation>
+        <translation>Necesitas habilitar Bluetooth para poder conectar un nuevo receptor GNSS.</translation>
     </message>
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="117"/>
@@ -128,7 +128,7 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="209"/>
         <source>Looking for more devices</source>
-        <translation>Buscando más dispositivos</translation>
+        <translation>Buscando por más dispositivos</translation>
     </message>
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="209"/>
@@ -146,12 +146,12 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../androidutils.cpp" line="331"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
-        <translation>El permiso de almacenamiento está denegado permanentemente, por favor permítalo en ajustes para cargar imágenes de la galería</translation>
+        <translation>Permiso de almacenamiento está denegado permanentemente, por favor habítelo en ajustes para cargar imágenes de la galería</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="335"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
-        <translation>Input necesita permiso de almacenamiento para cargar imágenes de la galería</translation>
+        <translation>Mergin necesita permiso de almacenamiento para cargar imágenes de la galería</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="353"/>
@@ -161,7 +161,7 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../androidutils.cpp" line="357"/>
         <source>We need a camera permission in order to take a photo</source>
-        <translation>Necesitamos permiso de la cámara para poder tomar fotos</translation>
+        <translation>Necesitamos permiso de la cámara para poder tomar fotografías</translation>
     </message>
 </context>
 <context>
@@ -192,13 +192,13 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="792"/>
         <source>Cannot delete feature</source>
-        <translation>No se puede eliminar el objeto</translation>
+        <translation>No se puede eliminar objeto</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="480"/>
         <location filename="../attributes/attributecontroller.cpp" line="816"/>
         <source>Feature could not be added</source>
-        <translation>No se ha podido añadir el objeto</translation>
+        <translation>Objeto no se ha podido añadir</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="854"/>
@@ -231,12 +231,12 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../qml/AuthPanel.qml" line="130"/>
         <source>Please update Input to use the latest Mergin features.</source>
-        <translation>Para usar las últimas herramientas de Mergin, por favor actualiza Input </translation>
+        <translation>Por favor, actualiza MerginMaps para utilizar las últimas herramientas.</translation>
     </message>
     <message>
         <location filename="../qml/AuthPanel.qml" line="134"/>
         <source>Mergin is currently unavailable - please try again later.</source>
-        <translation>Actualmente, Mergin no está disponible - por favor, inténtalo de nuevo más tarde</translation>
+        <translation>Actualmente Mergin no está disponible - por favor, inténtalo nuevamente mas tarde.</translation>
     </message>
 </context>
 <context>
@@ -244,7 +244,7 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../qml/Banner.qml" line="36"/>
         <source>Learn more</source>
-        <translation>Aprende más</translation>
+        <translation>Ver mas detalles</translation>
     </message>
 </context>
 <context>
@@ -272,7 +272,7 @@ Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuació
     <message>
         <location filename="../qml/components/BluetoothConnectionDialog.qml" line="48"/>
         <source>You can close this message, we will try to repeatedly connect to your device.%1 If you need more help, %2click here%3</source>
-        <translation>Puede cerrar este mensaje, intentaremos conectar repetidamente a su dispositivo.%1 Si necesita más ayuda, %2pulse aquí%3</translation>
+        <translation>Puede cerrar este mensaje, intentaremos conectarnos repetidamente a su dispositivo.%1 Si necesita más ayuda, %2presione aquí%3</translation>
     </message>
     <message>
         <location filename="../qml/components/BluetoothConnectionDialog.qml" line="56"/>
@@ -304,12 +304,12 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
         <location filename="../position/bluetoothpositionprovider.cpp" line="116"/>
         <location filename="../position/bluetoothpositionprovider.cpp" line="124"/>
         <source>No connection, reconnecting in (%1)</source>
-        <translation>Sin conexión, reconectando en (%1)</translation>
+        <translation>Sin conexión, reconectado en (%1)</translation>
     </message>
     <message>
         <location filename="../position/bluetoothpositionprovider.cpp" line="141"/>
         <source>Could not connect to device, not paired</source>
-        <translation>No se pudo conectar al dispositivo, no emparejado.</translation>
+        <translation>No se puede conectar el dispositivo, no emparejado</translation>
     </message>
     <message>
         <location filename="../position/bluetoothpositionprovider.cpp" line="156"/>
@@ -333,7 +333,7 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/BrowseDataLayersPanel.qml" line="47"/>
         <source>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</source>
-        <translation>Ninguna capa ha sido configurada para permitir explorar sus entidades. Ver %1cómo modificar tu proyecto%2.</translation>
+        <translation>Ninguna capa ha sido configurada para permitir explorar sus objetos. Ver %1cómo modificar tu proyecto%2.</translation>
     </message>
 </context>
 <context>
@@ -362,17 +362,17 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="35"/>
         <source>Could not create directory %1.</source>
-        <translation>No se pudo crear el directorio %1.</translation>
+        <translation>No se puede crear carpeta %1</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="128"/>
         <source>Failed to copy image file to %1.</source>
-        <translation>Error al copiar el archivo de imagen a %1.</translation>
+        <translation>Error al copiar archivo de imagen a %1</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="201"/>
         <source>Open Image</source>
-        <translation>Abrir imagen</translation>
+        <translation>Abrir Imagen</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="203"/>
@@ -382,17 +382,17 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="215"/>
         <source>Remove photo reference</source>
-        <translation>Eliminar referencia de la foto</translation>
+        <translation>Eliminar referencia de la fotografía</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="216"/>
         <source>Also permanently delete photo from device?</source>
-        <translation>¿Eliminar permanentemente la foto también del dispositivo?</translation>
+        <translation>¿Eliminar permanentemente la fotografía también del dispositivo?</translation>
     </message>
     <message>
         <location filename="../qml/ExternalResourceBundle.qml" line="238"/>
         <source>Failed to copy image</source>
-        <translation>No se pudo copiar la imagen</translation>
+        <translation>Error al copiar imagen</translation>
     </message>
 </context>
 <context>
@@ -405,7 +405,7 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="156"/>
         <source>Feature could not be saved, please check all required fields</source>
-        <translation>El objeto no se ha podido guardar, por favor compruebe todos los campos requeridos.</translation>
+        <translation>Objeto no guardado, por favor revise todos los campos requeridos</translation>
     </message>
 </context>
 <context>
@@ -428,12 +428,12 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
         <source>Delete feature</source>
-        <translation>Borrar objeto</translation>
+        <translation>Eliminar objeto</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="200"/>
         <source>Are you sure you want to delete this feature?</source>
-        <translation>¿Está seguro de que quiere eliminar este objeto?</translation>
+        <translation>¿Está seguro de eliminar este objeto?</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
@@ -453,7 +453,7 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
-        <translation>Error al guardar los cambios. Esto no debería pasar normalmente. Por favor, reinicie la aplicación y pruebe otra vez — si eso no lo soluciona, por favor contacte con soporte.</translation>
+        <translation>Error al guardar los cambios. Esto no debería pasar normalmente. Por favor, reinicie la aplicación y pruebe nuevamente — si no se soluciona, por favor contacte con soporte.</translation>
     </message>
 </context>
 <context>
@@ -485,7 +485,7 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/FeaturesListPage.qml" line="59"/>
         <source>Showing only the first %1 features</source>
-        <translation>Se muestran solo los primeros %1 objetos</translation>
+        <translation>Mostrando solo los primeros %1 objetos</translation>
     </message>
 </context>
 <context>
@@ -493,7 +493,7 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
     <message>
         <location filename="../qml/FeaturesListPageToolbar.qml" line="53"/>
         <source>Add Feature</source>
-        <translation>Añadir Objeto</translation>
+        <translation>Adicionar Objeto</translation>
     </message>
     <message>
         <location filename="../qml/FeaturesListPageToolbar.qml" line="69"/>
@@ -522,7 +522,8 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
         <location filename="../fieldsmodel.cpp" line="118"/>
         <source>Field %1 already exists. 
 Won&apos;t be added to the project.</source>
-        <translation>Campo %1 ya existe. No se añadirá al proyecto.</translation>
+        <translation>Campo %1 ya existe. 
+No se añadirá al proyecto.</translation>
     </message>
 </context>
 <context>
@@ -530,7 +531,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="67"/>
         <source>GPS info</source>
-        <translation>Información de GPS</translation>
+        <translation>Información de GNSS</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="235"/>
@@ -550,7 +551,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="110"/>
         <source>No receiver</source>
-        <translation>No hay receptor</translation>
+        <translation>Sin receptor</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="126"/>
@@ -575,12 +576,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="205"/>
         <source>Horizontal accuracy</source>
-        <translation>Precisión horizontal</translation>
+        <translation>Precisión Horizontal</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="339"/>
         <source>Manage GPS receivers</source>
-        <translation>Gestionar receptores GPS</translation>
+        <translation>Administrar receptores GNSS</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="140"/>
@@ -598,7 +599,7 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/misc/GpsDataPage.qml" line="302"/>
         <location filename="../qml/misc/GpsDataPage.qml" line="315"/>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>S/R</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="220"/>
@@ -608,12 +609,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="251"/>
         <source>Fix quality</source>
-        <translation>Calidad del posicionamiento</translation>
+        <translation>Arreglar precisión</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="266"/>
         <source>Satellites (in use/view)</source>
-        <translation>Satélites (en uso / vista)</translation>
+        <translation>Satélites (en uso/vista)</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="284"/>
@@ -628,7 +629,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="314"/>
         <source>Last fix</source>
-        <translation>Última solución</translation>
+        <translation>Último arreglo</translation>
     </message>
 </context>
 <context>
@@ -636,7 +637,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../inputhelp.cpp" line="232"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
-        <translation>Informe enviado. %1Por favor, envíanos un e-mail a%1%2</translation>
+        <translation>Informe enviado. %1Por favor, contáctanos a%1%2</translation>
     </message>
     <message>
         <location filename="../inputhelp.cpp" line="237"/>
@@ -649,18 +650,18 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../inputprojutils.cpp" line="78"/>
         <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Input.</source>
-        <translation>Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto descargado reinicia Input, por favor.</translation>
+        <translation>Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto descargado reinicia Mergin, por favor.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="99"/>
         <source>Error creating custom PROJ operation. For newly downloaded project please restart Input.</source>
-        <translation>Error al crear operación PROJ personalizada. Para un nuevo proyecto descargado reinicia Input, por favor.</translation>
+        <translation>Error al crear operación PROJ personalizada. Para un nuevo proyecto descargado reinicia Mergin, por favor.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="109"/>
         <source>Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Input.</source>
         <translation> 
-Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto descargado reinicia Input, por favor.</translation>
+Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto descargado reinicia Mergin, por favor.</translation>
     </message>
 </context>
 <context>
@@ -668,7 +669,7 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../inpututils.cpp" line="177"/>
         <source>just now</source>
-        <translation>ahora</translation>
+        <translation>ahora mismo</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="182"/>
@@ -743,28 +744,28 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
         <location filename="../inpututils.cpp" line="1379"/>
         <source>screen DPI: %1x%2
 </source>
-        <translation>PPP de pantalla: %1x%2
+        <translation>pantalla DPI: %1x%2
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1380"/>
         <source>screen size: %1x%2 mm
 </source>
-        <translation>tamaño de pantalla %1x%2 mm
+        <translation>tamaño de pantalla: %1x%2 mm
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1381"/>
         <source>reported device pixel ratio: %1
 </source>
-        <translation>La relación de píxeles del dispositivo ha sido informado: %1
+        <translation>Relación de píxeles del dispositivo informada: %1
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1382"/>
         <source>calculated device pixel ratio: %1
 </source>
-        <translation>La relación de píxeles del dispositivo ha sido calculada: %1
+        <translation>Relación de píxeles del dispositivo calculada: %1
 </translation>
     </message>
     <message>
@@ -787,12 +788,12 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="29"/>
         <source>Insufficient space left on device</source>
-        <translation>Espacio insuficiente en el dispositivo</translation>
+        <translation>Espacio insuficiente disponible en el dispositivo</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="31"/>
         <source>Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue.</source>
-        <translation>El dispositivo se está quedando sin espacio, necesita %1 de espacio libre para ver sus proyectos. Elimine algunos archivos y vuelva aquí o pulse Ayuda para ver otras formas de resolver este problema.</translation>
+        <translation>El dispositivo se está quedando sin espacio, necesita %1 de espacio libre para ver sus proyectos. Elimine algunos archivos y vuelva aquí o presione Ayuda para ver otras formas de resolver este problema.</translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="40"/>
@@ -802,7 +803,7 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="43"/>
         <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
-        <translation>Su dispositivo encontró un problema mientras se realizaba una actualización.  No podrá ver sus proyectos. Pulse Ayuda para ver cómo resolver este problema. </translation>
+        <translation>Su dispositivo encontró un problema mientras se realizaba una actualización.  No podrá ver sus proyectos. Presione Ayuda para ver cómo resolver este problema. </translation>
     </message>
     <message>
         <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
@@ -843,12 +844,12 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/LoginForm.qml" line="113"/>
         <source>Username</source>
-        <translation>Nombre de usuario</translation>
+        <translation>Nombre de Usuario</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="157"/>
         <source>Sign in</source>
-        <translation>Iniciar sesión</translation>
+        <translation>Iniciar Sesión</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="223"/>
@@ -873,19 +874,19 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
         <location filename="../qml/MainPanel.qml" line="82"/>
         <location filename="../qml/MainPanel.qml" line="278"/>
         <source>GPS</source>
-        <translation>GPS</translation>
+        <translation>GNSS</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="117"/>
         <location filename="../qml/MainPanel.qml" line="307"/>
         <source>Record</source>
-        <translation>Registrar</translation>
+        <translation>Grabar</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="137"/>
         <location filename="../qml/MainPanel.qml" line="326"/>
         <source>Zoom to project</source>
-        <translation>Hacer zoom al proyecto</translation>
+        <translation>Hacer Zoom al proyecto</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="155"/>
@@ -923,7 +924,7 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/MainPanel.qml" line="364"/>
         <source>Browse features</source>
-        <translation>Explorar entidades</translation>
+        <translation>Explorar objetos</translation>
     </message>
 </context>
 <context>
@@ -931,12 +932,12 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/MapThemePanel.qml" line="44"/>
         <source>Map Themes</source>
-        <translation>Temas de mapa</translation>
+        <translation>Temas de Mapa</translation>
     </message>
     <message>
         <location filename="../qml/MapThemePanel.qml" line="69"/>
         <source>Project has no themes defined. See %1how to setup themes%2.</source>
-        <translation>Proyecto no tiene temas definidos. Ver %1cómo configurar temas%2.</translation>
+        <translation>El proyecto no tienen definido temas de mapa. Vea %1cómo configurar temas%2</translation>
     </message>
 </context>
 <context>
@@ -944,7 +945,7 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="925"/>
         <source>GPS currently unavailable.</source>
-        <translation>GPS no disponible actualmente.</translation>
+        <translation>GNSS no disponible actualmente.</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="312"/>
@@ -959,12 +960,12 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="335"/>
         <source>Somebody else is syncing, we will try again later</source>
-        <translation>Alguien más está sincronizando, lo intentaremos de nuevo más tarde</translation>
+        <translation>Alguien más está sincronizando, intentaremos nuevamente más tarde</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="345"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
-        <translation>There was an issue during synchronization, we will try again. Click to learn more</translation>
+        <translation>Hubo un problema durante la sincronización, intentaremos nuevamente. Presiona para más detalles</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="363"/>
@@ -1008,8 +1009,8 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
         <location filename="../qml/dialogs/MigrateToMerginDialog.qml" line="19"/>
         <source>This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration. 
 Click &apos;Yes&apos; to upload it.</source>
-        <translation>Este proyecto actualmente no está cargado en Merging. Súbelo a Merging para activar la sincronización y la colaboración. 
-Haga clic en &apos;Sí&apos; para cargarlo.</translation>
+        <translation>Este proyecto actualmente no está subido en Mergin. Súbelo a Mergin para activar la sincronización y la colaboración. 
+Presione en &apos;Sí&apos; para subirlo.</translation>
     </message>
 </context>
 <context>
@@ -1059,7 +1060,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/misc/PositionProviderPage.qml" line="60"/>
         <source>GPS receivers</source>
-        <translation>Receptores GPS</translation>
+        <translation>Receptores GNSS</translation>
     </message>
     <message>
         <location filename="../qml/misc/PositionProviderPage.qml" line="89"/>
@@ -1084,7 +1085,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/misc/PositionProviderPage.qml" line="299"/>
         <source>Connecting to receivers via Bluetooth directly in Input is not possible on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. Input will still think it is the internal GPS of your phone/tablet.%1%2Click here to learn more.%3</source>
-        <translation>En iOS no es posible conectarse a receptores via Bluetooth directamente en Input. Es posible que su proveedor de hardware le proporcione una app que conecte con el receptor y fije la posición. Input pensará que se trata del GPS interno del móvil/tablet.%1%2Pulse aquí para saber más. %3</translation>
+        <translation>En iOS no es posible conectarse a receptores via Bluetooth directamente en Mergin. Es posible que su proveedor de hardware le proporcione una app que conecte con el receptor y fije la posición. Mergin pensará que se trata del GNSS interno del móvil/tablet.%1%2Presione aquí para saber más. %3</translation>
     </message>
     <message>
         <location filename="../qml/misc/PositionProviderPage.qml" line="366"/>
@@ -1112,7 +1113,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../position/positionprovidersmodel.cpp" line="26"/>
         <source>GPS receiver of this device</source>
-        <translation>Receptor GPS de este dispositivo</translation>
+        <translation>Receptor GNSS de este dispositivo</translation>
     </message>
     <message>
         <location filename="../position/positionprovidersmodel.cpp" line="115"/>
@@ -1148,7 +1149,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="105"/>
         <source>Remove from device</source>
-        <translation>Eliminar del dispositivo</translation>
+        <translation>Retirar del dispositivo</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectDelegateItem.qml" line="110"/>
@@ -1200,7 +1201,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="180"/>
         <source>You can also create new project by clicking button below.</source>
-        <translation>También puedes crear un nuevo proyecto pulsando el botón inferior</translation>
+        <translation>También puedes crear un nuevo proyecto presionando el botón inferior</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="202"/>
@@ -1220,7 +1221,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="261"/>
         <source>Remove project</source>
-        <translation>Eliminar proyecto</translation>
+        <translation>Remover proyecto</translation>
     </message>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="262"/>
@@ -1359,22 +1360,22 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../purchasing.cpp" line="528"/>
         <source>Successfully restored your subscription</source>
-        <translation>Tu suscripción ha sido restaurada correctamente</translation>
+        <translation>Suscripción restaurada correctamente</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="530"/>
         <source>Successfully purchased subscription</source>
-        <translation>Tu suscripción ha sido comprada correctamente</translation>
+        <translation>Suscripción ha sido comprada correctamente</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="542"/>
         <source>Failed to purchase subscription</source>
-        <translation>No se ha podido comprar suscripción</translation>
+        <translation>Error al comprar su suscripción</translation>
     </message>
     <message>
         <location filename="../purchasing.cpp" line="540"/>
         <source>Unable to restore your subscription</source>
-        <translation>No se ha podido restaurar tu suscripción</translation>
+        <translation>No se ha podido restaurar su suscripción</translation>
     </message>
 </context>
 <context>
@@ -1420,7 +1421,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value is too large</source>
-        <translation>El valor es demasiado grande</translation>
+        <translation>El valor es demasiado largo</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="61"/>
@@ -1430,7 +1431,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Can not be longer than %1 characters</source>
-        <translation>No puede ser más largo de %1 caracteres</translation>
+        <translation>No puede tener más de %1 caracteres</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="65"/>
@@ -1450,7 +1451,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Value must be unique</source>
-        <translation>El valor tiene que ser único</translation>
+        <translation>El valor debe ser único</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="69"/>
@@ -1471,42 +1472,42 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="195"/>
         <source>No fix</source>
-        <translation>Sin posicionamiento</translation>
+        <translation>Sin corrección</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="198"/>
         <source>GPS fix, no correction data</source>
-        <translation>Posicionamiento GPS, sin datos de corrección</translation>
+        <translation>Corrección GNSS, sin datos de corrección</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="203"/>
         <source>DGPS fix</source>
-        <translation>Posicionamiento DGPS</translation>
+        <translation>Corrección DGPS</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="206"/>
         <source>PPS fix</source>
-        <translation>Posicionamiento PPS</translation>
+        <translation>Corrección PPS</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="209"/>
         <source>RTK fix</source>
-        <translation>Posicionamiento RTK</translation>
+        <translation>Corrección RTK</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="212"/>
         <source>RTK float</source>
-        <translation> Float RTK</translation>
+        <translation>Flotante RTK</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="215"/>
         <source>Estimated fix (dead reckoning)</source>
-        <translation>Posicionamiento estimado (navegación por estima)</translation>
+        <translation>Corrección estimada (navegación por estima)</translation>
     </message>
     <message>
         <location filename="../position/abstractpositionprovider.cpp" line="218"/>
         <source>Unknown fix</source>
-        <translation>Posicionamiento desconocido</translation>
+        <translation>Corrección desconocida</translation>
     </message>
 </context>
 <context>
@@ -1514,7 +1515,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="175"/>
         <source>Rendering</source>
-        <translation>Representación</translation>
+        <translation>Renderizar</translation>
     </message>
 </context>
 <context>
@@ -1570,7 +1571,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/map/RecordingTools.qml" line="175"/>
         <source>You need to add at least %1 points.</source>
-        <translation>Se requiere adicionar  por lo menos %1 puntos.</translation>
+        <translation>Se requiere adicionar por lo menos %1 puntos.</translation>
     </message>
 </context>
 <context>
@@ -1588,7 +1589,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="189"/>
         <source>Confirm password</source>
-        <translation>Confirma la contraseña</translation>
+        <translation>Confirmar contraseña</translation>
     </message>
     <message>
         <location filename="../qml/RegistrationForm.qml" line="214"/>
@@ -1606,7 +1607,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/editor/RelationPhotoFooterDelegate.qml" line="94"/>
         <source>Add</source>
-        <translation>Añadir</translation>
+        <translation>Adicionar</translation>
     </message>
 </context>
 <context>
@@ -1627,17 +1628,17 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="100"/>
         <source>GPS</source>
-        <translation>GPS</translation>
+        <translation>GNSS</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="108"/>
         <source>Follow GPS with map</source>
-        <translation>Seguir GPS con mapa</translation>
+        <translation>Seguir GNSS con mapa</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="127"/>
         <source>GPS accuracy</source>
-        <translation>Precisión GPS</translation>
+        <translation>Precisión GNSS</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="182"/>
@@ -1652,7 +1653,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="227"/>
         <source>Select GPS receiver</source>
-        <translation>Selecciona receptor GPS</translation>
+        <translation>Selecciona receptor GNSS</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="239"/>
@@ -1780,12 +1781,12 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="59"/>
         <source>Data to sync: %1</source>
-        <translation>Datos para sincronizar:% 1</translation>
+        <translation>Datos para sincronizar: %1</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="85"/>
         <source>Using %1 / %2</source>
-        <translation>En uso %1 / %2</translation>
+        <translation>Usando %1 / %2</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="95"/>
@@ -1825,7 +1826,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/SubscribePage.qml" line="164"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
-        <translation>Tu fórmula de suscripción de Mergin se renovará automáticamente. Puedes cancelarla o cambiarla en cualquier momento. %1Descubre más%2</translation>
+        <translation>Tu plan de suscripción de Mergin se renovará automáticamente. Puedes cancelarla o cambiarla en cualquier momento. %1Descubre como%2</translation>
     </message>
 </context>
 <context>
@@ -1848,7 +1849,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/SubscribePlanItem.qml" line="73"/>
         <source>Email support</source>
-        <translation>Asistencia por correo electrónico</translation>
+        <translation>Soporte por eMail</translation>
     </message>
 </context>
 <context>
@@ -1869,7 +1870,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
         <source>Take a photo</source>
-        <translation>Toma una foto</translation>
+        <translation>Tomar una fotografía</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="276"/>
@@ -1879,7 +1880,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/editor/inputexternalresource.qml" line="297"/>
         <source>Image is not available: </source>
-        <translation>La imagen no está disponible:</translation>
+        <translation>Imagen no está disponible</translation>
     </message>
 </context>
 <context>
@@ -1892,12 +1893,12 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/editor/inputrelation.qml" line="134"/>
         <source>Add</source>
-        <translation>Añadir</translation>
+        <translation>Adicionar</translation>
     </message>
     <message>
         <location filename="../qml/editor/inputrelation.qml" line="190"/>
         <source>Linked features</source>
-        <translation>Funciones vinculadas</translation>
+        <translation>Objetos vinculados</translation>
     </message>
 </context>
 <context>
@@ -1913,7 +1914,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/editor/inputvaluerelationpage.qml" line="129"/>
         <source>Features</source>
-        <translation>Entidades</translation>
+        <translation>Objetos</translation>
     </message>
 </context>
 <context>
@@ -1922,22 +1923,22 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
         <location filename="../qml/main.qml" line="220"/>
         <location filename="../qml/main.qml" line="277"/>
         <source>No Changes</source>
-        <translation>Sin cambios</translation>
+        <translation>Sin Cambios</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="251"/>
         <source>GPS auto-center mode on</source>
-        <translation>Modo centrado automático GPS encendido</translation>
+        <translation>Modo GNSS auto-centrado habilitado</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="251"/>
         <source>GPS auto-center mode off</source>
-        <translation>Modo centrado automático GPS apagado</translation>
+        <translation>Modo GNSS auto-centrado deshabilitado</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="266"/>
         <source>No editable layers found.</source>
-        <translation>No se han encontrado ningunas capas editables.</translation>
+        <translation>No se ha encontrado capas editables</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="536"/>
@@ -1947,7 +1948,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/main.qml" line="557"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
-        <translation>Error al comunicar con Mergin.%1Intenta mejorar tu conexión a internet.</translation>
+        <translation>Error al conectarse con Mergin. %1 Intenta mejorar tu conexión a la red. </translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="604"/>
@@ -1962,7 +1963,7 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     <message>
         <location filename="../qml/main.qml" line="482"/>
         <source>PROJ Error</source>
-        <translation>Error en PROJ</translation>
+        <translation>Error de PROJ</translation>
     </message>
 </context>
 </TS>

@@ -19,9 +19,9 @@
 #include "qgsgeometry.h"
 
 #include "inpututils.h"
+#include "variablesmanager.h"
 
 class PositionKit;
-class VariablesManager;
 class QgsVectorLayer;
 
 class Vertex
@@ -83,7 +83,7 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( RecordingType recordingType READ recordingType WRITE setRecordingType NOTIFY recordingTypeChanged )
     Q_PROPERTY( int recordingInterval READ recordingInterval WRITE setRecordingInterval NOTIFY recordingIntervalChanged )
 
-    Q_PROPERTY( QgsVectorLayer *layer READ layer WRITE setLayer NOTIFY layerChanged )
+    Q_PROPERTY( QgsVectorLayer *activeLayer READ activeLayer WRITE setActiveLayer NOTIFY activeLayerChanged )
     Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
 
     Q_PROPERTY( QgsGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
@@ -94,17 +94,15 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( Vertex activeVertex READ activeVertex WRITE setActiveVertex NOTIFY activeVertexChanged )
     Q_PROPERTY( InsertPolicy insertPolicy READ insertPolicy WRITE setInsertPolicy NOTIFY insertPolicyChanged )
 
-    // When editing geometry - set this as the geometry to start with
-    Q_PROPERTY( QgsGeometry initialGeometry READ initialGeometry WRITE setInitialGeometry NOTIFY initialGeometryChanged )
-
     Q_PROPERTY( MapToolState state READ state WRITE setState NOTIFY stateChanged )
 
     Q_PROPERTY( QgsPoint recordPoint READ recordPoint WRITE setRecordPoint NOTIFY recordPointChanged )
     Q_PROPERTY( int activePart READ activePart NOTIFY activePartChanged )
     Q_PROPERTY( int activeRing READ activeRing NOTIFY activeRingChanged )
 
-    Q_PROPERTY( FeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
     Q_PROPERTY( bool canUndo READ canUndo WRITE setCanUndo NOTIFY canUndoChanged )
+    Q_PROPERTY( QgsFeature activeFeature READ activeFeature WRITE setActiveFeature NOTIFY activeFeatureChanged )
+    Q_PROPERTY( VariablesManager *variablesManager READ variablesManager WRITE setVariablesManager NOTIFY variablesManagerChanged )
 
   public:
 
@@ -188,15 +186,11 @@ class RecordingMapTool : public AbstractMapTool
     PositionKit *positionKit() const;
     void setPositionKit( PositionKit *newPositionKit );
 
-    QgsVectorLayer *layer() const;
-    void setLayer( QgsVectorLayer *newLayer );
+    QgsVectorLayer *activeLayer() const;
+    void setActiveLayer( QgsVectorLayer *newActiveLayer );
 
     const QgsGeometry &recordedGeometry() const;
     void setRecordedGeometry( const QgsGeometry &newRecordedGeometry );
-
-    const QgsGeometry &initialGeometry() const;
-    // Fills mPoints array with points from the geometry
-    void setInitialGeometry( const QgsGeometry &newInitialGeometry );
 
     const QgsGeometry &existingVertices() const;
     void setExistingVertices( const QgsGeometry &newExistingVertices );
@@ -228,21 +222,23 @@ class RecordingMapTool : public AbstractMapTool
     int activeRing() const;
     void setActivePartAndRing( int newActivePart, int newActiveRing );
 
-    const FeatureLayerPair &featureLayerPair() const;
-    void setFeatureLayerPair( const FeatureLayerPair &newFeatureLayerPair );
-
     bool canUndo() const;
     void setCanUndo( bool newCanUndo );
 
+    const QgsFeature &activeFeature() const;
+    void setActiveFeature( const QgsFeature &newActiveFeature );
+
+    VariablesManager *variablesManager() const;
+    void setVariablesManager( VariablesManager *newVariablesManager );
+
   signals:
-    void layerChanged( QgsVectorLayer *layer );
+    void activeLayerChanged( QgsVectorLayer *activeLayer );
     void centeredToGPSChanged( bool centeredToGPS );
     void positionKitChanged( PositionKit *positionKit );
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
     void recordingIntervalChanged( int lineRecordingInterval );
     void recordingTypeChanged( const RecordingMapTool::RecordingType &recordingType );
 
-    void initialGeometryChanged( const QgsGeometry &initialGeometry );
     void existingVerticesChanged( const QgsGeometry &existingVertices );
     void midPointsChanged( const QgsGeometry &midPoints );
     void handlesChanged( const QgsGeometry &handles );
@@ -257,8 +253,9 @@ class RecordingMapTool : public AbstractMapTool
     void activePartChanged( int activePart );
     void activeRingChanged( int activeRing );
 
-    void featureLayerPairChanged( const FeatureLayerPair &featureLayerPair );
     void canUndoChanged( bool canUndo );
+    void activeFeatureChanged( const QgsFeature &activeFeature );
+    void variablesManagerChanged( VariablesManager *variablesManager );
 
   public slots:
     void onPositionChanged();
@@ -302,7 +299,6 @@ class RecordingMapTool : public AbstractMapTool
     bool shouldBeVisible( QgsPoint point );
 
     QgsGeometry mRecordedGeometry;
-    QgsGeometry mInitialGeometry;
 
     bool mCenteredToGPS = false;
     RecordingType mRecordingType = Manual;
@@ -310,13 +306,12 @@ class RecordingMapTool : public AbstractMapTool
 
     QDateTime mLastTimeRecorded;
 
-    QgsVectorLayer *mLayer = nullptr; // not owned
+    QgsVectorLayer *mActiveLayer = nullptr; // not owned
     PositionKit *mPositionKit = nullptr; // not owned
 
     QgsGeometry mExistingVertices;
     QgsGeometry mMidPoints;
     QgsGeometry mHandles;
-    QgsGeometry mHiddenHandle;
 
     MapToolState mState = MapToolState::Record;
     InsertPolicy mInsertPolicy = InsertPolicy::End;
@@ -334,8 +329,9 @@ class RecordingMapTool : public AbstractMapTool
     int mActiveRing = 0;
     int mActivePart = 0;
 
-    FeatureLayerPair mFeatureLayerPair;
     bool mCanUndo = false;
+    QgsFeature mActiveFeature;
+    VariablesManager *mVariablesManager = nullptr; // not owned
 };
 
 #endif // RECORDINGMAPTOOL_H
