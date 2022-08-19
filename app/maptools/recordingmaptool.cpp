@@ -526,7 +526,17 @@ void RecordingMapTool::prepareEditing()
   {
     mActiveLayer->startEditing();
 
-    setState( MapToolState::View );
+    // if we are editing point layer we start with the grabbed point
+    if ( mActiveFeature.geometry().type() == QgsWkbTypes::PointGeometry && !mActiveFeature.geometry().isMultipart() )
+    {
+      Vertex v( QgsVertexId( 0, 0, 0 ), QgsPoint( mActiveFeature.geometry().asPoint() ), Vertex::Existing );
+      setActiveVertex( v );
+      setState( MapToolState::Grab );
+    }
+    else
+    {
+      setState( MapToolState::View );
+    }
     setRecordedGeometry( mActiveFeature.geometry() );
   }
   else if ( !mActiveFeature.isValid() || mActiveFeature.geometry().isEmpty() )
