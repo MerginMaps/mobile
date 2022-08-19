@@ -3,6 +3,7 @@
     <file>input_fi.qm</file> 
     <file>input_ko_KR.qm</file> 
     <file>input_pl.qm</file> 
+    <file>input_es_419.qm</file> 
     <file>input_et.qm</file> 
     <file>input_ko.qm</file> 
     <file>input_sl.qm</file> 
@@ -26,6 +27,7 @@
     <file>input_it.qm</file> 
     <file>input_ru_RU.qm</file> 
     <file>input_es.qm</file> 
+    <file>input_ro.qm</file> 
     <file>input_tr.qm</file> 
     <file>input_en.qm</file> 
     <file>input_zh.qm</file> 
