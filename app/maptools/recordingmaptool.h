@@ -19,9 +19,9 @@
 #include "qgsgeometry.h"
 
 #include "inpututils.h"
+#include "variablesmanager.h"
 
 class PositionKit;
-class VariablesManager;
 class QgsVectorLayer;
 
 class Vertex

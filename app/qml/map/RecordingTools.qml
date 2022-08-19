@@ -27,7 +27,6 @@ Item {
 
   property bool centerToGPSOnStartup: false
   property var activeFeature
-  property var variablesManager
 
   signal canceled()
   signal done( var geometry )
