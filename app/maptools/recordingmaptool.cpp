@@ -227,7 +227,6 @@ void RecordingMapTool::removePoint()
   if ( mState == MapToolState::Grab )
   {
     // we are removing existing vertex selected by ActiveVertex
-
     if ( !mActiveVertex.isValid() )
     {
       return;
@@ -344,7 +343,14 @@ void RecordingMapTool::removePoint()
     else
     {
       // points / multipoints
-      mRecordedGeometry.get()->deleteVertex( current );
+      if ( mRecordedGeometry.isMultipart() )
+      {
+        mRecordedGeometry.deletePart( current.part );
+      }
+      else
+      {
+        mRecordedGeometry = QgsGeometry();
+      }
     }
 
     mActiveLayer->beginEditCommand( QStringLiteral( "Delete vertex" ) );
