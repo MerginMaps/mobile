@@ -29,6 +29,7 @@ RecordingMapTool::RecordingMapTool( QObject *parent )
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::completeEditOperation );
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::collectVertices );
   connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::updateVisibleItems );
+  connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::updateActiveVertexGeometry );
   connect( this, &RecordingMapTool::stateChanged, this, &RecordingMapTool::updateVisibleItems );
 }
 
@@ -1035,6 +1036,14 @@ void RecordingMapTool::undo()
   }
 }
 
+void RecordingMapTool::updateActiveVertexGeometry()
+{
+  if ( mActiveVertex.isValid() )
+  {
+    setActiveVertexGeometry( QgsGeometry( mActiveVertex.coordinates().clone() ) );
+  }
+}
+
 Vertex::Vertex()
 {
 
@@ -1234,6 +1243,18 @@ void RecordingMapTool::setActiveVertex( const Vertex &newActiveVertex )
   emit activeVertexChanged( mActiveVertex );
 }
 
+const QgsGeometry &RecordingMapTool::activeVertexGeometry() const
+{
+  return mActiveVertexGeometry;
+}
+
+void RecordingMapTool::setActiveVertexGeometry( const QgsGeometry &newActiveVertexGeometry )
+{
+  if ( mActiveVertexGeometry.equals( newActiveVertexGeometry ) )
+    return;
+  mActiveVertexGeometry = newActiveVertexGeometry;
+  emit recordedGeometryChanged( mActiveVertexGeometry );
+}
 
 const QgsVertexId &Vertex::vertexId() const
 {
