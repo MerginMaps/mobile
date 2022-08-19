@@ -391,7 +391,22 @@ bool RecordingMapTool::hasValidGeometry() const
   {
     if ( mActiveLayer->geometryType() == QgsWkbTypes::PointGeometry )
     {
-      return mRecordedGeometry.constGet()->nCoordinates() == 1;
+      if ( mRecordedGeometry.isMultipart() )
+      {
+        const QgsAbstractGeometry *geom = mRecordedGeometry.constGet();
+        for ( auto it = geom->const_parts_begin(); it != geom->const_parts_end(); ++it )
+        {
+          if ( ( *it )->nCoordinates() != 1 )
+          {
+            return false;
+          }
+        }
+        return true;
+      }
+      else
+      {
+        return mRecordedGeometry.constGet()->nCoordinates() == 1;
+      }
     }
     else if ( mActiveLayer->geometryType() == QgsWkbTypes::LineGeometry )
     {
