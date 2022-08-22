@@ -342,8 +342,8 @@ void TestMapTools::testExistingVertices()
   //~ QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 2, 2 ) );
 
   delete polygonLayer;
-  delete lineLayer;
-  delete pointLayer;
+  //~ delete lineLayer;
+  //~ delete pointLayer;
 }
 
 void TestMapTools::testMidSegmentVertices()
