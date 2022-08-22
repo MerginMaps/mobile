@@ -970,13 +970,27 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
 
 FeatureLayerPair RecordingMapTool::commitChanges()
 {
-  // TODO
-  return FeatureLayerPair();
+  if ( mActiveLayer && mActiveLayer->isEditable() )
+  {
+    mActiveLayer->commitChanges();
+  }
+
+  if ( mActiveLayer && mActiveFeature.isValid() )
+  {
+    return FeatureLayerPair( mActiveFeature, mActiveLayer );
+  }
+  else
+  {
+    return FeatureLayerPair();
+  }
 }
 
 void RecordingMapTool::rollbackChanges()
 {
-  // TODO
+  if ( mActiveLayer && mActiveLayer->isEditable() )
+  {
+    mActiveLayer->rollBack();
+  }
 }
 
 void RecordingMapTool::updateVertex( const Vertex &vertex, const QgsPoint &point )
