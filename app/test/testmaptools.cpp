@@ -289,7 +289,6 @@ void TestMapTools::testExistingVertices()
   QVERIFY( polygonLayer->isValid() );
   project->addMapLayer( polygonLayer );
 
-  qDebug() << "EXISTING VERTICES POLYGON";
   mapTool.setActiveLayer( polygonLayer );
   mapTool.setActiveFeature( polyFeature );
 
@@ -300,51 +299,51 @@ void TestMapTools::testExistingVertices()
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 1 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 1, 1 ) );
 
-  //~ // line
-  //~ QgsVectorLayer *lineLayer = new QgsVectorLayer( QStringLiteral( "LineString?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
-  //~ QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) << QgsPoint( 2, 2 ) );
-  //~ geometry.set( line );
+  // line
+  QgsVectorLayer *lineLayer = new QgsVectorLayer( QStringLiteral( "LineString?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
+  QgsLineString *line = new QgsLineString( QVector< QgsPoint >() << QgsPoint( 0, 0 ) << QgsPoint( 0, 1 ) << QgsPoint( 1, 1 ) << QgsPoint( 2, 2 ) );
+  geometry.set( line );
 
-  //~ QgsFeature lineFeature;
-  //~ lineFeature.setGeometry( geometry );
-  //~ lineLayer->dataProvider()->addFeature( lineFeature );
-  //~ QVERIFY( lineLayer->isValid() );
-  //~ project->addMapLayer( lineLayer );
+  QgsFeature lineFeature;
+  lineFeature.setGeometry( geometry );
+  lineLayer->dataProvider()->addFeature( lineFeature );
+  QVERIFY( lineLayer->isValid() );
+  project->addMapLayer( lineLayer );
 
-  //~ mapTool.setActiveLayer( lineLayer );
-  //~ mapTool.setActiveFeature( lineFeature );
+  mapTool.setActiveLayer( lineLayer );
+  mapTool.setActiveFeature( lineFeature );
 
-  //~ vertices = mapTool.existingVertices();
-  //~ QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
-  //~ QCOMPARE( vertices.constGet()->partCount(), 4 );
-  //~ QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
-  //~ QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 1 ) );
-  //~ QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 1, 1 ) );
-  //~ QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 2, 2 ) );
+  vertices = mapTool.existingVertices();
+  QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
+  QCOMPARE( vertices.constGet()->partCount(), 4 );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 1, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 2, 2 ) );
 
-  //~ // multipoint
-  //~ QgsVectorLayer *pointLayer = new QgsVectorLayer( QStringLiteral( "MultiPoint?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
-  //~ geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
+  // multipoint
+  QgsVectorLayer *pointLayer = new QgsVectorLayer( QStringLiteral( "MultiPoint?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
+  geometry = QgsGeometry::fromWkt( "MultiPoint( 0 0, 1 1, 2 2)" );
 
-  //~ QgsFeature pointFeature;
-  //~ pointFeature.setGeometry( geometry );
-  //~ pointLayer->dataProvider()->addFeature( pointFeature );
-  //~ QVERIFY( pointLayer->isValid() );
-  //~ project->addMapLayer( pointLayer );
+  QgsFeature pointFeature;
+  pointFeature.setGeometry( geometry );
+  pointLayer->dataProvider()->addFeature( pointFeature );
+  QVERIFY( pointLayer->isValid() );
+  project->addMapLayer( pointLayer );
 
-  //~ mapTool.setActiveLayer( pointLayer );
-  //~ mapTool.setActiveFeature( pointFeature );
+  mapTool.setActiveLayer( pointLayer );
+  mapTool.setActiveFeature( pointFeature );
 
-  //~ vertices = mapTool.existingVertices();
-  //~ QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
-  //~ QCOMPARE( vertices.constGet()->partCount(), 3 );
-  //~ QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
-  //~ QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 1, 1 ) );
-  //~ QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 2, 2 ) );
+  vertices = mapTool.existingVertices();
+  QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
+  QCOMPARE( vertices.constGet()->partCount(), 3 );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 1, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 2, 2 ) );
 
   delete polygonLayer;
-  //~ delete lineLayer;
-  //~ delete pointLayer;
+  delete lineLayer;
+  delete pointLayer;
 }
 
 void TestMapTools::testMidSegmentVertices()
