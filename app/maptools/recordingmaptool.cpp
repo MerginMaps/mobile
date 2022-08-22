@@ -698,9 +698,11 @@ void RecordingMapTool::updateVisibleItems()
   }
 
   Vertex v;
+  qDebug() << "COUNT" << mVertices.count();
   for ( int i = 0; i < mVertices.count(); i++ )
   {
     v = mVertices.at( i );
+    qDebug() << i << v.type() << v.coordinates().asWkt(8);
 
     if ( v.type() == Vertex::Existing && v != mActiveVertex )
     {
@@ -729,6 +731,7 @@ void RecordingMapTool::updateVisibleItems()
         if ( i > 0 && i < mVertices.count() )
         {
           Vertex prevVertex = mVertices.at( i - 1 );
+          qDebug() << "PREV" << i - 1 << prevVertex.type() << prevVertex.coordinates().asWkt(8);
 
           // next vertex should be the either the next vertex in the sequence
           // if this midpoint is a first or middle midpoint of the ring or
@@ -737,6 +740,7 @@ void RecordingMapTool::updateVisibleItems()
           Vertex nextVertex = mVertices.at( i + 1 );
           if ( nextVertex.vertexId().part != v.vertexId().part || nextVertex.vertexId().ring != v.vertexId().ring )
           {
+            qDebug() << "FIND FIRST";
             for ( int j = 0 ; j < mVertices.count(); j++ )
             {
               nextVertex = mVertices.at( j );
@@ -746,6 +750,7 @@ void RecordingMapTool::updateVisibleItems()
               }
             }
           }
+          qDebug() << "NEXT" << i - 1 << nextVertex.type() << nextVertex.coordinates().asWkt(8);
 
           if ( prevVertex != mActiveVertex && nextVertex != mActiveVertex )
           {
