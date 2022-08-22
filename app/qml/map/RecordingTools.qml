@@ -29,7 +29,7 @@ Item {
   property var activeFeature
 
   signal canceled()
-  signal done( var geometry )
+  signal done( var featureLayerPair )
 
   Banner {
     id: gpsAccuracyBanner
@@ -257,6 +257,10 @@ Item {
           mapTool.releaseVertex( crosshair.recordPoint )
         }
 
+        // TODO: mapTool.commitChanges
+        // let pair = mapTool.commitChanges()
+        // root.done( pair )
+
         root.done( mapTool.recordedGeometry )
       }
       else
@@ -266,12 +270,7 @@ Item {
     }
 
     onCancelClicked: {
-      if ( mapTool.state == RecordingMapTool.Grab )
-      {
-        mapTool.cancelGrab()
-        return;
-      }
-
+      // TODO: mapTool.rollbackChanges
       root.canceled()
     }
   }

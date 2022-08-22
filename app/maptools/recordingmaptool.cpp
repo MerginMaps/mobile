@@ -963,6 +963,17 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
   setActiveVertex( Vertex() );
 }
 
+FeatureLayerPair RecordingMapTool::commitChanges()
+{
+  // TODO
+  return FeatureLayerPair();
+}
+
+void RecordingMapTool::rollbackChanges()
+{
+  // TODO
+}
+
 void RecordingMapTool::updateVertex( const Vertex &vertex, const QgsPoint &point )
 {
   if ( !mActiveLayer )

@@ -151,6 +151,8 @@ Item {
         }
     }
 
+    // TODO: remove this item if layer does not have geometry
+
     Menu {
         id: rootMenu
         title: qsTr("Advanced")

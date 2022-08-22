@@ -160,6 +160,10 @@ class RecordingMapTool : public AbstractMapTool
      */
     Q_INVOKABLE void releaseVertex( const QgsPoint &point );
 
+    Q_INVOKABLE FeatureLayerPair commitChanges();
+
+    Q_INVOKABLE void rollbackChanges();
+
     /**
      * Reverts last change from the layer undo stack.
      */

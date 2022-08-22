@@ -782,12 +782,6 @@ Item {
         }
         else if ( root.state === "edit" )
         {
-          if ( internal.oldGeometry )
-          {
-            let editedFeaturePair = __inputUtils.changeFeaturePairGeometry( internal.featurePairToEdit, internal.oldGeometry )
-            internal.oldGeometry = null
-            root.editingGeometryFinished( editedFeaturePair )
-          }
           root.editingGeometryCanceled()
         }
         else if ( root.state === "recordInLayer" )
@@ -801,18 +795,15 @@ Item {
       onDone: {
         if ( root.state === "record" )
         {
-          let newFeaturePair = __inputUtils.createFeatureLayerPair( __activeLayer.vectorLayer, geometry, __variablesManager )
-          root.recordingFinished( newFeaturePair )
+          root.recordingFinished( featureLayerPair )
         }
         else if ( root.state === "edit" )
         {
-          let editedFeaturePair = __inputUtils.changeFeaturePairGeometry( internal.featurePairToEdit, geometry )
-          root.editingGeometryFinished( editedFeaturePair )
+          root.editingGeometryFinished( featureLayerPair )
         }
         else if ( root.state === "recordInLayer" )
         {
-          let newFeaturePair = __inputUtils.createFeatureLayerPair( __activeLayer.vectorLayer, geometry, __variablesManager )
-          root.recordInLayerFeatureFinished( newFeaturePair )
+          root.recordInLayerFeatureFinished( featureLayerPair )
         }
 
         root.state = "view"
@@ -882,7 +873,6 @@ Item {
     property var stakeoutTarget
 
     property bool isInRecordState: root.state === "record" || root.state === "recordInLayer" || root.state === "edit"
-    property var oldGeometry: null // geometry of the feature before redraw
   }
 
   function select( featurepair ) {
@@ -913,9 +903,6 @@ Item {
     __activeProject.setActiveLayer( featurepair.layer )
     centerToPair( featurepair )
     redrawGeometryBanner.show()
-
-    // save existing geometry, so we can restore it on cancel
-    internal.oldGeometry = featurepair.feature.geometry
 
     // clear feature geometry
     internal.featurePairToEdit = __inputUtils.changeFeaturePairGeometry( featurepair, __inputUtils.emptyGeometry() )
