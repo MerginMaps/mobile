@@ -726,7 +726,7 @@ void RecordingMapTool::updateVisibleItems()
       // for polygons show midpoint if previous or next vertex is not active
       if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
       {
-        if ( i > 0 && i < mVertices.count() - 1 )
+        if ( i > 0 && i < mVertices.count() )
         {
           Vertex prevVertex = mVertices.at( i - 1 );
 
