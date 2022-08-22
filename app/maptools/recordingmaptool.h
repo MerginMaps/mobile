@@ -92,6 +92,7 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( QgsGeometry handles READ handles WRITE setHandles NOTIFY handlesChanged )
 
     Q_PROPERTY( Vertex activeVertex READ activeVertex WRITE setActiveVertex NOTIFY activeVertexChanged )
+    Q_PROPERTY( QgsGeometry activeVertexGeometry READ activeVertexGeometry WRITE setActiveVertexGeometry NOTIFY activeVertexGeometryChanged )
     Q_PROPERTY( InsertPolicy insertPolicy READ insertPolicy WRITE setInsertPolicy NOTIFY insertPolicyChanged )
 
     Q_PROPERTY( MapToolState state READ state WRITE setState NOTIFY stateChanged )
@@ -159,6 +160,10 @@ class RecordingMapTool : public AbstractMapTool
      */
     Q_INVOKABLE void releaseVertex( const QgsPoint &point );
 
+    Q_INVOKABLE FeatureLayerPair commitChanges();
+
+    Q_INVOKABLE void rollbackChanges();
+
     /**
      * Reverts last change from the layer undo stack.
      */
@@ -215,6 +220,9 @@ class RecordingMapTool : public AbstractMapTool
     const Vertex &activeVertex() const;
     void setActiveVertex( const Vertex &newActiveVertex );
 
+    const QgsGeometry &activeVertexGeometry() const;
+    void setActiveVertexGeometry( const QgsGeometry &newActiveVertexGeometry );
+
     const InsertPolicy &insertPolicy() const;
     void setInsertPolicy( const InsertPolicy &insertPolicy );
 
@@ -247,6 +255,7 @@ class RecordingMapTool : public AbstractMapTool
     void recordPointChanged( QgsPoint recordPoint );
 
     void activeVertexChanged( const Vertex &activeVertex );
+    void activeVertexGeometryChanged( const QgsGeometry &activeVertexGeometry );
 
     void insertPolicyChanged( const RecordingMapTool::InsertPolicy &insertPolicy );
 
@@ -275,6 +284,11 @@ class RecordingMapTool : public AbstractMapTool
      * start/end points and "handles" (for lines) from the nodes index.
      */
     void updateVisibleItems();
+
+    /**
+     * Updates geometry of the active vertex
+     */
+    void updateActiveVertexGeometry();
 
     /**
      * Grabs next vertex after the removal of the currently selected vertex
@@ -323,6 +337,7 @@ class RecordingMapTool : public AbstractMapTool
     // ActiveVertex is set only when we grab a point,
     // it is the grabbed point, contains its coordinates and index
     Vertex mActiveVertex;
+    QgsGeometry mActiveVertexGeometry;
 
     // ActiveRing and ActivePart are set only when we record,
     // in order to know where to insert the points

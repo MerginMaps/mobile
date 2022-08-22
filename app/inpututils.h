@@ -462,8 +462,13 @@ class InputUtils: public QObject
     //! Creates featureLayerPair from geometry and layer, evaluates its expressions and returns it.
     Q_INVOKABLE static FeatureLayerPair createFeatureLayerPair( QgsVectorLayer *layer, const QgsGeometry &geometry, VariablesManager *variablesmanager );
 
-    //! Changes featureLayerPair's geometry to passed geometry
-    //! Geometry must be in the same CRS as the layer
+    Q_INVOKABLE static void createEditBuffer( QgsVectorLayer *layer );
+
+    /**
+     *  Changes featureLayerPair's geometry to passed geometry
+     *  Geometry must be in the same CRS as the layer
+     *  Change is written directly inside the layer edit buffer, but the buffer is not commited!
+     */
     Q_INVOKABLE static FeatureLayerPair changeFeaturePairGeometry( FeatureLayerPair featurePair, const QgsGeometry &geometry );
 
     // Calculates real screen DPR based on DPI

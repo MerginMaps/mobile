@@ -1699,10 +1699,31 @@ FeatureLayerPair InputUtils::createFeatureLayerPair( QgsVectorLayer *layer, cons
   return FeatureLayerPair( feat, layer );
 }
 
+void InputUtils::createEditBuffer( QgsVectorLayer *layer )
+{
+  if ( layer )
+  {
+    if ( !layer->editBuffer() )
+    {
+      layer->startEditing();
+    }
+  }
+}
+
 FeatureLayerPair InputUtils::changeFeaturePairGeometry( FeatureLayerPair featurePair, const QgsGeometry &geometry )
 {
-  featurePair.featureRef().setGeometry( geometry );
-  return featurePair;
+  QgsVectorLayer *vlayer = featurePair.layer();
+  if ( vlayer )
+  {
+    InputUtils::createEditBuffer( vlayer );
+    QgsGeometry g( geometry );
+    vlayer->changeGeometry( featurePair.feature().id(), g );
+    vlayer->triggerRepaint();
+  }
+
+  QgsFeature f = featurePair.layer()->getFeature( featurePair.feature().id() );
+
+  return FeatureLayerPair( f, featurePair.layer() );
 }
 
 QgsPointXY InputUtils::extractPointFromFeature( const FeatureLayerPair &feature )
@@ -1852,7 +1873,10 @@ QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
 
     case QgsWkbTypes::MultiPolygon:
     {
+      QgsLineString *line = new QgsLineString();
+      QgsPolygon *polygon = new QgsPolygon( line );
       QgsMultiPolygon *multiPolygon = new QgsMultiPolygon();
+      multiPolygon->addGeometry( polygon );
       geometry.set( multiPolygon );
       break;
     }

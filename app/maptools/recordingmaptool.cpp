@@ -29,6 +29,7 @@ RecordingMapTool::RecordingMapTool( QObject *parent )
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::completeEditOperation );
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::collectVertices );
   connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::updateVisibleItems );
+  connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::updateActiveVertexGeometry );
   connect( this, &RecordingMapTool::stateChanged, this, &RecordingMapTool::updateVisibleItems );
 }
 
@@ -226,7 +227,6 @@ void RecordingMapTool::removePoint()
   if ( mState == MapToolState::Grab )
   {
     // we are removing existing vertex selected by ActiveVertex
-
     if ( !mActiveVertex.isValid() )
     {
       return;
@@ -343,7 +343,14 @@ void RecordingMapTool::removePoint()
     else
     {
       // points / multipoints
-      mRecordedGeometry.get()->deleteVertex( current );
+      if ( mRecordedGeometry.isMultipart() )
+      {
+        mRecordedGeometry.deletePart( current.part );
+      }
+      else
+      {
+        mRecordedGeometry = QgsGeometry();
+      }
     }
 
     mActiveLayer->beginEditCommand( QStringLiteral( "Delete vertex" ) );
@@ -390,7 +397,22 @@ bool RecordingMapTool::hasValidGeometry() const
   {
     if ( mActiveLayer->geometryType() == QgsWkbTypes::PointGeometry )
     {
-      return mRecordedGeometry.constGet()->nCoordinates() == 1;
+      if ( mRecordedGeometry.isMultipart() )
+      {
+        const QgsAbstractGeometry *geom = mRecordedGeometry.constGet();
+        for ( auto it = geom->const_parts_begin(); it != geom->const_parts_end(); ++it )
+        {
+          if ( ( *it )->nCoordinates() != 1 )
+          {
+            return false;
+          }
+        }
+        return true;
+      }
+      else
+      {
+        return mRecordedGeometry.constGet()->nCoordinates() == 1;
+      }
     }
     else if ( mActiveLayer->geometryType() == QgsWkbTypes::LineGeometry )
     {
@@ -504,7 +526,17 @@ void RecordingMapTool::prepareEditing()
   {
     mActiveLayer->startEditing();
 
-    setState( MapToolState::View );
+    // if we are editing point layer we start with the grabbed point
+    if ( mActiveFeature.geometry().type() == QgsWkbTypes::PointGeometry && !mActiveFeature.geometry().isMultipart() )
+    {
+      Vertex v( QgsVertexId( 0, 0, 0 ), QgsPoint( mActiveFeature.geometry().asPoint() ), Vertex::Existing );
+      setActiveVertex( v );
+      setState( MapToolState::Grab );
+    }
+    else
+    {
+      setState( MapToolState::View );
+    }
     setRecordedGeometry( mActiveFeature.geometry() );
   }
   else if ( !mActiveFeature.isValid() || mActiveFeature.geometry().isEmpty() )
@@ -677,7 +709,50 @@ void RecordingMapTool::updateVisibleItems()
     }
     else if ( v.type() == Vertex::MidPoint )
     {
-      midPoints->addGeometry( v.coordinates().clone() );
+      // for lines show midpoint if previous or next vertex is not active
+      if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
+      {
+        if ( i > 0 && i < mVertices.count() - 1 )
+        {
+          Vertex prevVertex = mVertices.at( i - 1 );
+          Vertex nextVertex = mVertices.at( i + 1 );
+          if ( prevVertex != mActiveVertex && nextVertex != mActiveVertex )
+          {
+            midPoints->addGeometry( v.coordinates().clone() );
+          }
+        }
+      }
+
+      // for polygons show midpoint if previous or next vertex is not active
+      if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+      {
+        if ( i > 0 && i <= mVertices.count() - 1 )
+        {
+          Vertex prevVertex = mVertices.at( i - 1 );
+
+          // next vertex should be the either the next vertex in the sequence
+          // if this midpoint is a first or middle midpoint of the ring or
+          // it should be the first vertex of the correspoding ring is this
+          // midpoint is the last midpoint of the ring
+          Vertex nextVertex = mVertices.at( i + 1 );
+          if ( nextVertex.vertexId().part != v.vertexId().part || nextVertex.vertexId().ring != v.vertexId().ring )
+          {
+            for ( int j = 0 ; j < mVertices.count(); j++ )
+            {
+              nextVertex = mVertices.at( j );
+              if ( nextVertex.vertexId().part == v.vertexId().part && nextVertex.vertexId().ring == v.vertexId().ring )
+              {
+                break;
+              }
+            }
+          }
+
+          if ( prevVertex != mActiveVertex && nextVertex != mActiveVertex )
+          {
+            midPoints->addGeometry( v.coordinates().clone() );
+          }
+        }
+      }
     }
     else if ( v.type() == Vertex::HandleStart )
     {
@@ -888,6 +963,17 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
   setActiveVertex( Vertex() );
 }
 
+FeatureLayerPair RecordingMapTool::commitChanges()
+{
+  // TODO
+  return FeatureLayerPair();
+}
+
+void RecordingMapTool::rollbackChanges()
+{
+  // TODO
+}
+
 void RecordingMapTool::updateVertex( const Vertex &vertex, const QgsPoint &point )
 {
   if ( !mActiveLayer )
@@ -1032,6 +1118,18 @@ void RecordingMapTool::undo()
 
     mActiveLayer->triggerRepaint();
     setCanUndo( mActiveLayer->undoStack()->canUndo() );
+  }
+}
+
+void RecordingMapTool::updateActiveVertexGeometry()
+{
+  if ( mActiveVertex.isValid() )
+  {
+    setActiveVertexGeometry( QgsGeometry( mActiveVertex.coordinates().clone() ) );
+  }
+  else
+  {
+    setActiveVertexGeometry( QgsGeometry() );
   }
 }
 
@@ -1234,6 +1332,18 @@ void RecordingMapTool::setActiveVertex( const Vertex &newActiveVertex )
   emit activeVertexChanged( mActiveVertex );
 }
 
+const QgsGeometry &RecordingMapTool::activeVertexGeometry() const
+{
+  return mActiveVertexGeometry;
+}
+
+void RecordingMapTool::setActiveVertexGeometry( const QgsGeometry &newActiveVertexGeometry )
+{
+  if ( mActiveVertexGeometry.equals( newActiveVertexGeometry ) )
+    return;
+  mActiveVertexGeometry = newActiveVertexGeometry;
+  emit recordedGeometryChanged( mActiveVertexGeometry );
+}
 
 const QgsVertexId &Vertex::vertexId() const
 {
