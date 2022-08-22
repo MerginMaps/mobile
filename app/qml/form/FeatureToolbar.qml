@@ -113,6 +113,7 @@ Item {
         Item {
             width: parent.width/parent.children.length
             height: parent.height
+            visible: __inputUtils.isSpatialLayer(__activeLayer.vectorLayer)
 
             MainPanelButton {
               id: menuBtn
