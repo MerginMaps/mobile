@@ -1170,6 +1170,15 @@ bool InputUtils::isMultiPartLayer( QgsVectorLayer *layer )
   return QgsWkbTypes::isMultiType( layer->wkbType() );
 }
 
+bool InputUtils::isSpatialLayer( QgsVectorLayer *layer )
+{
+  if ( !layer )
+  {
+    return false;
+  }
+  return layer->isSpatial();
+}
+
 qreal InputUtils::calculateScreenDpr()
 {
   const QList<QScreen *> screens = QGuiApplication::screens();

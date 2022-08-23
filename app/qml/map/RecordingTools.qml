@@ -233,8 +233,8 @@ Item {
 
       if ( pointLayerSelected )
       {
-        // finish recording
-        root.done( mapTool.recordedGeometry )
+        let pair = mapTool.commitChanges()
+        root.done( pair )
       }
     }
 
@@ -257,11 +257,8 @@ Item {
           mapTool.releaseVertex( crosshair.recordPoint )
         }
 
-        // TODO: mapTool.commitChanges
-        // let pair = mapTool.commitChanges()
-        // root.done( pair )
-
-        root.done( mapTool.recordedGeometry )
+        let pair = mapTool.commitChanges()
+        root.done( pair )
       }
       else
       {
@@ -270,7 +267,7 @@ Item {
     }
 
     onCancelClicked: {
-      // TODO: mapTool.rollbackChanges
+      mapTool.rollbackChanges()
       root.canceled()
     }
   }

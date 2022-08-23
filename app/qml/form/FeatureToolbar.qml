@@ -17,6 +17,7 @@ Item {
 
     property int itemSize: toolbar.height * 0.8
     property bool isFeaturePoint: false
+    property bool isSpatialLayer: false
 
     signal editClicked()
     signal deleteClicked()
@@ -113,6 +114,7 @@ Item {
         Item {
             width: parent.width/parent.children.length
             height: parent.height
+            visible: isSpatialLayer
 
             MainPanelButton {
               id: menuBtn
