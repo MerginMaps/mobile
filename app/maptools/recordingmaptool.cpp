@@ -750,6 +750,17 @@ void RecordingMapTool::updateVisibleItems()
           else
           {
             nextVertex = mVertices.at( i + 1 );
+            if ( nextVertex.vertexId().part != v.vertexId().part || nextVertex.vertexId().ring != v.vertexId().ring )
+            {
+              for ( int j = 0 ; j < mVertices.count(); j++ )
+              {
+                nextVertex = mVertices.at( j );
+                if ( nextVertex.vertexId().part == v.vertexId().part && nextVertex.vertexId().ring == v.vertexId().ring )
+                {
+                  break;
+                }
+              }
+            }
           }
 
           if ( prevVertex != mActiveVertex && nextVertex != mActiveVertex )
