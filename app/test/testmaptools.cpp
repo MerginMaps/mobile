@@ -184,7 +184,6 @@ void TestMapTools::testSplitting()
 
 void TestMapTools::testRecording()
 {
-  QSKIP( "testRecording will be enabled later; ENABLE WHEN PUSHING TO MASTER" );
   RecordingMapTool *recordTool = new RecordingMapTool();
 
   QString projectDir = TestUtils::testDataDir() + "/planes";
@@ -249,7 +248,7 @@ void TestMapTools::testRecording()
   recordTool->addPoint( pointsToAdd[0] );
   recordTool->addPoint( pointsToAdd[1] );
 
-  QVERIFY( recordTool->hasValidGeometry() );
+  QVERIFY( !recordTool->hasValidGeometry() );
 
   recordTool->addPoint( pointsToAdd[2] );
 
