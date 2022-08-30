@@ -637,7 +637,6 @@ void TestMapTools::testAddVertexPointLayer()
 
 void TestMapTools::testAddVertexMultiPointLayer()
 {
-  QSKIP( "testAddVertexMultiPointLayer will be enabled later; ENABLE WHEN PUSHING TO MASTER" );
   RecordingMapTool mapTool;
 
   QgsProject *project = TestUtils::loadPlanesTestProject();
@@ -682,17 +681,17 @@ void TestMapTools::testAddVertexMultiPointLayer()
 
   mapTool.addPoint( pointsToAdd[1] );
 
-  // nothing should happen really
+  // adds another part
   QVERIFY( mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 2 );
+  QVERIFY( mapTool.recordedGeometry().constGet()->partCount() == 2 );
   QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointsToAdd[0] );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), pointsToAdd[1] );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
   QVERIFY( mapTool.recordedGeometry().wkbType() == QgsWkbTypes::MultiPoint );
-
-  // if maptool is in GRAB and VIEW state, no point should be added
 
   // clear recorded geometry
   mapTool.setActiveLayer( nullptr );
@@ -701,13 +700,14 @@ void TestMapTools::testAddVertexMultiPointLayer()
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
+  // if maptool is in GRAB and VIEW state, no point should be added
   mapTool.setState( RecordingMapTool::Grab );
 
   mapTool.addPoint( pointsToAdd[0] );
 
   // no point should be added
   QVERIFY( !mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 0 );
+  QVERIFY( mapTool.recordedGeometry().isEmpty() );
 
   mapTool.setState( RecordingMapTool::View );
 
@@ -715,10 +715,9 @@ void TestMapTools::testAddVertexMultiPointLayer()
 
   // no point should be added
   QVERIFY( !mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 0 );
+  QVERIFY( mapTool.recordedGeometry().isEmpty() );
 
   delete project;
-  delete ms;
   delete multiPointLayer;
 }
 
