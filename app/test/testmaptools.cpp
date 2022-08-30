@@ -723,7 +723,6 @@ void TestMapTools::testAddVertexMultiPointLayer()
 
 void TestMapTools::testAddVertexLineLayer()
 {
-  QSKIP( "testAddVertexLineLayer will be enabled later; ENABLE WHEN PUSHING TO MASTER" );
   RecordingMapTool mapTool;
 
   QgsProject *project = TestUtils::loadPlanesTestProject();
@@ -748,7 +747,6 @@ void TestMapTools::testAddVertexLineLayer()
   //
   // ----------- Linestring layer ----------
   //
-
   QVector<QgsPoint> pointsToAdd =
   {
     { -97.129, 22.602 }, // added to end
@@ -818,7 +816,6 @@ void TestMapTools::testAddVertexLineLayer()
   //
   // Let's try to add point from beginning
   //
-
   mapTool.setInsertPolicy( RecordingMapTool::Start );
 
   mapTool.addPoint( pointsToAdd[4] );
@@ -833,7 +830,6 @@ void TestMapTools::testAddVertexLineLayer()
   //
   // Let's add point to the middle of line
   //
-
   mapTool.setInsertPolicy( RecordingMapTool::End );
 
   Vertex addPosition = Vertex( QgsVertexId( 0, 0, 3 ), pointsToAdd[3], Vertex::Existing );
@@ -847,7 +843,6 @@ void TestMapTools::testAddVertexLineLayer()
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
   delete project;
-  delete ms;
   delete lineLayer;
 }
 
