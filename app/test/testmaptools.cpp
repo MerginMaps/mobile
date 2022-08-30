@@ -848,7 +848,6 @@ void TestMapTools::testAddVertexLineLayer()
 
 void TestMapTools::testAddVertexMultiLineLayer()
 {
-  QSKIP( "testAddVertexMultiLineLayer will be enabled later; ENABLE WHEN PUSHING TO MASTER" );
   RecordingMapTool mapTool;
 
   QgsProject *project = TestUtils::loadPlanesTestProject();
@@ -906,7 +905,7 @@ void TestMapTools::testAddVertexMultiLineLayer()
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
-  QVERIFY( mapTool.recordedGeometry().wkbType() == QgsWkbTypes::LineString );
+  QVERIFY( mapTool.recordedGeometry().wkbType() == QgsWkbTypes::MultiLineString );
 
   mapTool.addPoint( pointsToAdd[2] );
 
@@ -935,9 +934,7 @@ void TestMapTools::testAddVertexMultiLineLayer()
 
   QVERIFY( mapTool.hasValidGeometry() );
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 3 );
-
-  QVERIFY( !mapTool.activeVertex().isValid() );
-  QVERIFY( mapTool.state() == RecordingMapTool::View );
+  QVERIFY( mapTool.state() == RecordingMapTool::Grab );
 
   mapTool.setState( RecordingMapTool::Record );
   mapTool.setActiveVertex( Vertex() );
@@ -954,7 +951,6 @@ void TestMapTools::testAddVertexMultiLineLayer()
   //
   // Let's try to add point from beginning
   //
-
   mapTool.setInsertPolicy( RecordingMapTool::Start );
 
   mapTool.addPoint( pointsToAdd[4] );
@@ -969,7 +965,6 @@ void TestMapTools::testAddVertexMultiLineLayer()
   //
   // Let's add point to the middle of line
   //
-
   mapTool.setInsertPolicy( RecordingMapTool::End );
 
   Vertex addPosition = Vertex( QgsVertexId( 0, 0, 3 ), pointsToAdd[3], Vertex::Existing );
@@ -983,7 +978,6 @@ void TestMapTools::testAddVertexMultiLineLayer()
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
   delete project;
-  delete ms;
   delete multiLineLayer;
 }
 
