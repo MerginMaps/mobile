@@ -983,7 +983,6 @@ void TestMapTools::testAddVertexMultiLineLayer()
 
 void TestMapTools::testAddVertexPolygonLayer()
 {
-  QSKIP( "testAddVertexPolygonLayer will be enabled later; ENABLE WHEN PUSHING TO MASTER" );
   RecordingMapTool mapTool;
 
   QgsProject *project = TestUtils::loadPlanesTestProject();
@@ -1007,7 +1006,6 @@ void TestMapTools::testAddVertexPolygonLayer()
   //
   // ----------- Polygon layer ----------
   //
-
   QVector<QgsPoint> pointsToAdd =
   {
     { -95.5, 22.0 },
@@ -1034,7 +1032,8 @@ void TestMapTools::testAddVertexPolygonLayer()
   mapTool.addPoint( pointsToAdd[1] );
 
   QVERIFY( !mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 2 );
+  // ring will be closed, hance 3 points
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 3 );
   QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), pointsToAdd[1] );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
@@ -1045,7 +1044,7 @@ void TestMapTools::testAddVertexPolygonLayer()
   mapTool.addPoint( pointsToAdd[2] );
 
   QVERIFY( mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 3 );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 4 );
   QCOMPARE( mapTool.recordedGeometry().vertexAt( 2 ), pointsToAdd[2] );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
@@ -1056,7 +1055,7 @@ void TestMapTools::testAddVertexPolygonLayer()
   mapTool.addPoint( pointsToAdd[3] );
 
   QVERIFY( mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 3 );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 4 );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::View );
@@ -1068,7 +1067,7 @@ void TestMapTools::testAddVertexPolygonLayer()
   mapTool.addPoint( pointsToAdd[3] );
 
   QVERIFY( mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 3 );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 4 );
 
   mapTool.setState( RecordingMapTool::Record );
   mapTool.setActiveVertex( Vertex() );
@@ -1079,7 +1078,7 @@ void TestMapTools::testAddVertexPolygonLayer()
   mapTool.addPoint( pointsToAdd[3] );
 
   QVERIFY( mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 4 );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 5 );
   QCOMPARE( mapTool.recordedGeometry().vertexAt( 3 ), pointsToAdd[3] );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
@@ -1088,30 +1087,28 @@ void TestMapTools::testAddVertexPolygonLayer()
   //
   // Let's insert points to the middle
   //
-
   Vertex addVertexPos = Vertex( QgsVertexId( 0, 0, 1 ), pointsToAdd[4], Vertex::Existing );
   mapTool.addPointAtPosition( addVertexPos, pointsToAdd[4] );
 
   QVERIFY( mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 5 );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 6 );
   QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), pointsToAdd[4] );
 
   addVertexPos = Vertex( QgsVertexId( 0, 0, 3 ), pointsToAdd[5], Vertex::Existing );
   mapTool.addPointAtPosition( addVertexPos, pointsToAdd[5] );
 
   QVERIFY( mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 6 );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 7 );
   QCOMPARE( mapTool.recordedGeometry().vertexAt( 3 ), pointsToAdd[5] );
 
   addVertexPos = Vertex( QgsVertexId( 0, 0, 6 ), pointsToAdd[6], Vertex::Existing );
   mapTool.addPointAtPosition( addVertexPos, pointsToAdd[6] );
 
   QVERIFY( mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 7 );
-  QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), pointsToAdd[6] );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 8 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 6 ), pointsToAdd[6] );
 
   delete project;
-  delete ms;
   delete polygonLayer;
 }
 
