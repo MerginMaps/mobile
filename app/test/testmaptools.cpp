@@ -11,6 +11,7 @@
 
 #include "QtTest/QtTest"
 #include <QSignalSpy>
+#include <QList>
 
 #include "qgspoint.h"
 #include "qgslinestring.h"
@@ -552,6 +553,11 @@ void TestMapTools::testLookForVertex()
   mapTool.lookForVertex( screenPoint );
   QVERIFY( !mapTool.activeVertex().isValid() );
   QCOMPARE( mapTool.state(), RecordingMapTool::MapToolState::View );
+
+  // TODO: identify:
+  // - no vertex
+  // - ring vertex
+  // - part vertex
 
   delete lineLayer;
 }
@@ -1250,29 +1256,50 @@ void TestMapTools::testAddVertexMultiPolygonLayer()
 
 void TestMapTools::testUpdateVertex()
 {
-  /*
-    //
-    // Take some initial geometry and update existing vertices position.
-    // It should work only when tool is in GRAB state
-    //
+  RecordingMapTool mapTool;
 
-    RecordingMapTool mapTool;
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
 
-    QgsGeometry line = QgsGeometry::fromPolyline(
-    {
-      QgsPoint( 10, 20 ),
-      QgsPoint( 20, 30 ),
-      QgsPoint( 30, 40 ),
-    } );
+  QgsQuickMapCanvasMap canvas;
+  QgsQuickMapSettings *ms = canvas.mapSettings();
+  setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
-    mapTool.setInitialGeometry( line );
+  mapTool.setMapSettings( ms );
 
-    Vertex updateVertexId = Vertex( QgsVertexId( 0, 0, 1 ), QgsPoint( 20, 30 ), Vertex::Existing );
+  QCOMPARE( mapTool.recordingType(), RecordingMapTool::Manual );
 
-    mapTool.updateVertex( updateVertexId, QgsPoint( 50, 50 ) );
+  // Create memory layer to work with
+  QgsVectorLayer *lineLayer = new QgsVectorLayer( "LineString?crs=epsg:4326", "linelayer", "memory" );
 
-    QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), QgsPoint( 50, 50 ) );
-  */
+  QgsGeometry line = QgsGeometry::fromPolyline(
+  {
+    QgsPoint( 10, 20 ),
+    QgsPoint( 20, 30 ),
+    QgsPoint( 30, 40 ),
+  } );
+
+  QgsFeature feature;
+  feature.setGeometry( line );
+  QVERIFY( feature.isValid() );
+
+  lineLayer->dataProvider()->addFeatures( QList<QgsFeature>() << feature );
+  QCOMPARE( lineLayer->featureCount(), 1 );
+
+  mapTool.setState( RecordingMapTool::Grab );
+  mapTool.setActiveLayer( lineLayer );
+  mapTool.setActiveFeature( feature );
+
+  Vertex updateVertexId = Vertex( QgsVertexId( 0, 0, 1 ), QgsPoint( 20, 30 ), Vertex::Existing );
+
+  mapTool.setActiveVertex( updateVertexId );
+
+  mapTool.updateVertex( updateVertexId, QgsPoint( 50, 50 ) );
+
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), QgsPoint( 50, 50 ) );
+
+  delete project;
+  delete lineLayer;
 }
 
 void TestMapTools::testRemoveVertex()
@@ -1284,16 +1311,6 @@ void TestMapTools::testRemoveVertex()
   // - multiline geo
   // - polygon geo
   // - multipolygon geo
-}
-
-void TestMapTools::testLookForVertexV2()
-{
-  // try to identify:
-  // - no vertex
-  // - ring vertex
-  // - part vertex
-  // -
-
 }
 
 void TestMapTools::testVerticesStructure()

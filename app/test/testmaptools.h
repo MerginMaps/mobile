@@ -38,7 +38,6 @@ class TestMapTools : public QObject
     void testAddVertexMultiPolygonLayer();
     void testUpdateVertex();
     void testRemoveVertex();
-    void testLookForVertexV2();
     void testVerticesStructure();
 };
 
