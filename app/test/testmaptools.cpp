@@ -31,8 +31,6 @@
 
 #include "featurelayerpair.h"
 
-void setupMapSettings( QgsQuickMapSettings *settings, QgsProject *project, QgsRectangle extent, QSize outputsize );
-
 void setupMapSettings( QgsQuickMapSettings *settings, QgsProject *project, QgsRectangle extent, QSize outputsize )
 {
   if ( !project || !settings )
@@ -238,10 +236,15 @@ void TestMapTools::testRecording()
   recordTool->addPoint( pointsToAdd[0] );
 
   QCOMPARE( geometryChangedSpy.count(), 1 );
-
   QVERIFY( !recordTool->hasValidGeometry() );
 
   recordTool->removePoint();
+
+  // we will end up in GRAB mode
+  QVERIFY( recordTool->state() == RecordingMapTool::Grab );
+
+  // go back to RECORDING
+  recordTool->setState( RecordingMapTool::Record );
 
   QCOMPARE( geometryChangedSpy.count(), 2 );
 
