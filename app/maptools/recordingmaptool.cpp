@@ -42,6 +42,12 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     return;
   }
 
+  // if maptool is in GRAB and VIEW state, no point should be added
+  if ( mState == RecordingMapTool::View || mState == RecordingMapTool::Grab )
+  {
+    return;
+  }
+
   QgsPoint pointToAdd( point );
 
   if ( mPositionKit && ( mCenteredToGPS || mRecordingType == StreamMode ) )
@@ -395,6 +401,11 @@ bool RecordingMapTool::hasValidGeometry() const
 {
   if ( mActiveLayer )
   {
+    if ( mRecordedGeometry.isEmpty() )
+    {
+      return false;
+    }
+
     if ( mActiveLayer->geometryType() == QgsWkbTypes::PointGeometry )
     {
       if ( mRecordedGeometry.isMultipart() )
@@ -1272,7 +1283,10 @@ void RecordingMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
   // we need to clear all recorded points and recalculate the geometry
   setRecordedGeometry( QgsGeometry() );
 
-  mActiveLayer->startEditing();
+  if ( mActiveLayer )
+  {
+    mActiveLayer->startEditing();
+  }
 }
 
 const QgsGeometry &RecordingMapTool::recordedGeometry() const

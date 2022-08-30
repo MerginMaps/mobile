@@ -555,7 +555,6 @@ void TestMapTools::testLookForVertex()
 
 void TestMapTools::testAddVertexPointLayer()
 {
-  QSKIP( "testAddVertexPointLayer will be enabled later; ENABLE WHEN PUSHING TO MASTER" );
   RecordingMapTool mapTool;
 
   QgsProject *project = TestUtils::loadPlanesTestProject();
@@ -586,7 +585,6 @@ void TestMapTools::testAddVertexPointLayer()
   //
   // Point layer should only add point when geometry is empty
   //
-
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
@@ -601,41 +599,39 @@ void TestMapTools::testAddVertexPointLayer()
 
   mapTool.addPoint( pointsToAdd[1] );
 
-  // nothing should happen really
+  // geometry is updated with new point
   QVERIFY( mapTool.hasValidGeometry() );
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
-  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointsToAdd[0] );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointsToAdd[1] );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
   QVERIFY( mapTool.recordedGeometry().wkbType() == QgsWkbTypes::Point );
 
-  // if maptool is in GRAB and VIEW state, no point should be added
+  // clear recorded geometry
   mapTool.setActiveLayer( nullptr );
   mapTool.setActiveLayer( pointLayer );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
+  // if maptool is in GRAB and VIEW state, no point should be added
   mapTool.setState( RecordingMapTool::Grab );
-
   mapTool.addPoint( pointsToAdd[0] );
 
   // no point should be added
   QVERIFY( !mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 0 );
+  QVERIFY( mapTool.recordedGeometry().isEmpty() );
 
   mapTool.setState( RecordingMapTool::View );
-
   mapTool.addPoint( pointsToAdd[0] );
 
   // no point should be added
   QVERIFY( !mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 0 );
+  QVERIFY( mapTool.recordedGeometry().isEmpty() );
 
   delete project;
-  delete ms;
   delete pointLayer;
 }
 
