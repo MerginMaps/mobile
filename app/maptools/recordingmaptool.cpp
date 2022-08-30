@@ -363,7 +363,6 @@ void RecordingMapTool::removePoint()
     emit recordedGeometryChanged( mRecordedGeometry );
 
     grabNextVertex();
-
   }
   else if ( mState == MapToolState::Record )
   {
@@ -1077,6 +1076,14 @@ void RecordingMapTool::grabNextVertex()
     return;
   }
 
+  if ( mRecordedGeometry.isEmpty() )
+  {
+    setActivePartAndRing( 0, 0 );
+    setState( MapToolState::Record );
+    setActiveVertex( Vertex() );
+    return;
+  }
+
   // mActiveVertex is pointing to removed vertex
   QgsVertexId current = mActiveVertex.vertexId();
 
@@ -1093,7 +1100,6 @@ void RecordingMapTool::grabNextVertex()
 
     QgsVertexId next( current.part, current.ring, nextId );
     QgsPoint positionOfNext = mRecordedGeometry.constGet()->vertexAt( next );
-
     setActiveVertex( Vertex( next, positionOfNext, Vertex::Existing ) );
     setState( MapToolState::Grab );
   }

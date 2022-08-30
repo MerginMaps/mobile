@@ -1304,13 +1304,115 @@ void TestMapTools::testUpdateVertex()
 
 void TestMapTools::testRemoveVertex()
 {
-  // remove point to:
-  // - point geo
-  // - multipoint geo
-  // - line geo
-  // - multiline geo
-  // - polygon geo
-  // - multipolygon geo
+  RecordingMapTool mapTool;
+
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+
+  QgsQuickMapCanvasMap canvas;
+  QgsQuickMapSettings *ms = canvas.mapSettings();
+  setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
+
+  mapTool.setMapSettings( ms );
+
+  QCOMPARE( mapTool.recordingType(), RecordingMapTool::Manual );
+
+  // Point layer
+  QgsVectorLayer *pointLayer = new QgsVectorLayer( "Point?crs=epsg:4326", "pointlayer", "memory" );
+
+  QgsFeature feature;
+  feature.setGeometry( QgsGeometry::fromPointXY( QgsPointXY( 10, 10 ) ) );
+  QVERIFY( feature.isValid() );
+
+  pointLayer->dataProvider()->addFeatures( QList<QgsFeature>() << feature );
+  QCOMPARE( pointLayer->featureCount(), 1 );
+
+  mapTool.setState( RecordingMapTool::Grab );
+  mapTool.setActiveLayer( pointLayer );
+  mapTool.setActiveFeature( feature );
+
+  Vertex v = Vertex( QgsVertexId( 0, 0, 1 ), QgsPoint( 10, 10 ), Vertex::Existing );
+
+  mapTool.setActiveVertex( v );
+  mapTool.removePoint();
+  QVERIFY( mapTool.recordedGeometry().isEmpty() );
+
+  // MultiPoint layer
+  QgsVectorLayer *multiPointLayer = new QgsVectorLayer( "MultiPoint?crs=epsg:4326", "pointlayer", "memory" );
+
+  QgsGeometry multiPoint = QgsGeometry::fromMultiPointXY(
+  {
+    QgsPointXY( 10, 20 ),
+    QgsPointXY( 20, 30 ),
+    QgsPointXY( 30, 40 ),
+    QgsPointXY( 40, 50 ),
+  } );
+
+  feature = QgsFeature();
+  feature.setGeometry( multiPoint );
+  QVERIFY( feature.isValid() );
+
+  multiPointLayer->dataProvider()->addFeatures( QList<QgsFeature>() << feature );
+  QCOMPARE( multiPointLayer->featureCount(), 1 );
+
+  mapTool.setActiveLayer( multiPointLayer );
+  mapTool.setActiveFeature( feature );
+  mapTool.setState( RecordingMapTool::Grab );
+
+  v = Vertex( QgsVertexId( 1, 0, 1 ), QgsPoint( 20, 30 ), Vertex::Existing );
+  mapTool.setActiveVertex( v );
+  mapTool.removePoint();
+
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 3 );
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 1 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 30, 40 ) );
+
+  // Line layer
+  QgsVectorLayer *lineLayer = new QgsVectorLayer( "LineString?crs=epsg:4326", "linelayer", "memory" );
+
+  QgsGeometry line = QgsGeometry::fromPolyline(
+  {
+    QgsPoint( 10, 20 ),
+    QgsPoint( 20, 30 ),
+    QgsPoint( 30, 40 ),
+    QgsPoint( 40, 50 ),
+  } );
+
+  feature = QgsFeature();
+  feature.setGeometry( line );
+  QVERIFY( feature.isValid() );
+
+  lineLayer->dataProvider()->addFeatures( QList<QgsFeature>() << feature );
+  QCOMPARE( lineLayer->featureCount(), 1 );
+
+  mapTool.setActiveLayer( lineLayer );
+  mapTool.setActiveFeature( feature );
+  mapTool.setState( RecordingMapTool::Grab );
+
+  v = Vertex( QgsVertexId( 0, 0, 1 ), QgsPoint( 20, 30 ), Vertex::Existing );
+  mapTool.setActiveVertex( v );
+  mapTool.removePoint();
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), QgsPoint( 30, 40 ) );
+
+  // MultiLine layer
+  QgsVectorLayer *multiLineLayer = new QgsVectorLayer( "MultiLineString?crs=epsg:4326", "multilinelayer", "memory" );
+
+  // Polygon layer
+  QgsVectorLayer *polygonLayer = new QgsVectorLayer( "Polygon?crs=epsg:4326", "polygonlayer", "memory" );
+
+  // MultiPolygon layer
+  QgsVectorLayer *multiPolygonLayer = new QgsVectorLayer( "MultiPolygon?crs=epsg:4326", "multipolygonlayer", "memory" );
+
+  delete project;
+  delete pointLayer;
+  delete multiPointLayer;
+  delete lineLayer;
+  delete multiLineLayer;
+  delete polygonLayer;
+  delete multiPolygonLayer;
 }
 
 void TestMapTools::testVerticesStructure()
