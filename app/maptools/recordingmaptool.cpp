@@ -999,6 +999,7 @@ FeatureLayerPair RecordingMapTool::commitChanges()
   if ( mActiveLayer->isEditable() )
   {
     mActiveLayer->commitChanges();
+    mActiveLayer->triggerRepaint();
   }
 
   if ( mActiveFeature.isValid() )
@@ -1015,6 +1016,7 @@ void RecordingMapTool::rollbackChanges()
   if ( mActiveLayer && mActiveLayer->isEditable() )
   {
     mActiveLayer->rollBack();
+    mActiveLayer->triggerRepaint();
   }
 }
 
