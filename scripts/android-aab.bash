@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# ----
+# Have a look at android-apk.bash script to see all required environment variables!
+# ----
+
 BUILD_DIR=`pwd`/input
 INSTALL_DIR=${BUILD_DIR}/out
 
