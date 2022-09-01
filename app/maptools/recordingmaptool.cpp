@@ -1106,7 +1106,7 @@ void RecordingMapTool::grabNextVertex()
   else
   {
     // jump to other part if there is any
-    if ( mRecordedGeometry.constGet()->partCount() > 1 )
+    if ( mRecordedGeometry.constGet()->partCount() >= 1 )
     {
       QgsVertexId nextRingVertex( 0, 0, 0 );
       QgsPoint nextRingVertexPosition = mRecordedGeometry.constGet()->vertexAt( nextRingVertex );

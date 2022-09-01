@@ -1396,15 +1396,216 @@ void TestMapTools::testRemoveVertex()
   mapTool.setActiveVertex( v );
   mapTool.removePoint();
   QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), QgsPoint( 30, 40 ) );
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 10, 20 ) );
 
   // MultiLine layer
   QgsVectorLayer *multiLineLayer = new QgsVectorLayer( "MultiLineString?crs=epsg:4326", "multilinelayer", "memory" );
+  QgsGeometry multiLine = QgsGeometry::fromMultiPolylineXY(
+  {
+    {
+      QgsPointXY( 10, 20 ),
+      QgsPointXY( 20, 30 ),
+      QgsPointXY( 30, 40 ),
+      QgsPointXY( 40, 50 ),
+    },
+    {
+      QgsPointXY( 60, 70 ),
+      QgsPointXY( 70, 80 ),
+      QgsPointXY( 80, 90 ),
+    }
+  } );
+
+  feature = QgsFeature();
+  feature.setGeometry( multiLine );
+  QVERIFY( feature.isValid() );
+
+  multiLineLayer->dataProvider()->addFeatures( QList<QgsFeature>() << feature );
+  QCOMPARE( multiLineLayer->featureCount(), 1 );
+
+  mapTool.setActiveLayer( multiLineLayer );
+  mapTool.setActiveFeature( feature );
+  mapTool.setState( RecordingMapTool::Grab );
+
+  v = Vertex( QgsVertexId( 0, 0, 3 ), QgsPoint( 40, 50 ), Vertex::Existing );
+  mapTool.setActiveVertex( v );
+  mapTool.removePoint();
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 2 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 30, 40 ) );
+
+  // delete from the 2nd part
+  v = Vertex( QgsVertexId( 1, 0, 0 ), QgsPoint( 60, 70 ), Vertex::Existing );
+  mapTool.setActiveVertex( v );
+  mapTool.removePoint();
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 1 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 70, 80 ) );
+
+  // remove part completely
+  mapTool.removePoint();
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 1 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 80, 90 ) );
+
+  // jump to 1st part
+  mapTool.removePoint();
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 10, 20 ) );
 
   // Polygon layer
   QgsVectorLayer *polygonLayer = new QgsVectorLayer( "Polygon?crs=epsg:4326", "polygonlayer", "memory" );
+  QgsGeometry polygon = QgsGeometry::fromPolygonXY(
+  {
+    {
+      // exterior ring
+      QgsPointXY( 0, 0 ),
+      QgsPointXY( 0, 20 ),
+      QgsPointXY( 20, 20 ),
+      QgsPointXY( 20, 0 ),
+    },
+    {
+      // interior ring - hole
+      QgsPointXY( 5, 5 ),
+      QgsPointXY( 5, 10 ),
+      QgsPointXY( 10, 10 ),
+      QgsPointXY( 10, 5 ),
+    }
+  } );
+
+  feature = QgsFeature();
+  feature.setGeometry( polygon );
+  QVERIFY( feature.isValid() );
+
+  polygonLayer->dataProvider()->addFeatures( QList<QgsFeature>() << feature );
+  QCOMPARE( polygonLayer->featureCount(), 1 );
+
+  mapTool.setActiveLayer( polygonLayer );
+  mapTool.setActiveFeature( feature );
+  mapTool.setState( RecordingMapTool::Grab );
+
+  v = Vertex( QgsVertexId( 0, 0, 2 ), QgsPoint( 20, 20 ), Vertex::Existing );
+  mapTool.setActiveVertex( v );
+  mapTool.removePoint();
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 1 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 0, 20 ) );
+
+  // delete vertex from ring
+  v = Vertex( QgsVertexId( 0, 1, 3 ), QgsPoint( 10, 50 ), Vertex::Existing );
+  mapTool.setActiveVertex( v );
+  mapTool.removePoint();
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 1 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 2 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 10, 10 ) );
 
   // MultiPolygon layer
   QgsVectorLayer *multiPolygonLayer = new QgsVectorLayer( "MultiPolygon?crs=epsg:4326", "multipolygonlayer", "memory" );
+  QgsGeometry multiPolygon = QgsGeometry::fromMultiPolygonXY(
+  {
+    {
+      // part 1
+      {
+        QgsPointXY( 50, 50 ),
+        QgsPointXY( 50, 70 ),
+        QgsPointXY( 70, 70 ),
+        QgsPointXY( 70, 50 ),
+      }
+    },
+    {
+      // part 2
+      {
+        // exterior ring
+        QgsPointXY( 0, 0 ),
+        QgsPointXY( 0, 20 ),
+        QgsPointXY( 20, 20 ),
+        QgsPointXY( 20, 0 ),
+      },
+      {
+        // interior ring - hole
+        QgsPointXY( 5, 5 ),
+        QgsPointXY( 5, 10 ),
+        QgsPointXY( 10, 10 ),
+        QgsPointXY( 10, 5 ),
+      }
+    },
+  } );
+
+  feature = QgsFeature();
+  feature.setGeometry( multiPolygon );
+  QVERIFY( feature.isValid() );
+
+  multiPolygonLayer->dataProvider()->addFeatures( QList<QgsFeature>() << feature );
+  QCOMPARE( multiPolygonLayer->featureCount(), 1 );
+
+  mapTool.setActiveLayer( multiPolygonLayer );
+  mapTool.setActiveFeature( feature );
+  mapTool.setState( RecordingMapTool::Grab );
+
+  v = Vertex( QgsVertexId( 0, 0, 0 ), QgsPoint( 50, 50 ), Vertex::Existing );
+  mapTool.setActiveVertex( v );
+  mapTool.removePoint();
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 50, 70 ) );
+
+  // delete from the 2nd part
+  v = Vertex( QgsVertexId( 1, 0, 0 ), QgsPoint( 0, 0 ), Vertex::Existing );
+  mapTool.setActiveVertex( v );
+  mapTool.removePoint();
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 1 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 0, 20 ) );
+
+  // delete from the part ring
+  v = Vertex( QgsVertexId( 1, 1, 2 ), QgsPoint( 10, 10 ), Vertex::Existing );
+  mapTool.setActiveVertex( v );
+  mapTool.removePoint();
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 1 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 1 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 1 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 5, 10 ) );
+
+  // delete ring completely
+  mapTool.removePoint();
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 1 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 1 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 5, 5 ) );
+
+  mapTool.removePoint();
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 1 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 1 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 10, 5 ) );
+
+  // we should jump to the 1st part
+  mapTool.removePoint();
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 50, 70 ) );
 
   delete project;
   delete pointLayer;
