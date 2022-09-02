@@ -1842,51 +1842,56 @@ QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
     return geometry;
   }
 
-  switch ( layer->wkbType() )
+  bool isMulti = QgsWkbTypes::isMultiType( layer->wkbType() );
+
+  switch ( layer->geometryType() )
   {
-    case QgsWkbTypes::Point:
+    case QgsWkbTypes::PointGeometry:
     {
-      QgsPoint *point = new QgsPoint();
-      geometry.set( point );
+      if ( isMulti )
+      {
+        QgsMultiPoint *multiPoint = new QgsMultiPoint();
+        geometry.set( multiPoint );
+      }
+      else
+      {
+        QgsPoint *point = new QgsPoint();
+        geometry.set( point );
+      }
       break;
     }
 
-    case QgsWkbTypes::LineString:
+    case QgsWkbTypes::LineGeometry:
     {
-      QgsLineString *line = new QgsLineString();
-      geometry.set( line );
+      if ( isMulti )
+      {
+        QgsMultiLineString *multiLine = new QgsMultiLineString();
+        geometry.set( multiLine );
+      }
+      else
+      {
+        QgsLineString *line = new QgsLineString();
+        geometry.set( line );
+      }
       break;
     }
 
-    case QgsWkbTypes::Polygon:
+    case QgsWkbTypes::PolygonGeometry:
     {
-      QgsLineString *line = new QgsLineString();
-      QgsPolygon *polygon = new QgsPolygon( line );
-      geometry.set( polygon );
-      break;
-    }
-
-    case QgsWkbTypes::MultiPoint:
-    {
-      QgsMultiPoint *multiPoint = new QgsMultiPoint();
-      geometry.set( multiPoint );
-      break;
-    }
-
-    case QgsWkbTypes::MultiLineString:
-    {
-      QgsMultiLineString *multiLine = new QgsMultiLineString();
-      geometry.set( multiLine );
-      break;
-    }
-
-    case QgsWkbTypes::MultiPolygon:
-    {
-      QgsLineString *line = new QgsLineString();
-      QgsPolygon *polygon = new QgsPolygon( line );
-      QgsMultiPolygon *multiPolygon = new QgsMultiPolygon();
-      multiPolygon->addGeometry( polygon );
-      geometry.set( multiPolygon );
+      if ( isMulti )
+      {
+        QgsLineString *line = new QgsLineString();
+        QgsPolygon *polygon = new QgsPolygon( line );
+        QgsMultiPolygon *multiPolygon = new QgsMultiPolygon();
+        multiPolygon->addGeometry( polygon );
+        geometry.set( multiPolygon );
+      }
+      else
+      {
+        QgsLineString *line = new QgsLineString();
+        QgsPolygon *polygon = new QgsPolygon( line );
+        geometry.set( polygon );
+      }
       break;
     }
 
