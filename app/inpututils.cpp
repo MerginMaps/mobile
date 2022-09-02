@@ -1901,3 +1901,25 @@ QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
 
   return geometry;
 }
+
+
+QString InputUtils::invalidGeometryWarning( QgsVectorLayer *layer )
+{
+  QString msg;
+  if ( !layer )
+  {
+    return msg;
+  }
+
+  int nPoints = 1;
+  if ( layer->geometryType() == QgsWkbTypes::LineGeometry )
+  {
+    nPoints = 2;
+  }
+  else if ( layer->geometryType() == QgsWkbTypes::PolygonGeometry )
+  {
+    nPoints = 3;
+  }
+
+  return tr( "You need to add at least %1 point(s)." ).arg( nPoints );
+}

@@ -502,6 +502,8 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QgsGeometry createGeometryForLayer( QgsVectorLayer *layer );
 
+    Q_INVOKABLE static QString invalidGeometryWarning( QgsVectorLayer *layer );
+
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
