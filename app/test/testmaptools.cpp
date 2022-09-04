@@ -1460,6 +1460,7 @@ void TestMapTools::testRemoveVertex()
   // jump to 1st part
   mapTool.removePoint();
   QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 1 );
   QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
   QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
   QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
@@ -1496,6 +1497,7 @@ void TestMapTools::testRemoveVertex()
   mapTool.setActiveFeature( feature );
   mapTool.setState( RecordingMapTool::Grab );
 
+  // delete from exterior ring
   v = Vertex( QgsVertexId( 0, 0, 2 ), QgsPoint( 20, 20 ), Vertex::Existing );
   mapTool.setActiveVertex( v );
   mapTool.removePoint();
@@ -1504,9 +1506,10 @@ void TestMapTools::testRemoveVertex()
   QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
   QCOMPARE( mapTool.activeVertex().vertexId().vertex, 1 );
   QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 0, 20 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->ringCount(), 2 );
 
-  // delete vertex from ring
-  v = Vertex( QgsVertexId( 0, 1, 3 ), QgsPoint( 10, 50 ), Vertex::Existing );
+  // delete from interior ring
+  v = Vertex( QgsVertexId( 0, 1, 3 ), QgsPoint( 10, 5 ), Vertex::Existing );
   mapTool.setActiveVertex( v );
   mapTool.removePoint();
   QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
@@ -1514,6 +1517,33 @@ void TestMapTools::testRemoveVertex()
   QCOMPARE( mapTool.activeVertex().vertexId().ring, 1 );
   QCOMPARE( mapTool.activeVertex().vertexId().vertex, 2 );
   QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 10, 10 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->ringCount(), 2 );
+
+  // delete interior ring completely
+  mapTool.removePoint();
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 1 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 1 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 5, 10 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->ringCount(), 2 );
+
+  mapTool.removePoint();
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 1 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 5, 5 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->ringCount(), 2 );
+
+  mapTool.removePoint();
+  QCOMPARE( mapTool.state(), RecordingMapTool::Grab );
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 0, 0 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->ringCount(), 1 );
+
 
   // MultiPolygon layer
   QgsVectorLayer *multiPolygonLayer = new QgsVectorLayer( "MultiPolygon?crs=epsg:4326", "multipolygonlayer", "memory" );
@@ -1558,6 +1588,7 @@ void TestMapTools::testRemoveVertex()
   mapTool.setActiveFeature( feature );
   mapTool.setState( RecordingMapTool::Grab );
 
+  // delete vertex from the 1st part
   v = Vertex( QgsVertexId( 0, 0, 0 ), QgsPoint( 50, 50 ), Vertex::Existing );
   mapTool.setActiveVertex( v );
   mapTool.removePoint();
@@ -1566,8 +1597,10 @@ void TestMapTools::testRemoveVertex()
   QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
   QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
   QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 50, 70 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->ringCount( 1 ), 2 );
 
-  // delete from the 2nd part
+  // delete vertex from the 2nd part
   v = Vertex( QgsVertexId( 1, 0, 0 ), QgsPoint( 0, 0 ), Vertex::Existing );
   mapTool.setActiveVertex( v );
   mapTool.removePoint();
@@ -1576,6 +1609,8 @@ void TestMapTools::testRemoveVertex()
   QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
   QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
   QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 0, 20 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->ringCount( 1 ), 2 );
 
   // delete from the part ring
   v = Vertex( QgsVertexId( 1, 1, 2 ), QgsPoint( 10, 10 ), Vertex::Existing );
@@ -1586,6 +1621,8 @@ void TestMapTools::testRemoveVertex()
   QCOMPARE( mapTool.activeVertex().vertexId().ring, 1 );
   QCOMPARE( mapTool.activeVertex().vertexId().vertex, 1 );
   QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 5, 10 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->ringCount( 1 ), 2 );
 
   // delete ring completely
   mapTool.removePoint();
@@ -1593,12 +1630,16 @@ void TestMapTools::testRemoveVertex()
   QCOMPARE( mapTool.activeVertex().vertexId().ring, 1 );
   QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
   QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 5, 5 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->ringCount( 1 ), 2 );
 
   mapTool.removePoint();
   QCOMPARE( mapTool.activeVertex().vertexId().part, 1 );
   QCOMPARE( mapTool.activeVertex().vertexId().ring, 1 );
   QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
   QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 10, 5 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->ringCount( 1 ), 2 );
 
   // we should jump to the 1st part
   mapTool.removePoint();
@@ -1606,6 +1647,30 @@ void TestMapTools::testRemoveVertex()
   QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
   QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
   QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 50, 70 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->ringCount( 1 ), 1 );
+
+  // delete 1st part completely
+  mapTool.removePoint();
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 70, 70 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+
+  mapTool.removePoint();
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 70, 50 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+
+  mapTool.removePoint();
+  QCOMPARE( mapTool.activeVertex().vertexId().part, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().ring, 0 );
+  QCOMPARE( mapTool.activeVertex().vertexId().vertex, 0 );
+  QCOMPARE( mapTool.activeVertex().coordinates(), QgsPoint( 0, 20 ) );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 1 );
 
   delete project;
   delete pointLayer;
