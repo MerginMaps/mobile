@@ -313,7 +313,7 @@ void RecordingMapTool::removePoint()
 
       // if this was the last point in the ring and ring is interior
       // we remove that ring completely
-      if ( r->isEmpty() && current.ring > 0)
+      if ( r->isEmpty() && current.ring > 0 )
       {
         QgsCurvePolygon *p = qgsgeometry_cast<QgsCurvePolygon *>( poly );
         p->removeInteriorRing( current.ring - 1 );
