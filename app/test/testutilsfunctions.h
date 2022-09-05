@@ -44,6 +44,8 @@ class TestUtilsFunctions: public QObject
     void testEquals();
     void testGeometryIcons();
     void testFixCountryCode();
+    void testCreateGeometryForLayer();
+    void testInvalidGeometryWarning();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );

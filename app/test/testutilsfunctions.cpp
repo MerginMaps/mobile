@@ -780,3 +780,63 @@ void TestUtilsFunctions::testFixCountryCode()
     QCOMPARE( mUtils->fixLocaleCountry( test.first ), test.second );
   }
 }
+
+void TestUtilsFunctions::testCreateGeometryForLayer()
+{
+  QVector< QPair< QString, QgsWkbTypes::Type > > testcases =
+  {
+    { QStringLiteral( "Point" ), QgsWkbTypes::Point },
+    { QStringLiteral( "MultiPoint" ), QgsWkbTypes::MultiPoint },
+    { QStringLiteral( "PointZ" ), QgsWkbTypes::Point },
+    { QStringLiteral( "LineString" ), QgsWkbTypes::LineString },
+    { QStringLiteral( "MultiLineString" ), QgsWkbTypes::MultiLineString },
+    { QStringLiteral( "LineStringM" ), QgsWkbTypes::LineString },
+    { QStringLiteral( "MultiLineStringZM" ), QgsWkbTypes::MultiLineString },
+    { QStringLiteral( "Polygon" ), QgsWkbTypes::Polygon },
+    { QStringLiteral( "MultiPolygon" ), QgsWkbTypes::MultiPolygon },
+    { QStringLiteral( "MultiPolygonM" ), QgsWkbTypes::MultiPolygon },
+  };
+
+  QgsGeometry geom;
+
+  for ( const auto &test : testcases )
+  {
+    QgsVectorLayer *layer = new QgsVectorLayer( QStringLiteral( "%1?crs=epsg:4326" ).arg( test.first ), "layer", "memory" );
+    geom = InputUtils::createGeometryForLayer( layer );
+    QVERIFY( geom.isEmpty() );
+    QCOMPARE( geom.wkbType(), test.second );
+    delete layer;
+  }
+}
+
+void TestUtilsFunctions::testInvalidGeometryWarning()
+{
+  QVector< QPair< QString, int > > testcases =
+  {
+    { QStringLiteral( "Point" ), 1 },
+    { QStringLiteral( "MultiPoint" ), 1 },
+    { QStringLiteral( "LineString" ), 2 },
+    { QStringLiteral( "MultiLineString" ), 2 },
+    { QStringLiteral( "Polygon" ), 3 },
+    { QStringLiteral( "MultiPolygon" ), 3 },
+  };
+
+  QString msg;
+
+  for ( const auto &test : testcases )
+  {
+    QgsVectorLayer *layer = new QgsVectorLayer( QStringLiteral( "%1?crs=epsg:4326" ).arg( test.first ), "layer", "memory" );
+    msg = InputUtils::invalidGeometryWarning( layer );
+
+    if ( QgsWkbTypes::isMultiType( layer->wkbType() ) )
+    {
+      QCOMPARE( msg, QStringLiteral( "You need to add at least %1 point(s) to every part." ).arg( test.second ) );
+    }
+    else
+    {
+      QCOMPARE( msg, QStringLiteral( "You need to add at least %1 point(s)." ).arg( test.second ) );
+    }
+
+    delete layer;
+  }
+}
