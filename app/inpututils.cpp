@@ -1921,5 +1921,12 @@ QString InputUtils::invalidGeometryWarning( QgsVectorLayer *layer )
     nPoints = 3;
   }
 
-  return tr( "You need to add at least %1 point(s)." ).arg( nPoints );
+  if ( QgsWkbTypes::isMultiType( layer->wkbType() ) )
+  {
+    return tr( "You need to add at least %1 point(s) to every part." ).arg( nPoints );
+  }
+  else
+  {
+    return tr( "You need to add at least %1 point(s)." ).arg( nPoints );
+  }
 }

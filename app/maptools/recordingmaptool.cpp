@@ -316,6 +316,7 @@ void RecordingMapTool::removePoint()
       if ( r->isEmpty() && current.ring > 0 )
       {
         QgsCurvePolygon *p = qgsgeometry_cast<QgsCurvePolygon *>( poly );
+        // rings numerarion starts with 0
         p->removeInteriorRing( current.ring - 1 );
       }
 
