@@ -177,7 +177,7 @@ Item {
         state: featureForm.state
 
         visible: !root.readOnly
-        isFeaturePoint: __inputUtils.geometryFromLayer( root.featureLayerPair.layer ) === "point"
+        isFeaturePoint: __inputUtils.isPointLayer( root.featureLayerPair.layer )
         isSpatialLayer: __inputUtils.isSpatialLayer( root.featureLayerPair.layer )
 
         onEditClicked: root.formState = "edit"

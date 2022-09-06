@@ -42,6 +42,12 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     return;
   }
 
+  // if maptool is in GRAB and VIEW state, no point should be added
+  if ( mState == RecordingMapTool::View || mState == RecordingMapTool::Grab )
+  {
+    return;
+  }
+
   QgsPoint pointToAdd( point );
 
   if ( mPositionKit && ( mCenteredToGPS || mRecordingType == StreamMode ) )
@@ -242,15 +248,15 @@ void RecordingMapTool::removePoint()
     if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
     {
       QgsLineString *r;
-      const QgsPolygon *poly;
+      QgsPolygon *poly;
 
       if ( mRecordedGeometry.isMultipart() )
       {
-        poly = qgsgeometry_cast<const QgsMultiPolygon *>( mRecordedGeometry.constGet() )->polygonN( current.part );
+        poly = qgsgeometry_cast<QgsMultiPolygon *>( mRecordedGeometry.get() )->polygonN( current.part );
       }
       else
       {
-        poly = qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() );
+        poly = qgsgeometry_cast<QgsPolygon *>( mRecordedGeometry.get() );
       }
 
       if ( !poly )
@@ -304,6 +310,22 @@ void RecordingMapTool::removePoint()
       {
         mRecordedGeometry.get()->deleteVertex( current );
       }
+
+      // if this was the last point in the ring and ring is interior
+      // we remove that ring completely
+      if ( r->isEmpty() && current.ring > 0 )
+      {
+        QgsCurvePolygon *p = qgsgeometry_cast<QgsCurvePolygon *>( poly );
+        // rings numerarion starts with 0
+        p->removeInteriorRing( current.ring - 1 );
+      }
+
+      // if this was the last point in the part of the multipart geometry
+      // we remove that part completely
+      if ( mRecordedGeometry.isMultipart() && poly->isEmpty() )
+      {
+        mRecordedGeometry.deletePart( current.part );
+      }
     }
     else if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
     {
@@ -337,7 +359,16 @@ void RecordingMapTool::removePoint()
       }
       else
       {
-        mRecordedGeometry.get()->deleteVertex( current );
+        // if this is the last point of the part in multipart geometry
+        // let's remove that part completely
+        if ( mRecordedGeometry.isMultipart() && r->nCoordinates() == 1 )
+        {
+          mRecordedGeometry.deletePart( current.part );
+        }
+        else
+        {
+          mRecordedGeometry.get()->deleteVertex( current );
+        }
       }
     }
     else
@@ -357,7 +388,6 @@ void RecordingMapTool::removePoint()
     emit recordedGeometryChanged( mRecordedGeometry );
 
     grabNextVertex();
-
   }
   else if ( mState == MapToolState::Record )
   {
@@ -395,6 +425,11 @@ bool RecordingMapTool::hasValidGeometry() const
 {
   if ( mActiveLayer )
   {
+    if ( mRecordedGeometry.isEmpty() )
+    {
+      return false;
+    }
+
     if ( mActiveLayer->geometryType() == QgsWkbTypes::PointGeometry )
     {
       if ( mRecordedGeometry.isMultipart() )
@@ -989,6 +1024,7 @@ FeatureLayerPair RecordingMapTool::commitChanges()
   if ( mActiveLayer->isEditable() )
   {
     mActiveLayer->commitChanges();
+    mActiveLayer->triggerRepaint();
   }
 
   if ( mActiveFeature.isValid() )
@@ -1005,6 +1041,7 @@ void RecordingMapTool::rollbackChanges()
   if ( mActiveLayer && mActiveLayer->isEditable() )
   {
     mActiveLayer->rollBack();
+    mActiveLayer->triggerRepaint();
   }
 }
 
@@ -1066,11 +1103,43 @@ void RecordingMapTool::grabNextVertex()
     return;
   }
 
+  if ( mRecordedGeometry.isEmpty() )
+  {
+    setActivePartAndRing( 0, 0 );
+    setState( MapToolState::Record );
+    setActiveVertex( Vertex() );
+    return;
+  }
+
   // mActiveVertex is pointing to removed vertex
   QgsVertexId current = mActiveVertex.vertexId();
 
+  // check whether we should try to get next vertex in the current part/ring
+  // or it was already removed
+  bool grabInCurrent = true;
+  if ( mRecordedGeometry.isMultipart() )
+  {
+    if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
+    {
+      grabInCurrent = current.part <= mRecordedGeometry.constGet()->partCount();
+    }
+    else if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+    {
+      // excluding exterior ring
+      grabInCurrent = current.part <= mRecordedGeometry.constGet()->partCount() && current.ring <= mRecordedGeometry.constGet()->ringCount( current.part ) - 1;
+    }
+  }
+  else
+  {
+    if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+    {
+      // excluding exterior ring
+      grabInCurrent = current.ring <= mRecordedGeometry.constGet()->ringCount() - 1;
+    }
+  }
+
   // if there are some remaining points in the current ring&part, grab one of them!
-  if ( mRecordedGeometry.constGet()->vertexCount( current.part, current.ring ) )
+  if ( grabInCurrent && mRecordedGeometry.constGet()->vertexCount( current.part, current.ring ) )
   {
     int nextId = 0;
 
@@ -1082,14 +1151,13 @@ void RecordingMapTool::grabNextVertex()
 
     QgsVertexId next( current.part, current.ring, nextId );
     QgsPoint positionOfNext = mRecordedGeometry.constGet()->vertexAt( next );
-
     setActiveVertex( Vertex( next, positionOfNext, Vertex::Existing ) );
     setState( MapToolState::Grab );
   }
   else
   {
     // jump to other part if there is any
-    if ( mRecordedGeometry.constGet()->partCount() > 1 )
+    if ( mRecordedGeometry.constGet()->partCount() >= 1 )
     {
       QgsVertexId nextRingVertex( 0, 0, 0 );
       QgsPoint nextRingVertexPosition = mRecordedGeometry.constGet()->vertexAt( nextRingVertex );
@@ -1272,7 +1340,10 @@ void RecordingMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
   // we need to clear all recorded points and recalculate the geometry
   setRecordedGeometry( QgsGeometry() );
 
-  mActiveLayer->startEditing();
+  if ( mActiveLayer )
+  {
+    mActiveLayer->startEditing();
+  }
 }
 
 const QgsGeometry &RecordingMapTool::recordedGeometry() const

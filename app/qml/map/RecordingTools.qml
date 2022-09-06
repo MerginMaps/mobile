@@ -262,7 +262,7 @@ Item {
       }
       else
       {
-        showMessage( qsTr( "You need to add at least %1 points." ).arg( __inputUtils.isLineLayer( mapTool.layer ) ? 2 : 3 ) )
+        showMessage( __inputUtils.invalidGeometryWarning( mapTool.activeLayer ) )
       }
     }
 

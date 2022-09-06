@@ -166,12 +166,12 @@ Item {
         MenuItem {
             width: parent.width
             height: toolbar.itemSize
+            enabled: !isFeaturePoint
 
             ExtendedMenuItem {
                 height: toolbar.itemSize
                 rowHeight: height
                 width: parent.width
-                enabled: !isFeaturePoint
                 contentText: qsTr("Split geometry")
                 imageSource: InputStyle.scissorsIcon
             }
