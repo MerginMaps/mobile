@@ -153,8 +153,6 @@ Item {
         }
     }
 
-    // TODO: remove this item if layer does not have geometry
-
     Menu {
         id: rootMenu
         title: qsTr("Advanced")
@@ -166,7 +164,7 @@ Item {
         MenuItem {
             width: parent.width
             height: toolbar.itemSize
-            enabled: !isFeaturePoint
+            visible: !isFeaturePoint
 
             ExtendedMenuItem {
                 height: toolbar.itemSize
