@@ -143,12 +143,11 @@ Item {
         project: root.project
 
         controller: AttributeController {
-          featureLayerPair: root.featureLayerPair
           variablesManager: __variablesManager
-
           rememberAttributesController: RememberAttributesController {
             rememberValuesAllowed: __appSettings.reuseLastEnteredValues
           }
+          featureLayerPair: root.featureLayerPair
         }
 
         importDataHandler: codeReaderHandler.handler
