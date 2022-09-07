@@ -1203,6 +1203,9 @@ void RecordingMapTool::undo()
       {
         mActiveLayer->rollBack();
         setActiveFeature( QgsFeature() );
+        setState( MapToolState::Record );
+        setActivePartAndRing( 0, 0 );
+        setActiveVertex( Vertex() );
       }
     }
     else
@@ -1215,6 +1218,9 @@ void RecordingMapTool::undo()
       else
       {
         setRecordedGeometry( mActiveFeature.geometry() );
+        setState( MapToolState::Record );
+        setActivePartAndRing( 0, 0 );
+        setActiveVertex( Vertex() );
       }
     }
 
