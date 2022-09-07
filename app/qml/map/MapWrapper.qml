@@ -586,6 +586,57 @@ Item {
   }
 
   MapFloatButton {
+    id: undoButton
+
+    // Find out if undo would collide with activeLayerButton button
+    // based on distance between them
+    function wouldCollideWithLayerBtn()
+    {
+      let undoBtnRightMostX = undoButton.x + undoButton.width
+      let layerBtnRightMostX = activeLayerButton.x
+      let distance = layerBtnRightMostX - undoBtnRightMostX
+      return distance < InputStyle.smallGap / 2
+    }
+
+     // let accBtnRightMostX = accuracyButton.x + accuracyButton.width
+     // let syncBtnLeftMostX = syncButton.x
+     // let distance = syncBtnLeftMostX - accBtnRightMostX
+     // return distance < InputStyle.smallGap / 2
+
+    onClicked: recordingToolsLoader.item.undo()
+
+    maxWidth: InputStyle.mapBtnHeight
+    withImplicitMargins: false
+
+    anchors.bottom: wouldCollideWithLayerBtn() ? activeLayerButton.top : parent.bottom
+    anchors.bottomMargin: root.mapExtentOffset + InputStyle.smallGap
+    anchors.left: parent.left
+    anchors.leftMargin: InputStyle.smallGap
+
+    visible: {
+      let isPointLayer = __inputUtils.isPointLayer( __activeLayer.vectorLayer ) && !__inputUtils.isMultiPartLayer( __activeLayer.vectorLayer )
+      return recordingToolsLoader.active && !isPointLayer
+    }
+
+    content: Item {
+
+      implicitWidth: InputStyle.mapBtnHeight
+      height: parent.height
+
+      anchors.horizontalCenter: parent.horizontalCenter
+
+      Symbol {
+        id: undoIcon
+
+        iconSize: parent.height / 2
+        source: InputStyle.undoIcon
+
+        anchors.centerIn: parent
+      }
+    }
+  }
+
+  MapFloatButton {
     id: accuracyButton
 
     property int accuracyPrecision: __positionKit.horizontalAccuracy > 1 ? 1 : 2

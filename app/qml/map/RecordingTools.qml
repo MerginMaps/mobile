@@ -25,6 +25,10 @@ Item {
   /*required*/ property var map
   /*required*/ property var gpsState
 
+  function undo() {
+    mapTool.undo()
+  }
+
   property bool centerToGPSOnStartup: false
   property var activeFeature
 
