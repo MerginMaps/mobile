@@ -613,6 +613,7 @@ Item {
     anchors.left: parent.left
     anchors.leftMargin: InputStyle.smallGap
 
+    enabled: recordingToolsLoader.item.canUndo
     visible: {
       let isPointLayer = __inputUtils.isPointLayer( __activeLayer.vectorLayer ) && !__inputUtils.isMultiPartLayer( __activeLayer.vectorLayer )
       return recordingToolsLoader.active && !isPointLayer

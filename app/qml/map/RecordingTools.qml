@@ -29,6 +29,7 @@ Item {
     mapTool.undo()
   }
 
+  property bool canUndo: mapTool.canUndo
   property bool centerToGPSOnStartup: false
   property var activeFeature
 
