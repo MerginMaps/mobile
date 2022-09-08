@@ -1029,7 +1029,6 @@ FeatureLayerPair RecordingMapTool::commitChanges()
 
   if ( mActiveFeature.isValid() )
   {
-    setActiveFeature( mActiveLayer->getFeature( mActiveFeature.id() ) );
     return FeatureLayerPair( mActiveFeature, mActiveLayer );
   }
 
@@ -1241,6 +1240,16 @@ void RecordingMapTool::updateActiveVertexGeometry()
   }
 }
 
+void RecordingMapTool::updateActiveFeature( const QString &layerId, const QgsFeatureList &addedFeatures )
+{
+  if ( addedFeatures.count() == 0 )
+  {
+    return;
+  }
+
+  setActiveFeature( mActiveLayer->getFeature( addedFeatures.at( 0 ).id() ) );
+}
+
 Vertex::Vertex()
 {
 
@@ -1335,6 +1344,11 @@ void RecordingMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
   if ( mActiveLayer == newActiveLayer )
     return;
 
+  if ( mActiveLayer )
+  {
+    disconnect( mActiveLayer, nullptr, this, nullptr );
+  }
+
   if ( mActiveLayer && mActiveLayer->isEditable() )
   {
     mActiveLayer->rollBack();
@@ -1349,6 +1363,7 @@ void RecordingMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
   if ( mActiveLayer )
   {
     mActiveLayer->startEditing();
+    connect( mActiveLayer, &QgsVectorLayer::committedFeaturesAdded, this, &RecordingMapTool::updateActiveFeature );
   }
 }
 
