@@ -50,7 +50,7 @@ macx:!android {
     LIBS += -lprovider_wfs_a
     LIBS += -lprovider_wms_a
     LIBS += -lprovider_postgres_a
-    LIBS += -lqt5keychain -lqca-qt5
+    LIBS += -lqt6keychain -lqca-qt6
     LIBS += -lgdal -lpq -lspatialite
     LIBS += -lcharset -lxml2
     LIBS += -ltasn1 -lbz2 -lproj

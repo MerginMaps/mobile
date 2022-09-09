@@ -18,7 +18,7 @@
 
     INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}
     INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}/qgis
-    INCLUDEPATH += /usr/include/gdal
+    INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}/proj
 
     LIBS += -L$${INPUT_SDK_LIB_PATH}
     LIBS += -L$${INPUT_SDK_LIB_PATH}/x86_64-linux-gnu
@@ -53,7 +53,7 @@
     LIBS += -lgeodiff
     LIBS += -lproj
     LIBS += -lZXing
-    LIBS += -lqt5keychain -lqca-qt5
+    LIBS += -lqt6keychain -lqca-qt6
     LIBS += -lgdal -lpq -lspatialite
     LIBS += -lxml2
     LIBS += -lproj

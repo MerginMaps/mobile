@@ -14,11 +14,11 @@ on:
 
 env:
   TEST_MERGIN_URL: https://test.dev.merginmaps.com/
-  QT_VERSION: 5.14.2
+  QT_VERSION: 6.3.1
   QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.15.0
   INPUT_SDK_VERSION: mac-20220810-95
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 4
+  CACHE_VERSION: 5
 
 concurrency:
   group: ci-${{github.ref}}-macos

@@ -102,7 +102,7 @@ bool ActiveProject::load( const QString &filePath )
 
 bool ActiveProject::forceLoad( const QString &filePath, bool force )
 {
-  CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + force );
+  CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + ( force ? "true" : "false" ) );
 
   // clear autosync
   setAutosyncEnabled( false );
