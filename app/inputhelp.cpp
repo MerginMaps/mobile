@@ -211,7 +211,7 @@ void InputHelp::submitReport()
   req.setRawHeader( "User-Agent", "InputApp" );
   req.setRawHeader( "Content-Type", "text/plain" );
   QNetworkReply *reply = mManager.post( req, logArr );
-  qDebug() << "Report to " << reportLogUrl << endl;
+  qDebug() << "Report to " << reportLogUrl << Qt::endl;
 
   mSubmitReportPending = true;
   emit submitReportPendingChanged();

@@ -17,6 +17,7 @@
 #include "qgsvectorfilewriter.h"
 #include "qgsdatetimefieldformatter.h"
 #include "qgsmarkersymbollayer.h"
+#include "qgis.h"
 #include "qgssymbollayer.h"
 #include "qgssymbol.h"
 #include "qgsmarkersymbol.h"
@@ -152,7 +153,7 @@ QgsFields ProjectWizard::createFields( const QList<FieldConfiguration> fieldsCon
 
 QgsSingleSymbolRenderer *ProjectWizard::surveyLayerRenderer()
 {
-  QgsSimpleMarkerSymbolLayer *markerLayer = new QgsSimpleMarkerSymbolLayer( QgsSimpleMarkerSymbolLayer::Circle );
+  QgsSimpleMarkerSymbolLayer *markerLayer = new QgsSimpleMarkerSymbolLayer( Qgis::MarkerShape::Circle );
   markerLayer->setSize( 3.0 );
   markerLayer->setFillColor( QColor( "#d73027" ) );
   markerLayer->setStrokeColor( QColor( "#e8e8e8" ) );

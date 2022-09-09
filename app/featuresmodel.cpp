@@ -104,7 +104,7 @@ QString FeaturesModel::searchResultPair( const FeatureLayerPair &pair ) const
     return QString();
 
   QgsFields fields = pair.feature().fields();
-  QStringList words = mSearchExpression.split( ' ', QString::SplitBehavior::SkipEmptyParts );
+  QStringList words = mSearchExpression.split( ' ', Qt::SkipEmptyParts );
   QStringList foundPairs;
 
   for ( const QString &word : words )
@@ -138,7 +138,7 @@ QString FeaturesModel::buildSearchExpression()
   QStringList expressionParts;
   QStringList wordExpressions;
 
-  QStringList words = mSearchExpression.split( ' ', QString::SplitBehavior::SkipEmptyParts );
+  QStringList words = mSearchExpression.split( ' ', Qt::SkipEmptyParts );
 
   for ( const QString &word : words )
   {
