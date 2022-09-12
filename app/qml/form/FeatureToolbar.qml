@@ -98,6 +98,7 @@ Item {
         Item {
             width: parent.width/parent.children.length
             height: parent.height
+            visible: isSpatialLayer
 
             MainPanelButton {
 
