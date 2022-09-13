@@ -203,10 +203,6 @@ jobs:
             cd ${{ github.workspace }}/build-apk-$ARCH
             ../scripts/android-apk.bash
 
-            # rename generated file
-            cd ${{ github.workspace }}/build-apk-arm64-v8a/build-input-apk/out/build/outputs/apk/release
-            mv out-release-signed.apk merginmaps-v7a-$CI_VERSION_CODE.apk
-
       - name: Build arm64-v8a APK
         env:
           ARCH: arm64-v8a
@@ -220,9 +216,13 @@ jobs:
             cd ${{ github.workspace }}/build-apk-$ARCH
             ../scripts/android-apk.bash
 
-            # rename generated file
-            cd ${{ github.workspace }}/build-apk-arm64-v8a/build-input-apk/out/build/outputs/apk/release
-            mv out-release-signed.apk merginmaps-v8-$CI_VERSION_CODE.apk
+      - name: Rename build artefacts
+        run: |
+          cd ${{ github.workspace }}/build-apk-arm64-v8a/build-input-apk/out/build/outputs/apk/release
+          mv out-release-signed.apk `echo merginmaps-v8-$CI_VERSION_CODE.apk`
+          
+          cd ${{ github.workspace }}/build-apk-armeabi-v7a/build-input-apk/out/build/outputs/apk/release/
+          mv out-release-signed.apk `echo merginmaps-v7a-$CI_VERSION_CODE.apk`
 
       - name: Upload v8 APK to Artifacts
         uses: actions/upload-artifact@v2
