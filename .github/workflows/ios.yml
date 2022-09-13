@@ -193,31 +193,22 @@ jobs:
             exit 1
           fi
 
-      - name: Download repo history
-        uses: actions/checkout@v2
-        with:
-          path: input-history
-          fetch-depth: 0 # fetch all history
+      - name: Calculate build number
+        env:
+          OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
+        run: |
+            BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
+
+            TIMESTAMP=`date "+%y.%m"`
+            CF_BUNDLE_VERSION=${TIMESTAMP}.${BUILD_NUM}
+
+            echo "CF_BUNDLE_VERSION=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
+
+            echo "Build number: ${CF_BUNDLE_VERSION}"
 
       - name: Create build system with 
-        env:
-          START_VERSION_OFFSET: 110000 # offset for build version number - due to previous builds
         run: |
           INPUT_DIR=`pwd`
-
-          # calculate CF_BUNDLE_VERSION
-          cd input-history
-          NUM_OF_COMMITS=`git rev-list --count --all`
-          echo "#commits inside $NUM_OF_COMMITS `pwd`"
-          cd ..
-
-          echo "#commits outside `git rev-list --count --all` `pwd`"
-
-          VERSION_CODE=$((START_VERSION_OFFSET + NUM_OF_COMMITS))
-          echo "#vc $VERSION_CODE"
-          TIMESTAMP=`date "+%y.%m"`
-
-          CF_BUNDLE_VERSION=${TIMESTAMP}.${VERSION_CODE}
 
           # patch the Info.plist
           CF_BUNDLE_SHORT_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" $INPUT_DIR/app/ios/Info.plist`
