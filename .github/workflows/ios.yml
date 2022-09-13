@@ -208,8 +208,10 @@ jobs:
           # calculate CF_BUNDLE_VERSION
           cd input-history
           NUM_OF_COMMITS=`git rev-list --count --all`
-          echo "#commits $NUM_OF_COMMITS"
+          echo "#commits inside $NUM_OF_COMMITS `pwd`"
           cd ..
+
+          echo "#commits outside `git rev-list --count --all` `pwd`"
 
           VERSION_CODE=$((START_VERSION_OFFSET + NUM_OF_COMMITS))
           echo "#vc $VERSION_CODE"
