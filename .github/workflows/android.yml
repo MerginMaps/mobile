@@ -229,7 +229,7 @@ jobs:
           name: armeabi apk
 
       - name: Build AAB
-        if: github.ref_name == "master" || github.ref_type == "tag"
+        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         env:
           ARCH: 'armeabi-v7a arm64-v8a'
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
@@ -245,7 +245,7 @@ jobs:
             ../scripts/android-aab.bash
 
       - name: Upload AAB to Artifacts
-        if: github.ref_name == "master" || github.ref_type == "tag"
+        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         uses: actions/upload-artifact@v2
         with:
           path: ${{ github.workspace }}/build-aab/build-input-aab/out/build/outputs/bundle/release/out-release.aab
