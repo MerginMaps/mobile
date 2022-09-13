@@ -1242,7 +1242,7 @@ void RecordingMapTool::updateActiveVertexGeometry()
 
 void RecordingMapTool::updateActiveFeature( const QString &layerId, const QgsFeatureList &addedFeatures )
 {
-  if ( addedFeatures.count() == 0 )
+  if ( addedFeatures.count() == 0 || mActiveLayer->id() != layerId )
   {
     return;
   }
@@ -1352,6 +1352,7 @@ void RecordingMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
   if ( mActiveLayer && mActiveLayer->isEditable() )
   {
     mActiveLayer->rollBack();
+    mActiveLayer->triggerRepaint();
   }
 
   mActiveLayer = newActiveLayer;
@@ -1359,6 +1360,10 @@ void RecordingMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
 
   // we need to clear all recorded points and recalculate the geometry
   setRecordedGeometry( QgsGeometry() );
+  setActiveFeature( QgsFeature() );
+  setActiveVertex( Vertex() );
+  setActivePartAndRing( 0, 0 );
+  setState( MapToolState::Record );
 
   if ( mActiveLayer )
   {
