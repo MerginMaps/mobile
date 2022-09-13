@@ -169,7 +169,7 @@ QtObject {
     property color highlightLineColor: Qt.rgba( 1, 0.2, 0.2, 1 )
     property color highlightFillColor: Qt.rgba( 1, 0.2, 0.2, InputStyle.lowHighlightOpacity )
     property color highlightOutlineColor: "white"
-    property real highlightLineWidth: 6 * __dp
+    property real highlightLineWidth: 8 * __dp
     property real highlightOutlinePenWidth: 2 * __dp
 
     property real mapOutOfExtentBorder: scale(64) // when pair lays very close to device display border, center map extent
