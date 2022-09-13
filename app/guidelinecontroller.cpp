@@ -19,6 +19,9 @@ GuidelineController::GuidelineController( QObject *parent )
 {
   connect( this, &GuidelineController::allowedChanged, this, &GuidelineController::buildGuideline );
   connect( this, &GuidelineController::activeVertexChanged, this, &GuidelineController::buildGuideline );
+  connect( this, &GuidelineController::activePartChanged, this, &GuidelineController::buildGuideline );
+  connect( this, &GuidelineController::activeRingChanged, this, &GuidelineController::buildGuideline );
+  connect( this, &GuidelineController::insertPolicyChanged, this, &GuidelineController::buildGuideline );
   connect( this, &GuidelineController::realGeometryChanged, this, &GuidelineController::buildGuideline );
   connect( this, &GuidelineController::crosshairPositionChanged, this, &GuidelineController::buildGuideline );
 }
