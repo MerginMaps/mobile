@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
-        if: off
+        if: false
 
       - uses: actions/checkout@v2
 
@@ -54,7 +54,7 @@ jobs:
       - name: Prepare build cache for branch/tag
         # use a fork of actions/cache@v2 to upload cache even when the build or test failed
         uses: pat-s/always-upload-cache@v2.1.5
-        if: off
+        if: false
         with:
           path: ${{ env.CCACHE_DIR }}
           # The branch or tag ref that triggered the workflow run. For branches this in the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
@@ -64,7 +64,7 @@ jobs:
             build-ios-ccache-refs/heads/master-
 
       - name: Install brew deps
-        if: off
+        if: false
         run: |
           brew install gnupg
           brew install openssl@1.1
@@ -72,14 +72,14 @@ jobs:
           brew install ccache
 
       - name: Install ccache
-        if: off
+        if: false
         run: |
           mkdir -p ${CCACHE_DIR}
           ccache --set-config=max_size=2.0G
           ccache -s
 
       - name: Extract Mergin API_KEY
-        if: off
+        if: false
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
@@ -92,7 +92,7 @@ jobs:
               -md md5
 
       - name: Configure Keychain
-        if: off
+        if: false
         run: |
           security create-keychain -p "" "$KEYCHAIN"
           security list-keychains -s "$KEYCHAIN"
@@ -102,7 +102,7 @@ jobs:
           security list-keychains
 
       - name: Configure Code Signing
-        if: off
+        if: false
         env:
           IOS_GPG_KEY: ${{ secrets.IOS_GPG_KEY }}
           IOS_CERT_KEY: ${{ secrets.IOS_CERT_KEY }}
@@ -117,7 +117,7 @@ jobs:
 
       # Input SDK
       - name: Cache Input-SDK
-        if: off
+        if: false
         id: cache-input-sdk
         uses: pat-s/always-upload-cache@v2.1.5
         with:
@@ -125,7 +125,7 @@ jobs:
           key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
-        if: off
+        if: false
         run: |
           wget -O \
             ${{ github.workspace }}/input-sdk.tar.gz \
@@ -138,14 +138,14 @@ jobs:
       - name: Cache Qt
         id: cache-qt
         uses: pat-s/always-upload-cache@v2.1.5
-        if: off
+        if: false
         with:
           path: ${{ github.workspace }}/Qt
           key: ${{ runner.os }}-QtCache-v1-${{ env.QT_VERSION }}-ios-${{ env.CACHE_VERSION }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
-        if: off
+        if: false
         with:
           version: ${{ env.QT_VERSION }}
           target: ios
@@ -157,7 +157,7 @@ jobs:
       # Do this only until we move from 5.14.2!!
       - name: Patch Qt!
         shell: bash
-        if: off
+        if: false
         run: |
           echo "Patch 5.14.2 see https://github.com/MerginMaps/input-sdk/issues/34"
 
@@ -175,7 +175,7 @@ jobs:
       # !! and ccache received all of the compilation flags that were supposed to go to clang.
       - name: Export app/config.pri
         shell: bash
-        if: off
+        if: false
         run: |
           touch ./app/config.pri
           echo -e "ios {"  >> ./app/config.pri
@@ -254,7 +254,7 @@ jobs:
           # /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
               
       - name: Build Input
-        if: off
+        if: false
         run: |
           INPUT_DIR=`pwd`
           cd build-INPUT
@@ -268,7 +268,7 @@ jobs:
             "OTHER_CODE_SIGN_FLAGS=--keychain '$KEYCHAIN'"
 
       - name: Create Input Package
-        if: off
+        if: false
         run: |
           INPUT_DIR=`pwd`
           cd build-INPUT
@@ -284,7 +284,7 @@ jobs:
           INPUTAPP_BOT_APPLEID_PASS: ${{ secrets.INPUTAPP_BOT_APPLEID_PASS }}
           INPUTAPP_BOT_APPLEID_USER: ${{ secrets.INPUTAPP_BOT_APPLEID_USER }}
           INPUTAPP_BOT_GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-        if: off
+        if: false
         run: |
           CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" app/ios/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
