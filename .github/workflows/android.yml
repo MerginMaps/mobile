@@ -227,13 +227,13 @@ jobs:
       - name: Upload v8 APK to Artifacts
         uses: actions/upload-artifact@v2
         with:
-          path: ${{ github.workspace }}/build-apk-arm64-v8a/build-input-apk/out/build/outputs/apk/release/merginmaps-v8-$CI_VERSION_CODE.apk
+          path: ${{ github.workspace }}/build-apk-arm64-v8a/build-input-apk/out/build/outputs/apk/release/merginmaps-v8-${{ env.CI_VERSION_CODE }}.apk
           name: arm64 apk
 
       - name: Upload v7 APK to Artifacts
         uses: actions/upload-artifact@v2
         with:
-          path: ${{ github.workspace }}/build-apk-armeabi-v7a/build-input-apk/out/build/outputs/apk/release/merginmaps-v7a-$CI_VERSION_CODE.apk
+          path: ${{ github.workspace }}/build-apk-armeabi-v7a/build-input-apk/out/build/outputs/apk/release/merginmaps-v7a-${{ env.CI_VERSION_CODE }}.apk
           name: armeabi apk
 
       - name: Build AAB
