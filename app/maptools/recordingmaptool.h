@@ -271,7 +271,7 @@ class RecordingMapTool : public AbstractMapTool
 
   private slots:
     void prepareEditing();
-    void updateActiveFeature( const QString &layerId, const QgsFeatureList &addedFeatures );
+    void onFeatureAdded( QgsFeatureId newFeatureId );
 
     /**
      * Creates nodes index. Extracts existing geometry vertices and generates virtual

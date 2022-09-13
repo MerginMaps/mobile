@@ -1027,17 +1027,15 @@ FeatureLayerPair RecordingMapTool::commitChanges()
     if ( FID_IS_NEW( mActiveFeature.id() ) || FID_IS_NULL( mActiveFeature.id() ) )
     {
       // recording new feature
-
-      // connect to addedFeatures signal
-      // commit
-      // disconnect
+      connect( mActiveLayer, &QgsVectorLayer::featureAdded, this, &RecordingMapTool::onFeatureAdded );
+      mActiveLayer->commitChanges();
+      disconnect( mActiveLayer, &QgsVectorLayer::featureAdded, this, &RecordingMapTool::onFeatureAdded );
     }
     else
     {
       // edit existing feature's geometry
-
-      // commit
-      // setActiveFeature( mActiveLayer->getFeature( mActiveFeature.id() ) );
+      mActiveLayer->commitChanges();
+      setActiveFeature( mActiveLayer->getFeature( mActiveFeature.id() ) );
     }
 
     mActiveLayer->commitChanges();
@@ -1061,6 +1059,11 @@ void RecordingMapTool::rollbackChanges()
     mActiveLayer->rollBack();
     mActiveLayer->triggerRepaint();
   }
+}
+
+void RecordingMapTool::onFeatureAdded( QgsFeatureId newFeatureId )
+{
+  setActiveFeature( mActiveLayer->getFeature( newFeatureId ) );
 }
 
 void RecordingMapTool::updateVertex( const Vertex &vertex, const QgsPoint &point )
@@ -1259,16 +1262,6 @@ void RecordingMapTool::updateActiveVertexGeometry()
   }
 }
 
-void RecordingMapTool::updateActiveFeature( const QString &layerId, const QgsFeatureList &addedFeatures )
-{
-  if ( addedFeatures.count() == 0 || mActiveLayer->id() != layerId )
-  {
-    return;
-  }
-
-  setActiveFeature( mActiveLayer->getFeature( addedFeatures.at( 0 ).id() ) );
-}
-
 Vertex::Vertex()
 {
 
@@ -1363,11 +1356,6 @@ void RecordingMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
   if ( mActiveLayer == newActiveLayer )
     return;
 
-  if ( mActiveLayer )
-  {
-    disconnect( mActiveLayer, nullptr, this, nullptr );
-  }
-
   if ( mActiveLayer && mActiveLayer->isEditable() )
   {
     mActiveLayer->rollBack();
@@ -1387,7 +1375,6 @@ void RecordingMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
   if ( mActiveLayer )
   {
     mActiveLayer->startEditing();
-//    connect( mActiveLayer, &QgsVectorLayer::committedFeaturesAdded, this, &RecordingMapTool::updateActiveFeature );
   }
 }
 
