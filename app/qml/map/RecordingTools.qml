@@ -174,7 +174,7 @@ Item {
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
 
-    markerType: "circleWithIcon"
+    markerType: "circle"
     markerColor: InputStyle.mapMarkerExistingVertexColor
     markerCircleSize: InputStyle.mapMarkerExistingVertexSize
     markerCircleIconSource: InputStyle.mapMarkerMoveIcon

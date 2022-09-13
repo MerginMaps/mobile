@@ -247,6 +247,8 @@ Item {
           height: markerCircleSize
           color: highlight.markerColor
           radius: width/2
+          border.color: highlight.markerOutlineColor
+          border.width: highlight.markerOutlineWidth
       }
 
       Rectangle {
