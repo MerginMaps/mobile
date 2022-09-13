@@ -208,7 +208,7 @@ jobs:
           mkdir -p build-INPUT
           cd build-INPUT
 
-          run qmake
+          # run qmake
           ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/bin/qmake \
             ${INPUT_DIR}/app/input.pro \
             -spec macx-ios-clang \
