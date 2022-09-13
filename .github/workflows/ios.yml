@@ -199,7 +199,7 @@ jobs:
           path: input-history
           fetch-depth: 0 # fetch all history
 
-      - name: Create build system with qmake
+      - name: Create build system with 
         env:
           START_VERSION_OFFSET: 110000 # offset for build version number - due to previous builds
         run: |
