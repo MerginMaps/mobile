@@ -1023,7 +1023,26 @@ FeatureLayerPair RecordingMapTool::commitChanges()
 
   if ( mActiveLayer->isEditable() )
   {
+
+    if ( FID_IS_NEW( mActiveFeature.id() ) || FID_IS_NULL( mActiveFeature.id() ) )
+    {
+      // recording new feature
+
+      // connect to addedFeatures signal
+      // commit
+      // disconnect
+    }
+    else
+    {
+      // edit existing feature's geometry
+
+      // commit
+      // setActiveFeature( mActiveLayer->getFeature( mActiveFeature.id() ) );
+    }
+
     mActiveLayer->commitChanges();
+    // mActiveFeature now acquires new fid!
+
     mActiveLayer->triggerRepaint();
   }
 
@@ -1368,7 +1387,7 @@ void RecordingMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
   if ( mActiveLayer )
   {
     mActiveLayer->startEditing();
-    connect( mActiveLayer, &QgsVectorLayer::committedFeaturesAdded, this, &RecordingMapTool::updateActiveFeature );
+//    connect( mActiveLayer, &QgsVectorLayer::committedFeaturesAdded, this, &RecordingMapTool::updateActiveFeature );
   }
 }
 
