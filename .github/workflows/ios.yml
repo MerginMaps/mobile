@@ -33,14 +33,13 @@ jobs:
     steps:
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
-        if: false
 
       - uses: actions/checkout@v2
 
       # CCache
       - name: Prepare build cache for pull request
         uses: pat-s/always-upload-cache@v2.1.5
-        if: false
+        if: github.event_name == 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
           key: build-ios-ccache-${{ github.actor }}-${{ github.head_ref }}-${{ github.sha }}
@@ -54,7 +53,7 @@ jobs:
       - name: Prepare build cache for branch/tag
         # use a fork of actions/cache@v2 to upload cache even when the build or test failed
         uses: pat-s/always-upload-cache@v2.1.5
-        if: false
+        if: github.event_name != 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
           # The branch or tag ref that triggered the workflow run. For branches this in the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
@@ -64,7 +63,6 @@ jobs:
             build-ios-ccache-refs/heads/master-
 
       - name: Install brew deps
-        if: false
         run: |
           brew install gnupg
           brew install openssl@1.1
@@ -72,14 +70,12 @@ jobs:
           brew install ccache
 
       - name: Install ccache
-        if: false
         run: |
           mkdir -p ${CCACHE_DIR}
           ccache --set-config=max_size=2.0G
           ccache -s
 
       - name: Extract Mergin API_KEY
-        if: false
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
@@ -92,7 +88,6 @@ jobs:
               -md md5
 
       - name: Configure Keychain
-        if: false
         run: |
           security create-keychain -p "" "$KEYCHAIN"
           security list-keychains -s "$KEYCHAIN"
@@ -102,7 +97,6 @@ jobs:
           security list-keychains
 
       - name: Configure Code Signing
-        if: false
         env:
           IOS_GPG_KEY: ${{ secrets.IOS_GPG_KEY }}
           IOS_CERT_KEY: ${{ secrets.IOS_CERT_KEY }}
@@ -117,7 +111,6 @@ jobs:
 
       # Input SDK
       - name: Cache Input-SDK
-        if: false
         id: cache-input-sdk
         uses: pat-s/always-upload-cache@v2.1.5
         with:
@@ -125,7 +118,7 @@ jobs:
           key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
-        if: false
+        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
           wget -O \
             ${{ github.workspace }}/input-sdk.tar.gz \
@@ -138,14 +131,12 @@ jobs:
       - name: Cache Qt
         id: cache-qt
         uses: pat-s/always-upload-cache@v2.1.5
-        if: false
         with:
           path: ${{ github.workspace }}/Qt
           key: ${{ runner.os }}-QtCache-v1-${{ env.QT_VERSION }}-ios-${{ env.CACHE_VERSION }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
-        if: false
         with:
           version: ${{ env.QT_VERSION }}
           target: ios
@@ -157,7 +148,6 @@ jobs:
       # Do this only until we move from 5.14.2!!
       - name: Patch Qt!
         shell: bash
-        if: false
         run: |
           echo "Patch 5.14.2 see https://github.com/MerginMaps/input-sdk/issues/34"
 
@@ -175,7 +165,6 @@ jobs:
       # !! and ccache received all of the compilation flags that were supposed to go to clang.
       - name: Export app/config.pri
         shell: bash
-        if: false
         run: |
           touch ./app/config.pri
           echo -e "ios {"  >> ./app/config.pri
@@ -193,7 +182,7 @@ jobs:
             exit 1
           fi
 
-      - name: Calculate build number
+      - name: Calculate a build number
         env:
           OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
         run: |
@@ -206,7 +195,7 @@ jobs:
 
             echo "Build number: ${CF_BUNDLE_VERSION}"
 
-      - name: Create build system with 
+      - name: Create build system with qmake
         run: |
           INPUT_DIR=`pwd`
 
@@ -219,33 +208,32 @@ jobs:
           mkdir -p build-INPUT
           cd build-INPUT
 
-          # run qmake
-          # ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/bin/qmake \
-          #   ${INPUT_DIR}/app/input.pro \
-          #   -spec macx-ios-clang \
-          #   CONFIG+=release \
-          #   CONFIG+=iphoneos \
-          #   CONFIG+=device \
-          #   CONFIG+=qtquickcompiler \
-          #   QMAKE_MAC_XCODE_SETTINGS+=qprofile \
-          #   qprofile.name=PROVISIONING_PROFILE_SPECIFIER \
-          #   qprofile.value="LutraConsultingLtd.Input.AppStore" \
-          #   QMAKE_MAC_XCODE_SETTINGS+=qteam \
-          #   qteam.name=DEVELOPMENT_TEAM \
-          #   qteam.value=79QMH2QRAH \
-          #   QMAKE_MAC_XCODE_SETTINGS+=qidentity \
-          #   qidentity.name=CODE_SIGN_IDENTITY \
-          #   qidentity.value="iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)" \
-          #   QMAKE_MAC_XCODE_SETTINGS+=qstyle \
-          #   qstyle.name=CODE_SIGN_STYLE \
-          #   qstyle.value=Manual
+          run qmake
+          ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/bin/qmake \
+            ${INPUT_DIR}/app/input.pro \
+            -spec macx-ios-clang \
+            CONFIG+=release \
+            CONFIG+=iphoneos \
+            CONFIG+=device \
+            CONFIG+=qtquickcompiler \
+            QMAKE_MAC_XCODE_SETTINGS+=qprofile \
+            qprofile.name=PROVISIONING_PROFILE_SPECIFIER \
+            qprofile.value="LutraConsultingLtd.Input.AppStore" \
+            QMAKE_MAC_XCODE_SETTINGS+=qteam \
+            qteam.name=DEVELOPMENT_TEAM \
+            qteam.value=79QMH2QRAH \
+            QMAKE_MAC_XCODE_SETTINGS+=qidentity \
+            qidentity.name=CODE_SIGN_IDENTITY \
+            qidentity.value="iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)" \
+            QMAKE_MAC_XCODE_SETTINGS+=qstyle \
+            qstyle.name=CODE_SIGN_STYLE \
+            qstyle.value=Manual
             
-          # # Use old deprecated build system in XCode 13
-          # /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
-          # /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+          # Use old deprecated build system in XCode 13
+          /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+          /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
               
       - name: Build Input
-        if: false
         run: |
           INPUT_DIR=`pwd`
           cd build-INPUT
@@ -259,7 +247,6 @@ jobs:
             "OTHER_CODE_SIGN_FLAGS=--keychain '$KEYCHAIN'"
 
       - name: Create Input Package
-        if: false
         run: |
           INPUT_DIR=`pwd`
           cd build-INPUT
@@ -275,7 +262,7 @@ jobs:
           INPUTAPP_BOT_APPLEID_PASS: ${{ secrets.INPUTAPP_BOT_APPLEID_PASS }}
           INPUTAPP_BOT_APPLEID_USER: ${{ secrets.INPUTAPP_BOT_APPLEID_USER }}
           INPUTAPP_BOT_GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-        if: false
+        if: success()
         run: |
           CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" app/ios/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
