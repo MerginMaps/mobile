@@ -14,7 +14,7 @@
 # optional:
 # CORES, number of cores to use
 
-BUILD_DIR=`pwd`/build-input
+BUILD_DIR=`pwd`/build-input-apk
 INSTALL_DIR=${BUILD_DIR}/out
 
 set -e

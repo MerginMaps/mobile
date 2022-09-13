@@ -210,13 +210,13 @@ jobs:
       - name: Upload v8 APK to Artifacts
         uses: actions/upload-artifact@v2
         with:
-          path: ${{ github.workspace }}/build-apk-arm64-v8a/input/out/build/outputs/apk/release/out-release-signed.apk
+          path: ${{ github.workspace }}/build-apk-arm64-v8a/build-input-apk/out/build/outputs/apk/release/out-release-signed.apk
           name: arm64 apk
 
       - name: Upload v7 APK to Artifacts
         uses: actions/upload-artifact@v2
         with:
-          path: ${{ github.workspace }}/build-apk-armeabi-v7a/input/out/build/outputs/apk/release/out-release-signed.apk
+          path: ${{ github.workspace }}/build-apk-armeabi-v7a/build-input-apk/out/build/outputs/apk/release/out-release-signed.apk
           name: armeabi apk
 
       - name: Download repo history
@@ -260,7 +260,7 @@ jobs:
         if: ${{ env.GIT_BRANCH }} == "master"
         uses: actions/upload-artifact@v2
         with:
-          path: ${{ github.workspace }}/build-aab/input/out/build/outputs/bundle/release/out-release.aab
+          path: ${{ github.workspace }}/build-aab/build-input-aab/out/build/outputs/bundle/release/out-release.aab
           name: aab bundle
 
       - name: Check generated files
