@@ -199,16 +199,6 @@ jobs:
         run: |
           INPUT_DIR=`pwd`
 
-          # calculate CF_BUNDLE_VERSION
-          cd input-history
-          NUM_OF_COMMITS=`git rev-list --count --all`
-          cd ..
-
-          VERSION_CODE=$((START_VERSION_OFFSET + NUM_OF_COMMITS))
-          TIMESTAMP=`date "+%y.%m"`
-
-          CF_BUNDLE_VERSION=${TIMESTAMP}.${VERSION_CODE}
-
           # patch the Info.plist
           CF_BUNDLE_SHORT_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" $INPUT_DIR/app/ios/Info.plist`
 
@@ -238,11 +228,11 @@ jobs:
             QMAKE_MAC_XCODE_SETTINGS+=qstyle \
             qstyle.name=CODE_SIGN_STYLE \
             qstyle.value=Manual
-            
+
           # Use old deprecated build system in XCode 13
           /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
           /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
-              
+
       - name: Build Input
         run: |
           INPUT_DIR=`pwd`
