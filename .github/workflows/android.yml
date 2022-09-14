@@ -180,6 +180,15 @@ jobs:
           echo -e "}"  >> ./app/config.pri
           cat ./app/config.pri
 
+      - name: Calculate build number
+        env:
+          OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
+        run: |
+            BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
+            echo "CI_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
+
+            echo "Build number: ${BUILD_NUM}"
+
       - name: Build armeabi-v7a APK
         env:
           ARCH: armeabi-v7a
@@ -207,41 +216,28 @@ jobs:
             cd ${{ github.workspace }}/build-apk-$ARCH
             ../scripts/android-apk.bash
 
+      - name: Rename build artefacts
+        run: |
+          cd ${{ github.workspace }}/build-apk-arm64-v8a/build-input-apk/out/build/outputs/apk/release
+          mv out-release-signed.apk `echo merginmaps-v8-$CI_VERSION_CODE.apk`
+          
+          cd ${{ github.workspace }}/build-apk-armeabi-v7a/build-input-apk/out/build/outputs/apk/release/
+          mv out-release-signed.apk `echo merginmaps-v7a-$CI_VERSION_CODE.apk`
+
       - name: Upload v8 APK to Artifacts
         uses: actions/upload-artifact@v2
         with:
-          path: ${{ github.workspace }}/build-apk-arm64-v8a/build-input-apk/out/build/outputs/apk/release/out-release-signed.apk
+          path: ${{ github.workspace }}/build-apk-arm64-v8a/build-input-apk/out/build/outputs/apk/release/merginmaps-v8-${{ env.CI_VERSION_CODE }}.apk
           name: arm64 apk
 
       - name: Upload v7 APK to Artifacts
         uses: actions/upload-artifact@v2
         with:
-          path: ${{ github.workspace }}/build-apk-armeabi-v7a/build-input-apk/out/build/outputs/apk/release/out-release-signed.apk
+          path: ${{ github.workspace }}/build-apk-armeabi-v7a/build-input-apk/out/build/outputs/apk/release/merginmaps-v7a-${{ env.CI_VERSION_CODE }}.apk
           name: armeabi apk
 
-      - name: Download repo history
-        if: ${{ env.GIT_BRANCH }} == "master"
-        uses: actions/checkout@v2
-        with:
-          path: input-history
-          fetch-depth: 0 # fetch all history
-
-      - name: Calculate version code
-        if: ${{ env.GIT_BRANCH }} == "master"
-        env:
-          START_VERSION_OFFSET: 110000 # offset for build version number - due to previous builds
-        run: |
-            cd input-history
-
-            NUM_OF_COMMITS=`git rev-list --count --all`
-            
-            VERSION_CODE=$((START_VERSION_OFFSET + NUM_OF_COMMITS))
-
-            echo "CI_VERSION_CODE=${VERSION_CODE}" >> $GITHUB_ENV
-            echo "Building version: ${VERSION_CODE}"
-
       - name: Build AAB
-        if: ${{ env.GIT_BRANCH }} == "master"
+        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         env:
           ARCH: 'armeabi-v7a arm64-v8a'
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
@@ -257,12 +253,8 @@ jobs:
             ../scripts/android-aab.bash
 
       - name: Upload AAB to Artifacts
-        if: ${{ env.GIT_BRANCH }} == "master"
+        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         uses: actions/upload-artifact@v2
         with:
           path: ${{ github.workspace }}/build-aab/build-input-aab/out/build/outputs/bundle/release/out-release.aab
           name: aab bundle
-
-      - name: Check generated files
-        run: |
-            find ${{ github.workspace }}/build-* -name "*.apk" -or -name "*.aab"
