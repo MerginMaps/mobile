@@ -1024,6 +1024,11 @@ FeatureLayerPair RecordingMapTool::commitChanges()
   if ( mActiveLayer->isEditable() )
   {
 
+    // when new feature is added we don't know its ID and as a result can not
+    // update active feature with actual data. To get the actual ID of the feature
+    // we listen to the featureAdded signal and update active feature. When feature
+    // if updated we stop listening
+    // For existing features we already knew their ID and can commit changes directly.
     if ( FID_IS_NEW( mActiveFeature.id() ) || FID_IS_NULL( mActiveFeature.id() ) )
     {
       // recording new feature
@@ -1037,9 +1042,6 @@ FeatureLayerPair RecordingMapTool::commitChanges()
       mActiveLayer->commitChanges();
       setActiveFeature( mActiveLayer->getFeature( mActiveFeature.id() ) );
     }
-
-    mActiveLayer->commitChanges();
-    // mActiveFeature now acquires new fid!
 
     mActiveLayer->triggerRepaint();
   }
