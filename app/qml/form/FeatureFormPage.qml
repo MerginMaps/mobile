@@ -136,12 +136,14 @@ Item {
         project: root.project
 
         controller: AttributeController {
-          featureLayerPair: root.featureLayerPair
-          variablesManager: __variablesManager
-
+          /*required*/ variablesManager: __variablesManager
           rememberAttributesController: RememberAttributesController {
             rememberValuesAllowed: __appSettings.reuseLastEnteredValues
           }
+          // NOTE: order matters, we want to init variables manager before
+          // assingning FeatureLayerPair, as VariablesManager required for
+          // correct expression evaluation
+          /*required*/ featureLayerPair: root.featureLayerPair
         }
 
         importDataHandler: codeReaderHandler.handler

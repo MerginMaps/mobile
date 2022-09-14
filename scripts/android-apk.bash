@@ -1,6 +1,20 @@
 #!/bin/bash
 
-BUILD_DIR=`pwd`/input
+# Needed env variables:
+# QT_BASE, e.g. /opt/Qt/<version>/android
+# SOURCE_DIR, path to input root source dir
+# ANDROID_NDK_ROOT, e.g. /opt/Android/sdk/ndk/<version>
+# ANDROID_NDK_HOST, e.g. darwin_x86_64 (on mac)
+# ANDROID_NDK_PLATFORM=android-24
+# ANDROIDAPI=24
+# ARCH=armeabi-v7a or arm640v8a
+# INPUTKEYSTORE_STOREPASS
+# make sure you have JAVA_HOME env set to your java installation where JAVA_HOME/lib/tools.jar exists
+
+# optional:
+# CORES, number of cores to use
+
+BUILD_DIR=`pwd`/build-input-apk
 INSTALL_DIR=${BUILD_DIR}/out
 
 set -e
@@ -29,6 +43,7 @@ echo "BUILD_DIR: ${BUILD_DIR}"
 echo "ARCH: ${ARCH}"
 echo "NDK: ${ANDROID_NDK_ROOT}"
 echo "API: $ANDROIDAPI"
+echo "QT BASE: ${QT_BASE}"
 
 ######################
 # Input
