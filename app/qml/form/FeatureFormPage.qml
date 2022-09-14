@@ -184,7 +184,10 @@ Item {
 
         onEditClicked: root.formState = "edit"
         onDeleteClicked: deleteDialog.visible = true
-        onEditGeometryClicked: root.editGeometryClicked()
+        onEditGeometryClicked: {
+          featureForm.oldFeatureLayerPair = root.featureLayerPair
+          root.editGeometryClicked()
+        }
         onSplitGeometryClicked: root.splitGeometryClicked()
         onRedrawGeometryClicked: root.redrawGeometryClicked()
       }
