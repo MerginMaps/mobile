@@ -828,6 +828,8 @@ Item {
       centerToGPSOnStartup: root.state !== "edit"
 
       onCanceled: {
+        howtoEditingBanner.hide()
+
         if ( root.state === "record" )
         {
           root.recordingCanceled()
@@ -845,6 +847,8 @@ Item {
       }
 
       onDone: {
+        howtoEditingBanner.hide()
+
         if ( root.state === "record" )
         {
           root.recordingFinished( featureLayerPair )
