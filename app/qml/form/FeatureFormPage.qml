@@ -115,7 +115,7 @@ Item {
               saveChangesDialog.open()
             }
             else {
-              root.close()
+              featureForm.cancel()
             }
             event.accepted = true;
           }
