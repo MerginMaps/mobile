@@ -1930,3 +1930,26 @@ QString InputUtils::invalidGeometryWarning( QgsVectorLayer *layer )
     return tr( "You need to add at least %1 point(s)." ).arg( nPoints );
   }
 }
+
+void InputUtils::updateFeature( const FeatureLayerPair &pair )
+{
+  if ( !pair.layer() )
+  {
+    return;
+  }
+
+  if ( !pair.feature().isValid() )
+  {
+    return;
+  }
+
+  if ( !pair.layer()->isEditable() )
+  {
+    pair.layer()->startEditing();
+  }
+
+  QgsFeature f( pair.feature() );
+  pair.layer()->updateFeature( f );
+  pair.layer()->commitChanges();
+  pair.layer()->triggerRepaint();
+}

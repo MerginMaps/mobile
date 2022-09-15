@@ -504,6 +504,11 @@ class InputUtils: public QObject
 
     Q_INVOKABLE static QString invalidGeometryWarning( QgsVectorLayer *layer );
 
+    /**
+     * Updates existing layer feature with new feature data.
+     */
+    Q_INVOKABLE static void updateFeature( const FeatureLayerPair &pair );
+
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
