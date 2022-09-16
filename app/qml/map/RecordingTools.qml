@@ -119,7 +119,7 @@ Item {
     width: root.map.width
 
     lineColor: InputStyle.guidelineColor
-
+    lineWidth: InputStyle.guidelineLineWidth
     lineStrokeStyle: ShapePath.DashLine
 
     mapSettings: root.map.mapSettings
@@ -148,6 +148,7 @@ Item {
 
     lineColor: InputStyle.guidelineColor
     lineStrokeStyle: ShapePath.DashLine
+    lineWidth: InputStyle.guidelineLineWidth
   }
 
   Highlight {
@@ -161,7 +162,7 @@ Item {
 
     markerType: "circleWithIcon"
     markerColor: InputStyle.mapMarkerMidVertexColor
-    markerCircleSize: InputStyle.mapMarkerMidVertexSize
+    markerSize: InputStyle.mapMarkerMidVertexSize
     markerCircleIconSource: InputStyle.plusIcon
   }
 
@@ -174,9 +175,9 @@ Item {
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
 
-    markerType: "circle"
+    markerType: "rectangular"
     markerColor: InputStyle.mapMarkerExistingVertexColor
-    markerCircleSize: InputStyle.mapMarkerExistingVertexSize
+    markerSize: InputStyle.mapMarkerExistingVertexSize
     markerCircleIconSource: InputStyle.mapMarkerMoveIcon
   }
 

@@ -56,7 +56,8 @@ Item {
   // internal properties not meant to be modified from outside
   //
   property real markerOffsetY: 14 * __dp // for circle marker type to be aligned with crosshair
-  property real markerCircleSize: 15 * __dp
+  property real markerSize: 15 * __dp
+  property real markerRadius: 5
 
   // properties used by markers (not able to use values directly from mapTransform
   // (no direct access to matrix no mapSettings' visible extent)
@@ -243,10 +244,24 @@ Item {
             centerIn: parent
             verticalCenterOffset: highlight.markerOffsetY
           }
-          width: markerCircleSize
-          height: markerCircleSize
+          width: markerSize
+          height: markerSize
           color: highlight.markerColor
           radius: width/2
+          border.color: highlight.markerOutlineColor
+          border.width: highlight.markerOutlineWidth
+      }
+
+      Rectangle {
+          visible: markerType === "rectangular"
+          anchors {
+            centerIn: parent
+            verticalCenterOffset: highlight.markerOffsetY
+          }
+          width: markerSize
+          height: markerSize
+          color: highlight.markerColor
+          radius: markerRadius
           border.color: highlight.markerOutlineColor
           border.width: highlight.markerOutlineWidth
       }
@@ -259,8 +274,8 @@ Item {
           verticalCenterOffset: highlight.markerOffsetY
         }
 
-        width: markerCircleSize
-        height: markerCircleSize
+        width: markerSize
+        height: markerSize
 
         color: highlight.markerColor
 
@@ -274,8 +289,8 @@ Item {
 
           source: highlight.markerCircleIconSource
 
-          width: parent.width - parent.width / 5
-          height: parent.height - parent.height / 5
+          width: markerSize
+          height: markerSize
           sourceSize.width: width
           sourceSize.height: height
         }

@@ -41,7 +41,7 @@ QtObject {
     property color darkGreen: "#006146"
     property color guidelineColor: Qt.rgba( 1, 0.2, 0.2, 0.8 )
 
-    property real mapMarkerExistingVertexSize: 27 * __dp
+    property real mapMarkerExistingVertexSize: 21 * __dp
     property color mapMarkerExistingVertexColor: "#D9D9D9"
     property real mapMarkerMidVertexSize: 18 * __dp
     property color mapMarkerMidVertexColor: "#BBD9D9D9"
@@ -169,6 +169,7 @@ QtObject {
     property color highlightLineColor: Qt.rgba( 1, 0.2, 0.2, 1 )
     property color highlightFillColor: Qt.rgba( 1, 0.2, 0.2, InputStyle.lowHighlightOpacity )
     property color highlightOutlineColor: "white"
+    property real guidelineLineWidth: 6 * __dp
     property real highlightLineWidth: 8 * __dp
     property real highlightOutlinePenWidth: 2 * __dp
 
