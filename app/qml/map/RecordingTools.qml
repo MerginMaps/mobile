@@ -118,8 +118,7 @@ Item {
     height: root.map.height
     width: root.map.width
 
-    lineColor: InputStyle.guidelineColor
-    lineWidth: InputStyle.guidelineLineWidth
+    lineWidth: InputStyle.guidelineWidth
     lineStrokeStyle: ShapePath.DashLine
 
     mapSettings: root.map.mapSettings
@@ -131,6 +130,7 @@ Item {
 
     height: root.map.height
     width: root.map.width
+
     visible: !__inputUtils.isPointLayer(__activeLayer.vectorLayer)
 
     mapSettings: root.map.mapSettings
@@ -146,9 +146,8 @@ Item {
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
 
-    lineColor: InputStyle.guidelineColor
     lineStrokeStyle: ShapePath.DashLine
-    lineWidth: InputStyle.guidelineLineWidth
+    lineWidth: InputStyle.guidelineWidth
   }
 
   Highlight {
@@ -160,10 +159,9 @@ Item {
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
 
-    markerType: "circleWithIcon"
-    markerColor: InputStyle.mapMarkerMidVertexColor
-    markerSize: InputStyle.mapMarkerMidVertexSize
-    markerCircleIconSource: InputStyle.plusIcon
+    markerType: "circle"
+    markerSize: InputStyle.mapMarkerSize
+    markerBorderColor: InputStyle.mapMarkerColor
   }
 
   Highlight {
@@ -175,10 +173,8 @@ Item {
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
 
-    markerType: "rectangular"
-    markerColor: InputStyle.mapMarkerExistingVertexColor
-    markerSize: InputStyle.mapMarkerExistingVertexSize
-    markerCircleIconSource: InputStyle.mapMarkerMoveIcon
+    markerType: "circle"
+    markerSize: InputStyle.mapMarkerSizeBig
   }
 
   Crosshair {

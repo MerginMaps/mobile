@@ -23,41 +23,40 @@ Item {
   // geometry must be in map canvas CRS!
   property var geometry
 
-  // color for line geometries
-  property color lineColor: InputStyle.highlightLineColor
-  // width for line geometries
-  property real lineWidth: InputStyle.highlightLineWidth
-  // stroke style for line geometries (solid line / dashed line)
-  property int lineStrokeStyle: ShapePath.SolidLine
+  // for transformation of the highlight to the correct location on the map
+  property QgsQuick.MapSettings mapSettings
 
-  // color for polygon geometries
-  property color fillColor: InputStyle.highlightFillColor
-
-  // width for outlines of lines and polygons
-  property real outlinePenWidth: InputStyle.highlightOutlinePenWidth
-  // color for outlines of lines and polygons
-  property color outlineColor: InputStyle.highlightOutlineColor
-
+  // point (marker) properties
   property string markerType: "image"   // "circle" or "image"
-  property color markerColor: "grey"
-  property color markerOutlineColor: "black"
-  property real markerOutlineWidth: 1 * __dp < 1 ? 1 : 1 * __dp
+  property color markerColor: InputStyle.mapMarkerColor
+  property color markerBorderColor: InputStyle.mapMarkerBorderColor
+  property real markerSize: InputStyle.mapMarkerSize
+  property real markerBorderWidth: InputStyle.mapMarkerBorderWidth
   property real markerWidth: InputStyle.mapMarkerWidth
   property real markerHeight: InputStyle.mapMarkerHeight
   property real markerAnchorX: markerWidth / 2
   property real markerAnchorY: InputStyle.mapMarkerAnchorY
   property url markerImageSource: InputStyle.mapMarkerIcon
-  property url markerCircleIconSource: InputStyle.noIcon
 
-  // for transformation of the highlight to the correct location on the map
-  property QgsQuick.MapSettings mapSettings
+  // line properties
+  property color lineColor: InputStyle.mapLineColor
+  property color lineBorderColor: InputStyle.mapLineBorderColor
+  property real lineWidth: InputStyle.mapLineWidth
+  property real lineBorderWidth: InputStyle.mapLineBorderWidth // on top of width
+  property int lineStrokeStyle: ShapePath.SolidLine // (solid line / dashed line)
+
+  // polygon properties
+  property color polygonFillColor: InputStyle.mapPolygonFillColor
+  property color polygonRingColor: InputStyle.mapPolygonRingColor
+  property color polygonRingBorderColor: InputStyle.mapPolygonRingBorderColor
+  property real polygonRingWidth: InputStyle.mapPolygonRingWidth
+  property real polygonRingBorderWidth: InputStyle.mapPolygonRingBorderWidth // on top of ring width
 
   //
   // internal properties not meant to be modified from outside
   //
   property real markerOffsetY: 14 * __dp // for circle marker type to be aligned with crosshair
-  property real markerSize: 15 * __dp
-  property real markerRadius: 5
+  property real markerRadius: 5 * __dp
 
   // properties used by markers (not able to use values directly from mapTransform
   // (no direct access to matrix no mapSettings' visible extent)
@@ -117,7 +116,8 @@ Item {
       markerItems = [];
       lineShapePath.pathElements = newLineElements
       polygonShapePath.pathElements = newPolygonElements
-      lineOutlineShapePath.pathElements = newLineElements
+      lineBorderShapePath.pathElements = newLineElements
+      polygonRingBorderPath.pathElements = newPolygonElements
 
       return;
     }
@@ -211,8 +211,9 @@ Item {
 
     markerItems = newMarkerItems
     polygonShapePath.pathElements = newPolygonElements
+    polygonRingBorderPath.pathElements = newPolygonElements
     lineShapePath.pathElements = newLineElements
-    lineOutlineShapePath.pathElements = newLineElements
+    lineBorderShapePath.pathElements = newLineElements
   }
 
   // keeps list of currently displayed marker items (an internal property)
@@ -248,52 +249,8 @@ Item {
           height: markerSize
           color: highlight.markerColor
           radius: width/2
-          border.color: highlight.markerOutlineColor
-          border.width: highlight.markerOutlineWidth
-      }
-
-      Rectangle {
-          visible: markerType === "rectangular"
-          anchors {
-            centerIn: parent
-            verticalCenterOffset: highlight.markerOffsetY
-          }
-          width: markerSize
-          height: markerSize
-          color: highlight.markerColor
-          radius: markerRadius
-          border.color: highlight.markerOutlineColor
-          border.width: highlight.markerOutlineWidth
-      }
-
-      Rectangle {
-        visible: markerType === "circleWithIcon"
-
-        anchors {
-          centerIn: parent
-          verticalCenterOffset: highlight.markerOffsetY
-        }
-
-        width: markerSize
-        height: markerSize
-
-        color: highlight.markerColor
-
-        radius: width / 2
-
-        border.color: highlight.markerOutlineColor
-        border.width: highlight.markerOutlineWidth
-
-        Image {
-          anchors.centerIn: parent
-
-          source: highlight.markerCircleIconSource
-
-          width: markerSize
-          height: markerSize
-          sourceSize.width: width
-          sourceSize.height: height
-        }
+          border.color: highlight.markerBorderColor
+          border.width: highlight.markerBorderWidth
       }
 
       Image {
@@ -331,10 +288,10 @@ Item {
     Component {  id: componentMoveTo; PathMove { } }
 
     ShapePath {
-        id: lineOutlineShapePath
-        strokeWidth: highlight.lineWidth / shapeTransform.scale  // negate scaling from the transform
+        id: lineBorderShapePath
+        strokeWidth: ( highlight.lineBorderWidth + highlight.lineWidth ) / shapeTransform.scale  // negate scaling from the transform
         fillColor: "transparent"
-        strokeColor: highlight.outlineColor
+        strokeColor: highlight.lineBorderColor
         capStyle: lineShapePath.capStyle
         joinStyle: lineShapePath.joinStyle
     }
@@ -343,17 +300,27 @@ Item {
       id: lineShapePath
       strokeColor: highlight.lineColor
       strokeStyle: highlight.lineStrokeStyle
-      strokeWidth: (highlight.lineWidth - highlight.outlinePenWidth*2) / shapeTransform.scale  // negate scaling from the transform
+      strokeWidth: highlight.lineWidth / shapeTransform.scale  // negate scaling from the transform
       fillColor: "transparent"
       capStyle: ShapePath.RoundCap
       joinStyle: ShapePath.BevelJoin
     }
 
     ShapePath {
+      id: polygonRingBorderPath
+      strokeColor: highlight.polygonRingBorderColor
+      strokeStyle: ShapePath.SolidLine
+      strokeWidth: highlight.polygonRingBorderWidth + highlight.polygonRingWidth / shapeTransform.scale  // negate scaling from the transform
+      fillColor: "transparent"
+      capStyle: ShapePath.RoundCap
+      joinStyle: ShapePath.BevelJoin
+    }
+
+    ShapePath { // rings + fill
       id: polygonShapePath
-      strokeColor: highlight.outlineColor
-      strokeWidth: highlight.outlinePenWidth / shapeTransform.scale  // negate scaling from the transform
-      fillColor: highlight.fillColor
+      strokeColor: highlight.polygonRingColor
+      strokeWidth: highlight.polygonRingWidth / shapeTransform.scale  // negate scaling from the transform
+      fillColor: highlight.polygonFillColor
       capStyle: ShapePath.FlatCap
       joinStyle: ShapePath.BevelJoin
     }
