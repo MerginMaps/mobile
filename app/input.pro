@@ -13,6 +13,7 @@ QT += quick qml xml concurrent positioning sensors quickcontrols2
 QT += network svg sql
 QT += opengl
 QT += core
+QT += core5compat
 
 # Exiv still uses std::auto_ptr
 # remove when https://github.com/lutraconsulting/input-sdk/issues/68 is fixed

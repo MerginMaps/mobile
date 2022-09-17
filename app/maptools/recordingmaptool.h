@@ -16,10 +16,10 @@
 #include <qglobal.h>
 
 #include "qgsgeometry.h"
+#include "qgsvectorlayer.h"
+#include "position/positionkit.h"
 
-class PositionKit;
 class VariablesManager;
-class QgsVectorLayer;
 
 class RecordingMapTool : public AbstractMapTool
 {

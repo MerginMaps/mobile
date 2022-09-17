@@ -21,9 +21,9 @@
 #include "activelayer.h"
 #include "layersproxymodel.h"
 #include "localprojectsmanager.h"
+#include "autosynccontroller.h"
 
 class QgsQuickMapSettings;
-class AutosyncController;
 
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.

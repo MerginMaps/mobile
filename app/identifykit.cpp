@@ -20,7 +20,6 @@
 #include "qgsvectorlayer.h"
 
 #include "identifykit.h"
-#include "qgsquickmapsettings.h"
 #include "qgsexpressioncontextutils.h"
 
 #include "qgis.h"

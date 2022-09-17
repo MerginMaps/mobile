@@ -22,9 +22,6 @@
 #include "coreutils.h"
 #include "geodiffutils.h"
 #include "localprojectsmanager.h"
-#include "merginuserauth.h"
-#include "merginuserinfo.h"
-#include "merginsubscriptioninfo.h"
 
 #include <geodiff.h>
 

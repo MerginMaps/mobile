@@ -19,10 +19,8 @@
 #include <QObject>
 
 #include "qgsfeature.h"
+#include "qgsvectorlayer.h"
 
-
-
-class QgsVectorLayer;
 
 /**
  * \ingroup quick

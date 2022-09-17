@@ -9,11 +9,10 @@
 
 #include "recordingmaptool.h"
 
-#include "qgsvectorlayer.h"
+
 #include "qgspolygon.h"
 #include "qgsvectorlayerutils.h"
 
-#include "position/positionkit.h"
 #include "variablesmanager.h"
 #include "inpututils.h"
 

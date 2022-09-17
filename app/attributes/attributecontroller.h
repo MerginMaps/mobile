@@ -24,22 +24,22 @@
 #include <QVector>
 #include <QUuid>
 
-
 #include "featurelayerpair.h"
 #include "attributedata.h"
+#include "attributeformproxymodel.h"
+#include "attributetabproxymodel.h"
+#include "rememberattributescontroller.h"
 
 #include "qgsfeature.h"
+#include "qgsproject.h"
 #include "qgseditformconfig.h"
 #include "qgsexpressioncontext.h"
 #include "qgsattributeeditorcontainer.h"
 #include "variablesmanager.h"
 
 class AttributeFormModel;
-class AttributeFormProxyModel;
 class AttributeTabModel;
-class AttributeTabProxyModel;
 class QgsVectorLayer;
-class RememberAttributesController;
 
 /**
  * This is implementation of the controller between Attribute*Model
