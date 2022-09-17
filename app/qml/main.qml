@@ -551,7 +551,7 @@ ApplicationWindow {
 
     Connections {
         target: __merginApi
-        onNetworkErrorOccurred: {
+        function onNetworkErrorOccurred( message, topic, httpCode, projectFullName ) {
           if ( stateManager.state === "projects" )
           {
             var msg = message ? message : qsTr( "Failed to communicate with Mergin.%1Try improving your network connection." ).arg( "\n" )
@@ -559,7 +559,7 @@ ApplicationWindow {
           }
         }
 
-        onStorageLimitReached: {
+        function onStorageLimitReached( uploadSize ) {
           __merginApi.getUserInfo()
           if (__merginApi.apiSupportsSubscriptions) {
             __merginApi.getSubscriptionInfo()
@@ -568,9 +568,11 @@ ApplicationWindow {
           storageLimitDialog.open()
         }
 
-        onNotify: showMessage(message)
+        function onNotify( message ) {
+          showMessage(message)
+        }
 
-        onProjectDataChanged: {
+        function onProjectDataChanged( projectFullName ) {
           //! if current project has been updated, refresh canvas
           if ( projectFullName === projectPanel.activeProjectId ) {
             map.mapSettings.extentChanged()
@@ -580,34 +582,40 @@ ApplicationWindow {
 
     Connections {
         target: __inputProjUtils
-        onProjError: {
+        function onProjError( message ) {
           showProjError(message)
         }
     }
 
     Connections {
         target: __inputUtils
-        onShowNotificationRequested: {
+        function onShowNotificationRequested( message ) {
             showMessage(message)
         }
     }
 
     Connections {
       target: __activeProject
-      onLoadingStarted: {
+      function onLoadingStarted() {
         projectLoadingScreen.visible = true;
         failedToLoadProjectBanner.reset();
         projectIssuesPanel.clear();
       }
-      onLoadingFinished: projectLoadingScreen.visible = false
-      onLoadingErrorFound: {
+      function onLoadingFinished() {
+        projectLoadingScreen.visible = false
+      }
+      function onLoadingErrorFound() {
         failedToLoadProjectBanner.pushNotificationMessage( qsTr( "There were issues loading the project." ) )
       }
-
-      onReportIssue: projectIssuesPanel.reportIssue( layerName, message )
-
-      onProjectReloaded: map.clear()
-      onProjectWillBeReloaded: formsStackManager.reload()
+      function onReportIssue( layerName, message ) {
+        projectIssuesPanel.reportIssue( layerName, message )
+      }
+      function onProjectReloaded( project ) {
+        map.clear()
+      }
+      function onProjectWillBeReloaded() {
+        formsStackManager.reload()
+      }
     }
 
     LegacyFolderMigration {

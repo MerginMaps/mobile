@@ -54,8 +54,8 @@ Item {
       migrationInProgress.visible = true
     }
 
-    function onMigrationProgressed( numOfCopiedProjects ) {
-      root.numOfCopiedProjects = numOfCopiedProjects
+    function onMigrationProgressed( progress ) {
+      root.numOfCopiedProjects = progress
     }
 
     function onMigrationFinished( success ) {

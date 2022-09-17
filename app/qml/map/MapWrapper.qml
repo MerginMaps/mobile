@@ -725,7 +725,7 @@ Item {
 
   Connections {
     target: mapCanvas.mapSettings
-    onExtentChanged: {
+    function onExtentChanged() {
       scaleBar.visible = true
     }
   }

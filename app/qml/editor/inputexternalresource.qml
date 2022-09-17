@@ -132,7 +132,9 @@ Item {
 
   Connections {
     target: photoCapturePanelLoader.item
-    onConfirmButtonClicked: externalResourceHandler.confirmImage(fieldItem, path, filename)
+    function onConfirmButtonClicked( path, filename ) {
+      externalResourceHandler.confirmImage(fieldItem, path, filename)
+    }
   }
 
   Rectangle {

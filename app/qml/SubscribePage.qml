@@ -29,12 +29,12 @@ Rectangle {
 
   Connections {
     target: __purchasing
-    onIndividualPlanChanged: {
+    function onIndividualPlanChanged() {
       if (!root.isBusy && root.visible) {
         subscribeBusyIndicator.running = false
       }
     }
-    onProfessionalPlanChanged: {
+    function onProfessionalPlanChanged() {
       if (!root.isBusy && root.visible) {
         subscribeBusyIndicator.running = false
       }

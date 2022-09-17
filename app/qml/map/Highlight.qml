@@ -73,7 +73,7 @@ Item {
 
   Connections {
       target: mapSettings
-      onVisibleExtentChanged: {
+      function onVisibleExtentChanged() {
           mapTransformScale = __inputUtils.mapSettingsScale(mapSettings)
           mapTransformOffsetX = __inputUtils.mapSettingsOffsetX(mapSettings)
           mapTransformOffsetY = __inputUtils.mapSettingsOffsetY(mapSettings)

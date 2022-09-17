@@ -239,12 +239,16 @@ Item {
 
         Connections {
           target: master
-          onReset: tabRow.currentIndex = 0
+          function onReset() {
+            tabRow.currentIndex = 0
+          }
         }
 
         Connections {
           target: swipeView
-          onCurrentIndexChanged: tabRow.currentIndex = swipeView.currentIndex
+          function onCurrentIndexChanged() {
+            tabRow.currentIndex = swipeView.currentIndex
+          }
         }
 
         Repeater {
@@ -365,7 +369,9 @@ Item {
 
             Connections {
               target: master
-              onReset: content.contentY = 0
+              function onReset() {
+                content.contentY = 0
+              }
             }
 
             model: swipeViewRepeater.model.attributeFormProxyModel(formPage.tabIndex)
@@ -528,19 +534,19 @@ Item {
           target: attributeEditorLoader.item
           ignoreUnknownSignals: true
 
-          onEditorValueChanged: {
+          function onEditorValueChanged( newValue, isNull ) {
             AttributeValue = isNull ? undefined : newValue
           }
 
-          onImportDataRequested: {
+          function onImportDataRequested() {
            importDataHandler.importData(attributeEditorLoader.item)
           }
 
-          onOpenLinkedFeature: {
+          function onOpenLinkedFeature( linkedFeature ) {
             form.openLinkedFeature( linkedFeature )
           }
 
-          onCreateLinkedFeature: {
+          function onCreateLinkedFeature() {
             let parentHasValidId = __inputUtils.isFeatureIdValid( parentFeature.feature.id )
 
             if ( parentHasValidId ) {
@@ -558,14 +564,14 @@ Item {
         Connections {
           target: form.controller
 
-          onFeatureLayerPairChanged: {
+          function onFeatureLayerPairChanged() {
             if ( attributeEditorLoader.item && attributeEditorLoader.item.featureLayerPairChanged )
             {
               attributeEditorLoader.item.featureLayerPairChanged()
             }
           }
 
-          onFormRecalculated: {
+          function onFormRecalculated() {
             if ( attributeEditorLoader.item && attributeEditorLoader.item.reload )
             {
               attributeEditorLoader.item.reload()
@@ -577,13 +583,13 @@ Item {
           target: form
           ignoreUnknownSignals: true
 
-          onSaved: {
+          function onSaved() {
             if (attributeEditorLoader.item && typeof attributeEditorLoader.item.callbackOnSave === "function") {
               attributeEditorLoader.item.callbackOnSave()
             }
           }
 
-          onCanceled: {
+          function onCanceled() {
             if (attributeEditorLoader.item && typeof attributeEditorLoader.item.callbackOnCancel === "function") {
               attributeEditorLoader.item.callbackOnCancel()
             }
@@ -627,14 +633,18 @@ Item {
 
   Connections {
     target: Qt.inputMethod
-    onVisibleChanged: {
+    function onVisibleChanged() {
       Qt.inputMethod.commit()
     }
   }
 
   Connections {
     target: form.controller
-    onChangesCommited: form.saved()
-    onChangesRolledback: form.editingFailed()
+    function onChangesCommited() {
+      form.saved()
+    }
+    function onChangesRolledback() {
+      form.editingFailed()
+    }
   }
 }

@@ -165,7 +165,9 @@ Item {
 
         Connections {
           target: root
-          onFormStateChanged: featureForm.state = root.formState
+          function onFormStateChanged() {
+            featureForm.state = root.formState
+          }
         }
 
         Component.onCompleted: {

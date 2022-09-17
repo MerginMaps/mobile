@@ -159,13 +159,17 @@ Item {
     Connections {
         target: __androidUtils
         // used for both gallery and camera
-        onImageSelected:externalResourceHandler.imageSelected(imagePath)
+        function onImageSelected( imagePath ) {
+          externalResourceHandler.imageSelected(imagePath)
+        }
     }
 
     Connections {
         target: __iosUtils
         // used for both gallery and camera
-        onImageSelected: externalResourceHandler.imageCaptured(imagePath)
+        function onImageSelected( imagePath ) {
+          externalResourceHandler.imageCaptured(imagePath)
+        }
     }
 
     Popup {

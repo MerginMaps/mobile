@@ -216,11 +216,11 @@ Item {
     Connections {
       target: __merginApi
 
-      onListProjectsFailed: {
+      function onListProjectsFailed() {
         reloadList.visible = root.projectModelType !== ProjectsModel.LocalProjectsModel // show reload list to all models except local
       }
 
-      onListProjectsFinished: {
+      function onListProjectsFinished( merginProjects, projectCount, page, requestId ) {
         if ( projectCount > -1 )
           reloadList.visible = false
       }
