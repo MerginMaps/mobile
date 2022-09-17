@@ -10,7 +10,7 @@
 
 #include <QObject>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <memory>
 
 #include "qgsapplication.h"

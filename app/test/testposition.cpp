@@ -10,7 +10,7 @@
 
 #include <QObject>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QSignalSpy>
 
 #include "qgsapplication.h"
@@ -109,18 +109,18 @@ void TestPosition::testBluetoothProviderConnection()
 
   QSignalSpy providerSpy( btProvider, &AbstractPositionProvider::stateChanged );
 
-  emit socket->error( QBluetoothSocket::NetworkError );
+  emit socket->errorOccurred( QBluetoothSocket::SocketError::NetworkError );
   QCOMPARE( AbstractPositionProvider::NoConnection, btProvider->state() );
 
-  emit socket->stateChanged( QBluetoothSocket::ConnectingState );
+  emit socket->stateChanged( QBluetoothSocket::SocketState::ConnectingState );
   QCOMPARE( AbstractPositionProvider::Connecting, btProvider->state() );
   QVERIFY( providerSpy.count() > 0 );
 
-  emit socket->stateChanged( QBluetoothSocket::ConnectedState );
+  emit socket->stateChanged( QBluetoothSocket::SocketState::ConnectedState );
   QCOMPARE( AbstractPositionProvider::Connected, btProvider->state() );
   QVERIFY( providerSpy.count() > 1 );
 
-  emit socket->stateChanged( QBluetoothSocket::UnconnectedState );
+  emit socket->stateChanged( QBluetoothSocket::SocketState::UnconnectedState );
   QCOMPARE( AbstractPositionProvider::NoConnection, btProvider->state() );
   QCOMPARE( "Could not connect to device, not paired", btProvider->stateMessage() );
   QVERIFY( providerSpy.count() > 2 );

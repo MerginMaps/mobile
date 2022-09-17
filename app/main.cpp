@@ -13,7 +13,7 @@
 #include <QQmlComponent>
 #include <QtDebug>
 #include <QQmlError>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QWindow>
 #include <QtGlobal>
 #include <QQmlContext>
@@ -338,11 +338,6 @@ void addQmlImportPath( QQmlEngine &engine )
 
 int main( int argc, char *argv[] )
 {
-  // This flag enables auto scaling for HighDPI screens.
-  // This basically means that each specified pixel in QML is now considered dp
-  // See __dp comment for more information.
-  QGuiApplication::setAttribute( Qt::AA_EnableHighDpiScaling );
-
   QgsApplication app( argc, argv, true );
 
   const QString version = CoreUtils::appVersion();
@@ -512,6 +507,8 @@ int main( int argc, char *argv[] )
   QObject::connect( &iosUtils, &IosUtils::showToast, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]( const QString & projectFullName, bool successfully, int version, bool reloadNeeded )
   {
+    Q_UNUSED( successfully );
+    Q_UNUSED( version );
     if ( reloadNeeded && activeProject.projectFullName() == projectFullName )
     {
       activeProject.reloadProject( activeProject.qgsProject()->homePath() );
