@@ -20,7 +20,7 @@ class CodeScanner : public QVideoSink
 {
     Q_OBJECT
 
-    Q_PROPERTY( QVideoSink* videoSink READ videoSink WRITE setVideoSink NOTIFY videoSinkChanged )
+    Q_PROPERTY( QVideoSink *videoSink READ videoSink WRITE setVideoSink NOTIFY videoSinkChanged )
     Q_PROPERTY( QRectF captureRect READ captureRect WRITE setCaptureRect NOTIFY captureRectChanged )
 
   public:
@@ -39,7 +39,7 @@ class CodeScanner : public QVideoSink
   public slots:
     void pauseProcessing();
     void continueProcessing();
-    void setProcessing(bool processing);
+    void setProcessing( bool processing );
 
     void processImage( QRDecoder *decoder, const QImage &image );
 
@@ -49,7 +49,7 @@ class CodeScanner : public QVideoSink
     void captureRectChanged( const QRectF &captureRect );
     void capturedStringChanged( const QString &captured );
 
-    void process(const QImage &image);
+    void process( const QImage &image );
 
   private slots:
     void initCamera();

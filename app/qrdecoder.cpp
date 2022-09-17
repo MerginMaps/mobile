@@ -13,24 +13,26 @@
 /*
  * zxing-cpp interface
  */
-namespace ZXing {
-  namespace Qt {
+namespace ZXing
+{
+  namespace Qt
+  {
     using ZXing::DecodeHints;
     using ZXing::BarcodeFormat;
     using ZXing::BarcodeFormats;
     using ZXing::Binarizer;
 
-    template <typename T, typename _ = decltype(ToString(T()))>
-    QDebug operator << (QDebug dbg, const T& v)
+    template <typename T, typename _ = decltype( ToString( T() ) )>
+    QDebug operator << ( QDebug dbg, const T &v )
     {
-      return dbg.noquote() << QString::fromStdString(ToString(v));
+      return dbg.noquote() << QString::fromStdString( ToString( v ) );
     }
 
     // Result of the decode operation
     class Result : private ZXing::Result
     {
       public:
-        explicit Result(ZXing::Result&& r) : ZXing::Result(std::move(r)){ }
+        explicit Result( ZXing::Result &&r ) : ZXing::Result( std::move( r ) ) { }
 
         using ZXing::Result::format;
         using ZXing::Result::isValid;
@@ -39,9 +41,10 @@ namespace ZXing {
         inline QString text() const { return QString::fromWCharArray( ZXing::Result::text().c_str() ); }
     };
 
-    Result ReadBarcode( const QImage& img, const DecodeHints& hints = {} )
+    Result ReadBarcode( const QImage &img, const DecodeHints &hints = {} )
     {
-      auto ImgFmtFromQImg = []( const QImage& img ) {
+      auto ImgFmtFromQImg = []( const QImage & img )
+      {
         switch ( img.format() )
         {
           case QImage::Format_ARGB32:
@@ -59,19 +62,20 @@ namespace ZXing {
         }
       };
 
-      auto exec = [&]( const QImage& img ){
+      auto exec = [&]( const QImage & img )
+      {
         return Result( ZXing::ReadBarcode( { img.bits(), img.width(), img.height(), ImgFmtFromQImg( img ) }, hints ) );
       };
-      return ImgFmtFromQImg(img) == ImageFormat::None ? exec( img.convertToFormat( QImage::Format_RGBX8888 ) ) : exec( img );
+      return ImgFmtFromQImg( img ) == ImageFormat::None ? exec( img.convertToFormat( QImage::Format_RGBX8888 ) ) : exec( img );
     }
   } // Qt namespace
 } // ZXing namespace
 
 using namespace ZXing::Qt;
 
-std::ostream& operator << ( std::ostream& os, const std::vector< ZXing::ResultPoint >& points )
+std::ostream &operator << ( std::ostream &os, const std::vector< ZXing::ResultPoint > &points )
 {
-  for ( const auto& p : points )
+  for ( const auto &p : points )
   {
     os << int( p.x() + .5f ) << "x" << int( p.y() + .5f ) << " ";
   }
@@ -83,7 +87,7 @@ static int mResolutionWidth = DEFAULT_RES_W;
 static int mResolutionHeight = DEFAULT_RES_H;
 
 QRDecoder::QRDecoder( QObject *parent )
-  : QObject(parent)
+  : QObject( parent )
 {
 }
 
@@ -111,7 +115,7 @@ QImage QRDecoder::videoFrameToImage( const QVideoFrame &videoFrame, const QRect 
 {
   auto handleType = videoFrame.handleType();
 
-  if (handleType == QVideoFrame::NoHandle)
+  if ( handleType == QVideoFrame::NoHandle )
   {
     QImage image = videoFrame.toImage();
 
@@ -159,7 +163,7 @@ bool QRDecoder::isDecoding() const
 
 void QRDecoder::setIsDecoding( bool isDecoding )
 {
-  if ( mIsDecoding == isDecoding)
+  if ( mIsDecoding == isDecoding )
   {
     return;
   }
@@ -168,7 +172,7 @@ void QRDecoder::setIsDecoding( bool isDecoding )
   emit isDecodingChanged( mIsDecoding );
 }
 
-void QRDecoder::setResolution(const int &width, const int &height)
+void QRDecoder::setResolution( const int &width, const int &height )
 {
   mResolutionWidth = width;
   mResolutionHeight = height;

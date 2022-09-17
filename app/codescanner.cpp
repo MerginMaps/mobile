@@ -1,13 +1,13 @@
 #include "codescanner.h"
 
 CodeScanner::CodeScanner( QObject *parent )
-  : QVideoSink(parent)
-  ,	mCamera( nullptr )
+  : QVideoSink( parent )
+  , mCamera( nullptr )
 {
   connect( &mDecoder, &QRDecoder::capturedStringChanged, this, &CodeScanner::setCapturedString );
   connect( this, &QVideoSink::videoFrameChanged, this, &CodeScanner::processFrame );
 
-  mWorker = new QRWorker(this);
+  mWorker = new QRWorker( this );
   mWorker->moveToThread( &mWorkThread );
   connect( &mWorkThread, &QThread::finished, mWorker, &QObject::deleteLater );
   connect( this, &CodeScanner::process, mWorker, &QRWorker::process );
@@ -34,10 +34,10 @@ void CodeScanner::initCamera()
   int i = 0;
 #endif
 
-  const auto s = settings.at(i);
+  const auto s = settings.at( i );
 
-  int w = settings.at(i).resolution().width();
-  int h = settings.at(i).resolution().height();
+  int w = settings.at( i ).resolution().width();
+  int h = settings.at( i ).resolution().height();
   mDecoder.setResolution( w, h );
 
   mCamera->setFocusMode( QCamera::FocusModeAuto );
@@ -60,11 +60,11 @@ void CodeScanner::stopCamera()
 
 void CodeScanner::processFrame( const QVideoFrame &frame )
 {
-  if( mProcessing)
+  if ( mProcessing )
   {
     emit process( mDecoder.videoFrameToImage( frame, captureRect().toRect() ) );
 
-    if( mVideoSink)
+    if ( mVideoSink )
     {
       mVideoSink->setVideoFrame( frame );
     }
@@ -121,7 +121,7 @@ QRectF CodeScanner::captureRect() const
 
 void CodeScanner::setCaptureRect( const QRectF &captureRect )
 {
-  if ( mCaptureRect == captureRect)
+  if ( mCaptureRect == captureRect )
   {
     return;
   }
