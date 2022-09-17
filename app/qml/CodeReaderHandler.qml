@@ -25,7 +25,7 @@ Item {
     property var itemWidget
 
     /**
-     * Invokes QR scaner and seves reference to the caller (widget) to save the value afterwards.
+     * Invokes QR scaner and saves reference to the caller (widget) to save the value afterwards.
      * NOTE: Not supported for WIN yet
      * \param itemWidget editorWidget for modified field to send valueChanged signal.
      */
@@ -61,8 +61,8 @@ Item {
 
   Component {
     id: cameraComponent
-    CodeReader {
-      id: codeReader
+    CodeScanner {
+      id: codeScanner
       width: codeReaderBundle.width
       height: codeReaderBundle.height
 

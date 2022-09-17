@@ -7,9 +7,8 @@
         <file>BrowseDataLayersPanel.qml</file>
         <file>BrowseDataPanel.qml</file>
         <file>CircularProgressBar.qml</file>
-        <file>CodeReader.qml</file>
         <file>CodeReaderHandler.qml</file>
-        <file>CodeReaderOverlay.qml</file>
+        <file>CodeScanner.qml</file>
         <file>ExternalResourceBundle.qml</file>
         <file>FeaturesList.qml</file>
         <file>FeaturesListPage.qml</file>
