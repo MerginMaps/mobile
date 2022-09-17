@@ -7,9 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs
 
 import "."  // import InputStyle singleton
 
@@ -205,9 +205,9 @@ Item {
         title: qsTr( "Open Image" )
         visible: false
         nameFilters: [ qsTr( "Image files (*.gif *.png *.jpg)" ) ]
-        width: window.width
-        height: window.height
-        folder: shortcuts.pictures // https://doc.qt.io/qt-5/ios-platform-notes.html#native-image-picker
+        //width: window.width
+        //height: window.height
+        currentFolder: shortcuts.pictures // https://doc.qt.io/qt-5/ios-platform-notes.html#native-image-picker
         onAccepted: externalResourceHandler.imageSelected(fileDialog.fileUrl)
     }
 
@@ -218,16 +218,18 @@ Item {
         visible: false
         title: qsTr( "Remove photo reference" )
         text: qsTr( "Also permanently delete photo from device?" )
-        icon: StandardIcon.Warning
-        standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
-        onYes: {
+        //icon: StandardIcon.Warning
+        buttons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
+        onButtonClicked: {
+          if (clickedButton === StandardButton.Yes) {
             externalResourceHandler.itemWidget.sourceToDelete = imageDeleteDialog.imagePath
             externalResourceHandler.itemWidget.editorValueChanged("", false)
             visible = false
-        }
-        onNo: {
+          }
+          else if (clickedButton === StandardButton.No) {
             externalResourceHandler.itemWidget.editorValueChanged("", false)
             // visible = false called afterwards when onReject
+          }
         }
         onRejected: {
            visible = false
@@ -241,8 +243,8 @@ Item {
         visible: false
         title: qsTr( "Failed to copy image" )
         text: errorText
-        icon: StandardIcon.Warning
-        standardButtons: StandardButton.Ok
+        //icon: StandardIcon.Warning
+        buttons: StandardButton.Ok
         onAccepted: {
             externalResourceHandler.itemWidget.editorValueChanged("", false)
             visible = false

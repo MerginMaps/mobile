@@ -7,9 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Dialogs 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs
 
 import lc 1.0
 import ".."
@@ -200,8 +200,8 @@ Item {
         visible: false
         title: qsTr( "Delete feature" )
         text: qsTr( "Are you sure you want to delete this feature?" )
-        icon: StandardIcon.Warning
-        standardButtons: StandardButton.Ok | StandardButton.Cancel
+        //icon: StandardIcon.Warning
+        buttons: StandardButton.Ok | StandardButton.Cancel
 
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
         onButtonClicked: {
@@ -221,8 +221,8 @@ Item {
         visible: false
         title: qsTr( "Unsaved changes" )
         text: qsTr( "Do you want to save changes?" )
-        icon: StandardIcon.Warning
-        standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
+        //icon: StandardIcon.Warning
+        buttons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
 
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
         onButtonClicked: {
@@ -245,8 +245,8 @@ Item {
         visible: false
         title: qsTr( "Saving failed" )
         text: qsTr( "Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support." )
-        icon: StandardIcon.Warning
-        standardButtons: StandardButton.Close
+        //icon: StandardIcon.Warning
+        buttons: StandardButton.Close
 
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
         onButtonClicked: {

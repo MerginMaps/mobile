@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.0
-import QtGraphicalEffects 1.0
+import QtQuick
+import Qt5Compat.GraphicalEffects
 import ".."  // import InputStyle singleton
 
 DropShadow {
@@ -16,8 +16,6 @@ DropShadow {
     horizontalOffset: 0
     verticalOffset: InputStyle.shadowVerticalOffset
     radius: InputStyle.shadowRadius
-    samples: InputStyle.shadowSamples
     color: "grey"
     transparentBorder: true
-
 }

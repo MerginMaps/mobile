@@ -7,11 +7,11 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtGraphicalEffects 1.14
-import QtQuick.Layouts 1.14
-import QtQuick.Dialogs 1.3 as Dialogs
+import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
+import QtQuick.Layouts
+import QtQuick.Dialogs
 import lc 1.0
 import "."  // import InputStyle singleton
 import "./components"
@@ -375,7 +375,7 @@ Page {
       }
     }
 
-    Dialogs.MessageDialog {
+    MessageDialog {
       id: accountDeletionFailedDialog
 
       property string messageText
@@ -383,8 +383,8 @@ Page {
       visible: false
       title: qsTr( "Failed to remove account" )
       text: messageText
-      icon: Dialogs.StandardIcon.Warning
-      standardButtons: Dialogs.StandardButton.Close
+      //icon: StandardIcon.Warning
+      buttons: StandardButton.Close
       onRejected: {
         close()
         accountDeleted()

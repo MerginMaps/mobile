@@ -8,10 +8,10 @@
  ***************************************************************************/
 
 
-import QtQuick 2.7
-import QtQuick.Controls.Styles 1.2
-import QtGraphicalEffects 1.0
-import QtQuick.Controls 2.2
+import QtQuick
+//import QtQuick.Controls.Styles
+import Qt5Compat.GraphicalEffects
+import QtQuick.Controls
 import "."  // import InputStyle singleton
 
 ProgressBar {

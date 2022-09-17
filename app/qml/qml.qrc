@@ -9,6 +9,7 @@
         <file>CircularProgressBar.qml</file>
         <file>CodeReaderHandler.qml</file>
         <file>CodeScanner.qml</file>
+        <file>CodeScannerOverlay.qml</file>
         <file>ExternalResourceBundle.qml</file>
         <file>FeaturesList.qml</file>
         <file>FeaturesListPage.qml</file>

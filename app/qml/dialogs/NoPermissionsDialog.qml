@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Dialogs 1.3
+import QtQuick
+import QtQuick.Dialogs
 
 MessageDialog {
   id: root
@@ -16,5 +16,5 @@ MessageDialog {
   title: qsTr( "No rights to access the project" )
   text: qsTr( "You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard." )
 
-  standardButtons: StandardButton.Ok
+  buttons: StandardButton.Ok
 }

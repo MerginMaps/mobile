@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
+import QtQuick
 
 import QgsQuick 0.1
 import lc 1.0

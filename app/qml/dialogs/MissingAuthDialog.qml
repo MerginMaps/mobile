@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Dialogs 1.3
+import QtQuick
+import QtQuick.Dialogs
 
 MessageDialog {
   id: root
@@ -18,7 +18,7 @@ MessageDialog {
   title: qsTr( "Sign in to Mergin" )
   text: qsTr( "You need to be signed in to your Mergin account in order to synchronize a project. Hit 'Yes' to sign in." )
 
-  standardButtons: StandardButton.No | StandardButton.Yes
+  buttons: StandardButton.No | StandardButton.Yes
 
   onButtonClicked: {
     if ( clickedButton === StandardButton.Yes ) {

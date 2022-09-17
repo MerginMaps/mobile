@@ -7,10 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.0
-import QtQml.Models 2.2
-import QtQml 2.2
+import QtQuick
+import QtQuick.Controls
+import QtQml.Models
+import QtQml
 
 import lc 1.0
 import "../components"

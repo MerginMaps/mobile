@@ -7,11 +7,11 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Dialogs 1.3
-import QtQuick.Layouts 1.14
-import QtGraphicalEffects 1.14
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs
+import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 
 import lc 1.0
 import ".."

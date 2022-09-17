@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Dialogs 1.3
+import QtQuick
+import QtQuick.Dialogs
 
 /**
   * Dialog bearing information about synchronization failure.
@@ -22,7 +22,7 @@ MessageDialog {
   title: qsTr( "Failed to synchronize your changes" )
   text: qsTr( "Your changes could not be sent to server, make sure you are connected to internet and have write access to this project." )
 
-  standardButtons: StandardButton.Ok
+  buttons: StandardButton.Ok
 
 //  detailedText: ""
 }

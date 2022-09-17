@@ -6,8 +6,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-import QtQuick 2.7
-import QtQuick.Controls 2.7
+import QtQuick
+import QtQuick.Controls
 import "."  // import InputStyle singleton
 
 Item {

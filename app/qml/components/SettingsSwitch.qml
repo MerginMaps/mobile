@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.6
+import QtQuick
 
 import "." // import Components
 import "../" // import InputStyle

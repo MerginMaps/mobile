@@ -7,15 +7,15 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 
 // Required for iOS to get rid of "module "QtMultimedia" is not installed".
 // It looks like static QT plugins are not copied to the distribution
-import QtMultimedia 5.8
-import QtQml.Models 2.2
-import QtPositioning 5.8
-import QtQuick.Dialogs 1.1
+import QtMultimedia
+import QtQml.Models
+import QtPositioning
+import QtQuick.Dialogs
 
 import lc 1.0
 import "./map"
@@ -480,8 +480,12 @@ ApplicationWindow {
         id: projDialog
         onAccepted: projDialog.close()
         title: qsTr("PROJ Error")
-        standardButtons: StandardButton.Ignore |StandardButton.Help
-        onHelp: Qt.openUrlExternally(__inputHelp.howToSetupProj)
+        buttons: StandardButton.Ignore |StandardButton.Help
+        onButtonClicked: {
+          if (clickedButton === StandardButton.Help) {
+            Qt.openUrlExternally(__inputHelp.howToSetupProj)
+          }
+        }
     }
 
     FormsStackManager {

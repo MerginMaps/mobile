@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 pragma Singleton
-import QtQuick 2.0
+import QtQuick
 
 QtObject {
 
@@ -148,7 +148,7 @@ QtObject {
 
     property string closeIcon: "qrc:/ic_clear_black.svg"
     property string stakeoutIcon: "qrc:/stakeout.png"
-    
+
     property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
 
     // map related styling constats

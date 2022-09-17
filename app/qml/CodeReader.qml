@@ -7,10 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.7
-import QtQuick.Layouts 1.3
-import QtMultimedia 5.13
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtMultimedia
 import lc 1.0
 
 import "./components"

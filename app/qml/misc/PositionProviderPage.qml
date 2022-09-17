@@ -7,10 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtGraphicalEffects 1.14
-import QtQuick.Dialogs 1.3
+import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
+import QtQuick.Dialogs
 
 import lc 1.0
 
@@ -365,8 +365,8 @@ Page {
 
     title: qsTr( "Remove receiver" )
     text: qsTr( "Do you want to remove receiver from the list of recent receivers?" )
-    icon: StandardIcon.Warning
-    standardButtons: StandardButton.Ok | StandardButton.Cancel
+    //icon: StandardIcon.Warning
+    buttons: StandardButton.Ok | StandardButton.Cancel
 
     //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
     onButtonClicked: {

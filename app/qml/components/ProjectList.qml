@@ -7,10 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Dialogs 1.2
-import QtQuick.Layouts 1.12
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs
+import QtQuick.Layouts
 import lc 1.0
 import "../"
 import "."
@@ -260,8 +260,8 @@ Item {
 
     title: qsTr( "Remove project" )
     text: qsTr( "Any unsynchronized changes will be lost." )
-    icon: StandardIcon.Warning
-    standardButtons: StandardButton.Ok | StandardButton.Cancel
+    //icon: StandardIcon.Warning
+    buttons: StandardButton.Ok | StandardButton.Cancel
 
     //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
     onButtonClicked: {
@@ -296,8 +296,12 @@ Item {
 
     title: qsTr( "Download project" )
     text: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
-    icon: StandardIcon.Question
-    standardButtons: StandardButton.Yes | StandardButton.No
-    onYes: controllerModel.syncProject( relatedProjectId )
+    //icon: StandardIcon.Question
+    buttons: StandardButton.Yes | StandardButton.No
+    onButtonClicked: {
+      if (clickedButton === StandardButton.Yes) {
+        controllerModel.syncProject( relatedProjectId )
+      }
+    }
   }
 }
