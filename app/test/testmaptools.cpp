@@ -473,6 +473,7 @@ void TestMapTools::testHandles()
   const QVector<QgsGeometry> parts = handles.asGeometryCollection();
   for ( int i = 0; i < parts.count(); i++ )
   {
+    qDebug() << parts.at( i ).asWkt();
     QVERIFY( parts.at( i ).equals( expected.at( i ) ) );
   }
 
