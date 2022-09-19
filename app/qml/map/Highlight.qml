@@ -117,7 +117,7 @@ Item {
       lineShapePath.pathElements = newLineElements
       polygonShapePath.pathElements = newPolygonElements
       lineBorderShapePath.pathElements = newLineElements
-//      polygonRingBorderPath.pathElements = newPolygonElements
+      polygonRingBorderPath.pathElements = newPolygonElements
 
       return;
     }
