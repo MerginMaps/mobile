@@ -1266,17 +1266,19 @@ void RecordingMapTool::updateActiveVertexGeometry()
 
 QgsPoint RecordingMapTool::handlePoint( QgsPoint p1, QgsPoint p2 )
 {
-  double factor = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceMeters, mActiveLayer->crs().mapUnits() );
-  double meters = InputUtils().screenUnitsToMeters( mapSettings(), 100 );
+  if ( !mActiveLayer )
+  {
+    return QgsPoint();
+  }
 
+  double h = 15 * mapSettings()->mapUnitsPerPixel();
+  double factor = QgsUnitTypes::fromUnitToUnitFactor( mapSettings()->destinationCrs().mapUnits(), mActiveLayer->crs().mapUnits() );
   QgsDistanceArea da;
   da.setEllipsoid( QStringLiteral( "WGS84" ) );
   da.setSourceCrs( mActiveLayer->crs(), mapSettings()->transformContext() );
   double d = da.convertLengthMeasurement( da.measureLine( QgsPointXY( p1 ), QgsPointXY( p2 ) ), mActiveLayer->crs().mapUnits() );
-
-  double t = ( d + meters * factor ) / std::sqrt( ( p2.x() - p1.x() ) * ( p2.x() - p1.x() ) + ( p2.y() - p1.y() ) * ( p2.y() - p1.y() ) );
-  double x = p1.x() + t * ( p2.x() - p1.x() );
-  double y = p1.y() + t * ( p2.y() - p1.y() );
+  double x = ( ( p2.x() - p1.x() ) * ( d + h * factor ) / d ) + p1.x();
+  double y = ( ( p2.y() - p1.y() ) * ( d + h * factor ) / d ) + p1.y();
   return QgsPoint( x, y );
 }
 
