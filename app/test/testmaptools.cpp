@@ -473,7 +473,7 @@ void TestMapTools::testHandles()
   const QVector<QgsGeometry> parts = handles.asGeometryCollection();
   for ( int i = 0; i < parts.count(); i++ )
   {
-    QVERIFY( parts.at( i ).asWkt(14) == expected.at( i ) );
+    QVERIFY( parts.at( i ).asWkt( 14 ) == expected.at( i ) );
   }
 
   delete lineLayer;
