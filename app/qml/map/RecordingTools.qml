@@ -25,8 +25,9 @@ Item {
   /*required*/ property var map
   /*required*/ property var gpsState
 
-  function undo() {
-    mapTool.undo()
+  function rollbackChanges() {
+    mapTool.rollbackChanges()
+    root.canceled()
   }
 
   property bool canUndo: mapTool.canUndo
@@ -268,11 +269,6 @@ Item {
       {
         showMessage( __inputUtils.invalidGeometryWarning( mapTool.activeLayer ) )
       }
-    }
-
-    onCancelClicked: {
-      mapTool.rollbackChanges()
-      root.canceled()
     }
   }
 

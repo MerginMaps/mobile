@@ -90,6 +90,23 @@ Item {
             visible: root.pointLayerSelected ? false : true
 
             MainPanelButton {
+                id: undoButton
+                width: root.itemSize
+                text: qsTr("Undo")
+                imageSource: InputStyle.undoIcon
+
+                enabled: root.recordingMapTool.canUndo
+
+                onActivated: root.undoClicked()
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+            height: parent.height
+            visible: root.pointLayerSelected ? false : true
+
+            MainPanelButton {
                 id: removeButton
                 width: root.itemSize
                 text: qsTr("Remove")
@@ -151,20 +168,5 @@ Item {
                 onActivated: root.doneClicked()
             }
         }
-
-        Item {
-            height: parent.height
-            Layout.fillWidth: true
-
-            MainPanelButton {
-                id: cancelButton
-                width: root.itemSize
-                text: qsTr("Cancel")
-                imageSource: InputStyle.noIcon
-
-                onActivated: root.cancelClicked()
-            }
-        }
     }
-
 }
