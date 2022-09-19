@@ -594,6 +594,7 @@ Item {
         cancelEditDialog.open()
       }
       else if ( root.state === "record" ) {
+        cancelEditDialog.open()
       }
     }
 
@@ -673,6 +674,7 @@ Item {
                      "If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ " +
                      "in the toolbar." )
       }
+      return ""
     }
 
     standardButtons: StandardButton.Yes | StandardButton.No
