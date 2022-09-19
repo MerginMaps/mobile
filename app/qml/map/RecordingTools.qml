@@ -135,6 +135,8 @@ Item {
 
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+    lineBorderColor: InputStyle.mapLineColor
+    polygonRingBorderColor: InputStyle.mapLineColor
   }
 
   Highlight {

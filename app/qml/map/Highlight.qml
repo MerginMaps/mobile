@@ -117,7 +117,7 @@ Item {
       lineShapePath.pathElements = newLineElements
       polygonShapePath.pathElements = newPolygonElements
       lineBorderShapePath.pathElements = newLineElements
-      polygonRingBorderPath.pathElements = newPolygonElements
+//      polygonRingBorderPath.pathElements = newPolygonElements
 
       return;
     }
@@ -307,10 +307,13 @@ Item {
     }
 
     ShapePath {
+      // Used as a border to polygon ring - we do not use it currently.
+      // If the simple path for rings is enough (without borders),
+      // we can safely remove this one.
       id: polygonRingBorderPath
       strokeColor: highlight.polygonRingBorderColor
       strokeStyle: ShapePath.SolidLine
-      strokeWidth: highlight.polygonRingBorderWidth + highlight.polygonRingWidth / shapeTransform.scale  // negate scaling from the transform
+      strokeWidth: (highlight.polygonRingBorderWidth + highlight.polygonRingWidth) / shapeTransform.scale  // negate scaling from the transform
       fillColor: "transparent"
       capStyle: ShapePath.RoundCap
       joinStyle: ShapePath.BevelJoin

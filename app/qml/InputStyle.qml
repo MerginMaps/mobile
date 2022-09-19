@@ -166,21 +166,21 @@ QtObject {
     property real mapMarkerBorderWidth: 2 * __dp
     property real mapMarkerHeight: 70 * __dp
     property real mapMarkerAnchorY: 48 * __dp
-    property real mapMarkerSize: 15 * __dp
+    property real mapMarkerSize: 18 * __dp
     property real mapMarkerSizeBig: 21 * __dp
 
     property color mapLineColor: mapObjectsColor
     property color mapLineBorderColor: "white"
 
-    property real mapLineWidth: 6 * __dp
-    property real mapLineBorderWidth: 2 * __dp < 1 ? 1 : 1 * __dp
+    property real mapLineWidth: 8 * __dp
+    property real mapLineBorderWidth: 0 * __dp
 
     property color mapPolygonRingColor: mapObjectsColor
     property color mapPolygonRingBorderColor: "white"
     property color mapPolygonFillColor: mapObjectsColorTransparent
 
-    property real mapPolygonRingWidth: 6 * __dp
-    property real mapPolygonRingBorderWidth: 2 * __dp
+    property real mapPolygonRingWidth: 8 * __dp
+    property real mapPolygonRingBorderWidth: 0 * __dp
 
     property real mapOutOfExtentBorder: scale(64) // when pair lays very close to device display border, center map extent
 
