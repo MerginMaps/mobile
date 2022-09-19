@@ -668,8 +668,8 @@ void RecordingMapTool::collectVertices()
         QgsVertexId id( vertexId.part, vertexId.ring, 1 );
 
         // start handle point
-        QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( vertexId ), geom->vertexAt( id ), -0.5 );
-        mVertices.push_back( Vertex( vertexId, handlePoint, Vertex::HandleStart ) );
+        QgsPoint handle = handlePoint( geom->vertexAt( id ), geom->vertexAt( vertexId ) );
+        mVertices.push_back( Vertex( vertexId, handle, Vertex::HandleStart ) );
         startPart = vertexId.part;
       }
 
@@ -698,8 +698,8 @@ void RecordingMapTool::collectVertices()
           QgsVertexId id( vertexId.part, vertexId.ring, vertexCount - 2 );
 
           // end handle point
-          QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( id ), geom->vertexAt( vertexId ), 1.5 );
-          mVertices.push_back( Vertex( vertexId, handlePoint, Vertex::HandleEnd ) );
+          QgsPoint handle = handlePoint( geom->vertexAt( id ), geom->vertexAt( vertexId ) );
+          mVertices.push_back( Vertex( vertexId, handle, Vertex::HandleEnd ) );
           endPart = vertexId.part;
         }
       }
@@ -1262,6 +1262,22 @@ void RecordingMapTool::updateActiveVertexGeometry()
   {
     setActiveVertexGeometry( QgsGeometry() );
   }
+}
+
+QgsPoint RecordingMapTool::handlePoint( QgsPoint p1, QgsPoint p2 )
+{
+  double factor = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceMeters, mActiveLayer->crs().mapUnits() );
+  double meters = InputUtils().screenUnitsToMeters( mapSettings(), 100 );
+
+  QgsDistanceArea da;
+  da.setEllipsoid( QStringLiteral( "WGS84" ) );
+  da.setSourceCrs( mActiveLayer->crs(), mapSettings()->transformContext() );
+  double d = da.convertLengthMeasurement( da.measureLine( QgsPointXY( p1 ), QgsPointXY( p2 ) ), mActiveLayer->crs().mapUnits() );
+
+  double t = ( d + meters * factor ) / std::sqrt( ( p2.x() - p1.x() ) * ( p2.x() - p1.x() ) + ( p2.y() - p1.y() ) * ( p2.y() - p1.y() ) );
+  double x = p1.x() + t * ( p2.x() - p1.x() );
+  double y = p1.y() + t * ( p2.y() - p1.y() );
+  return QgsPoint( x, y );
 }
 
 Vertex::Vertex()

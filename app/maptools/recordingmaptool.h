@@ -307,6 +307,7 @@ class RecordingMapTool : public AbstractMapTool
 
   private:
     double pixelsToMapUnits( double numPixels );
+    QgsPoint handlePoint( QgsPoint p1, QgsPoint p2 );
 
     /**
      * Check whether given point should be used for creating markers/handles
