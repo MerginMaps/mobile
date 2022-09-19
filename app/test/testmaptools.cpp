@@ -464,17 +464,16 @@ void TestMapTools::testHandles()
 
   // handle segments first point is a handle point and second point is
   // an existing vertex (start/end of the line)
-  QVector<QgsGeometry> expected =
+  QVector<QString> expected =
   {
-    QgsGeometry::fromWkt( "LINESTRING(0 -4.65830879130428421, 0 0)" ),
-    QgsGeometry::fromWkt( "LINESTRING(1 1, 5.66485086921393322 1)" ),
+    QStringLiteral( "LineString (0 -4.65830879130428, 0 0)" ),
+    QStringLiteral( "LineString (1 1, 5.66485086921393 1)" ),
   };
 
   const QVector<QgsGeometry> parts = handles.asGeometryCollection();
   for ( int i = 0; i < parts.count(); i++ )
   {
-    qDebug() << parts.at( i ).asWkt();
-    QVERIFY( parts.at( i ).equals( expected.at( i ) ) );
+    QVERIFY( parts.at( i ).asWkt(14) == expected.at( i ) );
   }
 
   delete lineLayer;
