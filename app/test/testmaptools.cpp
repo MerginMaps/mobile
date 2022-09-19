@@ -405,10 +405,10 @@ void TestMapTools::testMidSegmentVertices()
   vertices = mapTool.midPoints();
   QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, -0.5 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, -4.65830879130428421 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 0.5 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 0.5, 1 ) );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 1.5, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 5.66485086921393322, 1 ) );
 
   // multipoint
   QgsVectorLayer *pointLayer = new QgsVectorLayer( QStringLiteral( "MultiPoint?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
@@ -466,8 +466,8 @@ void TestMapTools::testHandles()
   // an existing vertex (start/end of the line)
   QVector<QgsGeometry> expected =
   {
-    QgsGeometry::fromWkt( "LINESTRING(0 -0.5, 0 0)" ),
-    QgsGeometry::fromWkt( "LINESTRING(1 1, 1.5 1)" ),
+    QgsGeometry::fromWkt( "LINESTRING(0 -4.65830879130428421, 0 0)" ),
+    QgsGeometry::fromWkt( "LINESTRING(1 1, 5.66485086921393322 1)" ),
   };
 
   const QVector<QgsGeometry> parts = handles.asGeometryCollection();
@@ -512,7 +512,7 @@ void TestMapTools::testLookForVertex()
   QCOMPARE( mapTool.state(), RecordingMapTool::MapToolState::View );
 
   // Start handle point. Active vertex is invalid, state changes to Record
-  QPointF screenPoint = ms->coordinateToScreen( QgsPoint( -0.05, -0.53 ) );
+  QPointF screenPoint = ms->coordinateToScreen( QgsPoint( -0.05, -4.55 ) );
   mapTool.lookForVertex( screenPoint );
   QVERIFY( !mapTool.activeVertex().isValid() );
   QCOMPARE( mapTool.state(), RecordingMapTool::MapToolState::Record );
