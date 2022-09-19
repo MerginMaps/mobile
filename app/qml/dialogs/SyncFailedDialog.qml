@@ -22,7 +22,5 @@ MessageDialog {
   title: qsTr( "Failed to synchronize your changes" )
   text: qsTr( "Your changes could not be sent to server, make sure you are connected to internet and have write access to this project." )
 
-  buttons: StandardButton.Ok
-
-//  detailedText: ""
+  buttons: MessageDialog.Ok
 }

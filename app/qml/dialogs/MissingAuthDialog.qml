@@ -18,10 +18,10 @@ MessageDialog {
   title: qsTr( "Sign in to Mergin" )
   text: qsTr( "You need to be signed in to your Mergin account in order to synchronize a project. Hit 'Yes' to sign in." )
 
-  buttons: StandardButton.No | StandardButton.Yes
+  buttons: MessageDialog.No | MessageDialog.Yes
 
   onButtonClicked: {
-    if ( clickedButton === StandardButton.Yes ) {
+    if ( clickedButton === MessageDialog.Yes ) {
       root.singInRequested()
     }
   }

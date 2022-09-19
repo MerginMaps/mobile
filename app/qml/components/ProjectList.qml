@@ -260,12 +260,11 @@ Item {
 
     title: qsTr( "Remove project" )
     text: qsTr( "Any unsynchronized changes will be lost." )
-    //icon: StandardIcon.Warning
-    buttons: StandardButton.Ok | StandardButton.Cancel
+    buttons: MessageDialog.Ok | MessageDialog.Cancel
 
     //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
     onButtonClicked: {
-      if (clickedButton === StandardButton.Ok) {
+      if (clickedButton === MessageDialog.Ok) {
         if (relatedProjectId === "")
           return
 
@@ -282,7 +281,7 @@ Item {
         removeDialog.relatedProjectId = ""
         visible = false
       }
-      else if (clickedButton === StandardButton.Cancel) {
+      else if (clickedButton === MessageDialog.Cancel) {
         removeDialog.relatedProjectId = ""
         visible = false
       }
@@ -296,10 +295,9 @@ Item {
 
     title: qsTr( "Download project" )
     text: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
-    //icon: StandardIcon.Question
-    buttons: StandardButton.Yes | StandardButton.No
+    buttons: MessageDialog.Yes | MessageDialog.No
     onButtonClicked: {
-      if (clickedButton === StandardButton.Yes) {
+      if (clickedButton === MessageDialog.Yes) {
         controllerModel.syncProject( relatedProjectId )
       }
     }

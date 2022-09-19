@@ -218,15 +218,14 @@ Item {
         visible: false
         title: qsTr( "Remove photo reference" )
         text: qsTr( "Also permanently delete photo from device?" )
-        //icon: StandardIcon.Warning
-        buttons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
+        buttons: MessageDialog.Yes | MessageDialog.No | MessageDialog.Cancel
         onButtonClicked: {
-          if (clickedButton === StandardButton.Yes) {
+          if (clickedButton === MessageDialog.Yes) {
             externalResourceHandler.itemWidget.sourceToDelete = imageDeleteDialog.imagePath
             externalResourceHandler.itemWidget.editorValueChanged("", false)
             visible = false
           }
-          else if (clickedButton === StandardButton.No) {
+          else if (clickedButton === MessageDialog.No) {
             externalResourceHandler.itemWidget.editorValueChanged("", false)
             // visible = false called afterwards when onReject
           }

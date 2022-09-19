@@ -383,8 +383,7 @@ Page {
       visible: false
       title: qsTr( "Failed to remove account" )
       text: messageText
-      //icon: StandardIcon.Warning
-      buttons: StandardButton.Close
+      buttons: MessageDialog.Close
       onRejected: {
         close()
         accountDeleted()

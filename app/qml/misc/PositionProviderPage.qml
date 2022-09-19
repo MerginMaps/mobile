@@ -365,12 +365,11 @@ Page {
 
     title: qsTr( "Remove receiver" )
     text: qsTr( "Do you want to remove receiver from the list of recent receivers?" )
-    //icon: StandardIcon.Warning
-    buttons: StandardButton.Ok | StandardButton.Cancel
+    buttons: MessageDialog.Ok | MessageDialog.Cancel
 
     //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
     onButtonClicked: {
-      if (clickedButton === StandardButton.Ok) {
+      if (clickedButton === MessageDialog.Ok) {
         if (relatedProviderId === "")
           return
 
@@ -382,7 +381,7 @@ Page {
 
         providersModel.removeProvider( relatedProviderId )
       }
-      else if (clickedButton === StandardButton.Cancel) {
+      else if (clickedButton === MessageDialog.Cancel) {
         removeDialog.relatedProviderId = ""
         visible = false
       }

@@ -18,7 +18,7 @@ MessageDialog {
   title: qsTr( "Upload project to Mergin?" )
   text: qsTr( "This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration. \nClick 'Yes' to upload it." )
 
-  buttons: StandardButton.Ok | StandardButton.Cancel
+  buttons: MessageDialog.Ok | MessageDialog.Cancel
 
   onButtonClicked: {
     if ( clickedButton === StandardButton.Ok ) {

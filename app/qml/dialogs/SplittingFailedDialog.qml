@@ -16,5 +16,5 @@ MessageDialog {
   title: qsTr( "We could not split the feature" )
   text: qsTr( "Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it." )
 
-  buttons: StandardButton.Ok
+  buttons: MessageDialog.Ok
 }

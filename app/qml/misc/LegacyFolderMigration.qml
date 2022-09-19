@@ -29,10 +29,10 @@ Item {
     title: qsTr( "Insufficient space left on device" )
 
     text: qsTr( "Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue." ).arg( notEnoughSpaceLeftdialog.neededSpace )
-    buttons: StandardButton.Help | StandardButton.Ignore
+    buttons: MessageDialog.Help | MessageDialog.Ignore
 
     onButtonClicked: {
-      if (clickedButton === StandardButton.Help) {
+      if (clickedButton === MessageDialog.Help) {
         Qt.openUrlExternally( "https://www.lutraconsulting.co.uk/blog/2021/10/26/input-scoped-storage-update/" )
       }
     }
@@ -42,13 +42,11 @@ Item {
     id: migrationFailureDialog
 
     title: qsTr( "An error occured during update" )
-    //icon: StandardIcon.Warning
-
     text: qsTr( "Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue." )
-    buttons: StandardButton.Help | StandardButton.Ignore
+    buttons: MessageDialog.Help | MessageDialog.Ignore
 
     onButtonClicked: {
-      if (clickedButton === StandardButton.Help) {
+      if (clickedButton === MessageDialog.Help) {
         Qt.openUrlExternally( "https://www.lutraconsulting.co.uk/blog/2021/10/26/input-scoped-storage-update/" )
       }
     }
