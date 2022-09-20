@@ -590,17 +590,44 @@ Item {
     id: backButton
 
     onClicked: {
-      if ( root.state === "edit" ) {
-        cancelEditDialog.open()
-      }
-      else if ( root.state === "record" ) {
+      if ( root.state === "edit" || root.state === "record" ) {
         cancelEditDialog.open()
       }
     }
 
     maxWidth: parent.width * 0.8
 
-    anchors.top: howtoEditingBanner.showBanner ? howtoEditingBanner.bottom : parent.top
+    anchors.top: {
+      if ( howtoEditingBanner.showBanner ) {
+        return howtoEditingBanner.bottom
+      }
+      else if ( howtoSplittingBanner.showBanner ) {
+        return howtoSplittingBanner.bottom
+      }
+      else if ( redrawGeometryBanner.showBanner ) {
+        return redrawGeometryBanner.bottom
+      }
+      else if ( splittingDoneBanner.showBanner ) {
+        return splittingDoneBanner.bottom
+      }
+      else if ( retryableSyncErrorBanner.showBanner ) {
+        return retryableSyncErrorBanner.bottom
+      }
+      else if ( anotherProcessIsRunningBanner.showBanner ) {
+        return anotherProcessIsRunningBanner.bottom
+      }
+      else if ( upToDateBanner.showBanner ) {
+        return upToDateBanner.bottom
+      }
+      else if ( syncSuccessfulBanner.showBanner ) {
+        return syncSuccessfulBanner.bottom
+      }
+      else if ( recordingToolsLoader.item.gpsBannerVisible() ) {
+        return recordingToolsLoader.item.gpsBannerBottom()
+      }
+
+      return parent.top
+    }
     anchors.topMargin: root.mapExtentOffset + InputStyle.smallGap
     anchors.left: parent.left
     anchors.leftMargin: InputStyle.smallGap
