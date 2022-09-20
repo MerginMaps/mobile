@@ -25,20 +25,8 @@ Item {
   /*required*/ property var map
   /*required*/ property var gpsState
 
-  function rollbackChanges() {
-    mapTool.rollbackChanges()
-    root.canceled()
-  }
+  property alias gpsBanner: gpsAccuracyBanner
 
-  function hasChanges() {
-    return mapTool.hasChanges()
-  }
-
-  function gpsBannerVisible() {
-    return root.gpsAccuracyBanner ? root.gpsAccuracyBanner.bottom : 0
-  }
-
-  property bool canUndo: mapTool.canUndo
   property bool centerToGPSOnStartup: false
   property var activeFeature
 
@@ -318,5 +306,14 @@ Item {
       mapTool.centeredToGPS = true
       root.map.mapSettings.setCenter( mapPositioning.mapPosition )
     }
+  }
+
+  function rollbackChanges() {
+    mapTool.rollbackChanges()
+    root.canceled()
+  }
+
+  function hasChanges() {
+    return mapTool.hasChanges()
   }
 }

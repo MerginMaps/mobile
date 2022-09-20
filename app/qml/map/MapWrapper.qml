@@ -601,39 +601,8 @@ Item {
     }
 
     maxWidth: parent.width * 0.8
-
-    anchors.top: {
-      if ( howtoEditingBanner.showBanner ) {
-        return howtoEditingBanner.bottom
-      }
-      else if ( howtoSplittingBanner.showBanner ) {
-        return howtoSplittingBanner.bottom
-      }
-      else if ( redrawGeometryBanner.showBanner ) {
-        return redrawGeometryBanner.bottom
-      }
-      else if ( splittingDoneBanner.showBanner ) {
-        return splittingDoneBanner.bottom
-      }
-      else if ( retryableSyncErrorBanner.showBanner ) {
-        return retryableSyncErrorBanner.bottom
-      }
-      else if ( anotherProcessIsRunningBanner.showBanner ) {
-        return anotherProcessIsRunningBanner.bottom
-      }
-      else if ( upToDateBanner.showBanner ) {
-        return upToDateBanner.bottom
-      }
-      else if ( syncSuccessfulBanner.showBanner ) {
-        return syncSuccessfulBanner.bottom
-      }
-      else if ( recordingToolsLoader.item.gpsBannerVisible() > 0 ) {
-        return recordingToolsLoader.item.gpsBannerVisible()
-      }
-
-      return parent.top
-    }
-    anchors.topMargin: InputStyle.smallGap
+    anchors.top: parent.top
+    anchors.topMargin: internal.visibleBannerHeight + InputStyle.smallGap
     anchors.left: parent.left
     anchors.leftMargin: InputStyle.smallGap
 
@@ -1014,6 +983,38 @@ Item {
     property var stakeoutTarget
 
     property bool isInRecordState: root.state === "record" || root.state === "recordInLayer" || root.state === "edit"
+
+    // If any banner is visible this property has its height.
+    // Usefull to calculate a top margin of map floating buttons.
+    property real visibleBannerHeight: {
+      if ( recordingToolsLoader.active )
+      {
+        let gps_banner = recordingToolsLoader.item.gpsBanner
+        if ( gps_banner.showBanner )
+        {
+          return gps_banner.height
+        }
+      }
+
+      const active = ( banner ) => banner.showBanner;
+      const banners = [
+        howtoEditingBanner,
+        howtoSplittingBanner,
+        redrawGeometryBanner,
+        splittingDoneBanner,
+        retryableSyncErrorBanner,
+        anotherProcessIsRunningBanner,
+        upToDateBanner,
+        syncSuccessfulBanner
+      ]
+
+      if ( banners.some( active ) )
+      {
+        return howtoEditingBanner.height
+      }
+
+      return 0
+    }
   }
 
   function select( featurepair ) {
