@@ -633,7 +633,7 @@ Item {
 
       return parent.top
     }
-    anchors.topMargin: root.mapExtentOffset + InputStyle.smallGap
+    anchors.topMargin: InputStyle.smallGap
     anchors.left: parent.left
     anchors.leftMargin: InputStyle.smallGap
 
