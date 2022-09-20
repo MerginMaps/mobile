@@ -25,11 +25,8 @@ Item {
   /*required*/ property var map
   /*required*/ property var gpsState
 
-  function undo() {
-    mapTool.undo()
-  }
+  property alias gpsBanner: gpsAccuracyBanner
 
-  property bool canUndo: mapTool.canUndo
   property bool centerToGPSOnStartup: false
   property var activeFeature
 
@@ -113,28 +110,17 @@ Item {
   }
 
   Highlight {
-    id: guideline
-
-    height: root.map.height
-    width: root.map.width
-
-    lineColor: InputStyle.guidelineColor
-
-    lineStrokeStyle: ShapePath.DashLine
-
-    mapSettings: root.map.mapSettings
-    geometry: guidelineController.guidelineGeometry
-  }
-
-  Highlight {
     id: highlight
 
     height: root.map.height
     width: root.map.width
+
     visible: !__inputUtils.isPointLayer(__activeLayer.vectorLayer)
 
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+
+    lineBorderWidth: 0
   }
 
   Highlight {
@@ -146,8 +132,21 @@ Item {
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
 
-    lineColor: InputStyle.guidelineColor
     lineStrokeStyle: ShapePath.DashLine
+    lineWidth: InputStyle.guidelineWidth
+  }
+
+  Highlight {
+    id: guideline
+
+    height: root.map.height
+    width: root.map.width
+
+    lineWidth: InputStyle.guidelineWidth
+    lineStrokeStyle: ShapePath.DashLine
+
+    mapSettings: root.map.mapSettings
+    geometry: guidelineController.guidelineGeometry
   }
 
   Highlight {
@@ -159,10 +158,9 @@ Item {
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
 
-    markerType: "circleWithIcon"
-    markerColor: InputStyle.mapMarkerMidVertexColor
-    markerCircleSize: InputStyle.mapMarkerMidVertexSize
-    markerCircleIconSource: InputStyle.plusIcon
+    markerType: "circle"
+    markerSize: InputStyle.mapMarkerSize
+    markerBorderColor: InputStyle.mapMarkerColor
   }
 
   Highlight {
@@ -174,10 +172,8 @@ Item {
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
 
-    markerType: "circleWithIcon"
-    markerColor: InputStyle.mapMarkerExistingVertexColor
-    markerCircleSize: InputStyle.mapMarkerExistingVertexSize
-    markerCircleIconSource: InputStyle.mapMarkerMoveIcon
+    markerType: "circle"
+    markerSize: InputStyle.mapMarkerSizeBig
   }
 
   Crosshair {
@@ -270,11 +266,6 @@ Item {
         showMessage( __inputUtils.invalidGeometryWarning( mapTool.activeLayer ) )
       }
     }
-
-    onCancelClicked: {
-      mapTool.rollbackChanges()
-      root.canceled()
-    }
   }
 
   MapPosition {
@@ -315,5 +306,14 @@ Item {
       mapTool.centeredToGPS = true
       root.map.mapSettings.setCenter( mapPositioning.mapPosition )
     }
+  }
+
+  function rollbackChanges() {
+    mapTool.rollbackChanges()
+    root.canceled()
+  }
+
+  function hasChanges() {
+    return mapTool.hasChanges()
   }
 }

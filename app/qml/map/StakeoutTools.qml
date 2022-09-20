@@ -27,7 +27,7 @@ Item {
     width: root.map.width
 
     mapSettings: root.map.mapSettings
-    lineWidth: InputStyle.highlightLineWidth * 2
+    lineWidth: InputStyle.mapLineWidth
   }
 
   MapPosition {

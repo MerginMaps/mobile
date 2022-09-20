@@ -668,8 +668,8 @@ void RecordingMapTool::collectVertices()
         QgsVertexId id( vertexId.part, vertexId.ring, 1 );
 
         // start handle point
-        QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( vertexId ), geom->vertexAt( id ), -0.5 );
-        mVertices.push_back( Vertex( vertexId, handlePoint, Vertex::HandleStart ) );
+        QgsPoint handle = handlePoint( geom->vertexAt( id ), geom->vertexAt( vertexId ) );
+        mVertices.push_back( Vertex( vertexId, handle, Vertex::HandleStart ) );
         startPart = vertexId.part;
       }
 
@@ -698,8 +698,8 @@ void RecordingMapTool::collectVertices()
           QgsVertexId id( vertexId.part, vertexId.ring, vertexCount - 2 );
 
           // end handle point
-          QgsPoint handlePoint = QgsGeometryUtils::interpolatePointOnLine( geom->vertexAt( id ), geom->vertexAt( vertexId ), 1.5 );
-          mVertices.push_back( Vertex( vertexId, handlePoint, Vertex::HandleEnd ) );
+          QgsPoint handle = handlePoint( geom->vertexAt( id ), geom->vertexAt( vertexId ) );
+          mVertices.push_back( Vertex( vertexId, handle, Vertex::HandleEnd ) );
           endPart = vertexId.part;
         }
       }
@@ -1262,6 +1262,48 @@ void RecordingMapTool::updateActiveVertexGeometry()
   {
     setActiveVertexGeometry( QgsGeometry() );
   }
+}
+
+QgsPoint RecordingMapTool::handlePoint( QgsPoint p1, QgsPoint p2 )
+{
+  if ( !mActiveLayer )
+  {
+    return QgsPoint();
+  }
+
+  double h = 15 * mapSettings()->mapUnitsPerPixel();
+  double factor = QgsUnitTypes::fromUnitToUnitFactor( mapSettings()->destinationCrs().mapUnits(), mActiveLayer->crs().mapUnits() );
+  QgsDistanceArea da;
+  da.setEllipsoid( QStringLiteral( "WGS84" ) );
+  da.setSourceCrs( mActiveLayer->crs(), mapSettings()->transformContext() );
+  double d = da.convertLengthMeasurement( da.measureLine( QgsPointXY( p1 ), QgsPointXY( p2 ) ), mActiveLayer->crs().mapUnits() );
+  double x = ( ( p2.x() - p1.x() ) * ( d + h * factor ) / d ) + p1.x();
+  double y = ( ( p2.y() - p1.y() ) * ( d + h * factor ) / d ) + p1.y();
+  return QgsPoint( x, y );
+}
+
+bool RecordingMapTool::hasChanges() const
+{
+  if ( !mActiveLayer )
+  {
+    return false;
+  }
+
+  if ( mActiveLayer->isEditable() )
+  {
+    if ( FID_IS_NEW( mActiveFeature.id() ) || FID_IS_NULL( mActiveFeature.id() ) )
+    {
+      // new feature
+      return mActiveLayer->undoStack()->count() > 1;
+    }
+    else
+    {
+      // existing feature
+      return mActiveLayer->isModified();
+    }
+  }
+
+  return false;
 }
 
 Vertex::Vertex()

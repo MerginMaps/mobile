@@ -39,12 +39,8 @@ QtObject {
     property color darkOrange: "#FD9626"
     property color softGreen: "#32AA3A"
     property color darkGreen: "#006146"
-    property color guidelineColor: Qt.rgba( 1, 0.2, 0.2, 0.8 )
-
-    property real mapMarkerExistingVertexSize: 41 * __dp
-    property color mapMarkerExistingVertexColor: "#D9D9D9"
-    property real mapMarkerMidVertexSize: 30 * __dp
-    property color mapMarkerMidVertexColor: "#BBD9D9D9"
+    property color mapObjectsColor: "#EF4444"
+    property color mapObjectsColorTransparent: "#80EF4444"
 
     property int fontPixelSizeSmall: scaleFont(15)
     property int fontPixelSizeNormal: scaleFont(18)
@@ -110,7 +106,6 @@ QtObject {
 
     property string moreMenuIcon: "qrc:/more_menu.svg"
     property string mapMarkerIcon: "qrc:/marker.svg"
-    property string mapMarkerMoveIcon: "qrc:/arrows-move.svg"
 
     property string projectIcon: "qrc:/project.svg"
     property string zoomToProjectIcon: "qrc:/zoom_to_project.svg"
@@ -159,18 +154,33 @@ QtObject {
 
     property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
 
-    // map related styling constats
+    property color guidelineColor: mapObjectsColor
+    property real guidelineWidth: 4 * __dp
+
+    property color mapMarkerColor: mapObjectsColor
+    property color mapMarkerBorderColor: "white"
+
     property real mapLoadingIndicatorHeight: 7 * __dp
 
     property real mapMarkerWidth: 60 * __dp
+    property real mapMarkerBorderWidth: 2 * __dp
     property real mapMarkerHeight: 70 * __dp
     property real mapMarkerAnchorY: 48 * __dp
+    property real mapMarkerSize: 18 * __dp
+    property real mapMarkerSizeBig: 21 * __dp
 
-    property color highlightLineColor: Qt.rgba( 1, 0.2, 0.2, 1 )
-    property color highlightFillColor: Qt.rgba( 1, 0.2, 0.2, InputStyle.lowHighlightOpacity )
-    property color highlightOutlineColor: "white"
-    property real highlightLineWidth: 6 * __dp
-    property real highlightOutlinePenWidth: 2 * __dp
+    property color mapLineColor: mapObjectsColor
+    property color mapLineBorderColor: "white"
+
+    property real mapLineWidth: 8 * __dp
+    property real mapLineBorderWidth: 4 * __dp
+
+    property color mapPolygonRingColor: mapObjectsColor
+    property color mapPolygonRingBorderColor: "white"
+    property color mapPolygonFillColor: mapObjectsColorTransparent
+
+    property real mapPolygonRingWidth: 8 * __dp
+    property real mapPolygonRingBorderWidth: 0 * __dp
 
     property real mapOutOfExtentBorder: scale(64) // when pair lays very close to device display border, center map extent
 

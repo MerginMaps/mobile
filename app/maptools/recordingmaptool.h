@@ -169,6 +169,11 @@ class RecordingMapTool : public AbstractMapTool
      */
     Q_INVOKABLE void undo();
 
+    /**
+     * Returns true if there are changes in the layer edit buffer
+     */
+    Q_INVOKABLE bool hasChanges() const;
+
     void updateVertex( const Vertex &vertex, const QgsPoint &point );
 
     /**
@@ -307,6 +312,7 @@ class RecordingMapTool : public AbstractMapTool
 
   private:
     double pixelsToMapUnits( double numPixels );
+    QgsPoint handlePoint( QgsPoint p1, QgsPoint p2 );
 
     /**
      * Check whether given point should be used for creating markers/handles
