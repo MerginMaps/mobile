@@ -591,7 +591,12 @@ Item {
 
     onClicked: {
       if ( root.state === "edit" || root.state === "record" ) {
-        cancelEditDialog.open()
+        if ( recordingToolsLoader.item.hasChanges() ) {
+          cancelEditDialog.open()
+        }
+        else {
+          recordingToolsLoader.item.rollbackChanges()
+        }
       }
     }
 

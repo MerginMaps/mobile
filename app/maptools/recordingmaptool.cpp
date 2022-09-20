@@ -1282,6 +1282,30 @@ QgsPoint RecordingMapTool::handlePoint( QgsPoint p1, QgsPoint p2 )
   return QgsPoint( x, y );
 }
 
+bool RecordingMapTool::hasChanges() const
+{
+  if ( !mActiveLayer )
+  {
+    return false;
+  }
+
+  if ( mActiveLayer->isEditable() )
+  {
+    if ( FID_IS_NEW( mActiveFeature.id() ) || FID_IS_NULL( mActiveFeature.id() ) )
+    {
+      // new feature
+      return mActiveLayer->undoStack()->count() > 1;
+    }
+    else
+    {
+      // existing feature
+      return mActiveLayer->isModified();
+    }
+  }
+
+  return false;
+}
+
 Vertex::Vertex()
 {
 

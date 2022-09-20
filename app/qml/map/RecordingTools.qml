@@ -30,6 +30,10 @@ Item {
     root.canceled()
   }
 
+  function hasChanges() {
+    return mapTool.hasChanges()
+  }
+
   function gpsBannerVisible() {
     return root.gpsAccuracyBanner ? root.gpsAccuracyBanner.bottom : 0
   }
