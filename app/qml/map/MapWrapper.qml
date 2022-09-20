@@ -200,11 +200,6 @@ Item {
 
   Compass { id: deviceCompass }
 
-  PositionMarker {
-    mapPosition: mapPositioning
-    compass: deviceCompass
-  }
-
   StateGroup {
     id: gpsStateGroup
 
@@ -298,6 +293,11 @@ Item {
     active: root.state === "split"
 
     sourceComponent: splittingToolsComponent
+  }
+
+  PositionMarker {
+    mapPosition: mapPositioning
+    compass: deviceCompass
   }
 
   AutoHideBanner {
@@ -667,7 +667,7 @@ Item {
     text: {
       if ( root.state === "edit" ) {
         return qsTr( "Clicking ‘Yes’ discards your changes to the geometry. If you would like " +
-                     "to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar." )
+                    "to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar." )
       }
       else if ( root.state === "record" ) {
         return qsTr( "Clicking ‘Yes’ discards your new geometry and no feature will be saved. " +

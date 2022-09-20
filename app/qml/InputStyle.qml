@@ -39,8 +39,8 @@ QtObject {
     property color darkOrange: "#FD9626"
     property color softGreen: "#32AA3A"
     property color darkGreen: "#006146"
-    property color mapObjectsColor: "#FD9626"
-    property color mapObjectsColorTransparent: "#80FD9626"
+    property color mapObjectsColor: "#EF4444"
+    property color mapObjectsColorTransparent: "#80EF4444"
 
     property int fontPixelSizeSmall: scaleFont(15)
     property int fontPixelSizeNormal: scaleFont(18)
@@ -173,7 +173,7 @@ QtObject {
     property color mapLineBorderColor: "white"
 
     property real mapLineWidth: 8 * __dp
-    property real mapLineBorderWidth: 0 * __dp
+    property real mapLineBorderWidth: 4 * __dp
 
     property color mapPolygonRingColor: mapObjectsColor
     property color mapPolygonRingBorderColor: "white"

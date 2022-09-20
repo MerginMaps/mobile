@@ -114,19 +114,6 @@ Item {
   }
 
   Highlight {
-    id: guideline
-
-    height: root.map.height
-    width: root.map.width
-
-    lineWidth: InputStyle.guidelineWidth
-    lineStrokeStyle: ShapePath.DashLine
-
-    mapSettings: root.map.mapSettings
-    geometry: guidelineController.guidelineGeometry
-  }
-
-  Highlight {
     id: highlight
 
     height: root.map.height
@@ -136,8 +123,8 @@ Item {
 
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
-    lineBorderColor: InputStyle.mapLineColor
-    polygonRingBorderColor: InputStyle.mapLineColor
+
+    lineBorderWidth: 0
   }
 
   Highlight {
@@ -151,6 +138,19 @@ Item {
 
     lineStrokeStyle: ShapePath.DashLine
     lineWidth: InputStyle.guidelineWidth
+  }
+
+  Highlight {
+    id: guideline
+
+    height: root.map.height
+    width: root.map.width
+
+    lineWidth: InputStyle.guidelineWidth
+    lineStrokeStyle: ShapePath.DashLine
+
+    mapSettings: root.map.mapSettings
+    geometry: guidelineController.guidelineGeometry
   }
 
   Highlight {
