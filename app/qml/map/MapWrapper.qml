@@ -622,8 +622,8 @@ Item {
       else if ( syncSuccessfulBanner.showBanner ) {
         return syncSuccessfulBanner.bottom
       }
-      else if ( recordingToolsLoader.item.gpsBannerVisible() ) {
-        return recordingToolsLoader.item.gpsBannerBottom()
+      else if ( recordingToolsLoader.item.gpsBannerVisible() > 0 ) {
+        return recordingToolsLoader.item.gpsBannerVisible()
       }
 
       return parent.top

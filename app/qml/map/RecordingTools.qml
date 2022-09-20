@@ -31,12 +31,6 @@ Item {
   }
 
   function gpsBannerVisible() {
-    console.log("gps visible", root.gpsAccuracyBanner ? root.gpsAccuracyBanner.showBanner : false)
-    return root.gpsAccuracyBanner ? root.gpsAccuracyBanner.showBanner : false
-  }
-
-  function gpsBannerBottom() {
-    console.log("gps bottom", root.gpsAccuracyBanner ? root.gpsAccuracyBanner.bottom : 0)
     return root.gpsAccuracyBanner ? root.gpsAccuracyBanner.bottom : 0
   }
 
