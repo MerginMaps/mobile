@@ -787,14 +787,14 @@ void TestUtilsFunctions::testCreateGeometryForLayer()
   {
     { QStringLiteral( "Point" ), QgsWkbTypes::Point },
     { QStringLiteral( "MultiPoint" ), QgsWkbTypes::MultiPoint },
-    { QStringLiteral( "PointZ" ), QgsWkbTypes::Point },
+    { QStringLiteral( "PointZ" ), QgsWkbTypes::PointZ },
     { QStringLiteral( "LineString" ), QgsWkbTypes::LineString },
     { QStringLiteral( "MultiLineString" ), QgsWkbTypes::MultiLineString },
-    { QStringLiteral( "LineStringM" ), QgsWkbTypes::LineString },
-    { QStringLiteral( "MultiLineStringZM" ), QgsWkbTypes::MultiLineString },
+    { QStringLiteral( "LineStringM" ), QgsWkbTypes::LineStringM },
+    { QStringLiteral( "MultiLineStringZM" ), QgsWkbTypes::MultiLineStringZM },
     { QStringLiteral( "Polygon" ), QgsWkbTypes::Polygon },
     { QStringLiteral( "MultiPolygon" ), QgsWkbTypes::MultiPolygon },
-    { QStringLiteral( "MultiPolygonM" ), QgsWkbTypes::MultiPolygon },
+    { QStringLiteral( "MultiPolygonM" ), QgsWkbTypes::MultiPolygonM },
   };
 
   QgsGeometry geom;
