@@ -116,6 +116,8 @@ Item {
    */
   property AttributeController controller
 
+  property var oldFeatureLayerPair: null
+
   /**
    * View for extra components like value relation page, relations page, etc.
    */
@@ -178,6 +180,13 @@ Item {
 
     if ( shouldRemoveFeature ) {
       form.controller.deleteFeature()
+    }
+
+    // restore previous feature state
+    if ( form.oldFeatureLayerPair )
+    {
+      __inputUtils.updateFeature( form.oldFeatureLayerPair )
+      form.oldFeatureLayerPair = null
     }
 
     canceled()

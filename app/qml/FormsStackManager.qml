@@ -58,6 +58,7 @@ Item {
   signal closed()
   signal editGeometryRequested( var pair )
   signal splitGeometryRequested( var pair )
+  signal redrawGeometryRequested( var pair )
   signal createLinkedFeatureRequested( var targetLayer, var parentPair )
   signal stakeoutFeature( var feature );
 
@@ -196,7 +197,6 @@ Item {
       if ( form && typeof form.openDrawer === "function" ) {
         if ( success && i === root.activeFormIndex ) {
           form.featureLayerPair = pair
-          form.updateFeatureGeometry()
         }
         form.openDrawer()
       }
@@ -272,6 +272,7 @@ Item {
       }
       onEditGeometry: root.editGeometryRequested( pair )
       onSplitGeometry: root.splitGeometryRequested( pair )
+      onRedrawGeometry: root.redrawGeometryRequested( pair )
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
       onCreateLinkedFeature: root.createLinkedFeatureRequested( targetLayer, parentPair )
       onStakeoutFeature: root.stakeoutFeature( feature )

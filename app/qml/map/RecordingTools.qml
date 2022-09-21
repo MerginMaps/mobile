@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 import QtQuick 2.14
+import QtQuick.Shapes 1.14
 
 import QgsQuick 0.1
 import lc 1.0
@@ -24,11 +25,13 @@ Item {
   /*required*/ property var map
   /*required*/ property var gpsState
 
-  property var initialGeometry
+  property alias gpsBanner: gpsAccuracyBanner
+
   property bool centerToGPSOnStartup: false
+  property var activeFeature
 
   signal canceled()
-  signal done( var geometry )
+  signal done( var featureLayerPair )
 
   Banner {
     id: gpsAccuracyBanner
@@ -64,34 +67,46 @@ Item {
     centeredToGPS: false
     mapSettings: root.map.mapSettings
 
+    recordPoint: crosshair.recordPoint
+
     recordingType: RecordingMapTool.Manual
     recordingInterval: __appSettings.lineRecordingInterval
 
     positionKit: __positionKit
-    layer: __activeLayer.vectorLayer
+    activeLayer: __activeLayer.vectorLayer
+    activeFeature: root.activeFeature
+    variablesManager: __variablesManager
 
     // Bind variables manager to know if we are centered to GPS or not when evaluating position variables
     onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition
+
+    onActiveVertexChanged: {
+      if ( activeVertex.isValid() )
+      {
+        // Center to clicked vertex
+        let newCenter = mapTool.vertexMapCoors( activeVertex )
+
+        if ( !isNaN( newCenter.x ) && !isNaN( newCenter.y ) )
+        {
+          root.map.jump( crosshair.screenPoint, root.map.mapSettings.coordinateToScreen( newCenter ) )
+        }
+      }
+    }
   }
 
   GuidelineController {
     id: guidelineController
 
+    allowed: mapTool.state !== RecordingMapTool.View
+
     mapSettings: root.map.mapSettings
+    insertPolicy: mapTool.insertPolicy
     crosshairPosition: crosshair.screenPoint
     realGeometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
-  }
 
-  Highlight {
-    id: guideline
-
-    height: root.map.height
-    width: root.map.width
-
-    lineColor: InputStyle.guidelineColor
-
-    mapSettings: root.map.mapSettings
-    geometry: guidelineController.guidelineGeometry
+    activeVertex: mapTool.activeVertex
+    activePart: mapTool.activePart
+    activeRing: mapTool.activeRing
   }
 
   Highlight {
@@ -100,14 +115,73 @@ Item {
     height: root.map.height
     width: root.map.width
 
+    visible: !__inputUtils.isPointLayer(__activeLayer.vectorLayer)
+
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+
+    lineBorderWidth: 0
+  }
+
+  Highlight {
+    id: handlesHighlight
+
+    height: root.map.height
+    width: root.map.width
+
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
+
+    lineStrokeStyle: ShapePath.DashLine
+    lineWidth: InputStyle.guidelineWidth
+  }
+
+  Highlight {
+    id: guideline
+
+    height: root.map.height
+    width: root.map.width
+
+    lineWidth: InputStyle.guidelineWidth
+    lineStrokeStyle: ShapePath.DashLine
+
+    mapSettings: root.map.mapSettings
+    geometry: guidelineController.guidelineGeometry
+  }
+
+  Highlight {
+    id: midSegmentsHighlight
+
+    height: root.map.height
+    width: root.map.width
+
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
+
+    markerType: "circle"
+    markerSize: InputStyle.mapMarkerSize
+    markerBorderColor: InputStyle.mapMarkerColor
+  }
+
+  Highlight {
+    id: existingVerticesHighlight
+
+    height: root.map.height
+    width: root.map.width
+
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
+
+    markerType: "circle"
+    markerSize: InputStyle.mapMarkerSizeBig
   }
 
   Crosshair {
     id: crosshair
 
     anchors.fill: parent
+
+    visible: mapTool.state !== RecordingMapTool.View
 
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
@@ -123,9 +197,11 @@ Item {
     height: InputStyle.rowHeightHeader
 
     gpsIndicatorColor: root.gpsState.indicatorColor
-    pointLayerSelected: __inputUtils.isPointLayer( __activeLayer.vectorLayer )
+    pointLayerSelected: __inputUtils.isPointLayer( __activeLayer.vectorLayer ) && !__inputUtils.isMultiPartLayer( __activeLayer.vectorLayer )
 
     manualRecording: mapTool.recordingType === RecordingMapTool.Manual
+
+    recordingMapTool: mapTool
 
     onGpsSwitchClicked: {
       if ( root.gpsState.state === "unavailable" ) {
@@ -158,25 +234,38 @@ Item {
 
       if ( pointLayerSelected )
       {
-        // finish recording
-        root.done( mapTool.recordedGeometry )
+        let pair = mapTool.commitChanges()
+        root.done( pair )
       }
     }
 
-    onRemovePointClicked: mapTool.removePoint()
+    onReleaseClicked: {
+      mapTool.releaseVertex( crosshair.recordPoint )
+    }
+
+    onRemoveClicked: mapTool.removePoint()
+
+    onUndoClicked: {
+      mapTool.undo()
+    }
 
     onDoneClicked: {
       if ( mapTool.hasValidGeometry() )
       {
-        root.done( mapTool.recordedGeometry )
+        // If we currently grab a point
+        if ( mapTool.state == RecordingMapTool.Grab )
+        {
+          mapTool.releaseVertex( crosshair.recordPoint )
+        }
+
+        let pair = mapTool.commitChanges()
+        root.done( pair )
       }
       else
       {
-        showMessage( qsTr( "You need to add at least %1 points." ).arg( __inputUtils.isLineLayer( mapTool.layer ) ? 2 : 3 ) )
+        showMessage( __inputUtils.invalidGeometryWarning( mapTool.activeLayer ) )
       }
     }
-
-    onCancelClicked: root.canceled()
   }
 
   MapPosition {
@@ -197,6 +286,12 @@ Item {
     function onUserInteractedWithMap() {
       mapTool.centeredToGPS = false
     }
+
+    function onClicked( point ) {
+      let screenPoint = Qt.point( point.x, point.y )
+
+      mapTool.lookForVertex( screenPoint )
+    }
   }
 
   Component.onCompleted: {
@@ -211,5 +306,14 @@ Item {
       mapTool.centeredToGPS = true
       root.map.mapSettings.setCenter( mapPositioning.mapPosition )
     }
+  }
+
+  function rollbackChanges() {
+    mapTool.rollbackChanges()
+    root.canceled()
+  }
+
+  function hasChanges() {
+    return mapTool.hasChanges()
   }
 }

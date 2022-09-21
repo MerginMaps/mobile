@@ -23,44 +23,47 @@ Item {
   // geometry must be in map canvas CRS!
   property var geometry
 
-  // color for line geometries
-  property color lineColor: InputStyle.highlightLineColor
-  // width for line geometries
-  property real lineWidth: InputStyle.highlightLineWidth
-  // stroke style for line geometries (solid line / dashed line)
-  property int lineStrokeStyle: ShapePath.SolidLine
+  // for transformation of the highlight to the correct location on the map
+  property QgsQuick.MapSettings mapSettings
 
-  // color for polygon geometries
-  property color fillColor: InputStyle.highlightFillColor
-
-  // width for outlines of lines and polygons
-  property real outlinePenWidth: InputStyle.highlightOutlinePenWidth
-  // color for outlines of lines and polygons
-  property color outlineColor: InputStyle.highlightOutlineColor
-
+  // point (marker) properties
   property string markerType: "image"   // "circle" or "image"
-  property color markerColor: "grey"
+  property color markerColor: InputStyle.mapMarkerColor
+  property color markerBorderColor: InputStyle.mapMarkerBorderColor
+  property real markerSize: InputStyle.mapMarkerSize
+  property real markerBorderWidth: InputStyle.mapMarkerBorderWidth
   property real markerWidth: InputStyle.mapMarkerWidth
   property real markerHeight: InputStyle.mapMarkerHeight
   property real markerAnchorX: markerWidth / 2
   property real markerAnchorY: InputStyle.mapMarkerAnchorY
   property url markerImageSource: InputStyle.mapMarkerIcon
 
-  // for transformation of the highlight to the correct location on the map
-  property QgsQuick.MapSettings mapSettings
+  // line properties
+  property color lineColor: InputStyle.mapLineColor
+  property color lineBorderColor: InputStyle.mapLineBorderColor
+  property real lineWidth: InputStyle.mapLineWidth
+  property real lineBorderWidth: InputStyle.mapLineBorderWidth // on top of width
+  property int lineStrokeStyle: ShapePath.SolidLine // (solid line / dashed line)
+
+  // polygon properties
+  property color polygonFillColor: InputStyle.mapPolygonFillColor
+  property color polygonRingColor: InputStyle.mapPolygonRingColor
+  property color polygonRingBorderColor: InputStyle.mapPolygonRingBorderColor
+  property real polygonRingWidth: InputStyle.mapPolygonRingWidth
+  property real polygonRingBorderWidth: InputStyle.mapPolygonRingBorderWidth // on top of ring width
 
   //
   // internal properties not meant to be modified from outside
   //
   property real markerOffsetY: 14 * __dp // for circle marker type to be aligned with crosshair
-  property real markerCircleSize: 15 * __dp
+  property real markerRadius: 5 * __dp
 
   // properties used by markers (not able to use values directly from mapTransform
   // (no direct access to matrix no mapSettings' visible extent)
-  property real mapTransformScale: 1
-  property real mapTransformOffsetX: 0
-  property real mapTransformOffsetY: 0
-  property real displayDevicePixelRatio: 1
+  property real mapTransformScale: __inputUtils.mapSettingsScale(mapSettings)
+  property real mapTransformOffsetX: __inputUtils.mapSettingsOffsetX(mapSettings)
+  property real mapTransformOffsetY: __inputUtils.mapSettingsOffsetY(mapSettings)
+  property real displayDevicePixelRatio: __inputUtils.mapSettingsDPR( mapSettings )
 
   // Reference view settings used for transformation of coordinates (needed for lines and polygons).
   // We convert their coordinates to screen coordinates of the current view, and then as user pans/zooms
@@ -97,7 +100,27 @@ Item {
 
   function constructHighlights()
   {
-    if ( !geometry || !mapSettings ) return
+    if ( !mapSettings ) return
+
+    if ( !geometry )
+    {
+      // trigger repaint for empty geometries
+      markerItems = markerItems.map( function (marker) { return marker.destroy() } )
+
+      let newLineElements = [];
+      newLineElements.push( componentMoveTo.createObject( lineShapePath ) )
+
+      let newPolygonElements = [];
+      newPolygonElements.push( componentMoveTo.createObject( polygonShapePath ) )
+
+      markerItems = [];
+      lineShapePath.pathElements = newLineElements
+      polygonShapePath.pathElements = newPolygonElements
+      lineBorderShapePath.pathElements = newLineElements
+      polygonRingBorderPath.pathElements = newPolygonElements
+
+      return;
+    }
 
     refTransformOffsetX = mapTransformOffsetX
     refTransformOffsetY = mapTransformOffsetY
@@ -117,7 +140,22 @@ Item {
     {
       if ( geometryType === 0 ) // point
       {
-        newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[dataStartIndex], "posY": data[dataStartIndex + 1] } ) )
+        if ( data.length === 3 )
+        {
+          newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[dataStartIndex], "posY": data[dataStartIndex + 1] } ) )
+        }
+        else
+        {
+          let it = 0;
+          // this is multipoint [0, x1, y1, 0, x2, y2, 0, x3, y3, 0,..]
+          for ( it = dataStartIndex; it < data.length; it += 3 )
+          {
+            newMarkerItems.push( componentMarker.createObject( highlight, {
+                                                                "posX": data[it],
+                                                                "posY": data[it + 1]
+                                                              } ) )
+          }
+        }
       }
       else // line or polygon
       {
@@ -141,6 +179,13 @@ Item {
         {
           let geomType = data[ i++ ];
           let pointsCount = data[ i++ ];
+
+          // skip this part/ring if it is empty
+          if ( pointsCount === 0 )
+          {
+            continue
+          }
+
           // Move to the first point
           let x0 = transformX( data[i] )
           let y0 = transformY( data[i+1] )
@@ -166,8 +211,9 @@ Item {
 
     markerItems = newMarkerItems
     polygonShapePath.pathElements = newPolygonElements
+    polygonRingBorderPath.pathElements = newPolygonElements
     lineShapePath.pathElements = newLineElements
-    lineOutlineShapePath.pathElements = newLineElements
+    lineBorderShapePath.pathElements = newLineElements
   }
 
   // keeps list of currently displayed marker items (an internal property)
@@ -194,19 +240,21 @@ Item {
       height: highlight.markerHeight
 
       Rectangle {
-          visible: markerType == "circle"
+          visible: markerType === "circle"
           anchors {
             centerIn: parent
             verticalCenterOffset: highlight.markerOffsetY
           }
-          width: markerCircleSize
-          height: markerCircleSize
+          width: markerSize
+          height: markerSize
           color: highlight.markerColor
           radius: width/2
+          border.color: highlight.markerBorderColor
+          border.width: highlight.markerBorderWidth
       }
 
       Image {
-          visible: markerType == "image"
+          visible: markerType === "image"
           anchors.fill: parent
           source: highlight.markerImageSource
           sourceSize.width: width
@@ -240,10 +288,10 @@ Item {
     Component {  id: componentMoveTo; PathMove { } }
 
     ShapePath {
-        id: lineOutlineShapePath
-        strokeWidth: highlight.lineWidth / shapeTransform.scale  // negate scaling from the transform
+        id: lineBorderShapePath
+        strokeWidth: ( highlight.lineBorderWidth + highlight.lineWidth ) / shapeTransform.scale  // negate scaling from the transform
         fillColor: "transparent"
-        strokeColor: highlight.outlineColor
+        strokeColor: highlight.lineBorderColor
         capStyle: lineShapePath.capStyle
         joinStyle: lineShapePath.joinStyle
     }
@@ -252,17 +300,30 @@ Item {
       id: lineShapePath
       strokeColor: highlight.lineColor
       strokeStyle: highlight.lineStrokeStyle
-      strokeWidth: (highlight.lineWidth - highlight.outlinePenWidth*2) / shapeTransform.scale  // negate scaling from the transform
+      strokeWidth: highlight.lineWidth / shapeTransform.scale  // negate scaling from the transform
       fillColor: "transparent"
       capStyle: ShapePath.RoundCap
       joinStyle: ShapePath.BevelJoin
     }
 
     ShapePath {
+      // Used as a border to polygon ring - we do not use it currently.
+      // If the simple path for rings is enough (without borders),
+      // we can safely remove this one.
+      id: polygonRingBorderPath
+      strokeColor: highlight.polygonRingBorderColor
+      strokeStyle: ShapePath.SolidLine
+      strokeWidth: (highlight.polygonRingBorderWidth + highlight.polygonRingWidth) / shapeTransform.scale  // negate scaling from the transform
+      fillColor: "transparent"
+      capStyle: ShapePath.RoundCap
+      joinStyle: ShapePath.BevelJoin
+    }
+
+    ShapePath { // rings + fill
       id: polygonShapePath
-      strokeColor: highlight.outlineColor
-      strokeWidth: highlight.outlinePenWidth / shapeTransform.scale  // negate scaling from the transform
-      fillColor: highlight.fillColor
+      strokeColor: highlight.polygonRingColor
+      strokeWidth: highlight.polygonRingWidth / shapeTransform.scale  // negate scaling from the transform
+      fillColor: highlight.polygonFillColor
       capStyle: ShapePath.FlatCap
       joinStyle: ShapePath.BevelJoin
     }

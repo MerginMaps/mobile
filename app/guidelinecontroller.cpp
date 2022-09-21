@@ -9,53 +9,180 @@
 
 #include "guidelinecontroller.h"
 #include "inpututils.h"
+#include "qgslinestring.h"
+#include "qgsmultilinestring.h"
 #include "qgspolygon.h"
+#include "qgsmultipolygon.h"
 
 GuidelineController::GuidelineController( QObject *parent )
   : QObject{parent}
 {
-
+  connect( this, &GuidelineController::allowedChanged, this, &GuidelineController::buildGuideline );
+  connect( this, &GuidelineController::activeVertexChanged, this, &GuidelineController::buildGuideline );
+  connect( this, &GuidelineController::activePartChanged, this, &GuidelineController::buildGuideline );
+  connect( this, &GuidelineController::activeRingChanged, this, &GuidelineController::buildGuideline );
+  connect( this, &GuidelineController::insertPolicyChanged, this, &GuidelineController::buildGuideline );
+  connect( this, &GuidelineController::realGeometryChanged, this, &GuidelineController::buildGuideline );
+  connect( this, &GuidelineController::crosshairPositionChanged, this, &GuidelineController::buildGuideline );
 }
 
 void GuidelineController::buildGuideline()
 {
-  // take the existing geometry and add crosshair position to it
-  if ( !mMapSettings || mCrosshairPosition.isNull() || mRealGeometry.isNull() || mRealGeometry.isEmpty() )
+  if ( !mAllowed || !mMapSettings || mCrosshairPosition.isNull() )
   {
     setGuidelineGeometry( QgsGeometry() );
     return;
   }
 
-  if ( mRealGeometry.type() == QgsWkbTypes::PointGeometry )
+  if ( mRealGeometry.isEmpty() )
   {
     setGuidelineGeometry( QgsGeometry() );
     return;
   }
 
   QgsPoint crosshair = mMapSettings->screenToCoordinate( mCrosshairPosition );
-
-  if ( mRealGeometry.type() == QgsWkbTypes::LineGeometry )
+  if ( crosshair.isEmpty() )
   {
-    QgsPolylineXY points = mRealGeometry.asPolyline();
-    points.append( crosshair );
-
-    setGuidelineGeometry( QgsGeometry::fromPolylineXY( points ) );
+    setGuidelineGeometry( QgsGeometry() );
+    return;
   }
-  else if ( mRealGeometry.type() == QgsWkbTypes::PolygonGeometry )
-  {
-    QgsPolygonXY poly = mRealGeometry.asPolygon();
 
-    if ( poly[0].count() < 2 )
+  /**
+   * How guideline is built
+   *
+   * Point / MultiPoint
+   * No guideline
+   *
+   * LineString / MultiLineString
+   * Differentiate between recording and grabbing state.
+   * If recording - create simple line from the beggining/end of the active part's point to crosshair position
+   * If grab - create line consisting of three points (one before active*, crosshair, one after active*)
+   *    * ~ if such vertex does not exist, skip it - we move first or last point
+   *
+   * Polygon / MultiPolygon
+   * Differentiate between recording and grabbing state.
+   * If grab - if we hold the only existing vertex - do not draw guideline
+   *         - line consisting of three points (one before active*, crosshair, one after active*)
+   *    * ~ if such vertex does not exist, skip it - we move first or last point
+   *
+   * If recording - create line if there is only one vertex - between vertex and crosshair
+   *              - create polygon between first point, crosshair and last added point (make sure it is not the first one)
+   */
+
+  QgsWkbTypes::GeometryType geotype = mRealGeometry.type();
+
+  if ( geotype == QgsWkbTypes::PointGeometry )
+  {
+    setGuidelineGeometry( QgsGeometry() );
+    return;
+  }
+
+  if ( mActiveVertex.isValid() )
+  {
+    // we grab an existing point
+
+    int nVertices = mRealGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
+    if ( nVertices <= 1 )
     {
-      // if it is not yet a polygon, create line guideline
-      poly[0].append( crosshair );
-      setGuidelineGeometry( QgsGeometry::fromPolylineXY( poly[0] ) );
+      // we hold the only point or there is no point
+      setGuidelineGeometry( QgsGeometry() );
+      return;
     }
-    else
+
+    QgsPolylineXY guideline;
+
+    QgsVertexId current = mActiveVertex.vertexId();
+    QgsPoint previous, next;
+
+    next = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, current.vertex + 1 ) );
+    previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, current.vertex - 1 ) );
+
+    // fix closed polygons rings
+    if ( geotype == QgsWkbTypes::PolygonGeometry )
     {
-      // let's add the crosshair as one-before-last vertex
-      poly[0].insert( poly[0].count() - 1, crosshair );
-      setGuidelineGeometry( QgsGeometry::fromPolygonXY( poly ) );
+      if ( current.vertex == 0 && nVertices >= 4 )
+      {
+        previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, nVertices - 2 ) );
+      }
+    }
+
+    if ( !previous.isEmpty() )
+    {
+      guideline.push_back( previous );
+    }
+
+    guideline.push_back( crosshair );
+
+    if ( !next.isEmpty() )
+    {
+      guideline.push_back( next );
+    }
+
+    setGuidelineGeometry( QgsGeometry::fromPolylineXY( guideline ) );
+  }
+  else
+  {
+    // recording new points
+
+    if ( geotype == QgsWkbTypes::LineGeometry )
+    {
+      // we are adding new point to the end/beginning
+      QgsGeometry guideline;
+      QgsLineString *line;
+
+      if ( mRealGeometry.isMultipart() )
+      {
+        QgsMultiLineString *multiLine = qgsgeometry_cast<QgsMultiLineString *>( mRealGeometry.constGet() );
+        line = multiLine->lineStringN( mActivePart );
+      }
+      else
+      {
+        line = qgsgeometry_cast<QgsLineString *>( mRealGeometry.constGet() );
+      }
+
+      if ( !line )
+      {
+        setGuidelineGeometry( guideline );
+        return;
+      }
+
+      if ( mInsertPolicy == RecordingMapTool::Start )
+      {
+        // add crosshair to the begginning
+        QgsPoint firstPoint = line->pointN( 0 );
+        guideline = QgsGeometry::fromPolyline( { crosshair, firstPoint } );
+      }
+      else if ( line->vertexCount() > 0 )
+      {
+        // add crosshair to the end of the geometry
+        QgsPoint lastPoint = line->pointN( line->vertexCount() - 1 );
+        guideline = QgsGeometry::fromPolyline( { lastPoint, crosshair } );
+      }
+
+      setGuidelineGeometry( guideline );
+    }
+    else if ( geotype == QgsWkbTypes::PolygonGeometry )
+    {
+      int nVertices = mRealGeometry.constGet()->vertexCount( mActivePart, mActiveRing );
+      if ( nVertices == 0 )
+      {
+        // we hold the only point
+        setGuidelineGeometry( QgsGeometry() );
+        return;
+      }
+      else if ( nVertices == 1 )
+      {
+        // build line
+        QgsPointXY previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, mActiveRing, 0 ) );
+        setGuidelineGeometry( QgsGeometry::fromPolylineXY( { previous, crosshair } ) );
+      }
+      else
+      {
+        // build a polygon
+        QgsPointXY first = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, mActiveRing, 0 ) );
+        QgsPointXY last = mRealGeometry.constGet()->vertexAt( QgsVertexId( mActivePart, mActiveRing, nVertices - 2 ) );
+        setGuidelineGeometry( QgsGeometry::fromPolygonXY( { { first, crosshair, last } } ) );
+      }
     }
   }
 }
@@ -84,8 +211,6 @@ void GuidelineController::setCrosshairPosition( QPointF newCrosshairPosition )
     return;
   mCrosshairPosition = newCrosshairPosition;
   emit crosshairPositionChanged( mCrosshairPosition );
-
-  buildGuideline();
 }
 
 const QgsGeometry &GuidelineController::realGeometry() const
@@ -99,8 +224,6 @@ void GuidelineController::setRealGeometry( const QgsGeometry &newRealGeometry )
     return;
   mRealGeometry = newRealGeometry;
   emit realGeometryChanged( mRealGeometry );
-
-  buildGuideline();
 }
 
 QgsQuickMapSettings *GuidelineController::mapSettings() const
@@ -128,4 +251,69 @@ void GuidelineController::setMapSettings( QgsQuickMapSettings *newMapSettings )
   connect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &GuidelineController::buildGuideline );
 
   emit mapSettingsChanged( mMapSettings );
+}
+
+const Vertex &GuidelineController::activeVertex() const
+{
+  return mActiveVertex;
+}
+
+void GuidelineController::setActiveVertex( const Vertex &newActiveVertex )
+{
+  if ( mActiveVertex == newActiveVertex )
+    return;
+  mActiveVertex = newActiveVertex;
+  emit activeVertexChanged( mActiveVertex );
+}
+
+bool GuidelineController::allowed() const
+{
+  return mAllowed;
+}
+
+void GuidelineController::setAllowed( bool newAllowed )
+{
+  if ( mAllowed == newAllowed )
+    return;
+  mAllowed = newAllowed;
+  emit allowedChanged( mAllowed );
+}
+
+const RecordingMapTool::InsertPolicy &GuidelineController::insertPolicy() const
+{
+  return mInsertPolicy;
+}
+
+void GuidelineController::setInsertPolicy( const RecordingMapTool::InsertPolicy &insertPolicy )
+{
+  if ( mInsertPolicy == insertPolicy )
+    return;
+  mInsertPolicy = insertPolicy;
+  emit insertPolicyChanged( mInsertPolicy );
+}
+
+int GuidelineController::activePart() const
+{
+  return mActivePart;
+}
+
+void GuidelineController::setActivePart( int newActivePart )
+{
+  if ( mActivePart == newActivePart )
+    return;
+  mActivePart = newActivePart;
+  emit activePartChanged( mActivePart );
+}
+
+int GuidelineController::activeRing() const
+{
+  return mActiveRing;
+}
+
+void GuidelineController::setActiveRing( int newActiveRing )
+{
+  if ( mActiveRing == newActiveRing )
+    return;
+  mActiveRing = newActiveRing;
+  emit activeRingChanged( mActiveRing );
 }

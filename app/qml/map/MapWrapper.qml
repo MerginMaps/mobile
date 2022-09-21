@@ -11,6 +11,7 @@ import QtQuick 2.14
 
 import lc 1.0
 import QgsQuick 0.1 as QgsQuick
+import QtQuick.Dialogs 1.3
 
 import ".."
 import "../components"
@@ -99,11 +100,11 @@ Item {
 
       case "edit": {
         editingGeometryStarted()
+        hideHighlight()
         break
       }
 
       case "split": {
-        centerToPair( internal.featurePairToEdit )
         howtoSplittingBanner.show()
         splittingStarted()
         break
@@ -199,11 +200,6 @@ Item {
 
   Compass { id: deviceCompass }
 
-  PositionMarker {
-    mapPosition: mapPositioning
-    compass: deviceCompass
-  }
-
   StateGroup {
     id: gpsStateGroup
 
@@ -260,6 +256,7 @@ Item {
   Highlight {
     id: identifyHighlight
 
+    visible: root.state === "view"
     anchors.fill: mapCanvas
 
     mapSettings: mapCanvas.mapSettings
@@ -296,6 +293,11 @@ Item {
     active: root.state === "split"
 
     sourceComponent: splittingToolsComponent
+  }
+
+  PositionMarker {
+    mapPosition: mapPositioning
+    compass: deviceCompass
   }
 
   AutoHideBanner {
@@ -377,6 +379,38 @@ Item {
     visibleInterval: 10000
 
     text: qsTr( "Create line to split the selected feature" )
+  }
+
+  AutoHideBanner {
+    id: howtoEditingBanner
+
+    width: parent.width - InputStyle.innerFieldMargin * 2
+    height: InputStyle.rowHeight
+
+    bgColor: InputStyle.secondaryBackgroundColor
+    fontColor: "white"
+
+    source: InputStyle.infoIcon
+
+    visibleInterval: 10000
+
+    text: qsTr( "Select some point to start editing the geometry" )
+  }
+
+  AutoHideBanner {
+    id: redrawGeometryBanner
+
+    width: parent.width - InputStyle.innerFieldMargin * 2
+    height: InputStyle.rowHeight
+
+    bgColor: InputStyle.secondaryBackgroundColor
+    fontColor: "white"
+
+    source: InputStyle.infoIcon
+
+    visibleInterval: 10000
+
+    text: qsTr( "Record new geometry for the feature" )
   }
 
   MissingAuthDialog {
@@ -551,6 +585,111 @@ Item {
       }
     }
   }
+
+  MapFloatButton {
+    id: backButton
+
+    onClicked: {
+      if ( root.state === "edit" || root.state === "record" ) {
+        if ( recordingToolsLoader.item.hasChanges() ) {
+          cancelEditDialog.open()
+        }
+        else {
+          recordingToolsLoader.item.rollbackChanges()
+        }
+      }
+    }
+
+    maxWidth: parent.width * 0.8
+    anchors.top: parent.top
+    anchors.topMargin: internal.visibleBannerHeight + InputStyle.smallGap
+    anchors.left: parent.left
+    anchors.leftMargin: InputStyle.smallGap
+
+    visible: root.state != "view"
+
+    content: Item {
+
+      implicitWidth: backtext.implicitWidth + backicon.width + InputStyle.tinyGap
+      height: parent.height
+
+      anchors.horizontalCenter: parent.horizontalCenter
+
+      Symbol {
+        id: backicon
+
+        iconSize: parent.height / 2
+        source: InputStyle.backIcon
+
+        anchors.verticalCenter: parent.verticalCenter
+      }
+
+      Text {
+        id: backtext
+
+        property real maxTextWidth: backButton.maxWidth - ( backicon.width + InputStyle.tinyGap + leftPadding ) // used offsets
+
+        text: captionmetrics.elidedText
+        elide: Text.ElideRight
+        wrapMode: Text.NoWrap
+
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        color: InputStyle.fontColor
+
+        height: parent.height
+
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+
+        leftPadding: height / 3 // small gap between icon and caption
+
+        TextMetrics { // element holding metrics about printed text to be able to scale text without binding loops
+          id: captionmetrics
+
+          font: backtext.font
+          text: "Back"
+          elide: backtext.elide
+          elideWidth: backtext.maxTextWidth
+        }
+
+        anchors {
+          left: backicon.right
+          right: parent.right
+          verticalCenter: parent.verticalCenter
+        }
+      }
+    }
+  }
+
+  MessageDialog {
+    id: cancelEditDialog
+
+    title: qsTr( "Discard the changes?" )
+    text: {
+      if ( root.state === "edit" ) {
+        return qsTr( "Clicking ‘Yes’ discards your changes to the geometry. If you would like " +
+                    "to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar." )
+      }
+      else if ( root.state === "record" ) {
+        return qsTr( "Clicking ‘Yes’ discards your new geometry and no feature will be saved. " +
+                     "If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ " +
+                     "in the toolbar." )
+      }
+      return ""
+    }
+
+    standardButtons: StandardButton.Yes | StandardButton.No
+
+    onButtonClicked: {
+      if ( clickedButton === StandardButton.Yes ) {
+        recordingToolsLoader.item.rollbackChanges()
+      }
+      else if ( clickedButton === StandardButton.No ) {
+        cancelEditDialog.close()
+      }
+    }
+  }
+
 
   MapFloatButton {
     id: accuracyButton
@@ -738,11 +877,13 @@ Item {
 
       map: mapCanvas
       gpsState: gpsStateGroup
-      initialGeometry: root.state === "edit" ? internal.featurePairToEdit : null
+      activeFeature: root.state === "edit" ? internal.featurePairToEdit.feature : __inputUtils.emptyFeature()
 
       centerToGPSOnStartup: root.state !== "edit"
 
       onCanceled: {
+        howtoEditingBanner.hide()
+
         if ( root.state === "record" )
         {
           root.recordingCanceled()
@@ -760,20 +901,19 @@ Item {
       }
 
       onDone: {
+        howtoEditingBanner.hide()
+
         if ( root.state === "record" )
         {
-          let newFeaturePair = __inputUtils.createFeatureLayerPair( __activeLayer.vectorLayer, geometry, __variablesManager )
-          root.recordingFinished( newFeaturePair )
+          root.recordingFinished( featureLayerPair )
         }
         else if ( root.state === "edit" )
         {
-          let editedFeaturePair = __inputUtils.changeFeaturePairGeometry( internal.featurePairToEdit, geometry )
-          root.editingGeometryFinished( editedFeaturePair )
+          root.editingGeometryFinished( featureLayerPair )
         }
         else if ( root.state === "recordInLayer" )
         {
-          let newFeaturePair = __inputUtils.createFeatureLayerPair( __activeLayer.vectorLayer, geometry, __variablesManager )
-          root.recordInLayerFeatureFinished( newFeaturePair )
+          root.recordInLayerFeatureFinished( featureLayerPair )
         }
 
         root.state = "view"
@@ -843,6 +983,38 @@ Item {
     property var stakeoutTarget
 
     property bool isInRecordState: root.state === "record" || root.state === "recordInLayer" || root.state === "edit"
+
+    // If any banner is visible this property has its height.
+    // Usefull to calculate a top margin of map floating buttons.
+    property real visibleBannerHeight: {
+      if ( recordingToolsLoader.active )
+      {
+        let gps_banner = recordingToolsLoader.item.gpsBanner
+        if ( gps_banner.showBanner )
+        {
+          return gps_banner.height
+        }
+      }
+
+      const active = ( banner ) => banner.showBanner;
+      const banners = [
+        howtoEditingBanner,
+        howtoSplittingBanner,
+        redrawGeometryBanner,
+        splittingDoneBanner,
+        retryableSyncErrorBanner,
+        anotherProcessIsRunningBanner,
+        upToDateBanner,
+        syncSuccessfulBanner
+      ]
+
+      if ( banners.some( active ) )
+      {
+        return howtoEditingBanner.height
+      }
+
+      return 0
+    }
   }
 
   function select( featurepair ) {
@@ -863,12 +1035,26 @@ Item {
   function edit( featurepair ) {
     __activeProject.setActiveLayer( featurepair.layer )
     centerToPair( featurepair )
+    howtoEditingBanner.show()
 
     internal.featurePairToEdit = featurepair
     state = "edit"
   }
 
+  function redraw( featurepair ) {
+    __activeProject.setActiveLayer( featurepair.layer )
+    centerToPair( featurepair )
+    redrawGeometryBanner.show()
+
+    // clear feature geometry
+    internal.featurePairToEdit = __inputUtils.changeFeaturePairGeometry( featurepair, __inputUtils.emptyGeometry() )
+
+    state = "edit"
+  }
+
   function split( featurepair ) {
+    centerToPair( featurepair )
+
     internal.featurePairToEdit = featurepair
     state = "split"
   }
@@ -909,12 +1095,10 @@ Item {
   function highlightPair( pair ) {
     let geometry = __inputUtils.extractGeometry( pair, mapCanvas.mapSettings )
     identifyHighlight.geometry = __inputUtils.convertGeometryToMapCRS( geometry, pair.layer, mapCanvas.mapSettings )
-    identifyHighlight.visible = true
   }
 
   function hideHighlight() {
     identifyHighlight.geometry = null
-    identifyHighlight.visible = false
   }
 
   function centerToPosition() {

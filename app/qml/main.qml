@@ -16,6 +16,7 @@ import QtMultimedia 5.8
 import QtQml.Models 2.2
 import QtPositioning 5.8
 import QtQuick.Dialogs 1.1
+import Qt.labs.settings 1.0
 
 import lc 1.0
 import "./map"
@@ -62,6 +63,14 @@ ApplicationWindow {
               map.state = "inactive";
             }
         }
+    }
+
+    Settings {
+      // start window where it was closed last time
+      property alias x: window.x
+      property alias y: window.y
+      property alias width: window.width
+      property alias height: window.height
     }
 
     //! Must stay in main.qml, it is used from different nested components
@@ -512,6 +521,11 @@ ApplicationWindow {
       onSplitGeometryRequested: {
         stateManager.state = "record"
         map.split( pair )
+      }
+
+      onRedrawGeometryRequested: {
+        stateManager.state = "record"
+        map.redraw( pair )
       }
 
       onClosed: {

@@ -74,7 +74,7 @@ class AbstractPositionProvider : public QObject
     void positionChanged( const GeoPosition &position );
 
     void stateMessageChanged( const QString &message );
-    void stateChanged( State state );
+    void stateChanged( AbstractPositionProvider::State state );
 
   protected:
     void setState( const QString &message ); // keeps state enum the same and only changes the message

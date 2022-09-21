@@ -29,16 +29,9 @@ Item {
   signal close()
   signal editGeometryClicked()
   signal splitGeometryClicked()
+  signal redrawGeometryClicked()
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentController, var relation )
-
-  function updateFeatureGeometry() {
-    let f = formStackView.get( 0 )
-
-    if ( f ) {
-      f.form.controller.save()
-    }
-  }
 
   StackView {
     id: formStackView
@@ -122,7 +115,7 @@ Item {
               saveChangesDialog.open()
             }
             else {
-              root.close()
+              featureForm.cancel()
             }
             event.accepted = true;
           }
@@ -186,12 +179,17 @@ Item {
         state: featureForm.state
 
         visible: !root.readOnly
-        isFeaturePoint: __inputUtils.geometryFromLayer( root.featureLayerPair.layer ) === "point"
+        isFeaturePoint: __inputUtils.isPointLayer( root.featureLayerPair.layer )
+        isSpatialLayer: __inputUtils.isSpatialLayer( root.featureLayerPair.layer )
 
         onEditClicked: root.formState = "edit"
         onDeleteClicked: deleteDialog.visible = true
-        onEditGeometryClicked: root.editGeometryClicked()
+        onEditGeometryClicked: {
+          featureForm.oldFeatureLayerPair = root.featureLayerPair
+          root.editGeometryClicked()
+        }
         onSplitGeometryClicked: root.splitGeometryClicked()
+        onRedrawGeometryClicked: root.redrawGeometryClicked()
       }
 
       MessageDialog {

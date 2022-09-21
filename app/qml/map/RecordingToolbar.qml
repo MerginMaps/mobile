@@ -20,16 +20,19 @@ import "../components"
 Item {
     id: root
 
-    signal addClicked
-    signal cancelClicked
     signal gpsSwitchClicked
     signal gpsSwithHeld
+    signal removeClicked
+    signal addClicked
+    signal releaseClicked
     signal doneClicked
-    signal removePointClicked
+    signal cancelClicked
+    signal undoClicked
 
     property color gpsIndicatorColor: InputStyle.softRed
     property bool pointLayerSelected: true
     property bool manualRecording: false
+    property var recordingMapTool
 
     property int itemSize: rowHeight * 0.8
     property int rowHeight: InputStyle.rowHeightHeader
@@ -87,28 +90,14 @@ Item {
             visible: root.pointLayerSelected ? false : true
 
             MainPanelButton {
-                id: removePointButton
+                id: undoButton
                 width: root.itemSize
                 text: qsTr("Undo")
                 imageSource: InputStyle.undoIcon
-                enabled: manualRecording
 
-                onActivated: root.removePointClicked()
-            }
-        }
+                enabled: root.recordingMapTool.canUndo
 
-        Item {
-            height: parent.height
-            Layout.fillWidth: true
-
-            MainPanelButton {
-                id: addButton
-                width: root.itemSize
-                text: qsTr("Add Point")
-                imageSource: InputStyle.plusIcon
-                enabled: manualRecording
-
-                onActivated: root.addClicked()
+                onActivated: root.undoClicked()
             }
         }
 
@@ -116,6 +105,59 @@ Item {
             Layout.fillWidth: true
             height: parent.height
             visible: root.pointLayerSelected ? false : true
+
+            MainPanelButton {
+                id: removeButton
+                width: root.itemSize
+                text: qsTr("Remove")
+                imageSource: InputStyle.minusIcon
+
+                enabled: {
+                  if ( !manualRecording ) return false;
+                  if ( root.recordingMapTool.state === RecordingMapTool.View ) return false;
+                  if ( __inputUtils.isEmptyGeometry( root.recordingMapTool.recordedGeometry ) ) return false;
+
+                  return true;
+                }
+
+                onActivated: root.removeClicked()
+            }
+        }
+
+        Item {
+            height: parent.height
+            Layout.fillWidth: true
+            visible: root.recordingMapTool.state === RecordingMapTool.View || root.recordingMapTool.state === RecordingMapTool.Record
+
+            MainPanelButton {
+                id: addButton
+                width: root.itemSize
+                text: qsTr("Add")
+                imageSource: InputStyle.plusIcon
+                enabled: manualRecording && root.recordingMapTool.state !== RecordingMapTool.View
+
+                onActivated: root.addClicked()
+            }
+        }
+
+        Item {
+            height: parent.height
+            Layout.fillWidth: true
+            visible: root.recordingMapTool.state === RecordingMapTool.Grab
+
+            MainPanelButton {
+                id: releaseButton
+                width: root.itemSize
+                text: qsTr("Release")
+                imageSource: InputStyle.plusIcon
+
+                onActivated: root.releaseClicked()
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+            height: parent.height
 
             MainPanelButton {
                 id: finishButton
@@ -126,20 +168,5 @@ Item {
                 onActivated: root.doneClicked()
             }
         }
-
-        Item {
-            height: parent.height
-            Layout.fillWidth: true
-
-            MainPanelButton {
-                id: cancelButton
-                width: root.itemSize
-                text: qsTr("Cancel")
-                imageSource: InputStyle.noIcon
-
-                onActivated: root.cancelClicked()
-            }
-        }
     }
-
 }

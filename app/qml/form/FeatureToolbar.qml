@@ -17,11 +17,13 @@ Item {
 
     property int itemSize: toolbar.height * 0.8
     property bool isFeaturePoint: false
+    property bool isSpatialLayer: false
 
     signal editClicked()
     signal deleteClicked()
     signal editGeometryClicked()
     signal splitGeometryClicked()
+    signal redrawGeometryClicked()
 
     states: [
         State {
@@ -96,13 +98,13 @@ Item {
         Item {
             width: parent.width/parent.children.length
             height: parent.height
+            visible: isSpatialLayer
 
             MainPanelButton {
 
                 width: toolbar.itemSize
                 text: qsTr("Edit geometry")
                 imageSource: InputStyle.editIcon
-                enabled: isFeaturePoint
 
                 onActivated: {
                     toolbar.editGeometryClicked()
@@ -113,15 +115,18 @@ Item {
         Item {
             width: parent.width/parent.children.length
             height: parent.height
+            visible: isSpatialLayer
 
             MainPanelButton {
+              id: menuBtn
+              width: toolbar.itemSize
+              text: qsTr("Advanced")
+              imageSource: InputStyle.moreMenuIcon
 
-                width: toolbar.itemSize
-                text: qsTr("Split geometry")
-                imageSource: InputStyle.scissorsIcon
-                enabled: !isFeaturePoint
-
-                onActivated: toolbar.splitGeometryClicked()
+              onActivated: {
+                if ( !rootMenu.visible ) rootMenu.open()
+                else rootMenu.close()
+              }
             }
         }
     }
@@ -148,5 +153,51 @@ Item {
             }
         }
     }
+
+    Menu {
+        id: rootMenu
+        title: qsTr("Advanced")
+        x:parent.width - rootMenu.width
+        y: -rootMenu.height
+        width: parent.width < 300 * __dp ? parent.width : 300 * __dp
+        closePolicy: Popup.CloseOnReleaseOutsideParent | Popup.CloseOnEscape
+
+        MenuItem {
+            width: parent.width
+            height: toolbar.itemSize
+            visible: !isFeaturePoint
+
+            ExtendedMenuItem {
+                height: toolbar.itemSize
+                rowHeight: height
+                width: parent.width
+                contentText: qsTr("Split geometry")
+                imageSource: InputStyle.scissorsIcon
+            }
+
+            onClicked: {
+                toolbar.splitGeometryClicked()
+                rootMenu.close()
+            }
+        }
+
+        MenuItem {
+            width: parent.width
+            height: toolbar.itemSize
+
+            ExtendedMenuItem {
+                height: toolbar.itemSize
+                rowHeight: height
+                width: parent.width
+                contentText: qsTr("Redraw geometry")
+                imageSource: InputStyle.eraserIcon
+            }
+
+            onClicked: {
+                toolbar.redrawGeometryClicked()
+                rootMenu.close()
+            }
+        }
+   }
 
 }

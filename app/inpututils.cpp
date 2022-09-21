@@ -33,6 +33,11 @@
 #include "qgslayertree.h"
 #include "qgsprojectviewsettings.h"
 #include "qgsvectorlayerutils.h"
+#include "qgslinestring.h"
+#include "qgspolygon.h"
+#include "qgsmultipoint.h"
+#include "qgsmultilinestring.h"
+#include "qgsmultipolygon.h"
 
 #include "featurelayerpair.h"
 #include "qgsquickmapsettings.h"
@@ -724,6 +729,16 @@ QgsGeometry InputUtils::emptyGeometry()
   return QgsGeometry();
 }
 
+QgsFeature InputUtils::emptyFeature()
+{
+  return QgsFeature();
+}
+
+bool InputUtils::isEmptyGeometry( const QgsGeometry &geometry )
+{
+  return geometry.isEmpty();
+}
+
 QgsPoint InputUtils::coordinateToPoint( const QGeoCoordinate &coor )
 {
   return QgsPoint( coor.longitude(), coor.latitude(), coor.altitude() );
@@ -1144,6 +1159,24 @@ bool InputUtils::isPolygonLayer( QgsVectorLayer *layer )
 bool InputUtils::isNoGeometryLayer( QgsVectorLayer *layer )
 {
   return geometryFromLayer( layer ) == "nullGeo";
+}
+
+bool InputUtils::isMultiPartLayer( QgsVectorLayer *layer )
+{
+  if ( !layer )
+  {
+    return false;
+  }
+  return QgsWkbTypes::isMultiType( layer->wkbType() );
+}
+
+bool InputUtils::isSpatialLayer( QgsVectorLayer *layer )
+{
+  if ( !layer )
+  {
+    return false;
+  }
+  return layer->isSpatial();
 }
 
 qreal InputUtils::calculateScreenDpr()
@@ -1675,15 +1708,31 @@ FeatureLayerPair InputUtils::createFeatureLayerPair( QgsVectorLayer *layer, cons
   return FeatureLayerPair( feat, layer );
 }
 
+void InputUtils::createEditBuffer( QgsVectorLayer *layer )
+{
+  if ( layer )
+  {
+    if ( !layer->editBuffer() )
+    {
+      layer->startEditing();
+    }
+  }
+}
+
 FeatureLayerPair InputUtils::changeFeaturePairGeometry( FeatureLayerPair featurePair, const QgsGeometry &geometry )
 {
-  // So far we only support editing of point geometries
-  if ( geometry.type() == QgsWkbTypes::PointGeometry )
+  QgsVectorLayer *vlayer = featurePair.layer();
+  if ( vlayer )
   {
-    featurePair.featureRef().setGeometry( geometry );
+    InputUtils::createEditBuffer( vlayer );
+    QgsGeometry g( geometry );
+    vlayer->changeGeometry( featurePair.feature().id(), g );
+    vlayer->triggerRepaint();
   }
 
-  return featurePair;
+  QgsFeature f = featurePair.layer()->getFeature( featurePair.feature().id() );
+
+  return FeatureLayerPair( f, featurePair.layer() );
 }
 
 QgsPointXY InputUtils::extractPointFromFeature( const FeatureLayerPair &feature )
@@ -1781,4 +1830,126 @@ bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
 {
   int quality = activeProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoQuality" ), 0 );
   return ImageUtils::rescale( path, quality );
+}
+
+
+QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
+{
+  QgsGeometry geometry;
+
+  if ( !layer )
+  {
+    return geometry;
+  }
+
+  bool isMulti = QgsWkbTypes::isMultiType( layer->wkbType() );
+
+  switch ( layer->geometryType() )
+  {
+    case QgsWkbTypes::PointGeometry:
+    {
+      if ( isMulti )
+      {
+        QgsMultiPoint *multiPoint = new QgsMultiPoint();
+        geometry.set( multiPoint );
+      }
+      else
+      {
+        QgsPoint *point = new QgsPoint();
+        geometry.set( point );
+      }
+      break;
+    }
+
+    case QgsWkbTypes::LineGeometry:
+    {
+      if ( isMulti )
+      {
+        QgsMultiLineString *multiLine = new QgsMultiLineString();
+        geometry.set( multiLine );
+      }
+      else
+      {
+        QgsLineString *line = new QgsLineString();
+        geometry.set( line );
+      }
+      break;
+    }
+
+    case QgsWkbTypes::PolygonGeometry:
+    {
+      if ( isMulti )
+      {
+        QgsLineString *line = new QgsLineString();
+        QgsPolygon *polygon = new QgsPolygon( line );
+        QgsMultiPolygon *multiPolygon = new QgsMultiPolygon();
+        multiPolygon->addGeometry( polygon );
+        geometry.set( multiPolygon );
+      }
+      else
+      {
+        QgsLineString *line = new QgsLineString();
+        QgsPolygon *polygon = new QgsPolygon( line );
+        geometry.set( polygon );
+      }
+      break;
+    }
+
+    default:
+      break;
+  }
+
+  return geometry;
+}
+
+
+QString InputUtils::invalidGeometryWarning( QgsVectorLayer *layer )
+{
+  QString msg;
+  if ( !layer )
+  {
+    return msg;
+  }
+
+  int nPoints = 1;
+  if ( layer->geometryType() == QgsWkbTypes::LineGeometry )
+  {
+    nPoints = 2;
+  }
+  else if ( layer->geometryType() == QgsWkbTypes::PolygonGeometry )
+  {
+    nPoints = 3;
+  }
+
+  if ( QgsWkbTypes::isMultiType( layer->wkbType() ) )
+  {
+    return tr( "You need to add at least %1 point(s) to every part." ).arg( nPoints );
+  }
+  else
+  {
+    return tr( "You need to add at least %1 point(s)." ).arg( nPoints );
+  }
+}
+
+void InputUtils::updateFeature( const FeatureLayerPair &pair )
+{
+  if ( !pair.layer() )
+  {
+    return;
+  }
+
+  if ( !pair.feature().isValid() )
+  {
+    return;
+  }
+
+  if ( !pair.layer()->isEditable() )
+  {
+    pair.layer()->startEditing();
+  }
+
+  QgsFeature f( pair.feature() );
+  pair.layer()->updateFeature( f );
+  pair.layer()->commitChanges();
+  pair.layer()->triggerRepaint();
 }

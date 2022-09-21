@@ -14,6 +14,7 @@
 
 #include "testutils.h"
 #include "coreutils.h"
+#include "inpututils.h"
 #include "merginapi.h"
 
 void TestUtils::mergin_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password )
@@ -123,4 +124,19 @@ bool TestUtils::generateProjectFolder( const QString &rootPath, const QJsonDocum
   }
 
   return allGood;
+}
+
+QgsProject *TestUtils::loadPlanesTestProject()
+{
+  QString projectDir = TestUtils::testDataDir() + "/planes";
+  QString projectTempDir = QDir::tempPath() + "/" + QUuid::createUuid().toString();
+  QString projectName = "quickapp_project.qgs";
+
+  // copy the project to tmp dir to not change its data
+  InputUtils::cpDir( projectDir, projectTempDir );
+
+  QgsProject *project = new QgsProject();
+  project->read( projectTempDir + "/" + projectName );
+
+  return project;
 }

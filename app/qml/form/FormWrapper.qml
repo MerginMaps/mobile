@@ -39,13 +39,10 @@ Item {
   signal closed()
   signal editGeometry( var pair )
   signal splitGeometry( var pair )
+  signal redrawGeometry( var pair )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var targetLayer, var parentPair )
   signal stakeoutFeature( var feature )
-
-  function updateFeatureGeometry() {
-    formContainer.updateFeatureGeometry()
-  }
 
   function openDrawer() {
     root.panelState = "form"
@@ -161,6 +158,10 @@ Item {
       onSplitGeometryClicked: {
         root.panelState = "hidden"
         root.splitGeometry( root.featureLayerPair )
+      }
+      onRedrawGeometryClicked: {
+        root.panelState = "hidden"
+        root.redrawGeometry( root.featureLayerPair )
       }
     }
   }

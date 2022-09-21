@@ -39,7 +39,8 @@ QtObject {
     property color darkOrange: "#FD9626"
     property color softGreen: "#32AA3A"
     property color darkGreen: "#006146"
-    property color guidelineColor: Qt.rgba( 0.67, 0.7, 0.74, 0.5 )
+    property color mapObjectsColor: "#EF4444"
+    property color mapObjectsColorTransparent: "#80EF4444"
 
     property int fontPixelSizeSmall: scaleFont(15)
     property int fontPixelSizeNormal: scaleFont(18)
@@ -82,6 +83,7 @@ QtObject {
     property string backIcon: "qrc:/back.svg"
     property string checkIcon: "qrc:/check.svg"
     property string plusIcon: "qrc:/plus.svg"
+    property string minusIcon: "qrc:/minus.svg"
     property string noIcon: "qrc:/no.svg"
     property string yesIcon: "qrc:/yes.svg"
     property string editIcon: "qrc:/edit.svg"
@@ -138,6 +140,7 @@ QtObject {
     property string searchIcon: "qrc:/search.svg"
     property string loadingIndicatorIcon: "qrc:/loadingindicator.svg"
     property string scissorsIcon: "qrc:/scissors.svg"
+    property string eraserIcon: "qrc:/eraser.svg"
 
     property string linkIcon: "qrc:/link-rotated.svg"
     property string unlinkIcon: "qrc:/unlink.svg"
@@ -148,21 +151,36 @@ QtObject {
 
     property string closeIcon: "qrc:/ic_clear_black.svg"
     property string stakeoutIcon: "qrc:/stakeout.png"
-    
+
     property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
 
-    // map related styling constats
+    property color guidelineColor: mapObjectsColor
+    property real guidelineWidth: 4 * __dp
+
+    property color mapMarkerColor: mapObjectsColor
+    property color mapMarkerBorderColor: "white"
+
     property real mapLoadingIndicatorHeight: 7 * __dp
 
     property real mapMarkerWidth: 60 * __dp
+    property real mapMarkerBorderWidth: 2 * __dp
     property real mapMarkerHeight: 70 * __dp
     property real mapMarkerAnchorY: 48 * __dp
+    property real mapMarkerSize: 18 * __dp
+    property real mapMarkerSizeBig: 21 * __dp
 
-    property color highlightLineColor: Qt.rgba( 1, 0.2, 0.2, 1 )
-    property color highlightFillColor: Qt.rgba( 1, 0.2, 0.2, InputStyle.lowHighlightOpacity )
-    property color highlightOutlineColor: "white"
-    property real highlightLineWidth: 6 * __dp
-    property real highlightOutlinePenWidth: 2 * __dp
+    property color mapLineColor: mapObjectsColor
+    property color mapLineBorderColor: "white"
+
+    property real mapLineWidth: 8 * __dp
+    property real mapLineBorderWidth: 4 * __dp
+
+    property color mapPolygonRingColor: mapObjectsColor
+    property color mapPolygonRingBorderColor: "white"
+    property color mapPolygonFillColor: mapObjectsColorTransparent
+
+    property real mapPolygonRingWidth: 8 * __dp
+    property real mapPolygonRingBorderWidth: 0 * __dp
 
     property real mapOutOfExtentBorder: scale(64) // when pair lays very close to device display border, center map extent
 

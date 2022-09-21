@@ -205,6 +205,16 @@ class InputUtils: public QObject
     Q_INVOKABLE static QgsGeometry emptyGeometry();
 
     /**
+     * Creates empty feature
+     */
+    Q_INVOKABLE static QgsFeature emptyFeature();
+
+    /**
+     * Returns true for null or empty geometry
+     */
+    Q_INVOKABLE static bool isEmptyGeometry( const QgsGeometry &geometry );
+
+    /**
       * Converts QGeoCoordinate to QgsPoint
       */
     Q_INVOKABLE static QgsPoint coordinateToPoint( const QGeoCoordinate &coor );
@@ -426,6 +436,8 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool isLineLayer( QgsVectorLayer *layer );
     Q_INVOKABLE static bool isPolygonLayer( QgsVectorLayer *layer );
     Q_INVOKABLE static bool isNoGeometryLayer( QgsVectorLayer *layer );
+    Q_INVOKABLE static bool isMultiPartLayer( QgsVectorLayer *layer );
+    Q_INVOKABLE static bool isSpatialLayer( QgsVectorLayer *layer );
 
     // Returns a point geometry from point feature
     Q_INVOKABLE static QgsPointXY extractPointFromFeature( const FeatureLayerPair &feature );
@@ -451,8 +463,13 @@ class InputUtils: public QObject
     //! Creates featureLayerPair from geometry and layer, evaluates its expressions and returns it.
     Q_INVOKABLE static FeatureLayerPair createFeatureLayerPair( QgsVectorLayer *layer, const QgsGeometry &geometry, VariablesManager *variablesmanager );
 
-    //! Changes featureLayerPair's geometry to passed geometry
-    //! Geometry must be in the same CRS as the layer
+    Q_INVOKABLE static void createEditBuffer( QgsVectorLayer *layer );
+
+    /**
+     *  Changes featureLayerPair's geometry to passed geometry
+     *  Geometry must be in the same CRS as the layer
+     *  Change is written directly inside the layer edit buffer, but the buffer is not commited!
+     */
     Q_INVOKABLE static FeatureLayerPair changeFeaturePairGeometry( FeatureLayerPair featurePair, const QgsGeometry &geometry );
 
     // Calculates real screen DPR based on DPI
@@ -479,6 +496,19 @@ class InputUtils: public QObject
      * Rescales image according to the project photo quality setting.
      */
     Q_INVOKABLE static bool rescaleImage( const QString &path, QgsProject *activeProject );
+
+    /**
+     * Creates an empty geometry matching layer WKB type
+     */
+    Q_INVOKABLE static QgsGeometry createGeometryForLayer( QgsVectorLayer *layer );
+
+    Q_INVOKABLE static QString invalidGeometryWarning( QgsVectorLayer *layer );
+
+    /**
+     * Updates existing layer feature with new feature data.
+     */
+    Q_INVOKABLE static void updateFeature( const FeatureLayerPair &pair );
+
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );

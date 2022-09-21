@@ -24,6 +24,21 @@ class TestMapTools : public QObject
     void testSnapping();
     void testSplitting();
     void testRecording();
+
+    void testExistingVertices();
+    void testMidSegmentVertices();
+    void testHandles();
+    void testLookForVertex();
+
+    void testAddVertexPointLayer();
+    void testAddVertexMultiPointLayer();
+    void testAddVertexLineLayer();
+    void testAddVertexMultiLineLayer();
+    void testAddVertexPolygonLayer();
+    void testAddVertexMultiPolygonLayer();
+    void testUpdateVertex();
+    void testRemoveVertex();
+    void testVerticesStructure();
 };
 
 #endif // TESTMAPTOOLS_H

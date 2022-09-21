@@ -273,6 +273,9 @@ void initDeclarative()
   qRegisterMetaType< QgsCoordinateFormatter::FormatFlags >( "QgsCoordinateFormatter::FormatFlags" );
   qRegisterMetaType< QgsCoordinateFormatter::Format >( "QgsCoordinateFormatter::Format" );
   qRegisterMetaType< QVariant::Type >( "QVariant::Type" );
+  qRegisterMetaType< QgsVertexId >( "QgsVertexId" );
+
+  qRegisterMetaType< Vertex >( "Vertex" );
 
   qmlRegisterUncreatableType< FormItem >( "lc", 1, 0, "FormItem", "Only enums from FormItem can be used" );
   qmlRegisterUncreatableType< AttributeFormModel >( "lc", 1, 0, "AttributeFormModel", "Created by AttributeController" );
@@ -512,6 +515,8 @@ int main( int argc, char *argv[] )
   QObject::connect( &iosUtils, &IosUtils::showToast, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]( const QString & projectFullName, bool successfully, int version, bool reloadNeeded )
   {
+    Q_UNUSED( successfully );
+    Q_UNUSED( version );
     if ( reloadNeeded && activeProject.projectFullName() == projectFullName )
     {
       activeProject.reloadProject( activeProject.qgsProject()->homePath() );
