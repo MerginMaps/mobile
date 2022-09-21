@@ -11,31 +11,24 @@ jobs:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: ubuntu-latest
     env:
-      QT_VERSION: '5.14.2'
+      QT_VERSION: '6.3.2'
     steps:
 
       - uses: actions/checkout@v2
 
-      # Qt
-      - name: Cache Qt
-        id: cache-qt
-        uses: pat-s/always-upload-cache@v2.1.5
-        with:
-          path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-i18n
-
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ env.QT_VERSION }}
-          target: android
-          arch: android
+          setup-python: 'false'
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning'
           dir: ${{ github.workspace }}
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          cache: true
+          cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-lnx
 
       - name: Check for new translation entries
         run: |
-          ./scripts/update_i18n_ts.bash ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
+          ./scripts/update_i18n_ts.bash ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/gcc_64
 
           echo "Changes in i18n entries"
           git diff app/i18n/input_en.ts | grep -E \\+\\\s+\<source\> || true

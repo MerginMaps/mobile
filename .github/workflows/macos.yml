@@ -14,12 +14,13 @@ on:
 
 env:
   TEST_MERGIN_URL: https://test.dev.merginmaps.com/
-  QT_VERSION: 6.3.1
+  QT_VERSION: 6.3.2
   QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.15.0
   INPUT_SDK_VERSION: mac-20220810-95
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 5
-
+  CACHE_VERSION: 0
+  XC_VERSION: ${{ '13.2.1' }}     
+      
 concurrency:
   group: ci-${{github.ref}}-macos
   cancel-in-progress: true
@@ -34,6 +35,9 @@ jobs:
         with:
           path: input
 
+      - name: Select latest Xcode
+        run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
+        
       - name: install brew deps
         run: |
           brew install lcov
@@ -84,21 +88,15 @@ jobs:
           ccache -s
 
       # Qt
-      - name: Cache Qt
-        id: cache-qt
-        uses: pat-s/always-upload-cache@v2.1.5
-        with:
-          path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}
-
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ env.QT_VERSION }}
+          target: desktop
           dir: ${{ github.workspace }}
-          setup-python: 'false'
-          py7zrversion: '==0.18.1'
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning'
+          cache: true
+          cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-mac
 
       # Input SDK
       - name: Cache Input-SDK
