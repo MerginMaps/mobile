@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.0
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Controls
 
 import lc 1.0
 import "./components"
@@ -30,11 +30,11 @@ Item {
       color: InputStyle.clrPanelMain
       rowHeight: InputStyle.rowHeightHeader
       titleText: qsTr("Layers")
-      
+
       onBack: root.backButtonClicked()
       withBackButton: true
     }
-    
+
     LayerList {
         implicitHeight: layersListPage.height - layersPageHeader.height
         width: parent.width

@@ -18,7 +18,6 @@
 #include "qgsfield.h"
 #include "qgsvectorlayer.h"
 #include "qgsexpressioncontextutils.h"
-#include "qgsproject.h"
 
 AttributePreviewModel::AttributePreviewModel( const QVector<QPair<QString, QString>> &items )
   : QAbstractListModel( nullptr )

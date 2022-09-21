@@ -7,16 +7,16 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 
 // Required for iOS to get rid of "module "QtMultimedia" is not installed".
 // It looks like static QT plugins are not copied to the distribution
-import QtMultimedia 5.8
-import QtQml.Models 2.2
-import QtPositioning 5.8
-import QtQuick.Dialogs 1.1
-import Qt.labs.settings 1.0
+
+import QtMultimedia
+import QtQml.Models
+import QtPositioning
+import QtQuick.Dialogs
 
 import lc 1.0
 import "./map"
@@ -489,8 +489,12 @@ ApplicationWindow {
         id: projDialog
         onAccepted: projDialog.close()
         title: qsTr("PROJ Error")
-        standardButtons: StandardButton.Ignore |StandardButton.Help
-        onHelp: Qt.openUrlExternally(__inputHelp.howToSetupProj)
+        buttons: MessageDialog.Ignore | MessageDialog.Help
+        onButtonClicked: {
+          if (clickedButton === MessageDialog.Help) {
+            Qt.openUrlExternally(__inputHelp.howToSetupProj)
+          }
+        }
     }
 
     FormsStackManager {
@@ -565,7 +569,7 @@ ApplicationWindow {
 
     Connections {
         target: __merginApi
-        onNetworkErrorOccurred: {
+        function onNetworkErrorOccurred( message, topic, httpCode, projectFullName ) {
           if ( stateManager.state === "projects" )
           {
             var msg = message ? message : qsTr( "Failed to communicate with Mergin.%1Try improving your network connection." ).arg( "\n" )
@@ -573,7 +577,7 @@ ApplicationWindow {
           }
         }
 
-        onStorageLimitReached: {
+        function onStorageLimitReached( uploadSize ) {
           __merginApi.getUserInfo()
           if (__merginApi.apiSupportsSubscriptions) {
             __merginApi.getSubscriptionInfo()
@@ -582,9 +586,11 @@ ApplicationWindow {
           storageLimitDialog.open()
         }
 
-        onNotify: showMessage(message)
+        function onNotify( message ) {
+          showMessage(message)
+        }
 
-        onProjectDataChanged: {
+        function onProjectDataChanged( projectFullName ) {
           //! if current project has been updated, refresh canvas
           if ( projectFullName === projectPanel.activeProjectId ) {
             map.mapSettings.extentChanged()
@@ -594,34 +600,40 @@ ApplicationWindow {
 
     Connections {
         target: __inputProjUtils
-        onProjError: {
+        function onProjError( message ) {
           showProjError(message)
         }
     }
 
     Connections {
         target: __inputUtils
-        onShowNotificationRequested: {
+        function onShowNotificationRequested( message ) {
             showMessage(message)
         }
     }
 
     Connections {
       target: __activeProject
-      onLoadingStarted: {
+      function onLoadingStarted() {
         projectLoadingScreen.visible = true;
         failedToLoadProjectBanner.reset();
         projectIssuesPanel.clear();
       }
-      onLoadingFinished: projectLoadingScreen.visible = false
-      onLoadingErrorFound: {
+      function onLoadingFinished() {
+        projectLoadingScreen.visible = false
+      }
+      function onLoadingErrorFound() {
         failedToLoadProjectBanner.pushNotificationMessage( qsTr( "There were issues loading the project." ) )
       }
-
-      onReportIssue: projectIssuesPanel.reportIssue( layerName, message )
-
-      onProjectReloaded: map.clear()
-      onProjectWillBeReloaded: formsStackManager.reload()
+      function onReportIssue( layerName, message ) {
+        projectIssuesPanel.reportIssue( layerName, message )
+      }
+      function onProjectReloaded( project ) {
+        map.clear()
+      }
+      function onProjectWillBeReloaded() {
+        formsStackManager.reload()
+      }
     }
 
     LegacyFolderMigration {

@@ -8,12 +8,12 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-import QtQuick.Templates 2.1 as T
-import QtQuick 2.7
-import QtQuick.Controls 2.7
-import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.2
-import QtGraphicalEffects 1.0
+import QtQuick.Templates as T
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
+import Qt5Compat.GraphicalEffects
 
 import lc 1.0
 import "." // import InputStyle singleton

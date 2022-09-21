@@ -17,7 +17,7 @@
 
 #include <QObject>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 
 #include "qgsapplication.h"
 #include "qgsvectorlayer.h"

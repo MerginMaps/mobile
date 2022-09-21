@@ -47,7 +47,8 @@ QString CoreUtils::localizedDateFromUTFString( QString timestamp )
   QDateTime dateTime = QDateTime::fromString( timestamp, Qt::ISODate );
   if ( dateTime.isValid() )
   {
-    return dateTime.date().toString( Qt::DefaultLocaleShortDate );
+    QLocale locale = QLocale::system();
+    return locale.toString( dateTime.date(), locale.dateFormat( QLocale::ShortFormat ) );
   }
   else
   {
@@ -95,7 +96,7 @@ void CoreUtils::log( const QString &topic, const QString &info )
 {
   QString logFilePath;
   QByteArray data;
-  data.append( QString( "%1 %2: %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( topic ).arg( info ) );
+  data.append( QString( "%1 %2: %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( topic ).arg( info ).toUtf8() );
   appendLog( data, sLogFile );
 }
 
@@ -219,7 +220,7 @@ QString CoreUtils::generateConflictedCopyFileName( const QString &file, const QS
   {
     suffix += "~";
   }
-  return QString( "%1/%2 (conflicted copy, %3 v%4).%5" ).arg( f.path(), f.baseName(), username, QString::number( version ), suffix );
+  return QString( "%1/%2 (conflicted copy, %3 v%4).%5" ).arg( f.path(), f.baseName(), username, QString::number( version ).toUtf8(), suffix );
 }
 
 QString CoreUtils::generateEditConflictFileName( const QString &file, const QString &username, int version )

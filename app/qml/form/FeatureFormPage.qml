@@ -7,9 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Dialogs 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs
 
 import lc 1.0
 import ".."
@@ -160,7 +160,9 @@ Item {
 
         Connections {
           target: root
-          onFormStateChanged: featureForm.state = root.formState
+          function onFormStateChanged() {
+            featureForm.state = root.formState
+          }
         }
 
         Component.onCompleted: {
@@ -198,12 +200,11 @@ Item {
         visible: false
         title: qsTr( "Delete feature" )
         text: qsTr( "Are you sure you want to delete this feature?" )
-        icon: StandardIcon.Warning
-        standardButtons: StandardButton.Ok | StandardButton.Cancel
+        buttons: MessageDialog.Ok | MessageDialog.Cancel
 
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
         onButtonClicked: {
-          if ( clickedButton === StandardButton.Ok ) {
+          if ( clickedButton === MessageDialog.Ok ) {
             featureForm.controller.deleteFeature()
             featureForm.canceled()
             root.close()
@@ -219,18 +220,17 @@ Item {
         visible: false
         title: qsTr( "Unsaved changes" )
         text: qsTr( "Do you want to save changes?" )
-        icon: StandardIcon.Warning
-        standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
+        buttons: MessageDialog.Yes | MessageDialog.No | MessageDialog.Cancel
 
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
         onButtonClicked: {
-          if (clickedButton === StandardButton.Yes) {
+          if (clickedButton === MessageDialog.Yes) {
             featureForm.save()
           }
-          else if (clickedButton === StandardButton.No) {
+          else if (clickedButton === MessageDialog.No) {
             featureForm.canceled()
           }
-          else if (clickedButton === StandardButton.Cancel) {
+          else if (clickedButton === MessageDialog.Cancel) {
             // Do nothing
           }
           visible = false
@@ -243,8 +243,7 @@ Item {
         visible: false
         title: qsTr( "Saving failed" )
         text: qsTr( "Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support." )
-        icon: StandardIcon.Warning
-        standardButtons: StandardButton.Close
+        buttons: MessageDialog.Close
 
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
         onButtonClicked: {

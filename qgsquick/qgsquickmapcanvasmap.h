@@ -144,7 +144,7 @@ class QUICK_EXPORT QgsQuickMapCanvasMap : public QQuickItem
     void incrementalRenderingChanged();
 
   protected:
-    void geometryChanged( const QRectF &newGeometry, const QRectF &oldGeometry ) override;
+    void geometryChange( const QRectF &newGeometry, const QRectF &oldGeometry ) override;
 
   public slots:
     //! Stop map rendering

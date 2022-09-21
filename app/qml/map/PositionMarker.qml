@@ -7,10 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.3
-import QtQuick.Controls 2.2
-import QtQml 2.2
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQml
+import Qt5Compat.GraphicalEffects
 
 import ".."
 import lc 1.0

@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Shapes 1.14
+import QtQuick
+import QtQuick.Shapes
 
 import QgsQuick 0.1 as QgsQuick
 
@@ -76,7 +76,7 @@ Item {
 
   Connections {
       target: mapSettings
-      onVisibleExtentChanged: {
+      function onVisibleExtentChanged() {
           mapTransformScale = __inputUtils.mapSettingsScale(mapSettings)
           mapTransformOffsetX = __inputUtils.mapSettingsOffsetX(mapSettings)
           mapTransformOffsetY = __inputUtils.mapSettingsOffsetY(mapSettings)

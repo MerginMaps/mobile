@@ -9,7 +9,7 @@
 
 #include "recordingmaptool.h"
 
-#include "qgsvectorlayer.h"
+
 #include "qgspolygon.h"
 #include "qgsvectorlayerutils.h"
 #include "qgsmultipoint.h"
@@ -1042,6 +1042,7 @@ FeatureLayerPair RecordingMapTool::commitChanges()
       mActiveLayer->commitChanges();
       setActiveFeature( mActiveLayer->getFeature( mActiveFeature.id() ) );
     }
+
 
     mActiveLayer->triggerRepaint();
   }

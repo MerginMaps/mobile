@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.12
+import QtQuick
 import lc 1.0
 
 import "./components"

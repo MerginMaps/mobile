@@ -9,7 +9,7 @@
 
 #include "testutilsfunctions.h"
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QLocale>
 
 #include "qgsapplication.h"

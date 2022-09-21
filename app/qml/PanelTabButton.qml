@@ -7,9 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
-import QtQuick 2.0
+import QtQuick
+import QtQuick.Controls
 import "."  // import InputStyle singleton
 
 TabButton {

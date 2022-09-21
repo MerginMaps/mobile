@@ -13,7 +13,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "qgsvectorlayer.h"
 #include "qgsfeature.h"
 
 #include "featurelayerpair.h"

@@ -13,12 +13,12 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.3
-import QtQuick.Layouts 1.0
-import QtQuick.Controls 2.2
-import QtQml 2.2
-import QtMultimedia 5.8
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtQml
+import QtMultimedia
+import Qt5Compat.GraphicalEffects
 
 Drawer {
   // Capture path
