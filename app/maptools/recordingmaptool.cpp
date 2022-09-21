@@ -1023,7 +1023,6 @@ FeatureLayerPair RecordingMapTool::commitChanges()
 
   if ( mActiveLayer->isEditable() )
   {
-
     // when new feature is added we don't know its ID and as a result can not
     // update active feature with actual data. To get the actual ID of the feature
     // we listen to the featureAdded signal and update active feature. When feature

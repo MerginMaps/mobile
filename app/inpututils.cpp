@@ -1899,6 +1899,16 @@ QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
       break;
   }
 
+  if ( QgsWkbTypes::hasZ( layer->wkbType() ) )
+  {
+    geometry.get()->addZValue( 0 );
+  }
+
+  if ( QgsWkbTypes::hasM( layer->wkbType() ) )
+  {
+    geometry.get()->addMValue( 0 );
+  }
+
   return geometry;
 }
 
