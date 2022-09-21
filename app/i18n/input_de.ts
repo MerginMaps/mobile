@@ -396,12 +396,12 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="155"/>
+        <location filename="../qml/form/FeatureForm.qml" line="157"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>Formular kann nicht gespeichert werden, es gibt Validierungsfehler</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="156"/>
+        <location filename="../qml/form/FeatureForm.qml" line="158"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Feature konnte nicht gespeichert werden, bitte überprüfen Sie alle Pflichtfelder</translation>
     </message>
@@ -409,17 +409,17 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>FeatureFormPage</name>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="76"/>
         <source>Edit Feature</source>
         <translation>Bearbeite Feature</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="76"/>
         <source>Feature</source>
         <translation>Feature</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="93"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="86"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
@@ -457,25 +457,36 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>FeatureToolbar</name>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="65"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="67"/>
         <source>Edit</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="87"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="89"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="103"/>
-        <location filename="../qml/form/FeatureToolbar.qml" line="141"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="106"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="146"/>
         <source>Edit geometry</source>
         <translation>Geometrie bearbeiten</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="120"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="123"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="159"/>
+        <source>Advanced</source>
+        <translation>Erweitert</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureToolbar.qml" line="174"/>
         <source>Split geometry</source>
         <translation>Geometrie aufteilen</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureToolbar.qml" line="192"/>
+        <source>Redraw geometry</source>
+        <translation>Geometrie neu zeichnen</translation>
     </message>
 </context>
 <context>
@@ -664,111 +675,121 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="182"/>
         <source>just now</source>
         <translation>gerade jetzt</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 minutes ago</source>
         <translation>vor %1 Minuten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 minute ago</source>
         <translation>vor %1 Minute</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 hours ago</source>
         <translation>vor %1 Stunden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 hour ago</source>
         <translation>vor %1 Stunde</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
         <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="201"/>
         <source>%1 days ago</source>
         <translation>vor %1 Tagen</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
         <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="201"/>
         <source>%1 day ago</source>
         <translation>vor %1 Tag</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="201"/>
+        <location filename="../inpututils.cpp" line="206"/>
         <source>%1 weeks ago</source>
         <translation>vor %1 Wochen</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="201"/>
+        <location filename="../inpututils.cpp" line="206"/>
         <source>%1 week ago</source>
         <translation>vor %1 Woche</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="206"/>
+        <location filename="../inpututils.cpp" line="211"/>
         <source>%1 months ago</source>
         <translation>vor %1 Monaten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="206"/>
+        <location filename="../inpututils.cpp" line="211"/>
         <source>%1 month ago</source>
         <translation>vor %1 Monat</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="216"/>
         <source>%1 years ago</source>
         <translation>vor %1 Jahren</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="216"/>
         <source>%1 year ago</source>
         <translation>vor %1 Jahr</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1378"/>
+        <location filename="../inpututils.cpp" line="1411"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>Bildschirmauflösung: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1379"/>
+        <location filename="../inpututils.cpp" line="1412"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>Bildschirm DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1380"/>
+        <location filename="../inpututils.cpp" line="1413"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>Bildschirmgröße: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1381"/>
+        <location filename="../inpututils.cpp" line="1414"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>Gemeldetes Gerätepixelverhältnis: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1382"/>
+        <location filename="../inpututils.cpp" line="1415"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>Berechnetes Gerätepixelverhältnis: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1383"/>
+        <location filename="../inpututils.cpp" line="1416"/>
         <source>used dp scale: %1</source>
         <translation>verwendete DP-Skala: %1</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="1926"/>
+        <source>You need to add at least %1 point(s) to every part.</source>
+        <translation>Sie müssen mindestens %1 Punkt(e) zu jedem Teil hinzufügen.</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="1930"/>
+        <source>You need to add at least %1 point(s).</source>
+        <translation>Sie müssen mindestens %1 Punkt(e) hinzufügen.</translation>
     </message>
 </context>
 <context>
@@ -940,57 +961,82 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="925"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1109"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS ist derzeit nicht verfügbar.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="312"/>
+        <location filename="../qml/map/MapWrapper.qml" line="314"/>
         <source>Successfully synchronized</source>
         <translation>Erfolgreich synchronisiert</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="326"/>
+        <location filename="../qml/map/MapWrapper.qml" line="328"/>
         <source>Up to date</source>
         <translation>Auf dem neuesten Stand</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="335"/>
+        <location filename="../qml/map/MapWrapper.qml" line="337"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Jemand anderes synchronisiert gerade, wir versuchen es später noch einmal</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="345"/>
+        <location filename="../qml/map/MapWrapper.qml" line="347"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>Es gab ein Problem bei der Synchronisation, wir werden es wieder versuchen. Klicken Sie, um mehr zu erfahren</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="363"/>
+        <location filename="../qml/map/MapWrapper.qml" line="365"/>
         <source>Splitting done successfully</source>
         <translation>Aufteilung erfolgreich durchgeführt</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="379"/>
+        <location filename="../qml/map/MapWrapper.qml" line="381"/>
         <source>Create line to split the selected feature</source>
         <translation>Linie erstellen, um das ausgewählte Feature zu teilen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="518"/>
+        <location filename="../qml/map/MapWrapper.qml" line="397"/>
+        <source>Select some point to start editing the geometry</source>
+        <translation>Wähle einen Punkt aus, um mit der Bearbeitung der Geometrie zu beginnen.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="413"/>
+        <source>Record new geometry for the feature</source>
+        <translation>Neue Geometrie für das Feature erfassen</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="552"/>
         <source>Details</source>
         <translation>Details</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="601"/>
+        <location filename="../qml/map/MapWrapper.qml" line="667"/>
+        <source>Discard the changes?</source>
+        <translation>Änderungen verwerfen?</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="670"/>
+        <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
+        <translation>Wenn Sie auf &apos;Ja&apos; klicken, werden Ihre Änderungen an der Geometrie verworfen. Wenn Sie die Änderungen stattdessen speichern möchten, klicken Sie auf &apos;Nein&apos; und dann auf &apos;Fertig&apos; in der Symbolleiste.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="674"/>
+        <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
+        <translation>Wenn Sie auf &apos;Ja&apos; klicken, wird Ihre neuen Geometrien verworfen und kein Feature gespeichert. Wenn Sie die Geometrie stattdessen speichern möchten, klicken Sie auf &apos;Nein&apos; und dann auf &apos;Fertig&apos; in der Symbolleiste.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="740"/>
         <source>Connecting to %1</source>
         <translation>Verbindet mit %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="615"/>
+        <location filename="../qml/map/MapWrapper.qml" line="754"/>
         <source>Connected, no position</source>
         <translation>Verbunden, keine Position</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="619"/>
+        <location filename="../qml/map/MapWrapper.qml" line="758"/>
         <source>Unknown accuracy</source>
         <translation>Unbekannte Genauigkeit</translation>
     </message>
@@ -1527,48 +1573,48 @@ Klicken Sie auf &quot;Ja&quot;, um es hochzuladen.</translation>
 <context>
     <name>RecordingToolbar</name>
     <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="69"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="72"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="92"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="95"/>
         <source>Undo</source>
         <translation>Rückgängig</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="107"/>
-        <source>Add Point</source>
-        <translation>Punkt hinzufügen</translation>
+        <location filename="../qml/map/RecordingToolbar.qml" line="112"/>
+        <source>Remove</source>
+        <translation>Entfernen</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="123"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="135"/>
+        <source>Add</source>
+        <translation>Hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/RecordingToolbar.qml" line="151"/>
+        <source>Release</source>
+        <translation>Freigabe</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/RecordingToolbar.qml" line="165"/>
         <source>Done</source>
         <translation>Erledigt</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="137"/>
-        <source>Cancel</source>
-        <translation>Abbrechen</translation>
     </message>
 </context>
 <context>
     <name>RecordingTools</name>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="51"/>
+        <location filename="../qml/map/RecordingTools.qml" line="54"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Geringe GPS-Positionsgenauigkeit (%1 m) Bitte sicherstellen, dass eine gute Sicht zum Himmel besteht.</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="132"/>
-        <location filename="../qml/map/RecordingTools.qml" line="207"/>
+        <location filename="../qml/map/RecordingTools.qml" line="208"/>
+        <location filename="../qml/map/RecordingTools.qml" line="302"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS derzeit nicht verfügbar.</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/RecordingTools.qml" line="175"/>
-        <source>You need to add at least %1 points.</source>
-        <translation>Sie müssen mindestens %1 Punkte hinzufügen.</translation>
     </message>
 </context>
 <context>
@@ -1917,48 +1963,48 @@ Klicken Sie auf &quot;Ja&quot;, um es hochzuladen.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="220"/>
-        <location filename="../qml/main.qml" line="277"/>
+        <location filename="../qml/main.qml" line="229"/>
+        <location filename="../qml/main.qml" line="286"/>
         <source>No Changes</source>
         <translation>Keine Änderungen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="251"/>
+        <location filename="../qml/main.qml" line="260"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS-Autocenter-Modus an</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="251"/>
+        <location filename="../qml/main.qml" line="260"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS-Autocenter-Modus aus</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="266"/>
+        <location filename="../qml/main.qml" line="275"/>
         <source>No editable layers found.</source>
         <translation>Keine zu bearbeitenden Layer gefunden!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="536"/>
+        <location filename="../qml/main.qml" line="550"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Abstecken ist deaktiviert, weil der Standort nicht verfügbar ist!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="557"/>
+        <location filename="../qml/main.qml" line="571"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Kommunikation mit Mergin fehlgeschlagen. %1 Versuchen Sie, Ihre Netzwerkverbindung zu verbessern.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="604"/>
+        <location filename="../qml/main.qml" line="618"/>
         <source>There were issues loading the project.</source>
         <translation>Es gab Probleme beim Laden des Projekts.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="635"/>
+        <location filename="../qml/main.qml" line="649"/>
         <source>Press back again to quit the app</source>
         <translation>Drücken Sie erneut auf &quot;Zurück&quot;, um die Anwendung zu beenden.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="482"/>
+        <location filename="../qml/main.qml" line="491"/>
         <source>PROJ Error</source>
         <translation>PROJ Fehler</translation>
     </message>
