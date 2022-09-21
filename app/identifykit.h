@@ -23,12 +23,11 @@
 #include "qgsmapsettings.h"
 #include "qgspoint.h"
 #include "qgsrendercontext.h"
-
+#include "qgsquickmapsettings.h"
 
 #include "featurelayerpair.h"
 
 class QgsMapLayer;
-class QgsQuickMapSettings;
 class QgsVectorLayer;
 
 /**

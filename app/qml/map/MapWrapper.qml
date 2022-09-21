@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
+import QtQuick
 
 import lc 1.0
 import QgsQuick 0.1 as QgsQuick
@@ -865,7 +865,7 @@ Item {
 
   Connections {
     target: mapCanvas.mapSettings
-    onExtentChanged: {
+    function onExtentChanged() {
       scaleBar.visible = true
     }
   }

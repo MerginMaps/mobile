@@ -29,10 +29,10 @@
 #include "merginprojectmetadata.h"
 #include "localprojectsmanager.h"
 #include "project.h"
+#include "merginsubscriptioninfo.h"
+#include "merginuserinfo.h"
+#include "merginuserauth.h"
 
-class MerginUserAuth;
-class MerginUserInfo;
-class MerginSubscriptionInfo;
 class Purchasing;
 
 struct ProjectDiff

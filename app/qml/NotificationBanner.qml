@@ -6,10 +6,10 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-import QtQuick 2.14
-import QtQuick.Layouts 1.14
-import QtGraphicalEffects 1.0
-import QtQuick.Controls 2.7
+import QtQuick
+import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
+import QtQuick.Controls
 
 import "."
 import "./components"

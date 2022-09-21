@@ -15,9 +15,9 @@
 
 #include "project.h"
 #include "merginapi.h"
+#include "synchronizationmanager.h"
 
 class LocalProjectsManager;
-class SynchronizationManager;
 
 /**
  * \brief The ProjectsModel class holds projects (both local and mergin). Model loads local projects from LocalProjectsManager that hold them

@@ -1087,8 +1087,8 @@ const QgsEditorWidgetSetup InputUtils::getEditorWidgetSetup( const QgsField &fie
   }
   else
   {
-    QVariantMap config;
-    config = config.unite( additionalArgs );
+    QMultiMap<QString, QVariant> config;
+    config = config.unite( QMultiMap( additionalArgs ) );
 
     if ( widgetType == QStringLiteral( "TextEdit" ) )
     {
@@ -1121,7 +1121,14 @@ const QgsEditorWidgetSetup InputUtils::getEditorWidgetSetup( const QgsField &fie
       config.insert( QStringLiteral( "AllowNULL" ), true );
     }
 
-    return QgsEditorWidgetSetup( widgetType, config );
+    QVariantMap cfg;
+    QList<QString> keys = config.uniqueKeys();
+    for ( int i = 0; i < keys.size(); i++ )
+    {
+      cfg.insert( keys.at( i ), config.value( keys.at( i ) ) );
+    }
+
+    return QgsEditorWidgetSetup( widgetType, cfg );
   }
 }
 

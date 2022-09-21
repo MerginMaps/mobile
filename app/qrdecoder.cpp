@@ -1,13 +1,18 @@
 #include "qrdecoder.h"
 
-#include <QtMultimedia/qvideoframe.h>
+#include <QDebug>
 #include <QImage>
+#include <QtMultimedia/qvideoframe.h>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
-#include <ZXing/ReadBarcode.h>
+#include <QOffscreenSurface>
 #include <iostream>
-#include <QDebug>
 
+#include <ZXing/ReadBarcode.h>
+
+/*
+ * zxing-cpp interface
+ */
 namespace ZXing
 {
   namespace Qt
@@ -16,16 +21,18 @@ namespace ZXing
     using ZXing::BarcodeFormat;
     using ZXing::BarcodeFormats;
     using ZXing::Binarizer;
+
     template <typename T, typename _ = decltype( ToString( T() ) )>
-    QDebug operator<<( QDebug dbg, const T &v )
+    QDebug operator << ( QDebug dbg, const T &v )
     {
       return dbg.noquote() << QString::fromStdString( ToString( v ) );
     }
 
+    // Result of the decode operation
     class Result : private ZXing::Result
     {
       public:
-        explicit Result( ZXing::Result &&r ) : ZXing::Result( std::move( r ) ) {}
+        explicit Result( ZXing::Result &&r ) : ZXing::Result( std::move( r ) ) { }
 
         using ZXing::Result::format;
         using ZXing::Result::isValid;
@@ -57,85 +64,60 @@ namespace ZXing
 
       auto exec = [&]( const QImage & img )
       {
-        return Result( ZXing::ReadBarcode( {img.bits(), img.width(), img.height(), ImgFmtFromQImg( img )}, hints ) );
+        return Result( ZXing::ReadBarcode( { img.bits(), img.width(), img.height(), ImgFmtFromQImg( img ) }, hints ) );
       };
-
       return ImgFmtFromQImg( img ) == ImageFormat::None ? exec( img.convertToFormat( QImage::Format_RGBX8888 ) ) : exec( img );
     }
-  } // namespace Qt
-} // namespace ZXing
-
+  } // Qt namespace
+} // ZXing namespace
 
 using namespace ZXing::Qt;
 
-std::ostream &operator<<( std::ostream &os, const std::vector<ZXing::ResultPoint> &points )
+std::ostream &operator << ( std::ostream &os, const std::vector< ZXing::ResultPoint > &points )
 {
   for ( const auto &p : points )
+  {
     os << int( p.x() + .5f ) << "x" << int( p.y() + .5f ) << " ";
+  }
+
   return os;
 }
 
-QRDecoder::QRDecoder( QObject *parent ) : QObject( parent )
-{
+static int mResolutionWidth = DEFAULT_RES_W;
+static int mResolutionHeight = DEFAULT_RES_H;
 
+QRDecoder::QRDecoder( QObject *parent )
+  : QObject( parent )
+{
 }
 
-void QRDecoder::setIsDecoding( bool isDecoding )
-{
-  if ( _isDecoding == isDecoding )
-  {
-    return;
-  }
-
-  _isDecoding = isDecoding;
-  emit isDecodingChanged( _isDecoding );
-}
-
-void QRDecoder::setVideoFrame( const QVideoFrame &videoFrame )
-{
-  _videoFrame = videoFrame;
-}
-
-bool QRDecoder::isDecoding() const
-{
-  return _isDecoding;
-}
-
-void QRDecoder::process( const QImage capturedImage )
+void QRDecoder::processImage( const QImage capturedImage )
 {
   setIsDecoding( true );
 
   const auto hints = DecodeHints()
-                     .setFormats( BarcodeFormat::QR_CODE | BarcodeFormat::DATA_MATRIX | BarcodeFormat::CODABAR |
-                                  BarcodeFormat::CODE_39 | BarcodeFormat::CODE_93 | BarcodeFormat::CODE_128 |
-                                  BarcodeFormat::EAN_8 | BarcodeFormat::EAN_13 )
+                     .setFormats( BarcodeFormat::QRCode | BarcodeFormat::DataMatrix | BarcodeFormat::Codabar |
+                                  BarcodeFormat::Code39 | BarcodeFormat::Code93 | BarcodeFormat::Code128 |
+                                  BarcodeFormat::EAN8 | BarcodeFormat::EAN13 )
                      .setTryHarder( true );
 
   const auto result = ReadBarcode( capturedImage, hints );
 
   if ( result.isValid() )
   {
-    emit capturedText( result.text() );
+    setCapturedString( result.text() );
   }
 
   setIsDecoding( false );
 }
 
-QVideoFrame QRDecoder::videoFrame() const
+QImage QRDecoder::videoFrameToImage( const QVideoFrame &videoFrame, const QRect &captureRect )
 {
-  return _videoFrame;
-}
+  auto handleType = videoFrame.handleType();
 
-QImage QRDecoder::videoFrameToImage( const QVideoFrame &videoFrame )
-{
-  if ( videoFrame.handleType() == QAbstractVideoBuffer::NoHandle )
+  if ( handleType == QVideoFrame::NoHandle )
   {
-    const QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat( videoFrame.pixelFormat() );
-    QImage image( videoFrame.bits(),
-                  videoFrame.width(),
-                  videoFrame.height(),
-                  videoFrame.bytesPerLine(),
-                  imageFormat );
+    QImage image = videoFrame.toImage();
 
     if ( image.isNull() )
     {
@@ -147,25 +129,51 @@ QImage QRDecoder::videoFrameToImage( const QVideoFrame &videoFrame )
       image = image.convertToFormat( QImage::Format_ARGB32 );
     }
 
-    return image;
-  }
-
-  if ( videoFrame.handleType() == QAbstractVideoBuffer::GLTextureHandle )
-  {
-    QImage image( videoFrame.width(), videoFrame.height(), QImage::Format_ARGB32 );
-    GLuint textureId = static_cast<GLuint>( videoFrame.handle().toInt() );
-    QOpenGLContext *ctx = QOpenGLContext::currentContext();
-    QOpenGLFunctions *f = ctx->functions();
-    GLuint fbo;
-    f->glGenFramebuffers( 1, &fbo );
-    GLint prevFbo;
-    f->glGetIntegerv( GL_FRAMEBUFFER_BINDING, &prevFbo );
-    f->glBindFramebuffer( GL_FRAMEBUFFER, fbo );
-    f->glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0 );
-    f->glReadPixels( 0, 0,  videoFrame.width(),  videoFrame.height(), GL_RGBA, GL_UNSIGNED_BYTE, image.bits() );
-    f->glBindFramebuffer( GL_FRAMEBUFFER, static_cast<GLuint>( prevFbo ) );
-    return image.rgbSwapped();
+    // QML videooutput has no mapNormalizedRectToItem method
+#ifdef Q_OS_ANDROID
+    return image.copy( mResolutionHeight / 4, mResolutionWidth / 4, mResolutionHeight / 2, mResolutionWidth / 2 );
+#else
+    return image.copy( captureRect );
+#endif
   }
 
   return QImage();
+}
+
+QString QRDecoder::capturedString() const
+{
+  return mCapturedString;
+}
+
+void QRDecoder::setCapturedString( const QString &capturedString )
+{
+  if ( mCapturedString == capturedString )
+  {
+    return;
+  }
+
+  mCapturedString = capturedString;
+  emit capturedStringChanged( mCapturedString );
+}
+
+bool QRDecoder::isDecoding() const
+{
+  return mIsDecoding;
+}
+
+void QRDecoder::setIsDecoding( bool isDecoding )
+{
+  if ( mIsDecoding == isDecoding )
+  {
+    return;
+  }
+
+  mIsDecoding = isDecoding;
+  emit isDecodingChanged( mIsDecoding );
+}
+
+void QRDecoder::setResolution( const int &width, const int &height )
+{
+  mResolutionWidth = width;
+  mResolutionHeight = height;
 }

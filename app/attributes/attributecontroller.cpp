@@ -15,14 +15,13 @@
 
 #include "attributecontroller.h"
 #include "attributeformmodel.h"
-#include "attributeformproxymodel.h"
 #include "attributetabmodel.h"
-#include "attributetabproxymodel.h"
-#include "rememberattributescontroller.h"
 #include "fieldvalidator.h"
 
 #include <QDebug>
 #include <QSet>
+
+#include "qgsproject.h"
 #include "qgsvectorlayer.h"
 #include "qgsattributeeditorfield.h"
 #include "qgsattributeeditorrelation.h"

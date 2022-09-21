@@ -7,11 +7,11 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtGraphicalEffects 1.14
-import QtQuick.Layouts 1.14
-import QtQuick.Dialogs 1.3 as Dialogs
+import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
+import QtQuick.Layouts
+import QtQuick.Dialogs
 import lc 1.0
 import "."  // import InputStyle singleton
 import "./components"
@@ -375,7 +375,7 @@ Page {
       }
     }
 
-    Dialogs.MessageDialog {
+    MessageDialog {
       id: accountDeletionFailedDialog
 
       property string messageText
@@ -383,8 +383,7 @@ Page {
       visible: false
       title: qsTr( "Failed to remove account" )
       text: messageText
-      icon: Dialogs.StandardIcon.Warning
-      standardButtons: Dialogs.StandardButton.Close
+      buttons: MessageDialog.Close
       onRejected: {
         close()
         accountDeleted()
@@ -404,13 +403,13 @@ Page {
     Connections {
       target: __merginApi
 
-      onUserIsAnOrgOwnerError: {
+      function onUserIsAnOrgOwnerError() {
         accountDeleteIndicator.running = false
         accountDeletionFailedDialog.messageText = qsTr("Can not close account because user is the only owner of organisation.\n\n" +
                                                        "Please go to the Mergin Maps <a href='%1'>dashboard</a> to remove it manually.".arg(__merginApi.apiRoot()))
         accountDeletionFailedDialog.open()
       }
-      onAccountDeleted: {
+      function onAccountDeleted( result ) {
         accountDeleteIndicator.running = false
         if ( result ) {
             accountDeleted()

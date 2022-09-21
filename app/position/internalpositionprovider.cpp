@@ -23,8 +23,7 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent )
     mGpsPositionSource->setUpdateInterval( 1000 );
 
     connect( mGpsPositionSource.get(), &QGeoPositionInfoSource::positionUpdated, this, &InternalPositionProvider::parsePositionUpdate );
-    connect( mGpsPositionSource.get(), QOverload<QGeoPositionInfoSource::Error>::of( &QGeoPositionInfoSource::error ), this,
-             [ = ]( QGeoPositionInfoSource::Error positioningError )
+    connect( mGpsPositionSource.get(), &QGeoPositionInfoSource::errorOccurred, this, [ = ]( QGeoPositionInfoSource::Error positioningError )
     {
       CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Error occured (position source), code: %1" ).arg( positioningError ) );
     } );
@@ -49,14 +48,16 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent )
   {
     connect( mGpsSatellitesSource.get(), &QGeoSatelliteInfoSource::satellitesInViewUpdated, this, &InternalPositionProvider::parseVisibleSatellitesUpdate );
     connect( mGpsSatellitesSource.get(), &QGeoSatelliteInfoSource::satellitesInUseUpdated, this, &InternalPositionProvider::parseUsedSatellitesUpdate );
-    connect( mGpsSatellitesSource.get(), QOverload<QGeoSatelliteInfoSource::Error>::of( &QGeoSatelliteInfoSource::error ), this,
-             [ = ]( QGeoSatelliteInfoSource::Error satelliteError )
+    connect( mGpsSatellitesSource.get(), &QGeoSatelliteInfoSource::errorOccurred, this, [ = ]( QGeoSatelliteInfoSource::Error satelliteError )
     {
-      CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Error occured (satellites source), code: %1" ).arg( satelliteError ) );
-    } );
-    connect( mGpsSatellitesSource.get(), &QGeoSatelliteInfoSource::requestTimeout, this, [ = ]()
-    {
-      CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Stopped receiving satellites data" ) );
+      if ( satelliteError == QGeoSatelliteInfoSource::UpdateTimeoutError )
+      {
+        CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Stopped receiving satellites data" ) );
+      }
+      else
+      {
+        CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Error occured (satellites source), code: %1" ).arg( satelliteError ) );
+      }
     } );
 
     mSatelliteSourceValid = true;

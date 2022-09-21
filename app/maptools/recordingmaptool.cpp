@@ -9,7 +9,7 @@
 
 #include "recordingmaptool.h"
 
-#include "qgsvectorlayer.h"
+
 #include "qgspolygon.h"
 #include "qgsvectorlayerutils.h"
 #include "qgsmultipoint.h"

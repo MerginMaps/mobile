@@ -23,7 +23,6 @@
 #include "activeproject.h"
 #include "inpututils.h"
 #include "coreutils.h"
-#include "autosynccontroller.h"
 
 const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 

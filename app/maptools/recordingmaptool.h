@@ -17,7 +17,8 @@
 
 #include "qgsvertexid.h"
 #include "qgsgeometry.h"
-
+#include "qgsvectorlayer.h"
+#include "position/positionkit.h"
 #include "inpututils.h"
 #include "variablesmanager.h"
 
