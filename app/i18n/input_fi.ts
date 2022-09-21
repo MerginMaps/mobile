@@ -398,12 +398,12 @@ Poistaaksesi tilisi anna käyttäjänimesi alle ja klikkaa Yes.</translation>
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="155"/>
+        <location filename="../qml/form/FeatureForm.qml" line="157"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>Lomaketta ei voi tallentaa, siinä on validointivirheitä</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="156"/>
+        <location filename="../qml/form/FeatureForm.qml" line="158"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Ominaisuutta ei voitu tallentaa, ole hyvä ja tarkista kaikki pakolliset tiedot</translation>
     </message>
@@ -411,17 +411,17 @@ Poistaaksesi tilisi anna käyttäjänimesi alle ja klikkaa Yes.</translation>
 <context>
     <name>FeatureFormPage</name>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="76"/>
         <source>Edit Feature</source>
         <translation>Muokkaa ominaisuutta</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="76"/>
         <source>Feature</source>
         <translation>Ominaisuus</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="93"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="86"/>
         <source>Save</source>
         <translation>Tallenna</translation>
     </message>
@@ -459,25 +459,36 @@ Poistaaksesi tilisi anna käyttäjänimesi alle ja klikkaa Yes.</translation>
 <context>
     <name>FeatureToolbar</name>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="65"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="67"/>
         <source>Edit</source>
         <translation>Muokkaa</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="87"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="89"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="103"/>
-        <location filename="../qml/form/FeatureToolbar.qml" line="141"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="106"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="146"/>
         <source>Edit geometry</source>
         <translation>Muokkaa geometriaa</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="120"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="123"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="159"/>
+        <source>Advanced</source>
+        <translation>Edistynyt</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureToolbar.qml" line="174"/>
         <source>Split geometry</source>
         <translation>Jaa geometria</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureToolbar.qml" line="192"/>
+        <source>Redraw geometry</source>
+        <translation>Piirrä geometria uudelleen</translation>
     </message>
 </context>
 <context>
@@ -666,111 +677,121 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="182"/>
         <source>just now</source>
         <translation>juuri nyt</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 minutes ago</source>
         <translation>%1 minuuttia sitten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 minute ago</source>
         <translation>%1 minuutti sitten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 hours ago</source>
         <translation>%1 tuntia sitten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 hour ago</source>
         <translation>%1 tunti sitten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
         <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="201"/>
         <source>%1 days ago</source>
         <translation>%1 päivää sitten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
         <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="201"/>
         <source>%1 day ago</source>
         <translation>%1 päivä sitten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="201"/>
+        <location filename="../inpututils.cpp" line="206"/>
         <source>%1 weeks ago</source>
         <translation>%1 viikkoa sitten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="201"/>
+        <location filename="../inpututils.cpp" line="206"/>
         <source>%1 week ago</source>
         <translation>%1 viikko sitten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="206"/>
+        <location filename="../inpututils.cpp" line="211"/>
         <source>%1 months ago</source>
         <translation>%1 kuukautta sitten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="206"/>
+        <location filename="../inpututils.cpp" line="211"/>
         <source>%1 month ago</source>
         <translation>%1 kuukausi sitten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="216"/>
         <source>%1 years ago</source>
         <translation>%1 vuotta sitten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="216"/>
         <source>%1 year ago</source>
         <translation>%1 vuosi sitten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1378"/>
+        <location filename="../inpututils.cpp" line="1411"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>näytön resolutio: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1379"/>
+        <location filename="../inpututils.cpp" line="1412"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>näytön DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1380"/>
+        <location filename="../inpututils.cpp" line="1413"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>näytön koko: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1381"/>
+        <location filename="../inpututils.cpp" line="1414"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>raportoitu laitteen pikselisuhde: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1382"/>
+        <location filename="../inpututils.cpp" line="1415"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>raportoitu laitteen pikselisuhde: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1383"/>
+        <location filename="../inpututils.cpp" line="1416"/>
         <source>used dp scale: %1</source>
         <translation>käytetty dp mittakaava: %1</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="1926"/>
+        <source>You need to add at least %1 point(s) to every part.</source>
+        <translation>Sinun tulee lisätä vähintään %1 piste(ttä) jokaiseen osaan.</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="1930"/>
+        <source>You need to add at least %1 point(s).</source>
+        <translation>Sinun tulee lisätä vähintään %1 piste(ttä).</translation>
     </message>
 </context>
 <context>
@@ -942,57 +963,82 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="925"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1109"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS ei käytettävissä nyt.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="312"/>
+        <location filename="../qml/map/MapWrapper.qml" line="314"/>
         <source>Successfully synchronized</source>
         <translation>Synkronoitu onnistuneesti</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="326"/>
+        <location filename="../qml/map/MapWrapper.qml" line="328"/>
         <source>Up to date</source>
         <translation>Päivitetty</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="335"/>
+        <location filename="../qml/map/MapWrapper.qml" line="337"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Joku toinen synkronoi parhaillaan, yritämme uudelleen myöhemmin</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="345"/>
+        <location filename="../qml/map/MapWrapper.qml" line="347"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>Synkronoinnissa tapahtui virhe, yritämme uudelleen. Klikkaa tietääksesi lisää</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="363"/>
+        <location filename="../qml/map/MapWrapper.qml" line="365"/>
         <source>Splitting done successfully</source>
         <translation>Jako suoritettu onnistuneesti</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="379"/>
+        <location filename="../qml/map/MapWrapper.qml" line="381"/>
         <source>Create line to split the selected feature</source>
         <translation>Luo viiva jakaaksesi valitut ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="518"/>
+        <location filename="../qml/map/MapWrapper.qml" line="397"/>
+        <source>Select some point to start editing the geometry</source>
+        <translation>Valitse jokin piste geometrian muokkaamiseksi.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="413"/>
+        <source>Record new geometry for the feature</source>
+        <translation>Merkitse uusi uusi geometria ominaisuudelle</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="552"/>
         <source>Details</source>
         <translation>Yksityiskohdat</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="601"/>
+        <location filename="../qml/map/MapWrapper.qml" line="667"/>
+        <source>Discard the changes?</source>
+        <translation>Hylkää muutokset?</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="670"/>
+        <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
+        <translation>Klikkaa ‘Yes’ hylkää muutokset geometriaan. Jos haluat sen sijaan tallentaa muutokset, napsauta ‘No’ ja sitten ‘Done’ työkalupalkissa.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="674"/>
+        <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
+        <translation>Klikkaa ‘Yes’ hylkää muutokset geometriaan eikä ominaisuutta tallenneta. Jos haluat sen sijaan tallentaa muutokset, napsauta ‘No’ ja sitten ‘Done’ työkalupalkissa.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="740"/>
         <source>Connecting to %1</source>
         <translation>Yhdistetään %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="615"/>
+        <location filename="../qml/map/MapWrapper.qml" line="754"/>
         <source>Connected, no position</source>
         <translation>Yhdistetty, ei sijaintia</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="619"/>
+        <location filename="../qml/map/MapWrapper.qml" line="758"/>
         <source>Unknown accuracy</source>
         <translation>Tuntematon tarkkuus</translation>
     </message>
@@ -1535,48 +1581,48 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
 <context>
     <name>RecordingToolbar</name>
     <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="69"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="72"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="92"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="95"/>
         <source>Undo</source>
         <translation>Peruuta</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="107"/>
-        <source>Add Point</source>
-        <translation>Lisää piste</translation>
+        <location filename="../qml/map/RecordingToolbar.qml" line="112"/>
+        <source>Remove</source>
+        <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="123"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="135"/>
+        <source>Add</source>
+        <translation>Lisää</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/RecordingToolbar.qml" line="151"/>
+        <source>Release</source>
+        <translation>Julkaisu</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/RecordingToolbar.qml" line="165"/>
         <source>Done</source>
         <translation>Valmis</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="137"/>
-        <source>Cancel</source>
-        <translation>Peruuta</translation>
     </message>
 </context>
 <context>
     <name>RecordingTools</name>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="51"/>
+        <location filename="../qml/map/RecordingTools.qml" line="54"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Heikko GPS sijainnin tarkkuus (%1 m)&lt;br&gt;&lt;br&gt;Ole ystävällinen ja varmista hyvä näkyvyys taivaalle.</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="132"/>
-        <location filename="../qml/map/RecordingTools.qml" line="207"/>
+        <location filename="../qml/map/RecordingTools.qml" line="208"/>
+        <location filename="../qml/map/RecordingTools.qml" line="302"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS ei ole hetkellisesti käytettävissä.</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/RecordingTools.qml" line="175"/>
-        <source>You need to add at least %1 points.</source>
-        <translation>Sinun tulee lisätä vähintäin %1 pistettä.</translation>
     </message>
 </context>
 <context>
@@ -1925,48 +1971,48 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="220"/>
-        <location filename="../qml/main.qml" line="277"/>
+        <location filename="../qml/main.qml" line="229"/>
+        <location filename="../qml/main.qml" line="286"/>
         <source>No Changes</source>
         <translation>Ei muutoksia</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="251"/>
+        <location filename="../qml/main.qml" line="260"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS automaattinen keskitys päälle</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="251"/>
+        <location filename="../qml/main.qml" line="260"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS automaattinen keskitys pois päältä</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="266"/>
+        <location filename="../qml/main.qml" line="275"/>
         <source>No editable layers found.</source>
         <translation>Muokattavia tasoja ei löytynyt.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="536"/>
+        <location filename="../qml/main.qml" line="550"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Silmälläpito on poistettu käytöstä, koska sijainti ei ole saatavilla!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="557"/>
+        <location filename="../qml/main.qml" line="571"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Yhteys Merginin kanssa epäonnistui.%1Yritä parantaa verkkoyhteyttäsi.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="604"/>
+        <location filename="../qml/main.qml" line="618"/>
         <source>There were issues loading the project.</source>
         <translation>Ongelmia ladattaessa projektia.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="635"/>
+        <location filename="../qml/main.qml" line="649"/>
         <source>Press back again to quit the app</source>
         <translation>Paina Takaisin uudestaan lopettaaksesi appsin.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="482"/>
+        <location filename="../qml/main.qml" line="491"/>
         <source>PROJ Error</source>
         <translation>PROJ virhe</translation>
     </message>
