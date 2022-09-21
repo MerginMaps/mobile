@@ -15,9 +15,9 @@ on:
 env:
   CCACHE_DIR: ~/.ccache
   INPUT_SDK_VERSION: ubuntu-2204-20220809-80
-  QT_VERSION: '5.14.2'
-  CACHE_VERSION: 5
-
+  QT_VERSION: '6.3.2'
+  CACHE_VERSION: 0
+      
 concurrency:
   group: ci-${{github.ref}}-linux
   cancel-in-progress: true
@@ -35,30 +35,24 @@ jobs:
       - name: Install Build Dependencies
         run: |
             sudo apt-get update -y
-            sudo apt-get install libcurl4-gnutls-dev
-            sudo apt-get install -y bison ca-certificates ccache cmake cmake-curses-gui dh-python expect flex flip gdal-bin \
-                            git graphviz libexiv2-dev libexpat1-dev libfcgi-dev libgdal-dev libgeos-dev libgeos++-dev \
-                            libgsl-dev libpq-dev libproj-dev libprotobuf-dev \
-                            libspatialindex-dev libspatialite-dev libsqlite3-dev libsqlite3-mod-spatialite libyaml-tiny-perl \
+            sudo apt-get install libcurl4-gnutls-dev                        
+            sudo apt-get install -y bison ca-certificates ccache cmake cmake-curses-gui dh-python expect flex flip \
+                            git graphviz libexiv2-dev libexpat1-dev libfcgi-dev libgeos-dev \
+                            libgsl-dev libfreexl-dev libpq-dev libprotobuf-dev \
+                            libspatialindex-dev libsqlite3-dev libyaml-tiny-perl \
                             libzip-dev libzstd-dev lighttpd locales ninja-build \
                             pkg-config poppler-utils protobuf-compiler python3-all-dev \
                             spawn-fcgi xauth xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable xvfb
-
-      - name: Cache Qt
-        id: cache-qt
-        uses: pat-s/always-upload-cache@v2.1.5
-        with:
-          path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-${{ env.CACHE_VERSION }}
-
+                            
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ env.QT_VERSION }}
           setup-python: 'false'
-          py7zrversion: '==0.18.1'
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning'
           dir: ${{ github.workspace }}
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          cache: true
+          cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-lnx
 
       - name: Extract Mergin API_KEY
         env:

@@ -20,13 +20,15 @@ concurrency:
 jobs:
   win64_build:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: windows-2022
+    runs-on: windows-2019
     
     env:
-      QT_VERSION: 5.14.2
+      QT_VERSION: '6.3.2'
       INPUT_SDK_VERSION: win64-20220809-81
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
-      CACHE_VERSION: 3
+      CACHE_VERSION: 0
+      VS_VERSION: "2019"
+      QT_ARCH: "win64_msvc2019_64"
       
     steps:
       - name: Checkout Input
@@ -84,20 +86,16 @@ jobs:
             build-win64-ccache-${{ github.ref }}-
             build-win64-ccache-refs/heads/master-
           
-      - name: Cache Qt
-        id: cache-qt
-        uses: pat-s/always-upload-cache@v2.1.5
-        with:
-          path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-${{ env.QT_VERSION }}-win64
-
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ env.QT_VERSION }}
           target: desktop
+          arch: ${{ env.QT_ARCH }}
           dir: ${{ github.workspace }}
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning'
+          cache: true
+          cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-win
  
        # Input SDK
       - name: Cache Input-SDK
@@ -138,6 +136,8 @@ jobs:
       
       - name: Developer Command Prompt for Microsoft Visual C++
         uses: ilammy/msvc-dev-cmd@v1
+        with:
+          vsversion: ${{ env.VS_VERSION }}
         
       - name: Build Input
         shell: cmd
@@ -167,7 +167,7 @@ jobs:
             set INPUT_SOURCE_DIR="%GITHUB_WORKSPACE%\input"
             set PACKAGE_DIR=C:\input-package
             set INPUT_SDK_DIR=%GITHUB_WORKSPACE%\input-sdk
-            set Qt5_Dir=%GITHUB_WORKSPACE%\Qt\%QT_VERSION%\msvc2017_64
+            set Qt6_Dir=%GITHUB_WORKSPACE%\Qt\%QT_VERSION%\%QT_ARCH%
             %GITHUB_WORKSPACE%\input\scripts\package_win.cmd
             dir C:\input-package\stage
             

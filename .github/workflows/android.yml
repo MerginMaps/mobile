@@ -21,17 +21,19 @@ jobs:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-11
     env:
-      QT_VERSION: '5.14.2'
+      QT_VERSION: '6.3.2'
       ANDROIDAPI: 24
       ANDROID_NDK_PLATFORM: android-24
-      NDK_VERSION: r21
+      NDK_VERSION: r22
+      NDK_VERSION_FULL: r22b
+      JDK_VERSION: 1.8
       SDK_PLATFORM: android-30
-      SDK_BUILD_TOOLS: 28.0.3
-      INPUT_SDK_VERSION: android-macOS-20220810-90
+      SDK_BUILD_TOOLS: 31.0.0
+      INPUT_SDK_VERSION: android-macOS-20220810-90 ### <<< TODO!
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
-      CACHE_VERSION: 4
+      CACHE_VERSION: 0
 
     steps:
       - uses: actions/checkout@v2
@@ -76,7 +78,9 @@ jobs:
           echo "/usr/local/opt/bison/bin" >> $GITHUB_PATH
           brew install gnupg
           brew install openssl@1.1
-
+          pip3 install -U pip
+          pip3 install aqtinstall
+          
           if  [[ ${{ github.ref }} == refs/tags/* ]]
           then
               export GIT_TAG="${GITHUB_REF//refs\/tags\//}"
@@ -90,22 +94,51 @@ jobs:
           echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
           echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
 
-      # Qt
       - name: Cache Qt
         id: cache-qt
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-android-${{ env.CACHE_VERSION }}
-
+          key: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-android
+          
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        if: steps.cache-qt.outputs.cache-hit != 'true'
+        run: |
+          aqt install-qt \
+            mac android ${{ env.QT_VERSION }} android_arm64_v8a \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -O ${{ github.workspace }}/Qt
+            
+          aqt install-qt \
+            mac android ${{ env.QT_VERSION }} android_armv7 \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -O ${{ github.workspace }}/Qt
+        
+          aqt install-qt \
+            mac desktop ${{ env.QT_VERSION }} \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -O ${{ github.workspace }}/Qt
+          
+          ls -la ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
+          
+       # Android SDK & NDK
+      - uses: nttld/setup-ndk@v1
+        id: setup-ndk
         with:
-          version: ${{ env.QT_VERSION }}
-          target: android
-          arch: android
-          dir: ${{ github.workspace }}
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          ndk-version: ${{ env.NDK_VERSION_FULL }}
+          add-to-path: true
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+         java-version: ${{ env.JDK_VERSION }}
+
+      - name: Setup Android SDK
+        uses: malinskiy/action-android/install-sdk@release/0.1.2
+
+      - name: Install Android Tools
+        run: |
+          sdkmanager --licenses && sdkmanager --verbose "platforms;${SDK_PLATFORM}" "build-tools;${SDK_BUILD_TOOLS}" tools platform-tools
 
       # Input SDK
       - name: Cache Input-SDK
@@ -113,7 +146,7 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
@@ -150,25 +183,6 @@ jobs:
            -k $INPUTKEYSTORE_DECRYPT_KEY \
            -md md5
 
-       # Android SDK & NDK
-      - uses: nttld/setup-ndk@v1
-        id: setup-ndk
-        with:
-          ndk-version: r21e
-          add-to-path: true
-
-      - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-         java-version: 1.8
-
-      - name: Setup Android SDK
-        uses: malinskiy/action-android/install-sdk@release/0.1.2
-
-      - name: Install Android Tools
-        run: |
-          sdkmanager --licenses && sdkmanager --verbose "platforms;${SDK_PLATFORM}" "build-tools;${SDK_BUILD_TOOLS}" tools platform-tools
-
       # Build Input App
       - name: Export app/config.pri
         run: |
@@ -194,7 +208,7 @@ jobs:
           ARCH: armeabi-v7a
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
-          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
+          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_armv7
           STAGE_PATH: ${{ github.workspace }}/input-sdk/android/stage/armeabi-v7a
           SOURCE_DIR: ${{ github.workspace }}
 
@@ -208,7 +222,7 @@ jobs:
           ARCH: arm64-v8a
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
-          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
+          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a
           SOURCE_DIR: ${{ github.workspace }}
 
         run: |
@@ -242,7 +256,7 @@ jobs:
           ARCH: 'armeabi-v7a arm64-v8a'
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
-          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android
+          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a
           SOURCE_DIR: ${{ github.workspace }}
 
         run: |
