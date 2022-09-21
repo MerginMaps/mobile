@@ -29,7 +29,7 @@ jobs:
       JDK_VERSION: 1.8
       SDK_PLATFORM: android-30
       SDK_BUILD_TOOLS: 31.0.0
-      INPUT_SDK_VERSION: android-macOS-20220810-90 ### <<< TODO!
+      INPUT_SDK_VERSION: android-macOS-20220921-109
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
