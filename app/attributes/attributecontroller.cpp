@@ -454,18 +454,15 @@ void AttributeController::updateOnFeatureChange()
                                           rememberedValue
                                         );
         if ( shouldUseRememberedValue )
+        {
           mFeatureLayerPair.featureRef().setAttribute( fieldIndex, rememberedValue );
+        }
       }
     }
     ++formItemsIterator;
   }
 
   recalculateDerivedItems( false, isNewFeature() );
-}
-
-bool AttributeController::isNewFeature() const
-{
-  return FID_IS_NULL( mFeatureLayerPair.feature().id() );
 }
 
 void AttributeController::acquireId()
@@ -804,6 +801,48 @@ bool AttributeController::deleteFeature()
   return rv;
 }
 
+bool AttributeController::save()
+{
+  if ( !mFeatureLayerPair.layer() )
+    return false;
+
+  if ( mIsNewFeature && FID_IS_NULL( mFeatureLayerPair.feature().id() ) )
+  {
+    // new feature without valid ID
+    startEditing();
+    QgsFeature feat = mFeatureLayerPair.feature();
+    if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
+    {
+      QgsMessageLog::logMessage( tr( "Feature could not be added" ),
+                                 QStringLiteral( "Input" ),
+                                 Qgis::Critical );
+
+    }
+    connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
+    if ( commit() )
+    {
+      emit changesCommited();
+    }
+    else
+    {
+      emit changesRolledback();
+    }
+    disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
+  }
+  else
+  {
+    emit changesCommited();
+  }
+
+  // feature already commited and has valid id
+  if ( mRememberAttributesController )
+  {
+    mRememberAttributesController->storeFeature( mFeatureLayerPair );
+  }
+
+  return true;
+}
+/*
 bool AttributeController::create()
 {
   if ( !mFeatureLayerPair.layer() )
@@ -828,7 +867,6 @@ bool AttributeController::create()
     emit changesRolledback();
   }
   disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
-
 
   if ( mRememberAttributesController )
   {
@@ -876,6 +914,7 @@ bool AttributeController::save()
   }
   return rv;
 }
+*/
 
 bool AttributeController::startEditing()
 {
@@ -1139,4 +1178,17 @@ void AttributeController::onFeatureAdded( QgsFeatureId newFeatureId )
   QgsFeature f = mFeatureLayerPair.layer()->getFeature( newFeatureId );
   setFeatureLayerPair( FeatureLayerPair( f, mFeatureLayerPair.layer() ) );
   emit featureIdChanged();
+}
+
+bool AttributeController::isNewFeature() const
+{
+  return mIsNewFeature;
+}
+
+void AttributeController::setIsNewFeature( bool newIsNewFeature )
+{
+  if ( mIsNewFeature == newIsNewFeature )
+    return;
+  mIsNewFeature = newIsNewFeature;
+  emit isNewFeatureChanged( mIsNewFeature );
 }

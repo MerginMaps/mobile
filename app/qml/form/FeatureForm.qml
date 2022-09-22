@@ -162,14 +162,17 @@ Item {
     }
 
     parent.focus = true
+    controller.save()
 
-    if ( __inputUtils.isFeatureIdValid( controller.featureLayerPair.feature.id ) ) {
+/*
+    if ( form.state != "add" ) {
       controller.save()
     }
     else
     {
       controller.create()
     }
+*/
   }
 
   function cancel() {

@@ -137,6 +137,7 @@ Item {
 
         controller: AttributeController {
           /*required*/ variablesManager: __variablesManager
+          isNewFeature: root.formState === "add"
           rememberAttributesController: RememberAttributesController {
             rememberValuesAllowed: __appSettings.reuseLastEnteredValues
           }

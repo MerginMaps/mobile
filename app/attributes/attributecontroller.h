@@ -89,6 +89,10 @@ class  AttributeController : public QObject
      */
     Q_PROPERTY( QgsRelation linkedRelation READ linkedRelation WRITE setLinkedRelation NOTIFY linkedRelationChanged )
 
+    //! Returns TRUE if this is newly create feature
+    Q_PROPERTY( bool isNewFeature READ isNewFeature WRITE setIsNewFeature NOTIFY isNewFeatureChanged )
+
+
   public:
     AttributeController( QObject *parent = nullptr );
     ~AttributeController() override;
@@ -111,9 +115,7 @@ class  AttributeController : public QObject
     AttributeFormProxyModel *attributeFormProxyModelForTab( int tabRow ) const;
 
     Q_INVOKABLE bool deleteFeature();
-    Q_INVOKABLE bool create();
     Q_INVOKABLE bool save();
-    Q_INVOKABLE bool isNewFeature() const;
     Q_INVOKABLE void acquireId();
 
     int tabCount() const;
@@ -146,6 +148,9 @@ class  AttributeController : public QObject
     const QgsRelation &linkedRelation() const;
     void setLinkedRelation( const QgsRelation &newLinkedRelation );
 
+    bool isNewFeature() const;
+    void setIsNewFeature( bool newIsNewFeature );
+
   public slots:
     void onFeatureAdded( QgsFeatureId newFeatureId );
 
@@ -159,6 +164,7 @@ class  AttributeController : public QObject
     void hasValidationErrorsChanged();
     void parentControllerChanged();
     void linkedRelationChanged();
+    void isNewFeatureChanged( bool isNewFeature );
 
     void formDataChanged( QUuid uuid, QVector<int> roles = QVector<int>() );
     void tabDataChanged( int id );
@@ -221,6 +227,7 @@ class  AttributeController : public QObject
     bool mHasValidationErrors = false;
     bool mHasAnyChanges = false;
     bool mHasTabs = false;
+    bool mIsNewFeature = false;
 
     FeatureLayerPair mFeatureLayerPair;
     std::unique_ptr<AttributeTabProxyModel> mAttributeTabProxyModel;
