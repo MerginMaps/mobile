@@ -116,8 +116,6 @@ Item {
    */
   property AttributeController controller
 
-  property var oldFeatureLayerPair: null
-
   /**
    * View for extra components like value relation page, relations page, etc.
    */
@@ -175,12 +173,8 @@ Item {
       form.controller.deleteFeature()
     }
 
-    // restore previous feature state
-    if ( form.oldFeatureLayerPair )
-    {
-      __inputUtils.updateFeature( form.oldFeatureLayerPair )
-      form.oldFeatureLayerPair = null
-    }
+    // rollback all changes if the layer is still editable
+    form.controller.rollback()
 
     canceled()
   }
@@ -637,6 +631,6 @@ Item {
   Connections {
     target: form.controller
     onChangesCommited: form.saved()
-    onChangesRolledback: form.editingFailed()
+    onCommitFailed: form.editingFailed()
   }
 }

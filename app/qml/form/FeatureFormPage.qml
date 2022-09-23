@@ -27,9 +27,9 @@ Item {
   property string formState
 
   signal close()
-  signal editGeometryClicked()
+  signal editGeometryClicked( var pair )
   signal splitGeometryClicked()
-  signal redrawGeometryClicked()
+  signal redrawGeometryClicked( var pair )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentController, var relation )
 
@@ -137,7 +137,6 @@ Item {
 
         controller: AttributeController {
           /*required*/ variablesManager: __variablesManager
-          isNewFeature: root.formState === "add"
           rememberAttributesController: RememberAttributesController {
             rememberValuesAllowed: __appSettings.reuseLastEnteredValues
           }
@@ -185,12 +184,9 @@ Item {
 
         onEditClicked: root.formState = "edit"
         onDeleteClicked: deleteDialog.visible = true
-        onEditGeometryClicked: {
-          featureForm.oldFeatureLayerPair = root.featureLayerPair
-          root.editGeometryClicked()
-        }
+        onEditGeometryClicked: root.editGeometryClicked( featureForm.controller.featureLayerPair )
         onSplitGeometryClicked: root.splitGeometryClicked()
-        onRedrawGeometryClicked: root.redrawGeometryClicked()
+        onRedrawGeometryClicked: root.redrawGeometryClicked( featureForm.controller.featureLayerPair )
       }
 
       MessageDialog {

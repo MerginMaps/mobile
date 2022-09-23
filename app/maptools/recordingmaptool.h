@@ -160,9 +160,9 @@ class RecordingMapTool : public AbstractMapTool
      */
     Q_INVOKABLE void releaseVertex( const QgsPoint &point );
 
-    Q_INVOKABLE FeatureLayerPair commitChanges();
+    Q_INVOKABLE FeatureLayerPair getFeatureLayerPair();
 
-    Q_INVOKABLE void rollbackChanges();
+    Q_INVOKABLE void discardChanges();
 
     /**
      * Reverts last change from the layer undo stack.
@@ -354,6 +354,8 @@ class RecordingMapTool : public AbstractMapTool
     bool mCanUndo = false;
     QgsFeature mActiveFeature;
     VariablesManager *mVariablesManager = nullptr; // not owned
+
+    int mMinUndoStackIndex = 0; // We can not undo more than this index
 };
 
 #endif // RECORDINGMAPTOOL_H

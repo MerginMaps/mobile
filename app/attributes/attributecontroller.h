@@ -89,9 +89,6 @@ class  AttributeController : public QObject
      */
     Q_PROPERTY( QgsRelation linkedRelation READ linkedRelation WRITE setLinkedRelation NOTIFY linkedRelationChanged )
 
-    //! Returns TRUE if creating a new feature, FALSE if changing existing feature
-    Q_PROPERTY( bool addingNewFeature READ addingNewFeature WRITE setAddingNewFeature NOTIFY addingNewFeatureChanged )
-
 
   public:
     AttributeController( QObject *parent = nullptr );
@@ -115,6 +112,7 @@ class  AttributeController : public QObject
     AttributeFormProxyModel *attributeFormProxyModelForTab( int tabRow ) const;
 
     Q_INVOKABLE bool deleteFeature();
+    Q_INVOKABLE bool rollback();
     Q_INVOKABLE bool save();
     Q_INVOKABLE void acquireId();
 
@@ -148,9 +146,6 @@ class  AttributeController : public QObject
     const QgsRelation &linkedRelation() const;
     void setLinkedRelation( const QgsRelation &newLinkedRelation );
 
-    bool addingNewFeature() const;
-    void setAddingNewFeature( bool newAddingNewFeature );
-
   public slots:
     void onFeatureAdded( QgsFeatureId newFeatureId );
 
@@ -164,14 +159,13 @@ class  AttributeController : public QObject
     void hasValidationErrorsChanged();
     void parentControllerChanged();
     void linkedRelationChanged();
-    void addingNewFeatureChanged( bool addingNewFeature );
 
     void formDataChanged( QUuid uuid, QVector<int> roles = QVector<int>() );
     void tabDataChanged( int id );
     void formRecalculated();
     void featureIdChanged();
     void changesCommited();
-    void changesRolledback();
+    void commitFailed();
 
   private:
     void clearAll();
@@ -188,6 +182,8 @@ class  AttributeController : public QObject
 
     void updateOnLayerChange();
     void updateOnFeatureChange();
+
+    bool isNewFeature() const;
 
     /**
      * Recalculates visibility & constrains & default values
@@ -227,7 +223,6 @@ class  AttributeController : public QObject
     bool mHasValidationErrors = false;
     bool mHasAnyChanges = false;
     bool mHasTabs = false;
-    bool mAddingNewFeature = false;
 
     FeatureLayerPair mFeatureLayerPair;
     std::unique_ptr<AttributeTabProxyModel> mAttributeTabProxyModel;

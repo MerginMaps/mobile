@@ -147,7 +147,7 @@ Item {
       onClose: root.panelState = "closed"
       onEditGeometryClicked: {
         root.panelState = "hidden"
-        root.editGeometry( root.featureLayerPair )
+        root.editGeometry( pair )
       }
       onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
       onCreateLinkedFeature: {
@@ -161,7 +161,7 @@ Item {
       }
       onRedrawGeometryClicked: {
         root.panelState = "hidden"
-        root.redrawGeometry( root.featureLayerPair )
+        root.redrawGeometry( pair )
       }
     }
   }

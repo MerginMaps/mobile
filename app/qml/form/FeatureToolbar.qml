@@ -140,12 +140,12 @@ Item {
         Item {
             width: parent.width/parent.children.length
             height: parent.height
+            visible: isSpatialLayer
 
             MainPanelButton {
                 width: toolbar.itemSize
                 text: qsTr("Edit geometry")
                 imageSource: InputStyle.editIcon
-                enabled: isFeaturePoint
 
                 onActivated: {
                     toolbar.editGeometryClicked()

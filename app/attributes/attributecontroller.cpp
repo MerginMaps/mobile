@@ -445,7 +445,7 @@ void AttributeController::updateOnFeatureChange()
       int fieldIndex = itemData->fieldIndex();
       const QVariant newVal = feature.attribute( fieldIndex );
       mFormItems[itemData->id()]->setOriginalValue( newVal );
-      if ( mRememberAttributesController && addingNewFeature() ) // this is a new feature
+      if ( mRememberAttributesController && isNewFeature() ) // this is a new feature
       {
         QVariant rememberedValue;
         bool shouldUseRememberedValue = mRememberAttributesController->rememberedValue(
@@ -462,7 +462,13 @@ void AttributeController::updateOnFeatureChange()
     ++formItemsIterator;
   }
 
-  recalculateDerivedItems( false, addingNewFeature() );
+  recalculateDerivedItems( false, isNewFeature() );
+}
+
+bool AttributeController::isNewFeature() const
+{
+  QgsFeatureId id = mFeatureLayerPair.feature().id();
+  return FID_IS_NEW( id ) || FID_IS_NULL( id );
 }
 
 void AttributeController::acquireId()
@@ -483,7 +489,7 @@ void AttributeController::acquireId()
   connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
   if ( !commit() )
   {
-    emit changesRolledback();
+    emit commitFailed();
   }
   disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
 }
@@ -703,7 +709,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   }
 
   // Check if we have any changes
-  bool anyChanges = addingNewFeature();
+  bool anyChanges = isNewFeature();
   if ( !anyChanges )
   {
     QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
@@ -789,7 +795,7 @@ bool AttributeController::deleteFeature()
     QgsMessageLog::logMessage( tr( "Cannot delete feature" ),
                                QStringLiteral( "Input" ),
                                Qgis::Warning );
-    emit changesRolledback();
+    emit commitFailed();
   }
   else
   {
@@ -801,11 +807,29 @@ bool AttributeController::deleteFeature()
   return rv;
 }
 
-bool AttributeController::save()
+bool AttributeController::rollback()
 {
   if ( !mFeatureLayerPair.layer() )
     return false;
 
+  if ( !mFeatureLayerPair.layer()->isEditable() )
+  {
+    return false;
+  }
+
+  if ( !mFeatureLayerPair.layer()->rollBack() )
+  {
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Could not rollback the changes in form" ) );
+  }
+
+  mFeatureLayerPair.layer()->triggerRepaint();
+  return true;
+}
+
+bool AttributeController::save()
+{
+  if ( !mFeatureLayerPair.layer() )
+    return false;
 
   if ( !startEditing() )
   {
@@ -838,16 +862,19 @@ bool AttributeController::save()
                                  Qgis::Warning );
   }
 
+  bool featureIsNew = isNewFeature();
+
   // This calls lower-level I/O functions which shouldn't be used
   // in a Q_INVOKABLE because they can make the UI unresponsive.
   rv = commit();
+
   if ( rv )
   {
     emit changesCommited();
   }
   else
   {
-    emit changesRolledback();
+    emit commitFailed();
   }
 
   if ( featureIsNotYetAdded )
@@ -856,7 +883,7 @@ bool AttributeController::save()
   }
 
   // Store the feature attributes for future use
-  if ( addingNewFeature() && mRememberAttributesController )
+  if ( featureIsNew && mRememberAttributesController )
   {
     mRememberAttributesController->storeFeature( mFeatureLayerPair );
   }
@@ -1126,17 +1153,4 @@ void AttributeController::onFeatureAdded( QgsFeatureId newFeatureId )
   QgsFeature f = mFeatureLayerPair.layer()->getFeature( newFeatureId );
   setFeatureLayerPair( FeatureLayerPair( f, mFeatureLayerPair.layer() ) );
   emit featureIdChanged();
-}
-
-bool AttributeController::addingNewFeature() const
-{
-  return mAddingNewFeature;
-}
-
-void AttributeController::setAddingNewFeature( bool newAddingNewFeature )
-{
-  if ( mAddingNewFeature == newAddingNewFeature )
-    return;
-  mAddingNewFeature = newAddingNewFeature;
-  emit addingNewFeatureChanged( mAddingNewFeature );
 }
