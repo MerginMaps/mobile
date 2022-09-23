@@ -445,7 +445,7 @@ void AttributeController::updateOnFeatureChange()
       int fieldIndex = itemData->fieldIndex();
       const QVariant newVal = feature.attribute( fieldIndex );
       mFormItems[itemData->id()]->setOriginalValue( newVal );
-      if ( mRememberAttributesController && isNewFeature() ) // this is a new feature
+      if ( mRememberAttributesController && addingNewFeature() ) // this is a new feature
       {
         QVariant rememberedValue;
         bool shouldUseRememberedValue = mRememberAttributesController->rememberedValue(
@@ -856,7 +856,7 @@ bool AttributeController::save()
   }
 
   // Store the feature attributes for future use
-  if ( mIsNewFeature && mRememberAttributesController )
+  if ( addingNewFeature() && mRememberAttributesController )
   {
     mRememberAttributesController->storeFeature( mFeatureLayerPair );
   }
@@ -1128,15 +1128,15 @@ void AttributeController::onFeatureAdded( QgsFeatureId newFeatureId )
   emit featureIdChanged();
 }
 
-bool AttributeController::isNewFeature() const
+bool AttributeController::addingNewFeature() const
 {
-  return mIsNewFeature;
+  return mAddingNewFeature;
 }
 
-void AttributeController::setIsNewFeature( bool newIsNewFeature )
+void AttributeController::setAddingNewFeature( bool newAddingNewFeature )
 {
-  if ( mIsNewFeature == newIsNewFeature )
+  if ( mAddingNewFeature == newAddingNewFeature )
     return;
-  mIsNewFeature = newIsNewFeature;
-  emit isNewFeatureChanged( mIsNewFeature );
+  mAddingNewFeature = newAddingNewFeature;
+  emit addingNewFeatureChanged( mAddingNewFeature );
 }
