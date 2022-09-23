@@ -806,17 +806,20 @@ bool AttributeController::save()
   if ( !mFeatureLayerPair.layer() )
     return false;
 
+
+  if ( !startEditing() )
+  {
+    return false;
+  }
+
   bool rv = true;
 
-  if ( FID_IS_NULL( mFeatureLayerPair.feature().id() ) )
-  {
-    // new feature without valid ID
-    if ( !startEditing() )
-    {
-      rv = false;
-    }
+  QgsFeature feat = mFeatureLayerPair.feature();
 
-    QgsFeature feat = mFeatureLayerPair.feature();
+  bool featureIsNotYetAdded = FID_IS_NULL( feat.id() );
+
+  if ( featureIsNotYetAdded )
+  {
     if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
     {
       QgsMessageLog::logMessage( tr( "Feature could not be added" ),
@@ -825,44 +828,34 @@ bool AttributeController::save()
 
     }
     connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
-    rv = commit();
-    if ( rv )
-    {
-      emit changesCommited();
-    }
-    else
-    {
-      emit changesRolledback();
-    }
-    disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
   }
   else
   {
-    if ( !startEditing() )
-    {
-      rv = false;
-    }
-
-    QgsFeature feat = mFeatureLayerPair.feature();
+    // update it instead of adding
     if ( !mFeatureLayerPair.layer()->updateFeature( feat ) )
       QgsMessageLog::logMessage( tr( "Cannot update feature" ),
                                  QStringLiteral( "Input" ),
                                  Qgis::Warning );
-
-    // This calls lower-level I/O functions which shouldn't be used
-    // in a Q_INVOKABLE because they can make the UI unresponsive.
-    rv = commit();
-    if ( rv )
-    {
-      emit changesCommited();
-    }
-    else
-    {
-      emit changesRolledback();
-    }
   }
 
-  // feature already commited and has valid id
+  // This calls lower-level I/O functions which shouldn't be used
+  // in a Q_INVOKABLE because they can make the UI unresponsive.
+  rv = commit();
+  if ( rv )
+  {
+    emit changesCommited();
+  }
+  else
+  {
+    emit changesRolledback();
+  }
+
+  if ( featureIsNotYetAdded )
+  {
+    disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
+  }
+
+  // Store the feature attributes for future use
   if ( mIsNewFeature && mRememberAttributesController )
   {
     mRememberAttributesController->storeFeature( mFeatureLayerPair );
