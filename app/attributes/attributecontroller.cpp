@@ -462,7 +462,7 @@ void AttributeController::updateOnFeatureChange()
     ++formItemsIterator;
   }
 
-  recalculateDerivedItems( false, isNewFeature() );
+  recalculateDerivedItems( false, addingNewFeature() );
 }
 
 void AttributeController::acquireId()
@@ -703,7 +703,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   }
 
   // Check if we have any changes
-  bool anyChanges = isNewFeature();
+  bool anyChanges = addingNewFeature();
   if ( !anyChanges )
   {
     QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
