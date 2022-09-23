@@ -21,6 +21,7 @@
 
 #include "position/positionkit.h"
 #include "variablesmanager.h"
+#include "coreutils.h"
 
 RecordingMapTool::RecordingMapTool( QObject *parent )
   : AbstractMapTool{parent}
@@ -1032,13 +1033,28 @@ FeatureLayerPair RecordingMapTool::commitChanges()
     {
       // recording new feature
       connect( mActiveLayer, &QgsVectorLayer::featureAdded, this, &RecordingMapTool::onFeatureAdded );
-      mActiveLayer->commitChanges();
+      if ( !mActiveLayer->commitChanges() )
+      {
+        CoreUtils::log( QStringLiteral( "CommitChanges" ),
+                        QStringLiteral( "Failed to commit changes:\n%1" )
+                        .arg( mActiveLayer->commitErrors().join( QLatin1Char( '\n' ) ) ) );
+        mActiveLayer->rollBack();
+        return FeatureLayerPair();
+      }
       disconnect( mActiveLayer, &QgsVectorLayer::featureAdded, this, &RecordingMapTool::onFeatureAdded );
     }
     else
     {
       // edit existing feature's geometry
-      mActiveLayer->commitChanges();
+      if ( !mActiveLayer->commitChanges() )
+      {
+        CoreUtils::log( QStringLiteral( "CommitChanges" ),
+                        QStringLiteral( "Failed to commit changes:\n%1" )
+                        .arg( mActiveLayer->commitErrors().join( QLatin1Char( '\n' ) ) ) );
+        mActiveLayer->rollBack();
+        return FeatureLayerPair();
+      }
+
       setActiveFeature( mActiveLayer->getFeature( mActiveFeature.id() ) );
     }
 
