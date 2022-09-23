@@ -163,16 +163,6 @@ Item {
 
     parent.focus = true
     controller.save()
-
-/*
-    if ( form.state != "add" ) {
-      controller.save()
-    }
-    else
-    {
-      controller.create()
-    }
-*/
   }
 
   function cancel() {
