@@ -11,8 +11,8 @@
 
 #ifdef ANDROID
 #include <QtAndroid>
-#include <QAndroidJniObject>
-#include <QAndroidJniEnvironment>
+#include <QJniObject>
+#include <QJniEnvironment>
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
@@ -36,8 +36,8 @@ void AndroidUtils::showToast( QString message )
 #ifdef ANDROID
   QtAndroid::runOnAndroidThread( [message]
   {
-    QAndroidJniObject javaString = QAndroidJniObject::fromString( message );
-    QAndroidJniObject toast = QAndroidJniObject::callStaticObjectMethod( "android/widget/Toast", "makeText",
+    QJniObject javaString = QJniObject::fromString( message );
+    QJniObject toast = QJniObject::callStaticObjectMethod( "android/widget/Toast", "makeText",
         "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
         QtAndroid::androidActivity().object(),
         javaString.object(),
@@ -100,9 +100,9 @@ QString AndroidUtils::externalStorageAppFolder()
 QString AndroidUtils::readExif( const QString &filePath, const QString &tag )
 {
 #ifdef ANDROID
-  QAndroidJniObject jFilePath = QAndroidJniObject::fromString( filePath );
-  QAndroidJniObject jTag = QAndroidJniObject::fromString( tag );
-  QAndroidJniObject attribute = QAndroidJniObject::callStaticObjectMethod( "uk.co.lutraconsulting.EXIFUtils",
+  QJniObject jFilePath = QJniObject::fromString( filePath );
+  QJniObject jTag = QJniObject::fromString( tag );
+  QJniObject attribute = QJniObject::callStaticObjectMethod( "uk.co.lutraconsulting.EXIFUtils",
                                 "getEXIFAttribute",
                                 "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
                                 jFilePath.object<jstring>(),
@@ -280,13 +280,13 @@ void AndroidUtils::turnBluetoothOn()
 #ifdef ANDROID
   if ( !isBluetoothTurnedOn() )
   {
-    QAndroidJniObject ACTION_BT = QAndroidJniObject::getStaticObjectField(
+    QJniObject ACTION_BT = QJniObject::getStaticObjectField(
                                     "android/bluetooth/BluetoothAdapter",
                                     "ACTION_REQUEST_ENABLE",
                                     "Ljava/lang/String;"
                                   );
 
-    QAndroidJniObject intent(
+    QJniObject intent(
       "android/content/Intent",
       "(Ljava/lang/String;)V",
       ACTION_BT.object()
@@ -384,14 +384,14 @@ void AndroidUtils::callImagePicker()
   // it is not a mandatory permission, so continue even if it is rejected
   requestMediaLocationPermission();
 
-  QAndroidJniObject ACTION_PICK = QAndroidJniObject::getStaticObjectField( "android/content/Intent", "ACTION_PICK", "Ljava/lang/String;" );
-  QAndroidJniObject EXTERNAL_CONTENT_URI = QAndroidJniObject::getStaticObjectField( "android/provider/MediaStore$Images$Media", "EXTERNAL_CONTENT_URI", "Landroid/net/Uri;" );
+  QJniObject ACTION_PICK = QJniObject::getStaticObjectField( "android/content/Intent", "ACTION_PICK", "Ljava/lang/String;" );
+  QJniObject EXTERNAL_CONTENT_URI = QJniObject::getStaticObjectField( "android/provider/MediaStore$Images$Media", "EXTERNAL_CONTENT_URI", "Landroid/net/Uri;" );
 
-  QAndroidJniObject intent = QAndroidJniObject( "android/content/Intent", "(Ljava/lang/String;Landroid/net/Uri;)V", ACTION_PICK.object<jstring>(), EXTERNAL_CONTENT_URI.object<jobject>() );
+  QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;Landroid/net/Uri;)V", ACTION_PICK.object<jstring>(), EXTERNAL_CONTENT_URI.object<jobject>() );
 
   if ( ACTION_PICK.isValid() && intent.isValid() )
   {
-    intent.callObjectMethod( "setType", "(Ljava/lang/String;)Landroid/content/Intent;", QAndroidJniObject::fromString( "image/*" ).object<jstring>() );
+    intent.callObjectMethod( "setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString( "image/*" ).object<jstring>() );
     QtAndroid::startActivity( intent.object<jobject>(), MEDIA_CODE, this ); // this as receiver
   }
 #endif
@@ -412,16 +412,16 @@ void AndroidUtils::callCamera( const QString &targetPath )
 
   const QString IMAGE_CAPTURE_ACTION = QString( "android.media.action.IMAGE_CAPTURE" );
 
-  QAndroidJniObject activity = QAndroidJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
-  QAndroidJniObject intent = QAndroidJniObject( "android/content/Intent", "(Ljava/lang/String;)V", activity.object<jstring>() );
+  QJniObject activity = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
+  QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;)V", activity.object<jstring>() );
 
-  QAndroidJniObject packageName = QAndroidJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting" ) );
-  QAndroidJniObject className = QAndroidJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
+  QJniObject packageName = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting" ) );
+  QJniObject className = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
 
   intent.callObjectMethod( "setClassName", "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;", packageName.object<jstring>(), className.object<jstring>() );
 
-  QAndroidJniObject extra = QAndroidJniObject::fromString( "targetPath" );
-  QAndroidJniObject my_prefix = QAndroidJniObject::fromString( targetPath );
+  QJniObject extra = QJniObject::fromString( "targetPath" );
+  QJniObject my_prefix = QJniObject::fromString( targetPath );
 
   intent.callObjectMethod( "putExtra",
                            "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;",
@@ -438,11 +438,11 @@ void AndroidUtils::callCamera( const QString &targetPath )
 }
 
 #ifdef ANDROID
-void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode, const QAndroidJniObject &data )
+void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode, const QJniObject &data )
 {
 
-  jint RESULT_OK = QAndroidJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_OK" );
-  jint RESULT_CANCELED = QAndroidJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_CANCELED" );
+  jint RESULT_OK = QJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_OK" );
+  jint RESULT_CANCELED = QJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_CANCELED" );
 
   if ( receiverRequestCode == BLUETOOTH_CODE )
   {
@@ -460,14 +460,14 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
 
   if ( resultCode == RESULT_CANCELED )
   {
-    QAndroidJniObject RESULT_STRING = QAndroidJniObject::fromString( QStringLiteral( "__RESULT__" ) );
+    QJniObject RESULT_STRING = QJniObject::fromString( QStringLiteral( "__RESULT__" ) );
     // User has triggered cancel, result has no data.
     if ( !data.isValid() )
     {
       return;
     }
 
-    QAndroidJniObject errorJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
+    QJniObject errorJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
     // Internal cancelation due to an error
     QString errorMsg = errorJNI.toString();
     showToast( errorMsg );
@@ -476,24 +476,24 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
 
   if ( receiverRequestCode == MEDIA_CODE && resultCode == RESULT_OK )
   {
-    QAndroidJniObject uri = data.callObjectMethod( "getData", "()Landroid/net/Uri;" );
-    QAndroidJniObject mediaStore = QAndroidJniObject::getStaticObjectField( "android/provider/MediaStore$MediaColumns", "DATA", "Ljava/lang/String;" );
-    QAndroidJniEnvironment env;
+    QJniObject uri = data.callObjectMethod( "getData", "()Landroid/net/Uri;" );
+    QJniObject mediaStore = QJniObject::getStaticObjectField( "android/provider/MediaStore$MediaColumns", "DATA", "Ljava/lang/String;" );
+    QJniEnvironment env;
     jobjectArray projection = ( jobjectArray )env->NewObjectArray( 1, env->FindClass( "java/lang/String" ), NULL );
     jobject projectionDataAndroid = env->NewStringUTF( mediaStore.toString().toStdString().c_str() );
     env->SetObjectArrayElement( projection, 0, projectionDataAndroid );
-    QAndroidJniObject contentResolver = QtAndroid::androidActivity().callObjectMethod( "getContentResolver", "()Landroid/content/ContentResolver;" );
-    QAndroidJniObject cursor = contentResolver.callObjectMethod( "query", "(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;", uri.object<jobject>(), projection, NULL, NULL, NULL );
+    QJniObject contentResolver = QtAndroid::androidActivity().callObjectMethod( "getContentResolver", "()Landroid/content/ContentResolver;" );
+    QJniObject cursor = contentResolver.callObjectMethod( "query", "(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;", uri.object<jobject>(), projection, NULL, NULL, NULL );
     jint columnIndex = cursor.callMethod<jint>( "getColumnIndex", "(Ljava/lang/String;)I", mediaStore.object<jstring>() );
     cursor.callMethod<jboolean>( "moveToFirst", "()Z" );
-    QAndroidJniObject result = cursor.callObjectMethod( "getString", "(I)Ljava/lang/String;", columnIndex );
+    QJniObject result = cursor.callObjectMethod( "getString", "(I)Ljava/lang/String;", columnIndex );
     QString selectedImagePath = "file://" + result.toString();
     emit imageSelected( selectedImagePath );
   }
   else if ( receiverRequestCode == CAMERA_CODE && resultCode == RESULT_OK )
   {
-    QAndroidJniObject RESULT_STRING = QAndroidJniObject::fromString( QStringLiteral( "__RESULT__" ) );
-    QAndroidJniObject absolutePathJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
+    QJniObject RESULT_STRING = QJniObject::fromString( QStringLiteral( "__RESULT__" ) );
+    QJniObject absolutePathJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
     QString absolutePath = absolutePathJNI.toString();
 
     QString selectedImagePath = "file://" + absolutePath;

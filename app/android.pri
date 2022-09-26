@@ -33,7 +33,7 @@ android {
 
     INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}
     INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}/qgis
-    
+
     # by default QMake eats linked libs if they are mentioned multiple times
     # https://stackoverflow.com/questions/18327959/qmake-how-to-link-a-library-twice/18328971
     CONFIG += no_lflags_merge
@@ -74,11 +74,11 @@ android {
     LIBS += -lsqlite3 -liconv -lz -lzip
     LIBS += -ltiff
     LIBS += -lwebp -lcurl -ljpeg
-    
+
     QT += multimedia
     QT += printsupport
-    QT += androidextras
     QT += bluetooth
+    QT += core-private
     DEFINES += "HAVE_BLUETOOTH"
 
     QMAKE_CXXFLAGS += -std=c++11
