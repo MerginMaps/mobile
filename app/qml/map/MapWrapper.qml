@@ -678,18 +678,17 @@ Item {
       return ""
     }
 
-    buttons: StandardButton.Yes | StandardButton.No
+    buttons: MessageDialog.Yes | MessageDialog.No
 
     onButtonClicked: {
-      if ( clickedButton === StandardButton.Yes ) {
+      if ( clickedButton === MessageDialog.Yes ) {
         recordingToolsLoader.item.rollbackChanges()
       }
-      else if ( clickedButton === StandardButton.No ) {
+      else if ( clickedButton === MessageDialog.No ) {
         cancelEditDialog.close()
       }
     }
   }
-
 
   MapFloatButton {
     id: accuracyButton
@@ -900,7 +899,7 @@ Item {
         root.state = "view"
       }
 
-      onDone: {
+      onDone: function( featureLayerPair ) {
         howtoEditingBanner.hide()
 
         if ( root.state === "record" )
