@@ -11,7 +11,7 @@
 #define ANDROIDUTILS_H
 
 #ifdef ANDROID
-#include <QAndroidActivityResultReceiver>
+#include <QtCore/private/qandroidextras_p.h>
 #include <QJniObject>
 #include <QBluetoothLocalDevice>
 #endif

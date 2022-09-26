@@ -114,10 +114,6 @@
 #include <QStandardPaths>
 #endif
 
-#ifdef ANDROID
-#include <QtAndroidExtras>
-#endif
-
 #ifdef DESKTOP_OS
 #include <QCommandLineParser>
 #include <qgis.h>
@@ -659,7 +655,7 @@ int main( int argc, char *argv[] )
   qDebug() <<  "All up and running";
 
 #ifdef ANDROID
-  QtAndroid::hideSplashScreen();
+  QNativeInterface::QAndroidApplication::hideSplashScreen();
 #endif
 
   // Android scoped storage migration logic

@@ -10,7 +10,7 @@
 #include "androidutils.h"
 
 #ifdef ANDROID
-#include <QtAndroid>
+#include <QtCore/private/qandroidextras_p.h>
 #include <QJniObject>
 #include <QJniEnvironment>
 #include <QDebug>
@@ -34,12 +34,13 @@ AndroidUtils::AndroidUtils( QObject *parent ): QObject( parent )
 void AndroidUtils::showToast( QString message )
 {
 #ifdef ANDROID
-  QtAndroid::runOnAndroidThread( [message]
+  QtAndroid::runOnAndroidMainThread( [message]
   {
+    auto activity = QJniObject( QNativeInterface::QAndroidApplication: context() );
     QJniObject javaString = QJniObject::fromString( message );
     QJniObject toast = QJniObject::callStaticObjectMethod( "android/widget/Toast", "makeText",
         "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
-        QtAndroid::androidActivity().object(),
+        activity.object(),
         javaString.object(),
         jint( 1 ) );
     toast.callMethod<void>( "show" );
@@ -103,10 +104,10 @@ QString AndroidUtils::readExif( const QString &filePath, const QString &tag )
   QJniObject jFilePath = QJniObject::fromString( filePath );
   QJniObject jTag = QJniObject::fromString( tag );
   QJniObject attribute = QJniObject::callStaticObjectMethod( "uk.co.lutraconsulting.EXIFUtils",
-                                "getEXIFAttribute",
-                                "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
-                                jFilePath.object<jstring>(),
-                                jTag.object<jstring>() );
+                         "getEXIFAttribute",
+                         "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
+                         jFilePath.object<jstring>(),
+                         jTag.object<jstring>() );
   return attribute.toString();
 #else
   Q_UNUSED( filePath )
@@ -281,10 +282,10 @@ void AndroidUtils::turnBluetoothOn()
   if ( !isBluetoothTurnedOn() )
   {
     QJniObject ACTION_BT = QJniObject::getStaticObjectField(
-                                    "android/bluetooth/BluetoothAdapter",
-                                    "ACTION_REQUEST_ENABLE",
-                                    "Ljava/lang/String;"
-                                  );
+                             "android/bluetooth/BluetoothAdapter",
+                             "ACTION_REQUEST_ENABLE",
+                             "Ljava/lang/String;"
+                           );
 
     QJniObject intent(
       "android/content/Intent",
@@ -294,7 +295,7 @@ void AndroidUtils::turnBluetoothOn()
 
     if ( ACTION_BT.isValid() && intent.isValid() )
     {
-      QtAndroid::startActivity( intent.object<jobject>(), BLUETOOTH_CODE, this );
+      QtAndroidPrivate::startActivity( intent.object<jobject>(), BLUETOOTH_CODE, this );
     }
   }
 #endif
@@ -312,7 +313,8 @@ bool AndroidUtils::isBluetoothTurnedOn()
 void AndroidUtils::quitApp()
 {
 #ifdef ANDROID
-  QtAndroid::androidActivity().callMethod<void>( "quitGracefully", "()V" );
+  auto activity = QJniObject( QNativeInterface::QAndroidApplication: context() );
+  activity.callMethod<void>( "quitGracefully", "()V" );
 
   // If quitGracefully failed or this device is not of specified manufacturer, let's exit via QT
   QCoreApplication::quit();
@@ -392,7 +394,7 @@ void AndroidUtils::callImagePicker()
   if ( ACTION_PICK.isValid() && intent.isValid() )
   {
     intent.callObjectMethod( "setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString( "image/*" ).object<jstring>() );
-    QtAndroid::startActivity( intent.object<jobject>(), MEDIA_CODE, this ); // this as receiver
+    QtAndroidPrivate::startActivity( intent.object<jobject>(), MEDIA_CODE, this ); // this as receiver
   }
 #endif
 }
@@ -430,7 +432,7 @@ void AndroidUtils::callCamera( const QString &targetPath )
 
   if ( intent.isValid() )
   {
-    QtAndroid::startActivity( intent.object<jobject>(), CAMERA_CODE, this );
+    QtAndroidPrivate::startActivity( intent.object<jobject>(), CAMERA_CODE, this );
   }
 #else
   Q_UNUSED( targetPath )
@@ -482,7 +484,8 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
     jobjectArray projection = ( jobjectArray )env->NewObjectArray( 1, env->FindClass( "java/lang/String" ), NULL );
     jobject projectionDataAndroid = env->NewStringUTF( mediaStore.toString().toStdString().c_str() );
     env->SetObjectArrayElement( projection, 0, projectionDataAndroid );
-    QJniObject contentResolver = QtAndroid::androidActivity().callObjectMethod( "getContentResolver", "()Landroid/content/ContentResolver;" );
+    auto activity = QJniObject( QNativeInterface::QAndroidApplication: context() );
+    QJniObject contentResolver = activity.callObjectMethod( "getContentResolver", "()Landroid/content/ContentResolver;" );
     QJniObject cursor = contentResolver.callObjectMethod( "query", "(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;", uri.object<jobject>(), projection, NULL, NULL, NULL );
     jint columnIndex = cursor.callMethod<jint>( "getColumnIndex", "(Ljava/lang/String;)I", mediaStore.object<jstring>() );
     cursor.callMethod<jboolean>( "moveToFirst", "()Z" );
