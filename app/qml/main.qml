@@ -18,6 +18,8 @@ import QtQml.Models
 import QtPositioning
 import QtQuick.Dialogs
 
+import Qt.labs.settings 1.0
+
 import lc 1.0
 import "./map"
 import "./misc"

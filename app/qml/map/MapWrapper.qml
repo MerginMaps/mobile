@@ -11,7 +11,7 @@ import QtQuick
 
 import lc 1.0
 import QgsQuick 0.1 as QgsQuick
-import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 
 import ".."
 import "../components"
@@ -678,7 +678,7 @@ Item {
       return ""
     }
 
-    standardButtons: StandardButton.Yes | StandardButton.No
+    buttons: StandardButton.Yes | StandardButton.No
 
     onButtonClicked: {
       if ( clickedButton === StandardButton.Yes ) {
