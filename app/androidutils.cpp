@@ -34,9 +34,9 @@ AndroidUtils::AndroidUtils( QObject *parent ): QObject( parent )
 void AndroidUtils::showToast( QString message )
 {
 #ifdef ANDROID
-  QtAndroid::runOnAndroidMainThread( [message]
+  QNativeInterface::QAndroidApplication::runOnAndroidMainThread( [message]
   {
-    auto activity = QJniObject( QNativeInterface::QAndroidApplication: context() );
+    auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
     QJniObject javaString = QJniObject::fromString( message );
     QJniObject toast = QJniObject::callStaticObjectMethod( "android/widget/Toast", "makeText",
         "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
@@ -63,12 +63,13 @@ bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
 {
 #ifdef ANDROID
 
-  QtAndroid::PermissionResult r = QtAndroid::checkPermission( permissionString );
-  if ( r == QtAndroid::PermissionResult::Denied )
+  QFuture<QtAndroidPrivate::PermissionResult> r = QtAndroidPrivate::checkPermission( permissionString );
+  r.waitForFinished();
+  if ( r.result() == QtAndroidPrivate::PermissionResult::Denied )
   {
-    QtAndroid::requestPermissionsSync( QStringList() << permissionString );
-    r = QtAndroid::checkPermission( permissionString );
-    if ( r == QtAndroid::PermissionResult::Denied )
+    QFuture<QtAndroidPrivate::PermissionResult> future = QtAndroidPrivate::requestPermission( permissionString );
+    future.waitForFinished();
+    if ( future.result() == QtAndroidPrivate::PermissionResult::Denied )
     {
       return false;
     }
@@ -227,7 +228,9 @@ void AndroidUtils::handleLegacyFolderMigration( AppSettings *appsettings, bool d
   // Step 3: make sure we have a WRITE permission to storage
   // this check should not be that important since previous app versions could not run without this permission - all updated
   // versions will thus have it granted. Anyways..
-  if ( QtAndroid::checkPermission( "android.permission.WRITE_EXTERNAL_STORAGE" ) != QtAndroid::PermissionResult::Granted )
+  QFuture<QtAndroidPrivate::PermissionResult> res = QtAndroidPrivate::checkPermission( "android.permission.WRITE_EXTERNAL_STORAGE" );
+  res.waitForFinished();
+  if ( res.result() != QtAndroidPrivate::PermissionResult::Authorized )
   {
     if ( !checkAndAcquirePermissions( "android.permission.WRITE_EXTERNAL_STORAGE" ) )
     {
@@ -267,7 +270,7 @@ void AndroidUtils::handleLegacyFolderMigration( AppSettings *appsettings, bool d
   }
 
   //  Step 6: finally, let's copy the projects folder, project after project
-  QtConcurrent::run( this, &AndroidUtils::migrateLegacyProjects, legacyFolderPath, externalStorageAppFolder() );
+  QtConcurrent::run( &AndroidUtils::migrateLegacyProjects, this, legacyFolderPath, externalStorageAppFolder() );
 
   CoreUtils::log( "LegacyFolderMigration", "Data migration has been sent to other thread!" );
 #else
@@ -313,7 +316,7 @@ bool AndroidUtils::isBluetoothTurnedOn()
 void AndroidUtils::quitApp()
 {
 #ifdef ANDROID
-  auto activity = QJniObject( QNativeInterface::QAndroidApplication: context() );
+  auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
   activity.callMethod<void>( "quitGracefully", "()V" );
 
   // If quitGracefully failed or this device is not of specified manufacturer, let's exit via QT
@@ -327,7 +330,9 @@ bool AndroidUtils::requestStoragePermission()
 
   if ( !checkAndAcquirePermissions( "android.permission.READ_EXTERNAL_STORAGE" ) )
   {
-    if ( !QtAndroid::shouldShowRequestPermissionRationale( "android.permission.READ_EXTERNAL_STORAGE" ) )
+    auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+    jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", "android.permission.WRITE_EXTERNAL_STORAGE" );
+    if ( !res )
     {
       // permanently denied permission, user needs to go to settings to allow permission
       showToast( tr( "Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery" ) );
@@ -349,7 +354,9 @@ bool AndroidUtils::requestCameraPermission()
 
   if ( checkAndAcquirePermissions( "android.permission.CAMERA" ) == false )
   {
-    if ( !QtAndroid::shouldShowRequestPermissionRationale( "android.permission.CAMERA" ) )
+    auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+    jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", "android.permission.CAMERA" );
+    if ( !res )
     {
       // permanently denied permission, user needs to go to settings to allow permission
       showToast( tr( "Camera permission is permanently denied, please allow it in settings" ) );
@@ -484,7 +491,7 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
     jobjectArray projection = ( jobjectArray )env->NewObjectArray( 1, env->FindClass( "java/lang/String" ), NULL );
     jobject projectionDataAndroid = env->NewStringUTF( mediaStore.toString().toStdString().c_str() );
     env->SetObjectArrayElement( projection, 0, projectionDataAndroid );
-    auto activity = QJniObject( QNativeInterface::QAndroidApplication: context() );
+    auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
     QJniObject contentResolver = activity.callObjectMethod( "getContentResolver", "()Landroid/content/ContentResolver;" );
     QJniObject cursor = contentResolver.callObjectMethod( "query", "(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;", uri.object<jobject>(), projection, NULL, NULL, NULL );
     jint columnIndex = cursor.callMethod<jint>( "getColumnIndex", "(Ljava/lang/String;)I", mediaStore.object<jstring>() );

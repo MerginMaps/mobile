@@ -65,7 +65,7 @@ android {
     # and providers and auth methods
     LIBS += -lqgis_core
 
-    LIBS += -lqt5keychain -lqca-qt5
+    LIBS += -lqt6keychain -lqca-qt6
     LIBS += -lgdal -lpq -lspatialite
     LIBS += -lcharset
     LIBS += -ltasn1 -lproj
