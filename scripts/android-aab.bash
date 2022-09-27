@@ -32,7 +32,7 @@ make install INSTALL_ROOT=${INSTALL_DIR}
 
 if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
     echo "building release"
-    ${QT_BASE}/bin/androiddeployqt \
+    $(dirname ${QT_BASE})/gcc_64/bin/androiddeployqt \
         --sign ${SOURCE_DIR}/Input_keystore.keystore input \
         --storepass ${INPUTKEYSTORE_STOREPASS} \
         --keypass ${INPUTKEYSTORE_STOREPASS} \

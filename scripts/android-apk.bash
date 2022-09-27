@@ -64,7 +64,7 @@ make install INSTALL_ROOT=${INSTALL_DIR}
 
 if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
     echo "building release"
-    ${QT_BASE}/bin/androiddeployqt \
+    $(dirname ${QT_BASE})/gcc_64/bin/androiddeployqt \
         --sign ${SOURCE_DIR}/Input_keystore.keystore input \
         --storepass ${INPUTKEYSTORE_STOREPASS} \
         --keypass ${INPUTKEYSTORE_STOREPASS} \
@@ -74,7 +74,7 @@ if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
         --gradle
 else
     echo "building debug"
-    ${QT_BASE}/bin/androiddeployqt \
+    $(dirname ${QT_BASE})/gcc_64/bin/androiddeployqt \
         --input ${BUILD_DIR}/android-Input-deployment-settings.json \
         --output ${INSTALL_DIR} \
         --deployment bundled \
