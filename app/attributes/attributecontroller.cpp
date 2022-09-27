@@ -454,7 +454,9 @@ void AttributeController::updateOnFeatureChange()
                                           rememberedValue
                                         );
         if ( shouldUseRememberedValue )
+        {
           mFeatureLayerPair.featureRef().setAttribute( fieldIndex, rememberedValue );
+        }
       }
     }
     ++formItemsIterator;
@@ -465,7 +467,8 @@ void AttributeController::updateOnFeatureChange()
 
 bool AttributeController::isNewFeature() const
 {
-  return FID_IS_NULL( mFeatureLayerPair.feature().id() );
+  QgsFeatureId id = mFeatureLayerPair.feature().id();
+  return FID_IS_NEW( id ) || FID_IS_NULL( id );
 }
 
 void AttributeController::acquireId()
@@ -486,7 +489,7 @@ void AttributeController::acquireId()
   connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
   if ( !commit() )
   {
-    emit changesRolledback();
+    emit commitFailed();
   }
   disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
 }
@@ -792,7 +795,7 @@ bool AttributeController::deleteFeature()
     QgsMessageLog::logMessage( tr( "Cannot delete feature" ),
                                QStringLiteral( "Input" ),
                                Qgis::Warning );
-    emit changesRolledback();
+    emit commitFailed();
   }
   else
   {
@@ -804,36 +807,22 @@ bool AttributeController::deleteFeature()
   return rv;
 }
 
-bool AttributeController::create()
+bool AttributeController::rollback()
 {
   if ( !mFeatureLayerPair.layer() )
     return false;
 
-  startEditing();
-  QgsFeature feat = mFeatureLayerPair.feature();
-  if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
+  if ( !mFeatureLayerPair.layer()->isEditable() )
   {
-    QgsMessageLog::logMessage( tr( "Feature could not be added" ),
-                               QStringLiteral( "Input" ),
-                               Qgis::Critical );
+    return false;
+  }
 
-  }
-  connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
-  if ( commit() )
+  if ( !mFeatureLayerPair.layer()->rollBack() )
   {
-    emit changesCommited();
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Could not rollback the changes in form" ) );
   }
-  else
-  {
-    emit changesRolledback();
-  }
-  disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
 
-
-  if ( mRememberAttributesController )
-  {
-    mRememberAttributesController->storeFeature( mFeatureLayerPair );
-  }
+  mFeatureLayerPair.layer()->triggerRepaint();
   return true;
 }
 
@@ -842,18 +831,38 @@ bool AttributeController::save()
   if ( !mFeatureLayerPair.layer() )
     return false;
 
-  bool rv = true;
-
   if ( !startEditing() )
   {
-    rv = false;
+    return false;
   }
 
+  bool rv = true;
+
   QgsFeature feat = mFeatureLayerPair.feature();
-  if ( !mFeatureLayerPair.layer()->updateFeature( feat ) )
-    QgsMessageLog::logMessage( tr( "Cannot update feature" ),
-                               QStringLiteral( "Input" ),
-                               Qgis::Warning );
+
+  bool featureIsNotYetAdded = FID_IS_NULL( feat.id() );
+
+  if ( featureIsNotYetAdded )
+  {
+    if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
+    {
+      QgsMessageLog::logMessage( tr( "Feature could not be added" ),
+                                 QStringLiteral( "Input" ),
+                                 Qgis::Critical );
+
+    }
+    connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
+  }
+  else
+  {
+    // update it instead of adding
+    if ( !mFeatureLayerPair.layer()->updateFeature( feat ) )
+      QgsMessageLog::logMessage( tr( "Cannot update feature" ),
+                                 QStringLiteral( "Input" ),
+                                 Qgis::Warning );
+  }
+
+  bool featureIsNew = isNewFeature();
 
   // This calls lower-level I/O functions which shouldn't be used
   // in a Q_INVOKABLE because they can make the UI unresponsive.
@@ -861,19 +870,24 @@ bool AttributeController::save()
 
   if ( rv )
   {
-    QgsFeature feat;
-    if ( mFeatureLayerPair.layer()->getFeatures( QgsFeatureRequest().setFilterFid( mFeatureLayerPair.feature().id() ) ).nextFeature( feat ) )
-      setFeatureLayerPair( FeatureLayerPair( feat, mFeatureLayerPair.layer() ) );
-    else
-      QgsMessageLog::logMessage( tr( "Feature %1 could not be fetched after commit" ).arg( mFeatureLayerPair.feature().id() ),
-                                 QStringLiteral( "Input" ),
-                                 Qgis::Warning );
     emit changesCommited();
   }
   else
   {
-    emit changesRolledback();
+    emit commitFailed();
   }
+
+  if ( featureIsNotYetAdded )
+  {
+    disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
+  }
+
+  // Store the feature attributes for future use
+  if ( featureIsNew && mRememberAttributesController )
+  {
+    mRememberAttributesController->storeFeature( mFeatureLayerPair );
+  }
+
   return rv;
 }
 

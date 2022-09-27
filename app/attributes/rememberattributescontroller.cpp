@@ -128,5 +128,3 @@ bool RememberAttributesController::rememberedValue(
   value = fromAttributes.at( fieldIndex );
   return true;
 }
-
-

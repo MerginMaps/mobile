@@ -89,6 +89,7 @@ class  AttributeController : public QObject
      */
     Q_PROPERTY( QgsRelation linkedRelation READ linkedRelation WRITE setLinkedRelation NOTIFY linkedRelationChanged )
 
+
   public:
     AttributeController( QObject *parent = nullptr );
     ~AttributeController() override;
@@ -111,9 +112,8 @@ class  AttributeController : public QObject
     AttributeFormProxyModel *attributeFormProxyModelForTab( int tabRow ) const;
 
     Q_INVOKABLE bool deleteFeature();
-    Q_INVOKABLE bool create();
+    Q_INVOKABLE bool rollback();
     Q_INVOKABLE bool save();
-    Q_INVOKABLE bool isNewFeature() const;
     Q_INVOKABLE void acquireId();
 
     int tabCount() const;
@@ -165,7 +165,7 @@ class  AttributeController : public QObject
     void formRecalculated();
     void featureIdChanged();
     void changesCommited();
-    void changesRolledback();
+    void commitFailed();
 
   private:
     void clearAll();
@@ -182,6 +182,8 @@ class  AttributeController : public QObject
 
     void updateOnLayerChange();
     void updateOnFeatureChange();
+
+    bool isNewFeature() const;
 
     /**
      * Recalculates visibility & constrains & default values

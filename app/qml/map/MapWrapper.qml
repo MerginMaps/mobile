@@ -262,6 +262,12 @@ Item {
     mapSettings: mapCanvas.mapSettings
   }
 
+  PositionMarker {
+    mapPosition: mapPositioning
+    compass: deviceCompass
+    visible: !internal.isInRecordState
+  }
+
   Loader {
     id: recordingToolsLoader
 
@@ -293,11 +299,6 @@ Item {
     active: root.state === "split"
 
     sourceComponent: splittingToolsComponent
-  }
-
-  PositionMarker {
-    mapPosition: mapPositioning
-    compass: deviceCompass
   }
 
   AutoHideBanner {
@@ -595,7 +596,7 @@ Item {
           cancelEditDialog.open()
         }
         else {
-          recordingToolsLoader.item.rollbackChanges()
+          recordingToolsLoader.item.discardChanges()
         }
       }
     }
@@ -682,7 +683,7 @@ Item {
 
     onButtonClicked: {
       if ( clickedButton === StandardButton.Yes ) {
-        recordingToolsLoader.item.rollbackChanges()
+        recordingToolsLoader.item.discardChanges()
       }
       else if ( clickedButton === StandardButton.No ) {
         cancelEditDialog.close()
@@ -877,6 +878,7 @@ Item {
 
       map: mapCanvas
       gpsState: gpsStateGroup
+      compass: deviceCompass
       activeFeature: root.state === "edit" ? internal.featurePairToEdit.feature : __inputUtils.emptyFeature()
 
       centerToGPSOnStartup: root.state !== "edit"

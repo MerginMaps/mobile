@@ -24,6 +24,7 @@ Item {
 
   /*required*/ property var map
   /*required*/ property var gpsState
+  /*required*/ property var compass
 
   property alias gpsBanner: gpsAccuracyBanner
 
@@ -32,32 +33,6 @@ Item {
 
   signal canceled()
   signal done( var featureLayerPair )
-
-  Banner {
-    id: gpsAccuracyBanner
-
-    property bool shouldShowAccuracyWarning: {
-      let isLowAccuracy = gpsState.state === "low" || gpsState.state === "unavailable"
-      let isBannerAllowed = __appSettings.gpsAccuracyWarning
-      let isUsingPosition = mapTool.isUsingPosition
-      let isGpsWorking = __positionKit.hasPosition
-
-      return isLowAccuracy  &&
-          isBannerAllowed   &&
-          isGpsWorking      &&
-          isUsingPosition
-    }
-
-    width: parent.width - InputStyle.innerFieldMargin * 2
-    height: InputStyle.rowHeight * 2
-
-    text: qsTr( "Low GPS position accuracy (%1 m)<br><br>Please make sure you have good view of the sky." )
-    .arg( __inputUtils.formatNumber( __positionKit.horizontalAccuracy ) )
-    withLink: true
-    link: __inputHelp.gpsAccuracyHelpLink
-
-    showBanner: shouldShowAccuracyWarning
-  }
 
   RecordingMapTool {
     id: mapTool
@@ -176,6 +151,11 @@ Item {
     markerSize: InputStyle.mapMarkerSizeBig
   }
 
+  PositionMarker {
+    mapPosition: mapPositioning
+    compass: root.compass
+  }
+
   Crosshair {
     id: crosshair
 
@@ -234,7 +214,7 @@ Item {
 
       if ( pointLayerSelected )
       {
-        let pair = mapTool.commitChanges()
+        let pair = mapTool.getFeatureLayerPair()
         root.done( pair )
       }
     }
@@ -258,7 +238,7 @@ Item {
           mapTool.releaseVertex( crosshair.recordPoint )
         }
 
-        let pair = mapTool.commitChanges()
+        let pair = mapTool.getFeatureLayerPair()
         root.done( pair )
       }
       else
@@ -279,6 +259,32 @@ Item {
         root.map.mapSettings.setCenter( mapPositioning.mapPosition )
       }
     }
+  }
+
+  Banner {
+    id: gpsAccuracyBanner
+
+    property bool shouldShowAccuracyWarning: {
+      let isLowAccuracy = gpsState.state === "low" || gpsState.state === "unavailable"
+      let isBannerAllowed = __appSettings.gpsAccuracyWarning
+      let isUsingPosition = mapTool.isUsingPosition
+      let isGpsWorking = __positionKit.hasPosition
+
+      return isLowAccuracy  &&
+          isBannerAllowed   &&
+          isGpsWorking      &&
+          isUsingPosition
+    }
+
+    width: parent.width - InputStyle.innerFieldMargin * 2
+    height: InputStyle.rowHeight * 2
+
+    text: qsTr( "Low GPS position accuracy (%1 m)<br><br>Please make sure you have good view of the sky." )
+    .arg( __inputUtils.formatNumber( __positionKit.horizontalAccuracy ) )
+    withLink: true
+    link: __inputHelp.gpsAccuracyHelpLink
+
+    showBanner: shouldShowAccuracyWarning
   }
 
   Connections {
@@ -308,8 +314,8 @@ Item {
     }
   }
 
-  function rollbackChanges() {
-    mapTool.rollbackChanges()
+  function discardChanges() {
+    mapTool.discardChanges()
     root.canceled()
   }
 

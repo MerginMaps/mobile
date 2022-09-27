@@ -21,6 +21,10 @@
 
 #include "position/positionkit.h"
 #include "variablesmanager.h"
+#include "coreutils.h"
+
+#include <QUndoStack>
+#include <QUndoCommand>
 
 RecordingMapTool::RecordingMapTool( QObject *parent )
   : AbstractMapTool{parent}
@@ -1014,50 +1018,34 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
   setActiveVertex( Vertex() );
 }
 
-FeatureLayerPair RecordingMapTool::commitChanges()
+FeatureLayerPair RecordingMapTool::getFeatureLayerPair()
 {
-  if ( !mActiveLayer )
-  {
-    return FeatureLayerPair();
-  }
+  bool featureIsValid = FID_IS_NEW( mActiveFeature.id() ) || mActiveFeature.isValid();
 
-  if ( mActiveLayer->isEditable() )
+  if ( mActiveLayer && featureIsValid )
   {
-    // when new feature is added we don't know its ID and as a result can not
-    // update active feature with actual data. To get the actual ID of the feature
-    // we listen to the featureAdded signal and update active feature. When feature
-    // if updated we stop listening
-    // For existing features we already knew their ID and can commit changes directly.
-    if ( FID_IS_NEW( mActiveFeature.id() ) || FID_IS_NULL( mActiveFeature.id() ) )
-    {
-      // recording new feature
-      connect( mActiveLayer, &QgsVectorLayer::featureAdded, this, &RecordingMapTool::onFeatureAdded );
-      mActiveLayer->commitChanges();
-      disconnect( mActiveLayer, &QgsVectorLayer::featureAdded, this, &RecordingMapTool::onFeatureAdded );
-    }
-    else
-    {
-      // edit existing feature's geometry
-      mActiveLayer->commitChanges();
-      setActiveFeature( mActiveLayer->getFeature( mActiveFeature.id() ) );
-    }
-
-    mActiveLayer->triggerRepaint();
-  }
-
-  if ( mActiveFeature.isValid() )
-  {
+    mActiveFeature.setGeometry( mRecordedGeometry );
     return FeatureLayerPair( mActiveFeature, mActiveLayer );
   }
 
   return FeatureLayerPair();
 }
 
-void RecordingMapTool::rollbackChanges()
+void RecordingMapTool::discardChanges()
 {
   if ( mActiveLayer && mActiveLayer->isEditable() )
   {
-    mActiveLayer->rollBack();
+    if ( mActiveLayer->undoStack() )
+    {
+      //
+      // In future, if we want to use REDO, we would probably need to
+      // set all changes between mMinUndoStackIndex and current stack index
+      // as obsolete.
+      //
+
+      mActiveLayer->undoStack()->setIndex( mMinUndoStackIndex );
+    }
+
     mActiveLayer->triggerRepaint();
   }
 }
@@ -1203,13 +1191,13 @@ void RecordingMapTool::completeEditOperation()
     mActiveLayer->changeGeometry( mActiveFeature.id(), mRecordedGeometry );
     mActiveLayer->endEditCommand();
     mActiveLayer->triggerRepaint();
-    setCanUndo( mActiveLayer->undoStack()->canUndo() );
+    setCanUndo( mActiveLayer->undoStack()->index() > mMinUndoStackIndex );
   }
 }
 
 void RecordingMapTool::undo()
 {
-  if ( mActiveLayer && mActiveLayer->undoStack() )
+  if ( mActiveLayer && mActiveLayer->undoStack() && mActiveLayer->undoStack()->index() > mMinUndoStackIndex )
   {
     mActiveLayer->undoStack()->undo();
 
@@ -1223,7 +1211,7 @@ void RecordingMapTool::undo()
       }
       else
       {
-        mActiveLayer->rollBack();
+        mActiveLayer->undoStack()->setIndex( mMinUndoStackIndex );
         setActiveFeature( QgsFeature() );
         setState( MapToolState::Record );
         setActivePartAndRing( 0, 0 );
@@ -1247,7 +1235,8 @@ void RecordingMapTool::undo()
     }
 
     mActiveLayer->triggerRepaint();
-    setCanUndo( mActiveLayer->undoStack()->canUndo() );
+
+    setCanUndo( mActiveLayer->undoStack()->index() > mMinUndoStackIndex );
   }
 }
 
@@ -1288,18 +1277,9 @@ bool RecordingMapTool::hasChanges() const
     return false;
   }
 
-  if ( mActiveLayer->isEditable() )
+  if ( mActiveLayer->isEditable() && mActiveLayer->undoStack() )
   {
-    if ( FID_IS_NEW( mActiveFeature.id() ) || FID_IS_NULL( mActiveFeature.id() ) )
-    {
-      // new feature
-      return mActiveLayer->undoStack()->count() > 1;
-    }
-    else
-    {
-      // existing feature
-      return mActiveLayer->isModified();
-    }
+    return mActiveLayer->undoStack()->index() > mMinUndoStackIndex;
   }
 
   return false;
@@ -1414,10 +1394,13 @@ void RecordingMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
   setActiveVertex( Vertex() );
   setActivePartAndRing( 0, 0 );
   setState( MapToolState::Record );
+  mMinUndoStackIndex = 0;
+  setCanUndo( false );
 
   if ( mActiveLayer )
   {
     mActiveLayer->startEditing();
+    mMinUndoStackIndex = mActiveLayer->undoStack()->index();
   }
 }
 
@@ -1637,6 +1620,7 @@ void RecordingMapTool::setActiveFeature( const QgsFeature &newActiveFeature )
 {
   if ( mActiveFeature == newActiveFeature )
     return;
+
   mActiveFeature = newActiveFeature;
   emit activeFeatureChanged( mActiveFeature );
 }

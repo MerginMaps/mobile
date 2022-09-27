@@ -85,7 +85,7 @@ Item {
             height: parent.height
 
             MainPanelButton {
-                width: toolbar.itemSize
+                width: visible ? toolbar.itemSize : 0
                 text: qsTr("Delete")
                 imageSource: InputStyle.removeIcon
 
@@ -96,13 +96,12 @@ Item {
         }
 
         Item {
-            width: parent.width/parent.children.length
+            width: visible ? parent.width/parent.children.length : 0
             height: parent.height
             visible: isSpatialLayer
 
             MainPanelButton {
-
-                width: toolbar.itemSize
+                width: parent.visible ? toolbar.itemSize : 0
                 text: qsTr("Edit geometry")
                 imageSource: InputStyle.editIcon
 
@@ -113,13 +112,13 @@ Item {
         }
 
         Item {
-            width: parent.width/parent.children.length
+            width: visible ? parent.width/parent.children.length : 0
             height: parent.height
             visible: isSpatialLayer
 
             MainPanelButton {
               id: menuBtn
-              width: toolbar.itemSize
+              width: parent.visible ? toolbar.itemSize : 0
               text: qsTr("Advanced")
               imageSource: InputStyle.moreMenuIcon
 
@@ -137,15 +136,16 @@ Item {
         width: parent.width
         anchors.fill: parent
 
+
         Item {
             width: parent.width/parent.children.length
             height: parent.height
+            visible: isSpatialLayer
 
             MainPanelButton {
                 width: toolbar.itemSize
                 text: qsTr("Edit geometry")
                 imageSource: InputStyle.editIcon
-                enabled: isFeaturePoint
 
                 onActivated: {
                     toolbar.editGeometryClicked()
@@ -164,7 +164,7 @@ Item {
 
         MenuItem {
             width: parent.width
-            height: toolbar.itemSize
+            height: visible ? toolbar.itemSize : 0
             visible: !isFeaturePoint
 
             ExtendedMenuItem {
