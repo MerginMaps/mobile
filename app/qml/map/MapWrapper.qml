@@ -11,7 +11,7 @@ import QtQuick
 
 import lc 1.0
 import QgsQuick 0.1 as QgsQuick
-import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 
 import ".."
 import "../components"
@@ -679,18 +679,17 @@ Item {
       return ""
     }
 
-    standardButtons: StandardButton.Yes | StandardButton.No
+    buttons: MessageDialog.Yes | MessageDialog.No
 
     onButtonClicked: {
-      if ( clickedButton === StandardButton.Yes ) {
+      if ( clickedButton === MessageDialog.Yes ) {
         recordingToolsLoader.item.discardChanges()
       }
-      else if ( clickedButton === StandardButton.No ) {
+      else if ( clickedButton === MessageDialog.No ) {
         cancelEditDialog.close()
       }
     }
   }
-
 
   MapFloatButton {
     id: accuracyButton
@@ -902,7 +901,7 @@ Item {
         root.state = "view"
       }
 
-      onDone: {
+      onDone: function( featureLayerPair ) {
         howtoEditingBanner.hide()
 
         if ( root.state === "record" )

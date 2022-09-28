@@ -25,7 +25,7 @@ Item {
       width: 20
       height: 5
 
-      color: Theme.borderColor
+      color: InputStyle.fontColor
       radius: height / 2
     }
 
@@ -40,7 +40,7 @@ Item {
       width: 5
       height: 20
 
-      color: Theme.borderColor
+      color: InputStyle.fontColor
       radius: width / 2
     }
 
@@ -55,7 +55,7 @@ Item {
       width: 20
       height: 5
 
-      color: Theme.borderColor
+      color: InputStyle.fontColor
       radius: height / 2
     }
 
@@ -70,7 +70,7 @@ Item {
       width: 5
       height: 20
 
-      color: Theme.borderColor
+      color: InputStyle.fontColor
       radius: width / 2
     }
 
@@ -85,7 +85,7 @@ Item {
       width: 20
       height: 5
 
-      color: Theme.borderColor
+      color: InputStyle.fontColor
       radius: height / 2
     }
 
@@ -100,7 +100,7 @@ Item {
       width: 5
       height: 20
 
-      color: Theme.borderColor
+      color: InputStyle.fontColor
       radius: width / 2
     }
 
@@ -115,7 +115,7 @@ Item {
       width: 20
       height: 5
 
-      color: Theme.borderColor
+      color: InputStyle.fontColor
       radius: height / 2
     }
 
@@ -130,7 +130,7 @@ Item {
       width: 5
       height: 20
 
-      color: Theme.borderColor
+      color: InputStyle.fontColor
       radius: width / 2
     }
 
@@ -144,7 +144,7 @@ Item {
       width: parent.width
       height: 1
 
-      color: Theme.borderColor
+      color: InputStyle.fontColor
 
       SequentialAnimation {
         id: scanIndicatorAnimation
@@ -168,17 +168,6 @@ Item {
         }
       }
     }
-  }
-
-  Text {
-    id: scanCapsuleText
-
-    anchors {
-      verticalCenter: captureZoneCorners.bottom
-      horizontalCenter: captureZoneCorners.horizontalCenter
-    }
-
-    text: qsTr("Scan code")
   }
 
   onCaptureRectChanged: {

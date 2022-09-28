@@ -242,8 +242,7 @@ Item {
         visible: false
         title: qsTr( "Failed to copy image" )
         text: errorText
-        //icon: StandardIcon.Warning
-        buttons: StandardButton.Ok
+        buttons: MessageDialog.Ok
         onAccepted: {
             externalResourceHandler.itemWidget.editorValueChanged("", false)
             visible = false

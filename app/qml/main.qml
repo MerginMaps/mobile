@@ -18,6 +18,8 @@ import QtQml.Models
 import QtPositioning
 import QtQuick.Dialogs
 
+import Qt.labs.settings 1.0
+
 import lc 1.0
 import "./map"
 import "./misc"
@@ -164,7 +166,7 @@ ApplicationWindow {
 
       onNothingIdentified: formsStackManager.closeDrawer();
 
-      onRecordingFinished: {
+      onRecordingFinished: function( pair ) {
         formsStackManager.openForm( pair, "add", "form" )
         stateManager.state = "view"
         map.highlightPair( pair )
@@ -172,7 +174,7 @@ ApplicationWindow {
       onRecordingCanceled: stateManager.state = "view"
 
       onEditingGeometryStarted: formsStackManager.geometryEditingStarted()
-      onEditingGeometryFinished: {
+      onEditingGeometryFinished: function( pair ) {
         formsStackManager.geometryEditingFinished( pair )
         stateManager.state = "view"
       }
@@ -182,7 +184,7 @@ ApplicationWindow {
       }
 
       onRecordInLayerFeatureStarted: formsStackManager.geometryEditingStarted()
-      onRecordInLayerFeatureFinished: {
+      onRecordInLayerFeatureFinished: function( pair ) {
         formsStackManager.recordInLayerFinished( pair )
         stateManager.state = "view"
       }

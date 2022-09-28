@@ -10,10 +10,9 @@
 #ifndef ANDROIDUTILS_H
 #define ANDROIDUTILS_H
 
-
 #ifdef ANDROID
-#include <QAndroidActivityResultReceiver>
-#include <QAndroidJniObject>
+#include <QtCore/private/qandroidextras_p.h>
+#include <QJniObject>
 #include <QBluetoothLocalDevice>
 #endif
 #include <QObject>
@@ -72,7 +71,7 @@ class AndroidUtils: public QObject
     const static int CAMERA_CODE = 102;
     const static int BLUETOOTH_CODE = 103;
 
-    void handleActivityResult( int receiverRequestCode, int resultCode, const QAndroidJniObject &data ) override;
+    void handleActivityResult( int receiverRequestCode, int resultCode, const QJniObject &data ) override;
 #endif
 
   signals:

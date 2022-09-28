@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQuick.Shapes 1.3
 import QgsQuick 0.1
 import lc 1.0
 
@@ -53,7 +54,7 @@ Item {
     // Bind variables manager to know if we are centered to GPS or not when evaluating position variables
     onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition
 
-    onActiveVertexChanged: {
+    onActiveVertexChanged: function( activeVertex ) {
       if ( activeVertex.isValid() )
       {
         // Center to clicked vertex
