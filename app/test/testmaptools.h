@@ -39,6 +39,8 @@ class TestMapTools : public QObject
     void testUpdateVertex();
     void testRemoveVertex();
     void testVerticesStructure();
+
+    void testZMRecording();
 };
 
 #endif // TESTMAPTOOLS_H

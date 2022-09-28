@@ -178,11 +178,11 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     }
   }
 
-  if ( mRecordedGeometry.wkbType() == QgsWkbTypes::Point )
+  if ( QgsWkbTypes::flatType( mRecordedGeometry.wkbType() ) == QgsWkbTypes::Point )
   {
     mRecordedGeometry.set( pointToAdd.clone() );
   }
-  else if ( mRecordedGeometry.wkbType() == QgsWkbTypes::MultiPoint )
+  else if ( QgsWkbTypes::flatType( mRecordedGeometry.wkbType() ) == QgsWkbTypes::MultiPoint )
   {
     mRecordedGeometry.addPart( pointToAdd.clone() );
   }
