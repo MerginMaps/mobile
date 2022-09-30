@@ -2346,6 +2346,7 @@ void TestMapTools::testZMRecording()
   mapTool.setActiveLayer( polygonMLayer );
 
   pointToAdd = QgsPoint( -97.129, 22.602 );
+  pointToAdd.addMValue();
   pointToAdd.setZ( 100 );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
