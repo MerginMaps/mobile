@@ -70,7 +70,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     pointToAdd.setY( transformed.y() );
   }
 
-  fixZ( pointToAdd );
+  fixZM( pointToAdd );
 
   QgsVertexId id( mActivePart, mActiveRing, 0 );
 
@@ -495,13 +495,16 @@ bool RecordingMapTool::hasValidGeometry() const
   return false;
 }
 
-void RecordingMapTool::fixZ( QgsPoint &point ) const
+void RecordingMapTool::fixZM( QgsPoint &point ) const
 {
   if ( !mActiveLayer )
     return;
 
   bool layerIs3D = QgsWkbTypes::hasZ( mActiveLayer->wkbType() );
   bool pointIs3D = QgsWkbTypes::hasZ( point.wkbType() );
+
+  bool layerIsM = QgsWkbTypes::hasM( mActiveLayer->wkbType() );
+  bool pointIsM = QgsWkbTypes::hasM( point.wkbType() );
 
   if ( layerIs3D )
   {
@@ -515,6 +518,21 @@ void RecordingMapTool::fixZ( QgsPoint &point ) const
     if ( pointIs3D )
     {
       point.dropZValue();
+    }
+  }
+
+  if ( layerIsM )
+  {
+    if ( !pointIsM )
+    {
+      point.addMValue();
+    }
+  }
+  else /* !layerIsM */
+  {
+    if ( pointIsM )
+    {
+      point.dropMValue();
     }
   }
 }
