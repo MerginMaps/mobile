@@ -42,7 +42,7 @@ jobs:
                             libzip-dev libzstd-dev lighttpd locales ninja-build \
                             pkg-config poppler-utils protobuf-compiler python3-all-dev \
                             spawn-fcgi xauth xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable xvfb \
-                            libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+                            libgstreamer-plugins-base1.0-dev
             
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
