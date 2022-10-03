@@ -41,7 +41,7 @@ ios {
     CONFIG += static
     DEFINES += QT_NO_SSL
 
-    QT += multimedia multimediawidgets location
+    QT += multimedia multimediawidgets
     QTPLUGIN += qios
 
     # other libs

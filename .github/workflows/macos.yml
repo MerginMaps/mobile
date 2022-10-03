@@ -135,7 +135,7 @@ jobs:
         run: |
           mkdir -p build-Input
           cd build-Input
-          ${{ github.workspace }}/Qt/${QT_VERSION}/clang_64/bin/qmake \
+          ${{ github.workspace }}/Qt/${QT_VERSION}/macos/bin/qmake \
             ../input/app/input.pro \
             CONFIG+=debug \
             CONFIG+=qtquickcompiler

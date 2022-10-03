@@ -37,7 +37,7 @@ jobs:
             sudo apt-get update -y
             sudo apt-get install libcurl4-gnutls-dev                        
             sudo apt-get install -y bison ca-certificates ccache cmake cmake-curses-gui dh-python expect flex flip \
-                            git graphviz libexiv2-dev libexpat1-dev libfcgi-dev libgeos-dev \
+                            git graphviz libexiv2-dev libexpat1-dev libfcgi-dev libgeos-dev libgeos++-dev libwebp-dev \
                             libgsl-dev libfreexl-dev libpq-dev libprotobuf-dev \
                             libspatialindex-dev libsqlite3-dev libyaml-tiny-perl \
                             libzip-dev libzstd-dev lighttpd locales ninja-build \
