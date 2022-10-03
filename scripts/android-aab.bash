@@ -41,7 +41,8 @@ if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
         --output ${INSTALL_DIR} \
         --aab \
         --deployment bundled \
-        --gradle
+        --gradle \
+        --verbose
 else
     echo "missing certificate! exit"
     exit 1

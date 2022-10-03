@@ -109,12 +109,11 @@ android {
     for (abi, ANDROID_ABIS): ANDROID_EXTRA_LIBS += \
         $${INPUT_SDK_PATH}/$${abi}/lib/libcrypto_1_1.so \
         $${INPUT_SDK_PATH}/$${abi}/lib/libssl_1_1.so \
-        $$QT_LIBS_DIR/libQt5OpenGL_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5PrintSupport_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5Sensors_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5Network_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5Sql_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5Svg_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5AndroidExtras_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5SerialPort_$${abi}.so
+        $$QT_LIBS_DIR/libQt6OpenGL_$${abi}.so \
+        $$QT_LIBS_DIR/libQt6PrintSupport_$${abi}.so \
+        $$QT_LIBS_DIR/libQt6Sensors_$${abi}.so \
+        $$QT_LIBS_DIR/libQt6Network_$${abi}.so \
+        $$QT_LIBS_DIR/libQt6Sql_$${abi}.so \
+        $$QT_LIBS_DIR/libQt6Svg_$${abi}.so \
+        $$QT_LIBS_DIR/libQt6SerialPort_$${abi}.so
 }
