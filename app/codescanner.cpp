@@ -41,6 +41,7 @@ void CodeScanner::initCamera()
   mDecoder.setResolution( w, h );
 
   mCamera->setFocusMode( QCamera::FocusModeAuto );
+  mCamera->setExposureMode( QCamera::ExposureBarcode );
   mCamera->setCameraFormat( s );
 
   mCaptureSession.setCamera( mCamera );
