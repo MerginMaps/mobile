@@ -209,7 +209,7 @@ jobs:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_armv7
-          STAGE_PATH: ${{ github.workspace }}/input-sdk/android/stage/armeabi-v7a
+          QT_NATIVE_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos
           SOURCE_DIR: ${{ github.workspace }}
 
         run: |
@@ -223,6 +223,7 @@ jobs:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a
+          QT_NATIVE_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos
           SOURCE_DIR: ${{ github.workspace }}
 
         run: |
@@ -257,6 +258,7 @@ jobs:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a
+          QT_NATIVE_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos
           SOURCE_DIR: ${{ github.workspace }}
 
         run: |

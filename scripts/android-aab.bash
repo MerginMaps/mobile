@@ -17,7 +17,8 @@ echo "SOURCE_DIR: ${SOURCE_DIR}"
 echo "BUILD_DIR: ${BUILD_DIR}"
 echo "ARCH: ${ARCH}"
 echo "NDK: ${ANDROID_NDK_ROOT}"
-echo "API: $ANDROIDAPI"
+echo "QT_BASE: $QT_BASE"
+echo "QT_NATIVE_BASE: $QT_NATIVE_BASE"
 
 mkdir -p ${BUILD_DIR}/.gradle
 
@@ -32,7 +33,7 @@ make install INSTALL_ROOT=${INSTALL_DIR}
 
 if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
     echo "building release"
-    ${QT_BASE}/bin/androiddeployqt \
+    ${QT_NATIVE_BASE}/bin/androiddeployqt \
         --sign ${SOURCE_DIR}/Input_keystore.keystore input \
         --storepass ${INPUTKEYSTORE_STOREPASS} \
         --keypass ${INPUTKEYSTORE_STOREPASS} \
