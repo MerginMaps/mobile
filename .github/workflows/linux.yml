@@ -35,14 +35,16 @@ jobs:
       - name: Install Build Dependencies
         run: |
             sudo apt-get update -y                    
-            sudo apt-get install -y libcurl4-gnutls-dev   bison ca-certificates ccache cmake cmake-curses-gui dh-python expect flex flip \
+            sudo apt-get install -y libcurl4-gnutls-dev bison ca-certificates ccache cmake cmake-curses-gui dh-python expect flex flip \
                             git graphviz libexiv2-dev libexpat1-dev libfcgi-dev libgeos-dev libgeos++-dev libwebp-dev \
                             libgsl-dev libfreexl-dev libpq-dev libprotobuf-dev \
                             libspatialindex-dev libsqlite3-dev libyaml-tiny-perl \
                             libzip-dev libzstd-dev lighttpd locales ninja-build \
                             pkg-config poppler-utils protobuf-compiler python3-all-dev \
                             spawn-fcgi xauth xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable xvfb \
-                            libgstreamer-plugins-base1.0-dev
+                            gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
+                            gstreamer1.0-plugins-ugly gstreamer1.0-x libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0 \
+                            libgstreamer-plugins-good1.0-0 libgstreamer1.0-0
             
       - name: Install Qt
         uses: jurplel/install-qt-action@v3

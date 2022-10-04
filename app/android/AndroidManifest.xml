@@ -5,7 +5,7 @@
           android:versionCode="__BASH_REPLACE_CODE__"
           android:installLocation="auto">
     <application android:hardwareAccelerated="true"
-                 android:name="org.qtproject.qt5.android.bindings.QtApplication"
+                 android:name="org.qtproject.qt.android.bindings.QtApplication"
                  android:label="Mergin Maps"
                  android:icon="@mipmap/ic_merginmaps_launcher"
                  android:extractNativeLibs="true"

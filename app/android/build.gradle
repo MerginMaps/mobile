@@ -7,7 +7,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.4'
+        classpath 'com.android.tools.build:gradle:7.0.2'
     }
 }
 
@@ -30,7 +30,7 @@ android {
      * The following variables:
      * - androidBuildToolsVersion,
      * - androidCompileSdkVersion
-     * - qt5AndroidDir - holds the path to qt android files
+     * - qtAndroidDir - holds the path to qt android files
      *                   needed to build any Qt application
      *                   on Android.
      *
@@ -40,17 +40,17 @@ android {
      *******************************************************/
 
     compileSdkVersion androidCompileSdkVersion.toInteger()
-
-    /* for some reasons this is hardcoded */
     buildToolsVersion androidBuildToolsVersion
-    /* buildToolsVersion '28.0.3' */
+    ndkVersion androidNdkVersion
+
+    packagingOptions.jniLibs.useLegacyPackaging true
 
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = [qt5AndroidDir + '/src', 'src', 'java']
-            aidl.srcDirs = [qt5AndroidDir + '/src', 'src', 'aidl']
-            res.srcDirs = [qt5AndroidDir + '/res', 'res']
+            java.srcDirs = [qtAndroidDir + '/src', 'src', 'java']
+            aidl.srcDirs = [qtAndroidDir + '/src', 'src', 'aidl']
+            res.srcDirs = [qtAndroidDir + '/res', 'res']
             resources.srcDirs = ['resources']
             renderscript.srcDirs = ['src']
             assets.srcDirs = ['assets']
@@ -58,20 +58,25 @@ android {
        }
     }
 
-    lintOptions {
-        abortOnError false
+    compileOptions {
+    	sourceCompatibility JavaVersion.VERSION_1_8
+	    targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    defaultConfig {
-        resConfigs "en"
+    lintOptions {
+        abortOnError false
     }
 
     // Do not compress Qt binary resources file
     aaptOptions {
         noCompress 'rcc'
     }
-    compileOptions {
-	sourceCompatibility 1.8
-	targetCompatibility 1.8
+
+    defaultConfig {
+        resConfigs "en"
+        minSdkVersion qtMidSdkVersion
+        targetSdkVersion qtTargetSdkVersion
+        ndk.abiFilters = qtTargetAbiList.split(",")
     }
+
 }
