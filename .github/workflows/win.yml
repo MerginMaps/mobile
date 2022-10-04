@@ -167,7 +167,6 @@ jobs:
             set INPUT_SOURCE_DIR="%GITHUB_WORKSPACE%\input"
             set PACKAGE_DIR=C:\input-package
             set INPUT_SDK_DIR=%GITHUB_WORKSPACE%\input-sdk
-            set Qt6_Dir=%GITHUB_WORKSPACE%\Qt\%QT_VERSION%\%QT_ARCH%
             %GITHUB_WORKSPACE%\input\scripts\package_win.cmd
             dir C:\input-package\stage
             
