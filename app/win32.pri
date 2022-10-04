@@ -17,7 +17,7 @@ win32 {
   LIBS += -L$${INPUT_SDK_PATH}/lib
   
   LIBS += -lqgis_core
-  LIBS += -lgdal_i
+  LIBS += -lgdal
   LIBS += -lgeodiff
   LIBS += -lproj
   LIBS += -lsqlite3  
