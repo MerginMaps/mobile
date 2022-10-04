@@ -45,7 +45,7 @@ win32 {
   LIBS += -lproj
   LIBS += -lexiv2 -lexiv2-xmp
   LIBS += -lZXing
-  LIBS += -lqt6keychain -lqca-qt6
+  LIBS += -lqt6keychain -lqca
   LIBS += -lgdal -lpq -lspatialite
   LIBS += -lxml2
   LIBS += -lproj
