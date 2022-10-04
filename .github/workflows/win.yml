@@ -168,6 +168,12 @@ jobs:
             set PACKAGE_DIR=C:\input-package
             set INPUT_SDK_DIR=%GITHUB_WORKSPACE%\input-sdk
             %GITHUB_WORKSPACE%\input\scripts\package_win.cmd
+            
+            echo "downloading vc_redist.x64"
+            curl -fsSL --connect-timeout 60 -o \
+              %PACKAGE_DIR%\stage\vc_redist.x64.exe \
+              https://aka.ms/vs/17/release/vc_redist.x64.exe
+              
             dir C:\input-package\stage
             
       - name: create package
