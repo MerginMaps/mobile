@@ -46,12 +46,12 @@ win32 {
   LIBS += -lexiv2 -lexiv2-xmp
   LIBS += -lZXing
   LIBS += -lqt6keychain -lqca
-  LIBS += -lgdal -lpq -lspatialite
-  LIBS += -lxml2
+  LIBS += -lgdal -llibpq -lspatialite
+  LIBS += -llibxml2
   LIBS += -lproj
-  LIBS += -lspatialindex -lgeos -lgeos_c
-  LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
-  LIBS += -lsqlite3 -lz -lzip
+  LIBS += -lspatialindex-64 -lspatialindex_c-64 -lgeos -lgeos_c
+  LIBS += -llibprotobuf-lite -llibexpat -lfreexl -lexiv2 -lexiv2-xmp
+  LIBS += -lsqlite3 -lzlib -lzip
   LIBS += -ltiff -ljpeg
   LIBS += -lwebp
     
