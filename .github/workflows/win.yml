@@ -167,14 +167,16 @@ jobs:
             set INPUT_SOURCE_DIR="%GITHUB_WORKSPACE%\input"
             set PACKAGE_DIR=C:\input-package
             set INPUT_SDK_DIR=%GITHUB_WORKSPACE%\input-sdk
-            %GITHUB_WORKSPACE%\input\scripts\package_win.cmd
-            
-            echo "downloading vc_redist.x64"
-            curl -fsSL --connect-timeout 60 -o \
-              %PACKAGE_DIR%\stage\vc_redist.x64.exe \
-              https://aka.ms/vs/17/release/vc_redist.x64.exe
-              
-            dir C:\input-package\stage
+            %GITHUB_WORKSPACE%\input\scripts\package_win.cmd              
+
+      - name: Downloading redist
+        shell: bash
+        run: |
+          URL="https://aka.ms/vs/17/release/vc_redist.x64.exe"
+          echo "downloading: $URL"
+          curl -fsSL --connect-timeout 60 -o \
+            /c/input-package/stage/vc_redist.x64.exe \
+            ${URL}
             
       - name: create package
         shell: cmd
