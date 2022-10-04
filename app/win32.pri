@@ -54,6 +54,8 @@ win32 {
   LIBS += -lsqlite3 -lzlib -lzip
   LIBS += -ltiff -ljpeg
   LIBS += -lwebp
+  
+  LIBS += -lws2_32 -luser32 -lshell32
     
   QT += printsupport
   QT += widgets
