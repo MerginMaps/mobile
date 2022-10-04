@@ -55,7 +55,7 @@ win32 {
   LIBS += -ltiff -ljpeg
   LIBS += -lwebp
   
-  LIBS += -lws2_32 -luser32 -lshell32
+  LIBS += -lAdvapi32 -lws2_32 -luser32 -lshell32
     
   QT += printsupport
   QT += widgets
