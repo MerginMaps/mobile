@@ -43,7 +43,6 @@ android {
     ndkVersion androidNdkVersion
 
     packagingOptions.jniLibs.useLegacyPackaging true
-    useAndroidX true
 
     sourceSets {
         main {
