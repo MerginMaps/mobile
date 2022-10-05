@@ -229,7 +229,9 @@ void TestPosition::testBluetoothProviderPosition()
   QCOMPARE( positionKit->altitude(), 153.026 );
   QCOMPARE( positionKit->speed(), 0.05 );
   QCOMPARE( positionKit->hdop(), 3.2 );
-  QCOMPARE( positionKit->satellitesUsed(), 9 );
+  // satellites count has been moved to GPGSA / GNGSA messages in QGIS
+  // see https://github.com/qgis/QGIS/pull/49820
+  QCOMPARE( positionKit->satellitesUsed(), 0 );
   QCOMPARE( positionKit->fix(), "RTK float" );
   QCOMPARE( positionKit->lastRead(), QDateTime().fromString( "2022-01-31T12:17:17Z", Qt::ISODate ) );
 }
