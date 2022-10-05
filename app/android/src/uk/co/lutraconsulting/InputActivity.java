@@ -1,7 +1,7 @@
 package uk.co.lutraconsulting;
 import android.os.Bundle;
 import android.view.WindowManager;
-import org.qtproject.qt5.android.bindings.QtActivity;
+import org.qtproject.qt.android.bindings.QtActivity;
 import android.util.Log;
 import android.os.Build;
 import java.lang.Exception;
