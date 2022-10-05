@@ -42,7 +42,6 @@ ios {
     DEFINES += QT_NO_SSL
 
     QT += multimedia multimediawidgets
-    QTPLUGIN += qios
 
     # other libs
     LIBS += -L$${INPUT_SDK_LIB_PATH} -L$${QGIS_PLUGINS_PATH}

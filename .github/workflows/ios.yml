@@ -219,7 +219,7 @@ jobs:
             qteam.value=79QMH2QRAH \
             QMAKE_MAC_XCODE_SETTINGS+=qidentity \
             qidentity.name=CODE_SIGN_IDENTITY \
-            qidentity.value=\"iPhone Distribution: LUTRA CONSULTING LIMITED \(79QMH2QRAH\)\" \
+            qidentity.value="iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)" \
             QMAKE_MAC_XCODE_SETTINGS+=qstyle \
             qstyle.name=CODE_SIGN_STYLE \
             qstyle.value=Manual
