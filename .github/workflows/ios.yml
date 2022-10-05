@@ -162,11 +162,30 @@ jobs:
         shell: bash
         run: |
           touch ./app/config.pri
+          
           echo -e "ios {"  >> ./app/config.pri
+          
           echo -e "  INPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64"  >> ./app/config.pri
           echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
           echo -e "  QMAKE_IOS_DEPLOYMENT_TARGET = ${{ env.IOS_MIN_SDK_VERSION }}"  >> ./app/config.pri
           echo -e "  QMAKE_CXX = ${{ github.workspace }}/scripts/ci/ios/ccache_clang"  >> ./app/config.pri
+          
+          echo -e "  qprofile.name=PROVISIONING_PROFILE_SPECIFIER"  >> ./app/config.pri
+          echo -e "  qprofile.value=\"LutraConsultingLtd.Input.AppStore\""  >> ./app/config.pri
+          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qprofile"  >> ./app/config.pri
+
+          echo -e "  qteam.name=DEVELOPMENT_TEAM"  >> ./app/config.pri
+          echo -e "  qteam.value=79QMH2QRAH"  >> ./app/config.pri
+          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qteam"  >> ./app/config.pri
+
+          echo -e "  qidentity.name=CODE_SIGN_IDENTITY"  >> ./app/config.pri
+          echo -e "  qidentity.value=\"iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)\""  >> ./app/config.pri
+          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qidentity"  >> ./app/config.pri
+                    
+          echo -e "  qstyle.name=CODE_SIGN_STYLE"  >> ./app/config.pri
+          echo -e "  qstyle.value=Manual"  >> ./app/config.pri
+          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qstyle"  >> ./app/config.pri
+          
           echo -e "}"  >> ./app/config.pri
           cat ./app/config.pri
 
@@ -210,19 +229,7 @@ jobs:
             CONFIG+=release \
             CONFIG+=iphoneos \
             CONFIG+=device \
-            CONFIG+=qtquickcompiler \
-            QMAKE_MAC_XCODE_SETTINGS+=qprofile \
-            qprofile.name=PROVISIONING_PROFILE_SPECIFIER \
-            qprofile.value="LutraConsultingLtd.Input.AppStore" \
-            QMAKE_MAC_XCODE_SETTINGS+=qteam \
-            qteam.name=DEVELOPMENT_TEAM \
-            qteam.value=79QMH2QRAH \
-            QMAKE_MAC_XCODE_SETTINGS+=qidentity \
-            qidentity.name=CODE_SIGN_IDENTITY \
-            qidentity.value="iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)" \
-            QMAKE_MAC_XCODE_SETTINGS+=qstyle \
-            qstyle.name=CODE_SIGN_STYLE \
-            qstyle.value=Manual
+            CONFIG+=qtquickcompiler
 
           # Use old deprecated build system in XCode 13
           /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
