@@ -110,6 +110,15 @@ FieldValidator::ValidationStatus FieldValidator::validateNumericField( const For
     return Valid;
   }
 
+  // in Qt 6 isNull() does not return true for true if the variant contained an object
+  // of a builtin type with an isNull() method that returned true for that object.
+  // So isNull() for QVariant( QString() ) will return false and we need to handle this
+  // separately.
+  if ( value.userType() == QVariant::String && value.toString().isEmpty() )
+  {
+    return Valid;
+  }
+
   QString errorMessage;
 
   bool containsDecimals = value.toString().contains( QLocale().decimalPoint() ) || value.toString().contains( "." );
