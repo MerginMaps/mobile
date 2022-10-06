@@ -20,7 +20,7 @@ env:
   XC_VERSION: ${{ '13.2.1' }}
   IOS_MIN_SDK_VERSION: ${{ '14.0' }}
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 4
+  CACHE_VERSION: 5
 
 concurrency:
   group: ci-${{github.ref}}-ios
