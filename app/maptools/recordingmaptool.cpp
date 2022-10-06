@@ -61,13 +61,14 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
     QgsPoint transformed = InputUtils::transformPoint(
                              PositionKit::positionCRS(),
-                             mActiveLayer->sourceCrs(),
+                             mActiveLayer->crs(),
                              mActiveLayer->transformContext(),
                              pointToAdd
                            );
 
     pointToAdd.setX( transformed.x() );
     pointToAdd.setY( transformed.y() );
+    pointToAdd.setZ( transformed.z() );
   }
 
   fixZM( pointToAdd );

@@ -96,6 +96,7 @@ class SnapUtils : public QObject
 
   private:
     void setupSnapping();
+    void initializeRecordPosition();
 
     QgsSnappingUtils mSnappingUtils;
 
