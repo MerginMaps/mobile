@@ -2610,7 +2610,7 @@ void TestMerginApi::uploadRemoteProject( MerginApi *api, const QString &projectN
 void TestMerginApi::writeFileContent( const QString &filename, const QByteArray &data )
 {
   QFile f( filename );
-  bool ok = f.open(QIODeviceBase::WriteOnly);
+  bool ok = f.open( QIODeviceBase::WriteOnly );
   Q_ASSERT( ok );
   f.write( data );
   f.close();
