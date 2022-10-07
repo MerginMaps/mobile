@@ -109,7 +109,7 @@ Item {
       Item {
         id: backHandler
         focus: true
-        Keys.onReleased: {
+        Keys.onReleased: function( event ) {
           if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
             if ( featureForm.controller.hasAnyChanges )  {
               saveChangesDialog.open()
@@ -121,7 +121,7 @@ Item {
           }
         }
 
-        onVisibleChanged: {
+        onVisibleChanged: function( visible ) {
           if ( visible )
             backHandler.forceActiveFocus()
         }

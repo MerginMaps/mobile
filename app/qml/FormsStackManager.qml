@@ -270,12 +270,24 @@ Item {
           formsStack.popOneOrClose()
         }
       }
-      onEditGeometry: root.editGeometryRequested( pair )
-      onSplitGeometry: root.splitGeometryRequested( pair )
-      onRedrawGeometry: root.redrawGeometryRequested( pair )
-      onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
-      onCreateLinkedFeature: root.createLinkedFeatureRequested( targetLayer, parentPair )
-      onStakeoutFeature: root.stakeoutFeature( feature )
+      onEditGeometry: function( pair ) {
+        root.editGeometryRequested( pair )
+      }
+      onSplitGeometry: function( pair ) {
+        root.splitGeometryRequested( pair )
+      }
+      onRedrawGeometry: function( pair ) {
+        root.redrawGeometryRequested( pair )
+      }
+      onOpenLinkedFeature: function( linkedFeature ) {
+        root.openLinkedFeature( linkedFeature )
+      }
+      onCreateLinkedFeature: function( targetLayer, parentPair ) {
+        root.createLinkedFeatureRequested( targetLayer, parentPair )
+      }
+      onStakeoutFeature: function( feature ) {
+        root.stakeoutFeature( feature )
+      }
     }
   }
 }

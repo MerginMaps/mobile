@@ -162,7 +162,9 @@ ApplicationWindow {
         return 0
       }
 
-      onFeatureIdentified: formsStackManager.openForm( pair, "readOnly", "preview" );
+      onFeatureIdentified: function( pair ) {
+        formsStackManager.openForm( pair, "readOnly", "preview" );
+      }
 
       onNothingIdentified: formsStackManager.closeDrawer();
 
@@ -508,7 +510,7 @@ ApplicationWindow {
 
       project: __activeProject.qgsProject
 
-      onCreateLinkedFeatureRequested: {
+      onCreateLinkedFeatureRequested: function( targetLayer, parentPair )  {
         if ( __inputUtils.isNoGeometryLayer( targetLayer) ) {
           let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
           recordInLayerFinished( newPair, true )
@@ -519,17 +521,17 @@ ApplicationWindow {
         }
       }
 
-      onEditGeometryRequested: {
+      onEditGeometryRequested: function( pair ) {
         stateManager.state = "record"
         map.edit( pair )
       }
 
-      onSplitGeometryRequested: {
+      onSplitGeometryRequested: function( pair ) {
         stateManager.state = "record"
         map.split( pair )
       }
 
-      onRedrawGeometryRequested: {
+      onRedrawGeometryRequested: function( pair ) {
         stateManager.state = "record"
         map.redraw( pair )
       }
@@ -548,7 +550,7 @@ ApplicationWindow {
         map.hideHighlight()
       }
 
-      onStakeoutFeature: {
+      onStakeoutFeature: function( feature ) {
         if ( !__inputUtils.isPointLayerFeature( feature ) )
           return;
         if ( !__positionKit.hasPosition )

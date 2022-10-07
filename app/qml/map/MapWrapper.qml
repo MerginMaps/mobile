@@ -162,7 +162,7 @@ Item {
       identifyMode: IdentifyKit.TopDownAll
     }
 
-    onClicked: {
+    onClicked: function( point ) {
       if ( root.state === "view" )
       {
         let screenPoint = Qt.point( point.x, point.y )
@@ -1094,7 +1094,7 @@ Item {
   }
 
   function highlightPair( pair ) {
-    let geometry = __inputUtils.extractGeometry( pair, mapCanvas.mapSettings )
+    let geometry = __inputUtils.extractGeometry( pair )
     identifyHighlight.geometry = __inputUtils.convertGeometryToMapCRS( geometry, pair.layer, mapCanvas.mapSettings )
   }
 
