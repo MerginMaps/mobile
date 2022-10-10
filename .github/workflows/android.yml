@@ -27,7 +27,7 @@ jobs:
       NDK_VERSION: r22
       NDK_VERSION_FULL: r22b
       JDK_VERSION: 11
-      SDK_PLATFORM: android-30
+      SDK_PLATFORM: android-31
       SDK_BUILD_TOOLS: 31.0.0
       INPUT_SDK_VERSION: android-macOS-20221005-113
       CCACHE_DIR: /Users/runner/work/ccache

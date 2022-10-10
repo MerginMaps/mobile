@@ -17,6 +17,7 @@ echo "SOURCE_DIR: ${SOURCE_DIR}"
 echo "BUILD_DIR: ${BUILD_DIR}"
 echo "ARCH: ${ARCH}"
 echo "NDK: ${ANDROID_NDK_ROOT}"
+echo "SDK: ${SDK_PLATFORM}"
 echo "QT_BASE: $QT_BASE"
 echo "QT_NATIVE_BASE: $QT_NATIVE_BASE"
 
@@ -41,8 +42,8 @@ if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
         --output ${INSTALL_DIR} \
         --aab \
         --deployment bundled \
-        --gradle \
-        --verbose
+        --android-platform ${SDK_PLATFORM} \
+        --gradle
 else
     echo "missing certificate! exit"
     exit 1

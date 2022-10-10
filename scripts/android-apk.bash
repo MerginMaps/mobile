@@ -43,6 +43,7 @@ echo "SOURCE_DIR: ${SOURCE_DIR}"
 echo "BUILD_DIR: ${BUILD_DIR}"
 echo "ARCH: ${ARCH}"
 echo "NDK: ${ANDROID_NDK_ROOT}"
+echo "SDK: ${SDK_PLATFORM}"
 echo "API: $ANDROIDAPI"
 echo "QT BASE: ${QT_BASE}"
 
@@ -72,6 +73,7 @@ if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
         --input ${BUILD_DIR}/android-Input-deployment-settings.json \
         --output ${INSTALL_DIR} \
         --deployment bundled \
+        --android-platform ${SDK_PLATFORM} \
         --gradle
 else
     echo "building debug"
@@ -79,5 +81,6 @@ else
         --input ${BUILD_DIR}/android-Input-deployment-settings.json \
         --output ${INSTALL_DIR} \
         --deployment bundled \
+        --android-platform ${SDK_PLATFORM} \
         --gradle
 fi
