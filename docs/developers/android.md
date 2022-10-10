@@ -1,8 +1,8 @@
 looking for android [publishing](./publishing.md)
 
-# Development
+# Development for Android
 
-Tested: Linux, MacOs, iOS
+Tested: Linux, MacOs
 In general you need `qgis_core` and `qgis_quick` libraries build for target platform.
 
 You need to copy and edit config.in with your paths!
@@ -24,7 +24,7 @@ Notes:
 
 Requirements Android:
 - input-sdk for Android
-- Qt5 for android
+- Qt6 for android
 - android-ndk
 - android-sdk
 
@@ -32,15 +32,12 @@ How to compile Android:
 
   1. edit `config.pri` file with your paths (Qt, input-sdk)
 
-
-
 ## Development MacOS Cross-Compilation for Android
 
 Same requirements as for Linux Cross-Compilation for Android
 
 Quick guide:
-- `brew tap caskroom/versions`
-- `brew cask install java8`
+- `brew install openjdk@11`
 - `brew install ant`
 - `brew install bison`
 - `sudo mkdir -p /opt; sudo chown <your name>:admin /opt`
