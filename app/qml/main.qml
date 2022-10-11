@@ -352,7 +352,9 @@ ApplicationWindow {
       height: window.height
       focus: true
 
-      onFeatureSelectRequested: selectFeature( pair )
+      onFeatureSelectRequested: function( pair ) {
+        selectFeature( pair )
+      }
 
       onCreateFeatureRequested: {
         let newPair = __inputUtils.createFeatureLayerPair( selectedLayer, __inputUtils.emptyGeometry(), __variablesManager )

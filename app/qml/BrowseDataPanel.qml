@@ -65,7 +65,7 @@ Item {
     anchors.fill: parent
     focus: true
 
-    Keys.onReleased: {
+    Keys.onReleased: function( event ) {
       if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
         event.accepted = true;
         popOnePageOrClose()
@@ -83,7 +83,7 @@ Item {
 
     BrowseDataLayersPanel {
       onBackButtonClicked: popOnePageOrClose()
-      onLayerClicked: {
+      onLayerClicked: function( layerId ) {
         setSelectedLayer( layerId )
         pushFeaturesListPage()
       }
@@ -100,7 +100,7 @@ Item {
 
       toolbarButtons: ["add"]
       onBackButtonClicked: popOnePageOrClose()
-      onSelectionFinished: {
+      onSelectionFinished: function( featureIds ) {
         let featurePair = featuresListModel.convertRoleValue( FeaturesModel.FeatureId, featureIds, FeaturesModel.FeaturePair )
 
         if ( !featurePair.feature.geometry.isNull ) {

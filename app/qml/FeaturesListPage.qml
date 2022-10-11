@@ -97,7 +97,9 @@ Item {
 
       visible: root.allowSearch
       allowTimer: true
-      onSearchTextChanged: root.featuresModel.searchExpression = text
+      onSearchTextChanged: function( text ) {
+        root.featuresModel.searchExpression = text
+      }
     }
 
     FeaturesList {
@@ -115,7 +117,9 @@ Item {
       allowMultiselect: root.allowMultiselect
       selectedFeatures: root.preselectedFeatures
 
-      onFeatureClicked: root.finishSelection( featureId )
+      onFeatureClicked: function( featureId ) {
+        root.finishSelection( featureId )
+      }
     }
 
     footer: FeaturesListPageToolbar {

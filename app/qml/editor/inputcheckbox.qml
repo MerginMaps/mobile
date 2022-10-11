@@ -85,7 +85,7 @@ Item {
 
       checked: value === fieldItem.checkedState
 
-      onSwitchChecked: {
+      onSwitchChecked: function( isChecked ) {
         editorValueChanged( isChecked ? fieldItem.checkedState : fieldItem.uncheckedState, false )
       }
 

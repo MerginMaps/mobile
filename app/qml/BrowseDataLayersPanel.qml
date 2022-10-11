@@ -48,7 +48,7 @@ Item {
                       .arg("<a href='"+ __inputHelp.howToEnableBrowsingDataLink +"'>")
                       .arg("</a>")
 
-        onListItemClicked: {
+        onListItemClicked: function( layerId ) {
           layerClicked( layerId )
         }
     }
