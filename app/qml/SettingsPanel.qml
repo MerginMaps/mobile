@@ -347,10 +347,7 @@ Item {
             text: qsTr("Diagnostic log")
             MouseArea {
               anchors.fill: parent
-              onClicked: stackview.push(logPanelComponent, {
-                                          "text": __inputHelp.fullLog(true,
-                                                                      200000)
-                                        })
+              onClicked: stackview.push(logPanelComponent, { "text": __inputHelp.fullLog( true ) } )
             }
           }
         }

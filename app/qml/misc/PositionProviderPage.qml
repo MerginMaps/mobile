@@ -309,7 +309,9 @@ Page {
         leftPadding: InputStyle.panelMargin
         rightPadding: InputStyle.panelMargin
 
-        onLinkActivated: Qt.openUrlExternally( link )
+        onLinkActivated: function( link ) {
+          Qt.openUrlExternally( link )
+        }
       }
     }
   }

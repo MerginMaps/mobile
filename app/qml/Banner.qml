@@ -99,7 +99,9 @@ Rectangle {
       textItem.rightPadding: InputStyle.innerFieldMargin
       textItem.text: banner.getText()
 
-      onLinkActivated: Qt.openUrlExternally(link)
+      onLinkActivated: function( link ) {
+        Qt.openUrlExternally(link)
+      }
     }
   }
 }

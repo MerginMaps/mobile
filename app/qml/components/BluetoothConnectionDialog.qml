@@ -272,7 +272,9 @@ Dialog {
           color: InputStyle.fontColor
           font.pixelSize: InputStyle.fontPixelSizeNormal
 
-          onLinkActivated: Qt.openUrlExternally( link )
+          onLinkActivated: function( link ) {
+            Qt.openUrlExternally( link )
+          }
         }
       }
 

@@ -167,7 +167,9 @@ Item {
         .arg("</a>")
         .arg("<a href='"+ __inputHelp.howToDownloadProjectLink +"'>")
 
-        onLinkActivated: Qt.openUrlExternally(link)
+        onLinkActivated: function( link ) {
+          Qt.openUrlExternally(link)
+        }
       }
 
 

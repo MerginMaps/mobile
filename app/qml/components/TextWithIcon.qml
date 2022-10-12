@@ -59,7 +59,9 @@ Row {
     height: root.height
     verticalAlignment: Text.AlignVCenter
     font.pixelSize: InputStyle.fontPixelSizeNormal
-    onLinkActivated: root.linkActivated(link)
+    onLinkActivated: function( link ) {
+      root.linkActivated(link)
+    }
     color: root.fontColor
     text: "<style>a:link { color: " + root.linkColor
           + "; text-decoration: underline; }</style>" + root.text

@@ -145,7 +145,9 @@ Page {
         height: InputStyle.rowHeight
         visible: root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionInGracePeriod
         source: InputStyle.exclamationTriangleIcon
-        onLinkActivated: Qt.openUrlExternally(link)
+        onLinkActivated: function( link ) {
+          Qt.openUrlExternally(link)
+        }
         text: qsTr("Please update your %1billing details%2 as soon as possible")
                 .arg("<a href='" + __purchasing.subscriptionBillingUrl + "'>")
                 .arg("</a>")

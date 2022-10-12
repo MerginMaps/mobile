@@ -211,7 +211,7 @@ ApplicationWindow {
         gpsDataPageLoader.focus = true
       }
 
-      onStakeoutStarted: {
+      onStakeoutStarted: function( pair ) {
         stakeoutPanelLoader.active = true
         stakeoutPanelLoader.focus = true
         stakeoutPanelLoader.item.targetPair = pair
