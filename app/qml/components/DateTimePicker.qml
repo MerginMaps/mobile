@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import Qt.labs.calendar 1.0
+//import Qt.labs.calendar 1.0
 import Qt5Compat.GraphicalEffects
 
 import ".."
@@ -61,7 +61,7 @@ Item {
 
   focus: true
 
-  Keys.onReleased: {
+  Keys.onReleased: function( event ) {
     if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
       event.accepted = true
       root.canceled()

@@ -102,7 +102,7 @@ Item {
       }
     }
 
-    Keys.onReleased: {
+    Keys.onReleased: function( event ) {
       if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
         event.accepted = true;
 
@@ -294,8 +294,12 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: setupProjectOpen( projectId, projectFilePath )
-            onShowLocalChangesRequested: showChanges( projectId )
+            onOpenProjectRequested: function( projectId, projectFilePath ) {
+              setupProjectOpen( projectId, projectFilePath )
+            }
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
             list.onActiveProjectDeleted: setupProjectOpen( "", "" )
           }
 
@@ -306,8 +310,12 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: setupProjectOpen( projectId, projectFilePath )
-            onShowLocalChangesRequested: showChanges( projectId )
+            onOpenProjectRequested: function( projectId, projectFilePath ) {
+              setupProjectOpen( projectId, projectFilePath )
+            }
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
             list.onActiveProjectDeleted: setupProjectOpen( "", "" )
           }
 
@@ -318,8 +326,12 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: setupProjectOpen( projectId, projectFilePath )
-            onShowLocalChangesRequested: showChanges( projectId )
+            onOpenProjectRequested: function( projectId, projectFilePath ) {
+              setupProjectOpen( projectId, projectFilePath )
+            }
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
             list.onActiveProjectDeleted: setupProjectOpen( "", "" )
           }
 
@@ -331,7 +343,9 @@ Item {
             list.visible: !stackView.pending
 
             onOpenProjectRequested: setupProjectOpen( projectId, projectFilePath )
-            onShowLocalChangesRequested: showChanges( projectId )
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
             list.onActiveProjectDeleted: setupProjectOpen( "", "" )
           }
         }

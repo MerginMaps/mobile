@@ -336,7 +336,7 @@ ApplicationWindow {
           }
         }
 
-        onOpenProjectRequested: {
+        onOpenProjectRequested: function( projectId, projectPath ) {
           __appSettings.defaultProject = projectPath
           __appSettings.activeProject = projectPath
           __activeProject.load( projectPath )

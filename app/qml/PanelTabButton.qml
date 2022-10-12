@@ -39,5 +39,4 @@ TabButton {
         font.bold: true
         font.pixelSize: InputStyle.fontPixelSizeNormal
     }
-
 }

@@ -116,7 +116,9 @@ Item {
     PreviewPanel {
       id: previewPanel
 
-      onStakeoutFeature: root.stakeoutFeature( feature )
+      onStakeoutFeature: function( feature ) {
+        root.stakeoutFeature( feature )
+      }
 
       isReadOnly: root.isReadOnly
       controller: AttributePreviewController { project: root.project; featureLayerPair: root.featureLayerPair }

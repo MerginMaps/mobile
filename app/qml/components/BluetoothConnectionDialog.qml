@@ -69,7 +69,7 @@ Dialog {
   Item {
     focus: true
     // just close the popup, keep the connection running
-    Keys.onReleased: {
+    Keys.onReleased: function( event ) {
       if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
         event.accepted = true
         close()
