@@ -52,7 +52,7 @@ ApplicationWindow {
             }
         ]
 
-        onStateChanged: {
+        onStateChanged: function() {
             if ( stateManager.state === "view" ) {
               projectPanel.hidePanel()
               map.state = "view"
@@ -166,63 +166,75 @@ ApplicationWindow {
         formsStackManager.openForm( pair, "readOnly", "preview" );
       }
 
-      onNothingIdentified: formsStackManager.closeDrawer();
+      onNothingIdentified: function() {
+        formsStackManager.closeDrawer();
+      }
 
       onRecordingFinished: function( pair ) {
         formsStackManager.openForm( pair, "add", "form" )
         stateManager.state = "view"
         map.highlightPair( pair )
       }
-      onRecordingCanceled: stateManager.state = "view"
+      onRecordingCanceled: function() {
+        stateManager.state = "view"
+      }
 
-      onEditingGeometryStarted: formsStackManager.geometryEditingStarted()
+      onEditingGeometryStarted: function() {
+        formsStackManager.geometryEditingStarted()
+      }
       onEditingGeometryFinished: function( pair ) {
         formsStackManager.geometryEditingFinished( pair )
         stateManager.state = "view"
       }
-      onEditingGeometryCanceled: {
+      onEditingGeometryCanceled: function() {
         formsStackManager.geometryEditingFinished( null, false )
         stateManager.state = "view"
       }
 
-      onRecordInLayerFeatureStarted: formsStackManager.geometryEditingStarted()
+      onRecordInLayerFeatureStarted: function() {
+        formsStackManager.geometryEditingStarted()
+      }
       onRecordInLayerFeatureFinished: function( pair ) {
         formsStackManager.recordInLayerFinished( pair )
         stateManager.state = "view"
       }
-      onRecordInLayerFeatureCanceled: {
+      onRecordInLayerFeatureCanceled: function() {
         formsStackManager.recordInLayerFinished( null, false )
         stateManager.state = "view"
       }
 
-      onSplittingStarted: formsStackManager.hideAll()
+      onSplittingStarted: function() {
+        formsStackManager.hideAll()
+      }
       onSplittingFinished: {
         formsStackManager.closeAll()
         stateManager.state = "view"
       }
-      onSplittingCanceled: {
+      onSplittingCanceled: function() {
         formsStackManager.reopenAll()
         stateManager.state = "view"
       }
 
-      onNotify: showMessage( message )
-      onAccuracyButtonClicked: {
+      onNotify: function() {
+        showMessage( message )
+      }
+      onAccuracyButtonClicked: function() {
         gpsDataPageLoader.active = true
         gpsDataPageLoader.focus = true
       }
 
-      onStakeoutStarted: {
+      onStakeoutStarted: function( pair ) {
         stakeoutPanelLoader.active = true
         stakeoutPanelLoader.focus = true
         stakeoutPanelLoader.item.targetPair = pair
       }
 
-      onSignInRequested: {
+      onSignInRequested: function() {
         stateManager.state = "projects"
         projectPanel.openAuthPanel()
       }
 
-      onLocalChangesPanelRequested: {
+      onLocalChangesPanelRequested: function() {
           if ( __merginProjectStatusModel.loadProjectInfo( __activeProject.projectFullName() ) )
           {
             stateManager.state = "projects"
@@ -255,23 +267,33 @@ ApplicationWindow {
 
         gpsIndicatorColor: map.gpsIndicatorColor
 
-        onOpenProjectClicked: stateManager.state = "projects"
-        onOpenMapThemesClicked: mapThemesPanel.visible = true
-        onMyLocationClicked: map.centerToPosition()
+        onOpenProjectClicked: function() {
+          stateManager.state = "projects"
+        }
+        onOpenMapThemesClicked: function() {
+          mapThemesPanel.visible = true
+        }
+        onMyLocationClicked: function() {
+          map.centerToPosition()
+        }
 
-        onMyLocationHold: {
+        onMyLocationHold: function() {
             __appSettings.autoCenterMapChecked = !__appSettings.autoCenterMapChecked
             showMessage( __appSettings.autoCenterMapChecked ?  qsTr("GPS auto-center mode on") : qsTr("GPS auto-center mode off") )
         }
-        onOpenSettingsClicked: settingsPanel.visible = true
-        onZoomToProject: {
+        onOpenSettingsClicked: function() {
+          settingsPanel.visible = true
+        }
+        onZoomToProject: function() {
           if ( __appSettings.autoCenterMapChecked ) {
             mainPanel.myLocationHold()
           }
           __inputUtils.zoomToProject( __activeProject.qgsProject, map.mapSettings )
         }
-        onOpenBrowseDataClicked: browseDataPanel.visible = true
-        onRecordClicked: {
+        onOpenBrowseDataClicked: function() {
+          browseDataPanel.visible = true
+        }
+        onRecordClicked: function() {
             if ( __recordingLayersModel.rowCount() > 0 ) {
               stateManager.state = "record"
               map.record()
@@ -279,7 +301,7 @@ ApplicationWindow {
                 showMessage( qsTr( "No editable layers found." ) )
             }
         }
-        onLocalChangesClicked: {
+        onLocalChangesClicked: function() {
           if ( __merginProjectStatusModel.loadProjectInfo( __activeProject.projectFullName() ) )
           {
             stateManager.state = "projects"
@@ -298,7 +320,7 @@ ApplicationWindow {
       width: parent.width - failedToLoadProjectBanner.anchors.margins * 2
       height: InputStyle.rowHeight * 2
 
-      onDetailsClicked: {
+      onDetailsClicked: function() {
         projectIssuesPanel.projectLoadingLog = __activeProject.projectLoadingLog();
         projectIssuesPanel.visible = true;
       }
@@ -311,7 +333,7 @@ ApplicationWindow {
       width: window.width
       rowHeight: InputStyle.rowHeight
 
-      onVisibleChanged: {
+      onVisibleChanged: function() {
         if (settingsPanel.visible)
           settingsPanel.focus = true; // get focus
         else
@@ -327,7 +349,7 @@ ApplicationWindow {
         height: window.height
         width: window.width
 
-        onVisibleChanged: {
+        onVisibleChanged: function() {
           if (projectPanel.visible)
             projectPanel.forceActiveFocus()
           else
@@ -336,13 +358,15 @@ ApplicationWindow {
           }
         }
 
-        onOpenProjectRequested: {
+        onOpenProjectRequested: function( projectPath ) {
           __appSettings.defaultProject = projectPath
           __appSettings.activeProject = projectPath
           __activeProject.load( projectPath )
         }
 
-        onClosed: stateManager.state = "view"
+        onClosed: function() {
+          stateManager.state = "view"
+        }
     }
 
     BrowseDataPanel {
@@ -356,12 +380,12 @@ ApplicationWindow {
         selectFeature( pair )
       }
 
-      onCreateFeatureRequested: {
+      onCreateFeatureRequested: function() {
         let newPair = __inputUtils.createFeatureLayerPair( selectedLayer, __inputUtils.emptyGeometry(), __variablesManager )
         formsStackManager.openForm( newPair, "add", "form" )
       }
 
-      onVisibleChanged: {
+      onVisibleChanged: function() {
         if ( !browseDataPanel.visible )
           mainPanel.forceActiveFocus()
       }
@@ -373,7 +397,7 @@ ApplicationWindow {
       GpsDataPage {
         id: gpsDataPage
 
-        onBack: {
+        onBack: function() {
           mainPanel.focus = true
           gpsDataPageLoader.active = false
         }
@@ -392,7 +416,7 @@ ApplicationWindow {
       active: false
       focus: true
       sourceComponent: gpsDataPageComponent
-      onActiveChanged: {
+      onActiveChanged: function() {
         if ( gpsDataPageLoader.active )
         {
           formsStackManager.closeDrawer();
@@ -431,7 +455,7 @@ ApplicationWindow {
       rowHeight: InputStyle.rowHeight
       visible: false;
 
-      onVisibleChanged: {
+      onVisibleChanged: function() {
         if (projectIssuesPanel.visible)
           projectIssuesPanel.focus = true; // get focus
         else
@@ -460,14 +484,18 @@ ApplicationWindow {
 
         mapCanvas: map
 
-        onStakeoutFinished: {
+        onStakeoutFinished: function() {
           map.stopStakeout()
           formsStackManager.openForm( targetPair, "readOnly", "preview" )
           stakeoutPanelLoader.active = false
         }
 
-        onAutoFollowClicked: map.autoFollowStakeoutPath()
-        onPanelHeightUpdated: map.updatePosition()
+        onAutoFollowClicked: function() {
+          map.autoFollowStakeoutPath()
+        }
+        onPanelHeightUpdated: function() {
+          map.updatePosition()
+        }
       }
     }
 
@@ -483,7 +511,7 @@ ApplicationWindow {
 
     StorageLimitDialog {
         id: storageLimitDialog
-        onOpenSubscriptionPlans: {
+        onOpenSubscriptionPlans: function() {
           storageLimitDialog.close()
           if (__merginApi.apiSupportsSubscriptions) {
             projectPanel.manageSubscriptionPlans()
@@ -496,7 +524,7 @@ ApplicationWindow {
         onAccepted: projDialog.close()
         title: qsTr("PROJ Error")
         buttons: MessageDialog.Ignore | MessageDialog.Help
-        onButtonClicked: {
+        onButtonClicked: function( clickedButton ) {
           if (clickedButton === MessageDialog.Help) {
             Qt.openUrlExternally(__inputHelp.howToSetupProj)
           }
@@ -538,7 +566,7 @@ ApplicationWindow {
         map.redraw( pair )
       }
 
-      onClosed: {
+      onClosed: function() {
         if ( browseDataPanel.visible ) {
           browseDataPanel.refreshFeaturesData()
           browseDataPanel.focus = true

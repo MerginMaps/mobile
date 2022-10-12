@@ -236,7 +236,7 @@ Rectangle {
       text: qsTr("Sign up")
       font.pixelSize: InputStyle.fontPixelSizeBig
       anchors.horizontalCenter: parent.horizontalCenter
-      onClicked: {
+      onClicked: function() {
         stackView.pending = true
         __merginApi.registerUser(registerName.text, email.text, passwordField.password.text,
                                  passwordConfirmField.password.text, acceptTOC.checked)

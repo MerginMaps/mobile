@@ -22,7 +22,7 @@ AbstractEditor {
   signal editorValueChanged( var newValue, bool isNull )
   signal openLinkedFeature( var linkedFeature )
 
-  onContentClicked: {
+  onContentClicked: function() {
     let featurePair = rModel.attributeFromForeignKey( parentValue, FeaturesModel.FeaturePair )
 
     if ( featurePair == null || !featurePair.valid ) return
@@ -30,14 +30,16 @@ AbstractEditor {
      openLinkedFeature( featurePair )
   }
 
-  onRightActionClicked: {
+  onRightActionClicked: function() {
     if ( root.parent.readOnly ) return
 
     let page = root.parent.formView.push( parentFeaturesPageComponent, { featuresModel: rModel } )
     page.forceActiveFocus()
   }
 
-  onParentValueChanged: title.text = rModel.attributeFromForeignKey( parentValue, FeaturesModel.FeatureTitle ) || ""
+  onParentValueChanged: function() {
+    title.text = rModel.attributeFromForeignKey( parentValue, FeaturesModel.FeatureTitle ) || ""
+  }
 
   RelationReferenceFeaturesModel {
     id: rModel
@@ -45,7 +47,9 @@ AbstractEditor {
     config: root.parent.config
     project: root.parent.activeProject
 
-    onModelReset: title.text = rModel.attributeFromForeignKey( parentValue, FeaturesModel.FeatureTitle ) || ""
+    onModelReset: function() {
+      title.text = rModel.attributeFromForeignKey( parentValue, FeaturesModel.FeatureTitle ) || ""
+    }
   }
 
   content: Text {
@@ -96,22 +100,22 @@ AbstractEditor {
       toolbarButtons: ["unlink"]
       toolbarVisible: rModel.allowNull
 
-      onBackButtonClicked: {
+      onBackButtonClicked: function() {
         root.parent.formView.pop()
       }
 
-      onSelectionFinished: {
+      onSelectionFinished: function(featureIds) {
         let fk = rModel.foreignKeyFromAttribute( FeaturesModel.FeatureId, featureIds )
         root.editorValueChanged( fk, false )
         root.parent.formView.pop()
       }
 
-      onUnlinkClicked: {
+      onUnlinkClicked: function() {
         root.editorValueChanged( undefined, true )
         root.parent.formView.pop()
       }
 
-      Keys.onReleased: {
+      Keys.onReleased: function(event) {
         if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
           event.accepted = true
           root.parent.formView.pop()

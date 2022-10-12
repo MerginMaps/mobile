@@ -31,7 +31,9 @@ Item {
       rowHeight: InputStyle.rowHeightHeader
       titleText: qsTr("Layers")
 
-      onBack: root.backButtonClicked()
+      onBack: function() {
+        root.backButtonClicked()
+      }
       withBackButton: true
     }
 

@@ -61,7 +61,7 @@ AbstractEditor {
       color: customStyle.fields.backgroundColor
     }
 
-    onTextEdited: {
+    onTextEdited: function(text) {
       let val = text
       if ( field.isNumeric )
       {
@@ -71,6 +71,8 @@ AbstractEditor {
       editorValueChanged( val, val === "" )
     }
 
-    onPreeditTextChanged: if ( __androidUtils.isAndroid ) Qt.inputMethod.commit() // to avoid Android's uncommited text
+    onPreeditTextChanged: function() {
+      if ( __androidUtils.isAndroid ) Qt.inputMethod.commit() // to avoid Android's uncommited text
+    }
   }
 }

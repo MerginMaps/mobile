@@ -59,13 +59,15 @@ Page {
     rowHeight: InputStyle.rowHeightHeader
     titleText: qsTr( "GPS receivers" )
 
-    onBack: root.close()
+    onBack: function() {
+      root.close()
+    }
     withBackButton: true
   }
 
   focus: true
 
-  Keys.onReleased: {
+  Keys.onReleased: function(event) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true
       close()
@@ -104,7 +106,9 @@ Page {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: root.constructProvider( model.ProviderType, model.ProviderId, model.ProviderName )
+        onClicked: function() {
+          root.constructProvider( model.ProviderType, model.ProviderId, model.ProviderName )
+        }
       }
 
       Row {
@@ -151,7 +155,9 @@ Page {
           // We need to duplicate mouse area here in order to handle clicks from RadioButton
           MouseArea {
             anchors.fill: parent
-            onClicked: root.constructProvider( model.ProviderType, model.ProviderId, model.ProviderName )
+            onClicked: function() {
+              root.constructProvider( model.ProviderType, model.ProviderId, model.ProviderName )
+            }
           }
         }
 
@@ -229,13 +235,15 @@ Page {
 
           MouseArea {
             anchors.fill: parent
-            onClicked: removeDialog.openDialog( model.ProviderId )
+            onClicked: function() {
+              removeDialog.openDialog( model.ProviderId )
+            }
           }
         }
       }
     }
 
-    Component.onCompleted: {
+    Component.onCompleted: function() {
       // select appropriate footer, on iOS say that you can not connect via BT
       if ( __haveBluetooth )
       {
@@ -270,7 +278,7 @@ Page {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: {
+        onClicked: function() {
           let page = root.stackView.push( bluetoothDiscoveryComponent )
           page.focus = true
         }
@@ -309,7 +317,9 @@ Page {
         leftPadding: InputStyle.panelMargin
         rightPadding: InputStyle.panelMargin
 
-        onLinkActivated: Qt.openUrlExternally( link )
+        onLinkActivated: function(link) {
+          Qt.openUrlExternally( link )
+        }
       }
     }
   }
@@ -321,8 +331,12 @@ Page {
       height: root.height + header.height
       width: root.width
 
-      onInitiatedConnectionTo: providersModel.addProvider( deviceName, deviceAddress )
-      onClose: root.stackView.pop()
+      onInitiatedConnectionTo: function(deviceAddress, deviceName) {
+        providersModel.addProvider( deviceName, deviceAddress )
+      }
+      onClose: function() {
+        root.stackView.pop()
+      }
     }
   }
 
@@ -334,7 +348,9 @@ Page {
     asynchronous: true
     anchors.fill: parent
 
-    onLoaded: item.open()
+    onLoaded: function() {
+      item.open()
+    }
   }
 
   Component {
@@ -348,7 +364,9 @@ Page {
 
       anchors.centerIn: parent
 
-      onClosed: dialogLoader.active = false
+      onClosed: function() {
+        dialogLoader.active = false
+      }
     }
   }
 
@@ -368,7 +386,7 @@ Page {
     buttons: MessageDialog.Ok | MessageDialog.Cancel
 
     //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-    onButtonClicked: {
+    onButtonClicked: function(clickedButton) {
       if (clickedButton === MessageDialog.Ok) {
         if (relatedProviderId === "")
           return

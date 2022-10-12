@@ -35,7 +35,7 @@ Item {
     }
   }
 
-  Keys.onReleased: {
+  Keys.onReleased: function( event ) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true
 
@@ -74,7 +74,9 @@ Item {
         rowHeight: InputStyle.rowHeightHeader
         titleText: qsTr("Settings")
 
-        onBack: root.visible = false
+        onBack: function() {
+          root.visible = false
+        }
       }
 
       ScrollView {
@@ -111,12 +113,16 @@ Item {
               id: autoCenterMapSwitch
 
               checked: __appSettings.autoCenterMapChecked
-              onCheckedChanged: __appSettings.autoCenterMapChecked = checked
+              onCheckedChanged: function() {
+                 __appSettings.autoCenterMapChecked = checked
+              }
             }
 
             MouseArea {
               anchors.fill: parent
-              onClicked: autoCenterMapSwitch.toggle()
+              onClicked: function() {
+                autoCenterMapSwitch.toggle()
+              }
             }
           }
 
@@ -211,12 +217,16 @@ Item {
               id: accuracyWarningSwitch
 
               checked: __appSettings.gpsAccuracyWarning
-              onCheckedChanged: __appSettings.gpsAccuracyWarning = checked
+              onCheckedChanged: function() {
+                __appSettings.gpsAccuracyWarning = checked
+              }
             }
 
             MouseArea {
               anchors.fill: parent
-              onClicked: accuracyWarningSwitch.toggle()
+              onClicked: function() {
+                accuracyWarningSwitch.toggle()
+              }
             }
           }
 
@@ -228,7 +238,9 @@ Item {
 
             MouseArea {
               anchors.fill: parent
-              onClicked: stackview.push( positionProviderComponent )
+              onClicked: function() {
+                stackview.push( positionProviderComponent )
+              }
             }
           }
 

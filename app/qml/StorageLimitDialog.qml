@@ -110,7 +110,9 @@ Dialog {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: root.openSubscriptionPlans()
+        onClicked: function() {
+          root.openSubscriptionPlans()
+        }
       }
     }
 

@@ -67,7 +67,7 @@ Item {
                 text: qsTr("Edit")
                 imageSource: InputStyle.editIcon
 
-                onActivated: {
+                onActivated: function() {
                     toolbar.editClicked()
                 }
             }
@@ -89,7 +89,7 @@ Item {
                 text: qsTr("Delete")
                 imageSource: InputStyle.removeIcon
 
-                onActivated: {
+                onActivated: function() {
                     toolbar.deleteClicked()
                 }
             }
@@ -105,7 +105,7 @@ Item {
                 text: qsTr("Edit geometry")
                 imageSource: InputStyle.editIcon
 
-                onActivated: {
+                onActivated: function() {
                     toolbar.editGeometryClicked()
                 }
             }
@@ -122,7 +122,7 @@ Item {
               text: qsTr("Advanced")
               imageSource: InputStyle.moreMenuIcon
 
-              onActivated: {
+              onActivated: function() {
                 if ( !rootMenu.visible ) rootMenu.open()
                 else rootMenu.close()
               }
@@ -147,7 +147,7 @@ Item {
                 text: qsTr("Edit geometry")
                 imageSource: InputStyle.editIcon
 
-                onActivated: {
+                onActivated: function() {
                     toolbar.editGeometryClicked()
                 }
             }
@@ -175,7 +175,7 @@ Item {
                 imageSource: InputStyle.scissorsIcon
             }
 
-            onClicked: {
+            onClicked: function() {
                 toolbar.splitGeometryClicked()
                 rootMenu.close()
             }
@@ -193,11 +193,10 @@ Item {
                 imageSource: InputStyle.eraserIcon
             }
 
-            onClicked: {
+            onClicked: function() {
                 toolbar.redrawGeometryClicked()
                 rootMenu.close()
             }
         }
    }
-
 }

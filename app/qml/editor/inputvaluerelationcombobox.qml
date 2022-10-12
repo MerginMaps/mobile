@@ -60,7 +60,7 @@ AbstractEditor {
     config: root.fieldConfig
     pair: root.featureLayerPair
 
-    onInvalidate: {
+    onInvalidate: function() {
       if ( root.parentValueIsNull )
       {
         return // ignore invalidate signal if value is already NULL
@@ -83,7 +83,7 @@ AbstractEditor {
     iconSize: height / 2
     model: vrModel
 
-    onItemClicked: {
+    onItemClicked: function(index) {
       // We need to convert feature id to string prior to sending it to C++ in order to
       // avoid conversion to scientific notation.
       let fid = index.toString()

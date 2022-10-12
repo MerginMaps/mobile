@@ -116,7 +116,9 @@ Rectangle {
           background: Rectangle {
             color: loginForm.bgColor
           }
-          onEditingFinished: focus = false
+          onEditingFinished: function() {
+            focus = false
+          }
         }
       }
 
@@ -157,7 +159,7 @@ Rectangle {
         text: qsTr("Sign in")
         font.pixelSize: InputStyle.fontPixelSizeBig
         anchors.horizontalCenter: parent.horizontalCenter
-        onClicked: {
+        onClicked: function() {
           stackView.pending = true
           __merginApi.authorize(loginName.text, passwordField.password.text)
         }
@@ -192,7 +194,9 @@ Rectangle {
             radius: 2 * __dp
           }
 
-          onClicked: __merginApi.pingMergin()
+          onClicked: function() {
+            __merginApi.pingMergin()
+          }
 
           Image {
             id: image

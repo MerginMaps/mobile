@@ -26,7 +26,7 @@ Item {
   signal showLocalChangesRequested( string projectId )
   signal activeProjectDeleted()
 
-  onSearchTextChanged: {
+  onSearchTextChanged: function(searchText) {
     if ( projectModelType === ProjectsModel.PublicProjectsModel ) {
       controllerModel.listProjects( searchText )
     }
@@ -40,7 +40,7 @@ Item {
   ListView {
     id: listview
 
-    Component.onCompleted: {
+    Component.onCompleted: function() {
       // set proper footer (add project / fetch more)
       if ( root.projectModelType === ProjectsModel.LocalProjectsModel )
         listview.footer = addProjectButtonComponent
@@ -48,7 +48,7 @@ Item {
         listview.footer = loadingSpinnerComponent
     }
 
-    onAtYEndChanged: {
+    onAtYEndChanged: function( atYEnd ) {
       if ( atYEnd ) { // user reached end of the list
         if ( controllerModel.hasMoreProjects && !controllerModel.isLoading ) {
           controllerModel.fetchAnotherPage( viewModel.searchExpression )
@@ -97,7 +97,7 @@ Item {
       viewContentY: ListView.view.contentY
       viewHeight: ListView.view.height
 
-      onOpenRequested: {
+      onOpenRequested: function() {
         if ( model.ProjectIsLocal )
           root.openProjectRequested( projectId, model.ProjectFilePath )
         else if ( !model.ProjectIsLocal && model.ProjectIsMergin && !model.ProjectSyncPending) {
@@ -105,14 +105,22 @@ Item {
           downloadProjectDialog.open()
         }
       }
-      onSyncRequested: controllerModel.syncProject( projectId )
-      onMigrateRequested: controllerModel.migrateProject( projectId )
-      onRemoveRequested: {
+      onSyncRequested: function() {
+        controllerModel.syncProject( projectId )
+      }
+      onMigrateRequested: function() {
+        controllerModel.migrateProject( projectId )
+      }
+      onRemoveRequested: function() {
         removeDialog.relatedProjectId = projectId
         removeDialog.open()
       }
-      onStopSyncRequested: controllerModel.stopProjectSync( projectId )
-      onShowChangesRequested: root.showLocalChangesRequested( projectId )
+      onStopSyncRequested: function() {
+        controllerModel.stopProjectSync( projectId )
+      }
+      onShowChangesRequested: function() {
+        root.showLocalChangesRequested( projectId )
+      }
     }
   }
 
@@ -134,7 +142,9 @@ Item {
       text: qsTr("Create project")
       visible: listview.count > 0
 
-      onClicked: stackView.push(projectWizardComp)
+      onClicked: function() {
+        stackView.push(projectWizardComp)
+      }
     }
   }
 
@@ -167,7 +177,9 @@ Item {
         .arg("</a>")
         .arg("<a href='"+ __inputHelp.howToDownloadProjectLink +"'>")
 
-        onLinkActivated: Qt.openUrlExternally(link)
+        onLinkActivated: function( link ) {
+          Qt.openUrlExternally(link)
+        }
       }
 
 
@@ -187,7 +199,9 @@ Item {
         Layout.fillWidth: true
 
         text: qsTr( "Create project" )
-        onClicked: stackView.push(projectWizardComp)
+        onClicked: function() {
+          stackView.push(projectWizardComp)
+        }
       }
     }
   }
@@ -233,7 +247,7 @@ Item {
       text: qsTr("Retry")
       font.pixelSize: InputStyle.fontPixelSizeNormal
       anchors.horizontalCenter: parent.horizontalCenter
-      onClicked: {
+      onClicked: function() {
         // filters suppose to not change
         controllerModel.listProjects( root.searchText )
       }
@@ -263,7 +277,7 @@ Item {
     buttons: MessageDialog.Ok | MessageDialog.Cancel
 
     //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-    onButtonClicked: {
+    onButtonClicked: function(clickedButton) {
       if (clickedButton === MessageDialog.Ok) {
         if (relatedProjectId === "")
           return
@@ -296,7 +310,7 @@ Item {
     title: qsTr( "Download project" )
     text: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
     buttons: MessageDialog.Yes | MessageDialog.No
-    onButtonClicked: {
+    onButtonClicked: function(clickedButton) {
       if (clickedButton === MessageDialog.Yes) {
         controllerModel.syncProject( relatedProjectId )
       }

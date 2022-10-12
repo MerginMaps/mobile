@@ -62,7 +62,7 @@ Item {
                 text: qsTr("Projects")
                 imageSource: InputStyle.projectIcon
 
-                onActivated: {
+                onActivated: function() {
                   rootMenu.close()
                   mainPanel.openProjectClicked()
                 }
@@ -84,12 +84,12 @@ Item {
                 imageSource2: InputStyle.gpsNotFixedIcon
                 imageSourceCondition: __appSettings.autoCenterMapChecked
 
-                onActivated: {
+                onActivated: function() {
                   rootMenu.close()
                   mainPanel.myLocationClicked()
                 }
 
-                onActivatedOnHold: {
+                onActivatedOnHold: function() {
                   rootMenu.close()
                   mainPanel.myLocationHold()
                 }
@@ -117,7 +117,7 @@ Item {
                 text: qsTr("Record")
                 imageSource: InputStyle.recordIcon
 
-                onActivated: {
+                onActivated: function() {
                   rootMenu.close()
                   mainPanel.recordClicked()
                 }
@@ -137,7 +137,7 @@ Item {
                 text: qsTr("Zoom to project")
                 imageSource: InputStyle.zoomToProjectIcon
 
-                onActivated: {
+                onActivated: function() {
                   rootMenu.close()
                   mainPanel.zoomToProject()
                 }
@@ -155,7 +155,7 @@ Item {
                 text: qsTr("Local changes")
                 imageSource: InputStyle.projectIcon
 
-                onActivated: {
+                onActivated: function() {
                   rootMenu.close()
                   mainPanel.localChangesClicked()
                 }
@@ -174,7 +174,7 @@ Item {
                 text: qsTr("Browse data")
                 imageSource: InputStyle.tableIcon
 
-                onActivated: {
+                onActivated: function() {
                   rootMenu.close()
                   mainPanel.openBrowseDataClicked()
                 }
@@ -193,7 +193,7 @@ Item {
                 width: mainPanel.itemSize
                 text: qsTr("Map themes")
                 imageSource: InputStyle.mapThemesIcon
-                onActivated: {
+                onActivated: function() {
                   rootMenu.close()
                   mainPanel.openMapThemesClicked()
                 }
@@ -213,7 +213,7 @@ Item {
                 width: mainPanel.itemSize
                 text: qsTr("Settings")
                 imageSource: InputStyle.settingsIcon
-                onActivated: {
+                onActivated: function() {
                   rootMenu.close()
                   mainPanel.openSettingsClicked()
                 }
@@ -231,7 +231,7 @@ Item {
               text: qsTr("More")
               imageSource: InputStyle.moreMenuIcon
 
-              onActivated: {
+              onActivated: function() {
                 if ( !rootMenu.visible ) rootMenu.open()
                 else rootMenu.close()
               }
@@ -260,7 +260,7 @@ Item {
                 imageSource: InputStyle.projectIcon
             }
 
-            onClicked: {
+            onClicked: function() {
                 openProjectBtn.activated()
                 rootMenu.close()
             }
@@ -288,7 +288,7 @@ Item {
                 }
             }
 
-            onClicked: {
+            onClicked: function() {
                 myLocationBtn.activated()
                 rootMenu.close()
             }
@@ -308,7 +308,7 @@ Item {
                 imageSource: InputStyle.recordIcon
             }
 
-            onClicked: {
+            onClicked: function() {
                 recBtn.activated()
                 rootMenu.close()
             }
@@ -327,7 +327,7 @@ Item {
                 imageSource: InputStyle.zoomToProjectIcon
             }
 
-            onClicked: {
+            onClicked: function() {
                 zoomToProjectBtn.activated()
                 rootMenu.close()
             }
@@ -346,7 +346,7 @@ Item {
                 imageSource: InputStyle.projectIcon
             }
 
-            onClicked: {
+            onClicked: function() {
                 localChangesBtn.activated()
                 rootMenu.close()
             }
@@ -365,7 +365,7 @@ Item {
                 imageSource: InputStyle.tableIcon
             }
 
-            onClicked: {
+            onClicked: function() {
                 browseDataBtn.activated()
                 rootMenu.close()
             }
@@ -384,7 +384,7 @@ Item {
                 imageSource: InputStyle.mapThemesIcon
             }
 
-            onClicked: {
+            onClicked: function() {
                 mapThemesBtn.activated()
                 rootMenu.close()
             }
@@ -403,7 +403,7 @@ Item {
                 imageSource: InputStyle.settingsIcon
             }
 
-            onClicked: {
+            onClicked: function() {
                 settingsBtn.activated()
                 rootMenu.close()
             }

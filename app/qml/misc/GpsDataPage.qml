@@ -25,7 +25,7 @@ Item {
 
   signal back()
 
-  Keys.onReleased: {
+  Keys.onReleased: function(event) {
     if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
       event.accepted = true
       root.back()
@@ -46,14 +46,16 @@ Item {
       id: gpsPage
 
       focus: true
-      Keys.onReleased: {
+      Keys.onReleased: function(event) {
         if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
           event.accepted = true
           root.back()
         }
       }
 
-      Component.onCompleted: forceActiveFocus()
+      Component.onCompleted: function() {
+        forceActiveFocus()
+      }
 
       MapPosition {
         id: mapPositioning
@@ -71,7 +73,9 @@ Item {
 
         color: InputStyle.clrPanelMain
 
-        onBack: root.back()
+        onBack: function() {
+          root.back()
+        }
         withBackButton: true
       }
 
@@ -115,7 +119,6 @@ Item {
 
             Layout.fillWidth: true
             Layout.preferredHeight: InputStyle.rowHeight
-
 
             TextRowWithTitle {
               id: gpsReceiverStatus
@@ -339,7 +342,7 @@ Item {
               text: qsTr( "Manage GPS receivers" )
               imageSource: InputStyle.settingsIcon
 
-              onActivated: {
+              onActivated: function() {
                 additionalContent.push( positionProviderComponent )
               }
             }
@@ -352,9 +355,13 @@ Item {
   Component {
     id: positionProviderComponent
     PositionProviderPage {
-      onClose: additionalContent.pop(null)
+      onClose: function() {
+        additionalContent.pop(null)
+      }
       stackView: additionalContent
-      Component.onCompleted: forceActiveFocus()
+      Component.onCompleted: function() {
+        forceActiveFocus()
+      }
     }
   }
 }

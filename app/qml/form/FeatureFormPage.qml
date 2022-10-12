@@ -51,7 +51,7 @@ Item {
     initialItem: formPageComponent
     focus: true
 
-    onCurrentItemChanged: {
+    onCurrentItemChanged: function() {
       currentItem.forceActiveFocus()
     }
   }
@@ -78,7 +78,9 @@ Item {
         backIconVisible: !saveButtonText.visible
         backTextVisible: saveButtonText.visible
 
-        onBack: featureForm.cancel()
+        onBack: function() {
+          featureForm.cancel()
+        }
 
         Text {
           id: saveButtonText
@@ -101,7 +103,9 @@ Item {
 
           MouseArea {
             anchors.fill: parent
-            onClicked: featureForm.save()
+            onClicked: function() {
+              featureForm.save()
+            }
           }
         }
       }
@@ -150,11 +154,21 @@ Item {
         externalResourceHandler: externalResourceBundle.handler
         state: root.formState
 
-        onSaved: root.close()
-        onCanceled: root.close()
-        onEditingFailed: editingFailedDialog.open()
-        onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
-        onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
+        onSaved: function() {
+          root.close()
+        }
+        onCanceled: function() {
+          root.close()
+        }
+        onEditingFailed: function() {
+          editingFailedDialog.open()
+        }
+        onOpenLinkedFeature: function(linkedFeature) {
+          root.openLinkedFeature( linkedFeature )
+        }
+        onCreateLinkedFeature: function(parentController, relation) {
+          root.createLinkedFeature( parentController, relation )
+        }
 
         extraView: formPage.StackView.view
 
@@ -165,7 +179,7 @@ Item {
           }
         }
 
-        Component.onCompleted: {
+        Component.onCompleted: function() {
           if ( root.parentController && root.linkedRelation ) {
             featureForm.controller.parentController = root.parentController
             featureForm.controller.linkedRelation = root.linkedRelation
@@ -184,11 +198,21 @@ Item {
         isFeaturePoint: __inputUtils.isPointLayer( root.featureLayerPair.layer )
         isSpatialLayer: __inputUtils.isSpatialLayer( root.featureLayerPair.layer )
 
-        onEditClicked: root.formState = "edit"
-        onDeleteClicked: deleteDialog.visible = true
-        onEditGeometryClicked: root.editGeometryClicked( featureForm.controller.featureLayerPair )
-        onSplitGeometryClicked: root.splitGeometryClicked()
-        onRedrawGeometryClicked: root.redrawGeometryClicked( featureForm.controller.featureLayerPair )
+        onEditClicked: function() {
+          root.formState = "edit"
+        }
+        onDeleteClicked: function() {
+          deleteDialog.visible = true
+        }
+        onEditGeometryClicked: function() {
+          root.editGeometryClicked( featureForm.controller.featureLayerPair )
+        }
+        onSplitGeometryClicked: function() {
+          root.splitGeometryClicked()
+        }
+        onRedrawGeometryClicked: function() {
+          oot.redrawGeometryClicked( featureForm.controller.featureLayerPair )
+        }
       }
 
       MessageDialog {
@@ -200,7 +224,7 @@ Item {
         buttons: MessageDialog.Ok | MessageDialog.Cancel
 
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-        onButtonClicked: {
+        onButtonClicked: function(clickedButton) {
           if ( clickedButton === MessageDialog.Ok ) {
             featureForm.controller.deleteFeature()
             featureForm.canceled()
@@ -220,7 +244,7 @@ Item {
         buttons: MessageDialog.Yes | MessageDialog.No | MessageDialog.Cancel
 
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-        onButtonClicked: {
+        onButtonClicked: function(clickedButton) {
           if (clickedButton === MessageDialog.Yes) {
             featureForm.save()
           }
@@ -243,7 +267,7 @@ Item {
         buttons: MessageDialog.Close
 
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-        onButtonClicked: {
+        onButtonClicked: function() {
           visible = false
         }
       }

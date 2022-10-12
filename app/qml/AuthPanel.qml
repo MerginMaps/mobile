@@ -56,7 +56,7 @@ Item {
     }
   ]
 
-  onStateChanged: {
+  onStateChanged: function( state ) {
     if (state === "login") {
       loginForm.visible = true
       loginForm.clean()
@@ -79,7 +79,9 @@ Item {
     rowHeight: InputStyle.rowHeightHeader
     titleText: root.state === "login" ? qsTr("Login") : qsTr("Register")
 
-    onBack: root.back()
+    onBack: function() {
+      root.back()
+    }
   }
 
   Pane {
@@ -103,7 +105,7 @@ Item {
       fontColor: root.fontColor
       fieldHeight: root.fieldHeight
 
-      onRegistrationRequested: {
+      onRegistrationRequested: function() {
         registrationForm.clean()
         root.state = "register"
       }
@@ -163,7 +165,7 @@ Item {
           MouseArea {
             width: iconContainerMergin.width
             height: iconContainerMergin.height
-            onClicked: {
+            onClicked: function() {
               merginLink.enabled = !merginLink.enabled
             }
           }
@@ -198,7 +200,7 @@ Item {
             color: enabled ? InputStyle.panelBackgroundLight : root.bgColor
           }
 
-          onEnabledChanged: {
+          onEnabledChanged: function( enabled ) {
             if (!enabled && __merginApi.apiRoot !== merginLink.text) {
               __merginApi.apiRoot = merginLink.text
             }

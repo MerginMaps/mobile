@@ -29,7 +29,7 @@ Item {
 
     MouseArea {
       anchors.fill: parent
-      onClicked: {
+      onClicked: function() {
         contentClicked()
       }
     }
@@ -82,7 +82,9 @@ Item {
 
                         MouseArea {
                             anchors.fill: parent
-                            onClicked: previewPanel.stakeoutFeature( controller.featureLayerPair )
+                            onClicked: function() {
+                              previewPanel.stakeoutFeature( controller.featureLayerPair )
+                            }
                         }
 
                         Image {
@@ -114,7 +116,9 @@ Item {
                       MouseArea {
                           id: editArea
                           anchors.fill: iconContainer
-                          onClicked: editClicked()
+                          onClicked: function() {
+                            editClicked()
+                          }
                       }
 
                       Image {
@@ -204,7 +208,6 @@ Item {
                             font.pixelSize: InputStyle.fontPixelSizeNormal
                             color: InputStyle.fontColor
                             elide: Text.ElideRight
-
                         }
                     }
                 }

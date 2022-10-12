@@ -37,10 +37,10 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         enabled: root.enabled && handleClicks
-        onClicked: {
+        onClicked: function() {
             root.activated()
         }
-        onPressAndHold: {
+        onPressAndHold: function() {
             root.activatedOnHold()
         }
     }

@@ -23,7 +23,7 @@ Item {
   signal featureSelectRequested( var pair )
   signal createFeatureRequested()
 
-  onFocusChanged: { // pass focus to stackview
+  onFocusChanged: function() { // pass focus to stackview
     browseDataLayout.focus = true
   }
 
@@ -72,7 +72,7 @@ Item {
       }
     }
 
-    onVisibleChanged: {
+    onVisibleChanged: function() {
       if ( browseDataLayout.visible )
         browseDataLayout.forceActiveFocus()
     }
@@ -82,7 +82,9 @@ Item {
     id: browseDataLayersPanel
 
     BrowseDataLayersPanel {
-      onBackButtonClicked: popOnePageOrClose()
+      onBackButtonClicked: function() {
+        popOnePageOrClose()
+      }
       onLayerClicked: function( layerId ) {
         setSelectedLayer( layerId )
         pushFeaturesListPage()
@@ -99,7 +101,9 @@ Item {
       featuresModel: featuresListModel
 
       toolbarButtons: ["add"]
-      onBackButtonClicked: popOnePageOrClose()
+      onBackButtonClicked: function() {
+        popOnePageOrClose()
+      }
       onSelectionFinished: function( featureIds ) {
         let featurePair = featuresListModel.convertRoleValue( FeaturesModel.FeatureId, featureIds, FeaturesModel.FeaturePair )
 
@@ -109,7 +113,9 @@ Item {
 
         root.featureSelectRequested( featurePair )
       }
-      onAddFeatureClicked: createFeatureRequested()
+      onAddFeatureClicked: function() {
+        createFeatureRequested()
+      }
     }
   }
 

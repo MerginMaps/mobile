@@ -62,8 +62,7 @@ Rectangle {
 
   transitions: Transition {
     NumberAnimation { property: "opacity"; duration: 500 }
-    onRunningChanged:
-    {
+    onRunningChanged: function( running ) {
       if ( state == "show" && !running )
         banner.visible = true;
       if ( state == "fade" && !running )
@@ -79,7 +78,9 @@ Rectangle {
     anchors.fill: banner
     enabled: banner.showBanner
 
-    onClicked: banner.clicked()
+    onClicked: function() {
+      banner.clicked()
+    }
   }
 
   ColumnLayout {
@@ -99,7 +100,9 @@ Rectangle {
       textItem.rightPadding: InputStyle.innerFieldMargin
       textItem.text: banner.getText()
 
-      onLinkActivated: Qt.openUrlExternally(link)
+      onLinkActivated: function( link ) {
+        Qt.openUrlExternally(link)
+      }
     }
   }
 }

@@ -59,7 +59,9 @@ Item {
         width: leftActionContainer.actionAllowed ? parent.width + customStyle.fields.sideMargin : parent.width
         x: leftActionContainer.actionAllowed ? parent.x - customStyle.fields.sideMargin : parent.x
         height: parent.height
-        onClicked: root.leftActionClicked()
+        onClicked: function() {
+          root.leftActionClicked()
+        }
       }
     }
 
@@ -75,7 +77,9 @@ Item {
       MouseArea {
         width: parent.width
         height: parent.height
-        onClicked: root.contentClicked()
+        onClicked: function() {
+          root.contentClicked()
+        }
       }
     }
 
@@ -93,7 +97,9 @@ Item {
       MouseArea {
         width: rightActionContainer.actionAllowed ? parent.width + customStyle.fields.sideMargin : parent.width
         height: parent.height
-        onClicked: root.rightActionClicked()
+        onClicked: function() {
+          root.rightActionClicked()
+        }
       }
     }
   }

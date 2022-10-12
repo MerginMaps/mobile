@@ -58,7 +58,7 @@ AbstractEditor {
     }
   }
 
-  onLeftActionClicked: {
+  onLeftActionClicked: function() {
     if ( minusSign.enabled )
     {
       let decremented = Number( numberInput.text ) - root.step
@@ -83,7 +83,7 @@ AbstractEditor {
       TextInput {
         id: numberInput
 
-        onTextEdited: {
+        onTextEdited: function(text) {
           let val = text.replace( ",", "." ).replace( / /g, '' ) // replace comma with dot
           root.editorValueChanged( val, val  === "" )
         }
@@ -124,7 +124,7 @@ AbstractEditor {
     }
   }
 
-  onContentClicked: {
+  onContentClicked: function() {
     numberInput.forceActiveFocus()
   }
 
@@ -153,7 +153,7 @@ AbstractEditor {
     }
   }
 
-  onRightActionClicked: {
+  onRightActionClicked: function() {
     if ( plusSign.enabled )
     {
       let incremented = Number( numberInput.text ) + root.step

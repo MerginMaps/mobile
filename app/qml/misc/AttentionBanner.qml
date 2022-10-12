@@ -30,6 +30,8 @@ Rectangle {
 
   MouseArea {
     anchors.fill: parent
-    onClicked: Qt.openUrlExternally( __inputHelp.merginDashboardLink )
+    onClicked: function() {
+      Qt.openUrlExternally( __inputHelp.merginDashboardLink )
+    }
   }
 }

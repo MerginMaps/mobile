@@ -87,7 +87,9 @@ Item {
         color: InputStyle.highlightColor
       }
 
-      onClicked: subscribeClicked()
+      onClicked: function() {
+        subscribeClicked()
+      }
 
       contentItem: Text {
         text: subscribeButton.text
@@ -98,8 +100,6 @@ Item {
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
       }
-
     }
   }
-
 }

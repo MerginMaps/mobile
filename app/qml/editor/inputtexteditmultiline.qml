@@ -40,10 +40,16 @@ AbstractEditor {
     text: root.parentValue !== undefined ? root.parentValue : ''
     textFormat: config['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
 
-    onLinkActivated: Qt.openUrlExternally( link )
+    onLinkActivated: function(link) {
+      Qt.openUrlExternally( link )
+    }
 
-    onTextChanged: root.editorValueChanged( text, text === "" )
+    onTextChanged: function(text) {
+      root.editorValueChanged( text, text === "" )
+    }
 
-    onPreeditTextChanged: Qt.inputMethod.commit() // to avoid Android's uncommited text
+    onPreeditTextChanged: function() {
+      Qt.inputMethod.commit() // to avoid Android's uncommited text
+    }
   }
 }

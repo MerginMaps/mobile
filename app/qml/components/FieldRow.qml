@@ -31,7 +31,9 @@ Item {
       Layout.preferredWidth: row.itemSize
 
       Component.onCompleted: text = AttributeName
-      onTextChanged: AttributeName = text
+      onTextChanged: function(text) {
+        AttributeName = text
+      }
     }
 
     ComboBox {
@@ -52,12 +54,24 @@ Item {
         anchors.fill: parent
         propagateComposedEvents: true
 
-        onClicked: mouse.accepted = false
-        onPressed: { forceActiveFocus(); mouse.accepted = false; }
-        onReleased: mouse.accepted = false;
-        onDoubleClicked: mouse.accepted = false;
-        onPositionChanged: mouse.accepted = false;
-        onPressAndHold: mouse.accepted = false;
+        onClicked: function() {
+          mouse.accepted = false
+        }
+        onPressed: function() {
+          forceActiveFocus(); mouse.accepted = false;
+        }
+        onReleased: function() {
+          mouse.accepted = false;
+        }
+        onDoubleClicked: function() {
+          mouse.accepted = false;
+        }
+        onPositionChanged: function() {
+          mouse.accepted = false;
+        }
+        onPressAndHold: function() {
+          mouse.accepted = false;
+        }
       }
 
       delegate: ItemDelegate {
@@ -68,7 +82,7 @@ Item {
         font.pixelSize: InputStyle.fontPixelSizeNormal
         highlighted: comboBox.highlightedIndex === index
         leftPadding: textField.leftPadding
-        onClicked: {
+        onClicked: function() {
           WidgetType = model.widget
           comboBox.currentIndex = index
         }
@@ -132,7 +146,7 @@ Item {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: {
+        onClicked: function() {
           fieldDelegate.removeClicked(index)
         }
       }

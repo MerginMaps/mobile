@@ -42,7 +42,7 @@ Item {
     titleText: qsTr("Project Status")
     z: contentLayout.z + 1
 
-    onBack: {
+    onBack: function() {
       statusPanel.back()
     }
     withBackButton: true
@@ -125,7 +125,6 @@ Item {
               y: mainText.height
               x: 0
               property real tileWidth: extendedText.width/3
-
 
                 ExtendedMenuItem {
                   id: insertsCount
@@ -219,5 +218,3 @@ Item {
     }
   }
 }
-
-

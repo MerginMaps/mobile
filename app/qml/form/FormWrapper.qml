@@ -84,7 +84,7 @@ Item {
         }
       ]
 
-      onStateChanged: {
+      onStateChanged: function(state) {
         switch( state ) {
           case "form":
           case "preview":
@@ -108,7 +108,7 @@ Item {
     edge: Qt.BottomEdge
     closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
 
-    onClosed: {
+    onClosed: function() {
       if ( statesManager.state !== "hidden" )
         statesManager.state = "closed"
     }
@@ -124,8 +124,10 @@ Item {
       height: root.previewHeight
       width: root.width
 
-      onContentClicked: root.panelState = "form"
-      onEditClicked: {
+      onContentClicked: function() {
+        root.panelState = "form"
+      }
+      onEditClicked: function() {
         root.panelState = "form"
         formContainer.formState = "edit"
       }
@@ -144,7 +146,9 @@ Item {
 
       formState: root.formState
 
-      onClose: root.panelState = "closed"
+      onClose: function() {
+        root.panelState = "closed"
+      }
       onEditGeometryClicked: function( pair ) {
         root.panelState = "hidden"
         root.editGeometry( pair )
@@ -157,7 +161,7 @@ Item {
         root.relationToApply = relation
         root.createLinkedFeature( relation.referencingLayer, root.featureLayerPair )
       }
-      onSplitGeometryClicked: {
+      onSplitGeometryClicked: function() {
         root.panelState = "hidden"
         root.splitGeometry( root.featureLayerPair )
       }

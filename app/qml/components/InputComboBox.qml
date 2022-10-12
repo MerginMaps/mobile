@@ -29,12 +29,25 @@ ComboBox {
     anchors.fill: parent
     propagateComposedEvents: true
 
-    onClicked: mouse.accepted = false
-    onPressed: { forceActiveFocus(); mouse.accepted = false; }
-    onReleased: mouse.accepted = false;
-    onDoubleClicked: mouse.accepted = false;
-    onPositionChanged: mouse.accepted = false;
-    onPressAndHold: mouse.accepted = false;
+    onClicked: function() {
+      mouse.accepted = false
+    }
+    onPressed: function() {
+      forceActiveFocus();
+      mouse.accepted = false;
+    }
+    onReleased: function() {
+      mouse.accepted = false;
+    }
+    onDoubleClicked: function() {
+      mouse.accepted = false;
+    }
+    onPositionChanged: function() {
+      mouse.accepted = false;
+    }
+    onPressAndHold: function() {
+      mouse.accepted = false;
+    }
   }
 
   // [hidpi fixes]
@@ -46,7 +59,9 @@ ComboBox {
     font.pixelSize: customStyle.fields.fontPixelSize
     highlighted: comboBox.highlightedIndex === index
     leftPadding: customStyle.fields.sideMargin
-    onClicked: comboBox.itemClicked( model.FeatureId ? model.FeatureId : index )
+    onClicked: function() {
+      comboBox.itemClicked( model.FeatureId ? model.FeatureId : index )
+    }
   }
 
   contentItem: Text {

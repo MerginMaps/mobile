@@ -170,7 +170,7 @@ Item {
     }
   }
 
-  onCaptureRectChanged: {
+  onCaptureRectChanged: function( captureRect ) {
     toTopAnimation.to = 5
     toBottomAnimation.to = captureRect.height - 10
     scanIndicatorAnimation.start()

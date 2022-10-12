@@ -31,7 +31,7 @@ Item {
     projectIssuesModel.clear();
   }
 
-  Keys.onReleased: {
+  Keys.onReleased: function( event ) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true
 
@@ -70,7 +70,9 @@ Item {
         rowHeight: InputStyle.rowHeightHeader
         titleText: qsTr("Project Issues")
 
-        onBack: root.visible = false
+        onBack: function() {
+          root.visible = false
+        }
       }
 
       ScrollView {
@@ -140,10 +142,12 @@ Item {
                       wrapMode: Text.Wrap
                     }
                 }
-                onHeightChanged: invalidLayersList.height += height;
+                onHeightChanged: function( height ) {
+                  invalidLayersList.height += height;
+                }
               }
 
-              onCountChanged: {
+              onCountChanged: function( count ) {
                 if ( count == 0 )
                   invalidLayersList.height = 0;
               }

@@ -65,7 +65,7 @@ Item {
 
     anchors.fill: parent
 
-    Keys.onReleased: {
+    Keys.onReleased: function( event ) {
       if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
         event.accepted = true;
         deactivateSearch()
@@ -84,7 +84,7 @@ Item {
 
       titleText: pageTitle
 
-      onBack: {
+      onBack: function() {
         searchBar.deactivate()
         root.backButtonClicked()
        }
@@ -131,9 +131,15 @@ Item {
       doneButtonVisible: root.toolbarButtons.includes("done")
       unlinkButtonVisible: root.toolbarButtons.includes("unlink")
 
-      onAddButtonClicked: addFeatureClicked()
-      onDoneButtonClicked: root.finishSelection( listview.selectedFeatures )
-      onUnlinkButtonClicked: root.unlinkClicked()
+      onAddButtonClicked: function() {
+        addFeatureClicked()
+      }
+      onDoneButtonClicked: function() {
+        root.finishSelection( listview.selectedFeatures )
+      }
+      onUnlinkButtonClicked: function() {
+        root.unlinkClicked()
+      }
     }
   }
 }

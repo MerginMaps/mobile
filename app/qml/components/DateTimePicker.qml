@@ -55,13 +55,13 @@ Item {
     timepicker.setTime(toDate)
   }
 
-  onDateToSelectChanged: {
+  onDateToSelectChanged: function( dateToSelect ) {
     setDate(dateToSelect)
   }
 
   focus: true
 
-  Keys.onReleased: {
+  Keys.onReleased: function( event ) {
     if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
       event.accepted = true
       root.canceled()
@@ -109,7 +109,7 @@ Item {
         }
         MouseArea {
           anchors.fill: parent
-          onClicked: {
+          onClicked: function() {
             root.canceled();
           }
         }
@@ -144,7 +144,7 @@ Item {
           }
           MouseArea {
             anchors.fill: parent
-            onClicked: {
+            onClicked: function() {
               yearsList.show();
             }
           }
@@ -170,7 +170,7 @@ Item {
 
           MouseArea {
             anchors.fill: parent
-            onClicked: {
+            onClicked: function() {
               yearsList.hide();
             }
           }
@@ -204,7 +204,7 @@ Item {
         }
         MouseArea {
           anchors.fill: parent
-          onClicked: {
+          onClicked: function() {
             root.selected(getSelectedTime())
           }
         }
@@ -277,7 +277,7 @@ Item {
 
               MouseArea {
                 anchors.fill: parent
-                onClicked: {
+                onClicked: function() {
                   if (monthGrid.month !== Calendar.January) {
                     monthGrid.month -= 1;
                   } else {
@@ -315,7 +315,7 @@ Item {
 
               MouseArea {
                 anchors.fill: parent
-                onClicked: {
+                onClicked: function() {
                   if (monthGrid.month != Calendar.December) {
                     monthGrid.month += 1;
                   } else {
@@ -392,7 +392,7 @@ Item {
 
               MouseArea {
                 anchors.fill: parent
-                onClicked: {
+                onClicked: function() {
                   calendar.selectDate(model.date)
                 }
               }
@@ -431,7 +431,7 @@ Item {
           }
           MouseArea {
             anchors.fill: parent
-            onClicked: {
+            onClicked: function() {
               calendar.navigateToDate(new Date(yearsList.startYear + index, calendar.selectedDate.getMonth()));
               yearsList.hide();
             }

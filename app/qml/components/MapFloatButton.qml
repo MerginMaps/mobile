@@ -49,8 +49,12 @@ Item {
 
     MouseArea {
       anchors.fill: parent
-      onClicked: root.clicked()
-      onPressAndHold: root.pressAndHold()
+      onClicked: function() {
+        root.clicked()
+      }
+      onPressAndHold: function() {
+        root.pressAndHold()
+      }
     }
   }
 }
