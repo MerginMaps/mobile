@@ -219,7 +219,7 @@ Item {
         title: qsTr( "Remove photo reference" )
         text: qsTr( "Also permanently delete photo from device?" )
         buttons: MessageDialog.Yes | MessageDialog.No | MessageDialog.Cancel
-        onButtonClicked: {
+        onButtonClicked: function(clickedButton) {
           if (clickedButton === MessageDialog.Yes) {
             externalResourceHandler.itemWidget.sourceToDelete = imageDeleteDialog.imagePath
             externalResourceHandler.itemWidget.editorValueChanged("", false)

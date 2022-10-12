@@ -200,7 +200,7 @@ Item {
         buttons: MessageDialog.Ok | MessageDialog.Cancel
 
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-        onButtonClicked: {
+        onButtonClicked: function(clickedButton) {
           if ( clickedButton === MessageDialog.Ok ) {
             featureForm.controller.deleteFeature()
             featureForm.canceled()
@@ -220,7 +220,7 @@ Item {
         buttons: MessageDialog.Yes | MessageDialog.No | MessageDialog.Cancel
 
         //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-        onButtonClicked: {
+        onButtonClicked: function(clickedButton) {
           if (clickedButton === MessageDialog.Yes) {
             featureForm.save()
           }

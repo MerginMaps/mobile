@@ -93,17 +93,13 @@ Drawer {
     Camera {
       id: camera
       cameraState: Camera.UnloadedState
+      focusMode: Camera.FocusContinuous
 
       imageCapture {
         onImageCaptured: {
           // Show the preview in an Image
           photoPreview.source = preview
         }
-      }
-
-      focus {
-          focusMode: Camera.FocusContinuous
-          focusPointMode: Camera.FocusPointAuto
       }
     }
 

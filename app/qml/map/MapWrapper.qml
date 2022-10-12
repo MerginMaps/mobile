@@ -681,7 +681,7 @@ Item {
 
     buttons: MessageDialog.Yes | MessageDialog.No
 
-    onButtonClicked: {
+    onButtonClicked: function(clickedButton) {
       if ( clickedButton === MessageDialog.Yes ) {
         recordingToolsLoader.item.discardChanges()
       }

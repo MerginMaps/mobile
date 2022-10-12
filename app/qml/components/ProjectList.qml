@@ -265,7 +265,7 @@ Item {
     buttons: MessageDialog.Ok | MessageDialog.Cancel
 
     //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-    onButtonClicked: {
+    onButtonClicked: function(clickedButton) {
       if (clickedButton === MessageDialog.Ok) {
         if (relatedProjectId === "")
           return
@@ -298,7 +298,7 @@ Item {
     title: qsTr( "Download project" )
     text: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
     buttons: MessageDialog.Yes | MessageDialog.No
-    onButtonClicked: {
+    onButtonClicked: function(clickedButton) {
       if (clickedButton === MessageDialog.Yes) {
         controllerModel.syncProject( relatedProjectId )
       }

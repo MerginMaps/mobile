@@ -193,7 +193,7 @@ AbstractEditor {
         hasDatePicker: root.includesDate
         hasTimePicker: root.includesTime
 
-        onSelected: {
+        onSelected: function( selectedDate ) {
           if ( selectedDate )
             root.editorValueChanged(selectedDate, false)
 

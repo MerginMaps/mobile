@@ -20,7 +20,7 @@ MessageDialog {
 
   buttons: MessageDialog.No | MessageDialog.Yes
 
-  onButtonClicked: {
+  onButtonClicked: function(clickedButton) {
     if ( clickedButton === MessageDialog.Yes ) {
       root.singInRequested()
     }

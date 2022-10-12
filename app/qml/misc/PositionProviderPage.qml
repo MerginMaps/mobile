@@ -370,7 +370,7 @@ Page {
     buttons: MessageDialog.Ok | MessageDialog.Cancel
 
     //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-    onButtonClicked: {
+    onButtonClicked: function(clickedButton) {
       if (clickedButton === MessageDialog.Ok) {
         if (relatedProviderId === "")
           return

@@ -31,7 +31,7 @@ Item {
     text: qsTr( "Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue." ).arg( notEnoughSpaceLeftdialog.neededSpace )
     buttons: MessageDialog.Help | MessageDialog.Ignore
 
-    onButtonClicked: {
+    onButtonClicked: function(clickedButton) {
       if (clickedButton === MessageDialog.Help) {
         Qt.openUrlExternally( "https://www.lutraconsulting.co.uk/blog/2021/10/26/input-scoped-storage-update/" )
       }

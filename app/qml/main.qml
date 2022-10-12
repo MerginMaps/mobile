@@ -496,7 +496,7 @@ ApplicationWindow {
         onAccepted: projDialog.close()
         title: qsTr("PROJ Error")
         buttons: MessageDialog.Ignore | MessageDialog.Help
-        onButtonClicked: {
+        onButtonClicked: function(clickedButton) {
           if (clickedButton === MessageDialog.Help) {
             Qt.openUrlExternally(__inputHelp.howToSetupProj)
           }
