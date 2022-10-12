@@ -56,17 +56,13 @@ AbstractEditor {
     obj.forceActiveFocus()
   }
 
-  onParentValueChanged: function() {
+  onParentValueChanged: {
     vrModel.pair = root.featureLayerPair
     setText()
   }
 
-  onRightActionClicked: function() {
-    pushVrPage()
-  }
-  onContentClicked: function() {
-    pushVrPage()
-  }
+  onRightActionClicked: pushVrPage()
+  onContentClicked: pushVrPage()
 
   enabled: !isReadOnly
 
@@ -76,7 +72,7 @@ AbstractEditor {
     config: root.fieldConfig
     pair: root.featureLayerPair
 
-    onInvalidate: function() {
+    onInvalidate: {
       if ( root.parentValueIsNull )
       {
         return // ignore invalidate signal if value is already NULL
@@ -136,11 +132,11 @@ AbstractEditor {
       toolbarButtons: ["done"]
       toolbarVisible: false
 
-      onBackButtonClicked: function() {
+      onBackButtonClicked: {
         root.stackView.pop()
       }
 
-      onSelectionFinished: function() {
+      onSelectionFinished: {
         if ( root.allowMultivalue )
         {
           let isNull = featureIds.length === 0

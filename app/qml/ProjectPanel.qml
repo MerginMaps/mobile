@@ -102,7 +102,7 @@ Item {
       }
     }
 
-    Keys.onReleased: function( event ) {
+    Keys.onReleased: {
       if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
         event.accepted = true;
 
@@ -115,7 +115,7 @@ Item {
       }
     }
 
-    onVisibleChanged: function() {
+    onVisibleChanged: {
       if ( stackView.visible )
         stackView.forceActiveFocus()
     }
@@ -173,7 +173,7 @@ Item {
         height: InputStyle.rowHeightHeader
         rowHeight: InputStyle.rowHeightHeader
 
-        onBack: function() {
+        onBack: {
           if ( root.activeProjectId ) {
             root.hidePanel()
           }
@@ -200,7 +200,7 @@ Item {
 
             MouseArea {
               anchors.fill: parent
-              onClicked: function() {
+              onClicked: {
                 if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
                   __merginApi.getUserInfo()
                   if (__merginApi.apiSupportsSubscriptions)
@@ -258,7 +258,7 @@ Item {
           }
         ]
 
-        onStateChanged: function() {
+        onStateChanged: {
           __merginApi.pingMergin()
           refreshProjectList()
           pageFooter.setActiveButton( pageContent.state )
@@ -294,15 +294,9 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: function( projectId, projectFilePath ) {
-              setupProjectOpen( projectId, projectFilePath )
-            }
-            onShowLocalChangesRequested: function( projectId ) {
-              showChanges( projectId )
-            }
-            list.onActiveProjectDeleted: function() {
-              setupProjectOpen( "", "" )
-            }
+            onOpenProjectRequested: setupProjectOpen( projectId, projectFilePath )
+            onShowLocalChangesRequested: showChanges( projectId )
+            list.onActiveProjectDeleted: setupProjectOpen( "", "" )
           }
 
           ProjectListPage {

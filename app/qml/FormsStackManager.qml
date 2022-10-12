@@ -265,7 +265,7 @@ Item {
 
       previewHeight: root.previewHeight
 
-      onClosed: function() {
+      onClosed: {
         if ( panelState !== "hidden" ) {
           formsStack.popOneOrClose()
         }

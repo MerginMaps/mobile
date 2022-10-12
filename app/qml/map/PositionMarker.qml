@@ -25,9 +25,7 @@ Item {
     property color baseColor: InputStyle.highlightColor
     property bool withAccuracy: true
 
-    onCompassChanged: function() {
-      positionDirection.compass = positionMarker.compass
-    }
+    onCompassChanged: positionDirection.compass = positionMarker.compass
 
     PositionDirection {
       id: positionDirection

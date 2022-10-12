@@ -180,13 +180,9 @@ AbstractEditor {
       }
       width: formView.width
 
-      onClosed: function() {
-        dateTimeDrawerLoader.active = false
-      }
+      onClosed: dateTimeDrawerLoader.active = false
 
-      Component.onCompleted: function() {
-        open()
-      }
+      Component.onCompleted: open()
 
       Components.DateTimePicker {
         id: picker
@@ -197,14 +193,14 @@ AbstractEditor {
         hasDatePicker: root.includesDate
         hasTimePicker: root.includesTime
 
-        onSelected: function(selectedDate) {
+        onSelected: {
           if ( selectedDate )
             root.editorValueChanged(selectedDate, false)
 
           dateTimeDrawer.close()
         }
 
-        onCanceled: function() {
+        onCanceled: {
           dateTimeDrawer.close()
         }
       }

@@ -31,7 +31,7 @@ Item {
     text: qsTr( "Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue." ).arg( notEnoughSpaceLeftdialog.neededSpace )
     buttons: MessageDialog.Help | MessageDialog.Ignore
 
-    onButtonClicked: function(clickedButton) {
+    onButtonClicked: {
       if (clickedButton === MessageDialog.Help) {
         Qt.openUrlExternally( "https://www.lutraconsulting.co.uk/blog/2021/10/26/input-scoped-storage-update/" )
       }
@@ -45,7 +45,7 @@ Item {
     text: qsTr( "Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue." )
     buttons: MessageDialog.Help | MessageDialog.Ignore
 
-    onButtonClicked: function(clickedButton) {
+    onButtonClicked: {
       if (clickedButton === MessageDialog.Help) {
         Qt.openUrlExternally( "https://www.lutraconsulting.co.uk/blog/2021/10/26/input-scoped-storage-update/" )
       }
@@ -89,7 +89,7 @@ Item {
 
     MouseArea {
       anchors.fill: parent
-      onClicked: function() {} // do not propagate clicks
+      onClicked: {} // do not propagate clicks
     }
 
     ColumnLayout {

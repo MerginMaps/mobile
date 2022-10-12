@@ -80,15 +80,16 @@ Item {
       currentIndex = find(reverseConfig[value])
     }
 
-    onCurrentTextChanged: function(currentText) {
+    onCurrentTextChanged: {
       var currentMap = config['map'].length ? config['map'][currentIndex] : config['map']
       if (currentMap)
         editorValueChanged(currentMap[currentText], false)
     }
 
     // Workaround to get a signal when the value has changed
-    onCurrentEditorValueChanged: function() {
+    onCurrentEditorValueChanged: {
       currentIndex = find(reverseConfig[value])
     }
+
   }
 }

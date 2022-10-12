@@ -84,9 +84,7 @@ Item {
       }
   }
 
-  onGeometryChanged: function() {
-    constructHighlights()
-  }
+  onGeometryChanged: constructHighlights()
 
   // Transforms X coordinate from map CRS to screen XY with regards to scale and HighDPI
   function transformX( xcoord )

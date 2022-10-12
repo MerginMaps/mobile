@@ -54,7 +54,7 @@ Item {
       MouseArea {
         anchors.fill: parent
         propagateComposedEvents: false
-        onClicked: function() {
+        onClicked: {
           if ( allowMultiselect ) {
             checkboxItem.toggle()
             root.toggleFeature( model.FeatureId )
@@ -63,7 +63,7 @@ Item {
         }
       }
 
-      Component.onCompleted: function() { // toggle preselected features
+      Component.onCompleted: { // toggle preselected features
         if ( root.selectedFeatures.includes( model.FeatureId ) )
           checkboxItem.checkState = Qt.Checked
       }
@@ -86,9 +86,7 @@ Item {
             height: 40 * __dp
             width: 40 * __dp
 
-            onCheckboxClicked: function() {
-              root.toggleFeature( model.FeatureId )
-            }
+            onCheckboxClicked: root.toggleFeature( model.FeatureId )
           }
         }
 

@@ -37,7 +37,7 @@ ListView {
 
         MouseArea {
           anchors.fill: parent
-          onClicked: function() {
+          onClicked: {
             activeIndex = index
             listItemClicked( model.layerId )
           }

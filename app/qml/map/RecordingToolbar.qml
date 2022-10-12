@@ -39,7 +39,7 @@ Item {
 
     focus: true
 
-    Keys.onReleased: function(event) {
+    Keys.onReleased: {
       if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
         event.accepted = true;
         cancelButton.activated()
@@ -53,7 +53,7 @@ Item {
 
         MouseArea {
           anchors.fill: parent
-          onClicked: function() {} // dont do anything, just do not let click event propagate
+          onClicked: {} // dont do anything, just do not let click event propagate
         }
     }
 
@@ -71,12 +71,8 @@ Item {
                 width: root.itemSize
                 text: qsTr("GPS")
                 imageSource: InputStyle.gpsFixedIcon
-                onActivated: function() {
-                  root.gpsSwitchClicked()
-                }
-                onActivatedOnHold: function() {
-                  root.gpsSwithHeld()
-                }
+                onActivated: root.gpsSwitchClicked()
+                onActivatedOnHold: root.gpsSwithHeld()
 
                 RoundIndicator {
                     width: parent.height/4
@@ -101,9 +97,7 @@ Item {
 
                 enabled: root.recordingMapTool.canUndo
 
-                onActivated: function() {
-                  root.undoClicked()
-                }
+                onActivated: root.undoClicked()
             }
         }
 
@@ -126,9 +120,7 @@ Item {
                   return true;
                 }
 
-                onActivated: function() {
-                  root.removeClicked()
-                }
+                onActivated: root.removeClicked()
             }
         }
 
@@ -144,9 +136,7 @@ Item {
                 imageSource: InputStyle.plusIcon
                 enabled: manualRecording && root.recordingMapTool.state !== RecordingMapTool.View
 
-                onActivated: function() {
-                  root.addClicked()
-                }
+                onActivated: root.addClicked()
             }
         }
 
@@ -161,9 +151,7 @@ Item {
                 text: qsTr("Release")
                 imageSource: InputStyle.plusIcon
 
-                onActivated: function() {
-                  root.releaseClicked()
-                }
+                onActivated: root.releaseClicked()
             }
         }
 
@@ -177,9 +165,7 @@ Item {
                 text: qsTr("Done")
                 imageSource: InputStyle.checkIcon
 
-                onActivated: function() {
-                  root.doneClicked()
-                }
+                onActivated: root.doneClicked()
             }
         }
     }

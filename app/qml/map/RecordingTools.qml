@@ -52,9 +52,7 @@ Item {
     variablesManager: __variablesManager
 
     // Bind variables manager to know if we are centered to GPS or not when evaluating position variables
-    onIsUsingPositionChanged: function(isUsingPosition) {
-      __variablesManager.useGpsPoint = isUsingPosition
-    }
+    onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition
 
     onActiveVertexChanged: function( activeVertex ) {
       if ( activeVertex.isValid() )
@@ -184,7 +182,7 @@ Item {
 
     recordingMapTool: mapTool
 
-    onGpsSwitchClicked: function() {
+    onGpsSwitchClicked: {
       if ( root.gpsState.state === "unavailable" ) {
         showMessage( qsTr( "GPS currently unavailable." ) )
         return
@@ -194,7 +192,7 @@ Item {
       root.map.mapSettings.setCenter( mapPositioning.mapPosition )
     }
 
-    onGpsSwithHeld: function() {
+    onGpsSwithHeld: {
       // start / stop streaming mode
       if ( mapTool.recordingType === RecordingMapTool.Manual )
       {
@@ -210,7 +208,7 @@ Item {
       }
     }
 
-    onAddClicked: function() {
+    onAddClicked: {
       mapTool.addPoint( crosshair.recordPoint )
 
       if ( pointLayerSelected )
@@ -220,19 +218,17 @@ Item {
       }
     }
 
-    onReleaseClicked: function() {
+    onReleaseClicked: {
       mapTool.releaseVertex( crosshair.recordPoint )
     }
 
-    onRemoveClicked: function() {
-      mapTool.removePoint()
-    }
+    onRemoveClicked: mapTool.removePoint()
 
-    onUndoClicked: function() {
+    onUndoClicked: {
       mapTool.undo()
     }
 
-    onDoneClicked: function() {
+    onDoneClicked: {
       if ( mapTool.hasValidGeometry() )
       {
         // If we currently grab a point
@@ -256,7 +252,7 @@ Item {
 
     mapSettings: root.map.mapSettings
     positionKit: __positionKit
-    onScreenPositionChanged: function() {
+    onScreenPositionChanged: {
       if ( mapTool.isUsingPosition )
       {
         root.map.mapSettings.setCenter( mapPositioning.mapPosition )
@@ -303,7 +299,7 @@ Item {
     }
   }
 
-  Component.onCompleted: function() {
+  Component.onCompleted: {
     if ( root.centerToGPSOnStartup )
     {
       // center to GPS

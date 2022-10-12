@@ -25,9 +25,7 @@ Popup {
         color: InputStyle.panelBackgroundLight
         opacity: 1
     }
-    onOpened: function() {
-      timer.start()
-    }
+    onOpened: timer.start()
 
     Text {
         anchors.fill: parent

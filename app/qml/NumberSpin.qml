@@ -73,9 +73,7 @@ Item {
       width: imageDecrease.width * 3
       height: imageDecrease.height * 3
 
-      onClicked: function() {
-        if (minValue <= root.value - 1) root.value -=1
-      }
+      onClicked: if (minValue <= root.value - 1) root.value -=1
     }
 
     MouseArea {
@@ -84,8 +82,6 @@ Item {
       width: imageIncrease.width * 3
       height: imageIncrease.height * 3
 
-      onClicked: function() {
-        if (maxValue >= root.value + 1) root.value +=1
-      }
+      onClicked: if (maxValue >= root.value + 1) root.value +=1
     }
 }

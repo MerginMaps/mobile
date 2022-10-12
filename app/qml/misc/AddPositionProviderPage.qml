@@ -31,7 +31,7 @@ Page {
     rowHeight: InputStyle.rowHeightHeader
     titleText: qsTr( "Connect to bluetooth device" )
 
-    onBack: function() {
+    onBack: {
       btModel.discovering = false
       root.close()
     }
@@ -41,7 +41,7 @@ Page {
 
   focus: true
 
-  Keys.onReleased: function(event) {
+  Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true
       btModel.discovering = false
@@ -59,7 +59,7 @@ Page {
       discovering: false
     }
 
-    Component.onCompleted: function() {
+    Component.onCompleted: {
       // Is bluetooth turned on?
       // For Android we need to opt to enable Bluetooth and listen on response in the connections component.
       if ( __inputUtils.isBluetoothTurnedOn() )
@@ -162,7 +162,7 @@ Page {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: function() {
+        onClicked: {
           __positionKit.positionProvider = __positionKit.constructProvider( "external", model.DeviceAddress, model.DeviceName )
           root.initiatedConnectionTo( model.DeviceAddress, model.DeviceName )
 
@@ -227,9 +227,7 @@ Page {
     asynchronous: true
     anchors.fill: parent
 
-    onLoaded: function() {
-      item.open()
-    }
+    onLoaded: item.open()
   }
 
   Component {
@@ -243,19 +241,17 @@ Page {
 
       anchors.centerIn: parent
 
-      onSuccess: function() {
+      onSuccess: {
         btModel.discovering = false
         root.close()
       }
 
-      onFailure: function() {
+      onFailure: {
         // keep discovering, revert position provider back to internal provider
         __positionKit.positionProvider = __positionKit.constructProvider( "internal", "devicegps", "" )
       }
 
-      onClosed: function() {
-        dialogLoader.active = false
-      }
+      onClosed: dialogLoader.active = false
     }
   }
 }

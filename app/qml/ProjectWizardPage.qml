@@ -50,7 +50,7 @@ Item {
     rowHeight: InputStyle.rowHeightHeader
     titleText: qsTr("Create Project")
 
-    onBack: function() {
+    onBack: {
       projectWizardPanel.back()
     }
   }
@@ -113,9 +113,7 @@ Item {
           color: projectWizardPanel.fontColor
           widgetList: projectWizardPanel.widgetsModel
 
-          onRemoveClicked: function() {
-            fieldsModel.removeField(index)
-          }
+          onRemoveClicked: fieldsModel.removeField(index)
         }
 
         footer: Item {
@@ -127,7 +125,7 @@ Item {
               text: qsTr("Add field")
               anchors.centerIn: parent
               iconSource: InputStyle.plusIcon
-              onClicked: function() {
+              onClicked: {
                 fieldsModel.addField("", "TextEdit")
                 if (fieldList.visible) {
                   fieldList.positionViewAtEnd()
@@ -151,7 +149,7 @@ Item {
 
     MouseArea {
       anchors.fill: parent
-      onClicked: function() {} // dont do anything, just do not let click event propagate
+      onClicked: {} // dont do anything, just do not let click event propagate
     }
 
     Row {
@@ -169,7 +167,7 @@ Item {
           faded: !projectNameField.displayText
           imageSource: InputStyle.checkIcon
 
-          onActivated: function() {
+          onActivated: {
             if (faded) {
               __inputUtils.showNotification(qsTr("Empty project name"))
             } else {

@@ -107,8 +107,6 @@ Item {
 
   MouseArea {
     anchors.fill: parent
-    onClicked: function() {
-      root.clicked( model.FeaturePair )
-    }
+    onClicked: root.clicked( model.FeaturePair )
   }
 }

@@ -54,9 +54,7 @@ Item {
 
     MouseArea {
       anchors.fill: parent
-      onClicked: function() {
-        switchComp.toggle()
-      }
+      onClicked: switchComp.toggle()
     }
 
     Text {
@@ -92,7 +90,7 @@ Item {
       }
 
       // Workaround to get a signal when the value has changed
-      onCurrentValueChanged: function(currentValue) {
+      onCurrentValueChanged: {
         switchComp.checked = currentValue === fieldItem.checkedState
       }
     }

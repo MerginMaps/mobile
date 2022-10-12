@@ -67,7 +67,7 @@ Item {
       height: codeReaderBundle.height
 
       visible: false
-      onScanFinished: function( value ) {
+      onScanFinished: {
         codeReaderHandler.setValue(value)
       }
     }

@@ -74,7 +74,8 @@ Rectangle {
 
   transitions: Transition {
     NumberAnimation { property: "opacity"; duration: 500 }
-    onRunningChanged: function() {
+    onRunningChanged:
+    {
       if ( state == "show" && !running )
         notificationBanner.visible = true;
       if ( state == "fade" && !running )
@@ -105,9 +106,7 @@ Rectangle {
     icon.name: "close-icon"
     icon.source: InputStyle.closeIcon
     palette.button: "#00FFFFFF"
-    onClicked: function() {
-      notificationBanner.state = "fade"
-    }
+    onClicked: notificationBanner.state = "fade"
   }
 
   ColumnLayout {
@@ -151,8 +150,6 @@ Rectangle {
       radius: InputStyle.cornerRadius
     }
     text: "Details"
-    onClicked: function() {
-      detailsClicked()
-    }
+    onClicked: detailsClicked()
   }
 }

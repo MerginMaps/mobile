@@ -205,10 +205,10 @@ Item {
         title: qsTr( "Open Image" )
         visible: false
         nameFilters: [ qsTr( "Image files (*.gif *.png *.jpg)" ) ]
+        //width: window.width
+        //height: window.height
         currentFolder: shortcuts.pictures // https://doc.qt.io/qt-5/ios-platform-notes.html#native-image-picker
-        onAccepted: function() {
-          externalResourceHandler.imageSelected(fileDialog.fileUrl)
-        }
+        onAccepted: externalResourceHandler.imageSelected(fileDialog.fileUrl)
     }
 
     MessageDialog {
@@ -219,7 +219,7 @@ Item {
         title: qsTr( "Remove photo reference" )
         text: qsTr( "Also permanently delete photo from device?" )
         buttons: MessageDialog.Yes | MessageDialog.No | MessageDialog.Cancel
-        onButtonClicked: function() {
+        onButtonClicked: {
           if (clickedButton === MessageDialog.Yes) {
             externalResourceHandler.itemWidget.sourceToDelete = imageDeleteDialog.imagePath
             externalResourceHandler.itemWidget.editorValueChanged("", false)
@@ -230,7 +230,7 @@ Item {
             // visible = false called afterwards when onReject
           }
         }
-        onRejected: function() {
+        onRejected: {
            visible = false
         }
     }
@@ -243,7 +243,7 @@ Item {
         title: qsTr( "Failed to copy image" )
         text: errorText
         buttons: MessageDialog.Ok
-        onAccepted: function() {
+        onAccepted: {
             externalResourceHandler.itemWidget.editorValueChanged("", false)
             visible = false
         }

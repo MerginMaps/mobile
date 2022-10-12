@@ -35,9 +35,7 @@ Item {
 
     mapSettings: map.mapSettings
     positionKit: __positionKit
-    onScreenPositionChanged: function() {
-      updateStakeout()
-    }
+    onScreenPositionChanged: updateStakeout()
   }
 
   Connections {
@@ -47,9 +45,7 @@ Item {
     }
   }
 
-  Component.onCompleted: function() {
-    updateStakeout()
-  }
+  Component.onCompleted: updateStakeout()
 
   QtObject {
     id: internal
@@ -57,9 +53,7 @@ Item {
     // Determines if canvas is auto centered to stakeout line
     property bool shouldAutoFollowStakoutPath: true
 
-    onShouldAutoFollowStakoutPathChanged: function() {
-      updateStakeout()
-    }
+    onShouldAutoFollowStakoutPathChanged: updateStakeout()
   }
 
   function updateStakeout() {

@@ -64,11 +64,7 @@ Item {
       bottom: parent.bottom
     }
 
-    onOpenProjectRequested: function( projectId, projectFilePath ) {
-      root.openProjectRequested( projectId, projectFilePath )
-    }
-    onShowLocalChangesRequested: function( projectId ) {
-      root.showLocalChangesRequested( projectId )
-    }
+    onOpenProjectRequested: root.openProjectRequested( projectId, projectFilePath )
+    onShowLocalChangesRequested: root.showLocalChangesRequested( projectId )
   }
 }

@@ -84,7 +84,7 @@ Item {
     }
   ]
 
-  Keys.onReleased: function( event ) {
+  Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true;
       endStakeout()
@@ -115,7 +115,7 @@ Item {
       // back handler
       focus: true
 
-      Keys.onReleased: function( event ) {
+      Keys.onReleased: {
         if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
           event.accepted = true;
           endStakeout()
@@ -193,9 +193,7 @@ Item {
 
           MouseArea {
             anchors.fill: parent
-            onClicked: function() {
-              endStakeout()
-            }
+            onClicked: endStakeout()
           }
         }
       }

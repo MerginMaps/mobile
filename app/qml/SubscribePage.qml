@@ -23,7 +23,7 @@ Rectangle {
   //! If true and component is visible, busy indicator suppose to be on. Currently used only while fetching a recommendedPlan
   property bool isBusy: __purchasing.individualPlan.id === "" || __purchasing.professionalPlan.id === ""
 
-  onVisibleChanged: function() {
+  onVisibleChanged: {
     subscribeBusyIndicator.running = root.visible && root.isBusy
   }
 
@@ -60,9 +60,7 @@ Rectangle {
     rowHeight: InputStyle.rowHeightHeader
     titleText: qsTr("Subscribe")
 
-    onBack: function() {
-      backClicked()
-    }
+    onBack: backClicked()
     withBackButton: true
   }
 
@@ -139,7 +137,7 @@ Rectangle {
             id: individualTab
             plan: __purchasing.individualPlan
             name: qsTr("Individual")
-            onSubscribeClicked: function() {
+            onSubscribeClicked: {
                __purchasing.purchase( __purchasing.individualPlan.id )
               root.subscribeClicked()
             }
@@ -148,7 +146,7 @@ Rectangle {
             id: professionalTab
             plan: __purchasing.professionalPlan
             name: qsTr("Professional")
-            onSubscribeClicked: function() {
+            onSubscribeClicked: {
                __purchasing.purchase( __purchasing.professionalPlan.id )
               root.subscribeClicked()
             }

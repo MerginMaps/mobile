@@ -42,13 +42,9 @@ AbstractEditor {
     text: root.parentValue !== undefined ? root.parentValue : ''
     textFormat: config['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
 
-    onLinkActivated: function(link) {
-      Qt.openUrlExternally( link )
-    }
+    onLinkActivated: Qt.openUrlExternally( link )
 
-    onTextChanged: function(text) {
-      root.editorValueChanged( text, text === "" )
-    }
+    onTextChanged: root.editorValueChanged( text, text === "" )
   }
 
   rightAction: Item {
@@ -74,7 +70,5 @@ AbstractEditor {
     }
   }
 
-  onRightActionClicked: function() {
-    root.importDataRequested()
-  }
+  onRightActionClicked: root.importDataRequested()
 }

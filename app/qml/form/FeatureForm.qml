@@ -264,7 +264,7 @@ Item {
             contentItem: Text {
               // Make sure the width is derived from the text so we can get wider
               // than the parent item and the Flickable is useful
-              Component.onCompleted: function() {
+              Component.onCompleted: {
                 tabButton.width = tabButton.width + paintedWidth
                 if (tabRow.currentIndex == index)
                   tabButton.checked = true
@@ -615,17 +615,13 @@ Item {
           y: rememberCheckboxContainer.height/2 - rememberCheckbox.height/2
           x: (parent.width + form.style.fields.outerMargin) / 7
 
-          onCheckboxClicked: function() {
-            RememberValue = buttonState
-          }
+          onCheckboxClicked: RememberValue = buttonState
           checked: RememberValue ? true : false
         }
 
         MouseArea {
           anchors.fill: parent
-          onClicked: function() {
-            rememberCheckbox.checkboxClicked( !rememberCheckbox.checkState )
-          }
+          onClicked: rememberCheckbox.checkboxClicked( !rememberCheckbox.checkState )
         }
       }
     }

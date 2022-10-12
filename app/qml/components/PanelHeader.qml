@@ -75,9 +75,7 @@ Rectangle {
         MouseArea {
           anchors.fill: parent
           anchors.leftMargin: -InputStyle.panelMargin
-          onClicked: function() {
-            back()
-          }
+          onClicked: back()
         }
     }
 
@@ -91,4 +89,5 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
     }
+
 }

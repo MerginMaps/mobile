@@ -39,6 +39,7 @@ Page {
   id: root
   visible: true
 
+
   // /////////////////
   // header
   PanelHeader {
@@ -345,7 +346,7 @@ Page {
           id: usernameField
           placeholderText: qsTr("Enter username")
           Layout.fillWidth: true
-          onTextEdited: function( text ) {
+          onTextEdited: {
             buttons.standardButton(Dialog.Yes).enabled = (text == username)
           }
         }
@@ -356,20 +357,20 @@ Page {
         standardButtons: Dialog.Yes | Dialog.No
       }
 
-      onAboutToShow: function() {
+      onAboutToShow: {
         buttons.standardButton(Dialog.Yes).enabled = false;
       }
 
-      onAboutToHide: function() {
+      onAboutToHide: {
         usernameField.clear()
       }
 
-      onAccepted: function() {
+      onAccepted: {
          close()
          accountDeleteIndicator.running = true
          __merginApi.deleteAccount()
       }
-      onRejected: function() {
+      onRejected: {
         close()
       }
     }
@@ -383,7 +384,7 @@ Page {
       title: qsTr( "Failed to remove account" )
       text: messageText
       buttons: MessageDialog.Close
-      onRejected: function() {
+      onRejected: {
         close()
         accountDeleted()
       }

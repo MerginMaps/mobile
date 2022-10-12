@@ -136,9 +136,7 @@ Rectangle {
   MouseArea {
     anchors.fill: parent
     enabled: projectIsValid
-    onClicked: function() {
-      openRequested()
-    }
+    onClicked: openRequested()
   }
 
   RowLayout {
@@ -245,7 +243,7 @@ Rectangle {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: function() {
+        onClicked: {
           if ( projectRemoteError ) {
             __inputUtils.showNotification( qsTr( "Could not synchronize project, please make sure you are logged in and have sufficient rights." ) )
             return
@@ -286,7 +284,7 @@ Rectangle {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: function() {
+        onClicked: {
           fillMoreMenu()
           contextMenu.open()
         }
@@ -321,7 +319,7 @@ Rectangle {
     }
 
     //! sets y-offset either above or below related item according relative position to end of the list
-    onAboutToShow: function() {
+    onAboutToShow: {
       let itemRelativeY = parent.y - root.viewContentY
       if ( itemRelativeY + contextMenu.height >= root.viewHeight )
         contextMenu.y = -contextMenu.height + parent.height / 3
@@ -351,9 +349,7 @@ Rectangle {
         overlayImage: true
       }
 
-      onClicked: function() {
-        callback()
-      }
+      onClicked: callback()
     }
   }
 }

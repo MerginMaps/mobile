@@ -28,7 +28,7 @@ Drawer {
 
     Item {
       focus: true
-      Keys.onReleased: function( event ) {
+      Keys.onReleased: {
         if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
           mapThemePanel.close()
         }
@@ -85,7 +85,7 @@ Drawer {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: function() {
+                onClicked: {
                   __activeProject.setActiveMapTheme( index )
                   mapThemePanel.close()
                 }

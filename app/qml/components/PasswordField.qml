@@ -54,12 +54,8 @@ Row {
       color: root.bgColor
     }
 
-    onEditingFinished: function() {
-      focus = false
-    }
-    onVisibleChanged: function() {
-      if (!password.visible) password.echoMode = TextInput.Password
-    }
+    onEditingFinished: focus = false
+    onVisibleChanged: if (!password.visible) password.echoMode = TextInput.Password
   }
 
   Rectangle {
@@ -81,7 +77,7 @@ Row {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: function() {
+        onClicked: {
           if (password.echoMode === TextInput.Normal) {
             password.echoMode = TextInput.Password
           } else {

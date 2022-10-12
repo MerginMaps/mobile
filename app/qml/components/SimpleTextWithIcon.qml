@@ -27,7 +27,7 @@ Rectangle {
 
   MouseArea {
     anchors.fill: parent
-    onClicked: function() {
+    onClicked: {
       root.clicked()
     }
   }

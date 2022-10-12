@@ -36,9 +36,7 @@ Item {
       }
     }
 
-    onPreeditTextChanged: function() {
-      if ( __androidUtils.isAndroid ) Qt.inputMethod.commit() // to avoid Android's uncommited text
-    }
+    onPreeditTextChanged: if ( __androidUtils.isAndroid ) Qt.inputMethod.commit() // to avoid Android's uncommited text
 
     text: root.number
 
@@ -80,9 +78,7 @@ Item {
 
     MouseArea {
       anchors.fill: parent
-      onClicked: function() {
-        numberInput.forceActiveFocus()
-      }
+      onClicked: numberInput.forceActiveFocus()
     }
   }
 }

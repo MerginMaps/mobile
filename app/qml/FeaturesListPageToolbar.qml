@@ -34,7 +34,7 @@ Item {
 
     MouseArea {
       anchors.fill: parent
-      onClicked: function() {} // do nothing but do not let click propagate
+      onClicked: {} // do nothing but do not let click propagate
     }
 
     RowLayout {
@@ -52,7 +52,7 @@ Item {
           width: root.height * 0.8
           text: qsTr("Add Feature")
           imageSource: InputStyle.plusIcon
-          onActivated: function() {
+          onActivated: {
             addButtonClicked()
           }
         }
@@ -68,7 +68,7 @@ Item {
           width: root.height * 0.8
           text: qsTr("Done")
           imageSource: InputStyle.checkIcon
-          onActivated: function() {
+          onActivated: {
             doneButtonClicked()
           }
         }
@@ -84,7 +84,7 @@ Item {
           width: root.height * 0.8
           text: qsTr("Remove link")
           imageSource: InputStyle.unlinkIcon
-          onActivated: function() {
+          onActivated: {
             unlinkButtonClicked()
           }
         }

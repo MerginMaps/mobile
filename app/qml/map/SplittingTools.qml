@@ -85,13 +85,9 @@ Item {
     width: parent.width
     height: InputStyle.rowHeightHeader
 
-    onAddClicked: function() {
-      mapTool.addPoint( crosshair.recordPoint )
-    }
-    onRemoveClicked: function() {
-      mapTool.removePoint()
-    }
-    onDoneClicked: function() {
+    onAddClicked: mapTool.addPoint( crosshair.recordPoint )
+    onRemoveClicked: mapTool.removePoint()
+    onDoneClicked: {
       if ( mapTool.hasValidGeometry() )
       {
         let result = mapTool.commitSplit()
@@ -102,8 +98,6 @@ Item {
         showMessage( qsTr( "You need to add at least 2 points." ) )
       }
     }
-    onCancelClicked: function() {
-      root.canceled()
-    }
+    onCancelClicked: root.canceled()
   }
 }

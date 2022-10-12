@@ -84,7 +84,7 @@ Item {
     }
   ]
 
-  onStateChanged: function(state) {
+  onStateChanged: {
     switch ( state ) {
 
       case "record": {
@@ -181,7 +181,7 @@ Item {
       }
     }
 
-    onLongPressed: function() {
+    onLongPressed: {
       // Alter position of simulated provider
       if ( __positionKit.positionProvider && __positionKit.positionProvider.id() === "simulated" )
       {
@@ -195,9 +195,7 @@ Item {
 
     mapSettings: mapCanvas.mapSettings
     positionKit: __positionKit
-    onScreenPositionChanged: function() {
-      updatePosition()
-    }
+    onScreenPositionChanged: updatePosition()
   }
 
   Compass { id: deviceCompass }
@@ -349,9 +347,7 @@ Item {
     visibleInterval: 10000
     text: qsTr( "There was an issue during synchronization, we will try again. Click to learn more" )
 
-    onClicked: function() {
-      syncFailedDialog.open()
-    }
+    onClicked: syncFailedDialog.open()
   }
 
   AutoHideBanner {
@@ -421,9 +417,7 @@ Item {
   MissingAuthDialog {
     id: missingAuthDialog
 
-    onSingInRequested: function() {
-      root.signInRequested()
-    }
+    onSingInRequested: root.signInRequested()
   }
 
   SyncFailedDialog {
@@ -433,9 +427,7 @@ Item {
   MigrateToMerginDialog {
     id: migrateToMerginDialog
 
-    onMigrationRequested: function() {
-      __syncManager.migrateProjectToMergin( __activeProject.projectFullName() )
-    }
+    onMigrationRequested: __syncManager.migrateProjectToMergin( __activeProject.projectFullName() )
   }
 
   NoPermissionsDialog {
@@ -459,12 +451,8 @@ Item {
       return distance < InputStyle.smallGap / 2
     }
 
-    onClicked: function() {
-      __activeProject.requestSync()
-    }
-    onPressAndHold: function() {
-      root.localChangesPanelRequested()
-    }
+    onClicked: __activeProject.requestSync()
+    onPressAndHold: root.localChangesPanelRequested()
 
     maxWidth: InputStyle.mapBtnHeight
     withImplicitMargins: false
@@ -602,7 +590,7 @@ Item {
   MapFloatButton {
     id: backButton
 
-    onClicked: function() {
+    onClicked: {
       if ( root.state === "edit" || root.state === "record" ) {
         if ( recordingToolsLoader.item.hasChanges() ) {
           cancelEditDialog.open()
@@ -693,7 +681,7 @@ Item {
 
     buttons: MessageDialog.Yes | MessageDialog.No
 
-    onButtonClicked: function(clickedButton) {
+    onButtonClicked: {
       if ( clickedButton === MessageDialog.Yes ) {
         recordingToolsLoader.item.discardChanges()
       }
@@ -708,9 +696,7 @@ Item {
 
     property int accuracyPrecision: __positionKit.horizontalAccuracy > 1 ? 1 : 2
 
-    onClicked: function() {
-      accuracyButtonClicked()
-    }
+    onClicked: accuracyButtonClicked()
 
     maxWidth: parent.width - ( InputStyle.panelMargin * 2 )
 
@@ -803,9 +789,7 @@ Item {
   MapFloatButton {
     id: activeLayerButton
 
-    onClicked: function() {
-      activeLayerPanel.openPanel()
-    }
+    onClicked: activeLayerPanel.openPanel()
 
     maxWidth: parent.width * 0.8
 
@@ -875,9 +859,7 @@ Item {
     width: window.width
     edge: Qt.BottomEdge
 
-    onActiveLayerChangeRequested: function(layerId) {
-      __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
-    }
+    onActiveLayerChangeRequested: __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
   }
 
   Connections {
@@ -900,7 +882,7 @@ Item {
 
       centerToGPSOnStartup: root.state !== "edit"
 
-      onCanceled: function() {
+      onCanceled: {
         howtoEditingBanner.hide()
 
         if ( root.state === "record" )
@@ -962,7 +944,7 @@ Item {
       map: mapCanvas
       featureToSplit: internal.featurePairToEdit
 
-      onDone: function() {
+      onDone: {
         // close all feature forms, show banner if it went fine or not
         howtoSplittingBanner.hide()
 
@@ -981,7 +963,7 @@ Item {
         root.state = "view"
       }
 
-      onCanceled: function() {
+      onCanceled: {
         // go back to feature form
         howtoSplittingBanner.hide()
 

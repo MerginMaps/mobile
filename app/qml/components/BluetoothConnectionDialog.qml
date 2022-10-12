@@ -69,7 +69,7 @@ Dialog {
   Item {
     focus: true
     // just close the popup, keep the connection running
-    Keys.onReleased: function( event ) {
+    Keys.onReleased: {
       if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
         event.accepted = true
         close()
@@ -83,7 +83,7 @@ Dialog {
     interval: 1500
     repeat: false
     running: false
-    onTriggered: function() {
+    onTriggered: {
       if ( rootstate.state === "success" )
       {
         root.success()
@@ -272,9 +272,7 @@ Dialog {
           color: InputStyle.fontColor
           font.pixelSize: InputStyle.fontPixelSizeNormal
 
-          onLinkActivated: function( link ) {
-            Qt.openUrlExternally( link )
-          }
+          onLinkActivated: Qt.openUrlExternally( link )
         }
       }
 
@@ -290,7 +288,7 @@ Dialog {
           text: qsTr( "Close" )
           visible: rootstate.state === "fail" || rootstate.state === "waitingToReconnect"
 
-          onClicked: function() {
+          onClicked: {
             root.failure()
             root.close()
           }

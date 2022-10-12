@@ -23,7 +23,7 @@ Item {
 
   signal close
 
-  Keys.onReleased: function( event ) {
+  Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true
       close()
@@ -51,9 +51,7 @@ Item {
       rowHeight: InputStyle.rowHeightHeader
       titleText: qsTr("Diagnostic Log")
 
-      onBack: function() {
-        root.close()
-      }
+      onBack: root.close()
       withBackButton: true
     }
 
@@ -90,7 +88,7 @@ Item {
       height: InputStyle.rowHeightHeader
       text: __inputHelp.submitReportPending ? qsTr("Sending...") : qsTr("Send to Developers")
 
-      onClicked: function() {
+      onClicked: {
         if (!__inputHelp.submitReportPending)
           __inputHelp.submitReport()
       }

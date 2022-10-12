@@ -158,12 +158,10 @@ Item {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: function() {
-          externalResourceHandler.previewImage( __inputUtils.getAbsolutePath( image.currentValue, prefixToRelativePath ) )
-        }
+        onClicked: externalResourceHandler.previewImage( __inputUtils.getAbsolutePath( image.currentValue, prefixToRelativePath ) )
       }
 
-      onCurrentValueChanged: function() {
+      onCurrentValueChanged: {
         image.source = image.getSource()
       }
 
@@ -198,9 +196,7 @@ Item {
     anchors.bottom: imageContainer.bottom
     anchors.margins: buttonsContainer.itemHeight/4
 
-    onClicked: function() {
-      externalResourceHandler.removeImage( fieldItem, __inputUtils.getAbsolutePath( image.currentValue, prefixToRelativePath ) )
-    }
+    onClicked: externalResourceHandler.removeImage( fieldItem, __inputUtils.getAbsolutePath( image.currentValue, prefixToRelativePath ) )
 
     background: Image {
       id: deleteIcon
@@ -246,7 +242,7 @@ Item {
 
         MouseArea {
           anchors.fill: parent
-          onClicked: function() {
+          onClicked: {
             if (externalResourceHandler.capturePhoto) {
               externalResourceHandler.capturePhoto(fieldItem)
             } else {
@@ -289,9 +285,7 @@ Item {
 
         MouseArea {
           anchors.fill: parent
-          onClicked: function() {
-            externalResourceHandler.chooseImage(fieldItem)
-          }
+          onClicked: externalResourceHandler.chooseImage(fieldItem)
         }
       }
     }
@@ -311,4 +305,5 @@ Item {
     elide: Text.ElideRight
     visible: fieldItem.state === "notAvailable"
   }
+
 }

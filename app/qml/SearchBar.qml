@@ -42,7 +42,7 @@ Rectangle {
     searchTextChanged("")
   }
 
-  onVisibleChanged: function() {
+  onVisibleChanged: {
     // On Android, due to a Qt bug, we need to call deactivate again on page close to clear text search and focus
     if ( !visible && __androidUtils.isAndroid )
       root.deactivate()
@@ -52,7 +52,7 @@ Rectangle {
     id: searchTimer
     interval: emitInterval
     running: false
-    onTriggered: function() {
+    onTriggered: {
       root.text = searchField.displayText
       searchTextChanged( root.text )
     }
@@ -79,7 +79,7 @@ Rectangle {
       leftPadding: root.panelMargin
       rightPadding: root.panelMargin
 
-      onDisplayTextChanged: function() {
+      onDisplayTextChanged: {
         if ( root.allowTimer ) {
           if ( searchTimer.running )
             searchTimer.restart()
@@ -119,7 +119,7 @@ Rectangle {
 
       MouseArea {
         anchors.fill: iconContainer
-        onClicked: function() {
+        onClicked: {
           if ( searchField.displayText ) {
             root.deactivate()
           }

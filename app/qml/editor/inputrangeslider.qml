@@ -102,9 +102,7 @@ Item {
         Layout.preferredHeight: root.height
         rightPadding: customStyle.fields.sideMargin
 
-        onValueChanged: function() {
-          root.editorValueChanged( slider.value, false )
-        }
+        onValueChanged: root.editorValueChanged( slider.value, false )
 
         background: Rectangle {
           x: slider.leftPadding

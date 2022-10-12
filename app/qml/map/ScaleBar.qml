@@ -88,7 +88,7 @@ Item {
         to: 0.0
         duration: 1000
 
-        onStopped: function() {
+        onStopped: {
             scaleBar.visible = false
             scaleBar.opacity = 1.0
         }
@@ -97,12 +97,12 @@ Item {
     Timer {
         id: scaleBarTimer
         interval: 3000; running: false; repeat: false
-        onTriggered: function() {
+        onTriggered: {
             fadeOut.start()
         }
     }
 
-    onVisibleChanged: function() {
+    onVisibleChanged: {
         if (scaleBar.visible) {
             fadeOut.stop()
             scaleBarTimer.restart()

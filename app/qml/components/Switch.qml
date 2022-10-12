@@ -41,7 +41,5 @@ T.Switch {
         color: control.isReadOnly || !control.checked ? control.bgndColorInactive : control.bgndColorActive
     }
 
-    onCheckedChanged: function(checked) {
-      control.switchChecked( checked )
-    }
+    onCheckedChanged: control.switchChecked( checked )
 }

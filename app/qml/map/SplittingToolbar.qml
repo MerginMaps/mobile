@@ -26,7 +26,7 @@ Item {
   focus: true
   height: InputStyle.rowHeightHeader
 
-  Keys.onReleased: function(event) {
+  Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true;
       cancelClicked()
@@ -41,7 +41,7 @@ Item {
 
     MouseArea {
       anchors.fill: parent
-      onClicked: function() {} // dont do anything, just do not let click event propagate
+      onClicked: {} // dont do anything, just do not let click event propagate
     }
   }
 
@@ -61,9 +61,7 @@ Item {
         text: qsTr("Undo")
         imageSource: InputStyle.undoIcon
 
-        onActivated: function() {
-          root.removeClicked()
-        }
+        onActivated: root.removeClicked()
       }
     }
 
@@ -77,9 +75,7 @@ Item {
         text: qsTr("Add Point")
         imageSource: InputStyle.plusIcon
 
-        onActivated: function() {
-          root.addClicked()
-        }
+        onActivated: root.addClicked()
       }
     }
 
@@ -93,9 +89,7 @@ Item {
         text: qsTr("Done")
         imageSource: InputStyle.checkIcon
 
-        onActivated: function() {
-          root.doneClicked()
-        }
+        onActivated: root.doneClicked()
       }
     }
 
@@ -109,9 +103,7 @@ Item {
         text: qsTr("Cancel")
         imageSource: InputStyle.noIcon
 
-        onActivated: function() {
-          root.cancelClicked()
-        }
+        onActivated: root.cancelClicked()
       }
     }
   }

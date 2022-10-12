@@ -63,7 +63,7 @@ Drawer {
     opacity: photoPanel.bgOpacity
   }
 
-  onVisibleChanged: function() {
+  onVisibleChanged: {
     if (visible) {
       camera.setCameraState(Camera.ActiveState)
       camera.start()
@@ -95,7 +95,7 @@ Drawer {
       cameraState: Camera.UnloadedState
 
       imageCapture {
-        onImageCaptured: function() {
+        onImageCaptured: {
           // Show the preview in an Image
           photoPreview.source = preview
         }
@@ -126,7 +126,7 @@ Drawer {
         MouseArea {
           id: mouseArea
           anchors.fill: parent
-          onClicked: function() {
+          onClicked: {
             if (targetDir !== "") {
               camera.imageCapture.captureToLocation(photoPanel.targetDir);
             } else {
@@ -156,9 +156,7 @@ Drawer {
       height: parent.height
       fillMode: Image.PreserveAspectFit
       visible: false
-      onVisibleChanged: function() {
-        if (!photoPreview.visible) photoPreview.source = ""
-      }
+      onVisibleChanged: if (!photoPreview.visible) photoPreview.source = ""
 
       // Cancel button
       Rectangle {
@@ -178,9 +176,7 @@ Drawer {
 
         MouseArea {
           anchors.fill: parent
-          onClicked: function() {
-            photoPanel.discardCapturedImage()
-          }
+          onClicked:photoPanel.discardCapturedImage()
         }
 
         Image {
@@ -240,7 +236,7 @@ Drawer {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: function() {
+        onClicked: {
           cancelButton.visible ? photoPanel.discardCapturedImage() : photoPanel.close()
         }
       }

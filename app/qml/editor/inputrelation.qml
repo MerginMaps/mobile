@@ -87,7 +87,7 @@ Item {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: function() {
+        onClicked: {
           if ( textModeContainer.state === "initial" )
             textModeContainer.state = "page"
         }
@@ -107,12 +107,8 @@ Item {
             firstLinesMaxWidth: flowItemView.width
             lastLineMaxWidth: flowItemView.width / 2
 
-            onClicked: function() {
-              root.openLinkedFeature( feature )
-            }
-            onSetInvisible: function() {
-              textModeContainer.invisibleItemsCounter++
-            }
+            onClicked: root.openLinkedFeature( feature )
+            onSetInvisible: textModeContainer.invisibleItemsCounter++
           }
         }
 
@@ -129,9 +125,7 @@ Item {
           backgroundContent.border.color: customStyle.relationComponent.tagBorderColorButton
           textContent.color: customStyle.relationComponent.tagTextColor
 
-          onClicked: function() {
-            textModeContainer.state = "page"
-          }
+          onClicked: textModeContainer.state = "page"
         }
 
         RelationTextDelegate {
@@ -147,9 +141,7 @@ Item {
           firstLinesMaxWidth: textModeContainer.fullLineWidth
           lastLineMaxWidth: firstLinesMaxWidth
 
-          onClicked: function() {
-            root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
-          }
+          onClicked: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
         }
       }
     }
@@ -178,16 +170,12 @@ Item {
 
         model: rmodel
         delegate: RelationPhotoDelegate {
-          onClicked: function() {
-            root.openLinkedFeature( feature )
-          }
+          onClicked: root.openLinkedFeature( feature )
         }
 
         footer: RelationPhotoFooterDelegate {
           isReadOnly: root.parent.readOnly
-          onClicked: function() {
-            root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
-          }
+          onClicked: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
         }
       }
     }
@@ -205,20 +193,18 @@ Item {
       toolbarVisible: !root.parent.readOnly
       focus: true
 
-      onBackButtonClicked: function() {
+      onBackButtonClicked: {
         root.parent.formView.pop()
         textModeContainer.state = "initial"
       }
 
-      onAddFeatureClicked: function() {
-        root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
-      }
-      onSelectionFinished: function() {
+      onAddFeatureClicked: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
+      onSelectionFinished: {
         let clickedFeature = featuresModel.convertRoleValue( FeaturesModel.FeatureId, featureIds, FeaturesModel.FeaturePair )
         root.openLinkedFeature( clickedFeature )
       }
 
-      Keys.onReleased: function(event) {
+      Keys.onReleased: {
         if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
           event.accepted = true
           root.parent.formView.pop()
