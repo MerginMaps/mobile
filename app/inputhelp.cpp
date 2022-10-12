@@ -43,12 +43,12 @@ InputHelp::InputHelp( MerginApi *merginApi, InputUtils *utils ):
 
 QString InputHelp::helpRootLink() const
 {
-  return helpRoot + utmTagHelp;
+  return helpRoot + "/" + utmTagHelp;
 }
 
 QString InputHelp::inputWebLink() const
 {
-  return inputWeb + utmTagOther;
+  return inputWeb + "/" +  utmTagOther;
 }
 
 QString InputHelp::merginWebLink() const
