@@ -28,7 +28,6 @@
     # https://stackoverflow.com/questions/18327959/qmake-how-to-link-a-library-twice/18328971
     CONFIG += no_lflags_merge
 
-    LIBS += -lqgis_native
     LIBS += -lqgis_core
     LIBS += -lauthmethod_basic_a
     LIBS += -lauthmethod_esritoken_a
