@@ -19,8 +19,8 @@ env:
   INPUT_SDK_VERSION: mac-20221012-106
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 0
-  XC_VERSION: ${{ '13.2.1' }}     
-      
+  XC_VERSION: ${{ '13.2.1' }}
+
 concurrency:
   group: ci-${{github.ref}}-macos
   cancel-in-progress: true
@@ -37,7 +37,7 @@ jobs:
 
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
-        
+
       - name: install brew deps
         run: |
           brew install lcov
@@ -163,9 +163,10 @@ jobs:
         run: |
           mkdir -p build-Input-rel
           cd build-Input-rel
-          ${{ github.workspace }}/Qt/${QT_VERSION}/clang_64/bin/qmake \
+          ${{ github.workspace }}/Qt/${QT_VERSION}/macos/bin/qmake \
             ../input/app/input.pro \
             CONFIG+=release
+            CONFIG+=qtquickcompiler
           make
 
       - name: Get TimeStamp
