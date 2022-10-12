@@ -10,7 +10,6 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-//import Qt.labs.calendar 1.0
 import Qt5Compat.GraphicalEffects
 
 import ".."
