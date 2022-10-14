@@ -22,7 +22,7 @@
             </intent-filter>
             <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
             <!-- <meta-data android:name="android.app.arguments" android:value="-- %%INSERT_APP_ARGUMENTS%% --" /> -->
-            
+
             <!-- Splash screen -->
             <meta-data android:name="android.app.splash_screen_drawable" android:resource="@drawable/splashscreen"/>
             <meta-data android:name="android.app.splash_screen_sticky" android:value="true"/>
@@ -93,7 +93,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
 
     <!-- Add the following permission when app should target Android 12 (API LVL 31), it is used for orientation sensor! -->
-    <!-- <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS"/> -->
+    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS"/>
 
     <!-- The following comment will be replaced upon deployment with default features based on the dependencies of the application.
          Remove the comment if you do not require these default features. -->
