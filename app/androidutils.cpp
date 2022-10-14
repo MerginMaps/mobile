@@ -34,17 +34,19 @@ AndroidUtils::AndroidUtils( QObject *parent ): QObject( parent )
 void AndroidUtils::showToast( QString message )
 {
 #ifdef ANDROID
-  QNativeInterface::QAndroidApplication::runOnAndroidMainThread( [message]
+  QNativeInterface::QAndroidApplication::runOnAndroidMainThread( [message]()
   {
-    auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+    QJniObject activity = QNativeInterface::QAndroidApplication::context();
     QJniObject javaString = QJniObject::fromString( message );
-    QJniObject toast = QJniObject::callStaticObjectMethod( "android/widget/Toast", "makeText",
-        "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
-        activity.object(),
-        javaString.object(),
-        jint( 1 ) );
+    QJniObject toast = QJniObject::callStaticObjectMethod(
+			"android.widget.Toast",
+			"makeText",
+			"(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
+			activity.object(),
+			javaString.object<jstring>(),
+			jint( 1 ) );
     toast.callMethod<void>( "show" );
-  } );
+  } ).waitForFinished();
 #else
   Q_UNUSED( message )
 #endif
