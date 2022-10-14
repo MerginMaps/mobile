@@ -21,10 +21,14 @@ class QRDecoder : public QObject
 
     QString capturedString() const;
 
+    // Returns image from video frame
     static QImage videoFrameToImage( const QVideoFrame &videoFrame, const QRect &captureRect );
+
+    // Set camera resolution
     void setResolution( const int &width, const int &height );
 
   public slots:
+    // read qr code from the image
     void processImage( const QImage capturedImage );
 
   signals:
@@ -32,11 +36,12 @@ class QRDecoder : public QObject
     void capturedStringChanged( const QString &capturedString );
 
   private:
+    void setCapturedString( const QString &capturedString );
+    void setIsDecoding( bool isDecoding );
+
     bool mIsDecoding = false;
     QString mCapturedString = "";
 
-    void setCapturedString( const QString &capturedString );
-    void setIsDecoding( bool isDecoding );
 };
 
 #endif // QRDECODER_H

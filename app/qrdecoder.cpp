@@ -38,9 +38,11 @@ namespace ZXing
         using ZXing::Result::isValid;
         using ZXing::Result::status;
 
+        // Return result of qt code decoding as a human-readable text
         inline QString text() const { return QString::fromWCharArray( ZXing::Result::text().c_str() ); }
     };
 
+    // Call ZXing::ReadBarcode() method and get result as a text
     Result ReadBarcode( const QImage &img, const DecodeHints &hints = {} )
     {
       auto ImgFmtFromQImg = []( const QImage & img )
@@ -99,7 +101,10 @@ void QRDecoder::processImage( const QImage capturedImage )
                      .setFormats( BarcodeFormat::QRCode | BarcodeFormat::DataMatrix | BarcodeFormat::Codabar |
                                   BarcodeFormat::Code39 | BarcodeFormat::Code93 | BarcodeFormat::Code128 |
                                   BarcodeFormat::EAN8 | BarcodeFormat::EAN13 )
-                     .setTryHarder( true );
+                     .setTryHarder( true )
+                     .setTryRotate( true )
+                     .setIsPure( false )
+                     .setBinarizer( Binarizer::LocalAverage );
 
   const auto result = ReadBarcode( capturedImage, hints );
 

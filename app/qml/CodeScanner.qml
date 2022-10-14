@@ -28,7 +28,7 @@ Drawer {
 
     captureRect: Qt.rect(root.width / 4, root.height / 4, root.width / 2, root.height / 2)
 
-    onCapturedStringChanged: function (captured) {
+    onCapturedStringChanged: function( captured ) {
       codeReader.scanFinished( captured )
       qrcodeScanner.setProcessing(false)
     }

@@ -99,6 +99,11 @@ QRDecoder *CodeScanner::decoder()
   return &mDecoder;
 }
 
+QString CodeScanner::capturedString() const
+{
+  return mCapturedString;
+}
+
 void CodeScanner::setCapturedString( const QString &capturedString )
 {
   if ( mCapturedString == capturedString )
@@ -108,11 +113,6 @@ void CodeScanner::setCapturedString( const QString &capturedString )
 
   mCapturedString = capturedString;
   emit capturedStringChanged( mCapturedString );
-}
-
-QString CodeScanner::capturedString() const
-{
-  return mCapturedString;
 }
 
 QRectF CodeScanner::captureRect() const

@@ -56,6 +56,9 @@ class CodeScanner : public QVideoSink
     void stopCamera();
 
   private:
+    void setCapturedString( const QString &capturedString );
+    void processFrame( const QVideoFrame &frame );
+
     QRDecoder mDecoder;
     QCamera *mCamera = nullptr;
     QPointer<QVideoSink> mVideoSink;
@@ -65,13 +68,10 @@ class CodeScanner : public QVideoSink
     QThread mWorkThread;
     QRWorker *mWorker;
     bool mProcessing = true;
-
-    void setCapturedString( const QString &capturedString );
-    void processFrame( const QVideoFrame &frame );
 };
 
 /**
- * Runs CodeScanner processImage() in a separate thread
+ * Runs CodeScanner::process() in a separate thread
  */
 class QRWorker : public QObject
 {
