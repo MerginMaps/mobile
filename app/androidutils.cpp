@@ -39,12 +39,12 @@ void AndroidUtils::showToast( QString message )
     QJniObject activity = QNativeInterface::QAndroidApplication::context();
     QJniObject javaString = QJniObject::fromString( message );
     QJniObject toast = QJniObject::callStaticObjectMethod(
-			"android.widget.Toast",
-			"makeText",
-			"(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
-			activity.object(),
-			javaString.object<jstring>(),
-			jint( 1 ) );
+                         "android.widget.Toast",
+                         "makeText",
+                         "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
+                         activity.object(),
+                         javaString.object<jstring>(),
+                         jint( 1 ) );
     toast.callMethod<void>( "show" );
   } ).waitForFinished();
 #else
