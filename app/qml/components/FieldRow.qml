@@ -52,12 +52,25 @@ Item {
         anchors.fill: parent
         propagateComposedEvents: true
 
-        onClicked: mouse.accepted = false
-        onPressed: { forceActiveFocus(); mouse.accepted = false; }
-        onReleased: mouse.accepted = false;
-        onDoubleClicked: mouse.accepted = false;
-        onPositionChanged: mouse.accepted = false;
-        onPressAndHold: mouse.accepted = false;
+        onClicked: function( mouse ) {
+          mouse.accepted = false
+        }
+        onPressed: function( mouse ) {
+          forceActiveFocus();
+          mouse.accepted = false;
+        }
+        onReleased: function( mouse ) {
+          mouse.accepted = false;
+        }
+        onDoubleClicked: function( mouse ) {
+          mouse.accepted = false;
+        }
+        onPositionChanged: function( mouse ) {
+          mouse.accepted = false;
+        }
+        onPressAndHold: function( mouse ) {
+          mouse.accepted = false;
+        }
       }
 
       delegate: ItemDelegate {
