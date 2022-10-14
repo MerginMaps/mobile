@@ -2279,3 +2279,90 @@ void TestMapTools::testVerticesStructure()
   QCOMPARE( verticesmpi.at( 14 ).vertexId().ring, 1 );
   QCOMPARE( verticesmpi.at( 15 ).vertexId().ring, 0 );
 }
+
+void TestMapTools::testZMRecording()
+{
+  QgsVectorLayer *pointZLayer = new QgsVectorLayer( QStringLiteral( "PointZ?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
+  QgsVectorLayer *lineZMLayer = new QgsVectorLayer( QStringLiteral( "LineStringZM?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
+  QgsVectorLayer *polygonMLayer = new QgsVectorLayer( QStringLiteral( "PolygonM?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
+
+  RecordingMapTool mapTool;
+
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+
+  QgsQuickMapCanvasMap canvas;
+  QgsQuickMapSettings *ms = canvas.mapSettings();
+  setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
+
+  mapTool.setMapSettings( ms );
+
+  QCOMPARE( mapTool.recordingType(), RecordingMapTool::Manual );
+
+  mapTool.setState( RecordingMapTool::Record );
+
+  mapTool.setActiveLayer( pointZLayer );
+  mapTool.setActiveFeature( QgsFeature() );
+
+  QgsPoint pointToAdd( -97.129, 22.602, 10 );
+
+  //
+  // PointZ geo
+  //
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  mapTool.addPoint( pointToAdd );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointToAdd );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  // LineStringZM geo
+
+  mapTool.setActiveLayer( nullptr );
+  mapTool.setActiveLayer( lineZMLayer );
+
+  pointToAdd = QgsPoint( -97.129, 22.602, 10, 100 );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  mapTool.addPoint( pointToAdd );
+
+  QVERIFY( !mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointToAdd );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  // PolygoneM geo
+
+  mapTool.setActiveLayer( nullptr );
+  mapTool.setActiveLayer( polygonMLayer );
+
+  pointToAdd = QgsPoint( -97.129, 22.602 );
+  pointToAdd.addMValue();
+  pointToAdd.setZ( 100 );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  mapTool.addPoint( pointToAdd );
+
+  QVERIFY( !mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointToAdd );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  delete project;
+  delete pointZLayer;
+  delete lineZMLayer;
+  delete polygonMLayer;
+}

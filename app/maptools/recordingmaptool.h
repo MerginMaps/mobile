@@ -308,8 +308,8 @@ class RecordingMapTool : public AbstractMapTool
     void completeEditOperation();
 
   protected:
-    //! Unifies Z coordinate of the point with current layer - drops / adds it
-    void fixZ( QgsPoint &point ) const;
+    //! Unifies Z/M coordinate of the point with current layer - drops / adds it
+    void fixZM( QgsPoint &point ) const;
 
   private:
     double pixelsToMapUnits( double numPixels );

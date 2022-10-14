@@ -32,12 +32,12 @@ Item {
     SnapUtils {
       id: snapUtils
 
+      centerPosition: root.center
       mapSettings: root.mapSettings
       qgsProject: root.qgsProject
       useSnapping: root.shouldUseSnapping
       destinationLayer: __activeLayer.vectorLayer
 
-      centerPosition: root.center
     }
 
     Image {

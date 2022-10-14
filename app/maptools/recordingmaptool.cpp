@@ -61,16 +61,17 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
     QgsPoint transformed = InputUtils::transformPoint(
                              PositionKit::positionCRS(),
-                             mActiveLayer->sourceCrs(),
+                             mActiveLayer->crs(),
                              mActiveLayer->transformContext(),
                              pointToAdd
                            );
 
     pointToAdd.setX( transformed.x() );
     pointToAdd.setY( transformed.y() );
+    pointToAdd.setZ( transformed.z() );
   }
 
-  fixZ( pointToAdd );
+  fixZM( pointToAdd );
 
   QgsVertexId id( mActivePart, mActiveRing, 0 );
 
@@ -178,11 +179,11 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     }
   }
 
-  if ( mRecordedGeometry.wkbType() == QgsWkbTypes::Point )
+  if ( QgsWkbTypes::flatType( mRecordedGeometry.wkbType() ) == QgsWkbTypes::Point )
   {
     mRecordedGeometry.set( pointToAdd.clone() );
   }
-  else if ( mRecordedGeometry.wkbType() == QgsWkbTypes::MultiPoint )
+  else if ( QgsWkbTypes::flatType( mRecordedGeometry.wkbType() ) == QgsWkbTypes::MultiPoint )
   {
     mRecordedGeometry.addPart( pointToAdd.clone() );
   }
@@ -495,13 +496,16 @@ bool RecordingMapTool::hasValidGeometry() const
   return false;
 }
 
-void RecordingMapTool::fixZ( QgsPoint &point ) const
+void RecordingMapTool::fixZM( QgsPoint &point ) const
 {
   if ( !mActiveLayer )
     return;
 
   bool layerIs3D = QgsWkbTypes::hasZ( mActiveLayer->wkbType() );
   bool pointIs3D = QgsWkbTypes::hasZ( point.wkbType() );
+
+  bool layerIsM = QgsWkbTypes::hasM( mActiveLayer->wkbType() );
+  bool pointIsM = QgsWkbTypes::hasM( point.wkbType() );
 
   if ( layerIs3D )
   {
@@ -515,6 +519,21 @@ void RecordingMapTool::fixZ( QgsPoint &point ) const
     if ( pointIs3D )
     {
       point.dropZValue();
+    }
+  }
+
+  if ( layerIsM )
+  {
+    if ( !pointIsM )
+    {
+      point.addMValue();
+    }
+  }
+  else /* !layerIsM */
+  {
+    if ( pointIsM )
+    {
+      point.dropMValue();
     }
   }
 }

@@ -175,43 +175,38 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="518"/>
+        <location filename="../attributes/attributecontroller.cpp" line="521"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation type="unfinished">Default value expression for %1:%2 has parser error: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="528"/>
+        <location filename="../attributes/attributecontroller.cpp" line="531"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation type="unfinished">Default value expression for %1:%2 has evaluation error: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="539"/>
+        <location filename="../attributes/attributecontroller.cpp" line="542"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation type="unfinished">Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="792"/>
+        <location filename="../attributes/attributecontroller.cpp" line="795"/>
         <source>Cannot delete feature</source>
         <translation type="unfinished">Cannot delete feature</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="480"/>
-        <location filename="../attributes/attributecontroller.cpp" line="816"/>
+        <location filename="../attributes/attributecontroller.cpp" line="483"/>
+        <location filename="../attributes/attributecontroller.cpp" line="849"/>
         <source>Feature could not be added</source>
         <translation type="unfinished">Feature could not be added</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="854"/>
+        <location filename="../attributes/attributecontroller.cpp" line="860"/>
         <source>Cannot update feature</source>
         <translation type="unfinished">Cannot update feature</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="868"/>
-        <source>Feature %1 could not be fetched after commit</source>
-        <translation type="unfinished">Feature %1 could not be fetched after commit</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="890"/>
+        <location filename="../attributes/attributecontroller.cpp" line="904"/>
         <source>Cannot start editing</source>
         <translation type="unfinished">Cannot start editing</translation>
     </message>
@@ -397,12 +392,12 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="157"/>
+        <location filename="../qml/form/FeatureForm.qml" line="155"/>
         <source>Can not save the form, there are validation errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="158"/>
+        <location filename="../qml/form/FeatureForm.qml" line="156"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation type="unfinished"></translation>
     </message>
@@ -425,32 +420,32 @@ In order to delete your account, enter your username in the field below and clic
         <translation type="unfinished">Save</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="196"/>
         <source>Delete feature</source>
         <translation type="unfinished">Delete feature</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="200"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="217"/>
         <source>Unsaved changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="221"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Do you want to save changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="244"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="241"/>
         <source>Saving failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="242"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -468,13 +463,13 @@ In order to delete your account, enter your username in the field below and clic
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="106"/>
-        <location filename="../qml/form/FeatureToolbar.qml" line="146"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="105"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="147"/>
         <source>Edit geometry</source>
         <translation>Edit geometry</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="123"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="122"/>
         <location filename="../qml/form/FeatureToolbar.qml" line="159"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
@@ -780,12 +775,12 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1926"/>
+        <location filename="../inpututils.cpp" line="1936"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1930"/>
+        <location filename="../inpututils.cpp" line="1940"/>
         <source>You need to add at least %1 point(s).</source>
         <translation type="unfinished"></translation>
     </message>
@@ -959,82 +954,82 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1109"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1111"/>
         <source>GPS currently unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="314"/>
+        <location filename="../qml/map/MapWrapper.qml" line="315"/>
         <source>Successfully synchronized</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="328"/>
+        <location filename="../qml/map/MapWrapper.qml" line="329"/>
         <source>Up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="337"/>
+        <location filename="../qml/map/MapWrapper.qml" line="338"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="347"/>
+        <location filename="../qml/map/MapWrapper.qml" line="348"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="365"/>
+        <location filename="../qml/map/MapWrapper.qml" line="366"/>
         <source>Splitting done successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="381"/>
+        <location filename="../qml/map/MapWrapper.qml" line="382"/>
         <source>Create line to split the selected feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="397"/>
+        <location filename="../qml/map/MapWrapper.qml" line="398"/>
         <source>Select some point to start editing the geometry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="413"/>
+        <location filename="../qml/map/MapWrapper.qml" line="414"/>
         <source>Record new geometry for the feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="552"/>
+        <location filename="../qml/map/MapWrapper.qml" line="553"/>
         <source>Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="667"/>
+        <location filename="../qml/map/MapWrapper.qml" line="668"/>
         <source>Discard the changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="670"/>
+        <location filename="../qml/map/MapWrapper.qml" line="671"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="674"/>
+        <location filename="../qml/map/MapWrapper.qml" line="675"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="740"/>
+        <location filename="../qml/map/MapWrapper.qml" line="741"/>
         <source>Connecting to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="754"/>
+        <location filename="../qml/map/MapWrapper.qml" line="755"/>
         <source>Connected, no position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="758"/>
+        <location filename="../qml/map/MapWrapper.qml" line="759"/>
         <source>Unknown accuracy</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1602,13 +1597,13 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>RecordingTools</name>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="54"/>
+        <location filename="../qml/map/RecordingTools.qml" line="282"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="208"/>
-        <location filename="../qml/map/RecordingTools.qml" line="302"/>
+        <location filename="../qml/map/RecordingTools.qml" line="188"/>
+        <location filename="../qml/map/RecordingTools.qml" line="308"/>
         <source>GPS currently unavailable.</source>
         <translation type="unfinished"></translation>
     </message>

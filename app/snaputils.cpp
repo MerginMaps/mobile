@@ -66,6 +66,8 @@ void SnapUtils::setMapSettings( QgsQuickMapSettings *newMapSettings )
   }
 
   emit mapSettingsChanged( mMapSettings );
+
+  initializeRecordPosition();
 }
 
 void SnapUtils::getsnap()
@@ -85,7 +87,7 @@ void SnapUtils::getsnap()
                            mDestinationLayer->transformContext(),
                            recordpoint );
 
-  // do no snap in the streaming mode
+  // do not snap in the streaming mode
   if ( !mUseSnapping )
   {
     setRecordPoint( centerPoint );
@@ -180,6 +182,8 @@ void SnapUtils::setCenterPosition( QPointF newCenterPosition )
     return;
   mCenterPosition = newCenterPosition;
   emit centerPositionChanged( mCenterPosition );
+
+  initializeRecordPosition();
 }
 
 QgsPoint SnapUtils::recordPoint() const
@@ -277,6 +281,24 @@ void SnapUtils::setupSnapping()
   mSnappingUtils.setIndexingStrategy( QgsSnappingUtils::IndexExtent );
 }
 
+void SnapUtils::initializeRecordPosition()
+{
+  if ( !mMapSettings || ! mDestinationLayer || mCenterPosition == QPointF( -1, -1 ) )
+  {
+    return;
+  }
+
+  // take center position and convert it to destination layer CRS
+  QgsPoint recordpoint = mMapSettings->screenToCoordinate( mCenterPosition );
+  QgsPoint centerPoint = InputUtils::transformPoint(
+                           mMapSettings->destinationCrs(),
+                           mDestinationLayer->crs(),
+                           mDestinationLayer->transformContext(),
+                           recordpoint );
+
+  setRecordPoint( centerPoint );
+}
+
 QgsVectorLayer *SnapUtils::destinationLayer() const
 {
   return mDestinationLayer;
@@ -288,4 +310,6 @@ void SnapUtils::setDestinationLayer( QgsVectorLayer *newDestinationLayer )
     return;
   mDestinationLayer = newDestinationLayer;
   emit destinationLayerChanged( mDestinationLayer );
+
+  initializeRecordPosition();
 }
