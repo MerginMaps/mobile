@@ -509,6 +509,16 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static void updateFeature( const FeatureLayerPair &pair );
 
+    /**
+     *  Returns row id from passed model index
+     */
+    Q_INVOKABLE static int rowFromIndex( const QModelIndex index );
+
+    /**
+     *  Returns column id from passed model index
+     */
+    Q_INVOKABLE static int colFromIndex( const QModelIndex index );
+
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );

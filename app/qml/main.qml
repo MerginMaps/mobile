@@ -7,21 +7,22 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 
 // Required for iOS to get rid of "module "QtMultimedia" is not installed".
 // It looks like static QT plugins are not copied to the distribution
-import QtMultimedia 5.8
-import QtQml.Models 2.2
-import QtPositioning 5.8
-import QtQuick.Dialogs 1.1
+import QtMultimedia 5.14
+import QtQml.Models 2.14
+import QtPositioning 5.14
+import QtQuick.Dialogs 1.3
 import Qt.labs.settings 1.0
 
 import lc 1.0
 import "./map"
 import "./misc"
 import "./dialogs"
+import "./layers"
 
 ApplicationWindow {
     id: window
@@ -31,6 +32,8 @@ ApplicationWindow {
     visibility: __appwindowvisibility
     title: "Mergin Maps" // Do not translate
 
+    onFocusObjectChanged: console.log("Focus has", object)
+    onActiveFocusItemChanged: console.log("Active focus item changed", activeFocusItem)
 
     Item {
         id: stateManager
@@ -286,6 +289,10 @@ ApplicationWindow {
             __inputUtils.showNotification( qsTr( "No Changes" ) )
           }
         }
+        onLayersClicked: {
+          let layerspanel = mapPanelsStackView.push( layersPanelComponent, {}, StackView.PushTransition )
+//          layerspanel.forceActiveFocus()
+        }
     }
 
     NotificationBanner {
@@ -358,6 +365,51 @@ ApplicationWindow {
       onVisibleChanged: {
         if ( !browseDataPanel.visible )
           mainPanel.forceActiveFocus()
+      }
+    }
+
+    StackView {
+      id: mapPanelsStackView
+
+      //
+      // View that can show panels on top of the map,
+      // like layers panel, settings and similar
+      //
+
+      anchors.fill: parent
+
+      pushEnter: Transition {
+        YAnimator {
+          to: 0
+          from: mapPanelsStackView.height
+          duration: 400
+          easing.type: Easing.OutCubic
+        }
+      }
+
+      pushExit: Transition {}
+
+      popEnter: Transition {}
+
+      popExit: Transition {
+        YAnimator {
+          to: mapPanelsStackView.height
+          from: 0
+          duration: 400
+          easing.type: Easing.OutCubic
+        }
+      }
+    }
+
+    Component {
+      id: layersPanelComponent
+
+      LayersPanelV2 {
+
+        onClose: {
+          mainPanel.forceActiveFocus()
+          mapPanelsStackView.clear( StackView.PopTransition )
+        }
       }
     }
 

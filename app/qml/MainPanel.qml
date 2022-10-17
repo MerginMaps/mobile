@@ -25,6 +25,7 @@ Item {
     signal openSettingsClicked()
     signal zoomToProject()
     signal localChangesClicked()
+  signal layersClicked()
 
     property real itemSize: mainPanel.height * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
@@ -182,9 +183,27 @@ Item {
         }
 
         Item {
-            id: mapThemesItem
             height: parent.height
             visible: panelRow.itemsToShow > 7
+            width: visible ? panelRow.calculatedItemWidth : 0
+
+            MainPanelButton {
+                id: layersBtn
+                width: mainPanel.itemSize
+                text: qsTr("Layers")
+                imageSource: InputStyle.vectorPolygonIcon
+
+                onActivated: {
+                  rootMenu.close()
+                  mainPanel.layersClicked()
+                }
+            }
+        }
+
+        Item {
+            id: mapThemesItem
+            height: parent.height
+            visible: panelRow.itemsToShow > 8
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -204,7 +223,7 @@ Item {
         Item {
             id: settingsItem
             height: parent.height
-            visible: panelRow.itemsToShow > 8
+            visible: panelRow.itemsToShow > 9
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -367,6 +386,25 @@ Item {
 
             onClicked: {
                 browseDataBtn.activated()
+                rootMenu.close()
+            }
+        }
+
+        MenuItem {
+            width: parent.width
+            visible: !mapThemesItem.visible
+            height: visible ? mainPanel.itemSize : 0
+
+            ExtendedMenuItem {
+                height: mainPanel.itemSize
+                rowHeight: height
+                width: parent.width
+                contentText: qsTr("Layers")
+                imageSource: InputStyle.vectorPolygonIcon
+            }
+
+            onClicked: {
+                layersBtn.activated()
                 rootMenu.close()
             }
         }

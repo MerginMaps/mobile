@@ -45,12 +45,14 @@ QtObject {
     property int fontPixelSizeSmall: scaleFont(15)
     property int fontPixelSizeNormal: scaleFont(18)
     property int fontPixelSizeBig: scaleFont(21)
+    property real fontPixelSizeHeader: scaleFont(25)
 
     property int borderSize: Math.max( scale(1), 1 )
 
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
     property real rowHeightHeader: scale(64)
+    property real rowHeightMedium: scale(45)
     property real rowHeightSmall: scale(20)
     property real fieldHeight: scale(54)
     property real mapBtnHeight: scale(40)
@@ -59,6 +61,11 @@ QtObject {
     property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: scale(45)
     property real projectItemHeight: rowHeightHeader * 1.2
+
+    property real searchBoxV2Spacing: scale(10)
+    property real panelMarginV2: scale(15)
+
+    property real buttonClickArea: scale(15)
 
     property real closeBtnSize: scale(30)
 
@@ -70,17 +77,22 @@ QtObject {
     property real lowHighlightOpacity: 0.4
     property real highHighlightOpacity: 0.8
     property real cornerRadius: 8 * __dp
-    property real innerFieldMargin: 10 * __dp  // TODO rename fieldMargin
-    property real outerFieldMargin: 20 * __dp  // TODO change for PanelMargin
+    property real innerFieldMargin: 10 * __dp
+    property real outerFieldMargin: 20 * __dp
     property real formSpacing: 10 * __dp
 
+    property real listMargins: 10 * __dp
+
     property real circleRadius: 100
+
+    property real iconSizeMedium: 25 * __dp
 
     // icons
     property string cameraIcon: "qrc:/add_photo.svg"
     property string removeIcon: "qrc:/trash.svg"
     property string galleryIcon: "qrc:/gallery.svg"
     property string backIcon: "qrc:/back.svg"
+    property string backIconV2: "qrc:/backv2.svg"
     property string checkIcon: "qrc:/check.svg"
     property string plusIcon: "qrc:/plus.svg"
     property string minusIcon: "qrc:/minus.svg"
@@ -93,6 +105,9 @@ QtObject {
     property string detachIcon: "qrc:/unlink.svg"
     property string eyeIcon: "qrc:/eye.svg"
     property string eyeSlashIcon: "qrc:/eye-slash.svg"
+
+    property url eyeIconV2: "qrc:/eyev2.svg"
+    property url eyeSlashIconV2: "qrc:/eye_slashv2.svg"
 
     property string valueRelationIcon: "qrc:/value_relation_open.svg"
     property string comboboxIcon: "qrc:/combobox.svg"
@@ -138,6 +153,7 @@ QtObject {
     property string databaseIcon: "qrc:/database-solid.svg"
     property string lockIcon: "qrc:/lock.svg"
     property string searchIcon: "qrc:/search.svg"
+    property string searchIconV2: "qrc:/searchv2.svg"
     property string loadingIndicatorIcon: "qrc:/loadingindicator.svg"
     property string scissorsIcon: "qrc:/scissors.svg"
     property string eraserIcon: "qrc:/eraser.svg"

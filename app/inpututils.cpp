@@ -1963,3 +1963,13 @@ void InputUtils::updateFeature( const FeatureLayerPair &pair )
   pair.layer()->commitChanges();
   pair.layer()->triggerRepaint();
 }
+
+int InputUtils::rowFromIndex( const QModelIndex index )
+{
+  return index.row();
+}
+
+int InputUtils::colFromIndex( const QModelIndex index )
+{
+  return index.column();
+}

@@ -8,6 +8,8 @@ attributes/attributetabmodel.cpp \
 attributes/attributetabproxymodel.cpp \
 attributes/rememberattributescontroller.cpp \
 attributes/fieldvalidator.cpp \
+layer/layertreemodel.cpp \
+layer/layertreesortfiltermodel.cpp \
 maptools/abstractmaptool.cpp \
 maptools/splittingmaptool.cpp \
 maptools/recordingmaptool.cpp \
@@ -24,6 +26,7 @@ bluetoothdiscoverymodel.cpp \
 featurelayerpair.cpp \
 guidelinecontroller.cpp \
 identifykit.cpp \
+modelpixmapprovider.cpp \
 scalebarkit.cpp \
 synchronizationerror.cpp \
 synchronizationmanager.cpp \
@@ -67,6 +70,8 @@ attributes/attributetabmodel.h \
 attributes/attributetabproxymodel.h \
 attributes/rememberattributescontroller.h \
 attributes/fieldvalidator.h \
+layer/layertreemodel.h \
+layer/layertreesortfiltermodel.h \
 maptools/abstractmaptool.h \
 maptools/splittingmaptool.h \
 maptools/recordingmaptool.h \
@@ -84,6 +89,7 @@ featurelayerpair.h \
 guidelinecontroller.h \
 identifykit.h \
 imageutils.h \
+modelpixmapprovider.h \
 scalebarkit.h \
 synchronizationerror.h \
 synchronizationmanager.h \
