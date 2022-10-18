@@ -29,7 +29,7 @@ class LayerTreeModel : public QAbstractItemModel
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     int columnCount( const QModelIndex &parent = QModelIndex() ) const override;
-    Q_INVOKABLE QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const override;
+    QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const override;
     QModelIndex parent( const QModelIndex &child ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 
@@ -38,6 +38,7 @@ class LayerTreeModel : public QAbstractItemModel
 
   signals:
     void qgsProjectChanged( QgsProject *qgsProject );
+    void modelInitialized();
 
   protected slots:
     void setupModel();

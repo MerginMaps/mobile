@@ -18,10 +18,11 @@ Page {
   id: root
 
   property var model: null
-  property var parentModelIndex: null
+  property var parentNodeIndex: null
+  property string pageTitle: qsTr("Layers")
 
   signal close()
-  signal layerClicked( var layerindex, bool isGroup )
+  signal nodeClicked( var nodeIndex, string nodeType )
   signal searchboxClicked()
 
   Keys.onReleased: {
@@ -33,7 +34,7 @@ Page {
 
   header: MMComponents.PanelHeaderV2 {
     width: parent.width
-    headerTitle: qsTr("Layers")
+    headerTitle: root.pageTitle
     onBackClicked: root.close()
   }
 
@@ -71,10 +72,10 @@ Page {
     clip: true
 
     model: root.model
-    parentModelIndex: root.parentModelIndex
+    parentNodeIndex: root.parentNodeIndex
 
-    onLayerClicked: function( layerindex, isGroup ) {
-      root.layerClicked( layerindex, isGroup )
+    onNodeClicked: function( nodeIndex, nodeType ) {
+      root.nodeClicked( nodeIndex, nodeType )
     }
   }
 }

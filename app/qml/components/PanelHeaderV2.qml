@@ -30,6 +30,7 @@ Rectangle {
     anchors.fill: parent
 
     text: root.headerTitle
+    elide: Text.ElideMiddle
 
     font.bold: true
     color: InputStyle.fontColor

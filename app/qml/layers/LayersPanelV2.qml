@@ -22,8 +22,8 @@ Item {
   LayerTreeSortFilterModel {
     id: layerTreeProxyModel
 
-    sourceModel: LayerTreeModel {
-      id: layerTreeModel
+    layerTreeModel: LayerTreeModel {
+      id: layerModel
       qgsProject: __activeProject.qgsProject
     }
   }
@@ -47,15 +47,23 @@ Item {
     LayersListPageV2 {
       model: layerTreeProxyModel
 
-      onLayerClicked: function ( layerindex, isGroup ) {
-        if ( isGroup )
+      onNodeClicked: function ( nodeIndex, nodeType ) {
+        if ( nodeType === "group" )
         {
-          let item = pagesStackView.push( layersListPage, { parentModelIndex: layerindex }, StackView.PushTransition )
+          const groupName = layerTreeProxyModel.data(nodeIndex, 0) // group name (0 = display role)
+          const props = {
+            parentNodeIndex: nodeIndex,
+            pageTitle: groupName
+          }
+
+          let item = pagesStackView.push( layersListPage, props , StackView.PushTransition )
           item.forceActiveFocus()
         }
-        else
+        else if ( nodeType === "layer" )
         {
-          let item = pagesStackView.push( layerDetailsPage, {}, StackView.PushTransition )
+          const props = {}
+
+          let item = pagesStackView.push( layerDetailsPage, props, StackView.PushTransition )
           item.forceActiveFocus()
         }
       }
@@ -110,11 +118,11 @@ Item {
     target: __activeProject
 
     function onProjectWillBeReloaded() {
-      layerTreeModel.reset()
+      layerModel.reset()
     }
 
     function onProjectReloaded( qgsProject ) {
-      layerTreeModel.qgsProject = __activeProject.qgsProject
+      layerModel.qgsProject = __activeProject.qgsProject
     }
   }
 

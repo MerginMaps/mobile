@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,14 +8,12 @@
  ***************************************************************************/
 
 #include "layertreesortfiltermodel.h"
+#include "QDebug"
 
 LayerTreeSortFilterModel::LayerTreeSortFilterModel( QObject *parent )
   : QSortFilterProxyModel{parent}
 {
-
 }
-
-LayerTreeSortFilterModel::~LayerTreeSortFilterModel() = default;
 
 LayerTreeModel *LayerTreeSortFilterModel::layerTreeModel() const
 {
@@ -24,77 +22,45 @@ LayerTreeModel *LayerTreeSortFilterModel::layerTreeModel() const
 
 void LayerTreeSortFilterModel::setLayerTreeModel( LayerTreeModel *newLayerTreeModel )
 {
-  if ( mLayerTreeModel == newLayerTreeModel )
-    return;
+  if ( mLayerTreeModel )
+  {
+    disconnect( mLayerTreeModel );
+  }
 
-  mLayerTreeModel = newLayerTreeModel;
-  emit layerTreeModelChanged( mLayerTreeModel );
+  if ( mLayerTreeModel != newLayerTreeModel )
+  {
+    mLayerTreeModel = newLayerTreeModel;
+    emit layerTreeModelChanged( mLayerTreeModel );
+  }
+
+  if ( mLayerTreeModel )
+  {
+    setSourceModel( mLayerTreeModel );
+    connect( mLayerTreeModel, &LayerTreeModel::modelInitialized, this, &LayerTreeSortFilterModel::onSourceModelInitialized );
+  }
 }
 
-const QString &LayerTreeSortFilterModel::searchExpression() const
+LayerTreeSortFilterModel::~LayerTreeSortFilterModel() = default;
+
+//const QString &LayerTreeSortFilterModel::searchExpression() const
+//{
+//  return mSearchExpression;
+//}
+
+//void LayerTreeSortFilterModel::setSearchExpression( const QString &newSearchExpression )
+//{
+//  if ( mSearchExpression == newSearchExpression )
+//    return;
+//  mSearchExpression = newSearchExpression;
+//  emit searchExpressionChanged( mSearchExpression );
+//}
+
+QModelIndex LayerTreeSortFilterModel::getModelIndex( int row, int column, const QModelIndex &parent ) const
 {
-  return mSearchExpression;
+  return index( row, column, parent );
 }
 
-void LayerTreeSortFilterModel::setSearchExpression( const QString &newSearchExpression )
+void LayerTreeSortFilterModel::onSourceModelInitialized()
 {
-  if ( mSearchExpression == newSearchExpression )
-    return;
-  mSearchExpression = newSearchExpression;
-  emit searchExpressionChanged( mSearchExpression );
+  sort( 0 );
 }
-
-//QModelIndex LayerTreeSortFilterModel::index(int row, int column, const QModelIndex &parent) const
-//{
-//  return createIndex( row, column, nullptr );
-//}
-
-//bool LayerTreeSortFilterModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
-//{
-//  if ( !mLayerTreeModel )
-//    return false;
-
-
-//}
-
-//bool ProjectsProxyModel::lessThan( const QModelIndex &left, const QModelIndex &right ) const
-//{
-//  if ( mModelType == ProjectsModel::LocalProjectsModel )
-//  {
-//    bool lProjectIsMergin = mModel->data( left, ProjectsModel::ProjectIsMergin ).toBool();
-//    bool rProjectIsMergin = mModel->data( right, ProjectsModel::ProjectIsMergin ).toBool();
-
-//    /**
-//     * Ordering of local projects: first non-mergin projects (using folder name),
-//     * then mergin projects (sorted first by namespace, then project name)
-//     */
-
-//    if ( !lProjectIsMergin && !rProjectIsMergin )
-//    {
-//      QString lProjectFullName = mModel->data( left, ProjectsModel::ProjectFullName ).toString();
-//      QString rProjectFullName = mModel->data( right, ProjectsModel::ProjectFullName ).toString();
-
-//      return lProjectFullName.compare( rProjectFullName, Qt::CaseInsensitive ) < 0;
-//    }
-//    if ( !lProjectIsMergin && rProjectIsMergin )
-//    {
-//      return true;
-//    }
-//    if ( lProjectIsMergin && !rProjectIsMergin )
-//    {
-//      return false;
-//    }
-//  }
-
-//  // comparing 2 mergin projects
-//  QString lNamespace = mModel->data( left, ProjectsModel::ProjectNamespace ).toString();
-//  QString lProjectName = mModel->data( left, ProjectsModel::ProjectName ).toString();
-//  QString rNamespace = mModel->data( right, ProjectsModel::ProjectNamespace ).toString();
-//  QString rProjectName = mModel->data( right, ProjectsModel::ProjectName ).toString();
-
-//  if ( lNamespace == rNamespace )
-//  {
-//    return lProjectName.compare( rProjectName, Qt::CaseInsensitive ) < 0;
-//  }
-//  return lNamespace.compare( rNamespace, Qt::CaseInsensitive ) < 0;
-//}

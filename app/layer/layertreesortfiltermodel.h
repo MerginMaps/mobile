@@ -20,7 +20,7 @@ class LayerTreeSortFilterModel : public QSortFilterProxyModel
     Q_OBJECT
 
 //    Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression NOTIFY searchExpressionChanged )
-//    Q_PROPERTY( LayerTreeModel *layerTreeModel READ layerTreeModel WRITE setLayerTreeModel NOTIFY layerTreeModelChanged )
+    Q_PROPERTY( LayerTreeModel *layerTreeModel READ layerTreeModel WRITE setLayerTreeModel NOTIFY layerTreeModelChanged )
 
   public:
 
@@ -30,21 +30,21 @@ class LayerTreeSortFilterModel : public QSortFilterProxyModel
     LayerTreeModel *layerTreeModel() const;
     void setLayerTreeModel( LayerTreeModel *newLayerTreeModel );
 
-    const QString &searchExpression() const;
-    void setSearchExpression( const QString &newSearchExpression );
+//    const QString &searchExpression() const;
+//    void setSearchExpression( const QString &newSearchExpression );
 
-//    Q_INVOKABLE QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const override;
+    Q_INVOKABLE QModelIndex getModelIndex( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
+
+  public slots:
+    void onSourceModelInitialized();
 
   signals:
     void layerTreeModelChanged( LayerTreeModel *layerTreeModel );
-    void searchExpressionChanged( const QString &searchExpression );
-
-//  protected:
-//    bool lessThan( const QModelIndex &left, const QModelIndex &right ) const override;
+//    void searchExpressionChanged( const QString &searchExpression );
 
   private:
     LayerTreeModel *mLayerTreeModel = nullptr;
-    QString mSearchExpression;
+//    QString mSearchExpression;
 };
 
 #endif // LAYERTREESORTFILTERMODEL_H

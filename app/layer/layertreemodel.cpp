@@ -13,9 +13,9 @@
 #include <QUuid>
 #include <QPixmap>
 #include <QBuffer>
-#include "qdebug.h"
 
 #include "qgslayertree.h"
+#include "inpututils.h"
 
 LayerTreeModel::LayerTreeModel( QObject *parent )
   : QAbstractItemModel( parent )
@@ -40,9 +40,7 @@ void LayerTreeModel::setupModel()
   connect( mModel.get(), &QgsLayerTreeModel::modelReset, this, &LayerTreeModel::modelReset );
   connect( mModel.get(), &QgsLayerTreeModel::columnsAboutToBeInserted, this, &LayerTreeModel::columnsInserted );
 
-  // TODO: any other signals?
-
-//  emit dataChanged( index(0,0), index(rowCount(), 0) );
+  emit modelInitialized();
 }
 
 void LayerTreeModel::reset()
@@ -98,8 +96,65 @@ QVariant LayerTreeModel::data( const QModelIndex &index, int role ) const
     QgsLayerTreeNode *node = mModel->index2node( index );
     if ( node )
     {
-      return QgsLayerTree::isGroup( node );
+      if ( QgsLayerTree::isGroup( node ) )
+      {
+        return QStringLiteral( "group" );
+      }
+      else if ( QgsLayerTree::isLayer( node ) )
+      {
+        return QStringLiteral( "layer" );
+      }
     }
+  }
+  else if ( role == Qt::ToolTipRole )
+  {
+    // return parent groups to this layer in format "groupA/group B/"
+    QString path;
+
+    QModelIndex parentIndex = parent( index );
+
+    while ( parentIndex.isValid() )
+    {
+      path.append( data( parentIndex, Qt::DisplayRole ).toString() + "/" );
+      parentIndex = parent( parentIndex );
+    }
+
+    return path;
+  }
+  else if ( role == Qt::DecorationRole )
+  {
+    QIcon icon = mModel->data( index, role ).value<QIcon>();
+
+    if ( icon.isNull() )
+    {
+      // find icon for this node - either layer icon (based on type and geometry) or group
+      QgsLayerTreeNode *node = mModel->index2node( index );
+      QString iconPath;
+
+      if ( !node )
+        return QVariant();
+
+      if ( QgsLayerTree::isGroup( node ) )
+      {
+        iconPath = "qrc:/mIconGroup.svg";
+      }
+      else if ( QgsLayerTree::isLayer( node ) )
+      {
+        QgsLayerTreeLayer *layerNode = QgsLayerTree::toLayer( node );
+        if ( !layerNode )
+          return QVariant();
+
+        QgsMapLayer *mapLayer = layerNode->layer();
+        if ( !mapLayer )
+          return QVariant();
+
+        iconPath = InputUtils::loadIconFromLayer( mapLayer );
+      }
+
+      return iconPath;
+    }
+
+    return icon;
   }
 
   return mModel->data( index, role );

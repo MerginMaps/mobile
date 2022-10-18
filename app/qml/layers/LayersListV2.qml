@@ -19,14 +19,21 @@ Item {
   id: root
 
   property var model: null
-  property var parentModelIndex: null
+  property var parentNodeIndex: null
 
-  signal layerClicked( var layerindex, bool isGroup )
+  signal nodeClicked( var nodeIndex, string nodeType )
 
   QtObject {
     id: internal
 
-    property int indexColumn: root.parentModelIndex ? __inputUtils.colFromIndex( root.parentModelIndex ) : -1
+    property int indexColumn: {
+      const idx = __inputUtils.colFromIndex( delegatemodel.rootIndex )
+      if ( idx < 0 ) {
+        // root
+        return 0
+      }
+      return idx
+    }
   }
 
   ListView {
@@ -64,7 +71,16 @@ Item {
             bottomMargin: -InputStyle.buttonClickArea
           }
 
-          onClicked: root.layerClicked( root.model.index( index, internal.indexColumn ), model.whatsThis )
+          onClicked: {
+            if ( root.parentNodeIndex ) {
+              var modelindex = root.model.getModelIndex( index, 0, root.parentNodeIndex )
+            }
+            else {
+              modelindex = root.model.getModelIndex( index, 0 )
+            }
+
+            root.nodeClicked( modelindex, model.whatsThis )
+          }
         }
 
         RowLayout {
@@ -76,23 +92,22 @@ Item {
             verticalCenter: parent.verticalCenter
           }
 
-//          Image {
-//            source: "image://LayerTreePixmapProvider/" + index + "/" + internal.indexColumn
-//          }
+          Image {
+            Layout.preferredWidth: InputStyle.iconSizeMedium
+            Layout.preferredHeight: InputStyle.iconSizeMedium
 
-          Rectangle {
-            // temp placeholder in place of icon
-
-            Layout.preferredWidth: 20 * __dp
-            Layout.preferredHeight: 20 * __dp
-
-            radius: index % 3 === 0 ? InputStyle.circleRadius : 0
-
-            color: ["blue", "red", "orange"][index % 3]
+            source: {
+              if ( typeof( model.decoration ) === 'string' ) {
+                return model.decoration
+              }
+              else {
+                return "image://LayerTreePixmapProvider/" + index + "/" + internal.indexColumn
+              }
+            }
           }
 
           Text {
-            text: model.display
+            text: model.toolTip + model.display
 
             Layout.fillWidth: true
 
@@ -129,9 +144,9 @@ Item {
   }
 
   Component.onCompleted: {
-    if ( root.parentModelIndex )
+    if ( root.parentNodeIndex )
     {
-      delegatemodel.rootIndex = root.parentModelIndex
+      delegatemodel.rootIndex = root.parentNodeIndex
     }
   }
 }

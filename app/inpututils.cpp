@@ -1796,18 +1796,42 @@ void InputUtils::zoomToProject( QgsProject *qgsProject, QgsQuickMapSettings *map
 
 QString InputUtils::loadIconFromLayer( QgsMapLayer *layer )
 {
-  if ( !layer )
-    return QString();
+  if ( !layer || !layer->isValid() )
+    return QStringLiteral( "qrc:/mIndicatorBadLayer.svg" );
 
   QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
 
-  if ( vectorLayer )
+  QgsMapLayerType type = layer->type();
+
+  switch ( type )
   {
-    QgsWkbTypes::GeometryType geometry = vectorLayer->geometryType();
-    return iconFromGeometry( geometry );
+    case QgsMapLayerType::VectorLayer:
+    {
+      return iconFromGeometry( vectorLayer->geometryType() );
+    }
+    case QgsMapLayerType::RasterLayer:
+    {
+      return QStringLiteral( "qrc:/mIconRasterLayer.svg" );
+    }
+    case QgsMapLayerType::AnnotationLayer:
+    {
+      return QStringLiteral( "qrc:/mIconAnnotationLayer.svg" );
+    }
+    case QgsMapLayerType::VectorTileLayer:
+    {
+      return QStringLiteral( "qrc:/mIconVectorTileLayer.svg" );
+    }
+    case QgsMapLayerType::PointCloudLayer:
+    {
+      return QStringLiteral( "qrc:/mIconPointCloudLayer.svg" );
+    }
+    case QgsMapLayerType::MeshLayer:
+    {
+      return QStringLiteral( "qrc:/mIconMeshLayer.svg" );
+    }
+    default:
+      return QString();
   }
-  else
-    return QString( "qrc:/mIconRasterLayer.svg" );
 }
 
 QString InputUtils::loadIconFromFeature( QgsFeature feature )

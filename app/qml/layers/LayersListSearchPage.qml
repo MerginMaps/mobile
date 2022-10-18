@@ -18,10 +18,10 @@ Page {
   id: root
 
   property var model: null
-  property var parentModelIndex: null
+  property var parentNodeIndex: null
 
   signal close()
-  signal layerClicked( var layerindex, bool isGroup )
+  signal nodeClicked( var nodeIndex, string nodeType )
 
   Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
@@ -67,10 +67,10 @@ Page {
     clip: true
 
     model: root.model
-    parentModelIndex: root.parentModelIndex
+    parentNodeIndex: root.parentNodeIndex
 
-    onLayerClicked: function( layerindex, isGroup ) {
-      root.layerClicked( layerindex, isGroup )
+    onNodeClicked: function( nodeIndex, nodeType ) {
+      root.nodeClicked( nodeIndex, nodeType )
     }
   }
 
