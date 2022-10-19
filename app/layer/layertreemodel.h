@@ -14,9 +14,19 @@
 #include <qglobal.h>
 
 #include "qgslayertreemodel.h"
+#include "qgslayertree.h"
 #include "qgsproject.h"
 
-class LayerTreeModel : public QAbstractItemModel
+class LayerTree: public QgsLayerTree
+{
+    Q_OBJECT
+
+  public:
+    explicit LayerTree( QObject *parent );
+    ~LayerTree();
+};
+
+class LayerTreeModel : public QgsLayerTreeModel
 {
     Q_OBJECT
 
@@ -27,10 +37,6 @@ class LayerTreeModel : public QAbstractItemModel
     explicit LayerTreeModel( QObject *parent = nullptr );
     virtual ~LayerTreeModel();
 
-    int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
-    int columnCount( const QModelIndex &parent = QModelIndex() ) const override;
-    QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const override;
-    QModelIndex parent( const QModelIndex &child ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 
     QgsLayerTreeNode *node( QModelIndex modelIndex ) const;
@@ -50,8 +56,6 @@ class LayerTreeModel : public QAbstractItemModel
 
   private:
     QgsProject *mQgsProject = nullptr; // not owned
-
-    std::unique_ptr<QgsLayerTreeModel> mModel = nullptr;
 };
 
 #endif // LAYERTREEMODEL_H

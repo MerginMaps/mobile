@@ -9,16 +9,20 @@
 
 #include "layertreemodel.h"
 
-#include <QDir>
-#include <QUuid>
 #include <QPixmap>
-#include <QBuffer>
 
 #include "qgslayertree.h"
 #include "inpututils.h"
 
+LayerTree::LayerTree( QObject *parent )
+{
+// TODO: fix destruction of this -- singleton?
+}
+
+LayerTree::~LayerTree() = default;
+
 LayerTreeModel::LayerTreeModel( QObject *parent )
-  : QAbstractItemModel( parent )
+  : QgsLayerTreeModel( new LayerTree( this ), parent ) // TODO: fix destruction of temp QgsLayerTree()
 {
   connect( this, &LayerTreeModel::qgsProjectChanged, this, &LayerTreeModel::setupModel );
 }
@@ -31,72 +35,27 @@ void LayerTreeModel::setupModel()
     return;
 
   QgsLayerTree *root = mQgsProject->layerTreeRoot();
-  mModel = std::make_unique<QgsLayerTreeModel>( root );
 
-  connect( mModel.get(), &QgsLayerTreeModel::dataChanged, this, &LayerTreeModel::dataChanged );
-  connect( mModel.get(), &QgsLayerTreeModel::rowsAboutToBeInserted, this, &LayerTreeModel::rowsAboutToBeInserted );
-  connect( mModel.get(), &QgsLayerTreeModel::rowsInserted, this, &LayerTreeModel::rowsInserted );
-  connect( mModel.get(), &QgsLayerTreeModel::modelAboutToBeReset, this, &LayerTreeModel::modelAboutToBeReset );
-  connect( mModel.get(), &QgsLayerTreeModel::modelReset, this, &LayerTreeModel::modelReset );
-  connect( mModel.get(), &QgsLayerTreeModel::columnsAboutToBeInserted, this, &LayerTreeModel::columnsInserted );
+  setRootGroup( root );
 
   emit modelInitialized();
 }
 
 void LayerTreeModel::reset()
 {
-  if ( mModel )
-  {
-    disconnect( mModel.get() );
-  }
-
-  mModel.reset();
   mQgsProject = nullptr;
-}
-
-int LayerTreeModel::rowCount( const QModelIndex &parent ) const
-{
-  if ( !mModel )
-    return 0;
-
-  return mModel->rowCount( parent );
-}
-
-int LayerTreeModel::columnCount( const QModelIndex &parent ) const
-{
-  if ( !mModel )
-    return 0;
-
-  return mModel->columnCount( parent );
-}
-
-QModelIndex LayerTreeModel::index( int row, int column, const QModelIndex &parent ) const
-{
-  if ( !mModel )
-    return QModelIndex();
-
-  QModelIndex mModelIndex = mModel->index( row, column, parent );
-
-  // Convert model index from mModel to include pointer to this model instead
-  return createIndex( row, column, mModelIndex.internalPointer() );
-}
-
-QModelIndex LayerTreeModel::parent( const QModelIndex &child ) const
-{
-  if ( !mModel )
-    return QModelIndex();
-
-  return mModel->parent( child );
 }
 
 QVariant LayerTreeModel::data( const QModelIndex &index, int role ) const
 {
-  if ( !mModel )
+  if ( !index.isValid() || index.column() > 1 )
+  {
     return QVariant();
+  }
 
   if ( role == Qt::WhatsThisRole )
   {
-    QgsLayerTreeNode *node = mModel->index2node( index );
+    QgsLayerTreeNode *node = index2node( index );
     if ( node )
     {
       if ( QgsLayerTree::isGroup( node ) )
@@ -118,7 +77,7 @@ QVariant LayerTreeModel::data( const QModelIndex &index, int role ) const
 
     while ( parentIndex.isValid() )
     {
-      path.append( data( parentIndex, Qt::DisplayRole ).toString() + "/" );
+      path.append( QgsLayerTreeModel::data( parentIndex, Qt::DisplayRole ).toString() + "/" );
       parentIndex = parent( parentIndex );
     }
 
@@ -126,12 +85,12 @@ QVariant LayerTreeModel::data( const QModelIndex &index, int role ) const
   }
   else if ( role == Qt::DecorationRole )
   {
-    QIcon icon = mModel->data( index, role ).value<QIcon>();
+    QIcon icon = QgsLayerTreeModel::data( index, role ).value<QIcon>();
 
     if ( icon.isNull() )
     {
       // find icon for this node - either layer icon (based on type and geometry) or group
-      QgsLayerTreeNode *node = mModel->index2node( index );
+      QgsLayerTreeNode *node = index2node( index );
       QString iconPath;
 
       if ( !node )
@@ -162,7 +121,7 @@ QVariant LayerTreeModel::data( const QModelIndex &index, int role ) const
   else if ( role == Qt::StatusTipRole )
   {
     // returns whether this node is visible or not
-    QgsLayerTreeNode *node = mModel->index2node( index );
+    QgsLayerTreeNode *node = index2node( index );
 
     if ( node )
     {
@@ -172,17 +131,12 @@ QVariant LayerTreeModel::data( const QModelIndex &index, int role ) const
     return false;
   }
 
-  return mModel->data( index, role );
+  return QgsLayerTreeModel::data( index, role );
 }
 
 QgsLayerTreeNode *LayerTreeModel::node( QModelIndex modelIndex ) const
 {
-  if ( !mModel )
-  {
-    return nullptr;
-  }
-
-  return mModel->index2node( modelIndex );
+  return index2node( modelIndex );
 }
 
 QgsProject *LayerTreeModel::qgsProject() const
@@ -197,13 +151,4 @@ void LayerTreeModel::setQgsProject( QgsProject *newQgsProject )
 
   mQgsProject = newQgsProject;
   emit qgsProjectChanged( mQgsProject );
-}
-
-QgsLayerTreeModel *LayerTreeModel::qgsModel() const
-{
-  if ( mModel )
-  {
-    return mModel.get();
-  }
-  return nullptr;
 }
