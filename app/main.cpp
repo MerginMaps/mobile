@@ -269,6 +269,7 @@ void initDeclarative()
   qRegisterMetaType< QgsFeature > ( "QgsFeature" );
   qRegisterMetaType< QgsFeatureId > ( "QgsFeatureId" );
   qRegisterMetaType< QgsPoint >( "QgsPoint" );
+  qRegisterMetaType< QgsLayerTreeNode * >( "QgsLayerTreeNode*" );
   qRegisterMetaType< QgsPointXY >( "QgsPointXY" );
   qRegisterMetaType< QgsRelation >( "QgsRelation" );
   qRegisterMetaType< QgsPolymorphicRelation >( "QgsPolymorphicRelation" );

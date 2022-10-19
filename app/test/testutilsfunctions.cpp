@@ -708,7 +708,7 @@ void TestUtilsFunctions::testGeometryIcons()
     { QgsMemoryProviderUtils::createMemoryLayer( "N1", QgsFields(), QgsWkbTypes::Unknown ), QStringLiteral( "qrc:/mIconTableLayer.svg" ) },
     { QgsMemoryProviderUtils::createMemoryLayer( "N2", QgsFields(), QgsWkbTypes::NoGeometry ), QStringLiteral( "qrc:/mIconTableLayer.svg" ) },
 
-    { new QgsRasterLayer(), QStringLiteral( "qrc:/mIconRasterLayer.svg" ) }
+    { new QgsRasterLayer(), QStringLiteral( "qrc:/mIconRaster.svg" ) }
   };
 
   for ( const auto &test : testcases )

@@ -1179,6 +1179,16 @@ bool InputUtils::isSpatialLayer( QgsVectorLayer *layer )
   return layer->isSpatial();
 }
 
+bool InputUtils::isVectorLayer( QgsMapLayer *layer )
+{
+  if ( !layer )
+  {
+    return false;
+  }
+
+  return ( layer->type() == QgsMapLayerType::VectorLayer );
+}
+
 qreal InputUtils::calculateScreenDpr()
 {
   const QList<QScreen *> screens = QGuiApplication::screens();
@@ -1811,7 +1821,7 @@ QString InputUtils::loadIconFromLayer( QgsMapLayer *layer )
     }
     case QgsMapLayerType::RasterLayer:
     {
-      return QStringLiteral( "qrc:/mIconRasterLayer.svg" );
+      return QStringLiteral( "qrc:/mIconRaster.svg" );
     }
     case QgsMapLayerType::AnnotationLayer:
     {
@@ -1996,4 +2006,29 @@ int InputUtils::rowFromIndex( const QModelIndex index )
 int InputUtils::colFromIndex( const QModelIndex index )
 {
   return index.column();
+}
+
+QgsMapLayer *InputUtils::node2Layer( QgsLayerTreeNode *node )
+{
+  if ( !node )
+  {
+    return nullptr;
+  }
+
+  if ( QgsLayerTree::isLayer( node ) )
+  {
+    QgsLayerTreeLayer *layerNode = QgsLayerTree::toLayer( node );
+
+    if ( layerNode )
+    {
+      QgsMapLayer *layer = layerNode->layer();
+
+      if ( layer )
+      {
+        return layer;
+      }
+    }
+  }
+
+  return nullptr;
 }

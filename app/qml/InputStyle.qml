@@ -15,6 +15,7 @@ QtObject {
     // Primary colors
     property color fontColor: "#006146"
     property color fontColorBright: "#679D70"
+    property color fontColorWhite: "#FFFFFF"
     property color panelBackground2: "#C6CCC7"
     property color activeButtonColor: "#006146"
     property color activeButtonColorOrange: "#FD9626"
@@ -23,7 +24,7 @@ QtObject {
 
     // Secondary colors
     property color clrPanelMain: "white"
-    property color clrPanelBackground: fontColor
+    property color clrPanelBackground: "#006146"
     property color panelBackgroundDark: "#B3B3B3"
     property color panelBackgroundDarker: "#575757"
     property color panelBackgroundLight: "#E6E6E6"
@@ -64,6 +65,8 @@ QtObject {
 
     property real searchBoxV2Spacing: scale(10)
     property real panelMarginV2: scale(15)
+    property real toolbarHeight: scale(64)
+    property real toolbarButtonSize: scale(50)
 
     property real buttonClickArea: scale(15)
 
@@ -86,6 +89,7 @@ QtObject {
     property real circleRadius: 100
 
     property real iconSizeMedium: 25 * __dp
+    property real iconSizeLarge: 30 * __dp
 
     // icons
     property string cameraIcon: "qrc:/add_photo.svg"
@@ -108,6 +112,8 @@ QtObject {
 
     property url eyeIconV2: "qrc:/eyev2.svg"
     property url eyeSlashIconV2: "qrc:/eye_slashv2.svg"
+    property url tableV2Icon: "qrc:/tablev2.svg"
+    property url fileInfoIcon: "qrc:/file_info.svg"
 
     property string valueRelationIcon: "qrc:/value_relation_open.svg"
     property string comboboxIcon: "qrc:/combobox.svg"

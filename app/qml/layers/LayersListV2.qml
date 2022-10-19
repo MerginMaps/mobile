@@ -22,6 +22,7 @@ Item {
   property var parentNodeIndex: null
 
   signal nodeClicked( var nodeIndex, string nodeType )
+  signal nodeVisibilityClicked( var nodeIndex )
 
   QtObject {
     id: internal
@@ -100,6 +101,9 @@ Item {
               if ( typeof( model.decoration ) === 'string' ) {
                 return model.decoration
               }
+              else if ( index < 0 ) {
+                return ""
+              }
               else {
                 return "image://LayerTreePixmapProvider/" + index + "/" + internal.indexColumn
               }
@@ -107,7 +111,7 @@ Item {
           }
 
           Text {
-            text: model.toolTip + model.display
+            text: model.display
 
             Layout.fillWidth: true
 
@@ -124,7 +128,7 @@ Item {
             Layout.preferredWidth: InputStyle.iconSizeMedium
             Layout.preferredHeight: InputStyle.iconSizeMedium
 
-            source: index % 2 === 0 ? InputStyle.eyeIconV2 : InputStyle.eyeSlashIconV2
+            source: model.statusTip ? InputStyle.eyeIconV2 : InputStyle.eyeSlashIconV2
 
             MouseArea {
               anchors {
@@ -135,7 +139,16 @@ Item {
                 bottomMargin: -InputStyle.buttonClickArea
               }
 
-              onClicked: console.log( "Change visibility of", index )
+              onClicked: {
+                if ( root.parentNodeIndex ) {
+                  var modelindex = root.model.getModelIndex( index, 0, root.parentNodeIndex )
+                }
+                else {
+                  modelindex = root.model.getModelIndex( index, 0 )
+                }
+
+                root.nodeVisibilityClicked( modelindex )
+              }
             }
           }
         }

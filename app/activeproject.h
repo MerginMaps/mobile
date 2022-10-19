@@ -72,6 +72,8 @@ class ActiveProject: public QObject
      */
     Q_INVOKABLE void setActiveLayer( QgsMapLayer *layer ) const;
 
+    Q_INVOKABLE void switchLayerTreeNodeVisibility( QgsLayerTreeNode *node );
+
     /**
      * mapSettings method returns mapsettings pointer
      */

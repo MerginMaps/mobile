@@ -15,7 +15,7 @@ import ".."
 Item {
   id: root
 
-  property alias searchText: searchfield.text
+  signal searchTextChanged( string searchText )
 
   // set width manually
   height: InputStyle.rowHeightMedium
@@ -57,6 +57,8 @@ Item {
 
         font.italic: true
         placeholderText: qsTr("Search")
+
+        onTextChanged: searchTextChanged( text )
 
         background: Rectangle {
           color: "transparent"

@@ -13,6 +13,8 @@
 LayerTreeSortFilterModel::LayerTreeSortFilterModel( QObject *parent )
   : QSortFilterProxyModel{parent}
 {
+  setRecursiveFilteringEnabled( true );
+  setFilterCaseSensitivity( Qt::CaseInsensitive );
 }
 
 LayerTreeModel *LayerTreeSortFilterModel::layerTreeModel() const
@@ -42,22 +44,36 @@ void LayerTreeSortFilterModel::setLayerTreeModel( LayerTreeModel *newLayerTreeMo
 
 LayerTreeSortFilterModel::~LayerTreeSortFilterModel() = default;
 
-//const QString &LayerTreeSortFilterModel::searchExpression() const
-//{
-//  return mSearchExpression;
-//}
+const QString &LayerTreeSortFilterModel::searchExpression() const
+{
+  return mSearchExpression;
+}
 
-//void LayerTreeSortFilterModel::setSearchExpression( const QString &newSearchExpression )
-//{
-//  if ( mSearchExpression == newSearchExpression )
-//    return;
-//  mSearchExpression = newSearchExpression;
-//  emit searchExpressionChanged( mSearchExpression );
-//}
+void LayerTreeSortFilterModel::setSearchExpression( const QString &newSearchExpression )
+{
+  if ( mSearchExpression == newSearchExpression )
+    return;
+  mSearchExpression = newSearchExpression;
+  emit searchExpressionChanged( mSearchExpression );
+
+  setFilterFixedString( mSearchExpression );
+}
 
 QModelIndex LayerTreeSortFilterModel::getModelIndex( int row, int column, const QModelIndex &parent ) const
 {
   return index( row, column, parent );
+}
+
+QgsLayerTreeNode *LayerTreeSortFilterModel::getNode( QModelIndex modelIndex ) const
+{
+  if ( !mLayerTreeModel )
+  {
+    return nullptr;
+  }
+
+  QModelIndex sourceModelIndex = mapToSource( modelIndex );
+
+  return mLayerTreeModel->node( sourceModelIndex );
 }
 
 void LayerTreeSortFilterModel::onSourceModelInitialized()

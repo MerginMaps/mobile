@@ -439,6 +439,8 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool isMultiPartLayer( QgsVectorLayer *layer );
     Q_INVOKABLE static bool isSpatialLayer( QgsVectorLayer *layer );
 
+    Q_INVOKABLE static bool isVectorLayer( QgsMapLayer *layer );
+
     // Returns a point geometry from point feature
     Q_INVOKABLE static QgsPointXY extractPointFromFeature( const FeatureLayerPair &feature );
 
@@ -518,6 +520,11 @@ class InputUtils: public QObject
      *  Returns column id from passed model index
      */
     Q_INVOKABLE static int colFromIndex( const QModelIndex index );
+
+    /**
+     * Returns map layer from node if node is of layer type, otherwise returns nullptr
+     */
+    Q_INVOKABLE static QgsMapLayer *node2Layer( QgsLayerTreeNode *node );
 
 
   signals:

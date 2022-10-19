@@ -21,6 +21,7 @@ Page {
   property var parentNodeIndex: null
 
   signal close()
+  signal searchTextChanged( string searchText )
   signal nodeClicked( var nodeIndex, string nodeType )
 
   Keys.onReleased: {
@@ -48,7 +49,7 @@ Page {
       topMargin: InputStyle.panelMarginV2
     }
 
-//    onSearchTextChanged: listModel.listModelFilter()
+    onSearchTextChanged: root.searchTextChanged( searchText )
   }
 
   LayersListV2 {

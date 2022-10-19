@@ -13,13 +13,15 @@
 #include <QSortFilterProxyModel>
 #include <qglobal.h>
 
+#include "qgslayertreenode.h"
+
 #include "layer/layertreemodel.h"
 
 class LayerTreeSortFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
-//    Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression NOTIFY searchExpressionChanged )
+    Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression NOTIFY searchExpressionChanged )
     Q_PROPERTY( LayerTreeModel *layerTreeModel READ layerTreeModel WRITE setLayerTreeModel NOTIFY layerTreeModelChanged )
 
   public:
@@ -30,21 +32,24 @@ class LayerTreeSortFilterModel : public QSortFilterProxyModel
     LayerTreeModel *layerTreeModel() const;
     void setLayerTreeModel( LayerTreeModel *newLayerTreeModel );
 
-//    const QString &searchExpression() const;
-//    void setSearchExpression( const QString &newSearchExpression );
+    const QString &searchExpression() const;
+    void setSearchExpression( const QString &newSearchExpression );
 
     Q_INVOKABLE QModelIndex getModelIndex( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
+
+    // Converts modelIndex to source model index and returns specific node
+    Q_INVOKABLE QgsLayerTreeNode *getNode( QModelIndex modelIndex ) const;
 
   public slots:
     void onSourceModelInitialized();
 
   signals:
     void layerTreeModelChanged( LayerTreeModel *layerTreeModel );
-//    void searchExpressionChanged( const QString &searchExpression );
+    void searchExpressionChanged( const QString &searchExpression );
 
   private:
     LayerTreeModel *mLayerTreeModel = nullptr;
-//    QString mSearchExpression;
+    QString mSearchExpression;
 };
 
 #endif // LAYERTREESORTFILTERMODEL_H

@@ -33,8 +33,12 @@ class LayerTreeModel : public QAbstractItemModel
     QModelIndex parent( const QModelIndex &child ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 
+    QgsLayerTreeNode *node( QModelIndex modelIndex ) const;
+
     QgsProject *qgsProject() const;
     void setQgsProject( QgsProject *newQgsProject );
+
+    QgsLayerTreeModel *qgsModel() const;
 
   signals:
     void qgsProjectChanged( QgsProject *qgsProject );

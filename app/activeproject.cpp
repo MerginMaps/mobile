@@ -360,3 +360,12 @@ void ActiveProject::setActiveLayer( QgsMapLayer *layer ) const
     mAppSettings.setDefaultLayer( mActiveLayer.layerName() );
   }
 }
+
+void ActiveProject::switchLayerTreeNodeVisibility( QgsLayerTreeNode *node )
+{
+  if ( !node )
+    return;
+
+  qDebug() << "Switching visibility of node " << node << "to" << !node->isVisible();
+  node->setItemVisibilityChecked( !node->isVisible() );
+}

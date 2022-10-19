@@ -61,11 +61,18 @@ Item {
         }
         else if ( nodeType === "layer" )
         {
-          const props = {}
+          const props = {
+            layerTreeNode: layerTreeProxyModel.getNode( nodeIndex )
+          }
 
           let item = pagesStackView.push( layerDetailsPage, props, StackView.PushTransition )
           item.forceActiveFocus()
         }
+      }
+
+      onNodeVisibilityClicked: function( nodeIndex ) {
+        let node = layerTreeProxyModel.getNode( nodeIndex )
+        __activeProject.switchLayerTreeNodeVisibility( node )
       }
 
       onClose: function() {
@@ -103,6 +110,35 @@ Item {
     id: searchLayersPage
 
     LayersListSearchPage {
+      model: layerTreeProxyModel
+
+      onNodeClicked: function( nodeIndex, nodeType ) {
+        if ( nodeType === "group" )
+        {
+          const groupName = layerTreeProxyModel.data(nodeIndex, 0) // group name (0 = display role)
+          const props = {
+            parentNodeIndex: nodeIndex,
+            pageTitle: groupName
+          }
+
+          let item = pagesStackView.push( layersListPage, props , StackView.PushTransition )
+          item.forceActiveFocus()
+        }
+        else if ( nodeType === "layer" )
+        {
+          const props = {
+            mapLayer: layerTreeProxyModel.getNode( nodeIndex )
+          }
+
+          let item = pagesStackView.push( layerDetailsPage, props, StackView.PushTransition )
+          item.forceActiveFocus()
+        }
+      }
+
+      onSearchTextChanged: function( searchText ) {
+        layerTreeProxyModel.searchExpression = searchText
+      }
+
       onClose: function() {
         if (pagesStackView.depth > 1)  {
           pagesStackView.pop( StackView.PopTransition )

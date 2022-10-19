@@ -125,5 +125,6 @@
         <file>components/PanelHeaderV2.qml</file>
         <file>layers/LayersListPageV2.qml</file>
         <file>layers/LayersListSearchPage.qml</file>
+        <file>components/ToolbarButton.qml</file>
     </qresource>
 </RCC>

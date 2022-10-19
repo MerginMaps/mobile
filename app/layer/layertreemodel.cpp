@@ -75,7 +75,10 @@ QModelIndex LayerTreeModel::index( int row, int column, const QModelIndex &paren
   if ( !mModel )
     return QModelIndex();
 
-  return mModel->index( row, column, parent );
+  QModelIndex mModelIndex = mModel->index( row, column, parent );
+
+  // Convert model index from mModel to include pointer to this model instead
+  return createIndex( row, column, mModelIndex.internalPointer() );
 }
 
 QModelIndex LayerTreeModel::parent( const QModelIndex &child ) const
@@ -156,8 +159,30 @@ QVariant LayerTreeModel::data( const QModelIndex &index, int role ) const
 
     return icon;
   }
+  else if ( role == Qt::StatusTipRole )
+  {
+    // returns whether this node is visible or not
+    QgsLayerTreeNode *node = mModel->index2node( index );
+
+    if ( node )
+    {
+      return node->isVisible();
+    }
+
+    return false;
+  }
 
   return mModel->data( index, role );
+}
+
+QgsLayerTreeNode *LayerTreeModel::node( QModelIndex modelIndex ) const
+{
+  if ( !mModel )
+  {
+    return nullptr;
+  }
+
+  return mModel->index2node( modelIndex );
 }
 
 QgsProject *LayerTreeModel::qgsProject() const
@@ -172,4 +197,13 @@ void LayerTreeModel::setQgsProject( QgsProject *newQgsProject )
 
   mQgsProject = newQgsProject;
   emit qgsProjectChanged( mQgsProject );
+}
+
+QgsLayerTreeModel *LayerTreeModel::qgsModel() const
+{
+  if ( mModel )
+  {
+    return mModel.get();
+  }
+  return nullptr;
 }

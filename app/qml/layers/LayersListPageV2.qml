@@ -23,6 +23,7 @@ Page {
 
   signal close()
   signal nodeClicked( var nodeIndex, string nodeType )
+  signal nodeVisibilityClicked( var nodeIndex )
   signal searchboxClicked()
 
   Keys.onReleased: {
@@ -76,6 +77,10 @@ Page {
 
     onNodeClicked: function( nodeIndex, nodeType ) {
       root.nodeClicked( nodeIndex, nodeType )
+    }
+
+    onNodeVisibilityClicked: function( nodeIndex ) {
+      root.nodeVisibilityClicked( nodeIndex )
     }
   }
 }
