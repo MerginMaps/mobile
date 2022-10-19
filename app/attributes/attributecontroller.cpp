@@ -490,6 +490,7 @@ void AttributeController::acquireId()
                                  Qgis::Critical );
 
     }
+    connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
   }
   else
   {
@@ -499,12 +500,15 @@ void AttributeController::acquireId()
                                  Qgis::Warning );
   }
 
-  connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
   if ( !commit() )
   {
     emit commitFailed();
   }
-  disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
+
+  if ( featureIsNotYetAdded )
+  {
+    disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
+  }
 }
 
 bool AttributeController::recalculateDefaultValues(
