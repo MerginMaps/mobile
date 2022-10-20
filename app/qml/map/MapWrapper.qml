@@ -599,6 +599,12 @@ Item {
           recordingToolsLoader.item.discardChanges()
         }
       }
+      else if ( root.state == "split" )
+      {
+        howtoSplittingBanner.hide()
+        root.splittingCanceled()
+        root.state = "view"
+      }
     }
 
     maxWidth: parent.width * 0.8
@@ -607,7 +613,7 @@ Item {
     anchors.left: parent.left
     anchors.leftMargin: InputStyle.smallGap
 
-    visible: root.state != "view"
+    visible: root.state == "record" || root.state == "edit" || root.state == "split"
 
     content: Item {
 
