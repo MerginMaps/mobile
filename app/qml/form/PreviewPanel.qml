@@ -187,7 +187,7 @@ Item {
                     delegate: Row {
                         id: root
                         spacing: InputStyle.panelMargin
-                        width: parent.width
+                        width: ListView.view.width
 
                         Text {
                             id: fieldName

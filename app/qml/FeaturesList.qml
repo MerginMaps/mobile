@@ -48,7 +48,7 @@ Item {
 
     delegate: Rectangle {
       id: itemContainer
-      width: parent.width
+      width: ListView.view.width
       height: 50 * __dp
 
       MouseArea {

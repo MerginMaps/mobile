@@ -78,7 +78,7 @@ Item {
     delegate: ProjectDelegateItem {
       id: projectDelegate
 
-      width: parent.width
+      width: ListView.view.width
       height: InputStyle.projectItemHeight
 
       projectDisplayName: root.projectModelType === ProjectsModel.CreatedProjectsModel ? model.ProjectName : model.ProjectFullName

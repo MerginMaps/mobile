@@ -67,7 +67,7 @@ Item {
       section.criteria: ViewSection.FullString
       section.delegate: Item {
         height: statusPanel.rowHeight/2
-        width: parent.width
+        width: ListView.view.width
 
         Rectangle {
           anchors.fill: parent
@@ -85,11 +85,10 @@ Item {
         }
       }
 
-
       delegate: Item {
         id: delegateItem
         height: fileStatus === MerginProjectStatusModel.Changelog ? statusPanel.rowHeight * 1.2 : statusPanel.rowHeight
-        width: parent.width
+        width: ListView.view.width
 
         RowLayout {
           id: row
@@ -102,7 +101,6 @@ Item {
             id: textContainer
             height: statusPanel.rowHeight
             Layout.fillWidth: true
-
 
             Text {
               id: mainText
@@ -125,7 +123,6 @@ Item {
               y: mainText.height
               x: 0
               property real tileWidth: extendedText.width/3
-
 
                 ExtendedMenuItem {
                   id: insertsCount
@@ -219,5 +216,3 @@ Item {
     }
   }
 }
-
-

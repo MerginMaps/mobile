@@ -108,7 +108,7 @@ Item {
               spacing: 3
               delegate: PanelItem {
                 anchors.margins: 5
-                width: parent.width
+                width:  ListView.view.width
                 height: row.height
                 color: InputStyle.clrPanelMain
                 Row {

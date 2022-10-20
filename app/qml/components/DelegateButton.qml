@@ -28,5 +28,4 @@ Item {
     color: delegateButtonContainer.bgColor
     fontBold: true
   }
-
 }

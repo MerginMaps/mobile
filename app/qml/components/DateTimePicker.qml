@@ -419,7 +419,7 @@ Item {
         }
 
         delegate: Rectangle {
-          width: parent.width
+          width: ListView.view.width
           height: 30
           Text {
             anchors.centerIn: parent
