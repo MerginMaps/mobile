@@ -599,11 +599,13 @@ Item {
           recordingToolsLoader.item.discardChanges()
         }
       }
-      else if ( root.state == "split" )
-      {
+      else if ( root.state == "split" ) {
         howtoSplittingBanner.hide()
         root.splittingCanceled()
         root.state = "view"
+      }
+      else if ( root.state == "recordInLayer" ) {
+        root.recordInLayerFeatureCanceled()
       }
     }
 
@@ -613,7 +615,7 @@ Item {
     anchors.left: parent.left
     anchors.leftMargin: InputStyle.smallGap
 
-    visible: root.state == "record" || root.state == "edit" || root.state == "split"
+    visible: root.state == "record" || root.state == "edit" || root.state == "split" || root.state == "recordInLayer"
 
     content: Item {
 
