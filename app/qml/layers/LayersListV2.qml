@@ -21,6 +21,7 @@ Item {
   property var model: null
   property var parentNodeIndex: null
 
+  property bool showNodePath: false // show path to node groupA/groupB under the item
   property string imageProviderPath: ""
 
   signal nodeClicked( var node, string nodeType, string nodeName )
@@ -40,7 +41,7 @@ Item {
         id: layerrow
 
         width: ListView.view.width
-        height: InputStyle.rowHeightMedium
+        height: InputStyle.rowHeightMedium * ( root.showNodePath ? 1.5 : 1 )
 
         Rectangle {
           anchors {
@@ -87,17 +88,38 @@ Item {
             }
           }
 
-          Text {
-            text: model.display
-
+          ColumnLayout {
             Layout.fillWidth: true
+            Layout.fillHeight: true
+            spacing: 0
 
-            color: InputStyle.fontColor
+            Text {
+              text: model.display
 
-            font.bold: true
-            font.pixelSize: InputStyle.fontPixelSizeBig
+              Layout.fillWidth: true
+              Layout.fillHeight: true
 
-            elide: Text.ElideMiddle
+              color: InputStyle.fontColor
+
+              font.bold: true
+              font.pixelSize: InputStyle.fontPixelSizeBig
+
+              elide: Text.ElideMiddle
+            }
+
+            Text {
+              text: model.nodePath
+              Layout.fillWidth: true
+              Layout.fillHeight: true
+
+              // show it only if there is some path
+              visible: root.showNodePath && model.nodePath
+
+              color: InputStyle.secondaryFontColor
+              font.pixelSize: InputStyle.fontPixelSizeNormal
+
+              elide: Text.ElideMiddle
+            }
           }
 
           Image {

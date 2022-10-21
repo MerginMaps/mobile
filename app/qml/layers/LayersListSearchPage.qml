@@ -71,6 +71,7 @@ Page {
     model: root.model
     parentNodeIndex: root.parentNodeIndex
 
+    showNodePath: true
     imageProviderPath: "image://LayerTreeFlatModelPixmapProvider/"
 
     onNodeClicked: function( node, nodeType, nodeName ) {
