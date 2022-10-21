@@ -591,7 +591,7 @@ Item {
     id: backButton
 
     onClicked: {
-      if ( root.state === "edit" || root.state === "record" ) {
+      if ( root.state === "edit" || root.state === "record" || root.state == "recordInLayer") {
         if ( recordingToolsLoader.item.hasChanges() ) {
           cancelEditDialog.open()
         }
@@ -603,9 +603,6 @@ Item {
         howtoSplittingBanner.hide()
         root.splittingCanceled()
         root.state = "view"
-      }
-      else if ( root.state == "recordInLayer" ) {
-        root.recordInLayerFeatureCanceled()
       }
     }
 

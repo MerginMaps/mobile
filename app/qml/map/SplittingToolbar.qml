@@ -92,19 +92,5 @@ Item {
         onActivated: root.doneClicked()
       }
     }
-
-    Item {
-      height: parent.height
-      Layout.fillWidth: true
-
-      MainPanelButton {
-        id: cancelButton
-        width: root.itemSize
-        text: qsTr("Cancel")
-        imageSource: InputStyle.noIcon
-
-        onActivated: root.cancelClicked()
-      }
-    }
   }
 }
