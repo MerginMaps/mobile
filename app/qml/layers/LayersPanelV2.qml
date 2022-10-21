@@ -149,6 +149,10 @@ Item {
         layerTreeFlatSortFilterModel.searchExpression = searchText
       }
 
+      onNodeVisibilityClicked: function( node ) {
+        __activeProject.switchLayerTreeNodeVisibility( node )
+      }
+
       onClose: function() {
         if (pagesStackView.depth > 1)  {
           pagesStackView.pop( StackView.PopTransition )

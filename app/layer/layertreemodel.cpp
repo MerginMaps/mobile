@@ -89,12 +89,7 @@ QVariant LayerTreeModel::data( const QModelIndex &index, int role ) const
   }
   else if ( role == NodeIsVisible )
   {
-    if ( node )
-    {
-      return node->isVisible();
-    }
-
-    return false;
+    return visible( node );
   }
   else if ( role == SerializedNode )
   {
@@ -202,4 +197,30 @@ QgsLayerTreeNode *LayerTreeModel::deserializeNode( const QString &nodeId ) const
   }
 
   return index2node( indexIterator );
+}
+
+QString LayerTreeModel::visible( QgsLayerTreeNode *node ) const
+{
+  if ( !node )
+  {
+    return QString();
+  }
+
+  if ( QgsLayerTree::isLayer( node ) )
+  {
+    QgsLayerTreeLayer *nodeLayer = QgsLayerTree::toLayer( node );
+    if ( nodeLayer && nodeLayer->layer() && !nodeLayer->layer()->isSpatial() )
+    {
+      return QString(); // not a spatial layer - do not show eye icon at all
+    }
+  }
+
+  if ( node->isVisible() )
+  {
+    return QStringLiteral( "yes" );
+  }
+  else
+  {
+    return QStringLiteral( "no" );
+  }
 }

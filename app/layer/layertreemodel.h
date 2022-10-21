@@ -48,6 +48,12 @@ class LayerTreeModel : public QgsLayerTreeModel
     QString serializeNode( QgsLayerTreeNode *node ) const;
     QgsLayerTreeNode *deserializeNode( const QString &nodeId ) const;
 
+    /**
+     * Returns QML representation of node's visibility, either 'yes', 'no' or empty string
+     * if this layer node is not spatial
+     */
+    QString visible( QgsLayerTreeNode *node ) const;
+
     Q_INVOKABLE void reset();
 
   signals:

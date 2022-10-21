@@ -859,8 +859,6 @@ Item {
     height: window.height/2
     width: window.width
     edge: Qt.BottomEdge
-
-    onActiveLayerChangeRequested: __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
   }
 
   Connections {

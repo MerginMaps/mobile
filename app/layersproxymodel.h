@@ -53,7 +53,7 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     QList<QgsMapLayer *> layers() const;
 
   public slots:
-    void onMapThemeChanged();
+    void refreshData();
 
   private:
 

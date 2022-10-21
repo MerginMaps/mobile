@@ -101,7 +101,7 @@ QList<QgsMapLayer *> LayersProxyModel::layers() const
   return filteredLayers;
 }
 
-void LayersProxyModel::onMapThemeChanged()
+void LayersProxyModel::refreshData()
 {
   invalidate();
 }

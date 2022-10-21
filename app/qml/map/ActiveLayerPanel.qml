@@ -17,8 +17,6 @@ import "../components" as Components
 Drawer {
     property string activeLayerId: __activeLayer.layerId
 
-    signal activeLayerChangeRequested( var layerId )
-
     function openPanel() {
         layerPanel.visible = true
     }

@@ -105,7 +105,17 @@ Item {
             Layout.preferredWidth: InputStyle.iconSizeMedium
             Layout.preferredHeight: InputStyle.iconSizeMedium
 
-            source: model.nodeIsVisible ? InputStyle.eyeIconV2 : InputStyle.eyeSlashIconV2
+            source: {
+              if ( model.nodeIsVisible === "yes" )
+              {
+                return InputStyle.eyeIconV2
+              }
+              else if ( model.nodeIsVisible === "no" )
+              {
+                return InputStyle.eyeSlashIconV2
+              }
+              return "" // not a spatial layer
+            }
 
             MouseArea {
               anchors {

@@ -240,7 +240,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginUserInfo>( "lc", 1, 0, "MerginUserInfo", "" );
   qmlRegisterUncreatableType<MerginSubscriptionInfo>( "lc", 1, 0, "MerginSubscriptionInfo", "" );
   qmlRegisterUncreatableType<PurchasingPlan>( "lc", 1, 0, "MerginPlan", "" );
-  qmlRegisterUncreatableType<MapThemesModel>( "lc", 1, 0, "MapThemesModel", "" );
   qmlRegisterUncreatableType<ActiveProject>( "lc", 1, 0, "ActiveProject", "" );
   qmlRegisterUncreatableType<SynchronizationManager>( "lc", 1, 0, "SynchronizationManager", "" );
   qmlRegisterUncreatableType<SynchronizationError>( "lc", 1, 0, "SyncError", "SyncError Enum" );
@@ -303,6 +302,7 @@ void initDeclarative()
   qmlRegisterType< LayerTreeSortFilterModel >( "lc", 1, 0, "LayerTreeSortFilterModel" );
   qmlRegisterType< LayerTreeFlatModel >( "lc", 1, 0, "LayerTreeFlatModel" );
   qmlRegisterType< LayerTreeFlatSortFilterModel >( "lc", 1, 0, "LayerTreeFlatSortFilterModel" );
+  qmlRegisterType< MapThemesModel >( "lc", 1, 0, "MapThemesModel" );
   qmlRegisterType< GuidelineController >( "lc", 1, 0, "GuidelineController" );
   qmlRegisterType< FeaturesModel >( "lc", 1, 0, "FeaturesModel" );
   qmlRegisterType< RelationFeaturesModel >( "lc", 1, 0, "RelationFeaturesModel" );
@@ -464,7 +464,6 @@ int main( int argc, char *argv[] )
   AndroidUtils au;
   IosUtils iosUtils;
   LocalProjectsManager localProjectsManager( projectDir );
-  MapThemesModel mtm;
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjectsManager ) );
   InputUtils iu( &au );
   MerginProjectStatusModel mpsm( localProjectsManager );
@@ -477,7 +476,7 @@ int main( int argc, char *argv[] )
   LayersProxyModel recordingLpm( &lm, LayerModelTypes::ActiveLayerSelection );
 
   ActiveLayer al;
-  ActiveProject activeProject( mtm, as, al, recordingLpm, localProjectsManager );
+  ActiveProject activeProject( as, al, recordingLpm, localProjectsManager );
   std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
@@ -524,7 +523,6 @@ int main( int argc, char *argv[] )
   // Direct connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &pk, &PositionKit::appStateChanged );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
-  QObject::connect( &mtm, &MapThemesModel::mapThemeChanged, &recordingLpm, &LayersProxyModel::onMapThemeChanged );
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
   QObject::connect( &pw, &ProjectWizard::notify, &iu, &InputUtils::showNotificationRequested );
@@ -590,7 +588,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
   engine.rootContext()->setContextProperty( "__activeProject", &activeProject );
   engine.rootContext()->setContextProperty( "__syncManager", &syncManager );
-  engine.rootContext()->setContextProperty( "__mapThemesModel", &mtm );
   engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );

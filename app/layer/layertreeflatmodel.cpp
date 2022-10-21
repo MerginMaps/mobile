@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,6 +15,25 @@ LayerTreeFlatModel::LayerTreeFlatModel( QObject *parent )
   : QStandardItemModel( parent )
 {
   connect( this, &LayerTreeFlatModel::qgsProjectChanged, this, &LayerTreeFlatModel::populate );
+}
+
+QVariant LayerTreeFlatModel::data( const QModelIndex &index, int role ) const
+{
+  if ( !index.isValid() || index.row() < 0 )
+  {
+    return QVariant();
+  }
+
+  if ( role == NodeIsVisible )
+  {
+    QgsLayerTreeNode *node = data( index, Node ).value<QgsLayerTreeNode *>();
+
+    if ( node && mLayerTreeModel )
+    {
+      return mLayerTreeModel->visible( node );
+    }
+  }
+  return QStandardItemModel::data( index, role );
 }
 
 QHash<int, QByteArray> LayerTreeFlatModel::roleNames() const
@@ -53,12 +72,24 @@ void LayerTreeFlatModel::populate()
   beginResetModel();
 
   clear();
+
+  if ( mLayerTreeModel )
+  {
+    disconnect( mLayerTreeModel.get() );
+  }
+
   mLayerTreeModel.reset();
 
   if ( mQgsProject )
   {
     mLayerTreeModel = std::make_unique<LayerTreeModel>( this );
     mLayerTreeModel->setQgsProject( mQgsProject );
+
+    // listen on changes in source model - node visibility might change
+    connect( mLayerTreeModel.get(), &LayerTreeModel::dataChanged, this, [this]()
+    {
+      emit dataChanged( index( 0, 0 ), index( rowCount() - 1, 0 ) );
+    } );
 
     // scrape the layer tree
     QgsLayerTree *root = mQgsProject->layerTreeRoot();

@@ -39,6 +39,7 @@ class LayerTreeFlatModel : public QStandardItemModel
     LayerTreeFlatModel( QObject *parent = nullptr );
     virtual ~LayerTreeFlatModel();
 
+    QVariant data( const QModelIndex &index, int role ) const override;
     QHash<int, QByteArray> roleNames() const override;
 
     QgsProject *qgsProject() const;
