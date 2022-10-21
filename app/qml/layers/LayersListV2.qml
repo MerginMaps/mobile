@@ -21,21 +21,10 @@ Item {
   property var model: null
   property var parentNodeIndex: null
 
-  signal nodeClicked( var nodeIndex, string nodeType )
-  signal nodeVisibilityClicked( var nodeIndex )
+  property string imageProviderPath: ""
 
-  QtObject {
-    id: internal
-
-    property int indexColumn: {
-      const idx = __inputUtils.colFromIndex( delegatemodel.rootIndex )
-      if ( idx < 0 ) {
-        // root
-        return 0
-      }
-      return idx
-    }
-  }
+  signal nodeClicked( var node, string nodeType, string nodeName )
+  signal nodeVisibilityClicked( var node )
 
   ListView {
     id: layerslist
@@ -72,16 +61,7 @@ Item {
             bottomMargin: -InputStyle.buttonClickArea
           }
 
-          onClicked: {
-            if ( root.parentNodeIndex ) {
-              var modelindex = root.model.getModelIndex( index, 0, root.parentNodeIndex )
-            }
-            else {
-              modelindex = root.model.getModelIndex( index, 0 )
-            }
-
-            root.nodeClicked( modelindex, model.whatsThis )
-          }
+          onClicked: root.nodeClicked( model.node, model.nodeType, model.display )
         }
 
         RowLayout {
@@ -93,20 +73,17 @@ Item {
             verticalCenter: parent.verticalCenter
           }
 
-          Image {
+          Item {
             Layout.preferredWidth: InputStyle.iconSizeMedium
             Layout.preferredHeight: InputStyle.iconSizeMedium
 
-            source: {
-              if ( typeof( model.decoration ) === 'string' ) {
-                return model.decoration
-              }
-              else if ( index < 0 ) {
-                return ""
-              }
-              else {
-                return "image://LayerTreePixmapProvider/" + index + "/" + internal.indexColumn
-              }
+            Image {
+              anchors.fill: parent
+
+              sourceSize: Qt.size( width, height)
+              cache: false // important! Otherwise pixmap providers would not be called for the same id again
+
+              source: root.imageProviderPath + model.serializedNode
             }
           }
 
@@ -128,7 +105,7 @@ Item {
             Layout.preferredWidth: InputStyle.iconSizeMedium
             Layout.preferredHeight: InputStyle.iconSizeMedium
 
-            source: model.statusTip ? InputStyle.eyeIconV2 : InputStyle.eyeSlashIconV2
+            source: model.nodeIsVisible ? InputStyle.eyeIconV2 : InputStyle.eyeSlashIconV2
 
             MouseArea {
               anchors {
@@ -139,16 +116,7 @@ Item {
                 bottomMargin: -InputStyle.buttonClickArea
               }
 
-              onClicked: {
-                if ( root.parentNodeIndex ) {
-                  var modelindex = root.model.getModelIndex( index, 0, root.parentNodeIndex )
-                }
-                else {
-                  modelindex = root.model.getModelIndex( index, 0 )
-                }
-
-                root.nodeVisibilityClicked( modelindex )
-              }
+              onClicked: root.nodeVisibilityClicked( model.node )
             }
           }
         }

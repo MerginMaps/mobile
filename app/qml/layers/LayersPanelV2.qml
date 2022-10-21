@@ -23,7 +23,16 @@ Item {
     id: layerTreeProxyModel
 
     layerTreeModel: LayerTreeModel {
-      id: layerModel
+      id: layerTreeModel
+      qgsProject: __activeProject.qgsProject
+    }
+  }
+
+  LayerTreeFlatSortFilterModel {
+    id: layerTreeFlatSortFilterModel
+
+    layerTreeFlatModel: LayerTreeFlatModel {
+      id: layerTreeFlatModel
       qgsProject: __activeProject.qgsProject
     }
   }
@@ -47,13 +56,13 @@ Item {
     LayersListPageV2 {
       model: layerTreeProxyModel
 
-      onNodeClicked: function ( nodeIndex, nodeType ) {
+      onNodeClicked: function ( node, nodeType, nodeName ) {
         if ( nodeType === "group" )
         {
-          const groupName = layerTreeProxyModel.data(nodeIndex, 0) // group name (0 = display role)
+          let index = layerTreeProxyModel.node2index( node )
           const props = {
-            parentNodeIndex: nodeIndex,
-            pageTitle: groupName
+            parentNodeIndex: index,
+            pageTitle: layerTreeProxyModel.data(index, nodeName)
           }
 
           let item = pagesStackView.push( layersListPage, props , StackView.PushTransition )
@@ -62,7 +71,7 @@ Item {
         else if ( nodeType === "layer" )
         {
           const props = {
-            layerTreeNode: layerTreeProxyModel.getNode( nodeIndex )
+            layerTreeNode: node
           }
 
           let item = pagesStackView.push( layerDetailsPage, props, StackView.PushTransition )
@@ -70,8 +79,7 @@ Item {
         }
       }
 
-      onNodeVisibilityClicked: function( nodeIndex ) {
-        let node = layerTreeProxyModel.getNode( nodeIndex )
+      onNodeVisibilityClicked: function( node ) {
         __activeProject.switchLayerTreeNodeVisibility( node )
       }
 
@@ -96,7 +104,7 @@ Item {
 
     LayerDetail {
       onClose: function() {
-        if (pagesStackView.depth > 1)  {
+        if (pagesStackView.depth > 1) {
           pagesStackView.pop( StackView.PopTransition )
         }
         else {
@@ -110,15 +118,17 @@ Item {
     id: searchLayersPage
 
     LayersListSearchPage {
-      model: layerTreeProxyModel
 
-      onNodeClicked: function( nodeIndex, nodeType ) {
+      model: layerTreeFlatSortFilterModel
+
+      onNodeClicked: function( node, nodeType, nodeName ) {
         if ( nodeType === "group" )
         {
-          const groupName = layerTreeProxyModel.data(nodeIndex, 0) // group name (0 = display role)
+          // convert to layersListSortFilterModel index
+          const index = layerTreeProxyModel.node2index( node )
           const props = {
-            parentNodeIndex: nodeIndex,
-            pageTitle: groupName
+            parentNodeIndex: index,
+            pageTitle: nodeName
           }
 
           let item = pagesStackView.push( layersListPage, props , StackView.PushTransition )
@@ -127,7 +137,7 @@ Item {
         else if ( nodeType === "layer" )
         {
           const props = {
-            mapLayer: layerTreeProxyModel.getNode( nodeIndex )
+            mapLayer: node
           }
 
           let item = pagesStackView.push( layerDetailsPage, props, StackView.PushTransition )
@@ -136,7 +146,7 @@ Item {
       }
 
       onSearchTextChanged: function( searchText ) {
-        layerTreeProxyModel.searchExpression = searchText
+        layerTreeFlatSortFilterModel.searchExpression = searchText
       }
 
       onClose: function() {
@@ -154,22 +164,29 @@ Item {
     target: __activeProject
 
     function onProjectWillBeReloaded() {
-      layerModel.reset()
+      layerTreeModel.reset()
+      layerTreeFlatModel.reset()
     }
 
     function onProjectReloaded( qgsProject ) {
-      layerModel.qgsProject = __activeProject.qgsProject
+      layerTreeModel.qgsProject = __activeProject.qgsProject
+      layerTreeFlatModel.qgsProject = __activeProject.qgsProject
     }
   }
 
   Component.onCompleted: {
-
     //
-    // We need to initialize pixmap provider so that it knows where to look for icons (model)
+    // We need to initialize pixmap providers so that it knows where to look for icons
     //
-    __layerTreePixmapProvider.setModel( layerTreeProxyModel )
+    __layerTreeModelPixmapProvider.setModel( layerTreeModel )
+    __layerTreeFlatModelPixmapProvider.setModel( layerTreeFlatModel )
 
     let item = pagesStackView.push( layersListPage, {}, StackView.Immediate )
     item.forceActiveFocus()
+  }
+
+  Component.onDestruction: {
+    __layerTreeModelPixmapProvider.reset()
+    __layerTreeFlatModelPixmapProvider.reset()
   }
 }

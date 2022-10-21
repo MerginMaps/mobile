@@ -7,44 +7,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "modelpixmapprovider.h"
+#include "layertreeflatmodelpixmapprovider.h"
 
 #include <QIcon>
 #include <QPixmap>
 #include <QDebug>
+#include "inpututils.h"
 
-ModelPixmapProvider::ModelPixmapProvider( QObject *parent )
+LayerTreeFlatModelPixmapProvider::LayerTreeFlatModelPixmapProvider( QObject *parent )
   : QObject( parent ), QQuickImageProvider( QQuickImageProvider::Pixmap )
 {
+  mDpr = InputUtils::calculateDpRatio();
 }
 
-ModelPixmapProvider::~ModelPixmapProvider()
+LayerTreeFlatModelPixmapProvider::~LayerTreeFlatModelPixmapProvider()
 {
   mModel = nullptr;
 }
 
-QPixmap ModelPixmapProvider::requestPixmap( const QString &id, QSize *size, const QSize &requestedSize )
+QPixmap LayerTreeFlatModelPixmapProvider::requestPixmap( const QString &id, QSize *size, const QSize &requestedSize )
 {
-  qDebug() << "Asked for image in image provider" << id << *size << requestedSize;
-
   if ( !mModel )
   {
     qDebug() << "Empty model in image provider!" << id;
     return QPixmap();
   }
 
-  // parse id to get row and column to the model.
-  // it should look like <row>/<col>
-
-  QStringList indexes = id.split( '/' );
-  if ( indexes.size() != 2 )
-  {
-    qDebug() << "Invalid index in image provider!" << id;
-    return QPixmap();
-  }
-
   bool ok = false;
-  int row = indexes[0].toInt( &ok );
+  int row = id.toInt( &ok );
 
   if ( !ok )
   {
@@ -52,25 +42,22 @@ QPixmap ModelPixmapProvider::requestPixmap( const QString &id, QSize *size, cons
     return QPixmap();
   }
 
-  int col = indexes[1].toInt( &ok );
-
-  if ( !ok )
-  {
-    qDebug() << "Invalid col id in image provider!" << id;
-    return QPixmap();
-  }
-
-
-  QModelIndex modelIndex = mModel->index( row, col );
+  QModelIndex modelIndex = mModel->index( row, 0 );
   QIcon icon = mModel->data( modelIndex, Qt::DecorationRole ).value<QIcon>();
 
-  if ( icon.isNull() || icon.availableSizes().isEmpty() )
+  if ( icon.isNull() )
   {
     qDebug() << "Empty icon in image provider!" << id;
     return QPixmap();
   }
 
-  QSize iconSize = icon.availableSizes().at( 0 );
+  QSize iconSize( requestedSize );
+  if ( iconSize.isEmpty() )
+  {
+    // fallback size
+    iconSize = QSize( 30 * mDpr, 30 * mDpr );
+  }
+
   QPixmap pixmap = icon.pixmap( iconSize );
 
   size->setHeight( pixmap.height() );
@@ -79,10 +66,15 @@ QPixmap ModelPixmapProvider::requestPixmap( const QString &id, QSize *size, cons
   return pixmap;
 }
 
-void ModelPixmapProvider::setModel( QAbstractItemModel *model )
+void LayerTreeFlatModelPixmapProvider::setModel( LayerTreeFlatModel *model )
 {
   if ( mModel != model )
   {
     mModel = model;
   }
+}
+
+void LayerTreeFlatModelPixmapProvider::reset()
+{
+  mModel = nullptr;
 }

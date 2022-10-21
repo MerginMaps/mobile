@@ -1044,6 +1044,8 @@ FeatureLayerPair RecordingMapTool::getFeatureLayerPair()
   if ( mActiveLayer && featureIsValid )
   {
     mActiveFeature.setGeometry( mRecordedGeometry );
+    QgsAttributes attrs( mActiveFeature.fields().count() );
+    mActiveFeature.setAttributes( attrs );
     return FeatureLayerPair( mActiveFeature, mActiveLayer );
   }
 

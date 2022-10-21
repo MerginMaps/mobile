@@ -6,6 +6,8 @@
         <file>arrows-move.svg</file>
         <file>back.svg</file>
         <file>backv2.svg</file>
+        <file>baseline-edit-24px.svg</file>
+        <file>baseline-gps_off-24px.svg</file>
         <file>check.svg</file>
         <file>cloud-upload.svg</file>
         <file>combobox.svg</file>
@@ -34,19 +36,31 @@
         <file>gps_marker_no_position.svg</file>
         <file>gps_marker_position.svg</file>
         <file>home.svg</file>
+        <file>ic_angle_down 2.svg</file>
         <file>ic_angle_down.svg</file>
+        <file>ic_angle_right 2.svg</file>
         <file>ic_angle_right.svg</file>
+        <file>ic_back 2.svg</file>
         <file>ic_back.svg</file>
+        <file>ic_camera 2.svg</file>
         <file>ic_camera.svg</file>
+        <file>ic_camera_alt_border 2.svg</file>
         <file>ic_camera_alt_border.svg</file>
+        <file>ic_check_black 2.svg</file>
         <file>ic_check_black.svg</file>
+        <file>ic_clear_black 2.svg</file>
         <file>ic_clear_black.svg</file>
+        <file>ic_clear_white 2.svg</file>
         <file>ic_clear_white.svg</file>
+        <file>ic_delete_forever_white 2.svg</file>
         <file>ic_delete_forever_white.svg</file>
+        <file>ic_gallery 2.svg</file>
         <file>ic_gallery.svg</file>
         <file>ic_gps_fixed_48px.svg</file>
         <file>ic_gps_not_fixed_48px.svg</file>
+        <file>ic_navigation_black 2.svg</file>
         <file>ic_navigation_black.svg</file>
+        <file>ic_save_white 2.svg</file>
         <file>ic_save_white.svg</file>
         <file>ic_today.svg</file>
         <file>info.svg</file>
@@ -56,19 +70,25 @@
         <file>lock.svg</file>
         <file>logo.png</file>
         <file>lutra_logo.svg</file>
+        <file>mActionFolder.svg</file>
         <file>mIconAnnotationLayer.svg</file>
+        <file>mIconGeometryCollectionLayer.svg</file>
         <file>mIconGroup.svg</file>
+        <file>mIconLayer.png</file>
         <file>mIconLineLayer.svg</file>
         <file>mIconMeshLayer.svg</file>
         <file>mIconPointCloudLayer.svg</file>
         <file>mIconPointLayer.svg</file>
         <file>mIconPolygonLayer.svg</file>
         <file>mIconRaster.svg</file>
+        <file>mIconRasterLayer.svg</file>
         <file>mIconTableLayer.svg</file>
         <file>mIconVectorTileLayer.svg</file>
         <file>mIndicatorBadLayer.svg</file>
         <file>map_styles.svg</file>
         <file>marker.svg</file>
+        <file>mergin.svg</file>
+        <file>mergin_color.svg</file>
         <file>minus.svg</file>
         <file>mm_logo_hor_pos.svg</file>
         <file>mm_logo_vert_pos.svg</file>
@@ -94,5 +114,21 @@
         <file>value_relation_open.svg</file>
         <file>yes.svg</file>
         <file>zoom_to_project.svg</file>
+    </qresource>
+    <qresource prefix="/images/themes/default">
+        <file>mActionFolder.svg</file>
+        <file>mIconAnnotationLayer.svg</file>
+        <file>mIconGeometryCollectionLayer.svg</file>
+        <file>mIconGroup.svg</file>
+        <file>mIconLayer.png</file>
+        <file>mIconLineLayer.svg</file>
+        <file>mIconMeshLayer.svg</file>
+        <file>mIconPointCloudLayer.svg</file>
+        <file>mIconPointLayer.svg</file>
+        <file>mIconPolygonLayer.svg</file>
+        <file>mIconRaster.svg</file>
+        <file>mIconVectorTileLayer.svg</file>
+        <file>mIndicatorBadLayer.svg</file>
+        <file>mIconTableLayer.svg</file>
     </qresource>
 </RCC>

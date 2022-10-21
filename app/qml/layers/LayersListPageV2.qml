@@ -22,8 +22,8 @@ Page {
   property string pageTitle: qsTr("Layers")
 
   signal close()
-  signal nodeClicked( var nodeIndex, string nodeType )
-  signal nodeVisibilityClicked( var nodeIndex )
+  signal nodeClicked( var node, string nodeType, string nodeName )
+  signal nodeVisibilityClicked( var node )
   signal searchboxClicked()
 
   Keys.onReleased: {
@@ -75,12 +75,14 @@ Page {
     model: root.model
     parentNodeIndex: root.parentNodeIndex
 
-    onNodeClicked: function( nodeIndex, nodeType ) {
-      root.nodeClicked( nodeIndex, nodeType )
+    imageProviderPath: "image://LayerTreeModelPixmapProvider/"
+
+    onNodeClicked: function( node, nodeType, nodeName ) {
+      root.nodeClicked( node, nodeType, nodeName )
     }
 
-    onNodeVisibilityClicked: function( nodeIndex ) {
-      root.nodeVisibilityClicked( nodeIndex )
+    onNodeVisibilityClicked: function( node ) {
+      root.nodeVisibilityClicked( node )
     }
   }
 }

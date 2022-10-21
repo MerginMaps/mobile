@@ -7,58 +7,57 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LAYERTREEMODEL_H
-#define LAYERTREEMODEL_H
+#ifndef LAYERTREEFLATMODEL_H
+#define LAYERTREEFLATMODEL_H
 
+#include <QStandardItemModel>
 #include <QObject>
 #include <qglobal.h>
 
-#include "qgslayertreemodel.h"
 #include "qgsproject.h"
 
-class LayerTreeModel : public QgsLayerTreeModel
+#include "layer/layertreemodel.h"
+
+class LayerTreeFlatModel : public QStandardItemModel
 {
     Q_OBJECT
 
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
 
   public:
-
     enum Roles
     {
-      Node = Qt::UserRole + 1,
-      NodeType,
-      NodePath,
-      NodeIsVisible,
-      SerializedNode
+      // copy roles from layer tree model
+      Node = LayerTreeModel::Node,
+      NodeType = LayerTreeModel::NodeType,
+      NodePath = LayerTreeModel::NodePath,
+      NodeIsVisible = LayerTreeModel::NodeIsVisible,
+      SerializedNode = LayerTreeModel::SerializedNode
     };
     Q_ENUM( Roles );
 
-    explicit LayerTreeModel( QObject *parent = nullptr );
-    virtual ~LayerTreeModel();
+    LayerTreeFlatModel( QObject *parent = nullptr );
+    virtual ~LayerTreeFlatModel();
 
-    QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
     QHash<int, QByteArray> roleNames() const override;
 
     QgsProject *qgsProject() const;
     void setQgsProject( QgsProject *newQgsProject );
 
-    QgsLayerTreeModel *qgsModel() const;
-
-    QString serializeNode( QgsLayerTreeNode *node ) const;
-    QgsLayerTreeNode *deserializeNode( const QString &nodeId ) const;
-
     Q_INVOKABLE void reset();
+
+  public slots:
+    void populate();
 
   signals:
     void qgsProjectChanged( QgsProject *qgsProject );
+
     void modelInitialized();
 
-  protected slots:
-    void setupModel();
-
   private:
+    std::unique_ptr<LayerTreeModel> mLayerTreeModel;
+
     QgsProject *mQgsProject = nullptr; // not owned
 };
 
-#endif // LAYERTREEMODEL_H
+#endif // LAYERTREEFLATMODEL_H

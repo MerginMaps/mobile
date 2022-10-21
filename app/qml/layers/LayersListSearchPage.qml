@@ -21,8 +21,9 @@ Page {
   property var parentNodeIndex: null
 
   signal close()
+  signal nodeClicked( var node, string nodeType, string nodeName )
   signal searchTextChanged( string searchText )
-  signal nodeClicked( var nodeIndex, string nodeType )
+  signal nodeVisibilityClicked( var node )
 
   Keys.onReleased: {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
@@ -70,8 +71,14 @@ Page {
     model: root.model
     parentNodeIndex: root.parentNodeIndex
 
-    onNodeClicked: function( nodeIndex, nodeType ) {
-      root.nodeClicked( nodeIndex, nodeType )
+    imageProviderPath: "image://LayerTreeFlatModelPixmapProvider/"
+
+    onNodeClicked: function( node, nodeType, nodeName ) {
+      root.nodeClicked( node, nodeType, nodeName )
+    }
+
+    onNodeVisibilityClicked: function( node ) {
+      root.nodeVisibilityClicked( node )
     }
   }
 

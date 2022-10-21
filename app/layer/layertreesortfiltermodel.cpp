@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,13 +8,46 @@
  ***************************************************************************/
 
 #include "layertreesortfiltermodel.h"
+#include "qgslayertree.h"
+
 #include "QDebug"
 
 LayerTreeSortFilterModel::LayerTreeSortFilterModel( QObject *parent )
   : QSortFilterProxyModel{parent}
 {
-  setRecursiveFilteringEnabled( true );
   setFilterCaseSensitivity( Qt::CaseInsensitive );
+}
+
+bool LayerTreeSortFilterModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
+{
+  if ( mLayerTreeModel )
+  {
+    QModelIndex modelIndex = mLayerTreeModel->index( source_row, 0, source_parent );
+
+    QgsLayerTreeNode *node = mLayerTreeModel->index2node( modelIndex );
+
+    if ( node && QgsLayerTree::isLayer( node ) )
+    {
+      QgsLayerTreeLayer *layerLeaf = QgsLayerTree::toLayer( node );
+
+      if ( layerLeaf )
+      {
+        QgsMapLayer *layer = layerLeaf->layer();
+
+        if ( layer )
+        {
+          bool isPrivate = layer->flags() & QgsMapLayer::LayerFlag::Private;
+
+          if ( isPrivate )
+          {
+            return false;
+          }
+        }
+      }
+    }
+  }
+
+  return QSortFilterProxyModel::filterAcceptsRow( source_row, source_parent );
 }
 
 LayerTreeModel *LayerTreeSortFilterModel::layerTreeModel() const
@@ -64,16 +97,21 @@ QModelIndex LayerTreeSortFilterModel::getModelIndex( int row, int column, const 
   return index( row, column, parent );
 }
 
-QgsLayerTreeNode *LayerTreeSortFilterModel::getNode( QModelIndex modelIndex ) const
+QModelIndex LayerTreeSortFilterModel::node2index( QgsLayerTreeNode *node ) const
 {
-  if ( !mLayerTreeModel )
+  if ( !node )
   {
-    return nullptr;
+    return QModelIndex();
   }
 
-  QModelIndex sourceModelIndex = mapToSource( modelIndex );
+  QModelIndex srcIndex = mLayerTreeModel->node2index( node );
 
-  return mLayerTreeModel->node( sourceModelIndex );
+  if ( !srcIndex.isValid() )
+  {
+    return QModelIndex();
+  }
+
+  return mapFromSource( srcIndex );
 }
 
 void LayerTreeSortFilterModel::onSourceModelInitialized()

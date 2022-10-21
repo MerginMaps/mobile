@@ -7,28 +7,31 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MODELPIXMAPPROVIDER_H
-#define MODELPIXMAPPROVIDER_H
+#ifndef LAYERTREEMODELPIXMAPPROVIDER_H
+#define LAYERTREEMODELPIXMAPPROVIDER_H
 
-#include "QtCore/qabstractitemmodel.h"
 #include <QQuickImageProvider>
 #include <QObject>
 #include <qglobal.h>
 
-class ModelPixmapProvider : public QObject, public QQuickImageProvider
+#include "layer/layertreemodel.h"
+
+class LayerTreeModelPixmapProvider : public QObject, public QQuickImageProvider
 {
     Q_OBJECT
 
   public:
-    explicit ModelPixmapProvider( QObject *parent = nullptr );
-    virtual ~ModelPixmapProvider();
+    explicit LayerTreeModelPixmapProvider( QObject *parent = nullptr );
+    virtual ~LayerTreeModelPixmapProvider();
 
     QPixmap requestPixmap( const QString &id, QSize *, const QSize & ) override;
 
-    Q_INVOKABLE void setModel( QAbstractItemModel *model );
+    Q_INVOKABLE void setModel( LayerTreeModel *model );
+    Q_INVOKABLE void reset();
 
   private:
-    QAbstractItemModel *mModel = nullptr; // not owned
+    qreal mDpr = 1;
+    LayerTreeModel *mModel = nullptr; // not owned
 };
 
-#endif // MODELPIXMAPPROVIDER_H
+#endif // LAYERTREEMODELPIXMAPPROVIDER_H

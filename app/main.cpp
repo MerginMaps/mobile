@@ -99,14 +99,17 @@
 #include "position/abstractpositionprovider.h"
 #include "synchronizationmanager.h"
 #include "synchronizationerror.h"
-#include "modelpixmapprovider.h"
 
 #include "maptools/abstractmaptool.h"
 #include "maptools/recordingmaptool.h"
 #include "maptools/splittingmaptool.h"
 
 #include "layer/layertreemodel.h"
+#include "layer/layertreemodelpixmapprovider.h"
 #include "layer/layertreesortfiltermodel.h"
+#include "layer/layertreeflatmodel.h"
+#include "layer/layertreeflatmodelpixmapprovider.h"
+#include "layer/layertreeflatsortfiltermodel.h"
 
 #ifndef NDEBUG
 // #include <QQmlDebuggingEnabler>
@@ -279,8 +282,6 @@ void initDeclarative()
   qRegisterMetaType< QgsCoordinateFormatter::Format >( "QgsCoordinateFormatter::Format" );
   qRegisterMetaType< QVariant::Type >( "QVariant::Type" );
   qRegisterMetaType< QgsVertexId >( "QgsVertexId" );
-//  qRegisterMetaType< QAbstractItemModel* >( "QAbstractItemModel*" );
-//  qmlRegisterUncreatableType<QAbstractItemModel>("QtExtra", 1, 0, "","Registered, because of Qt bug");
   qmlRegisterAnonymousType<QAbstractItemModel>( "lc", 1 );
 
   qRegisterMetaType< Vertex >( "Vertex" );
@@ -300,6 +301,8 @@ void initDeclarative()
   qmlRegisterType< SnapUtils >( "lc", 1, 0, "SnapUtils" );
   qmlRegisterType< LayerTreeModel >( "lc", 1, 0, "LayerTreeModel" );
   qmlRegisterType< LayerTreeSortFilterModel >( "lc", 1, 0, "LayerTreeSortFilterModel" );
+  qmlRegisterType< LayerTreeFlatModel >( "lc", 1, 0, "LayerTreeFlatModel" );
+  qmlRegisterType< LayerTreeFlatSortFilterModel >( "lc", 1, 0, "LayerTreeFlatSortFilterModel" );
   qmlRegisterType< GuidelineController >( "lc", 1, 0, "GuidelineController" );
   qmlRegisterType< FeaturesModel >( "lc", 1, 0, "FeaturesModel" );
   qmlRegisterType< RelationFeaturesModel >( "lc", 1, 0, "RelationFeaturesModel" );
@@ -481,7 +484,8 @@ int main( int argc, char *argv[] )
 
   SynchronizationManager syncManager( ma.get() );
 
-  ModelPixmapProvider *layerTreePixmapProvider( new ModelPixmapProvider );
+  LayerTreeModelPixmapProvider *layerTreeModelPixmapProvider( new LayerTreeModelPixmapProvider );
+  LayerTreeFlatModelPixmapProvider *layerTreeFlatModelPixmapProvider( new LayerTreeFlatModelPixmapProvider );
 
   // build position kit, save active provider to QSettings and load previously active provider
   PositionKit pk;
@@ -600,8 +604,10 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__positionKit", &pk );
 
   // add image provider to pass QIcons/QImages from C++ to QML
-  engine.rootContext()->setContextProperty( "__layerTreePixmapProvider", layerTreePixmapProvider );
-  engine.addImageProvider( QLatin1String( "LayerTreePixmapProvider" ), layerTreePixmapProvider );
+  engine.rootContext()->setContextProperty( "__layerTreeModelPixmapProvider", layerTreeModelPixmapProvider );
+  engine.addImageProvider( QLatin1String( "LayerTreeModelPixmapProvider" ), layerTreeModelPixmapProvider );
+  engine.rootContext()->setContextProperty( "__layerTreeFlatModelPixmapProvider", layerTreeFlatModelPixmapProvider );
+  engine.addImageProvider( QLatin1String( "LayerTreeFlatModelPixmapProvider" ), layerTreeFlatModelPixmapProvider );
 
 #ifdef HAVE_BLUETOOTH
   engine.rootContext()->setContextProperty( "__haveBluetooth", true );

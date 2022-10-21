@@ -7,51 +7,44 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LAYERTREESORTFILTERMODEL_H
-#define LAYERTREESORTFILTERMODEL_H
+#ifndef LAYERTREEFLATSORTFILTERMODEL_H
+#define LAYERTREEFLATSORTFILTERMODEL_H
 
 #include <QSortFilterProxyModel>
+#include <QObject>
 #include <qglobal.h>
 
-#include "qgslayertreenode.h"
+#include "layer/layertreeflatmodel.h"
 
-#include "layer/layertreemodel.h"
-
-class LayerTreeSortFilterModel : public QSortFilterProxyModel
+class LayerTreeFlatSortFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
     Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression NOTIFY searchExpressionChanged )
-    Q_PROPERTY( LayerTreeModel *layerTreeModel READ layerTreeModel WRITE setLayerTreeModel NOTIFY layerTreeModelChanged )
+    Q_PROPERTY( LayerTreeFlatModel *layerTreeFlatModel READ layerTreeFlatModel WRITE setLayerTreeFlatModel NOTIFY layerTreeFlatModelChanged )
 
   public:
-
-    explicit LayerTreeSortFilterModel( QObject *parent = nullptr );
-    virtual ~LayerTreeSortFilterModel();
+    explicit LayerTreeFlatSortFilterModel( QObject *parent = nullptr );
+    virtual ~LayerTreeFlatSortFilterModel();
 
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
-
-    LayerTreeModel *layerTreeModel() const;
-    void setLayerTreeModel( LayerTreeModel *newLayerTreeModel );
 
     const QString &searchExpression() const;
     void setSearchExpression( const QString &newSearchExpression );
 
-    Q_INVOKABLE QModelIndex getModelIndex( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
-
-    // Returns index to passed node
-    Q_INVOKABLE QModelIndex node2index( QgsLayerTreeNode *node ) const;
+    LayerTreeFlatModel *layerTreeFlatModel() const;
+    void setLayerTreeFlatModel( LayerTreeFlatModel *newLayerTreeFlatModel );
 
   public slots:
     void onSourceModelInitialized();
 
   signals:
-    void layerTreeModelChanged( LayerTreeModel *layerTreeModel );
     void searchExpressionChanged( const QString &searchExpression );
+    void layerTreeFlatModelChanged( LayerTreeFlatModel *layerTreeFlatModel );
 
   private:
-    LayerTreeModel *mLayerTreeModel = nullptr;
     QString mSearchExpression;
+    LayerTreeFlatModel *mLayerTreeFlatModel = nullptr;
 };
 
-#endif // LAYERTREESORTFILTERMODEL_H
+#endif // LAYERTREEFLATSORTFILTERMODEL_H
