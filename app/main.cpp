@@ -110,6 +110,8 @@
 #include "layer/layertreeflatmodel.h"
 #include "layer/layertreeflatmodelpixmapprovider.h"
 #include "layer/layertreeflatsortfiltermodel.h"
+#include "layer/layerdetaildata.h"
+#include "layer/layerdetaillegendimageprovider.h"
 
 #ifndef NDEBUG
 // #include <QQmlDebuggingEnabler>
@@ -302,6 +304,7 @@ void initDeclarative()
   qmlRegisterType< LayerTreeSortFilterModel >( "lc", 1, 0, "LayerTreeSortFilterModel" );
   qmlRegisterType< LayerTreeFlatModel >( "lc", 1, 0, "LayerTreeFlatModel" );
   qmlRegisterType< LayerTreeFlatSortFilterModel >( "lc", 1, 0, "LayerTreeFlatSortFilterModel" );
+  qmlRegisterType< LayerDetailData >( "lc", 1, 0, "LayerDetailData" );
   qmlRegisterType< MapThemesModel >( "lc", 1, 0, "MapThemesModel" );
   qmlRegisterType< GuidelineController >( "lc", 1, 0, "GuidelineController" );
   qmlRegisterType< FeaturesModel >( "lc", 1, 0, "FeaturesModel" );
@@ -485,6 +488,7 @@ int main( int argc, char *argv[] )
 
   LayerTreeModelPixmapProvider *layerTreeModelPixmapProvider( new LayerTreeModelPixmapProvider );
   LayerTreeFlatModelPixmapProvider *layerTreeFlatModelPixmapProvider( new LayerTreeFlatModelPixmapProvider );
+  LayerDetailLegendImageProvider *layerDetailLegendImageProvider( new LayerDetailLegendImageProvider );
 
   // build position kit, save active provider to QSettings and load previously active provider
   PositionKit pk;
@@ -605,6 +609,8 @@ int main( int argc, char *argv[] )
   engine.addImageProvider( QLatin1String( "LayerTreeModelPixmapProvider" ), layerTreeModelPixmapProvider );
   engine.rootContext()->setContextProperty( "__layerTreeFlatModelPixmapProvider", layerTreeFlatModelPixmapProvider );
   engine.addImageProvider( QLatin1String( "LayerTreeFlatModelPixmapProvider" ), layerTreeFlatModelPixmapProvider );
+  engine.rootContext()->setContextProperty( "__layerDetailLegendImageProvider", layerDetailLegendImageProvider );
+  engine.addImageProvider( QLatin1String( "LayerDetailLegendImageProvider" ), layerDetailLegendImageProvider );
 
 #ifdef HAVE_BLUETOOTH
   engine.rootContext()->setContextProperty( "__haveBluetooth", true );

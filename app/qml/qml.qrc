@@ -98,7 +98,7 @@
         <file>form/FeatureToolbar.qml</file>
         <file>form/FormWrapper.qml</file>
         <file>form/PreviewPanel.qml</file>
-        <file>layers/FeaturesListV2.qml</file>
+        <file>layers/FeaturesListPageV2.qml</file>
         <file>layers/LayerDetail.qml</file>
         <file>layers/LayersListV2.qml</file>
         <file>main.qml</file>

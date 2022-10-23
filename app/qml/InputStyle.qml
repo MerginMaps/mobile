@@ -18,7 +18,7 @@ QtObject {
     property color fontColorWhite: "#FFFFFF"
     property color panelBackground2: "#C6CCC7"
     property color activeButtonColor: "#006146"
-    property color activeButtonColorOrange: "#FD9626"
+    property color actionColor: "#FD9626"
     property color invalidButtonColor: "red"
     property color learnMoreLinkColor: "darkblue"
 
@@ -53,10 +53,12 @@ QtObject {
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
     property real rowHeightHeader: scale(64)
+    property real rowHeightListEntry: scale(64)
     property real rowHeightMedium: scale(45)
     property real rowHeightSmall: scale(20)
     property real fieldHeight: scale(54)
     property real mapBtnHeight: scale(40)
+    property real bigGap: scale(45)
     property real smallGap: scale(25)
     property real tinyGap: scale(5)
     property real delegateBtnHeight: rowHeight * 0.8
@@ -85,11 +87,14 @@ QtObject {
     property real formSpacing: 10 * __dp
 
     property real listMargins: 10 * __dp
+    property real listMarginsSmall: 5 * __dp
 
     property real circleRadius: 100
 
     property real iconSizeMedium: 25 * __dp
     property real iconSizeLarge: 30 * __dp
+    property real switchWidth: scale( 45 )
+    property real switchHeight: scale( 25 )
 
     // icons
     property string cameraIcon: "qrc:/add_photo.svg"
@@ -99,6 +104,7 @@ QtObject {
     property string backIconV2: "qrc:/backv2.svg"
     property string checkIcon: "qrc:/check.svg"
     property string plusIcon: "qrc:/plus.svg"
+    property string plusIconV2: "qrc:/plusv2.svg"
     property string minusIcon: "qrc:/minus.svg"
     property string noIcon: "qrc:/no.svg"
     property string yesIcon: "qrc:/yes.svg"

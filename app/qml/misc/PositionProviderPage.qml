@@ -260,8 +260,8 @@ Page {
         height: parent.height
         source: InputStyle.plusIcon
 
-        fontColor: InputStyle.activeButtonColorOrange
-        iconColor: InputStyle.activeButtonColorOrange
+        fontColor: InputStyle.actionColor
+        iconColor: InputStyle.actionColor
 
         leftPadding: InputStyle.panelMargin
 

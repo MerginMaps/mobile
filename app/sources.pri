@@ -1,4 +1,6 @@
 SOURCES += \
+    $$PWD/layer/layerdetaildata.cpp \
+    $$PWD/layer/layerdetaillegendimageprovider.cpp \
 attributes/attributecontroller.cpp \
 attributes/attributedata.cpp \
 attributes/attributeformmodel.cpp \
@@ -64,6 +66,8 @@ valuerelationfeaturesmodel.cpp
 
 
 HEADERS += \
+    $$PWD/layer/layerdetaildata.h \
+    $$PWD/layer/layerdetaillegendimageprovider.h \
 attributes/attributecontroller.h \
 attributes/attributedata.h \
 attributes/attributeformmodel.h \

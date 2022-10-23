@@ -52,14 +52,6 @@ Item {
     }
   ]
 
-  Component.onCompleted: {
-    if ( featuresModel )
-    {
-      if ( featuresModel.layerFeaturesCount() > featuresModel.featuresLimit )
-        __inputUtils.showNotification( qsTr( "Showing only the first %1 features" ).arg( featuresModel.featuresLimit ) )
-    }
-  }
-
   Page {
     id: featuresPage
 

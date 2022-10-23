@@ -51,7 +51,7 @@ Item {
           }
 
           height: InputStyle.borderSize
-          color: InputStyle.panelBackgroundDark
+          color: InputStyle.panelBackgroundLight
         }
 
         MouseArea {
