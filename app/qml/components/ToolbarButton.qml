@@ -62,7 +62,6 @@ Rectangle {
       }
     }
 
-
     Text {
       width: parent.width
 

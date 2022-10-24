@@ -32,9 +32,6 @@ ApplicationWindow {
     visibility: __appwindowvisibility
     title: "Mergin Maps" // Do not translate
 
-    onFocusObjectChanged: console.log("Focus has", object)
-    onActiveFocusItemChanged: console.log("Active focus item changed", activeFocusItem)
-
     Item {
         id: stateManager
         state: "view"

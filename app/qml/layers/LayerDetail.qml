@@ -238,6 +238,8 @@ Page {
       Item {
         id: featuresButtonParent
 
+        property bool isSelected: content.currentIndex === 0
+
         Layout.fillWidth: true
         Layout.fillHeight: true
 
@@ -246,7 +248,9 @@ Page {
         MMComponents.ToolbarButton {
 
           text: qsTr( "Features" )
-          imageSource: InputStyle.tableV2Icon
+
+          fontColor: featuresButtonParent.isSelected ? InputStyle.fontColorWhite : InputStyle.secondaryFontColor
+          imageSource: featuresButtonParent.isSelected ? InputStyle.tableV2Icon : InputStyle.tableInactiveV2Icon
 
           anchors.centerIn: parent
 
@@ -261,6 +265,15 @@ Page {
       Item {
         id: layerInfoButtonParent
 
+        property bool isSelected: {
+          if ( featuresButtonParent.visible ) {
+            if ( content.currentIndex === 0 ) {
+              return false
+            }
+          }
+          return true
+        }
+
         Layout.fillWidth: true
         Layout.fillHeight: true
 
@@ -269,7 +282,9 @@ Page {
         MMComponents.ToolbarButton {
 
           text: qsTr( "Layer info" )
-          imageSource: InputStyle.fileInfoIcon
+
+          fontColor: layerInfoButtonParent.isSelected ? InputStyle.fontColorWhite : InputStyle.secondaryFontColor
+          imageSource: layerInfoButtonParent.isSelected ? InputStyle.fileInfoIcon : InputStyle.fileInfoInactiveIcon
 
           anchors.centerIn: parent
 

@@ -31,6 +31,7 @@
         <file>eyev2.svg</file>
         <file>file.svg</file>
         <file>file_info.svg</file>
+        <file>file_info_inactive.svg</file>
         <file>gallery.svg</file>
         <file>gps_direction.svg</file>
         <file>gps_marker_no_position.svg</file>
@@ -85,6 +86,7 @@
         <file>mIconTableLayer.svg</file>
         <file>mIconVectorTileLayer.svg</file>
         <file>mIndicatorBadLayer.svg</file>
+        <file>map_search.svg</file>
         <file>map_styles.svg</file>
         <file>marker.svg</file>
         <file>mergin.svg</file>
@@ -97,6 +99,7 @@
         <file>no.svg</file>
         <file>plus-big.svg</file>
         <file>plus.svg</file>
+        <file>plusv2.svg</file>
         <file>project.svg</file>
         <file>qrcode.svg</file>
         <file>scissors.svg</file>
@@ -107,6 +110,7 @@
         <file>stop.svg</file>
         <file>sync.svg</file>
         <file>table.svg</file>
+        <file>table_inactivev2.svg</file>
         <file>tablev2.svg</file>
         <file>trash.svg</file>
         <file>undo.svg</file>
@@ -114,7 +118,6 @@
         <file>value_relation_open.svg</file>
         <file>yes.svg</file>
         <file>zoom_to_project.svg</file>
-        <file>plusv2.svg</file>
     </qresource>
     <qresource prefix="/images/themes/default">
         <file>mActionFolder.svg</file>
@@ -128,8 +131,8 @@
         <file>mIconPointLayer.svg</file>
         <file>mIconPolygonLayer.svg</file>
         <file>mIconRaster.svg</file>
+        <file>mIconTableLayer.svg</file>
         <file>mIconVectorTileLayer.svg</file>
         <file>mIndicatorBadLayer.svg</file>
-        <file>mIconTableLayer.svg</file>
     </qresource>
 </RCC>

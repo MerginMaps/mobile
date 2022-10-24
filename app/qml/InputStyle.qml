@@ -119,7 +119,10 @@ QtObject {
     property url eyeIconV2: "qrc:/eyev2.svg"
     property url eyeSlashIconV2: "qrc:/eye_slashv2.svg"
     property url tableV2Icon: "qrc:/tablev2.svg"
+    property url tableInactiveV2Icon: "qrc:/table_inactivev2.svg"
     property url fileInfoIcon: "qrc:/file_info.svg"
+    property url fileInfoInactiveIcon: "qrc:/file_info_inactive.svg"
+    property url mapSearchIcon: "qrc:/map_search.svg"
 
     property string valueRelationIcon: "qrc:/value_relation_open.svg"
     property string comboboxIcon: "qrc:/combobox.svg"

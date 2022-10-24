@@ -171,7 +171,7 @@ Item {
                 id: layersBtn
                 width: mainPanel.itemSize
                 text: qsTr("Layers")
-                imageSource: InputStyle.vectorPolygonIcon
+                imageSource: InputStyle.mapSearchIcon
 
                 onActivated: {
                   rootMenu.close()
@@ -361,7 +361,7 @@ Item {
                 rowHeight: height
                 width: parent.width
                 contentText: qsTr("Layers")
-                imageSource: InputStyle.vectorPolygonIcon
+                imageSource: InputStyle.mapSearchIcon
             }
 
             onClicked: {
