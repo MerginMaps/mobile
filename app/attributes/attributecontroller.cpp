@@ -476,21 +476,36 @@ void AttributeController::acquireId()
   if ( !mFeatureLayerPair.layer() )
     return;
 
-  startEditing();
   QgsFeature feat = mFeatureLayerPair.feature();
-  if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
-  {
-    QgsMessageLog::logMessage( tr( "Feature could not be added" ),
-                               QStringLiteral( "Input" ),
-                               Qgis::Critical );
+  bool featureIsNotYetAdded = FID_IS_NULL( feat.id() );
 
+  startEditing();
+
+  if ( featureIsNotYetAdded )
+  {
+    if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
+    {
+      QgsMessageLog::logMessage( tr( "Feature could not be added" ),
+                                 QStringLiteral( "Input" ),
+                                 Qgis::Critical );
+
+    }
+  }
+  else
+  {
+    if ( !mFeatureLayerPair.layer()->updateFeature( feat ) )
+      QgsMessageLog::logMessage( tr( "Cannot update feature" ),
+                                 QStringLiteral( "Input" ),
+                                 Qgis::Warning );
   }
 
   connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
+
   if ( !commit() )
   {
     emit commitFailed();
   }
+
   disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
 }
 
@@ -915,6 +930,7 @@ bool AttributeController::startEditing()
 bool AttributeController::commit()
 {
   Q_ASSERT( mFeatureLayerPair.layer() );
+
 
   if ( !mFeatureLayerPair.layer()->commitChanges() )
   {
