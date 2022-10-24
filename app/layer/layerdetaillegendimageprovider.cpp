@@ -22,10 +22,8 @@ LayerDetailLegendImageProvider::LayerDetailLegendImageProvider( QObject *parent 
 
 LayerDetailLegendImageProvider::~LayerDetailLegendImageProvider() = default;
 
-QImage LayerDetailLegendImageProvider::requestImage( const QString &id, QSize *size, const QSize &requestedSize )
+QImage LayerDetailLegendImageProvider::requestImage( const QString &, QSize *size, const QSize &requestedSize )
 {
-  qDebug() << "Asked for legend with id" << id << ", requested size:" << requestedSize;
-
   if ( !mLayerDetailData )
   {
     qDebug() << "Empty layer data ptr in image provider!";
@@ -41,8 +39,6 @@ QImage LayerDetailLegendImageProvider::requestImage( const QString &id, QSize *s
   }
 
   QSizeF minimumSize = renderer->minimumSize();
-
-  qDebug() << "Minimum size for this legend:" << minimumSize;
 
   // We want to take requested width from QML and minimum height from legend renderer.
   // However, minimum height is not calculated with dpr in mind, so we need to multiply
@@ -67,12 +63,6 @@ QImage LayerDetailLegendImageProvider::requestImage( const QString &id, QSize *s
   painter.setRenderHint( QPainter::Antialiasing );
 
   QgsRenderContext context = QgsRenderContext::fromQPainter( &painter );
-  qDebug() << "min width converted:" << context.convertFromMapUnits( minimumSize.width(), QgsUnitTypes::RenderPixels );
-
-
-//  qreal scale = legend.width() / ( minimumSize.width() * mDpr );
-
-  qDebug() << "Scale:" << scale << "ppi" << ppi << "ratio" << scale / ppi << "other way" << ppi / scale;
 
   painter.scale( 6, 6 );
 
@@ -84,45 +74,6 @@ QImage LayerDetailLegendImageProvider::requestImage( const QString &id, QSize *s
   size->setWidth( legend.width() );
 
   return legend;
-
-  // -----
-
-  //ls=QgsLegendSettings()
-  //tree=QgsLayerTree()
-  //lrl=tree.insertLayer(0, iface.activeLayer())
-  //ltm=QgsLayerTreeModel(tree)
-  //lr=QgsLegendRenderer(ltm, ls)
-  //lr.minimumSize()
-
-  //img=QImage(500,500, QImage.Format_ARGB32_Premultiplied)
-  //p=QPainter(img)
-  //p.setRenderHint(QPainter.Antialiasing)
-  //rc=QgsRenderContext.fromQPainter(p)
-
-  //p.scale(96/25.4, 96/25.4)
-
-  //ltl.setCustomProperty("legend/title-style", "hidden")
-
-  //img.fill(Qt.white)
-  //lr.drawLegend(rc)
-
-  //img.save("/tmp/legend.png")
-
-  // -----
-
-//  QSize iconSize( requestedSize );
-//  if ( iconSize.isEmpty() )
-//  {
-//    // fallback size
-//    iconSize = QSize( 30 * mDpr, 30 * mDpr );
-//  }
-
-//  QPixmap pixmap = icon.pixmap( iconSize );
-
-//  size->setHeight( pixmap.height() );
-//  size->setWidth( pixmap.width() );
-
-  //  return pixmap;
 }
 
 void LayerDetailLegendImageProvider::setDpr( qreal dpr )

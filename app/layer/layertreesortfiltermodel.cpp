@@ -10,8 +10,6 @@
 #include "layertreesortfiltermodel.h"
 #include "qgslayertree.h"
 
-#include "QDebug"
-
 LayerTreeSortFilterModel::LayerTreeSortFilterModel( QObject *parent )
   : QSortFilterProxyModel{parent}
 {

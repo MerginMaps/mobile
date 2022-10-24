@@ -13,8 +13,6 @@
 #include "qgslegendsettings.h"
 #include "qgslayertreemodel.h"
 
-#include "qdebug.h"
-
 LayerDetailData::LayerDetailData( QObject *parent )
   : QObject{parent}
 {
@@ -101,7 +99,6 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
 
   mLayerTreeNode->setCustomProperty( QStringLiteral( "legend/title-style" ), QStringLiteral( "hidden" ) );
 
-  qDebug() << "Initialized!";
   mLegendRenderer = std::make_unique<QgsLegendRenderer>( treeModel, legendSettings );
 }
 
