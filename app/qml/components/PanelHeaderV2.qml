@@ -27,11 +27,18 @@ Rectangle {
   Text {
     id: title
 
-    anchors.fill: parent
+    anchors {
+      left: parent.left
+      leftMargin: backicon.width + InputStyle.panelMargin
+      right: parent.right
+      rightMargin: backicon.width + InputStyle.panelMargin
+      top: parent.top
+      bottom: parent.bottom
+    }
 
     text: root.headerTitle
-    elide: Text.ElideMiddle
 
+    elide: Text.ElideMiddle
     font.bold: true
     color: InputStyle.fontColor
     font.pixelSize: InputStyle.fontPixelSizeHeader

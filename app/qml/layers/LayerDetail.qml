@@ -56,7 +56,7 @@ Page {
 
       header: MMComponents.PanelHeaderV2 {
         width: parent.width
-        color: InputStyle.panelBackgroundLight
+        color: InputStyle.clrPanelMain
 
         headerTitle: layerDetailData.name
 
@@ -64,7 +64,7 @@ Page {
       }
 
       background: Rectangle {
-        color: InputStyle.panelBackgroundLight
+        color: InputStyle.clrPanelMain
       }
 
       ScrollView {
@@ -104,7 +104,7 @@ Page {
               width: parent.width
               height: InputStyle.rowHeightMedium
 
-              color: InputStyle.clrPanelMain
+              color: InputStyle.panelBackgroundLight
               radius: InputStyle.cornerRadius
 
               RowLayout {
@@ -177,7 +177,7 @@ Page {
               width: parent.width
               height: parent.height - symbologyTitle.height
 
-              color: InputStyle.clrPanelMain
+              color: InputStyle.panelBackgroundLight
               radius: InputStyle.cornerRadius
 
               Item {
