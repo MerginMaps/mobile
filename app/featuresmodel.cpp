@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,6 +43,8 @@ void FeaturesModel::populate()
 
       mFeatures << FeatureLayerPair( f, mLayer );
     }
+
+    emit layerFeaturesCountChanged( layerFeaturesCount() );
 
     endResetModel();
   }
@@ -281,9 +283,11 @@ void FeaturesModel::setLayer( QgsVectorLayer *newLayer )
       connect( mLayer, &QgsMapLayer::willBeDeleted, this, &FeaturesModel::reset );
 
       connect( mLayer, &QgsVectorLayer::featureAdded, this, &FeaturesModel::populate );
-      connect( mLayer, &QgsVectorLayer::featureDeleted, this, &FeaturesModel::populate );
-      connect( mLayer, &QgsVectorLayer::dataChanged, this, &FeaturesModel::populate );
+      connect( mLayer, &QgsVectorLayer::featuresDeleted, this, &FeaturesModel::populate );
+      connect( mLayer, &QgsVectorLayer::attributeValueChanged, this, &FeaturesModel::populate );
     }
+
+    emit layerFeaturesCountChanged( layerFeaturesCount() );
   }
 }
 

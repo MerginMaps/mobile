@@ -30,7 +30,7 @@ Item {
   property var featuresModel: null
   property var preselectedFeatures: []
 
-  property string pageTitle: featuresModel ? featuresModel.layer.name + " (" + featuresModel.layerFeaturesCount() + ")" : ""
+  property string pageTitle: featuresModel ? featuresModel.layer.name + " (" + featuresModel.layerFeaturesCount + ")" : ""
 
   function finishSelection( featureIds )
   {

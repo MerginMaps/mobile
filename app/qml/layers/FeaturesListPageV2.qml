@@ -26,7 +26,7 @@ Page {
 
   header: MMComponents.PanelHeaderV2 {
     width: parent.width
-    headerTitle: root.selectedLayer ? root.selectedLayer.name + " (" + featuresModel.layerFeaturesCount() + ")": ""
+    headerTitle: root.selectedLayer ? root.selectedLayer.name + " (" + featuresModel.layerFeaturesCount + ")": ""
     onBackClicked: root.close()
   }
 
