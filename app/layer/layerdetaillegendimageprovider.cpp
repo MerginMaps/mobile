@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -12,6 +12,8 @@
 #include "qgsrendercontext.h"
 
 #include <QPainter>
+#include <QGuiApplication>
+#include <QScreen>
 
 #include "QDebug"
 
@@ -34,7 +36,7 @@ QImage LayerDetailLegendImageProvider::requestImage( const QString &, QSize *siz
 
   if ( !renderer )
   {
-    qDebug() << "Rendere is not initialized in image provider, returning empty image";
+    qDebug() << "Renderer is not initialized in image provider, returning empty image";
     return QImage();
   }
 
@@ -44,9 +46,9 @@ QImage LayerDetailLegendImageProvider::requestImage( const QString &, QSize *siz
   // However, minimum height is not calculated with dpr in mind, so we need to multiply
   // it by dpr.
 
-  qreal ppi = 96 * mDpr;
-  qreal minWidthMapUnits = minimumSize.width();
-  qreal minWidthPixels = minWidthMapUnits * ppi; // TODO: this is wrong conversion - from map units to pixels
+  QScreen *screen = QGuiApplication::screens().at( 0 );
+  qreal pdpi = screen->physicalDotsPerInch() * screen->devicePixelRatio();
+  qreal dpm = pdpi / 25.4;
 
   QSize desiredSize( requestedSize );
   if ( desiredSize.isEmpty() )
@@ -55,23 +57,21 @@ QImage LayerDetailLegendImageProvider::requestImage( const QString &, QSize *siz
     desiredSize = QSize( 60 * mDpr, 60 * mDpr );
   }
 
-  qreal scale = desiredSize.width() / minWidthPixels;
-
-  QImage legend = QImage( desiredSize.width(), minimumSize.height() * ppi * scale, QImage::Format_ARGB32_Premultiplied );
+  QImage legend = QImage( desiredSize.width(), minimumSize.height() * dpm, QImage::Format_ARGB32_Premultiplied );
 
   QPainter painter( &legend );
   painter.setRenderHint( QPainter::Antialiasing );
 
   QgsRenderContext context = QgsRenderContext::fromQPainter( &painter );
 
-  painter.scale( 6, 6 );
+  painter.scale( dpm, dpm );
 
-  legend.fill( Qt::white );
+  legend.fill( Qt::transparent );
 
   renderer->drawLegend( context );
 
-  size->setHeight( legend.height() );
-  size->setWidth( legend.width() );
+  size->setHeight( desiredSize.height() );
+  size->setWidth( desiredSize.width() );
 
   return legend;
 }
