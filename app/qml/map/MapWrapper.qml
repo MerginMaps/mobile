@@ -591,13 +591,18 @@ Item {
     id: backButton
 
     onClicked: {
-      if ( root.state === "edit" || root.state === "record" ) {
+      if ( root.state === "edit" || root.state === "record" || root.state == "recordInLayer") {
         if ( recordingToolsLoader.item.hasChanges() ) {
           cancelEditDialog.open()
         }
         else {
           recordingToolsLoader.item.discardChanges()
         }
+      }
+      else if ( root.state == "split" ) {
+        howtoSplittingBanner.hide()
+        root.splittingCanceled()
+        root.state = "view"
       }
     }
 
@@ -607,7 +612,7 @@ Item {
     anchors.left: parent.left
     anchors.leftMargin: InputStyle.smallGap
 
-    visible: root.state != "view"
+    visible: root.state == "record" || root.state == "edit" || root.state == "split" || root.state == "recordInLayer"
 
     content: Item {
 
@@ -671,7 +676,7 @@ Item {
         return qsTr( "Clicking ‘Yes’ discards your changes to the geometry. If you would like " +
                     "to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar." )
       }
-      else if ( root.state === "record" ) {
+      else if ( root.state === "record" || root.state === "recordInLayer" ) {
         return qsTr( "Clicking ‘Yes’ discards your new geometry and no feature will be saved. " +
                      "If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ " +
                      "in the toolbar." )
