@@ -475,7 +475,6 @@ int main( int argc, char *argv[] )
 
   // layer models
   LayersModel lm;
-  LayersProxyModel browseLpm( &lm, LayerModelTypes::BrowseDataLayerSelection );
   LayersProxyModel recordingLpm( &lm, LayerModelTypes::ActiveLayerSelection );
 
   ActiveLayer al;
@@ -596,7 +595,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
   engine.rootContext()->setContextProperty( "__recordingLayersModel", &recordingLpm );
-  engine.rootContext()->setContextProperty( "__browseDataLayersModel", &browseLpm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
   engine.rootContext()->setContextProperty( "__purchasing", purchasing.get() );
   engine.rootContext()->setContextProperty( "__projectWizard", &pw );

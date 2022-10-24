@@ -111,7 +111,7 @@ Item {
     }
 
     footer: FeaturesListPageToolbar {
-      id: browseDataToolbar
+      id: toolbar
 
       visible: root.toolbarVisible
 

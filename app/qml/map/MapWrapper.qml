@@ -67,7 +67,7 @@ Item {
     },
     State {
       // recording feature in specific layer without option to change the recording layer,
-      // used to create linked features in relations, value relations and browse data
+      // used to create linked features in relations and value relations
       name: "recordInLayer"
     },
     State {

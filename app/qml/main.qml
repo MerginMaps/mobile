@@ -269,7 +269,6 @@ ApplicationWindow {
           }
           __inputUtils.zoomToProject( __activeProject.qgsProject, map.mapSettings )
         }
-        onOpenBrowseDataClicked: browseDataPanel.visible = true
         onRecordClicked: {
             if ( __recordingLayersModel.rowCount() > 0 ) {
               stateManager.state = "record"
@@ -346,26 +345,6 @@ ApplicationWindow {
         }
 
         onClosed: stateManager.state = "view"
-    }
-
-    BrowseDataPanel {
-      id: browseDataPanel
-
-      width: window.width
-      height: window.height
-      focus: true
-
-      onFeatureSelectRequested: selectFeature( pair )
-
-      onCreateFeatureRequested: {
-        let newPair = __inputUtils.createFeatureLayerPair( selectedLayer, __inputUtils.emptyGeometry(), __variablesManager )
-        formsStackManager.openForm( newPair, "add", "form" )
-      }
-
-      onVisibleChanged: {
-        if ( !browseDataPanel.visible )
-          mainPanel.forceActiveFocus()
-      }
     }
 
     StackView {
@@ -596,9 +575,10 @@ ApplicationWindow {
       }
 
       onClosed: {
-        if ( browseDataPanel.visible ) {
-          browseDataPanel.refreshFeaturesData()
-          browseDataPanel.focus = true
+        if ( mapPanelsStackView.depth ) {
+          // this must be layers panel as it is the only thing on the stackview currently
+          const item = mapPanelsStackView.get( 0 )
+          item.forceActiveFocus()
         }
         else if ( gpsDataPageLoader.active )
         {

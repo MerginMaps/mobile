@@ -24,9 +24,6 @@ LayersProxyModel::LayersProxyModel( LayersModel *model, LayerModelTypes modelTyp
     case ActiveLayerSelection:
       filterFunction = [this]( QgsMapLayer * layer ) { return recordingAllowed( layer ); };
       break;
-    case BrowseDataLayerSelection:
-      filterFunction = [this]( QgsMapLayer * layer ) { return browsingAllowed( layer ); };
-      break;
     default:
       filterFunction = []( QgsMapLayer * ) { return true; };
       break;
@@ -59,17 +56,6 @@ bool LayersProxyModel::recordingAllowed( QgsMapLayer *layer ) const
 
   QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
   return ( vectorLayer && !vectorLayer->readOnly() && layerHasGeometry( vectorLayer ) && layerVisible( layer ) );
-}
-
-bool LayersProxyModel::browsingAllowed( QgsMapLayer *layer ) const
-{
-  if ( !layer || !layer->isValid() )
-    return false;
-
-  bool isIdentifiable = layer->flags() & QgsMapLayer::LayerFlag::Identifiable;
-  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-
-  return ( vectorLayer && isIdentifiable );
 }
 
 bool LayersProxyModel::layerVisible( QgsMapLayer *layer ) const

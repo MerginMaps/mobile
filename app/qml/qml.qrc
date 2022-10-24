@@ -4,8 +4,6 @@
         <file>AccountPage.qml</file>
         <file>AuthPanel.qml</file>
         <file>Banner.qml</file>
-        <file>BrowseDataLayersPanel.qml</file>
-        <file>BrowseDataPanel.qml</file>
         <file>CircularProgressBar.qml</file>
         <file>CodeReader.qml</file>
         <file>CodeReaderHandler.qml</file>

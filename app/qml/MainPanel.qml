@@ -21,7 +21,6 @@ Item {
     signal myLocationHold()
     signal recordClicked()
     signal openMapThemesClicked()
-    signal openBrowseDataClicked()
     signal openSettingsClicked()
     signal zoomToProject()
     signal localChangesClicked()
@@ -164,27 +163,8 @@ Item {
         }
 
         Item {
-            id: browseDataItem
             height: parent.height
             visible: panelRow.itemsToShow > 6
-            width: visible ? panelRow.calculatedItemWidth : 0
-
-            MainPanelButton {
-                id: browseDataBtn
-                width: mainPanel.itemSize
-                text: qsTr("Browse data")
-                imageSource: InputStyle.tableIcon
-
-                onActivated: {
-                  rootMenu.close()
-                  mainPanel.openBrowseDataClicked()
-                }
-            }
-        }
-
-        Item {
-            height: parent.height
-            visible: panelRow.itemsToShow > 7
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -203,7 +183,7 @@ Item {
         Item {
             id: mapThemesItem
             height: parent.height
-            visible: panelRow.itemsToShow > 8
+            visible: panelRow.itemsToShow > 7
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -223,7 +203,7 @@ Item {
         Item {
             id: settingsItem
             height: parent.height
-            visible: panelRow.itemsToShow > 9
+            visible: panelRow.itemsToShow > 8
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -367,25 +347,6 @@ Item {
 
             onClicked: {
                 localChangesBtn.activated()
-                rootMenu.close()
-            }
-        }
-
-        MenuItem {
-            width: parent.width
-            visible: !mapThemesItem.visible
-            height: visible ? mainPanel.itemSize : 0
-
-            ExtendedMenuItem {
-                height: mainPanel.itemSize
-                rowHeight: height
-                width: parent.width
-                contentText: qsTr("Browse features")
-                imageSource: InputStyle.tableIcon
-            }
-
-            onClicked: {
-                browseDataBtn.activated()
                 rootMenu.close()
             }
         }
