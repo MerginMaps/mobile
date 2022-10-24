@@ -148,7 +148,7 @@ Item {
         else if ( nodeType === "layer" )
         {
           const props = {
-            mapLayer: node
+            layerTreeNode: node
           }
 
           let item = pagesStackView.push( layerDetailsPage, props, StackView.PushTransition )
