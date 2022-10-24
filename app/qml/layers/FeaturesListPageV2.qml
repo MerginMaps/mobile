@@ -21,7 +21,7 @@ Page {
   property var selectedLayer: null
 
   signal close()
-  signal featureClicked( var featureId )
+  signal featureClicked( var featurePair )
   signal addFeatureClicked( var toLayer )
 
   header: MMComponents.PanelHeaderV2 {
@@ -120,6 +120,11 @@ Page {
         height: InputStyle.borderSize
         color: InputStyle.panelBackgroundLight
       }
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: root.featureClicked( model.FeaturePair )
+      }
     }
   }
 
@@ -166,7 +171,7 @@ Page {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: root.addFeatureClicked( root.layer )
+        onClicked: root.addFeatureClicked( root.selectedLayer )
       }
     }
   }

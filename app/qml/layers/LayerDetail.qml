@@ -19,6 +19,8 @@ Page {
   id: root
 
   signal close()
+  signal featureClicked( var featurePair )
+  signal addFeatureClicked( var targetLayer )
 
   property var layerTreeNode: null
 
@@ -157,7 +159,7 @@ Page {
             id: legendWrapper
 
             Layout.fillWidth: true
-            Layout.preferredHeight: legend.height + symbologyTitle.height
+            Layout.preferredHeight: legend.height + symbologyTitle.height + 2 * InputStyle.panelMarginV2
 
             spacing: InputStyle.panelSpacing
 
@@ -173,13 +175,13 @@ Page {
               id: legendItem
 
               width: parent.width
-              height: legend.height + 2 * InputStyle.panelMarginV2
+              height: parent.height - symbologyTitle.height
 
               color: InputStyle.clrPanelMain
               radius: InputStyle.cornerRadius
 
               Item {
-                height: childrenRect.height
+                height: parent.height - 2 * InputStyle.panelMarginV2
                 width: parent.width - 2 * InputStyle.panelMarginV2
 
                 x: legendItem.x + InputStyle.panelMarginV2
@@ -211,12 +213,12 @@ Page {
     FeaturesListPageV2 {
       selectedLayer: layerDetailData.vectorLayer
 
-      onFeatureClicked: function( featureId ) {
-
+      onFeatureClicked: function( featurePair ) {
+        root.featureClicked( featurePair )
       }
 
       onAddFeatureClicked: function ( toLayer ) {
-
+        root.addFeatureClicked( toLayer )
       }
 
       onClose: function() {

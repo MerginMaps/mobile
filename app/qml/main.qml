@@ -406,9 +406,24 @@ ApplicationWindow {
 
       LayersPanelV2 {
 
-        onClose: {
+        onClose: function() {
           mainPanel.forceActiveFocus()
           mapPanelsStackView.clear( StackView.PopTransition )
+        }
+
+        onSelectFeature: function( featurePair ) {
+          window.selectFeature( featurePair )
+
+          // close layers panel if the feature has geometry
+          if ( __inputUtils.isSpatialLayer( featurePair.layer ) )
+          {
+            close()
+          }
+        }
+
+        onAddFeature: function( targetLayer ) {
+          let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
+          formsStackManager.openForm( newPair, "add", "form" )
         }
       }
     }

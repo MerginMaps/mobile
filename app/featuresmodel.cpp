@@ -36,6 +36,11 @@ void FeaturesModel::populate()
 
     while ( it.nextFeature( f ) )
     {
+      if ( FID_IS_NEW( f.id() ) || FID_IS_NULL( f.id() ) )
+      {
+        continue; // ignore uncommited features
+      }
+
       mFeatures << FeatureLayerPair( f, mLayer );
     }
 
@@ -264,7 +269,7 @@ void FeaturesModel::setLayer( QgsVectorLayer *newLayer )
   {
     if ( mLayer )
     {
-      disconnect( mLayer, &QgsMapLayer::willBeDeleted, this, &FeaturesModel::reset );
+      disconnect( mLayer );
     }
 
     mLayer = newLayer;
@@ -274,6 +279,10 @@ void FeaturesModel::setLayer( QgsVectorLayer *newLayer )
     {
       // avoid dangling pointers to mLayer when switching projects
       connect( mLayer, &QgsMapLayer::willBeDeleted, this, &FeaturesModel::reset );
+
+      connect( mLayer, &QgsVectorLayer::featureAdded, this, &FeaturesModel::populate );
+      connect( mLayer, &QgsVectorLayer::featureDeleted, this, &FeaturesModel::populate );
+      connect( mLayer, &QgsVectorLayer::dataChanged, this, &FeaturesModel::populate );
     }
   }
 }

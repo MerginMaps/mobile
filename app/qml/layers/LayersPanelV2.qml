@@ -19,6 +19,9 @@ Item {
 
   signal close()
 
+  signal addFeature( var targetLayer )
+  signal selectFeature( var featurePair )
+
   LayerTreeSortFilterModel {
     id: layerTreeProxyModel
 
@@ -110,6 +113,14 @@ Item {
         else {
           root.close()
         }
+      }
+
+      onFeatureClicked: function( featurePair ) {
+        root.selectFeature( featurePair )
+      }
+
+      onAddFeatureClicked: function( targetLayer ) {
+        root.addFeature( targetLayer )
       }
     }
   }
