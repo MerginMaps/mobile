@@ -95,7 +95,7 @@ Page {
             spacing: InputStyle.panelSpacing
 
             Text {
-              text: qsTr( "Customisation" )
+              text: qsTr( "Settings" )
               font.bold: true
               font.pixelSize: InputStyle.fontPixelSizeNormal
             }
@@ -166,7 +166,7 @@ Page {
             Text {
               id: symbologyTitle
 
-              text: qsTr( "Symbology" )
+              text: qsTr( "Legend" )
               font.bold: true
               font.pixelSize: InputStyle.fontPixelSizeNormal
             }

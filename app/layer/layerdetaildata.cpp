@@ -13,8 +13,6 @@
 #include "qgslegendsettings.h"
 #include "qgslayertreemodel.h"
 
-#include "inpututils.h"
-
 LayerDetailData::LayerDetailData( QObject *parent )
   : QObject{parent}
 {
@@ -89,36 +87,18 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
     }
   } );
 
+
   // setup render context for legend
   QgsLegendSettings legendSettings;
-  qreal dpr = InputUtils::calculateDpRatio();
 
-  QgsLegendStyle symbolStyle;
-
-  QFont symbolFont( "Lato" );
-  symbolFont.setPixelSize( 35 * dpr );
-  symbolStyle.setFont( symbolFont );
-  symbolStyle.setMargin( QgsLegendStyle::Left, 2 ); // give some breathing space between symbol and label
-
-  legendSettings.setStyle( QgsLegendStyle::SymbolLabel, symbolStyle );
-
-  QgsLegendStyle subgroupStyle;
-
-  QFont font( "Lato" );
-  font.setPixelSize( 40 * dpr );
-  font.setBold( true );
-  subgroupStyle.setFont( font );
-
-  legendSettings.setStyle( QgsLegendStyle::Subgroup, subgroupStyle );
+  mLayerTreeNode->setCustomProperty( QStringLiteral( "legend/title-style" ), QStringLiteral( "hidden" ) );
 
   QgsLayerTree *tree = new QgsLayerTree();
   tree->setParent( this );
-  tree->insertLayer( 0, nodeLayer->layer() );
+  tree->insertChildNode( 0, nodeLayer->clone() );
 
   QgsLayerTreeModel *treeModel = new QgsLayerTreeModel( tree );
   treeModel->setParent( this );
-
-  mLayerTreeNode->setCustomProperty( QStringLiteral( "legend/title-style" ), QStringLiteral( "hidden" ) );
 
   mLegendRenderer = std::make_unique<QgsLegendRenderer>( treeModel, legendSettings );
 }

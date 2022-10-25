@@ -100,14 +100,14 @@ void TestLayerTree::testLayerTreeModel()
 
   QCOMPARE( spy1.count(), 1 );
 
-  QCOMPARE( model->rowCount(), 7 ); // including private layer
+  QCOMPARE( model->rowCount(), 8 ); // including private layer
 
   // let's check the sort model
   LayerTreeSortFilterModel *sortModel = new LayerTreeSortFilterModel();
 
   sortModel->setLayerTreeModel( model );
 
-  QCOMPARE( sortModel->rowCount(), 6 ); // excluding the private layer
+  QCOMPARE( sortModel->rowCount(), 7 ); // excluding the private layer
 
   // in QML sourceModel is set immediately, so we need to emit
   // the signal here (in order to sort) manually as we assign the source model later
@@ -135,14 +135,14 @@ void TestLayerTree::testLayerTreeFlatModel()
 
   QCOMPARE( spy1.count(), 1 );
 
-  QCOMPARE( model->rowCount(), 7 ); // including private layer
+  QCOMPARE( model->rowCount(), 10 ); // including private layer and child layers
 
   // let's check the sort model
   LayerTreeFlatSortFilterModel *sortModel = new LayerTreeFlatSortFilterModel();
 
   sortModel->setLayerTreeFlatModel( model );
 
-  QCOMPARE( sortModel->rowCount(), 6 ); // excluding the private layer
+  QCOMPARE( sortModel->rowCount(), 9 ); // excluding the private layer
 
   // in QML sourceModel is set immediately, so we need to emit
   // the signal here (in order to sort) manually as we assign the source model later
@@ -168,5 +168,93 @@ void TestLayerTree::testLayerTreeImageProviders()
   QgsProject *project = new QgsProject();
 
   QVERIFY( project->read( projectDir ) );
+
+  // Render legend
+
+  LayerDetailLegendImageProvider *legendImageProvider = new LayerDetailLegendImageProvider();
+
+  QgsLayerTree *root = project->layerTreeRoot();
+  QList<QgsLayerTreeNode *> nodes = root->children();
+
+  QgsLayerTreeNode *testedNode = nullptr;
+
+  for ( const auto node : nodes )
+  {
+    if ( node->name() == QStringLiteral( "FlySector" ) )
+    {
+      testedNode = node;
+      break;
+    }
+  }
+
+  LayerDetailData *data = new LayerDetailData();
+  data->setLayerTreeNode( testedNode );
+
+  legendImageProvider->setData( data );
+
+  QSize testOutSize;
+  QVERIFY( !legendImageProvider->requestImage( "0", &testOutSize, QSize( 100, 100 ) ).isNull() );
+  QVERIFY( !testOutSize.isNull() );
+
+  // Layer tree icons in tree view
+  LayerTreeModelPixmapProvider *treePixmapProvider = new LayerTreeModelPixmapProvider();
+
+  LayerTreeModel *treeModel = new LayerTreeModel();
+  treeModel->setQgsProject( project );
+
+  treePixmapProvider->setModel( treeModel );
+
+  testOutSize = QSize();
+  QPixmap out = treePixmapProvider->requestPixmap( "0", &testOutSize, QSize( 20, 20 ) );
+  QVERIFY( !out.isNull() );
+  QVERIFY( !testOutSize.isNull() );
+
+  // test (de)serialisation of nodes
+  testedNode = nullptr;
+  QList<QgsLayerTreeNode *> queue = root->children();
+  QgsLayerTreeNode *node = nullptr;
+
+  while ( !queue.isEmpty() )
+  {
+    node = queue.takeFirst();
+
+    if ( node->name() == QStringLiteral( "inner" ) )
+    {
+      testedNode = node;
+      break;
+    }
+
+    queue.append( node->children() );
+  }
+
+  QVERIFY( testedNode );
+
+  QModelIndex testedIndex = treeModel->node2index( testedNode );
+  QString serializedNode = treeModel->data( testedIndex, LayerTreeModel::SerializedNode ).toString();
+
+  QCOMPARE( serializedNode, QStringLiteral( "7-0-0" ) );
+
+  QgsLayerTreeNode *deserializedNode = treeModel->deserializeNode( serializedNode );
+  QCOMPARE( deserializedNode, testedNode );
+
+  // Layer tree icons in search (flat list)
+  LayerTreeFlatModelPixmapProvider *flatPixmapProvider = new LayerTreeFlatModelPixmapProvider();
+  LayerTreeFlatModel *flatModel = new LayerTreeFlatModel();
+  flatModel->setQgsProject( project );
+
+  flatPixmapProvider->setModel( flatModel );
+
+  testOutSize = QSize();
+  out = flatPixmapProvider->requestPixmap( "0", &testOutSize, QSize( 20, 20 ) );
+  QVERIFY( !out.isNull() );
+  QVERIFY( !testOutSize.isNull() );
+
+  // ---
+  delete treeModel;
+  delete flatModel;
+  delete data;
+  delete treePixmapProvider;
+  delete flatPixmapProvider;
+  delete legendImageProvider;
 }
 
