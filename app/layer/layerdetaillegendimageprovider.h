@@ -25,13 +25,10 @@ class LayerDetailLegendImageProvider : public QObject, public QQuickImageProvide
 
     QImage requestImage( const QString &id, QSize *size, const QSize &requestedSize ) override;
 
-    void setDpr( qreal dpr );
-
     Q_INVOKABLE void setData( LayerDetailData *layerDetailData );
     Q_INVOKABLE void reset();
 
   private:
-    qreal mDpr = 1;
     LayerDetailData *mLayerDetailData = nullptr; // not owned
 };
 

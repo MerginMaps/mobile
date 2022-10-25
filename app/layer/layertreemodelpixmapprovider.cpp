@@ -12,12 +12,10 @@
 #include <QIcon>
 #include <QPixmap>
 #include <QDebug>
-#include "inpututils.h"
 
 LayerTreeModelPixmapProvider::LayerTreeModelPixmapProvider( QObject *parent )
   : QObject( parent ), QQuickImageProvider( QQuickImageProvider::Pixmap )
 {
-  mDpr = InputUtils::calculateDpRatio();
 }
 
 LayerTreeModelPixmapProvider::~LayerTreeModelPixmapProvider()
@@ -60,7 +58,7 @@ QPixmap LayerTreeModelPixmapProvider::requestPixmap( const QString &id, QSize *s
   if ( iconSize.isEmpty() )
   {
     // fallback size
-    iconSize = QSize( 30 * mDpr, 30 * mDpr );
+    iconSize = QSize( 30, 30 );
   }
 
   QPixmap pixmap = icon.pixmap( iconSize );

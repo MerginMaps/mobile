@@ -54,7 +54,7 @@ QImage LayerDetailLegendImageProvider::requestImage( const QString &, QSize *siz
   if ( desiredSize.isEmpty() )
   {
     // fallback size
-    desiredSize = QSize( 60 * mDpr, 60 * mDpr );
+    desiredSize = QSize( 60, 60 );
   }
 
   QImage legend = QImage( desiredSize.width(), minimumSize.height() * dpm, QImage::Format_ARGB32_Premultiplied );
@@ -74,11 +74,6 @@ QImage LayerDetailLegendImageProvider::requestImage( const QString &, QSize *siz
   size->setWidth( desiredSize.width() );
 
   return legend;
-}
-
-void LayerDetailLegendImageProvider::setDpr( qreal dpr )
-{
-  mDpr = dpr;
 }
 
 void LayerDetailLegendImageProvider::setData( LayerDetailData *layerDetailData )

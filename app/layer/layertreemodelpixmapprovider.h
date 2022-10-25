@@ -30,7 +30,6 @@ class LayerTreeModelPixmapProvider : public QObject, public QQuickImageProvider
     Q_INVOKABLE void reset();
 
   private:
-    qreal mDpr = 1;
     LayerTreeModel *mModel = nullptr; // not owned
 };
 

@@ -26,13 +26,10 @@ class LayerTreeFlatModelPixmapProvider : public QObject, public QQuickImageProvi
 
     QPixmap requestPixmap( const QString &id, QSize *, const QSize & ) override;
 
-    void setDpr( qreal dpr );
-
     Q_INVOKABLE void setModel( LayerTreeFlatModel *model );
     Q_INVOKABLE void reset();
 
   private:
-    qreal mDpr = 1;
     LayerTreeFlatModel *mModel = nullptr; // not owned
 };
 
