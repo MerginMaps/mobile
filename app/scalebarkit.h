@@ -20,8 +20,7 @@
 #include <QString>
 
 #include "inpututils.h"
-
-class QgsQuickMapSettings;
+#include "qgsquickmapsettings.h"
 
 /**
  *

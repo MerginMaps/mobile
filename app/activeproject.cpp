@@ -17,7 +17,6 @@
 #include "qgslayertreelayer.h"
 #include "qgslayertreegroup.h"
 #include "qgsmapthemecollection.h"
-#include "qgsquickmapsettings.h"
 
 #include "activeproject.h"
 #include "coreutils.h"

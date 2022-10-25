@@ -13,8 +13,8 @@
 #include <QPixmap>
 #include <QDebug>
 
-LayerTreeFlatModelPixmapProvider::LayerTreeFlatModelPixmapProvider( QObject *parent )
-  : QObject( parent ), QQuickImageProvider( QQuickImageProvider::Pixmap )
+LayerTreeFlatModelPixmapProvider::LayerTreeFlatModelPixmapProvider()
+  : QQuickImageProvider( QQuickImageProvider::Pixmap )
 {
 }
 
