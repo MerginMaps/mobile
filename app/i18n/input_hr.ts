@@ -98,12 +98,12 @@ Kako bi izbrisali Vaš račun, unesite korisničko ime u polju ispod i kliknite 
 <context>
     <name>ActiveLayerPanel</name>
     <message>
-        <location filename="../qml/map/ActiveLayerPanel.qml" line="51"/>
+        <location filename="../qml/map/ActiveLayerPanel.qml" line="49"/>
         <source>Choose Active Layer</source>
         <translation>Odaberi aktivni sloj</translation>
     </message>
     <message>
-        <location filename="../qml/map/ActiveLayerPanel.qml" line="63"/>
+        <location filename="../qml/map/ActiveLayerPanel.qml" line="61"/>
         <source>Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.</source>
         <translation>Nije pronađen niti jedan sloj predviđen za snimanje u projektu. Pogledajte %1kako omogućiti sloj za snimanje u projektu%2.</translation>
     </message>
@@ -175,43 +175,39 @@ Kako bi izbrisali Vaš račun, unesite korisničko ime u polju ispod i kliknite 
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="518"/>
+        <location filename="../attributes/attributecontroller.cpp" line="536"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Zadana vrijednost izraza za %1:%2 sadrži grešku provjere sintakse: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="528"/>
+        <location filename="../attributes/attributecontroller.cpp" line="546"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Zadana vrijednost izraza za %1:%2 ima grešku procjene: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="539"/>
+        <location filename="../attributes/attributecontroller.cpp" line="557"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Vrijednost &quot;%1&quot; %4 nije mogla biti pretvorena u odgovarajuću vrijednost za polje %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="792"/>
+        <location filename="../attributes/attributecontroller.cpp" line="810"/>
         <source>Cannot delete feature</source>
         <translation>Nije moguće izbrisati objekt</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="480"/>
-        <location filename="../attributes/attributecontroller.cpp" line="816"/>
+        <location filename="../attributes/attributecontroller.cpp" line="488"/>
+        <location filename="../attributes/attributecontroller.cpp" line="864"/>
         <source>Feature could not be added</source>
         <translation>Objekt nije mogao biti dodan</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="854"/>
+        <location filename="../attributes/attributecontroller.cpp" line="497"/>
+        <location filename="../attributes/attributecontroller.cpp" line="875"/>
         <source>Cannot update feature</source>
         <translation>Nije moguće ažurirati objekt</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="868"/>
-        <source>Feature %1 could not be fetched after commit</source>
-        <translation>Objekt %1 nije mogao biti dohvaćen nakon izvršenja</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="890"/>
+        <location filename="../attributes/attributecontroller.cpp" line="919"/>
         <source>Cannot start editing</source>
         <translation>Nije moguće započeti izmjenu</translation>
     </message>
@@ -324,19 +320,6 @@ Kako bi izbrisali Vaš račun, unesite korisničko ime u polju ispod i kliknite 
     </message>
 </context>
 <context>
-    <name>BrowseDataLayersPanel</name>
-    <message>
-        <location filename="../qml/BrowseDataLayersPanel.qml" line="32"/>
-        <source>Layers</source>
-        <translation>Slojevi</translation>
-    </message>
-    <message>
-        <location filename="../qml/BrowseDataLayersPanel.qml" line="47"/>
-        <source>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</source>
-        <translation>Nema slojeva konfiguriranih za pregled atributa. Pogledajte %1kako prilagoditi proojekt%2.</translation>
-    </message>
-</context>
-<context>
     <name>CodeReader</name>
     <message>
         <location filename="../qml/CodeReader.qml" line="64"/>
@@ -398,12 +381,12 @@ Kako bi izbrisali Vaš račun, unesite korisničko ime u polju ispod i kliknite 
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="157"/>
+        <location filename="../qml/form/FeatureForm.qml" line="155"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>Obrazac nije spremljen, postoje greške u validaciji</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="158"/>
+        <location filename="../qml/form/FeatureForm.qml" line="156"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Objekt nije mogao biti spremljen, molimo provjerite sva obavezna polje</translation>
     </message>
@@ -426,32 +409,32 @@ Kako bi izbrisali Vaš račun, unesite korisničko ime u polju ispod i kliknite 
         <translation>Spremi</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="196"/>
         <source>Delete feature</source>
         <translation>Izbriši objekt</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="200"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Jeste li sigurni da želite izbrisati ovaj objekt?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="217"/>
         <source>Unsaved changes</source>
         <translation>Nespremljene promjene</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="221"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Do you want to save changes?</source>
         <translation>Želite li spremiti promjene?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="244"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="241"/>
         <source>Saving failed</source>
         <translation>Neuspješno spremanje</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="242"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>Neuspjeh prilikom spremanja. Ovo nije uobičajeno ponašanje. Molimo ponovno pokrenite aplikaciju i pokušajte ponovno - ukoliko to ne pomogne, molimo obratite se korisničkoj podršci.</translation>
     </message>
@@ -469,13 +452,13 @@ Kako bi izbrisali Vaš račun, unesite korisničko ime u polju ispod i kliknite 
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="106"/>
-        <location filename="../qml/form/FeatureToolbar.qml" line="146"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="105"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="147"/>
         <source>Edit geometry</source>
         <translation>Uredi geometriju</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="123"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="122"/>
         <location filename="../qml/form/FeatureToolbar.qml" line="159"/>
         <source>Advanced</source>
         <translation>Napredno</translation>
@@ -489,14 +472,6 @@ Kako bi izbrisali Vaš račun, unesite korisničko ime u polju ispod i kliknite 
         <location filename="../qml/form/FeatureToolbar.qml" line="192"/>
         <source>Redraw geometry</source>
         <translation>Ponovno iscrtaj geometriju</translation>
-    </message>
-</context>
-<context>
-    <name>FeaturesListPage</name>
-    <message>
-        <location filename="../qml/FeaturesListPage.qml" line="59"/>
-        <source>Showing only the first %1 features</source>
-        <translation>Prikaz samo prvih %1 objekata</translation>
     </message>
 </context>
 <context>
@@ -515,6 +490,14 @@ Kako bi izbrisali Vaš račun, unesite korisničko ime u polju ispod i kliknite 
         <location filename="../qml/FeaturesListPageToolbar.qml" line="85"/>
         <source>Remove link</source>
         <translation>Ukloni poveznicu</translation>
+    </message>
+</context>
+<context>
+    <name>FeaturesListPageV2</name>
+    <message>
+        <location filename="../qml/layers/FeaturesListPageV2.qml" line="155"/>
+        <source>Add feature</source>
+        <translation>Dodaj objekt</translation>
     </message>
 </context>
 <context>
@@ -783,12 +766,12 @@ Won&apos;t be added to the project.</source>
         <translation>korišteno dp mjerilo: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1926"/>
+        <location filename="../inpututils.cpp" line="1936"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Morate dodati barem %1 točku u svakom od segmenata.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1930"/>
+        <location filename="../inpututils.cpp" line="1940"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Morate dodati barem %1 točku(točaka).</translation>
     </message>
@@ -800,6 +783,50 @@ Won&apos;t be added to the project.</source>
         <location filename="../position/internalpositionprovider.cpp" line="110"/>
         <source>Connected</source>
         <translation>Povezano</translation>
+    </message>
+</context>
+<context>
+    <name>LayerDetail</name>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="98"/>
+        <source>Settings</source>
+        <translation>Postavke</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="130"/>
+        <source>Visible on map</source>
+        <translation>Vidljivo na karti</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="169"/>
+        <source>Legend</source>
+        <translation>Legenda</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="250"/>
+        <source>Features</source>
+        <translation>Objekti</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="284"/>
+        <source>Layer info</source>
+        <translation>Informacije o sloju</translation>
+    </message>
+</context>
+<context>
+    <name>LayersListPageV2</name>
+    <message>
+        <location filename="../qml/layers/LayersListPageV2.qml" line="22"/>
+        <source>Layers</source>
+        <translation>Slojevi</translation>
+    </message>
+</context>
+<context>
+    <name>LayersListSearchPage</name>
+    <message>
+        <location filename="../qml/layers/LayersListSearchPage.qml" line="37"/>
+        <source>Search layers</source>
+        <translation>Pretraži slojeve</translation>
     </message>
 </context>
 <context>
@@ -885,65 +912,61 @@ Won&apos;t be added to the project.</source>
     <name>MainPanel</name>
     <message>
         <location filename="../qml/MainPanel.qml" line="62"/>
-        <location filename="../qml/MainPanel.qml" line="259"/>
+        <location filename="../qml/MainPanel.qml" line="258"/>
         <source>Projects</source>
         <translation>Projekti</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="82"/>
-        <location filename="../qml/MainPanel.qml" line="278"/>
+        <location filename="../qml/MainPanel.qml" line="277"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="117"/>
-        <location filename="../qml/MainPanel.qml" line="307"/>
+        <location filename="../qml/MainPanel.qml" line="306"/>
         <source>Record</source>
         <translation>Snimaj</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="137"/>
-        <location filename="../qml/MainPanel.qml" line="326"/>
+        <location filename="../qml/MainPanel.qml" line="325"/>
         <source>Zoom to project</source>
         <translation>Zumiraj na projekt</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="155"/>
-        <location filename="../qml/MainPanel.qml" line="345"/>
+        <location filename="../qml/MainPanel.qml" line="344"/>
         <source>Local changes</source>
         <translation>Lokalne izmjene</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="174"/>
-        <source>Browse data</source>
-        <translation>Pregledaj podatke</translation>
+        <location filename="../qml/MainPanel.qml" line="173"/>
+        <location filename="../qml/MainPanel.qml" line="363"/>
+        <source>Layers</source>
+        <translation>Slojevi</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="194"/>
-        <location filename="../qml/MainPanel.qml" line="383"/>
+        <location filename="../qml/MainPanel.qml" line="193"/>
+        <location filename="../qml/MainPanel.qml" line="382"/>
         <source>Map themes</source>
         <translation>Teme karte</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="214"/>
-        <location filename="../qml/MainPanel.qml" line="402"/>
+        <location filename="../qml/MainPanel.qml" line="213"/>
+        <location filename="../qml/MainPanel.qml" line="401"/>
         <source>Settings</source>
         <translation>Postavke</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="231"/>
+        <location filename="../qml/MainPanel.qml" line="230"/>
         <source>More</source>
         <translation>Više</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="244"/>
+        <location filename="../qml/MainPanel.qml" line="243"/>
         <source>Menu</source>
         <translation>Meni</translation>
-    </message>
-    <message>
-        <location filename="../qml/MainPanel.qml" line="364"/>
-        <source>Browse features</source>
-        <translation>Pregledaj podatke</translation>
     </message>
 </context>
 <context>
@@ -954,7 +977,7 @@ Won&apos;t be added to the project.</source>
         <translation>Teme karte</translation>
     </message>
     <message>
-        <location filename="../qml/MapThemePanel.qml" line="69"/>
+        <location filename="../qml/MapThemePanel.qml" line="75"/>
         <source>Project has no themes defined. See %1how to setup themes%2.</source>
         <translation>Projekt nema definiranih tema. Pogledajte %1kako stvoriti teme%2.</translation>
     </message>
@@ -962,82 +985,82 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1109"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1114"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS trenutno nije dostupan</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="314"/>
+        <location filename="../qml/map/MapWrapper.qml" line="315"/>
         <source>Successfully synchronized</source>
         <translation>Uspješno sinkronizirano</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="328"/>
+        <location filename="../qml/map/MapWrapper.qml" line="329"/>
         <source>Up to date</source>
         <translation>Ažurno</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="337"/>
+        <location filename="../qml/map/MapWrapper.qml" line="338"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Netko upravo sinkronizira podatke, pokušati ćemo nešto kasnije</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="347"/>
+        <location filename="../qml/map/MapWrapper.qml" line="348"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>Došlo je do problema prilikom sinkronizacije, pokušati ćemo ponovno. Klikni za više</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="365"/>
+        <location filename="../qml/map/MapWrapper.qml" line="366"/>
         <source>Splitting done successfully</source>
         <translation>Razdvajanje uspješno izvršeno</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="381"/>
+        <location filename="../qml/map/MapWrapper.qml" line="382"/>
         <source>Create line to split the selected feature</source>
         <translation>Stvori liniju kako bi razdvojio odabrani objekt</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="397"/>
+        <location filename="../qml/map/MapWrapper.qml" line="398"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Odaberite jednu od točaka za početak izmjene geometrije</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="413"/>
+        <location filename="../qml/map/MapWrapper.qml" line="414"/>
         <source>Record new geometry for the feature</source>
         <translation>Snimi novu geometriju za objekt</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="552"/>
+        <location filename="../qml/map/MapWrapper.qml" line="553"/>
         <source>Details</source>
         <translation>Detalji</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="667"/>
+        <location filename="../qml/map/MapWrapper.qml" line="673"/>
         <source>Discard the changes?</source>
         <translation>Odustani od promjena?</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="670"/>
+        <location filename="../qml/map/MapWrapper.qml" line="676"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Odabirom &apos;Da&apos; odustaje se od promjena na geometriji. Ukoliko želite spremiti promjene, odaberite &apos;Ne&apos; a potom &apos;Gotovo&apos; na alatnoj traci.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="674"/>
+        <location filename="../qml/map/MapWrapper.qml" line="680"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Odabirom &apos;Da&apos; odustaje se od nove geometrije i niti jedan objekt neće biti spremljen. Ukoliko želite spremiti geometriju, odaberite &apos;Ne&apos; a potom &apos;Gotovo&apos; na alatnoj traci.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="740"/>
+        <location filename="../qml/map/MapWrapper.qml" line="746"/>
         <source>Connecting to %1</source>
         <translation>Povezivanje na %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="754"/>
+        <location filename="../qml/map/MapWrapper.qml" line="760"/>
         <source>Connected, no position</source>
         <translation>Povezano, nema pozicije</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="758"/>
+        <location filename="../qml/map/MapWrapper.qml" line="764"/>
         <source>Unknown accuracy</source>
         <translation>Nepoznata preciznost</translation>
     </message>
@@ -1607,13 +1630,13 @@ Stisnite &apos;Da&apos; za prijenos.</translation>
 <context>
     <name>RecordingTools</name>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="54"/>
+        <location filename="../qml/map/RecordingTools.qml" line="282"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Niska preciznost GPS pozicije (%1 m)&lt;br&gt;&lt;br&gt;Molimo osigurajte dobru vidljivost neba.</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="208"/>
-        <location filename="../qml/map/RecordingTools.qml" line="302"/>
+        <location filename="../qml/map/RecordingTools.qml" line="188"/>
+        <location filename="../qml/map/RecordingTools.qml" line="308"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS trenutno nije dostupan</translation>
     </message>
@@ -1660,6 +1683,14 @@ Stisnite &apos;Da&apos; za prijenos.</translation>
         <location filename="../qml/SearchBar.qml" line="72"/>
         <source>SEARCH</source>
         <translation>TRAŽI</translation>
+    </message>
+</context>
+<context>
+    <name>SearchBoxV2</name>
+    <message>
+        <location filename="../qml/components/SearchBoxV2.qml" line="59"/>
+        <source>Search</source>
+        <translation>Traži</translation>
     </message>
 </context>
 <context>
@@ -1782,11 +1813,6 @@ Stisnite &apos;Da&apos; za prijenos.</translation>
         <location filename="../qml/map/SplittingToolbar.qml" line="89"/>
         <source>Done</source>
         <translation>Završeno</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/SplittingToolbar.qml" line="103"/>
-        <source>Cancel</source>
-        <translation>Odustani</translation>
     </message>
 </context>
 <context>
@@ -1965,7 +1991,7 @@ Stisnite &apos;Da&apos; za prijenos.</translation>
     <name>main</name>
     <message>
         <location filename="../qml/main.qml" line="229"/>
-        <location filename="../qml/main.qml" line="286"/>
+        <location filename="../qml/main.qml" line="285"/>
         <source>No Changes</source>
         <translation>Nema promjena</translation>
     </message>
@@ -1980,32 +2006,32 @@ Stisnite &apos;Da&apos; za prijenos.</translation>
         <translation>Način GPS autocentriranja isključen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="275"/>
+        <location filename="../qml/main.qml" line="274"/>
         <source>No editable layers found.</source>
         <translation>Nema slojeva za uređivanje.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="550"/>
+        <location filename="../qml/main.qml" line="594"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Navođenje je onemogućeno zbog nedostupnosti lokacije!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="571"/>
+        <location filename="../qml/main.qml" line="615"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Neuspješna komunikacija sa Mergin servisom.%1Provjerite mrežne postavke i kvalitetu signala.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="618"/>
+        <location filename="../qml/main.qml" line="662"/>
         <source>There were issues loading the project.</source>
         <translation>Došlo je do problema prilikom učitavanja projekta</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="649"/>
+        <location filename="../qml/main.qml" line="693"/>
         <source>Press back again to quit the app</source>
         <translation>Odaberite &quot;nazad&quot; još jednom za izlaz iz aplikacije</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="491"/>
+        <location filename="../qml/main.qml" line="534"/>
         <source>PROJ Error</source>
         <translation>PROJ greška</translation>
     </message>
