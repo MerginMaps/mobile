@@ -33,6 +33,9 @@ class FeaturesModel : public QAbstractListModel
     // Limits maximum number of features that will be fetched from layer
     Q_PROPERTY( int featuresLimit READ featuresLimit NOTIFY featuresLimitChanged )
 
+    // Returns number of features in layer (property). Can be different number than rowCount() due to a searchExpression
+    Q_PROPERTY( int layerFeaturesCount READ layerFeaturesCount NOTIFY layerFeaturesCountChanged )
+
   public:
 
     enum ModelRoles
@@ -57,9 +60,6 @@ class FeaturesModel : public QAbstractListModel
      * \brief reloadFeatures reloads features from current layer
      */
     Q_INVOKABLE void reloadFeatures();
-
-    // Returns number of features in layer (property). Can be different number than rowCount() due to a searchExpression
-    Q_INVOKABLE int layerFeaturesCount() const;
 
     /**
      * \brief rowFromRoleValue finds feature with requested role and value, returns its row
@@ -87,11 +87,15 @@ class FeaturesModel : public QAbstractListModel
     void setSearchExpression( const QString &searchExpression );
     void setLayer( QgsVectorLayer *newLayer );
 
+    int layerFeaturesCount() const;
+
   signals:
 
     void featuresLimitChanged( int featuresLimit );
     void searchExpressionChanged( const QString &searchExpression );
     void layerChanged( QgsVectorLayer *layer );
+
+    void layerFeaturesCountChanged( int layerFeaturesCount );
 
   protected:
 

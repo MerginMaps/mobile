@@ -324,8 +324,8 @@ class InputUtils: public QObject
     Q_INVOKABLE static const QUrl getThemeIcon( const QString &name );
 
     //! returns icon for layer / feature based on its geometry
-    Q_INVOKABLE QString loadIconFromLayer( QgsMapLayer *layer );
-    Q_INVOKABLE QString loadIconFromFeature( QgsFeature feature );
+    Q_INVOKABLE static QString loadIconFromLayer( QgsMapLayer *layer );
+    Q_INVOKABLE static QString loadIconFromFeature( QgsFeature feature );
 
     /**
       * Returns url to field editor component for a feature form.
@@ -541,7 +541,7 @@ class InputUtils: public QObject
     static double ratherZeroThanNaN( double d );
 
     // Returns icon from QgsWkbType geometry
-    QString iconFromGeometry( const QgsWkbTypes::GeometryType &geometry );
+    static QString iconFromGeometry( const QgsWkbTypes::GeometryType &geometry );
 
     AndroidUtils *mAndroidUtils = nullptr; // not owned
 };

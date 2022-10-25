@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,8 +36,15 @@ void FeaturesModel::populate()
 
     while ( it.nextFeature( f ) )
     {
+      if ( FID_IS_NEW( f.id() ) || FID_IS_NULL( f.id() ) )
+      {
+        continue; // ignore uncommited features
+      }
+
       mFeatures << FeatureLayerPair( f, mLayer );
     }
+
+    emit layerFeaturesCountChanged( layerFeaturesCount() );
 
     endResetModel();
   }
@@ -264,7 +271,7 @@ void FeaturesModel::setLayer( QgsVectorLayer *newLayer )
   {
     if ( mLayer )
     {
-      disconnect( mLayer, &QgsMapLayer::willBeDeleted, this, &FeaturesModel::reset );
+      disconnect( mLayer );
     }
 
     mLayer = newLayer;
@@ -274,7 +281,13 @@ void FeaturesModel::setLayer( QgsVectorLayer *newLayer )
     {
       // avoid dangling pointers to mLayer when switching projects
       connect( mLayer, &QgsMapLayer::willBeDeleted, this, &FeaturesModel::reset );
+
+      connect( mLayer, &QgsVectorLayer::featureAdded, this, &FeaturesModel::populate );
+      connect( mLayer, &QgsVectorLayer::featuresDeleted, this, &FeaturesModel::populate );
+      connect( mLayer, &QgsVectorLayer::attributeValueChanged, this, &FeaturesModel::populate );
     }
+
+    emit layerFeaturesCountChanged( layerFeaturesCount() );
   }
 }
 

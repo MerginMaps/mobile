@@ -30,7 +30,7 @@ Item {
   property var featuresModel: null
   property var preselectedFeatures: []
 
-  property string pageTitle: featuresModel ? featuresModel.layer.name + " (" + featuresModel.layerFeaturesCount() + ")" : ""
+  property string pageTitle: featuresModel ? featuresModel.layer.name + " (" + featuresModel.layerFeaturesCount + ")" : ""
 
   function finishSelection( featureIds )
   {
@@ -51,14 +51,6 @@ Item {
       when: searchBar.text != ""
     }
   ]
-
-  Component.onCompleted: {
-    if ( featuresModel )
-    {
-      if ( featuresModel.layerFeaturesCount() > featuresModel.featuresLimit )
-        __inputUtils.showNotification( qsTr( "Showing only the first %1 features" ).arg( featuresModel.featuresLimit ) )
-    }
-  }
 
   Page {
     id: featuresPage
@@ -119,7 +111,7 @@ Item {
     }
 
     footer: FeaturesListPageToolbar {
-      id: browseDataToolbar
+      id: toolbar
 
       visible: root.toolbarVisible
 

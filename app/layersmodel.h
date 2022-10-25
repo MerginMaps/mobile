@@ -35,7 +35,7 @@ class LayersModel : public QgsMapLayerModel
       IconSourceRole,
       LayerIdRole
     };
-    Q_ENUMS( LayerRoles )
+    Q_ENUM( LayerRoles )
 
     //! Methods overridden from QgsMapLayerModel
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;

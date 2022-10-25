@@ -13,29 +13,25 @@
 
 #include "qgsvectorlayer.h"
 #include "qgslayertree.h"
+#include "qgslayertreemodel.h"
 #include "qgslayertreelayer.h"
 #include "qgslayertreegroup.h"
 #include "qgsmapthemecollection.h"
 #include "qgsquickmapsettings.h"
-#include "qgsapplication.h"
-#include "qgslogger.h"
 
 #include "activeproject.h"
-#include "inpututils.h"
 #include "coreutils.h"
 #include "autosynccontroller.h"
 
 const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 
-ActiveProject::ActiveProject( MapThemesModel &mapThemeModel
-                              , AppSettings &appSettings
+ActiveProject::ActiveProject( AppSettings &appSettings
                               , ActiveLayer &activeLayer
                               , LayersProxyModel &recordingLayerPM
                               , LocalProjectsManager &localProjectsManager
                               , QObject *parent ) :
 
   QObject( parent )
-  , mMapThemeModel( mapThemeModel )
   , mAppSettings( appSettings )
   , mActiveLayer( activeLayer )
   , mRecordingLayerPM( recordingLayerPM )
@@ -151,8 +147,9 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   {
     emit projectWillBeReloaded();
     mActiveLayer.resetActiveLayer();
+
     res = mQgsProject->read( filePath );
-    mMapThemeModel.reloadMapThemes( mQgsProject );
+
     mLocalProject = mLocalProjectsManager.projectFromProjectFilePath( filePath );
 
     if ( !mLocalProject.isValid() )
@@ -160,13 +157,10 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
       CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Could not find project in local projects: " ) + filePath );
     }
 
-    QgsVectorLayer *defaultLayer = mRecordingLayerPM.layerFromLayerName( mAppSettings.defaultLayer() );
-    if ( defaultLayer )
-      setActiveLayer( defaultLayer );
-    else
-      setActiveLayer( mRecordingLayerPM.firstUsableLayer() );
-
-    setMapSettingsLayers();
+    updateMapTheme();
+    updateRecordingLayers();
+    updateActiveLayer();
+    updateMapSettingsLayers();
 
     emit localProjectChanged( mLocalProject );
     emit projectReloaded( mQgsProject );
@@ -174,7 +168,9 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
 
   bool foundInvalidLayer = false;
   QStringList invalidLayers;
-  for ( QgsMapLayer *layer : mQgsProject->mapLayers() )
+  QMap<QString, QgsMapLayer *> projectLayers = mQgsProject->mapLayers();
+
+  for ( QgsMapLayer *layer : projectLayers )
   {
     if ( !layer->isValid() )
     {
@@ -270,19 +266,19 @@ void ActiveProject::setMapSettings( QgsQuickMapSettings *mapSettings )
     return;
 
   mMapSettings = mapSettings;
-  setMapSettingsLayers();
+  updateMapSettingsLayers();
 
   emit mapSettingsChanged();
 }
 
-void ActiveProject::setMapSettingsLayers() const
+void ActiveProject::updateMapSettingsLayers() const
 {
   if ( !mQgsProject || !mMapSettings ) return;
 
   QgsLayerTree *root = mQgsProject->layerTreeRoot();
 
   // Get list of all visible and valid layers in the project
-  QList< QgsMapLayer * > allLayers;
+  QList< QgsMapLayer * > visibleLayers;
   foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
   {
     if ( nodeLayer->isVisible() )
@@ -290,12 +286,12 @@ void ActiveProject::setMapSettingsLayers() const
       QgsMapLayer *layer = nodeLayer->layer();
       if ( layer && layer->isValid() )
       {
-        allLayers << layer;
+        visibleLayers << layer;
       }
     }
   }
 
-  mMapSettings->setLayers( allLayers );
+  mMapSettings->setLayers( visibleLayers );
   mMapSettings->setTransformContext( mQgsProject->transformContext() );
 }
 
@@ -316,22 +312,26 @@ AutosyncController *ActiveProject::autosyncController() const
 
 bool ActiveProject::layerVisible( QgsMapLayer *layer )
 {
-  if ( !layer ) return false;
-
-  // check if active layer is visible in current map theme too
-  QgsLayerTree *root = QgsProject::instance()->layerTreeRoot();
-  foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
+  if ( !mQgsProject || !layer )
   {
-    if ( nodeLayer->isVisible() )
-    {
-      QgsMapLayer *nLayer = nodeLayer->layer();
-      if ( nLayer && nLayer->isValid() && nLayer->id() == layer->id() )
-      {
-        return true;
-      }
-    }
+    return false;
   }
-  return false;
+
+  QgsLayerTree *root = mQgsProject->layerTreeRoot();
+
+  if ( !root )
+  {
+    return false;
+  }
+
+  QgsLayerTreeLayer *layerTree = root->findLayer( layer );
+
+  if ( !layerTree )
+  {
+    return false;
+  }
+
+  return layerTree->isVisible();
 }
 
 QString ActiveProject::projectLoadingLog() const
@@ -339,24 +339,124 @@ QString ActiveProject::projectLoadingLog() const
   return mProjectLoadingLog;
 }
 
-void ActiveProject::setActiveMapTheme( int index )
+void ActiveProject::updateMapTheme()
 {
-  QString name = mMapThemeModel.setActiveThemeIndex( index );
+  if ( !mQgsProject )
+  {
+    return;
+  }
 
-  // if active layer is no longer visible
+  QgsLayerTree *root = mQgsProject->layerTreeRoot();
+  QgsMapThemeCollection *collection = mQgsProject->mapThemeCollection();
+
+  if ( !root || !collection )
+  {
+    return;
+  }
+
+  QgsLayerTreeModel model( root );
+
+  QString themeCandidateName;
+  QStringList mapThemes = collection->mapThemes();
+
+  QgsMapThemeCollection::MapThemeRecord themeCandidate = collection->createThemeFromCurrentState( root, &model );
+
+  for ( const QString &themeName : mapThemes )
+  {
+    QgsMapThemeCollection::MapThemeRecord themeIterator = collection->mapThemeState( themeName );
+
+    if ( themeCandidate == themeIterator )
+    {
+      themeCandidateName = themeName;
+      break;
+    }
+  }
+
+  setMapTheme( themeCandidateName );
+}
+
+void ActiveProject::setMapTheme( const QString &themeName )
+{
+  if ( mMapTheme == themeName )
+  {
+    return;
+  }
+
+  if ( !mQgsProject )
+  {
+    return;
+  }
+
+  mMapTheme = themeName;
+
+  if ( !mMapTheme.isEmpty() )
+  {
+    QgsLayerTree *root = mQgsProject->layerTreeRoot();
+    QgsMapThemeCollection *collection = mQgsProject->mapThemeCollection();
+
+    if ( !root || !collection )
+    {
+      return;
+    }
+
+    QgsLayerTreeModel model( root );
+    collection->applyTheme( mMapTheme, root, &model );
+  }
+
+  emit mapThemeChanged( mMapTheme );
+
+  updateRecordingLayers(); // <- worth to decouple similar to map themes model decoupling
+  updateActiveLayer();
+  updateMapSettingsLayers();
+}
+
+void ActiveProject::updateActiveLayer()
+{
   if ( !layerVisible( mActiveLayer.layer() ) )
-    setActiveLayer( mRecordingLayerPM.firstUsableLayer() );
+  {
+    QgsMapLayer *defaultLayer = mRecordingLayerPM.layerFromLayerName( mAppSettings.defaultLayer() );
 
-  setMapSettingsLayers();
+    if ( !defaultLayer )
+    {
+      defaultLayer = mRecordingLayerPM.firstUsableLayer();
+    }
+
+    setActiveLayer( defaultLayer );
+  }
+}
+
+void ActiveProject::updateRecordingLayers()
+{
+  mRecordingLayerPM.refreshData();
 }
 
 void ActiveProject::setActiveLayer( QgsMapLayer *layer ) const
 {
   if ( !layer || !layer->isValid() )
+  {
     mActiveLayer.resetActiveLayer();
+  }
   else
   {
     mActiveLayer.setActiveLayer( layer );
     mAppSettings.setDefaultLayer( mActiveLayer.layerName() );
   }
+}
+
+void ActiveProject::switchLayerTreeNodeVisibility( QgsLayerTreeNode *node )
+{
+  if ( !node )
+    return;
+
+  node->setItemVisibilityChecked( !node->isVisible() );
+
+  updateMapTheme();
+  updateRecordingLayers(); // <- worth to decouple similar to map themes model decoupling
+  updateActiveLayer();
+  updateMapSettingsLayers();
+}
+
+const QString &ActiveProject::mapTheme() const
+{
+  return mMapTheme;
 }

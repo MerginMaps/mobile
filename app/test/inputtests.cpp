@@ -27,6 +27,7 @@
 #include "test/testcoreutils.h"
 #include "test/testimageutils.h"
 #include "test/testmaptools.h"
+#include "test/testlayertree.h"
 
 #if not defined APPLE_PURCHASING
 #include "test/testpurchasing.h"
@@ -171,6 +172,11 @@ int InputTests::runTest() const
   {
     TestMapTools maptoolsTest;
     nFailed = QTest::qExec( &maptoolsTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testLayerTree" )
+  {
+    TestLayerTree layerTreeTest;
+    nFailed = QTest::qExec( &layerTreeTest, mTestArgs );
   }
 #if not defined APPLE_PURCHASING
   else if ( mTestRequested == "--testPurchasing" )

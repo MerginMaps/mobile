@@ -10,10 +10,6 @@
 
 #include "activelayer.h"
 
-#include "qgsproject.h"
-#include "qgslayertree.h"
-#include "qgslayertreelayer.h"
-
 ActiveLayer::ActiveLayer() :
   mLayer( nullptr )
 {

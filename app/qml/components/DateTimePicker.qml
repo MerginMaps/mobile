@@ -199,7 +199,7 @@ Item {
           font.pixelSize: InputStyle.fontPixelSizeBig
           font.bold: true
 
-          color: InputStyle.activeButtonColorOrange
+          color: InputStyle.actionColor
           text: qsTr("OK")
         }
         MouseArea {
