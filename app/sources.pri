@@ -1,6 +1,4 @@
 SOURCES += \
-    $$PWD/layer/layerdetaildata.cpp \
-    $$PWD/layer/layerdetaillegendimageprovider.cpp \
 attributes/attributecontroller.cpp \
 attributes/attributedata.cpp \
 attributes/attributeformmodel.cpp \
@@ -10,6 +8,8 @@ attributes/attributetabmodel.cpp \
 attributes/attributetabproxymodel.cpp \
 attributes/rememberattributescontroller.cpp \
 attributes/fieldvalidator.cpp \
+layer/layerdetaildata.cpp \
+layer/layerdetaillegendimageprovider.cpp \
 layer/layertreemodel.cpp \
 layer/layertreemodelpixmapprovider.cpp \
 layer/layertreesortfiltermodel.cpp \
@@ -66,8 +66,6 @@ valuerelationfeaturesmodel.cpp
 
 
 HEADERS += \
-    $$PWD/layer/layerdetaildata.h \
-    $$PWD/layer/layerdetaillegendimageprovider.h \
 attributes/attributecontroller.h \
 attributes/attributedata.h \
 attributes/attributeformmodel.h \
@@ -77,6 +75,8 @@ attributes/attributetabmodel.h \
 attributes/attributetabproxymodel.h \
 attributes/rememberattributescontroller.h \
 attributes/fieldvalidator.h \
+layer/layerdetaildata.h \
+layer/layerdetaillegendimageprovider.h \
 layer/layertreemodel.h \
 layer/layertreemodelpixmapprovider.h \
 layer/layertreesortfiltermodel.h \
@@ -163,7 +163,8 @@ contains(DEFINES, INPUT_TEST) {
       test/testmodels.cpp \
       test/testcoreutils.cpp \
       test/testimageutils.cpp \
-      test/testmaptools.cpp
+      test/testmaptools.cpp \
+      test/testlayertree.cpp
 
   HEADERS += \
       test/inputtests.h \
@@ -184,7 +185,8 @@ contains(DEFINES, INPUT_TEST) {
       test/testmodels.h \
       test/testcoreutils.h \
       test/testimageutils.h \
-      test/testmaptools.h
+      test/testmaptools.h \
+      test/testlayertree.h
 }
 
 contains(DEFINES, APPLE_PURCHASING) {
