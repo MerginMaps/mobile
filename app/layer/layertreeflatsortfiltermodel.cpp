@@ -15,6 +15,7 @@ LayerTreeFlatSortFilterModel::LayerTreeFlatSortFilterModel( QObject *parent )
   : QSortFilterProxyModel{parent}
 {
   setFilterCaseSensitivity( Qt::CaseInsensitive );
+  setSortCaseSensitivity( Qt::CaseInsensitive );
 }
 
 LayerTreeFlatSortFilterModel::~LayerTreeFlatSortFilterModel() = default;

@@ -21,7 +21,6 @@ class LayerTreeSortFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
-    Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression NOTIFY searchExpressionChanged )
     Q_PROPERTY( LayerTreeModel *layerTreeModel READ layerTreeModel WRITE setLayerTreeModel NOTIFY layerTreeModelChanged )
 
   public:
@@ -34,11 +33,6 @@ class LayerTreeSortFilterModel : public QSortFilterProxyModel
     LayerTreeModel *layerTreeModel() const;
     void setLayerTreeModel( LayerTreeModel *newLayerTreeModel );
 
-    const QString &searchExpression() const;
-    void setSearchExpression( const QString &newSearchExpression );
-
-    Q_INVOKABLE QModelIndex getModelIndex( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
-
     // Returns index to passed node
     Q_INVOKABLE QModelIndex node2index( QgsLayerTreeNode *node ) const;
 
@@ -47,11 +41,9 @@ class LayerTreeSortFilterModel : public QSortFilterProxyModel
 
   signals:
     void layerTreeModelChanged( LayerTreeModel *layerTreeModel );
-    void searchExpressionChanged( const QString &searchExpression );
 
   private:
     LayerTreeModel *mLayerTreeModel = nullptr;
-    QString mSearchExpression;
 };
 
 #endif // LAYERTREESORTFILTERMODEL_H

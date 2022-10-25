@@ -1179,16 +1179,6 @@ bool InputUtils::isSpatialLayer( QgsVectorLayer *layer )
   return layer->isSpatial();
 }
 
-bool InputUtils::isVectorLayer( QgsMapLayer *layer )
-{
-  if ( !layer )
-  {
-    return false;
-  }
-
-  return ( layer->type() == QgsMapLayerType::VectorLayer );
-}
-
 qreal InputUtils::calculateScreenDpr()
 {
   const QList<QScreen *> screens = QGuiApplication::screens();
@@ -1806,42 +1796,18 @@ void InputUtils::zoomToProject( QgsProject *qgsProject, QgsQuickMapSettings *map
 
 QString InputUtils::loadIconFromLayer( QgsMapLayer *layer )
 {
-  if ( !layer || !layer->isValid() )
-    return QStringLiteral( "qrc:/mIndicatorBadLayer.svg" );
+  if ( !layer )
+    return QString();
 
   QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
 
-  QgsMapLayerType type = layer->type();
-
-  switch ( type )
+  if ( vectorLayer )
   {
-    case QgsMapLayerType::VectorLayer:
-    {
-      return iconFromGeometry( vectorLayer->geometryType() );
-    }
-    case QgsMapLayerType::RasterLayer:
-    {
-      return QStringLiteral( "qrc:/mIconRaster.svg" );
-    }
-    case QgsMapLayerType::AnnotationLayer:
-    {
-      return QStringLiteral( "qrc:/mIconAnnotationLayer.svg" );
-    }
-    case QgsMapLayerType::VectorTileLayer:
-    {
-      return QStringLiteral( "qrc:/mIconVectorTileLayer.svg" );
-    }
-    case QgsMapLayerType::PointCloudLayer:
-    {
-      return QStringLiteral( "qrc:/mIconPointCloudLayer.svg" );
-    }
-    case QgsMapLayerType::MeshLayer:
-    {
-      return QStringLiteral( "qrc:/mIconMeshLayer.svg" );
-    }
-    default:
-      return QString();
+    QgsWkbTypes::GeometryType geometry = vectorLayer->geometryType();
+    return iconFromGeometry( geometry );
   }
+  else
+    return QString( "qrc:/mIconRasterLayer.svg" );
 }
 
 QString InputUtils::loadIconFromFeature( QgsFeature feature )
@@ -1996,39 +1962,4 @@ void InputUtils::updateFeature( const FeatureLayerPair &pair )
   pair.layer()->updateFeature( f );
   pair.layer()->commitChanges();
   pair.layer()->triggerRepaint();
-}
-
-int InputUtils::rowFromIndex( const QModelIndex index )
-{
-  return index.row();
-}
-
-int InputUtils::colFromIndex( const QModelIndex index )
-{
-  return index.column();
-}
-
-QgsMapLayer *InputUtils::node2Layer( QgsLayerTreeNode *node )
-{
-  if ( !node )
-  {
-    return nullptr;
-  }
-
-  if ( QgsLayerTree::isLayer( node ) )
-  {
-    QgsLayerTreeLayer *layerNode = QgsLayerTree::toLayer( node );
-
-    if ( layerNode )
-    {
-      QgsMapLayer *layer = layerNode->layer();
-
-      if ( layer )
-      {
-        return layer;
-      }
-    }
-  }
-
-  return nullptr;
 }

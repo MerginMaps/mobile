@@ -13,7 +13,7 @@
 LayerTreeSortFilterModel::LayerTreeSortFilterModel( QObject *parent )
   : QSortFilterProxyModel{parent}
 {
-  setFilterCaseSensitivity( Qt::CaseInsensitive );
+  setSortCaseSensitivity( Qt::CaseInsensitive );
 }
 
 bool LayerTreeSortFilterModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
@@ -74,26 +74,6 @@ void LayerTreeSortFilterModel::setLayerTreeModel( LayerTreeModel *newLayerTreeMo
 }
 
 LayerTreeSortFilterModel::~LayerTreeSortFilterModel() = default;
-
-const QString &LayerTreeSortFilterModel::searchExpression() const
-{
-  return mSearchExpression;
-}
-
-void LayerTreeSortFilterModel::setSearchExpression( const QString &newSearchExpression )
-{
-  if ( mSearchExpression == newSearchExpression )
-    return;
-  mSearchExpression = newSearchExpression;
-  emit searchExpressionChanged( mSearchExpression );
-
-  setFilterFixedString( mSearchExpression );
-}
-
-QModelIndex LayerTreeSortFilterModel::getModelIndex( int row, int column, const QModelIndex &parent ) const
-{
-  return index( row, column, parent );
-}
 
 QModelIndex LayerTreeSortFilterModel::node2index( QgsLayerTreeNode *node ) const
 {
