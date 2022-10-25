@@ -15,15 +15,16 @@ QtObject {
     // Primary colors
     property color fontColor: "#006146"
     property color fontColorBright: "#679D70"
+    property color fontColorWhite: "#FFFFFF"
     property color panelBackground2: "#C6CCC7"
     property color activeButtonColor: "#006146"
-    property color activeButtonColorOrange: "#FD9626"
+    property color actionColor: "#FD9626"
     property color invalidButtonColor: "red"
     property color learnMoreLinkColor: "darkblue"
 
     // Secondary colors
     property color clrPanelMain: "white"
-    property color clrPanelBackground: fontColor
+    property color clrPanelBackground: "#006146"
     property color panelBackgroundDark: "#B3B3B3"
     property color panelBackgroundDarker: "#575757"
     property color panelBackgroundLight: "#E6E6E6"
@@ -45,20 +46,31 @@ QtObject {
     property int fontPixelSizeSmall: scaleFont(15)
     property int fontPixelSizeNormal: scaleFont(18)
     property int fontPixelSizeBig: scaleFont(21)
+    property real fontPixelSizeHeader: scaleFont(25)
 
     property int borderSize: Math.max( scale(1), 1 )
 
     property int panelMargin: scale(30)
     property real rowHeight: scale(64)
     property real rowHeightHeader: scale(64)
+    property real rowHeightListEntry: scale(64)
+    property real rowHeightMedium: scale(45)
     property real rowHeightSmall: scale(20)
     property real fieldHeight: scale(54)
     property real mapBtnHeight: scale(40)
+    property real bigGap: scale(45)
     property real smallGap: scale(25)
     property real tinyGap: scale(5)
     property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: scale(45)
     property real projectItemHeight: rowHeightHeader * 1.2
+
+    property real searchBoxV2Spacing: scale(10)
+    property real panelMarginV2: scale(15)
+    property real toolbarHeight: scale(64)
+    property real toolbarButtonSize: scale(50)
+
+    property real buttonClickArea: scale(15)
 
     property real closeBtnSize: scale(30)
 
@@ -70,19 +82,29 @@ QtObject {
     property real lowHighlightOpacity: 0.4
     property real highHighlightOpacity: 0.8
     property real cornerRadius: 8 * __dp
-    property real innerFieldMargin: 10 * __dp  // TODO rename fieldMargin
-    property real outerFieldMargin: 20 * __dp  // TODO change for PanelMargin
+    property real innerFieldMargin: 10 * __dp
+    property real outerFieldMargin: 20 * __dp
     property real formSpacing: 10 * __dp
 
+    property real listMargins: 10 * __dp
+    property real listMarginsSmall: 5 * __dp
+
     property real circleRadius: 100
+
+    property real iconSizeMedium: 25 * __dp
+    property real iconSizeLarge: 30 * __dp
+    property real switchWidth: scale( 45 )
+    property real switchHeight: scale( 25 )
 
     // icons
     property string cameraIcon: "qrc:/add_photo.svg"
     property string removeIcon: "qrc:/trash.svg"
     property string galleryIcon: "qrc:/gallery.svg"
     property string backIcon: "qrc:/back.svg"
+    property string backIconV2: "qrc:/backv2.svg"
     property string checkIcon: "qrc:/check.svg"
     property string plusIcon: "qrc:/plus.svg"
+    property string plusIconV2: "qrc:/plusv2.svg"
     property string minusIcon: "qrc:/minus.svg"
     property string noIcon: "qrc:/no.svg"
     property string yesIcon: "qrc:/yes.svg"
@@ -93,6 +115,14 @@ QtObject {
     property string detachIcon: "qrc:/unlink.svg"
     property string eyeIcon: "qrc:/eye.svg"
     property string eyeSlashIcon: "qrc:/eye-slash.svg"
+
+    property url eyeIconV2: "qrc:/eyev2.svg"
+    property url eyeSlashIconV2: "qrc:/eye_slashv2.svg"
+    property url tableV2Icon: "qrc:/tablev2.svg"
+    property url tableInactiveV2Icon: "qrc:/table_inactivev2.svg"
+    property url fileInfoIcon: "qrc:/file_info.svg"
+    property url fileInfoInactiveIcon: "qrc:/file_info_inactive.svg"
+    property url mapSearchIcon: "qrc:/map_search.svg"
 
     property string valueRelationIcon: "qrc:/value_relation_open.svg"
     property string comboboxIcon: "qrc:/combobox.svg"
@@ -138,6 +168,7 @@ QtObject {
     property string databaseIcon: "qrc:/database-solid.svg"
     property string lockIcon: "qrc:/lock.svg"
     property string searchIcon: "qrc:/search.svg"
+    property string searchIconV2: "qrc:/searchv2.svg"
     property string loadingIndicatorIcon: "qrc:/loadingindicator.svg"
     property string scissorsIcon: "qrc:/scissors.svg"
     property string eraserIcon: "qrc:/eraser.svg"

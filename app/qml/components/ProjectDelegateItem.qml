@@ -35,7 +35,7 @@ Rectangle {
   property color secondaryColor: InputStyle.fontColor
   property real itemMargin: InputStyle.panelMargin
 
-  property color iconColor: root.highlight ? root.primaryColor : InputStyle.activeButtonColorOrange
+  property color iconColor: root.highlight ? root.primaryColor : InputStyle.actionColor
   property real iconSize: height * 0.3
   property real borderWidth: 1 * __dp
   property real menuItemHeight: height * 0.8

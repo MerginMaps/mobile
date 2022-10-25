@@ -22,7 +22,6 @@
 enum LayerModelTypes
 {
   ActiveLayerSelection,
-  BrowseDataLayerSelection,
   AllLayers
 };
 
@@ -53,15 +52,12 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     QList<QgsMapLayer *> layers() const;
 
   public slots:
-    void onMapThemeChanged();
+    void refreshData();
 
   private:
 
     //! returns if input layer is capable of recording new features
     bool recordingAllowed( QgsMapLayer *layer ) const;
-
-    //! filters if input layer should be visible for browsing
-    bool browsingAllowed( QgsMapLayer *layer ) const;
 
     //! filters if input layer is visible in current map theme
     bool layerVisible( QgsMapLayer *layer ) const;

@@ -28,7 +28,7 @@ class ActiveLayer : public QObject
 
     Q_PROPERTY( QString layerId READ layerId NOTIFY activeLayerChanged )
     Q_PROPERTY( QString layerName READ layerName NOTIFY activeLayerChanged )
-    Q_PROPERTY( QgsMapLayer *layer WRITE setActiveLayer READ layer NOTIFY activeLayerChanged )
+    Q_PROPERTY( QgsMapLayer *layer READ layer NOTIFY activeLayerChanged )
     Q_PROPERTY( QgsVectorLayer *vectorLayer READ vectorLayer NOTIFY activeLayerChanged )
 
   public:
@@ -61,7 +61,7 @@ class ActiveLayer : public QObject
     void resetActiveLayer();
 
   private:
-    QgsMapLayer *mLayer;
+    QgsMapLayer *mLayer; // not owned
 };
 
 #endif // ACTIVELAYER_H

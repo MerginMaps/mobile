@@ -15,8 +15,6 @@
 
 #include "qgsproject.h"
 
-#include "inpututils.h"
-#include "mapthemesmodel.h"
 #include "appsettings.h"
 #include "activelayer.h"
 #include "layersproxymodel.h"
@@ -36,10 +34,11 @@ class ActiveProject: public QObject
     Q_PROPERTY( AutosyncController *autosyncController READ autosyncController NOTIFY autosyncControllerChanged )
     Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
+    Q_PROPERTY( QString mapTheme READ mapTheme WRITE setMapTheme NOTIFY mapThemeChanged )
+
   public:
     explicit ActiveProject(
-      MapThemesModel &mapThemeModel
-      , AppSettings &appSettings
+      AppSettings &appSettings
       , ActiveLayer &activeLayer
       , LayersProxyModel &recordingLayerPM
       , LocalProjectsManager &localProjectsManager
@@ -62,15 +61,22 @@ class ActiveProject: public QObject
     Q_INVOKABLE bool load( const QString &filePath );
 
     /**
-     * Updates active map theme.
-     * \param index Represents row number in the map theme model.
+     * Applies map theme with 'name' to currently loaded QGIS project
+     * Invalidates active layer if it is no longer visible
      */
-    Q_INVOKABLE void setActiveMapTheme( int index );
+    Q_INVOKABLE void setMapTheme( const QString &name );
 
     /**
      * setActiveLayer sets active layer from layer
      */
     Q_INVOKABLE void setActiveLayer( QgsMapLayer *layer ) const;
+
+    /**
+     * Switches visibility of node from off to on or vice versa
+     * Invalidates current map theme in case layer's visibility is not aligned with it
+     * Invalidates active layer in case active layer is no longer visible
+     */
+    Q_INVOKABLE void switchLayerTreeNodeVisibility( QgsLayerTreeNode *node );
 
     /**
      * mapSettings method returns mapsettings pointer
@@ -89,7 +95,7 @@ class ActiveProject: public QObject
     /**
      * setMapSettingsLayers reloads layer list from current project
      */
-    void setMapSettingsLayers() const;
+    void updateMapSettingsLayers() const;
 
     /**
      * layerVisible returns boolean if input layer is visible within current project
@@ -103,6 +109,8 @@ class ActiveProject: public QObject
 
     //! A File on this path represents that project is loading and exists only during the process.
     static const QString LOADING_FLAG_FILE_PATH;
+
+    const QString &mapTheme() const;
 
   signals:
     void qgsProjectChanged();
@@ -123,6 +131,8 @@ class ActiveProject: public QObject
 
     void syncActiveProject( const LocalProject &project );
 
+    void mapThemeChanged( const QString &mapTheme );
+
   public slots:
     // Reloads project if current project path matches given path (its the same project)
     bool reloadProject( QString projectDir );
@@ -133,10 +143,21 @@ class ActiveProject: public QObject
 
   private:
 
+    //! Tries to match current visible layers with some theme and if it fails, invalidates current map theme
+    void updateMapTheme();
+
+    /** Checks whether active (recording) layer is still visible,
+     *  if not, sets first available layer as active;
+     *  sets nullptr if there are no other available layers
+     */
+    void updateActiveLayer();
+
+    //! Reloads layers in 'recoring layers model'
+    void updateRecordingLayers();
+
     QgsProject *mQgsProject = nullptr;
     LocalProject mLocalProject;
 
-    MapThemesModel &mMapThemeModel;
     AppSettings &mAppSettings;
     ActiveLayer &mActiveLayer;
     LayersProxyModel &mRecordingLayerPM;
@@ -154,6 +175,7 @@ class ActiveProject: public QObject
     * otherwise used only for loading a new projects (evoked by a user).
     */
     bool forceLoad( const QString &filePath, bool force );
+    QString mMapTheme;
 };
 
 #endif // ACTIVEPROJECT_H

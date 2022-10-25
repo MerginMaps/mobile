@@ -12,7 +12,6 @@ import QtQuick.Controls
 
 // Required for iOS to get rid of "module "QtMultimedia" is not installed".
 // It looks like static QT plugins are not copied to the distribution
-
 import QtMultimedia
 import QtQml.Models
 import QtPositioning
@@ -24,6 +23,7 @@ import lc 1.0
 import "./map"
 import "./misc"
 import "./dialogs"
+import "./layers"
 
 ApplicationWindow {
     id: window
@@ -32,7 +32,6 @@ ApplicationWindow {
     height: __appwindowheight
     visibility: __appwindowvisibility
     title: "Mergin Maps" // Do not translate
-
 
     Item {
         id: stateManager
@@ -270,7 +269,6 @@ ApplicationWindow {
           }
           __inputUtils.zoomToProject( __activeProject.qgsProject, map.mapSettings )
         }
-        onOpenBrowseDataClicked: browseDataPanel.visible = true
         onRecordClicked: {
             if ( __recordingLayersModel.rowCount() > 0 ) {
               stateManager.state = "record"
@@ -289,6 +287,10 @@ ApplicationWindow {
           {
             __inputUtils.showNotification( qsTr( "No Changes" ) )
           }
+        }
+        onLayersClicked: {
+          let layerspanel = mapPanelsStackView.push( layersPanelComponent, {}, StackView.PushTransition )
+//          layerspanel.forceActiveFocus()
         }
     }
 
@@ -345,25 +347,63 @@ ApplicationWindow {
         onClosed: stateManager.state = "view"
     }
 
-    BrowseDataPanel {
-      id: browseDataPanel
+    StackView {
+      id: mapPanelsStackView
 
-      width: window.width
-      height: window.height
-      focus: true
+      //
+      // View that can show panels on top of the map,
+      // like layers panel, settings and similar
+      //
 
-      onFeatureSelectRequested: function( pair ) {
-        selectFeature( pair )
+      anchors.fill: parent
+
+      pushEnter: Transition {
+        YAnimator {
+          to: 0
+          from: mapPanelsStackView.height
+          duration: 400
+          easing.type: Easing.OutCubic
+        }
       }
 
-      onCreateFeatureRequested: {
-        let newPair = __inputUtils.createFeatureLayerPair( selectedLayer, __inputUtils.emptyGeometry(), __variablesManager )
-        formsStackManager.openForm( newPair, "add", "form" )
-      }
+      pushExit: Transition {}
 
-      onVisibleChanged: {
-        if ( !browseDataPanel.visible )
+      popEnter: Transition {}
+
+      popExit: Transition {
+        YAnimator {
+          to: mapPanelsStackView.height
+          from: 0
+          duration: 400
+          easing.type: Easing.OutCubic
+        }
+      }
+    }
+
+    Component {
+      id: layersPanelComponent
+
+      LayersPanelV2 {
+
+        onClose: function() {
           mainPanel.forceActiveFocus()
+          mapPanelsStackView.clear( StackView.PopTransition )
+        }
+
+        onSelectFeature: function( featurePair ) {
+          window.selectFeature( featurePair )
+
+          // close layers panel if the feature has geometry
+          if ( __inputUtils.isSpatialLayer( featurePair.layer ) )
+          {
+            close()
+          }
+        }
+
+        onAddFeature: function( targetLayer ) {
+          let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
+          formsStackManager.openForm( newPair, "add", "form" )
+        }
       }
     }
 
@@ -539,9 +579,10 @@ ApplicationWindow {
       }
 
       onClosed: {
-        if ( browseDataPanel.visible ) {
-          browseDataPanel.refreshFeaturesData()
-          browseDataPanel.focus = true
+        if ( mapPanelsStackView.depth ) {
+          // this must be layers panel as it is the only thing on the stackview currently
+          const item = mapPanelsStackView.get( 0 )
+          item.forceActiveFocus()
         }
         else if ( gpsDataPageLoader.active )
         {

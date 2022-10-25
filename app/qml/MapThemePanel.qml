@@ -15,8 +15,8 @@ import "."  // import InputStyle singleton
 import "./components"
 
 Drawer {
+    id: root
 
-    id: mapThemePanel
     visible: false
     modal: true
     interactive: false
@@ -30,7 +30,7 @@ Drawer {
       focus: true
       Keys.onReleased: function( event ) {
         if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-          mapThemePanel.close()
+          root.close()
         }
       }
     }
@@ -42,7 +42,7 @@ Drawer {
           color: InputStyle.panelBackgroundLight
           rowHeight: InputStyle.rowHeightHeader
           titleText: qsTr("Map Themes")
-          onBack: mapThemePanel.close()
+          onBack: root.close()
           withBackButton: true
           layer.enabled: true
           layer.effect: Shadow {}
@@ -50,12 +50,18 @@ Drawer {
 
     ListView {
         id: listView
-        height: mapThemePanel.height - header.height
+
+        height: root.height - header.height
         width: parent.width
         y: header.height
         implicitWidth: parent.width
         implicitHeight: contentHeight
-        model: __mapThemesModel
+
+        model: MapThemesModel {
+          id: mapThemesModel
+          qgsProject: __activeProject.qgsProject
+        }
+
         delegate: delegateItem
         clip: true
 
@@ -75,8 +81,26 @@ Drawer {
 
     Component {
         id: delegateItem
+
         Rectangle {
             id: itemContainer
+
+            property bool isSelected: __activeProject.mapTheme === model.display
+            property bool isOneBeforeSelected: {
+              if ( index + 1 >= mapThemesModel.rowCount() ) {
+                return false
+              }
+
+              const modelindex = mapThemesModel.index( index + 1, 0 )
+              const previousThemeName = mapThemesModel.data( modelindex, 0 )
+
+              if ( previousThemeName === __activeProject.mapTheme ) {
+                return true
+              }
+
+              return false
+            }
+
             width: listView.cellWidth
             height: listView.cellHeight
             anchors.leftMargin: InputStyle.panelMargin
@@ -86,23 +110,35 @@ Drawer {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                  __activeProject.setActiveMapTheme( index )
-                  mapThemePanel.close()
+                  __activeProject.mapTheme = model.display
+                  root.close()
                 }
             }
 
             ExtendedMenuItem {
                 id: item
                 panelMargin: InputStyle.panelMargin
-                contentText: name
+                contentText: model.display
                 imageSource: InputStyle.mapThemesIcon
                 anchors.rightMargin: panelMargin
                 anchors.leftMargin: panelMargin
-                highlight: __mapThemesModel.activeThemeIndex === index
-                showBorder: __mapThemesModel.activeThemeIndex - 1 !== index && __mapThemesModel.activeThemeIndex !== index
+                highlight: itemContainer.isSelected
+                // Do not show border line for selected item and one before selected
+                showBorder: !itemContainer.isSelected && !itemContainer.isOneBeforeSelected
             }
         }
-
     }
 
+
+  Connections {
+    target: __activeProject
+
+    function onProjectWillBeReloaded() {
+      mapThemesModel.reset()
+    }
+
+    function onProjectReloaded( qgsProject ) {
+      mapThemesModel.qgsProject = __activeProject.qgsProject
+    }
+  }
 }

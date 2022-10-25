@@ -21,10 +21,10 @@ Item {
     signal myLocationHold()
     signal recordClicked()
     signal openMapThemesClicked()
-    signal openBrowseDataClicked()
     signal openSettingsClicked()
     signal zoomToProject()
     signal localChangesClicked()
+  signal layersClicked()
 
     property real itemSize: mainPanel.height * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
@@ -163,20 +163,19 @@ Item {
         }
 
         Item {
-            id: browseDataItem
             height: parent.height
             visible: panelRow.itemsToShow > 6
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
-                id: browseDataBtn
+                id: layersBtn
                 width: mainPanel.itemSize
-                text: qsTr("Browse data")
-                imageSource: InputStyle.tableIcon
+                text: qsTr("Layers")
+                imageSource: InputStyle.mapSearchIcon
 
                 onActivated: {
                   rootMenu.close()
-                  mainPanel.openBrowseDataClicked()
+                  mainPanel.layersClicked()
                 }
             }
         }
@@ -361,12 +360,12 @@ Item {
                 height: mainPanel.itemSize
                 rowHeight: height
                 width: parent.width
-                contentText: qsTr("Browse features")
-                imageSource: InputStyle.tableIcon
+                contentText: qsTr("Layers")
+                imageSource: InputStyle.mapSearchIcon
             }
 
             onClicked: {
-                browseDataBtn.activated()
+                layersBtn.activated()
                 rootMenu.close()
             }
         }

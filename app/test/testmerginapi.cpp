@@ -11,6 +11,7 @@
 #include "testutils.h"
 #include "merginuserauth.h"
 #include "merginuserinfo.h"
+#include "mapthemesmodel.h"
 #include "synchronizationmanager.h"
 #include "activeproject.h"
 #include "autosynccontroller.h"
@@ -2360,7 +2361,7 @@ void TestMerginApi::testAutosync()
 
   MapThemesModel mtm; AppSettings as; ActiveLayer al;
   LayersModel lm; LayersProxyModel lpm( &lm, LayerModelTypes::ActiveLayerSelection );
-  ActiveProject activeProject( mtm, as, al, lpm, mApi->localProjectsManager() );
+  ActiveProject activeProject( as, al, lpm, mApi->localProjectsManager() );
 
   mApi->localProjectsManager().addLocalProject( projectdir, projectname );
 

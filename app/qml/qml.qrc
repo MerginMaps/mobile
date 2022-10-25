@@ -4,8 +4,6 @@
         <file>AccountPage.qml</file>
         <file>AuthPanel.qml</file>
         <file>Banner.qml</file>
-        <file>BrowseDataLayersPanel.qml</file>
-        <file>BrowseDataPanel.qml</file>
         <file>CircularProgressBar.qml</file>
         <file>CodeReaderHandler.qml</file>
         <file>CodeScanner.qml</file>
@@ -98,6 +96,9 @@
         <file>form/FeatureToolbar.qml</file>
         <file>form/FormWrapper.qml</file>
         <file>form/PreviewPanel.qml</file>
+        <file>layers/FeaturesListPageV2.qml</file>
+        <file>layers/LayerDetail.qml</file>
+        <file>layers/LayersListV2.qml</file>
         <file>main.qml</file>
         <file>map/ActiveLayerPanel.qml</file>
         <file>map/Crosshair.qml</file>
@@ -117,5 +118,11 @@
         <file>misc/LegacyFolderMigration.qml</file>
         <file>misc/PositionProviderPage.qml</file>
         <file>qmldir</file>
+        <file>layers/LayersPanelV2.qml</file>
+        <file>components/SearchBoxV2.qml</file>
+        <file>components/PanelHeaderV2.qml</file>
+        <file>layers/LayersListPageV2.qml</file>
+        <file>layers/LayersListSearchPage.qml</file>
+        <file>components/ToolbarButton.qml</file>
     </qresource>
 </RCC>
