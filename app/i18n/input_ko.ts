@@ -98,12 +98,12 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>ActiveLayerPanel</name>
     <message>
-        <location filename="../qml/map/ActiveLayerPanel.qml" line="51"/>
+        <location filename="../qml/map/ActiveLayerPanel.qml" line="49"/>
         <source>Choose Active Layer</source>
         <translation>활성 레이어 선택</translation>
     </message>
     <message>
-        <location filename="../qml/map/ActiveLayerPanel.qml" line="63"/>
+        <location filename="../qml/map/ActiveLayerPanel.qml" line="61"/>
         <source>Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.</source>
         <translation>프로젝트에서 편집 가능한 레이어를 찾을 수 없습니다. %1프로젝트에서 디지타이징을 활성화하는 방법%2을 참조하십시오.</translation>
     </message>
@@ -175,43 +175,39 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="518"/>
+        <location filename="../attributes/attributecontroller.cpp" line="536"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>%1:%2의 기본값 표현식에 파서 오류가 있습니다: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="528"/>
+        <location filename="../attributes/attributecontroller.cpp" line="546"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>%1:%2의 기본값 표현식에 평가 오류가 있습니다: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="539"/>
+        <location filename="../attributes/attributecontroller.cpp" line="557"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>&quot;%1&quot; %4 값을 %2(%3) 필드에 대해 호환되는 값으로 변환할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="792"/>
+        <location filename="../attributes/attributecontroller.cpp" line="810"/>
         <source>Cannot delete feature</source>
         <translation>피처를 삭제할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="480"/>
-        <location filename="../attributes/attributecontroller.cpp" line="816"/>
+        <location filename="../attributes/attributecontroller.cpp" line="488"/>
+        <location filename="../attributes/attributecontroller.cpp" line="864"/>
         <source>Feature could not be added</source>
         <translation>피처를 추가할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="854"/>
+        <location filename="../attributes/attributecontroller.cpp" line="497"/>
+        <location filename="../attributes/attributecontroller.cpp" line="875"/>
         <source>Cannot update feature</source>
         <translation>피처를 업데이트할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="868"/>
-        <source>Feature %1 could not be fetched after commit</source>
-        <translation>커밋 후 %1 피처를 가져올 수 없습니다</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="890"/>
+        <location filename="../attributes/attributecontroller.cpp" line="919"/>
         <source>Cannot start editing</source>
         <translation>편집을 시작할 수 없습니다</translation>
     </message>
@@ -324,19 +320,6 @@ In order to delete your account, enter your username in the field below and clic
     </message>
 </context>
 <context>
-    <name>BrowseDataLayersPanel</name>
-    <message>
-        <location filename="../qml/BrowseDataLayersPanel.qml" line="32"/>
-        <source>Layers</source>
-        <translation>레이어</translation>
-    </message>
-    <message>
-        <location filename="../qml/BrowseDataLayersPanel.qml" line="47"/>
-        <source>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</source>
-        <translation>해당 피처를 탐색할 수 있도록 구성된 레이어가 없습니다. %1프로젝트를 수정하는 방법%2을 참조하십시오.</translation>
-    </message>
-</context>
-<context>
     <name>CodeReader</name>
     <message>
         <location filename="../qml/CodeReader.qml" line="64"/>
@@ -411,47 +394,47 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>FeatureFormPage</name>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="76"/>
         <source>Edit Feature</source>
         <translation>피처 편집</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="83"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="76"/>
         <source>Feature</source>
         <translation>피처</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="93"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="86"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="196"/>
         <source>Delete feature</source>
         <translation>피처 삭제</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="200"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>이 피처를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="217"/>
         <source>Unsaved changes</source>
         <translation>변경사항 저장되지 않음</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="221"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Do you want to save changes?</source>
         <translation>변경사항을 저장하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="244"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="241"/>
         <source>Saving failed</source>
         <translation>저장 실패</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="242"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>변경 사항을 저장하지 못했습니다. 이 문제는 보통 발생하지 않습니다. 앱을 다시 시작하고 재시도하세요 — 그래도 문제가 해결되지 않으면 지원팀에 문의하세요.</translation>
     </message>
@@ -459,33 +442,36 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>FeatureToolbar</name>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="65"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="67"/>
         <source>Edit</source>
         <translation>편집</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="87"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="89"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="103"/>
-        <location filename="../qml/form/FeatureToolbar.qml" line="141"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="105"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="147"/>
         <source>Edit geometry</source>
         <translation>도형 편집</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="120"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="122"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="159"/>
+        <source>Advanced</source>
+        <translation>고급</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/FeatureToolbar.qml" line="174"/>
         <source>Split geometry</source>
         <translation>도형 분할</translation>
     </message>
-</context>
-<context>
-    <name>FeaturesListPage</name>
     <message>
-        <location filename="../qml/FeaturesListPage.qml" line="59"/>
-        <source>Showing only the first %1 features</source>
-        <translation>첫 번째 %1 피처만 표시</translation>
+        <location filename="../qml/form/FeatureToolbar.qml" line="192"/>
+        <source>Redraw geometry</source>
+        <translation>도형 다시 그리기</translation>
     </message>
 </context>
 <context>
@@ -504,6 +490,14 @@ In order to delete your account, enter your username in the field below and clic
         <location filename="../qml/FeaturesListPageToolbar.qml" line="85"/>
         <source>Remove link</source>
         <translation>링크 제거</translation>
+    </message>
+</context>
+<context>
+    <name>FeaturesListPageV2</name>
+    <message>
+        <location filename="../qml/layers/FeaturesListPageV2.qml" line="155"/>
+        <source>Add feature</source>
+        <translation>피처 추가</translation>
     </message>
 </context>
 <context>
@@ -666,111 +660,121 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="177"/>
+        <location filename="../inpututils.cpp" line="182"/>
         <source>just now</source>
         <translation>지금 당장</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 minutes ago</source>
         <translation>%1 분 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="187"/>
         <source>%1 minute ago</source>
         <translation>%1 분 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 hours ago</source>
         <translation>%1 시간 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="192"/>
         <source>%1 hour ago</source>
         <translation>%1 시간 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
         <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="201"/>
         <source>%1 days ago</source>
         <translation>%1 일 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="191"/>
         <location filename="../inpututils.cpp" line="196"/>
+        <location filename="../inpututils.cpp" line="201"/>
         <source>%1 day ago</source>
         <translation>%1 일 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="201"/>
+        <location filename="../inpututils.cpp" line="206"/>
         <source>%1 weeks ago</source>
         <translation>%1 주 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="201"/>
+        <location filename="../inpututils.cpp" line="206"/>
         <source>%1 week ago</source>
         <translation>%1 주 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="206"/>
+        <location filename="../inpututils.cpp" line="211"/>
         <source>%1 months ago</source>
         <translation>%1 개월 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="206"/>
+        <location filename="../inpututils.cpp" line="211"/>
         <source>%1 month ago</source>
         <translation>%1 개월 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="216"/>
         <source>%1 years ago</source>
         <translation>%1 년 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="216"/>
         <source>%1 year ago</source>
         <translation>%1 년 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1378"/>
+        <location filename="../inpututils.cpp" line="1411"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>화면 해상도: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1379"/>
+        <location filename="../inpututils.cpp" line="1412"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>화면 DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1380"/>
+        <location filename="../inpututils.cpp" line="1413"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>화면 크기: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1381"/>
+        <location filename="../inpututils.cpp" line="1414"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>기록상 장치 화소 비율: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1382"/>
+        <location filename="../inpututils.cpp" line="1415"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>계산상 장치 화소 비율 :%1 
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1383"/>
+        <location filename="../inpututils.cpp" line="1416"/>
         <source>used dp scale: %1</source>
         <translation>사용된 dp 배율: %1</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="1936"/>
+        <source>You need to add at least %1 point(s) to every part.</source>
+        <translation>모든 부분에 최소한 %1 지점(들)을 추가해야 합니다.</translation>
+    </message>
+    <message>
+        <location filename="../inpututils.cpp" line="1940"/>
+        <source>You need to add at least %1 point(s).</source>
+        <translation>최소 %1 지점(들)을 추가해야 합니다.</translation>
     </message>
 </context>
 <context>
@@ -780,6 +784,50 @@ Won&apos;t be added to the project.</source>
         <location filename="../position/internalpositionprovider.cpp" line="110"/>
         <source>Connected</source>
         <translation>연결됨</translation>
+    </message>
+</context>
+<context>
+    <name>LayerDetail</name>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="98"/>
+        <source>Settings</source>
+        <translation>설정</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="130"/>
+        <source>Visible on map</source>
+        <translation>지도에 표시</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="169"/>
+        <source>Legend</source>
+        <translation>범례</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="250"/>
+        <source>Features</source>
+        <translation>피처</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="284"/>
+        <source>Layer info</source>
+        <translation>레이어 정보</translation>
+    </message>
+</context>
+<context>
+    <name>LayersListPageV2</name>
+    <message>
+        <location filename="../qml/layers/LayersListPageV2.qml" line="22"/>
+        <source>Layers</source>
+        <translation>레이어</translation>
+    </message>
+</context>
+<context>
+    <name>LayersListSearchPage</name>
+    <message>
+        <location filename="../qml/layers/LayersListSearchPage.qml" line="37"/>
+        <source>Search layers</source>
+        <translation>레이어 검색</translation>
     </message>
 </context>
 <context>
@@ -865,65 +913,61 @@ Won&apos;t be added to the project.</source>
     <name>MainPanel</name>
     <message>
         <location filename="../qml/MainPanel.qml" line="62"/>
-        <location filename="../qml/MainPanel.qml" line="259"/>
+        <location filename="../qml/MainPanel.qml" line="258"/>
         <source>Projects</source>
         <translation>프로젝트</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="82"/>
-        <location filename="../qml/MainPanel.qml" line="278"/>
+        <location filename="../qml/MainPanel.qml" line="277"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="117"/>
-        <location filename="../qml/MainPanel.qml" line="307"/>
+        <location filename="../qml/MainPanel.qml" line="306"/>
         <source>Record</source>
         <translation>기록</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="137"/>
-        <location filename="../qml/MainPanel.qml" line="326"/>
+        <location filename="../qml/MainPanel.qml" line="325"/>
         <source>Zoom to project</source>
         <translation>프로젝트로 확대</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="155"/>
-        <location filename="../qml/MainPanel.qml" line="345"/>
+        <location filename="../qml/MainPanel.qml" line="344"/>
         <source>Local changes</source>
         <translation>로컬 변경사항</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="174"/>
-        <source>Browse data</source>
-        <translation>데이터 찾아보기</translation>
+        <location filename="../qml/MainPanel.qml" line="173"/>
+        <location filename="../qml/MainPanel.qml" line="363"/>
+        <source>Layers</source>
+        <translation>레이어</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="194"/>
-        <location filename="../qml/MainPanel.qml" line="383"/>
+        <location filename="../qml/MainPanel.qml" line="193"/>
+        <location filename="../qml/MainPanel.qml" line="382"/>
         <source>Map themes</source>
         <translation>지도 테마</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="214"/>
-        <location filename="../qml/MainPanel.qml" line="402"/>
+        <location filename="../qml/MainPanel.qml" line="213"/>
+        <location filename="../qml/MainPanel.qml" line="401"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="231"/>
+        <location filename="../qml/MainPanel.qml" line="230"/>
         <source>More</source>
         <translation>더보기</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="244"/>
+        <location filename="../qml/MainPanel.qml" line="243"/>
         <source>Menu</source>
         <translation>메뉴</translation>
-    </message>
-    <message>
-        <location filename="../qml/MainPanel.qml" line="364"/>
-        <source>Browse features</source>
-        <translation>피처 찾아보기</translation>
     </message>
 </context>
 <context>
@@ -934,7 +978,7 @@ Won&apos;t be added to the project.</source>
         <translation>지도 테마</translation>
     </message>
     <message>
-        <location filename="../qml/MapThemePanel.qml" line="69"/>
+        <location filename="../qml/MapThemePanel.qml" line="75"/>
         <source>Project has no themes defined. See %1how to setup themes%2.</source>
         <translation>프로젝트에 정의된 테마가 없습니다. %1테마 설정 방법%2을 참조하십시오.</translation>
     </message>
@@ -942,57 +986,82 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="925"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1114"/>
         <source>GPS currently unavailable.</source>
         <translation>현재 GPS를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="312"/>
+        <location filename="../qml/map/MapWrapper.qml" line="315"/>
         <source>Successfully synchronized</source>
         <translation>성공적으로 동기화됨</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="326"/>
+        <location filename="../qml/map/MapWrapper.qml" line="329"/>
         <source>Up to date</source>
         <translation>최신 정보</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="335"/>
+        <location filename="../qml/map/MapWrapper.qml" line="338"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>다른  사람이 동기화 중입니다. 나중에 다시 시도하겠습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="345"/>
+        <location filename="../qml/map/MapWrapper.qml" line="348"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>동기화하는 동안 문제가 발생했습니다. 다시 시도하겠습니다. 자세히 알아보려면 클릭</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="363"/>
+        <location filename="../qml/map/MapWrapper.qml" line="366"/>
         <source>Splitting done successfully</source>
         <translation>분할 완료</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="379"/>
+        <location filename="../qml/map/MapWrapper.qml" line="382"/>
         <source>Create line to split the selected feature</source>
-        <translation>선택한 피처를 분할한 선 생성</translation>
+        <translation>선택한 피처를 분할할 선 생성</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="518"/>
+        <location filename="../qml/map/MapWrapper.qml" line="398"/>
+        <source>Select some point to start editing the geometry</source>
+        <translation>도형 편집을 시작할 지점 선택</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="414"/>
+        <source>Record new geometry for the feature</source>
+        <translation>피처에 대한 새 도형 기록</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="553"/>
         <source>Details</source>
         <translation>세부 사항</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="601"/>
+        <location filename="../qml/map/MapWrapper.qml" line="673"/>
+        <source>Discard the changes?</source>
+        <translation>변경사항을 취소하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="676"/>
+        <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
+        <translation>&apos;예&apos;를 클릭하면 도형에 대한 변경사항이 취소됩니다. 대신 변경사항을 저장하려면 툴바에서 &apos;아니요&apos;를 누른 다음 &apos;완료&apos;를 누르십시오.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="680"/>
+        <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
+        <translation>&apos;예&apos;를 클릭하면 새 도형이 취소되고 피처가 저장되지 않습니다. 대신 도형을 저장하려면 &apos;아니요&apos;를 누른 다음 &apos;완료&apos;를 누르십시오.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="746"/>
         <source>Connecting to %1</source>
         <translation>%1 연결 중</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="615"/>
+        <location filename="../qml/map/MapWrapper.qml" line="760"/>
         <source>Connected, no position</source>
         <translation>연결됨, 위치 없음</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="619"/>
+        <location filename="../qml/map/MapWrapper.qml" line="764"/>
         <source>Unknown accuracy</source>
         <translation>알 수 없는 정확도</translation>
     </message>
@@ -1529,48 +1598,48 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>RecordingToolbar</name>
     <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="69"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="72"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="92"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="95"/>
         <source>Undo</source>
         <translation>실행 취소</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="107"/>
-        <source>Add Point</source>
-        <translation>포인트 추가</translation>
+        <location filename="../qml/map/RecordingToolbar.qml" line="112"/>
+        <source>Remove</source>
+        <translation>제거</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="123"/>
+        <location filename="../qml/map/RecordingToolbar.qml" line="135"/>
+        <source>Add</source>
+        <translation>추가</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/RecordingToolbar.qml" line="151"/>
+        <source>Release</source>
+        <translation>출시</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/RecordingToolbar.qml" line="165"/>
         <source>Done</source>
         <translation>완료</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/RecordingToolbar.qml" line="137"/>
-        <source>Cancel</source>
-        <translation>취소</translation>
     </message>
 </context>
 <context>
     <name>RecordingTools</name>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="51"/>
+        <location filename="../qml/map/RecordingTools.qml" line="282"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>낮은 GIS 위치 정확도 (%1 m)&lt;br&gt;&lt;br&gt;하늘이 잘 보이는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="132"/>
-        <location filename="../qml/map/RecordingTools.qml" line="207"/>
+        <location filename="../qml/map/RecordingTools.qml" line="188"/>
+        <location filename="../qml/map/RecordingTools.qml" line="308"/>
         <source>GPS currently unavailable.</source>
         <translation>현재 GPS를 사용할 수 없습니다.</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/RecordingTools.qml" line="175"/>
-        <source>You need to add at least %1 points.</source>
-        <translation>최소한 %1 포인트를 추가해야 합니다.</translation>
     </message>
 </context>
 <context>
@@ -1614,6 +1683,14 @@ Click &apos;Yes&apos; to upload it.</source>
     <message>
         <location filename="../qml/SearchBar.qml" line="72"/>
         <source>SEARCH</source>
+        <translation>검색</translation>
+    </message>
+</context>
+<context>
+    <name>SearchBoxV2</name>
+    <message>
+        <location filename="../qml/components/SearchBoxV2.qml" line="59"/>
+        <source>Search</source>
         <translation>검색</translation>
     </message>
 </context>
@@ -1718,7 +1795,7 @@ Click &apos;Yes&apos; to upload it.</source>
     <message>
         <location filename="../qml/dialogs/SplittingFailedDialog.qml" line="17"/>
         <source>Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it.</source>
-        <translation>분할선이 피처와 교차하는지 확인하십시오. 피처를 분할하려면 피처에 유효한 지오메트리가 있어야 합니다.</translation>
+        <translation>분할선이 피처와 교차하는지 확인하십시오. 분할하려면 피처에 유효한 지오메트리가 있어야 합니다.</translation>
     </message>
 </context>
 <context>
@@ -1738,18 +1815,13 @@ Click &apos;Yes&apos; to upload it.</source>
         <source>Done</source>
         <translation>완료</translation>
     </message>
-    <message>
-        <location filename="../qml/map/SplittingToolbar.qml" line="103"/>
-        <source>Cancel</source>
-        <translation>취소</translation>
-    </message>
 </context>
 <context>
     <name>SplittingTools</name>
     <message>
         <location filename="../qml/map/SplittingTools.qml" line="98"/>
         <source>You need to add at least 2 points.</source>
-        <translation>최소 2개 포인트를 추가해야 합니다.</translation>
+        <translation>최소 2 포인트를 추가해야 합니다.</translation>
     </message>
 </context>
 <context>
@@ -1919,48 +1991,48 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="220"/>
-        <location filename="../qml/main.qml" line="277"/>
+        <location filename="../qml/main.qml" line="229"/>
+        <location filename="../qml/main.qml" line="285"/>
         <source>No Changes</source>
         <translation>변경사항 없음</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="251"/>
+        <location filename="../qml/main.qml" line="260"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS 자동 센터 모드 켜기</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="251"/>
+        <location filename="../qml/main.qml" line="260"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS 자동 센터 모드 끄기</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="266"/>
+        <location filename="../qml/main.qml" line="274"/>
         <source>No editable layers found.</source>
         <translation>편집 가능한 레이어를 찾을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="536"/>
+        <location filename="../qml/main.qml" line="594"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>위치를 사용할 수 없기 때문에 측설이 비활성화되었습니다!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="557"/>
+        <location filename="../qml/main.qml" line="615"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Mergin과 통신하지 못했습니다.%1네트워크 연결을 개선하십시오.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="604"/>
+        <location filename="../qml/main.qml" line="662"/>
         <source>There were issues loading the project.</source>
         <translation>프로젝트를 로드하는 중에 문제가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="635"/>
+        <location filename="../qml/main.qml" line="693"/>
         <source>Press back again to quit the app</source>
         <translation>앱을 종료하려면 뒤로가기를 다시 누르세요.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="482"/>
+        <location filename="../qml/main.qml" line="534"/>
         <source>PROJ Error</source>
         <translation>PROJ 오류</translation>
     </message>
