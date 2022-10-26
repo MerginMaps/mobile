@@ -98,12 +98,12 @@ Per eliminar el vostre compte, introduïu el vostre nom d&apos;usuari al camp se
 <context>
     <name>ActiveLayerPanel</name>
     <message>
-        <location filename="../qml/map/ActiveLayerPanel.qml" line="51"/>
+        <location filename="../qml/map/ActiveLayerPanel.qml" line="49"/>
         <source>Choose Active Layer</source>
         <translation>Escollir capa activa</translation>
     </message>
     <message>
-        <location filename="../qml/map/ActiveLayerPanel.qml" line="63"/>
+        <location filename="../qml/map/ActiveLayerPanel.qml" line="61"/>
         <source>Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.</source>
         <translation>No es pot trobar cap capa editable al projecte. Vegeu %1com activar la digitalització al vostre projecte%2.</translation>
     </message>
@@ -175,43 +175,39 @@ Per eliminar el vostre compte, introduïu el vostre nom d&apos;usuari al camp se
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="518"/>
+        <location filename="../attributes/attributecontroller.cpp" line="536"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>L&apos;expressió de valor per defecte per a %1:%2 té un error d&apos;analitzador: %3 </translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="528"/>
+        <location filename="../attributes/attributecontroller.cpp" line="546"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>L&apos;expressió de valor per defecte per a %1:%2 té un error d&apos;avaluació: %3 </translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="539"/>
+        <location filename="../attributes/attributecontroller.cpp" line="557"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>El valor &quot;%1&quot; %4 no s&apos;ha pogut convertir en un valor compatible per al camp %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="792"/>
+        <location filename="../attributes/attributecontroller.cpp" line="810"/>
         <source>Cannot delete feature</source>
         <translation>No es pot esborrar la característica</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="480"/>
-        <location filename="../attributes/attributecontroller.cpp" line="816"/>
+        <location filename="../attributes/attributecontroller.cpp" line="488"/>
+        <location filename="../attributes/attributecontroller.cpp" line="864"/>
         <source>Feature could not be added</source>
         <translation>La característica no es pot afegir</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="854"/>
+        <location filename="../attributes/attributecontroller.cpp" line="497"/>
+        <location filename="../attributes/attributecontroller.cpp" line="875"/>
         <source>Cannot update feature</source>
         <translation>No es pot actualitzar la característica</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="868"/>
-        <source>Feature %1 could not be fetched after commit</source>
-        <translation>La característica %1 no es pot recuperar després del lliurament</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="890"/>
+        <location filename="../attributes/attributecontroller.cpp" line="919"/>
         <source>Cannot start editing</source>
         <translation>No es pot començar a editar</translation>
     </message>
@@ -324,19 +320,6 @@ Per eliminar el vostre compte, introduïu el vostre nom d&apos;usuari al camp se
     </message>
 </context>
 <context>
-    <name>BrowseDataLayersPanel</name>
-    <message>
-        <location filename="../qml/BrowseDataLayersPanel.qml" line="32"/>
-        <source>Layers</source>
-        <translation>Capes</translation>
-    </message>
-    <message>
-        <location filename="../qml/BrowseDataLayersPanel.qml" line="47"/>
-        <source>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</source>
-        <translation>No hi ha cap capa configurada per mostrar les seves característiques. Vegeu %1com modificar el vostre project%2.</translation>
-    </message>
-</context>
-<context>
     <name>CodeReader</name>
     <message>
         <location filename="../qml/CodeReader.qml" line="64"/>
@@ -398,12 +381,12 @@ Per eliminar el vostre compte, introduïu el vostre nom d&apos;usuari al camp se
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="157"/>
+        <location filename="../qml/form/FeatureForm.qml" line="155"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>No es pot desar el formulari per errors de validació</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="158"/>
+        <location filename="../qml/form/FeatureForm.qml" line="156"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>La característica no s&apos;ha desat, comproveu els camps requerits</translation>
     </message>
@@ -426,32 +409,32 @@ Per eliminar el vostre compte, introduïu el vostre nom d&apos;usuari al camp se
         <translation>Desa</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="196"/>
         <source>Delete feature</source>
         <translation>Esborrar característica</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="200"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Esteu segur que voleu esborrar aquesta característica?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="217"/>
         <source>Unsaved changes</source>
         <translation>Canivs sense desar</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="221"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
         <source>Do you want to save changes?</source>
         <translation>Voleu desar els canvis?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="244"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="241"/>
         <source>Saving failed</source>
         <translation>Error a l&apos;hora de desar</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="242"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>No s&apos;han pogut desar els canvis. Això normalment no hauria de passar. Si us plau, reinicieu l&apos;aplicació i torneu-ho a provar; si torna a passar, poseu-vos en contacte amb el servei d&apos;assistència.</translation>
     </message>
@@ -469,13 +452,13 @@ Per eliminar el vostre compte, introduïu el vostre nom d&apos;usuari al camp se
         <translation>Esborrar</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="106"/>
-        <location filename="../qml/form/FeatureToolbar.qml" line="146"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="105"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="147"/>
         <source>Edit geometry</source>
         <translation>Editar geometria</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="123"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="122"/>
         <location filename="../qml/form/FeatureToolbar.qml" line="159"/>
         <source>Advanced</source>
         <translation>Avançat</translation>
@@ -489,14 +472,6 @@ Per eliminar el vostre compte, introduïu el vostre nom d&apos;usuari al camp se
         <location filename="../qml/form/FeatureToolbar.qml" line="192"/>
         <source>Redraw geometry</source>
         <translation>Redibuixar geometria</translation>
-    </message>
-</context>
-<context>
-    <name>FeaturesListPage</name>
-    <message>
-        <location filename="../qml/FeaturesListPage.qml" line="59"/>
-        <source>Showing only the first %1 features</source>
-        <translation>Mostrant només les primeres %1 característiques </translation>
     </message>
 </context>
 <context>
@@ -515,6 +490,14 @@ Per eliminar el vostre compte, introduïu el vostre nom d&apos;usuari al camp se
         <location filename="../qml/FeaturesListPageToolbar.qml" line="85"/>
         <source>Remove link</source>
         <translation>Treure enllaç</translation>
+    </message>
+</context>
+<context>
+    <name>FeaturesListPageV2</name>
+    <message>
+        <location filename="../qml/layers/FeaturesListPageV2.qml" line="155"/>
+        <source>Add feature</source>
+        <translation>Afegeix una funció</translation>
     </message>
 </context>
 <context>
@@ -784,12 +767,12 @@ No s&apos;afegirà al projecte.</translation>
         <translation>escala dp utilitzada: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1926"/>
+        <location filename="../inpututils.cpp" line="1936"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Heu d&apos;afegir almenys %1 punt(s) a cada tros.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1930"/>
+        <location filename="../inpututils.cpp" line="1940"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Heu d&apos;afegir com a mínim %1 punt(s).</translation>
     </message>
@@ -801,6 +784,50 @@ No s&apos;afegirà al projecte.</translation>
         <location filename="../position/internalpositionprovider.cpp" line="110"/>
         <source>Connected</source>
         <translation>Connectat</translation>
+    </message>
+</context>
+<context>
+    <name>LayerDetail</name>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="98"/>
+        <source>Settings</source>
+        <translation>Configuració</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="130"/>
+        <source>Visible on map</source>
+        <translation>Visible al mapa</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="169"/>
+        <source>Legend</source>
+        <translation>Llegenda</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="250"/>
+        <source>Features</source>
+        <translation>Característiques</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="284"/>
+        <source>Layer info</source>
+        <translation>Informació de la capa</translation>
+    </message>
+</context>
+<context>
+    <name>LayersListPageV2</name>
+    <message>
+        <location filename="../qml/layers/LayersListPageV2.qml" line="22"/>
+        <source>Layers</source>
+        <translation>Capes</translation>
+    </message>
+</context>
+<context>
+    <name>LayersListSearchPage</name>
+    <message>
+        <location filename="../qml/layers/LayersListSearchPage.qml" line="37"/>
+        <source>Search layers</source>
+        <translation>Cerca a les capes</translation>
     </message>
 </context>
 <context>
@@ -886,65 +913,61 @@ No s&apos;afegirà al projecte.</translation>
     <name>MainPanel</name>
     <message>
         <location filename="../qml/MainPanel.qml" line="62"/>
-        <location filename="../qml/MainPanel.qml" line="259"/>
+        <location filename="../qml/MainPanel.qml" line="258"/>
         <source>Projects</source>
         <translation>Projectes</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="82"/>
-        <location filename="../qml/MainPanel.qml" line="278"/>
+        <location filename="../qml/MainPanel.qml" line="277"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="117"/>
-        <location filename="../qml/MainPanel.qml" line="307"/>
+        <location filename="../qml/MainPanel.qml" line="306"/>
         <source>Record</source>
         <translation>Registre</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="137"/>
-        <location filename="../qml/MainPanel.qml" line="326"/>
+        <location filename="../qml/MainPanel.qml" line="325"/>
         <source>Zoom to project</source>
         <translation>Zoom al projecte</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="155"/>
-        <location filename="../qml/MainPanel.qml" line="345"/>
+        <location filename="../qml/MainPanel.qml" line="344"/>
         <source>Local changes</source>
         <translation>Canvis locals</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="174"/>
-        <source>Browse data</source>
-        <translation>Veure dades</translation>
+        <location filename="../qml/MainPanel.qml" line="173"/>
+        <location filename="../qml/MainPanel.qml" line="363"/>
+        <source>Layers</source>
+        <translation>Capes</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="194"/>
-        <location filename="../qml/MainPanel.qml" line="383"/>
+        <location filename="../qml/MainPanel.qml" line="193"/>
+        <location filename="../qml/MainPanel.qml" line="382"/>
         <source>Map themes</source>
         <translation>Temes de mapa</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="214"/>
-        <location filename="../qml/MainPanel.qml" line="402"/>
+        <location filename="../qml/MainPanel.qml" line="213"/>
+        <location filename="../qml/MainPanel.qml" line="401"/>
         <source>Settings</source>
         <translation>Configuració</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="231"/>
+        <location filename="../qml/MainPanel.qml" line="230"/>
         <source>More</source>
         <translation>Més</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="244"/>
+        <location filename="../qml/MainPanel.qml" line="243"/>
         <source>Menu</source>
         <translation>Menú</translation>
-    </message>
-    <message>
-        <location filename="../qml/MainPanel.qml" line="364"/>
-        <source>Browse features</source>
-        <translation>Veure les característiques</translation>
     </message>
 </context>
 <context>
@@ -955,7 +978,7 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Temes de mapa</translation>
     </message>
     <message>
-        <location filename="../qml/MapThemePanel.qml" line="69"/>
+        <location filename="../qml/MapThemePanel.qml" line="75"/>
         <source>Project has no themes defined. See %1how to setup themes%2.</source>
         <translation>El projecte no té cap tema definit. Vegeu %1com crear temes%2.</translation>
     </message>
@@ -963,82 +986,82 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1109"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1114"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS no disponible</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="314"/>
+        <location filename="../qml/map/MapWrapper.qml" line="315"/>
         <source>Successfully synchronized</source>
         <translation>Correctament sincronitzat</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="328"/>
+        <location filename="../qml/map/MapWrapper.qml" line="329"/>
         <source>Up to date</source>
         <translation>Actualitzat</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="337"/>
+        <location filename="../qml/map/MapWrapper.qml" line="338"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Algú més s&apos;està sincronitzant, ho tornarem a provar més tard</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="347"/>
+        <location filename="../qml/map/MapWrapper.qml" line="348"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>Hi ha hagut un problema durant la sincronització, ho tornarem a provar. Feu clic per obtenir més informació</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="365"/>
+        <location filename="../qml/map/MapWrapper.qml" line="366"/>
         <source>Splitting done successfully</source>
         <translation>Divisió realitzada amb èxit</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="381"/>
+        <location filename="../qml/map/MapWrapper.qml" line="382"/>
         <source>Create line to split the selected feature</source>
         <translation>Crea una línia per dividir la geometria seleccionada</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="397"/>
+        <location filename="../qml/map/MapWrapper.qml" line="398"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Seleccioneu algun punt per començar a editar la geometria</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="413"/>
+        <location filename="../qml/map/MapWrapper.qml" line="414"/>
         <source>Record new geometry for the feature</source>
-        <translation>Enregistreu una geometria nova per a la forma</translation>
+        <translation>Enregistreu una geometria nova per a la característica</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="552"/>
+        <location filename="../qml/map/MapWrapper.qml" line="553"/>
         <source>Details</source>
         <translation>Detalls</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="667"/>
+        <location filename="../qml/map/MapWrapper.qml" line="673"/>
         <source>Discard the changes?</source>
         <translation>Descartar els canvis?</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="670"/>
+        <location filename="../qml/map/MapWrapper.qml" line="676"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Si feu clic a &quot;Sí&quot;, es descartarà els canvis a la geometria. Si voleu desar els canvis premeu &quot;No&quot;, i després &quot;Fet&quot; a la barra d&apos;eines.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="674"/>
+        <location filename="../qml/map/MapWrapper.qml" line="680"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Si feu clic a &quot;Sí&quot;, es descarta la vostra nova geometria i no es desarà cap forma. Si voleu desar la geometria premeu &quot;No&quot;, i després &quot;Fet&quot; a la barra d&apos;eines.</translation>
+        <translation>Si feu clic a &quot;Sí&quot;, es descarta la vostra nova geometria i no es desarà cap característica. Si voleu desar la geometria premeu &quot;No&quot;, i després &quot;Fet&quot; a la barra d&apos;eines.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="740"/>
+        <location filename="../qml/map/MapWrapper.qml" line="746"/>
         <source>Connecting to %1</source>
         <translation>Connectant amb %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="754"/>
+        <location filename="../qml/map/MapWrapper.qml" line="760"/>
         <source>Connected, no position</source>
         <translation>Connectat, sense posició</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="758"/>
+        <location filename="../qml/map/MapWrapper.qml" line="764"/>
         <source>Unknown accuracy</source>
         <translation>Precisió desconeguda</translation>
     </message>
@@ -1608,13 +1631,13 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
 <context>
     <name>RecordingTools</name>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="54"/>
+        <location filename="../qml/map/RecordingTools.qml" line="282"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Precisió de posició GPS baixa (% 1 m)&lt;br&gt;&lt;br&gt;Assegureu-vos que teniu una bona visió del cel.</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="208"/>
-        <location filename="../qml/map/RecordingTools.qml" line="302"/>
+        <location filename="../qml/map/RecordingTools.qml" line="188"/>
+        <location filename="../qml/map/RecordingTools.qml" line="308"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS no disponible actualment.</translation>
     </message>
@@ -1661,6 +1684,14 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
         <location filename="../qml/SearchBar.qml" line="72"/>
         <source>SEARCH</source>
         <translation>CERCA</translation>
+    </message>
+</context>
+<context>
+    <name>SearchBoxV2</name>
+    <message>
+        <location filename="../qml/components/SearchBoxV2.qml" line="59"/>
+        <source>Search</source>
+        <translation>Cerca</translation>
     </message>
 </context>
 <context>
@@ -1783,11 +1814,6 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
         <location filename="../qml/map/SplittingToolbar.qml" line="89"/>
         <source>Done</source>
         <translation>Fet</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/SplittingToolbar.qml" line="103"/>
-        <source>Cancel</source>
-        <translation>Cancel·lar</translation>
     </message>
 </context>
 <context>
@@ -1966,7 +1992,7 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
     <name>main</name>
     <message>
         <location filename="../qml/main.qml" line="229"/>
-        <location filename="../qml/main.qml" line="286"/>
+        <location filename="../qml/main.qml" line="285"/>
         <source>No Changes</source>
         <translation>Cap canvi</translation>
     </message>
@@ -1981,32 +2007,32 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
         <translation>Mode autocentrat del GPS desactivat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="275"/>
+        <location filename="../qml/main.qml" line="274"/>
         <source>No editable layers found.</source>
         <translation>No s&apos;ha trobat cap nivell editable.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="550"/>
+        <location filename="../qml/main.qml" line="594"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>El replanteig està desactivat perquè la ubicació no està disponible!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="571"/>
+        <location filename="../qml/main.qml" line="615"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Error de comunicació amb Mergin.%1Proveu a millorar la vostra connexió de xarxa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="618"/>
+        <location filename="../qml/main.qml" line="662"/>
         <source>There were issues loading the project.</source>
         <translation>Problemes en carregar el projecte.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="649"/>
+        <location filename="../qml/main.qml" line="693"/>
         <source>Press back again to quit the app</source>
         <translation>Premeu enrere un altre cop per sortir de l&apos;aplicació</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="491"/>
+        <location filename="../qml/main.qml" line="534"/>
         <source>PROJ Error</source>
         <translation>Error de PROJ</translation>
     </message>
