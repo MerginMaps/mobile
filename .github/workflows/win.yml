@@ -24,7 +24,7 @@ jobs:
     
     env:
       QT_VERSION: '6.3.2'
-      INPUT_SDK_VERSION: win64-20221012-125
+      INPUT_SDK_VERSION: win64-20221026-126
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
       CACHE_VERSION: 0
       VS_VERSION: "2019"
