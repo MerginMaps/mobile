@@ -113,6 +113,8 @@
 #include "layer/layerdetaildata.h"
 #include "layer/layerdetaillegendimageprovider.h"
 
+#include <QQuickStyle>
+
 #ifndef NDEBUG
 // #include <QQmlDebuggingEnabler>
 #endif
@@ -566,6 +568,7 @@ int main( int argc, char *argv[] )
   }
   app.setFont( QFont( "Lato" ) );
 
+  QQuickStyle::setStyle( "Basic" );
   QQmlEngine engine;
   addQmlImportPath( engine );
   initDeclarative();
