@@ -17,8 +17,8 @@
 
 #include "QDebug"
 
-LayerDetailLegendImageProvider::LayerDetailLegendImageProvider( QObject *parent )
-  : QObject( parent ), QQuickImageProvider( QQuickImageProvider::Image )
+LayerDetailLegendImageProvider::LayerDetailLegendImageProvider()
+  : QQuickImageProvider( QQuickImageProvider::Image )
 {
 }
 

@@ -7,15 +7,17 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import ".."  // import InputStyle singleton
 
 Text {
     width: parent.width
     height: parent.height
     color: InputStyle.fontColor
-    onLinkActivated: Qt.openUrlExternally(link)
+    onLinkActivated: function( link ) {
+      Qt.openUrlExternally(link)
+    }
     textFormat: Text.StyledText
     wrapMode: Text.WordWrap
     font.pixelSize: InputStyle.fontPixelSizeNormal

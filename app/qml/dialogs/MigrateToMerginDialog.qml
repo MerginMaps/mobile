@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Dialogs 1.3
+import QtQuick
+import QtQuick.Dialogs
 
 MessageDialog {
   id: root
@@ -18,9 +18,9 @@ MessageDialog {
   title: qsTr( "Upload project to Mergin?" )
   text: qsTr( "This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration. \nClick 'Yes' to upload it." )
 
-  standardButtons: StandardButton.Ok | StandardButton.Cancel
+  buttons: MessageDialog.Ok | MessageDialog.Cancel
 
-  onButtonClicked: {
+  onButtonClicked: function(clickedButton) {
     if ( clickedButton === StandardButton.Ok ) {
       root.migrationRequested()
     }

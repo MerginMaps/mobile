@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
+import QtQuick
+import QtQuick.Controls
 
 import lc 1.0
 import "."  // import InputStyle singleton
@@ -28,7 +28,7 @@ Drawer {
 
     Item {
       focus: true
-      Keys.onReleased: {
+      Keys.onReleased: function( event ) {
         if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
           root.close()
         }

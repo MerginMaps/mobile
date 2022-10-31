@@ -20,12 +20,12 @@
 #include <QVector>
 #include <QString>
 
+#include "qgsproject.h"
 #include "featurelayerpair.h"
 
 
 class QgsExpressionContextScope;
 class QgsVectorLayer;
-class QgsProject;
 
 /**
  * Simple name-value model to be used in the preview panel

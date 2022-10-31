@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import "../components"
 
 /**
@@ -85,7 +85,7 @@ Item {
 
       checked: value === fieldItem.checkedState
 
-      onSwitchChecked: {
+      onSwitchChecked: function( isChecked ) {
         editorValueChanged( isChecked ? fieldItem.checkedState : fieldItem.uncheckedState, false )
       }
 

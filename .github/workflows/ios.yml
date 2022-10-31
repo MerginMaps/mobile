@@ -13,12 +13,12 @@ on:
       - published
 
 env:
-  QT_VERSION: 5.14.2
-  INPUT_SDK_VERSION: ios-20220810-59
+  IOS_MIN_SDK_VERSION: ${{ '14.0' }}    
+  QT_VERSION: '6.3.2'
+  XC_VERSION: ${{ '13.2.1' }}
+  INPUT_SDK_VERSION: ios-20221026-79
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
-  XC_VERSION: ${{ '13.2.1' }}
-  IOS_MIN_SDK_VERSION: ${{ '14.0' }}
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 5
 
@@ -68,7 +68,9 @@ jobs:
           brew install openssl@1.1
           brew install python3
           brew install ccache
-
+          pip3 install -U pip
+          pip3 install aqtinstall
+          
       - name: Install ccache
         run: |
           mkdir -p ${CCACHE_DIR}
@@ -133,30 +135,23 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v1-${{ env.QT_VERSION }}-ios-${{ env.CACHE_VERSION }}
-
+          key: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-ios
+          
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
-        with:
-          version: ${{ env.QT_VERSION }}
-          target: ios
-          dir: ${{ github.workspace }}
-          setup-python: 'false'
-          py7zrversion: '==0.18.1'
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
-
-      # Do this only until we move from 5.14.2!!
-      - name: Patch Qt!
-        shell: bash
+        if: steps.cache-qt.outputs.cache-hit != 'true'
         run: |
-          echo "Patch 5.14.2 see https://github.com/MerginMaps/input-sdk/issues/34"
-
-          if [ ! ${{ env.QT_VERSION }} == "5.14.2" ]; then
-            echo "Can not patch other Qt version than 5.14.2. Remove this step in case of higher Qt version!"
-            exit 1
-          fi
-
-          cp ${{ github.workspace }}/scripts/ci/ios/toolchain5.14.2_xcode12.prf ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/mkspecs/features/toolchain.prf
+          aqt install-qt \
+            mac ios ${{ env.QT_VERSION }} \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -O ${{ github.workspace }}/Qt
+            
+          aqt install-qt \
+            mac desktop ${{ env.QT_VERSION }} \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -O ${{ github.workspace }}/Qt
+            
+          ls -la ${{ github.workspace }}/Qt
+          ls -la ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
 
       # Build Input App
       # !! ccache_clang is a custom script which runs ccache and default XCode clang.
@@ -167,15 +162,34 @@ jobs:
         shell: bash
         run: |
           touch ./app/config.pri
+          
           echo -e "ios {"  >> ./app/config.pri
+          
           echo -e "  INPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64"  >> ./app/config.pri
           echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
           echo -e "  QMAKE_IOS_DEPLOYMENT_TARGET = ${{ env.IOS_MIN_SDK_VERSION }}"  >> ./app/config.pri
           echo -e "  QMAKE_CXX = ${{ github.workspace }}/scripts/ci/ios/ccache_clang"  >> ./app/config.pri
+          
+          echo -e "  qprofile.name=PROVISIONING_PROFILE_SPECIFIER"  >> ./app/config.pri
+          echo -e "  qprofile.value=\"LutraConsultingLtd.Input.AppStore\""  >> ./app/config.pri
+          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qprofile"  >> ./app/config.pri
+
+          echo -e "  qteam.name=DEVELOPMENT_TEAM"  >> ./app/config.pri
+          echo -e "  qteam.value=79QMH2QRAH"  >> ./app/config.pri
+          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qteam"  >> ./app/config.pri
+
+          echo -e "  qidentity.name=CODE_SIGN_IDENTITY"  >> ./app/config.pri
+          echo -e "  qidentity.value=\"iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)\""  >> ./app/config.pri
+          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qidentity"  >> ./app/config.pri
+                    
+          echo -e "  qstyle.name=CODE_SIGN_STYLE"  >> ./app/config.pri
+          echo -e "  qstyle.value=Manual"  >> ./app/config.pri
+          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qstyle"  >> ./app/config.pri
+          
           echo -e "}"  >> ./app/config.pri
           cat ./app/config.pri
 
-          if [ ! ${{ env.QT_VERSION }} == "5.14.2" ]; then
+          if [ ! ${{ env.QT_VERSION }} == "6.3.2" ]; then
             echo "Qt version has changed! Double check if we still need custom script 'ccache_clang' for QMAKE_CXX."
             echo "  - If yes, change this condition to the new Qt version"
             echo "  - If no, remove the 'ccache_clang' script and this check too"
@@ -215,19 +229,7 @@ jobs:
             CONFIG+=release \
             CONFIG+=iphoneos \
             CONFIG+=device \
-            CONFIG+=qtquickcompiler \
-            QMAKE_MAC_XCODE_SETTINGS+=qprofile \
-            qprofile.name=PROVISIONING_PROFILE_SPECIFIER \
-            qprofile.value="LutraConsultingLtd.Input.AppStore" \
-            QMAKE_MAC_XCODE_SETTINGS+=qteam \
-            qteam.name=DEVELOPMENT_TEAM \
-            qteam.value=79QMH2QRAH \
-            QMAKE_MAC_XCODE_SETTINGS+=qidentity \
-            qidentity.name=CODE_SIGN_IDENTITY \
-            qidentity.value="iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)" \
-            QMAKE_MAC_XCODE_SETTINGS+=qstyle \
-            qstyle.name=CODE_SIGN_STYLE \
-            qstyle.value=Manual
+            CONFIG+=qtquickcompiler
 
           # Use old deprecated build system in XCode 13
           /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings

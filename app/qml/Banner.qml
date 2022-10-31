@@ -6,9 +6,9 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-import QtQuick 2.7
-import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import "."
 import "./components"
 
@@ -99,7 +99,9 @@ Rectangle {
       textItem.rightPadding: InputStyle.innerFieldMargin
       textItem.text: banner.getText()
 
-      onLinkActivated: Qt.openUrlExternally(link)
+      onLinkActivated: function( link ) {
+        Qt.openUrlExternally(link)
+      }
     }
   }
 }

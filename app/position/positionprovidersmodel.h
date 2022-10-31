@@ -14,7 +14,8 @@
 #include <qglobal.h>
 #include <QAbstractListModel>
 
-class AppSettings;
+#include "appsettings.h"
+
 
 struct PositionProvider
 {

@@ -7,11 +7,11 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
-import QtGraphicalEffects 1.0
-import QtQuick.Dialogs 1.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
+import QtQuick.Dialogs
 
 import lc 1.0
 import "."  // import InputStyle singleton
@@ -102,7 +102,7 @@ Item {
       }
     }
 
-    Keys.onReleased: {
+    Keys.onReleased: function( event ) {
       if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
         event.accepted = true;
 
@@ -266,7 +266,7 @@ Item {
 
         Connections {
           target: root
-          onVisibleChanged: {
+          function onVisibleChanged() {
             if ( root.visible ) { // projectsPanel opened
               pageContent.state = "local"
             }
@@ -275,7 +275,7 @@ Item {
             }
           }
 
-          onResetView: {
+          function onResetView() {
             if ( pageContent.state === "created" || pageContent.state === "shared" )
               pageContent.state = "local"
           }
@@ -294,8 +294,12 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: setupProjectOpen( projectId, projectFilePath )
-            onShowLocalChangesRequested: showChanges( projectId )
+            onOpenProjectRequested: function( projectId, projectFilePath ) {
+              setupProjectOpen( projectId, projectFilePath )
+            }
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
             list.onActiveProjectDeleted: setupProjectOpen( "", "" )
           }
 
@@ -306,8 +310,12 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: setupProjectOpen( projectId, projectFilePath )
-            onShowLocalChangesRequested: showChanges( projectId )
+            onOpenProjectRequested: function( projectId, projectFilePath ) {
+              setupProjectOpen( projectId, projectFilePath )
+            }
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
             list.onActiveProjectDeleted: setupProjectOpen( "", "" )
           }
 
@@ -318,8 +326,12 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: setupProjectOpen( projectId, projectFilePath )
-            onShowLocalChangesRequested: showChanges( projectId )
+            onOpenProjectRequested: function( projectId, projectFilePath ) {
+              setupProjectOpen( projectId, projectFilePath )
+            }
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
             list.onActiveProjectDeleted: setupProjectOpen( "", "" )
           }
 
@@ -331,7 +343,9 @@ Item {
             list.visible: !stackView.pending
 
             onOpenProjectRequested: setupProjectOpen( projectId, projectFilePath )
-            onShowLocalChangesRequested: showChanges( projectId )
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
             list.onActiveProjectDeleted: setupProjectOpen( "", "" )
           }
         }
@@ -447,7 +461,7 @@ Item {
 
       Connections {
         target: __projectWizard
-        onProjectCreated: {
+        function onProjectCreated( projectDir, projectName ) {
           if  (stackView.currentItem.objectName === "projectWizard") {
             __inputUtils.log(
                   "Create project",
@@ -462,9 +476,13 @@ Item {
         target: __merginApi
         enabled: root.visible
 
-        onListProjectsFinished: stackView.pending = false
-        onListProjectsByNameFinished: stackView.pending = false
-        onApiVersionStatusChanged: {
+        function onListProjectsFinished( merginProjects, projectCount, page, requestId ) {
+          stackView.pending = false
+        }
+        function onListProjectsByNameFinished( merginProjects, requestId ) {
+          stackView.pending = false
+        }
+        function onApiVersionStatusChanged() {
           stackView.pending = false
           if (__merginApi.apiVersionStatus === MerginApiStatus.OK && stackView.currentItem.objectName === "authPanel") {
             if (__merginApi.userAuth.hasAuthData()) {
@@ -476,11 +494,11 @@ Item {
             }
           }
         }
-        onAuthRequested: {
+        function onAuthRequested() {
           stackView.pending = false
           root.openAuthPanel()
         }
-        onAuthChanged: {
+        function onAuthChanged() {
           stackView.pending = false
           if ( __merginApi.userAuth.hasAuthData() ) {
             stackView.popOnePageOrClose()
@@ -488,9 +506,15 @@ Item {
             root.forceActiveFocus()
           }
         }
-        onAuthFailed: stackView.pending = false
-        onRegistrationFailed: stackView.pending = false
-        onRegistrationSucceeded: stackView.pending = false
+        function onAuthFailed() {
+          stackView.pending = false
+        }
+        function onRegistrationFailed() {
+          stackView.pending = false
+        }
+        function onRegistrationSucceeded() {
+          stackView.pending = false
+        }
       }
     }
   }

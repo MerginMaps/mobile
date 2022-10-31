@@ -7,9 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.2
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 import ".."  // import InputStyle singleton
 
 Row {
@@ -59,7 +59,9 @@ Row {
     height: root.height
     verticalAlignment: Text.AlignVCenter
     font.pixelSize: InputStyle.fontPixelSizeNormal
-    onLinkActivated: root.linkActivated(link)
+    onLinkActivated: function( link ) {
+      root.linkActivated(link)
+    }
     color: root.fontColor
     text: "<style>a:link { color: " + root.linkColor
           + "; text-decoration: underline; }</style>" + root.text

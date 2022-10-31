@@ -1,8 +1,8 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
-import QtQuick.Dialogs 1.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
+import QtQuick.Dialogs
 
 import lc 1.0
 import "./.." // import InputStyle singleton
@@ -52,12 +52,25 @@ Item {
         anchors.fill: parent
         propagateComposedEvents: true
 
-        onClicked: mouse.accepted = false
-        onPressed: { forceActiveFocus(); mouse.accepted = false; }
-        onReleased: mouse.accepted = false;
-        onDoubleClicked: mouse.accepted = false;
-        onPositionChanged: mouse.accepted = false;
-        onPressAndHold: mouse.accepted = false;
+        onClicked: function( mouse ) {
+          mouse.accepted = false
+        }
+        onPressed: function( mouse ) {
+          forceActiveFocus();
+          mouse.accepted = false;
+        }
+        onReleased: function( mouse ) {
+          mouse.accepted = false;
+        }
+        onDoubleClicked: function( mouse ) {
+          mouse.accepted = false;
+        }
+        onPositionChanged: function( mouse ) {
+          mouse.accepted = false;
+        }
+        onPressAndHold: function( mouse ) {
+          mouse.accepted = false;
+        }
       }
 
       delegate: ItemDelegate {

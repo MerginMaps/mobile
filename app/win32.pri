@@ -16,14 +16,47 @@ win32 {
   INCLUDEPATH += $${INPUT_SDK_PATH}/include/qgis
   LIBS += -L$${INPUT_SDK_PATH}/lib
   
+  # by default QMake eats linked libs if they are mentioned multiple times
+  # https://stackoverflow.com/questions/18327959/qmake-how-to-link-a-library-twice/18328971
+  CONFIG += no_lflags_merge
+
   LIBS += -lqgis_core
-  LIBS += -lgdal_i
+  LIBS += -lauthmethod_basic_a
+  LIBS += -lauthmethod_esritoken_a
+  LIBS += -lauthmethod_identcert_a
+  LIBS += -lauthmethod_oauth2_a
+  LIBS += -lauthmethod_pkcs12_a
+  LIBS += -lauthmethod_pkipaths_a
+  LIBS += -lprovider_arcgisfeatureserver_a
+  LIBS += -lprovider_arcgismapserver_a
+  LIBS += -lprovider_delimitedtext_a
+  LIBS += -lprovider_spatialite_a
+  LIBS += -lprovider_virtuallayer_a
+  LIBS += -lprovider_wcs_a
+  LIBS += -lprovider_wfs_a
+  LIBS += -lprovider_wms_a
+  LIBS += -lprovider_postgres_a
+
+  # needs to be added again because of the cycling dependencies between qgis_core
+  # and providers and auth methods
+  LIBS += -lqgis_core
+
   LIBS += -lgeodiff
   LIBS += -lproj
-  LIBS += -lsqlite3  
   LIBS += -lexiv2 -lexiv2-xmp
-  LIBS += -lzxing
+  LIBS += -lZXing
+  LIBS += -lqt6keychain -lqca
+  LIBS += -lgdal -llibpq -lspatialite
+  LIBS += -llibxml2
+  LIBS += -lproj
+  LIBS += -lspatialindex-64 -lspatialindex_c-64 -lgeos -lgeos_c
+  LIBS += -llibprotobuf-lite -llibexpat -lfreexl -lexiv2 -lexiv2-xmp
+  LIBS += -lsqlite3 -lzlib -lzip
+  LIBS += -ltiff -ljpeg
+  LIBS += -lwebp
   
+  LIBS += -lAdvapi32 -lws2_32 -luser32 -lshell32
+    
   QT += printsupport
   QT += widgets
   QT += multimedia

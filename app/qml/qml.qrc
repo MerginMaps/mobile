@@ -5,9 +5,9 @@
         <file>AuthPanel.qml</file>
         <file>Banner.qml</file>
         <file>CircularProgressBar.qml</file>
-        <file>CodeReader.qml</file>
         <file>CodeReaderHandler.qml</file>
-        <file>CodeReaderOverlay.qml</file>
+        <file>CodeScanner.qml</file>
+        <file>CodeScannerOverlay.qml</file>
         <file>ExternalResourceBundle.qml</file>
         <file>FeaturesList.qml</file>
         <file>FeaturesListPage.qml</file>

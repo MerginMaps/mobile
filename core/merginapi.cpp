@@ -22,9 +22,6 @@
 #include "coreutils.h"
 #include "geodiffutils.h"
 #include "localprojectsmanager.h"
-#include "merginuserauth.h"
-#include "merginuserinfo.h"
-#include "merginsubscriptioninfo.h"
 
 #include <geodiff.h>
 
@@ -2722,7 +2719,7 @@ MerginProject MerginApi::parseProjectMetadata( const QJsonObject &proj )
   if ( proj.contains( QStringLiteral( "error" ) ) )
   {
     // handle project error (user might be logged out / do not have write rights / project is on different server / project is orphaned)
-    project.remoteError = proj.value( QStringLiteral( "error" ) ).toInt( 0 ); // error code
+    project.remoteError = QString::number( proj.value( QStringLiteral( "error" ) ).toInt( 0 ) ); // error code
     return project;
   }
 

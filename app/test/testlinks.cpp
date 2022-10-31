@@ -23,12 +23,12 @@ void UrlTester::processFinished()
   Q_ASSERT( r );
   if ( r->error() == QNetworkReply::NoError )
   {
-    qDebug() << "  URL " << mUrl << " ...OK" << Qt::endl;
+    qDebug() << "  URL " << mUrl << " ...OK";
     mResult = 0;
   }
   else
   {
-    qDebug() << "  URL " << mUrl << " ...ERROR" << Qt::endl;
+    qDebug() << "  URL " << mUrl << " ...ERROR";
     mResult = 1;
   }
   r->deleteLater();
@@ -40,7 +40,7 @@ void UrlTester::open()
   QNetworkRequest req( mUrl );
   req.setRawHeader( "User-Agent", "InputApp tests" );
   QNetworkReply *reply = mManager.get( req );
-  qDebug() << "Requesting " << mUrl << Qt::endl;
+  qDebug() << "Requesting " << mUrl;
   connect( reply, &QNetworkReply::finished, this, &UrlTester::processFinished );
 }
 

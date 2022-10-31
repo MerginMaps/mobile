@@ -7,11 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Layouts 1.14
-import QtQuick.Controls 2.14
-import Qt.labs.calendar 1.0
-import QtGraphicalEffects 1.14
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
 import ".."
 
@@ -61,7 +60,7 @@ Item {
 
   focus: true
 
-  Keys.onReleased: {
+  Keys.onReleased: function( event ) {
     if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
       event.accepted = true
       root.canceled()
@@ -420,7 +419,7 @@ Item {
         }
 
         delegate: Rectangle {
-          width: parent.width
+          width: ListView.view.width
           height: 30
           Text {
             anchors.centerIn: parent

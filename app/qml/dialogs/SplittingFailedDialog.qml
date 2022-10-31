@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Dialogs 1.3
+import QtQuick
+import QtQuick.Dialogs
 
 MessageDialog {
   id: root
@@ -16,5 +16,5 @@ MessageDialog {
   title: qsTr( "We could not split the feature" )
   text: qsTr( "Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it." )
 
-  standardButtons: StandardButton.Ok
+  buttons: MessageDialog.Ok
 }

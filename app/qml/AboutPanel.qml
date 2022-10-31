@@ -7,12 +7,12 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.2
-import QtGraphicalEffects 1.0
-import QtQuick.Window 2.12
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
+import Qt5Compat.GraphicalEffects
+import QtQuick.Window
 
 import "."  // import InputStyle singleton
 import "./components"
@@ -45,7 +45,7 @@ Page {
     }
   }
 
-  Keys.onReleased: {
+  Keys.onReleased: function( event ) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true
       close()

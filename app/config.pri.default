@@ -10,6 +10,14 @@ android {
   # Definition needed by QGIS_QUICK to work properly.
   # The value is NOT used to find app folder
   QGIS_QUICK_DATA_PATH = INPUT
+  
+  # If you have 
+  # "error: undefined reference to 'stdout'" or 
+  # ld: error: undefined symbol: __write_chk or
+  # ld: error: undefined symbol: fseeko64 or
+  # or similar ...
+  # make sure that in BUILD ENV you have ANDROID_NDK_PLATFORM platform set 
+  # to same value as in the input-sdk builds, e.g. ANDROID_NDK_PLATFORM=android-24
 }
 
 unix:!macx:!android {

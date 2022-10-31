@@ -31,10 +31,9 @@ BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const
   mReceiverDevice = std::make_unique<QBluetoothLocalDevice>();
 
   connect( mSocket.get(), &QBluetoothSocket::stateChanged, this, &BluetoothPositionProvider::socketStateChanged );
-  connect( mSocket.get(), QOverload<QBluetoothSocket::SocketError>::of( &QBluetoothSocket::error ), this,
-           [ = ]( QBluetoothSocket::SocketError error )
+  connect( mSocket.get(), &QBluetoothSocket::errorOccurred, this, [ = ]( QBluetoothSocket::SocketError error )
   {
-    QString errorToString = QMetaEnum::fromType<QBluetoothSocket::SocketError>().valueToKey( error );
+    QString errorToString = QMetaEnum::fromType<QBluetoothSocket::SocketError>().valueToKey( int( error ) );
     CoreUtils::log(
       QStringLiteral( "BluetoothPositionProvider" ),
       QStringLiteral( "Occured connection error: %1, text: %2" ).arg( errorToString, mSocket->errorString() )
@@ -63,7 +62,7 @@ void BluetoothPositionProvider::startUpdates()
 {
   if ( mSocket->state() == QBluetoothSocket::SocketState::UnconnectedState )
   {
-    mSocket->connectToService( mTargetAddress, QBluetoothUuid( QBluetoothUuid::SerialPort ), QIODevice::ReadOnly );
+    mSocket->connectToService( mTargetAddress, QBluetoothUuid( QBluetoothUuid::ServiceClassUuid::SerialPort ), QIODevice::ReadOnly );
   }
 }
 
@@ -151,27 +150,27 @@ void BluetoothPositionProvider::handleLostConnection()
 
 void BluetoothPositionProvider::socketStateChanged( QBluetoothSocket::SocketState state )
 {
-  if ( state == QBluetoothSocket::ConnectingState || state == QBluetoothSocket::ServiceLookupState )
+  if ( state == QBluetoothSocket::SocketState::ConnectingState || state == QBluetoothSocket::SocketState::ServiceLookupState )
   {
     setState( tr( "Connecting to %1" ).arg( mProviderName ), State::Connecting );
   }
-  else if ( state == QBluetoothSocket::ConnectedState )
+  else if ( state == QBluetoothSocket::SocketState::ConnectedState )
   {
     setState( tr( "Connected" ), State::Connected );
   }
-  else if ( state == QBluetoothSocket::UnconnectedState )
+  else if ( state == QBluetoothSocket::SocketState::UnconnectedState )
   {
     setState( tr( "No connection" ), State::NoConnection );
     handleLostConnection();
   }
 
-  QString stateToString = QMetaEnum::fromType<QBluetoothSocket::SocketState>().valueToKey( state );
+  QString stateToString = QMetaEnum::fromType<QBluetoothSocket::SocketState>().valueToKey( int( state ) );
   CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Socket changed state, code: %1" ).arg( stateToString ) );
 }
 
 void BluetoothPositionProvider::positionUpdateReceived()
 {
-  if ( mSocket->state() != QBluetoothSocket::UnconnectedState )
+  if ( mSocket->state() != QBluetoothSocket::SocketState::UnconnectedState )
   {
     // if by any chance we showed wrong message in the status like "no connection", fix it here
     // we know the connection is working because we just received data from the device

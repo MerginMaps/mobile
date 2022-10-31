@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
+import QtQuick
+import QtQuick.Controls
 
 import lc 1.0
 import ".."
@@ -116,7 +116,9 @@ Item {
     PreviewPanel {
       id: previewPanel
 
-      onStakeoutFeature: root.stakeoutFeature( feature )
+      onStakeoutFeature: function( feature ) {
+        root.stakeoutFeature( feature )
+      }
 
       isReadOnly: root.isReadOnly
       controller: AttributePreviewController { project: root.project; featureLayerPair: root.featureLayerPair }
@@ -145,12 +147,14 @@ Item {
       formState: root.formState
 
       onClose: root.panelState = "closed"
-      onEditGeometryClicked: {
+      onEditGeometryClicked: function( pair ) {
         root.panelState = "hidden"
         root.editGeometry( pair )
       }
-      onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
-      onCreateLinkedFeature: {
+      onOpenLinkedFeature: function( linkedFeature ) {
+        root.openLinkedFeature( linkedFeature )
+      }
+      onCreateLinkedFeature: function( parentController, relation ) {
         root.controllerToApply = parentController
         root.relationToApply = relation
         root.createLinkedFeature( relation.referencingLayer, root.featureLayerPair )
@@ -159,7 +163,7 @@ Item {
         root.panelState = "hidden"
         root.splitGeometry( root.featureLayerPair )
       }
-      onRedrawGeometryClicked: {
+      onRedrawGeometryClicked: function( pair ) {
         root.panelState = "hidden"
         root.redrawGeometry( pair )
       }

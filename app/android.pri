@@ -33,7 +33,7 @@ android {
 
     INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}
     INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}/qgis
-    
+
     # by default QMake eats linked libs if they are mentioned multiple times
     # https://stackoverflow.com/questions/18327959/qmake-how-to-link-a-library-twice/18328971
     CONFIG += no_lflags_merge
@@ -65,7 +65,7 @@ android {
     # and providers and auth methods
     LIBS += -lqgis_core
 
-    LIBS += -lqt5keychain -lqca-qt5
+    LIBS += -lqt6keychain -lqca-qt6
     LIBS += -lgdal -lpq -lspatialite
     LIBS += -lcharset
     LIBS += -ltasn1 -lproj
@@ -74,11 +74,11 @@ android {
     LIBS += -lsqlite3 -liconv -lz -lzip
     LIBS += -ltiff
     LIBS += -lwebp -lcurl -ljpeg
-    
+
     QT += multimedia
     QT += printsupport
-    QT += androidextras
     QT += bluetooth
+    QT += core-private
     DEFINES += "HAVE_BLUETOOTH"
 
     QMAKE_CXXFLAGS += -std=c++11
@@ -108,13 +108,5 @@ android {
 
     for (abi, ANDROID_ABIS): ANDROID_EXTRA_LIBS += \
         $${INPUT_SDK_PATH}/$${abi}/lib/libcrypto_1_1.so \
-        $${INPUT_SDK_PATH}/$${abi}/lib/libssl_1_1.so \
-        $$QT_LIBS_DIR/libQt5OpenGL_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5PrintSupport_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5Sensors_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5Network_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5Sql_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5Svg_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5AndroidExtras_$${abi}.so \
-        $$QT_LIBS_DIR/libQt5SerialPort_$${abi}.so
+        $${INPUT_SDK_PATH}/$${abi}/lib/libssl_1_1.so
 }

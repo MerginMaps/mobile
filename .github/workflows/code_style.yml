@@ -1,7 +1,5 @@
 name: Code Layout
 
-env:
-  QT_VERSION: '6.2.0'
 on:
   push:
     paths:

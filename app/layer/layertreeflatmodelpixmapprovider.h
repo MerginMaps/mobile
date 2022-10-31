@@ -16,12 +16,12 @@
 #include <QObject>
 #include <qglobal.h>
 
-class LayerTreeFlatModelPixmapProvider : public QObject, public QQuickImageProvider
+class LayerTreeFlatModelPixmapProvider : public QQuickImageProvider
 {
     Q_OBJECT
 
   public:
-    explicit LayerTreeFlatModelPixmapProvider( QObject *parent = nullptr );
+    explicit LayerTreeFlatModelPixmapProvider();
     virtual ~LayerTreeFlatModelPixmapProvider();
 
     QPixmap requestPixmap( const QString &id, QSize *, const QSize & ) override;

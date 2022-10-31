@@ -379,7 +379,7 @@ Item {
     target: null
     grabPermissions: PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByItems
 
-    onWheel: {
+    onWheel: function( event ) {
       if (event.angleDelta.y > 0)
       {
         zoomIn(point.position)

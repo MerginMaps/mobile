@@ -41,8 +41,7 @@ ios {
     CONFIG += static
     DEFINES += QT_NO_SSL
 
-    QT += multimedia multimediawidgets location
-    QTPLUGIN += qios
+    QT += multimedia multimediawidgets
 
     # other libs
     LIBS += -L$${INPUT_SDK_LIB_PATH} -L$${QGIS_PLUGINS_PATH}
@@ -64,7 +63,7 @@ ios {
     LIBS += -lprovider_wfs_a
     LIBS += -lprovider_wms_a
     LIBS += -lprovider_postgres_a
-    LIBS += -lqt5keychain -lqca-qt5
+    LIBS += -lqt6keychain -lqca-qt6
     LIBS += -lgdal -lpq -lspatialite
     LIBS += -lcharset -lxml2
     LIBS += -ltasn1 -lbz2 -lproj
@@ -73,9 +72,9 @@ ios {
     LIBS += -lsqlite3 -liconv -lz -lzip
     LIBS += -ltiff
     LIBS += -lwebp -lcurl -ljpeg
-    
+
     LIBS += -framework Security -framework CoreFoundation -framework SystemConfiguration
-    
+
     QMAKE_INFO_PLIST = ios/Info.plist
 
     # demo projects

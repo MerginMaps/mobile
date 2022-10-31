@@ -7,10 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Layouts 1.14
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import lc 1.0
 import "." // import InputStyle singleton
 import "./components"
@@ -35,7 +35,7 @@ Item {
     }
   }
 
-  Keys.onReleased: {
+  Keys.onReleased: function( event ) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true
 
@@ -347,10 +347,7 @@ Item {
             text: qsTr("Diagnostic log")
             MouseArea {
               anchors.fill: parent
-              onClicked: stackview.push(logPanelComponent, {
-                                          "text": __inputHelp.fullLog(true,
-                                                                      200000)
-                                        })
+              onClicked: stackview.push(logPanelComponent, { "text": __inputHelp.fullLog( true ) } )
             }
           }
         }

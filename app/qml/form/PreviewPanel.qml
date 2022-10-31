@@ -7,10 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.3
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
 import ".."  // import InputStyle singleton
 import "../components" as Components
@@ -187,7 +187,7 @@ Item {
                     delegate: Row {
                         id: root
                         spacing: InputStyle.panelMargin
-                        width: parent.width
+                        width: ListView.view.width
 
                         Text {
                             id: fieldName

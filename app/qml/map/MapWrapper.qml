@@ -7,11 +7,11 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
+import QtQuick
 
 import lc 1.0
 import QgsQuick 0.1 as QgsQuick
-import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 
 import ".."
 import "../components"
@@ -162,7 +162,7 @@ Item {
       identifyMode: IdentifyKit.TopDownAll
     }
 
-    onClicked: {
+    onClicked: function( point ) {
       if ( root.state === "view" )
       {
         let screenPoint = Qt.point( point.x, point.y )
@@ -684,18 +684,17 @@ Item {
       return ""
     }
 
-    standardButtons: StandardButton.Yes | StandardButton.No
+    buttons: MessageDialog.Yes | MessageDialog.No
 
-    onButtonClicked: {
-      if ( clickedButton === StandardButton.Yes ) {
+    onButtonClicked: function(clickedButton) {
+      if ( clickedButton === MessageDialog.Yes ) {
         recordingToolsLoader.item.discardChanges()
       }
-      else if ( clickedButton === StandardButton.No ) {
+      else if ( clickedButton === MessageDialog.No ) {
         cancelEditDialog.close()
       }
     }
   }
-
 
   MapFloatButton {
     id: accuracyButton
@@ -868,7 +867,7 @@ Item {
 
   Connections {
     target: mapCanvas.mapSettings
-    onExtentChanged: {
+    function onExtentChanged() {
       scaleBar.visible = true
     }
   }
@@ -905,7 +904,7 @@ Item {
         root.state = "view"
       }
 
-      onDone: {
+      onDone: function( featureLayerPair ) {
         howtoEditingBanner.hide()
 
         if ( root.state === "record" )
@@ -1098,7 +1097,7 @@ Item {
   }
 
   function highlightPair( pair ) {
-    let geometry = __inputUtils.extractGeometry( pair, mapCanvas.mapSettings )
+    let geometry = __inputUtils.extractGeometry( pair )
     identifyHighlight.geometry = __inputUtils.convertGeometryToMapCRS( geometry, pair.layer, mapCanvas.mapSettings )
   }
 

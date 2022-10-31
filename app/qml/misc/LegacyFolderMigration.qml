@@ -7,10 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Dialogs 1.3
-import QtQuick.Layouts 1.14
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs
+import QtQuick.Layouts
 
 import "../"
 import "../components"
@@ -29,21 +29,27 @@ Item {
     title: qsTr( "Insufficient space left on device" )
 
     text: qsTr( "Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue." ).arg( notEnoughSpaceLeftdialog.neededSpace )
-    standardButtons: StandardButton.Help | StandardButton.Ignore
+    buttons: MessageDialog.Help | MessageDialog.Ignore
 
-    onHelp: Qt.openUrlExternally( "https://www.lutraconsulting.co.uk/blog/2021/10/26/input-scoped-storage-update/" )
+    onButtonClicked: function(clickedButton) {
+      if (clickedButton === MessageDialog.Help) {
+        Qt.openUrlExternally( "https://www.lutraconsulting.co.uk/blog/2021/10/26/input-scoped-storage-update/" )
+      }
+    }
   }
 
   MessageDialog {
     id: migrationFailureDialog
 
     title: qsTr( "An error occured during update" )
-    icon: StandardIcon.Warning
-
     text: qsTr( "Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue." )
-    standardButtons: StandardButton.Help | StandardButton.Ignore
+    buttons: MessageDialog.Help | MessageDialog.Ignore
 
-    onHelp: Qt.openUrlExternally( "https://www.lutraconsulting.co.uk/blog/2021/10/26/input-scoped-storage-update/" )
+    onButtonClicked: {
+      if (clickedButton === MessageDialog.Help) {
+        Qt.openUrlExternally( "https://www.lutraconsulting.co.uk/blog/2021/10/26/input-scoped-storage-update/" )
+      }
+    }
   }
 
   Connections {
@@ -54,8 +60,8 @@ Item {
       migrationInProgress.visible = true
     }
 
-    function onMigrationProgressed( numOfCopiedProjects ) {
-      root.numOfCopiedProjects = numOfCopiedProjects
+    function onMigrationProgressed( progress ) {
+      root.numOfCopiedProjects = progress
     }
 
     function onMigrationFinished( success ) {

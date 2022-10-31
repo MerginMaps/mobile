@@ -19,7 +19,6 @@
 #include "qgsdistancearea.h"
 #include "qgspointxy.h"
 
-#include "qgsquickmapsettings.h"
 #include "scalebarkit.h"
 #include "inpututils.h"
 #include "qgsunittypes.h"

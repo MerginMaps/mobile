@@ -43,12 +43,12 @@ InputHelp::InputHelp( MerginApi *merginApi, InputUtils *utils ):
 
 QString InputHelp::helpRootLink() const
 {
-  return helpRoot + utmTagHelp;
+  return helpRoot + "/" + utmTagHelp;
 }
 
 QString InputHelp::inputWebLink() const
 {
-  return inputWeb + utmTagOther;
+  return inputWeb + "/" +  utmTagOther;
 }
 
 QString InputHelp::merginWebLink() const
@@ -211,7 +211,7 @@ void InputHelp::submitReport()
   req.setRawHeader( "User-Agent", "InputApp" );
   req.setRawHeader( "Content-Type", "text/plain" );
   QNetworkReply *reply = mManager.post( req, logArr );
-  qDebug() << "Report to " << reportLogUrl << endl;
+  qDebug() << "Report to " << reportLogUrl;
 
   mSubmitReportPending = true;
   emit submitReportPendingChanged();

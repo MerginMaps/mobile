@@ -287,44 +287,6 @@ void TestMerginApi::testDownloadProjectSpecChars()
   QVERIFY( projectFileExtra.exists() );
 }
 
-void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath )
-{
-  // create a project
-  QSignalSpy spy( api, &MerginApi::projectCreated );
-  api->createProject( projectNamespace, projectName, true );
-  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
-  QCOMPARE( spy.count(), 1 );
-  QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
-
-  // Copy data
-  QString projectDir = api->projectsPath() + "/" + projectName + "/";
-  InputUtils::cpDir( sourcePath, projectDir );
-
-  // make MerginApi aware of the project and its directory
-  api->localProjectsManager().addMerginProject( projectDir, projectNamespace, projectName );
-
-  // Upload data
-  QSignalSpy spy3( api, &MerginApi::syncProjectFinished );
-  api->pushProject( projectNamespace, projectName );
-  QVERIFY( spy3.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( spy3.count(), 1 );
-  QList<QVariant> arguments = spy3.takeFirst();
-  QVERIFY( arguments.at( 2 ).toBool() );
-
-  // Remove the whole project
-  QDir( projectDir ).removeRecursively();
-  QFileInfo info( projectDir );
-  QDir dir( projectDir );
-  QCOMPARE( info.size(), 0 );
-  QVERIFY( dir.isEmpty() );
-
-  api->localProjectsManager().removeLocalProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
-
-  QCOMPARE( QFileInfo( projectDir ).size(), 0 );
-  QVERIFY( QDir( projectDir ).isEmpty() );
-}
-
-
 void TestMerginApi::testCancelDownloadProject()
 {
   QString projectName = "testCancelDownloadProject";
@@ -624,7 +586,6 @@ void TestMerginApi::testEmptyFileUploadDownload()
   QCOMPARE( checksum, checksum2 );
 }
 
-
 void TestMerginApi::testPushAddedFile()
 {
   QString projectName = "testPushAddedFile";
@@ -873,7 +834,6 @@ void TestMerginApi::testUpdateAddedFile()
   QCOMPARE( project2.local.localVersion, 2 );
   QCOMPARE( project2.mergin.serverVersion, 2 );
   QCOMPARE( project2.mergin.status, ProjectStatus::UpToDate );
-
 
   // check that the added file is there
   QVERIFY( QFile::exists( projectDir + "/project.qgs" ) );
@@ -1220,7 +1180,6 @@ void TestMerginApi::testDiffSubdirsUpload()
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
 }
-
 
 void TestMerginApi::testDiffUpdateBasic()
 {
@@ -2560,6 +2519,43 @@ int TestMerginApi::serverVersionFromSpy( QSignalSpy &spy )
   return serverVersion;
 }
 
+void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath )
+{
+  // create a project
+  QSignalSpy spy( api, &MerginApi::projectCreated );
+  api->createProject( projectNamespace, projectName, true );
+  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
+
+  // Copy data
+  QString projectDir = api->projectsPath() + "/" + projectName + "/";
+  InputUtils::cpDir( sourcePath, projectDir );
+
+  // make MerginApi aware of the project and its directory
+  api->localProjectsManager().addMerginProject( projectDir, projectNamespace, projectName );
+
+  // Upload data
+  QSignalSpy spy3( api, &MerginApi::syncProjectFinished );
+  api->pushProject( projectNamespace, projectName );
+  QVERIFY( spy3.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( spy3.count(), 1 );
+  QList<QVariant> arguments = spy3.takeFirst();
+  QVERIFY( arguments.at( 2 ).toBool() );
+
+  // Remove the whole project
+  QDir( projectDir ).removeRecursively();
+  QFileInfo info( projectDir );
+  QDir dir( projectDir );
+  QCOMPARE( info.size(), 0 );
+  QVERIFY( dir.isEmpty() );
+
+  api->localProjectsManager().removeLocalProject( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+
+  QCOMPARE( QFileInfo( projectDir ).size(), 0 );
+  QVERIFY( QDir( projectDir ).isEmpty() );
+}
+
 void TestMerginApi::deleteRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName )
 {
   QSignalSpy spy( api, &MerginApi::serverProjectDeleted );
@@ -2615,7 +2611,8 @@ void TestMerginApi::uploadRemoteProject( MerginApi *api, const QString &projectN
 void TestMerginApi::writeFileContent( const QString &filename, const QByteArray &data )
 {
   QFile f( filename );
-  Q_ASSERT( f.open( QIODevice::WriteOnly ) );
+  bool ok = f.open( QIODeviceBase::WriteOnly );
+  Q_ASSERT( ok );
   f.write( data );
   f.close();
 }
@@ -2624,7 +2621,8 @@ QByteArray TestMerginApi::readFileContent( const QString &filename )
 {
   QFile f( filename );
   Q_ASSERT( f.exists() );
-  Q_ASSERT( f.open( QIODevice::ReadOnly ) );
+  bool ok = f.open( QIODeviceBase::ReadOnly );
+  Q_ASSERT( ok );
   QByteArray data = f.readAll();
   f.close();
   return data;
@@ -2652,7 +2650,6 @@ bool TestMerginApi::createJsonFile( const QString &path, const QVariantMap &para
 
 void TestMerginApi::refreshProjectsModel( const ProjectsModel::ProjectModelTypes modelType )
 {
-
   if ( modelType == ProjectsModel::LocalProjectsModel )
   {
     QSignalSpy spy( mApi, &MerginApi::listProjectsByNameFinished );

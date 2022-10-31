@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.0
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Controls
 
 import "./components"
 
@@ -57,7 +57,7 @@ Item {
 
     anchors.fill: parent
 
-    Keys.onReleased: {
+    Keys.onReleased: function( event ) {
       if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
         event.accepted = true;
         deactivateSearch()
@@ -75,7 +75,7 @@ Item {
       rowHeight: InputStyle.rowHeightHeader
 
       titleText: pageTitle
-      
+
       onBack: {
         searchBar.deactivate()
         root.backButtonClicked()
@@ -89,7 +89,9 @@ Item {
 
       visible: root.allowSearch
       allowTimer: true
-      onSearchTextChanged: root.featuresModel.searchExpression = text
+      onSearchTextChanged: function( text ) {
+        root.featuresModel.searchExpression = text
+      }
     }
 
     FeaturesList {
@@ -107,7 +109,9 @@ Item {
       allowMultiselect: root.allowMultiselect
       selectedFeatures: root.preselectedFeatures
 
-      onFeatureClicked: root.finishSelection( featureId )
+      onFeatureClicked: function( featureId ) {
+        root.finishSelection( featureId )
+      }
     }
 
     footer: FeaturesListPageToolbar {

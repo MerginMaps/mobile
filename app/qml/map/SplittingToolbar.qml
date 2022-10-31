@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Layouts 1.14
+import QtQuick
+import QtQuick.Layouts
 
 import ".."
 import "../components"
@@ -26,7 +26,7 @@ Item {
   focus: true
   height: InputStyle.rowHeightHeader
 
-  Keys.onReleased: {
+  Keys.onReleased: function( event ) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true;
       cancelClicked()

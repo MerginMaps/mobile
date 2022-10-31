@@ -7,10 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Dialogs 1.2
-import QtQuick.Layouts 1.12
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs
+import QtQuick.Layouts
 import lc 1.0
 import "../"
 import "."
@@ -78,7 +78,7 @@ Item {
     delegate: ProjectDelegateItem {
       id: projectDelegate
 
-      width: parent.width
+      width: ListView.view.width
       height: InputStyle.projectItemHeight
 
       projectDisplayName: root.projectModelType === ProjectsModel.CreatedProjectsModel ? model.ProjectName : model.ProjectFullName
@@ -167,7 +167,9 @@ Item {
         .arg("</a>")
         .arg("<a href='"+ __inputHelp.howToDownloadProjectLink +"'>")
 
-        onLinkActivated: Qt.openUrlExternally(link)
+        onLinkActivated: function( link ) {
+          Qt.openUrlExternally(link)
+        }
       }
 
 
@@ -216,11 +218,11 @@ Item {
     Connections {
       target: __merginApi
 
-      onListProjectsFailed: {
+      function onListProjectsFailed() {
         reloadList.visible = root.projectModelType !== ProjectsModel.LocalProjectsModel // show reload list to all models except local
       }
 
-      onListProjectsFinished: {
+      function onListProjectsFinished( merginProjects, projectCount, page, requestId ) {
         if ( projectCount > -1 )
           reloadList.visible = false
       }
@@ -260,12 +262,11 @@ Item {
 
     title: qsTr( "Remove project" )
     text: qsTr( "Any unsynchronized changes will be lost." )
-    icon: StandardIcon.Warning
-    standardButtons: StandardButton.Ok | StandardButton.Cancel
+    buttons: MessageDialog.Ok | MessageDialog.Cancel
 
     //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-    onButtonClicked: {
-      if (clickedButton === StandardButton.Ok) {
+    onButtonClicked: function(clickedButton) {
+      if (clickedButton === MessageDialog.Ok) {
         if (relatedProjectId === "")
           return
 
@@ -282,7 +283,7 @@ Item {
         removeDialog.relatedProjectId = ""
         visible = false
       }
-      else if (clickedButton === StandardButton.Cancel) {
+      else if (clickedButton === MessageDialog.Cancel) {
         removeDialog.relatedProjectId = ""
         visible = false
       }
@@ -296,8 +297,11 @@ Item {
 
     title: qsTr( "Download project" )
     text: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
-    icon: StandardIcon.Question
-    standardButtons: StandardButton.Yes | StandardButton.No
-    onYes: controllerModel.syncProject( relatedProjectId )
+    buttons: MessageDialog.Yes | MessageDialog.No
+    onButtonClicked: function(clickedButton) {
+      if (clickedButton === MessageDialog.Yes) {
+        controllerModel.syncProject( relatedProjectId )
+      }
+    }
   }
 }

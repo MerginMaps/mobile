@@ -7,11 +7,11 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Layouts 1.14
-import QtGraphicalEffects 1.14
-import QtQuick.Window 2.14
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
+import QtQuick.Window
 
 import "../components" as Components
 
@@ -193,7 +193,7 @@ AbstractEditor {
         hasDatePicker: root.includesDate
         hasTimePicker: root.includesTime
 
-        onSelected: {
+        onSelected: function( selectedDate ) {
           if ( selectedDate )
             root.editorValueChanged(selectedDate, false)
 

@@ -7,9 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtGraphicalEffects 1.14
+import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
 AbstractEditor {
   id: root
@@ -42,7 +42,9 @@ AbstractEditor {
     text: root.parentValue !== undefined ? root.parentValue : ''
     textFormat: config['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
 
-    onLinkActivated: Qt.openUrlExternally( link )
+    onLinkActivated: function( link ) {
+      Qt.openUrlExternally( link )
+    }
 
     onTextChanged: root.editorValueChanged( text, text === "" )
   }

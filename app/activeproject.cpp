@@ -17,11 +17,9 @@
 #include "qgslayertreelayer.h"
 #include "qgslayertreegroup.h"
 #include "qgsmapthemecollection.h"
-#include "qgsquickmapsettings.h"
 
 #include "activeproject.h"
 #include "coreutils.h"
-#include "autosynccontroller.h"
 
 const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 
@@ -98,7 +96,7 @@ bool ActiveProject::load( const QString &filePath )
 
 bool ActiveProject::forceLoad( const QString &filePath, bool force )
 {
-  CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + force );
+  CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + ( force ? "true" : "false" ) );
 
   // clear autosync
   setAutosyncEnabled( false );

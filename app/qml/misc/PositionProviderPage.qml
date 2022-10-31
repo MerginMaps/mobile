@@ -7,10 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtGraphicalEffects 1.14
-import QtQuick.Dialogs 1.3
+import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
+import QtQuick.Dialogs
 
 import lc 1.0
 
@@ -65,7 +65,7 @@ Page {
 
   focus: true
 
-  Keys.onReleased: {
+  Keys.onReleased: function( event ) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true
       close()
@@ -309,7 +309,9 @@ Page {
         leftPadding: InputStyle.panelMargin
         rightPadding: InputStyle.panelMargin
 
-        onLinkActivated: Qt.openUrlExternally( link )
+        onLinkActivated: function( link ) {
+          Qt.openUrlExternally( link )
+        }
       }
     }
   }
@@ -365,12 +367,11 @@ Page {
 
     title: qsTr( "Remove receiver" )
     text: qsTr( "Do you want to remove receiver from the list of recent receivers?" )
-    icon: StandardIcon.Warning
-    standardButtons: StandardButton.Ok | StandardButton.Cancel
+    buttons: MessageDialog.Ok | MessageDialog.Cancel
 
     //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-    onButtonClicked: {
-      if (clickedButton === StandardButton.Ok) {
+    onButtonClicked: function(clickedButton) {
+      if (clickedButton === MessageDialog.Ok) {
         if (relatedProviderId === "")
           return
 
@@ -382,7 +383,7 @@ Page {
 
         providersModel.removeProvider( relatedProviderId )
       }
-      else if (clickedButton === StandardButton.Cancel) {
+      else if (clickedButton === MessageDialog.Cancel) {
         removeDialog.relatedProviderId = ""
         visible = false
       }

@@ -9,7 +9,6 @@
 
 #include "positionprovidersmodel.h"
 #include "inpututils.h"
-#include "appsettings.h"
 #include "coreutils.h"
 
 PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractListModel( parent )

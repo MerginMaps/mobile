@@ -16,11 +16,11 @@
 
 #include "layerdetaildata.h"
 
-class LayerDetailLegendImageProvider : public QObject, public QQuickImageProvider
+class LayerDetailLegendImageProvider : public QQuickImageProvider
 {
     Q_OBJECT
   public:
-    explicit LayerDetailLegendImageProvider( QObject *parent = nullptr );
+    explicit LayerDetailLegendImageProvider();
     virtual ~LayerDetailLegendImageProvider();
 
     QImage requestImage( const QString &id, QSize *size, const QSize &requestedSize ) override;

@@ -7,9 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtGraphicalEffects 1.0
-import QtQuick.Controls 2.2
+import QtQuick
+import Qt5Compat.GraphicalEffects
+import QtQuick.Controls
 import "."  // import InputStyle singleton
 import ".."
 

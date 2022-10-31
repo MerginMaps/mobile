@@ -7,11 +7,11 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Layouts 1.14
-import QtQuick.Controls 2.14
-import QtGraphicalEffects 1.0
-import QtQuick.Shapes 1.14
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
+import QtQuick.Shapes
 
 import "."  // import InputStyle singleton
 import "./components" as Components
@@ -84,7 +84,7 @@ Item {
     }
   ]
 
-  Keys.onReleased: {
+  Keys.onReleased: function( event ) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true;
       endStakeout()
@@ -115,7 +115,7 @@ Item {
       // back handler
       focus: true
 
-      Keys.onReleased: {
+      Keys.onReleased: function( event ) {
         if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
           event.accepted = true;
           endStakeout()

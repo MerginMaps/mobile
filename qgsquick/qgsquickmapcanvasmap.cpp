@@ -367,9 +367,9 @@ QSGNode *QgsQuickMapCanvasMap::updatePaintNode( QSGNode *oldNode, QQuickItem::Up
   return node;
 }
 
-void QgsQuickMapCanvasMap::geometryChanged( const QRectF &newGeometry, const QRectF &oldGeometry )
+void QgsQuickMapCanvasMap::geometryChange( const QRectF &newGeometry, const QRectF &oldGeometry )
 {
-  QQuickItem::geometryChanged( newGeometry, oldGeometry );
+  QQuickItem::geometryChange( newGeometry, oldGeometry );
   if ( newGeometry.size() != oldGeometry.size() )
   {
     mMapSettings->setOutputSize( newGeometry.size().toSize() );

@@ -7,9 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.12
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
 Rectangle {
   id: root
@@ -22,7 +22,7 @@ Rectangle {
   property string text: ""
   property bool allowTimer: false
   property int emitInterval: 200
-  
+
   property color bgColor: InputStyle.panelBackgroundLight
   property color fontColor: InputStyle.panelBackgroundDarker
 
@@ -57,12 +57,12 @@ Rectangle {
       searchTextChanged( root.text )
     }
   }
-  
+
   Item {
     id: row
     width: root.width
     height: root.height
-    
+
     TextField {
       id: searchField
       width: parent.width - iconContainer.width
@@ -78,7 +78,7 @@ Rectangle {
 
       leftPadding: root.panelMargin
       rightPadding: root.panelMargin
-      
+
       onDisplayTextChanged: {
         if ( root.allowTimer ) {
           if ( searchTimer.running )
@@ -93,13 +93,13 @@ Rectangle {
         }
       }
     }
-    
+
     Item {
       id: iconContainer
       height: searchField.height
       width: searchField.height + root.panelMargin
       anchors.right: parent.right
-      
+
       Image {
         id: cancelSearchBtn
         source: searchField.displayText ? InputStyle.noIcon : InputStyle.searchIcon
@@ -110,7 +110,7 @@ Rectangle {
         anchors.centerIn: parent
         fillMode: Image.PreserveAspectFit
       }
-      
+
       ColorOverlay {
         anchors.fill: cancelSearchBtn
         source: cancelSearchBtn
@@ -127,7 +127,7 @@ Rectangle {
       }
     }
   }
-  
+
   Rectangle {
     id: searchFieldBorder
     color: root.fontColor

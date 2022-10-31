@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtGraphicalEffects 1.14
+import QtQuick
+import Qt5Compat.GraphicalEffects
 
 import lc 1.0
 import ".."
@@ -243,7 +243,7 @@ Item {
         snapUtils.clear()
       }
 
-      function onProjectReloaded() {
+      function onProjectReloaded( project ) {
         // We need to re-assign qgs project to snaputils, because
         // even though we loaded a different project,
         // internally we keep the same pointer for QgsProject.

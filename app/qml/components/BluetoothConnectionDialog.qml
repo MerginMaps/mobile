@@ -7,9 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Layouts 1.14
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import ".."
 import lc 1.0
@@ -69,7 +69,7 @@ Dialog {
   Item {
     focus: true
     // just close the popup, keep the connection running
-    Keys.onReleased: {
+    Keys.onReleased: function( event ) {
       if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
         event.accepted = true
         close()
@@ -272,7 +272,9 @@ Dialog {
           color: InputStyle.fontColor
           font.pixelSize: InputStyle.fontPixelSizeNormal
 
-          onLinkActivated: Qt.openUrlExternally( link )
+          onLinkActivated: function( link ) {
+            Qt.openUrlExternally( link )
+          }
         }
       }
 

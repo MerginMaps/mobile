@@ -6,15 +6,15 @@ macx:!android {
     isEmpty(INPUT_SDK_PATH) {
       error("Missing INPUT_SDK_PATH")
     }
-    
+
     INPUT_SDK_LIB_PATH = $${INPUT_SDK_PATH}/lib
     INPUT_SDK_INCLUDE_PATH = $${INPUT_SDK_PATH}/include
-    
+
     # QGIS
     QGIS_PREFIX_PATH = $${INPUT_SDK_PATH}/QGIS.app/Contents/MacOS
     QGIS_FRAMEWORK_DIR = $${INPUT_SDK_PATH}/QGIS.app/Contents/Frameworks
     QGIS_PLUGINS_PATH=$${INPUT_SDK_PATH}/QGIS.app/Contents/PlugIns/qgis
-    
+
     exists($${QGIS_FRAMEWORK_DIR}/qgis_core.framework/qgis_core) {
       message("Building from QGIS: $${QGIS_FRAMEWORK_DIR}/qgis_core.framework/qgis_core")
     } else {
@@ -27,8 +27,7 @@ macx:!android {
         $${INPUT_SDK_INCLUDE_PATH}
 
     LIBS += -F$${QGIS_FRAMEWORK_DIR}
-    LIBS += -framework qgis_core \
-            -framework qgis_native
+    LIBS += -framework qgis_core
 
     # other libs
     LIBS += -L$${INPUT_SDK_LIB_PATH} -L$${QGIS_PLUGINS_PATH}
@@ -50,7 +49,7 @@ macx:!android {
     LIBS += -lprovider_wfs_a
     LIBS += -lprovider_wms_a
     LIBS += -lprovider_postgres_a
-    LIBS += -lqt5keychain -lqca-qt5
+    LIBS += -lqt6keychain -lqca-qt6
     LIBS += -lgdal -lpq -lspatialite
     LIBS += -lcharset -lxml2
     LIBS += -ltasn1 -lbz2 -lproj
@@ -59,7 +58,7 @@ macx:!android {
     LIBS += -ltiff
     LIBS += -lsqlite3 -liconv -lz -lzip
     LIBS += -lwebp -lcurl -ljpeg
-    
+
     LIBS += -framework Security -framework CoreFoundation -framework SystemConfiguration
 
     # PURCHASING stuff (only testing)

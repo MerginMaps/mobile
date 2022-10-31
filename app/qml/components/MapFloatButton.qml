@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
+import QtQuick
 import ".."
 
 Item {
@@ -37,7 +37,7 @@ Item {
     color: InputStyle.panelBackgroundLight
 
     layer.enabled: true
-    layer.effect: Shadow { verticalOffset: 0; horizontalOffset: 0; radius: 7; samples: 15 }
+    layer.effect: Shadow { verticalOffset: 0; horizontalOffset: 0; radius: 7; }
 
     Item {
       id: contentContainer

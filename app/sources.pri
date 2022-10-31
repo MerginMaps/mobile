@@ -54,7 +54,7 @@ variablesmanager.cpp \
 ios/iosimagepicker.cpp \
 ios/iosutils.cpp \
 inputprojutils.cpp \
-codefilter.cpp \
+codescanner.cpp \
 qrdecoder.cpp \
 projectsmodel.cpp \
 projectsproxymodel.cpp \
@@ -121,7 +121,7 @@ variablesmanager.h \
 ios/iosimagepicker.h \
 ios/iosutils.h \
 inputprojutils.h \
-codefilter.h \
+codescanner.h \
 qrdecoder.h \
 projectsmodel.h \
 projectsproxymodel.h \

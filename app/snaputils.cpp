@@ -7,6 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "qgis.h"
+
 #include "snaputils.h"
 #include "inpututils.h"
 
@@ -255,8 +257,8 @@ void SnapUtils::setupSnapping()
     case 1:
     {
       QgsSnappingConfig config;
-      config.setMode( QgsSnappingConfig::AllLayers );
-      config.setTypeFlag( QgsSnappingConfig::VertexFlag | QgsSnappingConfig::SegmentFlag );
+      config.setMode( Qgis::SnappingMode::AllLayers );
+      config.setTypeFlag( Qgis::SnappingType::Vertex | Qgis::SnappingType::Segment );
       config.setTolerance( 20.0 * InputUtils::calculateDpRatio() );
       config.setUnits( QgsTolerance::Pixels );
       config.setEnabled( true );

@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Needed env variables:
-# QT_BASE, e.g. /opt/Qt/<version>/android
+# QT_BASE, e.g. /opt/Qt/<version>/android_armv7
+# QT_NATIVE_BASE, e.g. /opt/Qt/<version>/macos
 # SOURCE_DIR, path to input root source dir
 # ANDROID_NDK_ROOT, e.g. /opt/Android/sdk/ndk/<version>
 # ANDROID_NDK_HOST, e.g. darwin_x86_64 (on mac)
@@ -42,6 +43,7 @@ echo "SOURCE_DIR: ${SOURCE_DIR}"
 echo "BUILD_DIR: ${BUILD_DIR}"
 echo "ARCH: ${ARCH}"
 echo "NDK: ${ANDROID_NDK_ROOT}"
+echo "SDK: ${SDK_PLATFORM}"
 echo "API: $ANDROIDAPI"
 echo "QT BASE: ${QT_BASE}"
 
@@ -64,19 +66,21 @@ make install INSTALL_ROOT=${INSTALL_DIR}
 
 if [ -f ${SOURCE_DIR}/Input_keystore.keystore ]; then
     echo "building release"
-    ${QT_BASE}/bin/androiddeployqt \
+    ${QT_NATIVE_BASE}/bin/androiddeployqt \
         --sign ${SOURCE_DIR}/Input_keystore.keystore input \
         --storepass ${INPUTKEYSTORE_STOREPASS} \
         --keypass ${INPUTKEYSTORE_STOREPASS} \
         --input ${BUILD_DIR}/android-Input-deployment-settings.json \
         --output ${INSTALL_DIR} \
         --deployment bundled \
+        --android-platform ${SDK_PLATFORM} \
         --gradle
 else
     echo "building debug"
-    ${QT_BASE}/bin/androiddeployqt \
+    ${QT_NATIVE_BASE}/bin/androiddeployqt \
         --input ${BUILD_DIR}/android-Input-deployment-settings.json \
         --output ${INSTALL_DIR} \
         --deployment bundled \
+        --android-platform ${SDK_PLATFORM} \
         --gradle
 fi

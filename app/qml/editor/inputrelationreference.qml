@@ -7,9 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtGraphicalEffects 1.14
+import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
 import lc 1.0
 import ".."
@@ -111,7 +111,7 @@ AbstractEditor {
         root.parent.formView.pop()
       }
 
-      Keys.onReleased: {
+      Keys.onReleased: function( event ) {
         if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
           event.accepted = true
           root.parent.formView.pop()

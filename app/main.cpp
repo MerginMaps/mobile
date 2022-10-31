@@ -13,7 +13,7 @@
 #include <QQmlComponent>
 #include <QtDebug>
 #include <QQmlError>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QWindow>
 #include <QtGlobal>
 #include <QQmlContext>
@@ -51,7 +51,7 @@
 #include "inputprojutils.h"
 #include "fieldsmodel.h"
 #include "projectwizard.h"
-#include "codefilter.h"
+#include "codescanner.h"
 #include "inputexpressionfunctions.h"
 #include "compass.h"
 #include "attributepreviewcontroller.h"
@@ -121,10 +121,6 @@
 #include <QFile>
 #include <QDir>
 #include <QStandardPaths>
-#endif
-
-#ifdef ANDROID
-#include <QtAndroidExtras>
 #endif
 
 #ifdef DESKTOP_OS
@@ -256,7 +252,7 @@ void initDeclarative()
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<Compass>( "lc", 1, 0, "Compass" );
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
-  qmlRegisterType<CodeFilter>( "lc", 1, 0, "CodeFilter" );
+  qmlRegisterType<CodeScanner>( "lc", 1, 0, "CodeScanner" );
   qmlRegisterType<ProjectsModel>( "lc", 1, 0, "ProjectsModel" );
   qmlRegisterType<ProjectsProxyModel>( "lc", 1, 0, "ProjectsProxyModel" );
   qmlRegisterType<AttributePreviewController>( "lc", 1, 0, "AttributePreviewController" );
@@ -357,11 +353,6 @@ void addQmlImportPath( QQmlEngine &engine )
 
 int main( int argc, char *argv[] )
 {
-  // This flag enables auto scaling for HighDPI screens.
-  // This basically means that each specified pixel in QML is now considered dp
-  // See __dp comment for more information.
-  QGuiApplication::setAttribute( Qt::AA_EnableHighDpiScaling );
-
   QgsApplication app( argc, argv, true );
 
   const QString version = CoreUtils::appVersion();
@@ -687,7 +678,7 @@ int main( int argc, char *argv[] )
   qDebug() <<  "All up and running";
 
 #ifdef ANDROID
-  QtAndroid::hideSplashScreen();
+  QNativeInterface::QAndroidApplication::hideSplashScreen();
 #endif
 
   // Android scoped storage migration logic
