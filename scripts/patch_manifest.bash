@@ -21,7 +21,7 @@ if [ ! -d $INFOLDER ]; then
     echo "Dir $INFOLDER not found!"
 fi
 
-cp -R $INFOLDER $OUTFOLDER
+cp -R $INFOLDER/* $OUTFOLDER
 $SED "s/__BASH_REPLACE_VERSION__/$BASH_REPLACE_VERSION/g" $MANIFEST
 $SED "s/__BASH_REPLACE_CODE__/$BASH_REPLACE_CODE/g" $MANIFEST
 rm -f $OUTFOLDER/AndroidManifest.xml.orig
