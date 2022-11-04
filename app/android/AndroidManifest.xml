@@ -9,6 +9,7 @@
                  android:label="Mergin Maps"
                  android:icon="@mipmap/ic_merginmaps_launcher"
                  android:extractNativeLibs="true"
+                 android:allowNativeHeapPointerTagging="false"
                  android:preserveLegacyExternalStorage="true">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
                   android:name="uk.co.lutraconsulting.InputActivity"
