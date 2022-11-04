@@ -206,13 +206,14 @@ Item {
     clip: true
     color: form.style.tabs.backgroundColor
 
-    anchors.fill: parent
+    width: formView.width
+    height: formView.height
 
     Flickable {
       id: flickable
       anchors {
-        left: parent.left
-        right: parent.right
+        left: container.left
+        right: container.right
         leftMargin: form.style.fields.outerMargin
         rightMargin: form.style.fields.outerMargin
       }
@@ -297,9 +298,9 @@ Item {
       currentIndex: form.controller.hasTabs ? tabRow.currentIndex : 0
       anchors {
         top: flickable.bottom
-        left: parent.left
-        right: parent.right
-        bottom: parent.bottom
+        left: container.left
+        right: container.right
+        bottom: container.bottom
      }
 
       Repeater {
@@ -314,14 +315,14 @@ Item {
 
           // The main form content area
           Rectangle {
-            anchors.fill: parent
+            anchors.fill: formPage
             color: form.style.backgroundColor
             opacity: form.style.backgroundOpacity
           }
 
           ListView {
             id: content
-            anchors.fill: parent
+            anchors.fill: formPage
             clip: true
             spacing: form.style.group.spacing
             section.property: "Group"
@@ -331,14 +332,14 @@ Item {
               // section header: group box name
               Item {
                 id: headerContainer
-                width: parent.width
+                width: ListView.view.width
                 height: section === "" ? 0 : form.style.group.height + form.style.group.spacing // add space after section header
 
                 Rectangle {
-                  width: parent.width
+                  width: headerContainer.width
                   height: section === "" ? 0 : form.style.group.height
                   color: form.style.group.marginColor
-                  anchors.top: parent.top
+                  anchors.top: headerContainer.top
 
                   Rectangle {
                     anchors.fill: parent
@@ -370,9 +371,10 @@ Item {
               }
             }
 
+
             model: swipeViewRepeater.model.attributeFormProxyModel(formPage.tabIndex)
 
-           delegate: fieldItem
+            delegate: fieldItem
 
             header: Rectangle {
               opacity: 1
@@ -390,7 +392,7 @@ Item {
 
     // Borders
     Rectangle {
-      width: parent.width
+      width: container.width
       height: form.style.tabs.borderWidth
       anchors.top: flickable.top
       color: form.style.tabs.borderColor
@@ -398,7 +400,7 @@ Item {
     }
 
     Rectangle {
-      width: parent.width
+      width: container.width
       height: form.style.tabs.borderWidth
       anchors.bottom: flickable.bottom
       color: form.style.tabs.borderColor
@@ -415,213 +417,222 @@ Item {
     Item {
       id: fieldContainer
 
+      // TODO: filter such fields in field proxy model instead
       property bool shouldBeVisible: Type === FormItem.Field || Type === FormItem.Relation
 
       visible: shouldBeVisible
+
       // We also need to set height to zero if Type is not field otherwise children created blank space in form
       height: shouldBeVisible ? childrenRect.height : 0
-
-      anchors {
-        left: parent.left
-        right: parent.right
-        leftMargin: form.style.fields.outerMargin
-        rightMargin: form.style.fields.outerMargin
-      }
+      width: ListView.view.width
 
       Item {
-        id: fieldLabelContainer
-
-        height: fieldLabel.height + fieldValidationText.height + form.style.fields.sideMargin
+        id: paddedEditorField
 
         anchors {
-          left: parent.left
-          right: parent.right
-          topMargin: form.style.fields.sideMargin
-          bottomMargin: form.style.fields.sideMargin
+          left: fieldContainer.left
+          right: fieldContainer.right
+          leftMargin: form.style.fields.outerMargin
+          rightMargin: form.style.fields.outerMargin
         }
 
-        Label {
-          id: fieldLabel
+        height: fieldContainer.shouldBeVisible ? childrenRect.height : 0
 
-          text: Name
-          color: form.style.constraint.validColor
-          leftPadding: form.style.fields.sideMargin
-          font.pixelSize: form.style.fields.labelPixelSize
-          horizontalAlignment: Text.AlignLeft
-          verticalAlignment: Text.AlignVCenter
-          anchors.top: parent.top
-        }
+        Item {
+          id: fieldLabelContainer
 
-        Label {
-          id: fieldValidationText
+          height: fieldLabel.height + fieldValidationText.height + form.style.fields.sideMargin
 
           anchors {
-            left: parent.left
-            right: parent.right
-            top: fieldLabel.bottom
-            leftMargin: form.style.fields.sideMargin
+            left: paddedEditorField.left
+            right: paddedEditorField.right
+            topMargin: form.style.fields.sideMargin
+            bottomMargin: form.style.fields.sideMargin
           }
 
-          text: ValidationMessage
-          visible: ValidationMessage // show if there is something
-          height: visible ? paintedHeight : 0
-          wrapMode: Text.WordWrap
-          opacity: visible ? 1 : 0
-          color: ValidationStatus === FieldValidator.Warning ? form.style.constraint.descriptionColor : form.style.constraint.invalidColor
-          horizontalAlignment: Text.AlignLeft
-          verticalAlignment: Text.AlignVCenter
+          Label {
+            id: fieldLabel
 
-          Behavior on height {
-            NumberAnimation { duration: 100 }
+            text: Name
+            color: form.style.constraint.validColor
+            leftPadding: form.style.fields.sideMargin
+            font.pixelSize: form.style.fields.labelPixelSize
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
+            anchors.top: fieldLabelContainer.top
           }
 
-          Behavior on opacity {
-            NumberAnimation { duration: 100 }
+          Label {
+            id: fieldValidationText
+
+            anchors {
+              left: fieldLabelContainer.left
+              right: fieldLabelContainer.right
+              top: fieldLabel.bottom
+              leftMargin: form.style.fields.sideMargin
+            }
+
+            text: ValidationMessage
+            visible: ValidationMessage // show if there is something
+            height: visible ? paintedHeight : 0
+            wrapMode: Text.WordWrap
+            opacity: visible ? 1 : 0
+            color: ValidationStatus === FieldValidator.Warning ? form.style.constraint.descriptionColor : form.style.constraint.invalidColor
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
+
+            Behavior on height {
+              NumberAnimation { duration: 100 }
+            }
+
+            Behavior on opacity {
+              NumberAnimation { duration: 100 }
+            }
           }
         }
-      }
 
-      Item {
-        id: placeholder
-        height: childrenRect.height
-        anchors {
-          left: parent.left
-          right: rememberCheckboxContainer.left
-          top: fieldLabelContainer.bottom
-        }
-
-        Loader {
-          id: attributeEditorLoader
-
+        Item {
+          id: placeholder
           height: childrenRect.height
-          anchors { left: parent.left; right: parent.right }
-
-          property var value: AttributeValue
-          property bool valueIsNull: AttributeValueIsNull
-
-          property var field: Field
-          property var widget: EditorWidget
-          property var config: EditorWidgetConfig
-
-          property var homePath: form.project ? form.project.homePath : ""
-          property var externalResourceHandler: form.externalResourceHandler
-
-          property var customStyle: form.style
-          property bool readOnly: form.state === "readOnly" || !AttributeEditable
-
-          property var labelAlias: Name
-          property var activeProject: form.project
-          property var associatedRelation: Relation
-          property var featurePair: form.controller.featureLayerPair
-
-          property var formView: extraView //! passes StackView to editor, so that editors can show fullpage views (VR page, camera,..)
-
-          active: widget !== 'Hidden'
-          Keys.forwardTo: backHandler
-
-          source: {
-            if ( widget !== undefined )
-               return form.loadWidgetFn( widget.toLowerCase(), config, field )
-            else return ''
-          }
-        }
-
-        Connections {
-          target: attributeEditorLoader.item
-          ignoreUnknownSignals: true
-
-          function onEditorValueChanged( newValue, isNull ) {
-            AttributeValue = isNull ? undefined : newValue
+          anchors {
+            left: paddedEditorField.left
+            right: rememberCheckboxContainer.left
+            top: fieldLabelContainer.bottom
           }
 
-          function onImportDataRequested() {
-           importDataHandler.importData(attributeEditorLoader.item)
-          }
+          Loader {
+            id: attributeEditorLoader
 
-          function onOpenLinkedFeature( linkedFeature ) {
-            form.openLinkedFeature( linkedFeature )
-          }
+            height: childrenRect.height
+            anchors { left: placeholder.left; right: placeholder.right }
 
-          function onCreateLinkedFeature() {
-            let parentHasValidId = __inputUtils.isFeatureIdValid( parentFeature.feature.id )
+            property var value: AttributeValue
+            property bool valueIsNull: AttributeValueIsNull
 
-            if ( parentHasValidId ) {
-              // parent feature in this case already have valid id, so we can open new form
-              form.createLinkedFeature( form.controller, relation )
-            }
-            else {
-              // parent feature do not have a valid ID yet, we need to save it and acquire ID
-              form.controller.acquireId()
-              form.createLinkedFeature( form.controller, relation )
-            }
-          }
-        }
+            property var field: Field
+            property var widget: EditorWidget
+            property var config: EditorWidgetConfig
 
-        Connections {
-          target: form.controller
+            property var homePath: form.project ? form.project.homePath : ""
+            property var externalResourceHandler: form.externalResourceHandler
 
-          function onFeatureLayerPairChanged() {
-            if ( attributeEditorLoader.item && attributeEditorLoader.item.featureLayerPairChanged )
-            {
-              attributeEditorLoader.item.featureLayerPairChanged()
+            property var customStyle: form.style
+            property bool readOnly: form.state === "readOnly" || !AttributeEditable
+
+            property var labelAlias: Name
+            property var activeProject: form.project
+            property var associatedRelation: Relation
+            property var featurePair: form.controller.featureLayerPair
+
+            property var formView: extraView //! passes StackView to editor, so that editors can show fullpage views (VR page, camera,..)
+
+            active: widget !== 'Hidden'
+            Keys.forwardTo: backHandler
+
+            source: {
+              if ( widget !== undefined )
+                return form.loadWidgetFn( widget.toLowerCase(), config, field )
+              else return ''
             }
           }
 
-          function onFormRecalculated() {
-            if ( attributeEditorLoader.item && attributeEditorLoader.item.reload )
-            {
-              attributeEditorLoader.item.reload()
+          Connections {
+            target: attributeEditorLoader.item
+            ignoreUnknownSignals: true
+
+            function onEditorValueChanged( newValue, isNull ) {
+              AttributeValue = isNull ? undefined : newValue
+            }
+
+            function onImportDataRequested() {
+              importDataHandler.importData(attributeEditorLoader.item)
+            }
+
+            function onOpenLinkedFeature( linkedFeature ) {
+              form.openLinkedFeature( linkedFeature )
+            }
+
+            function onCreateLinkedFeature() {
+              let parentHasValidId = __inputUtils.isFeatureIdValid( parentFeature.feature.id )
+
+              if ( parentHasValidId ) {
+                // parent feature in this case already have valid id, so we can open new form
+                form.createLinkedFeature( form.controller, relation )
+              }
+              else {
+                // parent feature do not have a valid ID yet, we need to save it and acquire ID
+                form.controller.acquireId()
+                form.createLinkedFeature( form.controller, relation )
+              }
+            }
+          }
+
+          Connections {
+            target: form.controller
+
+            function onFeatureLayerPairChanged() {
+              if ( attributeEditorLoader.item && attributeEditorLoader.item.featureLayerPairChanged )
+              {
+                attributeEditorLoader.item.featureLayerPairChanged()
+              }
+            }
+
+            function onFormRecalculated() {
+              if ( attributeEditorLoader.item && attributeEditorLoader.item.reload )
+              {
+                attributeEditorLoader.item.reload()
+              }
+            }
+          }
+
+          Connections {
+            target: form
+            ignoreUnknownSignals: true
+
+            function onSaved() {
+              if (attributeEditorLoader.item && typeof attributeEditorLoader.item.callbackOnSave === "function") {
+                attributeEditorLoader.item.callbackOnSave()
+              }
+            }
+
+            function onCanceled() {
+              if (attributeEditorLoader.item && typeof attributeEditorLoader.item.callbackOnCancel === "function") {
+                attributeEditorLoader.item.callbackOnCancel()
+              }
             }
           }
         }
 
-        Connections {
-          target: form
-          ignoreUnknownSignals: true
+        Item {
+          id: rememberCheckboxContainer
+          visible: form.controller.rememberAttributesController.rememberValuesAllowed && form.state === "add" && EditorWidget !== "Hidden" && Type === FormItem.Field
 
-          function onSaved() {
-            if (attributeEditorLoader.item && typeof attributeEditorLoader.item.callbackOnSave === "function") {
-              attributeEditorLoader.item.callbackOnSave()
-            }
+          implicitWidth: visible ? 35 * __dp : 0
+          implicitHeight: placeholder.height
+
+          anchors {
+            top: fieldLabelContainer.bottom
+            right: paddedEditorField.right
           }
 
-          function onCanceled() {
-            if (attributeEditorLoader.item && typeof attributeEditorLoader.item.callbackOnCancel === "function") {
-              attributeEditorLoader.item.callbackOnCancel()
-            }
+          CheckboxComponent {
+            id: rememberCheckbox
+            visible: rememberCheckboxContainer.visible
+            baseColor: form.style.checkboxComponent.baseColor
+
+            implicitWidth: 40 * __dp
+            implicitHeight: width
+            y: rememberCheckboxContainer.height/2 - rememberCheckbox.height/2
+            x: (rememberCheckboxContainer.width + form.style.fields.outerMargin) / 7
+
+            onCheckboxClicked: RememberValue = buttonState
+            checked: RememberValue ? true : false
           }
-        }
-      }
 
-      Item {
-        id: rememberCheckboxContainer
-        visible: form.controller.rememberAttributesController.rememberValuesAllowed && form.state === "add" && EditorWidget !== "Hidden" && Type === FormItem.Field
-
-        implicitWidth: visible ? 35 * __dp : 0
-        implicitHeight: placeholder.height
-
-        anchors {
-          top: fieldLabelContainer.bottom
-          right: parent.right
-        }
-
-        CheckboxComponent {
-          id: rememberCheckbox
-          visible: rememberCheckboxContainer.visible
-          baseColor: form.style.checkboxComponent.baseColor
-
-          implicitWidth: 40 * __dp
-          implicitHeight: width
-          y: rememberCheckboxContainer.height/2 - rememberCheckbox.height/2
-          x: (parent.width + form.style.fields.outerMargin) / 7
-
-          onCheckboxClicked: RememberValue = buttonState
-          checked: RememberValue ? true : false
-        }
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: rememberCheckbox.checkboxClicked( !rememberCheckbox.checkState )
+          MouseArea {
+            anchors.fill: rememberCheckboxContainer
+            onClicked: rememberCheckbox.checkboxClicked( !rememberCheckbox.checkState )
+          }
         }
       }
     }
