@@ -207,7 +207,7 @@ Item {
         nameFilters: [ qsTr( "Image files (*.gif *.png *.jpg)" ) ]
         //width: window.width
         //height: window.height
-        currentFolder: shortcuts.pictures // https://doc.qt.io/qt-5/ios-platform-notes.html#native-image-picker
+        currentFolder: __inputUtils.imageGalleryLocation()
         onAccepted: externalResourceHandler.imageSelected(fileDialog.fileUrl)
     }
 

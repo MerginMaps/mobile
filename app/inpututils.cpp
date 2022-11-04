@@ -56,6 +56,7 @@
 #include <limits>
 #include <math.h>
 #include <iostream>
+#include <QStandardPaths>
 
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
 static const QString INVALID_DATETIME_STR = QStringLiteral( "Invalid datetime" );
@@ -1969,4 +1970,9 @@ void InputUtils::updateFeature( const FeatureLayerPair &pair )
   pair.layer()->updateFeature( f );
   pair.layer()->commitChanges();
   pair.layer()->triggerRepaint();
+}
+
+QString InputUtils::imageGalleryLocation()
+{
+  return QStandardPaths::standardLocations( QStandardPaths::PicturesLocation ).last();
 }
