@@ -1974,5 +1974,13 @@ void InputUtils::updateFeature( const FeatureLayerPair &pair )
 
 QString InputUtils::imageGalleryLocation()
 {
-  return QStandardPaths::standardLocations( QStandardPaths::PicturesLocation ).last();
+  QStringList galleryPaths = QStandardPaths::standardLocations( QStandardPaths::PicturesLocation );
+
+  if ( galleryPaths.isEmpty() )
+  {
+    CoreUtils::log( QStringLiteral( "Image Picker" ), QStringLiteral( "Could not find standard path to image gallery" ) );
+    return QString();
+  }
+
+  return galleryPaths.last();
 }
