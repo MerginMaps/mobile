@@ -161,12 +161,13 @@ Item {
 
     onPxChanged: {
       if ( enabled ) {
-        mapCanvasWrapper.mapSettings.setCenter( utils.toQgsPoint( Qt.point( px, py ) ) )
+        mapCanvasWrapper.mapSettings.center = utils.toQgsPoint( Qt.point( px, py ) )
       }
     }
+
     onPyChanged: {
       if ( enabled ) {
-        mapCanvasWrapper.mapSettings.setCenter( utils.toQgsPoint( Qt.point( px, py ) ) )
+        mapCanvasWrapper.mapSettings.center = utils.toQgsPoint( Qt.point( px, py ) )
       }
     }
   }
