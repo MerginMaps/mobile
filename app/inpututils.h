@@ -509,6 +509,9 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static void updateFeature( const FeatureLayerPair &pair );
 
+    // Returns default path to images in this system
+    Q_INVOKABLE static QString imageGalleryLocation();
+
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
