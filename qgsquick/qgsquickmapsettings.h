@@ -156,7 +156,7 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
     QgsProject *project() const;
 
     //! Returns the center point of the current map extent
-    Q_INVOKABLE QgsPoint center() const;
+    QgsPoint center() const;
 
     //! Move current map extent to have center point defined by \a center
     Q_INVOKABLE void setCenter( const QgsPoint &center );

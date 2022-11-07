@@ -3,6 +3,7 @@ SOURCES += \
   $$PWD/qgsquickmapcanvasmap.cpp \
   $$PWD/qgsquickmapsettings.cpp \
   $$PWD/qgsquickmaptransform.cpp \
+  $$PWD/qgsquickutils.cpp
 
 HEADERS += \
   $$PWD/qgsquickcoordinatetransformer.h \
@@ -10,5 +11,6 @@ HEADERS += \
   $$PWD/qgsquickmapsettings.h \
   $$PWD/qgsquickmaptransform.h \
   $$PWD/qgis_quick.h \
+  $$PWD/qgsquickutils.h
 
 RESOURCES += $$PWD/plugin/qgsquick.qrc

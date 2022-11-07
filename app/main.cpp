@@ -79,6 +79,7 @@
 #include "qgsquickmapcanvasmap.h"
 #include "qgsquickmapsettings.h"
 #include "qgsquickmaptransform.h"
+#include "qgsquickutils.h"
 #include "position/positionkit.h"
 #include "scalebarkit.h"
 #include "featuresmodel.h"
@@ -319,6 +320,7 @@ void initDeclarative()
   qmlRegisterType< QgsQuickMapSettings >( "QgsQuick", 0, 1, "MapSettings" );
   qmlRegisterType< QgsQuickMapTransform >( "QgsQuick", 0, 1, "MapTransform" );
   qmlRegisterType< QgsQuickCoordinateTransformer >( "QgsQuick", 0, 1, "CoordinateTransformer" );
+  qmlRegisterType< QgsQuickUtils >( "QgsQuick", 0, 1, "QgsQuickUtils" );
 
   qmlRegisterUncreatableType< AbstractPositionProvider >( "lc", 1, 0, "PositionProvider", "Must be instantiated via its construct method" );
 
