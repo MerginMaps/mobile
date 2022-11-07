@@ -23,11 +23,9 @@
 #include "qgscoordinatetransformcontext.h"
 #include "qgsmaplayer.h"
 #include "qgsmapsettings.h"
-#include "qgsmapthemecollection.h"
 #include "qgspoint.h"
 #include "qgsrectangle.h"
 #include "qgsproject.h"
-
 
 /**
  * \ingroup quick
@@ -56,6 +54,11 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
      * When project is read, map settings (CRS, extent, ...) are automatically set from its DOM.
      */
     Q_PROPERTY( QgsProject *project READ project WRITE setProject NOTIFY projectChanged )
+
+    /**
+     * Geographical coordinate representing the center point of the current extent
+     */
+    Q_PROPERTY( QgsPoint center READ center WRITE setCenter NOTIFY extentChanged )
 
     /**
      * Geographical coordinates of the rectangle that should be rendered.
@@ -117,6 +120,21 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
      */
     Q_PROPERTY( QList<QgsMapLayer *> layers READ layers WRITE setLayers NOTIFY layersChanged )
 
+    /**
+     * Returns TRUE if a temporal filtering is enabled
+     */
+    Q_PROPERTY( bool isTemporal READ isTemporal WRITE setIsTemporal NOTIFY temporalStateChanged )
+
+    /**
+     * The temporal range's begin (i.e. lower) value
+     */
+    Q_PROPERTY( QDateTime temporalBegin READ temporalBegin WRITE setTemporalBegin NOTIFY temporalStateChanged )
+
+    /**
+     * The temporal range's end (i.e. higher) value
+     */
+    Q_PROPERTY( QDateTime temporalEnd READ temporalEnd WRITE setTemporalEnd NOTIFY temporalStateChanged )
+
   public:
     //! Create new map settings
     explicit QgsQuickMapSettings( QObject *parent = nullptr );
@@ -136,6 +154,9 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
 
     //! \copydoc QgsQuickMapSettings::project
     QgsProject *project() const;
+
+    //! Returns the center point of the current map extent
+    Q_INVOKABLE QgsPoint center() const;
 
     //! Move current map extent to have center point defined by \a center
     Q_INVOKABLE void setCenter( const QgsPoint &center );
@@ -249,11 +270,23 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
      */
     void setDevicePixelRatio( const qreal &devicePixelRatio );
 
-    /**
-     * Helper function to convert QPointF to QgsPoint without any transformations.
-     * Useful for converting these values in QML.
-     */
-    Q_INVOKABLE static QgsPoint toQgsPoint( const QPointF &point );
+    //! \copydoc QgsQuickMapSettings::isTemporal
+    bool isTemporal() const;
+
+    //! \copydoc QgsQuickMapSettings::isTemporal
+    void setIsTemporal( bool temporal );
+
+    //! \copydoc QgsQuickMapSettings::temporalBegin
+    QDateTime temporalBegin() const;
+
+    //! \copydoc QgsQuickMapSettings::temporalBegin
+    void setTemporalBegin( const QDateTime &begin );
+
+    //! \copydoc QgsQuickMapSettings::temporalEnd
+    QDateTime temporalEnd() const;
+
+    //! \copydoc QgsQuickMapSettings::temporalEnd
+    void setTemporalEnd( const QDateTime &end );
 
   signals:
     //! \copydoc QgsQuickMapSettings::project
@@ -287,6 +320,14 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
 
     //! \copydoc QgsQuickMapSettings::layers
     void layersChanged();
+
+    /**
+     * Emitted when the temporal state has changed.
+     * \see isTemporal()
+     * \see temporalBegin()
+     * \see temporalEnd()
+     */
+    void temporalStateChanged();
 
     //! \copydoc QgsQuickMapSettings::devicePixelRatio
     void devicePixelRatioChanged();
