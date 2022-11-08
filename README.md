@@ -1,4 +1,4 @@
-# Mergin Maps Input
+# Mergin Maps Input App
 
 <img src="images/MM_logo.png" width=350>
 
