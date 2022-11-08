@@ -83,7 +83,7 @@ Drawer {
     height: window.height
 
     Component.onDestruction: {
-      if (!captureItem && camera.imageCapture.capturedImagePath != ""){
+      if (!captureItem && camera.imageCapture.capturedImagePath !== ""){
         captureItem.saveImage = false
         Utils.removeFile(camera.imageCapture.capturedImagePath)
       }

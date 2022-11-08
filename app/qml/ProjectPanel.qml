@@ -342,11 +342,15 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: setupProjectOpen( projectId, projectFilePath )
+            onOpenProjectRequested: function( projectId, projectFilePath ) {
+              setupProjectOpen( projectId, projectFilePath )
+            }
             onShowLocalChangesRequested: function( projectId ) {
               showChanges( projectId )
             }
-            list.onActiveProjectDeleted: setupProjectOpen( "", "" )
+            list.onActiveProjectDeleted: function() {
+              setupProjectOpen( "", "" )
+            }
           }
         }
       }

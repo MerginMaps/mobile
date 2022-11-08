@@ -64,9 +64,9 @@ Rectangle {
     NumberAnimation { property: "opacity"; duration: 500 }
     onRunningChanged:
     {
-      if ( state == "show" && !running )
+      if ( state === "show" && !running )
         banner.visible = true;
-      if ( state == "fade" && !running )
+      if ( state === "fade" && !running )
         banner.visible = false;
     }
   }

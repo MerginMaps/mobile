@@ -45,7 +45,7 @@ Item {
     text: qsTr( "Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue." )
     buttons: MessageDialog.Help | MessageDialog.Ignore
 
-    onButtonClicked: {
+    onButtonClicked: function(clickedButton) {
       if (clickedButton === MessageDialog.Help) {
         Qt.openUrlExternally( "https://www.lutraconsulting.co.uk/blog/2021/10/26/input-scoped-storage-update/" )
       }

@@ -290,7 +290,6 @@ ApplicationWindow {
         }
         onLayersClicked: {
           let layerspanel = mapPanelsStackView.push( layersPanelComponent, {}, StackView.PushTransition )
-//          layerspanel.forceActiveFocus()
         }
     }
 
