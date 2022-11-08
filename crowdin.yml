@@ -1,0 +1,3 @@
+files:
+  - source: /app/i18n/input_en.ts
+    translation: /app/i18n/input_%locale_with_underscore%.ts
