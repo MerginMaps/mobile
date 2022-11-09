@@ -299,13 +299,6 @@ Item {
     text: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
     buttons: MessageDialog.Yes | MessageDialog.No
 
-    Keys.onReleased: function( event ) {
-      if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
-        event.accepted = true;
-        downloadProjectDialog.close()
-      }
-    }
-
     onButtonClicked: function( clickedButton ) {
       if (clickedButton === MessageDialog.Yes) {
         controllerModel.syncProject( relatedProjectId )
