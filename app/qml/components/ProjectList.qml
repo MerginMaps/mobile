@@ -28,9 +28,9 @@ Item {
 
   onSearchTextChanged: {
     if ( projectModelType === ProjectsModel.PublicProjectsModel ) {
-      controllerModel.listProjects( searchText )
+      controllerModel.listProjects( root.searchText )
     }
-    else viewModel.searchExpression = searchText
+    else viewModel.searchExpression = root.searchText
   }
 
   function refreshProjectList() {
@@ -298,10 +298,14 @@ Item {
     title: qsTr( "Download project" )
     text: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
     buttons: MessageDialog.Yes | MessageDialog.No
-    onButtonClicked: function(clickedButton) {
+
+    onButtonClicked: function( clickedButton ) {
       if (clickedButton === MessageDialog.Yes) {
         controllerModel.syncProject( relatedProjectId )
       }
+
+      console.log( "Closed via button clicked" )
+      downloadProjectDialog.close()
     }
   }
 }

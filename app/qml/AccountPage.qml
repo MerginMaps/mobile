@@ -348,8 +348,8 @@ Page {
           id: usernameField
           placeholderText: qsTr("Enter username")
           Layout.fillWidth: true
-          onTextEdited: {
-            buttons.standardButton(Dialog.Yes).enabled = (text == username)
+          onTextEdited: function() {
+            buttons.standardButton(Dialog.Yes).enabled = (text === username)
           }
         }
       }

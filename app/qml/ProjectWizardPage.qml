@@ -31,7 +31,9 @@ Item {
 
   FieldsModel {
     id: fieldsModel
-    onNotify: __inputUtils.showNotification(message)
+    onNotify: function( message ) {
+      __inputUtils.showNotification(message)
+    }
     Component.onCompleted: fieldsModel.initModel()
   }
 

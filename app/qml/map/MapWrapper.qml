@@ -181,7 +181,7 @@ Item {
       }
     }
 
-    onLongPressed: {
+    onLongPressed: function( point ) {
       // Alter position of simulated provider
       if ( __positionKit.positionProvider && __positionKit.positionProvider.id() === "simulated" )
       {
@@ -591,7 +591,7 @@ Item {
     id: backButton
 
     onClicked: {
-      if ( root.state === "edit" || root.state === "record" || root.state == "recordInLayer") {
+      if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer") {
         if ( recordingToolsLoader.item.hasChanges() ) {
           cancelEditDialog.open()
         }
@@ -599,7 +599,7 @@ Item {
           recordingToolsLoader.item.discardChanges()
         }
       }
-      else if ( root.state == "split" ) {
+      else if ( root.state === "split" ) {
         howtoSplittingBanner.hide()
         root.splittingCanceled()
         root.state = "view"

@@ -323,7 +323,9 @@ Page {
       height: root.height + header.height
       width: root.width
 
-      onInitiatedConnectionTo: providersModel.addProvider( deviceName, deviceAddress )
+      onInitiatedConnectionTo: function( deviceName, deviceAddress ) {
+        providersModel.addProvider( deviceName, deviceAddress )
+      }
       onClose: root.stackView.pop()
     }
   }

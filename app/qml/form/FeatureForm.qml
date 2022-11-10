@@ -625,7 +625,9 @@ Item {
             y: rememberCheckboxContainer.height/2 - rememberCheckbox.height/2
             x: (rememberCheckboxContainer.width + form.style.fields.outerMargin) / 7
 
-            onCheckboxClicked: RememberValue = buttonState
+            onCheckboxClicked: function( buttonState ) {
+              RememberValue = buttonState
+            }
             checked: RememberValue ? true : false
           }
 
