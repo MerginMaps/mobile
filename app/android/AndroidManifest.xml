@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="uk.co.lutraconsulting"
     android:installLocation="auto"
-    android:versionCode="-- %%INSERT_VERSION_CODE%% --"
-    android:versionName="-- %%INSERT_VERSION_NAME%% --">
+    android:versionCode="__BASH_REPLACE_CODE__"
+    android:versionName="__BASH_REPLACE_VERSION__">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> <!-- Need due to a legacy storage migration -->
     <uses-permission android:name="android.permission.INTERNET"/>
