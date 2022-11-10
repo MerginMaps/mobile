@@ -5,9 +5,10 @@
 # QT_NATIVE_BASE, e.g. /opt/Qt/<version>/macos
 # SOURCE_DIR, path to input root source dir
 # ANDROID_NDK_ROOT, e.g. /opt/Android/sdk/ndk/<version>
-# ANDROID_NDK_HOST, e.g. darwin_x86_64 (on mac)
+# ANDROID_NDK_HOST, e.g. darwin-x86_64 (on mac)
 # ANDROID_NDK_PLATFORM=android-24
 # ANDROIDAPI=24
+# SDK_PLATFORM=android-31
 # ARCH=armeabi-v7a or arm640v8a
 # INPUTKEYSTORE_STOREPASS
 # make sure you have JAVA_HOME env set to your java installation where JAVA_HOME/lib/tools.jar exists
