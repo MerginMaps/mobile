@@ -34,6 +34,10 @@ android {
     INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}
     INCLUDEPATH += $${INPUT_SDK_INCLUDE_PATH}/qgis
 
+    # see https://source.android.com/docs/setup/about/build-numbers#platform-code-names-versions-api-levels-and-ndk-releases
+    ANDROID_TARGET_SDK_VERSION = 31
+    ANDROID_MIN_SDK_VERSION = 24
+
     # by default QMake eats linked libs if they are mentioned multiple times
     # https://stackoverflow.com/questions/18327959/qmake-how-to-link-a-library-twice/18328971
     CONFIG += no_lflags_merge
