@@ -281,11 +281,16 @@ Item {
           }
         }
 
-        StackLayout {
-          id: projectListLayout
+        SwipeView {
+          id: content
 
           anchors.fill: parent
-          currentIndex: pageFooter.currentIndex
+
+          interactive: true
+        }
+
+        Component {
+          id: localProjectsPageComponent
 
           ProjectListPage {
             id: localProjectsPage
@@ -302,6 +307,10 @@ Item {
             }
             list.onActiveProjectDeleted: setupProjectOpen( "", "" )
           }
+        }
+
+        Component {
+          id: createdProjectsPageComponent
 
           ProjectListPage {
             id: createdProjectsPage
@@ -318,6 +327,10 @@ Item {
             }
             list.onActiveProjectDeleted: setupProjectOpen( "", "" )
           }
+        }
+
+        Component {
+          id: sharedProjectsPageComponent
 
           ProjectListPage {
             id: sharedProjectsPage
@@ -334,6 +347,10 @@ Item {
             }
             list.onActiveProjectDeleted: setupProjectOpen( "", "" )
           }
+        }
+
+        Component {
+          id: publicProjectsPageComponent
 
           ProjectListPage {
             id: publicProjectsPage
@@ -351,6 +368,22 @@ Item {
             list.onActiveProjectDeleted: function() {
               setupProjectOpen( "", "" )
             }
+          }
+        }
+
+        Component.onCompleted: {
+          // local projects page always visible
+          content.addItem( localProjectsPageComponent.createObject( content ) )
+
+          if ( __merginApi.serverType === MerginServerType.UNKNOWN || __merginApi.serverType === MerginServerType.OLD ) {
+            // for old server we keep old UI
+            content.addItem( createdProjectsPageComponent.createObject( content ) )
+            content.addItem( sharedProjectsPageComponent.createObject( content ) )
+            content.addItem( publicProjectsPageComponent.createObject( content ) )
+          }
+          else {
+            // for new server add only created projects page
+            content.addItem( createdProjectsPageComponent.createObject( content ) )
           }
         }
       }
