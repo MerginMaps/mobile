@@ -29,7 +29,6 @@ class MerginUserInfo: public QObject
     explicit MerginUserInfo( QObject *parent = nullptr );
     ~MerginUserInfo() = default;
 
-  public:
     void clear();
     void setFromJson( QJsonObject docObj );
 
@@ -37,8 +36,14 @@ class MerginUserInfo: public QObject
     double diskUsage() const;
     double storageLimit() const;
 
+    void saveWorkspacesData();
+
+    void findActiveWorkspace();
+    void saveLastActiveWorkspace();
+
   signals:
     void userInfoChanged();
+
   public slots:
     void onStorageChanged( double storage );
 
@@ -46,6 +51,10 @@ class MerginUserInfo: public QObject
     QString mEmail;
     double mDiskUsage = 0.0; // in Bytes
     double mStorageLimit = 0.0; // in Bytes
+    int mPreferredWorkspace = -1;
+    QMap<int, QString> mWorkspaces;
+    int mActiveWorkspace = -1;
+    QString mActiveWorkspaceName = "";
 };
 
 #endif // MERGINUSERINFO_H
