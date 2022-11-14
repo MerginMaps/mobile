@@ -8,6 +8,7 @@
 #include "testutils.h"
 #include "merginuserauth.h"
 #include "merginuserinfo.h"
+#include "merginservertype.h"
 #include "mapthemesmodel.h"
 #include "synchronizationmanager.h"
 #include "activeproject.h"
@@ -2672,10 +2673,10 @@ void TestMerginApi::refreshProjectsModel( const ProjectsModel::ProjectModelTypes
 
 void TestMerginApi::testServerType()
 {
-  // legacy
+  // old
   QSignalSpy spy( mApi, &MerginApi::serverTypeChanged );
   mApi->getServerType();
   spy.wait( TestUtils::SHORT_REPLY );
   QCOMPARE( spy.count(), 1 );
-  QCOMPARE( mApi->serverType(), MerginApi::ServerType::OLD );
+  QCOMPARE( mApi->serverType(), MerginServerType::OLD );
 }

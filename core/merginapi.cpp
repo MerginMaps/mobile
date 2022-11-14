@@ -754,13 +754,13 @@ void MerginApi::getUserInfo()
     return;
   }
 
-  if ( mServerType == ServerType::UNKNOWN )
+  if ( mServerType == MerginServerType::UNKNOWN )
   {
     return;
   }
 
   QString urlString;
-  if ( mServerType == ServerType::OLD )
+  if ( mServerType == MerginServerType::OLD )
   {
     urlString = mApiRoot + QStringLiteral( "v1/user/%1" ).arg( mUserAuth->username() );
   }
@@ -1346,7 +1346,7 @@ void MerginApi::setApiRoot( const QString &apiRoot )
     settings.setValue( QStringLiteral( "apiRoot" ), mApiRoot );
     settings.endGroup();
     setApiVersionStatus( MerginApiStatus::UNKNOWN );
-    setServerType( ServerType::UNKNOWN );
+    setServerType( MerginServerType::UNKNOWN );
     emit apiRootChanged();
   }
 }
@@ -3113,32 +3113,32 @@ void MerginApi::getServerTypeReplyFinished()
       QJsonObject docObj = doc.object();
       if ( docObj.contains( QStringLiteral( "user_workspaces_allowed" ) ) )
       {
-        setServerType( ServerType::EE );
+        setServerType( MerginServerType::EE );
       }
       if ( docObj.contains( QStringLiteral( "global_namespace" ) ) )
       {
-        setServerType( ServerType::CE );
+        setServerType( MerginServerType::CE );
       }
     }
   }
   else // legacy (old) server
   {
-    setServerType( ServerType::OLD );
+    setServerType( MerginServerType::OLD );
   }
 
   r->deleteLater();
 }
 
-const MerginApi::ServerType &MerginApi::serverType() const
+MerginServerType::ServerType MerginApi::serverType() const
 {
   return mServerType;
 }
 
-void MerginApi::setServerType( const ServerType &newServerType )
+void MerginApi::setServerType( const MerginServerType::ServerType &serverType )
 {
-  if ( mServerType != newServerType )
+  if ( mServerType != serverType )
   {
-    mServerType = newServerType;
+    mServerType = serverType;
     QSettings settings;
     settings.beginGroup( QStringLiteral( "Input/" ) );
     settings.setValue( QStringLiteral( "serverType" ), mServerType );
@@ -3146,6 +3146,7 @@ void MerginApi::setServerType( const ServerType &newServerType )
     emit serverTypeChanged();
   }
 }
+
 
 DownloadQueueItem::DownloadQueueItem( const QString &fp, int s, int v, int rf, int rt, bool diff )
   : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )

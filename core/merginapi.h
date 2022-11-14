@@ -25,6 +25,7 @@
 #include <QDateTime>
 
 #include "merginapistatus.h"
+#include "merginservertype.h"
 #include "merginsubscriptionstatus.h"
 #include "merginprojectmetadata.h"
 #include "localprojectsmanager.h"
@@ -195,19 +196,9 @@ class MerginApi: public QObject
     // supportsSelectiveSync if true, fetches mergin-config.json in project and changes sync behavior based on its content (selective sync)
     Q_PROPERTY( bool supportsSelectiveSync READ supportsSelectiveSync NOTIFY supportsSelectiveSyncChanged )
     Q_PROPERTY( /*MerginApiStatus::ApiStatus*/ int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
-    Q_PROPERTY( ServerType serverType READ serverType WRITE setServerType NOTIFY serverTypeChanged )
+    Q_PROPERTY( /*MerginServerType::ServerType*/ int serverType READ serverType NOTIFY serverTypeChanged )
 
   public:
-
-    enum ServerType
-    {
-      UNKNOWN = 0,
-      OLD, // no workspaces
-      SAAS, // supports workspaces and switch workspace
-      EE, // supports workspaces and switch workspace
-      CE, // one global workspace without switch
-    };
-    Q_ENUM( ServerType );
 
     explicit MerginApi( LocalProjectsManager &localProjects, QObject *parent = nullptr );
     ~MerginApi() = default;
@@ -464,8 +455,9 @@ class MerginApi: public QObject
      * Possible types are: saas, ce, ee and legacy
      */
     void getServerType();
-    const ServerType &serverType() const;
-    void setServerType( const ServerType &newServerType );
+
+    MerginServerType::ServerType serverType() const;
+    void setServerType( const MerginServerType::ServerType &serverType );
 
   signals:
     void apiSupportsSubscriptionsChanged();
@@ -674,7 +666,7 @@ class MerginApi: public QObject
     static QList<DownloadQueueItem> itemsForFileChunks( const MerginFile &file, int version );
     static QList<DownloadQueueItem> itemsForFileDiffs( const MerginFile &file );
 
-    ServerType mServerType = ServerType::UNKNOWN;
+    MerginServerType::ServerType mServerType = MerginServerType::ServerType::UNKNOWN;
 
     friend class TestMerginApi;
     friend class Purchasing;
