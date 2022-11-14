@@ -1,0 +1,5 @@
+if(EXISTS ${MM_SDK_PATH})
+    message("Using SDK: ${MM_SDK_PATH}")
+else()
+    message(FATAL_ERROR "${MM_SDK_PATH} is not valid path with the SDK. Set valid MM_SDK_PATH path.")
+endif()

@@ -1,0 +1,1 @@
+add_executable(merginmaps $<TARGET_OBJECTS:mm_qgsquick> $<TARGET_OBJECTS:mm_core> main.cpp)

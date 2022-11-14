@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qgsquickmapcanvas.qml</file>
-    </qresource>
-</RCC>
