@@ -747,15 +747,29 @@ void MerginApi::registerUser( const QString &username,
   CoreUtils::log( "auth", QStringLiteral( "Requesting registration: " ) + url.toString() );
 }
 
-void MerginApi::getUserInfo( )
+void MerginApi::getUserInfo()
 {
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
 
+  if ( mServerType == ServerType::UNKNOWN )
+  {
+    return;
+  }
+
+  QString urlString;
+  if ( mServerType == ServerType::OLD )
+  {
+    urlString = mApiRoot + QStringLiteral( "v1/user/%1" ).arg( mUserAuth->username() );
+  }
+  else
+  {
+    urlString = mApiRoot + QStringLiteral( "v1/user/profile" );
+  }
+
   QNetworkRequest request = getDefaultRequest();
-  QString urlString = mApiRoot + QStringLiteral( "v1/user/%1" ).arg( mUserAuth->username() );
   QUrl url( urlString );
   request.setUrl( url );
 
