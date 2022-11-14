@@ -2669,3 +2669,13 @@ void TestMerginApi::refreshProjectsModel( const ProjectsModel::ProjectModelTypes
     QCOMPARE( spy.count(), 1 );
   }
 }
+
+void TestMerginApi::testServerType()
+{
+  // legacy
+  QSignalSpy spy( mApi, &MerginApi::serverTypeChanged );
+  mApi->getServerType();
+  spy.wait( TestUtils::SHORT_REPLY );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( mApi->serverType(), MerginApi::ServerType::OLD );
+}

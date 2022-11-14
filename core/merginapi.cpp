@@ -47,6 +47,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
 
   QObject::connect( this, &MerginApi::authChanged, this, &MerginApi::saveAuthData );
   QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::pingMergin );
+  QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::getServerType );
   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::checkMerginVersion );
   QObject::connect( mUserInfo, &MerginUserInfo::userInfoChanged, this, &MerginApi::userInfoChanged );
   QObject::connect( mSubscriptionInfo, &MerginSubscriptionInfo::subscriptionInfoChanged, this, &MerginApi::subscriptionInfoChanged );
@@ -54,6 +55,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::authChanged );
 
   loadAuthData();
+  getServerType();
   GEODIFF_init();
   GEODIFF_setLoggerCallback( &GeodiffUtils::log );
   GEODIFF_setMaximumLoggerLevel( GEODIFF_LoggerLevel::LevelDebug );
@@ -1326,6 +1328,7 @@ void MerginApi::setApiRoot( const QString &apiRoot )
     settings.setValue( QStringLiteral( "apiRoot" ), mApiRoot );
     settings.endGroup();
     setApiVersionStatus( MerginApiStatus::UNKNOWN );
+    setServerType( ServerType::UNKNOWN );
     emit apiRootChanged();
   }
 }
@@ -3064,6 +3067,66 @@ void MerginApi::deleteAccountFinished()
   }
 
   r->deleteLater();
+}
+
+void MerginApi::getServerType()
+{
+  QNetworkRequest request = getDefaultRequest();
+  QString urlString = mApiRoot + QStringLiteral( "config" );
+  QUrl url( urlString );
+  request.setUrl( url );
+
+  QNetworkReply *reply = mManager.get( request );
+  CoreUtils::log( "server type", QStringLiteral( "Requesting server type: " ) + url.toString() );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::getServerTypeReplyFinished );
+}
+
+void MerginApi::getServerTypeReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( "server type", QStringLiteral( "Success" ) );
+    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    if ( doc.isObject() )
+    {
+      QJsonObject docObj = doc.object();
+      if ( docObj.contains( QStringLiteral( "user_workspaces_allowed" ) ) )
+      {
+        setServerType( ServerType::EE );
+      }
+      if ( docObj.contains( QStringLiteral( "global_namespace" ) ) )
+      {
+        setServerType( ServerType::CE );
+      }
+    }
+  }
+  else // legacy (old) server
+  {
+    setServerType( ServerType::OLD );
+  }
+
+  r->deleteLater();
+}
+
+const MerginApi::ServerType &MerginApi::serverType() const
+{
+  return mServerType;
+}
+
+void MerginApi::setServerType( const ServerType &newServerType )
+{
+  if ( mServerType != newServerType )
+  {
+    mServerType = newServerType;
+    QSettings settings;
+    settings.beginGroup( QStringLiteral( "Input/" ) );
+    settings.setValue( QStringLiteral( "serverType" ), mServerType );
+    settings.endGroup();
+    emit serverTypeChanged();
+  }
 }
 
 DownloadQueueItem::DownloadQueueItem( const QString &fp, int s, int v, int rf, int rt, bool diff )

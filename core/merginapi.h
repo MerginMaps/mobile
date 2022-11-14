@@ -195,8 +195,20 @@ class MerginApi: public QObject
     // supportsSelectiveSync if true, fetches mergin-config.json in project and changes sync behavior based on its content (selective sync)
     Q_PROPERTY( bool supportsSelectiveSync READ supportsSelectiveSync NOTIFY supportsSelectiveSyncChanged )
     Q_PROPERTY( /*MerginApiStatus::ApiStatus*/ int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
+    Q_PROPERTY( ServerType serverType READ serverType WRITE setServerType NOTIFY serverTypeChanged )
 
   public:
+
+    enum ServerType
+    {
+      UNKNOWN = 0,
+      OLD, // no workspaces
+      SAAS, // supports workspaces and switch workspace
+      EE, // supports workspaces and switch workspace
+      CE, // one global workspace without switch
+    };
+    Q_ENUM( ServerType );
+
     explicit MerginApi( LocalProjectsManager &localProjects, QObject *parent = nullptr );
     ~MerginApi() = default;
 
@@ -445,6 +457,14 @@ class MerginApi: public QObject
     bool supportsSelectiveSync() const;
     void setSupportsSelectiveSync( bool supportsSelectiveSync );
 
+    /**
+     * Determine Mergin server type by querying /config endpoint.
+     * Possible types are: saas, ce, ee and legacy
+     */
+    void getServerType();
+    const ServerType &serverType() const;
+    void setServerType( const ServerType &newServerType );
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -495,6 +515,8 @@ class MerginApi: public QObject
     void accountDeleted( bool result );
     void userIsAnOrgOwnerError();
 
+    void serverTypeChanged();
+
   private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
@@ -526,6 +548,8 @@ class MerginApi: public QObject
      * Calls user info only when has authData, otherwise slots catches the signal from clearing user data after signing out.
      */
     void onPlanProductIdChanged();
+
+    void getServerTypeReplyFinished();
 
   private:
     MerginProject parseProjectMetadata( const QJsonObject &project );
@@ -647,6 +671,8 @@ class MerginApi: public QObject
 
     static QList<DownloadQueueItem> itemsForFileChunks( const MerginFile &file, int version );
     static QList<DownloadQueueItem> itemsForFileDiffs( const MerginFile &file );
+
+    ServerType mServerType = ServerType::UNKNOWN;
 
     friend class TestMerginApi;
     friend class Purchasing;
