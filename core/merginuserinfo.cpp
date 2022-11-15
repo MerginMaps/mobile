@@ -55,6 +55,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   }
 
   saveWorkspacesData();
+  findActiveWorkspace();
   emit userInfoChanged();
 }
 
@@ -86,6 +87,17 @@ void MerginUserInfo::saveWorkspacesData()
   settings.setValue( "preferredWorkspace", mPreferredWorkspace );
   //settings.setValue( "workspaces", mWorkspaces );
   settings.endGroup();
+}
+
+void MerginUserInfo::loadWorkspacesData()
+{
+  QSettings settings;
+  settings.beginGroup( "Input/" );
+  settings.value( "preferredWorkspace", -1 );
+  //settings.value( "workspaces" );
+  settings.endGroup();
+
+  findActiveWorkspace();
 }
 
 void MerginUserInfo::findActiveWorkspace()

@@ -37,6 +37,7 @@ class MerginUserInfo: public QObject
     double storageLimit() const;
 
     void saveWorkspacesData();
+    void loadWorkspacesData();
 
     void findActiveWorkspace();
     void saveLastActiveWorkspace();

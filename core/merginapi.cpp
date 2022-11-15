@@ -751,6 +751,7 @@ void MerginApi::getUserInfo()
 {
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
+    mUserInfo->loadWorkspacesData();
     return;
   }
 
