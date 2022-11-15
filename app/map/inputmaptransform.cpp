@@ -1,10 +1,4 @@
-/***************************************************************************
-  qgsquickmaptransform.cpp
-  --------------------------------------
-  Date                 : 27.12.2014
-  Copyright            : (C) 2014 by Matthias Kuhn
-  Email                : matthias (at) opengis.ch
- ***************************************************************************
+/**************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -13,38 +7,38 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "qgsquickmaptransform.h"
+#include "inputmaptransform.h"
 
-void QgsQuickMapTransform::applyTo( QMatrix4x4 *matrix ) const
+void InputMapTransform::applyTo( QMatrix4x4 *matrix ) const
 {
   *matrix *= mMatrix;
   matrix->optimize();
 }
 
-QgsQuickMapSettings *QgsQuickMapTransform::mapSettings() const
+InputMapSettings *InputMapTransform::mapSettings() const
 {
   return mMapSettings;
 }
 
-void QgsQuickMapTransform::setMapSettings( QgsQuickMapSettings *mapSettings )
+void InputMapTransform::setMapSettings( InputMapSettings *mapSettings )
 {
   if ( mapSettings == mMapSettings )
     return;
 
   if ( mMapSettings )
-    disconnect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &QgsQuickMapTransform::updateMatrix );
+    disconnect( mMapSettings, &InputMapSettings::visibleExtentChanged, this, &InputMapTransform::updateMatrix );
 
   mMapSettings = mapSettings;
 
   if ( mMapSettings )
-    connect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &QgsQuickMapTransform::updateMatrix );
+    connect( mMapSettings, &InputMapSettings::visibleExtentChanged, this, &InputMapTransform::updateMatrix );
 
   updateMatrix();
 
   emit mapSettingsChanged();
 }
 
-void QgsQuickMapTransform::updateMatrix()
+void InputMapTransform::updateMatrix()
 {
   QMatrix4x4 matrix;
   float scaleFactor = static_cast<float>( ( 1.0 / mMapSettings->mapUnitsPerPixel() ) / mMapSettings->devicePixelRatio() );

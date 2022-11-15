@@ -30,29 +30,16 @@ set(MM_CORE_HDRS
     geodiffutils.h
 )
 
-set(MM_QGSQUICK_SRCS
-    qgsquickcoordinatetransformer.cpp
-    qgsquickmapcanvasmap.cpp
-    qgsquickmapsettings.cpp
-    qgsquickmaptransform.cpp
-    qgsquickutils.cpp
-)
-
-set(MM_QGSQUICK_SRCS
-    qgsquickcoordinatetransformer.h
-    qgsquickmapcanvasmap.h
-    qgsquickmapsettings.h
-    qgsquickmaptransform.h
-    qgis_quick.h
-    qgsquickutils.h
-)
-
-
 if(USE_MM_SERVER_API_KEY)
+  if (EXISTS merginsecrets.cpp)
     set(MM_CORE_SRCS ${MM_CORE_SRCS} merginsecrets.cpp)
+  else()
+    message(FATAL_ERROR "core/merginsecrets.cpp doesn't exists. Decode it or set USE_MM_SERVER_API_KEY=FALSE")
+  endif()
 endif()
 
 add_library(mm_core OBJECT ${MM_CORE_SRCS} ${MM_CORE_HDRS})
+target_link_libraries(mm_core PUBLIC Qt6::Core Qt6::Network InputSDK::geodiff)
 
 if(NOT USE_MM_SERVER_API_KEY)
     target_compile_definitions(mm_core PRIVATE USE_MERGIN_DUMMY_API_KEY)

@@ -1,10 +1,4 @@
 /***************************************************************************
-  qgsquickmapsettings.h
-  --------------------------------------
-  Date                 : 27.12.2014
-  Copyright            : (C) 2014 by Matthias Kuhn
-  Email                : matthias (at) opengis.ch
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -13,10 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKMAPSETTINGS_H
-#define QGSQUICKMAPSETTINGS_H
-
-#include "qgis_quick.h"
+#ifndef INPUTMAPSETTINGS_H
+#define INPUTMAPSETTINGS_H
 
 #include <QObject>
 
@@ -28,8 +20,7 @@
 #include "qgsproject.h"
 
 /**
- * \ingroup quick
- * \brief The QgsQuickMapSettings class encapsulates QgsMapSettings class to offer
+ * \brief The InputMapSettings class encapsulates QgsMapSettings class to offer
  * settings of configuration of map rendering via QML properties.
  *
  * On top of QgsMapSettings functionality, when QgsProject is attached,
@@ -37,18 +28,14 @@
  * QgsProject should be attached before it is read.
  *
  * \note QML Type: MapSettings
- *
- * \sa QgsMapCanvas
- *
- * \since QGIS 3.2
  */
-class QUICK_EXPORT QgsQuickMapSettings : public QObject
+class InputMapSettings : public QObject
 {
     Q_OBJECT
 
     /**
      * A project property should be used as a primary source of project all other components
-     * in the application. QgsProject should be attached to QgsQuickMapSettings before
+     * in the application. QgsProject should be attached to InputMapSettings before
      * it is read (QgsProject::read)
      *
      * When project is read, map settings (CRS, extent, ...) are automatically set from its DOM.
@@ -64,7 +51,7 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
      * Geographical coordinates of the rectangle that should be rendered.
      * The actual visible extent used for rendering could be slightly different
      * since the given extent may be expanded in order to fit the aspect ratio
-     * of output size. Use QgsQuickMapSettings::visibleExtent to get the resulting extent.
+     * of output size. Use InputMapSettings::visibleExtent to get the resulting extent.
      *
      * Automatically loaded from project on QgsProject::readProject
      */
@@ -137,8 +124,8 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
 
   public:
     //! Create new map settings
-    explicit QgsQuickMapSettings( QObject *parent = nullptr );
-    ~QgsQuickMapSettings() = default;
+    explicit InputMapSettings( QObject *parent = nullptr );
+    ~InputMapSettings() = default;
 
     //! Clone map settings
     QgsMapSettings mapSettings() const;
@@ -149,10 +136,10 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
     //! \copydoc QgsMapSettings::setExtent()
     void setExtent( const QgsRectangle &extent );
 
-    //! \copydoc QgsQuickMapSettings::project
+    //! \copydoc InputMapSettings::project
     void setProject( QgsProject *project );
 
-    //! \copydoc QgsQuickMapSettings::project
+    //! \copydoc InputMapSettings::project
     QgsProject *project() const;
 
     //! Returns the center point of the current map extent
@@ -167,7 +154,7 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
     //! Move current map extent to have center point defined by \a layer. Optionally only pan to the layer if \a shouldZoom is false.
     Q_INVOKABLE void setCenterToLayer( QgsMapLayer *layer, bool shouldZoom = true );
 
-    //! \copydoc QgsQuickMapSettings::mapUnitsPerPoint
+    //! \copydoc InputMapSettings::mapUnitsPerPoint
     double mapUnitsPerPoint() const;
 
     //! \copydoc QgsMapSettings::visibleExtent()
@@ -197,16 +184,16 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
     //! \copydoc QgsMapSettings::setTransformContext()
     void setTransformContext( const QgsCoordinateTransformContext &context );
 
-    //! \copydoc QgsQuickMapSettings::rotation
+    //! \copydoc InputMapSettings::rotation
     double rotation() const;
 
-    //! \copydoc QgsQuickMapSettings::rotation
+    //! \copydoc InputMapSettings::rotation
     void setRotation( double rotation );
 
-    //! \copydoc QgsQuickMapSettings::backgroundColor
+    //! \copydoc InputMapSettings::backgroundColor
     QColor backgroundColor() const;
 
-    //! \copydoc QgsQuickMapSettings::backgroundColor
+    //! \copydoc InputMapSettings::backgroundColor
     void setBackgroundColor( const QColor &color );
 
     /**
@@ -270,55 +257,55 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
      */
     void setDevicePixelRatio( const qreal &devicePixelRatio );
 
-    //! \copydoc QgsQuickMapSettings::isTemporal
+    //! \copydoc InputMapSettings::isTemporal
     bool isTemporal() const;
 
-    //! \copydoc QgsQuickMapSettings::isTemporal
+    //! \copydoc InputMapSettings::isTemporal
     void setIsTemporal( bool temporal );
 
-    //! \copydoc QgsQuickMapSettings::temporalBegin
+    //! \copydoc InputMapSettings::temporalBegin
     QDateTime temporalBegin() const;
 
-    //! \copydoc QgsQuickMapSettings::temporalBegin
+    //! \copydoc InputMapSettings::temporalBegin
     void setTemporalBegin( const QDateTime &begin );
 
-    //! \copydoc QgsQuickMapSettings::temporalEnd
+    //! \copydoc InputMapSettings::temporalEnd
     QDateTime temporalEnd() const;
 
-    //! \copydoc QgsQuickMapSettings::temporalEnd
+    //! \copydoc InputMapSettings::temporalEnd
     void setTemporalEnd( const QDateTime &end );
 
   signals:
-    //! \copydoc QgsQuickMapSettings::project
+    //! \copydoc InputMapSettings::project
     void projectChanged();
 
-    //! \copydoc QgsQuickMapSettings::extent
+    //! \copydoc InputMapSettings::extent
     void extentChanged();
 
-    //! \copydoc QgsQuickMapSettings::destinationCrs
+    //! \copydoc InputMapSettings::destinationCrs
     void destinationCrsChanged();
 
-    //! \copydoc QgsQuickMapSettings::mapUnitsPerPixel
+    //! \copydoc InputMapSettings::mapUnitsPerPixel
     void mapUnitsPerPixelChanged();
-    //! \copydoc QgsQuickMapSettings::mapUnitsPerPoint
+    //! \copydoc InputMapSettings::mapUnitsPerPoint
     void mapUnitsPerPointChanged();
 
-    //! \copydoc QgsQuickMapSettings::rotation
+    //! \copydoc InputMapSettings::rotation
     void rotationChanged();
 
-    //! \copydoc QgsQuickMapSettings::backgroundColor
+    //! \copydoc InputMapSettings::backgroundColor
     void backgroundColorChanged();
 
-    //! \copydoc QgsQuickMapSettings::visibleExtent
+    //! \copydoc InputMapSettings::visibleExtent
     void visibleExtentChanged();
 
-    //! \copydoc QgsQuickMapSettings::outputSize
+    //! \copydoc InputMapSettings::outputSize
     void outputSizeChanged();
 
-    //! \copydoc QgsQuickMapSettings::outputDpi
+    //! \copydoc InputMapSettings::outputDpi
     void outputDpiChanged();
 
-    //! \copydoc QgsQuickMapSettings::layers
+    //! \copydoc InputMapSettings::layers
     void layersChanged();
 
     /**
@@ -329,7 +316,7 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
      */
     void temporalStateChanged();
 
-    //! \copydoc QgsQuickMapSettings::devicePixelRatio
+    //! \copydoc InputMapSettings::devicePixelRatio
     void devicePixelRatioChanged();
 
   private slots:
@@ -352,4 +339,4 @@ class QUICK_EXPORT QgsQuickMapSettings : public QObject
     qreal mDevicePixelRatio = 1.0;
 };
 
-#endif // QGSQUICKMAPSETTINGS_H
+#endif // INPUTMAPSETTINGS_H

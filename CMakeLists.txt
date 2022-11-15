@@ -13,7 +13,8 @@ project(
 )
 
 set(CMAKE_COLOR_MAKEFILE ON)
-set(CMAKE_AUTORCC ON)
+# set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOMOC ON)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
@@ -26,12 +27,12 @@ if (MSVC)
   add_compile_definitions(_HAS_AUTO_PTR_ETC=1)
 endif()
 
-set(USE_MM_SERVER_API_KEY TRUE CACHE BOOL "Determines whether we should use server API key. Decrypt file with secrets on disk if you want to use it.")
+set(USE_SERVER_API_KEY TRUE CACHE BOOL "Determines whether we should use server API key. Decrypt file with secrets on disk if you want to use it.")
 set(QGIS_QUICK_DATA_PATH "INPUT" CACHE STRING "The internal variable pointing to the application storage folder") 
-set(MM_SDK_PATH "" CACHE PATH "Path to the Mergin Maps Input SDK on host machine" )
+set(INPUT_SDK_PATH "" CACHE PATH "Path to the Mergin Maps Input SDK on host machine" )
 
 find_package(Qt6 COMPONENTS Quick Qml Xml Concurrent Positioning Sensors QuickControls2 Network Svg Sql OpenGl Core Core5Compat REQUIRED)
-find_package(MerginMapsSDK)
+find_package(InputSDK)
 
 add_subdirectory(core)
 add_subdirectory(app)

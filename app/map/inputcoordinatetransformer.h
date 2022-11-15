@@ -1,10 +1,4 @@
-/***************************************************************************
- qgsquickcoordinatetransformer.h
-  --------------------------------------
-  Date                 : 1.6.2017
-  Copyright            : (C) 2017 by Matthias Kuhn
-  Email                :  matthias (at) opengis.ch
- ***************************************************************************
+/**************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -13,31 +7,27 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QGSQUICKCOORDINATETRANSFORMER_H
-#define QGSQUICKCOORDINATETRANSFORMER_H
+#ifndef INPUTCOORDINATETRANSFORMER_H
+#define INPUTCOORDINATETRANSFORMER_H
 
 #include <QObject>
 
 #include "qgspoint.h"
 
-#include "qgis_quick.h"
 #include "qgscoordinatetransformcontext.h"
 #include "qgscoordinatereferencesystem.h"
 #include "qgscoordinatetransform.h"
 #include "qgspoint.h"
 
 /**
- * \ingroup quick
  * \brief Helper class for transform of coordinates (QgsPoint) to a different coordinate reference system.
  *
  * It requires connection of transformation context from mapSettings, source position and source CRS to
  * calculate projected position in desired destination CRS.
  *
  * \note QML Type: CoordinateTransformer
- *
- * \since QGIS 3.4
  */
-class QUICK_EXPORT QgsQuickCoordinateTransformer : public QObject
+class InputCoordinateTransformer : public QObject
 {
     Q_OBJECT
 
@@ -53,54 +43,54 @@ class QUICK_EXPORT QgsQuickCoordinateTransformer : public QObject
     //! Source CRS, default 4326
     Q_PROPERTY( QgsCoordinateReferenceSystem sourceCrs READ sourceCrs WRITE setSourceCrs NOTIFY sourceCrsChanged )
 
-    //! Transformation context, can be set from QgsQuickMapSettings::transformContext()
+    //! Transformation context, can be set from InputMapSettings::transformContext()
     Q_PROPERTY( QgsCoordinateTransformContext transformContext READ transformContext WRITE setTransformContext NOTIFY transformContextChanged )
 
   public:
     //! Creates new coordinate transformer
-    explicit QgsQuickCoordinateTransformer( QObject *parent = nullptr );
+    explicit InputCoordinateTransformer( QObject *parent = nullptr );
 
-    //!\copydoc QgsQuickCoordinateTransformer::projectedPosition
+    //!\copydoc InputCoordinateTransformer::projectedPosition
     QgsPoint projectedPosition() const;
 
-    //!\copydoc QgsQuickCoordinateTransformer::sourcePosition
+    //!\copydoc InputCoordinateTransformer::sourcePosition
     QgsPoint sourcePosition() const;
 
-    //!\copydoc QgsQuickCoordinateTransformer::sourcePosition
+    //!\copydoc InputCoordinateTransformer::sourcePosition
     void setSourcePosition( const QgsPoint &sourcePosition );
 
-    //!\copydoc QgsQuickCoordinateTransformer::destinationCrs
+    //!\copydoc InputCoordinateTransformer::destinationCrs
     QgsCoordinateReferenceSystem destinationCrs() const;
 
-    //!\copydoc QgsQuickCoordinateTransformer::destinationCrs
+    //!\copydoc InputCoordinateTransformer::destinationCrs
     void setDestinationCrs( const QgsCoordinateReferenceSystem &destinationCrs );
 
-    //!\copydoc QgsQuickCoordinateTransformer::sourceCrs
+    //!\copydoc InputCoordinateTransformer::sourceCrs
     QgsCoordinateReferenceSystem sourceCrs() const;
 
-    //!\copydoc QgsQuickCoordinateTransformer::sourceCrs
+    //!\copydoc InputCoordinateTransformer::sourceCrs
     void setSourceCrs( const QgsCoordinateReferenceSystem &sourceCrs );
 
-    //!\copydoc QgsQuickCoordinateTransformer::transformContext
+    //!\copydoc InputCoordinateTransformer::transformContext
     void setTransformContext( const QgsCoordinateTransformContext &context );
 
-    //!\copydoc QgsQuickCoordinateTransformer::transformContext
+    //!\copydoc InputCoordinateTransformer::transformContext
     QgsCoordinateTransformContext transformContext() const;
 
   signals:
-    //!\copydoc QgsQuickCoordinateTransformer::projectedPosition
+    //!\copydoc InputCoordinateTransformer::projectedPosition
     void projectedPositionChanged();
 
-    //!\copydoc QgsQuickCoordinateTransformer::sourcePosition
+    //!\copydoc InputCoordinateTransformer::sourcePosition
     void sourcePositionChanged();
 
-    //!\copydoc QgsQuickCoordinateTransformer::destinationCrs
+    //!\copydoc InputCoordinateTransformer::destinationCrs
     void destinationCrsChanged();
 
-    //!\copydoc QgsQuickCoordinateTransformer::sourceCrs
+    //!\copydoc InputCoordinateTransformer::sourceCrs
     void sourceCrsChanged();
 
-    //!\copydoc QgsQuickCoordinateTransformer::transformContext
+    //!\copydoc InputCoordinateTransformer::transformContext
     void transformContextChanged();
 
   private:
@@ -111,4 +101,4 @@ class QUICK_EXPORT QgsQuickCoordinateTransformer : public QObject
     QgsCoordinateTransform mCoordinateTransform;
 };
 
-#endif // QGSQUICKCOORDINATETRANSFORMER_H
+#endif // INPUTCOORDINATETRANSFORMER_H
