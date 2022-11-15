@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Shapes
 
-import QgsQuick 0.1 as QgsQuick
+import Input 0.1 as Input
 
 import lc 1.0
 
@@ -24,7 +24,7 @@ Item {
   property var geometry
 
   // for transformation of the highlight to the correct location on the map
-  property QgsQuick.MapSettings mapSettings
+  property Input.MapSettings mapSettings
 
   // point (marker) properties
   property string markerType: "image"   // "circle" or "image"

@@ -24,7 +24,7 @@
 
 #include "testutils.h"
 
-#include "qgsquickmapcanvasmap.h"
+#include "inputmapcanvasmap.h"
 #include "qgsvectorlayer.h"
 
 TestPosition::TestPosition( PositionKit *kit, QObject *parent ) : QObject( parent )
@@ -295,12 +295,12 @@ void TestPosition::testMapPosition()
   QVERIFY( crsGPS.authid() == "EPSG:5514" );
 
   QgsRectangle extent = QgsRectangle( -120, 23, -82, 47 );
-  QgsQuickMapCanvasMap canvas;
+  InputMapCanvasMap canvas;
 
   QgsVectorLayer *tempLayer = new QgsVectorLayer( QStringLiteral( "Point?crs=epsg:5514" ), QStringLiteral( "vl" ), QStringLiteral( "memory" ) );
   QVERIFY( tempLayer->isValid() );
 
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapSettings *ms = canvas.mapSettings();
   ms->setDestinationCrs( crsGPS );
   ms->setExtent( extent );
   ms->setOutputSize( QSize( 1000, 500 ) );

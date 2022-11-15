@@ -16,7 +16,7 @@
 #include "qgspoint.h"
 #include "qgsproject.h"
 #include "qgscoordinatereferencesystem.h"
-#include "qgsquickmapsettings.h"
+#include "inputmapsettings.h"
 
 #include "qgssnappingutils.h"
 
@@ -25,7 +25,7 @@ class SnapUtils : public QObject
     Q_OBJECT
 
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
     Q_PROPERTY( QPointF centerPosition READ centerPosition WRITE setCenterPosition NOTIFY centerPositionChanged )
     Q_PROPERTY( SnapType snapType READ snapType WRITE setSnapType NOTIFY snapTypeChanged )
     Q_PROPERTY( bool useSnapping READ useSnapping WRITE setUseSnapping NOTIFY useSnappingChanged )
@@ -48,8 +48,8 @@ class SnapUtils : public QObject
     QgsProject *qgsProject() const;
     void setQgsProject( QgsProject *newQgsProject );
 
-    QgsQuickMapSettings *mapSettings() const;
-    void setMapSettings( QgsQuickMapSettings *newMapSettings );
+    InputMapSettings *mapSettings() const;
+    void setMapSettings( InputMapSettings *newMapSettings );
 
     Q_INVOKABLE void getsnap();
 
@@ -80,7 +80,7 @@ class SnapUtils : public QObject
   signals:
 
     void qgsProjectChanged( QgsProject *qgsProject );
-    void mapSettingsChanged( QgsQuickMapSettings *mapSettings );
+    void mapSettingsChanged( InputMapSettings *mapSettings );
 
     void centerPositionChanged( QPointF centerPosition );
 
@@ -101,7 +101,7 @@ class SnapUtils : public QObject
     QgsSnappingUtils mSnappingUtils;
 
     QgsProject *mQgsProject = nullptr; // not owned
-    QgsQuickMapSettings *mMapSettings = nullptr; // not owned
+    InputMapSettings *mMapSettings = nullptr; // not owned
     QgsVectorLayer *mDestinationLayer = nullptr; // not owned
 
     QPointF mCenterPosition = QPointF( -1, -1 );

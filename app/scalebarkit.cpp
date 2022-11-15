@@ -34,7 +34,7 @@ ScaleBarKit::ScaleBarKit( QObject *parent )
   connect( this, &ScaleBarKit::preferredWidthChanged, this, &ScaleBarKit::updateScaleBar );
 }
 
-void ScaleBarKit::setMapSettings( QgsQuickMapSettings *mapSettings )
+void ScaleBarKit::setMapSettings( InputMapSettings *mapSettings )
 {
   if ( mMapSettings == mapSettings )
     return;
@@ -50,12 +50,12 @@ void ScaleBarKit::setMapSettings( QgsQuickMapSettings *mapSettings )
   // Connect all signals to change scale bar when needed!
   if ( mMapSettings )
   {
-    connect( mMapSettings, &QgsQuickMapSettings::extentChanged, this, &ScaleBarKit::updateScaleBar );
-    connect( mMapSettings, &QgsQuickMapSettings::destinationCrsChanged, this, &ScaleBarKit::updateScaleBar );
-    connect( mMapSettings, &QgsQuickMapSettings::mapUnitsPerPixelChanged, this, &ScaleBarKit::updateScaleBar );
-    connect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &ScaleBarKit::updateScaleBar );
-    connect( mMapSettings, &QgsQuickMapSettings::outputSizeChanged, this, &ScaleBarKit::updateScaleBar );
-    connect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &ScaleBarKit::updateScaleBar );
+    connect( mMapSettings, &InputMapSettings::extentChanged, this, &ScaleBarKit::updateScaleBar );
+    connect( mMapSettings, &InputMapSettings::destinationCrsChanged, this, &ScaleBarKit::updateScaleBar );
+    connect( mMapSettings, &InputMapSettings::mapUnitsPerPixelChanged, this, &ScaleBarKit::updateScaleBar );
+    connect( mMapSettings, &InputMapSettings::visibleExtentChanged, this, &ScaleBarKit::updateScaleBar );
+    connect( mMapSettings, &InputMapSettings::outputSizeChanged, this, &ScaleBarKit::updateScaleBar );
+    connect( mMapSettings, &InputMapSettings::outputDpiChanged, this, &ScaleBarKit::updateScaleBar );
   }
 
   emit mapSettingsChanged();

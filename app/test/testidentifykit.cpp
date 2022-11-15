@@ -1,5 +1,5 @@
 /***************************************************************************
-     testqgsquickidentifykit.cpp
+     testinputidentifykit.cpp
      --------------------------------------
   Date                 : May 2018
   Copyright            : (C) 2018 by Viktor Sklencar
@@ -25,7 +25,7 @@
 #include "qgsgeometry.h"
 #include "qgsvectordataprovider.h"
 
-#include "qgsquickmapcanvasmap.h"
+#include "inputmapcanvasmap.h"
 #include "identifykit.h"
 
 
@@ -35,12 +35,12 @@ void TestIdentifyKit::identifyOne()
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
 
   QgsRectangle extent = QgsRectangle( -120, 23, -82, 47 );
-  QgsQuickMapCanvasMap canvas;
+  InputMapCanvasMap canvas;
 
   QgsVectorLayer *tempLayer = new QgsVectorLayer( QStringLiteral( "Point?crs=epsg:4326" ), QStringLiteral( "vl" ), QStringLiteral( "memory" ) );
   QVERIFY( tempLayer->isValid() );
 
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapSettings *ms = canvas.mapSettings();
   ms->setDestinationCrs( crsGPS );
   ms->setExtent( extent );
   ms->setOutputSize( QSize( 1000, 500 ) );
@@ -80,7 +80,7 @@ void TestIdentifyKit::identifyOneDefinedVector()
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
 
   QgsRectangle extent = QgsRectangle( -120, 23, -82, 47 );
-  QgsQuickMapCanvasMap canvas;
+  InputMapCanvasMap canvas;
 
   QgsVectorLayer *tempLayer = new QgsVectorLayer( QStringLiteral( "Point?crs=epsg:4326" ), QStringLiteral( "vl" ), QStringLiteral( "memory" ) );
   QVERIFY( tempLayer->isValid() );
@@ -88,7 +88,7 @@ void TestIdentifyKit::identifyOneDefinedVector()
   QgsVectorLayer *tempLayer2 = new QgsVectorLayer( QStringLiteral( "Point?crs=epsg:4326" ), QStringLiteral( "vl2" ), QStringLiteral( "memory" ) );
   QVERIFY( tempLayer->isValid() );
 
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapSettings *ms = canvas.mapSettings();
   ms->setDestinationCrs( crsGPS );
   ms->setExtent( extent );
   ms->setOutputSize( QSize( 1000, 500 ) );
@@ -129,12 +129,12 @@ void TestIdentifyKit::identifyInRadius()
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
 
   QgsRectangle extent = QgsRectangle( -120, 23, -82, 47 );
-  QgsQuickMapCanvasMap canvas;
+  InputMapCanvasMap canvas;
 
   QgsVectorLayer *tempLayer = new QgsVectorLayer( QStringLiteral( "Point?crs=epsg:4326" ), QStringLiteral( "vl" ), QStringLiteral( "memory" ) );
   QVERIFY( tempLayer->isValid() );
 
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapSettings *ms = canvas.mapSettings();
   ms->setDestinationCrs( crsGPS );
   ms->setExtent( extent );
   ms->setOutputSize( QSize( 1000, 500 ) );

@@ -14,7 +14,7 @@
 #include <qglobal.h>
 
 #include "qgsgeometry.h"
-#include "qgsquickmapsettings.h"
+#include "inputmapsettings.h"
 
 #include "maptools/recordingmaptool.h"
 
@@ -26,7 +26,7 @@ class GuidelineController : public QObject
     // input properties (geometry of real feature and curent crosshair position in map CRS)
     Q_PROPERTY( QgsGeometry realGeometry READ realGeometry WRITE setRealGeometry NOTIFY realGeometryChanged )
     Q_PROPERTY( QPointF crosshairPosition READ crosshairPosition WRITE setCrosshairPosition NOTIFY crosshairPositionChanged )
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     Q_PROPERTY( Vertex activeVertex READ activeVertex WRITE setActiveVertex NOTIFY activeVertexChanged )
     Q_PROPERTY( RecordingMapTool::InsertPolicy insertPolicy READ insertPolicy WRITE setInsertPolicy NOTIFY insertPolicyChanged )
@@ -51,8 +51,8 @@ class GuidelineController : public QObject
     const QgsGeometry &realGeometry() const;
     void setRealGeometry( const QgsGeometry &newRealGeometry );
 
-    QgsQuickMapSettings *mapSettings() const;
-    void setMapSettings( QgsQuickMapSettings *newMapSettings );
+    InputMapSettings *mapSettings() const;
+    void setMapSettings( InputMapSettings *newMapSettings );
 
     const Vertex &activeVertex() const;
     void setActiveVertex( const Vertex &newActiveVertex );
@@ -76,7 +76,7 @@ class GuidelineController : public QObject
 
     void realGeometryChanged( const QgsGeometry &realGeometry );
 
-    void mapSettingsChanged( QgsQuickMapSettings *mapSettings );
+    void mapSettingsChanged( InputMapSettings *mapSettings );
 
     void activeVertexChanged( const Vertex &activeVertex );
 
@@ -96,7 +96,7 @@ class GuidelineController : public QObject
     QgsGeometry mGuidelineGeometry;
     QPointF mCrosshairPosition;
     QgsGeometry mRealGeometry;
-    QgsQuickMapSettings *mMapSettings = nullptr; // not owned
+    InputMapSettings *mMapSettings = nullptr; // not owned
     Vertex mActiveVertex;
     bool mAllowed;
     RecordingMapTool::InsertPolicy mInsertPolicy;

@@ -14,7 +14,7 @@ import QtQml
 
 import lc 1.0
 import "../components"
-import QgsQuick 0.1 as QgsQuick
+import Input 0.1 as Input
 
 Item {
   /**
@@ -109,7 +109,7 @@ Item {
   /**
    * Active project.
    */
-  property QgsQuick.Project project
+  property Input.Project project
 
   /**
    * Controller

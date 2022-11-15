@@ -57,7 +57,7 @@ echo "Starting to format QML files"
 
 RETURN=0
 
-FILES=`find ../app ../qgsquick -name \*.qml* -print`
+FILES=`find ../app ../input -name \*.qml* -print`
 
 # <QMLFORMAT CODE>
 # --indent-width 2: use 2 spaces to indent

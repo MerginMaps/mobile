@@ -14,7 +14,7 @@
 #include <qglobal.h>
 
 #include "position/positionkit.h"
-#include "qgsquickmapsettings.h"
+#include "inputmapsettings.h"
 
 /**
  * MapPosition utility class converts real world position into map related attributes
@@ -35,7 +35,7 @@ class MapPosition : public QObject
 
     // Components to use during calculation
     Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
   public:
     explicit MapPosition( QObject *parent = nullptr );
@@ -43,8 +43,8 @@ class MapPosition : public QObject
     PositionKit *positionKit() const;
     void setPositionKit( PositionKit *newPositionKit );
 
-    QgsQuickMapSettings *mapSettings() const;
-    void setMapSettings( QgsQuickMapSettings *newMapSettings );
+    InputMapSettings *mapSettings() const;
+    void setMapSettings( InputMapSettings *newMapSettings );
 
     QgsPoint mapPosition() const;
     QgsPointXY screenPosition() const;
@@ -52,7 +52,7 @@ class MapPosition : public QObject
 
   signals:
     void positionKitChanged( PositionKit * );
-    void mapSettingsChanged( QgsQuickMapSettings * );
+    void mapSettingsChanged( InputMapSettings * );
 
     void mapPositionChanged( QgsPoint );
     void screenPositionChanged( QgsPointXY );
@@ -72,7 +72,7 @@ class MapPosition : public QObject
     double mScreenAccuracy = 2;
 
     PositionKit *mPositionKit = nullptr; // not owned
-    QgsQuickMapSettings *mMapSettings = nullptr; // not owned
+    InputMapSettings *mMapSettings = nullptr; // not owned
 };
 
 #endif // MAPPOSITION_H

@@ -78,7 +78,7 @@ void TestUtilsFunctions::screenUnitsToMeters()
   QgsCoordinateReferenceSystem crsGPS = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
 
-  QgsQuickMapSettings ms;
+  InputMapSettings ms;
   ms.setDestinationCrs( crsGPS );
   ms.setExtent( QgsRectangle( 49, 16, 50, 17 ) );
   ms.setOutputSize( QSize( 1000, 500 ) );
@@ -400,7 +400,7 @@ void TestUtilsFunctions::testStakeoutPathExtent()
 {
   QgsCoordinateReferenceSystem crs = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
 
-  QgsQuickMapSettings ms;
+  InputMapSettings ms;
   ms.setDestinationCrs( crs );
   ms.setExtent( QgsRectangle( 49, 16, 50, 17 ) );
   ms.setOutputSize( QSize( 400, 620 ) );
@@ -485,7 +485,7 @@ void TestUtilsFunctions::testDistanceBetweenGpsAndFeature()
 {
   QgsCoordinateReferenceSystem crs = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
 
-  QgsQuickMapSettings ms;
+  InputMapSettings ms;
   ms.setDestinationCrs( crs );
 
   QgsPoint gpsPos( 36.77320625296759, 3.060085717615282 );
@@ -507,7 +507,7 @@ void TestUtilsFunctions::testAngleBetweenGpsAndFeature()
 {
   QgsCoordinateReferenceSystem featureCRS = QgsCoordinateReferenceSystem::fromEpsgId( 3857 );
 
-  QgsQuickMapSettings ms;
+  InputMapSettings ms;
   ms.setDestinationCrs( featureCRS );
 
   QgsPoint gpsPos( 14.7067, 46.6842 );
@@ -564,7 +564,7 @@ void TestUtilsFunctions::testMapPointToGps()
 {
   // get a point from map crs and compare it to GPS crs (4326)
 
-  QgsQuickMapSettings ms;
+  InputMapSettings ms;
   ms.setDestinationCrs( QgsCoordinateReferenceSystem::fromEpsgId( 3857 ) );
   ms.setExtent( QgsRectangle( 1638326.6916276202537119, 5886831.7859314000234008, 1653505.5471235010772943, 5901042.9167255694046617 ) );
   ms.setOutputSize( QSize( 1000, 500 ) );

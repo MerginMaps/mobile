@@ -20,7 +20,7 @@
 #include <QString>
 
 #include "inpututils.h"
-#include "qgsquickmapsettings.h"
+#include "inputmapsettings.h"
 
 /**
  *
@@ -46,7 +46,7 @@ class  ScaleBarKit : public QObject
     /**
      * Associated map settings. Should be initialized before the first use from mapcanvas map settings.
      */
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings MEMBER mMapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( InputMapSettings *mapSettings MEMBER mMapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     /**
      * Preferred width of scalebar in pixels. Default set to 300.
@@ -82,7 +82,7 @@ class  ScaleBarKit : public QObject
     ~ScaleBarKit() = default;
 
     //! \copydoc ScaleBarKit::mapSettings
-    void setMapSettings( QgsQuickMapSettings *mapSettings );
+    void setMapSettings( InputMapSettings *mapSettings );
 
     //! \copydoc ScaleBarKit::width
     int width() const;
@@ -120,7 +120,7 @@ class  ScaleBarKit : public QObject
     void updateScaleBar();
 
   private:
-    QgsQuickMapSettings *mMapSettings = nullptr; // not owned
+    InputMapSettings *mMapSettings = nullptr; // not owned
     int mPreferredWidth; // pixels
     int mWidth; // pixels
     int mDistance; // in meters or kilometers, rounded

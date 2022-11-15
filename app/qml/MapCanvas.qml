@@ -1,5 +1,5 @@
 /***************************************************************************
- qgsquickmapcanvas.qml
+ inputmapcanvas.qml
   --------------------------------------
   Date                 : 10.12.2014
   Copyright            : (C) 2014 by Matthias Kuhn
@@ -17,7 +17,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQml
 
-import QgsQuick 0.1 as QgsQuick
+import Input 0.1 as Input
 
 Item {
   id: root
@@ -30,7 +30,7 @@ Item {
    *
    * This is a readonly property.
    *
-   * See also QgsQuickMapCanvasMap::mapSettings
+   * See also InputMapCanvasMap::mapSettings
    */
   property alias mapSettings: mapCanvasWrapper.mapSettings
 
@@ -40,7 +40,7 @@ Item {
    *
    * This is a readonly property.
    *
-   * See also QgsQuickMapCanvasMap::mapSettings
+   * See also InputMapCanvasMap::mapSettings
    */
   property alias isRendering: mapCanvasWrapper.isRendering
 
@@ -128,7 +128,7 @@ Item {
     unfreeze('moveTo')
   }
 
-  QgsQuick.MapCanvasMap {
+  Input.MapCanvasMap {
     id: mapCanvasWrapper
 
     width: root.width

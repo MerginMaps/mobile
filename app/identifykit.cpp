@@ -29,12 +29,12 @@ IdentifyKit::IdentifyKit( QObject *parent )
 {
 }
 
-QgsQuickMapSettings *IdentifyKit::mapSettings() const
+InputMapSettings *IdentifyKit::mapSettings() const
 {
   return mMapSettings;
 }
 
-void IdentifyKit::setMapSettings( QgsQuickMapSettings *mapSettings )
+void IdentifyKit::setMapSettings( InputMapSettings *mapSettings )
 {
   if ( mapSettings == mMapSettings )
     return;
@@ -94,7 +94,7 @@ FeatureLayerPairs IdentifyKit::identify( const QPointF &point, QgsVectorLayer *l
   return results;
 }
 
-static FeatureLayerPair _closestFeature( const FeatureLayerPairs &results, const QgsQuickMapSettings &mapSettings, const QPointF &point, double searchRadius )
+static FeatureLayerPair _closestFeature( const FeatureLayerPairs &results, const InputMapSettings &mapSettings, const QPointF &point, double searchRadius )
 {
   QgsPointXY mapPoint = mapSettings.screenToCoordinate( point.toPoint() );
 

@@ -74,13 +74,14 @@
 #include "attributeformproxymodel.h"
 #include "attributetabmodel.h"
 #include "attributetabproxymodel.h"
-#include "qgsquickcoordinatetransformer.h"
+#include "inputcoordinatetransformer.h"
 #include "identifykit.h"
 #include "featurelayerpair.h"
-#include "qgsquickmapcanvasmap.h"
-#include "qgsquickmapsettings.h"
-#include "qgsquickmaptransform.h"
-#include "qgsquickutils.h"
+
+#include "inputmapcanvasmap.h"
+#include "inputmapsettings.h"
+#include "inputmaptransform.h"
+
 #include "position/positionkit.h"
 #include "scalebarkit.h"
 #include "featuresmodel.h"
@@ -236,13 +237,6 @@ static void init_qgis( const QString &pkgPath )
   qDebug( "qgis providers:\n%s", QgsProviderRegistry::instance()->pluginList().toLatin1().data() );
 }
 
-static QObject *_quickUtilsProvider( QQmlEngine *engine, QJSEngine *scriptEngine )
-{
-  Q_UNUSED( engine )
-  Q_UNUSED( scriptEngine )
-  return new QgsQuickUtils();  // the object will be owned by QML engine and destroyed by the engine on exit
-}
-
 void initDeclarative()
 {
   qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
@@ -321,14 +315,13 @@ void initDeclarative()
   qmlRegisterType< BluetoothDiscoveryModel >( "lc", 1, 0, "BluetoothDiscoveryModel" );
   qmlRegisterType< PositionProvidersModel >( "lc", 1, 0, "PositionProvidersModel" );
 
-  qmlRegisterUncreatableType< QgsUnitTypes >( "QgsQuick", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
-  qmlRegisterType< QgsVectorLayer >( "QgsQuick", 0, 1, "VectorLayer" );
-  qmlRegisterType< QgsProject >( "QgsQuick", 0, 1, "Project" );
-  qmlRegisterType< QgsQuickMapCanvasMap >( "QgsQuick", 0, 1, "MapCanvasMap" );
-  qmlRegisterType< QgsQuickMapSettings >( "QgsQuick", 0, 1, "MapSettings" );
-  qmlRegisterType< QgsQuickMapTransform >( "QgsQuick", 0, 1, "MapTransform" );
-  qmlRegisterType< QgsQuickCoordinateTransformer >( "QgsQuick", 0, 1, "CoordinateTransformer" );
-  qmlRegisterSingletonType< QgsQuickUtils >( "QgsQuick", 0, 1, "Utils", _quickUtilsProvider );
+  qmlRegisterUncreatableType< QgsUnitTypes >( "Input", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
+  qmlRegisterType< QgsVectorLayer >( "Input", 0, 1, "VectorLayer" );
+  qmlRegisterType< QgsProject >( "Input", 0, 1, "Project" );
+  qmlRegisterType< InputMapCanvasMap >( "Input", 0, 1, "MapCanvasMap" );
+  qmlRegisterType< InputMapSettings >( "Input", 0, 1, "MapSettings" );
+  qmlRegisterType< InputMapTransform >( "Input", 0, 1, "MapTransform" );
+  qmlRegisterType< InputCoordinateTransformer >( "Input", 0, 1, "CoordinateTransformer" );
 
   qmlRegisterUncreatableType< AbstractPositionProvider >( "lc", 1, 0, "PositionProvider", "Must be instantiated via its construct method" );
 
@@ -337,18 +330,18 @@ void initDeclarative()
   qmlRegisterType< RecordingMapTool >( "lc", 1, 0, "RecordingMapTool" );
   qmlRegisterType< SplittingMapTool >( "lc", 1, 0, "SplittingMapTool" );
 
-  qmlRegisterType( QUrl( "qrc:/qgsquickmapcanvas.qml" ), "QgsQuick", 0, 1, "MapCanvas" );
+  qmlRegisterType( QUrl( "qrc:/inputmapcanvas.qml" ), "Input", 0, 1, "MapCanvas" );
 }
 
 void addQmlImportPath( QQmlEngine &engine )
 {
-  // This adds a runtime qml directory containing QgsQuick plugin
+  // This adds a runtime qml directory containing Input plugin
   // when Input is installed (e.g. Android/Win32)
   engine.addImportPath( QgsApplication::qmlImportPath() );
   qDebug() << "adding QML import Path: " << QgsApplication::qmlImportPath();
 
 #ifdef QML_BUILD_IMPORT_DIR
-  // Adds a runtime qml directory containing QgsQuick plugin
+  // Adds a runtime qml directory containing Input plugin
   // if we are using the developer mode (not installed Input)
   // e.g. Linux/MacOS
   QString qmlBuildImportPath( STR( QML_BUILD_IMPORT_DIR ) );
@@ -357,7 +350,7 @@ void addQmlImportPath( QQmlEngine &engine )
 #endif
 
 #ifdef Q_OS_IOS
-  // REQUIRED FOR IOS - to load QgsQuick/*.qml files defined in qmldir
+  // REQUIRED FOR IOS - to load Input/*.qml files defined in qmldir
   engine.addImportPath( "qrc:///" );
   qDebug() << "adding QML import Path: " << "qrc:///";
 #endif
