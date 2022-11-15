@@ -151,6 +151,13 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     {
       QString error = mQgsProject->error();
       CoreUtils::log( QStringLiteral( "Project loading" ), QStringLiteral( "Could not read project file: " ) + error );
+
+      mLocalProject = LocalProject();
+      mQgsProject->clear();
+
+      emit localProjectChanged( mLocalProject );
+      emit projectReloaded( mQgsProject );
+
       emit projectReadingFailed( error );
       return res;
     }
