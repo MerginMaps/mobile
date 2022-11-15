@@ -1342,7 +1342,7 @@ void MerginApi::setApiRoot( const QString &apiRoot )
     settings.setValue( QStringLiteral( "apiRoot" ), mApiRoot );
     settings.endGroup();
     setApiVersionStatus( MerginApiStatus::UNKNOWN );
-    setServerType( MerginServerType::UNKNOWN );
+    setServerType( MerginServerType::OLD );
     emit apiRootChanged();
   }
 }
