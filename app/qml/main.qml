@@ -606,6 +606,26 @@ ApplicationWindow {
       }
     }
 
+    MessageDialog {
+      id: projectErrorDialog
+
+      title: qsTr("Failed to read project")
+      buttons: MessageDialog.Close | MessageDialog.Help
+
+      onButtonClicked: function(button, role) {
+        switch (button) {
+          case MessageDialog.Close:
+            projectLoadingScreen.visible = false
+            projectErrorDialog.close()
+            projectPanel.openPanel()
+            break;
+          case MessageDialog.Help:
+            Qt.openUrlExternally(__inputHelp.projectLoadingErrorHelpLink)
+            break;
+        }
+      }
+    }
+
     ProjectLoadingScreen {
       id: projectLoadingScreen
 
@@ -679,6 +699,10 @@ ApplicationWindow {
       }
       function onProjectWillBeReloaded() {
         formsStackManager.reload()
+      }
+      function onProjectReadingFailed( message ) {
+        projectErrorDialog.informativeText = qsTr( "Could not read project file:\n" ) + message
+        projectErrorDialog.open()
       }
     }
 

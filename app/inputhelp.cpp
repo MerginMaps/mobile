@@ -126,6 +126,11 @@ QString InputHelp::merginTermsLink() const
   return MerginApi::defaultApiRoot() + "assets/tos.html" + utmTagOther;
 }
 
+QString InputHelp::projectLoadingErrorHelpLink() const
+{
+  return MerginApi::defaultApiRoot() + "/manage/project_loading/" + utmTagHelp;
+}
+
 bool InputHelp::submitReportPending() const
 {
   return mSubmitReportPending;

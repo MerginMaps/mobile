@@ -121,6 +121,7 @@ class ActiveProject: public QObject
     void loadingStarted();
     void loadingFinished();
 
+    void projectReadingFailed( QString error );
     void reportIssue( QString layerName, QString message );
     void loadingErrorFound();
     void qgisLogChanged();

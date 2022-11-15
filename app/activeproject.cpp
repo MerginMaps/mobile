@@ -147,6 +147,13 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     mActiveLayer.resetActiveLayer();
 
     res = mQgsProject->read( filePath );
+    if ( !res )
+    {
+      QString error = mQgsProject->error();
+      CoreUtils::log( QStringLiteral( "Project loading" ), QStringLiteral( "Could not read project file: " ) + error );
+      emit projectReadingFailed( error );
+      return res;
+    }
 
     mLocalProject = mLocalProjectsManager.projectFromProjectFilePath( filePath );
 
