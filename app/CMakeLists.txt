@@ -27,8 +27,10 @@ set(MM_SRCS
     maptools/recordingmaptool.cpp
     maptools/splittingmaptool.cpp
     
+    ios/iosimagepicker.cpp
+    ios/iosutils.cpp
+    
     position/abstractpositionprovider.cpp
-    position/bluetoothpositionprovider.cpp
     position/internalpositionprovider.cpp
     position/mapposition.cpp
     position/positiondirection.cpp
@@ -102,8 +104,10 @@ set(MM_HDRS
     maptools/recordingmaptool.h
     maptools/splittingmaptool.h
     
+    ios/iosimagepicker.h
+    ios/iosutils.h
+    
     position/abstractpositionprovider.h
-    position/bluetoothpositionprovider.h
     position/internalpositionprovider.h
     position/mapposition.h
     position/positiondirection.h
@@ -226,6 +230,7 @@ set(MM_QML
     qml/map/Crosshair.qml
     qml/map/Highlight.qml
     qml/map/LoadingIndicator.qml
+    qml/map/MapCanvas.qml
     qml/map/MapWrapper.qml
     qml/map/PositionMarker.qml
     qml/map/RecordingToolbar.qml
@@ -258,7 +263,6 @@ set(MM_QML
     qml/LogPanel.qml
     qml/LoginForm.qml
     qml/MainPanel.qml
-    qml/MapCanvas.qml
     qml/MapThemePanel.qml
     qml/Notification.qml
     qml/NotificationBanner.qml
@@ -407,56 +411,140 @@ set (MM_SVGS
     img/zoom_to_project.svg
 )
 
+if (HAVE_BLUETOOTH)
+    set(MM_SRCS ${MM_SRCS} 
+        position/bluetoothpositionprovider.cpp
+    )
+    
+    set(MM_HDRS ${MM_HDRS} 
+        position/bluetoothpositionprovider.h
+    )
+    
+endif()
+
+
+if (ENABLE_TESTS)
+    set(MM_SRCS ${MM_SRCS} 
+        test/inputtests.cpp
+        test/testattributecontroller.cpp
+        test/testattributepreviewcontroller.cpp
+        test/testcoreutils.cpp
+        test/testformeditors.cpp
+        test/testidentifykit.cpp
+        test/testimageutils.cpp
+        test/testingpurchasingbackend.cpp
+        test/testlayertree.cpp
+        test/testlinks.cpp
+        test/testmaptools.cpp
+        test/testmerginapi.cpp
+        test/testmodels.cpp
+        test/testposition.cpp
+        test/testpurchasing.cpp
+        test/testrememberattributescontroller.cpp
+        test/testscalebarkit.cpp
+        test/testutils.cpp
+        test/testutilsfunctions.cpp
+        test/testvariablesmanager.cpp
+    )
+    
+    set(MM_HDRS ${MM_HDRS} 
+        test/inputtests.h
+        test/testattributecontroller.h
+        test/testattributepreviewcontroller.h
+        test/testcoreutils.h
+        test/testformeditors.h
+        test/testidentifykit.h
+        test/testimageutils.h
+        test/testingpurchasingbackend.h
+        test/testlayertree.h
+        test/testlinks.h
+        test/testmaptools.h
+        test/testmerginapi.h
+        test/testmodels.h
+        test/testposition.h
+        test/testpurchasing.h
+        test/testrememberattributescontroller.h
+        test/testscalebarkit.h
+        test/testutils.h
+        test/testutilsfunctions.h
+        test/testvariablesmanager.h
+    )
+endif()
+
 qt_add_executable(merginmaps ${MM_SRCS} ${MM_HDRS} $<TARGET_OBJECTS:mm_core> main.cpp)
 target_include_directories(merginmaps PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/attributes ${CMAKE_CURRENT_SOURCE_DIR}/map ${CMAKE_CURRENT_SOURCE_DIR}/layer ${CMAKE_CURRENT_SOURCE_DIR}/maptools ${CMAKE_CURRENT_SOURCE_DIR}/position)
 target_link_libraries(merginmaps PUBLIC Qt6::Quick Qt6::Qml Qt6::Xml Qt6::Concurrent Qt6::Positioning Qt6::Sensors Qt6::QuickControls2 Qt6::Network Qt6::Svg Qt6::Sql Qt6::Core Qt6::Core5Compat) # TODO: OpenGl?
+target_link_libraries(merginmaps PUBLIC Qt6::Bluetooth Qt6::Multimedia Qt6::Widgets)
+if (NOT IOS)
+  # https://doc.qt.io/qt-6/qtprintsupport-index.html
+  # Qt Print Support is not available on iOS.
+  target_link_libraries(merginmaps PUBLIC  Qt6::PrintSupport)
+endif()
+
 target_link_libraries(merginmaps PUBLIC
-mm_core 
-QGIS::Core 
-Geodiff::Geodiff 
-Proj::Proj
-ZXing::ZXing
-QGIS::authmethod_basic
-QGIS::authmethod_esritoken
-QGIS::authmethod_identcert
-QGIS::authmethod_oauth2
-QGIS::authmethod_pkcs12
-QGIS::authmethod_pkipaths
-QGIS::provider_arcgisfeatureserver
-QGIS::provider_arcgismapserver
-QGIS::provider_delimitedtext
-QGIS::provider_spatialite
-QGIS::provider_virtuallayer
-QGIS::provider_wcs
-QGIS::provider_wfs
-QGIS::provider_wms
-QGIS::provider_postgres
-# Qtkeychain::Qtkeychain
-# Qca::Qca
-# Gdal::Gdal
-# Pg::Pg
-# Spatialite::Spatialite
+  mm_core 
+  QGIS::Core 
+  Geodiff::Geodiff 
+  Proj::Proj
+  ZXing::ZXing
+  QGIS::authmethod_basic
+  QGIS::authmethod_esritoken
+  QGIS::authmethod_identcert
+  QGIS::authmethod_oauth2
+  QGIS::authmethod_pkcs12
+  QGIS::authmethod_pkipaths
+  QGIS::provider_arcgisfeatureserver
+  QGIS::provider_arcgismapserver
+  QGIS::provider_delimitedtext
+  QGIS::provider_spatialite
+  QGIS::provider_virtuallayer
+  QGIS::provider_wcs
+  QGIS::provider_wfs
+  QGIS::provider_wms
+  QGIS::provider_postgres
+  Qtkeychain::Qtkeychain
+  Qca::Qca
+  Gdal::Gdal
+  Pq::Pq
+  Spatialite::Spatialite
+  Charset::Charset
+  Xml2::Xml2 
+  Tasn1::Tasn1
+  Bz2::Bz2
+  Proj::Proj # linking 2x why (macos?)
+  Spatialindex::Spatialindex
+  Geos::Geos Geos::Geos-c
+  Protobuf::Protobuf-lite 
+  Expat::Expat
+  Freexl::Freexl
+  Exiv2::Exiv2 Exiv2::Exiv2-xmp
+  Tiff::Tiff
+  Sqlite3::Sqlite3
+  Iconv::Iconv
+  ZLIB::ZLIB
+  Zip::Zip
+  WebP::WebP
+  Curl::Curl
+  Jpeg::Jpeg
 )
 
-# LIBS += -lcharset -lxml2
-# LIBS += -ltasn1 -lbz2 -lproj
-# LIBS += -lspatialindex -lgeos -lgeos_c
-# LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
-# LIBS += -ltiff
-# LIBS += -lsqlite3 -liconv -lz -lzip
-# LIBS += -lwebp -lcurl -ljpeg
 
 if(APPLE)
-  target_link_libraries(merginmaps PUBLIC -framework Security -framework CoreFoundation -framework SystemConfiguration)
+  target_link_libraries(merginmaps PUBLIC 
+      AppleFrameworks::Security
+      AppleFrameworks::CoreFoundation
+      AppleFrameworks::SystemConfiguration
+  )
 endif()
 
 if (ENABLE_TESTS)
-    target_link_libraries(merginmaps PUBLIC Qt6:Test)
+    target_link_libraries(merginmaps PUBLIC Qt6::Test)
 endif()
 
 qt_add_qml_module(merginmaps
-    URI input
+    URI MMInput
     VERSION 1.0
     QML_FILES ${MM_QML}
+    RESOURCE_PREFIX /com.merginmaps/imports
     RESOURCES ${MM_PNGS} ${MM_SVGS}
 )

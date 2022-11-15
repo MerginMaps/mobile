@@ -103,7 +103,7 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v3-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
@@ -132,12 +132,16 @@ jobs:
 
       - name: build Input (Debug)
         run: |
+          mkdir -p install-Input
           mkdir -p build-Input
           cd build-Input
-          ${{ github.workspace }}/Qt/${QT_VERSION}/macos/bin/qmake \
-            ../input/app/input.pro \
-            CONFIG+=debug \
-            CONFIG+=qtquickcompiler
+          
+          cmake .. \
+             -DCMAKE_BUILD_TYPE=Debug \
+             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${QT_VERSION}/macos \
+             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
+             -DUSE_SERVER_API_KEY=TRUE \
+             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
           make
 
       - name: run tests
@@ -160,12 +164,16 @@ jobs:
 
       - name: build Input (Release)
         run: |
+          mkdir -p install-Input-rel
           mkdir -p build-Input-rel
           cd build-Input-rel
-          ${{ github.workspace }}/Qt/${QT_VERSION}/macos/bin/qmake \
-            ../input/app/input.pro \
-            CONFIG+=release
-            CONFIG+=qtquickcompiler
+
+          cmake .. \
+             -DCMAKE_BUILD_TYPE=Release \
+             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${QT_VERSION}/macos \
+             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
+             -DUSE_SERVER_API_KEY=TRUE \
+             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
           make
 
       - name: Get TimeStamp

@@ -22,23 +22,23 @@ find_library(QGIS_CORE_LIBRARY
   NO_DEFAULT_PATH
 )
 
-set(QGIS_REQUIRED_VARS QGIS_CORE_LIBRARY QGIS_INCLUDE_DIR )
+set(QGIS_REQUIRED_VARS QGIS_CORE_LIBRARY QGIS_INCLUDE_DIR)
 set(QGIS_PROVIDERS_LIST
-authmethod_basic
-authmethod_esritoken
-authmethod_identcert
-authmethod_oauth2
-authmethod_pkcs12
-authmethod_pkipaths
-provider_arcgisfeatureserver
-provider_arcgismapserver
-provider_delimitedtext
-provider_spatialite
-provider_virtuallayer
-provider_wcs
-provider_wfs
-provider_wms
-provider_postgres
+  authmethod_basic
+  authmethod_esritoken
+  authmethod_identcert
+  authmethod_oauth2
+  authmethod_pkcs12
+  authmethod_pkipaths
+  provider_arcgisfeatureserver
+  provider_arcgismapserver
+  provider_delimitedtext
+  provider_spatialite
+  provider_virtuallayer
+  provider_wcs
+  provider_wfs
+  provider_wms
+  provider_postgres
 )
 
 foreach(provider ${QGIS_PROVIDERS_LIST})
@@ -58,16 +58,16 @@ find_package_handle_standard_args(
 )
 
 if(QGIS_FOUND AND NOT TARGET QGIS::Core)
-  add_library(QGIS::Core STATIC IMPORTED)
+  add_library(QGIS::Core INTERFACE IMPORTED)
   set_target_properties(QGIS::Core PROPERTIES
-    IMPORTED_LOCATION "${QGIS_CORE_LIBRARY}"
+    INTERFACE_LINK_LIBRARIES "-F${QGIS_DEFAULT_LIB_PATH} -framework qgis_core"
     INTERFACE_INCLUDE_DIRECTORIES "${QGIS_INCLUDE_DIR}"
   )
   
   foreach(provider ${QGIS_PROVIDERS_LIST})
     add_library(QGIS::${provider} STATIC IMPORTED)
     set_target_properties(QGIS::${provider} PROPERTIES
-      IMPORTED_LOCATION "QGIS_${provider}_LIBRARY "
+      IMPORTED_LOCATION "${QGIS_${provider}_LIBRARY}"
     )
   endforeach()
   

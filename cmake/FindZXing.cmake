@@ -1,12 +1,12 @@
 # GPLv2 Licence
 
-find_path(ZXing_INCLUDE_DIR geodiff.h
+find_path(ZXing_INCLUDE_DIR ZXing/ZXConfig.h
   "${INPUT_SDK_PATH}/include"
   NO_DEFAULT_PATH
 )
   
 find_library(ZXing_LIBRARY 
-  NAMES zxing 
+  NAMES ZXing 
   PATHS "${INPUT_SDK_PATH}/lib"
   NO_DEFAULT_PATH
 )

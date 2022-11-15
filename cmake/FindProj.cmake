@@ -1,6 +1,6 @@
 # GPLv2 Licence
 
-find_path(Proj_INCLUDE_DIR geodiff.h
+find_path(Proj_INCLUDE_DIR proj.h
   "${INPUT_SDK_PATH}/include"
   NO_DEFAULT_PATH
 )

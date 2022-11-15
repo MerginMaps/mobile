@@ -333,8 +333,11 @@ void initDeclarative()
   qmlRegisterType( QUrl( "qrc:/inputmapcanvas.qml" ), "Input", 0, 1, "MapCanvas" );
 }
 
-void addQmlImportPath( QQmlEngine &engine )
-{
+// void addQmlImportPath( QQmlEngine &engine )
+//{
+//  engine.addImportPath(":/MMInput/:");    
+
+  /**
   // This adds a runtime qml directory containing Input plugin
   // when Input is installed (e.g. Android/Win32)
   engine.addImportPath( QgsApplication::qmlImportPath() );
@@ -354,7 +357,8 @@ void addQmlImportPath( QQmlEngine &engine )
   engine.addImportPath( "qrc:///" );
   qDebug() << "adding QML import Path: " << "qrc:///";
 #endif
-}
+  */
+// }
 
 int main( int argc, char *argv[] )
 {
@@ -573,7 +577,8 @@ int main( int argc, char *argv[] )
 
   QQuickStyle::setStyle( "Basic" );
   QQmlEngine engine;
-  addQmlImportPath( engine );
+  // addQmlImportPath( engine );
+  
   initDeclarative();
   // QGIS environment variables to set
   // OGR_SQLITE_JOURNAL is set to DELETE to avoid working with WAL files
@@ -637,8 +642,9 @@ int main( int argc, char *argv[] )
   bool use_simulated_position = false;
 #endif
   engine.rootContext()->setContextProperty( "__use_simulated_position", use_simulated_position );
-
-  QQmlComponent component( &engine, QUrl( "qrc:/main.qml" ) );
+  
+  engine.addImportPath(":/com.merginmaps/imports:");
+  QQmlComponent component( &engine, QUrl( "qrc:/com.merginmaps/imports/MMInput/qml/main.qml" ) );
   QObject *object = component.create();
 
   if ( !component.errors().isEmpty() )
