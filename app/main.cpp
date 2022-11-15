@@ -329,15 +329,14 @@ void initDeclarative()
   qmlRegisterUncreatableType< AbstractMapTool >( "lc", 1, 0, "AbstractMapTool", "Instantiate one of child map tools instead" );
   qmlRegisterType< RecordingMapTool >( "lc", 1, 0, "RecordingMapTool" );
   qmlRegisterType< SplittingMapTool >( "lc", 1, 0, "SplittingMapTool" );
-
-  qmlRegisterType( QUrl( "qrc:/inputmapcanvas.qml" ), "Input", 0, 1, "MapCanvas" );
 }
 
-// void addQmlImportPath( QQmlEngine &engine )
-//{
-//  engine.addImportPath(":/MMInput/:");    
+void addQmlImportPath( QQmlEngine &engine )
+{
+  engine.addImportPath( ":/com.merginmaps/imports:" );
 
-  /**
+  // TODO: check if the old imports are still required!
+
   // This adds a runtime qml directory containing Input plugin
   // when Input is installed (e.g. Android/Win32)
   engine.addImportPath( QgsApplication::qmlImportPath() );
@@ -357,8 +356,7 @@ void initDeclarative()
   engine.addImportPath( "qrc:///" );
   qDebug() << "adding QML import Path: " << "qrc:///";
 #endif
-  */
-// }
+}
 
 int main( int argc, char *argv[] )
 {
@@ -577,8 +575,8 @@ int main( int argc, char *argv[] )
 
   QQuickStyle::setStyle( "Basic" );
   QQmlEngine engine;
-  // addQmlImportPath( engine );
-  
+  addQmlImportPath( engine );
+
   initDeclarative();
   // QGIS environment variables to set
   // OGR_SQLITE_JOURNAL is set to DELETE to avoid working with WAL files
@@ -642,8 +640,7 @@ int main( int argc, char *argv[] )
   bool use_simulated_position = false;
 #endif
   engine.rootContext()->setContextProperty( "__use_simulated_position", use_simulated_position );
-  
-  engine.addImportPath(":/com.merginmaps/imports:");
+
   QQmlComponent component( &engine, QUrl( "qrc:/com.merginmaps/imports/MMInput/qml/main.qml" ) );
   QObject *object = component.create();
 

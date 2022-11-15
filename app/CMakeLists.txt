@@ -528,7 +528,6 @@ target_link_libraries(merginmaps PUBLIC
   Jpeg::Jpeg
 )
 
-
 if(APPLE)
   target_link_libraries(merginmaps PUBLIC 
       AppleFrameworks::Security
@@ -540,6 +539,11 @@ endif()
 if (ENABLE_TESTS)
     target_link_libraries(merginmaps PUBLIC Qt6::Test)
 endif()
+
+
+set_source_files_properties(qml/InputStyle.qml PROPERTIES
+    QT_QML_SINGLETON_TYPE TRUE
+)
 
 qt_add_qml_module(merginmaps
     URI MMInput
