@@ -666,7 +666,7 @@ class MerginApi: public QObject
     static QList<DownloadQueueItem> itemsForFileChunks( const MerginFile &file, int version );
     static QList<DownloadQueueItem> itemsForFileDiffs( const MerginFile &file );
 
-    MerginServerType::ServerType mServerType = MerginServerType::ServerType::UNKNOWN;
+    MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
 
     friend class TestMerginApi;
     friend class Purchasing;

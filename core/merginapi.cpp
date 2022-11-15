@@ -754,11 +754,6 @@ void MerginApi::getUserInfo()
     return;
   }
 
-  if ( mServerType == MerginServerType::UNKNOWN )
-  {
-    return;
-  }
-
   QString urlString;
   if ( mServerType == MerginServerType::OLD )
   {

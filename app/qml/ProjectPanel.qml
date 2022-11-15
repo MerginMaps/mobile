@@ -375,7 +375,7 @@ Item {
           // local projects page always visible
           content.addItem( localProjectsPageComponent.createObject( content ) )
 
-          if ( __merginApi.serverType === MerginServerType.UNKNOWN || __merginApi.serverType === MerginServerType.OLD ) {
+          if ( __merginApi.serverType === MerginServerType.OLD ) {
             // for old server we keep old UI
             content.addItem( createdProjectsPageComponent.createObject( content ) )
             content.addItem( sharedProjectsPageComponent.createObject( content ) )
