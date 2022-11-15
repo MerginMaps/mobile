@@ -3143,6 +3143,58 @@ void MerginApi::setServerType( const MerginServerType::ServerType &serverType )
   }
 }
 
+void MerginApi::listWorkspaces()
+{
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  {
+    emit listWorkspacesFailed();
+    return;
+  }
+
+  QUrl url( mApiRoot + QStringLiteral( "/v1/workspaces" ) );
+  QNetworkRequest request = getDefaultRequest( mUserAuth->hasAuthData() );
+  request.setUrl( url );
+
+  QNetworkReply *reply = mManager.get( request );
+  CoreUtils::log( "list workspaces", QStringLiteral( "Requesting: " ) + url.toString() );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::listWorkspacesReplyFinished );
+}
+
+void MerginApi::listWorkspacesReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( "list workspaces", QStringLiteral( "Success" ) );
+    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    if ( doc.isArray() )
+    {
+      QStringList workspaces;
+      for ( auto it = doc.array().constBegin(); it != doc.array().constEnd(); ++it )
+      {
+        workspaces << it->toObject().value( QStringLiteral( "name" ) ).toString();
+      }
+
+      emit listWorkspacesFinished( workspaces );
+    }
+    else
+    {
+      emit listWorkspacesFailed();
+    }
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "listWorkspaces" ), r->errorString(), serverMsg );
+    CoreUtils::log( "list workspaces", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: listWorkspaces" ) );
+    emit listWorkspacesFailed();
+  }
+
+  r->deleteLater();
+}
 
 DownloadQueueItem::DownloadQueueItem( const QString &fp, int s, int v, int rf, int rt, bool diff )
   : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )

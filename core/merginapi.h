@@ -459,6 +459,8 @@ class MerginApi: public QObject
     MerginServerType::ServerType serverType() const;
     void setServerType( const MerginServerType::ServerType &serverType );
 
+    void listWorkspaces();
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -511,6 +513,9 @@ class MerginApi: public QObject
 
     void serverTypeChanged();
 
+    void listWorkspacesFailed();
+    void listWorkspacesFinished( const QStringList &workspaces );
+
   private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
@@ -544,6 +549,7 @@ class MerginApi: public QObject
     void onPlanProductIdChanged();
 
     void getServerTypeReplyFinished();
+    void listWorkspacesReplyFinished();
 
   private:
     MerginProject parseProjectMetadata( const QJsonObject &project );
