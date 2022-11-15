@@ -20,7 +20,7 @@
 #include "layersproxymodel.h"
 #include "localprojectsmanager.h"
 #include "autosynccontroller.h"
-#include "qgsquickmapsettings.h"
+#include "inputmapsettings.h"
 
 
 /**
@@ -32,7 +32,7 @@ class ActiveProject: public QObject
     Q_PROPERTY( LocalProject localProject READ localProject NOTIFY localProjectChanged ) // LocalProject instance of active project, changes when project is loaded
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject NOTIFY qgsProjectChanged ) // QgsProject instance of active project, never changes
     Q_PROPERTY( AutosyncController *autosyncController READ autosyncController NOTIFY autosyncControllerChanged )
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     Q_PROPERTY( QString mapTheme READ mapTheme WRITE setMapTheme NOTIFY mapThemeChanged )
 
@@ -81,7 +81,7 @@ class ActiveProject: public QObject
     /**
      * mapSettings method returns mapsettings pointer
      */
-    QgsQuickMapSettings *mapSettings() const;
+    InputMapSettings *mapSettings() const;
 
     //! Returns autosyncController instance if autosync is allowed, otherwise returns nullptr
     AutosyncController *autosyncController() const;
@@ -90,7 +90,7 @@ class ActiveProject: public QObject
      * setMapSettings method sets mapSettings
      * Method also reloads the layer list
      */
-    void setMapSettings( QgsQuickMapSettings *mapSettings );
+    void setMapSettings( InputMapSettings *mapSettings );
 
     /**
      * setMapSettingsLayers reloads layer list from current project
@@ -163,7 +163,7 @@ class ActiveProject: public QObject
     ActiveLayer &mActiveLayer;
     LayersProxyModel &mRecordingLayerPM;
     LocalProjectsManager &mLocalProjectsManager;
-    QgsQuickMapSettings *mMapSettings = nullptr;
+    InputMapSettings *mMapSettings = nullptr;
 
     std::unique_ptr<AutosyncController> mAutosyncController;
 

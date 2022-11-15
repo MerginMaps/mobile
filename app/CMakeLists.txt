@@ -408,6 +408,51 @@ set (MM_SVGS
 )
 
 qt_add_executable(merginmaps ${MM_SRCS} ${MM_HDRS} $<TARGET_OBJECTS:mm_core> main.cpp)
+target_include_directories(merginmaps PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/attributes ${CMAKE_CURRENT_SOURCE_DIR}/map ${CMAKE_CURRENT_SOURCE_DIR}/layer ${CMAKE_CURRENT_SOURCE_DIR}/maptools ${CMAKE_CURRENT_SOURCE_DIR}/position)
+target_link_libraries(merginmaps PUBLIC Qt6::Quick Qt6::Qml Qt6::Xml Qt6::Concurrent Qt6::Positioning Qt6::Sensors Qt6::QuickControls2 Qt6::Network Qt6::Svg Qt6::Sql Qt6::Core Qt6::Core5Compat) # TODO: OpenGl?
+target_link_libraries(merginmaps PUBLIC
+mm_core 
+QGIS::Core 
+Geodiff::Geodiff 
+Proj::Proj
+ZXing::ZXing
+QGIS::authmethod_basic
+QGIS::authmethod_esritoken
+QGIS::authmethod_identcert
+QGIS::authmethod_oauth2
+QGIS::authmethod_pkcs12
+QGIS::authmethod_pkipaths
+QGIS::provider_arcgisfeatureserver
+QGIS::provider_arcgismapserver
+QGIS::provider_delimitedtext
+QGIS::provider_spatialite
+QGIS::provider_virtuallayer
+QGIS::provider_wcs
+QGIS::provider_wfs
+QGIS::provider_wms
+QGIS::provider_postgres
+# Qtkeychain::Qtkeychain
+# Qca::Qca
+# Gdal::Gdal
+# Pg::Pg
+# Spatialite::Spatialite
+)
+
+# LIBS += -lcharset -lxml2
+# LIBS += -ltasn1 -lbz2 -lproj
+# LIBS += -lspatialindex -lgeos -lgeos_c
+# LIBS += -lprotobuf-lite -lexpat -lfreexl -lexiv2 -lexiv2-xmp
+# LIBS += -ltiff
+# LIBS += -lsqlite3 -liconv -lz -lzip
+# LIBS += -lwebp -lcurl -ljpeg
+
+if(APPLE)
+  target_link_libraries(merginmaps PUBLIC -framework Security -framework CoreFoundation -framework SystemConfiguration)
+endif()
+
+if (ENABLE_TESTS)
+    target_link_libraries(merginmaps PUBLIC Qt6:Test)
+endif()
 
 qt_add_qml_module(merginmaps
     URI input
