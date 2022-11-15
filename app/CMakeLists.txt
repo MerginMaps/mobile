@@ -152,141 +152,6 @@ set(MM_HDRS
     variablesmanager.h
 )
 
-set(MM_QML
-    qml/banners/AutoHideBanner.qml
-    
-    qml/components/BluetoothConnectionDialog.qml
-    qml/components/CheckboxComponent.qml
-    qml/components/DateTimePicker.qml
-    qml/components/DelegateButton.qml
-    qml/components/ExtendedMenuItem.qml
-    qml/components/FieldRow.qml
-    qml/components/IconTextItem.qml
-    qml/components/InputComboBox.qml
-    qml/components/InputText.qml
-    qml/components/InputTextField.qml
-    qml/components/LayerList.qml
-    qml/components/LeftCheckBox.qml
-    qml/components/LoadingSpinner.qml
-    qml/components/MainPanelButton.qml
-    qml/components/MapFloatButton.qml
-    qml/components/NumberInputField.qml
-    qml/components/PanelHeader.qml
-    qml/components/PanelHeaderV2.qml
-    qml/components/PasswordField.qml
-    qml/components/ProjectDelegateItem.qml
-    qml/components/ProjectList.qml
-    qml/components/RichTextBlock.qml
-    qml/components/SearchBoxV2.qml
-    qml/components/SettingsSwitch.qml
-    qml/components/Shadow.qml
-    qml/components/SimpleTextWithIcon.qml
-    qml/components/Switch.qml
-    qml/components/Symbol.qml
-    qml/components/TextHyperlink.qml
-    qml/components/TextRowWithTitle.qml
-    qml/components/TextWithIcon.qml
-    qml/components/ToolbarButton.qml
-    
-    qml/dialogs/MigrateToMerginDialog.qml
-    qml/dialogs/MissingAuthDialog.qml
-    qml/dialogs/NoPermissionsDialog.qml
-    qml/dialogs/SplittingFailedDialog.qml
-    qml/dialogs/SyncFailedDialog.qml
-    
-    qml/editor/AbstractEditor.qml
-    qml/editor/RelationPhotoDelegate.qml
-    qml/editor/RelationPhotoFooterDelegate.qml
-    qml/editor/RelationTextDelegate.qml
-    qml/editor/inputcheckbox.qml
-    qml/editor/inputdatetime.qml
-    qml/editor/inputexternalresource.qml
-    qml/editor/inputqrcodereader.qml
-    qml/editor/inputrangeeditable.qml
-    qml/editor/inputrangeslider.qml
-    qml/editor/inputrelation.qml
-    qml/editor/inputrelationreference.qml
-    qml/editor/inputtextedit.qml
-    qml/editor/inputtexteditmultiline.qml
-    qml/editor/inputvaluemap.qml
-    qml/editor/inputvaluerelationcombobox.qml
-    qml/editor/inputvaluerelationpage.qml
-    
-    qml/form/FeatureForm.qml
-    qml/form/FeatureFormPage.qml
-    qml/form/FeatureFormStyling.qml
-    qml/form/FeatureToolbar.qml
-    qml/form/FormWrapper.qml
-    qml/form/PreviewPanel.qml
-    
-    qml/layers/FeaturesListPageV2.qml
-    qml/layers/LayerDetail.qml
-    qml/layers/LayersListPageV2.qml
-    qml/layers/LayersListSearchPage.qml
-    qml/layers/LayersListV2.qml
-    qml/layers/LayersPanelV2.qml
-    
-    qml/map/ActiveLayerPanel.qml
-    qml/map/Crosshair.qml
-    qml/map/Highlight.qml
-    qml/map/LoadingIndicator.qml
-    qml/map/MapCanvas.qml
-    qml/map/MapWrapper.qml
-    qml/map/PositionMarker.qml
-    qml/map/RecordingToolbar.qml
-    qml/map/RecordingTools.qml
-    qml/map/ScaleBar.qml
-    qml/map/SplittingToolbar.qml
-    qml/map/SplittingTools.qml
-    qml/map/StakeoutTools.qml
-    
-    qml/misc/AddPositionProviderPage.qml
-    qml/misc/AttentionBanner.qml
-    qml/misc/GpsDataPage.qml
-    qml/misc/LegacyFolderMigration.qml
-    qml/misc/PositionProviderPage.qml
-    
-    qml/AboutPanel.qml
-    qml/AccountPage.qml
-    qml/AuthPanel.qml
-    qml/Banner.qml
-    qml/CircularProgressBar.qml
-    qml/CodeReaderHandler.qml
-    qml/CodeScanner.qml
-    qml/CodeScannerOverlay.qml
-    qml/ExternalResourceBundle.qml
-    qml/FeaturesList.qml
-    qml/FeaturesListPage.qml
-    qml/FeaturesListPageToolbar.qml
-    qml/FormsStackManager.qml
-    qml/InputStyle.qml
-    qml/LogPanel.qml
-    qml/LoginForm.qml
-    qml/MainPanel.qml
-    qml/MapThemePanel.qml
-    qml/Notification.qml
-    qml/NotificationBanner.qml
-    qml/NumberSpin.qml
-    qml/PanelItem.qml
-    qml/PanelTabButton.qml
-    qml/PhotoPanel.qml
-    qml/ProjectIssuesPanel.qml
-    qml/ProjectListPage.qml
-    qml/ProjectLoadingScreen.qml
-    qml/ProjectPanel.qml
-    qml/ProjectStatusPanel.qml
-    qml/ProjectWizardPage.qml
-    qml/RegistrationForm.qml
-    qml/RoundIndicator.qml
-    qml/SearchBar.qml
-    qml/SettingsPanel.qml
-    qml/StakeoutPanel.qml
-    qml/StorageLimitDialog.qml
-    qml/SubscribePage.qml
-    qml/SubscribePlanItem.qml
-    qml/main.qml
-)
-
 set (MM_PNGS
     img/logo.png
     img/mIconLayer.png
@@ -471,6 +336,12 @@ if (ENABLE_TESTS)
     )
 endif()
 
+qt_add_resources(MM_SRCS 
+  img/pics.qrc 
+  i18n/input_i18n.qrc 
+  fonts/fonts.qrc
+)
+
 qt_add_executable(merginmaps ${MM_SRCS} ${MM_HDRS} $<TARGET_OBJECTS:mm_core> main.cpp)
 target_include_directories(merginmaps PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/attributes ${CMAKE_CURRENT_SOURCE_DIR}/map ${CMAKE_CURRENT_SOURCE_DIR}/layer ${CMAKE_CURRENT_SOURCE_DIR}/maptools ${CMAKE_CURRENT_SOURCE_DIR}/position)
 target_link_libraries(merginmaps PUBLIC Qt6::Quick Qt6::Qml Qt6::Xml Qt6::Concurrent Qt6::Positioning Qt6::Sensors Qt6::QuickControls2 Qt6::Network Qt6::Svg Qt6::Sql Qt6::Core Qt6::Core5Compat) # TODO: OpenGl?
@@ -540,6 +411,140 @@ if (ENABLE_TESTS)
     target_link_libraries(merginmaps PUBLIC Qt6::Test)
 endif()
 
+set(MM_QML
+    qml/banners/AutoHideBanner.qml
+    
+    qml/components/BluetoothConnectionDialog.qml
+    qml/components/CheckboxComponent.qml
+    qml/components/DateTimePicker.qml
+    qml/components/DelegateButton.qml
+    qml/components/ExtendedMenuItem.qml
+    qml/components/FieldRow.qml
+    qml/components/IconTextItem.qml
+    qml/components/InputComboBox.qml
+    qml/components/InputText.qml
+    qml/components/InputTextField.qml
+    qml/components/LayerList.qml
+    qml/components/LeftCheckBox.qml
+    qml/components/LoadingSpinner.qml
+    qml/components/MainPanelButton.qml
+    qml/components/MapFloatButton.qml
+    qml/components/NumberInputField.qml
+    qml/components/PanelHeader.qml
+    qml/components/PanelHeaderV2.qml
+    qml/components/PasswordField.qml
+    qml/components/ProjectDelegateItem.qml
+    qml/components/ProjectList.qml
+    qml/components/RichTextBlock.qml
+    qml/components/SearchBoxV2.qml
+    qml/components/SettingsSwitch.qml
+    qml/components/Shadow.qml
+    qml/components/SimpleTextWithIcon.qml
+    qml/components/Switch.qml
+    qml/components/Symbol.qml
+    qml/components/TextHyperlink.qml
+    qml/components/TextRowWithTitle.qml
+    qml/components/TextWithIcon.qml
+    qml/components/ToolbarButton.qml
+    
+    qml/dialogs/MigrateToMerginDialog.qml
+    qml/dialogs/MissingAuthDialog.qml
+    qml/dialogs/NoPermissionsDialog.qml
+    qml/dialogs/SplittingFailedDialog.qml
+    qml/dialogs/SyncFailedDialog.qml
+    
+    qml/editor/AbstractEditor.qml
+    qml/editor/RelationPhotoDelegate.qml
+    qml/editor/RelationPhotoFooterDelegate.qml
+    qml/editor/RelationTextDelegate.qml
+    qml/editor/inputcheckbox.qml
+    qml/editor/inputdatetime.qml
+    qml/editor/inputexternalresource.qml
+    qml/editor/inputqrcodereader.qml
+    qml/editor/inputrangeeditable.qml
+    qml/editor/inputrangeslider.qml
+    qml/editor/inputrelation.qml
+    qml/editor/inputrelationreference.qml
+    qml/editor/inputtextedit.qml
+    qml/editor/inputtexteditmultiline.qml
+    qml/editor/inputvaluemap.qml
+    qml/editor/inputvaluerelationcombobox.qml
+    qml/editor/inputvaluerelationpage.qml
+    
+    qml/form/FeatureForm.qml
+    qml/form/FeatureFormPage.qml
+    qml/form/FeatureFormStyling.qml
+    qml/form/FeatureToolbar.qml
+    qml/form/FormWrapper.qml
+    qml/form/PreviewPanel.qml
+    
+    qml/layers/FeaturesListPageV2.qml
+    qml/layers/LayerDetail.qml
+    qml/layers/LayersListPageV2.qml
+    qml/layers/LayersListSearchPage.qml
+    qml/layers/LayersListV2.qml
+    qml/layers/LayersPanelV2.qml
+    
+    qml/map/ActiveLayerPanel.qml
+    qml/map/Crosshair.qml
+    qml/map/Highlight.qml
+    qml/map/LoadingIndicator.qml
+    qml/map/MapCanvas.qml
+    qml/map/MapWrapper.qml
+    qml/map/PositionMarker.qml
+    qml/map/RecordingToolbar.qml
+    qml/map/RecordingTools.qml
+    qml/map/ScaleBar.qml
+    qml/map/SplittingToolbar.qml
+    qml/map/SplittingTools.qml
+    qml/map/StakeoutTools.qml
+    
+    qml/misc/AddPositionProviderPage.qml
+    qml/misc/AttentionBanner.qml
+    qml/misc/GpsDataPage.qml
+    qml/misc/LegacyFolderMigration.qml
+    qml/misc/PositionProviderPage.qml
+    
+    qml/AboutPanel.qml
+    qml/AccountPage.qml
+    qml/AuthPanel.qml
+    qml/Banner.qml
+    qml/CircularProgressBar.qml
+    qml/CodeReaderHandler.qml
+    qml/CodeScanner.qml
+    qml/CodeScannerOverlay.qml
+    qml/ExternalResourceBundle.qml
+    qml/FeaturesList.qml
+    qml/FeaturesListPage.qml
+    qml/FeaturesListPageToolbar.qml
+    qml/FormsStackManager.qml
+    qml/InputStyle.qml
+    qml/LogPanel.qml
+    qml/LoginForm.qml
+    qml/MainPanel.qml
+    qml/MapThemePanel.qml
+    qml/Notification.qml
+    qml/NotificationBanner.qml
+    qml/NumberSpin.qml
+    qml/PanelItem.qml
+    qml/PanelTabButton.qml
+    qml/PhotoPanel.qml
+    qml/ProjectIssuesPanel.qml
+    qml/ProjectListPage.qml
+    qml/ProjectLoadingScreen.qml
+    qml/ProjectPanel.qml
+    qml/ProjectStatusPanel.qml
+    qml/ProjectWizardPage.qml
+    qml/RegistrationForm.qml
+    qml/RoundIndicator.qml
+    qml/SearchBar.qml
+    qml/SettingsPanel.qml
+    qml/StakeoutPanel.qml
+    qml/StorageLimitDialog.qml
+    qml/SubscribePage.qml
+    qml/SubscribePlanItem.qml
+    qml/main.qml
+)
 
 set_source_files_properties(qml/InputStyle.qml PROPERTIES
     QT_QML_SINGLETON_TYPE TRUE
@@ -550,5 +555,4 @@ qt_add_qml_module(merginmaps
     VERSION 1.0
     QML_FILES ${MM_QML}
     RESOURCE_PREFIX /com.merginmaps/imports
-    RESOURCES ${MM_PNGS} ${MM_SVGS}
 )

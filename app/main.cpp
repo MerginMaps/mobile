@@ -333,9 +333,8 @@ void initDeclarative()
 
 void addQmlImportPath( QQmlEngine &engine )
 {
+  // QML resources
   engine.addImportPath( ":/com.merginmaps/imports:" );
-
-  // TODO: check if the old imports are still required!
 
   // This adds a runtime qml directory containing Input plugin
   // when Input is installed (e.g. Android/Win32)
