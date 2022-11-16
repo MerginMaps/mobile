@@ -302,12 +302,21 @@ endif()
 
 add_subdirectory(qml)
 
+# register Singleton
 set_source_files_properties(qml/InputStyle.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
+# make sure the QML files are not prefixed with "qml/" in the qmldir
+set(MM_QML_SRCS)
+foreach(src ${MM_QML})
+    set(MM_QML_SRCS ${MM_QML_SRCS} qml/${src})
+    set_source_files_properties(qml/${src} PROPERTIES QT_RESOURCE_ALIAS ${src})
+endforeach()
+
+# For some reason, this call cannot be in qml/CMakeLists.txt - it creates some circular dep (why?)
 qt_add_qml_module(merginmaps
     URI MMInput
     VERSION 1.0
-    QML_FILES ${MM_QML}
+    QML_FILES ${MM_QML_SRCS}
     RESOURCE_PREFIX /com.merginmaps/imports
 )
 

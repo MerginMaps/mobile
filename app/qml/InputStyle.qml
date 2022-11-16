@@ -12,8 +12,6 @@ import QtQml
 import QtQuick
 
 QtObject {
-
-/*
     // Primary colors
     property color fontColor: "#006146"
     property color fontColorBright: "#679D70"
@@ -226,6 +224,4 @@ QtObject {
     {
       return fontSize * __dp
     }
-    
-*/ 
 }
