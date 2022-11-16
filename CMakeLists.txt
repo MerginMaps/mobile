@@ -13,6 +13,30 @@ project(
   LANGUAGES CXX
 )
 
+# APPLE is both iOS and macOS
+if (APPLE AND NOT IOS)
+    set(MACOS TRUE)
+endif()
+
+if (MACOS)
+    set(platform "macOS")
+elseif(IOS)
+    set(platform "iOS")
+elseif(ANDROID)
+    set(platform "android")
+elseif(MSCV)
+    set(platform "windows")
+elseif(UNIX)
+    set(platform "linux")
+else()
+    message(FATAL_ERROR "unknown target platform")
+endif()
+
+message(STATUS "Mergin Maps Input ${MM_VERSION_MAJOR}.${MM_VERSION_MINOR}.${MM_VERSION_PATCH} - ${platform}")
+
+# TODO MACOS_DEPLOYMENT_TARGET for macos
+
+
 set(COVERAGE FALSE CACHE BOOL "Compile with coverage flags")
 set(USE_SERVER_API_KEY TRUE CACHE BOOL "Determines whether we should use server API key. Decrypt file with secrets on disk if you want to use it.")
 set(QGIS_QUICK_DATA_PATH "INPUT" CACHE STRING "The internal variable pointing to the application storage folder") 
@@ -49,7 +73,7 @@ if (HAVE_BLUETOOTH)
   add_compile_definitions(HAVE_BLUETOOTH)
 endif()
 
-if (APPLE)
+if (MACOS)
     # lot of errors like: This was likely caused by different translation units being compiled with different visibility settings
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden -fvisibility=hidden")
 endif()
@@ -100,12 +124,17 @@ if(NOT MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 endif()
 
-if (APPLE)
+if (MACOS)
     add_compile_definitions(DESKTOP_OS)
     add_compile_definitions(PURCHASING) # PURCHASING stuff (only testing)
     add_compile_definitions(HAVE_WIDGETS)
-else()
+else() # IOS or ANDROID
     add_compile_definitions(MOBILE_OS)
+endif()
+
+if (IOS)
+    # Disabling warnings in qgis qgswkbptr.h
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-shorten-64-to-32")  
 endif()
 
 add_compile_definitions(INPUT_APP)

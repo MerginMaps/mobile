@@ -232,6 +232,8 @@ if (APPLE)
   )
 endif()
 
+# TODO: IOS QMAKE_TARGET_BUNDLE_PREFIX = LutraConsultingLtd
+
 target_include_directories(merginmaps PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/attributes ${CMAKE_CURRENT_SOURCE_DIR}/map ${CMAKE_CURRENT_SOURCE_DIR}/layer ${CMAKE_CURRENT_SOURCE_DIR}/maptools ${CMAKE_CURRENT_SOURCE_DIR}/position)
 target_link_libraries(merginmaps PUBLIC Qt6::Quick Qt6::Qml Qt6::Xml Qt6::Concurrent Qt6::Positioning Qt6::Sensors Qt6::QuickControls2 Qt6::Network Qt6::Svg Qt6::Sql Qt6::Core Qt6::Core5Compat) # TODO: OpenGl?
 target_link_libraries(merginmaps PUBLIC Qt6::Bluetooth Qt6::Multimedia Qt6::Widgets)

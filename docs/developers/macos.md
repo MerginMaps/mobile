@@ -8,16 +8,17 @@ mkdir build-input-desktop
 cd build-input-desktop
 cmake \
   -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_PREFIX_PATH=/opt/Qt/6.4.0/macos \
+  -DCMAKE_PREFIX_PATH=/opt/Qt/6.4.1/macos \
   -DCMAKE_INSTALL_PREFIX:PATH=~/install \
   -DUSE_MM_SERVER_API_KEY=FALSE \
-  -DMM_SDK_PATH=~/input-sdk/build/macos/stage/mac
+  -DINPUT_SDK_PATH=~/input-sdk/build/macos/stage/mac \
+  -GNinja \
+  -DQGIS_QUICK_DATA_PATH=/Users/peter/Projects/quick/input/app/android/assets \
   ../input
 
-make
+ninja
 cd ..
 ```
 
 3. Open Input in Qt Creator
 4. Compile and run
-

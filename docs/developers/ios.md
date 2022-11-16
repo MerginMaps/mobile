@@ -1,5 +1,25 @@
 looking for ios [publishing](./publishing.md)
 
+## Development MacOS Cross-Compilation for iOS
+
+```
+  cmake \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_PREFIX_PATH=/opt/Qt/6.4.1/ios \
+    -DCMAKE_INSTALL_PREFIX:PATH=~/Projects/quick/input/build-input-ios/install \
+    -DUSE_SERVER_API_KEY=FALSE -DINPUT_SDK_PATH=~/Projects/quick/input-sdk/build/ios/stage/arm64 \
+    -GNinja \
+    -DENABLE_VISIBILITY=0 \
+    -DARCHS=arm64 \
+    -DPLATFORM=OS \
+    -DCMAKE_TOOLCHAIN_FILE=~/Projects/quick/input-sdk/ios/tools/ios.toolchain.cmake \
+    -DENABLE_ARC=0 \
+    -DDEPLOYMENT_TARGET=14.0 \
+    -DQT_HOST_PATH=/opt/Qt/6.4.1/macos \
+    -DIOS=TRUE \
+    ../input
+```
+
 # in-app purchases
 
 read https://doc.qt.io/qt-5/qtpurchasing-appstore.html
