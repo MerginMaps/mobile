@@ -75,8 +75,9 @@ Drawer {
       CodeScannerOverlay {
         id: scannerOverlay
 
-        anchors.fill: parent
-        captureRect: qrcodeScanner.captureRect
+        rectSize: Math.min(codeReader.height, codeReader.width) * 0.8
+        width: codeReader.width
+        height: codeReader.height - header.height
       }
     }
   }
