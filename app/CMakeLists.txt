@@ -546,9 +546,7 @@ set(MM_QML
     qml/main.qml
 )
 
-set_source_files_properties(qml/InputStyle.qml PROPERTIES
-    QT_QML_SINGLETON_TYPE TRUE
-)
+set_source_files_properties(qml/InputStyle.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 qt_add_qml_module(merginmaps
     URI MMInput

@@ -27,6 +27,7 @@ if (MSVC)
   add_compile_definitions(_HAS_AUTO_PTR_ETC=1)
 endif()
 
+set(COVERAGE FALSE CACHE BOOL "Compile with coverage flags")
 set(USE_SERVER_API_KEY TRUE CACHE BOOL "Determines whether we should use server API key. Decrypt file with secrets on disk if you want to use it.")
 set(QGIS_QUICK_DATA_PATH "INPUT" CACHE STRING "The internal variable pointing to the application storage folder") 
 set(INPUT_SDK_PATH "" CACHE PATH "Path to the Mergin Maps Input SDK on host machine" )
@@ -36,6 +37,11 @@ set(HAVE_BLUETOOTH TRUE CACHE STRING "Building with bluetooth position provider"
 
 find_package(Qt6 ${QT6_VERSION} COMPONENTS Quick Qml Xml Concurrent Positioning Sensors QuickControls2 Network Svg Sql OpenGl Core Core5Compat REQUIRED)
 find_package(Qt6 ${QT6_VERSION} COMPONENTS Multimedia Widgets REQUIRED)
+
+if (COVERAGE)
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} --coverage" )
+    set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} --coverage" )
+endif()
 
 if (HAVE_BLUETOOTH)
   find_package(Qt6 ${QT6_VERSION} COMPONENTS Bluetooth REQUIRED)
