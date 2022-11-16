@@ -21,6 +21,10 @@ Drawer {
 
   signal scanFinished(var value)
 
+  onVisibleChanged: {
+    qrcodeScanner.setProcessing( codeReader.visible )
+  }
+
   CodeScanner {
     id: qrcodeScanner
 
@@ -30,7 +34,7 @@ Drawer {
 
     onCapturedStringChanged: function( captured ) {
       codeReader.scanFinished( captured )
-      qrcodeScanner.setProcessing(false)
+      codeReaderTimer.start()
     }
   }
 
@@ -66,8 +70,8 @@ Drawer {
       VideoOutput {
         id: videoOutput
 
-        anchors.fill: parent
-        width: root.width
+        width: codeReader.width
+        height: codeReader.height
         focus: visible
         fillMode: VideoOutput.PreserveAspectCrop
       }
@@ -80,5 +84,23 @@ Drawer {
         height: codeReader.height - header.height
       }
     }
+  }
+
+  BusyIndicator {
+    id: codeReaderBusyIndicator
+    width: codeReader.width / 8
+    height: width
+    running: codeReaderTimer.running
+    visible: running
+    anchors.centerIn: parent
+    z: codeReader.z + 1
+  }
+
+  Timer {
+    id: codeReaderTimer
+    interval: 1000
+    triggeredOnStart: false
+    repeat: false
+    onTriggered: codeReader.visible = false
   }
 }

@@ -52,7 +52,6 @@ Item {
     }
   }
 
-
   Loader {
     id: codeReaderLoader
     sourceComponent: cameraComponent
