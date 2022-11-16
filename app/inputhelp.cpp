@@ -128,7 +128,7 @@ QString InputHelp::merginTermsLink() const
 
 QString InputHelp::projectLoadingErrorHelpLink() const
 {
-  return MerginApi::defaultApiRoot() + "/manage/project_loading/" + utmTagHelp;
+  return helpRoot + "/manage/project_loading/" + utmTagHelp;
 }
 
 bool InputHelp::submitReportPending() const

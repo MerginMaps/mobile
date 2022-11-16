@@ -609,7 +609,7 @@ ApplicationWindow {
     MessageDialog {
       id: projectErrorDialog
 
-      title: qsTr("Failed to read project")
+      title: qsTr("Failed to open the project")
       buttons: MessageDialog.Close | MessageDialog.Help
 
       onButtonClicked: function(button, role) {
@@ -701,7 +701,7 @@ ApplicationWindow {
         formsStackManager.reload()
       }
       function onProjectReadingFailed( message ) {
-        projectErrorDialog.informativeText = qsTr( "Could not read project file:\n" ) + message
+        projectErrorDialog.informativeText = qsTr( "Could not read the project file:" ) + "\n" + message
         projectErrorDialog.open()
       }
     }
