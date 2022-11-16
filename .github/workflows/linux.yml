@@ -13,8 +13,8 @@ on:
 
 env:
   CCACHE_DIR: ~/.ccache
-  INPUT_SDK_VERSION: ubuntu-2204-20221114-98
-  QT_VERSION: '6.4.0'
+  INPUT_SDK_VERSION: ubuntu-2204-20221116-102
+  QT_VERSION: '6.4.1'
   CACHE_VERSION: 0
       
 concurrency:
@@ -50,7 +50,7 @@ jobs:
         with:
           version: ${{ env.QT_VERSION }}
           setup-python: 'false'
-          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning'
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
           dir: ${{ github.workspace }}
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-lnx

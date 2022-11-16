@@ -22,8 +22,8 @@ jobs:
     runs-on: windows-2019
     
     env:
-      QT_VERSION: '6.4.0'
-      INPUT_SDK_VERSION: win64-20221114-128
+      QT_VERSION: '6.4.1'
+      INPUT_SDK_VERSION: win64-20221116-132
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
       CACHE_VERSION: 0
       VS_VERSION: "2019"
@@ -92,7 +92,7 @@ jobs:
           target: desktop
           arch: ${{ env.QT_ARCH }}
           dir: ${{ github.workspace }}
-          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning'
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-win
  

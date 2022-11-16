@@ -13,6 +13,18 @@ project(
   LANGUAGES CXX
 )
 
+set(COVERAGE FALSE CACHE BOOL "Compile with coverage flags")
+set(USE_SERVER_API_KEY TRUE CACHE BOOL "Determines whether we should use server API key. Decrypt file with secrets on disk if you want to use it.")
+set(QGIS_QUICK_DATA_PATH "INPUT" CACHE STRING "The internal variable pointing to the application storage folder") 
+set(INPUT_SDK_PATH "" CACHE PATH "Path to the Mergin Maps Input SDK on host machine" )
+set(ENABLE_TESTS TRUE CACHE BOOL "Whether to build tests")
+set(QT6_VERSION ${QT_VERSION_DEFAULT} CACHE STRING "QT6 version to use")
+set(HAVE_BLUETOOTH TRUE CACHE STRING "Building with bluetooth position provider")
+
+find_package(Qt6 ${QT6_VERSION} COMPONENTS Quick Qml Xml Concurrent Positioning Sensors QuickControls2 Network Svg Sql OpenGl Core Core5Compat REQUIRED)
+find_package(Qt6 ${QT6_VERSION} COMPONENTS Multimedia Widgets REQUIRED)
+qt_standard_project_setup()
+
 set(CMAKE_COLOR_MAKEFILE ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
@@ -27,17 +39,6 @@ if (MSVC)
   add_compile_definitions(_HAS_AUTO_PTR_ETC=1)
 endif()
 
-set(COVERAGE FALSE CACHE BOOL "Compile with coverage flags")
-set(USE_SERVER_API_KEY TRUE CACHE BOOL "Determines whether we should use server API key. Decrypt file with secrets on disk if you want to use it.")
-set(QGIS_QUICK_DATA_PATH "INPUT" CACHE STRING "The internal variable pointing to the application storage folder") 
-set(INPUT_SDK_PATH "" CACHE PATH "Path to the Mergin Maps Input SDK on host machine" )
-set(ENABLE_TESTS TRUE CACHE BOOL "Whether to build tests")
-set(QT6_VERSION ${QT_VERSION_DEFAULT} CACHE STRING "QT6 version to use")
-set(HAVE_BLUETOOTH TRUE CACHE STRING "Building with bluetooth position provider")
-
-find_package(Qt6 ${QT6_VERSION} COMPONENTS Quick Qml Xml Concurrent Positioning Sensors QuickControls2 Network Svg Sql OpenGl Core Core5Compat REQUIRED)
-find_package(Qt6 ${QT6_VERSION} COMPONENTS Multimedia Widgets REQUIRED)
-
 if (COVERAGE)
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} --coverage" )
     set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} --coverage" )
@@ -46,6 +47,11 @@ endif()
 if (HAVE_BLUETOOTH)
   find_package(Qt6 ${QT6_VERSION} COMPONENTS Bluetooth REQUIRED)
   add_compile_definitions(HAVE_BLUETOOTH)
+endif()
+
+if (APPLE)
+    # lot of errors like: This was likely caused by different translation units being compiled with different visibility settings
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden -fvisibility=hidden")
 endif()
 
 if (NOT IOS)
@@ -113,8 +119,8 @@ add_compile_definitions(QGIS_QUICK_DATA_PATH=${QGIS_QUICK_DATA_PATH})
 #  DEFINES += "QGIS_QUICK_EXPAND_TEST_DATA"
 #}
 #TODO debug|release?
-add_compile_definitions("$<$<CONFIG:DEBUG>:-DQGIS_PREFIX_PATH=${QGIS_PREFIX_PATH}>")
-add_compile_definitions("$<$<CONFIG:DEBUG>:-DQGIS_QUICK_EXPAND_TEST_DATA>")
+add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_PREFIX_PATH=${QGIS_PREFIX_PATH}>")
+add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_QUICK_EXPAND_TEST_DATA>")
 
 if (ENABLE_TESTS)
   enable_testing()

@@ -13,9 +13,9 @@ on:
 
 env:
   TEST_MERGIN_URL: https://test.dev.merginmaps.com/
-  QT_VERSION: 6.4.0
+  QT_VERSION: 6.4.1
   QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.15.0
-  INPUT_SDK_VERSION: mac-20221114-109
+  INPUT_SDK_VERSION: mac-20221116-112
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 0
   XC_VERSION: ${{ '13.2.1' }}
@@ -93,7 +93,7 @@ jobs:
           version: ${{ env.QT_VERSION }}
           target: desktop
           dir: ${{ github.workspace }}
-          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning'
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-mac
 
@@ -122,7 +122,7 @@ jobs:
           mkdir -p build-Input
           cd build-Input
           
-          cmake .. \
+          cmake \
              -DCMAKE_BUILD_TYPE=Debug \
              -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${QT_VERSION}/macos \
              -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
@@ -130,7 +130,8 @@ jobs:
              -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
              -DCOVERAGE=TRUE \
-             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+             ..
              
           make
 
@@ -158,14 +159,15 @@ jobs:
           mkdir -p build-Input-rel
           cd build-Input-rel
 
-          cmake .. \
+          cmake \
              -DCMAKE_BUILD_TYPE=Release \
              -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${QT_VERSION}/macos \
              -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
              -DUSE_SERVER_API_KEY=TRUE \
              -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
-             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+             ..
              
           make
 

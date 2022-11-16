@@ -20,7 +20,7 @@ jobs:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-11
     env:
-      QT_VERSION: '6.4.0'
+      QT_VERSION: '6.4.1'
       ANDROIDAPI: 24
       ANDROID_NDK_PLATFORM: android-24
       NDK_VERSION: r23
@@ -28,7 +28,7 @@ jobs:
       JDK_VERSION: 11
       SDK_PLATFORM: android-31
       SDK_BUILD_TOOLS: 31.0.0
-      INPUT_SDK_VERSION: android-macOS-20221114-125
+      INPUT_SDK_VERSION: android-macOS-20221116-128
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
@@ -105,17 +105,17 @@ jobs:
         run: |
           aqt install-qt \
             mac android ${{ env.QT_VERSION }} android_arm64_v8a \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
             -O ${{ github.workspace }}/Qt
             
           aqt install-qt \
             mac android ${{ env.QT_VERSION }} android_armv7 \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
             -O ${{ github.workspace }}/Qt
         
           aqt install-qt \
             mac desktop ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
             -O ${{ github.workspace }}/Qt
           
           ls -la ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}

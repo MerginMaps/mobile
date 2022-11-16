@@ -13,9 +13,9 @@ on:
 
 env:
   IOS_MIN_SDK_VERSION: ${{ '14.0' }}    
-  QT_VERSION: '6.4.0'
+  QT_VERSION: '6.4.1'
   XC_VERSION: ${{ '13.2.1' }}
-  INPUT_SDK_VERSION: ios-20221114-84
+  INPUT_SDK_VERSION: ios-20221116-87
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache
@@ -141,12 +141,12 @@ jobs:
         run: |
           aqt install-qt \
             mac ios ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
             -O ${{ github.workspace }}/Qt
             
           aqt install-qt \
             mac desktop ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
             -O ${{ github.workspace }}/Qt
             
           ls -la ${{ github.workspace }}/Qt
