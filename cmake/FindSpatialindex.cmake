@@ -1,15 +1,22 @@
 # GPLv2 Licence
 
-find_path(Spatialindex_INCLUDE_DIR spatialindex/RTree.h
-  "${INPUT_SDK_PATH}/include"
-  NO_DEFAULT_PATH
-)
+# not in linux input-SDK
+
+if (LINUX)
+  find_path(Spatialindex_INCLUDE_DIR NAMES spatialindex/RTree.h)
+  find_library(Spatialindex_LIBRARY NAMES spatialindex)
+else()  
+  find_path(Spatialindex_INCLUDE_DIR spatialindex/RTree.h
+    "${INPUT_SDK_PATH}/include"
+    NO_DEFAULT_PATH
+  )
   
-find_library(Spatialindex_LIBRARY 
-  NAMES spatialindex 
-  PATHS "${INPUT_SDK_PATH}/lib"
-  NO_DEFAULT_PATH
-)
+  find_library(Spatialindex_LIBRARY 
+    NAMES spatialindex 
+    PATHS "${INPUT_SDK_PATH}/lib"
+    NO_DEFAULT_PATH
+  )
+endif()
 
 find_package_handle_standard_args(
   Spatialindex
@@ -17,7 +24,7 @@ find_package_handle_standard_args(
 )
 
 if(Spatialindex_FOUND AND NOT TARGET Spatialindex::Spatialindex)
-  add_library(Spatialindex::Spatialindex STATIC IMPORTED)
+  add_library(Spatialindex::Spatialindex UNKNOWN IMPORTED)
   set_target_properties(Spatialindex::Spatialindex PROPERTIES
     IMPORTED_LOCATION "${Spatialindex_LIBRARY}"
     INTERFACE_INCLUDE_DIRECTORIES "${Spatialindex_INCLUDE_DIR}"

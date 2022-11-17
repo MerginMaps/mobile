@@ -15,7 +15,7 @@ env:
   TEST_MERGIN_URL: https://test.dev.merginmaps.com/
   QT_VERSION: 6.4.1
   QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.15.0
-  INPUT_SDK_VERSION: mac-20221116-112
+  INPUT_SDK_VERSION: mac-20221117-113
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 0
   XC_VERSION: ${{ '13.2.1' }}

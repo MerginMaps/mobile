@@ -15,7 +15,7 @@ env:
   IOS_MIN_SDK_VERSION: ${{ '14.0' }}    
   QT_VERSION: '6.4.1'
   XC_VERSION: ${{ '13.2.1' }}
-  INPUT_SDK_VERSION: ios-20221116-87
+  INPUT_SDK_VERSION: ios-20221117-88
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache
@@ -152,49 +152,6 @@ jobs:
           ls -la ${{ github.workspace }}/Qt
           ls -la ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
 
-      # Build Input App
-      # !! ccache_clang is a custom script which runs ccache and default XCode clang.
-      # !! It has been created due to a bug in Qt when QMAKE_CXX ignored everything after
-      # !! whitespace chars. In that case in the string 'ccache clang++' clang was ignored
-      # !! and ccache received all of the compilation flags that were supposed to go to clang.
-      - name: Export app/config.pri
-        shell: bash
-        run: |
-          touch ./app/config.pri
-          
-          echo -e "ios {"  >> ./app/config.pri
-          
-          echo -e "  INPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64"  >> ./app/config.pri
-          echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
-          echo -e "  QMAKE_IOS_DEPLOYMENT_TARGET = ${{ env.IOS_MIN_SDK_VERSION }}"  >> ./app/config.pri
-          echo -e "  QMAKE_CXX = ${{ github.workspace }}/scripts/ci/ios/ccache_clang"  >> ./app/config.pri
-          
-          echo -e "  qprofile.name=PROVISIONING_PROFILE_SPECIFIER"  >> ./app/config.pri
-          echo -e "  qprofile.value=\"LutraConsultingLtd.Input.AppStore\""  >> ./app/config.pri
-          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qprofile"  >> ./app/config.pri
-
-          echo -e "  qteam.name=DEVELOPMENT_TEAM"  >> ./app/config.pri
-          echo -e "  qteam.value=79QMH2QRAH"  >> ./app/config.pri
-          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qteam"  >> ./app/config.pri
-
-          echo -e "  qidentity.name=CODE_SIGN_IDENTITY"  >> ./app/config.pri
-          echo -e "  qidentity.value=\"iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)\""  >> ./app/config.pri
-          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qidentity"  >> ./app/config.pri
-                    
-          echo -e "  qstyle.name=CODE_SIGN_STYLE"  >> ./app/config.pri
-          echo -e "  qstyle.value=Manual"  >> ./app/config.pri
-          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qstyle"  >> ./app/config.pri
-          
-          echo -e "}"  >> ./app/config.pri
-          cat ./app/config.pri
-
-          if [ ! ${{ env.QT_VERSION }} == "6.3.2" ]; then
-            echo "Qt version has changed! Double check if we still need custom script 'ccache_clang' for QMAKE_CXX."
-            echo "  - If yes, change this condition to the new Qt version"
-            echo "  - If no, remove the 'ccache_clang' script and this check too"
-            exit 1
-          fi
-
       - name: Calculate a build number
         env:
           OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
@@ -217,19 +174,50 @@ jobs:
 
           echo "Building version: $CF_BUNDLE_SHORT_VERSION ($CF_BUNDLE_VERSION)"
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $CF_BUNDLE_VERSION" "$INPUT_DIR/app/ios/Info.plist"
-
+ 
+          mkdir -p install-Input
           mkdir -p build-INPUT
           cd build-INPUT
 
-          # run qmake
-          ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/bin/qmake \
-            ${INPUT_DIR}/app/input.pro \
-            -spec macx-ios-clang \
-            CONFIG+=release \
-            CONFIG+=iphoneos \
-            CONFIG+=device \
-            CONFIG+=qtquickcompiler
+          # run cmake
+          cmake \
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+            -DIOS=TRUE \
+            -DENABLE_VISIBILITY=0 \
+            -DARCHS=arm64 \
+            -DPLATFORM=OS \
+            -DENABLE_ARC=0 \
+            -DENABLE_BITCODE=0 \
+            -DDEPLOYMENT_TARGET=${ env.IOS_MIN_SDK_VERSION } \
+            -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios \
+            -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
+            -DUSE_SERVER_API_KEY=TRUE \
+            -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64 \
+            -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/input-sdk/ios.toolchain.cmake \
+            -GNinja \
+            -DQT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            ../input
 
+          #TODO echo -e "  QMAKE_IOS_DEPLOYMENT_TARGET = ${{ env.IOS_MIN_SDK_VERSION }}"  >> ./app/config.pri
+          #TODO echo -e "  QMAKE_CXX = ${{ github.workspace }}/scripts/ci/ios/ccache_clang"  >> ./app/config.pri
+          
+          #TODO echo -e "  qprofile.name=PROVISIONING_PROFILE_SPECIFIER"  >> ./app/config.pri
+          #TODO echo -e "  qprofile.value=\"LutraConsultingLtd.Input.AppStore\""  >> ./app/config.pri
+          #TODO echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qprofile"  >> ./app/config.pri
+
+          #TODO echo -e "  qteam.name=DEVELOPMENT_TEAM"  >> ./app/config.pri
+          #TODO echo -e "  qteam.value=79QMH2QRAH"  >> ./app/config.pri
+          #TODO echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qteam"  >> ./app/config.pri
+
+          #TODO echo -e "  qidentity.name=CODE_SIGN_IDENTITY"  >> ./app/config.pri
+          #TODO echo -e "  qidentity.value=\"iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)\""  >> ./app/config.pri
+          #TODO echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qidentity"  >> ./app/config.pri
+                    
+          #TODO echo -e "  qstyle.name=CODE_SIGN_STYLE"  >> ./app/config.pri
+          #TODO echo -e "  qstyle.value=Manual"  >> ./app/config.pri
+          #TODO echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qstyle"  >> ./app/config.pri
+          
           # Use old deprecated build system in XCode 13
           /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
           /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings

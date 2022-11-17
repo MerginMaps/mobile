@@ -1,15 +1,22 @@
 # GPLv2 Licence
 
-find_path(Pq_INCLUDE_DIR postgres_ext.h
-  "${INPUT_SDK_PATH}/include"
-  NO_DEFAULT_PATH
-)
+# not in linux input-SDK
+
+if (LINUX)
+  find_path(Pq_INCLUDE_DIR NAMES postgres_ext.h)
+  find_library(Pq_LIBRARY NAMES pq)
+else()   
+  find_path(Pq_INCLUDE_DIR postgres_ext.h
+    "${INPUT_SDK_PATH}/include"
+    NO_DEFAULT_PATH
+  )
   
-find_library(Pq_LIBRARY 
-  NAMES pq
-  PATHS "${INPUT_SDK_PATH}/lib"
-  NO_DEFAULT_PATH
-)
+  find_library(Pq_LIBRARY 
+    NAMES pq
+    PATHS "${INPUT_SDK_PATH}/lib"
+    NO_DEFAULT_PATH
+  )
+endif()
 
 find_package_handle_standard_args(
   Pq
@@ -17,7 +24,7 @@ find_package_handle_standard_args(
 )
 
 if(Pq_FOUND AND NOT TARGET Pq::Pq)
-  add_library(Pq::Pq STATIC IMPORTED)
+  add_library(Pq::Pq UNKNOWN IMPORTED)
   set_target_properties(Pq::Pq PROPERTIES
     IMPORTED_LOCATION "${Pq_LIBRARY}"
     INTERFACE_INCLUDE_DIRECTORIES "${Pq_INCLUDE_DIR}"

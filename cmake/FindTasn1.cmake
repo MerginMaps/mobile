@@ -1,15 +1,23 @@
 # GPLv2 Licence
 
-find_path(Tasn1_INCLUDE_DIR libtasn1.h
-  "${INPUT_SDK_PATH}/include"
-  NO_DEFAULT_PATH
-)
+# not in linux input-SDK
+
+if (LINUX)
+  # find_path(Tasn1_INCLUDE_DIR NAMES libtasn1.h)
+  # find_library(Tasn1_LIBRARY NAMES tasn1)
+  message(FATAL_ERROR "tasn1 is not needed on LINUX")
+else()   
+  find_path(Tasn1_INCLUDE_DIR libtasn1.h
+    "${INPUT_SDK_PATH}/include"
+    NO_DEFAULT_PATH
+  )
   
-find_library(Tasn1_LIBRARY 
-  NAMES tasn1 
-  PATHS "${INPUT_SDK_PATH}/lib"
-  NO_DEFAULT_PATH
-)
+  find_library(Tasn1_LIBRARY 
+    NAMES tasn1 
+    PATHS "${INPUT_SDK_PATH}/lib"
+    NO_DEFAULT_PATH
+  )
+endif()
 
 find_package_handle_standard_args(
   Tasn1

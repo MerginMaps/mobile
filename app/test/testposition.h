@@ -26,8 +26,12 @@ class TestPosition: public QObject
     void cleanup() {} // will be called after every testfunction.
 
     void simulatedPosition();
+    
+#ifdef HAVE_BLUETOOTH
     void testBluetoothProviderConnection();
     void testBluetoothProviderPosition();
+#endif
+    
     void testPositionProviderKeysInSettings();
     void testMapPosition();
 

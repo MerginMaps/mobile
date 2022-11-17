@@ -13,7 +13,7 @@ on:
 
 env:
   CCACHE_DIR: ~/.ccache
-  INPUT_SDK_VERSION: ubuntu-2204-20221116-102
+  INPUT_SDK_VERSION: ubuntu-2204-20221117-103
   QT_VERSION: '6.4.1'
   CACHE_VERSION: 0
       
@@ -117,23 +117,23 @@ jobs:
           cd ${{ github.workspace }}/input-sdk
           tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
 
-      # Build Input App
-      - name: Export app/config.pri
-        run: |
-          touch ./input/app/config.pri
-          echo -e "unix:!macx:!android {"  >> ./input/app/config.pri
-          echo -e "  INPUT_SDK_PATH = ${{ github.workspace }}/input-sdk"  >> ./input/app/config.pri
-          echo -e "  QGIS_QUICK_DATA_PATH = ${{ github.workspace }}/input/app/android/assets/qgis-data"  >> ./input/app/config.pri
-          echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX "  >> ./input/app/config.pri
-          echo -e "}"  >> ./input/app/config.pri
-          cat ./input/app/config.pri
-          
+      # Build Input App          
       - name: build Input
         run: |
+          mkdir -p install-Input
           mkdir -p build-Input
           cd build-Input
-          qmake \
-            ../input/app/input.pro
+
+          cmake \
+             -DCMAKE_BUILD_TYPE=Release \
+             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${QT_VERSION}/macos \
+             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
+             -DUSE_SERVER_API_KEY=TRUE \
+             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
+             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
+             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+             ..
+             
           make
 
       - name: Get TimeStamp

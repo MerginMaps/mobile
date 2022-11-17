@@ -5,15 +5,31 @@ if(NOT APPLE)
 endif()
 
 # Defines 
+#
+# macOS + iOS
+# 
 # AppleFrameworks::Security
 # AppleFrameworks::CoreFoundation
 # AppleFrameworks::SystemConfiguration
+# 
+# iOS
+# AppleFrameworks::StoreKit
+# AppleFrameworks::Foundation
+
 
 set(APPLE_FRAMEWORKS
   Security
   CoreFoundation
   SystemConfiguration
 )
+
+if (HAVE_APPLE_PURCHASING)
+  set(APPLE_FRAMEWORKS ${APPLE_FRAMEWORKS} 
+    Foundation 
+    StoreKit
+  )
+endif()
+
 
 foreach(framework ${APPLE_FRAMEWORKS})
     find_library(APPLE_${framework}_LIBRARY 

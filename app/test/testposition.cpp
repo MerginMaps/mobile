@@ -17,7 +17,11 @@
 #include "appsettings.h"
 #include "position/positionkit.h"
 #include "position/simulatedpositionprovider.h"
+
+#ifdef HAVE_BLUETOOTH
 #include "position/bluetoothpositionprovider.h"
+#endif
+
 #include "position/internalpositionprovider.h"
 #include "position/mapposition.h"
 #include "position/positionprovidersmodel.h"
@@ -81,6 +85,8 @@ void TestPosition::simulatedPosition()
   positionKit->setPositionProvider( nullptr );
   QVERIFY( !positionKit->positionProvider() );
 }
+
+#ifdef HAVE_BLUETOOTH
 
 void TestPosition::testBluetoothProviderConnection()
 {
@@ -233,6 +239,8 @@ void TestPosition::testBluetoothProviderPosition()
   QCOMPARE( positionKit->fix(), "RTK float" );
   QCOMPARE( positionKit->lastRead(), QDateTime().fromString( "2022-01-31T12:17:17Z", Qt::ISODate ) );
 }
+
+#endif 
 
 void TestPosition::testPositionProviderKeysInSettings()
 {

@@ -1,3 +1,7 @@
+######################################################################
+## SOURCES of Mergin Maps Target
+######################################################################
+
 set(MM_SRCS
     attributes/attributecontroller.cpp
     attributes/attributedata.cpp
@@ -160,7 +164,6 @@ if (HAVE_BLUETOOTH)
     set(MM_HDRS ${MM_HDRS} 
         position/bluetoothpositionprovider.h
     )
-    
 endif()
 
 if (ENABLE_TESTS)
@@ -211,13 +214,48 @@ if (ENABLE_TESTS)
     )
 endif()
 
+if(IOS) 
+  set(MM_HDRS ${MM_HDRS} 
+    ios/iosinterface.h 
+    ios/iosviewdelegate.h
+  )
+  
+  set(MM_SRCS ${MM_SRCS}
+    ios/iosinterface.mm
+    ios/iosviewdelegate.mm
+    ios/iosimagepicker.mm
+    ios/iosutils.mm
+  )
+endif()
+
+if(HAVE_APPLE_PURCHASING)
+    set(MM_HDRS ${MM_HDRS} 
+      ios/iospurchasing.h
+    )
+  
+    set(MM_SRCS ${MM_SRCS}
+      ios/iospurchasing.mm
+    )
+endif()
+
 qt_add_resources(MM_SRCS 
   img/pics.qrc 
   i18n/input_i18n.qrc 
   fonts/fonts.qrc
 )
 
-qt_add_executable(merginmaps MANUAL_FINALIZATION ${MM_SRCS} ${MM_HDRS} $<TARGET_OBJECTS:mm_core> main.cpp)
+######################################################################
+## Mergin Maps Target
+######################################################################
+
+qt_add_executable(merginmaps ${MM_SRCS} ${MM_HDRS} $<TARGET_OBJECTS:mm_core> main.cpp)
+target_include_directories(merginmaps PUBLIC 
+  ${CMAKE_CURRENT_SOURCE_DIR}/attributes 
+  ${CMAKE_CURRENT_SOURCE_DIR}/map 
+  ${CMAKE_CURRENT_SOURCE_DIR}/layer 
+  ${CMAKE_CURRENT_SOURCE_DIR}/maptools 
+  ${CMAKE_CURRENT_SOURCE_DIR}/position
+)
 
 if (APPLE)
   set_target_properties(merginmaps PROPERTIES
@@ -230,25 +268,68 @@ if (APPLE)
     XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
     XCODE_ATTRIBUTE_EXECUTABLE_NAME "merginmaps"
   )
+  
+  # IOS: TODO QMAKE_TARGET_BUNDLE_PREFIX = LutraConsultingLtd
+  # IOS: TODO QMAKE_INFO_PLIST = ios/Info.plist
+  # demo projects
+  # demoFiles.files = $$files(android/assets/demo-projects/*)
+  # demoFiles.path = demo-projects
+  # QMAKE_BUNDLE_DATA += demoFiles
+
+  # qgis resources
+  # crsFiles.files = $$files(android/assets/qgis-data/resources/*)
+  # crsFiles.path = qgis-data/resources
+  # QMAKE_BUNDLE_DATA += crsFiles
+
+  # proj
+  # projFiles.files = $$files(android/assets/qgis-data/proj/*)
+  # projFiles.path = qgis-data/proj
+  # QMAKE_BUNDLE_DATA += projFiles
+
+  # app icon
+  # QMAKE_ASSET_CATALOGS = $$PWD/ios/Images.xcassets
+  # QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
+
+  # launch screen
+  # app_launch_images.files = $$PWD/ios/launchscreen/InputScreen.xib $$files($$PWD/ios/launchscreen/*.png)
+  # QMAKE_BUNDLE_DATA += app_launch_images
 endif()
 
 # TODO: IOS QMAKE_TARGET_BUNDLE_PREFIX = LutraConsultingLtd
 
-target_include_directories(merginmaps PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/attributes ${CMAKE_CURRENT_SOURCE_DIR}/map ${CMAKE_CURRENT_SOURCE_DIR}/layer ${CMAKE_CURRENT_SOURCE_DIR}/maptools ${CMAKE_CURRENT_SOURCE_DIR}/position)
-target_link_libraries(merginmaps PUBLIC Qt6::Quick Qt6::Qml Qt6::Xml Qt6::Concurrent Qt6::Positioning Qt6::Sensors Qt6::QuickControls2 Qt6::Network Qt6::Svg Qt6::Sql Qt6::Core Qt6::Core5Compat) # TODO: OpenGl?
-target_link_libraries(merginmaps PUBLIC Qt6::Bluetooth Qt6::Multimedia Qt6::Widgets)
+######################################################################
+## LINKING Mergin Maps Target
+######################################################################
+
+target_link_libraries(merginmaps PUBLIC 
+    Qt6::Quick Qt6::Qml Qt6::Xml Qt6::Concurrent 
+    Qt6::Positioning Qt6::Sensors Qt6::QuickControls2 
+    Qt6::Network Qt6::Svg Qt6::Sql Qt6::Core Qt6::Core5Compat) # TODO: OpenGl?
+
+if(HAVE_BLUETOOTH)
+    target_link_libraries(merginmaps PUBLIC Qt6::Bluetooth)
+endif()
+
+target_link_libraries(merginmaps PUBLIC Qt6::Multimedia Qt6::Widgets)
 if (NOT IOS)
   # https://doc.qt.io/qt-6/qtprintsupport-index.html
   # Qt Print Support is not available on iOS.
   target_link_libraries(merginmaps PUBLIC  Qt6::PrintSupport)
 endif()
 
+if (ANDROID)
+  target_link_libraries(merginmaps PUBLIC  Qt6::CorePrivate)
+endif()
+
 target_link_libraries(merginmaps PUBLIC
   mm_core 
-  QGIS::Core 
+  QGIS::Core
   Geodiff::Geodiff 
   Proj::Proj
   ZXing::ZXing
+)
+
+target_link_libraries(merginmaps PUBLIC
   QGIS::authmethod_basic
   QGIS::authmethod_esritoken
   QGIS::authmethod_identcert
@@ -264,16 +345,25 @@ target_link_libraries(merginmaps PUBLIC
   QGIS::provider_wfs
   QGIS::provider_wms
   QGIS::provider_postgres
+)
+
+target_link_libraries(merginmaps PUBLIC
   Qtkeychain::Qtkeychain
   Qca::Qca
   Gdal::Gdal
   Pq::Pq
   Spatialite::Spatialite
   Charset::Charset
-  Xml2::Xml2 
-  Tasn1::Tasn1
-  Bz2::Bz2
-  Proj::Proj # linking 2x why (macos?)
+)
+
+if (NOT ANDROID) 
+  target_link_libraries(merginmaps PUBLIC
+    Bz2::Bz2
+    Xml2::Xml2
+  )
+endif()
+
+target_link_libraries(merginmaps PUBLIC
   Spatialindex::Spatialindex
   Geos::Geos Geos::Geos-c
   Protobuf::Protobuf-lite 
@@ -290,6 +380,18 @@ target_link_libraries(merginmaps PUBLIC
   Jpeg::Jpeg
 )
 
+if (NOT LINUX)
+  target_link_libraries(merginmaps PUBLIC Tasn1::Tasn1)
+endif()
+
+# https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md#Unwinding
+# do we need -lunwind ?
+
+if (ANDROID)
+  target_link_libraries(merginmaps PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
+endif()
+
+
 if(APPLE)
   target_link_libraries(merginmaps PUBLIC 
       AppleFrameworks::Security
@@ -298,9 +400,20 @@ if(APPLE)
   )
 endif()
 
-if (ENABLE_TESTS)
-    target_link_libraries(merginmaps PUBLIC Qt6::Test)
+if(HAVE_APPLE_PURCHASING)
+  target_link_libraries(merginmaps PUBLIC 
+      AppleFrameworks::StoreKit
+      AppleFrameworks::Foundation
+  )
 endif()
+
+if (ENABLE_TESTS)
+  target_link_libraries(merginmaps PUBLIC Qt6::Test)
+endif()
+
+######################################################################
+## QML
+######################################################################
 
 add_subdirectory(qml)
 
@@ -321,5 +434,3 @@ qt_add_qml_module(merginmaps
     QML_FILES ${MM_QML_SRCS}
     RESOURCE_PREFIX /com.merginmaps/imports
 )
-
-qt_finalize_target(merginmaps)

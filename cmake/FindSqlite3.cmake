@@ -1,15 +1,22 @@
 # GPLv2 Licence
 
-find_path(Sqlite3_INCLUDE_DIR sqlite3.h
-  "${INPUT_SDK_PATH}/include"
-  NO_DEFAULT_PATH
-)
+# not in linux input-SDK
+
+if (LINUX)
+  find_path(Sqlite3_INCLUDE_DIR NAMES sqlite3.h)
+  find_library(Sqlite3_LIBRARY NAMES sqlite3)
+else()   
+  find_path(Sqlite3_INCLUDE_DIR sqlite3.h
+    "${INPUT_SDK_PATH}/include"
+    NO_DEFAULT_PATH
+  )
   
-find_library(Sqlite3_LIBRARY 
-  NAMES sqlite3 
-  PATHS "${INPUT_SDK_PATH}/lib"
-  NO_DEFAULT_PATH
-)
+  find_library(Sqlite3_LIBRARY 
+    NAMES sqlite3 
+    PATHS "${INPUT_SDK_PATH}/lib"
+    NO_DEFAULT_PATH
+  )
+endif()
 
 find_package_handle_standard_args(
   Sqlite3
@@ -17,7 +24,7 @@ find_package_handle_standard_args(
 )
 
 if(Sqlite3_FOUND AND NOT TARGET Sqlite3::Sqlite3)
-  add_library(Sqlite3::Sqlite3 STATIC IMPORTED)
+  add_library(Sqlite3::Sqlite3 UNKNOWN IMPORTED)
   set_target_properties(Sqlite3::Sqlite3 PROPERTIES
     IMPORTED_LOCATION "${Sqlite3_LIBRARY}"
     INTERFACE_INCLUDE_DIRECTORIES "${Sqlite3_INCLUDE_DIR}"
