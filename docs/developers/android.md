@@ -21,7 +21,18 @@ Requirements Android:
 - android-sdk
 
 ```
-TODO
+mkdir build
+cd build
+cmake -G Ninja \
+  -DANDROID_ABI=arm64-v8a \
+  -DANDROID_PLATFORM=android-24 \
+  -DANDROID_SDK_ROOT=/home/martin/android \
+  -DANDROID_NDK=/home/martin/android/ndk/23.1.7779620 \
+  -DCMAKE_TOOLCHAIN_FILE=/home/martin/android/ndk/23.1.7779620/build/cmake/android.toolchain.cmake \
+  -DINPUT_SDK_PATH=/home/martin/input-sdk/android-macOS-20221117-129/arm64-v8a \
+  -DCMAKE_PREFIX_PATH=/home/martin/Qt/6.4.1/android_arm64_v8a \
+  ..
+ninja
 ```
 
 ## Development MacOS Cross-Compilation for Android

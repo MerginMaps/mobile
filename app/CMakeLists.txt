@@ -414,6 +414,9 @@ endif()
 
 if (ANDROID)
   target_link_libraries(merginmaps PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
+  set_property(TARGET merginmaps PROPERTY QT_ANDROID_EXTRA_LIBS
+      ${INPUT_SDK_PATH}/lib/libcrypto_1_1.so
+      ${INPUT_SDK_PATH}/lib/libssl_1_1.so)
 endif()
 
 
