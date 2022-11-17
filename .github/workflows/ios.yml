@@ -188,7 +188,7 @@ jobs:
             -DPLATFORM=OS \
             -DENABLE_ARC=0 \
             -DENABLE_BITCODE=0 \
-            -DDEPLOYMENT_TARGET=${ env.IOS_MIN_SDK_VERSION } \
+            -DDEPLOYMENT_TARGET=${{ env.IOS_MIN_SDK_VERSION }} \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios \
             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
             -DUSE_SERVER_API_KEY=TRUE \
