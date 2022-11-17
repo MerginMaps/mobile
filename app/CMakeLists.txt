@@ -301,6 +301,14 @@ endif()
 ## LINKING Mergin Maps Target
 ######################################################################
 
+# at least on Linux qgis_core needs to be linked before Qt libs, otherwise
+# one gets "DSO missing from command line" linker error about missing symbol
+# from qt6::core5compat library - probably if our code does not use anything
+# from that library, it is not added (linking order matters)
+target_link_libraries(merginmaps PUBLIC
+  QGIS::Core
+)
+
 target_link_libraries(merginmaps PUBLIC 
     Qt6::Quick Qt6::Qml Qt6::Xml Qt6::Concurrent 
     Qt6::Positioning Qt6::Sensors Qt6::QuickControls2 
@@ -323,7 +331,6 @@ endif()
 
 target_link_libraries(merginmaps PUBLIC
   mm_core 
-  QGIS::Core
   Geodiff::Geodiff 
   Proj::Proj
   ZXing::ZXing
@@ -347,18 +354,37 @@ target_link_libraries(merginmaps PUBLIC
   QGIS::provider_postgres
 )
 
+if (LINUX)
+  # needs to be added again because of the cycling dependencies between qgis_core
+  # and providers and auth methods
+  target_link_libraries(merginmaps PUBLIC
+    QGIS::Core
+  )
+endif()
+
 target_link_libraries(merginmaps PUBLIC
   Qtkeychain::Qtkeychain
   Qca::Qca
   Gdal::Gdal
   Pq::Pq
   Spatialite::Spatialite
-  Charset::Charset
 )
 
-if (NOT ANDROID) 
+if (MACOS OR IOS OR ANDROID)
+  target_link_libraries(merginmaps PUBLIC
+    Charset::Charset
+    Iconv::Iconv
+  )
+endif()
+
+if (MACOS OR IOS)
   target_link_libraries(merginmaps PUBLIC
     Bz2::Bz2
+  )
+endif()
+
+if (NOT ANDROID)
+  target_link_libraries(merginmaps PUBLIC
     Xml2::Xml2
   )
 endif()
@@ -372,7 +398,6 @@ target_link_libraries(merginmaps PUBLIC
   Exiv2::Exiv2 Exiv2::Exiv2-xmp
   Tiff::Tiff
   Sqlite3::Sqlite3
-  Iconv::Iconv
   ZLIB::ZLIB
   Zip::Zip
   WebP::WebP

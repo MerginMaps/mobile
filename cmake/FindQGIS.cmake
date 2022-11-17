@@ -7,7 +7,7 @@ if(APPLE)
 else()
     set(QGIS_DEFAULT_INCLUDE_PATH "${INPUT_SDK_PATH}/include/qgis")
     set(QGIS_DEFAULT_LIB_PATH "${INPUT_SDK_PATH}/lib")
-    set(QGIS_DEFAULT_PROVIDER_PATH "${QGIS_DEFAULT_LIB_PATH}")
+    set(QGIS_DEFAULT_PROVIDER_PATH "${QGIS_DEFAULT_LIB_PATH}/qgis/plugins")
 endif()
 
 

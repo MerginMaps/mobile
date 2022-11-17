@@ -3,7 +3,7 @@
 # not in linux input-SDK
 
 if (LINUX)
-  find_path(Pq_INCLUDE_DIR NAMES postgres_ext.h)
+  find_path(Pq_INCLUDE_DIR postgres_ext.h /usr/include/postgresql)
   find_library(Pq_LIBRARY NAMES pq)
 else()   
   find_path(Pq_INCLUDE_DIR postgres_ext.h

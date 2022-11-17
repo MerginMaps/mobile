@@ -3,7 +3,7 @@
 # not in linux input-SDK
 
 if (LINUX)
-  find_path(Exiv2_INCLUDE_DIR NAMES exif.hpp)
+  find_path(Exiv2_INCLUDE_DIR NAMES exiv2/exiv2.hpp)
   find_library(Exiv2_LIBRARY NAMES exiv2)
   find_library(Exiv2_xmp_LIBRARY NAMES exiv2-xmp)
 else()
