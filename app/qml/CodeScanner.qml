@@ -11,67 +11,64 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtMultimedia
-import lc 1.0
+import lc 1.0 as InputClass
 
 import "./components"
 
-Drawer {
-  id: codeReader
-  palette.dark: InputStyle.fontColor // changes busy indicator color
+Item {
+  id: root
 
-  signal scanFinished(var value)
+  signal backButtonClicked()
+  signal scanFinished( var data )
 
-  onVisibleChanged: {
-    qrcodeScanner.setProcessing( codeReader.visible )
-  }
+  Page {
+    id: scannerPage
 
-  CodeScanner {
-    id: qrcodeScanner
+    anchors.fill: parent
 
-    videoSink: videoOutput.videoSink
+    header: PanelHeader {
+      id: scannerPageHeader
 
-    captureRect: Qt.rect(root.width / 4, root.height / 4, root.width / 2, root.height / 2)
-
-    onCapturedStringChanged: function( captured ) {
-      codeReader.scanFinished( captured )
-      codeReaderTimer.start()
-    }
-  }
-
-  onHeightChanged: {
-    qrcodeScanner.captureRect = Qt.rect(width / 4, height / 4, width / 2, height / 2)
-  }
-
-  onWidthChanged: {
-    qrcodeScanner.captureRect = Qt.rect(width / 4, height / 4, width / 2, height / 2)
-  }
-
-  ColumnLayout {
-    width: codeReader.width
-    height: codeReader.height
-    spacing: 0
-
-    PanelHeader {
-      id: header
-      Layout.fillWidth: true
+      width: parent.width
       height: InputStyle.rowHeightHeader
+
+      color: InputStyle.clrPanelMain
       rowHeight: InputStyle.rowHeightHeader
-      titleText: qsTr("Scan code")
+
+      titleText: qsTr( "Scan code" )
+
+      onBack: {
+        qrcodeScanner.setProcessing( false )
+        root.backButtonClicked()
+       }
+
       withBackButton: true
-      onBack: codeReader.visible = false
+    }
+
+    InputClass.CodeScanner {
+      id: qrcodeScanner
+
+      videoSink: videoOutput.videoSink
+
+      captureRect: Qt.rect(root.width / 4, root.height / 4, root.width / 2, root.height / 2)
+
+      onCapturedStringChanged: function( captured ) {
+        qrcodeScanner.setProcessing( false )
+        root.scanFinished( captured )
+      }
     }
 
     Rectangle {
       id: videoContainer
-      width: codeReader.width
-      height: codeReader.height - header.height
+      width: root.width
+      height: root.height - header.height
       color: InputStyle.clrPanelBackground
 
       VideoOutput {
         id: videoOutput
 
-        width: codeReader.width
-        height: codeReader.height
+        width: root.width
+        height: root.height
         focus: visible
         fillMode: VideoOutput.PreserveAspectCrop
       }
@@ -79,28 +76,10 @@ Drawer {
       CodeScannerOverlay {
         id: scannerOverlay
 
-        rectSize: Math.min(codeReader.height, codeReader.width) * 0.8
-        width: codeReader.width
-        height: codeReader.height - header.height
+        rectSize: Math.min(root.height, root.width) * 0.8
+        width: root.width
+        height: root.height - header.height
       }
     }
-  }
-
-  BusyIndicator {
-    id: codeReaderBusyIndicator
-    width: codeReader.width / 8
-    height: width
-    running: codeReaderTimer.running
-    visible: running
-    anchors.centerIn: parent
-    z: codeReader.z + 1
-  }
-
-  Timer {
-    id: codeReaderTimer
-    interval: 1000
-    triggeredOnStart: false
-    repeat: false
-    onTriggered: codeReader.visible = false
   }
 }

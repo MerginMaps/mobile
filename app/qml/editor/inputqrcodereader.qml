@@ -11,6 +11,9 @@ import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 
+import lc 1.0
+import ".."
+
 AbstractEditor {
   id: root
 
@@ -19,7 +22,6 @@ AbstractEditor {
   /*required*/ property bool isReadOnly: parent.readOnly
 
   signal editorValueChanged( var newValue, bool isNull )
-  signal importDataRequested()
 
   height: textArea.topPadding + textArea.bottomPadding + textArea.contentHeight
 
@@ -72,5 +74,29 @@ AbstractEditor {
     }
   }
 
-  onRightActionClicked: root.importDataRequested()
+  onRightActionClicked: {
+    if ( root.parent.readOnly ) return
+
+    let page = root.parent.formView.push( readerComponent, {} )
+    page.forceActiveFocus()
+  }
+
+  Component {
+    id: readerComponent
+
+    CodeScanner {
+      id: codeScannerPage
+
+      focus: true
+
+      onBackButtonClicked: {
+        root.parent.formView.pop()
+      }
+
+      onScanFinished: function( captured ) {
+        root.editorValueChanged( captured, false )
+        root.parent.formView.pop()
+      }
+    }
+  }
 }
