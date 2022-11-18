@@ -20,6 +20,7 @@ AbstractEditor {
   /*required*/ property var config: parent.config
   /*required*/ property var parentValue: parent.value
   /*required*/ property bool isReadOnly: parent.readOnly
+  property StackView formView: parent.formView
 
   signal editorValueChanged( var newValue, bool isNull )
 
@@ -77,7 +78,7 @@ AbstractEditor {
   onRightActionClicked: {
     if ( root.parent.readOnly ) return
 
-    let page = root.parent.formView.push( readerComponent, {} )
+    let page = root.formView.push( readerComponent, {} )
     page.forceActiveFocus()
   }
 
@@ -90,12 +91,12 @@ AbstractEditor {
       focus: true
 
       onBackButtonClicked: {
-        root.parent.formView.pop()
+        root.formView.pop()
       }
 
       onScanFinished: function( captured ) {
         root.editorValueChanged( captured, false )
-        root.parent.formView.pop()
+        root.formView.pop()
       }
     }
   }

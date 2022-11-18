@@ -29,11 +29,11 @@ Item {
         model: [0, 1, 3, 2]
 
         delegate: Item {
-          property var length: 30  * __dp
-          property var borderWidth: 5 * __dp
-          property var animationDuration: 1000
-          property var primaryColor: InputStyle.fontColor
-          property var secondaryColor: InputStyle.fontColorBright
+          property real length: 30  * __dp
+          property real borderWidth: 5 * __dp
+          property int animationDuration: 1000
+          property color primaryColor: InputStyle.fontColor
+          property color secondaryColor: InputStyle.fontColorBright
 
           id: cornerItem
           Layout.fillHeight: true

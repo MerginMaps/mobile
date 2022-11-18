@@ -165,7 +165,7 @@ bool AttributeFormModel::setData( const QModelIndex &index, const QVariant &valu
 
     case AttributeValue:
     {
-      const FormItem * item = mController->formItem( uuid );
+      const FormItem *item = mController->formItem( uuid );
       if ( mController->formValue( item->fieldIndex() ) == value )
       {
         return false;
