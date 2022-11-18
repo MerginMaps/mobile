@@ -615,14 +615,14 @@ ApplicationWindow {
       onButtonClicked: function(button, role) {
         switch (button) {
           case MessageDialog.Close:
-            projectLoadingScreen.visible = false
             projectErrorDialog.close()
-            projectPanel.openPanel()
             break;
           case MessageDialog.Help:
             Qt.openUrlExternally(__inputHelp.projectLoadingErrorHelpLink)
             break;
         }
+        projectLoadingScreen.visible = false
+        projectPanel.openPanel()
       }
     }
 
