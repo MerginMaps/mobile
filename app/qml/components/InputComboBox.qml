@@ -30,7 +30,10 @@ ComboBox {
     propagateComposedEvents: true
 
     onClicked: mouse.accepted = false
-    onPressed: { forceActiveFocus(); mouse.accepted = false; }
+    onPressed: function( mouse ) {
+      forceActiveFocus();
+      mouse.accepted = false;
+    }
     onReleased: mouse.accepted = false;
     onDoubleClicked: mouse.accepted = false;
     onPositionChanged: mouse.accepted = false;

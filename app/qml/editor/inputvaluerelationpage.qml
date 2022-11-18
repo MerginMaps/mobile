@@ -136,7 +136,7 @@ AbstractEditor {
         root.stackView.pop()
       }
 
-      onSelectionFinished: {
+      onSelectionFinished: function( featureIds ) {
         if ( root.allowMultivalue )
         {
           let isNull = featureIds.length === 0
