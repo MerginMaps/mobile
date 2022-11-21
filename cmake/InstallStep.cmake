@@ -41,27 +41,6 @@ else ()
   message(FATAL_ERROR "unknown deployment platform")
 endif ()
 
-# https://doc-snapshots.qt.io/qt6-dev/qt-deploy-runtime-dependencies.html Replace with
-# qt_generate_deploy_script from QT 6.5.x The following script must only be executed at
-# install time Note: This command is in technology preview and may change in future
-# releases. (QT 6.4.x)
-set(deploy_script "${CMAKE_CURRENT_BINARY_DIR}/deploy_merginmaps.cmake")
-
-file(
-  GENERATE
-  OUTPUT ${deploy_script}
-  CONTENT
-    "
-# Including the file pointed to by QT_DEPLOY_SUPPORT ensures the generated
-# deployment script has access to qt_deploy_runtime_dependencies()
-include(\"${QT_DEPLOY_SUPPORT}\")
-qt_deploy_runtime_dependencies(
-    EXECUTABLE \"${executable_path}\"
-    GENERATE_QT_CONF
-    VERBOSE
-)"
-)
-
 # Binary
 install(TARGETS merginmaps BUNDLE DESTINATION .)
 
@@ -70,4 +49,27 @@ install(DIRECTORY app/android/assets/demo-projects DESTINATION ${ASSETS_DIR})
 install(DIRECTORY app/android/assets/qgis-data DESTINATION ${ASSETS_DIR})
 
 # Add its runtime dependencies
-install(SCRIPT ${deploy_script})
+if (NOT LINUX)
+  # https://doc-snapshots.qt.io/qt6-dev/qt-deploy-runtime-dependencies.html Replace with
+  # qt_generate_deploy_script from QT 6.5.x The following script must only be executed at
+  # install time Note: This command is in technology preview and may change in future
+  # releases. (QT 6.4.x)
+  set(deploy_script "${CMAKE_CURRENT_BINARY_DIR}/deploy_merginmaps.cmake")
+
+  file(
+    GENERATE
+    OUTPUT ${deploy_script}
+    CONTENT
+      "
+    # Including the file pointed to by QT_DEPLOY_SUPPORT ensures the generated
+    # deployment script has access to qt_deploy_runtime_dependencies()
+    include(\"${QT_DEPLOY_SUPPORT}\")
+    qt_deploy_runtime_dependencies(
+        EXECUTABLE \"${executable_path}\"
+        GENERATE_QT_CONF
+        VERBOSE
+    )"
+  )
+
+  install(SCRIPT ${deploy_script})
+endif ()
