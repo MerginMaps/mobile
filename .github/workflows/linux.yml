@@ -132,7 +132,7 @@ jobs:
              -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-             ..
+             -S ..
              
           make
 
