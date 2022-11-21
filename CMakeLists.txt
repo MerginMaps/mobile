@@ -27,13 +27,17 @@ if(UNIX AND NOT ANDROID AND NOT APPLE)
     set(LINUX TRUE)
 endif()   
 
+if(MSCV)
+    set(WIN TRUE)
+endif()
+
 if (MACOS)
     set(platform "macOS")
 elseif(IOS)
     set(platform "iOS")
 elseif(ANDROID)
     set(platform "android")
-elseif(MSCV)
+elseif(WIN)
     set(platform "windows")
 elseif(LINUX)
     set(platform "linux")
@@ -254,3 +258,9 @@ endif()
 
 add_subdirectory(core)
 add_subdirectory(app)
+
+######################################################################
+## INSTALL
+######################################################################
+
+include(InstallStep)
