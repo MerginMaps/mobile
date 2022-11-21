@@ -144,7 +144,8 @@ jobs:
              -DINPUT_SDK_PATH:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk ^
              -DQGIS_QUICK_DATA_PATH=INPUT ^
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ^
-             ..
+             -S ${{ steps.vars.outputs.WORKSPACE_DIR }}/input ^
+             -B .
              
           nmake
           

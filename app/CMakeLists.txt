@@ -451,3 +451,11 @@ qt_add_qml_module(
   QML_FILES ${MM_QML_SRCS}
   RESOURCE_PREFIX /com.merginmaps/imports
 )
+
+# ########################################################################################
+# ANDROID specific
+# ########################################################################################
+if (ANDROID)
+  qt_android_generate_deployment_settings(merginmaps)
+  qt_android_add_apk_target(merginmaps)
+endif ()

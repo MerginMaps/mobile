@@ -43,6 +43,7 @@ jobs:
         run: |
           brew install lcov
           brew install ccache
+          brew install ninja
 
       - name: Extract Mergin API_KEY
         env:
@@ -120,22 +121,21 @@ jobs:
       # Build Input App
       - name: build Input (Debug)
         run: |
-          mkdir -p install-Input
           mkdir -p build-Input
           cd build-Input
           
           cmake \
              -DCMAKE_BUILD_TYPE=Debug \
              -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
-             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
              -DUSE_SERVER_API_KEY=TRUE \
              -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
              -DCOVERAGE=TRUE \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-             ..
+             -GNinja \
+             -S ../input
              
-          make
+          ninja
 
       - name: run tests
         run: |
@@ -157,7 +157,7 @@ jobs:
 
       - name: build Input (Release)
         run: |
-          mkdir -p install-Input-rel
+          mkdir -p install-Input
           mkdir -p build-Input-rel
           cd build-Input-rel
 
@@ -169,9 +169,11 @@ jobs:
              -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-             ..
-             
-          make
+             -GNinja \
+             -S ../input
+          
+          ninja  
+          ninja install
 
       - name: Get TimeStamp
         id: time
@@ -184,8 +186,8 @@ jobs:
         run: |
           INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.time }}-${{ github.run_number }}.tar.gz
           echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
-          cd ${{ github.workspace }}/build-Input-rel
-          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./Input.app
+          cd ${{ github.workspace }}/install-Input
+          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} "./Mergin Maps.app"
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v2

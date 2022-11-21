@@ -134,10 +134,11 @@ jobs:
              -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+             -GNinja \
              -S ../input
              
-          make -j2
-          make install          
+          ninja
+          ninja install          
 
       - name: Get TimeStamp
         id: time
@@ -152,8 +153,8 @@ jobs:
           echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
           
           cd ${{ github.workspace }}/install-Input
-          ls -la .
-          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./app/merginmaps
+          find .
+          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v2

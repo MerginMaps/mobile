@@ -3,7 +3,7 @@
 set(QT_BIN_DIR ${Qt6_DIR}/../../../bin)
 if (LINUX)
   find_program(QTDEPLOY_EXECUTABLE linuxdeploy linuxdeploy-x86_64.AppImage)
-  set(ASSETS_DIR "data")
+  set(ASSETS_DIR "share/input")
   set(executable_path "\${QT_DEPLOY_BIN_DIR}/$<TARGET_FILE_NAME:merginmaps>")
 elseif (MACOS)
   find_program(

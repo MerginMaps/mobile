@@ -167,7 +167,7 @@ jobs:
 
             echo "Build number: ${CF_BUNDLE_VERSION}"
 
-      - name: Create build system with qmake
+      - name: Create build system with cmake
         run: |
           INPUT_DIR=`pwd`
 
@@ -199,7 +199,8 @@ jobs:
             -GNinja \
             -DQT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            ../input
+            -S $INPUT_DIR \
+            -B ./
 
           #TODO echo -e "  QMAKE_IOS_DEPLOYMENT_TARGET = ${{ env.IOS_MIN_SDK_VERSION }}"  >> ./app/config.pri
           #TODO echo -e "  QMAKE_CXX = ${{ github.workspace }}/scripts/ci/ios/ccache_clang"  >> ./app/config.pri
