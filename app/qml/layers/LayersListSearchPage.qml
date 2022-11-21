@@ -50,7 +50,9 @@ Page {
       topMargin: InputStyle.panelMarginV2
     }
 
-    onSearchTextChanged: root.searchTextChanged( searchText )
+    onSearchTextChanged: function( searchText ) {
+      root.searchTextChanged( searchText )
+    }
   }
 
   LayersListV2 {

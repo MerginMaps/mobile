@@ -68,7 +68,7 @@ Drawer {
         cellHeight: InputStyle.rowHeight
         borderWidth: 1
 
-        onListItemClicked: {
+        onListItemClicked: function( layerId ) {
           __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
           layerPanel.visible = false
         }

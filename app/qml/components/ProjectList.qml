@@ -304,7 +304,6 @@ Item {
         controllerModel.syncProject( relatedProjectId )
       }
 
-      console.log( "Closed via button clicked" )
       downloadProjectDialog.close()
     }
   }
