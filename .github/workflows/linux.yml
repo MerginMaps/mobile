@@ -136,7 +136,8 @@ jobs:
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
              -S ../input
              
-          make
+          make -j2
+          make install          
 
       - name: Get TimeStamp
         id: time
@@ -149,8 +150,10 @@ jobs:
         run: |
           INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.time }}-${{ github.run_number }}.tar.gz
           echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
-          cd ${{ github.workspace }}/build-Input
-          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./Input
+          
+          cd ${{ github.workspace }}/install-Input
+          ls -la .
+          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./app/merginmaps
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v2
