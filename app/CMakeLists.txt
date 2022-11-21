@@ -1,6 +1,6 @@
-######################################################################
-## SOURCES of Mergin Maps Target
-######################################################################
+# ########################################################################################
+# SOURCES of Mergin Maps Target
+# ########################################################################################
 
 set(MM_SRCS
     attributes/attributecontroller.cpp
@@ -12,7 +12,6 @@ set(MM_SRCS
     attributes/attributetabproxymodel.cpp
     attributes/fieldvalidator.cpp
     attributes/rememberattributescontroller.cpp
-    
     layer/layerdetaildata.cpp
     layer/layerdetaillegendimageprovider.cpp
     layer/layertreeflatmodel.cpp
@@ -21,19 +20,15 @@ set(MM_SRCS
     layer/layertreemodel.cpp
     layer/layertreemodelpixmapprovider.cpp
     layer/layertreesortfiltermodel.cpp
-    
     map/inputcoordinatetransformer.cpp
     map/inputmapcanvasmap.cpp
     map/inputmapsettings.cpp
     map/inputmaptransform.cpp
-    
     maptools/abstractmaptool.cpp
     maptools/recordingmaptool.cpp
     maptools/splittingmaptool.cpp
-    
     ios/iosimagepicker.cpp
     ios/iosutils.cpp
-    
     position/abstractpositionprovider.cpp
     position/internalpositionprovider.cpp
     position/mapposition.cpp
@@ -41,7 +36,6 @@ set(MM_SRCS
     position/positionkit.cpp
     position/positionprovidersmodel.cpp
     position/simulatedpositionprovider.cpp
-    
     activelayer.cpp
     activeproject.cpp
     androidutils.cpp
@@ -89,7 +83,6 @@ set(MM_HDRS
     attributes/attributetabproxymodel.h
     attributes/fieldvalidator.h
     attributes/rememberattributescontroller.h
-    
     layer/layerdetaildata.h
     layer/layerdetaillegendimageprovider.h
     layer/layertreeflatmodel.h
@@ -98,19 +91,15 @@ set(MM_HDRS
     layer/layertreemodel.h
     layer/layertreemodelpixmapprovider.h
     layer/layertreesortfiltermodel.h
-    
     map/inputcoordinatetransformer.h
     map/inputmapcanvasmap.h
     map/inputmapsettings.h
     map/inputmaptransform.h
-    
     maptools/abstractmaptool.h
     maptools/recordingmaptool.h
     maptools/splittingmaptool.h
-    
     ios/iosimagepicker.h
     ios/iosutils.h
-    
     position/abstractpositionprovider.h
     position/internalpositionprovider.h
     position/mapposition.h
@@ -118,7 +107,6 @@ set(MM_HDRS
     position/positionkit.h
     position/positionprovidersmodel.h
     position/simulatedpositionprovider.h
-    
     activelayer.h
     activeproject.h
     androidutils.h
@@ -157,291 +145,291 @@ set(MM_HDRS
 )
 
 if (HAVE_BLUETOOTH)
-    set(MM_SRCS ${MM_SRCS} 
-        position/bluetoothpositionprovider.cpp
-    )
-    
-    set(MM_HDRS ${MM_HDRS} 
-        position/bluetoothpositionprovider.h
-    )
-endif()
+  set(MM_SRCS ${MM_SRCS} position/bluetoothpositionprovider.cpp)
+
+  set(MM_HDRS ${MM_HDRS} position/bluetoothpositionprovider.h)
+endif ()
 
 if (ENABLE_TESTS)
-    set(MM_SRCS ${MM_SRCS} 
-        test/inputtests.cpp
-        test/testattributecontroller.cpp
-        test/testattributepreviewcontroller.cpp
-        test/testcoreutils.cpp
-        test/testformeditors.cpp
-        test/testidentifykit.cpp
-        test/testimageutils.cpp
-        test/testingpurchasingbackend.cpp
-        test/testlayertree.cpp
-        test/testlinks.cpp
-        test/testmaptools.cpp
-        test/testmerginapi.cpp
-        test/testmodels.cpp
-        test/testposition.cpp
-        test/testpurchasing.cpp
-        test/testrememberattributescontroller.cpp
-        test/testscalebarkit.cpp
-        test/testutils.cpp
-        test/testutilsfunctions.cpp
-        test/testvariablesmanager.cpp
-    )
-    
-    set(MM_HDRS ${MM_HDRS} 
-        test/inputtests.h
-        test/testattributecontroller.h
-        test/testattributepreviewcontroller.h
-        test/testcoreutils.h
-        test/testformeditors.h
-        test/testidentifykit.h
-        test/testimageutils.h
-        test/testingpurchasingbackend.h
-        test/testlayertree.h
-        test/testlinks.h
-        test/testmaptools.h
-        test/testmerginapi.h
-        test/testmodels.h
-        test/testposition.h
-        test/testpurchasing.h
-        test/testrememberattributescontroller.h
-        test/testscalebarkit.h
-        test/testutils.h
-        test/testutilsfunctions.h
-        test/testvariablesmanager.h
-    )
-endif()
-
-if(IOS) 
-  set(MM_HDRS ${MM_HDRS} 
-    ios/iosinterface.h 
-    ios/iosviewdelegate.h
+  set(MM_SRCS
+      ${MM_SRCS}
+      test/inputtests.cpp
+      test/testattributecontroller.cpp
+      test/testattributepreviewcontroller.cpp
+      test/testcoreutils.cpp
+      test/testformeditors.cpp
+      test/testidentifykit.cpp
+      test/testimageutils.cpp
+      test/testingpurchasingbackend.cpp
+      test/testlayertree.cpp
+      test/testlinks.cpp
+      test/testmaptools.cpp
+      test/testmerginapi.cpp
+      test/testmodels.cpp
+      test/testposition.cpp
+      test/testpurchasing.cpp
+      test/testrememberattributescontroller.cpp
+      test/testscalebarkit.cpp
+      test/testutils.cpp
+      test/testutilsfunctions.cpp
+      test/testvariablesmanager.cpp
   )
-  
-  set(MM_SRCS ${MM_SRCS}
-    ios/iosinterface.mm
-    ios/iosviewdelegate.mm
-    ios/iosimagepicker.mm
-    ios/iosutils.mm
+
+  set(MM_HDRS
+      ${MM_HDRS}
+      test/inputtests.h
+      test/testattributecontroller.h
+      test/testattributepreviewcontroller.h
+      test/testcoreutils.h
+      test/testformeditors.h
+      test/testidentifykit.h
+      test/testimageutils.h
+      test/testingpurchasingbackend.h
+      test/testlayertree.h
+      test/testlinks.h
+      test/testmaptools.h
+      test/testmerginapi.h
+      test/testmodels.h
+      test/testposition.h
+      test/testpurchasing.h
+      test/testrememberattributescontroller.h
+      test/testscalebarkit.h
+      test/testutils.h
+      test/testutilsfunctions.h
+      test/testvariablesmanager.h
   )
-endif()
+endif ()
 
-if(HAVE_APPLE_PURCHASING)
-    set(MM_HDRS ${MM_HDRS} 
-      ios/iospurchasing.h
-    )
-  
-    set(MM_SRCS ${MM_SRCS}
-      ios/iospurchasing.mm
-    )
-endif()
+if (IOS)
+  set(MM_HDRS ${MM_HDRS} ios/iosinterface.h ios/iosviewdelegate.h)
 
-qt_add_resources(MM_SRCS 
-  img/pics.qrc 
-  i18n/input_i18n.qrc 
+  set(MM_SRCS
+      ${MM_SRCS}
+      ios/iosinterface.mm
+      ios/iosviewdelegate.mm
+      ios/iosimagepicker.mm
+      ios/iosutils.mm
+  )
+endif ()
+
+if (HAVE_APPLE_PURCHASING)
+  set(MM_HDRS ${MM_HDRS} ios/iospurchasing.h)
+
+  set(MM_SRCS ${MM_SRCS} ios/iospurchasing.mm)
+endif ()
+
+qt_add_resources(
+  MM_SRCS
+  img/pics.qrc
+  i18n/input_i18n.qrc
   fonts/fonts.qrc
 )
 
-######################################################################
-## Mergin Maps Target
-######################################################################
+# ########################################################################################
+# Mergin Maps Target
+# ########################################################################################
 
-qt_add_executable(merginmaps ${MM_SRCS} ${MM_HDRS} $<TARGET_OBJECTS:mm_core> main.cpp)
-target_include_directories(merginmaps PUBLIC 
-  ${CMAKE_CURRENT_SOURCE_DIR}/attributes 
-  ${CMAKE_CURRENT_SOURCE_DIR}/map 
-  ${CMAKE_CURRENT_SOURCE_DIR}/layer 
-  ${CMAKE_CURRENT_SOURCE_DIR}/maptools 
-  ${CMAKE_CURRENT_SOURCE_DIR}/position
+qt_add_executable(
+  merginmaps
+  ${MM_SRCS}
+  ${MM_HDRS}
+  $<TARGET_OBJECTS:mm_core>
+  main.cpp
+)
+target_include_directories(
+  merginmaps
+  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/attributes
+         ${CMAKE_CURRENT_SOURCE_DIR}/map
+         ${CMAKE_CURRENT_SOURCE_DIR}/layer
+         ${CMAKE_CURRENT_SOURCE_DIR}/maptools
+         ${CMAKE_CURRENT_SOURCE_DIR}/position
 )
 
 if (APPLE)
-  set_target_properties(merginmaps PROPERTIES
-    OUTPUT_NAME "Mergin Maps"
-    MACOSX_BUNDLE TRUE
-    MACOSX_RPATH TRUE
-    MACOSX_BUNDLE_GUI_IDENTIFIER com.merginmaps.input
-    # XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
-    # RESOURCE "${RESOURCE_FILES}"
-    XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
-    XCODE_ATTRIBUTE_EXECUTABLE_NAME "merginmaps"
+  set_target_properties(
+    merginmaps
+    PROPERTIES OUTPUT_NAME "Mergin Maps"
+               MACOSX_BUNDLE TRUE
+               MACOSX_RPATH TRUE
+               MACOSX_BUNDLE_GUI_IDENTIFIER com.merginmaps.input
+               # XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
+               # RESOURCE "${RESOURCE_FILES}"
+               XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
+               XCODE_ATTRIBUTE_EXECUTABLE_NAME "merginmaps"
   )
-  
-  # IOS: TODO QMAKE_TARGET_BUNDLE_PREFIX = LutraConsultingLtd
-  # IOS: TODO QMAKE_INFO_PLIST = ios/Info.plist
-  # demo projects
-  # demoFiles.files = $$files(android/assets/demo-projects/*)
-  # demoFiles.path = demo-projects
-  # QMAKE_BUNDLE_DATA += demoFiles
 
-  # qgis resources
-  # crsFiles.files = $$files(android/assets/qgis-data/resources/*)
-  # crsFiles.path = qgis-data/resources
-  # QMAKE_BUNDLE_DATA += crsFiles
+  # IOS: TODO QMAKE_TARGET_BUNDLE_PREFIX = LutraConsultingLtd IOS: TODO QMAKE_INFO_PLIST =
+  # ios/Info.plist demo projects demoFiles.files = $$files(android/assets/demo-projects/*)
+  # demoFiles.path = demo-projects QMAKE_BUNDLE_DATA += demoFiles
 
-  # proj
-  # projFiles.files = $$files(android/assets/qgis-data/proj/*)
-  # projFiles.path = qgis-data/proj
-  # QMAKE_BUNDLE_DATA += projFiles
+  # qgis resources crsFiles.files = $$files(android/assets/qgis-data/resources/*)
+  # crsFiles.path = qgis-data/resources QMAKE_BUNDLE_DATA += crsFiles
 
-  # app icon
-  # QMAKE_ASSET_CATALOGS = $$PWD/ios/Images.xcassets
+  # proj projFiles.files = $$files(android/assets/qgis-data/proj/*) projFiles.path =
+  # qgis-data/proj QMAKE_BUNDLE_DATA += projFiles
+
+  # app icon QMAKE_ASSET_CATALOGS = $$PWD/ios/Images.xcassets
   # QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
 
-  # launch screen
-  # app_launch_images.files = $$PWD/ios/launchscreen/InputScreen.xib $$files($$PWD/ios/launchscreen/*.png)
-  # QMAKE_BUNDLE_DATA += app_launch_images
-endif()
+  # launch screen app_launch_images.files = $$PWD/ios/launchscreen/InputScreen.xib
+  # $$files($$PWD/ios/launchscreen/*.png) QMAKE_BUNDLE_DATA += app_launch_images
+endif ()
 
 # TODO: IOS QMAKE_TARGET_BUNDLE_PREFIX = LutraConsultingLtd
 
-######################################################################
-## LINKING Mergin Maps Target
-######################################################################
+# ########################################################################################
+# LINKING Mergin Maps Target
+# ########################################################################################
 
-# at least on Linux qgis_core needs to be linked before Qt libs, otherwise
-# one gets "DSO missing from command line" linker error about missing symbol
-# from qt6::core5compat library - probably if our code does not use anything
-# from that library, it is not added (linking order matters)
-target_link_libraries(merginmaps PUBLIC
-  QGIS::Core
-)
+# at least on Linux qgis_core needs to be linked before Qt libs, otherwise one gets "DSO
+# missing from command line" linker error about missing symbol from qt6::core5compat
+# library - probably if our code does not use anything from that library, it is not added
+# (linking order matters)
+target_link_libraries(merginmaps PUBLIC QGIS::Core)
 
-target_link_libraries(merginmaps PUBLIC 
-    Qt6::Quick Qt6::Qml Qt6::Xml Qt6::Concurrent 
-    Qt6::Positioning Qt6::Sensors Qt6::QuickControls2 
-    Qt6::Network Qt6::Svg Qt6::Sql Qt6::Core Qt6::Core5Compat) # TODO: OpenGl?
+target_link_libraries(
+  merginmaps
+  PUBLIC Qt6::Quick
+         Qt6::Qml
+         Qt6::Xml
+         Qt6::Concurrent
+         Qt6::Positioning
+         Qt6::Sensors
+         Qt6::QuickControls2
+         Qt6::Network
+         Qt6::Svg
+         Qt6::Sql
+         Qt6::Core
+         Qt6::Core5Compat
+) # TODO: OpenGl?
 
-if(HAVE_BLUETOOTH)
-    target_link_libraries(merginmaps PUBLIC Qt6::Bluetooth)
-endif()
+if (HAVE_BLUETOOTH)
+  target_link_libraries(merginmaps PUBLIC Qt6::Bluetooth)
+endif ()
 
 target_link_libraries(merginmaps PUBLIC Qt6::Multimedia Qt6::Widgets)
 if (NOT IOS)
-  # https://doc.qt.io/qt-6/qtprintsupport-index.html
-  # Qt Print Support is not available on iOS.
-  target_link_libraries(merginmaps PUBLIC  Qt6::PrintSupport)
-endif()
+  # https://doc.qt.io/qt-6/qtprintsupport-index.html Qt Print Support is not available on
+  # iOS.
+  target_link_libraries(merginmaps PUBLIC Qt6::PrintSupport)
+endif ()
 
 if (ANDROID)
-  target_link_libraries(merginmaps PUBLIC  Qt6::CorePrivate)
-endif()
+  target_link_libraries(merginmaps PUBLIC Qt6::CorePrivate)
+endif ()
 
-target_link_libraries(merginmaps PUBLIC
-  mm_core 
-  Geodiff::Geodiff 
-  Proj::Proj
-  ZXing::ZXing
+target_link_libraries(
+  merginmaps
+  PUBLIC mm_core
+         Geodiff::Geodiff
+         Proj::Proj
+         ZXing::ZXing
 )
 
-target_link_libraries(merginmaps PUBLIC
-  QGIS::authmethod_basic
-  QGIS::authmethod_esritoken
-  QGIS::authmethod_identcert
-  QGIS::authmethod_oauth2
-  QGIS::authmethod_pkcs12
-  QGIS::authmethod_pkipaths
-  QGIS::provider_arcgisfeatureserver
-  QGIS::provider_arcgismapserver
-  QGIS::provider_delimitedtext
-  QGIS::provider_spatialite
-  QGIS::provider_virtuallayer
-  QGIS::provider_wcs
-  QGIS::provider_wfs
-  QGIS::provider_wms
-  QGIS::provider_postgres
+target_link_libraries(
+  merginmaps
+  PUBLIC QGIS::authmethod_basic
+         QGIS::authmethod_esritoken
+         QGIS::authmethod_identcert
+         QGIS::authmethod_oauth2
+         QGIS::authmethod_pkcs12
+         QGIS::authmethod_pkipaths
+         QGIS::provider_arcgisfeatureserver
+         QGIS::provider_arcgismapserver
+         QGIS::provider_delimitedtext
+         QGIS::provider_spatialite
+         QGIS::provider_virtuallayer
+         QGIS::provider_wcs
+         QGIS::provider_wfs
+         QGIS::provider_wms
+         QGIS::provider_postgres
 )
 
 if (LINUX)
-  # needs to be added again because of the cycling dependencies between qgis_core
-  # and providers and auth methods
-  target_link_libraries(merginmaps PUBLIC
-    QGIS::Core
-  )
-endif()
+  # needs to be added again because of the cycling dependencies between qgis_core and
+  # providers and auth methods
+  target_link_libraries(merginmaps PUBLIC QGIS::Core)
+endif ()
 
-target_link_libraries(merginmaps PUBLIC
-  Qtkeychain::Qtkeychain
-  Qca::Qca
-  Gdal::Gdal
-  Pq::Pq
-  Spatialite::Spatialite
+target_link_libraries(
+  merginmaps
+  PUBLIC Qtkeychain::Qtkeychain
+         Qca::Qca
+         Gdal::Gdal
+         Pq::Pq
+         Spatialite::Spatialite
 )
 
-if (MACOS OR IOS OR ANDROID)
-  target_link_libraries(merginmaps PUBLIC
-    Charset::Charset
-    Iconv::Iconv
-  )
-endif()
+if (MACOS
+    OR IOS
+    OR ANDROID
+)
+  target_link_libraries(merginmaps PUBLIC Charset::Charset Iconv::Iconv)
+endif ()
 
 if (MACOS OR IOS)
-  target_link_libraries(merginmaps PUBLIC
-    Bz2::Bz2
-  )
-endif()
+  target_link_libraries(merginmaps PUBLIC Bz2::Bz2)
+endif ()
 
 if (NOT ANDROID)
-  target_link_libraries(merginmaps PUBLIC
-    Xml2::Xml2
-  )
-endif()
+  target_link_libraries(merginmaps PUBLIC Xml2::Xml2)
+endif ()
 
-target_link_libraries(merginmaps PUBLIC
-  Spatialindex::Spatialindex
-  Geos::Geos Geos::Geos-c
-  Protobuf::Protobuf-lite 
-  Expat::Expat
-  Freexl::Freexl
-  Exiv2::Exiv2 Exiv2::Exiv2-xmp
-  Tiff::Tiff
-  Sqlite3::Sqlite3
-  ZLIB::ZLIB
-  Zip::Zip
-  WebP::WebP
-  Curl::Curl
-  Jpeg::Jpeg
+target_link_libraries(
+  merginmaps
+  PUBLIC Spatialindex::Spatialindex
+         Geos::Geos
+         Geos::Geos-c
+         Protobuf::Protobuf-lite
+         Expat::Expat
+         Freexl::Freexl
+         Exiv2::Exiv2
+         Exiv2::Exiv2-xmp
+         Tiff::Tiff
+         Sqlite3::Sqlite3
+         ZLIB::ZLIB
+         Zip::Zip
+         WebP::WebP
+         Curl::Curl
+         Jpeg::Jpeg
 )
 
 if (NOT LINUX)
   target_link_libraries(merginmaps PUBLIC Tasn1::Tasn1)
-endif()
+endif ()
 
 # https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md#Unwinding
 # do we need -lunwind ?
 
 if (ANDROID)
   target_link_libraries(merginmaps PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
-  set_property(TARGET merginmaps PROPERTY QT_ANDROID_EXTRA_LIBS
-      ${INPUT_SDK_PATH}/lib/libcrypto_1_1.so
-      ${INPUT_SDK_PATH}/lib/libssl_1_1.so)
-endif()
-
-
-if(APPLE)
-  target_link_libraries(merginmaps PUBLIC 
-      AppleFrameworks::Security
-      AppleFrameworks::CoreFoundation
-      AppleFrameworks::SystemConfiguration
+  set_property(
+    TARGET merginmaps
+    PROPERTY QT_ANDROID_EXTRA_LIBS ${INPUT_SDK_PATH}/lib/libcrypto_1_1.so
+             ${INPUT_SDK_PATH}/lib/libssl_1_1.so
   )
-endif()
+endif ()
 
-if(HAVE_APPLE_PURCHASING)
-  target_link_libraries(merginmaps PUBLIC 
-      AppleFrameworks::StoreKit
-      AppleFrameworks::Foundation
+if (APPLE)
+  target_link_libraries(
+    merginmaps PUBLIC AppleFrameworks::Security AppleFrameworks::CoreFoundation
+                      AppleFrameworks::SystemConfiguration
   )
-endif()
+endif ()
+
+if (HAVE_APPLE_PURCHASING)
+  target_link_libraries(
+    merginmaps PUBLIC AppleFrameworks::StoreKit AppleFrameworks::Foundation
+  )
+endif ()
 
 if (ENABLE_TESTS)
   target_link_libraries(merginmaps PUBLIC Qt6::Test)
-endif()
+endif ()
 
-######################################################################
-## QML
-######################################################################
+# ########################################################################################
+# QML
+# ########################################################################################
 
 add_subdirectory(qml)
 
@@ -450,15 +438,16 @@ set_source_files_properties(qml/InputStyle.qml PROPERTIES QT_QML_SINGLETON_TYPE 
 
 # make sure the QML files are not prefixed with "qml/" in the qmldir
 set(MM_QML_SRCS)
-foreach(src ${MM_QML})
-    set(MM_QML_SRCS ${MM_QML_SRCS} qml/${src})
-    set_source_files_properties(qml/${src} PROPERTIES QT_RESOURCE_ALIAS ${src})
-endforeach()
+foreach (src ${MM_QML})
+  set(MM_QML_SRCS ${MM_QML_SRCS} qml/${src})
+  set_source_files_properties(qml/${src} PROPERTIES QT_RESOURCE_ALIAS ${src})
+endforeach ()
 
-# For some reason, this call cannot be in qml/CMakeLists.txt - it creates some circular dep (why?)
-qt_add_qml_module(merginmaps
-    URI MMInput
-    VERSION 1.0
-    QML_FILES ${MM_QML_SRCS}
-    RESOURCE_PREFIX /com.merginmaps/imports
+# For some reason, this call cannot be in qml/CMakeLists.txt
+qt_add_qml_module(
+  merginmaps
+  URI MMInput
+  VERSION 1.0
+  QML_FILES ${MM_QML_SRCS}
+  RESOURCE_PREFIX /com.merginmaps/imports
 )

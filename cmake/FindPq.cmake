@@ -5,33 +5,30 @@
 if (LINUX)
   find_path(Pq_INCLUDE_DIR postgres_ext.h /usr/include/postgresql)
   find_library(Pq_LIBRARY NAMES pq)
-else()   
-  find_path(Pq_INCLUDE_DIR postgres_ext.h
+else ()
+  find_path(
+    Pq_INCLUDE_DIR
+    postgres_ext.h
     "${INPUT_SDK_PATH}/include"
     NO_DEFAULT_PATH
   )
-  
-  find_library(Pq_LIBRARY 
+
+  find_library(
+    Pq_LIBRARY
     NAMES pq
     PATHS "${INPUT_SDK_PATH}/lib"
     NO_DEFAULT_PATH
   )
-endif()
+endif ()
 
-find_package_handle_standard_args(
-  Pq
-  REQUIRED_VARS Pq_LIBRARY Pq_INCLUDE_DIR
-)
+find_package_handle_standard_args(Pq REQUIRED_VARS Pq_LIBRARY Pq_INCLUDE_DIR)
 
-if(Pq_FOUND AND NOT TARGET Pq::Pq)
+if (Pq_FOUND AND NOT TARGET Pq::Pq)
   add_library(Pq::Pq UNKNOWN IMPORTED)
-  set_target_properties(Pq::Pq PROPERTIES
-    IMPORTED_LOCATION "${Pq_LIBRARY}"
-    INTERFACE_INCLUDE_DIRECTORIES "${Pq_INCLUDE_DIR}"
+  set_target_properties(
+    Pq::Pq PROPERTIES IMPORTED_LOCATION "${Pq_LIBRARY}" INTERFACE_INCLUDE_DIRECTORIES
+                                                        "${Pq_INCLUDE_DIR}"
   )
-endif()
+endif ()
 
-mark_as_advanced(
-  Pq_LIBRARY
-  Pq_INCLUDE_DIR
-)
+mark_as_advanced(Pq_LIBRARY Pq_INCLUDE_DIR)

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=`pwd`
 cd $DIR
@@ -10,9 +8,9 @@ cd $DIR
 CONFIG=$DIR/cmake_format_config.py
 
 RETURN=0
-FORMATTER=$(which cmake-lint)
+FORMATTER=$(which cmake-format)
 if [ $? -ne 0 ]; then
-	echo "[!] cmake-lint not installed." >&2
+	echo "[!] cmake-format not installed." >&2
     echo "pip3 install cmakelang"
 	exit 1
 fi
@@ -22,9 +20,8 @@ echo $FORMATTER; $FORMATTER --version
 FILES=`find ../app ../cmake ../core -name \*.cmake* -print -o -name \CMakeLists.txt -print`
 
 for FILE in $FILES; do
-    echo "$FILE"
     cp $FILE $FILE.orig
-    cmake-lint -c cmake_format_config.py --in-place $FILE
+    cmake-format -c cmake_format_config.py --in-place $FILE
     cmp -s $FILE.orig $FILE 
     if [ $? -ne 0 ]; then
         echo "Changed $FILE" >&2

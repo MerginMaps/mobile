@@ -30,18 +30,21 @@ set(MM_CORE_HDRS
     geodiffutils.h
 )
 
-if(USE_MM_SERVER_API_KEY)
+if (USE_MM_SERVER_API_KEY)
   if (EXISTS merginsecrets.cpp)
     set(MM_CORE_SRCS ${MM_CORE_SRCS} merginsecrets.cpp)
-  else()
-    message(FATAL_ERROR "core/merginsecrets.cpp doesn't exists. Decode it or set USE_MM_SERVER_API_KEY=FALSE")
-  endif()
-endif()
+  else ()
+    message(
+      FATAL_ERROR
+        "core/merginsecrets.cpp doesn't exists. Decode it or set USE_MM_SERVER_API_KEY=FALSE"
+    )
+  endif ()
+endif ()
 
 add_library(mm_core OBJECT ${MM_CORE_SRCS} ${MM_CORE_HDRS})
 target_include_directories(mm_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(mm_core PRIVATE Qt6::Core Qt6::Network Geodiff::Geodiff)
 
-if(NOT USE_MM_SERVER_API_KEY)
-    target_compile_definitions(mm_core PRIVATE USE_MERGIN_DUMMY_API_KEY)
-endif()
+if (NOT USE_MM_SERVER_API_KEY)
+  target_compile_definitions(mm_core PRIVATE USE_MERGIN_DUMMY_API_KEY)
+endif ()

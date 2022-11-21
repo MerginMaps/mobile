@@ -29,6 +29,24 @@ jobs:
         run: |
           ./input/scripts/format_cpp.bash
 
+  code_style_cmake:
+    name: CMake code convention check
+    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install cmake-format
+        run: |
+          sudo pip3 install cmakelang
+
+      - name: Checkout input
+        uses: actions/checkout@v2
+        with:
+          path: input
+
+      - name: Run astyle check
+        run: |
+          ./input/scripts/format_cmake.bash
+          
   code_style_qml:
     name: QML code convention check
     if: ${{ false }}  # disable for now

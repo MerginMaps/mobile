@@ -5,6 +5,8 @@ on:
     - 'app/**'
     - 'core/**'
     - 'scripts/**'
+    - 'cmake/**'
+    - 'CMakeLists.txt'
     - '.github/workflows/ios.yml'
 
   release:
