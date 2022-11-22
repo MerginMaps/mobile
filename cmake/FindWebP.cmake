@@ -2,21 +2,21 @@
 
 # not in linux input-SDK
 
-if (LINUX)
+if (LNX)
   find_path(WebP_INCLUDE_DIR NAMES webp/encode.h)
   find_library(WebP_LIBRARY NAMES webp)
 else ()
   find_path(
     WebP_INCLUDE_DIR
     webp/encode.h
-    "${INPUT_SDK_PATH}/include"
+    "${INPUT_SDK_PATH_MULTI}/include"
     NO_DEFAULT_PATH
   )
 
   find_library(
     WebP_LIBRARY
     NAMES webp
-    PATHS "${INPUT_SDK_PATH}/lib"
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
 endif ()

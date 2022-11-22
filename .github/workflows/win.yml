@@ -27,7 +27,7 @@ jobs:
       QT_VERSION: '6.4.1'
       INPUT_SDK_VERSION: win64-20221116-132
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
-      CACHE_VERSION: 0
+      CACHE_VERSION: 1
       VS_VERSION: "2019"
       QT_ARCH: "win64_msvc2019_64"
       
@@ -119,8 +119,6 @@ jobs:
           mkdir -p input-sdk
           cd input-sdk
           unzip ${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk.tar.gz -d .
-          cd ..
-          ls -la input-sdk
           
       # Build Input App
       - name: Developer Command Prompt for Microsoft Visual C++
@@ -128,35 +126,50 @@ jobs:
         with:
           vsversion: ${{ env.VS_VERSION }}
         
-      - name: Build Input
+      - name: Configure Input
         shell: cmd
         run: |
           mkdir install-Input -ea 0
           mkdir build-Input -ea 0
           cd build-Input
           
-          qmake ..\input\app CONFIG+=Release CONFIG+=qtquickcompiler
           cmake ^
              -DCMAKE_BUILD_TYPE=Release ^
              -DCMAKE_PREFIX_PATH:PATH=${{ env.Qt6_Dir }} ^
-             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input ^
-             -DUSE_SERVER_API_KEY=TRUE ^
+             -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-Input ^
              -DINPUT_SDK_PATH:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk ^
-             -DQGIS_QUICK_DATA_PATH=INPUT ^
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ^
+             -G "NMake Makefiles" ^
              -S ${{ steps.vars.outputs.WORKSPACE_DIR }}/input ^
              -B .
-             
+              
+      - name: Build Input
+        shell: cmd
+        run: |
+          cd build-Input
           nmake
           
-          IF NOT EXIST release\Input.exe (echo err_INPUT_BUILD & exit /b 1)
-                    
+          IF NOT EXIST Input.exe (echo err_INPUT_BUILD & exit /b 1)
+                              
       - name: Get TimeStamp
         id: time
         uses: josStorer/get-current-time@v2.0.2
         with:
           format: 'YYYYMMDD'
 
+      - name: create package folder
+        shell: cmd
+        run: |
+            mkdir C:\input-package
+            mkdir C:\input-package\stage
+            C: 
+            cd C:\input-package\stage 
+            set INPUT_BUILD_DIR="%GITHUB_WORKSPACE%\build-Input"
+            set INPUT_SOURCE_DIR="%GITHUB_WORKSPACE%\input"
+            set PACKAGE_DIR=C:\input-package
+            set INPUT_SDK_DIR=%GITHUB_WORKSPACE%\input-sdk
+            %GITHUB_WORKSPACE%\input\scripts\package_win.cmd 
+            
       - name: create package folder
         shell: cmd
         run: |

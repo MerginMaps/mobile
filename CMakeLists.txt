@@ -1,119 +1,224 @@
 cmake_minimum_required(VERSION 3.22)
 
-#TODO automatically change with the scripts/update version script
+# ########################################################################################
+# GLOBAL SETTINGS (call before "project()")
+# ########################################################################################
+
+# TODO automatically change with the scripts/update version script
 set(MM_VERSION_MAJOR "2")
 set(MM_VERSION_MINOR "0")
 set(MM_VERSION_PATCH "0")
-set(QT_VERSION_DEFAULT "6.4")
+set(QT_VERSION_DEFAULT "6.4.1")
+
+# Note: we cannot set this for non-android build, since CMake will start looking for
+# Qt6AndroidMacros.cmake
+if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
+  set(ANDROIDAPI "24")
+  set(QT_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
+  set(ANDROID_PLATFORM "android-${ANDROIDAPI}")
+  set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}")
+  set(ANDROID_STL "c++_shared")
+  set(QT_ANDROID_TARGET_SDK_VERSION "31")
+endif ()
+
+if (IOS)
+  set(ENABLE_VISIBILITY FALSE)
+  set(ARCHS "arm64")
+  set(PLATFORM "OS")
+  set(ENABLE_ARC FALSE)
+  set(ENABLE_BITCODE FALSE)
+  set(DEPLOYMENT_TARGET "14.0")
+endif ()
+
+if (APPLE
+    AND NOT IOS
+    AND NOT DEFINED ENV{INPUT_SDK_ANDROID_BASE}
+)
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15.0")
+endif ()
+
+# ########################################################################################
+# PROJECT SETUP
+# ########################################################################################
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+set(INPUT_CMAKE_TEMPLATES_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_templates)
+set(INPUT_SCRIPTS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/scripts)
+
+include(VersionDetect)
+include(PlatformDetect)
+mm_detect_platform()
 
 project(
-  merginmaps
+  Input
   VERSION ${MM_VERSION_MAJOR}.${MM_VERSION_MINOR}.${MM_VERSION_PATCH}
   DESCRIPTION "The easiest way to take your QGIS projects into the field"
   HOMEPAGE_URL "https://merginmaps.com"
   LANGUAGES CXX
 )
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+# ########################################################################################
+# OPTIONS
+# ########################################################################################
 
-# APPLE is both iOS and macOS
-if (APPLE AND NOT IOS)
-    set(MACOS TRUE)
-endif()
-
-if(UNIX AND NOT ANDROID AND NOT APPLE)
-    set(LINUX TRUE)
-endif()   
-
-if(MSCV)
-    set(WIN TRUE)
-endif()
-
-if (MACOS)
-    set(platform "macOS")
-elseif(IOS)
-    set(platform "iOS")
-elseif(ANDROID)
-    set(platform "android")
-    message(STATUS "ABIS: ${QT_ANDROID_ABIS}")
-elseif(WIN)
-    set(platform "windows")
-elseif(LINUX)
-    set(platform "linux")
-else()
-    message(FATAL_ERROR "unknown target platform")
-endif()
-
-message(STATUS "Mergin Maps Input ${MM_VERSION_MAJOR}.${MM_VERSION_MINOR}.${MM_VERSION_PATCH} - ${platform}")
-
-# TODO MACOS_DEPLOYMENT_TARGET for macos
-# TODO ANDROID_TARGET_SDK_VERSION = 31
-# TODO ANDROID_MIN_SDK_VERSION = 24
-######################################################################
-## OPTIONS
-######################################################################
-
-if(ANDROID OR IOS)
+if (ANDROID OR IOS)
   set(ENABLE_TESTS_DEFAULT FALSE)
-else()
+else ()
   set(ENABLE_TESTS_DEFAULT TRUE)
-endif()
+endif ()
 
-if(IOS)
+if (IOS)
   set(HAVE_BLUETOOTH_DEFAULT FALSE)
-else()
+else ()
   set(HAVE_BLUETOOTH_DEFAULT TRUE)
-endif()
+endif ()
 
-if(IOS)
-  set(HAVE_PURCHASING_DEFAULT TRUE) 
+if (IOS)
+  set(HAVE_PURCHASING_DEFAULT TRUE)
   set(HAVE_APPLE_PURCHASING_DEFAULT TRUE)
-else()
+else ()
   set(HAVE_PURCHASING_DEFAULT ${ENABLE_TESTS_DEFAULT})
   set(HAVE_APPLE_PURCHASING_DEFAULT FALSE)
-endif()
+endif ()
 
-set(COVERAGE FALSE CACHE BOOL "Compile with coverage flags")
-set(USE_SERVER_API_KEY TRUE CACHE BOOL "Determines whether we should use server API key. Decrypt file with secrets on disk if you want to use it.")
-set(QGIS_QUICK_DATA_PATH "INPUT" CACHE STRING "The internal variable pointing to the application storage folder") 
-set(INPUT_SDK_PATH "" CACHE PATH "Path to the Mergin Maps Input SDK on host machine" )
-set(ENABLE_TESTS ${ENABLE_TESTS_DEFAULT} CACHE BOOL "Whether to build tests")
-set(QT6_VERSION ${QT_VERSION_DEFAULT} CACHE STRING "QT6 version to use")
-set(HAVE_BLUETOOTH ${HAVE_BLUETOOTH_DEFAULT} CACHE STRING "Building with bluetooth position provider")
-set(HAVE_PURCHASING ${HAVE_PURCHASING_DEFAULT} CACHE STRING "Build with purchasing (e.g. for test of purchasing GUI)")
-set(HAVE_APPLE_PURCHASING ${HAVE_APPLE_PURCHASING_DEFAULT} CACHE STRING "Building with Apple's StoreKit support")
+# on android in multi-ABI build, command line variables are NOT passed to
+# ExternalProject_Add called by QT. Therefore we need to pass the variables through ENV
+if (ANDROID)
+  if (NOT DEFINED ENV{INPUT_SDK_ANDROID_BASE})
+    message(
+      FATAL_ERROR
+        "On Android, you need to define INPUT_SDK_ANDROID_BASE as environment variable. Clean build directory and run cmake again!"
+    )
+  else ()
+    set(INPUT_SDK_PATH_DEFAULT $ENV{INPUT_SDK_ANDROID_BASE})
+  endif ()
+else ()
+  set(INPUT_SDK_PATH_DEFAULT "")
+endif ()
 
-######################################################################
-## FIND PACKAGES
-######################################################################
+if (DEFINED ENV{INPUT_VERSION_CODE})
+  set(INPUT_VERSION_CODE_DEFAULT "$ENV{INPUT_VERSION_CODE}")
+else ()
+  if (ANDROID)
+    set(INPUT_VERSION_CODE_DEFAULT "0000000")
+  elseif (APPLE)
+    set(INPUT_VERSION_CODE_DEFAULT "00.00.000000")
+  endif ()
+endif ()
 
-if(ANDROID)
+set(COVERAGE
+    FALSE
+    CACHE BOOL "Compile with coverage flags"
+)
+set(USE_MM_SERVER_API_KEY
+    TRUE
+    CACHE
+      BOOL
+      "Determines whether we should use server API key. Decrypt file with secrets on disk if you want to use it."
+)
+set(QGIS_QUICK_DATA_PATH
+    "INPUT"
+    CACHE STRING "The internal variable pointing to the application storage folder"
+)
+set(INPUT_SDK_PATH
+    ${INPUT_SDK_PATH_DEFAULT}
+    CACHE
+      PATH
+      "Path to the Mergin Maps Input SDK on host machine; on android define ENV variable instead and without the ABI suffix (armeabi-v7a, arm64-v8a)"
+)
+set(ENABLE_TESTS
+    ${ENABLE_TESTS_DEFAULT}
+    CACHE BOOL "Whether to build tests"
+)
+set(HAVE_BLUETOOTH
+    ${HAVE_BLUETOOTH_DEFAULT}
+    CACHE STRING "Building with bluetooth position provider"
+)
+set(HAVE_PURCHASING
+    ${HAVE_PURCHASING_DEFAULT}
+    CACHE STRING "Build with purchasing (e.g. for test of purchasing GUI)"
+)
+set(HAVE_APPLE_PURCHASING
+    ${HAVE_APPLE_PURCHASING_DEFAULT}
+    CACHE STRING "Building with Apple's StoreKit support"
+)
+set(QT6_VERSION
+    ${QT_VERSION_DEFAULT}
+    CACHE STRING "QT6 version to use"
+)
+
+if (ANDROID
+    OR IOS
+    OR MACOS
+)
+  set(INPUT_VERSION_CODE
+      "${INPUT_VERSION_CODE_DEFAULT}"
+      CACHE STRING "Build version (for stores)"
+  )
+endif ()
+
+mm_detect_version()
+message(STATUS "Mergin Maps Input ${version_desc} - ${platform_desc}")
+
+# ########################################################################################
+# FIND PACKAGES
+# ########################################################################################
+
+if (ANDROID)
+  set(INPUT_SDK_PATH_ANDROID_ABI_armeabi-v7a ${INPUT_SDK_PATH}/armeabi-v7a)
+  set(INPUT_SDK_PATH_ANDROID_ABI_arm64-v8a ${INPUT_SDK_PATH}/arm64-v8a)
+  set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH}/${ANDROID_ABI})
   # allow libraries outside of SDK/NDK directory
   set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
   set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
   set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE BOTH)
-endif()
+else ()
+  set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH})
+endif ()
 
 # TODO: OpenGl needed?
-find_package(Qt6 ${QT6_VERSION} COMPONENTS Quick Qml Xml Concurrent Positioning Sensors QuickControls2 Network Svg Sql Core Core5Compat REQUIRED)
-find_package(Qt6 ${QT6_VERSION} COMPONENTS Multimedia Widgets REQUIRED)
+find_package(
+  Qt6 ${QT6_VERSION}
+  COMPONENTS Quick
+             Qml
+             Xml
+             Concurrent
+             Positioning
+             Sensors
+             QuickControls2
+             Network
+             Svg
+             Sql
+             Core
+             Core5Compat
+  REQUIRED
+)
+find_package(
+  Qt6 ${QT6_VERSION}
+  COMPONENTS Multimedia Widgets
+  REQUIRED
+)
 
 if (NOT IOS)
-    # https://doc.qt.io/qt-6/qtprintsupport-index.html
-    # Qt Print Support is not available on iOS.
-  find_package(Qt6 ${QT6_VERSION} COMPONENTS PrintSupport REQUIRED)
-endif()
+  # https://doc.qt.io/qt-6/qtprintsupport-index.html Qt Print Support is not available on
+  # iOS.
+  find_package(
+    Qt6 ${QT6_VERSION}
+    COMPONENTS PrintSupport
+    REQUIRED
+  )
+endif ()
 
-if (MACOS OR IOS OR ANDROID)
-    find_package(Charset REQUIRED)
-    find_package(Iconv REQUIRED)
-endif()
+if (MACOS
+    OR IOS
+    OR ANDROID
+)
+  find_package(Charset REQUIRED)
+  find_package(Iconv REQUIRED)
+endif ()
 
 if (MACOS OR IOS)
   find_package(Bz2 REQUIRED)
-endif()
+endif ()
 
 find_package(Curl REQUIRED)
 find_package(Exiv2 REQUIRED)
@@ -137,131 +242,163 @@ find_package(Tiff REQUIRED)
 find_package(WebP REQUIRED)
 if (NOT ANDROID)
   find_package(Xml2 REQUIRED)
-endif()
+endif ()
 find_package(ZLIB REQUIRED)
 find_package(ZXing REQUIRED)
 find_package(Zip REQUIRED)
 
 if (ANDROID)
   find_package(OpenSSL REQUIRED)
-endif()
+endif ()
 
-if (APPLE)
+if (IOS OR MACOS)
   find_package(AppleFrameworks REQUIRED)
-endif()
+endif ()
 
-if (NOT LINUX)
+if (ANDROID
+    OR IOS
+    OR MACOS
+)
   find_package(Tasn1 REQUIRED)
-endif()
+endif ()
 
 if (HAVE_BLUETOOTH)
-  find_package(Qt6 ${QT6_VERSION} COMPONENTS Bluetooth REQUIRED)
-endif()
+  find_package(
+    Qt6 ${QT6_VERSION}
+    COMPONENTS Bluetooth
+    REQUIRED
+  )
+endif ()
 
 if (ENABLE_TESTS)
-  find_package(Qt6 ${QT6_VERSION} COMPONENTS Test REQUIRED)
-endif()
+  find_package(
+    Qt6 ${QT6_VERSION}
+    COMPONENTS Test
+    REQUIRED
+  )
+endif ()
 
-######################################################################
-## GLOBAL SETUP
-######################################################################
+# ########################################################################################
+# GLOBAL SETUP
+# ########################################################################################
 
 qt_standard_project_setup()
 
 set(CMAKE_COLOR_MAKEFILE ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 if (ENABLE_TESTS)
   enable_testing()
-endif()
+endif ()
 
-######################################################################
-## GLOBAL DEFINES
-######################################################################
+# ########################################################################################
+# GLOBAL DEFINES
+# ########################################################################################
 
 # TODO move most of the C++ defines to generated header file!
 
 # Exiv still uses std::auto_ptr
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_definitions(_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR)
-endif()
-if (MSVC)
+endif ()
+
+if (WIN)
   add_compile_definitions(_HAS_AUTO_PTR_ETC=1)
-endif()
+  add_compile_definitions(_USE_MATH_DEFINES)
+endif ()
 
 if (COVERAGE)
-    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} --coverage" )
-    set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} --coverage" )
-endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+endif ()
+
+if (ANDROID)
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g0")
+endif ()
 
 if (HAVE_BLUETOOTH)
   add_compile_definitions(HAVE_BLUETOOTH)
-endif()
+endif ()
 
 if (HAVE_PURCHASING)
-    add_compile_definitions(PURCHASING)
-endif()
+  add_compile_definitions(PURCHASING)
+endif ()
 
 if (HAVE_APPLE_PURCHASING)
-    add_compile_definitions(APPLE_PURCHASING)
-endif()
-    
-if(IOS OR ANDROID)
-  add_compile_definitions(MOBILE_OS)
-else()
-  add_compile_definitions(DESKTOP_OS)
-endif()
+  add_compile_definitions(APPLE_PURCHASING)
+endif ()
 
-if(IOS)
+if (IOS OR ANDROID)
+  add_compile_definitions(MOBILE_OS)
+else ()
+  add_compile_definitions(DESKTOP_OS)
+endif ()
+
+if (IOS)
+  # Using Security.SecureTransport for SSL
   add_compile_definitions(QT_NO_SSL)
+endif ()
+
+if (IOS)
   add_compile_definitions(QT_NO_PRINTER)
-endif()
+endif ()
 
 add_compile_definitions(HAVE_WIDGETS)
 add_compile_definitions(INPUT_APP)
 
 add_compile_definitions(QGIS_QUICK_DATA_PATH=${QGIS_QUICK_DATA_PATH})
+add_compile_definitions(VERSTR=\"${ESCAPED_VERSTR}\")
+add_compile_definitions(INPUT_VERSION=\"${INPUT_VERSION}\")
 
-#TODO also for RelWithDebug?
+# TODO also for RelWithDebug?
 add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_PREFIX_PATH=${QGIS_PREFIX_PATH}>")
 add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_QUICK_EXPAND_TEST_DATA>")
 
 if (ENABLE_TESTS)
   add_compile_definitions(INPUT_TEST)
-  set(TEST_DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../test/test_data")
-  add_compile_definitions(TEST_DATA_DIR=\"${TEST_DATA_DIR}\" )
-endif()
+  set(TEST_DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test/test_data")
+  add_compile_definitions(TEST_DATA_DIR=\"${TEST_DATA_DIR}\")
+endif ()
 
-######################################################################
-## GLOBAL COMPILE FLAGS
-######################################################################
+# ########################################################################################
+# GLOBAL COMPILE FLAGS
+# ########################################################################################
 
 if (MACOS)
-    # lot of errors like: This was likely caused by different translation units being compiled with different visibility settings
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden -fvisibility=hidden")
-endif()
+  # lot of errors like: This was likely caused by different translation units being
+  # compiled with different visibility settings
+  set(CMAKE_CXX_FLAGS
+      "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden -fvisibility=hidden"
+  )
+endif ()
 
-if(NOT MSVC) 
-  # Hundreds of warnings from QGIS core
-  # warning: 'Type' is deprecated: Use QMetaType::Type instead
+if (NOT WIN)
+  # Hundreds of warnings from QGIS core warning: 'Type' is deprecated: Use QMetaType::Type
+  # instead
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
-endif()
+endif ()
+
+if (WIN)
+  # Disable: warning C4003: not enough actual parameters for macro 'QStringLiteral'
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4003")
+endif ()
 
 if (IOS)
-    # Disabling warnings in qgis qgswkbptr.h
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-shorten-64-to-32")  
-endif()
+  # Disabling warnings in qgis qgswkbptr.h
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-shorten-64-to-32")
+endif ()
 
-
-######################################################################
-## SUBDIRECTORIES
-######################################################################
+# ########################################################################################
+# SUBDIRECTORIES
+# ########################################################################################
 
 add_subdirectory(core)
 add_subdirectory(app)
 
-######################################################################
-## INSTALL
-######################################################################
+# ########################################################################################
+# INSTALL
+# ########################################################################################
 
 include(InstallStep)

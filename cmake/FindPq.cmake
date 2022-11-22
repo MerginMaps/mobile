@@ -2,21 +2,36 @@
 
 # not in linux input-SDK
 
-if (LINUX)
+if (LNX)
   find_path(Pq_INCLUDE_DIR postgres_ext.h /usr/include/postgresql)
   find_library(Pq_LIBRARY NAMES pq)
+elseif (WIN)
+  find_path(
+    Pq_INCLUDE_DIR
+    postgres_ext.h
+    "${INPUT_SDK_PATH_MULTI}/include"
+    NO_DEFAULT_PATH
+  )
+
+  find_library(
+    Pq_LIBRARY
+    NAMES libpq
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+    NO_DEFAULT_PATH
+  )
+
 else ()
   find_path(
     Pq_INCLUDE_DIR
     postgres_ext.h
-    "${INPUT_SDK_PATH}/include"
+    "${INPUT_SDK_PATH_MULTI}/include"
     NO_DEFAULT_PATH
   )
 
   find_library(
     Pq_LIBRARY
     NAMES pq
-    PATHS "${INPUT_SDK_PATH}/lib"
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
 endif ()

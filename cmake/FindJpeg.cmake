@@ -2,21 +2,21 @@
 
 # not in linux input-SDK
 
-if (LINUX)
+if (LNX)
   find_path(Jpeg_INCLUDE_DIR NAMES jpeglib.h)
   find_library(Jpeg_LIBRARY NAMES jpeg)
 else ()
   find_path(
     Jpeg_INCLUDE_DIR
     jpeglib.h
-    "${INPUT_SDK_PATH}/include"
+    "${INPUT_SDK_PATH_MULTI}/include"
     NO_DEFAULT_PATH
   )
 
   find_library(
     Jpeg_LIBRARY
     NAMES jpeg
-    PATHS "${INPUT_SDK_PATH}/lib"
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
 endif ()

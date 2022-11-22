@@ -3,14 +3,14 @@
 find_path(
   Qtkeychain_INCLUDE_DIR
   qt6keychain/keychain.h
-  "${INPUT_SDK_PATH}/include"
+  "${INPUT_SDK_PATH_MULTI}/include"
   NO_DEFAULT_PATH
 )
 
 find_library(
   Qtkeychain_LIBRARY
   NAMES qt6keychain
-  PATHS "${INPUT_SDK_PATH}/lib"
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )
 

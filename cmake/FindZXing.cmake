@@ -3,14 +3,14 @@
 find_path(
   ZXing_INCLUDE_DIR
   ZXing/ZXConfig.h
-  "${INPUT_SDK_PATH}/include"
+  "${INPUT_SDK_PATH_MULTI}/include"
   NO_DEFAULT_PATH
 )
 
 find_library(
   ZXing_LIBRARY
   NAMES ZXing
-  PATHS "${INPUT_SDK_PATH}/lib"
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )
 

@@ -2,21 +2,35 @@
 
 # not in linux input-SDK
 
-if (LINUX)
+if (LNX)
   find_path(Spatialindex_INCLUDE_DIR NAMES spatialindex/RTree.h)
   find_library(Spatialindex_LIBRARY NAMES spatialindex)
+elseif (WIN)
+  find_path(
+    Spatialindex_INCLUDE_DIR
+    spatialindex/RTree.h
+    "${INPUT_SDK_PATH_MULTI}/include"
+    NO_DEFAULT_PATH
+  )
+
+  find_library(
+    Spatialindex_LIBRARY
+    NAMES spatialindex-64
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+    NO_DEFAULT_PATH
+  )
 else ()
   find_path(
     Spatialindex_INCLUDE_DIR
     spatialindex/RTree.h
-    "${INPUT_SDK_PATH}/include"
+    "${INPUT_SDK_PATH_MULTI}/include"
     NO_DEFAULT_PATH
   )
 
   find_library(
     Spatialindex_LIBRARY
     NAMES spatialindex
-    PATHS "${INPUT_SDK_PATH}/lib"
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
 endif ()

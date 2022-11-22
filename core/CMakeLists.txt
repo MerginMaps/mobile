@@ -31,14 +31,18 @@ set(MM_CORE_HDRS
 )
 
 if (USE_MM_SERVER_API_KEY)
-  if (EXISTS merginsecrets.cpp)
-    set(MM_CORE_SRCS ${MM_CORE_SRCS} merginsecrets.cpp)
-  else ()
+  # NOTE: merginsecrets.cpp should not be part of mm_core target sources
+  if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/merginsecrets.cpp)
     message(
       FATAL_ERROR
         "core/merginsecrets.cpp doesn't exists. Decode it or set USE_MM_SERVER_API_KEY=FALSE"
     )
   endif ()
+else ()
+  message(
+    STATUS
+      "Using dummy MM_SERVER_API_KEY. You will not be able to call certain Mergin Maps API (e.g. register)"
+  )
 endif ()
 
 add_library(mm_core OBJECT ${MM_CORE_SRCS} ${MM_CORE_HDRS})

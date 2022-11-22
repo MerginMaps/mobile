@@ -3,14 +3,14 @@
 find_path(
   Gdal_INCLUDE_DIR
   gdal.h
-  "${INPUT_SDK_PATH}/include"
+  "${INPUT_SDK_PATH_MULTI}/include"
   NO_DEFAULT_PATH
 )
 
 find_library(
   Gdal_LIBRARY
   NAMES gdal
-  PATHS "${INPUT_SDK_PATH}/lib"
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )
 

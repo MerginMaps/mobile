@@ -16,10 +16,9 @@ on:
 env:
   TEST_MERGIN_URL: https://test.dev.merginmaps.com/
   QT_VERSION: 6.4.1
-  QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.15.0
   INPUT_SDK_VERSION: mac-20221117-113
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 0
+  CACHE_VERSION: 1
   XC_VERSION: ${{ '13.2.1' }}
 
 concurrency:
@@ -119,6 +118,13 @@ jobs:
           tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
 
       # Build Input App
+      - name: Calculate build number
+        run: |
+            BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
+            echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
+
+            echo "Version code: ${BUILD_NUM}"
+            
       - name: build Input (Debug)
         run: |
           mkdir -p build-Input
@@ -140,7 +146,7 @@ jobs:
       - name: run tests
         run: |
           cd build-Input/
-          ../input/scripts/run_all_tests.bash ./Input.app/Contents/MacOS/Input
+          ../input/scripts/run_all_tests.bash "./app/Input.app/Contents/MacOS/Input"
 
       - name: build lcov summary
         run: |
@@ -186,6 +192,7 @@ jobs:
           INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.tar.gz
           echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
           cd ${{ github.workspace }}/install-Input
+          find .
           tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} "./Mergin Maps.app"
 
       - name: Upload Sdk in Artifacts

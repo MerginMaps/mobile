@@ -20,6 +20,7 @@
 #include <QQuickWindow>
 #include <QLocale>
 #include <QImageReader>
+#include <QStandardPaths>
 #ifdef INPUT_TEST
 #include "test/inputtests.h"
 #endif

@@ -10,13 +10,13 @@ echo "INPUT_SDK_DIR: %INPUT_SDK_DIR%"
 echo "Qt6_Dir: %Qt6_Dir%"
 
 IF NOT EXIST %STAGE_PATH% (echo err_STAGE_PATH & goto error)
-IF NOT EXIST %INPUT_SOURCE_DIR%\app\input.pro (echo err_INPUT_SOURCE_DIR & goto error)
-IF NOT EXIST %INPUT_BUILD_DIR%\release\Input.exe (echo err_INPUT_BUILD_DIR & goto error)
+IF NOT EXIST %INPUT_SOURCE_DIR%\CMakeLists.txt (echo err_INPUT_SOURCE_DIR & goto error)
+IF NOT EXIST %INPUT_BUILD_DIR%\Input.exe (echo err_INPUT_BUILD_DIR & goto error)
 IF NOT EXIST %INPUT_SDK_DIR%\bin\geodiff.dll (echo err_INPUT_SDK_DIR & goto error)
 IF NOT EXIST %Qt6_Dir%\bin\qmake.exe (echo err_Qt6_Dir & goto error)
 
 cd %STAGE_PATH%
-xcopy %INPUT_BUILD_DIR%\release\Input.exe %STAGE_PATH%\ /Y
+xcopy %INPUT_BUILD_DIR%\Input.exe %STAGE_PATH%\ /Y
 windeployqt --release Input.exe
 
 if not exist %STAGE_PATH%\images mkdir %STAGE_PATH%\images

@@ -6,21 +6,21 @@ if (ANDROID)
   find_path(
     OpenSSL_INCLUDE_DIR
     openssl/ssl.h
-    "${INPUT_SDK_PATH}/include"
+    "${INPUT_SDK_PATH_MULTI}/include"
     NO_DEFAULT_PATH
   )
 
   find_library(
     OpenSSL_CRYPTO_LIBRARY
     NAMES crypto_1_1
-    PATHS "${INPUT_SDK_PATH}/lib"
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
 
   find_library(
     OpenSSL_LIBRARY
     NAMES ssl_1_1
-    PATHS "${INPUT_SDK_PATH}/lib"
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
 else ()

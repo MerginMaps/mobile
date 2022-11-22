@@ -3,14 +3,14 @@
 find_path(
   Proj_INCLUDE_DIR
   proj.h
-  "${INPUT_SDK_PATH}/include"
+  "${INPUT_SDK_PATH_MULTI}/include"
   NO_DEFAULT_PATH
 )
 
 find_library(
   Proj_LIBRARY
   NAMES proj
-  PATHS "${INPUT_SDK_PATH}/lib"
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )
 

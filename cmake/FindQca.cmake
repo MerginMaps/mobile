@@ -1,18 +1,34 @@
 # GPLv2 Licence
 
-find_path(
-  Qca_INCLUDE_DIR
-  Qca-qt6/QtCrypto/qca.h
-  "${INPUT_SDK_PATH}/include"
-  NO_DEFAULT_PATH
-)
+if (WIN)
+  find_path(
+    Qca_INCLUDE_DIR
+    QtCrypto/qca.h
+    "${INPUT_SDK_PATH_MULTI}/include"
+    NO_DEFAULT_PATH
+  )
 
-find_library(
-  Qca_LIBRARY
-  NAMES qca-qt6
-  PATHS "${INPUT_SDK_PATH}/lib"
-  NO_DEFAULT_PATH
-)
+  find_library(
+    Qca_LIBRARY
+    NAMES qca
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+    NO_DEFAULT_PATH
+  )
+else ()
+  find_path(
+    Qca_INCLUDE_DIR
+    Qca-qt6/QtCrypto/qca.h
+    "${INPUT_SDK_PATH_MULTI}/include"
+    NO_DEFAULT_PATH
+  )
+
+  find_library(
+    Qca_LIBRARY
+    NAMES qca-qt6
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+    NO_DEFAULT_PATH
+  )
+endif ()
 
 find_package_handle_standard_args(Qca REQUIRED_VARS Qca_LIBRARY Qca_INCLUDE_DIR)
 

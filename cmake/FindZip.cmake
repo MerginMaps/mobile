@@ -2,21 +2,21 @@
 
 # not in linux input-SDK
 
-if (LINUX)
+if (LNX)
   find_path(Zip_INCLUDE_DIR NAMES zip.h)
   find_library(Zip_LIBRARY NAMES zip)
 else ()
   find_path(
     Zip_INCLUDE_DIR
     zip.h
-    "${INPUT_SDK_PATH}/include"
+    "${INPUT_SDK_PATH_MULTI}/include"
     NO_DEFAULT_PATH
   )
 
   find_library(
     Zip_LIBRARY
     NAMES zip
-    PATHS "${INPUT_SDK_PATH}/lib"
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
 endif ()

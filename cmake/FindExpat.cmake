@@ -2,21 +2,35 @@
 
 # not in linux input-SDK
 
-if (LINUX)
+if (LNX)
   find_path(Expat_INCLUDE_DIR NAMES expat.h)
   find_library(Expat_LIBRARY NAMES expat)
+elseif (WIN)
+  find_path(
+    Expat_INCLUDE_DIR
+    expat.h
+    "${INPUT_SDK_PATH_MULTI}/include"
+    NO_DEFAULT_PATH
+  )
+
+  find_library(
+    Expat_LIBRARY
+    NAMES libexpat
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+    NO_DEFAULT_PATH
+  )
 else ()
   find_path(
     Expat_INCLUDE_DIR
     expat.h
-    "${INPUT_SDK_PATH}/include"
+    "${INPUT_SDK_PATH_MULTI}/include"
     NO_DEFAULT_PATH
   )
 
   find_library(
     Expat_LIBRARY
     NAMES expat
-    PATHS "${INPUT_SDK_PATH}/lib"
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
 endif ()

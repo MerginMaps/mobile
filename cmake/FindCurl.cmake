@@ -2,21 +2,35 @@
 
 # not in linux input-SDK
 
-if (LINUX)
+if (LNX)
   find_path(Curl_INCLUDE_DIR NAMES curl/curl.h)
   find_library(Curl_LIBRARY NAMES curl)
+elseif (WIN)
+  find_path(
+    Curl_INCLUDE_DIR
+    curl/curl.h
+    "${INPUT_SDK_PATH_MULTI}/include"
+    NO_DEFAULT_PATH
+  )
+
+  find_library(
+    Curl_LIBRARY
+    NAMES libcurl
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+    NO_DEFAULT_PATH
+  )
 else ()
   find_path(
     Curl_INCLUDE_DIR
     curl/curl.h
-    "${INPUT_SDK_PATH}/include"
+    "${INPUT_SDK_PATH_MULTI}/include"
     NO_DEFAULT_PATH
   )
 
   find_library(
     Curl_LIBRARY
     NAMES curl
-    PATHS "${INPUT_SDK_PATH}/lib"
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
 endif ()

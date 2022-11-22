@@ -230,14 +230,15 @@ qt_add_resources(
 # ########################################################################################
 
 qt_add_executable(
-  merginmaps
+  Input
   ${MM_SRCS}
   ${MM_HDRS}
   $<TARGET_OBJECTS:mm_core>
   main.cpp
 )
+
 target_include_directories(
-  merginmaps
+  Input
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/attributes
          ${CMAKE_CURRENT_SOURCE_DIR}/map
          ${CMAKE_CURRENT_SOURCE_DIR}/layer
@@ -245,37 +246,83 @@ target_include_directories(
          ${CMAKE_CURRENT_SOURCE_DIR}/position
 )
 
-if (APPLE)
-  set_target_properties(
-    merginmaps
-    PROPERTIES OUTPUT_NAME "Mergin Maps"
-               MACOSX_BUNDLE TRUE
-               MACOSX_RPATH TRUE
-               MACOSX_BUNDLE_GUI_IDENTIFIER com.merginmaps.input
-               # XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
-               # RESOURCE "${RESOURCE_FILES}"
-               XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
-               XCODE_ATTRIBUTE_EXECUTABLE_NAME "merginmaps"
+if (ANDROID)
+  if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/android/AndroidManifest.xml)
+    file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/android/AndroidManifest.xml)
+  endif ()
+  configure_file(
+    ${INPUT_CMAKE_TEMPLATES_PATH}/AndroidManifest.xml.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/android/AndroidManifest.xml @ONLY
   )
-
-  # IOS: TODO QMAKE_TARGET_BUNDLE_PREFIX = LutraConsultingLtd IOS: TODO QMAKE_INFO_PLIST =
-  # ios/Info.plist demo projects demoFiles.files = $$files(android/assets/demo-projects/*)
-  # demoFiles.path = demo-projects QMAKE_BUNDLE_DATA += demoFiles
-
-  # qgis resources crsFiles.files = $$files(android/assets/qgis-data/resources/*)
-  # crsFiles.path = qgis-data/resources QMAKE_BUNDLE_DATA += crsFiles
-
-  # proj projFiles.files = $$files(android/assets/qgis-data/proj/*) projFiles.path =
-  # qgis-data/proj QMAKE_BUNDLE_DATA += projFiles
-
-  # app icon QMAKE_ASSET_CATALOGS = $$PWD/ios/Images.xcassets
-  # QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
-
-  # launch screen app_launch_images.files = $$PWD/ios/launchscreen/InputScreen.xib
-  # $$files($$PWD/ios/launchscreen/*.png) QMAKE_BUNDLE_DATA += app_launch_images
+  set_target_properties(
+    Input PROPERTIES QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
+  )
 endif ()
 
-# TODO: IOS QMAKE_TARGET_BUNDLE_PREFIX = LutraConsultingLtd
+if (MACOS)
+  set_target_properties(
+    Input
+    PROPERTIES MACOSX_BUNDLE TRUE
+               MACOSX_RPATH TRUE
+               MACOSX_BUNDLE_GUI_IDENTIFIER LutraConsultingLtd.Input
+               MACOSX_BUNDLE_SHORT_VERSION_STRING ${INPUT_VERSION_CODE}
+               XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
+               XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
+  )
+endif ()
+
+if (IOS)
+  # demo projects
+  set(IOS_DEMO_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/assets/demo-projects)
+  target_sources(Input PRIVATE ${IOS_DEMO_DIR})
+  set_source_files_properties(
+    ${IOS_DEMO_DIR} PROPERTIES MACOSX_PACKAGE_LOCATION Resources
+  )
+
+  # qgis resources
+  set(IOS_CRS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/assets/qgis-data/resources)
+  target_sources(Input PRIVATE ${IOS_CRS_DIR})
+  set_source_files_properties(
+    ${IOS_CRS_DIR} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/qgis-data
+  )
+
+  # proj
+  set(IOS_PROJ_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/assets/qgis-data/proj)
+  target_sources(Input PRIVATE ${IOS_PROJ_DIR})
+  set_source_files_properties(
+    ${IOS_PROJ_DIR} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/qgis-data
+  )
+
+  # app icon
+  set(IOS_ASSET_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ios/Images.xcassets)
+  target_sources(Input PRIVATE ${IOS_ASSET_DIR})
+  set_source_files_properties(
+    ${IOS_ASSET_DIR} PROPERTIES MACOSX_PACKAGE_LOCATION Resources
+  )
+
+  # launch screen
+  set(IOS_LAUNCHSCREEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ios/launchscreen/InputScreen.xib)
+  target_sources(Input PRIVATE ${IOS_LAUNCHSCREEN_DIR})
+  set_source_files_properties(
+    ${IOS_LAUNCHSCREEN_DIR} PROPERTIES MACOSX_PACKAGE_LOCATION Resources
+  )
+
+  set_target_properties(
+    Input
+    PROPERTIES MACOSX_BUNDLE TRUE
+               MACOSX_BUNDLE_INFO_PLIST ${INPUT_CMAKE_TEMPLATES_PATH}/iOSInfo.plist.in
+               MACOSX_BUNDLE_GUI_IDENTIFIER "LutraConsultingLtd.Input"
+               MACOSX_BUNDLE_SHORT_VERSION_STRING ${INPUT_VERSION}
+               MACOSX_BUNDLE_BUNDLE_VERSION ${INPUT_VERSION_CODE}
+               XCODE_ATTRIBUTE_PROVISIONING_PROFILE_SPECIFIER
+               "LutraConsultingLtd.Input.AppStore"
+               XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "79QMH2QRAH"
+               XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY
+               "iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)"
+               XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Manual"
+               XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
+  )
+endif ()
 
 # ########################################################################################
 # LINKING Mergin Maps Target
@@ -285,10 +332,10 @@ endif ()
 # missing from command line" linker error about missing symbol from qt6::core5compat
 # library - probably if our code does not use anything from that library, it is not added
 # (linking order matters)
-target_link_libraries(merginmaps PUBLIC QGIS::Core)
+target_link_libraries(Input PUBLIC QGIS::Core)
 
 target_link_libraries(
-  merginmaps
+  Input
   PUBLIC Qt6::Quick
          Qt6::Qml
          Qt6::Xml
@@ -304,22 +351,20 @@ target_link_libraries(
 ) # TODO: OpenGl?
 
 if (HAVE_BLUETOOTH)
-  target_link_libraries(merginmaps PUBLIC Qt6::Bluetooth)
+  target_link_libraries(Input PUBLIC Qt6::Bluetooth)
 endif ()
 
-target_link_libraries(merginmaps PUBLIC Qt6::Multimedia Qt6::Widgets)
+target_link_libraries(Input PUBLIC Qt6::Multimedia Qt6::Widgets)
 if (NOT IOS)
-  # https://doc.qt.io/qt-6/qtprintsupport-index.html Qt Print Support is not available on
-  # iOS.
-  target_link_libraries(merginmaps PUBLIC Qt6::PrintSupport)
+  target_link_libraries(Input PUBLIC Qt6::PrintSupport)
 endif ()
 
 if (ANDROID)
-  target_link_libraries(merginmaps PUBLIC Qt6::CorePrivate)
+  target_link_libraries(Input PUBLIC Qt6::CorePrivate)
 endif ()
 
 target_link_libraries(
-  merginmaps
+  Input
   PUBLIC mm_core
          Geodiff::Geodiff
          Proj::Proj
@@ -327,7 +372,7 @@ target_link_libraries(
 )
 
 target_link_libraries(
-  merginmaps
+  Input
   PUBLIC QGIS::authmethod_basic
          QGIS::authmethod_esritoken
          QGIS::authmethod_identcert
@@ -345,14 +390,14 @@ target_link_libraries(
          QGIS::provider_postgres
 )
 
-if (LINUX)
+if (LNX)
   # needs to be added again because of the cycling dependencies between qgis_core and
   # providers and auth methods
-  target_link_libraries(merginmaps PUBLIC QGIS::Core)
+  target_link_libraries(Input PUBLIC QGIS::Core)
 endif ()
 
 target_link_libraries(
-  merginmaps
+  Input
   PUBLIC Qtkeychain::Qtkeychain
          Qca::Qca
          Gdal::Gdal
@@ -364,19 +409,19 @@ if (MACOS
     OR IOS
     OR ANDROID
 )
-  target_link_libraries(merginmaps PUBLIC Charset::Charset Iconv::Iconv)
+  target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv)
 endif ()
 
 if (MACOS OR IOS)
-  target_link_libraries(merginmaps PUBLIC Bz2::Bz2)
+  target_link_libraries(Input PUBLIC Bz2::Bz2)
 endif ()
 
 if (NOT ANDROID)
-  target_link_libraries(merginmaps PUBLIC Xml2::Xml2)
+  target_link_libraries(Input PUBLIC Xml2::Xml2)
 endif ()
 
 target_link_libraries(
-  merginmaps
+  Input
   PUBLIC Spatialindex::Spatialindex
          Geos::Geos
          Geos::Geos-c
@@ -394,37 +439,41 @@ target_link_libraries(
          Jpeg::Jpeg
 )
 
-if (NOT LINUX)
-  target_link_libraries(merginmaps PUBLIC Tasn1::Tasn1)
+if (ANDROID
+    OR IOS
+    OR MACOS
+)
+  target_link_libraries(Input PUBLIC Tasn1::Tasn1)
 endif ()
 
+# TODO
 # https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md#Unwinding
 # do we need -lunwind ?
 
 if (ANDROID)
-  target_link_libraries(merginmaps PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
+  target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
   set_property(
-    TARGET merginmaps
-    PROPERTY QT_ANDROID_EXTRA_LIBS ${INPUT_SDK_PATH}/lib/libcrypto_1_1.so
-             ${INPUT_SDK_PATH}/lib/libssl_1_1.so
+    TARGET Input
+    PROPERTY QT_ANDROID_EXTRA_LIBS ${INPUT_SDK_PATH_MULTI}/lib/libcrypto_1_1.so
+             ${INPUT_SDK_PATH_MULTI}/lib/libssl_1_1.so
   )
 endif ()
 
-if (APPLE)
+if (MACOS OR IOS)
   target_link_libraries(
-    merginmaps PUBLIC AppleFrameworks::Security AppleFrameworks::CoreFoundation
-                      AppleFrameworks::SystemConfiguration
+    Input PUBLIC AppleFrameworks::Security AppleFrameworks::CoreFoundation
+                 AppleFrameworks::SystemConfiguration
   )
 endif ()
 
 if (HAVE_APPLE_PURCHASING)
   target_link_libraries(
-    merginmaps PUBLIC AppleFrameworks::StoreKit AppleFrameworks::Foundation
+    Input PUBLIC AppleFrameworks::StoreKit AppleFrameworks::Foundation
   )
 endif ()
 
 if (ENABLE_TESTS)
-  target_link_libraries(merginmaps PUBLIC Qt6::Test)
+  target_link_libraries(Input PUBLIC Qt6::Test)
 endif ()
 
 # ########################################################################################
@@ -445,17 +494,9 @@ endforeach ()
 
 # For some reason, this call cannot be in qml/CMakeLists.txt
 qt_add_qml_module(
-  merginmaps
+  Input
   URI MMInput
   VERSION 1.0
   QML_FILES ${MM_QML_SRCS}
   RESOURCE_PREFIX /com.merginmaps/imports
 )
-
-# ########################################################################################
-# ANDROID specific
-# ########################################################################################
-if (ANDROID)
-  qt_android_generate_deployment_settings(merginmaps)
-  qt_android_add_apk_target(merginmaps)
-endif ()

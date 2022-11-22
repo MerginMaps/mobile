@@ -1,19 +1,23 @@
 # GPLv2 Licence
 
-if (APPLE)
+if (MACOS OR IOS)
   set(QGIS_DEFAULT_INCLUDE_PATH
-      "${INPUT_SDK_PATH}/QGIS.app/Contents/Frameworks/qgis_core.framework/Headers"
+      "${INPUT_SDK_PATH_MULTI}/QGIS.app/Contents/Frameworks/qgis_core.framework/Headers"
   )
-  set(QGIS_DEFAULT_LIB_PATH "${INPUT_SDK_PATH}/QGIS.app/Contents/Frameworks")
-  set(QGIS_DEFAULT_PROVIDER_PATH "${INPUT_SDK_PATH}/QGIS.app/Contents/PlugIns/qgis")
+  set(QGIS_DEFAULT_LIB_PATH "${INPUT_SDK_PATH_MULTI}/QGIS.app/Contents/Frameworks")
+  set(QGIS_DEFAULT_PROVIDER_PATH "${INPUT_SDK_PATH_MULTI}/QGIS.app/Contents/PlugIns/qgis")
 elseif (ANDROID)
-  set(QGIS_DEFAULT_INCLUDE_PATH "${INPUT_SDK_PATH}/include/qgis")
-  set(QGIS_DEFAULT_LIB_PATH "${INPUT_SDK_PATH}/lib")
+  set(QGIS_DEFAULT_INCLUDE_PATH "${INPUT_SDK_PATH_MULTI}/include/qgis")
+  set(QGIS_DEFAULT_LIB_PATH "${INPUT_SDK_PATH_MULTI}/lib")
   set(QGIS_DEFAULT_PROVIDER_PATH "${QGIS_DEFAULT_LIB_PATH}")
-else () # linux
-  set(QGIS_DEFAULT_INCLUDE_PATH "${INPUT_SDK_PATH}/include/qgis")
-  set(QGIS_DEFAULT_LIB_PATH "${INPUT_SDK_PATH}/lib")
+elseif (LNX)
+  set(QGIS_DEFAULT_INCLUDE_PATH "${INPUT_SDK_PATH_MULTI}/include/qgis")
+  set(QGIS_DEFAULT_LIB_PATH "${INPUT_SDK_PATH_MULTI}/lib")
   set(QGIS_DEFAULT_PROVIDER_PATH "${QGIS_DEFAULT_LIB_PATH}/qgis/plugins")
+else () # windows
+  set(QGIS_DEFAULT_INCLUDE_PATH "${INPUT_SDK_PATH_MULTI}/include/qgis")
+  set(QGIS_DEFAULT_LIB_PATH "${INPUT_SDK_PATH_MULTI}/lib")
+  set(QGIS_DEFAULT_PROVIDER_PATH "${QGIS_DEFAULT_LIB_PATH}")
 endif ()
 
 find_path(

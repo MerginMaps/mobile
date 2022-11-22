@@ -5,21 +5,21 @@
 	<key>CFBundleDisplayName</key>
 	<string>Mergin Maps</string>
 	<key>CFBundleExecutable</key>
-	<string>${EXECUTABLE_NAME}</string>
+	<string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Created by Qt/QMake</string>
 	<key>CFBundleIdentifier</key>
-	<string>${PRODUCT_BUNDLE_IDENTIFIER}</string>
+	<string>${MACOSX_BUNDLE_GUI_IDENTIFIER}</string>
 	<key>CFBundleName</key>
-	<string>${PRODUCT_NAME}</string>
+	<string>${MACOSX_BUNDLE_BUNDLE_NAME}</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0.0</string>
+	<string>${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
 	<key>CFBundleSignature</key>
 	<string>${QMAKE_PKGINFO_TYPEINFO}</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
@@ -66,20 +66,20 @@
 		<string>ru_RU</string>
 		<string>pt_BR</string>
 		<string>nl</string>
-        	<string>de</string>
-       		<string>it</string>
-        	<string>pl</string>
-        	<string>pt_PT</string>
-        	<string>hr_HR</string>
-        	<string>ca</string>
-        	<string>ar</string>
-        	<string>tr</string>
-        	<string>sk</string>
-        	<string>ja_JP</string>
-        	<string>af_ZA</string>
-        	<string>hr</string>
-        	<string>az</string>
-        	<string>az_AZ</string>
+        <string>de</string>
+       	<string>it</string>
+        <string>pl</string>
+        <string>pt_PT</string>
+        <string>hr_HR</string>
+        <string>ca</string>
+        <string>ar</string>
+        <string>tr</string>
+        <string>sk</string>
+        <string>ja_JP</string>
+        <string>af_ZA</string>
+        <string>hr</string>
+        <string>az</string>
+        <string>az_AZ</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>

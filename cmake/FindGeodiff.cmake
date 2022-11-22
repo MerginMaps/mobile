@@ -3,14 +3,14 @@
 find_path(
   Geodiff_INCLUDE_DIR
   geodiff.h
-  "${INPUT_SDK_PATH}/include"
+  "${INPUT_SDK_PATH_MULTI}/include"
   NO_DEFAULT_PATH
 )
 
 find_library(
   Geodiff_LIBRARY
   NAMES geodiff
-  PATHS "${INPUT_SDK_PATH}/lib"
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )
 

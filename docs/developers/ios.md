@@ -4,20 +4,13 @@ looking for ios [publishing](./publishing.md)
 
 ```
   cmake \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DIOS=TRUE \
-    -DENABLE_VISIBILITY=0 \
-    -DARCHS=arm64 \
-    -DPLATFORM=OS \
-    -DENABLE_ARC=0 \
-    -DENABLE_BITCODE=0 \
-    -DDEPLOYMENT_TARGET=14.0 \
     -DCMAKE_PREFIX_PATH=/opt/Qt/6.4.1/ios \
     -DCMAKE_INSTALL_PREFIX:PATH=~/Projects/quick/input/build-input-ios/install \
     -DUSE_SERVER_API_KEY=FALSE \
     -DINPUT_SDK_PATH=~/Projects/quick/input-sdk/build/ios/stage/arm64 \
     -DCMAKE_TOOLCHAIN_FILE=~/Projects/quick/input-sdk/build/ios/stage/ios.toolchain.cmake \
-    -GNinja \
+    -G "Xcode" \
     -DQT_HOST_PATH=/opt/Qt/6.4.1/macos \
     ../input
 ```

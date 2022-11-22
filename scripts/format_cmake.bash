@@ -15,22 +15,22 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-echo $FORMATTER; $FORMATTER --version
-
-FILES=`find ../app ../cmake ../core -name \*.cmake* -print -o -name \CMakeLists.txt -print`
+FILES=`find .. -name \*.cmake* -print -o -name \CMakeLists.txt -print`
 
 for FILE in $FILES; do
-    cp $FILE $FILE.orig
-    cmake-format -c cmake_format_config.py --in-place $FILE
-    cmp -s $FILE.orig $FILE 
-    if [ $? -ne 0 ]; then
+    cmake-format -c cmake_format_config.py --check $FILE
+    if [ $? -ne 0 ]; then  
+      cp $FILE $FILE.orig
+      cmake-format -c cmake_format_config.py --in-place $FILE
+      cmp -s $FILE.orig $FILE 
+      if [ $? -ne 0 ]; then
         echo "Changed $FILE" >&2
         RETURN=1
         diff -u $FILE.orig $FILE >&2
-	    rm $FILE.orig
+      fi
+      rm $FILE.orig
     else
-        rm $FILE.orig
-        echo "Unchanged $FILE" >&2
+      echo "Unchanged $FILE" >&2
     fi
 done
 

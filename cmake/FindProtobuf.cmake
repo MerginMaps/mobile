@@ -2,21 +2,35 @@
 
 # not in linux input-SDK
 
-if (LINUX)
+if (LNX)
   find_path(Protobuf_INCLUDE_DIR NAMES google/protobuf/service.h)
   find_library(Protobuf_lite_LIBRARY NAMES protobuf-lite)
+elseif (WIN)
+  find_path(
+    Protobuf_INCLUDE_DIR
+    google/protobuf/service.h
+    "${INPUT_SDK_PATH_MULTI}/include"
+    NO_DEFAULT_PATH
+  )
+
+  find_library(
+    Protobuf_lite_LIBRARY
+    NAMES libprotobuf-lite
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+    NO_DEFAULT_PATH
+  )
 else ()
   find_path(
     Protobuf_INCLUDE_DIR
     google/protobuf/service.h
-    "${INPUT_SDK_PATH}/include"
+    "${INPUT_SDK_PATH_MULTI}/include"
     NO_DEFAULT_PATH
   )
 
   find_library(
     Protobuf_lite_LIBRARY
     NAMES protobuf-lite
-    PATHS "${INPUT_SDK_PATH}/lib"
+    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
 endif ()

@@ -2,14 +2,16 @@
 
 # not in macos input-SDK not in linux input-SDK
 
-if (LINUX OR MACOS)
+if (LNX OR MACOS)
   find_library(Bz2_LIBRARY NAMES bz2)
 elseif (ANDROID)
   message(FATAL_ERROR "bz2 is not required on ANDROID")
 else ()
-  # TODO find_path(Bz2_INCLUDE_DIR tiff.h "${INPUT_SDK_PATH}/include" NO_DEFAULT_PATH )
+  # TODO find_path(Bz2_INCLUDE_DIR tiff.h "${INPUT_SDK_PATH_MULTI}/include"
+  # NO_DEFAULT_PATH )
 
-  find_library(Bz2_LIBRARY NAMES bz2 # PATHS "${INPUT_SDK_PATH}/lib" NO_DEFAULT_PATH
+  find_library(
+    Bz2_LIBRARY NAMES bz2 # PATHS "${INPUT_SDK_PATH_MULTI}/lib" NO_DEFAULT_PATH
   )
 endif ()
 
