@@ -183,7 +183,7 @@ jobs:
 
       - name: package Input.app
         run: |
-          INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.time }}-${{ github.run_number }}.tar.gz
+          INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.tar.gz
           echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
           cd ${{ github.workspace }}/install-Input
           tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} "./Mergin Maps.app"

@@ -42,7 +42,7 @@ jobs:
         shell: bash
         run: |
           WORKSPACE_DIR=$(cygpath -m "${{ github.workspace }}")
-          echo "::set-output name=WORKSPACE_DIR::$WORKSPACE_DIR"
+          echo "WORKSPACE_DIR=$WORKSPACE_DIR" >> $GITHUB_OUTPUT
           echo "WORKSPACE_DIR: $WORKSPACE_DIR"
           
       - name: Install ccache
@@ -183,11 +183,11 @@ jobs:
         shell: cmd
         run: |
             makensis.exe input\scripts\input_win.nsi
-            xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-input-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.exe* /Y
+            xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-input-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v3
         with:
-          path: mergin-maps-input-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.exe
+          path: mergin-maps-input-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe
           if-no-files-found: error
 
