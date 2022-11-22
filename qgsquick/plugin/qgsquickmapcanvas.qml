@@ -13,9 +13,9 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQml 2.14
+import QtQuick
+import QtQuick.Controls
+import QtQml
 
 import QgsQuick 0.1 as QgsQuick
 
@@ -197,65 +197,102 @@ Item {
     }
   }
 
-  // Map actions - select, long press, double tap - with fingers
-  // Extra gesture - tap and hold - will forward grabPermissions to grabHandler to zoom in/out
-  TapHandler {
-    id: tapHandler
+  //
+  // Qt6.0+ does not work well when PinchHandler is combined with TapHandler.
+  // Sometimes, after map is zoomed in/out a few times, TapHandler ends in an invalid state -
+  // it does not clear some internal pointer and results in ignoring all the following touch
+  // interactions.
+  // Thus, we reset the TapHandler each time pinch is completed to keep TapHandler working properly.
+  //
+  // See QTBUG-108689
+  //
+  Timer {
+    id: repairTapHandlerTimer
 
-    property bool longPressActive: false
-    property bool doublePressed: false
-    property var timer: Timer {
-      property var tapPoint
+    interval: 50
 
-      interval: 350
-      repeat: false
-
-      onTriggered: {
-        root.clicked(tapPoint)
-      }
-    }
-
-    acceptedDevices: mouseAsTouchScreen ? PointerDevice.AllDevices : PointerDevice.TouchScreen
-
-    onSingleTapped: {
-      if(point.modifiers === Qt.RightButton)
-      {
-        mapCanvasWrapper.zoom(point.position, 1.25)
-      }
-      else
-      {
-        timer.tapPoint = point.position
-        timer.restart()
-      }
-    }
-
-    onDoubleTapped: {
-      mapCanvasWrapper.zoom(point.position, 0.8)
-    }
-
-    onLongPressed: {
-      root.longPressed(point.position)
-      longPressActive = true
-    }
-
-    onPressedChanged: {
-      if ( pressed && timer.running )
-      {
-        timer.stop()
-        doublePressed = true
-        dragHandler.grabPermissions = PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything
-      }
-      else
-      {
-        doublePressed = false
-        dragHandler.grabPermissions = PointerHandler.ApprovesTakeOverByHandlersOfSameType | PointerHandler.ApprovesTakeOverByHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByItems
-      }
-
-      if (longPressActive)
-        root.longPressReleased()
-      longPressActive = false
+    onTriggered: {
+      tapHandlerLoader.active = false
+      tapHandlerLoader.active = true
     }
   }
+
+  Loader {
+    id: tapHandlerLoader
+
+    anchors.fill: parent
+    sourceComponent: tapHandlerComponent
+  }
+
+  // Map actions - select, long press, double tap - with fingers
+  // Extra gesture - tap and hold - will forward grabPermissions to grabHandler to zoom in/out
+  Component {
+    id: tapHandlerComponent
+
+    Item {
+      id: tapHandlerParent
+
+      property bool doublePressed: false
+
+      TapHandler {
+        id: tapHandler
+
+        property bool longPressActive: false
+        property var timer: Timer {
+          property var tapPoint
+
+          interval: 200
+          repeat: false
+
+          onTriggered: {
+            root.clicked(tapPoint)
+          }
+        }
+
+        acceptedDevices: mouseAsTouchScreen ? PointerDevice.AllDevices : PointerDevice.TouchScreen
+
+        onSingleTapped: {
+          if(point.modifiers === Qt.RightButton)
+          {
+            mapCanvasWrapper.zoom(point.position, 1.25)
+          }
+          else
+          {
+            timer.tapPoint = point.position
+            timer.restart()
+          }
+        }
+
+        onDoubleTapped: {
+          mapCanvasWrapper.zoom(point.position, 0.8)
+        }
+
+        onLongPressed: {
+          root.longPressed(point.position)
+          longPressActive = true
+        }
+
+        onPressedChanged: {
+          if ( pressed && timer.running )
+          {
+            timer.stop()
+            tapHandlerParent.doublePressed = true
+            dragHandler.grabPermissions = PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything
+          }
+          else
+          {
+            tapHandlerParent.doublePressed = false
+            dragHandler.grabPermissions = PointerHandler.ApprovesTakeOverByHandlersOfSameType | PointerHandler.ApprovesTakeOverByHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByItems
+          }
+
+          if (longPressActive)
+            root.longPressReleased()
+          longPressActive = false
+        }
+      }
+    }
+  }
+
 
   // Map panning with fingers and an extra gesture to zoom in/out after double tap (tap and hold)
   DragHandler {
@@ -273,7 +310,7 @@ Item {
     onActiveChanged: {
       if ( active )
       {
-        if ( tapHandler.doublePressed )
+        if ( tapHandlerLoader.active ? tapHandlerLoader.item.doublePressed : false )
         {
           oldTranslationY = 0;
           zoomCenter = centroid.position;
@@ -360,6 +397,9 @@ Item {
         oldPos = centroid.position
       } else {
         unfreeze('pinch')
+
+        // See comment for repairTapHandlerTimer to understand why we need to call this
+        repairTapHandlerTimer.restart()
       }
     }
 
