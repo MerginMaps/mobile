@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout Input
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: input
 
@@ -71,7 +71,7 @@ jobs:
 
       # CCache
       - name: Prepare build cache for pull request
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         if: github.event_name == 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -85,7 +85,7 @@ jobs:
 
       - name: Prepare build cache for branch/tag
         # use a fork of actions/cache@v2 to upload cache even when the build or test failed
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         if: github.event_name != 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -104,7 +104,7 @@ jobs:
       # Input SDK
       - name: Cache Input-SDK
         id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/input-sdk
           key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
@@ -142,9 +142,8 @@ jobs:
 
       - name: Get TimeStamp
         id: time
-        uses: nanzm/get-time-action@v1.1
+        uses: josStorer/get-current-time@v2.0.2
         with:
-          timeZone: 8
           format: 'YYYYMMDD'
 
       - name: package Input
@@ -157,6 +156,6 @@ jobs:
           tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./
 
       - name: Upload Sdk in Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           path: ${{ github.workspace }}/${{ env.INPUT_TAR }}

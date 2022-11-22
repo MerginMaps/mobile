@@ -21,7 +21,7 @@ jobs:
           sudo apt-get install astyle
 
       - name: Checkout input
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: input
 
@@ -39,7 +39,7 @@ jobs:
           sudo pip3 install cmakelang
 
       - name: Checkout input
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: input
 
@@ -55,7 +55,7 @@ jobs:
     steps:
 
       - name: Checkout app
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: input
 
