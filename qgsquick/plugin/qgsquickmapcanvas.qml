@@ -207,37 +207,36 @@ Item {
   // See QTBUG-108689
   //
   Timer {
-    id: repairTapHandlerTimer
+    id: repairHandlersTimer
 
     interval: 50
 
     onTriggered: {
-      tapHandlerLoader.active = false
-      tapHandlerLoader.active = true
+      handlersLoader.active = false
+      handlersLoader.active = true
     }
   }
 
   Loader {
-    id: tapHandlerLoader
+    id: handlersLoader
 
     anchors.fill: parent
-    sourceComponent: tapHandlerComponent
+    sourceComponent: handlersComponent
   }
 
-  // Map actions - select, long press, double tap - with fingers
-  // Extra gesture - tap and hold - will forward grabPermissions to grabHandler to zoom in/out
   Component {
-    id: tapHandlerComponent
+    id: handlersComponent
 
     Item {
-      id: tapHandlerParent
 
-      property bool doublePressed: false
-
+      // Map actions - select, long press, double tap - with fingers
+      // Extra gesture - tap and hold - will forward grabPermissions to grabHandler to zoom in/out
       TapHandler {
         id: tapHandler
 
         property bool longPressActive: false
+        property bool doublePressed: false
+
         property var timer: Timer {
           property var tapPoint
 
@@ -276,12 +275,12 @@ Item {
           if ( pressed && timer.running )
           {
             timer.stop()
-            tapHandlerParent.doublePressed = true
+            doublePressed = true
             dragHandler.grabPermissions = PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything
           }
           else
           {
-            tapHandlerParent.doublePressed = false
+            doublePressed = false
             dragHandler.grabPermissions = PointerHandler.ApprovesTakeOverByHandlersOfSameType | PointerHandler.ApprovesTakeOverByHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByItems
           }
 
@@ -290,58 +289,57 @@ Item {
           longPressActive = false
         }
       }
-    }
-  }
 
+      // Used to handle map panning (both touch and mouse)
+      DragHandler {
+        id: dragHandler
 
-  // Map panning with fingers and an extra gesture to zoom in/out after double tap (tap and hold)
-  DragHandler {
-    id: dragHandler
+        target: null
+        grabPermissions: PointerHandler.ApprovesTakeOverByHandlersOfSameType | PointerHandler.ApprovesTakeOverByHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByItems
 
-    target: null
-    grabPermissions: PointerHandler.ApprovesTakeOverByHandlersOfSameType | PointerHandler.ApprovesTakeOverByHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByItems
+        property var oldPos
+        property real oldTranslationY
 
-    property var oldPos
-    property real oldTranslationY
+        property bool isZooming: false
+        property point zoomCenter
 
-    property bool isZooming: false
-    property point zoomCenter
-
-    onActiveChanged: {
-      if ( active )
-      {
-        if ( tapHandlerLoader.active ? tapHandlerLoader.item.doublePressed : false )
-        {
-          oldTranslationY = 0;
-          zoomCenter = centroid.position;
-          isZooming = true;
-          freeze('zoom');
+        onActiveChanged: {
+          if ( active )
+          {
+            if ( tapHandler.doublePressed )
+            {
+              oldTranslationY = 0;
+              zoomCenter = centroid.position;
+              isZooming = true;
+              freeze('zoom');
+            }
+            else
+            {
+              freeze('pan');
+            }
+          }
+          else
+          {
+            unfreeze(isZooming ? 'zoom' : 'pan');
+            isZooming = false;
+          }
         }
-        else
-        {
-          freeze('pan');
-        }
-      }
-      else
-      {
-        unfreeze(isZooming ? 'zoom' : 'pan');
-        isZooming = false;
-      }
-    }
 
-    onCentroidChanged: {
-      var oldPos1 = oldPos;
-      oldPos = centroid.position;
-      if ( active )
-      {
-        if ( isZooming )
-        {
-          mapCanvasWrapper.zoom(zoomCenter, Math.pow(0.8, (translation.y - oldTranslationY)/60))
-          oldTranslationY = translation.y
-        }
-        else
-        {
-          mapCanvasWrapper.pan(centroid.position, oldPos1)
+        onCentroidChanged: {
+          var oldPos1 = oldPos;
+          oldPos = centroid.position;
+          if ( active )
+          {
+            if ( isZooming )
+            {
+              mapCanvasWrapper.zoom(zoomCenter, Math.pow(0.8, (translation.y - oldTranslationY)/60))
+              oldTranslationY = translation.y
+            }
+            else
+            {
+              mapCanvasWrapper.pan(centroid.position, oldPos1)
+            }
+          }
         }
       }
     }
@@ -398,8 +396,8 @@ Item {
       } else {
         unfreeze('pinch')
 
-        // See comment for repairTapHandlerTimer to understand why we need to call this
-        repairTapHandlerTimer.restart()
+        // See comment for repairHandlersTimer to understand why we need to call this
+        repairHandlersTimer.restart()
       }
     }
 
