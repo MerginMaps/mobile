@@ -240,7 +240,7 @@ void TestPosition::testBluetoothProviderPosition()
   QCOMPARE( positionKit->lastRead(), QDateTime().fromString( "2022-01-31T12:17:17Z", Qt::ISODate ) );
 }
 
-#endif 
+#endif
 
 void TestPosition::testPositionProviderKeysInSettings()
 {
