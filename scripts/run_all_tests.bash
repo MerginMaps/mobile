@@ -54,6 +54,12 @@ NFAILURES=$(($NFAILURES+$?))
 $INPUT_EXECUTABLE --testMapTools
 NFAILURES=$(($NFAILURES+$?))
 
+$INPUT_EXECUTABLE --testLayerTree
+NFAILURES=$(($NFAILURES+$?))
+
+$INPUT_EXECUTABLE --testActiveProject
+NFAILURES=$(($NFAILURES+$?))
+
 echo "Total $NFAILURES failures found in testing"
 
 exit $NFAILURES

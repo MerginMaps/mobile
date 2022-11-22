@@ -123,6 +123,11 @@ class TestLinks: public QObject
       _run( mHelp.merginTermsLink() );
     }
 
+    void testProjectLoadingErrorHelpLink()
+    {
+      _run( mHelp.projectLoadingErrorHelpLink() );
+    }
+
   private:
     InputHelp mHelp;
     QNetworkAccessManager mManager;
