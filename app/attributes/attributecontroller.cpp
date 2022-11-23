@@ -27,6 +27,7 @@
 #include "qgsattributeeditorrelation.h"
 #include "qgsattributeeditorcontainer.h"
 #include "qgsvectorlayerutils.h"
+#include "qgsvectorlayereditbuffer.h"
 #include "qgsrelation.h"
 #include "qgsmessagelog.h"
 #include "inpututils.h"
@@ -461,7 +462,14 @@ void AttributeController::updateOnFeatureChange()
     ++formItemsIterator;
   }
 
-  recalculateDerivedItems( false, isNewFeature() );
+  bool formValueChange = false;
+  // if feature geometry was changed we also need recalculate defaults
+  // as some attributes may contain expressions which use feature geometry
+  if ( mFeatureLayerPair.layer()->isEditable() )
+  {
+    formValueChange = mFeatureLayerPair.layer()->editBuffer()->changedGeometries().contains( feature.id() );
+  }
+  recalculateDerivedItems( formValueChange, isNewFeature() );
 }
 
 bool AttributeController::isNewFeature() const
