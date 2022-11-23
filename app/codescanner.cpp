@@ -61,6 +61,7 @@ void CodeScanner::stopCamera()
 
 void CodeScanner::processFrame( const QVideoFrame &frame )
 {
+  qDebug() << "CodeScanner::processFrame";
   if ( mProcessing )
   {
     emit process( mDecoder.videoFrameToImage( frame, captureRect().toRect() ) );
@@ -75,6 +76,7 @@ void CodeScanner::processFrame( const QVideoFrame &frame )
 
 void CodeScanner::processImage( QRDecoder *decoder, const QImage &image )
 {
+  qDebug() << "CodeScanner::processImage";
   decoder->processImage( image );
   continueProcessing();
 }
@@ -106,6 +108,7 @@ QString CodeScanner::capturedString() const
 
 void CodeScanner::setCapturedString( const QString &capturedString )
 {
+  qDebug() << "CodeScanner::setCapturedString" << capturedString;
   if ( mCapturedString == capturedString )
   {
     return;

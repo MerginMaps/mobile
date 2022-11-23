@@ -21,8 +21,6 @@ Page {
   signal backButtonClicked()
   signal scanFinished( var data )
 
-  anchors.fill: parent
-
   header: PanelHeader {
     id: scannerPageHeader
 
@@ -35,7 +33,6 @@ Page {
     titleText: qsTr( "Scan code" )
 
     onBack: {
-      qrcodeScanner.setProcessing( false )
       root.backButtonClicked()
      }
 
@@ -50,23 +47,19 @@ Page {
     captureRect: Qt.rect(root.width / 4, root.height / 4, root.width / 2, root.height / 2)
 
     onCapturedStringChanged: function( captured ) {
-      qrcodeScanner.setProcessing( false )
       root.scanFinished( captured )
     }
   }
 
   Rectangle {
     id: videoContainer
+
     width: root.width
     height: root.height - header.height
-    color: InputStyle.clrPanelBackground
 
     VideoOutput {
       id: videoOutput
 
-      width: root.width
-      height: root.height
-      focus: visible
       fillMode: VideoOutput.PreserveAspectCrop
     }
 
@@ -78,13 +71,4 @@ Page {
       height: root.height - header.height
     }
   }
-
-  onHeightChanged: {
-    qrcodeScanner.captureRect = Qt.rect(width / 4, height / 4, width / 2, height / 2)
-  }
-
-  onWidthChanged: {
-    qrcodeScanner.captureRect = Qt.rect(width / 4, height / 4, width / 2, height / 2)
-  }
 }
-

@@ -95,6 +95,7 @@ QRDecoder::QRDecoder( QObject *parent )
 
 void QRDecoder::processImage( const QImage capturedImage )
 {
+  qDebug() << "QRDecoder::processImage";
   setIsDecoding( true );
 
   const auto hints = DecodeHints()
@@ -110,6 +111,7 @@ void QRDecoder::processImage( const QImage capturedImage )
 
   if ( result.isValid() )
   {
+    qDebug() << "decoded" << result.text();
     setCapturedString( result.text() );
   }
 
@@ -118,6 +120,7 @@ void QRDecoder::processImage( const QImage capturedImage )
 
 QImage QRDecoder::videoFrameToImage( const QVideoFrame &videoFrame, const QRect &captureRect )
 {
+  qDebug() << "QRDecoder::videoFrameToImage";
   auto handleType = videoFrame.handleType();
 
   if ( handleType == QVideoFrame::NoHandle )
@@ -138,7 +141,8 @@ QImage QRDecoder::videoFrameToImage( const QVideoFrame &videoFrame, const QRect 
 #ifdef Q_OS_ANDROID
     return image.copy( mResolutionHeight / 4, mResolutionWidth / 4, mResolutionHeight / 2, mResolutionWidth / 2 );
 #else
-    return image.copy( captureRect );
+    //return image.copy( captureRect );
+    return image;
 #endif
   }
 
