@@ -52,6 +52,8 @@ Item {
   //! Consider mouse as a touchscreen device. If disabled, the mouse will act as a stylus pen.
   property bool mouseAsTouchScreen: false
 
+  property real mapExtentOffset: 0
+
   //! This signal is emitted independently of double tap / click
   signal clicked(var point)
 
@@ -220,7 +222,13 @@ Item {
   Loader {
     id: handlersLoader
 
-    anchors.fill: parent
+    width: root.width
+
+    //
+    // Subtract space that is occupied by feature form from TapHandler's active area height
+    //
+    height: root.height - root.mapExtentOffset
+
     sourceComponent: handlersComponent
   }
 
