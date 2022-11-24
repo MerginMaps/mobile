@@ -1107,13 +1107,22 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
   if ( isValidFormId( id ) )
   {
     std::shared_ptr<FormItem> item = mFormItems[id];
+    QgsField field = item->field();
+    QVariant val( value );
 
-    mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), value );
-
-    emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::AttributeValueIsNull } );
-
-    recalculateDerivedItems( true, false );
-    return true;
+    if ( !field.convertCompatible( val ) )
+    {
+      QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
+      QgsMessageLog::logMessage( msg );
+      return false;
+    }
+    else
+    {
+      mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
+      emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::AttributeValueIsNull } );
+      recalculateDerivedItems( true, false );
+      return true;
+    }
   }
   else
   {
