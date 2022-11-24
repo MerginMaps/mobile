@@ -28,6 +28,7 @@
 #include "qgsattributeeditorcontainer.h"
 #include "qgsvectorlayerutils.h"
 #include "qgsvectorlayereditbuffer.h"
+#include "qgsexpressioncontextutils.h"
 #include "qgsrelation.h"
 #include "qgsmessagelog.h"
 #include "inpututils.h"
@@ -622,6 +623,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   // Create context
   QgsFields fields = mFeatureLayerPair.feature().fields();
   QgsExpressionContext expressionContext = layer->createExpressionContext();
+  expressionContext << QgsExpressionContextUtils::formScope( mFeatureLayerPair.feature() );
   if ( mVariablesManager )
     expressionContext << mVariablesManager->positionScope();
 
