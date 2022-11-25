@@ -226,12 +226,12 @@ void GuidelineController::setRealGeometry( const QgsGeometry &newRealGeometry )
   emit realGeometryChanged( mRealGeometry );
 }
 
-QgsQuickMapSettings *GuidelineController::mapSettings() const
+InputMapSettings *GuidelineController::mapSettings() const
 {
   return mMapSettings;
 }
 
-void GuidelineController::setMapSettings( QgsQuickMapSettings *newMapSettings )
+void GuidelineController::setMapSettings( InputMapSettings *newMapSettings )
 {
   if ( !newMapSettings || mMapSettings == newMapSettings )
     return;
@@ -243,12 +243,12 @@ void GuidelineController::setMapSettings( QgsQuickMapSettings *newMapSettings )
 
   mMapSettings = newMapSettings;
 
-  connect( mMapSettings, &QgsQuickMapSettings::extentChanged, this, &GuidelineController::buildGuideline );
-  connect( mMapSettings, &QgsQuickMapSettings::destinationCrsChanged, this, &GuidelineController::buildGuideline );
-  connect( mMapSettings, &QgsQuickMapSettings::mapUnitsPerPixelChanged, this, &GuidelineController::buildGuideline );
-  connect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &GuidelineController::buildGuideline );
-  connect( mMapSettings, &QgsQuickMapSettings::outputSizeChanged, this, &GuidelineController::buildGuideline );
-  connect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &GuidelineController::buildGuideline );
+  connect( mMapSettings, &InputMapSettings::extentChanged, this, &GuidelineController::buildGuideline );
+  connect( mMapSettings, &InputMapSettings::destinationCrsChanged, this, &GuidelineController::buildGuideline );
+  connect( mMapSettings, &InputMapSettings::mapUnitsPerPixelChanged, this, &GuidelineController::buildGuideline );
+  connect( mMapSettings, &InputMapSettings::visibleExtentChanged, this, &GuidelineController::buildGuideline );
+  connect( mMapSettings, &InputMapSettings::outputSizeChanged, this, &GuidelineController::buildGuideline );
+  connect( mMapSettings, &InputMapSettings::outputDpiChanged, this, &GuidelineController::buildGuideline );
 
   emit mapSettingsChanged( mMapSettings );
 }

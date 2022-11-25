@@ -5,8 +5,10 @@ on:
     paths:
     - 'app/**'
     - 'core/**'
-    - 'qgsquick/**'
     - 'scripts/**'
+    - 'cmake/**'
+    - 'cmake_templates/**'
+    - 'CMakeLists.txt'
     - '.github/workflows/win.yml'
  
   release:
@@ -23,16 +25,16 @@ jobs:
     runs-on: windows-2019
     
     env:
-      QT_VERSION: '6.3.2'
-      INPUT_SDK_VERSION: win64-20221026-126
+      QT_VERSION: '6.4.1'
+      INPUT_SDK_VERSION: win64-20221116-132
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
-      CACHE_VERSION: 0
+      CACHE_VERSION: 1
       VS_VERSION: "2019"
       QT_ARCH: "win64_msvc2019_64"
       
     steps:
       - name: Checkout Input
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: input
  
@@ -41,7 +43,7 @@ jobs:
         shell: bash
         run: |
           WORKSPACE_DIR=$(cygpath -m "${{ github.workspace }}")
-          echo "::set-output name=WORKSPACE_DIR::$WORKSPACE_DIR"
+          echo "WORKSPACE_DIR=$WORKSPACE_DIR" >> $GITHUB_OUTPUT
           echo "WORKSPACE_DIR: $WORKSPACE_DIR"
           
       - name: Install ccache
@@ -62,7 +64,7 @@ jobs:
           openssl aes-256-cbc -d  -in merginsecrets.cpp.enc  -out merginsecrets.cpp  -k "%MERGINSECRETS_DECRYPT_KEY%" -md md5
           
       - name: Prepare build cache for pull request
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         if: github.event_name == 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -76,7 +78,7 @@ jobs:
 
       - name: Prepare build cache for branch/tag
         # use a fork of actions/cache@v2 to upload cache even when the build or test failed
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         if: github.event_name != 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -93,17 +95,17 @@ jobs:
           target: desktop
           arch: ${{ env.QT_ARCH }}
           dir: ${{ github.workspace }}
-          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning'
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-win
  
        # Input SDK
       - name: Cache Input-SDK
         id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v8-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         shell: bash
@@ -118,44 +120,57 @@ jobs:
           mkdir -p input-sdk
           cd input-sdk
           unzip ${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk.tar.gz -d .
-          cd ..
-          ls -la input-sdk
           
       # Build Input App
-      - name: Export app/config.pri
-        shell: bash
-        run: |
-          touch ./input/app/config.pri
-          echo -e "win32 {"  >> ./input/app/config.pri
-          echo -e "  INPUT_SDK_PATH = ${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk"  >> ./input/app/config.pri
-          echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./input/app/config.pri
-          echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX"  >> ./input/app/config.pri
-          echo -e "  CONFIG += sdk_no_version_check"  >> ./input/app/config.pri
-          echo -e "}"  >> ./input/app/config.pri
-          cat ./input/app/config.pri
-      
       - name: Developer Command Prompt for Microsoft Visual C++
         uses: ilammy/msvc-dev-cmd@v1
         with:
           vsversion: ${{ env.VS_VERSION }}
         
+      - name: Configure Input
+        shell: cmd
+        run: |
+          mkdir install-Input -ea 0
+          mkdir build-Input -ea 0
+          cd build-Input
+          
+          cmake ^
+             -DCMAKE_BUILD_TYPE=Release ^
+             -DCMAKE_PREFIX_PATH:PATH=${{ env.Qt6_Dir }} ^
+             -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-Input ^
+             -DINPUT_SDK_PATH:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk ^
+             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ^
+             -G "NMake Makefiles" ^
+             -S ${{ steps.vars.outputs.WORKSPACE_DIR }}/input ^
+             -B .
+              
       - name: Build Input
         shell: cmd
         run: |
-          mkdir build-Input -ea 0
           cd build-Input
-          qmake ..\input\app CONFIG+=Release CONFIG+=qtquickcompiler
           nmake
           
-          IF NOT EXIST release\Input.exe (echo err_INPUT_BUILD & exit /b 1)
-                    
+          IF NOT EXIST Input.exe (echo err_INPUT_BUILD & exit /b 1)
+                              
       - name: Get TimeStamp
         id: time
-        uses: nanzm/get-time-action@v1.1
+        uses: josStorer/get-current-time@v2.0.2
         with:
-          timeZone: 8
           format: 'YYYYMMDD'
 
+      - name: create package folder
+        shell: cmd
+        run: |
+            mkdir C:\input-package
+            mkdir C:\input-package\stage
+            C: 
+            cd C:\input-package\stage 
+            set INPUT_BUILD_DIR="%GITHUB_WORKSPACE%\build-Input"
+            set INPUT_SOURCE_DIR="%GITHUB_WORKSPACE%\input"
+            set PACKAGE_DIR=C:\input-package
+            set INPUT_SDK_DIR=%GITHUB_WORKSPACE%\input-sdk
+            %GITHUB_WORKSPACE%\input\scripts\package_win.cmd 
+            
       - name: create package folder
         shell: cmd
         run: |
@@ -182,11 +197,11 @@ jobs:
         shell: cmd
         run: |
             makensis.exe input\scripts\input_win.nsi
-            xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-input-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.exe* /Y
+            xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-input-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
 
       - name: Upload Sdk in Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          path: mergin-maps-input-win64-${{ steps.time.outputs.time }}-${{ github.run_number }}.exe
+          path: mergin-maps-input-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe
           if-no-files-found: error
 

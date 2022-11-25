@@ -11,6 +11,8 @@
 #define TESTPURCHASING_H
 
 #include <QObject>
+
+#include "inputconfig.h"
 #include "testingpurchasingbackend.h"
 
 class MerginApi;

@@ -10,6 +10,8 @@
 #ifndef POSITIONKIT_H
 #define POSITIONKIT_H
 
+#include "inputconfig.h"
+
 #include "position/abstractpositionprovider.h"
 
 #include "qgspoint.h"

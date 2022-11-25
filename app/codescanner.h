@@ -9,6 +9,8 @@
 #include <QVideoSink>
 #include <QPointer>
 
+#include "inputconfig.h"
+
 #include "qrdecoder.h"
 
 class QRWorker;

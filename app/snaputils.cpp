@@ -36,12 +36,12 @@ void SnapUtils::setQgsProject( QgsProject *newQgsProject )
   }
 }
 
-QgsQuickMapSettings *SnapUtils::mapSettings() const
+InputMapSettings *SnapUtils::mapSettings() const
 {
   return mMapSettings;
 }
 
-void SnapUtils::setMapSettings( QgsQuickMapSettings *newMapSettings )
+void SnapUtils::setMapSettings( InputMapSettings *newMapSettings )
 {
   if ( mMapSettings == newMapSettings )
     return;
@@ -55,12 +55,12 @@ void SnapUtils::setMapSettings( QgsQuickMapSettings *newMapSettings )
 
   if ( mMapSettings )
   {
-    connect( mMapSettings, &QgsQuickMapSettings::extentChanged, this, &SnapUtils::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::destinationCrsChanged, this, &SnapUtils::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::mapUnitsPerPixelChanged, this, &SnapUtils::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &SnapUtils::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::outputSizeChanged, this, &SnapUtils::onMapSettingsUpdated );
-    connect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &SnapUtils::onMapSettingsUpdated );
+    connect( mMapSettings, &InputMapSettings::extentChanged, this, &SnapUtils::onMapSettingsUpdated );
+    connect( mMapSettings, &InputMapSettings::destinationCrsChanged, this, &SnapUtils::onMapSettingsUpdated );
+    connect( mMapSettings, &InputMapSettings::mapUnitsPerPixelChanged, this, &SnapUtils::onMapSettingsUpdated );
+    connect( mMapSettings, &InputMapSettings::visibleExtentChanged, this, &SnapUtils::onMapSettingsUpdated );
+    connect( mMapSettings, &InputMapSettings::outputSizeChanged, this, &SnapUtils::onMapSettingsUpdated );
+    connect( mMapSettings, &InputMapSettings::outputDpiChanged, this, &SnapUtils::onMapSettingsUpdated );
 
     mSnappingUtils.setMapSettings( mMapSettings->mapSettings() );
   }

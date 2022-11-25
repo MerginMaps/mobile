@@ -11,6 +11,8 @@ test/temp_extra_projects/
 input.pro.user*
 app/android/assets/qgis-data/proj_custom/
 app/android/assets/qgis-data/projects/
+app/android/assets/projects/
 *.gpkg-wal
 *.gpkg-shm
 Input_keystore.keystore
+CMakeLists.txt.user

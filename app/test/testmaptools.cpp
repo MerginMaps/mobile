@@ -20,8 +20,8 @@
 #include "qgslinestring.h"
 #include "qgsgeometry.h"
 
-#include "qgsquickmapcanvasmap.h"
-#include "qgsquickmapsettings.h"
+#include "inputmapcanvasmap.h"
+#include "inputmapsettings.h"
 
 #include "testutils.h"
 
@@ -32,7 +32,7 @@
 
 #include "featurelayerpair.h"
 
-void setupMapSettings( QgsQuickMapSettings *settings, QgsProject *project, QgsRectangle extent, QSize outputsize )
+void setupMapSettings( InputMapSettings *settings, QgsProject *project, QgsRectangle extent, QSize outputsize )
 {
   if ( !project || !settings )
     return;
@@ -79,9 +79,9 @@ void TestMapTools::testSnapping()
   // this should snap (map CRS): -106.961,35.929
   QgsPoint center( -107.5419, 35.0978 );
 
-  QgsQuickMapCanvasMap canvas;
+  InputMapCanvasMap canvas;
 
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapSettings *ms = canvas.mapSettings();
   ms->setProject( project );
   ms->setDestinationCrs( project->crs() );
   ms->setOutputSize( QSize( 600, 1096 ) );
@@ -128,9 +128,9 @@ void TestMapTools::testSplitting()
   QVERIFY( flySectorLayer && flySectorLayer->isValid() );
 
   // set map settings
-  QgsQuickMapCanvasMap canvas;
+  InputMapCanvasMap canvas;
 
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapSettings *ms = canvas.mapSettings();
   ms->setProject( project );
   ms->setDestinationCrs( project->crs() );
   ms->setOutputSize( QSize( 600, 1096 ) );
@@ -202,9 +202,9 @@ void TestMapTools::testRecording()
   QVERIFY( flySectorLayer && flySectorLayer->isValid() );
 
   // set map settings
-  QgsQuickMapCanvasMap canvas;
+  InputMapCanvasMap canvas;
 
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapSettings *ms = canvas.mapSettings();
   ms->setProject( project );
   ms->setDestinationCrs( project->crs() );
   ms->setOutputSize( QSize( 600, 1096 ) );
@@ -273,8 +273,8 @@ void TestMapTools::testExistingVertices()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
@@ -356,8 +356,8 @@ void TestMapTools::testMidSegmentVertices()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
@@ -437,8 +437,8 @@ void TestMapTools::testHandles()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
@@ -486,8 +486,8 @@ void TestMapTools::testLookForVertex()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
@@ -569,8 +569,8 @@ void TestMapTools::testAddVertexPointLayer()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
@@ -651,8 +651,8 @@ void TestMapTools::testAddVertexMultiPointLayer()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
@@ -737,8 +737,8 @@ void TestMapTools::testAddVertexLineLayer()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
@@ -862,8 +862,8 @@ void TestMapTools::testAddVertexMultiLineLayer()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
@@ -996,8 +996,8 @@ void TestMapTools::testAddVertexPolygonLayer()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
@@ -1127,8 +1127,8 @@ void TestMapTools::testAddVertexMultiPolygonLayer()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
@@ -1261,8 +1261,8 @@ void TestMapTools::testUpdateVertex()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
@@ -1309,8 +1309,8 @@ void TestMapTools::testRemoveVertex()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
@@ -1733,8 +1733,8 @@ void TestMapTools::testVerticesStructure()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
@@ -2291,8 +2291,8 @@ void TestMapTools::testZMRecording()
   QgsProject *project = TestUtils::loadPlanesTestProject();
   QVERIFY( project && !project->homePath().isEmpty() );
 
-  QgsQuickMapCanvasMap canvas;
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );

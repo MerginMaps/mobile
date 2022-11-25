@@ -12,6 +12,8 @@
 
 #include <QObject>
 
+#include "inputconfig.h"
+
 class TestFormEditors : public QObject
 {
     Q_OBJECT

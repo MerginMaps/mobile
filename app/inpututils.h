@@ -24,18 +24,19 @@
 
 #include <limits>
 
+#include "inputconfig.h"
 #include "inputhelp.h"
 #include "merginapi.h"
 #include "androidutils.h"
 #include "featurelayerpair.h"
-#include "qgsquickmapsettings.h"
+#include "inputmapsettings.h"
 #include "qgis.h"
 #include "qgsexpressioncontextutils.h"
 #include "qgsmessagelog.h"
 #include "qgspoint.h"
 #include "qgspointxy.h"
 #include "qgsunittypes.h"
-#include "qgsquickmapsettings.h"
+#include "inputmapsettings.h"
 #include "featurelayerpair.h"
 #include "qgscoordinateformatter.h"
 #include "position/mapposition.h"
@@ -74,19 +75,19 @@ class InputUtils: public QObject
     Q_INVOKABLE QString getFileName( const QString &filePath );
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
     Q_INVOKABLE QString formatNumber( const double number, int precision = 1 );
-    Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio );
+    Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings, double panelOffsetRatio );
 
     // utility functions to extract information from map settings
     // (in theory this data should be directly available from .MapTransform
     // but they are not currently, so this is a workaround we need for display of markers)
 
-    Q_INVOKABLE double mapSettingsScale( QgsQuickMapSettings *ms );
-    Q_INVOKABLE double mapSettingsOffsetX( QgsQuickMapSettings *ms );
-    Q_INVOKABLE double mapSettingsOffsetY( QgsQuickMapSettings *ms );
-    Q_INVOKABLE double mapSettingsDPR( QgsQuickMapSettings *ms );
+    Q_INVOKABLE double mapSettingsScale( InputMapSettings *ms );
+    Q_INVOKABLE double mapSettingsOffsetX( InputMapSettings *ms );
+    Q_INVOKABLE double mapSettingsOffsetY( InputMapSettings *ms );
+    Q_INVOKABLE double mapSettingsDPR( InputMapSettings *ms );
 
     //! Converts geometry to map canvas CRS if not already
-    Q_INVOKABLE static QgsGeometry convertGeometryToMapCRS( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, QgsQuickMapSettings *targetSettings );
+    Q_INVOKABLE static QgsGeometry convertGeometryToMapCRS( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings );
 
     /**
      * Function extracts QgsGeometry from the given pair.
@@ -243,16 +244,16 @@ class InputUtils: public QObject
       */
     Q_INVOKABLE static QPointF transformPointToScreenCoordinates(
       const QgsCoordinateReferenceSystem &srcCrs,
-      QgsQuickMapSettings *mapSettings,
+      InputMapSettings *mapSettings,
       const QgsPoint &srcPoint );
 
     /**
       * Calculates the distance in meter representing baseLengthPixels pixels on the screen based on the current map settings.
       */
-    Q_INVOKABLE static double screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels );
+    Q_INVOKABLE static double screenUnitsToMeters( InputMapSettings *mapSettings, int baseLengthPixels );
 
     // Converts map coordinate in map's X/Y to GPS coordinate
-    Q_INVOKABLE static QgsPoint mapPointToGps( QPointF mapPosition, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE static QgsPoint mapPointToGps( QPointF mapPosition, InputMapSettings *mapSettings );
 
     /**
       * Returns whether file on path exists
@@ -443,19 +444,19 @@ class InputUtils: public QObject
     Q_INVOKABLE static QgsPointXY extractPointFromFeature( const FeatureLayerPair &feature );
 
     // Returns an extent for stakeout based on distance between gps position and target feature
-    Q_INVOKABLE QgsRectangle stakeoutPathExtent( MapPosition *mapPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings, double mapExtentOffset );
+    Q_INVOKABLE QgsRectangle stakeoutPathExtent( MapPosition *mapPosition, const FeatureLayerPair &targetFeature, InputMapSettings *mapSettings, double mapExtentOffset );
 
     //! Returns geometry created out of the two points and converts it to map canvas screen pixels.
-    Q_INVOKABLE static QgsGeometry stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE static QgsGeometry stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, InputMapSettings *mapSettings );
 
     // Translates distance to target point into scale factor that should be used for map canvas during stakeout
     qreal distanceToScale( qreal distance );
 
     // Returns the distance from \a gpsPos to the feature \a pair
-    Q_INVOKABLE qreal distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE qreal distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, InputMapSettings *mapSettings );
 
     // Returns an angle between current gps position and feature
-    Q_INVOKABLE qreal angleBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE qreal angleBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, InputMapSettings *mapSettings );
 
     // Returns the title of the feature
     Q_INVOKABLE static QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );
@@ -490,7 +491,7 @@ class InputUtils: public QObject
     /**
      *  Changes visible extent of mapsettings based on settings in QGIS project.
      */
-    Q_INVOKABLE void zoomToProject( QgsProject *qgsProject, QgsQuickMapSettings *mapSettings );
+    Q_INVOKABLE void zoomToProject( QgsProject *qgsProject, InputMapSettings *mapSettings );
 
     /**
      * Rescales image according to the project photo quality setting.

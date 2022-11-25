@@ -19,7 +19,7 @@
 #include <QScreen>
 
 #include "qgsapplication.h"
-#include "qgsquickmapcanvasmap.h"
+#include "inputmapcanvasmap.h"
 #include "scalebarkit.h"
 
 #include "testutils.h"
@@ -30,9 +30,9 @@ void TestScaleBarKit::updateScaleBar()
   QVERIFY( crsGPS.authid() == "EPSG:4326" );
 
   QgsRectangle extent = QgsRectangle( 49, 16, 50, 17 );
-  QgsQuickMapCanvasMap canvas;
+  InputMapCanvasMap canvas;
 
-  QgsQuickMapSettings *ms = canvas.mapSettings();
+  InputMapSettings *ms = canvas.mapSettings();
   ms->setDestinationCrs( crsGPS );
   ms->setExtent( extent );
   ms->setOutputSize( QSize( 1000, 500 ) );

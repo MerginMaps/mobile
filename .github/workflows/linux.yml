@@ -4,8 +4,10 @@ on:
     paths:
     - 'app/**'
     - 'core/**'
-    - 'qgsquick/**'
     - 'scripts/**'
+    - 'cmake/**'
+    - 'cmake_templates/**'
+    - 'CMakeLists.txt'
     - '.github/workflows/linux.yml'
 
   release:
@@ -14,8 +16,8 @@ on:
 
 env:
   CCACHE_DIR: ~/.ccache
-  INPUT_SDK_VERSION: ubuntu-2204-20221026-96
-  QT_VERSION: '6.3.2'
+  INPUT_SDK_VERSION: ubuntu-2204-20221117-103
+  QT_VERSION: '6.4.1'
   CACHE_VERSION: 0
       
 concurrency:
@@ -28,7 +30,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout Input
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: input
 
@@ -51,7 +53,7 @@ jobs:
         with:
           version: ${{ env.QT_VERSION }}
           setup-python: 'false'
-          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning'
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
           dir: ${{ github.workspace }}
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-lnx
@@ -70,7 +72,7 @@ jobs:
 
       # CCache
       - name: Prepare build cache for pull request
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         if: github.event_name == 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -84,7 +86,7 @@ jobs:
 
       - name: Prepare build cache for branch/tag
         # use a fork of actions/cache@v2 to upload cache even when the build or test failed
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         if: github.event_name != 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -103,10 +105,10 @@ jobs:
       # Input SDK
       - name: Cache Input-SDK
         id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
@@ -118,40 +120,42 @@ jobs:
           cd ${{ github.workspace }}/input-sdk
           tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
 
-      # Build Input App
-      - name: Export app/config.pri
-        run: |
-          touch ./input/app/config.pri
-          echo -e "unix:!macx:!android {"  >> ./input/app/config.pri
-          echo -e "  INPUT_SDK_PATH = ${{ github.workspace }}/input-sdk"  >> ./input/app/config.pri
-          echo -e "  QGIS_QUICK_DATA_PATH = ${{ github.workspace }}/input/app/android/assets/qgis-data"  >> ./input/app/config.pri
-          echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX "  >> ./input/app/config.pri
-          echo -e "}"  >> ./input/app/config.pri
-          cat ./input/app/config.pri
-          
+      # Build Input App          
       - name: build Input
         run: |
+          mkdir -p install-Input
           mkdir -p build-Input
           cd build-Input
-          qmake \
-            ../input/app/input.pro
-          make
+          
+          cmake \
+             -DCMAKE_BUILD_TYPE=Release \
+             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/gcc_64 \
+             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
+             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
+             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
+             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+             -GNinja \
+             -S ../input
+             
+          ninja
+          ninja install          
 
       - name: Get TimeStamp
         id: time
-        uses: nanzm/get-time-action@v1.1
+        uses: josStorer/get-current-time@v2.0.2
         with:
-          timeZone: 8
           format: 'YYYYMMDD'
 
       - name: package Input
         run: |
-          INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.time }}-${{ github.run_number }}.tar.gz
+          INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.tar.gz
           echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
-          cd ${{ github.workspace }}/build-Input
-          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./Input
+          
+          cd ${{ github.workspace }}/install-Input
+          find .
+          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./
 
       - name: Upload Sdk in Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           path: ${{ github.workspace }}/${{ env.INPUT_TAR }}

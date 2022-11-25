@@ -12,7 +12,7 @@
 
 #include "qgis.h"
 
-#ifndef Q_OS_IOS
+#ifdef HAVE_BLUETOOTH
 #include "bluetoothpositionprovider.h"
 #endif
 

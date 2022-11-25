@@ -24,6 +24,7 @@
 #include <QVector>
 #include <QUuid>
 
+#include "inputconfig.h"
 #include "featurelayerpair.h"
 #include "attributedata.h"
 #include "attributeformproxymodel.h"

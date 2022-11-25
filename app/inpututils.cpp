@@ -18,7 +18,7 @@
 #include "qgslinestring.h"
 #include "qgspolygon.h"
 #include "qgsvectorlayer.h"
-#include "qgsquickmaptransform.h"
+#include "inputmaptransform.h"
 #include "coreutils.h"
 #include "qgis.h"
 #include "qgscoordinatereferencesystem.h"
@@ -40,7 +40,7 @@
 #include "qgsmultipolygon.h"
 
 #include "featurelayerpair.h"
-#include "qgsquickmapsettings.h"
+#include "inputmapsettings.h"
 #include "qgsunittypes.h"
 #include "qgsfeatureid.h"
 
@@ -220,7 +220,7 @@ QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &
   return INVALID_DATETIME_STR;
 }
 
-void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, QgsQuickMapSettings *mapSettings, double panelOffsetRatio )
+void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings, double panelOffsetRatio )
 {
 
   if ( !mapSettings )
@@ -293,31 +293,31 @@ double InputUtils::convertRationalNumber( const QString &rationalValue )
   return numerator / denominator;
 }
 
-double InputUtils::mapSettingsScale( QgsQuickMapSettings *ms )
+double InputUtils::mapSettingsScale( InputMapSettings *ms )
 {
   if ( !ms ) return 1;
   return 1 / ms->mapUnitsPerPixel();
 }
 
-double InputUtils::mapSettingsOffsetX( QgsQuickMapSettings *ms )
+double InputUtils::mapSettingsOffsetX( InputMapSettings *ms )
 {
   if ( !ms ) return 0;
   return -ms->visibleExtent().xMinimum();
 }
 
-double InputUtils::mapSettingsOffsetY( QgsQuickMapSettings *ms )
+double InputUtils::mapSettingsOffsetY( InputMapSettings *ms )
 {
   if ( !ms ) return 0;
   return -ms->visibleExtent().yMaximum();
 }
 
-double InputUtils::mapSettingsDPR( QgsQuickMapSettings *ms )
+double InputUtils::mapSettingsDPR( InputMapSettings *ms )
 {
   if ( !ms ) return 1;
   return ms->devicePixelRatio();
 }
 
-QgsGeometry InputUtils::convertGeometryToMapCRS( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, QgsQuickMapSettings *targetSettings )
+QgsGeometry InputUtils::convertGeometryToMapCRS( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings )
 {
   QgsGeometry g( geometry );
 
@@ -818,7 +818,7 @@ QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
   return QgsPoint();
 }
 
-QPointF InputUtils::transformPointToScreenCoordinates( const QgsCoordinateReferenceSystem &srcCrs, QgsQuickMapSettings *mapSettings, const QgsPoint &srcPoint )
+QPointF InputUtils::transformPointToScreenCoordinates( const QgsCoordinateReferenceSystem &srcCrs, InputMapSettings *mapSettings, const QgsPoint &srcPoint )
 {
   if ( !mapSettings || srcPoint.isEmpty() )
     return QPointF();
@@ -827,7 +827,7 @@ QPointF InputUtils::transformPointToScreenCoordinates( const QgsCoordinateRefere
   return mapSettings->coordinateToScreen( mapcrsPoint );
 }
 
-double InputUtils::screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int baseLengthPixels )
+double InputUtils::screenUnitsToMeters( InputMapSettings *mapSettings, int baseLengthPixels )
 {
   if ( mapSettings == nullptr ) return 0.0;
 
@@ -844,7 +844,7 @@ double InputUtils::screenUnitsToMeters( QgsQuickMapSettings *mapSettings, int ba
   return mDistanceArea.measureLine( p1, p2 );
 }
 
-QgsPoint InputUtils::mapPointToGps( QPointF mapPosition, QgsQuickMapSettings *mapSettings )
+QgsPoint InputUtils::mapPointToGps( QPointF mapPosition, InputMapSettings *mapSettings )
 {
   if ( !mapSettings )
     return QgsPoint();
@@ -1476,7 +1476,7 @@ bool InputUtils::isFeatureIdValid( qint64 featureId )
 QgsRectangle InputUtils::stakeoutPathExtent(
   MapPosition *mapPosition,
   const FeatureLayerPair &targetFeature,
-  QgsQuickMapSettings *mapSettings,
+  InputMapSettings *mapSettings,
   double mapExtentOffset
 )
 {
@@ -1546,7 +1546,7 @@ QgsRectangle InputUtils::stakeoutPathExtent(
   return extent;
 }
 
-QgsGeometry InputUtils::stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, QgsQuickMapSettings *mapSettings )
+QgsGeometry InputUtils::stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, InputMapSettings *mapSettings )
 {
   if ( !mapSettings || !target.isValid() )
     return QgsGeometry();
@@ -1585,7 +1585,7 @@ qreal InputUtils::distanceToScale( qreal distance )
   return scale;
 }
 
-qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
+qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const FeatureLayerPair &targetFeature, InputMapSettings *mapSettings )
 {
   if ( !mapSettings || !targetFeature.isValid() )
     return -1;
@@ -1630,7 +1630,7 @@ qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const Feat
   return distance;
 }
 
-qreal InputUtils::angleBetweenGpsAndFeature( QgsPoint gpsPoint, const FeatureLayerPair &targetFeature, QgsQuickMapSettings *mapSettings )
+qreal InputUtils::angleBetweenGpsAndFeature( QgsPoint gpsPoint, const FeatureLayerPair &targetFeature, InputMapSettings *mapSettings )
 {
   if ( !mapSettings || !targetFeature.isValid() )
     return -1;
@@ -1763,7 +1763,7 @@ bool InputUtils::isPointLayerFeature( const FeatureLayerPair &feature )
   return point != nullptr;
 }
 
-void InputUtils::zoomToProject( QgsProject *qgsProject, QgsQuickMapSettings *mapSettings )
+void InputUtils::zoomToProject( QgsProject *qgsProject, InputMapSettings *mapSettings )
 {
   if ( !qgsProject || !mapSettings )
   {

@@ -4,8 +4,10 @@ on:
     paths:
     - 'app/**'
     - 'core/**'
-    - 'qgsquick/**'
     - 'scripts/**'
+    - 'cmake/**'
+    - 'cmake_templates/**'
+    - 'CMakeLists.txt'
     - '.github/workflows/macos.yml'
 
   release:
@@ -14,11 +16,10 @@ on:
 
 env:
   TEST_MERGIN_URL: https://test.dev.merginmaps.com/
-  QT_VERSION: 6.3.2
-  QMAKE_MACOSX_DEPLOYMENT_TARGET: 10.15.0
-  INPUT_SDK_VERSION: mac-20221026-107
+  QT_VERSION: 6.4.1
+  INPUT_SDK_VERSION: mac-20221117-113
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 0
+  CACHE_VERSION: 1
   XC_VERSION: ${{ '13.2.1' }}
 
 concurrency:
@@ -31,7 +32,7 @@ jobs:
     runs-on: macos-11
     steps:
       - name: Checkout Input
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: input
 
@@ -42,6 +43,7 @@ jobs:
         run: |
           brew install lcov
           brew install ccache
+          brew install ninja
 
       - name: Extract Mergin API_KEY
         env:
@@ -57,7 +59,7 @@ jobs:
 
       # CCache
       - name: Prepare build cache for pull request
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         if: github.event_name == 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -71,7 +73,7 @@ jobs:
 
       - name: Prepare build cache for branch/tag
         # use a fork of actions/cache@v2 to upload cache even when the build or test failed
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         if: github.event_name != 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -94,17 +96,17 @@ jobs:
           version: ${{ env.QT_VERSION }}
           target: desktop
           dir: ${{ github.workspace }}
-          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning'
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-mac
 
       # Input SDK
       - name: Cache Input-SDK
         id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v3-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
@@ -117,34 +119,35 @@ jobs:
           tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
 
       # Build Input App
-      - name: Export app/config.pri
+      - name: Calculate build number
         run: |
-          touch ./input/app/config.pri
-          echo -e "macx:!android {"  >> ./input/app/config.pri
-          echo -e "  INPUT_SDK_PATH = ${{ github.workspace }}/input-sdk"  >> ./input/app/config.pri
-          echo -e "  QMAKE_MACOSX_DEPLOYMENT_TARGET = ${{ env.QMAKE_MACOSX_DEPLOYMENT_TARGET }}"  >> ./input/app/config.pri
-          echo -e "  QGIS_QUICK_DATA_PATH = ${{ github.workspace }}/input/app/android/assets/qgis-data"  >> ./input/app/config.pri
-          echo -e "  QMAKE_CXXFLAGS += --coverage"  >> ./input/app/config.pri
-          echo -e "  QMAKE_LFLAGS += --coverage"  >> ./input/app/config.pri
-          echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX"  >> ./input/app/config.pri
-          echo -e "  CONFIG += sdk_no_version_check"  >> ./input/app/config.pri
-          echo -e "}"  >> ./input/app/config.pri
-          cat ./input/app/config.pri
+            BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
+            echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
 
+            echo "Version code: ${BUILD_NUM}"
+            
       - name: build Input (Debug)
         run: |
           mkdir -p build-Input
           cd build-Input
-          ${{ github.workspace }}/Qt/${QT_VERSION}/macos/bin/qmake \
-            ../input/app/input.pro \
-            CONFIG+=debug \
-            CONFIG+=qtquickcompiler
-          make
+          
+          cmake \
+             -DCMAKE_BUILD_TYPE=Debug \
+             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
+             -DUSE_SERVER_API_KEY=TRUE \
+             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
+             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
+             -DCOVERAGE=TRUE \
+             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+             -GNinja \
+             -S ../input
+             
+          ninja
 
       - name: run tests
         run: |
           cd build-Input/
-          ../input/scripts/run_all_tests.bash ./Input.app/Contents/MacOS/Input
+          ../input/scripts/run_all_tests.bash "./app/Input.app/Contents/MacOS/Input"
 
       - name: build lcov summary
         run: |
@@ -161,29 +164,39 @@ jobs:
 
       - name: build Input (Release)
         run: |
+          mkdir -p install-Input
           mkdir -p build-Input-rel
           cd build-Input-rel
-          ${{ github.workspace }}/Qt/${QT_VERSION}/macos/bin/qmake \
-            ../input/app/input.pro \
-            CONFIG+=release
-            CONFIG+=qtquickcompiler
-          make
+
+          cmake \
+             -DCMAKE_BUILD_TYPE=Release \
+             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${QT_VERSION}/macos \
+             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
+             -DUSE_SERVER_API_KEY=TRUE \
+             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
+             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
+             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+             -GNinja \
+             -S ../input
+          
+          ninja  
+          ninja install
 
       - name: Get TimeStamp
         id: time
-        uses: nanzm/get-time-action@v1.1
+        uses: josStorer/get-current-time@v2.0.2
         with:
-          timeZone: 8
           format: 'YYYYMMDD'
 
       - name: package Input.app
         run: |
-          INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.time }}-${{ github.run_number }}.tar.gz
+          INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.tar.gz
           echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
-          cd ${{ github.workspace }}/build-Input-rel
-          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./Input.app
+          cd ${{ github.workspace }}/install-Input
+          find .
+          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} "./Mergin Maps.app"
 
       - name: Upload Sdk in Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           path: ${{ github.workspace }}/${{ env.INPUT_TAR }}

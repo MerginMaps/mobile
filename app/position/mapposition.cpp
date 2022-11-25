@@ -37,12 +37,12 @@ void MapPosition::setPositionKit( PositionKit *newPositionKit )
   update();
 }
 
-QgsQuickMapSettings *MapPosition::mapSettings() const
+InputMapSettings *MapPosition::mapSettings() const
 {
   return mMapSettings;
 }
 
-void MapPosition::setMapSettings( QgsQuickMapSettings *newMapSettings )
+void MapPosition::setMapSettings( InputMapSettings *newMapSettings )
 {
   if ( mMapSettings == newMapSettings )
     return;
@@ -56,12 +56,12 @@ void MapPosition::setMapSettings( QgsQuickMapSettings *newMapSettings )
 
   if ( mMapSettings )
   {
-    connect( mMapSettings, &QgsQuickMapSettings::extentChanged, this, &MapPosition::update );
-    connect( mMapSettings, &QgsQuickMapSettings::destinationCrsChanged, this, &MapPosition::update );
-    connect( mMapSettings, &QgsQuickMapSettings::mapUnitsPerPixelChanged, this, &MapPosition::update );
-    connect( mMapSettings, &QgsQuickMapSettings::visibleExtentChanged, this, &MapPosition::update );
-    connect( mMapSettings, &QgsQuickMapSettings::outputSizeChanged, this, &MapPosition::update );
-    connect( mMapSettings, &QgsQuickMapSettings::outputDpiChanged, this, &MapPosition::update );
+    connect( mMapSettings, &InputMapSettings::extentChanged, this, &MapPosition::update );
+    connect( mMapSettings, &InputMapSettings::destinationCrsChanged, this, &MapPosition::update );
+    connect( mMapSettings, &InputMapSettings::mapUnitsPerPixelChanged, this, &MapPosition::update );
+    connect( mMapSettings, &InputMapSettings::visibleExtentChanged, this, &MapPosition::update );
+    connect( mMapSettings, &InputMapSettings::outputSizeChanged, this, &MapPosition::update );
+    connect( mMapSettings, &InputMapSettings::outputDpiChanged, this, &MapPosition::update );
   }
 
   emit mapSettingsChanged( mMapSettings );

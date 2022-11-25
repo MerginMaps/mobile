@@ -6,11 +6,13 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#ifndef TESTSCALEBARKIT_H
+#define TESTSCALEBARKIT_H
+
 #include <QObject>
 #include <QtTest>
 
-#ifndef TESTSCALEBARKIT_H
-#define TESTSCALEBARKIT_H
+#include "inputconfig.h"
 
 class TestScaleBarKit: public QObject
 {

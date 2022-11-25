@@ -1,6 +1,8 @@
 #ifndef QRDECODER_H
 #define QRDECODER_H
 
+#include "inputconfig.h"
+
 #include <QObject>
 #include <QVideoFrame>
 

@@ -14,6 +14,8 @@
 #include <QObject>
 #include <qglobal.h>
 
+#include "inputconfig.h"
+
 #include "qgsproject.h"
 
 #include "layer/layertreemodel.h"

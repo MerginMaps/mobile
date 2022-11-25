@@ -276,7 +276,7 @@ void ActiveProject::requestSync()
   emit syncActiveProject( mLocalProject );
 }
 
-void ActiveProject::setMapSettings( QgsQuickMapSettings *mapSettings )
+void ActiveProject::setMapSettings( InputMapSettings *mapSettings )
 {
   if ( mMapSettings == mapSettings )
     return;
@@ -311,7 +311,7 @@ void ActiveProject::updateMapSettingsLayers() const
   mMapSettings->setTransformContext( mQgsProject->transformContext() );
 }
 
-QgsQuickMapSettings *ActiveProject::mapSettings() const
+InputMapSettings *ActiveProject::mapSettings() const
 {
   return mMapSettings;
 }

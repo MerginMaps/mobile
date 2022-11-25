@@ -15,7 +15,6 @@ Other Checks:
 
 [![InputApp Code Layout](https://github.com/MerginMaps/input/workflows/Code%20Layout/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22Code+Layout%22)
 [![Coverage Status](https://coveralls.io/repos/github/MerginMaps/input/badge.svg?branch=master)](https://coveralls.io/github/MerginMaps/input?branch=master)
-[![QgsQuick](https://github.com/MerginMaps/input/workflows/QgsQuick/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22QgsQuick%22)
 [![Translations](https://github.com/MerginMaps/input/actions/workflows/i18n.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/i18n.yml)
 
 Citation link:
@@ -77,7 +76,7 @@ Read more about the app [https://merginmaps.com/docs](https://merginmaps.com/doc
 
 ## Developers
 
-For more information on building Mergin Maps Input app please have a look in [developer documentation](docs/developers/README.md).
+To setup your development environment, read [INSTALL](./INSTALL.md)
 
 ## Privacy policy
 Read more about the app privacy policy [here](https://merginmaps.com/docs/reference/privacy/)

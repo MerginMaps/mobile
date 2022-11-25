@@ -13,6 +13,7 @@
 #include <QObject>
 #include <qglobal.h>
 
+#include "inputconfig.h"
 #include "qgslayertreemodel.h"
 #include "qgsproject.h"
 

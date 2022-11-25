@@ -10,6 +10,7 @@
 #ifndef SPLITTINGMAPTOOL_H
 #define SPLITTINGMAPTOOL_H
 
+#include "inputconfig.h"
 #include "abstractmaptool.h"
 #include <qglobal.h>
 

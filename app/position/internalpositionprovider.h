@@ -10,6 +10,7 @@
 #ifndef INTERNALPOSITIONPROVIDER_H
 #define INTERNALPOSITIONPROVIDER_H
 
+#include "inputconfig.h"
 #include "abstractpositionprovider.h"
 
 #include <QObject>

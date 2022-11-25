@@ -11,17 +11,17 @@ jobs:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: ubuntu-latest
     env:
-      QT_VERSION: '6.3.2'
+      QT_VERSION: '6.4.1'
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
           version: ${{ env.QT_VERSION }}
           setup-python: 'false'
-          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning'
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
           dir: ${{ github.workspace }}
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-lnx

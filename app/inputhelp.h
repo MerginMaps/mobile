@@ -14,6 +14,8 @@
 #include <QString>
 #include <QNetworkAccessManager>
 
+#include "inputconfig.h"
+
 class MerginApi;
 class InputUtils;
 

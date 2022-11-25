@@ -14,6 +14,7 @@
 
 #include "test/testmerginapi.h"
 #include "test/testlinks.h"
+
 #include "test/testutilsfunctions.h"
 #include "test/testattributepreviewcontroller.h"
 #include "test/testattributecontroller.h"

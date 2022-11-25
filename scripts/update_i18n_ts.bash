@@ -7,11 +7,6 @@ LUPDATE_PARAMS="-extensions qml,cpp,hpp,h,ui,c -ts"
 
 echo "update_18n_ts.bash QT_DIST_DIR"
 
-if [ ! -f "$DIR/../qgsquick/qgsquickmapcanvasmap.cpp" ]; then
-  echo "Missing $DIR/../qgsquick/qgsquickmapcanvasmap.cpp!"
-  exit 1;
-fi
-
 QT_DIR=$1
 QT_DIR=`realpath $QT_DIR`
 
@@ -28,10 +23,9 @@ fi
 I18N_DIR=$DIR/../app/i18n
 cd $I18N_DIR
 INPUT_TS="$INPUT_TS ./input_en.ts"
-QUICKQUI_DIR=`realpath --relative-to=$I18N_DIR $DIR/../qgsquick`
 INPUT_DIR=../
 
-$QT_DIST_DIR/bin/lupdate -noobsolete $INPUT_DIR $QUICKQUI_DIR $LUPDATE_PARAMS $INPUT_TS
+$QT_DIST_DIR/bin/lupdate -noobsolete $INPUT_DIR $LUPDATE_PARAMS $INPUT_TS
 
 echo "update i18n done"
 cd $PWD

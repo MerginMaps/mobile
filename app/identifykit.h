@@ -19,11 +19,13 @@
 #include <QObject>
 #include <QPair>
 
+#include "inputconfig.h"
+
 #include "qgsfeature.h"
 #include "qgsmapsettings.h"
 #include "qgspoint.h"
 #include "qgsrendercontext.h"
-#include "qgsquickmapsettings.h"
+#include "inputmapsettings.h"
 
 #include "featurelayerpair.h"
 
@@ -49,7 +51,7 @@ class  IdentifyKit : public QObject
     /**
      * Map settings. Set directly when creating QML object.
      */
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     /**
      * Search radius for the identify functions
@@ -98,10 +100,10 @@ class  IdentifyKit : public QObject
     explicit IdentifyKit( QObject *parent = nullptr );
 
     //! \copydoc IdentifyKit::mapSettings
-    QgsQuickMapSettings *mapSettings() const;
+    InputMapSettings *mapSettings() const;
 
     //! \copydoc IdentifyKit::mapSettings
-    void setMapSettings( QgsQuickMapSettings *mapSettings );
+    void setMapSettings( InputMapSettings *mapSettings );
 
     //! \copydoc IdentifyKit::searchRadiusMm
     double searchRadiusMm() const;
@@ -157,7 +159,7 @@ class  IdentifyKit : public QObject
     void identifyModeChanged();
 
   private:
-    QgsQuickMapSettings *mMapSettings = nullptr; // not owned
+    InputMapSettings *mMapSettings = nullptr; // not owned
 
     double searchRadiusMU( const QgsRenderContext &context ) const;
     double searchRadiusMU() const;

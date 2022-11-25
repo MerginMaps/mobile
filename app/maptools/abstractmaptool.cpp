@@ -17,12 +17,12 @@ AbstractMapTool::AbstractMapTool( QObject *parent )
 
 AbstractMapTool::~AbstractMapTool() = default;
 
-QgsQuickMapSettings *AbstractMapTool::mapSettings() const
+InputMapSettings *AbstractMapTool::mapSettings() const
 {
   return mMapSettings;
 }
 
-void AbstractMapTool::setMapSettings( QgsQuickMapSettings *newMapSettings )
+void AbstractMapTool::setMapSettings( InputMapSettings *newMapSettings )
 {
   if ( mMapSettings == newMapSettings )
     return;

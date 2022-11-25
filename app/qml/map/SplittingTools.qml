@@ -11,7 +11,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Shapes
 
-import QgsQuick 0.1
+import Input 0.1
 import lc 1.0
 
 import "../"

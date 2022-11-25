@@ -6,11 +6,13 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#ifndef TESTIDENTIFYKIT_H
+#define TESTIDENTIFYKIT_H
+
 #include <QObject>
 #include <QtTest>
 
-#ifndef TESTIDENTIFYKIT_H
-#define TESTIDENTIFYKIT_H
+#include "inputconfig.h"
 
 class TestIdentifyKit: public QObject
 {

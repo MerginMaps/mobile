@@ -10,7 +10,6 @@
 import QtQuick
 
 import lc 1.0
-import QgsQuick 0.1 as QgsQuick
 import QtQuick.Dialogs
 
 import ".."
@@ -146,7 +145,7 @@ Item {
     anchors.fill: parent
   }
 
-  QgsQuick.MapCanvas {
+  MapCanvas {
     id: mapCanvas
 
     height: root.height

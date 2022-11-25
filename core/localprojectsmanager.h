@@ -11,7 +11,7 @@
 #define LOCALPROJECTSMANAGER_H
 
 #include <QObject>
-#include <project.h>
+#include "project.h"
 
 /**
  * \brief The LocalProjectsManager class is responsible for loading local - downloaded - files from path

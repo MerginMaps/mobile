@@ -13,6 +13,7 @@
 #include <QObject>
 #include <QNetworkReply>
 
+#include "inputconfig.h"
 #include "project.h"
 #include "merginapi.h"
 #include "synchronizationerror.h"

@@ -13,6 +13,8 @@
 #include <QTest>
 #include <QObject>
 
+#include "inputconfig.h"
+
 class TestAttributePreviewController: public QObject
 {
     Q_OBJECT

@@ -4,23 +4,24 @@ on:
     paths:
     - 'app/**'
     - 'core/**'
-    - 'qgsquick/**'
     - 'scripts/**'
+    - 'cmake/**'
+    - 'cmake_templates/**'
+    - 'CMakeLists.txt'
     - '.github/workflows/ios.yml'
 
   release:
     types:
       - published
 
-env:
-  IOS_MIN_SDK_VERSION: ${{ '14.0' }}    
-  QT_VERSION: '6.3.2'
+env:   
+  QT_VERSION: '6.4.1'
   XC_VERSION: ${{ '13.2.1' }}
-  INPUT_SDK_VERSION: ios-20221026-79
+  INPUT_SDK_VERSION: ios-20221117-88
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 5
+  CACHE_VERSION: 8
 
 concurrency:
   group: ci-${{github.ref}}-ios
@@ -34,11 +35,11 @@ jobs:
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # CCache
       - name: Prepare build cache for pull request
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         if: github.event_name == 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -52,7 +53,7 @@ jobs:
 
       - name: Prepare build cache for branch/tag
         # use a fork of actions/cache@v2 to upload cache even when the build or test failed
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         if: github.event_name != 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -68,6 +69,7 @@ jobs:
           brew install openssl@1.1
           brew install python3
           brew install ccache
+          brew install ninja
           pip3 install -U pip
           pip3 install aqtinstall
           
@@ -114,10 +116,10 @@ jobs:
       # Input SDK
       - name: Cache Input-SDK
         id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
@@ -132,69 +134,24 @@ jobs:
       # Qt
       - name: Cache Qt
         id: cache-qt
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-ios
+          key: ${{ runner.os }}-QtCache-v1-${{ env.QT_VERSION }}-ios
           
       - name: Install Qt
         if: steps.cache-qt.outputs.cache-hit != 'true'
         run: |
-          aqt install-qt \
+          python3 -m aqt install-qt \
             mac ios ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
             -O ${{ github.workspace }}/Qt
             
-          aqt install-qt \
+          python3 -m aqt install-qt \
             mac desktop ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
             -O ${{ github.workspace }}/Qt
-            
-          ls -la ${{ github.workspace }}/Qt
-          ls -la ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
 
-      # Build Input App
-      # !! ccache_clang is a custom script which runs ccache and default XCode clang.
-      # !! It has been created due to a bug in Qt when QMAKE_CXX ignored everything after
-      # !! whitespace chars. In that case in the string 'ccache clang++' clang was ignored
-      # !! and ccache received all of the compilation flags that were supposed to go to clang.
-      - name: Export app/config.pri
-        shell: bash
-        run: |
-          touch ./app/config.pri
-          
-          echo -e "ios {"  >> ./app/config.pri
-          
-          echo -e "  INPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64"  >> ./app/config.pri
-          echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
-          echo -e "  QMAKE_IOS_DEPLOYMENT_TARGET = ${{ env.IOS_MIN_SDK_VERSION }}"  >> ./app/config.pri
-          echo -e "  QMAKE_CXX = ${{ github.workspace }}/scripts/ci/ios/ccache_clang"  >> ./app/config.pri
-          
-          echo -e "  qprofile.name=PROVISIONING_PROFILE_SPECIFIER"  >> ./app/config.pri
-          echo -e "  qprofile.value=\"LutraConsultingLtd.Input.AppStore\""  >> ./app/config.pri
-          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qprofile"  >> ./app/config.pri
-
-          echo -e "  qteam.name=DEVELOPMENT_TEAM"  >> ./app/config.pri
-          echo -e "  qteam.value=79QMH2QRAH"  >> ./app/config.pri
-          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qteam"  >> ./app/config.pri
-
-          echo -e "  qidentity.name=CODE_SIGN_IDENTITY"  >> ./app/config.pri
-          echo -e "  qidentity.value=\"iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)\""  >> ./app/config.pri
-          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qidentity"  >> ./app/config.pri
-                    
-          echo -e "  qstyle.name=CODE_SIGN_STYLE"  >> ./app/config.pri
-          echo -e "  qstyle.value=Manual"  >> ./app/config.pri
-          echo -e "  QMAKE_MAC_XCODE_SETTINGS+=qstyle"  >> ./app/config.pri
-          
-          echo -e "}"  >> ./app/config.pri
-          cat ./app/config.pri
-
-          if [ ! ${{ env.QT_VERSION }} == "6.3.2" ]; then
-            echo "Qt version has changed! Double check if we still need custom script 'ccache_clang' for QMAKE_CXX."
-            echo "  - If yes, change this condition to the new Qt version"
-            echo "  - If no, remove the 'ccache_clang' script and this check too"
-            exit 1
-          fi
 
       - name: Calculate a build number
         env:
@@ -205,36 +162,30 @@ jobs:
             TIMESTAMP=`date "+%y.%m"`
             CF_BUNDLE_VERSION=${TIMESTAMP}.${BUILD_NUM}
 
-            echo "CF_BUNDLE_VERSION=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
-
+            echo "INPUT_VERSION_CODE=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
             echo "Build number: ${CF_BUNDLE_VERSION}"
 
-      - name: Create build system with qmake
+      - name: Create build system with cmake
         run: |
           INPUT_DIR=`pwd`
-
-          # patch the Info.plist
-          CF_BUNDLE_SHORT_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" $INPUT_DIR/app/ios/Info.plist`
-
-          echo "Building version: $CF_BUNDLE_SHORT_VERSION ($CF_BUNDLE_VERSION)"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $CF_BUNDLE_VERSION" "$INPUT_DIR/app/ios/Info.plist"
-
+ 
+          mkdir -p install-Input
           mkdir -p build-INPUT
           cd build-INPUT
-
-          # run qmake
-          ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios/bin/qmake \
-            ${INPUT_DIR}/app/input.pro \
-            -spec macx-ios-clang \
-            CONFIG+=release \
-            CONFIG+=iphoneos \
-            CONFIG+=device \
-            CONFIG+=qtquickcompiler
-
-          # Use old deprecated build system in XCode 13
-          /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
-          /usr/libexec/PlistBuddy -c "Set :DisableBuildSystemDeprecationDiagnostic true" ./Input.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
-
+                    
+          # run cmake
+          cmake \
+            -DIOS=TRUE \
+            -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios \
+            -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
+            -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64 \
+            -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/input-sdk/ios.toolchain.cmake \
+            -G "Xcode" \
+            -DQT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -S $INPUT_DIR \
+            -B ./
+ 
       - name: Build Input
         run: |
           INPUT_DIR=`pwd`
@@ -266,7 +217,7 @@ jobs:
           INPUTAPP_BOT_GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
         if: success()
         run: |
-          CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" app/ios/Info.plist`
+          CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" build-INPUT/app/CMakeFiles/Input.dir/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
           xcrun altool --upload-app -t ios -f build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
 

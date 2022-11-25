@@ -19,6 +19,7 @@
 
 #include <QStandardItemModel>
 
+#include "inputconfig.h"
 #include "qgsproject.h"
 
 class MapThemesModel : public QStandardItemModel

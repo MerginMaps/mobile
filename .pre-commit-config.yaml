@@ -14,4 +14,4 @@ repos:
         entry: './scripts/astyle.bash'
         language: script
         types_or: [c++, objective-c++]
-        files: ^(app|core|qgsquick)/
+        files: ^(app|core)/

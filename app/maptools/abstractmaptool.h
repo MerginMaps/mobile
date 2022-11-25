@@ -13,28 +13,29 @@
 #include <QObject>
 #include <qglobal.h>
 
-#include "qgsquickmapsettings.h"
+#include "inputconfig.h"
+#include "inputmapsettings.h"
 
 class AbstractMapTool : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY( QgsQuickMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
   public:
     explicit AbstractMapTool( QObject *parent = nullptr );
     virtual ~AbstractMapTool();
 
-    QgsQuickMapSettings *mapSettings() const;
-    void setMapSettings( QgsQuickMapSettings *newMapSettings );
+    InputMapSettings *mapSettings() const;
+    void setMapSettings( InputMapSettings *newMapSettings );
 
   signals:
 
-    void mapSettingsChanged( QgsQuickMapSettings *mapSettings );
+    void mapSettingsChanged( InputMapSettings *mapSettings );
 
   private:
 
-    QgsQuickMapSettings *mMapSettings = nullptr;
+    InputMapSettings *mMapSettings = nullptr;
 };
 
 #endif // ABSTRACTMAPTOOL_H

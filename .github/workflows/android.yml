@@ -4,8 +4,10 @@ on:
     paths:
     - 'app/**'
     - 'core/**'
-    - 'qgsquick/**'
     - 'scripts/**'
+    - 'cmake/**'
+    - 'cmake_templates/**'
+    - 'CMakeLists.txt'
     - '.github/workflows/android.yml'
 
   release:
@@ -21,26 +23,24 @@ jobs:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-11
     env:
-      QT_VERSION: '6.3.2'
-      ANDROIDAPI: 24
-      ANDROID_NDK_PLATFORM: android-24
-      NDK_VERSION: r22
-      NDK_VERSION_FULL: r22b
+      QT_VERSION: '6.4.1'
+      NDK_VERSION: r23
+      NDK_VERSION_FULL: r23b
       JDK_VERSION: 11
       SDK_PLATFORM: android-31
       SDK_BUILD_TOOLS: 31.0.0
-      INPUT_SDK_VERSION: android-macOS-20221026-117
+      INPUT_SDK_VERSION: android-macOS-20221117-129
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
-      CACHE_VERSION: 1
+      CACHE_VERSION: 3
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # CCache
       - name: Prepare build cache for pull request
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         if: github.event_name == 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -54,7 +54,7 @@ jobs:
 
       - name: Prepare build cache for branch/tag
         # use a fork of actions/cache@v2 to upload cache even when the build or test failed
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         if: github.event_name != 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -78,6 +78,7 @@ jobs:
           echo "/usr/local/opt/bison/bin" >> $GITHUB_PATH
           brew install gnupg
           brew install openssl@1.1
+          brew install ninja
           pip3 install -U pip
           pip3 install aqtinstall
           
@@ -96,30 +97,28 @@ jobs:
 
       - name: Cache Qt
         id: cache-qt
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-android
+          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-android
           
       - name: Install Qt
         if: steps.cache-qt.outputs.cache-hit != 'true'
         run: |
-          aqt install-qt \
+          python3 -m aqt install-qt \
             mac android ${{ env.QT_VERSION }} android_arm64_v8a \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
             -O ${{ github.workspace }}/Qt
             
-          aqt install-qt \
+          python3 -m aqt install-qt \
             mac android ${{ env.QT_VERSION }} android_armv7 \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
             -O ${{ github.workspace }}/Qt
         
-          aqt install-qt \
+          python3 -m aqt install-qt \
             mac desktop ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
             -O ${{ github.workspace }}/Qt
-          
-          ls -la ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
           
        # Android SDK & NDK
       - uses: nttld/setup-ndk@v1
@@ -129,13 +128,13 @@ jobs:
           add-to-path: true
 
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
          java-version: ${{ env.JDK_VERSION }}
          distribution: zulu
 
       - name: Setup Android SDK
-        uses: malinskiy/action-android/install-sdk@release/0.1.2
+        uses: malinskiy/action-android/install-sdk@release/0.1.4
 
       - name: Install Android Tools
         run: |
@@ -144,7 +143,7 @@ jobs:
       # Input SDK
       - name: Cache Input-SDK
         id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v2.1.5
+        uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/input-sdk
           key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
@@ -185,93 +184,83 @@ jobs:
            -md md5
 
       # Build Input App
-      - name: Export app/config.pri
-        run: |
-          touch ./app/config.pri
-          echo -e "android {"  >> ./app/config.pri
-          echo -e "  INPUT_SDK_PATH=${{ github.workspace }}/input-sdk"  >> ./app/config.pri
-          echo -e "  QGIS_QUICK_DATA_PATH = INPUT"  >> ./app/config.pri
-          echo -e "  QMAKE_CXX = ccache \$\$QMAKE_CXX "  >> ./app/config.pri
-          echo -e "}"  >> ./app/config.pri
-          cat ./app/config.pri
-
       - name: Calculate build number
         env:
           OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
         run: |
             BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
-            echo "CI_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
+            echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
 
-            echo "Build number: ${BUILD_NUM}"
-
-      - name: Build armeabi-v7a APK
+            echo "Version code: ${BUILD_NUM}"
+                                    
+      - name: Configure Input
         env:
-          ARCH: armeabi-v7a
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
-          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_armv7
-          QT_NATIVE_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos
-          SOURCE_DIR: ${{ github.workspace }}
+          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
+          INPUT_SDK_ANDROID_BASE: ${{ github.workspace }}/input-sdk
 
         run: |
-            mkdir -p ${{ github.workspace }}/build-apk-$ARCH
-            cd ${{ github.workspace }}/build-apk-$ARCH
-            ../scripts/android-apk.bash
+            mkdir -p ${{ github.workspace }}/build-Input
+            cd ${{ github.workspace }}/build-Input
 
-      - name: Build arm64-v8a APK
+            cmake \
+              -DCMAKE_BUILD_TYPE=Release \
+              -DQT_ANDROID_ABIS="arm64-v8a;armeabi-v7a" \
+              -DQT_HOST_PATH=$QT_BASE/macos \
+              -DCMAKE_TOOLCHAIN_FILE=$QT_BASE/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
+              -GNinja \
+              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+              -S ../ \
+              -B ./
+      
+      - name: build APK
         env:
-          ARCH: arm64-v8a
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
-          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a
-          QT_NATIVE_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos
-          SOURCE_DIR: ${{ github.workspace }}
-
+          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
+          INPUT_SDK_ANDROID_BASE: ${{ github.workspace }}/input-sdk
         run: |
-            mkdir -p ${{ github.workspace }}/build-apk-$ARCH
-            cd ${{ github.workspace }}/build-apk-$ARCH
-            ../scripts/android-apk.bash
+            cd ${{ github.workspace }}/build-Input
+            ninja apk
+            
+            echo "APKs:"
+            find . | grep .apk
+                
+      - name: build AAB   
+        env:
+          ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
+          ANDROID_NDK_HOST: darwin-x86_64
+          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
+          INPUT_SDK_ANDROID_BASE: ${{ github.workspace }}/input-sdk
+        run: |
+            cd ${{ github.workspace }}/build-Input
+            ninja aab
 
+            echo "AAB:"
+            find . | grep .aab
+            
       - name: Rename build artefacts
         run: |
-          cd ${{ github.workspace }}/build-apk-arm64-v8a/build-input-apk/out/build/outputs/apk/release
-          mv out-release-signed.apk `echo merginmaps-v8-$CI_VERSION_CODE.apk`
+          mv \
+            ${{ github.workspace }}/build-Input/app/android-build/build/outputs/apk/debug/android-build-debug.apk \
+            ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
+                       
+          mv \
+            ${{ github.workspace }}/build-Input/app/android-build/build/outputs/bundle/release/android-build-release.aab \
+            ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab
           
-          cd ${{ github.workspace }}/build-apk-armeabi-v7a/build-input-apk/out/build/outputs/apk/release/
-          mv out-release-signed.apk `echo merginmaps-v7a-$CI_VERSION_CODE.apk`
-
-      - name: Upload v8 APK to Artifacts
-        uses: actions/upload-artifact@v2
+          
+      - name: Upload APK to Artifacts
+        uses: actions/upload-artifact@v3
         with:
-          path: ${{ github.workspace }}/build-apk-arm64-v8a/build-input-apk/out/build/outputs/apk/release/merginmaps-v8-${{ env.CI_VERSION_CODE }}.apk
+          path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
           name: arm64 apk
-
-      - name: Upload v7 APK to Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          path: ${{ github.workspace }}/build-apk-armeabi-v7a/build-input-apk/out/build/outputs/apk/release/merginmaps-v7a-${{ env.CI_VERSION_CODE }}.apk
-          name: armeabi apk
-
-      - name: Build AAB
-        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
-        env:
-          ARCH: 'armeabi-v7a arm64-v8a'
-          ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
-          ANDROID_NDK_HOST: darwin-x86_64
-          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a
-          QT_NATIVE_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos
-          SOURCE_DIR: ${{ github.workspace }}
-
-        run: |
-            pwd
-            echo "Version code: ${{env.CI_VERSION_CODE}}"
-            mkdir -p ${{ github.workspace }}/build-aab
-            cd ${{ github.workspace }}/build-aab
-            ../scripts/android-aab.bash
 
       - name: Upload AAB to Artifacts
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          path: ${{ github.workspace }}/build-aab/build-input-aab/out/build/outputs/bundle/release/out-release.aab
+          path: ${{ github.workspace }}/merginmaps-$INPUT_VERSION_CODE.aab
           name: aab bundle
+          

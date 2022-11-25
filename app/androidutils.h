@@ -10,6 +10,8 @@
 #ifndef ANDROIDUTILS_H
 #define ANDROIDUTILS_H
 
+#include "inputconfig.h"
+
 #ifdef ANDROID
 #include <QtCore/private/qandroidextras_p.h>
 #include <QJniObject>
