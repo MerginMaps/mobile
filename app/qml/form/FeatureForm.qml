@@ -552,7 +552,7 @@ Item {
               form.openLinkedFeature( linkedFeature )
             }
 
-            function onCreateLinkedFeature() {
+            function onCreateLinkedFeature( parentFeature, relation ) {
               let parentHasValidId = __inputUtils.isFeatureIdValid( parentFeature.feature.id )
 
               if ( parentHasValidId ) {

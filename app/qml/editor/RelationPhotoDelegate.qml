@@ -21,9 +21,6 @@ Item {
 
   signal clicked( var feature )
 
-  height: parent.height
-  width: height
-
   Image {
     id: image
 
