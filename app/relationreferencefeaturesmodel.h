@@ -12,6 +12,7 @@
 
 #include <QObject>
 
+#include "inputconfig.h"
 #include "qgsproject.h"
 #include "featuresmodel.h"
 

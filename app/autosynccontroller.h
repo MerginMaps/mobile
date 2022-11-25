@@ -11,6 +11,7 @@
 #define AUTOSYNCCONTROLLER_H
 
 #include <QObject>
+#include "inputconfig.h"
 
 class QgsProject;
 

@@ -9,6 +9,8 @@
 #include "qgsfield.h"
 #include "qgsfields.h"
 
+#include "inputconfig.h"
+
 struct FieldConfiguration
 {
   QString attributeName;

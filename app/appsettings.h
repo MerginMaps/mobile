@@ -15,6 +15,8 @@
 #include <QVariant>
 #include <QString>
 
+#include "inputconfig.h"
+
 class AppSettings: public QObject
 {
     Q_OBJECT

@@ -12,6 +12,8 @@
 
 #include <QString>
 #include <qtestcase.h>
+
+#include "inputconfig.h"
 #include "qgsproject.h"
 #include "merginapi.h"
 

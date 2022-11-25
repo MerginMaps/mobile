@@ -13,6 +13,7 @@
 #include <QObject>
 #include <QSortFilterProxyModel>
 
+#include "inputconfig.h"
 #include "projectsmodel.h"
 
 /**

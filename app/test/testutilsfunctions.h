@@ -11,6 +11,7 @@
 #define TESTUTILSFUNCTIONS_H
 
 #include <QObject>
+#include "inputconfig.h"
 #include "inpututils.h"
 
 class TestUtilsFunctions: public QObject

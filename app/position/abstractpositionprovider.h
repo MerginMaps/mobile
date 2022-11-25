@@ -10,6 +10,8 @@
 #ifndef ABSTRACTPOSITIONPROVIDER_H
 #define ABSTRACTPOSITIONPROVIDER_H
 
+#include "inputconfig.h"
+
 #include "qgsgpsconnection.h"
 #include "qgspoint.h"
 

@@ -14,6 +14,7 @@
 #include <QtTest/QtTest>
 
 #include "inputhelp.h"
+#include "inputconfig.h"
 
 class UrlTester: public QObject
 {

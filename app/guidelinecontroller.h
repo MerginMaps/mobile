@@ -13,6 +13,8 @@
 #include <QObject>
 #include <qglobal.h>
 
+#include "inputconfig.h"
+
 #include "qgsgeometry.h"
 #include "inputmapsettings.h"
 

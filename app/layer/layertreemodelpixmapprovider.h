@@ -14,6 +14,7 @@
 #include <QObject>
 #include <qglobal.h>
 
+#include "inputconfig.h"
 #include "layer/layertreemodel.h"
 
 class LayerTreeModelPixmapProvider : public QQuickImageProvider

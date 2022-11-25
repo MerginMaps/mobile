@@ -20,6 +20,7 @@
 #include <QJsonObject>
 #include <memory>
 
+#include "inputconfig.h"
 #include "merginsubscriptiontype.h"
 
 class MerginApi;

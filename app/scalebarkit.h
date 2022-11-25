@@ -19,6 +19,7 @@
 #include <QObject>
 #include <QString>
 
+#include "inputconfig.h"
 #include "inpututils.h"
 #include "inputmapsettings.h"
 

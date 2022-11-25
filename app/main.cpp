@@ -7,6 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "inputconfig.h"
+
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>

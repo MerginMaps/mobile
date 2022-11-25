@@ -11,6 +11,7 @@
 #define TESTINGPURCHASINGBACKEND_H
 
 #include "purchasing.h"
+#include "inputconfig.h"
 
 #include <QObject>
 #include <QByteArray>

@@ -6,11 +6,13 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#ifndef TESTATTRIBUTECONTROLLER_H
+#define TESTATTRIBUTECONTROLLER_H
+
 #include <QObject>
 #include <QtTest>
 
-#ifndef TESTATTRIBUTECONTROLLER_H
-#define TESTATTRIBUTECONTROLLER_H
+#include "inputconfig.h"
 
 class TestAttributeController: public QObject
 {

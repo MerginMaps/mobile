@@ -13,6 +13,7 @@
 #include <QAbstractListModel>
 #include <memory>
 
+#include "inputconfig.h"
 #include "project.h"
 #include "merginapi.h"
 #include "synchronizationmanager.h"

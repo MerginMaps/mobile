@@ -11,6 +11,7 @@
 #define TESTIMAGEUTILS_H
 
 #include <QObject>
+#include "inputconfig.h"
 
 class TestImageUtils : public QObject
 {

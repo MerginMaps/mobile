@@ -25,6 +25,7 @@
 #include <QObject>
 #include <memory>
 
+#include "inputconfig.h"
 #include "qgsfieldconstraints.h"
 #include "qgseditorwidgetsetup.h"
 #include "qgsexpression.h"

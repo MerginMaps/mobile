@@ -9,6 +9,7 @@
 #include <QObject>
 #include <QtTest>
 
+#include "inputconfig.h"
 #include "variablesmanager.h"
 #include "qgeopositioninfo.h"
 #include "compass.h"

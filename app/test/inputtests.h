@@ -10,6 +10,8 @@
 #ifndef INPUTTESTS_H
 #define INPUTTESTS_H
 
+#include "inputconfig.h"
+
 #include <QString>
 #include <QStringList>
 

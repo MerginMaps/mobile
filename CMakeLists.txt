@@ -131,15 +131,15 @@ set(ENABLE_TESTS
 )
 set(HAVE_BLUETOOTH
     ${HAVE_BLUETOOTH_DEFAULT}
-    CACHE STRING "Building with bluetooth position provider"
+    CACHE BOOL "Building with bluetooth position provider"
 )
 set(HAVE_PURCHASING
     ${HAVE_PURCHASING_DEFAULT}
-    CACHE STRING "Build with purchasing (e.g. for test of purchasing GUI)"
+    CACHE BOOL "Build with purchasing (e.g. for test of purchasing GUI)"
 )
 set(HAVE_APPLE_PURCHASING
     ${HAVE_APPLE_PURCHASING_DEFAULT}
-    CACHE STRING "Building with Apple's StoreKit support"
+    CACHE BOOL "Building with Apple's StoreKit support"
 )
 set(QT6_VERSION
     ${QT_VERSION_DEFAULT}
@@ -296,9 +296,6 @@ endif ()
 # ########################################################################################
 # GLOBAL DEFINES
 # ########################################################################################
-
-# TODO move most of the C++ defines to generated header file!
-
 # Exiv still uses std::auto_ptr
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_definitions(_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR)
@@ -307,27 +304,6 @@ endif ()
 if (WIN)
   add_compile_definitions(_HAS_AUTO_PTR_ETC=1)
   add_compile_definitions(_USE_MATH_DEFINES)
-endif ()
-
-if (COVERAGE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
-endif ()
-
-if (ANDROID)
-  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g0")
-endif ()
-
-if (HAVE_BLUETOOTH)
-  add_compile_definitions(HAVE_BLUETOOTH)
-endif ()
-
-if (HAVE_PURCHASING)
-  add_compile_definitions(PURCHASING)
-endif ()
-
-if (HAVE_APPLE_PURCHASING)
-  add_compile_definitions(APPLE_PURCHASING)
 endif ()
 
 if (IOS OR ANDROID)
@@ -345,26 +321,40 @@ if (IOS)
   add_compile_definitions(QT_NO_PRINTER)
 endif ()
 
+# This is for QGIS defined, do not move to inputconfig.h
 add_compile_definitions(HAVE_WIDGETS)
-add_compile_definitions(INPUT_APP)
 
-add_compile_definitions(QGIS_QUICK_DATA_PATH=${QGIS_QUICK_DATA_PATH})
-add_compile_definitions(VERSTR=\"${ESCAPED_VERSTR}\")
-add_compile_definitions(INPUT_VERSION=\"${INPUT_VERSION}\")
-
-# TODO also for RelWithDebug?
+# QGIS defines
 add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_PREFIX_PATH=${QGIS_PREFIX_PATH}>")
 add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_QUICK_EXPAND_TEST_DATA>")
 
+# Generate inputconfig.h
 if (ENABLE_TESTS)
-  add_compile_definitions(INPUT_TEST)
+  set(INPUT_TEST TRUE)
   set(TEST_DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test/test_data")
-  add_compile_definitions(TEST_DATA_DIR=\"${TEST_DATA_DIR}\")
 endif ()
+
+if (HAVE_PURCHASING)
+  set(PURCHASING TRUE)
+endif ()
+
+if (HAVE_APPLE_PURCHASING)
+  set(APPLE_PURCHASING TRUE)
+endif ()
+
+configure_file(
+  ${CMAKE_SOURCE_DIR}/cmake_templates/inputconfig.h.in ${CMAKE_BINARY_DIR}/inputconfig.h
+)
+include_directories(${CMAKE_BINARY_DIR})
 
 # ########################################################################################
 # GLOBAL COMPILE FLAGS
 # ########################################################################################
+
+if (COVERAGE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+endif ()
 
 if (MACOS)
   # lot of errors like: This was likely caused by different translation units being
@@ -388,6 +378,10 @@ endif ()
 if (IOS)
   # Disabling warnings in qgis qgswkbptr.h
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-shorten-64-to-32")
+endif ()
+
+if (ANDROID)
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g0")
 endif ()
 
 # ########################################################################################

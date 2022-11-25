@@ -348,7 +348,7 @@ target_link_libraries(
          Qt6::Sql
          Qt6::Core
          Qt6::Core5Compat
-) # TODO: OpenGl?
+)
 
 if (HAVE_BLUETOOTH)
   target_link_libraries(Input PUBLIC Qt6::Bluetooth)
@@ -445,10 +445,6 @@ if (ANDROID
 )
   target_link_libraries(Input PUBLIC Tasn1::Tasn1)
 endif ()
-
-# TODO
-# https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md#Unwinding
-# do we need -lunwind ?
 
 if (ANDROID)
   target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)

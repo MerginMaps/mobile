@@ -10,6 +10,7 @@
 #ifndef SIMULATEDPOSITIONPROVIDER_H
 #define SIMULATEDPOSITIONPROVIDER_H
 
+#include "inputconfig.h"
 #include "position/abstractpositionprovider.h"
 
 #include <QObject>

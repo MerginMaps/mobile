@@ -13,6 +13,8 @@
 #include <QObject>
 #include <QNetworkReply>
 
+#include "inputconfig.h"
+
 class SynchronizationError
 {
     Q_GADGET

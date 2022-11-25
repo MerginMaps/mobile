@@ -15,6 +15,7 @@
 #include <QMap>
 #include <QSet>
 
+#include "inputconfig.h"
 #include "purchasing.h"
 
 class IosPurchasingBackend;

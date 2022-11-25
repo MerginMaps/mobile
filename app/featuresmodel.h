@@ -15,6 +15,8 @@
 #include "qgsvectorlayer.h"
 #include "featurelayerpair.h"
 
+#include "inputconfig.h"
+
 /**
  * FeaturesModel class fetches features from layer and provides them via Qt Model's interface
  */

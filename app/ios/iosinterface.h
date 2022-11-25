@@ -19,6 +19,8 @@
 #include <UIKit/UIKit.h>
 
 #include <QVariantMap>
+
+#include "inputconfig.h"
 #include "iosimagepicker.h"
 
 /**

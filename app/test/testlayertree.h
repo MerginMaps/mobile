@@ -12,6 +12,7 @@
 
 #include <QObject>
 #include <qglobal.h>
+#include "inputconfig.h"
 
 class TestLayerTree : public QObject
 {

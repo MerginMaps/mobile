@@ -15,6 +15,8 @@
 #include <qglobal.h>
 #include <memory>
 
+#include "inputconfig.h"
+
 #ifdef HAVE_BLUETOOTH
 #include <QBluetoothDeviceInfo>
 #include <QBluetoothDeviceDiscoveryAgent>

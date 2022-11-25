@@ -19,6 +19,8 @@
 #include <QObject>
 #include <QPair>
 
+#include "inputconfig.h"
+
 #include "qgsfeature.h"
 #include "qgsmapsettings.h"
 #include "qgspoint.h"

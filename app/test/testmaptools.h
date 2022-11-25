@@ -13,6 +13,8 @@
 #include <QObject>
 #include <qglobal.h>
 
+#include "inputconfig.h"
+
 class TestMapTools : public QObject
 {
     Q_OBJECT
