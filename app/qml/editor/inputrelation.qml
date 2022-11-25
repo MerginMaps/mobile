@@ -173,6 +173,9 @@ Item {
         model: rmodel
         delegate: RelationPhotoDelegate {
           onClicked: root.openLinkedFeature( feature )
+
+          height: ListView.view.height
+          width: height
         }
 
         footer: RelationPhotoFooterDelegate {

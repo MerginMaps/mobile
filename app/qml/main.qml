@@ -34,36 +34,34 @@ ApplicationWindow {
     title: "Mergin Maps" // Do not translate
 
     Item {
-        id: stateManager
-        state: "view"
-        states: [
-            // Browsing map in opened project
-            State {
-                name: "view"
-            },
-            // When a user is in recording session - creating new features, editing geometries..
-            State {
-                name: "record"
-            },
-            // Listing projects
-            State {
-                name: "projects"
-            }
-        ]
+      id: stateManager
+      state: "map"
 
-        onStateChanged: {
-            if ( stateManager.state === "view" ) {
-              projectPanel.hidePanel()
-              map.state = "view"
-            }
-            else if ( stateManager.state === "record" ) {
-              // pass
-            }
-            else if ( stateManager.state === "projects" ) {
-              projectPanel.openPanel()
-              map.state = "inactive";
-            }
+      states: [
+        State {
+          name: "map" // Working with map in an opened project - view, record, stakeout, form, ...
+        },
+        State {
+          name: "projects" // Listing projects
+        },
+        State {
+          name: "misc" // Settings, GPS panel, ..
         }
+      ]
+
+      onStateChanged: {
+        console.log( " --- Root app state:", state )
+        if ( stateManager.state === "map" ) {
+          map.state = "view"
+        }
+        else if ( stateManager.state === "projects" ) {
+          projectPanel.openPanel()
+        }
+
+        if ( stateManager.state !== "map" ) {
+          map.state = "inactive";
+        }
+      }
     }
 
     Settings {
@@ -115,12 +113,14 @@ ApplicationWindow {
         else {
           // if default project load failed, delete default setting
           __appSettings.defaultProject = ""
-          projectPanel.openPanel()
+          stateManager.state = "projects"
         }
       }
-      else projectPanel.openPanel()
+      else {
+        stateManager.state = "projects"
+      }
 
-      // get focus when any project is active, otherwise let focus to merginprojectpanel
+      // get focus when any project is active, otherwise let focus to project panel
       if ( __appSettings.activeProject )
         mainPanel.forceActiveFocus()
 
@@ -165,43 +165,37 @@ ApplicationWindow {
         formsStackManager.openForm( pair, "readOnly", "preview" );
       }
 
-      onNothingIdentified: formsStackManager.closeDrawer();
+      onNothingIdentified: {
+        formsStackManager.closeDrawer()
+      }
 
       onRecordingFinished: function( pair ) {
         formsStackManager.openForm( pair, "add", "form" )
-        stateManager.state = "view"
         map.highlightPair( pair )
       }
-      onRecordingCanceled: stateManager.state = "view"
 
       onEditingGeometryStarted: formsStackManager.geometryEditingStarted()
       onEditingGeometryFinished: function( pair ) {
         formsStackManager.geometryEditingFinished( pair )
-        stateManager.state = "view"
       }
       onEditingGeometryCanceled: {
         formsStackManager.geometryEditingFinished( null, false )
-        stateManager.state = "view"
       }
 
       onRecordInLayerFeatureStarted: formsStackManager.geometryEditingStarted()
       onRecordInLayerFeatureFinished: function( pair ) {
         formsStackManager.recordInLayerFinished( pair )
-        stateManager.state = "view"
       }
       onRecordInLayerFeatureCanceled: {
         formsStackManager.recordInLayerFinished( null, false )
-        stateManager.state = "view"
       }
 
       onSplittingStarted: formsStackManager.hideAll()
       onSplittingFinished: {
         formsStackManager.closeAll()
-        stateManager.state = "view"
       }
       onSplittingCanceled: {
         formsStackManager.reopenAll()
-        stateManager.state = "view"
       }
 
       onNotify: showMessage( message )
@@ -250,12 +244,15 @@ ApplicationWindow {
 
         y: window.height - height
 
-        visible: stateManager.state === "view"
+        visible: map.state === "view"
 
         gpsIndicatorColor: map.gpsIndicatorColor
 
         onOpenProjectClicked: stateManager.state = "projects"
-        onOpenMapThemesClicked: mapThemesPanel.visible = true
+        onOpenMapThemesClicked: {
+          mapThemesPanel.visible = true
+          stateManager.state = "misc"
+        }
         onMyLocationClicked: map.centerToPosition()
 
         onMyLocationHold: {
@@ -271,7 +268,7 @@ ApplicationWindow {
         }
         onRecordClicked: {
             if ( __recordingLayersModel.rowCount() > 0 ) {
-              stateManager.state = "record"
+              stateManager.state = "map"
               map.record()
             } else {
                 showMessage( qsTr( "No editable layers found." ) )
@@ -289,6 +286,7 @@ ApplicationWindow {
           }
         }
         onLayersClicked: {
+          stateManager.state = "misc"
           let layerspanel = mapPanelsStackView.push( layersPanelComponent, {}, StackView.PushTransition )
         }
     }
@@ -313,10 +311,14 @@ ApplicationWindow {
       rowHeight: InputStyle.rowHeight
 
       onVisibleChanged: {
-        if (settingsPanel.visible)
+        if (settingsPanel.visible) {
           settingsPanel.focus = true; // get focus
-        else
+          stateManager.state = "misc"
+        }
+        else {
           mainPanel.focus = true; // pass focus back to main panel
+          stateManager.state = "map"
+        }
       }
 
       gpsIndicatorColor: map.gpsIndicatorColor
@@ -329,10 +331,10 @@ ApplicationWindow {
         width: window.width
 
         onVisibleChanged: {
-          if (projectPanel.visible)
+          if ( projectPanel.visible ) {
             projectPanel.forceActiveFocus()
-          else
-          {
+          }
+          else {
             mainPanel.forceActiveFocus()
           }
         }
@@ -343,7 +345,7 @@ ApplicationWindow {
           __activeProject.load( projectPath )
         }
 
-        onClosed: stateManager.state = "view"
+        onClosed: stateManager.state = "map"
     }
 
     StackView {
@@ -387,21 +389,25 @@ ApplicationWindow {
         onClose: function() {
           mainPanel.forceActiveFocus()
           mapPanelsStackView.clear( StackView.PopTransition )
+          stateManager.state = "map"
         }
 
         onSelectFeature: function( featurePair ) {
-          window.selectFeature( featurePair )
-
           // close layers panel if the feature has geometry
           if ( __inputUtils.isSpatialLayer( featurePair.layer ) )
           {
             close()
           }
+
+          window.selectFeature( featurePair )
         }
 
         onAddFeature: function( targetLayer ) {
           let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
           formsStackManager.openForm( newPair, "add", "form" )
+
+          // If we start supporting addition of spatial features from the layer's list,
+          // make sure to change the root state here to "map"
         }
       }
     }
@@ -441,6 +447,7 @@ ApplicationWindow {
             // if we are in stakeout mode
             stakeoutPanelLoader.item.hide()
           }
+          stateManager.state = "misc"
         }
         else
         {
@@ -449,6 +456,7 @@ ApplicationWindow {
             // user closed GPS panel and we are in stakeout mode - reopen stakeout panel
             stakeoutPanelLoader.item.restore()
           }
+          stateManager.state = "map"
         }
       }
     }
@@ -459,6 +467,8 @@ ApplicationWindow {
         height: window.height/2
         width: window.width
         edge: Qt.BottomEdge
+
+        onClosed: stateManager.state = "map"
     }
 
 
@@ -557,23 +567,23 @@ ApplicationWindow {
           recordInLayerFinished( newPair, true )
         }
         else { // we will record geometry
-          stateManager.state = "record"
+          stateManager.state = "map"
           map.recordInLayer( targetLayer, parentPair )
         }
       }
 
       onEditGeometryRequested: function( pair ) {
-        stateManager.state = "record"
+        stateManager.state = "map"
         map.edit( pair )
       }
 
       onSplitGeometryRequested: function( pair ) {
-        stateManager.state = "record"
+        stateManager.state = "map"
         map.split( pair )
       }
 
       onRedrawGeometryRequested: function( pair ) {
-        stateManager.state = "record"
+        stateManager.state = "map"
         map.redraw( pair )
       }
 
@@ -582,12 +592,17 @@ ApplicationWindow {
           // this must be layers panel as it is the only thing on the stackview currently
           const item = mapPanelsStackView.get( 0 )
           item.forceActiveFocus()
+          stateManager.state = "misc"
         }
         else if ( gpsDataPageLoader.active )
         {
+          stateManager.state = "misc"
           // do nothing, gps page already has focus
         }
-        else mainPanel.focus = true
+        else {
+          stateManager.state = "map"
+          mainPanel.focus = true
+        }
 
         map.hideHighlight()
       }

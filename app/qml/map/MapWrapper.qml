@@ -80,7 +80,7 @@ Item {
       name: "stakeout"
     },
     State {
-      name: "inactive" // covered by other element
+      name: "inactive" // ignores touch input
     }
   ]
 
@@ -151,7 +151,19 @@ Item {
 
     height: root.height
     width: root.width
-    visible: root.state !== "inactive"
+
+    /**
+     * We need to do a little hack here.
+     * Qt 6.4.1 falsely propagates events to all handlers event if the mouse event is accepted.
+     * Thus, mouse clicks were propagated to map canvas even if feature form was opened -
+     * resulting in undefined behaviour.
+     *
+     * As a workaround, we pass mapExtentOffset to map canvas and alter the TapHandler's height based on it.
+     * This way canvas still reacts to clicks when form is opened in preview.
+     *
+     * See https://bugreports.qt.io/browse/QTBUG-108821
+     */
+    mapExtentOffset: root.mapExtentOffset
 
     mapSettings.project: __activeProject.qgsProject
 
