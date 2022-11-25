@@ -153,8 +153,12 @@ Item {
         onSaved: root.close()
         onCanceled: root.close()
         onEditingFailed: editingFailedDialog.open()
-        onOpenLinkedFeature: root.openLinkedFeature( linkedFeature )
-        onCreateLinkedFeature: root.createLinkedFeature( parentController, relation )
+        onOpenLinkedFeature: function( linkedFeature ) {
+          root.openLinkedFeature( linkedFeature )
+        }
+        onCreateLinkedFeature: function( parentController, relation ) {
+          root.createLinkedFeature( parentController, relation )
+        }
 
         extraView: formPage.StackView.view
 

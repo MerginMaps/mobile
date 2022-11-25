@@ -107,7 +107,9 @@ Item {
             firstLinesMaxWidth: flowItemView.width
             lastLineMaxWidth: flowItemView.width / 2
 
-            onClicked: root.openLinkedFeature( feature )
+            onClicked: function( feature ) {
+              root.openLinkedFeature( feature )
+            }
             onSetInvisible: textModeContainer.invisibleItemsCounter++
           }
         }
