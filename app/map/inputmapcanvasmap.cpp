@@ -36,9 +36,9 @@ InputMapCanvasMap::InputMapCanvasMap( QQuickItem *parent )
   connect( &mRefreshTimer, &QTimer::timeout, this, [ = ] { refreshMap(); } );
   connect( &mMapUpdateTimer, &QTimer::timeout, this, &InputMapCanvasMap::renderJobUpdated );
 
-  connect( mMapSettings.get(), &InputMapSettings::extentChanged, this, &InputMapSettings::onExtentChanged );
-  connect( mMapSettings.get(), &InputMapSettings::layersChanged, this, &InputMapSettings::onLayersChanged );
-  connect( mMapSettings.get(), &InputMapSettings::temporalStateChanged, this, &InputMapSettings::onTemporalStateChanged );
+  connect( mMapSettings.get(), &InputMapSettings::extentChanged, this, &InputMapCanvasMap::onExtentChanged );
+  connect( mMapSettings.get(), &InputMapSettings::layersChanged, this, &InputMapCanvasMap::onLayersChanged );
+  connect( mMapSettings.get(), &InputMapSettings::temporalStateChanged, this, &InputMapCanvasMap::onTemporalStateChanged );
 
   connect( this, &InputMapCanvasMap::renderStarting, this, &InputMapCanvasMap::isRenderingChanged );
   connect( this, &InputMapCanvasMap::mapCanvasRefreshed, this, &InputMapCanvasMap::isRenderingChanged );
@@ -484,7 +484,7 @@ void InputMapCanvasMap::clearCache()
     mCache->clear();
 }
 
-void QgsQuickMapCanvasMap::clearTemporalCache()
+void InputMapCanvasMap::clearTemporalCache()
 {
   if ( mCache )
   {

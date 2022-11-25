@@ -183,6 +183,9 @@ class InputMapSettings : public QObject
      */
     Q_INVOKABLE QgsPoint screenToCoordinate( const QPointF &point ) const;
 
+
+    Q_INVOKABLE QgsPoint toQgsPoint( const QPointF &point ) const;
+
     //! \copydoc QgsMapSettings::setTransformContext()
     void setTransformContext( const QgsCoordinateTransformContext &context );
 

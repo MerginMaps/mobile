@@ -173,6 +173,7 @@ if (ENABLE_TESTS)
       test/testutils.cpp
       test/testutilsfunctions.cpp
       test/testvariablesmanager.cpp
+      test/testactiveproject.cpp
   )
 
   set(MM_HDRS
@@ -197,6 +198,7 @@ if (ENABLE_TESTS)
       test/testutils.h
       test/testutilsfunctions.h
       test/testvariablesmanager.h
+      test/testactiveproject.h
   )
 endif ()
 

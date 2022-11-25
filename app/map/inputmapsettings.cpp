@@ -303,7 +303,7 @@ void InputMapSettings::setDevicePixelRatio( const qreal &devicePixelRatio )
   emit devicePixelRatioChanged();
 }
 
-QgsPoint InputMapSettings::toQgsPoint( const QPointF &point )
+QgsPoint InputMapSettings::toQgsPoint( const QPointF &point ) const
 {
   return QgsPoint( point );
 }
