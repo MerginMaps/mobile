@@ -19,6 +19,7 @@
 #include <QQmlContext>
 #include <QQuickWindow>
 #include <QLocale>
+#include <QImageReader>
 #ifdef INPUT_TEST
 #include "test/inputtests.h"
 #endif
@@ -709,6 +710,9 @@ int main( int argc, char *argv[] )
 
   // save app version to settings
   as.setAppVersion( version );
+
+  // Photos bigger that 512 MB (when uncompressed) will not load
+  QImageReader::setAllocationLimit( 512 );
 
   int ret = EXIT_FAILURE;
   try
