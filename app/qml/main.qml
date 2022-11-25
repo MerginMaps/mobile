@@ -244,7 +244,7 @@ ApplicationWindow {
 
         y: window.height - height
 
-        visible: stateManager.state === "map"
+        visible: map.state === "view"
 
         gpsIndicatorColor: map.gpsIndicatorColor
 
