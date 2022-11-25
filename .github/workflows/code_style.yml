@@ -43,7 +43,7 @@ jobs:
         with:
           path: input
 
-      - name: Run astyle check
+      - name: Run cmake-format check
         run: |
           ./input/scripts/format_cmake.bash
           

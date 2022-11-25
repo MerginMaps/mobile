@@ -7,6 +7,7 @@ on:
     - 'core/**'
     - 'scripts/**'
     - 'cmake/**'
+    - 'cmake_templates/**'
     - 'CMakeLists.txt'
     - '.github/workflows/win.yml'
  
