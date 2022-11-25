@@ -76,7 +76,7 @@ Read more about the app [https://merginmaps.com/docs](https://merginmaps.com/doc
 
 ## Developers
 
-For more information on building Mergin Maps Input app please have a look in [developer documentation](docs/developers/README.md).
+To setup your development environment, read [INSTALL](./INSTALL.md)
 
 ## Privacy policy
 Read more about the app privacy policy [here](https://merginmaps.com/docs/reference/privacy/)
