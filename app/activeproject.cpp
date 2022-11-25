@@ -153,9 +153,11 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
       CoreUtils::log( QStringLiteral( "Project loading" ), QStringLiteral( "Could not read project file: " ) + error );
 
       mLocalProject = LocalProject();
-      mQgsProject->clear();
-      QList< QgsMapLayer * > layers;
-      mMapSettings->setLayers( layers );
+      if ( mMapSettings )
+      {
+        QList< QgsMapLayer * > layers;
+        mMapSettings->setLayers( layers );
+      }
 
       emit localProjectChanged( mLocalProject );
       emit projectReloaded( mQgsProject );
