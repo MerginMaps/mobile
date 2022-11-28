@@ -89,7 +89,6 @@ set(MM_QML
     AuthPanel.qml
     Banner.qml
     CircularProgressBar.qml
-    CodeReaderHandler.qml
     CodeScanner.qml
     CodeScannerOverlay.qml
     ExternalResourceBundle.qml
