@@ -19,7 +19,7 @@ import QtQuick.Dialogs
 
 import Qt.labs.settings 1.0
 
-import lc 1.0
+import lc 1.0 as InputClass
 import "./map"
 import "./misc"
 import "./dialogs"
@@ -32,6 +32,22 @@ ApplicationWindow {
     height: __appwindowheight
     visibility: __appwindowvisibility
     title: "Mergin Maps" // Do not translate
+/*
+  CaptureSession {
+    id: captureSession
+
+    camera: Camera {
+      id: camera
+    }
+    videoOutput: output
+  }
+
+  VideoOutput {
+    id: output
+
+    fillMode: VideoOutput.PreserveAspectCrop
+  }
+*/
 
     Item {
       id: stateManager

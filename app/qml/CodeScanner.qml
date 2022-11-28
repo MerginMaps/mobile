@@ -39,6 +39,22 @@ Page {
     withBackButton: true
   }
 
+  CaptureSession {
+    id: captureSession
+
+    camera: Camera {
+      id: camera
+    }
+    videoOutput: output
+  }
+
+  VideoOutput {
+    id: output
+
+    fillMode: VideoOutput.PreserveAspectCrop
+  }
+
+/*
   InputClass.CodeScanner {
     id: qrcodeScanner
 
@@ -71,4 +87,5 @@ Page {
       height: root.height - header.height
     }
   }
+*/
 }
