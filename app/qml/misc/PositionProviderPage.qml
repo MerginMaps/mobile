@@ -371,11 +371,12 @@ Page {
     text: qsTr( "Do you want to remove receiver from the list of recent receivers?" )
     buttons: MessageDialog.Ok | MessageDialog.Cancel
 
-    //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
     onButtonClicked: function(clickedButton) {
       if (clickedButton === MessageDialog.Ok) {
-        if (relatedProviderId === "")
+        if (relatedProviderId === "") {
+          close()
           return
+        }
 
         if ( __appSettings.activePositionProviderId == relatedProviderId )
         {
@@ -385,10 +386,8 @@ Page {
 
         providersModel.removeProvider( relatedProviderId )
       }
-      else if (clickedButton === MessageDialog.Cancel) {
-        removeDialog.relatedProviderId = ""
-        visible = false
-      }
+      removeDialog.relatedProviderId = ""
+      close()
     }
   }
 }

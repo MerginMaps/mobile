@@ -264,11 +264,12 @@ Item {
     text: qsTr( "Any unsynchronized changes will be lost." )
     buttons: MessageDialog.Ok | MessageDialog.Cancel
 
-    //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
     onButtonClicked: function(clickedButton) {
       if (clickedButton === MessageDialog.Ok) {
-        if (relatedProjectId === "")
+        if (relatedProjectId === "") {
+          close()
           return
+        }
 
         if ( root.activeProjectId === relatedProjectId )
           root.activeProjectDeleted()
@@ -279,14 +280,10 @@ Item {
               ( __merginApi.userAuth ? __merginApi.userAuth.username : "unknown" ) + " (" + __localProjectsManager.projectChanges( relatedProjectId ) + ")" )
 
         controllerModel.removeLocalProject( relatedProjectId )
+      }
 
-        removeDialog.relatedProjectId = ""
-        visible = false
-      }
-      else if (clickedButton === MessageDialog.Cancel) {
-        removeDialog.relatedProjectId = ""
-        visible = false
-      }
+      removeDialog.relatedProjectId = ""
+      close()
     }
   }
 

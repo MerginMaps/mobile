@@ -203,15 +203,15 @@ Item {
         text: qsTr( "Are you sure you want to delete this feature?" )
         buttons: MessageDialog.Ok | MessageDialog.Cancel
 
-        //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
         onButtonClicked: function(clickedButton) {
           if ( clickedButton === MessageDialog.Ok ) {
             featureForm.controller.deleteFeature()
             featureForm.canceled()
+            deleteDialog.close()
             root.close()
           }
 
-          visible = false
+          deleteDialog.close()
         }
       }
 
@@ -223,7 +223,6 @@ Item {
         text: qsTr( "Do you want to save changes?" )
         buttons: MessageDialog.Yes | MessageDialog.No | MessageDialog.Cancel
 
-        //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
         onButtonClicked: function(clickedButton) {
           if (clickedButton === MessageDialog.Yes) {
             featureForm.save()
@@ -234,7 +233,7 @@ Item {
           else if (clickedButton === MessageDialog.Cancel) {
             // Do nothing
           }
-          visible = false
+          saveChangesDialog.close()
         }
       }
 
@@ -246,10 +245,7 @@ Item {
         text: qsTr( "Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support." )
         buttons: MessageDialog.Close
 
-        //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
-        onButtonClicked: {
-          visible = false
-        }
+        onButtonClicked: close()
       }
 
       ExternalResourceBundle {

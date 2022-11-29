@@ -549,6 +549,7 @@ ApplicationWindow {
           if (clickedButton === MessageDialog.Help) {
             Qt.openUrlExternally(__inputHelp.howToSetupProj)
           }
+          close()
         }
     }
 
@@ -628,16 +629,12 @@ ApplicationWindow {
       buttons: MessageDialog.Close | MessageDialog.Help
 
       onButtonClicked: function(button, role) {
-        switch (button) {
-          case MessageDialog.Close:
-            projectErrorDialog.close()
-            break;
-          case MessageDialog.Help:
-            Qt.openUrlExternally(__inputHelp.projectLoadingErrorHelpLink)
-            break;
+        if ( button === MessageDialog.Help ) {
+          Qt.openUrlExternally(__inputHelp.projectLoadingErrorHelpLink)
         }
         projectLoadingScreen.visible = false
         projectPanel.openPanel()
+        close()
       }
     }
 
