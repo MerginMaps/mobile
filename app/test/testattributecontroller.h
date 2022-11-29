@@ -27,6 +27,7 @@ class TestAttributeController: public QObject
     void twoGroupsDragAndDropLayout();
     void tabsAndFieldsMixed();
     void testValidationMessages();
+    void testExpressions();
 };
 
 #endif // TESTATTRIBUTECONTROLLER_H
