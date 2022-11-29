@@ -27,7 +27,7 @@ BluetoothDiscoveryModel::BluetoothDiscoveryModel( QObject *parent ) : QAbstractL
 
   connect( mDiscoveryAgent.get(), &QBluetoothDeviceDiscoveryAgent::errorOccurred, this, [ = ]( QBluetoothDeviceDiscoveryAgent::Error error )
   {
-    CoreUtils::log( "Bluetooth discovery", QString( "Error occured during device discovery, error code #" ).arg( error ) );
+    CoreUtils::log( "Bluetooth discovery", QString( "Error occured during device discovery, error code #%1" ).arg( error ) );
     finishedDiscovery();
   } );
 #endif
