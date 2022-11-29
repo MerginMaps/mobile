@@ -380,15 +380,13 @@ Page {
     MessageDialog {
       id: accountDeletionFailedDialog
 
-      property string messageText
-
       visible: false
       title: qsTr( "Failed to remove account" )
-      text: messageText
+      text: qsTr( "An error occured while removing your account" )
       buttons: MessageDialog.Close
-      onRejected: {
+
+      onButtonClicked: function( clickedButton ) {
         close()
-        accountDeleted()
       }
     }
 
@@ -407,8 +405,8 @@ Page {
 
       function onUserIsAnOrgOwnerError() {
         accountDeleteIndicator.running = false
-        accountDeletionFailedDialog.messageText = qsTr("Can not close account because user is the only owner of organisation.\n\n" +
-                                                       "Please go to the Mergin Maps <a href='%1'>dashboard</a> to remove it manually.".arg(__merginApi.apiRoot()))
+        accountDeletionFailedDialog.text = qsTr("Can not close account because user is the only owner of an organisation.\n\n" +
+                                                       "Please go to the Mergin Maps website to remove it manually.")
         accountDeletionFailedDialog.open()
       }
       function onAccountDeleted( result ) {
@@ -417,7 +415,6 @@ Page {
             accountDeleted()
         }
         else {
-          accountDeletionFailedDialog.messageText = qsTr( "Failed to remove account" )
           accountDeletionFailedDialog.open()
         }
       }
