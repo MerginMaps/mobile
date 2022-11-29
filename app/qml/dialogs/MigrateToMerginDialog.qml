@@ -21,7 +21,7 @@ MessageDialog {
   buttons: MessageDialog.Ok | MessageDialog.Cancel
 
   onButtonClicked: function(clickedButton) {
-    if ( clickedButton === StandardButton.Ok ) {
+    if ( clickedButton === MessageDialog.Ok ) {
       root.migrationRequested()
     }
     close()
