@@ -167,7 +167,7 @@ void InputMapCanvasMap::renderJobFinished()
   const QgsMapRendererJob::Errors errors = mJob->errors();
   for ( const QgsMapRendererJob::Error &error : errors )
   {
-    QgsMessageLog::logMessage( QStringLiteral( "%1 :: %2" ).arg( error.layerID, error.message ), tr( "Rendering" ) );
+    QgsMessageLog::logMessage( QStringLiteral( "%1 :: %2" ).arg( error.layerID, error.message ), QStringLiteral( "Rendering" ) );
   }
 
   // take labeling results before emitting renderComplete, so labeling map tools
