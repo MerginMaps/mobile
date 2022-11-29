@@ -638,23 +638,6 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
-    <name>InputMapCanvasMap</name>
-    <message>
-        <location filename="../map/inputmapcanvasmap.cpp" line="170"/>
-        <source>Rendering</source>
-        <translation type="unfinished">Rendering</translation>
-    </message>
-</context>
-<context>
-    <name>InputMapSettings</name>
-    <message>
-        <location filename="../map/inputmapsettings.cpp" line="248"/>
-        <location filename="../map/inputmapsettings.cpp" line="278"/>
-        <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
-        <translation type="unfinished">Map Canvas rotation is not supported. Resetting from %1 to 0.</translation>
-    </message>
-</context>
-<context>
     <name>InputProjUtils</name>
     <message>
         <location filename="../inputprojutils.cpp" line="78"/>
