@@ -701,9 +701,7 @@ Item {
       if ( clickedButton === MessageDialog.Yes ) {
         recordingToolsLoader.item.discardChanges()
       }
-      else if ( clickedButton === MessageDialog.No ) {
-        cancelEditDialog.close()
-      }
+      cancelEditDialog.close()
     }
   }
 

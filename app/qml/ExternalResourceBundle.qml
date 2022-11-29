@@ -229,9 +229,8 @@ Item {
             externalResourceHandler.itemWidget.editorValueChanged("", false)
             // visible = false called afterwards when onReject
           }
-        }
-        onRejected: {
-           visible = false
+
+          close()
         }
     }
 
@@ -243,9 +242,9 @@ Item {
         title: qsTr( "Failed to copy image" )
         text: errorText
         buttons: MessageDialog.Ok
-        onAccepted: {
-            externalResourceHandler.itemWidget.editorValueChanged("", false)
-            visible = false
+        onButtonClicked: function(clickedButton) {
+          externalResourceHandler.itemWidget.editorValueChanged("", false)
+          close()
         }
     }
 }

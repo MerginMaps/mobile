@@ -23,4 +23,6 @@ MessageDialog {
   text: qsTr( "Your changes could not be sent to server, make sure you are connected to internet and have write access to this project." )
 
   buttons: MessageDialog.Ok
+
+  onButtonClicked: close()
 }

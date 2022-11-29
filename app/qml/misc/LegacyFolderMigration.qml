@@ -35,6 +35,7 @@ Item {
       if (clickedButton === MessageDialog.Help) {
         Qt.openUrlExternally( "https://www.lutraconsulting.co.uk/blog/2021/10/26/input-scoped-storage-update/" )
       }
+      close()
     }
   }
 
@@ -49,6 +50,7 @@ Item {
       if (clickedButton === MessageDialog.Help) {
         Qt.openUrlExternally( "https://www.lutraconsulting.co.uk/blog/2021/10/26/input-scoped-storage-update/" )
       }
+      close()
     }
   }
 

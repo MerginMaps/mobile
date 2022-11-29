@@ -24,5 +24,6 @@ MessageDialog {
     if ( clickedButton === StandardButton.Ok ) {
       root.migrationRequested()
     }
+    close()
   }
 }
