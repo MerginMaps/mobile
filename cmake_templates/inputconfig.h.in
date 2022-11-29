@@ -4,9 +4,9 @@
 #define INPUT_APP
 
 #cmakedefine VERSTR "@ESCAPED_VERSTR@"
-#cmakedefine INPUT_VERSION "@INPUT_VERSION@"
+#cmakedefine INPUT_VERSION @INPUT_VERSION@
 
-#cmakedefine QGIS_QUICK_DATA_PATH "@QGIS_QUICK_DATA_PATH@"
+#cmakedefine QGIS_QUICK_DATA_PATH @QGIS_QUICK_DATA_PATH@
 
 #cmakedefine INPUT_TEST
 #cmakedefine TEST_DATA_DIR "@TEST_DATA_DIR@"
