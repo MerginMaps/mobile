@@ -10,7 +10,7 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../qml/AccountPage.qml" line="170"/>
+        <location filename="../qml/AccountPage.qml" line="172"/>
         <source>Your subscription was cancelled on %1</source>
         <translation>Vaše predplatné bolo zrušené %1.</translation>
     </message>
@@ -25,57 +25,57 @@
         <translation>Vaše predplatné sa od %1 už nebude obnovovať.</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="149"/>
+        <location filename="../qml/AccountPage.qml" line="151"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
         <translation>Platobné údaje sa nepodarilo overiť. Prosím, čo najskôr zadajte platné %1platobné údaje%2.</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="160"/>
+        <location filename="../qml/AccountPage.qml" line="162"/>
         <source>Your next bill will be for %1 on %2</source>
         <translation>Nasledujúca platba vo výške %1 sa odráta dňa %2 </translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="195"/>
+        <location filename="../qml/AccountPage.qml" line="197"/>
         <source>Using %1 / %2</source>
         <translation>Využitých %1 / %2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="213"/>
+        <location filename="../qml/AccountPage.qml" line="215"/>
         <source>Manage Subscription</source>
         <translation>Spravovať predplatné</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="213"/>
+        <location filename="../qml/AccountPage.qml" line="215"/>
         <source>Working...</source>
         <translation>Spracúvam...</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="213"/>
+        <location filename="../qml/AccountPage.qml" line="215"/>
         <source>Subscription plans</source>
         <translation>Možnosti predplatného</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="249"/>
+        <location filename="../qml/AccountPage.qml" line="251"/>
         <source>You can also %1restore%2 your purchases</source>
         <translation>Môžete si taktiež %1preniesť%2 svoje platby</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="278"/>
+        <location filename="../qml/AccountPage.qml" line="280"/>
         <source>Sign out</source>
         <translation>Odhlásiť</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="301"/>
+        <location filename="../qml/AccountPage.qml" line="303"/>
         <source>Delete account</source>
         <translation>Vymazať účet</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="332"/>
+        <location filename="../qml/AccountPage.qml" line="334"/>
         <source>Delete account?</source>
         <translation>Vymazať účet?</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="338"/>
+        <location filename="../qml/AccountPage.qml" line="340"/>
         <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
 
 In order to delete your account, enter your username in the field below and click Yes.</source>
@@ -84,13 +84,13 @@ In order to delete your account, enter your username in the field below and clic
 Na vymazanie účtu prosím zadajte nižšie vaše uživateľské meno a stlčte Áno.</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="347"/>
+        <location filename="../qml/AccountPage.qml" line="349"/>
         <source>Enter username</source>
         <translation>Uživateľské meno</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="384"/>
-        <location filename="../qml/AccountPage.qml" line="419"/>
+        <location filename="../qml/AccountPage.qml" line="386"/>
+        <location filename="../qml/AccountPage.qml" line="420"/>
         <source>Failed to remove account</source>
         <translation>Nepodarilo sa vymazať konto</translation>
     </message>
@@ -139,27 +139,27 @@ Na vymazanie účtu prosím zadajte nižšie vaše uživateľské meno a stlčte
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="233"/>
+        <location filename="../androidutils.cpp" line="239"/>
         <source>Without storage permission you will not be able to access previous projects</source>
         <translation>Bez povoleného prístupu k úložisku nebude možné pristúpiť k už uloženým projektom</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="331"/>
+        <location filename="../androidutils.cpp" line="340"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>Prístup k úložisku je zakázaný, prosím povoľte ho v nastaveniach, aby bolo možné načítať obrázky z galérie</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="335"/>
+        <location filename="../androidutils.cpp" line="344"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
         <translation>Input potrebuje prístup k úložisku, aby bolo možné načítať obrázky z galérie</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="353"/>
+        <location filename="../androidutils.cpp" line="364"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Povolenie na prístup ku kamere je zakázané, prosím, povoľte ho v nastaveniach</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="357"/>
+        <location filename="../androidutils.cpp" line="368"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Aplikácia Input potrebuje povolenie ku kamere aby mohla spraviť fotografiu</translation>
     </message>
@@ -175,39 +175,39 @@ Na vymazanie účtu prosím zadajte nižšie vaše uživateľské meno a stlčte
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="536"/>
+        <location filename="../attributes/attributecontroller.cpp" line="535"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Predvolený výraz pre %1:%2 obsahuje chybu: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="546"/>
+        <location filename="../attributes/attributecontroller.cpp" line="545"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Predvolený výraz pre %1:%2 obsahuje chybu: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="557"/>
+        <location filename="../attributes/attributecontroller.cpp" line="556"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Hodnota &quot;%1&quot; %4 nemohla byť konvertovaná pre stĺpec %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="810"/>
+        <location filename="../attributes/attributecontroller.cpp" line="809"/>
         <source>Cannot delete feature</source>
         <translation>Nepodarilo sa vymazať objekt</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="488"/>
-        <location filename="../attributes/attributecontroller.cpp" line="864"/>
+        <location filename="../attributes/attributecontroller.cpp" line="487"/>
+        <location filename="../attributes/attributecontroller.cpp" line="863"/>
         <source>Feature could not be added</source>
         <translation>Objekt sa nepodarilo pridať</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="497"/>
-        <location filename="../attributes/attributecontroller.cpp" line="875"/>
+        <location filename="../attributes/attributecontroller.cpp" line="496"/>
+        <location filename="../attributes/attributecontroller.cpp" line="874"/>
         <source>Cannot update feature</source>
         <translation>Nepodarilo sa upraviť objekt</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="919"/>
+        <location filename="../attributes/attributecontroller.cpp" line="918"/>
         <source>Cannot start editing</source>
         <translation>Nepodarilo sa spustiť režim úprav</translation>
     </message>
@@ -278,7 +278,7 @@ Na vymazanie účtu prosím zadajte nižšie vaše uživateľské meno a stlčte
 Prosím uistite sa, že zariadenie je zapnuté a pripravené na pripojenie.%1 %2Zistiť viac%3.</translation>
     </message>
     <message>
-        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="288"/>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="290"/>
         <source>Close</source>
         <translation>Zavrieť</translation>
     </message>
@@ -286,43 +286,43 @@ Prosím uistite sa, že zariadenie je zapnuté a pripravené na pripojenie.%1 %2
 <context>
     <name>BluetoothPositionProvider</name>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="43"/>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="164"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="42"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="163"/>
         <source>No connection</source>
         <translation>Odpojený</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="84"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="83"/>
         <source>Reconnecting</source>
         <translation>Znovu sa pripájam</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="116"/>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="124"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="115"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="123"/>
         <source>No connection, reconnecting in (%1)</source>
         <translation>Odpojený, pripájam sa znovu za (%1)</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="141"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="140"/>
         <source>Could not connect to device, not paired</source>
         <translation>Nedá sa pripojiť na zariadenie, nie je spárované</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="156"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="155"/>
         <source>Connecting to %1</source>
         <translation>Pripájam sa na %1</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="160"/>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="178"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="159"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="177"/>
         <source>Connected</source>
         <translation>Pripojený</translation>
     </message>
 </context>
 <context>
-    <name>CodeReader</name>
+    <name>CodeScanner</name>
     <message>
-        <location filename="../qml/CodeReader.qml" line="64"/>
+        <location filename="../qml/CodeScanner.qml" line="55"/>
         <source>Scan code</source>
         <translation>Naskenovať kód</translation>
     </message>
@@ -330,12 +330,12 @@ Prosím uistite sa, že zariadenie je zapnuté a pripravené na pripojenie.%1 %2
 <context>
     <name>DateTimePicker</name>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="108"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="107"/>
         <source>Cancel</source>
         <translation>Zrušiť</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="203"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="202"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -353,27 +353,27 @@ Prosím uistite sa, že zariadenie je zapnuté a pripravené na pripojenie.%1 %2
         <translation>Nepodarilo sa skopírovať obrázok do %1.</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="201"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="205"/>
         <source>Open Image</source>
         <translation>Otvoriť obrázok</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="203"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="207"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Obrázky (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="215"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="219"/>
         <source>Remove photo reference</source>
         <translation>Odstrániť fotografiu z objektu</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="216"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="220"/>
         <source>Also permanently delete photo from device?</source>
         <translation>Chcete fotografiu odstrániť aj z vášho zariadenia?</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="238"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="243"/>
         <source>Failed to copy image</source>
         <translation>Nepodarilo sa skopírovať obrázok</translation>
     </message>
@@ -409,32 +409,32 @@ Prosím uistite sa, že zariadenie je zapnuté a pripravené na pripojenie.%1 %2
         <translation>Uložiť</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="196"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="202"/>
         <source>Delete feature</source>
         <translation>Vymazať objekt</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="203"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Naozaj si prajete vymazať tento objekt?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="217"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="222"/>
         <source>Unsaved changes</source>
         <translation>Neuložené zmeny</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="223"/>
         <source>Do you want to save changes?</source>
         <translation>Chcete uložiť zmeny?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="241"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
         <source>Saving failed</source>
         <translation>Ukladanie zlyhalo</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="242"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="246"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>Nepodarilo sa uložiť zmeny. Toto by sa normálne nemalo stať. Prosím reštartujte aplikáciu a skúste znovu - ak to nepomôže, kontaktuje podporu.</translation>
     </message>
@@ -629,12 +629,12 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="232"/>
+        <location filename="../inputhelp.cpp" line="237"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Vaša požiadavka bola zaznamenaná.%1Kontaktujte nás prosím na adrese%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="237"/>
+        <location filename="../inputhelp.cpp" line="242"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Nepodarilo sa odoslať požiadavku.%1Prosím skontrolujte vaše internetové pripojenie.</translation>
     </message>
@@ -660,119 +660,119 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="183"/>
         <source>just now</source>
         <translation>práve teraz</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="188"/>
         <source>%1 minutes ago</source>
         <translation>pred %1 minútami</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="188"/>
         <source>%1 minute ago</source>
         <translation>pred %1 minútou </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="192"/>
+        <location filename="../inpututils.cpp" line="193"/>
         <source>%1 hours ago</source>
         <translation>pred %1 hodinami</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="192"/>
+        <location filename="../inpututils.cpp" line="193"/>
         <source>%1 hour ago</source>
         <translation>pred %1 hodinou</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
-        <location filename="../inpututils.cpp" line="201"/>
+        <location filename="../inpututils.cpp" line="197"/>
+        <location filename="../inpututils.cpp" line="202"/>
         <source>%1 days ago</source>
         <translation>pred %1 dňami</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
-        <location filename="../inpututils.cpp" line="201"/>
+        <location filename="../inpututils.cpp" line="197"/>
+        <location filename="../inpututils.cpp" line="202"/>
         <source>%1 day ago</source>
         <translation>pred %1 dňom</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="206"/>
+        <location filename="../inpututils.cpp" line="207"/>
         <source>%1 weeks ago</source>
         <translation>pred %1 týždňami</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="206"/>
+        <location filename="../inpututils.cpp" line="207"/>
         <source>%1 week ago</source>
         <translation>pred %1 týždňom</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="212"/>
         <source>%1 months ago</source>
         <translation>pred %1 mesiacmi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="212"/>
         <source>%1 month ago</source>
         <translation>pred %1 mesiacom</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="217"/>
         <source>%1 years ago</source>
         <translation>pred %1 rokmi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="217"/>
         <source>%1 year ago</source>
         <translation>pred %1 rokom</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1411"/>
+        <location filename="../inpututils.cpp" line="1419"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>Rozlíšenie obrazovky: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1412"/>
+        <location filename="../inpututils.cpp" line="1420"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI obrazovky: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1413"/>
+        <location filename="../inpututils.cpp" line="1421"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>Veľkosť obrazovky: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1414"/>
+        <location filename="../inpututils.cpp" line="1422"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>reportovaný device pixel ratio: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1415"/>
+        <location filename="../inpututils.cpp" line="1423"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>vypočítaný device pixel ratio: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1416"/>
+        <location filename="../inpututils.cpp" line="1424"/>
         <source>used dp scale: %1</source>
         <translation>použitý dp scale: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1936"/>
+        <location filename="../inpututils.cpp" line="1944"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Musíte pridať aspoň %1 bodov na každú časť geometrie.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1940"/>
+        <location filename="../inpututils.cpp" line="1948"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Musíte pridať aspoň %1 bodov.</translation>
     </message>
@@ -780,8 +780,8 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>InternalPositionProvider</name>
     <message>
-        <location filename="../position/internalpositionprovider.cpp" line="33"/>
-        <location filename="../position/internalpositionprovider.cpp" line="110"/>
+        <location filename="../position/internalpositionprovider.cpp" line="32"/>
+        <location filename="../position/internalpositionprovider.cpp" line="111"/>
         <source>Connected</source>
         <translation>Pripojený</translation>
     </message>
@@ -843,22 +843,22 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Na zariadení dochádza voľné miesto, potrebujete %1 voľného miesta na projekty. Prosím uvoľnite miesto a vráťte sa, alebo kliknite Pomoc pre ďalšie rady, ako vyriešiť tento problém.</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="40"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="44"/>
         <source>An error occured during update</source>
         <translation>Nastala chyba pri aktualizácii</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="43"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="45"/>
         <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
         <translation>Došlo ku chybe v zariadení pri aktualizácii. Nebude možné vidieť projekty. Prosím kliknite na Pomoc pre rady, ako vyriešiť tento problém.</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="109"/>
         <source>We are working on an important update, please do not close the application</source>
         <translation>Pracujeme na dôležitej aktualizácii, prosím nezatvárajte aplikáciu</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="117"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="123"/>
         <source>%1/%2</source>
         <translation>%1/%2</translation>
     </message>
@@ -884,27 +884,27 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>LoginForm</name>
     <message>
-        <location filename="../qml/LoginForm.qml" line="70"/>
+        <location filename="../qml/LoginForm.qml" line="62"/>
         <source>Sync projects with your desktop computer and work collaboratively with others by logging in to your %1Mergin Maps%2 account.</source>
         <translation>Synchronizujte projekty s počítačom a spolupracujte s ďalšími po prihlásení do vášho %1Mergin Maps%2 účtu.</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="113"/>
+        <location filename="../qml/LoginForm.qml" line="105"/>
         <source>Username</source>
         <translation>Používateľské meno</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="157"/>
+        <location filename="../qml/LoginForm.qml" line="149"/>
         <source>Sign in</source>
         <translation>Prihlásiť sa</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="223"/>
+        <location filename="../qml/LoginForm.qml" line="215"/>
         <source>Sign up for free</source>
         <translation>Bezplatná registrácia</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="245"/>
+        <location filename="../qml/LoginForm.qml" line="237"/>
         <source>Forgot password?</source>
         <translation>Zabudli ste heslo?</translation>
     </message>
@@ -986,82 +986,82 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1114"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1124"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS momentálne nie je dostupné.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="315"/>
+        <location filename="../qml/map/MapWrapper.qml" line="326"/>
         <source>Successfully synchronized</source>
         <translation>Synchronizácia bola úspešná</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="329"/>
+        <location filename="../qml/map/MapWrapper.qml" line="340"/>
         <source>Up to date</source>
         <translation>Dáta sú aktuálne</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="338"/>
+        <location filename="../qml/map/MapWrapper.qml" line="349"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Niekto iný práve synchronizuje, skúsime to znovu neskôr</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="348"/>
+        <location filename="../qml/map/MapWrapper.qml" line="359"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>Pri synchronizácii nastala chyba, skúsime to znovu neskôr. Kliknite pre viac info</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="366"/>
+        <location filename="../qml/map/MapWrapper.qml" line="377"/>
         <source>Splitting done successfully</source>
         <translation>Rozdelenie sa podarilo</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="382"/>
+        <location filename="../qml/map/MapWrapper.qml" line="393"/>
         <source>Create line to split the selected feature</source>
         <translation>Nakreslite čiaru na rozdelenie objektu</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="398"/>
+        <location filename="../qml/map/MapWrapper.qml" line="409"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Vyberte bod pre začatie úpravy geometrie</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="414"/>
+        <location filename="../qml/map/MapWrapper.qml" line="425"/>
         <source>Record new geometry for the feature</source>
         <translation>Nahrať novú geometriu objektu</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="553"/>
+        <location filename="../qml/map/MapWrapper.qml" line="564"/>
         <source>Details</source>
         <translation>Detaily</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="673"/>
+        <location filename="../qml/map/MapWrapper.qml" line="684"/>
         <source>Discard the changes?</source>
         <translation>Zrušiť zmeny?</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="676"/>
+        <location filename="../qml/map/MapWrapper.qml" line="687"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Kliknutím Áno zrušíte zmeny geometrie. Ak chcete uložiť zmeny, stlačte Nie a potom &apos;Hotovo&apos; v menu dole.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="680"/>
+        <location filename="../qml/map/MapWrapper.qml" line="691"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Kliknutím Áno zrušíte novú geometriu a objekt sa neuloží. Ak chcete uložiť zmeny, stlačte Nie a potom &apos;Hotovo&apos; v menu dole.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="746"/>
+        <location filename="../qml/map/MapWrapper.qml" line="756"/>
         <source>Connecting to %1</source>
         <translation>Pripájam sa k %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="760"/>
+        <location filename="../qml/map/MapWrapper.qml" line="770"/>
         <source>Connected, no position</source>
         <translation>Pripojený, nemám polohu</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="764"/>
+        <location filename="../qml/map/MapWrapper.qml" line="774"/>
         <source>Unknown accuracy</source>
         <translation>Neznáma presnosť</translation>
     </message>
@@ -1156,17 +1156,17 @@ Kliknite Áno pre upload.</translation>
         <translation>Pripojenie prijímačov cez Bluetooth priamo cez appku nie je možné na iOS. Váš dodávateľ harvéru možno poskytuje vlastnú appku, ktorá sa pripojí na prijímač a nastaví polohu. Táto aplikácia si však naďalej bude myslieť, že používa internú GPS vášho telefónu/tabletu.%1%2Kliknite sem pre viac info.%3</translation>
     </message>
     <message>
-        <location filename="../qml/misc/PositionProviderPage.qml" line="366"/>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="370"/>
         <source>Remove receiver</source>
         <translation>Odobrať prijímač</translation>
     </message>
     <message>
-        <location filename="../qml/misc/PositionProviderPage.qml" line="367"/>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="371"/>
         <source>Do you want to remove receiver from the list of recent receivers?</source>
         <translation>Chcete odobrať prijímač zo zoznamu nedávno použitých prijímačov?</translation>
     </message>
     <message>
-        <location filename="../qml/misc/PositionProviderPage.qml" line="380"/>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="383"/>
         <source>Internal</source>
         <translation>Interný</translation>
     </message>
@@ -1174,22 +1174,22 @@ Kliknite Áno pre upload.</translation>
 <context>
     <name>PositionProvidersModel</name>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="25"/>
+        <location filename="../position/positionprovidersmodel.cpp" line="24"/>
         <source>Internal</source>
         <translation>Interný</translation>
     </message>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="26"/>
+        <location filename="../position/positionprovidersmodel.cpp" line="25"/>
         <source>GPS receiver of this device</source>
         <translation>GPS prijímač tohto zariadenia</translation>
     </message>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="115"/>
+        <location filename="../position/positionprovidersmodel.cpp" line="114"/>
         <source> Bluetooth device</source>
         <translation>Bluetooth zariadenie</translation>
     </message>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="171"/>
+        <location filename="../position/positionprovidersmodel.cpp" line="170"/>
         <source>Bluetooth device</source>
         <translation>Bluetooth zariadenie</translation>
     </message>
@@ -1257,7 +1257,7 @@ Kliknite Áno pre upload.</translation>
     <name>ProjectList</name>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="134"/>
-        <location filename="../qml/components/ProjectList.qml" line="189"/>
+        <location filename="../qml/components/ProjectList.qml" line="191"/>
         <source>Create project</source>
         <translation>Vytvor projekt</translation>
     </message>
@@ -1267,42 +1267,42 @@ Kliknite Áno pre upload.</translation>
         <translation>Nenašli sa žiadne projekty.%1Zisti %2 ako vytvoriť projekty%3 a %4stiahni ich%3 do aplikácie.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="180"/>
+        <location filename="../qml/components/ProjectList.qml" line="182"/>
         <source>You can also create new project by clicking button below.</source>
         <translation>Môžes takisto vytvoriť nový projekt keď klikneš na tlačítko dole.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="202"/>
+        <location filename="../qml/components/ProjectList.qml" line="204"/>
         <source>Unable to get the list of projects.</source>
         <translation>Nepodarilo sa získať zoznam projektov.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="202"/>
+        <location filename="../qml/components/ProjectList.qml" line="204"/>
         <source>No projects found!</source>
         <translation>Žiadne projekty!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="233"/>
+        <location filename="../qml/components/ProjectList.qml" line="235"/>
         <source>Retry</source>
         <translation>Skúsiť znovu</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="261"/>
+        <location filename="../qml/components/ProjectList.qml" line="263"/>
         <source>Remove project</source>
         <translation>Odstrániť projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="262"/>
+        <location filename="../qml/components/ProjectList.qml" line="264"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Všetky neuložené zmeny budú stratené.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="297"/>
+        <location filename="../qml/components/ProjectList.qml" line="298"/>
         <source>Download project</source>
         <translation>Stiahnuť projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="298"/>
+        <location filename="../qml/components/ProjectList.qml" line="299"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>Chcete stiahnuť projekt
@@ -1330,27 +1330,27 @@ Kliknite Áno pre upload.</translation>
         <translation>Projekty</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="368"/>
+        <location filename="../qml/ProjectPanel.qml" line="386"/>
         <source>Home</source>
         <translation>Domov</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="390"/>
+        <location filename="../qml/ProjectPanel.qml" line="408"/>
         <source>My projects</source>
         <translation>Moje projekty</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="414"/>
+        <location filename="../qml/ProjectPanel.qml" line="432"/>
         <source>Shared with me</source>
         <translation>Zdieľané so mnou</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="414"/>
+        <location filename="../qml/ProjectPanel.qml" line="432"/>
         <source>Shared</source>
         <translation>Zdieľané</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="434"/>
+        <location filename="../qml/ProjectPanel.qml" line="452"/>
         <source>Explore</source>
         <translation>Iné projekty</translation>
     </message>
@@ -1371,7 +1371,7 @@ Kliknite Áno pre upload.</translation>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="119"/>
+        <location filename="../projectwizard.cpp" line="120"/>
         <source>Project %1 created</source>
         <translation>Projekt %1 bol vytvorený</translation>
     </message>
@@ -1379,32 +1379,32 @@ Kliknite Áno pre upload.</translation>
 <context>
     <name>ProjectWizardPage</name>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="51"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="53"/>
         <source>Create Project</source>
         <translation>Vytvoriť nový projekt</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="76"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="78"/>
         <source>Project name</source>
         <translation>Názov projektu</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="91"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="93"/>
         <source>Fields</source>
         <translation>Stĺpce</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="125"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="127"/>
         <source>Add field</source>
         <translation>Pridať stĺpce</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="166"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="168"/>
         <source>Create project</source>
         <translation>Vytvoriť projekt</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="172"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="174"/>
         <source>Empty project name</source>
         <translation>Zadajte názov projektu</translation>
     </message>
@@ -1472,63 +1472,63 @@ Kliknite Áno pre upload.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="57"/>
+        <location filename="../attributes/fieldvalidator.h" line="59"/>
         <source>Value must be a number</source>
         <translation>Musíte zadať platné číslo</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="58"/>
+        <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value must be lower than %1</source>
         <translation>Číslo musí byť menšie ako %1</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="59"/>
+        <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Value must be higher than %1</source>
         <translation>Číslo musí byť väčšie ako %1</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="60"/>
+        <location filename="../attributes/fieldvalidator.h" line="62"/>
         <source>Value is too large</source>
         <translation>Hodnota je príliš veľká</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="61"/>
+        <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Field can not contain decimal places</source>
         <translation>Pole nemôže obsahovať desatinné číslo</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="63"/>
+        <location filename="../attributes/fieldvalidator.h" line="65"/>
         <source>Can not be longer than %1 characters</source>
         <translation>Hodnota nemôže obsahovať viac ako %1 znakov</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="65"/>
+        <location filename="../attributes/fieldvalidator.h" line="67"/>
         <source>Field should not be empty</source>
         <translation>Pole by nemalo byť prázdne</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="66"/>
+        <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Field must not be empty</source>
         <translation>Pole je povinné</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="67"/>
+        <location filename="../attributes/fieldvalidator.h" line="69"/>
         <source>Value should be unique</source>
         <translation>Hodnota by mala byť unikátna</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="68"/>
+        <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Value must be unique</source>
         <translation>Hodnota musí byť unikátna</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="69"/>
-        <location filename="../attributes/fieldvalidator.h" line="70"/>
+        <location filename="../attributes/fieldvalidator.h" line="71"/>
+        <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Unmet QGIS expression constraint</source>
         <translation>Nesplnená požiadavka podľa QGIS vzorca</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="72"/>
+        <location filename="../attributes/fieldvalidator.h" line="74"/>
         <source>Not a valid value</source>
         <translation>Neplatná hodnota</translation>
     </message>
@@ -1579,23 +1579,6 @@ Kliknite Áno pre upload.</translation>
     </message>
 </context>
 <context>
-    <name>QgsQuickMapCanvasMap</name>
-    <message>
-        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="175"/>
-        <source>Rendering</source>
-        <translation>Vykreslovanie</translation>
-    </message>
-</context>
-<context>
-    <name>QgsQuickMapSettings</name>
-    <message>
-        <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="244"/>
-        <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="273"/>
-        <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
-        <translation>Otočenie mapy nie je podporované. Vraciam sa od %1 k 0.</translation>
-    </message>
-</context>
-<context>
     <name>RecordingToolbar</name>
     <message>
         <location filename="../qml/map/RecordingToolbar.qml" line="72"/>
@@ -1631,13 +1614,13 @@ Kliknite Áno pre upload.</translation>
 <context>
     <name>RecordingTools</name>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="282"/>
+        <location filename="../qml/map/RecordingTools.qml" line="281"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Nízka presnosť GPS (%1 m)&lt;br&gt;&lt;br&gt;Uistite sa, že máte dobrý výhľad na oblohu.</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="188"/>
-        <location filename="../qml/map/RecordingTools.qml" line="308"/>
+        <location filename="../qml/map/RecordingTools.qml" line="187"/>
+        <location filename="../qml/map/RecordingTools.qml" line="307"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS momentálne nie je dostupné.</translation>
     </message>
@@ -1939,17 +1922,17 @@ Kliknite Áno pre upload.</translation>
 <context>
     <name>inputexternalresource</name>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="236"/>
         <source>Take a photo</source>
         <translation>Odfotiť</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="276"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="278"/>
         <source>From gallery</source>
         <translation>Z galérie</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="297"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="299"/>
         <source>Image is not available: </source>
         <translation>Obrázok nie je dostupný:</translation>
     </message>
@@ -1957,17 +1940,17 @@ Kliknite Áno pre upload.</translation>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="119"/>
+        <location filename="../qml/editor/inputrelation.qml" line="121"/>
         <source>%1 more</source>
         <translation>%1 viac</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="134"/>
+        <location filename="../qml/editor/inputrelation.qml" line="136"/>
         <source>Add</source>
         <translation>Pridať</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="190"/>
+        <location filename="../qml/editor/inputrelation.qml" line="195"/>
         <source>Linked features</source>
         <translation>Prepojené objekty</translation>
     </message>
@@ -1991,7 +1974,7 @@ Kliknite Áno pre upload.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="229"/>
+        <location filename="../qml/main.qml" line="226"/>
         <location filename="../qml/main.qml" line="285"/>
         <source>No Changes</source>
         <translation>Žiadne zmeny</translation>
@@ -2012,27 +1995,37 @@ Kliknite Áno pre upload.</translation>
         <translation>Nenašla sa žiadna upraviteľná vrstva.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="594"/>
+        <location filename="../qml/main.qml" line="615"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Vytýčenie nie je k dispozícii, pretože nemáme polohu!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="615"/>
+        <location filename="../qml/main.qml" line="627"/>
+        <source>Failed to open the project</source>
+        <translation>Nepodarilo sa otvoriť projekt</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="656"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Zlyhala komunikácia s Mergin serverom.%1Skontrolujte svoje internetové pripojenie</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="662"/>
+        <location filename="../qml/main.qml" line="707"/>
         <source>There were issues loading the project.</source>
         <translation>Pri načítaní projektu nastali problémy.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="693"/>
+        <location filename="../qml/main.qml" line="719"/>
+        <source>Could not read the project file:</source>
+        <translation>Nastala chyba pri čítaní projektového súboru:</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="746"/>
         <source>Press back again to quit the app</source>
         <translation>Znovu stlačte naspäť pre ukončenie aplikácie</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="534"/>
+        <location filename="../qml/main.qml" line="546"/>
         <source>PROJ Error</source>
         <translation>Chyba PROJ</translation>
     </message>
