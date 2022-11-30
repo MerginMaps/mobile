@@ -325,7 +325,7 @@ endif ()
 add_compile_definitions(HAVE_WIDGETS)
 
 # QGIS defines
-add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_PREFIX_PATH=${QGIS_PREFIX_PATH}>")
+# add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_PREFIX_PATH=${QGIS_PREFIX_PATH}>")
 add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_QUICK_EXPAND_TEST_DATA>")
 
 # Generate inputconfig.h
@@ -395,4 +395,8 @@ add_subdirectory(app)
 # INSTALL
 # ########################################################################################
 
-include(InstallStep)
+if (WIN OR LNX OR MACOS)
+  # qt_add_executable on Android automatically creates target for apk/aab
+  # on IOS we use xcodebuild to build ipa
+  include(InstallStep)
+endif ()
