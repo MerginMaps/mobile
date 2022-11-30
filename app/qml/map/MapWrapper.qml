@@ -664,7 +664,7 @@ Item {
           id: captionmetrics
 
           font: backtext.font
-          text: "Back"
+          text: qsTr( "Back" )
           elide: backtext.elide
           elideWidth: backtext.maxTextWidth
         }
