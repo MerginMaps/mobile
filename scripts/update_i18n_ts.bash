@@ -23,9 +23,8 @@ fi
 I18N_DIR=$DIR/../app/i18n
 cd $I18N_DIR
 INPUT_TS="$INPUT_TS ./input_en.ts"
-INPUT_DIR=../
 
-$QT_DIR/bin/lupdate -noobsolete $INPUT_DIR $LUPDATE_PARAMS $INPUT_TS
+$QT_DIR/bin/lupdate -noobsolete .. ../../core $LUPDATE_PARAMS $INPUT_TS
 
 echo "update i18n done ✅"
 cd $PWD
