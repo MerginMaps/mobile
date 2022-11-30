@@ -395,8 +395,11 @@ add_subdirectory(app)
 # INSTALL
 # ########################################################################################
 
-if (WIN OR LNX OR MACOS)
-  # qt_add_executable on Android automatically creates target for apk/aab
-  # on IOS we use xcodebuild to build ipa
+if (WIN
+    OR LNX
+    OR MACOS
+)
+  # qt_add_executable on Android automatically creates target for apk/aab on IOS we use
+  # xcodebuild to build ipa
   include(InstallStep)
 endif ()
