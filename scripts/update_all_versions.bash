@@ -13,20 +13,13 @@ BUILD=${VER_PARTS[2]}
 
 echo "using version $MAJOR.$MINOR.$BUILD"
 
-# ios: app/ios/Info.plist (JUST CFBundleShortVersionString, CFBundleVersion is calculated automatically)
-IOS_FILE=$DIR/../app/ios/Info.plist
-echo "patching $IOS_FILE"
-
-sed -i.orig -E "s|<string>[0-9]+\\.[0-9]+\\.[0-9]+<\\/string>|<string>$VERSION<\\/string>|g" $IOS_FILE
-rm -f $IOS_FILE.orig
-
-# android: app/version.pri
-ANDROID_FILE=$DIR/../app/version.pri
-echo "patching $ANDROID_FILE"
-sed -i.orig -E "s|VERSION_MAJOR = [0-9]+|VERSION_MAJOR = $MAJOR|g" $ANDROID_FILE
-sed -i.orig -E "s|VERSION_MINOR = [0-9]+|VERSION_MINOR = $MINOR|g" $ANDROID_FILE
-sed -i.orig -E "s|VERSION_FIX = [0-9]+|VERSION_FIX = $BUILD|g" $ANDROID_FILE
-rm -f $ANDROID_FILE.orig
+# CMakeLists.txt
+CMAKE_FILE=$DIR/../CMakeLists.txt
+echo "patching $CMAKE_FILE"
+sed -i.orig -E "s|MM_VERSION_MAJOR \"[0-9]+\"|MM_VERSION_MAJOR \"$MAJOR\"|g" $CMAKE_FILE
+sed -i.orig -E "s|MM_VERSION_MINOR \"[0-9]+\"|MM_VERSION_MINOR \"$MINOR\"|g" $CMAKE_FILE
+sed -i.orig -E "s|MM_VERSION_PATCH \"[0-9]+\"|MM_VERSION_PATCH \"$BUILD\"|g" $CMAKE_FILE
+rm -f $CMAKE_FILE.orig
 
 # .zenodo.json
 ZENODO_FILE=$DIR/../.zenodo.json
