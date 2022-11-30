@@ -6,14 +6,24 @@ Building Mergin Maps Input from source - step by step
 
 * [1. Introduction](#1-introduction)
 * [2. Overview](#2-overview)
+   * [2.1 Secrets](#21-secrets)
+   * [2.2 Code formatting](#22-code-formatting)
 * [3. Building GNU/Ubuntu](#3-building-gnuubuntu)
 * [4. Building Android (on Ubuntu/macOS/Windows)](#4-building-android-on-ubuntumacoswindows)
    * [4.1. Android on Ubuntu](#41-android-on-ubuntu)
    * [4.2. Android on macOS](#42-android-on-macos)
    * [4.3. Android on Windows](#43-android-on-windows)
 * [5. Building iOS](#5-building-ios)
+   * [5.1 iOS assets](#51-ios-assets)
+       * [application icon](#application-icon)
+       * [launch screen](#launch-screen)
+   * [5.2 iOS dist certificates](#52-ios-dist-certificates)
+   * [5.3 iOS in-app purchases](#53-ios-in-app-purchases)
+       * [add new subscription](#add-new-subscription)
+       * [to do apple in-app purchases test](#to-do-apple-in-app-purchases-test)
 * [6. Building macOS](#6-building-macos)
 * [7. Building Windows](#7-building-windows)
+
 
 # 1. Introduction
 
@@ -348,13 +358,39 @@ cd ..
 
 # 7. Building Windows
 
-**Note to document writers:**: This section needs a proper rewrite
+For version of the tools used, see `.github/workflows/win.yml`
 
-- download input-sdk for win, extract to C:\projects\input-sdk\x86_64\
-- download and install NSIS: Nullsoft Scriptable Install System
-- download and install QtCreator for debugging executable (to see qDebug())
-- you should have path "stage" in the input-sdk folder with all libs (qgis_core, qgis_quick, ...)
-- install all prerequisities of input-sdk (Visual Studio, SDK, Python, Cmake)
-- get input repo to C:\projects\input-sdk\x86_64\input
-- copy app/config.pri.default 
-- run scripts/builds_win.cmd
+- download input-sdk for win, extract to C:\projects\input-sdk\win-sdk
+- download and install Qt
+- download and install QtCreator for debugging executable
+- download and install Visual Studio, SDK, Python, Cmake
+- (optional) install ccache and add to PATH
+- open cmd
+- setup build environment
+```
+set ROOT_DIR=C:\Users\zilol\Projects
+set Qt6_DIR=C:\Qt\6.4.1\msvc2019_64
+set PATH=%QT_ROOT%\bin;C:\Program Files\CMake\bin\;%PATH%
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=x64
+```
+
+- configure
+```
+cd %ROOT_DIR%\build\input
+
+cmake ^
+   -DCMAKE_BUILD_TYPE=Release ^
+   -DCMAKE_PREFIX_PATH:PATH=%Qt6_Dir%^
+   -DCMAKE_INSTALL_PREFIX:PATH=%ROOT_DIR%\install\input ^
+   -DINPUT_SDK_PATH:PATH=%ROOT_DIR%\input-sdk-qt-6.4.1-win64-20221116-132 ^
+   -G "NMake Makefiles" ^
+   -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ^
+   -S %ROOT_DIR%\input ^
+   -B .
+```
+
+- build 
+```
+set CL=/MP
+nmake
+```
