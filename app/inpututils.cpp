@@ -1984,3 +1984,10 @@ QString InputUtils::imageGalleryLocation()
 
   return galleryPaths.last();
 }
+
+bool InputUtils::isValidName( const QString &projectName )
+{
+  QRegularExpression reForbiddenmNames( R"([@#$%^&*\(\)\{\}\[\]\\\/\|\+=<>~\?:;,`\'\"]|^[\s^\.].*$|^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d|^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$)" );
+  QRegularExpressionMatch matchForbiddenNames = reForbiddenmNames.match( projectName );
+  return !matchForbiddenNames.hasMatch();
+}

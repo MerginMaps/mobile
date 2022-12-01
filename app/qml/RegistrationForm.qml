@@ -237,9 +237,13 @@ Rectangle {
       font.pixelSize: InputStyle.fontPixelSizeBig
       anchors.horizontalCenter: parent.horizontalCenter
       onClicked: {
-        stackView.pending = true
-        __merginApi.registerUser(registerName.text, email.text, passwordField.password.text,
-                                 passwordConfirmField.password.text, acceptTOC.checked)
+        if (!__inputUtils.isValidName(registerName.text)) {
+          __inputUtils.showNotification(qsTr("User name contains invalid characters"))
+        } else {
+          stackView.pending = true
+          __merginApi.registerUser(registerName.text, email.text, passwordField.password.text,
+                                   passwordConfirmField.password.text, acceptTOC.checked)
+        }
       }
       background: Rectangle {
         color: InputStyle.highlightColor
