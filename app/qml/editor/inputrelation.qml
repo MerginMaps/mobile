@@ -190,7 +190,9 @@ Item {
 
         model: rmodel
         delegate: RelationPhotoDelegate {
-          onClicked: root.openLinkedFeature( feature )
+          onClicked: function ( feature ) {
+            root.openLinkedFeature( feature )
+          }
 
           height: ListView.view.height
           width: height
@@ -222,7 +224,7 @@ Item {
       }
 
       onAddFeatureClicked: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
-      onSelectionFinished: {
+      onSelectionFinished: function( featureIds ) {
         let clickedFeature = featuresModel.convertRoleValue( FeaturesModel.FeatureId, featureIds, FeaturesModel.FeaturePair )
         root.openLinkedFeature( clickedFeature )
       }
