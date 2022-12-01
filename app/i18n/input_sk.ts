@@ -89,10 +89,23 @@ Na vymazanie účtu prosím zadajte nižšie vaše uživateľské meno a stlčte
         <translation>Uživateľské meno</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="386"/>
-        <location filename="../qml/AccountPage.qml" line="420"/>
+        <location filename="../qml/AccountPage.qml" line="384"/>
         <source>Failed to remove account</source>
         <translation>Nepodarilo sa vymazať konto</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="385"/>
+        <source>An error occured while removing your account</source>
+        <translation>Nastala chyba pri odstraňovaní konta</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="408"/>
+        <source>Can not close account because user is the only owner of an organisation.
+
+Please go to the Mergin Maps website to remove it manually.</source>
+        <translation>Nepodarilo sa odstrániť konto, pretože uživateľ je jediný vlastník organizácie.
+
+Prosím odstráňte najprv organizáciu po prihlásení na web Mergin Maps.</translation>
     </message>
 </context>
 <context>
@@ -373,7 +386,7 @@ Prosím uistite sa, že zariadenie je zapnuté a pripravené na pripojenie.%1 %2
         <translation>Chcete fotografiu odstrániť aj z vášho zariadenia?</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="243"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="242"/>
         <source>Failed to copy image</source>
         <translation>Nepodarilo sa skopírovať obrázok</translation>
     </message>
@@ -429,12 +442,12 @@ Prosím uistite sa, že zariadenie je zapnuté a pripravené na pripojenie.%1 %2
         <translation>Chcete uložiť zmeny?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="244"/>
         <source>Saving failed</source>
         <translation>Ukladanie zlyhalo</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="246"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>Nepodarilo sa uložiť zmeny. Toto by sa normálne nemalo stať. Prosím reštartujte aplikáciu a skúste znovu - ak to nepomôže, kontaktuje podporu.</translation>
     </message>
@@ -843,24 +856,42 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Na zariadení dochádza voľné miesto, potrebujete %1 voľného miesta na projekty. Prosím uvoľnite miesto a vráťte sa, alebo kliknite Pomoc pre ďalšie rady, ako vyriešiť tento problém.</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="44"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="45"/>
         <source>An error occured during update</source>
         <translation>Nastala chyba pri aktualizácii</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="45"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="46"/>
         <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
         <translation>Došlo ku chybe v zariadení pri aktualizácii. Nebude možné vidieť projekty. Prosím kliknite na Pomoc pre rady, ako vyriešiť tento problém.</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="109"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="111"/>
         <source>We are working on an important update, please do not close the application</source>
         <translation>Pracujeme na dôležitej aktualizácii, prosím nezatvárajte aplikáciu</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="123"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="125"/>
         <source>%1/%2</source>
         <translation>%1/%2</translation>
+    </message>
+</context>
+<context>
+    <name>LocalProjectsManager</name>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="210"/>
+        <source>Download failed, remove and retry</source>
+        <translation>Sťahovanie zlyhalo, vymažte projekt a skúste znova</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="230"/>
+        <source>Found multiple QGIS project files</source>
+        <translation>Našlo sa viacero QGIS projektov</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="235"/>
+        <source>Failed to find a QGIS project file</source>
+        <translation>Nenašiel sa žiaden QGIS projekt</translation>
     </message>
 </context>
 <context>
@@ -986,7 +1017,7 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1124"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1122"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS momentálne nie je dostupné.</translation>
     </message>
@@ -1036,6 +1067,11 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Detaily</translation>
     </message>
     <message>
+        <location filename="../qml/map/MapWrapper.qml" line="667"/>
+        <source>Back</source>
+        <translation>Naspäť</translation>
+    </message>
+    <message>
         <location filename="../qml/map/MapWrapper.qml" line="684"/>
         <source>Discard the changes?</source>
         <translation>Zrušiť zmeny?</translation>
@@ -1051,19 +1087,75 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Kliknutím Áno zrušíte novú geometriu a objekt sa neuloží. Ak chcete uložiť zmeny, stlačte Nie a potom &apos;Hotovo&apos; v menu dole.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="756"/>
+        <location filename="../qml/map/MapWrapper.qml" line="754"/>
         <source>Connecting to %1</source>
         <translation>Pripájam sa k %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="770"/>
+        <location filename="../qml/map/MapWrapper.qml" line="768"/>
         <source>Connected, no position</source>
         <translation>Pripojený, nemám polohu</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="774"/>
+        <location filename="../qml/map/MapWrapper.qml" line="772"/>
         <source>Unknown accuracy</source>
         <translation>Neznáma presnosť</translation>
+    </message>
+</context>
+<context>
+    <name>MerginApi</name>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="679"/>
+        <source>Username must have at least 4 characters</source>
+        <translation>Používateľské meno musí mať aspoň 4 znaky</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="686"/>
+        <source>Please enter a valid email</source>
+        <translation>Zadajte prosím platný email</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="693"/>
+        <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
+        <translation>Heslo nie je dostatočne silné. Skontrolujte, či obsahuje%1 minimálne 8 znakov,%1 obsahuje aspoň jedno malé písmeno,%1 aspoň jedno veľké písmeno a%1 aspoň jednu číslicu alebo špeciálny znak</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="706"/>
+        <source>Passwords do not match</source>
+        <translation>Heslá sa nezhodujú</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="713"/>
+        <source>Please accept Terms and Privacy Policy</source>
+        <translation>Prosím potvrďte súhlas s podmienkami používania a zásadami ochrany osobných údajov</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1001"/>
+        <source>Registration successful</source>
+        <translation>Registrácia prebehla úspešne</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1022"/>
+        <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
+        <translation>Registrácia nie je povolená na zvolenom Mergin serveri.%1Kontaktujte, prosím, svojeho administrátora.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1292"/>
+        <source>Project detached from Mergin</source>
+        <translation>Projekt bol odpojený z Mergin</translation>
+    </message>
+</context>
+<context>
+    <name>MerginProjectStatusModel</name>
+    <message>
+        <location filename="../../core/merginprojectstatusmodel.cpp" line="70"/>
+        <source>Pending Changes</source>
+        <translation>Zmeny na uloženie</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
+        <source>Failed to determine changes</source>
+        <translation>Nepodarilo sa zistiť zmeny</translation>
     </message>
 </context>
 <context>
@@ -1166,7 +1258,7 @@ Kliknite Áno pre upload.</translation>
         <translation>Chcete odobrať prijímač zo zoznamu nedávno použitých prijímačov?</translation>
     </message>
     <message>
-        <location filename="../qml/misc/PositionProviderPage.qml" line="383"/>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="384"/>
         <source>Internal</source>
         <translation>Interný</translation>
     </message>
@@ -1297,12 +1389,12 @@ Kliknite Áno pre upload.</translation>
         <translation>Všetky neuložené zmeny budú stratené.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="298"/>
+        <location filename="../qml/components/ProjectList.qml" line="295"/>
         <source>Download project</source>
         <translation>Stiahnuť projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="299"/>
+        <location filename="../qml/components/ProjectList.qml" line="296"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>Chcete stiahnuť projekt
@@ -1995,32 +2087,32 @@ Kliknite Áno pre upload.</translation>
         <translation>Nenašla sa žiadna upraviteľná vrstva.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="615"/>
+        <location filename="../qml/main.qml" line="616"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Vytýčenie nie je k dispozícii, pretože nemáme polohu!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="627"/>
+        <location filename="../qml/main.qml" line="628"/>
         <source>Failed to open the project</source>
         <translation>Nepodarilo sa otvoriť projekt</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="656"/>
+        <location filename="../qml/main.qml" line="653"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Zlyhala komunikácia s Mergin serverom.%1Skontrolujte svoje internetové pripojenie</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="707"/>
+        <location filename="../qml/main.qml" line="704"/>
         <source>There were issues loading the project.</source>
         <translation>Pri načítaní projektu nastali problémy.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="719"/>
+        <location filename="../qml/main.qml" line="716"/>
         <source>Could not read the project file:</source>
         <translation>Nastala chyba pri čítaní projektového súboru:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="746"/>
+        <location filename="../qml/main.qml" line="743"/>
         <source>Press back again to quit the app</source>
         <translation>Znovu stlačte naspäť pre ukončenie aplikácie</translation>
     </message>
