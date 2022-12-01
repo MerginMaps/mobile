@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Shapes 1.3
+import QtQuick.Shapes
 import Input 0.1
 import lc 1.0
 
