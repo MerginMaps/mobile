@@ -158,6 +158,11 @@ ApplicationWindow {
           // if feature preview panel is opened
           return formsStackManager.takenVerticalSpace - mainPanel.height
         }
+        else if ( stateManager.state === "projects" || stateManager.state === "misc" )
+        {
+          return window.height
+        }
+
         return 0
       }
 
