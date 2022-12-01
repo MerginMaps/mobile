@@ -296,6 +296,8 @@ Item {
     SwipeView {
       id: swipeView
       currentIndex: form.controller.hasTabs ? tabRow.currentIndex : 0
+      interactive: false
+
       anchors {
         top: flickable.bottom
         left: container.left
