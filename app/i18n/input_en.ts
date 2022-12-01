@@ -89,9 +89,20 @@ In order to delete your account, enter your username in the field below and clic
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="386"/>
-        <location filename="../qml/AccountPage.qml" line="420"/>
+        <location filename="../qml/AccountPage.qml" line="384"/>
         <source>Failed to remove account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="385"/>
+        <source>An error occured while removing your account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="408"/>
+        <source>Can not close account because user is the only owner of an organisation.
+
+Please go to the Mergin Maps website to remove it manually.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -372,7 +383,7 @@ In order to delete your account, enter your username in the field below and clic
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="243"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="242"/>
         <source>Failed to copy image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -428,12 +439,12 @@ In order to delete your account, enter your username in the field below and clic
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="244"/>
         <source>Saving failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="246"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -839,23 +850,41 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="44"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="45"/>
         <source>An error occured during update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="45"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="46"/>
         <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="109"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="111"/>
         <source>We are working on an important update, please do not close the application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="123"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="125"/>
         <source>%1/%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LocalProjectsManager</name>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="210"/>
+        <source>Download failed, remove and retry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="230"/>
+        <source>Found multiple QGIS project files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="235"/>
+        <source>Failed to find a QGIS project file</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -982,7 +1011,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1124"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1122"/>
         <source>GPS currently unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1032,6 +1061,11 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qml/map/MapWrapper.qml" line="667"/>
+        <source>Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/map/MapWrapper.qml" line="684"/>
         <source>Discard the changes?</source>
         <translation type="unfinished"></translation>
@@ -1047,18 +1081,74 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="756"/>
+        <location filename="../qml/map/MapWrapper.qml" line="754"/>
         <source>Connecting to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="770"/>
+        <location filename="../qml/map/MapWrapper.qml" line="768"/>
         <source>Connected, no position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="774"/>
+        <location filename="../qml/map/MapWrapper.qml" line="772"/>
         <source>Unknown accuracy</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MerginApi</name>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="679"/>
+        <source>Username must have at least 4 characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="686"/>
+        <source>Please enter a valid email</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="693"/>
+        <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="706"/>
+        <source>Passwords do not match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="713"/>
+        <source>Please accept Terms and Privacy Policy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1001"/>
+        <source>Registration successful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1022"/>
+        <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1292"/>
+        <source>Project detached from Mergin</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MerginProjectStatusModel</name>
+    <message>
+        <location filename="../../core/merginprojectstatusmodel.cpp" line="70"/>
+        <source>Pending Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
+        <source>Failed to determine changes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1161,7 +1251,7 @@ Click &apos;Yes&apos; to upload it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/misc/PositionProviderPage.qml" line="383"/>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="384"/>
         <source>Internal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1292,12 +1382,12 @@ Click &apos;Yes&apos; to upload it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="298"/>
+        <location filename="../qml/components/ProjectList.qml" line="295"/>
         <source>Download project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="299"/>
+        <location filename="../qml/components/ProjectList.qml" line="296"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation type="unfinished"></translation>
@@ -1989,32 +2079,32 @@ Click &apos;Yes&apos; to upload it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="615"/>
+        <location filename="../qml/main.qml" line="616"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="627"/>
+        <location filename="../qml/main.qml" line="628"/>
         <source>Failed to open the project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="656"/>
+        <location filename="../qml/main.qml" line="653"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="707"/>
+        <location filename="../qml/main.qml" line="704"/>
         <source>There were issues loading the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="719"/>
+        <location filename="../qml/main.qml" line="716"/>
         <source>Could not read the project file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="746"/>
+        <location filename="../qml/main.qml" line="743"/>
         <source>Press back again to quit the app</source>
         <translation type="unfinished"></translation>
     </message>
