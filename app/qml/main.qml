@@ -158,6 +158,14 @@ ApplicationWindow {
           // if feature preview panel is opened
           return formsStackManager.takenVerticalSpace - mainPanel.height
         }
+        else if ( stateManager.state === "projects" || stateManager.state === "misc" )
+        {
+          //
+          // Due to an upstream bug in Qt, see #2387 and #2425 for more info
+          //
+          return window.height
+        }
+
         return 0
       }
 
