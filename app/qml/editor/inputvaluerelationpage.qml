@@ -92,7 +92,7 @@ AbstractEditor {
     anchors.leftMargin: customStyle.fields.sideMargin
     color: customStyle.fields.fontColor
     font.pixelSize: customStyle.fields.fontPixelSize
-    clip: true
+    elide: Text.ElideRight
 
     horizontalAlignment: Text.AlignLeft
     verticalAlignment: Text.AlignVCenter
