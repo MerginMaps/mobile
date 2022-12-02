@@ -50,6 +50,9 @@ Item {
     activeLayer: __activeLayer.vectorLayer
     activeFeature: root.activeFeature
 
+    // Bind variables manager to know if we are centered to GPS or not when evaluating position variables
+    onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition
+
     onActiveVertexChanged: function( activeVertex ) {
       if ( activeVertex.isValid() )
       {
