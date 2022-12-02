@@ -49,7 +49,13 @@ Item {
   Keys.onReleased: function( event ) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true
-      root.close()
+
+      if ( pagesStackView.depth === 1 ) {
+        root.close()
+      }
+      else {
+        pagesStackView.pop( StackView.PopTransition )
+      }
     }
   }
 
