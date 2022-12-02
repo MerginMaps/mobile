@@ -73,6 +73,11 @@ Item {
           PropertyChanges { target: drawer; interactive: false }
           PropertyChanges { target: formContainer; visible: true }
           PropertyChanges { target: previewPanel; visible: false }
+          StateChangeScript {
+            script: {
+              formContainer.opened()
+            }
+          }
         },
         State {
           name: "closed"
