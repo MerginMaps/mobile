@@ -4,16 +4,15 @@
 
 Platform builds:
 
-[![InputApp Android Build](https://github.com/MerginMaps/input/workflows/Android/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22Android%22)
-[![InputApp iOS Build](https://github.com/MerginMaps/input/workflows/iOS%20Build/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22iOS+Build%22)
-[![InputApp win64](https://github.com/MerginMaps/input/actions/workflows/win.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/win.yml)
-
-Other Checks:
-
-[![macOS Build (Auto Tests)](https://github.com/MerginMaps/input/actions/workflows/macos.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/macos.yml)
+[![Android Build](https://github.com/MerginMaps/input/workflows/Android/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22Android%22)
+[![iOS Build](https://github.com/MerginMaps/input/workflows/iOS%20Build/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22iOS+Build%22)
+[![win64](https://github.com/MerginMaps/input/actions/workflows/win.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/win.yml)
+[![macOS Build](https://github.com/MerginMaps/input/actions/workflows/macos.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/macos.yml)
 [![linux Build](https://github.com/MerginMaps/input/actions/workflows/linux.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/linux.yml)
 
-[![InputApp Code Layout](https://github.com/MerginMaps/input/workflows/Code%20Layout/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22Code+Layout%22)
+Other Checks:
+[![Auto Tests](https://github.com/MerginMaps/input/actions/workflows/tests.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/tests.yml)
+[![Code Layout](https://github.com/MerginMaps/input/workflows/Code%20Layout/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22Code+Layout%22)
 [![Coverage Status](https://coveralls.io/repos/github/MerginMaps/input/badge.svg?branch=master)](https://coveralls.io/github/MerginMaps/input?branch=master)
 [![Translations](https://github.com/MerginMaps/input/actions/workflows/i18n.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/i18n.yml)
 
