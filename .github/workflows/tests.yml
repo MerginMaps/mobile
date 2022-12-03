@@ -24,11 +24,11 @@ env:
   XC_VERSION: ${{ '13.2.1' }}
 
 concurrency:
-  group: ci-${{github.ref}}-macos
+  group: ci-${{github.ref}}-tests
   cancel-in-progress: true
 
 jobs:
-  macos_build:
+  auto_test:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-11
     steps:
