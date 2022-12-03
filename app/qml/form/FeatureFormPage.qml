@@ -27,11 +27,16 @@ Item {
   property string formState
 
   signal close()
+  signal opened()
   signal editGeometryClicked( var pair )
   signal splitGeometryClicked()
   signal redrawGeometryClicked( var pair )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentController, var relation )
+
+  onOpened: {
+    formStackView.forceActiveFocus()
+  }
 
   StackView {
     id: formStackView
