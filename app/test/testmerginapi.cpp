@@ -2497,25 +2497,31 @@ MerginProjectsList TestMerginApi::getProjectList( QString tag )
 
 MerginProjectsList TestMerginApi::projectListFromSpy( QSignalSpy &spy )
 {
-  QList<QVariant> response = spy.takeFirst();
-
-  // get projects emited from MerginAPI, it is first argument in listProjectsFinished signal
   MerginProjectsList projects;
-  if ( response.length() > 0 )
-    projects = qvariant_cast<MerginProjectsList>( response.at( 0 ) );
 
+  if ( !spy.isEmpty() )
+  {
+    QList<QVariant> response = spy.takeFirst();
+
+    // get projects emited from MerginAPI, it is first argument in listProjectsFinished signal
+    if ( response.length() > 0 )
+      projects = qvariant_cast<MerginProjectsList>( response.at( 0 ) );
+  }
   return projects;
 }
 
 int TestMerginApi::serverVersionFromSpy( QSignalSpy &spy )
 {
-  QList<QVariant> response = spy.takeFirst();
-
-  // get version number emited from MerginApi::syncProjectFinished, it is third argument
   int serverVersion = -1;
-  if ( response.length() >= 4 )
-    serverVersion = response.at( 3 ).toInt();
 
+  if ( !spy.isEmpty() )
+  {
+    QList<QVariant> response = spy.takeFirst();
+
+    // get version number emited from MerginApi::syncProjectFinished, it is third argument
+    if ( response.length() >= 4 )
+      serverVersion = response.at( 3 ).toInt();
+  }
   return serverVersion;
 }
 
@@ -2541,7 +2547,8 @@ void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectN
   QVERIFY( spy3.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy3.count(), 1 );
   QList<QVariant> arguments = spy3.takeFirst();
-  QVERIFY( arguments.at( 2 ).toBool() );
+  int version = arguments.at( 2 ).toInt();
+  QCOMPARE( version, 1 );
 
   // Remove the whole project
   QDir( projectDir ).removeRecursively();

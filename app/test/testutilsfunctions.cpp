@@ -30,6 +30,8 @@
 
 #include <QtTest/QtTest>
 #include <QtCore/QObject>
+#include <QTemporaryDir>
+#include <QLocale>
 
 const int DAY_IN_SECS = 60 * 60 * 24;
 const int MONTH_IN_SECS = 60 * 60 * 24 * 31;
@@ -158,7 +160,11 @@ void TestUtilsFunctions::formatPoint()
 {
   QgsPoint point( -2.234521, 34.4444421 );
   QString point2str =  mUtils->formatPoint( point );
-  QVERIFY( point2str == "-2.235,34.444" );
+  QString expected =
+    QStringLiteral( "-2" ) + QLocale().decimalPoint() + QStringLiteral( "235" )
+    + QgsCoordinateFormatter::separator()
+    + QStringLiteral( "34" ) + QLocale().decimalPoint() + QStringLiteral( "444" );
+  QCOMPARE( point2str, expected );
 }
 
 void TestUtilsFunctions::formatDistance()
@@ -322,8 +328,7 @@ void TestUtilsFunctions::resolveTargetDir()
 void TestUtilsFunctions::testDirSize()
 {
   // create some test data in tmp with non ascii characters
-  QString tempFolder = QDir::tempPath();
-
+  QString tempFolder = QTemporaryDir( QDir::tempPath() + "/input-testDirSize-XXXXXX" ).path();
   QString project = tempFolder + QStringLiteral( "/input-project" );
   qint64 dirSize;
 
