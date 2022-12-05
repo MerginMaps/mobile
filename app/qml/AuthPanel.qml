@@ -112,7 +112,7 @@ Item {
     RegistrationForm {
       id: registrationForm
       visible: false
-      height: Qt.inputMethod.visible ? parent.height + staticPane.height - Qt.inputMethod.keyboardRectangle.height : parent.height - staticPane.height
+      height: parent.height - staticPane.height
       width: parent.width
     }
 
