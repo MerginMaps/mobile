@@ -95,8 +95,6 @@ elseif (LNX)
     FILES_MATCHING
     PATTERN "*.so"
   )
-  # elseif(MACOS) no shared libs otherwise the destination would be:
-  # Input.app/Contents/MacOS/lib/
 endif ()
 
 # ########################################################################################
@@ -126,8 +124,6 @@ foreach (qml_dir ${qml_dirs})
       DESTINATION qml
       PATTERN "*d.so" EXCLUDE
     )
-    # elseif (MACOS) install( DIRECTORY ${Qt6_base_dir}/qml/${qml_dir} DESTINATION
-    # Input.app/Contents/MacOS/qml PATTERN "*dylib.dSYM" EXCLUDE )
   endif ()
 
 endforeach ()
@@ -154,12 +150,6 @@ foreach (plugins_dir ${plugins_dirs})
       DESTINATION plugins/
       PATTERN "*d.so" EXCLUDE
     )
-    # elseif (MACOS)
-    # install(
-    # DIRECTORY ${Qt6_base_dir}/plugins/${plugins_dir} DESTINATION
-    # Input.app/Contents/PlugIns/
-    # PATTERN "*dylib.dSYM" EXCLUDE
-    # )
   endif ()
 
 endforeach ()
@@ -228,8 +218,6 @@ foreach (qt_lib ${qt_libs})
     install(FILES ${Qt6_base_dir}/bin/Qt6${qt_lib}.dll DESTINATION .)
   elseif (LNX)
     install(FILES ${Qt6_base_dir}/lib/Qt6${qt_lib}.so DESTINATION .)
-    # elseif (MACOS) install(DIRECTORY ${Qt6_base_dir}/lib/Qt${qt_lib}.framework
-    # DESTINATION Input.app/Contents/Frameworks/ )
   endif ()
 endforeach ()
 
