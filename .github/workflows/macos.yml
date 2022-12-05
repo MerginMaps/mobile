@@ -157,7 +157,7 @@ jobs:
           echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
           cd ${{ github.workspace }}/install-Input
           find .
-          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} "./Mergin Maps.app"
+          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} "./Input.app"
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v3
