@@ -27,5 +27,5 @@ set(MM_TESTS
 )
 
 foreach (test ${MM_TESTS})
-  add_mm_test(${test_args})
+  add_mm_test(${test})
 endforeach ()
