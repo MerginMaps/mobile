@@ -21,6 +21,44 @@ else ()
 endif ()
 
 # ########################################################################################
+# Use <plat>deployqt when possible
+# ########################################################################################
+if (MACOS)
+  get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+  if (isMultiConfig)
+    set(deploy_script "${CMAKE_CURRENT_BINARY_DIR}/deploy_input_$<CONFIG>.cmake")
+  else ()
+    set(deploy_script
+        "${CMAKE_CURRENT_BINARY_DIR}/deploy_input_${CMAKE_BUILD_TYPE}.cmake"
+    )
+  endif ()
+
+  set(executable_path "Input.app/Contents/MacOS/INPUT")
+
+  # https://doc-snapshots.qt.io/qt6-dev/qt-deploy-runtime-dependencies.html Replace with
+  # qt_generate_deploy_script from QT 6.5.x The following script must only be executed at
+  # install time Note: This command is in technology preview and may change in future
+  # releases. (QT 6.4.x)
+  file(
+    GENERATE
+    OUTPUT ${deploy_script}
+    CONTENT
+      "
+		include(\"${QT_DEPLOY_SUPPORT}\")
+
+        qt_deploy_qml_imports(TARGET Input)
+
+    	qt_deploy_runtime_dependencies(
+            QML_DIR \"${qml_path}\"
+			EXECUTABLE \"${executable_path}\"
+			GENERATE_QT_CONF
+		)"
+  )
+
+  install(SCRIPT ${deploy_script})
+endif ()
+
+# ########################################################################################
 # SDK Shared Libraries
 # ########################################################################################
 if (WIN)
@@ -76,7 +114,6 @@ set(qml_dirs
 )
 
 foreach (qml_dir ${qml_dirs})
-
   if (WIN)
     install(
       DIRECTORY ${Qt6_base_dir}/qml/${qml_dir}
@@ -89,12 +126,8 @@ foreach (qml_dir ${qml_dirs})
       DESTINATION qml
       PATTERN "*d.so" EXCLUDE
     )
-  elseif (MACOS)
-    install(
-      DIRECTORY ${Qt6_base_dir}/qml/${qml_dir}
-      DESTINATION Input.app/Contents/MacOS/qml
-      PATTERN "*dylib.dSYM" EXCLUDE
-    )
+    # elseif (MACOS) install( DIRECTORY ${Qt6_base_dir}/qml/${qml_dir} DESTINATION
+    # Input.app/Contents/MacOS/qml PATTERN "*dylib.dSYM" EXCLUDE )
   endif ()
 
 endforeach ()
@@ -121,12 +154,12 @@ foreach (plugins_dir ${plugins_dirs})
       DESTINATION plugins/
       PATTERN "*d.so" EXCLUDE
     )
-  elseif (MACOS)
-    install(
-      DIRECTORY ${Qt6_base_dir}/plugins/${plugins_dir}
-      DESTINATION Input.app/Contents/PlugIns/
-      PATTERN "*dylib.dSYM" EXCLUDE
-    )
+    # elseif (MACOS)
+    # install(
+    # DIRECTORY ${Qt6_base_dir}/plugins/${plugins_dir} DESTINATION
+    # Input.app/Contents/PlugIns/
+    # PATTERN "*dylib.dSYM" EXCLUDE
+    # )
   endif ()
 
 endforeach ()
@@ -195,10 +228,8 @@ foreach (qt_lib ${qt_libs})
     install(FILES ${Qt6_base_dir}/bin/Qt6${qt_lib}.dll DESTINATION .)
   elseif (LNX)
     install(FILES ${Qt6_base_dir}/lib/Qt6${qt_lib}.so DESTINATION .)
-  elseif (MACOS)
-    install(DIRECTORY ${Qt6_base_dir}/lib/Qt${qt_lib}.framework
-            DESTINATION Input.app/Contents/Frameworks/
-    )
+    # elseif (MACOS) install(DIRECTORY ${Qt6_base_dir}/lib/Qt${qt_lib}.framework
+    # DESTINATION Input.app/Contents/Frameworks/ )
   endif ()
 endforeach ()
 
