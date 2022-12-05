@@ -217,7 +217,7 @@ foreach (qt_lib ${qt_libs})
   if (WIN)
     install(FILES ${Qt6_base_dir}/bin/Qt6${qt_lib}.dll DESTINATION .)
   elseif (LNX)
-    install(FILES ${Qt6_base_dir}/lib/Qt6${qt_lib}.so DESTINATION .)
+    install(FILES ${Qt6_base_dir}/lib/libQt6${qt_lib}.so DESTINATION .)
   endif ()
 endforeach ()
 
