@@ -89,10 +89,23 @@ Per eliminar el vostre compte, introduïu el vostre nom d&apos;usuari al camp se
         <translation>Introduïu el nom d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="386"/>
-        <location filename="../qml/AccountPage.qml" line="420"/>
+        <location filename="../qml/AccountPage.qml" line="384"/>
         <source>Failed to remove account</source>
         <translation>No s&apos;ha pogut eliminar el compte</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="385"/>
+        <source>An error occured while removing your account</source>
+        <translation>S&apos;ha produït un error en eliminar el vostre compte</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="408"/>
+        <source>Can not close account because user is the only owner of an organisation.
+
+Please go to the Mergin Maps website to remove it manually.</source>
+        <translation>No es pot tancar el compte perquè l&apos;usuari és l&apos;únic propietari d&apos;una organització.
+
+Aneu al lloc web de Mergin Maps per eliminar-lo manualment.</translation>
     </message>
 </context>
 <context>
@@ -373,7 +386,7 @@ Per eliminar el vostre compte, introduïu el vostre nom d&apos;usuari al camp se
         <translation>Voleu també esborrar permanentment la fotografia del dispositiu?</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="243"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="242"/>
         <source>Failed to copy image</source>
         <translation>No s&apos;ha pogut copiar la imatge</translation>
     </message>
@@ -429,12 +442,12 @@ Per eliminar el vostre compte, introduïu el vostre nom d&apos;usuari al camp se
         <translation>Voleu desar els canvis?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="244"/>
         <source>Saving failed</source>
         <translation>Error a l&apos;hora de desar</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="246"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>No s&apos;han pogut desar els canvis. Això normalment no hauria de passar. Si us plau, reinicieu l&apos;aplicació i torneu-ho a provar; si torna a passar, poseu-vos en contacte amb el servei d&apos;assistència.</translation>
     </message>
@@ -843,24 +856,42 @@ No s&apos;afegirà al projecte.</translation>
         <translation>El vostre dispositiu s&apos;està quedant sense espai, necessiteu %1 d&apos;espai lliure per veure els vostres projectes. Esborreu alguns arxius i torneu-ho a provar o feu clic a Ajuda per veure altres maneres de resoldre aquest problema.</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="44"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="45"/>
         <source>An error occured during update</source>
         <translation>S&apos;ha produït un error durant l&apos;actualització</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="45"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="46"/>
         <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
         <translation>El vostre dispositiu ha patit un problema durant una actualització. No podreu veure els vostres projectes. Feu clic a Ajuda per veure com resoldre aquest problema.</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="109"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="111"/>
         <source>We are working on an important update, please do not close the application</source>
         <translation>Estem treballant en una actualització important, no tanqueu l&apos;aplicació</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="123"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="125"/>
         <source>%1/%2</source>
         <translation>%1/%2</translation>
+    </message>
+</context>
+<context>
+    <name>LocalProjectsManager</name>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="210"/>
+        <source>Download failed, remove and retry</source>
+        <translation>S&apos;ha produït un error en descarregar, suprimiu i torneu a provar </translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="230"/>
+        <source>Found multiple QGIS project files</source>
+        <translation>Hem trobat diversos arxius de projecte de QGIS</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="235"/>
+        <source>Failed to find a QGIS project file</source>
+        <translation>No hem trobat cap arxiu de projecte de QGIS</translation>
     </message>
 </context>
 <context>
@@ -986,7 +1017,7 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1124"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1122"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS no disponible</translation>
     </message>
@@ -1036,6 +1067,11 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Detalls</translation>
     </message>
     <message>
+        <location filename="../qml/map/MapWrapper.qml" line="667"/>
+        <source>Back</source>
+        <translation>Tornar</translation>
+    </message>
+    <message>
         <location filename="../qml/map/MapWrapper.qml" line="684"/>
         <source>Discard the changes?</source>
         <translation>Descartar els canvis?</translation>
@@ -1051,19 +1087,75 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Si feu clic a &quot;Sí&quot;, es descarta la vostra nova geometria i no es desarà cap característica. Si voleu desar la geometria premeu &quot;No&quot;, i després &quot;Fet&quot; a la barra d&apos;eines.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="756"/>
+        <location filename="../qml/map/MapWrapper.qml" line="754"/>
         <source>Connecting to %1</source>
         <translation>Connectant amb %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="770"/>
+        <location filename="../qml/map/MapWrapper.qml" line="768"/>
         <source>Connected, no position</source>
         <translation>Connectat, sense posició</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="774"/>
+        <location filename="../qml/map/MapWrapper.qml" line="772"/>
         <source>Unknown accuracy</source>
         <translation>Precisió desconeguda</translation>
+    </message>
+</context>
+<context>
+    <name>MerginApi</name>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="679"/>
+        <source>Username must have at least 4 characters</source>
+        <translation>El nom d&apos;usuari ha de tenir 4 caracters com a mínim</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="686"/>
+        <source>Please enter a valid email</source>
+        <translation>Si us plau afegiu una adreça de correu vàlida</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="693"/>
+        <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
+        <translation>Contrasenya fluixa. Ha de %1tenir com a mínim 8 caracters%1 minúscules%1 majúscules%1 dígits o caràcters especials</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="706"/>
+        <source>Passwords do not match</source>
+        <translation>Les contrasenyes no coincideixen</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="713"/>
+        <source>Please accept Terms and Privacy Policy</source>
+        <translation>Si us plau accepteu els Termes i la Política de Privadesa</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1001"/>
+        <source>Registration successful</source>
+        <translation>Registre completat correctament</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1022"/>
+        <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
+        <translation>No es permeten registres nous al servidor Mergin escollit.%1Si us plau consulteu-ho amb el vostre administrador.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1292"/>
+        <source>Project detached from Mergin</source>
+        <translation>Projecte desvinculat de Mergin </translation>
+    </message>
+</context>
+<context>
+    <name>MerginProjectStatusModel</name>
+    <message>
+        <location filename="../../core/merginprojectstatusmodel.cpp" line="70"/>
+        <source>Pending Changes</source>
+        <translation>Canvis pendents</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
+        <source>Failed to determine changes</source>
+        <translation>No s&apos;ha pogut determinar canvis</translation>
     </message>
 </context>
 <context>
@@ -1166,7 +1258,7 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
         <translation>Voleu treure el receptor de la llista de receptors recents?</translation>
     </message>
     <message>
-        <location filename="../qml/misc/PositionProviderPage.qml" line="383"/>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="384"/>
         <source>Internal</source>
         <translation>Intern</translation>
     </message>
@@ -1297,12 +1389,12 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
         <translation>Es perdran tots els canvis no sincronitzats.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="298"/>
+        <location filename="../qml/components/ProjectList.qml" line="295"/>
         <source>Download project</source>
         <translation>Descarregar projecte</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="299"/>
+        <location filename="../qml/components/ProjectList.qml" line="296"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>Voleu descarregar el projecte
@@ -1995,32 +2087,32 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
         <translation>No s&apos;ha trobat cap nivell editable.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="615"/>
+        <location filename="../qml/main.qml" line="616"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>El replanteig està desactivat perquè la ubicació no està disponible!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="627"/>
+        <location filename="../qml/main.qml" line="628"/>
         <source>Failed to open the project</source>
         <translation>No s&apos;ha pogut obrir el projecte</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="656"/>
+        <location filename="../qml/main.qml" line="653"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Error de comunicació amb Mergin.%1Proveu a millorar la vostra connexió de xarxa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="707"/>
+        <location filename="../qml/main.qml" line="704"/>
         <source>There were issues loading the project.</source>
         <translation>Problemes en carregar el projecte.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="719"/>
+        <location filename="../qml/main.qml" line="716"/>
         <source>Could not read the project file:</source>
         <translation>No s&apos;ha pogut llegir el fitxer del projecte:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="746"/>
+        <location filename="../qml/main.qml" line="743"/>
         <source>Press back again to quit the app</source>
         <translation>Premeu enrere un altre cop per sortir de l&apos;aplicació</translation>
     </message>
