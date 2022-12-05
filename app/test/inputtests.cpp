@@ -202,7 +202,7 @@ int InputTests::runTest() const
    * WARNING:
    *
    * when you are adding new test here in the list, add
-   * it also to scripts/run_all_tests.bash
+   * it also to test/CMakeLists.txt
    *
    */
 
