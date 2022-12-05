@@ -89,10 +89,23 @@ Kako bi izbrisali Vaš račun, unesite korisničko ime u polju ispod i kliknite 
         <translation>Unesi korisničko ime</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="386"/>
-        <location filename="../qml/AccountPage.qml" line="420"/>
+        <location filename="../qml/AccountPage.qml" line="384"/>
         <source>Failed to remove account</source>
         <translation>Neuspješno brisanje korisničkog računa</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="385"/>
+        <source>An error occured while removing your account</source>
+        <translation>Došlo je do greške prilikom brisanja Vašeg računa </translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="408"/>
+        <source>Can not close account because user is the only owner of an organisation.
+
+Please go to the Mergin Maps website to remove it manually.</source>
+        <translation>Ne može se zatvoriti račun, budući da je jedini vlasnik organizacije.
+
+Molimo zatvorite ga ručno na Mergin Maps web stranici.</translation>
     </message>
 </context>
 <context>
@@ -373,7 +386,7 @@ Kako bi izbrisali Vaš račun, unesite korisničko ime u polju ispod i kliknite 
         <translation>Također pobrisati trajno i fotografiju sa uređaja?</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="243"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="242"/>
         <source>Failed to copy image</source>
         <translation>Neuspješno kopiranje slike</translation>
     </message>
@@ -429,12 +442,12 @@ Kako bi izbrisali Vaš račun, unesite korisničko ime u polju ispod i kliknite 
         <translation>Želite li spremiti promjene?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="244"/>
         <source>Saving failed</source>
         <translation>Neuspješno spremanje</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="246"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>Neuspjeh prilikom spremanja. Ovo nije uobičajeno ponašanje. Molimo ponovno pokrenite aplikaciju i pokušajte ponovno - ukoliko to ne pomogne, molimo obratite se korisničkoj podršci.</translation>
     </message>
@@ -636,23 +649,6 @@ Won&apos;t be added to the project.</source>
         <location filename="../inputhelp.cpp" line="242"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Obavijest nije poslana.%1Molimo provjerite Vašu internetsku vezu.</translation>
-    </message>
-</context>
-<context>
-    <name>InputMapCanvasMap</name>
-    <message>
-        <location filename="../map/inputmapcanvasmap.cpp" line="170"/>
-        <source>Rendering</source>
-        <translation>Prikazivanje</translation>
-    </message>
-</context>
-<context>
-    <name>InputMapSettings</name>
-    <message>
-        <location filename="../map/inputmapsettings.cpp" line="248"/>
-        <location filename="../map/inputmapsettings.cpp" line="278"/>
-        <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
-        <translation>Rotiranje karte nije podržano. Ponovno postavljanje sa %1 na 0.</translation>
     </message>
 </context>
 <context>
@@ -859,24 +855,42 @@ Won&apos;t be added to the project.</source>
         <translation>Na Vašem uređaju ponestaje prostora za pohranu, potrebno Vam je %1 slobodnog prostora kako bi mogli vidjeti projekte. Uklonite neke od datoteka i pokušajte ponovno ili stisnite na Pomoć kako bi pregledali ostale načine za rjšavanje ovog problema.</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="44"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="45"/>
         <source>An error occured during update</source>
         <translation>Došlo je do greške tijekom nadogradnje</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="45"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="46"/>
         <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
         <translation>Došlo je do problema na Vašem uređaju tijekom nadogradnje. Nećete moći vidjeti svoje projekte. Stisnite Pomoć za pregled mogućnosti rješavanja ovog problema.</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="109"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="111"/>
         <source>We are working on an important update, please do not close the application</source>
         <translation>Radimo na vrlo bitnoj nadogradnji, molimo ne gasite aplikaciju.</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="123"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="125"/>
         <source>%1/%2</source>
         <translation>%1/%2</translation>
+    </message>
+</context>
+<context>
+    <name>LocalProjectsManager</name>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="210"/>
+        <source>Download failed, remove and retry</source>
+        <translation>Neuspješno preuzimanje, ukloni i pokušaj ponovno</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="230"/>
+        <source>Found multiple QGIS project files</source>
+        <translation>Višestruke datoteke QGIS projekta</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="235"/>
+        <source>Failed to find a QGIS project file</source>
+        <translation>Nedostaje datoteka QGIS projekta</translation>
     </message>
 </context>
 <context>
@@ -1002,7 +1016,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1124"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1122"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS trenutno nije dostupan</translation>
     </message>
@@ -1052,6 +1066,11 @@ Won&apos;t be added to the project.</source>
         <translation>Detalji</translation>
     </message>
     <message>
+        <location filename="../qml/map/MapWrapper.qml" line="667"/>
+        <source>Back</source>
+        <translation>Nazad</translation>
+    </message>
+    <message>
         <location filename="../qml/map/MapWrapper.qml" line="684"/>
         <source>Discard the changes?</source>
         <translation>Odustani od promjena?</translation>
@@ -1067,19 +1086,75 @@ Won&apos;t be added to the project.</source>
         <translation>Odabirom &apos;Da&apos; odustaje se od nove geometrije i niti jedan objekt neće biti spremljen. Ukoliko želite spremiti geometriju, odaberite &apos;Ne&apos; a potom &apos;Gotovo&apos; na alatnoj traci.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="756"/>
+        <location filename="../qml/map/MapWrapper.qml" line="754"/>
         <source>Connecting to %1</source>
         <translation>Povezivanje na %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="770"/>
+        <location filename="../qml/map/MapWrapper.qml" line="768"/>
         <source>Connected, no position</source>
         <translation>Povezano, nema pozicije</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="774"/>
+        <location filename="../qml/map/MapWrapper.qml" line="772"/>
         <source>Unknown accuracy</source>
         <translation>Nepoznata preciznost</translation>
+    </message>
+</context>
+<context>
+    <name>MerginApi</name>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="679"/>
+        <source>Username must have at least 4 characters</source>
+        <translation>Korisničko ime mora sadržavati najmanje 4 znaka</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="686"/>
+        <source>Please enter a valid email</source>
+        <translation>Molimo unesite valjani email</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="693"/>
+        <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
+        <translation>Zaporka nije dovoljno jaka. Mora%1 sadržavati minimalno 8 znakova%1 sadržavati mala slova%1 sadržavati velima slova%1 sadržavati brojke ili specijalne znakove</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="706"/>
+        <source>Passwords do not match</source>
+        <translation>Zaporke se ne podudaraju</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="713"/>
+        <source>Please accept Terms and Privacy Policy</source>
+        <translation>Molimo prihvatite uvjete korištenja i politiku privatnosti</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1001"/>
+        <source>Registration successful</source>
+        <translation>Registracija uspješna</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1022"/>
+        <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
+        <translation>Nisu dozvoljene nove registracije na odabranom Mergin poslužitelju.%1Kontaktirajte Vašeg administratora.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1292"/>
+        <source>Project detached from Mergin</source>
+        <translation>Projekt nepovezan s Merginom</translation>
+    </message>
+</context>
+<context>
+    <name>MerginProjectStatusModel</name>
+    <message>
+        <location filename="../../core/merginprojectstatusmodel.cpp" line="70"/>
+        <source>Pending Changes</source>
+        <translation>Izmjene u tijeku</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
+        <source>Failed to determine changes</source>
+        <translation>Nemoguće odrediti promjene</translation>
     </message>
 </context>
 <context>
@@ -1182,7 +1257,7 @@ Stisnite &apos;Da&apos; za prijenos.</translation>
         <translation>Želite li ukloniti prijemnik sa popisa nedavno korištenih prijemnika?</translation>
     </message>
     <message>
-        <location filename="../qml/misc/PositionProviderPage.qml" line="383"/>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="384"/>
         <source>Internal</source>
         <translation>Ugrađeni</translation>
     </message>
@@ -1313,12 +1388,12 @@ Stisnite &apos;Da&apos; za prijenos.</translation>
         <translation>Sve nesinkronizirane promjene će biti izgubljene.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="298"/>
+        <location filename="../qml/components/ProjectList.qml" line="295"/>
         <source>Download project</source>
         <translation>Preuzmi projekt</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="299"/>
+        <location filename="../qml/components/ProjectList.qml" line="296"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>Želite li preuzeti projekt
@@ -2011,32 +2086,32 @@ Stisnite &apos;Da&apos; za prijenos.</translation>
         <translation>Nema slojeva za uređivanje.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="615"/>
+        <location filename="../qml/main.qml" line="616"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Navođenje je onemogućeno zbog nedostupnosti lokacije!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="627"/>
+        <location filename="../qml/main.qml" line="628"/>
         <source>Failed to open the project</source>
         <translation>Neuspješno otvaranje projekta</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="656"/>
+        <location filename="../qml/main.qml" line="653"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Neuspješna komunikacija sa Mergin servisom.%1Provjerite mrežne postavke i kvalitetu signala.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="707"/>
+        <location filename="../qml/main.qml" line="704"/>
         <source>There were issues loading the project.</source>
         <translation>Došlo je do problema prilikom učitavanja projekta</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="719"/>
+        <location filename="../qml/main.qml" line="716"/>
         <source>Could not read the project file:</source>
         <translation>Nije bilo moguće otvoriti datoteku projekta:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="746"/>
+        <location filename="../qml/main.qml" line="743"/>
         <source>Press back again to quit the app</source>
         <translation>Odaberite &quot;nazad&quot; još jednom za izlaz iz aplikacije</translation>
     </message>
