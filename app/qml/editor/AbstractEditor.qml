@@ -80,10 +80,8 @@ Item {
       width: parent.width - ( leftActionContainer.width + rightActionContainer.width )
 
       TapHandler {
-        onPressedChanged: {
-          if ( !pressed ) {
-            root.contentClicked()
-          }
+        onSingleTapped: {
+          root.contentClicked()
         }
       }
     }

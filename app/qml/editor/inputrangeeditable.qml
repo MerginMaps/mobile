@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -76,12 +76,14 @@ AbstractEditor {
 
       x: parent.width / 2 - width / 2
 
-      width: numberInput.contentWidth + suffix.contentWidth > parent.width ? parent.width : numberInput.contentWidth + suffix.contentWidth
+      width: childrenRect.width
 
       height: parent.height
 
       TextInput {
         id: numberInput
+
+        property real maxWidth: contentContainer.width - suffix.width
 
         onTextEdited: {
           let val = text.replace( ",", "." ).replace( / /g, '' ) // replace comma with dot
@@ -91,7 +93,18 @@ AbstractEditor {
         text: root.parentValue === undefined || root.parentValueIsNull ? "" : root.parentValue
 
         height: parent.height
-        width: contentWidth < ( parent.width - suffix.width ) ? contentWidth : parent.width - suffix.width
+        width: {
+          // set parent width if the number exceeds width of the field
+          if ( contentWidth > numberInput.maxWidth ) {
+            return numberInput.maxWidth
+          }
+
+          if ( contentWidth > 0 ) {
+            return contentWidth
+          }
+
+          return 1 // TextInput must have width set at least to one, otherwise listview would not scroll to this element
+        }
 
         inputMethodHints: Qt.ImhFormattedNumbersOnly
 
@@ -125,7 +138,12 @@ AbstractEditor {
   }
 
   onContentClicked: {
-    numberInput.forceActiveFocus()
+    if ( numberInput.activeFocus ) {
+      Qt.inputMethod.show() // only show keyboard if we already have active focus
+    }
+    else {
+      numberInput.forceActiveFocus()
+    }
   }
 
   rightAction: Item {
