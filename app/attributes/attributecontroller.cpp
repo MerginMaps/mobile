@@ -880,7 +880,7 @@ bool AttributeController::save()
   else
   {
     // update it instead of adding
-    if ( !mFeatureLayerPair.layer()->updateFeature( feat ) )
+    if ( !mFeatureLayerPair.layer()->updateFeature( feat, true ) )
       QgsMessageLog::logMessage( tr( "Cannot update feature" ),
                                  QStringLiteral( "Input" ),
                                  Qgis::Warning );
