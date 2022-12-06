@@ -82,6 +82,11 @@ class CoreUtils
     //! Checks whether file path has a QGIS project suffix (qgs or qgz)
     static bool hasProjectFileExtension( const QString filePath );
 
+    /**
+     * Check whether given project/user name is valid
+     */
+    static bool isValidName( const QString &name );
+
   private:
     static QString sLogFile;
     static void appendLog( const QByteArray &data, const QString &path );

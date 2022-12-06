@@ -160,3 +160,89 @@ void TestCoreUtils::testHasProjectFileExtension()
   QVERIFY( CoreUtils::hasProjectFileExtension( QStringLiteral( "project.QGZ" ) ) );
   QVERIFY( !CoreUtils::hasProjectFileExtension( QStringLiteral( "project.qg" ) ) );
 }
+
+void TestCoreUtils::testNameValidation()
+{
+  QVector< QPair< QString, bool > > testcases =
+  {
+    { QStringLiteral( "project" ), true },
+    { QStringLiteral( "ProJect" ), true },
+    { QStringLiteral( "Pro123ject" ), true },
+    { QStringLiteral( "123PROJECT" ), true },
+    { QStringLiteral( "PROJECT" ), true },
+    { QStringLiteral( "project " ), true },
+    { QStringLiteral( "pro ject" ), true },
+    { QStringLiteral( "proj-ect" ), true },
+    { QStringLiteral( "-project" ), true },
+    { QStringLiteral( "proj_ect" ), true },
+    { QStringLiteral( "proj.ect" ), true },
+    { QStringLiteral( "proj!ect" ), true },
+
+    { QStringLiteral( " project" ), false },
+    { QStringLiteral( ".project" ), false },
+    { QStringLiteral( "proj~ect" ), false },
+    { QStringLiteral( "pro\\ject" ), false },
+    { QStringLiteral( "pro/ject" ), false },
+    { QStringLiteral( "pro|ject" ), false },
+    { QStringLiteral( "pro+ject" ), false },
+    { QStringLiteral( "pro=ject" ), false },
+    { QStringLiteral( "pro>ject" ), false },
+    { QStringLiteral( "pro<ject" ), false },
+    { QStringLiteral( "pro@ject" ), false },
+    { QStringLiteral( "pro#ject" ), false },
+    { QStringLiteral( "pro$ject" ), false },
+    { QStringLiteral( "pro%ject" ), false },
+    { QStringLiteral( "pro^ject" ), false },
+    { QStringLiteral( "pro&ject" ), false },
+    { QStringLiteral( "pro*ject" ), false },
+    { QStringLiteral( "pro?ject" ), false },
+    { QStringLiteral( "pro:ject" ), false },
+    { QStringLiteral( "pro;ject" ), false },
+    { QStringLiteral( "pro,ject" ), false },
+    { QStringLiteral( "pro`ject" ), false },
+    { QStringLiteral( "pro'ject" ), false },
+    { QStringLiteral( "pro\"ject" ), false },
+    { QStringLiteral( "projectz" ), true },
+    { QStringLiteral( "projectZ" ), true },
+    { QStringLiteral( "project0" ), true },
+
+    { QStringLiteral( "pro(ject" ), false },
+    { QStringLiteral( "pro)ject" ), false },
+    { QStringLiteral( "pro{ject" ), false },
+    { QStringLiteral( "pro}ject" ), false },
+    { QStringLiteral( "pro[ject" ), false },
+    { QStringLiteral( "pro]ject" ), false },
+    { QStringLiteral( "pro]ject" ), false },
+
+    { QStringLiteral( "CON" ), false },
+    { QStringLiteral( "NUL" ), false },
+    { QStringLiteral( "NULL" ), true },
+    { QStringLiteral( "PRN" ), false },
+    { QStringLiteral( "LPT0" ), false },
+    { QStringLiteral( "lpt0" ), true },
+    { QStringLiteral( "LPT1" ), false },
+    { QStringLiteral( "lpt1" ), true },
+    { QStringLiteral( "COM1" ), false },
+    { QStringLiteral( "com1" ), true },
+    { QStringLiteral( "AUX" ), false },
+    { QStringLiteral( "AuX" ), true },
+    { QStringLiteral( "projAUXect" ), true },
+    { QStringLiteral( "CONproject" ), true },
+    { QStringLiteral( "projectCON" ), true },
+    { QStringLiteral( "項目" ), true },
+    { QStringLiteral( "פּרוֹיֶקט" ), true },
+
+    { QStringLiteral( "support" ), false },
+    { QStringLiteral( "helpdesk" ), false },
+    { QStringLiteral( "input" ), false },
+    { QStringLiteral( "lutraconsulting" ), false },
+    { QStringLiteral( "lutra" ), false },
+    { QStringLiteral( "merginmaps" ), false },
+    { QStringLiteral( "mergin" ), false },
+  };
+
+  for ( const auto &test : testcases )
+  {
+    QCOMPARE( CoreUtils::isValidName( test.first ), test.second );
+  }
+}

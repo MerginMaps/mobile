@@ -173,11 +173,7 @@ Item {
             if (faded) {
               __inputUtils.showNotification(qsTr("Empty project name"))
             } else {
-              if ( !__inputUtils.isValidName(projectNameField.displayText) ) {
-                __inputUtils.showNotification(qsTr("Project name contains invalid characters"))
-              } else {
-                __projectWizard.createProject(projectNameField.displayText, fieldsModel )
-              }
+              __projectWizard.createProject(projectNameField.displayText, fieldsModel )
             }
           }
         }

@@ -513,11 +513,6 @@ class InputUtils: public QObject
     // Returns default path to images in this system
     Q_INVOKABLE static QString imageGalleryLocation();
 
-    /**
-     * Check whether given project/user name is valid
-     */
-    Q_INVOKABLE static bool isValidName( const QString &projectName );
-
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 
