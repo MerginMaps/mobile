@@ -80,7 +80,7 @@ QString InputTests::initTestingDir()
 {
   // override the path where local projects are stored
   // and wipe the temporary projects dir if it already exists
-  QDir testDataDir( STR( INPUT_TEST_DATA_DIR ) );  // #defined in input.pro
+  QDir testDataDir( TEST_DATA_DIR );
   QDir testProjectsDir( testDataDir.path() + "/../temp_projects" );
   if ( testProjectsDir.exists() )
     testProjectsDir.removeRecursively();

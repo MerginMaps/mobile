@@ -1,9 +1,6 @@
 #include <QtTest/QtTest>
 #include <QtCore/QObject>
 
-#define STR1(x)  #x
-#define STR(x)  STR1(x)
-
 #include "testmerginapi.h"
 #include "inpututils.h"
 #include "coreutils.h"
@@ -67,7 +64,7 @@ void TestMerginApi::initTestCase()
 
   mUsername = username;  // keep for later
 
-  QDir testDataDir( STR( INPUT_TEST_DATA_DIR ) );  // #defined in input.pro
+  QDir testDataDir( TEST_DATA_DIR );
   mTestDataPath = testDataDir.canonicalPath();  // get rid of any ".." that may cause problems later
   qDebug() << "test data dir:" << mTestDataPath;
 
