@@ -323,7 +323,7 @@ Page {
       height: root.height + header.height
       width: root.width
 
-      onInitiatedConnectionTo: function( deviceName, deviceAddress ) {
+      onInitiatedConnectionTo: function( deviceAddress, deviceName ) {
         providersModel.addProvider( deviceName, deviceAddress )
       }
       onClose: root.stackView.pop()
@@ -378,7 +378,7 @@ Page {
           return
         }
 
-        if ( __appSettings.activePositionProviderId == relatedProviderId )
+        if ( __appSettings.activePositionProviderId === relatedProviderId )
         {
           // we are removing an active provider, replace it with internal provider
           root.constructProvider( "internal", "devicegps", qsTr( "Internal" ) )
