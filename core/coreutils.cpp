@@ -239,7 +239,7 @@ bool CoreUtils::hasProjectFileExtension( const QString filePath )
 
 bool CoreUtils::isValidName( const QString &name )
 {
-  QRegularExpression reForbiddenmNames( R"([@#$%^&*\(\)\{\}\[\]\\\/\|\+=<>~\?:;,`\'\"]|^[\s^\.].*$|^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d|^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$)" );
+  QRegularExpression reForbiddenmNames( R"([@#$%^&*\(\)\{\}\[\]\\\/\|\+=<>~\?:;,`\'\"]|^[\s^\.].*$|^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d|^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$|^sales$|^admin$)" );
   QRegularExpressionMatch matchForbiddenNames = reForbiddenmNames.match( name );
   return !matchForbiddenNames.hasMatch();
 }

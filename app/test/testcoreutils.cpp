@@ -239,6 +239,8 @@ void TestCoreUtils::testNameValidation()
     { QStringLiteral( "lutra" ), false },
     { QStringLiteral( "merginmaps" ), false },
     { QStringLiteral( "mergin" ), false },
+    { QStringLiteral( "sales" ), false },
+    { QStringLiteral( "admin" ), false },
   };
 
   for ( const auto &test : testcases )
