@@ -158,6 +158,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
         QList< QgsMapLayer * > layers;
         mMapSettings->setLayers( layers );
       }
+      mQgsProject->clear();
 
       emit localProjectChanged( mLocalProject );
       emit projectReloaded( mQgsProject );
