@@ -11,7 +11,6 @@
 #define TESTACTIVEPROJECT_H
 
 #include <QObject>
-#include "inputconfig.h"
 #include <merginapi.h>
 
 class TestActiveProject : public QObject

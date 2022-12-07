@@ -331,7 +331,8 @@ add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_QUICK_EXPAND_TEST_DATA>")
 # Generate inputconfig.h
 if (ENABLE_TESTS)
   set(INPUT_TEST TRUE)
-  set(TEST_DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test/test_data")
+  file(COPY test/test_data DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test/)
+  set(TEST_DATA_DIR "${CMAKE_CURRENT_BINARY_DIR}/test/test_data")
 endif ()
 
 if (HAVE_PURCHASING)
