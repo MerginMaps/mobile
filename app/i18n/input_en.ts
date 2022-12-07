@@ -404,47 +404,47 @@ Please go to the Mergin Maps website to remove it manually.</source>
 <context>
     <name>FeatureFormPage</name>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="76"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="81"/>
         <source>Edit Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="76"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="81"/>
         <source>Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="86"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="91"/>
         <source>Save</source>
         <translation type="unfinished">Save</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="202"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="207"/>
         <source>Delete feature</source>
         <translation type="unfinished">Delete feature</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="203"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="208"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="222"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="227"/>
         <source>Unsaved changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="223"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="228"/>
         <source>Do you want to save changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="244"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="249"/>
         <source>Saving failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="250"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2024,17 +2024,17 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="121"/>
+        <location filename="../qml/editor/inputrelation.qml" line="139"/>
         <source>%1 more</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="136"/>
+        <location filename="../qml/editor/inputrelation.qml" line="154"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="195"/>
+        <location filename="../qml/editor/inputrelation.qml" line="215"/>
         <source>Linked features</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2058,58 +2058,58 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="226"/>
-        <location filename="../qml/main.qml" line="285"/>
+        <location filename="../qml/main.qml" line="234"/>
+        <location filename="../qml/main.qml" line="293"/>
         <source>No Changes</source>
         <translation type="unfinished">No Changes</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="260"/>
+        <location filename="../qml/main.qml" line="268"/>
         <source>GPS auto-center mode on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="260"/>
+        <location filename="../qml/main.qml" line="268"/>
         <source>GPS auto-center mode off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="274"/>
+        <location filename="../qml/main.qml" line="282"/>
         <source>No editable layers found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="616"/>
+        <location filename="../qml/main.qml" line="624"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="628"/>
+        <location filename="../qml/main.qml" line="636"/>
         <source>Failed to open the project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="653"/>
+        <location filename="../qml/main.qml" line="661"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="704"/>
+        <location filename="../qml/main.qml" line="712"/>
         <source>There were issues loading the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="716"/>
+        <location filename="../qml/main.qml" line="724"/>
         <source>Could not read the project file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="743"/>
+        <location filename="../qml/main.qml" line="751"/>
         <source>Press back again to quit the app</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="546"/>
+        <location filename="../qml/main.qml" line="554"/>
         <source>PROJ Error</source>
         <translation type="unfinished"></translation>
     </message>
