@@ -27,6 +27,8 @@
 #include "qgsattributeeditorrelation.h"
 #include "qgsattributeeditorcontainer.h"
 #include "qgsvectorlayerutils.h"
+#include "qgsvectorlayereditbuffer.h"
+#include "qgsexpressioncontextutils.h"
 #include "qgsrelation.h"
 #include "qgsmessagelog.h"
 #include "inpututils.h"
@@ -461,7 +463,14 @@ void AttributeController::updateOnFeatureChange()
     ++formItemsIterator;
   }
 
-  recalculateDerivedItems( false, isNewFeature() );
+  bool formValueChange = false;
+  // if feature geometry was changed we also need recalculate defaults
+  // as some attributes may contain expressions which use feature geometry
+  if ( mFeatureLayerPair.layer()->isEditable() )
+  {
+    formValueChange = mFeatureLayerPair.layer()->editBuffer()->changedGeometries().contains( feature.id() );
+  }
+  recalculateDerivedItems( formValueChange, isNewFeature() );
 }
 
 bool AttributeController::isNewFeature() const
@@ -614,6 +623,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   // Create context
   QgsFields fields = mFeatureLayerPair.feature().fields();
   QgsExpressionContext expressionContext = layer->createExpressionContext();
+  expressionContext << QgsExpressionContextUtils::formScope( mFeatureLayerPair.feature() );
   if ( mVariablesManager )
     expressionContext << mVariablesManager->positionScope();
 
@@ -870,7 +880,7 @@ bool AttributeController::save()
   else
   {
     // update it instead of adding
-    if ( !mFeatureLayerPair.layer()->updateFeature( feat ) )
+    if ( !mFeatureLayerPair.layer()->updateFeature( feat, true ) )
       QgsMessageLog::logMessage( tr( "Cannot update feature" ),
                                  QStringLiteral( "Input" ),
                                  Qgis::Warning );
@@ -1099,13 +1109,22 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
   if ( isValidFormId( id ) )
   {
     std::shared_ptr<FormItem> item = mFormItems[id];
+    QgsField field = item->field();
+    QVariant val( value );
 
-    mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), value );
-
-    emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::AttributeValueIsNull } );
-
-    recalculateDerivedItems( true, false );
-    return true;
+    if ( !field.convertCompatible( val ) )
+    {
+      QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
+      QgsMessageLog::logMessage( msg );
+      return false;
+    }
+    else
+    {
+      mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
+      emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::AttributeValueIsNull } );
+      recalculateDerivedItems( true, false );
+      return true;
+    }
   }
   else
   {
