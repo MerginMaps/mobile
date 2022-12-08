@@ -64,14 +64,11 @@ bool AndroidUtils::isAndroid() const
 bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
 {
 #ifdef ANDROID
-
-  QFuture<QtAndroidPrivate::PermissionResult> r = QtAndroidPrivate::checkPermission( permissionString );
-  r.waitForFinished();
-  if ( r.result() == QtAndroidPrivate::PermissionResult::Denied )
+  auto r = QtAndroidPrivate::checkPermission( permissionString ).result();
+  if ( r == QtAndroidPrivate::Denied )
   {
-    QFuture<QtAndroidPrivate::PermissionResult> future = QtAndroidPrivate::requestPermission( permissionString );
-    future.waitForFinished();
-    if ( future.result() == QtAndroidPrivate::PermissionResult::Denied )
+    r = QtAndroidPrivate::requestPermission( permissionString ).result();
+    if ( r == QtAndroidPrivate::Denied )
     {
       return false;
     }
@@ -353,11 +350,10 @@ bool AndroidUtils::requestStoragePermission()
 bool AndroidUtils::requestCameraPermission()
 {
 #ifdef ANDROID
-
   if ( checkAndAcquirePermissions( "android.permission.CAMERA" ) == false )
   {
     auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-    jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", "android.permission.CAMERA" );
+    jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", QJniObject::fromString( "android.permission.CAMERA" ).object() );
     if ( !res )
     {
       // permanently denied permission, user needs to go to settings to allow permission
@@ -411,7 +407,6 @@ void AndroidUtils::callImagePicker()
 void AndroidUtils::callCamera( const QString &targetPath )
 {
 #ifdef ANDROID
-
   if ( !requestCameraPermission() )
   {
     return;
