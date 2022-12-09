@@ -234,8 +234,21 @@ jobs:
             
             echo "APKs:"
             find . | grep .apk
-                
-      - name: build AAB   
+
+      - name: Rename APK artefacts
+        run: |
+          mv \
+            ${{ github.workspace }}/build-Input/app/android-build/build/outputs/apk/release/android-build-release-signed.apk \
+            ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
+
+      - name: Upload APK to Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
+          name: APK compined
+
+      - name: build AAB
+        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         env:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
@@ -247,25 +260,16 @@ jobs:
 
             echo "AAB:"
             find . | grep .aab
-            
-      - name: Rename build artefacts
-        run: |
-          mv \
-            ${{ github.workspace }}/build-Input/app/android-build/build/outputs/apk/release/android-build-release-signed.apk \
-            ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
-                       
+
+      - name: Rename AAB artefacts
+        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
+        run: |       
           mv \
             ${{ github.workspace }}/build-Input/app/android-build/build/outputs/bundle/release/android-build-release.aab \
             ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab
-          
-          
-      - name: Upload APK to Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
-          name: APK compined
 
       - name: Upload AAB to Artifacts
+        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         uses: actions/upload-artifact@v3
         with:
           path: ${{ github.workspace }}/merginmaps-$INPUT_VERSION_CODE.aab
