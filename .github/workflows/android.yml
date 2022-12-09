@@ -32,8 +32,10 @@ jobs:
       INPUT_SDK_VERSION: android-macOS-20221117-129
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-      INPUTKEYSTORE_STOREPASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       CACHE_VERSION: 3
+      QT_ANDROID_KEYSTORE_ALIAS: input
+      QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
+      QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
 
     steps:
       - uses: actions/checkout@v3
@@ -182,6 +184,9 @@ jobs:
            -out Input_keystore.keystore \
            -k $INPUTKEYSTORE_DECRYPT_KEY \
            -md md5
+          
+          echo "$$! path to keystore `realpath Input_keystore.keystore`"
+          echo "QT_ANDROID_KEYSTORE_PATH=`realpath Input_keystore.keystore`" >> $GITHUB_ENV
 
       # Build Input App
       - name: Calculate build number
@@ -208,6 +213,8 @@ jobs:
               -DCMAKE_BUILD_TYPE=Release \
               -DQT_ANDROID_ABIS="arm64-v8a;armeabi-v7a" \
               -DQT_HOST_PATH=$QT_BASE/macos \
+              -DQT_ANDROID_SIGN_APK=Yes \
+              -DQT_ANDROID_SIGN_AAB=Yes \
               -DCMAKE_TOOLCHAIN_FILE=$QT_BASE/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
               -GNinja \
               -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
@@ -243,7 +250,7 @@ jobs:
       - name: Rename build artefacts
         run: |
           mv \
-            ${{ github.workspace }}/build-Input/app/android-build/build/outputs/apk/debug/android-build-debug.apk \
+            ${{ github.workspace }}/build-Input/app/android-build/build/outputs/apk/release/android-build-release-signed.apk \
             ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
                        
           mv \
@@ -255,12 +262,12 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
-          name: arm64 apk
+          name: APK compined
 
       - name: Upload AAB to Artifacts
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         uses: actions/upload-artifact@v3
         with:
           path: ${{ github.workspace }}/merginmaps-$INPUT_VERSION_CODE.aab
-          name: aab bundle
+          name: AAB bundle
           
