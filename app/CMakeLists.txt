@@ -257,7 +257,7 @@ if (ANDROID)
     ${CMAKE_CURRENT_SOURCE_DIR}/android/AndroidManifest.xml @ONLY
   )
   set_target_properties(
-    Input 
+    Input
     PROPERTIES QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
                QT_ANDROID_TARGET_SDK_VERSION 31
                QT_ANDROID_MIN_SDK_VERSION 24
