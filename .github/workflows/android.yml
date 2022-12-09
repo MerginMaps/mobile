@@ -266,7 +266,6 @@ jobs:
           name: APK compined
 
       - name: Upload AAB to Artifacts
-        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         uses: actions/upload-artifact@v3
         with:
           path: ${{ github.workspace }}/merginmaps-$INPUT_VERSION_CODE.aab
