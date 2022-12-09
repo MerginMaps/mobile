@@ -272,6 +272,6 @@ jobs:
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         uses: actions/upload-artifact@v3
         with:
-          path: ${{ github.workspace }}/merginmaps-$INPUT_VERSION_CODE.aab
+          path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab
           name: AAB bundle
           
