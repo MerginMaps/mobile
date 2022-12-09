@@ -185,8 +185,9 @@ jobs:
            -k $INPUTKEYSTORE_DECRYPT_KEY \
            -md md5
           
-          echo "$$! path to keystore `realpath Input_keystore.keystore`"
-          echo "QT_ANDROID_KEYSTORE_PATH=`realpath Input_keystore.keystore`" >> $GITHUB_ENV
+          PATH_TO_KEYSTORE=`pwd`/Input_keystore.keystore
+          echo "path to keystore $PATH_TO_KEYSTORE"
+          echo "QT_ANDROID_KEYSTORE_PATH=$PATH_TO_KEYSTORE" >> $GITHUB_ENV
 
       # Build Input App
       - name: Calculate build number
