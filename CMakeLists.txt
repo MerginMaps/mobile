@@ -14,11 +14,13 @@ set(QT_VERSION_DEFAULT "6.4.1")
 # Qt6AndroidMacros.cmake
 if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
   set(ANDROIDAPI "24")
-  set(QT_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
   set(ANDROID_PLATFORM "android-${ANDROIDAPI}")
   set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}")
   set(ANDROID_STL "c++_shared")
-  set(QT_ANDROID_TARGET_SDK_VERSION "31")
+
+  # Target/Minimum API levels for Android, used as Input target properties
+  set(INPUT_ANDROID_TARGET_SDK_VERSION "31")
+  set(INPUT_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
 endif ()
 
 if (IOS)
