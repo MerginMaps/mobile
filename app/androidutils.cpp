@@ -324,11 +324,10 @@ void AndroidUtils::quitApp()
 bool AndroidUtils::requestStoragePermission()
 {
 #ifdef ANDROID
-
   if ( !checkAndAcquirePermissions( "android.permission.READ_EXTERNAL_STORAGE" ) )
   {
     auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-    jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", "android.permission.WRITE_EXTERNAL_STORAGE" );
+    jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", QJniObject::fromString( "android.permission.WRITE_EXTERNAL_STORAGE" ).object() );
     if ( !res )
     {
       // permanently denied permission, user needs to go to settings to allow permission
@@ -340,7 +339,6 @@ bool AndroidUtils::requestStoragePermission()
     }
     return false;
   }
-
 #endif
   return true;
 }
