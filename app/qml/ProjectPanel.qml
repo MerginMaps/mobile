@@ -465,6 +465,10 @@ Item {
 
       Connections {
         target: __projectWizard
+        function onProjectCreationFailed(message) {
+          __inputUtils.showNotification(message)
+          stackView.pending = false
+        }
         function onProjectCreated( projectDir, projectName ) {
           if  (stackView.currentItem.objectName === "projectWizard") {
             __inputUtils.log(

@@ -680,6 +680,13 @@ void MerginApi::registerUser( const QString &username,
     return;
   }
 
+  if ( !CoreUtils::isValidName( username ) )
+  {
+    emit registrationFailed();
+    emit notify( tr( "Username contains invalid characters" ) );
+    return;
+  }
+
   if ( email.isEmpty() || !email.contains( '@' ) || !email.contains( '.' ) )
   {
     emit registrationFailed();

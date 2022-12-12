@@ -44,6 +44,7 @@ class ProjectWizard : public QObject
     /**
       * Emitted after a project has been craeted.
      */
+    void projectCreationFailed( const QString &message );
     void projectCreated( const QString &projectDir, const QString &projectName );
     void notify( const QString &message );
   private:

@@ -23,6 +23,7 @@
 #include "qgsmarkersymbol.h"
 #include "qgssinglesymbolrenderer.h"
 #include "inpututils.h"
+#include "coreutils.h"
 
 ProjectWizard::ProjectWizard( const QString &dataDir, QObject *parent )
   : QObject( parent )
@@ -87,6 +88,12 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList
 
 void ProjectWizard::createProject( QString const &projectName, FieldsModel *fieldsModel )
 {
+  if ( !CoreUtils::isValidName( projectName ) )
+  {
+    emit projectCreationFailed( tr( "Project name contains invalid characters" ) );
+    return;
+  }
+
   QString projectDir = CoreUtils::createUniqueProjectDirectory( mDataDir, projectName );
   QString projectFilepath( QString( "%1/%2.%3" ).arg( projectDir ).arg( projectName ).arg( "qgs" ) );
   QString gpkgName( QStringLiteral( "data" ) );
