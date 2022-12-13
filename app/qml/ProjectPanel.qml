@@ -149,6 +149,7 @@ Item {
       function refreshProjectList( keepSearchFilter = false ) {
 
         stackView.pending = true
+        /*
         switch( pageContent.state ) {
           case "local":
             localProjectsPage.refreshProjectsList( keepSearchFilter )
@@ -163,6 +164,7 @@ Item {
             publicProjectsPage.refreshProjectsList( keepSearchFilter )
             break
         }
+        */
       }
 
       header: PanelHeader {

@@ -107,13 +107,12 @@ void MerginUserInfo::findActiveWorkspace()
     mActiveWorkspace = -1;
     mActiveWorkspaceName = "";
   }
-
-  if ( mWorkspaces.count() == 1 )
+  else if ( mWorkspaces.count() == 1 )
   {
     mActiveWorkspace = mWorkspaces.firstKey();
     mActiveWorkspaceName = mWorkspaces.value( mActiveWorkspace );
   }
-  else
+  else if ( mWorkspaces.count() > 1 )
   {
     QSettings settings;
     settings.beginGroup( "Input/" );
