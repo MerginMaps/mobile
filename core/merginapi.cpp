@@ -3086,7 +3086,7 @@ void MerginApi::deleteAccountFinished()
 void MerginApi::getServerType()
 {
   QNetworkRequest request = getDefaultRequest();
-  QString urlString = mApiRoot + QStringLiteral( "config" );
+  QString urlString = mApiRoot + QStringLiteral( "/config" );
   QUrl url( urlString );
   request.setUrl( url );
 
@@ -3106,14 +3106,18 @@ void MerginApi::getServerTypeReplyFinished()
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
-      QJsonObject docObj = doc.object();
-      if ( docObj.contains( QStringLiteral( "user_workspaces_allowed" ) ) )
+      QString serverType = docObj.value( QStringLiteral( "server_type" ) ).toString();
+      if ( serverType == QStringLiteral( "ee" ) )
       {
         setServerType( MerginServerType::EE );
       }
-      if ( docObj.contains( QStringLiteral( "global_namespace" ) ) )
+      else if ( serverType == QStringLiteral( "ce" ) )
       {
         setServerType( MerginServerType::CE );
+      }
+      else if ( serverType == QStringLiteral( "saas" ) )
+      {
+        setServerType( MerginServerType::SAAS );
       }
     }
   }
