@@ -3106,7 +3106,7 @@ void MerginApi::getServerTypeReplyFinished()
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
-      QString serverType = docObj.value( QStringLiteral( "server_type" ) ).toString();
+      QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
       if ( serverType == QStringLiteral( "ee" ) )
       {
         setServerType( MerginServerType::EE );
