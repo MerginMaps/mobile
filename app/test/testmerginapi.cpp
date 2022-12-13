@@ -2677,6 +2677,6 @@ void TestMerginApi::testServerType()
   QSignalSpy spy( mApi, &MerginApi::serverTypeChanged );
   mApi->getServerType();
   spy.wait( TestUtils::SHORT_REPLY );
-  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.count(), 0 );
   QCOMPARE( mApi->serverType(), MerginServerType::OLD );
 }
