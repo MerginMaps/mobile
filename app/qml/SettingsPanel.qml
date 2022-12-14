@@ -114,9 +114,10 @@ Item {
               onCheckedChanged: __appSettings.autoCenterMapChecked = checked
             }
 
-            MouseArea {
-              anchors.fill: parent
-              onClicked: autoCenterMapSwitch.toggle()
+            TapHandler {
+              onTapped: function(eventPoint, button) {
+                autoCenterMapSwitch.toggle()
+              }
             }
           }
 
@@ -203,7 +204,7 @@ Item {
           }
 
           PanelItem {
-            height: settingsPanel.rowHeight
+            height: root.rowHeight
             width: parent.width
             text: qsTr("Show accuracy warning")
 
@@ -214,9 +215,10 @@ Item {
               onCheckedChanged: __appSettings.gpsAccuracyWarning = checked
             }
 
-            MouseArea {
-              anchors.fill: parent
-              onClicked: accuracyWarningSwitch.toggle()
+            TapHandler {
+              onTapped: function(eventPoint, button) {
+                accuracyWarningSwitch.toggle()
+              }
             }
           }
 
@@ -274,9 +276,10 @@ Item {
               onCheckedChanged: __appSettings.reuseLastEnteredValues = checked
             }
 
-            MouseArea {
-              anchors.fill: parent
-              onClicked: rememberValuesSwitch.toggle()
+            TapHandler {
+              onTapped: function(eventPoint, button) {
+                rememberValuesSwitch.toggle()
+              }
             }
           }
 
@@ -293,9 +296,10 @@ Item {
               onCheckedChanged: __appSettings.autosyncAllowed = checked
             }
 
-            MouseArea {
-              anchors.fill: parent
-              onClicked: autosyncSwitch.toggle()
+            TapHandler {
+              onTapped: function(eventPoint, button) {
+                autosyncSwitch.toggle()
+              }
             }
           }
 

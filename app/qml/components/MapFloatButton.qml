@@ -47,10 +47,18 @@ Item {
       anchors.horizontalCenter: parent.horizontalCenter
     }
 
-    MouseArea {
+    Item {
       anchors.fill: parent
-      onClicked: root.clicked()
-      onPressAndHold: root.pressAndHold()
+      
+      TapHandler {
+        onTapped: function(eventPoint, button) {
+          root.clicked()
+        }
+
+        onLongPressed: function() {
+          root.pressAndHold()
+        }
+      }
     }
   }
 }
