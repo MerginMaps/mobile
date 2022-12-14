@@ -85,7 +85,16 @@ void MerginUserInfo::saveWorkspacesData()
   QSettings settings;
   settings.beginGroup( "Input/" );
   settings.setValue( "preferredWorkspace", mPreferredWorkspace );
-  //settings.setValue( "workspaces", mWorkspaces );
+
+  settings.beginGroup( "workspaces" );
+  QMap<int, QString>::const_iterator it = mWorkspaces.constBegin();
+  while ( it != mWorkspaces.constEnd() )
+  {
+     settings.setValue( QString::number( it.key() ), it.value() );
+     ++it;
+  }
+  settings.endGroup();
+
   settings.endGroup();
 }
 
@@ -93,8 +102,17 @@ void MerginUserInfo::loadWorkspacesData()
 {
   QSettings settings;
   settings.beginGroup( "Input/" );
-  settings.value( "preferredWorkspace", -1 );
-  //settings.value( "workspaces" );
+  mPreferredWorkspace = settings.value( "preferredWorkspace", -1 ).toInt();
+  mActiveWorkspace = settings.value( "lastUsedWorkspace", -1 ).toInt();
+
+  settings.beginGroup( "workspaces" );
+  QStringList keys = settings.childKeys();
+  for (const QString &key : keys )
+  {
+    mWorkspaces[ key.toInt() ] = settings.value( key ).toString();
+  }
+  settings.endGroup();
+
   settings.endGroup();
 
   findActiveWorkspace();
