@@ -39,10 +39,8 @@ Rectangle {
         enabled: root.enabled && handleClicks
 
         TapHandler {
-            onPressedChanged: {
-                if ( !pressed ) {
-                    root.activated()
-                }
+            onTapped: function(eventPoint, button) {
+                root.activated()
             }
 
             onLongPressed: {
