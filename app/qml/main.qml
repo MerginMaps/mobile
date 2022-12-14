@@ -165,6 +165,14 @@ ApplicationWindow {
           //
           return window.height
         }
+        else if ( gpsDataPageLoader.active )
+        {
+          //
+          // Block also GPS data page clicks propagation.
+          // Due to an upstream bug in Qt, see #2387 and #2425 for more info
+          //
+          return window.height
+        }
 
         return 0
       }
@@ -455,7 +463,6 @@ ApplicationWindow {
             // if we are in stakeout mode
             stakeoutPanelLoader.item.hide()
           }
-          stateManager.state = "misc"
         }
         else
         {
@@ -464,7 +471,6 @@ ApplicationWindow {
             // user closed GPS panel and we are in stakeout mode - reopen stakeout panel
             stakeoutPanelLoader.item.restore()
           }
-          stateManager.state = "map"
         }
       }
     }
