@@ -81,7 +81,7 @@ Item {
   StackView {
     id: stackView
 
-    initialItem: projectsPanelComp
+    initialItem: __merginApi.serverType === MerginServerType.OLD ? projectsPanelComp : workspaceProjectsPanelComp
     anchors.fill: parent
     focus: true
     visible: false
@@ -102,6 +102,15 @@ Item {
       }
     }
 
+    function clearStackOnServerChange() {
+        stackView.clear()
+        if ( __merginApi.serverType === MerginServerType.OLD ) {
+            stackView.push( projectsPanelComp )
+        } else {
+            stackView.push( workspaceProjectsPanelComp )
+        }
+    }
+
     Keys.onReleased: function( event ) {
       if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
         event.accepted = true;
@@ -118,6 +127,14 @@ Item {
     onVisibleChanged: {
       if ( stackView.visible )
         stackView.forceActiveFocus()
+    }
+
+    Connections {
+      target: __merginApi
+
+      function onServerTypeChanged( serverType ) {
+          stackView.clearStackOnServerChange()
+      }
     }
   }
 
@@ -147,9 +164,7 @@ Item {
       }
 
       function refreshProjectList( keepSearchFilter = false ) {
-
         stackView.pending = true
-        /*
         switch( pageContent.state ) {
           case "local":
             localProjectsPage.refreshProjectsList( keepSearchFilter )
@@ -164,7 +179,6 @@ Item {
             publicProjectsPage.refreshProjectsList( keepSearchFilter )
             break
         }
-        */
       }
 
       header: PanelHeader {
@@ -460,6 +474,309 @@ Item {
           }
 
           onClicked: pageContent.state = "public"
+        }
+      }
+
+      // Other components
+
+      Connections {
+        target: __projectWizard
+        function onProjectCreationFailed(message) {
+          __inputUtils.showNotification(message)
+          stackView.pending = false
+        }
+        function onProjectCreated( projectDir, projectName ) {
+          if  (stackView.currentItem.objectName === "projectWizard") {
+            __inputUtils.log(
+                  "Create project",
+                  "Local project " + projectName + " created at path: " + projectDir + " by "
+                  + ( __merginApi.userAuth ? __merginApi.userAuth.username : "unknown" ) )
+            stackView.popOnePageOrClose()
+          }
+        }
+      }
+
+      Connections {
+        target: __merginApi
+        enabled: root.visible
+
+        function onListProjectsFinished( merginProjects, projectCount, page, requestId ) {
+          stackView.pending = false
+        }
+        function onListProjectsByNameFinished( merginProjects, requestId ) {
+          stackView.pending = false
+        }
+        function onApiVersionStatusChanged() {
+          stackView.pending = false
+          if (__merginApi.apiVersionStatus === MerginApiStatus.OK && stackView.currentItem.objectName === "authPanel") {
+            if (__merginApi.userAuth.hasAuthData()) {
+              refreshProjectList()
+            } else if (pageContent.state !== 'local') {
+              if (stackView.currentItem.objectName !== "authPanel") {
+                root.openAuthPanel()
+              }
+            }
+          }
+        }
+        function onAuthRequested() {
+          stackView.pending = false
+          root.openAuthPanel()
+        }
+        function onAuthChanged() {
+          stackView.pending = false
+          if ( __merginApi.userAuth.hasAuthData() ) {
+            stackView.popOnePageOrClose()
+            projectsPage.refreshProjectList()
+            root.forceActiveFocus()
+          }
+        }
+        function onAuthFailed() {
+          stackView.pending = false
+        }
+        function onRegistrationFailed() {
+          stackView.pending = false
+        }
+        function onRegistrationSucceeded() {
+          stackView.pending = false
+        }
+      }
+    }
+  }
+
+  Component {
+    id: workspaceProjectsPanelComp
+
+    Page {
+      id: projectsPage
+
+      function setupProjectOpen( projectId, projectPath ) {
+        activeProjectId = projectId
+        activeProjectPath = projectPath
+        openProjectRequested( projectId, projectPath )
+
+        if ( projectId && projectPath ) // this is not project reset
+          hidePanel()
+      }
+
+      function refreshProjectList( keepSearchFilter = false ) {
+        stackView.pending = true
+        switch( pageContent.state ) {
+          case "local":
+            localProjectsPage.refreshProjectsList( keepSearchFilter )
+            break
+          case "created":
+            createdProjectsPage.refreshProjectsList( keepSearchFilter )
+            break
+        }
+      }
+
+      header: PanelHeader {
+        id: pageHeader
+
+        titleText: qsTr("Projects")
+        color: InputStyle.clrPanelMain
+        height: InputStyle.rowHeightHeader
+        rowHeight: InputStyle.rowHeightHeader
+
+        onBack: {
+          if ( root.activeProjectId ) {
+            root.hidePanel()
+          }
+        }
+        withBackButton: root.activeProjectPath
+
+        Item {
+          id: avatar
+
+          width: InputStyle.rowHeightHeader * 0.8
+          height: InputStyle.rowHeightHeader
+          anchors.right: parent.right
+          anchors.rightMargin: InputStyle.panelMargin
+
+          Rectangle {
+            id: avatarImage
+
+            anchors.centerIn: parent
+            width: avatar.width
+            height: avatar.width
+            color: InputStyle.fontColor
+            radius: width*0.5
+            antialiasing: true
+
+            MouseArea {
+              anchors.fill: parent
+              onClicked: {
+                if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
+                  __merginApi.getUserInfo()
+                  if (__merginApi.apiSupportsSubscriptions)
+                    __merginApi.getSubscriptionInfo()
+                  stackView.push( accountPanelComp )
+                }
+                else
+                  root.openAuthPanel()
+              }
+            }
+
+            Image {
+              id: userIcon
+
+              anchors.centerIn: avatarImage
+              source: InputStyle.accountIcon
+              height: avatarImage.height * 0.8
+              width: height
+              sourceSize.width: width
+              sourceSize.height: height
+              fillMode: Image.PreserveAspectFit
+            }
+
+            ColorOverlay {
+              anchors.fill: userIcon
+              source: userIcon
+              color: "#FFFFFF"
+            }
+          }
+        }
+      }
+
+      background: Rectangle {
+        anchors.fill: parent
+        color: InputStyle.clrPanelMain
+      }
+
+      Item {
+        id: pageContent
+
+        anchors.fill: parent
+
+        states: [
+          State {
+            name: "local"
+          },
+          State {
+            name: "created"
+          }
+        ]
+
+        onStateChanged: {
+          __merginApi.pingMergin()
+          refreshProjectList()
+          pageFooter.setActiveButton( pageContent.state )
+        }
+
+        Connections {
+          target: root
+          function onVisibleChanged() {
+            if ( root.visible ) { // projectsPanel opened
+              pageContent.state = "local"
+            }
+            else {
+              pageContent.state = ""
+            }
+          }
+
+          function onResetView() {
+            if ( pageContent.state === "created" )
+              pageContent.state = "local"
+          }
+        }
+
+        StackLayout {
+          id: projectListLayout
+
+          anchors.fill: parent
+          currentIndex: pageFooter.currentIndex
+
+          ProjectListPage {
+            id: localProjectsPage
+
+            projectModelType: ProjectsModel.LocalProjectsModel
+            activeProjectId: root.activeProjectId
+            list.visible: !stackView.pending
+
+            onOpenProjectRequested: function( projectId, projectFilePath ) {
+              setupProjectOpen( projectId, projectFilePath )
+            }
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
+            list.onActiveProjectDeleted: setupProjectOpen( "", "" )
+          }
+
+          ProjectListPage {
+            id: createdProjectsPage
+
+            projectModelType: ProjectsModel.CreatedProjectsModel
+            activeProjectId: root.activeProjectId
+            list.visible: !stackView.pending
+
+            onOpenProjectRequested: function( projectId, projectFilePath ) {
+              setupProjectOpen( projectId, projectFilePath )
+            }
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
+            list.onActiveProjectDeleted: setupProjectOpen( "", "" )
+          }
+        }
+      }
+
+      footer: TabBar {
+        id: pageFooter
+
+        property int itemSize: pageFooter.height * 0.8
+
+        function setActiveButton( state ) {
+          switch( state ) {
+            case "local": pageFooter.setCurrentIndex( 0 ); break
+            case "created": pageFooter.setCurrentIndex( 1 ); break
+          }
+        }
+
+        spacing: 0
+        contentHeight: InputStyle.rowHeightHeader
+
+        TabButton {
+          id: localProjectsBtn
+
+          background: Rectangle {
+            anchors.fill: parent
+            color: InputStyle.fontColor
+          }
+
+          MainPanelButton {
+            id: localProjectsInnerBtn
+
+            text: qsTr("Home")
+            imageSource: InputStyle.homeIcon
+            width: pageFooter.itemSize
+
+            handleClicks: false
+            faded: pageFooter.currentIndex !== localProjectsBtn.TabBar.index
+          }
+
+          onClicked: pageContent.state = "local"
+        }
+
+        TabButton {
+          id: createdProjectsBtn
+
+          background: Rectangle {
+            anchors.fill: parent
+            color: InputStyle.fontColor
+          }
+
+          MainPanelButton {
+            id: createdProjectsInnerBtn
+
+            text: qsTr("My projects")
+            imageSource: InputStyle.accountIcon
+            width: pageFooter.itemSize
+
+            handleClicks: false
+            faded: pageFooter.currentIndex !== createdProjectsBtn.TabBar.index
+          }
+
+          onClicked: pageContent.state = "created"
         }
       }
 

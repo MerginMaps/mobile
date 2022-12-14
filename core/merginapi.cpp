@@ -3112,7 +3112,7 @@ void MerginApi::getServerTypeReplyFinished()
         setServerType( MerginServerType::EE );
       }
 
-      if ( docObj.contains( QStringLiteral( "global_namespace" ) ) )
+      if ( docObj.contains( QStringLiteral( "global_workspace" ) ) )
       {
         setServerType( MerginServerType::CE );
       }
