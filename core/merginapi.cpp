@@ -3106,19 +3106,30 @@ void MerginApi::getServerTypeReplyFinished()
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
-      QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
-      if ( serverType == QStringLiteral( "ee" ) )
+      QJsonObject docObj = doc.object();
+      if ( docObj.contains( QStringLiteral( "user_workspaces_allowed" ) ) )
       {
         setServerType( MerginServerType::EE );
       }
-      else if ( serverType == QStringLiteral( "ce" ) )
+
+      if ( docObj.contains( QStringLiteral( "global_namespace" ) ) )
       {
         setServerType( MerginServerType::CE );
       }
-      else if ( serverType == QStringLiteral( "saas" ) )
-      {
-        setServerType( MerginServerType::SAAS );
-      }
+
+      //QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
+      //if ( serverType == QStringLiteral( "ee" ) )
+      //{
+        //setServerType( MerginServerType::EE );
+      //}
+      //else if ( serverType == QStringLiteral( "ce" ) )
+      //{
+        //setServerType( MerginServerType::CE );
+      //}
+      //else if ( serverType == QStringLiteral( "saas" ) )
+      //{
+        //setServerType( MerginServerType::SAAS );
+      //}
     }
   }
   else // legacy (old) server
