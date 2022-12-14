@@ -3120,15 +3120,15 @@ void MerginApi::getServerTypeReplyFinished()
       //QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
       //if ( serverType == QStringLiteral( "ee" ) )
       //{
-        //setServerType( MerginServerType::EE );
+      //setServerType( MerginServerType::EE );
       //}
       //else if ( serverType == QStringLiteral( "ce" ) )
       //{
-        //setServerType( MerginServerType::CE );
+      //setServerType( MerginServerType::CE );
       //}
       //else if ( serverType == QStringLiteral( "saas" ) )
       //{
-        //setServerType( MerginServerType::SAAS );
+      //setServerType( MerginServerType::SAAS );
       //}
     }
   }

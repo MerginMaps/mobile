@@ -90,8 +90,8 @@ void MerginUserInfo::saveWorkspacesData()
   QMap<int, QString>::const_iterator it = mWorkspaces.constBegin();
   while ( it != mWorkspaces.constEnd() )
   {
-     settings.setValue( QString::number( it.key() ), it.value() );
-     ++it;
+    settings.setValue( QString::number( it.key() ), it.value() );
+    ++it;
   }
   settings.endGroup();
 
@@ -107,7 +107,7 @@ void MerginUserInfo::loadWorkspacesData()
 
   settings.beginGroup( "workspaces" );
   QStringList keys = settings.childKeys();
-  for (const QString &key : keys )
+  for ( const QString &key : keys )
   {
     mWorkspaces[ key.toInt() ] = settings.value( key ).toString();
   }
