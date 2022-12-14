@@ -3138,6 +3138,8 @@ void MerginApi::getServerTypeReplyFinished()
   }
 
   r->deleteLater();
+
+  getUserInfo();
 }
 
 MerginServerType::ServerType MerginApi::serverType() const
