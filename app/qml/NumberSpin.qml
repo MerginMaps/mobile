@@ -66,22 +66,30 @@ Item {
         rotation: imageIncrease.rotation
     }
 
-//  Mouse areas enlarging clickable areas for arrows, see https://github.com/MerginMaps/input/pull/1055
-    MouseArea {
+//  Click areas enlarging clickable areas for arrows, see https://github.com/MerginMaps/input/pull/1055
+    Item {
       y: imageDecrease.y - imageDecrease.height
       x: imageDecrease.x - imageDecrease.width
       width: imageDecrease.width * 3
       height: imageDecrease.height * 3
 
-      onClicked: if (minValue <= root.value - 1) root.value -=1
+      TapHandler {  
+        onTapped: function(eventPoint, button) {
+            if (minValue <= root.value - 1) root.value -=1
+        }
+      }
     }
 
-    MouseArea {
+    Item {
       y: imageIncrease.y - imageIncrease.height
       x: imageIncrease.x - imageIncrease.width
       width: imageIncrease.width * 3
       height: imageIncrease.height * 3
 
-      onClicked: if (maxValue >= root.value + 1) root.value +=1
+      TapHandler {
+        onTapped: function(eventPoint, button) {
+            if (maxValue >= root.value + 1) root.value +=1
+        }
+      }
     }
 }
