@@ -159,7 +159,8 @@ void ProjectsModel::listProjects( const QString &searchExpression, int page )
     return;
   }
 
-  mLastRequestId = mBackend->listProjects( searchExpression, modelTypeToFlag(), "", "", page );
+  QString workspace = mBackend->userInfo()->activeWorkspace();
+  mLastRequestId = mBackend->listProjects( searchExpression, modelTypeToFlag(), "", workspace, page );
 
   if ( !mLastRequestId.isEmpty() )
   {

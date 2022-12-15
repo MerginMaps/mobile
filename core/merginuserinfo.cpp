@@ -34,6 +34,8 @@ void MerginUserInfo::clear()
 
 void MerginUserInfo::setFromJson( QJsonObject docObj )
 {
+  clear();
+
   // parse profile data
   mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
   mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toDouble();
@@ -72,6 +74,11 @@ double MerginUserInfo::diskUsage() const
 double MerginUserInfo::storageLimit() const
 {
   return mStorageLimit;
+}
+
+QString MerginUserInfo::activeWorkspace() const
+{
+  return mActiveWorkspaceName;
 }
 
 void MerginUserInfo::onStorageChanged( double storage )

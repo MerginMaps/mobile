@@ -53,6 +53,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   QObject::connect( mSubscriptionInfo, &MerginSubscriptionInfo::subscriptionInfoChanged, this, &MerginApi::subscriptionInfoChanged );
   QObject::connect( mSubscriptionInfo, &MerginSubscriptionInfo::planProductIdChanged, this, &MerginApi::onPlanProductIdChanged );
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::authChanged );
+  QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::getServerType );
 
   loadAuthData();
   getServerType();
@@ -102,7 +103,7 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
   {
     query.addQueryItem( "flag", flag );
   }
-  query.addQueryItem( "order_by", QStringLiteral( "namespace" ) );
+  //query.addQueryItem( "order_by", QStringLiteral( "namespace" ) );
   // Required query parameters
   query.addQueryItem( "page", QString::number( page ) );
   query.addQueryItem( "per_page", QString::number( PROJECT_PER_PAGE ) );

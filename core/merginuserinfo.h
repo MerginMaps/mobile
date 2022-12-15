@@ -24,6 +24,7 @@ class MerginUserInfo: public QObject
     Q_PROPERTY( QString email READ email NOTIFY userInfoChanged )
     Q_PROPERTY( double storageLimit READ storageLimit NOTIFY userInfoChanged )
     Q_PROPERTY( double diskUsage READ diskUsage NOTIFY userInfoChanged ) // in Bytes
+    Q_PROPERTY( QString activeWorkspace READ activeWorkspace NOTIFY userInfoChanged )
 
   public:
     explicit MerginUserInfo( QObject *parent = nullptr );
@@ -35,6 +36,7 @@ class MerginUserInfo: public QObject
     QString email() const;
     double diskUsage() const;
     double storageLimit() const;
+    QString activeWorkspace() const;
 
     void saveWorkspacesData();
     void loadWorkspacesData();
