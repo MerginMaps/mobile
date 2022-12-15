@@ -81,6 +81,11 @@ QString MerginUserInfo::activeWorkspace() const
   return mActiveWorkspaceName;
 }
 
+QStringList MerginUserInfo::workspaces() const
+{
+  return mWorkspaces.values();
+}
+
 void MerginUserInfo::onStorageChanged( double storage )
 {
   mStorageLimit = storage;
