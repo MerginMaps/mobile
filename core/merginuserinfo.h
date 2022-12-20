@@ -43,7 +43,7 @@ class MerginUserInfo: public QObject
     void saveWorkspacesData();
     void loadWorkspacesData();
 
-    void findActiveWorkspace();
+    void findActiveWorkspace( int preferredWorkspace = -1 );
     void saveLastActiveWorkspace();
 
   signals:
@@ -56,7 +56,6 @@ class MerginUserInfo: public QObject
     QString mEmail;
     double mDiskUsage = 0.0; // in Bytes
     double mStorageLimit = 0.0; // in Bytes
-    int mPreferredWorkspace = -1;
     QMap<int, QString> mWorkspaces;
     int mActiveWorkspace = -1;
 };

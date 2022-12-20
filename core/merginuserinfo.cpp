@@ -25,7 +25,6 @@ void MerginUserInfo::clear()
   mDiskUsage = 0;
   mStorageLimit = 0;
 
-  mPreferredWorkspace = -1;
   mActiveWorkspace = -1;
   mWorkspaces.clear();
 
@@ -43,9 +42,10 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toDouble();
   mStorageLimit = docObj.value( QStringLiteral( "storage" ) ).toDouble();
 
+  int preferredWorkspace = -1;
   if ( docObj.contains( QStringLiteral( "preferred_workspace" ) ) )
   {
-    mPreferredWorkspace = docObj.value( QStringLiteral( "preferred_workspace" ) ).toInt();
+    preferredWorkspace = docObj.value( QStringLiteral( "preferred_workspace" ) ).toInt();
   }
 
   if ( docObj.contains( QStringLiteral( "workspaces" ) ) )
@@ -59,7 +59,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   }
 
   saveWorkspacesData();
-  findActiveWorkspace();
+  findActiveWorkspace( preferredWorkspace );
   emit userInfoChanged();
 }
 
@@ -80,7 +80,7 @@ double MerginUserInfo::storageLimit() const
 
 QString MerginUserInfo::activeWorkspace() const
 {
-  return mWorkspaces.value(mActiveWorkspace);
+  return mWorkspaces.value( mActiveWorkspace );
 }
 
 QStringList MerginUserInfo::workspaces() const
@@ -98,7 +98,6 @@ void MerginUserInfo::saveWorkspacesData()
 {
   QSettings settings;
   settings.beginGroup( "Input/" );
-  settings.setValue( "preferredWorkspace", mPreferredWorkspace );
 
   settings.beginGroup( "workspaces" );
   QMap<int, QString>::const_iterator it = mWorkspaces.constBegin();
@@ -116,7 +115,6 @@ void MerginUserInfo::loadWorkspacesData()
 {
   QSettings settings;
   settings.beginGroup( "Input/" );
-  mPreferredWorkspace = settings.value( "preferredWorkspace", -1 ).toInt();
   mActiveWorkspace = settings.value( "lastUsedWorkspace", -1 ).toInt();
 
   settings.beginGroup( "workspaces" );
@@ -132,7 +130,7 @@ void MerginUserInfo::loadWorkspacesData()
   findActiveWorkspace();
 }
 
-void MerginUserInfo::findActiveWorkspace()
+void MerginUserInfo::findActiveWorkspace( int preferredWorkspace )
 {
   if ( mWorkspaces.isEmpty() )
   {
@@ -155,9 +153,9 @@ void MerginUserInfo::findActiveWorkspace()
     }
     else
     {
-      if ( mPreferredWorkspace >= 0 )
+      if ( preferredWorkspace >= 0 )
       {
-        mActiveWorkspace = mPreferredWorkspace;
+        mActiveWorkspace = preferredWorkspace;
       }
       else
       {
