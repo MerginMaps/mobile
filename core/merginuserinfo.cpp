@@ -78,7 +78,7 @@ double MerginUserInfo::storageLimit() const
 
 QString MerginUserInfo::activeWorkspace() const
 {
-  return mActiveWorkspaceName;
+  return mWorkspaces.value(mActiveWorkspace);
 }
 
 QStringList MerginUserInfo::workspaces() const
@@ -135,12 +135,10 @@ void MerginUserInfo::findActiveWorkspace()
   if ( mWorkspaces.isEmpty() )
   {
     mActiveWorkspace = -1;
-    mActiveWorkspaceName = "";
   }
   else if ( mWorkspaces.count() == 1 )
   {
     mActiveWorkspace = mWorkspaces.firstKey();
-    mActiveWorkspaceName = mWorkspaces.value( mActiveWorkspace );
   }
   else if ( mWorkspaces.count() > 1 )
   {
@@ -152,19 +150,16 @@ void MerginUserInfo::findActiveWorkspace()
     if ( mWorkspaces.contains( lastUsedWorkspace ) )
     {
       mActiveWorkspace = lastUsedWorkspace;
-      mActiveWorkspaceName = mWorkspaces.value( mActiveWorkspace );
     }
     else
     {
       if ( mPreferredWorkspace >= 0 )
       {
         mActiveWorkspace = mPreferredWorkspace;
-        mActiveWorkspaceName = mWorkspaces.value( mActiveWorkspace );
       }
       else
       {
         mActiveWorkspace = mWorkspaces.firstKey();
-        mActiveWorkspaceName = mWorkspaces.value( mActiveWorkspace );
       }
     }
   }

@@ -59,7 +59,6 @@ class MerginUserInfo: public QObject
     int mPreferredWorkspace = -1;
     QMap<int, QString> mWorkspaces;
     int mActiveWorkspace = -1;
-    QString mActiveWorkspaceName = "";
 };
 
 #endif // MERGINUSERINFO_H
