@@ -53,7 +53,6 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   QObject::connect( mSubscriptionInfo, &MerginSubscriptionInfo::subscriptionInfoChanged, this, &MerginApi::subscriptionInfoChanged );
   QObject::connect( mSubscriptionInfo, &MerginSubscriptionInfo::planProductIdChanged, this, &MerginApi::onPlanProductIdChanged );
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::authChanged );
-  QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::getServerType );
 
   loadAuthData();
   getServerType();
