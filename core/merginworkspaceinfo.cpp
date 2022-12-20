@@ -29,11 +29,7 @@ void MerginWorkspaceInfo::clear()
 
 void MerginWorkspaceInfo::setFromJson( QJsonObject docObj )
 {
-  blockSignals( true );
-  clear();
-  blockSignals( false );
-
-  // parse profile data
+  // parse storage data
   mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toDouble();
   mStorageLimit = docObj.value( QStringLiteral( "storage" ) ).toDouble();
 

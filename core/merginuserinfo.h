@@ -39,11 +39,12 @@ class MerginUserInfo: public QObject
     void saveWorkspacesData();
     void loadWorkspacesData();
 
-    void findActiveWorkspace( int preferredWorkspace = -1 );
-    void saveLastActiveWorkspace();
+    int findActiveWorkspace( int preferredWorkspace = -1 );
+    void setActiveWorkspace( int newWorkspace );
 
   signals:
     void userInfoChanged();
+    void activeWorkspaceChanged();
 
   private:
     QString mEmail;

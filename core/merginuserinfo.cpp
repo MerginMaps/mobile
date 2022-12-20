@@ -106,18 +106,20 @@ void MerginUserInfo::loadWorkspacesData()
 
   settings.endGroup();
 
-  findActiveWorkspace();
+  int workspace = findActiveWorkspace();
+  setActiveWorkspace( workspace );
 }
 
-void MerginUserInfo::findActiveWorkspace( int preferredWorkspace )
+int MerginUserInfo::findActiveWorkspace( int preferredWorkspace )
 {
+  int workspace;
   if ( mWorkspaces.isEmpty() )
   {
-    mActiveWorkspace = -1;
+    workspace = -1;
   }
   else if ( mWorkspaces.count() == 1 )
   {
-    mActiveWorkspace = mWorkspaces.firstKey();
+    workspace = mWorkspaces.firstKey();
   }
   else if ( mWorkspaces.count() > 1 )
   {
@@ -128,28 +130,37 @@ void MerginUserInfo::findActiveWorkspace( int preferredWorkspace )
 
     if ( mWorkspaces.contains( lastUsedWorkspace ) )
     {
-      mActiveWorkspace = lastUsedWorkspace;
+      workspace = lastUsedWorkspace;
     }
     else
     {
       if ( preferredWorkspace >= 0 )
       {
-        mActiveWorkspace = preferredWorkspace;
+        workspace = preferredWorkspace;
       }
       else
       {
-        mActiveWorkspace = mWorkspaces.firstKey();
+        workspace = mWorkspaces.firstKey();
       }
     }
   }
 
-  saveLastActiveWorkspace();
+  return workspace;
 }
 
-void MerginUserInfo::saveLastActiveWorkspace()
+void MerginUserInfo::setActiveWorkspace( int newWorkspace )
 {
+  if ( mActiveWorkspace == newWorkspace )
+  {
+    return;
+  }
+
+  mActiveWorkspace = newWorkspace;
+
   QSettings settings;
   settings.beginGroup( "Input/" );
   settings.setValue( "lastUsedWorkspace", mActiveWorkspace );
   settings.endGroup();
+
+  emit activeWorkspaceChanged();
 }

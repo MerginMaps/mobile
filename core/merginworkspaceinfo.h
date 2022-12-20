@@ -29,6 +29,8 @@ class MerginWorkspaceInfo: public QObject
     ~MerginWorkspaceInfo() = default;
 
     void clear();
+    void clearStorageInfo();
+    void clearBillingInfo();
     void setFromJson( QJsonObject docObj );
 
     double diskUsage() const;
