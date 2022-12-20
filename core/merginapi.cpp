@@ -3138,7 +3138,7 @@ void MerginApi::getServerTypeReplyFinished()
   else
   {
     int statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    if ( statusCore == 404 ) // legacy (old) server
+    if ( statusCode == 404 ) // legacy (old) server
     {
       setServerType( MerginServerType::OLD );
     }
