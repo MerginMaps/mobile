@@ -76,7 +76,7 @@ MerginSubscriptionInfo *MerginApi::subscriptionInfo() const
   return mSubscriptionInfo;
 }
 
-QString MerginApi::listProjects( const QString &searchExpression, const QString &flag, const QString &filterTag, const QString &filterOnlyNamespace, const int page )
+QString MerginApi::listProjects( const QString &searchExpression, const QString &flag, const QString &filterTag, const int page )
 {
   bool authorize = !flag.isEmpty();
   if ( ( authorize && !validateAuth() ) || mApiVersionStatus != MerginApiStatus::OK )
@@ -85,10 +85,12 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
     return QString();
   }
 
+  QString workspace = mUserInfo->activeWorkspace();
+
   QUrlQuery query;
-  if ( !filterOnlyNamespace.isEmpty() )
+  if ( !workspace.isEmpty() )
   {
-    query.addQueryItem( "only_namespace", filterOnlyNamespace );
+    query.addQueryItem( "only_namespace", workspace );
   }
   if ( !filterTag.isEmpty() )
   {
