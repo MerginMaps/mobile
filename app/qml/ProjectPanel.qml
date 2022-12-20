@@ -567,6 +567,9 @@ Item {
           case "created":
             createdProjectsPage.refreshProjectsList( keepSearchFilter )
             break
+          case "public":
+            publicProjectsPage.refreshProjectsList( keepSearchFilter )
+            break
         }
       }
 
@@ -654,6 +657,9 @@ Item {
           },
           State {
             name: "created"
+          },
+          State {
+            name: "public"
           }
         ]
 
@@ -726,6 +732,24 @@ Item {
             }
             list.onActiveProjectDeleted: setupProjectOpen( "", "" )
           }
+
+          ProjectListPage {
+            id: publicProjectsPage
+
+            projectModelType: ProjectsModel.PublicProjectsModel
+            activeProjectId: root.activeProjectId
+            list.visible: !stackView.pending
+
+            onOpenProjectRequested: function( projectId, projectFilePath ) {
+              setupProjectOpen( projectId, projectFilePath )
+            }
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
+            list.onActiveProjectDeleted: function() {
+              setupProjectOpen( "", "" )
+            }
+          }
         }
       }
 
@@ -738,6 +762,7 @@ Item {
           switch( state ) {
             case "local": pageFooter.setCurrentIndex( 0 ); break
             case "created": pageFooter.setCurrentIndex( 1 ); break
+            case "public": pageFooter.setCurrentIndex( 2 ); break
           }
         }
 
@@ -786,6 +811,28 @@ Item {
           }
 
           onClicked: pageContent.state = "created"
+        }
+
+        TabButton {
+          id: publicProjectsBtn
+
+          background: Rectangle {
+            anchors.fill: parent
+            color: InputStyle.fontColor
+          }
+
+          MainPanelButton {
+            id: publicProjectsInnerBtn
+
+            text: qsTr("Explore")
+            imageSource: InputStyle.exploreIcon
+            width: pageFooter.itemSize
+
+            handleClicks: false
+            faded: pageFooter.currentIndex !== publicProjectsBtn.TabBar.index
+          }
+
+          onClicked: pageContent.state = "public"
         }
       }
 
