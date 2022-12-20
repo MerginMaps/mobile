@@ -3132,9 +3132,20 @@ void MerginApi::getServerTypeReplyFinished()
       //}
     }
   }
-  else // legacy (old) server
+  else
   {
-    setServerType( MerginServerType::OLD );
+    int statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    if ( statusCore == 404 ) // legacy (old) server
+    {
+      setServerType( MerginServerType::OLD );
+    }
+    else
+    {
+      QString serverMsg = extractServerErrorMsg( r->readAll() );
+      QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getServerType" ), r->errorString(), serverMsg );
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getServerType" ) );
+      CoreUtils::log( "server type", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    }
   }
 
   r->deleteLater();
