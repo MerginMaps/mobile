@@ -34,7 +34,9 @@ void MerginUserInfo::clear()
 
 void MerginUserInfo::setFromJson( QJsonObject docObj )
 {
+  blockSignals( true );
   clear();
+  blockSignals( false );
 
   // parse profile data
   mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
