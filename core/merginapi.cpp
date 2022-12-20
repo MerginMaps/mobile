@@ -40,6 +40,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   , mLocalProjects( localProjects )
   , mDataDir( localProjects.dataDir() )
   , mUserInfo( new MerginUserInfo )
+  , mWorkspaceInfo( new MerginWorkspaceInfo )
   , mSubscriptionInfo( new MerginSubscriptionInfo )
   , mUserAuth( new MerginUserAuth )
 {
@@ -70,6 +71,11 @@ MerginUserAuth *MerginApi::userAuth() const
 MerginUserInfo *MerginApi::userInfo() const
 {
   return mUserInfo;
+}
+
+MerginWorkspaceInfo *MerginApi::workspaceInfo() const
+{
+  return mWorkspaceInfo;
 }
 
 MerginSubscriptionInfo *MerginApi::subscriptionInfo() const

@@ -32,6 +32,7 @@
 #include "project.h"
 #include "merginsubscriptioninfo.h"
 #include "merginuserinfo.h"
+#include "merginworkspaceinfo.h"
 #include "merginuserauth.h"
 
 class Purchasing;
@@ -190,6 +191,7 @@ class MerginApi: public QObject
     Q_OBJECT
     Q_PROPERTY( MerginUserAuth *userAuth READ userAuth NOTIFY authChanged )
     Q_PROPERTY( MerginUserInfo *userInfo READ userInfo NOTIFY userInfoChanged )
+    Q_PROPERTY( MerginWorkspaceInfo *workspaceInfo READ workspaceInfo NOTIFY workspaceInfoChanged )
     Q_PROPERTY( MerginSubscriptionInfo *subscriptionInfo READ subscriptionInfo NOTIFY subscriptionInfoChanged )
     Q_PROPERTY( QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged )
     Q_PROPERTY( bool apiSupportsSubscriptions READ apiSupportsSubscriptions NOTIFY apiSupportsSubscriptionsChanged )
@@ -205,6 +207,7 @@ class MerginApi: public QObject
 
     MerginUserAuth *userAuth() const;
     MerginUserInfo *userInfo() const;
+    MerginWorkspaceInfo *workspaceInfo() const;
     MerginSubscriptionInfo *subscriptionInfo() const;
 
     /**
@@ -495,6 +498,7 @@ class MerginApi: public QObject
     void projectCreated( const QString &projectFullName, bool result );
     void serverProjectDeleted( const QString &projecFullName, bool result );
     void userInfoChanged();
+    void workspaceInfoChanged();
     void subscriptionInfoChanged();
     void configChanged();
     void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
@@ -645,6 +649,7 @@ class MerginApi: public QObject
     QString mDataDir; // dir with all projects
 
     MerginUserInfo *mUserInfo; //owned by this (qml grouped-properties)
+    MerginWorkspaceInfo *mWorkspaceInfo; //owned by this (qml grouped-properties)
     MerginSubscriptionInfo *mSubscriptionInfo; //owned by this (qml grouped-properties)
     MerginUserAuth *mUserAuth; //owned by this (qml grouped-properties)
 

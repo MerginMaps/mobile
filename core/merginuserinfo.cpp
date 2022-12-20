@@ -22,9 +22,6 @@ MerginUserInfo::MerginUserInfo( QObject *parent )
 void MerginUserInfo::clear()
 {
   mEmail = "";
-  mDiskUsage = 0;
-  mStorageLimit = 0;
-
   mActiveWorkspace = -1;
   mWorkspaces.clear();
 
@@ -39,8 +36,6 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
 
   // parse profile data
   mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
-  mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toDouble();
-  mStorageLimit = docObj.value( QStringLiteral( "storage" ) ).toDouble();
 
   int preferredWorkspace = -1;
   if ( docObj.contains( QStringLiteral( "preferred_workspace" ) ) )
@@ -68,16 +63,6 @@ QString MerginUserInfo::email() const
   return mEmail;
 }
 
-double MerginUserInfo::diskUsage() const
-{
-  return mDiskUsage;
-}
-
-double MerginUserInfo::storageLimit() const
-{
-  return mStorageLimit;
-}
-
 QString MerginUserInfo::activeWorkspace() const
 {
   return mWorkspaces.value( mActiveWorkspace );
@@ -86,12 +71,6 @@ QString MerginUserInfo::activeWorkspace() const
 QStringList MerginUserInfo::workspaces() const
 {
   return mWorkspaces.values();
-}
-
-void MerginUserInfo::onStorageChanged( double storage )
-{
-  mStorageLimit = storage;
-  emit userInfoChanged();
 }
 
 void MerginUserInfo::saveWorkspacesData()

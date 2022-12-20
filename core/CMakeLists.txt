@@ -9,6 +9,7 @@ set(MM_CORE_SRCS
     merginprojectstatusmodel.cpp
     merginuserauth.cpp
     merginuserinfo.cpp
+    merginworkspaceinfo.cpp
     localprojectsmanager.cpp
     merginprojectmetadata.cpp
     project.cpp
@@ -26,6 +27,7 @@ set(MM_CORE_HDRS
     merginprojectstatusmodel.h
     merginuserauth.h
     merginuserinfo.h
+    merginworkspaceinfo.h
     localprojectsmanager.h
     merginprojectmetadata.h
     project.h

@@ -8,8 +8,8 @@
  ***************************************************************************/
 
 
-#ifndef MERGINUSERINFO_H
-#define MERGINUSERINFO_H
+#ifndef MERGINWORKSPACEINFO_H
+#define MERGINWORKSPACEINFO_H
 
 #include <QObject>
 #include <QString>
@@ -18,37 +18,31 @@
 #include "merginsubscriptionstatus.h"
 #include "merginsubscriptiontype.h"
 
-class MerginUserInfo: public QObject
+class MerginWorkspaceInfo: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( QString email READ email NOTIFY userInfoChanged )
-    Q_PROPERTY( QString activeWorkspace READ activeWorkspace NOTIFY userInfoChanged )
-    Q_PROPERTY( QStringList workspaces READ workspaces NOTIFY userInfoChanged )
+    Q_PROPERTY( double storageLimit READ storageLimit NOTIFY workspaceInfoChanged )
+    Q_PROPERTY( double diskUsage READ diskUsage NOTIFY workspaceInfoChanged ) // in Bytes
 
   public:
-    explicit MerginUserInfo( QObject *parent = nullptr );
-    ~MerginUserInfo() = default;
+    explicit MerginWorkspaceInfo( QObject *parent = nullptr );
+    ~MerginWorkspaceInfo() = default;
 
     void clear();
     void setFromJson( QJsonObject docObj );
 
-    QString email() const;
-    QString activeWorkspace() const;
-    QStringList workspaces() const;
-
-    void saveWorkspacesData();
-    void loadWorkspacesData();
-
-    void findActiveWorkspace( int preferredWorkspace = -1 );
-    void saveLastActiveWorkspace();
+    double diskUsage() const;
+    double storageLimit() const;
 
   signals:
-    void userInfoChanged();
+    void workspaceInfoChanged();
+
+  public slots:
+    void onStorageChanged( double storage );
 
   private:
-    QString mEmail;
-    QMap<int, QString> mWorkspaces;
-    int mActiveWorkspace = -1;
+    double mDiskUsage = 0.0; // in Bytes
+    double mStorageLimit = 0.0; // in Bytes
 };
 
-#endif // MERGINUSERINFO_H
+#endif // MERGINWORKSPACEINFO_H
