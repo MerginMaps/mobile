@@ -686,15 +686,6 @@ Item {
           }
         }
 
-        ComboBox {
-          id: workspaceComboBox
-
-          model: __merginApi.userInfo.workspaces
-          onActivated: function(index) {
-            console.log("Switch to", index)
-          }
-        }
-
         StackLayout {
           id: projectListLayout
 
