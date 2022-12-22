@@ -2615,7 +2615,7 @@ void MerginApi::getBillingInfoFinished()
     if ( doc.isObject() )
     {
       QJsonObject docObj = doc.object();
-      mWorkspaceInfo->setFromJson( docObj );
+      mSubscriptionInfo->setFromJson( docObj );
     }
   }
   else
@@ -2624,7 +2624,7 @@ void MerginApi::getBillingInfoFinished()
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getBillingInfo" ), r->errorString(), serverMsg );
     CoreUtils::log( "billing info", QStringLiteral( "FAILED - %1" ).arg( message ) );
     mWorkspaceInfo->clear();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getWorkspaceInfo" ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getBillingInfo" ) );
   }
 
   r->deleteLater();
