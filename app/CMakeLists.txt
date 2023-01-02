@@ -71,6 +71,8 @@ set(MM_SRCS
     synchronizationmanager.cpp
     valuerelationfeaturesmodel.cpp
     variablesmanager.cpp
+    workspacesmodel.cpp
+    workspacesproxymodel.cpp
 )
 
 set(MM_HDRS
@@ -142,6 +144,8 @@ set(MM_HDRS
     synchronizationoptions.h
     valuerelationfeaturesmodel.h
     variablesmanager.h
+    workspacesmodel.h
+    workspacesproxymodel.h
 )
 
 if (HAVE_BLUETOOTH)

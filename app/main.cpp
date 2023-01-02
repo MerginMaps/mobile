@@ -120,6 +120,9 @@
 #include "layer/layerdetaildata.h"
 #include "layer/layerdetaillegendimageprovider.h"
 
+#include "workspacesmodel.h"
+#include "workspacesproxymodel.h"
+
 #include <QQuickStyle>
 
 #ifndef NDEBUG
@@ -266,6 +269,8 @@ void initDeclarative()
   qmlRegisterType<ProjectsModel>( "lc", 1, 0, "ProjectsModel" );
   qmlRegisterType<ProjectsProxyModel>( "lc", 1, 0, "ProjectsProxyModel" );
   qmlRegisterType<AttributePreviewController>( "lc", 1, 0, "AttributePreviewController" );
+  qmlRegisterType<WorkspacesModel>( "lc", 1, 0, "WorkspacesModel" );
+  qmlRegisterType<WorkspacesProxyModel>( "lc", 1, 0, "WorkspacesProxyModel" );
   qmlRegisterUncreatableType<AttributePreviewModel>( "lc", 1, 0, "AttributePreviewModel", "" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
   qRegisterMetaType< FeatureLayerPair >( "FeatureLayerPair" );

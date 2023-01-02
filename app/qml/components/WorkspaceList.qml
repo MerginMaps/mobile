@@ -23,8 +23,7 @@ Item {
   signal workspaceChanged()
 
   onSearchTextChanged: {
-    console.log("text changed")
-    //viewModel.searchExpression = root.searchText
+    proxyModel.searchExpression = root.searchText
   }
 
   ListView {
@@ -34,17 +33,15 @@ Item {
     clip: true
     maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
 
-/*
     // Proxy model with source projects model
-    model: WorkspaceProxyModel {
-      id: viewModel
+    model: WorkspacesProxyModel {
+      id: proxyModel
 
-      workspaceSourceModel: WorkspaceModel {
-        id: controllerModel
+      sourceModel: WorkspacesModel {
+        id: model
 
         merginApi: __merginApi
       }
     }
-*/
   }
 }
