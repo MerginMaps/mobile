@@ -32,6 +32,7 @@ set(MM_QML
     components/TextRowWithTitle.qml
     components/TextWithIcon.qml
     components/ToolbarButton.qml
+    components/WorkspaceList.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
     dialogs/NoPermissionsDialog.qml
@@ -122,6 +123,7 @@ set(MM_QML
     StorageLimitDialog.qml
     SubscribePage.qml
     SubscribePlanItem.qml
+    SwitchWorkspacePage.qml
     main.qml
     PARENT_SCOPE
 )

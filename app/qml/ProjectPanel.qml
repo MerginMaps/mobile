@@ -686,10 +686,34 @@ Item {
           }
         }
 
+        Button {
+          id: switchWorkspaceButton
+
+          anchors {
+              left: parent.left
+              right: parent.right
+          }
+
+          contentItem: Text {
+            text: __merginApi.workspaceInfo.activeWorkspace + " > "
+            horizontalAlignment : Text.AlignLeft
+          }
+
+          onClicked: {
+            console.log("clicked")
+            stackView.push(workspaceListComponent)
+          }
+        }
+
         StackLayout {
           id: projectListLayout
 
-          anchors.fill: parent
+          anchors {
+              left: parent.left
+              right: parent.right
+              top: switchWorkspaceButton.bottom
+              bottom: parent.bottom
+          }
           currentIndex: pageFooter.currentIndex
 
           ProjectListPage {
@@ -974,6 +998,19 @@ Item {
     ProjectWizardPage {
       id: projectWizardPanel
       objectName: "projectWizard"
+      height: root.height
+      width: root.width
+      onBack: {
+        stackView.popOnePageOrClose()
+      }
+    }
+  }
+
+  Component {
+    id: workspaceListComponent
+
+    SwitchWorkspacePage {
+      id: switchWorkspacePanel
       height: root.height
       width: root.width
       onBack: {
