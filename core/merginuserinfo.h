@@ -36,6 +36,8 @@ class MerginUserInfo: public QObject
     QString activeWorkspace() const;
     QStringList workspaces() const;
 
+    Q_INVOKABLE int workspaceId( const QString &workspace );
+
     void saveWorkspacesData();
     void loadWorkspacesData();
 

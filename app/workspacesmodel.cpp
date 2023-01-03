@@ -12,7 +12,7 @@
 WorkspacesModel::WorkspacesModel( QObject *parent )
   : QStandardItemModel( parent )
 {
-  rebuild();
+  connect( this, &WorkspacesModel::merginApiChanged, this, &WorkspacesModel::rebuild );
 }
 
 WorkspacesModel::~WorkspacesModel() = default;

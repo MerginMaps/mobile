@@ -695,12 +695,11 @@ Item {
           }
 
           contentItem: Text {
-            text: __merginApi.workspaceInfo.activeWorkspace + " > "
+            text: __merginApi.userInfo.activeWorkspace + " > "
             horizontalAlignment : Text.AlignLeft
           }
 
           onClicked: {
-            console.log("clicked")
             stackView.push(workspaceListComponent)
           }
         }

@@ -8,18 +8,18 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQuick.Controls
 import lc 1.0
 
 import "./components"
 import "./misc"
 
-Item {
+Page {
   signal back
 
   id: switchWorkspacePanel
-  visible: true
 
-  PanelHeader {
+  header: PanelHeader {
     id: header
     height: InputStyle.rowHeightHeader
     width: parent.width
@@ -31,7 +31,6 @@ Item {
     onBack: {
       switchWorkspacePanel.back()
     }
-
   }
 
   SearchBar {

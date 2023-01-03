@@ -112,7 +112,7 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
   {
     query.addQueryItem( "flag", flag );
   }
-  query.addQueryItem( "order_params", QStringLiteral( "namespace_asc,name_asc" ) );
+  //query.addQueryItem( "order_params", QStringLiteral( "namespace_asc,name_asc" ) );
   // Required query parameters
   query.addQueryItem( "page", QString::number( page ) );
   query.addQueryItem( "per_page", QString::number( PROJECT_PER_PAGE ) );
@@ -796,7 +796,7 @@ void MerginApi::getWorkspaceInfo()
     return;
   }
 
-  QString urlString = mApiRoot + QStringLiteral( "v1/workspace/%1" ).arg( mUserInfo->activeWorkspace() );
+  QString urlString = mApiRoot + QStringLiteral( "v1/workspace/%1" ).arg( mUserInfo->workspaceId( mUserInfo->activeWorkspace() ) );
   QNetworkRequest request = getDefaultRequest();
   QUrl url( urlString );
   request.setUrl( url );

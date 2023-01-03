@@ -26,9 +26,11 @@ class WorkspacesModel : public QStandardItemModel
     explicit WorkspacesModel( QObject *parent = nullptr );
     virtual ~WorkspacesModel();
 
-    void rebuild();
     MerginApi *merginApi() const;
     void setMerginApi( MerginApi *merginApi );
+
+  public slots:
+    void rebuild();
 
   signals:
     void merginApiChanged( MerginApi *api );

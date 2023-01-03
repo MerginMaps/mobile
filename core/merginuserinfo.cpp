@@ -145,6 +145,7 @@ int MerginUserInfo::findActiveWorkspace( int preferredWorkspace )
     }
   }
 
+  setActiveWorkspace( workspace );
   return workspace;
 }
 
@@ -163,4 +164,10 @@ void MerginUserInfo::setActiveWorkspace( int newWorkspace )
   settings.endGroup();
 
   emit activeWorkspaceChanged();
+  emit userInfoChanged();
+}
+
+int MerginUserInfo::workspaceId( const QString &workspace )
+{
+  return mWorkspaces.key( workspace, -1 );
 }
