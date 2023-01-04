@@ -689,6 +689,7 @@ Item {
         Button {
           id: switchWorkspaceButton
 
+          visible: __merginApi.serverType != MerginServerType.CE
           anchors {
               left: parent.left
               right: parent.right
