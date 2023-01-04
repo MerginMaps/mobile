@@ -519,7 +519,7 @@ class MerginApi: public QObject
     void serverTypeChanged();
 
     void listWorkspacesFailed();
-    void listWorkspacesFinished( const QStringList &workspaces );
+    void listWorkspacesFinished( const QMap<int, QString> &workspaces );
 
   private slots:
     void listProjectsReplyFinished( QString requestId );

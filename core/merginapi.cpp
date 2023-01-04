@@ -3312,10 +3312,11 @@ void MerginApi::listWorkspacesReplyFinished()
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isArray() )
     {
-      QStringList workspaces;
+      QMap<int, QString> workspaces;
       for ( auto it = doc.array().constBegin(); it != doc.array().constEnd(); ++it )
       {
-        workspaces << it->toObject().value( QStringLiteral( "name" ) ).toString();
+        QJsonObject ws = it->toObject();
+        workspaces.insert( ws.value( QStringLiteral( "id" ) ).toInt(), ws.value( QStringLiteral( "name" ) ).toString() );
       }
 
       emit listWorkspacesFinished( workspaces );
