@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import lc 1.0
 
+import "."
 import "./components"
 import "./misc"
 
@@ -55,6 +56,19 @@ Page {
       right: parent.right
       top: searchBar.bottom
       bottom: parent.bottom
+    }
+  }
+
+  DelegateButton {
+    id: createWorkspaceButton
+
+    width: parent.width
+    height: InputStyle.fieldHeight
+    anchors.centerIn: parent
+
+    text: qsTr("Create new workspace")
+    onClicked: {
+      console.log("create workspace clicked")
     }
   }
 }
