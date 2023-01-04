@@ -3338,6 +3338,60 @@ void MerginApi::listWorkspacesReplyFinished()
   r->deleteLater();
 }
 
+void MerginApi::listInvitations()
+{
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  {
+    emit listInvitationsFailed();
+    return;
+  }
+
+  QUrl url( mApiRoot + QStringLiteral( "/v1/workspace/invitations" ) );
+  QNetworkRequest request = getDefaultRequest( mUserAuth->hasAuthData() );
+  request.setUrl( url );
+
+  QNetworkReply *reply = mManager.get( request );
+  CoreUtils::log( "list invitations", QStringLiteral( "Requesting: " ) + url.toString() );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::listInvitationsReplyFinished );
+}
+
+void MerginApi::listInvitationsReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( "list invitations", QStringLiteral( "Success" ) );
+    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    if ( doc.isArray() )
+    {
+      QMap<QString, QString> invitations;
+      for ( auto it = doc.array().constBegin(); it != doc.array().constEnd(); ++it )
+      {
+        QJsonObject inv = it->toObject();
+        invitations.insert( inv.value( QStringLiteral( "uuid" ) ).toString(), inv.value( QStringLiteral( "workspace" ) ).toString() );
+      }
+
+      emit listInvitationsFinished( invitations );
+    }
+    else
+    {
+      emit listInvitationsFailed();
+    }
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "listInvitations" ), r->errorString(), serverMsg );
+    CoreUtils::log( "list invitations", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: listInvitations" ) );
+    emit listInvitationsFailed();
+  }
+
+  r->deleteLater();
+}
+
 DownloadQueueItem::DownloadQueueItem( const QString &fp, int s, int v, int rf, int rt, bool diff )
   : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )
 {

@@ -463,7 +463,21 @@ class MerginApi: public QObject
     MerginServerType::ServerType serverType() const;
     void setServerType( const MerginServerType::ServerType &serverType );
 
+    /**
+     * Sends non-blocking GET request to the server to list user workspaces.
+     * On listWorkspacesReplyFinished, when a response is received, parses
+     * workspaces json and emits signal with a QMap<int, QString> containing
+     * workspace id and name.
+     */
     void listWorkspaces();
+
+    /**
+     * Sends non-blocking GET request to the server to list available
+     * invitations. On listInvitationsReplyFinished, when a response is
+     * received, parses invitations json and emits signal with a
+     * QMap<QString, QString> containing invitation uuid and name.
+     */
+    void listInvitations();
 
   signals:
     void apiSupportsSubscriptionsChanged();
@@ -521,6 +535,9 @@ class MerginApi: public QObject
     void listWorkspacesFailed();
     void listWorkspacesFinished( const QMap<int, QString> &workspaces );
 
+    void listInvitationsFailed();
+    void listInvitationsFinished( const QMap<QString, QString> &workspaces );
+
   private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
@@ -557,6 +574,7 @@ class MerginApi: public QObject
 
     void getServerTypeReplyFinished();
     void listWorkspacesReplyFinished();
+    void listInvitationsReplyFinished();
 
   private:
     MerginProject parseProjectMetadata( const QJsonObject &project );
