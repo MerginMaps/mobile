@@ -39,5 +39,5 @@ void WorkspacesProxyModel::setSourceModel( WorkspacesModel *sourceModel )
     return;
 
   mModel = sourceModel;
-  setSourceModel( mModel );
+  QSortFilterProxyModel::setSourceModel( mModel );
 }

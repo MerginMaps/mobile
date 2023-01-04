@@ -29,7 +29,7 @@ Item {
   ListView {
     id: listview
 
-    anchors.fill: parent
+    anchors.fill: root
     clip: true
     maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
 
@@ -43,12 +43,13 @@ Item {
         merginApi: __merginApi
       }
     }
-  }
 
-/*
-  Rectangle {
-    anchors.fill: parent
-    color: "red"
+    spacing: 10
+
+    delegate: Rectangle {
+      width: 50
+      height: 50
+      color: "red"
+    }
   }
-*/
 }

@@ -15,9 +15,9 @@ import "./components"
 import "./misc"
 
 Page {
-  signal back
+  id: root
 
-  id: switchWorkspacePanel
+  signal back
 
   header: PanelHeader {
     id: header
@@ -29,7 +29,7 @@ Page {
     withBackButton: true
 
     onBack: {
-      switchWorkspacePanel.back()
+      root.back()
     }
   }
 
