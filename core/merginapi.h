@@ -479,6 +479,13 @@ class MerginApi: public QObject
      */
     void listInvitations();
 
+    /**
+    * Accepts or discards an invitaion to join workspace.
+    * \param uuid Invitation UUID
+    * \param accept Whether user accepted invitation
+    */
+    Q_INVOKABLE void processInvitation( const QString &uuid, bool accept );
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -538,6 +545,9 @@ class MerginApi: public QObject
     void listInvitationsFailed();
     void listInvitationsFinished( const QMap<QString, QString> &workspaces );
 
+    void processInvitationFailed();
+    void processInvitationFinished();
+
   private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
@@ -575,6 +585,7 @@ class MerginApi: public QObject
     void getServerTypeReplyFinished();
     void listWorkspacesReplyFinished();
     void listInvitationsReplyFinished();
+    void processInvitationReplyFinished();
 
   private:
     MerginProject parseProjectMetadata( const QJsonObject &project );

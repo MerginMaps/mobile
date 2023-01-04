@@ -3392,6 +3392,53 @@ void MerginApi::listInvitationsReplyFinished()
   r->deleteLater();
 }
 
+void MerginApi::processInvitation( const QString &uuid, bool accept )
+{
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  {
+    emit processInvitationFailed();
+    return;
+  }
+
+  QNetworkRequest request = getDefaultRequest( false );
+  QString urlString = mApiRoot + QStringLiteral( "v1/workspace/invitation/%1" ).arg( uuid );
+  QUrl url( urlString );
+  request.setUrl( url );
+  request.setRawHeader( "Content-Type", "application/json" );
+
+  QJsonDocument jsonDoc;
+  QJsonObject jsonObject;
+  jsonObject.insert( QStringLiteral( "accept" ), accept );
+  jsonDoc.setObject( jsonObject );
+  QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
+  QNetworkReply *reply = mManager.post( request, json );
+  CoreUtils::log( "process invitation", QStringLiteral( "Requesting: " ) + url.toString() );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::processInvitationReplyFinished );
+}
+
+void MerginApi::processInvitationReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( "process invitation", QStringLiteral( "Success" ) );
+    emit processInvitationFinished();
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "processInvitation" ), r->errorString(), serverMsg );
+    CoreUtils::log( "process invitation", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: processInvitation" ) );
+    emit processInvitationFailed();
+  }
+
+  r->deleteLater();
+}
+
+
 DownloadQueueItem::DownloadQueueItem( const QString &fp, int s, int v, int rf, int rt, bool diff )
   : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )
 {
