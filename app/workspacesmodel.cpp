@@ -25,12 +25,14 @@ void WorkspacesModel::rebuild()
 
   if ( mApi )
   {
-    QStringList workspaces = mApi->userInfo()->workspaces();
-
-    for ( const QString &w : workspaces )
+    QMap<int, QString> workspaces = mApi->userInfo()->workspaces();
+    QMap<int, QString>::const_iterator it = workspaces.constBegin();
+    while ( it != workspaces.constEnd() )
     {
-      QStandardItem *item = new QStandardItem( w );
+      QStandardItem *item = new QStandardItem( it.value() );
+      item->setData( it.key() );
       appendRow( item );
+      ++it;
     }
   }
 

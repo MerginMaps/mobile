@@ -63,14 +63,19 @@ QString MerginUserInfo::email() const
   return mEmail;
 }
 
-QString MerginUserInfo::activeWorkspace() const
+QString MerginUserInfo::activeWorkspaceName() const
 {
   return mWorkspaces.value( mActiveWorkspace );
 }
 
-QStringList MerginUserInfo::workspaces() const
+int MerginUserInfo::activeWorkspaceId() const
 {
-  return mWorkspaces.values();
+  return mActiveWorkspace;
+}
+
+QMap<int, QString> MerginUserInfo::workspaces() const
+{
+  return mWorkspaces;
 }
 
 void MerginUserInfo::saveWorkspacesData()
@@ -165,9 +170,4 @@ void MerginUserInfo::setActiveWorkspace( int newWorkspace )
 
   emit activeWorkspaceChanged();
   emit userInfoChanged();
-}
-
-int MerginUserInfo::workspaceId( const QString &workspace )
-{
-  return mWorkspaces.key( workspace, -1 );
 }

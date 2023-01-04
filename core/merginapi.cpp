@@ -93,7 +93,7 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
     return QString();
   }
 
-  QString workspace = mUserInfo->activeWorkspace();
+  QString workspace = mUserInfo->activeWorkspaceName();
 
   QUrlQuery query;
   if ( !workspace.isEmpty() )
@@ -796,7 +796,7 @@ void MerginApi::getWorkspaceInfo()
     return;
   }
 
-  QString urlString = mApiRoot + QStringLiteral( "v1/workspace/%1" ).arg( mUserInfo->workspaceId( mUserInfo->activeWorkspace() ) );
+  QString urlString = mApiRoot + QStringLiteral( "v1/workspace/%1" ).arg( mUserInfo->activeWorkspaceId() );
   QNetworkRequest request = getDefaultRequest();
   QUrl url( urlString );
   request.setUrl( url );
@@ -813,7 +813,7 @@ void MerginApi::getBillingInfo()
     return;
   }
 
-  QString urlString = mApiRoot + QStringLiteral( "v1/workspace/%1/service" ).arg( mUserInfo->activeWorkspace() );
+  QString urlString = mApiRoot + QStringLiteral( "v1/workspace/%1/service" ).arg( mUserInfo->activeWorkspaceId() );
   QNetworkRequest request = getDefaultRequest();
   QUrl url( urlString );
   request.setUrl( url );

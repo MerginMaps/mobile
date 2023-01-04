@@ -22,8 +22,7 @@ class MerginUserInfo: public QObject
 {
     Q_OBJECT
     Q_PROPERTY( QString email READ email NOTIFY userInfoChanged )
-    Q_PROPERTY( QString activeWorkspace READ activeWorkspace NOTIFY userInfoChanged )
-    Q_PROPERTY( QStringList workspaces READ workspaces NOTIFY userInfoChanged )
+    Q_PROPERTY( QString activeWorkspace READ activeWorkspaceName NOTIFY userInfoChanged )
 
   public:
     explicit MerginUserInfo( QObject *parent = nullptr );
@@ -33,10 +32,9 @@ class MerginUserInfo: public QObject
     void setFromJson( QJsonObject docObj );
 
     QString email() const;
-    QString activeWorkspace() const;
-    QStringList workspaces() const;
-
-    Q_INVOKABLE int workspaceId( const QString &workspace );
+    QString activeWorkspaceName() const;
+    int activeWorkspaceId() const;
+    QMap<int, QString> workspaces() const;
 
     void saveWorkspacesData();
     void loadWorkspacesData();
