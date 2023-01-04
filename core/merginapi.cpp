@@ -96,7 +96,7 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
   QString workspace = mUserInfo->activeWorkspaceName();
 
   QUrlQuery query;
-  if ( !workspace.isEmpty() )
+  if ( !workspace.isEmpty() && !flag.isEmpty() )
   {
     query.addQueryItem( "only_namespace", workspace );
   }
