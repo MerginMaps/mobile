@@ -486,6 +486,12 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void processInvitation( const QString &uuid, bool accept );
 
+    /**
+    * Creates a new workspace on Mergin server.
+    * \param workspaceName
+    */
+    Q_INVOKABLE bool createWorkspace( const QString &workspaceName );
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -548,6 +554,8 @@ class MerginApi: public QObject
     void processInvitationFailed();
     void processInvitationFinished();
 
+    void workspaceCreated( const QString &workspaceName, bool result );
+
   private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
@@ -586,6 +594,7 @@ class MerginApi: public QObject
     void listWorkspacesReplyFinished();
     void listInvitationsReplyFinished();
     void processInvitationReplyFinished();
+    void createWorkspaceReplyFinished();
 
   private:
     MerginProject parseProjectMetadata( const QJsonObject &project );
@@ -690,6 +699,7 @@ class MerginApi: public QObject
     {
       AttrProjectFullName = QNetworkRequest::User,
       AttrTempFileName    = QNetworkRequest::User + 1,
+      AttrWorkspaceName   = QNetworkRequest::User + 2,
     };
 
     Transactions mTransactionalStatus; //projectFullname -> transactionStatus

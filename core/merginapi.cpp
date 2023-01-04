@@ -3438,6 +3438,65 @@ void MerginApi::processInvitationReplyFinished()
   r->deleteLater();
 }
 
+bool MerginApi::createWorkspace( const QString &workspaceName )
+{
+  if ( !validateAuth() )
+  {
+    emit missingAuthorizationError( workspaceName );
+    return false;
+  }
+
+  if ( mApiVersionStatus != MerginApiStatus::OK )
+  {
+    return false;
+  }
+
+  QNetworkRequest request = getDefaultRequest();
+  QUrl url( mApiRoot + QString( "/v1/workspace" ) );
+  request.setUrl( url );
+  request.setRawHeader( "Content-Type", "application/json" );
+  request.setRawHeader( "Accept", "application/json" );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrWorkspaceName ), workspaceName );
+
+  QJsonDocument jsonDoc;
+  QJsonObject jsonObject;
+  jsonObject.insert( QStringLiteral( "name" ), workspaceName );
+  jsonDoc.setObject( jsonObject );
+  QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
+
+  QNetworkReply *reply = mManager.post( request, json );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::createWorkspaceReplyFinished );
+  CoreUtils::log( "create " + workspaceName, QStringLiteral( "Requesting workspace creation: " ) + url.toString() );
+
+  return true;
+}
+
+void MerginApi::createWorkspaceReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  QString workspaceName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrWorkspaceName ) ).toString();
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( "create " + workspaceName, QStringLiteral( "Success" ) );
+    emit workspaceCreated( workspaceName, true );
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
+    CoreUtils::log( "create " + workspaceName, message );
+
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+
+    emit workspaceCreated( workspaceName, false );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName );
+  }
+  r->deleteLater();
+}
+
 
 DownloadQueueItem::DownloadQueueItem( const QString &fp, int s, int v, int rf, int rt, bool diff )
   : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )
