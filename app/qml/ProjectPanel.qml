@@ -1018,4 +1018,17 @@ Item {
       }
     }
   }
+
+  Component {
+    id: createWorkspaceComponent
+
+    CreateWorkspacePage {
+      id: createWorkspacePanel
+      height: root.height
+      width: root.width
+      onBack: {
+        stackView.popOnePageOrClose()
+      }
+    }
+  }
 }

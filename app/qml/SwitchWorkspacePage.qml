@@ -68,7 +68,7 @@ Page {
 
     text: qsTr("Create new workspace")
     onClicked: {
-      console.log("create workspace clicked")
+      stackView.push(createWorkspaceComponent)
     }
   }
 }

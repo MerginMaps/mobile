@@ -93,6 +93,7 @@ set(MM_QML
     CodeReaderHandler.qml
     CodeScanner.qml
     CodeScannerOverlay.qml
+    CreateWorkspacePage.qml
     ExternalResourceBundle.qml
     FeaturesList.qml
     FeaturesListPage.qml
