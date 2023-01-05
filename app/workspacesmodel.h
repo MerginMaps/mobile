@@ -20,22 +20,33 @@ class WorkspacesModel : public QStandardItemModel
     Q_OBJECT
 
     Q_PROPERTY( MerginApi *merginApi READ merginApi WRITE setMerginApi NOTIFY merginApiChanged )
+    Q_PROPERTY( bool isLoading READ isLoading NOTIFY isLoadingChanged )
 
   public:
 
     explicit WorkspacesModel( QObject *parent = nullptr );
     virtual ~WorkspacesModel();
 
+    Q_INVOKABLE void listWorkspaces();
+
     MerginApi *merginApi() const;
     void setMerginApi( MerginApi *merginApi );
 
+    bool isLoading() const;
+
   public slots:
-    void rebuild();
+    void onListWorkspacesFinished( const QMap<int, QString> &workspaces );
 
   signals:
     void merginApiChanged( MerginApi *api );
+    void isLoadingChanged( bool isLoading );
+    void modelInitialized();
 
   private:
+    void setModelIsLoading( bool state );
+    void initializeModel();
+
+    bool mModelIsLoading;
     MerginApi *mApi = nullptr; // not owned
 };
 

@@ -52,4 +52,13 @@ Item {
       color: "red"
     }
   }
+
+  Component {
+    id: loadingSpinnerComponent
+
+    LoadingSpinner {
+      x: parent.width / 2 - width / 2
+      running: sourceModel.isLoading
+    }
+  }
 }

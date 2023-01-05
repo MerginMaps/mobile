@@ -12,31 +12,48 @@
 WorkspacesModel::WorkspacesModel( QObject *parent )
   : QStandardItemModel( parent )
 {
-  connect( this, &WorkspacesModel::merginApiChanged, this, &WorkspacesModel::rebuild );
+  connect( this, &WorkspacesModel::merginApiChanged, this, &WorkspacesModel::initializeModel );
 }
 
 WorkspacesModel::~WorkspacesModel() = default;
 
-void WorkspacesModel::rebuild()
+void WorkspacesModel::initializeModel()
+{
+  if ( !mApi )
+  {
+    return;
+  }
+
+  QObject::connect( mApi, &MerginApi::listWorkspacesFinished, this, &WorkspacesModel::onListWorkspacesFinished );
+  listWorkspaces();
+
+  emit modelInitialized();
+}
+
+void WorkspacesModel::listWorkspaces()
+{
+  mApi->listWorkspaces();
+  setModelIsLoading( true );
+}
+
+void WorkspacesModel::onListWorkspacesFinished( const QMap<int, QString> &workspaces )
 {
   beginResetModel();
 
   clear();
 
-  if ( mApi )
+  QMap<int, QString>::const_iterator it = workspaces.constBegin();
+  while ( it != workspaces.constEnd() )
   {
-    QMap<int, QString> workspaces = mApi->userInfo()->workspaces();
-    QMap<int, QString>::const_iterator it = workspaces.constBegin();
-    while ( it != workspaces.constEnd() )
-    {
-      QStandardItem *item = new QStandardItem( it.value() );
-      item->setData( it.key() );
-      appendRow( item );
-      ++it;
-    }
+    QStandardItem *item = new QStandardItem( it.value() );
+    item->setData( it.key() );
+    appendRow( item );
+    ++it;
   }
 
   endResetModel();
+
+  setModelIsLoading( false );
 }
 
 MerginApi *WorkspacesModel::merginApi() const
@@ -51,4 +68,15 @@ void WorkspacesModel::setMerginApi( MerginApi *merginApi )
 
   mApi = merginApi;
   emit merginApiChanged( mApi );
+}
+
+bool WorkspacesModel::isLoading() const
+{
+  return mModelIsLoading;
+}
+
+void WorkspacesModel::setModelIsLoading( bool state )
+{
+  mModelIsLoading = state;
+  emit isLoadingChanged( mModelIsLoading );
 }
