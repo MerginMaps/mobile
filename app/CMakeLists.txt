@@ -54,6 +54,8 @@ set(MM_SRCS
     inputhelp.cpp
     inputprojutils.cpp
     inpututils.cpp
+    invitationsmodel.cpp
+    invitationsproxymodel.cpp
     layersmodel.cpp
     layersproxymodel.cpp
     main.cpp
@@ -127,6 +129,8 @@ set(MM_HDRS
     inputhelp.h
     inputprojutils.h
     inpututils.h
+    invitationsmodel.h
+    invitationsproxymodel.h
     layersmodel.h
     layersproxymodel.h
     mapthemesmodel.h

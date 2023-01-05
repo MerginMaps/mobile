@@ -122,6 +122,8 @@
 
 #include "workspacesmodel.h"
 #include "workspacesproxymodel.h"
+#include "invitationsmodel.h"
+#include "invitationsproxymodel.h"
 
 #include <QQuickStyle>
 
@@ -271,6 +273,8 @@ void initDeclarative()
   qmlRegisterType<AttributePreviewController>( "lc", 1, 0, "AttributePreviewController" );
   qmlRegisterType<WorkspacesModel>( "lc", 1, 0, "WorkspacesModel" );
   qmlRegisterType<WorkspacesProxyModel>( "lc", 1, 0, "WorkspacesProxyModel" );
+  qmlRegisterType<InvitationsModel>( "lc", 1, 0, "InvitationsModel" );
+  qmlRegisterType<InvitationsProxyModel>( "lc", 1, 0, "InvitationsProxyModel" );
   qmlRegisterUncreatableType<AttributePreviewModel>( "lc", 1, 0, "AttributePreviewModel", "" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
   qRegisterMetaType< FeatureLayerPair >( "FeatureLayerPair" );
