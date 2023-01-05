@@ -37,7 +37,7 @@ Item {
     model: WorkspacesProxyModel {
       id: proxyModel
 
-      sourceModel: WorkspacesModel {
+      workspacesSourceModel: WorkspacesModel {
         id: model
 
         merginApi: __merginApi

@@ -20,18 +20,18 @@ class WorkspacesProxyModel : public QSortFilterProxyModel
     Q_OBJECT
 
     Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression NOTIFY searchExpressionChanged )
-    Q_PROPERTY( WorkspacesModel *sourceModel READ sourceModel WRITE setSourceModel )
+    Q_PROPERTY( WorkspacesModel *workspacesSourceModel READ workspacesSourceModel WRITE setWorkspacesSourceModel )
 
   public:
     explicit WorkspacesProxyModel( QObject *parent = nullptr );
     ~WorkspacesProxyModel() override {};
 
     QString searchExpression() const;
-    WorkspacesModel *sourceModel() const;
+    WorkspacesModel *workspacesSourceModel() const;
 
   public slots:
     void setSearchExpression( QString searchExpression );
-    void setSourceModel( WorkspacesModel *sourceModel );
+    void setWorkspacesSourceModel( WorkspacesModel *sourceModel );
 
   signals:
     void searchExpressionChanged( QString searchExpression );

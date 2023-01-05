@@ -18,7 +18,7 @@ QString WorkspacesProxyModel::searchExpression() const
   return mSearchExpression;
 }
 
-WorkspacesModel *WorkspacesProxyModel::sourceModel() const
+WorkspacesModel *WorkspacesProxyModel::workspacesSourceModel() const
 {
   return mModel;
 }
@@ -33,11 +33,11 @@ void WorkspacesProxyModel::setSearchExpression( QString searchExpression )
   emit searchExpressionChanged( mSearchExpression );
 }
 
-void WorkspacesProxyModel::setSourceModel( WorkspacesModel *sourceModel )
+void WorkspacesProxyModel::setWorkspacesSourceModel( WorkspacesModel *sourceModel )
 {
   if ( mModel == sourceModel )
     return;
 
   mModel = sourceModel;
-  QSortFilterProxyModel::setSourceModel( mModel );
+  setSourceModel( mModel );
 }
