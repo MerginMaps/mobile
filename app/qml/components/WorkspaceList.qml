@@ -58,7 +58,7 @@ Item {
 
     LoadingSpinner {
       x: parent.width / 2 - width / 2
-      running: sourceModel.isLoading
+      running: workspacesSourceModel.isLoading
     }
   }
 }
