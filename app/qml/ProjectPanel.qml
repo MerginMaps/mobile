@@ -899,9 +899,14 @@ Item {
         function onAuthChanged() {
           stackView.pending = false
           if ( __merginApi.userAuth.hasAuthData() ) {
-            stackView.popOnePageOrClose()
-            projectsPage.refreshProjectList()
-            root.forceActiveFocus()
+              if (__merginApi.userInfo.activeWorkspace == "") {
+                stackView.popOnePageOrClose()
+                stackView.push(createWorkspaceComponent)
+              } else {
+                stackView.popOnePageOrClose()
+                projectsPage.refreshProjectList()
+                root.forceActiveFocus()
+            }
           }
         }
         function onAuthFailed() {
