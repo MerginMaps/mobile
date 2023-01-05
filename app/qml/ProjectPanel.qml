@@ -913,6 +913,9 @@ Item {
         function onRegistrationSucceeded() {
           stackView.pending = false
         }
+        function onActiveWorkspaceChanged() {
+          projectsPage.refreshProjectList()
+        }
       }
     }
   }

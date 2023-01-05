@@ -529,6 +529,7 @@ class MerginApi: public QObject
     void userInfoChanged();
     void workspaceInfoChanged();
     void subscriptionInfoChanged();
+    void activeWorkspaceChanged();
     void configChanged();
     void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
     void pullFilesStarted();
