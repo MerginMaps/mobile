@@ -10,6 +10,7 @@ set(MM_QML
     components/InputComboBox.qml
     components/InputText.qml
     components/InputTextField.qml
+    components/InvitationList.qml
     components/LayerList.qml
     components/LeftCheckBox.qml
     components/LoadingSpinner.qml
