@@ -104,6 +104,7 @@ set(MM_QML
     LogPanel.qml
     LoginForm.qml
     MainPanel.qml
+    ManageInvitationsPage.qml
     MapThemePanel.qml
     Notification.qml
     NotificationBanner.qml
