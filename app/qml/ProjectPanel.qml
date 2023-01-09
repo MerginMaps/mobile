@@ -1039,4 +1039,17 @@ Item {
       }
     }
   }
+
+  Component {
+    id: manageInvitationsComponent
+
+    ManageInvitationsPage {
+      id: manageInvitationsPanel
+      height: root.height
+      width: root.width
+      onBack: {
+        stackView.popOnePageOrClose()
+      }
+    }
+  }
 }
