@@ -15,8 +15,8 @@ MessageDialog {
 
   signal installRequested()
 
-  text: qsTr( "Install scanner application" )
-  informativeText: qsTr( "You will be redirected to Google Play to install the Barcode Scanner app." )
+  title: qsTr( "Install scanner application" )
+  text: qsTr( "You will be redirected to Google Play to install the Barcode Scanner app." ) + "\n\n" + qsTr( "After the Barcode Scanner app is installed, close it and switch back to Mergin Maps." )
 
   buttons: MessageDialog.Ok
 
