@@ -15,10 +15,10 @@ on:
       - published
 
 env:
-  QT_VERSION: 6.4.1
-  INPUT_SDK_VERSION: mac-20221117-113
+  QT_VERSION: 6.4.2
+  INPUT_SDK_VERSION: mac-20230106-115
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 1
+  CACHE_VERSION: 0
   XC_VERSION: ${{ '13.2.1' }}
 
 concurrency:
