@@ -16,3 +16,5 @@ app/android/assets/projects/
 *.gpkg-shm
 Input_keystore.keystore
 CMakeLists.txt.user
+app/android/.gradle/*
+app/android/.gradle

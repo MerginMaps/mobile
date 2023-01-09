@@ -29,28 +29,20 @@ public class InputActivity extends QtActivity
     //
     // QT app exit on back button causes crashes on some manufacturers (mainly Huawei, but also Samsung Galaxy recently).
     //
-    // Let's play safe and only use this fix for HUAWEI phones for now.
-    // If the fix proves itself in next release, we can add it for all other manufacturers.
-    //
     // Qt bug: QTBUG-82617
     // See: https://developernote.com/2022/03/crash-at-std-thread-and-std-mutex-destructors-on-android/#comment-694101
     // See: https://stackoverflow.com/questions/61321845/qt-app-crashes-at-the-destructor-of-stdthread-on-android-10-devices
     //
 
-    boolean shouldQuit = man.contains( "HUAWEI" );
-
-    if ( shouldQuit )
+    try
     {
-      try
-      {
-        finishAffinity();
-        System.exit(0);
-      }
-      catch ( Exception exp )
-      {
-        exp.printStackTrace();
-        Log.d( TAG, String.format( "quitGracefully() failed to execute: '%s'", exp.toString() ) );
-      }
+      finishAffinity();
+      System.exit(0);
+    }
+    catch ( Exception exp )
+    {
+      exp.printStackTrace();
+      Log.d( TAG, String.format( "quitGracefully() failed to execute: '%s'", exp.toString() ) );
     }
   }
 

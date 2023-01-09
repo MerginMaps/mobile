@@ -11,6 +11,7 @@
 
 #ifdef ANDROID
 #include <QtCore/private/qandroidextras_p.h>
+#include <QCoreApplication>
 #include <QJniObject>
 #include <QJniEnvironment>
 #include <QDebug>
@@ -408,6 +409,38 @@ void AndroidUtils::callImagePicker()
 #endif
 }
 
+void AndroidUtils::installQRCodeScanner()
+{
+#ifdef ANDROID
+
+  QJniObject activity = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.InstallScannerActivity" ) );
+  QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;)V", activity.object<jstring>() );
+
+  QJniObject packageName = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting" ) );
+  QJniObject className = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.InstallScannerActivity" ) );
+
+  intent.callObjectMethod( "setClassName", "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;", packageName.object<jstring>(), className.object<jstring>() );
+
+  QtAndroidPrivate::startActivity( intent, INSTALL_QR_SCANNER_CODE, this );
+#endif
+}
+
+void AndroidUtils::scanQRCode()
+{
+#ifdef ANDROID
+
+  QJniObject activity = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.ScannerActivity" ) );
+  QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;)V", activity.object<jstring>() );
+
+  QJniObject packageName = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting" ) );
+  QJniObject className = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.ScannerActivity" ) );
+
+  intent.callObjectMethod( "setClassName", "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;", packageName.object<jstring>(), className.object<jstring>() );
+
+  QtAndroidPrivate::startActivity( intent, QR_SCAN_CODE, this );
+#endif
+}
+
 void AndroidUtils::callCamera( const QString &targetPath )
 {
 #ifdef ANDROID
@@ -451,7 +484,6 @@ void AndroidUtils::callCamera( const QString &targetPath )
 #ifdef ANDROID
 void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode, const QJniObject &data )
 {
-
   jint RESULT_OK = QJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_OK" );
   jint RESULT_CANCELED = QJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_CANCELED" );
 
@@ -466,6 +498,44 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
       emit bluetoothEnabled( false );
     }
 
+    return;
+  }
+
+  if ( receiverRequestCode == QR_SCAN_CODE )
+  {
+    const QJniObject key = QJniObject::fromString( "message" );
+    const QJniObject rawResponse = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", key.object() );
+
+    QString response;
+
+    if ( rawResponse.isValid() )
+    {
+      response = rawResponse.toString();
+    }
+
+    CoreUtils::log( QStringLiteral( "AndroidUtils" ), QStringLiteral( "Scan activity finished, raw value: %1, success: %2" ).arg( response ).arg( resultCode ) );
+
+    if ( resultCode == RESULT_OK )
+    {
+      emit qrScanFinished( response );
+    }
+    else
+    {
+      if ( response == "not_installed" )
+      {
+        emit qrScannerMissing();
+      }
+      else
+      {
+        emit qrScanAborted();
+      }
+    }
+
+    return;
+  }
+
+  if ( receiverRequestCode == INSTALL_QR_SCANNER_CODE )
+  {
     return;
   }
 

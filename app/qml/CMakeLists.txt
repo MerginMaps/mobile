@@ -37,6 +37,7 @@ set(MM_QML
     dialogs/NoPermissionsDialog.qml
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
+    dialogs/InstallScannerAppDialog.qml
     editor/AbstractEditor.qml
     editor/RelationPhotoDelegate.qml
     editor/RelationPhotoFooterDelegate.qml

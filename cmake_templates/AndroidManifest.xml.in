@@ -98,6 +98,16 @@
              <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
         </activity>
 
+        <activity android:process=":qt" android:name=".ScannerActivity" android:label="-- %%INSERT_APP_NAME%% --">
+            <!-- android:process=":qt" is needed to force the service to run on a separate process than the Activity -->
+          <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+        </activity>
+        
+        <activity android:process=":qt" android:name=".InstallScannerActivity" android:label="-- %%INSERT_APP_NAME%% --">
+            <!-- android:process=":qt" is needed to force the service to run on a separate process than the Activity -->
+          <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+        </activity>
+
         <provider android:name="androidx.core.content.FileProvider" android:authorities="uk.co.lutraconsulting.fileprovider" android:exported="false" android:grantUriPermissions="true">
              <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths">
              </meta-data>
