@@ -55,11 +55,18 @@ Item {
       height: parent.height
       width: actionAllowed ? parent.height : 0
 
-      MouseArea {
+      Item {
         width: leftActionContainer.actionAllowed ? parent.width + customStyle.fields.sideMargin : parent.width
         x: leftActionContainer.actionAllowed ? parent.x - customStyle.fields.sideMargin : parent.x
         height: parent.height
-        onClicked: root.leftActionClicked()
+
+        TapHandler {
+          onPressedChanged: {
+            if ( !pressed ) {
+              root.leftActionClicked()
+            }
+          }
+        }
       }
     }
 
@@ -72,10 +79,10 @@ Item {
       height: parent.height
       width: parent.width - ( leftActionContainer.width + rightActionContainer.width )
 
-      MouseArea {
-        width: parent.width
-        height: parent.height
-        onClicked: root.contentClicked()
+      TapHandler {
+        onSingleTapped: {
+          root.contentClicked()
+        }
       }
     }
 
@@ -90,10 +97,17 @@ Item {
       height: parent.height
       width: actionAllowed > 0 ? parent.height : 0
 
-      MouseArea {
+      Item {
         width: rightActionContainer.actionAllowed ? parent.width + customStyle.fields.sideMargin : parent.width
         height: parent.height
-        onClicked: root.rightActionClicked()
+
+        TapHandler {
+          onPressedChanged: {
+            if ( !pressed ) {
+              root.rightActionClicked()
+            }
+          }
+        }
       }
     }
   }

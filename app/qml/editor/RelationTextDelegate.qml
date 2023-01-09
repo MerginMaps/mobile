@@ -30,7 +30,12 @@ Item {
     return -1 // after last line ~> invisible
   }
 
-  property bool isVisible: {
+  signal clicked( var feature )
+
+  height: customStyle.relationComponent.textDelegateHeight
+  width: childrenRect.width
+
+  visible: {
     if ( itemsLine === 0 ) return true
     if ( itemsLine === 1 ) {
       // this is last line, we want to make sure that I can fit to line with "Add" icon and "More" icon
@@ -38,17 +43,8 @@ Item {
         return true
     }
 
-    root.setInvisible()
     return false
   }
-
-  signal clicked( var feature )
-  signal setInvisible()
-
-  height: customStyle.relationComponent.textDelegateHeight
-  width: childrenRect.width
-
-  visible: isVisible
 
   Rectangle {
     id: textDelegateContent

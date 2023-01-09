@@ -680,6 +680,13 @@ void MerginApi::registerUser( const QString &username,
     return;
   }
 
+  if ( !CoreUtils::isValidName( username ) )
+  {
+    emit registrationFailed();
+    emit notify( tr( "Username contains invalid characters" ) );
+    return;
+  }
+
   if ( email.isEmpty() || !email.contains( '@' ) || !email.contains( '.' ) )
   {
     emit registrationFailed();
@@ -3041,9 +3048,9 @@ void MerginApi::deleteAccountFinished()
   }
   else
   {
-    int statusCode = r->attribute( QNetworkRequest::HttpReasonPhraseAttribute ).toInt();
+    int statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
     QString serverMsg = extractServerErrorMsg( r->readAll() );
-    CoreUtils::log( "delete account " + mUserAuth->username(), QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+    CoreUtils::log( "delete account " + mUserAuth->username(), QStringLiteral( "FAILED - %1 %2. %3" ).arg( statusCode ).arg( r->errorString() ).arg( serverMsg ) );
     if ( statusCode == 422 )
     {
       emit userIsAnOrgOwnerError();

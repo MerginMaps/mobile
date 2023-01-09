@@ -17,4 +17,6 @@ MessageDialog {
   text: qsTr( "You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard." )
 
   buttons: MessageDialog.Ok
+
+  onButtonClicked: close()
 }

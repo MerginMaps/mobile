@@ -20,7 +20,6 @@
 #include "qgsvectorlayereditbuffer.h"
 
 #include "position/positionkit.h"
-#include "variablesmanager.h"
 #include "coreutils.h"
 
 #include <QUndoStack>
@@ -77,15 +76,9 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
   if ( !mActiveFeature.isValid() )
   {
-    QgsAttributes attrs( mActiveLayer->fields().count() );
-    QgsExpressionContext context = mActiveLayer->createExpressionContext();
-    if ( mVariablesManager )
-    {
-      context << mVariablesManager->positionScope();
-    }
-
     QgsGeometry geometry = InputUtils::createGeometryForLayer( mActiveLayer );
-    mActiveFeature = QgsVectorLayerUtils::createFeature( mActiveLayer, geometry, attrs.toMap(), &context );
+    mActiveFeature = QgsFeature();
+    mActiveFeature.setFields( mActiveLayer->fields(), true );
     mRecordedGeometry = mActiveFeature.geometry();
 
     mActiveLayer->startEditing();
@@ -1642,19 +1635,4 @@ void RecordingMapTool::setActiveFeature( const QgsFeature &newActiveFeature )
 
   mActiveFeature = newActiveFeature;
   emit activeFeatureChanged( mActiveFeature );
-}
-
-VariablesManager *RecordingMapTool::variablesManager() const
-{
-  return mVariablesManager;
-}
-
-void RecordingMapTool::setVariablesManager( VariablesManager *newVariablesManager )
-{
-  if ( mVariablesManager == newVariablesManager )
-    return;
-
-  mVariablesManager = newVariablesManager;
-
-  emit variablesManagerChanged( mVariablesManager );
 }

@@ -1,4 +1,4 @@
-name: macOS Build
+name: Auto Tests
 on:
   push:
     paths:
@@ -6,15 +6,17 @@ on:
     - 'core/**'
     - 'scripts/**'
     - 'cmake/**'
+    - 'test/**'
     - 'cmake_templates/**'
     - 'CMakeLists.txt'
-    - '.github/workflows/macos.yml'
+    - '.github/workflows/tests.yml'
 
   release:
     types:
       - published
 
 env:
+  TEST_MERGIN_URL: https://test.dev.merginmaps.com/
   QT_VERSION: 6.4.1
   INPUT_SDK_VERSION: mac-20221117-113
   CCACHE_DIR: /Users/runner/work/ccache
@@ -22,11 +24,11 @@ env:
   XC_VERSION: ${{ '13.2.1' }}
 
 concurrency:
-  group: ci-${{github.ref}}-macos
+  group: ci-${{github.ref}}-tests
   cancel-in-progress: true
 
 jobs:
-  macos_build:
+  auto_test:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-11
     steps:
@@ -62,13 +64,13 @@ jobs:
         if: github.event_name == 'pull_request'
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: build-mac-ccache-${{ github.actor }}-${{ github.head_ref }}-${{ github.sha }}
+          key: build-tests-ccache-${{ github.actor }}-${{ github.head_ref }}-${{ github.sha }}
           # The head_ref or source branch of the pull request in a workflow run.
           # The base_ref or target branch of the pull request in a workflow run.
           restore-keys: |
-            build-mac-ccache-${{ github.actor }}-${{ github.head_ref }}-
-            build-mac-ccache-refs/heads/${{ github.base_ref }}-
-            build-mac-ccache-refs/heads/master-
+            build-tests-ccache-${{ github.actor }}-${{ github.head_ref }}-
+            build-tests-ccache-refs/heads/${{ github.base_ref }}-
+            build-tests-ccache-refs/heads/master-
 
       - name: Prepare build cache for branch/tag
         # use a fork of actions/cache@v2 to upload cache even when the build or test failed
@@ -77,10 +79,10 @@ jobs:
         with:
           path: ${{ env.CCACHE_DIR }}
           # The branch or tag ref that triggered the workflow run. For branches this in the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
-          key: build-mac-ccache-${{ github.ref }}-${{ github.sha }}
+          key: build-tests-ccache-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
-            build-mac-ccache-${{ github.ref }}-
-            build-mac-ccache-refs/heads/master-
+            build-tests-ccache-${{ github.ref }}-
+            build-tests-ccache-refs/heads/master-
 
       - name: Install ccache
         run: |
@@ -125,41 +127,39 @@ jobs:
 
             echo "Version code: ${BUILD_NUM}"
             
-      - name: build Input
+      - name: build Input (Debug)
         run: |
-          mkdir -p install-Input
-          mkdir -p build-Input-rel
-          cd build-Input-rel
-
+          mkdir -p build-Input
+          cd build-Input
+          
           cmake \
-             -DCMAKE_BUILD_TYPE=Release \
-             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${QT_VERSION}/macos \
-             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
+             -DCMAKE_BUILD_TYPE=Debug \
+             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
              -DUSE_SERVER_API_KEY=TRUE \
              -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
+             -DCOVERAGE=TRUE \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+             -DENABLE_TESTS=TRUE \
              -GNinja \
              -S ../input
-          
-          ninja  
-          ninja install
+             
+          ninja
 
-      - name: Get TimeStamp
-        id: time
-        uses: josStorer/get-current-time@v2.0.2
-        with:
-          format: 'YYYYMMDD'
-
-      - name: package Input.app
+      - name: run tests
         run: |
-          INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.tar.gz
-          echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
-          cd ${{ github.workspace }}/install-Input
-          find .
-          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} "./Input.app"
+          cd build-Input/
+          ctest --output-on-failure
 
-      - name: Upload Sdk in Artifacts
-        uses: actions/upload-artifact@v3
+      - name: build lcov summary
+        run: |
+          cd build-Input
+          lcov --directory . --capture --output-file coverage.info
+          lcov --remove coverage.info '*input-sdk/*' '*Qt/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input/*' --output-file coverage.info
+          lcov --list coverage.info
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
         with:
-          path: ${{ github.workspace }}/${{ env.INPUT_TAR }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: build-Input/coverage.info

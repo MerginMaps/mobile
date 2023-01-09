@@ -80,7 +80,7 @@ QString InputTests::initTestingDir()
 {
   // override the path where local projects are stored
   // and wipe the temporary projects dir if it already exists
-  QDir testDataDir( STR( INPUT_TEST_DATA_DIR ) );  // #defined in input.pro
+  QDir testDataDir( TEST_DATA_DIR );
   QDir testProjectsDir( testDataDir.path() + "/../temp_projects" );
   if ( testProjectsDir.exists() )
     testProjectsDir.removeRecursively();
@@ -202,7 +202,7 @@ int InputTests::runTest() const
    * WARNING:
    *
    * when you are adding new test here in the list, add
-   * it also to scripts/run_all_tests.bash
+   * it also to test/CMakeLists.txt
    *
    */
 

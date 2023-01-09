@@ -17,7 +17,7 @@ import QtQml.Models
 import QtPositioning
 import QtQuick.Dialogs
 
-import Qt.labs.settings 1.0
+import Qt.labs.settings
 
 import lc 1.0 as InputClass
 import "./map"
@@ -174,6 +174,22 @@ ApplicationWindow {
           // if feature preview panel is opened
           return formsStackManager.takenVerticalSpace - mainPanel.height
         }
+        else if ( stateManager.state === "projects" || stateManager.state === "misc" )
+        {
+          //
+          // Due to an upstream bug in Qt, see #2387 and #2425 for more info
+          //
+          return window.height
+        }
+        else if ( gpsDataPageLoader.active )
+        {
+          //
+          // Block also GPS data page clicks propagation.
+          // Due to an upstream bug in Qt, see #2387 and #2425 for more info
+          //
+          return window.height
+        }
+
         return 0
       }
 
@@ -463,7 +479,6 @@ ApplicationWindow {
             // if we are in stakeout mode
             stakeoutPanelLoader.item.hide()
           }
-          stateManager.state = "misc"
         }
         else
         {
@@ -472,7 +487,6 @@ ApplicationWindow {
             // user closed GPS panel and we are in stakeout mode - reopen stakeout panel
             stakeoutPanelLoader.item.restore()
           }
-          stateManager.state = "map"
         }
       }
     }
@@ -565,6 +579,7 @@ ApplicationWindow {
           if (clickedButton === MessageDialog.Help) {
             Qt.openUrlExternally(__inputHelp.howToSetupProj)
           }
+          close()
         }
     }
 
@@ -644,16 +659,12 @@ ApplicationWindow {
       buttons: MessageDialog.Close | MessageDialog.Help
 
       onButtonClicked: function(button, role) {
-        switch (button) {
-          case MessageDialog.Close:
-            projectErrorDialog.close()
-            break;
-          case MessageDialog.Help:
-            Qt.openUrlExternally(__inputHelp.projectLoadingErrorHelpLink)
-            break;
+        if ( button === MessageDialog.Help ) {
+          Qt.openUrlExternally(__inputHelp.projectLoadingErrorHelpLink)
         }
         projectLoadingScreen.visible = false
         projectPanel.openPanel()
+        close()
       }
     }
 

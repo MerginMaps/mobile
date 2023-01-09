@@ -55,7 +55,6 @@ Item {
 
       property real fullLineWidth: flowItemView.width // full line width - first lines
       property real lastLineShorterWidth: flowItemView.width - addChildButton.width - ( showMoreButton.visible ? showMoreButton.width : 0 )
-      property int invisibleItemsCounter: 0
 
       states: [
         State {
@@ -102,7 +101,12 @@ Item {
         spacing: customStyle.relationComponent.flowSpacing
 
         Repeater {
+          id: generator
+
           model: rmodel
+
+          property int invisibleItemsCount: 0
+
           delegate: RelationTextDelegate {
             firstLinesMaxWidth: flowItemView.width
             lastLineMaxWidth: flowItemView.width / 2
@@ -110,15 +114,29 @@ Item {
             onClicked: function( feature ) {
               root.openLinkedFeature( feature )
             }
-            onSetInvisible: textModeContainer.invisibleItemsCounter++
+
+            onVisibleChanged: generator.recalculateVisibleItems()
+          }
+
+          function recalculateVisibleItems() {
+            let invisibles_count = 0
+
+            for ( let i = 0; i < generator.count; i++ ) {
+              let delegate_i = generator.itemAt( i )
+              if ( delegate_i && !delegate_i.visible ) {
+                invisibles_count++
+              }
+            }
+
+            generator.invisibleItemsCount = invisibles_count
           }
         }
 
         RelationTextDelegate {
           id: showMoreButton
 
-          isVisible: textModeContainer.invisibleItemsCounter > 0
-          text: qsTr( "%1 more" ).arg( textModeContainer.invisibleItemsCounter )
+          visible: generator.invisibleItemsCount > 0
+          text: qsTr( "%1 more" ).arg( generator.invisibleItemsCount )
 
           firstLinesMaxWidth: textModeContainer.fullLineWidth
           lastLineMaxWidth: firstLinesMaxWidth
@@ -134,7 +152,7 @@ Item {
           id: addChildButton
 
           text: "+ " + qsTr( "Add" )
-          isVisible: !root.parent.readOnly
+          visible: !root.parent.readOnly
 
           backgroundContent.color: customStyle.relationComponent.tagBackgroundColorButtonAlt
           backgroundContent.border.color: customStyle.relationComponent.tagBorderColorButton
@@ -172,7 +190,9 @@ Item {
 
         model: rmodel
         delegate: RelationPhotoDelegate {
-          onClicked: root.openLinkedFeature( feature )
+          onClicked: function ( feature ) {
+            root.openLinkedFeature( feature )
+          }
 
           height: ListView.view.height
           width: height
@@ -204,7 +224,7 @@ Item {
       }
 
       onAddFeatureClicked: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
-      onSelectionFinished: {
+      onSelectionFinished: function( featureIds ) {
         let clickedFeature = featuresModel.convertRoleValue( FeaturesModel.FeatureId, featureIds, FeaturesModel.FeaturePair )
         root.openLinkedFeature( clickedFeature )
       }

@@ -34,14 +34,18 @@ Rectangle {
     color: root.isHighlighted ? fontColor : backgroundColor
     opacity: root.faded ? 0.6 : 1
 
-    MouseArea {
+    Item {
         anchors.fill: parent
         enabled: root.enabled && handleClicks
-        onClicked: {
-            root.activated()
-        }
-        onPressAndHold: {
-            root.activatedOnHold()
+
+        TapHandler {
+            onTapped: function(eventPoint, button) {
+                root.activated()
+            }
+
+            onLongPressed: {
+                root.activatedOnHold()
+            }
         }
     }
 

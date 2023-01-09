@@ -8,16 +8,15 @@ FieldsModel::FieldsModel( QObject *parent )
 
 bool FieldsModel::addField( const QString &name, const QString &widgetType )
 {
-
   if ( contains( name ) )
   {
     if ( name.isEmpty() )
     {
-      notify( tr( "Please fill a name of previous field before adding a new field." ) );
+      emit notify( tr( "Please fill a name of previous field before adding a new field." ) );
     }
     else
     {
-      notify( tr( "Field %1 already exists." ).arg( name ) );
+      emit notify( tr( "Field %1 already exists." ).arg( name ) );
     }
     return false;
   }
@@ -108,14 +107,13 @@ bool FieldsModel::setData( const QModelIndex &index, const QVariant &value, int 
   if ( row < 0 || row >= mFields.count() )
     return false;
 
-
   switch ( role )
   {
     case AttributeName:
     {
       if ( contains( value.toString() ) )
       {
-        notify( tr( "Field %1 already exists. \nWon't be added to the project." ).arg( value.toString() ) );
+        emit notify( tr( "Field %1 already exists. \nWon't be added to the project." ).arg( value.toString() ) );
       }
       mFields[row].attributeName = value.toString();
       emit dataChanged( index, index, {AttributeName} );

@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Shapes 1.3
+import QtQuick.Shapes
 import Input 0.1
 import lc 1.0
 
@@ -49,7 +49,6 @@ Item {
     positionKit: __positionKit
     activeLayer: __activeLayer.vectorLayer
     activeFeature: root.activeFeature
-    variablesManager: __variablesManager
 
     // Bind variables manager to know if we are centered to GPS or not when evaluating position variables
     onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition

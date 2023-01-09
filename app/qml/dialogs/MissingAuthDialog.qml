@@ -24,5 +24,6 @@ MessageDialog {
     if ( clickedButton === MessageDialog.Yes ) {
       root.singInRequested()
     }
+    close()
   }
 }

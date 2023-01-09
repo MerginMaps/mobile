@@ -237,9 +237,9 @@ Rectangle {
       font.pixelSize: InputStyle.fontPixelSizeBig
       anchors.horizontalCenter: parent.horizontalCenter
       onClicked: {
-        stackView.pending = true
-        __merginApi.registerUser(registerName.text, email.text, passwordField.password.text,
-                                 passwordConfirmField.password.text, acceptTOC.checked)
+          stackView.pending = true
+          __merginApi.registerUser(registerName.text, email.text, passwordField.password.text,
+                                   passwordConfirmField.password.text, acceptTOC.checked)
       }
       background: Rectangle {
         color: InputStyle.highlightColor

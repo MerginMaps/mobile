@@ -664,7 +664,7 @@ Item {
           id: captionmetrics
 
           font: backtext.font
-          text: "Back"
+          text: qsTr( "Back" )
           elide: backtext.elide
           elideWidth: backtext.maxTextWidth
         }
@@ -701,9 +701,7 @@ Item {
       if ( clickedButton === MessageDialog.Yes ) {
         recordingToolsLoader.item.discardChanges()
       }
-      else if ( clickedButton === MessageDialog.No ) {
-        cancelEditDialog.close()
-      }
+      cancelEditDialog.close()
     }
   }
 

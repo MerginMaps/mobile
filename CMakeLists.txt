@@ -14,11 +14,13 @@ set(QT_VERSION_DEFAULT "6.4.1")
 # Qt6AndroidMacros.cmake
 if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
   set(ANDROIDAPI "24")
-  set(QT_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
   set(ANDROID_PLATFORM "android-${ANDROIDAPI}")
   set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}")
   set(ANDROID_STL "c++_shared")
-  set(QT_ANDROID_TARGET_SDK_VERSION "31")
+
+  # Target/Minimum API levels for Android, used as Input target properties
+  set(INPUT_ANDROID_TARGET_SDK_VERSION "31")
+  set(INPUT_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
 endif ()
 
 if (IOS)
@@ -325,13 +327,14 @@ endif ()
 add_compile_definitions(HAVE_WIDGETS)
 
 # QGIS defines
-add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_PREFIX_PATH=${QGIS_PREFIX_PATH}>")
+# add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_PREFIX_PATH=${QGIS_PREFIX_PATH}>")
 add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_QUICK_EXPAND_TEST_DATA>")
 
 # Generate inputconfig.h
 if (ENABLE_TESTS)
   set(INPUT_TEST TRUE)
-  set(TEST_DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test/test_data")
+  file(COPY test/test_data DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test/)
+  set(TEST_DATA_DIR "${CMAKE_CURRENT_BINARY_DIR}/test/test_data")
 endif ()
 
 if (HAVE_PURCHASING)
@@ -390,9 +393,19 @@ endif ()
 
 add_subdirectory(core)
 add_subdirectory(app)
+if (ENABLE_TESTS)
+  add_subdirectory(test)
+endif ()
 
 # ########################################################################################
 # INSTALL
 # ########################################################################################
 
-include(InstallStep)
+if (WIN
+    OR LNX
+    OR MACOS
+)
+  # qt_add_executable on Android automatically creates target for apk/aab on IOS we use
+  # xcodebuild to build ipa
+  include(InstallStep)
+endif ()

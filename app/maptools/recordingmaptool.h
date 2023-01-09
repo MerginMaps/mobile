@@ -22,7 +22,6 @@
 #include "qgsvectorlayer.h"
 #include "position/positionkit.h"
 #include "inpututils.h"
-#include "variablesmanager.h"
 
 class PositionKit;
 class QgsVectorLayer;
@@ -106,7 +105,6 @@ class RecordingMapTool : public AbstractMapTool
 
     Q_PROPERTY( bool canUndo READ canUndo WRITE setCanUndo NOTIFY canUndoChanged )
     Q_PROPERTY( QgsFeature activeFeature READ activeFeature WRITE setActiveFeature NOTIFY activeFeatureChanged )
-    Q_PROPERTY( VariablesManager *variablesManager READ variablesManager WRITE setVariablesManager NOTIFY variablesManagerChanged )
 
   public:
 
@@ -244,9 +242,6 @@ class RecordingMapTool : public AbstractMapTool
     const QgsFeature &activeFeature() const;
     void setActiveFeature( const QgsFeature &newActiveFeature );
 
-    VariablesManager *variablesManager() const;
-    void setVariablesManager( VariablesManager *newVariablesManager );
-
   signals:
     void activeLayerChanged( QgsVectorLayer *activeLayer );
     void centeredToGPSChanged( bool centeredToGPS );
@@ -272,7 +267,6 @@ class RecordingMapTool : public AbstractMapTool
 
     void canUndoChanged( bool canUndo );
     void activeFeatureChanged( const QgsFeature &activeFeature );
-    void variablesManagerChanged( VariablesManager *variablesManager );
 
   public slots:
     void onPositionChanged();
@@ -356,7 +350,6 @@ class RecordingMapTool : public AbstractMapTool
 
     bool mCanUndo = false;
     QgsFeature mActiveFeature;
-    VariablesManager *mVariablesManager = nullptr; // not owned
 
     int mMinUndoStackIndex = 0; // We can not undo more than this index
 };

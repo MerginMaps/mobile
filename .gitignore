@@ -12,6 +12,7 @@ input.pro.user*
 app/android/assets/qgis-data/proj_custom/
 app/android/assets/qgis-data/projects/
 app/android/assets/projects/
+app/android/AndroidManifest.xml
 *.gpkg-wal
 *.gpkg-shm
 Input_keystore.keystore

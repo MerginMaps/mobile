@@ -151,39 +151,18 @@ jobs:
           nmake
           
           IF NOT EXIST Input.exe (echo err_INPUT_BUILD & exit /b 1)
-                              
-      - name: Get TimeStamp
-        id: time
-        uses: josStorer/get-current-time@v2.0.2
-        with:
-          format: 'YYYYMMDD'
-
-      - name: create package folder
+                                          
+      - name: Install Input
         shell: cmd
         run: |
-            mkdir C:\input-package
-            mkdir C:\input-package\stage
-            C: 
-            cd C:\input-package\stage 
-            set INPUT_BUILD_DIR="%GITHUB_WORKSPACE%\build-Input"
-            set INPUT_SOURCE_DIR="%GITHUB_WORKSPACE%\input"
-            set PACKAGE_DIR=C:\input-package
-            set INPUT_SDK_DIR=%GITHUB_WORKSPACE%\input-sdk
-            %GITHUB_WORKSPACE%\input\scripts\package_win.cmd 
+            cd build-Input
+            nmake install 
             
-      - name: create package folder
-        shell: cmd
-        run: |
             mkdir C:\input-package
             mkdir C:\input-package\stage
-            C: 
-            cd C:\input-package\stage 
-            set INPUT_BUILD_DIR="%GITHUB_WORKSPACE%\build-Input"
-            set INPUT_SOURCE_DIR="%GITHUB_WORKSPACE%\input"
-            set PACKAGE_DIR=C:\input-package
-            set INPUT_SDK_DIR=%GITHUB_WORKSPACE%\input-sdk
-            %GITHUB_WORKSPACE%\input\scripts\package_win.cmd              
-
+            robocopy ${{ steps.vars.outputs.WORKSPACE_DIR }}/install-Input C:\input-package\stage /E /NFL
+            dir C:\input-package\stage
+            
       - name: Downloading redist
         shell: bash
         run: |
@@ -192,7 +171,13 @@ jobs:
           curl -fsSL --connect-timeout 60 -o \
             /c/input-package/stage/vc_redist.x64.exe \
             ${URL}
-            
+
+      - name: Get TimeStamp
+        id: time
+        uses: josStorer/get-current-time@v2.0.2
+        with:
+          format: 'YYYYMMDD'
+          
       - name: create package
         shell: cmd
         run: |

@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 #include "coreutils.h"
+#include "inputconfig.h"
 
 #include <QDateTime>
 #include <QDebug>
@@ -235,4 +236,11 @@ QString CoreUtils::generateEditConflictFileName( const QString &file, const QStr
 bool CoreUtils::hasProjectFileExtension( const QString filePath )
 {
   return filePath.contains( ".qgs", Qt::CaseInsensitive ) || filePath.contains( ".qgz", Qt::CaseInsensitive );
+}
+
+bool CoreUtils::isValidName( const QString &name )
+{
+  QRegularExpression reForbiddenmNames( R"([@#$%^&*\(\)\{\}\[\]\\\/\|\+=<>~\?:;,`\'\"]|^[\s^\.].*$|^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d|^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$|^sales$|^admin$)", QRegularExpression::CaseInsensitiveOption );
+  QRegularExpressionMatch matchForbiddenNames = reForbiddenmNames.match( name );
+  return !matchForbiddenNames.hasMatch();
 }

@@ -245,7 +245,7 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
       mMapSettings.readXml( node );
 
       if ( !qgsDoubleNear( mMapSettings.rotation(), 0 ) )
-        QgsMessageLog::logMessage( tr( "Map Canvas rotation is not supported. Resetting from %1 to 0." ).arg( mMapSettings.rotation() ) );
+        QgsMessageLog::logMessage( QStringLiteral( "Map Canvas rotation is not supported. Resetting from %1 to 0." ).arg( mMapSettings.rotation() ) );
     }
   }
   if ( !foundTheMapCanvas )
@@ -275,7 +275,7 @@ double InputMapSettings::rotation() const
 void InputMapSettings::setRotation( double rotation )
 {
   if ( !qgsDoubleNear( rotation, 0 ) )
-    QgsMessageLog::logMessage( tr( "Map Canvas rotation is not supported. Resetting from %1 to 0." ).arg( rotation ) );
+    QgsMessageLog::logMessage( QStringLiteral( "Map Canvas rotation is not supported. Resetting from %1 to 0." ).arg( rotation ) );
 }
 
 QColor InputMapSettings::backgroundColor() const

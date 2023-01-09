@@ -323,7 +323,7 @@ Page {
       height: root.height + header.height
       width: root.width
 
-      onInitiatedConnectionTo: function( deviceName, deviceAddress ) {
+      onInitiatedConnectionTo: function( deviceAddress, deviceName ) {
         providersModel.addProvider( deviceName, deviceAddress )
       }
       onClose: root.stackView.pop()
@@ -371,13 +371,14 @@ Page {
     text: qsTr( "Do you want to remove receiver from the list of recent receivers?" )
     buttons: MessageDialog.Ok | MessageDialog.Cancel
 
-    //! Using onButtonClicked instead of onAccepted,onRejected which have been called twice
     onButtonClicked: function(clickedButton) {
       if (clickedButton === MessageDialog.Ok) {
-        if (relatedProviderId === "")
+        if (relatedProviderId === "") {
+          close()
           return
+        }
 
-        if ( __appSettings.activePositionProviderId == relatedProviderId )
+        if ( __appSettings.activePositionProviderId === relatedProviderId )
         {
           // we are removing an active provider, replace it with internal provider
           root.constructProvider( "internal", "devicegps", qsTr( "Internal" ) )
@@ -385,10 +386,8 @@ Page {
 
         providersModel.removeProvider( relatedProviderId )
       }
-      else if (clickedButton === MessageDialog.Cancel) {
-        removeDialog.relatedProviderId = ""
-        visible = false
-      }
+      removeDialog.relatedProviderId = ""
+      close()
     }
   }
 }

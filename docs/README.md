@@ -4,6 +4,8 @@ For user documentation, please read [merginmaps.com/docs](https://merginmaps.com
 
 For setup of development environment, please see [INSTALL](../INSTALL.md).
 
+For translations, please see [translation docs](translations.md).
+
 ## Forms
 
 ![](media/form_models.svg)

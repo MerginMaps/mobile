@@ -37,17 +37,15 @@ void AndroidUtils::showToast( QString message )
 #ifdef ANDROID
   QNativeInterface::QAndroidApplication::runOnAndroidMainThread( [message]()
   {
-    QJniObject activity = QNativeInterface::QAndroidApplication::context();
-    QJniObject javaString = QJniObject::fromString( message );
     QJniObject toast = QJniObject::callStaticObjectMethod(
                          "android.widget.Toast",
                          "makeText",
                          "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
-                         activity.object(),
-                         javaString.object<jstring>(),
+                         QNativeInterface::QAndroidApplication::context(),
+                         QJniObject::fromString( message ).object(),
                          jint( 1 ) );
     toast.callMethod<void>( "show" );
-  } ).waitForFinished();
+  } );
 #else
   Q_UNUSED( message )
 #endif
@@ -65,14 +63,11 @@ bool AndroidUtils::isAndroid() const
 bool AndroidUtils::checkAndAcquirePermissions( const QString &permissionString )
 {
 #ifdef ANDROID
-
-  QFuture<QtAndroidPrivate::PermissionResult> r = QtAndroidPrivate::checkPermission( permissionString );
-  r.waitForFinished();
-  if ( r.result() == QtAndroidPrivate::PermissionResult::Denied )
+  auto r = QtAndroidPrivate::checkPermission( permissionString ).result();
+  if ( r == QtAndroidPrivate::Denied )
   {
-    QFuture<QtAndroidPrivate::PermissionResult> future = QtAndroidPrivate::requestPermission( permissionString );
-    future.waitForFinished();
-    if ( future.result() == QtAndroidPrivate::PermissionResult::Denied )
+    r = QtAndroidPrivate::requestPermission( permissionString ).result();
+    if ( r == QtAndroidPrivate::Denied )
     {
       return false;
     }
@@ -330,11 +325,10 @@ void AndroidUtils::quitApp()
 bool AndroidUtils::requestStoragePermission()
 {
 #ifdef ANDROID
-
   if ( !checkAndAcquirePermissions( "android.permission.READ_EXTERNAL_STORAGE" ) )
   {
     auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-    jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", "android.permission.WRITE_EXTERNAL_STORAGE" );
+    jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", QJniObject::fromString( "android.permission.WRITE_EXTERNAL_STORAGE" ).object() );
     if ( !res )
     {
       // permanently denied permission, user needs to go to settings to allow permission
@@ -346,7 +340,6 @@ bool AndroidUtils::requestStoragePermission()
     }
     return false;
   }
-
 #endif
   return true;
 }
@@ -354,11 +347,10 @@ bool AndroidUtils::requestStoragePermission()
 bool AndroidUtils::requestCameraPermission()
 {
 #ifdef ANDROID
-
   if ( checkAndAcquirePermissions( "android.permission.CAMERA" ) == false )
   {
     auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-    jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", "android.permission.CAMERA" );
+    jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", QJniObject::fromString( "android.permission.CAMERA" ).object() );
     if ( !res )
     {
       // permanently denied permission, user needs to go to settings to allow permission
@@ -444,7 +436,6 @@ void AndroidUtils::scanQRCode()
 void AndroidUtils::callCamera( const QString &targetPath )
 {
 #ifdef ANDROID
-
   if ( !requestCameraPermission() )
   {
     return;
