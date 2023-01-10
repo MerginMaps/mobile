@@ -11,6 +11,8 @@
 #define IMAGEUTILS_H
 
 #include <QString>
+#include <QImage>
+#include <QVideoFrame>
 
 #include "inputconfig.h"
 
@@ -30,6 +32,16 @@ class ImageUtils
      * and preserving EXIF metadata.
      */
     static bool rescale( const QString &path, int quality );
+
+    /**
+     * Rescales given image in memory and returns scaled down copy
+     */
+    static QImage rescale( const QImage &image, int quality );
+
+    /**
+     * Converts QVideoFrame to image and rescales it down to minimum resolution
+     */
+    static QImage rescaledImage( const QVideoFrame &frame );
 };
 
 #endif // IMAGEUTILS_H

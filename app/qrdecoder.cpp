@@ -1,6 +1,5 @@
 #include "qrdecoder.h"
 
-#include <QDebug>
 #include <QImage>
 #include <QtMultimedia/qvideoframe.h>
 #include <QOpenGLContext>
@@ -85,9 +84,6 @@ std::ostream &operator << ( std::ostream &os, const std::vector< ZXing::ResultPo
   return os;
 }
 
-static int mResolutionWidth = DEFAULT_RES_W;
-static int mResolutionHeight = DEFAULT_RES_H;
-
 QRDecoder::QRDecoder( QObject *parent )
   : QObject( parent )
 {
@@ -95,74 +91,27 @@ QRDecoder::QRDecoder( QObject *parent )
 
 void QRDecoder::processImage( const QImage capturedImage )
 {
-  qDebug() << "QRDecoder::processImage";
+  if ( mIsDecoding )
+  {
+    return;
+  }
+
   setIsDecoding( true );
 
   const auto hints = DecodeHints()
                      .setFormats( BarcodeFormat::QRCode | BarcodeFormat::DataMatrix | BarcodeFormat::Codabar |
                                   BarcodeFormat::Code39 | BarcodeFormat::Code93 | BarcodeFormat::Code128 |
                                   BarcodeFormat::EAN8 | BarcodeFormat::EAN13 )
-                     .setTryHarder( true )
-                     .setTryRotate( true )
-                     .setIsPure( false )
-                     .setBinarizer( Binarizer::LocalAverage );
+                     .setTryHarder( true );
 
   const auto result = ReadBarcode( capturedImage, hints );
 
   if ( result.isValid() )
   {
-    qDebug() << "decoded" << result.text();
-    setCapturedString( result.text() );
+    emit codeDecoded( result.text() );
   }
 
   setIsDecoding( false );
-}
-
-QImage QRDecoder::videoFrameToImage( const QVideoFrame &videoFrame, const QRect &captureRect )
-{
-  qDebug() << "QRDecoder::videoFrameToImage";
-  auto handleType = videoFrame.handleType();
-
-  if ( handleType == QVideoFrame::NoHandle )
-  {
-    QImage image = videoFrame.toImage();
-
-    if ( image.isNull() )
-    {
-      return QImage();
-    }
-
-    if ( image.format() != QImage::Format_ARGB32 )
-    {
-      image = image.convertToFormat( QImage::Format_ARGB32 );
-    }
-
-    // QML videooutput has no mapNormalizedRectToItem method
-#ifdef Q_OS_ANDROID
-    return image.copy( mResolutionHeight / 4, mResolutionWidth / 4, mResolutionHeight / 2, mResolutionWidth / 2 );
-#else
-    //return image.copy( captureRect );
-    return image;
-#endif
-  }
-
-  return QImage();
-}
-
-QString QRDecoder::capturedString() const
-{
-  return mCapturedString;
-}
-
-void QRDecoder::setCapturedString( const QString &capturedString )
-{
-  if ( mCapturedString == capturedString )
-  {
-    return;
-  }
-
-  mCapturedString = capturedString;
-  emit capturedStringChanged( mCapturedString );
 }
 
 bool QRDecoder::isDecoding() const
@@ -179,10 +128,4 @@ void QRDecoder::setIsDecoding( bool isDecoding )
 
   mIsDecoding = isDecoding;
   emit isDecodingChanged( mIsDecoding );
-}
-
-void QRDecoder::setResolution( const int &width, const int &height )
-{
-  mResolutionWidth = width;
-  mResolutionHeight = height;
 }

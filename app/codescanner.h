@@ -2,10 +2,7 @@
 #define CODESCANNER_H
 
 #include <QObject>
-#include <QCamera>
 #include <QThread>
-#include <QImageCapture>
-#include <QMediaCaptureSession>
 #include <QVideoSink>
 #include <QPointer>
 
@@ -16,77 +13,62 @@
 class QRWorker;
 
 /**
- * Process a video output from QML Camera by using QRDecoder
+ * Converts frames from videoSink (from QML) to images, rescales them and sends to QRDecoder.
+ * It ignores most of the frames and process only few of them per second.
  */
-class CodeScanner : public QVideoSink
+class CodeScanner : public QObject
 {
     Q_OBJECT
 
     Q_PROPERTY( QVideoSink *videoSink READ videoSink WRITE setVideoSink NOTIFY videoSinkChanged )
-    Q_PROPERTY( QRectF captureRect READ captureRect WRITE setCaptureRect NOTIFY captureRectChanged )
 
   public:
+
     explicit CodeScanner( QObject *parent = nullptr );
     ~CodeScanner() override;
 
-    QRDecoder *decoder() ;
-
     QVideoSink *videoSink() const;
     void setVideoSink( QVideoSink *videoSink );
-    QRectF captureRect() const;
-    void setCaptureRect( const QRectF &captureRect );
-
-    QString capturedString() const;
 
   public slots:
-    void pauseProcessing();
-    void continueProcessing();
-    void setProcessing( bool processing );
-
-    void processImage( QRDecoder *decoder, const QImage &image );
+    void processFrame( const QVideoFrame &frame );
+    void ignoreTimeout();
 
   signals:
-    void cameraChanged();
+    void startProcessing( const QImage &image );
+
+    void codeScanned( const QString &codeData );
     void videoSinkChanged();
-    void captureRectChanged( const QRectF &captureRect );
-    void capturedStringChanged( const QString &captured );
-
-    void process( const QImage &image );
-
-  private slots:
-    void initCamera();
-    void stopCamera();
 
   private:
-    void setCapturedString( const QString &capturedString );
-    void processFrame( const QVideoFrame &frame );
-
-    QRDecoder mDecoder;
-    QCamera *mCamera = nullptr;
     QPointer<QVideoSink> mVideoSink;
-    QRectF mCaptureRect;
-    QString mCapturedString = "";
-    QMediaCaptureSession mCaptureSession;
+
+    QRWorker *mWorker = nullptr; // owned
     QThread mWorkThread;
-    QRWorker *mWorker;
-    bool mProcessing = true;
+
+    bool mIgnoreFrames = false;
+
+    const int IGNORE_TIMER_INTERVAL = 500; // in ms
 };
 
 /**
- * Runs CodeScanner::process() in a separate thread
+ * Runs decoding in a separate thread
  */
 class QRWorker : public QObject
 {
     Q_OBJECT
 
   public:
-    QRWorker( CodeScanner *scanner );
+    QRWorker( QObject *parent = nullptr );
 
   public slots:
     void process( const QImage &image );
 
+  signals:
+    void codeScanned( const QString &scannedValue );
+
   private:
-    CodeScanner *mScanner;
+    QRDecoder mDecoder;
 };
 
 #endif // CODESCANNER_H

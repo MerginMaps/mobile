@@ -13,7 +13,6 @@
 
 #include <QFile>
 #include <QFileInfo>
-#include <QImage>
 
 #include <exiv2/exiv2.hpp>
 
@@ -54,50 +53,8 @@ bool ImageUtils::rescale( const QString &path, int quality )
 {
 
   QImage sourceImage( path );
-  bool isPortrait = sourceImage.height() > sourceImage.width();
-  int size = isPortrait ? sourceImage.width() : sourceImage.height();
 
-  int newSize = size;
-  switch ( quality )
-  {
-    case 0: // original quality, no rescaling needed
-    {
-      break;
-    }
-    case 1: // high quality, output image size ~2-4 Mb
-    {
-      newSize = 3000;
-      break;
-    }
-    case 2: // medium quality, output image size ~1-2 Mb
-    {
-      newSize = 1500;
-      break;
-    }
-    case 3: // low quality, output image size ~0.5 Mb
-    {
-      newSize = 1000;
-      break;
-    }
-  }
-
-  // if image width or height (depending on the orientation) is smaller
-  // than new size we keep original image
-  if ( size <= newSize )
-  {
-    return true;
-  }
-
-  // rescale
-  QImage rescaledImage;
-  if ( isPortrait )
-  {
-    rescaledImage = sourceImage.scaledToWidth( newSize, Qt::SmoothTransformation );
-  }
-  else
-  {
-    rescaledImage = sourceImage.scaledToHeight( newSize, Qt::SmoothTransformation );
-  }
+  QImage rescaledImage = rescale( sourceImage, quality );
 
   if ( rescaledImage.isNull() )
   {
@@ -132,4 +89,73 @@ bool ImageUtils::rescale( const QString &path, int quality )
 
   CoreUtils::log( "rescaling image", QStringLiteral( "Can not replace original file with rescaled version" ) );
   return false;
+}
+
+QImage ImageUtils::rescale( const QImage &sourceImage, int quality )
+{
+  bool isPortrait = sourceImage.height() > sourceImage.width();
+  int size = isPortrait ? sourceImage.width() : sourceImage.height();
+
+  int newSize = size;
+  switch ( quality )
+  {
+    case 0: // original quality, no rescaling needed
+    {
+      break;
+    }
+    case 1: // high quality, output image size ~2-4 Mb
+    {
+      newSize = 3000;
+      break;
+    }
+    case 2: // medium quality, output image size ~1-2 Mb
+    {
+      newSize = 1500;
+      break;
+    }
+    case 3: // low quality, output image size ~0.5 Mb
+    {
+      newSize = 1000;
+      break;
+    }
+  }
+
+  // if image width or height (depending on the orientation) is smaller
+  // than new size we keep original image
+  if ( size <= newSize )
+  {
+    return sourceImage;
+  }
+
+  // rescale
+  QImage rescaledImage;
+  if ( isPortrait )
+  {
+    rescaledImage = sourceImage.scaledToWidth( newSize, Qt::SmoothTransformation );
+  }
+  else
+  {
+    rescaledImage = sourceImage.scaledToHeight( newSize, Qt::SmoothTransformation );
+  }
+
+  return rescaledImage;
+}
+
+QImage ImageUtils::rescaledImage( const QVideoFrame &videoFrame )
+{
+  qDebug() << "ImageUtils::image";
+
+  QImage image = videoFrame.toImage();
+
+  if ( image.isNull() )
+  {
+    return QImage();
+  }
+
+  if ( image.format() != QImage::Format_ARGB32 )
+  {
+    image = image.convertToFormat( QImage::Format_ARGB32 );
+  }
+
+  return rescale( image, 3 );
 }

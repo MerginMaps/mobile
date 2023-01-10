@@ -44,26 +44,20 @@ Page {
 
     camera: Camera {
       id: camera
+
+      active: true
+      focusMode: Camera.FocusModeAutoNear
     }
-    videoOutput: output
+    videoOutput: videoOutput
   }
 
-  VideoOutput {
-    id: output
-
-    fillMode: VideoOutput.PreserveAspectCrop
-  }
-
-/*
   InputClass.CodeScanner {
     id: qrcodeScanner
 
     videoSink: videoOutput.videoSink
 
-    captureRect: Qt.rect(root.width / 4, root.height / 4, root.width / 2, root.height / 2)
-
-    onCapturedStringChanged: function( captured ) {
-      root.scanFinished( captured )
+    onCodeScanned: function( codeData ) {
+      root.scanFinished( codeData )
     }
   }
 
@@ -76,6 +70,7 @@ Page {
     VideoOutput {
       id: videoOutput
 
+      anchors.fill: parent
       fillMode: VideoOutput.PreserveAspectCrop
     }
 
@@ -87,5 +82,4 @@ Page {
       height: root.height - header.height
     }
   }
-*/
 }
