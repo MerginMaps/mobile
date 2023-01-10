@@ -65,7 +65,7 @@ AbstractEditor {
       width: parent.width * 0.6
       sourceSize.width: parent.width * 0.6
 
-      source: customStyle.icons.importData
+      source: InputStyle.qrCodeIcon
       visible: !root.isReadOnly
     }
 

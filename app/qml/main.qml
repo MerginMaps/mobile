@@ -9,11 +9,8 @@
 
 import QtQuick
 import QtQuick.Controls
-
-// Required for iOS to get rid of "module "QtMultimedia" is not installed".
-// It looks like static QT plugins are not copied to the distribution
 import QtMultimedia
-import QtQml.Models
+//import QtQml.Models
 import QtPositioning
 import QtQuick.Dialogs
 
@@ -32,22 +29,6 @@ ApplicationWindow {
     height: __appwindowheight
     visibility: __appwindowvisibility
     title: "Mergin Maps" // Do not translate
-/*
-  CaptureSession {
-    id: captureSession
-
-    camera: Camera {
-      id: camera
-    }
-    videoOutput: output
-  }
-
-  VideoOutput {
-    id: output
-
-    fillMode: VideoOutput.PreserveAspectCrop
-  }
-*/
 
     Item {
       id: stateManager
