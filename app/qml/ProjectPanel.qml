@@ -899,7 +899,11 @@ Item {
         function onAuthChanged() {
           stackView.pending = false
           if ( __merginApi.userAuth.hasAuthData() ) {
-              if (__merginApi.userInfo.activeWorkspace == "") {
+              if (__merginApi.userInfo.hasInvitations) {
+                stackView.popOnePageOrClose()
+                stackView.push(manageInvitationsComponent)
+              }
+              else if (__merginApi.userInfo.activeWorkspace == "") {
                 stackView.popOnePageOrClose()
                 stackView.push(createWorkspaceComponent)
               } else {
@@ -907,6 +911,7 @@ Item {
                 projectsPage.refreshProjectList()
                 root.forceActiveFocus()
             }
+            stackView.pending = false
           }
         }
         function onAuthFailed() {
@@ -921,6 +926,10 @@ Item {
         function onActiveWorkspaceChanged() {
           projectsPage.refreshProjectList()
         }
+        function userInfoChanged() {
+          stackView.pending = false
+        }
+
       }
     }
   }
