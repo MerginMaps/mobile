@@ -35,7 +35,7 @@ class CodeScanner : public QObject
     void ignoreTimeout();
 
   signals:
-    void startProcessing( const QImage &image );
+    void startProcessing( const QVideoFrame &frame );
 
     void codeScanned( const QString &codeData );
     void videoSinkChanged();
@@ -59,10 +59,10 @@ class QRWorker : public QObject
     Q_OBJECT
 
   public:
-    QRWorker( QObject *parent = nullptr );
+    QRWorker();
 
   public slots:
-    void process( const QImage &image );
+    void process( const QVideoFrame &frame );
 
   signals:
     void codeScanned( const QString &scannedValue );

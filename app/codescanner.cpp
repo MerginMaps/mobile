@@ -30,9 +30,7 @@ void CodeScanner::processFrame( const QVideoFrame &frame )
     return;
   }
 
-  QImage image = ImageUtils::rescaledImage( frame );
-
-  emit startProcessing( image );
+  emit startProcessing( frame );
 
   mIgnoreFrames = true;
   QTimer::singleShot( IGNORE_TIMER_INTERVAL, this, &CodeScanner::ignoreTimeout );
@@ -70,12 +68,13 @@ void CodeScanner::setVideoSink( QVideoSink *videoSink )
   emit videoSinkChanged();
 }
 
-QRWorker::QRWorker( QObject *parent ) : QObject( parent )
+QRWorker::QRWorker()
 {
   connect( &mDecoder, &QRDecoder::codeDecoded, this, &QRWorker::codeScanned );
 }
 
-void QRWorker::process( const QImage &image )
+void QRWorker::process( const QVideoFrame &frame )
 {
+  QImage image = ImageUtils::rescaledImage( frame );
   mDecoder.processImage( image );
 }

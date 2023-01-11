@@ -143,8 +143,6 @@ QImage ImageUtils::rescale( const QImage &sourceImage, int quality )
 
 QImage ImageUtils::rescaledImage( const QVideoFrame &videoFrame )
 {
-  qDebug() << "ImageUtils::image";
-
   QImage image = videoFrame.toImage();
 
   if ( image.isNull() )
