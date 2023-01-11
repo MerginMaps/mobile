@@ -53,6 +53,15 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
     }
   }
 
+  if ( docObj.contains( QStringLiteral( "invitations" ) ) )
+  {
+    QJsonArray invitations = docObj.value( "invitations" ).toArray();
+    for ( auto it = invitations.constBegin(); it != invitations.constEnd(); ++it )
+    {
+      mInvitations.append( MerginInvitation::fromJsonObject( it->toObject() ) );
+    }
+  }
+
   saveWorkspacesData();
   findActiveWorkspace( preferredWorkspace );
   emit userInfoChanged();
@@ -76,6 +85,16 @@ int MerginUserInfo::activeWorkspaceId() const
 QMap<int, QString> MerginUserInfo::workspaces() const
 {
   return mWorkspaces;
+}
+
+QList<MerginInvitation> MerginUserInfo::invitations() const
+{
+  return mInvitations;
+}
+
+bool MerginUserInfo::hasInvitations() const
+{
+  return mInvitations.count() > 0;
 }
 
 void MerginUserInfo::saveWorkspacesData()
@@ -170,4 +189,15 @@ void MerginUserInfo::setActiveWorkspace( int newWorkspace )
 
   emit activeWorkspaceChanged();
   emit userInfoChanged();
+}
+
+
+MerginInvitation MerginInvitation::fromJsonObject( const QJsonObject &invitationInfo )
+{
+  MerginInvitation merginInvitation;
+  merginInvitation.uuid = invitationInfo.value( QStringLiteral( "uuid" ) ).toString();
+  merginInvitation.workspace = invitationInfo.value( QStringLiteral( "workspace" ) ).toString();
+  merginInvitation.role = invitationInfo.value( QStringLiteral( "role" ) ).toString();
+
+  return merginInvitation;
 }
