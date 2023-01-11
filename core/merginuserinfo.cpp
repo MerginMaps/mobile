@@ -25,8 +25,6 @@ void MerginUserInfo::clear()
   mActiveWorkspace = -1;
   mWorkspaces.clear();
 
-  saveWorkspacesData();
-
   emit userInfoChanged();
 }
 

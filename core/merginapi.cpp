@@ -934,6 +934,7 @@ void MerginApi::saveAuthData()
   settings.endGroup();
 
   mUserAuth->saveAuthData();
+  mUserInfo->clear();
 }
 
 void MerginApi::createProjectFinished()

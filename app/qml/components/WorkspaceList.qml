@@ -27,7 +27,7 @@ Item {
   }
 
   ListView {
-    id: listview
+    id: listView
 
     anchors.fill: root
     clip: true
@@ -46,10 +46,47 @@ Item {
 
     spacing: 10
 
+    //delegate: delegateItem
     delegate: Rectangle {
       width: 50
       height: 50
       color: "red"
+    }
+  }
+
+  Component {
+    id: delegateItem
+
+    Rectangle {
+      id: itemContainer
+
+      property bool isSelected: __merginApi.userInfo.activeWorkspace === model.display
+
+      width: listView.cellWidth
+      height: listView.cellHeight
+      anchors.leftMargin: InputStyle.panelMargin
+      anchors.rightMargin: InputStyle.panelMargin
+      color: item.highlight ? InputStyle.panelItemHighlight : InputStyle.clrPanelMain
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: {
+          console.log("Change workspace to", model.display)
+          root.close()
+        }
+      }
+
+      ExtendedMenuItem {
+          id: item
+          panelMargin: InputStyle.panelMargin
+          contentText: model.display
+          //imageSource: InputStyle.mapThemesIcon
+          anchors.rightMargin: panelMargin
+          anchors.leftMargin: panelMargin
+          highlight: itemContainer.isSelected
+          // Do not show border line for selected item and one before selected
+          //showBorder: !itemContainer.isSelected && !itemContainer.isOneBeforeSelected
+      }
     }
   }
 
