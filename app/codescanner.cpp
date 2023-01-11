@@ -76,5 +76,9 @@ QRWorker::QRWorker()
 void QRWorker::process( const QVideoFrame &frame )
 {
   QImage image = ImageUtils::rescaledImage( frame );
-  mDecoder.processImage( image );
+
+  if ( !image.isNull() )
+  {
+    mDecoder.processImage( image );
+  }
 }

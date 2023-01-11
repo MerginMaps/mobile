@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtMultimedia
-//import QtQml.Models
+import QtQml.Models
 import QtPositioning
 import QtQuick.Dialogs
 
