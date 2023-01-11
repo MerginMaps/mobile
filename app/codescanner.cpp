@@ -7,7 +7,7 @@
 CodeScanner::CodeScanner( QObject *parent )
   : QObject( parent )
 {
-  mWorker = new QRWorker( this );
+  mWorker = new QRWorker;
   mWorker->moveToThread( &mWorkThread );
 
   connect( this, &CodeScanner::startProcessing, mWorker, &QRWorker::process );
