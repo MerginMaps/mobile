@@ -850,6 +850,7 @@ void MerginApi::clearAuth()
 {
   mUserAuth->clear();
   mUserInfo->clear();
+  mWorkspaceInfo->clear();
   mSubscriptionInfo->clear();
 }
 

@@ -22,6 +22,9 @@ void MerginUserAuth::clear()
   mAuthToken.clear();
   mTokenExpiration.setTime( QTime() );
   mUserId = -1;
+
+  saveAuthData();
+
   emit authChanged();
 }
 
