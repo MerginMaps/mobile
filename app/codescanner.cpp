@@ -1,27 +1,17 @@
 #include "codescanner.h"
 
 #include <QTimer>
+#include <QDebug>
 
-#include "imageutils.h"
+#include <QOpenGLContext>
+#include <QOpenGLFunctions>
 
 CodeScanner::CodeScanner( QObject *parent )
   : QObject( parent )
 {
-  mWorker = new QRWorker;
-  mWorker->moveToThread( &mWorkThread );
-
-  connect( this, &CodeScanner::startProcessing, mWorker, &QRWorker::process );
-  connect( mWorker, &QRWorker::codeScanned, this, &CodeScanner::codeScanned );
-  connect( &mWorkThread, &QThread::finished, mWorker, &QObject::deleteLater );
-
-  mWorkThread.start();
 }
 
-CodeScanner::~CodeScanner()
-{
-  mWorkThread.quit();
-  mWorkThread.wait();
-}
+CodeScanner::~CodeScanner() = default;
 
 void CodeScanner::processFrame( const QVideoFrame &frame )
 {
@@ -30,7 +20,14 @@ void CodeScanner::processFrame( const QVideoFrame &frame )
     return;
   }
 
-  emit startProcessing( frame );
+  QImage image = frame.toImage();
+
+  QString response = mDecoder.processImage( image );
+
+  if ( !response.isEmpty() )
+  {
+    emit codeScanned( response );
+  }
 
   mIgnoreFrames = true;
   QTimer::singleShot( IGNORE_TIMER_INTERVAL, this, &CodeScanner::ignoreTimeout );
@@ -66,19 +63,4 @@ void CodeScanner::setVideoSink( QVideoSink *videoSink )
   }
 
   emit videoSinkChanged();
-}
-
-QRWorker::QRWorker()
-{
-  connect( &mDecoder, &QRDecoder::codeDecoded, this, &QRWorker::codeScanned );
-}
-
-void QRWorker::process( const QVideoFrame &frame )
-{
-  QImage image = ImageUtils::rescaledImage( frame );
-
-  if ( !image.isNull() )
-  {
-    mDecoder.processImage( image );
-  }
 }

@@ -89,11 +89,11 @@ QRDecoder::QRDecoder( QObject *parent )
 {
 }
 
-void QRDecoder::processImage( const QImage capturedImage )
+QString QRDecoder::processImage( const QImage capturedImage )
 {
   if ( mIsDecoding )
   {
-    return;
+    return QString();
   }
 
   setIsDecoding( true );
@@ -106,12 +106,14 @@ void QRDecoder::processImage( const QImage capturedImage )
 
   const auto result = ReadBarcode( capturedImage, hints );
 
+  setIsDecoding( false );
+
   if ( result.isValid() )
   {
-    emit codeDecoded( result.text() );
+    return result.text();
   }
 
-  setIsDecoding( false );
+  return QString();
 }
 
 bool QRDecoder::isDecoding() const

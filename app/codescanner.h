@@ -5,6 +5,7 @@
 #include <QThread>
 #include <QVideoSink>
 #include <QPointer>
+#include <QVideoFrame>
 
 #include "inputconfig.h"
 
@@ -13,7 +14,7 @@
 class QRWorker;
 
 /**
- * Converts frames from videoSink (from QML) to images, rescales them and sends to QRDecoder.
+ * Converts frames from videoSink (from QML) to images and sends to QRDecoder.
  * It ignores most of the frames and process only few of them per second.
  */
 class CodeScanner : public QObject
@@ -43,32 +44,10 @@ class CodeScanner : public QObject
   private:
     QPointer<QVideoSink> mVideoSink;
 
-    QRWorker *mWorker = nullptr; // owned
-    QThread mWorkThread;
-
+    QRDecoder mDecoder;
     bool mIgnoreFrames = false;
 
-    const int IGNORE_TIMER_INTERVAL = 500; // in ms
-};
-
-/**
- * Runs decoding in a separate thread
- */
-class QRWorker : public QObject
-{
-    Q_OBJECT
-
-  public:
-    QRWorker();
-
-  public slots:
-    void process( const QVideoFrame &frame );
-
-  signals:
-    void codeScanned( const QString &scannedValue );
-
-  private:
-    QRDecoder mDecoder;
+    const int IGNORE_TIMER_INTERVAL = 1000; // in ms
 };
 
 #endif // CODESCANNER_H

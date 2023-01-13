@@ -20,7 +20,7 @@ class QRDecoder : public QObject
 
   public slots:
     // read qr code from the image
-    void processImage( const QImage capturedImage );
+    QString processImage( const QImage capturedImage );
 
   signals:
     void isDecodingChanged( bool isDecoding );
