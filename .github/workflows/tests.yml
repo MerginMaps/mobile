@@ -17,11 +17,11 @@ on:
 
 env:
   TEST_MERGIN_URL: https://test.dev.merginmaps.com/
-  QT_VERSION: 6.4.1
-  INPUT_SDK_VERSION: mac-20221117-113
+  QT_VERSION: 6.4.2
+  INPUT_SDK_VERSION: mac-20230109-117
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 1
-  XC_VERSION: ${{ '13.2.1' }}
+  CACHE_VERSION: 2
+  XC_VERSION: ${{ '14.2' }}
 
 concurrency:
   group: ci-${{github.ref}}-tests
@@ -30,7 +30,7 @@ concurrency:
 jobs:
   auto_test:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
       - name: Checkout Input
         uses: actions/checkout@v3

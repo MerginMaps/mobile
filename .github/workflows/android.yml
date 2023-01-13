@@ -21,24 +21,28 @@ concurrency:
 jobs:
   android_build:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-11
+    runs-on: macos-12
     env:
-      QT_VERSION: '6.4.1'
+      QT_VERSION: '6.4.2'
       NDK_VERSION: r23
       NDK_VERSION_FULL: r23b
       JDK_VERSION: 11
       SDK_PLATFORM: android-31
       SDK_BUILD_TOOLS: 31.0.0
-      INPUT_SDK_VERSION: android-macOS-20221117-129
+      INPUT_SDK_VERSION: android-macOS-20230110-133
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-      CACHE_VERSION: 3
+      CACHE_VERSION: 2
       QT_ANDROID_KEYSTORE_ALIAS: input
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
+      XC_VERSION: ${{ '14.2' }}
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Select latest Xcode
+        run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
 
       # CCache
       - name: Prepare build cache for pull request
