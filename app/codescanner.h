@@ -2,7 +2,6 @@
 #define CODESCANNER_H
 
 #include <QObject>
-#include <QThread>
 #include <QVideoSink>
 #include <QPointer>
 #include <QVideoFrame>

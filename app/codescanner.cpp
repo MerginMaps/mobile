@@ -1,10 +1,6 @@
 #include "codescanner.h"
 
 #include <QTimer>
-#include <QDebug>
-
-#include <QOpenGLContext>
-#include <QOpenGLFunctions>
 
 CodeScanner::CodeScanner( QObject *parent )
   : QObject( parent )
