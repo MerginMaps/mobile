@@ -52,6 +52,7 @@ class MerginUserInfo: public QObject
 
     void saveWorkspacesData();
     void loadWorkspacesData();
+    void clearCachedWorkspacesInfo();
 
     int findActiveWorkspace( int preferredWorkspace = -1 );
     Q_INVOKABLE void setActiveWorkspace( int newWorkspace );

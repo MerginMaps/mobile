@@ -296,6 +296,7 @@ class MerginApi: public QObject
     //! Sends subscription info request using userInfo endpoint.
     Q_INVOKABLE void getSubscriptionInfo();
     Q_INVOKABLE void clearAuth();
+    Q_INVOKABLE void clearWorkspaceCache();
     Q_INVOKABLE void resetApiRoot();
     Q_INVOKABLE QString resetPasswordUrl();
 

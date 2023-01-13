@@ -24,6 +24,7 @@ void MerginUserInfo::clear()
   mEmail = "";
   mActiveWorkspace = -1;
   mWorkspaces.clear();
+  mInvitations.clear();
 
   emit userInfoChanged();
 }
@@ -191,6 +192,16 @@ void MerginUserInfo::setActiveWorkspace( int newWorkspace )
   emit userInfoChanged();
 }
 
+void MerginUserInfo::clearCachedWorkspacesInfo()
+{
+  QSettings settings;
+  settings.beginGroup( "Input/" );
+  settings.setValue( "lastUsedWorkspace", -1 );
+  settings.remove( "workspaces" );
+  settings.endGroup();
+
+  emit userInfoChanged();
+}
 
 MerginInvitation MerginInvitation::fromJsonObject( const QJsonObject &invitationInfo )
 {

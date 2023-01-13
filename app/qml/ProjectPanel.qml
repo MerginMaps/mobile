@@ -980,6 +980,7 @@ Item {
         if ( __merginApi.userAuth.hasAuthData() ) {
           __merginApi.clearAuth()
         }
+        __merginApi.clearWorkspaceCache()
         stackView.popOnePageOrClose()
         root.resetView()
       }

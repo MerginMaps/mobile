@@ -854,6 +854,11 @@ void MerginApi::clearAuth()
   mSubscriptionInfo->clear();
 }
 
+void MerginApi::clearWorkspaceCache()
+{
+  mUserInfo->clearCachedWorkspacesInfo();
+}
+
 void MerginApi::resetApiRoot()
 {
   QSettings settings;
