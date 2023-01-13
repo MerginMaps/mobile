@@ -39,18 +39,6 @@ Page {
     withBackButton: true
   }
 
-  CaptureSession {
-    id: captureSession
-
-    camera: Camera {
-      id: camera
-
-      active: true
-      focusMode: Camera.FocusModeAutoNear
-    }
-    videoOutput: videoOutput
-  }
-
   InputClass.CodeScanner {
     id: qrcodeScanner
 
@@ -58,6 +46,8 @@ Page {
 
     onCodeScanned: function( codeData ) {
       root.scanFinished( codeData )
+      MMCamera.setActive( false )
+      MMCamera.captureSession.videoOutput = null
     }
   }
 
@@ -81,5 +71,13 @@ Page {
       width: root.width
       height: root.height - header.height
     }
+  }
+
+  Component.onCompleted: {
+    // create camera if not yet created
+    MMCamera.session()
+
+    MMCamera.captureSession.videoOutput = videoOutput
+    MMCamera.setActive( true )
   }
 }

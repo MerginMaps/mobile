@@ -102,6 +102,7 @@ set(MM_QML
     LoginForm.qml
     MainPanel.qml
     MapThemePanel.qml
+    MMCamera.qml
     Notification.qml
     NotificationBanner.qml
     NumberSpin.qml
