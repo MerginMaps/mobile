@@ -66,6 +66,14 @@ AbstractEditor {
       if ( field.isNumeric )
       {
         val = val.replace( ",", "." ).replace( / /g, '' ) // replace comma with dot and remove spaces
+
+        let endsWithDecimalSeparator = val.endsWith('.');
+        let hasOnlyOneDecimalSeparator = val.split('.').length === 2;
+
+        if ( endsWithDecimalSeparator && hasOnlyOneDecimalSeparator )
+        {
+          return; // do not send value changed signal when number ends with decimal separator
+        }
       }
 
       editorValueChanged( val, val === "" )
