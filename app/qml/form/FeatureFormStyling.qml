@@ -85,7 +85,6 @@ QtObject {
     property var back: InputStyle.backIcon
     property var combobox: InputStyle.comboboxIcon
     property var valueRelationMore: InputStyle.valueRelationIcon
-    property var importData: InputStyle.qrCodeIcon
     property var minus: __inputUtils.getThemeIcon("minus")
     property var plus: __inputUtils.getThemeIcon("plus-big")
     property string relationsLink: InputStyle.linkIcon

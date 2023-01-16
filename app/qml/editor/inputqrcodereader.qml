@@ -11,15 +11,19 @@ import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 
+import lc 1.0
+import ".."
+import "../dialogs" as MMDialogs
+
 AbstractEditor {
   id: root
 
   /*required*/ property var config: parent.config
   /*required*/ property var parentValue: parent.value
   /*required*/ property bool isReadOnly: parent.readOnly
+  property StackView formView: parent.formView
 
   signal editorValueChanged( var newValue, bool isNull )
-  signal importDataRequested()
 
   height: textArea.topPadding + textArea.bottomPadding + textArea.contentHeight
 
@@ -61,7 +65,7 @@ AbstractEditor {
       width: parent.width * 0.6
       sourceSize.width: parent.width * 0.6
 
-      source: customStyle.icons.importData
+      source: InputStyle.qrCodeIcon
       visible: !root.isReadOnly
     }
 
@@ -72,5 +76,63 @@ AbstractEditor {
     }
   }
 
-  onRightActionClicked: root.importDataRequested()
+  onRightActionClicked: {
+    if ( root.parent.readOnly ) return
+
+    if ( __androidUtils.isAndroid ) {
+      androidConnection.enabled = true // start listening to scan results
+      __androidUtils.scanQRCode()
+    }
+    else {
+      let page = root.formView.push( readerComponent, {} )
+      page.forceActiveFocus()
+    }
+  }
+
+  Component {
+    id: readerComponent
+
+    CodeScanner {
+      id: codeScannerPage
+
+      focus: true
+
+      onBackButtonClicked: {
+        root.formView.pop()
+      }
+
+      onScanFinished: function( captured ) {
+        root.editorValueChanged( captured, false )
+        root.formView.pop()
+      }
+    }
+  }
+
+  Connections {
+    id: androidConnection
+
+    target: __androidUtils
+    enabled: false // false by default to ignore scans to other fields
+
+    function onQrScanFinished( scanValue ) {
+      root.editorValueChanged( scanValue, false )
+      androidConnection.enabled = false
+    }
+
+    function onQrScannerMissing() {
+      // show install app rationale
+      installAppConsentDialog.open()
+      androidConnection.enabled = false
+    }
+
+    function onQrScanAborted() {
+      androidConnection.enabled = false
+    }
+  }
+
+  MMDialogs.InstallScannerAppDialog {
+    id: installAppConsentDialog
+
+    onInstallRequested: __androidUtils.installQRCodeScanner()
+  }
 }

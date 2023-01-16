@@ -37,6 +37,7 @@ set(MM_QML
     dialogs/NoPermissionsDialog.qml
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
+    dialogs/InstallScannerAppDialog.qml
     editor/AbstractEditor.qml
     editor/RelationPhotoDelegate.qml
     editor/RelationPhotoFooterDelegate.qml
@@ -89,7 +90,6 @@ set(MM_QML
     AuthPanel.qml
     Banner.qml
     CircularProgressBar.qml
-    CodeReaderHandler.qml
     CodeScanner.qml
     CodeScannerOverlay.qml
     ExternalResourceBundle.qml
@@ -102,6 +102,7 @@ set(MM_QML
     LoginForm.qml
     MainPanel.qml
     MapThemePanel.qml
+    MMCamera.qml
     Notification.qml
     NotificationBanner.qml
     NumberSpin.qml

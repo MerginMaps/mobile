@@ -1,178 +1,98 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick
+import QtQuick.Layouts
 
 Item {
   id: root
-
-  property rect captureRect
+  property real rectSize
 
   Item {
     id: captureZoneCorners
+    anchors.centerIn: root
+    width: root.rectSize
+    height: root.rectSize
 
-    x: root.captureRect.x
-    y: root.captureRect.y
+    GridLayout {
+      columns: 2
+      width: root.rectSize
+      height: root.rectSize
 
-    width: root.captureRect.width
-    height: root.captureRect.height
+      Repeater {
+        model: [0, 1, 3, 2]
 
-    Rectangle {
-      id: topLeftCornerH
+        delegate: Item {
+          property real length: 30  * __dp
+          property real borderWidth: 5 * __dp
+          property int animationDuration: 1000
+          property color primaryColor: InputStyle.fontColor
+          property color secondaryColor: InputStyle.fontColorBright
 
-      anchors {
-        top: parent.top
-        left: parent.left
-      }
+          id: cornerItem
+          Layout.fillHeight: true
+          Layout.fillWidth: true
+          rotation: modelData * 90
 
-      width: 20
-      height: 5
+          Rectangle {
+            anchors {
+              top: parent.top
+              left: parent.left
+            }
 
-      color: InputStyle.fontColor
-      radius: height / 2
-    }
+            width: cornerItem.length
+            height: cornerItem.borderWidth
+            color: InputStyle.fontColor
+            radius: width / 2
 
-    Rectangle {
-      id: topLeftCornerV
+            SequentialAnimation on color {
+              loops: Animation.Infinite
+              ColorAnimation {
+                from: cornerItem.primaryColor
+                to: cornerItem.secondaryColor
+                duration: cornerItem.animationDuration
+              }
+              ColorAnimation {
+                from: cornerItem.secondaryColor
+                to: cornerItem.primaryColor
+                duration: cornerItem.animationDuration
+              }
+            }
+          }
 
-      anchors {
-        top: parent.top
-        left: parent.left
-      }
+          Rectangle {
+            anchors {
+              top: parent.top
+              left: parent.left
+            }
 
-      width: 5
-      height: 20
+            width: cornerItem.borderWidth
+            height: cornerItem.length
+            color: InputStyle.fontColor
+            radius: width / 2
 
-      color: InputStyle.fontColor
-      radius: width / 2
-    }
-
-    Rectangle {
-      id: bottomLeftCornerH
-
-      anchors {
-        bottom: parent.bottom
-        left: parent.left
-      }
-
-      width: 20
-      height: 5
-
-      color: InputStyle.fontColor
-      radius: height / 2
-    }
-
-    Rectangle {
-      id: bottomLeftCornerV
-
-      anchors {
-        bottom: parent.bottom
-        left: parent.left
-      }
-
-      width: 5
-      height: 20
-
-      color: InputStyle.fontColor
-      radius: width / 2
-    }
-
-    Rectangle {
-      id: topRightCornerH
-
-      anchors {
-        top: parent.top
-        right: parent.right
-      }
-
-      width: 20
-      height: 5
-
-      color: InputStyle.fontColor
-      radius: height / 2
-    }
-
-    Rectangle {
-      id: topRightCornerV
-
-      anchors {
-        top: parent.top
-        right: parent.right
-      }
-
-      width: 5
-      height: 20
-
-      color: InputStyle.fontColor
-      radius: width / 2
-    }
-
-    Rectangle {
-      id: bottomRightCornerH
-
-      anchors {
-        bottom: parent.bottom
-        right: parent.right
-      }
-
-      width: 20
-      height: 5
-
-      color: InputStyle.fontColor
-      radius: height / 2
-    }
-
-    Rectangle {
-      id: bottomRightCornerV
-
-      anchors {
-        bottom: parent.bottom
-        right: parent.right
-      }
-
-      width: 5
-      height: 20
-
-      color: InputStyle.fontColor
-      radius: width / 2
-    }
-
-    Rectangle {
-      id: scanIndicator
-
-      anchors {
-        horizontalCenter: parent.horizontalCenter
-      }
-
-      width: parent.width
-      height: 1
-
-      color: InputStyle.fontColor
-
-      SequentialAnimation {
-        id: scanIndicatorAnimation
-
-        loops: Animation.Infinite
-
-        PropertyAnimation {
-          id: toTopAnimation
-
-          target: scanIndicator
-          property: "y"
-          duration: 2000
-        }
-
-        PropertyAnimation {
-          id: toBottomAnimation
-
-          target: scanIndicator
-          property: "y"
-          duration: 2000
+            SequentialAnimation on color {
+              loops: Animation.Infinite
+              ColorAnimation {
+                from: cornerItem.primaryColor
+                to: cornerItem.secondaryColor
+                duration: cornerItem.animationDuration
+              }
+              ColorAnimation {
+                from: cornerItem.secondaryColor
+                to: cornerItem.primaryColor
+                duration: cornerItem.animationDuration
+              }
+            }
+          }
         }
       }
     }
-  }
-
-  onCaptureRectChanged: {
-    toTopAnimation.to = 5
-    toBottomAnimation.to = captureRect.height - 10
-    scanIndicatorAnimation.start()
   }
 }

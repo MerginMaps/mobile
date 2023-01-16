@@ -272,6 +272,7 @@ if (MACOS)
     PROPERTIES MACOSX_BUNDLE TRUE
                MACOSX_RPATH TRUE
                MACOSX_BUNDLE_GUI_IDENTIFIER LutraConsultingLtd.Input
+               MACOSX_BUNDLE_INFO_PLIST ${INPUT_CMAKE_TEMPLATES_PATH}/iOSInfo.plist.in
                MACOSX_BUNDLE_SHORT_VERSION_STRING ${INPUT_VERSION_CODE}
                XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
                XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
@@ -487,6 +488,7 @@ add_subdirectory(qml)
 
 # register Singleton
 set_source_files_properties(qml/InputStyle.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+set_source_files_properties(qml/MMCamera.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 # make sure the QML files are not prefixed with "qml/" in the qmldir
 set(MM_QML_SRCS)

@@ -68,10 +68,16 @@ class AndroidUtils: public QObject
       * */
     Q_INVOKABLE void callImagePicker();
     Q_INVOKABLE void callCamera( const QString &targetPath );
+
+    Q_INVOKABLE void installQRCodeScanner();
+    Q_INVOKABLE void scanQRCode();
+
 #ifdef ANDROID
     const static int MEDIA_CODE = 101;
     const static int CAMERA_CODE = 102;
     const static int BLUETOOTH_CODE = 103;
+    const static int INSTALL_QR_SCANNER_CODE = 104;
+    const static int QR_SCAN_CODE = 105;
 
     void handleActivityResult( int receiverRequestCode, int resultCode, const QJniObject &data ) override;
 #endif
@@ -85,6 +91,10 @@ class AndroidUtils: public QObject
     void notEnoughSpaceLeftToMigrate( QString neededSpace );
 
     void bluetoothEnabled( bool state );
+
+    void qrScanFinished( QString scanValue );
+    void qrScanAborted();
+    void qrScannerMissing();
 
   public slots:
     void showToast( QString message );

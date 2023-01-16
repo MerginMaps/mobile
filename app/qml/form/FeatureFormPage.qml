@@ -151,7 +151,6 @@ Item {
           /*required*/ featureLayerPair: root.featureLayerPair
         }
 
-        importDataHandler: codeReaderHandler.handler
         externalResourceHandler: externalResourceBundle.handler
         state: root.formState
 
@@ -255,10 +254,6 @@ Item {
 
       ExternalResourceBundle {
         id: externalResourceBundle
-      }
-
-      CodeReaderHandler {
-        id: codeReaderHandler
       }
     }
   }

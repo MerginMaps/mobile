@@ -11,73 +11,73 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtMultimedia
-import lc 1.0
+import lc 1.0 as InputClass
 
 import "./components"
 
-Drawer {
-  id: codeReader
-  palette.dark: InputStyle.fontColor // changes busy indicator color
+Page {
+  id: root
 
-  signal scanFinished(var value)
+  signal backButtonClicked()
+  signal scanFinished( var data )
 
-  CodeScanner {
+  header: PanelHeader {
+    id: scannerPageHeader
+
+    width: parent.width
+    height: InputStyle.rowHeightHeader
+
+    color: InputStyle.clrPanelMain
+    rowHeight: InputStyle.rowHeightHeader
+
+    titleText: qsTr( "Scan code" )
+
+    onBack: {
+      root.backButtonClicked()
+     }
+
+    withBackButton: true
+  }
+
+  InputClass.CodeScanner {
     id: qrcodeScanner
 
     videoSink: videoOutput.videoSink
 
-    captureRect: Qt.rect(root.width / 4, root.height / 4, root.width / 2, root.height / 2)
-
-    onCapturedStringChanged: function( captured ) {
-      codeReader.scanFinished( captured )
-      qrcodeScanner.setProcessing(false)
+    onCodeScanned: function( codeData ) {
+      root.scanFinished( codeData )
+      MMCamera.setActive( false )
+      MMCamera.captureSession.videoOutput = null
     }
   }
 
-  onHeightChanged: {
-    qrcodeScanner.captureRect = Qt.rect(width / 4, height / 4, width / 2, height / 2)
-  }
+  Rectangle {
+    id: videoContainer
 
-  onWidthChanged: {
-    qrcodeScanner.captureRect = Qt.rect(width / 4, height / 4, width / 2, height / 2)
-  }
+    width: root.width
+    height: root.height - header.height
 
-  ColumnLayout {
-    width: codeReader.width
-    height: codeReader.height
-    spacing: 0
+    VideoOutput {
+      id: videoOutput
 
-    PanelHeader {
-      id: header
-      Layout.fillWidth: true
-      height: InputStyle.rowHeightHeader
-      rowHeight: InputStyle.rowHeightHeader
-      titleText: qsTr("Scan code")
-      withBackButton: true
-      onBack: codeReader.visible = false
+      anchors.fill: parent
+      fillMode: VideoOutput.PreserveAspectCrop
     }
 
-    Rectangle {
-      id: videoContainer
-      width: codeReader.width
-      height: codeReader.height - header.height
-      color: InputStyle.clrPanelBackground
+    CodeScannerOverlay {
+      id: scannerOverlay
 
-      VideoOutput {
-        id: videoOutput
-
-        anchors.fill: parent
-        width: root.width
-        focus: visible
-        fillMode: VideoOutput.PreserveAspectCrop
-      }
-
-      CodeScannerOverlay {
-        id: scannerOverlay
-
-        anchors.fill: parent
-        captureRect: qrcodeScanner.captureRect
-      }
+      rectSize: Math.min(root.height, root.width) * 0.8
+      width: root.width
+      height: root.height - header.height
     }
+  }
+
+  Component.onCompleted: {
+    // create camera if not yet created
+    MMCamera.session()
+
+    MMCamera.captureSession.videoOutput = videoOutput
+    MMCamera.setActive( true )
   }
 }

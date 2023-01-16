@@ -89,24 +89,6 @@ Item {
     }
 
   /**
-   * A handler for extra events for a TextEdit widget .
-   */
-  property var importDataHandler: QtObject {
-
-    /**
-     * Suppose to be called to invoke a component to set data automatically (e.g. code scanner, sensor).
-     * \param itemWidget editorWidget for modified field to send valueChanged signal.
-     */
-    property var importData: function importData(itemWidget) {}
-
-    /**
-     * Suppose to be called after `importData` function as a callback to set the value to the widget.
-     * \param value Value to be set.
-     */
-    property var setValue: function setValue(value) {}
-  }
-
-  /**
    * Active project.
    */
   property Input.Project project
@@ -549,10 +531,6 @@ Item {
 
             function onEditorValueChanged( newValue, isNull ) {
               AttributeValue = isNull ? undefined : newValue
-            }
-
-            function onImportDataRequested() {
-              importDataHandler.importData(attributeEditorLoader.item)
             }
 
             function onOpenLinkedFeature( linkedFeature ) {

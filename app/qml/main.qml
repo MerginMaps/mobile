@@ -9,9 +9,6 @@
 
 import QtQuick
 import QtQuick.Controls
-
-// Required for iOS to get rid of "module "QtMultimedia" is not installed".
-// It looks like static QT plugins are not copied to the distribution
 import QtMultimedia
 import QtQml.Models
 import QtPositioning
@@ -19,7 +16,7 @@ import QtQuick.Dialogs
 
 import Qt.labs.settings
 
-import lc 1.0
+import lc 1.0 as InputClass
 import "./map"
 import "./misc"
 import "./dialogs"
