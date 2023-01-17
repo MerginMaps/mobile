@@ -3459,6 +3459,12 @@ bool MerginApi::createWorkspace( const QString &workspaceName )
     return false;
   }
 
+  if ( !CoreUtils::isValidName( workspaceName ) )
+  {
+    emit notify( tr( "Workspace name contains invalid characters" ) );
+    return false;
+  }
+
   QNetworkRequest request = getDefaultRequest();
   QUrl url( mApiRoot + QString( "/v1/workspace" ) );
   request.setUrl( url );

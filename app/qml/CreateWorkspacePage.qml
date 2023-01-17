@@ -96,11 +96,13 @@ Item {
 
         text: qsTr("Create")
         onClicked: {
-          //
+          if (workspaceNameField.displayText === "") {
+            __inputUtils.showNotification(qsTr("Empty workspace name"))
+          } else {
+            __merginApi.createWorkspace(workspaceNameField.displayText)
+          }
         }
       }
-
-
     }
   }
 }
