@@ -9,97 +9,77 @@
 
 import QtQuick
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
+
 import "."  // import InputStyle singleton
-import "./components"
+import "./components" as MMComponents
 
 Item {
   id: root
-  visible: true
 
   signal subscribeClicked
 
-
   property var plan
-  property string name
-
   property bool hasPlan: __merginApi.subscriptionInfo.ownsActiveSubscription || !root.plan
+
+  height: childrenRect.height
+  // set width from parent
 
   Column {
     width: parent.width
-    spacing: 5
-    leftPadding: InputStyle.rowHeightHeader
-    rightPadding: InputStyle.rowHeightHeader
+    spacing: InputStyle.panelSpacing
 
-    TextWithIcon {
+    MMComponents.TextWithIcon {
       width: parent.width
       height: InputStyle.rowHeight
       source: InputStyle.infoIcon
       text: qsTr("Commercial use")
     }
 
-    TextWithIcon {
+    MMComponents.TextWithIcon {
       width: parent.width
       height: InputStyle.rowHeight
       source: InputStyle.todayIcon
       text: hasPlan ? "Custom billing period" : root.plan.period /* Do not translate, only used for test subscriptions */
     }
 
-    TextWithIcon {
+    MMComponents.TextWithIcon {
       width: parent.width
       height: InputStyle.rowHeight
       source: InputStyle.databaseIcon
       text: hasPlan ? "Custom storage" : root.plan.storage /* Do not translate, only used for test subscriptions */
     }
 
-    TextWithIcon {
+    MMComponents.TextWithIcon {
       width: parent.width
       height: InputStyle.rowHeight
       source: InputStyle.accountMultiIcon
       text: qsTr("Unlimited seats")
     }
 
-    TextWithIcon {
+    MMComponents.TextWithIcon {
       width: parent.width
       height: InputStyle.rowHeight
       source: InputStyle.projectIcon
       text: qsTr("Unlimited projects")
     }
 
-    TextWithIcon {
+    MMComponents.TextWithIcon {
       width: parent.width
       height: InputStyle.rowHeight
       source: InputStyle.envelopeIcon
       text: qsTr("Email support")
     }
 
-    Button {
-      id: subscribeButton
-      width: root.width - 2 * InputStyle.rowHeightHeader
-      anchors.horizontalCenter: parent.horizontalCenter
+    MMComponents.DelegateButton {
 
-      height: InputStyle.rowHeightHeader
-      text: hasPlan ? "Manage" : root.plan.price /* Do not translate, only used for test subscriptions */
+      width: parent.width
+      btnWidth: width
+      height: InputStyle.rowHeightMedium
+
+      text: root.hasPlan ? "Manage" : root.plan.price /* Do not translate, only used for test subscriptions */
       enabled: text !== ''
-      font.pixelSize: InputStyle.fontPixelSizeBig
 
-      background: Rectangle {
-        color: InputStyle.highlightColor
-      }
-
-      onClicked: subscribeClicked()
-
-      contentItem: Text {
-        text: subscribeButton.text
-        font: subscribeButton.font
-        opacity: enabled ? 1.0 : 0.3
-        color: "white"
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
-      }
-
+      onClicked: root.subscribeClicked()
     }
   }
-
 }

@@ -12,13 +12,14 @@ Item {
   property real btnWidth: delegateButtonContainer.height * 3
   property real btnHeight: InputStyle.delegateBtnHeight
   property var iconSource: ""
+  property real fontPixelSize: InputStyle.fontPixelSizeNormal
 
   id: delegateButtonContainer
 
   SimpleTextWithIcon {
     onClicked: delegateButtonContainer.clicked()
     height: delegateButtonContainer.btnHeight
-    width: delegateButtonContainer.btnWidth
+    requestedWidth: delegateButtonContainer.btnWidth
     source: delegateButtonContainer.iconSource
     text: delegateButtonContainer.text
     anchors.horizontalCenter: parent.horizontalCenter
@@ -27,5 +28,6 @@ Item {
     radius: delegateButtonContainer.cornerRadius
     color: delegateButtonContainer.bgColor
     fontBold: true
+    fontPixelSize: delegateButtonContainer.fontPixelSize
   }
 }

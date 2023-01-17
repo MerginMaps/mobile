@@ -22,7 +22,6 @@ Page {
   signal back
   signal signOutClicked
   signal managePlansClicked
-  signal restorePurchasesClicked
   signal accountDeleted
   signal switchWorkspace
 
@@ -52,7 +51,6 @@ Page {
   }
 
   ScrollView {
-    id: scrollView
 
     anchors {
       fill: parent
@@ -110,11 +108,14 @@ Page {
         Layout.fillWidth: true
         Layout.preferredHeight: InputStyle.rowHeight
 
+        spacing: InputStyle.formSpacing
+
         MMComponents.TextRowWithTitle {
           Layout.fillWidth: true
 
-          titleComponent.font.pixelSize: InputStyle.fontPixelSizeNormal
-          textComponent.font.pixelSize: InputStyle.fontPixelSizeBig
+          textComponent.font.bold: true
+          textComponent.wrapMode: Text.NoWrap
+          textComponent.elide: Text.ElideMiddle
 
           titleText: qsTr( "Workspace" )
           text: root.workspaceName
@@ -124,8 +125,9 @@ Page {
 
           Layout.preferredWidth: root.width / 3
           btnWidth: width
-          btnHeight: InputStyle.rowHeightMedium
+          btnHeight: InputStyle.mediumBtnHeight
           height: InputStyle.rowHeightMedium
+          fontPixelSize: InputStyle.fontPixelSizeSmall
 
           text: qsTr("Switch workspace")
 
@@ -225,8 +227,7 @@ Page {
         Layout.fillWidth: true
         Layout.topMargin: InputStyle.smallGap
 
-        titleComponent.font.pixelSize: InputStyle.fontPixelSizeNormal
-        textComponent.font.pixelSize: InputStyle.fontPixelSizeBig
+        textComponent.font.bold: true
 
         titleText: qsTr( "Account" )
         text: root.fullname ? root.fullname : root.username
@@ -280,64 +281,6 @@ Page {
         }
       }
     }
-
-
-//      Button {
-//        id: subscribeButton
-//        enabled: !__purchasing.transactionPending
-//        width: root.width - 2 * InputStyle.rowHeightHeader
-//        anchors.horizontalCenter: parent.horizontalCenter
-//        visible: __merginApi.apiSupportsSubscriptions && __merginApi.serverType === MerginServerType.SAAS
-
-//        height: InputStyle.rowHeightHeader
-//        text: __purchasing.transactionPending ? qsTr("Working...") : root.ownsActiveSubscription ? qsTr("Manage Subscription") : qsTr("Subscription plans")
-//        font.pixelSize: InputStyle.fontPixelSizeBig
-
-//        background: Rectangle {
-//          color: InputStyle.highlightColor
-//        }
-
-//        onClicked: managePlansClicked()
-
-//        contentItem: Text {
-//          text: subscribeButton.text
-//          font: subscribeButton.font
-//          opacity: enabled ? 1.0 : 0.3
-//          color: "white"
-//          horizontalAlignment: Text.AlignHCenter
-//          verticalAlignment: Text.AlignVCenter
-//          elide: Text.ElideRight
-//        }
-//      }
-
-//      Item {
-//        id: spacer
-//        visible: textRestore.visible
-//        height: InputStyle.rowHeightHeader
-//        width:parent.width
-//      }
-
-//      Text {
-//        id: textRestore
-//        visible: __iosUtils.isIos && __merginApi.apiSupportsSubscriptions && __purchasing.hasInAppPurchases && !__purchasing.transactionPending
-//        textFormat: Text.RichText
-//        onLinkActivated: restorePurchasesClicked()
-//        elide: Text.ElideRight
-//        horizontalAlignment: Text.AlignHCenter
-//        verticalAlignment: Text.AlignVCenter
-//        text: "<style>a:link { color: " + InputStyle.highlightColor
-//              + "; text-decoration: underline; }</style>" + qsTr(
-//                "You can also %1restore%2 your purchases")
-//              .arg("<a href='http://restore-purchases'>")
-//              .arg("</a>")
-//        font.pixelSize: InputStyle.fontPixelSizeNormal
-//        color: InputStyle.fontColor
-//        width: root.width
-//        leftPadding: InputStyle.rowHeightHeader
-//        rightPadding: InputStyle.rowHeightHeader
-//      }
-//    }
-
   }
 
     Dialog {
@@ -403,6 +346,7 @@ Page {
       buttons: MessageDialog.Close
 
       onButtonClicked: function( clickedButton ) {
+        accountDeleteIndicator.running = false
         close()
       }
     }

@@ -1026,10 +1026,6 @@ Item {
     WorkspaceAccountPage {
       id: workspaceAccountPage
 
-//      height: root.height
-//      width: root.width
-//      visible: true
-
       onBack: stackView.popOnePageOrClose()
 
       onManagePlansClicked: manageSubscriptionPlans()
@@ -1042,12 +1038,14 @@ Item {
         stackView.popOnePageOrClose()
         root.resetView()
       }
-//      onRestorePurchasesClicked: {
-//        __purchasing.restore()
-//      }
+
       onAccountDeleted: {
         stackView.popOnePageOrClose()
         root.resetView()
+      }
+
+      onSwitchWorkspace: {
+        stackView.push( workspaceListComponent )
       }
     }
   }
@@ -1073,10 +1071,8 @@ Item {
 
     WorkspaceSubscribePage {
       id: subscribePanel
-//      height: root.height
-//      width: root.width
-      onBackClicked: stackView.popOnePageOrClose()
-      onSubscribeClicked: stackView.popOnePageOrClose()
+
+      onBack: stackView.popOnePageOrClose()
     }
   }
 

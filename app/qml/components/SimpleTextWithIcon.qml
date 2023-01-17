@@ -17,13 +17,15 @@ Rectangle {
   property string source: ""
   property real fontPixelSize: InputStyle.fontPixelSizeNormal
   property bool fontBold: false
-
+  property real requestedWidth
   property alias icon: icon
 
   id: root
   color: root.bgColor
 
   signal clicked
+
+  width: requestedWidth < label.paintedWidth ? label.paintedWidth + InputStyle.buttonMinPadding : requestedWidth
 
   MouseArea {
     anchors.fill: parent

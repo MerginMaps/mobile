@@ -74,6 +74,8 @@ QtObject {
     property real buttonClickArea: scale(15)
 
     property real closeBtnSize: scale(30)
+    property real buttonMinPadding: scale(10)
+    property real mediumBtnHeight: scale(35)
 
     property real panelSpacing: 5 * __dp
     property real shadowVerticalOffset: -2 * __dp

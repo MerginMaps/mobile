@@ -8,161 +8,148 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
+
 import "."  // import InputStyle singleton
-import "./components"
+import "./components" as MMComponents
 
-Rectangle {
+Page {
   id: root
-  visible: true
 
-  signal backClicked
-  signal subscribeClicked
+  signal back
 
-  //! If true and component is visible, busy indicator suppose to be on. Currently used only while fetching a recommendedPlan
-  property bool isBusy: __purchasing.individualPlan.id === "" || __purchasing.professionalPlan.id === ""
-
-  onVisibleChanged: {
-    subscribeBusyIndicator.running = root.visible && root.isBusy
+  header: MMComponents.PanelHeaderV2 {
+    width: parent.width
+    headerTitle: qsTr("Subscribe")
+    onBackClicked: root.back()
   }
 
-  Connections {
-    target: __purchasing
-    function onIndividualPlanChanged() {
-      if (!root.isBusy && root.visible) {
-        subscribeBusyIndicator.running = false
-      }
+  ScrollView {
+
+    anchors {
+      fill: parent
     }
-    function onProfessionalPlanChanged() {
-      if (!root.isBusy && root.visible) {
-        subscribeBusyIndicator.running = false
+
+    contentWidth: availableWidth // only scroll vertically
+
+    ColumnLayout {
+
+      anchors {
+        fill: parent
+        leftMargin: InputStyle.outerFieldMargin
+        rightMargin: InputStyle.outerFieldMargin
       }
-    }
-  }
 
-  BusyIndicator {
-    id: subscribeBusyIndicator
-    width: root.width/8
-    height: width
-    running: false
-    visible: running
-    anchors.centerIn: root
-    z: root.z + 1
-  }
+      spacing: InputStyle.formSpacing
 
-  // header
-  PanelHeader {
-    id: header
-    height: InputStyle.rowHeightHeader
-    width: parent.width
-    color: InputStyle.clrPanelMain
-    rowHeight: InputStyle.rowHeightHeader
-    titleText: qsTr("Subscribe")
-
-    onBack: backClicked()
-    withBackButton: true
-  }
-
-  Image {
-    id: merginLogo
-    anchors.top: header.bottom
-    antialiasing: true
-    source: InputStyle.mmLogoHorizontal
-    height: InputStyle.rowHeightHeader * 0.8
-    width: parent.width
-    sourceSize.width: width
-    sourceSize.height: height
-    fillMode: Image.PreserveAspectFit
-    verticalAlignment: Text.AlignVCenter
-    horizontalAlignment: Text.AlignHCenter
-  }
-
-  Column {
-    anchors.top: merginLogo.bottom
-    anchors.topMargin: InputStyle.smallGap
-    width: parent.width
-    anchors.horizontalCenter: parent.horizontalCenter
-    TabBar {
+      TabBar {
         id: bar
-        width: root.width - 2 * InputStyle.rowHeightHeader
-        anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 5
+
+        Layout.fillWidth: true
+        Layout.topMargin: InputStyle.smallGap
+        Layout.preferredHeight: InputStyle.rowHeightMedium
+
+        spacing: InputStyle.panelSpacing
 
         TabButton {
-            id: individualTabButton
+          contentItem: Text {
+            color: bar.currentIndex === 0 ? "white" : InputStyle.highlightColor
+            text: qsTr("Individual")
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            font.pixelSize: InputStyle.fontPixelSizeNormal
+          }
 
-            contentItem: Text {
-              color: bar.currentIndex === 0 ? "white" : InputStyle.highlightColor
-              text: qsTr("Individual")
-              horizontalAlignment: Text.AlignHCenter
-              verticalAlignment: Text.AlignVCenter
-              font.pixelSize: InputStyle.fontPixelSizeNormal
-            }
-
-            background: Rectangle {
-              color: bar.currentIndex === 0 ? InputStyle.highlightColor: "white"
-              border.color: InputStyle.highlightColor
-              border.width: 1
-            }
+          background: Rectangle {
+            color: bar.currentIndex === 0 ? InputStyle.highlightColor: "white"
+            border.color: InputStyle.highlightColor
+            border.width: 1
+            radius: InputStyle.cornerRadius
+          }
         }
+
         TabButton {
-            id: professionalTabButton
+          contentItem: Text {
+            color: bar.currentIndex === 1 ? "white" : InputStyle.highlightColor
+            text: qsTr("Professional")
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            font.pixelSize: InputStyle.fontPixelSizeNormal
+          }
 
-            contentItem: Text {
-              color: bar.currentIndex === 1 ? "white" : InputStyle.highlightColor
-              text: qsTr("Professional")
-              horizontalAlignment: Text.AlignHCenter
-              verticalAlignment: Text.AlignVCenter
-              font.pixelSize: InputStyle.fontPixelSizeNormal
-            }
-
-            background: Rectangle {
-              color: bar.currentIndex === 1 ? InputStyle.highlightColor: "white"
-              border.color: InputStyle.highlightColor
-              border.width: 1
-            }
+          background: Rectangle {
+            color: bar.currentIndex === 1 ? InputStyle.highlightColor: "white"
+            border.color: InputStyle.highlightColor
+            border.width: 1
+            radius: InputStyle.cornerRadius
+          }
         }
-    }
+      }
 
-    SwipeView {
-        id: view
-
+      SwipeView {
         currentIndex: bar.currentIndex
-        anchors.top: bar.bottom
-        width: parent.width
-        anchors.horizontalCenter: parent.horizontalCenter
 
-        SubscribePlanItem {
-            id: individualTab
-            plan: __purchasing.individualPlan
-            name: qsTr("Individual")
-            onSubscribeClicked: {
-               __purchasing.purchase( __purchasing.individualPlan.id )
-              root.subscribeClicked()
-            }
-        }
-        SubscribePlanItem {
-            id: professionalTab
-            plan: __purchasing.professionalPlan
-            name: qsTr("Professional")
-            onSubscribeClicked: {
-               __purchasing.purchase( __purchasing.professionalPlan.id )
-              root.subscribeClicked()
-            }
+        Layout.fillWidth: true
+        Layout.preferredHeight: plan.height
+
+        interactive: false
+        spacing: InputStyle.formSpacing
+
+        WorkspaceSubscribePlanItem {
+          id: plan
+          plan: __purchasing.individualPlan
+
+          onSubscribeClicked: {
+            __purchasing.purchase( __purchasing.individualPlan.id )
+            root.back()
+          }
         }
 
+        WorkspaceSubscribePlanItem {
+          plan: __purchasing.professionalPlan
+
+          onSubscribeClicked: {
+            __purchasing.purchase( __purchasing.professionalPlan.id )
+            root.back()
+          }
+        }
+      }
+
+      Text {
+        Layout.fillWidth: true
+        Layout.preferredHeight: InputStyle.rowHeightHeader
+
+        color: InputStyle.fontColor
+        linkColor: InputStyle.highlightColor
+
+        wrapMode: Text.WordWrap
+        textFormat: Text.StyledText
+
+        font.bold: true
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+
+        verticalAlignment: Qt.AlignVCenter
+        horizontalAlignment: Qt.AlignHCenter
+
+        visible: !__purchasing.transactionPending
+
+        text: qsTr("You can also %1restore%2 your purchases.")
+          .arg("<a href='http://restore-purchases'>")
+          .arg("</a>")
+
+        onLinkActivated: __purchasing.restore()
+      }
+
+      MMComponents.TextHyperlink {
+        Layout.fillWidth: true
+        Layout.preferredHeight: InputStyle.rowHeightHeader
+        Layout.bottomMargin: InputStyle.smallGap
+
+        text: qsTr("Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2")
+          .arg("<a href='" + __inputHelp.merginSubscriptionDetailsLink + "'>")
+          .arg("</a>")
+      }
     }
-  }
-
-  TextHyperlink {
-    id: textNotice
-    width: parent.width
-    height: InputStyle.rowHeightHeader
-    anchors.bottom: parent.bottom
-    anchors.bottomMargin: InputStyle.rowHeightHeader/2
-    text: qsTr("Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2")
-              .arg("<a href='" + __inputHelp.merginSubscriptionDetailsLink + "'>")
-              .arg("</a>")
   }
 }
