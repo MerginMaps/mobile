@@ -10,7 +10,7 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../qml/AccountPage.qml" line="170"/>
+        <location filename="../qml/AccountPage.qml" line="172"/>
         <source>Your subscription was cancelled on %1</source>
         <translation>귀하의 구독은 %1에 취소되었습니다</translation>
     </message>
@@ -25,57 +25,57 @@
         <translation>%1 이후에는 구독이 자동 갱신되지 않습니다</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="149"/>
+        <location filename="../qml/AccountPage.qml" line="151"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
         <translation>가능한 한 빨리 %1결제 세부정보%2를 업데이트하십시오</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="160"/>
+        <location filename="../qml/AccountPage.qml" line="162"/>
         <source>Your next bill will be for %1 on %2</source>
         <translation>다음 청구서는 %2에 %1에 대한 것입니다</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="195"/>
+        <location filename="../qml/AccountPage.qml" line="197"/>
         <source>Using %1 / %2</source>
         <translation>사용량 %1 / %2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="213"/>
+        <location filename="../qml/AccountPage.qml" line="215"/>
         <source>Manage Subscription</source>
         <translation>구독 관리</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="213"/>
+        <location filename="../qml/AccountPage.qml" line="215"/>
         <source>Working...</source>
         <translation>작업 중...</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="213"/>
+        <location filename="../qml/AccountPage.qml" line="215"/>
         <source>Subscription plans</source>
         <translation>구독 플랜</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="249"/>
+        <location filename="../qml/AccountPage.qml" line="251"/>
         <source>You can also %1restore%2 your purchases</source>
         <translation>구매한 항목을 %1복원%2할 수도 있습니다</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="278"/>
+        <location filename="../qml/AccountPage.qml" line="280"/>
         <source>Sign out</source>
         <translation>로그아웃</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="301"/>
+        <location filename="../qml/AccountPage.qml" line="303"/>
         <source>Delete account</source>
         <translation>계정 삭제</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="332"/>
+        <location filename="../qml/AccountPage.qml" line="334"/>
         <source>Delete account?</source>
         <translation>계정 삭제?</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="338"/>
+        <location filename="../qml/AccountPage.qml" line="340"/>
         <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
 
 In order to delete your account, enter your username in the field below and click Yes.</source>
@@ -84,15 +84,28 @@ In order to delete your account, enter your username in the field below and clic
 계정을 삭제하려면 아래 필드에 사용자 이름을 입력하고 예를 클릭하십시오.</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="347"/>
+        <location filename="../qml/AccountPage.qml" line="349"/>
         <source>Enter username</source>
         <translation>사용자이름 입력</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="384"/>
-        <location filename="../qml/AccountPage.qml" line="419"/>
         <source>Failed to remove account</source>
         <translation>계정 제거 실패</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="385"/>
+        <source>An error occured while removing your account</source>
+        <translation>계정을 삭제하는 동안 오류가 발생했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="408"/>
+        <source>Can not close account because user is the only owner of an organisation.
+
+Please go to the Mergin Maps website to remove it manually.</source>
+        <translation>사용자가 조직의 유일한 소유자이기 때문에 계정을 닫을 수 없습니다.
+
+Mergin Maps 웹사이트로 이동하여 수동으로 제거하십시오.</translation>
     </message>
 </context>
 <context>
@@ -139,27 +152,27 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="233"/>
+        <location filename="../androidutils.cpp" line="235"/>
         <source>Without storage permission you will not be able to access previous projects</source>
         <translation>저장 권한이 없으면 이전 프로젝트에 액세스할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="331"/>
+        <location filename="../androidutils.cpp" line="335"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>저장 권한이 영구 거부되었습니다. 갤러리에서 사진을 로드하려면 설정에서 허용해 주세요</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="335"/>
+        <location filename="../androidutils.cpp" line="339"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
         <translation>갤러리에서 사진을 로드하려면 Input에 저장 권한이 필요합니다.</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="353"/>
+        <location filename="../androidutils.cpp" line="357"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>카메라 권한이 영구 거부되었습니다. 설정에서 허용해 주세요</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="357"/>
+        <location filename="../androidutils.cpp" line="361"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>사진을 찍으려면 카메라 권한이 필요합니다</translation>
     </message>
@@ -175,39 +188,40 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="536"/>
+        <location filename="../attributes/attributecontroller.cpp" line="544"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>%1:%2의 기본값 표현식에 파서 오류가 있습니다: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="546"/>
+        <location filename="../attributes/attributecontroller.cpp" line="554"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>%1:%2의 기본값 표현식에 평가 오류가 있습니다: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="557"/>
+        <location filename="../attributes/attributecontroller.cpp" line="565"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1117"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>&quot;%1&quot; %4 값을 %2(%3) 필드에 대해 호환되는 값으로 변환할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="810"/>
+        <location filename="../attributes/attributecontroller.cpp" line="819"/>
         <source>Cannot delete feature</source>
         <translation>피처를 삭제할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="488"/>
-        <location filename="../attributes/attributecontroller.cpp" line="864"/>
+        <location filename="../attributes/attributecontroller.cpp" line="496"/>
+        <location filename="../attributes/attributecontroller.cpp" line="873"/>
         <source>Feature could not be added</source>
         <translation>피처를 추가할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="497"/>
-        <location filename="../attributes/attributecontroller.cpp" line="875"/>
+        <location filename="../attributes/attributecontroller.cpp" line="505"/>
+        <location filename="../attributes/attributecontroller.cpp" line="884"/>
         <source>Cannot update feature</source>
         <translation>피처를 업데이트할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="919"/>
+        <location filename="../attributes/attributecontroller.cpp" line="928"/>
         <source>Cannot start editing</source>
         <translation>편집을 시작할 수 없습니다</translation>
     </message>
@@ -278,7 +292,7 @@ In order to delete your account, enter your username in the field below and clic
         장치의 전원이 켜져 있고 연결할 수 있는지 확인하십시오.%1 %2여기에서 자세히 알아보십시오%3.</translation>
     </message>
     <message>
-        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="288"/>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="290"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
@@ -286,43 +300,43 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>BluetoothPositionProvider</name>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="43"/>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="164"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="42"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="163"/>
         <source>No connection</source>
         <translation>연결 없음</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="84"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="83"/>
         <source>Reconnecting</source>
         <translation>다시 연결</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="116"/>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="124"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="115"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="123"/>
         <source>No connection, reconnecting in (%1)</source>
         <translation>연결 없음, 다시 연결 (%1)</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="141"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="140"/>
         <source>Could not connect to device, not paired</source>
         <translation>장치에 연결할 수 없음, 페어링되지 않음</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="156"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="155"/>
         <source>Connecting to %1</source>
         <translation>%1 연결 중</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="160"/>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="178"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="159"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="177"/>
         <source>Connected</source>
         <translation>연결됨</translation>
     </message>
 </context>
 <context>
-    <name>CodeReader</name>
+    <name>CodeScanner</name>
     <message>
-        <location filename="../qml/CodeReader.qml" line="64"/>
+        <location filename="../qml/CodeScanner.qml" line="33"/>
         <source>Scan code</source>
         <translation>코드 스캔</translation>
     </message>
@@ -330,12 +344,12 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>DateTimePicker</name>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="108"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="107"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="203"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="202"/>
         <source>OK</source>
         <translation>확인</translation>
     </message>
@@ -353,27 +367,27 @@ In order to delete your account, enter your username in the field below and clic
         <translation>이미지 파일을 %1에 복사하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="201"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="205"/>
         <source>Open Image</source>
         <translation>이미지 열기</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="203"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="207"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>이미지 파일 (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="215"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="219"/>
         <source>Remove photo reference</source>
         <translation>사진 참조 제거</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="216"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="220"/>
         <source>Also permanently delete photo from device?</source>
         <translation>또한 장치에서 사진을 영구 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="238"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="242"/>
         <source>Failed to copy image</source>
         <translation>이미지 복사 실패</translation>
     </message>
@@ -381,12 +395,12 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="155"/>
+        <location filename="../qml/form/FeatureForm.qml" line="137"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>양식을 저장할 수 없습니다. 유효성 검사 오류가 있습니다</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="156"/>
+        <location filename="../qml/form/FeatureForm.qml" line="138"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>피처를 저장할 수 없습니다. 필요한 모든 필드를 확인하세요</translation>
     </message>
@@ -394,47 +408,47 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>FeatureFormPage</name>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="76"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="81"/>
         <source>Edit Feature</source>
         <translation>피처 편집</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="76"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="81"/>
         <source>Feature</source>
         <translation>피처</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="86"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="91"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="196"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="206"/>
         <source>Delete feature</source>
         <translation>피처 삭제</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="197"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="207"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>이 피처를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="217"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="226"/>
         <source>Unsaved changes</source>
         <translation>변경사항 저장되지 않음</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="218"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="227"/>
         <source>Do you want to save changes?</source>
         <translation>변경사항을 저장하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="241"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="248"/>
         <source>Saving failed</source>
         <translation>저장 실패</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="242"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="249"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>변경 사항을 저장하지 못했습니다. 이 문제는 정상적으로 발생하지 않아야 합니다. 앱을 재시작하고 다시 시도하세요 — 그래도 문제가 해결되지 않으면 지원팀에 문의하세요.</translation>
     </message>
@@ -503,17 +517,17 @@ In order to delete your account, enter your username in the field below and clic
 <context>
     <name>FieldsModel</name>
     <message>
-        <location filename="../fieldsmodel.cpp" line="16"/>
+        <location filename="../fieldsmodel.cpp" line="15"/>
         <source>Please fill a name of previous field before adding a new field.</source>
         <translation>새 필드를 추가하기 전에 이전 필드의 이름을 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../fieldsmodel.cpp" line="20"/>
+        <location filename="../fieldsmodel.cpp" line="19"/>
         <source>Field %1 already exists.</source>
         <translation>%1 필드가 이미 존재합니다.</translation>
     </message>
     <message>
-        <location filename="../fieldsmodel.cpp" line="118"/>
+        <location filename="../fieldsmodel.cpp" line="116"/>
         <source>Field %1 already exists. 
 Won&apos;t be added to the project.</source>
         <translation>%1 필드가 이미 존재합니다. 
@@ -629,12 +643,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="232"/>
+        <location filename="../inputhelp.cpp" line="237"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>보고서가 제출되었습니다.%1%1%2에 문의하십시오</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="237"/>
+        <location filename="../inputhelp.cpp" line="242"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>보고서 제출에 실패했습니다.%1인터넷 연결을 확인하십시오.</translation>
     </message>
@@ -660,128 +674,146 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="183"/>
         <source>just now</source>
         <translation>지금 당장</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="188"/>
         <source>%1 minutes ago</source>
         <translation>%1 분 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="188"/>
         <source>%1 minute ago</source>
         <translation>%1 분 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="192"/>
+        <location filename="../inpututils.cpp" line="193"/>
         <source>%1 hours ago</source>
         <translation>%1 시간 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="192"/>
+        <location filename="../inpututils.cpp" line="193"/>
         <source>%1 hour ago</source>
         <translation>%1 시간 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
-        <location filename="../inpututils.cpp" line="201"/>
+        <location filename="../inpututils.cpp" line="197"/>
+        <location filename="../inpututils.cpp" line="202"/>
         <source>%1 days ago</source>
         <translation>%1 일 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
-        <location filename="../inpututils.cpp" line="201"/>
+        <location filename="../inpututils.cpp" line="197"/>
+        <location filename="../inpututils.cpp" line="202"/>
         <source>%1 day ago</source>
         <translation>%1 일 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="206"/>
+        <location filename="../inpututils.cpp" line="207"/>
         <source>%1 weeks ago</source>
         <translation>%1 주 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="206"/>
+        <location filename="../inpututils.cpp" line="207"/>
         <source>%1 week ago</source>
         <translation>%1 주 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="212"/>
         <source>%1 months ago</source>
         <translation>%1 개월 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="212"/>
         <source>%1 month ago</source>
         <translation>%1 개월 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="217"/>
         <source>%1 years ago</source>
         <translation>%1 년 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="217"/>
         <source>%1 year ago</source>
         <translation>%1 년 전</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1411"/>
+        <location filename="../inpututils.cpp" line="1419"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>화면 해상도: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1412"/>
+        <location filename="../inpututils.cpp" line="1420"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>화면 DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1413"/>
+        <location filename="../inpututils.cpp" line="1421"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>화면 크기: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1414"/>
+        <location filename="../inpututils.cpp" line="1422"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>기록상 장치 화소 비율: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1415"/>
+        <location filename="../inpututils.cpp" line="1423"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>계산상 장치 화소 비율 :%1 
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1416"/>
+        <location filename="../inpututils.cpp" line="1424"/>
         <source>used dp scale: %1</source>
         <translation>사용된 dp 배율: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1936"/>
+        <location filename="../inpututils.cpp" line="1944"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>모든 부분에 최소한 %1 포인트를 추가해야 합니다.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1940"/>
+        <location filename="../inpututils.cpp" line="1948"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>최소 %1 지점(들)을 추가해야 합니다.</translation>
     </message>
 </context>
 <context>
+    <name>InstallScannerAppDialog</name>
+    <message>
+        <location filename="../qml/dialogs/InstallScannerAppDialog.qml" line="18"/>
+        <source>Install scanner application</source>
+        <translation>스캐너 애플리케이션 설치</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/InstallScannerAppDialog.qml" line="19"/>
+        <source>You will be redirected to Google Play to install the Barcode Scanner app.</source>
+        <translation>Barcode Scanner 앱을 설치하기 위해 Google Play로 리디렉션됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/InstallScannerAppDialog.qml" line="19"/>
+        <source>After the Barcode Scanner app is installed, close it and switch back to Mergin Maps.</source>
+        <translation>Barcode Scanner 앱이 설치된 후, 앱을 닫고 Mergin Maps로 다시 전환하십시오.</translation>
+    </message>
+</context>
+<context>
     <name>InternalPositionProvider</name>
     <message>
-        <location filename="../position/internalpositionprovider.cpp" line="33"/>
-        <location filename="../position/internalpositionprovider.cpp" line="110"/>
+        <location filename="../position/internalpositionprovider.cpp" line="32"/>
+        <location filename="../position/internalpositionprovider.cpp" line="111"/>
         <source>Connected</source>
         <translation>연결됨</translation>
     </message>
@@ -843,24 +875,42 @@ Won&apos;t be added to the project.</source>
         <translation>장치의 공간이 부족합니다. 프로젝트를 보려면 %1의 여유 공간이 필요합니다. 일부 파일을 제거하고 돌아오거나 도움말을 클릭하여 이 문제를 해결하는 다른 방법을 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="40"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="45"/>
         <source>An error occured during update</source>
         <translation>업데이트 중 오류가 발생했습니다</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="43"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="46"/>
         <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
         <translation>업데이트를 적용하는 동안 장치에 문제가 발생합니다. 프로젝트를 볼 수 없습니다. 이 문제를 해결하는 방법을 보려면 도움말을 클릭하십시오.</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="111"/>
         <source>We are working on an important update, please do not close the application</source>
         <translation>중요한 업데이트를 진행 중입니다. 애플리케이션을 닫지 마십시오</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="117"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="125"/>
         <source>%1/%2</source>
         <translation>%1/%2</translation>
+    </message>
+</context>
+<context>
+    <name>LocalProjectsManager</name>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="210"/>
+        <source>Download failed, remove and retry</source>
+        <translation>다운로드 실패, 삭제 후 다시 시도</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="230"/>
+        <source>Found multiple QGIS project files</source>
+        <translation>다수 QGIS 프로젝트 파일 발견</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="235"/>
+        <source>Failed to find a QGIS project file</source>
+        <translation>QGIS 프로젝트 파일 발견 실패</translation>
     </message>
 </context>
 <context>
@@ -884,27 +934,27 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>LoginForm</name>
     <message>
-        <location filename="../qml/LoginForm.qml" line="70"/>
+        <location filename="../qml/LoginForm.qml" line="62"/>
         <source>Sync projects with your desktop computer and work collaboratively with others by logging in to your %1Mergin Maps%2 account.</source>
         <translation>프로젝트를 데스크톱 컴퓨터와 동기화하고 %1Mergin Maps%2 계정에 로그인하여 다른 사람들과 공동 작업을 수행하십시오.</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="113"/>
+        <location filename="../qml/LoginForm.qml" line="105"/>
         <source>Username</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="157"/>
+        <location filename="../qml/LoginForm.qml" line="149"/>
         <source>Sign in</source>
         <translation>로그인</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="223"/>
+        <location filename="../qml/LoginForm.qml" line="215"/>
         <source>Sign up for free</source>
         <translation>무료 가입</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="245"/>
+        <location filename="../qml/LoginForm.qml" line="237"/>
         <source>Forgot password?</source>
         <translation>비밀번호를 분실하셨습니까?</translation>
     </message>
@@ -986,84 +1036,150 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1114"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1122"/>
         <source>GPS currently unavailable.</source>
         <translation>현재 GPS를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="315"/>
+        <location filename="../qml/map/MapWrapper.qml" line="326"/>
         <source>Successfully synchronized</source>
         <translation>성공적으로 동기화됨</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="329"/>
+        <location filename="../qml/map/MapWrapper.qml" line="340"/>
         <source>Up to date</source>
         <translation>최신 정보</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="338"/>
+        <location filename="../qml/map/MapWrapper.qml" line="349"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>다른  사람이 동기화 중입니다. 나중에 다시 시도하겠습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="348"/>
+        <location filename="../qml/map/MapWrapper.qml" line="359"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>동기화하는 동안 문제가 발생했습니다. 다시 시도하겠습니다. 자세히 알아보려면 클릭</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="366"/>
+        <location filename="../qml/map/MapWrapper.qml" line="377"/>
         <source>Splitting done successfully</source>
         <translation>분할 완료</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="382"/>
+        <location filename="../qml/map/MapWrapper.qml" line="393"/>
         <source>Create line to split the selected feature</source>
         <translation>선택한 피처를 분할한 선 생성</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="398"/>
+        <location filename="../qml/map/MapWrapper.qml" line="409"/>
         <source>Select some point to start editing the geometry</source>
         <translation>도형 편집을 시작할 지점을 선택하세요</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="414"/>
+        <location filename="../qml/map/MapWrapper.qml" line="425"/>
         <source>Record new geometry for the feature</source>
         <translation>피처에 대한 새 도형 기록</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="553"/>
+        <location filename="../qml/map/MapWrapper.qml" line="564"/>
         <source>Details</source>
         <translation>세부 사항</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="673"/>
+        <location filename="../qml/map/MapWrapper.qml" line="667"/>
+        <source>Back</source>
+        <translation>뒤로</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="684"/>
         <source>Discard the changes?</source>
         <translation>변경사항을 취소할까요?</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="676"/>
+        <location filename="../qml/map/MapWrapper.qml" line="687"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>&apos;예&apos;를 클릭하면 도형에 대한 변경사항이 취소됩니다. 대신 변경사항을 저장하려면 툴바에서 &apos;아니요&apos;를 누른 다음 &apos;완료&apos;를 누르십시오.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="680"/>
+        <location filename="../qml/map/MapWrapper.qml" line="691"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>&apos;예&apos;를 클릭하면 새 도형이 취소되고 피처가 저장되지 않습니다. 대신 도형을 저장하려면 &apos;아니요&apos;를 누른 다음 &apos;완료&apos;를 누르십시오.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="746"/>
+        <location filename="../qml/map/MapWrapper.qml" line="754"/>
         <source>Connecting to %1</source>
         <translation>%1 연결 중</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="760"/>
+        <location filename="../qml/map/MapWrapper.qml" line="768"/>
         <source>Connected, no position</source>
         <translation>연결됨, 위치 없음</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="764"/>
+        <location filename="../qml/map/MapWrapper.qml" line="772"/>
         <source>Unknown accuracy</source>
         <translation>알 수 없는 정확도</translation>
+    </message>
+</context>
+<context>
+    <name>MerginApi</name>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="679"/>
+        <source>Username must have at least 4 characters</source>
+        <translation>사용자 이름은 4자 이상이어야 합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="686"/>
+        <source>Username contains invalid characters</source>
+        <translation>사용자 이름에 잘못된 문자가 포함되어 있습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="693"/>
+        <source>Please enter a valid email</source>
+        <translation>유효한 이메일을 입력하세요.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="700"/>
+        <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
+        <translation>비밀번호가 충분히 강력하지 않습니다. % 1는 8자 이상이어야 합니다. % 1는 소문자를 포함합니다. % 1는 대문자를 포함합니다. % 1는  숫자 또는 특수문자를 포함합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="713"/>
+        <source>Passwords do not match</source>
+        <translation>비밀번호가 일치하지 않습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="720"/>
+        <source>Please accept Terms and Privacy Policy</source>
+        <translation>약관 및 개인정보보호 정책에 동의하십시오.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1008"/>
+        <source>Registration successful</source>
+        <translation>등록 성공</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1029"/>
+        <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
+        <translation>선택한 Mergin 서버에서는 신규 등록이 허용되지 않습니다.%1관리자에게 확인하십시오.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1299"/>
+        <source>Project detached from Mergin</source>
+        <translation>Mergin에서 분리된 프로젝트</translation>
+    </message>
+</context>
+<context>
+    <name>MerginProjectStatusModel</name>
+    <message>
+        <location filename="../../core/merginprojectstatusmodel.cpp" line="70"/>
+        <source>Pending Changes</source>
+        <translation>보류 중인 변경사항</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
+        <source>Failed to determine changes</source>
+        <translation>변경사항을 확인하지 못했습니다.</translation>
     </message>
 </context>
 <context>
@@ -1156,17 +1272,17 @@ Click &apos;Yes&apos; to upload it.</source>
         <translation>iOS에서는 Input에서 직접 Bluetooth를 통해 수신기에 연결할 수 없습니다. 하드웨어 공급업체는 수신기에 연결하고 위치를 설정하는 맞춤형 앱을 제공할 수 있습니다. Input은 여전히 휴대전화/태블릿의 내부 GPS라고 생각합니다.%1%2Click here to learn more.%3</translation>
     </message>
     <message>
-        <location filename="../qml/misc/PositionProviderPage.qml" line="366"/>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="370"/>
         <source>Remove receiver</source>
         <translation>수신기 제거</translation>
     </message>
     <message>
-        <location filename="../qml/misc/PositionProviderPage.qml" line="367"/>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="371"/>
         <source>Do you want to remove receiver from the list of recent receivers?</source>
         <translation>최근 수신기 목록에서 수신기를 제거하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../qml/misc/PositionProviderPage.qml" line="380"/>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="384"/>
         <source>Internal</source>
         <translation>내부</translation>
     </message>
@@ -1174,22 +1290,22 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>PositionProvidersModel</name>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="25"/>
+        <location filename="../position/positionprovidersmodel.cpp" line="24"/>
         <source>Internal</source>
         <translation>내부</translation>
     </message>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="26"/>
+        <location filename="../position/positionprovidersmodel.cpp" line="25"/>
         <source>GPS receiver of this device</source>
         <translation>이 장치의 GPS 수신기</translation>
     </message>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="115"/>
+        <location filename="../position/positionprovidersmodel.cpp" line="114"/>
         <source> Bluetooth device</source>
         <translation>블루투스 장치</translation>
     </message>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="171"/>
+        <location filename="../position/positionprovidersmodel.cpp" line="170"/>
         <source>Bluetooth device</source>
         <translation>블루투스 장치</translation>
     </message>
@@ -1257,7 +1373,7 @@ Click &apos;Yes&apos; to upload it.</source>
     <name>ProjectList</name>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="134"/>
-        <location filename="../qml/components/ProjectList.qml" line="189"/>
+        <location filename="../qml/components/ProjectList.qml" line="191"/>
         <source>Create project</source>
         <translation>프로젝트 생성</translation>
     </message>
@@ -1267,42 +1383,42 @@ Click &apos;Yes&apos; to upload it.</source>
         <translation>다운로드한 프로젝트를 찾을 수 없습니다. %2프로젝트를 생성하는 방법%3을 %1배우고 %3장치에 %4다운로드합니다.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="180"/>
+        <location filename="../qml/components/ProjectList.qml" line="182"/>
         <source>You can also create new project by clicking button below.</source>
         <translation>아래 버튼을 클릭하여 새 프로젝트를 생성할 수도 있습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="202"/>
+        <location filename="../qml/components/ProjectList.qml" line="204"/>
         <source>Unable to get the list of projects.</source>
         <translation>프로젝트 목록을 가져올 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="202"/>
+        <location filename="../qml/components/ProjectList.qml" line="204"/>
         <source>No projects found!</source>
         <translation>프로젝트를 찾을 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="233"/>
+        <location filename="../qml/components/ProjectList.qml" line="235"/>
         <source>Retry</source>
         <translation>다시 시도</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="261"/>
+        <location filename="../qml/components/ProjectList.qml" line="263"/>
         <source>Remove project</source>
         <translation>프로젝트 삭제</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="262"/>
+        <location filename="../qml/components/ProjectList.qml" line="264"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>동기화되지 않은 변경사항은 손실됩니다.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="297"/>
+        <location filename="../qml/components/ProjectList.qml" line="295"/>
         <source>Download project</source>
         <translation>프로젝트 다운로드</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="298"/>
+        <location filename="../qml/components/ProjectList.qml" line="296"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>프로젝트를 다운로드하시겠습니까
@@ -1330,27 +1446,27 @@ Click &apos;Yes&apos; to upload it.</source>
         <translation>프로젝트</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="368"/>
+        <location filename="../qml/ProjectPanel.qml" line="386"/>
         <source>Home</source>
         <translation>홈</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="390"/>
+        <location filename="../qml/ProjectPanel.qml" line="408"/>
         <source>My projects</source>
         <translation>내 프로젝트</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="414"/>
+        <location filename="../qml/ProjectPanel.qml" line="432"/>
         <source>Shared with me</source>
         <translation>나에게 공유</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="414"/>
+        <location filename="../qml/ProjectPanel.qml" line="432"/>
         <source>Shared</source>
         <translation>공유</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="434"/>
+        <location filename="../qml/ProjectPanel.qml" line="452"/>
         <source>Explore</source>
         <translation>탐색</translation>
     </message>
@@ -1371,7 +1487,12 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="119"/>
+        <location filename="../projectwizard.cpp" line="93"/>
+        <source>Project name contains invalid characters</source>
+        <translation>프로젝트 이름에 잘못된 문자가 포함되어 있습니다.</translation>
+    </message>
+    <message>
+        <location filename="../projectwizard.cpp" line="127"/>
         <source>Project %1 created</source>
         <translation>1% 프로젝트가 생성되었습니다</translation>
     </message>
@@ -1379,32 +1500,32 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>ProjectWizardPage</name>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="51"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="53"/>
         <source>Create Project</source>
         <translation>프로젝트 생성</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="76"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="78"/>
         <source>Project name</source>
         <translation>프로젝트 이름</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="91"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="93"/>
         <source>Fields</source>
         <translation>필드</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="125"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="127"/>
         <source>Add field</source>
         <translation>필드 추가</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="166"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="168"/>
         <source>Create project</source>
         <translation>프로젝트 생성</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="172"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="174"/>
         <source>Empty project name</source>
         <translation>빈 프로젝트 이름</translation>
     </message>
@@ -1472,63 +1593,63 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="57"/>
+        <location filename="../attributes/fieldvalidator.h" line="59"/>
         <source>Value must be a number</source>
         <translation>값은 숫자여야 합니다</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="58"/>
+        <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value must be lower than %1</source>
         <translation>값은 %1보다 작아야 합니다</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="59"/>
+        <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Value must be higher than %1</source>
         <translation>값은 %1 보다 커야 합니다</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="60"/>
+        <location filename="../attributes/fieldvalidator.h" line="62"/>
         <source>Value is too large</source>
         <translation>값이 너무 큽니다</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="61"/>
+        <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Field can not contain decimal places</source>
         <translation>필드는 소수점 이하 자릿수를 포함할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="63"/>
+        <location filename="../attributes/fieldvalidator.h" line="65"/>
         <source>Can not be longer than %1 characters</source>
         <translation>%1 자를 초과할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="65"/>
+        <location filename="../attributes/fieldvalidator.h" line="67"/>
         <source>Field should not be empty</source>
         <translation>필드는 비워둘 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="66"/>
+        <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Field must not be empty</source>
         <translation>필드는 비워둘 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="67"/>
+        <location filename="../attributes/fieldvalidator.h" line="69"/>
         <source>Value should be unique</source>
         <translation>값은 고유해야 합니다</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="68"/>
+        <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Value must be unique</source>
         <translation>값은 고유해야 합니다</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="69"/>
-        <location filename="../attributes/fieldvalidator.h" line="70"/>
+        <location filename="../attributes/fieldvalidator.h" line="71"/>
+        <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Unmet QGIS expression constraint</source>
         <translation>충족되지 않은 QGIS 표현 제약</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="72"/>
+        <location filename="../attributes/fieldvalidator.h" line="74"/>
         <source>Not a valid value</source>
         <translation>유효한 값이 아닙니다</translation>
     </message>
@@ -1579,23 +1700,6 @@ Click &apos;Yes&apos; to upload it.</source>
     </message>
 </context>
 <context>
-    <name>QgsQuickMapCanvasMap</name>
-    <message>
-        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="175"/>
-        <source>Rendering</source>
-        <translation>렌더링</translation>
-    </message>
-</context>
-<context>
-    <name>QgsQuickMapSettings</name>
-    <message>
-        <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="244"/>
-        <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="273"/>
-        <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
-        <translation>Map Canvas 회전은 지원되지 않습니다. %1에서 0으로 재설정 중.</translation>
-    </message>
-</context>
-<context>
     <name>RecordingToolbar</name>
     <message>
         <location filename="../qml/map/RecordingToolbar.qml" line="72"/>
@@ -1631,13 +1735,13 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>RecordingTools</name>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="282"/>
+        <location filename="../qml/map/RecordingTools.qml" line="280"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>낮은 GIS 위치 정확도 (%1 m)&lt;br&gt;&lt;br&gt;하늘이 잘 보이는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="188"/>
-        <location filename="../qml/map/RecordingTools.qml" line="308"/>
+        <location filename="../qml/map/RecordingTools.qml" line="186"/>
+        <location filename="../qml/map/RecordingTools.qml" line="306"/>
         <source>GPS currently unavailable.</source>
         <translation>현재 GPS를 사용할 수 없습니다.</translation>
     </message>
@@ -1712,67 +1816,67 @@ Click &apos;Yes&apos; to upload it.</source>
         <translation>지도로 GPS 추적</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="127"/>
+        <location filename="../qml/SettingsPanel.qml" line="128"/>
         <source>GPS accuracy</source>
         <translation>GPS 정확도</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="182"/>
+        <location filename="../qml/SettingsPanel.qml" line="183"/>
         <source>Accuracy threshold</source>
         <translation>정확도 임계치</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="208"/>
+        <location filename="../qml/SettingsPanel.qml" line="209"/>
         <source>Show accuracy warning</source>
         <translation>정확도 경고 표시</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="227"/>
+        <location filename="../qml/SettingsPanel.qml" line="229"/>
         <source>Select GPS receiver</source>
         <translation>GPS 수신기 선택</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="239"/>
+        <location filename="../qml/SettingsPanel.qml" line="241"/>
         <source>Recording</source>
         <translation>기록</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="246"/>
+        <location filename="../qml/SettingsPanel.qml" line="248"/>
         <source>Line rec. interval</source>
         <translation>라인 기록 간격</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="268"/>
+        <location filename="../qml/SettingsPanel.qml" line="270"/>
         <source>Reuse last value option</source>
         <translation>마지막 값 재사용 옵션</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="287"/>
+        <location filename="../qml/SettingsPanel.qml" line="290"/>
         <source>Automatically sync changes</source>
         <translation>변경사항 자동 동기화</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="311"/>
+        <location filename="../qml/SettingsPanel.qml" line="315"/>
         <source>About</source>
         <translation>정보</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="320"/>
+        <location filename="../qml/SettingsPanel.qml" line="324"/>
         <source>Help</source>
         <translation>도움말</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="329"/>
+        <location filename="../qml/SettingsPanel.qml" line="333"/>
         <source>Privacy policy</source>
         <translation>개인정보보호 정책</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="338"/>
+        <location filename="../qml/SettingsPanel.qml" line="342"/>
         <source>Mergin terms of service</source>
         <translation>Mergin 서비스 약관</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="347"/>
+        <location filename="../qml/SettingsPanel.qml" line="351"/>
         <source>Diagnostic log</source>
         <translation>진단 로그</translation>
     </message>
@@ -1939,17 +2043,17 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>inputexternalresource</name>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="236"/>
         <source>Take a photo</source>
         <translation>사진 촬영</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="276"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="278"/>
         <source>From gallery</source>
         <translation>갤러리에서</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="297"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="299"/>
         <source>Image is not available: </source>
         <translation>이미지를 사용할 수 없습니다:</translation>
     </message>
@@ -1957,17 +2061,17 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="119"/>
+        <location filename="../qml/editor/inputrelation.qml" line="139"/>
         <source>%1 more</source>
         <translation>1% 이상</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="134"/>
+        <location filename="../qml/editor/inputrelation.qml" line="154"/>
         <source>Add</source>
         <translation>추가</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="190"/>
+        <location filename="../qml/editor/inputrelation.qml" line="215"/>
         <source>Linked features</source>
         <translation>피처 연결됨</translation>
     </message>
@@ -1991,48 +2095,58 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="229"/>
-        <location filename="../qml/main.qml" line="285"/>
+        <location filename="../qml/main.qml" line="239"/>
+        <location filename="../qml/main.qml" line="298"/>
         <source>No Changes</source>
         <translation>변경사항 없음</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="260"/>
+        <location filename="../qml/main.qml" line="273"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS 자동 센터 모드 켜기</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="260"/>
+        <location filename="../qml/main.qml" line="273"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS 자동 센터 모드 끄기</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="274"/>
+        <location filename="../qml/main.qml" line="287"/>
         <source>No editable layers found.</source>
         <translation>편집 가능한 레이어를 찾을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="594"/>
+        <location filename="../qml/main.qml" line="627"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>위치를 사용할 수 없기 때문에 측설이 비활성화되었습니다!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="615"/>
+        <location filename="../qml/main.qml" line="639"/>
+        <source>Failed to open the project</source>
+        <translation>프로젝트를 열지 못했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="664"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Mergin과 통신하지 못했습니다.%1네트워크 연결을 개선하십시오.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="662"/>
+        <location filename="../qml/main.qml" line="715"/>
         <source>There were issues loading the project.</source>
         <translation>프로젝트를 로드하는 중에 문제가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="693"/>
+        <location filename="../qml/main.qml" line="727"/>
+        <source>Could not read the project file:</source>
+        <translation>프로젝트 파일을 읽을 수 없습니다:</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="754"/>
         <source>Press back again to quit the app</source>
         <translation>앱을 종료하려면 뒤로가기를 다시 누르세요.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="534"/>
+        <location filename="../qml/main.qml" line="557"/>
         <source>PROJ Error</source>
         <translation>PROJ 오류</translation>
     </message>
