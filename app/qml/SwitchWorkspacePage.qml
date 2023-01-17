@@ -47,6 +47,82 @@ Page {
     allowTimer: true
   }
 
+  Item {
+    id: content
+
+    anchors {
+      top: searchBar.bottom
+      left: parent.left
+      right: parent.right
+    }
+
+    Column {
+      id: columnLayout
+      anchors.fill: parent
+
+      Label {
+        id: invitationsLabel
+        height: InputStyle.fieldHeight
+        width: parent.width
+        wrapMode: Text.WordWrap
+        text: qsTr("Invitations")
+        color: InputStyle.fontColor
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        leftPadding: InputStyle.innerFieldMargin
+        visible: __merginApi.userInfo.hasInvitations
+        //horizontalAlignment: Text.AlignLeft
+        //verticalAlignment: Text.AlignVCenter
+        //anchors.horizontalCenter: parent.horizontalCenter
+      }
+
+      InvitationList {
+        id: invitationList
+        width: parent.width
+        visible: __merginApi.userInfo.hasInvitations
+        //anchors.horizontalCenter: parent.horizontalCenter
+      }
+
+      Label {
+        id: workspacesLabel
+        height: InputStyle.fieldHeight
+        width: parent.width
+        wrapMode: Text.WordWrap
+        text: qsTr("Your workspaces")
+        color: InputStyle.fontColor
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        leftPadding: InputStyle.innerFieldMargin
+        //horizontalAlignment: Text.AlignLeft
+        //verticalAlignment: Text.AlignVCenter
+        //anchors.horizontalCenter: parent.horizontalCenter
+      }
+
+      WorkspaceList {
+        id: workspacelist
+
+        onWorkspaceChangeRequested: function (workspaceId) {
+          __merginApi.userInfo.setActiveWorkspace( workspaceId )
+          root.back()
+        }
+
+        onCreateWorkspaceRequested: root.createWorkspace()
+
+        searchText: searchBar.text
+        anchors.horizontalCenter: parent.horizontalCenter
+/*
+        anchors {
+          left: parent.left
+          right: parent.right
+          top: workspacesLabel.bottom
+          bottom: parent.bottom
+        }
+*/
+      }
+
+
+    }
+  }
+
+/*
   WorkspaceList {
     id: workspacelist
 
@@ -66,4 +142,5 @@ Page {
       bottom: parent.bottom
     }
   }
+*/
 }
