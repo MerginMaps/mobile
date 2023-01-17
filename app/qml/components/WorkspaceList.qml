@@ -96,17 +96,6 @@ Item {
 
           elide: Text.ElideMiddle
         }
-
-        Text {
-          Layout.fillWidth: true
-
-          color: InputStyle.secondaryFontColor
-          text: model.whatsThis
-
-          font.pixelSize: InputStyle.fontPixelSizeSmall
-
-          elide: Text.ElideMiddle
-        }
       }
 
       Rectangle {
