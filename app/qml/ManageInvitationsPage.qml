@@ -88,6 +88,7 @@ Item {
 
       TextHyperlink {
         id: createWorkspaceText
+
         width: columnLayout.width
         height: 2 * InputStyle.fieldHeight
         anchors.horizontalCenter: parent.horizontalCenter

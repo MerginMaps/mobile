@@ -14,6 +14,7 @@
 #include <QSortFilterProxyModel>
 
 #include "merginapi.h"
+#include "merginuserinfo.h"
 
 class InvitationsModel : public QStandardItemModel
 {
@@ -35,7 +36,7 @@ class InvitationsModel : public QStandardItemModel
     bool isLoading() const;
 
   public slots:
-    void onListInvitationsFinished( const QMap<QString, QString> &workspaces );
+    void onListInvitationsFinished( const QList<MerginInvitation> &invitations );
 
   signals:
     void merginApiChanged( MerginApi *api );

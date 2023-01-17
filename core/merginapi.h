@@ -551,7 +551,7 @@ class MerginApi: public QObject
     void listWorkspacesFinished( const QMap<int, QString> &workspaces );
 
     void listInvitationsFailed();
-    void listInvitationsFinished( const QMap<QString, QString> &workspaces );
+    void listInvitationsFinished( const QList<MerginInvitation> &invitations );
 
     void processInvitationFailed();
     void processInvitationFinished();

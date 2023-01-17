@@ -35,14 +35,75 @@ Item {
       }
     }
 
-    spacing: 10
+    spacing: InputStyle.panelSpacing
 
-    delegate: Rectangle {
-      width: 50
-      height: 50
-      color: "red"
+    delegate: delegateItem
+  }
+
+  Component {
+    id: delegateItem
+
+    Item {
+      height: InputStyle.rowHeight
+      width: ListView.view.width
+
+      ColumnLayout {
+        id: delegateContent
+
+        anchors {
+          left: parent.left
+          leftMargin: InputStyle.listMarginsSmall
+          right: parent.right
+          rightMargin: InputStyle.listMarginsSmall
+          top: parent.top
+        }
+
+        height: parent.height * 0.9
+
+        spacing: 0
+
+        Text {
+          Layout.fillWidth: true
+
+          color: InputStyle.fontColor
+          font.bold: true
+          text: model.display
+
+          font.pixelSize: InputStyle.fontPixelSizeNormal
+
+          elide: Text.ElideMiddle
+        }
+      }
+
+      Text {
+        Layout.fillWidth: true
+
+        color: InputStyle.secondaryFontColor
+        text: model.user
+
+        font.pixelSize: InputStyle.fontPixelSizeSmall
+
+        elide: Text.ElideMiddle
+      }
+
+      Rectangle {
+        anchors {
+          bottom: parent.bottom
+          left: parent.left
+          right: parent.right
+        }
+
+        height: InputStyle.borderSize
+        color: InputStyle.panelBackgroundLight
+      }
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: root.workspaceChangeRequested( model.whatsThis )
+      }
     }
   }
+
 
   Component {
     id: loadingSpinnerComponent

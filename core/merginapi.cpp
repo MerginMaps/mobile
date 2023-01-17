@@ -3365,12 +3365,12 @@ void MerginApi::listInvitationsReplyFinished()
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isArray() )
     {
-      QMap<QString, QString> invitations;
+      QList<MerginInvitation> invitations;
       QJsonArray array = doc.array();
       for ( auto it = array.constBegin(); it != array.constEnd(); ++it )
       {
-        QJsonObject inv = it->toObject();
-        invitations.insert( inv.value( QStringLiteral( "uuid" ) ).toString(), inv.value( QStringLiteral( "workspace" ) ).toString() );
+        MerginInvitation invite = MerginInvitation::fromJsonObject( it->toObject() );
+        invitations.append( invite );
       }
 
       emit listInvitationsFinished( invitations );

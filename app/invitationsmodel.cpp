@@ -36,19 +36,18 @@ void InvitationsModel::listInvitations()
   setModelIsLoading( true );
 }
 
-void InvitationsModel::onListInvitationsFinished( const QMap<QString, QString> &invitations )
+void InvitationsModel::onListInvitationsFinished( const QList<MerginInvitation> &invitations )
 {
   beginResetModel();
 
   clear();
 
-  QMap<QString, QString>::const_iterator it = invitations.constBegin();
-  while ( it != invitations.constEnd() )
+  for ( const MerginInvitation &invite : invitations )
   {
-    QStandardItem *item = new QStandardItem( it.value() );
-    item->setData( it.key() );
+    QStandardItem *item = new QStandardItem( invite.workspace );
+    item->setData( invite.role, Qt::UserRole );
+    item->setData( invite.uuid, Qt::WhatsThisRole );
     appendRow( item );
-    ++it;
   }
 
   endResetModel();
