@@ -41,8 +41,14 @@ Item {
 
   function manageSubscriptionPlans() {
     if (__purchasing.hasInAppPurchases && (__purchasing.hasManageSubscriptionCapability || !__merginApi.subscriptionInfo.ownsActiveSubscription )) {
-      stackView.push( subscribePanelComp)
-    } else {
+      if ( __merginApi.serverType === MerginServerType.OLD ) {
+        stackView.push( subscribePanelComp )
+      }
+      else if ( __merginApi.serverType === MerginServerType.SAAS ) {
+        stackView.push( workspaceSubscribePageComp )
+      }
+    }
+    else {
       Qt.openUrlExternally(__purchasing.subscriptionManageUrl);
     }
   }
@@ -217,14 +223,24 @@ Item {
             MouseArea {
               anchors.fill: parent
               onClicked: {
-                if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
+                if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK ) {
                   __merginApi.getUserInfo()
-                  if (__merginApi.apiSupportsSubscriptions)
+
+                  if ( __merginApi.apiSupportsSubscriptions ) {
                     __merginApi.getSubscriptionInfo()
-                  stackView.push( accountPanelComp )
+                  }
+
+                  if ( __merginApi.serverType === MerginServerType.OLD ) {
+                    stackView.push( accountPanelComp )
+                  }
+                  else {
+                    stackView.push( workspaceAccountPageComp )
+                  }
+
                 }
-                else
+                else {
                   root.openAuthPanel()
+                }
               }
             }
 
@@ -609,14 +625,24 @@ Item {
             MouseArea {
               anchors.fill: parent
               onClicked: {
-                if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
+                if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK ) {
                   __merginApi.getUserInfo()
-                  if (__merginApi.apiSupportsSubscriptions)
+
+                  if ( __merginApi.apiSupportsSubscriptions ) {
                     __merginApi.getSubscriptionInfo()
-                  stackView.push( accountPanelComp )
+                  }
+
+                  if ( __merginApi.serverType === MerginServerType.OLD ) {
+                    stackView.push( accountPanelComp )
+                  }
+                  else {
+                    stackView.push( workspaceAccountPageComp )
+                  }
+
                 }
-                else
+                else {
                   root.openAuthPanel()
+                }
               }
             }
 
@@ -995,6 +1021,38 @@ Item {
   }
 
   Component {
+    id: workspaceAccountPageComp
+
+    WorkspaceAccountPage {
+      id: workspaceAccountPage
+
+//      height: root.height
+//      width: root.width
+//      visible: true
+
+      onBack: stackView.popOnePageOrClose()
+
+      onManagePlansClicked: manageSubscriptionPlans()
+
+      onSignOutClicked: {
+        if ( __merginApi.userAuth.hasAuthData() ) {
+          __merginApi.clearAuth()
+        }
+        __merginApi.clearWorkspaceCache()
+        stackView.popOnePageOrClose()
+        root.resetView()
+      }
+//      onRestorePurchasesClicked: {
+//        __purchasing.restore()
+//      }
+      onAccountDeleted: {
+        stackView.popOnePageOrClose()
+        root.resetView()
+      }
+    }
+  }
+
+  Component {
     id: subscribePanelComp
 
     SubscribePage {
@@ -1007,6 +1065,18 @@ Item {
       onSubscribeClicked: {
         stackView.popOnePageOrClose()
       }
+    }
+  }
+
+  Component {
+    id: workspaceSubscribePageComp
+
+    WorkspaceSubscribePage {
+      id: subscribePanel
+//      height: root.height
+//      width: root.width
+      onBackClicked: stackView.popOnePageOrClose()
+      onSubscribeClicked: stackView.popOnePageOrClose()
     }
   }
 

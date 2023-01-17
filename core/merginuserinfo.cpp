@@ -21,6 +21,7 @@ MerginUserInfo::MerginUserInfo( QObject *parent )
 
 void MerginUserInfo::clear()
 {
+  mName = "";
   mEmail = "";
   mActiveWorkspace = -1;
   mWorkspaces.clear();
@@ -37,6 +38,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
 
   // parse profile data
   mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
+  mName = docObj.value( QStringLiteral( "name" ) ).toString();
 
   int preferredWorkspace = -1;
   if ( docObj.contains( QStringLiteral( "preferred_workspace" ) ) )
@@ -223,4 +225,9 @@ MerginInvitation MerginInvitation::fromJsonObject( const QJsonObject &invitation
   merginInvitation.role = invitationInfo.value( QStringLiteral( "role" ) ).toString();
 
   return merginInvitation;
+}
+
+QString MerginUserInfo::name() const
+{
+  return mName;
 }

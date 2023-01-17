@@ -28,6 +28,7 @@ QtObject {
     property color panelBackgroundDark: "#B3B3B3"
     property color panelBackgroundDarker: "#575757"
     property color panelBackgroundLight: "#E6E6E6"
+    property color panelBackgroundWhite: "#FFFFFF"
     property color secondaryBackgroundColor: "#86A3C3"
     property color labelColor: "#999999"
     property color secondaryFontColor: "#B3B3B3"
@@ -93,6 +94,8 @@ QtObject {
 
     property real iconSizeMedium: 25 * __dp
     property real iconSizeLarge: 30 * __dp
+    property real iconSizeXLarge: 50 * __dp
+    property real iconSizeXXLarge: 80 * __dp
     property real switchWidth: scale( 45 )
     property real switchHeight: scale( 25 )
 

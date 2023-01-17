@@ -11,12 +11,11 @@
 #include <QSettings>
 
 #include "merginworkspaceinfo.h"
-#include "coreutils.h"
 
 MerginWorkspaceInfo::MerginWorkspaceInfo( QObject *parent )
   : QObject( parent )
 {
-  clear();
+//  clear(); // not needed -> it is initialized as empty
 }
 
 void MerginWorkspaceInfo::clear()
@@ -32,6 +31,12 @@ void MerginWorkspaceInfo::setFromJson( QJsonObject docObj )
   // parse storage data
   mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toDouble();
   mStorageLimit = docObj.value( QStringLiteral( "storage" ) ).toDouble();
+
+  // role is not present if this is the old server
+  if ( docObj.contains( QStringLiteral( "role" ) ) )
+  {
+    mRole = docObj.value( QStringLiteral( "role" ) ).toString();
+  }
 
   emit workspaceInfoChanged();
 }
@@ -50,4 +55,9 @@ void MerginWorkspaceInfo::onStorageChanged( double storage )
 {
   mStorageLimit = storage;
   emit workspaceInfoChanged();
+}
+
+QString MerginWorkspaceInfo::role() const
+{
+  return mRole;
 }

@@ -127,6 +127,9 @@ set(MM_QML
     SubscribePage.qml
     SubscribePlanItem.qml
     SwitchWorkspacePage.qml
+    WorkspaceAccountPage.qml
+    WorkspaceSubscribePage.qml
+    WorkspaceSubscribePlanItem.qml
     main.qml
     PARENT_SCOPE
 )
