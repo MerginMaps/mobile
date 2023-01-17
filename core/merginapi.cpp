@@ -1058,8 +1058,10 @@ void MerginApi::authorizeFinished()
     {
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: authorize" ) );
     }
+    mUserAuth->blockSignals( true );
     mUserAuth->setUsername( QString() );
     mUserAuth->setPassword( QString() );
+    mUserAuth->blockSignals( false );
     mUserAuth->clearTokenData();
   }
   if ( mAuthLoopEvent.isRunning() )
