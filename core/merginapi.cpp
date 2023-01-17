@@ -3310,9 +3310,7 @@ void MerginApi::listWorkspacesReplyFinished()
     if ( doc.isArray() )
     {
       QMap<int, QString> workspaces;
-      qDebug() << doc.array();
       QJsonArray array = doc.array();
-
       for ( auto it = array.constBegin(); it != array.constEnd(); ++it )
       {
         QJsonObject ws = it->toObject();

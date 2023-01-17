@@ -46,7 +46,6 @@ void WorkspacesModel::onListWorkspacesFinished( const QMap<int, QString> &worksp
   while ( it != workspaces.constEnd() )
   {
     QStandardItem *item = new QStandardItem( it.value() );
-    item->setData( it.value(), Qt::DisplayRole );
     item->setData( it.key(), Qt::WhatsThisRole );
     appendRow( item );
     ++it;
