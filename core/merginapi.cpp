@@ -3317,6 +3317,7 @@ void MerginApi::listWorkspacesReplyFinished()
         workspaces.insert( ws.value( QStringLiteral( "id" ) ).toInt(), ws.value( QStringLiteral( "name" ) ).toString() );
       }
 
+      mUserInfo->setWorkspaces( workspaces );
       emit listWorkspacesFinished( workspaces );
     }
     else

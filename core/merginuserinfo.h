@@ -56,6 +56,7 @@ class MerginUserInfo: public QObject
 
     int findActiveWorkspace( int preferredWorkspace = -1 );
     Q_INVOKABLE void setActiveWorkspace( int newWorkspace );
+    void setWorkspaces( QMap<int, QString> workspaces );
 
   signals:
     void userInfoChanged();

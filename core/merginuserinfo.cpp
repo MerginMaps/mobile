@@ -90,6 +90,17 @@ QMap<int, QString> MerginUserInfo::workspaces() const
   return mWorkspaces;
 }
 
+void MerginUserInfo::setWorkspaces( QMap<int, QString> workspaces )
+{
+  if ( mWorkspaces == workspaces )
+  {
+    return;
+  }
+
+  mWorkspaces = workspaces;
+  emit userInfoChanged();
+}
+
 QList<MerginInvitation> MerginUserInfo::invitations() const
 {
   return mInvitations;
