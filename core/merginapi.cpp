@@ -3227,30 +3227,19 @@ void MerginApi::getServerTypeReplyFinished()
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
-      QJsonObject docObj = doc.object();
-      if ( docObj.contains( QStringLiteral( "user_workspaces_allowed" ) ) )
+      QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
+      if ( serverType == QStringLiteral( "ee" ) )
       {
         setServerType( MerginServerType::EE );
       }
-
-      if ( docObj.contains( QStringLiteral( "global_workspace" ) ) )
+      else if ( serverType == QStringLiteral( "ce" ) )
       {
         setServerType( MerginServerType::CE );
       }
-
-      //QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
-      //if ( serverType == QStringLiteral( "ee" ) )
-      //{
-      //setServerType( MerginServerType::EE );
-      //}
-      //else if ( serverType == QStringLiteral( "ce" ) )
-      //{
-      //setServerType( MerginServerType::CE );
-      //}
-      //else if ( serverType == QStringLiteral( "saas" ) )
-      //{
-      //setServerType( MerginServerType::SAAS );
-      //}
+      else if ( serverType == QStringLiteral( "saas" ) )
+      {
+        setServerType( MerginServerType::SAAS );
+      }
     }
   }
   else
@@ -3321,7 +3310,10 @@ void MerginApi::listWorkspacesReplyFinished()
     if ( doc.isArray() )
     {
       QMap<int, QString> workspaces;
-      for ( auto it = doc.array().constBegin(); it != doc.array().constEnd(); ++it )
+      qDebug() << doc.array();
+      QJsonArray array = doc.array();
+
+      for ( auto it = array.constBegin(); it != array.constEnd(); ++it )
       {
         QJsonObject ws = it->toObject();
         workspaces.insert( ws.value( QStringLiteral( "id" ) ).toInt(), ws.value( QStringLiteral( "name" ) ).toString() );
@@ -3375,7 +3367,8 @@ void MerginApi::listInvitationsReplyFinished()
     if ( doc.isArray() )
     {
       QMap<QString, QString> invitations;
-      for ( auto it = doc.array().constBegin(); it != doc.array().constEnd(); ++it )
+      QJsonArray array = doc.array();
+      for ( auto it = array.constBegin(); it != array.constEnd(); ++it )
       {
         QJsonObject inv = it->toObject();
         invitations.insert( inv.value( QStringLiteral( "uuid" ) ).toString(), inv.value( QStringLiteral( "workspace" ) ).toString() );

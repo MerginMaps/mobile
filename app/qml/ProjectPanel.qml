@@ -1029,10 +1029,16 @@ Item {
 
     SwitchWorkspacePage {
       id: switchWorkspacePanel
+
       height: root.height
       width: root.width
+
       onBack: {
         stackView.popOnePageOrClose()
+      }
+
+      onCreateWorkspace: {
+        stackView.push( createWorkspaceComponent )
       }
     }
   }

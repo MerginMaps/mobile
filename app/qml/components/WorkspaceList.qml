@@ -20,7 +20,8 @@ Item {
 
   property string searchText: ""
 
-  signal workspaceChanged()
+  signal workspaceChangeRequested( int workspaceId )
+  signal createWorkspaceRequested()
 
   onSearchTextChanged: {
     proxyModel.searchExpression = root.searchText
@@ -44,48 +45,84 @@ Item {
       }
     }
 
-    spacing: 10
+    spacing: InputStyle.panelSpacing
 
-    //delegate: delegateItem
-    delegate: Rectangle {
-      width: 50
-      height: 50
-      color: "red"
+    delegate: delegateItem
+
+    footer: DelegateButton {
+      id: createWorkspaceButton
+
+      width: listView.width
+      btnWidth: listView.width / 2
+      height: InputStyle.fieldHeight
+
+      text: qsTr("Create new workspace")
+      onClicked: {
+        root.createWorkspaceRequested()
+      }
     }
   }
 
   Component {
     id: delegateItem
 
-    Rectangle {
-      id: itemContainer
+    Item {
+      height: InputStyle.rowHeight
+      width: ListView.view.width
 
-      property bool isSelected: __merginApi.userInfo.activeWorkspace === model.display
+      ColumnLayout {
+        id: delegateContent
 
-      width: listView.cellWidth
-      height: listView.cellHeight
-      anchors.leftMargin: InputStyle.panelMargin
-      anchors.rightMargin: InputStyle.panelMargin
-      color: item.highlight ? InputStyle.panelItemHighlight : InputStyle.clrPanelMain
+        anchors {
+          left: parent.left
+          leftMargin: InputStyle.listMarginsSmall
+          right: parent.right
+          rightMargin: InputStyle.listMarginsSmall
+          top: parent.top
+        }
 
-      MouseArea {
-        anchors.fill: parent
-        onClicked: {
-          console.log("Change workspace to", model.display)
-          root.close()
+        height: parent.height * 0.9
+
+        spacing: 0
+
+        Text {
+          Layout.fillWidth: true
+
+          color: InputStyle.fontColor
+          font.bold: true
+          text: model.display
+
+          font.pixelSize: InputStyle.fontPixelSizeNormal
+
+          elide: Text.ElideMiddle
+        }
+
+        Text {
+          Layout.fillWidth: true
+
+          color: InputStyle.secondaryFontColor
+          text: model.whatsThis
+
+          font.pixelSize: InputStyle.fontPixelSizeSmall
+
+          elide: Text.ElideMiddle
         }
       }
 
-      ExtendedMenuItem {
-          id: item
-          panelMargin: InputStyle.panelMargin
-          contentText: model.display
-          //imageSource: InputStyle.mapThemesIcon
-          anchors.rightMargin: panelMargin
-          anchors.leftMargin: panelMargin
-          highlight: itemContainer.isSelected
-          // Do not show border line for selected item and one before selected
-          //showBorder: !itemContainer.isSelected && !itemContainer.isOneBeforeSelected
+      Rectangle {
+        anchors {
+          bottom: parent.bottom
+          left: parent.left
+          right: parent.right
+        }
+
+        height: InputStyle.borderSize
+        color: InputStyle.panelBackgroundLight
+      }
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: root.workspaceChangeRequested( model.whatsThis )
       }
     }
   }

@@ -64,7 +64,9 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   }
 
   saveWorkspacesData();
-  findActiveWorkspace( preferredWorkspace );
+  int workspace = findActiveWorkspace( preferredWorkspace );
+  setActiveWorkspace( workspace );
+
   emit userInfoChanged();
 }
 
@@ -119,7 +121,6 @@ void MerginUserInfo::loadWorkspacesData()
 {
   QSettings settings;
   settings.beginGroup( "Input/" );
-  mActiveWorkspace = settings.value( "lastUsedWorkspace", -1 ).toInt();
 
   settings.beginGroup( "workspaces" );
   QStringList keys = settings.childKeys();
@@ -137,7 +138,8 @@ void MerginUserInfo::loadWorkspacesData()
 
 int MerginUserInfo::findActiveWorkspace( int preferredWorkspace )
 {
-  int workspace;
+  int workspace = -1;
+
   if ( mWorkspaces.isEmpty() )
   {
     workspace = -1;
@@ -170,7 +172,6 @@ int MerginUserInfo::findActiveWorkspace( int preferredWorkspace )
     }
   }
 
-  setActiveWorkspace( workspace );
   return workspace;
 }
 

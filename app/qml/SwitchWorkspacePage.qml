@@ -19,6 +19,7 @@ Page {
   id: root
 
   signal back
+  signal createWorkspace()
 
   header: PanelHeader {
     id: header
@@ -49,6 +50,13 @@ Page {
   WorkspaceList {
     id: workspacelist
 
+    onWorkspaceChangeRequested: function (workspaceId) {
+      __merginApi.userInfo.setActiveWorkspace( workspaceId )
+      root.back()
+    }
+
+    onCreateWorkspaceRequested: root.createWorkspace()
+
     searchText: searchBar.text
 
     anchors {
@@ -56,19 +64,6 @@ Page {
       right: parent.right
       top: searchBar.bottom
       bottom: parent.bottom
-    }
-  }
-
-  DelegateButton {
-    id: createWorkspaceButton
-
-    width: parent.width
-    height: InputStyle.fieldHeight
-    anchors.centerIn: parent
-
-    text: qsTr("Create new workspace")
-    onClicked: {
-      stackView.push(createWorkspaceComponent)
     }
   }
 }
