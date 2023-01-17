@@ -696,7 +696,7 @@ Item {
           }
 
           contentItem: Text {
-            text: __merginApi.userInfo.activeWorkspace + " > "
+            text: __merginApi.userInfo.activeWorkspaceName + " > "
             horizontalAlignment : Text.AlignLeft
           }
 
@@ -903,7 +903,7 @@ Item {
                 stackView.popOnePageOrClose()
                 stackView.push(manageInvitationsComponent)
               }
-              else if (__merginApi.userInfo.activeWorkspace == "") {
+              else if (__merginApi.userInfo.activeWorkspaceId == -1) {
                 stackView.popOnePageOrClose()
                 stackView.push(createWorkspaceComponent)
               } else {
