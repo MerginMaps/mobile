@@ -79,7 +79,7 @@ Item {
         Layout.fillWidth: true
 
         color: InputStyle.secondaryFontColor
-        text: model.user
+        text: model.toolTip
 
         font.pixelSize: InputStyle.fontPixelSizeSmall
 
