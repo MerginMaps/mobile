@@ -228,6 +228,13 @@ Rectangle {
           verticalAlignment: Text.AlignVCenter
           elide: Text.ElideRight
         }
+
+        visible: {
+          if ( __merginApi.serverType === MerginServerType.CE ) {
+            return false;
+          }
+          return true;
+        }
       }
 
       Button {
