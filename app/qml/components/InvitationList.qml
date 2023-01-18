@@ -18,6 +18,9 @@ import "."
 Item {
   id: root
 
+  signal acceptInvitationRequested(string uuid)
+  signal rejectInvitationRequested(string uuid)
+
   ListView {
     id: listview
 
@@ -44,66 +47,95 @@ Item {
     id: delegateItem
 
     Item {
-      height: InputStyle.rowHeight
       width: ListView.view.width
+      height: InputStyle.rowHeightMedium
 
-      ColumnLayout {
-        id: delegateContent
+      RowLayout {
+        id: inviteRow
 
         anchors {
           left: parent.left
-          leftMargin: InputStyle.listMarginsSmall
           right: parent.right
-          rightMargin: InputStyle.listMarginsSmall
-          top: parent.top
+          verticalCenter: parent.verticalCenter
         }
 
-        height: parent.height * 0.9
-
-        spacing: 0
-
-        Text {
+        ColumnLayout {
           Layout.fillWidth: true
+          Layout.fillHeight: true
+          spacing: 0
 
-          color: InputStyle.fontColor
-          font.bold: true
-          text: model.display
+          // name of the workspace to join
+          Text {
+            text: model.display
 
-          font.pixelSize: InputStyle.fontPixelSizeNormal
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-          elide: Text.ElideMiddle
+            color: InputStyle.fontColor
+
+            font.bold: true
+            font.pixelSize: InputStyle.fontPixelSizeBig
+
+            elide: Text.ElideMiddle
+          }
+
+          // user role in this workspace
+          Text {
+            text: model.toolTip
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            color: InputStyle.secondaryFontColor
+            font.pixelSize: InputStyle.fontPixelSizeNormal
+
+            elide: Text.ElideMiddle
+          }
         }
-      }
 
-      Text {
-        Layout.fillWidth: true
+        // accept button
+        Image {
+          Layout.rightMargin: InputStyle.listMargins + InputStyle.iconSizeMedium - InputStyle.smallGap
+          Layout.preferredWidth: InputStyle.iconSizeMedium
+          Layout.preferredHeight: InputStyle.iconSizeMedium
 
-        color: InputStyle.secondaryFontColor
-        text: model.toolTip
+          source: InputStyle.yesIcon
 
-        font.pixelSize: InputStyle.fontPixelSizeSmall
+          MouseArea {
+            anchors {
+              fill: parent // make the click area bigger
+              leftMargin: -InputStyle.buttonClickArea
+              topMargin: -InputStyle.buttonClickArea
+              rightMargin: -InputStyle.buttonClickArea
+              bottomMargin: -InputStyle.buttonClickArea
+            }
 
-        elide: Text.ElideMiddle
-      }
-
-      Rectangle {
-        anchors {
-          bottom: parent.bottom
-          left: parent.left
-          right: parent.right
+            onClicked: root.acceptInvitationRequested(model.whatsThis)
+          }
         }
 
-        height: InputStyle.borderSize
-        color: InputStyle.panelBackgroundLight
-      }
+        // reject button
+        Image {
+          Layout.rightMargin: InputStyle.listMargins
+          Layout.preferredWidth: InputStyle.iconSizeMedium
+          Layout.preferredHeight: InputStyle.iconSizeMedium
 
-      MouseArea {
-        anchors.fill: parent
-        onClicked: root.workspaceChangeRequested( model.whatsThis )
+          source: InputStyle.noIcon
+
+          MouseArea {
+            anchors {
+              fill: parent // make the click area bigger
+              leftMargin: -InputStyle.buttonClickArea
+              topMargin: -InputStyle.buttonClickArea
+              rightMargin: -InputStyle.buttonClickArea
+              bottomMargin: -InputStyle.buttonClickArea
+            }
+
+            onClicked: root.rejectInvitationRequested(model.whatsThis)
+          }
+        }
       }
     }
   }
-
 
   Component {
     id: loadingSpinnerComponent
