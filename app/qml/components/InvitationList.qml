@@ -18,8 +18,8 @@ import "."
 Item {
   id: root
 
-  signal invitationAccepted(string uuid)
-  signal invitationRejected(string uuid)
+  signal acceptInvitationRequested(string uuid)
+  signal rejectInvitationRequested(string uuid)
 
   ListView {
     id: listview
@@ -109,7 +109,7 @@ Item {
               bottomMargin: -InputStyle.buttonClickArea
             }
 
-            onClicked: root.invitationAccepted(model.whatsThis)
+            onClicked: root.acceptInvitationRequested(model.whatsThis)
           }
         }
 
@@ -130,7 +130,7 @@ Item {
               bottomMargin: -InputStyle.buttonClickArea
             }
 
-            onClicked: root.invitationRejected(model.whatsThis)
+            onClicked: root.rejectInvitationRequested(model.whatsThis)
           }
         }
       }
