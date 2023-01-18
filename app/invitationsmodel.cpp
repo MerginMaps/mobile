@@ -55,6 +55,17 @@ void InvitationsModel::onListInvitationsFinished( const QList<MerginInvitation> 
   setModelIsLoading( false );
 }
 
+void InvitationsModel::processInvitation( const QString &uuid, bool accept )
+{
+  if ( !mApi )
+  {
+    return;
+  }
+
+  setModelIsLoading( true );
+  mApi->processInvitation( uuid, accept );
+}
+
 MerginApi *InvitationsModel::merginApi() const
 {
   return mApi;
@@ -65,8 +76,18 @@ void InvitationsModel::setMerginApi( MerginApi *merginApi )
   if ( !merginApi || mApi == merginApi )
     return;
 
+  if ( mApi )
+  {
+    disconnect( mApi );
+  }
+
   mApi = merginApi;
   emit merginApiChanged( mApi );
+
+  if ( mApi )
+  {
+    connect( mApi, &MerginApi::processInvitationFinished, this, &InvitationsModel::listInvitations );
+  }
 }
 
 bool InvitationsModel::isLoading() const
