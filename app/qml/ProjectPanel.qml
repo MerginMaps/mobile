@@ -71,7 +71,7 @@ Item {
       }
     }
 
-    stackView.push( authPanelComp, { state: authstate } )
+    stackView.push( authPanelComp, { state: authstate }, StackView.PushTransition )
   }
 
   function openChangesPanel()
@@ -527,9 +527,6 @@ Item {
 
     Page {
       id: projectsPage
-
-      Component.onDestruction: console.log("$$#: DESTROYED NEW PROJECTS PANEL")
-      Component.onCompleted: console.log("$$#: CREATED NEW PROJECTS PANEL")
 
       function setupProjectOpen( projectId, projectPath ) {
         activeProjectId = projectId
