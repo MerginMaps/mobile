@@ -24,6 +24,7 @@ struct MerginInvitation
   QString uuid;
   QString workspace;
   QString role;
+  QDateTime expiration;
 
   static MerginInvitation fromJsonObject( const QJsonObject &invitationInfo );
 };
@@ -36,7 +37,6 @@ class MerginUserInfo: public QObject
     Q_PROPERTY( QString email READ email NOTIFY userInfoChanged )
     Q_PROPERTY( QString activeWorkspaceName READ activeWorkspaceName NOTIFY userInfoChanged )
     Q_PROPERTY( int activeWorkspaceId READ activeWorkspaceId NOTIFY activeWorkspaceChanged )
-    Q_PROPERTY( bool hasInvitations READ hasInvitations NOTIFY activeWorkspaceChanged )
 
   public:
     explicit MerginUserInfo( QObject *parent = nullptr );
@@ -51,7 +51,6 @@ class MerginUserInfo: public QObject
     int activeWorkspaceId() const;
     QMap<int, QString> workspaces() const;
     QList<MerginInvitation> invitations() const;
-    bool hasInvitations() const;
 
     void saveWorkspacesData();
     void loadWorkspacesData();

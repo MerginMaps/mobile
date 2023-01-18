@@ -107,11 +107,6 @@ QList<MerginInvitation> MerginUserInfo::invitations() const
   return mInvitations;
 }
 
-bool MerginUserInfo::hasInvitations() const
-{
-  return mInvitations.count() > 0;
-}
-
 void MerginUserInfo::saveWorkspacesData()
 {
   QSettings settings;
@@ -221,6 +216,7 @@ MerginInvitation MerginInvitation::fromJsonObject( const QJsonObject &invitation
   merginInvitation.uuid = invitationInfo.value( QStringLiteral( "uuid" ) ).toString();
   merginInvitation.workspace = invitationInfo.value( QStringLiteral( "workspace" ) ).toString();
   merginInvitation.role = invitationInfo.value( QStringLiteral( "role" ) ).toString();
+  merginInvitation.expiration = invitationInfo.value( QStringLiteral( "expire" ) ).toVariant().toDateTime();
 
   return merginInvitation;
 }

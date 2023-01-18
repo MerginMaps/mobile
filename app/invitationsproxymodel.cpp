@@ -23,6 +23,15 @@ InvitationsModel *InvitationsProxyModel::invitationsSourceModel() const
   return mModel;
 }
 
+bool InvitationsProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const
+{
+  // filter out expired invitations
+  QModelIndex sourceIndex = sourceModel()->index( sourceRow, 0, sourceParent );
+  QDateTime expiration = sourceModel()->data( sourceIndex, Qt::StatusTipRole ).toDateTime();
+
+  return expiration > QDateTime::currentDateTimeUtc();
+}
+
 void InvitationsProxyModel::setSearchExpression( QString searchExpression )
 {
   if ( mSearchExpression == searchExpression )

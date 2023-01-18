@@ -29,6 +29,8 @@ class InvitationsProxyModel : public QSortFilterProxyModel
     QString searchExpression() const;
     InvitationsModel *invitationsSourceModel() const;
 
+    bool filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const override;
+
   public slots:
     void setSearchExpression( QString searchExpression );
     void setInvitationsSourceModel( InvitationsModel *sourceModel );

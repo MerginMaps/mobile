@@ -47,6 +47,7 @@ void InvitationsModel::onListInvitationsFinished( const QList<MerginInvitation> 
     QStandardItem *item = new QStandardItem( invite.workspace );
     item->setData( invite.role, Qt::ToolTipRole );
     item->setData( invite.uuid, Qt::WhatsThisRole );
+    item->setData( invite.expiration, Qt::StatusTipRole );
     appendRow( item );
   }
 
