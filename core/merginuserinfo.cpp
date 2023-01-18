@@ -196,7 +196,6 @@ void MerginUserInfo::setActiveWorkspace( int newWorkspace )
   settings.endGroup();
 
   emit activeWorkspaceChanged();
-  emit userInfoChanged();
 }
 
 void MerginUserInfo::clearCachedWorkspacesInfo()
