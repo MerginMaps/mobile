@@ -13,11 +13,6 @@ InvitationsProxyModel::InvitationsProxyModel( QObject *parent ) : QSortFilterPro
 {
 }
 
-QString InvitationsProxyModel::searchExpression() const
-{
-  return mSearchExpression;
-}
-
 InvitationsModel *InvitationsProxyModel::invitationsSourceModel() const
 {
   return mModel;
@@ -32,16 +27,6 @@ bool InvitationsProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex &
   return expiration > QDateTime::currentDateTimeUtc();
 }
 
-void InvitationsProxyModel::setSearchExpression( QString searchExpression )
-{
-  if ( mSearchExpression == searchExpression )
-    return;
-
-  mSearchExpression = searchExpression;
-  setFilterFixedString( mSearchExpression );
-  emit searchExpressionChanged( mSearchExpression );
-}
-
 void InvitationsProxyModel::setInvitationsSourceModel( InvitationsModel *sourceModel )
 {
   if ( mModel == sourceModel )
@@ -49,4 +34,5 @@ void InvitationsProxyModel::setInvitationsSourceModel( InvitationsModel *sourceM
 
   mModel = sourceModel;
   setSourceModel( mModel );
+  emit invitationsSourceModelChanged();
 }

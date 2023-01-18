@@ -18,29 +18,24 @@
 class InvitationsProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
-
-    Q_PROPERTY( QString searchExpression READ searchExpression WRITE setSearchExpression NOTIFY searchExpressionChanged )
-    Q_PROPERTY( InvitationsModel *invitationsSourceModel READ invitationsSourceModel WRITE setInvitationsSourceModel )
+    Q_PROPERTY( InvitationsModel *invitationsSourceModel READ invitationsSourceModel WRITE setInvitationsSourceModel NOTIFY invitationsSourceModelChanged )
 
   public:
     explicit InvitationsProxyModel( QObject *parent = nullptr );
     ~InvitationsProxyModel() override {};
 
-    QString searchExpression() const;
     InvitationsModel *invitationsSourceModel() const;
 
     bool filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const override;
 
   public slots:
-    void setSearchExpression( QString searchExpression );
     void setInvitationsSourceModel( InvitationsModel *sourceModel );
 
   signals:
-    void searchExpressionChanged( QString searchExpression );
+    void invitationsSourceModelChanged();
 
   private:
     InvitationsModel *mModel = nullptr; // not owned by this, needs to be set in order to proxy model to work
-    QString mSearchExpression;
 };
 
 #endif // INVITATIONSPROXYMODEL_H
