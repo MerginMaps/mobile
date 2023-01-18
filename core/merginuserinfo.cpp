@@ -11,7 +11,6 @@
 #include <QSettings>
 
 #include "merginuserinfo.h"
-#include "coreutils.h"
 
 MerginUserInfo::MerginUserInfo( QObject *parent )
   : QObject( parent )
@@ -145,8 +144,7 @@ void MerginUserInfo::loadWorkspacesData()
 
   settings.endGroup();
 
-  int workspace = findActiveWorkspace();
-  setActiveWorkspace( workspace );
+  mActiveWorkspace = findActiveWorkspace();
 }
 
 int MerginUserInfo::findActiveWorkspace( int preferredWorkspace )

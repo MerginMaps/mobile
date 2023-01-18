@@ -296,7 +296,6 @@ class MerginApi: public QObject
     //! Sends subscription info request using userInfo endpoint.
     Q_INVOKABLE void getSubscriptionInfo();
     Q_INVOKABLE void clearAuth();
-    Q_INVOKABLE void clearWorkspaceCache();
     Q_INVOKABLE void resetApiRoot();
     Q_INVOKABLE QString resetPasswordUrl();
 
@@ -459,10 +458,15 @@ class MerginApi: public QObject
      * Determine Mergin server type by querying /config endpoint.
      * Possible types are: saas, ce, ee and legacy
      */
-    void getServerType();
+    void getServerConfig();
 
     MerginServerType::ServerType serverType() const;
     void setServerType( const MerginServerType::ServerType &serverType );
+
+    /**
+     * Reads server details and user details from QSettings.
+     */
+    void loadCache();
 
     /**
      * Sends non-blocking GET request to the server to list user workspaces.
@@ -492,6 +496,11 @@ class MerginApi: public QObject
     * \param workspaceName
     */
     Q_INVOKABLE bool createWorkspace( const QString &workspaceName );
+
+    /**
+     * Clears authorisation data
+     */
+    Q_INVOKABLE void signOut();
 
   signals:
     void apiSupportsSubscriptionsChanged();
@@ -592,7 +601,7 @@ class MerginApi: public QObject
      */
     void onPlanProductIdChanged();
 
-    void getServerTypeReplyFinished();
+    void getServerConfigReplyFinished();
     void listWorkspacesReplyFinished();
     void listInvitationsReplyFinished();
     void processInvitationReplyFinished();
@@ -635,8 +644,6 @@ class MerginApi: public QObject
 
     static QByteArray getChecksum( const QString &filePath );
     static QSet<QString> listFiles( const QString &projectPath );
-
-    void loadAuthData();
 
     bool validateAuth();
     void checkMerginVersion( QString apiVersion, bool serverSupportsSubscriptions, QString msg = QStringLiteral() );

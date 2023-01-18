@@ -20,7 +20,7 @@ class MerginServerType
 
     enum ServerType
     {
-      OLD, // old, no workspaces
+      OLD = 0, // old, no workspaces
       CE, // ce, single global workspace
       EE, // ee, multiple workspaces
       SAAS // saas, multiple workspaces and subscriptions

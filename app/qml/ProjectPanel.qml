@@ -24,6 +24,7 @@ Item {
   property string activeProjectPath: ""
 
   signal openProjectRequested( string projectId, string projectPath )
+  signal refreshProjects()
   signal resetView() // resets view to state as when panel is opened
   signal closed()
 
@@ -61,6 +62,15 @@ Item {
 
   function openAuthPanel( authstate = "login" )
   {
+    for ( let i = 0; i < stackView.depth; i++ ) {
+      let item = stackView.get( i )
+
+      if ( item && item.objectName && item.objectName === "authPanel" ) {
+        // sorry, it is already opened, let's not open it again
+        return;
+      }
+    }
+
     stackView.push( authPanelComp, { state: authstate } )
   }
 
@@ -108,13 +118,15 @@ Item {
       }
     }
 
-    function clearStackOnServerChange() {
-        stackView.clear()
-        if ( __merginApi.serverType === MerginServerType.OLD ) {
-            stackView.push( projectsPanelComp )
-        } else {
-            stackView.push( workspaceProjectsPanelComp )
-        }
+    function switchUI() {
+      stackView.clear( StackView.Immediate )
+
+      if ( __merginApi.serverType === MerginServerType.OLD ) {
+        stackView.push( projectsPanelComp )
+      }
+      else {
+        stackView.push( workspaceProjectsPanelComp )
+      }
     }
 
     Keys.onReleased: function( event ) {
@@ -133,14 +145,6 @@ Item {
     onVisibleChanged: {
       if ( stackView.visible )
         stackView.forceActiveFocus()
-    }
-
-    Connections {
-      target: __merginApi
-
-      function onServerTypeChanged( serverType ) {
-          stackView.clearStackOnServerChange()
-      }
     }
   }
 
@@ -292,7 +296,7 @@ Item {
 
         onStateChanged: {
           __merginApi.pingMergin()
-          refreshProjectList()
+          projectsPage.refreshProjectList()
           pageFooter.setActiveButton( pageContent.state )
         }
 
@@ -310,6 +314,10 @@ Item {
           function onResetView() {
             if ( pageContent.state === "created" || pageContent.state === "shared" )
               pageContent.state = "local"
+          }
+
+          function onRefreshProjects() {
+            projectsPage.refreshProjectList()
           }
         }
 
@@ -511,51 +519,6 @@ Item {
           }
         }
       }
-
-      Connections {
-        target: __merginApi
-        enabled: root.visible
-
-        function onListProjectsFinished( merginProjects, projectCount, page, requestId ) {
-          stackView.pending = false
-        }
-        function onListProjectsByNameFinished( merginProjects, requestId ) {
-          stackView.pending = false
-        }
-        function onApiVersionStatusChanged() {
-          stackView.pending = false
-          if (__merginApi.apiVersionStatus === MerginApiStatus.OK && stackView.currentItem.objectName === "authPanel") {
-            if (__merginApi.userAuth.hasAuthData()) {
-              refreshProjectList()
-            } else if (pageContent.state !== 'local') {
-              if (stackView.currentItem.objectName !== "authPanel") {
-                root.openAuthPanel()
-              }
-            }
-          }
-        }
-        function onAuthRequested() {
-          stackView.pending = false
-          root.openAuthPanel()
-        }
-        function onAuthChanged() {
-          stackView.pending = false
-          if ( __merginApi.userAuth.hasAuthData() ) {
-            stackView.popOnePageOrClose()
-            projectsPage.refreshProjectList()
-            root.forceActiveFocus()
-          }
-        }
-        function onAuthFailed() {
-          stackView.pending = false
-        }
-        function onRegistrationFailed() {
-          stackView.pending = false
-        }
-        function onRegistrationSucceeded() {
-          stackView.pending = false
-        }
-      }
     }
   }
 
@@ -564,6 +527,9 @@ Item {
 
     Page {
       id: projectsPage
+
+      Component.onDestruction: console.log("$$#: DESTROYED NEW PROJECTS PANEL")
+      Component.onCompleted: console.log("$$#: CREATED NEW PROJECTS PANEL")
 
       function setupProjectOpen( projectId, projectPath ) {
         activeProjectId = projectId
@@ -691,7 +657,7 @@ Item {
 
         onStateChanged: {
           __merginApi.pingMergin()
-          refreshProjectList()
+          projectsPage.refreshProjectList()
           pageFooter.setActiveButton( pageContent.state )
         }
 
@@ -709,6 +675,10 @@ Item {
           function onResetView() {
             if ( pageContent.state === "created" )
               pageContent.state = "local"
+          }
+
+          function onRefreshProjects() {
+            projectsPage.refreshProjectList()
           }
         }
 
@@ -895,75 +865,15 @@ Item {
           }
         }
       }
-
-      Connections {
-        target: __merginApi
-        enabled: root.visible
-
-        function onListProjectsFinished( merginProjects, projectCount, page, requestId ) {
-          stackView.pending = false
-        }
-        function onListProjectsByNameFinished( merginProjects, requestId ) {
-          stackView.pending = false
-        }
-        function onApiVersionStatusChanged() {
-          stackView.pending = false
-          if (__merginApi.apiVersionStatus === MerginApiStatus.OK && stackView.currentItem.objectName === "authPanel") {
-            if (__merginApi.userAuth.hasAuthData()) {
-              refreshProjectList()
-            } else if (pageContent.state !== 'local') {
-              if (stackView.currentItem.objectName !== "authPanel") {
-                root.openAuthPanel()
-              }
-            }
-          }
-        }
-        function onAuthRequested() {
-          stackView.pending = false
-          root.openAuthPanel()
-        }
-        function onAuthChanged() {
-          stackView.pending = false
-          if ( __merginApi.userAuth.hasAuthData() ) {
-              if (__merginApi.userInfo.hasInvitations) {
-                stackView.popOnePageOrClose()
-                stackView.push(manageInvitationsComponent)
-              }
-              else if (__merginApi.userInfo.activeWorkspaceId == -1) {
-                stackView.popOnePageOrClose()
-                stackView.push(createWorkspaceComponent)
-              } else {
-                stackView.popOnePageOrClose()
-                projectsPage.refreshProjectList()
-                root.forceActiveFocus()
-            }
-            stackView.pending = false
-          }
-        }
-        function onAuthFailed() {
-          stackView.pending = false
-        }
-        function onRegistrationFailed() {
-          stackView.pending = false
-        }
-        function onRegistrationSucceeded() {
-          stackView.pending = false
-        }
-        function onActiveWorkspaceChanged() {
-          projectsPage.refreshProjectList()
-        }
-        function userInfoChanged() {
-          stackView.pending = false
-        }
-
-      }
     }
   }
 
   Component {
     id: authPanelComp
+
     AuthPanel {
       id: authPanel
+
       objectName: "authPanel"
       visible: false
       pending: stackView.pending
@@ -1003,11 +913,8 @@ Item {
       }
       onManagePlansClicked: manageSubscriptionPlans()
       onSignOutClicked: {
-        if ( __merginApi.userAuth.hasAuthData() ) {
-          __merginApi.clearAuth()
-        }
-        __merginApi.clearWorkspaceCache()
-        stackView.popOnePageOrClose()
+        __merginApi.signOut()
+        stackView.pop( null )
         root.resetView()
       }
       onRestorePurchasesClicked: {
@@ -1031,11 +938,8 @@ Item {
       onManagePlansClicked: manageSubscriptionPlans()
 
       onSignOutClicked: {
-        if ( __merginApi.userAuth.hasAuthData() ) {
-          __merginApi.clearAuth()
-        }
-        __merginApi.clearWorkspaceCache()
-        stackView.popOnePageOrClose()
+        __merginApi.signOut()
+        stackView.pop( null )
         root.resetView()
       }
 
@@ -1132,6 +1036,62 @@ Item {
       onBack: {
         stackView.popOnePageOrClose()
       }
+    }
+  }
+
+  Connections {
+    target: __merginApi
+    enabled: root.visible
+
+    function onListProjectsFinished( merginProjects, projectCount, page, requestId ) {
+      stackView.pending = false
+    }
+
+    function onListProjectsByNameFinished( merginProjects, requestId ) {
+      stackView.pending = false
+    }
+
+    function onApiVersionStatusChanged() {
+      stackView.pending = false
+
+      if (__merginApi.apiVersionStatus === MerginApiStatus.OK) {
+        if (__merginApi.userAuth.hasAuthData()) {
+          root.refreshProjects()
+        }
+      }
+    }
+
+    function onAuthRequested() {
+      stackView.pending = false
+      root.openAuthPanel()
+    }
+
+    function onAuthChanged() {
+      stackView.pending = false
+
+      if ( __merginApi.userAuth.hasAuthData() ) {
+        stackView.popOnePageOrClose()
+        root.refreshProjects()
+        root.forceActiveFocus()
+
+        // TODO: optionally show invitations
+      }
+    }
+
+    function onAuthFailed() {
+      stackView.pending = false
+    }
+
+    function onRegistrationFailed() {
+      stackView.pending = false
+    }
+
+    function onRegistrationSucceeded() {
+      stackView.pending = false
+    }
+
+    function onServerTypeChanged( serverType ) {
+        stackView.switchUI()
     }
   }
 }

@@ -44,25 +44,59 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   , mSubscriptionInfo( new MerginSubscriptionInfo )
   , mUserAuth( new MerginUserAuth )
 {
+  // load cached data if there are any
+  QSettings cache;
+  if ( cache.contains( QStringLiteral( "Input/apiRoot" ) ) )
+  {
+    loadCache();
+  }
+  else
+  {
+    // set default api root
+    setApiRoot( defaultApiRoot() );
+  }
+
   qRegisterMetaType<Transactions>();
 
   QObject::connect( this, &MerginApi::authChanged, this, &MerginApi::saveAuthData );
   QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::pingMergin );
-  QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::getServerType );
+  QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::getServerConfig );
   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::checkMerginVersion );
+  QObject::connect( this, &MerginApi::serverTypeChanged, this, &MerginApi::getUserInfo );
   QObject::connect( mUserInfo, &MerginUserInfo::userInfoChanged, this, &MerginApi::userInfoChanged );
   QObject::connect( mUserInfo, &MerginUserInfo::activeWorkspaceChanged, this, &MerginApi::activeWorkspaceChanged );
   QObject::connect( mUserInfo, &MerginUserInfo::activeWorkspaceChanged, this, &MerginApi::getWorkspaceInfo );
   QObject::connect( mSubscriptionInfo, &MerginSubscriptionInfo::subscriptionInfoChanged, this, &MerginApi::subscriptionInfoChanged );
   QObject::connect( mSubscriptionInfo, &MerginSubscriptionInfo::planProductIdChanged, this, &MerginApi::onPlanProductIdChanged );
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::authChanged );
-  QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::getUserInfo );
+  QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, [this]()
+  {
+    if ( mUserAuth->hasAuthData() )
+    {
+      // do not call /user/profile when user just logged out
+      getUserInfo();
+    }
+  } );
 
-  loadAuthData();
-  getServerType();
   GEODIFF_init();
   GEODIFF_setLoggerCallback( &GeodiffUtils::log );
   GEODIFF_setMaximumLoggerLevel( GEODIFF_LoggerLevel::LevelDebug );
+
+  // check if the cache is up to date
+  getServerConfig();
+  pingMergin();
+}
+
+void MerginApi::loadCache()
+{
+  QSettings settings;
+  mApiRoot = settings.value( QStringLiteral( "Input/apiRoot" ) ).toString();
+  int serverType = settings.value( QStringLiteral( "Input/serverType" ) ).toInt();
+
+  mServerType = static_cast<MerginServerType::ServerType>( serverType );
+
+  mUserAuth->loadAuthData();
+  mUserInfo->loadWorkspacesData();
 }
 
 MerginUserAuth *MerginApi::userAuth() const
@@ -762,7 +796,6 @@ void MerginApi::getUserInfo()
 {
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
-    mUserInfo->loadWorkspacesData();
     return;
   }
 
@@ -852,11 +885,6 @@ void MerginApi::clearAuth()
   mUserInfo->clear();
   mWorkspaceInfo->clear();
   mSubscriptionInfo->clear();
-}
-
-void MerginApi::clearWorkspaceCache()
-{
-  mUserInfo->clearCachedWorkspacesInfo();
 }
 
 void MerginApi::resetApiRoot()
@@ -1184,14 +1212,6 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool w
   return mManager.get( request );
 }
 
-void MerginApi::loadAuthData()
-{
-  QSettings settings;
-  settings.beginGroup( QStringLiteral( "Input/" ) );
-  setApiRoot( settings.value( QStringLiteral( "apiRoot" ) ).toString() );
-  mUserAuth->loadAuthData();
-}
-
 bool MerginApi::validateAuth()
 {
   if ( !mUserAuth->hasAuthData() )
@@ -1393,15 +1413,13 @@ void MerginApi::setApiRoot( const QString &apiRoot )
     newApiRoot = apiRoot;
   }
 
-  if ( newApiRoot  != mApiRoot )
+  if ( newApiRoot != mApiRoot )
   {
     mApiRoot = newApiRoot;
+
     QSettings settings;
-    settings.beginGroup( QStringLiteral( "Input/" ) );
-    settings.setValue( QStringLiteral( "apiRoot" ), mApiRoot );
-    settings.endGroup();
-    setApiVersionStatus( MerginApiStatus::UNKNOWN );
-    setServerType( MerginServerType::OLD );
+    settings.setValue( QStringLiteral( "Input/apiRoot" ), mApiRoot );
+
     emit apiRootChanged();
   }
 }
@@ -3206,7 +3224,7 @@ void MerginApi::deleteAccountFinished()
   r->deleteLater();
 }
 
-void MerginApi::getServerType()
+void MerginApi::getServerConfig()
 {
   QNetworkRequest request = getDefaultRequest();
   QString urlString = mApiRoot + QStringLiteral( "/config" );
@@ -3214,18 +3232,19 @@ void MerginApi::getServerType()
   request.setUrl( url );
 
   QNetworkReply *reply = mManager.get( request );
-  CoreUtils::log( "server type", QStringLiteral( "Requesting server type: " ) + url.toString() );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::getServerTypeReplyFinished );
+
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::getServerConfigReplyFinished );
+  CoreUtils::log( "Config", QStringLiteral( "Requesting server configuration: " ) + url.toString() );
 }
 
-void MerginApi::getServerTypeReplyFinished()
+void MerginApi::getServerConfigReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    CoreUtils::log( "server type", QStringLiteral( "Success" ) );
+    CoreUtils::log( "Config", QStringLiteral( "Success" ) );
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
@@ -3261,8 +3280,6 @@ void MerginApi::getServerTypeReplyFinished()
   }
 
   r->deleteLater();
-
-  getUserInfo();
 }
 
 MerginServerType::ServerType MerginApi::serverType() const
@@ -3477,6 +3494,11 @@ bool MerginApi::createWorkspace( const QString &workspaceName )
   CoreUtils::log( "create " + workspaceName, QStringLiteral( "Requesting workspace creation: " ) + url.toString() );
 
   return true;
+}
+
+void MerginApi::signOut()
+{
+  clearAuth();
 }
 
 void MerginApi::createWorkspaceReplyFinished()
