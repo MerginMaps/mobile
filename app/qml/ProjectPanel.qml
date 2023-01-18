@@ -1028,13 +1028,16 @@ Item {
 
     ManageInvitationsPage {
       id: manageInvitationsPanel
+
       height: root.height
       width: root.width
+
       onBack: {
         stackView.popOnePageOrClose()
       }
     }
   }
+
 
   Connections {
     target: __merginApi

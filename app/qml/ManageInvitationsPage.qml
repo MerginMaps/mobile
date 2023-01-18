@@ -1,102 +1,242 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
-import QtQuick.Dialogs
-
 import lc 1.0
-import "." // import InputStyle singleton
-import "./components"
 
-Item {
-  id: manageInvitationsPanel
+import "."
+import "./components"
+import "./misc"
+
+Page {
+  id: root
 
   signal back
+  signal createWorkspaceRequested
 
-  // background
-  Rectangle {
-    width: parent.width
-    height: parent.height
-    color: InputStyle.clrPanelMain
+  header: PanelHeaderV2 {
+    width: root.width
+    headerTitle: qsTr("Join a workspace")
+    onBackClicked: root.back()
   }
 
-  PanelHeader {
-    id: header
-
-    height: InputStyle.rowHeightHeader
-    width: createWorkspacePanel.width
-    color: InputStyle.clrPanelMain
-    rowHeight: InputStyle.rowHeightHeader
-    titleText: qsTr("Join workspace")
-
-    onBack: {
-      manageInvitationsPanel.back()
+  ColumnLayout {
+    anchors {
+      fill: parent
+      leftMargin: InputStyle.outerFieldMargin
+      rightMargin: InputStyle.outerFieldMargin
     }
-  }
 
-  Item {
-    id: content
-    anchors.fill: parent
-    anchors.bottomMargin: Qt.inputMethod.keyboardRectangle.height ? Qt.inputMethod.keyboardRectangle.height : 0
+    Image {
+      Layout.alignment: Qt.AlignHCenter
 
-    Column {
-      id: columnLayout
-      anchors.verticalCenter: parent.verticalCenter
-      width: parent.width
+      width: parent.width / 2
+      source: InputStyle.mmLogoHorizontal
+      sourceSize.width: width
+    }
 
-      Image {
-        id: mmLogo
-        source: InputStyle.mmLogoHorizontal
-        width: content.width / 2
-        sourceSize.width: width
-        anchors.horizontalCenter: parent.horizontalCenter
+    Rectangle {
+      Layout.fillWidth: true
+      Layout.preferredHeight: InputStyle.xSmallGap
+      color: "transparent"
+    }
+
+    Label {
+      Layout.fillWidth: true
+      Layout.preferredHeight: InputStyle.rowHeightSmall
+
+      text: qsTr("Hello") + " " + __merginApi.userAuth.username + "!"
+
+      font.pixelSize: InputStyle.fontPixelSizeNormal
+      font.bold: true
+      color: InputStyle.fontColor
+
+      horizontalAlignment: Text.AlignHCenter
+      verticalAlignment: Text.AlignVCenter
+    }
+
+    Label {
+      Layout.fillWidth: true
+      Layout.preferredHeight: InputStyle.rowHeightSmall
+
+      text: qsTr("You have been invited to the following workspaces:")
+
+      font.pixelSize: InputStyle.fontPixelSizeNormal
+      font.bold: true
+      color: InputStyle.fontColor
+
+      wrapMode: Text.WordWrap
+      horizontalAlignment: Text.AlignHCenter
+      verticalAlignment: Text.AlignVCenter
+    }
+
+    Rectangle {
+      Layout.fillWidth: true
+      Layout.preferredHeight: InputStyle.xSmallGap
+      color: "transparent"
+    }
+
+    ScrollView {
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+
+      contentWidth: availableWidth // only scroll vertically
+
+      ColumnLayout {
+        anchors {
+          fill: parent
+          leftMargin: InputStyle.outerFieldMargin
+          rightMargin: InputStyle.outerFieldMargin
+        }
+
+        Repeater {
+          id: invRepeater
+
+          model: InvitationsProxyModel {
+            invitationsSourceModel: InvitationsModel {
+              merginApi: __merginApi
+            }
+          }
+
+          delegate: Rectangle {
+            id: invDelegate
+
+            Layout.fillWidth: true
+            Layout.preferredHeight: InputStyle.rowHeightListClickable
+
+            border.color: InputStyle.panelBackgroundLight
+            border.width: InputStyle.borderSize
+            radius: InputStyle.cornerRadius
+
+            ColumnLayout {
+              anchors.fill: parent
+              spacing: 0
+
+              Label {
+                text: qsTr("Workspace") + ": " + model.display
+
+                Layout.fillWidth: true
+                Layout.preferredHeight: parent.height / 2
+
+                wrapMode: Text.Wrap
+                color: InputStyle.fontColor
+                font.pixelSize: InputStyle.fontPixelSizeBig
+                font.bold: true
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+              }
+
+              RowLayout {
+
+                Layout.fillWidth: true
+                Layout.preferredHeight: 50
+                Layout.bottomMargin: InputStyle.tinyGap
+
+                spacing: InputStyle.formSpacing
+
+                DelegateButton {
+                  Layout.preferredWidth: invDelegate.width / 2
+                  Layout.preferredHeight: InputStyle.mediumBtnHeight
+
+                  btnWidth: width - 2 * InputStyle.formSpacing
+                  btnHeight: InputStyle.mediumBtnHeight
+
+                  bgColor: InputStyle.clrPanelBackground
+
+                  fontPixelSize: InputStyle.fontPixelSizeSmall
+
+                  text: qsTr("Accept")
+
+                  onClicked: {
+                    __merginApi.processInvitation( model.whatsThis, true )
+                  }
+                }
+
+                DelegateButton {
+                  Layout.preferredWidth: invDelegate.width / 2
+                  Layout.preferredHeight: InputStyle.mediumBtnHeight
+
+                  btnWidth: width - 2 * InputStyle.formSpacing
+                  btnHeight: InputStyle.mediumBtnHeight
+
+                  bgColor: InputStyle.clrPanelMain
+                  fontColor: InputStyle.invalidButtonColor
+
+                  fontPixelSize: InputStyle.fontPixelSizeSmall
+
+                  text: qsTr("Reject")
+
+                  onClicked: {
+                    __merginApi.processInvitation( model.whatsThis, false )
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    Rectangle {
+      Layout.fillWidth: true
+      Layout.preferredHeight: InputStyle.xSmallGap
+      color: "transparent"
+    }
+
+    Label {
+      Layout.fillWidth: true
+      Layout.preferredHeight: InputStyle.rowHeightSmall
+
+      text: qsTr("Do you want to instead create a new workspace?")
+
+      font.pixelSize: InputStyle.fontPixelSizeNormal
+      font.bold: true
+      color: InputStyle.fontColor
+
+      wrapMode: Text.WordWrap
+      horizontalAlignment: Text.AlignHCenter
+      verticalAlignment: Text.AlignVCenter
+    }
+
+    Button {
+      id: createWorkspaceButton
+
+      Layout.fillWidth: true
+      Layout.preferredHeight: InputStyle.rowHeightSmall
+
+      text: qsTr("Click here!")
+
+      font.pixelSize: InputStyle.fontPixelSizeSmall
+      font.bold: true
+
+      onClicked: root.createWorkspaceRequested()
+      background: Rectangle {
+        color: root.bgColor
       }
 
-      Label {
-        id: helloLabel
-        height: InputStyle.fieldHeight
-        width: content.width * 0.75
-        text: qsTr("Hello") + " " + __merginApi.userAuth.username + "!"
-        color: InputStyle.fontColor
-        font.bold: true
-        font.pixelSize: InputStyle.fontPixelSizeNormal
+      contentItem: Text {
+        text: createWorkspaceButton.text
+        font: createWorkspaceButton.font
+        color: InputStyle.highlightColor
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        leftPadding: InputStyle.innerFieldMargin
-        anchors.horizontalCenter: parent.horizontalCenter
+        elide: Text.ElideRight
       }
+    }
 
-      Label {
-        id: infoLabel
-        height: InputStyle.fieldHeight
-        width: content.width * 0.75
-        wrapMode: Text.WordWrap
-        text: qsTr("You have been invited to the following workspaces:")
-        color: InputStyle.fontColor
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        leftPadding: InputStyle.innerFieldMargin
-        anchors.horizontalCenter: parent.horizontalCenter
-      }
-
-      // TODO: use delegate from SwitchWorkspace component
-//      InvitationList {
-//        id: invitationList
-//        width: columnLayout.width
-//        anchors.horizontalCenter: parent.horizontalCenter
-//      }
-
-      TextHyperlink {
-        id: createWorkspaceText
-
-        width: columnLayout.width
-        height: 2 * InputStyle.fieldHeight
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: qsTr("Do you want to instead create a new workspace? %1Click here!")
-                  .arg("<a href='" + __inputHelp.merginWebLink + "'>")
-                  .arg("</a>")
-      }
+    Rectangle {
+      Layout.fillWidth: true
+      Layout.preferredHeight: InputStyle.xSmallGap
+      color: "transparent"
     }
   }
 }
