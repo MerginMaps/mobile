@@ -40,4 +40,5 @@ void WorkspacesProxyModel::setWorkspacesSourceModel( WorkspacesModel *sourceMode
 
   mModel = sourceModel;
   setSourceModel( mModel );
+  emit workspacesSourceModelChanged();
 }
