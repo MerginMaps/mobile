@@ -35,6 +35,8 @@ class InvitationsModel : public QStandardItemModel
 
     bool isLoading() const;
 
+    void processInvitation( const QString &uuid, bool accept );
+
   public slots:
     void onListInvitationsFinished( const QList<MerginInvitation> &invitations );
 
