@@ -57,10 +57,12 @@ QtObject {
     property real rowHeightListEntry: scale(64)
     property real rowHeightMedium: scale(45)
     property real rowHeightSmall: scale(20)
+    property real rowHeightListClickable: scale(90)
     property real fieldHeight: scale(54)
     property real mapBtnHeight: scale(40)
     property real bigGap: scale(45)
     property real smallGap: scale(25)
+    property real xSmallGap: scale(15)
     property real tinyGap: scale(5)
     property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: scale(45)

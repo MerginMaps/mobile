@@ -3420,7 +3420,7 @@ void MerginApi::processInvitation( const QString &uuid, bool accept )
     return;
   }
 
-  QNetworkRequest request = getDefaultRequest( false );
+  QNetworkRequest request = getDefaultRequest( true );
   QString urlString = mApiRoot + QStringLiteral( "v1/workspace/invitation/%1" ).arg( uuid );
   QUrl url( urlString );
   request.setUrl( url );

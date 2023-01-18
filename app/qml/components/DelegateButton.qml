@@ -28,6 +28,7 @@ Item {
     radius: delegateButtonContainer.cornerRadius
     color: delegateButtonContainer.bgColor
     fontBold: true
+    fontColor: delegateButtonContainer.fontColor
     fontPixelSize: delegateButtonContainer.fontPixelSize
   }
 }

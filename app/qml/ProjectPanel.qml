@@ -1004,7 +1004,7 @@ Item {
         stackView.popOnePageOrClose()
       }
 
-      onCreateWorkspace: {
+      onCreateWorkspaceRequested: {
         stackView.push( createWorkspaceComponent )
       }
     }

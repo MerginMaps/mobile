@@ -80,11 +80,12 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
       }
 
-      InvitationList {
-        id: invitationList
-        width: columnLayout.width
-        anchors.horizontalCenter: parent.horizontalCenter
-      }
+      // TODO: use delegate from SwitchWorkspace component
+//      InvitationList {
+//        id: invitationList
+//        width: columnLayout.width
+//        anchors.horizontalCenter: parent.horizontalCenter
+//      }
 
       TextHyperlink {
         id: createWorkspaceText

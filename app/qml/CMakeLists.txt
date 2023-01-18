@@ -10,7 +10,6 @@ set(MM_QML
     components/InputComboBox.qml
     components/InputText.qml
     components/InputTextField.qml
-    components/InvitationList.qml
     components/LayerList.qml
     components/LeftCheckBox.qml
     components/LoadingSpinner.qml
@@ -33,7 +32,6 @@ set(MM_QML
     components/TextRowWithTitle.qml
     components/TextWithIcon.qml
     components/ToolbarButton.qml
-    components/WorkspaceList.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
     dialogs/NoPermissionsDialog.qml
