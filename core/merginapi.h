@@ -568,6 +568,8 @@ class MerginApi: public QObject
     void workspaceCreated( const QString &workspaceName, bool result );
     void userInfoReplyFinished();
 
+    void hasWorkspacesChanged();
+
   private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
