@@ -107,6 +107,11 @@ QList<MerginInvitation> MerginUserInfo::invitations() const
   return mInvitations;
 }
 
+bool MerginUserInfo::hasInvitations() const
+{
+  return mInvitations.count() > 0;
+}
+
 void MerginUserInfo::saveWorkspacesData()
 {
   QSettings settings;
