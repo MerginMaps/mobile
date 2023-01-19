@@ -15,13 +15,14 @@
 MerginWorkspaceInfo::MerginWorkspaceInfo( QObject *parent )
   : QObject( parent )
 {
-//  clear(); // not needed -> it is initialized as empty
+
 }
 
 void MerginWorkspaceInfo::clear()
 {
   mDiskUsage = 0;
   mStorageLimit = 0;
+  mRole = "";
 
   emit workspaceInfoChanged();
 }
@@ -49,12 +50,6 @@ double MerginWorkspaceInfo::diskUsage() const
 double MerginWorkspaceInfo::storageLimit() const
 {
   return mStorageLimit;
-}
-
-void MerginWorkspaceInfo::onStorageChanged( double storage )
-{
-  mStorageLimit = storage;
-  emit workspaceInfoChanged();
 }
 
 QString MerginWorkspaceInfo::role() const

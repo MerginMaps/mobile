@@ -37,9 +37,6 @@ class MerginWorkspaceInfo: public QObject
   signals:
     void workspaceInfoChanged();
 
-  public slots:
-    void onStorageChanged( double storage );
-
   private:
     double mDiskUsage = 0.0; // in Bytes
     double mStorageLimit = 0.0; // in Bytes

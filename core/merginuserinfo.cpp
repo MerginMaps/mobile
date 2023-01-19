@@ -32,10 +32,6 @@ void MerginUserInfo::clear()
 
 void MerginUserInfo::setFromJson( QJsonObject docObj )
 {
-  blockSignals( true );
-  clear();
-  blockSignals( false );
-
   // parse profile data
   mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
   mName = docObj.value( QStringLiteral( "name" ) ).toString();
@@ -46,6 +42,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
     preferredWorkspace = docObj.value( QStringLiteral( "preferred_workspace" ) ).toInt();
   }
 
+  mWorkspaces.clear();
   if ( docObj.contains( QStringLiteral( "workspaces" ) ) )
   {
     QJsonArray workspaces = docObj.value( "workspaces" ).toArray();
@@ -57,6 +54,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
     emit hasWorkspacesChanged();
   }
 
+  mInvitations.clear();
   if ( docObj.contains( QStringLiteral( "invitations" ) ) )
   {
     QJsonArray invitations = docObj.value( "invitations" ).toArray();
@@ -207,7 +205,6 @@ void MerginUserInfo::setActiveWorkspace( int newWorkspace )
   settings.beginGroup( "Input/" );
   settings.setValue( "lastUsedWorkspace", mActiveWorkspace );
   settings.endGroup();
-
   emit activeWorkspaceChanged();
 }
 
