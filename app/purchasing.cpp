@@ -508,6 +508,12 @@ void Purchasing::onTransactionCreationSucceeded( QSharedPointer<PurchasingTransa
   jsonObject.insert( QStringLiteral( "type" ), MerginSubscriptionType::toString( transaction->provider() ) );
   jsonObject.insert( QStringLiteral( "receipt-data" ), transaction->receipt() );
   jsonObject.insert( QStringLiteral( "api_key" ), mMerginApi->getApiKey( mMerginApi->apiRoot() ) );
+
+  if ( mMerginApi->serverType() == MerginServerType::SAAS )
+  {
+    jsonObject.insert( QStringLiteral( "workspace" ), mMerginApi->userInfo()->activeWorkspaceId() );
+  }
+
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
   QNetworkReply *reply = mMerginApi->mManager.post( request, json );
