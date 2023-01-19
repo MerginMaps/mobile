@@ -1130,9 +1130,5 @@ Item {
     function onActiveWorkspaceChanged() {
       root.refreshProjects()
     }
-
-    function onHasWorkspacesChanged() {
-      console.log("HAS WORKSPACES", __merginApi.userInfo.hasWorkspaces)
-    }
   }
 }
