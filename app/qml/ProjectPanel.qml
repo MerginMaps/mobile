@@ -693,7 +693,7 @@ Item {
         Button {
           id: switchWorkspaceButton
 
-          visible: __merginApi.serverType != MerginServerType.CE
+          visible: __merginApi.serverType != MerginServerType.CE && pageContent.state === "created"
           anchors {
               left: parent.left
               right: parent.right
@@ -715,7 +715,7 @@ Item {
           anchors {
               left: parent.left
               right: parent.right
-              top: switchWorkspaceButton.bottom
+              top: switchWorkspaceButton.visible? switchWorkspaceButton.bottom : parent.top
               bottom: parent.bottom
           }
           currentIndex: pageFooter.currentIndex
