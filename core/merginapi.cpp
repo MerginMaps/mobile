@@ -827,6 +827,11 @@ void MerginApi::getWorkspaceInfo()
     return;
   }
 
+  if ( mUserInfo->activeWorkspaceId() == -1 )
+  {
+    return;
+  }
+
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
