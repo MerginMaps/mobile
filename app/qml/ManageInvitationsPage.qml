@@ -26,6 +26,7 @@ Page {
     width: root.width
     headerTitle: qsTr("Join a workspace")
     onBackClicked: root.back()
+    haveBackButton: false
   }
 
   ColumnLayout {
@@ -100,6 +101,7 @@ Page {
         Repeater {
           id: invRepeater
 
+          // TODO: change model to userInfo -> invitations
           model: InvitationsProxyModel {
             invitationsSourceModel: InvitationsModel {
               merginApi: __merginApi
@@ -116,127 +118,86 @@ Page {
             border.width: InputStyle.borderSize
             radius: InputStyle.cornerRadius
 
-            ColumnLayout {
+            RowLayout {
               anchors.fill: parent
+              anchors.leftMargin: InputStyle.panelMargin
+              anchors.rightMargin: InputStyle.panelMargin
+
               spacing: 0
 
               Label {
                 text: qsTr("Workspace") + ": " + model.display
 
                 Layout.fillWidth: true
-                Layout.preferredHeight: parent.height / 2
+                Layout.fillHeight: true
 
                 wrapMode: Text.Wrap
                 color: InputStyle.fontColor
                 font.pixelSize: InputStyle.fontPixelSizeBig
                 font.bold: true
 
-                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
               }
 
-              RowLayout {
+              DelegateButton {
+                Layout.preferredWidth: invDelegate.width / 3
+                Layout.preferredHeight: InputStyle.mediumBtnHeight
 
-                Layout.fillWidth: true
-                Layout.preferredHeight: 50
-                Layout.bottomMargin: InputStyle.tinyGap
+                btnWidth: width
+                btnHeight: InputStyle.mediumBtnHeight
 
-                spacing: InputStyle.formSpacing
+                bgColor: InputStyle.clrPanelBackground
 
-                DelegateButton {
-                  Layout.preferredWidth: invDelegate.width / 2
-                  Layout.preferredHeight: InputStyle.mediumBtnHeight
+                fontPixelSize: InputStyle.fontPixelSizeSmall
 
-                  btnWidth: width - 2 * InputStyle.formSpacing
-                  btnHeight: InputStyle.mediumBtnHeight
+                text: qsTr("Accept")
 
-                  bgColor: InputStyle.clrPanelBackground
-
-                  fontPixelSize: InputStyle.fontPixelSizeSmall
-
-                  text: qsTr("Accept")
-
-                  onClicked: {
-                    __merginApi.processInvitation( model.whatsThis, true )
-                  }
-                }
-
-                DelegateButton {
-                  Layout.preferredWidth: invDelegate.width / 2
-                  Layout.preferredHeight: InputStyle.mediumBtnHeight
-
-                  btnWidth: width - 2 * InputStyle.formSpacing
-                  btnHeight: InputStyle.mediumBtnHeight
-
-                  bgColor: InputStyle.clrPanelMain
-                  fontColor: InputStyle.invalidButtonColor
-
-                  fontPixelSize: InputStyle.fontPixelSizeSmall
-
-                  text: qsTr("Reject")
-
-                  onClicked: {
-                    __merginApi.processInvitation( model.whatsThis, false )
-                  }
+                onClicked: {
+                  __merginApi.processInvitation( model.whatsThis, true )
                 }
               }
             }
           }
         }
+
+        Rectangle {
+          Layout.fillWidth: true
+          Layout.preferredHeight: InputStyle.xSmallGap
+          color: "transparent"
+        }
+
+        Text {
+          Layout.fillWidth: true
+          Layout.preferredHeight: InputStyle.rowHeightHeader
+
+          color: InputStyle.fontColor
+          linkColor: InputStyle.highlightColor
+
+          wrapMode: Text.WordWrap
+          textFormat: Text.StyledText
+
+          font.bold: true
+          font.pixelSize: InputStyle.fontPixelSizeNormal
+
+          verticalAlignment: Qt.AlignVCenter
+          horizontalAlignment: Qt.AlignHCenter
+
+          visible: !__purchasing.transactionPending
+
+          text: ("%1" + qsTr("Do you want to create a new workspace instead?") + "\n" + qsTr("Click here!") + "%2")
+            .arg("<a href='http://click-me'>")
+            .arg("</a>")
+
+          onLinkActivated: root.createWorkspaceRequested()
+        }
+
+        Rectangle {
+          Layout.fillWidth: true
+          Layout.preferredHeight: InputStyle.xSmallGap
+          color: "transparent"
+        }
       }
-    }
-
-    Rectangle {
-      Layout.fillWidth: true
-      Layout.preferredHeight: InputStyle.xSmallGap
-      color: "transparent"
-    }
-
-    Label {
-      Layout.fillWidth: true
-      Layout.preferredHeight: InputStyle.rowHeightSmall
-
-      text: qsTr("Do you want to instead create a new workspace?")
-
-      font.pixelSize: InputStyle.fontPixelSizeNormal
-      font.bold: true
-      color: InputStyle.fontColor
-
-      wrapMode: Text.WordWrap
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
-    }
-
-    Button {
-      id: createWorkspaceButton
-
-      Layout.fillWidth: true
-      Layout.preferredHeight: InputStyle.rowHeightSmall
-
-      text: qsTr("Click here!")
-
-      font.pixelSize: InputStyle.fontPixelSizeSmall
-      font.bold: true
-
-      onClicked: root.createWorkspaceRequested()
-      background: Rectangle {
-        color: root.bgColor
-      }
-
-      contentItem: Text {
-        text: createWorkspaceButton.text
-        font: createWorkspaceButton.font
-        color: InputStyle.highlightColor
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
-      }
-    }
-
-    Rectangle {
-      Layout.fillWidth: true
-      Layout.preferredHeight: InputStyle.xSmallGap
-      color: "transparent"
     }
   }
 }

@@ -25,6 +25,9 @@ void WorkspacesModel::initializeModel()
   }
 
   QObject::connect( mApi, &MerginApi::listWorkspacesFinished, this, &WorkspacesModel::onListWorkspacesFinished );
+  QObject::connect( mApi, &MerginApi::processInvitationFinished, this, &WorkspacesModel::listWorkspaces );
+  QObject::connect( mApi, &MerginApi::workspaceCreated, this, &WorkspacesModel::listWorkspaces );
+
   listWorkspaces();
 
   emit modelInitialized();

@@ -117,6 +117,7 @@ set(MM_QML
     ProjectStatusPanel.qml
     ProjectWizardPage.qml
     RegistrationForm.qml
+    RegistrationFinishPage.qml
     RoundIndicator.qml
     SearchBar.qml
     SettingsPanel.qml

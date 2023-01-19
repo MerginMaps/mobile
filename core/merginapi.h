@@ -566,6 +566,7 @@ class MerginApi: public QObject
     void processInvitationFinished();
 
     void workspaceCreated( const QString &workspaceName, bool result );
+    void userInfoReplyFinished();
 
   private slots:
     void listProjectsReplyFinished( QString requestId );

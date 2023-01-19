@@ -118,6 +118,16 @@ Item {
       }
     }
 
+    function popPage( pageName, operation = StackView.PopTransition ) {
+      for ( let i = 0; i < stackView.depth; i++ ) {
+        let item = stackView.get( i )
+
+        if ( item && item.objectName && item.objectName === pageName ) {
+          stackView.pop( item, operation )
+        }
+      }
+    }
+
     function switchUI() {
       stackView.clear( StackView.Immediate )
 
@@ -1015,8 +1025,7 @@ Item {
 
     CreateWorkspacePage {
       id: createWorkspacePanel
-      height: root.height
-      width: root.width
+
       onBack: {
         stackView.popOnePageOrClose()
       }
@@ -1024,20 +1033,14 @@ Item {
   }
 
   Component {
-    id: manageInvitationsComponent
+    id: registrationFinishComponent
 
-    ManageInvitationsPage {
-      id: manageInvitationsPanel
-
-      height: root.height
-      width: root.width
-
-      onBack: {
-        stackView.popOnePageOrClose()
+    RegistrationFinishPage {
+      onFinished: {
+        stackView.pop( null )
       }
     }
   }
-
 
   Connections {
     target: __merginApi
@@ -1067,19 +1070,16 @@ Item {
     }
 
     function onAuthChanged() {
-      // if new user registered, keep pending state as we have to check
-      // invitations and workspace presense
-      if (stackView.currentItem.objectName === "authPanel" && stackView.currentItem.state === "register") {
-        return
-      }
-
       stackView.pending = false
+
       if ( __merginApi.userAuth.hasAuthData() ) {
-        stackView.popOnePageOrClose()
+
+        if ( __merginApi.serverType === MerginServerType.OLD ) {
+          stackView.popPage( "authPanel" )
+        }
+
         root.refreshProjects()
         root.forceActiveFocus()
-
-        // TODO: optionally show invitations
       }
     }
 
@@ -1093,27 +1093,14 @@ Item {
 
     function onRegistrationSucceeded() {
       stackView.pending = false
+
+      if ( __merginApi.serverType !== MerginServerType.OLD ) {
+        stackView.push( registrationFinishComponent )
+      }
     }
 
     function onServerTypeChanged( serverType ) {
       stackView.switchUI()
-    }
-
-    function onUserInfoChanged() {
-      // check if register page is active and depending on the
-      // invitations and active workspace show proper page
-      if (stackView.currentItem.objectName === "authPanel" && stackView.currentItem.state === "register") {
-        stackView.pending = false
-        stackView.popOnePageOrClose()
-
-        if (__merginApi.userInfo.hasInvitations) {
-          stackView.push(manageInvitationsComponent)
-        }
-
-        if (__merginApi.userInfo.activeWorkspace === -1) {
-          stackView.push(createWorkspaceComponent)
-        }
-      }
     }
 
     function onActiveWorkspaceChanged() {

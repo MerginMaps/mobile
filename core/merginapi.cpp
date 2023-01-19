@@ -62,7 +62,9 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::pingMergin );
   QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::getServerConfig );
   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::checkMerginVersion );
+  QObject::connect( this, &MerginApi::workspaceCreated, this, &MerginApi::getUserInfo );
   QObject::connect( this, &MerginApi::serverTypeChanged, this, &MerginApi::getUserInfo );
+  QObject::connect( this, &MerginApi::processInvitationFinished, this, &MerginApi::getUserInfo );
   QObject::connect( mUserInfo, &MerginUserInfo::userInfoChanged, this, &MerginApi::userInfoChanged );
   QObject::connect( mUserInfo, &MerginUserInfo::activeWorkspaceChanged, this, &MerginApi::activeWorkspaceChanged );
   QObject::connect( mUserInfo, &MerginUserInfo::activeWorkspaceChanged, this, &MerginApi::getWorkspaceInfo );
@@ -1108,12 +1110,13 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "register", QStringLiteral( "Success" ) );
-    emit registrationSucceeded();
     QString msg = tr( "Registration successful" );
     emit notify( msg );
 
     if ( !username.isEmpty() && !password.isEmpty() ) // log in immediately
       authorize( username, password );
+
+    emit registrationSucceeded();
   }
   else
   {
@@ -2596,6 +2599,8 @@ void MerginApi::getUserInfoFinished()
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getUserInfo" ) );
   }
 
+  emit userInfoReplyFinished();
+
   r->deleteLater();
 }
 
@@ -3444,7 +3449,6 @@ void MerginApi::processInvitationReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "process invitation", QStringLiteral( "Success" ) );
-    emit processInvitationFinished();
   }
   else
   {
@@ -3454,6 +3458,8 @@ void MerginApi::processInvitationReplyFinished()
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: processInvitation" ) );
     emit processInvitationFailed();
   }
+
+  emit processInvitationFinished();
 
   r->deleteLater();
 }

@@ -27,14 +27,13 @@ class WorkspacesModel : public QStandardItemModel
     explicit WorkspacesModel( QObject *parent = nullptr );
     virtual ~WorkspacesModel();
 
-    Q_INVOKABLE void listWorkspaces();
-
     MerginApi *merginApi() const;
     void setMerginApi( MerginApi *merginApi );
 
     bool isLoading() const;
 
   public slots:
+    void listWorkspaces();
     void onListWorkspacesFinished( const QMap<int, QString> &workspaces );
 
   signals:

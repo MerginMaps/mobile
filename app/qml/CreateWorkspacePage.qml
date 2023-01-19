@@ -20,12 +20,20 @@ Page {
   id: root
 
   signal back
-  signal createWorkspaceRequested
+
+  property bool haveBackButton: true
+
+  function closePage() {
+    if ( root.haveBackButton ) {
+      root.back()
+    }
+  }
 
   header: PanelHeaderV2 {
     width: root.width
     headerTitle: qsTr("Create a workspace")
-    onBackClicked: root.back()
+    haveBackButton: root.haveBackButton
+    onBackClicked: root.closePage()
   }
 
   ColumnLayout {
@@ -67,7 +75,9 @@ Page {
       Layout.fillWidth: true
       Layout.preferredHeight: InputStyle.rowHeightSmall
 
-      text: qsTr("You are about to create a new workspace for your projects and colleagues. Please specify its name")
+      text: qsTr("Workspace is a place for all your projects and collaboration.\
+                  You can invite your colleagues to a workspace and manage their roles.\
+                  A good candidate for a workspace name is the name of your team or company.")
 
       font.pixelSize: InputStyle.fontPixelSizeNormal
       font.bold: true
@@ -102,15 +112,18 @@ Page {
       id: createWorkspaceButton
 
       Layout.fillWidth: true
+      btnWidth: width
       Layout.preferredHeight: InputStyle.fieldHeight
 
-      text: qsTr("Create")
+      text: qsTr("Create a Workspace")
 
       onClicked: {
         if (workspaceNameField.displayText === "") {
           __inputUtils.showNotification(qsTr("Empty workspace name"))
-        } else {
+        }
+        else {
           __merginApi.createWorkspace(workspaceNameField.displayText)
+          root.closePage()
         }
       }
     }
