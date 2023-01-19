@@ -2618,8 +2618,8 @@ void MerginApi::getWorkspaceInfoFinished()
       QJsonObject docObj = doc.object();
       mWorkspaceInfo->setFromJson( docObj );
 
-      // if server if SAAS, retrieve billing info
-      if ( mServerType == MerginServerType::SAAS )
+      // if server if SAAS and user is an owner of the workspace, retrieve billing info
+      if ( mServerType == MerginServerType::SAAS && mWorkspaceInfo->role() == QStringLiteral( "owner" ) )
       {
         getBillingInfo();
       }
