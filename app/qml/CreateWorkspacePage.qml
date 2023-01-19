@@ -75,9 +75,9 @@ Page {
       Layout.fillWidth: true
       Layout.preferredHeight: InputStyle.rowHeightSmall
 
-      text: qsTr("Workspace is a place for all your projects and collaboration.\
-                  You can invite your colleagues to a workspace and manage their roles.\
-                  A good candidate for a workspace name is the name of your team or company.")
+      text: qsTr("Workspace is a place for all your projects and collaboration." +
+                 "You can invite your colleagues to a workspace and manage their roles." +
+                 "A good candidate for a workspace name is the name of your team or company.")
 
       font.pixelSize: InputStyle.fontPixelSizeNormal
       font.bold: true
