@@ -700,7 +700,7 @@ Item {
           }
 
           contentItem: Text {
-            text: __merginApi.userInfo.activeWorkspaceName + " > "
+            text: __merginApi.userInfo.activeWorkspaceId > 0 ? __merginApi.userInfo.activeWorkspaceName + " >" : qsTr("Switch workspace") + " >"
             horizontalAlignment : Text.AlignLeft
           }
 
