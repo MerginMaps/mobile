@@ -42,6 +42,8 @@ Page {
   property string subscriptionsTimestamp: __merginApi.subscriptionInfo.subscriptionTimestamp
   property string nextBillPrice: __merginApi.subscriptionInfo.nextBillPrice
   property bool ownsActiveSubscription: __merginApi.subscriptionInfo.ownsActiveSubscription
+  property bool canAccessSubscription: __merginApi.subscriptionInfo.canAccessSubscription
+
   property bool apiSupportsSubscriptions: __merginApi.apiSupportsSubscriptions
 
   header: MMComponents.PanelHeaderV2 {
@@ -152,7 +154,7 @@ Page {
       MMComponents.TextRowWithTitle {
         Layout.fillWidth: true
 
-        visible: root.apiSupportsSubscriptions
+        visible: root.apiSupportsSubscriptions && root.canAccessSubscription
 
         titleText: qsTr( "Subscription plan" )
         text: root.planAlias
@@ -161,7 +163,7 @@ Page {
       MMComponents.TextRowWithTitle {
         Layout.fillWidth: true
 
-        visible: root.apiSupportsSubscriptions && root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionUnsubscribed
+        visible: root.apiSupportsSubscriptions && root.canAccessSubscription && root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionUnsubscribed
 
         titleText: qsTr( "Subscription status" )
         text: qsTr("Your subscription will not auto-renew after %1").arg(root.subscriptionsTimestamp)
@@ -170,7 +172,7 @@ Page {
       MMComponents.TextRowWithTitle {
         Layout.fillWidth: true
 
-        visible: root.apiSupportsSubscriptions && root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionInGracePeriod
+        visible: root.apiSupportsSubscriptions && root.canAccessSubscription && root.subscriptionStatus === MerginSubscriptionStatus.SubscriptionInGracePeriod
 
         titleText: qsTr( "Subscription status" )
         text: qsTr("Please update your %1billing details%2 as soon as possible")
@@ -185,7 +187,7 @@ Page {
       MMComponents.TextRowWithTitle {
         Layout.fillWidth: true
 
-        visible: root.apiSupportsSubscriptions && root.subscriptionStatus === MerginSubscriptionStatus.ValidSubscription
+        visible: root.apiSupportsSubscriptions && root.canAccessSubscription && root.subscriptionStatus === MerginSubscriptionStatus.ValidSubscription
 
         titleText: qsTr( "Subscription status" )
         text: qsTr("Your next bill will be for %1 on %2")
@@ -196,7 +198,7 @@ Page {
       MMComponents.TextRowWithTitle {
         Layout.fillWidth: true
 
-        visible: root.apiSupportsSubscriptions && root.subscriptionStatus === MerginSubscriptionStatus.CanceledSubscription
+        visible: root.apiSupportsSubscriptions && root.canAccessSubscription && root.subscriptionStatus === MerginSubscriptionStatus.CanceledSubscription
 
         titleText: qsTr( "Subscription status" )
         text: qsTr("Your subscription was cancelled on %1").arg(root.subscriptionsTimestamp)
@@ -208,7 +210,7 @@ Page {
         btnWidth: width
         height: InputStyle.rowHeightMedium
 
-        visible: root.apiSupportsSubscriptions
+        visible: root.apiSupportsSubscriptions && root.canAccessSubscription
 
         text: qsTr("Subscriptions")
 
