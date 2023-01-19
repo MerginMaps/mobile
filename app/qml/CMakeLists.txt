@@ -83,6 +83,7 @@ set(MM_QML
     misc/AttentionBanner.qml
     misc/GpsDataPage.qml
     misc/LegacyFolderMigration.qml
+    misc/NoWorkspaceBanner.qml
     misc/PositionProviderPage.qml
     AboutPanel.qml
     AccountPage.qml
@@ -100,7 +101,6 @@ set(MM_QML
     FormsStackManager.qml
     InputStyle.qml
     LogPanel.qml
-    LoginFinishPage.qml
     LoginForm.qml
     MainPanel.qml
     ManageInvitationsPage.qml

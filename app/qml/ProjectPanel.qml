@@ -15,6 +15,7 @@ import QtQuick.Dialogs
 
 import lc 1.0
 import "."  // import InputStyle singleton
+import "./misc"
 import "./components/"
 
 Item {
@@ -94,11 +95,33 @@ Item {
     stackView.focus = true
   }
 
+  NoWorkspaceBanner {
+    id: noWorkspaceBanner
+    visible: __merginApi.userAuth.hasAuthData() && !__merginApi.userInfo.hasWorkspaces
+    z: parent.z + 1
+    anchors {
+      top: parent.top
+      left: parent.left
+      right: parent.right
+    }
+
+    onCreateWorkspaceRequested: {
+      stackView.push(createWorkspaceComponent)
+    }
+  }
+
   StackView {
     id: stackView
 
     initialItem: __merginApi.serverType === MerginServerType.OLD ? projectsPanelComp : workspaceProjectsPanelComp
-    anchors.fill: parent
+
+    anchors {
+      top: noWorkspaceBanner.visible ? noWorkspaceBanner.bottom : parent.top
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
+    }
+
     focus: true
     visible: false
     z: root.z + 1
@@ -1043,16 +1066,6 @@ Item {
     }
   }
 
-  Component {
-    id: loginFinishComponent
-
-    LoginFinishPage {
-      onFinished: {
-        stackView.pop( null )
-      }
-    }
-  }
-
   Connections {
     target: __merginApi
     enabled: root.visible
@@ -1085,12 +1098,8 @@ Item {
 
       if ( __merginApi.userAuth.hasAuthData() ) {
 
-        //if ( __merginApi.serverType === MerginServerType.OLD || ( stackView.currentItem.objectName === "authPanel" && stackView.currentItem.state === "login" ) ) {
-        if ( __merginApi.serverType === MerginServerType.OLD ) {
+        if ( __merginApi.serverType === MerginServerType.OLD || ( stackView.currentItem.objectName === "authPanel" && stackView.currentItem.state === "login" ) ) {
           stackView.popPage( "authPanel" )
-        }
-        else if ( __merginApi.serverType !== MerginServerType.CE ) {
-          stackView.push(loginFinishComponent)
         }
 
         root.refreshProjects()
@@ -1123,10 +1132,7 @@ Item {
     }
 
     function onHasWorkspacesChanged() {
-      if ( !__merginApi.userInfo.hasWorkspaces ) {
-        console.log("SHOW CWS PAGE")
-        //stackView.push( createWorkspaceComponent )
-      }
+      console.log("HAS WORKSPACES", __merginApi.userInfo.hasWorkspaces)
     }
   }
 }

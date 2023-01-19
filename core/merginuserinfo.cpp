@@ -51,7 +51,6 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
       QJsonObject ws = it->toObject();
       mWorkspaces.insert( ws.value( QStringLiteral( "id" ) ).toInt(), ws.value( QStringLiteral( "name" ) ).toString() );
     }
-    emit hasWorkspacesChanged();
   }
 
   mInvitations.clear();
@@ -69,6 +68,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   setActiveWorkspace( workspace );
 
   emit userInfoChanged();
+  emit hasWorkspacesChanged();
 }
 
 QString MerginUserInfo::email() const
