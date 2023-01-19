@@ -100,6 +100,7 @@ set(MM_QML
     FormsStackManager.qml
     InputStyle.qml
     LogPanel.qml
+    LoginFinishPage.qml
     LoginForm.qml
     MainPanel.qml
     ManageInvitationsPage.qml

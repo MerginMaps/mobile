@@ -26,6 +26,7 @@ void MerginUserInfo::clear()
   mWorkspaces.clear();
   mInvitations.clear();
 
+  emit hasWorkspacesChanged();
   emit userInfoChanged();
 }
 
@@ -53,6 +54,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
       QJsonObject ws = it->toObject();
       mWorkspaces.insert( ws.value( QStringLiteral( "id" ) ).toInt(), ws.value( QStringLiteral( "name" ) ).toString() );
     }
+    emit hasWorkspacesChanged();
   }
 
   if ( docObj.contains( QStringLiteral( "invitations" ) ) )
@@ -99,6 +101,7 @@ void MerginUserInfo::setWorkspaces( QMap<int, QString> workspaces )
   }
 
   mWorkspaces = workspaces;
+  emit hasWorkspacesChanged();
   emit userInfoChanged();
 }
 
@@ -110,6 +113,11 @@ QList<MerginInvitation> MerginUserInfo::invitations() const
 bool MerginUserInfo::hasInvitations() const
 {
   return mInvitations.count() > 0;
+}
+
+bool MerginUserInfo::hasWorkspaces() const
+{
+  return mWorkspaces.count() > 0;
 }
 
 void MerginUserInfo::saveWorkspacesData()

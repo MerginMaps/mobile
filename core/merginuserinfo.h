@@ -38,6 +38,7 @@ class MerginUserInfo: public QObject
     Q_PROPERTY( QString activeWorkspaceName READ activeWorkspaceName NOTIFY userInfoChanged )
     Q_PROPERTY( int activeWorkspaceId READ activeWorkspaceId NOTIFY activeWorkspaceChanged )
     Q_PROPERTY( bool hasInvitations READ hasInvitations NOTIFY userInfoChanged )
+    Q_PROPERTY( bool hasWorkspaces READ hasWorkspaces NOTIFY hasWorkspacesChanged )
 
   public:
     explicit MerginUserInfo( QObject *parent = nullptr );
@@ -53,6 +54,7 @@ class MerginUserInfo: public QObject
     QMap<int, QString> workspaces() const;
     QList<MerginInvitation> invitations() const;
     bool hasInvitations() const;
+    bool hasWorkspaces() const;
 
     void saveWorkspacesData();
     void loadWorkspacesData();
@@ -65,6 +67,7 @@ class MerginUserInfo: public QObject
   signals:
     void userInfoChanged();
     void activeWorkspaceChanged();
+    void hasWorkspacesChanged();
 
   private:
     QString mName;

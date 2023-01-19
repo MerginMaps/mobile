@@ -124,6 +124,7 @@ Item {
 
         if ( item && item.objectName && item.objectName === pageName ) {
           stackView.pop( item, operation )
+          stackView.pop()
         }
       }
     }
@@ -1042,6 +1043,16 @@ Item {
     }
   }
 
+  Component {
+    id: loginFinishComponent
+
+    LoginFinishPage {
+      onFinished: {
+        stackView.pop( null )
+      }
+    }
+  }
+
   Connections {
     target: __merginApi
     enabled: root.visible
@@ -1074,8 +1085,12 @@ Item {
 
       if ( __merginApi.userAuth.hasAuthData() ) {
 
+        //if ( __merginApi.serverType === MerginServerType.OLD || ( stackView.currentItem.objectName === "authPanel" && stackView.currentItem.state === "login" ) ) {
         if ( __merginApi.serverType === MerginServerType.OLD ) {
           stackView.popPage( "authPanel" )
+        }
+        else if ( __merginApi.serverType !== MerginServerType.CE ) {
+          stackView.push(loginFinishComponent)
         }
 
         root.refreshProjects()
@@ -1105,6 +1120,13 @@ Item {
 
     function onActiveWorkspaceChanged() {
       root.refreshProjects()
+    }
+
+    function onHasWorkspacesChanged() {
+      if ( !__merginApi.userInfo.hasWorkspaces ) {
+        console.log("SHOW CWS PAGE")
+        //stackView.push( createWorkspaceComponent )
+      }
     }
   }
 }
