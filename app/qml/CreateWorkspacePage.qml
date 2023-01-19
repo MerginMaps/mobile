@@ -89,7 +89,7 @@ Page {
 
       Layout.fillWidth: true
       Layout.preferredHeight: InputStyle.fieldHeight
-      anchors.horizontalCenter: parent.horizontalCenter
+      Layout.alignment: Qt.AlignHCenter
     }
 
     Rectangle {
