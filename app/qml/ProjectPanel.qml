@@ -124,6 +124,7 @@ Item {
 
         if ( item && item.objectName && item.objectName === pageName ) {
           stackView.pop( item, operation )
+          stackView.pop()
         }
       }
     }
@@ -1074,7 +1075,7 @@ Item {
 
       if ( __merginApi.userAuth.hasAuthData() ) {
 
-        if ( __merginApi.serverType === MerginServerType.OLD ) {
+        if ( __merginApi.serverType === MerginServerType.OLD || ( stackView.currentItem.objectName === "authPanel" && stackView.currentItem.state === "login" ) ) {
           stackView.popPage( "authPanel" )
         }
 
