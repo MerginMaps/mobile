@@ -64,7 +64,7 @@ void TestPurchasing::initTestCase()
   QCOMPARE( spy.count(), 1 );
 
   QSignalSpy spy2( mApi, &MerginApi::subscriptionInfoChanged );
-  mApi->getSubscriptionInfo();
+  mApi->getServiceInfo();
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy2.count(), 1 );
 

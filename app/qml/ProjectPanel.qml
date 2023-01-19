@@ -56,7 +56,7 @@ Item {
 
   function getServiceInfo() {
     if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK && __merginApi.apiSupportsSubscriptions) {
-        __merginApi.getSubscriptionInfo()
+        __merginApi.getServiceInfo()
     }
   }
 
@@ -242,7 +242,7 @@ Item {
                   __merginApi.getUserInfo()
 
                   if ( __merginApi.apiSupportsSubscriptions ) {
-                    __merginApi.getSubscriptionInfo()
+                    __merginApi.getServiceInfo()
                   }
 
                   if ( __merginApi.serverType === MerginServerType.OLD ) {
@@ -603,7 +603,7 @@ Item {
                   __merginApi.getUserInfo()
 
                   if ( __merginApi.apiSupportsSubscriptions ) {
-                    __merginApi.getSubscriptionInfo()
+                    __merginApi.getWorkspaceInfo()
                   }
 
                   if ( __merginApi.serverType === MerginServerType.OLD ) {

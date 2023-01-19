@@ -292,9 +292,7 @@ class MerginApi: public QObject
     Q_INVOKABLE void authorize( const QString &login, const QString &password );
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void getWorkspaceInfo();
-    Q_INVOKABLE void getBillingInfo();
-    //! Sends subscription info request using userInfo endpoint.
-    Q_INVOKABLE void getSubscriptionInfo();
+    Q_INVOKABLE void getServiceInfo();
     Q_INVOKABLE void clearAuth();
     Q_INVOKABLE void resetApiRoot();
     Q_INVOKABLE QString resetPasswordUrl();
@@ -567,6 +565,7 @@ class MerginApi: public QObject
 
     void workspaceCreated( const QString &workspaceName, bool result );
     void userInfoReplyFinished();
+    void getWorkspaceInfoFinished();
 
     void hasWorkspacesChanged();
 
@@ -587,9 +586,8 @@ class MerginApi: public QObject
     void pushCancelReplyFinished();
 
     void getUserInfoFinished();
-    void getWorkspaceInfoFinished();
-    void getBillingInfoFinished();
-    void getSubscriptionInfoFinished();
+    void getWorkspaceInfoReplyFinished();
+    void getServiceInfoReplyFinished();
     void saveAuthData();
     void createProjectFinished();
     void deleteProjectFinished( bool informUser = true );
