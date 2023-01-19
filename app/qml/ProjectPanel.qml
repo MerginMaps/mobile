@@ -1093,5 +1093,9 @@ Item {
     function onServerTypeChanged( serverType ) {
         stackView.switchUI()
     }
+
+    function onActiveWorkspaceChanged() {
+      root.refreshProjects()
+    }
   }
 }
