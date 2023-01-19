@@ -127,7 +127,16 @@ void SynchronizationManager::migrateProjectToMergin( const QString &projectName 
 {
   if ( !mSyncProcesses.contains( projectName ) )
   {
-    bool hasStarted = mMerginApi->createProject( mMerginApi->merginUserName(), projectName );
+    bool hasStarted = false;
+
+    if ( mMerginApi->serverType() == MerginServerType::OLD )
+    {
+      hasStarted = mMerginApi->createProject( mMerginApi->merginUserName(), projectName );
+    }
+    else
+    {
+      hasStarted = mMerginApi->createProject( mMerginApi->userInfo()->activeWorkspaceName(), projectName );
+    }
 
     if ( hasStarted )
     {
