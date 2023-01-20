@@ -716,7 +716,7 @@ Item {
         Button {
           id: switchWorkspaceButton
 
-          visible: __merginApi.serverType != MerginServerType.CE && pageContent.state === "created"
+          visible: __merginApi.serverType !== MerginServerType.CE && pageContent.state === "created"
           anchors {
               left: parent.left
               right: parent.right

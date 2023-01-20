@@ -35,7 +35,7 @@ class MerginUserInfo: public QObject
     Q_OBJECT
     Q_PROPERTY( QString name READ name NOTIFY userInfoChanged )
     Q_PROPERTY( QString email READ email NOTIFY userInfoChanged )
-    Q_PROPERTY( QString activeWorkspaceName READ activeWorkspaceName NOTIFY userInfoChanged )
+    Q_PROPERTY( QString activeWorkspaceName READ activeWorkspaceName NOTIFY activeWorkspaceChanged )
     Q_PROPERTY( int activeWorkspaceId READ activeWorkspaceId NOTIFY activeWorkspaceChanged )
     Q_PROPERTY( bool hasInvitations READ hasInvitations NOTIFY userInfoChanged )
     Q_PROPERTY( bool hasWorkspaces READ hasWorkspaces NOTIFY hasWorkspacesChanged )
