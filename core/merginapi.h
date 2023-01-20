@@ -339,6 +339,8 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void deleteAccount();
 
+    Q_INVOKABLE bool apiSupportsWorkspaces();
+
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const QString sMetadataFile;
