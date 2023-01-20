@@ -8,6 +8,7 @@
 #include "merginapistatus.h"
 #include "merginuserauth.h"
 #include "merginuserinfo.h"
+#include "merginworkspaceinfo.h"
 #include "merginsubscriptioninfo.h"
 #include "testutils.h"
 #include "test/testingpurchasingbackend.h"
@@ -39,7 +40,7 @@ void TestPurchasing::runPurchasingCommand( TestingPurchasingBackend::NextPurchas
   QSignalSpy spy0( mApi, &MerginApi::subscriptionInfoChanged );
   if ( waitForUserInfo )
   {
-    QSignalSpy spy1( mApi, &MerginApi::userInfoChanged );
+    QSignalSpy spy1( mApi->workspaceInfo(), &MerginWorkspaceInfo::workspaceInfoChanged );
     mPurchasing->purchase( planId );
     QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
     QCOMPARE( spy0.count(), 1 );
