@@ -3295,6 +3295,7 @@ void MerginApi::setServerType( const MerginServerType::ServerType &serverType )
     settings.setValue( QStringLiteral( "serverType" ), mServerType );
     settings.endGroup();
     emit serverTypeChanged();
+    emit apiSupportsWorkspacesChanged();
   }
 }
 
