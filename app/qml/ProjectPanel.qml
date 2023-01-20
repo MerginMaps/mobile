@@ -15,6 +15,7 @@ import QtQuick.Dialogs
 
 import lc 1.0
 import "."  // import InputStyle singleton
+import "./misc"
 import "./components/"
 
 Item {
@@ -24,6 +25,7 @@ Item {
   property string activeProjectPath: ""
 
   signal openProjectRequested( string projectId, string projectPath )
+  signal refreshProjects()
   signal resetView() // resets view to state as when panel is opened
   signal closed()
 
@@ -41,21 +43,36 @@ Item {
 
   function manageSubscriptionPlans() {
     if (__purchasing.hasInAppPurchases && (__purchasing.hasManageSubscriptionCapability || !__merginApi.subscriptionInfo.ownsActiveSubscription )) {
-      stackView.push( subscribePanelComp)
-    } else {
+      if ( __merginApi.serverType === MerginServerType.OLD ) {
+        stackView.push( subscribePanelComp )
+      }
+      else if ( __merginApi.serverType === MerginServerType.SAAS ) {
+        stackView.push( workspaceSubscribePageComp )
+      }
+    }
+    else {
       Qt.openUrlExternally(__purchasing.subscriptionManageUrl);
     }
   }
 
   function getServiceInfo() {
     if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK && __merginApi.apiSupportsSubscriptions) {
-        __merginApi.getSubscriptionInfo()
+        __merginApi.getServiceInfo()
     }
   }
 
   function openAuthPanel( authstate = "login" )
   {
-    stackView.push( authPanelComp, { state: authstate } )
+    for ( let i = 0; i < stackView.depth; i++ ) {
+      let item = stackView.get( i )
+
+      if ( item && item.objectName && item.objectName === "authPanel" ) {
+        // sorry, it is already opened, let's not open it again
+        return;
+      }
+    }
+
+    stackView.push( authPanelComp, { state: authstate }, StackView.PushTransition )
   }
 
   function openChangesPanel()
@@ -78,11 +95,33 @@ Item {
     stackView.focus = true
   }
 
+  NoWorkspaceBanner {
+    id: noWorkspaceBanner
+    visible: __merginApi.userAuth.hasAuthData() && !__merginApi.userInfo.hasWorkspaces
+    z: parent.z + 1
+    anchors {
+      top: parent.top
+      left: parent.left
+      right: parent.right
+    }
+
+    onCreateWorkspaceRequested: {
+      stackView.push(createWorkspaceComponent)
+    }
+  }
+
   StackView {
     id: stackView
 
-    initialItem: projectsPanelComp
-    anchors.fill: parent
+    initialItem: __merginApi.serverType === MerginServerType.OLD ? projectsPanelComp : workspaceProjectsPanelComp
+
+    anchors {
+      top: noWorkspaceBanner.visible ? noWorkspaceBanner.bottom : parent.top
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
+    }
+
     focus: true
     visible: false
     z: root.z + 1
@@ -99,6 +138,28 @@ Item {
       if ( stackView.depth > 1 )
       {
         stackView.pop()
+      }
+    }
+
+    function popPage( pageName, operation = StackView.PopTransition ) {
+      for ( let i = 0; i < stackView.depth; i++ ) {
+        let item = stackView.get( i )
+
+        if ( item && item.objectName && item.objectName === pageName ) {
+          stackView.pop( item, operation )
+          stackView.pop()
+        }
+      }
+    }
+
+    function switchUI() {
+      stackView.clear( StackView.Immediate )
+
+      if ( __merginApi.serverType === MerginServerType.OLD ) {
+        stackView.push( projectsPanelComp )
+      }
+      else {
+        stackView.push( workspaceProjectsPanelComp )
       }
     }
 
@@ -147,7 +208,6 @@ Item {
       }
 
       function refreshProjectList( keepSearchFilter = false ) {
-
         stackView.pending = true
         switch( pageContent.state ) {
           case "local":
@@ -201,14 +261,24 @@ Item {
             MouseArea {
               anchors.fill: parent
               onClicked: {
-                if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK) {
+                if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK ) {
                   __merginApi.getUserInfo()
-                  if (__merginApi.apiSupportsSubscriptions)
-                    __merginApi.getSubscriptionInfo()
-                  stackView.push( accountPanelComp )
+
+                  if ( __merginApi.apiSupportsSubscriptions ) {
+                    __merginApi.getServiceInfo()
+                  }
+
+                  if ( __merginApi.serverType === MerginServerType.OLD ) {
+                    stackView.push( accountPanelComp )
+                  }
+                  else {
+                    stackView.push( workspaceAccountPageComp )
+                  }
+
                 }
-                else
+                else {
                   root.openAuthPanel()
+                }
               }
             }
 
@@ -260,7 +330,7 @@ Item {
 
         onStateChanged: {
           __merginApi.pingMergin()
-          refreshProjectList()
+          projectsPage.refreshProjectList()
           pageFooter.setActiveButton( pageContent.state )
         }
 
@@ -278,6 +348,10 @@ Item {
           function onResetView() {
             if ( pageContent.state === "created" || pageContent.state === "shared" )
               pageContent.state = "local"
+          }
+
+          function onRefreshProjects() {
+            projectsPage.refreshProjectList()
           }
         }
 
@@ -479,49 +553,347 @@ Item {
           }
         }
       }
+    }
+  }
 
-      Connections {
-        target: __merginApi
-        enabled: root.visible
+  Component {
+    id: workspaceProjectsPanelComp
 
-        function onListProjectsFinished( merginProjects, projectCount, page, requestId ) {
-          stackView.pending = false
+    Page {
+      id: projectsPage
+
+      function setupProjectOpen( projectId, projectPath ) {
+        activeProjectId = projectId
+        activeProjectPath = projectPath
+        openProjectRequested( projectId, projectPath )
+
+        if ( projectId && projectPath ) // this is not project reset
+          hidePanel()
+      }
+
+      function refreshProjectList( keepSearchFilter = false ) {
+        stackView.pending = true
+        switch( pageContent.state ) {
+          case "local":
+            localProjectsPage.refreshProjectsList( keepSearchFilter )
+            break
+          case "created":
+            createdProjectsPage.refreshProjectsList( keepSearchFilter )
+            break
+          case "public":
+            publicProjectsPage.refreshProjectsList( keepSearchFilter )
+            break
         }
-        function onListProjectsByNameFinished( merginProjects, requestId ) {
-          stackView.pending = false
+      }
+
+      header: PanelHeader {
+        id: pageHeader
+
+        titleText: qsTr("Projects")
+        color: InputStyle.clrPanelMain
+        height: InputStyle.rowHeightHeader
+        rowHeight: InputStyle.rowHeightHeader
+
+        onBack: {
+          if ( root.activeProjectId ) {
+            root.hidePanel()
+          }
         }
-        function onApiVersionStatusChanged() {
-          stackView.pending = false
-          if (__merginApi.apiVersionStatus === MerginApiStatus.OK && stackView.currentItem.objectName === "authPanel") {
-            if (__merginApi.userAuth.hasAuthData()) {
-              refreshProjectList()
-            } else if (pageContent.state !== 'local') {
-              if (stackView.currentItem.objectName !== "authPanel") {
-                root.openAuthPanel()
+        withBackButton: root.activeProjectPath
+
+        Item {
+          id: avatar
+
+          width: InputStyle.rowHeightHeader * 0.8
+          height: InputStyle.rowHeightHeader
+          anchors.right: parent.right
+          anchors.rightMargin: InputStyle.panelMargin
+
+          Rectangle {
+            id: avatarImage
+
+            anchors.centerIn: parent
+            width: avatar.width
+            height: avatar.width
+            color: InputStyle.fontColor
+            radius: width*0.5
+            antialiasing: true
+
+            MouseArea {
+              anchors.fill: parent
+              onClicked: {
+                if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK ) {
+                  __merginApi.getUserInfo()
+
+                  if ( __merginApi.apiSupportsSubscriptions ) {
+                    __merginApi.getWorkspaceInfo()
+                  }
+
+                  if ( __merginApi.serverType === MerginServerType.OLD ) {
+                    stackView.push( accountPanelComp )
+                  }
+                  else {
+                    stackView.push( workspaceAccountPageComp )
+                  }
+
+                }
+                else {
+                  root.openAuthPanel()
+                }
               }
+            }
+
+            Image {
+              id: userIcon
+
+              anchors.centerIn: avatarImage
+              source: InputStyle.accountIcon
+              height: avatarImage.height * 0.8
+              width: height
+              sourceSize.width: width
+              sourceSize.height: height
+              fillMode: Image.PreserveAspectFit
+            }
+
+            ColorOverlay {
+              anchors.fill: userIcon
+              source: userIcon
+              color: "#FFFFFF"
             }
           }
         }
-        function onAuthRequested() {
-          stackView.pending = false
-          root.openAuthPanel()
+      }
+
+      background: Rectangle {
+        anchors.fill: parent
+        color: InputStyle.clrPanelMain
+      }
+
+      Item {
+        id: pageContent
+
+        anchors.fill: parent
+
+        states: [
+          State {
+            name: "local"
+          },
+          State {
+            name: "created"
+          },
+          State {
+            name: "public"
+          }
+        ]
+
+        onStateChanged: {
+          __merginApi.pingMergin()
+          projectsPage.refreshProjectList()
+          pageFooter.setActiveButton( pageContent.state )
         }
-        function onAuthChanged() {
-          stackView.pending = false
-          if ( __merginApi.userAuth.hasAuthData() ) {
-            stackView.popOnePageOrClose()
+
+        Connections {
+          target: root
+          function onVisibleChanged() {
+            if ( root.visible ) { // projectsPanel opened
+              pageContent.state = "local"
+            }
+            else {
+              pageContent.state = ""
+            }
+          }
+
+          function onResetView() {
+            if ( pageContent.state === "created" )
+              pageContent.state = "local"
+          }
+
+          function onRefreshProjects() {
             projectsPage.refreshProjectList()
-            root.forceActiveFocus()
           }
         }
-        function onAuthFailed() {
+
+        Button {
+          id: switchWorkspaceButton
+
+          visible: __merginApi.serverType !== MerginServerType.CE && pageContent.state === "created"
+          anchors {
+              left: parent.left
+              right: parent.right
+          }
+
+          contentItem: Text {
+            text: __merginApi.userInfo.activeWorkspaceId > 0 ? __merginApi.userInfo.activeWorkspaceName + " >" : qsTr("Switch workspace") + " >"
+            horizontalAlignment : Text.AlignLeft
+          }
+
+          onClicked: {
+            stackView.push(workspaceListComponent)
+          }
+        }
+
+        StackLayout {
+          id: projectListLayout
+
+          anchors {
+              left: parent.left
+              right: parent.right
+              top: switchWorkspaceButton.visible? switchWorkspaceButton.bottom : parent.top
+              bottom: parent.bottom
+          }
+          currentIndex: pageFooter.currentIndex
+
+          ProjectListPage {
+            id: localProjectsPage
+
+            projectModelType: ProjectsModel.LocalProjectsModel
+            activeProjectId: root.activeProjectId
+            list.visible: !stackView.pending
+
+            onOpenProjectRequested: function( projectId, projectFilePath ) {
+              setupProjectOpen( projectId, projectFilePath )
+            }
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
+            list.onActiveProjectDeleted: setupProjectOpen( "", "" )
+          }
+
+          ProjectListPage {
+            id: createdProjectsPage
+
+            projectModelType: ProjectsModel.CreatedProjectsModel
+            activeProjectId: root.activeProjectId
+            list.visible: !stackView.pending
+
+            onOpenProjectRequested: function( projectId, projectFilePath ) {
+              setupProjectOpen( projectId, projectFilePath )
+            }
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
+            list.onActiveProjectDeleted: setupProjectOpen( "", "" )
+          }
+
+          ProjectListPage {
+            id: publicProjectsPage
+
+            projectModelType: ProjectsModel.PublicProjectsModel
+            activeProjectId: root.activeProjectId
+            list.visible: !stackView.pending
+
+            onOpenProjectRequested: function( projectId, projectFilePath ) {
+              setupProjectOpen( projectId, projectFilePath )
+            }
+            onShowLocalChangesRequested: function( projectId ) {
+              showChanges( projectId )
+            }
+            list.onActiveProjectDeleted: function() {
+              setupProjectOpen( "", "" )
+            }
+          }
+        }
+      }
+
+      footer: TabBar {
+        id: pageFooter
+
+        property int itemSize: pageFooter.height * 0.8
+
+        function setActiveButton( state ) {
+          switch( state ) {
+            case "local": pageFooter.setCurrentIndex( 0 ); break
+            case "created": pageFooter.setCurrentIndex( 1 ); break
+            case "public": pageFooter.setCurrentIndex( 2 ); break
+          }
+        }
+
+        spacing: 0
+        contentHeight: InputStyle.rowHeightHeader
+
+        TabButton {
+          id: localProjectsBtn
+
+          background: Rectangle {
+            anchors.fill: parent
+            color: InputStyle.fontColor
+          }
+
+          MainPanelButton {
+            id: localProjectsInnerBtn
+
+            text: qsTr("Home")
+            imageSource: InputStyle.homeIcon
+            width: pageFooter.itemSize
+
+            handleClicks: false
+            faded: pageFooter.currentIndex !== localProjectsBtn.TabBar.index
+          }
+
+          onClicked: pageContent.state = "local"
+        }
+
+        TabButton {
+          id: createdProjectsBtn
+
+          background: Rectangle {
+            anchors.fill: parent
+            color: InputStyle.fontColor
+          }
+
+          MainPanelButton {
+            id: createdProjectsInnerBtn
+
+            text: qsTr("My projects")
+            imageSource: InputStyle.accountIcon
+            width: pageFooter.itemSize
+
+            handleClicks: false
+            faded: pageFooter.currentIndex !== createdProjectsBtn.TabBar.index
+          }
+
+          onClicked: pageContent.state = "created"
+        }
+
+        TabButton {
+          id: publicProjectsBtn
+
+          background: Rectangle {
+            anchors.fill: parent
+            color: InputStyle.fontColor
+          }
+
+          MainPanelButton {
+            id: publicProjectsInnerBtn
+
+            text: qsTr("Explore")
+            imageSource: InputStyle.exploreIcon
+            width: pageFooter.itemSize
+
+            handleClicks: false
+            faded: pageFooter.currentIndex !== publicProjectsBtn.TabBar.index
+          }
+
+          onClicked: pageContent.state = "public"
+        }
+      }
+
+      // Other components
+
+      Connections {
+        target: __projectWizard
+        function onProjectCreationFailed(message) {
+          __inputUtils.showNotification(message)
           stackView.pending = false
         }
-        function onRegistrationFailed() {
-          stackView.pending = false
-        }
-        function onRegistrationSucceeded() {
-          stackView.pending = false
+        function onProjectCreated( projectDir, projectName ) {
+          if  (stackView.currentItem.objectName === "projectWizard") {
+            __inputUtils.log(
+                  "Create project",
+                  "Local project " + projectName + " created at path: " + projectDir + " by "
+                  + ( __merginApi.userAuth ? __merginApi.userAuth.username : "unknown" ) )
+            stackView.popOnePageOrClose()
+          }
         }
       }
     }
@@ -529,8 +901,10 @@ Item {
 
   Component {
     id: authPanelComp
+
     AuthPanel {
       id: authPanel
+
       objectName: "authPanel"
       visible: false
       pending: stackView.pending
@@ -570,10 +944,8 @@ Item {
       }
       onManagePlansClicked: manageSubscriptionPlans()
       onSignOutClicked: {
-        if ( __merginApi.userAuth.hasAuthData() ) {
-          __merginApi.clearAuth()
-        }
-        stackView.popOnePageOrClose()
+        __merginApi.signOut()
+        stackView.pop( null )
         root.resetView()
       }
       onRestorePurchasesClicked: {
@@ -582,6 +954,33 @@ Item {
       onAccountDeleted: {
         stackView.popOnePageOrClose()
         root.resetView()
+      }
+    }
+  }
+
+  Component {
+    id: workspaceAccountPageComp
+
+    WorkspaceAccountPage {
+      id: workspaceAccountPage
+
+      onBack: stackView.popOnePageOrClose()
+
+      onManagePlansClicked: manageSubscriptionPlans()
+
+      onSignOutClicked: {
+        __merginApi.signOut()
+        stackView.pop( null )
+        root.resetView()
+      }
+
+      onAccountDeleted: {
+        stackView.popOnePageOrClose()
+        root.resetView()
+      }
+
+      onSwitchWorkspace: {
+        stackView.push( workspaceListComponent )
       }
     }
   }
@@ -603,6 +1002,16 @@ Item {
   }
 
   Component {
+    id: workspaceSubscribePageComp
+
+    WorkspaceSubscribePage {
+      id: subscribePanel
+
+      onBack: stackView.popOnePageOrClose()
+    }
+  }
+
+  Component {
     id: projectWizardComp
 
     ProjectWizardPage {
@@ -613,6 +1022,113 @@ Item {
       onBack: {
         stackView.popOnePageOrClose()
       }
+    }
+  }
+
+  Component {
+    id: workspaceListComponent
+
+    SwitchWorkspacePage {
+      id: switchWorkspacePanel
+
+      height: root.height
+      width: root.width
+
+      onBack: {
+        stackView.popOnePageOrClose()
+      }
+
+      onCreateWorkspaceRequested: {
+        stackView.push( createWorkspaceComponent )
+      }
+    }
+  }
+
+  Component {
+    id: createWorkspaceComponent
+
+    CreateWorkspacePage {
+      id: createWorkspacePanel
+
+      onBack: {
+        stackView.popOnePageOrClose()
+      }
+    }
+  }
+
+  Component {
+    id: registrationFinishComponent
+
+    RegistrationFinishPage {
+      onFinished: {
+        stackView.pop( null )
+      }
+    }
+  }
+
+  Connections {
+    target: __merginApi
+    enabled: root.visible
+
+    function onListProjectsFinished( merginProjects, projectCount, page, requestId ) {
+      stackView.pending = false
+    }
+
+    function onListProjectsByNameFinished( merginProjects, requestId ) {
+      stackView.pending = false
+    }
+
+    function onApiVersionStatusChanged() {
+      stackView.pending = false
+
+      if (__merginApi.apiVersionStatus === MerginApiStatus.OK) {
+        if (__merginApi.userAuth.hasAuthData()) {
+          root.refreshProjects()
+        }
+      }
+    }
+
+    function onAuthRequested() {
+      stackView.pending = false
+      root.openAuthPanel()
+    }
+
+    function onAuthChanged() {
+      stackView.pending = false
+
+      if ( __merginApi.userAuth.hasAuthData() ) {
+
+        if ( __merginApi.serverType === MerginServerType.OLD || ( stackView.currentItem.objectName === "authPanel" && stackView.currentItem.state === "login" ) ) {
+          stackView.popPage( "authPanel" )
+        }
+
+        root.refreshProjects()
+        root.forceActiveFocus()
+      }
+    }
+
+    function onAuthFailed() {
+      stackView.pending = false
+    }
+
+    function onRegistrationFailed() {
+      stackView.pending = false
+    }
+
+    function onRegistrationSucceeded() {
+      stackView.pending = false
+
+      if ( __merginApi.serverType !== MerginServerType.OLD ) {
+        stackView.push( registrationFinishComponent )
+      }
+    }
+
+    function onServerTypeChanged( serverType ) {
+      stackView.switchUI()
+    }
+
+    function onActiveWorkspaceChanged() {
+      root.refreshProjects()
     }
   }
 }

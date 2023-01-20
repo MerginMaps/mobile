@@ -28,6 +28,7 @@ QtObject {
     property color panelBackgroundDark: "#B3B3B3"
     property color panelBackgroundDarker: "#575757"
     property color panelBackgroundLight: "#E6E6E6"
+    property color panelBackgroundWhite: "#FFFFFF"
     property color secondaryBackgroundColor: "#86A3C3"
     property color labelColor: "#999999"
     property color secondaryFontColor: "#B3B3B3"
@@ -56,10 +57,12 @@ QtObject {
     property real rowHeightListEntry: scale(64)
     property real rowHeightMedium: scale(45)
     property real rowHeightSmall: scale(20)
+    property real rowHeightListClickable: scale(90)
     property real fieldHeight: scale(54)
     property real mapBtnHeight: scale(40)
     property real bigGap: scale(45)
     property real smallGap: scale(25)
+    property real xSmallGap: scale(15)
     property real tinyGap: scale(5)
     property real delegateBtnHeight: rowHeight * 0.8
     property real scaleBarHeight: scale(45)
@@ -73,6 +76,8 @@ QtObject {
     property real buttonClickArea: scale(15)
 
     property real closeBtnSize: scale(30)
+    property real buttonMinPadding: scale(10)
+    property real mediumBtnHeight: scale(35)
 
     property real panelSpacing: 5 * __dp
     property real shadowVerticalOffset: -2 * __dp
@@ -93,6 +98,8 @@ QtObject {
 
     property real iconSizeMedium: 25 * __dp
     property real iconSizeLarge: 30 * __dp
+    property real iconSizeXLarge: 50 * __dp
+    property real iconSizeXXLarge: 80 * __dp
     property real switchWidth: scale( 45 )
     property real switchHeight: scale( 25 )
 

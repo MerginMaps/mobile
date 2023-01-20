@@ -186,8 +186,8 @@ QVector<QString> InputHelp::logHeader( bool isHtml )
   if ( !mMerginApi->userInfo()->email().isEmpty() )
   {
     retLines.push_back( QStringLiteral( "Mergin Data: %1/%2 Bytes" )
-                        .arg( InputUtils::bytesToHumanSize( mMerginApi->userInfo()->diskUsage() ) )
-                        .arg( InputUtils::bytesToHumanSize( mMerginApi->userInfo()->storageLimit() ) ) );
+                        .arg( InputUtils::bytesToHumanSize( mMerginApi->workspaceInfo()->diskUsage() ) )
+                        .arg( InputUtils::bytesToHumanSize( mMerginApi->workspaceInfo()->storageLimit() ) ) );
     retLines.push_back( QStringLiteral( "Subscription plan: %1" ).arg( mMerginApi->subscriptionInfo()->planAlias() ) );
     retLines.push_back( QStringLiteral( "Subscription Status: %1" ).arg( MerginSubscriptionStatus::toString( static_cast<MerginSubscriptionStatus::SubscriptionStatus>( mMerginApi->subscriptionInfo()->subscriptionStatus() ) ) ) );
   }

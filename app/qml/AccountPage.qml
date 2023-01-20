@@ -27,8 +27,8 @@ Page {
 
   property string username: __merginApi.userAuth.username
   property string email: __merginApi.userInfo.email
-  property int diskUsage: __merginApi.userInfo.diskUsage
-  property int storageLimit: __merginApi.userInfo.storageLimit
+  property int diskUsage: __merginApi.workspaceInfo.diskUsage
+  property int storageLimit: __merginApi.workspaceInfo.storageLimit
   property string planAlias: __merginApi.subscriptionInfo.planAlias
   property int subscriptionStatus: __merginApi.subscriptionInfo.subscriptionStatus
   property string subscriptionsTimestamp: __merginApi.subscriptionInfo.subscriptionTimestamp

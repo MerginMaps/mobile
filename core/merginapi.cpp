@@ -40,23 +40,67 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   , mLocalProjects( localProjects )
   , mDataDir( localProjects.dataDir() )
   , mUserInfo( new MerginUserInfo )
+  , mWorkspaceInfo( new MerginWorkspaceInfo )
   , mSubscriptionInfo( new MerginSubscriptionInfo )
   , mUserAuth( new MerginUserAuth )
 {
+  // load cached data if there are any
+  QSettings cache;
+  if ( cache.contains( QStringLiteral( "Input/apiRoot" ) ) )
+  {
+    loadCache();
+  }
+  else
+  {
+    // set default api root
+    setApiRoot( defaultApiRoot() );
+  }
+
   qRegisterMetaType<Transactions>();
 
   QObject::connect( this, &MerginApi::authChanged, this, &MerginApi::saveAuthData );
   QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::pingMergin );
+  QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::getServerConfig );
   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::checkMerginVersion );
+  QObject::connect( this, &MerginApi::workspaceCreated, this, &MerginApi::getUserInfo );
+  QObject::connect( this, &MerginApi::serverTypeChanged, this, &MerginApi::getUserInfo );
+  QObject::connect( this, &MerginApi::processInvitationFinished, this, &MerginApi::getUserInfo );
+  QObject::connect( this, &MerginApi::getWorkspaceInfoFinished, this, &MerginApi::getServiceInfo );
   QObject::connect( mUserInfo, &MerginUserInfo::userInfoChanged, this, &MerginApi::userInfoChanged );
+  QObject::connect( mUserInfo, &MerginUserInfo::activeWorkspaceChanged, this, &MerginApi::activeWorkspaceChanged );
+  QObject::connect( mUserInfo, &MerginUserInfo::activeWorkspaceChanged, this, &MerginApi::getWorkspaceInfo );
+  QObject::connect( mUserInfo, &MerginUserInfo::hasWorkspacesChanged, this, &MerginApi::hasWorkspacesChanged );
   QObject::connect( mSubscriptionInfo, &MerginSubscriptionInfo::subscriptionInfoChanged, this, &MerginApi::subscriptionInfoChanged );
   QObject::connect( mSubscriptionInfo, &MerginSubscriptionInfo::planProductIdChanged, this, &MerginApi::onPlanProductIdChanged );
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::authChanged );
+  QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, [this]()
+  {
+    if ( mUserAuth->hasAuthData() )
+    {
+      // do not call /user/profile when user just logged out
+      getUserInfo();
+    }
+  } );
 
-  loadAuthData();
   GEODIFF_init();
   GEODIFF_setLoggerCallback( &GeodiffUtils::log );
   GEODIFF_setMaximumLoggerLevel( GEODIFF_LoggerLevel::LevelDebug );
+
+  // check if the cache is up to date
+  getServerConfig();
+  pingMergin();
+}
+
+void MerginApi::loadCache()
+{
+  QSettings settings;
+  mApiRoot = settings.value( QStringLiteral( "Input/apiRoot" ) ).toString();
+  int serverType = settings.value( QStringLiteral( "Input/serverType" ) ).toInt();
+
+  mServerType = static_cast<MerginServerType::ServerType>( serverType );
+
+  mUserAuth->loadAuthData();
+  mUserInfo->loadWorkspacesData();
 }
 
 MerginUserAuth *MerginApi::userAuth() const
@@ -67,6 +111,11 @@ MerginUserAuth *MerginApi::userAuth() const
 MerginUserInfo *MerginApi::userInfo() const
 {
   return mUserInfo;
+}
+
+MerginWorkspaceInfo *MerginApi::workspaceInfo() const
+{
+  return mWorkspaceInfo;
 }
 
 MerginSubscriptionInfo *MerginApi::subscriptionInfo() const
@@ -83,7 +132,13 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
     return QString();
   }
 
+  QString workspace = mUserInfo->activeWorkspaceName();
+
   QUrlQuery query;
+  if ( !workspace.isEmpty() && !flag.isEmpty() )
+  {
+    query.addQueryItem( "only_namespace", workspace );
+  }
   if ( !filterTag.isEmpty() )
   {
     query.addQueryItem( "tags", filterTag );
@@ -96,7 +151,7 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
   {
     query.addQueryItem( "flag", flag );
   }
-  query.addQueryItem( "order_by", QStringLiteral( "namespace" ) );
+  //query.addQueryItem( "order_params", QStringLiteral( "namespace_asc,name_asc" ) );
   // Required query parameters
   query.addQueryItem( "page", QString::number( page ) );
   query.addQueryItem( "per_page", QString::number( PROJECT_PER_PAGE ) );
@@ -741,15 +796,24 @@ void MerginApi::registerUser( const QString &username,
   CoreUtils::log( "auth", QStringLiteral( "Requesting registration: " ) + url.toString() );
 }
 
-void MerginApi::getUserInfo( )
+void MerginApi::getUserInfo()
 {
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
 
+  QString urlString;
+  if ( mServerType == MerginServerType::OLD )
+  {
+    urlString = mApiRoot + QStringLiteral( "v1/user/%1" ).arg( mUserAuth->username() );
+  }
+  else
+  {
+    urlString = mApiRoot + QStringLiteral( "v1/user/profile" );
+  }
+
   QNetworkRequest request = getDefaultRequest();
-  QString urlString = mApiRoot + QStringLiteral( "v1/user/%1" ).arg( mUserAuth->username() );
   QUrl url( urlString );
   request.setUrl( url );
 
@@ -758,11 +822,16 @@ void MerginApi::getUserInfo( )
   connect( reply, &QNetworkReply::finished, this, &MerginApi::getUserInfoFinished );
 }
 
-void MerginApi::getSubscriptionInfo()
+void MerginApi::getWorkspaceInfo()
 {
-  if ( !apiSupportsSubscriptions() )
+  if ( mServerType == MerginServerType::OLD )
   {
-    qDebug() << "Subscription info request skipped - server doesn't support subscriptions.";
+    return;
+  }
+
+  if ( mUserInfo->activeWorkspaceId() == -1 )
+  {
+    return;
   }
 
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
@@ -770,20 +839,97 @@ void MerginApi::getSubscriptionInfo()
     return;
   }
 
+  QString urlString = mApiRoot + QStringLiteral( "v1/workspace/%1" ).arg( mUserInfo->activeWorkspaceId() );
   QNetworkRequest request = getDefaultRequest();
-  QString urlString = mApiRoot + QStringLiteral( "v1/user/service" );
   QUrl url( urlString );
   request.setUrl( url );
 
   QNetworkReply *reply = mManager.get( request );
-  CoreUtils::log( "subscription info", QStringLiteral( "Requesting subscription info: " ) + url.toString() );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::getSubscriptionInfoFinished );
+  CoreUtils::log( "workspace info", QStringLiteral( "Requesting workspace info: " ) + url.toString() );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::getWorkspaceInfoReplyFinished );
+}
+
+void MerginApi::getServiceInfo()
+{
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  {
+    return;
+  }
+
+  QString urlString;
+
+  if ( mServerType == MerginServerType::SAAS )
+  {
+    urlString = mApiRoot + QStringLiteral( "v1/workspace/%1/service" ).arg( mUserInfo->activeWorkspaceId() );
+  }
+  else if ( mServerType == MerginServerType::OLD )
+  {
+    urlString = mApiRoot + QStringLiteral( "v1/user/service" );
+  }
+  else
+  {
+    return;
+  }
+
+  QNetworkRequest request = getDefaultRequest( true );
+  QUrl url( urlString );
+  request.setUrl( url );
+
+  QNetworkReply *reply = mManager.get( request );
+
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::getServiceInfoReplyFinished );
+
+  CoreUtils::log( "Service info", QStringLiteral( "Requesting service info: " ) + url.toString() );
+}
+
+void MerginApi::getServiceInfoReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( "Service info", QStringLiteral( "Success" ) );
+
+    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    if ( doc.isObject() )
+    {
+      QJsonObject docObj = doc.object();
+      mSubscriptionInfo->setFromJson( docObj );
+    }
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getServiceInfo" ), r->errorString(), serverMsg );
+    CoreUtils::log( "Service info", QStringLiteral( "FAILED - %1" ).arg( message ) );
+
+    mSubscriptionInfo->clear();
+
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    if ( httpCode == 404 )
+    {
+      // no such API on the server, do not emit anything
+    }
+    else if ( httpCode == 403 )
+    {
+      // forbidden - I do not have enough rights to see this, do not emit anything
+    }
+    else
+    {
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getServiceInfo" ) );
+    }
+  }
+
+  r->deleteLater();
 }
 
 void MerginApi::clearAuth()
 {
   mUserAuth->clear();
   mUserInfo->clear();
+  mUserInfo->clearCachedWorkspacesInfo();
+  mWorkspaceInfo->clear();
   mSubscriptionInfo->clear();
 }
 
@@ -867,6 +1013,7 @@ void MerginApi::saveAuthData()
   settings.endGroup();
 
   mUserAuth->saveAuthData();
+  mUserInfo->clear();
 }
 
 void MerginApi::createProjectFinished()
@@ -985,8 +1132,10 @@ void MerginApi::authorizeFinished()
     {
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: authorize" ) );
     }
+    mUserAuth->blockSignals( true );
     mUserAuth->setUsername( QString() );
     mUserAuth->setPassword( QString() );
+    mUserAuth->blockSignals( false );
     mUserAuth->clearTokenData();
   }
   if ( mAuthLoopEvent.isRunning() )
@@ -1004,12 +1153,13 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "register", QStringLiteral( "Success" ) );
-    emit registrationSucceeded();
     QString msg = tr( "Registration successful" );
     emit notify( msg );
 
     if ( !username.isEmpty() && !password.isEmpty() ) // log in immediately
       authorize( username, password );
+
+    emit registrationSucceeded();
   }
   else
   {
@@ -1069,7 +1219,7 @@ void MerginApi::onPlanProductIdChanged()
 {
   if ( mUserAuth->hasAuthData() )
   {
-    getUserInfo();
+    getWorkspaceInfo();
   }
 }
 
@@ -1107,14 +1257,6 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool w
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   return mManager.get( request );
-}
-
-void MerginApi::loadAuthData()
-{
-  QSettings settings;
-  settings.beginGroup( QStringLiteral( "Input/" ) );
-  setApiRoot( settings.value( QStringLiteral( "apiRoot" ) ).toString() );
-  mUserAuth->loadAuthData();
 }
 
 bool MerginApi::validateAuth()
@@ -1318,14 +1460,13 @@ void MerginApi::setApiRoot( const QString &apiRoot )
     newApiRoot = apiRoot;
   }
 
-  if ( newApiRoot  != mApiRoot )
+  if ( newApiRoot != mApiRoot )
   {
     mApiRoot = newApiRoot;
+
     QSettings settings;
-    settings.beginGroup( QStringLiteral( "Input/" ) );
-    settings.setValue( QStringLiteral( "apiRoot" ), mApiRoot );
-    settings.endGroup();
-    setApiVersionStatus( MerginApiStatus::UNKNOWN );
+    settings.setValue( QStringLiteral( "Input/apiRoot" ), mApiRoot );
+
     emit apiRootChanged();
   }
 }
@@ -2486,6 +2627,10 @@ void MerginApi::getUserInfoFinished()
     {
       QJsonObject docObj = doc.object();
       mUserInfo->setFromJson( docObj );
+      if ( mServerType == MerginServerType::OLD )
+      {
+        mWorkspaceInfo->setFromJson( docObj );
+      }
     }
   }
   else
@@ -2497,31 +2642,35 @@ void MerginApi::getUserInfoFinished()
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getUserInfo" ) );
   }
 
+  emit userInfoReplyFinished();
+
   r->deleteLater();
 }
 
-void MerginApi::getSubscriptionInfoFinished()
+void MerginApi::getWorkspaceInfoReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    CoreUtils::log( "subscription info", QStringLiteral( "Success" ) );
+    CoreUtils::log( "workspace info", QStringLiteral( "Success" ) );
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
       QJsonObject docObj = doc.object();
-      mSubscriptionInfo->setFromJson( docObj );
+      mWorkspaceInfo->setFromJson( docObj );
+
+      emit getWorkspaceInfoFinished();
     }
   }
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
-    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getSubscriptionInfo" ), r->errorString(), serverMsg );
-    CoreUtils::log( "subscription info", QStringLiteral( "FAILED - %1" ).arg( message ) );
-    mSubscriptionInfo->clear();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getSubscriptionInfo" ) );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getWorkspaceInfo" ), r->errorString(), serverMsg );
+    CoreUtils::log( "workspace info", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    mWorkspaceInfo->clear();
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getWorkspaceInfo" ) );
   }
 
   r->deleteLater();
@@ -3065,6 +3214,311 @@ void MerginApi::deleteAccountFinished()
 
   r->deleteLater();
 }
+
+void MerginApi::getServerConfig()
+{
+  QNetworkRequest request = getDefaultRequest();
+  QString urlString = mApiRoot + QStringLiteral( "/config" );
+  QUrl url( urlString );
+  request.setUrl( url );
+
+  QNetworkReply *reply = mManager.get( request );
+
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::getServerConfigReplyFinished );
+  CoreUtils::log( "Config", QStringLiteral( "Requesting server configuration: " ) + url.toString() );
+}
+
+void MerginApi::getServerConfigReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( "Config", QStringLiteral( "Success" ) );
+    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    if ( doc.isObject() )
+    {
+      QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
+      if ( serverType == QStringLiteral( "ee" ) )
+      {
+        setServerType( MerginServerType::EE );
+      }
+      else if ( serverType == QStringLiteral( "ce" ) )
+      {
+        setServerType( MerginServerType::CE );
+      }
+      else if ( serverType == QStringLiteral( "saas" ) )
+      {
+        setServerType( MerginServerType::SAAS );
+      }
+    }
+  }
+  else
+  {
+    int statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    if ( statusCode == 404 ) // legacy (old) server
+    {
+      setServerType( MerginServerType::OLD );
+    }
+    else
+    {
+      QString serverMsg = extractServerErrorMsg( r->readAll() );
+      QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getServerType" ), r->errorString(), serverMsg );
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getServerType" ) );
+      CoreUtils::log( "server type", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    }
+  }
+
+  r->deleteLater();
+}
+
+MerginServerType::ServerType MerginApi::serverType() const
+{
+  return mServerType;
+}
+
+void MerginApi::setServerType( const MerginServerType::ServerType &serverType )
+{
+  if ( mServerType != serverType )
+  {
+    mServerType = serverType;
+    QSettings settings;
+    settings.beginGroup( QStringLiteral( "Input/" ) );
+    settings.setValue( QStringLiteral( "serverType" ), mServerType );
+    settings.endGroup();
+    emit serverTypeChanged();
+  }
+}
+
+void MerginApi::listWorkspaces()
+{
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  {
+    emit listWorkspacesFailed();
+    return;
+  }
+
+  QUrl url( mApiRoot + QStringLiteral( "/v1/workspaces" ) );
+  QNetworkRequest request = getDefaultRequest( mUserAuth->hasAuthData() );
+  request.setUrl( url );
+
+  QNetworkReply *reply = mManager.get( request );
+  CoreUtils::log( "list workspaces", QStringLiteral( "Requesting: " ) + url.toString() );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::listWorkspacesReplyFinished );
+}
+
+void MerginApi::listWorkspacesReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( "list workspaces", QStringLiteral( "Success" ) );
+    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    if ( doc.isArray() )
+    {
+      QMap<int, QString> workspaces;
+      QJsonArray array = doc.array();
+      for ( auto it = array.constBegin(); it != array.constEnd(); ++it )
+      {
+        QJsonObject ws = it->toObject();
+        workspaces.insert( ws.value( QStringLiteral( "id" ) ).toInt(), ws.value( QStringLiteral( "name" ) ).toString() );
+      }
+
+      mUserInfo->setWorkspaces( workspaces );
+      emit listWorkspacesFinished( workspaces );
+    }
+    else
+    {
+      emit listWorkspacesFailed();
+    }
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "listWorkspaces" ), r->errorString(), serverMsg );
+    CoreUtils::log( "list workspaces", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: listWorkspaces" ) );
+    emit listWorkspacesFailed();
+  }
+
+  r->deleteLater();
+}
+
+void MerginApi::listInvitations()
+{
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  {
+    emit listInvitationsFailed();
+    return;
+  }
+
+  QUrl url( mApiRoot + QStringLiteral( "/v1/workspace/invitations" ) );
+  QNetworkRequest request = getDefaultRequest( mUserAuth->hasAuthData() );
+  request.setUrl( url );
+
+  QNetworkReply *reply = mManager.get( request );
+  CoreUtils::log( "list invitations", QStringLiteral( "Requesting: " ) + url.toString() );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::listInvitationsReplyFinished );
+}
+
+void MerginApi::listInvitationsReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( "list invitations", QStringLiteral( "Success" ) );
+    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    if ( doc.isArray() )
+    {
+      QList<MerginInvitation> invitations;
+      QJsonArray array = doc.array();
+      for ( auto it = array.constBegin(); it != array.constEnd(); ++it )
+      {
+        MerginInvitation invite = MerginInvitation::fromJsonObject( it->toObject() );
+        invitations.append( invite );
+      }
+
+      emit listInvitationsFinished( invitations );
+    }
+    else
+    {
+      emit listInvitationsFailed();
+    }
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "listInvitations" ), r->errorString(), serverMsg );
+    CoreUtils::log( "list invitations", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: listInvitations" ) );
+    emit listInvitationsFailed();
+  }
+
+  r->deleteLater();
+}
+
+void MerginApi::processInvitation( const QString &uuid, bool accept )
+{
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  {
+    emit processInvitationFailed();
+    return;
+  }
+
+  QNetworkRequest request = getDefaultRequest( true );
+  QString urlString = mApiRoot + QStringLiteral( "v1/workspace/invitation/%1" ).arg( uuid );
+  QUrl url( urlString );
+  request.setUrl( url );
+  request.setRawHeader( "Content-Type", "application/json" );
+
+  QJsonDocument jsonDoc;
+  QJsonObject jsonObject;
+  jsonObject.insert( QStringLiteral( "accept" ), accept );
+  jsonDoc.setObject( jsonObject );
+  QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
+  QNetworkReply *reply = mManager.post( request, json );
+  CoreUtils::log( "process invitation", QStringLiteral( "Requesting: " ) + url.toString() );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::processInvitationReplyFinished );
+}
+
+void MerginApi::processInvitationReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( "process invitation", QStringLiteral( "Success" ) );
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "processInvitation" ), r->errorString(), serverMsg );
+    CoreUtils::log( "process invitation", QStringLiteral( "FAILED - %1" ).arg( message ) );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: processInvitation" ) );
+    emit processInvitationFailed();
+  }
+
+  emit processInvitationFinished();
+
+  r->deleteLater();
+}
+
+bool MerginApi::createWorkspace( const QString &workspaceName )
+{
+  if ( !validateAuth() )
+  {
+    emit missingAuthorizationError( workspaceName );
+    return false;
+  }
+
+  if ( mApiVersionStatus != MerginApiStatus::OK )
+  {
+    return false;
+  }
+
+  if ( !CoreUtils::isValidName( workspaceName ) )
+  {
+    emit notify( tr( "Workspace name contains invalid characters" ) );
+    return false;
+  }
+
+  QNetworkRequest request = getDefaultRequest();
+  QUrl url( mApiRoot + QString( "/v1/workspace" ) );
+  request.setUrl( url );
+  request.setRawHeader( "Content-Type", "application/json" );
+  request.setRawHeader( "Accept", "application/json" );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrWorkspaceName ), workspaceName );
+
+  QJsonDocument jsonDoc;
+  QJsonObject jsonObject;
+  jsonObject.insert( QStringLiteral( "name" ), workspaceName );
+  jsonDoc.setObject( jsonObject );
+  QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
+
+  QNetworkReply *reply = mManager.post( request, json );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::createWorkspaceReplyFinished );
+  CoreUtils::log( "create " + workspaceName, QStringLiteral( "Requesting workspace creation: " ) + url.toString() );
+
+  return true;
+}
+
+void MerginApi::signOut()
+{
+  clearAuth();
+}
+
+void MerginApi::createWorkspaceReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  QString workspaceName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrWorkspaceName ) ).toString();
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( "create " + workspaceName, QStringLiteral( "Success" ) );
+    emit workspaceCreated( workspaceName, true );
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
+    CoreUtils::log( "create " + workspaceName, message );
+
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+
+    emit workspaceCreated( workspaceName, false );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName );
+  }
+  r->deleteLater();
+}
+
 
 DownloadQueueItem::DownloadQueueItem( const QString &fp, int s, int v, int rf, int rt, bool diff )
   : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )

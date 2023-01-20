@@ -54,6 +54,8 @@ set(MM_SRCS
     inputhelp.cpp
     inputprojutils.cpp
     inpututils.cpp
+    invitationsmodel.cpp
+    invitationsproxymodel.cpp
     layersmodel.cpp
     layersproxymodel.cpp
     main.cpp
@@ -71,6 +73,8 @@ set(MM_SRCS
     synchronizationmanager.cpp
     valuerelationfeaturesmodel.cpp
     variablesmanager.cpp
+    workspacesmodel.cpp
+    workspacesproxymodel.cpp
 )
 
 set(MM_HDRS
@@ -125,6 +129,8 @@ set(MM_HDRS
     inputhelp.h
     inputprojutils.h
     inpututils.h
+    invitationsmodel.h
+    invitationsproxymodel.h
     layersmodel.h
     layersproxymodel.h
     mapthemesmodel.h
@@ -142,6 +148,8 @@ set(MM_HDRS
     synchronizationoptions.h
     valuerelationfeaturesmodel.h
     variablesmanager.h
+    workspacesmodel.h
+    workspacesproxymodel.h
 )
 
 if (HAVE_BLUETOOTH)

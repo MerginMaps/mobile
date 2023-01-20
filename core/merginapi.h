@@ -25,12 +25,14 @@
 #include <QDateTime>
 
 #include "merginapistatus.h"
+#include "merginservertype.h"
 #include "merginsubscriptionstatus.h"
 #include "merginprojectmetadata.h"
 #include "localprojectsmanager.h"
 #include "project.h"
 #include "merginsubscriptioninfo.h"
 #include "merginuserinfo.h"
+#include "merginworkspaceinfo.h"
 #include "merginuserauth.h"
 
 class Purchasing;
@@ -189,19 +191,23 @@ class MerginApi: public QObject
     Q_OBJECT
     Q_PROPERTY( MerginUserAuth *userAuth READ userAuth NOTIFY authChanged )
     Q_PROPERTY( MerginUserInfo *userInfo READ userInfo NOTIFY userInfoChanged )
+    Q_PROPERTY( MerginWorkspaceInfo *workspaceInfo READ workspaceInfo NOTIFY workspaceInfoChanged )
     Q_PROPERTY( MerginSubscriptionInfo *subscriptionInfo READ subscriptionInfo NOTIFY subscriptionInfoChanged )
     Q_PROPERTY( QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged )
     Q_PROPERTY( bool apiSupportsSubscriptions READ apiSupportsSubscriptions NOTIFY apiSupportsSubscriptionsChanged )
     // supportsSelectiveSync if true, fetches mergin-config.json in project and changes sync behavior based on its content (selective sync)
     Q_PROPERTY( bool supportsSelectiveSync READ supportsSelectiveSync NOTIFY supportsSelectiveSyncChanged )
     Q_PROPERTY( /*MerginApiStatus::ApiStatus*/ int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
+    Q_PROPERTY( /*MerginServerType::ServerType*/ int serverType READ serverType NOTIFY serverTypeChanged )
 
   public:
+
     explicit MerginApi( LocalProjectsManager &localProjects, QObject *parent = nullptr );
     ~MerginApi() = default;
 
     MerginUserAuth *userAuth() const;
     MerginUserInfo *userInfo() const;
+    MerginWorkspaceInfo *workspaceInfo() const;
     MerginSubscriptionInfo *subscriptionInfo() const;
 
     /**
@@ -226,7 +232,8 @@ class MerginApi: public QObject
      * \returns unique id of a request
      */
     Q_INVOKABLE QString listProjects( const QString &searchExpression = QStringLiteral(),
-                                      const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral(), const int page = 1 );
+                                      const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral(),
+                                      const int page = 1 );
 
     /**
      * Sends non-blocking GET request to the server to listProjectsByName API. Response is handled in listProjectsByNameFinished
@@ -284,8 +291,8 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void authorize( const QString &login, const QString &password );
     Q_INVOKABLE void getUserInfo();
-    //! Sends subscription info request using userInfo endpoint.
-    Q_INVOKABLE void getSubscriptionInfo();
+    Q_INVOKABLE void getWorkspaceInfo();
+    Q_INVOKABLE void getServiceInfo();
     Q_INVOKABLE void clearAuth();
     Q_INVOKABLE void resetApiRoot();
     Q_INVOKABLE QString resetPasswordUrl();
@@ -445,6 +452,54 @@ class MerginApi: public QObject
     bool supportsSelectiveSync() const;
     void setSupportsSelectiveSync( bool supportsSelectiveSync );
 
+    /**
+     * Determine Mergin server type by querying /config endpoint.
+     * Possible types are: saas, ce, ee and legacy
+     */
+    void getServerConfig();
+
+    MerginServerType::ServerType serverType() const;
+    void setServerType( const MerginServerType::ServerType &serverType );
+
+    /**
+     * Reads server details and user details from QSettings.
+     */
+    void loadCache();
+
+    /**
+     * Sends non-blocking GET request to the server to list user workspaces.
+     * On listWorkspacesReplyFinished, when a response is received, parses
+     * workspaces json and emits signal with a QMap<int, QString> containing
+     * workspace id and name.
+     */
+    void listWorkspaces();
+
+    /**
+     * Sends non-blocking GET request to the server to list available
+     * invitations. On listInvitationsReplyFinished, when a response is
+     * received, parses invitations json and emits signal with a
+     * QMap<QString, QString> containing invitation uuid and name.
+     */
+    void listInvitations();
+
+    /**
+    * Accepts or discards an invitaion to join workspace.
+    * \param uuid Invitation UUID
+    * \param accept Whether user accepted invitation
+    */
+    Q_INVOKABLE void processInvitation( const QString &uuid, bool accept );
+
+    /**
+    * Creates a new workspace on Mergin server.
+    * \param workspaceName
+    */
+    Q_INVOKABLE bool createWorkspace( const QString &workspaceName );
+
+    /**
+     * Clears authorisation data
+     */
+    Q_INVOKABLE void signOut();
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -480,7 +535,9 @@ class MerginApi: public QObject
     void projectCreated( const QString &projectFullName, bool result );
     void serverProjectDeleted( const QString &projecFullName, bool result );
     void userInfoChanged();
+    void workspaceInfoChanged();
     void subscriptionInfoChanged();
+    void activeWorkspaceChanged();
     void configChanged();
     void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
     void pullFilesStarted();
@@ -494,6 +551,23 @@ class MerginApi: public QObject
     void missingAuthorizationError( const QString &projectFullName );
     void accountDeleted( bool result );
     void userIsAnOrgOwnerError();
+
+    void serverTypeChanged();
+
+    void listWorkspacesFailed();
+    void listWorkspacesFinished( const QMap<int, QString> &workspaces );
+
+    void listInvitationsFailed();
+    void listInvitationsFinished( const QList<MerginInvitation> &invitations );
+
+    void processInvitationFailed();
+    void processInvitationFinished();
+
+    void workspaceCreated( const QString &workspaceName, bool result );
+    void userInfoReplyFinished();
+    void getWorkspaceInfoFinished();
+
+    void hasWorkspacesChanged();
 
   private slots:
     void listProjectsReplyFinished( QString requestId );
@@ -512,7 +586,8 @@ class MerginApi: public QObject
     void pushCancelReplyFinished();
 
     void getUserInfoFinished();
-    void getSubscriptionInfoFinished();
+    void getWorkspaceInfoReplyFinished();
+    void getServiceInfoReplyFinished();
     void saveAuthData();
     void createProjectFinished();
     void deleteProjectFinished( bool informUser = true );
@@ -526,6 +601,12 @@ class MerginApi: public QObject
      * Calls user info only when has authData, otherwise slots catches the signal from clearing user data after signing out.
      */
     void onPlanProductIdChanged();
+
+    void getServerConfigReplyFinished();
+    void listWorkspacesReplyFinished();
+    void listInvitationsReplyFinished();
+    void processInvitationReplyFinished();
+    void createWorkspaceReplyFinished();
 
   private:
     MerginProject parseProjectMetadata( const QJsonObject &project );
@@ -564,8 +645,6 @@ class MerginApi: public QObject
 
     static QByteArray getChecksum( const QString &filePath );
     static QSet<QString> listFiles( const QString &projectPath );
-
-    void loadAuthData();
 
     bool validateAuth();
     void checkMerginVersion( QString apiVersion, bool serverSupportsSubscriptions, QString msg = QStringLiteral() );
@@ -622,6 +701,7 @@ class MerginApi: public QObject
     QString mDataDir; // dir with all projects
 
     MerginUserInfo *mUserInfo; //owned by this (qml grouped-properties)
+    MerginWorkspaceInfo *mWorkspaceInfo; //owned by this (qml grouped-properties)
     MerginSubscriptionInfo *mSubscriptionInfo; //owned by this (qml grouped-properties)
     MerginUserAuth *mUserAuth; //owned by this (qml grouped-properties)
 
@@ -629,6 +709,7 @@ class MerginApi: public QObject
     {
       AttrProjectFullName = QNetworkRequest::User,
       AttrTempFileName    = QNetworkRequest::User + 1,
+      AttrWorkspaceName   = QNetworkRequest::User + 2,
     };
 
     Transactions mTransactionalStatus; //projectFullname -> transactionStatus
@@ -647,6 +728,8 @@ class MerginApi: public QObject
 
     static QList<DownloadQueueItem> itemsForFileChunks( const MerginFile &file, int version );
     static QList<DownloadQueueItem> itemsForFileDiffs( const MerginFile &file );
+
+    MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
 
     friend class TestMerginApi;
     friend class Purchasing;

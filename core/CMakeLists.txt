@@ -5,9 +5,11 @@ set(MM_CORE_SRCS
     merginsubscriptioninfo.cpp
     merginsubscriptionstatus.cpp
     merginsubscriptiontype.cpp
+    merginservertype.cpp
     merginprojectstatusmodel.cpp
     merginuserauth.cpp
     merginuserinfo.cpp
+    merginworkspaceinfo.cpp
     localprojectsmanager.cpp
     merginprojectmetadata.cpp
     project.cpp
@@ -21,9 +23,11 @@ set(MM_CORE_HDRS
     merginsubscriptioninfo.h
     merginsubscriptionstatus.h
     merginsubscriptiontype.h
+    merginservertype.h
     merginprojectstatusmodel.h
     merginuserauth.h
     merginuserinfo.h
+    merginworkspaceinfo.h
     localprojectsmanager.h
     merginprojectmetadata.h
     project.h

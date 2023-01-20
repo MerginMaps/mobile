@@ -104,8 +104,13 @@ Item {
       fieldHeight: root.fieldHeight
 
       onRegistrationRequested: {
-        registrationForm.clean()
-        root.state = "register"
+        if ( __merginApi.serverType === MerginServerType.EE ) {
+          Qt.openUrlExternally( __merginApi.apiRoot )
+        }
+        else {
+          registrationForm.clean()
+          root.state = "register"
+        }
       }
     }
 

@@ -64,7 +64,7 @@ void TestPurchasing::initTestCase()
   QCOMPARE( spy.count(), 1 );
 
   QSignalSpy spy2( mApi, &MerginApi::subscriptionInfoChanged );
-  mApi->getSubscriptionInfo();
+  mApi->getServiceInfo();
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy2.count(), 1 );
 
@@ -94,7 +94,7 @@ void TestPurchasing::testUserBuyTier01()
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID, true );
 
   QCOMPARE( mApi->subscriptionInfo()->planProductId(), TIER01_PLAN_ID );
-  QCOMPARE( mApi->userInfo()->storageLimit(), TIER01_STORAGE );
+  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TIER01_STORAGE );
   QCOMPARE( mApi->subscriptionInfo()->ownsActiveSubscription(), true );
   QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::ValidSubscription );
   QCOMPARE( mApi->subscriptionInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
@@ -106,7 +106,7 @@ void TestPurchasing::testUserBuyTier12()
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyProfessionalPlan, TIER02_PLAN_ID, true );
 
   QCOMPARE( mApi->subscriptionInfo()->planProductId(), TIER02_PLAN_ID );
-  QCOMPARE( mApi->userInfo()->storageLimit(), TIER02_STORAGE );
+  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TIER02_STORAGE );
   QCOMPARE( mApi->subscriptionInfo()->ownsActiveSubscription(), true );
   QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::ValidSubscription );
   QCOMPARE( mApi->subscriptionInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
@@ -117,7 +117,7 @@ void TestPurchasing::testUserUnsubscribed()
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID );
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveSimulateUnsubscribed, TIER01_PLAN_ID );
   QCOMPARE( mApi->subscriptionInfo()->planProductId(), TIER01_PLAN_ID );
-  QCOMPARE( mApi->userInfo()->storageLimit(), TIER01_STORAGE );
+  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TIER01_STORAGE );
   QCOMPARE( mApi->subscriptionInfo()->ownsActiveSubscription(), true );
   QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::SubscriptionUnsubscribed );
   QCOMPARE( mApi->subscriptionInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
@@ -128,7 +128,7 @@ void TestPurchasing::testUserInGracePeriod()
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID );
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveSimulateGracePeriod, TIER01_PLAN_ID );
   QCOMPARE( mApi->subscriptionInfo()->planProductId(), TIER01_PLAN_ID );
-  QCOMPARE( mApi->userInfo()->storageLimit(), TIER01_STORAGE );
+  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TIER01_STORAGE );
   QCOMPARE( mApi->subscriptionInfo()->ownsActiveSubscription(), true );
   QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::SubscriptionInGracePeriod );
   QCOMPARE( mApi->subscriptionInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
@@ -140,7 +140,7 @@ void TestPurchasing::testUserCancelledSubscription()
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, TIER01_PLAN_ID, true );
 
   QCOMPARE( mApi->subscriptionInfo()->planProductId(), "" );
-  QCOMPARE( mApi->userInfo()->storageLimit(), FREE_STORAGE );
+  QCOMPARE( mApi->workspaceInfo()->storageLimit(), FREE_STORAGE );
   QCOMPARE( mApi->subscriptionInfo()->ownsActiveSubscription(), false );
   QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::CanceledSubscription );
   QCOMPARE( mApi->subscriptionInfo()->planProvider(), MerginSubscriptionType::NoneSubscriptionType );
@@ -183,7 +183,7 @@ void TestPurchasing::testUserRestore()
   QCOMPARE( spy1.count(), 1 );
 
   QCOMPARE( mApi->subscriptionInfo()->planProductId(), TIER01_PLAN_ID );
-  QCOMPARE( mApi->userInfo()->storageLimit(), TIER01_STORAGE );
+  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TIER01_STORAGE );
   QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::ValidSubscription );
   QCOMPARE( mApi->subscriptionInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
 }

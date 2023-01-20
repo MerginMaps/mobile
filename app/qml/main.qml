@@ -669,7 +669,7 @@ ApplicationWindow {
         function onStorageLimitReached( uploadSize ) {
           __merginApi.getUserInfo()
           if (__merginApi.apiSupportsSubscriptions) {
-            __merginApi.getSubscriptionInfo()
+            __merginApi.getWorkspaceInfo()
           }
           storageLimitDialog.uploadSize = uploadSize
           storageLimitDialog.open()

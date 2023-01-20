@@ -17,8 +17,8 @@ import "./components"
 Dialog {
   property var uploadSize
   property string titleText: qsTr("You have reached a data limit")
-  property int diskUsage: __merginApi.userInfo.diskUsage
-  property int storageLimit: __merginApi.userInfo.storageLimit
+  property int diskUsage: __merginApi.workspaceInfo.diskUsage
+  property int storageLimit: __merginApi.workspaceInfo.storageLimit
   property string planAlias: __merginApi.subscriptionInfo.planAlias
   property real fieldHeight: InputStyle.rowHeight
 

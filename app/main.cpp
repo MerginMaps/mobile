@@ -40,6 +40,7 @@
 #include "mapthemesmodel.h"
 #include "merginapi.h"
 #include "merginapistatus.h"
+#include "merginservertype.h"
 #include "merginsubscriptioninfo.h"
 #include "merginsubscriptionstatus.h"
 #include "merginsubscriptiontype.h"
@@ -118,6 +119,11 @@
 #include "layer/layertreeflatsortfiltermodel.h"
 #include "layer/layerdetaildata.h"
 #include "layer/layerdetaillegendimageprovider.h"
+
+#include "workspacesmodel.h"
+#include "workspacesproxymodel.h"
+#include "invitationsmodel.h"
+#include "invitationsproxymodel.h"
 
 #include <QQuickStyle>
 
@@ -251,6 +257,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<SynchronizationError>( "lc", 1, 0, "SyncError", "SyncError Enum" );
   qmlRegisterUncreatableType<AppSettings>( "lc", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
+  qmlRegisterUncreatableType<MerginServerType>( "lc", 1, 0, "MerginServerType", "MerginServerType Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionStatus>( "lc", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionType>( "lc", 1, 0, "MerginSubscriptionType", "MerginSubscriptionType Enum" );
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "lc", 1, 0, "MerginProjectStatusModel", "Enum" );
@@ -264,6 +271,10 @@ void initDeclarative()
   qmlRegisterType<ProjectsModel>( "lc", 1, 0, "ProjectsModel" );
   qmlRegisterType<ProjectsProxyModel>( "lc", 1, 0, "ProjectsProxyModel" );
   qmlRegisterType<AttributePreviewController>( "lc", 1, 0, "AttributePreviewController" );
+  qmlRegisterType<WorkspacesModel>( "lc", 1, 0, "WorkspacesModel" );
+  qmlRegisterType<WorkspacesProxyModel>( "lc", 1, 0, "WorkspacesProxyModel" );
+  qmlRegisterType<InvitationsModel>( "lc", 1, 0, "InvitationsModel" );
+  qmlRegisterType<InvitationsProxyModel>( "lc", 1, 0, "InvitationsProxyModel" );
   qmlRegisterUncreatableType<AttributePreviewModel>( "lc", 1, 0, "AttributePreviewModel", "" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
   qRegisterMetaType< FeatureLayerPair >( "FeatureLayerPair" );

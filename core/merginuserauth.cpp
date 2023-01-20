@@ -22,6 +22,7 @@ void MerginUserAuth::clear()
   mAuthToken.clear();
   mTokenExpiration.setTime( QTime() );
   mUserId = -1;
+
   emit authChanged();
 }
 
@@ -71,6 +72,7 @@ void MerginUserAuth::loadAuthData()
   mUserId = settings.value( QStringLiteral( "userId" ) ).toInt();
   mTokenExpiration = settings.value( QStringLiteral( "expire" ) ).toDateTime();
   mAuthToken = settings.value( QStringLiteral( "token" ) ).toByteArray();
+  settings.endGroup();
 }
 
 QString MerginUserAuth::username() const

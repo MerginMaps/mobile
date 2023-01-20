@@ -23,15 +23,22 @@ void MerginSubscriptionInfo::clearSubscriptionData()
   mNextBillPrice = "";
   mSubscriptionId = -1;
   mOwnsActiveSubscription = false;
+  mCanAccessSubscription = false;
 }
 
 void MerginSubscriptionInfo::clearPlanInfo()
 {
   mPlanAlias = "";
   mPlanProvider = MerginSubscriptionType::NoneSubscriptionType;
-  mPlanProductId = "";
+
+  // plan product Id might change from several sources, we need to emit its signal only when it has really changed
+  if ( !mPlanProductId.isEmpty() )
+  {
+    mPlanProductId = "";
+    emit planProductIdChanged();
+  }
+
   emit planProviderChanged();
-  emit planProductIdChanged();
 }
 
 void MerginSubscriptionInfo::clear()
@@ -92,23 +99,29 @@ void MerginSubscriptionInfo::setFromJson( QJsonObject docObj )
     }
   }
 
-  // parse service.plan data
-  QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
-  mOwnsActiveSubscription = planObj.value( QStringLiteral( "is_paid_plan" ) ).toBool();
-  mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
-
-
-  MerginSubscriptionType::SubscriptionType planProvider = MerginSubscriptionType::fromString( planObj.value( QStringLiteral( "type" ) ).toString() );
-  if ( planProvider != mPlanProvider )
+  if ( docObj.contains( QStringLiteral( "plan" ) ) )
   {
-    mPlanProvider = planProvider;
-    emit planProviderChanged();
-  }
-  QString planProductId = planObj.value( QStringLiteral( "product_id" ) ).toString();
-  if ( planProductId !=  mPlanProductId )
-  {
-    mPlanProductId = planProductId;
-    emit planProductIdChanged();
+    // this user can access subscription information, because they received a response from /service API
+    mCanAccessSubscription = true;
+
+    // parse service.plan data
+    QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
+    mOwnsActiveSubscription = planObj.value( QStringLiteral( "is_paid_plan" ) ).toBool();
+    mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
+
+    MerginSubscriptionType::SubscriptionType planProvider = MerginSubscriptionType::fromString( planObj.value( QStringLiteral( "type" ) ).toString() );
+    if ( planProvider != mPlanProvider )
+    {
+      mPlanProvider = planProvider;
+      emit planProviderChanged();
+    }
+
+    QString planProductId = planObj.value( QStringLiteral( "product_id" ) ).toString();
+    if ( planProductId !=  mPlanProductId )
+    {
+      mPlanProductId = planProductId;
+      emit planProductIdChanged();
+    }
   }
 
   // check if some user action is required
@@ -178,4 +191,9 @@ QString MerginSubscriptionInfo::subscriptionTimestamp() const
 bool MerginSubscriptionInfo::actionRequired() const
 {
   return mActionRequired;
+}
+
+bool MerginSubscriptionInfo::canAccessSubscription() const
+{
+  return mCanAccessSubscription;
 }

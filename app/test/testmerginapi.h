@@ -85,6 +85,8 @@ class TestMerginApi: public QObject
     // mergin functions
     void testExcludeFromSync();
 
+    void testServerType();
+
   private:
     MerginApi *mApi;
     std::unique_ptr<ProjectsModel> mLocalProjectsModel;

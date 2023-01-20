@@ -16,6 +16,7 @@ Rectangle {
   id: root
 
   property string headerTitle
+  property bool haveBackButton: true
 
   signal backClicked()
 
@@ -55,6 +56,8 @@ Rectangle {
       leftMargin: InputStyle.panelMargin
       verticalCenter: parent.verticalCenter
     }
+
+    visible: root.haveBackButton
 
     source: InputStyle.backIconV2
     sourceSize.width: InputStyle.closeBtnSize

@@ -84,6 +84,7 @@ set(MM_QML
     misc/AttentionBanner.qml
     misc/GpsDataPage.qml
     misc/LegacyFolderMigration.qml
+    misc/NoWorkspaceBanner.qml
     misc/PositionProviderPage.qml
     AboutPanel.qml
     AccountPage.qml
@@ -92,6 +93,7 @@ set(MM_QML
     CircularProgressBar.qml
     CodeScanner.qml
     CodeScannerOverlay.qml
+    CreateWorkspacePage.qml
     ExternalResourceBundle.qml
     FeaturesList.qml
     FeaturesListPage.qml
@@ -101,6 +103,7 @@ set(MM_QML
     LogPanel.qml
     LoginForm.qml
     MainPanel.qml
+    ManageInvitationsPage.qml
     MapThemePanel.qml
     MMCamera.qml
     Notification.qml
@@ -116,6 +119,7 @@ set(MM_QML
     ProjectStatusPanel.qml
     ProjectWizardPage.qml
     RegistrationForm.qml
+    RegistrationFinishPage.qml
     RoundIndicator.qml
     SearchBar.qml
     SettingsPanel.qml
@@ -123,6 +127,10 @@ set(MM_QML
     StorageLimitDialog.qml
     SubscribePage.qml
     SubscribePlanItem.qml
+    SwitchWorkspacePage.qml
+    WorkspaceAccountPage.qml
+    WorkspaceSubscribePage.qml
+    WorkspaceSubscribePlanItem.qml
     main.qml
     PARENT_SCOPE
 )
