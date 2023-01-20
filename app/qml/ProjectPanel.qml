@@ -97,7 +97,7 @@ Item {
 
   NoWorkspaceBanner {
     id: noWorkspaceBanner
-    visible: __merginApi.userAuth.hasAuthData() && !__merginApi.userInfo.hasWorkspaces
+    visible: __merginApi.userAuth.hasAuthData() && !__merginApi.userInfo.hasWorkspaces && (stackView.currentItem && stackView.currentItem.objectName !== "registrationFinishPanel")
     z: parent.z + 1
     anchors {
       top: parent.top
@@ -1060,6 +1060,8 @@ Item {
     id: registrationFinishComponent
 
     RegistrationFinishPage {
+
+      objectName: "registrationFinishPanel"
       onFinished: {
         stackView.pop( null )
       }
