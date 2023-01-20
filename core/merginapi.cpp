@@ -135,7 +135,7 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
   QString workspace = mUserInfo->activeWorkspaceName();
 
   QUrlQuery query;
-  if ( !workspace.isEmpty() && !flag.isEmpty() )
+  if ( !workspace.isEmpty() )
   {
     query.addQueryItem( "only_namespace", workspace );
   }
@@ -147,11 +147,11 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
   {
     query.addQueryItem( "name", searchExpression.toUtf8().toPercentEncoding() );
   }
-  if ( !flag.isEmpty() )
+  if ( workspace.isEmpty() && !flag.isEmpty() )
   {
     query.addQueryItem( "flag", flag );
   }
-  //query.addQueryItem( "order_params", QStringLiteral( "namespace_asc,name_asc" ) );
+  query.addQueryItem( "order_params", QStringLiteral( "namespace_asc,name_asc" ) );
   // Required query parameters
   query.addQueryItem( "page", QString::number( page ) );
   query.addQueryItem( "per_page", QString::number( PROJECT_PER_PAGE ) );
