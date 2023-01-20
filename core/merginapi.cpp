@@ -1219,7 +1219,14 @@ void MerginApi::onPlanProductIdChanged()
 {
   if ( mUserAuth->hasAuthData() )
   {
-    getWorkspaceInfo();
+    if ( mServerType == MerginServerType::OLD )
+    {
+      getUserInfo();
+    }
+    else
+    {
+      getWorkspaceInfo();
+    }
   }
 }
 
