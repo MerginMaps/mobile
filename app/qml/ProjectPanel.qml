@@ -844,7 +844,7 @@ Item {
           MainPanelButton {
             id: createdProjectsInnerBtn
 
-            text: qsTr("My projects")
+            text: qsTr("Projects")
             imageSource: InputStyle.accountIcon
             width: pageFooter.itemSize
 
