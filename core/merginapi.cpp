@@ -3289,6 +3289,11 @@ void MerginApi::setServerType( const MerginServerType::ServerType &serverType )
 {
   if ( mServerType != serverType )
   {
+    if ( mApiRoot == defaultApiRoot() && mServerType == MerginServerType::OLD && serverType == MerginServerType::SAAS )
+    {
+      emit serverWasUpgraded();
+    }
+
     mServerType = serverType;
     QSettings settings;
     settings.beginGroup( QStringLiteral( "Input/" ) );
