@@ -97,7 +97,20 @@ Item {
 
   NoWorkspaceBanner {
     id: noWorkspaceBanner
-    visible: __merginApi.serverType !== MerginServerType.OLD && __merginApi.serverType !== MerginServerType.CE && __merginApi.userAuth.hasAuthData() && !__merginApi.userInfo.hasWorkspaces && (stackView.currentItem && stackView.currentItem.objectName !== "registrationFinishPanel" && stackView.currentItem.objectName !== "createWorkspacePanel")
+    visible: {
+      if (__merginApi.apiSupportsWorkspaces) {
+        return false
+      }
+      if (__merginApi.userAuth.hasAuthData()) {
+        return false
+      }
+      if (stackView.currentItem &&
+          stackView.currentItem.objectName !== "registrationFinishPanel" &&
+          stackView.currentItem.objectName !== "createWorkspacePanel") {
+        return false
+      }
+      return !__merginApi.userInfo.hasWorkspaces
+    }
     z: parent.z + 1
     anchors {
       top: parent.top
