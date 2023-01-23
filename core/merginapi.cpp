@@ -3289,7 +3289,7 @@ void MerginApi::setServerType( const MerginServerType::ServerType &serverType )
 {
   if ( mServerType != serverType )
   {
-    if ( mApiRoot == defaultApiRoot() && mServerType == MerginServerType::OLD && serverType == MerginServerType::SAAS )
+    if ( mServerType == MerginServerType::OLD && serverType == MerginServerType::SAAS )
     {
       emit serverWasUpgraded();
     }
