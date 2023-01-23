@@ -569,6 +569,8 @@ class MerginApi: public QObject
 
     void hasWorkspacesChanged();
 
+    void serverWasUpgraded();
+
   private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
