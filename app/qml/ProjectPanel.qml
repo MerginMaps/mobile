@@ -98,16 +98,15 @@ Item {
   NoWorkspaceBanner {
     id: noWorkspaceBanner
     visible: {
-      if (__merginApi.apiSupportsWorkspaces) {
-        return false
+      if ( !__merginApi.apiSupportsWorkspaces ) {
+        return false;
       }
-      if (__merginApi.userAuth.hasAuthData()) {
-        return false
+      if ( !__merginApi.userAuth.hasAuthData() ) {
+        return false;
       }
-      if (stackView.currentItem &&
-          stackView.currentItem.objectName !== "registrationFinishPanel" &&
-          stackView.currentItem.objectName !== "createWorkspacePanel") {
-        return false
+      // do not show the banner in case of accepting invitation or creating a workspace
+      if (stackView.currentItem && (stackView.currentItem.objectName === "registrationFinishPanel" || stackView.currentItem.objectName === "createWorkspacePanel")) {
+        return false;
       }
       return !__merginApi.userInfo.hasWorkspaces
     }
