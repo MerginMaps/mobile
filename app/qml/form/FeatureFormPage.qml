@@ -232,7 +232,7 @@ Item {
             featureForm.save()
           }
           else if (clickedButton === MessageDialog.No) {
-            featureForm.canceled()
+            featureForm.cancel()
           }
           else if (clickedButton === MessageDialog.Cancel) {
             // Do nothing
