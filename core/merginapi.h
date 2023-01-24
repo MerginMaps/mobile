@@ -199,6 +199,7 @@ class MerginApi: public QObject
     Q_PROPERTY( bool supportsSelectiveSync READ supportsSelectiveSync NOTIFY supportsSelectiveSyncChanged )
     Q_PROPERTY( /*MerginApiStatus::ApiStatus*/ int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
     Q_PROPERTY( /*MerginServerType::ServerType*/ int serverType READ serverType NOTIFY serverTypeChanged )
+    Q_PROPERTY( bool apiSupportsWorkspaces READ apiSupportsWorkspaces NOTIFY apiSupportsWorkspacesChanged )
 
   public:
 
@@ -500,6 +501,11 @@ class MerginApi: public QObject
      */
     Q_INVOKABLE void signOut();
 
+    /**
+     * Returns true if server supports workspaces
+     */
+    bool apiSupportsWorkspaces();
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -568,6 +574,7 @@ class MerginApi: public QObject
     void getWorkspaceInfoFinished();
 
     void hasWorkspacesChanged();
+    void apiSupportsWorkspacesChanged();
 
     void serverWasUpgraded();
 

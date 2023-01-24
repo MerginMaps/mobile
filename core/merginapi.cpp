@@ -3300,6 +3300,7 @@ void MerginApi::setServerType( const MerginServerType::ServerType &serverType )
     settings.setValue( QStringLiteral( "serverType" ), mServerType );
     settings.endGroup();
     emit serverTypeChanged();
+    emit apiSupportsWorkspacesChanged();
   }
 }
 
@@ -3531,6 +3532,17 @@ void MerginApi::createWorkspaceReplyFinished()
   r->deleteLater();
 }
 
+bool MerginApi::apiSupportsWorkspaces()
+{
+  if ( mServerType == MerginServerType::SAAS || mServerType == MerginServerType::EE )
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
 
 DownloadQueueItem::DownloadQueueItem( const QString &fp, int s, int v, int rf, int rt, bool diff )
   : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )
