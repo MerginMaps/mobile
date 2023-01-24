@@ -34,6 +34,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
   bool ignoreWhatsNew = settings.value( QStringLiteral( "ignoreWhatsNew" ), false ).toBool();
   mWsTooltipShownCounter = settings.value( QStringLiteral( "wsTooltipCounter" ) ).toInt();
+  double gpsHeight = settings.value( "gpsHeight", 0 ).toDouble();
 
   settings.endGroup();
 
@@ -50,6 +51,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setActivePositionProviderId( activeProviderId );
   setAutosyncAllowed( autosync );
   setIgnoreWhatsNew( ignoreWhatsNew );
+  setGpsAntennaHeight( gpsHeight );
 }
 
 QString AppSettings::defaultLayer() const
@@ -355,4 +357,20 @@ void AppSettings::wsTooltipShown()
 bool AppSettings::ignoreWsTooltip() const
 {
   return mWsTooltipShownCounter >= WS_TOOLTIP_MAX_NUM_OF_OCCURENCIES;
+}
+
+double AppSettings::gpsAntennaHeight() const
+{
+  return mGpsAntennaHeight;
+}
+
+void AppSettings::setGpsAntennaHeight( double gpsAntennaHeight )
+{
+  if ( mGpsAntennaHeight != gpsAntennaHeight )
+  {
+    mGpsAntennaHeight = gpsAntennaHeight;
+    setValue( "gpsHeight", gpsAntennaHeight );
+
+    emit gpsAntennaHeightChanged();
+  }
 }
