@@ -130,6 +130,7 @@ Page {
           btnHeight: InputStyle.mediumBtnHeight
           height: InputStyle.rowHeightMedium
           fontPixelSize: InputStyle.fontPixelSizeSmall
+          visible: __merginApi.apiSupportsWorkspaces
 
           text: qsTr("Switch workspace")
 
