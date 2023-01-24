@@ -159,7 +159,7 @@ void ProjectsModel::listProjects( const QString &searchExpression, int page )
     return;
   }
 
-  mLastRequestId = mBackend->listProjects( searchExpression, modelTypeToFlag(), "", page );
+  mLastRequestId = mBackend->listProjects( searchExpression, modelTypeToFlag(), page );
 
   if ( !mLastRequestId.isEmpty() )
   {
@@ -588,6 +588,10 @@ QString ProjectsModel::modelTypeToFlag() const
       return QStringLiteral( "created" );
     case SharedProjectsModel:
       return QStringLiteral( "shared" );
+    case WorkspaceProjectsModel:
+      return QStringLiteral( "workspace" );
+    case PublicProjectsModel:
+      return QStringLiteral( "public" );
     default:
       return QLatin1String();
   }

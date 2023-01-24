@@ -2487,7 +2487,7 @@ void TestMerginApi::testExcludeFromSync()
 MerginProjectsList TestMerginApi::getProjectList( QString tag )
 {
   QSignalSpy spy( mApi,  &MerginApi::listProjectsFinished );
-  mApi->listProjects( QString(), tag, QString() );
+  mApi->listProjects( QString(), tag );
   spy.wait( TestUtils::SHORT_REPLY );
 
   return projectListFromSpy( spy );
