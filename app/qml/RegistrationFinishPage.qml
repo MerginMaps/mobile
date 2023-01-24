@@ -70,8 +70,10 @@ Page {
       }
     }
 
-    function onWorkspaceCreated() {
-      root.finished()
+    function onWorkspaceCreated(workspace, result) {
+      if (result) {
+        root.finished()
+      }
     }
 
     function onProcessInvitationFinished() {

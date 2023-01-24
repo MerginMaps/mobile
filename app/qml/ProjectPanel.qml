@@ -1145,5 +1145,11 @@ Item {
     function onActiveWorkspaceChanged() {
       root.refreshProjects()
     }
+
+    function onWorkspaceCreated(workspace, result) {
+      if (result) {
+        stackView.popPage("createWorkspacePanel")
+      }
+    }
   }
 }
