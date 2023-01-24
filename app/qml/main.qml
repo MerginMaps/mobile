@@ -47,7 +47,6 @@ ApplicationWindow {
       ]
 
       onStateChanged: {
-        console.log( " --- Root app state:", state )
         if ( stateManager.state === "map" ) {
           map.state = "view"
         }
@@ -254,6 +253,11 @@ ApplicationWindow {
 
         width: window.width
         height: InputStyle.rowHeightHeader
+
+        //
+        // In order to workaround the QTBUG-108689 - we need to disable main panel's buttons when something else occupies the space
+        //
+        enabled: mainPanel.height > map.mapExtentOffset
 
         y: window.height - height
 
