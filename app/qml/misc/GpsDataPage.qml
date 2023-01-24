@@ -116,7 +116,6 @@ Item {
             Layout.fillWidth: true
             Layout.preferredHeight: InputStyle.rowHeight
 
-
             TextRowWithTitle {
               id: gpsReceiverStatus
 
@@ -127,6 +126,16 @@ Item {
               text: __positionKit.positionProvider ? __positionKit.positionProvider.stateMessage : ""
               visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
             }
+          }
+
+          TextRowWithTitle {
+            id: gpsAntenna
+
+            Layout.fillWidth: true
+            Layout.columnSpan: 2
+
+            titleText: qsTr( "GPS antenna height" )
+            text: __appSettings.gpsAntennaHeight > 0 ? __appSettings.gpsAntennaHeight : qsTr( "Not set" )
           }
 
           TextRowWithTitle {
