@@ -598,80 +598,39 @@ Item {
         }
       }
 
-      header: PanelHeader {
-        id: pageHeader
+      header: PanelHeaderV2 {
+        id: headerRow
 
-        titleText: qsTr("Projects")
-        color: InputStyle.clrPanelMain
-        height: InputStyle.rowHeightHeader
-        rowHeight: InputStyle.rowHeightHeader
+        width: projectsPage.width
 
-        onBack: {
-          if ( root.activeProjectId ) {
-            root.hidePanel()
+        headerTitle: {
+          if ( pageContent.state === "local" ) {
+            return qsTr("Downloaded projects")
           }
+          else if ( pageContent.state === "created" ) {
+            return __merginApi.userInfo.hasWorkspaces ? __merginApi.userInfo.activeWorkspaceName : qsTr("Projects")
+          }
+          return qsTr("Public projects")
         }
-        withBackButton: root.activeProjectPath
 
-        Item {
-          id: avatar
+        haveBackButton: root.activeProjectPath
+        haveAccountButton: true
 
-          width: InputStyle.rowHeightHeader * 0.8
-          height: InputStyle.rowHeightHeader
-          anchors.right: parent.right
-          anchors.rightMargin: InputStyle.panelMargin
+        onBackClicked: root.hidePanel()
+        onAccountClicked: {
+          if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK ) {
 
-          Rectangle {
-            id: avatarImage
+            __merginApi.refreshUserData()
 
-            anchors.centerIn: parent
-            width: avatar.width
-            height: avatar.width
-            color: InputStyle.fontColor
-            radius: width*0.5
-            antialiasing: true
-
-            MouseArea {
-              anchors.fill: parent
-              onClicked: {
-                if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK ) {
-                  __merginApi.getUserInfo()
-
-                  if ( __merginApi.apiSupportsSubscriptions ) {
-                    __merginApi.getWorkspaceInfo()
-                  }
-
-                  if ( __merginApi.serverType === MerginServerType.OLD ) {
-                    stackView.push( accountPanelComp )
-                  }
-                  else {
-                    stackView.push( workspaceAccountPageComp )
-                  }
-
-                }
-                else {
-                  root.openAuthPanel()
-                }
-              }
+            if ( __merginApi.serverType === MerginServerType.OLD ) {
+              stackView.push( accountPanelComp )
             }
-
-            Image {
-              id: userIcon
-
-              anchors.centerIn: avatarImage
-              source: InputStyle.accountIcon
-              height: avatarImage.height * 0.8
-              width: height
-              sourceSize.width: width
-              sourceSize.height: height
-              fillMode: Image.PreserveAspectFit
+            else {
+              stackView.push( workspaceAccountPageComp )
             }
-
-            ColorOverlay {
-              anchors.fill: userIcon
-              source: userIcon
-              color: "#FFFFFF"
-            }
+          }
+          else {
+            root.openAuthPanel()
           }
         }
       }
@@ -725,32 +684,13 @@ Item {
           }
         }
 
-        Button {
-          id: switchWorkspaceButton
-
-          visible: __merginApi.serverType !== MerginServerType.CE && pageContent.state === "created"
-          anchors {
-              left: parent.left
-              right: parent.right
-          }
-
-          contentItem: Text {
-            text: __merginApi.userInfo.activeWorkspaceId > 0 ? __merginApi.userInfo.activeWorkspaceName + " >" : qsTr("Switch workspace") + " >"
-            horizontalAlignment : Text.AlignLeft
-          }
-
-          onClicked: {
-            stackView.push(workspaceListComponent)
-          }
-        }
-
         StackLayout {
           id: projectListLayout
 
           anchors {
               left: parent.left
               right: parent.right
-              top: switchWorkspaceButton.visible? switchWorkspaceButton.bottom : parent.top
+              top: parent.top
               bottom: parent.bottom
           }
           currentIndex: pageFooter.currentIndex
@@ -857,7 +797,7 @@ Item {
             id: createdProjectsInnerBtn
 
             text: qsTr("Projects")
-            imageSource: InputStyle.accountIcon
+            imageSource: InputStyle.mapSearchIcon
             width: pageFooter.itemSize
 
             handleClicks: false

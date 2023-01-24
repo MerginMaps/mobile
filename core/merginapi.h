@@ -502,6 +502,11 @@ class MerginApi: public QObject
     Q_INVOKABLE void signOut();
 
     /**
+     * Emits API calls that bear user information like username, workspaces and service
+     */
+    Q_INVOKABLE void refreshUserData();
+
+    /**
      * Returns true if server supports workspaces
      */
     bool apiSupportsWorkspaces();
