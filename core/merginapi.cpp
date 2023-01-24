@@ -3526,8 +3526,15 @@ void MerginApi::createWorkspaceReplyFinished()
 
     int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
 
+    if ( httpCode == 409 )
+    {
+      emit networkErrorOccurred( tr( "Workspace %1 already exists" ).arg( workspaceName ), QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName );
+    }
+    else
+    {
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName );
+    }
     emit workspaceCreated( workspaceName, false );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName );
   }
   r->deleteLater();
 }

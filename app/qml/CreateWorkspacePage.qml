@@ -123,7 +123,6 @@ Page {
         }
         else {
           __merginApi.createWorkspace(workspaceNameField.displayText)
-          root.closePage()
         }
       }
     }
