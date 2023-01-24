@@ -129,16 +129,6 @@ Item {
           }
 
           TextRowWithTitle {
-            id: gpsAntenna
-
-            Layout.fillWidth: true
-            Layout.columnSpan: 2
-
-            titleText: qsTr( "GPS antenna height" )
-            text: __appSettings.gpsAntennaHeight > 0 ? __appSettings.gpsAntennaHeight : qsTr( "Not set" )
-          }
-
-          TextRowWithTitle {
             id: longitude
 
             Layout.fillWidth: true
@@ -322,6 +312,15 @@ Item {
 
             titleText: qsTr( "Last fix" )
             text: __positionKit.lastRead.toLocaleTimeString( Qt.locale() ) || qsTr( "N/A" )
+          }
+
+          TextRowWithTitle {
+            id: gpsAntenna
+
+            Layout.fillWidth: true
+
+            titleText: qsTr( "GPS antenna height" )
+            text: __appSettings.gpsAntennaHeight > 0 ? __appSettings.gpsAntennaHeight : qsTr( "Not set" )
           }
         }
       }
