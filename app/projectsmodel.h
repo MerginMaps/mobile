@@ -78,6 +78,7 @@ class ProjectsModel : public QAbstractListModel
       CreatedProjectsModel,
       SharedProjectsModel,
       PublicProjectsModel,
+      WorkspaceProjectsModel,
       RecentProjectsModel
     };
     Q_ENUM( ProjectModelTypes )

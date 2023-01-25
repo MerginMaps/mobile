@@ -123,35 +123,48 @@ MerginSubscriptionInfo *MerginApi::subscriptionInfo() const
   return mSubscriptionInfo;
 }
 
-QString MerginApi::listProjects( const QString &searchExpression, const QString &flag, const QString &filterTag, const int page )
+QString MerginApi::listProjects( const QString &searchExpression, const QString &flag, const int page )
 {
-  bool authorize = !flag.isEmpty();
+  bool authorize = flag != "public";
+
   if ( ( authorize && !validateAuth() ) || mApiVersionStatus != MerginApiStatus::OK )
   {
     emit listProjectsFailed();
     return QString();
   }
 
-  QString workspace = mUserInfo->activeWorkspaceName();
-
   QUrlQuery query;
-  if ( !workspace.isEmpty() && !flag.isEmpty() )
+
+  if ( flag == "workspace" )
   {
-    query.addQueryItem( "only_namespace", workspace );
+    if ( mUserInfo->activeWorkspaceId() < 0 )
+    {
+      emit listProjectsFailed();
+      return QString();
+    }
+
+    query.addQueryItem( "only_namespace", mUserInfo->activeWorkspaceName() );
   }
-  if ( !filterTag.isEmpty() )
+  else if ( flag == "created" )
   {
-    query.addQueryItem( "tags", filterTag );
+    query.addQueryItem( "flag", "created" );
   }
+  else if ( flag == "shared" )
+  {
+    query.addQueryItem( "flag", "shared" );
+  }
+  else if ( flag == "public" )
+  {
+    query.addQueryItem( "only_public", "true" );
+  }
+
   if ( !searchExpression.isEmpty() )
   {
     query.addQueryItem( "name", searchExpression.toUtf8().toPercentEncoding() );
   }
-  if ( !flag.isEmpty() )
-  {
-    query.addQueryItem( "flag", flag );
-  }
-  //query.addQueryItem( "order_params", QStringLiteral( "namespace_asc,name_asc" ) );
+
+  query.addQueryItem( "order_params", QStringLiteral( "namespace_asc,name_asc" ) );
+
   // Required query parameters
   query.addQueryItem( "page", QString::number( page ) );
   query.addQueryItem( "per_page", QString::number( PROJECT_PER_PAGE ) );

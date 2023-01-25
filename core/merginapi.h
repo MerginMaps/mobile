@@ -228,12 +228,11 @@ class MerginApi: public QObject
      * Eventually emits listProjectsFinished on which ProjectPanel (qml component) updates content.
      * \param searchExpression Search filter on projects name.
      * \param flag If defined, it is used to filter out projects tagged as 'created' or 'shared' with a authorized user
-     * \param filterTag Name of tag that fetched projects have to have.
      * \param page Requested page of projects.
      * \returns unique id of a request
      */
     Q_INVOKABLE QString listProjects( const QString &searchExpression = QStringLiteral(),
-                                      const QString &flag = QStringLiteral(), const QString &filterTag = QStringLiteral(),
+                                      const QString &flag = QStringLiteral(),
                                       const int page = 1 );
 
     /**

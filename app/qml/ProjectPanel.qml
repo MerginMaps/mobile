@@ -590,7 +590,7 @@ Item {
             localProjectsPage.refreshProjectsList( keepSearchFilter )
             break
           case "created":
-            createdProjectsPage.refreshProjectsList( keepSearchFilter )
+            workspaceProjectsPage.refreshProjectsList( keepSearchFilter )
             break
           case "public":
             publicProjectsPage.refreshProjectsList( keepSearchFilter )
@@ -772,9 +772,9 @@ Item {
           }
 
           ProjectListPage {
-            id: createdProjectsPage
+            id: workspaceProjectsPage
 
-            projectModelType: ProjectsModel.CreatedProjectsModel
+            projectModelType: ProjectsModel.WorkspaceProjectsModel
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
