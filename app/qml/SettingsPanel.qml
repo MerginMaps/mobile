@@ -227,6 +227,18 @@ Item {
           PanelItem {
             height: root.rowHeight
             width: parent.width
+            color: InputStyle.clrPanelMain
+            text: qsTr("Select GPS receiver")
+
+            MouseArea {
+              anchors.fill: parent
+              onClicked: stackview.push( positionProviderComponent )
+            }
+          }
+
+          PanelItem {
+            height: root.rowHeight
+            width: parent.width
             text: qsTr("GPS antenna height")
 
             MouseArea {
@@ -251,20 +263,6 @@ Item {
               anchors.rightMargin: InputStyle.panelMargin
             }
           }
-
-
-          PanelItem {
-            height: root.rowHeight
-            width: parent.width
-            color: InputStyle.clrPanelMain
-            text: qsTr("Select GPS receiver")
-
-            MouseArea {
-              anchors.fill: parent
-              onClicked: stackview.push( positionProviderComponent )
-            }
-          }
-
 
           // Header "Recording"
           PanelItem {
