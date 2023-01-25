@@ -52,6 +52,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
   }
 
   QgsPoint pointToAdd( point );
+  pointToAdd.setZ( point.z() - mAntennaHeight );
 
   if ( mPositionKit && ( mCenteredToGPS || mRecordingType == StreamMode ) )
   {
@@ -1358,6 +1359,19 @@ void RecordingMapTool::setRecordingInterval( int newRecordingInterval )
     return;
   mRecordingInterval = newRecordingInterval;
   emit recordingIntervalChanged( mRecordingInterval );
+}
+
+double RecordingMapTool::antennaHeight() const
+{
+  return mAntennaHeight;
+}
+
+void RecordingMapTool::setAntennaHeight( double newAntennaHeight )
+{
+  if ( mAntennaHeight == newAntennaHeight )
+    return;
+  mAntennaHeight = newAntennaHeight;
+  emit antennaHeightChanged( mAntennaHeight );
 }
 
 PositionKit *RecordingMapTool::positionKit() const

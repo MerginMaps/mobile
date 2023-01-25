@@ -43,6 +43,8 @@ class TestMapTools : public QObject
     void testVerticesStructure();
 
     void testZMRecording();
+
+    void testAntennaHeight();
 };
 
 #endif // TESTMAPTOOLS_H

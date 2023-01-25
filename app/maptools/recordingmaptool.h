@@ -84,6 +84,7 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( bool centeredToGPS READ centeredToGPS WRITE setCenteredToGPS NOTIFY centeredToGPSChanged )
     Q_PROPERTY( RecordingType recordingType READ recordingType WRITE setRecordingType NOTIFY recordingTypeChanged )
     Q_PROPERTY( int recordingInterval READ recordingInterval WRITE setRecordingInterval NOTIFY recordingIntervalChanged )
+    Q_PROPERTY( double antennaHeight READ antennaHeight WRITE setAntennaHeight NOTIFY antennaHeightChanged )
 
     Q_PROPERTY( QgsVectorLayer *activeLayer READ activeLayer WRITE setActiveLayer NOTIFY activeLayerChanged )
     Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
@@ -194,6 +195,9 @@ class RecordingMapTool : public AbstractMapTool
     int recordingInterval() const;
     void setRecordingInterval( int newRecordingInterval );
 
+    double antennaHeight() const;
+    void setAntennaHeight( double newAntennaHeight );
+
     PositionKit *positionKit() const;
     void setPositionKit( PositionKit *newPositionKit );
 
@@ -249,6 +253,7 @@ class RecordingMapTool : public AbstractMapTool
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
     void recordingIntervalChanged( int lineRecordingInterval );
     void recordingTypeChanged( const RecordingMapTool::RecordingType &recordingType );
+    void antennaHeightChanged( double antennaHeight );
 
     void existingVerticesChanged( const QgsGeometry &existingVertices );
     void midPointsChanged( const QgsGeometry &midPoints );
@@ -321,6 +326,7 @@ class RecordingMapTool : public AbstractMapTool
     bool mCenteredToGPS = false;
     RecordingType mRecordingType = Manual;
     int mRecordingInterval;  // in seconds for the StreamingMode
+    double mAntennaHeight = 0;
 
     QDateTime mLastTimeRecorded;
 

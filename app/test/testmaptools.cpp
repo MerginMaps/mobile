@@ -2366,3 +2366,55 @@ void TestMapTools::testZMRecording()
   delete lineZMLayer;
   delete polygonMLayer;
 }
+
+void TestMapTools::testAntennaHeight()
+{
+  QgsVectorLayer *pointLayer = new QgsVectorLayer( QStringLiteral( "PointZ?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
+
+  RecordingMapTool mapTool;
+
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
+  setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
+
+  mapTool.setMapSettings( ms );
+
+  QCOMPARE( mapTool.recordingType(), RecordingMapTool::Manual );
+
+  mapTool.setState( RecordingMapTool::Record );
+
+  mapTool.setActiveLayer( pointLayer );
+  mapTool.setActiveFeature( QgsFeature() );
+
+  QgsPoint pointToAdd( -97.129, 22.602, 10 );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  mapTool.addPoint( pointToAdd );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointToAdd );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  mapTool.setActiveFeature( QgsFeature() );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  double antennaHeight = 2.0;
+  mapTool.setAntennaHeight( antennaHeight );
+
+  mapTool.addPoint( pointToAdd );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QgsPoint p = mapTool.recordedGeometry().vertexAt( 0 );
+  QCOMPARE( p.z(), pointToAdd.z() - antennaHeight );
+}
