@@ -129,6 +129,11 @@ class TestLinks: public QObject
       _run( mHelp.projectLoadingErrorHelpLink() );
     }
 
+    void testWhatsNewLink()
+    {
+      _run( mHelp.whatsNewPostLink() );
+    }
+
   private:
     InputHelp mHelp;
     QNetworkAccessManager mManager;
