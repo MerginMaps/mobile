@@ -18,12 +18,17 @@ Rectangle {
   id: root
 
   property string headerTitle
+  property string tooltipText
 
   property bool haveBackButton: true
   property bool haveAccountButton: false
 
   signal backClicked()
   signal accountClicked()
+
+  function openTooltip() {
+    tooltip.open()
+  }
 
   height: InputStyle.rowHeightHeader
   // set width manually
@@ -185,6 +190,45 @@ Rectangle {
           anchors.fill: userIcon
           source: userIcon
           color: "#FFFFFF"
+        }
+      }
+
+      ToolTip {
+        id: tooltip
+
+        y: avatarImage.y
+        x: title.x + InputStyle.smallGap
+
+        background: Item {
+
+          // arrow
+          Rectangle {
+            width: height
+            height: parent.height / 3
+
+            rotation: 45
+            color: InputStyle.panelBackgroundDarker
+
+            x: bgndRect.x + bgndRect.width - width / 2
+            y: bgndRect.y + bgndRect.height / 2 - width / 2
+          }
+
+          Rectangle {
+            id: bgndRect
+
+            width: parent.width
+            height: parent.height
+            color: InputStyle.panelBackgroundDarker
+            radius: InputStyle.cornerRadius
+            antialiasing: true
+          }
+        }
+
+        contentItem: Label {
+          text: root.tooltipText
+
+          font.pixelSize: InputStyle.fontPixelSizeSmall
+          color: InputStyle.fontColorWhite
         }
       }
     }

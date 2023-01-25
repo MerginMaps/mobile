@@ -613,6 +613,8 @@ Item {
           return qsTr("Public projects")
         }
 
+        tooltipText: qsTr("Your other projects are accessible%1by switching your workspace here").arg("\n")
+
         haveBackButton: root.activeProjectPath
         haveAccountButton: true
 
@@ -661,6 +663,21 @@ Item {
           __merginApi.pingMergin()
           projectsPage.refreshProjectList()
           pageFooter.setActiveButton( pageContent.state )
+
+          //
+          // Show ws explanation tooltip if user is in workspace projects, on the ws server,
+          // has more than one ws and has not seen it yet for too many times
+          //
+          if ( state === "created" ) {
+
+            if (__merginApi.apiSupportsWorkspaces &&
+                __merginApi.userInfo.hasMoreThanOneWorkspace &&
+                !__appSettings.ignoreWsTooltip ) {
+
+              __appSettings.wsTooltipShown()
+              headerRow.openTooltip()
+            }
+          }
         }
 
         Connections {
