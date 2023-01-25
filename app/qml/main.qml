@@ -653,6 +653,13 @@ ApplicationWindow {
       }
     }
 
+    WhatsNewDialog {
+      id: whatsNewDialog
+
+      informativeText: qsTr("We've made it easier for teams to collaborate on Mergin Maps! To find out more, check out our latest blog post about workspaces by clicking the button below.")
+      infoUrl: __inputHelp.whatsNewPostLink
+    }
+
     ProjectLoadingScreen {
       id: projectLoadingScreen
 
@@ -687,6 +694,12 @@ ApplicationWindow {
           //! if current project has been updated, refresh canvas
           if ( projectFullName === projectPanel.activeProjectId ) {
             map.mapSettings.extentChanged()
+          }
+        }
+
+        function onServerWasUpgraded() {
+          if (!__appSettings.ignoreWhatsNew) {
+            whatsNewDialog.open()
           }
         }
     }

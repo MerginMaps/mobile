@@ -129,6 +129,7 @@ set(MM_QML
     SubscribePlanItem.qml
     SwitchWorkspacePage.qml
     WorkspaceAccountPage.qml
+    WhatsNewDialog.qml
     WorkspaceSubscribePage.qml
     WorkspaceSubscribePlanItem.qml
     main.qml

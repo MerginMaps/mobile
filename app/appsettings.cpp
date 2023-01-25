@@ -31,6 +31,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   bool legacyFolderMigrated = settings.value( QStringLiteral( "legacyFolderMigrated" ), false ).toBool();
   QString activeProviderId = settings.value( QStringLiteral( "activePositionProviderId" ) ).toString();
   bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
+  bool ignoreWhatsNew = settings.value( QStringLiteral( "ignoreWhatsNew" ), false ).toBool();
   settings.endGroup();
 
   setDefaultProject( path );
@@ -45,6 +46,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setLegacyFolderMigrated( legacyFolderMigrated );
   setActivePositionProviderId( activeProviderId );
   setAutosyncAllowed( autosync );
+  setIgnoreWhatsNew( ignoreWhatsNew );
 }
 
 QString AppSettings::defaultLayer() const
@@ -319,4 +321,19 @@ void AppSettings::setAutosyncAllowed( bool newAutosyncAllowed )
   mAutosyncAllowed = newAutosyncAllowed;
   setValue( QStringLiteral( "autosyncAllowed" ), newAutosyncAllowed );
   emit autosyncAllowedChanged( mAutosyncAllowed );
+}
+
+bool AppSettings::ignoreWhatsNew() const
+{
+  return mIgnoreWhatsNew;
+}
+
+void AppSettings::setIgnoreWhatsNew( bool newIgnoreWhatsNew )
+{
+  if ( mIgnoreWhatsNew == newIgnoreWhatsNew )
+    return;
+
+  mIgnoreWhatsNew = newIgnoreWhatsNew;
+  setValue( QStringLiteral( "ignoreWhatsNew" ), newIgnoreWhatsNew );
+  emit ignoreWhatsNewChanged();
 }
