@@ -11,6 +11,7 @@ import QtQuick
 
 import lc 1.0
 import QtQuick.Dialogs
+import QtQuick.Layouts
 
 import ".."
 import "../components"
@@ -732,46 +733,67 @@ Item {
       else return ( gpsStateGroup.state !== "unavailable" )
     }
 
-    content: Item {
-
-      implicitWidth: acctext.implicitWidth + indicator.width + InputStyle.tinyGap
+    content: RowLayout {
       height: parent.height
+      Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
       anchors.horizontalCenter: parent.horizontalCenter
+
+      Symbol {
+        id: gpsicon
+
+        iconSize: parent.height / 2
+        source: InputStyle.syncIcon
+        visible: __appSettings.gpsAntennaHeight > 0
+      }
 
       Text {
         id: acctext
 
         text: {
+          let gpsText = "";
+          let accuracyText = "";
+          if ( __appSettings.gpsAntennaHeight > 0 )
+          {
+            gpsText = __inputUtils.formatNumber( __appSettings.gpsAntennaHeight, 3 ) + " m"
+          }
+
           if ( !__positionKit.positionProvider )
           {
-            return ""
+            return gpsText
           }
           else if ( __positionKit.positionProvider.type() === "external" )
           {
             if ( __positionKit.positionProvider.state === PositionProvider.Connecting )
             {
-              return qsTr( "Connecting to %1" ).arg( __positionKit.positionProvider.name() )
+              accuracyText = qsTr( "Connecting to %1" ).arg( __positionKit.positionProvider.name() )
             }
             else if ( __positionKit.positionProvider.state === PositionProvider.WaitingToReconnect )
             {
-              return __positionKit.positionProvider.stateMessage
+              accuracyText = __positionKit.positionProvider.stateMessage
             }
             else if ( __positionKit.positionProvider.state === PositionProvider.NoConnection )
             {
-              return __positionKit.positionProvider.stateMessage
+              accuracyText = __positionKit.positionProvider.stateMessage
             }
+
+            return gpsText === "" ? accuracyText : gpsText + " / " + accuracyText
           }
 
           if ( !__positionKit.hasPosition )
           {
-            return qsTr( "Connected, no position" )
+            accuracyText = qsTr( "Connected, no position" )
           }
           else if ( Number.isNaN( __positionKit.horizontalAccuracy ) || __positionKit.horizontalAccuracy < 0 )
           {
-            return qsTr( "Unknown accuracy" )
+            accuracyText = qsTr( "Unknown accuracy" )
           }
-          return __inputUtils.formatNumber( __positionKit.horizontalAccuracy, accuracyButton.accuracyPrecision ) + " m"
+          else
+          {
+            accuracyText = __inputUtils.formatNumber( __positionKit.horizontalAccuracy, accuracyButton.accuracyPrecision ) + " m"
+          }
+
+          return gpsText === "" ? accuracyText : gpsText + " / " + accuracyText
         }
         elide: Text.ElideRight
         wrapMode: Text.NoWrap
@@ -780,7 +802,6 @@ Item {
         color: InputStyle.fontColor
 
         height: parent.height
-        anchors.horizontalCenter: parent.horizontalCenter
 
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
@@ -789,12 +810,11 @@ Item {
       RoundIndicator {
         id: indicator
 
+        Layout.alignment: Qt.AlignTop
+        Layout.topMargin: InputStyle.tinyGap
+
         width: parent.height / 4
         height: width
-        anchors.left: acctext.right
-        anchors.leftMargin: InputStyle.tinyGap
-        anchors.topMargin: InputStyle.tinyGap
-        anchors.top: parent.top
         color: gpsStateGroup.indicatorColor
       }
     }
