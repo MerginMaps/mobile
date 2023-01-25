@@ -15,6 +15,7 @@
 
 const QString AppSettings::INPUTAPP_GROUP_NAME = QStringLiteral( "inputApp" );
 const QString AppSettings::POSITION_PROVIDERS_GROUP = QStringLiteral( "inputApp/positionProviders" );
+const int AppSettings::WS_TOOLTIP_MAX_NUM_OF_OCCURENCIES = 5;
 
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
@@ -31,6 +32,8 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   bool legacyFolderMigrated = settings.value( QStringLiteral( "legacyFolderMigrated" ), false ).toBool();
   QString activeProviderId = settings.value( QStringLiteral( "activePositionProviderId" ) ).toString();
   bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
+  mWsTooltipShownCounter = settings.value( QStringLiteral( "wsTooltipCounter" ) ).toInt();
+
   settings.endGroup();
 
   setDefaultProject( path );
@@ -319,4 +322,20 @@ void AppSettings::setAutosyncAllowed( bool newAutosyncAllowed )
   mAutosyncAllowed = newAutosyncAllowed;
   setValue( QStringLiteral( "autosyncAllowed" ), newAutosyncAllowed );
   emit autosyncAllowedChanged( mAutosyncAllowed );
+}
+
+void AppSettings::wsTooltipShown()
+{
+  if ( mWsTooltipShownCounter < WS_TOOLTIP_MAX_NUM_OF_OCCURENCIES )
+  {
+    mWsTooltipShownCounter += 1;
+    setValue( QStringLiteral( "wsTooltipCounter" ), mWsTooltipShownCounter );
+
+    emit ignoreWsTooltipChanged();
+  }
+}
+
+bool AppSettings::ignoreWsTooltip() const
+{
+  return mWsTooltipShownCounter >= WS_TOOLTIP_MAX_NUM_OF_OCCURENCIES;
 }

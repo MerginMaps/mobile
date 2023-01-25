@@ -33,6 +33,7 @@ class AppSettings: public QObject
     Q_PROPERTY( bool legacyFolderMigrated READ legacyFolderMigrated WRITE setLegacyFolderMigrated NOTIFY legacyFolderMigratedChanged )
     Q_PROPERTY( QString activePositionProviderId READ activePositionProviderId WRITE setActivePositionProviderId NOTIFY activePositionProviderIdChanged )
     Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
+    Q_PROPERTY( bool ignoreWsTooltip READ ignoreWsTooltip NOTIFY ignoreWsTooltipChanged )
 
   public:
     explicit AppSettings( QObject *parent = nullptr );
@@ -82,8 +83,13 @@ class AppSettings: public QObject
     bool autosyncAllowed() const;
     void setAutosyncAllowed( bool newAutosyncAllowed );
 
+    Q_INVOKABLE void wsTooltipShown();
+
+    bool ignoreWsTooltip() const; // ---> can be removed after migration to ws
+
     static const QString INPUTAPP_GROUP_NAME;
     static const QString POSITION_PROVIDERS_GROUP;
+    static const int WS_TOOLTIP_MAX_NUM_OF_OCCURENCIES; // ---> can be removed after migration to ws
 
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
@@ -103,6 +109,8 @@ class AppSettings: public QObject
     void activePositionProviderIdChanged( const QString & );
 
     void autosyncAllowedChanged( bool autosyncAllowed );
+
+    void ignoreWsTooltipChanged(); // ---> can be removed after migration to ws
 
   private:
     // Projects path
@@ -137,6 +145,7 @@ class AppSettings: public QObject
     QVariant value( const QString &key, const QVariant &defaultValue = QVariant() );
     QString mActivePositionProviderId;
     bool mAutosyncAllowed = false;
+    int mWsTooltipShownCounter = 0; // ---> can be removed after migration to ws
 };
 
 #endif // APPSETTINGS_H

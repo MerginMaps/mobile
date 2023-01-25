@@ -3519,6 +3519,21 @@ void MerginApi::signOut()
   clearAuth();
 }
 
+void MerginApi::refreshUserData()
+{
+  getUserInfo();
+
+  if ( apiSupportsWorkspaces() )
+  {
+    getWorkspaceInfo();
+    // getServiceInfo is called automatically when workspace info finishes
+  }
+  else if ( mServerType == MerginServerType::OLD )
+  {
+    getServiceInfo();
+  }
+}
+
 void MerginApi::createWorkspaceReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );

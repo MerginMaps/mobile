@@ -27,6 +27,7 @@ void MerginUserInfo::clear()
   mInvitations.clear();
 
   emit hasWorkspacesChanged();
+  emit hasMoreThanOneWorkspaceChanged();
   emit userInfoChanged();
 }
 
@@ -69,6 +70,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
 
   emit userInfoChanged();
   emit hasWorkspacesChanged();
+  emit hasMoreThanOneWorkspaceChanged();
 }
 
 QString MerginUserInfo::email() const
@@ -233,4 +235,9 @@ MerginInvitation MerginInvitation::fromJsonObject( const QJsonObject &invitation
 QString MerginUserInfo::name() const
 {
   return mName;
+}
+
+bool MerginUserInfo::hasMoreThanOneWorkspace() const
+{
+  return mWorkspaces.size() > 1;
 }
