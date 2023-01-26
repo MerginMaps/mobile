@@ -33,6 +33,7 @@ class AppSettings: public QObject
     Q_PROPERTY( bool legacyFolderMigrated READ legacyFolderMigrated WRITE setLegacyFolderMigrated NOTIFY legacyFolderMigratedChanged )
     Q_PROPERTY( QString activePositionProviderId READ activePositionProviderId WRITE setActivePositionProviderId NOTIFY activePositionProviderIdChanged )
     Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
+    Q_PROPERTY( bool ignoreWhatsNew READ ignoreWhatsNew WRITE setIgnoreWhatsNew NOTIFY ignoreWhatsNewChanged )
     Q_PROPERTY( bool ignoreWsTooltip READ ignoreWsTooltip NOTIFY ignoreWsTooltipChanged )
 
   public:
@@ -83,8 +84,10 @@ class AppSettings: public QObject
     bool autosyncAllowed() const;
     void setAutosyncAllowed( bool newAutosyncAllowed );
 
-    Q_INVOKABLE void wsTooltipShown();
+    bool ignoreWhatsNew() const;
+    void setIgnoreWhatsNew( bool newIgnoreWhatsNew );
 
+    Q_INVOKABLE void wsTooltipShown();
     bool ignoreWsTooltip() const; // ---> can be removed after migration to ws
 
     static const QString INPUTAPP_GROUP_NAME;
@@ -109,6 +112,7 @@ class AppSettings: public QObject
     void activePositionProviderIdChanged( const QString & );
 
     void autosyncAllowedChanged( bool autosyncAllowed );
+    void ignoreWhatsNewChanged();
 
     void ignoreWsTooltipChanged(); // ---> can be removed after migration to ws
 
@@ -145,6 +149,7 @@ class AppSettings: public QObject
     QVariant value( const QString &key, const QVariant &defaultValue = QVariant() );
     QString mActivePositionProviderId;
     bool mAutosyncAllowed = false;
+    bool mIgnoreWhatsNew = false;
     int mWsTooltipShownCounter = 0; // ---> can be removed after migration to ws
 };
 

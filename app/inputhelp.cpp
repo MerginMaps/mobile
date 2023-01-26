@@ -131,6 +131,11 @@ QString InputHelp::projectLoadingErrorHelpLink() const
   return helpRoot + "/field/broken-project/" + utmTagHelp;
 }
 
+QString InputHelp::whatsNewPostLink() const
+{
+  return inputWeb + "/blog/introducing-workspaces" + utmTagOther;
+}
+
 bool InputHelp::submitReportPending() const
 {
   return mSubmitReportPending;

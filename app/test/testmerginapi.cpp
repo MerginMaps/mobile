@@ -2680,3 +2680,32 @@ void TestMerginApi::testServerType()
   QCOMPARE( spy.count(), 0 );
   QCOMPARE( mApi->serverType(), MerginServerType::OLD );
 }
+
+void TestMerginApi::testServerUpgrade()
+{
+  QSignalSpy spy( mApi, &MerginApi::serverWasUpgraded );
+  mApi->setServerType( MerginServerType::OLD );
+  spy.wait( TestUtils::SHORT_REPLY );
+  QCOMPARE( spy.count(), 0 );
+  QCOMPARE( mApi->serverType(), MerginServerType::OLD );
+
+  mApi->setServerType( MerginServerType::SAAS );
+  spy.wait( TestUtils::SHORT_REPLY );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( mApi->serverType(), MerginServerType::SAAS );
+
+  mApi->setServerType( MerginServerType::OLD );
+  spy.wait( TestUtils::SHORT_REPLY );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( mApi->serverType(), MerginServerType::OLD );
+
+  mApi->setServerType( MerginServerType::EE );
+  spy.wait( TestUtils::SHORT_REPLY );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( mApi->serverType(), MerginServerType::EE );
+
+  mApi->setServerType( MerginServerType::SAAS );
+  spy.wait( TestUtils::SHORT_REPLY );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( mApi->serverType(), MerginServerType::SAAS );
+}

@@ -39,6 +39,7 @@ class InputHelp: public QObject
     Q_PROPERTY( QString howToConnectGPSLink READ howToConnectGPSLink NOTIFY linkChanged )
     Q_PROPERTY( QString merginTermsLink READ merginTermsLink NOTIFY linkChanged )
     Q_PROPERTY( QString projectLoadingErrorHelpLink READ projectLoadingErrorHelpLink NOTIFY linkChanged )
+    Q_PROPERTY( QString whatsNewPostLink READ whatsNewPostLink NOTIFY linkChanged )
 
     //! When adding new link, make sure you also create unit test for it in TestLinks
 
@@ -71,6 +72,7 @@ class InputHelp: public QObject
     QString howToConnectGPSLink() const;
     QString merginTermsLink() const;
     QString projectLoadingErrorHelpLink() const;
+    QString whatsNewPostLink() const;
 
     bool submitReportPending() const;
     /**

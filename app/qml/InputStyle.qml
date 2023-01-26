@@ -79,6 +79,9 @@ QtObject {
     property real buttonMinPadding: scale(10)
     property real mediumBtnHeight: scale(35)
 
+    property real minDialogWidth: 200
+    property real minDialogHeight: 200
+
     property real panelSpacing: 5 * __dp
     property real shadowVerticalOffset: -2 * __dp
     property real shadowRadius: 8 * __dp
