@@ -320,7 +320,7 @@ Item {
             Layout.fillWidth: true
 
             titleText: qsTr( "GPS antenna height" )
-            text: __appSettings.gpsAntennaHeight > 0 ? __appSettings.gpsAntennaHeight : qsTr( "Not set" )
+            text: __appSettings.gpsAntennaHeight > 0 ? __inputUtils.formatNumber(__appSettings.gpsAntennaHeight, 3) + " m" : qsTr( "Not set" )
           }
         }
       }
