@@ -108,7 +108,7 @@ class AppSettings: public QObject
     void autoCenterMapCheckedChanged();
     void gpsAccuracyToleranceChanged();
     void gpsAccuracyWarningChanged();
-    void gpsAntennaHeightChanged();
+    void gpsAntennaHeightChanged( double antennaHeight );
     void lineRecordingIntervalChanged();
 
     void reuseLastEnteredValuesChanged( bool reuseLastEnteredValues );

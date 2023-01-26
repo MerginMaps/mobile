@@ -373,6 +373,6 @@ void AppSettings::setGpsAntennaHeight( double gpsAntennaHeight )
     mGpsAntennaHeight = height;
     setValue( "gpsHeight", mGpsAntennaHeight );
 
-    emit gpsAntennaHeightChanged();
+    emit gpsAntennaHeightChanged( mGpsAntennaHeight );
   }
 }
