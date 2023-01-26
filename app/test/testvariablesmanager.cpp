@@ -36,9 +36,10 @@ void TestVariablesManager::positionVariables()
   GeoPosition geoInfo = testGeoPosition();
   bool useGpsPoint = true;
   double direction = 123.45;
+  double antennaHeight = 3.654;
 
   QgsExpressionContext context;
-  context << mVariablesManager->positionScope( geoInfo, direction, useGpsPoint );
+  context << mVariablesManager->positionScope( geoInfo, direction, useGpsPoint, antennaHeight );
   evaluateExpression( QStringLiteral( "x(@position_coordinate)" ), QStringLiteral( "51.3624998" ), &context );
   evaluateExpression( QStringLiteral( "y(@position_coordinate)" ), QStringLiteral( "-2.9207148" ), &context );
   evaluateExpression( QStringLiteral( "@position_latitude" ), QStringLiteral( "-2.9207148" ), &context );
@@ -54,6 +55,7 @@ void TestVariablesManager::positionVariables()
   evaluateExpression( QStringLiteral( "@position_satellites_used" ), QStringLiteral( "21" ), &context );
   evaluateExpression( QStringLiteral( "@position_hdop" ), QStringLiteral( "1.88" ), &context );
   evaluateExpression( QStringLiteral( "@position_gps_fix" ), QStringLiteral( "DGPS fix" ), &context );
+  evaluateExpression( QStringLiteral( "@position_gps_antenna_height" ), QStringLiteral( "3.654" ), &context );
 }
 
 GeoPosition TestVariablesManager::testGeoPosition()

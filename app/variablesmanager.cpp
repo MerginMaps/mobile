@@ -45,10 +45,10 @@ void VariablesManager::registerInputExpressionFunctions()
 QgsExpressionContextScope *VariablesManager::positionScope()
 {
   GeoPosition position = mPositionKit->position();
-  return positionScope( position, compass()->direction(), mUseGpsPoint );
+  return positionScope( position, compass()->direction(), mUseGpsPoint, mPositionKit->antennaHeight() );
 }
 
-QgsExpressionContextScope *VariablesManager::positionScope( const GeoPosition &pos, const double direction, bool useGpsPoint )
+QgsExpressionContextScope *VariablesManager::positionScope( const GeoPosition &pos, const double direction, bool useGpsPoint, double antennaHeight )
 {
   QgsExpressionContextScope *scope = new QgsExpressionContextScope( QStringLiteral( "Position" ) );
   const QgsGeometry point = QgsGeometry( new QgsPoint( pos.longitude, pos.latitude, pos.elevation ) );
@@ -69,6 +69,7 @@ QgsExpressionContextScope *VariablesManager::positionScope( const GeoPosition &p
   addPositionVariable( scope, QStringLiteral( "satellites_used" ), pos.satellitesUsed );
   addPositionVariable( scope, QStringLiteral( "hdop" ), getGeoPositionAttribute( pos.hdop ) );
   addPositionVariable( scope, QStringLiteral( "gps_fix" ), pos.fixStatusString );
+  addPositionVariable( scope, QStringLiteral( "gps_antenna_height" ), getGeoPositionAttribute( antennaHeight, 3 ) );
 
   return scope;
 }
@@ -180,11 +181,11 @@ void VariablesManager::addPositionVariable( QgsExpressionContextScope *scope, co
   }
 }
 
-QVariant VariablesManager::getGeoPositionAttribute( double attributeValue )
+QVariant VariablesManager::getGeoPositionAttribute( double attributeValue, int precision )
 {
   if ( attributeValue >= 0 )
   {
-    return QString::number( attributeValue, 'f', 2 );
+    return QString::number( attributeValue, 'f', precision );
   }
   else
     return QVariant();

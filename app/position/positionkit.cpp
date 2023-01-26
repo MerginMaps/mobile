@@ -392,3 +392,38 @@ const GeoPosition &PositionKit::position() const
 {
   return mPosition;
 }
+
+AppSettings *PositionKit::appSettings() const
+{
+  return mAppSettings;
+}
+
+void PositionKit::setAppSettings( AppSettings *appSettings )
+{
+  if ( mAppSettings != appSettings )
+  {
+    if ( mAppSettings )
+    {
+      disconnect( mAppSettings );
+    }
+
+    mAppSettings = appSettings;
+    if ( mAppSettings )
+    {
+      QObject::connect( mAppSettings, &AppSettings::gpsAntennaHeightChanged, this, &PositionKit::antennaHeightChanged );
+    }
+    emit appSettingsChanged();
+  }
+}
+
+double PositionKit::antennaHeight() const
+{
+  if ( mAppSettings )
+  {
+    return mAppSettings->gpsAntennaHeight();
+  }
+  else
+  {
+    return 0;
+  }
+}

@@ -71,6 +71,9 @@ class PositionKit : public QObject
     // Provider of position data
     Q_PROPERTY( AbstractPositionProvider *positionProvider READ positionProvider WRITE setPositionProvider NOTIFY positionProviderChanged )
 
+    Q_PROPERTY( AppSettings *appSettings READ appSettings WRITE setAppSettings NOTIFY appSettingsChanged )
+    Q_PROPERTY( double antennaHeight READ antennaHeight NOTIFY antennaHeightChanged )
+
   public:
     //! Creates new position kit
     explicit PositionKit( QObject *parent = nullptr );
@@ -113,6 +116,11 @@ class PositionKit : public QObject
     Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
     Q_INVOKABLE static AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
 
+    AppSettings *appSettings() const;
+    void setAppSettings( AppSettings *appSettings );
+
+    double antennaHeight() const;
+
   signals:
     void latitudeChanged( double );
     void longitudeChanged( double );
@@ -141,6 +149,10 @@ class PositionKit : public QObject
 
     void positionChanged( const GeoPosition & );
 
+    void appSettingsChanged();
+
+    void antennaHeightChanged( double );
+
   public slots:
     void parsePositionUpdate( const GeoPosition &newPosition );
 
@@ -151,6 +163,7 @@ class PositionKit : public QObject
     GeoPosition mPosition;
     bool mHasPosition = false;
     std::unique_ptr<AbstractPositionProvider> mPositionProvider;
+    AppSettings *mAppSettings = nullptr;
 };
 
 #endif // POSITIONKIT_H
