@@ -65,6 +65,10 @@ QgsExpressionContextScope *VariablesManager::positionScope( const GeoPosition &p
   addPositionVariable( scope, QStringLiteral( "timestamp" ), pos.utcDateTime );
   addPositionVariable( scope, QStringLiteral( "direction" ), ( 360 + int( direction ) ) % 360 );
   addPositionVariable( scope, QStringLiteral( "from_gps" ), useGpsPoint );
+  addPositionVariable( scope, QStringLiteral( "satellites_visible" ), pos.satellitesVisible );
+  addPositionVariable( scope, QStringLiteral( "satellites_used" ), pos.satellitesUsed );
+  addPositionVariable( scope, QStringLiteral( "hdop" ), getGeoPositionAttribute( pos.hdop ) );
+  addPositionVariable( scope, QStringLiteral( "gps_fix" ), pos.fixStatusString );
 
   return scope;
 }

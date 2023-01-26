@@ -50,6 +50,10 @@ void TestVariablesManager::positionVariables()
   evaluateExpression( QStringLiteral( "@position_vertical_accuracy" ), QStringLiteral( "13.34" ), &context );
   evaluateExpression( QStringLiteral( "@position_magnetic_variation" ), QStringLiteral( "14.34" ), &context );
   evaluateExpression( QStringLiteral( "@position_direction" ), QStringLiteral( "123" ), &context );
+  evaluateExpression( QStringLiteral( "@position_satellites_visible" ), QStringLiteral( "23" ), &context );
+  evaluateExpression( QStringLiteral( "@position_satellites_used" ), QStringLiteral( "21" ), &context );
+  evaluateExpression( QStringLiteral( "@position_hdop" ), QStringLiteral( "1.88" ), &context );
+  evaluateExpression( QStringLiteral( "@position_gps_fix" ), QStringLiteral( "DGPS fix" ), &context );
 }
 
 GeoPosition TestVariablesManager::testGeoPosition()
@@ -64,6 +68,10 @@ GeoPosition TestVariablesManager::testGeoPosition()
   geoInfo.hacc = 12.34;
   geoInfo.vacc = 13.34;
   geoInfo.magneticVariation = 14.34;
+  geoInfo.satellitesVisible = 23;
+  geoInfo.satellitesUsed = 21;
+  geoInfo.hdop = 1.88;
+  geoInfo.fixStatusString = QStringLiteral( "DGPS fix" );
 
   return geoInfo;
 }
@@ -77,4 +85,3 @@ void TestVariablesManager::evaluateExpression( const QString &expStr, const QStr
   QVERIFY( !exp.hasEvalError() );
   QCOMPARE( value, expectedValue );
 }
-
