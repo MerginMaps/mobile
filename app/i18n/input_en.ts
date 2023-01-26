@@ -237,12 +237,12 @@ Please go to the Mergin Maps website to remove it manually.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="130"/>
+        <location filename="../qml/AuthPanel.qml" line="135"/>
         <source>Please update Input to use the latest Mergin features.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="134"/>
+        <location filename="../qml/AuthPanel.qml" line="139"/>
         <source>Mergin is currently unavailable - please try again later.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -335,6 +335,34 @@ Please go to the Mergin Maps website to remove it manually.</source>
     <message>
         <location filename="../qml/CodeScanner.qml" line="33"/>
         <source>Scan code</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CreateWorkspacePage</name>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="34"/>
+        <source>Create a workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="64"/>
+        <source>Hello</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="78"/>
+        <source>Workspace is a place for all your projects and collaboration. You can invite your colleagues to a workspace and manage their roles. A good candidate for a workspace name is the name of your team or company.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="118"/>
+        <source>Create a Workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="122"/>
+        <source>Empty workspace name</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -639,12 +667,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="237"/>
+        <location filename="../inputhelp.cpp" line="242"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="242"/>
+        <location filename="../inputhelp.cpp" line="247"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -948,7 +976,7 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="237"/>
+        <location filename="../qml/LoginForm.qml" line="244"/>
         <source>Forgot password?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1012,6 +1040,44 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/MainPanel.qml" line="243"/>
         <source>Menu</source>
         <translation>Menu</translation>
+    </message>
+</context>
+<context>
+    <name>ManageInvitationsPage</name>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="27"/>
+        <source>Join a workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="57"/>
+        <source>Hello</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="71"/>
+        <source>You have been invited to the following workspaces:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="129"/>
+        <source>Workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="154"/>
+        <source>Accept</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="188"/>
+        <source>Do you want to create a new workspace instead?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="188"/>
+        <source>Click here!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1118,48 +1184,58 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="679"/>
+        <location filename="../../core/merginapi.cpp" line="747"/>
         <source>Username must have at least 4 characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="686"/>
+        <location filename="../../core/merginapi.cpp" line="754"/>
         <source>Username contains invalid characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="693"/>
+        <location filename="../../core/merginapi.cpp" line="761"/>
         <source>Please enter a valid email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="700"/>
+        <location filename="../../core/merginapi.cpp" line="768"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="713"/>
+        <location filename="../../core/merginapi.cpp" line="781"/>
         <source>Passwords do not match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="720"/>
+        <location filename="../../core/merginapi.cpp" line="788"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1008"/>
+        <location filename="../../core/merginapi.cpp" line="1169"/>
         <source>Registration successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1029"/>
+        <location filename="../../core/merginapi.cpp" line="1192"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1299"/>
+        <location filename="../../core/merginapi.cpp" line="1461"/>
         <source>Project detached from Mergin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="3493"/>
+        <source>Workspace name contains invalid characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="3559"/>
+        <source>Workspace %1 already exists</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1213,6 +1289,14 @@ Click &apos;Yes&apos; to upload it.</source>
     <message>
         <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="17"/>
         <source>You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NoWorkspaceBanner</name>
+    <message>
+        <location filename="../qml/misc/NoWorkspaceBanner.qml" line="30"/>
+        <source>%1Workspace is required to use Mergin Maps. Click here to create one%2.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1428,39 +1512,58 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="71"/>
+        <location filename="../qml/ProjectPanel.qml" line="88"/>
         <source>No Changes</source>
         <translation type="unfinished">No Changes</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="171"/>
+        <location filename="../qml/ProjectPanel.qml" line="243"/>
+        <location filename="../qml/ProjectPanel.qml" line="611"/>
+        <location filename="../qml/ProjectPanel.qml" line="816"/>
         <source>Projects</source>
         <translation type="unfinished">Projects</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="386"/>
+        <location filename="../qml/ProjectPanel.qml" line="472"/>
+        <location filename="../qml/ProjectPanel.qml" line="794"/>
         <source>Home</source>
         <translation type="unfinished">Home</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="408"/>
+        <location filename="../qml/ProjectPanel.qml" line="494"/>
         <source>My projects</source>
         <translation type="unfinished">My projects</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="432"/>
+        <location filename="../qml/ProjectPanel.qml" line="518"/>
         <source>Shared with me</source>
         <translation type="unfinished">Shared with me</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="432"/>
+        <location filename="../qml/ProjectPanel.qml" line="518"/>
         <source>Shared</source>
         <translation type="unfinished">Shared</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="452"/>
+        <location filename="../qml/ProjectPanel.qml" line="538"/>
+        <location filename="../qml/ProjectPanel.qml" line="838"/>
         <source>Explore</source>
         <translation type="unfinished">Explore</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="608"/>
+        <source>Downloaded projects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="613"/>
+        <source>Public projects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="616"/>
+        <source>Your other projects are accessible%1by switching your workspace here</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1534,27 +1637,27 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>Purchasing</name>
     <message>
-        <location filename="../purchasing.cpp" line="520"/>
+        <location filename="../purchasing.cpp" line="526"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="528"/>
+        <location filename="../purchasing.cpp" line="534"/>
         <source>Successfully restored your subscription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="530"/>
+        <location filename="../purchasing.cpp" line="536"/>
         <source>Successfully purchased subscription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="542"/>
+        <location filename="../purchasing.cpp" line="548"/>
         <source>Failed to purchase subscription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="540"/>
+        <location filename="../purchasing.cpp" line="546"/>
         <source>Unable to restore your subscription</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2020,6 +2123,44 @@ Click &apos;Yes&apos; to upload it.</source>
     </message>
 </context>
 <context>
+    <name>SwitchWorkspacePage</name>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="27"/>
+        <source>Select a workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="77"/>
+        <source>You have a pending invitation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="113"/>
+        <source>Workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="146"/>
+        <source>Accept</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="165"/>
+        <source>Reject</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="183"/>
+        <source>Workspaces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="255"/>
+        <source>Create new workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SyncFailedDialog</name>
     <message>
         <location filename="../qml/dialogs/SyncFailedDialog.qml" line="22"/>
@@ -2029,6 +2170,205 @@ Click &apos;Yes&apos; to upload it.</source>
     <message>
         <location filename="../qml/dialogs/SyncFailedDialog.qml" line="23"/>
         <source>Your changes could not be sent to server, make sure you are connected to internet and have write access to this project.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WhatsNewDialog</name>
+    <message>
+        <location filename="../qml/WhatsNewDialog.qml" line="26"/>
+        <source>What&apos;s new</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WhatsNewDialog.qml" line="59"/>
+        <source>Ignore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WhatsNewDialog.qml" line="71"/>
+        <source>Read more</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WorkspaceAccountPage</name>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="51"/>
+        <source>My Account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="122"/>
+        <source>Workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="135"/>
+        <source>Switch workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="144"/>
+        <source>Your role</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="151"/>
+        <source>Workspace storage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="152"/>
+        <source>Using %1 / %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="160"/>
+        <source>Subscription plan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="169"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="178"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="193"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="204"/>
+        <source>Subscription status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="170"/>
+        <source>Your subscription will not auto-renew after %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="179"/>
+        <source>Please update your %1billing details%2 as soon as possible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="194"/>
+        <source>Your next bill will be for %1 on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="205"/>
+        <source>Your subscription was cancelled on %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="216"/>
+        <source>Subscriptions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="235"/>
+        <source>Account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="244"/>
+        <source>Username</source>
+        <translation type="unfinished">Username</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="251"/>
+        <source>Email</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="261"/>
+        <source>Sign out</source>
+        <translation type="unfinished">Sign out</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="267"/>
+        <source>Delete account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="297"/>
+        <source>Delete account?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="303"/>
+        <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
+
+In order to delete your account, enter your username in the field below and click Yes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="312"/>
+        <source>Enter username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="347"/>
+        <source>Failed to remove account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="348"/>
+        <source>An error occured while removing your account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="372"/>
+        <source>Can not close account because user is the only owner of an organisation.
+
+Please go to the Mergin Maps website to remove it manually.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WorkspaceSubscribePage</name>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="24"/>
+        <source>Subscribe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="58"/>
+        <source>Individual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="75"/>
+        <source>Professional</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="137"/>
+        <source>You can also %1restore%2 your purchases.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="149"/>
+        <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WorkspaceSubscribePlanItem</name>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="35"/>
+        <source>Commercial use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="56"/>
+        <source>Unlimited seats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="63"/>
+        <source>Unlimited projects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="70"/>
+        <source>Email support</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2087,58 +2427,63 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="239"/>
-        <location filename="../qml/main.qml" line="298"/>
+        <location filename="../qml/main.qml" line="238"/>
+        <location filename="../qml/main.qml" line="302"/>
         <source>No Changes</source>
         <translation type="unfinished">No Changes</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="273"/>
+        <location filename="../qml/main.qml" line="277"/>
         <source>GPS auto-center mode on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="273"/>
+        <location filename="../qml/main.qml" line="277"/>
         <source>GPS auto-center mode off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="287"/>
+        <location filename="../qml/main.qml" line="291"/>
         <source>No editable layers found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="627"/>
+        <location filename="../qml/main.qml" line="631"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="639"/>
+        <location filename="../qml/main.qml" line="643"/>
         <source>Failed to open the project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="664"/>
+        <location filename="../qml/main.qml" line="663"/>
+        <source>We&apos;ve made it easier for teams to collaborate on Mergin Maps! To find out more, check out our latest blog post about workspaces by clicking the button below.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="679"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="715"/>
+        <location filename="../qml/main.qml" line="736"/>
         <source>There were issues loading the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="727"/>
+        <location filename="../qml/main.qml" line="748"/>
         <source>Could not read the project file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="754"/>
+        <location filename="../qml/main.qml" line="775"/>
         <source>Press back again to quit the app</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="557"/>
+        <location filename="../qml/main.qml" line="561"/>
         <source>PROJ Error</source>
         <translation type="unfinished"></translation>
     </message>
