@@ -9,40 +9,35 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Dialogs
 import QtQuick.Layouts
 
 import "."
 import "./components"
 
 Dialog {
-  property string informativeText
-  property string infoUrl
-
   id: root
-  visible: false
+
+  property string infoUrl
+  property string informativeText
+
   modal: true
   closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-  anchors.centerIn: parent
-  margins: InputStyle.outerFieldMargin
 
   title: qsTr("What's new")
 
   background: Rectangle {
-    anchors.fill: parent
+    radius: InputStyle.cornerRadius
     color: "white"
   }
 
   contentItem: ColumnLayout {
-    anchors.margins: InputStyle.outerFieldMargin
-    anchors.fill: parent
-    spacing: 0
 
     Text {
       id: infoText
 
       Layout.fillWidth: true
-      Layout.preferredHeight: InputStyle.rowHeight * 2
+      Layout.fillHeight: true
+      Layout.minimumHeight: InputStyle.rowHeightHeader
 
       text: root.informativeText
       wrapMode: Text.WordWrap
@@ -52,13 +47,13 @@ Dialog {
       horizontalAlignment: Text.AlignJustify
     }
 
+
     RowLayout {
       Layout.fillWidth: true
-
-      spacing: InputStyle.formSpacing
+      Layout.preferredHeight: InputStyle.rowHeightHeader
 
       DelegateButton {
-        Layout.preferredWidth: root.width / 2
+        Layout.fillWidth: true
         Layout.preferredHeight: InputStyle.mediumBtnHeight
 
         text: qsTr("Ignore")
@@ -70,10 +65,10 @@ Dialog {
       }
  
       DelegateButton {
-        Layout.preferredWidth: root.width / 2
+        Layout.fillWidth: true
         Layout.preferredHeight: InputStyle.mediumBtnHeight
 
-        text: qsTr("More info")
+        text: qsTr("Read more")
 
         onClicked: {
           Qt.openUrlExternally(root.infoUrl)

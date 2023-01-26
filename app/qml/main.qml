@@ -656,6 +656,10 @@ ApplicationWindow {
     WhatsNewDialog {
       id: whatsNewDialog
 
+      width: parent.width / 2 < InputStyle.minDialogWidth ? parent.width - 2 * InputStyle.panelMargin : parent.width / 2
+      height: parent.height / 2 < InputStyle.minDialogHeight ? parent.height - 2 * InputStyle.panelMargin : parent.height / 2
+
+      anchors.centerIn: parent
       informativeText: qsTr("We've made it easier for teams to collaborate on Mergin Maps! To find out more, check out our latest blog post about workspaces by clicking the button below.")
       infoUrl: __inputHelp.whatsNewPostLink
     }
