@@ -75,9 +75,10 @@ Page {
       Layout.fillWidth: true
       Layout.preferredHeight: InputStyle.rowHeightSmall
 
-      text: qsTr("Workspace is a place for all your projects and collaboration. " +
-                 "You can invite your colleagues to a workspace and manage their roles. " +
-                 "A good candidate for a workspace name is the name of your team or company.")
+      text: qsTr("A Workspace is a place to store your projects. Colleagues " +
+                 "can be invited to your workspace to collaborate on projects. " +
+                 "A good candidate for a workspace name is the name of your " +
+                 "team or organisation.")
 
       font.pixelSize: InputStyle.fontPixelSizeNormal
       font.bold: true
@@ -100,6 +101,8 @@ Page {
       Layout.fillWidth: true
       Layout.preferredHeight: InputStyle.fieldHeight
       Layout.alignment: Qt.AlignHCenter
+
+      placeholderText: qsTr("My workspace name…")
     }
 
     Rectangle {
@@ -115,7 +118,7 @@ Page {
       btnWidth: width
       Layout.preferredHeight: InputStyle.fieldHeight
 
-      text: qsTr("Create a Workspace")
+      text: qsTr("Create workspace")
 
       onClicked: {
         if (workspaceNameField.displayText === "") {
