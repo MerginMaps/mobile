@@ -24,8 +24,16 @@ void InvitationsModel::initializeModel()
     return;
   }
 
-  QObject::connect( mApi, &MerginApi::listInvitationsFinished, this, &InvitationsModel::onListInvitationsFinished );
-  listInvitations();
+  if ( mFetchFromServer )
+  {
+    QObject::connect( mApi, &MerginApi::listInvitationsFinished, this, &InvitationsModel::onListInvitationsFinished );
+    listInvitations();
+  }
+  else
+  {
+    setModelIsLoading( true );
+    onListInvitationsFinished( mApi->userInfo()->invitations() );
+  }
 
   emit modelInitialized();
 }
@@ -83,12 +91,13 @@ void InvitationsModel::setMerginApi( MerginApi *merginApi )
   }
 
   mApi = merginApi;
-  emit merginApiChanged( mApi );
 
   if ( mApi )
   {
     connect( mApi, &MerginApi::processInvitationFinished, this, &InvitationsModel::listInvitations );
   }
+
+  emit merginApiChanged( mApi );
 }
 
 bool InvitationsModel::isLoading() const
@@ -100,4 +109,15 @@ void InvitationsModel::setModelIsLoading( bool state )
 {
   mModelIsLoading = state;
   emit isLoadingChanged( mModelIsLoading );
+}
+
+bool InvitationsModel::fetchFromServer() const
+{
+  return mFetchFromServer;
+}
+
+void InvitationsModel::setFetchFromServer( bool fetch )
+{
+  mFetchFromServer = fetch;
+  emit fetchFromServerChanged( mFetchFromServer );
 }

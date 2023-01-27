@@ -108,6 +108,7 @@ Page {
           model: InvitationsProxyModel {
             invitationsSourceModel: InvitationsModel {
               merginApi: __merginApi
+              fetchFromServer: false
             }
           }
 
