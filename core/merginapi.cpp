@@ -1346,19 +1346,36 @@ bool MerginApi::extractProjectName( const QString &sourceString, QString &projec
 
 QString MerginApi::extractServerErrorMsg( const QByteArray &data )
 {
-  QString serverMsg;
+  QString serverMsg = "[can't parse server error]";
   QJsonDocument doc = QJsonDocument::fromJson( data );
   if ( doc.isObject() )
   {
     QJsonObject obj = doc.object();
-    QJsonValue vDetail = obj.value( "detail" );
-    if ( vDetail.isString() )
+    if ( obj.contains( QStringLiteral( "detail" ) ) )
     {
-      serverMsg = vDetail.toString();
+      QJsonValue vDetail = obj.value( "detail" );
+      if ( vDetail.isString() )
+      {
+        serverMsg = vDetail.toString();
+      }
+      else if ( vDetail.isObject() )
+      {
+        serverMsg = QJsonDocument( vDetail.toObject() ).toJson();
+      }
     }
-    else if ( vDetail.isObject() )
+    else if ( obj.contains( QStringLiteral( "name" ) ) )
     {
-      serverMsg = QJsonDocument( vDetail.toObject() ).toJson();
+      QJsonValue val = obj.value( "name" );
+      if ( val.isArray() )
+      {
+        QJsonArray errors = val.toArray();
+        QStringList messages;
+        for ( auto it = errors.constBegin(); it != errors.constEnd(); ++it )
+        {
+          messages << it->toString();
+        }
+        serverMsg = messages.join( " " );
+      }
     }
     else
     {

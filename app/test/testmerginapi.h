@@ -89,6 +89,8 @@ class TestMerginApi: public QObject
 
     void testServerUpgrade();
 
+    void testServerError();
+
   private:
     MerginApi *mApi;
     std::unique_ptr<ProjectsModel> mLocalProjectsModel;
