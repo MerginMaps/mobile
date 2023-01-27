@@ -2709,3 +2709,15 @@ void TestMerginApi::testServerUpgrade()
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( mApi->serverType(), MerginServerType::SAAS );
 }
+
+void TestMerginApi::testServerError()
+{
+  QString msg = mApi->extractServerErrorMsg( "{\"detail\": \"Some error occured.\"}" );
+  QCOMPARE( msg, QStringLiteral( "Some error occured." ) );
+
+  msg = mApi->extractServerErrorMsg( "{\"name\": \"Some error occured.\"}" );
+  QCOMPARE( msg, QStringLiteral( "[can't parse server error]" ) );
+
+  msg = mApi->extractServerErrorMsg( "{\"name\": [\"Field must be between 4 and 25 characters long.\"]}" );
+  QCOMPARE( msg, QStringLiteral( "Field must be between 4 and 25 characters long." ) );
+}
