@@ -1156,8 +1156,12 @@ Item {
     function onUserInfoReplyFinished() {
       openInvitationsListener.showInvitationsList = false;
 
-      // let's double check if registration page is not opened
+      // let's not show invitations when registration finish page is opened
       if ( stackView.containsPage("registrationFinishPanel") ) {
+        return;
+      }
+
+      if ( !__merginApi.userAuth.hasAuthData() ) {
         return;
       }
 
