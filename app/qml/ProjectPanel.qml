@@ -164,6 +164,17 @@ Item {
       }
     }
 
+    function containsPage( pageName ) {
+      for ( let i = 0; i < stackView.depth; i++ ) {
+        let item = stackView.get( i );
+
+        if ( item && item.objectName && item.objectName === pageName ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     function switchUI() {
       stackView.clear( StackView.Immediate )
 
@@ -1027,6 +1038,26 @@ Item {
   }
 
   Component {
+    id: invitationsPanelComponent
+
+    ManageInvitationsPage {
+      objectName: "invitationsPanel"
+      haveBack: true
+      onBack: {
+        stackView.pop( null )
+      }
+
+      Connections {
+        target: __merginApi
+
+        function onProcessInvitationFinished() {
+          stackView.pop( null )
+        }
+      }
+    }
+  }
+
+  Component {
     id: registrationFinishComponent
 
     RegistrationFinishPage {
@@ -1077,6 +1108,10 @@ Item {
         root.refreshProjects()
         root.forceActiveFocus()
       }
+      else {
+        // log out - reenable openInvitationsListener
+        openInvitationsListener.showInvitationsList = true
+      }
     }
 
     function onAuthFailed() {
@@ -1106,6 +1141,28 @@ Item {
     function onWorkspaceCreated(workspace, result) {
       if (result) {
         stackView.popPage("createWorkspacePanel")
+      }
+    }
+  }
+
+  Connections {
+    id: openInvitationsListener
+
+    property bool showInvitationsList: true
+
+    target: __merginApi
+    enabled: __merginApi.apiSupportsWorkspaces && openInvitationsListener.showInvitationsList
+
+    function onUserInfoReplyFinished() {
+      openInvitationsListener.showInvitationsList = false;
+
+      // let's double check if registration page is not opened
+      if ( stackView.containsPage("registrationFinishPanel") ) {
+        return;
+      }
+
+      if ( __merginApi.userInfo.hasInvitations ) {
+        stackView.push( invitationsPanelComponent )
       }
     }
   }
