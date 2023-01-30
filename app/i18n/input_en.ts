@@ -352,16 +352,21 @@ Please go to the Mergin Maps website to remove it manually.</source>
     </message>
     <message>
         <location filename="../qml/CreateWorkspacePage.qml" line="78"/>
-        <source>Workspace is a place for all your projects and collaboration. You can invite your colleagues to a workspace and manage their roles. A good candidate for a workspace name is the name of your team or company.</source>
+        <source>A Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects. A good candidate for a workspace name is the name of your team or organisation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="118"/>
-        <source>Create a Workspace</source>
+        <location filename="../qml/CreateWorkspacePage.qml" line="105"/>
+        <source>My workspace name…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="122"/>
+        <location filename="../qml/CreateWorkspacePage.qml" line="121"/>
+        <source>Create workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="125"/>
         <source>Empty workspace name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1045,37 +1050,37 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ManageInvitationsPage</name>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="27"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="29"/>
         <source>Join a workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="57"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="59"/>
         <source>Hello</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="71"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="73"/>
         <source>You have been invited to the following workspaces:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="129"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="131"/>
         <source>Workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="154"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="156"/>
         <source>Accept</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="188"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="190"/>
         <source>Do you want to create a new workspace instead?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="188"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="190"/>
         <source>Click here!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1184,57 +1189,57 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="747"/>
+        <location filename="../../core/merginapi.cpp" line="756"/>
         <source>Username must have at least 4 characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="754"/>
+        <location filename="../../core/merginapi.cpp" line="763"/>
         <source>Username contains invalid characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="761"/>
+        <location filename="../../core/merginapi.cpp" line="770"/>
         <source>Please enter a valid email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="768"/>
+        <location filename="../../core/merginapi.cpp" line="777"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="781"/>
+        <location filename="../../core/merginapi.cpp" line="790"/>
         <source>Passwords do not match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="788"/>
+        <location filename="../../core/merginapi.cpp" line="797"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1169"/>
+        <location filename="../../core/merginapi.cpp" line="1177"/>
         <source>Registration successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1192"/>
+        <location filename="../../core/merginapi.cpp" line="1200"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1461"/>
+        <location filename="../../core/merginapi.cpp" line="1486"/>
         <source>Project detached from Mergin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3493"/>
+        <location filename="../../core/merginapi.cpp" line="3518"/>
         <source>Workspace name contains invalid characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3559"/>
+        <location filename="../../core/merginapi.cpp" line="3584"/>
         <source>Workspace %1 already exists</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1517,51 +1522,51 @@ Click &apos;Yes&apos; to upload it.</source>
         <translation type="unfinished">No Changes</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="243"/>
-        <location filename="../qml/ProjectPanel.qml" line="611"/>
-        <location filename="../qml/ProjectPanel.qml" line="816"/>
+        <location filename="../qml/ProjectPanel.qml" line="254"/>
+        <location filename="../qml/ProjectPanel.qml" line="622"/>
+        <location filename="../qml/ProjectPanel.qml" line="827"/>
         <source>Projects</source>
         <translation type="unfinished">Projects</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="472"/>
-        <location filename="../qml/ProjectPanel.qml" line="794"/>
+        <location filename="../qml/ProjectPanel.qml" line="483"/>
+        <location filename="../qml/ProjectPanel.qml" line="805"/>
         <source>Home</source>
         <translation type="unfinished">Home</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="494"/>
+        <location filename="../qml/ProjectPanel.qml" line="505"/>
         <source>My projects</source>
         <translation type="unfinished">My projects</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="518"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared with me</source>
         <translation type="unfinished">Shared with me</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="518"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared</source>
         <translation type="unfinished">Shared</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="538"/>
-        <location filename="../qml/ProjectPanel.qml" line="838"/>
+        <location filename="../qml/ProjectPanel.qml" line="549"/>
+        <location filename="../qml/ProjectPanel.qml" line="849"/>
         <source>Explore</source>
         <translation type="unfinished">Explore</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="608"/>
+        <location filename="../qml/ProjectPanel.qml" line="619"/>
         <source>Downloaded projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="613"/>
+        <location filename="../qml/ProjectPanel.qml" line="624"/>
         <source>Public projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="616"/>
+        <location filename="../qml/ProjectPanel.qml" line="627"/>
         <source>Your other projects are accessible%1by switching your workspace here</source>
         <translation type="unfinished"></translation>
     </message>
