@@ -1126,7 +1126,6 @@ void MerginApi::authorizeFinished()
       mUserAuth->clearTokenData();
       emit authFailed();
       CoreUtils::log( "auth", QStringLiteral( "FAILED - invalid JSON response" ) );
-      qDebug() << data;
       emit notify( "Internal server error during authorization" );
     }
   }
@@ -2352,7 +2351,7 @@ static MerginFile findFile( const QString &filePath, const QList<MerginFile> &fi
     if ( merginFile.path == filePath )
       return merginFile;
   }
-  qDebug() << "requested findFile() for non-existant file! " << filePath;
+  CoreUtils::log( QStringLiteral( "MerginFile" ), QStringLiteral( "requested findFile() for non-existant file: %1" ).arg( filePath ) );
   return MerginFile();
 }
 
