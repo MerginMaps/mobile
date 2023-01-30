@@ -82,6 +82,8 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
       return item->validationStatus();
     case Relation:
       return QVariant::fromValue( item->relation() );
+    case RawValue:
+      return item->rawValue();
     default:
       return QVariant();
   }
@@ -125,6 +127,7 @@ QHash<int, QByteArray> AttributeFormModel::roleNames() const
   roles[ValidationMessage] = QByteArray( "ValidationMessage" );
   roles[ValidationStatus] = QByteArray( "ValidationStatus" );
   roles[Relation] = QByteArray( "Relation" );
+  roles[RawValue] = QByteArray( "RawValue" );
 
   return roles;
 }

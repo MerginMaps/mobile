@@ -60,7 +60,8 @@ class  AttributeFormModel : public QAbstractListModel
       Visible, //!< Field visible
       ValidationMessage,
       ValidationStatus,
-      Relation //!< QgsRelation instance for this item, empty if it is not a relation
+      Relation, //!< QgsRelation instance for this item, empty if it is not a relation
+      RawValue
     };
 
     Q_ENUM( AttributeFormRoles )

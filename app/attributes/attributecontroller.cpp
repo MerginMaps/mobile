@@ -1112,6 +1112,8 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
     QgsField field = item->field();
     QVariant val( value );
 
+    item->setRawValue( val );
+
     if ( !field.convertCompatible( val ) )
     {
       QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );

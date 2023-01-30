@@ -115,6 +115,9 @@ class FormItem
     QVariant originalValue() const;
     void setOriginalValue( const QVariant &originalValue );
 
+    QVariant rawValue() const;
+    void setRawValue( const QVariant &rawValue );
+
     QgsRelation relation() const;
     QString fieldError() const;
 
@@ -135,6 +138,7 @@ class FormItem
     FieldValidator::ValidationStatus mValidationStatus = FieldValidator::Valid;
     bool mVisible = false;
     QVariant mOriginalValue; // original unmodified value
+    QVariant mRawValue;
 
     const QgsRelation mRelation; // empty if type is field
 };
