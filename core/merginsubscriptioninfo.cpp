@@ -24,6 +24,7 @@ void MerginSubscriptionInfo::clearSubscriptionData()
   mSubscriptionId = -1;
   mOwnsActiveSubscription = false;
   mCanAccessSubscription = false;
+  mActionRequired = false;
 }
 
 void MerginSubscriptionInfo::clearPlanInfo()
