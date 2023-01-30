@@ -355,16 +355,21 @@ Aneu al lloc web de Mergin Maps per eliminar-lo manualment.</translation>
     </message>
     <message>
         <location filename="../qml/CreateWorkspacePage.qml" line="78"/>
-        <source>Workspace is a place for all your projects and collaboration. You can invite your colleagues to a workspace and manage their roles. A good candidate for a workspace name is the name of your team or company.</source>
-        <translation>L&apos;espai de treball és un lloc per a tots els vostres projectes i col·laboracions. Podeu convidar els vostres companys a un espai de treball i gestionar les seves funcions. Un bon nom d&apos;espai de treball és el nom del vostre equip o empresa.</translation>
+        <source>A Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects. A good candidate for a workspace name is the name of your team or organisation.</source>
+        <translation>Un espai de treball és un lloc per emmagatzemar els vostres projectes. Podeu convidar companys al vostre espai de treball per col·laborar en projectes. Un bon nom per a un espai de treball és el nom del vostre equip o organització.</translation>
     </message>
     <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="118"/>
-        <source>Create a Workspace</source>
-        <translation>Crea un espai de treball</translation>
+        <location filename="../qml/CreateWorkspacePage.qml" line="105"/>
+        <source>My workspace name…</source>
+        <translation>El meu nom d&apos;espai de treball...</translation>
     </message>
     <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="122"/>
+        <location filename="../qml/CreateWorkspacePage.qml" line="121"/>
+        <source>Create workspace</source>
+        <translation>Crea espai de treball</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="125"/>
         <source>Empty workspace name</source>
         <translation>Nom de l&apos;espai de treball buit</translation>
     </message>
@@ -1051,37 +1056,37 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>ManageInvitationsPage</name>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="27"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="29"/>
         <source>Join a workspace</source>
-        <translation>Uneix-te a un espai de treball</translation>
+        <translation>Uniu-vos a un espai de treball</translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="57"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="59"/>
         <source>Hello</source>
         <translation>Hola</translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="71"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="73"/>
         <source>You have been invited to the following workspaces:</source>
         <translation>Heu estat convidat als següents espais de treball:</translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="129"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="131"/>
         <source>Workspace</source>
         <translation>Espai de treball</translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="154"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="156"/>
         <source>Accept</source>
         <translation>Acceptar</translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="188"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="190"/>
         <source>Do you want to create a new workspace instead?</source>
         <translation>Voleu crear un nou espai de treball?</translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="188"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="190"/>
         <source>Click here!</source>
         <translation>Clica aquí!</translation>
     </message>
@@ -1190,57 +1195,57 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="747"/>
+        <location filename="../../core/merginapi.cpp" line="756"/>
         <source>Username must have at least 4 characters</source>
         <translation>El nom d&apos;usuari ha de tenir 4 caracters com a mínim</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="754"/>
+        <location filename="../../core/merginapi.cpp" line="763"/>
         <source>Username contains invalid characters</source>
         <translation>El nom d&apos;usuari conté caràcters no vàlids</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="761"/>
+        <location filename="../../core/merginapi.cpp" line="770"/>
         <source>Please enter a valid email</source>
         <translation>Si us plau afegiu una adreça de correu vàlida</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="768"/>
+        <location filename="../../core/merginapi.cpp" line="777"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Contrasenya fluixa. Ha de %1tenir com a mínim 8 caracters%1 minúscules%1 majúscules%1 dígits o caràcters especials</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="781"/>
+        <location filename="../../core/merginapi.cpp" line="790"/>
         <source>Passwords do not match</source>
         <translation>Les contrasenyes no coincideixen</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="788"/>
+        <location filename="../../core/merginapi.cpp" line="797"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Si us plau accepteu els Termes i la Política de Privadesa</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1169"/>
+        <location filename="../../core/merginapi.cpp" line="1177"/>
         <source>Registration successful</source>
         <translation>Registre completat correctament</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1192"/>
+        <location filename="../../core/merginapi.cpp" line="1200"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>No es permeten registres nous al servidor Mergin escollit.%1Si us plau consulteu-ho amb el vostre administrador.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1461"/>
+        <location filename="../../core/merginapi.cpp" line="1486"/>
         <source>Project detached from Mergin</source>
         <translation>Projecte desvinculat de Mergin </translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3493"/>
+        <location filename="../../core/merginapi.cpp" line="3518"/>
         <source>Workspace name contains invalid characters</source>
         <translation>El nom de l&apos;espai de treball conté caràcters no vàlids</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3559"/>
+        <location filename="../../core/merginapi.cpp" line="3584"/>
         <source>Workspace %1 already exists</source>
         <translation>L&apos;espai de treball %1 ja existeix</translation>
     </message>
@@ -1525,51 +1530,51 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
         <translation>Sense canvis</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="243"/>
-        <location filename="../qml/ProjectPanel.qml" line="611"/>
-        <location filename="../qml/ProjectPanel.qml" line="816"/>
+        <location filename="../qml/ProjectPanel.qml" line="254"/>
+        <location filename="../qml/ProjectPanel.qml" line="622"/>
+        <location filename="../qml/ProjectPanel.qml" line="827"/>
         <source>Projects</source>
         <translation>Projectes</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="472"/>
-        <location filename="../qml/ProjectPanel.qml" line="794"/>
+        <location filename="../qml/ProjectPanel.qml" line="483"/>
+        <location filename="../qml/ProjectPanel.qml" line="805"/>
         <source>Home</source>
         <translation>Inici</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="494"/>
+        <location filename="../qml/ProjectPanel.qml" line="505"/>
         <source>My projects</source>
         <translation>Els meus projectes</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="518"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared with me</source>
         <translation>Compartit amb mi</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="518"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared</source>
         <translation>Compartit</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="538"/>
-        <location filename="../qml/ProjectPanel.qml" line="838"/>
+        <location filename="../qml/ProjectPanel.qml" line="549"/>
+        <location filename="../qml/ProjectPanel.qml" line="849"/>
         <source>Explore</source>
         <translation>Explora</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="608"/>
+        <location filename="../qml/ProjectPanel.qml" line="619"/>
         <source>Downloaded projects</source>
         <translation>Projectes descarregats</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="613"/>
+        <location filename="../qml/ProjectPanel.qml" line="624"/>
         <source>Public projects</source>
         <translation>Projectes públics</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="616"/>
+        <location filename="../qml/ProjectPanel.qml" line="627"/>
         <source>Your other projects are accessible%1by switching your workspace here</source>
         <translation>Els altres projectes són accessibles%1 canviant el vostre espai de treball aquí</translation>
     </message>
@@ -2140,7 +2145,7 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
     <message>
         <location filename="../qml/SwitchWorkspacePage.qml" line="77"/>
         <source>You have a pending invitation</source>
-        <translation>Tens una invitació pendent</translation>
+        <translation>Teniu una invitació pendent</translation>
     </message>
     <message>
         <location filename="../qml/SwitchWorkspacePage.qml" line="113"/>
@@ -2252,7 +2257,7 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
     <message>
         <location filename="../qml/WorkspaceAccountPage.qml" line="179"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
-        <translation>Si us plau, actualitzeu els vostres %1detalls de facturació%2 tan aviat com sigui possible</translation>
+        <translation>Si us plau, actualitzeu les vostres %1dades de facturació%2 tan aviat com sigui possible</translation>
     </message>
     <message>
         <location filename="../qml/WorkspaceAccountPage.qml" line="194"/>
@@ -2292,12 +2297,12 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
     <message>
         <location filename="../qml/WorkspaceAccountPage.qml" line="267"/>
         <source>Delete account</source>
-        <translation>Esborrar compte</translation>
+        <translation>Esborrar el compte</translation>
     </message>
     <message>
         <location filename="../qml/WorkspaceAccountPage.qml" line="297"/>
         <source>Delete account?</source>
-        <translation>Esborrar compte?</translation>
+        <translation>Esborrar el compte?</translation>
     </message>
     <message>
         <location filename="../qml/WorkspaceAccountPage.qml" line="303"/>
@@ -2338,7 +2343,7 @@ Aneu al lloc web de Mergin Maps per eliminar-lo manualment.</translation>
     <message>
         <location filename="../qml/WorkspaceSubscribePage.qml" line="24"/>
         <source>Subscribe</source>
-        <translation>Subscriu-te</translation>
+        <translation>Subscriviu-vos</translation>
     </message>
     <message>
         <location filename="../qml/WorkspaceSubscribePage.qml" line="58"/>
