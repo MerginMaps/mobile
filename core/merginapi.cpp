@@ -86,9 +86,18 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   GEODIFF_setLoggerCallback( &GeodiffUtils::log );
   GEODIFF_setMaximumLoggerLevel( GEODIFF_LoggerLevel::LevelDebug );
 
-  // check if the cache is up to date
+  //
+  // check if the cache is up to date:
+  //  - server url and type
+  //  - user auth and info
+  //  - workspace info
+  //
+
   getServerConfig();
   pingMergin();
+
+  QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::getUserInfo, Qt::SingleShotConnection );
+  QObject::connect( this, &MerginApi::userInfoReplyFinished, this, &MerginApi::getWorkspaceInfo, Qt::SingleShotConnection );
 }
 
 void MerginApi::loadCache()

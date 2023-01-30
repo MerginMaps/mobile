@@ -22,11 +22,13 @@ Page {
   signal back
   signal createWorkspaceRequested
 
+  property bool haveBack: false
+
   header: PanelHeaderV2 {
     width: root.width
     headerTitle: qsTr("Join a workspace")
     onBackClicked: root.back()
-    haveBackButton: false
+    haveBackButton: root.haveBack
   }
 
   ColumnLayout {
