@@ -59,11 +59,6 @@ void TestPurchasing::initTestCase()
   QString apiRoot, username, password;
   TestUtils::mergin_setup_auth( mApi, apiRoot, username, password );
 
-  QSignalSpy spy( mApi, &MerginApi::authChanged );
-  mApi->authorize( username, password );
-  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( spy.count(), 1 );
-
   QSignalSpy spy2( mApi, &MerginApi::subscriptionInfoChanged );
   mApi->getServiceInfo();
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );

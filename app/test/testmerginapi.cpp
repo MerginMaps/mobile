@@ -58,11 +58,6 @@ void TestMerginApi::initTestCase()
   QString apiRoot, username, password;
   TestUtils::mergin_setup_auth( mApi, apiRoot, username, password );
 
-  QSignalSpy spy( mApi, &MerginApi::authChanged );
-  mApi->authorize( username, password );
-  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( spy.count(), 1 );
-
   mUsername = username;  // keep for later
 
   QDir testDataDir( TEST_DATA_DIR );

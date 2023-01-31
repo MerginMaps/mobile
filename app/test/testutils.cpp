@@ -60,6 +60,14 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
     QCOMPARE( wsSpy.takeFirst().at( 1 ), true );
 
     qDebug() << "CREATED NEW WORKSPACE:" << username;
+
+    // call userInfo to set active workspace
+    QSignalSpy infoSpy( api, &MerginApi::userInfoReplyFinished );
+    api->getUserInfo();
+    QVERIFY( infoSpy.wait( TestUtils::LONG_REPLY ) );
+
+    QVERIFY( api->userInfo()->activeWorkspaceId() >= 0 );
+    qDebug() << "WORKING WITH WORKSPACE:" << api->userInfo()->activeWorkspaceName() << api->userInfo()->activeWorkspaceId();
   }
 
   Q_ASSERT( ::getenv( "TEST_API_USERNAME" ) );
