@@ -46,6 +46,7 @@ void WorkspacesModel::onListWorkspacesFinished( const QMap<int, QString> &worksp
   clear();
 
   QMap<int, QString>::const_iterator it = workspaces.constBegin();
+
   while ( it != workspaces.constEnd() )
   {
     QStandardItem *item = new QStandardItem( it.value() );
