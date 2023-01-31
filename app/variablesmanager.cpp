@@ -45,10 +45,22 @@ void VariablesManager::registerInputExpressionFunctions()
 QgsExpressionContextScope *VariablesManager::positionScope()
 {
   GeoPosition position = mPositionKit->position();
-  return positionScope( position, compass()->direction(), mUseGpsPoint, mPositionKit->antennaHeight() );
+
+  QString providerId = "";
+  QString providerName = "";
+  QString providerType = "";
+
+  if ( mPositionKit->positionProvider() )
+  {
+    providerId = mPositionKit->positionProvider()->id();
+    providerName = mPositionKit->positionProvider()->name();
+    providerType = mPositionKit->positionProvider()->type();
+  }
+
+  return positionScope( position, compass()->direction(), mUseGpsPoint, mPositionKit->antennaHeight(), providerId, providerName, providerType );
 }
 
-QgsExpressionContextScope *VariablesManager::positionScope( const GeoPosition &pos, const double direction, bool useGpsPoint, double antennaHeight )
+QgsExpressionContextScope *VariablesManager::positionScope( const GeoPosition &pos, const double direction, bool useGpsPoint, double antennaHeight, const QString &providerId, const QString &providerName, const QString &providerType)
 {
   QgsExpressionContextScope *scope = new QgsExpressionContextScope( QStringLiteral( "Position" ) );
   const QgsGeometry point = QgsGeometry( new QgsPoint( pos.longitude, pos.latitude, pos.elevation ) );
@@ -70,6 +82,9 @@ QgsExpressionContextScope *VariablesManager::positionScope( const GeoPosition &p
   addPositionVariable( scope, QStringLiteral( "hdop" ), getGeoPositionAttribute( pos.hdop ) );
   addPositionVariable( scope, QStringLiteral( "gps_fix" ), pos.fixStatusString );
   addPositionVariable( scope, QStringLiteral( "gps_antenna_height" ), getGeoPositionAttribute( antennaHeight, 3 ) );
+  addPositionVariable( scope, QStringLiteral( "provider_address" ), providerId );
+  addPositionVariable( scope, QStringLiteral( "provider_name" ), providerName );
+  addPositionVariable( scope, QStringLiteral( "provider_type" ), providerType );
 
   return scope;
 }

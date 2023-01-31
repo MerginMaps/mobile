@@ -37,9 +37,12 @@ void TestVariablesManager::positionVariables()
   bool useGpsPoint = true;
   double direction = 123.45;
   double antennaHeight = 3.654;
+  QString providerId = QStringLiteral( "devicegps" );
+  QString providerName = QStringLiteral( "internal" );
+  QString providerType = QStringLiteral( "internal" );
 
   QgsExpressionContext context;
-  context << mVariablesManager->positionScope( geoInfo, direction, useGpsPoint, antennaHeight );
+  context << mVariablesManager->positionScope( geoInfo, direction, useGpsPoint, antennaHeight, providerId, providerName, providerType );
   evaluateExpression( QStringLiteral( "x(@position_coordinate)" ), QStringLiteral( "51.3624998" ), &context );
   evaluateExpression( QStringLiteral( "y(@position_coordinate)" ), QStringLiteral( "-2.9207148" ), &context );
   evaluateExpression( QStringLiteral( "@position_latitude" ), QStringLiteral( "-2.9207148" ), &context );
@@ -56,6 +59,9 @@ void TestVariablesManager::positionVariables()
   evaluateExpression( QStringLiteral( "@position_hdop" ), QStringLiteral( "1.88" ), &context );
   evaluateExpression( QStringLiteral( "@position_gps_fix" ), QStringLiteral( "DGPS fix" ), &context );
   evaluateExpression( QStringLiteral( "@position_gps_antenna_height" ), QStringLiteral( "3.654" ), &context );
+  evaluateExpression( QStringLiteral( "@position_provider_address" ), providerId, &context );
+  evaluateExpression( QStringLiteral( "@position_provider_name" ), providerName, &context );
+  evaluateExpression( QStringLiteral( "@position_provider_type" ), providerType, &context );
 }
 
 GeoPosition TestVariablesManager::testGeoPosition()
