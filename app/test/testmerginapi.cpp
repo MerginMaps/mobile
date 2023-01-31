@@ -63,6 +63,13 @@ void TestMerginApi::initTestCase()
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
 
+  // we also need to create a workspace for this user
+  QSignalSpy wsSpy( mApi, &MerginApi::workspaceCreated );
+  mApi->createWorkspace( username );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
+
+  qDebug() << "CREATED NEW WORKSPACE:" << username;
+
   mUsername = username;  // keep for later
 
   QDir testDataDir( TEST_DATA_DIR );
@@ -2673,12 +2680,11 @@ void TestMerginApi::refreshProjectsModel( const ProjectsModel::ProjectModelTypes
 
 void TestMerginApi::testServerType()
 {
-  // old
   QSignalSpy spy( mApi, &MerginApi::serverTypeChanged );
   mApi->getServerConfig();
   spy.wait( TestUtils::SHORT_REPLY );
   QCOMPARE( spy.count(), 0 );
-  QCOMPARE( mApi->serverType(), MerginServerType::OLD );
+  QCOMPARE( mApi->serverType(), MerginServerType::SAAS );
 }
 
 void TestMerginApi::testServerUpgrade()
