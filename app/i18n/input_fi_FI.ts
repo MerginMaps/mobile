@@ -152,27 +152,27 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="239"/>
+        <location filename="../androidutils.cpp" line="235"/>
         <source>Without storage permission you will not be able to access previous projects</source>
         <translation>Ilman tallennuslupaa et voi käyttää aikaisempia projekteja</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="340"/>
+        <location filename="../androidutils.cpp" line="335"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>Tallennusoikeus on evätty pysyvästi, ole hyvä ja salli se asetuksissa ladataksesi kuvia galleriasta</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="344"/>
+        <location filename="../androidutils.cpp" line="339"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
         <translation>Input tarvitsee tallennusluvan kuvien lataamiseen galleriasta</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="364"/>
+        <location filename="../androidutils.cpp" line="357"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Kameran käyttöoikeus on evätty pysyvästi, salli se asetuksissa</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="368"/>
+        <location filename="../androidutils.cpp" line="361"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Tarvitsemme kameran luvan ottaaksemme kuvia</translation>
     </message>
@@ -188,39 +188,40 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="535"/>
+        <location filename="../attributes/attributecontroller.cpp" line="544"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Oletusarvolausekkeessa %1:%2 on jäsennysvirhe: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="545"/>
+        <location filename="../attributes/attributecontroller.cpp" line="554"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Oletusarvolausekkeessa %1:%2 on arviointivirhe: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="556"/>
+        <location filename="../attributes/attributecontroller.cpp" line="565"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1117"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Arvoa &quot;%1&quot; %4 ei voitu muuntaa yhteensopivaksi arvoksi kenttään %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="809"/>
+        <location filename="../attributes/attributecontroller.cpp" line="819"/>
         <source>Cannot delete feature</source>
         <translation>Ei voida poistaa ominaisuutta</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="487"/>
-        <location filename="../attributes/attributecontroller.cpp" line="863"/>
+        <location filename="../attributes/attributecontroller.cpp" line="496"/>
+        <location filename="../attributes/attributecontroller.cpp" line="873"/>
         <source>Feature could not be added</source>
         <translation>Ominaisuutta ei voitu lisätä</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="496"/>
-        <location filename="../attributes/attributecontroller.cpp" line="874"/>
+        <location filename="../attributes/attributecontroller.cpp" line="505"/>
+        <location filename="../attributes/attributecontroller.cpp" line="884"/>
         <source>Cannot update feature</source>
         <translation>Ominaisuutta ei voida päivittää.</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="918"/>
+        <location filename="../attributes/attributecontroller.cpp" line="928"/>
         <source>Cannot start editing</source>
         <translation>Ei voida aloittaa muokkausta</translation>
     </message>
@@ -238,12 +239,12 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
         <translation>Rekisteröidy</translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="130"/>
+        <location filename="../qml/AuthPanel.qml" line="135"/>
         <source>Please update Input to use the latest Mergin features.</source>
         <translation>Päivitä Input käyttääksesi viimeisimpiä Mergin ominaisuuksia.</translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="134"/>
+        <location filename="../qml/AuthPanel.qml" line="139"/>
         <source>Mergin is currently unavailable - please try again later.</source>
         <translation>Mergin ei ole tällä hetkellä käytettävissä - yritä myöhemmin uudelleen.</translation>
     </message>
@@ -335,9 +336,42 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
 <context>
     <name>CodeScanner</name>
     <message>
-        <location filename="../qml/CodeScanner.qml" line="55"/>
+        <location filename="../qml/CodeScanner.qml" line="33"/>
         <source>Scan code</source>
         <translation>Skannaus koodi</translation>
+    </message>
+</context>
+<context>
+    <name>CreateWorkspacePage</name>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="34"/>
+        <source>Create a workspace</source>
+        <translation>Luo työtila</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="64"/>
+        <source>Hello</source>
+        <translation>Hei</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="78"/>
+        <source>A Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects. A good candidate for a workspace name is the name of your team or organisation.</source>
+        <translation>Työtila on paikka projekteillesi. Kollegoita voidaan kutsua työtilaasi tekemään yhteistyötä projekteissa. Hyvä ehdokas työtilan nimeksi on tiimisi tai organisaatiosi nimi.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="105"/>
+        <source>My workspace name…</source>
+        <translation>Työtilani nimi...</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="121"/>
+        <source>Create workspace</source>
+        <translation>Luo työtila</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="125"/>
+        <source>Empty workspace name</source>
+        <translation>Tyhjä työtilan nimi</translation>
     </message>
 </context>
 <context>
@@ -394,12 +428,12 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="155"/>
+        <location filename="../qml/form/FeatureForm.qml" line="137"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>Lomaketta ei voi tallentaa, siinä on validointivirheitä</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="156"/>
+        <location filename="../qml/form/FeatureForm.qml" line="138"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Ominaisuutta ei voitu tallentaa, ole hyvä ja tarkista kaikki pakolliset tiedot</translation>
     </message>
@@ -422,32 +456,32 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
         <translation>Tallenna</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="207"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="206"/>
         <source>Delete feature</source>
         <translation>Poista ominaisuus</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="208"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="207"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Oletko varma halutessasi poistaa tämän ominaisuuden?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="227"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="226"/>
         <source>Unsaved changes</source>
         <translation>Tallentamattomia muutoksia</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="228"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="227"/>
         <source>Do you want to save changes?</source>
         <translation>Haluatko tallentaa muutokset?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="249"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="248"/>
         <source>Saving failed</source>
         <translation>Tallennus epäonnistui</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="250"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="249"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>Muutosten tallennus epäonnistui. Tätä ei tavallisesti tapahdu. Ole hyvä ja käynnistä sovellutus uudestaan jayritä uudelleen --jos tämä ei auta ota yhteyttä tukeen.</translation>
     </message>
@@ -516,17 +550,17 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
 <context>
     <name>FieldsModel</name>
     <message>
-        <location filename="../fieldsmodel.cpp" line="16"/>
+        <location filename="../fieldsmodel.cpp" line="15"/>
         <source>Please fill a name of previous field before adding a new field.</source>
         <translation>Täytä edellisen kentän nimi ennen uuden kentän lisäämistä.</translation>
     </message>
     <message>
-        <location filename="../fieldsmodel.cpp" line="20"/>
+        <location filename="../fieldsmodel.cpp" line="19"/>
         <source>Field %1 already exists.</source>
         <translation>Tieto %1 on jo olemassa.</translation>
     </message>
     <message>
-        <location filename="../fieldsmodel.cpp" line="118"/>
+        <location filename="../fieldsmodel.cpp" line="116"/>
         <source>Field %1 already exists. 
 Won&apos;t be added to the project.</source>
         <translation>Tieto %1 on jo olemassa. 
@@ -642,12 +676,12 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="237"/>
+        <location filename="../inputhelp.cpp" line="242"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Raportti lähetetty.%1Ota meihin yhteyttä osoitteella%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="242"/>
+        <location filename="../inputhelp.cpp" line="247"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Raportin lähettäminen epäonnistui.%1Tarkista internet yhteytesi.</translation>
     </message>
@@ -788,6 +822,24 @@ Sitä ei lisätä projektiin.</translation>
         <location filename="../inpututils.cpp" line="1948"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Sinun tulee lisätä vähintään %1 piste(ttä).</translation>
+    </message>
+</context>
+<context>
+    <name>InstallScannerAppDialog</name>
+    <message>
+        <location filename="../qml/dialogs/InstallScannerAppDialog.qml" line="18"/>
+        <source>Install scanner application</source>
+        <translation>Asenna skanneri sovellus</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/InstallScannerAppDialog.qml" line="19"/>
+        <source>You will be redirected to Google Play to install the Barcode Scanner app.</source>
+        <translation>Sinut ohjataan Google Play- kauppaan, jotta voit asentaa Barcode Scanner sovelluksen.</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/InstallScannerAppDialog.qml" line="19"/>
+        <source>After the Barcode Scanner app is installed, close it and switch back to Mergin Maps.</source>
+        <translation>Kun Barcode Scanner sovellus on asennettu, sulje se ja siirry takaisin Mergin Mapsiin.</translation>
     </message>
 </context>
 <context>
@@ -935,7 +987,7 @@ Sitä ei lisätä projektiin.</translation>
         <translation>Kirjaudu sisään ilmaiseksi</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="237"/>
+        <location filename="../qml/LoginForm.qml" line="244"/>
         <source>Forgot password?</source>
         <translation>Unohditko salasanan?</translation>
     </message>
@@ -999,6 +1051,44 @@ Sitä ei lisätä projektiin.</translation>
         <location filename="../qml/MainPanel.qml" line="243"/>
         <source>Menu</source>
         <translation>Valikko</translation>
+    </message>
+</context>
+<context>
+    <name>ManageInvitationsPage</name>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="29"/>
+        <source>Join a workspace</source>
+        <translation>Liity työtilaan</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="59"/>
+        <source>Hello</source>
+        <translation>Hei</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="73"/>
+        <source>You have been invited to the following workspaces:</source>
+        <translation>Sinut on kutsuttu seuraaviin työtiloihin:</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="131"/>
+        <source>Workspace</source>
+        <translation>Työtila</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="156"/>
+        <source>Accept</source>
+        <translation>Hyväksy</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="190"/>
+        <source>Do you want to create a new workspace instead?</source>
+        <translation>Haluatko luoda uuden työtilan sen sijaan ?</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="190"/>
+        <source>Click here!</source>
+        <translation>Klikkaa tästä!</translation>
     </message>
 </context>
 <context>
@@ -1105,44 +1195,59 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="679"/>
+        <location filename="../../core/merginapi.cpp" line="756"/>
         <source>Username must have at least 4 characters</source>
         <translation>Käyttäjänimessäsi tulee olla vähintään 4 merkkiä.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="686"/>
+        <location filename="../../core/merginapi.cpp" line="763"/>
+        <source>Username contains invalid characters</source>
+        <translation>Käyttäjänimi sisältää virheellisiä merkkejä</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="770"/>
         <source>Please enter a valid email</source>
         <translation>Ole ystävällinen ja anna kelvollinen sähköpostiosoite</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="693"/>
+        <location filename="../../core/merginapi.cpp" line="777"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Salasana ei tarpeeksi vahva. Sen tulee%1 olla vähintään 8 merkkiä pitkä%1 sisältäen pieniä kirjaimia%1sisältäen isoja  kirjaimia%1sisältäen numeroita tai erikoismerkkejä</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="706"/>
+        <location filename="../../core/merginapi.cpp" line="790"/>
         <source>Passwords do not match</source>
         <translation>Salasanat eivät vastaa toisiaan</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="713"/>
+        <location filename="../../core/merginapi.cpp" line="797"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Ole hyvä ja hyäksy Terms and Privacy Policy</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1001"/>
+        <location filename="../../core/merginapi.cpp" line="1177"/>
         <source>Registration successful</source>
         <translation>Rekisteröinti onnistui</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1022"/>
+        <location filename="../../core/merginapi.cpp" line="1200"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>Uutta rekisteröintiä ei hyväksytä valitulle Mergin palvelimelle.%1Ole hyvä ja tarkista hallintosi kanssa.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1292"/>
+        <location filename="../../core/merginapi.cpp" line="1486"/>
         <source>Project detached from Mergin</source>
         <translation>Projekti irrotettu Merginistä</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="3518"/>
+        <source>Workspace name contains invalid characters</source>
+        <translation>Työtilan nimi sisältää virheellisiä merkkejä</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="3584"/>
+        <source>Workspace %1 already exists</source>
+        <translation>Työtila %1 on jo olemassa</translation>
     </message>
 </context>
 <context>
@@ -1198,6 +1303,14 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
         <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="17"/>
         <source>You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard.</source>
         <translation>Sinulla ei ole oikeuksia synkronoida muutoksiasi. Ota yhteyttä Mergin projektin omistajaan saadaksesi toimivat oikeudet. Jos olet projektin omistaja kirjaudu Mergin sivustolle.</translation>
+    </message>
+</context>
+<context>
+    <name>NoWorkspaceBanner</name>
+    <message>
+        <location filename="../qml/misc/NoWorkspaceBanner.qml" line="30"/>
+        <source>%1Workspace is required to use Mergin Maps. Click here to create one%2.</source>
+        <translation>%1Työtila vaaditaan, jotta voit käyttää Mergin Mapsia. Klikkaa täältä luodaksesi uuden%2.</translation>
     </message>
 </context>
 <context>
@@ -1413,39 +1526,58 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="71"/>
+        <location filename="../qml/ProjectPanel.qml" line="88"/>
         <source>No Changes</source>
         <translation>Ei muutoksia</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="171"/>
+        <location filename="../qml/ProjectPanel.qml" line="254"/>
+        <location filename="../qml/ProjectPanel.qml" line="622"/>
+        <location filename="../qml/ProjectPanel.qml" line="827"/>
         <source>Projects</source>
         <translation>Projektit</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="386"/>
+        <location filename="../qml/ProjectPanel.qml" line="483"/>
+        <location filename="../qml/ProjectPanel.qml" line="805"/>
         <source>Home</source>
         <translation>Alku</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="408"/>
+        <location filename="../qml/ProjectPanel.qml" line="505"/>
         <source>My projects</source>
         <translation>Projektini</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="432"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared with me</source>
         <translation>Jaettu kanssani</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="432"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared</source>
         <translation>Jaettu</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="452"/>
+        <location filename="../qml/ProjectPanel.qml" line="549"/>
+        <location filename="../qml/ProjectPanel.qml" line="849"/>
         <source>Explore</source>
         <translation>Tutki</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="619"/>
+        <source>Downloaded projects</source>
+        <translation>Ladatut projektit</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="624"/>
+        <source>Public projects</source>
+        <translation>Julkiset projektit</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="627"/>
+        <source>Your other projects are accessible%1by switching your workspace here</source>
+        <translation>Muut projektisi ovat käytettävissä%1vaihtamalla työtilasi tänne</translation>
     </message>
 </context>
 <context>
@@ -1464,7 +1596,12 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="120"/>
+        <location filename="../projectwizard.cpp" line="93"/>
+        <source>Project name contains invalid characters</source>
+        <translation>Projektin nimi sisältää virheellisiä merkkejä</translation>
+    </message>
+    <message>
+        <location filename="../projectwizard.cpp" line="127"/>
         <source>Project %1 created</source>
         <translation>Projekti %1 luotu</translation>
     </message>
@@ -1514,30 +1651,30 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
 <context>
     <name>Purchasing</name>
     <message>
-        <location filename="../purchasing.cpp" line="520"/>
+        <location filename="../purchasing.cpp" line="526"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
         <translation>Maksutietojen käsittely epäonnistui.%1Tilausta ei ole ostettu.
 </translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="528"/>
+        <location filename="../purchasing.cpp" line="534"/>
         <source>Successfully restored your subscription</source>
         <translation>Tilauksesi palautus onnistui
 </translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="530"/>
+        <location filename="../purchasing.cpp" line="536"/>
         <source>Successfully purchased subscription</source>
         <translation>Tilauksesi ostettu onnistuneesti
 </translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="542"/>
+        <location filename="../purchasing.cpp" line="548"/>
         <source>Failed to purchase subscription</source>
         <translation>Tilauksen osto epäonnistui</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="540"/>
+        <location filename="../purchasing.cpp" line="546"/>
         <source>Unable to restore your subscription</source>
         <translation>Tilaustasi ei voi palauttaa
 
@@ -1712,13 +1849,13 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
 <context>
     <name>RecordingTools</name>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="281"/>
+        <location filename="../qml/map/RecordingTools.qml" line="280"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Heikko GPS sijainnin tarkkuus (%1 m)&lt;br&gt;&lt;br&gt;Ole ystävällinen ja varmista hyvä näkyvyys taivaalle.</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="187"/>
-        <location filename="../qml/map/RecordingTools.qml" line="307"/>
+        <location filename="../qml/map/RecordingTools.qml" line="186"/>
+        <location filename="../qml/map/RecordingTools.qml" line="306"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS ei ole hetkellisesti käytettävissä.</translation>
     </message>
@@ -1793,67 +1930,67 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
         <translation>Seuraa GPS sijaintia kartalla</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="127"/>
+        <location filename="../qml/SettingsPanel.qml" line="128"/>
         <source>GPS accuracy</source>
         <translation>GPS tarkkuus</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="182"/>
+        <location filename="../qml/SettingsPanel.qml" line="183"/>
         <source>Accuracy threshold</source>
         <translation>Tarkkuuden raja-arvot</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="208"/>
+        <location filename="../qml/SettingsPanel.qml" line="209"/>
         <source>Show accuracy warning</source>
         <translation>Näytä tarkkuusvaroitus</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="227"/>
+        <location filename="../qml/SettingsPanel.qml" line="229"/>
         <source>Select GPS receiver</source>
         <translation>Valitse GPS vastaanotin</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="239"/>
+        <location filename="../qml/SettingsPanel.qml" line="241"/>
         <source>Recording</source>
         <translation>Tallennetaan</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="246"/>
+        <location filename="../qml/SettingsPanel.qml" line="248"/>
         <source>Line rec. interval</source>
         <translation>Viivatallennuksen intervalli</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="268"/>
+        <location filename="../qml/SettingsPanel.qml" line="270"/>
         <source>Reuse last value option</source>
         <translation>Käytä uudelleen viimeisen arvon vaihtoehtoa</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="287"/>
+        <location filename="../qml/SettingsPanel.qml" line="290"/>
         <source>Automatically sync changes</source>
         <translation>Synkronoi muutokset automaattisesti</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="311"/>
+        <location filename="../qml/SettingsPanel.qml" line="315"/>
         <source>About</source>
         <translation>Yleistä</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="320"/>
+        <location filename="../qml/SettingsPanel.qml" line="324"/>
         <source>Help</source>
         <translation>Tuki</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="329"/>
+        <location filename="../qml/SettingsPanel.qml" line="333"/>
         <source>Privacy policy</source>
         <translation>Tietosuojakäytäntö</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="338"/>
+        <location filename="../qml/SettingsPanel.qml" line="342"/>
         <source>Mergin terms of service</source>
         <translation>Mergin käyttöehdot</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="347"/>
+        <location filename="../qml/SettingsPanel.qml" line="351"/>
         <source>Diagnostic log</source>
         <translation>Diagnostiikka loki</translation>
     </message>
@@ -2005,6 +2142,44 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
     </message>
 </context>
 <context>
+    <name>SwitchWorkspacePage</name>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="27"/>
+        <source>Select a workspace</source>
+        <translation>Valitse työtila</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="77"/>
+        <source>You have a pending invitation</source>
+        <translation>Sinulla on odottava kutsu</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="113"/>
+        <source>Workspace</source>
+        <translation>Työtila</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="146"/>
+        <source>Accept</source>
+        <translation>Hyväksy</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="165"/>
+        <source>Reject</source>
+        <translation>Hylkää</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="183"/>
+        <source>Workspaces</source>
+        <translation>Työtila</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="255"/>
+        <source>Create new workspace</source>
+        <translation>Luo uusi työtila</translation>
+    </message>
+</context>
+<context>
     <name>SyncFailedDialog</name>
     <message>
         <location filename="../qml/dialogs/SyncFailedDialog.qml" line="22"/>
@@ -2015,6 +2190,209 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
         <location filename="../qml/dialogs/SyncFailedDialog.qml" line="23"/>
         <source>Your changes could not be sent to server, make sure you are connected to internet and have write access to this project.</source>
         <translation>Muutoksiasi ei voitu lähettää palvelimelle, varmista että olet internetissä ja sinulla on kirjoitusoikeudet tähän projektiin.</translation>
+    </message>
+</context>
+<context>
+    <name>WhatsNewDialog</name>
+    <message>
+        <location filename="../qml/WhatsNewDialog.qml" line="26"/>
+        <source>What&apos;s new</source>
+        <translation>Mitä uutta</translation>
+    </message>
+    <message>
+        <location filename="../qml/WhatsNewDialog.qml" line="59"/>
+        <source>Ignore</source>
+        <translation>Jätä huomioimatta</translation>
+    </message>
+    <message>
+        <location filename="../qml/WhatsNewDialog.qml" line="71"/>
+        <source>Read more</source>
+        <translation>Lue lisää</translation>
+    </message>
+</context>
+<context>
+    <name>WorkspaceAccountPage</name>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="51"/>
+        <source>My Account</source>
+        <translation>Käyttäjätunnukseni</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="122"/>
+        <source>Workspace</source>
+        <translation>Työtila</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="135"/>
+        <source>Switch workspace</source>
+        <translation>Vaihda työtilaa</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="144"/>
+        <source>Your role</source>
+        <translation>Roolisi</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="151"/>
+        <source>Workspace storage</source>
+        <translation>Työtilavarasto</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="152"/>
+        <source>Using %1 / %2</source>
+        <translation>Käyttö %1 / %2</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="160"/>
+        <source>Subscription plan</source>
+        <translation>Tilaussuunnitelma</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="169"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="178"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="193"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="204"/>
+        <source>Subscription status</source>
+        <translation>Tilauksen status</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="170"/>
+        <source>Your subscription will not auto-renew after %1</source>
+        <translation>Tilauksesi ei uusiudu automaattisesti %1 jälkeen</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="179"/>
+        <source>Please update your %1billing details%2 as soon as possible</source>
+        <translation>Ole ystävällinen ja päivitä %1laskutustietosi%2 niin pian kuin mahdollista</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="194"/>
+        <source>Your next bill will be for %1 on %2</source>
+        <translation>Seuraava laskusi tilauksesta %1 on %2</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="205"/>
+        <source>Your subscription was cancelled on %1</source>
+        <translation>Tilauksesi peruttiin %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="216"/>
+        <source>Subscriptions</source>
+        <translation>Tilaukset</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="235"/>
+        <source>Account</source>
+        <translation>Käyttäjätili</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="244"/>
+        <source>Username</source>
+        <translation>Käyttäjänimi</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="251"/>
+        <source>Email</source>
+        <translation>Sähköposti</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="261"/>
+        <source>Sign out</source>
+        <translation>Kirjaudu ulos</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="267"/>
+        <source>Delete account</source>
+        <translation>Poista käyttäjätili</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="297"/>
+        <source>Delete account?</source>
+        <translation>Poista käyttäjätili?</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="303"/>
+        <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
+
+In order to delete your account, enter your username in the field below and click Yes.</source>
+        <translation>Tällä toimenpiteellä poistat Mergin Maps tilisi mukaan lukien kaikki projektisi sekä laitteestasi ja palvelimesta. Tätä toimenpidettä ei voida palauttaa. Jos sinulla on Apple tilaus tulee sinun  peruuttaa manuaalisesti.
+
+Poistaaksesi tilisi anna käyttäjänimesi alle ja klikkaa Kyllä.</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="312"/>
+        <source>Enter username</source>
+        <translation>Anna käyttäjänimi</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="347"/>
+        <source>Failed to remove account</source>
+        <translation>Tilin poisto epäonnistui</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="348"/>
+        <source>An error occured while removing your account</source>
+        <translation>Poistaessasi tiliäsi tapahtui virhe</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="372"/>
+        <source>Can not close account because user is the only owner of an organisation.
+
+Please go to the Mergin Maps website to remove it manually.</source>
+        <translation>Tiliä ei voida sulkea koska käyttäjä on ainoa organisaation omistaja.
+
+Ole hyvä ja siirry Mergin Maps verkkosivuille poistaaksesi sen manuaalisesti.</translation>
+    </message>
+</context>
+<context>
+    <name>WorkspaceSubscribePage</name>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="24"/>
+        <source>Subscribe</source>
+        <translation>Tilaa</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="58"/>
+        <source>Individual</source>
+        <translation>Yksityinen</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="75"/>
+        <source>Professional</source>
+        <translation>Ammattimainen</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="137"/>
+        <source>You can also %1restore%2 your purchases.</source>
+        <translation>Voit myös %1palauttaa%2 ostoksesi.</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="149"/>
+        <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
+        <translation>Mergin-tilaussuunnitelmasi uusitaan automaattisesti. Voit peruuttaa tai muuttaa sitä milloin tahansa. %1Lisätietoja%2</translation>
+    </message>
+</context>
+<context>
+    <name>WorkspaceSubscribePlanItem</name>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="35"/>
+        <source>Commercial use</source>
+        <translation>Kaupallinen käyttö</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="56"/>
+        <source>Unlimited seats</source>
+        <translation>Rajoittamattomasti paikkoja</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="63"/>
+        <source>Unlimited projects</source>
+        <translation>Rajoittamattomasti projekteja</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="70"/>
+        <source>Email support</source>
+        <translation>Tuki sähköpostilla</translation>
     </message>
 </context>
 <context>
@@ -2072,58 +2450,63 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="234"/>
-        <location filename="../qml/main.qml" line="293"/>
+        <location filename="../qml/main.qml" line="238"/>
+        <location filename="../qml/main.qml" line="302"/>
         <source>No Changes</source>
         <translation>Ei muutoksia</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="268"/>
+        <location filename="../qml/main.qml" line="277"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS automaattinen keskitys päälle</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="268"/>
+        <location filename="../qml/main.qml" line="277"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS automaattinen keskitys pois päältä</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="282"/>
+        <location filename="../qml/main.qml" line="291"/>
         <source>No editable layers found.</source>
         <translation>Muokattavia tasoja ei löytynyt.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="624"/>
+        <location filename="../qml/main.qml" line="631"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Silmälläpito on poistettu käytöstä, koska sijainti ei ole saatavilla!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="636"/>
+        <location filename="../qml/main.qml" line="643"/>
         <source>Failed to open the project</source>
         <translation>Projektin avaaminen epäonnistui</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="661"/>
+        <location filename="../qml/main.qml" line="663"/>
+        <source>We&apos;ve made it easier for teams to collaborate on Mergin Maps! To find out more, check out our latest blog post about workspaces by clicking the button below.</source>
+        <translation>Olemme helpottaneet tiimien yhteistyötä Mergin Mapsin parissa! Saat lisätietoja tutustumalla uusimpaan työtiloja käsittelevään blogikirjoitukseen napsauttamalla alla olevaa painiketta.</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="679"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Yhteys Merginin kanssa epäonnistui.%1Yritä parantaa verkkoyhteyttäsi.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="712"/>
+        <location filename="../qml/main.qml" line="736"/>
         <source>There were issues loading the project.</source>
         <translation>Ongelmia ladattaessa projektia.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="724"/>
+        <location filename="../qml/main.qml" line="748"/>
         <source>Could not read the project file:</source>
         <translation>Ei voitu lukea projektitiedostoa:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="751"/>
+        <location filename="../qml/main.qml" line="775"/>
         <source>Press back again to quit the app</source>
         <translation>Paina Takaisin uudestaan lopettaaksesi appsin.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="554"/>
+        <location filename="../qml/main.qml" line="561"/>
         <source>PROJ Error</source>
         <translation>PROJ virhe</translation>
     </message>
