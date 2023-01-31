@@ -7,6 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
+/*
+ * The source code forked from https://github.com/qgis/QGIS on 25th Nov 2022
+ * File: qgsquickmapsettings.cpp by (C) 2014 by Matthias Kuhn
+ */
 
 #include "qgis.h"
 #include "inputmapsettings.h"

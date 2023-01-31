@@ -7,6 +7,11 @@
  *                                                                         *
  ***************************************************************************/
 
+/*
+ * The source code forked from https://github.com/qgis/QGIS on 25th Nov 2022
+ * File: qgsquickcoordinatetransformer.h by (C) 2017 by Matthias Kuhn
+ */
+
 #ifndef INPUTCOORDINATETRANSFORMER_H
 #define INPUTCOORDINATETRANSFORMER_H
 

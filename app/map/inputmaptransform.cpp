@@ -7,6 +7,11 @@
  *                                                                         *
  ***************************************************************************/
 
+/*
+ * The source code forked from https://github.com/qgis/QGIS on 25th Nov 2022
+ * File: qgsquickmaptransform.cpp by (C) 2014 by Matthias Kuhn
+ */
+
 #include "inputmaptransform.h"
 
 void InputMapTransform::applyTo( QMatrix4x4 *matrix ) const
