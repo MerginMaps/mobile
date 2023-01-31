@@ -56,19 +56,12 @@ TestMerginApi::~TestMerginApi() = default;
 void TestMerginApi::initTestCase()
 {
   QString apiRoot, username, password;
-  TestUtils::mergin_auth( mApi, apiRoot, username, password );
+  TestUtils::mergin_setup_auth( mApi, apiRoot, username, password );
 
   QSignalSpy spy( mApi, &MerginApi::authChanged );
   mApi->authorize( username, password );
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
-
-  // we also need to create a workspace for this user
-  QSignalSpy wsSpy( mApi, &MerginApi::workspaceCreated );
-  mApi->createWorkspace( username );
-  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
-
-  qDebug() << "CREATED NEW WORKSPACE:" << username;
 
   mUsername = username;  // keep for later
 

@@ -57,7 +57,7 @@ void TestPurchasing::runPurchasingCommand( TestingPurchasingBackend::NextPurchas
 void TestPurchasing::initTestCase()
 {
   QString apiRoot, username, password;
-  TestUtils::mergin_auth( mApi, apiRoot, username, password );
+  TestUtils::mergin_setup_auth( mApi, apiRoot, username, password );
 
   QSignalSpy spy( mApi, &MerginApi::authChanged );
   mApi->authorize( username, password );
