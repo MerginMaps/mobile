@@ -133,7 +133,7 @@ QString InputHelp::projectLoadingErrorHelpLink() const
 
 QString InputHelp::whatsNewPostLink() const
 {
-  return inputWeb + "/blog/introducing-workspaces" + utmTagOther;
+  return inputWeb + "/blog/introducing-workspaces-simplified-collaboration" + utmTagOther;
 }
 
 bool InputHelp::submitReportPending() const
