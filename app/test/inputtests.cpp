@@ -62,13 +62,14 @@ bool InputTests::testingRequested() const
   return !mTestRequested.isEmpty();
 }
 
-void InputTests::init( MerginApi *api, Purchasing *purchasing, InputUtils *utils, VariablesManager *varManager, PositionKit *kit )
+void InputTests::init( MerginApi *api, Purchasing *purchasing, InputUtils *utils, VariablesManager *varManager, PositionKit *kit, AppSettings *settings )
 {
   mApi = api;
   mPurchasing = purchasing;
   mInputUtils = utils;
   mVariablesManager = varManager;
   mPositionKit = kit;
+  mAppSettings = settings;
 }
 
 void InputTests::initTestDeclarative()
@@ -147,7 +148,7 @@ int InputTests::runTest() const
   }
   else if ( mTestRequested == "--testVariablesManager" )
   {
-    TestVariablesManager vmTest( mVariablesManager );
+    TestVariablesManager vmTest( mVariablesManager, mPositionKit, mAppSettings );
     nFailed = QTest::qExec( &vmTest, mTestArgs );
   }
   else if ( mTestRequested == "--testFormEditors" )

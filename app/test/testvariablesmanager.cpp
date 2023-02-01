@@ -13,11 +13,17 @@
 #include "test/testmerginapi.h"
 #include "inputtests.h"
 #include "testutils.h"
+#include "position/bluetoothpositionprovider.h"
 
-TestVariablesManager::TestVariablesManager( VariablesManager *vm )
+TestVariablesManager::TestVariablesManager( VariablesManager *vm, PositionKit *pk, AppSettings *as )
 {
   mVariablesManager = vm;
-  QVERIFY( mVariablesManager );
+  mPositionKit = pk;
+  mAppSettings = as;
+
+  mPositionKit->setAppSettings( mAppSettings );
+  mVariablesManager->setPositionKit( mPositionKit );
+  //QVERIFY( mVariablesManager );
 }
 
 void TestVariablesManager::init()
@@ -33,16 +39,31 @@ void TestVariablesManager::cleanup()
 void TestVariablesManager::positionVariables()
 {
   // Init test data
-  GeoPosition geoInfo = testGeoPosition();
-  bool useGpsPoint = true;
-  double direction = 123.45;
-  double antennaHeight = 3.654;
-  QString providerId = QStringLiteral( "devicegps" );
-  QString providerName = QStringLiteral( "internal" );
-  QString providerType = QStringLiteral( "internal" );
+  //~ GeoPosition geoInfo = testGeoPosition();
+  //~ bool useGpsPoint = true;
+  //~ double direction = 123.45;
+  //~ double antennaHeight = 3.654;
+  //~ QString providerId = QStringLiteral( "devicegps" );
+  //~ QString providerName = QStringLiteral( "internal" );
+  //~ QString providerType = QStringLiteral( "internal" );
+
+  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:FF:AA:00:10", "testBluetoothProvider" );
+  mPositionKit->setPositionProvider( btProvider );
+
+  NmeaParser parser;
+  QString fullNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_full.txt";
+  QFile fullNmeaFile( fullNmeaPositionFilePath );
+  fullNmeaFile.open( QFile::ReadOnly );
+  QVERIFY( fullNmeaFile.isOpen() );
+  QgsGpsInformation position = parser.parseNmeaString( fullNmeaFile.readAll() );
+  emit btProvider->positionChanged( GeoPosition::fromQgsGpsInformation( position ) );
+
+  qDebug() << mPositionKit->latitude();
+  qDebug() << mPositionKit->longitude();
+  qDebug() << mPositionKit->horizontalAccuracy();
 
   QgsExpressionContext context;
-  context << mVariablesManager->positionScope( geoInfo, direction, useGpsPoint, antennaHeight, providerId, providerName, providerType );
+  context << mVariablesManager->positionScope();
   evaluateExpression( QStringLiteral( "x(@position_coordinate)" ), QStringLiteral( "51.3624998" ), &context );
   evaluateExpression( QStringLiteral( "y(@position_coordinate)" ), QStringLiteral( "-2.9207148" ), &context );
   evaluateExpression( QStringLiteral( "@position_latitude" ), QStringLiteral( "-2.9207148" ), &context );
@@ -59,9 +80,9 @@ void TestVariablesManager::positionVariables()
   evaluateExpression( QStringLiteral( "@position_hdop" ), QStringLiteral( "1.88" ), &context );
   evaluateExpression( QStringLiteral( "@position_gps_fix" ), QStringLiteral( "DGPS fix" ), &context );
   evaluateExpression( QStringLiteral( "@position_gps_antenna_height" ), QStringLiteral( "3.654" ), &context );
-  evaluateExpression( QStringLiteral( "@position_provider_address" ), providerId, &context );
-  evaluateExpression( QStringLiteral( "@position_provider_name" ), providerName, &context );
-  evaluateExpression( QStringLiteral( "@position_provider_type" ), providerType, &context );
+  evaluateExpression( QStringLiteral( "@position_provider_address" ), QStringLiteral( "devicegps" ), &context );
+  evaluateExpression( QStringLiteral( "@position_provider_name" ), QStringLiteral( "internal" ), &context );
+  evaluateExpression( QStringLiteral( "@position_provider_type" ), QStringLiteral( "internal" ), &context );
 }
 
 GeoPosition TestVariablesManager::testGeoPosition()

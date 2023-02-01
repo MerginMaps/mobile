@@ -44,11 +44,15 @@ void VariablesManager::registerInputExpressionFunctions()
 
 QgsExpressionContextScope *VariablesManager::positionScope()
 {
-  GeoPosition position = mPositionKit->position();
-
+  double direction = 0;
   QString providerId = "";
   QString providerName = "";
   QString providerType = "";
+
+  if ( compass() )
+  {
+    direction = compass()->direction();
+  }
 
   if ( mPositionKit->positionProvider() )
   {
@@ -57,31 +61,28 @@ QgsExpressionContextScope *VariablesManager::positionScope()
     providerType = mPositionKit->positionProvider()->type();
   }
 
-  return positionScope( position, compass()->direction(), mUseGpsPoint, mPositionKit->antennaHeight(), providerId, providerName, providerType );
-}
+  GeoPosition position = mPositionKit->position();
+  const QgsGeometry point = QgsGeometry( new QgsPoint( position.longitude, position.latitude, position.elevation ) );
 
-QgsExpressionContextScope *VariablesManager::positionScope( const GeoPosition &pos, const double direction, bool useGpsPoint, double antennaHeight, const QString &providerId, const QString &providerName, const QString &providerType)
-{
   QgsExpressionContextScope *scope = new QgsExpressionContextScope( QStringLiteral( "Position" ) );
-  const QgsGeometry point = QgsGeometry( new QgsPoint( pos.longitude, pos.latitude, pos.elevation ) );
 
   addPositionVariable( scope, QStringLiteral( "coordinate" ), QVariant::fromValue<QgsGeometry>( point ) );
-  addPositionVariable( scope, QStringLiteral( "longitude" ), pos.longitude );
-  addPositionVariable( scope, QStringLiteral( "latitude" ), pos.latitude );
-  addPositionVariable( scope, QStringLiteral( "altitude" ), pos.elevation );
-  addPositionVariable( scope, QStringLiteral( "horizontal_accuracy" ), getGeoPositionAttribute( pos.hacc ) );
-  addPositionVariable( scope, QStringLiteral( "vertical_accuracy" ), getGeoPositionAttribute( pos.vacc ) );
-  addPositionVariable( scope, QStringLiteral( "ground_speed" ), getGeoPositionAttribute( pos.speed ) );
-  addPositionVariable( scope, QStringLiteral( "vertical_speed" ), getGeoPositionAttribute( pos.verticalSpeed ) );
-  addPositionVariable( scope, QStringLiteral( "magnetic_variation" ), getGeoPositionAttribute( pos.magneticVariation ) );
-  addPositionVariable( scope, QStringLiteral( "timestamp" ), pos.utcDateTime );
+  addPositionVariable( scope, QStringLiteral( "longitude" ), position.longitude );
+  addPositionVariable( scope, QStringLiteral( "latitude" ), position.latitude );
+  addPositionVariable( scope, QStringLiteral( "altitude" ), position.elevation );
+  addPositionVariable( scope, QStringLiteral( "horizontal_accuracy" ), getGeoPositionAttribute( position.hacc ) );
+  addPositionVariable( scope, QStringLiteral( "vertical_accuracy" ), getGeoPositionAttribute( position.vacc ) );
+  addPositionVariable( scope, QStringLiteral( "ground_speed" ), getGeoPositionAttribute( position.speed ) );
+  addPositionVariable( scope, QStringLiteral( "vertical_speed" ), getGeoPositionAttribute( position.verticalSpeed ) );
+  addPositionVariable( scope, QStringLiteral( "magnetic_variation" ), getGeoPositionAttribute( position.magneticVariation ) );
+  addPositionVariable( scope, QStringLiteral( "timestamp" ), position.utcDateTime );
   addPositionVariable( scope, QStringLiteral( "direction" ), ( 360 + int( direction ) ) % 360 );
-  addPositionVariable( scope, QStringLiteral( "from_gps" ), useGpsPoint );
-  addPositionVariable( scope, QStringLiteral( "satellites_visible" ), pos.satellitesVisible );
-  addPositionVariable( scope, QStringLiteral( "satellites_used" ), pos.satellitesUsed );
-  addPositionVariable( scope, QStringLiteral( "hdop" ), getGeoPositionAttribute( pos.hdop ) );
-  addPositionVariable( scope, QStringLiteral( "gps_fix" ), pos.fixStatusString );
-  addPositionVariable( scope, QStringLiteral( "gps_antenna_height" ), getGeoPositionAttribute( antennaHeight, 3 ) );
+  addPositionVariable( scope, QStringLiteral( "from_gps" ), mUseGpsPoint );
+  addPositionVariable( scope, QStringLiteral( "satellites_visible" ), position.satellitesVisible );
+  addPositionVariable( scope, QStringLiteral( "satellites_used" ), position.satellitesUsed );
+  addPositionVariable( scope, QStringLiteral( "hdop" ), getGeoPositionAttribute( position.hdop ) );
+  addPositionVariable( scope, QStringLiteral( "gps_fix" ), position.fixStatusString );
+  addPositionVariable( scope, QStringLiteral( "gps_antenna_height" ), getGeoPositionAttribute( mPositionKit->antennaHeight(), 3 ) );
   addPositionVariable( scope, QStringLiteral( "provider_address" ), providerId );
   addPositionVariable( scope, QStringLiteral( "provider_name" ), providerName );
   addPositionVariable( scope, QStringLiteral( "provider_type" ), providerType );
