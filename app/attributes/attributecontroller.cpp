@@ -617,7 +617,6 @@ bool AttributeController::recalculateDefaultValues(
 
 void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool isFirstUpdateOfNewFeature )
 {
-  qDebug() << "AttributeController::recalculateDerivedItems";
   QSet<QUuid> changedFormItems;
 
   QgsVectorLayer *layer = mFeatureLayerPair.layer();
