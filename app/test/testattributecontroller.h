@@ -28,6 +28,7 @@ class TestAttributeController: public QObject
     void tabsAndFieldsMixed();
     void testValidationMessages();
     void testExpressions();
+    void testRawValue();
 };
 
 #endif // TESTATTRIBUTECONTROLLER_H

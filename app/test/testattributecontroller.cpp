@@ -530,3 +530,75 @@ void TestAttributeController::testExpressions()
     QCOMPARE( controller.featureLayerPair().feature().attribute( itemExpected->fieldIndex() ), unit.expectedValue );
   }
 }
+
+void TestAttributeController::testRawValue()
+{
+  QString projectDir = TestUtils::testDataDir() + "/expressions";
+  QString projectName = "project.qgz";
+
+  QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  QgsFeature feat;
+  feat.setValid( true );
+  feat.setFields( surveyLayer->fields(), true );
+  FeatureLayerPair pair( feat, surveyLayer );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+
+  /* Attributes:
+   *  - fid
+   *  - text1(string)
+   *  - text2(string)
+   *  - text_exp(string)    "text1" + "text2"
+   *  - num1(float)
+   *  - num2(float)
+   *  - num_exp(float)       "num1" + "num2"
+   *  - text3(string)
+   *  - text4(string)    attribute(@current_feature , 'text3')
+   */
+
+  QCOMPARE( controller.hasValidationErrors(), false );
+
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+  QCOMPARE( items.size(), 9 );
+
+  struct testunit
+  {
+    QUuid id;
+    QVariant value;
+    QVariant expectedValue;
+    QVariant rawValue;
+    QString expectedValidationMessage;
+    FieldValidator::ValidationStatus expectedValidationStatus;
+  };
+
+  namespace V = ValidationTexts;
+
+  QList<testunit> testunits
+  {
+    { items.at( 1 ), QVariant( 1 ), QVariant( "1" ), QVariant( "1" ), "", FieldValidator::Valid },
+    { items.at( 1 ), QVariant( "1" ), QVariant( "1" ), QVariant( "1" ), "", FieldValidator::Valid },
+    { items.at( 4 ), QVariant( "a" ), QVariant(), QVariant( "a" ), V::numberInvalid, FieldValidator::Error },
+    { items.at( 4 ), QVariant( "1" ), QVariant( 1 ), QVariant( "1" ), "", FieldValidator::Valid },
+    { items.at( 4 ), QVariant( 1 ), QVariant( 1 ), QVariant( 1 ), "", FieldValidator::Valid },
+  };
+
+  for ( const testunit &unit : testunits )
+  {
+    const FormItem *item = controller.formItem( unit.id );
+
+    controller.setFormValue( unit.id, unit.value );
+
+    QCOMPARE( controller.featureLayerPair().feature().attribute( item->fieldIndex() ), unit.expectedValue );
+    QCOMPARE( item->rawValue(), unit.rawValue );
+    QCOMPARE( item->validationMessage(), unit.expectedValidationMessage );
+    QCOMPARE( item->validationStatus(), unit.expectedValidationStatus );
+  }
+}
