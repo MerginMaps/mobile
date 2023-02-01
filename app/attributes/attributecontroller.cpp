@@ -457,6 +457,8 @@ void AttributeController::updateOnFeatureChange()
         if ( shouldUseRememberedValue )
         {
           mFeatureLayerPair.featureRef().setAttribute( fieldIndex, rememberedValue );
+          itemData->setRawValue( rememberedValue );
+          emit formDataChanged( itemData->id(), { AttributeFormModel::RawValue } );
         }
       }
     }
@@ -571,6 +573,8 @@ bool AttributeController::recalculateDefaultValues(
           if ( val != oldVal )
           {
             mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
+            item->setRawValue( val );
+            emit formDataChanged( item->id(), { AttributeFormModel::RawValue } );
             // Update also expression context after an attribute change
             expressionContext.setFeature( featureLayerPair().featureRef() );
             changedFormItems.insert( item->id() );
@@ -600,6 +604,8 @@ bool AttributeController::recalculateDefaultValues(
         }
 
         mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), valueToSet );
+        item->setRawValue( valueToSet );
+        emit formDataChanged( item->id(), { AttributeFormModel::RawValue } );
         changedFormItems.insert( item->id() );
       }
     }
@@ -611,6 +617,7 @@ bool AttributeController::recalculateDefaultValues(
 
 void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool isFirstUpdateOfNewFeature )
 {
+  qDebug() << "AttributeController::recalculateDerivedItems";
   QSet<QUuid> changedFormItems;
 
   QgsVectorLayer *layer = mFeatureLayerPair.layer();
@@ -1113,20 +1120,21 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
     QVariant val( value );
 
     item->setRawValue( val );
+    emit formDataChanged( item->id(), { AttributeFormModel::RawValue } );
+    emit rawValueChanged();
 
     if ( !field.convertCompatible( val ) )
     {
       QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
       QgsMessageLog::logMessage( msg );
-      return false;
     }
     else
     {
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
       emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::AttributeValueIsNull } );
-      recalculateDerivedItems( true, false );
-      return true;
     }
+    recalculateDerivedItems( true, false );
+    return true;
   }
   else
   {

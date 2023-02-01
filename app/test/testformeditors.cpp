@@ -94,7 +94,6 @@ void TestFormEditors::testNumericFields()
     QUuid fieldUuid;
     QString expectedValidationMessage;
     FieldValidator::ValidationStatus expectedValidationStatus;
-    bool canSetValue;
   };
 
   namespace V = ValidationTexts;
@@ -102,76 +101,70 @@ void TestFormEditors::testNumericFields()
   QList<combination> combinations =
   {
     // field "Heading", Int, range <100; 1000>, range editable
-    { QVariant( QString() ), headingFieldId, "", FieldValidator::Valid, true },
-    { "1", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error, true },
-    { "-1", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error, true },
-    { "10", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error, true },
-    { "-10", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error, true },
-    { "-100", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error, true },
-    { "100", headingFieldId, "", FieldValidator::Valid, true },
-    { "100h", headingFieldId, V::numberInvalid, FieldValidator::Error, false },
-    { "100", headingFieldId, "", FieldValidator::Valid, true },
-    { "1001", headingFieldId, V::numberUpperBoundReached.arg( 1000 ), FieldValidator::Error, true },
-    { "1000", headingFieldId, "", FieldValidator::Valid, true },
+    { QVariant( QString() ), headingFieldId, "", FieldValidator::Valid },
+    { "1", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error },
+    { "-1", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error },
+    { "10", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error },
+    { "-10", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error },
+    { "-100", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error },
+    { "100", headingFieldId, "", FieldValidator::Valid },
+    { "100h", headingFieldId, V::numberInvalid, FieldValidator::Error },
+    { "100", headingFieldId, "", FieldValidator::Valid },
+    { "1001", headingFieldId, V::numberUpperBoundReached.arg( 1000 ), FieldValidator::Error },
+    { "1000", headingFieldId, "", FieldValidator::Valid },
 
     // field "Importance", Real, range <-100.00; 100.00>, step:0.01, precision: 2, range editable
-    { QVariant( QString() ), importanceFieldId, "", FieldValidator::Valid, true },
-    { "0", importanceFieldId, "", FieldValidator::Valid, true },
-    { "-1.00", importanceFieldId, "", FieldValidator::Valid, true },
-    { "100.00", importanceFieldId, "", FieldValidator::Valid, true },
-    { "100.002", importanceFieldId, V::numberUpperBoundReached.arg( 100.00 ), FieldValidator::Error, true },
-    { "100.002fdsa", importanceFieldId, V::numberInvalid, FieldValidator::Error, false },
-    { "100.,.,.,", importanceFieldId, V::numberInvalid, FieldValidator::Error, false },
-    { "1 000", importanceFieldId, V::numberInvalid, FieldValidator::Error, false },
-    { "10", importanceFieldId, "", FieldValidator::Valid, true },
+    { QVariant( QString() ), importanceFieldId, "", FieldValidator::Valid },
+    { "0", importanceFieldId, "", FieldValidator::Valid },
+    { "-1.00", importanceFieldId, "", FieldValidator::Valid },
+    { "100.00", importanceFieldId, "", FieldValidator::Valid },
+    { "100.002", importanceFieldId, V::numberUpperBoundReached.arg( 100.00 ), FieldValidator::Error },
+    { "100.002fdsa", importanceFieldId, V::numberInvalid, FieldValidator::Error },
+    { "100.,.,.,", importanceFieldId, V::numberInvalid, FieldValidator::Error },
+    { "1 000", importanceFieldId, V::numberInvalid, FieldValidator::Error },
+    { "10", importanceFieldId, "", FieldValidator::Valid },
 
     // field "Pilots", Int, range <-1000; -100>, range editable
-    { QVariant( QString() ), pilotsFieldId, "", FieldValidator::Valid, true },
-    { "-100", pilotsFieldId, "", FieldValidator::Valid, true },
-    { "-1000", pilotsFieldId, "", FieldValidator::Valid, true },
-    { "0", pilotsFieldId, V::numberUpperBoundReached.arg( -100 ), FieldValidator::Error, true },
-    { "150", pilotsFieldId, V::numberUpperBoundReached.arg( -100 ), FieldValidator::Error, true },
-    { "-1001", pilotsFieldId, V::numberLowerBoundReached.arg( -1000 ), FieldValidator::Error, true },
-    { "-51216354321435", pilotsFieldId, V::numberExceedingVariableLimits, FieldValidator::Error, false },
-    { "--100", pilotsFieldId, V::numberInvalid, FieldValidator::Error, false },
-    { "--100fsda", pilotsFieldId, V::numberInvalid, FieldValidator::Error, false },
-    { "-100", pilotsFieldId, "", FieldValidator::Valid, true },
+    { QVariant( QString() ), pilotsFieldId, "", FieldValidator::Valid },
+    { "-100", pilotsFieldId, "", FieldValidator::Valid },
+    { "-1000", pilotsFieldId, "", FieldValidator::Valid },
+    { "0", pilotsFieldId, V::numberUpperBoundReached.arg( -100 ), FieldValidator::Error },
+    { "150", pilotsFieldId, V::numberUpperBoundReached.arg( -100 ), FieldValidator::Error },
+    { "-1001", pilotsFieldId, V::numberLowerBoundReached.arg( -1000 ), FieldValidator::Error },
+    { "-51216354321435", pilotsFieldId, V::numberExceedingVariableLimits, FieldValidator::Error },
+    { "--100", pilotsFieldId, V::numberInvalid, FieldValidator::Error },
+    { "--100fsda", pilotsFieldId, V::numberInvalid, FieldValidator::Error },
+    { "-100", pilotsFieldId, "", FieldValidator::Valid },
 
     // field "Cabin Crew", Int, no limit, range editable
-    { QVariant( QString() ), cabinCrewFieldId, "", FieldValidator::Valid, true },
-    { "-100", cabinCrewFieldId, "", FieldValidator::Valid, true },
-    { "-1000", cabinCrewFieldId, "", FieldValidator::Valid, true },
-    { "-2147483647", cabinCrewFieldId, "", FieldValidator::Valid, true }, // int limit from QGIS
-    { "2147483647", cabinCrewFieldId, "", FieldValidator::Valid, true }, // int limit from QGIS
-    { "214748364799", cabinCrewFieldId, V::numberExceedingVariableLimits, FieldValidator::Error, false },
-    { "-214748364799", cabinCrewFieldId, V::numberExceedingVariableLimits, FieldValidator::Error, false },
-    { "-214748-", cabinCrewFieldId, V::numberInvalid, FieldValidator::Error, false },
+    { QVariant( QString() ), cabinCrewFieldId, "", FieldValidator::Valid },
+    { "-100", cabinCrewFieldId, "", FieldValidator::Valid },
+    { "-1000", cabinCrewFieldId, "", FieldValidator::Valid },
+    { "-2147483647", cabinCrewFieldId, "", FieldValidator::Valid }, // int limit from QGIS
+    { "2147483647", cabinCrewFieldId, "", FieldValidator::Valid }, // int limit from QGIS
+    { "214748364799", cabinCrewFieldId, V::numberExceedingVariableLimits, FieldValidator::Error },
+    { "-214748364799", cabinCrewFieldId, V::numberExceedingVariableLimits, FieldValidator::Error },
+    { "-214748-", cabinCrewFieldId, V::numberInvalid, FieldValidator::Error },
 
     // field "Staff", Int, no limit, range slider
-    { QVariant( QString() ), staffFieldId, "", FieldValidator::Valid, true },
-    { "10", staffFieldId, "", FieldValidator::Valid, true },
-    { "-10", staffFieldId, "", FieldValidator::Valid, false },
+    { QVariant( QString() ), staffFieldId, "", FieldValidator::Valid },
+    { "10", staffFieldId, "", FieldValidator::Valid },
+    { "-10", staffFieldId, "", FieldValidator::Valid },
     // QML Slider does not allow to enter values higher or lower than specified range
   };
 
   // compare results
   for ( const auto &c : combinations )
   {
+    controller.setFormValue( c.fieldUuid, c.value );
     const FormItem *item = controller.formItem( c.fieldUuid );
-    bool res = controller.setFormValue( c.fieldUuid, c.value );
 
-    if ( !res )
-    {
-      QCOMPARE( res, c.canSetValue );
-    }
-    else
-    {
-      QCOMPARE( item->validationMessage(), c.expectedValidationMessage );
-      QCOMPARE( item->validationStatus(), c.expectedValidationStatus );
-    }
+    QCOMPARE( item->validationMessage(), c.expectedValidationMessage );
+    QCOMPARE( item->validationStatus(), c.expectedValidationStatus );
   }
 
-  QCOMPARE( controller.hasValidationErrors(), false );
+  // field "Cabin Crew" stayed with invalid input, check controller flag of values validity
+  QCOMPARE( controller.hasValidationErrors(), true );
 
   // invalidate some attribute and check if hasValidationErrors responds correctly
   controller.setFormValue( cabinCrewFieldId, "100" );

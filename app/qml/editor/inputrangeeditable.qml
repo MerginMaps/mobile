@@ -88,6 +88,7 @@ AbstractEditor {
         onTextEdited: {
           let val = text.replace( ",", "." ).replace( / /g, '' ) // replace comma with dot
 
+/*
           let endsWithDecimalSeparator = val.endsWith('.');
           let hasOnlyOneDecimalSeparator = val.split('.').length === 2;
 
@@ -95,6 +96,7 @@ AbstractEditor {
           {
             return; // do not send value changed signal when number ends with decimal separator
           }
+*/
 
           root.editorValueChanged( val, val  === "" )
         }

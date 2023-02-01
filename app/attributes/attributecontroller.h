@@ -167,6 +167,7 @@ class  AttributeController : public QObject
     void featureIdChanged();
     void changesCommited();
     void commitFailed();
+    void rawValueChanged();
 
   private:
     void clearAll();
