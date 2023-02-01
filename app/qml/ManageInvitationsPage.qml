@@ -186,7 +186,7 @@ Page {
           verticalAlignment: Qt.AlignVCenter
           horizontalAlignment: Qt.AlignHCenter
 
-          visible: root.showCreate && !__purchasing.transactionPending
+          visible: root.showCreate
 
           text: ("%1" + qsTr("Do you want to create a new workspace instead?") + "\n" + qsTr("Click here!") + "%2")
             .arg("<a href='http://click-me'>")
