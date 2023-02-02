@@ -33,7 +33,7 @@ jobs:
 
       - name: Check for new translation entries
         run: |
-          ./scripts/update_i18n_ts.bash ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/gcc_64
+          ./scripts/update_i18n_ts.bash ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos
 
           echo "Changes in i18n entries"
           git diff app/i18n/input_en.ts | grep -E \\+\\\s+\<source\> || true
