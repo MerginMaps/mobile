@@ -104,7 +104,6 @@ Page {
         Repeater {
           id: invRepeater
 
-          // TODO: change model to userInfo -> invitations
           model: InvitationsProxyModel {
             invitationsSourceModel: InvitationsModel {
               merginApi: __merginApi
