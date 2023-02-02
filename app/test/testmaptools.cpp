@@ -44,14 +44,20 @@ void setupMapSettings( InputMapSettings *settings, QgsProject *project, QgsRecta
   settings->setExtent( extent );
 }
 
+TestMapTools::TestMapTools( PositionKit *pk, AppSettings *as )
+{
+  mPositionKit = pk;
+  mAppSettings = as;
+
+  mPositionKit->setAppSettings( mAppSettings );
+}
+
 void TestMapTools::init()
 {
-
 }
 
 void TestMapTools::cleanup()
 {
-
 }
 
 void TestMapTools::testSnapping()
@@ -2381,6 +2387,7 @@ void TestMapTools::testAntennaHeight()
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
   mapTool.setMapSettings( ms );
+  mapTool.setPositionKit( mPositionKit );
 
   QCOMPARE( mapTool.recordingType(), RecordingMapTool::Manual );
 
@@ -2409,12 +2416,12 @@ void TestMapTools::testAntennaHeight()
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
   double antennaHeight = 2.0;
-  mapTool.setAntennaHeight( antennaHeight );
+  mAppSettings->setGpsAntennaHeight( antennaHeight );
 
   mapTool.addPoint( pointToAdd );
 
   QVERIFY( mapTool.hasValidGeometry() );
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
   QgsPoint p = mapTool.recordedGeometry().vertexAt( 0 );
-  QCOMPARE( p.z(), pointToAdd.z() - antennaHeight );
+  QCOMPARE( p.z(), pointToAdd.z() );
 }

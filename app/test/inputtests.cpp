@@ -173,7 +173,7 @@ int InputTests::runTest() const
   }
   else if ( mTestRequested == "--testMapTools" )
   {
-    TestMapTools maptoolsTest;
+    TestMapTools maptoolsTest( mPositionKit, mAppSettings );
     nFailed = QTest::qExec( &maptoolsTest, mTestArgs );
   }
   else if ( mTestRequested == "--testLayerTree" )
