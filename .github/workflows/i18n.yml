@@ -31,6 +31,10 @@ jobs:
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-lnx
 
+      - name: Install realpath
+        run: |
+          brew install coreutils
+
       - name: Check for new translation entries
         run: |
           ./scripts/update_i18n_ts.bash ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos
