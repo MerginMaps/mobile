@@ -1368,19 +1368,6 @@ void RecordingMapTool::setRecordingInterval( int newRecordingInterval )
   emit recordingIntervalChanged( mRecordingInterval );
 }
 
-double RecordingMapTool::antennaHeight() const
-{
-  return mAntennaHeight;
-}
-
-void RecordingMapTool::setAntennaHeight( double newAntennaHeight )
-{
-  if ( mAntennaHeight == newAntennaHeight )
-    return;
-  mAntennaHeight = newAntennaHeight;
-  emit antennaHeightChanged( mAntennaHeight );
-}
-
 PositionKit *RecordingMapTool::positionKit() const
 {
   return mPositionKit;
