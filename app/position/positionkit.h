@@ -163,7 +163,7 @@ class PositionKit : public QObject
     GeoPosition mPosition;
     bool mHasPosition = false;
     std::unique_ptr<AbstractPositionProvider> mPositionProvider;
-    AppSettings *mAppSettings = nullptr;
+    AppSettings *mAppSettings = nullptr; // not owned
 };
 
 #endif // POSITIONKIT_H

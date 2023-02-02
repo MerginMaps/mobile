@@ -366,8 +366,16 @@ double AppSettings::gpsAntennaHeight() const
 
 void AppSettings::setGpsAntennaHeight( double gpsAntennaHeight )
 {
-  // keep 3 decimal places
-  double height = std::round( gpsAntennaHeight / 0.001 ) * 0.001;
+  double height = gpsAntennaHeight;
+  if ( height <= 0 )
+  {
+    height = 0;
+  }
+  else
+  {
+    // keep 3 decimal places
+    height = std::round( gpsAntennaHeight / 0.001 ) * 0.001;
+  }
   if ( mGpsAntennaHeight != height )
   {
     mGpsAntennaHeight = height;

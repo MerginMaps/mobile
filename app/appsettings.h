@@ -156,7 +156,7 @@ class AppSettings: public QObject
     bool mAutosyncAllowed = false;
     bool mIgnoreWhatsNew = false;
     int mWsTooltipShownCounter = 0; // ---> can be removed after migration to ws
-    double mGpsAntennaHeight = -1;
+    double mGpsAntennaHeight = 0;
 };
 
 #endif // APPSETTINGS_H
