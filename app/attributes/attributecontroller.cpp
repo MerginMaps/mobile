@@ -458,7 +458,6 @@ void AttributeController::updateOnFeatureChange()
         {
           mFeatureLayerPair.featureRef().setAttribute( fieldIndex, rememberedValue );
           itemData->setRawValue( rememberedValue );
-          emit formDataChanged( itemData->id(), { AttributeFormModel::RawValue } );
         }
       }
     }
@@ -1120,7 +1119,6 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
 
     item->setRawValue( val );
     emit formDataChanged( item->id(), { AttributeFormModel::RawValue } );
-    emit rawValueChanged();
 
     if ( !field.convertCompatible( val ) )
     {
