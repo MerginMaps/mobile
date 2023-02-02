@@ -39,7 +39,7 @@ void TestVariablesManager::cleanup()
 
 void TestVariablesManager::positionVariables()
 {
-  mAppSettings->setGpsAntennaHeight(0);
+  mAppSettings->setGpsAntennaHeight( 0 );
 
   BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:FF:AA:00:10", "testBluetoothProvider" );
   mPositionKit->setPositionProvider( btProvider );
@@ -77,7 +77,7 @@ void TestVariablesManager::positionVariables()
   evaluateExpression( QStringLiteral( "@position_provider_name" ), QStringLiteral( "testBluetoothProvider" ), &context );
   evaluateExpression( QStringLiteral( "@position_provider_type" ), QStringLiteral( "external" ), &context );
 
-  mAppSettings->setGpsAntennaHeight(1.6784);
+  mAppSettings->setGpsAntennaHeight( 1.6784 );
   pos.verticalSpeed = 1.345;
   pos.magneticVariation = 14.34;
   emit btProvider->positionChanged( pos );
@@ -87,7 +87,7 @@ void TestVariablesManager::positionVariables()
   evaluateExpression( QStringLiteral( "@position_magnetic_variation" ), QStringLiteral( "14.34" ), &context );
   evaluateExpression( QStringLiteral( "@position_gps_antenna_height" ), QStringLiteral( "1.678" ), &context );
 
-  mAppSettings->setGpsAntennaHeight(0);
+  mAppSettings->setGpsAntennaHeight( 0 );
 }
 
 GeoPosition TestVariablesManager::testGeoPosition()
