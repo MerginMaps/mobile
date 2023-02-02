@@ -72,6 +72,6 @@ jobs:
           ./scripts/check_ios_translations.py ./cmake_templates/iOSInfo.plist.in ./app/i18n/input_i18n.qrc
 
           if [ $? -gt "0" ]; then
-            echo "Info.plist does not include the same translations as input_i18n.qrc, exit.."
+            echo "Info.plist does not include the same translations as input_i18n.qrc, stop.."
             exit 1
           fi
