@@ -43,37 +43,17 @@ Page {
       rightMargin: InputStyle.outerFieldMargin
     }
 
-    Image {
-      Layout.alignment: Qt.AlignHCenter
-
-      width: parent.width / 2
-      source: InputStyle.mmLogoHorizontal
-      sourceSize.width: width
-    }
-
     Rectangle {
       Layout.fillWidth: true
       Layout.preferredHeight: InputStyle.xSmallGap
+      Layout.alignment: Qt.AlignCenter
       color: "transparent"
     }
 
     Label {
       Layout.fillWidth: true
       Layout.preferredHeight: InputStyle.rowHeightSmall
-
-      text: qsTr("Hello") + " " + __merginApi.userAuth.username + "!"
-
-      font.pixelSize: InputStyle.fontPixelSizeNormal
-      font.bold: true
-      color: InputStyle.fontColor
-
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
-    }
-
-    Label {
-      Layout.fillWidth: true
-      Layout.preferredHeight: InputStyle.rowHeightSmall
+      Layout.alignment: Qt.AlignCenter
 
       text: qsTr("A Workspace is a place to store your projects. Colleagues " +
                  "can be invited to your workspace to collaborate on projects. " +
@@ -92,6 +72,7 @@ Page {
     Rectangle {
       Layout.fillWidth: true
       Layout.preferredHeight: InputStyle.xSmallGap
+      Layout.alignment: Qt.AlignCenter
       color: "transparent"
     }
 
@@ -100,7 +81,7 @@ Page {
 
       Layout.fillWidth: true
       Layout.preferredHeight: InputStyle.fieldHeight
-      Layout.alignment: Qt.AlignHCenter
+      Layout.alignment: Qt.AlignCenter
 
       placeholderText: qsTr("My workspace name…")
     }
@@ -108,6 +89,7 @@ Page {
     Rectangle {
       Layout.fillWidth: true
       Layout.preferredHeight: InputStyle.xSmallGap
+      Layout.alignment: Qt.AlignCenter
       color: "transparent"
     }
 
@@ -117,6 +99,7 @@ Page {
       Layout.fillWidth: true
       btnWidth: width
       Layout.preferredHeight: InputStyle.fieldHeight
+      Layout.alignment: Qt.AlignCenter
 
       text: qsTr("Create workspace")
 
