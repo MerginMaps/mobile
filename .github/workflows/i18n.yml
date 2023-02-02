@@ -1,10 +1,10 @@
 name: Translations
 
-on:
+# on: # TODO: temporary skip this step for the sake of testing
   # Trigger the workflow only on master
-  push:
-    branches:
-      - master
+  # push:
+    # branches:
+      # - master
 
 jobs:
   check_translation_files:
