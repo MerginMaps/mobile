@@ -6,6 +6,11 @@ name: Translations
     # branches:
       # - master
 
+on:
+  push:
+    paths:
+    - '.github/workflows/i18n.yml'
+
 jobs:
   check_translation_files:
     # if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate ')) # TODO: temporary skip this step for the sake of testing
