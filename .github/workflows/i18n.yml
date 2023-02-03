@@ -14,7 +14,7 @@ on:
 jobs:
   check_translation_files:
     # if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate ')) # TODO: temporary skip this step for the sake of testing
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     env:
       QT_VERSION: '6.4.2'
     steps:
@@ -31,13 +31,13 @@ jobs:
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-lnx
 
-      - name: Install realpath
-        run: |
-          brew install coreutils
+      # - name: Install realpath
+      #   run: |
+      #     brew install coreutils
 
       - name: Check for new translation entries
         run: |
-          ./scripts/update_i18n_ts.bash ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos
+          ./scripts/update_i18n_ts.bash ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/gcc_64
 
           echo "Changes in i18n entries"
           git diff app/i18n/input_en.ts | grep -E \\+\\\s+\<source\> || true
