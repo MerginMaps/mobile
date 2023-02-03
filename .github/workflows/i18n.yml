@@ -1,19 +1,14 @@
 name: Translations
 
-# on: # TODO: temporary skip this step for the sake of testing
-  # Trigger the workflow only on master
-  # push:
-    # branches:
-      # - master
-
 on:
+  # Trigger the workflow only on master
   push:
-    paths:
-    - '.github/workflows/i18n.yml'
+    branches:
+      - master
 
 jobs:
   check_translation_files:
-    # if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate ')) # TODO: temporary skip this step for the sake of testing
+    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: ubuntu-latest
     env:
       QT_VERSION: '6.4.2'
@@ -30,10 +25,6 @@ jobs:
           dir: ${{ github.workspace }}
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-lnx
-
-      # - name: Install realpath
-      #   run: |
-      #     brew install coreutils
 
       - name: Check for new translation entries
         run: |
@@ -72,6 +63,6 @@ jobs:
           ./scripts/check_ios_translations.py ./cmake_templates/iOSInfo.plist.in ./app/i18n/input_i18n.qrc
 
           if [ $? -gt "0" ]; then
-            echo "Info.plist does not include the same translations as input_i18n.qrc, stop.."
+            echo "Info.plist does not include the same translations as input_i18n.qrc, exit.."
             exit 1
           fi
