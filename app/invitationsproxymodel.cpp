@@ -24,6 +24,11 @@ bool InvitationsProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex &
   QModelIndex sourceIndex = sourceModel()->index( sourceRow, 0, sourceParent );
   QDateTime expiration = sourceModel()->data( sourceIndex, Qt::StatusTipRole ).toDateTime();
 
+  if ( !expiration.isValid() )
+  {
+    return true;
+  }
+
   return expiration > QDateTime::currentDateTimeUtc();
 }
 
