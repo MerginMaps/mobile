@@ -123,7 +123,7 @@ QString InputHelp::howToConnectGPSLink() const
 
 QString InputHelp::merginTermsLink() const
 {
-  return MerginApi::defaultApiRoot() + "assets/tos.html" + utmTagOther;
+  return MerginApi::marketingPageRoot() + "terms-of-service" + utmTagOther;
 }
 
 QString InputHelp::projectLoadingErrorHelpLink() const

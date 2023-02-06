@@ -344,9 +344,12 @@ class MerginApi: public QObject
     static const QString sMetadataFile;
     static const QString sMetadataFolder;
     static const QString sMerginConfigFile;
+    static const QString sMarketingPageRoot;
     static const QString sDefaultApiRoot;
 
     static QString defaultApiRoot() { return sDefaultApiRoot; }
+
+    static QString marketingPageRoot() { return sMarketingPageRoot; }
 
     static bool isFileDiffable( const QString &fileName ) { return fileName.endsWith( ".gpkg" ); }
 
