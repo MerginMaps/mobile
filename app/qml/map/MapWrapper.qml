@@ -753,7 +753,7 @@ Item {
         text: {
           if ( !__positionKit.positionProvider )
           {
-            return gpsText
+            return ""
           }
           else if ( __positionKit.positionProvider.type() === "external" )
           {
@@ -783,7 +783,7 @@ Item {
           let accuracyText = __inputUtils.formatNumber( __positionKit.horizontalAccuracy, accuracyButton.accuracyPrecision ) + " m"
           if ( __appSettings.gpsAntennaHeight > 0 )
           {
-            let gpsText = __inputUtils.formatNumber( __appSettings.gpsAntennaHeight, 3 ) + " m"
+            let gpsText = Number( __appSettings.gpsAntennaHeight.toFixed( 3 ) + " m"
             return gpsText + " / " + accuracyText
           }
           else

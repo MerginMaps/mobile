@@ -413,6 +413,7 @@ void PositionKit::setAppSettings( AppSettings *appSettings )
       QObject::connect( mAppSettings, &AppSettings::gpsAntennaHeightChanged, this, &PositionKit::antennaHeightChanged );
     }
     emit appSettingsChanged();
+    emit antennaHeightChanged();
   }
 }
 

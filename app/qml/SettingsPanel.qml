@@ -239,7 +239,7 @@ Item {
           PanelItem {
             height: root.rowHeight
             width: parent.width
-            text: qsTr("GPS antenna height")
+            text: qsTr("GPS antenna height\nIncludes pole height and GPS receiver's antenna height")
 
             MouseArea {
               anchors.fill: parent
