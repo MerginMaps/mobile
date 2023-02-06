@@ -22,6 +22,7 @@ class InvitationsModel : public QStandardItemModel
 
     Q_PROPERTY( MerginApi *merginApi READ merginApi WRITE setMerginApi NOTIFY merginApiChanged )
     Q_PROPERTY( bool isLoading READ isLoading NOTIFY isLoadingChanged )
+    Q_PROPERTY( bool fetchFromServer READ fetchFromServer WRITE setFetchFromServer NOTIFY fetchFromServerChanged )
 
   public:
 
@@ -34,6 +35,8 @@ class InvitationsModel : public QStandardItemModel
     void setMerginApi( MerginApi *merginApi );
 
     bool isLoading() const;
+    bool fetchFromServer() const;
+    void setFetchFromServer( bool fetch );
 
     void processInvitation( const QString &uuid, bool accept );
 
@@ -43,6 +46,7 @@ class InvitationsModel : public QStandardItemModel
   signals:
     void merginApiChanged( MerginApi *api );
     void isLoadingChanged( bool isLoading );
+    void fetchFromServerChanged( bool fetch );
     void modelInitialized();
 
   private:
@@ -50,6 +54,7 @@ class InvitationsModel : public QStandardItemModel
     void initializeModel();
 
     bool mModelIsLoading;
+    bool mFetchFromServer = true;
     MerginApi *mApi = nullptr; // not owned
 };
 
