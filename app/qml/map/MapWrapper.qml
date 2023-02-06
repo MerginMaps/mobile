@@ -744,20 +744,13 @@ Item {
 
         iconSize: parent.height / 2
         source: InputStyle.gpsAntennaIcon
-        visible: __appSettings.gpsAntennaHeight > 0
+        visible: __appSettings.gpsAntennaHeight > 0 && !Number.isNaN( __positionKit.horizontalAccuracy ) && __positionKit.horizontalAccuracy > 0
       }
 
       Text {
         id: acctext
 
         text: {
-          let gpsText = "";
-          let accuracyText = "";
-          if ( __appSettings.gpsAntennaHeight > 0 )
-          {
-            gpsText = __inputUtils.formatNumber( __appSettings.gpsAntennaHeight, 3 ) + " m"
-          }
-
           if ( !__positionKit.positionProvider )
           {
             return gpsText
@@ -766,34 +759,37 @@ Item {
           {
             if ( __positionKit.positionProvider.state === PositionProvider.Connecting )
             {
-              accuracyText = qsTr( "Connecting to %1" ).arg( __positionKit.positionProvider.name() )
+              return qsTr( "Connecting to %1" ).arg( __positionKit.positionProvider.name() )
             }
             else if ( __positionKit.positionProvider.state === PositionProvider.WaitingToReconnect )
             {
-              accuracyText = __positionKit.positionProvider.stateMessage
+              return __positionKit.positionProvider.stateMessage
             }
             else if ( __positionKit.positionProvider.state === PositionProvider.NoConnection )
             {
-              accuracyText = __positionKit.positionProvider.stateMessage
+              return __positionKit.positionProvider.stateMessage
             }
-
-            return gpsText === "" ? accuracyText : gpsText + " / " + accuracyText
           }
 
           if ( !__positionKit.hasPosition )
           {
-            accuracyText = qsTr( "Connected, no position" )
+            return qsTr( "Connected, no position" )
           }
           else if ( Number.isNaN( __positionKit.horizontalAccuracy ) || __positionKit.horizontalAccuracy < 0 )
           {
-            accuracyText = qsTr( "Unknown accuracy" )
+            return qsTr( "Unknown accuracy" )
+          }
+
+          let accuracyText = __inputUtils.formatNumber( __positionKit.horizontalAccuracy, accuracyButton.accuracyPrecision ) + " m"
+          if ( __appSettings.gpsAntennaHeight > 0 )
+          {
+            let gpsText = __inputUtils.formatNumber( __appSettings.gpsAntennaHeight, 3 ) + " m"
+            return gpsText + " / " + accuracyText
           }
           else
           {
-            accuracyText = __inputUtils.formatNumber( __positionKit.horizontalAccuracy, accuracyButton.accuracyPrecision ) + " m"
+            return accuracyText
           }
-
-          return gpsText === "" ? accuracyText : gpsText + " / " + accuracyText
         }
         elide: Text.ElideRight
         wrapMode: Text.NoWrap

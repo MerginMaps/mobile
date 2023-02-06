@@ -45,7 +45,6 @@ Item {
 
     recordingType: RecordingMapTool.Manual
     recordingInterval: __appSettings.lineRecordingInterval
-    antennaHeight: __appSettings.gpsAntennaHeight
 
     positionKit: __positionKit
     activeLayer: __activeLayer.vectorLayer

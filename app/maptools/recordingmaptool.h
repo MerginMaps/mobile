@@ -194,9 +194,6 @@ class RecordingMapTool : public AbstractMapTool
     int recordingInterval() const;
     void setRecordingInterval( int newRecordingInterval );
 
-    double antennaHeight() const;
-    void setAntennaHeight( double newAntennaHeight );
-
     PositionKit *positionKit() const;
     void setPositionKit( PositionKit *newPositionKit );
 
@@ -252,7 +249,6 @@ class RecordingMapTool : public AbstractMapTool
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
     void recordingIntervalChanged( int lineRecordingInterval );
     void recordingTypeChanged( const RecordingMapTool::RecordingType &recordingType );
-    void antennaHeightChanged( double antennaHeight );
 
     void existingVerticesChanged( const QgsGeometry &existingVertices );
     void midPointsChanged( const QgsGeometry &midPoints );
