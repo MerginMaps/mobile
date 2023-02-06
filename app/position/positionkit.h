@@ -151,7 +151,7 @@ class PositionKit : public QObject
 
     void appSettingsChanged();
 
-    void antennaHeightChanged( double );
+    void antennaHeightChanged();
 
   public slots:
     void parsePositionUpdate( const GeoPosition &newPosition );
