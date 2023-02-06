@@ -33,6 +33,7 @@ Rectangle {
         font.bold: bold
         font.pixelSize: InputStyle.fontPixelSizeNormal
         elide: Text.ElideRight
+        wrapMode: Text.WordWrap
     }
 
     Text {
