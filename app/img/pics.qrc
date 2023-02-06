@@ -118,6 +118,7 @@
         <file>value_relation_open.svg</file>
         <file>yes.svg</file>
         <file>zoom_to_project.svg</file>
+        <file>height_instrument.svg</file>
     </qresource>
     <qresource prefix="/images/themes/default">
         <file>mActionFolder.svg</file>

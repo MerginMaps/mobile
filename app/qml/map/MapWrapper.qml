@@ -743,7 +743,7 @@ Item {
         id: gpsicon
 
         iconSize: parent.height / 2
-        source: InputStyle.syncIcon
+        source: InputStyle.gpsAntennaIcon
         visible: __appSettings.gpsAntennaHeight > 0
       }
 
