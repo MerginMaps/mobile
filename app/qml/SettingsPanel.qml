@@ -237,12 +237,12 @@ Item {
           }
 
           PanelItemV2 {
-            height: root.rowHeight * 1.5
             width: parent.width
+
             text: qsTr("GPS antenna height")
             text2: qsTr("Includes pole height and GPS receiver's antenna height")
             suffix: " m"
-            value: __appsettings.gpsAntennaHeight
+            value: __appSettings.gpsAntennaHeight
 
             onSettingChanged: function( value ) {
                __appSettings.gpsAntennaHeight = value

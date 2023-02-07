@@ -14,8 +14,8 @@ import "."  // import InputStyle singleton
 
 Rectangle {
     id: root
-    height: InputStyle.rowHeight
-    width: parent.width
+
+    height: InputStyle.settingsPanelActionable
     color: InputStyle.clrPanelMain
 
     property double value
@@ -28,36 +28,47 @@ Rectangle {
     RowLayout {
       anchors.fill: parent
       anchors.leftMargin: InputStyle.panelMargin
+      anchors.rightMargin: InputStyle.panelMargin
+      anchors.topMargin: InputStyle.innerFieldMargin
+      anchors.bottomMargin: InputStyle.innerFieldMargin
 
       ColumnLayout {
-         Layout.preferredWidth: parent.width * 0.70
+         Layout.preferredWidth: parent.width * 0.5
+         Layout.maximumWidth: parent.width * 0.6
          Layout.fillHeight: true
-         spacing: InputStyle.formSpacing
+
+         spacing: InputStyle.panelSpacing
 
          Text {
              Layout.fillWidth: true
              Layout.preferredHeight: parent.height / 3
 
              text: root.text
+
              horizontalAlignment: Text.AlignLeft
              verticalAlignment: Text.AlignVCenter
+
+             elide: Text.ElideRight
+
              color: InputStyle.fontColor
              font.pixelSize: InputStyle.fontPixelSizeNormal
-             elide: Text.ElideRight
          }
 
          Text {
              Layout.fillWidth: true
-             Layout.preferredHeight: 2 * parent.height / 3
+             Layout.fillHeight: true
 
              text: root.text2
-             horizontalAlignment: Text.AlignLeft
+
              verticalAlignment: Text.AlignVCenter
+             horizontalAlignment: Text.AlignLeft
+
              color: InputStyle.secondaryFontColor
              font.pixelSize: InputStyle.fontPixelSizeSmall
+
              wrapMode: Text.Wrap
              maximumLineCount: 2
-             //elide: Text.ElideRight
+             elide: Text.ElideRight
          }
       }
 
