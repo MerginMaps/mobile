@@ -110,6 +110,7 @@ set(MM_QML
     NotificationBanner.qml
     NumberSpin.qml
     PanelItem.qml
+    PanelItemV2.qml
     PanelTabButton.qml
     PhotoPanel.qml
     ProjectIssuesPanel.qml
