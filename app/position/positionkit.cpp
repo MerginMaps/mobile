@@ -262,6 +262,20 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
+  if ( !qgsDoubleNear( newPosition.vdop, mPosition.vdop ) )
+  {
+    mPosition.vdop = newPosition.vdop;
+    emit vdopChanged( mPosition.vdop );
+    hasAnythingChanged = true;
+  }
+
+  if ( !qgsDoubleNear( newPosition.pdop, mPosition.pdop ) )
+  {
+    mPosition.pdop = newPosition.pdop;
+    emit pdopChanged( mPosition.pdop );
+    hasAnythingChanged = true;
+  }
+
   if ( newPosition.fixStatusString != mPosition.fixStatusString )
   {
     mPosition.fixStatusString = newPosition.fixStatusString;
@@ -381,6 +395,16 @@ QString PositionKit::fix() const
 double PositionKit::hdop() const
 {
   return mPosition.hdop;
+}
+
+double PositionKit::vdop() const
+{
+  return mPosition.vdop;
+}
+
+double PositionKit::pdop() const
+{
+  return mPosition.pdop;
 }
 
 AbstractPositionProvider *PositionKit::positionProvider() const

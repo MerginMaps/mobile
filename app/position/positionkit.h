@@ -61,6 +61,8 @@ class PositionKit : public QObject
 
     // GPS satellites advanced data (Horizontal dilution of precision)
     Q_PROPERTY( double hdop READ hdop NOTIFY hdopChanged )
+    Q_PROPERTY( double vdop READ vdop NOTIFY vdopChanged )
+    Q_PROPERTY( double pdop READ pdop NOTIFY pdopChanged )
 
     // GPS fix status
     Q_PROPERTY( QString fix READ fix NOTIFY fixChanged )
@@ -109,6 +111,8 @@ class PositionKit : public QObject
     void setPositionProvider( AbstractPositionProvider *newPositionProvider );
 
     double hdop() const;
+    double vdop() const;
+    double pdop() const;
 
     // Coordinate reference system of position - WGS84 (constant)
     Q_INVOKABLE static QgsCoordinateReferenceSystem positionCRS();
@@ -142,6 +146,8 @@ class PositionKit : public QObject
     void satellitesUsedChanged( int );
     void satellitesVisibleChanged( int );
     void hdopChanged( double );
+    void vdopChanged( double );
+    void pdopChanged( double );
 
     void fixChanged( const QString & );
 

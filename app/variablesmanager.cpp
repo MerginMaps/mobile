@@ -81,6 +81,8 @@ QgsExpressionContextScope *VariablesManager::positionScope()
   addPositionVariable( scope, QStringLiteral( "satellites_visible" ), position.satellitesVisible );
   addPositionVariable( scope, QStringLiteral( "satellites_used" ), position.satellitesUsed );
   addPositionVariable( scope, QStringLiteral( "hdop" ), getGeoPositionAttribute( position.hdop ) );
+  addPositionVariable( scope, QStringLiteral( "vdop" ), getGeoPositionAttribute( position.vdop ) );
+  addPositionVariable( scope, QStringLiteral( "pdop" ), getGeoPositionAttribute( position.pdop ) );
   addPositionVariable( scope, QStringLiteral( "gps_fix" ), position.fixStatusString );
   addPositionVariable( scope, QStringLiteral( "gps_antenna_height" ), getGeoPositionAttribute( mPositionKit->antennaHeight(), 3 ) );
   addPositionVariable( scope, QStringLiteral( "provider_address" ), providerId );

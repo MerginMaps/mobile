@@ -71,6 +71,8 @@ void TestVariablesManager::positionVariables()
   evaluateExpression( QStringLiteral( "@position_satellites_visible" ), QStringLiteral( "9" ), &context );
   evaluateExpression( QStringLiteral( "@position_satellites_used" ), QStringLiteral( "3" ), &context );
   evaluateExpression( QStringLiteral( "@position_hdop" ), QStringLiteral( "3.20" ), &context );
+  evaluateExpression( QStringLiteral( "@position_vdop" ), QStringLiteral( "4.90" ), &context );
+  evaluateExpression( QStringLiteral( "@position_pdop" ), QStringLiteral( "5.90" ), &context );
   evaluateExpression( QStringLiteral( "@position_gps_fix" ), QStringLiteral( "RTK float" ), &context );
   evaluateExpression( QStringLiteral( "@position_gps_antenna_height" ), QStringLiteral( "0.000" ), &context );
   evaluateExpression( QStringLiteral( "@position_provider_address" ), QStringLiteral( "AA:AA:FF:AA:00:10" ), &context );
