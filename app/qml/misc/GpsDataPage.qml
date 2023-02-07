@@ -291,6 +291,40 @@ Item {
           }
 
           TextRowWithTitle {
+            id: vdop
+
+            Layout.fillWidth: true
+
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+
+            titleText: qsTr( "VDOP" )
+            text: {
+              if ( !__positionKit.hasPosition || __positionKit.vdop < 0 ) {
+                return qsTr( "N/A" )
+              }
+
+              __inputUtils.formatNumber( __positionKit.vdop, 2 )
+            }
+          }
+
+          TextRowWithTitle {
+            id: pdop
+
+            Layout.fillWidth: true
+
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+
+            titleText: qsTr( "PDOP" )
+            text: {
+              if ( !__positionKit.hasPosition || __positionKit.pdop < 0 ) {
+                return qsTr( "N/A" )
+              }
+
+              __inputUtils.formatNumber( __positionKit.pdop, 2 )
+            }
+          }
+
+          TextRowWithTitle {
             id: speed
 
             Layout.fillWidth: true
