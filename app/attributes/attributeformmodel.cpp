@@ -57,8 +57,7 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
     case Type:
       return item->type();
     case AttributeValue:
-      //return mController->formValue( item->fieldIndex() );
-      return item->rawValue();
+      return mController->formValue( item->fieldIndex() );
     case AttributeValueIsNull:
       return mController->formValue( item->fieldIndex() ).isNull();
     case AttributeEditable:
