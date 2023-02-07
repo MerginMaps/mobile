@@ -20,8 +20,8 @@ Rectangle {
 
     property double value
     property string suffix
-    property string text: ""
-    property string text2: ""
+    property string title: ""
+    property string description: ""
 
     signal settingChanged( double value )
 
@@ -43,7 +43,7 @@ Rectangle {
              Layout.fillWidth: true
              Layout.preferredHeight: parent.height / 3
 
-             text: root.text
+             text: root.title
 
              horizontalAlignment: Text.AlignLeft
              verticalAlignment: Text.AlignVCenter
@@ -58,7 +58,7 @@ Rectangle {
              Layout.fillWidth: true
              Layout.fillHeight: true
 
-             text: root.text2
+             text: root.description
 
              verticalAlignment: Text.AlignVCenter
              horizontalAlignment: Text.AlignLeft

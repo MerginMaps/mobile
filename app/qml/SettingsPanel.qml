@@ -236,11 +236,11 @@ Item {
             }
           }
 
-          PanelItemV2 {
+          SettingsPanelItem {
             width: parent.width
 
-            text: qsTr("GPS antenna height")
-            text2: qsTr("Includes pole height and GPS receiver's antenna height")
+            title: qsTr("GPS antenna height")
+            description: qsTr("Includes pole height and GPS receiver's antenna height")
             suffix: " m"
             value: __appSettings.gpsAntennaHeight
 

@@ -110,7 +110,6 @@ set(MM_QML
     NotificationBanner.qml
     NumberSpin.qml
     PanelItem.qml
-    PanelItemV2.qml
     PanelTabButton.qml
     PhotoPanel.qml
     ProjectIssuesPanel.qml
@@ -124,6 +123,7 @@ set(MM_QML
     RoundIndicator.qml
     SearchBar.qml
     SettingsPanel.qml
+    SettingsPanelItem.qml
     StakeoutPanel.qml
     StorageLimitDialog.qml
     SubscribePage.qml
