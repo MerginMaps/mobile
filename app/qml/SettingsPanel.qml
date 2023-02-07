@@ -241,27 +241,11 @@ Item {
             width: parent.width
             text: qsTr("GPS antenna height")
             text2: qsTr("Includes pole height and GPS receiver's antenna height")
+            suffix: " m"
+            value: __appsettings.gpsAntennaHeight
 
-            MouseArea {
-              anchors.fill: parent
-              onClicked: heightField.getFocus()
-            }
-
-            NumberInputField {
-              id: heightField
-
-              number: __appSettings.gpsAntennaHeight
-              onValueChanged: function(value) {
-                __appSettings.gpsAntennaHeight = value
-              }
-
-              suffix: " m"
-
-              height: parent.height
-              width: height * 3
-
-              anchors.right: parent.right
-              anchors.rightMargin: InputStyle.panelMargin
+            onSettingChanged: function( value ) {
+               __appSettings.gpsAntennaHeight = value
             }
           }
 

@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Layouts
+import "./components"
 import "."  // import InputStyle singleton
 
 Rectangle {
@@ -17,19 +18,25 @@ Rectangle {
     width: parent.width
     color: InputStyle.clrPanelMain
 
+    property double value
+    property string suffix
     property string text: ""
     property string text2: ""
 
+    signal settingChanged( double value )
+
     RowLayout {
       anchors.fill: parent
+      anchors.leftMargin: InputStyle.panelMargin
 
       ColumnLayout {
          Layout.preferredWidth: parent.width * 0.70
+         Layout.fillHeight: true
+         spacing: InputStyle.formSpacing
 
          Text {
              Layout.fillWidth: true
              Layout.preferredHeight: parent.height / 3
-             Layout.leftMargin: InputStyle.panelMargin
 
              text: root.text
              horizontalAlignment: Text.AlignLeft
@@ -42,24 +49,37 @@ Rectangle {
          Text {
              Layout.fillWidth: true
              Layout.preferredHeight: 2 * parent.height / 3
-             Layout.leftMargin: InputStyle.panelMargin
 
              text: root.text2
-             width: 100
              horizontalAlignment: Text.AlignLeft
              verticalAlignment: Text.AlignVCenter
-             color: InputStyle.fontColor
+             color: InputStyle.secondaryFontColor
              font.pixelSize: InputStyle.fontPixelSizeSmall
-             wrapMode: Text.WordWrap
+             wrapMode: Text.Wrap
              maximumLineCount: 2
-             elide: Text.ElideRight
+             //elide: Text.ElideRight
          }
       }
 
-      Rectangle {
-        Layout.fillWidth: true
-        Layout.preferredWidth: parent.width * 0.30
-        color: "transparent"
+      NumberInputField {
+        id: heightField
+
+        Layout.preferredWidth: parent.width * 0.3
+        Layout.fillHeight: true
+
+        number: root.value
+        onValueChanged: function(value) {
+          root.settingChanged( value )
+        }
+
+        suffix: root.suffix
+
       }
     }
+
+    MouseArea {
+      anchors.fill: parent
+      onClicked: heightField.getFocus()
+    }
+
 }
