@@ -248,12 +248,12 @@ Item {
                __appSettings.gpsAntennaHeight = value
             }
           }
-
-          // Header "Recording"
-          PanelItem {
+          
+          // Header "Streaming mode"
+          SettingsHeaderItem {
             color: InputStyle.panelBackgroundLight
-            text: qsTr("Recording")
-            bold: true
+            text: qsTr("Streaming mode")
+            isNew: true
           }
 
           PanelItem {
@@ -275,6 +275,13 @@ Item {
               anchors.right: parent.right
               anchors.rightMargin: InputStyle.panelMargin
             }
+          }
+
+          // Header "Recording"
+          PanelItem {
+            color: InputStyle.panelBackgroundLight
+            text: qsTr("Recording")
+            bold: true
           }
 
           PanelItem {
