@@ -16,6 +16,7 @@
 #include <QString>
 
 #include "inputconfig.h"
+#include "streamingintervaltype.h"
 
 class AppSettings: public QObject
 {
@@ -26,6 +27,7 @@ class AppSettings: public QObject
     Q_PROPERTY( QString defaultLayer READ defaultLayer WRITE setDefaultLayer NOTIFY defaultLayerChanged )
     Q_PROPERTY( bool autoCenterMapChecked READ autoCenterMapChecked WRITE setAutoCenterMapChecked NOTIFY autoCenterMapCheckedChanged )
     Q_PROPERTY( int lineRecordingInterval READ lineRecordingInterval WRITE setLineRecordingInterval NOTIFY lineRecordingIntervalChanged )
+    Q_PROPERTY( StreamingIntervalType::IntervalType intervalType READ intervalType WRITE setIntervalType NOTIFY intervalTypeChanged )
     Q_PROPERTY( double gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged )
     Q_PROPERTY( bool gpsAccuracyWarning READ gpsAccuracyWarning WRITE setGpsAccuracyWarning NOTIFY gpsAccuracyWarningChanged )
     Q_PROPERTY( bool reuseLastEnteredValues READ reuseLastEnteredValues WRITE setReuseLastEnteredValues NOTIFY reuseLastEnteredValuesChanged )
@@ -59,6 +61,9 @@ class AppSettings: public QObject
 
     int lineRecordingInterval() const;
     void setLineRecordingInterval( int lineRecordingInterval );
+
+    StreamingIntervalType::IntervalType intervalType() const;
+    void setIntervalType( StreamingIntervalType::IntervalType intervalType );
 
     bool demoProjectsCopied();
     void setDemoProjectsCopied( const bool value );
@@ -110,6 +115,7 @@ class AppSettings: public QObject
     void gpsAccuracyWarningChanged();
     void gpsAntennaHeightChanged( double antennaHeight );
     void lineRecordingIntervalChanged();
+    void intervalTypeChanged();
 
     void reuseLastEnteredValuesChanged( bool reuseLastEnteredValues );
     void legacyFolderMigratedChanged( bool legacyFolderMigrated );
@@ -134,6 +140,7 @@ class AppSettings: public QObject
     bool mGpsAccuracyWarning = true;
     // Digitizing period in seconds
     int mLineRecordingInterval = 3;
+    StreamingIntervalType::IntervalType mIntervalType = StreamingIntervalType::IntervalType::Time;
     // Application version, helps to differentiate between app installation, update or regular run:
     //  1. if the value is null, this run is first after installation (or after user reset application data in settings)
     //  2. if the value is different from current version, this is first run after update

@@ -27,6 +27,8 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   double gpsTolerance = settings.value( "gpsTolerance", 10 ).toDouble();
   bool gpsAccuracyWarning = settings.value( "gpsAccuracyWarning", true ).toBool();
   int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
+  int streamingIntervalType = settings.value( "intervalType", 0 ).toInt();
+  StreamingIntervalType::IntervalType intervalType = static_cast<StreamingIntervalType::IntervalType>( streamingIntervalType );
   bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
   QString savedAppVersion = settings.value( QStringLiteral( "appVersion" ), QStringLiteral() ).toString();
   bool legacyFolderMigrated = settings.value( QStringLiteral( "legacyFolderMigrated" ), false ).toBool();
@@ -45,6 +47,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setGpsAccuracyTolerance( gpsTolerance );
   setGpsAccuracyWarning( gpsAccuracyWarning );
   setLineRecordingInterval( lineRecordingInterval );
+  setIntervalType( intervalType );
   setReuseLastEnteredValues( reuseLastEnteredValues );
   setAppVersion( savedAppVersion );
   setLegacyFolderMigrated( legacyFolderMigrated );
@@ -158,6 +161,22 @@ void AppSettings::setLineRecordingInterval( int value )
     setValue( "lineRecordingInterval", value );
 
     emit lineRecordingIntervalChanged();
+  }
+}
+
+StreamingIntervalType::IntervalType AppSettings::intervalType() const
+{
+  return mIntervalType;
+}
+
+void AppSettings::setIntervalType( StreamingIntervalType::IntervalType intervalType )
+{
+  if ( mIntervalType != intervalType )
+  {
+    mIntervalType = intervalType;
+    setValue( "intervalType", intervalType );
+
+    emit intervalTypeChanged();
   }
 }
 

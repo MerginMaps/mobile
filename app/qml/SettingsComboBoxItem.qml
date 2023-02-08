@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import lc 1.0
+
 import "./components"
 import "."  // import InputStyle singleton
 
@@ -85,8 +87,8 @@ Rectangle {
       Component.onCompleted: currentIndex = indexOfValue(root.value)
 
       model: [
-          { text: qsTr("Time [s]"), value: 0 },
-          { text: qsTr("Distance [m]"), value: 1 }
+          { text: qsTr("Time [s]"), value: StreamingIntervalType.Time },
+          { text: qsTr("Distance [m]"), value: StreamingIntervalType.Distance }
       ]
     }
   }
