@@ -31,7 +31,6 @@ Rectangle {
     spacing: InputStyle.panelSpacing
 
     Text {
-      Layout.fillHeight: true
       Layout.fillWidth: true
       Layout.preferredWidth: root.width * 0.5
 

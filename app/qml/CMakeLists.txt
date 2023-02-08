@@ -122,6 +122,7 @@ set(MM_QML
     RegistrationFinishPage.qml
     RoundIndicator.qml
     SearchBar.qml
+    SettingsComboBoxItem.qml
     SettingsHeaderItem.qml
     SettingsPanel.qml
     SettingsPanelItem.qml

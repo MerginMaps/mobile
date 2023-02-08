@@ -256,6 +256,18 @@ Item {
             isNew: true
           }
 
+          SettingsComboBoxItem {
+            width: parent.width
+
+            title: qsTr("Interval type")
+            description: qsTr("Choose when to add")
+            value: 0
+
+            onSettingChanged: function( value ) {
+               console.log("CHANGED VALUE TO", value)
+            }
+          }
+
           PanelItem {
             height: root.rowHeight
             width: parent.width
