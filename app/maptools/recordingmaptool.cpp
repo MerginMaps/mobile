@@ -77,6 +77,8 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     pointToAdd.setZ( pointToAdd.z() - mPositionKit->antennaHeight() );
   }
 
+  mLastRecordedPoint = pointToAdd;
+
   QgsVertexId id( mActivePart, mActiveRing, 0 );
 
   if ( !mActiveFeature.isValid() )
@@ -549,10 +551,20 @@ void RecordingMapTool::onPositionChanged()
   if ( !mPositionKit || !mPositionKit->hasPosition() )
     return;
 
-  if ( mLastTimeRecorded.addSecs( mRecordingInterval ) <= QDateTime::currentDateTime() )
+  if ( mRecordingIntervalType == StreamingIntervalType::IntervalType::Time )
   {
-    addPoint( QgsPoint() ); // addPoint will take point from GPS
-    mLastTimeRecorded = QDateTime::currentDateTime();
+    if ( mLastTimeRecorded.addSecs( mRecordingInterval ) <= QDateTime::currentDateTime() )
+    {
+      addPoint( QgsPoint() ); // addPoint will take point from GPS
+      mLastTimeRecorded = QDateTime::currentDateTime();
+    }
+  }
+  else if ( mRecordingIntervalType == StreamingIntervalType::IntervalType::Distance )
+  {
+    if ( mLastRecordedPoint.distance3D( mPositionKit->positionCoordinate() ) >= mRecordingInterval )
+    {
+      addPoint( QgsPoint() ); // addPoint will take point from GPS
+    }
   }
   else
   {
@@ -1363,6 +1375,20 @@ void RecordingMapTool::setRecordingInterval( int newRecordingInterval )
     return;
   mRecordingInterval = newRecordingInterval;
   emit recordingIntervalChanged( mRecordingInterval );
+}
+
+StreamingIntervalType::IntervalType RecordingMapTool::recordingIntervalType() const
+{
+  return mRecordingIntervalType;
+}
+
+void RecordingMapTool::setRecordingIntervalType( StreamingIntervalType::IntervalType intervalType )
+{
+  if ( mRecordingIntervalType != intervalType )
+  {
+    mRecordingIntervalType = intervalType;
+    emit recordingIntervalTypeChanged();
+  }
 }
 
 PositionKit *RecordingMapTool::positionKit() const
