@@ -446,6 +446,7 @@ void AttributeController::updateOnFeatureChange()
       int fieldIndex = itemData->fieldIndex();
       const QVariant newVal = feature.attribute( fieldIndex );
       mFormItems[itemData->id()]->setOriginalValue( newVal );
+      mFormItems[itemData->id()]->setRawValue( newVal ); // we need to set raw value as well, as we use it in form now
       if ( mRememberAttributesController && isNewFeature() ) // this is a new feature
       {
         QVariant rememberedValue;
