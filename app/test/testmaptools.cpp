@@ -31,6 +31,8 @@
 #include "maptools/recordingmaptool.h"
 
 #include "featurelayerpair.h"
+#include "streamingintervaltype.h"
+#include "position/bluetoothpositionprovider.h"
 
 void setupMapSettings( InputMapSettings *settings, QgsProject *project, QgsRectangle extent, QSize outputsize )
 {
@@ -2426,4 +2428,53 @@ void TestMapTools::testAntennaHeight()
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
   QgsPoint p = mapTool.recordedGeometry().vertexAt( 0 );
   QCOMPARE( p.z(), pointToAdd.z() - antennaHeight );
+}
+
+void TestMapTools::testSmallTracking()
+{
+  QgsVectorLayer *pointLayer = new QgsVectorLayer( QStringLiteral( "PointZ?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
+
+  RecordingMapTool mapTool;
+
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
+  setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
+
+  mapTool.setMapSettings( ms );
+  mapTool.setPositionKit( mPositionKit );
+
+  mapTool.setState( RecordingMapTool::Record );
+  mapTool.setRecordingType( RecordingMapTool::StreamMode );
+  mapTool.setRecordingInterval( 10 );
+  mapTool.setRecordingIntervalType( StreamingIntervalType::IntervalType::Distance );
+
+  mapTool.setActiveLayer( pointLayer );
+  mapTool.setActiveFeature( QgsFeature() );
+
+  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:FF:AA:00:10", "testBluetoothProvider" );
+  mPositionKit->setPositionProvider( btProvider );
+
+  NmeaParser parser;
+  QString nmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
+  QFile nmeaFile( nmeaPositionFilePath );
+  nmeaFile.open( QFile::ReadOnly );
+  QVERIFY( nmeaFile.isOpen() );
+  QgsGpsInformation position = parser.parseNmeaString( nmeaFile.readAll() );
+  GeoPosition pos = GeoPosition::fromQgsGpsInformation( position );
+  emit btProvider->positionChanged( pos );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), mPositionKit->positionCoordinate() );
+
+  pos.latitude = 48.10319550872501;
+  pos.longitude = 17.105920116666667;
+  emit btProvider->positionChanged( pos );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), mPositionKit->positionCoordinate() );
 }

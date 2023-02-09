@@ -561,7 +561,9 @@ void RecordingMapTool::onPositionChanged()
   }
   else if ( mRecordingIntervalType == StreamingIntervalType::IntervalType::Distance )
   {
-    if ( mLastRecordedPoint.distance3D( mPositionKit->positionCoordinate() ) >= mRecordingInterval )
+    double factor = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceDegrees, QgsUnitTypes::DistanceMeters );
+    double distance = mLastRecordedPoint.distance3D( mPositionKit->positionCoordinate() );
+    if ( mLastRecordedPoint.isEmpty() || factor * distance >= mRecordingInterval )
     {
       addPoint( QgsPoint() ); // addPoint will take point from GPS
     }
