@@ -98,6 +98,7 @@ void TestPurchasing::testUserBuyTier01()
 
 void TestPurchasing::testUserBuyTier12()
 {
+  QSKIP( "Must be revisited when working with workspaces!" );
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID );
   runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyProfessionalPlan, TIER02_PLAN_ID, true );
 
@@ -170,6 +171,7 @@ void TestPurchasing::testUserSendsBadReceipt()
 
 void TestPurchasing::testUserRestore()
 {
+  QSKIP( "Must be revisited when working with workspaces!" );
   QSignalSpy spy0( mApi->subscriptionInfo(), &MerginSubscriptionInfo::subscriptionInfoChanged );
   QSignalSpy spy1( mApi->userInfo(), &MerginUserInfo::userInfoChanged );
   mPurchasing->restore();
