@@ -31,6 +31,15 @@ Item {
     relation: associatedRelation
     parentFeatureLayerPair: featurePair
     homePath: activeProject.homePath
+
+    onModelReset: {
+      // Repeater does not necesarry clear delegates immediately if they are invisible,
+      // we need to do hard reload in this case so that recalculateVisibleItems() is triggered
+      generator.model = null
+      generator.model = rmodel
+
+      generator.recalculateVisibleItems()
+    }
   }
 
   anchors {

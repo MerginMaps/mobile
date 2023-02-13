@@ -100,7 +100,7 @@ AbstractEditor {
         root.parent.formView.pop()
       }
 
-      onSelectionFinished: {
+      onSelectionFinished: function( featureIds ) {
         let fk = rModel.foreignKeyFromAttribute( FeaturesModel.FeatureId, featureIds )
         root.editorValueChanged( fk, false )
         root.parent.formView.pop()
