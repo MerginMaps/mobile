@@ -67,18 +67,15 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
     pointToAdd.setX( transformed.x() );
     pointToAdd.setY( transformed.y() );
-    // apply gps antenna height
-    if ( mPositionKit->antennaHeight() > 0 )
-    {
-      pointToAdd.setZ( transformed.z() - mPositionKit->antennaHeight() );
-    }
-    else
-    {
-      pointToAdd.setZ( transformed.z() );
-    }
   }
 
   fixZM( pointToAdd );
+
+  // apply gps antenna height
+  if ( mPositionKit && mPositionKit->antennaHeight() > 0 )
+  {
+    pointToAdd.setZ( pointToAdd.z() - mPositionKit->antennaHeight() );
+  }
 
   QgsVertexId id( mActivePart, mActiveRing, 0 );
 

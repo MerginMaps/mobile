@@ -507,6 +507,7 @@ int main( int argc, char *argv[] )
     as.setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
   pk.setPositionProvider( pk.constructActiveProvider( &as ) );
+  pk.setAppSettings( &as );
 
   // Lambda context object can be used in all lambda functions defined here,
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
