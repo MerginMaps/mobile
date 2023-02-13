@@ -67,11 +67,24 @@ void RelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
 
 void RelationFeaturesModel::setParentFeatureLayerPair( FeatureLayerPair pair )
 {
-  if ( mParentFeatureLayerPair != pair )
-  {
-    mParentFeatureLayerPair = pair;
-    emit parentFeatureLayerPairChanged( mParentFeatureLayerPair );
+  if ( mParentFeatureLayerPair == pair )
+    return;
 
+  mParentFeatureLayerPair = pair;
+  emit parentFeatureLayerPairChanged( mParentFeatureLayerPair );
+
+  if ( !InputUtils::isFeatureIdValid( pair.feature().id() ) )
+  {
+    //
+    // Clear the model in case parent feature has invalid id (e.g. is new) and do not populate it
+    //
+
+    beginResetModel();
+    reset();
+    endResetModel();
+  }
+  else
+  {
     setup();
   }
 }
