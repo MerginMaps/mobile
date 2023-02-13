@@ -123,7 +123,7 @@ QString InputHelp::howToConnectGPSLink() const
 
 QString InputHelp::merginTermsLink() const
 {
-  return MerginApi::defaultApiRoot() + "assets/tos.html" + utmTagOther;
+  return MerginApi::marketingPageRoot() + "terms-of-service" + utmTagOther;
 }
 
 QString InputHelp::projectLoadingErrorHelpLink() const
@@ -133,7 +133,7 @@ QString InputHelp::projectLoadingErrorHelpLink() const
 
 QString InputHelp::whatsNewPostLink() const
 {
-  return inputWeb + "/blog/introducing-workspaces" + utmTagOther;
+  return inputWeb + "/blog/introducing-workspaces-simplified-collaboration" + utmTagOther;
 }
 
 bool InputHelp::submitReportPending() const

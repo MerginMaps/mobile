@@ -1043,6 +1043,7 @@ Item {
     ManageInvitationsPage {
       objectName: "invitationsPanel"
       haveBack: true
+      showCreate: false
       onBack: {
         stackView.pop( null )
       }

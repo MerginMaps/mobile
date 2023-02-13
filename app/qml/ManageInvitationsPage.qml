@@ -23,6 +23,7 @@ Page {
   signal createWorkspaceRequested
 
   property bool haveBack: false
+  property bool showCreate: true
 
   header: PanelHeaderV2 {
     width: root.width
@@ -38,37 +39,17 @@ Page {
       rightMargin: InputStyle.outerFieldMargin
     }
 
-    Image {
-      Layout.alignment: Qt.AlignHCenter
-
-      width: parent.width / 2
-      source: InputStyle.mmLogoHorizontal
-      sourceSize.width: width
-    }
-
     Rectangle {
       Layout.fillWidth: true
       Layout.preferredHeight: InputStyle.xSmallGap
+      Layout.alignment: Qt.AlignCenter
       color: "transparent"
     }
 
     Label {
       Layout.fillWidth: true
       Layout.preferredHeight: InputStyle.rowHeightSmall
-
-      text: qsTr("Hello") + " " + __merginApi.userAuth.username + "!"
-
-      font.pixelSize: InputStyle.fontPixelSizeNormal
-      font.bold: true
-      color: InputStyle.fontColor
-
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
-    }
-
-    Label {
-      Layout.fillWidth: true
-      Layout.preferredHeight: InputStyle.rowHeightSmall
+      Layout.alignment: Qt.AlignCenter
 
       text: qsTr("You have been invited to the following workspaces:")
 
@@ -84,12 +65,14 @@ Page {
     Rectangle {
       Layout.fillWidth: true
       Layout.preferredHeight: InputStyle.xSmallGap
+      Layout.alignment: Qt.AlignCenter
       color: "transparent"
     }
 
     ScrollView {
       Layout.fillWidth: true
       Layout.fillHeight: true
+      Layout.alignment: Qt.AlignCenter
 
       contentWidth: availableWidth // only scroll vertically
 
@@ -166,12 +149,14 @@ Page {
         Rectangle {
           Layout.fillWidth: true
           Layout.preferredHeight: InputStyle.xSmallGap
+          Layout.alignment: Qt.AlignCenter
           color: "transparent"
         }
 
         Text {
           Layout.fillWidth: true
           Layout.preferredHeight: InputStyle.rowHeightHeader
+          Layout.alignment: Qt.AlignCenter
 
           color: InputStyle.fontColor
           linkColor: InputStyle.highlightColor
@@ -185,7 +170,7 @@ Page {
           verticalAlignment: Qt.AlignVCenter
           horizontalAlignment: Qt.AlignHCenter
 
-          visible: !__purchasing.transactionPending
+          visible: root.showCreate
 
           text: ("%1" + qsTr("Do you want to create a new workspace instead?") + "\n" + qsTr("Click here!") + "%2")
             .arg("<a href='http://click-me'>")
@@ -197,6 +182,7 @@ Page {
         Rectangle {
           Layout.fillWidth: true
           Layout.preferredHeight: InputStyle.xSmallGap
+          Layout.alignment: Qt.AlignCenter
           color: "transparent"
         }
       }

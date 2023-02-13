@@ -10,7 +10,7 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../qml/AccountPage.qml" line="170"/>
+        <location filename="../qml/AccountPage.qml" line="172"/>
         <source>Your subscription was cancelled on %1</source>
         <translation>Je inschrijving is verlopen op %1</translation>
     </message>
@@ -25,57 +25,57 @@
         <translation>Je inschrijving wordt niet automatisch vernieuwd na %1</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="149"/>
+        <location filename="../qml/AccountPage.qml" line="151"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
         <translation>Vernieuw je %1betaalgegevens%2 zo snel mogelijk</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="160"/>
+        <location filename="../qml/AccountPage.qml" line="162"/>
         <source>Your next bill will be for %1 on %2</source>
         <translation>Je volgende rekening is voor %1 op %2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="195"/>
+        <location filename="../qml/AccountPage.qml" line="197"/>
         <source>Using %1 / %2</source>
         <translation>Gebruik %1 / %2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="213"/>
+        <location filename="../qml/AccountPage.qml" line="215"/>
         <source>Manage Subscription</source>
         <translation>Inschrijving beheren</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="213"/>
+        <location filename="../qml/AccountPage.qml" line="215"/>
         <source>Working...</source>
         <translation>Bezig...</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="213"/>
+        <location filename="../qml/AccountPage.qml" line="215"/>
         <source>Subscription plans</source>
         <translation>Lidmaatschap</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="249"/>
+        <location filename="../qml/AccountPage.qml" line="251"/>
         <source>You can also %1restore%2 your purchases</source>
         <translation>Je kunt je aankopen ook %1terugkrijgen%2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="278"/>
+        <location filename="../qml/AccountPage.qml" line="280"/>
         <source>Sign out</source>
         <translation>Uitloggen</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="301"/>
+        <location filename="../qml/AccountPage.qml" line="303"/>
         <source>Delete account</source>
         <translation>Verwijder account</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="332"/>
+        <location filename="../qml/AccountPage.qml" line="334"/>
         <source>Delete account?</source>
         <translation>Account verwijderen?</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="338"/>
+        <location filename="../qml/AccountPage.qml" line="340"/>
         <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
 
 In order to delete your account, enter your username in the field below and click Yes.</source>
@@ -84,26 +84,39 @@ In order to delete your account, enter your username in the field below and clic
 Om je account te verwijderen, geef je gebruikersnaam in het onderstaande veld en druk op Ja.</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="347"/>
+        <location filename="../qml/AccountPage.qml" line="349"/>
         <source>Enter username</source>
         <translation>Geef gebruikersnaam</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="384"/>
-        <location filename="../qml/AccountPage.qml" line="419"/>
         <source>Failed to remove account</source>
         <translation>Account niet verwijderd</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="385"/>
+        <source>An error occured while removing your account</source>
+        <translation>Een fout deed zich voor tijdens het verwijderen van jouw account</translation>
+    </message>
+    <message>
+        <location filename="../qml/AccountPage.qml" line="408"/>
+        <source>Can not close account because user is the only owner of an organisation.
+
+Please go to the Mergin Maps website to remove it manually.</source>
+        <translation>Het account kan niet gesloten worden want gebruiker is de enige eigenaar van een organisatie.
+
+Ga naar de website van Mergin Maps om deze daar te verwijderen.</translation>
     </message>
 </context>
 <context>
     <name>ActiveLayerPanel</name>
     <message>
-        <location filename="../qml/map/ActiveLayerPanel.qml" line="51"/>
+        <location filename="../qml/map/ActiveLayerPanel.qml" line="49"/>
         <source>Choose Active Layer</source>
         <translation>Kies actieve laag</translation>
     </message>
     <message>
-        <location filename="../qml/map/ActiveLayerPanel.qml" line="63"/>
+        <location filename="../qml/map/ActiveLayerPanel.qml" line="61"/>
         <source>Could not find any editable layers in the project. See %1how to enable digitizing in your project%2.</source>
         <translation>Kon geen bewerkbare lagen vinden in het project. Zie %1hoe u digitalisering in uw project kunt inschakelen%2.</translation>
     </message>
@@ -139,27 +152,27 @@ Om je account te verwijderen, geef je gebruikersnaam in het onderstaande veld en
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="233"/>
+        <location filename="../androidutils.cpp" line="235"/>
         <source>Without storage permission you will not be able to access previous projects</source>
         <translation>Zonder toestemming tot opslag, heeft u geen toegang tot vorige projecten</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="331"/>
+        <location filename="../androidutils.cpp" line="335"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>Toestemming tot opslag permanent geweigerd, sta dit toe in de instellingen om foto&apos;s te kunnen laden vanuit fotogallerij</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="335"/>
+        <location filename="../androidutils.cpp" line="339"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
         <translation>Input heeft toegang nodig tot opslag om foto&apos;s vanuit gallerij te kunnen laden</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="353"/>
+        <location filename="../androidutils.cpp" line="357"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Cameratoestemming is permanent geweigerd. Sta dit toe in de instellingen</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="357"/>
+        <location filename="../androidutils.cpp" line="361"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>We hebben cameratoestemming nodig om een ​​foto te maken</translation>
     </message>
@@ -175,43 +188,40 @@ Om je account te verwijderen, geef je gebruikersnaam in het onderstaande veld en
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="518"/>
+        <location filename="../attributes/attributecontroller.cpp" line="544"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Default waarde expressie voor %1:%2 geeft  parseer-fout: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="528"/>
+        <location filename="../attributes/attributecontroller.cpp" line="554"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Default-waarde expressie voor %1:%2 geeft evaluatie-fout: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="539"/>
+        <location filename="../attributes/attributecontroller.cpp" line="565"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1117"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Waarde &quot;%1&quot; %4 kan niet geconverteerd worden naar een toegestane waarde voor veld %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="792"/>
+        <location filename="../attributes/attributecontroller.cpp" line="819"/>
         <source>Cannot delete feature</source>
         <translation>Kan object niet verwijderen</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="480"/>
-        <location filename="../attributes/attributecontroller.cpp" line="816"/>
+        <location filename="../attributes/attributecontroller.cpp" line="496"/>
+        <location filename="../attributes/attributecontroller.cpp" line="873"/>
         <source>Feature could not be added</source>
         <translation>Object kon niet worden toegevoegd</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="854"/>
+        <location filename="../attributes/attributecontroller.cpp" line="505"/>
+        <location filename="../attributes/attributecontroller.cpp" line="884"/>
         <source>Cannot update feature</source>
         <translation>Kan object niet wijzigen</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="868"/>
-        <source>Feature %1 could not be fetched after commit</source>
-        <translation>Object %1 kon niet worden opgehaald na de commit</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="890"/>
+        <location filename="../attributes/attributecontroller.cpp" line="928"/>
         <source>Cannot start editing</source>
         <translation>Wijzigen kan niet starten</translation>
     </message>
@@ -229,12 +239,12 @@ Om je account te verwijderen, geef je gebruikersnaam in het onderstaande veld en
         <translation>Registreer</translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="130"/>
+        <location filename="../qml/AuthPanel.qml" line="135"/>
         <source>Please update Input to use the latest Mergin features.</source>
         <translation>Update Input om de laatste Mergin features te kunnen gebruiken</translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="134"/>
+        <location filename="../qml/AuthPanel.qml" line="139"/>
         <source>Mergin is currently unavailable - please try again later.</source>
         <translation>Mergin is momenteel niet beschikbaar - probeer het later nog een keer</translation>
     </message>
@@ -282,7 +292,7 @@ Om je account te verwijderen, geef je gebruikersnaam in het onderstaande veld en
 Controleer of je toestel aan staat en of er mee verbonden kan worden. %1 %2Leer meer hierover%3.</translation>
     </message>
     <message>
-        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="288"/>
+        <location filename="../qml/components/BluetoothConnectionDialog.qml" line="290"/>
         <source>Close</source>
         <translation>Afsluiten</translation>
     </message>
@@ -290,69 +300,84 @@ Controleer of je toestel aan staat en of er mee verbonden kan worden. %1 %2Leer 
 <context>
     <name>BluetoothPositionProvider</name>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="43"/>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="164"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="42"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="163"/>
         <source>No connection</source>
         <translation>Geen verbinding</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="84"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="83"/>
         <source>Reconnecting</source>
         <translation>Opnieuw verbinden</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="116"/>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="124"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="115"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="123"/>
         <source>No connection, reconnecting in (%1)</source>
         <translation>Geen verbinding, opnieuw verbinden in (%1)</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="141"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="140"/>
         <source>Could not connect to device, not paired</source>
         <translation>Kon geen verbinding met toestel opzetten, niet gekoppeld</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="156"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="155"/>
         <source>Connecting to %1</source>
         <translation>Verbinden met %1</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="160"/>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="178"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="159"/>
+        <location filename="../position/bluetoothpositionprovider.cpp" line="177"/>
         <source>Connected</source>
         <translation>Verbonden</translation>
     </message>
 </context>
 <context>
-    <name>BrowseDataLayersPanel</name>
+    <name>CodeScanner</name>
     <message>
-        <location filename="../qml/BrowseDataLayersPanel.qml" line="32"/>
-        <source>Layers</source>
-        <translation>Lagen</translation>
-    </message>
-    <message>
-        <location filename="../qml/BrowseDataLayersPanel.qml" line="47"/>
-        <source>No layers have been configured to allow browsing their features. See %1how to modify your project%2.</source>
-        <translation>Er zijn geen lagen geconfigureerd om door hun objecten te bladeren. Zie %1hoe u uw project kunt wijzigen%2.</translation>
+        <location filename="../qml/CodeScanner.qml" line="33"/>
+        <source>Scan code</source>
+        <translation>Scan de code</translation>
     </message>
 </context>
 <context>
-    <name>CodeReader</name>
+    <name>CreateWorkspacePage</name>
     <message>
-        <location filename="../qml/CodeReader.qml" line="64"/>
-        <source>Scan code</source>
-        <translation>Scan code</translation>
+        <location filename="../qml/CreateWorkspacePage.qml" line="34"/>
+        <source>Create a workspace</source>
+        <translation>Aanmaken van een workspace</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="58"/>
+        <source>A Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects. A good candidate for a workspace name is the name of your team or organisation.</source>
+        <translation>Een Workspace is een plaats waar jouw projecten bewaard worden. Collega&apos;s kunnen worden uitgenodigd tot jouw workspace om samen te werken aan projecten. Een goede candidaat voor een naam van een workspace is de naam van je team of organisatie.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="86"/>
+        <source>My workspace name…</source>
+        <translation>Mijn workspace naam...</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="104"/>
+        <source>Create workspace</source>
+        <translation>Aanmaken workspace</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="108"/>
+        <source>Empty workspace name</source>
+        <translation>Wis naam workspace</translation>
     </message>
 </context>
 <context>
     <name>DateTimePicker</name>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="108"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="107"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
     <message>
-        <location filename="../qml/components/DateTimePicker.qml" line="203"/>
+        <location filename="../qml/components/DateTimePicker.qml" line="202"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -370,27 +395,27 @@ Controleer of je toestel aan staat en of er mee verbonden kan worden. %1 %2Leer 
         <translation>Afbeelding niet naar %1 gekopieerd.</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="201"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="205"/>
         <source>Open Image</source>
         <translation>Afbeelding Openen</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="203"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="207"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Afbeeldingsbestanden (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="215"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="219"/>
         <source>Remove photo reference</source>
         <translation>Verwijder referentie naar foto</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="216"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="220"/>
         <source>Also permanently delete photo from device?</source>
         <translation>Foto ook definitief van apparaat verwijderen?</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="238"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="242"/>
         <source>Failed to copy image</source>
         <translation>Afbeelding niet gekopieerd</translation>
     </message>
@@ -398,12 +423,12 @@ Controleer of je toestel aan staat en of er mee verbonden kan worden. %1 %2Leer 
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="157"/>
+        <location filename="../qml/form/FeatureForm.qml" line="137"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>Kan het formulier niet opslaan, er zijn validatie fouten</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="158"/>
+        <location filename="../qml/form/FeatureForm.qml" line="138"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Object kan niet worden opgeslagen, controleer verplichte velden</translation>
     </message>
@@ -411,47 +436,47 @@ Controleer of je toestel aan staat en of er mee verbonden kan worden. %1 %2Leer 
 <context>
     <name>FeatureFormPage</name>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="76"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="81"/>
         <source>Edit Feature</source>
         <translation>Bewerk object</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="76"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="81"/>
         <source>Feature</source>
         <translation>Object</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="86"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="91"/>
         <source>Save</source>
         <translation>Opslaan</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="199"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="206"/>
         <source>Delete feature</source>
         <translation>Verwijder object</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="200"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="207"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Weet u zeker dat u dit object wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="220"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="226"/>
         <source>Unsaved changes</source>
         <translation>Niet opgeslagen wijzigingen</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="221"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="227"/>
         <source>Do you want to save changes?</source>
         <translation>Wilt u de wijzigingen opslaan?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="244"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="248"/>
         <source>Saving failed</source>
         <translation>Opslaan is niet gelukt</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="249"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>Wijzigingen niet opgeslagen. Normaal zou dit niet mogen gebeuren. Herstart de app en probeer het nogmaals — wanneer dat niet helpt, neem contact op met support.</translation>
     </message>
@@ -469,13 +494,13 @@ Controleer of je toestel aan staat en of er mee verbonden kan worden. %1 %2Leer 
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="106"/>
-        <location filename="../qml/form/FeatureToolbar.qml" line="146"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="105"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="147"/>
         <source>Edit geometry</source>
         <translation>Geometrie wijzigen</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureToolbar.qml" line="123"/>
+        <location filename="../qml/form/FeatureToolbar.qml" line="122"/>
         <location filename="../qml/form/FeatureToolbar.qml" line="159"/>
         <source>Advanced</source>
         <translation>Geavanceerd</translation>
@@ -489,14 +514,6 @@ Controleer of je toestel aan staat en of er mee verbonden kan worden. %1 %2Leer 
         <location filename="../qml/form/FeatureToolbar.qml" line="192"/>
         <source>Redraw geometry</source>
         <translation>Geometrie opnieuw tekenen</translation>
-    </message>
-</context>
-<context>
-    <name>FeaturesListPage</name>
-    <message>
-        <location filename="../qml/FeaturesListPage.qml" line="59"/>
-        <source>Showing only the first %1 features</source>
-        <translation>Alleen de eerste %1 objecten worden weergegeven</translation>
     </message>
 </context>
 <context>
@@ -518,19 +535,27 @@ Controleer of je toestel aan staat en of er mee verbonden kan worden. %1 %2Leer 
     </message>
 </context>
 <context>
+    <name>FeaturesListPageV2</name>
+    <message>
+        <location filename="../qml/layers/FeaturesListPageV2.qml" line="155"/>
+        <source>Add feature</source>
+        <translation>Object toevoegen</translation>
+    </message>
+</context>
+<context>
     <name>FieldsModel</name>
     <message>
-        <location filename="../fieldsmodel.cpp" line="16"/>
+        <location filename="../fieldsmodel.cpp" line="15"/>
         <source>Please fill a name of previous field before adding a new field.</source>
         <translation>Vul een naam in van het vorige veld in voordat u een nieuw veld toevoegt.</translation>
     </message>
     <message>
-        <location filename="../fieldsmodel.cpp" line="20"/>
+        <location filename="../fieldsmodel.cpp" line="19"/>
         <source>Field %1 already exists.</source>
         <translation>Veld %1 bestaat al.</translation>
     </message>
     <message>
-        <location filename="../fieldsmodel.cpp" line="118"/>
+        <location filename="../fieldsmodel.cpp" line="116"/>
         <source>Field %1 already exists. 
 Won&apos;t be added to the project.</source>
         <translation>Veld %1 bestaat al. 
@@ -646,12 +671,12 @@ Wordt niet toegevoegd aan het project.</translation>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="232"/>
+        <location filename="../inputhelp.cpp" line="242"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Rapport ingediend.%1Neem contact met ons op%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="237"/>
+        <location filename="../inputhelp.cpp" line="247"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Rapport kan niet worden ingediend.%1Controleer uw internetverbinding.</translation>
     </message>
@@ -677,130 +702,192 @@ Wordt niet toegevoegd aan het project.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="182"/>
+        <location filename="../inpututils.cpp" line="183"/>
         <source>just now</source>
         <translation>zojuist</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="188"/>
         <source>%1 minutes ago</source>
         <translation>%1 minuten geleden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="187"/>
+        <location filename="../inpututils.cpp" line="188"/>
         <source>%1 minute ago</source>
         <translation>%1 minuut geleden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="192"/>
+        <location filename="../inpututils.cpp" line="193"/>
         <source>%1 hours ago</source>
         <translation>%1 uren geleden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="192"/>
+        <location filename="../inpututils.cpp" line="193"/>
         <source>%1 hour ago</source>
         <translation>%1 uur geleden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
-        <location filename="../inpututils.cpp" line="201"/>
+        <location filename="../inpututils.cpp" line="197"/>
+        <location filename="../inpututils.cpp" line="202"/>
         <source>%1 days ago</source>
         <translation>%1 dagen geleden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="196"/>
-        <location filename="../inpututils.cpp" line="201"/>
+        <location filename="../inpututils.cpp" line="197"/>
+        <location filename="../inpututils.cpp" line="202"/>
         <source>%1 day ago</source>
         <translation>%1 dag geleden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="206"/>
+        <location filename="../inpututils.cpp" line="207"/>
         <source>%1 weeks ago</source>
         <translation>%1 weken geleden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="206"/>
+        <location filename="../inpututils.cpp" line="207"/>
         <source>%1 week ago</source>
         <translation>%1 week geleden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="212"/>
         <source>%1 months ago</source>
         <translation>%1 maanden geleden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="212"/>
         <source>%1 month ago</source>
         <translation>%1 maand geleden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="217"/>
         <source>%1 years ago</source>
         <translation>%1 jaren geleden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="217"/>
         <source>%1 year ago</source>
         <translation>%1 jaar geleden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1411"/>
+        <location filename="../inpututils.cpp" line="1419"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>schermresolutie: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1412"/>
+        <location filename="../inpututils.cpp" line="1420"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>scherm DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1413"/>
+        <location filename="../inpututils.cpp" line="1421"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>schermgrootte: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1414"/>
+        <location filename="../inpututils.cpp" line="1422"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>gerapporteerde pixelverhouding van het apparaat: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1415"/>
+        <location filename="../inpututils.cpp" line="1423"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>berekende pixelverhouding van het apparaat: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1416"/>
+        <location filename="../inpututils.cpp" line="1424"/>
         <source>used dp scale: %1</source>
         <translation>gebruikte schermresolutie: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1926"/>
+        <location filename="../inpututils.cpp" line="1944"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Je moet minstens %1 punt(en) toevoegen voor elk deel.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1930"/>
+        <location filename="../inpututils.cpp" line="1948"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Je moet minstens %1 punt(en) toevoegen.</translation>
     </message>
 </context>
 <context>
+    <name>InstallScannerAppDialog</name>
+    <message>
+        <location filename="../qml/dialogs/InstallScannerAppDialog.qml" line="18"/>
+        <source>Install scanner application</source>
+        <translation>Installeren scanner applicatie</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/InstallScannerAppDialog.qml" line="19"/>
+        <source>You will be redirected to Google Play to install the Barcode Scanner app.</source>
+        <translation>Je zult nu naar Google Play gaan om de Barcode Scanner app te installeren.</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/InstallScannerAppDialog.qml" line="19"/>
+        <source>After the Barcode Scanner app is installed, close it and switch back to Mergin Maps.</source>
+        <translation>Nadat de Barcode Scanner app is geïnstalleerd, sluit deze en keer terug naar Mergin Maps.</translation>
+    </message>
+</context>
+<context>
     <name>InternalPositionProvider</name>
     <message>
-        <location filename="../position/internalpositionprovider.cpp" line="33"/>
-        <location filename="../position/internalpositionprovider.cpp" line="110"/>
+        <location filename="../position/internalpositionprovider.cpp" line="32"/>
+        <location filename="../position/internalpositionprovider.cpp" line="111"/>
         <source>Connected</source>
         <translation>Verbonden</translation>
+    </message>
+</context>
+<context>
+    <name>LayerDetail</name>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="98"/>
+        <source>Settings</source>
+        <translation>Instellingen</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="130"/>
+        <source>Visible on map</source>
+        <translation>Zichtbaar op de kaart</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="169"/>
+        <source>Legend</source>
+        <translation>Legenda</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="250"/>
+        <source>Features</source>
+        <translation>Objecten</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="284"/>
+        <source>Layer info</source>
+        <translation>Kaartlaag info</translation>
+    </message>
+</context>
+<context>
+    <name>LayersListPageV2</name>
+    <message>
+        <location filename="../qml/layers/LayersListPageV2.qml" line="22"/>
+        <source>Layers</source>
+        <translation>Kaartlagen</translation>
+    </message>
+</context>
+<context>
+    <name>LayersListSearchPage</name>
+    <message>
+        <location filename="../qml/layers/LayersListSearchPage.qml" line="37"/>
+        <source>Search layers</source>
+        <translation>Zoek in kaartlagen</translation>
     </message>
 </context>
 <context>
@@ -816,24 +903,42 @@ Wordt niet toegevoegd aan het project.</translation>
         <translation>Uw toestel krijgt te weinig opslagcapaciteit, je hebt 1% aan vrij geheugen nodig om je projecten te zien. Verwijder enkele bestanden en kom terug of klik op Help om andere manieren te zien hoe dit probleem kan worden opgelost. </translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="40"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="45"/>
         <source>An error occured during update</source>
         <translation>Er deed zich een fout voor tijdens het bijwerken</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="43"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="46"/>
         <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
         <translation>Uw toestel geeft een probleem tijdens het bijwerken van een update. U zult niet uw projecten zien. Klik op Help om te zien hoe dit probleem kan worden opgelost. </translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="103"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="111"/>
         <source>We are working on an important update, please do not close the application</source>
         <translation>We werken momenteel aan een belangrijke update, de applicatie niet afsluiten</translation>
     </message>
     <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="117"/>
+        <location filename="../qml/misc/LegacyFolderMigration.qml" line="125"/>
         <source>%1/%2</source>
         <translation>%1/%2</translation>
+    </message>
+</context>
+<context>
+    <name>LocalProjectsManager</name>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="210"/>
+        <source>Download failed, remove and retry</source>
+        <translation>Download mislukt, verwijder en probeer opnieuw</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="230"/>
+        <source>Found multiple QGIS project files</source>
+        <translation>Meerdere QGIS project bestanden gevonden</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="235"/>
+        <source>Failed to find a QGIS project file</source>
+        <translation>Geen QGIS project bestand gevonden</translation>
     </message>
 </context>
 <context>
@@ -857,27 +962,27 @@ Wordt niet toegevoegd aan het project.</translation>
 <context>
     <name>LoginForm</name>
     <message>
-        <location filename="../qml/LoginForm.qml" line="70"/>
+        <location filename="../qml/LoginForm.qml" line="62"/>
         <source>Sync projects with your desktop computer and work collaboratively with others by logging in to your %1Mergin Maps%2 account.</source>
         <translation>Synchroniseer projecten met je PC en werk samen met anderen door in te loggen op je %1Mergin Maps%2 account.</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="113"/>
+        <location filename="../qml/LoginForm.qml" line="105"/>
         <source>Username</source>
         <translation>Gebruikersnaam</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="157"/>
+        <location filename="../qml/LoginForm.qml" line="149"/>
         <source>Sign in</source>
         <translation>Inloggen</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="223"/>
+        <location filename="../qml/LoginForm.qml" line="215"/>
         <source>Sign up for free</source>
         <translation>Schrijf u gratis in</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="245"/>
+        <location filename="../qml/LoginForm.qml" line="244"/>
         <source>Forgot password?</source>
         <translation>Wachtwoord vergeten?</translation>
     </message>
@@ -886,65 +991,94 @@ Wordt niet toegevoegd aan het project.</translation>
     <name>MainPanel</name>
     <message>
         <location filename="../qml/MainPanel.qml" line="62"/>
-        <location filename="../qml/MainPanel.qml" line="259"/>
+        <location filename="../qml/MainPanel.qml" line="258"/>
         <source>Projects</source>
         <translation>Projecten</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="82"/>
-        <location filename="../qml/MainPanel.qml" line="278"/>
+        <location filename="../qml/MainPanel.qml" line="277"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="117"/>
-        <location filename="../qml/MainPanel.qml" line="307"/>
+        <location filename="../qml/MainPanel.qml" line="306"/>
         <source>Record</source>
         <translation>Opnemen</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="137"/>
-        <location filename="../qml/MainPanel.qml" line="326"/>
+        <location filename="../qml/MainPanel.qml" line="325"/>
         <source>Zoom to project</source>
         <translation>Op project inzoomen</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="155"/>
-        <location filename="../qml/MainPanel.qml" line="345"/>
+        <location filename="../qml/MainPanel.qml" line="344"/>
         <source>Local changes</source>
         <translation>Lokale wijzigingen</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="174"/>
-        <source>Browse data</source>
-        <translation>Blader door gegevens</translation>
+        <location filename="../qml/MainPanel.qml" line="173"/>
+        <location filename="../qml/MainPanel.qml" line="363"/>
+        <source>Layers</source>
+        <translation>Kaartlagen</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="194"/>
-        <location filename="../qml/MainPanel.qml" line="383"/>
+        <location filename="../qml/MainPanel.qml" line="193"/>
+        <location filename="../qml/MainPanel.qml" line="382"/>
         <source>Map themes</source>
         <translation>Kaartthema</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="214"/>
-        <location filename="../qml/MainPanel.qml" line="402"/>
+        <location filename="../qml/MainPanel.qml" line="213"/>
+        <location filename="../qml/MainPanel.qml" line="401"/>
         <source>Settings</source>
         <translation>Instellingen</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="231"/>
+        <location filename="../qml/MainPanel.qml" line="230"/>
         <source>More</source>
         <translation>Meer</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="244"/>
+        <location filename="../qml/MainPanel.qml" line="243"/>
         <source>Menu</source>
         <translation>Menu</translation>
     </message>
+</context>
+<context>
+    <name>ManageInvitationsPage</name>
     <message>
-        <location filename="../qml/MainPanel.qml" line="364"/>
-        <source>Browse features</source>
-        <translation>Blader door objecten</translation>
+        <location filename="../qml/ManageInvitationsPage.qml" line="30"/>
+        <source>Join a workspace</source>
+        <translation>Lid worden van een workspace</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="54"/>
+        <source>You have been invited to the following workspaces:</source>
+        <translation>Je bent uitgenodigd voor volgende workspaces:</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="114"/>
+        <source>Workspace</source>
+        <translation>Workspace</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="139"/>
+        <source>Accept</source>
+        <translation>Accepteer</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="175"/>
+        <source>Do you want to create a new workspace instead?</source>
+        <translation>Wil je in plaats daarvan een nieuwe workspace aanmaken?</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="175"/>
+        <source>Click here!</source>
+        <translation>Klik hier!</translation>
     </message>
 </context>
 <context>
@@ -955,7 +1089,7 @@ Wordt niet toegevoegd aan het project.</translation>
         <translation>Kaartthema&apos;s</translation>
     </message>
     <message>
-        <location filename="../qml/MapThemePanel.qml" line="69"/>
+        <location filename="../qml/MapThemePanel.qml" line="75"/>
         <source>Project has no themes defined. See %1how to setup themes%2.</source>
         <translation>Project heeft geen thema&apos;s gedefinieerd. Bekijk %1 voor het maken van thema&apos;s%2.</translation>
     </message>
@@ -963,84 +1097,160 @@ Wordt niet toegevoegd aan het project.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1109"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1122"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS is momenteel niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="314"/>
+        <location filename="../qml/map/MapWrapper.qml" line="326"/>
         <source>Successfully synchronized</source>
         <translation>Succesvol gesynchroniseerd</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="328"/>
+        <location filename="../qml/map/MapWrapper.qml" line="340"/>
         <source>Up to date</source>
         <translation>Geen wijzigingen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="337"/>
+        <location filename="../qml/map/MapWrapper.qml" line="349"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Iemand is aan het synchroniseren, we proberen het later nog eens</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="347"/>
+        <location filename="../qml/map/MapWrapper.qml" line="359"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>Er was een probleem tijdens het synchroniseren, we zullen het nog eens proberen. Klik om meer te leren</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="365"/>
+        <location filename="../qml/map/MapWrapper.qml" line="377"/>
         <source>Splitting done successfully</source>
         <translation>Succesvol opgesplitst</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="381"/>
+        <location filename="../qml/map/MapWrapper.qml" line="393"/>
         <source>Create line to split the selected feature</source>
         <translation>Maak een lijn om het geselecteerd object op te splitsen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="397"/>
+        <location filename="../qml/map/MapWrapper.qml" line="409"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Selecteer een punt om de geometrie te bewerken</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="413"/>
+        <location filename="../qml/map/MapWrapper.qml" line="425"/>
         <source>Record new geometry for the feature</source>
         <translation>Nieuwe geometrie registreren voor object</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="552"/>
+        <location filename="../qml/map/MapWrapper.qml" line="564"/>
         <source>Details</source>
         <translation>Details</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="667"/>
+        <source>Back</source>
+        <translation>Terug</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="684"/>
         <source>Discard the changes?</source>
         <translation>Wijzigingen ongedaan maken?</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="670"/>
+        <location filename="../qml/map/MapWrapper.qml" line="687"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Wanneer je &apos;Ja&apos; selecteert, zullen je wijzigingen van de geometrie ongedaan worden gemaakt. Wanneer je de wijzigingen wilt opslaan, selecteer dan &apos;Nee&apos; en &apos;Gereed&apos; in de knoppenbalk. </translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="674"/>
+        <location filename="../qml/map/MapWrapper.qml" line="691"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Wanneer je &apos;Ja&apos; selecteert, wordt je nieuwe geometrie verwijderd en zal er geen object worden opgeslagen.  Wanneer je de geometrie wilt opslaan, selecteer dan &apos;Nee&apos; en &apos;Gereed&apos; in de knoppenbalk. </translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="740"/>
+        <location filename="../qml/map/MapWrapper.qml" line="754"/>
         <source>Connecting to %1</source>
         <translation>Verbinden met %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="754"/>
+        <location filename="../qml/map/MapWrapper.qml" line="768"/>
         <source>Connected, no position</source>
         <translation>Verbonden, geen locatie</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="758"/>
+        <location filename="../qml/map/MapWrapper.qml" line="772"/>
         <source>Unknown accuracy</source>
         <translation>Nauwkeurigheid onbekend</translation>
+    </message>
+</context>
+<context>
+    <name>MerginApi</name>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="756"/>
+        <source>Username must have at least 4 characters</source>
+        <translation>Gebruikersnaam moet minimaal 4 karakters hebben</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="763"/>
+        <source>Username contains invalid characters</source>
+        <translation>Gebruikersnaam bevat niet toegestane karakters</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="770"/>
+        <source>Please enter a valid email</source>
+        <translation>Voeg een geldig e-mailadres in</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="777"/>
+        <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
+        <translation>Wachtwoord niet sterk genoeg. Het moet%1 minstens 8 tekens lang zijn%1 bevat kleine letters%1 bevat hoofdletters%1 bevat cijfers of speciale tekens</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="790"/>
+        <source>Passwords do not match</source>
+        <translation>Wachtwoorden komen niet overeen</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="797"/>
+        <source>Please accept Terms and Privacy Policy</source>
+        <translation>Accepteer de voorwaarden en het privacybeleid</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1177"/>
+        <source>Registration successful</source>
+        <translation>Registratie succesvol</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1200"/>
+        <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
+        <translation>Nieuwe registraties zijn niet toegestaan ​​op de geselecteerde Mergin-server.%1 Neem contact op met uw beheerder.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1486"/>
+        <source>Project detached from Mergin</source>
+        <translation>Project ontkoppelt van Mergin</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="3518"/>
+        <source>Workspace name contains invalid characters</source>
+        <translation>De naam van de workspace bevat niet toegestane karakters</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="3584"/>
+        <source>Workspace %1 already exists</source>
+        <translation>Workspace %1 bestaat al</translation>
+    </message>
+</context>
+<context>
+    <name>MerginProjectStatusModel</name>
+    <message>
+        <location filename="../../core/merginprojectstatusmodel.cpp" line="70"/>
+        <source>Pending Changes</source>
+        <translation>In afwachting van wijzigingen</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
+        <source>Failed to determine changes</source>
+        <translation>Kan geen wijzigingen vaststellen</translation>
     </message>
 </context>
 <context>
@@ -1081,6 +1291,14 @@ Click &apos;Yes&apos; to upload it.</source>
         <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="17"/>
         <source>You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard.</source>
         <translation>Je mag je wijzigingen niet synchroniseren. Neem contact op met de eigenaar van het Mergin project voor het krijgen van rechten. Wanneer jij de project eigenaar bent, log in op het Mergin dashboard.</translation>
+    </message>
+</context>
+<context>
+    <name>NoWorkspaceBanner</name>
+    <message>
+        <location filename="../qml/misc/NoWorkspaceBanner.qml" line="30"/>
+        <source>%1Workspace is required to use Mergin Maps. Click here to create one%2.</source>
+        <translation>%1Workspace is benodigd om Mergin Maps te gebruiken. Klik hier om er één aan te maken%2.</translation>
     </message>
 </context>
 <context>
@@ -1132,17 +1350,17 @@ Click &apos;Yes&apos; to upload it.</source>
         <translation>Om een externe ontvanger via Bluetooth direct te verbinden met Input is niet mogelijk in iOS. De leverancier van je toestel kan een speciale app aanbieden waarmee je de verbinding kunt opzetten voor locatie-bepaling. Input zal deze zien als een interne GPS van je mobiel/tablet.%1%2Klik hier voor meer info.%3</translation>
     </message>
     <message>
-        <location filename="../qml/misc/PositionProviderPage.qml" line="366"/>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="370"/>
         <source>Remove receiver</source>
         <translation>Verwijder ontvanger</translation>
     </message>
     <message>
-        <location filename="../qml/misc/PositionProviderPage.qml" line="367"/>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="371"/>
         <source>Do you want to remove receiver from the list of recent receivers?</source>
         <translation>Wil je de ontvanger verwijderen uit de lijst van ontvangers?</translation>
     </message>
     <message>
-        <location filename="../qml/misc/PositionProviderPage.qml" line="380"/>
+        <location filename="../qml/misc/PositionProviderPage.qml" line="384"/>
         <source>Internal</source>
         <translation>Intern</translation>
     </message>
@@ -1150,22 +1368,22 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>PositionProvidersModel</name>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="25"/>
+        <location filename="../position/positionprovidersmodel.cpp" line="24"/>
         <source>Internal</source>
         <translation>Intern</translation>
     </message>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="26"/>
+        <location filename="../position/positionprovidersmodel.cpp" line="25"/>
         <source>GPS receiver of this device</source>
         <translation>GPS ontvanger van dit toestel</translation>
     </message>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="115"/>
+        <location filename="../position/positionprovidersmodel.cpp" line="114"/>
         <source> Bluetooth device</source>
         <translation> Bluetooth toestel</translation>
     </message>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="171"/>
+        <location filename="../position/positionprovidersmodel.cpp" line="170"/>
         <source>Bluetooth device</source>
         <translation> Bluetooth toestel</translation>
     </message>
@@ -1233,7 +1451,7 @@ Click &apos;Yes&apos; to upload it.</source>
     <name>ProjectList</name>
     <message>
         <location filename="../qml/components/ProjectList.qml" line="134"/>
-        <location filename="../qml/components/ProjectList.qml" line="189"/>
+        <location filename="../qml/components/ProjectList.qml" line="191"/>
         <source>Create project</source>
         <translation>Maak project aan</translation>
     </message>
@@ -1243,42 +1461,42 @@ Click &apos;Yes&apos; to upload it.</source>
         <translation>Geen gedownloade projecten gevonden.%1Leer%2 hoe u projecten aan kunt maken%3 en%4download ze%3 naar uw apparaat.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="180"/>
+        <location filename="../qml/components/ProjectList.qml" line="182"/>
         <source>You can also create new project by clicking button below.</source>
         <translation>U kunt ook een nieuw project maken door op de onderstaande knop te klikken.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="202"/>
+        <location filename="../qml/components/ProjectList.qml" line="204"/>
         <source>Unable to get the list of projects.</source>
         <translation>Kan de lijst met projecten niet ophalen.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="202"/>
+        <location filename="../qml/components/ProjectList.qml" line="204"/>
         <source>No projects found!</source>
         <translation>Geen projecten gevonden!</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="233"/>
+        <location filename="../qml/components/ProjectList.qml" line="235"/>
         <source>Retry</source>
         <translation>Probeer opnieuw</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="261"/>
+        <location filename="../qml/components/ProjectList.qml" line="263"/>
         <source>Remove project</source>
         <translation>Verwijder project</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="262"/>
+        <location filename="../qml/components/ProjectList.qml" line="264"/>
         <source>Any unsynchronized changes will be lost.</source>
         <translation>Niet opgeslagen wijzigingen gaan verloren.</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="297"/>
+        <location filename="../qml/components/ProjectList.qml" line="295"/>
         <source>Download project</source>
         <translation>Download project</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectList.qml" line="298"/>
+        <location filename="../qml/components/ProjectList.qml" line="296"/>
         <source>Would you like to download the project
  %1 ?</source>
         <translation>Wilt u het project downloaden
@@ -1296,39 +1514,58 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="71"/>
+        <location filename="../qml/ProjectPanel.qml" line="88"/>
         <source>No Changes</source>
         <translation>Geen wijzigingen</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="171"/>
+        <location filename="../qml/ProjectPanel.qml" line="254"/>
+        <location filename="../qml/ProjectPanel.qml" line="622"/>
+        <location filename="../qml/ProjectPanel.qml" line="827"/>
         <source>Projects</source>
         <translation>Projecten</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="368"/>
+        <location filename="../qml/ProjectPanel.qml" line="483"/>
+        <location filename="../qml/ProjectPanel.qml" line="805"/>
         <source>Home</source>
         <translation>Home</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="390"/>
+        <location filename="../qml/ProjectPanel.qml" line="505"/>
         <source>My projects</source>
         <translation>Mijn projecten</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="414"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared with me</source>
         <translation>Gedeeld met mij</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="414"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared</source>
         <translation>Gedeeld</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="434"/>
+        <location filename="../qml/ProjectPanel.qml" line="549"/>
+        <location filename="../qml/ProjectPanel.qml" line="849"/>
         <source>Explore</source>
         <translation>Verken</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="619"/>
+        <source>Downloaded projects</source>
+        <translation>Projecten gedownload</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="624"/>
+        <source>Public projects</source>
+        <translation>Publieke projecten</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="627"/>
+        <source>Your other projects are accessible%1by switching your workspace here</source>
+        <translation>Jouw andere projecten zijn beschikbaar%1door hier naar jouw workspace te wisselen</translation>
     </message>
 </context>
 <context>
@@ -1347,7 +1584,12 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="119"/>
+        <location filename="../projectwizard.cpp" line="93"/>
+        <source>Project name contains invalid characters</source>
+        <translation>Projectnaam bevat niet toegestane karakters</translation>
+    </message>
+    <message>
+        <location filename="../projectwizard.cpp" line="127"/>
         <source>Project %1 created</source>
         <translation>Project %1 aangemaakt</translation>
     </message>
@@ -1355,32 +1597,32 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>ProjectWizardPage</name>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="51"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="53"/>
         <source>Create Project</source>
         <translation>Maak project aan</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="76"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="78"/>
         <source>Project name</source>
         <translation>Projectnaam</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="91"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="93"/>
         <source>Fields</source>
         <translation>Velden</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="125"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="127"/>
         <source>Add field</source>
         <translation>Voeg veld toe</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="166"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="168"/>
         <source>Create project</source>
         <translation>Maak project aan</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectWizardPage.qml" line="172"/>
+        <location filename="../qml/ProjectWizardPage.qml" line="174"/>
         <source>Empty project name</source>
         <translation>Lege projectnaam</translation>
     </message>
@@ -1397,27 +1639,27 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>Purchasing</name>
     <message>
-        <location filename="../purchasing.cpp" line="520"/>
+        <location filename="../purchasing.cpp" line="526"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
         <translation>Verwerking van de betalingsgegevens is niet gelukt. %1 Abonnement is niet verstrekt.</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="528"/>
+        <location filename="../purchasing.cpp" line="534"/>
         <source>Successfully restored your subscription</source>
         <translation>Herstel van uw abonnement is gelukt</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="530"/>
+        <location filename="../purchasing.cpp" line="536"/>
         <source>Successfully purchased subscription</source>
         <translation>Aankoop van abonnement is gelukt</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="542"/>
+        <location filename="../purchasing.cpp" line="548"/>
         <source>Failed to purchase subscription</source>
         <translation>Aankoop van abonnement is mislukt</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="540"/>
+        <location filename="../purchasing.cpp" line="546"/>
         <source>Unable to restore your subscription</source>
         <translation>Het is niet gelukt uw abonnement te herstellen</translation>
     </message>
@@ -1448,63 +1690,63 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="57"/>
+        <location filename="../attributes/fieldvalidator.h" line="59"/>
         <source>Value must be a number</source>
         <translation>Waarde moet een getal zijn</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="58"/>
+        <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value must be lower than %1</source>
         <translation>Waarde moet lager zijn dan %1</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="59"/>
+        <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Value must be higher than %1</source>
         <translation>Waarde moet hoger zijn dan %1</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="60"/>
+        <location filename="../attributes/fieldvalidator.h" line="62"/>
         <source>Value is too large</source>
         <translation>Waarde is te groot</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="61"/>
+        <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Field can not contain decimal places</source>
         <translation>Veld kan niet het aantal decimale cijfers bevatten</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="63"/>
+        <location filename="../attributes/fieldvalidator.h" line="65"/>
         <source>Can not be longer than %1 characters</source>
         <translation>Kan niet langer zijn dan %1 karakters</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="65"/>
+        <location filename="../attributes/fieldvalidator.h" line="67"/>
         <source>Field should not be empty</source>
         <translation>Veld niet leeg laten</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="66"/>
+        <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Field must not be empty</source>
         <translation>Veld mag niet leeg zijn</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="67"/>
+        <location filename="../attributes/fieldvalidator.h" line="69"/>
         <source>Value should be unique</source>
         <translation>Geef unieke waarde</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="68"/>
+        <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Value must be unique</source>
         <translation>Waarde moet uniek zijn</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="69"/>
-        <location filename="../attributes/fieldvalidator.h" line="70"/>
+        <location filename="../attributes/fieldvalidator.h" line="71"/>
+        <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Unmet QGIS expression constraint</source>
         <translation>Niet voldaan aan QGIS expressie</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="72"/>
+        <location filename="../attributes/fieldvalidator.h" line="74"/>
         <source>Not a valid value</source>
         <translation>Geen geldige waarde</translation>
     </message>
@@ -1555,23 +1797,6 @@ Click &apos;Yes&apos; to upload it.</source>
     </message>
 </context>
 <context>
-    <name>QgsQuickMapCanvasMap</name>
-    <message>
-        <location filename="../../qgsquick/qgsquickmapcanvasmap.cpp" line="175"/>
-        <source>Rendering</source>
-        <translation>Bezig met renderen</translation>
-    </message>
-</context>
-<context>
-    <name>QgsQuickMapSettings</name>
-    <message>
-        <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="244"/>
-        <location filename="../../qgsquick/qgsquickmapsettings.cpp" line="273"/>
-        <source>Map Canvas rotation is not supported. Resetting from %1 to 0.</source>
-        <translation>Kaartrotatie wordt niet ondersteund en wordt teruggezet van %1 naar 0.</translation>
-    </message>
-</context>
-<context>
     <name>RecordingToolbar</name>
     <message>
         <location filename="../qml/map/RecordingToolbar.qml" line="72"/>
@@ -1591,12 +1816,12 @@ Click &apos;Yes&apos; to upload it.</source>
     <message>
         <location filename="../qml/map/RecordingToolbar.qml" line="135"/>
         <source>Add</source>
-        <translation>Toevoegen</translation>
+        <translation>Voeg toe</translation>
     </message>
     <message>
         <location filename="../qml/map/RecordingToolbar.qml" line="151"/>
         <source>Release</source>
-        <translation>Loslaten</translation>
+        <translation>Gereed</translation>
     </message>
     <message>
         <location filename="../qml/map/RecordingToolbar.qml" line="165"/>
@@ -1607,13 +1832,13 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>RecordingTools</name>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="54"/>
+        <location filename="../qml/map/RecordingTools.qml" line="280"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Lage GPS nauwkeurigheid (%1 m)&lt;br&gt;&lt;br&gt;Zoek meer de open ruimte op met vrij zicht naar de lucht.</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="208"/>
-        <location filename="../qml/map/RecordingTools.qml" line="302"/>
+        <location filename="../qml/map/RecordingTools.qml" line="186"/>
+        <location filename="../qml/map/RecordingTools.qml" line="306"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS is momenteel niet beschikbaar</translation>
     </message>
@@ -1663,6 +1888,14 @@ Click &apos;Yes&apos; to upload it.</source>
     </message>
 </context>
 <context>
+    <name>SearchBoxV2</name>
+    <message>
+        <location filename="../qml/components/SearchBoxV2.qml" line="59"/>
+        <source>Search</source>
+        <translation>Zoek</translation>
+    </message>
+</context>
+<context>
     <name>SettingsPanel</name>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="75"/>
@@ -1680,67 +1913,67 @@ Click &apos;Yes&apos; to upload it.</source>
         <translation>GPS volgen met kaart</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="127"/>
+        <location filename="../qml/SettingsPanel.qml" line="128"/>
         <source>GPS accuracy</source>
         <translation>GPS nauwkeurigheid</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="182"/>
+        <location filename="../qml/SettingsPanel.qml" line="183"/>
         <source>Accuracy threshold</source>
         <translation>Nauwkeurigheidsdrempel</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="208"/>
+        <location filename="../qml/SettingsPanel.qml" line="209"/>
         <source>Show accuracy warning</source>
         <translation>Toon waarschuwing nauwkeurigheid</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="227"/>
+        <location filename="../qml/SettingsPanel.qml" line="229"/>
         <source>Select GPS receiver</source>
         <translation>Selecteer GPS ontvanger</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="239"/>
+        <location filename="../qml/SettingsPanel.qml" line="241"/>
         <source>Recording</source>
         <translation>Opnemen</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="246"/>
+        <location filename="../qml/SettingsPanel.qml" line="248"/>
         <source>Line rec. interval</source>
         <translation>Interval lijnopname</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="268"/>
+        <location filename="../qml/SettingsPanel.qml" line="270"/>
         <source>Reuse last value option</source>
         <translation>Optie gebruik laatste waarde</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="287"/>
+        <location filename="../qml/SettingsPanel.qml" line="290"/>
         <source>Automatically sync changes</source>
         <translation>Automatisch wijzigingen synchroniseren</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="311"/>
+        <location filename="../qml/SettingsPanel.qml" line="315"/>
         <source>About</source>
         <translation>Over</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="320"/>
+        <location filename="../qml/SettingsPanel.qml" line="324"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="329"/>
+        <location filename="../qml/SettingsPanel.qml" line="333"/>
         <source>Privacy policy</source>
         <translation>Privacybeleid</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="338"/>
+        <location filename="../qml/SettingsPanel.qml" line="342"/>
         <source>Mergin terms of service</source>
         <translation>Gebruiksovereenkomst van Mergin diensten</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="347"/>
+        <location filename="../qml/SettingsPanel.qml" line="351"/>
         <source>Diagnostic log</source>
         <translation>Diagnostisch logboek</translation>
     </message>
@@ -1782,11 +2015,6 @@ Click &apos;Yes&apos; to upload it.</source>
         <location filename="../qml/map/SplittingToolbar.qml" line="89"/>
         <source>Done</source>
         <translation>Gereed</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/SplittingToolbar.qml" line="103"/>
-        <source>Cancel</source>
-        <translation>Annuleren</translation>
     </message>
 </context>
 <context>
@@ -1897,6 +2125,44 @@ Click &apos;Yes&apos; to upload it.</source>
     </message>
 </context>
 <context>
+    <name>SwitchWorkspacePage</name>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="27"/>
+        <source>Select a workspace</source>
+        <translation>Selecteren van een workspace</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="77"/>
+        <source>You have a pending invitation</source>
+        <translation>Je hebt een openstaande uitnodiging</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="113"/>
+        <source>Workspace</source>
+        <translation>Workspace</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="146"/>
+        <source>Accept</source>
+        <translation>Accepteer</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="165"/>
+        <source>Reject</source>
+        <translation>Weiger</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="183"/>
+        <source>Workspaces</source>
+        <translation>Workspaces</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="255"/>
+        <source>Create new workspace</source>
+        <translation>Aanmaken nieuwe workspace</translation>
+    </message>
+</context>
+<context>
     <name>SyncFailedDialog</name>
     <message>
         <location filename="../qml/dialogs/SyncFailedDialog.qml" line="22"/>
@@ -1910,19 +2176,222 @@ Click &apos;Yes&apos; to upload it.</source>
     </message>
 </context>
 <context>
+    <name>WhatsNewDialog</name>
+    <message>
+        <location filename="../qml/WhatsNewDialog.qml" line="26"/>
+        <source>What&apos;s new</source>
+        <translation>Wat is er nieuw</translation>
+    </message>
+    <message>
+        <location filename="../qml/WhatsNewDialog.qml" line="59"/>
+        <source>Ignore</source>
+        <translation>Negeer</translation>
+    </message>
+    <message>
+        <location filename="../qml/WhatsNewDialog.qml" line="71"/>
+        <source>Read more</source>
+        <translation>Lees meer</translation>
+    </message>
+</context>
+<context>
+    <name>WorkspaceAccountPage</name>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="51"/>
+        <source>My Account</source>
+        <translation>Mijn Account</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="122"/>
+        <source>Workspace</source>
+        <translation>Workspace</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="135"/>
+        <source>Switch workspace</source>
+        <translation>Wisselen van workspace</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="144"/>
+        <source>Your role</source>
+        <translation>Jouw rol</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="151"/>
+        <source>Workspace storage</source>
+        <translation>Workspace opslag</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="152"/>
+        <source>Using %1 / %2</source>
+        <translation>Gebruikt %1 / %2</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="160"/>
+        <source>Subscription plan</source>
+        <translation>Lidmaatschap</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="169"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="178"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="193"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="204"/>
+        <source>Subscription status</source>
+        <translation>Status lidmaatschap</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="170"/>
+        <source>Your subscription will not auto-renew after %1</source>
+        <translation>Je lidmaatschap wordt niet automatisch vernieuwd na %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="179"/>
+        <source>Please update your %1billing details%2 as soon as possible</source>
+        <translation>Werk je %1betaalgegevens%2 zo snel mogelijk bij</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="194"/>
+        <source>Your next bill will be for %1 on %2</source>
+        <translation>Je volgende rekening is voor %1 op %2</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="205"/>
+        <source>Your subscription was cancelled on %1</source>
+        <translation>Je lidmaatschap is verlopen op %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="216"/>
+        <source>Subscriptions</source>
+        <translation>Lidmaatschappen</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="235"/>
+        <source>Account</source>
+        <translation>Account</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="244"/>
+        <source>Username</source>
+        <translation>Gebruikersnaam</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="251"/>
+        <source>Email</source>
+        <translation>E-mail</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="261"/>
+        <source>Sign out</source>
+        <translation>Afmelden</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="267"/>
+        <source>Delete account</source>
+        <translation>Verwijder account</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="297"/>
+        <source>Delete account?</source>
+        <translation>Account verwijderen?</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="303"/>
+        <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
+
+In order to delete your account, enter your username in the field below and click Yes.</source>
+        <translation>Met deze actie wordt uw Mergin Maps account verwijderd met al je projecten, zowel op uw toestel als op de server. Deze actie kan niet ongedaan worden gemaakt. Wanneer u een Apple abonnement heeft, dan dient u dit zelf op te zeggen.
+
+Om je account te verwijderen, geef je gebruikersnaam in het onderstaande veld en druk op Ja.</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="312"/>
+        <source>Enter username</source>
+        <translation>Geef gebruikersnaam</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="347"/>
+        <source>Failed to remove account</source>
+        <translation>Account niet verwijderd</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="348"/>
+        <source>An error occured while removing your account</source>
+        <translation>Een fout deed zich voor tijdens het verwijderen van jouw account</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="372"/>
+        <source>Can not close account because user is the only owner of an organisation.
+
+Please go to the Mergin Maps website to remove it manually.</source>
+        <translation>Het account kan niet gesloten worden want gebruiker is de enige eigenaar van een organisatie.
+
+Ga naar de website van Mergin Maps om deze daar te verwijderen.</translation>
+    </message>
+</context>
+<context>
+    <name>WorkspaceSubscribePage</name>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="24"/>
+        <source>Subscribe</source>
+        <translation>Abonneer</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="58"/>
+        <source>Individual</source>
+        <translation>Individueel</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="75"/>
+        <source>Professional</source>
+        <translation>Professioneel</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="137"/>
+        <source>You can also %1restore%2 your purchases.</source>
+        <translation>Je kunt je aankopen ook %1terugkrijgen%2.</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="149"/>
+        <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
+        <translation>Uw gekozen Mergin lidmaatschap wordt bij einde contract automatisch verlengd. U kunt deze op elk moment wijzigen of opzeggen. %1Meer informatie%2</translation>
+    </message>
+</context>
+<context>
+    <name>WorkspaceSubscribePlanItem</name>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="35"/>
+        <source>Commercial use</source>
+        <translation>Commercieel gebruik</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="56"/>
+        <source>Unlimited seats</source>
+        <translation>Geen limiet gebruikte apparaten</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="63"/>
+        <source>Unlimited projects</source>
+        <translation>Geen limiet op aantal projecten</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="70"/>
+        <source>Email support</source>
+        <translation>Ondersteuning via E-mail</translation>
+    </message>
+</context>
+<context>
     <name>inputexternalresource</name>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="234"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="236"/>
         <source>Take a photo</source>
         <translation>Een foto nemen</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="276"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="278"/>
         <source>From gallery</source>
         <translation>Vanuit gallerij</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="297"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="299"/>
         <source>Image is not available: </source>
         <translation>Afbeelding is niet beschikbaar:</translation>
     </message>
@@ -1930,17 +2399,17 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="119"/>
+        <location filename="../qml/editor/inputrelation.qml" line="139"/>
         <source>%1 more</source>
         <translation>%1 meer</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="134"/>
+        <location filename="../qml/editor/inputrelation.qml" line="154"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="190"/>
+        <location filename="../qml/editor/inputrelation.qml" line="215"/>
         <source>Linked features</source>
         <translation>Gekoppelde objecten</translation>
     </message>
@@ -1964,48 +2433,63 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="229"/>
-        <location filename="../qml/main.qml" line="286"/>
+        <location filename="../qml/main.qml" line="238"/>
+        <location filename="../qml/main.qml" line="302"/>
         <source>No Changes</source>
         <translation>Geen wijzigingen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="260"/>
+        <location filename="../qml/main.qml" line="277"/>
         <source>GPS auto-center mode on</source>
         <translation>Modus GPS Auto centreren aan</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="260"/>
+        <location filename="../qml/main.qml" line="277"/>
         <source>GPS auto-center mode off</source>
         <translation>Modus GPS Auto centreren uit</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="275"/>
+        <location filename="../qml/main.qml" line="291"/>
         <source>No editable layers found.</source>
         <translation>Geen muteerbare lagen aanwezig.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="550"/>
+        <location filename="../qml/main.qml" line="631"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Punt uitzetten is niet actief omdat locatie niet bekend is!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="571"/>
+        <location filename="../qml/main.qml" line="643"/>
+        <source>Failed to open the project</source>
+        <translation>Openen project mislukt</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="663"/>
+        <source>We&apos;ve made it easier for teams to collaborate on Mergin Maps! To find out more, check out our latest blog post about workspaces by clicking the button below.</source>
+        <translation>We hebben het samenwerken eenvoudiger gemaakt in Mergin Maps! Lees meer hierover in onze laatste blog over workspaces via onderstaande knop.</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="679"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Communicatie met Mergin mislukt.%1Probeer netwerk verbindingen  te herstellen.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="618"/>
+        <location filename="../qml/main.qml" line="736"/>
         <source>There were issues loading the project.</source>
         <translation>Er zijn problemen met het laden van het project.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="649"/>
+        <location filename="../qml/main.qml" line="748"/>
+        <source>Could not read the project file:</source>
+        <translation>Kon het projectbestand niet lezen:</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="775"/>
         <source>Press back again to quit the app</source>
         <translation>Druk nogmaals op terug om de app te verlaten</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="491"/>
+        <location filename="../qml/main.qml" line="561"/>
         <source>PROJ Error</source>
         <translation>Foutmelding PROJ </translation>
     </message>

@@ -346,27 +346,22 @@ Please go to the Mergin Maps website to remove it manually.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="64"/>
-        <source>Hello</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="78"/>
+        <location filename="../qml/CreateWorkspacePage.qml" line="58"/>
         <source>A Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects. A good candidate for a workspace name is the name of your team or organisation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="105"/>
+        <location filename="../qml/CreateWorkspacePage.qml" line="86"/>
         <source>My workspace name…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="121"/>
+        <location filename="../qml/CreateWorkspacePage.qml" line="104"/>
         <source>Create workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="125"/>
+        <location filename="../qml/CreateWorkspacePage.qml" line="108"/>
         <source>Empty workspace name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1050,37 +1045,32 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ManageInvitationsPage</name>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="29"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="30"/>
         <source>Join a workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="59"/>
-        <source>Hello</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="73"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="54"/>
         <source>You have been invited to the following workspaces:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="131"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="114"/>
         <source>Workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="156"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="139"/>
         <source>Accept</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="190"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="175"/>
         <source>Do you want to create a new workspace instead?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="190"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="175"/>
         <source>Click here!</source>
         <translation type="unfinished"></translation>
     </message>
