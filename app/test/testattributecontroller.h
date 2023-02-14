@@ -29,6 +29,7 @@ class TestAttributeController: public QObject
     void testValidationMessages();
     void testExpressions();
     void testRawValue();
+    void testFieldsOutsideForm();
 };
 
 #endif // TESTATTRIBUTECONTROLLER_H

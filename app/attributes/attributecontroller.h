@@ -230,6 +230,7 @@ class  AttributeController : public QObject
     QVector<AttributeFormProxyModel *> mAttributeFormProxyModelForTabItem;
     QMap<QUuid, std::shared_ptr<FormItem>> mFormItems; // order of fields in tab is in tab item
     QVector<std::shared_ptr<TabItem>> mTabItems; // order of tabs by tab row number
+    QMap<int, QgsField> mExpressionFields; // fields with expressions outside form
 
     RememberAttributesController *mRememberAttributesController = nullptr; // not owned
     VariablesManager *mVariablesManager = nullptr; // not owned
