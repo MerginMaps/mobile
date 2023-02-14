@@ -23,7 +23,7 @@ namespace TestUtils
   const int LONG_REPLY = 70000;
 
   // Use credentials from env variables if they are set, otherwise register new user and set its credentials to env var
-  void mergin_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password );
+  void mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password );
 
   QString generateUsername();
   QString generateEmail();

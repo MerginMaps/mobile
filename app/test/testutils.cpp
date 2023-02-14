@@ -17,7 +17,7 @@
 #include "inpututils.h"
 #include "merginapi.h"
 
-void TestUtils::mergin_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password )
+void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password )
 {
   Q_ASSERT( api );
 
@@ -47,6 +47,27 @@ void TestUtils::mergin_auth( MerginApi *api, QString &apiRoot, QString &username
 
     qputenv( "TEST_API_USERNAME", username.toLatin1() );
     qputenv( "TEST_API_PASSWORD", password.toLatin1() );
+
+    QSignalSpy authSpy( api, &MerginApi::authChanged );
+    api->authorize( username, password );
+    QVERIFY( authSpy.wait( TestUtils::LONG_REPLY ) );
+    QCOMPARE( authSpy.count(), 1 );
+
+    // we also need to create a workspace for this user
+    QSignalSpy wsSpy( api, &MerginApi::workspaceCreated );
+    api->createWorkspace( username );
+    QVERIFY( wsSpy.wait( TestUtils::LONG_REPLY ) );
+    QCOMPARE( wsSpy.takeFirst().at( 1 ), true );
+
+    qDebug() << "CREATED NEW WORKSPACE:" << username;
+
+    // call userInfo to set active workspace
+    QSignalSpy infoSpy( api, &MerginApi::userInfoReplyFinished );
+    api->getUserInfo();
+    QVERIFY( infoSpy.wait( TestUtils::LONG_REPLY ) );
+
+    QVERIFY( api->userInfo()->activeWorkspaceId() >= 0 );
+    qDebug() << "WORKING WITH WORKSPACE:" << api->userInfo()->activeWorkspaceName() << api->userInfo()->activeWorkspaceId();
   }
 
   Q_ASSERT( ::getenv( "TEST_API_USERNAME" ) );

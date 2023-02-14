@@ -56,12 +56,7 @@ TestMerginApi::~TestMerginApi() = default;
 void TestMerginApi::initTestCase()
 {
   QString apiRoot, username, password;
-  TestUtils::mergin_auth( mApi, apiRoot, username, password );
-
-  QSignalSpy spy( mApi, &MerginApi::authChanged );
-  mApi->authorize( username, password );
-  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( spy.count(), 1 );
+  TestUtils::mergin_setup_auth( mApi, apiRoot, username, password );
 
   mUsername = username;  // keep for later
 
@@ -2673,12 +2668,11 @@ void TestMerginApi::refreshProjectsModel( const ProjectsModel::ProjectModelTypes
 
 void TestMerginApi::testServerType()
 {
-  // old
   QSignalSpy spy( mApi, &MerginApi::serverTypeChanged );
   mApi->getServerConfig();
   spy.wait( TestUtils::SHORT_REPLY );
   QCOMPARE( spy.count(), 0 );
-  QCOMPARE( mApi->serverType(), MerginServerType::OLD );
+  QCOMPARE( mApi->serverType(), MerginServerType::SAAS );
 }
 
 void TestMerginApi::testServerUpgrade()
