@@ -72,7 +72,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
   fixZM( pointToAdd );
 
   // apply gps antenna height
-  if ( mPositionKit && mPositionKit->antennaHeight() > 0 )
+  if ( QgsWkbTypes::hasZ( pointToAdd.wkbType() ) && mPositionKit && mPositionKit->antennaHeight() > 0 )
   {
     pointToAdd.setZ( pointToAdd.z() - mPositionKit->antennaHeight() );
   }
