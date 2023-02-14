@@ -2389,6 +2389,8 @@ void TestMapTools::testAntennaHeight()
   mapTool.setMapSettings( ms );
   mapTool.setPositionKit( mPositionKit );
 
+  mAppSettings->setGpsAntennaHeight( 0 );
+
   QCOMPARE( mapTool.recordingType(), RecordingMapTool::Manual );
 
   mapTool.setState( RecordingMapTool::Record );
@@ -2423,5 +2425,5 @@ void TestMapTools::testAntennaHeight()
   QVERIFY( mapTool.hasValidGeometry() );
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
   QgsPoint p = mapTool.recordedGeometry().vertexAt( 0 );
-  QCOMPARE( p.z(), pointToAdd.z() );
+  QCOMPARE( p.z(), pointToAdd.z() - antennaHeight );
 }
