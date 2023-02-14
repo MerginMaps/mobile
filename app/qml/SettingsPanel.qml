@@ -264,7 +264,7 @@ Item {
             value: 0
 
             onSettingChanged: function( value ) {
-               console.log("CHANGED VALUE TO", value)
+               __appSettings.intervalType = value
             }
           }
 
