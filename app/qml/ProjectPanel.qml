@@ -351,9 +351,7 @@ Item {
           }
         ]
 
-        Component.onCompleted: {
-          pageContent.state = "local"
-        }
+        state: "local"
 
         onStateChanged: {
           __merginApi.pingMergin()
@@ -674,9 +672,7 @@ Item {
           }
         ]
 
-        Component.onCompleted: {
-          pageContent.state = "local"
-        }
+        state: "local"
 
         onStateChanged: {
           __merginApi.pingMergin()
