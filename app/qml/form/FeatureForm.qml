@@ -495,7 +495,7 @@ Item {
             height: childrenRect.height
             anchors { left: placeholder.left; right: placeholder.right }
 
-            property var value: AttributeValue
+            property var value: RawValue
             property bool valueIsNull: AttributeValueIsNull
 
             property var field: Field

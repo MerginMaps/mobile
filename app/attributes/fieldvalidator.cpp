@@ -35,7 +35,7 @@ FieldValidator::ValidationStatus FieldValidator::validate( const FeatureLayerPai
   ValidationStatus state = Valid;
 
   const QgsField field = item.field();
-  QVariant value = pair.feature().attribute( item.fieldIndex() );
+  QVariant value = item.rawValue();
 
   bool isNumeric = item.editorWidgetType() == QStringLiteral( "Range" ) || field.isNumeric();
   if ( isNumeric )

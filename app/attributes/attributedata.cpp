@@ -204,6 +204,16 @@ QgsRelation FormItem::relation() const
   return mRelation;
 }
 
+QVariant FormItem::rawValue() const
+{
+  return mRawValue;
+}
+
+void FormItem::setRawValue( const QVariant &rawValue )
+{
+  mRawValue = rawValue;
+}
+
 
 TabItem::TabItem( const int &id,
                   const QString &name,
