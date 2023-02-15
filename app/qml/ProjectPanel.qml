@@ -351,6 +351,8 @@ Item {
           }
         ]
 
+        state: "local"
+
         onStateChanged: {
           __merginApi.pingMergin()
           projectsPage.refreshProjectList()
@@ -669,6 +671,8 @@ Item {
             name: "public"
           }
         ]
+
+        state: "local"
 
         onStateChanged: {
           __merginApi.pingMergin()
