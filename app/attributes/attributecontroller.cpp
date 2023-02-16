@@ -557,10 +557,9 @@ bool AttributeController::recalculateDefaultValues(
 )
 {
   // update default values for fields which are not in the form
-  QSet<int>::iterator it = mExpressionFieldsOutsideForm.begin();
-  while ( it != mExpressionFieldsOutsideForm.end() )
+  for ( const int idx : mExpressionFieldsOutsideForm )
   {
-    QgsField f = mFeatureLayerPair.layer()->fields().at( *it );
+    QgsField f = mFeatureLayerPair.layer()->fields().at( idx );
     const QgsDefaultValue defaultDefinition = f.defaultValueDefinition();
 
     QgsExpression exp( defaultDefinition.expression() );
@@ -592,11 +591,10 @@ bool AttributeController::recalculateDefaultValues(
       }
       else
       {
-        mFeatureLayerPair.featureRef().setAttribute( *it, val );
+        mFeatureLayerPair.featureRef().setAttribute( idx, val );
         expressionContext.setFeature( featureLayerPair().featureRef() );
       }
     }
-    ++it;
   }
 
   // evaluate default values for fields in the form
