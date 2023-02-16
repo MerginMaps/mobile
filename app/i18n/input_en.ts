@@ -186,40 +186,43 @@ Please go to the Mergin Maps website to remove it manually.</source>
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="544"/>
+        <location filename="../attributes/attributecontroller.cpp" line="568"/>
+        <location filename="../attributes/attributecontroller.cpp" line="618"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation type="unfinished">Default value expression for %1:%2 has parser error: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="554"/>
+        <location filename="../attributes/attributecontroller.cpp" line="578"/>
+        <location filename="../attributes/attributecontroller.cpp" line="628"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation type="unfinished">Default value expression for %1:%2 has evaluation error: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="565"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1117"/>
+        <location filename="../attributes/attributecontroller.cpp" line="589"/>
+        <location filename="../attributes/attributecontroller.cpp" line="639"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1199"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation type="unfinished">Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="819"/>
+        <location filename="../attributes/attributecontroller.cpp" line="898"/>
         <source>Cannot delete feature</source>
         <translation type="unfinished">Cannot delete feature</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="496"/>
-        <location filename="../attributes/attributecontroller.cpp" line="873"/>
+        <location filename="../attributes/attributecontroller.cpp" line="528"/>
+        <location filename="../attributes/attributecontroller.cpp" line="952"/>
         <source>Feature could not be added</source>
         <translation type="unfinished">Feature could not be added</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="505"/>
-        <location filename="../attributes/attributecontroller.cpp" line="884"/>
+        <location filename="../attributes/attributecontroller.cpp" line="537"/>
+        <location filename="../attributes/attributecontroller.cpp" line="963"/>
         <source>Cannot update feature</source>
         <translation type="unfinished">Cannot update feature</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="928"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1007"/>
         <source>Cannot start editing</source>
         <translation type="unfinished">Cannot start editing</translation>
     </message>
@@ -1179,57 +1182,57 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="756"/>
+        <location filename="../../core/merginapi.cpp" line="757"/>
         <source>Username must have at least 4 characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="763"/>
+        <location filename="../../core/merginapi.cpp" line="764"/>
         <source>Username contains invalid characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="770"/>
+        <location filename="../../core/merginapi.cpp" line="771"/>
         <source>Please enter a valid email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="777"/>
+        <location filename="../../core/merginapi.cpp" line="778"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="790"/>
+        <location filename="../../core/merginapi.cpp" line="791"/>
         <source>Passwords do not match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="797"/>
+        <location filename="../../core/merginapi.cpp" line="798"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1177"/>
+        <location filename="../../core/merginapi.cpp" line="1178"/>
         <source>Registration successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1200"/>
+        <location filename="../../core/merginapi.cpp" line="1201"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1486"/>
+        <location filename="../../core/merginapi.cpp" line="1487"/>
         <source>Project detached from Mergin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3518"/>
+        <location filename="../../core/merginapi.cpp" line="3519"/>
         <source>Workspace name contains invalid characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3584"/>
+        <location filename="../../core/merginapi.cpp" line="3585"/>
         <source>Workspace %1 already exists</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1513,50 +1516,50 @@ Click &apos;Yes&apos; to upload it.</source>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="254"/>
-        <location filename="../qml/ProjectPanel.qml" line="622"/>
-        <location filename="../qml/ProjectPanel.qml" line="827"/>
+        <location filename="../qml/ProjectPanel.qml" line="624"/>
+        <location filename="../qml/ProjectPanel.qml" line="831"/>
         <source>Projects</source>
         <translation type="unfinished">Projects</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="483"/>
-        <location filename="../qml/ProjectPanel.qml" line="805"/>
+        <location filename="../qml/ProjectPanel.qml" line="485"/>
+        <location filename="../qml/ProjectPanel.qml" line="809"/>
         <source>Home</source>
         <translation type="unfinished">Home</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="505"/>
+        <location filename="../qml/ProjectPanel.qml" line="507"/>
         <source>My projects</source>
         <translation type="unfinished">My projects</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="529"/>
+        <location filename="../qml/ProjectPanel.qml" line="531"/>
         <source>Shared with me</source>
         <translation type="unfinished">Shared with me</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="529"/>
+        <location filename="../qml/ProjectPanel.qml" line="531"/>
         <source>Shared</source>
         <translation type="unfinished">Shared</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="549"/>
-        <location filename="../qml/ProjectPanel.qml" line="849"/>
+        <location filename="../qml/ProjectPanel.qml" line="551"/>
+        <location filename="../qml/ProjectPanel.qml" line="853"/>
         <source>Explore</source>
         <translation type="unfinished">Explore</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="619"/>
+        <location filename="../qml/ProjectPanel.qml" line="621"/>
         <source>Downloaded projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="624"/>
+        <location filename="../qml/ProjectPanel.qml" line="626"/>
         <source>Public projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="627"/>
+        <location filename="../qml/ProjectPanel.qml" line="629"/>
         <source>Your other projects are accessible%1by switching your workspace here</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2388,17 +2391,17 @@ Please go to the Mergin Maps website to remove it manually.</source>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="139"/>
+        <location filename="../qml/editor/inputrelation.qml" line="148"/>
         <source>%1 more</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="154"/>
+        <location filename="../qml/editor/inputrelation.qml" line="163"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="215"/>
+        <location filename="../qml/editor/inputrelation.qml" line="224"/>
         <source>Linked features</source>
         <translation type="unfinished"></translation>
     </message>
