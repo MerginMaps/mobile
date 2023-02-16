@@ -355,7 +355,7 @@ void AttributeController::clearAll()
   setHasValidationErrors( false );
   mFormItems.clear();
   mTabItems.clear();
-  mExpressionFields.clear();
+  mExpressionFieldsOutsideForm.clear();
   mHasTabs = false;
 }
 
@@ -434,14 +434,14 @@ void AttributeController::updateOnLayerChange()
   }
 
   // collect fields which have default value expression and are not in the form
-  QMap<int, QgsField> fieldMap;
+  QSet<int> fieldIndexes;
   QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
   {
     std::shared_ptr<FormItem> item = formItemsIterator.value();
     if ( item->type() == FormItem::Field )
     {
-      fieldMap[item->fieldIndex()] = item->field();
+      fieldIndexes << item->fieldIndex();
     }
 
     ++formItemsIterator;
@@ -449,14 +449,14 @@ void AttributeController::updateOnLayerChange()
 
   for ( int i = 0; i < mFeatureLayerPair.layer()->fields().count(); i++ )
   {
-    if ( !fieldMap.contains( i ) )
+    if ( !fieldIndexes.contains( i ) )
     {
       QgsField f = mFeatureLayerPair.layer()->fields().at( i );
       const QgsDefaultValue defaultDefinition = f.defaultValueDefinition();
 
       if ( !defaultDefinition.expression().isEmpty() )
       {
-        mExpressionFields[ i ] = f;
+        mExpressionFieldsOutsideForm << i;
       }
     }
   }
@@ -557,10 +557,10 @@ bool AttributeController::recalculateDefaultValues(
 )
 {
   // update default values for fields which are not in the form
-  QMap<int, QgsField>::iterator it = mExpressionFields.begin();
-  while ( it != mExpressionFields.end() )
+  QSet<int>::iterator it = mExpressionFieldsOutsideForm.begin();
+  while ( it != mExpressionFieldsOutsideForm.end() )
   {
-    QgsField f = it.value();
+    QgsField f = mFeatureLayerPair.layer()->fields().at( *it );
     const QgsDefaultValue defaultDefinition = f.defaultValueDefinition();
 
     QgsExpression exp( defaultDefinition.expression() );
@@ -592,7 +592,7 @@ bool AttributeController::recalculateDefaultValues(
       }
       else
       {
-        mFeatureLayerPair.featureRef().setAttribute( it.key(), val );
+        mFeatureLayerPair.featureRef().setAttribute( *it, val );
         expressionContext.setFeature( featureLayerPair().featureRef() );
       }
     }
