@@ -1222,6 +1222,21 @@ QVariant AttributeController::formValue( int fieldIndex ) const
      )
     return QVariant();
 
+  QMap<QUuid, std::shared_ptr<FormItem>>::const_iterator formItemsIterator = mFormItems.constBegin();
+  while ( formItemsIterator != mFormItems.constEnd() )
+  {
+    std::shared_ptr<FormItem> item = formItemsIterator.value();
+    if ( item->type() == FormItem::Field )
+    {
+      if ( item->fieldIndex() == fieldIndex )
+      {
+        return item->rawValue();
+      }
+    }
+
+    ++formItemsIterator;
+  }
+
   return mFeatureLayerPair.feature().attribute( fieldIndex );
 }
 
