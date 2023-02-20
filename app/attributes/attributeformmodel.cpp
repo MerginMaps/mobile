@@ -58,8 +58,8 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
       return item->type();
     case AttributeValue:
       return mController->formValue( item->fieldIndex() );
-    case AttributeValueIsNull:
-      return mController->formValue( item->fieldIndex() ).isNull();
+    case RawValueIsNull:
+      return item->rawValue().isNull();
     case AttributeEditable:
       return item->isEditable();
     case AttributeFormModel::EditorWidget:
@@ -117,7 +117,7 @@ QHash<int, QByteArray> AttributeFormModel::roleNames() const
   roles[Type] = QByteArray( "Type" );
   roles[Name] = QByteArray( "Name" );
   roles[AttributeValue] = QByteArray( "AttributeValue" );
-  roles[AttributeValueIsNull] = QByteArray( "AttributeValueIsNull" );
+  roles[RawValueIsNull] = QByteArray( "RawValueIsNull" );
   roles[AttributeEditable] = QByteArray( "AttributeEditable" );
   roles[EditorWidget] = QByteArray( "EditorWidget" );
   roles[EditorWidgetConfig] = QByteArray( "EditorWidgetConfig" );

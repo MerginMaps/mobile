@@ -49,7 +49,7 @@ class  AttributeFormModel : public QAbstractListModel
       Type = Qt::UserRole + 1, //!< User role used to identify either "field" or "container" type of item
       Name, //!< Field Name
       AttributeValue, //!< Field Value
-      AttributeValueIsNull, //!< Whether field value is null (QVariant with set type, but NULL flag)
+      RawValueIsNull, //!< Whether field raw value is null (QVariant with set type, but NULL flag)
       AttributeEditable,  //!< Whether is field editable
       EditorWidget, //!< Widget type to represent the data (text field, value map, ...)
       EditorWidgetConfig, //!< Widget configuration

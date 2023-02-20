@@ -496,7 +496,7 @@ Item {
             anchors { left: placeholder.left; right: placeholder.right }
 
             property var value: RawValue
-            property bool valueIsNull: AttributeValueIsNull
+            property bool valueIsNull: RawValueIsNull
 
             property var field: Field
             property var widget: EditorWidget
