@@ -339,7 +339,7 @@ Item {
 
           // Terms of Service
           PanelItem {
-            text: qsTr("Mergin terms of service")
+            text: qsTr("Terms of service")
             MouseArea {
               anchors.fill: parent
               onClicked: Qt.openUrlExternally(__inputHelp.merginTermsLink)
