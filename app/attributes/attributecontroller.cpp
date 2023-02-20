@@ -647,7 +647,7 @@ bool AttributeController::recalculateDefaultValues(
           {
             mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
             item->setRawValue( val );
-            emit formDataChanged( item->id(), { AttributeFormModel::RawValue } );
+            emit formDataChanged( item->id(), { AttributeFormModel::RawValue, AttributeFormModel::RawValueIsNull } );
             // Update also expression context after an attribute change
             expressionContext.setFeature( featureLayerPair().featureRef() );
             changedFormItems.insert( item->id() );
@@ -1202,7 +1202,7 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
     else
     {
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
-      emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::AttributeValueIsNull } );
+      emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::RawValueIsNull } );
     }
     recalculateDerivedItems( true, false );
     return true;
