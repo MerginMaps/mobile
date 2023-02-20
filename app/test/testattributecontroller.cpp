@@ -381,6 +381,8 @@ void TestAttributeController::testValidationMessages()
     { items.at( 3 ), "13", V::softUniqueFailed, FieldValidator::Warning }, // there should already be feature with such value
     { items.at( 3 ), "14", "", FieldValidator::Valid },
     { items.at( 3 ), "14sad", V::numberInvalid, FieldValidator::Error },
+    { items.at( 3 ), "-", V::numberInvalid, FieldValidator::Error },
+    { items.at( 3 ), ".", V::numberInvalid, FieldValidator::Error },
     { items.at( 3 ), "14", "", FieldValidator::Valid },
 
     // Attribute - Occupied Expression, must be TRUE - HARD, expression descriptionn: 'Must be true'
