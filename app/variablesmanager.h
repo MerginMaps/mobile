@@ -44,7 +44,6 @@ class VariablesManager : public QObject
     //! Creates and registers custom expression functions to Input, so they can be used in default value definitions.
     void registerInputExpressionFunctions();
     QgsExpressionContextScope *positionScope();
-    QgsExpressionContextScope *positionScope( const GeoPosition &geoInfo, const double direction, bool useGpsPoint );
 
     PositionKit *positionKit() const;
     void setPositionKit( PositionKit *positionKit );
@@ -77,7 +76,7 @@ class VariablesManager : public QObject
 
     void setProjectVariables();
     void addPositionVariable( QgsExpressionContextScope *scope, const QString &name, const QVariant &value, const QVariant &defaultValue = QVariant() );
-    QVariant getGeoPositionAttribute( double attributeValue );
+    QVariant getGeoPositionAttribute( double attributeValue, int precision = 2 );
 };
 
 #endif // VARIABLESMANAGER_H

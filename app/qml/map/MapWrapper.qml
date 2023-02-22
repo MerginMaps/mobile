@@ -11,6 +11,7 @@ import QtQuick
 
 import lc 1.0
 import QtQuick.Dialogs
+import QtQuick.Layouts
 
 import ".."
 import "../components"
@@ -732,12 +733,19 @@ Item {
       else return ( gpsStateGroup.state !== "unavailable" )
     }
 
-    content: Item {
-
-      implicitWidth: acctext.implicitWidth + indicator.width + InputStyle.tinyGap
+    content: RowLayout {
       height: parent.height
+      Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
       anchors.horizontalCenter: parent.horizontalCenter
+
+      Symbol {
+        id: gpsicon
+
+        iconSize: parent.height / 2
+        source: InputStyle.gpsAntennaIcon
+        visible: __appSettings.gpsAntennaHeight > 0 && !Number.isNaN( __positionKit.horizontalAccuracy ) && __positionKit.horizontalAccuracy > 0
+      }
 
       Text {
         id: acctext
@@ -771,7 +779,17 @@ Item {
           {
             return qsTr( "Unknown accuracy" )
           }
-          return __inputUtils.formatNumber( __positionKit.horizontalAccuracy, accuracyButton.accuracyPrecision ) + " m"
+
+          let accuracyText = __inputUtils.formatNumber( __positionKit.horizontalAccuracy, accuracyButton.accuracyPrecision ) + " m"
+          if ( __appSettings.gpsAntennaHeight > 0 )
+          {
+            let gpsText = Number( __appSettings.gpsAntennaHeight.toFixed( 3 ) ) + " m"
+            return gpsText + " / " + accuracyText
+          }
+          else
+          {
+            return accuracyText
+          }
         }
         elide: Text.ElideRight
         wrapMode: Text.NoWrap
@@ -780,7 +798,6 @@ Item {
         color: InputStyle.fontColor
 
         height: parent.height
-        anchors.horizontalCenter: parent.horizontalCenter
 
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
@@ -789,12 +806,11 @@ Item {
       RoundIndicator {
         id: indicator
 
+        Layout.alignment: Qt.AlignTop
+        Layout.topMargin: InputStyle.tinyGap
+
         width: parent.height / 4
         height: width
-        anchors.left: acctext.right
-        anchors.leftMargin: InputStyle.tinyGap
-        anchors.topMargin: InputStyle.tinyGap
-        anchors.top: parent.top
         color: gpsStateGroup.indicatorColor
       }
     }

@@ -35,6 +35,7 @@ class AppSettings: public QObject
     Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
     Q_PROPERTY( bool ignoreWhatsNew READ ignoreWhatsNew WRITE setIgnoreWhatsNew NOTIFY ignoreWhatsNewChanged )
     Q_PROPERTY( bool ignoreWsTooltip READ ignoreWsTooltip NOTIFY ignoreWsTooltipChanged )
+    Q_PROPERTY( double gpsAntennaHeight READ gpsAntennaHeight WRITE setGpsAntennaHeight NOTIFY gpsAntennaHeightChanged )
 
   public:
     explicit AppSettings( QObject *parent = nullptr );
@@ -87,6 +88,9 @@ class AppSettings: public QObject
     bool ignoreWhatsNew() const;
     void setIgnoreWhatsNew( bool newIgnoreWhatsNew );
 
+    double gpsAntennaHeight() const;
+    void setGpsAntennaHeight( double gpsAntennaHeight );
+
     Q_INVOKABLE void wsTooltipShown();
     bool ignoreWsTooltip() const; // ---> can be removed after migration to ws
 
@@ -104,6 +108,7 @@ class AppSettings: public QObject
     void autoCenterMapCheckedChanged();
     void gpsAccuracyToleranceChanged();
     void gpsAccuracyWarningChanged();
+    void gpsAntennaHeightChanged( double antennaHeight );
     void lineRecordingIntervalChanged();
 
     void reuseLastEnteredValuesChanged( bool reuseLastEnteredValues );
@@ -151,6 +156,7 @@ class AppSettings: public QObject
     bool mAutosyncAllowed = false;
     bool mIgnoreWhatsNew = false;
     int mWsTooltipShownCounter = 0; // ---> can be removed after migration to ws
+    double mGpsAntennaHeight = 0;
 };
 
 #endif // APPSETTINGS_H

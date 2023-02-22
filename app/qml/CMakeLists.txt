@@ -123,6 +123,7 @@ set(MM_QML
     RoundIndicator.qml
     SearchBar.qml
     SettingsPanel.qml
+    SettingsPanelItem.qml
     StakeoutPanel.qml
     StorageLimitDialog.qml
     SubscribePage.qml

@@ -116,7 +116,6 @@ Item {
             Layout.fillWidth: true
             Layout.preferredHeight: InputStyle.rowHeight
 
-
             TextRowWithTitle {
               id: gpsReceiverStatus
 
@@ -292,6 +291,40 @@ Item {
           }
 
           TextRowWithTitle {
+            id: vdop
+
+            Layout.fillWidth: true
+
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+
+            titleText: qsTr( "VDOP" )
+            text: {
+              if ( !__positionKit.hasPosition || __positionKit.vdop < 0 ) {
+                return qsTr( "N/A" )
+              }
+
+              __inputUtils.formatNumber( __positionKit.vdop, 2 )
+            }
+          }
+
+          TextRowWithTitle {
+            id: pdop
+
+            Layout.fillWidth: true
+
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+
+            titleText: qsTr( "PDOP" )
+            text: {
+              if ( !__positionKit.hasPosition || __positionKit.pdop < 0 ) {
+                return qsTr( "N/A" )
+              }
+
+              __inputUtils.formatNumber( __positionKit.pdop, 2 )
+            }
+          }
+
+          TextRowWithTitle {
             id: speed
 
             Layout.fillWidth: true
@@ -313,6 +346,15 @@ Item {
 
             titleText: qsTr( "Last fix" )
             text: __positionKit.lastRead.toLocaleTimeString( Qt.locale() ) || qsTr( "N/A" )
+          }
+
+          TextRowWithTitle {
+            id: gpsAntenna
+
+            Layout.fillWidth: true
+
+            titleText: qsTr( "GPS antenna height" )
+            text: __appSettings.gpsAntennaHeight > 0 ? __inputUtils.formatNumber(__appSettings.gpsAntennaHeight, 3) + " m" : qsTr( "Not set" )
           }
         }
       }

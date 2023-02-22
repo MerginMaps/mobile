@@ -61,6 +61,8 @@ class PositionKit : public QObject
 
     // GPS satellites advanced data (Horizontal dilution of precision)
     Q_PROPERTY( double hdop READ hdop NOTIFY hdopChanged )
+    Q_PROPERTY( double vdop READ vdop NOTIFY vdopChanged )
+    Q_PROPERTY( double pdop READ pdop NOTIFY pdopChanged )
 
     // GPS fix status
     Q_PROPERTY( QString fix READ fix NOTIFY fixChanged )
@@ -70,6 +72,9 @@ class PositionKit : public QObject
 
     // Provider of position data
     Q_PROPERTY( AbstractPositionProvider *positionProvider READ positionProvider WRITE setPositionProvider NOTIFY positionProviderChanged )
+
+    Q_PROPERTY( AppSettings *appSettings READ appSettings WRITE setAppSettings NOTIFY appSettingsChanged )
+    Q_PROPERTY( double antennaHeight READ antennaHeight NOTIFY antennaHeightChanged )
 
   public:
     //! Creates new position kit
@@ -106,12 +111,19 @@ class PositionKit : public QObject
     void setPositionProvider( AbstractPositionProvider *newPositionProvider );
 
     double hdop() const;
+    double vdop() const;
+    double pdop() const;
 
     // Coordinate reference system of position - WGS84 (constant)
     Q_INVOKABLE static QgsCoordinateReferenceSystem positionCRS();
 
     Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
     Q_INVOKABLE static AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
+
+    AppSettings *appSettings() const;
+    void setAppSettings( AppSettings *appSettings );
+
+    double antennaHeight() const;
 
   signals:
     void latitudeChanged( double );
@@ -134,12 +146,18 @@ class PositionKit : public QObject
     void satellitesUsedChanged( int );
     void satellitesVisibleChanged( int );
     void hdopChanged( double );
+    void vdopChanged( double );
+    void pdopChanged( double );
 
     void fixChanged( const QString & );
 
     void positionProviderChanged( AbstractPositionProvider *provider );
 
     void positionChanged( const GeoPosition & );
+
+    void appSettingsChanged();
+
+    void antennaHeightChanged();
 
   public slots:
     void parsePositionUpdate( const GeoPosition &newPosition );
@@ -151,6 +169,7 @@ class PositionKit : public QObject
     GeoPosition mPosition;
     bool mHasPosition = false;
     std::unique_ptr<AbstractPositionProvider> mPositionProvider;
+    AppSettings *mAppSettings = nullptr; // not owned
 };
 
 #endif // POSITIONKIT_H

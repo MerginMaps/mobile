@@ -12,6 +12,8 @@
 #include "inputconfig.h"
 #include "variablesmanager.h"
 #include "qgeopositioninfo.h"
+#include "positionkit.h"
+#include "appsettings.h"
 #include "compass.h"
 
 #ifndef TESTVARIABLESMANAGER_H
@@ -21,7 +23,7 @@ class TestVariablesManager: public QObject
 {
     Q_OBJECT
   public:
-    TestVariablesManager( VariablesManager *vm );
+    TestVariablesManager( VariablesManager *vm, PositionKit *pk, AppSettings *as );
   private slots:
     void init(); // will be called before each testfunction is executed.
     void cleanup(); // will be called after every testfunction.
@@ -29,6 +31,8 @@ class TestVariablesManager: public QObject
     void positionVariables();
   private:
     VariablesManager *mVariablesManager;
+    PositionKit *mPositionKit;
+    AppSettings *mAppSettings;
     void evaluateExpression( const QString &expStr, const QString &expectedValue, const QgsExpressionContext *context );
     GeoPosition testGeoPosition();
 };

@@ -191,7 +191,9 @@ Item {
               id: inputField
 
               number: __appSettings.gpsAccuracyTolerance
-              onValueChanged: __appSettings.gpsAccuracyTolerance = value
+              onValueChanged: function(value) {
+                __appSettings.gpsAccuracyTolerance = value
+              }
 
               suffix: " m"
 
@@ -234,6 +236,18 @@ Item {
             }
           }
 
+          SettingsPanelItem {
+            width: parent.width
+
+            title: qsTr("GPS antenna height")
+            description: qsTr("Includes pole height and GPS receiver's antenna height")
+            suffix: " m"
+            value: __appSettings.gpsAntennaHeight
+
+            onSettingChanged: function( value ) {
+               __appSettings.gpsAntennaHeight = value
+            }
+          }
 
           // Header "Recording"
           PanelItem {

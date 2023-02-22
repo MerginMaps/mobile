@@ -14,11 +14,14 @@
 #include <qglobal.h>
 
 #include "inputconfig.h"
+#include "positionkit.h"
+#include "appsettings.h"
 
 class TestMapTools : public QObject
 {
     Q_OBJECT
-
+  public:
+    TestMapTools( PositionKit *pk, AppSettings *as );
   private slots:
     void init();
     void cleanup();
@@ -43,6 +46,11 @@ class TestMapTools : public QObject
     void testVerticesStructure();
 
     void testZMRecording();
+
+    void testAntennaHeight();
+  private:
+    PositionKit *mPositionKit;
+    AppSettings *mAppSettings;
 };
 
 #endif // TESTMAPTOOLS_H

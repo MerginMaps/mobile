@@ -262,6 +262,20 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
+  if ( !qgsDoubleNear( newPosition.vdop, mPosition.vdop ) )
+  {
+    mPosition.vdop = newPosition.vdop;
+    emit vdopChanged( mPosition.vdop );
+    hasAnythingChanged = true;
+  }
+
+  if ( !qgsDoubleNear( newPosition.pdop, mPosition.pdop ) )
+  {
+    mPosition.pdop = newPosition.pdop;
+    emit pdopChanged( mPosition.pdop );
+    hasAnythingChanged = true;
+  }
+
   if ( newPosition.fixStatusString != mPosition.fixStatusString )
   {
     mPosition.fixStatusString = newPosition.fixStatusString;
@@ -383,6 +397,16 @@ double PositionKit::hdop() const
   return mPosition.hdop;
 }
 
+double PositionKit::vdop() const
+{
+  return mPosition.vdop;
+}
+
+double PositionKit::pdop() const
+{
+  return mPosition.pdop;
+}
+
 AbstractPositionProvider *PositionKit::positionProvider() const
 {
   return mPositionProvider.get();
@@ -391,4 +415,40 @@ AbstractPositionProvider *PositionKit::positionProvider() const
 const GeoPosition &PositionKit::position() const
 {
   return mPosition;
+}
+
+AppSettings *PositionKit::appSettings() const
+{
+  return mAppSettings;
+}
+
+void PositionKit::setAppSettings( AppSettings *appSettings )
+{
+  if ( mAppSettings != appSettings )
+  {
+    if ( mAppSettings )
+    {
+      disconnect( mAppSettings );
+    }
+
+    mAppSettings = appSettings;
+    if ( mAppSettings )
+    {
+      QObject::connect( mAppSettings, &AppSettings::gpsAntennaHeightChanged, this, &PositionKit::antennaHeightChanged );
+    }
+    emit appSettingsChanged();
+    emit antennaHeightChanged();
+  }
+}
+
+double PositionKit::antennaHeight() const
+{
+  if ( mAppSettings )
+  {
+    return mAppSettings->gpsAntennaHeight();
+  }
+  else
+  {
+    return 0;
+  }
 }
