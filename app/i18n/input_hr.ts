@@ -188,40 +188,43 @@ Molimo zatvorite ga ručno na Mergin Maps web stranici.</translation>
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="544"/>
+        <location filename="../attributes/attributecontroller.cpp" line="568"/>
+        <location filename="../attributes/attributecontroller.cpp" line="618"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Zadana vrijednost izraza za %1:%2 sadrži grešku provjere sintakse: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="554"/>
+        <location filename="../attributes/attributecontroller.cpp" line="578"/>
+        <location filename="../attributes/attributecontroller.cpp" line="628"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Zadana vrijednost izraza za %1:%2 ima grešku procjene: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="565"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1117"/>
+        <location filename="../attributes/attributecontroller.cpp" line="589"/>
+        <location filename="../attributes/attributecontroller.cpp" line="639"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1199"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Vrijednost &quot;%1&quot; %4 nije mogla biti pretvorena u odgovarajuću vrijednost za polje %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="819"/>
+        <location filename="../attributes/attributecontroller.cpp" line="898"/>
         <source>Cannot delete feature</source>
         <translation>Nije moguće izbrisati objekt</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="496"/>
-        <location filename="../attributes/attributecontroller.cpp" line="873"/>
+        <location filename="../attributes/attributecontroller.cpp" line="528"/>
+        <location filename="../attributes/attributecontroller.cpp" line="952"/>
         <source>Feature could not be added</source>
         <translation>Objekt nije mogao biti dodan</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="505"/>
-        <location filename="../attributes/attributecontroller.cpp" line="884"/>
+        <location filename="../attributes/attributecontroller.cpp" line="537"/>
+        <location filename="../attributes/attributecontroller.cpp" line="963"/>
         <source>Cannot update feature</source>
         <translation>Nije moguće ažurirati objekt</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="928"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1007"/>
         <source>Cannot start editing</source>
         <translation>Nije moguće započeti izmjenu</translation>
     </message>
@@ -349,27 +352,22 @@ Molimo zatvorite ga ručno na Mergin Maps web stranici.</translation>
         <translation>Stvori radni prostor</translation>
     </message>
     <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="64"/>
-        <source>Hello</source>
-        <translation>Zdravo</translation>
-    </message>
-    <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="78"/>
+        <location filename="../qml/CreateWorkspacePage.qml" line="58"/>
         <source>A Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects. A good candidate for a workspace name is the name of your team or organisation.</source>
         <translation>Radni prostor je mjesto za pohranu Vaših projekata. Kolege mogu biti pozvane u Vaš radni prostor za suradnju na projektima. Dobar kandidat za ime radnog prostora je ima Vašeg tima ili organizacije.</translation>
     </message>
     <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="105"/>
+        <location filename="../qml/CreateWorkspacePage.qml" line="86"/>
         <source>My workspace name…</source>
         <translation>Ime mog radnog prostora...</translation>
     </message>
     <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="121"/>
+        <location filename="../qml/CreateWorkspacePage.qml" line="104"/>
         <source>Create workspace</source>
         <translation>Stvori radni prostor</translation>
     </message>
     <message>
-        <location filename="../qml/CreateWorkspacePage.qml" line="125"/>
+        <location filename="../qml/CreateWorkspacePage.qml" line="108"/>
         <source>Empty workspace name</source>
         <translation>Izbriši ima radnog prostora</translation>
     </message>
@@ -1055,37 +1053,32 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>ManageInvitationsPage</name>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="29"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="30"/>
         <source>Join a workspace</source>
         <translation>Pridruži se radnom prostoru</translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="59"/>
-        <source>Hello</source>
-        <translation>Zdravo</translation>
-    </message>
-    <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="73"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="54"/>
         <source>You have been invited to the following workspaces:</source>
         <translation>Pozvani ste u slijedeće radne prostore:</translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="131"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="114"/>
         <source>Workspace</source>
         <translation>Radni prostor</translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="156"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="139"/>
         <source>Accept</source>
         <translation>Prihvati</translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="190"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="175"/>
         <source>Do you want to create a new workspace instead?</source>
         <translation>Želite li umjesto toga stvoriti novi radni prostor?</translation>
     </message>
     <message>
-        <location filename="../qml/ManageInvitationsPage.qml" line="190"/>
+        <location filename="../qml/ManageInvitationsPage.qml" line="175"/>
         <source>Click here!</source>
         <translation>Klikni ovdje!</translation>
     </message>
@@ -1194,57 +1187,57 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="756"/>
+        <location filename="../../core/merginapi.cpp" line="757"/>
         <source>Username must have at least 4 characters</source>
         <translation>Korisničko ime mora sadržavati najmanje 4 znaka</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="763"/>
+        <location filename="../../core/merginapi.cpp" line="764"/>
         <source>Username contains invalid characters</source>
         <translation>Korisničko ime sadržava nevažeće znakove</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="770"/>
+        <location filename="../../core/merginapi.cpp" line="771"/>
         <source>Please enter a valid email</source>
         <translation>Molimo unesite valjani email</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="777"/>
+        <location filename="../../core/merginapi.cpp" line="778"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Zaporka nije dovoljno jaka. Mora%1 sadržavati minimalno 8 znakova%1 sadržavati mala slova%1 sadržavati velima slova%1 sadržavati brojke ili specijalne znakove</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="790"/>
+        <location filename="../../core/merginapi.cpp" line="791"/>
         <source>Passwords do not match</source>
         <translation>Zaporke se ne podudaraju</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="797"/>
+        <location filename="../../core/merginapi.cpp" line="798"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Molimo prihvatite uvjete korištenja i politiku privatnosti</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1177"/>
+        <location filename="../../core/merginapi.cpp" line="1178"/>
         <source>Registration successful</source>
         <translation>Registracija uspješna</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1200"/>
+        <location filename="../../core/merginapi.cpp" line="1201"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>Nisu dozvoljene nove registracije na odabranom Mergin poslužitelju.%1Kontaktirajte Vašeg administratora.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1486"/>
+        <location filename="../../core/merginapi.cpp" line="1487"/>
         <source>Project detached from Mergin</source>
         <translation>Projekt nepovezan s Merginom</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3518"/>
+        <location filename="../../core/merginapi.cpp" line="3519"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Ime radnog prostora sadrži nedozvoljene znakove</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3584"/>
+        <location filename="../../core/merginapi.cpp" line="3585"/>
         <source>Workspace %1 already exists</source>
         <translation>Radni prostor %1 već postoji</translation>
     </message>
@@ -1530,50 +1523,50 @@ Stisnite &apos;Da&apos; za prijenos.</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="254"/>
-        <location filename="../qml/ProjectPanel.qml" line="622"/>
-        <location filename="../qml/ProjectPanel.qml" line="827"/>
+        <location filename="../qml/ProjectPanel.qml" line="624"/>
+        <location filename="../qml/ProjectPanel.qml" line="831"/>
         <source>Projects</source>
         <translation>Projekti</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="483"/>
-        <location filename="../qml/ProjectPanel.qml" line="805"/>
+        <location filename="../qml/ProjectPanel.qml" line="485"/>
+        <location filename="../qml/ProjectPanel.qml" line="809"/>
         <source>Home</source>
         <translation>Naslovnica</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="505"/>
+        <location filename="../qml/ProjectPanel.qml" line="507"/>
         <source>My projects</source>
         <translation>Moji projekti</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="529"/>
+        <location filename="../qml/ProjectPanel.qml" line="531"/>
         <source>Shared with me</source>
         <translation>Podijeljeno</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="529"/>
+        <location filename="../qml/ProjectPanel.qml" line="531"/>
         <source>Shared</source>
         <translation>Podijeljeno</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="549"/>
-        <location filename="../qml/ProjectPanel.qml" line="849"/>
+        <location filename="../qml/ProjectPanel.qml" line="551"/>
+        <location filename="../qml/ProjectPanel.qml" line="853"/>
         <source>Explore</source>
         <translation>Istraži</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="619"/>
+        <location filename="../qml/ProjectPanel.qml" line="621"/>
         <source>Downloaded projects</source>
         <translation>Preuzeti projekti</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="624"/>
+        <location filename="../qml/ProjectPanel.qml" line="626"/>
         <source>Public projects</source>
         <translation>Javni projekti</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="627"/>
+        <location filename="../qml/ProjectPanel.qml" line="629"/>
         <source>Your other projects are accessible%1by switching your workspace here</source>
         <translation>Vaši ostali projekti su dostupni%1promjenom radnog prostora ovdje</translation>
     </message>
@@ -1979,8 +1972,8 @@ Stisnite &apos;Da&apos; za prijenos.</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="342"/>
-        <source>Mergin terms of service</source>
-        <translation>Uvjeti korištenja Mergin servisa</translation>
+        <source>Terms of service</source>
+        <translation>Uvjeti korištenja</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="351"/>
@@ -2409,17 +2402,17 @@ Molimo zatvorite ga ručno na Mergin Maps web stranici.</translation>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="139"/>
+        <location filename="../qml/editor/inputrelation.qml" line="148"/>
         <source>%1 more</source>
         <translation>%1 više</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="154"/>
+        <location filename="../qml/editor/inputrelation.qml" line="163"/>
         <source>Add</source>
         <translation>Dodaj</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="215"/>
+        <location filename="../qml/editor/inputrelation.qml" line="224"/>
         <source>Linked features</source>
         <translation>Povezanih objekata</translation>
     </message>
