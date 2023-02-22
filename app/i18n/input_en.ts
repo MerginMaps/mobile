@@ -1965,7 +1965,7 @@ Click &apos;Yes&apos; to upload it.</source>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="342"/>
-        <source>Mergin terms of service</source>
+        <source>Terms of service</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
