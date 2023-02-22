@@ -31,6 +31,7 @@
 #include "qgsconfig.h"
 #include "qgsproviderregistry.h"
 #include "qgsmaplayerproxymodel.h"
+#include "qgsnetworkaccessmanager.h"
 
 #include "androidutils.h"
 #include "ios/iosutils.h"
@@ -473,6 +474,13 @@ int main( int argc, char *argv[] )
     as.setDemoProjectsCopied( true );
     hasLoadedDemoProjects = true;
   }
+
+  // there seem to be issues with HTTP/2 server support (QTBUG-111417)
+  // so let's stick to HTTP/1 for the time being (Qt5 has HTTP/2 disabled by default)
+  QgsNetworkAccessManager::instance()->setRequestPreprocessor( []( QNetworkRequest * r )
+  {
+    r->setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
+  } );
 
   // Create Input classes
   AndroidUtils au;
