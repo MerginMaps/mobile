@@ -53,7 +53,6 @@ class TestMapTools : public QObject
   private:
     PositionKit *mPositionKit;
     AppSettings *mAppSettings;
-    AppSettings *mAppSettings;
 };
 
 #endif // TESTMAPTOOLS_H

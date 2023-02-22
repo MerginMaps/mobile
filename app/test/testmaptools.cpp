@@ -51,7 +51,9 @@ TestMapTools::TestMapTools( PositionKit *pk, AppSettings *as )
   mPositionKit = pk;
   mAppSettings = as;
 
+  mAppSettings->setGpsAntennaHeight( 0 );
   mPositionKit->setAppSettings( mAppSettings );
+  mPositionKit->setPositionProvider( nullptr );
 }
 
 void TestMapTools::init()

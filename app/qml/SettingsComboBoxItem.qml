@@ -78,7 +78,6 @@ Rectangle {
       id: modeComboBox
 
       Layout.preferredWidth: parent.width * 0.5
-      Layout.fillHeight: true
 
       textRole: "text"
       valueRole: "value"
@@ -91,10 +90,5 @@ Rectangle {
           { text: qsTr("Distance [m]"), value: StreamingIntervalType.Distance }
       ]
     }
-  }
-
-  MouseArea {
-    anchors.fill: parent
-    onClicked: modeComboBox.forceActiveFocus()
   }
 }

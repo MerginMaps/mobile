@@ -248,7 +248,7 @@ Item {
                __appSettings.gpsAntennaHeight = value
             }
           }
-          
+
           // Header "Streaming mode"
           SettingsHeaderItem {
             color: InputStyle.panelBackgroundLight
@@ -278,7 +278,7 @@ Item {
               value: __appSettings.lineRecordingInterval
               minValue: 1
               maxValue: 30
-              suffix: " s"
+              suffix: __appSettings.intervalType == StreamingIntervalType.Distance ? " m" : " s"
               onValueChanged: __appSettings.lineRecordingInterval = spinRecordingInterval.value
               height: parent.height / 2
               rowHeight: parent.height
