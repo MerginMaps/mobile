@@ -11,6 +11,7 @@
 
 WorkspacesProxyModel::WorkspacesProxyModel( QObject *parent ) : QSortFilterProxyModel( parent )
 {
+  setFilterCaseSensitivity( Qt::CaseInsensitive );
 }
 
 QString WorkspacesProxyModel::searchExpression() const
