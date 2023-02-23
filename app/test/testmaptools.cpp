@@ -2445,6 +2445,8 @@ void TestMapTools::testSmallTracking()
   InputMapSettings *ms = canvas.mapSettings();
   setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
 
+  mAppSettings->setGpsAntennaHeight( 0 );
+
   mapTool.setMapSettings( ms );
   mapTool.setPositionKit( mPositionKit );
 
