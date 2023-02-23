@@ -2470,6 +2470,10 @@ void TestMapTools::testSmallTracking()
 
   QVERIFY( mapTool.hasValidGeometry() );
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+
+  qDebug() << "TOOL" << mapTool.recordedGeometry().vertexAt( 0 ).asWkt();
+  qDebug() << "GPS" << mPositionKit->positionCoordinate().asWkt();
+
   QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), mPositionKit->positionCoordinate() );
 
   pos.latitude = 48.10319550872501;
