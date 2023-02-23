@@ -124,8 +124,8 @@ set(MM_QML
     SearchBar.qml
     SettingsComboBoxItem.qml
     SettingsHeaderItem.qml
+    SettingsNumberItem.qml
     SettingsPanel.qml
-    SettingsPanelItem.qml
     StakeoutPanel.qml
     StorageLimitDialog.qml
     SubscribePage.qml

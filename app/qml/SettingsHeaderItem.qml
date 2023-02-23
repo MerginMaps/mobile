@@ -28,11 +28,11 @@ Rectangle {
     anchors.topMargin: InputStyle.innerFieldMargin
     anchors.bottomMargin: InputStyle.innerFieldMargin
 
-    spacing: InputStyle.panelSpacing
+    spacing: InputStyle.panelMargin
 
     Text {
-      Layout.fillWidth: true
-      Layout.preferredWidth: root.width * 0.5
+      id: label
+      Layout.preferredWidth: label.paintedWidth
 
       text: root.text
 
@@ -63,7 +63,6 @@ Rectangle {
 
     Rectangle {
       Layout.fillWidth: true
-      Layout.preferredWidth: root.width * 0.5
       color: "transparent"
     }
   }

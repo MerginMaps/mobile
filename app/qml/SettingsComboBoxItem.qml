@@ -77,7 +77,7 @@ Rectangle {
     ComboBox {
       id: modeComboBox
 
-      Layout.preferredWidth: parent.width * 0.5
+      Layout.fillWidth: true
 
       textRole: "text"
       valueRole: "value"
@@ -86,9 +86,39 @@ Rectangle {
       Component.onCompleted: currentIndex = indexOfValue(root.value)
 
       model: [
-          { text: qsTr("Time [s]"), value: StreamingIntervalType.Time },
-          { text: qsTr("Distance [m]"), value: StreamingIntervalType.Distance }
+          { text: qsTr("Time elapsed"), value: StreamingIntervalType.Time },
+          { text: qsTr("Distance traveled"), value: StreamingIntervalType.Distance }
       ]
+
+      contentItem: Text {
+        text: modeComboBox.displayText
+        verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
+        color: InputStyle.fontColor
+      }
+
+      delegate: ItemDelegate {
+        width: modeComboBox.width
+        contentItem: Text {
+            text: modeComboBox.textRole
+                ? (Array.isArray(modeComboBox.model) ? modelData[modeComboBox.textRole] : model[modeComboBox.textRole])
+                : modelData
+            color: InputStyle.fontColor
+            elide: Text.ElideRight
+            verticalAlignment: Text.AlignVCenter
+        }
+        highlighted: modeComboBox.highlightedIndex === index
+      }
+
+      background: Rectangle {
+        color: InputStyle.clrPanelMain
+      }
+
+      Binding {
+        target: modeComboBox.indicator
+        property: "color"
+        value: InputStyle.fontColor
+      }
     }
   }
 }

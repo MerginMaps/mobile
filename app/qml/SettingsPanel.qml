@@ -236,7 +236,7 @@ Item {
             }
           }
 
-          SettingsPanelItem {
+          SettingsNumberItem {
             width: parent.width
 
             title: qsTr("GPS antenna height")
@@ -260,32 +260,24 @@ Item {
             width: parent.width
 
             title: qsTr("Interval type")
-            description: qsTr("Choose when to add")
-            value: 0
+            description: qsTr("Choose action when to add a new point")
+            value: __appSettings.intervalType
 
             onSettingChanged: function( value ) {
                __appSettings.intervalType = value
             }
           }
 
-          PanelItem {
-            height: root.rowHeight
+          SettingsNumberItem {
             width: parent.width
-            text: qsTr("Line rec. interval")
 
-            NumberSpin {
-              id: spinRecordingInterval
-              value: __appSettings.lineRecordingInterval
-              minValue: 1
-              maxValue: 30
-              suffix: __appSettings.intervalType == StreamingIntervalType.Distance ? " m" : " s"
-              onValueChanged: __appSettings.lineRecordingInterval = spinRecordingInterval.value
-              height: parent.height / 2
-              rowHeight: parent.height
-              anchors.verticalCenter: parent.verticalCenter
-              width: height * 4
-              anchors.right: parent.right
-              anchors.rightMargin: InputStyle.panelMargin
+            title: qsTr("Line rec. interval")
+            description: __appSettings.intervalType === StreamingIntervalType.Distance ? qsTr("in meters") : qsTr("in seconds")
+            suffix: __appSettings.intervalType === StreamingIntervalType.Distance ? " m" : " s"
+            value: __appSettings.gpsAntennaHeight
+
+            onSettingChanged: function( value ) {
+               __appSettings.lineRecordingInterval = value
             }
           }
 
