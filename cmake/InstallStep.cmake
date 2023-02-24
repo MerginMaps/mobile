@@ -134,6 +134,7 @@ set(plugins_dirs
     imageformats
     platforms
     multimedia
+    tls
 )
 
 foreach (plugins_dir ${plugins_dirs})
