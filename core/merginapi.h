@@ -574,7 +574,7 @@ class MerginApi: public QObject
     void listInvitationsFinished( const QList<MerginInvitation> &invitations );
 
     void processInvitationFailed();
-    void processInvitationFinished();
+    void processInvitationFinished( bool accepted );
 
     void workspaceCreated( const QString &workspaceName, bool result );
     void userInfoReplyFinished();
@@ -726,6 +726,7 @@ class MerginApi: public QObject
       AttrProjectFullName = QNetworkRequest::User,
       AttrTempFileName    = QNetworkRequest::User + 1,
       AttrWorkspaceName   = QNetworkRequest::User + 2,
+      AttrAcceptFlag      = QNetworkRequest::User + 3,
     };
 
     Transactions mTransactionalStatus; //projectFullname -> transactionStatus
