@@ -246,6 +246,7 @@ class Purchasing : public QObject
     Q_PROPERTY( bool hasInAppPurchases READ hasInAppPurchases NOTIFY hasInAppPurchasesChanged )
     Q_PROPERTY( bool hasManageSubscriptionCapability READ hasManageSubscriptionCapability NOTIFY hasManageSubscriptionCapabilityChanged )
     Q_PROPERTY( QString subscriptionManageUrl READ subscriptionManageUrl NOTIFY subscriptionManageUrlChanged )
+    Q_PROPERTY( QString subscriptionManageUrl READ subscriptionManageUrl NOTIFY subscriptionManageUrlChanged )
     Q_PROPERTY( QString subscriptionBillingUrl READ subscriptionBillingUrl NOTIFY subscriptionBillingUrlChanged )
 
   public:
@@ -253,6 +254,7 @@ class Purchasing : public QObject
 
     Q_INVOKABLE void purchase( const QString &planId );
     Q_INVOKABLE void restore();
+    Q_INVOKABLE QString subscriptionUrlWithWorkspace();
 
     bool hasManageSubscriptionCapability() const;
     bool transactionPending() const;

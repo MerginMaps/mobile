@@ -51,7 +51,7 @@ Item {
       }
     }
     else {
-      Qt.openUrlExternally(__purchasing.subscriptionManageUrl);
+      Qt.openUrlExternally(__purchasing.subscriptionUrlWithWorkspace());
     }
   }
 

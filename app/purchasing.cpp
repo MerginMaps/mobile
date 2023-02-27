@@ -276,6 +276,19 @@ void Purchasing::onHasInAppPurchasesChanged()
   setSubscriptionBillingUrl( subscriptionBillingUrl );
 }
 
+QString Purchasing::subscriptionUrlWithWorkspace()
+{
+  int ws = mMerginApi->userInfo()->activeWorkspaceId();
+  if ( ws >= 0 )
+  {
+    return mSubscriptionManageUrl + QStringLiteral( "?workspace=%1" ).arg( ws );
+  }
+  else
+  {
+    return mSubscriptionManageUrl;
+  }
+}
+
 bool Purchasing::hasInAppPurchases() const
 {
   return mHasInAppPurchases;
@@ -665,15 +678,7 @@ void Purchasing::setSubscriptionBillingUrl( const QString &subscriptionBillingUr
 
 void Purchasing::setDefaultUrls()
 {
-  int ws = mMerginApi->userInfo()->activeWorkspaceId();
-  if ( ws >= 0 )
-  {
-    mSubscriptionManageUrl = mMerginApi->apiRoot() + QStringLiteral( "subscription?workspace=%1" ).arg( ws );
-  }
-  else
-  {
-    mSubscriptionManageUrl = mMerginApi->apiRoot() + "subscription";
-  }
+  mSubscriptionManageUrl = mMerginApi->apiRoot() + "subscription";
   emit subscriptionManageUrlChanged();
   mSubscriptionBillingUrl = mMerginApi->apiRoot() + "billing";
   emit subscriptionBillingUrlChanged();
