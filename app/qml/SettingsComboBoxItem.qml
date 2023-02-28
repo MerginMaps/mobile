@@ -93,8 +93,10 @@ Rectangle {
       contentItem: Text {
         text: modeComboBox.displayText
         verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignRight
         elide: Text.ElideRight
         color: InputStyle.fontColor
+        font.pixelSize: InputStyle.fontPixelSizeNormal
       }
 
       delegate: ItemDelegate {
@@ -106,6 +108,7 @@ Rectangle {
             color: InputStyle.fontColor
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
+            font.pixelSize: InputStyle.fontPixelSizeNormal
         }
         highlighted: modeComboBox.highlightedIndex === index
       }
