@@ -252,16 +252,7 @@ void Purchasing::evaluateHasInAppPurchases()
 void Purchasing::onHasInAppPurchasesChanged()
 {
   bool hasManageCapability = false;
-  int ws = mMerginApi->userInfo()->activeWorkspaceId();
-  QString subscriptionManageUrl;
-  if ( ws >= 0 )
-  {
-    subscriptionManageUrl = mMerginApi->apiRoot() + QStringLiteral( "subscription?workspace=%1" ).arg( ws );
-  }
-  else
-  {
-    subscriptionManageUrl = mMerginApi->apiRoot() + "subscription";
-  }
+  QString subscriptionManageUrl = mMerginApi->apiRoot() + "subscription";
   QString subscriptionBillingUrl = mMerginApi->apiRoot() + "billing";
 
   if ( hasInAppPurchases() )
