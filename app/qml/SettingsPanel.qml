@@ -236,7 +236,7 @@ Item {
             }
           }
 
-          SettingsPanelItem {
+          SettingsNumberItem {
             width: parent.width
 
             title: qsTr("GPS antenna height")
@@ -249,32 +249,43 @@ Item {
             }
           }
 
+          // Header "Streaming mode"
+          SettingsHeaderItem {
+            color: InputStyle.panelBackgroundLight
+            text: qsTr("Streaming mode")
+            isNew: true
+          }
+
+          SettingsComboBoxItem {
+            width: parent.width
+
+            title: qsTr("Interval type")
+            description: qsTr("Choose action when to add a new point")
+            value: __appSettings.intervalType
+
+            onSettingChanged: function( value ) {
+               __appSettings.intervalType = value
+            }
+          }
+
+          SettingsNumberItem {
+            width: parent.width
+
+            title: qsTr("Line rec. interval")
+            description: __appSettings.intervalType === StreamingIntervalType.Distance ? qsTr("in meters") : qsTr("in seconds")
+            suffix: __appSettings.intervalType === StreamingIntervalType.Distance ? " m" : " s"
+            value: __appSettings.gpsAntennaHeight
+
+            onSettingChanged: function( value ) {
+               __appSettings.lineRecordingInterval = value
+            }
+          }
+
           // Header "Recording"
           PanelItem {
             color: InputStyle.panelBackgroundLight
             text: qsTr("Recording")
             bold: true
-          }
-
-          PanelItem {
-            height: root.rowHeight
-            width: parent.width
-            text: qsTr("Line rec. interval")
-
-            NumberSpin {
-              id: spinRecordingInterval
-              value: __appSettings.lineRecordingInterval
-              minValue: 1
-              maxValue: 30
-              suffix: " s"
-              onValueChanged: __appSettings.lineRecordingInterval = spinRecordingInterval.value
-              height: parent.height / 2
-              rowHeight: parent.height
-              anchors.verticalCenter: parent.verticalCenter
-              width: height * 4
-              anchors.right: parent.right
-              anchors.rightMargin: InputStyle.panelMargin
-            }
           }
 
           PanelItem {

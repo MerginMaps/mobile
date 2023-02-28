@@ -45,6 +45,7 @@ Item {
 
     recordingType: RecordingMapTool.Manual
     recordingInterval: __appSettings.lineRecordingInterval
+    recordingIntervalType: __appSettings.intervalType
 
     positionKit: __positionKit
     activeLayer: __activeLayer.vectorLayer

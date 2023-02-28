@@ -69,6 +69,7 @@ set(MM_SRCS
     relationreferencefeaturesmodel.cpp
     scalebarkit.cpp
     snaputils.cpp
+    streamingintervaltype.cpp
     synchronizationerror.cpp
     synchronizationmanager.cpp
     valuerelationfeaturesmodel.cpp
@@ -143,6 +144,7 @@ set(MM_HDRS
     relationreferencefeaturesmodel.h
     scalebarkit.h
     snaputils.h
+    streamingintervaltype.h
     synchronizationerror.h
     synchronizationmanager.h
     synchronizationoptions.h

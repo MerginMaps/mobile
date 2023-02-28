@@ -48,6 +48,8 @@ class TestMapTools : public QObject
     void testZMRecording();
 
     void testAntennaHeight();
+    void testSmallTracking();
+
   private:
     PositionKit *mPositionKit;
     AppSettings *mAppSettings;
