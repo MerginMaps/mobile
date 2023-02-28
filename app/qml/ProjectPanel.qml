@@ -1055,8 +1055,11 @@ Item {
       Connections {
         target: __merginApi
 
-        function onProcessInvitationFinished() {
-          stackView.pop( null )
+        function onProcessInvitationFinished( accepted ) {
+          stackView.pop(null)
+          if ( __merginApi.userInfo.hasWorkspaces && accepted ) {
+            stackView.push(workspaceListComponent)
+          }
         }
       }
     }
