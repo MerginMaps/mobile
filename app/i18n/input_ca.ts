@@ -573,12 +573,12 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Informació GPS</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="235"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="234"/>
         <source>Altitude</source>
         <translation>Altitud</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="137"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="136"/>
         <source>Longitude</source>
         <translation>Longitud</translation>
     </message>
@@ -593,80 +593,102 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Cap receptor</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="126"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="125"/>
         <source>Status</source>
         <translation>Estat</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="156"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="155"/>
         <source>Latitude</source>
         <translation>Latitud</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="175"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="174"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="190"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="189"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="205"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="204"/>
         <source>Horizontal accuracy</source>
         <translation>Precisió horitzontal</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="339"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="300"/>
+        <source>VDOP</source>
+        <translation>VDOP</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="317"/>
+        <source>PDOP</source>
+        <translation>PDOP</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="356"/>
+        <source>GPS antenna height</source>
+        <translation>Alçada de l&apos;antena GPS</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="357"/>
+        <source>Not set</source>
+        <translation>No establert</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="381"/>
         <source>Manage GPS receivers</source>
         <translation>Gestiona receptors GPS</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="140"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="147"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="159"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="166"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="178"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="193"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="208"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="223"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="238"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="254"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="270"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="287"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="302"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="315"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="139"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="146"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="158"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="165"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="177"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="192"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="207"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="222"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="237"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="253"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="269"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="286"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="303"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="320"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="335"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="348"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="220"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="219"/>
         <source>Vertical accuracy</source>
         <translation>Precisió vertical</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="251"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="250"/>
         <source>Fix quality</source>
         <translation>Qualitat de la posició</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="266"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="265"/>
         <source>Satellites (in use/view)</source>
         <translation>Satèl·lits (en ús / a la vista) </translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="284"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="283"/>
         <source>HDOP</source>
         <translation>HDOP</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="299"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="332"/>
         <source>Speed</source>
         <translation>Velocitat</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="314"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="347"/>
         <source>Last fix</source>
         <translation>Darrera correcció</translation>
     </message>
@@ -1100,87 +1122,87 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1122"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1138"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS no disponible</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="326"/>
+        <location filename="../qml/map/MapWrapper.qml" line="327"/>
         <source>Successfully synchronized</source>
         <translation>Correctament sincronitzat</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="340"/>
+        <location filename="../qml/map/MapWrapper.qml" line="341"/>
         <source>Up to date</source>
         <translation>Actualitzat</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="349"/>
+        <location filename="../qml/map/MapWrapper.qml" line="350"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Algú més s&apos;està sincronitzant, ho tornarem a provar més tard</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="359"/>
+        <location filename="../qml/map/MapWrapper.qml" line="360"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>Hi ha hagut un problema durant la sincronització, ho tornarem a provar. Feu clic per obtenir més informació</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="377"/>
+        <location filename="../qml/map/MapWrapper.qml" line="378"/>
         <source>Splitting done successfully</source>
         <translation>Divisió realitzada amb èxit</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="393"/>
+        <location filename="../qml/map/MapWrapper.qml" line="394"/>
         <source>Create line to split the selected feature</source>
         <translation>Crea una línia per dividir la geometria seleccionada</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="409"/>
+        <location filename="../qml/map/MapWrapper.qml" line="410"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Seleccioneu algun punt per començar a editar la geometria</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="425"/>
+        <location filename="../qml/map/MapWrapper.qml" line="426"/>
         <source>Record new geometry for the feature</source>
         <translation>Enregistreu una geometria nova per a la característica</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="564"/>
+        <location filename="../qml/map/MapWrapper.qml" line="565"/>
         <source>Details</source>
         <translation>Detalls</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="667"/>
+        <location filename="../qml/map/MapWrapper.qml" line="668"/>
         <source>Back</source>
         <translation>Tornar</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="684"/>
+        <location filename="../qml/map/MapWrapper.qml" line="685"/>
         <source>Discard the changes?</source>
         <translation>Descartar els canvis?</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="687"/>
+        <location filename="../qml/map/MapWrapper.qml" line="688"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Si feu clic a &quot;Sí&quot;, es descartarà els canvis a la geometria. Si voleu desar els canvis premeu &quot;No&quot;, i després &quot;Fet&quot; a la barra d&apos;eines.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="691"/>
+        <location filename="../qml/map/MapWrapper.qml" line="692"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Si feu clic a &quot;Sí&quot;, es descarta la vostra nova geometria i no es desarà cap característica. Si voleu desar la geometria premeu &quot;No&quot;, i després &quot;Fet&quot; a la barra d&apos;eines.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="754"/>
+        <location filename="../qml/map/MapWrapper.qml" line="762"/>
         <source>Connecting to %1</source>
         <translation>Connectant amb %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="768"/>
+        <location filename="../qml/map/MapWrapper.qml" line="776"/>
         <source>Connected, no position</source>
         <translation>Connectat, sense posició</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="772"/>
+        <location filename="../qml/map/MapWrapper.qml" line="780"/>
         <source>Unknown accuracy</source>
         <translation>Precisió desconeguda</translation>
     </message>
@@ -1643,27 +1665,27 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
 <context>
     <name>Purchasing</name>
     <message>
-        <location filename="../purchasing.cpp" line="526"/>
+        <location filename="../purchasing.cpp" line="539"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
         <translation>No s&apos;ha pogut processar els detalls del pagament.%1La subscripció no s&apos;ha comprat. </translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="534"/>
+        <location filename="../purchasing.cpp" line="547"/>
         <source>Successfully restored your subscription</source>
         <translation>La vostra subscripció s&apos;ha restaurat correctament</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="536"/>
+        <location filename="../purchasing.cpp" line="549"/>
         <source>Successfully purchased subscription</source>
         <translation>La subscripció s&apos;ha comprat correctament</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="548"/>
+        <location filename="../purchasing.cpp" line="561"/>
         <source>Failed to purchase subscription</source>
         <translation>No s&apos;ha pogut comprar la subscripció</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="546"/>
+        <location filename="../purchasing.cpp" line="559"/>
         <source>Unable to restore your subscription</source>
         <translation>No es pot restaurar la subscripció</translation>
     </message>
@@ -1836,13 +1858,13 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
 <context>
     <name>RecordingTools</name>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="280"/>
+        <location filename="../qml/map/RecordingTools.qml" line="281"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
         <translation>Precisió de posició GPS baixa (% 1 m)&lt;br&gt;&lt;br&gt;Assegureu-vos que teniu una bona visió del cel.</translation>
     </message>
     <message>
-        <location filename="../qml/map/RecordingTools.qml" line="186"/>
-        <location filename="../qml/map/RecordingTools.qml" line="306"/>
+        <location filename="../qml/map/RecordingTools.qml" line="187"/>
+        <location filename="../qml/map/RecordingTools.qml" line="307"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS no disponible actualment.</translation>
     </message>
@@ -1900,6 +1922,27 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
     </message>
 </context>
 <context>
+    <name>SettingsComboBoxItem</name>
+    <message>
+        <location filename="../qml/SettingsComboBoxItem.qml" line="89"/>
+        <source>Time elapsed</source>
+        <translation>Temps transcorregut</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsComboBoxItem.qml" line="90"/>
+        <source>Distance traveled</source>
+        <translation>Distància recorreguda</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsHeaderItem</name>
+    <message>
+        <location filename="../qml/SettingsHeaderItem.qml" line="56"/>
+        <source>New!</source>
+        <translation>Nou!</translation>
+    </message>
+</context>
+<context>
     <name>SettingsPanel</name>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="75"/>
@@ -1927,57 +1970,92 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
         <translation>Llindar de precisió</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="209"/>
+        <location filename="../qml/SettingsPanel.qml" line="211"/>
         <source>Show accuracy warning</source>
         <translation>Mostra l&apos;avís de precisió</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="229"/>
+        <location filename="../qml/SettingsPanel.qml" line="231"/>
         <source>Select GPS receiver</source>
         <translation>Seleccioneu receptor GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="241"/>
+        <location filename="../qml/SettingsPanel.qml" line="242"/>
+        <source>GPS antenna height</source>
+        <translation>Alçada de l&apos;antena GPS</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="243"/>
+        <source>Includes pole height and GPS receiver&apos;s antenna height</source>
+        <translation>Inclou l&apos;alçada del pal i l&apos;alçada de l&apos;antena del receptor GPS</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="255"/>
+        <source>Streaming mode</source>
+        <translation>Mode d&apos;emissió</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="262"/>
+        <source>Interval type</source>
+        <translation>Tipus d&apos;interval</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="263"/>
+        <source>Choose action when to add a new point</source>
+        <translation>Trieu l&apos;acció quan voleu afegir un punt nou</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="275"/>
+        <source>in meters</source>
+        <translation>en metres</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="275"/>
+        <source>in seconds</source>
+        <translation>en segons</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="287"/>
         <source>Recording</source>
         <translation>Enregistrant</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="248"/>
+        <location filename="../qml/SettingsPanel.qml" line="274"/>
         <source>Line rec. interval</source>
         <translation>Interval enregistrament línia</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="270"/>
+        <location filename="../qml/SettingsPanel.qml" line="295"/>
         <source>Reuse last value option</source>
         <translation>Reutilitzeu l&apos;opció del darrer valor</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="290"/>
+        <location filename="../qml/SettingsPanel.qml" line="315"/>
         <source>Automatically sync changes</source>
         <translation>Sincronitza automàticament els canvis</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="315"/>
+        <location filename="../qml/SettingsPanel.qml" line="340"/>
         <source>About</source>
         <translation>Sobre</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="324"/>
+        <location filename="../qml/SettingsPanel.qml" line="349"/>
         <source>Help</source>
         <translation>Ajuda</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="333"/>
+        <location filename="../qml/SettingsPanel.qml" line="358"/>
         <source>Privacy policy</source>
         <translation>Política de privadesa</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="342"/>
+        <location filename="../qml/SettingsPanel.qml" line="367"/>
         <source>Terms of service</source>
         <translation>Condicions del servei</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="351"/>
+        <location filename="../qml/SettingsPanel.qml" line="376"/>
         <source>Diagnostic log</source>
         <translation>Registre de diagnòstic</translation>
     </message>
