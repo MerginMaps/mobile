@@ -70,7 +70,7 @@ Item {
                 id: gpsSwitchBtn
                 width: root.itemSize
                 text: qsTr("GPS")
-                imageSource: InputStyle.gpsFixedIcon
+                imageSource: __appSettings.autoCenterMapChecked ? InputStyle.gpsFixedIcon : InputStyle.gpsNotFixedIcon
                 onActivated: root.gpsSwitchClicked()
                 onActivatedOnHold: root.gpsSwithHeld()
 

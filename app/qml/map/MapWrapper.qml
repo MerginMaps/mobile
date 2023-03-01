@@ -200,6 +200,14 @@ Item {
         __positionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), mapCanvas.mapSettings ) )
       }
     }
+
+    onUserInteractedWithMap: {
+      __appSettings.autoCenterMapChecked = false
+
+      if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer") {
+        recordingToolsLoader.item.stopStreaming()
+      }
+    }
   }
 
   MapPosition {
@@ -207,7 +215,9 @@ Item {
 
     mapSettings: mapCanvas.mapSettings
     positionKit: __positionKit
-    onScreenPositionChanged: updatePosition()
+    onMapPositionChanged: function(point) {
+      updatePosition(point)
+    }
   }
 
   Compass { id: deviceCompass }
@@ -908,8 +918,6 @@ Item {
       compass: deviceCompass
       activeFeature: root.state === "edit" ? internal.featurePairToEdit.feature : __inputUtils.emptyFeature()
 
-      centerToGPSOnStartup: root.state !== "edit"
-
       onCanceled: {
         howtoEditingBanner.hide()
 
@@ -1148,14 +1156,11 @@ Item {
             )
   }
 
-  function updatePosition() {
-    if ( root.state === "view" )
-    {
-      if ( __appSettings.autoCenterMapChecked && isPositionOutOfExtent() )
-      {
-        centerToPosition()
-      }
-    }
+  function updatePosition( point ) {
+     if (__appSettings.autoCenterMapChecked)
+     {
+       mapCanvas.moveTo( mapCanvas.mapSettings.coordinateToScreen( point ) )
+     }
   }
 
   function clear() {

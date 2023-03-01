@@ -27,7 +27,6 @@ Item {
 
   property alias gpsBanner: gpsAccuracyBanner
 
-  property bool centerToGPSOnStartup: false
   property var activeFeature
 
   signal canceled()
@@ -182,17 +181,26 @@ Item {
 
     recordingMapTool: mapTool
 
-    onGpsSwitchClicked: {
+    function centerToGpsAndFollow()
+    {
       if ( root.gpsState.state === "unavailable" ) {
         showMessage( qsTr( "GPS currently unavailable." ) )
         return
       }
 
+
       mapTool.centeredToGPS = true
       root.map.mapSettings.setCenter( mapPositioning.mapPosition )
+      __appSettings.autoCenterMapChecked = true;
+    }
+
+    onGpsSwitchClicked: {
+      centerToGpsAndFollow()
     }
 
     onGpsSwithHeld: {
+      centerToGpsAndFollow()
+
       // start / stop streaming mode
       if ( mapTool.recordingType === RecordingMapTool.Manual )
       {
@@ -200,11 +208,6 @@ Item {
 
         // add first point immediately
         mapTool.addPoint( crosshair.recordPoint )
-        root.map.mapSettings.setCenter( mapPositioning.mapPosition )
-      }
-      else
-      {
-        mapTool.recordingType = RecordingMapTool.Manual
       }
     }
 
@@ -252,11 +255,8 @@ Item {
 
     mapSettings: root.map.mapSettings
     positionKit: __positionKit
-    onScreenPositionChanged: {
-      if ( mapTool.isUsingPosition )
-      {
-        root.map.mapSettings.setCenter( mapPositioning.mapPosition )
-      }
+    onMapPositionChanged: function(point) {
+      updatePosition(point)
     }
   }
 
@@ -299,20 +299,6 @@ Item {
     }
   }
 
-  Component.onCompleted: {
-    if ( root.centerToGPSOnStartup )
-    {
-      // center to GPS
-      if ( root.gpsState.state === "unavailable" ) {
-        showMessage( qsTr( "GPS currently unavailable." ) )
-        return
-      }
-
-      mapTool.centeredToGPS = true
-      root.map.mapSettings.setCenter( mapPositioning.mapPosition )
-    }
-  }
-
   function discardChanges() {
     mapTool.discardChanges()
     root.canceled()
@@ -320,5 +306,18 @@ Item {
 
   function hasChanges() {
     return mapTool.hasChanges()
+  }
+
+  function stopStreaming() {
+    if ( mapTool.recordingType === RecordingMapTool.StreamMode )
+    {
+      mapTool.recordingType = RecordingMapTool.Manual
+    }
+  }
+
+  function updatePosition( point ) {
+    if (__appSettings.autoCenterMapChecked) {
+      mapCanvas.moveTo( mapCanvas.mapSettings.coordinateToScreen( point ) )
+    }
   }
 }

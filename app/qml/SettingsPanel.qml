@@ -105,26 +105,6 @@ Item {
             height: root.rowHeight
             width: parent.width
             color: InputStyle.clrPanelMain
-            text: qsTr("Follow GPS with map")
-
-            SettingsSwitch {
-              id: autoCenterMapSwitch
-
-              checked: __appSettings.autoCenterMapChecked
-              onCheckedChanged: __appSettings.autoCenterMapChecked = checked
-            }
-
-            TapHandler {
-              onTapped: function(eventPoint, button) {
-                autoCenterMapSwitch.toggle()
-              }
-            }
-          }
-
-          PanelItem {
-            height: root.rowHeight
-            width: parent.width
-            color: InputStyle.clrPanelMain
             text: qsTr("GPS accuracy")
 
             Row {

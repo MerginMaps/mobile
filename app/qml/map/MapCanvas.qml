@@ -11,7 +11,7 @@
  * The source code forked from https://github.com/qgis/QGIS on 25th Nov 2022
  * File: qgsquickmapcanvas.qml by (C) 2014 by Matthias Kuhn
  */
- 
+
 import QtQuick
 import QtQuick.Controls
 import QtQml
@@ -80,7 +80,9 @@ Item {
     mapCanvasWrapper.__freezecount[id] = true
     mapCanvasWrapper.freeze = true
 
-    userInteractedWithMap()
+    if (id != "moveTo") {
+      userInteractedWithMap()
+    }
   }
 
   function unfreeze(id) {

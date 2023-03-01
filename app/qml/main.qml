@@ -269,16 +269,16 @@ ApplicationWindow {
           mapThemesPanel.visible = true
           stateManager.state = "misc"
         }
-        onMyLocationClicked: map.centerToPosition()
 
-        onMyLocationHold: {
-            __appSettings.autoCenterMapChecked = !__appSettings.autoCenterMapChecked
-            showMessage( __appSettings.autoCenterMapChecked ?  qsTr("GPS auto-center mode on") : qsTr("GPS auto-center mode off") )
+        onMyLocationClicked: {
+          map.centerToPosition()
+          __appSettings.autoCenterMapChecked = true;
         }
+
         onOpenSettingsClicked: settingsPanel.visible = true
         onZoomToProject: {
           if ( __appSettings.autoCenterMapChecked ) {
-            mainPanel.myLocationHold()
+            mainPanel.onMyLocationClicked()
           }
           __inputUtils.zoomToProject( __activeProject.qgsProject, map.mapSettings )
         }
