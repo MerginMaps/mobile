@@ -562,37 +562,44 @@ bool AttributeController::recalculateDefaultValues(
     QgsField f = mFeatureLayerPair.layer()->fields().at( idx );
     const QgsDefaultValue defaultDefinition = f.defaultValueDefinition();
 
-    QgsExpression exp( defaultDefinition.expression() );
-    exp.prepare( &expressionContext );
-    if ( exp.hasParserError() )
-      QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has parser error: %3" ).arg(
-                                   mFeatureLayerPair.layer()->name(),
-                                   f.name(),
-                                   exp.parserErrorString() ),
-                                 QStringLiteral( "Input" ),
-                                 Qgis::Warning );
+    bool shouldApplyDefaultValue =
+      !defaultDefinition.expression().isEmpty() &&
+      ( isFirstUpdateOfNewFeature || ( isFormValueChange && defaultDefinition.applyOnUpdate() ) );
 
-    QVariant value = exp.evaluate( &expressionContext );
-
-    if ( exp.hasEvalError() )
-      QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has evaluation error: %3" ).arg(
-                                   mFeatureLayerPair.layer()->name(),
-                                   f.name(),
-                                   exp.evalErrorString() ),
-                                 QStringLiteral( "Input" ),
-                                 Qgis::Warning );
-    else
+    if ( shouldApplyDefaultValue )
     {
-      QVariant val( value );
-      if ( !f.convertCompatible( val ) )
-      {
-        QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), f.name(), f.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
-        QgsMessageLog::logMessage( msg );
-      }
+      QgsExpression exp( defaultDefinition.expression() );
+      exp.prepare( &expressionContext );
+      if ( exp.hasParserError() )
+        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has parser error: %3" ).arg(
+                                     mFeatureLayerPair.layer()->name(),
+                                     f.name(),
+                                     exp.parserErrorString() ),
+                                   QStringLiteral( "Input" ),
+                                   Qgis::Warning );
+
+      QVariant value = exp.evaluate( &expressionContext );
+
+      if ( exp.hasEvalError() )
+        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has evaluation error: %3" ).arg(
+                                     mFeatureLayerPair.layer()->name(),
+                                     f.name(),
+                                     exp.evalErrorString() ),
+                                   QStringLiteral( "Input" ),
+                                   Qgis::Warning );
       else
       {
-        mFeatureLayerPair.featureRef().setAttribute( idx, val );
-        expressionContext.setFeature( featureLayerPair().featureRef() );
+        QVariant val( value );
+        if ( !f.convertCompatible( val ) )
+        {
+          QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), f.name(), f.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
+          QgsMessageLog::logMessage( msg );
+        }
+        else
+        {
+          mFeatureLayerPair.featureRef().setAttribute( idx, val );
+          expressionContext.setFeature( featureLayerPair().featureRef() );
+        }
       }
     }
   }
