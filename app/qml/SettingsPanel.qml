@@ -274,7 +274,7 @@ Item {
             title: qsTr("Line rec. interval")
             description: __appSettings.intervalType === StreamingIntervalType.Distance ? qsTr("in meters") : qsTr("in seconds")
             suffix: __appSettings.intervalType === StreamingIntervalType.Distance ? " m" : " s"
-            value: __appSettings.gpsAntennaHeight
+            value: __appSettings.lineRecordingInterval
 
             onSettingChanged: function( value ) {
                __appSettings.lineRecordingInterval = value
