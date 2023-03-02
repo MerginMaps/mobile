@@ -531,6 +531,33 @@ void TestAttributeController::testExpressions()
     QCOMPARE( controller.featureLayerPair().feature().attribute( item->fieldIndex() ), unit.value );
     QCOMPARE( controller.featureLayerPair().feature().attribute( itemExpected->fieldIndex() ), unit.expectedValue );
   }
+
+  QString uuid = controller.featureLayerPair().feature().attribute( 9 ).toString();
+  pair = controller.featureLayerPair();
+
+  // set another feature
+  QgsFeature feat2;
+  feat2.setValid( true );
+  feat2.setFields( surveyLayer->fields(), true );
+  FeatureLayerPair pair2( feat2, surveyLayer );
+  controller.setFeatureLayerPair( pair2 );
+  for ( int i = 0; i > surveyLayer->fields().count(); i++ )
+  {
+    QCOMPARE( controller.featureLayerPair().feature().attribute( i ), QVariant() );
+  }
+
+  // set initial fetuare again and check that field values are the same
+  pair.featureRef().setId( 99 );
+  controller.setFeatureLayerPair( pair );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 1 ), QVariant( "1" ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 2 ), QVariant( "2" ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 3 ), QVariant( "12" ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 4 ), QVariant( 1 ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 5 ), QVariant( 2 ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 6 ), QVariant( 3 ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 7 ), QVariant( "A" ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 8 ), QVariant( "A" ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 9 ), uuid );
 }
 
 void TestAttributeController::testRawValue()
