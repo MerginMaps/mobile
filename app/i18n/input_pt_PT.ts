@@ -1083,7 +1083,7 @@ Não será adicionado ao projeto.</translation>
     <message>
         <location filename="../qml/ManageInvitationsPage.qml" line="54"/>
         <source>You have been invited to the following workspaces:</source>
-        <translation>Vocẽ foi convidado para seguir as seguintes áreas de trabalho:</translation>
+        <translation>Você foi convidado para seguir as seguintes áreas de trabalho:</translation>
     </message>
     <message>
         <location filename="../qml/ManageInvitationsPage.qml" line="114"/>
