@@ -1083,7 +1083,7 @@ Não será adicionado ao projeto.</translation>
     <message>
         <location filename="../qml/ManageInvitationsPage.qml" line="54"/>
         <source>You have been invited to the following workspaces:</source>
-        <translation>Vocẽ foi convidado para seguir as seguintes áreas de trabalho:</translation>
+        <translation>Você foi convidado para seguir as seguintes áreas de trabalho:</translation>
     </message>
     <message>
         <location filename="../qml/ManageInvitationsPage.qml" line="114"/>
@@ -1324,7 +1324,7 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
     <message>
         <location filename="../qml/misc/NoWorkspaceBanner.qml" line="30"/>
         <source>%1Workspace is required to use Mergin Maps. Click here to create one%2.</source>
-        <translation>%1área de trabalho é necessária para usar o Mergin Maps. Clique aqui para criar um%2.</translation>
+        <translation>%1Área de trabalho é necessária para usar o Mergin Maps. Clique aqui para criar um%2.</translation>
     </message>
 </context>
 <context>
@@ -1612,7 +1612,7 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
     <message>
         <location filename="../projectwizard.cpp" line="93"/>
         <source>Project name contains invalid characters</source>
-        <translation>Nome do projeto contêm carateres inválidos</translation>
+        <translation>Nome do projeto contém carateres inválidos</translation>
     </message>
     <message>
         <location filename="../projectwizard.cpp" line="127"/>
@@ -2295,7 +2295,7 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
     <message>
         <location filename="../qml/WorkspaceAccountPage.qml" line="144"/>
         <source>Your role</source>
-        <translation>Seu papel</translation>
+        <translation>A sua função</translation>
     </message>
     <message>
         <location filename="../qml/WorkspaceAccountPage.qml" line="151"/>
