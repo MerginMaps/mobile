@@ -79,10 +79,6 @@ Item {
   function freeze(id) {
     mapCanvasWrapper.__freezecount[id] = true
     mapCanvasWrapper.freeze = true
-
-    if (id != "moveTo") {
-      userInteractedWithMap()
-    }
   }
 
   function unfreeze(id) {
@@ -175,6 +171,9 @@ Item {
     }
   }
 
+      userInteractedWithMap()
+      userInteractedWithMap()
+      userInteractedWithMap()
   //
   // Qt6.0+ does not work well when PinchHandler is combined with TapHandler.
   // Sometimes, after map is zoomed in/out a few times, TapHandler ends in an invalid state -
