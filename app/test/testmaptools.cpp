@@ -1844,6 +1844,24 @@ void TestMapTools::testVerticesStructure()
   QCOMPARE( verticesl.at( 3 ).coordinates(), linestringdata.at( 1 ) );
   QCOMPARE( verticesl.at( 5 ).coordinates(), linestringdata.at( 2 ) );
 
+  // single point line
+  QgsLineString *r = qgsgeometry_cast<QgsLineString *>( linestrindataGEO.get() );
+  QgsPointSequence ps;
+  r->points( ps );
+  ps.removeAt( 2 );
+  ps.removeAt( 1 );
+  r->setPoints( ps );
+
+  lineFeature.setGeometry( linestrindataGEO );
+  lineLayer->dataProvider()->addFeature( lineFeature );
+
+  mapTool.setActiveLayer( lineLayer );
+  mapTool.setActiveFeature( lineFeature );
+
+  QCOMPARE( mapTool.collectedVertices().length(), 1 );
+  QVERIFY( mapTool.collectedVertices().at( 0 ).type() == Vertex::Existing );
+  QCOMPARE( mapTool.collectedVertices().at( 0 ).coordinates(), linestringdata.at( 0 ) );
+
   //
   // multilinestring
   //
