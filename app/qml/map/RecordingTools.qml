@@ -197,9 +197,6 @@ Item {
       if ( mapTool.recordingType === RecordingMapTool.Manual )
       {
         mapTool.recordingType = RecordingMapTool.StreamMode
-
-        // add first point immediately
-        mapTool.addPoint( crosshair.recordPoint )
         root.map.mapSettings.setCenter( mapPositioning.mapPosition )
       }
       else
