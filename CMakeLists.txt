@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.22)
 # TODO automatically change with the scripts/update version script
 set(MM_VERSION_MAJOR "2")
 set(MM_VERSION_MINOR "1")
-set(MM_VERSION_PATCH "0")
+set(MM_VERSION_PATCH "1")
 set(QT_VERSION_DEFAULT "6.4.2")
 
 # Note: we cannot set this for non-android build, since CMake will start looking for
