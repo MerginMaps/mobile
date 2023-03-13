@@ -371,9 +371,10 @@ Item {
         zoomCenter = centroid.position
       }
 
-      if ( active )
+      if ( active ) {
         freeze('zoom')
         userInteractedWithMap()
+      }
       else
         unfreeze('zoom')
     }
