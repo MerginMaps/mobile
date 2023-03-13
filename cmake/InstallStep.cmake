@@ -134,11 +134,9 @@ set(plugins_dirs
     imageformats
     platforms
     multimedia
-    tls
 )
 
 foreach (plugins_dir ${plugins_dirs})
-
   if (WIN)
     install(
       DIRECTORY ${Qt6_base_dir}/plugins/${plugins_dir}
@@ -152,8 +150,22 @@ foreach (plugins_dir ${plugins_dirs})
       PATTERN "*d.so" EXCLUDE
     )
   endif ()
-
 endforeach ()
+
+# tls has names like *backend[d].dll so excluding *d.dll doesn't work
+if (WIN)
+  install(
+    DIRECTORY ${Qt6_base_dir}/plugins/tls
+    DESTINATION .
+    PATTERN "*dd.dll" EXCLUDE
+  )
+elseif (LNX)
+  install(
+    DIRECTORY ${Qt6_base_dir}/plugins/tls
+    DESTINATION plugins/
+    PATTERN "*dd.so" EXCLUDE
+  )
+endif ()
 
 set(qt_libs
     Bluetooth
