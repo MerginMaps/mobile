@@ -249,7 +249,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
-          name: APK compined
+          name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} APK [v7 + v8a]
 
       - name: build AAB
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
@@ -277,5 +277,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab
-          name: AAB bundle
+          name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} AAB
           
