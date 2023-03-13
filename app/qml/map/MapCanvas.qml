@@ -108,6 +108,8 @@ Item {
   {
     freeze('moveTo')
 
+    userInteractedWithMap()
+
     let newPosMapCRS = mapCanvasWrapper.mapSettings.screenToCoordinate( newPos )
     let oldPosMapCRS = mapCanvasWrapper.mapSettings.center
 
@@ -171,9 +173,6 @@ Item {
     }
   }
 
-      userInteractedWithMap()
-      userInteractedWithMap()
-      userInteractedWithMap()
   //
   // Qt6.0+ does not work well when PinchHandler is combined with TapHandler.
   // Sometimes, after map is zoomed in/out a few times, TapHandler ends in an invalid state -
@@ -320,10 +319,12 @@ Item {
               zoomCenter = centroid.position;
               isZooming = true;
               freeze('zoom');
+              userInteractedWithMap()
             }
             else
             {
               freeze('pan');
+              userInteractedWithMap()
             }
           }
           else
@@ -372,6 +373,7 @@ Item {
 
       if ( active )
         freeze('zoom')
+        userInteractedWithMap()
       else
         unfreeze('zoom')
     }
@@ -399,6 +401,7 @@ Item {
     onActiveChanged: {
       if ( active ) {
         freeze('pinch')
+        userInteractedWithMap()
         oldScale = 1.0
         oldPos = centroid.position
       } else {
@@ -443,8 +446,6 @@ Item {
       {
         zoomOut(point.position)
       }
-
-      userInteractedWithMap()
     }
   }
 }

@@ -203,10 +203,6 @@ Item {
 
     onUserInteractedWithMap: {
       __appSettings.autoCenterMapChecked = false
-
-      if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer") {
-        recordingToolsLoader.item.stopStreaming()
-      }
     }
   }
 
