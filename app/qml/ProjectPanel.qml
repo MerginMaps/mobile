@@ -351,10 +351,6 @@ Item {
           }
         ]
 
-        Component.onCompleted: {
-          pageContent.state = "local"
-        }
-
         onStateChanged: {
           __merginApi.pingMergin()
           projectsPage.refreshProjectList()
@@ -673,10 +669,6 @@ Item {
             name: "public"
           }
         ]
-
-        Component.onCompleted: {
-          pageContent.state = "local"
-        }
 
         onStateChanged: {
           __merginApi.pingMergin()
