@@ -126,6 +126,7 @@ Item {
       id: warningMsgContainer
       visible: __merginApi.apiVersionStatus !== MerginApiStatus.OK
       width: parent.width
+      height: pendingText.paintedHeight
 
       Text {
         id: pendingText
