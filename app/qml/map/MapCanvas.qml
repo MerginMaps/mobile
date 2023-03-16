@@ -108,8 +108,6 @@ Item {
   {
     freeze('moveTo')
 
-    userInteractedWithMap()
-
     let newPosMapCRS = mapCanvasWrapper.mapSettings.screenToCoordinate( newPos )
     let oldPosMapCRS = mapCanvasWrapper.mapSettings.center
 
