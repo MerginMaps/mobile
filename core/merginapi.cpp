@@ -3467,6 +3467,7 @@ void MerginApi::processInvitation( const QString &uuid, bool accept )
   QUrl url( urlString );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrAcceptFlag ), accept );
 
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
@@ -3483,6 +3484,8 @@ void MerginApi::processInvitationReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
+  bool accept = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrAcceptFlag ) ).toBool();
+
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "process invitation", QStringLiteral( "Success" ) );
@@ -3496,7 +3499,7 @@ void MerginApi::processInvitationReplyFinished()
     emit processInvitationFailed();
   }
 
-  emit processInvitationFinished();
+  emit processInvitationFinished( accept );
 
   r->deleteLater();
 }
