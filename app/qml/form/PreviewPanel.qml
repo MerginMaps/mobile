@@ -172,6 +172,7 @@ Item {
                     source: controller.photo
                     sourceSize: Qt.size(width, height)
                     fillMode: Image.PreserveAspectFit
+                    autoTransform : true
                     anchors.fill: parent
                     anchors.topMargin: InputStyle.panelMargin
                 }
