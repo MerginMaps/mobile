@@ -19,7 +19,7 @@ void ProjectsProxyModel::initialize()
   mModelType = mModel->modelType();
 
   // do not sort at all in public projects, they come sorted from Mergin
-  if ( mModelType == ProjectsModel::LocalProjectsModel || mModelType == ProjectsModel::CreatedProjectsModel )
+  if ( mModelType == ProjectsModel::LocalProjectsModel )
   {
     if ( mModelType == ProjectsModel::CreatedProjectsModel )
       setFilterRole( ProjectsModel::ProjectName );
