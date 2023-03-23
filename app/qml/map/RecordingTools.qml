@@ -209,6 +209,10 @@ Item {
         // add first point immediately
         mapTool.addPoint( crosshair.recordPoint )
       }
+      else
+      {
+        mapTool.recordingType = RecordingMapTool.Manual
+      }
     }
 
     onAddClicked: {
@@ -306,13 +310,6 @@ Item {
 
   function hasChanges() {
     return mapTool.hasChanges()
-  }
-
-  function stopStreaming() {
-    if ( mapTool.recordingType === RecordingMapTool.StreamMode )
-    {
-      mapTool.recordingType = RecordingMapTool.Manual
-    }
   }
 
   function updatePosition( point ) {

@@ -270,6 +270,10 @@ ApplicationWindow {
           stateManager.state = "misc"
         }
 
+        onMyLocationHold: {
+          map.centerToPosition()
+          __appSettings.autoCenterMapChecked = true;
+        }
         onMyLocationClicked: {
           map.centerToPosition()
           __appSettings.autoCenterMapChecked = true;
@@ -278,7 +282,7 @@ ApplicationWindow {
         onOpenSettingsClicked: settingsPanel.visible = true
         onZoomToProject: {
           if ( __appSettings.autoCenterMapChecked ) {
-            mainPanel.onMyLocationClicked()
+            mainPanel.myLocationClicked()
           }
           __inputUtils.zoomToProject( __activeProject.qgsProject, map.mapSettings )
         }
