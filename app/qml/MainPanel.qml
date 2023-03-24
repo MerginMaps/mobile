@@ -145,6 +145,7 @@ Item {
         }
 
         Item {
+            id: localChangesItem
             height: parent.height
             visible: panelRow.itemsToShow > 5
             width: visible ? panelRow.calculatedItemWidth : 0
@@ -163,6 +164,7 @@ Item {
         }
 
         Item {
+            id: layersItem
             height: parent.height
             visible: panelRow.itemsToShow > 6
             width: visible ? panelRow.calculatedItemWidth : 0
@@ -334,7 +336,7 @@ Item {
 
         MenuItem {
             width: parent.width
-            visible: !mapThemesItem.visible
+            visible: !localChangesItem.visible
             height: visible ? mainPanel.itemSize : 0
 
             ExtendedMenuItem {
@@ -353,7 +355,7 @@ Item {
 
         MenuItem {
             width: parent.width
-            visible: !mapThemesItem.visible
+            visible: !layersItem.visible
             height: visible ? mainPanel.itemSize : 0
 
             ExtendedMenuItem {
