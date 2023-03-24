@@ -135,10 +135,11 @@ Item {
         text: {
           if (__merginApi.apiVersionStatus === MerginApiStatus.INCOMPATIBLE) {
             qsTr("Please update Input to use the latest Mergin features.")
-          } else if (__merginApi.apiVersionStatus === MerginApiStatus.PENDING) {
-            ""
-          } else {
+          } else if (__merginApi.apiVersionStatus === MerginApiStatus.NOT_FOUND) {
             qsTr("Mergin is currently unavailable - please try again later.")
+          } else {
+            // MerginApiStatus.PENDING or MerginApiStatus.UNKNOWN
+            ""
           }
         }
         verticalAlignment: Text.AlignVCenter
