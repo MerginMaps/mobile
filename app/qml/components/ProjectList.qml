@@ -27,7 +27,7 @@ Item {
   signal activeProjectDeleted()
 
   onSearchTextChanged: {
-    if ( projectModelType === ProjectsModel.PublicProjectsModel ) {
+    if ( projectModelType !== ProjectsModel.LocalProjectsModel ) {
       controllerModel.listProjects( root.searchText )
     }
     else viewModel.searchExpression = root.searchText

@@ -18,7 +18,8 @@ void ProjectsProxyModel::initialize()
   setSourceModel( mModel );
   mModelType = mModel->modelType();
 
-  if ( mModelType != ProjectsModel::PublicProjectsModel ) // do not sort at all in public projects, they come sorted from Mergin
+  // do not sort at all in public projects, they come sorted from Mergin
+  if ( mModelType == ProjectsModel::LocalProjectsModel )
   {
     if ( mModelType == ProjectsModel::CreatedProjectsModel )
       setFilterRole( ProjectsModel::ProjectName );

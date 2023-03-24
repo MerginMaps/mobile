@@ -221,7 +221,6 @@ void ProjectsModel::onListProjectsFinished( const MerginProjectsList &merginProj
   mServerProjectsCount = projectsCount;
   mPaginatedPage = page;
   emit hasMoreProjectsChanged();
-
   setModelIsLoading( false );
 }
 
