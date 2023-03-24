@@ -249,3 +249,8 @@ void LocalProjectsManager::addProject( const QString &projectDir, const QString 
   mProjects << project;
   emit localProjectAdded( project );
 }
+
+bool LocalProjectsManager::hasProjects() const
+{
+  return !mProjects.isEmpty();
+}

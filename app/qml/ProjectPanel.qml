@@ -1101,7 +1101,11 @@ Item {
 
     function onAuthRequested() {
       stackView.pending = false
-      root.openAuthPanel()
+
+      if (!__localProjectsManager.hasProjects())
+      {
+        root.openAuthPanel()
+      }
     }
 
     function onAuthChanged() {
