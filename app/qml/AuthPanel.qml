@@ -98,6 +98,7 @@ Item {
       visible: !warningMsgContainer.visible
       height: parent.height - staticPane.height
       width: parent.width
+      y: warningMsgContainer.visible ? warningMsgContainer.height : pane.top
       bgColor: root.bgColor
       panelMargin: root.panelMargin
       fontColor: root.fontColor
