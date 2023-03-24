@@ -1231,6 +1231,10 @@ void MerginApi::pingMerginReplyFinished()
   else
   {
     serverMsg = extractServerErrorMsg( r->readAll() );
+    if ( serverMsg.isEmpty() )
+    {
+      serverMsg = r->errorString();
+    }
     CoreUtils::log( "ping", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
   }
   r->deleteLater();
