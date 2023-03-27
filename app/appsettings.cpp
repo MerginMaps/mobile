@@ -30,8 +30,6 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   int streamingIntervalType = settings.value( "intervalType", 0 ).toInt();
   StreamingIntervalType::IntervalType intervalType = static_cast<StreamingIntervalType::IntervalType>( streamingIntervalType );
   bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
-  QString savedAppVersion = settings.value( QStringLiteral( "appVersion" ), QStringLiteral() ).toString();
-  bool legacyFolderMigrated = settings.value( QStringLiteral( "legacyFolderMigrated" ), false ).toBool();
   QString activeProviderId = settings.value( QStringLiteral( "activePositionProviderId" ) ).toString();
   bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
   bool ignoreWhatsNew = settings.value( QStringLiteral( "ignoreWhatsNew" ), false ).toBool();
@@ -49,8 +47,6 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setLineRecordingInterval( lineRecordingInterval );
   setIntervalType( intervalType );
   setReuseLastEnteredValues( reuseLastEnteredValues );
-  setAppVersion( savedAppVersion );
-  setLegacyFolderMigrated( legacyFolderMigrated );
   setActivePositionProviderId( activeProviderId );
   setAutosyncAllowed( autosync );
   setIgnoreWhatsNew( ignoreWhatsNew );
@@ -218,36 +214,6 @@ void AppSettings::setGpsAccuracyWarning( bool gpsAccuracyWarning )
     setValue( "gpsAccuracyWarning", gpsAccuracyWarning );
     emit gpsAccuracyWarningChanged();
   }
-}
-
-QString AppSettings::appVersion() const
-{
-  return mAppVersion;
-}
-
-void AppSettings::setAppVersion( const QString &newAppVersion )
-{
-  if ( mAppVersion == newAppVersion )
-    return;
-
-  mAppVersion = newAppVersion;
-  setValue( QStringLiteral( "appVersion" ), newAppVersion );
-  emit appVersionChanged( mAppVersion );
-}
-
-bool AppSettings::legacyFolderMigrated()
-{
-  return mLegacyFolderMigrated;
-}
-
-void AppSettings::setLegacyFolderMigrated( bool hasBeenMigrated )
-{
-  if ( mLegacyFolderMigrated == hasBeenMigrated )
-    return;
-
-  mLegacyFolderMigrated = hasBeenMigrated;
-  setValue( QStringLiteral( "legacyFolderMigrated" ), hasBeenMigrated );
-  emit legacyFolderMigratedChanged( mLegacyFolderMigrated );
 }
 
 const QString &AppSettings::activePositionProviderId() const

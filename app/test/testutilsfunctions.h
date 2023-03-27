@@ -35,7 +35,6 @@ class TestUtilsFunctions: public QObject
     void getRelativePath();
     void resolvePhotoPath();
     void resolveTargetDir();
-    void testDirSize();
     void testExtractPointFromFeature();
     void testStakeoutPathExtent();
     void testDistanceBetweenGpsAndFeature();
