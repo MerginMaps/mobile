@@ -253,7 +253,6 @@ Item {
           SettingsHeaderItem {
             color: InputStyle.panelBackgroundLight
             text: qsTr("Streaming mode")
-            isNew: true
           }
 
           SettingsComboBoxItem {
