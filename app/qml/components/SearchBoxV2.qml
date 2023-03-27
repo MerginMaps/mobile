@@ -57,8 +57,12 @@ Item {
 
         font.italic: true
         placeholderText: qsTr("Search")
+        font.capitalization: Font.MixedCase
+        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
 
-        onTextChanged: searchTextChanged( text )
+        onDisplayTextChanged: {
+          searchTextChanged( searchfield.displayText )
+        }
 
         background: Rectangle {
           color: "transparent"
