@@ -36,6 +36,8 @@ class TestPosition: public QObject
     void testPositionProviderKeysInSettings();
     void testMapPosition();
 
+    void testPositionTracking();
+
   private:
     PositionKit *positionKit;
 };

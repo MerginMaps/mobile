@@ -353,3 +353,10 @@ void TestPosition::testMapPosition()
   QVERIFY( !positionUpdateSpy2.isEmpty() );
   QVERIFY( mapPosition.mapPosition() != oldmappos );
 }
+
+void TestPosition::testPositionTracking()
+{
+
+  // TODO: test adding points, position change, invalid layers, turning on/off, and triggering autosync
+  QVERIFY( true );
+}
