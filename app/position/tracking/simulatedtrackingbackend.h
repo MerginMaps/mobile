@@ -7,23 +7,24 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef SIMULATEDTRACKINGBACKEND_H
+#define SIMULATEDTRACKINGBACKEND_H
+
 #include "abstracttrackingbackend.h"
+#include <qglobal.h>
 
-AbstractTrackingBackend::AbstractTrackingBackend( QObject *parent )
-  : QObject{parent}
+class AbstractPositionProvider;
+
+class SimulatedTrackingBackend : public AbstractTrackingBackend
 {
+    Q_OBJECT
+  public:
+    explicit SimulatedTrackingBackend( AbstractPositionProvider *positionProvider, AbstractTrackingBackend::UpdateFrequency updateFrequency, QObject *parent = nullptr );
+    explicit SimulatedTrackingBackend( AbstractTrackingBackend::UpdateFrequency updateFrequency, QObject *parent = nullptr );
 
-}
+  private:
 
-AbstractTrackingBackend::UpdateFrequency AbstractTrackingBackend::updateFrequency() const
-{
-  return mUpdateFrequency;
-}
+    std::unique_ptr<AbstractPositionProvider> mPositionProvider;
+};
 
-void AbstractTrackingBackend::setUpdateFrequency( const UpdateFrequency &newUpdateFrequency )
-{
-  if ( mUpdateFrequency == newUpdateFrequency )
-    return;
-  mUpdateFrequency = newUpdateFrequency;
-  emit updateFrequencyChanged( mUpdateFrequency );
-}
+#endif // SIMULATEDTRACKINGBACKEND_H

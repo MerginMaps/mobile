@@ -38,6 +38,7 @@ class AppSettings: public QObject
     Q_PROPERTY( bool ignoreWhatsNew READ ignoreWhatsNew WRITE setIgnoreWhatsNew NOTIFY ignoreWhatsNewChanged )
     Q_PROPERTY( bool ignoreWsTooltip READ ignoreWsTooltip NOTIFY ignoreWsTooltipChanged )
     Q_PROPERTY( double gpsAntennaHeight READ gpsAntennaHeight WRITE setGpsAntennaHeight NOTIFY gpsAntennaHeightChanged )
+    Q_PROPERTY( bool trackingActive READ trackingActive WRITE setTrackingActive NOTIFY trackingActiveChanged )
 
   public:
     explicit AppSettings( QObject *parent = nullptr );
@@ -103,6 +104,9 @@ class AppSettings: public QObject
     static const QString POSITION_PROVIDERS_GROUP;
     static const int WS_TOOLTIP_MAX_NUM_OF_OCCURENCIES; // ---> can be removed after migration to ws
 
+    bool trackingActive() const;
+    void setTrackingActive( bool newTrackingActive );
+
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
 
@@ -126,6 +130,8 @@ class AppSettings: public QObject
     void ignoreWhatsNewChanged();
 
     void ignoreWsTooltipChanged(); // ---> can be removed after migration to ws
+
+    void trackingActiveChanged( bool trackingActive );
 
   private:
     // Projects path
@@ -164,6 +170,7 @@ class AppSettings: public QObject
     bool mIgnoreWhatsNew = false;
     int mWsTooltipShownCounter = 0; // ---> can be removed after migration to ws
     double mGpsAntennaHeight = 0;
+    bool mTrackingActive = false;
 };
 
 #endif // APPSETTINGS_H

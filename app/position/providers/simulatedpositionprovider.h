@@ -42,6 +42,8 @@ class SimulatedPositionProvider : public AbstractPositionProvider
     );
     virtual ~SimulatedPositionProvider();
 
+    virtual void setUpdateInterval( double msecs ) override;
+
   public slots:
     virtual void startUpdates() override;
     virtual void stopUpdates() override;

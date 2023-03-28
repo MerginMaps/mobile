@@ -13,14 +13,35 @@
 #include <QObject>
 #include <qglobal.h>
 
+#include "position/geoposition.h"
+
 class AbstractTrackingBackend : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY( UpdateFrequency updateFrequency READ updateFrequency WRITE setUpdateFrequency NOTIFY updateFrequencyChanged )
+
   public:
+    enum UpdateFrequency
+    {
+      Often = 0,
+      Normal,
+      Occasional,
+    };
+    Q_ENUM( UpdateFrequency );
+
     explicit AbstractTrackingBackend( QObject *parent = nullptr );
 
-  signals:
+    UpdateFrequency updateFrequency() const;
+    void setUpdateFrequency( const UpdateFrequency &newUpdateFrequency );
 
+  signals:
+    void positionChanged( GeoPosition position );
+
+    void updateFrequencyChanged( AbstractTrackingBackend::UpdateFrequency updateFrequency );
+
+  private:
+    UpdateFrequency mUpdateFrequency;
 };
 
 #endif // ABSTRACTTRACKINGBACKEND_H

@@ -12,6 +12,7 @@ import QtQuick
 import lc 1.0
 import QtQuick.Dialogs
 import QtQuick.Layouts
+import QtQuick.Shapes
 
 import ".."
 import "../components"
@@ -272,6 +273,39 @@ Item {
     anchors.fill: mapCanvas
 
     mapSettings: mapCanvas.mapSettings
+  }
+
+  Loader {
+    id: tracking
+
+    anchors.fill: mapCanvas
+    asynchronous: true
+    active: __appSettings.trackingActive
+
+    sourceComponent: Component {
+      Item {
+        PositionTrackingManager {
+          id: trackingManager
+
+          positionKit: __positionKit
+          mapSettings: mapCanvas.mapSettings
+        }
+
+        Highlight {
+          id: trackingHighlight
+
+          height: mapCanvas.height
+          width: mapCanvas.width
+
+          markerColor: InputStyle.highlightColor
+          lineColor: InputStyle.highlightColor
+          lineWidth: InputStyle.mapLineWidth / 2
+
+          mapSettings: mapCanvas.mapSettings
+          geometry: trackingManager.trackedGeometry
+        }
+      }
+    }
   }
 
   PositionMarker {

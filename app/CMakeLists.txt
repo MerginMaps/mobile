@@ -34,7 +34,9 @@ set(MM_SRCS
     position/providers/positionprovidersmodel.cpp
     position/providers/simulatedpositionprovider.cpp
     position/tracking/abstracttrackingbackend.cpp
+    position/tracking/simulatedtrackingbackend.cpp
     position/tracking/positiontrackingmanager.cpp
+    position/geoposition.cpp
     position/mapposition.cpp
     position/positiondirection.cpp
     position/positionkit.cpp
@@ -112,7 +114,9 @@ set(MM_HDRS
     position/providers/positionprovidersmodel.h
     position/providers/simulatedpositionprovider.h
     position/tracking/abstracttrackingbackend.h
+    position/tracking/simulatedtrackingbackend.h
     position/tracking/positiontrackingmanager.h
+    position/geoposition.h
     position/mapposition.h
     position/positiondirection.h
     position/positionkit.h
@@ -518,4 +522,5 @@ qt_add_qml_module(
   VERSION 1.0
   QML_FILES ${MM_QML_SRCS}
   RESOURCE_PREFIX /com.merginmaps/imports
+  SOURCES position/tracking/positiontrackingmanager.h position/tracking/positiontrackingmanager.cpp
 )

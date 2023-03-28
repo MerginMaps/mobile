@@ -280,6 +280,33 @@ Item {
             }
           }
 
+          // Header "Tracking"
+          SettingsHeaderItem {
+            color: InputStyle.panelBackgroundLight
+            text: qsTr("Position tracking")
+            isNew: true
+          }
+
+          PanelItem {
+            height: root.rowHeight
+            width: parent.width
+            color: InputStyle.clrPanelMain
+            text: qsTr( "Track position" )
+
+            SettingsSwitch {
+              id: trackingSwitch
+
+              checked: __appSettings.trackingActive
+              onCheckedChanged: __appSettings.trackingActive = checked
+            }
+
+            TapHandler {
+              onTapped: function(eventPoint, button) {
+                trackingSwitch.toggle()
+              }
+            }
+          }
+
           // Header "Recording"
           PanelItem {
             color: InputStyle.panelBackgroundLight

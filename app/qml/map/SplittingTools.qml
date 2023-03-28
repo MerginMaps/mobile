@@ -59,8 +59,8 @@ Item {
   Highlight {
     id: highlight
 
-    height: root.map.height
-    width: root.map.width
+    height: map.height
+    width: map.width
 
     markerColor: "black"
     lineColor: "black"

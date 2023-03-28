@@ -20,18 +20,20 @@
 
 class QgsVectorLayer;
 class InputMapSettings;
+class PositionKit;
 
 class PositionTrackingManager : public QObject
 {
     Q_OBJECT
-    QML_ELEMENT
-
     Q_PROPERTY( QgsVectorLayer *layer READ layer WRITE setLayer NOTIFY layerChanged )
     Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
     Q_PROPERTY( QgsGeometry trackedGeometry READ trackedGeometry NOTIFY trackedGeometryChanged )
+    Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
 
   public:
     explicit PositionTrackingManager( QObject *parent = nullptr );
+
+    static AbstractTrackingBackend *constructTrackingBackend( PositionKit *positionKit = nullptr );
 
     QgsVectorLayer *layer() const;
     void setLayer( QgsVectorLayer *newLayer );
@@ -41,6 +43,12 @@ class PositionTrackingManager : public QObject
 
     QgsGeometry trackedGeometry() const;
 
+    PositionKit *positionKit() const;
+    void setPositionKit( PositionKit *newPositionKit );
+
+  public slots:
+    void addPoint( GeoPosition position );
+
   signals:
 
     void layerChanged( QgsVectorLayer *layer );
@@ -49,12 +57,16 @@ class PositionTrackingManager : public QObject
 
     void trackedGeometryChanged( QgsGeometry trackedGeometry );
 
+    void positionKitChanged( PositionKit *positionKit );
+
   private:
+    void setup();
 
     std::unique_ptr<AbstractTrackingBackend> mTrackingBackend; // owned
 
     QgsVectorLayer *mLayer = nullptr; // not owned
     InputMapSettings *mMapSettings = nullptr; // not owned
+    PositionKit *mPositionKit = nullptr; // not owned
 
     QgsGeometry mTrackedGeometry;
 };
