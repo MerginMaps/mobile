@@ -12,7 +12,7 @@
 
 #include "inputconfig.h"
 
-#include "position/abstractpositionprovider.h"
+#include "position/providers/abstractpositionprovider.h"
 
 #include "qgspoint.h"
 #include "qgscoordinatereferencesystem.h"

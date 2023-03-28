@@ -29,13 +29,15 @@ set(MM_SRCS
     maptools/splittingmaptool.cpp
     ios/iosimagepicker.cpp
     ios/iosutils.cpp
-    position/abstractpositionprovider.cpp
-    position/internalpositionprovider.cpp
+    position/providers/abstractpositionprovider.cpp
+    position/providers/internalpositionprovider.cpp
+    position/providers/positionprovidersmodel.cpp
+    position/providers/simulatedpositionprovider.cpp
+    position/tracking/abstracttrackingbackend.cpp
+    position/tracking/positiontrackingmanager.cpp
     position/mapposition.cpp
     position/positiondirection.cpp
     position/positionkit.cpp
-    position/positionprovidersmodel.cpp
-    position/simulatedpositionprovider.cpp
     activelayer.cpp
     activeproject.cpp
     androidutils.cpp
@@ -105,13 +107,15 @@ set(MM_HDRS
     maptools/splittingmaptool.h
     ios/iosimagepicker.h
     ios/iosutils.h
-    position/abstractpositionprovider.h
-    position/internalpositionprovider.h
+    position/providers/abstractpositionprovider.h
+    position/providers/internalpositionprovider.h
+    position/providers/positionprovidersmodel.h
+    position/providers/simulatedpositionprovider.h
+    position/tracking/abstracttrackingbackend.h
+    position/tracking/positiontrackingmanager.h
     position/mapposition.h
     position/positiondirection.h
     position/positionkit.h
-    position/positionprovidersmodel.h
-    position/simulatedpositionprovider.h
     activelayer.h
     activeproject.h
     androidutils.h
@@ -155,9 +159,9 @@ set(MM_HDRS
 )
 
 if (HAVE_BLUETOOTH)
-  set(MM_SRCS ${MM_SRCS} position/bluetoothpositionprovider.cpp)
+  set(MM_SRCS ${MM_SRCS} position/providers/bluetoothpositionprovider.cpp)
 
-  set(MM_HDRS ${MM_HDRS} position/bluetoothpositionprovider.h)
+  set(MM_HDRS ${MM_HDRS} position/providers/bluetoothpositionprovider.h)
 endif ()
 
 if (ENABLE_TESTS)

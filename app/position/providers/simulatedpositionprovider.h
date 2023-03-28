@@ -11,7 +11,7 @@
 #define SIMULATEDPOSITIONPROVIDER_H
 
 #include "inputconfig.h"
-#include "position/abstractpositionprovider.h"
+#include "abstractpositionprovider.h"
 
 #include <QObject>
 #include <QTimer>

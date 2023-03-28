@@ -13,7 +13,7 @@
 #include "test/testmerginapi.h"
 #include "inputtests.h"
 #include "testutils.h"
-#include "position/bluetoothpositionprovider.h"
+#include "position/providers/bluetoothpositionprovider.h"
 
 TestVariablesManager::TestVariablesManager( VariablesManager *vm, PositionKit *pk, AppSettings *as )
 {

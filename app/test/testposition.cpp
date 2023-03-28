@@ -16,15 +16,15 @@
 #include "qgsapplication.h"
 #include "appsettings.h"
 #include "position/positionkit.h"
-#include "position/simulatedpositionprovider.h"
+#include "position/providers/simulatedpositionprovider.h"
 
 #ifdef HAVE_BLUETOOTH
-#include "position/bluetoothpositionprovider.h"
+#include "position/providers/bluetoothpositionprovider.h"
 #endif
 
-#include "position/internalpositionprovider.h"
+#include "position/providers/internalpositionprovider.h"
+#include "position/providers/positionprovidersmodel.h"
 #include "position/mapposition.h"
-#include "position/positionprovidersmodel.h"
 
 #include "testutils.h"
 

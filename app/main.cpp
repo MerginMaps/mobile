@@ -103,8 +103,8 @@
 #include "qgsproject.h"
 #include "bluetoothdiscoverymodel.h"
 #include "position/mapposition.h"
-#include "position/positionprovidersmodel.h"
-#include "position/abstractpositionprovider.h"
+#include "position/providers/positionprovidersmodel.h"
+#include "position/providers/abstractpositionprovider.h"
 #include "synchronizationmanager.h"
 #include "synchronizationerror.h"
 
