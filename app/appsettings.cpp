@@ -30,6 +30,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   int streamingIntervalType = settings.value( "intervalType", 0 ).toInt();
   StreamingIntervalType::IntervalType intervalType = static_cast<StreamingIntervalType::IntervalType>( streamingIntervalType );
   bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
+  QString savedAppVersion = settings.value( QStringLiteral( "appVersion" ), QStringLiteral() ).toString();
   QString activeProviderId = settings.value( QStringLiteral( "activePositionProviderId" ) ).toString();
   bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
   bool ignoreWhatsNew = settings.value( QStringLiteral( "ignoreWhatsNew" ), false ).toBool();
@@ -47,6 +48,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setLineRecordingInterval( lineRecordingInterval );
   setIntervalType( intervalType );
   setReuseLastEnteredValues( reuseLastEnteredValues );
+  setAppVersion( savedAppVersion );
   setActivePositionProviderId( activeProviderId );
   setAutosyncAllowed( autosync );
   setIgnoreWhatsNew( ignoreWhatsNew );
@@ -214,6 +216,21 @@ void AppSettings::setGpsAccuracyWarning( bool gpsAccuracyWarning )
     setValue( "gpsAccuracyWarning", gpsAccuracyWarning );
     emit gpsAccuracyWarningChanged();
   }
+}
+
+QString AppSettings::appVersion() const
+{
+  return mAppVersion;
+}
+
+void AppSettings::setAppVersion( const QString &newAppVersion )
+{
+  if ( mAppVersion == newAppVersion )
+    return;
+
+  mAppVersion = newAppVersion;
+  setValue( QStringLiteral( "appVersion" ), newAppVersion );
+  emit appVersionChanged( mAppVersion );
 }
 
 const QString &AppSettings::activePositionProviderId() const

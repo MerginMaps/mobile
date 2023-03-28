@@ -715,6 +715,9 @@ int main( int argc, char *argv[] )
   QNativeInterface::QAndroidApplication::hideSplashScreen();
 #endif
 
+  // save app version to settings
+  as.setAppVersion( version );
+
   // Photos bigger that 512 MB (when uncompressed) will not load
   QImageReader::setAllocationLimit( 512 );
 

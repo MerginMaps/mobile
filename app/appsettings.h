@@ -31,6 +31,7 @@ class AppSettings: public QObject
     Q_PROPERTY( double gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged )
     Q_PROPERTY( bool gpsAccuracyWarning READ gpsAccuracyWarning WRITE setGpsAccuracyWarning NOTIFY gpsAccuracyWarningChanged )
     Q_PROPERTY( bool reuseLastEnteredValues READ reuseLastEnteredValues WRITE setReuseLastEnteredValues NOTIFY reuseLastEnteredValuesChanged )
+    Q_PROPERTY( QString appVersion READ appVersion WRITE setAppVersion NOTIFY appVersionChanged )
     Q_PROPERTY( QString activePositionProviderId READ activePositionProviderId WRITE setActivePositionProviderId NOTIFY activePositionProviderIdChanged )
     Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
     Q_PROPERTY( bool ignoreWhatsNew READ ignoreWhatsNew WRITE setIgnoreWhatsNew NOTIFY ignoreWhatsNewChanged )
@@ -71,6 +72,9 @@ class AppSettings: public QObject
     bool gpsAccuracyWarning() const;
     void setGpsAccuracyWarning( bool gpsAccuracyWarning );
 
+    QString appVersion() const;
+    void setAppVersion( const QString &newAppVersion );
+
     // SavedPositionProviders property is read only when needed ~ not at startup time.
     // It returns list of all external position providers (does not include internal/simulated position providers)
     QVariantList savedPositionProviders() const;
@@ -110,6 +114,7 @@ class AppSettings: public QObject
     void intervalTypeChanged();
 
     void reuseLastEnteredValuesChanged( bool reuseLastEnteredValues );
+    void appVersionChanged( const QString &version );
     void activePositionProviderIdChanged( const QString & );
 
     void autosyncAllowedChanged( bool autosyncAllowed );
@@ -131,6 +136,13 @@ class AppSettings: public QObject
     // Digitizing period in seconds
     int mLineRecordingInterval = 3;
     StreamingIntervalType::IntervalType mIntervalType = StreamingIntervalType::IntervalType::Time;
+
+    // Application version, helps to differentiate between app installation, update or regular run:
+    //  1. if the value is null, this run is first after installation (or after user reset application data in settings)
+    //  2. if the value is different from current version, this is first run after update
+    //  3. if the value is the same as current version, this is regular run
+    // these check is possible to do during startup (in main.cpp)
+    QString mAppVersion;
 
     // Projects path -> defaultLayer name
     QHash<QString, QString> mDefaultLayers;
