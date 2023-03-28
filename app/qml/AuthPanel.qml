@@ -95,7 +95,6 @@ Item {
 
     LoginForm {
       id: loginForm
-      visible: !warningMsgContainer.visible
       height: parent.height - staticPane.height
       width: parent.width
       y: warningMsgContainer.visible ? warningMsgContainer.height : pane.top
@@ -147,6 +146,17 @@ Item {
         font.pixelSize: InputStyle.fontPixelSizeNormal
         color: InputStyle.fontColor
         wrapMode: Text.WordWrap
+      }
+
+      onVisibleChanged: {
+        if (warningMsgContainer.visible) {
+          loginForm.visible = false
+          registrationForm.visible = false
+        }
+        else {
+          loginForm.visible = root.state === "login"
+          registrationForm.visible = root.state === "register"
+        }
       }
     }
 
