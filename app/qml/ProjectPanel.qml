@@ -351,8 +351,6 @@ Item {
           }
         ]
 
-        state: "local"
-
         onStateChanged: {
           __merginApi.pingMergin()
           projectsPage.refreshProjectList()
@@ -602,6 +600,11 @@ Item {
           case "local":
             localProjectsPage.refreshProjectsList( keepSearchFilter )
             break
+          case "":
+            // seems onVisibleChanged is not called on Android and state
+            // is not set when panel created.
+            localProjectsPage.refreshProjectsList( keepSearchFilter )
+            break
           case "created":
             workspaceProjectsPage.refreshProjectsList( keepSearchFilter )
             break
@@ -672,8 +675,6 @@ Item {
           }
         ]
 
-        state: "local"
-
         onStateChanged: {
           __merginApi.pingMergin()
           projectsPage.refreshProjectList()
@@ -684,7 +685,6 @@ Item {
           // has more than one ws and has not seen it yet for too many times
           //
           if ( state === "created" ) {
-
             if (__merginApi.apiSupportsWorkspaces &&
                 __merginApi.userInfo.hasMoreThanOneWorkspace &&
                 !__appSettings.ignoreWsTooltip ) {
