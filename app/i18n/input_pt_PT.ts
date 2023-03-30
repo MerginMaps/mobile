@@ -188,43 +188,43 @@ Por favor aceda ao Mergin Maps para removê-lo manualmente.</translation>
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="568"/>
-        <location filename="../attributes/attributecontroller.cpp" line="618"/>
+        <location filename="../attributes/attributecontroller.cpp" line="574"/>
+        <location filename="../attributes/attributecontroller.cpp" line="625"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>O valor padrão da expressão para %1:%2 tem um erro de interpretação: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="578"/>
-        <location filename="../attributes/attributecontroller.cpp" line="628"/>
+        <location filename="../attributes/attributecontroller.cpp" line="584"/>
+        <location filename="../attributes/attributecontroller.cpp" line="635"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>O valor padrão da expressão para %1:%2 tem uma expressão inválida: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="589"/>
-        <location filename="../attributes/attributecontroller.cpp" line="639"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1199"/>
+        <location filename="../attributes/attributecontroller.cpp" line="595"/>
+        <location filename="../attributes/attributecontroller.cpp" line="646"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1206"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>O valor &quot;%1&quot; %4 não pode ser convertido para um valor compatível para o campo %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="898"/>
+        <location filename="../attributes/attributecontroller.cpp" line="905"/>
         <source>Cannot delete feature</source>
         <translation>Não é possível apagar o elemento</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="528"/>
-        <location filename="../attributes/attributecontroller.cpp" line="952"/>
+        <location filename="../attributes/attributecontroller.cpp" line="959"/>
         <source>Feature could not be added</source>
         <translation>Não foi possível adicionar o elemento</translation>
     </message>
     <message>
         <location filename="../attributes/attributecontroller.cpp" line="537"/>
-        <location filename="../attributes/attributecontroller.cpp" line="963"/>
+        <location filename="../attributes/attributecontroller.cpp" line="970"/>
         <source>Cannot update feature</source>
         <translation>Não é possível atualizar o elemento</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="1007"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1014"/>
         <source>Cannot start editing</source>
         <translation>Não é possível iniciar a edição</translation>
     </message>
@@ -1016,59 +1016,59 @@ Não será adicionado ao projeto.</translation>
     <name>MainPanel</name>
     <message>
         <location filename="../qml/MainPanel.qml" line="62"/>
-        <location filename="../qml/MainPanel.qml" line="258"/>
+        <location filename="../qml/MainPanel.qml" line="260"/>
         <source>Projects</source>
         <translation>Projetos</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="82"/>
-        <location filename="../qml/MainPanel.qml" line="277"/>
+        <location filename="../qml/MainPanel.qml" line="279"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="117"/>
-        <location filename="../qml/MainPanel.qml" line="306"/>
+        <location filename="../qml/MainPanel.qml" line="308"/>
         <source>Record</source>
         <translation>Registar</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="137"/>
-        <location filename="../qml/MainPanel.qml" line="325"/>
+        <location filename="../qml/MainPanel.qml" line="327"/>
         <source>Zoom to project</source>
         <translation>Aproximar ao projeto</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="155"/>
-        <location filename="../qml/MainPanel.qml" line="344"/>
+        <location filename="../qml/MainPanel.qml" line="156"/>
+        <location filename="../qml/MainPanel.qml" line="346"/>
         <source>Local changes</source>
         <translation>Mudanças locais</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="173"/>
-        <location filename="../qml/MainPanel.qml" line="363"/>
+        <location filename="../qml/MainPanel.qml" line="175"/>
+        <location filename="../qml/MainPanel.qml" line="365"/>
         <source>Layers</source>
         <translation>Camadas</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="193"/>
-        <location filename="../qml/MainPanel.qml" line="382"/>
+        <location filename="../qml/MainPanel.qml" line="195"/>
+        <location filename="../qml/MainPanel.qml" line="384"/>
         <source>Map themes</source>
         <translation>Temas de mapas</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="213"/>
-        <location filename="../qml/MainPanel.qml" line="401"/>
+        <location filename="../qml/MainPanel.qml" line="215"/>
+        <location filename="../qml/MainPanel.qml" line="403"/>
         <source>Settings</source>
         <translation>Definições</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="230"/>
+        <location filename="../qml/MainPanel.qml" line="232"/>
         <source>More</source>
         <translation>Mais</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="243"/>
+        <location filename="../qml/MainPanel.qml" line="245"/>
         <source>Menu</source>
         <translation>Menu</translation>
     </message>
@@ -1210,57 +1210,57 @@ Não será adicionado ao projeto.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="757"/>
+        <location filename="../../core/merginapi.cpp" line="767"/>
         <source>Username must have at least 4 characters</source>
         <translation>Nome do utilizador deve ter pelo menos 4 caracteres</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="764"/>
+        <location filename="../../core/merginapi.cpp" line="774"/>
         <source>Username contains invalid characters</source>
         <translation>Nome de utilizador contêm carateres inválidos</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="771"/>
+        <location filename="../../core/merginapi.cpp" line="781"/>
         <source>Please enter a valid email</source>
         <translation>Por favor, introduza um email válido</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="778"/>
+        <location filename="../../core/merginapi.cpp" line="788"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>A senha não é suficientemente forte. Tem de ter%1 pelo menos 8 carateres de comprimento%1 contendo minúsculas%1 contendo maiúsculas%1 contendo números ou caracteres especiais</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="791"/>
+        <location filename="../../core/merginapi.cpp" line="801"/>
         <source>Passwords do not match</source>
         <translation>As senhas não coincidem</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="798"/>
+        <location filename="../../core/merginapi.cpp" line="808"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Por favor, aceite os Termos e Política de Privacidade</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1178"/>
+        <location filename="../../core/merginapi.cpp" line="1188"/>
         <source>Registration successful</source>
         <translation>Registo com sucesso</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1201"/>
+        <location filename="../../core/merginapi.cpp" line="1211"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>Os novos registos não são permitidos no servidor Mergin seleccionado.%1Por favor verifique com o seu administrador.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1487"/>
+        <location filename="../../core/merginapi.cpp" line="1497"/>
         <source>Project detached from Mergin</source>
         <translation>Projeto separado do Mergin</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3519"/>
+        <location filename="../../core/merginapi.cpp" line="3532"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Nome da área de trabalho contêm carateres inválidos</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3585"/>
+        <location filename="../../core/merginapi.cpp" line="3598"/>
         <source>Workspace %1 already exists</source>
         <translation>Área de trabalho %1 já existe</translation>
     </message>
@@ -1546,50 +1546,50 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="254"/>
-        <location filename="../qml/ProjectPanel.qml" line="624"/>
+        <location filename="../qml/ProjectPanel.qml" line="627"/>
         <location filename="../qml/ProjectPanel.qml" line="831"/>
         <source>Projects</source>
         <translation>Projetos</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="485"/>
+        <location filename="../qml/ProjectPanel.qml" line="483"/>
         <location filename="../qml/ProjectPanel.qml" line="809"/>
         <source>Home</source>
         <translation>Início</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="507"/>
+        <location filename="../qml/ProjectPanel.qml" line="505"/>
         <source>My projects</source>
         <translation>Meus projetos</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="531"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared with me</source>
         <translation>Partilhados comigo</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="531"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared</source>
         <translation>Partilhado</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="551"/>
+        <location filename="../qml/ProjectPanel.qml" line="549"/>
         <location filename="../qml/ProjectPanel.qml" line="853"/>
         <source>Explore</source>
         <translation>Explorar</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="621"/>
+        <location filename="../qml/ProjectPanel.qml" line="624"/>
         <source>Downloaded projects</source>
         <translation>Projetos transferidos</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="626"/>
+        <location filename="../qml/ProjectPanel.qml" line="629"/>
         <source>Public projects</source>
         <translation>Projetos públicos</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="629"/>
+        <location filename="../qml/ProjectPanel.qml" line="632"/>
         <source>Your other projects are accessible%1by switching your workspace here</source>
         <translation>Os seus projetos estão acessíveis%1ao mudar aqui a sua área de trabalho</translation>
     </message>
@@ -1995,67 +1995,67 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
         <translation>Modo transmissão</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="262"/>
+        <location filename="../qml/SettingsPanel.qml" line="261"/>
         <source>Interval type</source>
         <translation>Tipo intervalo</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="263"/>
+        <location filename="../qml/SettingsPanel.qml" line="262"/>
         <source>Choose action when to add a new point</source>
         <translation>Escolha a ação quando adicionar novo ponto</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="275"/>
+        <location filename="../qml/SettingsPanel.qml" line="274"/>
         <source>in meters</source>
         <translation>em metros</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="275"/>
+        <location filename="../qml/SettingsPanel.qml" line="274"/>
         <source>in seconds</source>
         <translation>em segundos</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="287"/>
+        <location filename="../qml/SettingsPanel.qml" line="286"/>
         <source>Recording</source>
         <translation>Modo de registo</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="274"/>
+        <location filename="../qml/SettingsPanel.qml" line="273"/>
         <source>Line rec. interval</source>
         <translation>Intervalo de reg. linha</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="295"/>
+        <location filename="../qml/SettingsPanel.qml" line="294"/>
         <source>Reuse last value option</source>
         <translation>Reutilizar o último valor</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="315"/>
+        <location filename="../qml/SettingsPanel.qml" line="314"/>
         <source>Automatically sync changes</source>
         <translation>Sincronizar alterações automaticamente</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="340"/>
+        <location filename="../qml/SettingsPanel.qml" line="339"/>
         <source>About</source>
         <translation>Sobre</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="349"/>
+        <location filename="../qml/SettingsPanel.qml" line="348"/>
         <source>Help</source>
         <translation>Ajuda</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="358"/>
+        <location filename="../qml/SettingsPanel.qml" line="357"/>
         <source>Privacy policy</source>
         <translation>Política de Privacidade</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="367"/>
+        <location filename="../qml/SettingsPanel.qml" line="366"/>
         <source>Terms of service</source>
         <translation>Termos de serviço</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="376"/>
+        <location filename="../qml/SettingsPanel.qml" line="375"/>
         <source>Diagnostic log</source>
         <translation>Log de Diagnóstico</translation>
     </message>
@@ -2546,27 +2546,22 @@ Por favor aceda ao Mergin Maps para removê-lo manualmente.</translation>
         <translation>Falha ao abrir o projeto</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="663"/>
-        <source>We&apos;ve made it easier for teams to collaborate on Mergin Maps! To find out more, check out our latest blog post about workspaces by clicking the button below.</source>
-        <translation>Facilitamos a colaboração das equipas no Mergin Maps! Para saber mais, veja o nosso último post no blog sobre áreas de trabalho clicando no botão abaixo.</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="679"/>
+        <location filename="../qml/main.qml" line="668"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Falha na comunicação com o Mergin.%1Tente melhorar a sua ligação à rede.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="736"/>
+        <location filename="../qml/main.qml" line="719"/>
         <source>There were issues loading the project.</source>
         <translation>Houve problemas ao carregar o projeto.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="748"/>
+        <location filename="../qml/main.qml" line="731"/>
         <source>Could not read the project file:</source>
         <translation>Não foi possível ler o ficheiro do projeto:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="775"/>
+        <location filename="../qml/main.qml" line="758"/>
         <source>Press back again to quit the app</source>
         <translation>Pressione novamente para sair da aplicação</translation>
     </message>
