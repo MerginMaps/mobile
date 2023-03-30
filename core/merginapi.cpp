@@ -64,7 +64,14 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   QObject::connect( this, &MerginApi::apiRootChanged, this, &MerginApi::getServerConfig );
   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::checkMerginVersion );
   QObject::connect( this, &MerginApi::workspaceCreated, this, &MerginApi::getUserInfo );
-  QObject::connect( this, &MerginApi::serverTypeChanged, this, &MerginApi::getUserInfo );
+  QObject::connect( this, &MerginApi::serverTypeChanged, this, [this]()
+  {
+    if ( mUserAuth->hasAuthData() )
+    {
+      // do not call /user/profile when user just logged out
+      getUserInfo();
+    }
+  } );
   QObject::connect( this, &MerginApi::processInvitationFinished, this, &MerginApi::getUserInfo );
   QObject::connect( this, &MerginApi::getWorkspaceInfoFinished, this, &MerginApi::getServiceInfo );
   QObject::connect( mUserInfo, &MerginUserInfo::userInfoChanged, this, &MerginApi::userInfoChanged );
@@ -97,8 +104,11 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   getServerConfig();
   pingMergin();
 
-  QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::getUserInfo, Qt::SingleShotConnection );
-  QObject::connect( this, &MerginApi::userInfoReplyFinished, this, &MerginApi::getWorkspaceInfo, Qt::SingleShotConnection );
+  if ( mUserAuth->hasAuthData() )
+  {
+    QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::getUserInfo, Qt::SingleShotConnection );
+    QObject::connect( this, &MerginApi::userInfoReplyFinished, this, &MerginApi::getWorkspaceInfo, Qt::SingleShotConnection );
+  }
 }
 
 void MerginApi::loadCache()

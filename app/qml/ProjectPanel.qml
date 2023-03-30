@@ -1101,6 +1101,7 @@ Item {
 
     function onAuthRequested() {
       stackView.pending = false
+
       root.openAuthPanel()
     }
 
