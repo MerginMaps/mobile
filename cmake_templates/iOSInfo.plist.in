@@ -82,6 +82,7 @@
         <string>hr</string>
         <string>az</string>
         <string>az_AZ</string>
+		<string>hu</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
