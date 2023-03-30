@@ -1015,59 +1015,59 @@ Nem lesz hozzáadva a projekthez.</translation>
     <name>MainPanel</name>
     <message>
         <location filename="../qml/MainPanel.qml" line="62"/>
-        <location filename="../qml/MainPanel.qml" line="258"/>
+        <location filename="../qml/MainPanel.qml" line="260"/>
         <source>Projects</source>
         <translation>Projektek</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="82"/>
-        <location filename="../qml/MainPanel.qml" line="277"/>
+        <location filename="../qml/MainPanel.qml" line="279"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="117"/>
-        <location filename="../qml/MainPanel.qml" line="306"/>
+        <location filename="../qml/MainPanel.qml" line="308"/>
         <source>Record</source>
         <translation>Rögzítés</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="137"/>
-        <location filename="../qml/MainPanel.qml" line="325"/>
+        <location filename="../qml/MainPanel.qml" line="327"/>
         <source>Zoom to project</source>
         <translation>Nagyítás a projektre</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="155"/>
-        <location filename="../qml/MainPanel.qml" line="344"/>
+        <location filename="../qml/MainPanel.qml" line="156"/>
+        <location filename="../qml/MainPanel.qml" line="346"/>
         <source>Local changes</source>
         <translation>Helyi változások</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="173"/>
-        <location filename="../qml/MainPanel.qml" line="363"/>
+        <location filename="../qml/MainPanel.qml" line="175"/>
+        <location filename="../qml/MainPanel.qml" line="365"/>
         <source>Layers</source>
         <translation>Rétegek</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="193"/>
-        <location filename="../qml/MainPanel.qml" line="382"/>
+        <location filename="../qml/MainPanel.qml" line="195"/>
+        <location filename="../qml/MainPanel.qml" line="384"/>
         <source>Map themes</source>
         <translation>Térkép témák</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="213"/>
-        <location filename="../qml/MainPanel.qml" line="401"/>
+        <location filename="../qml/MainPanel.qml" line="215"/>
+        <location filename="../qml/MainPanel.qml" line="403"/>
         <source>Settings</source>
         <translation>Beállítások</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="230"/>
+        <location filename="../qml/MainPanel.qml" line="232"/>
         <source>More</source>
         <translation>Több</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="243"/>
+        <location filename="../qml/MainPanel.qml" line="245"/>
         <source>Menu</source>
         <translation>Menü</translation>
     </message>
@@ -1209,57 +1209,57 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="757"/>
+        <location filename="../../core/merginapi.cpp" line="767"/>
         <source>Username must have at least 4 characters</source>
         <translation>A felhasználónévnek legalább 4 karakterből kell állnia</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="764"/>
+        <location filename="../../core/merginapi.cpp" line="774"/>
         <source>Username contains invalid characters</source>
         <translation>A felhasználónév érvénytelen karaktereket tartalmaz</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="771"/>
+        <location filename="../../core/merginapi.cpp" line="781"/>
         <source>Please enter a valid email</source>
         <translation>Kérjük, egy létező e-mail címet adjon meg</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="778"/>
+        <location filename="../../core/merginapi.cpp" line="788"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>A jelszó nem elég erős. Legalább % 1 8 karakter hosszúnak% 1  kell lennie, legyen benne kisbetű,% 1 tartalmazzon nagybetűs karaktert is% 1 és legyen benne szám vagy más speciális karakter.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="791"/>
+        <location filename="../../core/merginapi.cpp" line="801"/>
         <source>Passwords do not match</source>
         <translation>A jelszavak nem egyeznek</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="798"/>
+        <location filename="../../core/merginapi.cpp" line="808"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Kérjük, fogadja el a Felhasználási Feltételeket és az Adatvédelmi szabályzatot</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1178"/>
+        <location filename="../../core/merginapi.cpp" line="1188"/>
         <source>Registration successful</source>
         <translation>Sikeres regisztráció</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1201"/>
+        <location filename="../../core/merginapi.cpp" line="1211"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>Az új regisztrációk nem engedélyezettek a kiválasztott Mergin szerveren.%1Kérjük, forduljon az adminisztrátorhoz segítségért.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1487"/>
+        <location filename="../../core/merginapi.cpp" line="1497"/>
         <source>Project detached from Mergin</source>
         <translation>A projekt le van választva a Merginről</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3519"/>
+        <location filename="../../core/merginapi.cpp" line="3532"/>
         <source>Workspace name contains invalid characters</source>
         <translation>A munkaterület neve érvénytelen karaktert tartalmaz </translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3585"/>
+        <location filename="../../core/merginapi.cpp" line="3598"/>
         <source>Workspace %1 already exists</source>
         <translation>%1 munkaterület már létezik </translation>
     </message>
@@ -1545,50 +1545,50 @@ Kattintson az „Igen” gombra a feltöltéshez.</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="254"/>
-        <location filename="../qml/ProjectPanel.qml" line="624"/>
+        <location filename="../qml/ProjectPanel.qml" line="627"/>
         <location filename="../qml/ProjectPanel.qml" line="831"/>
         <source>Projects</source>
         <translation>Projektek</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="485"/>
+        <location filename="../qml/ProjectPanel.qml" line="483"/>
         <location filename="../qml/ProjectPanel.qml" line="809"/>
         <source>Home</source>
         <translation>Kezdőlap</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="507"/>
+        <location filename="../qml/ProjectPanel.qml" line="505"/>
         <source>My projects</source>
         <translation>Projektjeim</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="531"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared with me</source>
         <translation>Velem megosztva</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="531"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared</source>
         <translation>Megosztva</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="551"/>
+        <location filename="../qml/ProjectPanel.qml" line="549"/>
         <location filename="../qml/ProjectPanel.qml" line="853"/>
         <source>Explore</source>
         <translation>Felfedezés</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="621"/>
+        <location filename="../qml/ProjectPanel.qml" line="624"/>
         <source>Downloaded projects</source>
         <translation>Letöltött projektek</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="626"/>
+        <location filename="../qml/ProjectPanel.qml" line="629"/>
         <source>Public projects</source>
         <translation>Nyilvános projektek</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="629"/>
+        <location filename="../qml/ProjectPanel.qml" line="632"/>
         <source>Your other projects are accessible%1by switching your workspace here</source>
         <translation>Más projektjei elérhetőek,%1ha átváltja ide a munkaterületét</translation>
     </message>
@@ -1994,67 +1994,67 @@ Kattintson az „Igen” gombra a feltöltéshez.</translation>
         <translation>Streaming mód</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="262"/>
+        <location filename="../qml/SettingsPanel.qml" line="261"/>
         <source>Interval type</source>
         <translation>Intervallum típusa</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="263"/>
+        <location filename="../qml/SettingsPanel.qml" line="262"/>
         <source>Choose action when to add a new point</source>
         <translation>Új pont hozzáadásához kapcsolódó művelet kiválasztása</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="275"/>
+        <location filename="../qml/SettingsPanel.qml" line="274"/>
         <source>in meters</source>
         <translation>méterben</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="275"/>
+        <location filename="../qml/SettingsPanel.qml" line="274"/>
         <source>in seconds</source>
         <translation>másodpercben</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="287"/>
+        <location filename="../qml/SettingsPanel.qml" line="286"/>
         <source>Recording</source>
         <translation>Felvétel</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="274"/>
+        <location filename="../qml/SettingsPanel.qml" line="273"/>
         <source>Line rec. interval</source>
         <translation>Vonal felvételi intervallum</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="295"/>
+        <location filename="../qml/SettingsPanel.qml" line="294"/>
         <source>Reuse last value option</source>
         <translation>Utolsó érték opció újrahasználása</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="315"/>
+        <location filename="../qml/SettingsPanel.qml" line="314"/>
         <source>Automatically sync changes</source>
         <translation>Módosítások automatikus szinkronizálása</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="340"/>
+        <location filename="../qml/SettingsPanel.qml" line="339"/>
         <source>About</source>
         <translation>Névjegy</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="349"/>
+        <location filename="../qml/SettingsPanel.qml" line="348"/>
         <source>Help</source>
         <translation>Segítség</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="358"/>
+        <location filename="../qml/SettingsPanel.qml" line="357"/>
         <source>Privacy policy</source>
         <translation>Adatvédelmi szabályzat</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="367"/>
+        <location filename="../qml/SettingsPanel.qml" line="366"/>
         <source>Terms of service</source>
         <translation>Általános Szerződési Feltételek</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="376"/>
+        <location filename="../qml/SettingsPanel.qml" line="375"/>
         <source>Diagnostic log</source>
         <translation>Diagnosztikai napló</translation>
     </message>
@@ -2544,27 +2544,22 @@ Kérjük, látogasson el a Mergin Maps honlapjára a kézi eltávolításhoz.</t
         <translation>A projekt megnyitása nem sikerült</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="663"/>
-        <source>We&apos;ve made it easier for teams to collaborate on Mergin Maps! To find out more, check out our latest blog post about workspaces by clicking the button below.</source>
-        <translation>Megkönnyítettük a csapatok együttműködését a Mergin Maps alkalmazásban! Ha többet szeretne megtudni, keresse fel legújabb blogbejegyzésünket a munkaterületekről az alábbi gombra kattintva.</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="679"/>
+        <location filename="../qml/main.qml" line="668"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Nem sikerült kommunikálni a Merginnel.%1Próbálja meg javítani a hálózati kapcsolatot.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="736"/>
+        <location filename="../qml/main.qml" line="719"/>
         <source>There were issues loading the project.</source>
         <translation>Probléma történt a projekt betöltése során.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="748"/>
+        <location filename="../qml/main.qml" line="731"/>
         <source>Could not read the project file:</source>
         <translation>Nem sikerült beolvasni a projektfájlt:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="775"/>
+        <location filename="../qml/main.qml" line="758"/>
         <source>Press back again to quit the app</source>
         <translation>Nyomja meg újra a vissza gombot az alkalmazásból való kilépéshez</translation>
     </message>
