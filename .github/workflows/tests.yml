@@ -17,10 +17,10 @@ on:
 
 env:
   TEST_MERGIN_URL: https://test.dev.merginmaps.com/
-  QT_VERSION: 6.4.2
-  INPUT_SDK_VERSION: mac-20230109-117
+  QT_VERSION: 6.5.0
+  INPUT_SDK_VERSION: mac-20230109-117 !!!TODO
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 2
+  CACHE_VERSION: 0
   XC_VERSION: ${{ '14.2' }}
 
 concurrency:

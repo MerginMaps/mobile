@@ -210,8 +210,8 @@ Quick guide:
 For building ABIS see https://www.qt.io/blog/android-multi-abi-builds-are-back
 ```
   export ANDROID_SDK_ROOT=/opt/Android/android-sdk;
-  export ANDROID_NDK_ROOT=/opt/Android/android-sdk/ndk/23.1.7779620;
-  export QT_BASE=/opt/Qt/6.4.2;
+  export ANDROID_NDK_ROOT=/opt/Android/android-sdk/ndk/25.1.8937393;
+  export QT_BASE=/opt/Qt/6.5.0;
   export INPUT_SDK_ANDROID_BASE=~/Projects/quick/input-sdk/build/android/stage;
   export PATH=/usr/local/Cellar/openjdk\@11/11.0.16.1_1/bin/:$PATH;
   cmake \
@@ -248,13 +248,13 @@ Now you can create a build
 ```
   cmake \
     -DIOS=TRUE \
-    -DCMAKE_PREFIX_PATH=/opt/Qt/6.4.2/ios \
+    -DCMAKE_PREFIX_PATH=/opt/Qt/6.5.0/ios \
     -DCMAKE_INSTALL_PREFIX:PATH=~/Projects/quick/input/build-input-ios/install \
     -DUSE_SERVER_API_KEY=FALSE \
     -DINPUT_SDK_PATH=~/Projects/quick/input-sdk/build/ios/stage/arm64 \
     -DCMAKE_TOOLCHAIN_FILE=~/Projects/quick/input-sdk/build/ios/stage/ios.toolchain.cmake \
     -G "Xcode" \
-    -DQT_HOST_PATH=/opt/Qt/6.4.2/macos \
+    -DQT_HOST_PATH=/opt/Qt/6.5.0/macos \
     ../input
 ```
 
@@ -332,7 +332,7 @@ https://itunesconnect.apple.com
 
 # 6. Building macOS
 
-1. Download / build Input-SDK for your desired target platform (macos/android/ios)
+1. Download / build Input-SDK for your macos host
 2. Create Build system
  
 ```
@@ -341,7 +341,7 @@ cd build-input-desktop
 BASE_DIR=~/Projects/quick;
 cmake \
   -DCMAKE_BUILD_TYPE=Debug \
-  -DCMAKE_PREFIX_PATH=/opt/Qt/6.4.2/macos \
+  -DCMAKE_PREFIX_PATH=/opt/Qt/6.5.0/macos \
   -DCMAKE_INSTALL_PREFIX:PATH=$BASE_DIR/install-macos \
   -DINPUT_SDK_PATH=$BASE_DIR/input-sdk/build/macos/stage/mac \
   -GNinja \
@@ -369,7 +369,7 @@ For version of the tools used, see `.github/workflows/win.yml`
 - setup build environment
 ```
 set ROOT_DIR=C:\Users\zilol\Projects
-set Qt6_DIR=C:\Qt\6.4.2\msvc2019_64
+set Qt6_DIR=C:\Qt\6.5.0\msvc2019_64
 set PATH=%QT_ROOT%\bin;C:\Program Files\CMake\bin\;%PATH%
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=x64
 ```
@@ -382,7 +382,7 @@ cmake ^
    -DCMAKE_BUILD_TYPE=Release ^
    -DCMAKE_PREFIX_PATH:PATH=%Qt6_Dir%^
    -DCMAKE_INSTALL_PREFIX:PATH=%ROOT_DIR%\install\input ^
-   -DINPUT_SDK_PATH:PATH=%ROOT_DIR%\input-sdk-qt-6.4.2-win64-20221116-132 ^
+   -DINPUT_SDK_PATH:PATH=%ROOT_DIR%\input-sdk-qt-6.5.0-win64-20221116-132 ^
    -G "NMake Makefiles" ^
    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ^
    -S %ROOT_DIR%\input ^
