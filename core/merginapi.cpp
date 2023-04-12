@@ -90,10 +90,6 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
     }
   } );
 
-  GEODIFF_init();
-  GEODIFF_setLoggerCallback( &GeodiffUtils::log );
-  GEODIFF_setMaximumLoggerLevel( GEODIFF_LoggerLevel::LevelDebug );
-
   //
   // check if the cache is up to date:
   //  - server url and type
@@ -1721,12 +1717,12 @@ bool MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
   //
   bool hasConflicts = false;
 
-  int res = GEODIFF_rebase( basefile.toUtf8().constData(),
-                            src.toUtf8().constData(),
-                            dest.toUtf8().constData(),
-                            conflictfile.toUtf8().constData()
-                          );
-  if ( res == GEODIFF_SUCCESS )
+  bool res = GeodiffUtils::rebase( basefile,
+                                   src,
+                                   dest,
+                                   conflictfile
+                                 );
+  if ( res )
   {
     CoreUtils::log( "pull " + projectFullName, "geodiff rebase successful: " + filePath );
   }
@@ -2605,8 +2601,8 @@ void MerginApi::pushFinishReplyFinished()
 
       // update basefile (unmodified file that should be equivalent to the server)
       QString basePath = transaction.projectDir + "/.mergin/" + merginFile.path;
-      int res = GEODIFF_applyChangeset( basePath.toUtf8(), diffPath.toUtf8() );
-      if ( res == GEODIFF_SUCCESS )
+      bool res = GeodiffUtils::applyChangeset( basePath, diffPath );
+      if ( res )
       {
         CoreUtils::log( "push " + projectFullName, QString( "Applied %1 to base file of %2" ).arg( merginFile.diffName, merginFile.path ) );
       }

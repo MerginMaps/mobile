@@ -32,6 +32,7 @@
 #include "qgsproviderregistry.h"
 #include "qgsmaplayerproxymodel.h"
 #include "qgsnetworkaccessmanager.h"
+#include "geodiffutils.h"
 
 #include "androidutils.h"
 #include "ios/iosutils.h"
@@ -486,6 +487,7 @@ int main( int argc, char *argv[] )
   } );
 
   // Create Input classes
+  GeodiffUtils::init();
   AndroidUtils au;
   IosUtils iosUtils;
   LocalProjectsManager localProjectsManager( projectDir );
