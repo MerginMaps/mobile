@@ -428,6 +428,7 @@ if (MACOS
     OR ANDROID
 )
   target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv)
+  target_link_libraries(Input PUBLIC Pq::Pgcommon Pq::Pgport)
 endif ()
 
 if (MACOS OR IOS)
