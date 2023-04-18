@@ -9,20 +9,18 @@
 
 #include "positiontrackingmanager.h"
 
-#include "position/tracking/simulatedtrackingbackend.h"
-#include "position/positionkit.h"
+#include "internaltrackingbackend.h"
+#include "positionkit.h"
 #include "inputmapsettings.h"
-
+#include "qgsproject.h"
 #include "qgslinestring.h"
 
 #include "inpututils.h"
+#include "coreutils.h"
 
 PositionTrackingManager::PositionTrackingManager( QObject *parent )
   : QObject{parent}
 {
-  // build track line
-  QgsLineString *line = new QgsLineString();
-  mTrackedGeometry.set( line );
 }
 
 void PositionTrackingManager::addPoint( GeoPosition position )
@@ -45,26 +43,90 @@ void PositionTrackingManager::addPoint( GeoPosition position )
 
 void PositionTrackingManager::setup()
 {
-  if ( !mMapSettings || !mPositionKit )
+  if ( !mMapSettings || !mTrackingBackend || !mQgsProject )
   {
     return;
   }
 
-  mTrackingBackend = std::unique_ptr<AbstractTrackingBackend>( constructTrackingBackend( mPositionKit ) );
+  //
+  // find the tracking layer
+  //
+
+//  QString trackingLayerId = mQgsProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QStringLiteral() );
+  QString trackingLayerId = "tracking_layer_0942e7ff_965d_4c4f_bf35_b51048dcd4ca"; // MOCK!
+
+  if ( trackingLayerId.isEmpty() )
+  {
+    CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Could not find tracking layer for the project" ) );
+    return;
+  }
+
+  QgsVectorLayer *trackingLayer = mQgsProject->mapLayer<QgsVectorLayer *>( trackingLayerId );
+
+  if ( !trackingLayer || !trackingLayer->isValid() )
+  {
+    CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Tracking layer not found or invalid" ) );
+    return;
+  }
+
+  setLayer( trackingLayer );
+
+  //
+  // build track line
+  //
+
+  QgsLineString *line = new QgsLineString();
+  mTrackedGeometry.set( line );
+
   connect( mTrackingBackend.get(), &AbstractTrackingBackend::positionChanged, this, &PositionTrackingManager::addPoint );
 }
 
-AbstractTrackingBackend *PositionTrackingManager::constructTrackingBackend( PositionKit *positionKit )
+AbstractTrackingBackend *PositionTrackingManager::constructTrackingBackend( QgsProject *project, PositionKit *positionKit )
 {
   AbstractTrackingBackend *positionBackend = nullptr;
+  AbstractTrackingBackend::UpdateFrequency frequency = AbstractTrackingBackend::Normal;
 
-  if ( positionKit && positionKit->positionProvider() )
+  if ( project )
   {
-    positionBackend = new SimulatedTrackingBackend( positionKit->positionProvider(), AbstractTrackingBackend::Often );
+    int readFrequency = project->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/UpdateFrequency" ), 0 );
+
+    if ( readFrequency == 0 )
+    {
+      frequency = AbstractTrackingBackend::Often;
+    }
+    else if ( readFrequency == 1 )
+    {
+      frequency = AbstractTrackingBackend::Normal;
+    }
+    else
+    {
+      frequency = AbstractTrackingBackend::Occasional;
+    }
+  }
+
+  QString platform = InputUtils::appPlatform();
+  if ( platform == QStringLiteral( "android" ) )
+  {
+    // TODO: android provider
+  }
+  else if ( platform == QStringLiteral( "ios" ) )
+  {
+    // TODO: iOS provider
   }
   else
   {
-    positionBackend = new SimulatedTrackingBackend( AbstractTrackingBackend::Often );
+    // desktop
+    if ( positionKit )
+    {
+      positionBackend = new InternalTrackingBackend( positionKit, frequency );
+    }
+    else
+    {
+      CoreUtils::log(
+        QStringLiteral( "Position tracking" ),
+        QStringLiteral( "Requested tracking on desktop, but no position kit was provided" )
+      );
+    }
   }
 
   QQmlEngine::setObjectOwnership( positionBackend, QQmlEngine::CppOwnership );
@@ -105,17 +167,41 @@ QgsGeometry PositionTrackingManager::trackedGeometry() const
   return mTrackedGeometry;
 }
 
-PositionKit *PositionTrackingManager::positionKit() const
+AbstractTrackingBackend *PositionTrackingManager::trackingBackend() const
 {
-  return mPositionKit;
+  return mTrackingBackend.get();
 }
 
-void PositionTrackingManager::setPositionKit( PositionKit *newPositionKit )
+void PositionTrackingManager::setTrackingBackend( AbstractTrackingBackend *newTrackingBackend )
 {
-  if ( mPositionKit == newPositionKit )
+  if ( mTrackingBackend )
+  {
+    disconnect( mTrackingBackend.get() );
+  }
+
+  mTrackingBackend.reset( newTrackingBackend );
+
+//  if ( mTrackingBackend )
+//  {
+//    connect( mTrackingBackend.get(), &AbstractTrackingBackend::positionChanged, this, &PositionTrackingManager::addPoint );
+//  }
+
+  emit trackingBackendChanged( mTrackingBackend.get() );
+
+  setup();
+}
+
+QgsProject *PositionTrackingManager::qgsProject() const
+{
+  return mQgsProject;
+}
+
+void PositionTrackingManager::setQgsProject( QgsProject *newQgsProject )
+{
+  if ( mQgsProject == newQgsProject )
     return;
-  mPositionKit = newPositionKit;
-  emit positionKitChanged( mPositionKit );
+  mQgsProject = newQgsProject;
+  emit qgsProjectChanged( mQgsProject );
 
   setup();
 }

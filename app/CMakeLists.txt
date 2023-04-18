@@ -34,7 +34,7 @@ set(MM_SRCS
     position/providers/positionprovidersmodel.cpp
     position/providers/simulatedpositionprovider.cpp
     position/tracking/abstracttrackingbackend.cpp
-    position/tracking/simulatedtrackingbackend.cpp
+    position/tracking/internaltrackingbackend.cpp
     position/tracking/positiontrackingmanager.cpp
     position/geoposition.cpp
     position/mapposition.cpp
@@ -114,7 +114,7 @@ set(MM_HDRS
     position/providers/positionprovidersmodel.h
     position/providers/simulatedpositionprovider.h
     position/tracking/abstracttrackingbackend.h
-    position/tracking/simulatedtrackingbackend.h
+    position/tracking/internaltrackingbackend.h
     position/tracking/positiontrackingmanager.h
     position/geoposition.h
     position/mapposition.h

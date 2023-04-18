@@ -287,7 +287,7 @@ Item {
         PositionTrackingManager {
           id: trackingManager
 
-          positionKit: __positionKit
+          qgsProject: __activeProject.qgsProject
           mapSettings: mapCanvas.mapSettings
         }
 
@@ -303,6 +303,10 @@ Item {
 
           mapSettings: mapCanvas.mapSettings
           geometry: trackingManager.trackedGeometry
+        }
+
+        Component.onCompleted: {
+          trackingManager.trackingBackend = trackingManager.constructTrackingBackend( __activeProject.qgsProject, __positionKit )
         }
       }
     }

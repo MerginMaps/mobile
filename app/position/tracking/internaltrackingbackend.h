@@ -7,24 +7,27 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SIMULATEDTRACKINGBACKEND_H
-#define SIMULATEDTRACKINGBACKEND_H
+#ifndef INTERNALTRACKINGBACKEND_H
+#define INTERNALTRACKINGBACKEND_H
 
 #include "abstracttrackingbackend.h"
+
 #include <qglobal.h>
 
-class AbstractPositionProvider;
+class PositionKit;
 
-class SimulatedTrackingBackend : public AbstractTrackingBackend
+class InternalTrackingBackend : public AbstractTrackingBackend
 {
     Q_OBJECT
   public:
-    explicit SimulatedTrackingBackend( AbstractPositionProvider *positionProvider, AbstractTrackingBackend::UpdateFrequency updateFrequency, QObject *parent = nullptr );
-    explicit SimulatedTrackingBackend( AbstractTrackingBackend::UpdateFrequency updateFrequency, QObject *parent = nullptr );
+    explicit InternalTrackingBackend( PositionKit *positionKit, AbstractTrackingBackend::UpdateFrequency updateFrequency, QObject *parent = nullptr );
 
   private:
 
-    std::unique_ptr<AbstractPositionProvider> mPositionProvider;
+    QDateTime mLastUpdate;
+    double mUpdateInterval = 0; // ms
+
+    PositionKit *mPositionKit = nullptr; // not owned
 };
 
-#endif // SIMULATEDTRACKINGBACKEND_H
+#endif // INTERNALTRACKINGBACKEND_H
