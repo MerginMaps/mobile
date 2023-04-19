@@ -243,7 +243,7 @@ https://deciphertools.com/blog/2014_11_19_how_to_find_your_iphone_udid/
 - install all on device
 - set in Qt Creator
 
-Now you can create a build
+Now you can create a build (either on commmand line or by setting these variables in Qt Creator)
 
 ```
   cmake \
@@ -258,6 +258,10 @@ Now you can create a build
     ../input
 ```
 
+Notes
+ - you have to run Release or RelWithDebInfo builds. Debug builds will usually crash on some Qt's assert
+ - if there is any problem running Input App from Qt Creator, open cmake-generated project in XCode directly
+ 
 ## 5.1 iOS assets 
 
 ### application icon
