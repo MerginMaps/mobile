@@ -32,6 +32,8 @@ Item {
   readonly property alias mapSettings: mapCanvas.mapSettings
   readonly property alias compass: deviceCompass
 
+  property PositionTrackingManager trackingManager: tracking.item?.manager ?? null
+
   signal featureIdentified( var pair )
   signal nothingIdentified()
 
@@ -275,20 +277,35 @@ Item {
     mapSettings: mapCanvas.mapSettings
   }
 
+  PositionTrackingActiveDialog {
+    id: stopTrackingDialog
+
+    property string projectToSwitch
+
+    onStopRequested: {
+      tracking.item?.storeTrackedPath()
+      __activeProject.isTrackingPosition = false
+      __activeProject.load( projectToSwitch )
+    }
+  }
+
   Loader {
     id: tracking
 
     anchors.fill: mapCanvas
     asynchronous: true
-    active: __appSettings.trackingActive
+    active: false
 
     sourceComponent: Component {
       Item {
+        property alias manager: trackingManager
+
         PositionTrackingManager {
           id: trackingManager
 
           qgsProject: __activeProject.qgsProject
           mapSettings: mapCanvas.mapSettings
+          variablesManager: __variablesManager
         }
 
         Highlight {
@@ -302,12 +319,41 @@ Item {
           lineWidth: InputStyle.mapLineWidth / 2
 
           mapSettings: mapCanvas.mapSettings
-          geometry: trackingManager.trackedGeometry
+          geometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
         }
 
         Component.onCompleted: {
           trackingManager.trackingBackend = trackingManager.constructTrackingBackend( __activeProject.qgsProject, __positionKit )
         }
+
+        Connections {
+          target: __activeProject
+
+          function onLoadingFailedTrackingActive( projectPath ) {
+            stopTrackingDialog.projectToSwitch = projectPath
+            stopTrackingDialog.open()
+          }
+        }
+
+        function storeTrackedPath() {
+          trackingManager.storeTrackedPath()
+        }
+      }
+    }
+  }
+
+  Connections {
+    target: __activeProject
+
+    function onIsTrackingPositionChanged( isTracking ) {
+      if ( isTracking )
+      {
+        tracking.active = true
+      }
+      else
+      {
+        tracking.item?.storeTrackedPath()
+        tracking.active = false
       }
     }
   }
@@ -1161,7 +1207,7 @@ Item {
 
   function highlightPair( pair ) {
     let geometry = __inputUtils.extractGeometry( pair )
-    identifyHighlight.geometry = __inputUtils.convertGeometryToMapCRS( geometry, pair.layer, mapCanvas.mapSettings )
+    identifyHighlight.geometry = __inputUtils.transformGeometryToMapWithLayer( geometry, pair.layer, mapCanvas.mapSettings )
   }
 
   function hideHighlight() {

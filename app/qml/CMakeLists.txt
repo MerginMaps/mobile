@@ -38,6 +38,7 @@ set(MM_QML
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
     dialogs/InstallScannerAppDialog.qml
+    dialogs/PositionTrackingActiveDialog.qml
     editor/AbstractEditor.qml
     editor/RelationPhotoDelegate.qml
     editor/RelationPhotoFooterDelegate.qml
@@ -67,6 +68,7 @@ set(MM_QML
     layers/LayersListSearchPage.qml
     layers/LayersListV2.qml
     layers/LayersPanelV2.qml
+    popups/PositionTrackingDrawer.qml
     map/ActiveLayerPanel.qml
     map/Crosshair.qml
     map/Highlight.qml

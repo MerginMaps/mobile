@@ -403,16 +403,3 @@ void AppSettings::setGpsAntennaHeight( double gpsAntennaHeight )
     emit gpsAntennaHeightChanged( gpsAntennaHeight );
   }
 }
-
-bool AppSettings::trackingActive() const
-{
-  return mTrackingActive;
-}
-
-void AppSettings::setTrackingActive( bool newTrackingActive )
-{
-  if ( mTrackingActive == newTrackingActive )
-    return;
-  mTrackingActive = newTrackingActive;
-  emit trackingActiveChanged( mTrackingActive );
-}

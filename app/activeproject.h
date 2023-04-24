@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,7 +23,6 @@
 #include "autosynccontroller.h"
 #include "inputmapsettings.h"
 
-
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
  */
@@ -36,6 +35,9 @@ class ActiveProject: public QObject
     Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     Q_PROPERTY( QString mapTheme READ mapTheme WRITE setMapTheme NOTIFY mapThemeChanged )
+
+    Q_PROPERTY( bool positionTrackingAllowed READ positionTrackingAllowed NOTIFY positionTrackingAllowedChanged )
+    Q_PROPERTY( bool isTrackingPosition READ isTrackingPosition WRITE setIsTrackingPosition NOTIFY isTrackingPositionChanged )
 
   public:
     explicit ActiveProject(
@@ -79,6 +81,9 @@ class ActiveProject: public QObject
      */
     Q_INVOKABLE void switchLayerTreeNodeVisibility( QgsLayerTreeNode *node );
 
+    //! Returns boolean if any project is currently loaded
+    Q_INVOKABLE bool isProjectLoaded() const;
+
     /**
      * mapSettings method returns mapsettings pointer
      */
@@ -113,6 +118,11 @@ class ActiveProject: public QObject
 
     const QString &mapTheme() const;
 
+    bool isTrackingPosition() const;
+    void setIsTrackingPosition( bool shouldTrackPosition );
+
+    bool positionTrackingAllowed() const;
+
   signals:
     void qgsProjectChanged();
     void localProjectChanged( LocalProject project );
@@ -123,6 +133,7 @@ class ActiveProject: public QObject
     void loadingFinished();
 
     void projectReadingFailed( QString error );
+    void loadingFailedTrackingActive( QString projectPath );
     void reportIssue( QString layerName, QString message );
     void loadingErrorFound();
     void qgisLogChanged();
@@ -134,6 +145,10 @@ class ActiveProject: public QObject
     void syncActiveProject( const LocalProject &project );
 
     void mapThemeChanged( const QString &mapTheme );
+
+    void isTrackingPositionChanged( bool isTrackingPosition );
+
+    void positionTrackingAllowedChanged();
 
   public slots:
     // Reloads project if current project path matches given path (its the same project)
@@ -167,6 +182,7 @@ class ActiveProject: public QObject
     InputMapSettings *mMapSettings = nullptr;
 
     std::unique_ptr<AutosyncController> mAutosyncController;
+    bool mIsTrackingPosition = false;
 
     QString mProjectLoadingLog;
 

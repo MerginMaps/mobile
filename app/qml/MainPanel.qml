@@ -24,7 +24,8 @@ Item {
     signal openSettingsClicked()
     signal zoomToProject()
     signal localChangesClicked()
-  signal layersClicked()
+    signal layersClicked()
+    signal positionTrackingClicked()
 
     property real itemSize: mainPanel.height * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
@@ -201,11 +202,31 @@ Item {
             }
         }
 
+      Item {
+          id: trackingItem
+
+          height: parent.height
+          visible: panelRow.itemsToShow > 8
+          width: visible ? panelRow.calculatedItemWidth : 0
+
+          MainPanelButton {
+            id: trackingItemBtn
+
+            width: mainPanel.itemSize
+            text: qsTr("Position tracking")
+            imageSource: __activeProject.isTrackingPosition ? InputStyle.gpsFixedIcon : InputStyle.gpsNotFixedIcon
+            onActivated: {
+              rootMenu.close()
+              mainPanel.positionTrackingClicked()
+            }
+          }
+        }
+
         // Last item
         Item {
             id: settingsItem
             height: parent.height
-            visible: panelRow.itemsToShow > 8
+            visible: panelRow.itemsToShow > 9
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -387,6 +408,25 @@ Item {
 
             onClicked: {
                 mapThemesBtn.activated()
+                rootMenu.close()
+            }
+        }
+
+        MenuItem {
+            width: parent.width
+            visible: !trackingItem.visible
+            height: visible ? mainPanel.itemSize : 0
+
+            ExtendedMenuItem {
+                height: mainPanel.itemSize
+                rowHeight: height
+                width: parent.width
+                contentText: qsTr("Position tracking")
+                imageSource: __activeProject.isTrackingPosition ? InputStyle.gpsFixedIcon : InputStyle.gpsNotFixedIcon
+            }
+
+            onClicked: {
+                mainPanel.positionTrackingClicked()
                 rootMenu.close()
             }
         }

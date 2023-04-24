@@ -317,16 +317,11 @@ double InputUtils::mapSettingsDPR( InputMapSettings *ms )
   return ms->devicePixelRatio();
 }
 
-QgsGeometry InputUtils::convertGeometryToMapCRS( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings )
+QgsGeometry InputUtils::transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, const QgsCoordinateReferenceSystem &destinationCRS, const QgsCoordinateTransformContext &context )
 {
   QgsGeometry g( geometry );
 
-  if ( !sourceLayer || !targetSettings )
-  {
-    return QgsGeometry();
-  }
-
-  QgsCoordinateTransform ct( sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() );
+  QgsCoordinateTransform ct( sourceCRS, destinationCRS, context );
   if ( !ct.isShortCircuited() )
   {
     try
@@ -343,12 +338,58 @@ QgsGeometry InputUtils::convertGeometryToMapCRS( const QgsGeometry &geometry, Qg
   return g;
 }
 
+QgsGeometry InputUtils::transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, QgsVectorLayer *targetLayer )
+{
+  if ( !targetLayer || !targetLayer->isValid() )
+  {
+    return QgsGeometry();
+  }
+
+  return transformGeometry( geometry, sourceCRS, targetLayer->crs(), targetLayer->transformContext() );
+}
+
+QgsGeometry InputUtils::transformGeometryToMapWithLayer( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings )
+{
+  if ( !sourceLayer || !sourceLayer->isValid() || !targetSettings )
+  {
+    return QgsGeometry();
+  }
+
+  return transformGeometry( geometry, sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() );
+}
+
+QgsGeometry InputUtils::transformGeometryToMapWithCRS( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, InputMapSettings *targetSettings )
+{
+  if ( !targetSettings )
+  {
+    return QgsGeometry();
+  }
+
+  return transformGeometry( geometry, sourceCRS, targetSettings->destinationCrs(), targetSettings->transformContext() );
+}
+
 QgsGeometry InputUtils::extractGeometry( const FeatureLayerPair &pair )
 {
   if ( !pair.isValid() )
     return QgsGeometry();
 
   return pair.feature().geometry();
+}
+
+QString InputUtils::geometryLengthAsString( const QgsGeometry &geometry )
+{
+  QgsDistanceArea distanceArea;
+  distanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
+  distanceArea.setSourceCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ), QgsCoordinateTransformContext() );
+
+  qreal length = distanceArea.measureLength( geometry );
+
+  if ( qgsDoubleNear( length, 0 ) )
+  {
+    return "0 m";
+  }
+
+  return distanceArea.formatDistance( length, 2, distanceArea.lengthUnits() );
 }
 
 static void addLineString( const QgsLineString *line, QVector<double> &data )
@@ -1701,7 +1742,11 @@ QString InputUtils::featureTitle( const FeatureLayerPair &pair, QgsProject *proj
   return title;
 }
 
-FeatureLayerPair InputUtils::createFeatureLayerPair( QgsVectorLayer *layer, const QgsGeometry &geometry, VariablesManager *variablesmanager )
+FeatureLayerPair InputUtils::createFeatureLayerPair(
+  QgsVectorLayer *layer,
+  const QgsGeometry &geometry,
+  VariablesManager *variablesmanager,
+  QgsExpressionContextScope *additionalScope )
 {
   if ( !layer )
     return FeatureLayerPair();
@@ -1711,6 +1756,9 @@ FeatureLayerPair InputUtils::createFeatureLayerPair( QgsVectorLayer *layer, cons
 
   if ( variablesmanager )
     context << variablesmanager->positionScope();
+
+  if ( additionalScope )
+    context << additionalScope;
 
   QgsFeature feat = QgsVectorLayerUtils::createFeature( layer, geometry, attrs.toMap(), &context );
   return FeatureLayerPair( feat, layer );

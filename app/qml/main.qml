@@ -21,6 +21,7 @@ import "./map"
 import "./misc"
 import "./dialogs"
 import "./layers"
+import "./popups"
 
 ApplicationWindow {
     id: window
@@ -274,7 +275,7 @@ ApplicationWindow {
 
         onMyLocationHold: {
             __appSettings.autoCenterMapChecked = !__appSettings.autoCenterMapChecked
-            showMessage( __appSettings.autoCenterMapChecked ?  qsTr("GPS auto-center mode on") : qsTr("GPS auto-center mode off") )
+            showMessage( __appSettings.autoCenterMapChecked ? qsTr("GPS auto-center mode on") : qsTr("GPS auto-center mode off") )
         }
         onOpenSettingsClicked: settingsPanel.visible = true
         onZoomToProject: {
@@ -305,6 +306,10 @@ ApplicationWindow {
         onLayersClicked: {
           stateManager.state = "misc"
           let layerspanel = mapPanelsStackView.push( layersPanelComponent, {}, StackView.PushTransition )
+        }
+
+        onPositionTrackingClicked: {
+          trackingPanelLoader.active = true
         }
     }
 
@@ -486,6 +491,45 @@ ApplicationWindow {
         onClosed: stateManager.state = "map"
     }
 
+    Loader {
+      id: trackingPanelLoader
+
+      focus: true
+      active: false
+      asynchronous: true
+
+      sourceComponent: Component {
+
+        PositionTrackingDrawer {
+
+          width: window.width
+
+          trackingActive: __activeProject.isTrackingPosition
+          distanceTraveled: map.trackingManager ? __inputUtils.geometryLengthAsString( map.trackingManager?.trackedGeometry ) : qsTr( "not tracking" )
+          trackingStartedAt: {
+            if ( map.trackingManager?.startTime )
+            {
+              let date = map.trackingManager?.startTime
+              return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+            }
+            return qsTr( "not tracking" )
+          }
+
+          onTrackingBtnClicked: __activeProject.isTrackingPosition = !__activeProject.isTrackingPosition
+
+          onClosed: {
+            trackingPanelLoader.active = false
+          }
+        }
+      }
+
+      onActiveChanged: {
+        if ( active )
+        {
+          trackingPanelLoader.item?.open()
+        }
+      }
+    }
 
     ProjectIssuesPanel {
       id: projectIssuesPanel
@@ -724,26 +768,33 @@ ApplicationWindow {
 
     Connections {
       target: __activeProject
+
       function onLoadingStarted() {
         projectLoadingScreen.visible = true;
         failedToLoadProjectBanner.reset();
         projectIssuesPanel.clear();
       }
+
       function onLoadingFinished() {
         projectLoadingScreen.visible = false
       }
+
       function onLoadingErrorFound() {
         failedToLoadProjectBanner.pushNotificationMessage( qsTr( "There were issues loading the project." ) )
       }
+
       function onReportIssue( layerName, message ) {
         projectIssuesPanel.reportIssue( layerName, message )
       }
+
       function onProjectReloaded( project ) {
         map.clear()
       }
+
       function onProjectWillBeReloaded() {
         formsStackManager.reload()
       }
+
       function onProjectReadingFailed( message ) {
         projectErrorDialog.informativeText = qsTr( "Could not read the project file:" ) + "\n" + message
         projectErrorDialog.open()
