@@ -173,31 +173,6 @@ Item {
     }
   }
 
-  // Mouse, stylus and other pointer devices handler
-  TapHandler {
-    id: stylusClick
-
-    property bool longPressActive: false
-
-    enabled: !mouseAsTouchScreen
-    acceptedDevices: PointerDevice.AllDevices & ~PointerDevice.TouchScreen
-
-    onSingleTapped: {
-      root.clicked(point.position)
-    }
-
-    onLongPressed: {
-      root.longPressed(point.position)
-      longPressActive = true
-    }
-
-    onPressedChanged: {
-      if (longPressActive)
-        root.longPressReleased()
-      longPressActive = false
-    }
-  }
-
   //
   // Qt6.0+ does not work well when PinchHandler is combined with TapHandler.
   // Sometimes, after map is zoomed in/out a few times, TapHandler ends in an invalid state -
@@ -291,6 +266,31 @@ Item {
             dragHandler.grabPermissions = PointerHandler.ApprovesTakeOverByHandlersOfSameType | PointerHandler.ApprovesTakeOverByHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByItems
           }
 
+          if (longPressActive)
+            root.longPressReleased()
+          longPressActive = false
+        }
+      }
+
+      // Mouse, stylus and other pointer devices handler
+      TapHandler {
+        id: stylusClick
+
+        property bool longPressActive: false
+
+        enabled: !mouseAsTouchScreen
+        acceptedDevices: PointerDevice.AllDevices & ~PointerDevice.TouchScreen
+
+        onSingleTapped: {
+          root.clicked(point.position)
+        }
+
+        onLongPressed: {
+          root.longPressed(point.position)
+          longPressActive = true
+        }
+
+        onPressedChanged: {
           if (longPressActive)
             root.longPressReleased()
           longPressActive = false
