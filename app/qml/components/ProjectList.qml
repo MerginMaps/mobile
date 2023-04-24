@@ -22,7 +22,7 @@ Item {
   property string activeProjectId: ""
   property string searchText: ""
 
-  signal openProjectRequested( string projectId, string projectFilePath )
+  signal openProjectRequested( string projectFilePath )
   signal showLocalChangesRequested( string projectId )
   signal activeProjectDeleted()
 
@@ -99,7 +99,7 @@ Item {
 
       onOpenRequested: {
         if ( model.ProjectIsLocal )
-          root.openProjectRequested( projectId, model.ProjectFilePath )
+          root.openProjectRequested( model.ProjectFilePath )
         else if ( !model.ProjectIsLocal && model.ProjectIsMergin && !model.ProjectSyncPending) {
           downloadProjectDialog.relatedProjectId = model.ProjectId
           downloadProjectDialog.open()

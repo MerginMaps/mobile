@@ -13,6 +13,7 @@ import QtMultimedia
 import QtQml.Models
 import QtPositioning
 import QtQuick.Dialogs
+import QtQuick.Layouts
 
 import Qt.labs.settings
 
@@ -103,8 +104,6 @@ ApplicationWindow {
         let path = __appSettings.defaultProject
 
         if ( __localProjectsManager.projectIsValid( path ) && __activeProject.load( path ) ) {
-          projectPanel.activeProjectPath = path
-          projectPanel.activeProjectId = __localProjectsManager.projectId( path )
           __appSettings.activeProject = path
         }
         else {
@@ -352,6 +351,8 @@ ApplicationWindow {
         height: window.height
         width: window.width
 
+        activeProjectId: __activeProject.localProject.id() ?? ""
+
         onVisibleChanged: {
           if ( projectPanel.visible ) {
             projectPanel.forceActiveFocus()
@@ -361,9 +362,7 @@ ApplicationWindow {
           }
         }
 
-        onOpenProjectRequested: function( projectId, projectPath ) {
-          __appSettings.defaultProject = projectPath
-          __appSettings.activeProject = projectPath
+        onOpenProjectRequested: function( projectPath ) {
           __activeProject.load( projectPath )
         }
 
@@ -789,6 +788,14 @@ ApplicationWindow {
 
       function onProjectReloaded( project ) {
         map.clear()
+
+        if ( __activeProject.isProjectLoaded() )
+        {
+          projectPanel.hidePanel()
+        }
+
+        __appSettings.defaultProject = __activeProject.localProject.qgisProjectFilePath ?? ""
+        __appSettings.activeProject = __activeProject.localProject.qgisProjectFilePath ?? ""
       }
 
       function onProjectWillBeReloaded() {

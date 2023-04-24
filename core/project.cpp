@@ -21,6 +21,9 @@ QString LocalProject::fullName() const
   if ( !projectName.isEmpty() && !projectNamespace.isEmpty() )
     return MerginApi::getFullProjectName( projectNamespace, projectName );
 
+  if ( projectDir.isEmpty() )
+    return QString();
+
   QDir dir( projectDir );
   return dir.dirName();
 }
