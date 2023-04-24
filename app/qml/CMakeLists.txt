@@ -83,7 +83,6 @@ set(MM_QML
     misc/AddPositionProviderPage.qml
     misc/AttentionBanner.qml
     misc/GpsDataPage.qml
-    misc/LegacyFolderMigration.qml
     misc/NoWorkspaceBanner.qml
     misc/PositionProviderPage.qml
     AboutPanel.qml

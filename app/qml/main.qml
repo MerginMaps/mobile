@@ -18,7 +18,6 @@ import Qt.labs.settings
 
 import lc 1.0 as InputClass
 import "./map"
-import "./misc"
 import "./dialogs"
 import "./layers"
 
@@ -731,13 +730,6 @@ ApplicationWindow {
         projectErrorDialog.informativeText = qsTr( "Could not read the project file:" ) + "\n" + message
         projectErrorDialog.open()
       }
-    }
-
-    LegacyFolderMigration {
-      id: lfm
-
-      z: 1000 // unfortunatelly we need this hack because some parts of application still sets z coord
-      anchors.fill: parent
     }
 
     Timer {
