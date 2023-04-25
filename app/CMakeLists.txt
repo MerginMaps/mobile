@@ -522,5 +522,4 @@ qt_add_qml_module(
   VERSION 1.0
   QML_FILES ${MM_QML_SRCS}
   RESOURCE_PREFIX /com.merginmaps/imports
-  SOURCES position/tracking/positiontrackingmanager.h position/tracking/positiontrackingmanager.cpp
 )
