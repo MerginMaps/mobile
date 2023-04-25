@@ -14,8 +14,6 @@
 
 - ( void )dealloc
 {
-  NSLog( @"Object deallocated" );
-
   if ( mManager )
   {
     [mManager stopUpdatingLocation];
