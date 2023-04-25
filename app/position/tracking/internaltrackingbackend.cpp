@@ -14,9 +14,9 @@ InternalTrackingBackend::InternalTrackingBackend(
   PositionKit *positionKit,
   UpdateFrequency updateFrequency,
   QObject *parent )
-  : AbstractTrackingBackend{parent}
-  , mPositionKit( positionKit )
+  : AbstractTrackingBackend{ updateFrequency, AbstractTrackingBackend::SignalSlotSupport::Supported, parent }
   , mLastUpdate( QDateTime::currentDateTime() )
+  , mPositionKit( positionKit )
 {
   switch ( updateFrequency )
   {
@@ -37,7 +37,7 @@ InternalTrackingBackend::InternalTrackingBackend(
     {
       if ( mLastUpdate.addMSecs( mUpdateInterval ) <= QDateTime::currentDateTime() )
       {
-        emit positionChanged( position );
+        notifyListeners( position );
       }
     } );
   }

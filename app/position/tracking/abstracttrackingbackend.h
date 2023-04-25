@@ -30,18 +30,37 @@ class AbstractTrackingBackend : public QObject
     };
     Q_ENUM( UpdateFrequency );
 
-    explicit AbstractTrackingBackend( QObject *parent = nullptr );
+    enum SignalSlotSupport
+    {
+      Supported = 0,
+      NotSupported
+    };
+    Q_ENUM( SignalSlotSupport );
+
+    explicit AbstractTrackingBackend( UpdateFrequency updateFrequency = Often, SignalSlotSupport signalSlotSupport = Supported, QObject *parent = nullptr );
 
     UpdateFrequency updateFrequency() const;
     void setUpdateFrequency( const UpdateFrequency &newUpdateFrequency );
 
+    SignalSlotSupport signalSlotSupport() const;
+
+    void setNotifyFunction( std::function<void( const GeoPosition &position )> );
+
   signals:
-    void positionChanged( GeoPosition position );
+    void positionChanged( const GeoPosition &position );
 
     void updateFrequencyChanged( AbstractTrackingBackend::UpdateFrequency updateFrequency );
 
+  protected:
+    void notifyListeners( const GeoPosition &position );
+    void setSignalSlotSupport( SignalSlotSupport support );
+
   private:
     UpdateFrequency mUpdateFrequency;
+    SignalSlotSupport mSignalSlotSupport;
+
+    //! Function to call when this provider does not support signal/slot connection
+    std::function<void( const GeoPosition &position )> mNotifyFunction;
 };
 
 #endif // ABSTRACTTRACKINGBACKEND_H

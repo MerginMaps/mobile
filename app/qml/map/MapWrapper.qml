@@ -303,9 +303,8 @@ Item {
         PositionTrackingManager {
           id: trackingManager
 
-          qgsProject: __activeProject.qgsProject
-          mapSettings: mapCanvas.mapSettings
           variablesManager: __variablesManager
+          qgsProject: __activeProject.qgsProject
         }
 
         Highlight {

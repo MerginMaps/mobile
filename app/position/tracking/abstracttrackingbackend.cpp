@@ -8,11 +8,32 @@
  ***************************************************************************/
 
 #include "abstracttrackingbackend.h"
+#include "coreutils.h"
 
-AbstractTrackingBackend::AbstractTrackingBackend( QObject *parent )
-  : QObject{parent}
+AbstractTrackingBackend::AbstractTrackingBackend( UpdateFrequency updateFrequency, SignalSlotSupport signalSlotSupport, QObject *parent )
+  : QObject{ parent }
+  , mUpdateFrequency( updateFrequency )
+  , mSignalSlotSupport( signalSlotSupport )
 {
 
+}
+
+void AbstractTrackingBackend::notifyListeners( const GeoPosition &position )
+{
+  if ( mSignalSlotSupport == SignalSlotSupport::Supported )
+  {
+    emit positionChanged( position );
+    return;
+  }
+
+  if ( mNotifyFunction )
+  {
+    mNotifyFunction( position );
+  }
+  else
+  {
+    CoreUtils::log( QStringLiteral( "Tracking backend" ), QStringLiteral( "No way to inform about position update!" ) );
+  }
 }
 
 AbstractTrackingBackend::UpdateFrequency AbstractTrackingBackend::updateFrequency() const
@@ -26,4 +47,19 @@ void AbstractTrackingBackend::setUpdateFrequency( const UpdateFrequency &newUpda
     return;
   mUpdateFrequency = newUpdateFrequency;
   emit updateFrequencyChanged( mUpdateFrequency );
+}
+
+AbstractTrackingBackend::SignalSlotSupport AbstractTrackingBackend::signalSlotSupport() const
+{
+  return mSignalSlotSupport;
+}
+
+void AbstractTrackingBackend::setNotifyFunction( std::function<void ( const GeoPosition & )> fn )
+{
+  mNotifyFunction = fn;
+}
+
+void AbstractTrackingBackend::setSignalSlotSupport( SignalSlotSupport support )
+{
+  mSignalSlotSupport = support;
 }

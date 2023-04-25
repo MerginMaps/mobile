@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -9,50 +9,46 @@
 
 #include "positiontrackingmanager.h"
 
-#include "internaltrackingbackend.h"
 #include "positionkit.h"
-#include "inputmapsettings.h"
+#include "iostrackingbackend.h"
+#include "internaltrackingbackend.h"
+
 #include "qgsproject.h"
 #include "qgslinestring.h"
 
-#include "qsettings.h"
-
-#include "inpututils.h"
 #include "coreutils.h"
+#include "inpututils.h"
 #include "variablesmanager.h"
+
+#include "qsettings.h"
 
 PositionTrackingManager::PositionTrackingManager( QObject *parent )
   : QObject{parent}
 {
 }
 
-void PositionTrackingManager::addPoint( GeoPosition position )
+void PositionTrackingManager::addPoint( const GeoPosition &position )
 {
-  QgsPoint toAdd( position.longitude, position.latitude, position.elevation, QDateTime::currentDateTime().toSecsSinceEpoch() );
+  QgsPoint newPoint( position.longitude, position.latitude, position.elevation, QDateTime::currentDateTime().toSecsSinceEpoch() );
 
-  if ( toAdd.isEmpty() )
+  if ( newPoint.isEmpty() )
     return;
+
+  //
+  // we could ignore updates that have very bad accuracy in future
+  //
 
   int pointsCount = mTrackedGeometry.constGet()->vertexCount();
 
-  mTrackedGeometry.get()->insertVertex( QgsVertexId( 0, 0, pointsCount ), toAdd );
+  mTrackedGeometry.get()->insertVertex( QgsVertexId( 0, 0, pointsCount ), newPoint );
 
+  cacheTrackedGeometry();
   emit trackedGeometryChanged( mTrackedGeometry );
-
-  // store the geometry in persistent local memory
-  {
-    QSettings settings;
-
-    settings.beginGroup( QStringLiteral( "MerginMaps/Tracking/ProjectPath" ) );
-    settings.setValue( QStringLiteral( "TrackedPath" ), mTrackedGeometry.asWkt( 6 ) );
-
-    settings.endGroup();
-  }
 }
 
 void PositionTrackingManager::storeTrackedPath()
 {
-  if ( !mMapSettings || !mTrackingBackend || !mQgsProject || !mVariablesManager )
+  if ( !mQgsProject || !mVariablesManager )
   {
     CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Can not save tracking feature, missing required properties" ) );
     return;
@@ -67,19 +63,17 @@ void PositionTrackingManager::storeTrackedPath()
   }
 
   // convert captured geometry to the destination layer's CRS
-  QgsGeometry trackedGeoLayerCRS = InputUtils::transformGeometry( mTrackedGeometry, QgsCoordinateReferenceSystem::fromEpsgId( 4326 ), trackingLayer );
+  QgsGeometry geometryInLayerCRS = InputUtils::transformGeometry( mTrackedGeometry, QgsCoordinateReferenceSystem::fromEpsgId( 4326 ), trackingLayer );
 
   // create feature - add tracking variables to scope
   QgsExpressionContextScope *scope = new QgsExpressionContextScope( QStringLiteral( "MM_Tracking" ) );
   scope->addVariable( QgsExpressionContextScope::StaticVariable( QStringLiteral( "tracking_start_time" ), mTrackingStartTime, true, true ) );
   scope->addVariable( QgsExpressionContextScope::StaticVariable( QStringLiteral( "tracking_end_time" ), QDateTime::currentDateTime(), true, true ) );
 
-  FeatureLayerPair trackedFeature = InputUtils::createFeatureLayerPair( trackingLayer, trackedGeoLayerCRS, mVariablesManager, scope );
+  FeatureLayerPair trackedFeature = InputUtils::createFeatureLayerPair( trackingLayer, geometryInLayerCRS, mVariablesManager, scope );
 
   trackingLayer->startEditing();
-  trackingLayer->beginEditCommand( QStringLiteral( "Add tracked feature" ) );
   trackingLayer->addFeature( trackedFeature.featureRef() );
-  trackingLayer->endEditCommand();
 
   CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Feature created %1" ).arg( trackedFeature.feature().id() ) );
 
@@ -92,15 +86,8 @@ void PositionTrackingManager::storeTrackedPath()
   }
   else
   {
+    clearCache();
     trackingLayer->triggerRepaint();
-
-    // clear tracking cache
-    {
-      QSettings settings;
-      settings.beginGroup( QStringLiteral( "MerginMaps/Tracking/ProjectPath" ) );
-      settings.remove( QStringLiteral( "TrackedPath" ) );
-      settings.endGroup();
-    }
 
     CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Feature commited and cache cleared" ) );
   }
@@ -108,7 +95,7 @@ void PositionTrackingManager::storeTrackedPath()
 
 void PositionTrackingManager::setup()
 {
-  if ( !mMapSettings || !mTrackingBackend || !mQgsProject )
+  if ( !mTrackingBackend || !mQgsProject )
   {
     return;
   }
@@ -146,7 +133,26 @@ void PositionTrackingManager::setup()
   QgsLineString *line = new QgsLineString();
   mTrackedGeometry.set( line );
 
-  connect( mTrackingBackend.get(), &AbstractTrackingBackend::positionChanged, this, &PositionTrackingManager::addPoint );
+  if ( mTrackingBackend->signalSlotSupport() == AbstractTrackingBackend::SignalSlotSupport::Supported )
+  {
+    connect( mTrackingBackend.get(), &AbstractTrackingBackend::positionChanged, this, &PositionTrackingManager::addPoint );
+  }
+  else
+  {
+    mTrackingBackend->setNotifyFunction( [ = ]( const GeoPosition & p ) { this->addPoint( p ); } );
+  }
+}
+
+void PositionTrackingManager::cacheTrackedGeometry()
+{
+  QSettings settings;
+  settings.setValue( QStringLiteral( "MerginMaps/Tracking/TrackedPath" ), mTrackedGeometry.asWkt( 6 ) );
+}
+
+void PositionTrackingManager::clearCache()
+{
+  QSettings settings;
+  settings.remove( QStringLiteral( "MerginMaps/Tracking/TrackedPath" ) );
 }
 
 AbstractTrackingBackend *PositionTrackingManager::constructTrackingBackend( QgsProject *project, PositionKit *positionKit )
@@ -172,30 +178,24 @@ AbstractTrackingBackend *PositionTrackingManager::constructTrackingBackend( QgsP
     }
   }
 
-  QString platform = InputUtils::appPlatform();
-  if ( platform == QStringLiteral( "android" ) )
+  // TODO: android provider
+
+#ifdef Q_OS_IOS
+  positionBackend = new IOSTrackingBackend( frequency );
+#else
+  // desktop
+  if ( positionKit )
   {
-    // TODO: android provider
-  }
-  else if ( platform == QStringLiteral( "ios" ) )
-  {
-    // TODO: iOS provider
+    positionBackend = new InternalTrackingBackend( positionKit, frequency );
   }
   else
   {
-    // desktop
-    if ( positionKit )
-    {
-      positionBackend = new InternalTrackingBackend( positionKit, frequency );
-    }
-    else
-    {
-      CoreUtils::log(
-        QStringLiteral( "Position tracking" ),
-        QStringLiteral( "Requested tracking on desktop, but no position kit was provided" )
-      );
-    }
+    CoreUtils::log(
+      QStringLiteral( "Position tracking" ),
+      QStringLiteral( "Requested tracking on desktop, but no position kit provided" )
+    );
   }
+#endif
 
   QQmlEngine::setObjectOwnership( positionBackend, QQmlEngine::CppOwnership );
 
@@ -213,21 +213,6 @@ void PositionTrackingManager::setLayerId( QString newLayerId )
     return;
   mLayerId = newLayerId;
   emit layerIdChanged( mLayerId );
-}
-
-InputMapSettings *PositionTrackingManager::mapSettings() const
-{
-  return mMapSettings;
-}
-
-void PositionTrackingManager::setMapSettings( InputMapSettings *newMapSettings )
-{
-  if ( mMapSettings == newMapSettings )
-    return;
-  mMapSettings = newMapSettings;
-  emit mapSettingsChanged( mMapSettings );
-
-  setup();
 }
 
 QgsGeometry PositionTrackingManager::trackedGeometry() const
@@ -286,7 +271,6 @@ void PositionTrackingManager::projectReloaded()
 {
   // clear pointers to previously loaded project, but keep the geometry
   mQgsProject = nullptr;
-  mMapSettings = nullptr;
 }
 
 QgsCoordinateReferenceSystem PositionTrackingManager::crs() const

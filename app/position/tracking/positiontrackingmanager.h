@@ -35,7 +35,6 @@ class PositionTrackingManager : public QObject
 
     // properties to be set from QML
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
-    Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
     Q_PROPERTY( VariablesManager *variablesManager READ variablesManager WRITE setVariablesManager NOTIFY variablesManagerChanged )
     Q_PROPERTY( AbstractTrackingBackend *trackingBackend READ trackingBackend WRITE setTrackingBackend NOTIFY trackingBackendChanged )
 
@@ -58,9 +57,6 @@ class PositionTrackingManager : public QObject
     AbstractTrackingBackend *trackingBackend() const;
     void setTrackingBackend( AbstractTrackingBackend *newTrackingBackend );
 
-    InputMapSettings *mapSettings() const;
-    void setMapSettings( InputMapSettings *newMapSettings );
-
     QgsProject *qgsProject() const;
     void setQgsProject( QgsProject *newQgsProject );
 
@@ -76,15 +72,13 @@ class PositionTrackingManager : public QObject
     QDateTime startTime() const;
 
   public slots:
-    void addPoint( GeoPosition position );
+    void addPoint( const GeoPosition &position );
 
     void storeTrackedPath();
 
   signals:
 
     void layerIdChanged( QString layerId );
-
-    void mapSettingsChanged( InputMapSettings *mapSettings );
 
     void trackedGeometryChanged( QgsGeometry trackedGeometry );
 
@@ -100,11 +94,13 @@ class PositionTrackingManager : public QObject
     void setLayerId( QString newLayerId );
     void setup();
 
+    void cacheTrackedGeometry();
+    void clearCache();
+
     std::unique_ptr<AbstractTrackingBackend> mTrackingBackend; // owned
 
     QString mLayerId;
     QgsProject *mQgsProject = nullptr; // not owned
-    InputMapSettings *mMapSettings = nullptr; // not owned
     VariablesManager *mVariablesManager = nullptr; // not owned
 
     QgsGeometry mTrackedGeometry;
