@@ -13,7 +13,9 @@ endif ()
 #
 # iOS AppleFrameworks::StoreKit AppleFrameworks::Foundation
 
-set(APPLE_FRAMEWORKS Security CoreFoundation SystemConfiguration)
+set(APPLE_FRAMEWORKS Security CoreFoundation SystemConfiguration CoreLocation)
+
+#find_library(CORE_LOCATION_FRAMEWORK CoreLocation)
 
 if (HAVE_APPLE_PURCHASING)
   set(APPLE_FRAMEWORKS ${APPLE_FRAMEWORKS} Foundation StoreKit)
