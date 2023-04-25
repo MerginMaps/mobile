@@ -717,20 +717,6 @@ int main( int argc, char *argv[] )
   QNativeInterface::QAndroidApplication::hideSplashScreen();
 #endif
 
-  // Android scoped storage migration logic
-#ifdef ANDROID
-  QObject::connect( &au, &AndroidUtils::migrationFinished, [ &localProjectsManager, &as ]( bool success )
-  {
-    if ( success )
-    {
-      localProjectsManager.reloadDataDir();
-    }
-    as.setLegacyFolderMigrated( true );
-  } );
-
-  au.handleLegacyFolderMigration( &as, hasLoadedDemoProjects );
-#endif
-
   // save app version to settings
   as.setAppVersion( version );
 
