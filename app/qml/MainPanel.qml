@@ -47,7 +47,24 @@ Item {
         property int minItemNumber: 4
         property int itemsToShow: {
           var possibleItems = Math.min((width / panelRow.itemWidth), children.length) - 1
-          return minItemNumber >= possibleItems ? minItemNumber : possibleItems
+
+          if ( minItemNumber >= possibleItems )
+          {
+            return minItemNumber
+          }
+
+          // subtract invisible dynamic buttons (e.g. when tracking is not allowed )
+
+          if ( !__activeProject.positionTrackingAllowed )
+          {
+            // and if there is enough size to show the button
+            if ( possibleItems > trackingItem.positionInPanel )
+            {
+              possibleItems -= 1
+            }
+          }
+
+          return possibleItems
         }
         property real calculatedItemWidth: itemsToShow ? parent.width/itemsToShow : parent.width
 
@@ -205,8 +222,10 @@ Item {
       Item {
           id: trackingItem
 
+          property int positionInPanel: 8
+
           height: parent.height
-          visible: panelRow.itemsToShow > 8
+          visible: panelRow.itemsToShow > positionInPanel && __activeProject.positionTrackingAllowed
           width: visible ? panelRow.calculatedItemWidth : 0
 
           MainPanelButton {
@@ -414,7 +433,7 @@ Item {
 
         MenuItem {
             width: parent.width
-            visible: !trackingItem.visible
+            visible: !trackingItem.visible && __activeProject.positionTrackingAllowed
             height: visible ? mainPanel.itemSize : 0
 
             ExtendedMenuItem {
