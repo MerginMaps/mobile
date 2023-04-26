@@ -498,9 +498,8 @@ if (MACOS OR IOS)
 endif ()
 
 if (IOS)
-    target_link_libraries(
-    Input PUBLIC AppleFrameworks::CoreLocation)
-endif()
+  target_link_libraries(Input PUBLIC AppleFrameworks::CoreLocation)
+endif ()
 
 if (HAVE_APPLE_PURCHASING)
   target_link_libraries(
