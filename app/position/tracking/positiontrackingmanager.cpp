@@ -10,7 +10,11 @@
 #include "positiontrackingmanager.h"
 
 #include "positionkit.h"
+
+// backend implementations
+#ifdef Q_OS_IOS
 #include "iostrackingbackend.h"
+#endif
 #include "internaltrackingbackend.h"
 
 #include "qgsproject.h"
