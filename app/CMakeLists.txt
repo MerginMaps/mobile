@@ -221,7 +221,13 @@ if (ENABLE_TESTS)
 endif ()
 
 if (IOS)
-  set(MM_HDRS ${MM_HDRS} ios/iosinterface.h ios/iosviewdelegate.h)
+  set(MM_HDRS
+      ${MM_HDRS}
+      ios/iosinterface.h
+      ios/iosviewdelegate.h
+      position/tracking/iostrackingbackend.h
+      position/tracking/iostrackingbackendimpl.h
+  )
 
   set(MM_SRCS
       ${MM_SRCS}
@@ -229,6 +235,9 @@ if (IOS)
       ios/iosviewdelegate.mm
       ios/iosimagepicker.mm
       ios/iosutils.mm
+      position/tracking/iostrackingbackend.cpp
+      position/tracking/iostrackingbackend.mm
+      position/tracking/iostrackingbackendimpl.mm
   )
 endif ()
 
@@ -486,6 +495,10 @@ if (MACOS OR IOS)
     Input PUBLIC AppleFrameworks::Security AppleFrameworks::CoreFoundation
                  AppleFrameworks::SystemConfiguration
   )
+endif ()
+
+if (IOS)
+  target_link_libraries(Input PUBLIC AppleFrameworks::CoreLocation)
 endif ()
 
 if (HAVE_APPLE_PURCHASING)
