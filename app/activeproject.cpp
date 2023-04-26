@@ -521,6 +521,5 @@ bool ActiveProject::positionTrackingAllowed() const
     return false;
   }
 
-//  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/Enabled" ), false );
-  return true; // MOCK!
+  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/Enabled" ), false );
 }

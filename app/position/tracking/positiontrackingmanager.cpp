@@ -104,8 +104,7 @@ void PositionTrackingManager::setup()
   // find the tracking layer
   //
 
-//  QString trackingLayerId = mQgsProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QStringLiteral() );
-  QString trackingLayerId = "tracking_layer_0942e7ff_965d_4c4f_bf35_b51048dcd4ca"; // MOCK!
+  QString trackingLayerId = mQgsProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QStringLiteral() );
 
   if ( trackingLayerId.isEmpty() )
   {
