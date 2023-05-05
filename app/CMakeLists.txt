@@ -247,6 +247,12 @@ if (HAVE_APPLE_PURCHASING)
   set(MM_SRCS ${MM_SRCS} ios/iospurchasing.mm)
 endif ()
 
+if (ANDROID)
+  set(MM_HDRS ${MM_HDRS} position/tracking/androidtrackingbackend.h)
+
+  set(MM_SRCS ${MM_SRCS} position/tracking/androidtrackingbackend.cpp)
+endif ()
+
 qt_add_resources(
   MM_SRCS
   img/pics.qrc

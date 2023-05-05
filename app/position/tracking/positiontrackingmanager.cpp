@@ -12,10 +12,13 @@
 #include "positionkit.h"
 
 // backend implementations
-#ifdef Q_OS_IOS
+#ifdef ANDROID
+#include "androidtrackingbackend.h"
+#elif Q_OS_IOS
 #include "iostrackingbackend.h"
-#endif
+#else
 #include "internaltrackingbackend.h"
+#endif
 
 #include "qgsproject.h"
 #include "qgslinestring.h"
@@ -181,9 +184,9 @@ AbstractTrackingBackend *PositionTrackingManager::constructTrackingBackend( QgsP
     }
   }
 
-  // TODO: android provider
-
-#ifdef Q_OS_IOS
+#ifdef ANDROID
+  positionBackend = new AndroidTrackingBackend( frequency );
+#elif Q_OS_IOS
   positionBackend = new IOSTrackingBackend( frequency );
 #else
   // desktop
