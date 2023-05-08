@@ -152,27 +152,27 @@ Vaya al sitio web de Mergin Maps para eliminarlo manualmente.</translation>
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="239"/>
+        <location filename="../androidutils.cpp" line="235"/>
         <source>Without storage permission you will not be able to access previous projects</source>
         <translation>Sin permiso de almacenamiento no se prodrá acceder a proyectos anteriores</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="340"/>
+        <location filename="../androidutils.cpp" line="335"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>El permiso de almacenamiento está denegado permanentemente, por favor permítalo en ajustes para cargar imágenes de la galería</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="344"/>
+        <location filename="../androidutils.cpp" line="339"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
         <translation>Input necesita permiso de almacenamiento para cargar imágenes de la galería</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="364"/>
+        <location filename="../androidutils.cpp" line="357"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Permiso de la cámara denegado permanentemente, habilítelo en configuración</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="368"/>
+        <location filename="../androidutils.cpp" line="361"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Necesitamos permiso de la cámara para poder tomar fotos</translation>
     </message>
@@ -188,39 +188,43 @@ Vaya al sitio web de Mergin Maps para eliminarlo manualmente.</translation>
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="535"/>
+        <location filename="../attributes/attributecontroller.cpp" line="574"/>
+        <location filename="../attributes/attributecontroller.cpp" line="625"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Expresión de valor predeterminado para %1:%2 tiene un error del analizador: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="545"/>
+        <location filename="../attributes/attributecontroller.cpp" line="584"/>
+        <location filename="../attributes/attributecontroller.cpp" line="635"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Expresión de valor predeterminado para %1:%2 tiene un error de evaluación: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="556"/>
+        <location filename="../attributes/attributecontroller.cpp" line="595"/>
+        <location filename="../attributes/attributecontroller.cpp" line="646"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1206"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>El valor &quot;%1&quot; %4 no se ha podido convertir en un valor compatible para el campo %2(%3)</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="809"/>
+        <location filename="../attributes/attributecontroller.cpp" line="905"/>
         <source>Cannot delete feature</source>
         <translation>No se puede eliminar el objeto</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="487"/>
-        <location filename="../attributes/attributecontroller.cpp" line="863"/>
+        <location filename="../attributes/attributecontroller.cpp" line="528"/>
+        <location filename="../attributes/attributecontroller.cpp" line="959"/>
         <source>Feature could not be added</source>
         <translation>No se ha podido añadir el objeto</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="496"/>
-        <location filename="../attributes/attributecontroller.cpp" line="874"/>
+        <location filename="../attributes/attributecontroller.cpp" line="537"/>
+        <location filename="../attributes/attributecontroller.cpp" line="970"/>
         <source>Cannot update feature</source>
         <translation>No se puede actualizar el objeto</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="918"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1014"/>
         <source>Cannot start editing</source>
         <translation>No se puede iniciar la edición</translation>
     </message>
@@ -238,12 +242,12 @@ Vaya al sitio web de Mergin Maps para eliminarlo manualmente.</translation>
         <translation>Registrarse</translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="130"/>
+        <location filename="../qml/AuthPanel.qml" line="135"/>
         <source>Please update Input to use the latest Mergin features.</source>
         <translation>Para usar las últimas herramientas de Mergin, por favor actualiza Input </translation>
     </message>
     <message>
-        <location filename="../qml/AuthPanel.qml" line="134"/>
+        <location filename="../qml/AuthPanel.qml" line="139"/>
         <source>Mergin is currently unavailable - please try again later.</source>
         <translation>Actualmente, Mergin no está disponible - por favor, inténtalo de nuevo más tarde</translation>
     </message>
@@ -335,9 +339,37 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
 <context>
     <name>CodeScanner</name>
     <message>
-        <location filename="../qml/CodeScanner.qml" line="55"/>
+        <location filename="../qml/CodeScanner.qml" line="33"/>
         <source>Scan code</source>
         <translation>Escanear código</translation>
+    </message>
+</context>
+<context>
+    <name>CreateWorkspacePage</name>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="34"/>
+        <source>Create a workspace</source>
+        <translation>Crear un espacio de trabajo</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="58"/>
+        <source>A Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects. A good candidate for a workspace name is the name of your team or organisation.</source>
+        <translation>Un espacio de trabajo es un lugar para almacenar sus proyectos. Se puede invitar a colegas a su espacio de trabajo para colaborar en proyectos. Una opción para un nombre de espacio de trabajo es el nombre de su equipo u organización.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="86"/>
+        <source>My workspace name…</source>
+        <translation>El nombre de mi espacio de trabajo...</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="104"/>
+        <source>Create workspace</source>
+        <translation>Crear espacio de trabajo</translation>
+    </message>
+    <message>
+        <location filename="../qml/CreateWorkspacePage.qml" line="108"/>
+        <source>Empty workspace name</source>
+        <translation>Nombre del espacio de trabajo vacío</translation>
     </message>
 </context>
 <context>
@@ -394,12 +426,12 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="155"/>
+        <location filename="../qml/form/FeatureForm.qml" line="137"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>No se puede guardar el formulario, hay errores de validación</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="156"/>
+        <location filename="../qml/form/FeatureForm.qml" line="138"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>El objeto no se ha podido guardar, por favor compruebe todos los campos requeridos.</translation>
     </message>
@@ -422,32 +454,32 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="207"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="206"/>
         <source>Delete feature</source>
         <translation>Borrar objeto</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="208"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="207"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>¿Está seguro de que quiere eliminar este objeto?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="227"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="226"/>
         <source>Unsaved changes</source>
         <translation>Cambios no guardados</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="228"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="227"/>
         <source>Do you want to save changes?</source>
         <translation>¿Desea guardar los cambios?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="249"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="248"/>
         <source>Saving failed</source>
         <translation>Error al guardar</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="250"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="249"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>Error al guardar los cambios. Esto no debería pasar normalmente. Por favor, reinicie la aplicación y pruebe otra vez — si eso no lo soluciona, por favor contacte con soporte.</translation>
     </message>
@@ -516,17 +548,17 @@ Por favor asegúrese que su dispositivo está encendido y acepta conexiones.%1 %
 <context>
     <name>FieldsModel</name>
     <message>
-        <location filename="../fieldsmodel.cpp" line="16"/>
+        <location filename="../fieldsmodel.cpp" line="15"/>
         <source>Please fill a name of previous field before adding a new field.</source>
         <translation>Por favor, rellena el campo precedente antes de añadir un nuevo campo.</translation>
     </message>
     <message>
-        <location filename="../fieldsmodel.cpp" line="20"/>
+        <location filename="../fieldsmodel.cpp" line="19"/>
         <source>Field %1 already exists.</source>
         <translation>Campo %1 ya existe.</translation>
     </message>
     <message>
-        <location filename="../fieldsmodel.cpp" line="118"/>
+        <location filename="../fieldsmodel.cpp" line="116"/>
         <source>Field %1 already exists. 
 Won&apos;t be added to the project.</source>
         <translation>Campo %1 ya existe. No se añadirá al proyecto.</translation>
@@ -540,12 +572,12 @@ Won&apos;t be added to the project.</source>
         <translation>Información de GPS</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="235"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="234"/>
         <source>Altitude</source>
         <translation>Altitud</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="137"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="136"/>
         <source>Longitude</source>
         <translation>Longitud</translation>
     </message>
@@ -560,80 +592,102 @@ Won&apos;t be added to the project.</source>
         <translation>No hay receptor</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="126"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="125"/>
         <source>Status</source>
         <translation>Estado</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="156"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="155"/>
         <source>Latitude</source>
         <translation>Latitud</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="175"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="174"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="190"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="189"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="205"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="204"/>
         <source>Horizontal accuracy</source>
         <translation>Precisión horizontal</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="339"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="300"/>
+        <source>VDOP</source>
+        <translation>VDOP</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="317"/>
+        <source>PDOP</source>
+        <translation>PDOP</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="356"/>
+        <source>GPS antenna height</source>
+        <translation>Altura de la antena GPS</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="357"/>
+        <source>Not set</source>
+        <translation>No establecido</translation>
+    </message>
+    <message>
+        <location filename="../qml/misc/GpsDataPage.qml" line="381"/>
         <source>Manage GPS receivers</source>
         <translation>Gestionar receptores GPS</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="140"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="147"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="159"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="166"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="178"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="193"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="208"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="223"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="238"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="254"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="270"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="287"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="302"/>
-        <location filename="../qml/misc/GpsDataPage.qml" line="315"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="139"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="146"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="158"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="165"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="177"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="192"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="207"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="222"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="237"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="253"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="269"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="286"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="303"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="320"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="335"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="348"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="220"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="219"/>
         <source>Vertical accuracy</source>
         <translation>Precisión vertical</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="251"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="250"/>
         <source>Fix quality</source>
         <translation>Calidad del posicionamiento</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="266"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="265"/>
         <source>Satellites (in use/view)</source>
         <translation>Satélites (en uso / vista)</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="284"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="283"/>
         <source>HDOP</source>
         <translation>HDOP</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="299"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="332"/>
         <source>Speed</source>
         <translation>Velocidad</translation>
     </message>
     <message>
-        <location filename="../qml/misc/GpsDataPage.qml" line="314"/>
+        <location filename="../qml/misc/GpsDataPage.qml" line="347"/>
         <source>Last fix</source>
         <translation>Última solución</translation>
     </message>
@@ -641,12 +695,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="237"/>
+        <location filename="../inputhelp.cpp" line="242"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Informe enviado. %1Por favor, envíanos un e-mail a%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="242"/>
+        <location filename="../inputhelp.cpp" line="247"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Error al enviar el informe. %1Por favor, comprueba tu conexión de internet</translation>
     </message>
@@ -788,6 +842,24 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
         <location filename="../inpututils.cpp" line="1948"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Debe agregar al menos %1 punto(s).</translation>
+    </message>
+</context>
+<context>
+    <name>InstallScannerAppDialog</name>
+    <message>
+        <location filename="../qml/dialogs/InstallScannerAppDialog.qml" line="18"/>
+        <source>Install scanner application</source>
+        <translation>Instalar aplicación de escáner</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/InstallScannerAppDialog.qml" line="19"/>
+        <source>You will be redirected to Google Play to install the Barcode Scanner app.</source>
+        <translation>Será redirigido a Google Play para instalar la aplicación Barcode Scanner.</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/InstallScannerAppDialog.qml" line="19"/>
+        <source>After the Barcode Scanner app is installed, close it and switch back to Mergin Maps.</source>
+        <translation>Después de instalar la aplicación Barcode Scanner, ciérrela y vuelva a Mergin Maps.</translation>
     </message>
 </context>
 <context>
@@ -935,7 +1007,7 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
         <translation>Regístrate gratis</translation>
     </message>
     <message>
-        <location filename="../qml/LoginForm.qml" line="237"/>
+        <location filename="../qml/LoginForm.qml" line="244"/>
         <source>Forgot password?</source>
         <translation>¿Has olvidado tu contraseña?</translation>
     </message>
@@ -944,61 +1016,94 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
     <name>MainPanel</name>
     <message>
         <location filename="../qml/MainPanel.qml" line="62"/>
-        <location filename="../qml/MainPanel.qml" line="258"/>
+        <location filename="../qml/MainPanel.qml" line="260"/>
         <source>Projects</source>
         <translation>Proyectos</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="82"/>
-        <location filename="../qml/MainPanel.qml" line="277"/>
+        <location filename="../qml/MainPanel.qml" line="279"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="117"/>
-        <location filename="../qml/MainPanel.qml" line="306"/>
+        <location filename="../qml/MainPanel.qml" line="308"/>
         <source>Record</source>
         <translation>Registrar</translation>
     </message>
     <message>
         <location filename="../qml/MainPanel.qml" line="137"/>
-        <location filename="../qml/MainPanel.qml" line="325"/>
+        <location filename="../qml/MainPanel.qml" line="327"/>
         <source>Zoom to project</source>
         <translation>Hacer zoom al proyecto</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="155"/>
-        <location filename="../qml/MainPanel.qml" line="344"/>
+        <location filename="../qml/MainPanel.qml" line="156"/>
+        <location filename="../qml/MainPanel.qml" line="346"/>
         <source>Local changes</source>
         <translation>Cambios locales</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="173"/>
-        <location filename="../qml/MainPanel.qml" line="363"/>
+        <location filename="../qml/MainPanel.qml" line="175"/>
+        <location filename="../qml/MainPanel.qml" line="365"/>
         <source>Layers</source>
         <translation>Añadir entidad</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="193"/>
-        <location filename="../qml/MainPanel.qml" line="382"/>
+        <location filename="../qml/MainPanel.qml" line="195"/>
+        <location filename="../qml/MainPanel.qml" line="384"/>
         <source>Map themes</source>
         <translation>Temas de mapa</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="213"/>
-        <location filename="../qml/MainPanel.qml" line="401"/>
+        <location filename="../qml/MainPanel.qml" line="215"/>
+        <location filename="../qml/MainPanel.qml" line="403"/>
         <source>Settings</source>
         <translation>Configuración</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="230"/>
+        <location filename="../qml/MainPanel.qml" line="232"/>
         <source>More</source>
         <translation>Más</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="243"/>
+        <location filename="../qml/MainPanel.qml" line="245"/>
         <source>Menu</source>
         <translation>Menú</translation>
+    </message>
+</context>
+<context>
+    <name>ManageInvitationsPage</name>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="30"/>
+        <source>Join a workspace</source>
+        <translation>Unirse a un espacio de trabajo</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="54"/>
+        <source>You have been invited to the following workspaces:</source>
+        <translation>Ha sido invitado a los siguientes espacios de trabajo:</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="114"/>
+        <source>Workspace</source>
+        <translation>Espacio de trabajo</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="139"/>
+        <source>Accept</source>
+        <translation>Aceptar</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="175"/>
+        <source>Do you want to create a new workspace instead?</source>
+        <translation>¿Desea crear un nuevo espacio de trabajo en su lugar?</translation>
+    </message>
+    <message>
+        <location filename="../qml/ManageInvitationsPage.qml" line="175"/>
+        <source>Click here!</source>
+        <translation>¡Click aquí!</translation>
     </message>
 </context>
 <context>
@@ -1017,87 +1122,87 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1122"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1138"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS no disponible actualmente.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="326"/>
+        <location filename="../qml/map/MapWrapper.qml" line="327"/>
         <source>Successfully synchronized</source>
         <translation>Sincronizado correctamente</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="340"/>
+        <location filename="../qml/map/MapWrapper.qml" line="341"/>
         <source>Up to date</source>
         <translation>Actualizado</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="349"/>
+        <location filename="../qml/map/MapWrapper.qml" line="350"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Alguien más está sincronizando, lo intentaremos de nuevo más tarde</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="359"/>
+        <location filename="../qml/map/MapWrapper.qml" line="360"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>There was an issue during synchronization, we will try again. Click to learn more</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="377"/>
+        <location filename="../qml/map/MapWrapper.qml" line="378"/>
         <source>Splitting done successfully</source>
         <translation>División realizada con éxito</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="393"/>
+        <location filename="../qml/map/MapWrapper.qml" line="394"/>
         <source>Create line to split the selected feature</source>
         <translation>Crear línea para dividir el objeto seleccionada</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="409"/>
+        <location filename="../qml/map/MapWrapper.qml" line="410"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Seleccione algún punto para comenzar a editar la geometría</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="425"/>
+        <location filename="../qml/map/MapWrapper.qml" line="426"/>
         <source>Record new geometry for the feature</source>
         <translation>Grabar nueva geometría para el elemento</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="564"/>
+        <location filename="../qml/map/MapWrapper.qml" line="565"/>
         <source>Details</source>
         <translation>Detalles</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="667"/>
+        <location filename="../qml/map/MapWrapper.qml" line="668"/>
         <source>Back</source>
         <translation>Atrás</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="684"/>
+        <location filename="../qml/map/MapWrapper.qml" line="685"/>
         <source>Discard the changes?</source>
         <translation>Descartar los cambios?</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="687"/>
+        <location filename="../qml/map/MapWrapper.qml" line="688"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Al hacer clic en &apos;Sí&apos;, se descartan los cambios en la geometría. Si desea guardar los cambios, presione &quot;No&quot; y luego &quot;Hecho&quot; en la barra de herramientas.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="691"/>
+        <location filename="../qml/map/MapWrapper.qml" line="692"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Al hacer clic en &quot;Sí&quot;, se descarta la nueva geometría y no se guardará ningun elemento. Si desea guardar la geometría, presione &quot;No&quot; y luego &quot;Hecho&quot; en la barra de herramientas.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="754"/>
+        <location filename="../qml/map/MapWrapper.qml" line="762"/>
         <source>Connecting to %1</source>
         <translation>Conectando a %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="768"/>
+        <location filename="../qml/map/MapWrapper.qml" line="776"/>
         <source>Connected, no position</source>
         <translation>Conectado, sin posición</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="772"/>
+        <location filename="../qml/map/MapWrapper.qml" line="780"/>
         <source>Unknown accuracy</source>
         <translation>Precisión desconocida</translation>
     </message>
@@ -1105,44 +1210,59 @@ Falta rejilla para cambio de datum PROJ requerida %1. Para un nuevo proyecto des
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="679"/>
+        <location filename="../../core/merginapi.cpp" line="767"/>
         <source>Username must have at least 4 characters</source>
         <translation>Nombre de usuario debe contener por lo menos 4 caracteres</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="686"/>
+        <location filename="../../core/merginapi.cpp" line="774"/>
+        <source>Username contains invalid characters</source>
+        <translation>El nombre de usuario contiene caracteres inválidos</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="781"/>
         <source>Please enter a valid email</source>
         <translation>Por favor, introduce un e-mail válido</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="693"/>
+        <location filename="../../core/merginapi.cpp" line="788"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>La contraseña no es lo suficientemente fuerte. Debe contener %1 como mínimo 8 caracteres%1 letras minúsculas%1 letras mayúsculas%1 números o caracteres especiales</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="706"/>
+        <location filename="../../core/merginapi.cpp" line="801"/>
         <source>Passwords do not match</source>
         <translation>Contraseñas no corresponden</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="713"/>
+        <location filename="../../core/merginapi.cpp" line="808"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Por favor, acepta las condiciones de uso y la política de privacidad</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1001"/>
+        <location filename="../../core/merginapi.cpp" line="1188"/>
         <source>Registration successful</source>
         <translation>Registro exitoso</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1022"/>
+        <location filename="../../core/merginapi.cpp" line="1211"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>Nuevos registros no están autorizados en el servidor Mergin seleccionado.%1Por favor, contacta tu administrador</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1292"/>
+        <location filename="../../core/merginapi.cpp" line="1497"/>
         <source>Project detached from Mergin</source>
         <translation>Proyecto separado de Mergin</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="3532"/>
+        <source>Workspace name contains invalid characters</source>
+        <translation>El nombre del espacio de trabajo contiene caracteres no válidos</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="3598"/>
+        <source>Workspace %1 already exists</source>
+        <translation>El espacio de trabajo %1 ya existe</translation>
     </message>
 </context>
 <context>
@@ -1197,6 +1317,14 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
         <location filename="../qml/dialogs/NoPermissionsDialog.qml" line="17"/>
         <source>You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard.</source>
         <translation>No se le permite sincronizar sus cambios. Póngase en contacto con el propietario del proyecto Mergin para que le asigne el permiso correcto. Si es el propietario del proyecto, inicie sesión en el panel de control de Mergin.</translation>
+    </message>
+</context>
+<context>
+    <name>NoWorkspaceBanner</name>
+    <message>
+        <location filename="../qml/misc/NoWorkspaceBanner.qml" line="30"/>
+        <source>%1Workspace is required to use Mergin Maps. Click here to create one%2.</source>
+        <translation>Se requiere %1Workspace para usar Mergin Maps. Haga clic aquí para crear uno%2.</translation>
     </message>
 </context>
 <context>
@@ -1412,39 +1540,58 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="71"/>
+        <location filename="../qml/ProjectPanel.qml" line="88"/>
         <source>No Changes</source>
         <translation>Sin cambios</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="171"/>
+        <location filename="../qml/ProjectPanel.qml" line="254"/>
+        <location filename="../qml/ProjectPanel.qml" line="627"/>
+        <location filename="../qml/ProjectPanel.qml" line="831"/>
         <source>Projects</source>
         <translation>Proyectos</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="386"/>
+        <location filename="../qml/ProjectPanel.qml" line="483"/>
+        <location filename="../qml/ProjectPanel.qml" line="809"/>
         <source>Home</source>
         <translation>Inicio</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="408"/>
+        <location filename="../qml/ProjectPanel.qml" line="505"/>
         <source>My projects</source>
         <translation>Mis proyectos</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="432"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared with me</source>
         <translation>Compartido conmigo</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="432"/>
+        <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared</source>
         <translation>Compartido</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="452"/>
+        <location filename="../qml/ProjectPanel.qml" line="549"/>
+        <location filename="../qml/ProjectPanel.qml" line="853"/>
         <source>Explore</source>
         <translation>Explorar</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="624"/>
+        <source>Downloaded projects</source>
+        <translation>Proyectos descargados</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="629"/>
+        <source>Public projects</source>
+        <translation>Proyectos públicos</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectPanel.qml" line="632"/>
+        <source>Your other projects are accessible%1by switching your workspace here</source>
+        <translation>Puedes acceder a tus otros proyectos%1 cambiando tu espacio de trabajo aquí</translation>
     </message>
 </context>
 <context>
@@ -1463,7 +1610,12 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="120"/>
+        <location filename="../projectwizard.cpp" line="93"/>
+        <source>Project name contains invalid characters</source>
+        <translation>El nombre del proyecto contiene caracteres no válidos</translation>
+    </message>
+    <message>
+        <location filename="../projectwizard.cpp" line="127"/>
         <source>Project %1 created</source>
         <translation>Proyecto %1 creado</translation>
     </message>
@@ -1513,27 +1665,27 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
 <context>
     <name>Purchasing</name>
     <message>
-        <location filename="../purchasing.cpp" line="520"/>
+        <location filename="../purchasing.cpp" line="539"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
         <translation>No se ha podido tramitar el pago.%1Suscripción no comprada.</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="528"/>
+        <location filename="../purchasing.cpp" line="547"/>
         <source>Successfully restored your subscription</source>
         <translation>Tu suscripción ha sido restaurada correctamente</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="530"/>
+        <location filename="../purchasing.cpp" line="549"/>
         <source>Successfully purchased subscription</source>
         <translation>Tu suscripción ha sido comprada correctamente</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="542"/>
+        <location filename="../purchasing.cpp" line="561"/>
         <source>Failed to purchase subscription</source>
         <translation>No se ha podido comprar suscripción</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="540"/>
+        <location filename="../purchasing.cpp" line="559"/>
         <source>Unable to restore your subscription</source>
         <translation>No se ha podido restaurar tu suscripción</translation>
     </message>
@@ -1770,6 +1922,27 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     </message>
 </context>
 <context>
+    <name>SettingsComboBoxItem</name>
+    <message>
+        <location filename="../qml/SettingsComboBoxItem.qml" line="89"/>
+        <source>Time elapsed</source>
+        <translation>Tiempo transcurrido</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsComboBoxItem.qml" line="90"/>
+        <source>Distance traveled</source>
+        <translation>Distancia recorrida</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsHeaderItem</name>
+    <message>
+        <location filename="../qml/SettingsHeaderItem.qml" line="56"/>
+        <source>New!</source>
+        <translation>¡Nuevo!</translation>
+    </message>
+</context>
+<context>
     <name>SettingsPanel</name>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="75"/>
@@ -1787,67 +1960,102 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
         <translation>Seguir GPS con mapa</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="127"/>
+        <location filename="../qml/SettingsPanel.qml" line="128"/>
         <source>GPS accuracy</source>
         <translation>Precisión GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="182"/>
+        <location filename="../qml/SettingsPanel.qml" line="183"/>
         <source>Accuracy threshold</source>
         <translation>Umbral de precisión</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="208"/>
+        <location filename="../qml/SettingsPanel.qml" line="211"/>
         <source>Show accuracy warning</source>
         <translation>Mostrar aviso de precisión</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="227"/>
+        <location filename="../qml/SettingsPanel.qml" line="231"/>
         <source>Select GPS receiver</source>
         <translation>Selecciona receptor GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="239"/>
+        <location filename="../qml/SettingsPanel.qml" line="242"/>
+        <source>GPS antenna height</source>
+        <translation>Altura de la antena GPS</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="243"/>
+        <source>Includes pole height and GPS receiver&apos;s antenna height</source>
+        <translation>Incluye la altura del poste y la altura de la antena del receptor GPS</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="255"/>
+        <source>Streaming mode</source>
+        <translation>Modo de transmisión</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="261"/>
+        <source>Interval type</source>
+        <translation>Tipo de intervalo</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="262"/>
+        <source>Choose action when to add a new point</source>
+        <translation>Elegir acción cuando agregue un nuevo punto</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="274"/>
+        <source>in meters</source>
+        <translation>en metros</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="274"/>
+        <source>in seconds</source>
+        <translation>en segundos</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanel.qml" line="286"/>
         <source>Recording</source>
         <translation>Grabando</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="246"/>
+        <location filename="../qml/SettingsPanel.qml" line="273"/>
         <source>Line rec. interval</source>
         <translation>Intervalo de registro de línea</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="268"/>
+        <location filename="../qml/SettingsPanel.qml" line="294"/>
         <source>Reuse last value option</source>
         <translation>Reusar el último valor</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="287"/>
+        <location filename="../qml/SettingsPanel.qml" line="314"/>
         <source>Automatically sync changes</source>
         <translation>Sincronizar cambios automáticamente</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="311"/>
+        <location filename="../qml/SettingsPanel.qml" line="339"/>
         <source>About</source>
         <translation>Acerca de</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="320"/>
+        <location filename="../qml/SettingsPanel.qml" line="348"/>
         <source>Help</source>
         <translation>Ayuda</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="329"/>
+        <location filename="../qml/SettingsPanel.qml" line="357"/>
         <source>Privacy policy</source>
         <translation>Política de privacidad</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="338"/>
-        <source>Mergin terms of service</source>
-        <translation>Términos de servicio de Mergin</translation>
+        <location filename="../qml/SettingsPanel.qml" line="366"/>
+        <source>Terms of service</source>
+        <translation>Términos del servicio</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="347"/>
+        <location filename="../qml/SettingsPanel.qml" line="375"/>
         <source>Diagnostic log</source>
         <translation>Registro de diagnóstico</translation>
     </message>
@@ -1999,6 +2207,44 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
     </message>
 </context>
 <context>
+    <name>SwitchWorkspacePage</name>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="27"/>
+        <source>Select a workspace</source>
+        <translation>Seleccionar espacio de trabajo</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="77"/>
+        <source>You have a pending invitation</source>
+        <translation>Tienes una invitación pendiente</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="113"/>
+        <source>Workspace</source>
+        <translation>Espacio de trabajo</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="146"/>
+        <source>Accept</source>
+        <translation>Aceptar</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="165"/>
+        <source>Reject</source>
+        <translation>Rechazar</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="183"/>
+        <source>Workspaces</source>
+        <translation>Espacios de trabajo</translation>
+    </message>
+    <message>
+        <location filename="../qml/SwitchWorkspacePage.qml" line="255"/>
+        <source>Create new workspace</source>
+        <translation>Crear nuevo espacio de trabajo</translation>
+    </message>
+</context>
+<context>
     <name>SyncFailedDialog</name>
     <message>
         <location filename="../qml/dialogs/SyncFailedDialog.qml" line="22"/>
@@ -2009,6 +2255,209 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
         <location filename="../qml/dialogs/SyncFailedDialog.qml" line="23"/>
         <source>Your changes could not be sent to server, make sure you are connected to internet and have write access to this project.</source>
         <translation>Sus cambios no se pudieron enviar al servidor, asegúrese de estar conectado a Internet y tener acceso de escritura a este proyecto.</translation>
+    </message>
+</context>
+<context>
+    <name>WhatsNewDialog</name>
+    <message>
+        <location filename="../qml/WhatsNewDialog.qml" line="26"/>
+        <source>What&apos;s new</source>
+        <translation>Qué hay de nuevo</translation>
+    </message>
+    <message>
+        <location filename="../qml/WhatsNewDialog.qml" line="59"/>
+        <source>Ignore</source>
+        <translation>Ignorar</translation>
+    </message>
+    <message>
+        <location filename="../qml/WhatsNewDialog.qml" line="71"/>
+        <source>Read more</source>
+        <translation>Leer más</translation>
+    </message>
+</context>
+<context>
+    <name>WorkspaceAccountPage</name>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="51"/>
+        <source>My Account</source>
+        <translation>Mi cuenta</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="122"/>
+        <source>Workspace</source>
+        <translation>Espacio de trabajo</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="135"/>
+        <source>Switch workspace</source>
+        <translation>Cambiar espacio de trabajo</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="144"/>
+        <source>Your role</source>
+        <translation>Tu rol</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="151"/>
+        <source>Workspace storage</source>
+        <translation>Almacenamiento del espacio de trabajo</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="152"/>
+        <source>Using %1 / %2</source>
+        <translation>Usando %1 / %2</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="160"/>
+        <source>Subscription plan</source>
+        <translation>Plan de suscripción</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="169"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="178"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="193"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="204"/>
+        <source>Subscription status</source>
+        <translation>Estado de suscripción</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="170"/>
+        <source>Your subscription will not auto-renew after %1</source>
+        <translation>Su suscripción no se renovará automáticamente después de %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="179"/>
+        <source>Please update your %1billing details%2 as soon as possible</source>
+        <translation>Actualice sus %1detalles de facturación%2 lo antes posible</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="194"/>
+        <source>Your next bill will be for %1 on %2</source>
+        <translation>Tu próxima factura será por %1 el %2</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="205"/>
+        <source>Your subscription was cancelled on %1</source>
+        <translation>Su suscripción fue cancelada el %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="216"/>
+        <source>Subscriptions</source>
+        <translation>Suscripciones</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="235"/>
+        <source>Account</source>
+        <translation>Cuenta</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="244"/>
+        <source>Username</source>
+        <translation>Nombre de usuario</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="251"/>
+        <source>Email</source>
+        <translation>Correo</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="261"/>
+        <source>Sign out</source>
+        <translation>Cerrar sesión</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="267"/>
+        <source>Delete account</source>
+        <translation>Eliminar cuenta</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="297"/>
+        <source>Delete account?</source>
+        <translation>¿Esta seguro de eliminar su cuenta?</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="303"/>
+        <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
+
+In order to delete your account, enter your username in the field below and click Yes.</source>
+        <translation>Esta acción eliminará su cuenta de Mergin Maps con todos sus proyectos, tanto en el dispositivo como en el servidor. Esta acción no se puede deshacer. Si tiene una suscripción de Apple, debe cancelarla manualmente.
+
+Para eliminar su cuenta, ingrese su nombre de usuario en el campo a continuación y haga clic en Sí.</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="312"/>
+        <source>Enter username</source>
+        <translation>Ingrese su nombre de usuario</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="347"/>
+        <source>Failed to remove account</source>
+        <translation>No se pudo eliminar la cuenta</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="348"/>
+        <source>An error occured while removing your account</source>
+        <translation>Ocurrió un error al eliminar su cuenta</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="372"/>
+        <source>Can not close account because user is the only owner of an organisation.
+
+Please go to the Mergin Maps website to remove it manually.</source>
+        <translation>No se puede cerrar la cuenta porque el usuario es el único propietario de una organización.
+
+Vaya al sitio web de Mergin Maps para eliminarlo manualmente.</translation>
+    </message>
+</context>
+<context>
+    <name>WorkspaceSubscribePage</name>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="24"/>
+        <source>Subscribe</source>
+        <translation>Suscríbete</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="58"/>
+        <source>Individual</source>
+        <translation>Individual</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="75"/>
+        <source>Professional</source>
+        <translation>Profesional</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="137"/>
+        <source>You can also %1restore%2 your purchases.</source>
+        <translation>También puedes %1restaurar%2 tus compras.</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePage.qml" line="149"/>
+        <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
+        <translation>Su plan de suscripción de Mergin se renovará automáticamente. Puedes cancelarlo o cambiarlo en cualquier momento. %1Más información%2</translation>
+    </message>
+</context>
+<context>
+    <name>WorkspaceSubscribePlanItem</name>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="35"/>
+        <source>Commercial use</source>
+        <translation>Uso comersial</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="56"/>
+        <source>Unlimited seats</source>
+        <translation>Plazas ilimitadas</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="63"/>
+        <source>Unlimited projects</source>
+        <translation>Proyectos ilimitados</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="70"/>
+        <source>Email support</source>
+        <translation>Correo electrónico de soporte</translation>
     </message>
 </context>
 <context>
@@ -2032,17 +2481,17 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
 <context>
     <name>inputrelation</name>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="139"/>
+        <location filename="../qml/editor/inputrelation.qml" line="148"/>
         <source>%1 more</source>
         <translation>%1 más</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="154"/>
+        <location filename="../qml/editor/inputrelation.qml" line="163"/>
         <source>Add</source>
         <translation>Añadir</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputrelation.qml" line="215"/>
+        <location filename="../qml/editor/inputrelation.qml" line="224"/>
         <source>Linked features</source>
         <translation>Funciones vinculadas</translation>
     </message>
@@ -2066,58 +2515,58 @@ Haga clic en &apos;Sí&apos; para cargarlo.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="234"/>
-        <location filename="../qml/main.qml" line="293"/>
+        <location filename="../qml/main.qml" line="238"/>
+        <location filename="../qml/main.qml" line="302"/>
         <source>No Changes</source>
         <translation>Sin cambios</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="268"/>
+        <location filename="../qml/main.qml" line="277"/>
         <source>GPS auto-center mode on</source>
         <translation>Modo centrado automático GPS encendido</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="268"/>
+        <location filename="../qml/main.qml" line="277"/>
         <source>GPS auto-center mode off</source>
         <translation>Modo centrado automático GPS apagado</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="282"/>
+        <location filename="../qml/main.qml" line="291"/>
         <source>No editable layers found.</source>
         <translation>No se han encontrado ningunas capas editables.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="624"/>
+        <location filename="../qml/main.qml" line="631"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>¡El replanteo está desactivado porque la ubicación no está disponible!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="636"/>
+        <location filename="../qml/main.qml" line="643"/>
         <source>Failed to open the project</source>
         <translation>Error al abrir el proyecto</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="661"/>
+        <location filename="../qml/main.qml" line="668"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Error al comunicar con Mergin.%1Intenta mejorar tu conexión a internet.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="712"/>
+        <location filename="../qml/main.qml" line="719"/>
         <source>There were issues loading the project.</source>
         <translation>Hay problemas para cargar el proyecto</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="724"/>
+        <location filename="../qml/main.qml" line="731"/>
         <source>Could not read the project file:</source>
         <translation>Could not read the project file:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="751"/>
+        <location filename="../qml/main.qml" line="758"/>
         <source>Press back again to quit the app</source>
         <translation>Para salir de la aplicación presiona nuevamente atrás</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="554"/>
+        <location filename="../qml/main.qml" line="561"/>
         <source>PROJ Error</source>
         <translation>Error en PROJ</translation>
     </message>
