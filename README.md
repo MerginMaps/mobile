@@ -29,14 +29,14 @@ Click below to download the app on your mobile device:
 <p>
 <a href='https://play.google.com/store/apps/details?id=uk.co.lutraconsulting&ah=GSqwibzO2n63iMlCjHmMuBk89t4&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='images/google-play-store.png' height="57" /></a>
 <a href='https://apps.apple.com/us/app/input/id1478603559?ls=1'><img alt='Download it from TestFlight' src='images/app-store.png' width="170" /></a>
-<a href='https://github.com/MerginMaps/input/releases/tag/1.9.0'><img alt='Available on Windows' src='images/app_download_windows.png' width="170" /></a>
+<a href='https://github.com/MerginMaps/input/releases/latest'><img alt='Available on Windows' src='images/app_download_windows.png' height="57" /></a>
 </p>
 
 **Beta Release**
 <p>
 <a href='https://play.google.com/apps/testing/uk.co.lutraconsulting'><img alt='Get it on Google Play' src='images/google-play-store.png' height="28.5" /></a>
 <a href='https://testflight.apple.com/join/JO5EIywn'><img alt='Download it from TestFlight' src='images/app-store.png' width="85" /></a>
-<a href='https://github.com/MerginMaps/input/actions/workflows/win.yml'><img alt='Available on Windows' src='images/app_download_windows.png' width="85" /></a>
+<a href='https://github.com/MerginMaps/input/actions/workflows/win.yml'><img alt='Available on Windows' src='images/app_download_windows.png' height="28.5" /></a>
 </p>
 
 For more information on how to use the app, see [Documentation](https://merginmaps.com/docs).
@@ -44,10 +44,10 @@ For more information on how to use the app, see [Documentation](https://merginma
 ## How to help/contribute?
 
 - Help with translations, join [Mergin Maps Input app Transifex Team](https://explore.transifex.com/lutra-consulting/mergin-maps-input/)
-- Write a review of the application on App Store or Android Google Play
-- Test the application and report the bugs
+- Write a review of the application on [App Store](https://apps.apple.com/us/app/mergin-maps/id1478603559) or [Google Play](https://play.google.com/store/apps/details?id=uk.co.lutraconsulting&hl=en&gl=US)
+- Test the application and [report bugs](https://github.com/MerginMaps/input/issues)
 - Write a blog post or case study or create a youtube video. We are happy to help to promote it or co-author and place on our websites
-- Software developer? Code and prepare a pull request. We will help you with setup of the development environment and answer your questions.
+- Software developer? Code and prepare a pull request. We will help you with [setup of the development environment](./INSTALL.md) and answer your questions.
 - Donate or [subscribe](https://merginmaps.com/) to the Mergin Maps cloud service to help us maintain the project.
 
 <div><img align="left" width="45" height="45" src="https://raw.githubusercontent.com/MerginMaps/docs/main/src/.vuepress/public/slack.svg"><a href="https://merginmaps.com/community/join">Join our community chat</a><br/>and ask questions!</div>

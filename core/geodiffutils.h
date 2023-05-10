@@ -21,6 +21,8 @@
 class GeodiffUtils
 {
   public:
+    //! Create geodiff context
+    static void init();
 
     struct TableSummary
     {
@@ -60,6 +62,12 @@ class GeodiffUtils
 
     //! Geodiff logger callback function used to forward logs to Input.
     static void log( GEODIFF_LoggerLevel level, const char *msg );
+
+    //! Applies changeset file (binary) to BASE
+    static bool applyChangeset( const QString &src, const QString &changeset );
+
+    //! Rebases local modified version from base to modified_their version
+    static bool rebase( const QString &base, const QString &modified_their, const QString &modified, const QString &conflictfile );
 };
 
 #endif // GEODIFFUTILS_H

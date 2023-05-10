@@ -428,6 +428,7 @@ if (MACOS
     OR ANDROID
 )
   target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv)
+  target_link_libraries(Input PUBLIC Pq::Pgcommon Pq::Pgport)
 endif ()
 
 if (MACOS OR IOS)
@@ -468,8 +469,8 @@ if (ANDROID)
   target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
   set_property(
     TARGET Input
-    PROPERTY QT_ANDROID_EXTRA_LIBS ${INPUT_SDK_PATH_MULTI}/lib/libcrypto_1_1.so
-             ${INPUT_SDK_PATH_MULTI}/lib/libssl_1_1.so
+    PROPERTY QT_ANDROID_EXTRA_LIBS ${INPUT_SDK_PATH_MULTI}/lib/libcrypto_3.so
+             ${INPUT_SDK_PATH_MULTI}/lib/libssl_3.so
   )
 endif ()
 

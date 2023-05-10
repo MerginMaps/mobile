@@ -18,6 +18,52 @@
 #include <geodiff.h>
 #include "coreutils.h"
 
+/**
+ * Singleton pattern - to create context
+ */
+class GeodiffContext
+{
+
+  public:
+    GeodiffContext( GeodiffContext const & )  = delete;
+    void operator=( GeodiffContext const & )  = delete;
+    static GeodiffContext &instance();
+
+    GEODIFF_ContextH handle();
+  private:
+    GeodiffContext()
+    {
+      mHandle = GEODIFF_createContext();
+      GEODIFF_CX_setLoggerCallback( mHandle, &GeodiffUtils::log );
+      GEODIFF_CX_setMaximumLoggerLevel( mHandle, GEODIFF_LoggerLevel::LevelDebug );
+    }
+    ~GeodiffContext()
+    {
+      if ( mHandle )
+      {
+        GEODIFF_CX_destroy( mHandle );
+        mHandle = nullptr;
+      }
+    }
+
+    GEODIFF_ContextH mHandle = nullptr;
+};
+
+GeodiffContext &GeodiffContext::instance()
+{
+  static GeodiffContext instance;
+  return instance;
+}
+
+GEODIFF_ContextH GeodiffContext::handle()
+{
+  return mHandle;
+}
+
+void GeodiffUtils::init()
+{
+  Q_UNUSED( GeodiffContext::instance() );
+}
 
 QString GeodiffUtils::diffableFilePendingChanges( const QString &projectDir, const QString &filePath, bool onlySummary )
 {
@@ -34,7 +80,7 @@ QString GeodiffUtils::diffableFilePendingChanges( const QString &projectDir, con
     QString jsonPath = f.fileName();
     f.close();
 
-    int resList = onlySummary ? GEODIFF_listChangesSummary( diffPath.toUtf8(), jsonPath.toUtf8() ) : GEODIFF_listChanges( diffPath.toUtf8(), jsonPath.toUtf8() );
+    int resList = onlySummary ? GEODIFF_listChangesSummary( GeodiffContext::instance().handle(), diffPath.toUtf8(), jsonPath.toUtf8() ) : GEODIFF_listChanges( GeodiffContext::instance().handle(), diffPath.toUtf8(), jsonPath.toUtf8() );
 
     QFile::remove( diffPath );  // we don't need the temporary diff file anymore
 
@@ -60,13 +106,12 @@ int GeodiffUtils::createChangeset( const QString &projectDir, const QString &fil
   QString modifiedAbsPath = projectDir + "/" + fileName;
   QString baseAbsPath = projectDir + "/.mergin/" + fileName;
   QString diffAbsPath = projectDir + "/.mergin/" + diffName;
-  return GEODIFF_createChangeset( baseAbsPath.toUtf8(), modifiedAbsPath.toUtf8(), diffAbsPath.toUtf8() );
+  return GEODIFF_createChangeset( GeodiffContext::instance().handle(), baseAbsPath.toUtf8(), modifiedAbsPath.toUtf8(), diffAbsPath.toUtf8() );
 }
-
 
 bool GeodiffUtils::hasPendingChanges( const QString &projectDir, const QString &filePath )
 {
-  QString summaryJson = GeodiffUtils::diffableFilePendingChanges( projectDir, filePath, true );
+  QString summaryJson = diffableFilePendingChanges( projectDir, filePath, true );
   if ( summaryJson.startsWith( "ERROR" ) )
     return true;  // something went wrong - let's assume the file has changed
 
@@ -102,7 +147,7 @@ bool GeodiffUtils::applyDiffs( const QString &src, const QStringList &diffFiles 
 
   for ( QString diffFile : diffFiles )
   {
-    int res = GEODIFF_applyChangeset( src.toUtf8().constData(), diffFile.toUtf8().constData() );
+    int res = GEODIFF_applyChangeset( GeodiffContext::instance().handle(), src.toUtf8().constData(), diffFile.toUtf8().constData() );
     if ( res != GEODIFF_SUCCESS )
     {
       CoreUtils::log( "GEODIFF", "assemble server file fail: apply changeset failed " + diffFile );
@@ -110,6 +155,23 @@ bool GeodiffUtils::applyDiffs( const QString &src, const QStringList &diffFiles 
     }
   }
   return true;
+}
+
+bool GeodiffUtils::applyChangeset( const QString &src, const QString &changeset )
+{
+  int res = GEODIFF_applyChangeset( GeodiffContext::instance().handle(), src.toUtf8(), changeset.toUtf8() );
+  return ( res == GEODIFF_SUCCESS );
+}
+
+bool GeodiffUtils::rebase( const QString &base, const QString &modified_their, const QString &modified, const QString &conflictfile )
+{
+  int res = GEODIFF_rebase( GeodiffContext::instance().handle(),
+                            base.toUtf8().constData(),
+                            modified_their.toUtf8().constData(),
+                            modified.toUtf8().constData(),
+                            conflictfile.toUtf8().constData()
+                          );
+  return ( res == GEODIFF_SUCCESS );
 }
 
 void GeodiffUtils::log( GEODIFF_LoggerLevel level, const char *msg )

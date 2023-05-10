@@ -23,13 +23,13 @@ jobs:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-12
     env:
-      QT_VERSION: '6.4.2'
-      NDK_VERSION: r23
-      NDK_VERSION_FULL: r23b
+      QT_VERSION: '6.5.0'
+      NDK_VERSION: r25
+      NDK_VERSION_FULL: r25b
       JDK_VERSION: 11
       SDK_PLATFORM: android-31
       SDK_BUILD_TOOLS: 31.0.0
-      INPUT_SDK_VERSION: android-macOS-20230110-133
+      INPUT_SDK_VERSION: android-macOS-20230415-145
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       CACHE_VERSION: 2
@@ -242,7 +242,7 @@ jobs:
       - name: Rename APK artefacts
         run: |
           mv \
-            ${{ github.workspace }}/build-Input/app/android-build/build/outputs/apk/release/android-build-release-signed.apk \
+            ${{ github.workspace }}/build-Input/app/android-build/build/outputs/apk/debug/android-build-debug-signed.apk \
             ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
 
       - name: Upload APK to Artifacts
@@ -267,7 +267,7 @@ jobs:
 
       - name: Rename AAB artefacts
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
-        run: |       
+        run: |
           mv \
             ${{ github.workspace }}/build-Input/app/android-build/build/outputs/bundle/release/android-build-release.aab \
             ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab

@@ -12,14 +12,14 @@ if (ANDROID)
 
   find_library(
     OpenSSL_CRYPTO_LIBRARY
-    NAMES crypto_1_1
+    NAMES crypto_3
     PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
 
   find_library(
     OpenSSL_LIBRARY
-    NAMES ssl_1_1
+    NAMES ssl_3
     PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )

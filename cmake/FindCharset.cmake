@@ -5,7 +5,6 @@ if (MACOS OR LNX)
 
   find_library(Charset_LIBRARY NAMES charset)
 else ()
-  message("${INPUT_SDK_PATH_MULTI}/lib")
   find_library(
     Charset_LIBRARY
     NAMES charset
