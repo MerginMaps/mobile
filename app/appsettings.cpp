@@ -31,7 +31,6 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   StreamingIntervalType::IntervalType intervalType = static_cast<StreamingIntervalType::IntervalType>( streamingIntervalType );
   bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
   QString savedAppVersion = settings.value( QStringLiteral( "appVersion" ), QStringLiteral() ).toString();
-  bool legacyFolderMigrated = settings.value( QStringLiteral( "legacyFolderMigrated" ), false ).toBool();
   QString activeProviderId = settings.value( QStringLiteral( "activePositionProviderId" ) ).toString();
   bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
   mWsTooltipShownCounter = settings.value( QStringLiteral( "wsTooltipCounter" ) ).toInt();
@@ -49,7 +48,6 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setIntervalType( intervalType );
   setReuseLastEnteredValues( reuseLastEnteredValues );
   setAppVersion( savedAppVersion );
-  setLegacyFolderMigrated( legacyFolderMigrated );
   setActivePositionProviderId( activeProviderId );
   setAutosyncAllowed( autosync );
   setGpsAntennaHeight( gpsHeight );
@@ -231,21 +229,6 @@ void AppSettings::setAppVersion( const QString &newAppVersion )
   mAppVersion = newAppVersion;
   setValue( QStringLiteral( "appVersion" ), newAppVersion );
   emit appVersionChanged( mAppVersion );
-}
-
-bool AppSettings::legacyFolderMigrated()
-{
-  return mLegacyFolderMigrated;
-}
-
-void AppSettings::setLegacyFolderMigrated( bool hasBeenMigrated )
-{
-  if ( mLegacyFolderMigrated == hasBeenMigrated )
-    return;
-
-  mLegacyFolderMigrated = hasBeenMigrated;
-  setValue( QStringLiteral( "legacyFolderMigrated" ), hasBeenMigrated );
-  emit legacyFolderMigratedChanged( mLegacyFolderMigrated );
 }
 
 const QString &AppSettings::activePositionProviderId() const

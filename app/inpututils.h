@@ -150,9 +150,6 @@ class InputUtils: public QObject
      */
     static bool cpDir( const QString &srcPath, const QString &dstPath, bool onlyDiffable = false );
 
-    // Returns size of directory in bytes, 0 if path does not exist
-    static qint64 dirSize( const QString &path );
-
     static QString filesToString( QList<MerginFile> files );
 
     /** InputApp platform */

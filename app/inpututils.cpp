@@ -653,35 +653,6 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
   return result;
 }
 
-// https://stackoverflow.com/a/47854799/7875594
-qint64 InputUtils::dirSize( const QString &path )
-{
-  qint64 size = 0;
-  QDir dir( path );
-
-  if ( !dir.exists() )
-  {
-    return size;
-  }
-
-  QStringList subFiles = dir.entryList( QDir::Files | QDir::Hidden );
-
-  for ( QString filePath : subFiles )
-  {
-    QFileInfo fi( dir, filePath );
-    size += fi.size();
-  }
-
-  // add size of child directories recursively
-  QStringList subDirs = dir.entryList( QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden );
-
-  for ( QString subDirPath : subDirs )
-  {
-    size += dirSize( path + QDir::separator() + subDirPath );
-  }
-  return size;
-}
-
 QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime &dateTime )
 {
   if ( QFile::exists( srcPath ) )
