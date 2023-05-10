@@ -14,7 +14,7 @@
 // backend implementations
 #ifdef ANDROID
 #include "androidtrackingbackend.h"
-#elif Q_OS_IOS
+#elif defined( Q_OS_IOS )
 #include "iostrackingbackend.h"
 #else
 #include "internaltrackingbackend.h"
@@ -186,7 +186,7 @@ AbstractTrackingBackend *PositionTrackingManager::constructTrackingBackend( QgsP
 
 #ifdef ANDROID
   positionBackend = new AndroidTrackingBackend( frequency );
-#elif Q_OS_IOS
+#elif defined( Q_OS_IOS )
   positionBackend = new IOSTrackingBackend( frequency );
 #else
   // desktop
