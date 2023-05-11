@@ -630,7 +630,7 @@ Non verrà aggiunto al progetto.</translation>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="356"/>
         <source>GPS antenna height</source>
-        <translation>altezza antenna GPS</translation>
+        <translation>Altezza antenna GPS</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="357"/>
