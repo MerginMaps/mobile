@@ -511,7 +511,7 @@ Vai al sito di Mergin Maps per rimuoverlo manualmente.</translation>
     <message>
         <location filename="../qml/form/FeatureToolbar.qml" line="174"/>
         <source>Split geometry</source>
-        <translation>Dividi Geometria</translation>
+        <translation>Dividi geometria</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureToolbar.qml" line="192"/>
