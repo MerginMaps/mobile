@@ -2434,7 +2434,7 @@ Vai al sito di Mergin Maps per rimuoverlo manualmente.</translation>
     <message>
         <location filename="../qml/WorkspaceSubscribePage.qml" line="149"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
-        <translation>Il tuo piano di abbonamento a Mergin sarà rinnovato automaticamente. Puoi cancellarlo o cambiarlo in qualsiasi momento. %1Leggi di più%2</translation>
+        <translation>Il tuo piano di abbonamento a Mergin sarà rinnovato automaticamente. Puoi cancellarlo o cambiarlo in qualsiasi momento. %1Scopri di più%2</translation>
     </message>
 </context>
 <context>
