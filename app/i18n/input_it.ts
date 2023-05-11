@@ -1252,7 +1252,7 @@ Non verrà aggiunto al progetto.</translation>
     <message>
         <location filename="../../core/merginapi.cpp" line="1497"/>
         <source>Project detached from Mergin</source>
-        <translation>Il progetto non e&apos; collegato a Mergin</translation>
+        <translation>Il progetto non è collegato a Mergin</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="3532"/>
