@@ -1982,7 +1982,7 @@ Premi &apos;Si&apos; per caricarlo.</translation>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="242"/>
         <source>GPS antenna height</source>
-        <translation>altezza antenna GPS</translation>
+        <translation>Altezza antenna GPS</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="243"/>
