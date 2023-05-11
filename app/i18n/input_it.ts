@@ -1570,7 +1570,7 @@ Premi &apos;Si&apos; per caricarlo.</translation>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared</source>
-        <translation>Shared</translation>
+        <translation>Condivisi</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="549"/>
