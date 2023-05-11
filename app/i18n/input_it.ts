@@ -141,12 +141,12 @@ Vai al sito di Mergin Maps per rimuoverlo manualmente.</translation>
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="209"/>
         <source>Looking for more devices</source>
-        <translation>Ricerca nuovi dispositivi</translation>
+        <translation>Ricerca nuovi dispositivi in corso</translation>
     </message>
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="209"/>
         <source>Looking for devices</source>
-        <translation>Ricerca dispositivo</translation>
+        <translation>Ricerca dispositivo in corso</translation>
     </message>
 </context>
 <context>
