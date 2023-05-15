@@ -67,8 +67,8 @@ class PositionDirection : public QObject
     PositionKit *mPositionKit = nullptr;
     Compass *mCompass = nullptr;
     QTimer mTimer;
-    const qreal mUpdateMinAngleDelta = 3; //! in degrees.
-    const qreal mSpeedLimit = 4.16;  //! 4.16 m/s ~= 15km/h. Over speed limit, directions depends on direction of movement.
+    const qreal mUpdateMinAngleDelta = 3; //!< in degrees.
+    const qreal mSpeedLimit = 4.16;  //!< 4.16 m/s ~= 15km/h. Over speed limit, directions depends on direction of movement.
     //! Returns difference of angles. Result is in interval <0,180> degrees.
     qreal angleBetween( qreal d1, qreal d2 );
 };
