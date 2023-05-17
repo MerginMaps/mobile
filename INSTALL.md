@@ -359,6 +359,50 @@ cd ..
 3. Open Input in Qt Creator
 4. Compile and run
 
+## 6.1 Setup dev env on Mac ARM
+
+### Mac (Arm) build environment Setup: (works with Qt6.5.0)
+
+1. Create main folder
+```
+mkdir ~/merginmaps
+cd ~/merginmaps
+```
+2. Clone SDK
+```
+git clone https://github.com/MerginMaps/input-sdk.git
+cd ~/merginmaps/input-sdk/mac/merginmapsinput-sdk
+```
+3. Edit configuration file **config.conf** in SDK
+```
+  export QT_VER="6.5.0"
+  export MACOSX_DEPLOYMENT_TARGET=10.15.0
+  export ROOT_OUT_PATH=/Users/$USER/merginmaps/input-sdk/build/macos
+  export QT_BASE="/Qt/6.5.0/macos"
+  export ARCHES=("arm64")
+```
+4. Build SDK
+```
+./distribute.sh -mqgis
+```
+*Note: when occurs syntax error on qgsexpressionparser.yy, it's because old bison on Mac. Build works fine with Bison version 3.8.2*
+ 
+5. Clone input app
+```
+cd ~/merginmaps 
+https://github.com/MerginMaps/input.git
+```
+6. Create build folder for the app and run cmake
+```
+mkdir ~/merginmaps/build-input-desktop
+cd ~/merginmaps/build-input-desktop 
+BASE_DIR=~/merginmaps
+cmake -DINPUT_SDK_PATH=$BASE_DIR/input-sdk -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/Qt/6.5.0/macos -DCMAKE_INSTALL_PREFIX:PATH=$BASE_DIR/install-macos -GNinja -DQGIS_QUICK_DATA_PATH=$BASE_DIR/input/app/android/assets/qgis-data -DUSE_MM_SERVER_API_KEY=FALSE $BASE_DIR/input
+```
+7. Open Input in Qt Creator
+8. Compile and run
+
+*Note: When XCode13 is used, then can occur linking error. It should be updated to XCode14, or just comment out these 2 keys: NSCameraUsageDescription NSLocationUsageDescription from iOSInfo.plist.in*
 
 # 7. Building Windows
 
@@ -398,3 +442,4 @@ cmake ^
 set CL=/MP
 nmake
 ```
+
