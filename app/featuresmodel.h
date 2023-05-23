@@ -11,11 +11,14 @@
 #define FEATURESMODEL_H
 
 #include <QAbstractListModel>
+#include <QTimer>
+#include <QFutureWatcher>
 
 #include "qgsvectorlayer.h"
 #include "featurelayerpair.h"
 
 #include "inputconfig.h"
+
 
 /**
  * FeaturesModel class fetches features from layer and provides them via Qt Model's interface
@@ -109,8 +112,14 @@ class FeaturesModel : public QAbstractListModel
 
     virtual QVariant featureTitle( const FeatureLayerPair &featurePair ) const;
 
+  private slots:
+    void onFutureFinished();
+
   private:
     QString buildSearchExpression();
+
+    //! Performs getFeatures on layer. Takes ownership of \a layer and tries to move it to current thread.
+    QgsFeatureList fetchFeatures( QgsVectorLayer *layer, QgsFeatureRequest req, int searchId );
 
     //! Returns found attribute and its value from search expression for feature
     QString searchResultPair( const FeatureLayerPair &feat ) const;
@@ -120,6 +129,10 @@ class FeaturesModel : public QAbstractListModel
     FeatureLayerPairs mFeatures;
     QString mSearchExpression;
     QgsVectorLayer *mLayer = nullptr;
+
+    QTimer mSearchDelay;
+    QAtomicInt mNextSearchId = 0;
+    QFutureWatcher<QgsFeatureList> mSearchResultWatcher;
 };
 
 #endif // FEATURESMODEL_H

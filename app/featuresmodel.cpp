@@ -13,10 +13,19 @@
 #include "qgsproject.h"
 #include "qgsexpressioncontextutils.h"
 
+
+#include <QTimer>
+#include <QtConcurrent>
+
+
 FeaturesModel::FeaturesModel( QObject *parent )
   : QAbstractListModel( parent ),
     mLayer( nullptr )
 {
+  mSearchDelay.setSingleShot( true );
+  mSearchDelay.setInterval( 500 );
+  connect( &mSearchDelay, &QTimer::timeout, this, &FeaturesModel::populate );
+  connect( &mSearchResultWatcher, &QFutureWatcher<QgsFeatureList>::finished, this, &FeaturesModel::onFutureFinished );
 }
 
 FeaturesModel::~FeaturesModel() = default;
@@ -27,28 +36,70 @@ void FeaturesModel::populate()
   {
     beginResetModel();
     mFeatures.clear();
+    endResetModel();
 
     QgsFeatureRequest req;
     setupFeatureRequest( req );
 
-    QgsFeatureIterator it = mLayer->getFeatures( req );
-    QgsFeature f;
-
-    while ( it.nextFeature( f ) )
-    {
-      if ( FID_IS_NEW( f.id() ) || FID_IS_NULL( f.id() ) )
-      {
-        continue; // ignore uncommited features
-      }
-
-      mFeatures << FeatureLayerPair( f, mLayer );
-    }
-
-    emit layerFeaturesCountChanged( layerFeaturesCount() );
-
-    endResetModel();
+    int searchId = mNextSearchId.fetchAndAddOrdered( 1 );
+    QgsVectorLayer *layer = mLayer->clone();
+    layer->moveToThread( nullptr );
+    QFuture<QgsFeatureList> future = QtConcurrent::run( &FeaturesModel::fetchFeatures, this, layer, req, searchId );
+    mSearchResultWatcher.setFuture( future );
   }
 }
+
+QgsFeatureList FeaturesModel::fetchFeatures( QgsVectorLayer *layer, QgsFeatureRequest req, int searchId )
+{
+  QElapsedTimer t;
+  t.start();
+  std::unique_ptr<QgsVectorLayer> vLayer( layer );
+  vLayer->moveToThread( QThread::currentThread() );
+
+  QgsFeatureIterator it = vLayer->getFeatures( req );
+  QgsFeature f;
+  QgsFeatureList fl;
+
+  // a search might have been queued if no threads were available in the pool, so we also
+  // check if canceled before we start as the first iteration can potentially be slow
+  bool canceled = searchId + 1 != mNextSearchId.loadAcquire();
+  if ( canceled )
+    qDebug() << QString( "Search (%1) was cancelled before it started!" ).arg( searchId );
+
+  while ( it.nextFeature( f ) && !canceled )
+  {
+    if ( searchId + 1 != mNextSearchId.loadAcquire() )
+    {
+      canceled = true;
+      break;
+    }
+
+    if ( FID_IS_NEW( f.id() ) || FID_IS_NULL( f.id() ) )
+    {
+      continue; // ignore uncommited features
+    }
+
+    fl.append( f );
+  }
+
+  qDebug() << QString( "Search (%1) %2 after %3ms, results: %4" ).arg( searchId ).arg( canceled ? "was canceled" : "completed" ).arg( t.elapsed() ).arg( fl.count() );
+  return fl;
+}
+
+void FeaturesModel::onFutureFinished()
+{
+  QFutureWatcher<QgsFeatureList> *watcher = static_cast< QFutureWatcher<QgsFeatureList> *>( sender() );
+  const QgsFeatureList features = watcher->future().result();
+  beginResetModel();
+  mFeatures.clear();
+  for ( const auto &f : features )
+  {
+    mFeatures << FeatureLayerPair( f, mLayer );
+  }
+  emit layerFeaturesCountChanged( layerFeaturesCount() );
+  endResetModel();
+}
+
 
 void FeaturesModel::setup()
 {
@@ -253,10 +304,9 @@ void FeaturesModel::setSearchExpression( const QString &searchExpression )
 {
   if ( mSearchExpression != searchExpression )
   {
+    mSearchDelay.start();
     mSearchExpression = searchExpression;
     emit searchExpressionChanged( mSearchExpression );
-
-    populate();
   }
 }
 
