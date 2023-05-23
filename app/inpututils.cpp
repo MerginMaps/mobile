@@ -1170,8 +1170,11 @@ qreal InputUtils::calculateScreenDpr()
 
     qreal realDpi = dpiX < dpiY ? dpiX : dpiY;
     realDpi = realDpi * screen->devicePixelRatio();
-
+#ifdef ANDROID // due to crazy values onphysicalDotsPerInch[XY] from Qt6.5 (https://bugreports.qt.io/browse/QTBUG-113751)
+    return realDpi / 8.;
+#else
     return realDpi / 160.;
+#endif
   }
 
   return 1;
