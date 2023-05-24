@@ -12,7 +12,7 @@
 #include "coreutils.h"
 
 #include "qgsproject.h"
-#include "qgsrasterlayer.h"
+#include "qgsvectortilelayer.h"
 #include "qgsvectorlayer.h"
 #include "qgsvectorfilewriter.h"
 #include "qgsdatetimefieldformatter.h"
@@ -102,8 +102,18 @@ void ProjectWizard::createProject( QString const &projectName, FieldsModel *fiel
   QgsProject project;
 
   // add layers
-  QString urlWithParams( BG_MAPS_CONFIG );
-  QgsRasterLayer *bgLayer = new QgsRasterLayer( BG_MAPS_CONFIG, QStringLiteral( "OpenStreetMap" ), QStringLiteral( "wms" ) );
+  QgsDataSourceUri dsUri;
+  dsUri.setParam( QStringLiteral( "type" ), QStringLiteral( "xyz" ) );
+  dsUri.setParam( QStringLiteral( "url" ), QStringLiteral( "https://vtiles.dev.merginmaps.com/data/v3/{z}/{x}/{y}.pbf" ) );
+  dsUri.setParam( QStringLiteral( "styleUrl" ), QStringLiteral( "https://vtiles.dev.merginmaps.com/styles/basic-preview-global/style.json" ) );
+  dsUri.setParam( QStringLiteral( "zmin" ), QStringLiteral( "0" ) );
+  dsUri.setParam( QStringLiteral( "zmax" ), QStringLiteral( "14" ) );
+  QgsVectorTileLayer *bgLayer = new QgsVectorTileLayer( dsUri.encodedUri(), QStringLiteral( "OpenMapTiles(OSM)" ) );
+  bool ok;
+  QString error = bgLayer->loadDefaultStyle( ok );
+  QgsLayerMetadata metadata;
+  metadata.setRights( QStringList() << QStringLiteral( "© OpenMapTiles © OpenStreetMap contributors" ) );
+  bgLayer->setMetadata( metadata );
   QgsVectorLayer *layer = createGpkgLayer( projectDir, fieldsModel->fields() );
   QList<QgsMapLayer *> layers;
   layers << layer << bgLayer;
