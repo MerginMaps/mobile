@@ -54,7 +54,7 @@ Row {
       color: root.bgColor
     }
 
-    onEditingFinished: focus = false
+    //onEditingFinished: focus = false
     onVisibleChanged: if (!password.visible) password.echoMode = TextInput.Password
   }
 
