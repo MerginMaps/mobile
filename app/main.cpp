@@ -269,6 +269,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<LayersProxyModel>( "lc", 1, 0, "LayersProxyModel", "" );
   qmlRegisterUncreatableType<ActiveLayer>( "lc", 1, 0, "ActiveLayer", "" );
   qmlRegisterUncreatableType<StreamingIntervalType>( "lc", 1, 0, "StreamingIntervalType", "StreamingIntervalType Enum" );
+  qmlRegisterUncreatableType<RegistrationError>( "lc", 1, 0, "RegistrationError", "RegistrationError Enum" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<Compass>( "lc", 1, 0, "Compass" );
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );

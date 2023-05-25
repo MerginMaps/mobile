@@ -34,6 +34,48 @@ Rectangle {
     acceptTOC.checked = false
   }
 
+  Connections {
+    target: __merginApi
+    enabled: registerForm.visible
+
+    // show error message under the respective field
+    function onRegistrationFailed( msg, field ) {
+      console.log( "onRegistrationFailed: " + msg )
+
+      // clear previous error messages
+      registerNameErrorText.text = ""
+      emailErrorText.text = ""
+      passwordFieldErrorText.text = ""
+      passwordConfirmFieldErrorText.text = ""
+      acceptTOCErrorText.text = ""
+      errorText.text = ""
+
+      if( field === RegistrationError.USERNAME ) {
+        registerNameErrorText.text = msg
+        registerName.focus = true
+      }
+      else if( field === RegistrationError.EMAIL ) {
+        emailErrorText.text = msg
+        email.focus = true
+      }
+      else if( field === RegistrationError.PASSWORD ) {
+        passwordFieldErrorText.text = msg
+        passwordField.password.focus = true
+      }
+      else if( field === RegistrationError.CONFIRM_PASSWORD ) {
+        passwordConfirmFieldErrorText.text = msg
+        passwordConfirmField.password.focus = true
+      }
+      else if( field === RegistrationError.TOC ) {
+        acceptTOCErrorText.text = msg
+        acceptTOC.focus = true
+      }
+      else if( field === RegistrationError.OTHER ) {
+        errorText.text = msg
+      }
+    }
+  }
+
   ScrollView {
     width: registerForm.width
     height: registerForm.height
@@ -108,6 +150,11 @@ Rectangle {
       anchors.horizontalCenter: parent.horizontalCenter
     }
 
+    ErrorText {
+      id: registerNameErrorText
+      width: parent.width - fieldHeight / 2
+    }
+
     Row {
       width: registerForm.width
       height: fieldHeight
@@ -162,6 +209,11 @@ Rectangle {
       anchors.horizontalCenter: parent.horizontalCenter
     }
 
+    ErrorText {
+      id: emailErrorText
+      width: parent.width - fieldHeight / 2
+    }
+
     PasswordField {
       id: passwordField
       width: registerForm.width
@@ -180,6 +232,11 @@ Rectangle {
       anchors.horizontalCenter: parent.horizontalCenter
     }
 
+    ErrorText {
+      id: passwordFieldErrorText
+      width: parent.width - fieldHeight / 2
+    }
+
     PasswordField {
       id: passwordConfirmField
       width: registerForm.width
@@ -189,7 +246,6 @@ Rectangle {
       placeholderText:  qsTr('Confirm password')
     }
 
-
     Rectangle {
       id: confirmPassBorder
       color: InputStyle.panelBackgroundDark
@@ -198,6 +254,11 @@ Rectangle {
       opacity: passwordConfirmField.password.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2
       anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    ErrorText {
+      id: passwordConfirmFieldErrorText
+      width: parent.width - fieldHeight / 2
     }
 
     Row {
@@ -228,6 +289,11 @@ Rectangle {
       anchors.horizontalCenter: parent.horizontalCenter
     }
 
+    ErrorText {
+      id: acceptTOCErrorText
+      width: parent.width - fieldHeight / 2
+    }
+
     Button {
       id: registerButton
       enabled: !stackView.pending
@@ -255,6 +321,12 @@ Rectangle {
         elide: Text.ElideRight
       }
     }
+
+    ErrorText {
+      id: errorText
+      width: parent.width - fieldHeight / 2
+    }
+
     }
   }
 }
