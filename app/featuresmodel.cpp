@@ -14,6 +14,7 @@
 #include "qgsexpressioncontextutils.h"
 
 
+#include <QLocale>
 #include <QTimer>
 #include <QtConcurrent>
 
@@ -162,7 +163,7 @@ QString FeaturesModel::searchResultPair( const FeatureLayerPair &pair ) const
     return QString();
 
   QgsFields fields = pair.feature().fields();
-  QStringList words = mSearchExpression.split( ' ', Qt::SkipEmptyParts );
+  const QStringList words = mSearchExpression.split( ' ', Qt::SkipEmptyParts );
   QStringList foundPairs;
 
   for ( const QString &word : words )
@@ -196,30 +197,29 @@ QString FeaturesModel::buildSearchExpression()
   QStringList expressionParts;
   QStringList wordExpressions;
 
-  QStringList words = mSearchExpression.split( ' ', Qt::SkipEmptyParts );
+  const QLocale locale;
+  const QStringList words = mSearchExpression.split( ' ', Qt::SkipEmptyParts );
 
   for ( const QString &word : words )
   {
     bool searchExpressionIsNumeric;
-    int filterInt = word.toInt( &searchExpressionIsNumeric );
-    Q_UNUSED( filterInt ); // we only need to know if expression is numeric, int value is not used
+    // we only need to know if expression is numeric, return value is not used
+    locale.toFloat( word, &searchExpressionIsNumeric );
 
 
     for ( const QgsField &field : fields )
     {
-      if ( field.configurationFlags().testFlag( QgsField::ConfigurationFlag::NotSearchable ) )
+      if ( field.configurationFlags().testFlag( QgsField::ConfigurationFlag::NotSearchable ) ||
+           ( field.isNumeric() && !searchExpressionIsNumeric ) )
         continue;
-
-      if ( field.isNumeric() && searchExpressionIsNumeric )
-        expressionParts << QStringLiteral( "%1 ~ '%2.*'" ).arg( QgsExpression::quotedColumnRef( field.name() ), word );
-      else if ( field.type() == QVariant::String )
+      else if ( field.type() == QVariant::String || field.isNumeric() )
         expressionParts << QStringLiteral( "%1 ILIKE '%%2%'" ).arg( QgsExpression::quotedColumnRef( field.name() ), word );
     }
     wordExpressions << QStringLiteral( "(%1)" ).arg( expressionParts.join( QLatin1String( " ) OR ( " ) ) );
     expressionParts.clear();
   }
 
-  QString expression = QStringLiteral( "(%1)" ).arg( wordExpressions.join( QLatin1String( " ) AND ( " ) ) );
+  const QString expression = QStringLiteral( "(%1)" ).arg( wordExpressions.join( QLatin1String( " ) AND ( " ) ) );
 
   return expression;
 }
