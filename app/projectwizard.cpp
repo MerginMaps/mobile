@@ -25,6 +25,8 @@
 #include "inpututils.h"
 #include "coreutils.h"
 
+const QString TILES_URL = QStringLiteral( "https://vtiles.merginmaps.com" );
+
 ProjectWizard::ProjectWizard( const QString &dataDir, QObject *parent )
   : QObject( parent )
   , mDataDir( dataDir )
@@ -104,8 +106,8 @@ void ProjectWizard::createProject( QString const &projectName, FieldsModel *fiel
   // add layers
   QgsDataSourceUri dsUri;
   dsUri.setParam( QStringLiteral( "type" ), QStringLiteral( "xyz" ) );
-  dsUri.setParam( QStringLiteral( "url" ), QStringLiteral( "https://vtiles.dev.merginmaps.com/data/v3/{z}/{x}/{y}.pbf" ) );
-  dsUri.setParam( QStringLiteral( "styleUrl" ), QStringLiteral( "https://vtiles.dev.merginmaps.com/styles/basic-preview-global/style.json" ) );
+  dsUri.setParam( QStringLiteral( "url" ), QStringLiteral( "%1/data/v3/{z}/{x}/{y}.pbf" ).arg( TILES_URL ) );
+  dsUri.setParam( QStringLiteral( "styleUrl" ), QStringLiteral( "%1/styles/basic-preview-global/style.json" ).arg( TILES_URL ) );
   dsUri.setParam( QStringLiteral( "zmin" ), QStringLiteral( "0" ) );
   dsUri.setParam( QStringLiteral( "zmax" ), QStringLiteral( "14" ) );
   QgsVectorTileLayer *bgLayer = new QgsVectorTileLayer( dsUri.encodedUri(), QStringLiteral( "OpenMapTiles(OSM)" ) );
