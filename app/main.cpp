@@ -660,6 +660,11 @@ int main( int argc, char *argv[] )
   // Use `value * __dp` for each pixel value in QML
   engine.rootContext()->setContextProperty( "__dp", InputUtils::calculateDpRatio() );
 
+// due to https://bugreports.qt.io/browse/QTBUG-113751, the right DPI is set when app is created (after this pool)
+#if (defined ANDROID && QT_VERSION >= QT_VERSION_CHECK(6, 5, 0) )
+  QTimer::singleShot(100, [&engine]() { engine.rootContext()->setContextProperty( "__dp", InputUtils::calculateDpRatio() );} );
+#endif
+
   // Set simulated position for desktop builds
 #ifdef DESKTOP_OS
   bool use_simulated_position = true;
