@@ -128,6 +128,16 @@ Page {
     }
   }
 
+  BusyIndicator {
+    id: busyIndicator
+    width: parent.width/8
+    height: width
+    running: featuresModel.fetchingResults
+    visible: running
+    anchors.centerIn: parent
+    z: parent.z + 1
+  }
+
   Component {
     id: addFeatureHeaderComponent
 

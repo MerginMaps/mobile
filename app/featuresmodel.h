@@ -41,6 +41,8 @@ class FeaturesModel : public QAbstractListModel
     // Returns number of features in layer (property). Can be different number than rowCount() due to a searchExpression
     Q_PROPERTY( int layerFeaturesCount READ layerFeaturesCount NOTIFY layerFeaturesCountChanged )
 
+    // Returns if there is a pending feature request that will populate the model
+    Q_PROPERTY( bool fetchingResults READ fetchingResults NOTIFY fetchingResultsChanged )
   public:
 
     enum ModelRoles
@@ -85,6 +87,12 @@ class FeaturesModel : public QAbstractListModel
      */
     Q_INVOKABLE QVariant convertRoleValue( const int fromRole, const QVariant &fromValue, const int toRole ) const;
 
+    /**
+     * \brief fetchingResults checks if there is a pending feature request to the layer
+     * \return TRUE if there is a pending request, FALSE if no requests are pending
+     */
+    Q_INVOKABLE bool fetchingResults() const;
+
     int featuresLimit() const;
     QgsVectorLayer *layer() const;
     QString searchExpression() const;
@@ -101,6 +109,8 @@ class FeaturesModel : public QAbstractListModel
     void layerChanged( QgsVectorLayer *layer );
 
     void layerFeaturesCountChanged( int layerFeaturesCount );
+
+    void fetchingResultsChanged();
 
   protected:
 
@@ -133,6 +143,7 @@ class FeaturesModel : public QAbstractListModel
     QTimer mSearchDelay;
     QAtomicInt mNextSearchId = 0;
     QFutureWatcher<QgsFeatureList> mSearchResultWatcher;
+    bool mFetchingResults = false;
 };
 
 #endif // FEATURESMODEL_H

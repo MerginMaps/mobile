@@ -35,6 +35,8 @@ void FeaturesModel::populate()
 {
   if ( mLayer )
   {
+    mFetchingResults = true;
+    emit fetchingResultsChanged();
     beginResetModel();
     mFeatures.clear();
     endResetModel();
@@ -99,6 +101,8 @@ void FeaturesModel::onFutureFinished()
   }
   emit layerFeaturesCountChanged( layerFeaturesCount() );
   endResetModel();
+  mFetchingResults = false;
+  emit fetchingResultsChanged();
 }
 
 
@@ -344,4 +348,9 @@ void FeaturesModel::setLayer( QgsVectorLayer *newLayer )
 QgsVectorLayer *FeaturesModel::layer() const
 {
   return mLayer;
+}
+
+bool FeaturesModel::fetchingResults() const
+{
+  return mFetchingResults;
 }
