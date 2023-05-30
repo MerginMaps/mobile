@@ -141,7 +141,6 @@ Page {
     running: featuresModel.fetchingResults
     visible: running
     anchors.centerIn: parent
-    z: parent.z + 1
   }
 
   Component {
