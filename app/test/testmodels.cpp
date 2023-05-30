@@ -13,6 +13,7 @@
 
 #include <QtTest/QtTest>
 
+
 void TestModels::init()
 {
 
@@ -35,14 +36,17 @@ void TestModels::testFeaturesModel()
   fModel.setLayer( layer );
   fModel.reloadFeatures();
 
+  TestUtils::waitForModelToPopulate( fModel );
   QCOMPARE( fModel.rowCount(), layer->dataProvider()->featureCount() );
 
   fModel.setSearchExpression( QStringLiteral( "Seco" ) );
 
+  TestUtils::waitForModelToPopulate( fModel );
   QCOMPARE( fModel.rowCount(), 1 );
 
   fModel.setSearchExpression( QLatin1String() );
 
+  TestUtils::waitForModelToPopulate( fModel );
   QCOMPARE( fModel.rowCount(), layer->dataProvider()->featureCount() );
 
   QVariant title = fModel.data( fModel.index( 0 ), FeaturesModel::FeatureTitle );
