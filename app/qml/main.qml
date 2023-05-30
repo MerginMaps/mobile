@@ -302,7 +302,7 @@ ApplicationWindow {
         }
         onLayersAttributionClicked: {
           stateManager.state = "misc"
-          let attributionPanel = mapPanelsStackView.push( attributionPanelComponent, {}, StackView.PushTransition )
+          let layerspanel = mapPanelsStackView.push( attributionPanelComponent, {}, StackView.PushTransition )
         }
     }
 
@@ -430,30 +430,17 @@ ApplicationWindow {
     Component {
       id: attributionPanelComponent
 
-      LayersPanelV2 {
+      AttributionPanel {
+        id: attributionPanel
 
-        onClose: function() {
+        height: window.height
+        width: window.width
+        rowHeight: InputStyle.rowHeight
+
+        onBack: {
           mainPanel.forceActiveFocus()
           mapPanelsStackView.clear( StackView.PopTransition )
           stateManager.state = "map"
-        }
-
-        onSelectFeature: function( featurePair ) {
-          // close layers panel if the feature has geometry
-          if ( __inputUtils.isSpatialLayer( featurePair.layer ) )
-          {
-            close()
-          }
-
-          window.selectFeature( featurePair )
-        }
-
-        onAddFeature: function( targetLayer ) {
-          let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
-          formsStackManager.openForm( newPair, "add", "form" )
-
-          // If we start supporting addition of spatial features from the layer's list,
-          // make sure to change the root state here to "map"
         }
       }
     }

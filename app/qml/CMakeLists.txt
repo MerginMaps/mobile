@@ -135,6 +135,7 @@ set(MM_QML
     WhatsNewDialog.qml
     WorkspaceSubscribePage.qml
     WorkspaceSubscribePlanItem.qml
+    AttributionPanel.qml
     main.qml
     PARENT_SCOPE
 )
