@@ -11,7 +11,6 @@
 #define FEATURESMODEL_H
 
 #include <QAbstractListModel>
-#include <QTimer>
 #include <QFutureWatcher>
 
 #include "qgsvectorlayer.h"
@@ -140,7 +139,6 @@ class FeaturesModel : public QAbstractListModel
     QString mSearchExpression;
     QgsVectorLayer *mLayer = nullptr;
 
-    QTimer mSearchDelay;
     QAtomicInt mNextSearchId = 0;
     QFutureWatcher<QgsFeatureList> mSearchResultWatcher;
     bool mFetchingResults = false;

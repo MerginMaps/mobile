@@ -23,9 +23,6 @@ FeaturesModel::FeaturesModel( QObject *parent )
   : QAbstractListModel( parent ),
     mLayer( nullptr )
 {
-  mSearchDelay.setSingleShot( true );
-  mSearchDelay.setInterval( 500 );
-  connect( &mSearchDelay, &QTimer::timeout, this, &FeaturesModel::populate );
   connect( &mSearchResultWatcher, &QFutureWatcher<QgsFeatureList>::finished, this, &FeaturesModel::onFutureFinished );
 }
 
@@ -47,8 +44,7 @@ void FeaturesModel::populate()
     int searchId = mNextSearchId.fetchAndAddOrdered( 1 );
     QgsVectorLayer *layer = mLayer->clone();
     layer->moveToThread( nullptr );
-    QFuture<QgsFeatureList> future = QtConcurrent::run( &FeaturesModel::fetchFeatures, this, layer, req, searchId );
-    mSearchResultWatcher.setFuture( future );
+    mSearchResultWatcher.setFuture( QtConcurrent::run( &FeaturesModel::fetchFeatures, this, layer, req, searchId ) );
   }
 }
 
@@ -308,9 +304,9 @@ void FeaturesModel::setSearchExpression( const QString &searchExpression )
 {
   if ( mSearchExpression != searchExpression )
   {
-    mSearchDelay.start();
     mSearchExpression = searchExpression;
     emit searchExpressionChanged( mSearchExpression );
+    populate();
   }
 }
 
