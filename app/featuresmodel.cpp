@@ -49,21 +49,24 @@ void FeaturesModel::populate()
 
 QgsFeatureList FeaturesModel::fetchFeatures( QgsVectorLayerFeatureSource *source, QgsFeatureRequest req, int searchId )
 {
-  QElapsedTimer t;
-  t.start();
   std::unique_ptr<QgsVectorLayerFeatureSource> fs( source );
-
-  QgsFeatureIterator it = fs->getFeatures( req );
-  QgsFeature f;
   QgsFeatureList fl;
 
   // a search might have been queued if no threads were available in the pool, so we also
   // check if canceled before we start as the first iteration can potentially be slow
   bool canceled = searchId + 1 != mNextSearchId.loadAcquire();
   if ( canceled )
+  {
     qDebug() << QString( "Search (%1) was cancelled before it started!" ).arg( searchId );
+    return fl;
+  }
 
-  while ( it.nextFeature( f ) && !canceled )
+  QElapsedTimer t;
+  t.start();
+  QgsFeatureIterator it = fs->getFeatures( req );
+  QgsFeature f;
+
+  while ( it.nextFeature( f ) )
   {
     if ( searchId + 1 != mNextSearchId.loadAcquire() )
     {

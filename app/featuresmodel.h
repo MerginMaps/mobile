@@ -94,7 +94,7 @@ class FeaturesModel : public QAbstractListModel
      * \brief fetchingResults checks if there is a pending feature request to the layer
      * \return TRUE if there is a pending request, FALSE if no requests are pending
      */
-    Q_INVOKABLE bool fetchingResults() const;
+    bool fetchingResults() const;
 
     int featuresLimit() const;
     QgsVectorLayer *layer() const;
