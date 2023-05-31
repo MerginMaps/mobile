@@ -13,6 +13,7 @@ Row {
   property var bgColor
   property var password: password
   property string placeholderText: qsTr('Password')
+  property bool isWrong: false
 
   Rectangle {
     id: iconContainer2
@@ -35,7 +36,7 @@ Row {
     ColorOverlay {
       anchors.fill: icon
       source: icon
-      color: root.fontColor
+      color: root.isWrong ? InputStyle.errorTextColor : root.fontColor
     }
   }
 

@@ -33,7 +33,7 @@ QtObject {
     property color labelColor: "#999999"
     property color secondaryFontColor: "#B3B3B3"
     property color errorTextColor: "red"
-    property color errorTextBorderColor: "red"
+    property color errorTextBorderColor: "transparent"
 
     property color highlightColor: "#FD9626"
     property color panelItemHighlight: "#9ABFA0"
@@ -96,7 +96,7 @@ QtObject {
     property real innerFieldMargin: 10 * __dp
     property real outerFieldMargin: 20 * __dp
     property real formSpacing: 10 * __dp
-    property real errorTextPadding: 10 * __dp
+    property real errorTextPadding: 0
 
     property real listMargins: 10 * __dp
     property real listMarginsSmall: 5 * __dp

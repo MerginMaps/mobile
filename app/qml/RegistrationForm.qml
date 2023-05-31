@@ -120,7 +120,7 @@ Rectangle {
         ColorOverlay {
           anchors.fill: icon
           source: icon
-          color: root.fontColor
+          color: registerNameErrorText.text.length>0 ? InputStyle.errorTextColor : root.fontColor
         }
       }
 
@@ -142,7 +142,7 @@ Rectangle {
 
     Rectangle {
       id: registerNameBorder
-      color: root.fontColor
+      color: registerNameErrorText.text.length>0 ? InputStyle.errorTextColor : InputStyle.panelBackgroundDark
       y: registerName.height - height
       height: 2 * __dp
       opacity: registerName.focus ? 1 : 0.6
@@ -181,7 +181,7 @@ Rectangle {
         ColorOverlay {
           anchors.fill: icon4
           source: icon4
-          color: root.fontColor
+          color: emailErrorText.text.length>0 ? InputStyle.errorTextColor : root.fontColor
         }
       }
 
@@ -201,7 +201,7 @@ Rectangle {
 
     Rectangle {
       id: emailBorder
-      color: InputStyle.panelBackgroundDark
+      color: emailErrorText.text.length>0 ? InputStyle.errorTextColor : InputStyle.panelBackgroundDark
       height: 2 * __dp
       y: email.height - height
       opacity: email.focus ? 1 : 0.6
@@ -220,11 +220,12 @@ Rectangle {
       height: fieldHeight
       fontColor: root.fontColor
       bgColor: root.bgColor
+      isWrong: passwordFieldErrorText.text.length>0
     }
 
     Rectangle {
       id: passBorder
-      color: InputStyle.panelBackgroundDark
+      color: passwordFieldErrorText.text.length>0 ? InputStyle.errorTextColor : InputStyle.panelBackgroundDark
       height: 2 * __dp
       y: fieldHeight - height
       opacity: passwordField.password.focus ? 1 : 0.6
@@ -244,11 +245,12 @@ Rectangle {
       fontColor: root.fontColor
       bgColor: root.bgColor
       placeholderText:  qsTr('Confirm password')
+      isWrong: passwordConfirmFieldErrorText.text.length>0
     }
 
     Rectangle {
       id: confirmPassBorder
-      color: InputStyle.panelBackgroundDark
+      color: passwordConfirmFieldErrorText.text.length>0 ? InputStyle.errorTextColor : InputStyle.panelBackgroundDark
       height: 2 * __dp
       y: fieldHeight - height
       opacity: passwordConfirmField.password.focus ? 1 : 0.6
@@ -276,12 +278,13 @@ Rectangle {
               .arg("<a href='"+ __inputHelp.merginTermsLink + "'>")
               .arg("<a href='"+ __inputHelp.privacyPolicyLink +"'>")
               .arg("</a>")
+        shouldBeChecked: acceptTOCErrorText.text.length>0
       }
     }
 
     Rectangle {
       id: acceptTOCBorder
-      color: InputStyle.panelBackgroundDark
+      color: acceptTOCErrorText.text.length>0 ? InputStyle.errorTextColor : InputStyle.panelBackgroundDark
       height: 2 * __dp
       y: acceptTOC.height - height
       opacity: acceptTOC.focus ? 1 : 0.6
