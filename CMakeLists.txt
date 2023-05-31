@@ -16,7 +16,7 @@ if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
   # Workaround for bug https://bugreports.qt.io/browse/QTBUG-112885 in Qt6.5.0
   set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
 
-  set(ANDROIDAPI "28")
+  set(ANDROIDAPI "24")
   set(ANDROID_PLATFORM "android-${ANDROIDAPI}")
   set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}")
   set(ANDROID_STL "c++_shared")

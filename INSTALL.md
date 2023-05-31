@@ -157,7 +157,7 @@ Steps to build and run Input:
 
 # 4. Building Android (on Ubuntu/macOS/Windows)
 
-If you have "error: undefined reference to 'stdout'" or so, make sure that in BUILD ENV you have ANDROID_NDK_PLATFORM=android-28 or later!
+If you have "error: undefined reference to 'stdout'" or so, make sure that in BUILD ENV you have ANDROID_NDK_PLATFORM=android-24 or later!
 
 ![image](https://user-images.githubusercontent.com/22449698/166630970-a776576f-c505-4265-b4c8-ffbe212c6745.png)
 
@@ -175,6 +175,7 @@ Requirements Android:
 
   export ANDROID_SDK_ROOT=/home/martin/android;
   export ANDROID_NDK_ROOT=/home/martin/android/ndk/25.1.8937393;
+  export ANDROID_NDK_PLATFORM=android-24;
   export QT_BASE=/opt/Qt/6.5.1;
   export INPUT_SDK_ANDROID_BASE=/home/martin/input-sdk/android-macOS-20230531-118;
   
@@ -212,6 +213,7 @@ For building ABIS see https://www.qt.io/blog/android-multi-abi-builds-are-back
   export ANDROID_SDK_ROOT=/opt/Android/android-sdk;
   export ANDROID_NDK_ROOT=/opt/Android/android-sdk/ndk/25.1.8937393;
   export QT_BASE=/opt/Qt/6.5.1;
+  export ANDROID_NDK_PLATFORM=android-24;
   export INPUT_SDK_ANDROID_BASE=~/Projects/quick/input-sdk/build/android/stage;
   export PATH=/usr/local/Cellar/openjdk\@11/11.0.16.1_1/bin/:$PATH;
   cmake \
