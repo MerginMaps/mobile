@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.22)
 
 # TODO automatically change with the scripts/update version script
 set(MM_VERSION_MAJOR "2")
-set(MM_VERSION_MINOR "2")
+set(MM_VERSION_MINOR "3")
 set(MM_VERSION_PATCH "0")
 set(QT_VERSION_DEFAULT "6.5.0")
 
@@ -16,7 +16,7 @@ if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
   # Workaround for bug https://bugreports.qt.io/browse/QTBUG-112885 in Qt6.5.0
   set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
 
-  set(ANDROIDAPI "24")
+  set(ANDROIDAPI "28")
   set(ANDROID_PLATFORM "android-${ANDROIDAPI}")
   set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}")
   set(ANDROID_STL "c++_shared")
