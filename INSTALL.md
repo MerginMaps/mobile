@@ -141,7 +141,7 @@ Steps to build and run Input:
    mkdir build
    cd build
    cmake -G Ninja \
-     -DCMAKE_PREFIX_PATH=/home/martin/Qt/6.4.2/gcc_64 \
+     -DCMAKE_PREFIX_PATH=/home/martin/Qt/6.5.1/gcc_64 \
      -DINPUT_SDK_PATH=/home/martin/input-sdk/ubuntu-2204-20221117-103 \
      -DQGIS_QUICK_DATA_PATH=/home/martin/input/app/android/assets/qgis-data \
      ..
@@ -157,7 +157,7 @@ Steps to build and run Input:
 
 # 4. Building Android (on Ubuntu/macOS/Windows)
 
-If you have "error: undefined reference to 'stdout'" or so, make sure that in BUILD ENV you have ANDROID_NDK_PLATFORM=android-24 or later!
+If you have "error: undefined reference to 'stdout'" or so, make sure that in BUILD ENV you have ANDROID_NDK_PLATFORM=android-28 or later!
 
 ![image](https://user-images.githubusercontent.com/22449698/166630970-a776576f-c505-4265-b4c8-ffbe212c6745.png)
 
@@ -174,9 +174,9 @@ Requirements Android:
   cd build
 
   export ANDROID_SDK_ROOT=/home/martin/android;
-  export ANDROID_NDK_ROOT=/home/martin/android/ndk/23.1.7779620;
-  export QT_BASE=/opt/Qt/6.4.2;
-  export INPUT_SDK_ANDROID_BASE=/home/martin/input-sdk/android-macOS-20221117-129;
+  export ANDROID_NDK_ROOT=/home/martin/android/ndk/25.1.8937393;
+  export QT_BASE=/opt/Qt/6.5.1;
+  export INPUT_SDK_ANDROID_BASE=/home/martin/input-sdk/android-macOS-20230531-118;
   
   cmake \
     -DCMAKE_BUILD_TYPE=Release \
@@ -211,7 +211,7 @@ For building ABIS see https://www.qt.io/blog/android-multi-abi-builds-are-back
 ```
   export ANDROID_SDK_ROOT=/opt/Android/android-sdk;
   export ANDROID_NDK_ROOT=/opt/Android/android-sdk/ndk/25.1.8937393;
-  export QT_BASE=/opt/Qt/6.5.0;
+  export QT_BASE=/opt/Qt/6.5.1;
   export INPUT_SDK_ANDROID_BASE=~/Projects/quick/input-sdk/build/android/stage;
   export PATH=/usr/local/Cellar/openjdk\@11/11.0.16.1_1/bin/:$PATH;
   cmake \
@@ -248,13 +248,13 @@ Now you can create a build (either on commmand line or by setting these variable
 ```
   cmake \
     -DIOS=TRUE \
-    -DCMAKE_PREFIX_PATH=/opt/Qt/6.5.0/ios \
+    -DCMAKE_PREFIX_PATH=/opt/Qt/6.5.1/ios \
     -DCMAKE_INSTALL_PREFIX:PATH=~/Projects/quick/input/build-input-ios/install \
     -DUSE_SERVER_API_KEY=FALSE \
     -DINPUT_SDK_PATH=~/Projects/quick/input-sdk/build/ios/stage/arm64 \
     -DCMAKE_TOOLCHAIN_FILE=~/Projects/quick/input-sdk/build/ios/stage/ios.toolchain.cmake \
     -G "Xcode" \
-    -DQT_HOST_PATH=/opt/Qt/6.5.0/macos \
+    -DQT_HOST_PATH=/opt/Qt/6.5.1/macos \
     ../input
 ```
 
@@ -345,7 +345,7 @@ cd build-input-desktop
 BASE_DIR=~/Projects/quick;
 cmake \
   -DCMAKE_BUILD_TYPE=Debug \
-  -DCMAKE_PREFIX_PATH=/opt/Qt/6.5.0/macos \
+  -DCMAKE_PREFIX_PATH=/opt/Qt/6.5.1/macos \
   -DCMAKE_INSTALL_PREFIX:PATH=$BASE_DIR/install-macos \
   -DINPUT_SDK_PATH=$BASE_DIR/input-sdk/build/macos/stage/mac \
   -GNinja \
@@ -361,13 +361,14 @@ cd ..
 
 ## 6.1 Setup dev env on Mac ARM
 
-### Mac (Arm) build environment Setup: (works with Qt6.5.0)
+### Mac (Arm) build environment Setup: (works with Qt6.5.1)
 
 1. Create main folder
 ```
 mkdir ~/merginmaps
 cd ~/merginmaps
 ```
+
 2. Clone SDK
 ```
 git clone https://github.com/MerginMaps/input-sdk.git
@@ -375,29 +376,31 @@ cd ~/merginmaps/input-sdk/mac/merginmapsinput-sdk
 ```
 3. Edit configuration file **config.conf** in SDK
 ```
-  export QT_VER="6.5.0"
+  export QT_VER="6.5.1"
   export MACOSX_DEPLOYMENT_TARGET=10.15.0
   export ROOT_OUT_PATH=/Users/$USER/merginmaps/input-sdk/build/macos
-  export QT_BASE="/Qt/6.5.0/macos"
+  export QT_BASE="/Qt/6.5.1/macos"
   export ARCHES=("arm64")
 ```
+
 4. Build SDK
 ```
 ./distribute.sh -mqgis
 ```
 *Note: when occurs syntax error on qgsexpressionparser.yy, it's because old bison on Mac. Build works fine with Bison version 3.8.2*
  
-5. Clone input app
+5. Clone Input app
 ```
 cd ~/merginmaps 
 https://github.com/MerginMaps/input.git
 ```
+
 6. Create build folder for the app and run cmake
 ```
 mkdir ~/merginmaps/build-input-desktop
 cd ~/merginmaps/build-input-desktop 
 BASE_DIR=~/merginmaps
-cmake -DINPUT_SDK_PATH=$BASE_DIR/input-sdk -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/Qt/6.5.0/macos -DCMAKE_INSTALL_PREFIX:PATH=$BASE_DIR/install-macos -GNinja -DQGIS_QUICK_DATA_PATH=$BASE_DIR/input/app/android/assets/qgis-data -DUSE_MM_SERVER_API_KEY=FALSE $BASE_DIR/input
+cmake -DINPUT_SDK_PATH=$BASE_DIR/input-sdk -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/Qt/6.5.1/macos -DCMAKE_INSTALL_PREFIX:PATH=$BASE_DIR/install-macos -GNinja -DQGIS_QUICK_DATA_PATH=$BASE_DIR/input/app/android/assets/qgis-data -DUSE_MM_SERVER_API_KEY=FALSE $BASE_DIR/input
 ```
 7. Open Input in Qt Creator
 8. Compile and run
@@ -417,7 +420,7 @@ For version of the tools used, see `.github/workflows/win.yml`
 - setup build environment
 ```
 set ROOT_DIR=C:\Users\zilol\Projects
-set Qt6_DIR=C:\Qt\6.5.0\msvc2019_64
+set Qt6_DIR=C:\Qt\6.5.1\msvc2019_64
 set PATH=%QT_ROOT%\bin;C:\Program Files\CMake\bin\;%PATH%
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=x64
 ```
@@ -430,7 +433,7 @@ cmake ^
    -DCMAKE_BUILD_TYPE=Release ^
    -DCMAKE_PREFIX_PATH:PATH=%Qt6_Dir%^
    -DCMAKE_INSTALL_PREFIX:PATH=%ROOT_DIR%\install\input ^
-   -DINPUT_SDK_PATH:PATH=%ROOT_DIR%\input-sdk-qt-6.5.0-win64-20221116-132 ^
+   -DINPUT_SDK_PATH:PATH=%ROOT_DIR%\input-sdk-qt-6.5.1-win64-20221116-132 ^
    -G "NMake Makefiles" ^
    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ^
    -S %ROOT_DIR%\input ^
