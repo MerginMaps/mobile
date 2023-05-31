@@ -12,7 +12,7 @@
 
 #include "qgsproject.h"
 #include "qgsexpressioncontextutils.h"
-
+#include "qgsvectorlayerfeatureiterator.h"
 
 #include <QLocale>
 #include <QTimer>
@@ -42,20 +42,18 @@ void FeaturesModel::populate()
     setupFeatureRequest( req );
 
     int searchId = mNextSearchId.fetchAndAddOrdered( 1 );
-    QgsVectorLayer *layer = mLayer->clone();
-    layer->moveToThread( nullptr );
-    mSearchResultWatcher.setFuture( QtConcurrent::run( &FeaturesModel::fetchFeatures, this, layer, req, searchId ) );
+    QgsVectorLayerFeatureSource *source = new QgsVectorLayerFeatureSource( mLayer );
+    mSearchResultWatcher.setFuture( QtConcurrent::run( &FeaturesModel::fetchFeatures, this, source, req, searchId ) );
   }
 }
 
-QgsFeatureList FeaturesModel::fetchFeatures( QgsVectorLayer *layer, QgsFeatureRequest req, int searchId )
+QgsFeatureList FeaturesModel::fetchFeatures( QgsVectorLayerFeatureSource *source, QgsFeatureRequest req, int searchId )
 {
   QElapsedTimer t;
   t.start();
-  std::unique_ptr<QgsVectorLayer> vLayer( layer );
-  vLayer->moveToThread( QThread::currentThread() );
+  std::unique_ptr<QgsVectorLayerFeatureSource> fs( source );
 
-  QgsFeatureIterator it = vLayer->getFeatures( req );
+  QgsFeatureIterator it = fs->getFeatures( req );
   QgsFeature f;
   QgsFeatureList fl;
 

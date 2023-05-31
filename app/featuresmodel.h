@@ -12,11 +12,15 @@
 
 #include <QAbstractListModel>
 #include <QFutureWatcher>
+#include <QAtomicInt>
 
 #include "qgsvectorlayer.h"
 #include "featurelayerpair.h"
 
 #include "inputconfig.h"
+
+
+class QgsVectorLayerFeatureSource;
 
 
 /**
@@ -128,7 +132,7 @@ class FeaturesModel : public QAbstractListModel
     QString buildSearchExpression();
 
     //! Performs getFeatures on layer. Takes ownership of \a layer and tries to move it to current thread.
-    QgsFeatureList fetchFeatures( QgsVectorLayer *layer, QgsFeatureRequest req, int searchId );
+    QgsFeatureList fetchFeatures( QgsVectorLayerFeatureSource *layer, QgsFeatureRequest req, int searchId );
 
     //! Returns found attribute and its value from search expression for feature
     QString searchResultPair( const FeatureLayerPair &feat ) const;
