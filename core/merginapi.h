@@ -40,15 +40,15 @@ class Purchasing;
 class RegistrationError
 {
     Q_GADGET
-public:
+  public:
     enum RegistrationErrorType
     {
-        OTHER = 0,
-        USERNAME,
-        EMAIL,
-        PASSWORD,
-        CONFIRM_PASSWORD,
-        TOC
+      OTHER = 0,
+      USERNAME,
+      EMAIL,
+      PASSWORD,
+      CONFIRM_PASSWORD,
+      TOC
     };
     Q_ENUM( RegistrationErrorType )
 };

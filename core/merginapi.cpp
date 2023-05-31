@@ -761,7 +761,6 @@ void MerginApi::registerUser( const QString &username,
   {
     QString msg = tr( "Username must have at least 4 characters" );
     emit registrationFailed( msg, RegistrationError::RegistrationErrorType::USERNAME );
-    emit notify( msg );
     return;
   }
 
@@ -769,7 +768,6 @@ void MerginApi::registerUser( const QString &username,
   {
     QString msg = tr( "Username contains invalid characters" );
     emit registrationFailed( msg, RegistrationError::RegistrationErrorType::USERNAME );
-    emit notify( msg );
     return;
   }
 
@@ -777,7 +775,6 @@ void MerginApi::registerUser( const QString &username,
   {
     QString msg = tr( "Please enter a valid email" );
     emit registrationFailed( msg, RegistrationError::RegistrationErrorType::EMAIL );
-    emit notify( msg );
     return;
   }
 
@@ -790,7 +787,6 @@ void MerginApi::registerUser( const QString &username,
                       "%1 contain digits or special characters" )
                   .arg( "<br />  -" );
     emit registrationFailed( msg, RegistrationError::RegistrationErrorType::PASSWORD );
-    emit notify( msg );
     return;
 
   }
@@ -799,7 +795,6 @@ void MerginApi::registerUser( const QString &username,
   {
     QString msg = tr( "Passwords do not match" );
     emit registrationFailed( msg, RegistrationError::RegistrationErrorType::CONFIRM_PASSWORD );
-    emit notify( msg );
     return;
   }
 
@@ -807,7 +802,6 @@ void MerginApi::registerUser( const QString &username,
   {
     QString msg = tr( "Please accept Terms and Privacy Policy" );
     emit registrationFailed( msg, RegistrationError::RegistrationErrorType::TOC );
-    emit notify( msg );
     return;
   }
 
@@ -1204,20 +1198,20 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
     if ( status == 401 || status == 400 )
     {
       emit registrationFailed( serverMsg, RegistrationError::RegistrationErrorType::OTHER );
-      emit notify( serverMsg );
+      // emit notify( serverMsg );
     }
     else if ( status == 404 )
     {
       // the self-registration is not allowed on the server
       QString msg = tr( "New registrations are not allowed on the selected Mergin server.%1Please check with your administrator." ).arg( "\n" );
       emit registrationFailed( msg, RegistrationError::RegistrationErrorType::OTHER );
-      emit notify( msg );
+      // emit notify( msg );
     }
     else
     {
       QString msg = QStringLiteral( "Mergin API error: register" );
       emit registrationFailed( msg, RegistrationError::RegistrationErrorType::OTHER );
-      emit networkErrorOccurred( serverMsg, msg );
+      // emit networkErrorOccurred( serverMsg, msg );
     }
   }
   r->deleteLater();
