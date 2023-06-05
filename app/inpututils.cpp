@@ -619,8 +619,9 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
 
 #ifdef ANDROID
     // https://bugreports.qt.io/browse/QTBUG-114219
-    if (fileName.startsWith("assets:/")) {
-      fileName.remove(0, 8);
+    if ( fileName.startsWith( "assets:/" ) )
+    {
+      fileName.remove( 0, 8 );
     }
 #endif
 
