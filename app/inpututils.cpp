@@ -615,8 +615,18 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
   const QFileInfoList fileInfoList = srcDir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden );
   foreach ( const QFileInfo &info, fileInfoList )
   {
-    QString srcItemPath = srcPath + "/" + info.fileName();
-    QString dstItemPath = dstPath + "/" + info.fileName();
+    QString fileName = info.fileName();
+
+#ifdef ANDROID
+    // https://bugreports.qt.io/browse/QTBUG-114219
+    if (fileName.startsWith("assets:/")) {
+      fileName.remove(0, 8);
+    }
+#endif
+
+    QString srcItemPath = srcPath + "/" + fileName;
+    QString dstItemPath = dstPath + "/" + fileName;
+
     if ( info.isDir() )
     {
       if ( !cpDir( srcItemPath, dstItemPath ) )
@@ -627,7 +637,7 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
     }
     else if ( info.isFile() )
     {
-      if ( onlyDiffable && !MerginApi::isFileDiffable( info.fileName() ) )
+      if ( onlyDiffable && !MerginApi::isFileDiffable( fileName ) )
         continue;
 
       if ( !QFile::copy( srcItemPath, dstItemPath ) )
