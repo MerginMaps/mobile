@@ -768,7 +768,7 @@ void TestUtilsFunctions::testAttribution()
   QString projectDir = TestUtils::testDataDir() + "/planes";
   QgsProject::instance()->read( projectDir + "/quickapp_project.qgs" );
 
-  QList< QgsMapLayer* > layers = QgsProject::instance()->mapLayersByName( QStringLiteral( "airports" ) );
+  QList< QgsMapLayer * > layers = QgsProject::instance()->mapLayersByName( QStringLiteral( "airports" ) );
   QVERIFY( !layers.isEmpty() );
   QgsMapLayer *layer = layers.at( 0 );
   QVERIFY( layer->isValid() );

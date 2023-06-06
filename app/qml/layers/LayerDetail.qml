@@ -221,16 +221,25 @@ Page {
               font.pixelSize: InputStyle.fontPixelSizeNormal
             }
 
-            Text {
-              id: attributionText
+            Rectangle {
+              id: attributionItem
 
               width: parent.width
-              textFormat: Text.RichText
-              wrapMode: Text.WordWrap
-              text: __inputUtils.layerAttribution(layerDetailData.mapLayer)
+              height: parent.height - attributionTitle.height
+
+              color: InputStyle.panelBackgroundLight
+              radius: InputStyle.cornerRadius
+
+              Text {
+                id: attributionText
+
+                width: parent.width
+                textFormat: Text.RichText
+                wrapMode: Text.WordWrap
+                text: __inputUtils.layerAttribution(layerDetailData.mapLayer)
+              }
             }
           }
-
         }
       }
     }
