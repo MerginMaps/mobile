@@ -300,10 +300,6 @@ ApplicationWindow {
           stateManager.state = "misc"
           let layerspanel = mapPanelsStackView.push( layersPanelComponent, {}, StackView.PushTransition )
         }
-        onLayersAttributionClicked: {
-          stateManager.state = "misc"
-          let layerspanel = mapPanelsStackView.push( attributionPanelComponent, {}, StackView.PushTransition )
-        }
     }
 
     NotificationBanner {
@@ -423,24 +419,6 @@ ApplicationWindow {
 
           // If we start supporting addition of spatial features from the layer's list,
           // make sure to change the root state here to "map"
-        }
-      }
-    }
-
-    Component {
-      id: attributionPanelComponent
-
-      AttributionPanel {
-        id: attributionPanel
-
-        height: window.height
-        width: window.width
-        rowHeight: InputStyle.rowHeight
-
-        onBack: {
-          mainPanel.forceActiveFocus()
-          mapPanelsStackView.clear( StackView.PopTransition )
-          stateManager.state = "map"
         }
       }
     }

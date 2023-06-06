@@ -140,6 +140,28 @@ QgsVectorLayer *LayerDetailData::vectorLayer() const
   return qobject_cast<QgsVectorLayer *>( mapLayer );
 }
 
+QgsMapLayer *LayerDetailData::mapLayer() const
+{
+  if ( !mLayerTreeNode )
+  {
+    return nullptr;
+  }
+
+  QgsLayerTreeLayer *nodeLayer = QgsLayerTree::toLayer( mLayerTreeNode );
+  if ( !nodeLayer )
+  {
+    return nullptr;
+  }
+
+  QgsMapLayer *mapLayer = nodeLayer->layer();
+  if ( !mapLayer )
+  {
+    return nullptr;
+  }
+
+  return mapLayer;
+}
+
 bool LayerDetailData::isVisible() const
 {
   return mIsVisible;

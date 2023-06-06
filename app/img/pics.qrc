@@ -119,7 +119,6 @@
         <file>yes.svg</file>
         <file>zoom_to_project.svg</file>
         <file>height_instrument.svg</file>
-        <file>file-certificate.svg</file>
     </qresource>
     <qresource prefix="/images/themes/default">
         <file>mActionFolder.svg</file>

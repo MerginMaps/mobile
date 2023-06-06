@@ -24,8 +24,7 @@ Item {
     signal openSettingsClicked()
     signal zoomToProject()
     signal localChangesClicked()
-    signal layersAttributionClicked()
-  signal layersClicked()
+    signal layersClicked()
 
     property real itemSize: mainPanel.height * 0.8
     property color gpsIndicatorColor: InputStyle.softRed
@@ -202,30 +201,11 @@ Item {
             }
         }
 
-        Item {
-            id: layersAttributionItem
-            height: parent.height
-            visible: panelRow.itemsToShow > 8
-            width: visible ? panelRow.calculatedItemWidth : 0
-
-            MainPanelButton {
-
-                id: layersAttributionBtn
-                width: mainPanel.itemSize
-                text: qsTr("Attribution")
-                imageSource: InputStyle.attributionIcon
-                onActivated: {
-                  rootMenu.close()
-                  mainPanel.layersAttributionClicked()
-                }
-            }
-        }
-
         // Last item
         Item {
             id: settingsItem
             height: parent.height
-            visible: panelRow.itemsToShow > 9
+            visible: panelRow.itemsToShow > 8
             width: visible ? panelRow.calculatedItemWidth : 0
 
             MainPanelButton {
@@ -407,25 +387,6 @@ Item {
 
             onClicked: {
                 mapThemesBtn.activated()
-                rootMenu.close()
-            }
-        }
-
-        MenuItem {
-            width: parent.width
-            visible: !layersAttributionItem.visible
-            height: visible ? mainPanel.itemSize : 0
-
-            ExtendedMenuItem {
-                height: mainPanel.itemSize
-                rowHeight: height
-                width: parent.width
-                contentText: qsTr("Attribution")
-                imageSource: InputStyle.attributionIcon
-            }
-
-            onClicked: {
-                layersAttributionBtn.activated()
                 rootMenu.close()
             }
         }

@@ -1921,20 +1921,18 @@ QString InputUtils::imageGalleryLocation()
   return galleryPaths.last();
 }
 
-QString InputUtils::layersAttribution( QgsProject *activeProject )
+QString InputUtils::layerAttribution( QgsMapLayer *layer )
 {
-  QStringList attribution;
-  QMap<QString, QgsMapLayer *> projectLayers = activeProject->mapLayers();
-  for ( QgsMapLayer *layer : projectLayers )
+  if ( !layer || !layer->isValid() )
   {
-    if ( layer->isValid() )
-    {
-      QStringList rights = layer->metadata().rights();
-      if ( !rights.isEmpty() )
-      {
-        attribution << QStringLiteral( "<li>%1 — %2 </li>" ).arg( layer->name() ).arg( rights.join( QStringLiteral( ", " ) ) );
-      }
-    }
+    return QString();
   }
-  return QStringLiteral( "<ul>%1</ul>" ).arg( attribution.join( "\n" ) );
+
+  QStringList rights = layer->metadata().rights();
+  if ( !rights.isEmpty() )
+  {
+    return rights.join( QStringLiteral( ", " ) );
+  }
+
+  return QString();
 }

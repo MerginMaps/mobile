@@ -202,6 +202,33 @@ Page {
               }
             }
           }
+
+          Column {
+            id: layerAttribution
+
+            Layout.fillWidth: true
+            Layout.preferredHeight: attributionText.height + attributionTitle.height + 2 * InputStyle.panelMarginV2
+
+            spacing: InputStyle.panelSpacing
+
+            Text {
+              id: attributionTitle
+
+              text: qsTr( "Attribution" )
+              font.bold: true
+              font.pixelSize: InputStyle.fontPixelSizeNormal
+            }
+
+            Text {
+              id: attributionText
+
+              width: parent.width
+              textFormat: Text.RichText
+              wrapMode: Text.WordWrap
+              text: __inputUtils.layerAttribution(layerDetailData.mapLayer)
+            }
+          }
+
         }
       }
     }

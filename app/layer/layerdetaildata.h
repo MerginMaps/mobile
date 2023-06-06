@@ -31,6 +31,7 @@ class LayerDetailData : public QObject
     Q_PROPERTY( bool isSpatial READ isSpatial NOTIFY isSpatialChanged )
     Q_PROPERTY( bool isVectorLayer READ isVectorLayer NOTIFY isVectorLayerChanged )
     Q_PROPERTY( QgsVectorLayer *vectorLayer READ vectorLayer NOTIFY vectorLayerChanged )
+    Q_PROPERTY( QgsMapLayer *mapLayer READ mapLayer NOTIFY mapLayerChanged )
 
   public:
     explicit LayerDetailData( QObject *parent = nullptr );
@@ -44,6 +45,7 @@ class LayerDetailData : public QObject
     bool isVectorLayer() const;
     const QString &name() const;
     QgsVectorLayer *vectorLayer() const;
+    QgsMapLayer *mapLayer() const;
 
     QgsLegendRenderer *legendRenderer() const;
 
@@ -56,6 +58,7 @@ class LayerDetailData : public QObject
     void nameChanged( const QString &name );
     void vectorLayerChanged( QgsVectorLayer *vectorLayer );
     void layerTreeNodeChanged( QgsLayerTreeNode *layerTreeNode );
+    void mapLayerChanged( QgsMapLayer *mapLayer );
 
   private:
     QgsLayerTreeNode *mLayerTreeNode = nullptr; // not owned

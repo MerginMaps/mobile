@@ -508,9 +508,9 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString imageGalleryLocation();
 
     /**
-     * Returns text with the attribution information for project layers
+     * Returns string containing attribution information for a given layer
      */
-    Q_INVOKABLE static QString layersAttribution( QgsProject *activeProject );
+    Q_INVOKABLE static QString layerAttribution( QgsMapLayer *layer );
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
