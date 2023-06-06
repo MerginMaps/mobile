@@ -206,6 +206,8 @@ Page {
           Column {
             id: layerAttribution
 
+            visible: __inputUtils.layerAttribution(layerDetailData.mapLayer) != ""
+
             Layout.fillWidth: true
             Layout.preferredHeight: attributionText.height + attributionTitle.height + 2 * InputStyle.panelMarginV2
 

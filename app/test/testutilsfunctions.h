@@ -45,6 +45,7 @@ class TestUtilsFunctions: public QObject
     void testGeometryIcons();
     void testCreateGeometryForLayer();
     void testInvalidGeometryWarning();
+    void testAttribution();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );
