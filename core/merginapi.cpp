@@ -1198,20 +1198,20 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
     if ( status == 401 || status == 400 )
     {
       emit registrationFailed( serverMsg, RegistrationError::RegistrationErrorType::OTHER );
-      // emit notify( serverMsg );
+      emit notify( serverMsg );
     }
     else if ( status == 404 )
     {
       // the self-registration is not allowed on the server
       QString msg = tr( "New registrations are not allowed on the selected Mergin server.%1Please check with your administrator." ).arg( "\n" );
       emit registrationFailed( msg, RegistrationError::RegistrationErrorType::OTHER );
-      // emit notify( msg );
+      emit notify( msg );
     }
     else
     {
       QString msg = QStringLiteral( "Mergin API error: register" );
       emit registrationFailed( msg, RegistrationError::RegistrationErrorType::OTHER );
-      // emit networkErrorOccurred( serverMsg, msg );
+      emit networkErrorOccurred( serverMsg, msg );
     }
   }
   r->deleteLater();

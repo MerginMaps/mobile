@@ -325,11 +325,6 @@ Rectangle {
       }
     }
 
-    ErrorText {
-      id: errorText
-      width: parent.width - fieldHeight / 2
-    }
-
     }
   }
 }
