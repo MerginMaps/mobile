@@ -13,72 +13,21 @@
 #include "testutils.h"
 #include "test/testingpurchasingbackend.h"
 
-static const double FREE_STORAGE =  104857600.0; // 100 MB
-
-static const char *TIER01_PLAN_ID = "test_mergin_tier_1_1";
-static const double TIER01_STORAGE =  1073741824.0; // 1GB
-
-static const char *TIER02_PLAN_ID = "test_mergin_tier_1_2";
-static const double TIER02_STORAGE =  10737418240.0; // 10 GB
-
 TestPurchasing::TestPurchasing( MerginApi *api, Purchasing *purchasing )
 {
   mApi = api;
   Q_ASSERT( mApi );  // does not make sense to run without API
 
-  mPurchasing = purchasing;
-  Q_ASSERT( mPurchasing );
-
+  Q_ASSERT( purchasing );
   mPurchasingBackend = qobject_cast<TestingPurchasingBackend * >( purchasing->backend() );
   Q_ASSERT( mPurchasingBackend );
-}
-
-void TestPurchasing::runPurchasingCommand( TestingPurchasingBackend::NextPurchaseResult result, const QString &planId, bool waitForUserInfo )
-{
-  mPurchasingBackend->setNextPurchaseResult( result );
-
-  QSignalSpy spy0( mApi, &MerginApi::subscriptionInfoChanged );
-  if ( waitForUserInfo )
-  {
-    QSignalSpy spy1( mApi->workspaceInfo(), &MerginWorkspaceInfo::workspaceInfoChanged );
-    mPurchasing->purchase( planId );
-    QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
-    QCOMPARE( spy0.count(), 1 );
-    QVERIFY( spy1.wait( TestUtils::LONG_REPLY ) );
-  }
-  else
-  {
-    mPurchasing->purchase( planId );
-    QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
-    QCOMPARE( spy0.count(), 1 );
-  }
 }
 
 void TestPurchasing::initTestCase()
 {
   QString apiRoot, username, password;
   TestUtils::mergin_setup_auth( mApi, apiRoot, username, password );
-
-  QSignalSpy spy2( mApi, &MerginApi::subscriptionInfoChanged );
-  mApi->getServiceInfo();
-  QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( spy2.count(), 1 );
-
-  // verify we have test or none subscription
-  MerginSubscriptionType::SubscriptionType subscriptionType = mApi->subscriptionInfo()->planProvider();
-  if ( subscriptionType == MerginSubscriptionType::TestSubscriptionType )
-  {
-    // unsubscribe to have always the same start position
-    runPurchasingCommand( TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, mApi->subscriptionInfo()->planProductId() );
-    QCOMPARE( mApi->subscriptionInfo()->ownsActiveSubscription(), false );
-    QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::CanceledSubscription );
-  }
-  else
-  {
-    // if there is other type, it means that the test user on test.dev
-    // was manually modified outside the automatic testing
-    Q_ASSERT( subscriptionType == MerginSubscriptionType::NoneSubscriptionType );
-  }
+  TestUtils::mergin_setup_pro_subscription( mApi, mPurchasingBackend );
 }
 
 void TestPurchasing::cleanupTestCase()
@@ -87,11 +36,12 @@ void TestPurchasing::cleanupTestCase()
 
 void TestPurchasing::testUserBuyTier01()
 {
-  QSKIP( "Must be revisited when working with workspaces!" );
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID, true );
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, mApi->subscriptionInfo()->planProductId() );
+  QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::CanceledSubscription );
 
-  QCOMPARE( mApi->subscriptionInfo()->planProductId(), TIER01_PLAN_ID );
-  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TIER01_STORAGE );
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TestUtils::TIER01_PLAN_ID );
+  QCOMPARE( mApi->subscriptionInfo()->planProductId(), TestUtils::TIER01_PLAN_ID );
+  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TestUtils::TIER01_STORAGE );
   QCOMPARE( mApi->subscriptionInfo()->ownsActiveSubscription(), true );
   QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::ValidSubscription );
   QCOMPARE( mApi->subscriptionInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
@@ -99,12 +49,14 @@ void TestPurchasing::testUserBuyTier01()
 
 void TestPurchasing::testUserBuyTier12()
 {
-  QSKIP( "Must be revisited when working with workspaces!" );
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID );
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyProfessionalPlan, TIER02_PLAN_ID, true );
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, mApi->subscriptionInfo()->planProductId() );
+  QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::CanceledSubscription );
 
-  QCOMPARE( mApi->subscriptionInfo()->planProductId(), TIER02_PLAN_ID );
-  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TIER02_STORAGE );
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TestUtils::TIER01_PLAN_ID );
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveBuyProfessionalPlan, TestUtils::TIER02_PLAN_ID );
+
+  QCOMPARE( mApi->subscriptionInfo()->planProductId(), TestUtils::TIER02_PLAN_ID );
+  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TestUtils::TIER02_STORAGE );
   QCOMPARE( mApi->subscriptionInfo()->ownsActiveSubscription(), true );
   QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::ValidSubscription );
   QCOMPARE( mApi->subscriptionInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
@@ -113,10 +65,15 @@ void TestPurchasing::testUserBuyTier12()
 void TestPurchasing::testUserUnsubscribed()
 {
   QSKIP( "Must be revisited when working with workspaces!" );
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID );
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveSimulateUnsubscribed, TIER01_PLAN_ID );
-  QCOMPARE( mApi->subscriptionInfo()->planProductId(), TIER01_PLAN_ID );
-  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TIER01_STORAGE );
+
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, mApi->subscriptionInfo()->planProductId() );
+  QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::CanceledSubscription );
+
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TestUtils::TIER01_PLAN_ID );
+
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveSimulateUnsubscribed, TestUtils::TIER01_PLAN_ID, false );
+  QCOMPARE( mApi->subscriptionInfo()->planProductId(), TestUtils::TIER01_PLAN_ID );
+  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TestUtils::TIER01_STORAGE );
   QCOMPARE( mApi->subscriptionInfo()->ownsActiveSubscription(), true );
   QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::SubscriptionUnsubscribed );
   QCOMPARE( mApi->subscriptionInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
@@ -125,10 +82,14 @@ void TestPurchasing::testUserUnsubscribed()
 void TestPurchasing::testUserInGracePeriod()
 {
   QSKIP( "Must be revisited when working with workspaces!" );
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID );
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveSimulateGracePeriod, TIER01_PLAN_ID );
-  QCOMPARE( mApi->subscriptionInfo()->planProductId(), TIER01_PLAN_ID );
-  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TIER01_STORAGE );
+
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, mApi->subscriptionInfo()->planProductId() );
+  QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::CanceledSubscription );
+
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TestUtils::TIER01_PLAN_ID );
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveSimulateGracePeriod, TestUtils::TIER01_PLAN_ID );
+  QCOMPARE( mApi->subscriptionInfo()->planProductId(), TestUtils::TIER01_PLAN_ID );
+  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TestUtils::TIER01_STORAGE );
   QCOMPARE( mApi->subscriptionInfo()->ownsActiveSubscription(), true );
   QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::SubscriptionInGracePeriod );
   QCOMPARE( mApi->subscriptionInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
@@ -137,11 +98,11 @@ void TestPurchasing::testUserInGracePeriod()
 void TestPurchasing::testUserCancelledSubscription()
 {
   QSKIP( "Must be revisited when working with workspaces!" );
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveBuyIndividualPlan, TIER01_PLAN_ID );
-  runPurchasingCommand( TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, TIER01_PLAN_ID, true );
+
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, mApi->subscriptionInfo()->planProductId() );
 
   QCOMPARE( mApi->subscriptionInfo()->planProductId(), "" );
-  QCOMPARE( mApi->workspaceInfo()->storageLimit(), FREE_STORAGE );
+  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TestUtils::FREE_STORAGE );
   QCOMPARE( mApi->subscriptionInfo()->ownsActiveSubscription(), false );
   QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::CanceledSubscription );
   QCOMPARE( mApi->subscriptionInfo()->planProvider(), MerginSubscriptionType::NoneSubscriptionType );
@@ -150,11 +111,15 @@ void TestPurchasing::testUserCancelledSubscription()
 void TestPurchasing::testUserCancelledTransaction()
 {
   QSKIP( "Must be revisited when working with workspaces!" );
+
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, mApi->subscriptionInfo()->planProductId() );
+  QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::CanceledSubscription );
+
   int oldStatus = mApi->subscriptionInfo()->subscriptionStatus();
   mPurchasingBackend->setNextPurchaseResult( TestingPurchasingBackend::NonInteractiveUserCancelled );
 
   QSignalSpy spy0( mPurchasingBackend, &PurchasingBackend::transactionCreationFailed );
-  mPurchasing->purchase( TIER01_PLAN_ID );
+  mPurchasingBackend->purchasing()->purchase( TestUtils::TIER01_PLAN_ID );
   // immediate action without server for testbackend
   QCOMPARE( spy0.count(), 1 );
 
@@ -164,11 +129,15 @@ void TestPurchasing::testUserCancelledTransaction()
 void TestPurchasing::testUserSendsBadReceipt()
 {
   QSKIP( "Must be revisited when working with workspaces!" );
+
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, mApi->subscriptionInfo()->planProductId() );
+  QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::CanceledSubscription );
+
   int oldStatus = mApi->subscriptionInfo()->subscriptionStatus();
   mPurchasingBackend->setNextPurchaseResult( TestingPurchasingBackend::NonInteractiveBadReceipt );
 
   QSignalSpy spy0( mApi, &MerginApi::networkErrorOccurred );
-  mPurchasing->purchase( TIER01_PLAN_ID );
+  mPurchasingBackend->purchasing()->purchase( TestUtils::TIER01_PLAN_ID );
   QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy0.count(), 1 );
 
@@ -178,16 +147,20 @@ void TestPurchasing::testUserSendsBadReceipt()
 void TestPurchasing::testUserRestore()
 {
   QSKIP( "Must be revisited when working with workspaces!" );
+
+  TestUtils::runPurchasingCommand( mApi, mPurchasingBackend, TestingPurchasingBackend::NonInteractiveSimulateImmediatelyCancelSubscription, mApi->subscriptionInfo()->planProductId() );
+  QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::CanceledSubscription );
+
   QSignalSpy spy0( mApi->subscriptionInfo(), &MerginSubscriptionInfo::subscriptionInfoChanged );
   QSignalSpy spy1( mApi->userInfo(), &MerginUserInfo::userInfoChanged );
-  mPurchasing->restore();
+  mPurchasingBackend->purchasing()->restore();
   QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy0.count(), 1 );
   QVERIFY( spy1.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy1.count(), 1 );
 
-  QCOMPARE( mApi->subscriptionInfo()->planProductId(), TIER01_PLAN_ID );
-  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TIER01_STORAGE );
+  QCOMPARE( mApi->subscriptionInfo()->planProductId(), TestUtils::TIER01_PLAN_ID );
+  QCOMPARE( mApi->workspaceInfo()->storageLimit(), TestUtils::TIER01_STORAGE );
   QCOMPARE( mApi->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::ValidSubscription );
   QCOMPARE( mApi->subscriptionInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
 }

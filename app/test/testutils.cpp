@@ -26,8 +26,10 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
 
   apiRoot = ::getenv( "TEST_MERGIN_URL" );
   api->setApiRoot( apiRoot );
-
   qDebug() << "MERGIN API ROOT:" << apiRoot;
+
+  // let's make sure we do not mess with the public instance
+  Q_ASSERT( apiRoot != MerginApi::sDefaultApiRoot );
 
   username = ::getenv( "TEST_API_USERNAME" );
   password = ::getenv( "TEST_API_PASSWORD" );
@@ -44,7 +46,10 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
     QSignalSpy spy( api,  &MerginApi::registrationSucceeded );
     api->registerUser( username, email, password, password, true );
     QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
+    QCOMPARE( spy.count(), 1 );
 
+    // put it so in next local test run we can take it from
+    // the environment and we do not create another user
     qputenv( "TEST_API_USERNAME", username.toLatin1() );
     qputenv( "TEST_API_PASSWORD", password.toLatin1() );
 
@@ -68,15 +73,54 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
 
     QVERIFY( api->userInfo()->activeWorkspaceId() >= 0 );
     qDebug() << "WORKING WITH WORKSPACE:" << api->userInfo()->activeWorkspaceName() << api->userInfo()->activeWorkspaceId();
+
+    // we need to subscribe to some reasonable plan with workspace
   }
 
   Q_ASSERT( ::getenv( "TEST_API_USERNAME" ) );
   Q_ASSERT( ::getenv( "TEST_API_PASSWORD" ) );
 
   qDebug() << "MERGIN USERNAME:" << username;
+}
 
-  // let's make sure we do not mess with the public instance
-  Q_ASSERT( apiRoot != MerginApi::sDefaultApiRoot );
+void TestUtils::mergin_setup_pro_subscription( MerginApi *api, TestingPurchasingBackend *purchasingBackend )
+{
+  QSignalSpy spy2( api, &MerginApi::subscriptionInfoChanged );
+  api->getServiceInfo();
+  QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( spy2.count(), 1 );
+
+  if ( api->subscriptionInfo()->planProductId() != TIER02_PLAN_ID )
+  {
+    // always start from PRO subscription
+    runPurchasingCommand( api, purchasingBackend, TestingPurchasingBackend::NonInteractiveBuyProfessionalPlan, TIER02_PLAN_ID );
+  }
+
+  QCOMPARE( api->subscriptionInfo()->planProductId(), TIER02_PLAN_ID );
+  QCOMPARE( api->workspaceInfo()->storageLimit(), TIER02_STORAGE );
+  QCOMPARE( api->subscriptionInfo()->ownsActiveSubscription(), true );
+  QCOMPARE( api->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::ValidSubscription );
+  QCOMPARE( api->subscriptionInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
+
+  qDebug() << "MERGIN SUBSCRIPTION:" << api->subscriptionInfo()->planProductId();
+}
+
+void TestUtils::runPurchasingCommand( MerginApi *api, TestingPurchasingBackend *purchasingBackend, TestingPurchasingBackend::NextPurchaseResult result, const QString &planId, bool waitForWorkspaceInfoChanged )
+{
+  purchasingBackend->setNextPurchaseResult( result );
+
+  QSignalSpy spy0( api, &MerginApi::subscriptionInfoChanged );
+  QVERIFY( !planId.isEmpty() );
+  QSignalSpy spy1( api->workspaceInfo(), &MerginWorkspaceInfo::workspaceInfoChanged );
+
+  purchasingBackend->purchasing()->purchase( planId );
+  QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( spy0.count(), 1 );
+
+  if ( waitForWorkspaceInfoChanged )
+  {
+    QVERIFY( spy1.wait( TestUtils::LONG_REPLY ) );
+  }
 }
 
 QString TestUtils::generateUsername()
