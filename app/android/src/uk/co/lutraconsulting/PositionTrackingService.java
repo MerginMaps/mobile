@@ -44,8 +44,8 @@ public class PositionTrackingService extends Service implements LocationListener
 
     @Override
     public void onCreate() {
+        sendStatusUpdateMessage( "$$!: Foreground service about to be started" );
         super.onCreate();
-        Log.i( TAG, "Created" );
     }
 
     @Override
@@ -56,8 +56,17 @@ public class PositionTrackingService extends Service implements LocationListener
 
     @Override
     public void onDestroy() {
+        sendStatusUpdateMessage( "$$!: Foreground service about to be killed" );
         super.onDestroy();
-        Log.i( TAG, "Destroyed" );
+    }
+
+    public void sendStatusUpdateMessage( String message ) {
+        Intent sendToBroadcastIntent = new Intent();
+
+        sendToBroadcastIntent.setAction( PositionTrackingBroadcastMiddleware.TRACKING_STATUS_MESSAGE_ACTION );
+        sendToBroadcastIntent.putExtra( PositionTrackingBroadcastMiddleware.TRACKING_STATUS_MESSAGE_TAG, message );
+
+        sendBroadcast( sendToBroadcastIntent );
     }
 
     @Override
@@ -96,13 +105,13 @@ public class PositionTrackingService extends Service implements LocationListener
 
         startForeground( SERVICE_ID, notification );
 
-        Log.i( TAG, "Started the foreground service!" );
+        sendStatusUpdateMessage( "$$!: Started the foreground service!" );
 
         locationManager = ( LocationManager ) getApplication().getSystemService( LOCATION_SERVICE );
 
         boolean isGPSAvailable = locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER );
         if ( !isGPSAvailable ) {
-            Log.d( TAG, "Error, GPS is not available!" );
+            sendStatusUpdateMessage( "$$!: Error, GPS is not available!" );
             stopSelf();
             stopForeground( true );
         }
@@ -111,7 +120,7 @@ public class PositionTrackingService extends Service implements LocationListener
             boolean coarseLocationAccessGranted = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
             if ( !fineLocationAccessGranted || !coarseLocationAccessGranted ) {
-                Log.d( TAG, "Error, missing location permissions!" );
+                sendStatusUpdateMessage( "$$!: Error, missing location permissions!" );
                 stopSelf();
                 stopForeground(true);
             }
@@ -123,7 +132,7 @@ public class PositionTrackingService extends Service implements LocationListener
                 this
             );
 
-            Log.i( TAG, "Started to listen to position updates!" );
+            sendStatusUpdateMessage( "$$!: Started to listen to position updates!" );
         }
 
         return START_STICKY;
@@ -131,14 +140,12 @@ public class PositionTrackingService extends Service implements LocationListener
 
     @Override
     public void onLocationChanged( Location location ) {
-        Log.d( TAG, String.format( "Location updated %s", location.toString() ) );
-
         Intent sendToBroadcastIntent = new Intent();
 
-        sendToBroadcastIntent.setAction( PositionTrackingBroadcastMiddleware.TRACKING_BROADCAST_NOTIFY_ACTION );
-        sendToBroadcastIntent.putExtra( "uk.co.lutraconsulting.position.update.lon", location.getLongitude() );
-        sendToBroadcastIntent.putExtra( "uk.co.lutraconsulting.position.update.lat", location.getLatitude() );
-        sendToBroadcastIntent.putExtra( "uk.co.lutraconsulting.position.update.alt", location.getAltitude() );
+        sendToBroadcastIntent.setAction( PositionTrackingBroadcastMiddleware.TRACKING_POSITION_UPDATE_ACTION );
+        sendToBroadcastIntent.putExtra( PositionTrackingBroadcastMiddleware.TRACKING_POSITION_UPDATE_LON_TAG, location.getLongitude() );
+        sendToBroadcastIntent.putExtra( PositionTrackingBroadcastMiddleware.TRACKING_POSITION_UPDATE_LAT_TAG, location.getLatitude() );
+        sendToBroadcastIntent.putExtra( PositionTrackingBroadcastMiddleware.TRACKING_POSITION_UPDATE_ALT_TAG, location.getAltitude() );
 
         sendBroadcast( sendToBroadcastIntent );
     }

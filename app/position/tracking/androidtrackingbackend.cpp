@@ -13,11 +13,16 @@
 
 AndroidTrackingBackend *AndroidTrackingBackend::mInstance = nullptr;
 
-static void notifyListenersFromJava( JNIEnv *env, jobject /*this*/, jdouble longitude, jdouble latitude, jdouble altitude )
+static void notifyListenersPositionUpdated( JNIEnv *env, jobject /*this*/, jdouble longitude, jdouble latitude, jdouble altitude )
 {
   qDebug() << "Qt printing the data:" << longitude << latitude;
 
   AndroidTrackingBackend::instance()->update( longitude, latitude, altitude );
+}
+
+static void notifyListenersStatusUpdate( JNIEnv *env, jobject /*this*/, jstring message )
+{
+  qDebug() << "Qt printing the data:" << env->GetStringUTFChars( message, 0 );
 }
 
 AndroidTrackingBackend::AndroidTrackingBackend( AbstractTrackingBackend::UpdateFrequency frequency, QObject *parent )
@@ -49,6 +54,18 @@ AndroidTrackingBackend::AndroidTrackingBackend( AbstractTrackingBackend::UpdateF
   startForegroundService();
 }
 
+AndroidTrackingBackend::~AndroidTrackingBackend()
+{
+  // stop the foreground service
+  auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+  QAndroidIntent serviceIntent( activity.object(), "uk/co/lutraconsulting/PositionTrackingService" );
+
+  activity.callMethod<jboolean>(
+    "stopService",
+    "(Landroid/content/Intent;)Z",
+    serviceIntent.handle().object() );
+}
+
 void AndroidTrackingBackend::update( double longitude, double latitude, double altitude )
 {
   GeoPosition position;
@@ -61,14 +78,18 @@ void AndroidTrackingBackend::update( double longitude, double latitude, double a
 
 void AndroidTrackingBackend::startForegroundService()
 {
-  // 0. register callback from java
-  JNINativeMethod methods[] {{"notifyListenersFromJava", "(DDD)V", reinterpret_cast<void *>( notifyListenersFromJava )}};
+  qDebug() << "Qt about to create foreground service";
+
+  // 0. register callbacks from java
+  JNINativeMethod methods[] {{"notifyListenersPositionUpdated", "(DDD)V", reinterpret_cast<void *>( notifyListenersPositionUpdated )},
+    {"notifyListenersStatusUpdate", "(Ljava/lang/String;)V", reinterpret_cast<void *>( notifyListenersStatusUpdate )}
+  };
   QJniObject broadcastClass( "uk/co/lutraconsulting/PositionTrackingBroadcastMiddleware" );
 
   QJniEnvironment javaenv;
   jclass objectClass = javaenv->GetObjectClass( broadcastClass.object<jobject>() );
 
-  javaenv->RegisterNatives( objectClass, methods, 1 );
+  javaenv->RegisterNatives( objectClass, methods, 2 );
   javaenv->DeleteLocalRef( objectClass );
 
   // 1. get context object

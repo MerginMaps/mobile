@@ -19,6 +19,7 @@ class AndroidTrackingBackend : public AbstractTrackingBackend
     Q_OBJECT
   public:
     explicit AndroidTrackingBackend( AbstractTrackingBackend::UpdateFrequency frequency, QObject *parent = nullptr );
+    virtual ~AndroidTrackingBackend();
 
     static AndroidTrackingBackend *instance() { return mInstance; };
 
