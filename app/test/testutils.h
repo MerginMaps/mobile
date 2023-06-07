@@ -14,8 +14,8 @@
 #include <qtestcase.h>
 
 #include "inputconfig.h"
-#include "testingpurchasingbackend.h"
 #include "qgsproject.h"
+#include "testingpurchasingbackend.h"
 
 class MerginApi;
 class Purchasing;
@@ -38,7 +38,7 @@ namespace TestUtils
   void mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password );
 
   //! Setup professional plan for active workspace
-  void mergin_setup_pro_subscription( MerginApi *api, TestingPurchasingBackend *purchasingBackend );
+  void mergin_setup_pro_subscription( MerginApi *api, Purchasing *purchasing );
 
   QString generateUsername();
   QString generateEmail();
@@ -58,7 +58,7 @@ namespace TestUtils
   bool generateProjectFolder( const QString &rootPath, const QJsonDocument &structure );
 
   //! Test util function to invoke purchasing function and wait for the replies.
-  void runPurchasingCommand( MerginApi *api, TestingPurchasingBackend *purchasingBackend, TestingPurchasingBackend::NextPurchaseResult result, const QString &planId, bool waitForWorkspaceInfoChanged = true );
+  void runPurchasingCommand( MerginApi *api, Purchasing *purchasing, TestingPurchasingBackend::NextPurchaseResult result, const QString &planId, bool waitForWorkspaceInfoChanged = true );
 }
 
 #define COMPARENEAR(actual, expected, epsilon) \

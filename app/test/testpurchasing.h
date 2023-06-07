@@ -13,7 +13,6 @@
 #include <QObject>
 
 #include "inputconfig.h"
-#include "testingpurchasingbackend.h"
 
 class MerginApi;
 class Purchasing;
@@ -40,7 +39,7 @@ class TestPurchasing: public QObject
 
   private:
     MerginApi *mApi = nullptr;
-    TestingPurchasingBackend *mPurchasingBackend = nullptr;
+    Purchasing *mPurchasing = nullptr;
 };
 
 # endif // TESTPURCHASING_H

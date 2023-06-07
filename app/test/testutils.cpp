@@ -16,6 +16,8 @@
 #include "coreutils.h"
 #include "inpututils.h"
 #include "merginapi.h"
+#include "purchasing.h"
+#include "testingpurchasingbackend.h"
 
 void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password )
 {
@@ -82,46 +84,39 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
   qDebug() << "MERGIN WORKSPACE:" << api->userInfo()->activeWorkspaceName() << api->userInfo()->activeWorkspaceId();
 }
 
-void TestUtils::mergin_setup_pro_subscription( MerginApi *api, TestingPurchasingBackend *purchasingBackend )
+void TestUtils::mergin_setup_pro_subscription( MerginApi *api, Purchasing *purchasing )
 {
-  qDebug() << "AAA:1";
-
   QSignalSpy spy2( api, &MerginApi::subscriptionInfoChanged );
   api->getServiceInfo();
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy2.count(), 1 );
 
-  qDebug() << "AAA:2";
-  if ( purchasingBackend->purchasing()->transactionPending() )
-  {
-    qDebug() << "AAA:3";
-    // not sure why there is any transaction pending...
-    QSignalSpy spy3( purchasingBackend->purchasing(), &Purchasing::transactionPendingChanged );
-    QVERIFY( spy3.wait( TestUtils::LONG_REPLY ) );
-    Q_ASSERT( !spy2.isEmpty() );
-  }
+  Q_ASSERT( ! purchasing->transactionPending() );
 
-  qDebug() << "AAA:4";
   if ( api->subscriptionInfo()->planProductId() != TIER02_PLAN_ID )
   {
     // always start from PRO subscription
     qDebug() << "PURCHASE PRO subscription:" << api->userInfo()->activeWorkspaceName();
-    runPurchasingCommand( api, purchasingBackend, TestingPurchasingBackend::NonInteractiveBuyProfessionalPlan, TIER02_PLAN_ID );
+    runPurchasingCommand( api, purchasing, TestingPurchasingBackend::NonInteractiveBuyProfessionalPlan, TIER02_PLAN_ID );
   }
 
   Q_ASSERT( api->subscriptionInfo()->planProductId() == TIER02_PLAN_ID );
   qDebug() << "MERGIN SUBSCRIPTION:" << api->subscriptionInfo()->planProductId();
 }
 
-void TestUtils::runPurchasingCommand( MerginApi *api, TestingPurchasingBackend *purchasingBackend, TestingPurchasingBackend::NextPurchaseResult result, const QString &planId, bool waitForWorkspaceInfoChanged )
+void TestUtils::runPurchasingCommand( MerginApi *api, Purchasing *purchasing, TestingPurchasingBackend::NextPurchaseResult result, const QString &planId, bool waitForWorkspaceInfoChanged )
 {
+  Q_ASSERT( purchasing );
+  TestingPurchasingBackend *purchasingBackend = qobject_cast<TestingPurchasingBackend * >( purchasing->backend() );
+  Q_ASSERT( purchasingBackend );
+
   purchasingBackend->setNextPurchaseResult( result );
 
   QSignalSpy spy0( api, &MerginApi::subscriptionInfoChanged );
   QVERIFY( !planId.isEmpty() );
   QSignalSpy spy1( api->workspaceInfo(), &MerginWorkspaceInfo::workspaceInfoChanged );
 
-  purchasingBackend->purchasing()->purchase( planId );
+  purchasing->purchase( planId );
   QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy0.count(), 1 );
 

@@ -36,9 +36,8 @@ TestMerginApi::TestMerginApi( MerginApi *api, Purchasing *purchasing )
   mApi = api;
   Q_ASSERT( mApi );  // does not make sense to run without API
 
+  mPurchasing = purchasing;
   Q_ASSERT( purchasing );
-  mPurchasingBackend = qobject_cast<TestingPurchasingBackend * >( purchasing->backend() );
-  Q_ASSERT( mPurchasingBackend );
 
   mSyncManager = std::make_unique<SynchronizationManager>( mApi );
 
@@ -61,7 +60,7 @@ void TestMerginApi::initTestCase()
 {
   QString apiRoot, username, password;
   TestUtils::mergin_setup_auth( mApi, apiRoot, username, password );
-  TestUtils::mergin_setup_pro_subscription( mApi, mPurchasingBackend );
+  TestUtils::mergin_setup_pro_subscription( mApi, mPurchasing );
 
   mUsername = username;  // keep for later
 
