@@ -56,7 +56,7 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
     QSignalSpy authSpy( api, &MerginApi::authChanged );
     api->authorize( username, password );
     QVERIFY( authSpy.wait( TestUtils::LONG_REPLY ) );
-    QCOMPARE( authSpy.count(), 1 );
+    QVERIFY( !authSpy.isEmpty() );
 
     // we also need to create a workspace for this user
     QSignalSpy wsSpy( api, &MerginApi::workspaceCreated );

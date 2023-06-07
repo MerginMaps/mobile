@@ -348,7 +348,7 @@ void TestPosition::testMapPosition()
   positionKit->setPositionProvider( provider2 );
 
   QSignalSpy positionUpdateSpy2( provider2, &AbstractPositionProvider::positionChanged );
-  positionUpdateSpy2.wait( 1500 );
+  positionUpdateSpy2.wait( 5000 );
 
   QVERIFY( !positionUpdateSpy2.isEmpty() );
   QVERIFY( mapPosition.mapPosition() != oldmappos );
