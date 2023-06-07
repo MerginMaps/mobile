@@ -95,7 +95,7 @@ void ProjectWizard::createProject( QString const &projectName, FieldsModel *fiel
   }
 
   QString projectDir = CoreUtils::createUniqueProjectDirectory( mDataDir, projectName );
-  QString projectFilepath( QString( "%1/%2.%3" ).arg( projectDir ).arg( projectName ).arg( "qgs" ) );
+  QString projectFilepath( QString( "%1/%2.%3" ).arg( projectDir ).arg( projectName ).arg( "qgz" ) );
   QString gpkgName( QStringLiteral( "data" ) );
   QString projectGpkgPath( QString( "%1/%2.%3" ).arg( projectDir ).arg( gpkgName ).arg( "gpkg" ) );
 
