@@ -28,10 +28,10 @@ namespace TestUtils
 
   const double FREE_STORAGE =  104857600.0; // 100 MB
 
-  const char *const TIER01_PLAN_ID = "test_mergin_tier_1_1";
+  const QString TIER01_PLAN_ID = "test_mergin_tier_1_1";
   const double TIER01_STORAGE =  1073741824.0; // 1GB
 
-  const char *const TIER02_PLAN_ID = "test_mergin_tier_1_2";
+  const QString TIER02_PLAN_ID = "test_mergin_tier_1_2";
   const double TIER02_STORAGE =  10737418240.0; // 10 GB
 
   //! Use credentials from env variables if they are set, otherwise register new user and set its credentials to env var

@@ -95,7 +95,7 @@ class TestMerginApi: public QObject
     void testServerError();
 
   private:
-    MerginApi *mApi;
+    MerginApi *mApi = nullptr;
     TestingPurchasingBackend *mPurchasingBackend = nullptr;
 
     std::unique_ptr<ProjectsModel> mLocalProjectsModel;
