@@ -84,19 +84,24 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
 
 void TestUtils::mergin_setup_pro_subscription( MerginApi *api, TestingPurchasingBackend *purchasingBackend )
 {
+  qDebug() << "AAA:1";
+
   QSignalSpy spy2( api, &MerginApi::subscriptionInfoChanged );
   api->getServiceInfo();
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy2.count(), 1 );
 
+  qDebug() << "AAA:2";
   if ( purchasingBackend->purchasing()->transactionPending() )
   {
+    qDebug() << "AAA:3";
     // not sure why there is any transaction pending...
     QSignalSpy spy3( purchasingBackend->purchasing(), &Purchasing::transactionPendingChanged );
     QVERIFY( spy3.wait( TestUtils::LONG_REPLY ) );
     Q_ASSERT( !spy2.isEmpty() );
   }
 
+  qDebug() << "AAA:4";
   if ( api->subscriptionInfo()->planProductId() != TIER02_PLAN_ID )
   {
     // always start from PRO subscription
