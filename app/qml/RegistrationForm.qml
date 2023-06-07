@@ -40,7 +40,6 @@ Rectangle {
 
     // show error message under the respective field
     function onRegistrationFailed( msg, field ) {
-      console.log( "onRegistrationFailed: " + msg )
 
       // clear previous error messages
       registerNameErrorText.text = ""
