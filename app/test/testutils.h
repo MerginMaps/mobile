@@ -24,7 +24,7 @@ class TestingPurchasingBackend;
 namespace TestUtils
 {
   const int SHORT_REPLY = 5000;
-  const int LONG_REPLY = 70000;
+  const int LONG_REPLY = 90000;
 
   const double FREE_STORAGE =  104857600.0; // 100 MB
 

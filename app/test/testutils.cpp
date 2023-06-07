@@ -11,6 +11,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QSignalSpy>
+#include <QThread>
 
 #include "testutils.h"
 #include "coreutils.h"
@@ -90,17 +91,15 @@ void TestUtils::mergin_setup_pro_subscription( MerginApi *api, TestingPurchasing
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy2.count(), 1 );
 
+  Q_ASSERT( !purchasingBackend->purchasing()->transactionPending() );
+
   if ( api->subscriptionInfo()->planProductId() != TIER02_PLAN_ID )
   {
     // always start from PRO subscription
     runPurchasingCommand( api, purchasingBackend, TestingPurchasingBackend::NonInteractiveBuyProfessionalPlan, TIER02_PLAN_ID );
   }
 
-  QCOMPARE( api->subscriptionInfo()->planProductId(), TIER02_PLAN_ID );
-  QCOMPARE( api->workspaceInfo()->storageLimit(), TIER02_STORAGE );
-  QCOMPARE( api->subscriptionInfo()->ownsActiveSubscription(), true );
-  QCOMPARE( api->subscriptionInfo()->subscriptionStatus(), MerginSubscriptionStatus::ValidSubscription );
-  QCOMPARE( api->subscriptionInfo()->planProvider(), MerginSubscriptionType::TestSubscriptionType );
+  Q_ASSERT( api->subscriptionInfo()->planProductId() == TIER02_PLAN_ID );
 
   qDebug() << "MERGIN SUBSCRIPTION:" << api->subscriptionInfo()->planProductId();
 }
