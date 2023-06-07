@@ -11,7 +11,6 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QSignalSpy>
-#include <QThread>
 
 #include "testutils.h"
 #include "coreutils.h"
@@ -73,15 +72,14 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
     QVERIFY( infoSpy.wait( TestUtils::LONG_REPLY ) );
 
     QVERIFY( api->userInfo()->activeWorkspaceId() >= 0 );
-    qDebug() << "WORKING WITH WORKSPACE:" << api->userInfo()->activeWorkspaceName() << api->userInfo()->activeWorkspaceId();
 
-    // we need to subscribe to some reasonable plan with workspace
   }
 
   Q_ASSERT( ::getenv( "TEST_API_USERNAME" ) );
   Q_ASSERT( ::getenv( "TEST_API_PASSWORD" ) );
 
   qDebug() << "MERGIN USERNAME:" << username;
+  qDebug() << "MERGIN WORKSPACE:" << api->userInfo()->activeWorkspaceName() << api->userInfo()->activeWorkspaceId();
 }
 
 void TestUtils::mergin_setup_pro_subscription( MerginApi *api, TestingPurchasingBackend *purchasingBackend )
@@ -91,16 +89,15 @@ void TestUtils::mergin_setup_pro_subscription( MerginApi *api, TestingPurchasing
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy2.count(), 1 );
 
-  Q_ASSERT( !purchasingBackend->purchasing()->transactionPending() );
-
+  QVERIFY( !purchasingBackend->purchasing()->transactionPending() );
   if ( api->subscriptionInfo()->planProductId() != TIER02_PLAN_ID )
   {
     // always start from PRO subscription
+    qDebug() << "PURCHASE PRO subscription:" << api->userInfo()->activeWorkspaceName();
     runPurchasingCommand( api, purchasingBackend, TestingPurchasingBackend::NonInteractiveBuyProfessionalPlan, TIER02_PLAN_ID );
   }
 
   Q_ASSERT( api->subscriptionInfo()->planProductId() == TIER02_PLAN_ID );
-
   qDebug() << "MERGIN SUBSCRIPTION:" << api->subscriptionInfo()->planProductId();
 }
 
