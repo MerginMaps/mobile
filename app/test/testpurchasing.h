@@ -13,10 +13,8 @@
 #include <QObject>
 
 #include "inputconfig.h"
-#include "testingpurchasingbackend.h"
 
 class MerginApi;
-class TestingPurchasingBackend;
 class Purchasing;
 
 class TestPurchasing: public QObject
@@ -40,18 +38,8 @@ class TestPurchasing: public QObject
     void testUserRestore();
 
   private:
-    /**
-     * @brief runPurchasingCommand Test util function to invoke purchasing function and wait for the replies.
-     * @param result
-     * @param planId ID of the plan that is going to be purchased.
-     * @param waitForUserInfo True, if current user planID will be changed after executing the command.
-     *        The change will trigger an extra userInfo request to update storage.
-     */
-    void runPurchasingCommand( TestingPurchasingBackend::NextPurchaseResult result, const QString &planId, bool waitForUserInfo = false );
-
     MerginApi *mApi = nullptr;
     Purchasing *mPurchasing = nullptr;
-    TestingPurchasingBackend *mPurchasingBackend = nullptr;
 };
 
 # endif // TESTPURCHASING_H

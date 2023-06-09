@@ -18,14 +18,17 @@
 #include <merginapi.h>
 #include <projectsmodel.h>
 #include "project.h"
+#include "testingpurchasingbackend.h"
 
 #include <qgsapplication.h>
+
+class Purchasing;
 
 class TestMerginApi: public QObject
 {
     Q_OBJECT
   public:
-    explicit TestMerginApi( MerginApi *api );
+    explicit TestMerginApi( MerginApi *api, Purchasing *purchasing );
     ~TestMerginApi();
 
     static const QString TEST_PROJECT_NAME;
@@ -92,7 +95,9 @@ class TestMerginApi: public QObject
     void testServerError();
 
   private:
-    MerginApi *mApi;
+    MerginApi *mApi = nullptr;
+    Purchasing *mPurchasing = nullptr;
+
     std::unique_ptr<ProjectsModel> mLocalProjectsModel;
     std::unique_ptr<ProjectsModel> mCreatedProjectsModel;
     std::unique_ptr<SynchronizationManager> mSyncManager;
