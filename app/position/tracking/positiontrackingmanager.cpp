@@ -112,6 +112,7 @@ void PositionTrackingManager::setup()
 
   if ( trackingLayerId.isEmpty() )
   {
+    emit trackingErrorOccured( tr( "Could not find tracking layer for the project" ) );
     CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Could not find tracking layer for the project" ) );
     return;
   }
@@ -120,6 +121,7 @@ void PositionTrackingManager::setup()
 
   if ( !trackingLayer || !trackingLayer->isValid() )
   {
+    emit trackingErrorOccured( tr( "Tracking layer not found or invalid" ) );
     CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Tracking layer not found or invalid" ) );
     return;
   }
@@ -144,6 +146,9 @@ void PositionTrackingManager::setup()
   {
     mTrackingBackend->setNotifyFunction( [ = ]( const GeoPosition & p ) { this->addPoint( p ); } );
   }
+
+  mIsTrackingPosition = true;
+  emit isTrackingPositionChanged( true );
 }
 
 void PositionTrackingManager::cacheTrackedGeometry()
@@ -281,7 +286,23 @@ QgsCoordinateReferenceSystem PositionTrackingManager::crs() const
   return QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
 }
 
+void PositionTrackingManager::tryAgain()
+{
+  if ( !mTrackingBackend )
+  {
+    emit trackingErrorOccured( tr( "Failed to start tracking, please contact support" ) );
+    CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Try again failed, no position provider" ) );
+  }
+
+  setup();
+}
+
 QDateTime PositionTrackingManager::startTime() const
 {
   return mTrackingStartTime;
+}
+
+bool PositionTrackingManager::isTrackingPosition() const
+{
+  return mIsTrackingPosition;
 }

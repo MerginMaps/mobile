@@ -30,8 +30,9 @@ class PositionTrackingManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY( QString layerId READ layerId NOTIFY layerIdChanged )
-    Q_PROPERTY( QgsGeometry trackedGeometry READ trackedGeometry NOTIFY trackedGeometryChanged )
     Q_PROPERTY( QDateTime startTime READ startTime NOTIFY startTimeChanged )
+    Q_PROPERTY( QgsGeometry trackedGeometry READ trackedGeometry NOTIFY trackedGeometryChanged )
+    Q_PROPERTY( bool isTrackingPosition READ isTrackingPosition NOTIFY isTrackingPositionChanged )
 
     // properties to be set from QML
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
@@ -69,7 +70,11 @@ class PositionTrackingManager : public QObject
     //! Returns CRS of the tracked geometry
     Q_INVOKABLE QgsCoordinateReferenceSystem crs() const;
 
+    Q_INVOKABLE void tryAgain();
+
     QDateTime startTime() const;
+
+    bool isTrackingPosition() const;
 
   public slots:
     void addPoint( const GeoPosition &position );
@@ -90,6 +95,10 @@ class PositionTrackingManager : public QObject
 
     void startTimeChanged( QDateTime startTime );
 
+    void isTrackingPositionChanged( bool isTrackingPosition );
+
+    void trackingErrorOccured( const QString &message );
+
   private:
     void setLayerId( QString newLayerId );
     void setup();
@@ -107,6 +116,7 @@ class PositionTrackingManager : public QObject
 
     QDateTime mTrackingStartTime;
     QgsFeature mTrackedFeature;
+    bool mIsTrackingPosition = false;
 };
 
 #endif // POSITIONTRACKINGMANAGER_H

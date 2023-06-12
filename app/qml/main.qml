@@ -502,21 +502,37 @@ ApplicationWindow {
 
           width: window.width
 
-          trackingActive: __activeProject.isTrackingPosition
-          distanceTraveled: map.trackingManager ? __inputUtils.geometryLengthAsString( map.trackingManager?.trackedGeometry ) : qsTr( "not tracking" )
-          trackingStartedAt: {
-            if ( map.trackingManager?.startTime )
-            {
-              let date = map.trackingManager?.startTime
-              return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
-            }
-            return qsTr( "not tracking" )
-          }
+          trackingActive: map.isTrackingPosition
 
-          onTrackingBtnClicked: __activeProject.isTrackingPosition = !__activeProject.isTrackingPosition
+          distanceTraveled: trackingPrivate.getDistance()
+          trackingStartedAt: trackingPrivate.getStartingTime()
+
+          onTrackingBtnClicked: map.setTracking( !trackingActive )
 
           onClosed: {
             trackingPanelLoader.active = false
+          }
+
+          QtObject {
+            id: trackingPrivate
+
+            function getDistance() {
+              if ( map.isTrackingPosition ) {
+                return __inputUtils.geometryLengthAsString( map.trackingManager?.trackedGeometry )
+              }
+              return qsTr( "not tracking" )
+            }
+
+            function getStartingTime() {
+              if ( map.isTrackingPosition )
+              {
+                let date = map.trackingManager?.startTime
+                if ( date ) {
+                  return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+                }
+              }
+              return qsTr( "not tracking" )
+            }
           }
         }
       }

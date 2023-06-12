@@ -98,22 +98,6 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
 {
   CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + ( force ? "true" : "false" ) );
 
-  if ( isProjectLoaded() )
-  {
-    if ( mIsTrackingPosition )
-    {
-      if ( mQgsProject->fileName() == filePath || force )
-      {
-        // just reloading the current project
-      }
-      else
-      {
-        emit loadingFailedTrackingActive( filePath );
-        return false;
-      }
-    }
-  }
-
   // clear autosync
   setAutosyncEnabled( false );
 
@@ -197,7 +181,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
 
     emit localProjectChanged( mLocalProject );
     emit projectReloaded( mQgsProject );
-    emit positionTrackingAllowedChanged();
+    emit positionTrackingSupportedChanged();
   }
 
   bool foundInvalidLayer = false;
@@ -500,21 +484,7 @@ const QString &ActiveProject::mapTheme() const
   return mMapTheme;
 }
 
-bool ActiveProject::isTrackingPosition() const
-{
-  return mIsTrackingPosition;
-}
-
-void ActiveProject::setIsTrackingPosition( bool shouldTrackPosition )
-{
-  if ( mIsTrackingPosition != shouldTrackPosition )
-  {
-    mIsTrackingPosition = shouldTrackPosition;
-    emit isTrackingPositionChanged( mIsTrackingPosition );
-  }
-}
-
-bool ActiveProject::positionTrackingAllowed() const
+bool ActiveProject::positionTrackingSupported() const
 {
   if ( !isProjectLoaded() )
   {

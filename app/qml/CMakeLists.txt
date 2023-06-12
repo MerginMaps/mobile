@@ -38,7 +38,6 @@ set(MM_QML
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
     dialogs/InstallScannerAppDialog.qml
-    dialogs/PositionTrackingActiveDialog.qml
     editor/AbstractEditor.qml
     editor/RelationPhotoDelegate.qml
     editor/RelationPhotoFooterDelegate.qml
