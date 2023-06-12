@@ -67,14 +67,9 @@ ApplicationWindow {
       property alias height: window.height
     }
 
-    //! Must stay in main.qml, it is used from different nested components
     function showMessage(message) {
-        if ( !__androidUtils.isAndroid ) {
-            popup.text = message
-            popup.open()
-        } else {
-            __androidUtils.showToast( message )
-        }
+      popup.text = message
+      popup.open()
     }
 
     function showProjError(message) {

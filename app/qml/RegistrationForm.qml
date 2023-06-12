@@ -34,6 +34,47 @@ Rectangle {
     acceptTOC.checked = false
   }
 
+  Connections {
+    target: __merginApi
+    enabled: registerForm.visible
+
+    // show error message under the respective field
+    function onRegistrationFailed( msg, field ) {
+
+      // clear previous error messages
+      registerNameErrorText.text = ""
+      emailErrorText.text = ""
+      passwordFieldErrorText.text = ""
+      passwordConfirmFieldErrorText.text = ""
+      acceptTOCErrorText.text = ""
+      errorText.text = ""
+
+      if( field === RegistrationError.USERNAME ) {
+        registerNameErrorText.text = msg
+        registerName.focus = true
+      }
+      else if( field === RegistrationError.EMAIL ) {
+        emailErrorText.text = msg
+        email.focus = true
+      }
+      else if( field === RegistrationError.PASSWORD ) {
+        passwordFieldErrorText.text = msg
+        passwordField.password.focus = true
+      }
+      else if( field === RegistrationError.CONFIRM_PASSWORD ) {
+        passwordConfirmFieldErrorText.text = msg
+        passwordConfirmField.password.focus = true
+      }
+      else if( field === RegistrationError.TOC ) {
+        acceptTOCErrorText.text = msg
+        acceptTOC.focus = true
+      }
+      else if( field === RegistrationError.OTHER ) {
+        errorText.text = msg
+      }
+    }
+  }
+
   ScrollView {
     width: registerForm.width
     height: registerForm.height
@@ -78,7 +119,7 @@ Rectangle {
         ColorOverlay {
           anchors.fill: icon
           source: icon
-          color: root.fontColor
+          color: registerNameErrorText.text.length>0 ? InputStyle.errorTextColor : root.fontColor
         }
       }
 
@@ -100,12 +141,17 @@ Rectangle {
 
     Rectangle {
       id: registerNameBorder
-      color: root.fontColor
+      color: registerNameErrorText.text.length>0 ? InputStyle.errorTextColor : InputStyle.panelBackgroundDark
       y: registerName.height - height
       height: 2 * __dp
       opacity: registerName.focus ? 1 : 0.6
       width: parent.width - fieldHeight / 2
       anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    ErrorText {
+      id: registerNameErrorText
+      width: parent.width - fieldHeight / 2
     }
 
     Row {
@@ -134,7 +180,7 @@ Rectangle {
         ColorOverlay {
           anchors.fill: icon4
           source: icon4
-          color: root.fontColor
+          color: emailErrorText.text.length>0 ? InputStyle.errorTextColor : root.fontColor
         }
       }
 
@@ -154,12 +200,17 @@ Rectangle {
 
     Rectangle {
       id: emailBorder
-      color: InputStyle.panelBackgroundDark
+      color: emailErrorText.text.length>0 ? InputStyle.errorTextColor : InputStyle.panelBackgroundDark
       height: 2 * __dp
       y: email.height - height
       opacity: email.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2
       anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    ErrorText {
+      id: emailErrorText
+      width: parent.width - fieldHeight / 2
     }
 
     PasswordField {
@@ -168,16 +219,22 @@ Rectangle {
       height: fieldHeight
       fontColor: root.fontColor
       bgColor: root.bgColor
+      isWrong: passwordFieldErrorText.text.length>0
     }
 
     Rectangle {
       id: passBorder
-      color: InputStyle.panelBackgroundDark
+      color: passwordFieldErrorText.text.length>0 ? InputStyle.errorTextColor : InputStyle.panelBackgroundDark
       height: 2 * __dp
       y: fieldHeight - height
       opacity: passwordField.password.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2
       anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    ErrorText {
+      id: passwordFieldErrorText
+      width: parent.width - fieldHeight / 2
     }
 
     PasswordField {
@@ -187,17 +244,22 @@ Rectangle {
       fontColor: root.fontColor
       bgColor: root.bgColor
       placeholderText:  qsTr('Confirm password')
+      isWrong: passwordConfirmFieldErrorText.text.length>0
     }
-
 
     Rectangle {
       id: confirmPassBorder
-      color: InputStyle.panelBackgroundDark
+      color: passwordConfirmFieldErrorText.text.length>0 ? InputStyle.errorTextColor : InputStyle.panelBackgroundDark
       height: 2 * __dp
       y: fieldHeight - height
       opacity: passwordConfirmField.password.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2
       anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    ErrorText {
+      id: passwordConfirmFieldErrorText
+      width: parent.width - fieldHeight / 2
     }
 
     Row {
@@ -215,17 +277,23 @@ Rectangle {
               .arg("<a href='"+ __inputHelp.merginTermsLink + "'>")
               .arg("<a href='"+ __inputHelp.privacyPolicyLink +"'>")
               .arg("</a>")
+        shouldBeChecked: acceptTOCErrorText.text.length>0
       }
     }
 
     Rectangle {
       id: acceptTOCBorder
-      color: InputStyle.panelBackgroundDark
+      color: acceptTOCErrorText.text.length>0 ? InputStyle.errorTextColor : InputStyle.panelBackgroundDark
       height: 2 * __dp
       y: acceptTOC.height - height
       opacity: acceptTOC.focus ? 1 : 0.6
       width: registerForm.width - fieldHeight / 2
       anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    ErrorText {
+      id: acceptTOCErrorText
+      width: parent.width - fieldHeight / 2
     }
 
     Button {
@@ -255,6 +323,7 @@ Rectangle {
         elide: Text.ElideRight
       }
     }
+
     }
   }
 }

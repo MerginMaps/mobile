@@ -94,6 +94,8 @@ class TestMerginApi: public QObject
 
     void testServerError();
 
+    void testRegistration();
+
   private:
     MerginApi *mApi = nullptr;
     Purchasing *mPurchasing = nullptr;

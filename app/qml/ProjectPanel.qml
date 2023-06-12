@@ -1127,7 +1127,7 @@ Item {
       stackView.pending = false
     }
 
-    function onRegistrationFailed() {
+    function onRegistrationFailed( msg, field ) {
       stackView.pending = false
     }
 
