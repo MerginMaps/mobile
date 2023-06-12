@@ -1,7 +1,5 @@
 package uk.co.lutraconsulting;
 
-import android.util.Log;
-
 import android.Manifest;
 import android.os.Build;
 import android.os.IBinder;
@@ -44,7 +42,6 @@ public class PositionTrackingService extends Service implements LocationListener
 
     @Override
     public void onCreate() {
-        sendStatusUpdateMessage( "$$!: Foreground service about to be started" );
         super.onCreate();
     }
 
@@ -56,7 +53,6 @@ public class PositionTrackingService extends Service implements LocationListener
 
     @Override
     public void onDestroy() {
-        sendStatusUpdateMessage( "$$!: Foreground service about to be killed" );
         super.onDestroy();
     }
 
@@ -71,10 +67,9 @@ public class PositionTrackingService extends Service implements LocationListener
 
     @Override
     public int onStartCommand( Intent intent, int flags, int startId ) {
-        Log.i( TAG, "Starting onStartCommand" );
 
         if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.O ) {
-            Log.i( TAG, "Error, tracking is not supported on your Android version ( Android O (8.0) required )" );
+            sendStatusUpdateMessage( "Position tracking: Error, tracking is not supported on your Android version ( Android O (8.0) required )" );
             stopSelf();
 
             return START_STICKY;
@@ -105,13 +100,13 @@ public class PositionTrackingService extends Service implements LocationListener
 
         startForeground( SERVICE_ID, notification );
 
-        sendStatusUpdateMessage( "$$!: Started the foreground service!" );
+        sendStatusUpdateMessage( "Position tracking: Started the foreground service!" );
 
         locationManager = ( LocationManager ) getApplication().getSystemService( LOCATION_SERVICE );
 
         boolean isGPSAvailable = locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER );
         if ( !isGPSAvailable ) {
-            sendStatusUpdateMessage( "$$!: Error, GPS is not available!" );
+            sendStatusUpdateMessage( "Position tracking: Error, GPS is not available!" );
             stopSelf();
             stopForeground( true );
         }
@@ -120,19 +115,30 @@ public class PositionTrackingService extends Service implements LocationListener
             boolean coarseLocationAccessGranted = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
             if ( !fineLocationAccessGranted || !coarseLocationAccessGranted ) {
-                sendStatusUpdateMessage( "$$!: Error, missing location permissions!" );
+                sendStatusUpdateMessage( "Position tracking: Error, missing location permissions!" );
                 stopSelf();
                 stopForeground(true);
+            }
+            
+            long timeInterval = MIN_TIME_BW_UPDATES;
+            long distanceInterval = MIN_DISTANCE_CHANGE_FOR_UPDATES;
+
+            if ( intent.hasExtra( "uk.co.lutraconsulting.tracking.timeInterval" ) ) {
+                timeInterval = (long) intent.getDoubleExtra( "uk.co.lutraconsulting.tracking.timeInterval", 1000 );
+            }
+
+            if ( intent.hasExtra( "uk.co.lutraconsulting.tracking.distanceInterval" ) ) {
+                distanceInterval = (long) intent.getDoubleExtra( "uk.co.lutraconsulting.tracking.distanceInterval", 1 );
             }
 
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                MIN_TIME_BW_UPDATES,
-                MIN_DISTANCE_CHANGE_FOR_UPDATES,
+                timeInterval,
+                distanceInterval,
                 this
             );
 
-            sendStatusUpdateMessage( "$$!: Started to listen to position updates!" );
+            sendStatusUpdateMessage( "Position tracking: Started to listen to position updates!" );
         }
 
         return START_STICKY;

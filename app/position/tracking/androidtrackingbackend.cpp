@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 #include "androidtrackingbackend.h"
+#include "coreutils.h"
 
 #include <QtCore/private/qandroidextras_p.h>
 
@@ -22,7 +23,7 @@ static void notifyListenersPositionUpdated( JNIEnv *env, jobject /*this*/, jdoub
 
 static void notifyListenersStatusUpdate( JNIEnv *env, jobject /*this*/, jstring message )
 {
-  qDebug() << "Qt printing the data:" << env->GetStringUTFChars( message, 0 );
+  CoreUtils::log( QStringLiteral( "Android Tracking Backend" ), env->GetStringUTFChars( message, 0 ) );
 }
 
 AndroidTrackingBackend::AndroidTrackingBackend( AbstractTrackingBackend::UpdateFrequency frequency, QObject *parent )
@@ -78,8 +79,6 @@ void AndroidTrackingBackend::update( double longitude, double latitude, double a
 
 void AndroidTrackingBackend::startForegroundService()
 {
-  qDebug() << "Qt about to create foreground service";
-
   // 0. register callbacks from java
   JNINativeMethod methods[] {{"notifyListenersPositionUpdated", "(DDD)V", reinterpret_cast<void *>( notifyListenersPositionUpdated )},
     {"notifyListenersStatusUpdate", "(Ljava/lang/String;)V", reinterpret_cast<void *>( notifyListenersStatusUpdate )}
@@ -97,6 +96,8 @@ void AndroidTrackingBackend::startForegroundService()
 
   // 2. create intent with the foreground service
   QAndroidIntent serviceIntent( activity.object(), "uk/co/lutraconsulting/PositionTrackingService" );
+  serviceIntent.putExtra( QStringLiteral( "uk.co.lutraconsulting.tracking.distanceInterval" ), mDistanceFilter );
+  serviceIntent.putExtra( QStringLiteral( "uk.co.lutraconsulting.tracking.timeInterval" ), mUpdateInterval );
 
   // 3. build service with the intent
   QJniObject result = activity.callObjectMethod(
