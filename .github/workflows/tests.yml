@@ -126,6 +126,13 @@ jobs:
             echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
 
             echo "Version code: ${BUILD_NUM}"
+
+      - name: Calculate build number
+        run: |
+            BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
+            echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
+
+            echo "Version code: ${BUILD_NUM}"
             
       - name: build Input (Debug)
         run: |

@@ -382,7 +382,6 @@ int main( int argc, char *argv[] )
   QgsApplication app( argc, argv, true );
 
   const QString version = CoreUtils::appVersion();
-
   // Set up the QSettings environment must be done after qapp is created
   QCoreApplication::setOrganizationName( "Lutra Consulting" );
   QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
@@ -393,6 +392,7 @@ int main( int argc, char *argv[] )
   InputTests tests;
   tests.parseArgs( argc, argv );
 #endif
+  qDebug() << "Mergin Maps Input App" << version << InputUtils::appPlatform() << "(" << CoreUtils::appVersionCode() << ")";
   qDebug() << "Built with QGIS version " << VERSION_INT;
 
   // Set/Get enviroment
