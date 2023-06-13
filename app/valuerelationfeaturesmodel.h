@@ -53,6 +53,9 @@ class ValueRelationFeaturesModel : public FeaturesModel
     void configChanged( const QVariantMap &config );
     void invalidate(); // invalidate signal is emitted when value to convert is not present in model
 
+  protected:
+    virtual void populate() override;
+
   private:
     QMap<QVariant, QVariant> mCache;
 
