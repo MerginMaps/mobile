@@ -120,8 +120,15 @@ jobs:
           mkdir -p input-sdk
           cd input-sdk
           unzip ${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk.tar.gz -d .
-          
+
       # Build Input App
+      - name: Calculate build number
+        shell: bash
+        run: |
+            BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
+            echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
+            echo "Version code: ${BUILD_NUM}"
+
       - name: Developer Command Prompt for Microsoft Visual C++
         uses: ilammy/msvc-dev-cmd@v1
         with:

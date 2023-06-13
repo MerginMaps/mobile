@@ -105,8 +105,10 @@ if (DEFINED ENV{INPUT_VERSION_CODE})
 else ()
   if (ANDROID)
     set(INPUT_VERSION_CODE_DEFAULT "0000000")
-  elseif (APPLE)
+  elseif (IOS)
     set(INPUT_VERSION_CODE_DEFAULT "00.00.000000")
+  else ()
+    set(INPUT_VERSION_CODE_DEFAULT "000000")
   endif ()
 endif ()
 
@@ -151,15 +153,10 @@ set(QT6_VERSION
     CACHE STRING "QT6 version to use"
 )
 
-if (ANDROID
-    OR IOS
-    OR MACOS
+set(INPUT_VERSION_CODE
+    "${INPUT_VERSION_CODE_DEFAULT}"
+    CACHE STRING "Build version (for stores)"
 )
-  set(INPUT_VERSION_CODE
-      "${INPUT_VERSION_CODE_DEFAULT}"
-      CACHE STRING "Build version (for stores)"
-  )
-endif ()
 
 mm_detect_version()
 message(STATUS "Mergin Maps Input ${version_desc} - ${platform_desc}")

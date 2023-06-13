@@ -39,6 +39,14 @@ QString CoreUtils::appVersion()
   return version;
 }
 
+QString CoreUtils::appVersionCode()
+{
+  QString version;
+#ifdef INPUT_VERSION_CODE
+  version = STR( INPUT_VERSION_CODE );
+#endif
+  return version;
+}
 
 QString CoreUtils::localizedDateFromUTFString( QString timestamp )
 {
