@@ -43,7 +43,6 @@ class TestUtilsFunctions: public QObject
     void testMapPointToGps();
     void testEquals();
     void testGeometryIcons();
-    void testFixCountryCode();
     void testCreateGeometryForLayer();
     void testInvalidGeometryWarning();
 
