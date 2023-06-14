@@ -507,6 +507,7 @@ void TestFormEditors::testValueRelationsEditor()
   subVRModel.setConfig( subFkItem->editorWidgetConfig() );
   subVRModel.setPair( pair );
 
+  TestUtils::waitForModelToPopulate( subVRModel );
   QCOMPARE( subVRModel.rowCount(), subLayer->dataProvider()->featureCount() );
   QCOMPARE( subVRModel.layer()->id(), subLayer->id() );
 
@@ -518,6 +519,7 @@ void TestFormEditors::testValueRelationsEditor()
   subsubVRModel.setConfig( subsubFkItem->editorWidgetConfig() );
   subsubVRModel.setPair( pair );
 
+  TestUtils::waitForModelToPopulate( subsubVRModel );
   QCOMPARE( subsubVRModel.rowCount(), 2 ); // due to a filter expression
   QCOMPARE( subsubVRModel.layer()->id(), subsubLayer->id() );
 
@@ -531,6 +533,7 @@ void TestFormEditors::testValueRelationsEditor()
   // test filter expression in combination with search
   subsubVRModel.setSearchExpression( QStringLiteral( "2" ) );
 
+  TestUtils::waitForModelToPopulate( subsubVRModel );
   QCOMPARE( subsubVRModel.rowCount(), 1 );
 
   // test title field on result
@@ -547,6 +550,7 @@ void TestFormEditors::testValueRelationsEditor()
   anotherVRModel.setConfig( anotherFkItem->editorWidgetConfig() );
   anotherVRModel.setPair( pair );
 
+  TestUtils::waitForModelToPopulate( anotherVRModel );
   QCOMPARE( anotherVRModel.rowCount(), anotherLayer->dataProvider()->featureCount() );
   QCOMPARE( anotherVRModel.layer()->id(), anotherLayer->id() );
 

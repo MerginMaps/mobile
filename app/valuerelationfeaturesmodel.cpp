@@ -20,18 +20,6 @@ ValueRelationFeaturesModel::ValueRelationFeaturesModel( QObject *parent )
 
 ValueRelationFeaturesModel::~ValueRelationFeaturesModel() = default;
 
-void ValueRelationFeaturesModel::populate()
-{
-  FeaturesModel::populate();
-  QEventLoop loop;
-  QObject::connect( this, &FeaturesModel::fetchingResultsChanged, &loop, [&]()
-  {
-    if ( !fetchingResults() )
-      loop.quit();
-  } );
-  loop.exec();
-}
-
 void ValueRelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
 {
   FeaturesModel::setupFeatureRequest( request );
