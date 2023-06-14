@@ -27,12 +27,16 @@ AbstractEditor {
     if ( !root.isReadOnly )
     {
       vrModel.pair = root.featureLayerPair
-      setIndex()
     }
   }
 
   function setIndex()
   {
+    if ( vrModel.fetchingResults )
+    {
+      return // Don't set the index if the model is being populated. It will be called again once done.
+    }
+
     let fid = vrModel.convertFromQgisType( root.parentValue, FeaturesModel.FeatureId )
 
     if ( !Array.isArray( fid ) || !fid.length )
@@ -49,7 +53,6 @@ AbstractEditor {
 
   onParentValueChanged: {
     vrModel.pair = root.featureLayerPair
-    setIndex()
   }
 
   enabled: !isReadOnly
@@ -70,6 +73,14 @@ AbstractEditor {
         return // ignore invalidate signal if form is not in edit mode
       }
       root.editorValueChanged( "", true )
+    }
+
+    onFetchingResultsChanged: {
+      // we need to re-set the current index every time the model is done re-populating
+      if ( !vrModel.fetchingResults )
+      {
+        setIndex()
+      }
     }
   }
 
