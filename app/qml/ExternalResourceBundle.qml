@@ -73,7 +73,7 @@ Item {
          */
         property var previewImage: function previewImage(imagePath) {
             imagePreview.source = "file://" +  imagePath
-            imagePreview.width = window.width - 2 * InputStyle.panelMargin
+            imagePreview.width = window.width
             previewImageWrapper.open()
         }
 
@@ -173,31 +173,59 @@ Item {
     }
 
     Popup {
-        id: previewImageWrapper
-        modal: true
-        focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-        background: Item {
-            anchors.fill: parent
-        }
+      id: previewImageWrapper
+      modal: true
+      focus: true
+      closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+      background: Item {
+        anchors.fill: parent
+      }
+      onAboutToShow: {
+        photoFrame.scale = 1
+        photoFrame.rotation = 0
+        photoFrame.x = 0
+        photoFrame.y = 0
+        pinchHandler.persistentScale = 1.0
+        pinchHandler.persistentRotation = 0.0
+      }
 
-        contentHeight: window.height
-        contentWidth: window.width
-        contentItem: Image {
+      contentHeight: window.height
+      contentWidth: window.width
+      contentItem: ScrollView {
+        anchors.centerIn: parent
+        contentWidth: image.width
+        contentHeight: image.height
+
+        Rectangle {
+          id: photoFrame
+          width: imagePreview.width
+          height: imagePreview.height
+
+          Image {
             id: imagePreview
             anchors.centerIn: parent
-            visible: true
-            autoTransform: true
             fillMode: Image.PreserveAspectFit
+            antialiasing: true
+            autoTransform: true
+          }
 
-            // on iOS automatic closePolicy does not work
-            MouseArea {
-              anchors.fill: parent
-              onClicked: {
-                previewImageWrapper.close()
-              }
-            }
+          PinchHandler {
+            id: pinchHandler
+            minimumRotation: -180
+            maximumRotation: 180
+            minimumScale: 0.5
+            maximumScale: 10
+          }
+
+          DragHandler { }
         }
+
+        // on iOS automatic closePolicy does not work
+        MouseArea {
+          anchors.fill: parent
+          onClicked: previewImageWrapper.close()
+        }
+      }
     }
 
     FileDialog {
