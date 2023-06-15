@@ -33,7 +33,6 @@ AbstractEditor {
     if ( !root.isReadOnly )
     {
       vrModel.pair = root.featureLayerPair
-      setText()
     }
   }
 
@@ -58,7 +57,6 @@ AbstractEditor {
 
   onParentValueChanged: {
     vrModel.pair = root.featureLayerPair
-    setText()
   }
 
   onRightActionClicked: pushVrPage()
@@ -82,6 +80,14 @@ AbstractEditor {
         return // ignore invalidate signal if form is not in edit mode
       }
       root.editorValueChanged( "", true )
+    }
+
+    onFetchingResultsChanged: {
+      // we need to re-set the text every time the model is done re-populating
+      if ( !vrModel.fetchingResults )
+      {
+        setText()
+      }
     }
   }
 
