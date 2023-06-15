@@ -300,9 +300,14 @@ Item {
           }
         }
 
-        Highlight {
+        PositionTrackingHighlight {
           id: trackingHighlight
 
+          mapPosition: mapPositioning.mapPosition
+          trackedGeometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
+        }
+
+        Highlight {
           height: mapCanvas.height
           width: mapCanvas.width
 
@@ -311,7 +316,7 @@ Item {
           lineWidth: InputStyle.mapLineWidth / 2
 
           mapSettings: mapCanvas.mapSettings
-          geometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
+          geometry: trackingHighlight.highlightGeometry
         }
 
         Component.onCompleted: {

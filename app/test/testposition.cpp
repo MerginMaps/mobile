@@ -26,6 +26,8 @@
 #include "position/providers/positionprovidersmodel.h"
 #include "position/mapposition.h"
 
+#include "position/tracking/positiontrackinghighlight.h"
+
 #include "testutils.h"
 
 #include "inputmapcanvasmap.h"
@@ -359,4 +361,74 @@ void TestPosition::testPositionTracking()
 
   // TODO: test adding points, position change, invalid layers, turning on/off, and triggering autosync
   QVERIFY( true );
+}
+
+void TestPosition::testPositionTrackingHighlight()
+{
+  // simulate some tracking path and check if the map position is added correctly to the geometry
+  PositionTrackingHighlight trackingHighlight;
+
+  // nothing tracked so far
+  QgsGeometry g;
+  QgsPoint p = QgsPoint( 10, 10, 10 );
+
+  trackingHighlight.setTrackedGeometry( g );
+  trackingHighlight.setMapPosition( p );
+
+  QVERIFY( trackingHighlight.highlightGeometry().isEmpty() );
+
+  // empty linestring
+  g = QgsGeometry::fromPolyline( {} );
+  p = QgsPoint( 10, 10, 10 );
+
+  trackingHighlight.setTrackedGeometry( g );
+  trackingHighlight.setMapPosition( p );
+
+  QVERIFY( trackingHighlight.highlightGeometry().isEmpty() );
+
+  // one point in the tracked geo
+  g = QgsGeometry::fromPolyline( { QgsPoint( 5, 5, 5, 5 ) } );
+  p = QgsPoint( 10, 10, 10 );
+
+  trackingHighlight.setTrackedGeometry( g );
+  trackingHighlight.setMapPosition( p );
+
+  QString result = QStringLiteral( "LineStringZM (5 5 5 5, 10 10 10 nan)" );
+
+  QCOMPARE( trackingHighlight.highlightGeometry().asWkt( 1 ), result );
+
+  // two points in the tracked geo
+  g = QgsGeometry::fromPolyline( { QgsPoint( 5, 5, 5, 5 ), QgsPoint( 6, 6, 5, 5 ) } );
+  p = QgsPoint( 10, 10, 10 );
+
+  trackingHighlight.setTrackedGeometry( g );
+  trackingHighlight.setMapPosition( p );
+
+  result = QStringLiteral( "LineStringZM (5 5 5 5, 6 6 5 5, 10 10 10 nan)" );
+
+  QCOMPARE( trackingHighlight.highlightGeometry().asWkt( 1 ), result );
+
+  // three points in the tracked geo
+  g = QgsGeometry::fromPolyline( { QgsPoint( 5, 5, 5, 5 ), QgsPoint( 6, 6, 5, 5 ), QgsPoint( 7, 7, 5, 5 ) } );
+  p = QgsPoint( 10, 10, 10 );
+
+  trackingHighlight.setTrackedGeometry( g );
+  trackingHighlight.setMapPosition( p );
+
+  result = QStringLiteral( "LineStringZM (5 5 5 5, 6 6 5 5, 7 7 5 5, 10 10 10 nan)" );
+
+  QCOMPARE( trackingHighlight.highlightGeometry().asWkt( 1 ), result );
+
+  // change map position
+  p = QgsPoint( 20, 20, 20 );
+  trackingHighlight.setMapPosition( p );
+
+  result = QStringLiteral( "LineStringZM (5 5 5 5, 6 6 5 5, 7 7 5 5, 20 20 20 nan)" );
+  QCOMPARE( trackingHighlight.highlightGeometry().asWkt( 1 ), result );
+
+  // lost map position
+  p = QgsPoint();
+  trackingHighlight.setMapPosition( p );
+
+  QVERIFY( trackingHighlight.highlightGeometry().isEmpty() );
 }
