@@ -430,6 +430,8 @@ ApplicationWindow {
         id: gpsDataPage
 
         onBack: {
+          stateManager.state = "map"
+          map.state = "view"
           mainPanel.focus = true
           gpsDataPageLoader.active = false
         }
