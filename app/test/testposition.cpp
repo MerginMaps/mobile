@@ -358,6 +358,11 @@ void TestPosition::testMapPosition()
 
 void TestPosition::testPositionTracking()
 {
+  QString projectDir = TestUtils::testDataDir() + "/tracking";
+  QString projectName = "tracking-project.qgz";
+
+  QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
+
 
   // TODO: test adding points, position change, invalid layers, turning on/off, and triggering autosync
   QVERIFY( true );
