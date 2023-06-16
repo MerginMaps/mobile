@@ -25,7 +25,7 @@ IOSTrackingBackend::IOSTrackingBackend( UpdateFrequency frequency, QObject *pare
       break;
 
     case AbstractTrackingBackend::Occasional:
-      mDistanceFilter = 20;
+      mDistanceFilter = 10;
       break;
   }
 

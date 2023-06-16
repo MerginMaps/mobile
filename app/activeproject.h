@@ -35,9 +35,7 @@ class ActiveProject: public QObject
     Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     Q_PROPERTY( QString mapTheme READ mapTheme WRITE setMapTheme NOTIFY mapThemeChanged )
-
-    Q_PROPERTY( bool positionTrackingAllowed READ positionTrackingAllowed NOTIFY positionTrackingAllowedChanged )
-    Q_PROPERTY( bool isTrackingPosition READ isTrackingPosition WRITE setIsTrackingPosition NOTIFY isTrackingPositionChanged )
+    Q_PROPERTY( bool positionTrackingSupported READ positionTrackingSupported NOTIFY positionTrackingSupportedChanged )
 
   public:
     explicit ActiveProject(
@@ -118,10 +116,7 @@ class ActiveProject: public QObject
 
     const QString &mapTheme() const;
 
-    bool isTrackingPosition() const;
-    void setIsTrackingPosition( bool shouldTrackPosition );
-
-    bool positionTrackingAllowed() const;
+    bool positionTrackingSupported() const;
 
   signals:
     void qgsProjectChanged();
@@ -133,7 +128,6 @@ class ActiveProject: public QObject
     void loadingFinished();
 
     void projectReadingFailed( QString error );
-    void loadingFailedTrackingActive( QString projectPath );
     void reportIssue( QString layerName, QString message );
     void loadingErrorFound();
     void qgisLogChanged();
@@ -146,9 +140,7 @@ class ActiveProject: public QObject
 
     void mapThemeChanged( const QString &mapTheme );
 
-    void isTrackingPositionChanged( bool isTrackingPosition );
-
-    void positionTrackingAllowedChanged();
+    void positionTrackingSupportedChanged();
 
   public slots:
     // Reloads project if current project path matches given path (its the same project)
@@ -182,7 +174,6 @@ class ActiveProject: public QObject
     InputMapSettings *mMapSettings = nullptr;
 
     std::unique_ptr<AutosyncController> mAutosyncController;
-    bool mIsTrackingPosition = false;
 
     QString mProjectLoadingLog;
 

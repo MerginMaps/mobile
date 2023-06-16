@@ -51,3 +51,8 @@ void TestActiveProject::testProjectLoadFailure()
   QVERIFY( !activeProject.localProject().isValid() );
   QVERIFY( spy.count() );
 }
+
+void TestActiveProject::testPositionTrackingFlag()
+{
+  // add the test
+}

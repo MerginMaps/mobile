@@ -53,9 +53,9 @@ Item {
             return minItemNumber
           }
 
-          // subtract invisible dynamic buttons (e.g. when tracking is not allowed )
+          // subtract invisible dynamic buttons (e.g. when tracking is not supported )
 
-          if ( !__activeProject.positionTrackingAllowed )
+          if ( !__activeProject.positionTrackingSupported )
           {
             // and if there is enough size to show the button
             if ( possibleItems > trackingItem.positionInPanel )
@@ -225,7 +225,7 @@ Item {
           property int positionInPanel: 8
 
           height: parent.height
-          visible: panelRow.itemsToShow > positionInPanel && __activeProject.positionTrackingAllowed
+          visible: panelRow.itemsToShow > positionInPanel && __activeProject.positionTrackingSupported
           width: visible ? panelRow.calculatedItemWidth : 0
 
           MainPanelButton {
@@ -233,7 +233,7 @@ Item {
 
             width: mainPanel.itemSize
             text: qsTr("Position tracking")
-            imageSource: __activeProject.isTrackingPosition ? InputStyle.gpsFixedIcon : InputStyle.gpsNotFixedIcon
+            imageSource: InputStyle.mapMarkerIcon
             onActivated: {
               rootMenu.close()
               mainPanel.positionTrackingClicked()
@@ -433,7 +433,7 @@ Item {
 
         MenuItem {
             width: parent.width
-            visible: !trackingItem.visible && __activeProject.positionTrackingAllowed
+            visible: !trackingItem.visible && __activeProject.positionTrackingSupported
             height: visible ? mainPanel.itemSize : 0
 
             ExtendedMenuItem {
@@ -441,7 +441,7 @@ Item {
                 rowHeight: height
                 width: parent.width
                 contentText: qsTr("Position tracking")
-                imageSource: __activeProject.isTrackingPosition ? InputStyle.gpsFixedIcon : InputStyle.gpsNotFixedIcon
+                imageSource: InputStyle.mapMarkerIcon
             }
 
             onClicked: {

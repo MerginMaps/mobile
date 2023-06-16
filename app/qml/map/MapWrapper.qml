@@ -32,6 +32,7 @@ Item {
   readonly property alias mapSettings: mapCanvas.mapSettings
   readonly property alias compass: deviceCompass
 
+  property bool isTrackingPosition: trackingManager?.isTrackingPosition ?? false
   property PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
   signal featureIdentified( var pair )
@@ -277,18 +278,6 @@ Item {
     mapSettings: mapCanvas.mapSettings
   }
 
-  PositionTrackingActiveDialog {
-    id: stopTrackingDialog
-
-    property string projectToSwitch
-
-    onStopRequested: {
-      tracking.item?.storeTrackedPath()
-      __activeProject.isTrackingPosition = false
-      __activeProject.load( projectToSwitch )
-    }
-  }
-
   Loader {
     id: tracking
 
@@ -305,11 +294,20 @@ Item {
 
           variablesManager: __variablesManager
           qgsProject: __activeProject.qgsProject
+
+          onTrackingErrorOccured: (message) => {
+            notify( message )
+          }
+        }
+
+        PositionTrackingHighlight {
+          id: trackingHighlight
+
+          mapPosition: mapPositioning.mapPosition
+          trackedGeometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
         }
 
         Highlight {
-          id: trackingHighlight
-
           height: mapCanvas.height
           width: mapCanvas.width
 
@@ -318,7 +316,7 @@ Item {
           lineWidth: InputStyle.mapLineWidth / 2
 
           mapSettings: mapCanvas.mapSettings
-          geometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
+          geometry: trackingHighlight.highlightGeometry
         }
 
         Component.onCompleted: {
@@ -328,31 +326,11 @@ Item {
         Connections {
           target: __activeProject
 
-          function onLoadingFailedTrackingActive( projectPath ) {
-            stopTrackingDialog.projectToSwitch = projectPath
-            stopTrackingDialog.open()
+          function onProjectWillBeReloaded() {
+            // simply stop tracking
+            root.setTracking( false )
           }
         }
-
-        function storeTrackedPath() {
-          trackingManager.storeTrackedPath()
-        }
-      }
-    }
-  }
-
-  Connections {
-    target: __activeProject
-
-    function onIsTrackingPositionChanged( isTracking ) {
-      if ( isTracking )
-      {
-        tracking.active = true
-      }
-      else
-      {
-        tracking.item?.storeTrackedPath()
-        tracking.active = false
       }
     }
   }
@@ -707,7 +685,7 @@ Item {
     anchors.left: parent.left
     anchors.leftMargin: InputStyle.smallGap
 
-    visible: root.state == "record" || root.state == "edit" || root.state == "split" || root.state == "recordInLayer"
+    visible: root.state === "record" || root.state === "edit" || root.state === "split" || root.state === "recordInLayer"
 
     content: Item {
 
@@ -1246,5 +1224,20 @@ Item {
     // highlights may end up with dangling pointers to map layers and cause crashes)
 
     identifyHighlight.geometry = null
+  }
+
+  function setTracking( shouldTrack ) {
+    if ( shouldTrack ) {
+      if ( root.trackingManager ) {
+        root.trackingManager.tryAgain()
+      }
+      else {
+        tracking.active = true
+      }
+    }
+    else {
+      trackingManager?.storeTrackedPath()
+      tracking.active = false
+    }
   }
 }
