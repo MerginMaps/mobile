@@ -169,8 +169,8 @@ struct TransactionStatus
   QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
   bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
   bool pullBeforePush = false; //!< true when we're first doing update before doing actual upload. Used in sync finalization to figure out whether restart with upload or finish.
-  bool isInitialPush = false; //! true when we are first time uploading the project - migration to Mergin
-  bool gpkgSchemaChanged = false; //! true when GPKG schema changes found
+  bool isInitialPush = false; //!< true when we are first time uploading the project - migration to Mergin
+  bool gpkgSchemaChanged = false; //!< true when GPKG schema changes found
 
   int version = -1;  //!< version to which we are updating / the version which we have uploaded
 

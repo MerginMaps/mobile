@@ -141,12 +141,12 @@ Vai al sito di Mergin Maps per rimuoverlo manualmente.</translation>
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="209"/>
         <source>Looking for more devices</source>
-        <translation>Ricerca nuovi dispositivi</translation>
+        <translation>Ricerca nuovi dispositivi in corso</translation>
     </message>
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="209"/>
         <source>Looking for devices</source>
-        <translation>Ricerca dispositivo</translation>
+        <translation>Ricerca dispositivo in corso</translation>
     </message>
 </context>
 <context>
@@ -511,7 +511,7 @@ Vai al sito di Mergin Maps per rimuoverlo manualmente.</translation>
     <message>
         <location filename="../qml/form/FeatureToolbar.qml" line="174"/>
         <source>Split geometry</source>
-        <translation>Dividi Geometria</translation>
+        <translation>Dividi geometria</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureToolbar.qml" line="192"/>
@@ -630,7 +630,7 @@ Non verrà aggiunto al progetto.</translation>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="356"/>
         <source>GPS antenna height</source>
-        <translation>altezza antenna GPS</translation>
+        <translation>Altezza antenna GPS</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="357"/>
@@ -1252,7 +1252,7 @@ Non verrà aggiunto al progetto.</translation>
     <message>
         <location filename="../../core/merginapi.cpp" line="1497"/>
         <source>Project detached from Mergin</source>
-        <translation>Il progetto non e&apos; collegato a Mergin</translation>
+        <translation>Il progetto non è collegato a Mergin</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="3532"/>
@@ -1570,7 +1570,7 @@ Premi &apos;Si&apos; per caricarlo.</translation>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="529"/>
         <source>Shared</source>
-        <translation>Shared</translation>
+        <translation>Condivisi</translation>
     </message>
     <message>
         <location filename="../qml/ProjectPanel.qml" line="549"/>
@@ -1982,7 +1982,7 @@ Premi &apos;Si&apos; per caricarlo.</translation>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="242"/>
         <source>GPS antenna height</source>
-        <translation>altezza antenna GPS</translation>
+        <translation>Altezza antenna GPS</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanel.qml" line="243"/>
@@ -2434,7 +2434,7 @@ Vai al sito di Mergin Maps per rimuoverlo manualmente.</translation>
     <message>
         <location filename="../qml/WorkspaceSubscribePage.qml" line="149"/>
         <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
-        <translation>Il tuo piano di abbonamento a Mergin sarà rinnovato automaticamente. Puoi cancellarlo o cambiarlo in qualsiasi momento. %1Leggi di più%2</translation>
+        <translation>Il tuo piano di abbonamento a Mergin sarà rinnovato automaticamente. Puoi cancellarlo o cambiarlo in qualsiasi momento. %1Scopri di più%2</translation>
     </message>
 </context>
 <context>
