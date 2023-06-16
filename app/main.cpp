@@ -418,21 +418,6 @@ int main( int argc, char *argv[] )
   // Initialize translations
   QLocale locale;
 
-  /*
-   * We need to fix locale country code (capital letters after underscore)
-   * in system locale, because QT tries to do exact match, for example:
-   * system locale "en_GB" -> our provided locale "en" would not match and
-   * QT would try to find translation for other system language.
-   *
-   * If it fails it goes through the same process again, but without country code.
-   * We want to match "en_GB" with "en" immediately, thus we remove the country code.
-   *
-   * This fix can be removed from QT 5.15
-   * See: https://github.com/MerginMaps/input/issues/1417
-   * See: QTBUG-86179
-   */
-  locale = InputUtils::fixLocaleCountry( locale );
-
   QTranslator inputTranslator;
   if ( inputTranslator.load( locale, "input", "_", ":/" ) )
   {

@@ -138,9 +138,6 @@ class InputUtils: public QObject
 
     Q_INVOKABLE void quitApp();
 
-    // Removes country code from locale and replaces it with AnyCountry
-    static QLocale fixLocaleCountry( QLocale applocale );
-
     /**
      * Method copies all entries from given source path to destination path. If cannot copy a file for the first time,
      * removes it and tries again (overwrite a file). If failes again, skips the file, sets result to false and continue.
