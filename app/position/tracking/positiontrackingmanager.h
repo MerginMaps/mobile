@@ -72,14 +72,14 @@ class PositionTrackingManager : public QObject
 
     Q_INVOKABLE void tryAgain();
 
+    Q_INVOKABLE void storeTrackedPath();
+
     QDateTime startTime() const;
 
     bool isTrackingPosition() const;
 
   public slots:
     void addPoint( const GeoPosition &position );
-
-    void storeTrackedPath();
 
   signals:
 
