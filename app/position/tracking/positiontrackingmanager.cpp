@@ -73,6 +73,7 @@ void PositionTrackingManager::storeTrackedPath()
 
   // create feature - add tracking variables to scope
   QgsExpressionContextScope *scope = new QgsExpressionContextScope( QStringLiteral( "MM_Tracking" ) );
+  // ownership of the scope will be moved to QgsExpressionContext when the feature is created
   scope->addVariable( QgsExpressionContextScope::StaticVariable( QStringLiteral( "tracking_start_time" ), mTrackingStartTime, true, true ) );
   scope->addVariable( QgsExpressionContextScope::StaticVariable( QStringLiteral( "tracking_end_time" ), QDateTime::currentDateTime(), true, true ) );
 
@@ -246,6 +247,11 @@ AbstractTrackingBackend *PositionTrackingManager::trackingBackend() const
 
 void PositionTrackingManager::setTrackingBackend( AbstractTrackingBackend *newTrackingBackend )
 {
+  if ( mTrackingBackend.get() == newTrackingBackend )
+  {
+    return;
+  }
+
   if ( mTrackingBackend )
   {
     disconnect( mTrackingBackend.get() );
@@ -284,12 +290,6 @@ void PositionTrackingManager::setVariablesManager( VariablesManager *newVariable
     return;
   mVariablesManager = newVariablesManager;
   emit variablesManagerChanged( mVariablesManager );
-}
-
-void PositionTrackingManager::projectReloaded()
-{
-  // clear pointers to previously loaded project, but keep the geometry
-  mQgsProject = nullptr;
 }
 
 QgsCoordinateReferenceSystem PositionTrackingManager::crs() const

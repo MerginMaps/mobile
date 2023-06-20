@@ -8,7 +8,6 @@
  ***************************************************************************/
 
 #include "abstracttrackingbackend.h"
-#include "coreutils.h"
 
 AbstractTrackingBackend::AbstractTrackingBackend( UpdateFrequency updateFrequency, SignalSlotSupport signalSlotSupport, QObject *parent )
   : QObject( parent )
@@ -29,10 +28,6 @@ void AbstractTrackingBackend::notifyListeners( const GeoPosition &position )
   if ( mNotifyFunction )
   {
     mNotifyFunction( position );
-  }
-  else
-  {
-    CoreUtils::log( QStringLiteral( "Tracking backend" ), QStringLiteral( "No way to inform about position update!" ) );
   }
 }
 
