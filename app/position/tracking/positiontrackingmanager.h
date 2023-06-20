@@ -64,13 +64,12 @@ class PositionTrackingManager : public QObject
     VariablesManager *variablesManager() const;
     void setVariablesManager( VariablesManager *newVariablesManager );
 
-    //! Should be called when the same project is reloaded (e.g. there was a change in QGIS project file)
-    Q_INVOKABLE void projectReloaded();
-
     //! Returns CRS of the tracked geometry
     Q_INVOKABLE QgsCoordinateReferenceSystem crs() const;
 
     Q_INVOKABLE void tryAgain();
+
+    Q_INVOKABLE void storeTrackedPath();
 
     QDateTime startTime() const;
 
@@ -78,8 +77,6 @@ class PositionTrackingManager : public QObject
 
   public slots:
     void addPoint( const GeoPosition &position );
-
-    void storeTrackedPath();
 
   signals:
 

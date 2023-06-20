@@ -26,6 +26,8 @@
 #include "position/providers/positionprovidersmodel.h"
 #include "position/mapposition.h"
 
+#include "position/tracking/positiontrackingmanager.h"
+#include "position/tracking/internaltrackingbackend.h"
 #include "position/tracking/positiontrackinghighlight.h"
 
 #include "testutils.h"
@@ -358,14 +360,61 @@ void TestPosition::testMapPosition()
 
 void TestPosition::testPositionTracking()
 {
+  // test adding points to tracking geometry with simulated provider
+
   QString projectDir = TestUtils::testDataDir() + "/tracking";
   QString projectName = "tracking-project.qgz";
 
   QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
 
+  QVERIFY( !PositionTrackingManager::constructTrackingBackend( QgsProject::instance(), nullptr ) ); // should return null without pk
 
-  // TODO: test adding points, position change, invalid layers, turning on/off, and triggering autosync
-  QVERIFY( true );
+  SimulatedPositionProvider *simulatedProvider = new SimulatedPositionProvider( -92.36, 38.93, 0 );
+  positionKit->setPositionProvider( simulatedProvider ); // ownership of the provider is passed to pk
+  simulatedProvider = nullptr;
+
+  QVERIFY( positionKit->positionProvider() );
+
+  PositionTrackingManager manager;
+
+  QSignalSpy isTrackingSpy( &manager, &PositionTrackingManager::isTrackingPositionChanged );
+
+  QVERIFY( manager.trackedGeometry().isEmpty() );
+
+  manager.setQgsProject( QgsProject::instance() );
+  manager.setTrackingBackend( PositionTrackingManager::constructTrackingBackend( QgsProject::instance(), positionKit ) );
+
+  QVERIFY( manager.trackingBackend() );
+
+  QCOMPARE( isTrackingSpy.count(), 1 );
+  QCOMPARE( isTrackingSpy.takeFirst().at( 0 ), true );
+  QCOMPARE( manager.isTrackingPosition(), true );
+
+  QSignalSpy trackingSpy( &manager, &PositionTrackingManager::trackedGeometryChanged );
+
+  trackingSpy.wait( 4000 ); // new position should be emited in 2k ms
+
+  QVERIFY( manager.trackedGeometry().asWkt( 3 ).startsWith( QStringLiteral( "LineStringZM (-92.36 38.93 20" ) ) );
+
+  // store the geometry
+  QgsVectorLayer *trackingLayer = QgsProject::instance()->mapLayer<QgsVectorLayer *>( "tracking_layer_aad89df7_21db_466e_b5c1_a80160f74c01" );
+  QVERIFY( trackingLayer );
+
+  QSignalSpy addedSpy( trackingLayer, &QgsVectorLayer::featureAdded );
+
+  manager.storeTrackedPath();
+
+  QCOMPARE( addedSpy.count(), 2 ); // called twice, once with FID_NEW and second time after commit, with fid>0
+
+  int addedFid = addedSpy.at( 1 ).at( 0 ).toInt();
+  QgsFeature f = trackingLayer->getFeature( addedFid );
+  QVERIFY( f.geometry().asWkt( 3 ).startsWith( QStringLiteral( "LineStringZM (-92.36 38.93 20" ) ) );
+
+  QString datetimeFormat = QStringLiteral( "dd.MM.yyyy hh:mm:ss" );
+  QString dateTrackingStartedFromManager = manager.startTime().toString( datetimeFormat );
+  QString dateTrackingStartedInFeature = f.attribute( QStringLiteral( "tracking_start_time" ) ).toDateTime().toString( datetimeFormat );
+
+  QCOMPARE( dateTrackingStartedFromManager, dateTrackingStartedInFeature );
 }
 
 void TestPosition::testPositionTrackingHighlight()

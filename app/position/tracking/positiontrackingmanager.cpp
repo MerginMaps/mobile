@@ -30,7 +30,7 @@
 #include "qsettings.h"
 
 PositionTrackingManager::PositionTrackingManager( QObject *parent )
-  : QObject{parent}
+  : QObject( parent )
 {
 }
 
@@ -57,7 +57,7 @@ void PositionTrackingManager::addPoint( const GeoPosition &position )
 
 void PositionTrackingManager::storeTrackedPath()
 {
-  if ( !mQgsProject || !mVariablesManager )
+  if ( !mQgsProject )
   {
     CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Can not save tracking feature, missing required properties" ) );
     return;
@@ -76,16 +76,25 @@ void PositionTrackingManager::storeTrackedPath()
 
   // create feature - add tracking variables to scope
   QgsExpressionContextScope *scope = new QgsExpressionContextScope( QStringLiteral( "MM_Tracking" ) );
+  // ownership of the scope will be moved to QgsExpressionContext when the feature is created
   scope->addVariable( QgsExpressionContextScope::StaticVariable( QStringLiteral( "tracking_start_time" ), mTrackingStartTime, true, true ) );
   scope->addVariable( QgsExpressionContextScope::StaticVariable( QStringLiteral( "tracking_end_time" ), QDateTime::currentDateTime(), true, true ) );
 
-  FeatureLayerPair trackedFeature = InputUtils::createFeatureLayerPair( trackingLayer, geometryInLayerCRS, mVariablesManager, scope );
+  FeatureLayerPair trackedFeature;
+
+  if ( mVariablesManager )
+  {
+    trackedFeature = InputUtils::createFeatureLayerPair( trackingLayer, geometryInLayerCRS, mVariablesManager, scope );
+  }
+  else
+  {
+    trackedFeature = InputUtils::createFeatureLayerPair( trackingLayer, geometryInLayerCRS, nullptr, scope );
+  }
 
   trackingLayer->startEditing();
   trackingLayer->addFeature( trackedFeature.featureRef() );
 
   CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Feature created %1" ).arg( trackedFeature.feature().id() ) );
-  CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Feature geometry %1 points: %2" ).arg( mTrackedGeometry.constGet()->vertexCount() ).arg( mTrackedGeometry.asWkt( 4 ) ) );
 
   if ( !trackingLayer->commitChanges() )
   {
@@ -241,6 +250,11 @@ AbstractTrackingBackend *PositionTrackingManager::trackingBackend() const
 
 void PositionTrackingManager::setTrackingBackend( AbstractTrackingBackend *newTrackingBackend )
 {
+  if ( mTrackingBackend.get() == newTrackingBackend )
+  {
+    return;
+  }
+
   if ( mTrackingBackend )
   {
     disconnect( mTrackingBackend.get() );
@@ -279,12 +293,6 @@ void PositionTrackingManager::setVariablesManager( VariablesManager *newVariable
     return;
   mVariablesManager = newVariablesManager;
   emit variablesManagerChanged( mVariablesManager );
-}
-
-void PositionTrackingManager::projectReloaded()
-{
-  // clear pointers to previously loaded project, but keep the geometry
-  mQgsProject = nullptr;
 }
 
 QgsCoordinateReferenceSystem PositionTrackingManager::crs() const
