@@ -10,7 +10,7 @@
 #include "positiontrackinghighlight.h"
 
 PositionTrackingHighlight::PositionTrackingHighlight( QObject *parent )
-  : QObject{parent}
+  : QObject( parent )
 {
   connect( this, &PositionTrackingHighlight::trackedGeometryChanged, this, &PositionTrackingHighlight::recalculate );
   connect( this, &PositionTrackingHighlight::mapPositionChanged, this, &PositionTrackingHighlight::recalculate );

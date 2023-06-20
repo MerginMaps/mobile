@@ -87,8 +87,8 @@ class InputUtils: public QObject
     Q_INVOKABLE double mapSettingsDPR( InputMapSettings *ms );
 
     //! Converts geometry to destination CRS if not already
-    Q_INVOKABLE static QgsGeometry transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, const QgsCoordinateReferenceSystem &destinationCRS, const QgsCoordinateTransformContext &context );
-    Q_INVOKABLE static QgsGeometry transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, QgsVectorLayer *targetLayer );
+    static QgsGeometry transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, QgsVectorLayer *targetLayer );
+    static QgsGeometry transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, const QgsCoordinateReferenceSystem &destinationCRS, const QgsCoordinateTransformContext &context );
 
     //! Helper methods to use for transforming geometry from QML as overriding does not work properly there
     Q_INVOKABLE static QgsGeometry transformGeometryToMapWithLayer( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings );

@@ -11,7 +11,7 @@
 #include "coreutils.h"
 
 AbstractTrackingBackend::AbstractTrackingBackend( UpdateFrequency updateFrequency, SignalSlotSupport signalSlotSupport, QObject *parent )
-  : QObject{ parent }
+  : QObject( parent )
   , mUpdateFrequency( updateFrequency )
   , mSignalSlotSupport( signalSlotSupport )
 {

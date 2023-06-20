@@ -14,7 +14,7 @@ InternalTrackingBackend::InternalTrackingBackend(
   PositionKit *positionKit,
   UpdateFrequency updateFrequency,
   QObject *parent )
-  : AbstractTrackingBackend{ updateFrequency, AbstractTrackingBackend::SignalSlotSupport::Supported, parent }
+  : AbstractTrackingBackend( updateFrequency, AbstractTrackingBackend::SignalSlotSupport::Supported, parent )
   , mLastUpdate( QDateTime::currentDateTime() )
   , mPositionKit( positionKit )
 {

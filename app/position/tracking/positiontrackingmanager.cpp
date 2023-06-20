@@ -27,7 +27,7 @@
 #include "qsettings.h"
 
 PositionTrackingManager::PositionTrackingManager( QObject *parent )
-  : QObject{parent}
+  : QObject( parent )
 {
 }
 
