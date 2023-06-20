@@ -351,3 +351,15 @@ bool FeaturesModel::fetchingResults() const
 {
   return mFetchingResults;
 }
+
+void FeaturesModel::wait() const
+{
+  QEventLoop loop;
+  QObject::connect( this, &FeaturesModel::fetchingResultsChanged, &loop, [&]()
+  {
+    if ( !fetchingResults() )
+      loop.quit();
+  } );
+  if ( fetchingResults() )
+    loop.exec();
+}

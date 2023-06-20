@@ -33,12 +33,15 @@ AbstractEditor {
     if ( !root.isReadOnly )
     {
       vrModel.pair = root.featureLayerPair
+      vrModel.wait()
+      setText()
     }
   }
 
   function setText()
   {
     title.text = vrModel.convertFromQgisType( root.parentValue, FeaturesModel.FeatureTitle ).join( ', ' )
+      console.log("set text called")
   }
 
   function pushVrPage()
@@ -57,6 +60,8 @@ AbstractEditor {
 
   onParentValueChanged: {
     vrModel.pair = root.featureLayerPair
+    vrModel.wait()
+    setText()
   }
 
   onRightActionClicked: pushVrPage()
@@ -80,14 +85,6 @@ AbstractEditor {
         return // ignore invalidate signal if form is not in edit mode
       }
       root.editorValueChanged( "", true )
-    }
-
-    onFetchingResultsChanged: {
-      // we need to re-set the text every time the model is done re-populating
-      if ( !vrModel.fetchingResults )
-      {
-        setText()
-      }
     }
   }
 
@@ -139,6 +136,7 @@ AbstractEditor {
       toolbarVisible: false
 
       onBackButtonClicked: {
+          console.log("onBackButtonClicked")
         root.stackView.pop()
       }
 
@@ -152,6 +150,7 @@ AbstractEditor {
             // We need to convert feature id to string prior to sending it to C++ in order to
             // avoid conversion to scientific notation.
             featureIds = featureIds.map( function(x) { return x.toString() } )
+              console.log(featureIds)
           }
 
           root.editorValueChanged( vrModel.convertToQgisType( featureIds ), isNull )
@@ -163,6 +162,7 @@ AbstractEditor {
           featureIds = featureIds.toString()
 
           root.editorValueChanged( vrModel.convertToKey( featureIds ), false )
+            console.log(featureIds)
         }
         root.stackView.pop()
       }

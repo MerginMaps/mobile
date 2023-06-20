@@ -105,6 +105,7 @@ class FeaturesModel : public QAbstractListModel
 
     int layerFeaturesCount() const;
 
+    Q_INVOKABLE void wait() const;
   signals:
 
     void featuresLimitChanged( int featuresLimit );

@@ -37,6 +37,7 @@ Item {
     if ( resetAfterSelection )
     {
       searchBar.deactivate()
+      vrModel.wait()
     }
     selectionFinished( featureIds )
   }
