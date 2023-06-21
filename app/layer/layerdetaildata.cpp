@@ -48,6 +48,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
     emit isSpatialChanged( mIsSpatial );
     emit isVectorLayerChanged( mIsVectorLayer );
     emit vectorLayerChanged( nullptr );
+    emit mapLayerChanged( nullptr );
     return;
   }
 
@@ -60,6 +61,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
     emit isSpatialChanged( mIsSpatial );
     emit isVectorLayerChanged( mIsVectorLayer );
     emit vectorLayerChanged( nullptr );
+    emit mapLayerChanged( nullptr );
     return;
   }
 
@@ -76,6 +78,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
   emit isVectorLayerChanged( mIsVectorLayer );
 
   emit vectorLayerChanged( vectorLayer() );
+  emit vectorLayerChanged( nodeLayer->layer() );
 
   // listen on visibility change
   connect( mLayerTreeNode, &QgsLayerTreeNode::visibilityChanged, this, [this]( QgsLayerTreeNode * node )
