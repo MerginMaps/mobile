@@ -76,7 +76,7 @@ Item {
     mapSettings: root.map.mapSettings
     insertPolicy: mapTool.insertPolicy
     crosshairPosition: crosshair.screenPoint
-    realGeometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+    realGeometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
 
     activeVertex: mapTool.activeVertex
     activePart: mapTool.activePart
@@ -92,7 +92,7 @@ Item {
     visible: !__inputUtils.isPointLayer(__activeLayer.vectorLayer)
 
     mapSettings: root.map.mapSettings
-    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
 
     lineBorderWidth: 0
   }
@@ -104,7 +104,7 @@ Item {
     width: root.map.width
 
     mapSettings: root.map.mapSettings
-    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
+    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
 
     lineStrokeStyle: ShapePath.DashLine
     lineWidth: InputStyle.guidelineWidth
@@ -130,7 +130,7 @@ Item {
     width: root.map.width
 
     mapSettings: root.map.mapSettings
-    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
+    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
 
     markerType: "circle"
     markerSize: InputStyle.mapMarkerSize
@@ -144,7 +144,7 @@ Item {
     width: root.map.width
 
     mapSettings: root.map.mapSettings
-    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
+    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
 
     markerType: "circle"
     markerSize: InputStyle.mapMarkerSizeBig

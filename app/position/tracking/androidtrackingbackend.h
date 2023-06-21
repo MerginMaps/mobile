@@ -7,28 +7,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TESTACTIVEPROJECT_H
-#define TESTACTIVEPROJECT_H
+#ifndef ANDROIDTRACKINGBACKEND_H
+#define ANDROIDTRACKINGBACKEND_H
 
+#include "abstracttrackingbackend.h"
 #include <QObject>
-#include <merginapi.h>
+#include <qglobal.h>
 
-class TestActiveProject : public QObject
+class AndroidTrackingBackend : public AbstractTrackingBackend
 {
     Q_OBJECT
   public:
-    explicit TestActiveProject( MerginApi *api );
-    ~TestActiveProject();
+    explicit AndroidTrackingBackend( AbstractTrackingBackend::UpdateFrequency frequency, QObject *parent = nullptr );
+    virtual ~AndroidTrackingBackend();
 
-  private slots:
-    void init();
-    void cleanup();
+    static AndroidTrackingBackend *instance() { return mInstance; };
 
-    void testProjectLoadFailure();
-    void testPositionTrackingFlag();
+    void update( double longitude, double latitude, double altitude );
 
   private:
-    MerginApi *mApi;
+
+    static AndroidTrackingBackend *mInstance;
+
+    void startForegroundService();
+
+    qreal mDistanceFilter = 0;
+    qreal mUpdateInterval = 0; // ms
 };
 
-#endif // TESTACTIVEPROJECT_H
+#endif // ANDROIDTRACKINGBACKEND_H

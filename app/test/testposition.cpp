@@ -16,15 +16,19 @@
 #include "qgsapplication.h"
 #include "appsettings.h"
 #include "position/positionkit.h"
-#include "position/simulatedpositionprovider.h"
+#include "position/providers/simulatedpositionprovider.h"
 
 #ifdef HAVE_BLUETOOTH
-#include "position/bluetoothpositionprovider.h"
+#include "position/providers/bluetoothpositionprovider.h"
 #endif
 
-#include "position/internalpositionprovider.h"
+#include "position/providers/internalpositionprovider.h"
+#include "position/providers/positionprovidersmodel.h"
 #include "position/mapposition.h"
-#include "position/positionprovidersmodel.h"
+
+#include "position/tracking/positiontrackingmanager.h"
+#include "position/tracking/internaltrackingbackend.h"
+#include "position/tracking/positiontrackinghighlight.h"
 
 #include "testutils.h"
 
@@ -352,4 +356,133 @@ void TestPosition::testMapPosition()
 
   QVERIFY( !positionUpdateSpy2.isEmpty() );
   QVERIFY( mapPosition.mapPosition() != oldmappos );
+}
+
+void TestPosition::testPositionTracking()
+{
+  // test adding points to tracking geometry with simulated provider
+
+  QString projectDir = TestUtils::testDataDir() + "/tracking";
+  QString projectName = "tracking-project.qgz";
+
+  QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
+
+  QVERIFY( !PositionTrackingManager::constructTrackingBackend( QgsProject::instance(), nullptr ) ); // should return null without pk
+
+  SimulatedPositionProvider *simulatedProvider = new SimulatedPositionProvider( -92.36, 38.93, 0 );
+  positionKit->setPositionProvider( simulatedProvider ); // ownership of the provider is passed to pk
+  simulatedProvider = nullptr;
+
+  QVERIFY( positionKit->positionProvider() );
+
+  PositionTrackingManager manager;
+
+  QSignalSpy isTrackingSpy( &manager, &PositionTrackingManager::isTrackingPositionChanged );
+
+  QVERIFY( manager.trackedGeometry().isEmpty() );
+
+  manager.setQgsProject( QgsProject::instance() );
+  manager.setTrackingBackend( PositionTrackingManager::constructTrackingBackend( QgsProject::instance(), positionKit ) );
+
+  QVERIFY( manager.trackingBackend() );
+
+  QCOMPARE( isTrackingSpy.count(), 1 );
+  QCOMPARE( isTrackingSpy.takeFirst().at( 0 ), true );
+  QCOMPARE( manager.isTrackingPosition(), true );
+
+  QSignalSpy trackingSpy( &manager, &PositionTrackingManager::trackedGeometryChanged );
+
+  trackingSpy.wait( 4000 ); // new position should be emited in 2k ms
+
+  QVERIFY( manager.trackedGeometry().asWkt( 3 ).startsWith( QStringLiteral( "LineStringZM (-92.36 38.93 20" ) ) );
+
+  // store the geometry
+  QgsVectorLayer *trackingLayer = QgsProject::instance()->mapLayer<QgsVectorLayer *>( "tracking_layer_aad89df7_21db_466e_b5c1_a80160f74c01" );
+  QVERIFY( trackingLayer );
+
+  QSignalSpy addedSpy( trackingLayer, &QgsVectorLayer::featureAdded );
+
+  manager.storeTrackedPath();
+
+  QCOMPARE( addedSpy.count(), 2 ); // called twice, once with FID_NEW and second time after commit, with fid>0
+
+  int addedFid = addedSpy.at( 1 ).at( 0 ).toInt();
+  QgsFeature f = trackingLayer->getFeature( addedFid );
+  QVERIFY( f.geometry().asWkt( 3 ).startsWith( QStringLiteral( "LineStringZM (-92.36 38.93 20" ) ) );
+
+  QString datetimeFormat = QStringLiteral( "dd.MM.yyyy hh:mm:ss" );
+  QString dateTrackingStartedFromManager = manager.startTime().toString( datetimeFormat );
+  QString dateTrackingStartedInFeature = f.attribute( QStringLiteral( "tracking_start_time" ) ).toDateTime().toString( datetimeFormat );
+
+  QCOMPARE( dateTrackingStartedFromManager, dateTrackingStartedInFeature );
+}
+
+void TestPosition::testPositionTrackingHighlight()
+{
+  // simulate some tracking path and check if the map position is added correctly to the geometry
+  PositionTrackingHighlight trackingHighlight;
+
+  // nothing tracked so far
+  QgsGeometry g;
+  QgsPoint p = QgsPoint( 10, 10, 10 );
+
+  trackingHighlight.setTrackedGeometry( g );
+  trackingHighlight.setMapPosition( p );
+
+  QVERIFY( trackingHighlight.highlightGeometry().isEmpty() );
+
+  // empty linestring
+  g = QgsGeometry::fromPolyline( {} );
+  p = QgsPoint( 10, 10, 10 );
+
+  trackingHighlight.setTrackedGeometry( g );
+  trackingHighlight.setMapPosition( p );
+
+  QVERIFY( trackingHighlight.highlightGeometry().isEmpty() );
+
+  // one point in the tracked geo
+  g = QgsGeometry::fromPolyline( { QgsPoint( 5, 5, 5, 5 ) } );
+  p = QgsPoint( 10, 10, 10 );
+
+  trackingHighlight.setTrackedGeometry( g );
+  trackingHighlight.setMapPosition( p );
+
+  QString result = QStringLiteral( "LineStringZM (5 5 5 5, 10 10 10 nan)" );
+
+  QCOMPARE( trackingHighlight.highlightGeometry().asWkt( 1 ), result );
+
+  // two points in the tracked geo
+  g = QgsGeometry::fromPolyline( { QgsPoint( 5, 5, 5, 5 ), QgsPoint( 6, 6, 5, 5 ) } );
+  p = QgsPoint( 10, 10, 10 );
+
+  trackingHighlight.setTrackedGeometry( g );
+  trackingHighlight.setMapPosition( p );
+
+  result = QStringLiteral( "LineStringZM (5 5 5 5, 6 6 5 5, 10 10 10 nan)" );
+
+  QCOMPARE( trackingHighlight.highlightGeometry().asWkt( 1 ), result );
+
+  // three points in the tracked geo
+  g = QgsGeometry::fromPolyline( { QgsPoint( 5, 5, 5, 5 ), QgsPoint( 6, 6, 5, 5 ), QgsPoint( 7, 7, 5, 5 ) } );
+  p = QgsPoint( 10, 10, 10 );
+
+  trackingHighlight.setTrackedGeometry( g );
+  trackingHighlight.setMapPosition( p );
+
+  result = QStringLiteral( "LineStringZM (5 5 5 5, 6 6 5 5, 7 7 5 5, 10 10 10 nan)" );
+
+  QCOMPARE( trackingHighlight.highlightGeometry().asWkt( 1 ), result );
+
+  // change map position
+  p = QgsPoint( 20, 20, 20 );
+  trackingHighlight.setMapPosition( p );
+
+  result = QStringLiteral( "LineStringZM (5 5 5 5, 6 6 5 5, 7 7 5 5, 20 20 20 nan)" );
+  QCOMPARE( trackingHighlight.highlightGeometry().asWkt( 1 ), result );
+
+  // lost map position
+  p = QgsPoint();
+  trackingHighlight.setMapPosition( p );
+
+  QVERIFY( trackingHighlight.highlightGeometry().isEmpty() );
 }

@@ -7,17 +7,17 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "positionkit.h"
+#include "position/positionkit.h"
 #include "coreutils.h"
 
 #include "qgis.h"
 
 #ifdef HAVE_BLUETOOTH
-#include "bluetoothpositionprovider.h"
+#include "position/providers/bluetoothpositionprovider.h"
 #endif
 
-#include "internalpositionprovider.h"
-#include "simulatedpositionprovider.h"
+#include "position/providers/internalpositionprovider.h"
+#include "position/providers/simulatedpositionprovider.h"
 
 #include "appsettings.h"
 #include "inpututils.h"

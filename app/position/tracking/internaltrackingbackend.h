@@ -7,28 +7,27 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TESTACTIVEPROJECT_H
-#define TESTACTIVEPROJECT_H
+#ifndef INTERNALTRACKINGBACKEND_H
+#define INTERNALTRACKINGBACKEND_H
 
-#include <QObject>
-#include <merginapi.h>
+#include "abstracttrackingbackend.h"
 
-class TestActiveProject : public QObject
+#include <qglobal.h>
+
+class PositionKit;
+
+class InternalTrackingBackend : public AbstractTrackingBackend
 {
     Q_OBJECT
   public:
-    explicit TestActiveProject( MerginApi *api );
-    ~TestActiveProject();
-
-  private slots:
-    void init();
-    void cleanup();
-
-    void testProjectLoadFailure();
-    void testPositionTrackingFlag();
+    explicit InternalTrackingBackend( PositionKit *positionKit, AbstractTrackingBackend::UpdateFrequency updateFrequency, QObject *parent = nullptr );
 
   private:
-    MerginApi *mApi;
+
+    QDateTime mLastUpdate;
+    double mUpdateInterval = 0; // ms
+
+    PositionKit *mPositionKit = nullptr; // not owned
 };
 
-#endif // TESTACTIVEPROJECT_H
+#endif // INTERNALTRACKINGBACKEND_H

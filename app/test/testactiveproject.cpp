@@ -51,3 +51,39 @@ void TestActiveProject::testProjectLoadFailure()
   QVERIFY( !activeProject.localProject().isValid() );
   QVERIFY( spy.count() );
 }
+
+void TestActiveProject::testPositionTrackingFlag()
+{
+  // Load two different projects (one with tracking, one without) and make sure that
+  // the position tracking availability is correctly set
+
+  AppSettings as;
+  ActiveLayer al;
+  LayersModel lm;
+  LayersProxyModel lpm( &lm, LayerModelTypes::ActiveLayerSelection );
+  ActiveProject activeProject( as, al, lpm, mApi->localProjectsManager() );
+
+  // project "planes" - tracking not enabled
+  QString projectDir = TestUtils::testDataDir() + "/planes/";
+  QString projectName = "quickapp_project.qgs";
+
+  mApi->localProjectsManager().addLocalProject( projectDir, projectName );
+
+  QSignalSpy spy( &activeProject, &ActiveProject::positionTrackingSupportedChanged );
+
+  activeProject.load( projectDir + projectName );
+
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( activeProject.positionTrackingSupported(), false );
+
+  // project "tracking" - tracking enabled
+  projectDir = TestUtils::testDataDir() + "/tracking/";
+  projectName = "tracking-project.qgz";
+
+  mApi->localProjectsManager().addLocalProject( projectDir, projectName );
+
+  activeProject.load( projectDir + projectName );
+
+  QCOMPARE( spy.count(), 2 );
+  QCOMPARE( activeProject.positionTrackingSupported(), true );
+}

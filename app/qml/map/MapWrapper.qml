@@ -12,6 +12,7 @@ import QtQuick
 import lc 1.0
 import QtQuick.Dialogs
 import QtQuick.Layouts
+import QtQuick.Shapes
 
 import ".."
 import "../components"
@@ -30,6 +31,9 @@ Item {
 
   readonly property alias mapSettings: mapCanvas.mapSettings
   readonly property alias compass: deviceCompass
+
+  property bool isTrackingPosition: trackingManager?.isTrackingPosition ?? false
+  property PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
   signal featureIdentified( var pair )
   signal nothingIdentified()
@@ -272,6 +276,63 @@ Item {
     anchors.fill: mapCanvas
 
     mapSettings: mapCanvas.mapSettings
+  }
+
+  Loader {
+    id: tracking
+
+    anchors.fill: mapCanvas
+    asynchronous: true
+    active: false
+
+    sourceComponent: Component {
+      Item {
+        property alias manager: trackingManager
+
+        PositionTrackingManager {
+          id: trackingManager
+
+          variablesManager: __variablesManager
+          qgsProject: __activeProject.qgsProject
+
+          onTrackingErrorOccured: (message) => {
+            notify( message )
+          }
+        }
+
+        PositionTrackingHighlight {
+          id: trackingHighlight
+
+          mapPosition: mapPositioning.mapPosition
+          trackedGeometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
+        }
+
+        Highlight {
+          height: mapCanvas.height
+          width: mapCanvas.width
+
+          markerColor: InputStyle.highlightColor
+          lineColor: InputStyle.highlightColor
+          lineWidth: InputStyle.mapLineWidth / 2
+
+          mapSettings: mapCanvas.mapSettings
+          geometry: trackingHighlight.highlightGeometry
+        }
+
+        Component.onCompleted: {
+          trackingManager.trackingBackend = trackingManager.constructTrackingBackend( __activeProject.qgsProject, __positionKit )
+        }
+
+        Connections {
+          target: __activeProject
+
+          function onProjectWillBeReloaded() {
+            // simply stop tracking
+            root.setTracking( false )
+          }
+        }
+      }
+    }
   }
 
   PositionMarker {
@@ -624,7 +685,7 @@ Item {
     anchors.left: parent.left
     anchors.leftMargin: InputStyle.smallGap
 
-    visible: root.state == "record" || root.state == "edit" || root.state == "split" || root.state == "recordInLayer"
+    visible: root.state === "record" || root.state === "edit" || root.state === "split" || root.state === "recordInLayer"
 
     content: Item {
 
@@ -1123,7 +1184,7 @@ Item {
 
   function highlightPair( pair ) {
     let geometry = __inputUtils.extractGeometry( pair )
-    identifyHighlight.geometry = __inputUtils.convertGeometryToMapCRS( geometry, pair.layer, mapCanvas.mapSettings )
+    identifyHighlight.geometry = __inputUtils.transformGeometryToMapWithLayer( geometry, pair.layer, mapCanvas.mapSettings )
   }
 
   function hideHighlight() {
@@ -1163,5 +1224,20 @@ Item {
     // highlights may end up with dangling pointers to map layers and cause crashes)
 
     identifyHighlight.geometry = null
+  }
+
+  function setTracking( shouldTrack ) {
+    if ( shouldTrack ) {
+      if ( root.trackingManager ) {
+        root.trackingManager.tryAgain()
+      }
+      else {
+        tracking.active = true
+      }
+    }
+    else {
+      trackingManager?.storeTrackedPath()
+      tracking.active = false
+    }
   }
 }

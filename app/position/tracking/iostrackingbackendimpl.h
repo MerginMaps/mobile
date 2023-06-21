@@ -7,28 +7,23 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TESTACTIVEPROJECT_H
-#define TESTACTIVEPROJECT_H
+#ifndef IOSTRACKINGBACKENDIMPL_H
+#define IOSTRACKINGBACKENDIMPL_H
 
-#include <QObject>
-#include <merginapi.h>
+#import <CoreFoundation/CoreFoundation.h>
+#import <CoreLocation/CoreLocation.h>
 
-class TestActiveProject : public QObject
+#import "iostrackingbackend.h"
+
+@interface IOSTrackingBackendImpl : NSObject<CLLocationManagerDelegate>
 {
-    Q_OBJECT
-  public:
-    explicit TestActiveProject( MerginApi *api );
-    ~TestActiveProject();
+  IOSTrackingBackend *mObserver;
+  CLLocationManager *mManager;
+}
 
-  private slots:
-    void init();
-    void cleanup();
+-( id )initWithObserver:( IOSTrackingBackend * )iosObserver;
+-( NSString * )setup:( double )distanceFilter;
 
-    void testProjectLoadFailure();
-    void testPositionTrackingFlag();
+@end
 
-  private:
-    MerginApi *mApi;
-};
-
-#endif // TESTACTIVEPROJECT_H
+#endif // IOSTRACKINGBACKENDIMPL_H

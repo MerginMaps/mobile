@@ -50,13 +50,15 @@ struct LocalProject
 
   public:
 
+    Q_PROPERTY( QString qgisProjectFilePath MEMBER qgisProjectFilePath )
+
     LocalProject() {};
     ~LocalProject() {};
 
     QString projectName;
     QString projectNamespace;
 
-    QString id() const; //!< projectFullName for time being
+    Q_INVOKABLE QString id() const; //! projectFullName for time being
     QString fullName() const;
 
     QString projectDir;

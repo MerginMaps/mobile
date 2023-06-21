@@ -19,6 +19,7 @@ QtObject {
     property color panelBackground2: "#C6CCC7"
     property color activeButtonColor: "#006146"
     property color actionColor: "#FD9626"
+    property color actionColorDown: "#faa64b"
     property color invalidButtonColor: "red"
     property color learnMoreLinkColor: "darkblue"
 
@@ -94,6 +95,7 @@ QtObject {
     property real innerFieldMargin: 10 * __dp
     property real outerFieldMargin: 20 * __dp
     property real formSpacing: 10 * __dp
+    property real verticalSpaceM: 15 * __dp
 
     property real listMargins: 10 * __dp
     property real listMarginsSmall: 5 * __dp

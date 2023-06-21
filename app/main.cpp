@@ -103,8 +103,10 @@
 #include "qgsproject.h"
 #include "bluetoothdiscoverymodel.h"
 #include "position/mapposition.h"
-#include "position/positionprovidersmodel.h"
-#include "position/abstractpositionprovider.h"
+#include "position/providers/positionprovidersmodel.h"
+#include "position/providers/abstractpositionprovider.h"
+#include "position/tracking/positiontrackingmanager.h"
+#include "position/tracking/positiontrackinghighlight.h"
 #include "synchronizationmanager.h"
 #include "synchronizationerror.h"
 
@@ -332,6 +334,8 @@ void initDeclarative()
   qmlRegisterType< RelationReferenceFeaturesModel >( "lc", 1, 0, "RelationReferenceFeaturesModel" );
   qmlRegisterType< BluetoothDiscoveryModel >( "lc", 1, 0, "BluetoothDiscoveryModel" );
   qmlRegisterType< PositionProvidersModel >( "lc", 1, 0, "PositionProvidersModel" );
+  qmlRegisterType< PositionTrackingManager >( "lc", 1, 0, "PositionTrackingManager" );
+  qmlRegisterType< PositionTrackingHighlight >( "lc", 1, 0, "PositionTrackingHighlight" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "Input", 0, 1, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "Input", 0, 1, "VectorLayer" );
