@@ -306,6 +306,8 @@ class MerginApi: public QObject
     * \param password Password to given username to log in to Mergin
     */
     Q_INVOKABLE void authorize( const QString &login, const QString &password );
+    void getAuthToken();
+
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void getWorkspaceInfo();
     Q_INVOKABLE void getServiceInfo();
@@ -749,7 +751,6 @@ class MerginApi: public QObject
     static const QSet<QString> sIgnoreExtensions;
     static const QSet<QString> sIgnoreImageExtensions;
     static const QSet<QString> sIgnoreFiles;
-    QEventLoop mAuthLoopEvent;
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
     bool mApiSupportsSubscriptions = false;
     bool mSupportsSelectiveSync = true;

@@ -56,7 +56,7 @@ Item {
   }
 
   function getServiceInfo() {
-    if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK && __merginApi.apiSupportsSubscriptions) {
+    if (__merginApi.userAuth.hasLoginDetails() && __merginApi.apiVersionStatus === MerginApiStatus.OK && __merginApi.apiSupportsSubscriptions) {
         __merginApi.getServiceInfo()
     }
   }
@@ -101,7 +101,7 @@ Item {
       if ( !__merginApi.apiSupportsWorkspaces ) {
         return false;
       }
-      if ( !__merginApi.userAuth.hasAuthData() ) {
+      if ( !__merginApi.userAuth.hasLoginDetails() ) {
         return false;
       }
       // do not show the banner in case of accepting invitation or creating a workspace
@@ -284,7 +284,7 @@ Item {
             MouseArea {
               anchors.fill: parent
               onClicked: {
-                if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK ) {
+                if ( __merginApi.userAuth.hasLoginDetails() && __merginApi.apiVersionStatus === MerginApiStatus.OK ) {
                   __merginApi.getUserInfo()
 
                   if ( __merginApi.apiSupportsSubscriptions ) {
@@ -636,7 +636,7 @@ Item {
 
         onBackClicked: root.hidePanel()
         onAccountClicked: {
-          if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK ) {
+          if ( __merginApi.userAuth.hasLoginDetails() && __merginApi.apiVersionStatus === MerginApiStatus.OK ) {
 
             __merginApi.refreshUserData()
 
@@ -897,7 +897,7 @@ Item {
       toolbarHeight: InputStyle.rowHeightHeader
       onBack: {
         stackView.popOnePageOrClose()
-        if ( !__merginApi.userAuth.hasAuthData() ) {
+        if ( !__merginApi.userAuth.hasLoginDetails() ) {
           root.resetView()
         }
       }
@@ -1093,7 +1093,7 @@ Item {
       stackView.pending = false
 
       if (__merginApi.apiVersionStatus === MerginApiStatus.OK) {
-        if (__merginApi.userAuth.hasAuthData()) {
+        if (__merginApi.userAuth.hasLoginDetails()) {
           root.refreshProjects()
         }
       }
@@ -1108,7 +1108,7 @@ Item {
     function onAuthChanged() {
       stackView.pending = false
 
-      if ( __merginApi.userAuth.hasAuthData() ) {
+      if ( __merginApi.userAuth.hasLoginDetails() ) {
 
         if ( __merginApi.serverType === MerginServerType.OLD || ( stackView.currentItem.objectName === "authPanel" && stackView.currentItem.state === "login" ) ) {
           stackView.popPage( "authPanel" )
@@ -1170,7 +1170,7 @@ Item {
         return;
       }
 
-      if ( !__merginApi.userAuth.hasAuthData() ) {
+      if ( !__merginApi.userAuth.hasLoginDetails() ) {
         return;
       }
 

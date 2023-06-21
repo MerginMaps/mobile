@@ -12,13 +12,14 @@
 MerginUserAuth::MerginUserAuth( QObject *parent )
   : QObject( parent )
 {
-  clear();
 }
 
 void MerginUserAuth::clear()
 {
-  mUsername = "";
+  mLogin = "";
   mPassword = "";
+
+  mUsername = "";
   mAuthToken.clear();
   mTokenExpiration.setTime( QTime() );
   mUserId = -1;
@@ -26,64 +27,130 @@ void MerginUserAuth::clear()
   emit authChanged();
 }
 
-void MerginUserAuth::clearTokenData()
+bool MerginUserAuth::hasLoginDetails() const
 {
-  mTokenExpiration = QDateTime().currentDateTime().addDays( -42 ); // to make it expired arbitrary days ago
-  mAuthToken.clear();
-  emit authChanged();
+  return !mLogin.isEmpty() && !mPassword.isEmpty();
 }
 
-bool MerginUserAuth::hasAuthData()
+bool MerginUserAuth::hasValidToken() const
 {
-  return !mUsername.isEmpty() && !mPassword.isEmpty();
+  return ( !mAuthToken.isEmpty() && mTokenExpiration > QDateTime::currentDateTimeUtc() );
+}
+
+
+void MerginUserAuth::setLoginDetails( const QString login, const QString password )
+{
+  bool changed = false;
+
+  if ( mLogin != login )
+  {
+    mLogin = login;
+    changed = true;
+  }
+
+  if ( mPassword != password )
+  {
+    mPassword = password;
+    changed = true;
+  }
+
+  if ( changed )
+  {
+    mUsername = "";
+    mAuthToken.clear();
+    mTokenExpiration.setTime( QTime() );
+    mUserId = -1;
+
+    emit authChanged();
+  }
 }
 
 void MerginUserAuth::setFromJson( QJsonObject docObj )
 {
+  bool changed = false;
+
   // parse profile data
-  mUserId = docObj.value( QStringLiteral( "user" ) ).toInt();
-  mUsername = docObj.value( QStringLiteral( "username" ) ).toString();
+  int userId = docObj.value( QStringLiteral( "user" ) ).toInt();
+  if ( mUserId != userId )
+  {
+    mUserId = userId;
+    changed = true;
+  }
+
+  QString username = docObj.value( QStringLiteral( "username" ) ).toString();
+  if ( mUsername != username )
+  {
+    mUsername = username;
+    changed = true;
+  }
+
 
   // parse session data
   QJsonObject session = docObj.value( QStringLiteral( "session" ) ).toObject();
-  mAuthToken = session.value( QStringLiteral( "token" ) ).toString().toUtf8();
-  mTokenExpiration = QDateTime::fromString( session.value( QStringLiteral( "expire" ) ).toString(), Qt::ISODateWithMs ).toUTC();
-  emit authChanged();
+  QByteArray authToken = session.value( QStringLiteral( "token" ) ).toString().toUtf8();
+  if ( mAuthToken != authToken )
+  {
+    mAuthToken = authToken;
+    changed = true;
+  }
+
+  QDateTime tokenExpiration = QDateTime::fromString( session.value( QStringLiteral( "expire" ) ).toString(), Qt::ISODateWithMs ).toUTC();
+  if ( mTokenExpiration != tokenExpiration )
+  {
+    mTokenExpiration = tokenExpiration;
+    changed = true;
+  }
+
+  if ( changed )
+  {
+    emit authChanged();
+  }
 }
 
-void MerginUserAuth::saveAuthData()
+void MerginUserAuth::persist()
 {
   QSettings settings;
   settings.beginGroup( "Input/" );
-  settings.setValue( "username", mUsername );
+
+  settings.setValue( "login", mLogin );
   settings.setValue( "password", mPassword );
+
+  settings.setValue( "username", mUsername );
   settings.setValue( "userId", mUserId );
   settings.setValue( "token", mAuthToken );
   settings.setValue( "expire", mTokenExpiration );
+
   settings.endGroup();
 }
 
-void MerginUserAuth::loadAuthData()
+void MerginUserAuth::load()
 {
   QSettings settings;
   settings.beginGroup( QStringLiteral( "Input/" ) );
-  mUsername = settings.value( QStringLiteral( "username" ) ).toString();
+
+  if ( settings.contains( QStringLiteral( "login" ) ) )
+  {
+    mLogin = settings.value( QStringLiteral( "login" ) ).toString();
+  }
+  else
+  {
+    // for backward compatibility for Input App <= 2.2
+    mLogin = settings.value( QStringLiteral( "username" ) ).toString();
+  }
   mPassword = settings.value( QStringLiteral( "password" ) ).toString();
+
+  mUsername = settings.value( QStringLiteral( "username" ) ).toString();
   mUserId = settings.value( QStringLiteral( "userId" ) ).toInt();
   mTokenExpiration = settings.value( QStringLiteral( "expire" ) ).toDateTime();
   mAuthToken = settings.value( QStringLiteral( "token" ) ).toByteArray();
+
   settings.endGroup();
 }
 
-QString MerginUserAuth::username() const
-{
-  return mUsername;
-}
 
-void MerginUserAuth::setUsername( const QString &username )
+QString MerginUserAuth::login() const
 {
-  mUsername = username;
-  emit authChanged();
+  return mLogin;
 }
 
 QString MerginUserAuth::password() const
@@ -91,10 +158,9 @@ QString MerginUserAuth::password() const
   return mPassword;
 }
 
-void MerginUserAuth::setPassword( const QString &password )
+QString MerginUserAuth::username() const
 {
-  mPassword = password;
-  emit authChanged();
+  return mUsername;
 }
 
 int MerginUserAuth::userId() const
@@ -102,30 +168,14 @@ int MerginUserAuth::userId() const
   return mUserId;
 }
 
-void MerginUserAuth::setUserId( int userId )
-{
-  mUserId = userId;
-  emit authChanged();
-}
-
 QByteArray MerginUserAuth::authToken() const
 {
   return mAuthToken;
 }
 
-void MerginUserAuth::setAuthToken( const QByteArray &authToken )
-{
-  mAuthToken = authToken;
-  emit authChanged();
-}
 
 QDateTime MerginUserAuth::tokenExpiration() const
 {
   return mTokenExpiration;
 }
 
-void MerginUserAuth::setTokenExpiration( const QDateTime &tokenExpiration )
-{
-  mTokenExpiration = tokenExpiration;
-  emit authChanged();
-}

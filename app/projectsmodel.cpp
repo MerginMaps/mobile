@@ -543,7 +543,7 @@ void ProjectsModel::onProjectAttachedToMergin( const QString & )
 
 void ProjectsModel::onAuthChanged()
 {
-  if ( !mBackend->userAuth() || !mBackend->userAuth()->hasAuthData() ) // user logged out, clear created and shared lists
+  if ( !mBackend->userAuth() || !mBackend->userAuth()->hasLoginDetails() ) // user logged out, clear created and shared lists
   {
     if ( mModelType == CreatedProjectsModel || mModelType == SharedProjectsModel )
     {

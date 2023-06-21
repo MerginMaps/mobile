@@ -175,7 +175,7 @@ void TestMerginApi::testListProjectsByName()
   // let's invalidate main client's auth token and see if the listProjectsByName gets new one
   // set token's expiration to 3 secs ago
   QDateTime now = QDateTime::currentDateTimeUtc().addSecs( -3 );
-  mApi->userAuth()->setTokenExpiration( now );
+  mApi->userAuth()->mTokenExpiration = now;
 
   QStringList projects;
   projects.append( MerginApi::getFullProjectName( mUsername, projectName ) );
