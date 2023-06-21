@@ -78,7 +78,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
   emit isVectorLayerChanged( mIsVectorLayer );
 
   emit vectorLayerChanged( vectorLayer() );
-  emit vectorLayerChanged( nodeLayer->layer() );
+  emit mapLayerChanged( nodeLayer->layer() );
 
   // listen on visibility change
   connect( mLayerTreeNode, &QgsLayerTreeNode::visibilityChanged, this, [this]( QgsLayerTreeNode * node )
