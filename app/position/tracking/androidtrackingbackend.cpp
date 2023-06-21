@@ -16,8 +16,6 @@ AndroidTrackingBackend *AndroidTrackingBackend::mInstance = nullptr;
 
 static void notifyListenersPositionUpdated( JNIEnv *env, jobject /*this*/, jdouble longitude, jdouble latitude, jdouble altitude )
 {
-  qDebug() << "Qt printing the data:" << longitude << latitude;
-
   AndroidTrackingBackend::instance()->update( longitude, latitude, altitude );
 }
 
