@@ -151,7 +151,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: {
           stackView.pending = true
-          __merginApi.authorize(loginName.text, passwordField.password.text)
+          __merginApi.signIn(loginName.text, passwordField.password.text)
         }
         background: Rectangle {
           color: InputStyle.highlightColor

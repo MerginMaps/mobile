@@ -24,6 +24,13 @@
  *
  * Login details (login + password) is the entry typed by user in login/registration form (and eventually stored/loaded in QSettings)
  * With login details it is possible to request auth data from Mergin server (username, id, token and its expiration)
+ *
+ * We recognize 4 states
+ * 1. we do not have login credentials -> typically before registration or first user login (hasAuthData() == false)
+ * 2. we have login credentials but not auth data (username, id, token) -> typically user entered login credentials, but we were not able to get data from server
+ *    OR we have auth data (username, id, token) -> typically at some point in history we managed to get auth token ( hasAuthData() == true && hasValidToken() == false )
+ * 3. we have VALID auth token -> mean that we have valid auth bearer token from server that is still not expired (hasValidToken() == true)
+ *
  */
 
 class MerginUserAuth: public QObject
@@ -44,11 +51,16 @@ class MerginUserAuth: public QObject
     void authChanged();
 
   public:
-    Q_INVOKABLE bool hasLoginDetails() const;
+    //! Contains login + password
+    Q_INVOKABLE bool hasAuthData() const;
+    //! Contains all data and valid token
     bool hasValidToken() const;
 
-    //! Sets login details
-    void setLoginDetails( const QString login, const QString password );
+    //! Sets login details and clears auth data
+    //! Does not emit any signal, requester should ask for auth if needed
+    void setLoginCredentials( const QString login, const QString password );
+    //! Resets all auth - both login and auth details
+    void clear();
     //! Sets auth data from server JSON response
     void setFromJson( QJsonObject docObj );
 
@@ -56,7 +68,6 @@ class MerginUserAuth: public QObject
     QString login() const;
     //! Returns password for login action
     QString password() const;
-
     //! Returns associated username on Mergin server with login name
     QString username() const;
     //! Returns associated user ID on Mergin server with login name
@@ -66,13 +77,10 @@ class MerginUserAuth: public QObject
     //! Returns expiration time of server generated bearer token
     QDateTime tokenExpiration() const;
 
-    //! Resets all auth - both login and auth details
-    void clear();
-
     //! Persists all data in QSettings
-    void persist();
+    void saveAuthData();
     //! Loads all data from QSettings
-    void load();
+    void loadAuthData();
 
   private:
     QString mLogin;

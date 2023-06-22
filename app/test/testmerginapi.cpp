@@ -80,7 +80,7 @@ void TestMerginApi::initTestCase()
   mApiExtra = new MerginApi( *mLocalProjectsExtra );
   mApiExtra->setApiRoot( mApi->apiRoot() );
   QSignalSpy spyExtra( mApiExtra, &MerginApi::authChanged );
-  mApiExtra->authorize( username, password );
+  mApiExtra->signIn( username, password );
   QVERIFY( spyExtra.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spyExtra.count(), 1 );
 
@@ -2424,7 +2424,7 @@ void TestMerginApi::testRegisterAndDelete()
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
 
   QSignalSpy spyAuth( mApi->userAuth(),  &MerginUserAuth::authChanged );
-  mApi->authorize( username, password );
+  mApi->signIn( username, password );
   QVERIFY( spyAuth.wait( TestUtils::LONG_REPLY * 5 ) );
 
   // now delete user

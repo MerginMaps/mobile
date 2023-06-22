@@ -27,9 +27,14 @@ void MerginUserAuth::clear()
   emit authChanged();
 }
 
-bool MerginUserAuth::hasLoginDetails() const
+bool MerginUserAuth::hasAuthData() const
 {
   return !mLogin.isEmpty() && !mPassword.isEmpty();
+}
+
+bool MerginUserAuth::hasAuth() const
+{
+  return !mAuthToken.isEmpty() && !mUsername.isEmpty() && mUserId >= 0;
 }
 
 bool MerginUserAuth::hasValidToken() const
@@ -38,8 +43,10 @@ bool MerginUserAuth::hasValidToken() const
 }
 
 
-void MerginUserAuth::setLoginDetails( const QString login, const QString password )
+void MerginUserAuth::setLoginCredentials( const QString login, const QString password )
 {
+  Q_ASSERT( !login.isEmpty() && !password.isEmpty() );
+
   bool changed = false;
 
   if ( mLogin != login )
@@ -60,8 +67,6 @@ void MerginUserAuth::setLoginDetails( const QString login, const QString passwor
     mAuthToken.clear();
     mTokenExpiration.setTime( QTime() );
     mUserId = -1;
-
-    emit authChanged();
   }
 }
 
@@ -107,7 +112,7 @@ void MerginUserAuth::setFromJson( QJsonObject docObj )
   }
 }
 
-void MerginUserAuth::persist()
+void MerginUserAuth::saveAuthData()
 {
   QSettings settings;
   settings.beginGroup( "Input/" );
@@ -123,7 +128,7 @@ void MerginUserAuth::persist()
   settings.endGroup();
 }
 
-void MerginUserAuth::load()
+void MerginUserAuth::loadAuthData()
 {
   QSettings settings;
   settings.beginGroup( QStringLiteral( "Input/" ) );

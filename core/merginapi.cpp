@@ -44,6 +44,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   , mWorkspaceInfo( new MerginWorkspaceInfo )
   , mSubscriptionInfo( new MerginSubscriptionInfo )
   , mUserAuth( new MerginUserAuth )
+  , mMerginApiAuthP( new MerginApiAuthP )
 {
   // load cached data if there are any
   QSettings cache;
@@ -66,7 +67,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   QObject::connect( this, &MerginApi::workspaceCreated, this, &MerginApi::getUserInfo );
   QObject::connect( this, &MerginApi::serverTypeChanged, this, [this]()
   {
-    if ( mUserAuth->hasLoginDetails() )
+    if ( mUserAuth->hasAuthData() )
     {
       // do not call /user/profile when user just logged out
       getUserInfo();
@@ -83,7 +84,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::authChanged );
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, [this]()
   {
-    if ( mUserAuth->hasLoginDetails() )
+    if ( mUserAuth->hasAuthData() )
     {
       // do not call /user/profile when user just logged out
       getUserInfo();
@@ -100,7 +101,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   getServerConfig();
   pingMergin();
 
-  if ( mUserAuth->hasLoginDetails() )
+  if ( mUserAuth->hasAuthData() )
   {
     QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::getUserInfo, Qt::SingleShotConnection );
     QObject::connect( this, &MerginApi::userInfoReplyFinished, this, &MerginApi::getWorkspaceInfo, Qt::SingleShotConnection );
@@ -115,7 +116,7 @@ void MerginApi::loadCache()
 
   mServerType = static_cast<MerginServerType::ServerType>( serverType );
 
-  mUserAuth->load();
+  mUserAuth->loadAuthData();
   mUserInfo->loadWorkspacesData();
 }
 
@@ -189,7 +190,7 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
   url.setQuery( query );
 
   // Even if the authorization is not required, it can be include to fetch more results
-  QNetworkRequest request = getDefaultRequest( mUserAuth->hasLoginDetails() );
+  QNetworkRequest request = getDefaultRequest( mUserAuth->hasAuthData() );
   request.setUrl( url );
 
   QString requestId = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
@@ -719,7 +720,7 @@ bool MerginApi::pushProject( const QString &projectNamespace, const QString &pro
   return pushHasStarted;
 }
 
-void MerginApi::authorize( const QString &login, const QString &password )
+void MerginApi::signIn( const QString &login, const QString &password )
 {
   if ( login.isEmpty() || password.isEmpty() )
   {
@@ -728,16 +729,17 @@ void MerginApi::authorize( const QString &login, const QString &password )
     return;
   }
 
-  mUserAuth->blockSignals( true );
-  mUserAuth->setLoginDetails( login, password );
-  mUserAuth->blockSignals( false );
-
-  getAuthToken();
+  CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "New login credentials, requesting new auth token" ) );
+  mUserAuth->setLoginCredentials( login, password );
+  authorize();
 }
 
-void MerginApi::getAuthToken()
+void MerginApi::authorize()
 {
-  Q_ASSERT( mUserAuth->hasLoginDetails() );
+  // Start blocking event loop
+  mAuthLoopEvent.exec();
+
+  Q_ASSERT( mUserAuth->hasAuthData() );
 
   QNetworkRequest request = getDefaultRequest( false );
   QString urlString = mApiRoot + QStringLiteral( "v1/auth/login" );
@@ -1048,7 +1050,7 @@ void MerginApi::saveAuthData()
   settings.setValue( "apiRoot", mApiRoot );
   settings.endGroup();
 
-  mUserAuth->persist();
+  mUserAuth->saveAuthData();
   mUserInfo->clear();
 }
 
@@ -1162,6 +1164,10 @@ void MerginApi::authorizeFinished()
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: authorize" ) );
     }
   }
+  if ( mAuthLoopEvent.isRunning() )
+  {
+    mAuthLoopEvent.exit();
+  }
   r->deleteLater();
 }
 
@@ -1177,7 +1183,7 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
     emit notify( msg );
 
     if ( !username.isEmpty() && !password.isEmpty() ) // log in immediately
-      authorize( username, password );
+      signIn( username, password );
 
     emit registrationSucceeded();
   }
@@ -1239,7 +1245,7 @@ void MerginApi::pingMerginReplyFinished()
 
 void MerginApi::onPlanProductIdChanged()
 {
-  if ( mUserAuth->hasLoginDetails() )
+  if ( mUserAuth->hasAuthData() )
   {
     if ( mServerType == MerginServerType::OLD )
     {
@@ -1290,17 +1296,23 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool w
 
 bool MerginApi::validateAuth()
 {
-  if ( !mUserAuth->hasLoginDetails() )
+  // if we have valid token, nothing to do
+  if ( mUserAuth->hasValidToken() )
   {
+    return true;
+  }
+
+  // if we do not have any credentials to use, force user to login
+  if ( !mUserAuth->hasAuthData() )
+  {
+    CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Missing login credentials" ) );
     emit authRequested();
     return false;
   }
 
-  if ( !mUserAuth->hasValidToken() )
-  {
-    authorize( mUserAuth->username(), mUserAuth->password() );
-    CoreUtils::log( QStringLiteral( "MerginApi" ), QStringLiteral( "Requesting authorization because of missing or expired token." ) );
-  }
+  // So we have credentials but not valid token, request new auth from server
+  CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Requesting new auth token with stored login credentials" ) );
+  authorize();
   return true;
 }
 
@@ -2986,17 +2998,12 @@ MerginProjectsList MerginApi::parseProjectsFromJson( const QJsonDocument &doc )
 
 void MerginApi::refreshAuthToken()
 {
-  if ( !mUserAuth->hasLoginDetails() ||
-       mUserAuth->authToken().isEmpty() )
+  if ( mUserAuth->hasAuthData() &&
+       !mUserAuth->hasValidToken()
+     )
   {
-    CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Can not refresh token, missing credentials" ) );
-    return;
-  }
-
-  if ( mUserAuth->tokenExpiration() < QDateTime::currentDateTimeUtc() )
-  {
-    CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Token has expired, requesting new one" ) );
-    authorize( mUserAuth->username(), mUserAuth->password() );
+    CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Existing token has expired, requesting new one" ) );
+    authorize();
   }
 }
 
@@ -3350,7 +3357,7 @@ void MerginApi::listWorkspaces()
   }
 
   QUrl url( mApiRoot + QStringLiteral( "/v1/workspaces" ) );
-  QNetworkRequest request = getDefaultRequest( mUserAuth->hasLoginDetails() );
+  QNetworkRequest request = getDefaultRequest( mUserAuth->hasAuthData() );
   request.setUrl( url );
 
   QNetworkReply *reply = mManager.get( request );
@@ -3406,7 +3413,7 @@ void MerginApi::listInvitations()
   }
 
   QUrl url( mApiRoot + QStringLiteral( "/v1/workspace/invitations" ) );
-  QNetworkRequest request = getDefaultRequest( mUserAuth->hasLoginDetails() );
+  QNetworkRequest request = getDefaultRequest( mUserAuth->hasAuthData() );
   request.setUrl( url );
 
   QNetworkReply *reply = mManager.get( request );

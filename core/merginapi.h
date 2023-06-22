@@ -36,6 +36,7 @@
 #include "merginuserauth.h"
 
 class Purchasing;
+class MerginApiAuthP;
 
 class RegistrationError
 {
@@ -305,9 +306,7 @@ class MerginApi: public QObject
     * \param username Login user name to Mergin - either username or registered email
     * \param password Password to given username to log in to Mergin
     */
-    Q_INVOKABLE void authorize( const QString &login, const QString &password );
-    void getAuthToken();
-
+    Q_INVOKABLE void signIn( const QString &login, const QString &password );
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void getWorkspaceInfo();
     Q_INVOKABLE void getServiceInfo();
@@ -649,6 +648,17 @@ class MerginApi: public QObject
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
     static QString getApiKey( const QString &serverName );
 
+    //! Uses mUserAuth login credentials to get new or refresh auth token (network request to server)
+    void authorize();
+
+    //! Forces the valid authorization to be present to continue
+    bool validateAuth();
+
+    /** Refreshes auth token if exists but is expired.
+     *  No-op when there is not login credentials present
+     */
+    void refreshAuthToken();
+
     /**
      * Sends non-blocking POST request to the server to upload a file (chunk).
      * \param projectFullName Namespace/name
@@ -680,7 +690,6 @@ class MerginApi: public QObject
     static QByteArray getChecksum( const QString &filePath );
     static QSet<QString> listFiles( const QString &projectPath );
 
-    bool validateAuth();
     void checkMerginVersion( QString apiVersion, bool serverSupportsSubscriptions, QString msg = QStringLiteral() );
 
     /**
@@ -721,10 +730,6 @@ class MerginApi: public QObject
     //! Removes temp folder for project
     void removeProjectsTempFolder( const QString &projectNamespace, const QString &projectName );
 
-    //! Refreshes auth token if it is expired. It does a blocking call to authorize.
-    //! Works only when login, password and token is set in UserAuth
-    void refreshAuthToken();
-
     QNetworkRequest getDefaultRequest( bool withAuth = true );
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
@@ -738,6 +743,7 @@ class MerginApi: public QObject
     MerginWorkspaceInfo *mWorkspaceInfo; //owned by this (qml grouped-properties)
     MerginSubscriptionInfo *mSubscriptionInfo; //owned by this (qml grouped-properties)
     MerginUserAuth *mUserAuth; //owned by this (qml grouped-properties)
+    MerginApiAuthP *mMerginApiAuthP; //owned by this
 
     enum CustomAttribute
     {
@@ -751,6 +757,7 @@ class MerginApi: public QObject
     static const QSet<QString> sIgnoreExtensions;
     static const QSet<QString> sIgnoreImageExtensions;
     static const QSet<QString> sIgnoreFiles;
+    QEventLoop mAuthLoopEvent;
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
     bool mApiSupportsSubscriptions = false;
     bool mSupportsSelectiveSync = true;
