@@ -32,16 +32,10 @@ bool MerginUserAuth::hasAuthData() const
   return !mLogin.isEmpty() && !mPassword.isEmpty();
 }
 
-bool MerginUserAuth::hasAuth() const
-{
-  return !mAuthToken.isEmpty() && !mUsername.isEmpty() && mUserId >= 0;
-}
-
 bool MerginUserAuth::hasValidToken() const
 {
   return ( !mAuthToken.isEmpty() && mTokenExpiration > QDateTime::currentDateTimeUtc() );
 }
-
 
 void MerginUserAuth::setLoginCredentials( const QString login, const QString password )
 {

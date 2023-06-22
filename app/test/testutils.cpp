@@ -56,7 +56,7 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
     qputenv( "TEST_API_PASSWORD", password.toLatin1() );
 
     QSignalSpy authSpy( api, &MerginApi::authChanged );
-    api->signIn( username, password );
+    api->authorize( username, password );
     QVERIFY( authSpy.wait( TestUtils::LONG_REPLY ) );
     QVERIFY( !authSpy.isEmpty() );
 

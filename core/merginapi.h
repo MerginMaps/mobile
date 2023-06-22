@@ -36,7 +36,6 @@
 #include "merginuserauth.h"
 
 class Purchasing;
-class MerginApiAuthP;
 
 class RegistrationError
 {
@@ -306,7 +305,7 @@ class MerginApi: public QObject
     * \param username Login user name to Mergin - either username or registered email
     * \param password Password to given username to log in to Mergin
     */
-    Q_INVOKABLE void signIn( const QString &login, const QString &password );
+    Q_INVOKABLE void authorize( const QString &login, const QString &password );
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void getWorkspaceInfo();
     Q_INVOKABLE void getServiceInfo();
@@ -649,7 +648,7 @@ class MerginApi: public QObject
     static QString getApiKey( const QString &serverName );
 
     //! Uses mUserAuth login credentials to get new or refresh auth token (network request to server)
-    void authorize();
+    void getAuthToken();
 
     //! Forces the valid authorization to be present to continue
     bool validateAuth();
@@ -743,7 +742,6 @@ class MerginApi: public QObject
     MerginWorkspaceInfo *mWorkspaceInfo; //owned by this (qml grouped-properties)
     MerginSubscriptionInfo *mSubscriptionInfo; //owned by this (qml grouped-properties)
     MerginUserAuth *mUserAuth; //owned by this (qml grouped-properties)
-    MerginApiAuthP *mMerginApiAuthP; //owned by this
 
     enum CustomAttribute
     {

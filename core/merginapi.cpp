@@ -44,7 +44,6 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   , mWorkspaceInfo( new MerginWorkspaceInfo )
   , mSubscriptionInfo( new MerginSubscriptionInfo )
   , mUserAuth( new MerginUserAuth )
-  , mMerginApiAuthP( new MerginApiAuthP )
 {
   // load cached data if there are any
   QSettings cache;
@@ -720,7 +719,7 @@ bool MerginApi::pushProject( const QString &projectNamespace, const QString &pro
   return pushHasStarted;
 }
 
-void MerginApi::signIn( const QString &login, const QString &password )
+void MerginApi::authorize( const QString &login, const QString &password )
 {
   if ( login.isEmpty() || password.isEmpty() )
   {
@@ -731,14 +730,14 @@ void MerginApi::signIn( const QString &login, const QString &password )
 
   CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "New login credentials, requesting new auth token" ) );
   mUserAuth->setLoginCredentials( login, password );
-  authorize();
-}
+  getAuthToken();
 
-void MerginApi::authorize()
-{
   // Start blocking event loop
   mAuthLoopEvent.exec();
+}
 
+void MerginApi::getAuthToken()
+{
   Q_ASSERT( mUserAuth->hasAuthData() );
 
   QNetworkRequest request = getDefaultRequest( false );
@@ -756,7 +755,7 @@ void MerginApi::authorize()
 
   QNetworkReply *reply = mManager.post( request, json );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::authorizeFinished );
-  CoreUtils::log( "auth", QStringLiteral( "Requesting authorization: " ) + url.toString() );
+  CoreUtils::log( "Auth", QStringLiteral( "Requesting authorization: " ) + url.toString() );
 }
 
 void MerginApi::registerUser( const QString &username,
@@ -1144,14 +1143,14 @@ void MerginApi::authorizeFinished()
     else
     {
       emit authFailed();
-      CoreUtils::log( "auth", QStringLiteral( "FAILED - invalid JSON response" ) );
+      CoreUtils::log( "Auth", QStringLiteral( "FAILED - invalid JSON response" ) );
       emit notify( "Internal server error during authorization" );
     }
   }
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
-    CoreUtils::log( "auth", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+    CoreUtils::log( "Auth", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
     QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
     int status = statusCode.toInt();
     if ( status == 401 || status == 400 )
@@ -1183,7 +1182,7 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
     emit notify( msg );
 
     if ( !username.isEmpty() && !password.isEmpty() ) // log in immediately
-      signIn( username, password );
+      authorize( username, password );
 
     emit registrationSucceeded();
   }
@@ -1312,7 +1311,11 @@ bool MerginApi::validateAuth()
 
   // So we have credentials but not valid token, request new auth from server
   CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Requesting new auth token with stored login credentials" ) );
-  authorize();
+  getAuthToken();
+
+  // Start blocking event loop
+  mAuthLoopEvent.exec();
+
   return true;
 }
 
@@ -3003,7 +3006,9 @@ void MerginApi::refreshAuthToken()
      )
   {
     CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Existing token has expired, requesting new one" ) );
-    authorize();
+    getAuthToken();
+    // Start blocking event loop
+    mAuthLoopEvent.exec();
   }
 }
 
