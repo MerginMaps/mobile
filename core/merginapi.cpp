@@ -1134,38 +1134,48 @@ void MerginApi::authorizeFinished()
     }
     else
     {
-      mUserAuth->blockSignals( true );
-      mUserAuth->setUsername( QString() ); //clearTokenData emits the authChanged
-      mUserAuth->setPassword( QString() ); //clearTokenData emits the authChanged
-      mUserAuth->blockSignals( false );
-
+      // keep username and password, but clear token
+      // this is problem with internet connection or server
+      // so do not force user to input login credentials again
       mUserAuth->clearTokenData();
       emit authFailed();
-      CoreUtils::log( "auth", QStringLiteral( "FAILED - invalid JSON response" ) );
+      CoreUtils::log( "Auth", QStringLiteral( "FAILED - invalid JSON response" ) );
       emit notify( "Internal server error during authorization" );
     }
   }
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
-    CoreUtils::log( "auth", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
     QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
     int status = statusCode.toInt();
-    if ( status == 401 || status == 400 )
+    CoreUtils::log( "Auth", QStringLiteral( "FAILED - %1. %2 (%3)" ).arg( r->errorString(), serverMsg, QString::number( status ) ) );
+
+    if ( status == 401 )
     {
+      // OK, we have INVALID username or password or
+      // our user got blocked on the server by admin or owner
+      // lets show error to user and let him try different credentials
       emit authFailed();
       emit notify( serverMsg );
+
+      mUserAuth->blockSignals( true );
+      mUserAuth->setUsername( QString() );
+      mUserAuth->setPassword( QString() );
+      mUserAuth->blockSignals( false );
+
     }
     else
     {
+      // keep username and password
+      // this is problem with internet connection or server
+      // so do not force user to input login credentials again
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: authorize" ) );
     }
-    mUserAuth->blockSignals( true );
-    mUserAuth->setUsername( QString() );
-    mUserAuth->setPassword( QString() );
-    mUserAuth->blockSignals( false );
+
+    // in case of any error, just clean token and request new one
     mUserAuth->clearTokenData();
   }
+
   if ( mAuthLoopEvent.isRunning() )
   {
     mAuthLoopEvent.exit();
