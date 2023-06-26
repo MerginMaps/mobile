@@ -25,7 +25,7 @@
 #include "attributetabmodel.h"
 #include "attributeformproxymodel.h"
 #include "attributeformmodel.h"
-
+#include "inpututils.h"
 
 void TestAttributeController::init()
 {
@@ -693,4 +693,43 @@ void TestAttributeController::testFieldsOutsideForm()
       QCOMPARE( controller.featureLayerPair().feature().attribute( 4 ), t.expectedNum2 );
     }
   }
+}
+
+void TestAttributeController::testPhotoRenaming()
+{
+  QString projectName = QStringLiteral( "testPhotoRenaming" );
+  QString projectDir = QDir::tempPath() + "/" + projectName;
+  QString projectFileName = "project.qgz";
+
+  InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir );
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "image_test.jpg" ) ) );
+
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  QgsFeature feat;
+  feat.setValid( true );
+  feat.setFields( surveyLayer->fields(), true );
+  FeatureLayerPair pair( feat, surveyLayer );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+  QCOMPARE( items.size(), 4 );
+
+  controller.setFormValue( items.at( 2 ), QStringLiteral( "test" ) );
+  controller.setFormValue( items.at( 3 ), projectDir + QStringLiteral( "/photo.jpg" ) );
+  controller.save();
+
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 3 ), projectDir + QStringLiteral( "/image_test.jpg" ) );
 }

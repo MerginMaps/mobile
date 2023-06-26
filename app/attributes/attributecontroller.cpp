@@ -941,6 +941,71 @@ bool AttributeController::save()
   if ( !mFeatureLayerPair.layer() )
     return false;
 
+  QgsExpressionContext expressionContext = mFeatureLayerPair.layer()->createExpressionContext();
+  expressionContext << QgsExpressionContextUtils::formScope( mFeatureLayerPair.feature() );
+  if ( mVariablesManager )
+    expressionContext << mVariablesManager->positionScope();
+
+  expressionContext.setFields( mFeatureLayerPair.feature().fields() );
+  expressionContext.setFeature( mFeatureLayerPair.featureRef() );
+
+  // check for new photos
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+  while ( formItemsIterator != mFormItems.end() )
+  {
+    std::shared_ptr<FormItem> item = formItemsIterator.value();
+    if ( item->type() == FormItem::Field && item->editorWidgetType() == QStringLiteral( "ExternalResource" ) )
+    {
+      QVariantMap config = item->editorWidgetConfig();
+      if ( config[ QStringLiteral( "DocumentViewer" ) ] != 1 )
+      {
+        continue;
+      }
+
+      const QgsField field = item->field();
+      if ( item->originalValue() != mFeatureLayerPair.feature().attribute( item->fieldIndex() ) )
+      {
+        QgsExpression exp( QStringLiteral( "@project_folder + '/' + 'image_' + \"notes\" + '.jpg'" ) );
+        exp.prepare( &expressionContext );
+        if ( exp.hasParserError() )
+        {
+          QgsMessageLog::logMessage( tr( "Expression for %1:%2 has parser error: %3" ).arg( mFeatureLayerPair.layer()->name(), field.name(), exp.parserErrorString() ), QStringLiteral( "Input" ), Qgis::Warning );
+          continue;
+        }
+
+        QVariant value = exp.evaluate( &expressionContext );
+        if ( exp.hasEvalError() )
+        {
+          QgsMessageLog::logMessage( tr( "Expression for %1:%2 has evaluation error: %3" ).arg( mFeatureLayerPair.layer()->name(), field.name(), exp.evalErrorString() ), QStringLiteral( "Input" ), Qgis::Warning );
+        }
+        else
+        {
+          QVariant val( value );
+          if ( !field.convertCompatible( val ) )
+          {
+            QgsMessageLog::logMessage( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2 (%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ), QStringLiteral( "Input" ), Qgis::Warning );
+          }
+          else
+          {
+            // rename file
+            QString src = mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString();
+            QString dst = val.toString();
+            if ( InputUtils::renameFile( src, dst ) )
+            {
+              // update feature
+              mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
+              expressionContext.setFeature( featureLayerPair().featureRef() );
+            }
+          }
+        }
+      }
+    }
+
+    ++formItemsIterator;
+  }
+
+  // update their names + update data in the mFeatureLayerPair
+
   if ( !startEditing() )
   {
     return false;

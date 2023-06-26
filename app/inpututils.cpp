@@ -709,6 +709,16 @@ QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime 
   return QString();
 }
 
+bool InputUtils::renameFile( QString &srcPath, QString &dstPath )
+{
+  QFileInfo fi( dstPath );
+  if ( !InputUtils::createDirectory( fi.absoluteDir().path() ) )
+  {
+    return false;
+  }
+  return QFile::rename( srcPath, dstPath );
+}
+
 void InputUtils::showNotification( const QString &message )
 {
   emit showNotificationRequested( message );
