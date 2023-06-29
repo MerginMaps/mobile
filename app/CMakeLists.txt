@@ -42,6 +42,7 @@ set(MM_SRCS
     appsettings.cpp
     autosynccontroller.cpp
     bluetoothdiscoverymodel.cpp
+    changelogmodel.cpp
     codescanner.cpp
     compass.cpp
     featurelayerpair.cpp
@@ -118,6 +119,7 @@ set(MM_HDRS
     appsettings.h
     autosynccontroller.h
     bluetoothdiscoverymodel.h
+    changelogmodel.h
     codescanner.h
     compass.h
     featurelayerpair.h

@@ -90,6 +90,7 @@ set(MM_QML
     AccountPage.qml
     AuthPanel.qml
     Banner.qml
+    ChangelogPanel.qml
     CircularProgressBar.qml
     CodeScanner.qml
     CodeScannerOverlay.qml
