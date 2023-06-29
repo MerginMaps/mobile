@@ -709,7 +709,7 @@ QString InputUtils::renameWithDateTime( const QString &srcPath, const QDateTime 
   return QString();
 }
 
-bool InputUtils::renameFile( QString &srcPath, QString &dstPath )
+bool InputUtils::renameFile( const QString &srcPath, const QString &dstPath )
 {
   QFileInfo fi( dstPath );
   if ( !InputUtils::createDirectory( fi.absoluteDir().path() ) )

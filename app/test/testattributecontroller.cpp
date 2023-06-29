@@ -701,10 +701,13 @@ void TestAttributeController::testPhotoRenaming()
   QString projectDir = QDir::tempPath() + "/" + projectName;
   QString projectFileName = "project.qgz";
 
+  QDir tempDir( projectDir );
+  tempDir.removeRecursively();
+
   InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir );
 
   QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
-  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "image_test.jpg" ) ) );
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
 
   QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
 
@@ -726,10 +729,10 @@ void TestAttributeController::testPhotoRenaming()
   QCOMPARE( items.size(), 4 );
 
   controller.setFormValue( items.at( 2 ), QStringLiteral( "test" ) );
-  controller.setFormValue( items.at( 3 ), projectDir + QStringLiteral( "/photo.jpg" ) );
+  controller.setFormValue( items.at( 3 ), QStringLiteral( "photo.jpg" ) );
   controller.save();
 
   QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
   QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
-  QCOMPARE( controller.featureLayerPair().feature().attribute( 3 ), projectDir + QStringLiteral( "/image_test.jpg" ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 3 ), QStringLiteral( "image_test.jpg" ) );
 }

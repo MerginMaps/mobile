@@ -133,7 +133,7 @@ class InputUtils: public QObject
      * \param dstPath a new name of a file.
      * \result true on success, false otherwise.
      */
-    Q_INVOKABLE static bool renameFile( QString &srcPath, QString &dstPath );
+    Q_INVOKABLE static bool renameFile( const QString &srcPath, const QString &dstPath );
 
     /**
      * Shows notification

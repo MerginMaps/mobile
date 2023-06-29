@@ -941,6 +941,8 @@ bool AttributeController::save()
   if ( !mFeatureLayerPair.layer() )
     return false;
 
+  const QStringList photoFields = QgsProject::instance()->entryList( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoNaming/%1" ).arg( mFeatureLayerPair.layer()->id() ) );
+
   QgsExpressionContext expressionContext = mFeatureLayerPair.layer()->createExpressionContext();
   expressionContext << QgsExpressionContextUtils::formScope( mFeatureLayerPair.feature() );
   if ( mVariablesManager )
@@ -963,9 +965,10 @@ bool AttributeController::save()
       }
 
       const QgsField field = item->field();
-      if ( item->originalValue() != mFeatureLayerPair.feature().attribute( item->fieldIndex() ) )
+      if ( item->originalValue() != mFeatureLayerPair.feature().attribute( item->fieldIndex() ) && photoFields.contains( field.name() ) )
       {
-        QgsExpression exp( QStringLiteral( "@project_folder + '/' + 'image_' + \"notes\" + '.jpg'" ) );
+        QString expString = QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoNaming/%1/%2" ).arg( mFeatureLayerPair.layer()->id() ).arg( field.name() ) );
+        QgsExpression exp( expString );
         exp.prepare( &expressionContext );
         if ( exp.hasParserError() )
         {
@@ -988,12 +991,16 @@ bool AttributeController::save()
           else
           {
             // rename file
-            QString src = mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString();
-            QString dst = val.toString();
+            const QString targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, QgsProject::instance() );
+            const QString prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
+            const QString src = InputUtils::getAbsolutePath( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString(), prefix );
+            QFileInfo fi( src );
+            QString newName = QStringLiteral( "%1.%2" ).arg( val.toString() ).arg( fi.completeSuffix() );
+            const QString dst = InputUtils::getAbsolutePath( newName, prefix );
             if ( InputUtils::renameFile( src, dst ) )
             {
               // update feature
-              mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
+              mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), newName );
               expressionContext.setFeature( featureLayerPair().featureRef() );
             }
           }
