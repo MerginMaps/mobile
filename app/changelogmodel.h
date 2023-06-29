@@ -7,39 +7,40 @@
 
 struct Changelog
 {
-    QString title;
-    QString description;
-    QString link;
-    QDateTime date;
+  QString title;
+  QString description;
+  QString link;
+  QDateTime date;
 };
 
 class ChangelogModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_ENUMS(MyRoles)
+    Q_ENUMS( MyRoles )
 
-public:
-    enum MyRoles {
-        TitleRole = Qt::UserRole + 1, DescriptionRole, LinkRole, DateRole
+  public:
+    enum MyRoles
+    {
+      TitleRole = Qt::UserRole + 1, DescriptionRole, LinkRole, DateRole
     };
 
-    ChangelogModel(QObject *parent = nullptr);
+    ChangelogModel( QObject *parent = nullptr );
 
-    QHash<int,QByteArray> roleNames() const override;
-    int rowCount(const QModelIndex & parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
+    QHash<int, QByteArray> roleNames() const override;
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
+    QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 
-    Q_INVOKABLE void seeChangelogs(bool all = false);
+    Q_INVOKABLE void seeChangelogs( bool all = false );
 
-private slots:
-    void onFinished(QNetworkReply* reply);
+  private slots:
+    void onFinished( QNetworkReply *reply );
 
-signals:
-    void finished(const QString& title, const QString& link);
+  signals:
+    void finished( const QString &title, const QString &link );
 
-private:
+  private:
     QList<Changelog> _logs;
-    QNetworkAccessManager* _networkManager;
+    QNetworkAccessManager *_networkManager;
     QDateTime _lastSeen;
 };
 

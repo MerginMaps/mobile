@@ -53,109 +53,82 @@ Item {
       withBackButton: true
     }
 
-
-    //    Flickable {
-    //      id: flickableItem
-    //      clip: true
-    //      anchors.horizontalCenter: parent.horizontalCenter
-    //      width: root.width - InputStyle.panelMargin
-    //      height: parent.height
-    //      contentHeight: txt.height
-    //      contentWidth: width
-    //      maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
-
-    //      Text {
-    //        id: txt
-    //        text: "<style>" + "a:link { color: " + InputStyle.highlightColor
-    //              + "; text-decoration: underline; }" + "p.odd { color: "
-    //              + InputStyle.fontColorBright + "; }" + "</style>" + root.text
-    //        font.pixelSize: InputStyle.fontPixelSizeNormal
-    //        color: InputStyle.fontColor
-    //        textFormat: Text.RichText
-    //        wrapMode: Text.WordWrap
-    //        width: parent.width
-    //      }
-
-    //      ScrollBar.vertical: ScrollBar { }
-    //    }
-
-
     Item {
-        id: changelogItem
+      id: changelogItem
+      anchors.horizontalCenter: parent.horizontalCenter
+      width: root.width - InputStyle.panelMargin
+      height: parent.height
+
+      Component.onCompleted: changelogView.model.seeChangelogs()
+
+      Text {
+        id: title
+        text: qsTr("What's new")
+        wrapMode: Text.WordWrap
+        width: parent.width
+        font.pixelSize: InputStyle.fontPixelSizeHeader
+        color: InputStyle.fontColor
+      }
+
+      Text {
+        id: subTitle
+        anchors.top: title.bottom
+        text: qsTr("See what changed since you were last here")
+        wrapMode: Text.WordWrap
+        width: parent.width
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+        color: InputStyle.fontColor
+      }
+
+      Button {
+        id: closeButton
+        anchors.right: parent.right
+        onClicked: close()
+        contentItem: Text { text: "❌" }
+        background: Item {}
+      }
+
+      ListView {
+        id: changelogView
+        width: parent.width
+        anchors.top: subTitle.bottom
+        anchors.topMargin: 20
+        anchors.bottom: parent.bottom
+        spacing: 3
+        clip: true
+        model: ChangelogModel {}
+        delegate: MouseArea {
+          width: changeItem.width
+          height: changeItem.height
+          onClicked: Qt.openUrlExternally(link)
+          Column {
+            id: changeItem
+            width: changelogView.width
+            Rectangle { width: parent.width; height: 2; color: "lightGray" }
+            Text { text: date; font.italic: true; wrapMode: Text.WordWrap; width: parent.width; font.pixelSize: InputStyle.fontPixelSizeNormal; color: InputStyle.fontColor }
+            Text { text: title; font.bold: true; wrapMode: Text.WordWrap; width: parent.width; font.pixelSize: InputStyle.fontPixelSizeBig; color: InputStyle.fontColor }
+            Text { text: description; wrapMode: Text.WordWrap; width: parent.width; font.pixelSize: InputStyle.fontPixelSizeNormal; color: InputStyle.fontColor }
+          }
+        }
+
+        ScrollBar.vertical: ScrollBar {
+          parent: changelogView.parent
+          anchors.top: changelogView.top
+          anchors.left: changelogView.right
+          anchors.bottom: changelogView.bottom
+        }
+      }
+
+      Button {
+        id: seeAllChangesButton
         anchors.horizontalCenter: parent.horizontalCenter
-        width: root.width - InputStyle.panelMargin
-        height: parent.height
-
-        Component.onCompleted: changelogView.model.seeChangelogs()
-
-        Text {
-            id: title
-            text: qsTr("What's new")
-            wrapMode: Text.WordWrap
-            width: parent.width
-            font.pixelSize: InputStyle.fontPixelSizeHeader
-            color: InputStyle.fontColor
+        anchors.bottom: parent.bottom
+        onClicked: {
+          changelogView.model.seeChangelogs(true)
         }
-
-        Text {
-            id: subTitle
-            anchors.top: title.bottom
-            text: qsTr("See what changed since you were last here")
-            wrapMode: Text.WordWrap
-            width: parent.width
-            font.pixelSize: InputStyle.fontPixelSizeNormal
-            color: InputStyle.fontColor
-        }
-
-        Button {
-            id: closeButton
-            anchors.right: parent.right
-            onClicked: close()
-            contentItem: Text { text: "❌" }
-            background: Item {}
-        }
-
-        ListView {
-            id: changelogView
-            width: parent.width
-            anchors.top: subTitle.bottom
-            anchors.topMargin: 20
-            anchors.bottom: parent.bottom //seeAllChangesButton.top
-            spacing: 3
-            clip: true
-            model: ChangelogModel {}
-            delegate: MouseArea {
-                width: changeItem.width
-                height: changeItem.height
-                onClicked: Qt.openUrlExternally(link)
-                Column {
-                    id: changeItem
-                    width: changelogView.width
-                    Rectangle { width: parent.width; height: 2; color: "lightGray" }
-                    Text { text: date; font.italic: true; wrapMode: Text.WordWrap; width: parent.width; font.pixelSize: InputStyle.fontPixelSizeNormal; color: InputStyle.fontColor }
-                    Text { text: title; font.bold: true; wrapMode: Text.WordWrap; width: parent.width; font.pixelSize: InputStyle.fontPixelSizeBig; color: InputStyle.fontColor }
-                    Text { text: description; wrapMode: Text.WordWrap; width: parent.width; font.pixelSize: InputStyle.fontPixelSizeNormal; color: InputStyle.fontColor }
-                }
-            }
-
-            ScrollBar.vertical: ScrollBar {
-                parent: changelogView.parent
-                anchors.top: changelogView.top
-                anchors.left: changelogView.right
-                anchors.bottom: changelogView.bottom
-            }
-        }
-
-        Button {
-            id: seeAllChangesButton
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            onClicked: {
-                changelogView.model.seeChangelogs(true)
-            }
-            text: qsTr("Show all changes")
-            visible: false
-        }
+        text: qsTr("Show all changes")
+        visible: false
+      }
     }
 
     footer: DelegateButton {
