@@ -23,7 +23,7 @@ AbstractEditor {
   /*required*/ property var featureLayerPair: root.parent.featurePair
   /*required*/ property bool isReadOnly: root.parent.readOnly
   /*required*/ property var stackView: root.parent.formView
-
+property bool blockSignal: true
   property bool allowMultivalue: config["AllowMulti"]
 
   signal editorValueChanged( var newValue, bool isNull )
@@ -32,9 +32,8 @@ AbstractEditor {
   {
     if ( !root.isReadOnly )
     {
+      blockSignal = false
       vrModel.pair = root.featureLayerPair
-      vrModel.wait()
-      setText()
     }
   }
 
@@ -53,15 +52,13 @@ AbstractEditor {
       toolbarVisible: root.allowMultivalue,
       preselectedFeatures: root.allowMultivalue ? vrModel.convertFromQgisType( root.parentValue, FeaturesModel.FeatureId ) : []
     }
-
     let obj = root.stackView.push( featuresPageComponent, props )
     obj.forceActiveFocus()
   }
 
   onParentValueChanged: {
+    blockSignal = false
     vrModel.pair = root.featureLayerPair
-    vrModel.wait()
-    setText()
   }
 
   onRightActionClicked: pushVrPage()
@@ -85,6 +82,14 @@ AbstractEditor {
         return // ignore invalidate signal if form is not in edit mode
       }
       root.editorValueChanged( "", true )
+    }
+    onFetchingResultsChanged: {
+      // we need to re-set the text every time the model is done re-populating
+      if ( !vrModel.fetchingResults && !blockSignal )
+      {
+        setText()
+          blockSignal = true;
+      }
     }
   }
 
@@ -141,6 +146,7 @@ AbstractEditor {
       }
 
       onSelectionFinished: function( featureIds ) {
+          vrModel.wait()
         if ( root.allowMultivalue )
         {
           let isNull = featureIds.length === 0
