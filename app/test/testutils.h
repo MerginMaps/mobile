@@ -17,8 +17,6 @@
 #include "qgsproject.h"
 #include "merginapi.h"
 
-class FeaturesModel;
-
 namespace TestUtils
 {
   const int SHORT_REPLY = 5000;
@@ -43,9 +41,6 @@ namespace TestUtils
    * Returns true if files were successfully created
    */
   bool generateProjectFolder( const QString &rootPath, const QJsonDocument &structure );
-
-  //! Waits for the \a model to be populated in a background thread
-  void waitForModelToPopulate( FeaturesModel &model );
 }
 
 #define COMPARENEAR(actual, expected, epsilon) \

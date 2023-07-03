@@ -224,7 +224,7 @@ void TestFormEditors::testRelationsEditor()
   mainRelationModel.setRelation( mainRelation->relation() );
   mainRelationModel.setParentFeatureLayerPair( mainPair );
 
-  TestUtils::waitForModelToPopulate( mainRelationModel );
+  mainRelationModel.waitIfPopulating();
   int featuresCount = mainRelationModel.rowCount();
   QVERIFY( featuresCount > 0 );
 
@@ -260,7 +260,7 @@ void TestFormEditors::testRelationsEditor()
   QCOMPARE( catchFeatureIdSpy.count(), 1 );
   QgsFeatureId addedFeatureId = catchFeatureIdSpy.takeFirst().at( 0 ).value<QgsFeatureId>();
 
-  TestUtils::waitForModelToPopulate( mainRelationModel );
+  mainRelationModel.waitIfPopulating();
   int newFeaturesCount = mainRelationModel.rowCount();
   QCOMPARE( newFeaturesCount, featuresCount + 1 ); // we have added one feature
 
@@ -274,7 +274,7 @@ void TestFormEditors::testRelationsEditor()
   QVERIFY( subLayer->deleteFeature( addedFeatureId ) );
   QVERIFY( subLayer->commitChanges() );
 
-  TestUtils::waitForModelToPopulate( mainRelationModel );
+  mainRelationModel.waitIfPopulating();
   int reducedFeaturesCount = mainRelationModel.rowCount();
   QCOMPARE( reducedFeaturesCount, featuresCount );
 
@@ -350,7 +350,7 @@ void TestFormEditors::testRelationsReferenceEditor()
   subRelationRefModel.setConfig( subRelationRef->editorWidgetConfig() );
   subRelationRefModel.setProject( QgsProject::instance() );
 
-  TestUtils::waitForModelToPopulate( subRelationRefModel );
+  subRelationRefModel.waitIfPopulating();
   QgsFeature parentFeat = mainLayer->getFeature( 1 ); // this is parent feature
   QVariant fk = subRelationRefModel.foreignKeyFromAttribute( FeaturesModel::FeatureId, parentFeat.id() );
 
@@ -507,7 +507,7 @@ void TestFormEditors::testValueRelationsEditor()
   subVRModel.setConfig( subFkItem->editorWidgetConfig() );
   subVRModel.setPair( pair );
 
-  TestUtils::waitForModelToPopulate( subVRModel );
+  subVRModel.waitIfPopulating();
   QCOMPARE( subVRModel.rowCount(), subLayer->dataProvider()->featureCount() );
   QCOMPARE( subVRModel.layer()->id(), subLayer->id() );
 
@@ -519,7 +519,7 @@ void TestFormEditors::testValueRelationsEditor()
   subsubVRModel.setConfig( subsubFkItem->editorWidgetConfig() );
   subsubVRModel.setPair( pair );
 
-  TestUtils::waitForModelToPopulate( subsubVRModel );
+  subsubVRModel.waitIfPopulating();
   QCOMPARE( subsubVRModel.rowCount(), 2 ); // due to a filter expression
   QCOMPARE( subsubVRModel.layer()->id(), subsubLayer->id() );
 
@@ -533,7 +533,7 @@ void TestFormEditors::testValueRelationsEditor()
   // test filter expression in combination with search
   subsubVRModel.setSearchExpression( QStringLiteral( "2" ) );
 
-  TestUtils::waitForModelToPopulate( subsubVRModel );
+  subsubVRModel.waitIfPopulating();
   QCOMPARE( subsubVRModel.rowCount(), 1 );
 
   // test title field on result
@@ -550,7 +550,7 @@ void TestFormEditors::testValueRelationsEditor()
   anotherVRModel.setConfig( anotherFkItem->editorWidgetConfig() );
   anotherVRModel.setPair( pair );
 
-  TestUtils::waitForModelToPopulate( anotherVRModel );
+  anotherVRModel.waitIfPopulating();
   QCOMPARE( anotherVRModel.rowCount(), anotherLayer->dataProvider()->featureCount() );
   QCOMPARE( anotherVRModel.layer()->id(), anotherLayer->id() );
 
@@ -571,7 +571,7 @@ void TestFormEditors::testValueRelationsEditor()
   subsubVRModel.setPair( controller.featureLayerPair() );
   subsubVRModel.setSearchExpression( "" );
 
-  TestUtils::waitForModelToPopulate( subsubVRModel );
+  subsubVRModel.waitIfPopulating();
   QgsFeature bigF = subsubLayer->getFeature( 100000000 );
   QCOMPARE( subsubVRModel.convertToKey( bigF.id() ), bigF.id() );
 }

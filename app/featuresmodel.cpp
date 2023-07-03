@@ -33,7 +33,6 @@ void FeaturesModel::populate()
   if ( mLayer )
   {
     mFetchingResults = true;
-    emit fetchingResultsChanged();
     beginResetModel();
     mFeatures.clear();
     endResetModel();
@@ -99,7 +98,7 @@ void FeaturesModel::onFutureFinished()
   emit layerFeaturesCountChanged( layerFeaturesCount() );
   endResetModel();
   mFetchingResults = false;
-  emit fetchingResultsChanged();
+  emit donePopulating();
 }
 
 
@@ -352,14 +351,13 @@ bool FeaturesModel::fetchingResults() const
   return mFetchingResults;
 }
 
-void FeaturesModel::wait() const
+void FeaturesModel::waitIfPopulating() const
 {
   QEventLoop loop;
-  QObject::connect( this, &FeaturesModel::fetchingResultsChanged, &loop, [&]()
+  QObject::connect( this, &FeaturesModel::donePopulating, &loop, [&]()
   {
-    if ( !fetchingResults() )
-      loop.quit();
+    loop.quit();
   } );
-  if ( fetchingResults() )
+  if ( mFetchingResults )
     loop.exec();
 }

@@ -32,11 +32,6 @@ AbstractEditor {
 
   function setIndex()
   {
-    if ( vrModel.fetchingResults )
-    {
-      return // Don't set the index if the model is being populated. It will be called again once done.
-    }
-
     let fid = vrModel.convertFromQgisType( root.parentValue, FeaturesModel.FeatureId )
 
     if ( !Array.isArray( fid ) || !fid.length )
@@ -75,12 +70,9 @@ AbstractEditor {
       root.editorValueChanged( "", true )
     }
 
-    onFetchingResultsChanged: {
+    onDonePopulating: {
       // we need to re-set the current index every time the model is done re-populating
-      if ( !vrModel.fetchingResults )
-      {
-        setIndex()
-      }
+      setIndex()
     }
   }
 

@@ -23,7 +23,7 @@ AbstractEditor {
   /*required*/ property var featureLayerPair: root.parent.featurePair
   /*required*/ property bool isReadOnly: root.parent.readOnly
   /*required*/ property var stackView: root.parent.formView
-property bool blockSignal: true
+
   property bool allowMultivalue: config["AllowMulti"]
 
   signal editorValueChanged( var newValue, bool isNull )
@@ -32,7 +32,7 @@ property bool blockSignal: true
   {
     if ( !root.isReadOnly )
     {
-      blockSignal = false
+      connectOnce( vrModel.donePopulating, setText )
       vrModel.pair = root.featureLayerPair
     }
   }
@@ -40,7 +40,6 @@ property bool blockSignal: true
   function setText()
   {
     title.text = vrModel.convertFromQgisType( root.parentValue, FeaturesModel.FeatureTitle ).join( ', ' )
-      console.log("set text called")
   }
 
   function pushVrPage()
@@ -56,8 +55,16 @@ property bool blockSignal: true
     obj.forceActiveFocus()
   }
 
+  function connectOnce(sig, slot) {
+      var f = function() {
+          slot.apply(this, arguments)
+          sig.disconnect(f)
+      }
+      sig.connect(f)
+  }
+
   onParentValueChanged: {
-    blockSignal = false
+    connectOnce( vrModel.donePopulating, setText )
     vrModel.pair = root.featureLayerPair
   }
 
@@ -82,14 +89,6 @@ property bool blockSignal: true
         return // ignore invalidate signal if form is not in edit mode
       }
       root.editorValueChanged( "", true )
-    }
-    onFetchingResultsChanged: {
-      // we need to re-set the text every time the model is done re-populating
-      if ( !vrModel.fetchingResults && !blockSignal )
-      {
-        setText()
-          blockSignal = true;
-      }
     }
   }
 
@@ -141,12 +140,11 @@ property bool blockSignal: true
       toolbarVisible: false
 
       onBackButtonClicked: {
-          console.log("onBackButtonClicked")
         root.stackView.pop()
       }
 
       onSelectionFinished: function( featureIds ) {
-          vrModel.wait()
+        vrModel.waitIfPopulating()
         if ( root.allowMultivalue )
         {
           let isNull = featureIds.length === 0
@@ -156,7 +154,6 @@ property bool blockSignal: true
             // We need to convert feature id to string prior to sending it to C++ in order to
             // avoid conversion to scientific notation.
             featureIds = featureIds.map( function(x) { return x.toString() } )
-              console.log(featureIds)
           }
 
           root.editorValueChanged( vrModel.convertToQgisType( featureIds ), isNull )
@@ -168,7 +165,6 @@ property bool blockSignal: true
           featureIds = featureIds.toString()
 
           root.editorValueChanged( vrModel.convertToKey( featureIds ), false )
-            console.log(featureIds)
         }
         root.stackView.pop()
       }

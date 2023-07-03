@@ -16,7 +16,6 @@
 #include "coreutils.h"
 #include "inpututils.h"
 #include "merginapi.h"
-#include "featuresmodel.h"
 
 void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password )
 {
@@ -161,15 +160,4 @@ QgsProject *TestUtils::loadPlanesTestProject()
   project->read( projectTempDir + "/" + projectName );
 
   return project;
-}
-
-void TestUtils::waitForModelToPopulate( FeaturesModel &model )
-{
-  QEventLoop loop;
-  QObject::connect( &model, &FeaturesModel::fetchingResultsChanged, &loop, [&]()
-  {
-    if ( !model.fetchingResults() )
-      loop.quit();
-  } );
-  loop.exec();
 }
