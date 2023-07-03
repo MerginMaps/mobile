@@ -69,70 +69,67 @@ Item {
                       elide: Qt.ElideRight
                   }
 
-                  Item {
-                      id: stakeoutIconContainerSpace
-                      height: rowHeight
-                      width: rowHeight
+                  Button {
+                    id: stakeoutIconContainerSpace
+                    height: rowHeight
+                    width: rowHeight
 
-                      Item {
-                        visible: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
-                        enabled: visible
+                    background: Item {
+                      visible: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
+                      enabled: visible
 
-                        anchors.fill: parent
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: previewPanel.stakeoutFeature( controller.featureLayerPair )
-                        }
-
-                        Image {
-                            id: stakeoutIcon
-
-                            anchors.fill: parent
-                            anchors.margins: rowHeight/8
-                            anchors.rightMargin: 0
-                            source: InputStyle.stakeoutIcon
-                            sourceSize.width: width
-                            sourceSize.height: height
-                            fillMode: Image.PreserveAspectFit
-                        }
-
-                        ColorOverlay {
-                            anchors.fill: stakeoutIcon
-                            source: stakeoutIcon
-                            color: InputStyle.fontColor
-                        }
-                      }
-                  }
-
-                  Item {
-                      id: iconContainer
-                      height: rowHeight
-                      width: rowHeight
-                      visible: !previewPanel.isReadOnly
-
-                      MouseArea {
-                          id: editArea
-                          anchors.fill: iconContainer
-                          onClicked: editClicked()
-                      }
+                      anchors.fill: parent
 
                       Image {
-                          id: icon
-                          anchors.fill: parent
-                          anchors.margins: rowHeight/4
-                          anchors.rightMargin: 0
-                          source: InputStyle.editIcon
-                          sourceSize.width: width
-                          sourceSize.height: height
-                          fillMode: Image.PreserveAspectFit
+                        id: stakeoutIcon
+
+                        anchors.fill: parent
+                        anchors.margins: rowHeight/8
+                        anchors.rightMargin: 0
+                        source: InputStyle.stakeoutIcon
+                        sourceSize.width: width
+                        sourceSize.height: height
+                        fillMode: Image.PreserveAspectFit
                       }
 
                       ColorOverlay {
-                          anchors.fill: icon
-                          source: icon
-                          color: InputStyle.fontColor
+                        anchors.fill: stakeoutIcon
+                        source: stakeoutIcon
+                        color: InputStyle.fontColor
                       }
+                    }
+
+                    onClicked: previewPanel.stakeoutFeature( controller.featureLayerPair )
+                  }
+
+                  Button {
+                    id: iconContainer
+                    height: rowHeight
+                    width: rowHeight
+                    visible: !previewPanel.isReadOnly
+
+                    background: Item {
+                      anchors.fill: parent
+
+                      Image {
+                        id: icon
+                        anchors.fill: parent
+                        anchors.margins: rowHeight/4
+                        anchors.rightMargin: 0
+                        source: InputStyle.editIcon
+                        sourceSize.width: width
+                        sourceSize.height: height
+                        fillMode: Image.PreserveAspectFit
+                      }
+
+                      ColorOverlay {
+                        anchors.fill: icon
+                        source: icon
+                        color: InputStyle.fontColor
+                      }
+                    }
+
+                    onClicked: editClicked()
                   }
                 }
 
