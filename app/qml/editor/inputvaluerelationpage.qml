@@ -32,8 +32,8 @@ AbstractEditor {
   {
     if ( !root.isReadOnly )
     {
-      connectOnce( vrModel.donePopulating, setText )
       vrModel.pair = root.featureLayerPair
+      vrPageModel.pair = root.featureLayerPair
     }
   }
 
@@ -45,7 +45,7 @@ AbstractEditor {
   function pushVrPage()
   {
     let props = {
-      featuresModel: vrModel,
+      featuresModel: vrPageModel,
       pageTitle: labelAlias,
       allowMultiselect: root.allowMultivalue,
       toolbarVisible: root.allowMultivalue,
@@ -55,17 +55,11 @@ AbstractEditor {
     obj.forceActiveFocus()
   }
 
-  function connectOnce(sig, slot) {
-      var f = function() {
-          slot.apply(this, arguments)
-          sig.disconnect(f)
-      }
-      sig.connect(f)
-  }
-
   onParentValueChanged: {
-    connectOnce( vrModel.donePopulating, setText )
     vrModel.pair = root.featureLayerPair
+    vrPageModel.pair = root.featureLayerPair
+    // we call setText here too in case the pair did not change
+    setText()
   }
 
   onRightActionClicked: pushVrPage()
@@ -90,6 +84,17 @@ AbstractEditor {
       }
       root.editorValueChanged( "", true )
     }
+
+    onDonePopulating: {
+      setText()
+    }
+  }
+
+  ValueRelationFeaturesModel {
+    id: vrPageModel
+
+    config: root.fieldConfig
+    pair: root.featureLayerPair
   }
 
   content: Text {
@@ -144,7 +149,6 @@ AbstractEditor {
       }
 
       onSelectionFinished: function( featureIds ) {
-        vrModel.waitIfPopulating()
         if ( root.allowMultivalue )
         {
           let isNull = featureIds.length === 0
@@ -163,7 +167,6 @@ AbstractEditor {
           // We need to convert feature id to string prior to sending it to C++ in order to
           // avoid conversion to scientific notation.
           featureIds = featureIds.toString()
-
           root.editorValueChanged( vrModel.convertToKey( featureIds ), false )
         }
         root.stackView.pop()
