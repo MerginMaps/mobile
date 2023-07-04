@@ -91,11 +91,6 @@ class FeaturesModel : public QAbstractListModel
      */
     Q_INVOKABLE QVariant convertRoleValue( const int fromRole, const QVariant &fromValue, const int toRole ) const;
 
-    /**
-     * \brief waitIfPopulating enters an event loop while the model is populating. Does nothing if the model is already populated.
-     */
-    Q_INVOKABLE void waitIfPopulating() const;
-
     int featuresLimit() const;
     QgsVectorLayer *layer() const;
     QString searchExpression() const;
@@ -113,8 +108,8 @@ class FeaturesModel : public QAbstractListModel
 
     void layerFeaturesCountChanged( int layerFeaturesCount );
 
-    void fetchingResultsChanged();
-    void donePopulating();
+    //! \a isFetching is TRUE when still fetching results, FALSE when done fetching
+    bool fetchingResultsChanged( bool isFetching );
 
   protected:
 

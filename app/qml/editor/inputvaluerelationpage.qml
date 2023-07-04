@@ -82,8 +82,11 @@ AbstractEditor {
       root.editorValueChanged( "", true )
     }
 
-    onDonePopulating: {
-      setText()
+    onFetchingResultsChanged: {
+      if ( !isFetching )
+      {
+        setText()
+      }
     }
   }
 
