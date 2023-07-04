@@ -33,7 +33,6 @@ AbstractEditor {
     if ( !root.isReadOnly )
     {
       vrModel.pair = root.featureLayerPair
-      vrPageModel.pair = root.featureLayerPair
     }
   }
 
@@ -45,7 +44,6 @@ AbstractEditor {
   function pushVrPage()
   {
     let props = {
-      featuresModel: vrPageModel,
       pageTitle: labelAlias,
       allowMultiselect: root.allowMultivalue,
       toolbarVisible: root.allowMultivalue,
@@ -57,7 +55,6 @@ AbstractEditor {
 
   onParentValueChanged: {
     vrModel.pair = root.featureLayerPair
-    vrPageModel.pair = root.featureLayerPair
     // we call setText here too in case the pair did not change
     setText()
   }
@@ -88,13 +85,6 @@ AbstractEditor {
     onDonePopulating: {
       setText()
     }
-  }
-
-  ValueRelationFeaturesModel {
-    id: vrPageModel
-
-    config: root.fieldConfig
-    pair: root.featureLayerPair
   }
 
   content: Text {
@@ -137,6 +127,13 @@ AbstractEditor {
 
     FeaturesListPage {
       id: featuresPage
+
+      featuresModel: ValueRelationFeaturesModel {
+          id: vrPageModel
+
+          config: root.fieldConfig
+          pair: root.featureLayerPair
+        }
 
       pageTitle: qsTr( "Features" )
       allowSearch: true
