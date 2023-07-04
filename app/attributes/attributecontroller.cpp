@@ -1282,6 +1282,10 @@ void AttributeController::onFeatureAdded( QgsFeatureId newFeatureId )
 void AttributeController::renamePhotos()
 {
   const QStringList photoNameFormat = QgsProject::instance()->entryList( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoNaming/%1" ).arg( mFeatureLayerPair.layer()->id() ) );
+  if ( photoNameFormat.isEmpty() )
+  {
+    return;
+  }
 
   QgsExpressionContext expressionContext = mFeatureLayerPair.layer()->createExpressionContext();
   expressionContext << QgsExpressionContextUtils::formScope( mFeatureLayerPair.feature() );
