@@ -60,11 +60,10 @@ Item {
         x: leftActionContainer.actionAllowed ? parent.x - customStyle.fields.sideMargin : parent.x
         height: parent.height
 
-        TapHandler {
-          onPressedChanged: {
-            if ( !pressed ) {
-              root.leftActionClicked()
-            }
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            root.leftActionClicked()
           }
         }
       }
@@ -79,8 +78,9 @@ Item {
       height: parent.height
       width: parent.width - ( leftActionContainer.width + rightActionContainer.width )
 
-      TapHandler {
-        onSingleTapped: {
+      MouseArea {
+        anchors.fill: parent
+        onClicked: {
           root.contentClicked()
         }
       }
@@ -101,11 +101,10 @@ Item {
         width: rightActionContainer.actionAllowed ? parent.width + customStyle.fields.sideMargin : parent.width
         height: parent.height
 
-        TapHandler {
-          onPressedChanged: {
-            if ( !pressed ) {
-              root.rightActionClicked()
-            }
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            root.rightActionClicked()
           }
         }
       }
