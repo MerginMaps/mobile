@@ -25,7 +25,7 @@
 #include "inpututils.h"
 #include "coreutils.h"
 
-const QString TILES_URL = QStringLiteral( "https://vtiles.merginmaps.com" );
+const QString TILES_URL = QStringLiteral( "https://tiles.merginmaps.com" );
 
 ProjectWizard::ProjectWizard( const QString &dataDir, QObject *parent )
   : QObject( parent )
