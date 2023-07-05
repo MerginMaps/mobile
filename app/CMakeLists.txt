@@ -500,6 +500,7 @@ add_subdirectory(qml)
 # register Singleton
 set_source_files_properties(qml/InputStyle.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 set_source_files_properties(qml/MMCamera.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+set_source_files_properties(qml/Propagation.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 # make sure the QML files are not prefixed with "qml/" in the qmldir
 set(MM_QML_SRCS)

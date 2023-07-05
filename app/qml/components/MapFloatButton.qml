@@ -49,9 +49,10 @@ Item {
 
     Item {
       anchors.fill: parent
-      
+
       TapHandler {
         onTapped: function(eventPoint, button) {
+          Propagation.canClick = false
           root.clicked()
         }
 

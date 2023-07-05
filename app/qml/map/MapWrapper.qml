@@ -175,6 +175,9 @@ Item {
     }
 
     onClicked: function( point ) {
+      if(!Propagation.canClick)
+        return
+
       if ( root.state === "view" )
       {
         let screenPoint = Qt.point( point.x, point.y )
