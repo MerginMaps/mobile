@@ -230,14 +230,38 @@ Page {
               color: InputStyle.panelBackgroundLight
               radius: InputStyle.cornerRadius
 
+              Flickable {
+                id: flickableItem
+                clip: true
+
+                width: parent.width - InputStyle.panelMargin
+                height: parent.height
+                contentHeight: attributionText.height
+                contentWidth: width
+                maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
+
+                Text {
+                  id: attributionText
+
+                  width: parent.width
+                  font.pixelSize: InputStyle.fontPixelSizeNormal
+                  wrapMode: Text.WordWrap
+                  text: __inputUtils.layerAttribution(layerDetailData.mapLayer)
+                }
+
+                ScrollBar.vertical: ScrollBar {}
+              }
+/*
               Text {
                 id: attributionText
 
                 width: parent.width
                 textFormat: Text.RichText
+                font.pixelSize: InputStyle.fontPixelSizeNormal
                 wrapMode: Text.WordWrap
                 text: __inputUtils.layerAttribution(layerDetailData.mapLayer)
               }
+*/
             }
           }
         }
