@@ -41,7 +41,7 @@ Item {
 
     mapSettings: root.map.mapSettings
     crosshairPosition: crosshair.screenPoint
-    realGeometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+    realGeometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
   }
 
   Highlight {
@@ -59,15 +59,15 @@ Item {
   Highlight {
     id: highlight
 
-    height: root.map.height
-    width: root.map.width
+    height: map.height
+    width: map.width
 
     markerColor: "black"
     lineColor: "black"
     lineStrokeStyle: ShapePath.DashLine
 
     mapSettings: root.map.mapSettings
-    geometry: __inputUtils.convertGeometryToMapCRS( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
   }
 
   Crosshair {

@@ -133,7 +133,7 @@ class FeaturesModel : public QAbstractListModel
     //! Returns found attribute and its value from search expression for feature
     QString searchResultPair( const FeatureLayerPair &feat ) const;
 
-    const int FEATURES_LIMIT = 10000; //! Number of maximum features loaded from layer
+    const int FEATURES_LIMIT = 10000; //!< Number of maximum features loaded from layer
 
     FeatureLayerPairs mFeatures;
     QString mSearchExpression;

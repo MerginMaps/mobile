@@ -50,13 +50,15 @@ struct LocalProject
 
   public:
 
+    Q_PROPERTY( QString qgisProjectFilePath MEMBER qgisProjectFilePath )
+
     LocalProject() {};
     ~LocalProject() {};
 
     QString projectName;
     QString projectNamespace;
 
-    QString id() const; //! projectFullName for time being
+    Q_INVOKABLE QString id() const; //! projectFullName for time being
     QString fullName() const;
 
     QString projectDir;
@@ -100,7 +102,7 @@ struct MerginProject
   QString projectName;
   QString projectNamespace;
 
-  QString id() const; //! projectFullName for time being
+  QString id() const; //!< projectFullName for time being
 
   QDateTime serverUpdated; // available latest version of project files on server
   int serverVersion = -1;

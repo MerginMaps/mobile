@@ -26,6 +26,13 @@ SimulatedPositionProvider::SimulatedPositionProvider( double longitude, double l
   SimulatedPositionProvider::startUpdates();
 }
 
+void SimulatedPositionProvider::setUpdateInterval( double msecs )
+{
+  stopUpdates();
+  mTimerTimeout = msecs;
+  startUpdates();
+}
+
 SimulatedPositionProvider::~SimulatedPositionProvider() = default;
 
 void SimulatedPositionProvider::startUpdates()

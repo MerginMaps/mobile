@@ -13,6 +13,7 @@ import QtMultimedia
 import QtQml.Models
 import QtPositioning
 import QtQuick.Dialogs
+import QtQuick.Layouts
 
 import Qt.labs.settings
 
@@ -20,6 +21,7 @@ import lc 1.0 as InputClass
 import "./map"
 import "./dialogs"
 import "./layers"
+import "./popups"
 
 ApplicationWindow {
     id: window
@@ -101,8 +103,6 @@ ApplicationWindow {
         let path = __appSettings.defaultProject
 
         if ( __localProjectsManager.projectIsValid( path ) && __activeProject.load( path ) ) {
-          projectPanel.activeProjectPath = path
-          projectPanel.activeProjectId = __localProjectsManager.projectId( path )
           __appSettings.activeProject = path
         }
         else {
@@ -273,7 +273,7 @@ ApplicationWindow {
 
         onMyLocationHold: {
             __appSettings.autoCenterMapChecked = !__appSettings.autoCenterMapChecked
-            showMessage( __appSettings.autoCenterMapChecked ?  qsTr("GPS auto-center mode on") : qsTr("GPS auto-center mode off") )
+            showMessage( __appSettings.autoCenterMapChecked ? qsTr("GPS auto-center mode on") : qsTr("GPS auto-center mode off") )
         }
         onOpenSettingsClicked: settingsPanel.visible = true
         onZoomToProject: {
@@ -304,6 +304,10 @@ ApplicationWindow {
         onLayersClicked: {
           stateManager.state = "misc"
           let layerspanel = mapPanelsStackView.push( layersPanelComponent, {}, StackView.PushTransition )
+        }
+
+        onPositionTrackingClicked: {
+          trackingPanelLoader.active = true
         }
     }
 
@@ -346,6 +350,8 @@ ApplicationWindow {
         height: window.height
         width: window.width
 
+        activeProjectId: __activeProject.localProject.id() ?? ""
+
         onVisibleChanged: {
           if ( projectPanel.visible ) {
             projectPanel.forceActiveFocus()
@@ -355,9 +361,7 @@ ApplicationWindow {
           }
         }
 
-        onOpenProjectRequested: function( projectId, projectPath ) {
-          __appSettings.defaultProject = projectPath
-          __appSettings.activeProject = projectPath
+        onOpenProjectRequested: function( projectPath ) {
           __activeProject.load( projectPath )
         }
 
@@ -485,6 +489,61 @@ ApplicationWindow {
         onClosed: stateManager.state = "map"
     }
 
+    Loader {
+      id: trackingPanelLoader
+
+      focus: true
+      active: false
+      asynchronous: true
+
+      sourceComponent: Component {
+
+        PositionTrackingDrawer {
+
+          width: window.width
+
+          trackingActive: map.isTrackingPosition
+
+          distanceTraveled: trackingPrivate.getDistance()
+          trackingStartedAt: trackingPrivate.getStartingTime()
+
+          onTrackingBtnClicked: map.setTracking( !trackingActive )
+
+          onClosed: {
+            trackingPanelLoader.active = false
+          }
+
+          QtObject {
+            id: trackingPrivate
+
+            function getDistance() {
+              if ( map.isTrackingPosition ) {
+                return __inputUtils.geometryLengthAsString( map.trackingManager?.trackedGeometry )
+              }
+              return qsTr( "not tracking" )
+            }
+
+            function getStartingTime() {
+              if ( map.isTrackingPosition )
+              {
+                let date = map.trackingManager?.startTime
+                if ( date ) {
+                  return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+                }
+              }
+              return qsTr( "not tracking" )
+            }
+          }
+        }
+      }
+
+      onActiveChanged: {
+        if ( active )
+        {
+          trackingPanelLoader.item?.open()
+        }
+      }
+    }
 
     ProjectIssuesPanel {
       id: projectIssuesPanel
@@ -706,26 +765,41 @@ ApplicationWindow {
 
     Connections {
       target: __activeProject
+
       function onLoadingStarted() {
         projectLoadingScreen.visible = true;
         failedToLoadProjectBanner.reset();
         projectIssuesPanel.clear();
       }
+
       function onLoadingFinished() {
         projectLoadingScreen.visible = false
       }
+
       function onLoadingErrorFound() {
         failedToLoadProjectBanner.pushNotificationMessage( qsTr( "There were issues loading the project." ) )
       }
+
       function onReportIssue( layerName, message ) {
         projectIssuesPanel.reportIssue( layerName, message )
       }
+
       function onProjectReloaded( project ) {
         map.clear()
+
+        if ( __activeProject.isProjectLoaded() )
+        {
+          projectPanel.hidePanel()
+        }
+
+        __appSettings.defaultProject = __activeProject.localProject.qgisProjectFilePath ?? ""
+        __appSettings.activeProject = __activeProject.localProject.qgisProjectFilePath ?? ""
       }
+
       function onProjectWillBeReloaded() {
         formsStackManager.reload()
       }
+
       function onProjectReadingFailed( message ) {
         projectErrorDialog.informativeText = qsTr( "Could not read the project file:" ) + "\n" + message
         projectErrorDialog.open()

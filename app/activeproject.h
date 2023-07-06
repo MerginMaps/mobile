@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,7 +23,6 @@
 #include "autosynccontroller.h"
 #include "inputmapsettings.h"
 
-
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
  */
@@ -36,6 +35,7 @@ class ActiveProject: public QObject
     Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     Q_PROPERTY( QString mapTheme READ mapTheme WRITE setMapTheme NOTIFY mapThemeChanged )
+    Q_PROPERTY( bool positionTrackingSupported READ positionTrackingSupported NOTIFY positionTrackingSupportedChanged )
 
   public:
     explicit ActiveProject(
@@ -79,6 +79,9 @@ class ActiveProject: public QObject
      */
     Q_INVOKABLE void switchLayerTreeNodeVisibility( QgsLayerTreeNode *node );
 
+    //! Returns boolean if any project is currently loaded
+    Q_INVOKABLE bool isProjectLoaded() const;
+
     /**
      * mapSettings method returns mapsettings pointer
      */
@@ -113,6 +116,8 @@ class ActiveProject: public QObject
 
     const QString &mapTheme() const;
 
+    bool positionTrackingSupported() const;
+
   signals:
     void qgsProjectChanged();
     void localProjectChanged( LocalProject project );
@@ -134,6 +139,8 @@ class ActiveProject: public QObject
     void syncActiveProject( const LocalProject &project );
 
     void mapThemeChanged( const QString &mapTheme );
+
+    void positionTrackingSupportedChanged();
 
   public slots:
     // Reloads project if current project path matches given path (its the same project)

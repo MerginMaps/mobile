@@ -9,6 +9,7 @@ on:
     - 'cmake_templates/**'
     - 'CMakeLists.txt'
     - '.github/workflows/ios.yml'
+    - '.github/secrets/ios/**'
 
   release:
     types:

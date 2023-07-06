@@ -29,13 +29,18 @@ set(MM_SRCS
     maptools/splittingmaptool.cpp
     ios/iosimagepicker.cpp
     ios/iosutils.cpp
-    position/abstractpositionprovider.cpp
-    position/internalpositionprovider.cpp
+    position/providers/abstractpositionprovider.cpp
+    position/providers/internalpositionprovider.cpp
+    position/providers/positionprovidersmodel.cpp
+    position/providers/simulatedpositionprovider.cpp
+    position/tracking/abstracttrackingbackend.cpp
+    position/tracking/internaltrackingbackend.cpp
+    position/tracking/positiontrackinghighlight.cpp
+    position/tracking/positiontrackingmanager.cpp
+    position/geoposition.cpp
     position/mapposition.cpp
     position/positiondirection.cpp
     position/positionkit.cpp
-    position/positionprovidersmodel.cpp
-    position/simulatedpositionprovider.cpp
     activelayer.cpp
     activeproject.cpp
     androidutils.cpp
@@ -105,13 +110,18 @@ set(MM_HDRS
     maptools/splittingmaptool.h
     ios/iosimagepicker.h
     ios/iosutils.h
-    position/abstractpositionprovider.h
-    position/internalpositionprovider.h
+    position/providers/abstractpositionprovider.h
+    position/providers/internalpositionprovider.h
+    position/providers/positionprovidersmodel.h
+    position/providers/simulatedpositionprovider.h
+    position/tracking/abstracttrackingbackend.h
+    position/tracking/internaltrackingbackend.h
+    position/tracking/positiontrackinghighlight.h
+    position/tracking/positiontrackingmanager.h
+    position/geoposition.h
     position/mapposition.h
     position/positiondirection.h
     position/positionkit.h
-    position/positionprovidersmodel.h
-    position/simulatedpositionprovider.h
     activelayer.h
     activeproject.h
     androidutils.h
@@ -155,9 +165,9 @@ set(MM_HDRS
 )
 
 if (HAVE_BLUETOOTH)
-  set(MM_SRCS ${MM_SRCS} position/bluetoothpositionprovider.cpp)
+  set(MM_SRCS ${MM_SRCS} position/providers/bluetoothpositionprovider.cpp)
 
-  set(MM_HDRS ${MM_HDRS} position/bluetoothpositionprovider.h)
+  set(MM_HDRS ${MM_HDRS} position/providers/bluetoothpositionprovider.h)
 endif ()
 
 if (ENABLE_TESTS)
@@ -213,7 +223,13 @@ if (ENABLE_TESTS)
 endif ()
 
 if (IOS)
-  set(MM_HDRS ${MM_HDRS} ios/iosinterface.h ios/iosviewdelegate.h)
+  set(MM_HDRS
+      ${MM_HDRS}
+      ios/iosinterface.h
+      ios/iosviewdelegate.h
+      position/tracking/iostrackingbackend.h
+      position/tracking/iostrackingbackendimpl.h
+  )
 
   set(MM_SRCS
       ${MM_SRCS}
@@ -221,6 +237,9 @@ if (IOS)
       ios/iosviewdelegate.mm
       ios/iosimagepicker.mm
       ios/iosutils.mm
+      position/tracking/iostrackingbackend.cpp
+      position/tracking/iostrackingbackend.mm
+      position/tracking/iostrackingbackendimpl.mm
   )
 endif ()
 
@@ -228,6 +247,12 @@ if (HAVE_APPLE_PURCHASING)
   set(MM_HDRS ${MM_HDRS} ios/iospurchasing.h)
 
   set(MM_SRCS ${MM_SRCS} ios/iospurchasing.mm)
+endif ()
+
+if (ANDROID)
+  set(MM_HDRS ${MM_HDRS} position/tracking/androidtrackingbackend.h)
+
+  set(MM_SRCS ${MM_SRCS} position/tracking/androidtrackingbackend.cpp)
 endif ()
 
 qt_add_resources(
@@ -478,6 +503,10 @@ if (MACOS OR IOS)
     Input PUBLIC AppleFrameworks::Security AppleFrameworks::CoreFoundation
                  AppleFrameworks::SystemConfiguration
   )
+endif ()
+
+if (IOS)
+  target_link_libraries(Input PUBLIC AppleFrameworks::CoreLocation)
 endif ()
 
 if (HAVE_APPLE_PURCHASING)

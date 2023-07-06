@@ -181,6 +181,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
 
     emit localProjectChanged( mLocalProject );
     emit projectReloaded( mQgsProject );
+    emit positionTrackingSupportedChanged();
   }
 
   bool foundInvalidLayer = false;
@@ -447,6 +448,11 @@ void ActiveProject::updateRecordingLayers()
   mRecordingLayerPM.refreshData();
 }
 
+bool ActiveProject::isProjectLoaded() const
+{
+  return mQgsProject && !mQgsProject->fileName().isEmpty();
+}
+
 void ActiveProject::setActiveLayer( QgsMapLayer *layer ) const
 {
   if ( !layer || !layer->isValid() )
@@ -476,4 +482,14 @@ void ActiveProject::switchLayerTreeNodeVisibility( QgsLayerTreeNode *node )
 const QString &ActiveProject::mapTheme() const
 {
   return mMapTheme;
+}
+
+bool ActiveProject::positionTrackingSupported() const
+{
+  if ( !isProjectLoaded() )
+  {
+    return false;
+  }
+
+  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/Enabled" ), false );
 }
