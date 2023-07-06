@@ -209,7 +209,7 @@ Page {
             visible: __inputUtils.layerAttribution(layerDetailData.mapLayer) != ""
 
             Layout.fillWidth: true
-            Layout.preferredHeight: attributionText.height + attributionTitle.height + 2 * InputStyle.panelMarginV2
+            Layout.preferredHeight: 1.5 * InputStyle.rowHeightListEntry + attributionTitle.height + 2 * InputStyle.panelMarginV2
 
             spacing: InputStyle.panelSpacing
 
@@ -225,7 +225,7 @@ Page {
               id: attributionItem
 
               width: parent.width
-              height: parent.height - attributionTitle.height
+              height: 1.5 * InputStyle.rowHeightListEntry
 
               color: InputStyle.panelBackgroundLight
               radius: InputStyle.cornerRadius
@@ -234,7 +234,7 @@ Page {
                 id: flickableItem
                 clip: true
 
-                width: parent.width - InputStyle.panelMargin
+                width: parent.width
                 height: parent.height
                 contentHeight: attributionText.height
                 contentWidth: width
@@ -251,17 +251,6 @@ Page {
 
                 ScrollBar.vertical: ScrollBar {}
               }
-/*
-              Text {
-                id: attributionText
-
-                width: parent.width
-                textFormat: Text.RichText
-                font.pixelSize: InputStyle.fontPixelSizeNormal
-                wrapMode: Text.WordWrap
-                text: __inputUtils.layerAttribution(layerDetailData.mapLayer)
-              }
-*/
             }
           }
         }
