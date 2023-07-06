@@ -106,11 +106,11 @@ void ProjectWizard::createProject( QString const &projectName, FieldsModel *fiel
   // add layers
   QgsDataSourceUri dsUri;
   dsUri.setParam( QStringLiteral( "type" ), QStringLiteral( "xyz" ) );
-  dsUri.setParam( QStringLiteral( "url" ), QStringLiteral( "%1/data/v3/{z}/{x}/{y}.pbf" ).arg( TILES_URL ) );
-  dsUri.setParam( QStringLiteral( "styleUrl" ), QStringLiteral( "%1/styles/basic-preview-global/style.json" ).arg( TILES_URL ) );
+  dsUri.setParam( QStringLiteral( "url" ), QStringLiteral( "%1/data/default/{z}/{x}/{y}.pbf" ).arg( TILES_URL ) );
+  dsUri.setParam( QStringLiteral( "styleUrl" ), QStringLiteral( "%1/styles/default.json" ).arg( TILES_URL ) );
   dsUri.setParam( QStringLiteral( "zmin" ), QStringLiteral( "0" ) );
   dsUri.setParam( QStringLiteral( "zmax" ), QStringLiteral( "14" ) );
-  QgsVectorTileLayer *bgLayer = new QgsVectorTileLayer( dsUri.encodedUri(), QStringLiteral( "OpenMapTiles(OSM)" ) );
+  QgsVectorTileLayer *bgLayer = new QgsVectorTileLayer( dsUri.encodedUri(), QStringLiteral( "OpenMapTiles (OSM)" ) );
   bool ok;
   QString error = bgLayer->loadDefaultStyle( ok );
   QgsLayerMetadata metadata;
