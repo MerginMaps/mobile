@@ -1303,12 +1303,6 @@ void AttributeController::renamePhotos()
     if ( item->type() == FormItem::Field && item->editorWidgetType() == QStringLiteral( "ExternalResource" ) )
     {
       QVariantMap config = item->editorWidgetConfig();
-      if ( config[ QStringLiteral( "DocumentViewer" ) ] != 1 )
-      {
-        formItemsIterator++;
-        continue;
-      }
-
       const QgsField field = item->field();
       if ( !photoNameFormat.contains( field.name() ) )
       {
