@@ -128,6 +128,14 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString renameWithDateTime( const QString &srcPath, const QDateTime &dateTime = QDateTime() );
 
     /**
+     * Renames a file located at a given path to a given new name
+     * \param srcPath absolute path to a file.
+     * \param dstPath a new name of a file.
+     * \result true on success, false otherwise.
+     */
+    Q_INVOKABLE static bool renameFile( const QString &srcPath, const QString &dstPath );
+
+    /**
      * Shows notification
      */
     Q_INVOKABLE void showNotification( const QString &message );
