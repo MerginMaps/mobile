@@ -10,10 +10,10 @@
 pragma Singleton
 import QtQuick
 
-// workaround about propagation issues
+// workaround about propagation issues (can be removed after fix: dev-2.3_CU-861mp5x42_propagationFix)
 Timer {
   id: propagationTimer
-  interval: 500
+  interval: 300
 
   property bool canClick: true
 
