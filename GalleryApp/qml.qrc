@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Main.qml</file>
+        <file>qml/pages/InitialGalleryPage.qml</file>
+    </qresource>
+</RCC>
