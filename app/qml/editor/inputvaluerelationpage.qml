@@ -55,8 +55,6 @@ AbstractEditor {
 
   onParentValueChanged: {
     vrModel.pair = root.featureLayerPair
-    // we call setText here too in case the pair did not change
-    setText()
   }
 
   onRightActionClicked: pushVrPage()
