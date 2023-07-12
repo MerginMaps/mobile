@@ -230,26 +230,35 @@ Page {
               color: InputStyle.panelBackgroundLight
               radius: InputStyle.cornerRadius
 
-              Flickable {
-                id: flickableItem
-                clip: true
+              Item {
+                height: parent.height - 2 * InputStyle.panelMarginV2
+                width: parent.width - 2 * InputStyle.panelMarginV2
 
-                width: parent.width
-                height: parent.height
-                contentHeight: attributionText.height
-                contentWidth: width
-                maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
+                x: legendItem.x + InputStyle.panelMarginV2
+                y: legendItem.y - InputStyle.panelMarginV2
 
-                Text {
-                  id: attributionText
+
+                Flickable {
+                  id: flickableItem
+                  clip: true
 
                   width: parent.width
-                  font.pixelSize: InputStyle.fontPixelSizeNormal
-                  wrapMode: Text.WordWrap
-                  text: __inputUtils.layerAttribution(layerDetailData.mapLayer)
-                }
+                  height: parent.height
+                  contentHeight: attributionText.height
+                  contentWidth: width
+                  maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
 
-                ScrollBar.vertical: ScrollBar {}
+                  Text {
+                    id: attributionText
+
+                    width: parent.width
+                    font.pixelSize: InputStyle.fontPixelSizeNormal
+                    wrapMode: Text.WordWrap
+                    text: __inputUtils.layerAttribution(layerDetailData.mapLayer)
+                  }
+
+                  ScrollBar.vertical: ScrollBar {}
+                }
               }
             }
           }
