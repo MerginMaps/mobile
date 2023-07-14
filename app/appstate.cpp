@@ -7,27 +7,23 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef INTERNALTRACKINGBACKEND_H
-#define INTERNALTRACKINGBACKEND_H
+#include "appstate.h"
 
-#include "abstracttrackingbackend.h"
-#include <QDateTime>
-#include <qglobal.h>
-
-class PositionKit;
-
-class InternalTrackingBackend : public AbstractTrackingBackend
+AppState::AppState( QObject *parent ) : QObject( parent )
 {
-    Q_OBJECT
-  public:
-    explicit InternalTrackingBackend( PositionKit *positionKit, AbstractTrackingBackend::UpdateFrequency updateFrequency, QObject *parent = nullptr );
 
-  private:
+}
 
-    QDateTime mLastUpdate;
-    double mUpdateInterval = 0; // ms
+AppState::State AppState::state() const
+{
+  return mState;
+}
 
-    PositionKit *mPositionKit = nullptr; // not owned
-};
+void AppState::setState( const AppState::State &newState )
+{
+  if ( mState == newState )
+    return;
 
-#endif // INTERNALTRACKINGBACKEND_H
+  mState = newState;
+  emit stateChanged( mState );
+}

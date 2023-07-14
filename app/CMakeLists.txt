@@ -45,6 +45,7 @@ set(MM_SRCS
     activeproject.cpp
     androidutils.cpp
     appsettings.cpp
+    appstate.cpp
     autosynccontroller.cpp
     bluetoothdiscoverymodel.cpp
     codescanner.cpp
@@ -126,6 +127,7 @@ set(MM_HDRS
     activeproject.h
     androidutils.h
     appsettings.h
+    appstate.h
     autosynccontroller.h
     bluetoothdiscoverymodel.h
     codescanner.h
@@ -250,9 +252,17 @@ if (HAVE_APPLE_PURCHASING)
 endif ()
 
 if (ANDROID)
-  set(MM_HDRS ${MM_HDRS} position/tracking/androidtrackingbackend.h)
+  set(MM_HDRS
+      ${MM_HDRS}
+      position/tracking/androidtrackingbackend.h
+      position/tracking/androidtrackingcallback.h
+  )
 
-  set(MM_SRCS ${MM_SRCS} position/tracking/androidtrackingbackend.cpp)
+  set(MM_SRCS
+      ${MM_SRCS}
+      position/tracking/androidtrackingbackend.cpp
+      position/tracking/androidtrackingcallback.cpp
+  )
 endif ()
 
 qt_add_resources(

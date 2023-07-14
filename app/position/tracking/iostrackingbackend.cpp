@@ -9,6 +9,7 @@
 
 #include "iostrackingbackend.h"
 #include "coreutils.h"
+#include <QDateTime>
 
 IOSTrackingBackend::IOSTrackingBackend( UpdateFrequency frequency, QObject *parent )
   : AbstractTrackingBackend( frequency, AbstractTrackingBackend::SignalSlotSupport::NotSupported, parent )
@@ -39,10 +40,7 @@ IOSTrackingBackend::~IOSTrackingBackend()
 
 void IOSTrackingBackend::positionUpdate( double longitude, double latitude, double altitude )
 {
-  GeoPosition position;
-  position.longitude = longitude;
-  position.latitude = latitude;
-  position.elevation = altitude;
+  QgsPoint position( longitude, latitude, altitude, QDateTime::currentDateTime().toSecsSinceEpoch() );
 
   notifyListeners( position );
 }

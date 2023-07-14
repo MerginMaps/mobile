@@ -29,6 +29,11 @@ public class InputActivity extends QtActivity
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
   }
 
+  public String homePath()
+  {
+    return getFilesDir().getAbsolutePath();
+  }
+
   public void quitGracefully()
   {
     String man = android.os.Build.MANUFACTURER.toUpperCase();

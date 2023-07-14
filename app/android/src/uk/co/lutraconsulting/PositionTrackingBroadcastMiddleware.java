@@ -19,7 +19,7 @@ import android.content.BroadcastReceiver;
 
 public class PositionTrackingBroadcastMiddleware {
     
-    private static native void notifyListenersPositionUpdated( double longitude, double latitude, double altitude );
+    private static native void notifyListenersPositionUpdated();
     private static native void notifyListenersStatusUpdate( String status );
 
     private static final String TAG = "PositionTrackingBroadcastMiddleware";
@@ -33,20 +33,26 @@ public class PositionTrackingBroadcastMiddleware {
     public static final String TRACKING_STATUS_MESSAGE_TAG = "uk.co.lutraconsulting.tracking.status.message";
 
     public PositionTrackingBroadcastMiddleware() {
-        Log.i( TAG, "Broadcast middleware instantiated!");
+        Log.i( TAG, "Broadcast middleware instantiated! " + this.toString() );
     }
 
-    public void registerServiceBroadcastReceiver( Context context ) {
+    public void registerBroadcastReceiver( Context context ) {
 
         // Register custom type of intent action
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction( TRACKING_POSITION_UPDATE_ACTION );
         intentFilter.addAction( TRACKING_STATUS_MESSAGE_ACTION );
 
-        // Set this as receiver to intents of TRACKING_POSITION_UPDATE_ACTION action type
+        // Set this as the receiver of POSITION_UPDATE and STATUS_MESSAGE intent actions
         context.registerReceiver( serviceMessageReceiver, intentFilter );
 
-        Log.i( TAG, "Registered tracking broadcast middleware" );
+        Log.i( TAG, "Registered tracking broadcast middleware " + this.toString() );
+    }
+
+    public void unregisterBroadcastReceiver( Context context ) {
+        context.unregisterReceiver( serviceMessageReceiver );
+        
+        Log.i( TAG, "Unregistered tracking broadcast " + this.toString() );
     }
 
     private BroadcastReceiver serviceMessageReceiver = new BroadcastReceiver() {
@@ -55,16 +61,11 @@ public class PositionTrackingBroadcastMiddleware {
         public void onReceive( Context context, Intent intent ) {
 
             if ( intent.getAction().equals( TRACKING_POSITION_UPDATE_ACTION ) ) {
-                double lon = intent.getDoubleExtra( TRACKING_POSITION_UPDATE_LON_TAG, 0 );
-                double lat = intent.getDoubleExtra( TRACKING_POSITION_UPDATE_LAT_TAG, 0 );
-                double alt = intent.getDoubleExtra( TRACKING_POSITION_UPDATE_ALT_TAG, 0 );
-
-                notifyListenersPositionUpdated( lon, lat, alt );
+                notifyListenersPositionUpdated();
             }
 
             if ( intent.getAction().equals( TRACKING_STATUS_MESSAGE_ACTION ) ) {
                 String message = intent.getStringExtra( TRACKING_STATUS_MESSAGE_TAG );
-
                 notifyListenersStatusUpdate( message );
             }
         }

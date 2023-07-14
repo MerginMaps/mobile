@@ -27,18 +27,14 @@
 #include "inpututils.h"
 #include "variablesmanager.h"
 
-#include "qsettings.h"
-
 PositionTrackingManager::PositionTrackingManager( QObject *parent )
   : QObject( parent )
 {
 }
 
-void PositionTrackingManager::addPoint( const GeoPosition &position )
+void PositionTrackingManager::addPoint( const QgsPoint &position )
 {
-  QgsPoint newPoint( position.longitude, position.latitude, position.elevation, QDateTime::currentDateTime().toSecsSinceEpoch() );
-
-  if ( newPoint.isEmpty() )
+  if ( position.isEmpty() )
     return;
 
   //
@@ -47,15 +43,23 @@ void PositionTrackingManager::addPoint( const GeoPosition &position )
 
   int pointsCount = mTrackedGeometry.constGet()->vertexCount();
 
-  mTrackedGeometry.get()->insertVertex( QgsVertexId( 0, 0, pointsCount ), newPoint );
+  mTrackedGeometry.get()->insertVertex( QgsVertexId( 0, 0, pointsCount ), position );
 
-  cacheTrackedGeometry();
   emit trackedGeometryChanged( mTrackedGeometry );
-
-  CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Added point:" ) + newPoint.asWkt( 4 ) );
 }
 
-void PositionTrackingManager::storeTrackedPath()
+void PositionTrackingManager::addPoints( QList<QgsPoint> positions )
+{
+  for ( int ix = 0; ix < positions.size(); ix++ )
+  {
+    int pointsCount = mTrackedGeometry.constGet()->vertexCount();
+    mTrackedGeometry.get()->insertVertex( QgsVertexId( 0, 0, pointsCount ), positions[ix] );
+  }
+
+  emit trackedGeometryChanged( mTrackedGeometry );
+}
+
+void PositionTrackingManager::commitTrackedPath()
 {
   if ( !mQgsProject )
   {
@@ -70,6 +74,8 @@ void PositionTrackingManager::storeTrackedPath()
     CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Can not save tracking feature, layer is missing or invalid" ) );
     return;
   }
+
+  // TODO: On android read the position from the file
 
   // convert captured geometry to the destination layer's CRS
   QgsGeometry geometryInLayerCRS = InputUtils::transformGeometry( mTrackedGeometry, QgsCoordinateReferenceSystem::fromEpsgId( 4326 ), trackingLayer );
@@ -94,21 +100,22 @@ void PositionTrackingManager::storeTrackedPath()
   trackingLayer->startEditing();
   trackingLayer->addFeature( trackedFeature.featureRef() );
 
-  CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Feature created %1" ).arg( trackedFeature.feature().id() ) );
-
   if ( !trackingLayer->commitChanges() )
   {
     CoreUtils::log( QStringLiteral( "CommitChanges" ),
                     QStringLiteral( "Failed to commit changes:\n%1" )
                     .arg( trackingLayer->commitErrors().join( QLatin1Char( '\n' ) ) ) );
+
     trackingLayer->rollBack();
   }
   else
   {
-    clearCache();
     trackingLayer->triggerRepaint();
 
-    CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Feature commited and cache cleared" ) );
+    CoreUtils::log(
+      QStringLiteral( "Position tracking" ),
+      QStringLiteral( "Feature %1 commited" ).arg( trackedFeature.featureRef().id() )
+    );
   }
 }
 
@@ -156,26 +163,18 @@ void PositionTrackingManager::setup()
   if ( mTrackingBackend->signalSlotSupport() == AbstractTrackingBackend::SignalSlotSupport::Supported )
   {
     connect( mTrackingBackend.get(), &AbstractTrackingBackend::positionChanged, this, &PositionTrackingManager::addPoint );
+    connect( mTrackingBackend.get(), &AbstractTrackingBackend::multiplePositionChanges, this, &PositionTrackingManager::addPoints );
   }
   else
   {
-    mTrackingBackend->setNotifyFunction( [ = ]( const GeoPosition & p ) { this->addPoint( p ); } );
+    mTrackingBackend->setNotifyFunction( [ = ]( const QgsPoint & p ) { this->addPoint( p ); } );
   }
+
+  connect( mTrackingBackend.get(), &AbstractTrackingBackend::errorOccured, this, &PositionTrackingManager::trackingErrorOccured );
+  connect( mTrackingBackend.get(), &AbstractTrackingBackend::abort, this, &PositionTrackingManager::abort );
 
   mIsTrackingPosition = true;
   emit isTrackingPositionChanged( true );
-}
-
-void PositionTrackingManager::cacheTrackedGeometry()
-{
-  QSettings settings;
-  settings.setValue( QStringLiteral( "MerginMaps/Tracking/TrackedPath" ), mTrackedGeometry.asWkt( 6 ) );
-}
-
-void PositionTrackingManager::clearCache()
-{
-  QSettings settings;
-  settings.remove( QStringLiteral( "MerginMaps/Tracking/TrackedPath" ) );
 }
 
 AbstractTrackingBackend *PositionTrackingManager::constructTrackingBackend( QgsProject *project, PositionKit *positionKit )
@@ -319,4 +318,30 @@ QDateTime PositionTrackingManager::startTime() const
 bool PositionTrackingManager::isTrackingPosition() const
 {
   return mIsTrackingPosition;
+}
+
+AppState::State PositionTrackingManager::appState() const
+{
+  return mAppState;
+}
+
+void PositionTrackingManager::setAppState( const AppState::State &newAppState )
+{
+  if ( mAppState == newAppState )
+    return;
+
+  mAppState = newAppState;
+  emit appStateChanged( mAppState );
+
+  if ( !mTrackingBackend )
+    return;
+
+  if ( mAppState == AppState::Active )
+  {
+    mTrackingBackend->appMaximized();
+  }
+  else
+  {
+    mTrackingBackend->appMinimized();
+  }
 }

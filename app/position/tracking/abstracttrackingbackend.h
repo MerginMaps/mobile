@@ -13,7 +13,7 @@
 #include <QObject>
 #include <qglobal.h>
 
-#include "position/geoposition.h"
+#include "qgspoint.h"
 
 class AbstractTrackingBackend : public QObject
 {
@@ -44,15 +44,22 @@ class AbstractTrackingBackend : public QObject
 
     SignalSlotSupport signalSlotSupport() const;
 
-    void setNotifyFunction( std::function<void( const GeoPosition &position )> );
+    void setNotifyFunction( std::function<void( const QgsPoint &position )> );
+
+    virtual void appMinimized() {};
+    virtual void appMaximized() {};
 
   signals:
-    void positionChanged( const GeoPosition &position );
+    void positionChanged( const QgsPoint &position );
+    void multiplePositionChanges( QList<QgsPoint> positions );
+
+    void errorOccured( const QString &error );
+    void abort();
 
     void updateFrequencyChanged( AbstractTrackingBackend::UpdateFrequency updateFrequency );
 
   protected:
-    void notifyListeners( const GeoPosition &position );
+    void notifyListeners( const QgsPoint &position );
     void setSignalSlotSupport( SignalSlotSupport support );
 
   private:
@@ -60,7 +67,7 @@ class AbstractTrackingBackend : public QObject
     SignalSlotSupport mSignalSlotSupport;
 
     //! Function to call when this provider does not support signal/slot connection
-    std::function<void( const GeoPosition &position )> mNotifyFunction;
+    std::function<void( const QgsPoint &position )> mNotifyFunction;
 };
 
 #endif // ABSTRACTTRACKINGBACKEND_H

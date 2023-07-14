@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -13,6 +13,8 @@
 #include "abstracttrackingbackend.h"
 #include <QObject>
 #include <qglobal.h>
+#include <QFile>
+#include <QJniObject>
 
 class AndroidTrackingBackend : public AbstractTrackingBackend
 {
@@ -21,18 +23,19 @@ class AndroidTrackingBackend : public AbstractTrackingBackend
     explicit AndroidTrackingBackend( AbstractTrackingBackend::UpdateFrequency frequency, QObject *parent = nullptr );
     virtual ~AndroidTrackingBackend();
 
-    static AndroidTrackingBackend *instance() { return mInstance; };
-
-    void update( double longitude, double latitude, double altitude );
+    void sourceUpdatedPosition();
+    void sourceUpdatedState( const QString &statusMessage );
 
   private:
-
-    static AndroidTrackingBackend *mInstance;
-
-    void startForegroundService();
+    void setupForegroundUpdates();
 
     qreal mDistanceFilter = 0;
     qreal mUpdateInterval = 0; // ms
+
+    QString TRACKING_FILE_NAME = "tracking_updates.txt";
+    QFile mTrackingFile; // owned
+
+    QJniObject mBroadcastReceiver;
 };
 
 #endif // ANDROIDTRACKINGBACKEND_H

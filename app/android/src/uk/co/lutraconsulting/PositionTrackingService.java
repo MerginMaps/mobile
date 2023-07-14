@@ -25,6 +25,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import uk.co.lutraconsulting.PositionTrackingBroadcastMiddleware;
 
 import java.util.Timer;
@@ -47,11 +51,26 @@ public class PositionTrackingService extends Service implements LocationListener
     private static long MIN_TIME_BW_UPDATES = 1000; //ms
 
     protected LocationManager locationManager;
+    private FileOutputStream positionUpdatesStream;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // Create the file to store position updates
+        File file = new File( getFilesDir(), "tracking_updates.txt" );
+
+        sendStatusUpdateMessage( "Tracking file path:" + file.getAbsolutePath() );
+        
+        try {
+            // Open the FileOutputStream in append mode
+            positionUpdatesStream = new FileOutputStream(file, true);
+
+        } catch ( IOException e ) {
+            e.printStackTrace();
+            sendStatusUpdateMessage("ERROR #GENERAL: Could not open file stream: " + e.getMessage() );
+        }
     }
 
     @Override
@@ -63,6 +82,18 @@ public class PositionTrackingService extends Service implements LocationListener
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        // Close the FileOutputStream when the service is destroyed
+        try {
+            if (positionUpdatesStream != null) {
+                positionUpdatesStream.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            sendStatusUpdateMessage("ERROR #SILENT: Could not close file stream: " + e.getMessage() );
+        }
+
+        locationManager.removeUpdates(this);
     }
 
     public void sendStatusUpdateMessage( String message ) {
@@ -78,7 +109,7 @@ public class PositionTrackingService extends Service implements LocationListener
     public int onStartCommand( Intent intent, int flags, int startId ) {
 
         if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.O ) {
-            sendStatusUpdateMessage( "Position tracking: Error, tracking is not supported on your Android version ( Android O (8.0) required )" );
+            sendStatusUpdateMessage( "ERROR #UNSUPPORTED: tracking is not supported on your Android version ( Android O (8.0) required )" );
             stopSelf();
 
             return START_STICKY;
@@ -115,7 +146,7 @@ public class PositionTrackingService extends Service implements LocationListener
 
         boolean isGPSAvailable = locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER );
         if ( !isGPSAvailable ) {
-            sendStatusUpdateMessage( "Position tracking: Error, GPS is not available!" );
+            sendStatusUpdateMessage( "ERROR #GPS_UNAVAILABLE: GPS is not available!" );
             stopSelf();
             stopForeground( true );
         }
@@ -124,7 +155,7 @@ public class PositionTrackingService extends Service implements LocationListener
             boolean coarseLocationAccessGranted = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
             if ( !fineLocationAccessGranted || !coarseLocationAccessGranted ) {
-                sendStatusUpdateMessage( "Position tracking: Error, missing location permissions!" );
+                sendStatusUpdateMessage( "ERROR #PERMISSIONS: missing location permissions!" );
                 stopSelf();
                 stopForeground(true);
             }
@@ -147,7 +178,7 @@ public class PositionTrackingService extends Service implements LocationListener
                 this
             );
 
-            sendStatusUpdateMessage( "Position tracking: Started to listen to position updates!" );
+            sendStatusUpdateMessage( "Started to listen to position updates!" );
         }
 
         return START_STICKY;
@@ -155,13 +186,23 @@ public class PositionTrackingService extends Service implements LocationListener
 
     @Override
     public void onLocationChanged( Location location ) {
+
+        long currentTimeSeconds = System.currentTimeMillis() / 1000;
+        String positionUpdate = String.format("%f %f %f %d\n", location.getLongitude(), location.getLatitude(), location.getAltitude(), currentTimeSeconds);
+
+        try {
+            if ( positionUpdatesStream != null ) {
+                positionUpdatesStream.write( positionUpdate.getBytes() );
+            }
+        } catch ( IOException e ) {
+            e.printStackTrace();
+            sendStatusUpdateMessage("ERROR #GENERAL: Could not write to file:" + e.getMessage() );
+        }
+
+        // notify cpp about position update
         Intent sendToBroadcastIntent = new Intent();
 
         sendToBroadcastIntent.setAction( PositionTrackingBroadcastMiddleware.TRACKING_POSITION_UPDATE_ACTION );
-        sendToBroadcastIntent.putExtra( PositionTrackingBroadcastMiddleware.TRACKING_POSITION_UPDATE_LON_TAG, location.getLongitude() );
-        sendToBroadcastIntent.putExtra( PositionTrackingBroadcastMiddleware.TRACKING_POSITION_UPDATE_LAT_TAG, location.getLatitude() );
-        sendToBroadcastIntent.putExtra( PositionTrackingBroadcastMiddleware.TRACKING_POSITION_UPDATE_ALT_TAG, location.getAltitude() );
-
         sendBroadcast( sendToBroadcastIntent );
     }
 }

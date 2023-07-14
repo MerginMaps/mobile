@@ -37,7 +37,8 @@ InternalTrackingBackend::InternalTrackingBackend(
     {
       if ( mLastUpdate.addMSecs( mUpdateInterval ) <= QDateTime::currentDateTime() )
       {
-        notifyListeners( position );
+        QgsPoint p( position.longitude, position.latitude, position.elevation, QDateTime::currentDateTime().toSecsSinceEpoch() );
+        notifyListeners( p );
       }
     } );
   }

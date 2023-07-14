@@ -294,9 +294,14 @@ Item {
 
           variablesManager: __variablesManager
           qgsProject: __activeProject.qgsProject
+          appState: __appState.state
 
           onTrackingErrorOccured: (message) => {
             notify( message )
+          }
+
+          onAbort: () => {
+            root.setTracking( false )
           }
         }
 
@@ -1236,7 +1241,7 @@ Item {
       }
     }
     else {
-      trackingManager?.storeTrackedPath()
+      trackingManager?.commitTrackedPath()
       tracking.active = false
     }
   }

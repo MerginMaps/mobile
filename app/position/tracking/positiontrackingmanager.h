@@ -15,6 +15,7 @@
 #include <QQmlEngine>
 
 #include "abstracttrackingbackend.h"
+#include "appstate.h"
 
 #include "qgsgeometry.h"
 #include "qgsfeature.h"
@@ -36,6 +37,7 @@ class PositionTrackingManager : public QObject
 
     // properties to be set from QML
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
+    Q_PROPERTY( AppState::State appState READ appState WRITE setAppState NOTIFY appStateChanged )
     Q_PROPERTY( VariablesManager *variablesManager READ variablesManager WRITE setVariablesManager NOTIFY variablesManagerChanged )
     Q_PROPERTY( AbstractTrackingBackend *trackingBackend READ trackingBackend WRITE setTrackingBackend NOTIFY trackingBackendChanged )
 
@@ -69,14 +71,18 @@ class PositionTrackingManager : public QObject
 
     Q_INVOKABLE void tryAgain();
 
-    Q_INVOKABLE void storeTrackedPath();
+    Q_INVOKABLE void commitTrackedPath();
 
     QDateTime startTime() const;
 
     bool isTrackingPosition() const;
 
+    AppState::State appState() const;
+    void setAppState( const AppState::State &newAppState );
+
   public slots:
-    void addPoint( const GeoPosition &position );
+    void addPoint( const QgsPoint &position );
+    void addPoints( QList<QgsPoint> positions );
 
   signals:
 
@@ -96,12 +102,13 @@ class PositionTrackingManager : public QObject
 
     void trackingErrorOccured( const QString &message );
 
+    void appStateChanged( AppState::State appState );
+
+    void abort();
+
   private:
     void setLayerId( QString newLayerId );
     void setup();
-
-    void cacheTrackedGeometry();
-    void clearCache();
 
     std::unique_ptr<AbstractTrackingBackend> mTrackingBackend; // owned
 
@@ -114,6 +121,7 @@ class PositionTrackingManager : public QObject
     QDateTime mTrackingStartTime;
     QgsFeature mTrackedFeature;
     bool mIsTrackingPosition = false;
+    AppState::State mAppState;
 };
 
 #endif // POSITIONTRACKINGMANAGER_H

@@ -17,7 +17,7 @@ AbstractTrackingBackend::AbstractTrackingBackend( UpdateFrequency updateFrequenc
 
 }
 
-void AbstractTrackingBackend::notifyListeners( const GeoPosition &position )
+void AbstractTrackingBackend::notifyListeners( const QgsPoint &position )
 {
   if ( mSignalSlotSupport == SignalSlotSupport::Supported )
   {
@@ -49,7 +49,7 @@ AbstractTrackingBackend::SignalSlotSupport AbstractTrackingBackend::signalSlotSu
   return mSignalSlotSupport;
 }
 
-void AbstractTrackingBackend::setNotifyFunction( std::function<void ( const GeoPosition & )> fn )
+void AbstractTrackingBackend::setNotifyFunction( std::function<void ( const QgsPoint & )> fn )
 {
   mNotifyFunction = fn;
 }
