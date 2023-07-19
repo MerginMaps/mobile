@@ -150,7 +150,6 @@
 #include "qgsapplication.h"
 #include "activeproject.h"
 #include "appsettings.h"
-#include "appstate.h"
 
 static QString getDataDir()
 {
@@ -500,9 +499,6 @@ int main( int argc, char *argv[] )
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );
 
-  AppState appState;
-  appState.setState( AppState::Active );
-
   // layer models
   LayersModel lm;
   LayersProxyModel recordingLpm( &lm, LayerModelTypes::ActiveLayerSelection );
@@ -532,20 +528,8 @@ int main( int argc, char *argv[] )
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
   QObject lambdaContext;
 
-  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &lambdaContext, [&appState]( Qt::ApplicationState state )
+  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &lambdaContext, []( Qt::ApplicationState state )
   {
-    switch ( state )
-    {
-      case Qt::ApplicationActive:
-        appState.setState( AppState::Active );
-        break;
-      case Qt::ApplicationInactive:
-        appState.setState( AppState::Inactive );
-        break;
-      default:
-        appState.setState( AppState::Suspended );
-    }
-
     QString msg;
 
     // Instatiate QDebug with QString to redirect output to string
@@ -646,7 +630,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__localProjectsManager", &localProjectsManager );
   engine.rootContext()->setContextProperty( "__variablesManager", vm.get() );
   engine.rootContext()->setContextProperty( "__positionKit", &pk );
-  engine.rootContext()->setContextProperty( "__appState", &appState );
 
   // add image provider to pass QIcons/QImages from C++ to QML
   engine.rootContext()->setContextProperty( "__layerTreeModelPixmapProvider", layerTreeModelPixmapProvider );

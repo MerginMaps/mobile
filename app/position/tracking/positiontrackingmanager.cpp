@@ -319,29 +319,3 @@ bool PositionTrackingManager::isTrackingPosition() const
 {
   return mIsTrackingPosition;
 }
-
-AppState::State PositionTrackingManager::appState() const
-{
-  return mAppState;
-}
-
-void PositionTrackingManager::setAppState( const AppState::State &newAppState )
-{
-  if ( mAppState == newAppState )
-    return;
-
-  mAppState = newAppState;
-  emit appStateChanged( mAppState );
-
-  if ( !mTrackingBackend )
-    return;
-
-  if ( mAppState == AppState::Active )
-  {
-    mTrackingBackend->appMaximized();
-  }
-  else
-  {
-    mTrackingBackend->appMinimized();
-  }
-}

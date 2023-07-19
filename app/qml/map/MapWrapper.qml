@@ -294,7 +294,6 @@ Item {
 
           variablesManager: __variablesManager
           qgsProject: __activeProject.qgsProject
-          appState: __appState.state
 
           onTrackingErrorOccured: (message) => {
             notify( message )

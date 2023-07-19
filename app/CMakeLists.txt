@@ -45,7 +45,6 @@ set(MM_SRCS
     activeproject.cpp
     androidutils.cpp
     appsettings.cpp
-    appstate.cpp
     autosynccontroller.cpp
     bluetoothdiscoverymodel.cpp
     codescanner.cpp
@@ -127,7 +126,6 @@ set(MM_HDRS
     activeproject.h
     androidutils.h
     appsettings.h
-    appstate.h
     autosynccontroller.h
     bluetoothdiscoverymodel.h
     codescanner.h

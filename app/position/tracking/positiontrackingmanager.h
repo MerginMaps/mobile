@@ -15,7 +15,6 @@
 #include <QQmlEngine>
 
 #include "abstracttrackingbackend.h"
-#include "appstate.h"
 
 #include "qgsgeometry.h"
 #include "qgsfeature.h"
@@ -37,7 +36,6 @@ class PositionTrackingManager : public QObject
 
     // properties to be set from QML
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
-    Q_PROPERTY( AppState::State appState READ appState WRITE setAppState NOTIFY appStateChanged )
     Q_PROPERTY( VariablesManager *variablesManager READ variablesManager WRITE setVariablesManager NOTIFY variablesManagerChanged )
     Q_PROPERTY( AbstractTrackingBackend *trackingBackend READ trackingBackend WRITE setTrackingBackend NOTIFY trackingBackendChanged )
 
@@ -77,9 +75,6 @@ class PositionTrackingManager : public QObject
 
     bool isTrackingPosition() const;
 
-    AppState::State appState() const;
-    void setAppState( const AppState::State &newAppState );
-
   public slots:
     void addPoint( const QgsPoint &position );
     void addPoints( QList<QgsPoint> positions );
@@ -102,8 +97,6 @@ class PositionTrackingManager : public QObject
 
     void trackingErrorOccured( const QString &message );
 
-    void appStateChanged( AppState::State appState );
-
     void abort();
 
   private:
@@ -121,7 +114,6 @@ class PositionTrackingManager : public QObject
     QDateTime mTrackingStartTime;
     QgsFeature mTrackedFeature;
     bool mIsTrackingPosition = false;
-    AppState::State mAppState;
 };
 
 #endif // POSITIONTRACKINGMANAGER_H
