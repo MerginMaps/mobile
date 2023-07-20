@@ -19,6 +19,9 @@ public slots:
   void clearCache();
 
 private:
+  QString syncScript() const;
+
+private:
   QFileSystemWatcher *_watcher;
   QQmlApplicationEngine& _engine;
 };

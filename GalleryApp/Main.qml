@@ -104,7 +104,6 @@ ApplicationWindow {
 
     initialItem: Loader {
       id: mainLoader
-      anchors.fill: parent
       source: "file://"+ _qmlPath+ "/InitialGalleryPage.qml"
       scale: 1.0
     }
