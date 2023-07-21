@@ -4,5 +4,6 @@
         <file>qml/pages/InitialGalleryPage.qml</file>
         <file>qml/pages/CheckBoxPage.qml</file>
         <file>qml/pages/ToolTipPage.qml</file>
+        <file>qml/pages/TestComponent.qml</file>
     </qresource>
 </RCC>
