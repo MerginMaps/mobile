@@ -10,13 +10,14 @@ class HotReload : public QObject
 {
   Q_OBJECT
 public:
-  explicit HotReload(QQmlApplicationEngine& engine, const QString& directory, QObject *parent = nullptr);
+  explicit HotReload(QQmlApplicationEngine& engine, QObject *parent = nullptr);
 
 signals:
   void watchedSourceChanged();
 
 public slots:
   void clearCache();
+  void startHotReload();
 
 private:
   QString syncScript() const;

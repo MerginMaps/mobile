@@ -3,8 +3,9 @@
 #include <QDir>
 #include <QGuiApplication>
 #include <QProcess>
+#include <QTimer>
 
-#warning Tested on Mac
+// TODO: not needed to sync dirs every second, just when a file was changed
 QString HotReload::syncScript() const
 {
   return "#!/bin/sh \n\
@@ -16,23 +17,16 @@ while true; do \n\
 done";
 }
 
-HotReload::HotReload(QQmlApplicationEngine& engine, const QString &directory, QObject *parent):
+HotReload::HotReload(QQmlApplicationEngine& engine, QObject *parent):
   _engine(engine)
 {
+  // create dirs for sync (near the app)
   if(!QDir("HotReload/GalleryApp/qml/").exists())
     QDir().mkpath(QGuiApplication::applicationDirPath() + "/HotReload/GalleryApp/qml/");
   if(!QDir("HotReload/app/qmls/").exists())
     QDir().mkpath(QGuiApplication::applicationDirPath() + "/HotReload/app/qmls/");
 
-  _watcher = new QFileSystemWatcher(this);
-  _watcher->addPath("HotReload/GalleryApp/qml/Pages");
-  _watcher->addPath("HotReload/app/qmls/component");
-
-  connect(_watcher, &QFileSystemWatcher::directoryChanged, this, [this, &engine](const QString& path){
-    emit watchedSourceChanged();
-  });
-
-  // create runnable sync script near the app
+  // create runnable sync script (near the app)
   QString scriptFilename = QGuiApplication::applicationDirPath() + "/syncGallery.sh";
   qInfo() << "Sync script location: " << scriptFilename;
   if(!QFileInfo::exists(scriptFilename)) {
@@ -50,9 +44,24 @@ HotReload::HotReload(QQmlApplicationEngine& engine, const QString &directory, QO
 
   // run sync script
   QProcess::startDetached("./syncGallery.sh");
+
+  // start watching the changes in synced dirs
+  QTimer::singleShot(2000, this, &HotReload::startHotReload);
 }
 
 void HotReload::clearCache()
 {
   _engine.clearComponentCache();
+}
+
+void HotReload::startHotReload()
+{
+  _watcher = new QFileSystemWatcher(this);
+  _watcher->addPath("HotReload/GalleryApp/qml/Pages");
+  _watcher->addPath("HotReload/app/qmls/component");
+
+  // send signal for hot reloading
+  connect(_watcher, &QFileSystemWatcher::directoryChanged, this, [this](const QString& path){
+    emit watchedSourceChanged();
+  });
 }

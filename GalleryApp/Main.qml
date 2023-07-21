@@ -15,10 +15,9 @@ ApplicationWindow {
   Connections{
     target: _hotReload
     function onWatchedSourceChanged() {
-      console.log(_qmlPath)
       mainLoader.active = false;
       _hotReload.clearCache();
-      mainLoader.setSource( "file://"+_qmlPath+currentPageSource)
+      mainLoader.setSource( "file://"+_qmlWrapperPath+currentPageSource)
       mainLoader.active = true;
     }
   }
@@ -81,7 +80,7 @@ ApplicationWindow {
         onClicked: {
           window.currentPageSource = model.source
           listView.currentIndex = index
-          stackView.push("file://"+_qmlPath+model.source)
+          stackView.push("file://"+_qmlWrapperPath+model.source)
           stackView.pop()
           drawer.close()
         }
@@ -102,7 +101,7 @@ ApplicationWindow {
 
     initialItem: Loader {
       id: mainLoader
-      source: "file://"+_qmlPath+currentPageSource
+      source: "file://"+_qmlWrapperPath+currentPageSource
       scale: 1.0
     }
   }
