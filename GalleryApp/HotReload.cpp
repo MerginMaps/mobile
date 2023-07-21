@@ -58,6 +58,7 @@ void HotReload::startHotReload()
 {
   _watcher = new QFileSystemWatcher(this);
   _watcher->addPath("HotReload/GalleryApp/qml/Pages");
+  _watcher->addPath("HotReload/app/qmls");
   _watcher->addPath("HotReload/app/qmls/component");
 
   // send signal for hot reloading

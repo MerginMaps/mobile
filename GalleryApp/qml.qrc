@@ -4,7 +4,8 @@
         <file>qml/pages/InitialGalleryPage.qml</file>
         <file>qml/pages/CheckBoxPage.qml</file>
         <file>qml/pages/ToolTipPage.qml</file>
-        <file>qml/pages/TestComponent.qml</file>
+        <file>qml/pages/TextPage.qml</file>
         <file>../app/qmls/component/MyRectangle.qml</file>
+        <file>../app/qmls/Style.js</file>
     </qresource>
 </RCC>

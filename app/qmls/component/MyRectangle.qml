@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import "../Style.js" as Style
 
 Rectangle {
   anchors.centerIn: parent
@@ -9,7 +10,8 @@ Rectangle {
   radius: 20
   Text {
     anchors.centerIn: parent
-    text: "My rectangle :)"
+    text: Style.dynamicText()
+    color: Style.textColor
   }
 }
 

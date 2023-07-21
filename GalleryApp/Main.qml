@@ -89,6 +89,7 @@ ApplicationWindow {
       model: ListModel {
         ListElement { title: "ToolTip"; source: "ToolTipPage.qml" }
         ListElement { title: "CheckBox"; source: "CheckBoxPage.qml" }
+        ListElement { title: "Text"; source: "TextPage.qml" }
       }
 
       ScrollIndicator.vertical: ScrollIndicator { }
