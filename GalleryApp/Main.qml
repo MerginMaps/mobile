@@ -10,13 +10,15 @@ ApplicationWindow {
   visible: true
   title: "Gallery"
 
+  property string currentPageSource: "InitialGalleryPage.qml"
+
   Connections{
     target: _hotReload
     function onWatchedSourceChanged() {
       console.log(_qmlPath)
       mainLoader.active = false;
       _hotReload.clearCache();
-      mainLoader.setSource("file://"+ _qmlPath+ "/InitialGalleryPage.qml")
+      mainLoader.setSource( "file://"+_qmlPath+currentPageSource)
       mainLoader.active = true;
     }
   }
@@ -29,15 +31,7 @@ ApplicationWindow {
 
   Action {
     id: navigateBackAction
-    icon.name: stackView.depth > 1 ? "back" : "drawer"
-    onTriggered: {
-      if (stackView.depth > 1) {
-        stackView.pop()
-        listView.currentIndex = -1
-      } else {
-        drawer.open()
-      }
-    }
+    onTriggered: drawer.open()
   }
 
   header: ToolBar {
@@ -47,6 +41,7 @@ ApplicationWindow {
 
       ToolButton {
         action: navigateBackAction
+        text: "☰"
       }
 
       Label {
@@ -61,6 +56,7 @@ ApplicationWindow {
 
       ToolButton {
         onClicked: window.close()
+        text: "⨯"
       }
     }
   }
@@ -83,15 +79,17 @@ ApplicationWindow {
         text: model.title
         highlighted: ListView.isCurrentItem
         onClicked: {
+          window.currentPageSource = model.source
           listView.currentIndex = index
-          stackView.push(model.source)
+          stackView.push("file://"+_qmlPath+model.source)
+          stackView.pop()
           drawer.close()
         }
       }
 
       model: ListModel {
-        ListElement { title: "ToolTip"; source: "qml/pages/ToolTipPage.qml" }
-        ListElement { title: "CheckBox"; source: "qml/pages/CheckBoxPage.qml" }
+        ListElement { title: "ToolTip"; source: "ToolTipPage.qml" }
+        ListElement { title: "CheckBox"; source: "CheckBoxPage.qml" }
       }
 
       ScrollIndicator.vertical: ScrollIndicator { }
@@ -104,7 +102,7 @@ ApplicationWindow {
 
     initialItem: Loader {
       id: mainLoader
-      source: "file://"+ _qmlPath+ "/InitialGalleryPage.qml"
+      source: "file://"+_qmlPath+currentPageSource
       scale: 1.0
     }
   }

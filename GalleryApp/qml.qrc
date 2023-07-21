@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>Main.qml</file>
         <file>qml/pages/InitialGalleryPage.qml</file>
+        <file>qml/pages/CheckBoxPage.qml</file>
+        <file>qml/pages/ToolTipPage.qml</file>
     </qresource>
 </RCC>

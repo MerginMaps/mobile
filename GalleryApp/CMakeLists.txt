@@ -29,8 +29,6 @@ qt_add_qml_module(appGalleryApp
     URI GalleryApp
     VERSION 1.0
     QML_FILES Main.qml
-    qml/pages/ToolTipPage.qml
-    qml/pages/CheckBoxPage.qml
 )
 
 set_target_properties(appGalleryApp PROPERTIES

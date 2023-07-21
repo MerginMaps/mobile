@@ -7,12 +7,12 @@
 #warning Tested on Mac
 QString HotReload::syncScript() const
 {
-  return "#!/bin/sh \
-    echo running hot reload sync directories ... \
-    while true; do \
-      rsync -rav ../../../../GalleryApp/qml/pages/ qml/ \
-      sleep 1 \
-    done";
+  return "#!/bin/sh \n\
+echo running hot reload sync directories ... \n\
+while true; do \n\
+  rsync -ra ../../../../GalleryApp/qml/pages/ qml/ \n\
+  sleep 1 \n\
+done";
 }
 
 HotReload::HotReload(QQmlApplicationEngine& engine, const QString &directory, QObject *parent):
