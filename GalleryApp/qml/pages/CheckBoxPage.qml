@@ -1,7 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 
-Item {
+import "../../../app/qmls/component"
 
-  TestComponent { }
+Item {
+  MyRectangle { }
 }
