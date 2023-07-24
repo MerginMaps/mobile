@@ -37,10 +37,6 @@ void PositionTrackingManager::addPoint( const QgsPoint &position )
   if ( position.isEmpty() )
     return;
 
-  //
-  // we could ignore updates that have very bad accuracy in future
-  //
-
   int pointsCount = mTrackedGeometry.constGet()->vertexCount();
 
   mTrackedGeometry.get()->insertVertex( QgsVertexId( 0, 0, pointsCount ), position );
@@ -50,11 +46,33 @@ void PositionTrackingManager::addPoint( const QgsPoint &position )
 
 void PositionTrackingManager::addPoints( QList<QgsPoint> positions )
 {
-  for ( int ix = 0; ix < positions.size(); ix++ )
+  // get points from the previous geometry
+  QgsLineString *oldLine = nullptr;
+  oldLine = qgsgeometry_cast<QgsLineString *>( mTrackedGeometry.constGet() );
+
+  if ( !oldLine )
   {
-    int pointsCount = mTrackedGeometry.constGet()->vertexCount();
-    mTrackedGeometry.get()->insertVertex( QgsVertexId( 0, 0, pointsCount ), positions[ix] );
+    qDebug() << "Error, tracked geometry is not a line";
+    return;
   }
+
+  QList<double> xValues = oldLine->xVector();
+  QList<double> yValues = oldLine->yVector();
+  QList<double> zValues = oldLine->zVector();
+  QList<double> mValues = oldLine->mVector();
+
+  QListIterator<QgsPoint> positionsIterator( positions );
+  while ( positionsIterator.hasNext() )
+  {
+    const QgsPoint &p = positionsIterator.next();
+    xValues += p.x();
+    yValues += p.y();
+    zValues += p.z();
+    mValues += p.m();
+  }
+
+  QgsLineString *newLine = new QgsLineString( xValues, yValues, zValues, mValues );
+  mTrackedGeometry.set( newLine );
 
   emit trackedGeometryChanged( mTrackedGeometry );
 }
@@ -74,8 +92,6 @@ void PositionTrackingManager::commitTrackedPath()
     CoreUtils::log( QStringLiteral( "Position tracking" ), QStringLiteral( "Can not save tracking feature, layer is missing or invalid" ) );
     return;
   }
-
-  // TODO: On android read the position from the file
 
   // convert captured geometry to the destination layer's CRS
   QgsGeometry geometryInLayerCRS = InputUtils::transformGeometry( mTrackedGeometry, QgsCoordinateReferenceSystem::fromEpsgId( 4326 ), trackingLayer );
@@ -154,11 +170,22 @@ void PositionTrackingManager::setup()
   emit startTimeChanged( mTrackingStartTime );
 
   //
-  // build track line
+  // build the track line
+  //  - in case of direct calls from the tracking backend we start with clear line
+  //  - in case of updates through file we want to read the file first
   //
 
-  QgsLineString *line = new QgsLineString();
-  mTrackedGeometry.set( line );
+  if ( mTrackingBackend->trackingMethod() == AbstractTrackingBackend::TrackingMethod::UpdatesThroughDirectCall )
+  {
+    QgsLineString *line = new QgsLineString();
+    mTrackedGeometry.set( line );
+  }
+  else if ( mTrackingBackend->trackingMethod() == AbstractTrackingBackend::TrackingMethod::UpdatesThroughFile )
+  {
+    QList<QgsPoint> positions = mTrackingBackend->getAllUpdates();
+    QgsLineString *line = new QgsLineString( positions );
+    mTrackedGeometry.set( line );
+  }
 
   if ( mTrackingBackend->signalSlotSupport() == AbstractTrackingBackend::SignalSlotSupport::Supported )
   {
@@ -175,6 +202,12 @@ void PositionTrackingManager::setup()
 
   mIsTrackingPosition = true;
   emit isTrackingPositionChanged( true );
+
+  // update highlight if the geometry is not empty
+  if ( mTrackedGeometry.constGet() && mTrackedGeometry.constGet()->vertexCount() )
+  {
+    emit trackedGeometryChanged( mTrackedGeometry );
+  }
 }
 
 AbstractTrackingBackend *PositionTrackingManager::constructTrackingBackend( QgsProject *project, PositionKit *positionKit )

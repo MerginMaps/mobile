@@ -20,8 +20,14 @@ class AndroidTrackingBackend : public AbstractTrackingBackend
 {
     Q_OBJECT
   public:
-    explicit AndroidTrackingBackend( AbstractTrackingBackend::UpdateFrequency frequency, QObject *parent = nullptr );
+    explicit AndroidTrackingBackend(
+      UpdateFrequency updateFrequency,
+      QObject *parent = nullptr
+    );
+
     virtual ~AndroidTrackingBackend();
+
+    QList<QgsPoint> getAllUpdates() override;
 
     void sourceUpdatedPosition();
     void sourceUpdatedState( const QString &statusMessage );
@@ -29,13 +35,13 @@ class AndroidTrackingBackend : public AbstractTrackingBackend
   private:
     void setupForegroundUpdates();
 
+    QList<QgsPoint> parsePositionUpdates( const QString &data );
+
     qreal mDistanceFilter = 0;
     qreal mUpdateInterval = 0; // ms
 
     QString TRACKING_FILE_NAME = "tracking_updates.txt";
     QFile mTrackingFile; // owned
-
-    QJniObject mBroadcastReceiver;
 };
 
 #endif // ANDROIDTRACKINGBACKEND_H

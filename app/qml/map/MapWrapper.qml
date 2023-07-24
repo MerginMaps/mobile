@@ -1067,6 +1067,18 @@ Item {
     }
   }
 
+  Connections {
+    target: __activeProject
+
+    function onStartPositionTracking() {
+
+      if ( !tracking.active )
+      {
+        root.setTracking( true )
+      }
+    }
+  }
+
   QtObject {
     id: internal
     // private properties - not accessible by other components

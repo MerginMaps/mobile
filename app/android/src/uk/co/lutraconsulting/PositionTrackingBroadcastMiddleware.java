@@ -33,7 +33,7 @@ public class PositionTrackingBroadcastMiddleware {
     public static final String TRACKING_STATUS_MESSAGE_TAG = "uk.co.lutraconsulting.tracking.status.message";
 
     public PositionTrackingBroadcastMiddleware() {
-        Log.i( TAG, "Broadcast middleware instantiated! " + this.toString() );
+
     }
 
     public void registerBroadcastReceiver( Context context ) {
@@ -45,14 +45,10 @@ public class PositionTrackingBroadcastMiddleware {
 
         // Set this as the receiver of POSITION_UPDATE and STATUS_MESSAGE intent actions
         context.registerReceiver( serviceMessageReceiver, intentFilter );
-
-        Log.i( TAG, "Registered tracking broadcast middleware " + this.toString() );
     }
 
     public void unregisterBroadcastReceiver( Context context ) {
         context.unregisterReceiver( serviceMessageReceiver );
-        
-        Log.i( TAG, "Unregistered tracking broadcast " + this.toString() );
     }
 
     private BroadcastReceiver serviceMessageReceiver = new BroadcastReceiver() {

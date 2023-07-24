@@ -83,6 +83,8 @@ public class PositionTrackingService extends Service implements LocationListener
     public void onDestroy() {
         super.onDestroy();
 
+        locationManager.removeUpdates(this);
+
         // Close the FileOutputStream when the service is destroyed
         try {
             if (positionUpdatesStream != null) {
@@ -92,8 +94,6 @@ public class PositionTrackingService extends Service implements LocationListener
             e.printStackTrace();
             sendStatusUpdateMessage("ERROR #SILENT: Could not close file stream: " + e.getMessage() );
         }
-
-        locationManager.removeUpdates(this);
     }
 
     public void sendStatusUpdateMessage( String message ) {
@@ -187,7 +187,7 @@ public class PositionTrackingService extends Service implements LocationListener
     @Override
     public void onLocationChanged( Location location ) {
 
-        long currentTimeSeconds = System.currentTimeMillis() / 1000;
+        long currentTimeSeconds = System.currentTimeMillis() / 1000; // UTC time
         String positionUpdate = String.format("%f %f %f %d\n", location.getLongitude(), location.getLatitude(), location.getAltitude(), currentTimeSeconds);
 
         try {

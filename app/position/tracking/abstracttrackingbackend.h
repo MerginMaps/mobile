@@ -37,17 +37,31 @@ class AbstractTrackingBackend : public QObject
     };
     Q_ENUM( SignalSlotSupport );
 
-    explicit AbstractTrackingBackend( UpdateFrequency updateFrequency = Often, SignalSlotSupport signalSlotSupport = Supported, QObject *parent = nullptr );
+    enum TrackingMethod
+    {
+      UpdatesThroughDirectCall = 0, // iOS/Desktop sends position updates directly from source
+      UpdatesThroughFile // Android saves position updates to a file
+    };
+    Q_ENUM( TrackingMethod );
+
+    explicit AbstractTrackingBackend(
+      UpdateFrequency updateFrequency = Often,
+      SignalSlotSupport signalSlotSupport = Supported,
+      TrackingMethod trackingMethod = UpdatesThroughDirectCall,
+      QObject *parent = nullptr
+    );
 
     UpdateFrequency updateFrequency() const;
     void setUpdateFrequency( const UpdateFrequency &newUpdateFrequency );
 
     SignalSlotSupport signalSlotSupport() const;
 
+    TrackingMethod trackingMethod() const;
+
     void setNotifyFunction( std::function<void( const QgsPoint &position )> );
 
-    virtual void appMinimized() {};
-    virtual void appMaximized() {};
+    // Backends with UpdatesThroughFile tracking method can return all previous updates by reading the tracking file
+    virtual QList<QgsPoint> getAllUpdates() { return QList<QgsPoint>(); };
 
   signals:
     void positionChanged( const QgsPoint &position );
@@ -65,6 +79,7 @@ class AbstractTrackingBackend : public QObject
   private:
     UpdateFrequency mUpdateFrequency;
     SignalSlotSupport mSignalSlotSupport;
+    TrackingMethod mTrackingMethod;
 
     //! Function to call when this provider does not support signal/slot connection
     std::function<void( const QgsPoint &position )> mNotifyFunction;

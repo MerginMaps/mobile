@@ -21,6 +21,10 @@
 #include "activeproject.h"
 #include "coreutils.h"
 
+#ifdef ANDROID
+#include "position/tracking/androidtrackingbroadcast.h"
+#endif
+
 const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 
 ActiveProject::ActiveProject( AppSettings &appSettings
@@ -100,6 +104,12 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
 
   // clear autosync
   setAutosyncEnabled( false );
+
+  // clear position tracking broadcast listeners
+#ifdef ANDROID
+  disconnect( &AndroidTrackingBroadcast::getInstance() );
+  AndroidTrackingBroadcast::unregisterBroadcast();
+#endif
 
   // Just clear project if empty
   if ( filePath.isEmpty() )
@@ -225,6 +235,22 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   {
     setAutosyncEnabled( true );
   }
+
+  // in case tracking is running, we want to show the UI
+#ifdef ANDROID
+  if ( positionTrackingSupported() )
+  {
+    connect(
+      &AndroidTrackingBroadcast::getInstance(),
+      &AndroidTrackingBroadcast::positionUpdated,
+      this,
+      &ActiveProject::startPositionTracking,
+      Qt::SingleShotConnection
+    );
+
+    AndroidTrackingBroadcast::registerBroadcast();
+  }
+#endif
 
   return res;
 }

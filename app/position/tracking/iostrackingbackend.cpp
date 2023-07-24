@@ -12,7 +12,12 @@
 #include <QDateTime>
 
 IOSTrackingBackend::IOSTrackingBackend( UpdateFrequency frequency, QObject *parent )
-  : AbstractTrackingBackend( frequency, AbstractTrackingBackend::SignalSlotSupport::NotSupported, parent )
+  : AbstractTrackingBackend(
+      frequency,
+      AbstractTrackingBackend::SignalSlotSupport::NotSupported,
+      AbstractTrackingBackend::TrackingMethod::UpdatesThroughDirectCall,
+      parent
+    )
   , mDistanceFilter( 1 )
 {
   switch ( frequency )
