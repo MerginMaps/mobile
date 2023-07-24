@@ -27,7 +27,6 @@ AbstractEditor {
     if ( !root.isReadOnly )
     {
       vrModel.pair = root.featureLayerPair
-      setIndex()
     }
   }
 
@@ -49,7 +48,6 @@ AbstractEditor {
 
   onParentValueChanged: {
     vrModel.pair = root.featureLayerPair
-    setIndex()
   }
 
   enabled: !isReadOnly
@@ -70,6 +68,14 @@ AbstractEditor {
         return // ignore invalidate signal if form is not in edit mode
       }
       root.editorValueChanged( "", true )
+    }
+
+    onFetchingResultsChanged: {
+      if ( !isFetching )
+      {
+        // we need to re-set the current index every time the model is done re-populating
+        setIndex()
+      }
     }
   }
 

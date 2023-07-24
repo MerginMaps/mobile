@@ -33,7 +33,6 @@ AbstractEditor {
     if ( !root.isReadOnly )
     {
       vrModel.pair = root.featureLayerPair
-      setText()
     }
   }
 
@@ -45,20 +44,17 @@ AbstractEditor {
   function pushVrPage()
   {
     let props = {
-      featuresModel: vrModel,
       pageTitle: labelAlias,
       allowMultiselect: root.allowMultivalue,
       toolbarVisible: root.allowMultivalue,
       preselectedFeatures: root.allowMultivalue ? vrModel.convertFromQgisType( root.parentValue, FeaturesModel.FeatureId ) : []
     }
-
     let obj = root.stackView.push( featuresPageComponent, props )
     obj.forceActiveFocus()
   }
 
   onParentValueChanged: {
     vrModel.pair = root.featureLayerPair
-    setText()
   }
 
   onRightActionClicked: pushVrPage()
@@ -82,6 +78,13 @@ AbstractEditor {
         return // ignore invalidate signal if form is not in edit mode
       }
       root.editorValueChanged( "", true )
+    }
+
+    onFetchingResultsChanged: {
+      if ( !isFetching )
+      {
+        setText()
+      }
     }
   }
 
@@ -126,6 +129,13 @@ AbstractEditor {
     FeaturesListPage {
       id: featuresPage
 
+      featuresModel: ValueRelationFeaturesModel {
+          id: vrPageModel
+
+          config: root.fieldConfig
+          pair: root.featureLayerPair
+        }
+
       pageTitle: qsTr( "Features" )
       allowSearch: true
       focus: true
@@ -155,7 +165,6 @@ AbstractEditor {
           // We need to convert feature id to string prior to sending it to C++ in order to
           // avoid conversion to scientific notation.
           featureIds = featureIds.toString()
-
           root.editorValueChanged( vrModel.convertToKey( featureIds ), false )
         }
         root.stackView.pop()

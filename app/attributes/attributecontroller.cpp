@@ -848,7 +848,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     ++i;
   }
 
-  if ( anyChanges )
+  if ( isFormValueChange )
     emit formRecalculated();
 }
 

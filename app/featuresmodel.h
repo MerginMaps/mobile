@@ -11,11 +11,17 @@
 #define FEATURESMODEL_H
 
 #include <QAbstractListModel>
+#include <QFutureWatcher>
+#include <QAtomicInt>
 
 #include "qgsvectorlayer.h"
 #include "featurelayerpair.h"
 
 #include "inputconfig.h"
+
+
+class QgsVectorLayerFeatureSource;
+
 
 /**
  * FeaturesModel class fetches features from layer and provides them via Qt Model's interface
@@ -37,6 +43,9 @@ class FeaturesModel : public QAbstractListModel
 
     // Returns number of features in layer (property). Can be different number than rowCount() due to a searchExpression
     Q_PROPERTY( int layerFeaturesCount READ layerFeaturesCount NOTIFY layerFeaturesCountChanged )
+
+    // Returns if there is a pending feature request that will populate the model
+    Q_PROPERTY( bool fetchingResults MEMBER mFetchingResults NOTIFY fetchingResultsChanged )
 
   public:
 
@@ -99,6 +108,9 @@ class FeaturesModel : public QAbstractListModel
 
     void layerFeaturesCountChanged( int layerFeaturesCount );
 
+    //! \a isFetching is TRUE when still fetching results, FALSE when done fetching
+    bool fetchingResultsChanged( bool isFetching );
+
   protected:
 
     virtual void setupFeatureRequest( QgsFeatureRequest &request );
@@ -109,8 +121,14 @@ class FeaturesModel : public QAbstractListModel
 
     virtual QVariant featureTitle( const FeatureLayerPair &featurePair ) const;
 
+  private slots:
+    void onFutureFinished();
+
   private:
     QString buildSearchExpression();
+
+    //! Performs getFeatures on layer. Takes ownership of \a layer and tries to move it to current thread.
+    QgsFeatureList fetchFeatures( QgsVectorLayerFeatureSource *layer, QgsFeatureRequest req, int searchId );
 
     //! Returns found attribute and its value from search expression for feature
     QString searchResultPair( const FeatureLayerPair &feat ) const;
@@ -120,6 +138,10 @@ class FeaturesModel : public QAbstractListModel
     FeatureLayerPairs mFeatures;
     QString mSearchExpression;
     QgsVectorLayer *mLayer = nullptr;
+
+    QAtomicInt mNextSearchId = 0;
+    QFutureWatcher<QgsFeatureList> mSearchResultWatcher;
+    bool mFetchingResults = false;
 };
 
 #endif // FEATURESMODEL_H
