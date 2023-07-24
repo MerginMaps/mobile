@@ -24,7 +24,7 @@ Item {
     signal openSettingsClicked()
     signal zoomToProject()
     signal localChangesClicked()
-  signal layersClicked()
+    signal layersClicked()
 
     property real itemSize: mainPanel.height * 0.8
     property color gpsIndicatorColor: InputStyle.softRed

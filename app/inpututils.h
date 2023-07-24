@@ -507,6 +507,11 @@ class InputUtils: public QObject
     // Returns default path to images in this system
     Q_INVOKABLE static QString imageGalleryLocation();
 
+    /**
+     * Returns string containing attribution information for a given layer
+     */
+    Q_INVOKABLE static QString layerAttribution( QgsMapLayer *layer );
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 

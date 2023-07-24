@@ -1920,3 +1920,19 @@ QString InputUtils::imageGalleryLocation()
 
   return galleryPaths.last();
 }
+
+QString InputUtils::layerAttribution( QgsMapLayer *layer )
+{
+  if ( !layer || !layer->isValid() )
+  {
+    return QString();
+  }
+
+  QStringList rights = layer->metadata().rights();
+  if ( !rights.isEmpty() )
+  {
+    return rights.join( QStringLiteral( ", " ) );
+  }
+
+  return QString();
+}

@@ -762,3 +762,21 @@ void TestUtilsFunctions::testInvalidGeometryWarning()
     delete layer;
   }
 }
+
+void TestUtilsFunctions::testAttribution()
+{
+  QString projectDir = TestUtils::testDataDir() + "/planes";
+  QgsProject::instance()->read( projectDir + "/quickapp_project.qgs" );
+
+  QList< QgsMapLayer * > layers = QgsProject::instance()->mapLayersByName( QStringLiteral( "airports" ) );
+  QVERIFY( !layers.isEmpty() );
+  QgsMapLayer *layer = layers.at( 0 );
+  QVERIFY( layer->isValid() );
+  QString attr = InputUtils::layerAttribution( layer );
+  QVERIFY( attr.isEmpty() );
+  QgsLayerMetadata metadata;
+  metadata.setRights( QStringList() << QStringLiteral( "test" ) );
+  layer->setMetadata( metadata );
+  attr = InputUtils::layerAttribution( layer );
+  QCOMPARE( attr, QStringLiteral( "test" ) );
+}

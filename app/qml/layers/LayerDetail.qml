@@ -202,6 +202,66 @@ Page {
               }
             }
           }
+
+          Column {
+            id: layerAttribution
+
+            visible: __inputUtils.layerAttribution(layerDetailData.mapLayer) != ""
+
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1.5 * InputStyle.rowHeightListEntry + attributionTitle.height + 2 * InputStyle.panelMarginV2
+
+            spacing: InputStyle.panelSpacing
+
+            Text {
+              id: attributionTitle
+
+              text: qsTr( "Attribution" )
+              font.bold: true
+              font.pixelSize: InputStyle.fontPixelSizeNormal
+            }
+
+            Rectangle {
+              id: attributionItem
+
+              width: parent.width
+              height: 1.5 * InputStyle.rowHeightListEntry
+
+              color: InputStyle.panelBackgroundLight
+              radius: InputStyle.cornerRadius
+
+              Item {
+                height: parent.height - 2 * InputStyle.panelMarginV2
+                width: parent.width - 2 * InputStyle.panelMarginV2
+
+                x: legendItem.x + InputStyle.panelMarginV2
+                y: legendItem.y - InputStyle.panelMarginV2
+
+
+                Flickable {
+                  id: flickableItem
+                  clip: true
+
+                  width: parent.width
+                  height: parent.height
+                  contentHeight: attributionText.height
+                  contentWidth: width
+                  maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
+
+                  Text {
+                    id: attributionText
+
+                    width: parent.width
+                    font.pixelSize: InputStyle.fontPixelSizeNormal
+                    wrapMode: Text.WordWrap
+                    text: __inputUtils.layerAttribution(layerDetailData.mapLayer)
+                  }
+
+                  ScrollBar.vertical: ScrollBar {}
+                }
+              }
+            }
+          }
         }
       }
     }
