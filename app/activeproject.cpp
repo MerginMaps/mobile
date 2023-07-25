@@ -242,13 +242,21 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   {
     connect(
       &AndroidTrackingBroadcast::getInstance(),
-      &AndroidTrackingBroadcast::positionUpdated,
+      &AndroidTrackingBroadcast::aliveResponse,
       this,
-      &ActiveProject::startPositionTracking,
-      Qt::SingleShotConnection
+      [this]( bool isAlive )
+    {
+      if ( isAlive )
+      {
+        emit startPositionTracking();
+      }
+    },
+    Qt::SingleShotConnection
     );
 
+    // note: order matters in the following calls
     AndroidTrackingBroadcast::registerBroadcast();
+    AndroidTrackingBroadcast::sendAliveRequestAsync();
   }
 #endif
 

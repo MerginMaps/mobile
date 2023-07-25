@@ -53,6 +53,8 @@ public class PositionTrackingService extends Service implements LocationListener
     protected LocationManager locationManager;
     private FileOutputStream positionUpdatesStream;
 
+    public boolean amIRunning = false;
+
 
     @Override
     public void onCreate() {
@@ -105,14 +107,32 @@ public class PositionTrackingService extends Service implements LocationListener
         sendBroadcast( sendToBroadcastIntent );
     }
 
+    public void sendAliveStatusResponse( boolean isAlive ) {
+        Intent sendToBroadcastIntent = new Intent();
+
+        sendToBroadcastIntent.setAction( PositionTrackingBroadcastMiddleware.TRACKING_ALIVE_STATUS_ACTION );
+        sendToBroadcastIntent.putExtra( PositionTrackingBroadcastMiddleware.TRACKING_ALIVE_STATUS_TAG, isAlive );
+
+        sendBroadcast( sendToBroadcastIntent );
+    }
+
     @Override
     public int onStartCommand( Intent intent, int flags, int startId ) {
+
+        if ( intent.hasExtra( PositionTrackingBroadcastMiddleware.TRACKING_ALIVE_STATUS_ACTION ) ) {
+            // we are just checking if the service is running, without intention to start it
+            sendStatusUpdateMessage("Responding to alive request from service!!");
+            sendAliveStatusResponse( amIRunning );
+            stopSelf();
+
+            return START_NOT_STICKY; // do not bother recreating it
+        }
 
         if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.O ) {
             sendStatusUpdateMessage( "ERROR #UNSUPPORTED: tracking is not supported on your Android version ( Android O (8.0) required )" );
             stopSelf();
 
-            return START_STICKY;
+            return START_NOT_STICKY; // do not bother recreating it
         }
 
         // Build channel for notifications
@@ -180,6 +200,8 @@ public class PositionTrackingService extends Service implements LocationListener
 
             sendStatusUpdateMessage( "Started to listen to position updates!" );
         }
+
+        amIRunning = true;
 
         return START_STICKY;
     }

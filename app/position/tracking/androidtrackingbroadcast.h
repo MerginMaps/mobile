@@ -45,6 +45,13 @@ class AndroidTrackingBroadcast : public QObject
       emit trackingCallback.statusChanged( env->GetStringUTFChars( message, 0 ) );
     }
 
+    static void notifyListenersAliveResponse( JNIEnv *env, jobject /*this*/, jboolean isAlive )
+    {
+      AndroidTrackingBroadcast &trackingCallback = AndroidTrackingBroadcast::getInstance();
+
+      emit trackingCallback.aliveResponse( isAlive );
+    }
+
     static bool registerBroadcast()
     {
       return AndroidTrackingBroadcast::getInstance().registerBroadcastPrivate();
@@ -55,6 +62,11 @@ class AndroidTrackingBroadcast : public QObject
       return AndroidTrackingBroadcast::getInstance().unregisterBroadcastPrivate();
     }
 
+    static void sendAliveRequestAsync()
+    {
+      AndroidTrackingBroadcast::getInstance().sendAliveRequestAsyncPrivate();
+    }
+
   signals:
 
     // Emitted when Java reports a new position
@@ -62,6 +74,9 @@ class AndroidTrackingBroadcast : public QObject
 
     // Emitted when the Java position service wants to report an issue or other status
     void statusChanged( const QString &message );
+
+    // Emitted to notify if the tracking service is running
+    void aliveResponse( bool isAlive );
 
   private:
 
@@ -72,6 +87,7 @@ class AndroidTrackingBroadcast : public QObject
 
     bool registerBroadcastPrivate();
     bool unregisterBroadcastPrivate();
+    void sendAliveRequestAsyncPrivate();
 
     bool mBroadcastIsRegistered = false;
 

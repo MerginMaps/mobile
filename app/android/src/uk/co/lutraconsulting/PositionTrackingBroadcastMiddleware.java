@@ -21,13 +21,14 @@ public class PositionTrackingBroadcastMiddleware {
     
     private static native void notifyListenersPositionUpdated();
     private static native void notifyListenersStatusUpdate( String status );
+    private static native void notifyListenersAliveResponse( boolean status );
 
     private static final String TAG = "PositionTrackingBroadcastMiddleware";
 
     public static final String TRACKING_POSITION_UPDATE_ACTION = "uk.co.lutraconsulting.tracking.position";
-    public static final String TRACKING_POSITION_UPDATE_LON_TAG = "uk.co.lutraconsulting.position.update.lon";
-    public static final String TRACKING_POSITION_UPDATE_LAT_TAG = "uk.co.lutraconsulting.position.update.lat";
-    public static final String TRACKING_POSITION_UPDATE_ALT_TAG = "uk.co.lutraconsulting.position.update.alt";
+
+    public static final String TRACKING_ALIVE_STATUS_ACTION = "uk.co.lutraconsulting.tracking.alive";
+    public static final String TRACKING_ALIVE_STATUS_TAG = "uk.co.lutraconsulting.tracking.alive.status";
 
     public static final String TRACKING_STATUS_MESSAGE_ACTION = "uk.co.lutraconsulting.tracking.status";
     public static final String TRACKING_STATUS_MESSAGE_TAG = "uk.co.lutraconsulting.tracking.status.message";
@@ -42,6 +43,7 @@ public class PositionTrackingBroadcastMiddleware {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction( TRACKING_POSITION_UPDATE_ACTION );
         intentFilter.addAction( TRACKING_STATUS_MESSAGE_ACTION );
+        intentFilter.addAction( TRACKING_ALIVE_STATUS_ACTION );
 
         // Set this as the receiver of POSITION_UPDATE and STATUS_MESSAGE intent actions
         context.registerReceiver( serviceMessageReceiver, intentFilter );
@@ -63,6 +65,11 @@ public class PositionTrackingBroadcastMiddleware {
             if ( intent.getAction().equals( TRACKING_STATUS_MESSAGE_ACTION ) ) {
                 String message = intent.getStringExtra( TRACKING_STATUS_MESSAGE_TAG );
                 notifyListenersStatusUpdate( message );
+            }
+
+            if ( intent.getAction().equals( TRACKING_ALIVE_STATUS_ACTION ) ) {
+                boolean isAlive = intent.getBooleanExtra( TRACKING_ALIVE_STATUS_TAG, false );
+                notifyListenersAliveResponse( isAlive );
             }
         }
     };

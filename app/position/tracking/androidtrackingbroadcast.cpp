@@ -37,6 +37,11 @@ bool AndroidTrackingBroadcast::registerBroadcastPrivate()
       "notifyListenersStatusUpdate",
       "(Ljava/lang/String;)V",
       reinterpret_cast<void *>( AndroidTrackingBroadcast::notifyListenersStatusUpdate )
+    },
+    {
+      "notifyListenersAliveResponse",
+      "(Z)V",
+      reinterpret_cast<void *>( AndroidTrackingBroadcast::notifyListenersAliveResponse )
     }
   };
 
@@ -44,7 +49,7 @@ bool AndroidTrackingBroadcast::registerBroadcastPrivate()
 
   jclass objectClass = javaenv->GetObjectClass( mBroadcastReceiver.object<jobject>() );
 
-  javaenv->RegisterNatives( objectClass, methods, 2 );
+  javaenv->RegisterNatives( objectClass, methods, 3 );
   javaenv->DeleteLocalRef( objectClass );
 
   mBroadcastReceiver.callMethod<void>(
@@ -85,4 +90,17 @@ bool AndroidTrackingBroadcast::unregisterBroadcastPrivate()
   mBroadcastIsRegistered = false;
 
   return true;
+}
+
+void AndroidTrackingBroadcast::sendAliveRequestAsyncPrivate()
+{
+  auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+  QAndroidIntent serviceIntent( activity.object(), "uk/co/lutraconsulting/PositionTrackingService" );
+
+  serviceIntent.putExtra( QStringLiteral( "uk.co.lutraconsulting.tracking.alive" ), true );
+
+  QJniObject result = activity.callObjectMethod(
+                        "startService",
+                        "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+                        serviceIntent.handle().object() );
 }
