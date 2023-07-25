@@ -233,7 +233,7 @@ Item {
 
             width: mainPanel.itemSize
             text: qsTr("Position tracking")
-            imageSource: InputStyle.mapMarkerIcon
+            imageSource: InputStyle.trackingIcon
             onActivated: {
               rootMenu.close()
               mainPanel.positionTrackingClicked()
@@ -441,7 +441,7 @@ Item {
                 rowHeight: height
                 width: parent.width
                 contentText: qsTr("Position tracking")
-                imageSource: InputStyle.mapMarkerIcon
+                imageSource: InputStyle.trackingIcon
             }
 
             onClicked: {
