@@ -790,3 +790,43 @@ void TestUtilsFunctions::testInvalidGeometryWarning()
     delete layer;
   }
 }
+
+void TestUtilsFunctions::testParsePositionUpdates()
+{
+  //
+  // InputUtils::parsePositionUpdates parses position updates from file data to list of QgsPoints
+  // example: "10 20 30 40\n" -> QgsPoint( x:10, y:20, z:30, m:40 )
+  //
+
+  QList<std::pair<QString, QList<QgsPoint>>> testcases =
+  {
+    { QString(), QList<QgsPoint>() },
+    { "", QList<QgsPoint>() },
+    { "1", QList<QgsPoint>() },
+    { "1 1", QList<QgsPoint>() },
+    { "1 1 1", QList<QgsPoint>() },
+    { "1 1 1 1", QList<QgsPoint> { QgsPoint( 1, 1, 1, 1 ) } },
+    { "1 1 1 1\n", QList<QgsPoint> { QgsPoint( 1, 1, 1, 1 ) } },
+    { "1 1 1 1\n2 2 2\n3 3 3 3", QList<QgsPoint> { QgsPoint( 1, 1, 1, 1 ), QgsPoint( 3, 3, 3, 3 ) } }
+  };
+
+  for ( int i = 0; i < testcases.size(); ++i )
+  {
+    auto actual = InputUtils::parsePositionUpdates( testcases.at( i ).first );
+    auto expected = testcases.at( i ).second;
+
+    if ( actual.isEmpty() )
+    {
+      QCOMPARE( actual.isEmpty(), expected.isEmpty() );
+    }
+    else
+    {
+      QCOMPARE( actual.size(), expected.size() );
+
+      for ( int z = 0; z < actual.size(); ++z )
+      {
+        QVERIFY( InputUtils::equals( actual.at( z ), expected.at( z ) ) );
+      }
+    }
+  }
+}

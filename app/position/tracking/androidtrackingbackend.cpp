@@ -10,6 +10,7 @@
 #include "androidtrackingbackend.h"
 #include "androidtrackingbroadcast.h"
 #include "coreutils.h"
+#include "inpututils.h"
 
 #include <QtCore/private/qandroidextras_p.h>
 
@@ -97,7 +98,7 @@ QList<QgsPoint> AndroidTrackingBackend::getAllUpdates()
 
   QString fileData = QString( mTrackingFile.readAll() );
 
-  return parsePositionUpdates( fileData );
+  return InputUtils::parsePositionUpdates( fileData );
 }
 
 void AndroidTrackingBackend::sourceUpdatedPosition()
@@ -119,7 +120,7 @@ void AndroidTrackingBackend::sourceUpdatedPosition()
   }
 
   QString fileData = QString( mTrackingFile.readAll() );
-  QList<QgsPoint> parsedUpdates = parsePositionUpdates( fileData );
+  QList<QgsPoint> parsedUpdates = InputUtils::parsePositionUpdates( fileData );
 
   if ( parsedUpdates.size() > 1 )
   {
@@ -211,34 +212,4 @@ void AndroidTrackingBackend::setupForegroundUpdates()
   // go see if something's left from previous run!
   // (in future we could show a dialogue when project is opened and something is in the file)
   sourceUpdatedPosition();
-}
-
-QList<QgsPoint> AndroidTrackingBackend::parsePositionUpdates( const QString &data )
-{
-  QList<QgsPoint> parsedUpdates;
-  QStringList positions = data.split( '\n', Qt::SkipEmptyParts );
-
-  if ( positions.isEmpty() )
-  {
-    return parsedUpdates;
-  }
-
-  for ( int ix = 0; ix < positions.size(); ix++ )
-  {
-    QStringList coordinates = positions[ix].split( ' ', Qt::SkipEmptyParts );
-
-    if ( coordinates.size() != 4 )
-    {
-      continue;
-    }
-
-    QgsPoint geop;
-    geop.setX( coordinates[0].toDouble() ); // long
-    geop.setY( coordinates[1].toDouble() ); // lat
-    geop.setZ( coordinates[2].toDouble() ); // alt
-    geop.setM( coordinates[3].toDouble() ); // UTC time in secs
-    parsedUpdates << geop;
-  }
-
-  return parsedUpdates;
 }

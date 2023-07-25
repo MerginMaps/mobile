@@ -35,8 +35,6 @@ class AndroidTrackingBackend : public AbstractTrackingBackend
   private:
     void setupForegroundUpdates();
 
-    QList<QgsPoint> parsePositionUpdates( const QString &data );
-
     qreal mDistanceFilter = 0;
     qreal mUpdateInterval = 0; // ms
 
