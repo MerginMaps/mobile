@@ -164,7 +164,7 @@ public class PositionTrackingService extends Service implements LocationListener
 
         locationManager = ( LocationManager ) getApplication().getSystemService( LOCATION_SERVICE );
 
-        boolean isGPSAvailable = locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER );
+        boolean isGPSAvailable = locationManager.isProviderEnabled( LocationManager.FUSED_PROVIDER );
         if ( !isGPSAvailable ) {
             sendStatusUpdateMessage( "ERROR #GPS_UNAVAILABLE: GPS is not available!" );
             stopSelf();
