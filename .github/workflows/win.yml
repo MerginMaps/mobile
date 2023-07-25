@@ -25,7 +25,7 @@ jobs:
     runs-on: windows-2019
     
     env:
-      QT_VERSION: '6.5.1'
+      QT_VERSION: '6.5.2'
       INPUT_SDK_VERSION: win64-20230531-151
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
       CACHE_VERSION: 0
