@@ -13,6 +13,7 @@
 
 #include <QtTest/QtTest>
 
+
 void TestModels::init()
 {
 
@@ -26,6 +27,7 @@ void TestModels::cleanup()
 void TestModels::testFeaturesModel()
 {
   FeaturesModel fModel;
+  QSignalSpy spy( &fModel, &FeaturesModel::fetchingResultsChanged );
 
   QString projectDir = TestUtils::testDataDir() + "/project_value_relations";
   QgsVectorLayer *layer = new QgsVectorLayer( projectDir + "/db.gpkg|layername=main", "base", "ogr" );
@@ -34,15 +36,18 @@ void TestModels::testFeaturesModel()
 
   fModel.setLayer( layer );
   fModel.reloadFeatures();
+  spy.wait();
 
   QCOMPARE( fModel.rowCount(), layer->dataProvider()->featureCount() );
 
   fModel.setSearchExpression( QStringLiteral( "Seco" ) );
 
+  spy.wait();
   QCOMPARE( fModel.rowCount(), 1 );
 
   fModel.setSearchExpression( QLatin1String() );
 
+  spy.wait();
   QCOMPARE( fModel.rowCount(), layer->dataProvider()->featureCount() );
 
   QVariant title = fModel.data( fModel.index( 0 ), FeaturesModel::FeatureTitle );

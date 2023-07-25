@@ -83,6 +83,7 @@
         <string>az</string>
         <string>az_AZ</string>
 		<string>hu</string>
+		<string>cs</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>

@@ -3096,12 +3096,13 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   QString projectDir = transaction.projectDir;  // keep it before the transaction gets removed
   ProjectDiff diff = transaction.diff;
   int newVersion = syncSuccessful ? transaction.version : -1;
-  mTransactionalStatus.remove( projectFullName );
 
-  if ( transaction.gpkgSchemaChanged )
+  if ( transaction.gpkgSchemaChanged || projectFileHasBeenUpdated( diff ) )
   {
     emit projectReloadNeededAfterSync( projectFullName );
   }
+
+  mTransactionalStatus.remove( projectFullName );
 
   if ( pullBeforePush )
   {
