@@ -356,9 +356,9 @@ class InputUtils: public QObject
       * \returns string represetation of dist in desired destSystem. For distance less than 0, 0 is returned.
       */
     Q_INVOKABLE static QString formatDistance( double distance,
-        QgsUnitTypes::DistanceUnit units,
+        Qgis::DistanceUnit units,
         int decimals,
-        QgsUnitTypes::SystemOfMeasurement destSystem = QgsUnitTypes::MetricSystem );
+        Qgis::SystemOfMeasurement destSystem = Qgis::SystemOfMeasurement::Metric );
 
     /**
       * Deletes file from a given path.
@@ -380,10 +380,10 @@ class InputUtils: public QObject
       * \param destUnits output: unit of destDistance
       */
     static void humanReadableDistance( double srcDistance,
-                                       QgsUnitTypes::DistanceUnit srcUnits,
-                                       QgsUnitTypes::SystemOfMeasurement destSystem,
+                                       Qgis::DistanceUnit srcUnits,
+                                       Qgis::SystemOfMeasurement destSystem,
                                        double &destDistance,
-                                       QgsUnitTypes::DistanceUnit &destUnits );
+                                       Qgis::DistanceUnit &destUnits );
 
     //! Returns a string with information about screen size and resolution - useful for debugging
     QString dumpScreenInfo() const;
@@ -521,19 +521,19 @@ class InputUtils: public QObject
   private:
 
     static void formatToMetricDistance( double srcDistance,
-                                        QgsUnitTypes::DistanceUnit srcUnits,
+                                        Qgis::DistanceUnit srcUnits,
                                         double &destDistance,
-                                        QgsUnitTypes::DistanceUnit &destUnits );
+                                        Qgis::DistanceUnit &destUnits );
 
     static void formatToImperialDistance( double srcDistance,
-                                          QgsUnitTypes::DistanceUnit srcUnits,
+                                          Qgis::DistanceUnit srcUnits,
                                           double &destDistance,
-                                          QgsUnitTypes::DistanceUnit &destUnits );
+                                          Qgis::DistanceUnit &destUnits );
 
     static void formatToUSCSDistance( double srcDistance,
-                                      QgsUnitTypes::DistanceUnit srcUnits,
+                                      Qgis::DistanceUnit srcUnits,
                                       double &destDistance,
-                                      QgsUnitTypes::DistanceUnit &destUnits );
+                                      Qgis::DistanceUnit &destUnits );
 
     // on iOS the names from gallery pickers are like
     // file:assets-library://asset/asset.PNG%3Fid=A53AB989-6354-433A-9CB9-958179B7C14D&ext=PNG
@@ -543,7 +543,7 @@ class InputUtils: public QObject
     static double ratherZeroThanNaN( double d );
 
     // Returns icon from QgsWkbType geometry
-    static QString iconFromGeometry( const QgsWkbTypes::GeometryType &geometry );
+    static QString iconFromGeometry( const Qgis::GeometryType &geometry );
 
     AndroidUtils *mAndroidUtils = nullptr; // not owned
 };

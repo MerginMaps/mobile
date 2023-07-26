@@ -74,7 +74,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
   mIsSpatial = nodeLayer->layer()->isSpatial();
   emit isSpatialChanged( mIsSpatial );
 
-  mIsVectorLayer = nodeLayer->layer()->type() == QgsMapLayerType::VectorLayer;
+  mIsVectorLayer = nodeLayer->layer()->type() == Qgis::LayerType::Vector;
   emit isVectorLayerChanged( mIsVectorLayer );
 
   emit vectorLayerChanged( vectorLayer() );
@@ -135,7 +135,7 @@ QgsVectorLayer *LayerDetailData::vectorLayer() const
   }
 
   QgsMapLayer *mapLayer = nodeLayer->layer();
-  if ( !mapLayer || mapLayer->type() != QgsMapLayerType::VectorLayer )
+  if ( !mapLayer || mapLayer->type() != Qgis::LayerType::Vector )
   {
     return nullptr;
   }

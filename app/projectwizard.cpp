@@ -58,7 +58,7 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList
   options.driverName = QStringLiteral( "GPKG" );
   options.layerName = layerName;
   options.fileEncoding = QStringLiteral( "UTF-8" );
-  std::unique_ptr< QgsVectorFileWriter > writer( QgsVectorFileWriter::create( projectGpkgPath, predefinedFields, QgsWkbTypes::PointZ, layerCrs, QgsCoordinateTransformContext(), options ) );
+  std::unique_ptr< QgsVectorFileWriter > writer( QgsVectorFileWriter::create( projectGpkgPath, predefinedFields, Qgis::WkbType::PointZ, layerCrs, QgsCoordinateTransformContext(), options ) );
 
 
   QString errorMessage;
@@ -145,7 +145,7 @@ void ProjectWizard::writeMapCanvasSetting( QDomDocument &doc )
   QDomNodeList nl = doc.elementsByTagName( QStringLiteral( "qgis" ) );
   if ( !nl.count() )
   {
-    QgsDebugMsg( QStringLiteral( "Unable to find qgis element in project file" ) );
+    QgsDebugError( QStringLiteral( "Unable to find qgis element in project file" ) );
     return;
   }
   QDomNode qgisNode = nl.item( 0 );  // there should only be one, so zeroth element OK

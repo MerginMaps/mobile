@@ -32,20 +32,20 @@ QVariant LayersModel::data( const QModelIndex &index, int role ) const
   {
     case LayerNameRole: return layer->name();
     case VectorLayerRole: return vectorLayer ? QVariant::fromValue<QgsVectorLayer *>( vectorLayer ) : QVariant();
-    case HasGeometryRole: return vectorLayer ? vectorLayer->wkbType() != QgsWkbTypes::NoGeometry && vectorLayer->wkbType() != QgsWkbTypes::Type::Unknown : QVariant();
+    case HasGeometryRole: return vectorLayer ? vectorLayer->wkbType() != Qgis::WkbType::NoGeometry && vectorLayer->wkbType() != Qgis::WkbType::Unknown : QVariant();
     case IconSourceRole:
     {
       if ( vectorLayer )
       {
-        QgsWkbTypes::GeometryType type = vectorLayer->geometryType();
+        Qgis::GeometryType type = vectorLayer->geometryType();
         switch ( type )
         {
-          case QgsWkbTypes::GeometryType::PointGeometry: return QStringLiteral( "qrc:/mIconPointLayer.svg" );
-          case QgsWkbTypes::GeometryType::LineGeometry: return QStringLiteral( "qrc:/mIconLineLayer.svg" );
-          case QgsWkbTypes::GeometryType::PolygonGeometry: return QStringLiteral( "qrc:/mIconPolygonLayer.svg" );
+          case Qgis::GeometryType::Point: return QStringLiteral( "qrc:/mIconPointLayer.svg" );
+          case Qgis::GeometryType::Line: return QStringLiteral( "qrc:/mIconLineLayer.svg" );
+          case Qgis::GeometryType::Polygon: return QStringLiteral( "qrc:/mIconPolygonLayer.svg" );
 
-          case QgsWkbTypes::GeometryType::UnknownGeometry: // fall through
-          case QgsWkbTypes::GeometryType::NullGeometry: return QStringLiteral( "qrc:/mIconTableLayer.svg" );
+          case Qgis::GeometryType::Unknown: // fall through
+          case Qgis::GeometryType::Null: return QStringLiteral( "qrc:/mIconTableLayer.svg" );
         }
         return QVariant();
       }

@@ -104,7 +104,7 @@ void InputCoordinateTransformer::updatePosition()
   }
   catch ( const QgsCsException &exp )
   {
-    QgsDebugMsg( exp.what() );
+    QgsDebugError( exp.what() );
   }
 
   mProjectedPosition = QgsPoint( x, y );

@@ -169,36 +169,36 @@ void TestUtilsFunctions::formatPoint()
 
 void TestUtilsFunctions::formatDistance()
 {
-  QString dist2str =  mUtils->formatDistance( 1222.234, QgsUnitTypes::DistanceMeters,  2 );
+  QString dist2str =  mUtils->formatDistance( 1222.234, Qgis::DistanceUnit::Meters,  2 );
   QVERIFY( dist2str == "1.22 km" );
 
-  dist2str =  mUtils->formatDistance( 1222.234, QgsUnitTypes::DistanceMeters, 1 );
+  dist2str =  mUtils->formatDistance( 1222.234, Qgis::DistanceUnit::Meters, 1 );
   QVERIFY( dist2str == "1.2 km" );
 
-  dist2str =  mUtils->formatDistance( 1222.234, QgsUnitTypes::DistanceMeters, 0 );
+  dist2str =  mUtils->formatDistance( 1222.234, Qgis::DistanceUnit::Meters, 0 );
   QVERIFY( dist2str == "1 km" );
 
-  dist2str =  mUtils->formatDistance( 700.22, QgsUnitTypes::DistanceMeters, 1 );
+  dist2str =  mUtils->formatDistance( 700.22, Qgis::DistanceUnit::Meters, 1 );
   QVERIFY( dist2str == "700.2 m" );
 
-  dist2str =  mUtils->formatDistance( 0.22, QgsUnitTypes::DistanceMeters, 0 );
+  dist2str =  mUtils->formatDistance( 0.22, Qgis::DistanceUnit::Meters, 0 );
   QVERIFY( dist2str == "22 cm" );
 
-  dist2str =  mUtils->formatDistance( -0.22, QgsUnitTypes::DistanceMeters, 0 );
+  dist2str =  mUtils->formatDistance( -0.22, Qgis::DistanceUnit::Meters, 0 );
   QVERIFY( dist2str == "0 mm" );
 
-  dist2str =  mUtils->formatDistance( 1.222234, QgsUnitTypes::DistanceKilometers,  2 );
+  dist2str =  mUtils->formatDistance( 1.222234, Qgis::DistanceUnit::Kilometers,  2 );
   QVERIFY( dist2str == "1.22 km" );
 
   /////////////////////////////////////////////////////////
-  dist2str =  mUtils->formatDistance( 6000, QgsUnitTypes::DistanceFeet, 1, QgsUnitTypes::ImperialSystem );
+  dist2str =  mUtils->formatDistance( 6000, Qgis::DistanceUnit::Feet, 1, Qgis::SystemOfMeasurement::Imperial );
   QVERIFY( dist2str == "1.1 mi" );
 
-  dist2str =  mUtils->formatDistance( 5, QgsUnitTypes::DistanceFeet, 1, QgsUnitTypes::ImperialSystem );
+  dist2str =  mUtils->formatDistance( 5, Qgis::DistanceUnit::Feet, 1, Qgis::SystemOfMeasurement::Imperial );
   QVERIFY( dist2str == "1.7 yd" );
 
   /////////////////////////////////////////////////////////
-  dist2str =  mUtils->formatDistance( 7000, QgsUnitTypes::DistanceFeet, 1, QgsUnitTypes::USCSSystem );
+  dist2str =  mUtils->formatDistance( 7000, Qgis::DistanceUnit::Feet, 1, Qgis::SystemOfMeasurement::USCS );
   QVERIFY( dist2str == "1.2 NM" );
 }
 
@@ -637,26 +637,26 @@ void TestUtilsFunctions::testGeometryIcons()
 {
   QVector<QPair< QgsMapLayer *, QString > > testcases =
   {
-    { QgsMemoryProviderUtils::createMemoryLayer( "P1", QgsFields(), QgsWkbTypes::Point ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "P2", QgsFields(), QgsWkbTypes::PointZ ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "P3", QgsFields(), QgsWkbTypes::PointM ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "P4", QgsFields(), QgsWkbTypes::PointZM ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "P5", QgsFields(), QgsWkbTypes::MultiPoint ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P1", QgsFields(), Qgis::WkbType::Point ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P2", QgsFields(), Qgis::WkbType::PointZ ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P3", QgsFields(), Qgis::WkbType::PointM ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P4", QgsFields(), Qgis::WkbType::PointZM ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P5", QgsFields(), Qgis::WkbType::MultiPoint ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
 
-    { QgsMemoryProviderUtils::createMemoryLayer( "L1", QgsFields(), QgsWkbTypes::LineString ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "L2", QgsFields(), QgsWkbTypes::LineStringZ ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "L3", QgsFields(), QgsWkbTypes::LineStringM ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "L4", QgsFields(), QgsWkbTypes::LineStringZM ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "L5", QgsFields(), QgsWkbTypes::MultiLineString ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L1", QgsFields(), Qgis::WkbType::LineString ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L2", QgsFields(), Qgis::WkbType::LineStringZ ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L3", QgsFields(), Qgis::WkbType::LineStringM ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L4", QgsFields(), Qgis::WkbType::LineStringZM ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L5", QgsFields(), Qgis::WkbType::MultiLineString ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
 
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO1", QgsFields(), QgsWkbTypes::Polygon ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO2", QgsFields(), QgsWkbTypes::PolygonZ ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO3", QgsFields(), QgsWkbTypes::PolygonM ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO4", QgsFields(), QgsWkbTypes::PolygonZM ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO5", QgsFields(), QgsWkbTypes::MultiPolygon ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO1", QgsFields(), Qgis::WkbType::Polygon ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO2", QgsFields(), Qgis::WkbType::PolygonZ ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO3", QgsFields(), Qgis::WkbType::PolygonM ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO4", QgsFields(), Qgis::WkbType::PolygonZM ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO5", QgsFields(), Qgis::WkbType::MultiPolygon ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
 
-    { QgsMemoryProviderUtils::createMemoryLayer( "N1", QgsFields(), QgsWkbTypes::Unknown ), QStringLiteral( "qrc:/mIconTableLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "N2", QgsFields(), QgsWkbTypes::NoGeometry ), QStringLiteral( "qrc:/mIconTableLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "N1", QgsFields(), Qgis::WkbType::Unknown ), QStringLiteral( "qrc:/mIconTableLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "N2", QgsFields(), Qgis::WkbType::NoGeometry ), QStringLiteral( "qrc:/mIconTableLayer.svg" ) },
 
     { new QgsRasterLayer(), QStringLiteral( "qrc:/mIconRasterLayer.svg" ) }
   };
@@ -705,18 +705,18 @@ void TestUtilsFunctions::testGeometryIcons()
 
 void TestUtilsFunctions::testCreateGeometryForLayer()
 {
-  QVector< QPair< QString, QgsWkbTypes::Type > > testcases =
+  QVector< QPair< QString, Qgis::WkbType > > testcases =
   {
-    { QStringLiteral( "Point" ), QgsWkbTypes::Point },
-    { QStringLiteral( "MultiPoint" ), QgsWkbTypes::MultiPoint },
-    { QStringLiteral( "PointZ" ), QgsWkbTypes::PointZ },
-    { QStringLiteral( "LineString" ), QgsWkbTypes::LineString },
-    { QStringLiteral( "MultiLineString" ), QgsWkbTypes::MultiLineString },
-    { QStringLiteral( "LineStringM" ), QgsWkbTypes::LineStringM },
-    { QStringLiteral( "MultiLineStringZM" ), QgsWkbTypes::MultiLineStringZM },
-    { QStringLiteral( "Polygon" ), QgsWkbTypes::Polygon },
-    { QStringLiteral( "MultiPolygon" ), QgsWkbTypes::MultiPolygon },
-    { QStringLiteral( "MultiPolygonM" ), QgsWkbTypes::MultiPolygonM },
+    { QStringLiteral( "Point" ), Qgis::WkbType::Point },
+    { QStringLiteral( "MultiPoint" ), Qgis::WkbType::MultiPoint },
+    { QStringLiteral( "PointZ" ), Qgis::WkbType::PointZ },
+    { QStringLiteral( "LineString" ), Qgis::WkbType::LineString },
+    { QStringLiteral( "MultiLineString" ), Qgis::WkbType::MultiLineString },
+    { QStringLiteral( "LineStringM" ), Qgis::WkbType::LineStringM },
+    { QStringLiteral( "MultiLineStringZM" ), Qgis::WkbType::MultiLineStringZM },
+    { QStringLiteral( "Polygon" ), Qgis::WkbType::Polygon },
+    { QStringLiteral( "MultiPolygon" ), Qgis::WkbType::MultiPolygon },
+    { QStringLiteral( "MultiPolygonM" ), Qgis::WkbType::MultiPolygonM },
   };
 
   QgsGeometry geom;

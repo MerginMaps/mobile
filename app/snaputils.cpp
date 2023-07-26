@@ -260,7 +260,7 @@ void SnapUtils::setupSnapping()
       config.setMode( Qgis::SnappingMode::AllLayers );
       config.setTypeFlag( Qgis::SnappingType::Vertex | Qgis::SnappingType::Segment );
       config.setTolerance( 20.0 * InputUtils::calculateDpRatio() );
-      config.setUnits( QgsTolerance::Pixels );
+      config.setUnits( Qgis::MapToolUnit::Pixels );
       config.setEnabled( true );
 
       mSnappingUtils.setConfig( config );
@@ -270,7 +270,7 @@ void SnapUtils::setupSnapping()
     case 2:
     {
       QgsSnappingConfig config = mQgsProject->snappingConfig();
-      if ( config.units() == QgsTolerance::Pixels )
+      if ( config.units() == Qgis::MapToolUnit::Pixels )
       {
         config.setTolerance( config.tolerance() * InputUtils::calculateDpRatio() );
       }

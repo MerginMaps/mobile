@@ -306,7 +306,7 @@ void TestMapTools::testExistingVertices()
   mapTool.setActiveFeature( polyFeature );
 
   QgsGeometry vertices = mapTool.existingVertices();
-  QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
+  QCOMPARE( vertices.wkbType(), Qgis::WkbType::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 3 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 1 ) );
@@ -327,7 +327,7 @@ void TestMapTools::testExistingVertices()
   mapTool.setActiveFeature( lineFeature );
 
   vertices = mapTool.existingVertices();
-  QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
+  QCOMPARE( vertices.wkbType(), Qgis::WkbType::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 1 ) );
@@ -348,7 +348,7 @@ void TestMapTools::testExistingVertices()
   mapTool.setActiveFeature( pointFeature );
 
   vertices = mapTool.existingVertices();
-  QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
+  QCOMPARE( vertices.wkbType(), Qgis::WkbType::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 3 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 0 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 1, 1 ) );
@@ -390,7 +390,7 @@ void TestMapTools::testMidSegmentVertices()
   mapTool.setActiveFeature( polyFeature );
 
   QgsGeometry vertices = mapTool.midPoints();
-  QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
+  QCOMPARE( vertices.wkbType(), Qgis::WkbType::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, 1 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 1, 2 ) );
@@ -413,7 +413,7 @@ void TestMapTools::testMidSegmentVertices()
   mapTool.setActiveFeature( lineFeature );
 
   vertices = mapTool.midPoints();
-  QCOMPARE( vertices.wkbType(), QgsWkbTypes::MultiPoint );
+  QCOMPARE( vertices.wkbType(), Qgis::WkbType::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, -0.87614105022163979 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 0.5 ) );
@@ -469,7 +469,7 @@ void TestMapTools::testHandles()
   mapTool.setActiveFeature( lineFeature );
 
   QgsGeometry handles = mapTool.handles();
-  QCOMPARE( handles.wkbType(), QgsWkbTypes::MultiLineString );
+  QCOMPARE( handles.wkbType(), Qgis::WkbType::MultiLineString );
   QCOMPARE( handles.constGet()->partCount(), 2 );
 
   // handle segments first point is a handle point and second point is
@@ -626,7 +626,7 @@ void TestMapTools::testAddVertexPointLayer()
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
-  QVERIFY( mapTool.recordedGeometry().wkbType() == QgsWkbTypes::Point );
+  QVERIFY( mapTool.recordedGeometry().wkbType() == Qgis::WkbType::Point );
 
   // clear recorded geometry
   mapTool.setActiveLayer( nullptr );
@@ -710,7 +710,7 @@ void TestMapTools::testAddVertexMultiPointLayer()
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
-  QVERIFY( mapTool.recordedGeometry().wkbType() == QgsWkbTypes::MultiPoint );
+  QVERIFY( mapTool.recordedGeometry().wkbType() == Qgis::WkbType::MultiPoint );
 
   // clear recorded geometry
   mapTool.setActiveLayer( nullptr );
@@ -797,7 +797,7 @@ void TestMapTools::testAddVertexLineLayer()
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
-  QVERIFY( mapTool.recordedGeometry().wkbType() == QgsWkbTypes::LineString );
+  QVERIFY( mapTool.recordedGeometry().wkbType() == Qgis::WkbType::LineString );
 
   mapTool.addPoint( pointsToAdd[2] );
 
@@ -921,7 +921,7 @@ void TestMapTools::testAddVertexMultiLineLayer()
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
-  QVERIFY( mapTool.recordedGeometry().wkbType() == QgsWkbTypes::MultiLineString );
+  QVERIFY( mapTool.recordedGeometry().wkbType() == Qgis::WkbType::MultiLineString );
 
   mapTool.addPoint( pointsToAdd[2] );
 
@@ -1057,7 +1057,7 @@ void TestMapTools::testAddVertexPolygonLayer()
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
-  QVERIFY( mapTool.recordedGeometry().wkbType() == QgsWkbTypes::Polygon );
+  QVERIFY( mapTool.recordedGeometry().wkbType() == Qgis::WkbType::Polygon );
 
   mapTool.addPoint( pointsToAdd[2] );
 
@@ -1189,7 +1189,7 @@ void TestMapTools::testAddVertexMultiPolygonLayer()
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
-  QVERIFY( mapTool.recordedGeometry().wkbType() == QgsWkbTypes::Polygon );
+  QVERIFY( mapTool.recordedGeometry().wkbType() == Qgis::WkbType::Polygon );
 
   mapTool.addPoint( pointsToAdd[2] );
 
@@ -1758,7 +1758,7 @@ void TestMapTools::testVerticesStructure()
 
   QgsPointXY pointdata = QgsPointXY( 10, 20 );
   QgsGeometry pointdataGEO = QgsGeometry::fromPointXY( pointdata );
-  QVERIFY( pointdataGEO.wkbType() == QgsWkbTypes::Point );
+  QVERIFY( pointdataGEO.wkbType() == Qgis::WkbType::Point );
 
   QgsFeature pointFeature;
   pointFeature.setGeometry( pointdataGEO );
@@ -1784,7 +1784,7 @@ void TestMapTools::testVerticesStructure()
     QgsPointXY( 30, 40 )
   };
   QgsGeometry multipointdataGEO = QgsGeometry::fromMultiPointXY( multipointdata );
-  QVERIFY( multipointdataGEO.wkbType() == QgsWkbTypes::MultiPoint );
+  QVERIFY( multipointdataGEO.wkbType() == Qgis::WkbType::MultiPoint );
 
   QgsFeature multiPointFeature;
   multiPointFeature.setGeometry( multipointdataGEO );
@@ -1818,7 +1818,7 @@ void TestMapTools::testVerticesStructure()
     QgsPointXY( 30, 40 )
   };
   QgsGeometry linestrindataGEO = QgsGeometry::fromPolylineXY( linestringdata );
-  QVERIFY( linestrindataGEO.wkbType() == QgsWkbTypes::LineString );
+  QVERIFY( linestrindataGEO.wkbType() == Qgis::WkbType::LineString );
 
   QgsFeature lineFeature;
   lineFeature.setGeometry( linestrindataGEO );
@@ -1888,7 +1888,7 @@ void TestMapTools::testVerticesStructure()
   };
 
   QgsGeometry multilinestringdataGEO = QgsGeometry::fromMultiPolylineXY( multilinestringdata );
-  QVERIFY( multilinestringdataGEO.wkbType() == QgsWkbTypes::MultiLineString );
+  QVERIFY( multilinestringdataGEO.wkbType() == Qgis::WkbType::MultiLineString );
 
   QgsFeature multiLineFeature;
   multiLineFeature.setGeometry( multilinestringdataGEO );
@@ -1944,7 +1944,7 @@ void TestMapTools::testVerticesStructure()
     }
   };
   QgsGeometry simplepolygondataGEO = QgsGeometry::fromPolygonXY( simplepolygondata );
-  QVERIFY( simplepolygondataGEO.wkbType() == QgsWkbTypes::Polygon );
+  QVERIFY( simplepolygondataGEO.wkbType() == Qgis::WkbType::Polygon );
 
   QgsFeature simplepolygonFeature;
   simplepolygonFeature.setGeometry( simplepolygondataGEO );
@@ -1993,7 +1993,7 @@ void TestMapTools::testVerticesStructure()
     }
   };
   QgsGeometry polygondataGEO = QgsGeometry::fromPolygonXY( polygondata );
-  QVERIFY( polygondataGEO.wkbType() == QgsWkbTypes::Polygon );
+  QVERIFY( polygondataGEO.wkbType() == Qgis::WkbType::Polygon );
 
   QgsFeature polygonFeature;
   polygonFeature.setGeometry( polygondataGEO );
@@ -2094,7 +2094,7 @@ void TestMapTools::testVerticesStructure()
   points.removeLast();
   ring->setPoints( points );
 
-  QVERIFY( multipolygonringsdataGEO.wkbType() == QgsWkbTypes::MultiPolygon );
+  QVERIFY( multipolygonringsdataGEO.wkbType() == Qgis::WkbType::MultiPolygon );
 
   QgsFeature multipolygonringsFeature;
   multipolygonringsFeature.setGeometry( multipolygonringsdataGEO );
@@ -2235,7 +2235,7 @@ void TestMapTools::testVerticesStructure()
   points.removeLast();
   ring->setPoints( points );
 
-  QVERIFY( multipolygoninvaliddataGEO.wkbType() == QgsWkbTypes::MultiPolygon );
+  QVERIFY( multipolygoninvaliddataGEO.wkbType() == Qgis::WkbType::MultiPolygon );
 
   QgsFeature multipolygoninvalidFeature;
   multipolygoninvalidFeature.setGeometry( multipolygoninvaliddataGEO );
