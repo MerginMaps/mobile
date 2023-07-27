@@ -242,7 +242,7 @@ jobs:
       - name: Rename APK artefacts
         run: |
           mv \
-            ${{ github.workspace }}/build-Input/app/android-build/build/outputs/apk/debug/android-build-debug-signed.apk \
+            ${{ github.workspace }}/build-Input/app/android-build/build/outputs/apk/release/android-build-release-signed.apk \
             ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
 
       - name: Upload APK to Artifacts
