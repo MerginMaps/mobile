@@ -69,9 +69,9 @@ void GuidelineController::buildGuideline()
    *              - create polygon between first point, crosshair and last added point (make sure it is not the first one)
    */
 
-  Qgis::WkbType geotype = mRealGeometry.wkbType();
+  Qgis::GeometryType geotype = mRealGeometry.type();
 
-  if ( geotype == Qgis::WkbType::Point )
+  if ( geotype == Qgis::GeometryType::Point )
   {
     setGuidelineGeometry( QgsGeometry() );
     return;
@@ -98,7 +98,7 @@ void GuidelineController::buildGuideline()
     previous = mRealGeometry.constGet()->vertexAt( QgsVertexId( current.part, current.ring, current.vertex - 1 ) );
 
     // fix closed polygons rings
-    if ( geotype == Qgis::WkbType::Polygon )
+    if ( geotype == Qgis::GeometryType::Polygon )
     {
       if ( current.vertex == 0 && nVertices >= 4 )
       {
@@ -124,7 +124,7 @@ void GuidelineController::buildGuideline()
   {
     // recording new points
 
-    if ( geotype == Qgis::WkbType::LineString )
+    if ( geotype == Qgis::GeometryType::Line )
     {
       // we are adding new point to the end/beginning
       QgsGeometry guideline;
@@ -161,7 +161,7 @@ void GuidelineController::buildGuideline()
 
       setGuidelineGeometry( guideline );
     }
-    else if ( geotype == Qgis::WkbType::Polygon )
+    else if ( geotype == Qgis::GeometryType::Polygon )
     {
       int nVertices = mRealGeometry.constGet()->vertexCount( mActivePart, mActiveRing );
       if ( nVertices == 0 )

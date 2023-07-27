@@ -106,7 +106,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     }
   }
 
-  if ( mRecordedGeometry.wkbType() == Qgis::WkbType::Polygon )
+  if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
   {
     // if it is a polygon and ring is not correctly defined yet (e.g. only
     // contains 1 point or not closed) we add point directly to the ring
@@ -250,7 +250,7 @@ void RecordingMapTool::removePoint()
       return;
     }
 
-    if ( mRecordedGeometry.wkbType() == Qgis::WkbType::Polygon )
+    if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
     {
       QgsLineString *r;
       QgsPolygon *poly;
@@ -405,7 +405,7 @@ void RecordingMapTool::removePoint()
 
     int vertexToGrab = nVertices - 1;
 
-    if ( mRecordedGeometry.wkbType() == Qgis::WkbType::Polygon )
+    if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
     {
       if ( nVertices >= 4 )
       {
@@ -601,7 +601,7 @@ void RecordingMapTool::prepareEditing()
     mActiveLayer->startEditing();
 
     // if we are editing point layer we start with the grabbed point
-    if ( mActiveFeature.geometry().wkbType() == Qgis::WkbType::Point && !mActiveFeature.geometry().isMultipart() )
+    if ( mActiveFeature.geometry().type() == Qgis::GeometryType::Point && !mActiveFeature.geometry().isMultipart() )
     {
       Vertex v( QgsVertexId( 0, 0, 0 ), QgsPoint( mActiveFeature.geometry().asPoint() ), Vertex::Existing );
       setActiveVertex( v );
@@ -667,7 +667,7 @@ void RecordingMapTool::collectVertices()
   {
     int vertexCount = geom->vertexCount( vertexId.part, vertexId.ring );
 
-    if ( mRecordedGeometry.wkbType() == Qgis::WkbType::Polygon )
+    if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
     {
       if ( vertexCount == 1 )
       {
@@ -698,7 +698,7 @@ void RecordingMapTool::collectVertices()
         continue;
       }
     }
-    else if ( mRecordedGeometry.wkbType() == Qgis::WkbType::LineString )
+    else if ( mRecordedGeometry.type() == Qgis::GeometryType::Line )
     {
       // if this is firt point in line (or part) we add handle start point first
       if ( vertexId.vertex == 0 && vertexId.part != startPart && vertexCount >= 2 )
@@ -801,7 +801,7 @@ void RecordingMapTool::updateVisibleItems()
       }
 
       // for polygons show midpoint if previous or next vertex is not active
-      if ( mRecordedGeometry.wkbType() == Qgis::WkbType::Polygon )
+      if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
       {
         if ( i > 0 )
         {
@@ -976,7 +976,7 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
 
   int vertexCount = mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
 
-  if ( mRecordedGeometry.wkbType() == Qgis::WkbType::Polygon )
+  if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
   {
     QgsPolygon *polygon;
     QgsLineString *ring;
@@ -1029,7 +1029,7 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
   updateVertex( mActiveVertex, point );
 
   // if it is a first or last vertex of the line we go to the recording mode
-  if ( mRecordedGeometry.wkbType() == Qgis::WkbType::LineString )
+  if ( mRecordedGeometry.type() == Qgis::GeometryType::Line )
   {
     if ( mActiveVertex.type() == Vertex::Existing && mActiveVertex.vertexId().vertex == 0 )
     {
