@@ -77,7 +77,7 @@ class PositionTrackingManager : public QObject
 
   public slots:
     void addPoint( const QgsPoint &position );
-    void addPoints( QList<QgsPoint> positions );
+    void addPoints( const QList<QgsPoint> &positions );
 
   signals:
 

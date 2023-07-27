@@ -44,7 +44,7 @@ void PositionTrackingManager::addPoint( const QgsPoint &position )
   emit trackedGeometryChanged( mTrackedGeometry );
 }
 
-void PositionTrackingManager::addPoints( QList<QgsPoint> positions )
+void PositionTrackingManager::addPoints( const QList<QgsPoint> &positions )
 {
   // get points from the previous geometry
   QgsLineString *oldLine = nullptr;
