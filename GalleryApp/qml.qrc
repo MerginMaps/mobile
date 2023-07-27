@@ -5,7 +5,7 @@
         <file>qml/pages/CheckBoxPage.qml</file>
         <file>qml/pages/ToolTipPage.qml</file>
         <file>qml/pages/TextPage.qml</file>
-        <file>../app/qmls/component/MyRectangle.qml</file>
-        <file>../app/qmls/Style.js</file>
+        <file>../app/qmlV2/component/MyRectangle.qml</file>
+        <file>../app/qmlV2/Style.js</file>
     </qresource>
 </RCC>

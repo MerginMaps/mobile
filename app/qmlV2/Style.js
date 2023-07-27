@@ -3,5 +3,5 @@
 const textColor = "black"
 
 function dynamicText() {
-    return "Dynamic text"
+  return "Dynamic text"
 }
