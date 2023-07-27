@@ -4,13 +4,17 @@ import QtQuick.Controls
 Page {
   id: pane
 
+  //FontLoader { id: fontx; source: "qrc:/fonts/SquarePeg-Regular.ttf" }
+
   Label {
     width: parent.width / 2
-    text: "All these Controls provides a set of controls that can be used to build complete interfaces in Mergin Maps app"
+    text: "DP ratio: ~" + Math.round(__dp*1000)/1000
     anchors.centerIn: parent
     horizontalAlignment: Label.AlignHCenter
     verticalAlignment: Label.AlignVCenter
     wrapMode: Label.Wrap
     color: "white"
+    font.pixelSize: 20
+    //font.family: fontx.font.family
   }
 }

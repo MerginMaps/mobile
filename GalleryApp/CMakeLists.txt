@@ -4,6 +4,7 @@ project(GalleryApp VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(QT6_VERSION ${QT_VERSION_DEFAULT} CACHE STRING "QT6 version to use")
+set(CMAKE_AUTORCC ON)
 
 find_package(
     Qt6 ${QT6_VERSION}
@@ -21,8 +22,9 @@ find_package(
 qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appGalleryApp
-    main.cpp qml.qrc
+    main.cpp qml.qrc fonts.qrc
     HotReload.cpp HotReload.h
+    Helper.cpp Helper.h
 )
 
 qt_add_qml_module(appGalleryApp
@@ -49,3 +51,6 @@ install(TARGETS appGalleryApp
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
+qt_add_resources(
+  fonts.qrc
+)
