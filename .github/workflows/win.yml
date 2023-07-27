@@ -157,7 +157,7 @@ jobs:
           cd build-Input
           nmake
           
-          type D:\a\input\input\build-Input\app\meta_types\ßqt6input_release_metatypes.json
+          type D:\a\input\input\build-Input\app\meta_types\qt6input_release_metatypes.json
           
           IF NOT EXIST Input.exe (echo err_INPUT_BUILD & exit /b 1)
                                           
