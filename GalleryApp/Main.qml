@@ -12,13 +12,13 @@ ApplicationWindow {
 
   property string currentPageSource: "InitialGalleryPage.qml"
 
-  Connections{
+  Connections {
     target: _hotReload
     function onWatchedSourceChanged() {
-      mainLoader.active = false;
-      _hotReload.clearCache();
-      mainLoader.setSource( "file://"+_qmlWrapperPath+currentPageSource)
-      mainLoader.active = true;
+      mainLoader.active = false
+      _hotReload.clearCache()
+      mainLoader.setSource("file://" + _qmlWrapperPath + currentPageSource)
+      mainLoader.active = true
     }
   }
 
@@ -80,19 +80,28 @@ ApplicationWindow {
         onClicked: {
           window.currentPageSource = model.source
           listView.currentIndex = index
-          stackView.push("file://"+_qmlWrapperPath+model.source)
+          stackView.push("file://" + _qmlWrapperPath + model.source)
           stackView.pop()
           drawer.close()
         }
       }
 
       model: ListModel {
-        ListElement { title: "ToolTip"; source: "ToolTipPage.qml" }
-        ListElement { title: "CheckBox"; source: "CheckBoxPage.qml" }
-        ListElement { title: "Text"; source: "TextPage.qml" }
+        ListElement {
+          title: "ToolTip"
+          source: "ToolTipPage.qml"
+        }
+        ListElement {
+          title: "CheckBox"
+          source: "CheckBoxPage.qml"
+        }
+        ListElement {
+          title: "Text"
+          source: "TextPage.qml"
+        }
       }
 
-      ScrollIndicator.vertical: ScrollIndicator { }
+      ScrollIndicator.vertical: ScrollIndicator {}
     }
   }
 
@@ -102,7 +111,7 @@ ApplicationWindow {
 
     initialItem: Loader {
       id: mainLoader
-      source: "file://"+_qmlWrapperPath+currentPageSource
+      source: "file://" + _qmlWrapperPath + currentPageSource
       scale: 1.0
     }
   }

@@ -14,4 +14,3 @@ Rectangle {
     color: Style.textColor
   }
 }
-
