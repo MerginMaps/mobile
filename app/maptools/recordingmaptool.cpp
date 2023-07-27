@@ -787,7 +787,7 @@ void RecordingMapTool::updateVisibleItems()
     else if ( v.type() == Vertex::MidPoint )
     {
       // for lines show midpoint if previous or next vertex is not active
-      if ( mRecordedGeometry.wkbType() == Qgis::WkbType::LineString )
+      if ( mRecordedGeometry.type() == Qgis::GeometryType::Line )
       {
         if ( i > 0 && i < mVertices.count() - 1 )
         {
