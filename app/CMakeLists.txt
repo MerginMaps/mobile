@@ -251,7 +251,8 @@ qt_add_executable(
 
 target_include_directories(
   Input
-  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/attributes
+  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/
+         ${CMAKE_CURRENT_SOURCE_DIR}/attributes
          ${CMAKE_CURRENT_SOURCE_DIR}/map
          ${CMAKE_CURRENT_SOURCE_DIR}/layer
          ${CMAKE_CURRENT_SOURCE_DIR}/maptools
@@ -514,5 +515,5 @@ qt_add_qml_module(
   URI MMInput
   VERSION 1.0
   QML_FILES ${MM_QML_SRCS}
-  RESOURCE_PREFIX /com.merginmaps/imports
+  RESOURCE_PREFIX /com.merginmaps/imports NO_GENERATE_QMLTYPES
 )
