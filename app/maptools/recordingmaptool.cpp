@@ -106,7 +106,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     }
   }
 
-  if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+  if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
   {
     // if it is a polygon and ring is not correctly defined yet (e.g. only
     // contains 1 point or not closed) we add point directly to the ring
@@ -161,7 +161,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
       r->points( points );
       points.removeLast();
       r->setPoints( points );
-      mRecordedGeometry.addPart( poly.clone(), QgsWkbTypes::PolygonGeometry );
+      mRecordedGeometry.addPart( poly.clone(), Qgis::GeometryType::Polygon );
     }
 
     if ( r->nCoordinates() < 2 )
@@ -179,11 +179,11 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     }
   }
 
-  if ( QgsWkbTypes::flatType( mRecordedGeometry.wkbType() ) == QgsWkbTypes::Point )
+  if ( QgsWkbTypes::flatType( mRecordedGeometry.wkbType() ) == Qgis::WkbType::Point )
   {
     mRecordedGeometry.set( pointToAdd.clone() );
   }
-  else if ( QgsWkbTypes::flatType( mRecordedGeometry.wkbType() ) == QgsWkbTypes::MultiPoint )
+  else if ( QgsWkbTypes::flatType( mRecordedGeometry.wkbType() ) == Qgis::WkbType::MultiPoint )
   {
     mRecordedGeometry.addPart( pointToAdd.clone() );
   }
@@ -194,7 +194,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     {
       QgsLineString line;
       line.addVertex( pointToAdd );
-      mRecordedGeometry.addPart( line.clone(), QgsWkbTypes::LineGeometry );
+      mRecordedGeometry.addPart( line.clone(), Qgis::GeometryType::Line );
     }
     else
     {
@@ -250,7 +250,7 @@ void RecordingMapTool::removePoint()
       return;
     }
 
-    if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+    if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
     {
       QgsLineString *r;
       QgsPolygon *poly;
@@ -332,7 +332,7 @@ void RecordingMapTool::removePoint()
         mRecordedGeometry.deletePart( current.part );
       }
     }
-    else if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
+    else if ( mRecordedGeometry.type() == Qgis::GeometryType::Line )
     {
       QgsLineString *r;
 
@@ -405,7 +405,7 @@ void RecordingMapTool::removePoint()
 
     int vertexToGrab = nVertices - 1;
 
-    if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+    if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
     {
       if ( nVertices >= 4 )
       {
@@ -435,7 +435,7 @@ bool RecordingMapTool::hasValidGeometry() const
       return false;
     }
 
-    if ( mActiveLayer->geometryType() == QgsWkbTypes::PointGeometry )
+    if ( mActiveLayer->geometryType() == Qgis::GeometryType::Point )
     {
       if ( mRecordedGeometry.isMultipart() )
       {
@@ -454,7 +454,7 @@ bool RecordingMapTool::hasValidGeometry() const
         return mRecordedGeometry.constGet()->nCoordinates() == 1;
       }
     }
-    else if ( mActiveLayer->geometryType() == QgsWkbTypes::LineGeometry )
+    else if ( mActiveLayer->geometryType() == Qgis::GeometryType::Line )
     {
       if ( mRecordedGeometry.isMultipart() )
       {
@@ -473,7 +473,7 @@ bool RecordingMapTool::hasValidGeometry() const
         return mRecordedGeometry.constGet()->nCoordinates() >= 2;
       }
     }
-    else if ( mActiveLayer->geometryType() == QgsWkbTypes::PolygonGeometry )
+    else if ( mActiveLayer->geometryType() == Qgis::GeometryType::Polygon )
     {
       if ( mRecordedGeometry.isMultipart() )
       {
@@ -565,7 +565,7 @@ void RecordingMapTool::onPositionChanged()
   }
   else if ( mRecordingIntervalType == StreamingIntervalType::IntervalType::Distance )
   {
-    double factor = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceDegrees, QgsUnitTypes::DistanceMeters );
+    double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Degrees, Qgis::DistanceUnit::Meters );
     double distance = mLastRecordedPoint.distance( mPositionKit->positionCoordinate() );
     if ( mLastRecordedPoint.isEmpty() || factor * distance >= mRecordingInterval )
     {
@@ -601,7 +601,7 @@ void RecordingMapTool::prepareEditing()
     mActiveLayer->startEditing();
 
     // if we are editing point layer we start with the grabbed point
-    if ( mActiveFeature.geometry().type() == QgsWkbTypes::PointGeometry && !mActiveFeature.geometry().isMultipart() )
+    if ( mActiveFeature.geometry().type() == Qgis::GeometryType::Point && !mActiveFeature.geometry().isMultipart() )
     {
       Vertex v( QgsVertexId( 0, 0, 0 ), QgsPoint( mActiveFeature.geometry().asPoint() ), Vertex::Existing );
       setActiveVertex( v );
@@ -667,7 +667,7 @@ void RecordingMapTool::collectVertices()
   {
     int vertexCount = geom->vertexCount( vertexId.part, vertexId.ring );
 
-    if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+    if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
     {
       if ( vertexCount == 1 )
       {
@@ -698,7 +698,7 @@ void RecordingMapTool::collectVertices()
         continue;
       }
     }
-    else if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
+    else if ( mRecordedGeometry.type() == Qgis::GeometryType::Line )
     {
       // if this is firt point in line (or part) we add handle start point first
       if ( vertexId.vertex == 0 && vertexId.part != startPart && vertexCount >= 2 )
@@ -787,7 +787,7 @@ void RecordingMapTool::updateVisibleItems()
     else if ( v.type() == Vertex::MidPoint )
     {
       // for lines show midpoint if previous or next vertex is not active
-      if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
+      if ( mRecordedGeometry.type() == Qgis::GeometryType::Line )
       {
         if ( i > 0 && i < mVertices.count() - 1 )
         {
@@ -801,7 +801,7 @@ void RecordingMapTool::updateVisibleItems()
       }
 
       // for polygons show midpoint if previous or next vertex is not active
-      if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+      if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
       {
         if ( i > 0 )
         {
@@ -976,7 +976,7 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
 
   int vertexCount = mRecordedGeometry.constGet()->vertexCount( mActiveVertex.vertexId().part, mActiveVertex.vertexId().ring );
 
-  if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+  if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
   {
     QgsPolygon *polygon;
     QgsLineString *ring;
@@ -1029,7 +1029,7 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
   updateVertex( mActiveVertex, point );
 
   // if it is a first or last vertex of the line we go to the recording mode
-  if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
+  if ( mRecordedGeometry.type() == Qgis::GeometryType::Line )
   {
     if ( mActiveVertex.type() == Vertex::Existing && mActiveVertex.vertexId().vertex == 0 )
     {
@@ -1167,11 +1167,11 @@ void RecordingMapTool::grabNextVertex()
   bool grabInCurrent = true;
   if ( mRecordedGeometry.isMultipart() )
   {
-    if ( mRecordedGeometry.type() == QgsWkbTypes::LineGeometry )
+    if ( mRecordedGeometry.type() == Qgis::GeometryType::Line )
     {
       grabInCurrent = current.part <= mRecordedGeometry.constGet()->partCount();
     }
-    else if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+    else if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
     {
       // excluding exterior ring
       grabInCurrent = current.part <= mRecordedGeometry.constGet()->partCount() && current.ring <= mRecordedGeometry.constGet()->ringCount( current.part ) - 1;
@@ -1179,7 +1179,7 @@ void RecordingMapTool::grabNextVertex()
   }
   else
   {
-    if ( mRecordedGeometry.type() == QgsWkbTypes::PolygonGeometry )
+    if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
     {
       // excluding exterior ring
       grabInCurrent = current.ring <= mRecordedGeometry.constGet()->ringCount() - 1;

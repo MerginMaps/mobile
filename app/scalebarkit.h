@@ -57,7 +57,7 @@ class  ScaleBarKit : public QObject
     /**
      * Preferred system of measurement for the result
      */
-    Q_PROPERTY( QgsUnitTypes::SystemOfMeasurement systemOfMeasurement MEMBER mSystemOfMeasurement NOTIFY systemOfMeasurementChanged )
+    Q_PROPERTY( Qgis::SystemOfMeasurement systemOfMeasurement MEMBER mSystemOfMeasurement NOTIFY systemOfMeasurementChanged )
 
     /**
      * Units of distance (e.g. km or m) of result in desired systemOfMeasurement Read-only (result).
@@ -126,7 +126,7 @@ class  ScaleBarKit : public QObject
     int mWidth; // pixels
     int mDistance; // in meters or kilometers, rounded
     QString mUnits; // e.g. km or m
-    QgsUnitTypes::SystemOfMeasurement mSystemOfMeasurement = QgsUnitTypes::MetricSystem;
+    Qgis::SystemOfMeasurement mSystemOfMeasurement = Qgis::SystemOfMeasurement::Metric;
 };
 
 

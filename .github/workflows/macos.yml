@@ -15,8 +15,8 @@ on:
       - published
 
 env:
-  QT_VERSION: 6.5.1
-  INPUT_SDK_VERSION: mac-20230530-132
+  QT_VERSION: '6.5.2'
+  INPUT_SDK_VERSION: mac-20230725-138
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 0
   XC_VERSION: ${{ '14.2' }}

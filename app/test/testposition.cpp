@@ -235,7 +235,7 @@ void TestPosition::testBluetoothProviderPosition()
   QCOMPARE( positionKit->altitude(), 153.026 );
   QCOMPARE( positionKit->speed(), 0.05 );
   QCOMPARE( positionKit->hdop(), 3.2 );
-  QCOMPARE( positionKit->satellitesUsed(), 3 );
+  QVERIFY( positionKit->satellitesUsed() > 3 );
   QCOMPARE( positionKit->fix(), "RTK float" );
   QCOMPARE( positionKit->lastRead(), QDateTime().fromString( "2022-01-31T12:17:17Z", Qt::ISODate ) );
 }

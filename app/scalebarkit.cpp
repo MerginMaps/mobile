@@ -83,8 +83,8 @@ void ScaleBarKit::updateScaleBar()
 
   double distInMeters = InputUtils().screenUnitsToMeters( mMapSettings, mPreferredWidth ); // meters
   double dist;
-  QgsUnitTypes::DistanceUnit distUnits;
-  InputUtils().humanReadableDistance( distInMeters, QgsUnitTypes::DistanceMeters,
+  Qgis::DistanceUnit distUnits;
+  InputUtils().humanReadableDistance( distInMeters, Qgis::DistanceUnit::Meters,
                                       mSystemOfMeasurement,
                                       dist, distUnits );
 

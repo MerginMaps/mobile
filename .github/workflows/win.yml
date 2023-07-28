@@ -25,10 +25,10 @@ jobs:
     runs-on: windows-2019
     
     env:
-      QT_VERSION: '6.5.1'
-      INPUT_SDK_VERSION: win64-20230531-151
+      QT_VERSION: '6.5.2'
+      INPUT_SDK_VERSION: win64-20230727-171
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
-      CACHE_VERSION: 0
+      CACHE_VERSION: 1
       VS_VERSION: "2019"
       QT_ARCH: "win64_msvc2019_64"
       
@@ -156,7 +156,7 @@ jobs:
         run: |
           cd build-Input
           nmake
-          
+
           IF NOT EXIST Input.exe (echo err_INPUT_BUILD & exit /b 1)
                                           
       - name: Install Input
