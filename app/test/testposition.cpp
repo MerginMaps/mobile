@@ -402,7 +402,7 @@ void TestPosition::testPositionTracking()
 
   QSignalSpy addedSpy( trackingLayer, &QgsVectorLayer::featureAdded );
 
-  manager.storeTrackedPath();
+  manager.commitTrackedPath();
 
   QCOMPARE( addedSpy.count(), 2 ); // called twice, once with FID_NEW and second time after commit, with fid>0
 

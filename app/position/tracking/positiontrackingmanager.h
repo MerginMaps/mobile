@@ -69,14 +69,15 @@ class PositionTrackingManager : public QObject
 
     Q_INVOKABLE void tryAgain();
 
-    Q_INVOKABLE void storeTrackedPath();
+    Q_INVOKABLE void commitTrackedPath();
 
     QDateTime startTime() const;
 
     bool isTrackingPosition() const;
 
   public slots:
-    void addPoint( const GeoPosition &position );
+    void addPoint( const QgsPoint &position );
+    void addPoints( const QList<QgsPoint> &positions );
 
   signals:
 
@@ -96,12 +97,11 @@ class PositionTrackingManager : public QObject
 
     void trackingErrorOccured( const QString &message );
 
+    void abort();
+
   private:
     void setLayerId( QString newLayerId );
     void setup();
-
-    void cacheTrackedGeometry();
-    void clearCache();
 
     std::unique_ptr<AbstractTrackingBackend> mTrackingBackend; // owned
 

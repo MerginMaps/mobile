@@ -9,15 +9,21 @@
 
 #include "abstracttrackingbackend.h"
 
-AbstractTrackingBackend::AbstractTrackingBackend( UpdateFrequency updateFrequency, SignalSlotSupport signalSlotSupport, QObject *parent )
+AbstractTrackingBackend::AbstractTrackingBackend(
+  UpdateFrequency updateFrequency,
+  SignalSlotSupport signalSlotSupport,
+  TrackingMethod trackingMethod,
+  QObject *parent
+)
   : QObject( parent )
   , mUpdateFrequency( updateFrequency )
+  , mTrackingMethod( trackingMethod )
   , mSignalSlotSupport( signalSlotSupport )
 {
 
 }
 
-void AbstractTrackingBackend::notifyListeners( const GeoPosition &position )
+void AbstractTrackingBackend::notifyListeners( const QgsPoint &position )
 {
   if ( mSignalSlotSupport == SignalSlotSupport::Supported )
   {
@@ -49,7 +55,12 @@ AbstractTrackingBackend::SignalSlotSupport AbstractTrackingBackend::signalSlotSu
   return mSignalSlotSupport;
 }
 
-void AbstractTrackingBackend::setNotifyFunction( std::function<void ( const GeoPosition & )> fn )
+AbstractTrackingBackend::TrackingMethod AbstractTrackingBackend::trackingMethod() const
+{
+  return mTrackingMethod;
+}
+
+void AbstractTrackingBackend::setNotifyFunction( std::function<void ( const QgsPoint & )> fn )
 {
   mNotifyFunction = fn;
 }

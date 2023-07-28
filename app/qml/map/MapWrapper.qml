@@ -298,6 +298,10 @@ Item {
           onTrackingErrorOccured: (message) => {
             notify( message )
           }
+
+          onAbort: () => {
+            root.setTracking( false )
+          }
         }
 
         PositionTrackingHighlight {
@@ -1063,6 +1067,18 @@ Item {
     }
   }
 
+  Connections {
+    target: __activeProject
+
+    function onStartPositionTracking() {
+
+      if ( !tracking.active )
+      {
+        root.setTracking( true )
+      }
+    }
+  }
+
   QtObject {
     id: internal
     // private properties - not accessible by other components
@@ -1236,7 +1252,7 @@ Item {
       }
     }
     else {
-      trackingManager?.storeTrackedPath()
+      trackingManager?.commitTrackedPath()
       tracking.active = false
     }
   }

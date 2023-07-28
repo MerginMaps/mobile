@@ -154,6 +154,7 @@ QtObject {
     property string zoomToProjectIcon: "qrc:/zoom_to_project.svg"
     property string mapThemesIcon: "qrc:/map_styles.svg"
     property string settingsIcon: "qrc:/settings.svg"
+    property string trackingIcon: "qrc:/route.svg"
 
     property string gpsDirectionIcon: "qrc:/gps_direction.svg"
     property string gpsMarkerPositionIcon: "qrc:/gps_marker_position.svg"

@@ -14,7 +14,12 @@ InternalTrackingBackend::InternalTrackingBackend(
   PositionKit *positionKit,
   UpdateFrequency updateFrequency,
   QObject *parent )
-  : AbstractTrackingBackend( updateFrequency, AbstractTrackingBackend::SignalSlotSupport::Supported, parent )
+  : AbstractTrackingBackend(
+      updateFrequency,
+      AbstractTrackingBackend::SignalSlotSupport::Supported,
+      AbstractTrackingBackend::TrackingMethod::UpdatesThroughDirectCall,
+      parent
+    )
   , mLastUpdate( QDateTime::currentDateTime() )
   , mPositionKit( positionKit )
 {
@@ -37,7 +42,8 @@ InternalTrackingBackend::InternalTrackingBackend(
     {
       if ( mLastUpdate.addMSecs( mUpdateInterval ) <= QDateTime::currentDateTime() )
       {
-        notifyListeners( position );
+        QgsPoint p( position.longitude, position.latitude, position.elevation, QDateTime::currentDateTime().toSecsSinceEpoch() );
+        notifyListeners( p );
       }
     } );
   }

@@ -525,6 +525,11 @@ class InputUtils: public QObject
     // Returns default path to images in this system
     Q_INVOKABLE static QString imageGalleryLocation();
 
+    /**
+     * Parses position updates in format "<long> <lat> <alt> <time_in_secs>\n<long>..." into list of QgsPoints
+     */
+    static QList<QgsPoint> parsePositionUpdates( const QString &data );
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 

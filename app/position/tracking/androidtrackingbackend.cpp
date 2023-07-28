@@ -8,30 +8,22 @@
  ***************************************************************************/
 
 #include "androidtrackingbackend.h"
+#include "androidtrackingbroadcast.h"
 #include "coreutils.h"
+#include "inpututils.h"
 
 #include <QtCore/private/qandroidextras_p.h>
 
-AndroidTrackingBackend *AndroidTrackingBackend::mInstance = nullptr;
-
-static void notifyListenersPositionUpdated( JNIEnv *env, jobject /*this*/, jdouble longitude, jdouble latitude, jdouble altitude )
+AndroidTrackingBackend::AndroidTrackingBackend(
+  AbstractTrackingBackend::UpdateFrequency frequency,
+  QObject *parent )
+  : AbstractTrackingBackend(
+      frequency,
+      AbstractTrackingBackend::SignalSlotSupport::Supported,
+      AbstractTrackingBackend::TrackingMethod::UpdatesThroughFile,
+      parent
+    )
 {
-  AndroidTrackingBackend::instance()->update( longitude, latitude, altitude );
-}
-
-static void notifyListenersStatusUpdate( JNIEnv *env, jobject /*this*/, jstring message )
-{
-  CoreUtils::log( QStringLiteral( "Android Tracking Backend" ), env->GetStringUTFChars( message, 0 ) );
-}
-
-AndroidTrackingBackend::AndroidTrackingBackend( AbstractTrackingBackend::UpdateFrequency frequency, QObject *parent )
-  : AbstractTrackingBackend{ frequency, AbstractTrackingBackend::SignalSlotSupport::NotSupported, parent }
-{
-  if ( !mInstance )
-  {
-    mInstance = this;
-  }
-
   switch ( frequency )
   {
     case AbstractTrackingBackend::Often:
@@ -50,11 +42,15 @@ AndroidTrackingBackend::AndroidTrackingBackend( AbstractTrackingBackend::UpdateF
       break;
   }
 
-  startForegroundService();
+  setupForegroundUpdates();
 }
 
 AndroidTrackingBackend::~AndroidTrackingBackend()
 {
+  disconnect( &AndroidTrackingBroadcast::getInstance() );
+
+  AndroidTrackingBroadcast::unregisterBroadcast();
+
   // stop the foreground service
   auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
   QAndroidIntent serviceIntent( activity.object(), "uk/co/lutraconsulting/PositionTrackingService" );
@@ -63,53 +59,157 @@ AndroidTrackingBackend::~AndroidTrackingBackend()
     "stopService",
     "(Landroid/content/Intent;)Z",
     serviceIntent.handle().object() );
+
+  if ( mTrackingFile.isOpen() )
+  {
+    mTrackingFile.close();
+  }
+
+  if ( !mTrackingFile.remove() )
+  {
+    qDebug() << "Tracking file could not be removed";
+  }
 }
 
-void AndroidTrackingBackend::update( double longitude, double latitude, double altitude )
+QList<QgsPoint> AndroidTrackingBackend::getAllUpdates()
 {
-  GeoPosition position;
+  QList<QgsPoint> allUpdates;
 
-  position.longitude = longitude;
-  position.latitude = latitude;
-  position.elevation = altitude;
-  notifyListeners( position );
+  if ( mTrackingFile.isOpen() )
+  {
+    if ( !mTrackingFile.seek( 0 ) )
+    {
+      qDebug() << "Unknown error when rewinding to the beginning of the tracking file";
+      return allUpdates;
+    }
+  }
+  else
+  {
+    if ( !mTrackingFile.open( QFile::ReadOnly ) )
+    {
+      CoreUtils::log(
+        QStringLiteral( "Android Tracking Backend" ),
+        QStringLiteral( "Tracking file could not be opened for reading: %1" ).arg( mTrackingFile.fileName() )
+      );
+
+      return allUpdates;
+    }
+  }
+
+  QString fileData = QString( mTrackingFile.readAll() );
+
+  return InputUtils::parsePositionUpdates( fileData );
 }
 
-void AndroidTrackingBackend::startForegroundService()
+void AndroidTrackingBackend::sourceUpdatedPosition()
 {
-  // 0. register callbacks from java
-  JNINativeMethod methods[] {{"notifyListenersPositionUpdated", "(DDD)V", reinterpret_cast<void *>( notifyListenersPositionUpdated )},
-    {"notifyListenersStatusUpdate", "(Ljava/lang/String;)V", reinterpret_cast<void *>( notifyListenersStatusUpdate )}
-  };
-  QJniObject broadcastClass( "uk/co/lutraconsulting/PositionTrackingBroadcastMiddleware" );
+  if ( !mTrackingFile.isOpen() )
+  {
+    if ( !mTrackingFile.open( QFile::ReadOnly ) )
+    {
+      CoreUtils::log(
+        QStringLiteral( "Android Tracking Backend" ),
+        QStringLiteral( "Tracking file could not be opened for reading: %1" ).arg( mTrackingFile.fileName() )
+      );
 
-  QJniEnvironment javaenv;
-  jclass objectClass = javaenv->GetObjectClass( broadcastClass.object<jobject>() );
+      emit errorOccured( tr( "There was an error and tracking could not start, please contact support" ) );
+      emit abort();
 
-  javaenv->RegisterNatives( objectClass, methods, 2 );
-  javaenv->DeleteLocalRef( objectClass );
+      return;
+    }
+  }
 
-  // 1. get context object
+  QString fileData = QString( mTrackingFile.readAll() );
+  QList<QgsPoint> parsedUpdates = InputUtils::parsePositionUpdates( fileData );
+
+  if ( parsedUpdates.size() > 1 )
+  {
+    emit multiplePositionChanges( parsedUpdates );
+  }
+  else if ( parsedUpdates.size() == 1 )
+  {
+    emit positionChanged( parsedUpdates[0] );
+  }
+}
+
+void AndroidTrackingBackend::sourceUpdatedState( const QString &statusMessage )
+{
+  if ( statusMessage.startsWith( QStringLiteral( "ERROR" ), Qt::CaseSensitive ) )
+  {
+    CoreUtils::log( QStringLiteral( "Android Tracking Backend" ), statusMessage );
+
+    if ( statusMessage.contains( QStringLiteral( "#UNSUPPORTED" ), Qt::CaseSensitive ) )
+    {
+      emit errorOccured( tr( "Your device does not support tracking, available from Android 8.0" ) );
+      emit abort();
+    }
+    else if ( statusMessage.contains( QStringLiteral( "#PERMISSIONS" ), Qt::CaseSensitive ) )
+    {
+      emit errorOccured( tr( "Please enable location permission before starting tracking" ) );
+      emit abort();
+    }
+    else if ( statusMessage.contains( QStringLiteral( "#GPS_UNAVAILABLE" ), Qt::CaseSensitive ) )
+    {
+      emit errorOccured( tr( "Please enable location services on your device before starting tracking" ) );
+      emit abort();
+    }
+    else if ( statusMessage.contains( QStringLiteral( "#GENERAL" ), Qt::CaseSensitive ) )
+    {
+      emit errorOccured( tr( "There was an error and tracking could not start, please contact support" ) );
+      emit abort();
+    }
+  }
+  else
+  {
+    qDebug() << "Position Tracking:" << statusMessage; // just dev logs
+  }
+}
+
+void AndroidTrackingBackend::setupForegroundUpdates()
+{
+  if ( !AndroidTrackingBroadcast::registerBroadcast() )
+  {
+    emit errorOccured( tr( "There was an error and tracking could not start, please contact support" ) );
+    emit abort();
+
+    return;
+  }
+
+  connect(
+    &AndroidTrackingBroadcast::getInstance(),
+    &AndroidTrackingBroadcast::positionUpdated,
+    this,
+    &AndroidTrackingBackend::sourceUpdatedPosition
+  );
+
+  connect(
+    &AndroidTrackingBroadcast::getInstance(),
+    &AndroidTrackingBroadcast::statusChanged,
+    this,
+    &AndroidTrackingBackend::sourceUpdatedState
+  );
+
+  // TODO: you need to check if this is starting tracking or just resuming
+  // It should not be an issue to start this if it is already running, but let's double check
+
   auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-
-  // 2. create intent with the foreground service
   QAndroidIntent serviceIntent( activity.object(), "uk/co/lutraconsulting/PositionTrackingService" );
+
   serviceIntent.putExtra( QStringLiteral( "uk.co.lutraconsulting.tracking.distanceInterval" ), mDistanceFilter );
   serviceIntent.putExtra( QStringLiteral( "uk.co.lutraconsulting.tracking.timeInterval" ), mUpdateInterval );
 
-  // 3. build service with the intent
   QJniObject result = activity.callObjectMethod(
                         "startService",
                         "(Landroid/content/Intent;)Landroid/content/ComponentName;",
                         serviceIntent.handle().object() );
 
+  // find the file for position updates
+  auto path = activity.callMethod<jstring>( "homePath", "()Ljava/lang/String;" );
+  QString pathString = path.toString();
 
-  // 4. register position updates from the service to broadcast
-  QJniEnvironment env;
-  jclass javaClass = env.findClass( "uk/co/lutraconsulting/PositionTrackingBroadcastMiddleware" );
-  QJniObject classObject( javaClass );
+  mTrackingFile.setFileName( pathString + "/" + TRACKING_FILE_NAME );
 
-  classObject.callMethod<void>( "registerServiceBroadcastReceiver",
-                                "(Landroid/content/Context;)V",
-                                QNativeInterface::QAndroidApplication::context() );
+  // go see if something's left from previous run!
+  // (in future we could show a dialogue when project is opened and something is in the file)
+  sourceUpdatedPosition();
 }

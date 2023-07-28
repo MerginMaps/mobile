@@ -250,9 +250,13 @@ if (HAVE_APPLE_PURCHASING)
 endif ()
 
 if (ANDROID)
-  set(MM_HDRS ${MM_HDRS} position/tracking/androidtrackingbackend.h)
+  set(MM_HDRS ${MM_HDRS} position/tracking/androidtrackingbackend.h
+              position/tracking/androidtrackingbroadcast.h
+  )
 
-  set(MM_SRCS ${MM_SRCS} position/tracking/androidtrackingbackend.cpp)
+  set(MM_SRCS ${MM_SRCS} position/tracking/androidtrackingbackend.cpp
+              position/tracking/androidtrackingbroadcast.cpp
+  )
 endif ()
 
 qt_add_resources(

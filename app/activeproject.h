@@ -142,6 +142,9 @@ class ActiveProject: public QObject
 
     void positionTrackingSupportedChanged();
 
+    // Emited when the app (UI) should show tracking because there is a running tracking service
+    void startPositionTracking();
+
   public slots:
     // Reloads project if current project path matches given path (its the same project)
     bool reloadProject( QString projectDir );
