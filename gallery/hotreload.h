@@ -7,19 +7,33 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick
-import QtQuick.Controls
-import "../Style.js" as Style
+#ifndef HOTRELOAD_H
+#define HOTRELOAD_H
 
-Rectangle {
-  anchors.centerIn: parent
-  color: "white"
-  width: 200
-  height: 200
-  radius: 20
-  Text {
-    anchors.centerIn: parent
-    text: Style.dynamicText()
-    color: Style.textColor
-  }
-}
+#include <QObject>
+#include <QQmlApplicationEngine>
+
+class QFileSystemWatcher;
+
+class HotReload : public QObject
+{
+  Q_OBJECT
+public:
+  explicit HotReload(QQmlApplicationEngine& engine, QObject *parent = nullptr);
+
+signals:
+  void watchedSourceChanged();
+
+public slots:
+  void clearCache();
+  void startHotReload();
+
+private:
+  QString syncScript() const;
+
+private:
+  QFileSystemWatcher *_watcher;
+  QQmlApplicationEngine& _engine;
+};
+
+#endif // HOTRELOAD_H

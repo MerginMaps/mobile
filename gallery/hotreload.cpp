@@ -1,4 +1,13 @@
-#include "HotReload.h"
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#include "hotreload.h"
 #include <QFileSystemWatcher>
 #include <QDir>
 #include <QGuiApplication>
@@ -11,7 +20,7 @@ QString HotReload::syncScript() const
   return "#!/bin/sh \n\
 echo running hot reload sync directories ... \n\
 while true; do \n\
-  rsync -ra ../../../../GalleryApp/qml/ HotReload/GalleryApp/qml/ \n\
+  rsync -ra ../../../../gallery/qml/ HotReload/gallery/qml/ \n\
   rsync -ra ../../../../app/qmlV2/ HotReload/app/qmlV2/ \n\
   sleep 1 \n\
 done";
@@ -21,8 +30,8 @@ HotReload::HotReload(QQmlApplicationEngine& engine, QObject *parent):
   _engine(engine)
 {
   // create dirs for sync (near the app)
-  if(!QDir("HotReload/GalleryApp/qml/").exists())
-    QDir().mkpath(QGuiApplication::applicationDirPath() + "/HotReload/GalleryApp/qml/");
+  if(!QDir("HotReload/gallery/qml/").exists())
+    QDir().mkpath(QGuiApplication::applicationDirPath() + "/HotReload/gallery/qml/");
   if(!QDir("HotReload/app/qmlV2/").exists())
     QDir().mkpath(QGuiApplication::applicationDirPath() + "/HotReload/app/qmlV2/");
 
@@ -57,7 +66,7 @@ void HotReload::clearCache()
 void HotReload::startHotReload()
 {
   _watcher = new QFileSystemWatcher(this);
-  _watcher->addPath("HotReload/GalleryApp/qml/Pages");
+  _watcher->addPath("HotReload/gallery/qml/Pages");
   _watcher->addPath("HotReload/app/qmlV2");
   _watcher->addPath("HotReload/app/qmlV2/component");
 
