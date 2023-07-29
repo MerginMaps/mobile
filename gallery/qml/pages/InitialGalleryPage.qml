@@ -9,17 +9,21 @@
 
 import QtQuick
 import QtQuick.Controls
-import "../Style.js" as Style
 
-Rectangle {
-  anchors.centerIn: parent
-  color: "white"
-  width: 200
-  height: 200
-  radius: 20
-  Text {
+Page {
+  id: pane
+
+  //FontLoader { id: fontx; source: "qrc:/fonts/SquarePeg-Regular.ttf" }
+  Label {
+    width: parent.width / 2
+    text: "DP ratio: ~" + Math.round(__dp * 1000) / 1000 + "\n" +
+          "Used font: " + font.family
     anchors.centerIn: parent
-    text: Style.dynamicText()
-    color: Style.textColor
+    horizontalAlignment: Label.AlignHCenter
+    verticalAlignment: Label.AlignVCenter
+    wrapMode: Label.Wrap
+    color: "white"
+    font.pixelSize: 20
+    //font.family: fontx.font.family
   }
 }

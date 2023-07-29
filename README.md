@@ -77,5 +77,7 @@ Read more about the app [https://merginmaps.com/docs](https://merginmaps.com/doc
 
 To setup your development environment, read [INSTALL](./INSTALL.md)
 
+New sub-project 'gallery' app is used to develop/design (later to see) all UI components, used in the Mergin Maps app
+
 ## Privacy policy
 Read more about the app privacy policy [here](https://merginmaps.com/docs/reference/privacy/)
