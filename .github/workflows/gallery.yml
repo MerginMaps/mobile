@@ -105,13 +105,21 @@ jobs:
           nmake
           nmake install
 
-      - name: Prepare artefacts
-        shell: bash
+      - name: Prepare artefacts (macos & ubuntu)
+        if: matrix.os != 'windows-2019'
         run: |
           cd ${{ github.workspace }}/install-gallery
           ls -la .
           tar -czf ${{ github.workspace }}/merginmaps-gallery-${{ matrix.os }}.tar.gz .
 
+      - name: Prepare artefacts (windows)
+        if: matrix.os == 'windows-2019'
+        shell: cmd
+        run: |
+          cd install-gallery
+          dir
+          tar -czf ${{ github.workspace }}/merginmaps-gallery-${{ matrix.os }}.tar.gz .
+          
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v3
         with:
