@@ -105,12 +105,11 @@ jobs:
           nmake
           nmake install
 
-          dir ${{ steps.vars.outputs.WORKSPACE_DIR }}/install-gallery
-
       - name: Prepare artefacts
         shell: bash
         run: |
           cd ${{ github.workspace }}/install-gallery
+          ls -la .
           tar -czf ${{ github.workspace }}/merginmaps-gallery-${{ matrix.os }}.tar.gz .
 
       - name: Upload APK to Artifacts
