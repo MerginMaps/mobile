@@ -15,6 +15,7 @@ Other Checks:
 [![Code Layout](https://github.com/MerginMaps/input/workflows/Code%20Layout/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22Code+Layout%22)
 [![Coverage Status](https://coveralls.io/repos/github/MerginMaps/input/badge.svg?branch=master)](https://coveralls.io/github/MerginMaps/input?branch=master)
 [![Translations](https://github.com/MerginMaps/input/actions/workflows/i18n.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/i18n.yml)
+[![Gallery App](https://github.com/MerginMaps/input/actions/workflows/gallery.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/gallery.yml)
 
 Citation link:
 
