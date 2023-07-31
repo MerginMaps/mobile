@@ -44,8 +44,7 @@ qt_add_qml_module(
   MerginMapsGallery
   URI gallery
   VERSION 1.0
-  QML_FILES qml/Main.qml
-  NO_GENERATE_QMLTYPES
+  QML_FILES qml/Main.qml NO_GENERATE_QMLTYPES
 )
 
 qt_add_resources(fonts.qrc)
@@ -69,11 +68,17 @@ install(
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-qt_generate_deploy_qml_app_script(
-    TARGET MerginMapsGallery
-    OUTPUT_SCRIPT deploy_script
+if (NOT WIN32)
+  # Error: Process completed with exit code 1. on windows - needs some debugging Disable
+  # for now
+  qt_generate_deploy_qml_app_script(
+    TARGET
+    MerginMapsGallery
+    OUTPUT_SCRIPT
+    deploy_script
     MACOS_BUNDLE_POST_BUILD
     NO_UNSUPPORTED_PLATFORM_ERROR
     DEPLOY_USER_QML_MODULES_ON_UNSUPPORTED_PLATFORM
-)
-install(SCRIPT ${deploy_script})
+  )
+  install(SCRIPT ${deploy_script})
+endif ()
