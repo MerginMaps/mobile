@@ -6,7 +6,13 @@ on:
     - 'app/**'
     - 'core/**'
     - 'gallery/**'
-
+    - 'scripts/**'
+    - 'test/**'
+    - 'cmake/**'
+    - 'cmake_templates/**'
+    - 'CMakeLists.txt'
+    - '.github/workflows/code_style.yml'
+    
   release:
     types:
       - published
