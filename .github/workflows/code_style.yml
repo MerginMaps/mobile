@@ -19,7 +19,7 @@ on:
 
 env:
   QT_VERSION: '6.5.2'
-  CACHE_VERSION: 1
+  CACHE_VERSION: 0
   
 jobs:
   code_style_cpp:
@@ -70,13 +70,13 @@ jobs:
           path: input
 
       - name: Cache qmlfmt
-        uses: pat-s/always-upload-cache@v3.0.11
+        uses: actions/cache/save@v3
+        if: always()
         id: cache-qmlfmt
         with:
-          path: ${{ github.workspace }}/install-qmlfmt
-          key: cache-v${{ env.CACHE_VERSION }}-${{ env.QT_VERSION }}
+          path: ${{ github.workspace }}/build-qmlfmt
+          key: cache-v${{ env.CACHE_VERSION }}-qt-${{ env.QT_VERSION }}-qmlfmt
 
-      # Qt
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -93,24 +93,18 @@ jobs:
           git clone https://github.com/jesperhh/qmlfmt.git
           cd ${{ github.workspace }}/qmlfmt
           git submodule update --init qt-creator
-          mkdir ${{ github.workspace }}/install-qmlfmt
-          cd ${{ github.workspace }}/install-qmlfmt
+          mkdir ${{ github.workspace }}/build-qmlfmt
+          cd ${{ github.workspace }}/build-qmlfmt
           export Qt6_DIR="${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/cmake/Qt6"
           export Qt6GuiTools_DIR="${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/cmake/Qt6GuiTools"
           export Qt6Test_DIR="${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/cmake/Qt6Test"
-          cmake ../qmlfmt -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install-qmlfmt
+          cmake ../qmlfmt -DBUILD_TESTING=OFF
           make
-          make install
-          cd ${{ github.workspace }}/install-qmlfmt
-          ls ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/
-          otool -l ${{ github.workspace }}/install-qmlfmt/bin/qmlfmt
-          install_name_tool -add_rpath ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/ qmlfmt
 
       - name: Run style check
         run: |
-          otool -l ${{ github.workspace }}/install-qmlfmt/bin/qmlfmt
-          
-          export PATH=${{ github.workspace }}/install-qmlfmt/bin:$PATH
+          export PATH=${{ github.workspace }}/build-qmlfmt/bin:$PATH
           which qmlfmt
           qmlfmt -v
+
           ./input/scripts/format_qml.bash
