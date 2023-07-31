@@ -5,11 +5,16 @@ on:
     paths:
     - 'app/**'
     - 'core/**'
+    - 'gallery/**'
 
   release:
     types:
       - published
 
+env:
+  QT_VERSION: '6.5.2'
+  CACHE_VERSION: 0
+  
 jobs:
   code_style_cpp:
     name: C++ code convention check
@@ -49,8 +54,7 @@ jobs:
           
   code_style_qml:
     name: QML code convention check
-    if: ${{ false }}  # disable for now
-    # if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-latest
     steps:
 
@@ -59,8 +63,42 @@ jobs:
         with:
           path: input
 
-      - name: Install deps
-        run: brew install martindelille/tap/qmlfmt
+      - name: Cache qmlfmt
+        uses: actions/cache@v3
+        id: cache-qmlfmt
+        with:
+          path: ${{ github.workspace }}/install-qmlfmt
+          key: cache-v${{ env.CACHE_VERSION }}-${{ env.QT_VERSION }}
+
+      # Qt
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          target: desktop
+          dir: ${{ github.workspace }}
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
+          cache: true
+          cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-codestyle
+          
+      - name: Install qmlfmt
+        if: steps.cache-qmlfmt.outputs.cache-hit != 'true'
+        run: |
+          git clone https://github.com/jesperhh/qmlfmt.git
+          cd ${{ github.workspace }}/qmlfmt
+          git submodule update --init qt-creator
+          mkdir ${{ github.workspace }}/install-qmlfmt
+          cd ${{ github.workspace }}/install-qmlfmt
+          export Qt6_DIR="${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/cmake/Qt6"
+          export Qt6GuiTools_DIR="${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/cmake/Qt6GuiTools"
+          export Qt6Test_DIR="${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/cmake/Qt6Test"
+          cmake ../qmlfmt -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install-qmlfmt
+          make
+          make install
 
       - name: Run style check
-        run: ./input/scripts/format_qml.bash
+        run: |
+          export PATH=${{ github.workspace }}/install-qmlfmt/bin:$PATH
+          export DYLD_FRAMEWORK_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib
+          qmlfmt -v
+          ./input/scripts/format_qml.bash
