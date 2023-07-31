@@ -12,7 +12,7 @@
 #include <QScreen>
 #include <QFontDatabase>
 
-Helper::Helper(QObject *parent) : QObject{parent}
+Helper::Helper( QObject *parent ) : QObject{parent}
 {
 
 }
@@ -24,9 +24,10 @@ QString Helper::installFonts()
         << ":/fonts/Inter-SemiBold.ttf";
   for ( const QString &font : fonts )
   {
-    if ( QFontDatabase::addApplicationFont( font ) == -1 ) {
+    if ( QFontDatabase::addApplicationFont( font ) == -1 )
+    {
       qDebug() << "!! Failed to load font" << font;
-      exit(3);
+      exit( 3 );
     }
     else
       qDebug() << "Loaded font" << font;
