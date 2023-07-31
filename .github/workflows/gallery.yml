@@ -20,7 +20,7 @@ jobs:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     strategy:
       matrix:
-          os: [ubuntu-latest, macos-latest, windows-latest]
+          os: [ubuntu-latest, macos-latest] # windows-latest?
     runs-on: ${{ matrix.os }}
     env:
       QT_VERSION: '6.5.2'
@@ -34,7 +34,9 @@ jobs:
       - name: Select latest Xcode
         if: matrix.os == 'macos-latest'
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
-
+    
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -77,11 +79,6 @@ jobs:
         run: |
           cd ${{ github.workspace }}/install-gallery
           tar -czf ${{ github.workspace }}/merginmaps-gallery-${{ matrix.os }}.tar.gz MerginMapsGallery.app/
-
-      - name: Prepare artefacts (windows)
-        if: matrix.os == 'windows-latest'
-        run: |
-          
 
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v3
