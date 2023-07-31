@@ -45,6 +45,7 @@ qt_add_qml_module(
   URI gallery
   VERSION 1.0
   QML_FILES qml/Main.qml
+  NO_GENERATE_QMLTYPES
 )
 
 qt_add_resources(fonts.qrc)
