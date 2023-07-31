@@ -19,23 +19,33 @@ jobs:
   gallery_build:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     strategy:
+      fail-fast: false
       matrix:
-          os: [ubuntu-latest, macos-latest] # windows-latest?
+          os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     env:
       QT_VERSION: '6.5.2'
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       CACHE_VERSION: 0
       XC_VERSION: ${{ '14.2' }} # macos-only
-
+      VS_VERSION: "2019" # win-only
+      QT_ARCH: "win64_msvc2019_64" # win-only
+      
     steps:
       - uses: actions/checkout@v3
 
       - name: Select latest Xcode
         if: matrix.os == 'macos-latest'
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
-    
+
+      - name: Developer Command Prompt for Microsoft Visual C++
+        if: matrix.os == 'windows-latest'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          vsversion: ${{ env.VS_VERSION }}
+
       - uses: seanmiddleditch/gha-setup-ninja@master
+        if: matrix.os != 'windows-latest'
       
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -47,7 +57,14 @@ jobs:
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v${{ env.CACHE_VERSION}}-${{ env.QT_VERSION }}-gallery
 
-      - name: Configure Gallery App
+      - name: Developer Command Prompt for Microsoft Visual C++
+        if: matrix.os == 'windows-latest'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          vsversion: ${{ env.VS_VERSION }}
+          
+      - name: Configure and Build Gallery App (macos & ubuntu)
+        if: matrix.os != 'windows-latest'
         run: |
             mkdir -p ${{ github.workspace }}/install-gallery
             mkdir -p ${{ github.workspace }}/build-gallery
@@ -60,25 +77,40 @@ jobs:
               -GNinja \
               -S ../gallery \
               -B ./
-      
-      - name: Build Gallery App
-        run: |
-            cd ${{ github.workspace }}/build-gallery
+
             ninja
             ninja install
+            
             ls -la ${{ github.workspace }}/install-gallery
 
-      - name: Prepare artefacts (ubuntu)
-        if: matrix.os == 'ubuntu-latest'
+      - name: Configure and Build Gallery App (windows)
+        if: matrix.os == 'windows-latest'
+        shell: cmd
         run: |
-          cd ${{ github.workspace }}/install-gallery
-          tar -czf ${{ github.workspace }}/merginmaps-gallery-${{ matrix.os }}.tar.gz
+          mkdir install-gallery -ea 0
+          mkdir build-gallery -ea 0
+          cd build-gallery
+          
+          cmake ^
+             -DCMAKE_BUILD_TYPE=Release ^
+             -DCMAKE_PREFIX_PATH:PATH=${{ env.Qt6_Dir }} ^
+             -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-gallery ^
+             -G "NMake Makefiles" ^
+             -S ${{ steps.vars.outputs.WORKSPACE_DIR }}/input/gallery ^
+             -B .
+              
+          nmake
+          nmake install
+          
+          cd ..
+          cd install-gallery
+          dir
 
-      - name: Prepare artefacts (macos)
-        if: matrix.os == 'macos-latest'
+      - name: Prepare artefacts
+        shell: bash
         run: |
           cd ${{ github.workspace }}/install-gallery
-          tar -czf ${{ github.workspace }}/merginmaps-gallery-${{ matrix.os }}.tar.gz MerginMapsGallery.app/
+          tar -czf ${{ github.workspace }}/merginmaps-gallery-${{ matrix.os }}.tar.gz .
 
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v3
