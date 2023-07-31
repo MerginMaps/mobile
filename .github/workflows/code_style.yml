@@ -69,10 +69,9 @@ jobs:
         with:
           path: input
 
-      - name: Cache qmlfmt
-        uses: actions/cache/save@v3
-        if: always()
-        id: cache-qmlfmt
+      - name: Restore cached Primes
+        id: cache-qmlfmt-restore
+        uses: actions/cache/restore@v3
         with:
           path: ${{ github.workspace }}/build-qmlfmt
           key: cache-v${{ env.CACHE_VERSION }}-qt-${{ env.QT_VERSION }}-qmlfmt
@@ -88,7 +87,7 @@ jobs:
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-codestyle
           
       - name: Install qmlfmt
-        if: steps.cache-qmlfmt.outputs.cache-hit != 'true'
+        if: steps.cache-qmlfmt-restore.outputs.cache-hit != 'true'
         run: |
           git clone https://github.com/jesperhh/qmlfmt.git
           cd ${{ github.workspace }}/qmlfmt
@@ -101,9 +100,17 @@ jobs:
           cmake ../qmlfmt -DBUILD_TESTING=OFF
           make
 
+      - name: Cache qmlfmt
+        uses: actions/cache/save@v3
+        if: always()
+        id: cache-qmlfmt-save
+        with:
+          path: ${{ github.workspace }}/build-qmlfmt
+          key: cache-v${{ env.CACHE_VERSION }}-qt-${{ env.QT_VERSION }}-qmlfmt
+
       - name: Run style check
         run: |
-          export PATH=${{ github.workspace }}/build-qmlfmt/bin:$PATH
+          export PATH=${{ github.workspace }}/build-qmlfmt:$PATH
           which qmlfmt
           qmlfmt -v
 
