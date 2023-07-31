@@ -106,6 +106,10 @@ jobs:
 
       - name: Run style check
         run: |
+          ls ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/
+          otool -l ${{ github.workspace }}/install-qmlfmt/bin/qmlfmt
+          
           export PATH=${{ github.workspace }}/install-qmlfmt/bin:$PATH
+          
           qmlfmt -v
           ./input/scripts/format_qml.bash
