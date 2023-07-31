@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "Helper.h"
+#include "helper.h"
 #include <QGuiApplication>
 #include <QScreen>
 #include <QFontDatabase>
