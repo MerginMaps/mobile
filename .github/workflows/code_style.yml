@@ -113,5 +113,4 @@ jobs:
           export PATH=${{ github.workspace }}/build-qmlfmt:$PATH
           which qmlfmt
           qmlfmt -v
-
           ./input/scripts/format_qml.bash

@@ -17,23 +17,23 @@ class QFileSystemWatcher;
 
 class HotReload : public QObject
 {
-  Q_OBJECT
-public:
-  explicit HotReload(QQmlApplicationEngine& engine, QObject *parent = nullptr);
+    Q_OBJECT
+  public:
+    explicit HotReload( QQmlApplicationEngine &engine, QObject *parent = nullptr );
 
-signals:
-  void watchedSourceChanged();
+  signals:
+    void watchedSourceChanged();
 
-public slots:
-  void clearCache();
-  void startHotReload();
+  public slots:
+    void clearCache();
+    void startHotReload();
 
-private:
-  QString syncScript() const;
+  private:
+    QString syncScript() const;
 
-private:
-  QFileSystemWatcher *_watcher;
-  QQmlApplicationEngine& _engine;
+  private:
+    QFileSystemWatcher *_watcher;
+    QQmlApplicationEngine &_engine;
 };
 
 #endif // HOTRELOAD_H
