@@ -60,7 +60,7 @@ Mergin Maps Input app features touch optimised GUI components based on Qt Quick 
 * Support for capturing of new geometries
 * Display and editing of feature forms
 * Built-in service for storing and synchronising data ([Mergin Maps](https://merginmaps.com/))
-* Translated to several [languages](https://www.transifex.com/lutra-consulting/input)
+* Translated to several [languages](https://explore.transifex.com/lutra-consulting/mergin-maps-input/)
 
 <p float="left">
     <img align="centre" src="https://github.com/MerginMaps/input/blob/master/images/screen1.jpg" width="20%">
