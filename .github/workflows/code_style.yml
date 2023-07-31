@@ -70,7 +70,7 @@ jobs:
           path: input
 
       - name: Cache qmlfmt
-        uses: actions/cache@v3
+        uses: pat-s/always-upload-cache@v3.0.11
         id: cache-qmlfmt
         with:
           path: ${{ github.workspace }}/install-qmlfmt
@@ -101,15 +101,16 @@ jobs:
           cmake ../qmlfmt -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install-qmlfmt
           make
           make install
-          cd ${{ github.workspace }}/install-qmlfmt 
+          cd ${{ github.workspace }}/install-qmlfmt
+          ls ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/
+          otool -l ${{ github.workspace }}/install-qmlfmt/bin/qmlfmt
           install_name_tool -add_rpath ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/ qmlfmt
 
       - name: Run style check
         run: |
-          ls ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/
           otool -l ${{ github.workspace }}/install-qmlfmt/bin/qmlfmt
           
           export PATH=${{ github.workspace }}/install-qmlfmt/bin:$PATH
-          
+          which qmlfmt
           qmlfmt -v
           ./input/scripts/format_qml.bash
