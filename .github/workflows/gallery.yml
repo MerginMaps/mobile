@@ -99,7 +99,7 @@ jobs:
              -DCMAKE_PREFIX_PATH:PATH=${{ env.Qt6_Dir }} ^
              -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-gallery ^
              -G "NMake Makefiles" ^
-             -S ${{ steps.vars.outputs.WORKSPACE_DIR }}/input/gallery ^
+             -S ${{ steps.vars.outputs.WORKSPACE_DIR }}/gallery ^
              -B .
               
           nmake
