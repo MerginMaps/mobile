@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-          os: [ubuntu-latest, macos-latest, windows-latest]
+          os: [ubuntu-latest, macos-latest, windows-2019]
     runs-on: ${{ matrix.os }}
     env:
       QT_VERSION: '6.5.2'
@@ -39,7 +39,7 @@ jobs:
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
 
       - uses: seanmiddleditch/gha-setup-ninja@master
-        if: matrix.os != 'windows-latest'
+        if: matrix.os != 'windows-2019'
       
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -52,13 +52,13 @@ jobs:
           cache-key-prefix: ${{ runner.os }}-QtCache-v${{ env.CACHE_VERSION}}-${{ env.QT_VERSION }}-gallery
 
       - name: Developer Command Prompt for Microsoft Visual C++
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'windows-2019'
         uses: ilammy/msvc-dev-cmd@v1
         with:
           vsversion: ${{ env.VS_VERSION }}
           
       - name: Configure and Build Gallery App (macos & ubuntu)
-        if: matrix.os != 'windows-latest'
+        if: matrix.os != 'windows-2019'
         run: |
             mkdir -p ${{ github.workspace }}/install-gallery
             mkdir -p ${{ github.workspace }}/build-gallery
@@ -78,7 +78,7 @@ jobs:
             ls -la ${{ github.workspace }}/install-gallery
 
       - name: Configure and Build Gallery App (windows)
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'windows-2019'
         shell: cmd
         run: |
           mkdir install-gallery -ea 0
