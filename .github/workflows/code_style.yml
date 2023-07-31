@@ -19,7 +19,7 @@ on:
 
 env:
   QT_VERSION: '6.5.2'
-  CACHE_VERSION: 0
+  CACHE_VERSION: 1
   
 jobs:
   code_style_cpp:
@@ -101,10 +101,11 @@ jobs:
           cmake ../qmlfmt -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install-qmlfmt
           make
           make install
+          cd ${{ github.workspace }}/install-qmlfmt 
+          install_name_tool -add_rpath ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/ qmlfmt
 
       - name: Run style check
         run: |
           export PATH=${{ github.workspace }}/install-qmlfmt/bin:$PATH
-          export DYLD_FRAMEWORK_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib
           qmlfmt -v
           ./input/scripts/format_qml.bash
