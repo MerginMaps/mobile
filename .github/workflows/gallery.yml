@@ -16,13 +16,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  example_matrix:
+  gallery_build:
+    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     strategy:
       matrix:
           os: [ubuntu-latest, macos-latest, windows-latest]
-
-  gallery_build:
-    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: ${{ matrix.os }}
     env:
       QT_VERSION: '6.5.2'
@@ -83,9 +81,7 @@ jobs:
       - name: Prepare artefacts (windows)
         if: matrix.os == 'windows-latest'
         run: |
-          mv \
-            ${{ github.workspace }}/build-Input/app/android-build/build/outputs/apk/release/android-build-release-signed.apk \
-            ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
+          
 
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v3
