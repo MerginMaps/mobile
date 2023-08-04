@@ -8,5 +8,7 @@
         <file>../app/qmlV2/component/MyRectangle.qml</file>
         <file>../app/qmlV2/Style.js</file>
         <file>../app/qmlV2/component/MMButton.qml</file>
+        <file>../app/qmlV2/component/MMLinkButton.qml</file>
+        <file>../app/qmlV2/component/MMLink.qml</file>
     </qresource>
 </RCC>

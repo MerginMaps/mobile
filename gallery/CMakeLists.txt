@@ -34,6 +34,7 @@ qt_add_executable(
   main.cpp
   qml.qrc
   fonts.qrc
+  ../app/icons/icons.qrc
   hotreload.cpp
   hotreload.h
   helper.cpp
