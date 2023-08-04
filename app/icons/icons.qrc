@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Arrow Link Right.svg</file>
+    </qresource>
+</RCC>

@@ -24,36 +24,16 @@ Button {
     rightPadding: 32 * __dp
     topPadding: 10 * __dp
     bottomPadding: 10 * __dp
-    color: control.enabled ? control.down || control.hovered ? Style.grass : Style.forest : Style.forest
+    color: control.enabled ? Style.forest : Style.mediumGreen
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
     elide: Text.ElideRight
   }
 
   background: Rectangle {
-    color: control.enabled ? control.down || control.hovered ? Style.forest : Style.grass : Style.mediumGreen
+    color: control.enabled ? control.down || control.hovered ? Style.grass : Style.white : Style.white
+    border.color: control.enabled ? control.down || control.hovered ? Style.transparent : Style.forest : Style.mediumGreen
+    border.width: 2 * __dp
     radius: height / 2
   }
-
-//  onPressed: clickTransition.running = true
-
-//  SequentialAnimation {
-//    id: clickTransition
-
-//    PropertyAnimation {
-//      target: control
-//      properties: "scale"
-//      from: 1
-//      to: 0.9
-//      duration: 100
-//    }
-
-//    PropertyAnimation {
-//      target: control
-//      properties: "scale"
-//      from: 0.9
-//      to: 1
-//      duration: 100
-//    }
-//  }
 }
