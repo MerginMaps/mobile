@@ -16,17 +16,18 @@ import "."
 RoundButton {
   id: control
 
+  implicitWidth: icon.width * 2
+  implicitHeight: icon.height * 2
+
   contentItem: MMIcon {
     id: icon
 
-    source: Style.arrowLinkRight
+    source: Style.arrowLinkRightIcon
     color: control.enabled ? control.down || control.hovered ? Style.grass : Style.forest : Style.forest
-    implicitWidth: width + 5*__dp
-    implicitHeight: height + 5*__dp
   }
 
   background: Rectangle {
     color: control.enabled ? control.down || control.hovered ? Style.forest : Style.grass : Style.mediumGreen
-    radius: icon.implicitHeight
+    radius: control.implicitHeight / 2
   }
 }

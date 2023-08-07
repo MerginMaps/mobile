@@ -101,12 +101,8 @@ ApplicationWindow {
           source: "ButtonsPage.qml"
         }
         ListElement {
-          title: "CheckBox"
-          source: "CheckBoxPage.qml"
-        }
-        ListElement {
-          title: "Text"
-          source: "TextPage.qml"
+          title: "Inputs"
+          source: "InputsPage.qml"
         }
       }
 

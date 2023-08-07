@@ -22,7 +22,7 @@ Item {
 
   Image {
     id: icon
-    source: Style.arrowLinkRight
+    source: Style.arrowLinkRightIcon
     anchors.centerIn: control
   }
 

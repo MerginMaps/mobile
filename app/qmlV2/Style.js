@@ -53,8 +53,18 @@ const warning = "#FFD6A6"
 const negative = "#FFA6A6"
 const informative = "#A6F4FF"
 
+// Colors - special
+const night_6 = "#AA12181F" // placeholder input color
+const errorBgInputColor = "#FEFAF9" // error bg input color
+
 // Icons
-const arrowLinkRight = "qrc:/Arrow Link Right.svg"
+const arrowLinkRightIcon= "qrc:/Arrow Link Right.svg"
+const searchIcon = "qrc:/Search.svg"
+const calendarIcon = "qrc:/Calendar.svg"
+const showIcon = "qrc:/Show.svg"
+const hideIcon = "qrc:/Hide.svg"
+const xMarkIcon = "qrc:/X Mark.svg"
+const errorIcon = "qrc:/Error.svg"
 
 const textColor = "black"
 

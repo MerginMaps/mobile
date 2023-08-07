@@ -1,5 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>Arrow Link Right.svg</file>
+        <file>Calendar.svg</file>
+        <file>Hide.svg</file>
+        <file>Search.svg</file>
+        <file>Show.svg</file>
+        <file>X Mark.svg</file>
+        <file>Error.svg</file>
     </qresource>
 </RCC>

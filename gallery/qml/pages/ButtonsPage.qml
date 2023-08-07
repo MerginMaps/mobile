@@ -10,7 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import QtQuick.Layouts
 
 import "../../../app/qmlV2/component"
 
@@ -30,7 +29,8 @@ Column {
       padding: 5
     }
 
-    RowLayout {
+    Row {
+      spacing: 20
       anchors.fill: parent
       MMButton {
         text: "Primary"
@@ -55,7 +55,8 @@ Column {
       padding: 5
     }
 
-    RowLayout {
+    Row {
+      spacing: 20
       anchors.fill: parent
       MMLinkButton {
         text: "Secondary"
@@ -80,7 +81,8 @@ Column {
       padding: 5
     }
 
-    RowLayout {
+    Row {
+      spacing: 20
       anchors.fill: parent
       MMLink {
         text: "Tertriary"
@@ -105,7 +107,8 @@ Column {
       padding: 5
     }
 
-    RowLayout {
+    Row {
+      spacing: 20
       anchors.fill: parent
       MMRoundButton {
       }
@@ -127,7 +130,8 @@ Column {
       padding: 5
     }
 
-    RowLayout {
+    Row {
+      spacing: 20
       anchors.fill: parent
       MMRoundLinkButton {
       }

@@ -2,10 +2,9 @@
     <qresource prefix="/">
         <file>qml/Main.qml</file>
         <file>qml/pages/InitialGalleryPage.qml</file>
-        <file>qml/pages/CheckBoxPage.qml</file>
+        <file>qml/pages/InputsPage.qml</file>
         <file>qml/pages/ButtonsPage.qml</file>
-        <file>qml/pages/TextPage.qml</file>
-        <file>../app/qmlV2/component/MyRectangle.qml</file>
+        <file>../app/qmlV2/component/MMInput.qml</file>
         <file>../app/qmlV2/Style.js</file>
         <file>../app/qmlV2/component/MMButton.qml</file>
         <file>../app/qmlV2/component/MMLinkButton.qml</file>
