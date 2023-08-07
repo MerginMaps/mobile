@@ -8,37 +8,28 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
+import Qt5Compat.GraphicalEffects
 import "../Style.js" as Style
-import "."
 
-Button {
+Item {
   id: control
 
-  contentItem: Row {
+  property alias source: icon.source
+  property alias color: color.color
+
+  width: icon.implicitWidth
+  height: icon.implicitHeight
+
+  Image {
+    id: icon
+    source: Style.arrowLinkRight
     anchors.centerIn: control
-    spacing: 10
-
-    Text {
-      id: text
-
-      font: Qt.font(Style.t3)
-      text: control.text
-      color: control.enabled ? control.down || control.hovered ? Style.night : Style.forest : Style.mediumGreen
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
-      elide: Text.ElideRight
-      anchors.verticalCenter: parent.verticalCenter
-    }
-
-    MMIcon {
-      source: Style.arrowLinkRight
-      color: text.color
-    }
   }
 
-  background: Rectangle {
-    color: Style.transparent
+  ColorOverlay {
+    id: color
+
+    anchors.fill: icon
+    source: icon
   }
 }

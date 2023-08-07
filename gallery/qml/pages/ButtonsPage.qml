@@ -69,7 +69,7 @@ Column {
   }
 
   GroupBox {
-    title: "MMLink todo..."
+    title: "MMLink"
     background: Rectangle {
       color: "white"
       border.color: "gray"
@@ -88,6 +88,50 @@ Column {
       }
       MMLink {
         text: "Disabled"
+        enabled: false
+      }
+    }
+  }
+
+  GroupBox {
+    title: "MMRoundButton"
+    background: Rectangle {
+      color: "white"
+      border.color: "gray"
+    }
+    label: Label {
+      color: "black"
+      text: parent.title
+      padding: 5
+    }
+
+    RowLayout {
+      anchors.fill: parent
+      MMRoundButton {
+      }
+      MMRoundButton {
+        enabled: false
+      }
+    }
+  }
+
+  GroupBox {
+    title: "MMRoundLinkButton"
+    background: Rectangle {
+      color: "white"
+      border.color: "gray"
+    }
+    label: Label {
+      color: "black"
+      text: parent.title
+      padding: 5
+    }
+
+    RowLayout {
+      anchors.fill: parent
+      MMRoundLinkButton {
+      }
+      MMRoundLinkButton {
         enabled: false
       }
     }
