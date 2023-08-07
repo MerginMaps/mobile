@@ -18,7 +18,7 @@ Button {
 
   contentItem: Row {
     anchors.centerIn: control
-    spacing: 10
+    spacing: 10 * __dp
 
     Text {
       id: text
@@ -33,7 +33,7 @@ Button {
     }
 
     MMIcon {
-      source: Style.arrowLinkRight
+      source: Style.arrowLinkRightIcon
       color: text.color
     }
   }
