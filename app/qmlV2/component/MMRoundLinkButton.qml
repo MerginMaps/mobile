@@ -13,32 +13,22 @@ import QtQuick.Controls.Basic
 import "../Style.js" as Style
 import "."
 
-Button {
+RoundButton {
   id: control
 
-  contentItem: Row {
-    anchors.centerIn: control
-    spacing: 10
+  contentItem: MMIcon {
+    id: icon
 
-    Text {
-      id: text
-
-      font: Qt.font(Style.t3)
-      text: control.text
-      color: control.enabled ? control.down || control.hovered ? Style.night : Style.forest : Style.mediumGreen
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
-      elide: Text.ElideRight
-      anchors.verticalCenter: parent.verticalCenter
-    }
-
-    MMIcon {
-      source: Style.arrowLinkRight
-      color: text.color
-    }
+    source: Style.arrowLinkRight
+    color: control.enabled ? Style.forest : Style.mediumGreen
+    implicitWidth: width + 5*__dp
+    implicitHeight: height + 5*__dp
   }
 
   background: Rectangle {
-    color: Style.transparent
+    color: control.enabled ? control.down || control.hovered ? Style.grass : Style.white : Style.white
+    border.color: control.enabled ? control.down || control.hovered ? Style.transparent : Style.forest : Style.mediumGreen
+    border.width: 2 * __dp
+    radius: icon.implicitHeight
   }
 }

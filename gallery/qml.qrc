@@ -10,5 +10,8 @@
         <file>../app/qmlV2/component/MMButton.qml</file>
         <file>../app/qmlV2/component/MMLinkButton.qml</file>
         <file>../app/qmlV2/component/MMLink.qml</file>
+        <file>../app/qmlV2/component/MMIcon.qml</file>
+        <file>../app/qmlV2/component/MMRoundButton.qml</file>
+        <file>../app/qmlV2/component/MMRoundLinkButton.qml</file>
     </qresource>
 </RCC>
