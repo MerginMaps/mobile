@@ -7,5 +7,8 @@
         <file>Show.svg</file>
         <file>X Mark.svg</file>
         <file>Error.svg</file>
+        <file>Arrow Down.svg</file>
+        <file>Arrow Up.svg</file>
+        <file>QR Code.svg</file>
     </qresource>
 </RCC>

@@ -40,13 +40,6 @@ Column {
         enabled: false
       }
       Column {
-        TextInput { text: "type: MMInput.Type.Password" }
-        MMInput {
-          type: MMInput.Type.Password
-          text: "Password"
-        }
-      }
-      Column {
         TextInput { text: "type: MMInput.Type.Search" }
         MMInput {
           type: MMInput.Type.Search
@@ -69,6 +62,28 @@ Column {
           type: MMInput.Type.Password
           text: "Password"
           errorMsg: "Password must contain at least 6 characters\nMinimum 1 number\nAnd 1 special character"
+        }
+      }
+      Column {
+      TextInput { text: "type: MMInput.Type.Scan" }
+        MMInput {
+          type: MMInput.Type.Scan
+          text: "QR Code"
+        }
+      }
+      Column {
+      TextInput { text: "type: MMInput.Type.CopyButton" }
+        MMInput {
+          type: MMInput.Type.CopyButton
+          text: "Copy me"
+        }
+      }
+      Column {
+      TextInput { text: "type: MMInput.Type.CopyButton" }
+        MMInput {
+          type: MMInput.Type.CopyButton
+          text: "Copy me"
+          enabled: false
         }
       }
     }
