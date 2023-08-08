@@ -15,7 +15,7 @@ import "../Style.js" as Style
 Item {
   id: control
 
-  enum Type { Normal, Password, Search, Calendar }
+  enum Type { Normal, Password, Search, Calendar, Scan, CopyButton }
 
   property int type: MMInput.Type.Normal
   property alias text: textField.text
@@ -64,8 +64,8 @@ Item {
     width: parent.width
     color: (errorMsg.length > 0 || warningMsg.length > 0) ? Style.errorBgInputColor : Style.white
     border.color: (textField.activeFocus || textField.hovered) ? (errorMsg.length > 0 ? Style.negative :
-                                                                  warningMsg.length > 0 ? Style.warning :
-                                                                  Style.forest) : "transparent"
+                                                                                        warningMsg.length > 0 ? Style.warning :
+                                                                                                                Style.forest) : "transparent"
     border.width: enabled ? (textField.activeFocus ? 2*__dp : 1*__dp) : 0
     radius: parent.height
 
@@ -79,10 +79,10 @@ Item {
         id: leftIcon
 
         source: control.type === MMInput.Type.Search ? Style.searchIcon :
-                control.type === MMInput.Type.Calendar ? Style.calendarIcon : ""
+                                                       control.type === MMInput.Type.Calendar ? Style.calendarIcon : ""
         color: errorMsg.length > 0 ? Style.negative :
-               warningMsg.length > 0 ? Style.warning :
-               control.enabled ? Style.forest : Style.mediumGreen
+                                     warningMsg.length > 0 ? Style.warning :
+                                                             control.enabled ? Style.forest : Style.mediumGreen
         width: height
         height: rect.height
         visible: control.type === MMInput.Type.Search || control.type === MMInput.Type.Calendar
@@ -95,11 +95,13 @@ Item {
         width: control.width - 2 * row.leftPadding
                - (leftIcon.visible ? leftIcon.width : 0)
                - (rightIcon.visible ? rightIcon.width : 0)
+               - (button.visible ? button.width : 0)
         height: rect.height - 4 * __dp
         color: control.enabled ? Style.night : Style.mediumGreen
         placeholderTextColor: Style.night_6
         font: Qt.font(Style.p5)
         hoverEnabled: true
+        anchors.verticalCenter: parent.verticalCenter
         echoMode: (control.type === MMInput.Type.Password && !rightIcon.pressed) ? TextInput.Password : TextInput.Normal
         background: Rectangle {
           color: Style.transparent
@@ -111,11 +113,14 @@ Item {
 
         property bool pressed: false
         source: control.type === MMInput.Type.Password ? (pressed ? Style.hideIcon : Style.showIcon) :
-                (textField.activeFocus && textField.text.length>0) ? Style.xMarkIcon : ""
+                                                         control.type === MMInput.Type.Scan ? Style.qrCodeIcon :
+                                                                                              (textField.activeFocus && textField.text.length>0) ? Style.xMarkIcon : ""
         color: control.enabled ? Style.forest : Style.mediumGreen
-        width: height
+        width: visible ? height : 0
         height: rect.height
-        visible: control.type === MMInput.Type.Password || (textField.activeFocus && textField.text.length>0)
+        visible: control.type === MMInput.Type.Password ||
+                 control.type === MMInput.Type.Scan ||
+                 ((control.type !== MMInput.Type.CopyButton) && textField.activeFocus && textField.text.length>0)
 
         MouseArea {
           anchors.fill: parent
@@ -131,6 +136,39 @@ Item {
           }
         }
       }
+
+      Button {
+        id: button
+
+        visible: control.type === MMInput.Type.CopyButton
+        anchors.verticalCenter: parent.verticalCenter
+
+        contentItem: Text {
+          anchors.centerIn: button
+          font: Qt.font(Style.t5)
+          text: qsTr("Copy")
+          leftPadding: 2 * __dp
+          rightPadding: 2 * __dp
+          topPadding: 2 * __dp
+          bottomPadding: 2 * __dp
+          color: Style.deepOcean
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          elide: Text.ElideRight
+        }
+
+        background: Rectangle {
+          color: button.enabled ? Style.grass : Style.mediumGreen
+          radius: height / 2
+        }
+
+        onClicked: {
+          textField.selectAll()
+          textField.copy()
+          textField.deselect()
+        }
+      }
+
     }
   }
 }
