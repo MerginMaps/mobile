@@ -12,5 +12,7 @@
         <file>../app/qmlV2/component/MMIcon.qml</file>
         <file>../app/qmlV2/component/MMRoundButton.qml</file>
         <file>../app/qmlV2/component/MMRoundLinkButton.qml</file>
+        <file>qml/pages/TextAreaPage.qml</file>
+        <file>../app/qmlV2/component/MMTextArea.qml</file>
     </qresource>
 </RCC>

@@ -104,6 +104,10 @@ ApplicationWindow {
           title: "Inputs"
           source: "InputsPage.qml"
         }
+        ListElement {
+          title: "Text area"
+          source: "TextAreaPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}
