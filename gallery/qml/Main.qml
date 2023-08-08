@@ -105,8 +105,12 @@ ApplicationWindow {
           source: "InputsPage.qml"
         }
         ListElement {
-          title: "Text area"
+          title: "Text areas"
           source: "TextAreaPage.qml"
+        }
+        ListElement {
+          title: "Combo boxes"
+          source: "ComboBoxPage.qml"
         }
       }
 

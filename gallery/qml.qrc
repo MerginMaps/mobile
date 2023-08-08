@@ -14,5 +14,7 @@
         <file>../app/qmlV2/component/MMRoundLinkButton.qml</file>
         <file>qml/pages/TextAreaPage.qml</file>
         <file>../app/qmlV2/component/MMTextArea.qml</file>
+        <file>qml/pages/ComboBoxPage.qml</file>
+        <file>../app/qmlV2/component/MMComboBox.qml</file>
     </qresource>
 </RCC>
