@@ -238,6 +238,10 @@ ApplicationWindow {
           }
       }
 
+      onOpenTrackingPanel: {
+        trackingPanelLoader.active = true
+      }
+
       Component.onCompleted: {
         __activeProject.mapSettings = map.mapSettings
         __iosUtils.positionKit = __positionKit
