@@ -10,7 +10,9 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#ifdef DESKTOP_OS
 #include "hotreload.h"
+#endif
 #include "helper.h"
 #include <QFont>
 #include <QFontDatabase>
@@ -22,11 +24,16 @@ int main( int argc, char *argv[] )
   app.setFont( QFont( Helper::installFonts() ) );
 
   QQmlApplicationEngine engine;
+
+#ifdef DESKTOP_OS
   HotReload hotReload( engine );
   engine.rootContext()->setContextProperty( "_hotReload", &hotReload );
+#endif
+
   // path to local wrapper pages
-  engine.rootContext()->setContextProperty( "_qmlWrapperPath", QGuiApplication::applicationDirPath() + "/HotReload/gallery/qml/pages/" );
+  engine.rootContext()->setContextProperty( "_qmlWrapperPath", QGuiApplication::applicationDirPath() + "/HotReload/qml/pages/" );
   engine.rootContext()->setContextProperty( "__dp", Helper::calculateDpRatio() );
+  engine.rootContext()->setContextProperty( "__isMobile", Helper::isMobile() );
 
   QObject::connect( &engine, &QQmlApplicationEngine::objectCreationFailed,
   &app, []() { QCoreApplication::exit( -1 ); }, Qt::QueuedConnection );
