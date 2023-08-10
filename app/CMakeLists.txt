@@ -420,8 +420,8 @@ target_link_libraries(
   PUBLIC Qtkeychain::Qtkeychain
          Qca::Qca
          Gdal::Gdal
-         Pq::Pq 
-         Pq::Pgcommon 
+         Pq::Pq
+         Pq::Pgcommon
          Pq::Pgport
          Spatialite::Spatialite
 )
@@ -455,18 +455,15 @@ target_link_libraries(
          Jpeg::Jpeg
 )
 
-if (IOS
-    OR MACOS
-)
+if (IOS OR MACOS)
   target_link_libraries(Input PUBLIC Tasn1::Tasn1)
 endif ()
 
 target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
 if (ANDROID)
   set_property(
-    TARGET Input
-    PROPERTY QT_ANDROID_EXTRA_LIBS ${KDAB_OpenSSL_CRYPTO_LIBRARY}
-             ${KDAB_OpenSSL_LIBRARY}
+    TARGET Input PROPERTY QT_ANDROID_EXTRA_LIBS ${KDAB_OpenSSL_CRYPTO_LIBRARY}
+                          ${KDAB_OpenSSL_LIBRARY}
   )
 endif ()
 

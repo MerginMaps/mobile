@@ -1,18 +1,18 @@
 # GPLv2 Licence
 
-  find_path(
-    Sqlite3_INCLUDE_DIR
-    sqlite3.h
-    "${INPUT_SDK_PATH_MULTI}/include"
-    NO_DEFAULT_PATH
-  )
+find_path(
+  Sqlite3_INCLUDE_DIR
+  sqlite3.h
+  "${INPUT_SDK_PATH_MULTI}/include"
+  NO_DEFAULT_PATH
+)
 
-  find_library(
-    Sqlite3_LIBRARY
-    NAMES sqlite3
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
-  )
+find_library(
+  Sqlite3_LIBRARY
+  NAMES sqlite3
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+  NO_DEFAULT_PATH
+)
 
 find_package_handle_standard_args(
   Sqlite3 REQUIRED_VARS Sqlite3_LIBRARY Sqlite3_INCLUDE_DIR

@@ -2,9 +2,7 @@
 
 # not in macos input-SDK, not in linux input-SDK
 
-if (LNX
-    OR MACOS
-)
+if (LNX OR MACOS)
   message(FATAL_ERROR "not available for this platform in input-SDK")
   # find_library(Iconv_LIBRARY NAMES iconv)
 else ()

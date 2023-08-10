@@ -1,11 +1,11 @@
 # GPLv2 Licence
 
-  find_library(
-    Xml2_LIBRARY
-    NAMES libxml2
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
-  )
+find_library(
+  Xml2_LIBRARY
+  NAMES libxml2
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+  NO_DEFAULT_PATH
+)
 
 find_package_handle_standard_args(Xml2 REQUIRED_VARS Xml2_LIBRARY)
 

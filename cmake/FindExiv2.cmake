@@ -1,23 +1,23 @@
 # GPLv2 Licence
 find_path(
-    Exiv2_INCLUDE_DIR
-    exif.hpp
-    "${INPUT_SDK_PATH_MULTI}/include/exiv2"
-    NO_DEFAULT_PATH
+  Exiv2_INCLUDE_DIR
+  exif.hpp
+  "${INPUT_SDK_PATH_MULTI}/include/exiv2"
+  NO_DEFAULT_PATH
 )
 
 find_library(
-    Exiv2_LIBRARY
-    NAMES exiv2
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
+  Exiv2_LIBRARY
+  NAMES exiv2
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+  NO_DEFAULT_PATH
 )
 
 find_library(
-    Exiv2_xmp_LIBRARY
-    NAMES exiv2-xmp
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
+  Exiv2_xmp_LIBRARY
+  NAMES exiv2-xmp
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+  NO_DEFAULT_PATH
 )
 
 find_package_handle_standard_args(

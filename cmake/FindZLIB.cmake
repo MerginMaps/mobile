@@ -1,11 +1,11 @@
 # GPLv2 Licence
 
 find_library(
-    ZLIB_LIBRARY
-    NAMES z zlib
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
-  )
+  ZLIB_LIBRARY
+  NAMES z zlib
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+  NO_DEFAULT_PATH
+)
 
 find_package_handle_standard_args(ZLIB REQUIRED_VARS ZLIB_LIBRARY)
 

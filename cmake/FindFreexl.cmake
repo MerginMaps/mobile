@@ -1,18 +1,18 @@
 # GPLv2 Licence
 
-  find_path(
-    Freexl_INCLUDE_DIR
-    freexl.h
-    "${INPUT_SDK_PATH_MULTI}/include"
-    NO_DEFAULT_PATH
-  )
+find_path(
+  Freexl_INCLUDE_DIR
+  freexl.h
+  "${INPUT_SDK_PATH_MULTI}/include"
+  NO_DEFAULT_PATH
+)
 
-  find_library(
-    Freexl_LIBRARY
-    NAMES freexl
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
-  )
+find_library(
+  Freexl_LIBRARY
+  NAMES freexl
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+  NO_DEFAULT_PATH
+)
 
 find_package_handle_standard_args(Freexl REQUIRED_VARS Freexl_LIBRARY Freexl_INCLUDE_DIR)
 

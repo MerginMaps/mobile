@@ -1,18 +1,18 @@
 # GPLv2 Licence
 
-  find_path(
-    Zip_INCLUDE_DIR
-    zip.h
-    "${INPUT_SDK_PATH_MULTI}/include"
-    NO_DEFAULT_PATH
-  )
+find_path(
+  Zip_INCLUDE_DIR
+  zip.h
+  "${INPUT_SDK_PATH_MULTI}/include"
+  NO_DEFAULT_PATH
+)
 
-  find_library(
-    Zip_LIBRARY
-    NAMES zip
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
-  )
+find_library(
+  Zip_LIBRARY
+  NAMES zip
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+  NO_DEFAULT_PATH
+)
 
 find_package_handle_standard_args(Zip REQUIRED_VARS Zip_LIBRARY Zip_INCLUDE_DIR)
 

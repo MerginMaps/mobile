@@ -1,18 +1,18 @@
 # GPLv2 Licence
 
-  find_path(
-    WebP_INCLUDE_DIR
-    webp/encode.h
-    "${INPUT_SDK_PATH_MULTI}/include"
-    NO_DEFAULT_PATH
-  )
+find_path(
+  WebP_INCLUDE_DIR
+  webp/encode.h
+  "${INPUT_SDK_PATH_MULTI}/include"
+  NO_DEFAULT_PATH
+)
 
-  find_library(
-    WebP_LIBRARY
-    NAMES webp
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
-  )
+find_library(
+  WebP_LIBRARY
+  NAMES webp
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+  NO_DEFAULT_PATH
+)
 
 find_package_handle_standard_args(WebP REQUIRED_VARS WebP_LIBRARY WebP_INCLUDE_DIR)
 

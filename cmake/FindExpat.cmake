@@ -1,18 +1,18 @@
 # GPLv2 Licence
 
-  find_path(
-    Expat_INCLUDE_DIR
-    expat.h
-    "${INPUT_SDK_PATH_MULTI}/include"
-    NO_DEFAULT_PATH
-  )
+find_path(
+  Expat_INCLUDE_DIR
+  expat.h
+  "${INPUT_SDK_PATH_MULTI}/include"
+  NO_DEFAULT_PATH
+)
 
-  find_library(
-    Expat_LIBRARY
-    NAMES expat
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
-  )
+find_library(
+  Expat_LIBRARY
+  NAMES expat
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+  NO_DEFAULT_PATH
+)
 
 find_package_handle_standard_args(Expat REQUIRED_VARS Expat_LIBRARY Expat_INCLUDE_DIR)
 

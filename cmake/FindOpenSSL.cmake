@@ -22,9 +22,9 @@ find_library(
 )
 
 if (ANDROID)
-  # Android only note:
-  # on android platform we have both static openssl and shared openssl libraries required for Qt
-  # shared openssl should not be linked against!, it just need to be copied to APK for Qt
+  # Android only note: on android platform we have both static openssl and shared openssl
+  # libraries required for Qt shared openssl should not be linked against!, it just need
+  # to be copied to APK for Qt
   find_library(
     KDAB_OpenSSL_CRYPTO_LIBRARY
     NAMES crypto_3
@@ -41,14 +41,20 @@ if (ANDROID)
 endif ()
 
 if (ANDROID)
-    find_package_handle_standard_args(
-      OpenSSL REQUIRED_VARS OpenSSL_LIBRARY OpenSSL_CRYPTO_LIBRARY OpenSSL_INCLUDE_DIR KDAB_OpenSSL_LIBRARY KDAB_OpenSSL_CRYPTO_LIBRARY
-    )
-else()
+  find_package_handle_standard_args(
+    OpenSSL
+    REQUIRED_VARS
+      OpenSSL_LIBRARY
+      OpenSSL_CRYPTO_LIBRARY
+      OpenSSL_INCLUDE_DIR
+      KDAB_OpenSSL_LIBRARY
+      KDAB_OpenSSL_CRYPTO_LIBRARY
+  )
+else ()
   find_package_handle_standard_args(
     OpenSSL REQUIRED_VARS OpenSSL_LIBRARY OpenSSL_CRYPTO_LIBRARY OpenSSL_INCLUDE_DIR
   )
-endif()
+endif ()
 
 if (OpenSSL_FOUND AND NOT TARGET OpenSSL::OpenSSL)
   add_library(OpenSSL::OpenSSL UNKNOWN IMPORTED)
@@ -66,5 +72,5 @@ endif ()
 
 mark_as_advanced(OpenSSL_LIBRARY OpenSSL_CRYPTO_LIBRARY OpenSSL_INCLUDE_DIR)
 if (ANDROID)
-    mark_as_advanced(KDAB_OpenSSL_LIBRARY KDAB_OpenSSL_CRYPTO_LIBRARY)
+  mark_as_advanced(KDAB_OpenSSL_LIBRARY KDAB_OpenSSL_CRYPTO_LIBRARY)
 endif ()
