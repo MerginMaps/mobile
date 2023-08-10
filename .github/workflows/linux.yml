@@ -16,7 +16,7 @@ on:
 
 env:
   CCACHE_DIR: ~/.ccache
-  INPUT_SDK_VERSION: ubuntu-2204-20230725-123
+  INPUT_SDK_VERSION: x64-linux-20230809-155
   QT_VERSION: '6.5.2'
   CACHE_VERSION: 0
       
