@@ -9,21 +9,21 @@ find_path(
 
 find_library(
   Pq_LIBRARY
-  NAMES pq
+  NAMES pq libpq
   PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )
 
 find_library(
   Pgport_LIBRARY
-  NAMES pgport
+  NAMES pgport libpgport
   PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )
 
 find_library(
   Pgcommon_LIBRARY
-  NAMES pgcommon
+  NAMES pgcommon libpgcommon
   PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )

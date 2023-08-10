@@ -2,7 +2,7 @@
 
 find_library(
   Xml2_LIBRARY
-  NAMES libxml2
+  NAMES xml2 libxml2
   PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )

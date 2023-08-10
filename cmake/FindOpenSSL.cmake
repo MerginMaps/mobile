@@ -9,14 +9,14 @@ find_path(
 
 find_library(
   OpenSSL_CRYPTO_LIBRARY
-  NAMES crypto_3
+  NAMES crypto libcrypto
   PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )
 
 find_library(
   OpenSSL_LIBRARY
-  NAMES ssl_3
+  NAMES ssl libssl
   PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )
