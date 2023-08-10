@@ -22,7 +22,8 @@ Page {
     horizontalAlignment: Label.AlignHCenter
     verticalAlignment: Label.AlignVCenter
     wrapMode: Label.Wrap
-    color: "white"
+    color: "red"
+    font.family: "Inter"
     font.pixelSize: 20
     //font.family: fontx.font.family
   }

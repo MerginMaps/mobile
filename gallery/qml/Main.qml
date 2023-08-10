@@ -22,7 +22,8 @@ ApplicationWindow {
   property string currentPageSource: "InitialGalleryPage.qml"
 
   Connections {
-    target: _hotReload
+    target: __isMobile ? null : _hotReload
+    enabled: !__isMobile
     function onWatchedSourceChanged() {
       mainLoader.active = false
       _hotReload.clearCache()
@@ -89,7 +90,10 @@ ApplicationWindow {
         onClicked: {
           window.currentPageSource = model.source
           listView.currentIndex = index
-          stackView.push("file://" + _qmlWrapperPath + model.source)
+          if( __isMobile )
+            stackView.push("qrc:/qml/pages/" + model.source)
+          else
+            stackView.push("file://" + _qmlWrapperPath + model.source)
           stackView.pop()
           drawer.close()
         }
@@ -124,7 +128,7 @@ ApplicationWindow {
 
     initialItem: Loader {
       id: mainLoader
-      source: "file://" + _qmlWrapperPath + currentPageSource
+      source: ( __isMobile ? "qrc:/qml/pages/" : ("file://" + _qmlWrapperPath ) ) + currentPageSource
       scale: 1.0
     }
   }

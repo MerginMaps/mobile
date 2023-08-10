@@ -11,7 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-import "../../../app/qmlV2/component"
+import "../../app/qmlV2/component"
 
 Column {
   padding: 20

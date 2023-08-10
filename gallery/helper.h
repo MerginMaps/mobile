@@ -26,6 +26,9 @@ class Helper : public QObject
 
     // Calculates ratio between real DPR calculated by us with DPR calculated by QT that is later used in qml sizing
     static qreal calculateDpRatio();
+
+    // flag, if app is running on mobile device
+    static bool isMobile();
 };
 
 #endif // HELPER_H
