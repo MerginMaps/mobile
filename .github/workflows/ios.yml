@@ -18,7 +18,7 @@ on:
 env:   
   QT_VERSION: '6.5.2'
   XC_VERSION: ${{ '14.2' }}
-  INPUT_SDK_VERSION: ios-20230725-113
+  INPUT_SDK_VERSION: arm64-ios-20230809-150
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache

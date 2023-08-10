@@ -9,7 +9,7 @@ find_path(
 
 find_library(
   Curl_LIBRARY
-  NAMES curl
+  NAMES curl libcurl
   PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )

@@ -9,7 +9,7 @@ find_path(
 
 find_library(
   Expat_LIBRARY
-  NAMES expat
+  NAMES expat libexpat
   PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )

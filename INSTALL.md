@@ -371,12 +371,15 @@ https://itunesconnect.apple.com
 ```
 mkdir build-input-desktop
 cd build-input-desktop
-BASE_DIR=~/Projects/quick;
+
+export PATH=$(brew --prefix flex)/bin:$(brew --prefix bison)/bin:$(brew --prefix gettext)/bin:$PATH;\
+export BASE_DIR=~/Projects/quick;
+
 cmake \
   -DCMAKE_BUILD_TYPE=Debug \
   -DCMAKE_PREFIX_PATH=/opt/Qt/6.5.2/macos \
   -DCMAKE_INSTALL_PREFIX:PATH=$BASE_DIR/install-macos \
-  -DINPUT_SDK_PATH=$BASE_DIR/input-sdk/x64-osx \
+  -DINPUT_SDK_PATH=$BASE_DIR/sdk/x64-osx \
   -GNinja \
   -DQGIS_QUICK_DATA_PATH=$BASE_DIR/input/app/android/assets/qgis-data \
   $BASE_DIR/input

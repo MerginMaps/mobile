@@ -210,7 +210,7 @@ if (NOT IOS)
   )
 endif ()
 
-if (MACOS
+if (WIN
     OR IOS
     OR ANDROID
 )
@@ -218,10 +218,7 @@ if (MACOS
   find_package(Iconv REQUIRED)
 endif ()
 
-if (MACOS OR IOS)
-  find_package(Bz2 REQUIRED)
-endif ()
-
+find_package(Bz2 REQUIRED)
 find_package(Curl REQUIRED)
 find_package(Exiv2 REQUIRED)
 find_package(Expat REQUIRED)
@@ -229,7 +226,6 @@ find_package(Freexl REQUIRED)
 find_package(Gdal REQUIRED)
 find_package(Geodiff REQUIRED)
 find_package(Geos REQUIRED)
-find_package(Jpeg REQUIRED)
 find_package(Jpeg REQUIRED)
 find_package(Pq REQUIRED)
 find_package(Proj REQUIRED)
@@ -242,25 +238,14 @@ find_package(Spatialite REQUIRED)
 find_package(Sqlite3 REQUIRED)
 find_package(Tiff REQUIRED)
 find_package(WebP REQUIRED)
-if (NOT ANDROID)
-  find_package(Xml2 REQUIRED)
-endif ()
+find_package(Xml2 REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(ZXing REQUIRED)
 find_package(Zip REQUIRED)
-
-if (ANDROID)
-  find_package(OpenSSL REQUIRED)
-endif ()
+find_package(OpenSSL REQUIRED)
 
 if (IOS OR MACOS)
   find_package(AppleFrameworks REQUIRED)
-endif ()
-
-if (ANDROID
-    OR IOS
-    OR MACOS
-)
   find_package(Tasn1 REQUIRED)
 endif ()
 

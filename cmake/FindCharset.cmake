@@ -3,7 +3,7 @@
 # not in macos and linux input-SDK
 if (MACOS OR LNX)
   # find_library(Charset_LIBRARY NAMES charset)
-  message(FATAL_ERROR "not available for this platform in input-SDK")
+  message(FATAL_ERROR "charset not available for this platform in input-SDK")
 else ()
   find_library(
     Charset_LIBRARY
