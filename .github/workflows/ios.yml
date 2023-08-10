@@ -127,9 +127,9 @@ jobs:
         run: |
           wget -O \
             ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk
-          cd ${{ github.workspace }}/input-sdk
+            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
+          mkdir -p ${{ github.workspace }}/input-sdk/arm64-ios
+          cd ${{ github.workspace }}/input-sdk/arm64-ios
           tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
 
       # Qt
@@ -179,7 +179,7 @@ jobs:
             -DIOS=TRUE \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios \
             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
-            -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64 \
+            -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64-ios \
             -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/input-sdk/ios.toolchain.cmake \
             -G "Xcode" \
             -DQT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \

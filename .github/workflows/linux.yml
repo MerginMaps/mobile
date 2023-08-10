@@ -36,18 +36,14 @@ jobs:
 
       - name: Install Build Dependencies
         run: |
-            sudo apt-get update -y                    
-            sudo apt-get install -y libcurl4-gnutls-dev bison ca-certificates ccache cmake cmake-curses-gui dh-python expect flex flip \
-                            git graphviz libexiv2-dev libexpat1-dev libfcgi-dev libgeos-dev libgeos++-dev libwebp-dev \
-                            libgsl-dev libfreexl-dev libpq-dev libprotobuf-dev \
-                            libspatialindex-dev libsqlite3-dev libyaml-tiny-perl \
-                            libzip-dev libzstd-dev lighttpd locales ninja-build \
-                            pkg-config poppler-utils protobuf-compiler python3-all-dev \
-                            spawn-fcgi xauth xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable xvfb \
-                            gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
-                            gstreamer1.0-plugins-ugly gstreamer1.0-x libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0 \
-                            libgstreamer-plugins-good1.0-0 libgstreamer1.0-0
-            
+            sudo apt-get update -y
+
+            sudo apt-get install -y \
+            gperf autopoint '^libxcb.*-dev' libx11-xcb-dev libegl1-mesa libegl1-mesa-dev \
+            libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev \
+            autoconf-archive libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0 libfuse2 \
+            bison flex cmake ninja-build
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -115,9 +111,9 @@ jobs:
         run: |
           wget -O \
             ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk
-          cd ${{ github.workspace }}/input-sdk
+            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
+          mkdir -p ${{ github.workspace }}/input-sdk/x64-linux
+          cd ${{ github.workspace }}/input-sdk/x64-linux
           tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
 
       # Build Input App
@@ -138,7 +134,7 @@ jobs:
              -DCMAKE_BUILD_TYPE=Release \
              -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/gcc_64 \
              -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
-             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
+             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-linux \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
              -GNinja \

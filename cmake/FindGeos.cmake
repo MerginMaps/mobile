@@ -1,12 +1,5 @@
 # GPLv2 Licence
 
-# not in linux input-SDK
-
-if (LNX)
-  find_path(Geos_INCLUDE_DIR NAMES geos_c.h)
-  find_library(Geos_LIBRARY NAMES geos)
-  find_library(Geos_c_LIBRARY NAMES geos_c)
-else ()
   find_path(
     Geos_INCLUDE_DIR
     geos_c.h
@@ -27,7 +20,6 @@ else ()
     PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
-endif ()
 
 find_package_handle_standard_args(
   Geos REQUIRED_VARS Geos_LIBRARY Geos_c_LIBRARY Geos_INCLUDE_DIR

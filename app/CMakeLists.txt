@@ -420,25 +420,21 @@ target_link_libraries(
   PUBLIC Qtkeychain::Qtkeychain
          Qca::Qca
          Gdal::Gdal
-         Pq::Pq
+         Pq::Pq 
+         Pq::Pgcommon 
+         Pq::Pgport
          Spatialite::Spatialite
 )
 
-if (MACOS
+if (WIN
     OR IOS
     OR ANDROID
 )
   target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv)
-  target_link_libraries(Input PUBLIC Pq::Pgcommon Pq::Pgport)
 endif ()
 
-if (MACOS OR IOS)
-  target_link_libraries(Input PUBLIC Bz2::Bz2)
-endif ()
-
-if (NOT ANDROID)
-  target_link_libraries(Input PUBLIC Xml2::Xml2)
-endif ()
+target_link_libraries(Input PUBLIC Bz2::Bz2)
+target_link_libraries(Input PUBLIC Xml2::Xml2)
 
 target_link_libraries(
   Input
@@ -459,19 +455,18 @@ target_link_libraries(
          Jpeg::Jpeg
 )
 
-if (ANDROID
-    OR IOS
+if (IOS
     OR MACOS
 )
   target_link_libraries(Input PUBLIC Tasn1::Tasn1)
 endif ()
 
+target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
 if (ANDROID)
-  target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
   set_property(
     TARGET Input
-    PROPERTY QT_ANDROID_EXTRA_LIBS ${INPUT_SDK_PATH_MULTI}/lib/libcrypto_3.so
-             ${INPUT_SDK_PATH_MULTI}/lib/libssl_3.so
+    PROPERTY QT_ANDROID_EXTRA_LIBS ${KDAB_OpenSSL_CRYPTO_LIBRARY}
+             ${KDAB_OpenSSL_LIBRARY}
   )
 endif ()
 

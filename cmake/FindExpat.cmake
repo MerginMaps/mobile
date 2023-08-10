@@ -1,25 +1,5 @@
 # GPLv2 Licence
 
-# not in linux input-SDK
-
-if (LNX)
-  find_path(Expat_INCLUDE_DIR NAMES expat.h)
-  find_library(Expat_LIBRARY NAMES expat)
-elseif (WIN)
-  find_path(
-    Expat_INCLUDE_DIR
-    expat.h
-    "${INPUT_SDK_PATH_MULTI}/include"
-    NO_DEFAULT_PATH
-  )
-
-  find_library(
-    Expat_LIBRARY
-    NAMES libexpat
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
-  )
-else ()
   find_path(
     Expat_INCLUDE_DIR
     expat.h
@@ -33,7 +13,6 @@ else ()
     PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
-endif ()
 
 find_package_handle_standard_args(Expat REQUIRED_VARS Expat_LIBRARY Expat_INCLUDE_DIR)
 

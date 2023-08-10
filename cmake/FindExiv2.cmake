@@ -1,33 +1,24 @@
 # GPLv2 Licence
-
-# not in linux input-SDK
-
-if (LNX)
-  find_path(Exiv2_INCLUDE_DIR NAMES exiv2/exiv2.hpp)
-  find_library(Exiv2_LIBRARY NAMES exiv2)
-  find_library(Exiv2_xmp_LIBRARY NAMES exiv2-xmp)
-else ()
-  find_path(
+find_path(
     Exiv2_INCLUDE_DIR
     exif.hpp
     "${INPUT_SDK_PATH_MULTI}/include/exiv2"
     NO_DEFAULT_PATH
-  )
+)
 
-  find_library(
+find_library(
     Exiv2_LIBRARY
     NAMES exiv2
     PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
-  )
+)
 
-  find_library(
+find_library(
     Exiv2_xmp_LIBRARY
     NAMES exiv2-xmp
     PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
-  )
-endif ()
+)
 
 find_package_handle_standard_args(
   Exiv2 REQUIRED_VARS Exiv2_LIBRARY Exiv2_xmp_LIBRARY Exiv2_INCLUDE_DIR

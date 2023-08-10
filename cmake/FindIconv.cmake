@@ -4,9 +4,9 @@
 
 if (LNX
     OR MACOS
-    OR IOS
 )
-  find_library(Iconv_LIBRARY NAMES iconv)
+  message(FATAL_ERROR "not available for this platform in input-SDK")
+  # find_library(Iconv_LIBRARY NAMES iconv)
 else ()
   find_library(
     Iconv_LIBRARY

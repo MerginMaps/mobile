@@ -18,7 +18,7 @@ on:
 env:
   TEST_MERGIN_URL: https://test.dev.merginmaps.com/
   QT_VERSION: '6.5.2'
-  INPUT_SDK_VERSION: mac-20230725-138
+  INPUT_SDK_VERSION: x64-osx-20230810-174
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 0
   XC_VERSION: ${{ '14.2' }}
@@ -114,9 +114,9 @@ jobs:
         run: |
           wget -O \
             ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk
-          cd ${{ github.workspace }}/input-sdk
+            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
+          mkdir -p ${{ github.workspace }}/input-sdk/x64-osx
+          cd ${{ github.workspace }}/input-sdk/x64-osx
           tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
 
       # Build Input App
@@ -143,7 +143,7 @@ jobs:
              -DCMAKE_BUILD_TYPE=Debug \
              -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
              -DUSE_SERVER_API_KEY=TRUE \
-             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk \
+             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-osx \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
              -DCOVERAGE=TRUE \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \

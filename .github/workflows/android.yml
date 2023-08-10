@@ -29,7 +29,8 @@ jobs:
       JDK_VERSION: 11
       SDK_PLATFORM: android-31
       SDK_BUILD_TOOLS: 33.0.1
-      INPUT_SDK_VERSION: android-macOS-20230725-157
+      INPUT_SDK_VERSION_ARM: arm-android-20230809-193
+      INPUT_SDK_VERSION_ARM64: arm64-android-20230809-193
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       CACHE_VERSION: 0
@@ -157,12 +158,25 @@ jobs:
       - name: Install Input-SDK
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
+          # download
           wget -O \
-            input-sdk.tar.gz \
-            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk
-          cd ${{ github.workspace }}/input-sdk
-          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
+            input-sdk-arm-android.tar.gz \
+            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
+          
+          wget -O \
+            input-sdk-arm64-android.tar.gz \
+            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
+             
+          # unpack
+          mkdir -p ${{ github.workspace }}/input-sdk/arm-android
+          cd ${{ github.workspace }}/input-sdk/arm-android
+          tar -xvzf ${{ github.workspace }}/input-sdk-arm-android.tar.gz
+
+          mkdir -p ${{ github.workspace }}/input-sdk/arm64-android
+          cd ${{ github.workspace }}/input-sdk/arm64-android
+          tar -xvzf ${{ github.workspace }}/input-sdk-arm64-android.tar.gz
+
+          # check
           ls ${{ github.workspace }}/input-sdk
 
       - name: Extract Mergin API_KEY

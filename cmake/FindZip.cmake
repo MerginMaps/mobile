@@ -1,11 +1,5 @@
 # GPLv2 Licence
 
-# not in linux input-SDK
-
-if (LNX)
-  find_path(Zip_INCLUDE_DIR NAMES zip.h)
-  find_library(Zip_LIBRARY NAMES zip)
-else ()
   find_path(
     Zip_INCLUDE_DIR
     zip.h
@@ -19,7 +13,6 @@ else ()
     PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
-endif ()
 
 find_package_handle_standard_args(Zip REQUIRED_VARS Zip_LIBRARY Zip_INCLUDE_DIR)
 
