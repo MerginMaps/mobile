@@ -426,10 +426,7 @@ target_link_libraries(
          Spatialite::Spatialite
 )
 
-if (WIN
-    OR IOS
-    OR ANDROID
-)
+if (NOT LINUX)
   target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv)
 endif ()
 
@@ -451,8 +448,11 @@ target_link_libraries(
          ZLIB::ZLIB
          Zip::Zip
          WebP::WebP
+         WebP::Sharpyuv
          Curl::Curl
          Jpeg::Jpeg
+         Geotiff::Geotiff
+         Lzma::Lzma
 )
 
 if (IOS OR MACOS)

@@ -389,7 +389,7 @@ ninja
 
 5. Run Input
 ```
-   open Input.app
+open ./app/Input.app/
 ```
 
 # 7. Building Windows

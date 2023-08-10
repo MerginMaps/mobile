@@ -1,9 +1,10 @@
 # GPLv2 Licence
 
 # not in macos input-SDK, not in linux input-SDK
-if (LNX OR MACOS)
+if (MACOS)
+  find_library(Iconv_LIBRARY NAMES iconv)
+elseif (LNX)
   message(FATAL_ERROR "iconv not available for this platform in input-SDK")
-  # find_library(Iconv_LIBRARY NAMES iconv)
 else ()
   find_library(
     Iconv_LIBRARY

@@ -210,10 +210,7 @@ if (NOT IOS)
   )
 endif ()
 
-if (WIN
-    OR IOS
-    OR ANDROID
-)
+if (NOT LINUX)
   find_package(Charset REQUIRED)
   find_package(Iconv REQUIRED)
 endif ()
@@ -243,6 +240,8 @@ find_package(ZLIB REQUIRED)
 find_package(ZXing REQUIRED)
 find_package(Zip REQUIRED)
 find_package(OpenSSL REQUIRED)
+find_package(Geotiff REQUIRED)
+find_package(Lzma REQUIRED)
 
 if (IOS OR MACOS)
   find_package(AppleFrameworks REQUIRED)
