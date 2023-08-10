@@ -14,6 +14,7 @@ import QtQuick
 QtObject {
     // Primary colors
     property color fontColor: "#006146"
+    property color contrastFontColor: "#D2FBD0"
     property color fontColorBright: "#679D70"
     property color fontColorWhite: "#FFFFFF"
     property color panelBackground2: "#C6CCC7"
