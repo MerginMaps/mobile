@@ -9,7 +9,7 @@ find_path(
 
 find_library(
   Protobuf_lite_LIBRARY
-  NAMES protobuf-lite
+  NAMES protobuf-lite libprotobuf-lite
   PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )

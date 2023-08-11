@@ -474,6 +474,10 @@ if (MACOS OR IOS)
   )
 endif ()
 
+if (LNX)
+  target_link_libraries(Input PUBLIC Glib2::Glib2)
+endif ()
+
 if (HAVE_APPLE_PURCHASING)
   target_link_libraries(
     Input PUBLIC AppleFrameworks::StoreKit AppleFrameworks::Foundation

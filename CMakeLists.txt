@@ -33,6 +33,10 @@ if (IOS)
   set(ENABLE_ARC FALSE)
   set(ENABLE_BITCODE FALSE)
   set(DEPLOYMENT_TARGET "14.0")
+  set(CMAKE_OSX_DEPLOYMENT_TARGET ${DEPLOYMENT_TARGET})
+  set(CMAKE_SYSTEM_NAME "iOS")
+  set(CMAKE_SYSTEM_PROCESSOR "aarch64")
+  # CMAKE_OSX_ARCHITECTURES
 endif ()
 
 if (APPLE
@@ -246,6 +250,10 @@ find_package(Lzma REQUIRED)
 if (IOS OR MACOS)
   find_package(AppleFrameworks REQUIRED)
   find_package(Tasn1 REQUIRED)
+endif ()
+
+if (LNX)
+  find_package(Glib2 REQUIRED)
 endif ()
 
 if (HAVE_BLUETOOTH)

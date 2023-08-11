@@ -180,7 +180,6 @@ jobs:
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios \
             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64-ios \
-            -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/input-sdk/ios.toolchain.cmake \
             -G "Xcode" \
             -DQT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
