@@ -9,7 +9,7 @@ find_path(
 
 find_library(
   Geotiff_LIBRARY
-  NAMES geotiff
+  NAMES geotiff libgeotiff
   PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )

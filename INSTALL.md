@@ -389,7 +389,7 @@ ninja
 
 5. Run Input
 ```
-open ./app/Input.app/
+./app/Input.app/Contents/MacOS/Input
 ```
 
 # 7. Building Windows
@@ -418,7 +418,7 @@ cmake ^
    -DCMAKE_BUILD_TYPE=Release ^
    -DCMAKE_PREFIX_PATH:PATH=%Qt6_Dir%^
    -DCMAKE_INSTALL_PREFIX:PATH=%ROOT_DIR%\install\input ^
-   -DINPUT_SDK_PATH:PATH=%ROOT_DIR%\input-sdk-qt-6.5.2-win64-20221116-132 ^
+   -DINPUT_SDK_PATH:PATH=%ROOT_DIR%\input-sdk\x64-windows ^
    -G "NMake Makefiles" ^
    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ^
    -S %ROOT_DIR%\input ^

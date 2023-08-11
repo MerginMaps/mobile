@@ -183,12 +183,11 @@ jobs:
             -G "Xcode" \
             -DQT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -S $INPUT_DIR \
+            -S ${{ github.workspace }} \
             -B ./
  
       - name: Build Input
         run: |
-          INPUT_DIR=`pwd`
           cd build-INPUT
 
           xcodebuild \

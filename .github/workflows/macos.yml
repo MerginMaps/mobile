@@ -7,6 +7,7 @@ on:
     - 'scripts/**'
     - 'cmake/**'
     - 'cmake_templates/**'
+    - 'test/**'
     - 'CMakeLists.txt'
     - '.github/workflows/macos.yml'
 
@@ -125,7 +126,7 @@ jobs:
 
             echo "Version code: ${BUILD_NUM}"
             
-      - name: build Input
+      - name: build Input (Release)
         run: |
           mkdir -p install-Input
           mkdir -p build-Input-rel
@@ -145,6 +146,45 @@ jobs:
           ninja  
           ninja install
 
+      # Do Tests 
+      - name: build Input (Debug)
+        run: |
+          mkdir -p build-Input-db
+          cd build-Input-db
+          
+          cmake \
+             -DCMAKE_BUILD_TYPE=Debug \
+             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
+             -DUSE_SERVER_API_KEY=TRUE \
+             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-osx \
+             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
+             -DCOVERAGE=TRUE \
+             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+             -DENABLE_TESTS=TRUE \
+             -GNinja \
+             -S ../input
+             
+          ninja
+
+      - name: run tests
+        run: |
+          cd build-Input-db/
+          ctest --output-on-failure
+
+      - name: build lcov summary
+        run: |
+          cd build-Input-db
+          lcov --directory . --capture --output-file coverage.info
+          lcov --remove coverage.info '*input-sdk/*' '*Qt/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input-db/*' --output-file coverage.info
+          lcov --list coverage.info
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: build-Input-db/coverage.info
+
+      # Package
       - name: Get TimeStamp
         id: time
         uses: josStorer/get-current-time@v2.0.2
