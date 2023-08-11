@@ -207,6 +207,7 @@ If you have "error: undefined reference to 'stdout'" or so, make sure that in BU
    - Check what SDK version is currently in use - look for `INPUT_SDK_VERSION` in `.github/workflows/android.yml`
    - Download TWO Input SDKs for android - go to https://github.com/merginmaps/input-sdk/releases and download the built SDK.
    - Unpack the downloaded .tar.gz to `~/input-sdk/arm-android` and `~/input-sdk/arm64-android`
+   - WARNING!! It is super important to have both SDKs in same subfolder (e.g. `~/input-sdk`) and have folder name `arm64-android` and `arm-android`
 
 3. Get Qt libraries
  

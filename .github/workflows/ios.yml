@@ -146,7 +146,7 @@ jobs:
         uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v1-${{ env.QT_VERSION }}-ios
+          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-ios
           
       - name: Install Qt
         if: steps.cache-qt.outputs.cache-hit != 'true'
@@ -179,12 +179,14 @@ jobs:
           mkdir -p install-Input
           mkdir -p build-INPUT
           cd build-INPUT
-                    
+
+          ls -1 ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
+
           # run cmake
           cmake \
+            -DCMAKE_TOOLCHAIN_FILE:PATH="${{ github.workspace }}/ios-cmake/ios.toolchain.cmake" \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios \
             -DQT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
-            -DCMAKE_TOOLCHAIN_FILE:PATH="${{ github.workspace }}/ios-cmake/ios.toolchain.cmake" \
             -DIOS=TRUE \
             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64-ios \
