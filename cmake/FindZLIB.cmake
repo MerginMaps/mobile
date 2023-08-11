@@ -2,7 +2,7 @@
 
 find_library(
   ZLIB_LIBRARY
-  NAMES z zlib
+  NAMES z zlib libz
   PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )

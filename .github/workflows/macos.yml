@@ -123,28 +123,7 @@ jobs:
         run: |
             BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
             echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
-
             echo "Version code: ${BUILD_NUM}"
-            
-      - name: build Input (Release)
-        run: |
-          mkdir -p install-Input
-          mkdir -p build-Input-rel
-          cd build-Input-rel
-
-          cmake \
-             -DCMAKE_BUILD_TYPE=Release \
-             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${QT_VERSION}/macos \
-             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
-             -DUSE_SERVER_API_KEY=TRUE \
-             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-osx \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
-             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-             -GNinja \
-             -S ../input
-          
-          ninja  
-          ninja install
 
       # Do Tests 
       - name: build Input (Debug)
@@ -185,6 +164,26 @@ jobs:
           path-to-lcov: build-Input-db/coverage.info
 
       # Package
+      - name: build Input (Release)
+        run: |
+          mkdir -p install-Input
+          mkdir -p build-Input-rel
+          cd build-Input-rel
+
+          cmake \
+             -DCMAKE_BUILD_TYPE=Release \
+             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${QT_VERSION}/macos \
+             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
+             -DUSE_SERVER_API_KEY=TRUE \
+             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-osx \
+             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
+             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+             -GNinja \
+             -S ../input
+          
+          ninja  
+          ninja install
+
       - name: Get TimeStamp
         id: time
         uses: josStorer/get-current-time@v2.0.2

@@ -14,13 +14,6 @@ Building Mergin Maps Input from source - step by step
    * [4.2. Android on macOS](#42-android-on-macos)
    * [4.3. Android on Windows](#43-android-on-windows)
 * [5. Building iOS](#5-building-ios)
-   * [5.1 iOS assets](#51-ios-assets)
-       * [application icon](#application-icon)
-       * [launch screen](#launch-screen)
-   * [5.2 iOS dist certificates](#52-ios-dist-certificates)
-   * [5.3 iOS in-app purchases](#53-ios-in-app-purchases)
-       * [add new subscription](#add-new-subscription)
-       * [to do apple in-app purchases test](#to-do-apple-in-app-purchases-test)
 * [6. Building macOS](#6-building-macos)
 * [7. Building Windows](#7-building-windows)
 
@@ -249,106 +242,53 @@ Mergin Maps Input Android on Windows, please help us to update this section.
 
 # 5. Building iOS
 
-For installing the debug version of the iOS app to your device, you need development certificate
+- you have to run Release or RelWithDebInfo builds. Debug builds will usually crash on some Qt's assert
+- if there is any problem running Input App from Qt Creator, open cmake-generated project in XCode directly
+  
+1. Setup development environment
+   - XCode
+   - build tools, see requirements in `.github/workflows/ios.yml`
+   - to install app to your iOS device, you need development certificate
+       - Get device UDID: either iTunes or about this mac->system report->USB->find iPAD (Serial Number)
+       - Create dev iOS certificate for development
+       - Create provisioning profile for Input App + your certificate + your device (for this ask Lutra Apple development team)
+   - ios-toolchain 
+       - download ios.toolchain.cmake from https://github.com/leetal/ios-cmake to `~/input-sdk/ios.toolchain.cmake`
+       - version from `.github/workflows/ios.yml`
 
-- device UDID: either iTunes or about this mac->system report->USB->find iPAD (Serial Number)
-https://deciphertools.com/blog/2014_11_19_how_to_find_your_iphone_udid/
-- register app
-- create dev ios certificate
-- generate profile
-- install all on device
-- set in Qt Creator
+2. Get Input SDK - it contains pre-built dependencies of libraries used by Input
+
+   - Check what SDK version is currently in use - look for `INPUT_SDK_VERSION` in `.github/workflows/ios.yml`
+   - Download Input SDKs for ios - go to https://github.com/merginmaps/input-sdk/releases and download the built SDK.
+   - Unpack the downloaded .tar.gz to `~/input-sdk/arm64-ios`
+
+3. Get Qt libraries
+ 
+   - You need both macos and ios Qt installed!
+   - Check what Qt version is currently in use - look for `QT_VERSION` in `.github/workflows/ios.yml`
+   - Download Qt online installer from https://www.qt.io/download-open-source
+   - Use the online installer to install Qt to `/opt/Qt`
+
+4. Build Input (update CMake command with the correct Qt and Input SDK versions)
 
 Now you can create a build (either on commmand line or by setting these variables in Qt Creator)
 
 ```
+  mkdir build
+  mkdir install
+  cd build
+
   cmake \
     -DIOS=TRUE \
     -DCMAKE_PREFIX_PATH=/opt/Qt/6.5.2/ios \
-    -DCMAKE_INSTALL_PREFIX:PATH=~/Projects/quick/input/build-input-ios/install \
-    -DUSE_SERVER_API_KEY=FALSE \
-    -DINPUT_SDK_PATH=~/Projects/quick/input-sdk/build/ios/stage/arm64 \
-    -DCMAKE_TOOLCHAIN_FILE=~/Projects/quick/input-sdk/build/ios/stage/ios.toolchain.cmake \
-    -G "Xcode" \
     -DQT_HOST_PATH=/opt/Qt/6.5.2/macos \
+    -DCMAKE_TOOLCHAIN_FILE:PATH="~/input-sdk/ios.toolchain.cmake" \
+    -DCMAKE_INSTALL_PREFIX:PATH="../install" \
+    -DUSE_SERVER_API_KEY=FALSE \
+    -DINPUT_SDK_PATH=~/input-sdk/arm64-ios \
+    -G "Xcode" \
     ../input
 ```
-
-Notes
- - you have to run Release or RelWithDebInfo builds. Debug builds will usually crash on some Qt's assert
- - if there is any problem running Input App from Qt Creator, open cmake-generated project in XCode directly
- 
-## 5.1 iOS assets 
-
-### application icon
-
-see: https://appbus.wordpress.com/2017/10/06/ios-11-and-xcode-9-in-qt-5-9-x-projects/
-
-NOTE: icon must be without transparency!
-
-```
-brew install ImageMagick
-git clone https://github.com/smallmuou/ios-icon-generator
-chmod 777 ios-icon-generator.sh
-cd <repo>/input/app/ios
-<path_to_generator>/ios-icon-generator.sh ic_input_no_transparency.png appicon/
-```
-
-### launch screen
-- iOS7: use http://ticons.fokkezb.nl/ and rename
-- iPhone6: (XIB) generate in XCode (https://medium.com/better-programming/swift-3-creating-a-custom-view-from-a-xib-ecdfe5b3a960)
-
-## 5.2 iOS dist certificates
-
-1. Create new iOS distribution certificate
-- open Keychain Access -> Certificate Assistant -> Request certificate (see https://help.apple.com/developer-account/#/devbfa00fef7)
-   - User email: peter.petrik@lutraconsulting.co.uk
-   - Common name: LUTRA CONSULTING LIMITED
-   - CA email: None
-      - Request is: Saved to disk
-  -> creates `CertificateSigningRequest.certSigningRequest` file
-- click + on https://developer.apple.com/account/resources/certificates/list and create new iOS Distribution Certificate
-- Download it (`ios_distribution.cer`) and double click to open in Keychain Access
-- In Keychain Access, right click and export p12 file (`iPhone Distribution: LUTRA CONSULTING LIMITED (xxxxxxxxx)`), with passport (IOS_CERT_KEY). You need to have it imported to "login" or personal space to be able to export p12 file.
-- Store request and cer file, p12 in passbolt.lutraconsulting.co.uk (files in google drive in PP's MerginMaps/dev folder)
-
-2. Create/Update provisioning profile
-- Go to https://developer.apple.com/account/resources/profiles
-- Edit LutraConsultingLtd.Input.AppStore and assign the certificate generated in 1.
-- Download the `LutraConsultingLtdInputAppStore.mobileprovision`
-
-3. Encrypt the files for GitHub
-- Create IOS_GPG_KEY
-- install gpg `brew install gnupg`
-- Encrypt p12 file with command (use space in front of command to not end up in history!) ` gpg --symmetric --batch --passphrase="<IOS_GPG_KEY>" --output ./Certificates_ios_dist.p12.gpg ./Certificates.p12`
-- Encrypt mobileprovision file with command ` gpg --symmetric --batch --passphrase="<IOS_GPG_KEY>" --output ./LutraConsultingLtdInputAppStore.mobileprovision.gpg ./LutraConsultingLtdInputAppStore.mobileprovision`
-- Copy both files to `.github/secrets/ios`
-- Update secret (passports) on github
-
-## 5.3 iOS in-app purchases
-
-### add new subscription
-- go to: https://appstoreconnect.apple.com > In-App Purchases Manage
-- click +
-    - Auto-renewable subscription
-    - Reference name: mergin_tier_<x> (where <x> is 1,2,.. representing are 1GB, 10GB... tiers)
-    - Product ID: apple_mergin_tier_<x> (where <x> is same as reference name)
-    - Subscription Group: mergin_1
-    - Add and fill subscription duration and prize
-- create the SAME subscription plan in Mergin Maps via Admin interface
-
-### to do apple in-app purchases test 
-
-without actually paying
-https://itunesconnect.apple.com
-
-- create InputApp test user in https://itunesconnect.apple.com: Users and Access > Sandbox Testers > New Tester (create your user)
-    - You may want to test different location (for QLocale)
-    - Create unique email (group/alias) for the new user
-- create the Mergin Maps Account for the user on app.dev.merginmaps.com
-- you need to logout your regular MacOs/Ios Apple User from device before trying to purchase something
-- login as test user and you can simulate purchasing
-- note that this works only for app.dev.merginmaps.com. It will not be possible to use test user on public/production server.
 
 # 6. Building macOS
 

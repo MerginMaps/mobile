@@ -6,6 +6,8 @@ For setup of development environment, please see [INSTALL](../INSTALL.md).
 
 For translations, please see [translation docs](translations.md).
 
+For various how-tos, please see [howto dev docs](howto.md).
+
 ## Forms
 
 ![](media/form_models.svg)

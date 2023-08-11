@@ -27,16 +27,12 @@ if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
 endif ()
 
 if (IOS)
-  set(ENABLE_VISIBILITY FALSE)
-  set(ARCHS "arm64")
-  set(PLATFORM "OS")
-  set(ENABLE_ARC FALSE)
-  set(ENABLE_BITCODE FALSE)
-  set(DEPLOYMENT_TARGET "14.0")
-  set(CMAKE_OSX_DEPLOYMENT_TARGET ${DEPLOYMENT_TARGET})
-  set(CMAKE_SYSTEM_NAME "iOS")
-  set(CMAKE_SYSTEM_PROCESSOR "aarch64")
-  # CMAKE_OSX_ARCHITECTURES
+    set(ENABLE_VISIBILITY FALSE)
+    set(ARCHS "arm64")
+    set(PLATFORM "OS")
+    set(ENABLE_ARC FALSE)
+    set(ENABLE_BITCODE FALSE)
+    set(DEPLOYMENT_TARGET "14.0")
 endif ()
 
 if (APPLE
@@ -181,7 +177,6 @@ else ()
   set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH})
 endif ()
 
-# TODO: OpenGl needed?
 find_package(
   Qt6 ${QT6_VERSION}
   COMPONENTS Quick
@@ -219,6 +214,7 @@ if (NOT LINUX)
   find_package(Iconv REQUIRED)
 endif ()
 
+find_package(ZLIB REQUIRED)
 find_package(Bz2 REQUIRED)
 find_package(Curl REQUIRED)
 find_package(Exiv2 REQUIRED)
@@ -240,7 +236,6 @@ find_package(Sqlite3 REQUIRED)
 find_package(Tiff REQUIRED)
 find_package(WebP REQUIRED)
 find_package(Xml2 REQUIRED)
-find_package(ZLIB REQUIRED)
 find_package(ZXing REQUIRED)
 find_package(Zip REQUIRED)
 find_package(OpenSSL REQUIRED)

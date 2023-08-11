@@ -18,6 +18,7 @@ on:
 env:   
   QT_VERSION: '6.5.2'
   XC_VERSION: ${{ '14.2' }}
+  IOS_CMAKE_TOOLCHAIN_VERSION: "4.4.0" 
   INPUT_SDK_VERSION: arm64-ios-20230809-150
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
@@ -37,7 +38,14 @@ jobs:
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
 
       - uses: actions/checkout@v3
-
+ 
+      - name: Download ios-cmake toolchain
+        uses: actions/checkout@v3
+        with:
+            repository: leetal/ios-cmake
+            ref: ${{ env.IOS_CMAKE_TOOLCHAIN_VERSION }}
+            path: ios-cmake
+      
       # CCache
       - name: Prepare build cache for pull request
         uses: pat-s/always-upload-cache@v3.0.11
@@ -168,20 +176,19 @@ jobs:
 
       - name: Create build system with cmake
         run: |
-          export Qt6_DIR=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios
-          export QT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos
-          
           mkdir -p install-Input
           mkdir -p build-INPUT
           cd build-INPUT
                     
           # run cmake
           cmake \
+            -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios \
+            -DQT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
+            -DCMAKE_TOOLCHAIN_FILE:PATH="${{ github.workspace }}/ios-cmake/ios.toolchain.cmake" \
             -DIOS=TRUE \
             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64-ios \
             -G "Xcode" \
-            -DQT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -S ${{ github.workspace }} \
             -B ./
