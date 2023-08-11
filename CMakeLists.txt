@@ -168,7 +168,7 @@ message(STATUS "Mergin Maps Input ${version_desc} - ${platform_desc}")
 if (ANDROID)
   set(INPUT_SDK_PATH_ANDROID_ABI_armeabi-v7a ${INPUT_SDK_PATH}/arm-android)
   set(INPUT_SDK_PATH_ANDROID_ABI_arm64-v8a ${INPUT_SDK_PATH}/arm64-android)
-  set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH}/${ANDROID_ABI})
+  set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH_ANDROID_ABI_${ANDROID_ABI}})
   # allow libraries outside of SDK/NDK directory
   set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
   set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)

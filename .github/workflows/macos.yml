@@ -146,6 +146,8 @@ jobs:
           ninja
 
       - name: run tests
+        env:
+          TEST_MERGIN_URL: https://test.dev.merginmaps.com/
         run: |
           cd build-Input-db/
           ctest --output-on-failure
