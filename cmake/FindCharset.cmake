@@ -8,7 +8,7 @@ elseif (LNX)
 else ()
   find_library(
     Charset_LIBRARY
-    NAMES charset
+    NAMES charset libcharset
     PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )

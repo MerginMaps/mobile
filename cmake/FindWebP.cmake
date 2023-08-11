@@ -9,14 +9,14 @@ find_path(
 
 find_library(
   WebP_LIBRARY
-  NAMES webp
+  NAMES webp libwebp
   PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )
 
 find_library(
   WebP_sharpyuv_LIBRARY
-  NAMES sharpyuv
+  NAMES sharpyuv libsharpyuv
   PATHS "${INPUT_SDK_PATH_MULTI}/lib"
   NO_DEFAULT_PATH
 )

@@ -430,14 +430,13 @@ if (NOT LINUX)
   target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv)
 endif ()
 
-target_link_libraries(Input PUBLIC Bz2::Bz2)
 target_link_libraries(Input PUBLIC Xml2::Xml2)
 
 target_link_libraries(
   Input
   PUBLIC Spatialindex::Spatialindex
-         Geos::Geos
          Geos::Geos-c
+         Geos::Geos
          Protobuf::Protobuf-lite
          Expat::Expat
          Freexl::Freexl
@@ -453,6 +452,7 @@ target_link_libraries(
          Jpeg::Jpeg
          Geotiff::Geotiff
          Lzma::Lzma
+         Bz2::Bz2
 )
 
 if (IOS OR MACOS)
