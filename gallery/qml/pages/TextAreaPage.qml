@@ -33,16 +33,16 @@ Column {
       spacing: 20
       anchors.fill: parent
       MMTextArea {
-        areaHeight: 100
+        areaHeight: 50
         placeholderText: "Place holder"
       }
       MMTextArea {
-        areaHeight: 100
+        areaHeight: 50
         text: "Disabled"
         enabled: false
       }
       MMTextArea {
-        areaHeight: 100
+        areaHeight: 50
         text: "Something important"
         warningMsg: "Be careful"
       }
@@ -50,6 +50,13 @@ Column {
         areaHeight: 50
         text: "Something wrong"
         errorMsg: "Error message"
+      }
+      MMTextArea {
+        areaHeight: 50
+        text: "autoHeight: true\nminHeight: 50\nmaxHeight: 150"
+        minHeight: 50
+        maxHeight: 150
+        autoHeight: true
       }
     }
   }
