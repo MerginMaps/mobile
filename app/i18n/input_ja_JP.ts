@@ -150,6 +150,31 @@ Mergin Mapsのウェブサイトから手動で削除してください。</tran
     </message>
 </context>
 <context>
+    <name>AndroidTrackingBackend</name>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="115"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="158"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="172"/>
+        <source>There was an error and tracking could not start, please contact support</source>
+        <translation>エラーが発生し、追跡を開始できませんでした。サポートにご連絡ください。</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="143"/>
+        <source>Your device does not support tracking, available from Android 8.0</source>
+        <translation>お使いのデバイスは追跡機能をサポートしていません。Android 8.0からご使用いただけます。</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="148"/>
+        <source>Please enable location permission before starting tracking</source>
+        <translation>追跡を開始する前に、位置情報の許可を有効にしてください。</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="153"/>
+        <source>Please enable location services on your device before starting tracking</source>
+        <translation>追跡を開始する前に、デバイスの位置情報サービスを有効にしてください。</translation>
+    </message>
+</context>
+<context>
     <name>AndroidUtils</name>
     <message>
         <location filename="../androidutils.cpp" line="167"/>
@@ -535,7 +560,7 @@ Mergin Mapsのウェブサイトから手動で削除してください。</tran
 <context>
     <name>FeaturesListPageV2</name>
     <message>
-        <location filename="../qml/layers/FeaturesListPageV2.qml" line="155"/>
+        <location filename="../qml/layers/FeaturesListPageV2.qml" line="170"/>
         <source>Add feature</source>
         <translation>地物の追加</translation>
     </message>
@@ -1090,87 +1115,92 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1199"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1283"/>
         <source>GPS currently unavailable.</source>
         <translation>GPSは現在使用できません。</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="388"/>
+        <location filename="../qml/map/MapWrapper.qml" line="444"/>
         <source>Successfully synchronized</source>
         <translation>同期に成功しました</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="402"/>
+        <location filename="../qml/map/MapWrapper.qml" line="171"/>
+        <source>Position tracking is running</source>
+        <translation>現在位置の追跡を行っています</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="460"/>
         <source>Up to date</source>
         <translation>更新する</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="411"/>
+        <location filename="../qml/map/MapWrapper.qml" line="471"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>他の人が同期中なので、後で再試行します</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="421"/>
+        <location filename="../qml/map/MapWrapper.qml" line="483"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>同期中に問題が発生しました。後に再試行します。クリックして詳細を見る</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="439"/>
+        <location filename="../qml/map/MapWrapper.qml" line="503"/>
         <source>Splitting done successfully</source>
         <translation>分割に成功しました</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="455"/>
+        <location filename="../qml/map/MapWrapper.qml" line="521"/>
         <source>Create line to split the selected feature</source>
         <translation>選択した地物を分割するラインを作成</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="471"/>
+        <location filename="../qml/map/MapWrapper.qml" line="539"/>
         <source>Select some point to start editing the geometry</source>
         <translation>ジオメトリの編集を開始するポイントを選択します。</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="487"/>
+        <location filename="../qml/map/MapWrapper.qml" line="557"/>
         <source>Record new geometry for the feature</source>
         <translation>地物の新しいジオメトリを記録する</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="626"/>
+        <location filename="../qml/map/MapWrapper.qml" line="696"/>
         <source>Details</source>
         <translation>詳細</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="729"/>
+        <location filename="../qml/map/MapWrapper.qml" line="799"/>
         <source>Back</source>
         <translation>戻る</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="746"/>
+        <location filename="../qml/map/MapWrapper.qml" line="816"/>
         <source>Discard the changes?</source>
         <translation>変更を破棄しますか？</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="749"/>
+        <location filename="../qml/map/MapWrapper.qml" line="819"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>「はい」をクリックすると、ジオメトリへの変更が破棄されます。代わりに変更を保存したい場合は、ツールバーの「いいえ」をクリックし、次に「完了」をクリックします。</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="753"/>
+        <location filename="../qml/map/MapWrapper.qml" line="823"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>「はい」をクリックすると新しいジオメトリは破棄され、フィーチャーは保存されません。ジオメトリを保存したい場合は、ツールバーの「いいえ」、「完了」の順にクリックします。</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="823"/>
+        <location filename="../qml/map/MapWrapper.qml" line="893"/>
         <source>Connecting to %1</source>
         <translation>%1に接続中</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="837"/>
+        <location filename="../qml/map/MapWrapper.qml" line="907"/>
         <source>Connected, no position</source>
         <translation>接続完了、位置情報はありません</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="841"/>
+        <location filename="../qml/map/MapWrapper.qml" line="911"/>
         <source>Unknown accuracy</source>
         <translation>不明な精度</translation>
     </message>
@@ -1408,17 +1438,17 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>PositionTrackingManager</name>
     <message>
-        <location filename="../position/tracking/positiontrackingmanager.cpp" line="130"/>
+        <location filename="../position/tracking/positiontrackingmanager.cpp" line="153"/>
         <source>Could not find tracking layer for the project</source>
         <translation>プロジェクトの追跡レイヤーが見つかりません</translation>
     </message>
     <message>
-        <location filename="../position/tracking/positiontrackingmanager.cpp" line="139"/>
+        <location filename="../position/tracking/positiontrackingmanager.cpp" line="162"/>
         <source>Tracking layer not found or invalid</source>
         <translation>追跡レイヤーが見つからないか、無効です</translation>
     </message>
     <message>
-        <location filename="../position/tracking/positiontrackingmanager.cpp" line="307"/>
+        <location filename="../position/tracking/positiontrackingmanager.cpp" line="339"/>
         <source>Failed to start tracking, please contact support</source>
         <translation>追跡の開始に失敗しました。サポートに連絡してください</translation>
     </message>
@@ -2516,7 +2546,7 @@ Mergin Mapsのウェブサイトから手動で削除してください。</tran
 <context>
     <name>inputvaluerelationpage</name>
     <message>
-        <location filename="../qml/editor/inputvaluerelationpage.qml" line="129"/>
+        <location filename="../qml/editor/inputvaluerelationpage.qml" line="139"/>
         <source>Features</source>
         <translation>地物</translation>
     </message>
@@ -2525,63 +2555,63 @@ Mergin Mapsのウェブサイトから手動で削除してください。</tran
     <name>main</name>
     <message>
         <location filename="../qml/main.qml" line="237"/>
-        <location filename="../qml/main.qml" line="301"/>
+        <location filename="../qml/main.qml" line="305"/>
         <source>No Changes</source>
         <translation>変更はありません</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="276"/>
+        <location filename="../qml/main.qml" line="280"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS自動センターモードをON</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="276"/>
+        <location filename="../qml/main.qml" line="280"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS自動センターモードをOFF</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="290"/>
+        <location filename="../qml/main.qml" line="294"/>
         <source>No editable layers found.</source>
         <translation>編集可能なレイヤがみつかりません.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="523"/>
-        <location filename="../qml/main.qml" line="534"/>
+        <location filename="../qml/main.qml" line="527"/>
+        <location filename="../qml/main.qml" line="538"/>
         <source>not tracking</source>
         <translation>追跡していません</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="689"/>
+        <location filename="../qml/main.qml" line="693"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>位置情報が利用できないため、ステイクアウトは利用できません！</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="701"/>
+        <location filename="../qml/main.qml" line="705"/>
         <source>Failed to open the project</source>
         <translation>プロジェクトを開けませんでした</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="726"/>
+        <location filename="../qml/main.qml" line="730"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Merginとの通信に失敗しました。%1 インターネット状況の確認をしてください。</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="780"/>
+        <location filename="../qml/main.qml" line="784"/>
         <source>There were issues loading the project.</source>
         <translation>プロジェクトを読み込む上で問題が発生しました。</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="804"/>
+        <location filename="../qml/main.qml" line="808"/>
         <source>Could not read the project file:</source>
         <translation>プロジェクトファイルを読み込めませんでした：</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="824"/>
+        <location filename="../qml/main.qml" line="828"/>
         <source>Press back again to quit the app</source>
         <translation>アプリを終了するには、もう一度戻るを押してください</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="619"/>
+        <location filename="../qml/main.qml" line="623"/>
         <source>PROJ Error</source>
         <translation>PROJエラー</translation>
     </message>
