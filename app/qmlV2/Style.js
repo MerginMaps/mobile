@@ -68,6 +68,7 @@ const errorIcon = "qrc:/Error.svg"
 const arrowUpIcon = "qrc:/Arrow Up.svg"
 const arrowDownIcon = "qrc:/Arrow Down.svg"
 const qrCodeIcon = "qrc:/QR Code.svg"
+const checkmarkIcon = "qrc:/Checkmark.svg"
 
 const textColor = "black"
 

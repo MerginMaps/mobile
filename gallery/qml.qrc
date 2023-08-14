@@ -16,5 +16,8 @@
         <file>../app/qmlV2/component/MMTextArea.qml</file>
         <file>qml/pages/ComboBoxPage.qml</file>
         <file>../app/qmlV2/component/MMComboBox.qml</file>
+        <file>qml/pages/ChecksPage.qml</file>
+        <file>../app/qmlV2/component/MMCheckBox.qml</file>
+        <file>../app/qmlV2/component/MMRadioButton.qml</file>
     </qresource>
 </RCC>

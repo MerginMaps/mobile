@@ -10,5 +10,6 @@
         <file>Arrow Down.svg</file>
         <file>Arrow Up.svg</file>
         <file>QR Code.svg</file>
+        <file>Checkmark.svg</file>
     </qresource>
 </RCC>
