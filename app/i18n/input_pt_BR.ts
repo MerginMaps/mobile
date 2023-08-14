@@ -150,6 +150,31 @@ Por favor aceda ao Mergin Maps para removê-lo manualmente.</translation>
     </message>
 </context>
 <context>
+    <name>AndroidTrackingBackend</name>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="115"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="158"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="172"/>
+        <source>There was an error and tracking could not start, please contact support</source>
+        <translation>Ocorreu um erro e o tracking não pôde iniciar, entre em contato com o suporte</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="143"/>
+        <source>Your device does not support tracking, available from Android 8.0</source>
+        <translation>Seu dispositivo não suporta tracking, disponível apartir do Android 8.0</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="148"/>
+        <source>Please enable location permission before starting tracking</source>
+        <translation>Ative a permissão de localização antes de iniciar o tracking</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="153"/>
+        <source>Please enable location services on your device before starting tracking</source>
+        <translation>Ative os servições de localização do seu dispositivo antes de iniciar o tracking</translation>
+    </message>
+</context>
+<context>
     <name>AndroidUtils</name>
     <message>
         <location filename="../androidutils.cpp" line="167"/>
@@ -535,7 +560,7 @@ Certifique-se de que o seu dispositivo está ligado e pode ser ligado a.%1 %2Apr
 <context>
     <name>FeaturesListPageV2</name>
     <message>
-        <location filename="../qml/layers/FeaturesListPageV2.qml" line="155"/>
+        <location filename="../qml/layers/FeaturesListPageV2.qml" line="170"/>
         <source>Add feature</source>
         <translation>Adicionar elemento</translation>
     </message>
@@ -1090,87 +1115,92 @@ Não será adicionado ao projeto.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1199"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1283"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS de momento indisponível</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="388"/>
+        <location filename="../qml/map/MapWrapper.qml" line="444"/>
         <source>Successfully synchronized</source>
         <translation>Sincronizado com sucesso</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="402"/>
+        <location filename="../qml/map/MapWrapper.qml" line="171"/>
+        <source>Position tracking is running</source>
+        <translation>O tracking de posição está em funcionamento</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="460"/>
         <source>Up to date</source>
         <translation>Atualizado</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="411"/>
+        <location filename="../qml/map/MapWrapper.qml" line="471"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Alguém está a sincronizar, iremos tentar mais tarde</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="421"/>
+        <location filename="../qml/map/MapWrapper.qml" line="483"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>Existiu um problema durante a sincronização, iremos tentar novamente. Clique para saber mais</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="439"/>
+        <location filename="../qml/map/MapWrapper.qml" line="503"/>
         <source>Splitting done successfully</source>
         <translation>Divisão feita com sucesso</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="455"/>
+        <location filename="../qml/map/MapWrapper.qml" line="521"/>
         <source>Create line to split the selected feature</source>
         <translation>Criar linha para dividir o elemento selecionado</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="471"/>
+        <location filename="../qml/map/MapWrapper.qml" line="539"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Selecione algum ponto para começar a editar a geometria</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="487"/>
+        <location filename="../qml/map/MapWrapper.qml" line="557"/>
         <source>Record new geometry for the feature</source>
         <translation>Grave a nova geometria para o elemento</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="626"/>
+        <location filename="../qml/map/MapWrapper.qml" line="696"/>
         <source>Details</source>
         <translation>Detalhes</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="729"/>
+        <location filename="../qml/map/MapWrapper.qml" line="799"/>
         <source>Back</source>
         <translation>Retroceder</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="746"/>
+        <location filename="../qml/map/MapWrapper.qml" line="816"/>
         <source>Discard the changes?</source>
         <translation>Rejeitar as alterações?</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="749"/>
+        <location filename="../qml/map/MapWrapper.qml" line="819"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Clicar ‘Sim’ descarta as suas alterações na geometria. Se quiser guardar as alterações, clique em ‘Não’ e depois em ‘Feito’ na barra de ferramentas.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="753"/>
+        <location filename="../qml/map/MapWrapper.qml" line="823"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Clicar ‘Sim’ descarta a sua nova geometria e nenhum elementos será guardado. Se quiser guardar a geometria, clique em ‘Não’ e depois em ‘Feito’ na barra de ferramentas.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="823"/>
+        <location filename="../qml/map/MapWrapper.qml" line="893"/>
         <source>Connecting to %1</source>
         <translation>Ligando a %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="837"/>
+        <location filename="../qml/map/MapWrapper.qml" line="907"/>
         <source>Connected, no position</source>
         <translation>Ligado, sem posição</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="841"/>
+        <location filename="../qml/map/MapWrapper.qml" line="911"/>
         <source>Unknown accuracy</source>
         <translation>Precisão desconhecida</translation>
     </message>
@@ -1408,17 +1438,17 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
 <context>
     <name>PositionTrackingManager</name>
     <message>
-        <location filename="../position/tracking/positiontrackingmanager.cpp" line="130"/>
+        <location filename="../position/tracking/positiontrackingmanager.cpp" line="153"/>
         <source>Could not find tracking layer for the project</source>
         <translation>Não foi possível encontrar camada de seguimento para o projeto</translation>
     </message>
     <message>
-        <location filename="../position/tracking/positiontrackingmanager.cpp" line="139"/>
+        <location filename="../position/tracking/positiontrackingmanager.cpp" line="162"/>
         <source>Tracking layer not found or invalid</source>
         <translation>Camada de seguimento não encontrada ou inválida</translation>
     </message>
     <message>
-        <location filename="../position/tracking/positiontrackingmanager.cpp" line="307"/>
+        <location filename="../position/tracking/positiontrackingmanager.cpp" line="339"/>
         <source>Failed to start tracking, please contact support</source>
         <translation>Falha ao iniciar o seguimento, contate com o suporte</translation>
     </message>
@@ -2516,7 +2546,7 @@ Por favor aceda ao Mergin Maps para removê-lo manualmente.</translation>
 <context>
     <name>inputvaluerelationpage</name>
     <message>
-        <location filename="../qml/editor/inputvaluerelationpage.qml" line="129"/>
+        <location filename="../qml/editor/inputvaluerelationpage.qml" line="139"/>
         <source>Features</source>
         <translation>Elementos</translation>
     </message>
@@ -2525,63 +2555,63 @@ Por favor aceda ao Mergin Maps para removê-lo manualmente.</translation>
     <name>main</name>
     <message>
         <location filename="../qml/main.qml" line="237"/>
-        <location filename="../qml/main.qml" line="301"/>
+        <location filename="../qml/main.qml" line="305"/>
         <source>No Changes</source>
         <translation>Sem mudanças</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="276"/>
+        <location filename="../qml/main.qml" line="280"/>
         <source>GPS auto-center mode on</source>
         <translation>Modo GPS de auto-centrar ligado</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="276"/>
+        <location filename="../qml/main.qml" line="280"/>
         <source>GPS auto-center mode off</source>
         <translation>Modo GPS de auto-centrar desligado</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="290"/>
+        <location filename="../qml/main.qml" line="294"/>
         <source>No editable layers found.</source>
         <translation>Não foram encontradas camadas editáveis.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="523"/>
-        <location filename="../qml/main.qml" line="534"/>
+        <location filename="../qml/main.qml" line="527"/>
+        <location filename="../qml/main.qml" line="538"/>
         <source>not tracking</source>
         <translation>não seguindo</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="689"/>
+        <location filename="../qml/main.qml" line="693"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>O levantamento está desativada porque a localização não está disponível!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="701"/>
+        <location filename="../qml/main.qml" line="705"/>
         <source>Failed to open the project</source>
         <translation>Falha ao abrir o projeto</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="726"/>
+        <location filename="../qml/main.qml" line="730"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Falha na comunicação com o Mergin.%1Tente melhorar a sua ligação à rede.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="780"/>
+        <location filename="../qml/main.qml" line="784"/>
         <source>There were issues loading the project.</source>
         <translation>Houve problemas ao carregar o projeto.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="804"/>
+        <location filename="../qml/main.qml" line="808"/>
         <source>Could not read the project file:</source>
         <translation>Não foi possível ler o ficheiro do projeto:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="824"/>
+        <location filename="../qml/main.qml" line="828"/>
         <source>Press back again to quit the app</source>
         <translation>Pressione novamente para sair da aplicação</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="619"/>
+        <location filename="../qml/main.qml" line="623"/>
         <source>PROJ Error</source>
         <translation>Erro PROJ</translation>
     </message>
