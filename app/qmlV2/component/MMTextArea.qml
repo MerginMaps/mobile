@@ -15,11 +15,16 @@ import "../Style.js" as Style
 Item {
   id: control
 
-  property alias areaHeight: textArea.height
+  property int areaHeight
   property alias text: textArea.text
   property alias placeholderText: textArea.placeholderText
   property string warningMsg
   property string errorMsg
+
+  // auto resize
+  property int minHeight: 50
+  property int maxHeight: 150
+  property bool autoHeight: false
 
   width: 280 * __dp
   height: textArea.height + messageItem.height
@@ -30,6 +35,7 @@ Item {
     property string warningMsg
     property string errorMsg
 
+    height: control.autoHeight ? ( contentHeight+10 > control.minHeight ? contentHeight+10 > control.maxHeight ? control.maxHeight : contentHeight+10 : control.minHeight ) : control.areaHeight
     width: parent.width
     hoverEnabled: true
     placeholderTextColor: Style.night_6
