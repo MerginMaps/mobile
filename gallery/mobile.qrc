@@ -9,5 +9,7 @@
         <file>app/qmlV2/component/MMRoundButton.qml</file>
         <file>app/qmlV2/component/MMRoundLinkButton.qml</file>
         <file>app/qmlV2/component/MMTextArea.qml</file>
+        <file>app/qmlV2/component/MMCheckBox.qml</file>
+        <file>app/qmlV2/component/MMRadioButton.qml</file>
     </qresource>
 </RCC>

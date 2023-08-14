@@ -116,6 +116,10 @@ ApplicationWindow {
           title: "Combo boxes"
           source: "ComboBoxPage.qml"
         }
+        ListElement {
+          title: "Checks"
+          source: "ChecksPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}
