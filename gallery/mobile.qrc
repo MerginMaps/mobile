@@ -11,5 +11,6 @@
         <file>app/qmlV2/component/MMTextArea.qml</file>
         <file>app/qmlV2/component/MMCheckBox.qml</file>
         <file>app/qmlV2/component/MMRadioButton.qml</file>
+        <file>app/qmlV2/component/MMSwitch.qml</file>
     </qresource>
 </RCC>
