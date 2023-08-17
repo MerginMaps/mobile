@@ -156,7 +156,7 @@ Palun mine Mergin Maps veebilehele et seal konto sulgeda.</translation>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="158"/>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="172"/>
         <source>There was an error and tracking could not start, please contact support</source>
-        <translation>Tekkis viga ja trekkimist ei õnnestunud sisse lülitada, palun võta ühendust tehnilise toega</translation>
+        <translation>Tekkis viga ja teekonna salvestamist ei õnnestunud sisse lülitada, palun võta ühendust tehnilise toega</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="143"/>
