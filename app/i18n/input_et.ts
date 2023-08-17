@@ -171,7 +171,7 @@ Palun mine Mergin Maps veebilehele et seal konto sulgeda.</translation>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="153"/>
         <source>Please enable location services on your device before starting tracking</source>
-        <translation>Palun luba oma seadmes asukoha teenused enne kui hakkad trekkima</translation>
+        <translation>Palun luba oma seadmes asukoha teenused enne kui hakkad teekonda salvestama</translation>
     </message>
 </context>
 <context>
