@@ -1127,7 +1127,7 @@ Seda ei lisata projektile.</translation>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="171"/>
         <source>Position tracking is running</source>
-        <translation>Asukoha trekkimine on sisse lülitatud</translation>
+        <translation>Teekonna salvestamine on sisse lülitatud</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="460"/>
