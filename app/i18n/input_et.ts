@@ -150,6 +150,31 @@ Palun mine Mergin Maps veebilehele et seal konto sulgeda.</translation>
     </message>
 </context>
 <context>
+    <name>AndroidTrackingBackend</name>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="115"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="158"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="172"/>
+        <source>There was an error and tracking could not start, please contact support</source>
+        <translation>Tekkis viga ja trekkimist ei õnnestunud sisse lülitada, palun võta ühendust tehnilise toega</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="143"/>
+        <source>Your device does not support tracking, available from Android 8.0</source>
+        <translation>Sinu seade ei toeta trekkimist, see on saadaval alates Android 8.0</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="148"/>
+        <source>Please enable location permission before starting tracking</source>
+        <translation>Palun luba asukoha jälgimine enne kui hakkad trekkima</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="153"/>
+        <source>Please enable location services on your device before starting tracking</source>
+        <translation>Palun luba oma seadmes asukoha teenused enne kui hakkad trekkima</translation>
+    </message>
+</context>
+<context>
     <name>AndroidUtils</name>
     <message>
         <location filename="../androidutils.cpp" line="167"/>
@@ -535,7 +560,7 @@ Palun mine Mergin Maps veebilehele et seal konto sulgeda.</translation>
 <context>
     <name>FeaturesListPageV2</name>
     <message>
-        <location filename="../qml/layers/FeaturesListPageV2.qml" line="155"/>
+        <location filename="../qml/layers/FeaturesListPageV2.qml" line="170"/>
         <source>Add feature</source>
         <translation>Lisa nähtus</translation>
     </message>
@@ -1090,87 +1115,92 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1199"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1283"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS ei ole hetkel kättesaadav</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="388"/>
+        <location filename="../qml/map/MapWrapper.qml" line="444"/>
         <source>Successfully synchronized</source>
         <translation>Edukalt uuendatud</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="402"/>
+        <location filename="../qml/map/MapWrapper.qml" line="171"/>
+        <source>Position tracking is running</source>
+        <translation>Asukoha trekkimine on sisse lülitatud</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="460"/>
         <source>Up to date</source>
         <translation>Ajakohane</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="411"/>
+        <location filename="../qml/map/MapWrapper.qml" line="471"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Keegi teine süngib, proovime mõne aja pärast uuesti</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="421"/>
+        <location filename="../qml/map/MapWrapper.qml" line="483"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>Sünkimise käigus tekkis probleem, proovime hiljem uuesti. Kliki siia et täpsemalt teada saada</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="439"/>
+        <location filename="../qml/map/MapWrapper.qml" line="503"/>
         <source>Splitting done successfully</source>
         <translation>Tükeldamine õnnestus</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="455"/>
+        <location filename="../qml/map/MapWrapper.qml" line="521"/>
         <source>Create line to split the selected feature</source>
         <translation>Tekita joon et tükeldada valitud nähtus</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="471"/>
+        <location filename="../qml/map/MapWrapper.qml" line="539"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Vali mõni punkt et alustada geomeetria muutmist</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="487"/>
+        <location filename="../qml/map/MapWrapper.qml" line="557"/>
         <source>Record new geometry for the feature</source>
         <translation>Salvesta nähtuse uus geomeetria</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="626"/>
+        <location filename="../qml/map/MapWrapper.qml" line="696"/>
         <source>Details</source>
         <translation>Täpsemalt</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="729"/>
+        <location filename="../qml/map/MapWrapper.qml" line="799"/>
         <source>Back</source>
         <translation>Tagasi</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="746"/>
+        <location filename="../qml/map/MapWrapper.qml" line="816"/>
         <source>Discard the changes?</source>
         <translation>Tühistan muudatused?</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="749"/>
+        <location filename="../qml/map/MapWrapper.qml" line="819"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Vajutades &apos;Jah&apos; tühistatakse muudatused geomeetrias. Kui tahad selle asemel muudatused salvestada, siis vajuta &apos;Ei&apos; ja seejärel tööriistaribal &apos;Tehtud&apos;.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="753"/>
+        <location filename="../qml/map/MapWrapper.qml" line="823"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Vajutades &apos;Jah&apos; kustutatakse uus geomeetria ja nähtust ei salvestata. Kui soovid selle asemel geomeetria salvestada, siis vali tööriistaribal &apos;Ei&apos; ja seejärel &apos;Tehtud&apos;.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="823"/>
+        <location filename="../qml/map/MapWrapper.qml" line="893"/>
         <source>Connecting to %1</source>
         <translation>Ühendan %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="837"/>
+        <location filename="../qml/map/MapWrapper.qml" line="907"/>
         <source>Connected, no position</source>
         <translation>Ühendatud, puudub asukoht</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="841"/>
+        <location filename="../qml/map/MapWrapper.qml" line="911"/>
         <source>Unknown accuracy</source>
         <translation>Teadmata täpsus</translation>
     </message>
@@ -1408,17 +1438,17 @@ Vajuta &apos;Jah&apos; et üles laadida.</translation>
 <context>
     <name>PositionTrackingManager</name>
     <message>
-        <location filename="../position/tracking/positiontrackingmanager.cpp" line="130"/>
+        <location filename="../position/tracking/positiontrackingmanager.cpp" line="153"/>
         <source>Could not find tracking layer for the project</source>
         <translation>Ei leidnud selle projekti jaoks jälje kihti</translation>
     </message>
     <message>
-        <location filename="../position/tracking/positiontrackingmanager.cpp" line="139"/>
+        <location filename="../position/tracking/positiontrackingmanager.cpp" line="162"/>
         <source>Tracking layer not found or invalid</source>
         <translation>Jälje kiht on puudu või vigane</translation>
     </message>
     <message>
-        <location filename="../position/tracking/positiontrackingmanager.cpp" line="307"/>
+        <location filename="../position/tracking/positiontrackingmanager.cpp" line="339"/>
         <source>Failed to start tracking, please contact support</source>
         <translation>Jälgimist ei õnnestunud sisse lülitada, palun pöördu abi poole</translation>
     </message>
@@ -2516,7 +2546,7 @@ Palun mine Mergin Maps veebilehele et seda muuta.</translation>
 <context>
     <name>inputvaluerelationpage</name>
     <message>
-        <location filename="../qml/editor/inputvaluerelationpage.qml" line="129"/>
+        <location filename="../qml/editor/inputvaluerelationpage.qml" line="139"/>
         <source>Features</source>
         <translation>Nähtused</translation>
     </message>
@@ -2525,63 +2555,63 @@ Palun mine Mergin Maps veebilehele et seda muuta.</translation>
     <name>main</name>
     <message>
         <location filename="../qml/main.qml" line="237"/>
-        <location filename="../qml/main.qml" line="301"/>
+        <location filename="../qml/main.qml" line="305"/>
         <source>No Changes</source>
         <translation>Muudatusi pole</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="276"/>
+        <location filename="../qml/main.qml" line="280"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS auto-tsentreerimine sees</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="276"/>
+        <location filename="../qml/main.qml" line="280"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS auto-tsentreerimine väljas</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="290"/>
+        <location filename="../qml/main.qml" line="294"/>
         <source>No editable layers found.</source>
         <translation>Ei leidnud redigeeritavaid kihte.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="523"/>
-        <location filename="../qml/main.qml" line="534"/>
+        <location filename="../qml/main.qml" line="527"/>
+        <location filename="../qml/main.qml" line="538"/>
         <source>not tracking</source>
         <translation>ei jälgi</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="689"/>
+        <location filename="../qml/main.qml" line="693"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Markeerimine on välja lülitatud sest asukoht ei ole kättesaadav!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="701"/>
+        <location filename="../qml/main.qml" line="705"/>
         <source>Failed to open the project</source>
         <translation>Projekti ei õnnestunud avada</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="726"/>
+        <location filename="../qml/main.qml" line="730"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Mergin&apos;iga ei õnnestu ühendust saada.%1Püüa parandada võrguühendust.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="780"/>
+        <location filename="../qml/main.qml" line="784"/>
         <source>There were issues loading the project.</source>
         <translation>Projekti laadimisel tekkis tõrge.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="804"/>
+        <location filename="../qml/main.qml" line="808"/>
         <source>Could not read the project file:</source>
         <translation>Ei õnnestunud avada projektifaili:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="824"/>
+        <location filename="../qml/main.qml" line="828"/>
         <source>Press back again to quit the app</source>
         <translation>Vajuta veelkord tagasi et äpp kinni panna</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="619"/>
+        <location filename="../qml/main.qml" line="623"/>
         <source>PROJ Error</source>
         <translation>PROJ viga</translation>
     </message>
