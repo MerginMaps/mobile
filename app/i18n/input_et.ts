@@ -161,12 +161,12 @@ Palun mine Mergin Maps veebilehele et seal konto sulgeda.</translation>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="143"/>
         <source>Your device does not support tracking, available from Android 8.0</source>
-        <translation>Sinu seade ei toeta trekkimist, see on saadaval alates Android 8.0</translation>
+        <translation>Sinu seade ei toeta teekonna salvestamist, see on saadaval alates Android 8.0</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="148"/>
         <source>Please enable location permission before starting tracking</source>
-        <translation>Palun luba asukoha jälgimine enne kui hakkad trekkima</translation>
+        <translation>Palun luba asukoha jälgimine enne kui hakkad teekonda salvestama</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="153"/>
