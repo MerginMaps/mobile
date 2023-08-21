@@ -2576,7 +2576,7 @@ Kérjük, látogasson el a Mergin Maps honlapjára a kézi eltávolításhoz.</t
         <location filename="../qml/main.qml" line="527"/>
         <location filename="../qml/main.qml" line="538"/>
         <source>not tracking</source>
-        <translation>Nincs követés</translation>
+        <translation>nincs követés</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="693"/>
