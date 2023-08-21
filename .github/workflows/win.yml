@@ -26,7 +26,7 @@ jobs:
     
     env:
       QT_VERSION: '6.5.2'
-      INPUT_SDK_VERSION: win64-20230727-171
+      INPUT_SDK_VERSION: x64-windows-20230810-202
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
       CACHE_VERSION: 1
       VS_VERSION: "2019"
@@ -111,14 +111,14 @@ jobs:
         shell: bash
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
-          URL="https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.zip"
+          URL="https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.zip"
           echo "downloading: $URL"
           curl -fsSL --connect-timeout 60 -o \
             input-sdk.tar.gz \
             ${URL}
             
-          mkdir -p input-sdk
-          cd input-sdk
+          mkdir -p input-sdk/x64-windows
+          cd input-sdk/x64-windows
           unzip ${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk.tar.gz -d .
 
       # Build Input App
@@ -145,7 +145,7 @@ jobs:
              -DCMAKE_BUILD_TYPE=Release ^
              -DCMAKE_PREFIX_PATH:PATH=${{ env.Qt6_Dir }} ^
              -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-Input ^
-             -DINPUT_SDK_PATH:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk ^
+             -DINPUT_SDK_PATH:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk/x64-windows ^
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ^
              -G "NMake Makefiles" ^
              -S ${{ steps.vars.outputs.WORKSPACE_DIR }}/input ^

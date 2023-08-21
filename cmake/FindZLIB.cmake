@@ -1,17 +1,11 @@
 # GPLv2 Licence
 
-# not in macos input-SDK, not in linux input-SDK
-
-if (WIN)
-  find_library(
-    ZLIB_LIBRARY
-    NAMES zlib
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
-  )
-else ()
-  find_library(ZLIB_LIBRARY NAMES z)
-endif ()
+find_library(
+  ZLIB_LIBRARY
+  NAMES z zlib libz
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+  NO_DEFAULT_PATH
+)
 
 find_package_handle_standard_args(ZLIB REQUIRED_VARS ZLIB_LIBRARY)
 

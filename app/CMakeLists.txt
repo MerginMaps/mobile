@@ -421,30 +421,22 @@ target_link_libraries(
          Qca::Qca
          Gdal::Gdal
          Pq::Pq
+         Pq::Pgcommon
+         Pq::Pgport
          Spatialite::Spatialite
 )
 
-if (MACOS
-    OR IOS
-    OR ANDROID
-)
+if (NOT LINUX)
   target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv)
-  target_link_libraries(Input PUBLIC Pq::Pgcommon Pq::Pgport)
 endif ()
 
-if (MACOS OR IOS)
-  target_link_libraries(Input PUBLIC Bz2::Bz2)
-endif ()
-
-if (NOT ANDROID)
-  target_link_libraries(Input PUBLIC Xml2::Xml2)
-endif ()
+target_link_libraries(Input PUBLIC Xml2::Xml2)
 
 target_link_libraries(
   Input
   PUBLIC Spatialindex::Spatialindex
-         Geos::Geos
          Geos::Geos-c
+         Geos::Geos
          Protobuf::Protobuf-lite
          Expat::Expat
          Freexl::Freexl
@@ -455,23 +447,23 @@ target_link_libraries(
          ZLIB::ZLIB
          Zip::Zip
          WebP::WebP
+         WebP::Sharpyuv
          Curl::Curl
          Jpeg::Jpeg
+         Geotiff::Geotiff
+         Lzma::Lzma
+         Bz2::Bz2
 )
 
-if (ANDROID
-    OR IOS
-    OR MACOS
-)
+if (IOS OR MACOS)
   target_link_libraries(Input PUBLIC Tasn1::Tasn1)
 endif ()
 
+target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
 if (ANDROID)
-  target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
   set_property(
-    TARGET Input
-    PROPERTY QT_ANDROID_EXTRA_LIBS ${INPUT_SDK_PATH_MULTI}/lib/libcrypto_3.so
-             ${INPUT_SDK_PATH_MULTI}/lib/libssl_3.so
+    TARGET Input PROPERTY QT_ANDROID_EXTRA_LIBS ${KDAB_OpenSSL_CRYPTO_LIBRARY}
+                          ${KDAB_OpenSSL_LIBRARY}
   )
 endif ()
 
@@ -480,6 +472,10 @@ if (MACOS OR IOS)
     Input PUBLIC AppleFrameworks::Security AppleFrameworks::CoreFoundation
                  AppleFrameworks::SystemConfiguration
   )
+endif ()
+
+if (LNX)
+  target_link_libraries(Input PUBLIC Glib2::Glib2)
 endif ()
 
 if (HAVE_APPLE_PURCHASING)
