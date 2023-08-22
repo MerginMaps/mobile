@@ -86,14 +86,21 @@ class InputUtils: public QObject
     Q_INVOKABLE double mapSettingsOffsetY( InputMapSettings *ms );
     Q_INVOKABLE double mapSettingsDPR( InputMapSettings *ms );
 
-    //! Converts geometry to map canvas CRS if not already
-    Q_INVOKABLE static QgsGeometry convertGeometryToMapCRS( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings );
+    //! Converts geometry to destination CRS if not already
+    static QgsGeometry transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, QgsVectorLayer *targetLayer );
+    static QgsGeometry transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, const QgsCoordinateReferenceSystem &destinationCRS, const QgsCoordinateTransformContext &context );
+
+    //! Helper methods to use for transforming geometry from QML as overriding does not work properly there
+    Q_INVOKABLE static QgsGeometry transformGeometryToMapWithLayer( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings );
+    Q_INVOKABLE static QgsGeometry transformGeometryToMapWithCRS( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, InputMapSettings *targetSettings );
 
     /**
      * Function extracts QgsGeometry from the given pair.
      * If layer's CRS does not match canvas CRS, geometry is transformed to canvas CRS.
      */
     Q_INVOKABLE static QgsGeometry extractGeometry( const FeatureLayerPair &pair );
+
+    Q_INVOKABLE static QString geometryLengthAsString( const QgsGeometry &geometry );
 
     /**
      * Extract geometry coordinates from the given geometry.
@@ -119,6 +126,14 @@ class InputUtils: public QObject
      * \result Either absolute path of a rename file or empty string.
      */
     Q_INVOKABLE static QString renameWithDateTime( const QString &srcPath, const QDateTime &dateTime = QDateTime() );
+
+    /**
+     * Renames a file located at a given path to a given new name
+     * \param srcPath absolute path to a file.
+     * \param dstPath a new name of a file.
+     * \result true on success, false otherwise.
+     */
+    Q_INVOKABLE static bool renameFile( const QString &srcPath, const QString &dstPath );
 
     /**
      * Shows notification
@@ -456,7 +471,7 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );
 
     //! Creates featureLayerPair from geometry and layer, evaluates its expressions and returns it.
-    Q_INVOKABLE static FeatureLayerPair createFeatureLayerPair( QgsVectorLayer *layer, const QgsGeometry &geometry, VariablesManager *variablesmanager );
+    Q_INVOKABLE static FeatureLayerPair createFeatureLayerPair( QgsVectorLayer *layer, const QgsGeometry &geometry, VariablesManager *variablesmanager, QgsExpressionContextScope *additionalScope = nullptr );
 
     Q_INVOKABLE static void createEditBuffer( QgsVectorLayer *layer );
 
@@ -506,6 +521,11 @@ class InputUtils: public QObject
 
     // Returns default path to images in this system
     Q_INVOKABLE static QString imageGalleryLocation();
+
+    /**
+     * Parses position updates in format "<long> <lat> <alt> <time_in_secs>\n<long>..." into list of QgsPoints
+     */
+    static QList<QgsPoint> parsePositionUpdates( const QString &data );
 
     /**
      * Returns string containing attribution information for a given layer

@@ -83,6 +83,7 @@
         <string>az</string>
         <string>az_AZ</string>
 		<string>hu</string>
+		<string>cs</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
@@ -91,6 +92,11 @@
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>arm64</string>
+	</array>
+	<!-- Run the app when minimised while tracking position -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

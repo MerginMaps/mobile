@@ -41,9 +41,7 @@ Page {
       topMargin: InputStyle.panelMarginV2
     }
 
-    onSearchTextChanged: function ( searchText ) {
-      featuresModel.searchExpression = searchText
-    }
+    onSearchTextChanged: searchDelay.restart()
   }
 
   ListView {
@@ -126,6 +124,23 @@ Page {
         onClicked: root.featureClicked( model.FeaturePair )
       }
     }
+  }
+
+  Timer {
+    id: searchDelay
+    interval: 500
+    running: false
+    repeat: false
+    onTriggered: featuresModel.searchExpression = searchbox.searchText()
+  }
+
+  BusyIndicator {
+    id: busyIndicator
+    width: parent.width/8
+    height: width
+    running: featuresModel.fetchingResults
+    visible: running
+    anchors.centerIn: parent
   }
 
   Component {

@@ -219,6 +219,9 @@ class  AttributeController : public QObject
      */
     bool allowTabs( QgsAttributeEditorContainer *container );
 
+    //! renames photos if necessary
+    void renamePhotos();
+
     bool mConstraintsHardValid = false;
     bool mConstraintsSoftValid = false;
     bool mHasValidationErrors = false;

@@ -14,11 +14,13 @@ import QtQuick
 QtObject {
     // Primary colors
     property color fontColor: "#006146"
+    property color contrastFontColor: "#D2FBD0"
     property color fontColorBright: "#679D70"
     property color fontColorWhite: "#FFFFFF"
     property color panelBackground2: "#C6CCC7"
     property color activeButtonColor: "#006146"
     property color actionColor: "#FD9626"
+    property color actionColorDown: "#faa64b"
     property color invalidButtonColor: "red"
     property color learnMoreLinkColor: "darkblue"
 
@@ -97,6 +99,7 @@ QtObject {
     property real outerFieldMargin: 20 * __dp
     property real formSpacing: 10 * __dp
     property real errorTextPadding: 0
+    property real verticalSpaceM: 15 * __dp
 
     property real listMargins: 10 * __dp
     property real listMarginsSmall: 5 * __dp
@@ -155,6 +158,7 @@ QtObject {
     property string zoomToProjectIcon: "qrc:/zoom_to_project.svg"
     property string mapThemesIcon: "qrc:/map_styles.svg"
     property string settingsIcon: "qrc:/settings.svg"
+    property string trackingIcon: "qrc:/route.svg"
 
     property string gpsDirectionIcon: "qrc:/gps_direction.svg"
     property string gpsMarkerPositionIcon: "qrc:/gps_marker_position.svg"

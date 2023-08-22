@@ -21,6 +21,10 @@
 #include "activeproject.h"
 #include "coreutils.h"
 
+#ifdef ANDROID
+#include "position/tracking/androidtrackingbroadcast.h"
+#endif
+
 const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 
 ActiveProject::ActiveProject( AppSettings &appSettings
@@ -100,6 +104,12 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
 
   // clear autosync
   setAutosyncEnabled( false );
+
+  // clear position tracking broadcast listeners
+#ifdef ANDROID
+  disconnect( &AndroidTrackingBroadcast::getInstance() );
+  AndroidTrackingBroadcast::unregisterBroadcast();
+#endif
 
   // Just clear project if empty
   if ( filePath.isEmpty() )
@@ -181,6 +191,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
 
     emit localProjectChanged( mLocalProject );
     emit projectReloaded( mQgsProject );
+    emit positionTrackingSupportedChanged();
   }
 
   bool foundInvalidLayer = false;
@@ -224,6 +235,30 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   {
     setAutosyncEnabled( true );
   }
+
+  // in case tracking is running, we want to show the UI
+#ifdef ANDROID
+  if ( positionTrackingSupported() )
+  {
+    connect(
+      &AndroidTrackingBroadcast::getInstance(),
+      &AndroidTrackingBroadcast::aliveResponse,
+      this,
+      [this]( bool isAlive )
+    {
+      if ( isAlive )
+      {
+        emit startPositionTracking();
+      }
+    },
+    Qt::SingleShotConnection
+    );
+
+    // note: order matters in the following calls
+    AndroidTrackingBroadcast::registerBroadcast();
+    AndroidTrackingBroadcast::sendAliveRequestAsync();
+  }
+#endif
 
   return res;
 }
@@ -447,6 +482,11 @@ void ActiveProject::updateRecordingLayers()
   mRecordingLayerPM.refreshData();
 }
 
+bool ActiveProject::isProjectLoaded() const
+{
+  return mQgsProject && !mQgsProject->fileName().isEmpty();
+}
+
 void ActiveProject::setActiveLayer( QgsMapLayer *layer ) const
 {
   if ( !layer || !layer->isValid() )
@@ -476,4 +516,14 @@ void ActiveProject::switchLayerTreeNodeVisibility( QgsLayerTreeNode *node )
 const QString &ActiveProject::mapTheme() const
 {
   return mMapTheme;
+}
+
+bool ActiveProject::positionTrackingSupported() const
+{
+  if ( !isProjectLoaded() )
+  {
+    return false;
+  }
+
+  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/Enabled" ), false );
 }

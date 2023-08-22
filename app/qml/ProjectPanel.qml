@@ -21,10 +21,10 @@ import "./components/"
 Item {
   id: root
 
+  //! Used to determine if any project is loaded and to highlight it if so
   property string activeProjectId: ""
-  property string activeProjectPath: ""
 
-  signal openProjectRequested( string projectId, string projectPath )
+  signal openProjectRequested( string projectPath )
   signal refreshProjects()
   signal resetView() // resets view to state as when panel is opened
   signal closed()
@@ -39,6 +39,18 @@ Item {
     root.visible = false
     stackView.clearStackAndClose()
     root.closed()
+  }
+
+  function setupProjectOpen( projectPath ) {
+    if ( projectPath === __activeProject.localProject.qgisProjectFilePath )
+    {
+      // just hide the panel - project already loaded
+      hidePanel()
+    }
+    else
+    {
+      openProjectRequested( projectPath )
+    }
   }
 
   function manageSubscriptionPlans() {
@@ -193,7 +205,7 @@ Item {
         if (stackView.depth > 1) {
           stackView.currentItem.back()
         }
-        else if (root.activeProjectPath) {
+        else if (root.activeProjectId) {
           root.hidePanel()
         }
       }
@@ -220,15 +232,6 @@ Item {
 
     Page {
       id: projectsPage
-
-      function setupProjectOpen( projectId, projectPath ) {
-        activeProjectId = projectId
-        activeProjectPath = projectPath
-        openProjectRequested( projectId, projectPath )
-
-        if ( projectId && projectPath ) // this is not project reset
-          hidePanel()
-      }
 
       function refreshProjectList( keepSearchFilter = false ) {
         stackView.pending = true
@@ -261,7 +264,7 @@ Item {
             root.hidePanel()
           }
         }
-        withBackButton: root.activeProjectPath
+        withBackButton: root.activeProjectId
 
         Item {
           id: avatar
@@ -351,6 +354,8 @@ Item {
           }
         ]
 
+        state: root.visible ? "local" : ""
+
         onStateChanged: {
           __merginApi.pingMergin()
           projectsPage.refreshProjectList()
@@ -360,7 +365,7 @@ Item {
         Connections {
           target: root
           function onVisibleChanged() {
-            if ( root.visible ) { // projectsPanel opened
+            if ( root.visible ) {
               pageContent.state = "local"
             }
             else {
@@ -391,13 +396,13 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: function( projectId, projectFilePath ) {
-              setupProjectOpen( projectId, projectFilePath )
+            onOpenProjectRequested: function( projectFilePath ) {
+              setupProjectOpen( projectFilePath )
             }
             onShowLocalChangesRequested: function( projectId ) {
               showChanges( projectId )
             }
-            list.onActiveProjectDeleted: setupProjectOpen( "", "" )
+            list.onActiveProjectDeleted: setupProjectOpen( "" )
           }
 
           ProjectListPage {
@@ -407,13 +412,13 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: function( projectId, projectFilePath ) {
-              setupProjectOpen( projectId, projectFilePath )
+            onOpenProjectRequested: function( projectFilePath ) {
+              setupProjectOpen( projectFilePath )
             }
             onShowLocalChangesRequested: function( projectId ) {
               showChanges( projectId )
             }
-            list.onActiveProjectDeleted: setupProjectOpen( "", "" )
+            list.onActiveProjectDeleted: setupProjectOpen( "" )
           }
 
           ProjectListPage {
@@ -423,13 +428,13 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: function( projectId, projectFilePath ) {
-              setupProjectOpen( projectId, projectFilePath )
+            onOpenProjectRequested: function( projectFilePath ) {
+              setupProjectOpen( projectFilePath )
             }
             onShowLocalChangesRequested: function( projectId ) {
               showChanges( projectId )
             }
-            list.onActiveProjectDeleted: setupProjectOpen( "", "" )
+            list.onActiveProjectDeleted: setupProjectOpen( "" )
           }
 
           ProjectListPage {
@@ -439,14 +444,14 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: function( projectId, projectFilePath ) {
-              setupProjectOpen( projectId, projectFilePath )
+            onOpenProjectRequested: function( projectFilePath ) {
+              setupProjectOpen( projectFilePath )
             }
             onShowLocalChangesRequested: function( projectId ) {
               showChanges( projectId )
             }
             list.onActiveProjectDeleted: function() {
-              setupProjectOpen( "", "" )
+              setupProjectOpen( "" )
             }
           }
         }
@@ -585,24 +590,10 @@ Item {
     Page {
       id: projectsPage
 
-      function setupProjectOpen( projectId, projectPath ) {
-        activeProjectId = projectId
-        activeProjectPath = projectPath
-        openProjectRequested( projectId, projectPath )
-
-        if ( projectId && projectPath ) // this is not project reset
-          hidePanel()
-      }
-
       function refreshProjectList( keepSearchFilter = false ) {
         stackView.pending = true
         switch( pageContent.state ) {
           case "local":
-            localProjectsPage.refreshProjectsList( keepSearchFilter )
-            break
-          case "":
-            // seems onVisibleChanged is not called on Android and state
-            // is not set when panel created.
             localProjectsPage.refreshProjectsList( keepSearchFilter )
             break
           case "created":
@@ -631,7 +622,7 @@ Item {
 
         tooltipText: qsTr("Your other projects are accessible%1by switching your workspace here").arg("\n")
 
-        haveBackButton: root.activeProjectPath
+        haveBackButton: root.activeProjectId
         haveAccountButton: true
 
         onBackClicked: root.hidePanel()
@@ -674,6 +665,8 @@ Item {
             name: "public"
           }
         ]
+
+        state: root.visible ? "local" : ""
 
         onStateChanged: {
           __merginApi.pingMergin()
@@ -734,13 +727,13 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: function( projectId, projectFilePath ) {
-              setupProjectOpen( projectId, projectFilePath )
+            onOpenProjectRequested: function( projectFilePath ) {
+              setupProjectOpen( projectFilePath )
             }
             onShowLocalChangesRequested: function( projectId ) {
               showChanges( projectId )
             }
-            list.onActiveProjectDeleted: setupProjectOpen( "", "" )
+            list.onActiveProjectDeleted: setupProjectOpen( "" )
           }
 
           ProjectListPage {
@@ -750,13 +743,13 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: function( projectId, projectFilePath ) {
-              setupProjectOpen( projectId, projectFilePath )
+            onOpenProjectRequested: function( projectFilePath ) {
+              setupProjectOpen( projectFilePath )
             }
             onShowLocalChangesRequested: function( projectId ) {
               showChanges( projectId )
             }
-            list.onActiveProjectDeleted: setupProjectOpen( "", "" )
+            list.onActiveProjectDeleted: setupProjectOpen( "" )
           }
 
           ProjectListPage {
@@ -766,14 +759,14 @@ Item {
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 
-            onOpenProjectRequested: function( projectId, projectFilePath ) {
-              setupProjectOpen( projectId, projectFilePath )
+            onOpenProjectRequested: function( projectFilePath ) {
+              setupProjectOpen( projectFilePath )
             }
             onShowLocalChangesRequested: function( projectId ) {
               showChanges( projectId )
             }
             list.onActiveProjectDeleted: function() {
-              setupProjectOpen( "", "" )
+              setupProjectOpen( "" )
             }
           }
         }

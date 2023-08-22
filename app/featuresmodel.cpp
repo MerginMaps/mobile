@@ -12,11 +12,18 @@
 
 #include "qgsproject.h"
 #include "qgsexpressioncontextutils.h"
+#include "qgsvectorlayerfeatureiterator.h"
+
+#include <QLocale>
+#include <QTimer>
+#include <QtConcurrent>
+
 
 FeaturesModel::FeaturesModel( QObject *parent )
   : QAbstractListModel( parent ),
     mLayer( nullptr )
 {
+  connect( &mSearchResultWatcher, &QFutureWatcher<QgsFeatureList>::finished, this, &FeaturesModel::onFutureFinished );
 }
 
 FeaturesModel::~FeaturesModel() = default;
@@ -25,30 +32,76 @@ void FeaturesModel::populate()
 {
   if ( mLayer )
   {
+    mFetchingResults = true;
+    emit fetchingResultsChanged( mFetchingResults );
     beginResetModel();
     mFeatures.clear();
+    endResetModel();
 
     QgsFeatureRequest req;
     setupFeatureRequest( req );
 
-    QgsFeatureIterator it = mLayer->getFeatures( req );
-    QgsFeature f;
-
-    while ( it.nextFeature( f ) )
-    {
-      if ( FID_IS_NEW( f.id() ) || FID_IS_NULL( f.id() ) )
-      {
-        continue; // ignore uncommited features
-      }
-
-      mFeatures << FeatureLayerPair( f, mLayer );
-    }
-
-    emit layerFeaturesCountChanged( layerFeaturesCount() );
-
-    endResetModel();
+    int searchId = mNextSearchId.fetchAndAddOrdered( 1 );
+    QgsVectorLayerFeatureSource *source = new QgsVectorLayerFeatureSource( mLayer );
+    mSearchResultWatcher.setFuture( QtConcurrent::run( &FeaturesModel::fetchFeatures, this, source, req, searchId ) );
   }
 }
+
+QgsFeatureList FeaturesModel::fetchFeatures( QgsVectorLayerFeatureSource *source, QgsFeatureRequest req, int searchId )
+{
+  std::unique_ptr<QgsVectorLayerFeatureSource> fs( source );
+  QgsFeatureList fl;
+
+  // a search might have been queued if no threads were available in the pool, so we also
+  // check if canceled before we start as the first iteration can potentially be slow
+  bool canceled = searchId + 1 != mNextSearchId.loadAcquire();
+  if ( canceled )
+  {
+    qDebug() << QString( "Search (%1) was cancelled before it started!" ).arg( searchId );
+    return fl;
+  }
+
+  QElapsedTimer t;
+  t.start();
+  QgsFeatureIterator it = fs->getFeatures( req );
+  QgsFeature f;
+
+  while ( it.nextFeature( f ) )
+  {
+    if ( searchId + 1 != mNextSearchId.loadAcquire() )
+    {
+      canceled = true;
+      break;
+    }
+
+    if ( FID_IS_NEW( f.id() ) || FID_IS_NULL( f.id() ) )
+    {
+      continue; // ignore uncommited features
+    }
+
+    fl.append( f );
+  }
+
+  qDebug() << QString( "Search (%1) %2 after %3ms, results: %4" ).arg( searchId ).arg( canceled ? "was canceled" : "completed" ).arg( t.elapsed() ).arg( fl.count() );
+  return fl;
+}
+
+void FeaturesModel::onFutureFinished()
+{
+  QFutureWatcher<QgsFeatureList> *watcher = static_cast< QFutureWatcher<QgsFeatureList> *>( sender() );
+  const QgsFeatureList features = watcher->future().result();
+  beginResetModel();
+  mFeatures.clear();
+  for ( const auto &f : features )
+  {
+    mFeatures << FeatureLayerPair( f, mLayer );
+  }
+  emit layerFeaturesCountChanged( layerFeaturesCount() );
+  endResetModel();
+  mFetchingResults = false;
+  emit fetchingResultsChanged( mFetchingResults );
+}
+
 
 void FeaturesModel::setup()
 {
@@ -111,7 +164,7 @@ QString FeaturesModel::searchResultPair( const FeatureLayerPair &pair ) const
     return QString();
 
   QgsFields fields = pair.feature().fields();
-  QStringList words = mSearchExpression.split( ' ', Qt::SkipEmptyParts );
+  const QStringList words = mSearchExpression.split( ' ', Qt::SkipEmptyParts );
   QStringList foundPairs;
 
   for ( const QString &word : words )
@@ -145,30 +198,29 @@ QString FeaturesModel::buildSearchExpression()
   QStringList expressionParts;
   QStringList wordExpressions;
 
-  QStringList words = mSearchExpression.split( ' ', Qt::SkipEmptyParts );
+  const QLocale locale;
+  const QStringList words = mSearchExpression.split( ' ', Qt::SkipEmptyParts );
 
   for ( const QString &word : words )
   {
     bool searchExpressionIsNumeric;
-    int filterInt = word.toInt( &searchExpressionIsNumeric );
-    Q_UNUSED( filterInt ); // we only need to know if expression is numeric, int value is not used
+    // we only need to know if expression is numeric, return value is not used
+    locale.toFloat( word, &searchExpressionIsNumeric );
 
 
     for ( const QgsField &field : fields )
     {
-      if ( field.configurationFlags().testFlag( QgsField::ConfigurationFlag::NotSearchable ) )
+      if ( field.configurationFlags().testFlag( QgsField::ConfigurationFlag::NotSearchable ) ||
+           ( field.isNumeric() && !searchExpressionIsNumeric ) )
         continue;
-
-      if ( field.isNumeric() && searchExpressionIsNumeric )
-        expressionParts << QStringLiteral( "%1 ~ '%2.*'" ).arg( QgsExpression::quotedColumnRef( field.name() ), word );
-      else if ( field.type() == QVariant::String )
+      else if ( field.type() == QVariant::String || field.isNumeric() )
         expressionParts << QStringLiteral( "%1 ILIKE '%%2%'" ).arg( QgsExpression::quotedColumnRef( field.name() ), word );
     }
     wordExpressions << QStringLiteral( "(%1)" ).arg( expressionParts.join( QLatin1String( " ) OR ( " ) ) );
     expressionParts.clear();
   }
 
-  QString expression = QStringLiteral( "(%1)" ).arg( wordExpressions.join( QLatin1String( " ) AND ( " ) ) );
+  const QString expression = QStringLiteral( "(%1)" ).arg( wordExpressions.join( QLatin1String( " ) AND ( " ) ) );
 
   return expression;
 }
@@ -255,7 +307,6 @@ void FeaturesModel::setSearchExpression( const QString &searchExpression )
   {
     mSearchExpression = searchExpression;
     emit searchExpressionChanged( mSearchExpression );
-
     populate();
   }
 }

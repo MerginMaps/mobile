@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 package uk.co.lutraconsulting;
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -18,6 +27,11 @@ public class InputActivity extends QtActivity
     // this is to keep the screen on all the time so the device does not
     // go into sleep and recording is not interrupted
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+  }
+
+  public String homePath()
+  {
+    return getFilesDir().getAbsolutePath();
   }
 
   public void quitGracefully()

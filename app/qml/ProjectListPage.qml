@@ -20,7 +20,7 @@ Item {
   property string activeProjectId: ""
   property alias list: projectlist
 
-  signal openProjectRequested( string projectId, string projectFilePath )
+  signal openProjectRequested( string projectFilePath )
   signal showLocalChangesRequested( string projectId )
 
   function refreshProjectsList() {
@@ -64,8 +64,8 @@ Item {
       bottom: parent.bottom
     }
 
-    onOpenProjectRequested: function( projectId, projectFilePath ) {
-      root.openProjectRequested( projectId, projectFilePath )
+    onOpenProjectRequested: function( projectFilePath ) {
+      root.openProjectRequested( projectFilePath )
     }
     onShowLocalChangesRequested: function( projectId ) {
       root.showLocalChangesRequested( projectId )

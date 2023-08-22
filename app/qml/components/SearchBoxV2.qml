@@ -74,4 +74,8 @@ Item {
   function setActive() {
     searchfield.forceActiveFocus()
   }
+
+  function searchText() {
+      return searchfield.displayText
+  }
 }

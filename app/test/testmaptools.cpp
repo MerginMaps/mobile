@@ -32,7 +32,7 @@
 
 #include "featurelayerpair.h"
 #include "streamingintervaltype.h"
-#include "position/bluetoothpositionprovider.h"
+#include "position/providers/bluetoothpositionprovider.h"
 
 void setupMapSettings( InputMapSettings *settings, QgsProject *project, QgsRectangle extent, QSize outputsize )
 {

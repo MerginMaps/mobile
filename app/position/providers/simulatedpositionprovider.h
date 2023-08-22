@@ -11,7 +11,7 @@
 #define SIMULATEDPOSITIONPROVIDER_H
 
 #include "inputconfig.h"
-#include "position/abstractpositionprovider.h"
+#include "abstractpositionprovider.h"
 
 #include <QObject>
 #include <QTimer>
@@ -41,6 +41,8 @@ class SimulatedPositionProvider : public AbstractPositionProvider
       QObject *parent = nullptr
     );
     virtual ~SimulatedPositionProvider();
+
+    virtual void setUpdateInterval( double msecs ) override;
 
   public slots:
     virtual void startUpdates() override;

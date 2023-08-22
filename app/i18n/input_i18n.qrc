@@ -35,6 +35,7 @@
     <file>input_zh.qm</file> 
     <file>input_fr.qm</file> 
     <file>input_nl.qm</file> 
+    <file>input_cs.qm</file> 
     <file>input_az_AZ.qm</file> 
     <file>input_hu.qm</file> 
   </qresource> 
