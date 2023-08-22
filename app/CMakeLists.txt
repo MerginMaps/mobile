@@ -280,7 +280,8 @@ qt_add_executable(
 
 target_include_directories(
   Input
-  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/attributes
+  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/
+         ${CMAKE_CURRENT_SOURCE_DIR}/attributes
          ${CMAKE_CURRENT_SOURCE_DIR}/map
          ${CMAKE_CURRENT_SOURCE_DIR}/layer
          ${CMAKE_CURRENT_SOURCE_DIR}/maptools
@@ -449,29 +450,22 @@ target_link_libraries(
          Qca::Qca
          Gdal::Gdal
          Pq::Pq
+         Pq::Pgcommon
+         Pq::Pgport
          Spatialite::Spatialite
 )
 
-if (MACOS
-    OR IOS
-    OR ANDROID
-)
+if (NOT LINUX)
   target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv)
 endif ()
 
-if (MACOS OR IOS)
-  target_link_libraries(Input PUBLIC Bz2::Bz2)
-endif ()
-
-if (NOT ANDROID)
-  target_link_libraries(Input PUBLIC Xml2::Xml2)
-endif ()
+target_link_libraries(Input PUBLIC Xml2::Xml2)
 
 target_link_libraries(
   Input
   PUBLIC Spatialindex::Spatialindex
-         Geos::Geos
          Geos::Geos-c
+         Geos::Geos
          Protobuf::Protobuf-lite
          Expat::Expat
          Freexl::Freexl
@@ -482,23 +476,23 @@ target_link_libraries(
          ZLIB::ZLIB
          Zip::Zip
          WebP::WebP
+         WebP::Sharpyuv
          Curl::Curl
          Jpeg::Jpeg
+         Geotiff::Geotiff
+         Lzma::Lzma
+         Bz2::Bz2
 )
 
-if (ANDROID
-    OR IOS
-    OR MACOS
-)
+if (IOS OR MACOS)
   target_link_libraries(Input PUBLIC Tasn1::Tasn1)
 endif ()
 
+target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
 if (ANDROID)
-  target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
   set_property(
-    TARGET Input
-    PROPERTY QT_ANDROID_EXTRA_LIBS ${INPUT_SDK_PATH_MULTI}/lib/libcrypto_1_1.so
-             ${INPUT_SDK_PATH_MULTI}/lib/libssl_1_1.so
+    TARGET Input PROPERTY QT_ANDROID_EXTRA_LIBS ${KDAB_OpenSSL_CRYPTO_LIBRARY}
+                          ${KDAB_OpenSSL_LIBRARY}
   )
 endif ()
 
@@ -508,6 +502,10 @@ if (MACOS OR IOS)
                  AppleFrameworks::SystemConfiguration
   )
 endif ()
+
+if (LNX)
+  target_link_libraries(Input PUBLIC Glib2::Glib2)
+endif()
 
 if (IOS)
   target_link_libraries(Input PUBLIC AppleFrameworks::CoreLocation)
@@ -546,5 +544,5 @@ qt_add_qml_module(
   URI MMInput
   VERSION 1.0
   QML_FILES ${MM_QML_SRCS}
-  RESOURCE_PREFIX /com.merginmaps/imports
+  RESOURCE_PREFIX /com.merginmaps/imports NO_GENERATE_QMLTYPES
 )

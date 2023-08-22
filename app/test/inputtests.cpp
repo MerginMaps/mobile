@@ -101,12 +101,7 @@ int InputTests::runTest() const
   }
 
   qDebug() << "requested to run" << mTestRequested;
-  if ( mTestRequested == "--testMerginApi" )
-  {
-    TestMerginApi merginApiTest( mApi );
-    nFailed = QTest::qExec( &merginApiTest, mTestArgs );
-  }
-  else if ( mTestRequested == "--testLinks" )
+  if ( mTestRequested == "--testLinks" )
   {
     TestLinks linksTest( mApi, mInputUtils );
     nFailed = QTest::qExec( &linksTest, mTestArgs );
@@ -192,6 +187,12 @@ int InputTests::runTest() const
     TestPurchasing purchasingTest( mApi, mPurchasing );
     nFailed = QTest::qExec( &purchasingTest, mTestArgs );
   }
+  else if ( mTestRequested == "--testMerginApi" )
+  {
+    TestMerginApi merginApiTest( mApi, mPurchasing );
+    nFailed = QTest::qExec( &merginApiTest, mTestArgs );
+  }
+
 #endif
   else
   {

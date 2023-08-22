@@ -18,10 +18,10 @@ MessageDialog {
   title: qsTr( "Upload project to Mergin?" )
   text: qsTr( "This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration. \nClick 'Yes' to upload it." )
 
-  buttons: MessageDialog.Ok | MessageDialog.Cancel
+  buttons: MessageDialog.Yes | MessageDialog.Cancel
 
   onButtonClicked: function(clickedButton) {
-    if ( clickedButton === MessageDialog.Ok ) {
+    if ( clickedButton === MessageDialog.Yes ) {
       root.migrationRequested()
     }
     close()

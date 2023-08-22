@@ -26,6 +26,7 @@ class CoreUtils
 
     static QString appInfo();
     static QString appVersion();
+    static QString appVersionCode();
 
     static QString localizedDateFromUTFString( QString timestamp );
     static bool removeDir( const QString &projectDir );

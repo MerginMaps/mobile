@@ -1,9 +1,12 @@
 # GPLv2 Licence
 
-# not in linux input-SDK
+# not in linux and win and android input-SDK
 
-if (LNX OR WIN)
-  message(FATAL_ERROR "tasn1 is not needed on LNX")
+if (LNX
+    OR WIN
+    OR ANDROID
+)
+  message(FATAL_ERROR "tasn1 is not available for this platform in input-SDK")
 else ()
   find_path(
     Tasn1_INCLUDE_DIR

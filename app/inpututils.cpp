@@ -403,11 +403,11 @@ static void addLineString( const QgsLineString *line, QVector<double> &data )
   }
 }
 
-static void addSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::GeometryType type, QVector<double> &data )
+static void addSingleGeometry( const QgsAbstractGeometry *geom, Qgis::GeometryType type, QVector<double> &data )
 {
   switch ( type )
   {
-    case QgsWkbTypes::PointGeometry:
+    case Qgis::GeometryType::Point:
     {
       const QgsPoint *point = qgsgeometry_cast<const QgsPoint *>( geom );
       if ( point )
@@ -417,7 +417,7 @@ static void addSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::Geo
       break;
     }
 
-    case QgsWkbTypes::LineGeometry:
+    case Qgis::GeometryType::Line:
     {
       const QgsLineString *line = qgsgeometry_cast<const QgsLineString *>( geom );
       if ( line )
@@ -428,7 +428,7 @@ static void addSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::Geo
       break;
     }
 
-    case QgsWkbTypes::PolygonGeometry:
+    case Qgis::GeometryType::Polygon:
     {
       const QgsPolygon *poly = qgsgeometry_cast<const QgsPolygon *>( geom );
       if ( poly )
@@ -450,8 +450,8 @@ static void addSingleGeometry( const QgsAbstractGeometry *geom, QgsWkbTypes::Geo
       break;
     }
 
-    case QgsWkbTypes::UnknownGeometry:
-    case QgsWkbTypes::NullGeometry:
+    case Qgis::GeometryType::Unknown:
+    case Qgis::GeometryType::Null:
       break;
   }
 }
@@ -464,7 +464,7 @@ QVector<double> InputUtils::extractGeometryCoordinates( const QgsGeometry &geome
   QVector<double> data;
 
   const QgsAbstractGeometry *geom = geometry.constGet();
-  QgsWkbTypes::GeometryType geomType = geometry.type();
+  Qgis::GeometryType geomType = geometry.type();
   const QgsGeometryCollection *collection = qgsgeometry_cast<const QgsGeometryCollection *>( geom );
   if ( collection && !collection->isEmpty() )
   {
@@ -554,52 +554,6 @@ void InputUtils::quitApp()
   }
 }
 
-QLocale InputUtils::fixLocaleCountry( QLocale applocale )
-{
-  QLocale out = applocale;
-
-  if ( applocale.language() == QLocale::English )
-  {
-    out = QLocale( QLocale::English, QLocale::AnyCountry );
-  }
-  else if ( applocale.language() == QLocale::German || applocale.language() == QLocale::LowGerman || applocale.language() == QLocale::SwissGerman )
-  {
-    out = QLocale( QLocale::German, QLocale::AnyCountry );
-  }
-  else if ( applocale.language() == QLocale::French )
-  {
-    out = QLocale( QLocale::French, QLocale::AnyCountry );
-  }
-  else if ( applocale.language() == QLocale::Italian )
-  {
-    out = QLocale( QLocale::Italian, QLocale::AnyCountry );
-  }
-  else if ( applocale.language() == QLocale::Spanish )
-  {
-    out = QLocale( QLocale::Spanish, QLocale::AnyCountry );
-  }
-  else if ( applocale.language() == QLocale::Turkish )
-  {
-    out = QLocale( QLocale::Turkish, QLocale::AnyCountry );
-  }
-  else if ( applocale.language() == QLocale::Polish )
-  {
-    out = QLocale( QLocale::Polish, QLocale::AnyCountry );
-  }
-  else if ( applocale.language() == QLocale::Slovak )
-  {
-    out = QLocale( QLocale::Slovak, QLocale::AnyCountry );
-  }
-  else if ( applocale.language() == QLocale::Croatian )
-  {
-    out = QLocale( QLocale::Croatian, QLocale::AnyCountry );
-  }
-
-  CoreUtils::log( QStringLiteral( "Locale" ), QStringLiteral( "Converting %1 locale to simple %2" ).arg( applocale.name(), out.name() ) );
-
-  return out;
-}
-
 QString InputUtils::appPlatform()
 {
 #if defined( ANDROID )
@@ -656,8 +610,19 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
   const QFileInfoList fileInfoList = srcDir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden );
   foreach ( const QFileInfo &info, fileInfoList )
   {
-    QString srcItemPath = srcPath + "/" + info.fileName();
-    QString dstItemPath = dstPath + "/" + info.fileName();
+    QString fileName = info.fileName();
+
+#ifdef ANDROID
+    // https://bugreports.qt.io/browse/QTBUG-114219
+    if ( fileName.startsWith( "assets:/" ) )
+    {
+      fileName.remove( 0, 8 );
+    }
+#endif
+
+    QString srcItemPath = srcPath + "/" + fileName;
+    QString dstItemPath = dstPath + "/" + fileName;
+
     if ( info.isDir() )
     {
       if ( !cpDir( srcItemPath, dstItemPath ) )
@@ -668,7 +633,7 @@ bool InputUtils::cpDir( const QString &srcPath, const QString &dstPath, bool onl
     }
     else if ( info.isFile() )
     {
-      if ( onlyDiffable && !MerginApi::isFileDiffable( info.fileName() ) )
+      if ( onlyDiffable && !MerginApi::isFileDiffable( fileName ) )
         continue;
 
       if ( !QFile::copy( srcItemPath, dstItemPath ) )
@@ -1009,7 +974,7 @@ void InputUtils::log( const QString &context, const QString &message )
 const QUrl InputUtils::getThemeIcon( const QString &name )
 {
   QString path = QStringLiteral( "qrc:/%1.svg" ).arg( name );
-  QgsDebugMsg( QStringLiteral( "Using icon %1 from %2" ).arg( name, path ) );
+  QgsDebugMsgLevel( QStringLiteral( "Using icon %1 from %2" ).arg( name, path ), 2 );
   return QUrl( path );
 }
 
@@ -1161,10 +1126,10 @@ QString InputUtils::geometryFromLayer( QgsVectorLayer *layer )
   {
     switch ( layer->geometryType() )
     {
-      case QgsWkbTypes::PointGeometry: return QStringLiteral( "point" );
-      case QgsWkbTypes::LineGeometry: return QStringLiteral( "linestring" );
-      case QgsWkbTypes::PolygonGeometry: return QStringLiteral( "polygon" );
-      case QgsWkbTypes::NullGeometry: return QStringLiteral( "nullGeo" );
+      case Qgis::GeometryType::Point: return QStringLiteral( "point" );
+      case Qgis::GeometryType::Line: return QStringLiteral( "linestring" );
+      case Qgis::GeometryType::Polygon: return QStringLiteral( "polygon" );
+      case Qgis::GeometryType::Null: return QStringLiteral( "nullGeo" );
       default: return QString();
     }
   }
@@ -1278,12 +1243,12 @@ QString InputUtils::formatPoint(
 }
 
 QString InputUtils::formatDistance( double distance,
-                                    QgsUnitTypes::DistanceUnit units,
+                                    Qgis::DistanceUnit units,
                                     int decimals,
-                                    QgsUnitTypes::SystemOfMeasurement destSystem )
+                                    Qgis::SystemOfMeasurement destSystem )
 {
   double destDistance;
-  QgsUnitTypes::DistanceUnit destUnits;
+  Qgis::DistanceUnit destUnits;
 
   humanReadableDistance( distance, units, destSystem, destDistance, destUnits );
 
@@ -1292,19 +1257,19 @@ QString InputUtils::formatDistance( double distance,
          .arg( QgsUnitTypes::toAbbreviatedString( destUnits ) );
 }
 
-void InputUtils::humanReadableDistance( double srcDistance, QgsUnitTypes::DistanceUnit srcUnits,
-                                        QgsUnitTypes::SystemOfMeasurement destSystem,
-                                        double &destDistance, QgsUnitTypes::DistanceUnit &destUnits )
+void InputUtils::humanReadableDistance( double srcDistance, Qgis::DistanceUnit srcUnits,
+                                        Qgis::SystemOfMeasurement destSystem,
+                                        double &destDistance, Qgis::DistanceUnit &destUnits )
 {
-  if ( ( destSystem == QgsUnitTypes::MetricSystem ) || ( destSystem == QgsUnitTypes::UnknownSystem ) )
+  if ( ( destSystem == Qgis::SystemOfMeasurement::Metric ) || ( destSystem == Qgis::SystemOfMeasurement::Unknown ) )
   {
     return formatToMetricDistance( srcDistance, srcUnits, destDistance, destUnits );
   }
-  else if ( destSystem == QgsUnitTypes::ImperialSystem )
+  else if ( destSystem == Qgis::SystemOfMeasurement::Imperial )
   {
     return formatToImperialDistance( srcDistance, srcUnits, destDistance, destUnits );
   }
-  else if ( destSystem == QgsUnitTypes::USCSSystem )
+  else if ( destSystem == Qgis::SystemOfMeasurement::USCS )
   {
     return formatToUSCSDistance( srcDistance, srcUnits, destDistance, destUnits );
   }
@@ -1315,111 +1280,111 @@ void InputUtils::humanReadableDistance( double srcDistance, QgsUnitTypes::Distan
 }
 
 void InputUtils::formatToMetricDistance( double srcDistance,
-    QgsUnitTypes::DistanceUnit srcUnits,
+    Qgis::DistanceUnit srcUnits,
     double &destDistance,
-    QgsUnitTypes::DistanceUnit &destUnits )
+    Qgis::DistanceUnit &destUnits )
 {
-  double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, QgsUnitTypes::DistanceMillimeters );
+  double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, Qgis::DistanceUnit::Millimeters );
   if ( dist < 0 )
   {
     destDistance = 0;
-    destUnits = QgsUnitTypes::DistanceMillimeters;
+    destUnits = Qgis::DistanceUnit::Millimeters;
     return;
   }
 
-  double mmToKm = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceKilometers, QgsUnitTypes::DistanceMillimeters );
+  double mmToKm = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Kilometers, Qgis::DistanceUnit::Millimeters );
   if ( dist > mmToKm )
   {
     destDistance = dist / mmToKm;
-    destUnits = QgsUnitTypes::DistanceKilometers;
+    destUnits = Qgis::DistanceUnit::Kilometers;
     return;
   }
 
-  double mmToM = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceMeters, QgsUnitTypes::DistanceMillimeters );
+  double mmToM = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Meters, Qgis::DistanceUnit::Millimeters );
   if ( dist > mmToM )
   {
     destDistance = dist / mmToM;
-    destUnits = QgsUnitTypes::DistanceMeters;
+    destUnits = Qgis::DistanceUnit::Meters;
     return;
   }
 
-  double mmToCm = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceCentimeters, QgsUnitTypes::DistanceMillimeters );
+  double mmToCm = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Centimeters, Qgis::DistanceUnit::Millimeters );
   if ( dist > mmToCm )
   {
     destDistance = dist / mmToCm;
-    destUnits = QgsUnitTypes::DistanceCentimeters;
+    destUnits = Qgis::DistanceUnit::Centimeters;
     return;
   }
 
   destDistance = dist;
-  destUnits = QgsUnitTypes::DistanceMillimeters;
+  destUnits = Qgis::DistanceUnit::Millimeters;
 }
 
 void InputUtils::formatToImperialDistance( double srcDistance,
-    QgsUnitTypes::DistanceUnit srcUnits,
+    Qgis::DistanceUnit srcUnits,
     double &destDistance,
-    QgsUnitTypes::DistanceUnit &destUnits )
+    Qgis::DistanceUnit &destUnits )
 {
-  double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, QgsUnitTypes::DistanceFeet );
+  double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, Qgis::DistanceUnit::Feet );
   if ( dist < 0 )
   {
     destDistance = 0;
-    destUnits = QgsUnitTypes::DistanceFeet;
+    destUnits = Qgis::DistanceUnit::Feet;
     return;
   }
 
-  double feetToMile = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceMiles, QgsUnitTypes::DistanceFeet );
+  double feetToMile = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Miles, Qgis::DistanceUnit::Feet );
   if ( dist > feetToMile )
   {
     destDistance = dist / feetToMile;
-    destUnits = QgsUnitTypes::DistanceMiles;
+    destUnits = Qgis::DistanceUnit::Miles;
     return;
   }
 
-  double feetToYard = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceYards, QgsUnitTypes::DistanceFeet );
+  double feetToYard = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Yards, Qgis::DistanceUnit::Feet );
   if ( dist > feetToYard )
   {
     destDistance = dist / feetToYard;
-    destUnits = QgsUnitTypes::DistanceYards;
+    destUnits = Qgis::DistanceUnit::Yards;
     return;
   }
 
   destDistance = dist;
-  destUnits = QgsUnitTypes::DistanceFeet;
+  destUnits = Qgis::DistanceUnit::Feet;
   return;
 }
 
 void InputUtils::formatToUSCSDistance( double srcDistance,
-                                       QgsUnitTypes::DistanceUnit srcUnits,
+                                       Qgis::DistanceUnit srcUnits,
                                        double &destDistance,
-                                       QgsUnitTypes::DistanceUnit &destUnits )
+                                       Qgis::DistanceUnit &destUnits )
 {
-  double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, QgsUnitTypes::DistanceFeet );
+  double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, Qgis::DistanceUnit::Feet );
   if ( dist < 0 )
   {
     destDistance = 0;
-    destUnits = QgsUnitTypes::DistanceFeet;
+    destUnits = Qgis::DistanceUnit::Feet;
     return;
   }
 
-  double feetToMile = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceNauticalMiles, QgsUnitTypes::DistanceFeet );
+  double feetToMile = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::NauticalMiles, Qgis::DistanceUnit::Feet );
   if ( dist > feetToMile )
   {
     destDistance = dist / feetToMile;
-    destUnits = QgsUnitTypes::DistanceNauticalMiles;
+    destUnits = Qgis::DistanceUnit::NauticalMiles;
     return;
   }
 
-  double feetToYard = QgsUnitTypes::fromUnitToUnitFactor( QgsUnitTypes::DistanceYards, QgsUnitTypes::DistanceFeet );
+  double feetToYard = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Yards, Qgis::DistanceUnit::Feet );
   if ( dist > feetToYard )
   {
     destDistance = dist / feetToYard;
-    destUnits = QgsUnitTypes::DistanceYards;
+    destUnits = Qgis::DistanceUnit::Yards;
     return;
   }
 
   destDistance = dist;
-  destUnits = QgsUnitTypes::DistanceFeet;
+  destUnits = Qgis::DistanceUnit::Feet;
   return;
 }
 
@@ -1508,7 +1473,7 @@ QgsRectangle InputUtils::stakeoutPathExtent(
   QgsRectangle extent = mapSettings->extent();
 
   // We currently support only point geometries
-  if ( targetFeature.layer()->geometryType() != QgsWkbTypes::PointGeometry )
+  if ( targetFeature.layer()->geometryType() != Qgis::GeometryType::Point )
     return extent;
 
   if ( !mapPosition->positionKit() || !mapPosition->mapSettings() )
@@ -1613,7 +1578,7 @@ qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const Feat
     return -1;
 
   // We calculate distance only between points
-  if ( targetFeature.layer()->geometryType() != QgsWkbTypes::GeometryType::PointGeometry )
+  if ( targetFeature.layer()->geometryType() != Qgis::GeometryType::Point )
     return -1;
 
   // Transform gps position to map CRS
@@ -1647,7 +1612,7 @@ qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const Feat
   distanceArea.setSourceCrs( mapSettings->destinationCrs(), mapSettings->transformContext() );
 
   qreal distance = distanceArea.measureLine( transformedPosition, transformedTarget );
-  distance = distanceArea.convertLengthMeasurement( distance, QgsUnitTypes::DistanceMeters );
+  distance = distanceArea.convertLengthMeasurement( distance, Qgis::DistanceUnit::Meters );
 
   return distance;
 }
@@ -1661,7 +1626,7 @@ qreal InputUtils::angleBetweenGpsAndFeature( QgsPoint gpsPoint, const FeatureLay
   QgsFeature f = targetFeature.feature();
 
   // Only points are supported
-  if ( layer->geometryType() != QgsWkbTypes::GeometryType::PointGeometry )
+  if ( layer->geometryType() != Qgis::GeometryType::Point )
     return -1;
 
   // Transform gps position to map CRS
@@ -1840,7 +1805,7 @@ QString InputUtils::loadIconFromLayer( QgsMapLayer *layer )
 
   if ( vectorLayer )
   {
-    QgsWkbTypes::GeometryType geometry = vectorLayer->geometryType();
+    Qgis::GeometryType geometry = vectorLayer->geometryType();
     return iconFromGeometry( geometry );
   }
   else
@@ -1852,13 +1817,13 @@ QString InputUtils::loadIconFromFeature( QgsFeature feature )
   return iconFromGeometry( feature.geometry().type() );
 }
 
-QString InputUtils::iconFromGeometry( const QgsWkbTypes::GeometryType &geometry )
+QString InputUtils::iconFromGeometry( const Qgis::GeometryType &geometry )
 {
   switch ( geometry )
   {
-    case QgsWkbTypes::GeometryType::PointGeometry: return QString( "qrc:/mIconPointLayer.svg" );
-    case QgsWkbTypes::GeometryType::LineGeometry: return QString( "qrc:/mIconLineLayer.svg" );
-    case QgsWkbTypes::GeometryType::PolygonGeometry: return QString( "qrc:/mIconPolygonLayer.svg" );
+    case Qgis::GeometryType::Point: return QString( "qrc:/mIconPointLayer.svg" );
+    case Qgis::GeometryType::Line: return QString( "qrc:/mIconLineLayer.svg" );
+    case Qgis::GeometryType::Polygon: return QString( "qrc:/mIconPolygonLayer.svg" );
     default: return QString( "qrc:/mIconTableLayer.svg" );
   }
 }
@@ -1883,7 +1848,7 @@ QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
 
   switch ( layer->geometryType() )
   {
-    case QgsWkbTypes::PointGeometry:
+    case Qgis::GeometryType::Point:
     {
       if ( isMulti )
       {
@@ -1898,7 +1863,7 @@ QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
       break;
     }
 
-    case QgsWkbTypes::LineGeometry:
+    case Qgis::GeometryType::Line:
     {
       if ( isMulti )
       {
@@ -1913,7 +1878,7 @@ QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
       break;
     }
 
-    case QgsWkbTypes::PolygonGeometry:
+    case Qgis::GeometryType::Polygon:
     {
       if ( isMulti )
       {
@@ -1959,11 +1924,11 @@ QString InputUtils::invalidGeometryWarning( QgsVectorLayer *layer )
   }
 
   int nPoints = 1;
-  if ( layer->geometryType() == QgsWkbTypes::LineGeometry )
+  if ( layer->geometryType() == Qgis::GeometryType::Line )
   {
     nPoints = 2;
   }
-  else if ( layer->geometryType() == QgsWkbTypes::PolygonGeometry )
+  else if ( layer->geometryType() == Qgis::GeometryType::Polygon )
   {
     nPoints = 3;
   }
@@ -2012,6 +1977,22 @@ QString InputUtils::imageGalleryLocation()
   }
 
   return galleryPaths.last();
+}
+
+QString InputUtils::layerAttribution( QgsMapLayer *layer )
+{
+  if ( !layer || !layer->isValid() )
+  {
+    return QString();
+  }
+
+  QStringList rights = layer->metadata().rights();
+  if ( !rights.isEmpty() )
+  {
+    return rights.join( QStringLiteral( ", " ) );
+  }
+
+  return QString();
 }
 
 QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )

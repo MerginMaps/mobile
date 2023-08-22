@@ -46,7 +46,7 @@ bool layerHasGeometry( const QgsVectorLayer *layer )
 {
   if ( !layer || !layer->isValid() )
     return false;
-  return layer->wkbType() != QgsWkbTypes::NoGeometry && layer->wkbType() != QgsWkbTypes::Type::Unknown;
+  return layer->wkbType() != Qgis::WkbType::NoGeometry && layer->wkbType() != Qgis::WkbType::Unknown;
 }
 
 bool LayersProxyModel::recordingAllowed( QgsMapLayer *layer ) const

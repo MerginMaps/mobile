@@ -32,6 +32,7 @@
 #include "qgsproviderregistry.h"
 #include "qgsmaplayerproxymodel.h"
 #include "qgsnetworkaccessmanager.h"
+#include "geodiffutils.h"
 
 #include "androidutils.h"
 #include "ios/iosutils.h"
@@ -270,6 +271,7 @@ void initDeclarative()
   qmlRegisterUncreatableType<LayersProxyModel>( "lc", 1, 0, "LayersProxyModel", "" );
   qmlRegisterUncreatableType<ActiveLayer>( "lc", 1, 0, "ActiveLayer", "" );
   qmlRegisterUncreatableType<StreamingIntervalType>( "lc", 1, 0, "StreamingIntervalType", "StreamingIntervalType Enum" );
+  qmlRegisterUncreatableType<RegistrationError>( "lc", 1, 0, "RegistrationError", "RegistrationError Enum" );
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<Compass>( "lc", 1, 0, "Compass" );
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
@@ -298,8 +300,8 @@ void initDeclarative()
   qRegisterMetaType< QgsPointXY >( "QgsPointXY" );
   qRegisterMetaType< QgsRelation >( "QgsRelation" );
   qRegisterMetaType< QgsPolymorphicRelation >( "QgsPolymorphicRelation" );
-  qRegisterMetaType< QgsUnitTypes::SystemOfMeasurement >( "QgsUnitTypes::SystemOfMeasurement" );
-  qRegisterMetaType< QgsUnitTypes::DistanceUnit >( "QgsUnitTypes::DistanceUnit" );
+  qRegisterMetaType< Qgis::SystemOfMeasurement >( "Qgis::SystemOfMeasurement" );
+  qRegisterMetaType< Qgis::DistanceUnit >( "Qgis::DistanceUnit" );
   qRegisterMetaType< QgsCoordinateFormatter::FormatFlags >( "QgsCoordinateFormatter::FormatFlags" );
   qRegisterMetaType< QgsCoordinateFormatter::Format >( "QgsCoordinateFormatter::Format" );
   qRegisterMetaType< QVariant::Type >( "QVariant::Type" );
@@ -384,7 +386,6 @@ int main( int argc, char *argv[] )
   QgsApplication app( argc, argv, true );
 
   const QString version = CoreUtils::appVersion();
-
   // Set up the QSettings environment must be done after qapp is created
   QCoreApplication::setOrganizationName( "Lutra Consulting" );
   QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
@@ -395,6 +396,7 @@ int main( int argc, char *argv[] )
   InputTests tests;
   tests.parseArgs( argc, argv );
 #endif
+  qDebug() << "Mergin Maps Input App" << version << InputUtils::appPlatform() << "(" << CoreUtils::appVersionCode() << ")";
   qDebug() << "Built with QGIS version " << VERSION_INT;
 
   // Set/Get enviroment
@@ -419,21 +421,6 @@ int main( int argc, char *argv[] )
 
   // Initialize translations
   QLocale locale;
-
-  /*
-   * We need to fix locale country code (capital letters after underscore)
-   * in system locale, because QT tries to do exact match, for example:
-   * system locale "en_GB" -> our provided locale "en" would not match and
-   * QT would try to find translation for other system language.
-   *
-   * If it fails it goes through the same process again, but without country code.
-   * We want to match "en_GB" with "en" immediately, thus we remove the country code.
-   *
-   * This fix can be removed from QT 5.15
-   * See: https://github.com/MerginMaps/input/issues/1417
-   * See: QTBUG-86179
-   */
-  locale = InputUtils::fixLocaleCountry( locale );
 
   QTranslator inputTranslator;
   if ( inputTranslator.load( locale, "input", "_", ":/" ) )
@@ -490,6 +477,7 @@ int main( int argc, char *argv[] )
   } );
 
   // Create Input classes
+  GeodiffUtils::init();
   AndroidUtils au;
   IosUtils iosUtils;
   LocalProjectsManager localProjectsManager( projectDir );
@@ -661,6 +649,11 @@ int main( int argc, char *argv[] )
   // one we calculated. In these scenarios we use a ratio between real (our) DPR and DPR reported by QT.
   // Use `value * __dp` for each pixel value in QML
   engine.rootContext()->setContextProperty( "__dp", InputUtils::calculateDpRatio() );
+
+// due to https://bugreports.qt.io/browse/QTBUG-113751, the right DPI is set when app is created (after this pool)
+#if (defined ANDROID && QT_VERSION >= QT_VERSION_CHECK(6, 5, 0) )
+  QTimer::singleShot( 100, [&engine]() { engine.rootContext()->setContextProperty( "__dp", InputUtils::calculateDpRatio() );} );
+#endif
 
   // Set simulated position for desktop builds
 #ifdef DESKTOP_OS

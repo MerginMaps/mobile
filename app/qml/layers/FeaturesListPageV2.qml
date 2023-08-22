@@ -100,7 +100,7 @@ Page {
           Layout.fillWidth: true
 
           color: InputStyle.secondaryFontColor
-          text: model.Description + ( model.SearchResult ? ", " + model.SearchResult : "" )
+          text: model.Description + ( model.SearchResult ? ", " + model.SearchResult.substring(0, model.SearchResult.indexOf("\n")) : "" )
 
           font.pixelSize: InputStyle.fontPixelSizeSmall
 

@@ -1,39 +1,18 @@
 # GPLv2 Licence
 
-# not in linux input-SDK
+find_path(
+  Protobuf_INCLUDE_DIR
+  google/protobuf/service.h
+  "${INPUT_SDK_PATH_MULTI}/include"
+  NO_DEFAULT_PATH
+)
 
-if (LNX)
-  find_path(Protobuf_INCLUDE_DIR NAMES google/protobuf/service.h)
-  find_library(Protobuf_lite_LIBRARY NAMES protobuf-lite)
-elseif (WIN)
-  find_path(
-    Protobuf_INCLUDE_DIR
-    google/protobuf/service.h
-    "${INPUT_SDK_PATH_MULTI}/include"
-    NO_DEFAULT_PATH
-  )
-
-  find_library(
-    Protobuf_lite_LIBRARY
-    NAMES libprotobuf-lite
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
-  )
-else ()
-  find_path(
-    Protobuf_INCLUDE_DIR
-    google/protobuf/service.h
-    "${INPUT_SDK_PATH_MULTI}/include"
-    NO_DEFAULT_PATH
-  )
-
-  find_library(
-    Protobuf_lite_LIBRARY
-    NAMES protobuf-lite
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
-  )
-endif ()
+find_library(
+  Protobuf_lite_LIBRARY
+  NAMES protobuf-lite libprotobuf-lite
+  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
+  NO_DEFAULT_PATH
+)
 
 find_package_handle_standard_args(
   Protobuf REQUIRED_VARS Protobuf_lite_LIBRARY Protobuf_INCLUDE_DIR

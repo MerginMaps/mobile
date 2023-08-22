@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Templates as T
+import ".." // import InputStyle singleton
 
 /**
   * The checkbox where the rectangle area is on left of the text.
@@ -22,6 +23,7 @@ T.CheckBox {
     property var spaceWidth: height / 4.0
     property var baseSize: height / 5.5
     property var baseColor: InputStyle.panelBackgroundDarker
+    property bool shouldBeChecked: false
 
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                                          contentItem.implicitWidth + leftPadding + rightPadding)
@@ -40,7 +42,7 @@ T.CheckBox {
         x: control.leftPadding
         anchors.verticalCenter: parent.verticalCenter
         radius: 2
-        border.color: baseColor
+        border.color: control.shouldBeChecked ? InputStyle.errorTextColor : baseColor
 
         Rectangle {
             id: rectangle

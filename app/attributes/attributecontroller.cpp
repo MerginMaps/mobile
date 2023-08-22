@@ -142,7 +142,7 @@ bool AttributeController::allowTabs( QgsAttributeEditorContainer *container )
 {
   for ( QgsAttributeEditorElement *element : container->children() )
   {
-    if ( element->type() == QgsAttributeEditorElement::AeTypeContainer )
+    if ( element->type() == Qgis::AttributeEditorType::Container )
     {
       QgsAttributeEditorContainer *elemContainer = static_cast<QgsAttributeEditorContainer *>( element );
       if ( elemContainer->isGroupBox() )
@@ -199,7 +199,7 @@ void AttributeController::flatten(
   {
     switch ( element->type() )
     {
-      case QgsAttributeEditorElement::AeTypeContainer:
+      case Qgis::AttributeEditorType::Container:
       {
         QString visibilityExpression = parentVisibilityExpressions;
         QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
@@ -215,7 +215,7 @@ void AttributeController::flatten(
         break;
       }
 
-      case QgsAttributeEditorElement::AeTypeField:
+      case Qgis::AttributeEditorType::Field:
       {
         QUuid fieldUuid = QUuid::createUuid();
 
@@ -262,7 +262,7 @@ void AttributeController::flatten(
         break;
       }
 
-      case QgsAttributeEditorElement::AeTypeRelation:
+      case Qgis::AttributeEditorType::Relation:
       {
         QUuid widgetUuid = QUuid::createUuid();
 
@@ -305,19 +305,19 @@ void AttributeController::flatten(
         break;
       }
 
-      case QgsAttributeEditorElement::AeTypeInvalid:
+      case Qgis::AttributeEditorType::Invalid:
         // todo
         break;
 
-      case QgsAttributeEditorElement::AeTypeAction:
+      case Qgis::AttributeEditorType::Action:
         // todo
         break;
 
-      case QgsAttributeEditorElement::AeTypeQmlElement:
+      case Qgis::AttributeEditorType::QmlElement:
         // todo
         break;
 
-      case QgsAttributeEditorElement::AeTypeHtmlElement:
+      case Qgis::AttributeEditorType::HtmlElement:
         // todo
         break;
     }
@@ -367,7 +367,7 @@ void AttributeController::updateOnLayerChange()
   QgsVectorLayer *layer = mFeatureLayerPair.layer();
   if ( layer )
   {
-    if ( layer->editFormConfig().layout() == QgsEditFormConfig::TabLayout )
+    if ( layer->editFormConfig().layout() == Qgis::AttributeFormLayout::DragAndDrop )
     {
       QgsAttributeEditorContainer *root = layer->editFormConfig().invisibleRootContainer();
       if ( root->columnCount() > 1 )
@@ -381,7 +381,7 @@ void AttributeController::updateOnLayerChange()
       {
         for ( QgsAttributeEditorElement *element : root->children() )
         {
-          if ( element->type() == QgsAttributeEditorElement::AeTypeContainer )
+          if ( element->type() == Qgis::AttributeEditorType::Container )
           {
             QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
             if ( container->columnCount() > 1 )

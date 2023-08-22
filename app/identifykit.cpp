@@ -49,7 +49,7 @@ FeatureLayerPairs IdentifyKit::identify( const QPointF &point, QgsVectorLayer *l
 
   if ( !mMapSettings )
   {
-    QgsDebugMsg( QStringLiteral( "Unable to use IdentifyKit without mapSettings property set." ) );
+    QgsDebugError( QStringLiteral( "Unable to use IdentifyKit without mapSettings property set." ) );
     return results;
   }
 
@@ -62,7 +62,7 @@ FeatureLayerPairs IdentifyKit::identify( const QPointF &point, QgsVectorLayer *l
     {
       results.append( FeatureLayerPair( feature, layer ) );
     }
-    QgsDebugMsg( QStringLiteral( "IdentifyKit identified %1 results for layer %2" ).arg( results.count() ).arg( layer->name() ) );
+    QgsDebugMsgLevel( QStringLiteral( "IdentifyKit identified %1 results for layer %2" ).arg( results.count() ).arg( layer->name() ), 2 );
   }
   else
   {
@@ -83,12 +83,12 @@ FeatureLayerPairs IdentifyKit::identify( const QPointF &point, QgsVectorLayer *l
       }
       if ( mIdentifyMode == IdentifyMode::TopDownStopAtFirst && !results.isEmpty() )
       {
-        QgsDebugMsg( QStringLiteral( "IdentifyKit identified %1 results with TopDownStopAtFirst mode." ).arg( results.count() ) );
+        QgsDebugMsgLevel( QStringLiteral( "IdentifyKit identified %1 results with TopDownStopAtFirst mode." ).arg( results.count() ), 2 );
         return results;
       }
     }
 
-    QgsDebugMsg( QStringLiteral( "IdentifyKit identified %1 results" ).arg( results.count() ) );
+    QgsDebugMsgLevel( QStringLiteral( "IdentifyKit identified %1 results" ).arg( results.count() ), 2 );
   }
 
   return results;
@@ -118,8 +118,8 @@ static FeatureLayerPair _closestFeature( const FeatureLayerPairs &results, const
     }
 
     double dist = geom.distance( mapPointGeom );
-    QgsWkbTypes::GeometryType type = QgsWkbTypes::geometryType( geom.wkbType() );
-    if ( type == QgsWkbTypes::PointGeometry )
+    Qgis::GeometryType type = geom.type();
+    if ( type == Qgis::GeometryType::Point )
     {
       if ( dist < distMinPoint )
       {
@@ -127,7 +127,7 @@ static FeatureLayerPair _closestFeature( const FeatureLayerPairs &results, const
         distMinPoint = dist;
       }
     }
-    else if ( type == QgsWkbTypes::LineGeometry )
+    else if ( type == Qgis::GeometryType::Line )
     {
       if ( dist < distMinLine )
       {
@@ -205,7 +205,7 @@ QgsFeatureList IdentifyKit::identifyVectorLayer( QgsVectorLayer *layer, const Qg
   }
   catch ( QgsCsException &cse )
   {
-    QgsDebugMsg( QStringLiteral( "Invalid point, proceed without a found features." ) );
+    QgsDebugError( QStringLiteral( "Invalid point, proceed without a found features." ) );
     Q_UNUSED( cse )
   }
 

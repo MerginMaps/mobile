@@ -16,13 +16,14 @@ on:
       - published
 
 env:   
-  QT_VERSION: '6.4.2'
+  QT_VERSION: '6.5.2'
   XC_VERSION: ${{ '14.2' }}
-  INPUT_SDK_VERSION: ios-20230110-92
+  IOS_CMAKE_TOOLCHAIN_VERSION: "4.4.0" 
+  INPUT_SDK_VERSION: arm64-ios-20230809-150
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 2
+  CACHE_VERSION: 1
 
 concurrency:
   group: ci-${{github.ref}}-ios
@@ -37,7 +38,14 @@ jobs:
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
 
       - uses: actions/checkout@v3
-
+ 
+      - name: Download ios-cmake toolchain
+        uses: actions/checkout@v3
+        with:
+            repository: leetal/ios-cmake
+            ref: ${{ env.IOS_CMAKE_TOOLCHAIN_VERSION }}
+            path: ios-cmake
+      
       # CCache
       - name: Prepare build cache for pull request
         uses: pat-s/always-upload-cache@v3.0.11
@@ -127,9 +135,9 @@ jobs:
         run: |
           wget -O \
             ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk
-          cd ${{ github.workspace }}/input-sdk
+            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
+          mkdir -p ${{ github.workspace }}/input-sdk/arm64-ios
+          cd ${{ github.workspace }}/input-sdk/arm64-ios
           tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
 
       # Qt
@@ -138,7 +146,7 @@ jobs:
         uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v1-${{ env.QT_VERSION }}-ios
+          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-ios
           
       - name: Install Qt
         if: steps.cache-qt.outputs.cache-hit != 'true'
@@ -168,28 +176,27 @@ jobs:
 
       - name: Create build system with cmake
         run: |
-          INPUT_DIR=`pwd`
- 
           mkdir -p install-Input
           mkdir -p build-INPUT
           cd build-INPUT
-                    
+
+          ls -1 ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
+
           # run cmake
           cmake \
-            -DIOS=TRUE \
+            -DCMAKE_TOOLCHAIN_FILE:PATH="${{ github.workspace }}/ios-cmake/ios.toolchain.cmake" \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios \
-            -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
-            -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64 \
-            -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/input-sdk/ios.toolchain.cmake \
-            -G "Xcode" \
             -DQT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
+            -DIOS=TRUE \
+            -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
+            -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64-ios \
+            -G "Xcode" \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -S $INPUT_DIR \
+            -S ${{ github.workspace }} \
             -B ./
  
       - name: Build Input
         run: |
-          INPUT_DIR=`pwd`
           cd build-INPUT
 
           xcodebuild \

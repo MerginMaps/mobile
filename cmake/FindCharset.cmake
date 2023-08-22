@@ -1,14 +1,14 @@
 # GPLv2 Licence
 
-# not in macos input-SDK not in linux input-SDK
-if (MACOS OR LNX)
-
+# not in macos and linux input-SDK
+if (MACOS)
   find_library(Charset_LIBRARY NAMES charset)
+elseif (LNX)
+  message(FATAL_ERROR "charset not available for this platform in input-SDK")
 else ()
-  message("${INPUT_SDK_PATH_MULTI}/lib")
   find_library(
     Charset_LIBRARY
-    NAMES charset
+    NAMES charset libcharset
     PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )

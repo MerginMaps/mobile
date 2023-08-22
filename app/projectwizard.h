@@ -58,7 +58,6 @@ class ProjectWizard : public QObject
     QString mDataDir;
     std::unique_ptr<QgsMapSettings> mSettings = nullptr;
 
-    const QString BG_MAPS_CONFIG = QStringLiteral( "tilePixelRatio=1&type=xyz&url=https://tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png&zmax=19&zmin=0" );
     const QString PROJECT_CRS_ID = QStringLiteral( "EPSG:3857" );
     const QString LAYER_CRS_ID = QStringLiteral( "EPSG:4326" );
 };

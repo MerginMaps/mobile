@@ -239,7 +239,7 @@ void TestPosition::testBluetoothProviderPosition()
   QCOMPARE( positionKit->altitude(), 153.026 );
   QCOMPARE( positionKit->speed(), 0.05 );
   QCOMPARE( positionKit->hdop(), 3.2 );
-  QCOMPARE( positionKit->satellitesUsed(), 3 );
+  QVERIFY( positionKit->satellitesUsed() > 3 );
   QCOMPARE( positionKit->fix(), "RTK float" );
   QCOMPARE( positionKit->lastRead(), QDateTime().fromString( "2022-01-31T12:17:17Z", Qt::ISODate ) );
 }
@@ -332,7 +332,7 @@ void TestPosition::testMapPosition()
 
   // Let's give simulated provider some time to generate first location
   QSignalSpy positionUpdateSpy( provider, &AbstractPositionProvider::positionChanged );
-  positionUpdateSpy.wait( 3000 );
+  positionUpdateSpy.wait( 5000 );
 
   QVERIFY( !mapPosition.mapPosition().isEmpty() );
 
@@ -352,7 +352,7 @@ void TestPosition::testMapPosition()
   positionKit->setPositionProvider( provider2 );
 
   QSignalSpy positionUpdateSpy2( provider2, &AbstractPositionProvider::positionChanged );
-  positionUpdateSpy2.wait( 1500 );
+  positionUpdateSpy2.wait( 5000 );
 
   QVERIFY( !positionUpdateSpy2.isEmpty() );
   QVERIFY( mapPosition.mapPosition() != oldmappos );

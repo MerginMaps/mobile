@@ -31,10 +31,13 @@ static MerginProject _findProjectByName( const QString &projectNamespace, const 
 }
 
 
-TestMerginApi::TestMerginApi( MerginApi *api )
+TestMerginApi::TestMerginApi( MerginApi *api, Purchasing *purchasing )
 {
   mApi = api;
   Q_ASSERT( mApi );  // does not make sense to run without API
+
+  mPurchasing = purchasing;
+  Q_ASSERT( purchasing );
 
   mSyncManager = std::make_unique<SynchronizationManager>( mApi );
 
@@ -57,6 +60,7 @@ void TestMerginApi::initTestCase()
 {
   QString apiRoot, username, password;
   TestUtils::mergin_setup_auth( mApi, apiRoot, username, password );
+  TestUtils::mergin_setup_pro_subscription( mApi, mPurchasing );
 
   mUsername = username;  // keep for later
 
@@ -2714,4 +2718,45 @@ void TestMerginApi::testServerError()
 
   msg = mApi->extractServerErrorMsg( "{\"name\": [\"Field must be between 4 and 25 characters long.\"]}" );
   QCOMPARE( msg, QStringLiteral( "Field must be between 4 and 25 characters long." ) );
+}
+
+void TestMerginApi::testRegistration()
+{
+  QString username = "?";
+  QString email = "broken@email";
+  QString password = "pwd";
+  QString confirm_password = password;
+
+  // do not want to be authorized
+  mApi->clearAuth();
+
+  // wrong username test
+  QSignalSpy spy( mApi, &MerginApi::registrationFailed );
+  mApi->registerUser( username, email, password, confirm_password, true );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::USERNAME );
+
+  // wrong email test
+  username = "username";
+  mApi->registerUser( username, email, password, confirm_password, true );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::EMAIL );
+
+  // wrong password test
+  email = "username@email.com";
+  mApi->registerUser( username, email, password, confirm_password, true );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::PASSWORD );
+
+  // wrong confirm password test
+  password = "Lutra123:)";
+  mApi->registerUser( username, email, password, confirm_password, true );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::CONFIRM_PASSWORD );
+
+  // unchecked TOC test
+  confirm_password = "Lutra123:)";
+  mApi->registerUser( username, email, password, confirm_password, false );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::TOC );
 }

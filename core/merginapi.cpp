@@ -90,10 +90,6 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
     }
   } );
 
-  GEODIFF_init();
-  GEODIFF_setLoggerCallback( &GeodiffUtils::log );
-  GEODIFF_setMaximumLoggerLevel( GEODIFF_LoggerLevel::LevelDebug );
-
   //
   // check if the cache is up to date:
   //  - server url and type
@@ -763,49 +759,49 @@ void MerginApi::registerUser( const QString &username,
   // Some very basic checks, so we do not validate everything
   if ( username.isEmpty() || username.length() < 4 )
   {
-    emit registrationFailed();
-    emit notify( tr( "Username must have at least 4 characters" ) );
+    QString msg = tr( "Username must have at least 4 characters" );
+    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::USERNAME );
     return;
   }
 
   if ( !CoreUtils::isValidName( username ) )
   {
-    emit registrationFailed();
-    emit notify( tr( "Username contains invalid characters" ) );
+    QString msg = tr( "Username contains invalid characters" );
+    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::USERNAME );
     return;
   }
 
   if ( email.isEmpty() || !email.contains( '@' ) || !email.contains( '.' ) )
   {
-    emit registrationFailed();
-    emit notify( tr( "Please enter a valid email" ) );
+    QString msg = tr( "Please enter a valid email" );
+    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::EMAIL );
     return;
   }
 
   if ( password.isEmpty() || password.length() < 8 )
   {
-    emit registrationFailed();
     QString msg = tr( "Password not strong enough. It must"
                       "%1 be at least 8 characters long"
                       "%1 contain lowercase characters"
                       "%1 contain uppercase characters"
                       "%1 contain digits or special characters" )
                   .arg( "<br />  -" );
-    emit notify( msg );
+    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::PASSWORD );
     return;
+
   }
 
   if ( confirmPassword != password )
   {
-    emit registrationFailed();
-    emit notify( tr( "Passwords do not match" ) );
+    QString msg = tr( "Passwords do not match" );
+    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::CONFIRM_PASSWORD );
     return;
   }
 
   if ( !acceptedTOC )
   {
-    emit registrationFailed();
-    emit notify( tr( "Please accept Terms and Privacy Policy" ) );
+    QString msg = tr( "Please accept Terms and Privacy Policy" );
+    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::TOC );
     return;
   }
 
@@ -1138,38 +1134,48 @@ void MerginApi::authorizeFinished()
     }
     else
     {
-      mUserAuth->blockSignals( true );
-      mUserAuth->setUsername( QString() ); //clearTokenData emits the authChanged
-      mUserAuth->setPassword( QString() ); //clearTokenData emits the authChanged
-      mUserAuth->blockSignals( false );
-
+      // keep username and password, but clear token
+      // this is problem with internet connection or server
+      // so do not force user to input login credentials again
       mUserAuth->clearTokenData();
       emit authFailed();
-      CoreUtils::log( "auth", QStringLiteral( "FAILED - invalid JSON response" ) );
+      CoreUtils::log( "Auth", QStringLiteral( "FAILED - invalid JSON response" ) );
       emit notify( "Internal server error during authorization" );
     }
   }
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
-    CoreUtils::log( "auth", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
     QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
     int status = statusCode.toInt();
-    if ( status == 401 || status == 400 )
+    CoreUtils::log( "Auth", QStringLiteral( "FAILED - %1. %2 (%3)" ).arg( r->errorString(), serverMsg, QString::number( status ) ) );
+
+    if ( status == 401 )
     {
+      // OK, we have INVALID username or password or
+      // our user got blocked on the server by admin or owner
+      // lets show error to user and let him try different credentials
       emit authFailed();
       emit notify( serverMsg );
+
+      mUserAuth->blockSignals( true );
+      mUserAuth->setUsername( QString() );
+      mUserAuth->setPassword( QString() );
+      mUserAuth->blockSignals( false );
+
     }
     else
     {
+      // keep username and password
+      // this is problem with internet connection or server
+      // so do not force user to input login credentials again
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: authorize" ) );
     }
-    mUserAuth->blockSignals( true );
-    mUserAuth->setUsername( QString() );
-    mUserAuth->setPassword( QString() );
-    mUserAuth->blockSignals( false );
+
+    // in case of any error, just clean token and request new one
     mUserAuth->clearTokenData();
   }
+
   if ( mAuthLoopEvent.isRunning() )
   {
     mAuthLoopEvent.exit();
@@ -1201,19 +1207,21 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
     int status = statusCode.toInt();
     if ( status == 401 || status == 400 )
     {
-      emit registrationFailed();
+      emit registrationFailed( serverMsg, RegistrationError::RegistrationErrorType::OTHER );
       emit notify( serverMsg );
     }
     else if ( status == 404 )
     {
       // the self-registration is not allowed on the server
-      emit registrationFailed();
-      emit notify( tr( "New registrations are not allowed on the selected Mergin server.%1Please check with your administrator." ).arg( "\n" ) );
+      QString msg = tr( "New registrations are not allowed on the selected Mergin server.%1Please check with your administrator." ).arg( "\n" );
+      emit registrationFailed( msg, RegistrationError::RegistrationErrorType::OTHER );
+      emit notify( msg );
     }
     else
     {
-      emit registrationFailed();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: register" ) );
+      QString msg = QStringLiteral( "Mergin API error: register" );
+      emit registrationFailed( msg, RegistrationError::RegistrationErrorType::OTHER );
+      emit networkErrorOccurred( serverMsg, msg );
     }
   }
   r->deleteLater();
@@ -1721,12 +1729,12 @@ bool MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
   //
   bool hasConflicts = false;
 
-  int res = GEODIFF_rebase( basefile.toUtf8().constData(),
-                            src.toUtf8().constData(),
-                            dest.toUtf8().constData(),
-                            conflictfile.toUtf8().constData()
-                          );
-  if ( res == GEODIFF_SUCCESS )
+  bool res = GeodiffUtils::rebase( basefile,
+                                   src,
+                                   dest,
+                                   conflictfile
+                                 );
+  if ( res )
   {
     CoreUtils::log( "pull " + projectFullName, "geodiff rebase successful: " + filePath );
   }
@@ -2605,8 +2613,8 @@ void MerginApi::pushFinishReplyFinished()
 
       // update basefile (unmodified file that should be equivalent to the server)
       QString basePath = transaction.projectDir + "/.mergin/" + merginFile.path;
-      int res = GEODIFF_applyChangeset( basePath.toUtf8(), diffPath.toUtf8() );
-      if ( res == GEODIFF_SUCCESS )
+      bool res = GeodiffUtils::applyChangeset( basePath, diffPath );
+      if ( res )
       {
         CoreUtils::log( "push " + projectFullName, QString( "Applied %1 to base file of %2" ).arg( merginFile.diffName, merginFile.path ) );
       }

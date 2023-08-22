@@ -37,6 +37,22 @@
 
 class Purchasing;
 
+class RegistrationError
+{
+    Q_GADGET
+  public:
+    enum RegistrationErrorType
+    {
+      OTHER = 0,
+      USERNAME,
+      EMAIL,
+      PASSWORD,
+      CONFIRM_PASSWORD,
+      TOC
+    };
+    Q_ENUM( RegistrationErrorType )
+};
+
 struct ProjectDiff
 {
   // changes that should be pushed
@@ -542,7 +558,7 @@ class MerginApi: public QObject
     void authChanged();
     void authFailed();
     void registrationSucceeded();
-    void registrationFailed();
+    void registrationFailed( const QString &msg, RegistrationError::RegistrationErrorType type = RegistrationError::RegistrationErrorType::OTHER );
     void apiRootChanged();
     void apiVersionStatusChanged();
     void projectCreated( const QString &projectFullName, bool result );

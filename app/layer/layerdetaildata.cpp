@@ -48,6 +48,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
     emit isSpatialChanged( mIsSpatial );
     emit isVectorLayerChanged( mIsVectorLayer );
     emit vectorLayerChanged( nullptr );
+    emit mapLayerChanged( nullptr );
     return;
   }
 
@@ -60,6 +61,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
     emit isSpatialChanged( mIsSpatial );
     emit isVectorLayerChanged( mIsVectorLayer );
     emit vectorLayerChanged( nullptr );
+    emit mapLayerChanged( nullptr );
     return;
   }
 
@@ -72,10 +74,11 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
   mIsSpatial = nodeLayer->layer()->isSpatial();
   emit isSpatialChanged( mIsSpatial );
 
-  mIsVectorLayer = nodeLayer->layer()->type() == QgsMapLayerType::VectorLayer;
+  mIsVectorLayer = nodeLayer->layer()->type() == Qgis::LayerType::Vector;
   emit isVectorLayerChanged( mIsVectorLayer );
 
   emit vectorLayerChanged( vectorLayer() );
+  emit mapLayerChanged( nodeLayer->layer() );
 
   // listen on visibility change
   connect( mLayerTreeNode, &QgsLayerTreeNode::visibilityChanged, this, [this]( QgsLayerTreeNode * node )
@@ -132,12 +135,34 @@ QgsVectorLayer *LayerDetailData::vectorLayer() const
   }
 
   QgsMapLayer *mapLayer = nodeLayer->layer();
-  if ( !mapLayer || mapLayer->type() != QgsMapLayerType::VectorLayer )
+  if ( !mapLayer || mapLayer->type() != Qgis::LayerType::Vector )
   {
     return nullptr;
   }
 
   return qobject_cast<QgsVectorLayer *>( mapLayer );
+}
+
+QgsMapLayer *LayerDetailData::mapLayer() const
+{
+  if ( !mLayerTreeNode )
+  {
+    return nullptr;
+  }
+
+  QgsLayerTreeLayer *nodeLayer = QgsLayerTree::toLayer( mLayerTreeNode );
+  if ( !nodeLayer )
+  {
+    return nullptr;
+  }
+
+  QgsMapLayer *mapLayer = nodeLayer->layer();
+  if ( !mapLayer )
+  {
+    return nullptr;
+  }
+
+  return mapLayer;
 }
 
 bool LayerDetailData::isVisible() const

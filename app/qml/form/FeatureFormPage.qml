@@ -234,9 +234,6 @@ Item {
           else if (clickedButton === MessageDialog.No) {
             featureForm.cancel()
           }
-          else if (clickedButton === MessageDialog.Cancel) {
-            // Do nothing
-          }
           saveChangesDialog.close()
         }
       }

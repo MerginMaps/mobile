@@ -30,7 +30,7 @@ class MerginApi;
  * "TEST<plan_id>|<keyword>",
  * - where plan_id can be set to -1 (means server please find out my plan_id)
  * - and keyword is one of
- *    tier01       (free plan active, buy recommended plan)
+ *    tier01       (trial plan active, buy recommended plan)
  *    tier12       (recommended active, buy upgrade)
  *    cancel       (got refund from provider)
  *    grace        (grace period entered)

@@ -4,6 +4,7 @@ set(MM_QML
     components/CheckboxComponent.qml
     components/DateTimePicker.qml
     components/DelegateButton.qml
+    components/ErrorText.qml
     components/ExtendedMenuItem.qml
     components/FieldRow.qml
     components/IconTextItem.qml

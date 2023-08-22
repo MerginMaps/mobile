@@ -69,14 +69,9 @@ ApplicationWindow {
       property alias height: window.height
     }
 
-    //! Must stay in main.qml, it is used from different nested components
     function showMessage(message) {
-        if ( !__androidUtils.isAndroid ) {
-            popup.text = message
-            popup.open()
-        } else {
-            __androidUtils.showToast( message )
-        }
+      popup.text = message
+      popup.open()
     }
 
     function showProjError(message) {
@@ -457,6 +452,9 @@ ApplicationWindow {
     Loader {
       id: gpsDataPageLoader
 
+      property string lastState
+      property string lastMapState
+
       asynchronous: true
       active: false
       focus: true
@@ -464,6 +462,8 @@ ApplicationWindow {
       onActiveChanged: {
         if ( gpsDataPageLoader.active )
         {
+          lastState = stateManager.state
+          lastMapState = map.state
           formsStackManager.closeDrawer();
 
           if ( stakeoutPanelLoader.active )
@@ -479,6 +479,8 @@ ApplicationWindow {
             // user closed GPS panel and we are in stakeout mode - reopen stakeout panel
             stakeoutPanelLoader.item.restore()
           }
+          stateManager.state = lastState
+          map.state = lastMapState
         }
       }
     }

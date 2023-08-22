@@ -23,16 +23,17 @@ jobs:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-12
     env:
-      QT_VERSION: '6.4.2'
-      NDK_VERSION: r23
-      NDK_VERSION_FULL: r23b
+      QT_VERSION: '6.5.2'
+      NDK_VERSION: r25
+      NDK_VERSION_FULL: r25b
       JDK_VERSION: 11
       SDK_PLATFORM: android-31
-      SDK_BUILD_TOOLS: 31.0.0
-      INPUT_SDK_VERSION: android-macOS-20230110-133
+      SDK_BUILD_TOOLS: 33.0.1
+      INPUT_SDK_VERSION_ARM: arm-android-20230809-193
+      INPUT_SDK_VERSION_ARM64: arm64-android-20230809-193
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-      CACHE_VERSION: 2
+      CACHE_VERSION: 1
       QT_ANDROID_KEYSTORE_ALIAS: input
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
@@ -157,12 +158,25 @@ jobs:
       - name: Install Input-SDK
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
+          # download
           wget -O \
-            input-sdk.tar.gz \
-            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk
-          cd ${{ github.workspace }}/input-sdk
-          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
+            input-sdk-arm-android.tar.gz \
+            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION_ARM }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION_ARM }}.tar.gz
+          
+          wget -O \
+            input-sdk-arm64-android.tar.gz \
+            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION_ARM64 }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION_ARM64 }}.tar.gz
+             
+          # unpack
+          mkdir -p ${{ github.workspace }}/input-sdk/arm-android
+          cd ${{ github.workspace }}/input-sdk/arm-android
+          tar -xvzf ${{ github.workspace }}/input-sdk-arm-android.tar.gz
+
+          mkdir -p ${{ github.workspace }}/input-sdk/arm64-android
+          cd ${{ github.workspace }}/input-sdk/arm64-android
+          tar -xvzf ${{ github.workspace }}/input-sdk-arm64-android.tar.gz
+
+          # check
           ls ${{ github.workspace }}/input-sdk
 
       - name: Extract Mergin API_KEY
@@ -267,7 +281,7 @@ jobs:
 
       - name: Rename AAB artefacts
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
-        run: |       
+        run: |
           mv \
             ${{ github.workspace }}/build-Input/app/android-build/build/outputs/bundle/release/android-build-release.aab \
             ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab

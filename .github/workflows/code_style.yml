@@ -5,11 +5,22 @@ on:
     paths:
     - 'app/**'
     - 'core/**'
-
+    - 'gallery/**'
+    - 'scripts/**'
+    - 'test/**'
+    - 'cmake/**'
+    - 'cmake_templates/**'
+    - 'CMakeLists.txt'
+    - '.github/workflows/code_style.yml'
+    
   release:
     types:
       - published
 
+env:
+  QT_VERSION: '6.5.2'
+  CACHE_VERSION: 0
+  
 jobs:
   code_style_cpp:
     name: C++ code convention check
@@ -49,8 +60,7 @@ jobs:
           
   code_style_qml:
     name: QML code convention check
-    if: ${{ false }}  # disable for now
-    # if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-latest
     steps:
 
@@ -59,8 +69,48 @@ jobs:
         with:
           path: input
 
-      - name: Install deps
-        run: brew install martindelille/tap/qmlfmt
+      - name: Restore cached Primes
+        id: cache-qmlfmt-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ github.workspace }}/build-qmlfmt
+          key: cache-v${{ env.CACHE_VERSION }}-qt-${{ env.QT_VERSION }}-qmlfmt
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          target: desktop
+          dir: ${{ github.workspace }}
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
+          cache: true
+          cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-codestyle
+          
+      - name: Install qmlfmt
+        if: steps.cache-qmlfmt-restore.outputs.cache-hit != 'true'
+        run: |
+          git clone https://github.com/jesperhh/qmlfmt.git
+          cd ${{ github.workspace }}/qmlfmt
+          git submodule update --init qt-creator
+          mkdir ${{ github.workspace }}/build-qmlfmt
+          cd ${{ github.workspace }}/build-qmlfmt
+          export Qt6_DIR="${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/cmake/Qt6"
+          export Qt6GuiTools_DIR="${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/cmake/Qt6GuiTools"
+          export Qt6Test_DIR="${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos/lib/cmake/Qt6Test"
+          cmake ../qmlfmt -DBUILD_TESTING=OFF
+          make
+
+      - name: Cache qmlfmt
+        uses: actions/cache/save@v3
+        if: always()
+        id: cache-qmlfmt-save
+        with:
+          path: ${{ github.workspace }}/build-qmlfmt
+          key: cache-v${{ env.CACHE_VERSION }}-qt-${{ env.QT_VERSION }}-qmlfmt
 
       - name: Run style check
-        run: ./input/scripts/format_qml.bash
+        run: |
+          export PATH=${{ github.workspace }}/build-qmlfmt:$PATH
+          which qmlfmt
+          qmlfmt -v
+          ./input/scripts/format_qml.bash

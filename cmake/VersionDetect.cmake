@@ -12,11 +12,5 @@ macro (mm_detect_version)
             ${INPUT_VERSION}
   )
 
-  set(version_desc "version name ${INPUT_VERSION}")
-  if (ANDROID
-      OR IOS
-      OR MACOS
-  )
-    set(version_desc "${version_desc}; code ${INPUT_VERSION_CODE}")
-  endif ()
+  set(version_desc "version name ${INPUT_VERSION}; code ${INPUT_VERSION_CODE}")
 endmacro ()

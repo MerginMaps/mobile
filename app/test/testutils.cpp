@@ -16,6 +16,8 @@
 #include "coreutils.h"
 #include "inpututils.h"
 #include "merginapi.h"
+#include "purchasing.h"
+#include "testingpurchasingbackend.h"
 
 void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password )
 {
@@ -26,8 +28,10 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
 
   apiRoot = ::getenv( "TEST_MERGIN_URL" );
   api->setApiRoot( apiRoot );
-
   qDebug() << "MERGIN API ROOT:" << apiRoot;
+
+  // let's make sure we do not mess with the public instance
+  Q_ASSERT( apiRoot != MerginApi::sDefaultApiRoot );
 
   username = ::getenv( "TEST_API_USERNAME" );
   password = ::getenv( "TEST_API_PASSWORD" );
@@ -44,14 +48,17 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
     QSignalSpy spy( api,  &MerginApi::registrationSucceeded );
     api->registerUser( username, email, password, password, true );
     QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
+    QCOMPARE( spy.count(), 1 );
 
+    // put it so in next local test run we can take it from
+    // the environment and we do not create another user
     qputenv( "TEST_API_USERNAME", username.toLatin1() );
     qputenv( "TEST_API_PASSWORD", password.toLatin1() );
 
     QSignalSpy authSpy( api, &MerginApi::authChanged );
     api->authorize( username, password );
     QVERIFY( authSpy.wait( TestUtils::LONG_REPLY ) );
-    QCOMPARE( authSpy.count(), 1 );
+    QVERIFY( !authSpy.isEmpty() );
 
     // we also need to create a workspace for this user
     QSignalSpy wsSpy( api, &MerginApi::workspaceCreated );
@@ -67,16 +74,56 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
     QVERIFY( infoSpy.wait( TestUtils::LONG_REPLY ) );
 
     QVERIFY( api->userInfo()->activeWorkspaceId() >= 0 );
-    qDebug() << "WORKING WITH WORKSPACE:" << api->userInfo()->activeWorkspaceName() << api->userInfo()->activeWorkspaceId();
+
   }
 
   Q_ASSERT( ::getenv( "TEST_API_USERNAME" ) );
   Q_ASSERT( ::getenv( "TEST_API_PASSWORD" ) );
 
   qDebug() << "MERGIN USERNAME:" << username;
+  qDebug() << "MERGIN WORKSPACE:" << api->userInfo()->activeWorkspaceName() << api->userInfo()->activeWorkspaceId();
+}
 
-  // let's make sure we do not mess with the public instance
-  Q_ASSERT( apiRoot != MerginApi::sDefaultApiRoot );
+void TestUtils::mergin_setup_pro_subscription( MerginApi *api, Purchasing *purchasing )
+{
+  QSignalSpy spy2( api, &MerginApi::subscriptionInfoChanged );
+  api->getServiceInfo();
+  QVERIFY( spy2.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( spy2.count(), 1 );
+
+  Q_ASSERT( ! purchasing->transactionPending() );
+
+  if ( api->subscriptionInfo()->planProductId() != TIER02_PLAN_ID )
+  {
+    // always start from PRO subscription
+    qDebug() << "PURCHASE PRO subscription:" << api->userInfo()->activeWorkspaceName();
+    runPurchasingCommand( api, purchasing, TestingPurchasingBackend::NonInteractiveBuyProfessionalPlan, TIER02_PLAN_ID );
+  }
+
+  Q_ASSERT( api->subscriptionInfo()->planProductId() == TIER02_PLAN_ID );
+  qDebug() << "MERGIN SUBSCRIPTION:" << api->subscriptionInfo()->planProductId();
+}
+
+void TestUtils::runPurchasingCommand( MerginApi *api, Purchasing *purchasing, TestingPurchasingBackend::NextPurchaseResult result, const QString &planId, bool waitForWorkspaceInfoChanged )
+{
+  Q_ASSERT( purchasing );
+  TestingPurchasingBackend *purchasingBackend = qobject_cast<TestingPurchasingBackend * >( purchasing->backend() );
+  Q_ASSERT( purchasingBackend );
+
+  purchasingBackend->setNextPurchaseResult( result );
+
+  QSignalSpy spy0( api, &MerginApi::subscriptionInfoChanged );
+  QVERIFY( !planId.isEmpty() );
+  QSignalSpy spy1( api->workspaceInfo(), &MerginWorkspaceInfo::workspaceInfoChanged );
+
+  purchasing->purchase( planId );
+  QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( spy0.count(), 1 );
+
+  if ( waitForWorkspaceInfoChanged )
+  {
+    QVERIFY( spy1.wait( TestUtils::LONG_REPLY ) );
+  }
 }
 
 QString TestUtils::generateUsername()

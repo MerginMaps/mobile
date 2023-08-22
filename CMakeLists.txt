@@ -8,11 +8,14 @@ cmake_minimum_required(VERSION 3.22)
 set(MM_VERSION_MAJOR "2")
 set(MM_VERSION_MINOR "3")
 set(MM_VERSION_PATCH "0")
-set(QT_VERSION_DEFAULT "6.4.2")
+set(QT_VERSION_DEFAULT "6.5.2")
 
 # Note: we cannot set this for non-android build, since CMake will start looking for
 # Qt6AndroidMacros.cmake
 if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
+  # Workaround for bug https://bugreports.qt.io/browse/QTBUG-112885 in Qt6.5.0
+  set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
+
   set(ANDROIDAPI "24")
   set(ANDROID_PLATFORM "android-${ANDROIDAPI}")
   set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}")
@@ -102,8 +105,10 @@ if (DEFINED ENV{INPUT_VERSION_CODE})
 else ()
   if (ANDROID)
     set(INPUT_VERSION_CODE_DEFAULT "0000000")
-  elseif (APPLE)
+  elseif (IOS)
     set(INPUT_VERSION_CODE_DEFAULT "00.00.000000")
+  else ()
+    set(INPUT_VERSION_CODE_DEFAULT "000000")
   endif ()
 endif ()
 
@@ -148,15 +153,10 @@ set(QT6_VERSION
     CACHE STRING "QT6 version to use"
 )
 
-if (ANDROID
-    OR IOS
-    OR MACOS
+set(INPUT_VERSION_CODE
+    "${INPUT_VERSION_CODE_DEFAULT}"
+    CACHE STRING "Build version (for stores)"
 )
-  set(INPUT_VERSION_CODE
-      "${INPUT_VERSION_CODE_DEFAULT}"
-      CACHE STRING "Build version (for stores)"
-  )
-endif ()
 
 mm_detect_version()
 message(STATUS "Mergin Maps Input ${version_desc} - ${platform_desc}")
@@ -166,9 +166,9 @@ message(STATUS "Mergin Maps Input ${version_desc} - ${platform_desc}")
 # ########################################################################################
 
 if (ANDROID)
-  set(INPUT_SDK_PATH_ANDROID_ABI_armeabi-v7a ${INPUT_SDK_PATH}/armeabi-v7a)
-  set(INPUT_SDK_PATH_ANDROID_ABI_arm64-v8a ${INPUT_SDK_PATH}/arm64-v8a)
-  set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH}/${ANDROID_ABI})
+  set(INPUT_SDK_PATH_ANDROID_ABI_armeabi-v7a ${INPUT_SDK_PATH}/arm-android)
+  set(INPUT_SDK_PATH_ANDROID_ABI_arm64-v8a ${INPUT_SDK_PATH}/arm64-android)
+  set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH_ANDROID_ABI_${ANDROID_ABI}})
   # allow libraries outside of SDK/NDK directory
   set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
   set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
@@ -177,7 +177,6 @@ else ()
   set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH})
 endif ()
 
-# TODO: OpenGl needed?
 find_package(
   Qt6 ${QT6_VERSION}
   COMPONENTS Quick
@@ -210,18 +209,13 @@ if (NOT IOS)
   )
 endif ()
 
-if (MACOS
-    OR IOS
-    OR ANDROID
-)
+if (NOT LINUX)
   find_package(Charset REQUIRED)
   find_package(Iconv REQUIRED)
 endif ()
 
-if (MACOS OR IOS)
-  find_package(Bz2 REQUIRED)
-endif ()
-
+find_package(ZLIB REQUIRED)
+find_package(Bz2 REQUIRED)
 find_package(Curl REQUIRED)
 find_package(Exiv2 REQUIRED)
 find_package(Expat REQUIRED)
@@ -229,7 +223,6 @@ find_package(Freexl REQUIRED)
 find_package(Gdal REQUIRED)
 find_package(Geodiff REQUIRED)
 find_package(Geos REQUIRED)
-find_package(Jpeg REQUIRED)
 find_package(Jpeg REQUIRED)
 find_package(Pq REQUIRED)
 find_package(Proj REQUIRED)
@@ -242,26 +235,20 @@ find_package(Spatialite REQUIRED)
 find_package(Sqlite3 REQUIRED)
 find_package(Tiff REQUIRED)
 find_package(WebP REQUIRED)
-if (NOT ANDROID)
-  find_package(Xml2 REQUIRED)
-endif ()
-find_package(ZLIB REQUIRED)
+find_package(Xml2 REQUIRED)
 find_package(ZXing REQUIRED)
 find_package(Zip REQUIRED)
-
-if (ANDROID)
-  find_package(OpenSSL REQUIRED)
-endif ()
+find_package(OpenSSL REQUIRED)
+find_package(Geotiff REQUIRED)
+find_package(Lzma REQUIRED)
 
 if (IOS OR MACOS)
   find_package(AppleFrameworks REQUIRED)
+  find_package(Tasn1 REQUIRED)
 endif ()
 
-if (ANDROID
-    OR IOS
-    OR MACOS
-)
-  find_package(Tasn1 REQUIRED)
+if (LNX)
+  find_package(Glib2 REQUIRED)
 endif ()
 
 if (HAVE_BLUETOOTH)
