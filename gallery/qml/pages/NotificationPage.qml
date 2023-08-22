@@ -9,22 +9,36 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Basic
 
 import "../../app/qmlV2/component"
 
 Page {
   id: pane
 
-  Label {
-    width: parent.width / 2
-    text: "DP ratio: ~" + Math.round(__dp * 1000) / 1000 + "\n" +
-          "Used font: " + font.family
+  MMNotificationView {
+
+  }
+
+  Column {
+    width: parent.width
+    spacing: 20
     anchors.centerIn: parent
-    horizontalAlignment: Label.AlignHCenter
-    verticalAlignment: Label.AlignVCenter
-    wrapMode: Label.Wrap
-    color: "red"
-    font.family: "Inter"
-    font.pixelSize: 20
+
+    MMInput {
+      anchors.horizontalCenter: parent.horizontalCenter
+      placeholderText: "Write an informative message"
+      onEnterPressed: _notificationModel.add(text, 10, 0)
+    }
+    MMInput {
+      anchors.horizontalCenter: parent.horizontalCenter
+      placeholderText: "Write a warning message"
+      onEnterPressed: _notificationModel.add(text, 10, 1)
+    }
+    MMInput {
+      anchors.horizontalCenter: parent.horizontalCenter
+      placeholderText: "Write an error message"
+      onEnterPressed: _notificationModel.add(text, 10, 2)
+    }
   }
 }

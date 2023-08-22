@@ -23,6 +23,8 @@ Item {
   property string warningMsg
   property string errorMsg
 
+  signal enterPressed()
+
   width: 280 * __dp
   height: rect.height + messageItem.height
 
@@ -105,6 +107,13 @@ Item {
         echoMode: (control.type === MMInput.Type.Password && !rightIcon.pressed) ? TextInput.Password : TextInput.Normal
         background: Rectangle {
           color: Style.transparent
+        }
+
+        Keys.onPressed: (event) => {
+          if ( event.key === Qt.Key_Return || event.key === Qt.Key_Enter ) {
+            control.enterPressed()
+            event.accepted = true
+          }
         }
       }
 
