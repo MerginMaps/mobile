@@ -8,14 +8,13 @@
  ***************************************************************************/
 
 import QtQuick
+import QtCore
 import QtQuick.Controls
 import QtMultimedia
 import QtQml.Models
 import QtPositioning
 import QtQuick.Dialogs
 import QtQuick.Layouts
-
-import Qt.labs.settings
 
 import lc 1.0 as InputClass
 import "./map"
