@@ -362,14 +362,31 @@ if (IOS)
                MACOSX_BUNDLE_GUI_IDENTIFIER "LutraConsultingLtd.Input"
                MACOSX_BUNDLE_SHORT_VERSION_STRING ${INPUT_VERSION}
                MACOSX_BUNDLE_BUNDLE_VERSION ${INPUT_VERSION_CODE}
-               XCODE_ATTRIBUTE_PROVISIONING_PROFILE_SPECIFIER
-               "LutraConsultingLtd.Input.AppStore"
                XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "79QMH2QRAH"
-               XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY
-               "iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)"
-               XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Manual"
                XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
   )
+
+  if (IOS_USE_PRODUCTION_SIGNING)
+
+    # use production signing profile
+    set_target_properties(
+      Input
+      PROPERTIES 
+                XCODE_ATTRIBUTE_PROVISIONING_PROFILE_SPECIFIER "LutraConsultingLtd.Input.AppStore"
+                XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)"
+                XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Manual"
+    )
+    message(STATUS "Using manual code sign with production certificate")
+
+  else ()
+
+    # use development profiles - automatically manage signing
+    set_target_properties(
+      Input
+      PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Automatic"
+    )
+    message(STATUS "Using automatic code sign")
+  endif ()
 endif ()
 
 # ########################################################################################
