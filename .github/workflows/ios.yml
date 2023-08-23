@@ -186,6 +186,7 @@ jobs:
           cmake \
             -DCMAKE_TOOLCHAIN_FILE:PATH="${{ github.workspace }}/ios-cmake/ios.toolchain.cmake" \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios \
+            -DIOS_USE_PRODUCTION_SIGNING=TRUE \
             -DQT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
             -DIOS=TRUE \
             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
