@@ -249,7 +249,7 @@ Mergin Maps Input Android on Windows, please help us to update this section.
 1. Setup development environment
    - XCode
    - build tools, see requirements in `.github/workflows/ios.yml`
-   - to install app to your iOS device, you need development certificate
+   - if you want to build for production, you need development certificates. These are not needed for local development, signing is handled automatically (see IOS_USE_PRODUCTION_SIGNING cmake variable for more info). You can get the certificates by following:
        - Get device UDID: either iTunes or about this mac->system report->USB->find iPAD (Serial Number)
        - Create dev iOS certificate for development
        - Create provisioning profile for Input App + your certificate + your device (for this ask Lutra Apple development team)
