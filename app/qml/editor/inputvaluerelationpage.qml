@@ -80,7 +80,7 @@ AbstractEditor {
       root.editorValueChanged( "", true )
     }
 
-    onFetchingResultsChanged: {
+    onFetchingResultsChanged: function ( isFetching ) {
       if ( !isFetching )
       {
         setText()
