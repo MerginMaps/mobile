@@ -305,20 +305,9 @@ void AttributeController::flatten(
         break;
       }
 
-      case Qgis::AttributeEditorType::Invalid:
-        // todo
-        break;
-
-      case Qgis::AttributeEditorType::Action:
-        // todo
-        break;
-
-      case Qgis::AttributeEditorType::QmlElement:
-        // todo
-        break;
-
-      case Qgis::AttributeEditorType::HtmlElement:
-        // todo
+      default:
+        // Invalid, Action, QmlElement, HtmlElement, TextElement and SpacerElement
+        // are not supported at the moment
         break;
     }
   }
