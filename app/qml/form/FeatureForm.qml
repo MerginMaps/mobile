@@ -104,11 +104,6 @@ Item {
   property StackView extraView
 
   /**
-   * The function used for a component loader to find qml edit widget components used in form.
-   */
-  property var loadWidgetFn: __inputUtils.getEditorComponentSource
-
-  /**
    * Predefined form styling
    */
   property FeatureFormStyling style: FeatureFormStyling {}
@@ -520,7 +515,7 @@ Item {
 
             source: {
               if ( widget !== undefined )
-                return form.loadWidgetFn( widget.toLowerCase(), config, field )
+                return __inputUtils.getEditorComponentSource( widget.toLowerCase(), config, field )
               else return ''
             }
           }
