@@ -193,8 +193,8 @@ Item {
       contentWidth: window.width
       contentItem: ScrollView {
         anchors.centerIn: parent
-        contentWidth: image.width
-        contentHeight: image.height
+        contentWidth: imagePreview.width
+        contentHeight: imagePreview.height
 
         Rectangle {
           id: photoFrame

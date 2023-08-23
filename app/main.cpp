@@ -459,14 +459,12 @@ int main( int argc, char *argv[] )
 
   // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
   AppSettings as;
-  bool hasLoadedDemoProjects = false;
 
   // copy demo projects when the app is launched for the first time
   if ( !as.demoProjectsCopied() )
   {
     copy_demo_projects( demoDir, projectDir );
     as.setDemoProjectsCopied( true );
-    hasLoadedDemoProjects = true;
   }
 
   // there seem to be issues with HTTP/2 server support (QTBUG-111417)
