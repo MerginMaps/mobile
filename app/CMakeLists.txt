@@ -371,20 +371,18 @@ if (IOS)
     # use production signing profile
     set_target_properties(
       Input
-      PROPERTIES 
-                XCODE_ATTRIBUTE_PROVISIONING_PROFILE_SPECIFIER "LutraConsultingLtd.Input.AppStore"
-                XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)"
-                XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Manual"
+      PROPERTIES XCODE_ATTRIBUTE_PROVISIONING_PROFILE_SPECIFIER
+                 "LutraConsultingLtd.Input.AppStore"
+                 XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY
+                 "iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)"
+                 XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Manual"
     )
     message(STATUS "Using manual code sign with production certificate")
 
   else ()
 
     # use development profiles - automatically manage signing
-    set_target_properties(
-      Input
-      PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Automatic"
-    )
+    set_target_properties(Input PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Automatic")
     message(STATUS "Using automatic code sign")
   endif ()
 endif ()

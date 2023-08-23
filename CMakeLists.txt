@@ -128,9 +128,9 @@ set(QGIS_QUICK_DATA_PATH
 )
 set(IOS_USE_PRODUCTION_SIGNING
     FALSE
-    CACHE 
-    BOOL 
-    "Whether to sign the ios build with production certificate. Used in CI, leave false when building locally to automatically manage signing"
+    CACHE
+      BOOL
+      "Whether to sign the ios build with production certificate. Used in CI, leave false when building locally to automatically manage signing"
 )
 set(INPUT_SDK_PATH
     ${INPUT_SDK_PATH_DEFAULT}
