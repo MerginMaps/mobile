@@ -1079,14 +1079,29 @@ void MerginApi::createProjectFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QByteArray data = r->readAll();
+    QVariant code = extractServerErrorValue( data, QStringLiteral( "code" ) );
+    QString serverMsg = extractServerErrorMsg( data );
     QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
+    bool showLimitReachedDialog = code.toString() == QStringLiteral( "ProjectsLimitHit" );
+
     CoreUtils::log( "create " + projectFullName, message );
 
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-
     emit projectCreated( projectFullName, false );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectName );
+
+    if ( showLimitReachedDialog )
+    {
+      int maxProjects = 0;
+      QVariant maxProjectVariant = extractServerErrorValue( data, "projects_quota" );
+      if ( maxProjectVariant.isValid() )
+        maxProjects = maxProjectVariant.toInt();
+      emit projectLimitReached( maxProjects, serverMsg );
+    }
+    else
+    {
+      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectName );
+    }
   }
   r->deleteLater();
 }
@@ -1369,6 +1384,22 @@ bool MerginApi::extractProjectName( const QString &sourceString, QString &projec
     name = sourceString;
     return false;
   }
+}
+
+QVariant MerginApi::extractServerErrorValue( const QByteArray &data, const QString &key )
+{
+  QJsonDocument doc = QJsonDocument::fromJson( data );
+  if ( doc.isObject() )
+  {
+    QJsonObject obj = doc.object();
+    if ( obj.contains( key ) )
+    {
+      QJsonValue val = obj.value( key );
+      return val.toVariant();
+    }
+  }
+
+  return QVariant();
 }
 
 QString MerginApi::extractServerErrorMsg( const QByteArray &data )

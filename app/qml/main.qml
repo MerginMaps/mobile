@@ -618,6 +618,16 @@ ApplicationWindow {
         }
     }
 
+    ProjectLimitDialog {
+        id: projectLimitDialog
+        onOpenSubscriptionPlans: {
+          projectLimitDialog.close()
+          if (__merginApi.apiSupportsSubscriptions) {
+            projectPanel.manageSubscriptionPlans()
+          }
+        }
+    }
+
     MessageDialog {
         id: projDialog
         onAccepted: projDialog.close()
@@ -740,6 +750,15 @@ ApplicationWindow {
           }
           storageLimitDialog.uploadSize = uploadSize
           storageLimitDialog.open()
+        }
+
+        function onProjectLimitReached( maxProjects, errorMsg ) {
+          __merginApi.getUserInfo()
+          if (__merginApi.apiSupportsSubscriptions) {
+            __merginApi.getWorkspaceInfo()
+          }
+          projectLimitDialog.maxProjectNumber = maxProjects
+          projectLimitDialog.open()
         }
 
         function onNotify( message ) {

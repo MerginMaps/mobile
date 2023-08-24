@@ -553,6 +553,7 @@ class MerginApi: public QObject
     );
 
     void storageLimitReached( qreal uploadSize );
+    void projectLimitReached( int maxProjects, const QString &message );
     void notify( const QString &message );
     void authRequested();
     void authChanged();
@@ -681,6 +682,12 @@ class MerginApi: public QObject
     bool validateAuth();
     void checkMerginVersion( QString apiVersion, bool serverSupportsSubscriptions, QString msg = QStringLiteral() );
 
+    /**
+    * Extracts value of an error json. If its not json or value cannot be parsed, QVariant() is return;
+    * \param data Data received from mergin server on a request failed.
+    * \param key Where should be a value from data
+    */
+    QVariant extractServerErrorValue( const QByteArray &data, const QString &key );
     /**
     * Extracts detail (message) of an error json. If its not json or detail cannot be parsed, the whole data are return;
     * \param data Data received from mergin server on a request failed.
