@@ -156,7 +156,8 @@ jobs:
         run: |
           cd build-Input-db
 
-          lcov --directory . --capture --output-file coverage.info --no-external
+          lcov --directory . --capture --output-file coverage.info --no-external --ignore-errors gcov
+
           lcov --remove coverage.info '*/input-sdk/*' '*Qt/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input-db/*' --output-file coverage.info
           lcov --list coverage.info
 
