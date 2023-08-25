@@ -206,43 +206,43 @@ Please go to the Mergin Maps website to remove it manually.</source>
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="574"/>
-        <location filename="../attributes/attributecontroller.cpp" line="625"/>
+        <location filename="../attributes/attributecontroller.cpp" line="563"/>
+        <location filename="../attributes/attributecontroller.cpp" line="614"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation type="unfinished">Default value expression for %1:%2 has parser error: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="584"/>
-        <location filename="../attributes/attributecontroller.cpp" line="635"/>
+        <location filename="../attributes/attributecontroller.cpp" line="573"/>
+        <location filename="../attributes/attributecontroller.cpp" line="624"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation type="unfinished">Default value expression for %1:%2 has evaluation error: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="595"/>
-        <location filename="../attributes/attributecontroller.cpp" line="646"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1208"/>
+        <location filename="../attributes/attributecontroller.cpp" line="584"/>
+        <location filename="../attributes/attributecontroller.cpp" line="635"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1197"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation type="unfinished">Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="905"/>
+        <location filename="../attributes/attributecontroller.cpp" line="894"/>
         <source>Cannot delete feature</source>
         <translation type="unfinished">Cannot delete feature</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="528"/>
-        <location filename="../attributes/attributecontroller.cpp" line="961"/>
+        <location filename="../attributes/attributecontroller.cpp" line="517"/>
+        <location filename="../attributes/attributecontroller.cpp" line="950"/>
         <source>Feature could not be added</source>
         <translation type="unfinished">Feature could not be added</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="537"/>
-        <location filename="../attributes/attributecontroller.cpp" line="972"/>
+        <location filename="../attributes/attributecontroller.cpp" line="526"/>
+        <location filename="../attributes/attributecontroller.cpp" line="961"/>
         <source>Cannot update feature</source>
         <translation type="unfinished">Cannot update feature</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="1016"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1005"/>
         <source>Cannot start editing</source>
         <translation type="unfinished">Cannot start editing</translation>
     </message>
@@ -443,12 +443,12 @@ Please go to the Mergin Maps website to remove it manually.</source>
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="137"/>
+        <location filename="../qml/form/FeatureForm.qml" line="132"/>
         <source>Can not save the form, there are validation errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="138"/>
+        <location filename="../qml/form/FeatureForm.qml" line="133"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2555,64 +2555,64 @@ Please go to the Mergin Maps website to remove it manually.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="232"/>
-        <location filename="../qml/main.qml" line="300"/>
+        <location filename="../qml/main.qml" line="231"/>
+        <location filename="../qml/main.qml" line="299"/>
         <source>No Changes</source>
         <translation type="unfinished">No Changes</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="275"/>
+        <location filename="../qml/main.qml" line="274"/>
         <source>GPS auto-center mode on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="275"/>
+        <location filename="../qml/main.qml" line="274"/>
         <source>GPS auto-center mode off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="289"/>
+        <location filename="../qml/main.qml" line="288"/>
         <source>No editable layers found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="529"/>
-        <location filename="../qml/main.qml" line="540"/>
+        <location filename="../qml/main.qml" line="528"/>
+        <location filename="../qml/main.qml" line="539"/>
         <source>not tracking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="695"/>
+        <location filename="../qml/main.qml" line="694"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="707"/>
+        <location filename="../qml/main.qml" line="706"/>
         <source>Failed to open the project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="732"/>
+        <location filename="../qml/main.qml" line="731"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="786"/>
+        <location filename="../qml/main.qml" line="785"/>
         <source>There were issues loading the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="810"/>
+        <location filename="../qml/main.qml" line="809"/>
         <source>Could not read the project file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="830"/>
+        <location filename="../qml/main.qml" line="829"/>
         <source>Press back again to quit the app</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="625"/>
+        <location filename="../qml/main.qml" line="624"/>
         <source>PROJ Error</source>
         <translation type="unfinished"></translation>
     </message>
