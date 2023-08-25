@@ -22,7 +22,7 @@ if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
   set(ANDROID_STL "c++_shared")
 
   # Target/Minimum API levels for Android, used as Input target properties
-  set(INPUT_ANDROID_TARGET_SDK_VERSION "31")
+  set(INPUT_ANDROID_TARGET_SDK_VERSION "33")
   set(INPUT_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
 endif ()
 
