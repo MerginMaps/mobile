@@ -62,7 +62,7 @@ qt_add_qml_module(
   QML_FILES qml/Main.qml
             NO_GENERATE_QMLTYPES
             RESOURCES
-            mobile.qrc
+            qml.qrc
 )
 
 qt_add_resources(fonts.qrc)
