@@ -17,9 +17,9 @@ on:
 
 env:
   QT_VERSION: '6.5.2'
-  INPUT_SDK_VERSION: x64-osx-20230810-174
+  INPUT_SDK_VERSION: x64-osx-20230824-181
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 1
+  CACHE_VERSION: 2
   XC_VERSION: ${{ '14.2' }}
 
 concurrency:
@@ -155,8 +155,9 @@ jobs:
       - name: build lcov summary
         run: |
           cd build-Input-db
-          lcov --directory . --capture --output-file coverage.info
-          lcov --remove coverage.info '*input-sdk/*' '*Qt/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input-db/*' --output-file coverage.info
+
+          lcov --directory . --capture --output-file coverage.info --no-external
+          lcov --remove coverage.info '*/input-sdk/*' '*Qt/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input-db/*' --output-file coverage.info
           lcov --list coverage.info
 
       - name: Coveralls

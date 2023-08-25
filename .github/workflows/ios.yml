@@ -19,11 +19,11 @@ env:
   QT_VERSION: '6.5.2'
   XC_VERSION: ${{ '14.2' }}
   IOS_CMAKE_TOOLCHAIN_VERSION: "4.4.0" 
-  INPUT_SDK_VERSION: arm64-ios-20230809-150
+  INPUT_SDK_VERSION: arm64-ios-20230824-157
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 1
+  CACHE_VERSION: 2
 
 concurrency:
   group: ci-${{github.ref}}-ios
