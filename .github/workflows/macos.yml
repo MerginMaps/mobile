@@ -155,7 +155,10 @@ jobs:
       - name: build lcov summary
         run: |
           cd build-Input-db
-          lcov --directory . --capture --output-file coverage.info
+          
+          # omit qrc files, they sometimes produce error:
+          # function __cxx_global_var_init found on line but no corresponding 'line' coverage data point
+          lcov --directory . --capture --output-file coverage.info --exclude '*/qrc_*'
           lcov --remove coverage.info '*input-sdk/*' '*Qt/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input-db/*' --output-file coverage.info
           lcov --list coverage.info
 
