@@ -400,7 +400,7 @@ void TestUtilsFunctions::testStakeoutPathExtent()
 
     ms.setExtent( extent );
 	
-	// On some platforms the scale is not exactly the same
+    // On some platforms the scale is not exactly the same
     COMPARENEAR( ms.mapSettings().scale(), test.expectedScale, 1.5 );
   }
 
