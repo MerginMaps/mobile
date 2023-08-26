@@ -399,7 +399,7 @@ void TestUtilsFunctions::testStakeoutPathExtent()
     QVERIFY( mUtils->equals( extent.center(), test.expectedCenter ) );
 
     ms.setExtent( extent );
-	
+
     // On some platforms the scale is not exactly the same
     COMPARENEAR( ms.mapSettings().scale(), test.expectedScale, 1.5 );
   }
