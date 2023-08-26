@@ -149,9 +149,10 @@ jobs:
       - name: run tests
         env:
           TEST_MERGIN_URL: https://test.dev.merginmaps.com/
+		  QT_QPA_PLATFORM: "offscreen"
         run: |
           cd build-Input-db/
-          ctest --output-on-failure
+          xvfb-run --server-args="-screen 0 640x480x24" ctest --output-on-failure
 
       - name: build lcov summary
         run: |
