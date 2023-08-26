@@ -152,21 +152,6 @@ jobs:
           cd build-Input-db/
           ctest --output-on-failure
 
-      - name: build lcov summary
-        run: |
-          cd build-Input-db
-
-          lcov --directory . --capture --output-file coverage.info --no-external --ignore-errors gcov
-
-          lcov --remove coverage.info '*/input-sdk/*' '*Qt/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input-db/*' --output-file coverage.info
-          lcov --list coverage.info
-
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: build-Input-db/coverage.info
-
       # Package
       - name: build Input (Release)
         run: |

@@ -399,7 +399,9 @@ void TestUtilsFunctions::testStakeoutPathExtent()
     QVERIFY( mUtils->equals( extent.center(), test.expectedCenter ) );
 
     ms.setExtent( extent );
-    QCOMPARE( ( int )ms.mapSettings().scale(), test.expectedScale );
+
+    // On some platforms the scale is not exactly the same
+    COMPARENEAR( ms.mapSettings().scale(), test.expectedScale, 1.5 );
   }
 
   // Test stakeout distance2scale
