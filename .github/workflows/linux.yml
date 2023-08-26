@@ -7,7 +7,7 @@ on:
     - 'scripts/**'
     - 'cmake/**'
     - 'cmake_templates/**'
-	- 'test/**'
+    - 'test/**'
     - 'CMakeLists.txt'
     - '.github/workflows/linux.yml'
 
