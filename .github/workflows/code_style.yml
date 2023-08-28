@@ -58,3 +58,16 @@ jobs:
         run: |
           ./input/scripts/format_cmake.bash
 
+  cppcheck:
+    name: cpp check
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Requirements
+        run: |
+          brew install cppcheck
+
+      - name: Run cppcheck test
+        run: ./scripts/cppcheck.bash
