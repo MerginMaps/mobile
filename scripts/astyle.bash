@@ -57,7 +57,6 @@ for FILE in $FILES; do
             RETURN=1
             diff -u $FILE $FILE.astyle >&2
 	        mv $FILE.astyle $FILE
-            exit 1;
         else
             rm $FILE.astyle
             echo "Unchanged $FILE" >&2

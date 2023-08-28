@@ -63,7 +63,7 @@ for category in "error" "warning" "${ERROR_CATEGORIES[@]}"; do
             grep "${category}," ${LOG_FILE}
             echo ""
             echo "******************************************************************************************"
-            echo "${category} check failed !"
+            echo "ERROR: ${category} check failed !"
             ret_code=1
         fi
     fi
