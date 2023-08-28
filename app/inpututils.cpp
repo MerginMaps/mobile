@@ -1723,7 +1723,7 @@ void InputUtils::createEditBuffer( QgsVectorLayer *layer )
 }
 
 FeatureLayerPair InputUtils::changeFeaturePairGeometry( FeatureLayerPair featurePair, const QgsGeometry &geometry )
-{  
+{
   QgsVectorLayer *vlayer = featurePair.layer();
   if ( vlayer )
   {
@@ -1734,9 +1734,9 @@ FeatureLayerPair InputUtils::changeFeaturePairGeometry( FeatureLayerPair feature
     QgsFeature f = vlayer->getFeature( featurePair.feature().id() );
     return FeatureLayerPair( f, featurePair.layer() );
   }
-  else 
+  else
   {
-    // invalid pair 
+    // invalid pair
     return FeatureLayerPair();
   }
 }

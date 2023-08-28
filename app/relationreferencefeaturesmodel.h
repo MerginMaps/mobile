@@ -64,7 +64,7 @@ class RelationReferenceFeaturesModel : public FeaturesModel
     QString mPrimaryKeyField; // primary key field of referenced layer
     QVariantMap mConfig;
     QgsProject *mProject = nullptr;
-    bool mAllowNull;
+    bool mAllowNull = false;
 };
 
 #endif // RELATIONREFERENCEFEATURESMODEL_H
