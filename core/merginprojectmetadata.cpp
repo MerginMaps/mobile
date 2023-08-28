@@ -24,7 +24,8 @@ MerginFile MerginFile::fromJsonObject( const QJsonObject &merginFileInfo )
   merginFile.path = merginFileInfo.value( QStringLiteral( "path" ) ).toString();
   merginFile.size = merginFileInfo.value( QStringLiteral( "size" ) ).toInt();
   merginFile.mtime =  QDateTime::fromString( merginFileInfo.value( QStringLiteral( "mtime" ) ).toString(), Qt::ISODateWithMs ).toUTC();
-
+  merginFile.diffSize = 0;
+  
   if ( merginFileInfo.contains( QStringLiteral( "history" ) ) )
   {
     // "history" is only present if we request project info with "since=vXYZ" argument in the query.
