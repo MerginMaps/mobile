@@ -1445,6 +1445,7 @@ QString InputUtils::dateTimeFieldFormat( const QString &fieldFormat )
   {
     return QString( "Time" );
   }
+  // cppcheck-suppress duplicateBranch
   else if ( QgsDateTimeFieldFormatter::DATETIME_FORMAT == fieldFormat )
   {
     return QString( "Date Time" );

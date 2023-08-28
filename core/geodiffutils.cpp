@@ -29,7 +29,7 @@ class GeodiffContext
     void operator=( GeodiffContext const & )  = delete;
     static GeodiffContext &instance();
 
-    GEODIFF_ContextH handle();
+    GEODIFF_ContextH handle() const;
   private:
     GeodiffContext()
     {

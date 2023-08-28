@@ -62,12 +62,12 @@ class Vertex
     const VertexType &type() const;
     void setType( const VertexType &newType );
 
-    bool operator==( const Vertex &other )
+    bool operator==( const Vertex &other ) const
     {
       return other.vertexId() == mVertexId && InputUtils::equals( other.coordinates(), mCoordinates ) && other.type() == mType;
     }
 
-    bool operator!=( const Vertex &other )
+    bool operator!=( const Vertex &other ) const
     {
       return !( *this == other );
     }
