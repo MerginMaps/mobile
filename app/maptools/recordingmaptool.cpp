@@ -1141,7 +1141,7 @@ double RecordingMapTool::pixelsToMapUnits( double numPixels )
 
 bool RecordingMapTool::shouldBeVisible( const QgsPoint point )
 {
-  return !mActiveVertex.isValid() || ( mActiveVertex.isValid() && !InputUtils::equals( point, mActiveVertex.coordinates(), 1e-16 ) );
+  return !mActiveVertex.isValid() || !InputUtils::equals( point, mActiveVertex.coordinates(), 1e-16 );
 }
 
 void RecordingMapTool::grabNextVertex()
