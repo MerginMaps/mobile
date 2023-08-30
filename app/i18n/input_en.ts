@@ -2555,64 +2555,64 @@ Please go to the Mergin Maps website to remove it manually.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="231"/>
-        <location filename="../qml/main.qml" line="299"/>
+        <location filename="../qml/main.qml" line="233"/>
+        <location filename="../qml/main.qml" line="301"/>
         <source>No Changes</source>
         <translation type="unfinished">No Changes</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="274"/>
+        <location filename="../qml/main.qml" line="276"/>
         <source>GPS auto-center mode on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="274"/>
+        <location filename="../qml/main.qml" line="276"/>
         <source>GPS auto-center mode off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="288"/>
+        <location filename="../qml/main.qml" line="290"/>
         <source>No editable layers found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="528"/>
-        <location filename="../qml/main.qml" line="539"/>
+        <location filename="../qml/main.qml" line="530"/>
+        <location filename="../qml/main.qml" line="541"/>
         <source>not tracking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="694"/>
+        <location filename="../qml/main.qml" line="696"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="706"/>
+        <location filename="../qml/main.qml" line="708"/>
         <source>Failed to open the project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="731"/>
+        <location filename="../qml/main.qml" line="733"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="785"/>
+        <location filename="../qml/main.qml" line="787"/>
         <source>There were issues loading the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="809"/>
+        <location filename="../qml/main.qml" line="811"/>
         <source>Could not read the project file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="829"/>
+        <location filename="../qml/main.qml" line="831"/>
         <source>Press back again to quit the app</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="624"/>
+        <location filename="../qml/main.qml" line="626"/>
         <source>PROJ Error</source>
         <translation type="unfinished"></translation>
     </message>
