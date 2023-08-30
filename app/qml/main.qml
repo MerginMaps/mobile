@@ -203,7 +203,9 @@ ApplicationWindow {
         formsStackManager.reopenAll()
       }
 
-      onNotify: showMessage( message )
+      onNotify: function ( message ) {
+        showMessage( message )
+      }
       onAccuracyButtonClicked: {
         gpsDataPageLoader.active = true
         gpsDataPageLoader.focus = true
