@@ -164,7 +164,24 @@ public class PositionTrackingService extends Service implements LocationListener
 
         locationManager = ( LocationManager ) getApplication().getSystemService( LOCATION_SERVICE );
 
-        boolean isGPSAvailable = locationManager.isProviderEnabled( LocationManager.FUSED_PROVIDER );
+        if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.O ) {
+            sendStatusUpdateMessage( "ERROR #UNSUPPORTED: tracking is not supported on your Android version ( Android O (8.0) required )" );
+            stopSelf();
+
+            return START_NOT_STICKY; // do not bother recreating it
+        }
+
+        String positionProvider;
+        
+        // FUSED_PROVIDER is available since API 31 (Android 12)
+        if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.S ) {
+            positionProvider = LocationManager.GPS_PROVIDER;
+        }
+        else {
+            positionProvider = LocationManager.FUSED_PROVIDER;
+        }
+
+        boolean isGPSAvailable = locationManager.isProviderEnabled( positionProvider );
         if ( !isGPSAvailable ) {
             sendStatusUpdateMessage( "ERROR #GPS_UNAVAILABLE: GPS is not available!" );
             stopSelf();
@@ -192,7 +209,7 @@ public class PositionTrackingService extends Service implements LocationListener
             }
 
             locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
+                positionProvider,
                 timeInterval,
                 distanceInterval,
                 this
