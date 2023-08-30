@@ -1954,11 +1954,10 @@ void MerginApi::pushStartReplyFinished()
   }
   else
   {
-    QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
-    int status = statusCode.toInt();
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
-    QString errorMsg = r->errorString();
-    bool showLimitReachedDialog = status == 400 && serverMsg.contains( QStringLiteral( "You have reached a data limit" ) );
+    QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
+    QVariant code = extractServerErrorValue( data, QStringLiteral( "code" ) );
+    bool showLimitReachedDialog = code.toString() == QStringLiteral( "StorageLimitHit" );
 
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
@@ -1990,7 +1989,6 @@ void MerginApi::pushStartReplyFinished()
       int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushStartReply" ), httpCode, projectFullName );
     }
-
     finishProjectSync( projectFullName, false );
   }
 }
