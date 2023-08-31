@@ -22,6 +22,7 @@
 #include "coreutils.h"
 #include "geodiffutils.h"
 #include "localprojectsmanager.h"
+#include "../app/enumhelper.h"
 
 #include <geodiff.h>
 
@@ -1080,10 +1081,10 @@ void MerginApi::createProjectFinished()
   else
   {
     QByteArray data = r->readAll();
-    QVariant code = extractServerErrorValue( data, QStringLiteral( "code" ) );
+    QString code = extractServerErrorStringValue( data, QStringLiteral( "code" ) );
     QString serverMsg = extractServerErrorMsg( data );
     QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
-    bool showLimitReachedDialog = code.toString() == QStringLiteral( "ProjectsLimitHit" );
+    bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::ProjectsLimitHit );
 
     CoreUtils::log( "create " + projectFullName, message );
 
@@ -1384,6 +1385,11 @@ bool MerginApi::extractProjectName( const QString &sourceString, QString &projec
     name = sourceString;
     return false;
   }
+}
+
+QString MerginApi::extractServerErrorStringValue( const QByteArray &data, const QString &key )
+{
+  return extractServerErrorValue( data, key ).toString();
 }
 
 QVariant MerginApi::extractServerErrorValue( const QByteArray &data, const QString &key )
@@ -1956,8 +1962,8 @@ void MerginApi::pushStartReplyFinished()
   {
     QByteArray data = r->readAll();
     QString serverMsg = extractServerErrorMsg( data );
-    QVariant code = extractServerErrorValue( data, QStringLiteral( "code" ) );
-    bool showLimitReachedDialog = code.toString() == QStringLiteral( "StorageLimitHit" );
+    QString code = extractServerErrorStringValue( data, QStringLiteral( "code" ) );
+    bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::StorageLimitHit );
 
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 

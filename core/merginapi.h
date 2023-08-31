@@ -202,6 +202,18 @@ typedef QHash<QString, TransactionStatus> Transactions;
 
 Q_DECLARE_METATYPE( Transactions );
 
+class ErrorCode
+{
+    Q_GADGET
+  public:
+    enum Value
+    {
+      ProjectsLimitHit,
+      StorageLimitHit
+    };
+    Q_ENUM( Value );
+};
+
 class MerginApi: public QObject
 {
     Q_OBJECT
@@ -682,6 +694,12 @@ class MerginApi: public QObject
     bool validateAuth();
     void checkMerginVersion( QString apiVersion, bool serverSupportsSubscriptions, QString msg = QStringLiteral() );
 
+    /**
+    * Extracts string value of an error json. If its not json or value cannot be parsed, QString() is return;
+    * \param data Data received from mergin server on a request failed.
+    * \param key Where should be a value from data
+    */
+    QString extractServerErrorStringValue( const QByteArray &data, const QString &key );
     /**
     * Extracts value of an error json. If its not json or value cannot be parsed, QVariant() is return;
     * \param data Data received from mergin server on a request failed.
