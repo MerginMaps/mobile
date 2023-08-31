@@ -55,7 +55,10 @@ InputMapCanvasMap::InputMapCanvasMap( QQuickItem *parent )
   setFlags( QQuickItem::ItemHasContents );
 }
 
-InputMapCanvasMap::~InputMapCanvasMap() = default;
+InputMapCanvasMap::~InputMapCanvasMap()
+{
+  stopRendering();
+}
 
 InputMapSettings *InputMapCanvasMap::mapSettings() const
 {
@@ -438,8 +441,15 @@ void InputMapCanvasMap::stopRendering()
 {
   if ( mJob )
   {
+    mMapUpdateTimer.stop();
+
     disconnect( mJob, &QgsMapRendererJob::renderingLayersFinished, this, &InputMapCanvasMap::renderJobUpdated );
     disconnect( mJob, &QgsMapRendererJob::finished, this, &InputMapCanvasMap::renderJobFinished );
+
+    if ( !mJob->isActive() )
+      mJob->deleteLater();
+    else
+      connect( mJob, &QgsMapRendererJob::finished, mJob, &QObject::deleteLater );
 
     mJob->cancelWithoutBlocking();
     mJob = nullptr;
