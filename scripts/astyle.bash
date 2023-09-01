@@ -9,17 +9,21 @@ else
 fi
 echo "running astyle for $FILES"
 
-# see https://github.com/qgis/QGIS/blob/master/scripts/astyle.options
+# based on:
+# https://github.com/qgis/QGIS/blob/master/scripts/astyle.options
+
+# astyle 3.4 doesn't have these anymore:s
+# indent-preprocessor
+# max-instatement-indent=40
+    
 OPTIONS=$(cat <<-END
 --preserve-date
---indent-preprocessor
 --convert-tabs
 --indent=spaces=2
 --indent-classes
 --indent-labels
 --indent-namespaces
 --indent-switches
---max-instatement-indent=40
 --min-conditional-indent=-1
 --suffix=none
 --break-after-logical

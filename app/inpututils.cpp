@@ -1445,6 +1445,7 @@ QString InputUtils::dateTimeFieldFormat( const QString &fieldFormat )
   {
     return QString( "Time" );
   }
+  // cppcheck-suppress duplicateBranch
   else if ( QgsDateTimeFieldFormatter::DATETIME_FORMAT == fieldFormat )
   {
     return QString( "Date Time" );
@@ -1730,11 +1731,14 @@ FeatureLayerPair InputUtils::changeFeaturePairGeometry( FeatureLayerPair feature
     QgsGeometry g( geometry );
     vlayer->changeGeometry( featurePair.feature().id(), g );
     vlayer->triggerRepaint();
+    QgsFeature f = vlayer->getFeature( featurePair.feature().id() );
+    return FeatureLayerPair( f, featurePair.layer() );
   }
-
-  QgsFeature f = featurePair.layer()->getFeature( featurePair.feature().id() );
-
-  return FeatureLayerPair( f, featurePair.layer() );
+  else
+  {
+    // invalid pair
+    return FeatureLayerPair();
+  }
 }
 
 QgsPointXY InputUtils::extractPointFromFeature( const FeatureLayerPair &feature )

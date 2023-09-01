@@ -1295,7 +1295,7 @@ void AttributeController::renamePhotos()
       const QgsField field = item->field();
       if ( !photoNameFormat.contains( field.name() ) )
       {
-        formItemsIterator++;
+        ++formItemsIterator;
         continue;
       }
 
@@ -1307,7 +1307,7 @@ void AttributeController::renamePhotos()
         if ( exp.hasParserError() )
         {
           CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Expression for %1:%2 has parser error: %3" ).arg( mFeatureLayerPair.layer()->name() ).arg( field.name() ).arg( exp.parserErrorString() ) );
-          formItemsIterator++;
+          ++formItemsIterator;
           continue;
         }
 
@@ -1315,7 +1315,7 @@ void AttributeController::renamePhotos()
         if ( exp.hasEvalError() )
         {
           CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Expression for %1:%2 has evaluation error: %3" ).arg( mFeatureLayerPair.layer()->name() ).arg( field.name() ).arg( exp.evalErrorString() ) );
-          formItemsIterator++;
+          ++formItemsIterator;
           continue;
         }
 
@@ -1323,7 +1323,7 @@ void AttributeController::renamePhotos()
         if ( !field.convertCompatible( val ) )
         {
           CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Value \"%1\" %4 could not be converted to a compatible value for field %2 (%3)." ).arg( value.toString() ).arg( field.name() ).arg( field.typeName() ).arg( value.isNull() ? "NULL" : "NOT NULL" ) );
-          formItemsIterator++;
+          ++formItemsIterator;
           continue;
         }
 

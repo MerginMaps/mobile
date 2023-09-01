@@ -53,7 +53,7 @@ QString InputHelp::inputWebLink() const
 
 QString InputHelp::merginWebLink() const
 {
-  if ( !mMerginApi || mMerginApi->apiRoot() != MerginApi::defaultApiRoot() )
+  if ( mMerginApi && mMerginApi->apiRoot() != MerginApi::defaultApiRoot() )
   {
     return mMerginApi->apiRoot(); // UTM tags are included only for production server
   }
@@ -63,7 +63,7 @@ QString InputHelp::merginWebLink() const
 
 QString InputHelp::merginDashboardLink() const
 {
-  if ( !mMerginApi || mMerginApi->apiRoot() != MerginApi::defaultApiRoot() )
+  if ( mMerginApi && mMerginApi->apiRoot() != MerginApi::defaultApiRoot() )
   {
     return mMerginApi->apiRoot() + "dashboard";  // UTM tags are included only for production server
   }

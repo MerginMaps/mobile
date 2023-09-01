@@ -25,11 +25,11 @@ jobs:
   code_style_cpp:
     name: C++ code convention check
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Install astyle
         run: |
-          sudo apt-get install astyle
+          brew install astyle
 
       - name: Checkout input
         uses: actions/checkout@v3
@@ -58,3 +58,17 @@ jobs:
         run: |
           ./input/scripts/format_cmake.bash
 
+  cppcheck:
+    name: Cppcheck
+    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Requirements
+        run: |
+          brew install cppcheck
+
+      - name: Run cppcheck test
+        run: ./scripts/cppcheck.bash

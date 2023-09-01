@@ -29,7 +29,7 @@ class GeodiffContext
     void operator=( GeodiffContext const & )  = delete;
     static GeodiffContext &instance();
 
-    GEODIFF_ContextH handle();
+    GEODIFF_ContextH handle() const;
   private:
     GeodiffContext()
     {
@@ -55,7 +55,7 @@ GeodiffContext &GeodiffContext::instance()
   return instance;
 }
 
-GEODIFF_ContextH GeodiffContext::handle()
+GEODIFF_ContextH GeodiffContext::handle() const
 {
   return mHandle;
 }

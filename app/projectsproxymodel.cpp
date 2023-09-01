@@ -21,13 +21,8 @@ void ProjectsProxyModel::initialize()
   // do not sort at all in public projects, they come sorted from Mergin
   if ( mModelType == ProjectsModel::LocalProjectsModel )
   {
-    if ( mModelType == ProjectsModel::CreatedProjectsModel )
-      setFilterRole( ProjectsModel::ProjectName );
-    else
-      setFilterRole( ProjectsModel::ProjectFullName );
-
+    setFilterRole( ProjectsModel::ProjectFullName );
     setFilterCaseSensitivity( Qt::CaseInsensitive );
-
     sort( 0, Qt::AscendingOrder );
   }
 }
