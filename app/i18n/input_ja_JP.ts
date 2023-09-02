@@ -208,43 +208,43 @@ Mergin Mapsのウェブサイトから手動で削除してください。</tran
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="574"/>
-        <location filename="../attributes/attributecontroller.cpp" line="625"/>
+        <location filename="../attributes/attributecontroller.cpp" line="563"/>
+        <location filename="../attributes/attributecontroller.cpp" line="614"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>%1:%2 のデフォルト値の式の変換でエラーが起きました: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="584"/>
-        <location filename="../attributes/attributecontroller.cpp" line="635"/>
+        <location filename="../attributes/attributecontroller.cpp" line="573"/>
+        <location filename="../attributes/attributecontroller.cpp" line="624"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>%1:%2 のデフォルト値の式の評価でエラーが起きました: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="595"/>
-        <location filename="../attributes/attributecontroller.cpp" line="646"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1208"/>
+        <location filename="../attributes/attributecontroller.cpp" line="584"/>
+        <location filename="../attributes/attributecontroller.cpp" line="635"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1197"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>値 &quot;%1&quot; %4 はフィールド%2(%3)のための互換値に変換できませんでした。</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="905"/>
+        <location filename="../attributes/attributecontroller.cpp" line="894"/>
         <source>Cannot delete feature</source>
         <translation>地物を削除できません</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="528"/>
-        <location filename="../attributes/attributecontroller.cpp" line="961"/>
+        <location filename="../attributes/attributecontroller.cpp" line="517"/>
+        <location filename="../attributes/attributecontroller.cpp" line="950"/>
         <source>Feature could not be added</source>
         <translation>地物を追加できませんでした</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="537"/>
-        <location filename="../attributes/attributecontroller.cpp" line="972"/>
+        <location filename="../attributes/attributecontroller.cpp" line="526"/>
+        <location filename="../attributes/attributecontroller.cpp" line="961"/>
         <source>Cannot update feature</source>
         <translation>地物を更新できません</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="1016"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1005"/>
         <source>Cannot start editing</source>
         <translation>編集を開始できません</translation>
     </message>
@@ -418,27 +418,27 @@ Mergin Mapsのウェブサイトから手動で削除してください。</tran
         <translation>画像ファイルを %1 にコピーできませんでした。</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="205"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="233"/>
         <source>Open Image</source>
         <translation>イメージを開く</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="207"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="235"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>イメージファイル (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="219"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="247"/>
         <source>Remove photo reference</source>
         <translation>写真への参照を削除する</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="220"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="248"/>
         <source>Also permanently delete photo from device?</source>
         <translation>デバイスから写真を完全に削除しますか?</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="242"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="270"/>
         <source>Failed to copy image</source>
         <translation>画像ファイルをコピーできませんでした。</translation>
     </message>
@@ -446,12 +446,12 @@ Mergin Mapsのウェブサイトから手動で削除してください。</tran
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="137"/>
+        <location filename="../qml/form/FeatureForm.qml" line="132"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>フォームを保存できません。入力エラーがあります。</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="138"/>
+        <location filename="../qml/form/FeatureForm.qml" line="133"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>地物を保存できません。入力必須項目全てを確認してください。</translation>
     </message>
@@ -494,12 +494,12 @@ Mergin Mapsのウェブサイトから手動で削除してください。</tran
         <translation>変更内容を保存しますか？</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="248"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
         <source>Saving failed</source>
         <translation>保存に失敗しました</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="249"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="246"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>変更の保存に失敗しました。通常、このようなことは起こらないはずです。アプリを再起動して再度お試しください。それでも解決しない場合は、サポートまでご連絡ください。</translation>
     </message>
@@ -814,52 +814,52 @@ Won&apos;t be added to the project.</source>
         <translation>%1 年前</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1441"/>
+        <location filename="../inpututils.cpp" line="1406"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>スクリーン解像度: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1442"/>
+        <location filename="../inpututils.cpp" line="1407"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>スクリーンDPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1443"/>
+        <location filename="../inpututils.cpp" line="1408"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>スクリーンサイズ: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1444"/>
+        <location filename="../inpututils.cpp" line="1409"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>取得したデバイスの画素数比率: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1445"/>
+        <location filename="../inpututils.cpp" line="1410"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>計算したデバイスの画素数比率: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1446"/>
+        <location filename="../inpututils.cpp" line="1411"/>
         <source>used dp scale: %1</source>
         <translation>使用したdpスケール: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1973"/>
+        <location filename="../inpututils.cpp" line="1938"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>すべてのパートに少なくとも%1ポイントを加える必要があります。</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1977"/>
+        <location filename="../inpututils.cpp" line="1942"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>少なくとも%1ポイントを加える必要があります。</translation>
     </message>
@@ -909,12 +909,17 @@ Won&apos;t be added to the project.</source>
         <translation>凡例</translation>
     </message>
     <message>
-        <location filename="../qml/layers/LayerDetail.qml" line="250"/>
+        <location filename="../qml/layers/LayerDetail.qml" line="219"/>
+        <source>Attribution</source>
+        <translation>アトリビューション</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="310"/>
         <source>Features</source>
         <translation>地物</translation>
     </message>
     <message>
-        <location filename="../qml/layers/LayerDetail.qml" line="284"/>
+        <location filename="../qml/layers/LayerDetail.qml" line="344"/>
         <source>Layer info</source>
         <translation>レイヤ情報</translation>
     </message>
@@ -997,6 +1002,14 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/LoginForm.qml" line="244"/>
         <source>Forgot password?</source>
         <translation>パスワードをお忘れですか？</translation>
+    </message>
+</context>
+<context>
+    <name>MMInput</name>
+    <message>
+        <location filename="../qmlV2/component/MMInput.qml" line="149"/>
+        <source>Copy</source>
+        <translation>コピー</translation>
     </message>
 </context>
 <context>
@@ -1208,57 +1221,57 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="767"/>
+        <location filename="../../core/merginapi.cpp" line="762"/>
         <source>Username must have at least 4 characters</source>
         <translation>ユーザー名は4文字以上でなければなりません。</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="774"/>
+        <location filename="../../core/merginapi.cpp" line="769"/>
         <source>Username contains invalid characters</source>
         <translation>ユーザー名に無効な文字が含まれています</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="781"/>
+        <location filename="../../core/merginapi.cpp" line="776"/>
         <source>Please enter a valid email</source>
         <translation>正しいメールを入力して下さい</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="788"/>
+        <location filename="../../core/merginapi.cpp" line="783"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>パスワードの強度が十分ではありません。少なくとも以下の要素を満たす必要があります。%1 8文字以上の長さ%1 小文字を含む%1 大文字を含む%1 数字または特殊文字を含む</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="801"/>
+        <location filename="../../core/merginapi.cpp" line="796"/>
         <source>Passwords do not match</source>
         <translation>パスワードが一致しません。</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="808"/>
+        <location filename="../../core/merginapi.cpp" line="803"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>利用規約と個人情報保護についてに同意してください。</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1188"/>
+        <location filename="../../core/merginapi.cpp" line="1194"/>
         <source>Registration successful</source>
         <translation>登録が成功しました</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1211"/>
+        <location filename="../../core/merginapi.cpp" line="1216"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>選択したMerginサーバーでは新規登録ができません。%1 管理者にご確認ください。</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1497"/>
+        <location filename="../../core/merginapi.cpp" line="1505"/>
         <source>Project detached from Mergin</source>
         <translation>Merginから切り離されたプロジェクト</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3533"/>
+        <location filename="../../core/merginapi.cpp" line="3541"/>
         <source>Workspace name contains invalid characters</source>
         <translation>ワークスペース名に無効な文字が含まれています</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3599"/>
+        <location filename="../../core/merginapi.cpp" line="3607"/>
         <source>Workspace %1 already exists</source>
         <translation>ワークスペース %1 は既に存在しています。</translation>
     </message>
@@ -1456,7 +1469,7 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>PreviewPanel</name>
     <message>
-        <location filename="../qml/form/PreviewPanel.qml" line="158"/>
+        <location filename="../qml/form/PreviewPanel.qml" line="155"/>
         <source>No map tip available.</source>
         <translation>マップチップはありません</translation>
     </message>
@@ -1649,12 +1662,12 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="93"/>
+        <location filename="../projectwizard.cpp" line="95"/>
         <source>Project name contains invalid characters</source>
         <translation>プロジェクト名に無効な文字が含まれています</translation>
     </message>
     <message>
-        <location filename="../projectwizard.cpp" line="127"/>
+        <location filename="../projectwizard.cpp" line="139"/>
         <source>Project %1 created</source>
         <translation>プロジェクト %1 が作成されました</translation>
     </message>
@@ -1911,27 +1924,27 @@ Click &apos;Yes&apos; to upload it.</source>
 <context>
     <name>RegistrationForm</name>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="92"/>
+        <location filename="../qml/RegistrationForm.qml" line="133"/>
         <source>Username</source>
         <translation>ユーザ名</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="147"/>
+        <location filename="../qml/RegistrationForm.qml" line="193"/>
         <source>Email</source>
         <translation>電子メール</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="189"/>
+        <location filename="../qml/RegistrationForm.qml" line="246"/>
         <source>Confirm password</source>
         <translation>パスワード確認</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="214"/>
+        <location filename="../qml/RegistrationForm.qml" line="276"/>
         <source>I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Merginの %1利用規約%3 と %2個人情報保護について%3に同意します</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="236"/>
+        <location filename="../qml/RegistrationForm.qml" line="304"/>
         <source>Sign up</source>
         <translation>サインアップ</translation>
     </message>
@@ -2554,64 +2567,64 @@ Mergin Mapsのウェブサイトから手動で削除してください。</tran
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="237"/>
-        <location filename="../qml/main.qml" line="305"/>
+        <location filename="../qml/main.qml" line="233"/>
+        <location filename="../qml/main.qml" line="301"/>
         <source>No Changes</source>
         <translation>変更はありません</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="280"/>
+        <location filename="../qml/main.qml" line="276"/>
         <source>GPS auto-center mode on</source>
         <translation>GPS自動センターモードをON</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="280"/>
+        <location filename="../qml/main.qml" line="276"/>
         <source>GPS auto-center mode off</source>
         <translation>GPS自動センターモードをOFF</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="294"/>
+        <location filename="../qml/main.qml" line="290"/>
         <source>No editable layers found.</source>
         <translation>編集可能なレイヤがみつかりません.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="527"/>
-        <location filename="../qml/main.qml" line="538"/>
+        <location filename="../qml/main.qml" line="530"/>
+        <location filename="../qml/main.qml" line="541"/>
         <source>not tracking</source>
         <translation>追跡していません</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="693"/>
+        <location filename="../qml/main.qml" line="696"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>位置情報が利用できないため、ステイクアウトは利用できません！</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="705"/>
+        <location filename="../qml/main.qml" line="708"/>
         <source>Failed to open the project</source>
         <translation>プロジェクトを開けませんでした</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="730"/>
+        <location filename="../qml/main.qml" line="733"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Merginとの通信に失敗しました。%1 インターネット状況の確認をしてください。</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="784"/>
+        <location filename="../qml/main.qml" line="787"/>
         <source>There were issues loading the project.</source>
         <translation>プロジェクトを読み込む上で問題が発生しました。</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="808"/>
+        <location filename="../qml/main.qml" line="811"/>
         <source>Could not read the project file:</source>
         <translation>プロジェクトファイルを読み込めませんでした：</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="828"/>
+        <location filename="../qml/main.qml" line="831"/>
         <source>Press back again to quit the app</source>
         <translation>アプリを終了するには、もう一度戻るを押してください</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="623"/>
+        <location filename="../qml/main.qml" line="626"/>
         <source>PROJ Error</source>
         <translation>PROJエラー</translation>
     </message>
