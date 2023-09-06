@@ -1081,7 +1081,7 @@ void MerginApi::createProjectFinished()
   else
   {
     QByteArray data = r->readAll();
-    QString code = extractServerErrorStringValue( data, QStringLiteral( "code" ) );
+    QString code = extractServerErrorCode( data );
     QString serverMsg = extractServerErrorMsg( data );
     QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
     bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::ProjectsLimitHit );
@@ -1385,6 +1385,11 @@ bool MerginApi::extractProjectName( const QString &sourceString, QString &projec
     name = sourceString;
     return false;
   }
+}
+
+QString MerginApi::extractServerErrorCode( const QByteArray &data )
+{
+  return extractServerErrorStringValue( data, QStringLiteral( "code" ) );
 }
 
 QString MerginApi::extractServerErrorStringValue( const QByteArray &data, const QString &key )
@@ -1962,7 +1967,7 @@ void MerginApi::pushStartReplyFinished()
   {
     QByteArray data = r->readAll();
     QString serverMsg = extractServerErrorMsg( data );
-    QString code = extractServerErrorStringValue( data, QStringLiteral( "code" ) );
+    QString code = extractServerErrorCode( data );
     bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::StorageLimitHit );
 
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );

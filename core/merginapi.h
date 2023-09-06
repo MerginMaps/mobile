@@ -208,6 +208,7 @@ class ErrorCode
   public:
     enum Value
     {
+      Unknown = 0,
       ProjectsLimitHit,
       StorageLimitHit
     };
@@ -694,6 +695,11 @@ class MerginApi: public QObject
     bool validateAuth();
     void checkMerginVersion( QString apiVersion, bool serverSupportsSubscriptions, QString msg = QStringLiteral() );
 
+    /**
+    * Extracts string code of an error json. If its not json or value cannot be parsed, QString() is return;
+    * \param data Data received from mergin server on a request failed.
+    */
+    QString extractServerErrorCode( const QByteArray &data );
     /**
     * Extracts string value of an error json. If its not json or value cannot be parsed, QString() is return;
     * \param data Data received from mergin server on a request failed.
