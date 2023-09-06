@@ -1389,12 +1389,10 @@ bool MerginApi::extractProjectName( const QString &sourceString, QString &projec
 
 QString MerginApi::extractServerErrorCode( const QByteArray &data )
 {
-  return extractServerErrorStringValue( data, QStringLiteral( "code" ) );
-}
-
-QString MerginApi::extractServerErrorStringValue( const QByteArray &data, const QString &key )
-{
-  return extractServerErrorValue( data, key ).toString();
+  QVariant code = extractServerErrorValue( data, QStringLiteral( "code" ) );
+  if ( code.isValid() )
+    return code.toString();
+  return QString();
 }
 
 QVariant MerginApi::extractServerErrorValue( const QByteArray &data, const QString &key )

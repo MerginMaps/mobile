@@ -701,12 +701,6 @@ class MerginApi: public QObject
     */
     QString extractServerErrorCode( const QByteArray &data );
     /**
-    * Extracts string value of an error json. If its not json or value cannot be parsed, QString() is return;
-    * \param data Data received from mergin server on a request failed.
-    * \param key Where should be a value from data
-    */
-    QString extractServerErrorStringValue( const QByteArray &data, const QString &key );
-    /**
     * Extracts value of an error json. If its not json or value cannot be parsed, QVariant() is return;
     * \param data Data received from mergin server on a request failed.
     * \param key Where should be a value from data
