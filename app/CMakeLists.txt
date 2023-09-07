@@ -130,6 +130,7 @@ set(MM_HDRS
     bluetoothdiscoverymodel.h
     codescanner.h
     compass.h
+    enumhelper.h
     featurelayerpair.h
     featuresmodel.h
     fieldsmodel.h

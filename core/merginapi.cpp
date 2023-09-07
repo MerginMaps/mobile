@@ -22,6 +22,7 @@
 #include "coreutils.h"
 #include "geodiffutils.h"
 #include "localprojectsmanager.h"
+#include "../app/enumhelper.h"
 
 #include <geodiff.h>
 
@@ -1079,14 +1080,29 @@ void MerginApi::createProjectFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QByteArray data = r->readAll();
+    QString code = extractServerErrorCode( data );
+    QString serverMsg = extractServerErrorMsg( data );
     QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
+    bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::ProjectsLimitHit );
+
     CoreUtils::log( "create " + projectFullName, message );
 
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-
     emit projectCreated( projectFullName, false );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectName );
+
+    if ( showLimitReachedDialog )
+    {
+      int maxProjects = 0;
+      QVariant maxProjectVariant = extractServerErrorValue( data, "projects_quota" );
+      if ( maxProjectVariant.isValid() )
+        maxProjects = maxProjectVariant.toInt();
+      emit projectLimitReached( maxProjects, serverMsg );
+    }
+    else
+    {
+      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectName );
+    }
   }
   r->deleteLater();
 }
@@ -1369,6 +1385,30 @@ bool MerginApi::extractProjectName( const QString &sourceString, QString &projec
     name = sourceString;
     return false;
   }
+}
+
+QString MerginApi::extractServerErrorCode( const QByteArray &data )
+{
+  QVariant code = extractServerErrorValue( data, QStringLiteral( "code" ) );
+  if ( code.isValid() )
+    return code.toString();
+  return QString();
+}
+
+QVariant MerginApi::extractServerErrorValue( const QByteArray &data, const QString &key )
+{
+  QJsonDocument doc = QJsonDocument::fromJson( data );
+  if ( doc.isObject() )
+  {
+    QJsonObject obj = doc.object();
+    if ( obj.contains( key ) )
+    {
+      QJsonValue val = obj.value( key );
+      return val.toVariant();
+    }
+  }
+
+  return QVariant();
 }
 
 QString MerginApi::extractServerErrorMsg( const QByteArray &data )
@@ -1923,11 +1963,10 @@ void MerginApi::pushStartReplyFinished()
   }
   else
   {
-    QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
-    int status = statusCode.toInt();
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
-    QString errorMsg = r->errorString();
-    bool showLimitReachedDialog = status == 400 && serverMsg.contains( QStringLiteral( "You have reached a data limit" ) );
+    QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
+    QString code = extractServerErrorCode( data );
+    bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::StorageLimitHit );
 
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
@@ -1959,7 +1998,6 @@ void MerginApi::pushStartReplyFinished()
       int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushStartReply" ), httpCode, projectFullName );
     }
-
     finishProjectSync( projectFullName, false );
   }
 }

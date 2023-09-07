@@ -114,6 +114,7 @@ set(MM_QML
     PanelTabButton.qml
     PhotoPanel.qml
     ProjectIssuesPanel.qml
+    ProjectLimitDialog.qml
     ProjectListPage.qml
     ProjectLoadingScreen.qml
     ProjectPanel.qml
