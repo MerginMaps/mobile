@@ -139,9 +139,9 @@ Item {
          */
         property var imageCaptured: function imageCaptured(absoluteImagePath) {
           if (absoluteImagePath) {
-            var prefixPath = externalResourceHandler.itemWidget.targetDir.endsWith("/") ?
-                  externalResourceHandler.itemWidget.targetDir :
-                  externalResourceHandler.itemWidget.targetDir + "/"
+            var prefixPath = externalResourceHandler.itemWidget.prefixToRelativePath.endsWith("/") ?
+                  externalResourceHandler.itemWidget.prefixToRelativePath :
+                  externalResourceHandler.itemWidget.prefixToRelativePath + "/"
             externalResourceHandler.confirmImage(externalResourceHandler.itemWidget, prefixPath, absoluteImagePath)
           }
         }
