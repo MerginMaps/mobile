@@ -89,7 +89,7 @@ Page {
 
           color: InputStyle.fontColor
           font.bold: true
-          text: model.display
+          text: model.display.replace(/\n/g, ' ')
 
           font.pixelSize: InputStyle.fontPixelSizeNormal
 
@@ -100,7 +100,7 @@ Page {
           Layout.fillWidth: true
 
           color: InputStyle.secondaryFontColor
-          text: model.Description + ( model.SearchResult ? ", " + model.SearchResult.substring(0, model.SearchResult.indexOf("\n")) : "" )
+          text: model.Description + ( model.SearchResult ? ", " + model.SearchResult.replace(/\n/g, ' ') : "" )
 
           font.pixelSize: InputStyle.fontPixelSizeSmall
 
