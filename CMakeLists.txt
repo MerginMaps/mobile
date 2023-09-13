@@ -24,6 +24,10 @@ if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
   # Target/Minimum API levels for Android, used as Input target properties
   set(INPUT_ANDROID_TARGET_SDK_VERSION "33")
   set(INPUT_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
+  set(INPUT_ANDROID_NDK_PATH "$ENV{ANDROID_NDK_ROOT}")
+  if (NOT INPUT_ANDROID_NDK_PATH)
+    message(FATAL_ERROR "Set required environment variable ANDROID_NDK_ROOT.")
+  endif ()
 endif ()
 
 if (IOS)
@@ -173,7 +177,16 @@ message(STATUS "Mergin Maps Input ${version_desc} - ${platform_desc}")
 
 if (ANDROID)
   set(INPUT_SDK_PATH_ANDROID_ABI_armeabi-v7a ${INPUT_SDK_PATH}/arm-android)
+
+  if (NOT EXISTS ${INPUT_SDK_PATH_ANDROID_ABI_armeabi-v7a})
+    message(WARNING "INPUT_SDK_PATH arm-android directory does not exist!")
+  endif ()
+
   set(INPUT_SDK_PATH_ANDROID_ABI_arm64-v8a ${INPUT_SDK_PATH}/arm64-android)
+  if (NOT EXISTS ${INPUT_SDK_PATH_ANDROID_ABI_arm64-v8a})
+    message(WARNING "INPUT_SDK_PATH arm64-android directory does not exist!")
+  endif ()
+
   set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH_ANDROID_ABI_${ANDROID_ABI}})
   # allow libraries outside of SDK/NDK directory
   set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
@@ -215,7 +228,7 @@ if (NOT IOS)
   )
 endif ()
 
-if (NOT LINUX)
+if (NOT LNX)
   find_package(Charset REQUIRED)
   find_package(Iconv REQUIRED)
 endif ()
@@ -374,10 +387,6 @@ endif ()
 if (IOS)
   # Disabling warnings in qgis qgswkbptr.h
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-shorten-64-to-32")
-endif ()
-
-if (ANDROID)
-  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g0")
 endif ()
 
 # ########################################################################################
