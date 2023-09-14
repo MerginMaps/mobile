@@ -150,29 +150,49 @@ Jděte prosím na web Mergin Maps a odstraňte jej ručně.</translation>
     </message>
 </context>
 <context>
-    <name>AndroidUtils</name>
+    <name>AndroidTrackingBackend</name>
     <message>
-        <location filename="../androidutils.cpp" line="235"/>
-        <source>Without storage permission you will not be able to access previous projects</source>
-        <translation>Bez povolení k ukládání nebudete mít přístup k předchozím projektům.</translation>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="115"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="158"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="172"/>
+        <source>There was an error and tracking could not start, please contact support</source>
+        <translation>Došlo k chybě a sledování nebylo možné spustit, kontaktujte prosím podporu</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="335"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="143"/>
+        <source>Your device does not support tracking, available from Android 8.0</source>
+        <translation>Vaše zařízení nepodporuje sledování, dostupné od verze Android 8.0.</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="148"/>
+        <source>Please enable location permission before starting tracking</source>
+        <translation>Před zahájením sledování povolte povolení k poloze</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="153"/>
+        <source>Please enable location services on your device before starting tracking</source>
+        <translation>Před zahájením sledování povolte v zařízení služby určování polohy.</translation>
+    </message>
+</context>
+<context>
+    <name>AndroidUtils</name>
+    <message>
+        <location filename="../androidutils.cpp" line="167"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>Oprávnění k ukládání je trvale zakázáno, povolte jej prosím v nastavení, abyste mohli načítat obrázky z galerie.</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="339"/>
+        <location filename="../androidutils.cpp" line="171"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
         <translation>Vstup potřebuje oprávnění k ukládání, aby bylo možné načítat obrázky z galerie.</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="357"/>
+        <location filename="../androidutils.cpp" line="189"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Povolení fotoaparátu je trvale zakázáno, povolte jej prosím v nastavení.</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="361"/>
+        <location filename="../androidutils.cpp" line="193"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>K fotografování potřebujeme povolení k fotoaparátu.</translation>
     </message>
@@ -188,43 +208,43 @@ Jděte prosím na web Mergin Maps a odstraňte jej ručně.</translation>
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="574"/>
-        <location filename="../attributes/attributecontroller.cpp" line="625"/>
+        <location filename="../attributes/attributecontroller.cpp" line="563"/>
+        <location filename="../attributes/attributecontroller.cpp" line="614"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Výraz výchozí hodnoty pro %1:%2 má chybu parseru: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="584"/>
-        <location filename="../attributes/attributecontroller.cpp" line="635"/>
+        <location filename="../attributes/attributecontroller.cpp" line="573"/>
+        <location filename="../attributes/attributecontroller.cpp" line="624"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Výraz výchozí hodnoty pro %1:%2 má chybu vyhodnocení: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="595"/>
-        <location filename="../attributes/attributecontroller.cpp" line="646"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1206"/>
+        <location filename="../attributes/attributecontroller.cpp" line="584"/>
+        <location filename="../attributes/attributecontroller.cpp" line="635"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1197"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Hodnotu &quot;%1&quot; %4 nelze převést na kompatibilní hodnotu pro pole %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="905"/>
+        <location filename="../attributes/attributecontroller.cpp" line="894"/>
         <source>Cannot delete feature</source>
         <translation>Prvek nelze smazat</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="528"/>
-        <location filename="../attributes/attributecontroller.cpp" line="959"/>
+        <location filename="../attributes/attributecontroller.cpp" line="517"/>
+        <location filename="../attributes/attributecontroller.cpp" line="950"/>
         <source>Feature could not be added</source>
         <translation>Prvek nemůže být přidán</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="537"/>
-        <location filename="../attributes/attributecontroller.cpp" line="970"/>
+        <location filename="../attributes/attributecontroller.cpp" line="526"/>
+        <location filename="../attributes/attributecontroller.cpp" line="961"/>
         <source>Cannot update feature</source>
         <translation>Prvek nelze aktualizovat</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="1014"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1005"/>
         <source>Cannot start editing</source>
         <translation>Nelze zahájit editaci</translation>
     </message>
@@ -303,35 +323,35 @@ Ujistěte se, že je zařízení zapnuté a lze se k němu připojit.%1 %2Dalš�
 <context>
     <name>BluetoothPositionProvider</name>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="42"/>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="163"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="42"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="163"/>
         <source>No connection</source>
         <translation>Nedostupné připojení</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="83"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="83"/>
         <source>Reconnecting</source>
         <translation>Obnova spojení</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="115"/>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="123"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="115"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="123"/>
         <source>No connection, reconnecting in (%1)</source>
         <translation>Spojení ztraceno, obnovení za (%1)</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="140"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="140"/>
         <source>Could not connect to device, not paired</source>
         <translation>Nelze navázat spojení se zařízením, není spárováno</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="155"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="155"/>
         <source>Connecting to %1</source>
         <translation>Připojování k %1</translation>
     </message>
     <message>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="159"/>
-        <location filename="../position/bluetoothpositionprovider.cpp" line="177"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="159"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="177"/>
         <source>Connected</source>
         <translation>Připojeno</translation>
     </message>
@@ -398,27 +418,27 @@ Ujistěte se, že je zařízení zapnuté a lze se k němu připojit.%1 %2Dalš�
         <translation>Selhalo kopírování obrazových souborů do %1.</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="205"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="233"/>
         <source>Open Image</source>
         <translation>Otevřít obrázek</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="207"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="235"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Obrázky (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="219"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="247"/>
         <source>Remove photo reference</source>
         <translation>Odstranit odkaz na fotografii</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="220"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="248"/>
         <source>Also permanently delete photo from device?</source>
         <translation>Odstranit fotografii natrvalo také ze zařízení?</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="242"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="270"/>
         <source>Failed to copy image</source>
         <translation>Selhalo kopírování obrazových souborů</translation>
     </message>
@@ -426,12 +446,12 @@ Ujistěte se, že je zařízení zapnuté a lze se k němu připojit.%1 %2Dalš�
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="137"/>
+        <location filename="../qml/form/FeatureForm.qml" line="132"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>Formulář nelze uložit, dochází k chybám validace</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="138"/>
+        <location filename="../qml/form/FeatureForm.qml" line="133"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Položku se nepodařilo uložit, zkontrolujte prosím všechna povinná pole.</translation>
     </message>
@@ -474,12 +494,12 @@ Ujistěte se, že je zařízení zapnuté a lze se k němu připojit.%1 %2Dalš�
         <translation>Uložit změny?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="248"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
         <source>Saving failed</source>
         <translation>Ukládání selhalo</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="249"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="246"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>Nepodařilo se uložit změny. K tomu by normálně nemělo docházet. Restartujte prosím aplikaci a zkuste to znovu - pokud to nepomůže, kontaktujte prosím podporu.</translation>
     </message>
@@ -540,7 +560,7 @@ Ujistěte se, že je zařízení zapnuté a lze se k němu připojit.%1 %2Dalš�
 <context>
     <name>FeaturesListPageV2</name>
     <message>
-        <location filename="../qml/layers/FeaturesListPageV2.qml" line="155"/>
+        <location filename="../qml/layers/FeaturesListPageV2.qml" line="170"/>
         <source>Add feature</source>
         <translation>Přidat prvek</translation>
     </message>
@@ -794,50 +814,50 @@ Nemůže být přidáno do projektu.</translation>
         <translation>před %1 rokem</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1419"/>
+        <location filename="../inpututils.cpp" line="1406"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rozlišení displeje: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1420"/>
+        <location filename="../inpututils.cpp" line="1407"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI displeje: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1421"/>
+        <location filename="../inpututils.cpp" line="1408"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>velikost displeje: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1422"/>
+        <location filename="../inpututils.cpp" line="1409"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>hlášený poměr pixelů zařízení: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1423"/>
+        <location filename="../inpututils.cpp" line="1410"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>vypočtený poměr pixelů zařízení: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1424"/>
+        <location filename="../inpututils.cpp" line="1411"/>
         <source>used dp scale: %1</source>
         <translation>použité měřítko dp: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1944"/>
+        <location filename="../inpututils.cpp" line="1938"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Ke každé části je třeba přidat alespoň %1 bod(y).</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1948"/>
+        <location filename="../inpututils.cpp" line="1942"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Je třeba přidat alespoň %1 bodů.</translation>
     </message>
@@ -863,8 +883,8 @@ Nemůže být přidáno do projektu.</translation>
 <context>
     <name>InternalPositionProvider</name>
     <message>
-        <location filename="../position/internalpositionprovider.cpp" line="32"/>
-        <location filename="../position/internalpositionprovider.cpp" line="111"/>
+        <location filename="../position/providers/internalpositionprovider.cpp" line="32"/>
+        <location filename="../position/providers/internalpositionprovider.cpp" line="111"/>
         <source>Connected</source>
         <translation>Připojeno</translation>
     </message>
@@ -887,12 +907,17 @@ Nemůže být přidáno do projektu.</translation>
         <translation>Legenda</translation>
     </message>
     <message>
-        <location filename="../qml/layers/LayerDetail.qml" line="250"/>
+        <location filename="../qml/layers/LayerDetail.qml" line="219"/>
+        <source>Attribution</source>
+        <translation>Přiznání autorství</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="310"/>
         <source>Features</source>
         <translation>Prvky</translation>
     </message>
     <message>
-        <location filename="../qml/layers/LayerDetail.qml" line="284"/>
+        <location filename="../qml/layers/LayerDetail.qml" line="344"/>
         <source>Layer info</source>
         <translation>Informace o vrstvě</translation>
     </message>
@@ -911,39 +936,6 @@ Nemůže být přidáno do projektu.</translation>
         <location filename="../qml/layers/LayersListSearchPage.qml" line="37"/>
         <source>Search layers</source>
         <translation>Hledat vrstvy</translation>
-    </message>
-</context>
-<context>
-    <name>LegacyFolderMigration</name>
-    <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="29"/>
-        <source>Insufficient space left on device</source>
-        <translation>V zařízení nezbylo dost místa</translation>
-    </message>
-    <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="31"/>
-        <source>Your device is running out of space, you need %1 of free space in order to see your projects. Remove some files and come back or click Help to see other ways how to resolve this issue.</source>
-        <translation>V zařízení dochází místo, pro zobrazení projektů potřebujete %1 volného místa. Odstraňte některé soubory a vraťte se zpět nebo klikněte na Nápověda, abyste zjistili další způsoby, jak tento problém vyřešit.</translation>
-    </message>
-    <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="45"/>
-        <source>An error occured during update</source>
-        <translation>V průběhu aktualizace se vyskytla chyba</translation>
-    </message>
-    <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="46"/>
-        <source>Your device run into a problem during applying an update. You will not be able to see your projects. Click Help to see how to resolve this issue.</source>
-        <translation>Při použití aktualizace došlo v zařízení k problému. Nebudete moci zobrazit své projekty. Klepnutím na tlačítko Nápověda zjistíte, jak tento problém vyřešit.</translation>
-    </message>
-    <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="111"/>
-        <source>We are working on an important update, please do not close the application</source>
-        <translation>Pracujeme na důležité aktualizaci, aplikaci prosím nezavírejte.</translation>
-    </message>
-    <message>
-        <location filename="../qml/misc/LegacyFolderMigration.qml" line="125"/>
-        <source>%1/%2</source>
-        <translation>%1/%2</translation>
     </message>
 </context>
 <context>
@@ -1011,62 +1003,76 @@ Nemůže být přidáno do projektu.</translation>
     </message>
 </context>
 <context>
+    <name>MMInput</name>
+    <message>
+        <location filename="../qmlV2/component/MMInput.qml" line="149"/>
+        <source>Copy</source>
+        <translation>Kopírovat</translation>
+    </message>
+</context>
+<context>
     <name>MainPanel</name>
     <message>
-        <location filename="../qml/MainPanel.qml" line="62"/>
-        <location filename="../qml/MainPanel.qml" line="260"/>
+        <location filename="../qml/MainPanel.qml" line="80"/>
+        <location filename="../qml/MainPanel.qml" line="300"/>
         <source>Projects</source>
         <translation>Projekty</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="82"/>
-        <location filename="../qml/MainPanel.qml" line="279"/>
+        <location filename="../qml/MainPanel.qml" line="100"/>
+        <location filename="../qml/MainPanel.qml" line="319"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="117"/>
-        <location filename="../qml/MainPanel.qml" line="308"/>
+        <location filename="../qml/MainPanel.qml" line="135"/>
+        <location filename="../qml/MainPanel.qml" line="348"/>
         <source>Record</source>
         <translation>Záznam</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="137"/>
-        <location filename="../qml/MainPanel.qml" line="327"/>
+        <location filename="../qml/MainPanel.qml" line="155"/>
+        <location filename="../qml/MainPanel.qml" line="367"/>
         <source>Zoom to project</source>
         <translation>Přiblížit na rozsah projektu</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="156"/>
-        <location filename="../qml/MainPanel.qml" line="346"/>
+        <location filename="../qml/MainPanel.qml" line="174"/>
+        <location filename="../qml/MainPanel.qml" line="386"/>
         <source>Local changes</source>
         <translation>Místní změny</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="175"/>
-        <location filename="../qml/MainPanel.qml" line="365"/>
+        <location filename="../qml/MainPanel.qml" line="193"/>
+        <location filename="../qml/MainPanel.qml" line="405"/>
         <source>Layers</source>
         <translation>Vrstvy</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="195"/>
-        <location filename="../qml/MainPanel.qml" line="384"/>
+        <location filename="../qml/MainPanel.qml" line="213"/>
+        <location filename="../qml/MainPanel.qml" line="424"/>
         <source>Map themes</source>
         <translation>Mapová témata</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="215"/>
-        <location filename="../qml/MainPanel.qml" line="403"/>
+        <location filename="../qml/MainPanel.qml" line="235"/>
+        <location filename="../qml/MainPanel.qml" line="443"/>
+        <source>Position tracking</source>
+        <translation>Sledování polohy</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainPanel.qml" line="255"/>
+        <location filename="../qml/MainPanel.qml" line="462"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="232"/>
+        <location filename="../qml/MainPanel.qml" line="272"/>
         <source>More</source>
         <translation>Více</translation>
     </message>
     <message>
-        <location filename="../qml/MainPanel.qml" line="245"/>
+        <location filename="../qml/MainPanel.qml" line="285"/>
         <source>Menu</source>
         <translation>Menu</translation>
     </message>
@@ -1120,87 +1126,92 @@ Nemůže být přidáno do projektu.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1138"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1283"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS je momentálně nedostupná</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="327"/>
+        <location filename="../qml/map/MapWrapper.qml" line="444"/>
         <source>Successfully synchronized</source>
         <translation>Plně synchronizováno</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="341"/>
+        <location filename="../qml/map/MapWrapper.qml" line="171"/>
+        <source>Position tracking is running</source>
+        <translation>Sledování polohy je spuštěno</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MapWrapper.qml" line="460"/>
         <source>Up to date</source>
         <translation>Aktualizováno</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="350"/>
+        <location filename="../qml/map/MapWrapper.qml" line="471"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Někdo jiný synchronizuje, zkusíme to později.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="360"/>
+        <location filename="../qml/map/MapWrapper.qml" line="483"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>Při synchronizaci došlo k problému, zkusíme to znovu. Klikněte pro více informací</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="378"/>
+        <location filename="../qml/map/MapWrapper.qml" line="503"/>
         <source>Splitting done successfully</source>
         <translation>Rozdělení prvku úspěšně dokončeno</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="394"/>
+        <location filename="../qml/map/MapWrapper.qml" line="521"/>
         <source>Create line to split the selected feature</source>
         <translation>Vytvořit linii k rozdělení vybraného prvku</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="410"/>
+        <location filename="../qml/map/MapWrapper.qml" line="539"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Pro zahájení editace geometrie vyberte libovolný bod </translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="426"/>
+        <location filename="../qml/map/MapWrapper.qml" line="557"/>
         <source>Record new geometry for the feature</source>
         <translation>Zaznamenat novou geometrii prvku</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="565"/>
+        <location filename="../qml/map/MapWrapper.qml" line="696"/>
         <source>Details</source>
         <translation>Podrobnosti</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="668"/>
+        <location filename="../qml/map/MapWrapper.qml" line="799"/>
         <source>Back</source>
         <translation>Zpět</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="685"/>
+        <location filename="../qml/map/MapWrapper.qml" line="816"/>
         <source>Discard the changes?</source>
         <translation>Zamítnout změny?</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="688"/>
+        <location filename="../qml/map/MapWrapper.qml" line="819"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Kliknutím na tlačítko &quot;Ano&quot; se změny geometrie zruší. Pokud chcete změny uložit, stiskněte tlačítko &quot;Ne&quot; a poté tlačítko &quot;Hotovo&quot; na panelu nástrojů.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="692"/>
+        <location filename="../qml/map/MapWrapper.qml" line="823"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Kliknutím na tlačítko &quot;Ano&quot; se nová geometrie zruší a žádný prvek se neuloží. Pokud chcete geometrii uložit, stiskněte &quot;Ne&quot; a poté &quot;Hotovo&quot; na panelu nástrojů.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="762"/>
+        <location filename="../qml/map/MapWrapper.qml" line="893"/>
         <source>Connecting to %1</source>
         <translation>Připojení k %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="776"/>
+        <location filename="../qml/map/MapWrapper.qml" line="907"/>
         <source>Connected, no position</source>
         <translation>Připojeno, chybí údaje o pozici</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="780"/>
+        <location filename="../qml/map/MapWrapper.qml" line="911"/>
         <source>Unknown accuracy</source>
         <translation>Neznámá přesnost GPS</translation>
     </message>
@@ -1208,57 +1219,57 @@ Nemůže být přidáno do projektu.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="767"/>
+        <location filename="../../core/merginapi.cpp" line="762"/>
         <source>Username must have at least 4 characters</source>
         <translation>Uživatelské jméno musí mít alespoň 4 znaky</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="774"/>
+        <location filename="../../core/merginapi.cpp" line="769"/>
         <source>Username contains invalid characters</source>
         <translation>Uživatelské jméno obsahuje neplatné znaky</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="781"/>
+        <location filename="../../core/merginapi.cpp" line="776"/>
         <source>Please enter a valid email</source>
         <translation>Zadejte prosím platný e-mail</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="788"/>
+        <location filename="../../core/merginapi.cpp" line="783"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Heslo není dostatečně silné. Musí%1 mít alespoň 8 znaků%1 obsahovat malá písmena%1 obsahovat velká písmena%1 obsahovat číslice nebo speciální znaky.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="801"/>
+        <location filename="../../core/merginapi.cpp" line="796"/>
         <source>Passwords do not match</source>
         <translation>Hesla se neshodují</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="808"/>
+        <location filename="../../core/merginapi.cpp" line="803"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Přijměte prosím podmínky a zásady ochrany osobních údajů</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1188"/>
+        <location filename="../../core/merginapi.cpp" line="1194"/>
         <source>Registration successful</source>
         <translation>Registrace proběhla úspěšně</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1211"/>
+        <location filename="../../core/merginapi.cpp" line="1216"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>Na vybraném serveru Mergin nejsou povoleny nové registrace.%1Poraďte se se svým správcem.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1497"/>
+        <location filename="../../core/merginapi.cpp" line="1505"/>
         <source>Project detached from Mergin</source>
         <translation>Projekt odpojený od Mergin</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3532"/>
+        <location filename="../../core/merginapi.cpp" line="3541"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Název pracovního prostoru obsahuje neplatné znaky</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3598"/>
+        <location filename="../../core/merginapi.cpp" line="3607"/>
         <source>Workspace %1 already exists</source>
         <translation>Pracovní prostor %1 již existuje</translation>
     </message>
@@ -1392,30 +1403,71 @@ Klepnutím na tlačítko &quot;Ano&quot; jej nahrajete.</translation>
 <context>
     <name>PositionProvidersModel</name>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="24"/>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="24"/>
         <source>Internal</source>
         <translation>Interní</translation>
     </message>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="25"/>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="25"/>
         <source>GPS receiver of this device</source>
         <translation>GPS přijímač v zařízení</translation>
     </message>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="114"/>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="114"/>
         <source> Bluetooth device</source>
         <translation>zařízení připojená přes Bluetooth</translation>
     </message>
     <message>
-        <location filename="../position/positionprovidersmodel.cpp" line="170"/>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="170"/>
         <source>Bluetooth device</source>
         <translation>zařízení připojená přes Bluetooth</translation>
     </message>
 </context>
 <context>
+    <name>PositionTrackingDrawer</name>
+    <message>
+        <location filename="../qml/popups/PositionTrackingDrawer.qml" line="41"/>
+        <source>Position tracking</source>
+        <translation>Sledování polohy</translation>
+    </message>
+    <message>
+        <location filename="../qml/popups/PositionTrackingDrawer.qml" line="52"/>
+        <source>Mergin Maps can track your position on this project.</source>
+        <translation>Mergin Maps mohou sledovat vaši pozici v tomto projektu.</translation>
+    </message>
+    <message>
+        <location filename="../qml/popups/PositionTrackingDrawer.qml" line="107"/>
+        <source>Stop tracking</source>
+        <translation>Zastavit sledování</translation>
+    </message>
+    <message>
+        <location filename="../qml/popups/PositionTrackingDrawer.qml" line="107"/>
+        <source>Start tracking</source>
+        <translation>Zahájení sledování</translation>
+    </message>
+</context>
+<context>
+    <name>PositionTrackingManager</name>
+    <message>
+        <location filename="../position/tracking/positiontrackingmanager.cpp" line="153"/>
+        <source>Could not find tracking layer for the project</source>
+        <translation>Nepodařilo se najít sledovací vrstvu projektu</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/positiontrackingmanager.cpp" line="162"/>
+        <source>Tracking layer not found or invalid</source>
+        <translation>Sledovací vrstva nenalezena nebo neplatná</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/positiontrackingmanager.cpp" line="339"/>
+        <source>Failed to start tracking, please contact support</source>
+        <translation>Sledování se nepodařilo spustit, kontaktujte prosím podporu</translation>
+    </message>
+</context>
+<context>
     <name>PreviewPanel</name>
     <message>
-        <location filename="../qml/form/PreviewPanel.qml" line="158"/>
+        <location filename="../qml/form/PreviewPanel.qml" line="155"/>
         <source>No map tip available.</source>
         <translation>Nejsou k dispozici žádné mapové tipy.</translation>
     </message>
@@ -1538,56 +1590,56 @@ Klepnutím na tlačítko &quot;Ano&quot; jej nahrajete.</translation>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="88"/>
+        <location filename="../qml/ProjectPanel.qml" line="100"/>
         <source>No Changes</source>
         <translation>Žádné změny</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="254"/>
-        <location filename="../qml/ProjectPanel.qml" line="627"/>
-        <location filename="../qml/ProjectPanel.qml" line="831"/>
+        <location filename="../qml/ProjectPanel.qml" line="257"/>
+        <location filename="../qml/ProjectPanel.qml" line="618"/>
+        <location filename="../qml/ProjectPanel.qml" line="824"/>
         <source>Projects</source>
         <translation>Projekty</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="483"/>
-        <location filename="../qml/ProjectPanel.qml" line="809"/>
+        <location filename="../qml/ProjectPanel.qml" line="488"/>
+        <location filename="../qml/ProjectPanel.qml" line="802"/>
         <source>Home</source>
         <translation>Domů</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="505"/>
+        <location filename="../qml/ProjectPanel.qml" line="510"/>
         <source>My projects</source>
         <translation>Moje projekty</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="529"/>
+        <location filename="../qml/ProjectPanel.qml" line="534"/>
         <source>Shared with me</source>
         <translation>Sdílené se mnou</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="529"/>
+        <location filename="../qml/ProjectPanel.qml" line="534"/>
         <source>Shared</source>
         <translation>Sdílet</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="549"/>
-        <location filename="../qml/ProjectPanel.qml" line="853"/>
+        <location filename="../qml/ProjectPanel.qml" line="554"/>
+        <location filename="../qml/ProjectPanel.qml" line="846"/>
         <source>Explore</source>
         <translation>Prozkoumat</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="624"/>
+        <location filename="../qml/ProjectPanel.qml" line="615"/>
         <source>Downloaded projects</source>
         <translation>Stažené projekty</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="629"/>
+        <location filename="../qml/ProjectPanel.qml" line="620"/>
         <source>Public projects</source>
         <translation>Veřejné projekty</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="632"/>
+        <location filename="../qml/ProjectPanel.qml" line="623"/>
         <source>Your other projects are accessible%1by switching your workspace here</source>
         <translation>Vaše ostatní projekty jsou přístupné%1přepnutím pracovní plochy zde.</translation>
     </message>
@@ -1608,12 +1660,12 @@ Klepnutím na tlačítko &quot;Ano&quot; jej nahrajete.</translation>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="93"/>
+        <location filename="../projectwizard.cpp" line="95"/>
         <source>Project name contains invalid characters</source>
         <translation>Název projektu obsahuje neplatné znaky</translation>
     </message>
     <message>
-        <location filename="../projectwizard.cpp" line="127"/>
+        <location filename="../projectwizard.cpp" line="139"/>
         <source>Project %1 created</source>
         <translation>Projekt %1 byl vytvořen</translation>
     </message>
@@ -1775,47 +1827,47 @@ Klepnutím na tlačítko &quot;Ano&quot; jej nahrajete.</translation>
         <translation>Nevalidní hodnota</translation>
     </message>
     <message>
-        <location filename="../position/abstractpositionprovider.cpp" line="192"/>
+        <location filename="../position/geoposition.cpp" line="132"/>
         <source>No data</source>
         <translation>Nedostupná data</translation>
     </message>
     <message>
-        <location filename="../position/abstractpositionprovider.cpp" line="195"/>
+        <location filename="../position/geoposition.cpp" line="135"/>
         <source>No fix</source>
         <translation>Není opraveno</translation>
     </message>
     <message>
-        <location filename="../position/abstractpositionprovider.cpp" line="198"/>
+        <location filename="../position/geoposition.cpp" line="138"/>
         <source>GPS fix, no correction data</source>
         <translation>GPS oprava, bez korekčních dat</translation>
     </message>
     <message>
-        <location filename="../position/abstractpositionprovider.cpp" line="203"/>
+        <location filename="../position/geoposition.cpp" line="143"/>
         <source>DGPS fix</source>
         <translation>DGPS oprava</translation>
     </message>
     <message>
-        <location filename="../position/abstractpositionprovider.cpp" line="206"/>
+        <location filename="../position/geoposition.cpp" line="146"/>
         <source>PPS fix</source>
         <translation>PPS oprava</translation>
     </message>
     <message>
-        <location filename="../position/abstractpositionprovider.cpp" line="209"/>
+        <location filename="../position/geoposition.cpp" line="149"/>
         <source>RTK fix</source>
         <translation>RTK oprava</translation>
     </message>
     <message>
-        <location filename="../position/abstractpositionprovider.cpp" line="212"/>
+        <location filename="../position/geoposition.cpp" line="152"/>
         <source>RTK float</source>
         <translation>RTK float</translation>
     </message>
     <message>
-        <location filename="../position/abstractpositionprovider.cpp" line="215"/>
+        <location filename="../position/geoposition.cpp" line="155"/>
         <source>Estimated fix (dead reckoning)</source>
         <translation>Odhadovaná oprava (dead reckoning)</translation>
     </message>
     <message>
-        <location filename="../position/abstractpositionprovider.cpp" line="218"/>
+        <location filename="../position/geoposition.cpp" line="158"/>
         <source>Unknown fix</source>
         <translation>Neznámá oprava</translation>
     </message>
@@ -1870,27 +1922,27 @@ Klepnutím na tlačítko &quot;Ano&quot; jej nahrajete.</translation>
 <context>
     <name>RegistrationForm</name>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="92"/>
+        <location filename="../qml/RegistrationForm.qml" line="133"/>
         <source>Username</source>
         <translation>Uživatelské jméno</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="147"/>
+        <location filename="../qml/RegistrationForm.qml" line="193"/>
         <source>Email</source>
         <translation>Email</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="189"/>
+        <location filename="../qml/RegistrationForm.qml" line="246"/>
         <source>Confirm password</source>
         <translation>Potvrdit heslo</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="214"/>
+        <location filename="../qml/RegistrationForm.qml" line="276"/>
         <source>I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Souhlasím s %1Obchodními podmínkami%3 a %2Zásadami ochrany osobních údajů%3  Mergin.</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="236"/>
+        <location filename="../qml/RegistrationForm.qml" line="304"/>
         <source>Sign up</source>
         <translation>Přihlasit</translation>
     </message>
@@ -2061,7 +2113,7 @@ Klepnutím na tlačítko &quot;Ano&quot; jej nahrajete.</translation>
 <context>
     <name>SimulatedPositionProvider</name>
     <message>
-        <location filename="../position/simulatedpositionprovider.cpp" line="60"/>
+        <location filename="../position/providers/simulatedpositionprovider.cpp" line="67"/>
         <source>Connected</source>
         <translation>Připojeno</translation>
     </message>
@@ -2505,7 +2557,7 @@ Přejděte na webové stránky Mergin Maps a odstraňte jej ručně.</translatio
 <context>
     <name>inputvaluerelationpage</name>
     <message>
-        <location filename="../qml/editor/inputvaluerelationpage.qml" line="129"/>
+        <location filename="../qml/editor/inputvaluerelationpage.qml" line="139"/>
         <source>Features</source>
         <translation>Prvky</translation>
     </message>
@@ -2513,58 +2565,64 @@ Přejděte na webové stránky Mergin Maps a odstraňte jej ručně.</translatio
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="238"/>
-        <location filename="../qml/main.qml" line="302"/>
+        <location filename="../qml/main.qml" line="233"/>
+        <location filename="../qml/main.qml" line="301"/>
         <source>No Changes</source>
         <translation>Žádné změny</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="277"/>
+        <location filename="../qml/main.qml" line="276"/>
         <source>GPS auto-center mode on</source>
         <translation>Automatické centrování na GPS zapnuto</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="277"/>
+        <location filename="../qml/main.qml" line="276"/>
         <source>GPS auto-center mode off</source>
         <translation>Automatické centrování na GPS vypnuto</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="291"/>
+        <location filename="../qml/main.qml" line="290"/>
         <source>No editable layers found.</source>
         <translation>Nebyly nalezeny žádné editovatelné vrstvy.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="631"/>
+        <location filename="../qml/main.qml" line="530"/>
+        <location filename="../qml/main.qml" line="541"/>
+        <source>not tracking</source>
+        <translation>nesleduje</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="696"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Stake out je vypnut, protože poloha není k dispozici!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="643"/>
+        <location filename="../qml/main.qml" line="708"/>
         <source>Failed to open the project</source>
         <translation>Projekt se nepodařilo otevřít</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="668"/>
+        <location filename="../qml/main.qml" line="733"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Nepodařilo se komunikovat s Mergin.%1Zkuste zlepšit síťové připojení.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="719"/>
+        <location filename="../qml/main.qml" line="787"/>
         <source>There were issues loading the project.</source>
         <translation>Při načítání projektu došlo k problémům.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="731"/>
+        <location filename="../qml/main.qml" line="811"/>
         <source>Could not read the project file:</source>
         <translation>Nelze přečíst soubor projektu:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="758"/>
+        <location filename="../qml/main.qml" line="831"/>
         <source>Press back again to quit the app</source>
         <translation>Pro vypnutí aplikace znovu stiskněte &quot;Zpět&quot;.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="561"/>
+        <location filename="../qml/main.qml" line="626"/>
         <source>PROJ Error</source>
         <translation>Chyba PROJ</translation>
     </message>
