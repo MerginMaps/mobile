@@ -643,6 +643,20 @@ ApplicationWindow {
         }
     }
 
+    MessageDialog {
+      id: migrationDialog
+
+      onAccepted: migrationDialog.close()
+      text: qsTr("Your server will soon be out of date \n\n Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.")
+      buttons: MessageDialog.Close | MessageDialog.Help
+      onButtonClicked: function(clickedButton) {
+        if (clickedButton === MessageDialog.Help) {
+          Qt.openUrlExternally(__inputHelp.migrationGuides)
+        }
+        close()
+      }
+    }
+
     FormsStackManager {
       id: formsStackManager
 
@@ -772,6 +786,10 @@ ApplicationWindow {
           if ( projectFullName === projectPanel.activeProjectId ) {
             map.mapSettings.extentChanged()
           }
+        }
+
+        function onMigrationRequested() {
+          migrationDialog.open()
         }
     }
 

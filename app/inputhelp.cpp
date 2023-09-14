@@ -136,6 +136,11 @@ QString InputHelp::whatsNewPostLink() const
   return inputWeb + "/blog/introducing-workspaces-simplified-collaboration" + utmTagOther;
 }
 
+QString InputHelp::migrationGuides() const
+{
+  return helpRoot + "/dev/ce-migration/" + utmTagHelp;
+}
+
 bool InputHelp::submitReportPending() const
 {
   return mSubmitReportPending;

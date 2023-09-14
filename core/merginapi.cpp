@@ -1364,6 +1364,11 @@ void MerginApi::checkMerginVersion( QString apiVersion, bool serverSupportsSubsc
     {
       setApiVersionStatus( MerginApiStatus::INCOMPATIBLE );
     }
+
+    if ( ( MERGIN_SERVER_VERSION_MAJOR == major && MERGIN_SERVER_VERSION_MINOR > minor ) || ( MERGIN_SERVER_VERSION_MAJOR > major ) )
+    {
+      emit migrationRequested();
+    }
   }
   else
   {
@@ -3363,6 +3368,7 @@ void MerginApi::getServerConfigReplyFinished()
     if ( statusCode == 404 ) // legacy (old) server
     {
       setServerType( MerginServerType::OLD );
+      emit migrationRequested();
     }
     else
     {
