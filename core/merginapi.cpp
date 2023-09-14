@@ -244,6 +244,8 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
+  qInfo() << "xxx MerginApi::downloadNextItem" << projectFullName;
+
   if ( transaction.downloadQueue.isEmpty() )
   {
     // there's nothing to download so just finalize the pull
@@ -689,6 +691,8 @@ bool MerginApi::pullProject( const QString &projectNamespace, const QString &pro
 
 bool MerginApi::pushProject( const QString &projectNamespace, const QString &projectName, bool isInitialPush )
 {
+  qInfo() << "xxx MerginApi::pushProject" << projectNamespace << projectName;
+
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
   bool pushHasStarted = false;
 
@@ -1288,6 +1292,8 @@ void MerginApi::onPlanProductIdChanged()
 
 QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool withAuth )
 {
+  qInfo() << "xxx MerginApi::getProjectInfo" << projectFullName;
+
   if ( withAuth && !validateAuth() )
   {
     emit missingAuthorizationError( projectFullName );
@@ -1672,6 +1678,7 @@ void MerginApi::listProjectsByNameReplyFinished( QString requestId )
 
 void MerginApi::finalizeProjectPullCopy( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items )
 {
+  qInfo() << "xxx MerginApi::finalizeProjectPullCopy" << projectFullName;
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Copying new content of " ) + filePath );
 
   QString dest = projectDir + "/" + filePath;
@@ -1718,6 +1725,7 @@ void MerginApi::finalizeProjectPullCopy( const QString &projectFullName, const Q
 
 bool MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items )
 {
+  qInfo() << "xxx MerginApi::finalizeProjectPullApplyDiff" << projectFullName;
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Applying diff to " ) + filePath );
 
   // update diffable files that have been modified on the server
@@ -1820,6 +1828,8 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
 {
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
+
+  qInfo() << "xxx MerginApi::finalizeProjectPull" << projectFullName;
 
   QString projectDir = transaction.projectDir;
   QString tempProjectDir = getTempProjectDir( projectFullName );
@@ -2161,6 +2171,8 @@ void MerginApi::prepareProjectPull( const QString &projectFullName, const QByteA
 
 void MerginApi::startProjectPull( const QString &projectFullName )
 {
+  qInfo() << "xxx MerginApi::startProjectPull" << projectFullName;
+
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
@@ -2429,6 +2441,8 @@ void MerginApi::pushInfoReplyFinished()
 
   QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
 
+  qInfo() << "xxx MerginApi::pushInfoReplyFinished" << projectFullName;
+
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
   Q_ASSERT( r == transaction.replyPushProjectInfo );
@@ -2456,6 +2470,9 @@ void MerginApi::pushInfoReplyFinished()
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Need pull first: local version %1 | server version %2" )
                       .arg( projectInfo.localVersion ).arg( serverProject.version ) );
       transaction.pullBeforePush = true;
+
+      qInfo() << "xxx MerginApi::pushInfoReplyFinished PULL_BEFORE_PUSH" << projectFullName;
+
       prepareProjectPull( projectFullName, data );
       return;
     }
@@ -2563,6 +2580,10 @@ void MerginApi::pushInfoReplyFinished()
     changes.insert( "removed", removed );
     changes.insert( "updated", modified );
     changes.insert( "renamed", QJsonArray() );
+
+    qInfo() << "xxx MerginApi::pushInfoReplyFinished DELETED FILES" << deletedMerginFiles.length();
+    qInfo() << "xxx MerginApi::pushInfoReplyFinished" << changes;
+    qInfo() << "xxx MerginApi::pushInfoReplyFinished" << changes;
 
     qint64 totalSize = 0;
     for ( MerginFile file : filesToUpload )
