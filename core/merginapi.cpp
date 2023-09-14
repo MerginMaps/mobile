@@ -1365,7 +1365,8 @@ void MerginApi::checkMerginVersion( QString apiVersion, bool serverSupportsSubsc
       setApiVersionStatus( MerginApiStatus::INCOMPATIBLE );
     }
 
-    if ( ( MERGIN_SERVER_VERSION_MAJOR == major && MERGIN_SERVER_VERSION_MINOR > minor ) || ( MERGIN_SERVER_VERSION_MAJOR > major ) )
+    // will be dropped support for old servers (mostly CE servers without workspaces)
+    if ( ( MINIMUM_SERVER_VERSION_MAJOR == major && MINIMUM_SERVER_VERSION_MINOR > minor ) || ( MINIMUM_SERVER_VERSION_MAJOR > major ) )
     {
       emit migrationRequested();
     }

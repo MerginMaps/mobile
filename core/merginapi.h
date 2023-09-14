@@ -370,8 +370,8 @@ class MerginApi: public QObject
 
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
-    static const int MERGIN_SERVER_VERSION_MAJOR = 2023;
-    static const int MERGIN_SERVER_VERSION_MINOR = 2;
+    static const int MINIMUM_SERVER_VERSION_MAJOR = 2023;
+    static const int MINIMUM_SERVER_VERSION_MINOR = 2;
     static const QString sMetadataFile;
     static const QString sMetadataFolder;
     static const QString sMerginConfigFile;
