@@ -390,6 +390,15 @@ class MerginApi: public QObject
     static ProjectDiff localProjectChanges( const QString &projectDir );
 
     /**
+     * Parse major and minor version number from version string
+     * \param version full server version string
+     * \param major parsed major number
+     * \param minor parsed minor number
+     * @return true when parsing was successful
+     */
+    static bool parseVersion( const QString &version, int &major, int &minor );
+
+    /**
     * Finds project in merginProjects list according its full name.
     * \param projectPath Full path to project's folder
     * \param metadataFile Relative path of metafile to project's folder

@@ -1347,14 +1347,8 @@ void MerginApi::checkMerginVersion( QString apiVersion, bool serverSupportsSubsc
   {
     int major = -1;
     int minor = -1;
-    QRegularExpression re;
-    re.setPattern( QStringLiteral( "(?<major>\\d+)[.](?<minor>\\d+)" ) );
-    QRegularExpressionMatch match = re.match( apiVersion );
-    if ( match.hasMatch() )
-    {
-      major = match.captured( "major" ).toInt();
-      minor = match.captured( "minor" ).toInt();
-    }
+
+    parseVersion( apiVersion, major, minor );
 
     if ( ( MERGIN_API_VERSION_MAJOR == major && MERGIN_API_VERSION_MINOR <= minor ) || ( MERGIN_API_VERSION_MAJOR < major ) )
     {
@@ -1363,12 +1357,6 @@ void MerginApi::checkMerginVersion( QString apiVersion, bool serverSupportsSubsc
     else
     {
       setApiVersionStatus( MerginApiStatus::INCOMPATIBLE );
-    }
-
-    // will be dropped support for old servers (mostly CE servers without workspaces)
-    if ( ( MINIMUM_SERVER_VERSION_MAJOR == major && MINIMUM_SERVER_VERSION_MINOR > minor ) || ( MINIMUM_SERVER_VERSION_MAJOR > major ) )
-    {
-      emit migrationRequested();
     }
   }
   else
@@ -1478,6 +1466,21 @@ ProjectDiff MerginApi::localProjectChanges( const QString &projectDir )
   MerginConfig config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
 
   return compareProjectFiles( projectMetadata.files, projectMetadata.files, localFiles, projectDir, config.isValid, config );
+}
+
+bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
+{
+  QRegularExpression re;
+  re.setPattern( QStringLiteral( "(?<major>\\d+)[.](?<minor>\\d+)" ) );
+  QRegularExpressionMatch match = re.match( version );
+  if ( match.hasMatch() )
+  {
+    major = match.captured( "major" ).toInt();
+    minor = match.captured( "minor" ).toInt();
+    return true;
+  }
+
+  return false;
 }
 
 QString MerginApi::getTempProjectDir( const QString &projectFullName )
@@ -3360,6 +3363,19 @@ void MerginApi::getServerConfigReplyFinished()
       else if ( serverType == QStringLiteral( "saas" ) )
       {
         setServerType( MerginServerType::SAAS );
+      }
+
+      // parse server version
+      QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
+      int major = -1;
+      int minor = -1;
+
+      parseVersion( apiVersion, major, minor );
+
+      // will be dropped support for old servers (mostly CE servers without workspaces)
+      if ( ( MINIMUM_SERVER_VERSION_MAJOR == major && MINIMUM_SERVER_VERSION_MINOR > minor ) || ( MINIMUM_SERVER_VERSION_MAJOR > major ) )
+      {
+        emit migrationRequested();
       }
     }
   }
