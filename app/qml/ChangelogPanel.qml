@@ -38,14 +38,14 @@ Item {
     clip: true
 
     background: Rectangle {
-      color: "white"
+      color: InputStyle.panelBackgroundWhite
     }
 
     header: PanelHeader {
       id: header
       height: InputStyle.rowHeightHeader
       width: parent.width
-      color: "white"
+      color: InputStyle.clrPanelMain
       rowHeight: InputStyle.rowHeightHeader
       titleText: qsTr("Change Log")
 
@@ -86,15 +86,16 @@ Item {
         onClicked: close()
         contentItem: Text { text: "❌" }
         background: Item {}
+        visible: false
       }
 
       ListView {
         id: changelogView
         width: parent.width
         anchors.top: subTitle.bottom
-        anchors.topMargin: 20
+        anchors.topMargin: InputStyle.panelMargin
         anchors.bottom: parent.bottom
-        spacing: 3
+        spacing: InputStyle.panelMargin
         clip: true
         model: ChangelogModel {}
         delegate: MouseArea {
@@ -104,7 +105,7 @@ Item {
           Column {
             id: changeItem
             width: changelogView.width
-            Rectangle { width: parent.width; height: 2; color: "lightGray" }
+            Rectangle { width: parent.width; height: InputStyle.changelogLineWidth; color: InputStyle.changelogLineWColor }
             Text { text: date; font.italic: true; wrapMode: Text.WordWrap; width: parent.width; font.pixelSize: InputStyle.fontPixelSizeNormal; color: InputStyle.fontColor }
             Text { text: title; font.bold: true; wrapMode: Text.WordWrap; width: parent.width; font.pixelSize: InputStyle.fontPixelSizeBig; color: InputStyle.fontColor }
             Text { text: description; wrapMode: Text.WordWrap; width: parent.width; font.pixelSize: InputStyle.fontPixelSizeNormal; color: InputStyle.fontColor }
@@ -137,6 +138,7 @@ Item {
       width: root.width
       height: InputStyle.rowHeightHeader
       text: qsTr("Show all changes")
+      visible: false
 
       onClicked: {
         changelogView.model.seeChangelogs()

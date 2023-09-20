@@ -115,7 +115,7 @@ void ChangelogModel::seeChangelogs( bool all )
 
   // get all the changes
   _lastSeen = QDateTime::fromMSecsSinceEpoch( 0 );
-  _networkManager->get( QNetworkRequest( QUrl( "https://zive.aktuality.sk/rss/najnovsie" ) ) ); // TODO get URL from somewhere
+  _networkManager->get( QNetworkRequest( QUrl( "https://wishlist.merginmaps.com/rss/changelog.xml" ) ) ); // TODO get URL from somewhere
 }
 
 
