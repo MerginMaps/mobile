@@ -33,7 +33,6 @@ SynchronizationManager::~SynchronizationManager() = default;
 
 void SynchronizationManager::syncProject( const Project &project, SyncOptions::Authorization auth, SyncOptions::Strategy strategy )
 {
-  qInfo() << "xxx SynchronizationManager::syncProject START SYNC" << project.projectName();
   if ( project.isLocal() )
   {
     syncProject( project.local, auth, strategy );
@@ -55,8 +54,6 @@ void SynchronizationManager::syncProject( const Project &project, SyncOptions::A
 
 void SynchronizationManager::syncProject( const LocalProject &project, SyncOptions::Authorization auth, SyncOptions::Strategy strategy )
 {
-  qInfo() << "xxx SynchronizationManager::syncProject" << project.projectName;
-
   if ( !project.isValid() )
   {
     return;
@@ -87,12 +84,10 @@ void SynchronizationManager::syncProject( const LocalProject &project, SyncOptio
 
   if ( ProjectStatus::hasLocalChanges( project ) )
   {
-    qInfo() << "xxx SynchronizationManager::syncProject >> PUSH" << project.projectName;
     syncHasStarted = mMerginApi->pushProject( project.projectNamespace, project.projectName );
   }
   else
   {
-    qInfo() << "xxx SynchronizationManager::syncProject >> PULL" << project.projectName;
     syncHasStarted = mMerginApi->pullProject( project.projectNamespace, project.projectName, auth == SyncOptions::Authorized );
   }
 
