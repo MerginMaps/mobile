@@ -17,5 +17,6 @@ app/android/AndroidManifest.xml
 *.gpkg-shm
 Input_keystore.keystore
 CMakeLists.txt.user
+app/android/build.gradle
 app/android/.gradle/*
 app/android/.gradle

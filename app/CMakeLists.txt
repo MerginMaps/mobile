@@ -297,6 +297,15 @@ if (ANDROID)
     ${INPUT_CMAKE_TEMPLATES_PATH}/AndroidManifest.xml.in
     ${CMAKE_CURRENT_SOURCE_DIR}/android/AndroidManifest.xml @ONLY
   )
+
+  if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/android/build.gradle)
+    file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/android/build.gradle)
+  endif ()
+  configure_file(
+    ${INPUT_CMAKE_TEMPLATES_PATH}/build.gradle.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/android/build.gradle @ONLY
+  )
+
   set_target_properties(
     Input
     PROPERTIES QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
@@ -471,7 +480,7 @@ target_link_libraries(
          Spatialite::Spatialite
 )
 
-if (NOT LINUX)
+if (NOT LNX)
   target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv)
 endif ()
 
