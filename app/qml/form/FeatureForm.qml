@@ -150,6 +150,8 @@ Item {
       form.controller.deleteFeature()
     }
 
+    parent.focus = true
+
     // rollback all changes if the layer is still editable
     form.controller.rollback()
 

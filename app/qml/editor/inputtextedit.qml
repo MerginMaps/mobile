@@ -69,8 +69,8 @@ AbstractEditor {
       }
 
       editorValueChanged( val, val === "" )
-    }
 
-    onPreeditTextChanged: if ( __androidUtils.isAndroid ) Qt.inputMethod.commit() // to avoid Android's uncommited text
+      if ( __androidUtils.isAndroid ) Qt.inputMethod.commit() // to avoid Android's uncommited text
+    }
   }
 }
