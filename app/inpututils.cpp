@@ -1840,7 +1840,6 @@ bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
   return ImageUtils::rescale( path, quality );
 }
 
-
 QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
 {
   QgsGeometry geometry;
@@ -1919,7 +1918,6 @@ QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
 
   return geometry;
 }
-
 
 QString InputUtils::invalidGeometryWarning( QgsVectorLayer *layer )
 {
@@ -2012,17 +2010,17 @@ static double qgsRuntimeProfilerExtractModelAsText( QStringList &lines, const QS
   {
     QModelIndex rowIndex = QgsApplication::profiler()->index( r, 0, parent );
     if ( QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Group ).toString() != group )
-        continue;
+      continue;
     bool ok;
-    double elapsed = QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Elapsed ).toDouble(&ok);
-    if (!ok )
-        elapsed = 0.0;
+    double elapsed = QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Elapsed ).toDouble( &ok );
+    if ( !ok )
+      elapsed = 0.0;
     total_elapsed += elapsed;
 
-    if ( elapsed > PROFILER_THRESHOLD)
+    if ( elapsed > PROFILER_THRESHOLD )
     {
-        QString name = QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Name ).toString();
-        lines << QStringLiteral( "%1 %2: %3 sec" ).arg( QStringLiteral( ">" ).repeated( level + 1 ),  name, QString::number(elapsed, 'f', 3) );
+      QString name = QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Name ).toString();
+      lines << QStringLiteral( "  %1 %2: %3 sec" ).arg( QStringLiteral( ">" ).repeated( level + 1 ),  name, QString::number( elapsed, 'f', 3 ) );
     }
     total_elapsed += qgsRuntimeProfilerExtractModelAsText( lines, group, rowIndex, level + 1 );
   }
@@ -2034,21 +2032,22 @@ QVector<QString> InputUtils::qgisProfilerLog()
   QVector<QString> lines;
   const QString project = QgsProject::instance()->fileName();
 
-  if (!project.isEmpty()) {
-    lines << QStringLiteral( "QgsProject filename: %1").arg( project );
+  if ( !project.isEmpty() )
+  {
+    lines << QStringLiteral( "QgsProject filename: %1" ).arg( project );
   }
 
-  lines << QStringLiteral( "List of QgsRuntimeProfiler events above %1 sec").arg( QString::number(PROFILER_THRESHOLD, 'f', 3) );
+  lines << QStringLiteral( "List of QgsRuntimeProfiler events above %1 sec" ).arg( QString::number( PROFILER_THRESHOLD, 'f', 3 ) );
 
   const auto groups = QgsApplication::profiler()->groups();
-  for ( const QString &g : groups)
+  for ( const QString &g : groups )
   {
     QVector<QString> groupLines;
     double elapsed = qgsRuntimeProfilerExtractModelAsText( groupLines, g, QModelIndex(), 0 );
-    if (elapsed > PROFILER_THRESHOLD)
+    if ( elapsed > PROFILER_THRESHOLD )
     {
-        lines << QStringLiteral( "%1: total %2 sec").arg( g, QString::number(elapsed, 'f', 3));
-        lines << groupLines;
+      lines << QStringLiteral( "  %1: total %2 sec" ).arg( g, QString::number( elapsed, 'f', 3 ) );
+      lines << groupLines;
     }
   }
   return lines;
