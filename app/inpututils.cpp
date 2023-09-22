@@ -2004,7 +2004,6 @@ static double qgsRuntimeProfilerExtractModelAsText( QStringList &lines, const QS
   double total_elapsed = 0.0;
 
   const int rc = QgsApplication::profiler()->rowCount( parent );
-  const int cc = QgsApplication::profiler()->columnCount( parent );
   for ( int r = 0; r < rc; r++ )
   {
     QModelIndex rowIndex = QgsApplication::profiler()->index( r, 0, parent );
