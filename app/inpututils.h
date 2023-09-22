@@ -299,7 +299,6 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QString resolvePrefixForRelativePath( int relativeStorageMode, const QString &homePath, const QString &targetDir );
 
-
     /**
      * Returns absolute path of the file for given path and its prefix. If prefixPath is empty,
      * returns given path.
@@ -411,7 +410,6 @@ class InputUtils: public QObject
      * \return Evaluated expression
      */
     Q_INVOKABLE static QString evaluateExpression( const FeatureLayerPair &pair, QgsProject *activeProject, const QString &expression );
-
 
     /**
     * Returns the QVariant typeName of a \a field.
@@ -533,7 +531,7 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString layerAttribution( QgsMapLayer *layer );
 
     /**
-     * Returns QGIS profiler data from loading of last project
+     * Returns QGIS profiler data
      */
     static QVector<QString> qgisProfilerLog();
 

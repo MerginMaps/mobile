@@ -12,7 +12,6 @@
 #include <QWindow>
 #include <QScreen>
 #include <QApplication>
-#include <QSortFilterProxyModel>
 
 #include "qgsruntimeprofiler.h"
 #include "qcoreapplication.h"
