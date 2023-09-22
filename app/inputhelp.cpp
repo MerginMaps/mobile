@@ -200,9 +200,14 @@ QVector<QString> InputHelp::logHeader( bool isHtml )
   {
     retLines.push_back( QStringLiteral( "%1Mergin User Profile not available. To include it, open you Profile Page in InputApp%2" ).arg( isHtml ? "<b>" : "" ).arg( isHtml ? "</b>" : "" ) );
   }
+  retLines.push_back( QStringLiteral( "------------------------------------------" ) );
   retLines.push_back( QStringLiteral( "Screen Info:" ) );
   retLines.append( InputUtils().dumpScreenInfo().split( "\n" ).toVector() );
   retLines.push_back( QStringLiteral( "------------------------------------------" ) );
+  retLines.push_back( QStringLiteral( "Profiler Data:" ) );
+  retLines.append( InputUtils().qgisProfilerLog() );
+  retLines.push_back( QStringLiteral( "------------------------------------------" ) );
+
   return retLines;
 }
 

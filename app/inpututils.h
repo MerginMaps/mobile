@@ -532,6 +532,11 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QString layerAttribution( QgsMapLayer *layer );
 
+    /**
+     * Returns QGIS profiler data from loading of last project
+     */
+    static QVector<QString> qgisProfilerLog();
+
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );
 

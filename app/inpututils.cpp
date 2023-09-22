@@ -12,7 +12,9 @@
 #include <QWindow>
 #include <QScreen>
 #include <QApplication>
+#include <QSortFilterProxyModel>
 
+#include "qgsruntimeprofiler.h"
 #include "qcoreapplication.h"
 #include "qgsgeometrycollection.h"
 #include "qgslinestring.h"
@@ -1997,6 +1999,59 @@ QString InputUtils::layerAttribution( QgsMapLayer *layer )
   }
 
   return QString();
+}
+
+const double PROFILER_THRESHOLD = 0.001;
+static double qgsRuntimeProfilerExtractModelAsText( QStringList &lines, const QString &group, const QModelIndex &parent, int level )
+{
+  double total_elapsed = 0.0;
+
+  const int rc = QgsApplication::profiler()->rowCount( parent );
+  const int cc = QgsApplication::profiler()->columnCount( parent );
+  for ( int r = 0; r < rc; r++ )
+  {
+    QModelIndex rowIndex = QgsApplication::profiler()->index( r, 0, parent );
+    if ( QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Group ).toString() != group )
+        continue;
+    bool ok;
+    double elapsed = QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Elapsed ).toDouble(&ok);
+    if (!ok )
+        elapsed = 0.0;
+    total_elapsed += elapsed;
+
+    if ( elapsed > PROFILER_THRESHOLD)
+    {
+        QString name = QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Name ).toString();
+        lines << QStringLiteral( "%1 %2: %3 sec" ).arg( QStringLiteral( ">" ).repeated( level + 1 ),  name, QString::number(elapsed, 'f', 3) );
+    }
+    total_elapsed += qgsRuntimeProfilerExtractModelAsText( lines, group, rowIndex, level + 1 );
+  }
+  return total_elapsed;
+}
+
+QVector<QString> InputUtils::qgisProfilerLog()
+{
+  QVector<QString> lines;
+  const QString project = QgsProject::instance()->fileName();
+
+  if (!project.isEmpty()) {
+    lines << QStringLiteral( "QgsProject filename: %1").arg( project );
+  }
+
+  lines << QStringLiteral( "List of QgsRuntimeProfiler events above %1 sec").arg( QString::number(PROFILER_THRESHOLD, 'f', 3) );
+
+  const auto groups = QgsApplication::profiler()->groups();
+  for ( const QString &g : groups)
+  {
+    QVector<QString> groupLines;
+    double elapsed = qgsRuntimeProfilerExtractModelAsText( groupLines, g, QModelIndex(), 0 );
+    if (elapsed > PROFILER_THRESHOLD)
+    {
+        lines << QStringLiteral( "%1: total %2 sec").arg( g, QString::number(elapsed, 'f', 3));
+        lines << groupLines;
+    }
+  }
+  return lines;
 }
 
 QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
