@@ -83,7 +83,10 @@ public class PositionTrackingService extends Service implements LocationListener
 
     @Override
     public void onDestroy() {
-        locationManager.removeUpdates(this);
+
+        if (locationManager != null) {
+            locationManager.removeUpdates(this);
+        }
 
         // Close the FileOutputStream when the service is destroyed
         try {
