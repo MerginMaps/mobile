@@ -281,7 +281,7 @@ void SynchronizationManager::onProjectSyncFailure(
 }
 
 // in case of file system error
-void SynchronizationManager::onFileSystemSyncFailure(const QString &message, const QString &projectFullName)
+void SynchronizationManager::onFileSystemSyncFailure( const QString &message, const QString &projectFullName )
 {
   if ( projectFullName.isEmpty() || !mSyncProcesses.contains( projectFullName ) )
   {
