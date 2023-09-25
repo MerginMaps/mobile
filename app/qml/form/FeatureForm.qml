@@ -621,13 +621,6 @@ Item {
   }
 
   Connections {
-    target: Qt.inputMethod
-    function onVisibleChanged() {
-      Qt.inputMethod.commit()
-    }
-  }
-
-  Connections {
     target: form.controller
     function onChangesCommited() {
       form.saved()

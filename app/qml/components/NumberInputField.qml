@@ -36,8 +36,6 @@ Item {
       }
     }
 
-    onPreeditTextChanged: if ( __androidUtils.isAndroid ) Qt.inputMethod.commit() // to avoid Android's uncommited text
-
     text: root.number
 
     height: parent.height
