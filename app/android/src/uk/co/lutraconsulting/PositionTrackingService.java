@@ -83,8 +83,6 @@ public class PositionTrackingService extends Service implements LocationListener
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-
         locationManager.removeUpdates(this);
 
         // Close the FileOutputStream when the service is destroyed
@@ -96,6 +94,8 @@ public class PositionTrackingService extends Service implements LocationListener
             e.printStackTrace();
             sendStatusUpdateMessage("ERROR #SILENT: Could not close file stream: " + e.getMessage() );
         }
+
+        super.onDestroy();
     }
 
     public void sendStatusUpdateMessage( String message ) {
