@@ -23,6 +23,7 @@ SynchronizationManager::SynchronizationManager(
     QObject::connect( mMerginApi, &MerginApi::pushCanceled, this, &SynchronizationManager::onProjectSyncCanceled );
     QObject::connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::onProjectSyncFinished );
     QObject::connect( mMerginApi, &MerginApi::networkErrorOccurred, this, &SynchronizationManager::onProjectSyncFailure );
+    QObject::connect( mMerginApi, &MerginApi::fileSystemErrorOccurred, this, &SynchronizationManager::onFileSystemSyncFailure );
     QObject::connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
     QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
     QObject::connect( mMerginApi, &MerginApi::projectReloadNeededAfterSync, this, &SynchronizationManager::onProjectReloadNeededAfterSync );
@@ -277,6 +278,24 @@ void SynchronizationManager::onProjectSyncFailure(
 
     return;
   }
+}
+
+// in case of file system error
+void SynchronizationManager::onFileSystemSyncFailure(const QString &message, const QString &projectFullName)
+{
+  if ( projectFullName.isEmpty() || !mSyncProcesses.contains( projectFullName ) )
+  {
+    return;
+  }
+
+  SyncProcess &process = mSyncProcesses[projectFullName];
+  SynchronizationError::ErrorType error = SynchronizationError::FileSystemError;
+
+  emit syncError( projectFullName, error, false, message );
+  mSyncProcesses.remove( projectFullName );
+  emit syncFinished( projectFullName, false, -1, false );
+
+  return;
 }
 
 void SynchronizationManager::onProjectAttachedToMergin( const QString &projectFullName, const QString &previousName )

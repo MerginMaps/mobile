@@ -388,14 +388,9 @@ void MerginApi::downloadItemReplyFinished()
       qint64 bytesWritten = file.write( data );
       file.close();
 
-      // maybe problem with permissions or drive space
+      // not enough space on file system
       if ( data.size() != bytesWritten )
       {
-        QString serverMsg = extractServerErrorMsg( data );
-        if ( serverMsg.isEmpty() )
-        {
-          serverMsg = r->errorString();
-        }
         CoreUtils::log( "pull " + projectFullName, "Failed to write content into: " + file.fileName() );
 
         transaction.replyPullItem->deleteLater();
@@ -410,8 +405,7 @@ void MerginApi::downloadItemReplyFinished()
           QDir( transaction.projectDir ).removeRecursively();
         }
 
-        int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-        emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: writeFile" ), httpCode, projectFullName );
+        emit fileSystemErrorOccurred( QStringLiteral( "File system error: Cannot write data into file" ), projectFullName );
 
         finishProjectSync( projectFullName, false );
 
@@ -421,6 +415,22 @@ void MerginApi::downloadItemReplyFinished()
     else
     {
       CoreUtils::log( "pull " + projectFullName, "Failed to open for writing: " + file.fileName() );
+
+      transaction.replyPullItem->deleteLater();
+      transaction.replyPullItem = nullptr;
+
+      // get rid of the temporary download dir where we may have left some downloaded files
+      QDir( getTempProjectDir( projectFullName ) ).removeRecursively();
+
+      if ( transaction.firstTimeDownload )
+      {
+        Q_ASSERT( !transaction.projectDir.isEmpty() );
+        QDir( transaction.projectDir ).removeRecursively();
+      }
+
+      emit fileSystemErrorOccurred( QStringLiteral( "File system error: Cannot open file for writing" ), projectFullName );
+
+      finishProjectSync( projectFullName, false );
     }
 
     transaction.transferedSize += data.size();
@@ -1726,10 +1736,10 @@ void MerginApi::finalizeProjectPullCopy( const QString &projectFullName, const Q
     QByteArray data = fTmp.readAll();
     qint64 bytesWritten = f.write( data );
 
-    // maybe problem with permissions or drive space
+    // not enough space on file system
     if ( data.size() != bytesWritten )
     {
-      CoreUtils::log( "finalizeProjectPullCopy ", "Failed to write content into: " + fTmp.fileName() );
+      CoreUtils::log( "pull " + projectFullName, "Failed to write content into: " + fTmp.fileName() );
       return;
     }
   }
@@ -3214,13 +3224,14 @@ bool MerginApi::writeData( const QByteArray &data, const QString &path )
   createPathIfNotExists( path );
   if ( !file.open( QIODevice::WriteOnly ) )
   {
+    CoreUtils::log( "writeData ", "Failed to open file for writing: " + path );
     return false;
   }
 
   qint64 bytesWritten = file.write( data );
   file.close();
 
-  // maybe problem with permissions or drive space
+  // not enough space on file system
   if ( data.size() != bytesWritten )
   {
     CoreUtils::log( "writeData ", "Failed to write content into: " + path );

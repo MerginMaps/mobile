@@ -31,6 +31,7 @@ class SynchronizationError
       ProjectNotFound,
       VersionMismatch,
       ServerError,
+      FileSystemError,
       UnknownError
     };
     Q_ENUMS( ErrorType );

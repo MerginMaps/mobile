@@ -565,6 +565,11 @@ class MerginApi: public QObject
       const QString &projectFullName = QLatin1String()
     );
 
+    void fileSystemErrorOccurred(
+      const QString &message,
+      const QString &projectFullName = QLatin1String()
+    );
+
     void storageLimitReached( qreal uploadSize );
     void projectLimitReached( int maxProjects, const QString &message );
     void notify( const QString &message );
