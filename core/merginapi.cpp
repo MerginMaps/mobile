@@ -1729,7 +1729,7 @@ void MerginApi::finalizeProjectPullCopy( const QString &projectFullName, const Q
     // maybe problem with permissions or drive space
     if ( data.size() != bytesWritten )
     {
-      CoreUtils::log( "writeData ", "Failed to write content into: " + fTmp.fileName() );
+      CoreUtils::log( "finalizeProjectPullCopy ", "Failed to write content into: " + fTmp.fileName() );
       return;
     }
   }
