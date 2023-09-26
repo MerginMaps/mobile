@@ -1,12 +1,22 @@
-#include "ChangelogModel.h"
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#include "changelogmodel.h"
 #include <QNetworkReply>
 #include <QXmlStreamReader>
 #include <QDebug>
+#include "coreutils.h"
 
 ChangelogModel::ChangelogModel( QObject *parent ) : QAbstractListModel{parent}
 {
-  _networkManager = new QNetworkAccessManager( this );
-  connect( _networkManager, &QNetworkAccessManager::finished, this, &ChangelogModel::onFinished );
+  mNetworkManager = new QNetworkAccessManager( this );
+  connect( mNetworkManager, &QNetworkAccessManager::finished, this, &ChangelogModel::onFinished );
 }
 
 void ChangelogModel::onFinished( QNetworkReply *reply )
@@ -49,10 +59,10 @@ void ChangelogModel::onFinished( QNetworkReply *reply )
         if ( xml.name().toString() == "item" )
         {
           QDateTime dt = QDateTime::fromString( pubDate, "ddd, dd MMM yyyy hh:mm:ss t" );
-          if ( dt > _lastSeen )
+          if ( dt > mLastSeen )
           {
             beginInsertRows( QModelIndex(), rowCount(), rowCount() );
-            _logs << Changelog{ title, description, link, dt };
+            mLogs << Changelog{ title, description, link, dt };
             endInsertRows();
           }
         }
@@ -60,16 +70,16 @@ void ChangelogModel::onFinished( QNetworkReply *reply )
     }
     if ( xml.hasError() )
     {
-      qWarning() << "XML error:" << xml.errorString();
+      CoreUtils::log( QStringLiteral( "Changelog" ), QStringLiteral( "Failed to parse changelog. Xml parse error: " ).arg( xml.errorString() ) );
     }
   }
   else
   {
-    qWarning() << "Network error:" << reply->errorString();
+    CoreUtils::log( QStringLiteral( "Changelog" ), QStringLiteral( "Failed to get changelog. Server Error: %1" ).arg( reply->errorString() ) );
   }
   reply->deleteLater();
 
-  if ( !_logs.isEmpty() )
+  if ( !mLogs.isEmpty() )
   {
     emit dataChanged( createIndex( 0, 0 ), createIndex( rowCount(), 0 ) );
   }
@@ -89,7 +99,7 @@ QHash<int, QByteArray> ChangelogModel::roleNames() const
 int ChangelogModel::rowCount( const QModelIndex &parent ) const
 {
   Q_UNUSED( parent )
-  return _logs.size();
+  return mLogs.size();
 }
 
 QVariant ChangelogModel::data( const QModelIndex &index, int role ) const
@@ -97,11 +107,11 @@ QVariant ChangelogModel::data( const QModelIndex &index, int role ) const
   if ( !hasIndex( index.row(), index.column(), index.parent() ) )
     return {};
 
-  Changelog log = _logs.at( index.row() );
+  Changelog log = mLogs.at( index.row() );
   if ( role == TitleRole ) return log.title;
   if ( role == DescriptionRole ) return log.description;
   if ( role == LinkRole ) return log.link;
-  if ( role == DateRole ) return log.date.toString( "ddd, dd MMMM yyyy" );
+  if ( role == DateRole ) return log.date;
 
   return {};
 }
@@ -110,12 +120,12 @@ QVariant ChangelogModel::data( const QModelIndex &index, int role ) const
 void ChangelogModel::seeChangelogs( bool all )
 {
   beginResetModel();
-  _logs.clear();
+  mLogs.clear();
   endResetModel();
 
   // get all the changes
-  _lastSeen = QDateTime::fromMSecsSinceEpoch( 0 );
-  _networkManager->get( QNetworkRequest( QUrl( "https://wishlist.merginmaps.com/rss/changelog.xml" ) ) ); // TODO get URL from somewhere
+  mLastSeen = QDateTime::fromMSecsSinceEpoch( 0 );
+  mNetworkManager->get( QNetworkRequest( QUrl( "https://wishlist.merginmaps.com/rss/changelog.xml" ) ) );
 }
 
 

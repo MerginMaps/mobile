@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef CHANGELOGMODEL_H
 #define CHANGELOGMODEL_H
 
@@ -39,9 +48,9 @@ class ChangelogModel : public QAbstractListModel
     void finished( const QString &title, const QString &link );
 
   private:
-    QList<Changelog> _logs;
-    QNetworkAccessManager *_networkManager;
-    QDateTime _lastSeen;
+    QList<Changelog> mLogs;
+    QNetworkAccessManager *mNetworkManager;
+    QDateTime mLastSeen;
 };
 
 #endif // CHANGELOGMODEL_H
