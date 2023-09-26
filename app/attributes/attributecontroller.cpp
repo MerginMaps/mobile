@@ -223,7 +223,7 @@ void AttributeController::flatten(
         int fieldIndex = editorField->idx();
         if ( fieldIndex < 0 || fieldIndex >= layer->fields().size() )
         {
-          qDebug() << "Invalid fieldIndex for editorField!";
+          CoreUtils::log( "Forms", QStringLiteral( "Invalid fieldIndex for editorField in layer %1" ).arg( layer->name() ) );
           continue;
         }
         QgsField field = layer->fields().at( fieldIndex );
@@ -269,10 +269,17 @@ void AttributeController::flatten(
         QgsAttributeEditorRelation *relationField = static_cast<QgsAttributeEditorRelation *>( element );
         QgsRelation associatedRelation = relationField->relation();
 
+        bool isValid = associatedRelation.isValid();
+        if ( !isValid )
+        {
+          CoreUtils::log( "Relations", QStringLiteral( "Ignoring invalid relation in layer %1" ).arg( layer->name() ) );
+          continue;
+        }
+
         bool isNmRelation = layer->editFormConfig().widgetConfig( associatedRelation.id() )[QStringLiteral( "nm-rel" )].toBool();
         if ( isNmRelation )
         {
-          CoreUtils::log( "Relations", "Nm relations are not supported" );
+          CoreUtils::log( "Relations", QStringLiteral( "Nm relations are not supported in layer %1" ).arg( layer->name() ) );
           continue;
         }
 
