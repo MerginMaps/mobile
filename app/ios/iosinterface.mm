@@ -210,7 +210,12 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
     // Confirm event
     delegate->imagePickerControllerDidFinishPickingMediaWithInfo = ^( UIImagePickerController * picker, NSDictionary * info )
     {
-      Q_UNUSED( picker )
+      if ( delegate->processingPicture )
+      {
+        qWarning() << "Image Picker: Already processing other photo (imagePickerControllerDidFinishPickingMediaWithInfo)";
+        return;
+      }
+      delegate->processingPicture = YES;
 
       NSString *imagePath = generateImagePath( delegate->handler->targetDir().toNSString() );
       QString err;
@@ -244,7 +249,6 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
                                    Q_ARG( bool, err.isEmpty() ),
                                    Q_ARG( const QVariantMap, data ) );
       }
-      delegate = nil;
     };
 
 
