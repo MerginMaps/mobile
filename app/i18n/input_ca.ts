@@ -716,12 +716,12 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="242"/>
+        <location filename="../inputhelp.cpp" line="247"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Informe enviat.%1Si us plau poseu-vos en contacte amb nosaltres a%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="247"/>
+        <location filename="../inputhelp.cpp" line="252"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Error en enviar informe. %1Si us plau comproveu la vostra connexió a internet.</translation>
     </message>
@@ -747,119 +747,119 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="183"/>
+        <location filename="../inpututils.cpp" line="184"/>
         <source>just now</source>
         <translation>ara mateix</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="188"/>
+        <location filename="../inpututils.cpp" line="189"/>
         <source>%1 minutes ago</source>
         <translation>ara fa %1 minuts</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="188"/>
+        <location filename="../inpututils.cpp" line="189"/>
         <source>%1 minute ago</source>
         <translation>ara fa %1 minut</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="193"/>
+        <location filename="../inpututils.cpp" line="194"/>
         <source>%1 hours ago</source>
         <translation>ara fa %1 hores</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="193"/>
+        <location filename="../inpututils.cpp" line="194"/>
         <source>%1 hour ago</source>
         <translation>ara fa %1 hora</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="197"/>
-        <location filename="../inpututils.cpp" line="202"/>
+        <location filename="../inpututils.cpp" line="198"/>
+        <location filename="../inpututils.cpp" line="203"/>
         <source>%1 days ago</source>
         <translation>ara fa %1 dies</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="197"/>
-        <location filename="../inpututils.cpp" line="202"/>
+        <location filename="../inpututils.cpp" line="198"/>
+        <location filename="../inpututils.cpp" line="203"/>
         <source>%1 day ago</source>
         <translation>ara fa %1 dia</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="207"/>
+        <location filename="../inpututils.cpp" line="208"/>
         <source>%1 weeks ago</source>
         <translation>ara fa %1 setmanes</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="207"/>
+        <location filename="../inpututils.cpp" line="208"/>
         <source>%1 week ago</source>
         <translation>ara fa %1 setmana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="212"/>
+        <location filename="../inpututils.cpp" line="213"/>
         <source>%1 months ago</source>
         <translation>ara fa %1 mesos</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="212"/>
+        <location filename="../inpututils.cpp" line="213"/>
         <source>%1 month ago</source>
         <translation>ara fa %1 mes</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="217"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 years ago</source>
         <translation>ara fa %1 anys</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="217"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 year ago</source>
         <translation>ara fa %1 any</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1406"/>
+        <location filename="../inpututils.cpp" line="1407"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>resolució de pantalla: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1407"/>
+        <location filename="../inpututils.cpp" line="1408"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI de pantalla: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1408"/>
+        <location filename="../inpututils.cpp" line="1409"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>mida de pantalla: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1409"/>
+        <location filename="../inpututils.cpp" line="1410"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>relació de píxels del dispositiu informada: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1410"/>
+        <location filename="../inpututils.cpp" line="1411"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>relació de píxels del dispositiu calculada: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1411"/>
+        <location filename="../inpututils.cpp" line="1412"/>
         <source>used dp scale: %1</source>
         <translation>escala dp utilitzada: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1938"/>
+        <location filename="../inpututils.cpp" line="1941"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Heu d&apos;afegir almenys %1 punt(s) a cada tros.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1942"/>
+        <location filename="../inpututils.cpp" line="1945"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Heu d&apos;afegir com a mínim %1 punt(s).</translation>
     </message>
@@ -1221,57 +1221,57 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="762"/>
+        <location filename="../../core/merginapi.cpp" line="763"/>
         <source>Username must have at least 4 characters</source>
         <translation>El nom d&apos;usuari ha de tenir 4 caracters com a mínim</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="769"/>
+        <location filename="../../core/merginapi.cpp" line="770"/>
         <source>Username contains invalid characters</source>
         <translation>El nom d&apos;usuari conté caràcters no vàlids</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="776"/>
+        <location filename="../../core/merginapi.cpp" line="777"/>
         <source>Please enter a valid email</source>
         <translation>Si us plau afegiu una adreça de correu vàlida</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="783"/>
+        <location filename="../../core/merginapi.cpp" line="784"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Contrasenya fluixa. Ha de %1tenir com a mínim 8 caracters%1 minúscules%1 majúscules%1 dígits o caràcters especials</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="796"/>
+        <location filename="../../core/merginapi.cpp" line="797"/>
         <source>Passwords do not match</source>
         <translation>Les contrasenyes no coincideixen</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="803"/>
+        <location filename="../../core/merginapi.cpp" line="804"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Si us plau accepteu els Termes i la Política de Privadesa</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1194"/>
+        <location filename="../../core/merginapi.cpp" line="1210"/>
         <source>Registration successful</source>
         <translation>Registre completat correctament</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1216"/>
+        <location filename="../../core/merginapi.cpp" line="1232"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>No es permeten registres nous al servidor Mergin escollit.%1Si us plau consulteu-ho amb el vostre administrador.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1505"/>
+        <location filename="../../core/merginapi.cpp" line="1545"/>
         <source>Project detached from Mergin</source>
         <translation>Projecte desvinculat de Mergin </translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3541"/>
+        <location filename="../../core/merginapi.cpp" line="3579"/>
         <source>Workspace name contains invalid characters</source>
         <translation>El nom de l&apos;espai de treball conté caràcters no vàlids</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3607"/>
+        <location filename="../../core/merginapi.cpp" line="3645"/>
         <source>Workspace %1 already exists</source>
         <translation>L&apos;espai de treball %1 ja existeix</translation>
     </message>
@@ -1523,6 +1523,34 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
         <location filename="../qml/ProjectIssuesPanel.qml" line="157"/>
         <source>QGIS log</source>
         <translation>Registre de QGIS</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectLimitDialog</name>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="19"/>
+        <source>You have reached project number limit</source>
+        <translation>Heu assolit el límit de nombre de projectes</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="59"/>
+        <source>Maximum of projects: %1</source>
+        <translation>Màxim de projectes: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="66"/>
+        <source>Plan: %1</source>
+        <translation>Pla: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="79"/>
+        <source>Manage subscriptions</source>
+        <translation>Gestiona les subscripcions</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="95"/>
+        <source>Cancel</source>
+        <translation>Cancel · lar</translation>
     </message>
 </context>
 <context>
@@ -2567,64 +2595,64 @@ Aneu al lloc web de Mergin Maps per eliminar-lo manualment.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="231"/>
-        <location filename="../qml/main.qml" line="299"/>
+        <location filename="../qml/main.qml" line="233"/>
+        <location filename="../qml/main.qml" line="301"/>
         <source>No Changes</source>
         <translation>Cap canvi</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="274"/>
+        <location filename="../qml/main.qml" line="276"/>
         <source>GPS auto-center mode on</source>
         <translation>Mode autocentrat del GPS activat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="274"/>
+        <location filename="../qml/main.qml" line="276"/>
         <source>GPS auto-center mode off</source>
         <translation>Mode autocentrat del GPS desactivat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="288"/>
+        <location filename="../qml/main.qml" line="290"/>
         <source>No editable layers found.</source>
         <translation>No s&apos;ha trobat cap nivell editable.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="528"/>
-        <location filename="../qml/main.qml" line="539"/>
+        <location filename="../qml/main.qml" line="530"/>
+        <location filename="../qml/main.qml" line="541"/>
         <source>not tracking</source>
         <translation>no seguiment</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="694"/>
+        <location filename="../qml/main.qml" line="706"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>El replanteig està desactivat perquè la ubicació no està disponible!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="706"/>
+        <location filename="../qml/main.qml" line="718"/>
         <source>Failed to open the project</source>
         <translation>No s&apos;ha pogut obrir el projecte</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="731"/>
+        <location filename="../qml/main.qml" line="743"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Error de comunicació amb Mergin.%1Proveu a millorar la vostra connexió de xarxa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="785"/>
+        <location filename="../qml/main.qml" line="806"/>
         <source>There were issues loading the project.</source>
         <translation>Problemes en carregar el projecte.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="809"/>
+        <location filename="../qml/main.qml" line="830"/>
         <source>Could not read the project file:</source>
         <translation>No s&apos;ha pogut llegir el fitxer del projecte:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="829"/>
+        <location filename="../qml/main.qml" line="850"/>
         <source>Press back again to quit the app</source>
         <translation>Premeu enrere un altre cop per sortir de l&apos;aplicació</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="624"/>
+        <location filename="../qml/main.qml" line="636"/>
         <source>PROJ Error</source>
         <translation>Error de PROJ</translation>
     </message>
