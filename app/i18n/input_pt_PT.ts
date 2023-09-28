@@ -208,43 +208,43 @@ Por favor aceda ao Mergin Maps para removê-lo manualmente.</translation>
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="574"/>
-        <location filename="../attributes/attributecontroller.cpp" line="625"/>
+        <location filename="../attributes/attributecontroller.cpp" line="563"/>
+        <location filename="../attributes/attributecontroller.cpp" line="614"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>O valor padrão da expressão para %1:%2 tem um erro de interpretação: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="584"/>
-        <location filename="../attributes/attributecontroller.cpp" line="635"/>
+        <location filename="../attributes/attributecontroller.cpp" line="573"/>
+        <location filename="../attributes/attributecontroller.cpp" line="624"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>O valor padrão da expressão para %1:%2 tem uma expressão inválida: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="595"/>
-        <location filename="../attributes/attributecontroller.cpp" line="646"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1208"/>
+        <location filename="../attributes/attributecontroller.cpp" line="584"/>
+        <location filename="../attributes/attributecontroller.cpp" line="635"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1197"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>O valor &quot;%1&quot; %4 não pode ser convertido para um valor compatível para o campo %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="905"/>
+        <location filename="../attributes/attributecontroller.cpp" line="894"/>
         <source>Cannot delete feature</source>
         <translation>Não é possível apagar o elemento</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="528"/>
-        <location filename="../attributes/attributecontroller.cpp" line="961"/>
+        <location filename="../attributes/attributecontroller.cpp" line="517"/>
+        <location filename="../attributes/attributecontroller.cpp" line="950"/>
         <source>Feature could not be added</source>
         <translation>Não foi possível adicionar o elemento</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="537"/>
-        <location filename="../attributes/attributecontroller.cpp" line="972"/>
+        <location filename="../attributes/attributecontroller.cpp" line="526"/>
+        <location filename="../attributes/attributecontroller.cpp" line="961"/>
         <source>Cannot update feature</source>
         <translation>Não é possível atualizar o elemento</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="1016"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1005"/>
         <source>Cannot start editing</source>
         <translation>Não é possível iniciar a edição</translation>
     </message>
@@ -418,27 +418,27 @@ Certifique-se de que o seu dispositivo está ligado e pode ser ligado a.%1 %2Apr
         <translation>Falha ao copiar o ficheiro de imagem para  %1.</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="205"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="233"/>
         <source>Open Image</source>
         <translation>Abrir Imagem</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="207"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="235"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Ficheiros de imagem (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="219"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="247"/>
         <source>Remove photo reference</source>
         <translation>Remover referência da foto</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="220"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="248"/>
         <source>Also permanently delete photo from device?</source>
         <translation>Eliminar também a foto permanentemente do seu dispositivo?</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="242"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="270"/>
         <source>Failed to copy image</source>
         <translation>Falha ao copiar a imagem</translation>
     </message>
@@ -446,12 +446,12 @@ Certifique-se de que o seu dispositivo está ligado e pode ser ligado a.%1 %2Apr
 <context>
     <name>FeatureForm</name>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="137"/>
+        <location filename="../qml/form/FeatureForm.qml" line="132"/>
         <source>Can not save the form, there are validation errors</source>
         <translation>Não foi possível guardar o formulário, a validação detetou erros.</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureForm.qml" line="138"/>
+        <location filename="../qml/form/FeatureForm.qml" line="133"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>O elemento não foi guardado, por favor verifique todos os campos obrigatórios</translation>
     </message>
@@ -494,12 +494,12 @@ Certifique-se de que o seu dispositivo está ligado e pode ser ligado a.%1 %2Apr
         <translation>Você quer guardar as alterações?</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="248"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="245"/>
         <source>Saving failed</source>
         <translation>Falha ao guardar</translation>
     </message>
     <message>
-        <location filename="../qml/form/FeatureFormPage.qml" line="249"/>
+        <location filename="../qml/form/FeatureFormPage.qml" line="246"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
         <translation>Falha ao guardar alterações. Normalmente isto não deve acontecer. Reinicie a aplicação e tente novamente - se isso não ajudar, entre em contato com o suporte.</translation>
     </message>
@@ -716,12 +716,12 @@ Não será adicionado ao projeto.</translation>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="242"/>
+        <location filename="../inputhelp.cpp" line="247"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Relatório submetido.%1Por favor contacte-nos em%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="247"/>
+        <location filename="../inputhelp.cpp" line="252"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Erro na submissão do relatório.%1Por favor verifique a sua ligação de internet.</translation>
     </message>
@@ -747,119 +747,119 @@ Não será adicionado ao projeto.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="183"/>
+        <location filename="../inpututils.cpp" line="184"/>
         <source>just now</source>
         <translation>agora mesmo</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="188"/>
+        <location filename="../inpututils.cpp" line="189"/>
         <source>%1 minutes ago</source>
         <translation>%1 minutos atrás</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="188"/>
+        <location filename="../inpututils.cpp" line="189"/>
         <source>%1 minute ago</source>
         <translation>%1 minuto atrás</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="193"/>
+        <location filename="../inpututils.cpp" line="194"/>
         <source>%1 hours ago</source>
         <translation>%1 horas atrás</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="193"/>
+        <location filename="../inpututils.cpp" line="194"/>
         <source>%1 hour ago</source>
         <translation>%1 hora atrás</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="197"/>
-        <location filename="../inpututils.cpp" line="202"/>
+        <location filename="../inpututils.cpp" line="198"/>
+        <location filename="../inpututils.cpp" line="203"/>
         <source>%1 days ago</source>
         <translation>%1 dias atrás</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="197"/>
-        <location filename="../inpututils.cpp" line="202"/>
+        <location filename="../inpututils.cpp" line="198"/>
+        <location filename="../inpututils.cpp" line="203"/>
         <source>%1 day ago</source>
         <translation>%1 dia atrás</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="207"/>
+        <location filename="../inpututils.cpp" line="208"/>
         <source>%1 weeks ago</source>
         <translation>%1 semanas atrás</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="207"/>
+        <location filename="../inpututils.cpp" line="208"/>
         <source>%1 week ago</source>
         <translation>%1 semana atrás</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="212"/>
+        <location filename="../inpututils.cpp" line="213"/>
         <source>%1 months ago</source>
         <translation>%1 meses atrás</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="212"/>
+        <location filename="../inpututils.cpp" line="213"/>
         <source>%1 month ago</source>
         <translation>%1 mês atrás</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="217"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 years ago</source>
         <translation>%1 anos atrás</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="217"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 year ago</source>
         <translation>%1 ano atrás</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1441"/>
+        <location filename="../inpututils.cpp" line="1407"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>resolução do ecrã: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1442"/>
+        <location filename="../inpututils.cpp" line="1408"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI do ecrã: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1443"/>
+        <location filename="../inpututils.cpp" line="1409"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>tamanho do ecrã: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1444"/>
+        <location filename="../inpututils.cpp" line="1410"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>rácio de pixel reportado pelo dispositivo: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1445"/>
+        <location filename="../inpututils.cpp" line="1411"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>rácio de pixel calculado pelo dispositivo: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1446"/>
+        <location filename="../inpututils.cpp" line="1412"/>
         <source>used dp scale: %1</source>
         <translation>Escal dp usada: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1973"/>
+        <location filename="../inpututils.cpp" line="1941"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Precisa adicionar pelo menos %1 ponto(s) a cada parte.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1977"/>
+        <location filename="../inpututils.cpp" line="1945"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Precisa adicionar pelo menos %1 ponto(s).</translation>
     </message>
@@ -909,12 +909,17 @@ Não será adicionado ao projeto.</translation>
         <translation>Legenda</translation>
     </message>
     <message>
-        <location filename="../qml/layers/LayerDetail.qml" line="250"/>
+        <location filename="../qml/layers/LayerDetail.qml" line="219"/>
+        <source>Attribution</source>
+        <translation>Atribuição</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/LayerDetail.qml" line="310"/>
         <source>Features</source>
         <translation>Elementos</translation>
     </message>
     <message>
-        <location filename="../qml/layers/LayerDetail.qml" line="284"/>
+        <location filename="../qml/layers/LayerDetail.qml" line="344"/>
         <source>Layer info</source>
         <translation>Informação da camada</translation>
     </message>
@@ -997,6 +1002,14 @@ Não será adicionado ao projeto.</translation>
         <location filename="../qml/LoginForm.qml" line="244"/>
         <source>Forgot password?</source>
         <translation>Esqueceu senha?</translation>
+    </message>
+</context>
+<context>
+    <name>MMInput</name>
+    <message>
+        <location filename="../qmlV2/component/MMInput.qml" line="149"/>
+        <source>Copy</source>
+        <translation>Cópia</translation>
     </message>
 </context>
 <context>
@@ -1208,57 +1221,57 @@ Não será adicionado ao projeto.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="767"/>
+        <location filename="../../core/merginapi.cpp" line="763"/>
         <source>Username must have at least 4 characters</source>
         <translation>Nome do utilizador deve ter pelo menos 4 caracteres</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="774"/>
+        <location filename="../../core/merginapi.cpp" line="770"/>
         <source>Username contains invalid characters</source>
         <translation>Nome de utilizador contêm carateres inválidos</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="781"/>
+        <location filename="../../core/merginapi.cpp" line="777"/>
         <source>Please enter a valid email</source>
         <translation>Por favor, introduza um email válido</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="788"/>
+        <location filename="../../core/merginapi.cpp" line="784"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>A senha não é suficientemente forte. Tem de ter%1 pelo menos 8 carateres de comprimento%1 contendo minúsculas%1 contendo maiúsculas%1 contendo números ou caracteres especiais</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="801"/>
+        <location filename="../../core/merginapi.cpp" line="797"/>
         <source>Passwords do not match</source>
         <translation>As senhas não coincidem</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="808"/>
+        <location filename="../../core/merginapi.cpp" line="804"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Por favor, aceite os Termos e Política de Privacidade</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1188"/>
+        <location filename="../../core/merginapi.cpp" line="1210"/>
         <source>Registration successful</source>
         <translation>Registo com sucesso</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1211"/>
+        <location filename="../../core/merginapi.cpp" line="1232"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>Os novos registos não são permitidos no servidor Mergin seleccionado.%1Por favor verifique com o seu administrador.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1497"/>
+        <location filename="../../core/merginapi.cpp" line="1545"/>
         <source>Project detached from Mergin</source>
         <translation>Projeto separado do Mergin</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3533"/>
+        <location filename="../../core/merginapi.cpp" line="3579"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Nome da área de trabalho contêm carateres inválidos</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3599"/>
+        <location filename="../../core/merginapi.cpp" line="3645"/>
         <source>Workspace %1 already exists</source>
         <translation>Área de trabalho %1 já existe</translation>
     </message>
@@ -1456,7 +1469,7 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
 <context>
     <name>PreviewPanel</name>
     <message>
-        <location filename="../qml/form/PreviewPanel.qml" line="158"/>
+        <location filename="../qml/form/PreviewPanel.qml" line="155"/>
         <source>No map tip available.</source>
         <translation>Sem dicas de mapa disponível</translation>
     </message>
@@ -1510,6 +1523,34 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
         <location filename="../qml/ProjectIssuesPanel.qml" line="157"/>
         <source>QGIS log</source>
         <translation>Log do QGIS</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectLimitDialog</name>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="19"/>
+        <source>You have reached project number limit</source>
+        <translation>Você atingiu o número limite de projetos</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="59"/>
+        <source>Maximum of projects: %1</source>
+        <translation>Máximo de projetos: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="66"/>
+        <source>Plan: %1</source>
+        <translation>Plano: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="79"/>
+        <source>Manage subscriptions</source>
+        <translation>Gerir Subscrições</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="95"/>
+        <source>Cancel</source>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
@@ -1649,12 +1690,12 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="93"/>
+        <location filename="../projectwizard.cpp" line="95"/>
         <source>Project name contains invalid characters</source>
         <translation>Nome do projeto contém carateres inválidos</translation>
     </message>
     <message>
-        <location filename="../projectwizard.cpp" line="127"/>
+        <location filename="../projectwizard.cpp" line="139"/>
         <source>Project %1 created</source>
         <translation>Projeto %1 criado</translation>
     </message>
@@ -1911,27 +1952,27 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
 <context>
     <name>RegistrationForm</name>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="92"/>
+        <location filename="../qml/RegistrationForm.qml" line="133"/>
         <source>Username</source>
         <translation>Nome de utilizador</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="147"/>
+        <location filename="../qml/RegistrationForm.qml" line="193"/>
         <source>Email</source>
         <translation>Email</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="189"/>
+        <location filename="../qml/RegistrationForm.qml" line="246"/>
         <source>Confirm password</source>
         <translation>Confirmar senha</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="214"/>
+        <location filename="../qml/RegistrationForm.qml" line="276"/>
         <source>I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Eu aceito os %1Termos e Condições%3 e%2Política de Provacidade%3 do Mergin</translation>
     </message>
     <message>
-        <location filename="../qml/RegistrationForm.qml" line="236"/>
+        <location filename="../qml/RegistrationForm.qml" line="304"/>
         <source>Sign up</source>
         <translation>Registe-se</translation>
     </message>
@@ -2554,64 +2595,64 @@ Por favor aceda ao Mergin Maps para removê-lo manualmente.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="237"/>
-        <location filename="../qml/main.qml" line="305"/>
+        <location filename="../qml/main.qml" line="233"/>
+        <location filename="../qml/main.qml" line="301"/>
         <source>No Changes</source>
         <translation>Sem Mudanças</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="280"/>
+        <location filename="../qml/main.qml" line="276"/>
         <source>GPS auto-center mode on</source>
         <translation>Modo GPS de auto-centrar ligado</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="280"/>
+        <location filename="../qml/main.qml" line="276"/>
         <source>GPS auto-center mode off</source>
         <translation>Modo GPS de auto-centrar desligado</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="294"/>
+        <location filename="../qml/main.qml" line="290"/>
         <source>No editable layers found.</source>
         <translation>Não foram encontradas camadas editáveis.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="527"/>
-        <location filename="../qml/main.qml" line="538"/>
+        <location filename="../qml/main.qml" line="530"/>
+        <location filename="../qml/main.qml" line="541"/>
         <source>not tracking</source>
         <translation>não seguindo</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="693"/>
+        <location filename="../qml/main.qml" line="706"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>A orientação está desativada porque a localização não está disponível!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="705"/>
+        <location filename="../qml/main.qml" line="718"/>
         <source>Failed to open the project</source>
         <translation>Falha ao abrir o projeto</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="730"/>
+        <location filename="../qml/main.qml" line="743"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Falha na comunicação com o Mergin.%1Tente melhorar a sua ligação à rede.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="784"/>
+        <location filename="../qml/main.qml" line="806"/>
         <source>There were issues loading the project.</source>
         <translation>Houve problemas ao carregar o projeto.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="808"/>
+        <location filename="../qml/main.qml" line="830"/>
         <source>Could not read the project file:</source>
         <translation>Não foi possível ler o ficheiro do projeto:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="828"/>
+        <location filename="../qml/main.qml" line="850"/>
         <source>Press back again to quit the app</source>
         <translation>Pressione novamente para sair da aplicação</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="623"/>
+        <location filename="../qml/main.qml" line="636"/>
         <source>PROJ Error</source>
         <translation>Erro PROJ</translation>
     </message>
