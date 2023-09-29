@@ -1458,7 +1458,7 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="162"/>
         <source>Tracking layer not found or invalid</source>
-        <translation>Camada de seguimento não encontrada ou inválida</translation>
+        <translation>Camada de tracking não encontrada ou inválida</translation>
     </message>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="339"/>
