@@ -1463,7 +1463,7 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="339"/>
         <source>Failed to start tracking, please contact support</source>
-        <translation>Falha ao iniciar o seguimento, contate com o suporte</translation>
+        <translation>Falha ao iniciar o tracking, contate com o suporte</translation>
     </message>
 </context>
 <context>
