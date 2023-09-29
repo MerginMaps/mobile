@@ -1435,7 +1435,7 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
     <message>
         <location filename="../qml/popups/PositionTrackingDrawer.qml" line="52"/>
         <source>Mergin Maps can track your position on this project.</source>
-        <translation>Mergin Maps pode seguir sua posição neste projeto.</translation>
+        <translation>Mergin Maps pode seguir a sua posição neste projeto.</translation>
     </message>
     <message>
         <location filename="../qml/popups/PositionTrackingDrawer.qml" line="107"/>
@@ -1453,17 +1453,17 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="153"/>
         <source>Could not find tracking layer for the project</source>
-        <translation>Não foi possível encontrar camada de seguimento para o projeto</translation>
+        <translation>Não foi possível encontrar camada de tracking para o projeto</translation>
     </message>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="162"/>
         <source>Tracking layer not found or invalid</source>
-        <translation>Camada de seguimento não encontrada ou inválida</translation>
+        <translation>Camada de tracking não encontrada ou inválida</translation>
     </message>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="339"/>
         <source>Failed to start tracking, please contact support</source>
-        <translation>Falha ao iniciar o seguimento, contate com o suporte</translation>
+        <translation>Falha ao iniciar o tracking, contate com o suporte</translation>
     </message>
 </context>
 <context>
@@ -2619,7 +2619,7 @@ Por favor aceda ao Mergin Maps para removê-lo manualmente.</translation>
         <location filename="../qml/main.qml" line="530"/>
         <location filename="../qml/main.qml" line="541"/>
         <source>not tracking</source>
-        <translation>não seguindo</translation>
+        <translation>sem tracking</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="706"/>
