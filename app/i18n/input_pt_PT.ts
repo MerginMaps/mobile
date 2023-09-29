@@ -1453,7 +1453,7 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="153"/>
         <source>Could not find tracking layer for the project</source>
-        <translation>Não foi possível encontrar camada de seguimento para o projeto</translation>
+        <translation>Não foi possível encontrar camada de tracking para o projeto</translation>
     </message>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="162"/>
