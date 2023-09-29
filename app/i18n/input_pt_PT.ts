@@ -2619,7 +2619,7 @@ Por favor aceda ao Mergin Maps para removê-lo manualmente.</translation>
         <location filename="../qml/main.qml" line="530"/>
         <location filename="../qml/main.qml" line="541"/>
         <source>not tracking</source>
-        <translation>não seguindo</translation>
+        <translation>sem tracking</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="706"/>
