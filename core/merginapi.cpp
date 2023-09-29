@@ -210,6 +210,19 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
     return QLatin1String();
   }
 
+  const int listProjectsByNameApiLimit = 50;
+  QStringList projectNamesToRequest( projectNames );
+
+  if ( projectNamesToRequest.count() > listProjectsByNameApiLimit )
+  {
+    CoreUtils::log( "list projects by name", QStringLiteral( "Too many local projects: " ) + QString::number( projectNames.count(), 'f', 0 ) );
+    const int projectsToRemoveCount = projectNames.count() - listProjectsByNameApiLimit;
+    QString msg = tr( "Reached limit of local projects.\nRemove %1 projects from your device!" ).arg( projectsToRemoveCount );
+    notify( msg );
+    projectNamesToRequest.erase( projectNamesToRequest.begin() + listProjectsByNameApiLimit, projectNamesToRequest.end() );
+    Q_ASSERT( projectNamesToRequest.count() == listProjectsByNameApiLimit );
+  }
+
   // Authentification is optional in this case, as there might be public projects without the need to be logged in.
   // We only want to include auth token when user is logged in.
   // User's token, however, might have already expired, so let's just refresh it.
@@ -218,7 +231,7 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
   // construct JSON body
   QJsonDocument body;
   QJsonObject projects;
-  QJsonArray projectsArr = QJsonArray::fromStringList( projectNames );
+  QJsonArray projectsArr = QJsonArray::fromStringList( projectNamesToRequest );
 
   projects.insert( "projects", projectsArr );
   body.setObject( projects );
