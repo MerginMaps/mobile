@@ -1435,7 +1435,7 @@ Clique em &apos;Sim&apos; para o carregar.</translation>
     <message>
         <location filename="../qml/popups/PositionTrackingDrawer.qml" line="52"/>
         <source>Mergin Maps can track your position on this project.</source>
-        <translation>Mergin Maps pode seguir sua posição neste projeto.</translation>
+        <translation>Mergin Maps pode seguir a sua posição neste projeto.</translation>
     </message>
     <message>
         <location filename="../qml/popups/PositionTrackingDrawer.qml" line="107"/>
