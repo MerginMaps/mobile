@@ -716,12 +716,12 @@ Nemůže být přidáno do projektu.</translation>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="242"/>
+        <location filename="../inputhelp.cpp" line="247"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Hlášení bylo odesláno.%1Kontaktujte nás prosím na%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="247"/>
+        <location filename="../inputhelp.cpp" line="252"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Nepodařilo se odeslat hlášení.%1Prosím, zkontrolujte své internetové připojení.</translation>
     </message>
@@ -747,117 +747,117 @@ Nemůže být přidáno do projektu.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="183"/>
+        <location filename="../inpututils.cpp" line="184"/>
         <source>just now</source>
         <translation>právě teď</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="188"/>
+        <location filename="../inpututils.cpp" line="189"/>
         <source>%1 minutes ago</source>
         <translation>před %1 minutami</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="188"/>
+        <location filename="../inpututils.cpp" line="189"/>
         <source>%1 minute ago</source>
         <translation>před %1 minutou</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="193"/>
+        <location filename="../inpututils.cpp" line="194"/>
         <source>%1 hours ago</source>
         <translation>před %1 hodinami</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="193"/>
+        <location filename="../inpututils.cpp" line="194"/>
         <source>%1 hour ago</source>
         <translation>před %1 hodinou</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="197"/>
-        <location filename="../inpututils.cpp" line="202"/>
+        <location filename="../inpututils.cpp" line="198"/>
+        <location filename="../inpututils.cpp" line="203"/>
         <source>%1 days ago</source>
         <translation>před %1 dny</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="197"/>
-        <location filename="../inpututils.cpp" line="202"/>
+        <location filename="../inpututils.cpp" line="198"/>
+        <location filename="../inpututils.cpp" line="203"/>
         <source>%1 day ago</source>
         <translation>před %1 dnem</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="207"/>
+        <location filename="../inpututils.cpp" line="208"/>
         <source>%1 weeks ago</source>
         <translation>před %1 týdny</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="207"/>
+        <location filename="../inpututils.cpp" line="208"/>
         <source>%1 week ago</source>
         <translation>před %1 týdnem</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="212"/>
+        <location filename="../inpututils.cpp" line="213"/>
         <source>%1 months ago</source>
         <translation>před %1 měsíci</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="212"/>
+        <location filename="../inpututils.cpp" line="213"/>
         <source>%1 month ago</source>
         <translation>před %1 měsícem</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="217"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 years ago</source>
         <translation>před %1 roky</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="217"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 year ago</source>
         <translation>před %1 rokem</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1406"/>
+        <location filename="../inpututils.cpp" line="1407"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rozlišení displeje: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1407"/>
+        <location filename="../inpututils.cpp" line="1408"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI displeje: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1408"/>
+        <location filename="../inpututils.cpp" line="1409"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>velikost displeje: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1409"/>
+        <location filename="../inpututils.cpp" line="1410"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>hlášený poměr pixelů zařízení: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1410"/>
+        <location filename="../inpututils.cpp" line="1411"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>vypočtený poměr pixelů zařízení: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1411"/>
+        <location filename="../inpututils.cpp" line="1412"/>
         <source>used dp scale: %1</source>
         <translation>použité měřítko dp: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1938"/>
+        <location filename="../inpututils.cpp" line="1941"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Ke každé části je třeba přidat alespoň %1 bod(y).</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1942"/>
+        <location filename="../inpututils.cpp" line="1945"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Je třeba přidat alespoň %1 bodů.</translation>
     </message>
@@ -1219,57 +1219,57 @@ Nemůže být přidáno do projektu.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="762"/>
+        <location filename="../../core/merginapi.cpp" line="763"/>
         <source>Username must have at least 4 characters</source>
         <translation>Uživatelské jméno musí mít alespoň 4 znaky</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="769"/>
+        <location filename="../../core/merginapi.cpp" line="770"/>
         <source>Username contains invalid characters</source>
         <translation>Uživatelské jméno obsahuje neplatné znaky</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="776"/>
+        <location filename="../../core/merginapi.cpp" line="777"/>
         <source>Please enter a valid email</source>
         <translation>Zadejte prosím platný e-mail</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="783"/>
+        <location filename="../../core/merginapi.cpp" line="784"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Heslo není dostatečně silné. Musí%1 mít alespoň 8 znaků%1 obsahovat malá písmena%1 obsahovat velká písmena%1 obsahovat číslice nebo speciální znaky.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="796"/>
+        <location filename="../../core/merginapi.cpp" line="797"/>
         <source>Passwords do not match</source>
         <translation>Hesla se neshodují</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="803"/>
+        <location filename="../../core/merginapi.cpp" line="804"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Přijměte prosím podmínky a zásady ochrany osobních údajů</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1194"/>
+        <location filename="../../core/merginapi.cpp" line="1210"/>
         <source>Registration successful</source>
         <translation>Registrace proběhla úspěšně</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1216"/>
+        <location filename="../../core/merginapi.cpp" line="1232"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>Na vybraném serveru Mergin nejsou povoleny nové registrace.%1Poraďte se se svým správcem.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1505"/>
+        <location filename="../../core/merginapi.cpp" line="1545"/>
         <source>Project detached from Mergin</source>
         <translation>Projekt odpojený od Mergin</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3541"/>
+        <location filename="../../core/merginapi.cpp" line="3579"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Název pracovního prostoru obsahuje neplatné znaky</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3607"/>
+        <location filename="../../core/merginapi.cpp" line="3645"/>
         <source>Workspace %1 already exists</source>
         <translation>Pracovní prostor %1 již existuje</translation>
     </message>
@@ -1521,6 +1521,34 @@ Klepnutím na tlačítko &quot;Ano&quot; jej nahrajete.</translation>
         <location filename="../qml/ProjectIssuesPanel.qml" line="157"/>
         <source>QGIS log</source>
         <translation>QGIS log</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectLimitDialog</name>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="19"/>
+        <source>You have reached project number limit</source>
+        <translation>Dosáhli jste limitu počtu projektů</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="59"/>
+        <source>Maximum of projects: %1</source>
+        <translation>Maximální počet projektů: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="66"/>
+        <source>Plan: %1</source>
+        <translation>Plán: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="79"/>
+        <source>Manage subscriptions</source>
+        <translation>Správa předplatného</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="95"/>
+        <source>Cancel</source>
+        <translation>Zrušit</translation>
     </message>
 </context>
 <context>
@@ -2592,37 +2620,37 @@ Přejděte na webové stránky Mergin Maps a odstraňte jej ručně.</translatio
         <translation>nesleduje</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="696"/>
+        <location filename="../qml/main.qml" line="706"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Stake out je vypnut, protože poloha není k dispozici!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="708"/>
+        <location filename="../qml/main.qml" line="718"/>
         <source>Failed to open the project</source>
         <translation>Projekt se nepodařilo otevřít</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="733"/>
+        <location filename="../qml/main.qml" line="743"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Nepodařilo se komunikovat s Mergin.%1Zkuste zlepšit síťové připojení.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="787"/>
+        <location filename="../qml/main.qml" line="806"/>
         <source>There were issues loading the project.</source>
         <translation>Při načítání projektu došlo k problémům.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="811"/>
+        <location filename="../qml/main.qml" line="830"/>
         <source>Could not read the project file:</source>
         <translation>Nelze přečíst soubor projektu:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="831"/>
+        <location filename="../qml/main.qml" line="850"/>
         <source>Press back again to quit the app</source>
         <translation>Pro vypnutí aplikace znovu stiskněte &quot;Zpět&quot;.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="626"/>
+        <location filename="../qml/main.qml" line="636"/>
         <source>PROJ Error</source>
         <translation>Chyba PROJ</translation>
     </message>
