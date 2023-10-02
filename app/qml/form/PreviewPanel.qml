@@ -190,7 +190,7 @@ Item {
                         Text {
                             id: fieldName
                             text: Name
-                            width: root.width/2
+                            width: root.width / 2
                             font.pixelSize: InputStyle.fontPixelSizeNormal
                             color: InputStyle.fontColorBright
                             elide: Text.ElideRight
@@ -199,6 +199,7 @@ Item {
                         Text {
                             id: fieldValue
                             text: Value ? Value : ""
+                            width: root.width / 2 - root.spacing
                             font.pixelSize: InputStyle.fontPixelSizeNormal
                             color: InputStyle.fontColor
                             elide: Text.ElideRight
