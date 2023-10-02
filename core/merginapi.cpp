@@ -18,7 +18,9 @@
 #include <QSet>
 #include <QUuid>
 #include <QtMath>
+#include <QElapsedTimer>
 
+#include "checksum.h"
 #include "coreutils.h"
 #include "geodiffutils.h"
 #include "localprojectsmanager.h"
@@ -33,7 +35,7 @@ const QString MerginApi::sMarketingPageRoot = QStringLiteral( "https://merginmap
 const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://app.merginmaps.com/" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
 const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
-const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
+const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << Checksum::sCacheFile << ".DS_Store";
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
 
 
@@ -1595,20 +1597,31 @@ QString MerginApi::merginUserName() const
 
 QList<MerginFile> MerginApi::getLocalProjectFiles( const QString &projectPath )
 {
+  QElapsedTimer timer;
+  timer.start();
+
   QList<MerginFile> merginFiles;
+  Checksum checkSums( projectPath );
+
+  checkSums.load();
   QSet<QString> localFiles = listFiles( projectPath );
   for ( QString p : localFiles )
   {
-
     MerginFile file;
-    QByteArray localChecksumBytes = getChecksum( projectPath + p );
-    QString localChecksum = QString::fromLatin1( localChecksumBytes.data(), localChecksumBytes.size() );
-    file.checksum = localChecksum;
+    file.checksum = checkSums.get( p );
     file.path = p;
     QFileInfo info( projectPath + p );
     file.size = info.size();
     file.mtime = info.lastModified();
     merginFiles.append( file );
+  }
+
+  checkSums.save();
+
+  qint64 elapsed = timer.elapsed();
+  if ( elapsed > 50 )
+  {
+    CoreUtils::log( "Local File", QStringLiteral( "It took %1 ms to get info about %2 local files." ).arg( elapsed ).arg( localFiles.count() ) );
   }
   return merginFiles;
 }
@@ -2520,7 +2533,7 @@ void MerginApi::pushInfoReplyFinished()
 
         if ( geodiffRes == GEODIFF_SUCCESS )
         {
-          QByteArray checksumDiff = getChecksum( diffPath );
+          QByteArray checksumDiff = Checksum::calculate( diffPath );
 
           // TODO: this is ugly. our basefile may not need to have the same checksum as the server's
           // basefile (because each of them have applied the diff independently) so we have to fake it
@@ -3240,25 +3253,6 @@ bool MerginApi::excludeFromSync( const QString &filePath, const MerginConfig &co
     }
   }
   return false;
-}
-
-QByteArray MerginApi::getChecksum( const QString &filePath )
-{
-  QFile f( filePath );
-  if ( f.open( QFile::ReadOnly ) )
-  {
-    QCryptographicHash hash( QCryptographicHash::Sha1 );
-    QByteArray chunk = f.read( CHUNK_SIZE );
-    while ( !chunk.isEmpty() )
-    {
-      hash.addData( chunk );
-      chunk = f.read( CHUNK_SIZE );
-    }
-    f.close();
-    return hash.result().toHex();
-  }
-
-  return QByteArray();
 }
 
 QSet<QString> MerginApi::listFiles( const QString &path )

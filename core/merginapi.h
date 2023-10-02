@@ -689,7 +689,6 @@ class MerginApi: public QObject
     bool writeData( const QByteArray &data, const QString &path );
     void createPathIfNotExists( const QString &filePath );
 
-    static QByteArray getChecksum( const QString &filePath );
     static QSet<QString> listFiles( const QString &projectPath );
 
     bool validateAuth();
@@ -779,7 +778,6 @@ class MerginApi: public QObject
     bool mApiSupportsSubscriptions = false;
     bool mSupportsSelectiveSync = true;
 
-    static const int CHUNK_SIZE = 65536;
     static const int UPLOAD_CHUNK_SIZE;
     const int PROJECT_PER_PAGE = 50;
     const QString TEMP_FOLDER = QStringLiteral( ".temp/" );

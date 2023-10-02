@@ -1,6 +1,7 @@
 #include <QtTest/QtTest>
 #include <QtCore/QObject>
 
+#include "checksum.h"
 #include "testmerginapi.h"
 #include "inpututils.h"
 #include "coreutils.h"
@@ -533,7 +534,7 @@ void TestMerginApi::testMultiChunkUploadDownload()
     bigFile.write( QByteArray( 1024 * 1024, static_cast<char>( 'A' + i ) ) );   // AAAA.....BBBB.....CCCC.....
   bigFile.close();
 
-  QByteArray checksum = MerginApi::getChecksum( bigFilePath );
+  QByteArray checksum = Checksum::calculate( bigFilePath );
   QVERIFY( !checksum.isEmpty() );
 
   // upload
@@ -545,7 +546,7 @@ void TestMerginApi::testMultiChunkUploadDownload()
   downloadRemoteProject( mApi, mUsername, projectName );
 
   // verify it's there and with correct content
-  QByteArray checksum2 = MerginApi::getChecksum( bigFilePath );
+  QByteArray checksum2 = Checksum::calculate( bigFilePath );
   QVERIFY( QFileInfo::exists( bigFilePath ) );
   QCOMPARE( checksum, checksum2 );
 }
@@ -566,7 +567,7 @@ void TestMerginApi::testEmptyFileUploadDownload()
   QFile::copy( mTestDataPath + "/" + TEST_EMPTY_FILE_NAME, emptyFileDestinationPath );
   QVERIFY( QFileInfo::exists( emptyFileDestinationPath ) );
 
-  QByteArray checksum = MerginApi::getChecksum( emptyFileDestinationPath );
+  QByteArray checksum = Checksum::calculate( emptyFileDestinationPath );
   QVERIFY( !checksum.isEmpty() );
 
   //upload
@@ -578,7 +579,7 @@ void TestMerginApi::testEmptyFileUploadDownload()
   downloadRemoteProject( mApi, mUsername, projectName );
 
   // verify it's there and with correct content
-  QByteArray checksum2 = MerginApi::getChecksum( emptyFileDestinationPath );
+  QByteArray checksum2 = Checksum::calculate( emptyFileDestinationPath );
   QVERIFY( QFileInfo::exists( emptyFileDestinationPath ) );
   QCOMPARE( checksum, checksum2 );
 }
