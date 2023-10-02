@@ -298,10 +298,10 @@ Now you can create a build (either on commmand line or by setting these variable
 2. Get Input SDK - it contains pre-built dependencies of libraries used by Input
 
    - Check what SDK version is currently in use - look for `INPUT_SDK_VERSION` in `.github/workflows/macos.yml`
-   - Download Input SDK for Ubuntu - go to https://github.com/merginmaps/input-sdk/releases and download the built SDK.
+   - Download Input SDK for `osx` - go to https://github.com/merginmaps/input-sdk/releases and download the built SDK.
    - Unpack the downloaded .tar.gz to `~/input-sdk/x64-osx`
 
-3. Get Qt libraries - Ubuntu's system libraries are too old, and currently Input SDK does not include Qt SDK.
+3. Get Qt libraries - Input SDK does not include Qt SDK
 
    - Check what Qt version is currently in use - look for `QT_VERSION` in `.github/workflows/macos.yml`
    - Download Qt online installer from https://www.qt.io/download-open-source
