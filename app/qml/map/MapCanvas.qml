@@ -8,110 +8,50 @@
  ***************************************************************************/
 
 /*
- * The source code forked from https://github.com/qgis/QGIS on 25th Nov 2022
+ * Previous implementation was forked from https://github.com/qgis/QGIS on 25th Nov 2022
  * File: qgsquickmapcanvas.qml by (C) 2014 by Matthias Kuhn
  */
- 
+
 import QtQuick
+import QtCore
 import QtQuick.Controls
-import QtQml
 
 import Input 0.1 as Input
 
+//
+// MapCanvas QML object is a utility class for rendering map layers and handling user interaction
+//
+
 Item {
-  id: root
+  id: mapRoot
 
-  /**
-   * The mapSettings property contains configuration for rendering of the map.
-   *
-   * It should be used as a primary source of map settings (and project) for
-   * all other components in the application.
-   *
-   * This is a readonly property.
-   *
-   * See also InputMapCanvasMap::mapSettings
-   */
-  property alias mapSettings: mapCanvasWrapper.mapSettings
+  // Clicked signal is sent 350ms after click (to avoid mixing it with double click)
+  signal clicked( point p )
 
-  /**
-   * The isRendering property is set to true while a rendering job is pending for this map canvas map.
-   * It can be used to show a notification icon about an ongoing rendering job.
-   *
-   * This is a readonly property.
-   *
-   * See also InputMapCanvasMap::mapSettings
-   */
-  property alias isRendering: mapCanvasWrapper.isRendering
+  signal longPressed( point p )
 
-  /**
-   * When the incrementalRendering property is set to true, the automatic refresh of map canvas during rendering is allowed.
-   */
-  property alias incrementalRendering: mapCanvasWrapper.incrementalRendering
-
-  //! Consider mouse as a touchscreen device. If disabled, the mouse will act as a stylus pen.
-  property bool mouseAsTouchScreen: false
-
-  property real mapExtentOffset: 0
-
-  //! This signal is emitted independently of double tap / click
-  signal clicked(var point)
-
-  //! Signal emitted when user holds pointer on map
-  signal longPressed(var point)
-
-  //! Emitted when a release happens after a long press
-  signal longPressReleased()
-
-  //! Emitted when user does some interaction with map canvas (pan, zoom)
+  // UserInteractedWithMap signal is sent each time user pans/zooms the map
   signal userInteractedWithMap()
 
-  /**
-   * Freezes the map canvas refreshes.
-   *
-   * In case of repeated geometry changes (animated resizes, pinch, pan...)
-   * triggering refreshes all the time can cause severe performance impacts.
-   *
-   * If freeze is called, an internal counter is incremented and only when the
-   * counter is 0, refreshes will happen.
-   * It is therefore important to call freeze() and unfreeze() exactly the same
-   * number of times.
-   */
-  function freeze(id) {
-    mapCanvasWrapper.__freezecount[id] = true
-    mapCanvasWrapper.freeze = true
+  property alias mapSettings: mapRenderer.mapSettings
+  property alias isRendering: mapRenderer.isRendering
 
-    userInteractedWithMap()
-  }
+  // Number of miliseconds to differentiate between normal click (select feature) and double-click (zoom)
+  property int doubleClickThresholdMilis: 350
 
-  function unfreeze(id) {
-    delete mapCanvasWrapper.__freezecount[id]
-    mapCanvasWrapper.freeze = Object.keys(mapCanvasWrapper.__freezecount).length !== 0
-  }
-
-  function zoomIn(point) {
-    mapCanvasWrapper.zoom(point, 0.67)
-  }
-
-  function zoomOut(point) {
-    mapCanvasWrapper.zoom(point, 1.5)
-  }
-
+  // Requests map redraw
   function refresh() {
-    mapCanvasWrapper.clearCache()
-    mapCanvasWrapper.refresh()
+    mapRenderer.clearCache()
+    mapRenderer.refresh()
   }
 
-  /**
-   * Animates movement of map canvas from the current center to newPos.
-   *
-   * newPos needs to be in device pixels.
-   */
-  function moveTo( newPos )
+  // Animates movement of map canvas from the current center to newPos.
+  function jumpTo( newPos )
   {
-    freeze('moveTo')
+    rendererPrivate.freeze('jumpTo')
 
-    let newPosMapCRS = mapCanvasWrapper.mapSettings.screenToCoordinate( newPos )
-    let oldPosMapCRS = mapCanvasWrapper.mapSettings.center
+    let newPosMapCRS = mapRenderer.mapSettings.screenToCoordinate( newPos )
+    let oldPosMapCRS = mapRenderer.mapSettings.center
 
     // Disable animation until initial position is set
     jumpAnimator.enabled = false
@@ -124,18 +64,7 @@ Item {
     jumpAnimator.px = newPosMapCRS.x
     jumpAnimator.py = newPosMapCRS.y
 
-    unfreeze('moveTo')
-  }
-
-  Input.MapCanvasMap {
-    id: mapCanvasWrapper
-
-    width: root.width
-    height: root.height
-
-    property var __freezecount: ({})
-
-    freeze: false
+    rendererPrivate.unfreeze('jumpTo')
   }
 
   Item {
@@ -162,288 +91,194 @@ Item {
 
     onPxChanged: {
       if ( enabled ) {
-        mapCanvasWrapper.mapSettings.center = mapCanvasWrapper.mapSettings.toQgsPoint( Qt.point( px, py ) )
+        mapRenderer.mapSettings.center = mapRenderer.mapSettings.toQgsPoint( Qt.point( px, py ) )
       }
     }
 
     onPyChanged: {
       if ( enabled ) {
-        mapCanvasWrapper.mapSettings.center = mapCanvasWrapper.mapSettings.toQgsPoint( Qt.point( px, py ) )
+        mapRenderer.mapSettings.center = mapRenderer.mapSettings.toQgsPoint( Qt.point( px, py ) )
       }
     }
   }
 
-  //
-  // Qt6.0+ does not work well when PinchHandler is combined with TapHandler.
-  // Sometimes, after map is zoomed in/out a few times, TapHandler ends in an invalid state -
-  // it does not clear some internal pointer and results in ignoring all the following touch
-  // interactions.
-  // Thus, we reset the TapHandler each time pinch is completed to keep TapHandler working properly.
-  //
-  // See QTBUG-108689
-  //
-  Timer {
-    id: repairHandlersTimer
+  Input.MapCanvasMap {
+    id: mapRenderer
 
-    interval: 50
+    width: mapRoot.width
+    height: mapRoot.height
 
-    onTriggered: {
-      handlersLoader.active = false
-      handlersLoader.active = true
-    }
-  }
+    freeze: false
 
-  Loader {
-    id: handlersLoader
+    QtObject {
+      id: rendererPrivate
 
-    width: root.width
+      property var _freezeMap: ({})
 
-    //
-    // Subtract space that is occupied by feature form from TapHandler's active area height
-    //
-    height: root.height - root.mapExtentOffset
-
-    sourceComponent: handlersComponent
-  }
-
-  Component {
-    id: handlersComponent
-
-    Item {
-
-      // Map actions - select, long press, double tap - with fingers
-      // Extra gesture - tap and hold - will forward grabPermissions to grabHandler to zoom in/out
-      TapHandler {
-        id: tapHandler
-
-        property bool longPressActive: false
-        property bool doublePressed: false
-
-        property var timer: Timer {
-          property var tapPoint
-
-          interval: 200
-          repeat: false
-
-          onTriggered: {
-            root.clicked(tapPoint)
-          }
-        }
-
-        acceptedDevices: mouseAsTouchScreen ? PointerDevice.AllDevices : PointerDevice.TouchScreen
-
-        onSingleTapped: {
-          if(point.modifiers === Qt.RightButton)
-          {
-            mapCanvasWrapper.zoom(point.position, 1.25)
-          }
-          else
-          {
-            timer.tapPoint = point.position
-            timer.restart()
-          }
-        }
-
-        onDoubleTapped: {
-          mapCanvasWrapper.zoom(point.position, 0.8)
-        }
-
-        onLongPressed: {
-          root.longPressed(point.position)
-          longPressActive = true
-        }
-
-        onPressedChanged: {
-          if ( pressed && timer.running )
-          {
-            timer.stop()
-            doublePressed = true
-            dragHandler.grabPermissions = PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything
-          }
-          else
-          {
-            doublePressed = false
-            dragHandler.grabPermissions = PointerHandler.ApprovesTakeOverByHandlersOfSameType | PointerHandler.ApprovesTakeOverByHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByItems
-          }
-
-          if (longPressActive)
-            root.longPressReleased()
-          longPressActive = false
-        }
+      function freeze( id ) {
+        _freezeMap[ id ] = true
+        mapRenderer.freeze = true
       }
 
-      // Mouse, stylus and other pointer devices handler
-      TapHandler {
-        id: stylusClick
-
-        property bool longPressActive: false
-
-        enabled: !mouseAsTouchScreen
-        acceptedDevices: PointerDevice.AllDevices & ~PointerDevice.TouchScreen
-
-        onSingleTapped: {
-          root.clicked(point.position)
-        }
-
-        onLongPressed: {
-          root.longPressed(point.position)
-          longPressActive = true
-        }
-
-        onPressedChanged: {
-          if (longPressActive)
-            root.longPressReleased()
-          longPressActive = false
-        }
+      function unfreeze( id ) {
+        delete _freezeMap[ id ]
+        mapRenderer.freeze = Object.keys( _freezeMap ).length !== 0
       }
 
-      // Used to handle map panning (both touch and mouse)
-      DragHandler {
-        id: dragHandler
-
-        target: null
-        grabPermissions: PointerHandler.ApprovesTakeOverByHandlersOfSameType | PointerHandler.ApprovesTakeOverByHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByItems
-
-        property var oldPos
-        property real oldTranslationY
-
-        property bool isZooming: false
-        property point zoomCenter
-
-        onActiveChanged: {
-          if ( active )
-          {
-            if ( tapHandler.doublePressed )
-            {
-              oldTranslationY = 0;
-              zoomCenter = centroid.position;
-              isZooming = true;
-              freeze('zoom');
-            }
-            else
-            {
-              freeze('pan');
-            }
-          }
-          else
-          {
-            unfreeze(isZooming ? 'zoom' : 'pan');
-            isZooming = false;
-          }
-        }
-
-        onCentroidChanged: {
-          var oldPos1 = oldPos;
-          oldPos = centroid.position;
-          if ( active )
-          {
-            if ( isZooming )
-            {
-              mapCanvasWrapper.zoom(zoomCenter, Math.pow(0.8, (translation.y - oldTranslationY)/60))
-              oldTranslationY = translation.y
-            }
-            else
-            {
-              mapCanvasWrapper.pan(centroid.position, oldPos1)
-            }
-          }
-        }
+      function vectorDistance( a, b ) {
+        return Math.sqrt( Math.pow( a.x - b.x, 2 ), Math.pow( a.y - b.y, 2 ) )
       }
     }
   }
 
-  // Mouse or stylus map zooming with action buttons
-  DragHandler {
-    target: null
-    acceptedDevices: PointerDevice.Stylus | PointerDevice.Mouse
-    grabPermissions: PointerHandler.TakeOverForbidden
-    acceptedButtons: Qt.MiddleButton | Qt.RightButton
+  PinchArea {
+    id: pinchArea
 
-    property real oldTranslationY
-    property point zoomCenter
+    property string freezeId: 'pinch'
 
-    onActiveChanged: {
-      if (active)
-      {
-        oldTranslationY = 0
-        zoomCenter = centroid.position
-      }
+    anchors.fill: parent
 
-      if ( active )
-        freeze('zoom')
-      else
-        unfreeze('zoom')
+    onPinchStarted: {
+      mapRoot.userInteractedWithMap()
+      rendererPrivate.freeze( freezeId )
     }
 
-    onTranslationChanged: {
-      if (active)
-      {
-        mapCanvasWrapper.zoom(zoomCenter, Math.pow(0.8, (oldTranslationY - translation.y)/60))
-      }
-
-      oldTranslationY = translation.y
-    }
-  }
-
-  // Two fingers pinch zooming
-  PinchHandler {
-    id: pinch
-    target: null
-    acceptedDevices: PointerDevice.TouchScreen | PointerDevice.TouchPad
-    grabPermissions: PointerHandler.TakeOverForbidden
-
-    property var oldPos
-    property real oldScale: 1.0
-
-    onActiveChanged: {
-      if ( active ) {
-        freeze('pinch')
-        oldScale = 1.0
-        oldPos = centroid.position
-      } else {
-        unfreeze('pinch')
-
-        // See comment for repairHandlersTimer to understand why we need to call this
-        repairHandlersTimer.restart()
-      }
+    onPinchFinished: {
+      rendererPrivate.unfreeze( freezeId )
     }
 
-    onCentroidChanged: {
-      var oldPos1 = oldPos
-      oldPos = centroid.position
-      if ( active )
-      {
-        mapCanvasWrapper.pan(centroid.position, oldPos1)
-      }
+    onPinchUpdated: function ( pinch ) {
+      mapRenderer.pan( pinch.center, pinch.previousCenter )
+      mapRenderer.zoom( pinch.center, pinch.previousScale / pinch.scale )
     }
 
-    onActiveScaleChanged: {
-      if ( oldScale !== 1 )
-      {
-        mapCanvasWrapper.zoom( pinch.centroid.position, oldScale / pinch.activeScale )
-        mapCanvasWrapper.pan( pinch.centroid.position, oldPos )
+    MouseArea {
+      id: mouseArea
 
-      }
-      oldScale = pinch.activeScale
-    }
-  }
+      property var initialPosition
+      property var previousPosition
 
-  // Mouse wheel zooming
-  WheelHandler {
-    target: null
-    grabPermissions: PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByItems
+      property bool isDragging: false
 
-    onWheel: function( event ) {
-      if (event.angleDelta.y > 0)
-      {
-        zoomIn(point.position)
-      }
-      else
-      {
-        zoomOut(point.position)
+      property string freezeId: 'drag'
+
+      anchors.fill: parent
+      enabled: !pinchArea.pinch.active
+
+      // ignore touchpad scroll, listen only to the mouse wheel
+      scrollGestureEnabled: false
+
+      onPressed: function ( mouse ) {
+        initialPosition = Qt.point( mouse.x, mouse.y )
+        rendererPrivate.freeze( mouseArea.freezeId )
       }
 
-      userInteractedWithMap()
+      onReleased: function ( mouse ) {
+        let clickPosition = Qt.point( mouse.x, mouse.y )
+
+        if ( !clickDifferentiatorTimer.running ) {
+          // this is a simple click
+
+          clickDifferentiatorTimer.clickedPoint = Qt.point( mouse.x, mouse.y )
+        }
+        else {
+          // n-th click in a row (second, third,..)
+
+          // do not emit clicked signal for the second click
+          mouse.accepted = true
+
+          clickDifferentiatorTimer.invalidate = true
+
+          mapRenderer.zoom( Qt.point( mouse.x, mouse.y ), 0.4 )
+        }
+
+        if ( !isDragging ) {
+          clickDifferentiatorTimer.restart()
+        }
+
+        previousPosition = null
+        initialPosition = null
+        isDragging = false
+
+        rendererPrivate.unfreeze( mouseArea.freezeId )
+      }
+
+      onPressAndHold: function ( mouse ) {
+        mapRoot.longPressed( Qt.point( mouse.x, mouse.y ) )
+        clickDifferentiatorTimer.invalidate = true
+      }
+
+      onWheel: function ( wheel ) {
+        if ( wheel.angleDelta.y > 0 ) {
+          mapRenderer.zoom( Qt.point( wheel.x, wheel.y ), 0.67 )
+        }
+        else {
+          mapRenderer.zoom( Qt.point( wheel.x, wheel.y ), 1.5 )
+        }
+      }
+
+      // drag map canvas
+      onPositionChanged: function ( mouse ) {
+        let target = Qt.point( mouse.x, mouse.y )
+
+        if ( !previousPosition ) {
+          previousPosition = target
+          initialPosition = target
+          return
+        }
+
+        // we need to simulate natural scroll ~> revert movement on x and y
+        let reverted_x = previousPosition.x - ( mouse.x - previousPosition.x )
+        let reverted_y = previousPosition.y - ( mouse.y - previousPosition.y )
+
+        mapRenderer.pan( previousPosition, Qt.point( reverted_x, reverted_y ) )
+
+        previousPosition = target
+
+        let dragDistance = rendererPrivate.vectorDistance( initialPosition, target )
+        if ( dragDistance > drag.threshold ) {
+          isDragging = true
+
+          // do not emit click after drag
+          clickDifferentiatorTimer.reset()
+        }
+      }
+
+      onIsDraggingChanged: {
+        if ( isDragging ) {
+          mapRoot.userInteractedWithMap()
+        }
+      }
+
+      onCanceled: {
+        // pinch took over
+        previousPosition = null
+        initialPosition = null
+        isDragging = false
+        rendererPrivate.unfreeze( mouseArea.freezeId )
+      }
+
+      Timer {
+        id: clickDifferentiatorTimer
+
+        property point clickedPoint
+        property bool invalidate
+
+        interval: mapRoot.doubleClickThresholdMilis
+        repeat: false
+
+        onTriggered: {
+          if ( !invalidate ) {
+            mapRoot.clicked( clickedPoint )
+          }
+          invalidate = false
+        }
+
+        function reset() {
+          clickDifferentiatorTimer.stop()
+          clickDifferentiatorTimer.invalidate = false
+        }
+      }
     }
   }
 }
