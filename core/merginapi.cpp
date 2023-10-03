@@ -2540,7 +2540,7 @@ void MerginApi::pushInfoReplyFinished()
 
         if ( geodiffRes == GEODIFF_SUCCESS )
         {
-          QByteArray checksumDiff = CoreUtils::calculate( diffPath );
+          QByteArray checksumDiff = CoreUtils::calculateChecksum( diffPath );
 
           // TODO: this is ugly. our basefile may not need to have the same checksum as the server's
           // basefile (because each of them have applied the diff independently) so we have to fake it

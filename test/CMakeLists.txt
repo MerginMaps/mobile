@@ -24,6 +24,7 @@ set(MM_TESTS
     testMapTools
     testLayerTree
     testActiveProject
+    testProjectChecksumCache
 )
 
 foreach (test ${MM_TESTS})

@@ -44,7 +44,7 @@ class CoreUtils
      * This is potentially resourcing-costly operation
      * \param filePath full path to the file on disk
      */
-    static QByteArray calculate( const QString &filePath );
+    static QByteArray calculateChecksum( const QString &filePath );
 
     /**
     * Returns given path if it does not exist yet, otherwise adds a number to the path in format:

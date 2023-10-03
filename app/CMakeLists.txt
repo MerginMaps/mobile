@@ -195,6 +195,7 @@ if (ENABLE_TESTS)
       test/testutilsfunctions.cpp
       test/testvariablesmanager.cpp
       test/testactiveproject.cpp
+      test/testprojectchecksumcache.cpp
   )
 
   set(MM_HDRS
@@ -220,6 +221,7 @@ if (ENABLE_TESTS)
       test/testutilsfunctions.h
       test/testvariablesmanager.h
       test/testactiveproject.h
+      test/testprojectchecksumcache.h
   )
 endif ()
 

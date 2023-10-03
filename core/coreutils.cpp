@@ -16,9 +16,10 @@
 #include <QFile>
 #include <QDirIterator>
 #include <QTextStream>
+#include <QCryptographicHash>
+#include <QRegularExpression>
 
 #include "qcoreapplication.h"
-#include "merginapi.h"
 
 const QString CoreUtils::LOG_TO_DEVNULL = QStringLiteral();
 const QString CoreUtils::LOG_TO_STDOUT = QStringLiteral( "TO_STDOUT" );
@@ -163,7 +164,7 @@ QString CoreUtils::findUniquePath( const QString &path )
   return uniquePath;
 }
 
-QByteArray CoreUtils::calculate( const QString &filePath )
+QByteArray CoreUtils::calculateChecksum( const QString &filePath )
 {
   QFile f( filePath );
   if ( f.open( QFile::ReadOnly ) )

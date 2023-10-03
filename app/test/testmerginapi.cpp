@@ -534,7 +534,7 @@ void TestMerginApi::testMultiChunkUploadDownload()
     bigFile.write( QByteArray( 1024 * 1024, static_cast<char>( 'A' + i ) ) );   // AAAA.....BBBB.....CCCC.....
   bigFile.close();
 
-  QByteArray checksum = CoreUtils::calculate( bigFilePath );
+  QByteArray checksum = CoreUtils::calculateChecksum( bigFilePath );
   QVERIFY( !checksum.isEmpty() );
 
   // upload
@@ -546,7 +546,7 @@ void TestMerginApi::testMultiChunkUploadDownload()
   downloadRemoteProject( mApi, mUsername, projectName );
 
   // verify it's there and with correct content
-  QByteArray checksum2 = CoreUtils::calculate( bigFilePath );
+  QByteArray checksum2 = CoreUtils::calculateChecksum( bigFilePath );
   QVERIFY( QFileInfo::exists( bigFilePath ) );
   QCOMPARE( checksum, checksum2 );
 }
@@ -567,7 +567,7 @@ void TestMerginApi::testEmptyFileUploadDownload()
   QFile::copy( mTestDataPath + "/" + TEST_EMPTY_FILE_NAME, emptyFileDestinationPath );
   QVERIFY( QFileInfo::exists( emptyFileDestinationPath ) );
 
-  QByteArray checksum = CoreUtils::calculate( emptyFileDestinationPath );
+  QByteArray checksum = CoreUtils::calculateChecksum( emptyFileDestinationPath );
   QVERIFY( !checksum.isEmpty() );
 
   //upload
@@ -579,7 +579,7 @@ void TestMerginApi::testEmptyFileUploadDownload()
   downloadRemoteProject( mApi, mUsername, projectName );
 
   // verify it's there and with correct content
-  QByteArray checksum2 = CoreUtils::calculate( emptyFileDestinationPath );
+  QByteArray checksum2 = CoreUtils::calculateChecksum( emptyFileDestinationPath );
   QVERIFY( QFileInfo::exists( emptyFileDestinationPath ) );
   QCOMPARE( checksum, checksum2 );
 }
@@ -785,6 +785,7 @@ void TestMerginApi::testPushNoChanges()
   QCOMPARE( project2.mergin.status, ProjectStatus::UpToDate );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
 }
 
 void TestMerginApi::testUpdateAddedFile()
@@ -1123,6 +1124,7 @@ void TestMerginApi::testDiffUpload()
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
 
   // replace gpkg with a new version with a modified geometry
   QFile::remove( projectDir + "/base.gpkg" );
@@ -1132,6 +1134,7 @@ void TestMerginApi::testDiffUpload()
   ProjectDiff expectedDiff;
   expectedDiff.localUpdated = QSet<QString>() << "base.gpkg";
   QCOMPARE( diff, expectedDiff );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
 
   GeodiffUtils::ChangesetSummary expectedSummary;
   expectedSummary["simple"] = GeodiffUtils::TableSummary( 0, 1, 0 );
@@ -1142,6 +1145,7 @@ void TestMerginApi::testDiffUpload()
   uploadRemoteProject( mApi, mUsername, projectName );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
 }
 
 void TestMerginApi::testDiffSubdirsUpload()
@@ -1157,7 +1161,7 @@ void TestMerginApi::testDiffSubdirsUpload()
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/" + base ) );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
 
   // replace gpkg with a new version with a modified geometry
   QFile::remove( projectDir + "/" + base );
@@ -1167,6 +1171,7 @@ void TestMerginApi::testDiffSubdirsUpload()
   ProjectDiff expectedDiff;
   expectedDiff.localUpdated = QSet<QString>() << base ;
   QCOMPARE( diff, expectedDiff );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
 
   GeodiffUtils::ChangesetSummary expectedSummary;
   expectedSummary["simple"] = GeodiffUtils::TableSummary( 0, 1, 0 );
@@ -1177,6 +1182,7 @@ void TestMerginApi::testDiffSubdirsUpload()
   uploadRemoteProject( mApi, mUsername, projectName );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
 }
 
 void TestMerginApi::testDiffUpdateBasic()
@@ -1194,6 +1200,7 @@ void TestMerginApi::testDiffUpdateBasic()
 
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
 
   QgsVectorLayer *vl0 = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
   QVERIFY( vl0->isValid() );
@@ -1223,6 +1230,7 @@ void TestMerginApi::testDiffUpdateBasic()
   delete vl;
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
 
   QVERIFY( !GeodiffUtils::hasPendingChanges( projectDir, "base.gpkg" ) );
 }
@@ -1242,6 +1250,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
 
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
 
   //
   // download with mApiExtra + modify + upload
@@ -1275,6 +1284,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
   ProjectDiff expectedDiff;
   expectedDiff.localUpdated = QSet<QString>() << "base.gpkg";
   QCOMPARE( diff, expectedDiff );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
 
   // check that geodiff knows there was one added feature
   GeodiffUtils::ChangesetSummary expectedSummary;
@@ -1298,6 +1308,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
   // like before the update - there should be locally modified base.gpkg with the changes we did
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), expectedDiff );
   QCOMPARE( GeodiffUtils::parseChangesetSummary( changes ), expectedSummary );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
 }
 
 void TestMerginApi::testDiffUpdateWithRebaseFailed()
@@ -1318,6 +1329,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
 
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
 
   //
   // download with mApiExtra + modify + upload
@@ -1343,6 +1355,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   expectedDiff.localUpdated = QSet<QString>() << "base.gpkg";
   qDebug() << diff.dump();
   QCOMPARE( diff, expectedDiff );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
 
   // check that geodiff knows there was one added feature
   QString changes = GeodiffUtils::diffableFilePendingChanges( projectDir, "base.gpkg", true );
@@ -1368,6 +1381,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   ProjectDiff expectedDiffFinal;
   expectedDiffFinal.localAdded = QSet<QString>() << conflictFilename;
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), expectedDiffFinal );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
 }
 
 void TestMerginApi::testUpdateWithDiffs()
@@ -1385,6 +1399,7 @@ void TestMerginApi::testUpdateWithDiffs()
 
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
 
   //
   // download with mApiExtra + modify + upload
@@ -1415,6 +1430,7 @@ void TestMerginApi::testUpdateWithDiffs()
   delete vl;
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
   QVERIFY( !GeodiffUtils::hasPendingChanges( projectDir, "base.gpkg" ) );
 }
 

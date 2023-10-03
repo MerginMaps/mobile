@@ -15,6 +15,12 @@
 #include <QDateTime>
 #include <QHash>
 
+#include "inputconfig.h"
+
+#if defined(INPUT_TEST)
+class TestProjectChecksumCache;
+#endif
+
 /**
  * Calculates the checksums of local files and store the results in the local binary file
  */
@@ -34,8 +40,13 @@ class ProjectChecksumCache
     //! Name of the file in which the cache for the project is stored
     static const QString sCacheFile;
 
+#if defined(INPUT_TEST)
+    friend class TestProjectChecksumCache;
+#endif
+
   private:
     QString cacheFilePath() const;
+    QString cacheDirPath() const;
 
     struct CacheValue
     {

@@ -20,7 +20,12 @@ const QString ProjectChecksumCache::sCacheFile = QStringLiteral( "checksum.cache
 
 QString ProjectChecksumCache::cacheFilePath() const
 {
-  return mProjectDir + "/" + MerginApi::sMetadataFolder + "/" + sCacheFile;
+  return cacheDirPath() + "/" + sCacheFile;
+}
+
+QString ProjectChecksumCache::cacheDirPath() const
+{
+  return mProjectDir + "/" + MerginApi::sMetadataFolder;
 }
 
 ProjectChecksumCache::ProjectChecksumCache( const QString &projectDir )
@@ -52,8 +57,12 @@ ProjectChecksumCache::~ProjectChecksumCache()
   if ( !mCacheModified )
     return;
 
-  QFile f( cacheFilePath() );
+  // Make sure the directory exists
+  QDir dir;
+  if ( !dir.exists( cacheDirPath() ) )
+    dir.mkpath( cacheDirPath() );
 
+  QFile f( cacheFilePath() );
   if ( f.open( QIODevice::WriteOnly ) ) // implies Truncate
   {
     QDataStream stream( &f );
@@ -84,7 +93,7 @@ QString ProjectChecksumCache::get( const QString &path )
     }
   }
 
-  QByteArray localChecksumBytes = CoreUtils::calculate( mProjectDir + "/" + path );
+  QByteArray localChecksumBytes = CoreUtils::calculateChecksum( mProjectDir + "/" + path );
   QString localChecksum = QString::fromLatin1( localChecksumBytes.data(), localChecksumBytes.size() );
 
   CacheValue entry;
