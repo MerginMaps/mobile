@@ -1496,7 +1496,7 @@ bool MerginApi::hasLocalProjectChanges( const QString &projectDir )
 
   MerginConfig config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
 
-  return projectFilesEqual( projectMetadata.files, localFiles, projectDir );
+  return hasLocalChanges( projectMetadata.files, localFiles, projectDir );
 }
 
 QString MerginApi::getTempProjectDir( const QString &projectFullName )
@@ -2814,12 +2814,17 @@ void MerginApi::getWorkspaceInfoReplyFinished()
   r->deleteLater();
 }
 
-bool MerginApi::projectFilesEqual(
+bool MerginApi::hasLocalChanges(
   const QList<MerginFile> &oldServerFiles,
   const QList<MerginFile> &localFiles,
   const QString &projectDir
 )
 {
+  if (localFiles.count() != oldServerFiles.count())
+  {
+    return true;
+  }
+
   QHash<QString, MerginFile> oldServerFilesMap;
 
   for ( const MerginFile &file : oldServerFiles )
@@ -2835,7 +2840,7 @@ bool MerginApi::projectFilesEqual(
     if ( !hasOldServer )
     {
       // L-A
-      return false;
+      return true;
     }
     else
     {
@@ -2852,28 +2857,22 @@ bool MerginApi::projectFilesEqual(
           if ( GeodiffUtils::hasPendingChanges( projectDir, filePath ) )
           {
             // L-U
-            return false;
+            return true;
           }
         }
         else
         {
           // L-U
-          return false;
+          return true;
         }
       }
     }
-
-    if ( hasOldServer )
-      oldServerFilesMap.remove( filePath );
   }
 
-  if ( !oldServerFilesMap.empty() )
-  {
-    // L-D
-    return false;
-  }
-
-  return true;
+  // We know that the number of local files and old server is the same
+  // And also that all local files has old file counterpart
+  // So it is not possible that there is deleted local file at this point.
+  return false;
 }
 
 ProjectDiff MerginApi::compareProjectFiles(

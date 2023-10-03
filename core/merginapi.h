@@ -447,13 +447,13 @@ class MerginApi: public QObject
      * - "old" server version (what was downloaded from server) - read from the project directory's stored metadata
      * - local file version (what is currently in the project directory) - created on the fly from the local directory content
      *
-     * The function returns false if:
+     * The function returns true if:
      *   - there is any local file not present in "old" server version files
      *   - there is any local file missing in "old" server version files
      *   - there is different checksum of any non-diffable file (e.g. CSV file)
      *   - there is different content of any diffable file (e.g. GeoPackage)
      */
-    static bool projectFilesEqual(
+    static bool hasLocalChanges(
       const QList<MerginFile> &oldServerFiles,
       const QList<MerginFile> &localFiles,
       const QString &projectDir
