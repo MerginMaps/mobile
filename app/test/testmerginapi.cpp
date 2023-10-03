@@ -613,7 +613,7 @@ void TestMerginApi::testPushAddedFile()
   QVERIFY( project1.isLocal() && project1.isMergin() );
   QCOMPARE( project1.local.localVersion, 1 );
   QCOMPARE( project1.mergin.serverVersion, 1 );
-  QCOMPARE( project1.mergin.status, ProjectStatus::Modified );
+  QCOMPARE( project1.mergin.status, ProjectStatus::NeedsSync );
 
   // upload
   uploadRemoteProject( mApi, mUsername, projectName );
@@ -671,7 +671,7 @@ void TestMerginApi::testPushRemovedFile()
   QVERIFY( project1.isLocal() && project1.isMergin() );
   QCOMPARE( project1.local.localVersion, 1 );
   QCOMPARE( project1.mergin.serverVersion, 1 );
-  QCOMPARE( project1.mergin.status, ProjectStatus::Modified );
+  QCOMPARE( project1.mergin.status, ProjectStatus::NeedsSync );
 
   // upload changes
 
@@ -727,7 +727,7 @@ void TestMerginApi::testPushModifiedFile()
   QVERIFY( project1.isLocal() && project1.isMergin() );
   QCOMPARE( project1.local.localVersion, 1 );
   QCOMPARE( project1.mergin.serverVersion, 1 );
-  QCOMPARE( project1.mergin.status, ProjectStatus::Modified );
+  QCOMPARE( project1.mergin.status, ProjectStatus::NeedsSync );
 
   // upload
   uploadRemoteProject( mApi, mUsername, projectName );
@@ -822,7 +822,7 @@ void TestMerginApi::testUpdateAddedFile()
   QVERIFY( project1.isLocal() && project1.isMergin() );
   QCOMPARE( project1.local.localVersion, 1 );
   QCOMPARE( project1.mergin.serverVersion, 2 );
-  QCOMPARE( project1.mergin.status, ProjectStatus::OutOfDate );
+  QCOMPARE( project1.mergin.status, ProjectStatus::NeedsSync );
 
   // now try to update
   downloadRemoteProject( mApi, mUsername, projectName );
