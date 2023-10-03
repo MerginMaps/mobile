@@ -160,18 +160,18 @@ QString InputUtils::formatNumber( const double number, int precision )
   return QString::number( number, 'f', precision );
 }
 
-QString InputUtils::formatDistanceInProjectUnit( InputMapSettings *mapSettings, const double distanceInMeters, int precision )
+QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision )
 {
-  QgsCoordinateReferenceSystem projectCrs = mapSettings->destinationCrs();
+  Qgis::DistanceUnit distUnit = QgsProject::instance()->distanceUnits();
 
-  if ( !projectCrs.isValid() || projectCrs.mapUnits() == Qgis::DistanceUnit::Unknown )
+  if ( distUnit == Qgis::DistanceUnit::Unknown )
   {
     return QString::number( distanceInMeters, 'f', precision );
   }
 
-  double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Meters, projectCrs.mapUnits() );
+  double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Meters, distUnit );
   double distance = distanceInMeters * factor;
-  QString abbreviation = QgsUnitTypes::toAbbreviatedString( projectCrs.mapUnits() );
+  QString abbreviation = QgsUnitTypes::toAbbreviatedString( distUnit );
 
   return QString( "%1 %2" ).arg( QString::number( distance, 'f', precision ), abbreviation );
 }
