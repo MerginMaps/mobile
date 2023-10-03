@@ -133,39 +133,6 @@ void CoreUtils::appendLog( const QByteArray &data, const QString &path )
   }
 }
 
-QDateTime CoreUtils::getLastModifiedFileDateTime( const QString &path )
-{
-  QDateTime lastModified;
-  QDirIterator it( path, QStringList() << QStringLiteral( "*" ), QDir::Files, QDirIterator::Subdirectories );
-  while ( it.hasNext() )
-  {
-    it.next();
-    if ( !MerginApi::isInIgnore( it.fileInfo() ) )
-    {
-      if ( it.fileInfo().lastModified() > lastModified )
-      {
-        lastModified = it.fileInfo().lastModified();
-      }
-    }
-  }
-  return lastModified.toUTC();
-}
-
-int CoreUtils::getProjectFilesCount( const QString &path )
-{
-  int count = 0;
-  QDirIterator it( path, QStringList() << QStringLiteral( "*" ), QDir::Files, QDirIterator::Subdirectories );
-  while ( it.hasNext() )
-  {
-    it.next();
-    if ( !MerginApi::isInIgnore( it.fileInfo() ) )
-    {
-      count++;
-    }
-  }
-  return count;
-}
-
 QString CoreUtils::findUniquePath( const QString &path )
 {
   QFileInfo originalPath( path );

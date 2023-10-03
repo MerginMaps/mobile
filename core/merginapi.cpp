@@ -1489,6 +1489,16 @@ ProjectDiff MerginApi::localProjectChanges( const QString &projectDir )
   return compareProjectFiles( projectMetadata.files, projectMetadata.files, localFiles, projectDir, config.isValid, config );
 }
 
+bool MerginApi::hasLocalProjectChanges( const QString &projectDir )
+{
+  MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
+  QList<MerginFile> localFiles = getLocalProjectFiles( projectDir + "/" );
+
+  MerginConfig config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+
+  return projectFilesEqual( projectMetadata.files, localFiles, projectDir );
+}
+
 QString MerginApi::getTempProjectDir( const QString &projectFullName )
 {
   return mDataDir + "/" + TEMP_FOLDER + projectFullName;
@@ -1619,9 +1629,9 @@ QList<MerginFile> MerginApi::getLocalProjectFiles( const QString &projectPath )
   checkSums.save();
 
   qint64 elapsed = timer.elapsed();
-  if ( elapsed > 50 )
+  if ( elapsed > 100 )
   {
-    CoreUtils::log( "Local File", QStringLiteral( "It took %1 ms to get info about %2 local files." ).arg( elapsed ).arg( localFiles.count() ) );
+    CoreUtils::log( "Local File", QStringLiteral( "It took %1 ms to create MerginFiles for %2 local files for %3." ).arg( elapsed ).arg( localFiles.count() ).arg( projectPath ) );
   }
   return merginFiles;
 }
@@ -2804,6 +2814,67 @@ void MerginApi::getWorkspaceInfoReplyFinished()
   r->deleteLater();
 }
 
+bool MerginApi::projectFilesEqual(
+  const QList<MerginFile> &oldServerFiles,
+  const QList<MerginFile> &localFiles,
+  const QString &projectDir
+)
+{
+  QHash<QString, MerginFile> oldServerFilesMap;
+
+  for ( MerginFile file : oldServerFiles )
+  {
+    oldServerFilesMap.insert( file.path, file );
+  }
+
+  for ( MerginFile localFile : localFiles )
+  {
+    QString filePath = localFile.path;
+    bool hasOldServer = oldServerFilesMap.contains( localFile.path );
+    QString chkOld = oldServerFilesMap.value( localFile.path ).checksum;
+    QString chkLocal = localFile.checksum;
+
+    if ( !hasOldServer )
+    {
+      // L-A
+      return false;
+    }
+    else
+    {
+      if ( chkOld != chkLocal )
+      {
+        if ( isFileDiffable( filePath ) )
+        {
+          // we need to do a diff here to figure out whether the file is actually changed or not
+          // because the real content may be the same although the checksums do not match
+          // e.g. when GPKG is opened, its header is updated and therefore lastModified timestamp/checksum is updated as well.
+          if ( GeodiffUtils::hasPendingChanges( projectDir, filePath ) )
+          {
+            // L-U
+            return false;
+          }
+        }
+        else
+        {
+          // L-U
+          return false;
+        }
+      }
+    }
+
+    if ( hasOldServer )
+      oldServerFilesMap.remove( filePath );
+  }
+
+  if ( !oldServerFilesMap.empty() )
+  {
+    // L-D
+    return false;
+  }
+
+  return true;
+}
+
 ProjectDiff MerginApi::compareProjectFiles(
   const QList<MerginFile> &oldServerFiles,
   const QList<MerginFile> &newServerFiles,
@@ -2982,11 +3053,13 @@ ProjectDiff MerginApi::compareProjectFiles(
       oldServerFilesMap.remove( file.path );
   }
 
+  /*
   for ( MerginFile file : oldServerFilesMap )
   {
     // R-D/L-D
     // TODO: need to do anything?
   }
+  */
 
   return diff;
 }

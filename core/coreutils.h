@@ -38,8 +38,6 @@ class CoreUtils
     static QString downloadInProgressFilePath( const QString &projectDir );
 
     static QString uuidWithoutBraces( const QUuid &uuid );
-    static QDateTime getLastModifiedFileDateTime( const QString &path );
-    static int getProjectFilesCount( const QString &path );
 
     /**
     * Returns given path if it does not exist yet, otherwise adds a number to the path in format:
