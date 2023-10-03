@@ -15,24 +15,32 @@
 #include <QDateTime>
 #include <QHash>
 
+/**
+ * Calculates the checksums of local files and store the results in the local binary file
+ */
 class Checksum
 {
   public:
     Checksum( const QString &projectDir );
 
-    //! Load cache from mProjectDir/sCacheFile
+    //! Loads cache from mProjectDir/sCacheFile
     void load();
-    //! Save cache to mProjectDir/sCacheFile
+    //! Saves cache to mProjectDir/sCacheFile
     void save();
 
+    /**
+     * Returns Sha1 checksum of file (with-caching)
+     * Recalculates checksum for all entries not in cache
+     */
     QString get( const QString &path );
 
     /**
-     * Returns Sha1 checksum of file
-     * This is potentially resourcing-costly operation on big files
+     * Returns Sha1 checksum of file (no-caching)
+     * This is potentially resourcing-costly operation
      */
     static QByteArray calculate( const QString &filePath );
 
+    //! Name of the file in which the cache for the project is stored
     static const QString sCacheFile;
 
   private:
@@ -44,6 +52,7 @@ class Checksum
 
     QString mProjectDir;
     QHash<QString, CacheValue> mCache; //!< key -> file relative path to mProjectDir
+    bool mCacheModified = false;
 };
 
 

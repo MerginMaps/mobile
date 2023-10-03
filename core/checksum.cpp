@@ -26,6 +26,7 @@ Checksum::Checksum( const QString &projectDir )
 void Checksum::load()
 {
   mCache.clear();
+  mCacheModified = false;
 
   QFile f( mProjectDir + "/" + sCacheFile );
 
@@ -41,7 +42,6 @@ void Checksum::load()
     while ( stream.atEnd() == false )
     {
       stream >> path >> checksum >> mtime;
-
       entry.checksum = checksum;
       entry.mtime = mtime;
       mCache.insert( path, entry );
@@ -51,9 +51,12 @@ void Checksum::load()
 
 void Checksum::save()
 {
+  if ( !mCacheModified )
+    return;
+
   QFile f( mProjectDir + "/" + sCacheFile );
 
-  if ( f.open( QIODevice::WriteOnly ) )
+  if ( f.open( QIODevice::WriteOnly ) ) // implies Truncate
   {
     QDataStream stream( &f );
     stream.setVersion( QDataStream::Qt_6_5 );
@@ -80,6 +83,7 @@ QString Checksum::get( const QString &path )
     else
     {
       // invalid entry - remove from cache and recalculate
+      mCacheModified = true;
       mCache.remove( path );
     }
   }
@@ -91,6 +95,7 @@ QString Checksum::get( const QString &path )
   entry.checksum = localChecksum;
   entry.mtime = localLastModified;
   mCache.insert( path, entry );
+  mCacheModified = true;
 
   return localChecksum;
 }
