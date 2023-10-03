@@ -40,6 +40,13 @@ class CoreUtils
     static QString uuidWithoutBraces( const QUuid &uuid );
 
     /**
+     * Returns Sha1 checksum of file (no-caching)
+     * This is potentially resourcing-costly operation
+     * \param filePath full path to the file on disk
+     */
+    static QByteArray calculate( const QString &filePath );
+
+    /**
     * Returns given path if it does not exist yet, otherwise adds a number to the path in format:
     *  - if path is a directory: "folder" -> "folder (1)"
     *  - if path is a file: "filename.txt" -> "filename (1).txt"
@@ -88,6 +95,8 @@ class CoreUtils
 
   private:
     static QString sLogFile;
+    static int CHECKSUM_CHUNK_SIZE;
+
     static void appendLog( const QByteArray &data, const QString &path );
 };
 

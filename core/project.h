@@ -25,7 +25,7 @@ namespace ProjectStatus
   {
     NoVersion,  //!< the project is not downloaded
     UpToDate,   //!< both server and local copy are in sync with no extra modifications
-    NeedsSync,  //!< server has newer version than what is available locally and/or the project is not modified locally
+    NeedsSync,  //!< server has newer version than what is available locally and/or the project is modified locally
   };
   Q_ENUM_NS( Status )
 

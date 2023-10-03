@@ -20,7 +20,7 @@
 #include <QtMath>
 #include <QElapsedTimer>
 
-#include "checksum.h"
+#include "projectchecksumcache.h"
 #include "coreutils.h"
 #include "geodiffutils.h"
 #include "localprojectsmanager.h"
@@ -35,7 +35,7 @@ const QString MerginApi::sMarketingPageRoot = QStringLiteral( "https://merginmap
 const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://app.merginmaps.com/" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
 const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
-const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << Checksum::sCacheFile << ".DS_Store";
+const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
 
 
@@ -219,7 +219,7 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
   {
     CoreUtils::log( "list projects by name", QStringLiteral( "Too many local projects: " ) + QString::number( projectNames.count(), 'f', 0 ) );
     const int projectsToRemoveCount = projectNames.count() - listProjectsByNameApiLimit;
-    QString msg = tr( "Reached limit of local projects.\nRemove %1 projects from your device!" ).arg( projectsToRemoveCount );
+    QString msg = tr( "Please remove some projects as the app currently\nonly allows up to %1 downloaded projects." ).arg( projectsToRemoveCount );
     notify( msg );
     projectNamesToRequest.erase( projectNamesToRequest.begin() + listProjectsByNameApiLimit, projectNamesToRequest.end() );
     Q_ASSERT( projectNamesToRequest.count() == listProjectsByNameApiLimit );
@@ -1611,22 +1611,19 @@ QList<MerginFile> MerginApi::getLocalProjectFiles( const QString &projectPath )
   timer.start();
 
   QList<MerginFile> merginFiles;
-  Checksum checkSums( projectPath );
+  ProjectChecksumCache checksumCache( projectPath );
 
-  checkSums.load();
   QSet<QString> localFiles = listFiles( projectPath );
   for ( QString p : localFiles )
   {
     MerginFile file;
-    file.checksum = checkSums.get( p );
+    file.checksum = checksumCache.get( p );
     file.path = p;
     QFileInfo info( projectPath + p );
     file.size = info.size();
     file.mtime = info.lastModified();
     merginFiles.append( file );
   }
-
-  checkSums.save();
 
   qint64 elapsed = timer.elapsed();
   if ( elapsed > 100 )
@@ -2543,7 +2540,7 @@ void MerginApi::pushInfoReplyFinished()
 
         if ( geodiffRes == GEODIFF_SUCCESS )
         {
-          QByteArray checksumDiff = Checksum::calculate( diffPath );
+          QByteArray checksumDiff = CoreUtils::calculate( diffPath );
 
           // TODO: this is ugly. our basefile may not need to have the same checksum as the server's
           // basefile (because each of them have applied the diff independently) so we have to fake it
@@ -2820,7 +2817,7 @@ bool MerginApi::hasLocalChanges(
   const QString &projectDir
 )
 {
-  if (localFiles.count() != oldServerFiles.count())
+  if ( localFiles.count() != oldServerFiles.count() )
   {
     return true;
   }

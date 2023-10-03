@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CHECKSUM_H
-#define CHECKSUM_H
+#ifndef PROJECTCHECKSUMCACHE_H
+#define PROJECTCHECKSUMCACHE_H
 
 #include <QByteArray>
 #include <QString>
@@ -18,32 +18,25 @@
 /**
  * Calculates the checksums of local files and store the results in the local binary file
  */
-class Checksum
+class ProjectChecksumCache
 {
   public:
-    Checksum( const QString &projectDir );
-
-    //! Loads cache from mProjectDir/sCacheFile
-    void load();
-    //! Saves cache to mProjectDir/sCacheFile
-    void save();
+    ProjectChecksumCache( const QString &projectDir );
+    ~ProjectChecksumCache();
 
     /**
      * Returns Sha1 checksum of file (with-caching)
-     * Recalculates checksum for all entries not in cache
+     * Recalculates checksum for an entry not in cache
+     * \param path relative path of the file to mProjectDir
      */
     QString get( const QString &path );
-
-    /**
-     * Returns Sha1 checksum of file (no-caching)
-     * This is potentially resourcing-costly operation
-     */
-    static QByteArray calculate( const QString &filePath );
 
     //! Name of the file in which the cache for the project is stored
     static const QString sCacheFile;
 
   private:
+    QString cacheFilePath() const;
+
     struct CacheValue
     {
       QDateTime mtime; //!< associated file modification date when checksum was calculated
@@ -55,4 +48,4 @@ class Checksum
     bool mCacheModified = false;
 };
 
-#endif
+#endif // PROJECTCHECKSUMCACHE_H

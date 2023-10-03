@@ -23,6 +23,7 @@
 const QString CoreUtils::LOG_TO_DEVNULL = QStringLiteral();
 const QString CoreUtils::LOG_TO_STDOUT = QStringLiteral( "TO_STDOUT" );
 QString CoreUtils::sLogFile = CoreUtils::LOG_TO_DEVNULL;
+int CoreUtils::CHECKSUM_CHUNK_SIZE = 65536;
 
 QString CoreUtils::appInfo()
 {
@@ -160,6 +161,25 @@ QString CoreUtils::findUniquePath( const QString &path )
   }
 
   return uniquePath;
+}
+
+QByteArray CoreUtils::calculate( const QString &filePath )
+{
+  QFile f( filePath );
+  if ( f.open( QFile::ReadOnly ) )
+  {
+    QCryptographicHash hash( QCryptographicHash::Sha1 );
+    QByteArray chunk = f.read( CHECKSUM_CHUNK_SIZE );
+    while ( !chunk.isEmpty() )
+    {
+      hash.addData( chunk );
+      chunk = f.read( CHECKSUM_CHUNK_SIZE );
+    }
+    f.close();
+    return hash.result().toHex();
+  }
+
+  return QByteArray();
 }
 
 QString CoreUtils::createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName )

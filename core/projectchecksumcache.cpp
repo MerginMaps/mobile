@@ -12,23 +12,21 @@
 #include <QFileInfo>
 #include <QDataStream>
 
-#include "checksum.h"
+#include "projectchecksumcache.h"
+#include "coreutils.h"
+#include "merginapi.h"
 
-static const int CHUNK_SIZE = 65536;
-const QString Checksum::sCacheFile = QStringLiteral( ".checksum.cache" );
+const QString ProjectChecksumCache::sCacheFile = QStringLiteral( "checksum.cache" );
 
-Checksum::Checksum( const QString &projectDir )
-  : mProjectDir( projectDir )
+QString ProjectChecksumCache::cacheFilePath() const
 {
-
+  return mProjectDir + "/" + MerginApi::sMetadataFolder + "/" + sCacheFile;
 }
 
-void Checksum::load()
+ProjectChecksumCache::ProjectChecksumCache( const QString &projectDir )
+  : mProjectDir( projectDir )
 {
-  mCache.clear();
-  mCacheModified = false;
-
-  QFile f( mProjectDir + "/" + sCacheFile );
+  QFile f( cacheFilePath() );
 
   if ( f.open( QIODevice::ReadOnly ) )
   {
@@ -49,12 +47,12 @@ void Checksum::load()
   }
 }
 
-void Checksum::save()
+ProjectChecksumCache::~ProjectChecksumCache()
 {
   if ( !mCacheModified )
     return;
 
-  QFile f( mProjectDir + "/" + sCacheFile );
+  QFile f( cacheFilePath() );
 
   if ( f.open( QIODevice::WriteOnly ) ) // implies Truncate
   {
@@ -66,11 +64,15 @@ void Checksum::save()
       stream << it.key() << it.value().checksum << it.value().mtime;
     }
   }
+  else
+  {
+    CoreUtils::log( "projectchecksumcache", QStringLiteral( "Unable to save cache %1" ).arg( cacheFilePath() ) );
+  }
 }
 
-QString Checksum::get( const QString &path )
+QString ProjectChecksumCache::get( const QString &path )
 {
-  QDateTime localLastModified = QFileInfo( mProjectDir + path ).lastModified();
+  QDateTime localLastModified = QFileInfo( mProjectDir + "/" + path ).lastModified();
 
   auto match = mCache.find( path );
 
@@ -80,14 +82,9 @@ QString Checksum::get( const QString &path )
     {
       return match.value().checksum;
     }
-    else
-    {
-      // invalid entry - remove from cache and recalculate
-      mCache.remove( path );
-    }
   }
 
-  QByteArray localChecksumBytes = calculate( mProjectDir + path );
+  QByteArray localChecksumBytes = CoreUtils::calculate( mProjectDir + "/" + path );
   QString localChecksum = QString::fromLatin1( localChecksumBytes.data(), localChecksumBytes.size() );
 
   CacheValue entry;
@@ -97,23 +94,4 @@ QString Checksum::get( const QString &path )
   mCacheModified = true;
 
   return localChecksum;
-}
-
-QByteArray Checksum::calculate( const QString &filePath )
-{
-  QFile f( filePath );
-  if ( f.open( QFile::ReadOnly ) )
-  {
-    QCryptographicHash hash( QCryptographicHash::Sha1 );
-    QByteArray chunk = f.read( CHUNK_SIZE );
-    while ( !chunk.isEmpty() )
-    {
-      hash.addData( chunk );
-      chunk = f.read( CHUNK_SIZE );
-    }
-    f.close();
-    return hash.result().toHex();
-  }
-
-  return QByteArray();
 }
