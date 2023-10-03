@@ -160,6 +160,35 @@ QString InputUtils::formatNumber( const double number, int precision )
   return QString::number( number, 'f', precision );
 }
 
+QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision )
+{
+  QgsCoordinateReferenceSystem projectCrs = QgsProject::instance()->crs();
+
+  switch ( projectCrs.mapUnits() )
+  {
+    case Qgis::DistanceUnit::Meters:
+      return QString( "%1 %2" ).arg( QString::number( distanceInMeters, 'f', precision ), "m" );
+    case Qgis::DistanceUnit::Kilometers:
+      return QString( "%1 %2" ).arg( QString::number( distanceInMeters / 1000, 'f', precision ), "km" );
+    case Qgis::DistanceUnit::Feet:
+      return QString( "%1 %2" ).arg( QString::number( distanceInMeters * 3.28084, 'f', precision ), "feet" );
+    case Qgis::DistanceUnit::NauticalMiles:
+      return QString( "%1 %2" ).arg( QString::number( distanceInMeters / 1852, 'f', precision ), "nautical miles" );
+    case Qgis::DistanceUnit::Yards:
+      return QString( "%1 %2" ).arg( QString::number( distanceInMeters * 1.09361, 'f', precision ), "yards" );
+    case Qgis::DistanceUnit::Miles:
+      return QString( "%1 %2" ).arg( QString::number( distanceInMeters / 1609.34, 'f', precision ), "miles" );
+    case Qgis::DistanceUnit::Centimeters:
+      return QString( "%1 %2" ).arg( QString::number( distanceInMeters * 100, 'f', precision ), "cm" );
+    case Qgis::DistanceUnit::Millimeters:
+      return QString( "%1 %2" ).arg( QString::number( distanceInMeters * 1000, 'f', precision ), "mm" );
+    case Qgis::DistanceUnit::Inches:
+      return QString( "%1 %2" ).arg( QString::number( distanceInMeters * 39.3701, 'f', precision ), "inches" );
+    default:
+      return QString( "%1 %2" ).arg( QString::number( distanceInMeters, 'f', precision ), "m" );
+  }
+}
+
 QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax )
 {
   qint64 daysDiff = tMin.daysTo( tMax );
