@@ -44,13 +44,13 @@ ProjectStatus::Status ProjectStatus::projectStatus( const Project &project )
     return ProjectStatus::NoVersion;
   }
 
-  if ( ProjectStatus::hasLocalChanges( project.local ) )
+  // Version is lower than latest one, last sync also before updated
+  if ( project.local.localVersion < project.mergin.serverVersion )
   {
     return ProjectStatus::NeedsSync;
   }
 
-  // Version is lower than latest one, last sync also before updated
-  if ( project.local.localVersion < project.mergin.serverVersion )
+  if ( ProjectStatus::hasLocalChanges( project.local ) )
   {
     return ProjectStatus::NeedsSync;
   }
