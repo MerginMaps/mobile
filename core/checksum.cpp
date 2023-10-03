@@ -83,7 +83,6 @@ QString Checksum::get( const QString &path )
     else
     {
       // invalid entry - remove from cache and recalculate
-      mCacheModified = true;
       mCache.remove( path );
     }
   }

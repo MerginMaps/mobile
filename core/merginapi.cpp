@@ -2822,17 +2822,15 @@ bool MerginApi::projectFilesEqual(
 {
   QHash<QString, MerginFile> oldServerFilesMap;
 
-  for ( MerginFile file : oldServerFiles )
+  for ( const MerginFile &file : oldServerFiles )
   {
     oldServerFilesMap.insert( file.path, file );
   }
 
-  for ( MerginFile localFile : localFiles )
+  for ( const MerginFile &localFile : localFiles )
   {
     QString filePath = localFile.path;
     bool hasOldServer = oldServerFilesMap.contains( localFile.path );
-    QString chkOld = oldServerFilesMap.value( localFile.path ).checksum;
-    QString chkLocal = localFile.checksum;
 
     if ( !hasOldServer )
     {
@@ -2841,6 +2839,9 @@ bool MerginApi::projectFilesEqual(
     }
     else
     {
+      const QString chkOld = oldServerFilesMap.value( localFile.path ).checksum;
+      const QString chkLocal = localFile.checksum;
+
       if ( chkOld != chkLocal )
       {
         if ( isFileDiffable( filePath ) )

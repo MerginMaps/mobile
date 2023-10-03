@@ -55,6 +55,4 @@ class Checksum
     bool mCacheModified = false;
 };
 
-
-
 #endif
