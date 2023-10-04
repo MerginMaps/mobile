@@ -219,7 +219,7 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
   {
     CoreUtils::log( "list projects by name", QStringLiteral( "Too many local projects: " ) + QString::number( projectNames.count(), 'f', 0 ) );
     const int projectsToRemoveCount = projectNames.count() - listProjectsByNameApiLimit;
-    QString msg = tr( "Please remove some projects as the app currently\nonly allows up to %1 downloaded projects." ).arg( projectsToRemoveCount );
+    QString msg = tr( "Please remove some projects as the app currently\nonly allows up to %1 downloaded projects." ).arg( listProjectsByNameApiLimit );
     notify( msg );
     projectNamesToRequest.erase( projectNamesToRequest.begin() + listProjectsByNameApiLimit, projectNamesToRequest.end() );
     Q_ASSERT( projectNamesToRequest.count() == listProjectsByNameApiLimit );
