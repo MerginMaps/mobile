@@ -27,6 +27,7 @@
   self = [super init];
   if ( self )
   {
+    self->processingPicture = NO;
     self->handler = handler;
   }
   return self;
