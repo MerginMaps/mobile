@@ -276,12 +276,6 @@ Item {
       id: swipeView
       currentIndex: form.controller.hasTabs ? tabRow.currentIndex : 0
 
-      //
-      // Known limitation, we can not make swipeview interactive because of https://bugreports.qt.io/browse/QTBUG-109124
-      // It clashes with slider editors, see https://github.com/MerginMaps/input/issues/2411
-      //
-      interactive: false
-
       anchors {
         top: flickable.bottom
         left: container.left
