@@ -75,6 +75,7 @@ class InputUtils: public QObject
     Q_INVOKABLE QString getFileName( const QString &filePath );
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
     Q_INVOKABLE QString formatNumber( const double number, int precision = 1 );
+    Q_INVOKABLE QString formatDistanceInProjectUnit( const double distanceInMeters, int precision = 1 );
     Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings, double panelOffsetRatio );
 
     // utility functions to extract information from map settings

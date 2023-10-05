@@ -160,6 +160,22 @@ QString InputUtils::formatNumber( const double number, int precision )
   return QString::number( number, 'f', precision );
 }
 
+QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision )
+{
+  Qgis::DistanceUnit distUnit = QgsProject::instance()->distanceUnits();
+
+  if ( distUnit == Qgis::DistanceUnit::Unknown )
+  {
+    return QString::number( distanceInMeters, 'f', precision );
+  }
+
+  double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Meters, distUnit );
+  double distance = distanceInMeters * factor;
+  QString abbreviation = QgsUnitTypes::toAbbreviatedString( distUnit );
+
+  return QString( "%1 %2" ).arg( QString::number( distance, 'f', precision ), abbreviation );
+}
+
 QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax )
 {
   qint64 daysDiff = tMin.daysTo( tMax );
