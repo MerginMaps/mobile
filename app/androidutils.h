@@ -70,6 +70,8 @@ class AndroidUtils: public QObject
     const static int INSTALL_QR_SCANNER_CODE = 104;
     const static int QR_SCAN_CODE = 105;
 
+    const static int ANDROID_VERSION_13 = 13;
+
     void handleActivityResult( int receiverRequestCode, int resultCode, const QJniObject &data ) override;
 #endif
 

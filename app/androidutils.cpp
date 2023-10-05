@@ -157,7 +157,19 @@ void AndroidUtils::quitApp()
 bool AndroidUtils::requestStoragePermission()
 {
 #ifdef ANDROID
-  if ( !checkAndAcquirePermissions( "android.permission.READ_EXTERNAL_STORAGE" ) )
+  double buildVersion = QSysInfo::productVersion().toDouble();
+
+  //
+  // Android SDK 33 has a new set of permissions when reading external storage.
+  // See https://developer.android.com/reference/android/Manifest.permission#READ_EXTERNAL_STORAGE
+  //
+  QString storagePermissionType = QStringLiteral( "android.permission.READ_MEDIA_IMAGES" );
+  if ( buildVersion < ANDROID_VERSION_13 )
+  {
+    storagePermissionType = QStringLiteral( "android.permission.READ_EXTERNAL_STORAGE" );
+  }
+
+  if ( !checkAndAcquirePermissions( storagePermissionType ) )
   {
     auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
     jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", QJniObject::fromString( "android.permission.WRITE_EXTERNAL_STORAGE" ).object() );
