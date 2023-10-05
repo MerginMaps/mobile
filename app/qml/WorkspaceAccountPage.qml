@@ -21,7 +21,6 @@ Page {
 
   signal back
   signal signOutClicked
-  signal managePlansClicked
   signal accountDeleted
   signal switchWorkspace
 
@@ -205,17 +204,31 @@ Page {
         text: qsTr("Your subscription was cancelled on %1").arg(root.subscriptionsTimestamp)
       }
 
-      MMComponents.DelegateButton {
-
+      Text {
         Layout.fillWidth: true
-        btnWidth: width
-        height: InputStyle.rowHeightMedium
+        Layout.preferredHeight: InputStyle.rowHeightHeader
 
-        visible: root.apiSupportsSubscriptions && root.canAccessSubscription
+        leftPadding: InputStyle.formSpacing
 
-        text: qsTr("Subscriptions")
+        color: InputStyle.fontColor
+        linkColor: InputStyle.highlightColor
 
-        onClicked: root.managePlansClicked()
+        wrapMode: Text.WordWrap
+        textFormat: Text.StyledText
+
+        font.bold: true
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+
+        verticalAlignment: Qt.AlignVCenter
+        horizontalAlignment: Qt.AlignLeft
+
+        visible: __iosUtils.isIos && root.apiSupportsSubscriptions && root.canAccessSubscription
+
+        text: qsTr("You can also %1restore%2 your purchase.")
+          .arg("<a href='http://restore-purchases'>")
+          .arg("</a>")
+
+        onLinkActivated: __purchasing.restore()
       }
 
       // user profile

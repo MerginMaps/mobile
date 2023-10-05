@@ -253,7 +253,6 @@ class Purchasing : public QObject
 
     Q_INVOKABLE void purchase( const QString &planId );
     Q_INVOKABLE void restore();
-    Q_INVOKABLE QString subscriptionUrlWithWorkspace();
 
     bool hasManageSubscriptionCapability() const;
     bool transactionPending() const;

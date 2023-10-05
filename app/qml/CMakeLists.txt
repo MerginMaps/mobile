@@ -130,13 +130,9 @@ set(MM_QML
     SettingsPanel.qml
     StakeoutPanel.qml
     StorageLimitDialog.qml
-    SubscribePage.qml
-    SubscribePlanItem.qml
     SwitchWorkspacePage.qml
     WorkspaceAccountPage.qml
     WhatsNewDialog.qml
-    WorkspaceSubscribePage.qml
-    WorkspaceSubscribePlanItem.qml
     main.qml
     PARENT_SCOPE
 )

@@ -105,7 +105,7 @@ Dialog {
       font.pixelSize: InputStyle.fontPixelSizeNormal
       font.underline: true
       color: InputStyle.fontColor
-      text: qsTr("Manage subscriptions")
+      text: qsTr("Manage account")
       visible: __merginApi.apiSupportsSubscriptions
 
       MouseArea {

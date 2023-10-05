@@ -54,17 +54,7 @@ Item {
   }
 
   function manageSubscriptionPlans() {
-    if (__purchasing.hasInAppPurchases && (__purchasing.hasManageSubscriptionCapability || !__merginApi.subscriptionInfo.ownsActiveSubscription )) {
-      if ( __merginApi.serverType === MerginServerType.OLD ) {
-        stackView.push( subscribePanelComp )
-      }
-      else if ( __merginApi.serverType === MerginServerType.SAAS ) {
-        stackView.push( workspaceSubscribePageComp )
-      }
-    }
-    else {
-      Qt.openUrlExternally(__purchasing.subscriptionUrlWithWorkspace());
-    }
+    Qt.openUrlExternally(__inputHelp.merginDashboardLink);
   }
 
   function getServiceInfo() {
@@ -943,8 +933,6 @@ Item {
 
       onBack: stackView.popOnePageOrClose()
 
-      onManagePlansClicked: manageSubscriptionPlans()
-
       onSignOutClicked: {
         __merginApi.signOut()
         stackView.pop( null )
@@ -959,32 +947,6 @@ Item {
       onSwitchWorkspace: {
         stackView.push( workspaceListComponent )
       }
-    }
-  }
-
-  Component {
-    id: subscribePanelComp
-
-    SubscribePage {
-      id: subscribePanel
-      height: root.height
-      width: root.width
-      onBackClicked: {
-        stackView.popOnePageOrClose()
-      }
-      onSubscribeClicked: {
-        stackView.popOnePageOrClose()
-      }
-    }
-  }
-
-  Component {
-    id: workspaceSubscribePageComp
-
-    WorkspaceSubscribePage {
-      id: subscribePanel
-
-      onBack: stackView.popOnePageOrClose()
     }
   }
 
