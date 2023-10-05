@@ -933,6 +933,8 @@ Item {
 
       onBack: stackView.popOnePageOrClose()
 
+      onManagePlansClicked: manageSubscriptionPlans()
+
       onSignOutClicked: {
         __merginApi.signOut()
         stackView.pop( null )

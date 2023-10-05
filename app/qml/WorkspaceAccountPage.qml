@@ -21,6 +21,7 @@ Page {
 
   signal back
   signal signOutClicked
+  signal managePlansClicked
   signal accountDeleted
   signal switchWorkspace
 
@@ -202,6 +203,16 @@ Page {
 
         titleText: qsTr( "Subscription status" )
         text: qsTr("Your subscription was cancelled on %1").arg(root.subscriptionsTimestamp)
+      }
+
+      MMComponents.DelegateButton {
+        Layout.fillWidth: true
+        btnWidth: width
+
+        height: InputStyle.rowHeightMedium
+
+        text: qsTr("Manage account")
+        onClicked: root.managePlansClicked()
       }
 
       Text {
