@@ -806,8 +806,8 @@ ApplicationWindow {
         failedToLoadProjectBanner.pushNotificationMessage( qsTr( "There were issues loading the project." ) )
       }
 
-      function onReportIssue( layerName, message ) {
-        projectIssuesPanel.reportIssue( layerName, message )
+      function onReportIssue( title, message ) {
+        projectIssuesPanel.reportIssue( title, message )
       }
 
       function onProjectReloaded( project ) {

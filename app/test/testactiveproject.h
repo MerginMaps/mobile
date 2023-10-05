@@ -24,6 +24,7 @@ class TestActiveProject : public QObject
     void init();
     void cleanup();
 
+    void testProjectValidations();
     void testProjectLoadFailure();
     void testPositionTrackingFlag();
 

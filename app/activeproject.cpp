@@ -194,30 +194,15 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     emit positionTrackingSupportedChanged();
   }
 
-  bool foundInvalidLayer = false;
-  QStringList invalidLayers;
-  QMap<QString, QgsMapLayer *> projectLayers = mQgsProject->mapLayers();
-
-  for ( QgsMapLayer *layer : projectLayers )
-  {
-    if ( !layer->isValid() )
-    {
-      invalidLayers.append( layer->name() );
-      foundInvalidLayer = true;
-      emit reportIssue( layer->name(), layer->publicSource() );
-    }
-  }
+  bool foundErrorsInLoadedProject = validateProject();
 
   flagFile.remove();
   if ( !force )
   {
     emit loadingFinished();
 
-    if ( foundInvalidLayer )
+    if ( foundErrorsInLoadedProject )
     {
-      QString message = QStringLiteral( "WARNING: The following layers are invalid: %1" ).arg( invalidLayers.join( ", " ) );
-      CoreUtils::log( "project loading", message );
-
       QFile file( logFilePath );
       if ( file.open( QIODevice::ReadOnly ) )
       {
@@ -261,6 +246,47 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
 #endif
 
   return res;
+}
+
+bool ActiveProject::validateProject()
+{
+  Q_ASSERT( mQgsProject );
+
+  bool errorsFound = false;
+
+  // A. Per project validations
+  // A.1. Project CRS
+  if ( !mQgsProject->crs().isValid() )
+  {
+    errorsFound = true;
+    CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Invalid canvas CRS" ) );
+    emit reportIssue( tr( "General" ), tr( "Project has invalid CRS assigned. Map and tools have undefined behaviour!" ) );
+  }
+
+  // B. Per-Layer validations
+  QMap<QString, QgsMapLayer *> projectLayers = mQgsProject->mapLayers();
+  for ( QgsMapLayer *layer : projectLayers )
+  {
+    // B.1. Layer Validity
+    if ( !layer->isValid() )
+    {
+      errorsFound = true;
+      CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Invalid layer %1" ).arg( layer->name() ) );
+      emit reportIssue( tr( "Layer" ) + ": " + layer->name(), tr( "Unable to load source " ) + ": " + layer->publicSource() );
+    }
+    else
+    {
+      // B.2. Layer CRS
+      if ( layer->isSpatial() && !layer->crs().isValid() )
+      {
+        errorsFound = true;
+        CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Invalid layer CRS %1" ).arg( layer->name() ) );
+        emit reportIssue( tr( "Layer" ) + ": " + layer->name(), tr( "Layer has invalid CRS assigned. Recording tools have undefined behaviour." ) );
+      }
+    }
+  }
+
+  return errorsFound;
 }
 
 bool ActiveProject::reloadProject( QString projectDir )
