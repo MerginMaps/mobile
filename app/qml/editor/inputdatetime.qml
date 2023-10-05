@@ -195,7 +195,17 @@ AbstractEditor {
 
         onSelected: function( selectedDate ) {
           if ( selectedDate )
-            root.editorValueChanged(selectedDate, false)
+          {
+            if ( root.parentField.isDateOrTime )
+            {
+              root.editorValueChanged(selectedDate, false)
+            }
+            else
+            {
+              let dateStr = selectedDate.toLocaleString(Qt.locale(), config['field_format'])
+              root.editorValueChanged(dateStr, false)
+            }
+          }
 
           dateTimeDrawer.close()
         }
