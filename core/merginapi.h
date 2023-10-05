@@ -386,6 +386,7 @@ class MerginApi: public QObject
     QStringList projectDiffableFiles( const QString &projectFullName );
 
     static ProjectDiff localProjectChanges( const QString &projectDir );
+    static bool hasLocalProjectChanges( const QString &projectDir );
 
     /**
     * Finds project in merginProjects list according its full name.
@@ -439,6 +440,23 @@ class MerginApi: public QObject
       bool allowConfig = false,
       const MerginConfig &config = MerginConfig(),
       const MerginConfig &lastSyncConfig = MerginConfig()
+    );
+
+    /**
+     * Finds if project files from two sources are same
+     * - "old" server version (what was downloaded from server) - read from the project directory's stored metadata
+     * - local file version (what is currently in the project directory) - created on the fly from the local directory content
+     *
+     * The function returns true if:
+     *   - there is any local file not present in "old" server version files
+     *   - there is any local file missing in "old" server version files
+     *   - there is different checksum of any non-diffable file (e.g. CSV file)
+     *   - there is different content of any diffable file (e.g. GeoPackage)
+     */
+    static bool hasLocalChanges(
+      const QList<MerginFile> &oldServerFiles,
+      const QList<MerginFile> &localFiles,
+      const QString &projectDir
     );
 
     static QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
@@ -689,7 +707,6 @@ class MerginApi: public QObject
     bool writeData( const QByteArray &data, const QString &path );
     void createPathIfNotExists( const QString &filePath );
 
-    static QByteArray getChecksum( const QString &filePath );
     static QSet<QString> listFiles( const QString &projectPath );
 
     bool validateAuth();
@@ -779,7 +796,6 @@ class MerginApi: public QObject
     bool mApiSupportsSubscriptions = false;
     bool mSupportsSelectiveSync = true;
 
-    static const int CHUNK_SIZE = 65536;
     static const int UPLOAD_CHUNK_SIZE;
     const int PROJECT_PER_PAGE = 50;
     const QString TEMP_FOLDER = QStringLiteral( ".temp/" );

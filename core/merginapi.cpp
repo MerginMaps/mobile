@@ -18,7 +18,9 @@
 #include <QSet>
 #include <QUuid>
 #include <QtMath>
+#include <QElapsedTimer>
 
+#include "projectchecksumcache.h"
 #include "coreutils.h"
 #include "geodiffutils.h"
 #include "localprojectsmanager.h"
@@ -210,6 +212,19 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
     return QLatin1String();
   }
 
+  const int listProjectsByNameApiLimit = 50;
+  QStringList projectNamesToRequest( projectNames );
+
+  if ( projectNamesToRequest.count() > listProjectsByNameApiLimit )
+  {
+    CoreUtils::log( "list projects by name", QStringLiteral( "Too many local projects: " ) + QString::number( projectNames.count(), 'f', 0 ) );
+    const int projectsToRemoveCount = projectNames.count() - listProjectsByNameApiLimit;
+    QString msg = tr( "Please remove some projects as the app currently\nonly allows up to %1 downloaded projects." ).arg( listProjectsByNameApiLimit );
+    notify( msg );
+    projectNamesToRequest.erase( projectNamesToRequest.begin() + listProjectsByNameApiLimit, projectNamesToRequest.end() );
+    Q_ASSERT( projectNamesToRequest.count() == listProjectsByNameApiLimit );
+  }
+
   // Authentification is optional in this case, as there might be public projects without the need to be logged in.
   // We only want to include auth token when user is logged in.
   // User's token, however, might have already expired, so let's just refresh it.
@@ -218,7 +233,7 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
   // construct JSON body
   QJsonDocument body;
   QJsonObject projects;
-  QJsonArray projectsArr = QJsonArray::fromStringList( projectNames );
+  QJsonArray projectsArr = QJsonArray::fromStringList( projectNamesToRequest );
 
   projects.insert( "projects", projectsArr );
   body.setObject( projects );
@@ -1474,6 +1489,16 @@ ProjectDiff MerginApi::localProjectChanges( const QString &projectDir )
   return compareProjectFiles( projectMetadata.files, projectMetadata.files, localFiles, projectDir, config.isValid, config );
 }
 
+bool MerginApi::hasLocalProjectChanges( const QString &projectDir )
+{
+  MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
+  QList<MerginFile> localFiles = getLocalProjectFiles( projectDir + "/" );
+
+  MerginConfig config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+
+  return hasLocalChanges( projectMetadata.files, localFiles, projectDir );
+}
+
 QString MerginApi::getTempProjectDir( const QString &projectFullName )
 {
   return mDataDir + "/" + TEMP_FOLDER + projectFullName;
@@ -1582,20 +1607,28 @@ QString MerginApi::merginUserName() const
 
 QList<MerginFile> MerginApi::getLocalProjectFiles( const QString &projectPath )
 {
+  QElapsedTimer timer;
+  timer.start();
+
   QList<MerginFile> merginFiles;
+  ProjectChecksumCache checksumCache( projectPath );
+
   QSet<QString> localFiles = listFiles( projectPath );
   for ( QString p : localFiles )
   {
-
     MerginFile file;
-    QByteArray localChecksumBytes = getChecksum( projectPath + p );
-    QString localChecksum = QString::fromLatin1( localChecksumBytes.data(), localChecksumBytes.size() );
-    file.checksum = localChecksum;
+    file.checksum = checksumCache.get( p );
     file.path = p;
     QFileInfo info( projectPath + p );
     file.size = info.size();
     file.mtime = info.lastModified();
     merginFiles.append( file );
+  }
+
+  qint64 elapsed = timer.elapsed();
+  if ( elapsed > 100 )
+  {
+    CoreUtils::log( "Local File", QStringLiteral( "It took %1 ms to create MerginFiles for %2 local files for %3." ).arg( elapsed ).arg( localFiles.count() ).arg( projectPath ) );
   }
   return merginFiles;
 }
@@ -2507,7 +2540,7 @@ void MerginApi::pushInfoReplyFinished()
 
         if ( geodiffRes == GEODIFF_SUCCESS )
         {
-          QByteArray checksumDiff = getChecksum( diffPath );
+          QByteArray checksumDiff = CoreUtils::calculateChecksum( diffPath );
 
           // TODO: this is ugly. our basefile may not need to have the same checksum as the server's
           // basefile (because each of them have applied the diff independently) so we have to fake it
@@ -2778,6 +2811,67 @@ void MerginApi::getWorkspaceInfoReplyFinished()
   r->deleteLater();
 }
 
+bool MerginApi::hasLocalChanges(
+  const QList<MerginFile> &oldServerFiles,
+  const QList<MerginFile> &localFiles,
+  const QString &projectDir
+)
+{
+  if ( localFiles.count() != oldServerFiles.count() )
+  {
+    return true;
+  }
+
+  QHash<QString, MerginFile> oldServerFilesMap;
+
+  for ( const MerginFile &file : oldServerFiles )
+  {
+    oldServerFilesMap.insert( file.path, file );
+  }
+
+  for ( const MerginFile &localFile : localFiles )
+  {
+    QString filePath = localFile.path;
+    bool hasOldServer = oldServerFilesMap.contains( localFile.path );
+
+    if ( !hasOldServer )
+    {
+      // L-A
+      return true;
+    }
+    else
+    {
+      const QString chkOld = oldServerFilesMap.value( localFile.path ).checksum;
+      const QString chkLocal = localFile.checksum;
+
+      if ( chkOld != chkLocal )
+      {
+        if ( isFileDiffable( filePath ) )
+        {
+          // we need to do a diff here to figure out whether the file is actually changed or not
+          // because the real content may be the same although the checksums do not match
+          // e.g. when GPKG is opened, its header is updated and therefore lastModified timestamp/checksum is updated as well.
+          if ( GeodiffUtils::hasPendingChanges( projectDir, filePath ) )
+          {
+            // L-U
+            return true;
+          }
+        }
+        else
+        {
+          // L-U
+          return true;
+        }
+      }
+    }
+  }
+
+  // We know that the number of local files and old server is the same
+  // And also that all local files has old file counterpart
+  // So it is not possible that there is deleted local file at this point.
+  return false;
+}
+
 ProjectDiff MerginApi::compareProjectFiles(
   const QList<MerginFile> &oldServerFiles,
   const QList<MerginFile> &newServerFiles,
@@ -2956,11 +3050,13 @@ ProjectDiff MerginApi::compareProjectFiles(
       oldServerFilesMap.remove( file.path );
   }
 
+  /*
   for ( MerginFile file : oldServerFilesMap )
   {
     // R-D/L-D
     // TODO: need to do anything?
   }
+  */
 
   return diff;
 }
@@ -3227,25 +3323,6 @@ bool MerginApi::excludeFromSync( const QString &filePath, const MerginConfig &co
     }
   }
   return false;
-}
-
-QByteArray MerginApi::getChecksum( const QString &filePath )
-{
-  QFile f( filePath );
-  if ( f.open( QFile::ReadOnly ) )
-  {
-    QCryptographicHash hash( QCryptographicHash::Sha1 );
-    QByteArray chunk = f.read( CHUNK_SIZE );
-    while ( !chunk.isEmpty() )
-    {
-      hash.addData( chunk );
-      chunk = f.read( CHUNK_SIZE );
-    }
-    f.close();
-    return hash.result().toHex();
-  }
-
-  return QByteArray();
 }
 
 QSet<QString> MerginApi::listFiles( const QString &path )

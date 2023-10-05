@@ -30,6 +30,7 @@
 #include "test/testmaptools.h"
 #include "test/testlayertree.h"
 #include "test/testactiveproject.h"
+#include "test/testprojectchecksumcache.h"
 
 #if not defined APPLE_PURCHASING
 #include "test/testpurchasing.h"
@@ -180,6 +181,11 @@ int InputTests::runTest() const
   {
     TestActiveProject activeProjectTest( mApi );
     nFailed = QTest::qExec( &activeProjectTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testProjectChecksumCache" )
+  {
+    TestProjectChecksumCache projectChecksumTest;
+    nFailed = QTest::qExec( &projectChecksumTest, mTestArgs );
   }
 #if not defined APPLE_PURCHASING
   else if ( mTestRequested == "--testPurchasing" )

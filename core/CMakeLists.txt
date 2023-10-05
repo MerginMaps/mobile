@@ -14,6 +14,7 @@ set(MM_CORE_SRCS
     merginprojectmetadata.cpp
     project.cpp
     geodiffutils.cpp
+    projectchecksumcache.cpp
 )
 
 set(MM_CORE_HDRS
@@ -32,6 +33,7 @@ set(MM_CORE_HDRS
     merginprojectmetadata.h
     project.h
     geodiffutils.h
+    projectchecksumcache.h
 )
 
 if (USE_MM_SERVER_API_KEY)
