@@ -73,7 +73,7 @@ set(MM_QML
     map/Crosshair.qml
     map/Highlight.qml
     map/LoadingIndicator.qml
-    map/MapCanvas.qml
+    map/MMMapCanvas.qml
     map/MapWrapper.qml
     map/PositionMarker.qml
     map/RecordingToolbar.qml

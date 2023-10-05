@@ -199,7 +199,7 @@ Item {
         anchors.fill: parent
       }
 
-      MapCanvas {
+      MMMapCanvas {
         id: mapCanvas
 
         anchors.fill: canvasRoot

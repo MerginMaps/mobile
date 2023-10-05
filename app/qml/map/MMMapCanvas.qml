@@ -7,11 +7,6 @@
  *                                                                         *
  ***************************************************************************/
 
-/*
- * Previous implementation was forked from https://github.com/qgis/QGIS on 25th Nov 2022
- * File: qgsquickmapcanvas.qml by (C) 2014 by Matthias Kuhn
- */
-
 import QtQuick
 import QtCore
 import QtQuick.Controls
