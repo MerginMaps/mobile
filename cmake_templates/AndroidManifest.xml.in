@@ -5,14 +5,15 @@
     android:versionCode="@INPUT_VERSION_CODE@"
     android:versionName="@INPUT_VERSION@">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> <!-- Need due to a legacy storage migration -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/> <!-- Read images from gallery, Android <=12 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/> <!-- Read images from gallery, Android 13+ -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" /> <!-- BT permission up to SDK 30-->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" /> <!-- BT permission up to SDK 30-->
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS"/> <!-- Reading compass while taking a picture -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
@@ -31,13 +32,11 @@
         android:largeScreens="true"
         android:normalScreens="true"
         android:smallScreens="true" />
-    <!-- "preserveLegacyExternalStorage" is needed to support legacy storage migration -->
     <!-- "allowBackup" is suspicious, see https://developer.android.com/guide/topics/manifest/application-element#allowbackup -->
     <application 
         android:name="org.qtproject.qt.android.bindings.QtApplication"
         android:hardwareAccelerated="true"
         android:label="Mergin Maps"
-        android:preserveLegacyExternalStorage="true" 
         android:allowNativeHeapPointerTagging="false"
         android:allowBackup="true"
         android:fullBackupOnly="false"
