@@ -206,16 +206,40 @@ Page {
       }
 
       MMComponents.DelegateButton {
-
         Layout.fillWidth: true
         btnWidth: width
+
         height: InputStyle.rowHeightMedium
 
-        visible: root.apiSupportsSubscriptions && root.canAccessSubscription
-
-        text: qsTr("Subscriptions")
-
+        text: qsTr("Manage account")
         onClicked: root.managePlansClicked()
+      }
+
+      Text {
+        Layout.fillWidth: true
+        Layout.preferredHeight: InputStyle.rowHeightHeader
+
+        leftPadding: InputStyle.formSpacing
+
+        color: InputStyle.fontColor
+        linkColor: InputStyle.highlightColor
+
+        wrapMode: Text.WordWrap
+        textFormat: Text.StyledText
+
+        font.bold: true
+        font.pixelSize: InputStyle.fontPixelSizeNormal
+
+        verticalAlignment: Qt.AlignVCenter
+        horizontalAlignment: Qt.AlignLeft
+
+        visible: __iosUtils.isIos && root.apiSupportsSubscriptions && root.canAccessSubscription
+
+        text: qsTr("You can also %1restore%2 your purchase.")
+          .arg("<a href='http://restore-purchases'>")
+          .arg("</a>")
+
+        onLinkActivated: __purchasing.restore()
       }
 
       // user profile

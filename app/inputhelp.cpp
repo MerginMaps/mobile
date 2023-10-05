@@ -63,12 +63,40 @@ QString InputHelp::merginWebLink() const
 
 QString InputHelp::merginDashboardLink() const
 {
-  if ( mMerginApi && mMerginApi->apiRoot() != MerginApi::defaultApiRoot() )
+  QString activeWorkspacePathPart;
+
+  if ( mMerginApi && mMerginApi->apiSupportsWorkspaces() )
   {
-    return mMerginApi->apiRoot() + "dashboard";  // UTM tags are included only for production server
+    int activeWS = mMerginApi->userInfo()->activeWorkspaceId();
+    if ( activeWS >= 0 )
+    {
+      activeWorkspacePathPart = QStringLiteral( "?workspace=%1" ).arg( activeWS );
+    }
   }
 
-  return MerginApi::defaultApiRoot() + "dashboard" + utmTagAttention;
+  if ( mMerginApi && mMerginApi->apiRoot() != MerginApi::defaultApiRoot() )
+  {
+    return mMerginApi->apiRoot() + "dashboard" + activeWorkspacePathPart;
+  }
+
+  // Let's include UTM tags for production server
+  QString queryParams;
+
+  if ( !activeWorkspacePathPart.isEmpty() )
+  {
+    queryParams = activeWorkspacePathPart;
+
+    // URL can not have two question marks, merge the tags with &
+    QString utms( utmTagAttention );
+    utms.replace( "?", "&" );
+    queryParams += utms;
+  }
+  else
+  {
+    queryParams = utmTagAttention;
+  }
+
+  return MerginApi::defaultApiRoot() + "dashboard" + queryParams;
 }
 
 QString InputHelp::privacyPolicyLink() const

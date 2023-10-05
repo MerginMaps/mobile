@@ -267,19 +267,6 @@ void Purchasing::onHasInAppPurchasesChanged()
   setSubscriptionBillingUrl( subscriptionBillingUrl );
 }
 
-QString Purchasing::subscriptionUrlWithWorkspace()
-{
-  int ws = mMerginApi->userInfo()->activeWorkspaceId();
-  if ( ws >= 0 )
-  {
-    return mSubscriptionManageUrl + QStringLiteral( "?workspace=%1" ).arg( ws );
-  }
-  else
-  {
-    return mSubscriptionManageUrl;
-  }
-}
-
 bool Purchasing::hasInAppPurchases() const
 {
   return mHasInAppPurchases;
