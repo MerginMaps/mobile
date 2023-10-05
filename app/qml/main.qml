@@ -147,21 +147,6 @@ ApplicationWindow {
           // if feature preview panel is opened
           return formsStackManager.takenVerticalSpace - mainPanel.height
         }
-        else if ( stateManager.state === "projects" || stateManager.state === "misc" )
-        {
-          //
-          // Due to an upstream bug in Qt, see #2387 and #2425 for more info
-          //
-          return window.height
-        }
-        else if ( gpsDataPageLoader.active )
-        {
-          //
-          // Block also GPS data page clicks propagation.
-          // Due to an upstream bug in Qt, see #2387 and #2425 for more info
-          //
-          return window.height
-        }
 
         return 0
       }
@@ -252,11 +237,6 @@ ApplicationWindow {
 
         width: window.width
         height: InputStyle.rowHeightHeader
-
-        //
-        // In order to workaround the QTBUG-108689 - we need to disable main panel's buttons when something else occupies the space
-        //
-        enabled: mainPanel.height > map.mapExtentOffset
 
         y: window.height - height
 
