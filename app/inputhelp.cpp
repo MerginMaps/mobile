@@ -70,7 +70,7 @@ QString InputHelp::merginDashboardLink() const
     int activeWS = mMerginApi->userInfo()->activeWorkspaceId();
     if ( activeWS >= 0 )
     {
-      activeWorkspacePathPart = QStringLiteral( "?workspace=%1&" ).arg( activeWS );
+      activeWorkspacePathPart = QStringLiteral( "?workspace=%1" ).arg( activeWS );
     }
   }
 
@@ -86,9 +86,9 @@ QString InputHelp::merginDashboardLink() const
   {
     queryParams = activeWorkspacePathPart;
 
-    // URL can not have two question marks, let's remove the one in the utm tag
+    // URL can not have two question marks, merge the tags with &
     QString utms( utmTagAttention );
-    utms.replace( "?", "" );
+    utms.replace( "?", "&" );
     queryParams += utms;
   }
   else
