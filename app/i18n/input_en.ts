@@ -179,47 +179,52 @@ Please go to the Mergin Maps website to remove it manually.</source>
 <context>
     <name>AndroidTrackingBackend</name>
     <message>
-        <location filename="../position/tracking/androidtrackingbackend.cpp" line="115"/>
-        <location filename="../position/tracking/androidtrackingbackend.cpp" line="158"/>
-        <location filename="../position/tracking/androidtrackingbackend.cpp" line="172"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="116"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="159"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="173"/>
         <source>There was an error and tracking could not start, please contact support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../position/tracking/androidtrackingbackend.cpp" line="143"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="144"/>
         <source>Your device does not support tracking, available from Android 8.0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../position/tracking/androidtrackingbackend.cpp" line="148"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="149"/>
         <source>Please enable location permission before starting tracking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../position/tracking/androidtrackingbackend.cpp" line="153"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="154"/>
         <source>Please enable location services on your device before starting tracking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="198"/>
+        <source>Enable notifications to see tracking in the notifications tray</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="179"/>
+        <location filename="../androidutils.cpp" line="207"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="183"/>
+        <location filename="../androidutils.cpp" line="211"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="201"/>
+        <location filename="../androidutils.cpp" line="229"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="205"/>
+        <location filename="../androidutils.cpp" line="233"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation type="unfinished"></translation>
     </message>
