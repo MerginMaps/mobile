@@ -128,6 +128,10 @@ ApplicationWindow {
           title: "Notifications"
           source: "NotificationPage.qml"
         }
+        ListElement {
+          title: "Drawers"
+          source: "DrawerPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}

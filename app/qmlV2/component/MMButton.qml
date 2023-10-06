@@ -16,6 +16,8 @@ import "."
 Button {
   id: control
 
+  property bool transparent: false
+
   contentItem: Text {
     anchors.centerIn: control
     font: Qt.font(Style.t3)
@@ -31,7 +33,7 @@ Button {
   }
 
   background: Rectangle {
-    color: control.enabled ? control.down || control.hovered ? Style.forest : Style.grass : Style.mediumGreen
+    color: transparent ? "transparent" : control.enabled ? control.down || control.hovered ? Style.forest : Style.grass : Style.mediumGreen
     radius: height / 2
   }
 

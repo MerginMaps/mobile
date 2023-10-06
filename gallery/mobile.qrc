@@ -14,5 +14,6 @@
         <file>app/qmlV2/component/MMSwitch.qml</file>
         <file>app/qmlV2/component/MMNotification.qml</file>
         <file>app/qmlV2/component/MMNotificationView.qml</file>
+        <file>app/qmlV2/component/MMDrawer.qml</file>
     </qresource>
 </RCC>
