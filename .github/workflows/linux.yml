@@ -17,9 +17,9 @@ on:
 
 env:
   CCACHE_DIR: ~/.ccache
-  INPUT_SDK_VERSION: x64-linux-20230824-162
-  QT_VERSION: '6.5.2'
-  CACHE_VERSION: 1
+  INPUT_SDK_VERSION: x64-linux-20231006-163
+  QT_VERSION: '6.5.3' # use scripts/update_qt_version.bash to change
+  CACHE_VERSION: 0
       
 concurrency:
   group: ci-${{github.ref}}-linux
