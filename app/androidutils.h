@@ -36,6 +36,9 @@ class AndroidUtils: public QObject
 
     static QString externalStorageAppFolder();
 
+    // Android 13+ needs permission for sending notifications
+    static bool requestNotificationPermission();
+
     /**
      * Reads EXIF and returns value for given parameters.
      * @param filePath Absolute path to a file
