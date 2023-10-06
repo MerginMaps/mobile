@@ -91,6 +91,34 @@ QString AndroidUtils::externalStorageAppFolder()
   return QString();
 }
 
+bool AndroidUtils::requestNotificationPermission()
+{
+#ifdef ANDROID
+  double buildVersion = QSysInfo::productVersion().toDouble();
+
+  // POST_NOTIFICATIONS permission is available from Android 13+
+  if ( buildVersion < ANDROID_VERSION_13 )
+  {
+    return true;
+  }
+
+  QString notificationPermission = QStringLiteral( "android.permission.POST_NOTIFICATIONS" );
+
+  auto r = QtAndroidPrivate::checkPermission( notificationPermission ).result();
+  if ( r == QtAndroidPrivate::Authorized )
+  {
+    return true;
+  }
+
+  r = QtAndroidPrivate::requestPermission( notificationPermission ).result();
+  if ( r == QtAndroidPrivate::Authorized )
+  {
+    return true;
+  }
+#endif
+  return false;
+}
+
 QString AndroidUtils::readExif( const QString &filePath, const QString &tag )
 {
 #ifdef ANDROID
