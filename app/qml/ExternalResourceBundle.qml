@@ -10,7 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
-
 import "."  // import InputStyle singleton
 
 Item {
@@ -22,6 +21,9 @@ Item {
 
         // Has to be set for actions with callbacks
         property var itemWidget
+
+        // Whether we have camera available on this platform
+        property var hasCameraCapability:__androidUtils.isAndroid || __iosUtils.isIos
 
         /**
          * Called when clicked on the camera icon to capture an image.
@@ -41,7 +43,8 @@ Item {
           } else if (__iosUtils.isIos) {
               __iosUtils.callCamera(itemWidget.targetDir)
           } else {
-            itemWidget.showDefaultPanel()
+            // This should never happen
+            console.log("Camera not implemented on this platform.")
           }
         }
 
@@ -63,7 +66,7 @@ Item {
             } else if (__iosUtils.isIos) {
                 __iosUtils.callImagePicker(itemWidget.targetDir)
             } else {
-                fileDialog.open()
+                desktopGalleryPicker.open()
             }
         }
 
@@ -228,15 +231,16 @@ Item {
       }
     }
 
+    // Gallery picker
     FileDialog {
-        id: fileDialog
+        id: desktopGalleryPicker
         title: qsTr( "Open Image" )
         visible: false
         nameFilters: [ qsTr( "Image files (*.gif *.png *.jpg)" ) ]
-        //width: window.width
-        //height: window.height
         currentFolder: __inputUtils.imageGalleryLocation()
-        onAccepted: externalResourceHandler.imageSelected(fileDialog.fileUrl)
+        onAccepted: {
+          externalResourceHandler.imageSelected(selectedFile)
+        }
     }
 
     MessageDialog {
