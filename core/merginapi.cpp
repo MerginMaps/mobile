@@ -1348,7 +1348,13 @@ void MerginApi::checkMerginVersion( QString apiVersion, bool serverSupportsSubsc
     int major = -1;
     int minor = -1;
 
-    parseVersion( apiVersion, major, minor );
+    bool validVersion = parseVersion( apiVersion, major, minor );
+
+    if ( !validVersion )
+    {
+      setApiVersionStatus( MerginApiStatus::NOT_FOUND );
+      return;
+    }
 
     if ( ( MERGIN_API_VERSION_MAJOR == major && MERGIN_API_VERSION_MINOR <= minor ) || ( MERGIN_API_VERSION_MAJOR < major ) )
     {
@@ -3352,25 +3358,40 @@ void MerginApi::getServerConfigReplyFinished()
     if ( doc.isObject() )
     {
       QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
+      QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
+      int major = -1;
+      int minor = -1;
+      bool validVersion = parseVersion( apiVersion, major, minor );
+
+      if ( !validVersion )
+      {
+        CoreUtils::log( QStringLiteral( "Server version" ), QStringLiteral( "Cannot parse server version" ) );
+      }
+
       if ( serverType == QStringLiteral( "ee" ) )
       {
         setServerType( MerginServerType::EE );
+        if ( validVersion )
+        {
+          CoreUtils::log( QStringLiteral( "Server version:" ), QStringLiteral( "%1.%2 EE" ).arg( major ).arg( minor ) );
+        }
       }
       else if ( serverType == QStringLiteral( "ce" ) )
       {
         setServerType( MerginServerType::CE );
+        if ( validVersion )
+        {
+          CoreUtils::log( QStringLiteral( "Server version:" ), QStringLiteral( "%1.%2 EE" ).arg( major ).arg( minor ) );
+        }
       }
       else if ( serverType == QStringLiteral( "saas" ) )
       {
         setServerType( MerginServerType::SAAS );
+        if ( validVersion )
+        {
+          CoreUtils::log( QStringLiteral( "Server version:" ), QStringLiteral( "%1.%2 EE" ).arg( major ).arg( minor ) );
+        }
       }
-
-      // parse server version
-      QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
-      int major = -1;
-      int minor = -1;
-
-      parseVersion( apiVersion, major, minor );
 
       // will be dropped support for old servers (mostly CE servers without workspaces)
       if ( ( MINIMUM_SERVER_VERSION_MAJOR == major && MINIMUM_SERVER_VERSION_MINOR > minor ) || ( MINIMUM_SERVER_VERSION_MAJOR > major ) )
