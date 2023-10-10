@@ -22,5 +22,7 @@
         <file>../app/qmlV2/component/MMDrawer.qml</file>
         <file>qml/pages/DrawerPage.qml</file>
         <file>qml/pages/ChecksPage.qml</file>
+        <file>../app/qmlV2/component/MMComponent_reachedDataLimit.qml</file>
+        <file>../app/qmlV2/component/MMProgressBar.qml</file>
     </qresource>
 </RCC>

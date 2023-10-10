@@ -43,6 +43,9 @@ Page {
     description: "This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration."
     primaryButton: "Yes, Upload Project"
     secondaryButton: "No Cancel"
+
+    onPrimaryButtonClicked: visible = false
+    onSecondaryButtonClicked: visible = false
   }
 
   MMDrawer {
@@ -51,7 +54,19 @@ Page {
     picture: Style.ReachedDataLimitImage
     title: "You have reached a data limit"
     primaryButton: "Manage Subscription"
-    specialComponent: MMButton { text: "Special Component"; padding: 20 }
+    specialComponent: component.comp
+    visible: true
+
+    MMComponent_reachedDataLimit {
+      id: component
+      dataToSync: "643.8 MB"
+      dataUsing: "9.23 MB / 10.0 MB"
+      plan: "Individual"
+      usedData: 0.923
+    }
+
+    onPrimaryButtonClicked: visible = false
+    onSecondaryButtonClicked: visible = false
   }
 
   MMDrawer {
@@ -62,6 +77,8 @@ Page {
     description: "Your changes could not be sent to server, make sure you are connected to internet and have write access to this project."
     primaryButton: "Ok, I understand"
     boundedDescription: "Failed to push changes. Ask the project workspace owner to log in to their Mergin Maps dashboard for more information."
-    visible: true
+
+    onPrimaryButtonClicked: visible = false
+    onSecondaryButtonClicked: visible = false
   }
 }

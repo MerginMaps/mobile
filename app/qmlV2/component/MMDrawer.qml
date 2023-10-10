@@ -24,32 +24,37 @@ Drawer {
   property alias secondaryButton: secondaryButton.text
   property alias specialComponent: loader.sourceComponent
 
+  signal primaryButtonClicked
+  signal secondaryButtonClicked
+
   width: window.width
   height: mainColumn.height
   edge: Qt.BottomEdge
+
+  Rectangle {
+    color: roundedRect.color
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 2 * radius
+    anchors.topMargin: -radius
+    radius: Style.commonSpacing
+  }
 
   Rectangle {
     id: roundedRect
 
     anchors.fill: parent
     color: Style.white
-    radius: Style.commonSpacing
-
-    // Make the bottom corners more rounded by masking them
-    Rectangle {
-      anchors.bottom: parent.bottom
-      anchors.left: parent.left
-      anchors.right: parent.right
-      height: roundedRect.radius
-      color: Style.white
-    }
 
     Column {
       id: mainColumn
 
       width: parent.width
       spacing: Style.commonSpacing
-      padding: Style.commonSpacing
+      leftPadding: Style.commonSpacing
+      rightPadding: Style.commonSpacing
+      bottomPadding: Style.commonSpacing
 
       Image {
         id: closeButton
@@ -132,7 +137,7 @@ Drawer {
         width: parent.width - 2*Style.commonSpacing
         visible: text.length > 0
 
-        onClicked: control.visible = false
+        onClicked: primaryButtonClicked()
       }
 
       MMButton {
@@ -143,7 +148,7 @@ Drawer {
         transparent: true
         topPadding: 0
 
-        onClicked: control.visible = false
+        onClicked: secondaryButtonClicked()
       }
     }
   }
