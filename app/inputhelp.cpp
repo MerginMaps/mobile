@@ -164,11 +164,6 @@ QString InputHelp::whatsNewPostLink() const
   return inputWeb + "/blog/introducing-workspaces-simplified-collaboration" + utmTagOther;
 }
 
-QString InputHelp::subscriptionBillingUrl() const
-{
-
-}
-
 bool InputHelp::submitReportPending() const
 {
   return mSubmitReportPending;
