@@ -32,10 +32,6 @@
 #include "test/testactiveproject.h"
 #include "test/testprojectchecksumcache.h"
 
-#if not defined APPLE_PURCHASING
-#include "test/testpurchasing.h"
-#endif
-
 InputTests::InputTests() = default;
 
 InputTests::~InputTests() = default;
@@ -63,10 +59,9 @@ bool InputTests::testingRequested() const
   return !mTestRequested.isEmpty();
 }
 
-void InputTests::init( MerginApi *api, Purchasing *purchasing, InputUtils *utils, VariablesManager *varManager, PositionKit *kit, AppSettings *settings )
+void InputTests::init( MerginApi *api, InputUtils *utils, VariablesManager *varManager, PositionKit *kit, AppSettings *settings )
 {
   mApi = api;
-  mPurchasing = purchasing;
   mInputUtils = utils;
   mVariablesManager = varManager;
   mPositionKit = kit;
@@ -94,7 +89,7 @@ int InputTests::runTest() const
 {
   int nFailed = 0;
 
-  if ( !mApi || !mPurchasing || !mInputUtils )
+  if ( !mApi || !mInputUtils )
   {
     nFailed = 1000;
     qDebug() << "input tests not initialized";
@@ -187,19 +182,11 @@ int InputTests::runTest() const
     TestProjectChecksumCache projectChecksumTest;
     nFailed = QTest::qExec( &projectChecksumTest, mTestArgs );
   }
-#if not defined APPLE_PURCHASING
-  else if ( mTestRequested == "--testPurchasing" )
-  {
-    TestPurchasing purchasingTest( mApi, mPurchasing );
-    nFailed = QTest::qExec( &purchasingTest, mTestArgs );
-  }
   else if ( mTestRequested == "--testMerginApi" )
   {
-    TestMerginApi merginApiTest( mApi, mPurchasing );
+    TestMerginApi merginApiTest( mApi );
     nFailed = QTest::qExec( &merginApiTest, mTestArgs );
   }
-
-#endif
   else
   {
     qDebug() << "invalid test requested" << mTestRequested;

@@ -15,11 +15,8 @@
 
 #include "inputconfig.h"
 #include "qgsproject.h"
-#include "testingpurchasingbackend.h"
 
 class MerginApi;
-class Purchasing;
-class TestingPurchasingBackend;
 
 namespace TestUtils
 {
@@ -37,9 +34,6 @@ namespace TestUtils
   //! Use credentials from env variables if they are set, otherwise register new user and set its credentials to env var
   void mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password );
 
-  //! Setup professional plan for active workspace
-  void mergin_setup_pro_subscription( MerginApi *api, Purchasing *purchasing );
-
   QString generateUsername();
   QString generateEmail();
   QString generatePassword();
@@ -56,9 +50,6 @@ namespace TestUtils
    * Returns true if files were successfully created
    */
   bool generateProjectFolder( const QString &rootPath, const QJsonDocument &structure );
-
-  //! Test util function to invoke purchasing function and wait for the replies.
-  void runPurchasingCommand( MerginApi *api, Purchasing *purchasing, TestingPurchasingBackend::NextPurchaseResult result, const QString &planId, bool waitForWorkspaceInfoChanged = true );
 }
 
 #define COMPARENEAR(actual, expected, epsilon) \

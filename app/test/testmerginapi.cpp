@@ -32,13 +32,10 @@ static MerginProject _findProjectByName( const QString &projectNamespace, const 
 }
 
 
-TestMerginApi::TestMerginApi( MerginApi *api, Purchasing *purchasing )
+TestMerginApi::TestMerginApi( MerginApi *api )
 {
   mApi = api;
   Q_ASSERT( mApi );  // does not make sense to run without API
-
-  mPurchasing = purchasing;
-  Q_ASSERT( purchasing );
 
   mSyncManager = std::make_unique<SynchronizationManager>( mApi );
 
@@ -61,7 +58,6 @@ void TestMerginApi::initTestCase()
 {
   QString apiRoot, username, password;
   TestUtils::mergin_setup_auth( mApi, apiRoot, username, password );
-  TestUtils::mergin_setup_pro_subscription( mApi, mPurchasing );
 
   mUsername = username;  // keep for later
 

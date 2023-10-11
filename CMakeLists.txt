@@ -81,14 +81,6 @@ else ()
   set(HAVE_BLUETOOTH_DEFAULT TRUE)
 endif ()
 
-if (IOS)
-  set(HAVE_PURCHASING_DEFAULT TRUE)
-  set(HAVE_APPLE_PURCHASING_DEFAULT TRUE)
-else ()
-  set(HAVE_PURCHASING_DEFAULT ${ENABLE_TESTS_DEFAULT})
-  set(HAVE_APPLE_PURCHASING_DEFAULT FALSE)
-endif ()
-
 # on android in multi-ABI build, command line variables are NOT passed to
 # ExternalProject_Add called by QT. Therefore we need to pass the variables through ENV
 if (ANDROID)
@@ -150,14 +142,7 @@ set(HAVE_BLUETOOTH
     ${HAVE_BLUETOOTH_DEFAULT}
     CACHE BOOL "Building with bluetooth position provider"
 )
-set(HAVE_PURCHASING
-    ${HAVE_PURCHASING_DEFAULT}
-    CACHE BOOL "Build with purchasing (e.g. for test of purchasing GUI)"
-)
-set(HAVE_APPLE_PURCHASING
-    ${HAVE_APPLE_PURCHASING_DEFAULT}
-    CACHE BOOL "Building with Apple's StoreKit support"
-)
+
 set(QT6_VERSION
     ${QT_VERSION_DEFAULT}
     CACHE STRING "QT6 version to use"
@@ -341,14 +326,6 @@ if (ENABLE_TESTS)
   set(INPUT_TEST TRUE)
   file(COPY test/test_data DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test/)
   set(TEST_DATA_DIR "${CMAKE_CURRENT_BINARY_DIR}/test/test_data")
-endif ()
-
-if (HAVE_PURCHASING)
-  set(PURCHASING TRUE)
-endif ()
-
-if (HAVE_APPLE_PURCHASING)
-  set(APPLE_PURCHASING TRUE)
 endif ()
 
 configure_file(

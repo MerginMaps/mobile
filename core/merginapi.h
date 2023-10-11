@@ -35,8 +35,6 @@
 #include "merginworkspaceinfo.h"
 #include "merginuserauth.h"
 
-class Purchasing;
-
 class RegistrationError
 {
     Q_GADGET
@@ -806,8 +804,6 @@ class MerginApi: public QObject
     MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
 
     friend class TestMerginApi;
-    friend class Purchasing;
-    friend class PurchasingTransaction;
 };
 
 #endif // MERGINAPI_H
