@@ -25,13 +25,12 @@ CASE
 		<p><strong>Now add a line to the <i>Survey Tracks</i> layer then return here for<br/>
 		the next step in the tour</strong>.</p>'
 	WHEN "step" = 5 THEN 
-		'<p>Well done - you now know the basics of Input. We hope Input saves<br/>
-		you a lot of time in the field.</p>
-		<p>The next step is learning about Mergin. Input uses Mergin to load<br/>
+		'<p>Well done - you now know the basics of Mergin Maps mobile app. <br/>
+  		We hope it saves you a lot of time in the field.</p>
+		<p>Now you can upload your project to Mergin Maps cloud to load<br/>
 		projects without cables, share projects, sync field data in real-time<br/>
 		and to collaborate with others.</p>
-		<img src="file://' + @project_folder + '/' + 'images/mergin.png' + '"/>
-		<p><strong>Visit inputapp.io/mergin and make your next field visit wonderful!</strong></p>'
+		<p><strong>Visit merginmaps.com/docs for more info!</strong></p>'
 	ELSE
 		'next step'
 END
