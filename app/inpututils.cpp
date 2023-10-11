@@ -160,9 +160,14 @@ QString InputUtils::formatNumber( const double number, int precision )
   return QString::number( number, 'f', precision );
 }
 
-QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision )
+QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit )
 {
-  Qgis::DistanceUnit distUnit = QgsProject::instance()->distanceUnits();
+  Qgis::DistanceUnit distUnit = destUnit;
+
+  if ( distUnit == Qgis::DistanceUnit::Unknown )
+  {
+    distUnit = QgsProject::instance()->distanceUnits();
+  }
 
   if ( distUnit == Qgis::DistanceUnit::Unknown )
   {
