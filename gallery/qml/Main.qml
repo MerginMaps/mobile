@@ -128,6 +128,10 @@ ApplicationWindow {
           title: "Drawers"
           source: "DrawerPage.qml"
         }
+        ListElement {
+          title: "Map"
+          source: "MapPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}
