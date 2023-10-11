@@ -69,8 +69,14 @@ const arrowUpIcon = "qrc:/Arrow Up.svg"
 const arrowDownIcon = "qrc:/Arrow Down.svg"
 const qrCodeIcon = "qrc:/QR Code.svg"
 const checkmarkIcon = "qrc:/Checkmark.svg"
+const closeButtonIcon = "qrc:/CloseButton.svg"
 
-const textColor = "black"
+// Images
+const uploadImage = "qrc:/UploadImage.svg"
+const ReachedDataLimitImage = "qrc:/ReachedDataLimitImage.svg"
+
+// Spacing
+const commonSpacing = 20 * __dp
 
 function dynamicText() {
   return "Dynamic text"

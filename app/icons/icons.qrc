@@ -11,5 +11,8 @@
         <file>Arrow Up.svg</file>
         <file>QR Code.svg</file>
         <file>Checkmark.svg</file>
+        <file>CloseButton.svg</file>
+        <file>UploadImage.svg</file>
+        <file>ReachedDataLimitImage.svg</file>
     </qresource>
 </RCC>
