@@ -112,7 +112,6 @@ set(MM_QML
     NumberSpin.qml
     PanelItem.qml
     PanelTabButton.qml
-    PhotoPanel.qml
     ProjectIssuesPanel.qml
     ProjectLimitDialog.qml
     ProjectListPage.qml

@@ -90,22 +90,6 @@ Item {
     externalResourceHandler.onFormCanceled(fieldItem)
   }
 
-  function showDefaultPanel() {
-    if (!photoCapturePanelLoader.item) {
-      // Load the photo capture panel if not loaded yet
-      photoCapturePanelLoader.setSource("qrc:/PhotoPanel.qml")
-      photoCapturePanelLoader.item.height = window.height
-      photoCapturePanelLoader.item.width = window.width
-      photoCapturePanelLoader.item.edge = Qt.RightEdge
-      photoCapturePanelLoader.item.imageButtonSize = fieldItem.iconSize
-      photoCapturePanelLoader.item.backButtonSource = fieldItem.backIcon
-    }
-    photoCapturePanelLoader.item.visible = true
-    photoCapturePanelLoader.item.targetDir = targetDir
-    photoCapturePanelLoader.item.prefixToRelativePath = prefixToRelativePath
-    photoCapturePanelLoader.item.fieldItem = fieldItem
-  }
-
   id: fieldItem
   enabled: true // its interactive widget
   height: customStyle.fields.height * 3
@@ -125,17 +109,6 @@ Item {
       name: "notAvailable"
     }
   ]
-
-  Loader {
-    id: photoCapturePanelLoader
-  }
-
-  Connections {
-    target: photoCapturePanelLoader.item
-    function onConfirmButtonClicked( path, filename ) {
-      externalResourceHandler.confirmImage(fieldItem, path, filename)
-    }
-  }
 
   Rectangle {
     id: imageContainer
@@ -234,7 +207,7 @@ Item {
         iconSource: fieldItem.cameraIcon
         iconSize: buttonsContainer.itemHeight
         labelText: qsTr("Take a photo")
-        visible: !readOnly && fieldItem.state !== " valid"
+        visible: !readOnly && fieldItem.state !== " valid" && externalResourceHandler.hasCameraCapability
 
         Layout.preferredHeight: parent.height
         Layout.fillWidth: true
@@ -243,18 +216,14 @@ Item {
         MouseArea {
           anchors.fill: parent
           onClicked: {
-            if (externalResourceHandler.capturePhoto) {
-              externalResourceHandler.capturePhoto(fieldItem)
-            } else {
-              showDefaultPanel()
-            }
+            externalResourceHandler.capturePhoto(fieldItem)
           }
         }
       }
 
       Item {
         id: lineContainer
-        visible: !readOnly && fieldItem.state !== " valid"
+        visible: photoButton.visible
         Layout.fillWidth: true
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: line.width * 2
