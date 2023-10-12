@@ -113,10 +113,9 @@ class TestMerginApi: public QObject
 
     /**
      *  Creates a project on the server and pushes an initial version and removes the local copy.
-     *  Fails if such project already exist on the remote server.
-     *  \see deleteRemoteProjectNow
+     *  If force is used, the project is first deleted by deleteRemoteProjectNow from remote server
      */
-    void createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath );
+    void createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath, bool force = true );
 
     /**
      * Gets project id from project full name
