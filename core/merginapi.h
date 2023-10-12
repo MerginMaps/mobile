@@ -405,6 +405,7 @@ class MerginApi: public QObject
     // Test functions
     /**
     * Deletes the project of given namespace and name on Mergin server.
+    * Note that this deletion is not immediately done, but only scheduled.
     * \param projectNamespace
     * \param projectName
     */

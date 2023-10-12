@@ -23,16 +23,8 @@ namespace TestUtils
   const int SHORT_REPLY = 5000;
   const int LONG_REPLY = 90000;
 
-  const double FREE_STORAGE =  104857600.0; // 100 MB
-
-  const QString TIER01_PLAN_ID = "test_mergin_tier_1_1";
-  const double TIER01_STORAGE =  1073741824.0; // 1GB
-
-  const QString TIER02_PLAN_ID = "test_mergin_tier_1_2";
-  const double TIER02_STORAGE =  10737418240.0; // 10 GB
-
-  //! Use credentials from env variables if they are set, otherwise register new user and set its credentials to env var
-  void mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password );
+  //! Use credentials from env variables
+  void mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password, QString &workspace );
 
   QString generateUsername();
   QString generateEmail();

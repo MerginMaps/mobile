@@ -56,10 +56,11 @@ TestMerginApi::~TestMerginApi() = default;
 
 void TestMerginApi::initTestCase()
 {
-  QString apiRoot, username, password;
-  TestUtils::mergin_setup_auth( mApi, apiRoot, username, password );
+  QString apiRoot, username, password, workspace;
+  TestUtils::mergin_setup_auth( mApi, apiRoot, username, password, workspace );
 
   mUsername = username;  // keep for later
+  mWorkspaceName = workspace;  // keep for later
 
   QDir testDataDir( TEST_DATA_DIR );
   mTestDataPath = testDataDir.canonicalPath();  // get rid of any ".." that may cause problems later
@@ -81,47 +82,7 @@ void TestMerginApi::initTestCase()
   QVERIFY( spyExtra.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spyExtra.count(), 1 );
 
-  // remove any projects on the server that may prevent us from creating them
-  deleteRemoteProject( mApiExtra, mUsername, "testListProject" );
-  deleteRemoteProject( mApiExtra, mUsername, "testListProjectByName" );
-  deleteRemoteProject( mApiExtra, mUsername, "testDownloadProject" );
-  deleteRemoteProject( mApiExtra, mUsername, "testDownloadProjectSpecChars" );
-  deleteRemoteProject( mApiExtra, mUsername, "testPushAddedFile" );
-  deleteRemoteProject( mApiExtra, mUsername, "testPushRemovedFile" );
-  deleteRemoteProject( mApiExtra, mUsername, "testPushModifiedFile" );
-  deleteRemoteProject( mApiExtra, mUsername, "testPushNoChanges" );
-  deleteRemoteProject( mApiExtra, mUsername, "testUpdateAddedFile" );
-  deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedFiles" );
-  deleteRemoteProject( mApiExtra, mUsername, "testUpdateRemovedVsModifiedFiles" );
-  deleteRemoteProject( mApiExtra, mUsername, "testConflictRemoteUpdateLocalUpdate" );
-  deleteRemoteProject( mApiExtra, mUsername, "testConflictRemoteAddLocalAdd" );
-  deleteRemoteProject( mApiExtra, mUsername, "testEditConflictScenario" );
-  deleteRemoteProject( mApiExtra, mUsername, "testUploadProject" );
-  deleteRemoteProject( mApiExtra, mUsername, "testCancelDownloadProject" );
-  deleteRemoteProject( mApiExtra, mUsername, "testCreateProjectTwice" );
-  deleteRemoteProject( mApiExtra, mUsername, "testCreateDeleteProject" );
-  deleteRemoteProject( mApiExtra, mUsername, "testMultiChunkUploadDownload" );
-  deleteRemoteProject( mApiExtra, mUsername, "testEmptyFileUploadDownload" );
-  deleteRemoteProject( mApiExtra, mUsername, "testUploadWithUpdate" );
-  deleteRemoteProject( mApiExtra, mUsername, "testDiffUpload" );
-  deleteRemoteProject( mApiExtra, mUsername, "testDiffSubdirsUpload" );
-  deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateBasic" );
-  deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateWithRebase" );
-  deleteRemoteProject( mApiExtra, mUsername, "testDiffUpdateWithRebaseFailed" );
-  deleteRemoteProject( mApiExtra, mUsername, "testUpdateWithDiffs" );
-  deleteRemoteProject( mApiExtra, mUsername, "testUpdateWithMissedVersion" );
-  deleteRemoteProject( mApiExtra, mUsername, "testMigrateProject" );
-  deleteRemoteProject( mApiExtra, mUsername, "testMigrateProjectAndSync" );
-  deleteRemoteProject( mApiExtra, mUsername, "testMigrateDetachProject" );
-  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSync" );
-  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncSubfolder" );
-  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncAddConfigToExistingProject" );
-  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncRemoveConfig" );
-  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncChangeSyncFolder" );
-  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncDisabledInConfig" );
-  deleteRemoteProject( mApiExtra, mUsername, "testSelectiveSyncCorruptedFormat" );
-  deleteRemoteProject( mApiExtra, mUsername, "testSynchronizationViaManager" );
-  deleteRemoteProject( mApiExtra, mUsername, "testAutosync" );
+  // Note: projects on the server are deleted in createRemoteProject function when needed
 
   deleteLocalDir( mApi, "testExcludeFromSync" );
 
@@ -141,6 +102,8 @@ void TestMerginApi::cleanupTestCase()
 void TestMerginApi::testListProject()
 {
   QString projectName = "testListProject";
+
+  deleteRemoteProjectNow(mApi, mWorkspaceName, projectName );
 
   // check that there's no testListProject
   MerginProjectsList projects = getProjectList();
@@ -2448,6 +2411,48 @@ void TestMerginApi::testRegisterAndDelete()
   QVERIFY( arguments.at( 0 ).toBool() == true );
 }
 
+void TestMerginApi::testCreateWorkspace()
+{
+  // we need to register new user for tests and assign its credentials to env vars
+  QString username = TestUtils::generateUsername();
+  QString password = TestUtils::generatePassword();
+  QString email = TestUtils::generateEmail();
+
+  qDebug() << "REGISTERING NEW TEST USER:" << username;
+
+  QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
+  mApi->registerUser( username, email, password, password, true );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( spy.count(), 1 );
+
+  QSignalSpy authSpy( mApi, &MerginApi::authChanged );
+  mApi->authorize( username, password );
+  QVERIFY( authSpy.wait( TestUtils::LONG_REPLY ) );
+  QVERIFY( !authSpy.isEmpty() );
+
+  // we also need to create a workspace for this user
+  QSignalSpy wsSpy( mApi, &MerginApi::workspaceCreated );
+  mApi->createWorkspace( username );
+  QVERIFY( wsSpy.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( wsSpy.takeFirst().at( 1 ), true );
+
+  qDebug() << "CREATED NEW WORKSPACE:" << username;
+
+  // call userInfo to set active workspace
+  QSignalSpy infoSpy( mApi, &MerginApi::userInfoReplyFinished );
+  mApi->getUserInfo();
+  QVERIFY( infoSpy.wait( TestUtils::LONG_REPLY ) );
+
+  QVERIFY( mApi->userInfo()->activeWorkspaceId() >= 0 );
+
+  // not possible to delete user because it has workspace
+  QSignalSpy spyDelete( mApi,  &MerginApi::accountDeleted );
+  mApi->deleteAccount();
+  QVERIFY( spyDelete.wait( TestUtils::LONG_REPLY ) );
+  QList<QVariant> arguments = spyDelete.takeFirst();
+  QVERIFY( arguments.at( 0 ).toBool() == false );
+}
+
 void TestMerginApi::testExcludeFromSync()
 {
   // Set selective sync directory
@@ -2573,12 +2578,62 @@ void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectN
   QVERIFY( QDir( projectDir ).isEmpty() );
 }
 
-void TestMerginApi::deleteRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName )
+QString TestMerginApi::projectIdFromProjectFullName( MerginApi *api, const QString &projectNamespace, const QString &projectName )
 {
-  QSignalSpy spy( api, &MerginApi::serverProjectDeleted );
-  api->deleteProject( projectNamespace, projectName );
+  QString ret;
+  if ( !api->validateAuth() || api->mApiVersionStatus != MerginApiStatus::OK || api->mServerType == MerginServerType::OLD )
+  {
+    return ret;
+  }
+
+  QString projectFullName = api->getFullProjectName( projectNamespace, projectName );
+
+  QNetworkReply *r = api->getProjectInfo( projectFullName );
+  Q_ASSERT( r );
+  QSignalSpy spy( r, &QNetworkReply::finished );
   spy.wait( TestUtils::SHORT_REPLY );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    QByteArray data = r->readAll();
+    MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
+    ret = serverProject.projectId;
+  }
+  else
+  {
+    qDebug() << "Project " << projectFullName << " probably does not exists on remote server";
+  }
+
+  r->deleteLater();
+  return ret;
 }
+
+void TestMerginApi::deleteRemoteProjectNow( MerginApi *api, const QString &projectNamespace, const QString &projectName )
+{
+  if ( !api->validateAuth() || api->mApiVersionStatus != MerginApiStatus::OK || api->mServerType == MerginServerType::OLD )
+  {
+    return;
+  }
+
+  QString projectId = projectIdFromProjectFullName(api, projectNamespace, projectName);
+  if (projectId.isEmpty())
+  {
+    // probably no such project exist on server
+    return;
+  }
+
+  QNetworkRequest request = api->getDefaultRequest();
+  QUrl url( api->mApiRoot + QStringLiteral( "/v2/project/%1" ).arg( projectId ) );
+  request.setUrl( url );
+
+  QNetworkReply *r = api->mManager.deleteResource( request );
+  QSignalSpy spy( r, &QNetworkReply::finished );
+  spy.wait( TestUtils::SHORT_REPLY );
+
+  QCOMPARE( r->error(), QNetworkReply::NoError );
+  r->deleteLater();
+}
+
 
 void TestMerginApi::deleteLocalProject( MerginApi *api, const QString &projectNamespace, const QString &projectName )
 {

@@ -81,6 +81,7 @@ class TestMerginApi: public QObject
     void testAutosyncFailure();
 
     void testRegisterAndDelete();
+    void testCreateWorkspace();
 
     // mergin functions
     void testExcludeFromSync();
@@ -100,6 +101,7 @@ class TestMerginApi: public QObject
     std::unique_ptr<ProjectsModel> mCreatedProjectsModel;
     std::unique_ptr<SynchronizationManager> mSyncManager;
     QString mUsername;
+    QString mWorkspaceName;
     QString mTestDataPath;
     //! extra API to do requests we are not testing (as if some other user did those)
     MerginApi *mApiExtra = nullptr;
@@ -109,10 +111,24 @@ class TestMerginApi: public QObject
     MerginProjectsList projectListFromSpy( QSignalSpy &spy );
     int serverVersionFromSpy( QSignalSpy &spy );
 
-    //! Creates a project on the server and pushes an initial version and removes the local copy.
+    /**
+     *  Creates a project on the server and pushes an initial version and removes the local copy.
+     *  Fails if such project already exist on the remote server.
+     *  \see deleteRemoteProjectNow
+     */
     void createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath );
-    //! Deletes a project on the server
-    void deleteRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
+
+    /**
+     * Gets project id from project full name
+     * Returns empty string if project is not found on server
+     */
+    QString projectIdFromProjectFullName( MerginApi *api, const QString &projectNamespace, const QString &projectName );
+
+    /**
+     * Immediately deletes a project on the server
+     * If project does not exists, it does nothing.
+     */
+    void deleteRemoteProjectNow( MerginApi *api, const QString &projectNamespace, const QString &projectName );
 
     //! Downloads a remote project to the local drive, extended version also sets server version
     void downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int &serverVersion );

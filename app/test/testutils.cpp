@@ -17,7 +17,7 @@
 #include "inpututils.h"
 #include "merginapi.h"
 
-void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password )
+void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password, QString &workspace )
 {
   Q_ASSERT( api );
 
@@ -31,52 +31,19 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
   // let's make sure we do not mess with the public instance
   Q_ASSERT( apiRoot != MerginApi::sDefaultApiRoot );
 
+  // Test user needs to be set
+  Q_ASSERT( ::getenv( "TEST_API_USERNAME" ) );
+
+  // Test password needs to be set
+  Q_ASSERT( ::getenv( "TEST_API_PASSWORD" ) );
+
   username = ::getenv( "TEST_API_USERNAME" );
   password = ::getenv( "TEST_API_PASSWORD" );
 
-  if ( username.isEmpty() )
-  {
-    // we need to register new user for tests and assign its credentials to env vars
-    username = generateUsername();
-    password = generatePassword();
-    QString email = generateEmail();
+  // This user needs to have active workspace
+  Q_ASSERT( !api->userInfo()->activeWorkspaceName().isEmpty() );
 
-    qDebug() << "REGISTERING NEW TEST USER:" << username;
-
-    QSignalSpy spy( api,  &MerginApi::registrationSucceeded );
-    api->registerUser( username, email, password, password, true );
-    QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
-    QCOMPARE( spy.count(), 1 );
-
-    // put it so in next local test run we can take it from
-    // the environment and we do not create another user
-    qputenv( "TEST_API_USERNAME", username.toLatin1() );
-    qputenv( "TEST_API_PASSWORD", password.toLatin1() );
-
-    QSignalSpy authSpy( api, &MerginApi::authChanged );
-    api->authorize( username, password );
-    QVERIFY( authSpy.wait( TestUtils::LONG_REPLY ) );
-    QVERIFY( !authSpy.isEmpty() );
-
-    // we also need to create a workspace for this user
-    QSignalSpy wsSpy( api, &MerginApi::workspaceCreated );
-    api->createWorkspace( username );
-    QVERIFY( wsSpy.wait( TestUtils::LONG_REPLY ) );
-    QCOMPARE( wsSpy.takeFirst().at( 1 ), true );
-
-    qDebug() << "CREATED NEW WORKSPACE:" << username;
-
-    // call userInfo to set active workspace
-    QSignalSpy infoSpy( api, &MerginApi::userInfoReplyFinished );
-    api->getUserInfo();
-    QVERIFY( infoSpy.wait( TestUtils::LONG_REPLY ) );
-
-    QVERIFY( api->userInfo()->activeWorkspaceId() >= 0 );
-
-  }
-
-  Q_ASSERT( ::getenv( "TEST_API_USERNAME" ) );
-  Q_ASSERT( ::getenv( "TEST_API_PASSWORD" ) );
+  workspace = api->userInfo()->activeWorkspaceName();
 
   qDebug() << "MERGIN USERNAME:" << username;
   qDebug() << "MERGIN WORKSPACE:" << api->userInfo()->activeWorkspaceName() << api->userInfo()->activeWorkspaceId();
