@@ -149,6 +149,7 @@ jobs:
       - name: run tests
         env:
           TEST_MERGIN_URL: https://test.dev.merginmaps.com/
+          TEST_API_USERNAME: test_mobileapp
           QT_QPA_PLATFORM: "offscreen"
         run: |
           cd build-Input-db/

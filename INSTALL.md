@@ -1,4 +1,4 @@
-Building Mergin Maps Input from source - step by step
+Building Mergin Maps mobile app from source - step by step
 
 
 # Table of Contents
@@ -16,7 +16,7 @@ Building Mergin Maps Input from source - step by step
 * [5. Building iOS](#5-building-ios)
 * [6. Building macOS](#6-building-macos)
 * [7. Building Windows](#7-building-windows)
-
+* [8. Auto Testing](#9-auto-testing)
 
 # 1. Introduction
 
@@ -372,3 +372,20 @@ set CL=/MP
 nmake
 ```
 
+# 8. Auto Testing
+
+You need to add cmake define `-DENABLE_TESTING=TRUE` on your cmake configure line.
+Also you need to open Passbolt and check for password for user `test_mobileapp_dev` on `test.dev.merginmaps.com`, 
+or you need some user with unlimited projects limit. 
+
+! Note that the same user cannot run tests in paraller ! 
+
+now you need to set environment variables: 
+```
+TEST_MERGIN_URL=test.dev.merginmaps.com
+TEST_API_USERNAME=test_mobileapp_dev
+TEST_API_PASSWORD=<your_password>
+```
+
+Build binary and you can run tests either with `ctest` or you can run individual tests by adding `--test<TestName>`
+e.g. ` ./input --testMerginApi`
