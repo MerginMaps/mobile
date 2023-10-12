@@ -149,6 +149,7 @@ jobs:
         env:
           TEST_MERGIN_URL: https://test.dev.merginmaps.com/
           TEST_API_USERNAME: test_mobileapp2
+          TEST_API_PASSWORD: ${{ secrets.TEST_API_PASSWORD }}
         run: |
           cd build-Input-db/
           ctest --output-on-failure
