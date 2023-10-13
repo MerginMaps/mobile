@@ -4,7 +4,6 @@ set(MM_CORE_SRCS
     merginapistatus.cpp
     merginsubscriptioninfo.cpp
     merginsubscriptionstatus.cpp
-    merginsubscriptiontype.cpp
     merginservertype.cpp
     merginprojectstatusmodel.cpp
     merginuserauth.cpp
@@ -23,7 +22,6 @@ set(MM_CORE_HDRS
     merginapistatus.h
     merginsubscriptioninfo.h
     merginsubscriptionstatus.h
-    merginsubscriptiontype.h
     merginservertype.h
     merginprojectstatusmodel.h
     merginuserauth.h

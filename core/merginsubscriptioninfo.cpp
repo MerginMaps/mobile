@@ -30,7 +30,6 @@ void MerginSubscriptionInfo::clearSubscriptionData()
 void MerginSubscriptionInfo::clearPlanInfo()
 {
   mPlanAlias = "";
-  mPlanProvider = MerginSubscriptionType::NoneSubscriptionType;
 
   // plan product Id might change from several sources, we need to emit its signal only when it has really changed
   if ( !mPlanProductId.isEmpty() )
@@ -38,8 +37,6 @@ void MerginSubscriptionInfo::clearPlanInfo()
     mPlanProductId = "";
     emit planProductIdChanged();
   }
-
-  emit planProviderChanged();
 }
 
 void MerginSubscriptionInfo::clear()
@@ -110,13 +107,6 @@ void MerginSubscriptionInfo::setFromJson( QJsonObject docObj )
     mOwnsActiveSubscription = planObj.value( QStringLiteral( "is_paid_plan" ) ).toBool();
     mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
 
-    MerginSubscriptionType::SubscriptionType planProvider = MerginSubscriptionType::fromString( planObj.value( QStringLiteral( "type" ) ).toString() );
-    if ( planProvider != mPlanProvider )
-    {
-      mPlanProvider = planProvider;
-      emit planProviderChanged();
-    }
-
     QString planProductId = planObj.value( QStringLiteral( "product_id" ) ).toString();
     if ( planProductId !=  mPlanProductId )
     {
@@ -156,12 +146,6 @@ void MerginSubscriptionInfo::setLocalizedPrice( const QString &price )
 int MerginSubscriptionInfo::subscriptionId() const
 {
   return mSubscriptionId;
-}
-
-
-MerginSubscriptionType::SubscriptionType MerginSubscriptionInfo::planProvider() const
-{
-  return mPlanProvider;
 }
 
 QString MerginSubscriptionInfo::planProductId() const
