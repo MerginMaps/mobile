@@ -1463,7 +1463,7 @@ void TestMerginApi::testMigrateProject()
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
   QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
 
-  mApi->migrateProjectToMergin( projectName );
+  mApi->migrateProjectToMergin( projectName, mWorkspaceName );
 
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
@@ -1510,7 +1510,7 @@ void TestMerginApi::testMigrateProjectAndSync()
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
   QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
 
-  mApi->migrateProjectToMergin( projectName );
+  mApi->migrateProjectToMergin( projectName, mWorkspaceName );
 
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
@@ -1568,7 +1568,7 @@ void TestMerginApi::testMigrateDetachProject()
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
   QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
 
-  mApi->migrateProjectToMergin( projectName );
+  mApi->migrateProjectToMergin( projectName, mWorkspaceName );
 
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
@@ -2408,6 +2408,10 @@ void TestMerginApi::testAutosyncFailure()
 
 void TestMerginApi::testRegisterAndDelete()
 {
+#if defined(USE_MERGIN_DUMMY_API_KEY)
+  QSKIP("testRegisterAndDelete requires USE_MM_SERVER_API_KEY");
+#endif
+
   QString password = mApi->userAuth()->password();
 
   QString quiteRandom = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
@@ -2442,6 +2446,9 @@ void TestMerginApi::testRegisterAndDelete()
 
 void TestMerginApi::testCreateWorkspace()
 {
+#if defined(USE_MERGIN_DUMMY_API_KEY)
+  QSKIP("testCreateWorkspace requires USE_MM_SERVER_API_KEY");
+#endif
   // we need to register new user for tests and assign its credentials to env vars
   QString username = TestUtils::generateUsername();
   QString password = TestUtils::generatePassword();
@@ -2450,9 +2457,13 @@ void TestMerginApi::testCreateWorkspace()
   qDebug() << "REGISTERING NEW TEST USER:" << username;
 
   QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
+  QSignalSpy spy2( mApi,  &MerginApi::registrationFailed );
   mApi->registerUser( username, email, password, password, true );
-  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( spy.count(), 1 );
+  bool success = spy.wait( TestUtils::LONG_REPLY );
+  if (!success) {
+     qDebug() << "Failed registration" << spy2.takeFirst();
+     QVERIFY( false );
+  }
 
   QSignalSpy authSpy( mApi, &MerginApi::authChanged );
   mApi->authorize( username, password );

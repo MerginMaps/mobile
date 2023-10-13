@@ -217,6 +217,14 @@ if (ENABLE_TESTS)
       test/testactiveproject.h
       test/testprojectchecksumcache.h
   )
+
+  if (NOT USE_MM_SERVER_API_KEY)
+    set_property(
+      SOURCE test/testmerginapi.cpp
+      PROPERTY COMPILE_DEFINITIONS
+        USE_MERGIN_DUMMY_API_KEY
+      )
+  endif ()
 endif ()
 
 if (IOS)
