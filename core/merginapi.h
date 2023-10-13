@@ -405,7 +405,12 @@ class MerginApi: public QObject
     // Test functions
     /**
     * Deletes the project of given namespace and name on Mergin server.
-    * Note that this deletion is not immediately done, but only scheduled.
+    * Note that this deletion is not immediately done,
+    * but only scheduled to be deleted in few days.
+    *
+    * TODO - we should use DEL /v2/projects/ if possible, see
+    * TestMerginApi::deleteRemoteProjectNow()
+    *
     * \param projectNamespace
     * \param projectName
     */

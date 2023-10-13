@@ -23,8 +23,17 @@ namespace TestUtils
   const int SHORT_REPLY = 5000;
   const int LONG_REPLY = 90000;
 
-  //! Use credentials from env variables
-  void mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password, QString &workspace );
+  //! authorize user and select the active workspace
+  void authorizeUser( MerginApi *api, const QString &username, const QString &password );
+
+  //! select the first workspace as active workspace
+  void selectFirstWorkspace( MerginApi *api, QString &workspace );
+
+  //! Get TEST user credentials from env variables
+  void merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QString &username, QString &password );
+
+  //! Whether we need to auth again
+  bool needsToAuthorizeAgain(MerginApi *api, const QString &username);
 
   QString generateUsername();
   QString generateEmail();

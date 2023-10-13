@@ -376,7 +376,7 @@ nmake
 
 You need to add cmake define `-DENABLE_TESTING=TRUE` on your cmake configure line.
 Also you need to open Passbolt and check for password for user `test_mobileapp_dev` on `test.dev.merginmaps.com`, 
-or you need some user with unlimited projects limit. 
+or you need some user with unlimited projects limit. First workspace from list is taken.
 
 ! Note that the same user cannot run tests in paraller ! 
 

@@ -56,11 +56,17 @@ TestMerginApi::~TestMerginApi() = default;
 
 void TestMerginApi::initTestCase()
 {
+
   QString apiRoot, username, password, workspace;
-  TestUtils::mergin_setup_auth( mApi, apiRoot, username, password, workspace );
+  TestUtils::merginGetAuthCredentials( mApi, apiRoot, username, password );
+  if (TestUtils::needsToAuthorizeAgain(mApi, username )) {
+    TestUtils::authorizeUser(mApi, username, password);
+    TestUtils::selectFirstWorkspace(mApi, workspace);
+  }
 
   mUsername = username;  // keep for later
   mWorkspaceName = workspace;  // keep for later
+  qDebug() << "AUTH: username:" << mUsername << ", workspace:" << mWorkspaceName;
 
   QDir testDataDir( TEST_DATA_DIR );
   mTestDataPath = testDataDir.canonicalPath();  // get rid of any ".." that may cause problems later
@@ -76,15 +82,14 @@ void TestMerginApi::initTestCase()
   // create extra API to do requests we are not testing (as if some other user did those)
   mLocalProjectsExtra = new LocalProjectsManager( projectsExtraDir );
   mApiExtra = new MerginApi( *mLocalProjectsExtra );
+
   mApiExtra->setApiRoot( mApi->apiRoot() );
-  QSignalSpy spyExtra( mApiExtra, &MerginApi::authChanged );
-  mApiExtra->authorize( username, password );
-  QVERIFY( spyExtra.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( spyExtra.count(), 1 );
+  if (TestUtils::needsToAuthorizeAgain(mApiExtra, username )) {
+    TestUtils::authorizeUser(mApiExtra, username, password);
+    mApiExtra->userInfo()->setActiveWorkspace(mApi->userInfo()->activeWorkspaceId());
+  }
 
   // Note: projects on the server are deleted in createRemoteProject function when needed
-
-  deleteLocalDir( mApi, "testExcludeFromSync" );
 
   qRegisterMetaType<LocalProject>();
 }
@@ -209,6 +214,9 @@ void TestMerginApi::testDownloadProjectSpecChars()
   QString projectNamespace = mWorkspaceName;
   QString projectDir = mApi->projectsPath() + "/" + projectName + "/";
 
+  // First remove project on remote server (from previous test runs)
+  deleteRemoteProjectNow(mApi, projectNamespace, projectName);
+
   // create an empty project on the server
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
   mApi->createProject( projectNamespace, projectName, true );
@@ -295,6 +303,9 @@ void TestMerginApi::testCreateProjectTwice()
   QString projectName = "testCreateProjectTwice";
   QString projectNamespace = mWorkspaceName;
 
+  // First remove project on remote server (from previous test runs)
+  deleteRemoteProjectNow(mApi, projectNamespace, projectName);
+
   MerginProjectsList projects = getProjectList();
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
@@ -323,10 +334,7 @@ void TestMerginApi::testCreateProjectTwice()
   QCOMPARE( arguments.at( 1 ).toString(), QStringLiteral( "Mergin API error: createProject" ) );
 
   //Clean created project
-  QSignalSpy spy3( mApi, &MerginApi::serverProjectDeleted );
-  mApi->deleteProject( projectNamespace, projectName );
-  QVERIFY( spy3.wait( TestUtils::SHORT_REPLY ) );
-  QCOMPARE( spy3.takeFirst().at( 1 ).toBool(), true );
+  deleteRemoteProjectNow(mApi, projectNamespace, projectName);
 
   projects = getProjectList();
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
@@ -356,6 +364,10 @@ void TestMerginApi::testCreateDeleteProject()
   // Create a project
   QString projectName = "testCreateDeleteProject";
   QString projectNamespace = mWorkspaceName;
+
+  // First remove project on remote server (from previous test runs)
+  deleteRemoteProjectNow(mApi, projectNamespace, projectName);
+
   MerginProjectsList projects = getProjectList();
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
@@ -372,10 +384,7 @@ void TestMerginApi::testCreateDeleteProject()
   Q_ASSERT( _findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
   // Delete created project
-  QSignalSpy spy2( mApi, &MerginApi::serverProjectDeleted );
-  mApi->deleteProject( projectNamespace, projectName );
-  QVERIFY( spy2.wait( TestUtils::SHORT_REPLY ) );
-  QCOMPARE( spy2.takeFirst().at( 1 ).toBool(), true );
+  deleteRemoteProjectNow(mApi, projectNamespace, projectName);
 
   projects = getProjectList();
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
@@ -386,6 +395,9 @@ void TestMerginApi::testUploadProject()
   QString projectName = "testUploadProject";
   QString projectNamespace = mWorkspaceName;
   QString projectDir = mApi->projectsPath() + "/" + projectName;
+
+  // clean leftovers from previous run first
+  deleteRemoteProjectNow(mApi, projectNamespace, projectName);
 
   QSignalSpy spy0( mApiExtra, &MerginApi::projectCreated );
   mApiExtra->createProject( projectNamespace, projectName, true );
@@ -902,7 +914,7 @@ void TestMerginApi::testConflictRemoteUpdateLocalUpdate()
 
   // verify the result: the server version should be in test1.txt
   // and the local version should go to "test1 (conflicted copy, <username> v<version>).txt"
-  QString conflictFilename = projectDir + "/test1 (conflicted copy, " + mWorkspaceName + " v1).txt";
+  QString conflictFilename = projectDir + "/test1 (conflicted copy, " + mUsername + " v1).txt";
   QCOMPARE( readFileContent( filename ), QByteArray( "remote content" ) );
   QCOMPARE( readFileContent( conflictFilename ), QByteArray( "local content" ) );
 
@@ -926,7 +938,7 @@ void TestMerginApi::testConflictRemoteUpdateLocalUpdate()
   // verify the result: the server version should be in test1.txt
   // and the local version should go to "test1 (conflicted copy, <username> v<version>).txt"
   // Note: test1.txt conflict file should still be the same
-  QString conflictFilename2 = projectDir + "/test1 (conflicted copy, " + mWorkspaceName + " v3).txt";
+  QString conflictFilename2 = projectDir + "/test1 (conflicted copy, " + mUsername + " v3).txt";
   QCOMPARE( readFileContent( filename ), QByteArray( "remote content 2" ) );
   QCOMPARE( readFileContent( conflictFilename ), QByteArray( "local content" ) );
   QCOMPARE( readFileContent( conflictFilename2 ), QByteArray( "local content 2" ) );
@@ -968,7 +980,7 @@ void TestMerginApi::testConflictRemoteAddLocalAdd()
 
   // verify the result: the server version should be in test1.txt
   // and the local version should go to conflicted copy file
-  QString conflictFilename = projectDir + "/test-new-file (conflicted copy, " + mWorkspaceName + " v1).txt";
+  QString conflictFilename = projectDir + "/test-new-file (conflicted copy, " + mUsername + " v1).txt";
   QCOMPARE( readFileContent( filename ), QByteArray( "new remote content" ) );
   QCOMPARE( readFileContent( conflictFilename ), QByteArray( "new local content" ) );
 }
@@ -1021,11 +1033,11 @@ void TestMerginApi::testEditConflictScenario()
   QDir projDir( projectDir );
 
   // check the edit conflict file presence
-  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).json" ).arg( mWorkspaceName ) ) );
+  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).json" ).arg( mUsername ) ) );
 
   // when client B downloads changes, he should also have that edit conflict file
   downloadRemoteProject( mApiExtra, mWorkspaceName, projectName );
-  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).json" ).arg( mWorkspaceName ) ) );
+  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).json" ).arg( mUsername ) ) );
 }
 
 void TestMerginApi::testUploadWithUpdate()
@@ -1332,7 +1344,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   //
   // check the result
   //
-  QString conflictFilename = "base (conflicted copy, " + mWorkspaceName + " v1).gpkg";
+  QString conflictFilename = "base (conflicted copy, " + mUsername + " v1).gpkg";
   QVERIFY( QFile::exists( projectDir + "/base.gpkg" ) );
   QVERIFY( QFile::exists( projectDir + "/" + conflictFilename ) );
 
@@ -1435,6 +1447,10 @@ void TestMerginApi::testUpdateWithMissedVersion()
 void TestMerginApi::testMigrateProject()
 {
   QString projectName = "testMigrateProject";
+
+  // clean leftovers from previous tests
+  deleteRemoteProjectNow(mApi, mWorkspaceName, projectName);
+
   // make local copy of project
   QString projectDir = mApi->projectsPath() + "/" + projectName;
   createLocalProject( projectDir );
@@ -1449,7 +1465,7 @@ void TestMerginApi::testMigrateProject()
 
   mApi->migrateProjectToMergin( projectName );
 
-  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
   QCOMPARE( mApi->transactions().count(), 1 );
@@ -1471,7 +1487,7 @@ void TestMerginApi::testMigrateProjectAndSync()
 {
   // When a new project is migrated to Mergin, creating basefiles for diffable files was omitted.
   // Therefore sync was not properly working resulting into having a conflict file.
-  // Test covers creting a new project, migrating it to Mergin and both sides sync.
+  // Test covers creating a new project, migrating it to Mergin and both sides sync.
 
   // 1. [main] create project with .gpkg (v1) file
   // 2. [main] migrate the project to mergin
@@ -1484,6 +1500,9 @@ void TestMerginApi::testMigrateProjectAndSync()
   QString projectDir = mApi->projectsPath() + "/" + projectName;
   QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
 
+  // clean leftovers from previous tests
+  deleteRemoteProjectNow(mApi, mWorkspaceName, projectName);
+
   // step 1
   createLocalProject( projectDir );
   mApi->mLocalProjects.reloadDataDir();
@@ -1493,7 +1512,7 @@ void TestMerginApi::testMigrateProjectAndSync()
 
   mApi->migrateProjectToMergin( projectName );
 
-  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
   QCOMPARE( mApi->transactions().count(), 1 );
@@ -1534,6 +1553,10 @@ void TestMerginApi::testMigrateProjectAndSync()
 void TestMerginApi::testMigrateDetachProject()
 {
   QString projectName = "testMigrateDetachProject";
+
+  // clean leftovers from previous tests
+  deleteRemoteProjectNow(mApi, mWorkspaceName, projectName);
+
   // make local copy of project
   QString projectDir = mApi->projectsPath() + "/" + projectName;
   createLocalProject( projectDir );
@@ -1547,7 +1570,7 @@ void TestMerginApi::testMigrateDetachProject()
 
   mApi->migrateProjectToMergin( projectName );
 
-  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
   QCOMPARE( mApi->transactions().count(), 1 );
@@ -2396,8 +2419,14 @@ void TestMerginApi::testRegisterAndDelete()
   mApi->clearAuth();
 
   QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
+  QSignalSpy spy2( mApi,  &MerginApi::registrationFailed );
   mApi->registerUser( username, email, password, password, true );
-  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
+  bool success = spy.wait( TestUtils::LONG_REPLY );
+  if (!success) {
+     qDebug() << "Failed registration" << spy2.takeFirst();
+     QVERIFY( false );
+  }
+
 
   QSignalSpy spyAuth( mApi->userAuth(),  &MerginUserAuth::authChanged );
   mApi->authorize( username, password );
@@ -2455,6 +2484,8 @@ void TestMerginApi::testCreateWorkspace()
 
 void TestMerginApi::testExcludeFromSync()
 {
+  deleteLocalDir( mApi, "testExcludeFromSync" );
+
   // Set selective sync directory
   QString selectiveSyncDir( mApi->projectsPath() + "/testExcludeFromSync" );
 
@@ -2542,6 +2573,11 @@ int TestMerginApi::serverVersionFromSpy( QSignalSpy &spy )
 
 void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath, bool force )
 {
+  if (force)
+  {
+    deleteRemoteProjectNow(api, projectNamespace, projectName);
+  }
+
   // create a project
   QSignalSpy spy( api, &MerginApi::projectCreated );
   api->createProject( projectNamespace, projectName, true );
@@ -2623,9 +2659,9 @@ void TestMerginApi::deleteRemoteProjectNow( MerginApi *api, const QString &proje
   }
 
   QNetworkRequest request = api->getDefaultRequest();
-  QUrl url( api->mApiRoot + QStringLiteral( "/v2/project/%1" ).arg( projectId ) );
+  QUrl url( api->mApiRoot + QStringLiteral( "/v2/projects/%1" ).arg( projectId ) );
   request.setUrl( url );
-
+  qDebug() << "Trying to delete project " << projectName << ", id: " << projectId << " (" << url << ")";
   QNetworkReply *r = api->mManager.deleteResource( request );
   QSignalSpy spy( r, &QNetworkReply::finished );
   spy.wait( TestUtils::SHORT_REPLY );
@@ -2692,7 +2728,10 @@ void TestMerginApi::writeFileContent( const QString &filename, const QByteArray 
 QByteArray TestMerginApi::readFileContent( const QString &filename )
 {
   QFile f( filename );
-  Q_ASSERT( f.exists() );
+  if (!f.exists()) {
+    qDebug() << "Filename " << filename << " does not exist";
+    Q_ASSERT(false);
+  }
   bool ok = f.open( QIODeviceBase::ReadOnly );
   Q_ASSERT( ok );
   QByteArray data = f.readAll();

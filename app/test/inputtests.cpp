@@ -185,7 +185,16 @@ int InputTests::runTest() const
   else if ( mTestRequested == "--testMerginApi" )
   {
     TestMerginApi merginApiTest( mApi );
-    nFailed = QTest::qExec( &merginApiTest, mTestArgs );
+    QStringList args = mTestArgs;
+    if (!args.contains("-maxwarnings"))
+    {
+      args << "-maxwarnings" << "0"; //show all debug output
+    }
+
+    // To pick just one particular test, uncomment
+    // following line and add function name
+    // args << "testRegisterAndDelete";
+    nFailed = QTest::qExec( &merginApiTest, args );
   }
   else
   {

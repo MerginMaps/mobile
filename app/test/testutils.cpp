@@ -17,7 +17,7 @@
 #include "inpututils.h"
 #include "merginapi.h"
 
-void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password, QString &workspace )
+void TestUtils::merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QString &username, QString &password )
 {
   Q_ASSERT( api );
 
@@ -39,15 +39,67 @@ void TestUtils::mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &us
 
   username = ::getenv( "TEST_API_USERNAME" );
   password = ::getenv( "TEST_API_PASSWORD" );
+}
+
+void TestUtils::authorizeUser(MerginApi *api, const QString &username, const QString &password)
+{
+  // Auth this user
+  QSignalSpy spyExtra( api, &MerginApi::authChanged );
+  api->authorize( username, password );
+  QVERIFY( spyExtra.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( spyExtra.count(), 1 );
+}
+
+void TestUtils::selectFirstWorkspace(MerginApi *api, QString &workspace)
+{
+  // Gets his workspaces
+  QSignalSpy spyExtraWs( api, &MerginApi::listWorkspacesFinished );
+  api->listWorkspaces();
+  QVERIFY( spyExtraWs.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( spyExtraWs.count(), 1 );
+
+  // Sets active workspace
+  Q_ASSERT( !api->userInfo()->workspaces().isEmpty() );
+  api->userInfo()->setActiveWorkspace(api->userInfo()->workspaces().firstKey());
 
   // This user needs to have active workspace
   Q_ASSERT( !api->userInfo()->activeWorkspaceName().isEmpty() );
 
   workspace = api->userInfo()->activeWorkspaceName();
 
-  qDebug() << "MERGIN USERNAME:" << username;
-  qDebug() << "MERGIN WORKSPACE:" << api->userInfo()->activeWorkspaceName() << api->userInfo()->activeWorkspaceId();
 }
+
+bool TestUtils::needsToAuthorizeAgain(MerginApi *api, const QString &username)
+{
+  Q_ASSERT(api);
+  // no auth at all
+  if ( !api->userAuth()->hasAuthData() )
+  {
+      return true;
+  }
+
+  // wrong user
+  if ( api->userAuth()->username() != username)
+  {
+      return true;
+  }
+
+  // no workspace
+  if (api->userInfo()->activeWorkspaceName().isEmpty())
+  {
+      return true;
+  }
+
+  // invalid token
+  if ( api->userAuth()->authToken().isEmpty() || api->userAuth()->tokenExpiration() < QDateTime().currentDateTime().toUTC() )
+  {
+      return true;
+  }
+
+  // we are OK
+  return false;
+}
+
 
 QString TestUtils::generateUsername()
 {
