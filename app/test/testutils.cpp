@@ -41,7 +41,7 @@ void TestUtils::merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QStr
   password = ::getenv( "TEST_API_PASSWORD" );
 }
 
-void TestUtils::authorizeUser(MerginApi *api, const QString &username, const QString &password)
+void TestUtils::authorizeUser( MerginApi *api, const QString &username, const QString &password )
 {
   // Auth this user
   QSignalSpy spyExtra( api, &MerginApi::authChanged );
@@ -50,7 +50,7 @@ void TestUtils::authorizeUser(MerginApi *api, const QString &username, const QSt
   QCOMPARE( spyExtra.count(), 1 );
 }
 
-void TestUtils::selectFirstWorkspace(MerginApi *api, QString &workspace)
+void TestUtils::selectFirstWorkspace( MerginApi *api, QString &workspace )
 {
   // Gets his workspaces
   QSignalSpy spyExtraWs( api, &MerginApi::listWorkspacesFinished );
@@ -60,7 +60,7 @@ void TestUtils::selectFirstWorkspace(MerginApi *api, QString &workspace)
 
   // Sets active workspace
   Q_ASSERT( !api->userInfo()->workspaces().isEmpty() );
-  api->userInfo()->setActiveWorkspace(api->userInfo()->workspaces().firstKey());
+  api->userInfo()->setActiveWorkspace( api->userInfo()->workspaces().firstKey() );
 
   // This user needs to have active workspace
   Q_ASSERT( !api->userInfo()->activeWorkspaceName().isEmpty() );
@@ -69,31 +69,31 @@ void TestUtils::selectFirstWorkspace(MerginApi *api, QString &workspace)
 
 }
 
-bool TestUtils::needsToAuthorizeAgain(MerginApi *api, const QString &username)
+bool TestUtils::needsToAuthorizeAgain( MerginApi *api, const QString &username )
 {
-  Q_ASSERT(api);
+  Q_ASSERT( api );
   // no auth at all
   if ( !api->userAuth()->hasAuthData() )
   {
-      return true;
+    return true;
   }
 
   // wrong user
-  if ( api->userAuth()->username() != username)
+  if ( api->userAuth()->username() != username )
   {
-      return true;
+    return true;
   }
 
   // no workspace
-  if (api->userInfo()->activeWorkspaceName().isEmpty())
+  if ( api->userInfo()->activeWorkspaceName().isEmpty() )
   {
-      return true;
+    return true;
   }
 
   // invalid token
   if ( api->userAuth()->authToken().isEmpty() || api->userAuth()->tokenExpiration() < QDateTime().currentDateTime().toUTC() )
   {
-      return true;
+    return true;
   }
 
   // we are OK

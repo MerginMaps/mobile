@@ -59,9 +59,10 @@ void TestMerginApi::initTestCase()
 
   QString apiRoot, username, password, workspace;
   TestUtils::merginGetAuthCredentials( mApi, apiRoot, username, password );
-  if (TestUtils::needsToAuthorizeAgain(mApi, username )) {
-    TestUtils::authorizeUser(mApi, username, password);
-    TestUtils::selectFirstWorkspace(mApi, workspace);
+  if ( TestUtils::needsToAuthorizeAgain( mApi, username ) )
+  {
+    TestUtils::authorizeUser( mApi, username, password );
+    TestUtils::selectFirstWorkspace( mApi, workspace );
   }
 
   mUsername = username;  // keep for later
@@ -84,9 +85,10 @@ void TestMerginApi::initTestCase()
   mApiExtra = new MerginApi( *mLocalProjectsExtra );
 
   mApiExtra->setApiRoot( mApi->apiRoot() );
-  if (TestUtils::needsToAuthorizeAgain(mApiExtra, username )) {
-    TestUtils::authorizeUser(mApiExtra, username, password);
-    mApiExtra->userInfo()->setActiveWorkspace(mApi->userInfo()->activeWorkspaceId());
+  if ( TestUtils::needsToAuthorizeAgain( mApiExtra, username ) )
+  {
+    TestUtils::authorizeUser( mApiExtra, username, password );
+    mApiExtra->userInfo()->setActiveWorkspace( mApi->userInfo()->activeWorkspaceId() );
   }
 
   // Note: projects on the server are deleted in createRemoteProject function when needed
@@ -215,7 +217,7 @@ void TestMerginApi::testDownloadProjectSpecChars()
   QString projectDir = mApi->projectsPath() + "/" + projectName + "/";
 
   // First remove project on remote server (from previous test runs)
-  deleteRemoteProjectNow(mApi, projectNamespace, projectName);
+  deleteRemoteProjectNow( mApi, projectNamespace, projectName );
 
   // create an empty project on the server
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
@@ -304,7 +306,7 @@ void TestMerginApi::testCreateProjectTwice()
   QString projectNamespace = mWorkspaceName;
 
   // First remove project on remote server (from previous test runs)
-  deleteRemoteProjectNow(mApi, projectNamespace, projectName);
+  deleteRemoteProjectNow( mApi, projectNamespace, projectName );
 
   MerginProjectsList projects = getProjectList();
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
@@ -334,7 +336,7 @@ void TestMerginApi::testCreateProjectTwice()
   QCOMPARE( arguments.at( 1 ).toString(), QStringLiteral( "Mergin API error: createProject" ) );
 
   //Clean created project
-  deleteRemoteProjectNow(mApi, projectNamespace, projectName);
+  deleteRemoteProjectNow( mApi, projectNamespace, projectName );
 
   projects = getProjectList();
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
@@ -366,7 +368,7 @@ void TestMerginApi::testCreateDeleteProject()
   QString projectNamespace = mWorkspaceName;
 
   // First remove project on remote server (from previous test runs)
-  deleteRemoteProjectNow(mApi, projectNamespace, projectName);
+  deleteRemoteProjectNow( mApi, projectNamespace, projectName );
 
   MerginProjectsList projects = getProjectList();
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
@@ -384,7 +386,7 @@ void TestMerginApi::testCreateDeleteProject()
   Q_ASSERT( _findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
   // Delete created project
-  deleteRemoteProjectNow(mApi, projectNamespace, projectName);
+  deleteRemoteProjectNow( mApi, projectNamespace, projectName );
 
   projects = getProjectList();
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
@@ -397,7 +399,7 @@ void TestMerginApi::testUploadProject()
   QString projectDir = mApi->projectsPath() + "/" + projectName;
 
   // clean leftovers from previous run first
-  deleteRemoteProjectNow(mApi, projectNamespace, projectName);
+  deleteRemoteProjectNow( mApi, projectNamespace, projectName );
 
   QSignalSpy spy0( mApiExtra, &MerginApi::projectCreated );
   mApiExtra->createProject( projectNamespace, projectName, true );
@@ -1449,7 +1451,7 @@ void TestMerginApi::testMigrateProject()
   QString projectName = "testMigrateProject";
 
   // clean leftovers from previous tests
-  deleteRemoteProjectNow(mApi, mWorkspaceName, projectName);
+  deleteRemoteProjectNow( mApi, mWorkspaceName, projectName );
 
   // make local copy of project
   QString projectDir = mApi->projectsPath() + "/" + projectName;
@@ -1501,7 +1503,7 @@ void TestMerginApi::testMigrateProjectAndSync()
   QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
 
   // clean leftovers from previous tests
-  deleteRemoteProjectNow(mApi, mWorkspaceName, projectName);
+  deleteRemoteProjectNow( mApi, mWorkspaceName, projectName );
 
   // step 1
   createLocalProject( projectDir );
@@ -1555,7 +1557,7 @@ void TestMerginApi::testMigrateDetachProject()
   QString projectName = "testMigrateDetachProject";
 
   // clean leftovers from previous tests
-  deleteRemoteProjectNow(mApi, mWorkspaceName, projectName);
+  deleteRemoteProjectNow( mApi, mWorkspaceName, projectName );
 
   // make local copy of project
   QString projectDir = mApi->projectsPath() + "/" + projectName;
@@ -2409,7 +2411,7 @@ void TestMerginApi::testAutosyncFailure()
 void TestMerginApi::testRegisterAndDelete()
 {
 #if defined(USE_MERGIN_DUMMY_API_KEY)
-  QSKIP("testRegisterAndDelete requires USE_MM_SERVER_API_KEY");
+  QSKIP( "testRegisterAndDelete requires USE_MM_SERVER_API_KEY" );
 #endif
 
   QString password = mApi->userAuth()->password();
@@ -2426,9 +2428,10 @@ void TestMerginApi::testRegisterAndDelete()
   QSignalSpy spy2( mApi,  &MerginApi::registrationFailed );
   mApi->registerUser( username, email, password, password, true );
   bool success = spy.wait( TestUtils::LONG_REPLY );
-  if (!success) {
-     qDebug() << "Failed registration" << spy2.takeFirst();
-     QVERIFY( false );
+  if ( !success )
+  {
+    qDebug() << "Failed registration" << spy2.takeFirst();
+    QVERIFY( false );
   }
 
 
@@ -2447,7 +2450,7 @@ void TestMerginApi::testRegisterAndDelete()
 void TestMerginApi::testCreateWorkspace()
 {
 #if defined(USE_MERGIN_DUMMY_API_KEY)
-  QSKIP("testCreateWorkspace requires USE_MM_SERVER_API_KEY");
+  QSKIP( "testCreateWorkspace requires USE_MM_SERVER_API_KEY" );
 #endif
   // we need to register new user for tests and assign its credentials to env vars
   QString username = TestUtils::generateUsername();
@@ -2460,9 +2463,10 @@ void TestMerginApi::testCreateWorkspace()
   QSignalSpy spy2( mApi,  &MerginApi::registrationFailed );
   mApi->registerUser( username, email, password, password, true );
   bool success = spy.wait( TestUtils::LONG_REPLY );
-  if (!success) {
-     qDebug() << "Failed registration" << spy2.takeFirst();
-     QVERIFY( false );
+  if ( !success )
+  {
+    qDebug() << "Failed registration" << spy2.takeFirst();
+    QVERIFY( false );
   }
 
   QSignalSpy authSpy( mApi, &MerginApi::authChanged );
@@ -2584,9 +2588,9 @@ int TestMerginApi::serverVersionFromSpy( QSignalSpy &spy )
 
 void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath, bool force )
 {
-  if (force)
+  if ( force )
   {
-    deleteRemoteProjectNow(api, projectNamespace, projectName);
+    deleteRemoteProjectNow( api, projectNamespace, projectName );
   }
 
   // create a project
@@ -2739,9 +2743,10 @@ void TestMerginApi::writeFileContent( const QString &filename, const QByteArray 
 QByteArray TestMerginApi::readFileContent( const QString &filename )
 {
   QFile f( filename );
-  if (!f.exists()) {
+  if ( !f.exists() )
+  {
     qDebug() << "Filename " << filename << " does not exist";
-    Q_ASSERT(false);
+    Q_ASSERT( false );
   }
   bool ok = f.open( QIODeviceBase::ReadOnly );
   Q_ASSERT( ok );

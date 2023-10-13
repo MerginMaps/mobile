@@ -186,7 +186,7 @@ int InputTests::runTest() const
   {
     TestMerginApi merginApiTest( mApi );
     QStringList args = mTestArgs;
-    if (!args.contains("-maxwarnings"))
+    if ( !args.contains( "-maxwarnings" ) )
     {
       args << "-maxwarnings" << "0"; //show all debug output
     }

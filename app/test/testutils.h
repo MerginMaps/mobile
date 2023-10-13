@@ -33,7 +33,7 @@ namespace TestUtils
   void merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QString &username, QString &password );
 
   //! Whether we need to auth again
-  bool needsToAuthorizeAgain(MerginApi *api, const QString &username);
+  bool needsToAuthorizeAgain( MerginApi *api, const QString &username );
 
   QString generateUsername();
   QString generateEmail();
