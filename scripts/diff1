@@ -1,0 +1,14 @@
+--- ../app/CMakeLists.txt	2023-10-13 11:41:25.191623176 +0000
++++ ../app/CMakeLists.txt	2023-10-13 11:41:26.903635331 +0000
+@@ -220,10 +220,8 @@
+ 
+   if (NOT USE_MM_SERVER_API_KEY)
+     set_property(
+-      SOURCE test/testmerginapi.cpp
+-      PROPERTY COMPILE_DEFINITIONS
+-        USE_MERGIN_DUMMY_API_KEY
+-      )
++      SOURCE test/testmerginapi.cpp PROPERTY COMPILE_DEFINITIONS USE_MERGIN_DUMMY_API_KEY
++    )
+   endif ()
+ endif ()
