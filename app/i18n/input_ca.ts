@@ -1258,7 +1258,7 @@ No s&apos;afegirà al projecte.</translation>
         <location filename="../../core/merginapi.cpp" line="222"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
-        <translation>Si us plau, elimineu alguns projectes donaqt qe l&apos;aplicació actualment
+        <translation>Si us plau, elimineu alguns projectes donat que l&apos;aplicació actualment
 només permet fins a %1 projectes baixats.</translation>
     </message>
     <message>
