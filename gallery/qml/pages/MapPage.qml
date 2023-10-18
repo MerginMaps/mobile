@@ -80,10 +80,17 @@ Page {
     }
   }
 
-  MMMapButton {
+  Column {
     anchors.right: parent.right
     anchors.bottom: parent.bottom
     anchors.rightMargin: 20
     anchors.bottomMargin: 50
+    spacing: 20
+
+    MMMapButton {
+    }
+
+    MMMapButton {
+    }
   }
 }

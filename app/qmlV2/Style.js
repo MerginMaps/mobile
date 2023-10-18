@@ -75,6 +75,12 @@ const closeButtonIcon = "qrc:/CloseButton.svg"
 const uploadImage = "qrc:/UploadImage.svg"
 const ReachedDataLimitImage = "qrc:/ReachedDataLimitImage.svg"
 
+// Shadow
+const shadowVerticalOffset = 3 * __dp
+const shadowHorizontalOffset = 2 * __dp
+const shadowRadius = 7 * __dp
+const shadowColor = "#66777777"
+
 // Spacing
 const commonSpacing = 20 * __dp
 
