@@ -81,6 +81,7 @@ class FormItem
       int parentTabId,
       FormItem::FormItemType type,
       const QString &name,
+      const QgsExpression &visibilityExpression,
       const QgsRelation &relation
     );
 

@@ -302,6 +302,7 @@ void AttributeController::flatten(
               parentTabRow,
               FormItem::Relation,
               label,
+              parentVisibilityExpressions, // relation field doesn't have visibility expression itself
               associatedRelation
             )
           );

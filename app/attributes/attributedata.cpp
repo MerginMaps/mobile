@@ -71,14 +71,14 @@ FormItem *FormItem::createFieldItem(
          );
 }
 
-FormItem *FormItem::createRelationItem(
-  const QUuid &id,
-  const QString &groupName,
-  int parentTabId,
-  FormItemType type,
-  const QString &name,
-  const QgsRelation &relation
-)
+FormItem *FormItem::createRelationItem( const QUuid &id,
+                                        const QString &groupName,
+                                        int parentTabId,
+                                        FormItemType type,
+                                        const QString &name,
+                                        const QgsExpression &visibilityExpression,
+                                        const QgsRelation &relation
+                                      )
 {
   FormItem *item = new FormItem(
     id,
@@ -90,7 +90,7 @@ FormItem *FormItem::createRelationItem(
     true,
     QgsEditorWidgetSetup(),
     -1,
-    QgsExpression(),
+    visibilityExpression,
     relation
   );
   return item;
