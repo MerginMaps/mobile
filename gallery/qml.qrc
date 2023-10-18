@@ -19,6 +19,9 @@
         <file>../app/qmlV2/component/MMCheckBox.qml</file>
         <file>../app/qmlV2/component/MMRadioButton.qml</file>
         <file>../app/qmlV2/component/MMSwitch.qml</file>
+        <file>qml/pages/NotificationPage.qml</file>
+        <file>../app/qmlV2/component/MMNotification.qml</file>
+        <file>../app/qmlV2/component/MMNotificationView.qml</file>
         <file>../app/qmlV2/component/MMDrawer.qml</file>
         <file>qml/pages/DrawerPage.qml</file>
         <file>qml/pages/ChecksPage.qml</file>

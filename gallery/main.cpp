@@ -16,6 +16,7 @@
 #include "helper.h"
 #include <QFont>
 #include <QFontDatabase>
+#include "notificationmodel.h"
 
 int main( int argc, char *argv[] )
 {
@@ -29,6 +30,9 @@ int main( int argc, char *argv[] )
   HotReload hotReload( engine );
   engine.rootContext()->setContextProperty( "_hotReload", &hotReload );
 #endif
+
+  NotificationModel notificationModel;
+  engine.rootContext()->setContextProperty("notificationModel", &notificationModel);
 
   // path to local wrapper pages
   engine.rootContext()->setContextProperty( "_qmlWrapperPath", QGuiApplication::applicationDirPath() + "/HotReload/qml/pages/" );

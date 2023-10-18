@@ -15,13 +15,15 @@ import "../Style.js" as Style
 Item {
   id: control
 
-  enum Type { Normal, Password, Search, Calendar, Scan, CopyButton }
+  enum Type { Normal, Password, Search, Calendar, Scan, CopyButton, SendButton }
 
   property int type: MMInput.Type.Normal
   property alias text: textField.text
   property alias placeholderText: textField.placeholderText
   property string warningMsg
   property string errorMsg
+
+  signal sendButtonClicked
 
   width: 280 * __dp
   height: rect.height + messageItem.height
@@ -120,7 +122,7 @@ Item {
         height: rect.height
         visible: control.type === MMInput.Type.Password ||
                  control.type === MMInput.Type.Scan ||
-                 ((control.type !== MMInput.Type.CopyButton) && textField.activeFocus && textField.text.length>0)
+                 ((control.type !== MMInput.Type.CopyButton || control.type !== MMInput.Type.SendButton) && textField.activeFocus && textField.text.length>0)
 
         MouseArea {
           anchors.fill: parent
@@ -140,13 +142,13 @@ Item {
       Button {
         id: button
 
-        visible: control.type === MMInput.Type.CopyButton
+        visible: control.type === MMInput.Type.CopyButton || control.type === MMInput.Type.SendButton
         anchors.verticalCenter: parent.verticalCenter
 
         contentItem: Text {
           anchors.centerIn: button
           font: Qt.font(Style.t5)
-          text: qsTr("Copy")
+          text: control.type === MMInput.Type.CopyButton ? qsTr("Copy") : qsTr("Send")
           leftPadding: 2 * __dp
           rightPadding: 2 * __dp
           topPadding: 2 * __dp
@@ -163,9 +165,14 @@ Item {
         }
 
         onClicked: {
-          textField.selectAll()
-          textField.copy()
-          textField.deselect()
+          if(control.type === MMInput.Type.CopyButton) {
+            textField.selectAll()
+            textField.copy()
+            textField.deselect()
+          }
+          else if(control.type === MMInput.Type.SendButton) {
+            sendButtonClicked()
+          }
         }
       }
 
