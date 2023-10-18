@@ -31,22 +31,28 @@ Page {
       type: MMInput.Type.SendButton
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write an informative message"
-      onSendButtonClicked: { notificationModel.add(text, 100, NotificationType.Information); text = "" }
+      onSendButtonClicked: { notificationModel.add(text, 60, NotificationType.Information); text = "" }
+    }
+    MMInput {
+      type: MMInput.Type.SendButton
+      anchors.horizontalCenter: parent.horizontalCenter
+      placeholderText: "Write a success message"
+      onSendButtonClicked: { notificationModel.add(text, 60, NotificationType.Success); text = "" }
     }
     MMInput {
       type: MMInput.Type.SendButton
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write a warning message"
-      onSendButtonClicked: { notificationModel.add(text, 100, NotificationType.Warning); text = "" }
+      onSendButtonClicked: { notificationModel.add(text, 60, NotificationType.Warning); text = "" }
     }
     MMInput {
       type: MMInput.Type.SendButton
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write an error message"
-      onSendButtonClicked: { notificationModel.add(text, 100, NotificationType.Error); text = "" }
+      onSendButtonClicked: { notificationModel.add(text, 60, NotificationType.Error); text = "" }
     }
     Text {
-      text: "Note: Notification will be removed in 10s"
+      text: "Note: Notification will be removed in 1 minute"
       anchors.horizontalCenter: parent.horizontalCenter
       color: "green"
     }

@@ -21,6 +21,7 @@ class NotificationType
 
   enum MessageType {
     Information,
+    Success,
     Warning,
     Error
   };
