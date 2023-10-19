@@ -93,4 +93,13 @@ Page {
     MMMapButton {
     }
   }
+
+  MMMapLabel {
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    anchors.leftMargin: 20
+    anchors.bottomMargin: 50
+
+    text: "20.0 m"
+  }
 }

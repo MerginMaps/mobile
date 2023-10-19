@@ -27,5 +27,6 @@
         <file>qml/pages/MapPage.qml</file>
         <file>../app/qmlV2/component/MMMapButton.qml</file>
         <file>../app/qmlV2/component/MMShadow.qml</file>
+        <file>../app/qmlV2/component/MMMapLabel.qml</file>
     </qresource>
 </RCC>
