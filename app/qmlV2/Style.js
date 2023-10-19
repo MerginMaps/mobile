@@ -70,6 +70,10 @@ const arrowDownIcon = "qrc:/Arrow Down.svg"
 const qrCodeIcon = "qrc:/QR Code.svg"
 const checkmarkIcon = "qrc:/Checkmark.svg"
 const closeButtonIcon = "qrc:/CloseButton.svg"
+const deleteIcon = "qrc:/Delete.svg"
+const doneIcon = "qrc:/Done.svg"
+const editIcon = "qrc:/Edit.svg"
+const moreIcon = "qrc:/More.svg"
 
 // Images
 const uploadImage = "qrc:/UploadImage.svg"
@@ -77,6 +81,10 @@ const ReachedDataLimitImage = "qrc:/ReachedDataLimitImage.svg"
 
 // Spacing
 const commonSpacing = 20 * __dp
+
+// Bottom bar
+const bottomBarHeight = 89 * __dp
+const minimumBottomBarButtonWidth = 100 * __dp
 
 function dynamicText() {
   return "Dynamic text"
