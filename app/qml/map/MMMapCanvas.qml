@@ -177,14 +177,26 @@ Item {
           clickDifferentiatorTimer.clickedPoint = Qt.point( mouse.x, mouse.y )
         }
         else {
+          //
           // n-th click in a row (second, third,..)
+          // this can be double click if it is in a reasonable
+          // distance from the previous click
+          //
 
-          // do not emit clicked signal for the second click
-          mouse.accepted = true
+          let isDoubleClick = false
+          let previousTapPosition = clickDifferentiatorTimer.clickedPoint
 
-          clickDifferentiatorTimer.invalidate = true
+          if ( previousTapPosition ) {
+            let tapDistance = rendererPrivate.vectorDistance( clickPosition, previousTapPosition )
+            isDoubleClick = tapDistance < mouseArea.drag.threshold
+          }
 
-          mapRenderer.zoom( Qt.point( mouse.x, mouse.y ), 0.4 )
+          if ( isDoubleClick ) {
+            // do not emit clicked signal when zooming
+            clickDifferentiatorTimer.invalidate = true
+
+            mapRenderer.zoom( Qt.point( mouse.x, mouse.y ), 0.4 )
+          }
         }
 
         if ( !isDragging ) {
@@ -231,7 +243,9 @@ Item {
         previousPosition = target
 
         let dragDistance = rendererPrivate.vectorDistance( initialPosition, target )
-        if ( dragDistance > drag.threshold ) {
+
+        // TODO: we need a high-precision mode here
+        if ( dragDistance > mouseArea.drag.threshold ) {
           isDragging = true
 
           // do not emit click after drag
@@ -256,7 +270,7 @@ Item {
       Timer {
         id: clickDifferentiatorTimer
 
-        property point clickedPoint
+        property var clickedPoint
         property bool invalidate
 
         interval: mapRoot.doubleClickThresholdMilis
@@ -267,6 +281,7 @@ Item {
             mapRoot.clicked( clickedPoint )
           }
           invalidate = false
+          clickedPoint = null
         }
 
         function reset() {
