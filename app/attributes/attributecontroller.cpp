@@ -29,6 +29,7 @@
 #include "qgsvectorlayerutils.h"
 #include "qgsattributeeditorspacerelement.h"
 #include "qgsattributeeditortextelement.h"
+#include "qgsattributeeditorhtmlelement.h"
 #include "qgsvectorlayereditbuffer.h"
 #include "qgsexpressioncontextutils.h"
 #include "qgsrelation.h"
@@ -349,13 +350,14 @@ void AttributeController::flatten(
         const QString groupName = container->isGroupBox() ? container->name() : QString();
         std::shared_ptr<FormItem> formItemData =
           std::shared_ptr<FormItem>(
-            FormItem::createTextItem(
+            FormItem::createRichTextItem(
               fieldUuid,
               groupName,
               parentTabRow,
               textElement->name(),
               textElement->showLabel(),
               textElement->text(),
+              false,
               parentVisibilityExpressions // text doesn't have visibility expression itself
             )
           );
@@ -365,8 +367,36 @@ void AttributeController::flatten(
         items.append( fieldUuid );
         break;
       }
+      case Qgis::AttributeEditorType::HtmlElement:
+      {
+        QUuid fieldUuid = QUuid::createUuid();
+
+        QgsAttributeEditorHtmlElement *htmlElement = static_cast<QgsAttributeEditorHtmlElement *>( element );
+
+
+        const QString groupName = container->isGroupBox() ? container->name() : QString();
+        std::shared_ptr<FormItem> formItemData =
+          std::shared_ptr<FormItem>(
+            FormItem::createRichTextItem(
+              fieldUuid,
+              groupName,
+              parentTabRow,
+              htmlElement->name(),
+              htmlElement->showLabel(),
+              htmlElement->htmlCode(),
+              true,
+              parentVisibilityExpressions // text doesn't have visibility expression itself
+            )
+          );
+
+        mFormItems[formItemData->id()] = formItemData;
+
+        items.append( fieldUuid );
+        break;
+      }
+
       default:
-        // Invalid, Action, QmlElement, HtmlElement
+        // Invalid, Action, QmlElement
         // are not supported at the moment
         break;
     }

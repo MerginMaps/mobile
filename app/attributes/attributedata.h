@@ -46,7 +46,7 @@ class FormItem
       Relation,
       Field,
       Spacer,
-      Text
+      RichText
     };
     Q_ENUMS( FormItemType )
 
@@ -97,13 +97,14 @@ class FormItem
       const QgsExpression &visibilityExpression
     );
 
-    static FormItem *createTextItem(
+    static FormItem *createRichTextItem(
       const QUuid &id,
       const QString &groupName,
       int parentTabId,
       const QString &name,
       bool showName,
       const QString &text,
+      bool isHtml,
       const QgsExpression &visibilityExpression
     );
 

@@ -110,38 +110,47 @@ FormItem *FormItem::createSpacerItem(
   QVariantMap map;
   map["IsHLine"] = isHLine;
   map["ConfigType"] = "merginmaps-custom-config";
-  QgsEditorWidgetSetup config("spacer", map);
+  QgsEditorWidgetSetup config( "spacer", map );
 
   return new FormItem(
-    id,
-    QgsField(),
-    groupName,
-    parentTabId,
-    FormItem::Spacer,
-    name,
-    false, // label is never shown for spacer
-    false,
-    config,
-    -1,
-    visibilityExpression,
-    QgsRelation()
-  );
+           id,
+           QgsField(),
+           groupName,
+           parentTabId,
+           FormItem::Spacer,
+           name,
+           false, // label is never shown for spacer
+           false,
+           config,
+           -1,
+           visibilityExpression,
+           QgsRelation()
+         );
 }
 
-FormItem *FormItem::createTextItem( const QUuid &id, const QString &groupName, int parentTabId, const QString &name, bool showName, const QString &text, const QgsExpression &visibilityExpression )
+FormItem *FormItem::createRichTextItem(
+  const QUuid &id,
+  const QString &groupName,
+  int parentTabId,
+  const QString &name,
+  bool showName,
+  const QString &text,
+  bool isHtml,
+  const QgsExpression &visibilityExpression
+)
 {
   QVariantMap map;
-  map["UseHtml"] = false;
+  map["UseHtml"] = isHtml;
   map["ConfigType"] = "merginmaps-custom-config";
 
-  QgsEditorWidgetSetup config("text", map);
+  QgsEditorWidgetSetup config( "richtext", map );
 
-  FormItem* fi = new FormItem(
+  FormItem *fi = new FormItem(
     id,
     QgsField(),
     groupName,
     parentTabId,
-    FormItem::Text,
+    FormItem::RichText,
     name,
     showName,
     false,
@@ -151,7 +160,7 @@ FormItem *FormItem::createTextItem( const QUuid &id, const QString &groupName, i
     QgsRelation()
   );
 
-  fi->setRawValue(text);
+  fi->setRawValue( text );
   return fi;
 }
 
@@ -174,9 +183,6 @@ QString FormItem::editorWidgetType() const
 {
   if ( mType == FormItem::Relation )
     return QStringLiteral( "relation" );
-
-  if ( mType == FormItem::Spacer )
-    return QStringLiteral( "spacer" );
 
   return mEditorWidgetSetup.type();
 }

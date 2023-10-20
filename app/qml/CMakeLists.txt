@@ -51,7 +51,7 @@ set(MM_QML
     editor/inputrangeslider.qml
     editor/inputrelation.qml
     editor/inputrelationreference.qml
-    editor/inputtext.qml
+    editor/inputrichtext.qml
     editor/inputtextedit.qml
     editor/inputtexteditmultiline.qml
     editor/inputvaluemap.qml

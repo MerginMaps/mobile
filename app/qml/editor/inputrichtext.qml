@@ -18,14 +18,15 @@ Item {
   /*required*/ property var parentValue: parent.value
   /*required*/ property var config: parent.config
 
-  height: textArea.topPadding + textArea.bottomPadding + textArea.contentHeight
+  height: textArea.topMargin + textArea.bottomMargin + textArea.contentHeight
+  width: parent.width
 
   Rectangle { // background
-    width: parent.width
-    height: parent.height
+    width: root.width
+    height: root.height
     border.color: customStyle.fields.normalColor
     border.width: 1 * __dp
-    color: customStyle.fields.backgroundColor
+    color: "red" // customStyle.fields.backgroundColor
     radius: customStyle.fields.cornerRadius
   }
 
@@ -39,14 +40,14 @@ Item {
     text: root.parentValue !== undefined ? root.parentValue : ''
     textFormat: config['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
 
-    width: parent.width
+    width: root.width
 
-    anchors.fill: parent
-
-    topPadding: customStyle.fields.height * 0.25
-    bottomPadding: customStyle.fields.height * 0.25
-    leftPadding: customStyle.fields.sideMargin
-    rightPadding: customStyle.fields.sideMargin
+    anchors {
+      leftMargin: customStyle.fields.sideMargin
+      rightMargin: customStyle.fields.sideMargin
+      topMargin: customStyle.fields.height * 0.25
+      bottomMargin: customStyle.fields.height * 0.25
+    }
 
     onLinkActivated: function( link ) {
       Qt.openUrlExternally( link )
