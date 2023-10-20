@@ -435,6 +435,7 @@ void AttributeController::clearAll()
   mFormItems.clear();
   mTabItems.clear();
   mExpressionFieldsOutsideForm.clear();
+  mVirtualFieldsOutsideForm.clear();
   mHasTabs = false;
 }
 
@@ -537,6 +538,11 @@ void AttributeController::updateOnLayerChange()
       {
         mExpressionFieldsOutsideForm << i;
       }
+
+      if ( mFeatureLayerPair.layer()->fields().fieldOrigin( i ) == QgsFields::OriginExpression )
+      {
+        mVirtualFieldsOutsideForm << i;
+      }
     }
   }
 
@@ -631,7 +637,60 @@ void AttributeController::acquireId()
   disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
 }
 
-bool AttributeController::recalculateDefaultValues(
+void AttributeController::evaluateExpressionAndUpdateValue( QSet<QUuid> &changedFormItems,
+    const QString &expressionString, QgsExpressionContext &expressionContext, int fieldIndex, const QgsField &field, std::shared_ptr<FormItem> formItem )
+{
+  QgsExpression exp( expressionString );
+
+  exp.prepare( &expressionContext );
+  if ( exp.hasParserError() )
+    QgsMessageLog::logMessage( tr( "Expression for %1:%2 has parser error: %3" ).arg(
+                                 mFeatureLayerPair.layer()->name(),
+                                 field.name(),
+                                 exp.parserErrorString() ),
+                               QStringLiteral( "Input" ),
+                               Qgis::Warning );
+
+  QVariant value = exp.evaluate( &expressionContext );
+
+  if ( exp.hasEvalError() )
+    QgsMessageLog::logMessage( tr( "Expression for %1:%2 has evaluation error: %3" ).arg(
+                                 mFeatureLayerPair.layer()->name(),
+                                 field.name(),
+                                 exp.evalErrorString() ),
+                               QStringLiteral( "Input" ),
+                               Qgis::Warning );
+  else
+  {
+    QVariant val( value );
+    if ( !field.convertCompatible( val ) )
+    {
+      QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
+      QgsMessageLog::logMessage( msg );
+    }
+    else
+    {
+      QVariant oldVal = mFeatureLayerPair.feature().attribute( fieldIndex );
+
+      if ( val != oldVal )
+      {
+        mFeatureLayerPair.featureRef().setAttribute( fieldIndex, val );
+
+        if ( formItem )
+        {
+          formItem->setRawValue( val );
+          emit formDataChanged( formItem->id(), { AttributeFormModel::RawValue, AttributeFormModel::RawValueIsNull } );
+          changedFormItems.insert( formItem->id() );
+        }
+
+        // Update also expression context after an attribute change
+        expressionContext.setFeature( featureLayerPair().featureRef() );
+      }
+    }
+  }
+}
+
+void AttributeController::recalculateDefaultValues(
   QSet<QUuid> &changedFormItems,
   QgsExpressionContext &expressionContext,
   bool isFormValueChange,
@@ -650,48 +709,21 @@ bool AttributeController::recalculateDefaultValues(
 
     if ( shouldApplyDefaultValue )
     {
-      QgsExpression exp( defaultDefinition.expression() );
-      exp.prepare( &expressionContext );
-      if ( exp.hasParserError() )
-        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has parser error: %3" ).arg(
-                                     mFeatureLayerPair.layer()->name(),
-                                     f.name(),
-                                     exp.parserErrorString() ),
-                                   QStringLiteral( "Input" ),
-                                   Qgis::Warning );
-
-      QVariant value = exp.evaluate( &expressionContext );
-
-      if ( exp.hasEvalError() )
-        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has evaluation error: %3" ).arg(
-                                     mFeatureLayerPair.layer()->name(),
-                                     f.name(),
-                                     exp.evalErrorString() ),
-                                   QStringLiteral( "Input" ),
-                                   Qgis::Warning );
-      else
-      {
-        QVariant val( value );
-        if ( !f.convertCompatible( val ) )
-        {
-          QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), f.name(), f.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
-          QgsMessageLog::logMessage( msg );
-        }
-        else
-        {
-          mFeatureLayerPair.featureRef().setAttribute( idx, val );
-          expressionContext.setFeature( featureLayerPair().featureRef() );
-        }
-      }
+      evaluateExpressionAndUpdateValue( changedFormItems,
+                                        defaultDefinition.expression(),
+                                        expressionContext,
+                                        idx,
+                                        f,
+                                        nullptr );
     }
   }
 
   // evaluate default values for fields in the form
-  bool hasChanges = false;
   QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
   {
     std::shared_ptr<FormItem> item = formItemsIterator.value();
+
     const QgsField field = item->field();
     const QgsDefaultValue defaultDefinition = field.defaultValueDefinition();
 
@@ -701,49 +733,12 @@ bool AttributeController::recalculateDefaultValues(
 
     if ( shouldApplyDefaultValue )
     {
-      QgsExpression exp( field.defaultValueDefinition().expression() );
-      exp.prepare( &expressionContext );
-      if ( exp.hasParserError() )
-        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has parser error: %3" ).arg(
-                                     mFeatureLayerPair.layer()->name(),
-                                     field.name(),
-                                     exp.parserErrorString() ),
-                                   QStringLiteral( "Input" ),
-                                   Qgis::Warning );
-
-      QVariant value = exp.evaluate( &expressionContext );
-
-      if ( exp.hasEvalError() )
-        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has evaluation error: %3" ).arg(
-                                     mFeatureLayerPair.layer()->name(),
-                                     field.name(),
-                                     exp.evalErrorString() ),
-                                   QStringLiteral( "Input" ),
-                                   Qgis::Warning );
-      else
-      {
-        QVariant val( value );
-        if ( !field.convertCompatible( val ) )
-        {
-          QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
-          QgsMessageLog::logMessage( msg );
-        }
-        else
-        {
-          QVariant oldVal = mFeatureLayerPair.feature().attribute( item->fieldIndex() );
-
-          if ( val != oldVal )
-          {
-            mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
-            item->setRawValue( val );
-            emit formDataChanged( item->id(), { AttributeFormModel::RawValue, AttributeFormModel::RawValueIsNull } );
-            // Update also expression context after an attribute change
-            expressionContext.setFeature( featureLayerPair().featureRef() );
-            changedFormItems.insert( item->id() );
-            hasChanges = true;
-          }
-        }
-      }
+      evaluateExpressionAndUpdateValue( changedFormItems,
+                                        defaultDefinition.expression(),
+                                        expressionContext,
+                                        item->fieldIndex(),
+                                        field,
+                                        nullptr );
     }
 
     if ( isFirstUpdateOfNewFeature )
@@ -771,10 +766,45 @@ bool AttributeController::recalculateDefaultValues(
         changedFormItems.insert( item->id() );
       }
     }
-
     ++formItemsIterator;
   }
-  return hasChanges;
+}
+
+void AttributeController::recalculateVirtualFields( QSet<QUuid> &changedFormItems, QgsExpressionContext &expressionContext )
+{
+  // update default values for fields which are not in the form
+  for ( const int idx : mVirtualFieldsOutsideForm )
+  {
+    QgsField f = mFeatureLayerPair.layer()->fields().at( idx );
+    QString expressionString = mFeatureLayerPair.layer()->expressionField( idx );
+    evaluateExpressionAndUpdateValue( changedFormItems,
+                                      expressionString,
+                                      expressionContext,
+                                      idx,
+                                      f,
+                                      nullptr );
+  }
+
+  // evaluate virtual fields in the form
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+  while ( formItemsIterator != mFormItems.end() )
+  {
+    std::shared_ptr<FormItem> item = formItemsIterator.value();
+
+    const QgsField field = item->field();
+
+    if ( mFeatureLayerPair.layer()->fields().fieldOrigin( item->fieldIndex() ) == QgsFields::OriginExpression )
+    {
+      QString expressionString = mFeatureLayerPair.layer()->expressionField( item->fieldIndex() );
+      evaluateExpressionAndUpdateValue( changedFormItems,
+                                        expressionString,
+                                        expressionContext,
+                                        item->fieldIndex(),
+                                        field,
+                                        nullptr );
+    }
+    ++formItemsIterator;
+  }
 }
 
 void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool isFirstUpdateOfNewFeature )
@@ -798,22 +828,11 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   expressionContext.setFields( fields );
   expressionContext.setFeature( featureLayerPair().featureRef() );
 
+  // Evalueate virtual fields
+  recalculateVirtualFields( changedFormItems, expressionContext );
+
   // Evaluate default values
-  // it could be recursive, so
-  // let say try few times
-  const int LIMIT = 3;
-  int tryNumber = 0;
-  bool anyValueChanged = true;
-  while ( anyValueChanged && tryNumber < LIMIT )
-  {
-    anyValueChanged = recalculateDefaultValues( changedFormItems, expressionContext, isFormValueChange, isFirstUpdateOfNewFeature );
-    ++tryNumber;
-  }
-  if ( anyValueChanged )
-  {
-    // ok we cut the loop on limit...
-    qDebug() << "Evaluation of default values was not finished in " << LIMIT << " tries. Giving up, sorry!";
-  }
+  recalculateDefaultValues( changedFormItems, expressionContext, isFormValueChange, isFirstUpdateOfNewFeature );
 
   // Evaluate HTML and Text element expressions
   recalculateRichTextWidgets( changedFormItems, expressionContext );
