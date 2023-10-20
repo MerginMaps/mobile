@@ -18,7 +18,7 @@ Item {
   /*required*/ property var parentValue: parent.value
   /*required*/ property var config: parent.config
 
-  height: textArea.topMargin + textArea.bottomMargin + textArea.contentHeight
+  height: textArea.height
   width: parent.width
 
   Rectangle { // background
@@ -26,7 +26,7 @@ Item {
     height: root.height
     border.color: customStyle.fields.normalColor
     border.width: 1 * __dp
-    color: "red" // customStyle.fields.backgroundColor
+    color: customStyle.fields.backgroundColor
     radius: customStyle.fields.cornerRadius
   }
 
@@ -42,12 +42,10 @@ Item {
 
     width: root.width
 
-    anchors {
-      leftMargin: customStyle.fields.sideMargin
-      rightMargin: customStyle.fields.sideMargin
-      topMargin: customStyle.fields.height * 0.25
-      bottomMargin: customStyle.fields.height * 0.25
-    }
+    topPadding: customStyle.fields.height * 0.25
+    bottomPadding: customStyle.fields.height * 0.25
+    leftPadding: customStyle.fields.sideMargin
+    rightPadding: customStyle.fields.sideMargin
 
     onLinkActivated: function( link ) {
       Qt.openUrlExternally( link )
