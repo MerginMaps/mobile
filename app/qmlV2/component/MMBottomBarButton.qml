@@ -2,17 +2,20 @@ import QtQuick
 import "../Style.js" as Style
 
 Column {
-  height: control.height
+  id: control
+
+  signal clicked(var button)
 
   Item {
     height: parent.height
     width: (buttonView.width - 2*Style.commonSpacing) / buttonView.model.count
 
-    MouseArea {
+    Rectangle {
       width: parent.width - Style.commonSpacing/2
       height: parent.height - Style.commonSpacing/2
       anchors.centerIn: parent
       clip: button !== MMBottomBar.Buttons.Save
+      color: Style.transparent
 
       Image {
         source: {
@@ -54,6 +57,11 @@ Column {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Style.commonSpacing
         horizontalAlignment: Text.AlignHCenter
+      }
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: control.clicked(button)
       }
     }
   }

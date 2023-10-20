@@ -14,6 +14,10 @@ import "../Style.js" as Style
 Rectangle {
   id: control
 
+  signal deleteClicked
+  signal editGeometryClicked
+  signal saveClicked
+
   anchors {
     left: parent.left
     right: parent.right
@@ -52,12 +56,18 @@ Rectangle {
 
     ListElement { button: MMBottomBar.Buttons.Delete; priority: 3 }
     ListElement { button: MMBottomBar.Buttons.EditGeometry; priority: 4 }
-    ListElement { button: MMBottomBar.Buttons.Advanced; priority: 2 }
+    ListElement { button: MMBottomBar.Buttons.Advanced; priority: 0 }
     ListElement { button: MMBottomBar.Buttons.Save; priority: 0 }
   }
 
+  // buttons shown inside bottom bar
   ListModel {
     id: visibleButtonModel
+  }
+
+  // buttons that are not shown inside bottom bar, due to small space
+  ListModel {
+    id: invisibleButtonModel
   }
 
   ListView {
@@ -65,10 +75,33 @@ Rectangle {
 
     anchors.fill: parent
     model: visibleButtonModel
-    delegate: MMBottomBarButton {}
+    delegate: MMBottomBarButton {
+      height: control.height
+      onClicked: function (button) {
+        console.log(button)
+        switch (button) {
+        case MMBottomBar.Buttons.Delete: control.deleteClicked(); break
+        case MMBottomBar.Buttons.EditGeometry: control.editGeometryClicked(); break
+        case MMBottomBar.Buttons.Save: control.saveClicked(); break
+        case MMBottomBar.Buttons.Advanced: {
+          if (invisibleButtonModel.count > 0) {
+            menu.model = invisibleButtonModel
+            menu.visible = true
+          }
+          break
+        }
+        }
+      }
+    }
     orientation: ListView.Horizontal
     leftMargin: Style.commonSpacing
     rightMargin: Style.commonSpacing
+  }
+
+  MMMenuDrawer {
+    id: menu
+
+    title: qsTr("More Options")
   }
 
   onWidthChanged: setupBottomBar()
@@ -83,11 +116,16 @@ Rectangle {
     console.log("width = " + control.width)
     visibleButtonModel.clear()
     visibleButtonModel.modelReset()
+    invisibleButtonModel.clear()
+    invisibleButtonModel.modelReset()
     for( var i = 0; i < currentFullModel.count; i++ ) {
       var entry = currentFullModel.get(i);
       var w = control.width - 2 * Style.commonSpacing
       if(entry.priority === 0 || w > entry.priority * Style.minimumBottomBarButtonWidth ) {
         visibleButtonModel.append(entry)
+      }
+      else {
+        invisibleButtonModel.append(entry)
       }
     }
   }

@@ -85,6 +85,7 @@ const commonSpacing = 20 * __dp
 // Bottom bar
 const bottomBarHeight = 89 * __dp
 const minimumBottomBarButtonWidth = 100 * __dp
+const menuDrawerHeight = 67 * __dp
 
 function dynamicText() {
   return "Dynamic text"

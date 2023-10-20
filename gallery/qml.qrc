@@ -26,5 +26,7 @@
         <file>../app/qmlV2/component/MMProgressBar.qml</file>
         <file>../app/qmlV2/component/MMBottomBar.qml</file>
         <file>../app/qmlV2/component/MMBottomBarButton.qml</file>
+        <file>../app/qmlV2/component/MMMenuDrawer.qml</file>
+        <file>../app/qmlV2/component/MMMenuButton.qml</file>
     </qresource>
 </RCC>
