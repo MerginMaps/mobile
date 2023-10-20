@@ -16,7 +16,9 @@ import "../components"
 Rectangle {
   id: spacer
 
-  property bool isHLine: value
+  /*required*/ property var config: parent.config
+
+  property bool isHLine: config["IsHLine"]
   property int spacerHeight: customStyle.fields.height
   property int hLineWidth: 1
 

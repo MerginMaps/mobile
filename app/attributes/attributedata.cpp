@@ -22,6 +22,7 @@ FormItem::FormItem( const QUuid &id,
                     const int parentTabId,
                     FormItem::FormItemType type,
                     const QString &name,
+                    bool showName,
                     bool isEditable,
                     const QgsEditorWidgetSetup &editorWidgetSetup,
                     int fieldIndex,
@@ -34,6 +35,7 @@ FormItem::FormItem( const QUuid &id,
   , mParentTabId( parentTabId )
   , mType( type )
   , mName( name )
+  , mShowName( showName )
   , mIsEditable( isEditable )
   , mEditorWidgetSetup( editorWidgetSetup )
   , mFieldIndex( fieldIndex )
@@ -42,18 +44,17 @@ FormItem::FormItem( const QUuid &id,
 {
 }
 
-FormItem *FormItem::createFieldItem(
-  const QUuid &id,
-  const QgsField &field,
-  const QString &groupName,
-  int parentTabId,
-  const QString &name,
-  bool isEditable,
-  const QgsEditorWidgetSetup
-  &editorWidgetSetup,
-  int fieldIndex,
-  const QgsExpression &visibilityExpression
-)
+FormItem *FormItem::createFieldItem( const QUuid &id,
+                                     const QgsField &field,
+                                     const QString &groupName,
+                                     int parentTabId,
+                                     const QString &name, bool showName,
+                                     bool isEditable,
+                                     const QgsEditorWidgetSetup
+                                     &editorWidgetSetup,
+                                     int fieldIndex,
+                                     const QgsExpression &visibilityExpression
+                                   )
 {
   return new FormItem(
            id,
@@ -62,6 +63,7 @@ FormItem *FormItem::createFieldItem(
            parentTabId,
            FormItem::Field,
            name,
+           showName,
            isEditable,
            editorWidgetSetup,
            fieldIndex,
@@ -74,6 +76,7 @@ FormItem *FormItem::createRelationItem( const QUuid &id,
                                         const QString &groupName,
                                         int parentTabId,
                                         const QString &name,
+                                        bool showName,
                                         const QgsExpression &visibilityExpression,
                                         const QgsRelation &relation
                                       )
@@ -85,6 +88,7 @@ FormItem *FormItem::createRelationItem( const QUuid &id,
     parentTabId,
     FormItem::Relation,
     name,
+    showName,
     true,
     QgsEditorWidgetSetup(),
     -1,
@@ -103,22 +107,52 @@ FormItem *FormItem::createSpacerItem(
   const QgsExpression &visibilityExpression
 )
 {
-  FormItem *it = new FormItem(
+  QVariantMap map;
+  map["IsHLine"] = isHLine;
+  map["ConfigType"] = "merginmaps-custom-config";
+  QgsEditorWidgetSetup config("spacer", map);
+
+  return new FormItem(
     id,
     QgsField(),
     groupName,
     parentTabId,
     FormItem::Spacer,
     name,
+    false, // label is never shown for spacer
     false,
-    QgsEditorWidgetSetup(),
+    config,
+    -1,
+    visibilityExpression,
+    QgsRelation()
+  );
+}
+
+FormItem *FormItem::createTextItem( const QUuid &id, const QString &groupName, int parentTabId, const QString &name, bool showName, const QString &text, const QgsExpression &visibilityExpression )
+{
+  QVariantMap map;
+  map["UseHtml"] = false;
+  map["ConfigType"] = "merginmaps-custom-config";
+
+  QgsEditorWidgetSetup config("text", map);
+
+  FormItem* fi = new FormItem(
+    id,
+    QgsField(),
+    groupName,
+    parentTabId,
+    FormItem::Text,
+    name,
+    showName,
+    false,
+    config,
     -1,
     visibilityExpression,
     QgsRelation()
   );
 
-  it->setRawValue( isHLine );
-  return it;
+  fi->setRawValue(text);
+  return fi;
 }
 
 FormItem::FormItemType FormItem::type() const
@@ -230,6 +264,11 @@ void FormItem::setOriginalValue( const QVariant &originalValue )
 QgsRelation FormItem::relation() const
 {
   return mRelation;
+}
+
+bool FormItem::showName() const
+{
+  return mShowName;
 }
 
 QVariant FormItem::rawValue() const

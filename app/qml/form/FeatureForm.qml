@@ -398,7 +398,7 @@ Item {
       id: fieldContainer
 
       // TODO: filter such fields in field proxy model instead
-      property bool shouldBeVisible: Type === FormItem.Field || Type === FormItem.Relation || Type === FormItem.Spacer
+      property bool shouldBeVisible: Type !== FormItem.Invalid && Type !== FormItem.Container
 
       visible: shouldBeVisible
 
@@ -435,7 +435,7 @@ Item {
 
             text: Name
             height: visible ? paintedHeight : 0
-            visible: Type !== FormItem.Spacer
+            visible: ShowName
             color: form.style.constraint.validColor
             leftPadding: form.style.fields.sideMargin
             font.pixelSize: form.style.fields.labelPixelSize

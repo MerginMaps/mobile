@@ -45,7 +45,8 @@ class FormItem
       Container,
       Relation,
       Field,
-      Spacer
+      Spacer,
+      Text
     };
     Q_ENUMS( FormItemType )
 
@@ -56,6 +57,7 @@ class FormItem
       int parentTabId,
       FormItem::FormItemType type,
       const QString &name,
+      bool showName,
       bool isEditable,
       const QgsEditorWidgetSetup &editorWidgetSetup,
       int fieldIndex,
@@ -69,6 +71,7 @@ class FormItem
       const QString &groupName,
       int parentTabId,
       const QString &name,
+      bool showName,
       bool isEditable,
       const QgsEditorWidgetSetup &editorWidgetSetup,
       int fieldIndex,
@@ -80,6 +83,7 @@ class FormItem
       const QString &groupName,
       int parentTabId,
       const QString &name,
+      bool showName,
       const QgsExpression &visibilityExpression,
       const QgsRelation &relation
     );
@@ -90,6 +94,16 @@ class FormItem
       int parentTabId,
       const QString &name,
       bool isHLine,
+      const QgsExpression &visibilityExpression
+    );
+
+    static FormItem *createTextItem(
+      const QUuid &id,
+      const QString &groupName,
+      int parentTabId,
+      const QString &name,
+      bool showName,
+      const QString &text,
       const QgsExpression &visibilityExpression
     );
 
@@ -130,6 +144,8 @@ class FormItem
     QgsRelation relation() const;
     QString fieldError() const;
 
+    bool showName() const;
+
   private:
 
     const QUuid mId;
@@ -138,6 +154,7 @@ class FormItem
     const int mParentTabId;
     const FormItem::FormItemType mType;
     const QString mName;
+    const bool mShowName = true; // "Show label" in Widget Display group in QGIS widget settings
     const bool mIsEditable;
     const QgsEditorWidgetSetup mEditorWidgetSetup;
     const int mFieldIndex;

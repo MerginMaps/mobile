@@ -1054,7 +1054,8 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, cons
     return QUrl( path.arg( QLatin1String( "valuerelationcombobox" ) ) );
   }
 
-  QStringList supportedWidgets = { QStringLiteral( "textedit" ),
+  QStringList supportedWidgets = { QStringLiteral( "text" ),
+                                   QStringLiteral( "textedit" ),
                                    QStringLiteral( "valuemap" ),
                                    QStringLiteral( "valuerelation" ),
                                    QStringLiteral( "checkbox" ),
