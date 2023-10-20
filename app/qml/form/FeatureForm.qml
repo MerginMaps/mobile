@@ -398,7 +398,7 @@ Item {
       id: fieldContainer
 
       // TODO: filter such fields in field proxy model instead
-      property bool shouldBeVisible: Type === FormItem.Field || Type === FormItem.Relation
+      property bool shouldBeVisible: Type === FormItem.Field || Type === FormItem.Relation || Type === FormItem.Spacer
 
       visible: shouldBeVisible
 
@@ -434,6 +434,8 @@ Item {
             id: fieldLabel
 
             text: Name
+            height: visible ? paintedHeight : 0
+            visible: Type !== FormItem.Spacer
             color: form.style.constraint.validColor
             leftPadding: form.style.fields.sideMargin
             font.pixelSize: form.style.fields.labelPixelSize
@@ -512,7 +514,8 @@ Item {
             source: {
               if ( widget !== undefined )
                 return __inputUtils.getEditorComponentSource( widget.toLowerCase(), config, field )
-              else return ''
+              else
+                return ''
             }
           }
 

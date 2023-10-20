@@ -1062,6 +1062,7 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, cons
                                    QStringLiteral( "datetime" ),
                                    QStringLiteral( "range" ),
                                    QStringLiteral( "relation" ),
+                                   QStringLiteral( "spacer" ),
                                    QStringLiteral( "relationreference" )
                                  };
   if ( supportedWidgets.contains( widgetName ) )

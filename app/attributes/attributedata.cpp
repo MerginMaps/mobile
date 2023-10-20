@@ -16,19 +16,18 @@
 
 #include "attributedata.h"
 
-FormItem::FormItem(
-  const QUuid &id,
-  const QgsField &field,
-  const QString &groupName,
-  const int parentTabId,
-  FormItem::FormItemType type,
-  const QString &name,
-  bool isEditable,
-  const QgsEditorWidgetSetup &editorWidgetSetup,
-  int fieldIndex,
-  const QgsExpression &visibilityExpression,
-  const QgsRelation &relation
-)
+FormItem::FormItem( const QUuid &id,
+                    const QgsField &field,
+                    const QString &groupName,
+                    const int parentTabId,
+                    FormItem::FormItemType type,
+                    const QString &name,
+                    bool isEditable,
+                    const QgsEditorWidgetSetup &editorWidgetSetup,
+                    int fieldIndex,
+                    const QgsExpression &visibilityExpression,
+                    const QgsRelation &relation
+                  )
   : mId( id )
   , mField( field )
   , mGroupName( groupName )
@@ -48,7 +47,6 @@ FormItem *FormItem::createFieldItem(
   const QgsField &field,
   const QString &groupName,
   int parentTabId,
-  FormItemType type,
   const QString &name,
   bool isEditable,
   const QgsEditorWidgetSetup
@@ -62,19 +60,19 @@ FormItem *FormItem::createFieldItem(
            field,
            groupName,
            parentTabId,
-           type,
+           FormItem::Field,
            name,
            isEditable,
            editorWidgetSetup,
            fieldIndex,
-           visibilityExpression
+           visibilityExpression,
+           QgsRelation()
          );
 }
 
 FormItem *FormItem::createRelationItem( const QUuid &id,
                                         const QString &groupName,
                                         int parentTabId,
-                                        FormItemType type,
                                         const QString &name,
                                         const QgsExpression &visibilityExpression,
                                         const QgsRelation &relation
@@ -85,7 +83,7 @@ FormItem *FormItem::createRelationItem( const QUuid &id,
     QgsField(),
     groupName,
     parentTabId,
-    type,
+    FormItem::Relation,
     name,
     true,
     QgsEditorWidgetSetup(),
@@ -94,6 +92,33 @@ FormItem *FormItem::createRelationItem( const QUuid &id,
     relation
   );
   return item;
+}
+
+FormItem *FormItem::createSpacerItem(
+  const QUuid &id,
+  const QString &groupName,
+  int parentTabId,
+  const QString &name,
+  bool isHLine,
+  const QgsExpression &visibilityExpression
+)
+{
+  FormItem *it = new FormItem(
+    id,
+    QgsField(),
+    groupName,
+    parentTabId,
+    FormItem::Spacer,
+    name,
+    false,
+    QgsEditorWidgetSetup(),
+    -1,
+    visibilityExpression,
+    QgsRelation()
+  );
+
+  it->setRawValue( isHLine );
+  return it;
 }
 
 FormItem::FormItemType FormItem::type() const
@@ -115,6 +140,9 @@ QString FormItem::editorWidgetType() const
 {
   if ( mType == FormItem::Relation )
     return QStringLiteral( "relation" );
+
+  if ( mType == FormItem::Spacer )
+    return QStringLiteral( "spacer" );
 
   return mEditorWidgetSetup.type();
 }

@@ -45,6 +45,7 @@ class FormItem
       Container,
       Relation,
       Field,
+      Spacer
     };
     Q_ENUMS( FormItemType )
 
@@ -59,7 +60,7 @@ class FormItem
       const QgsEditorWidgetSetup &editorWidgetSetup,
       int fieldIndex,
       const QgsExpression &visibilityExpression,
-      const QgsRelation &relation = QgsRelation()
+      const QgsRelation &relation
     );
 
     static FormItem *createFieldItem(
@@ -67,7 +68,6 @@ class FormItem
       const QgsField &field,
       const QString &groupName,
       int parentTabId,
-      FormItem::FormItemType type,
       const QString &name,
       bool isEditable,
       const QgsEditorWidgetSetup &editorWidgetSetup,
@@ -79,10 +79,18 @@ class FormItem
       const QUuid &id,
       const QString &groupName,
       int parentTabId,
-      FormItem::FormItemType type,
       const QString &name,
       const QgsExpression &visibilityExpression,
       const QgsRelation &relation
+    );
+
+    static FormItem *createSpacerItem(
+      const QUuid &id,
+      const QString &groupName,
+      int parentTabId,
+      const QString &name,
+      bool isHLine,
+      const QgsExpression &visibilityExpression
     );
 
     FormItem::FormItemType type() const;
@@ -141,7 +149,7 @@ class FormItem
     QVariant mOriginalValue; // original unmodified value
     QVariant mRawValue;
 
-    const QgsRelation mRelation; // empty if type is field
+    const QgsRelation mRelation; // Only used for FormItemType::Relation
 };
 
 class  TabItem

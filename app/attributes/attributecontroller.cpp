@@ -27,6 +27,7 @@
 #include "qgsattributeeditorrelation.h"
 #include "qgsattributeeditorcontainer.h"
 #include "qgsvectorlayerutils.h"
+#include "qgsattributeeditorspacerelement.h"
 #include "qgsvectorlayereditbuffer.h"
 #include "qgsexpressioncontextutils.h"
 #include "qgsrelation.h"
@@ -246,7 +247,6 @@ void AttributeController::flatten(
               field,
               groupName,
               parentTabRow,
-              FormItem::Field,
               layer->attributeDisplayName( fieldIndex ),
               !isReadOnly,
               getEditorWidgetSetup( layer, fieldIndex ),
@@ -300,7 +300,6 @@ void AttributeController::flatten(
               widgetUuid,
               groupName,
               parentTabRow,
-              FormItem::Relation,
               label,
               parentVisibilityExpressions, // relation field doesn't have visibility expression itself
               associatedRelation
@@ -312,9 +311,34 @@ void AttributeController::flatten(
 
         break;
       }
+      case Qgis::AttributeEditorType::SpacerElement:
+      {
+        QUuid fieldUuid = QUuid::createUuid();
+
+        QgsAttributeEditorSpacerElement *spacerElement = static_cast<QgsAttributeEditorSpacerElement *>( element );
+
+        const QString groupName = container->isGroupBox() ? container->name() : QString();
+        std::shared_ptr<FormItem> formItemData =
+          std::shared_ptr<FormItem>(
+            FormItem::createSpacerItem(
+              fieldUuid,
+              groupName,
+              parentTabRow,
+              spacerElement->name(),
+              spacerElement->drawLine(),
+              parentVisibilityExpressions // spacer doesn't have visibility expression itself
+            )
+          );
+
+        mFormItems[formItemData->id()] = formItemData;
+
+
+        items.append( fieldUuid );
+        break;
+      }
 
       default:
-        // Invalid, Action, QmlElement, HtmlElement, TextElement and SpacerElement
+        // Invalid, Action, QmlElement, HtmlElement, TextElement
         // are not supported at the moment
         break;
     }

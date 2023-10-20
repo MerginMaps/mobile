@@ -56,6 +56,7 @@ set(MM_QML
     editor/inputvaluemap.qml
     editor/inputvaluerelationcombobox.qml
     editor/inputvaluerelationpage.qml
+    editor/inputspacer.qml
     form/FeatureForm.qml
     form/FeatureFormPage.qml
     form/FeatureFormStyling.qml
