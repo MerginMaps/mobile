@@ -31,9 +31,6 @@ Item {
   property alias mapSettings: mapRenderer.mapSettings
   property alias isRendering: mapRenderer.isRendering
 
-  // Number of miliseconds to differentiate between normal click (select feature) and double-click (zoom)
-  property int doubleClickThresholdMilis: 350
-
   // Requests map redraw
   function refresh() {
     mapRenderer.clearCache()
@@ -121,7 +118,7 @@ Item {
       }
 
       function vectorDistance( a, b ) {
-        return Math.sqrt( Math.pow( a.x - b.x, 2 ), Math.pow( a.y - b.y, 2 ) )
+        return Math.sqrt( Math.pow( b.x - a.x, 2 ) + Math.pow( b.y - a.y, 2 ) )
       }
     }
   }
@@ -166,29 +163,44 @@ Item {
       onPressed: function ( mouse ) {
         initialPosition = Qt.point( mouse.x, mouse.y )
         rendererPrivate.freeze( mouseArea.freezeId )
+
+        dragDifferentiatorTimer.start()
       }
 
       onReleased: function ( mouse ) {
         let clickPosition = Qt.point( mouse.x, mouse.y )
 
-        if ( !clickDifferentiatorTimer.running ) {
+        if ( clickDifferentiatorTimer.running ) {
+          //
+          // n-th click in a row (second, third,..)
+          // this can be double click if it is in a reasonable
+          // distance from the previous click
+          //
+
+          let isDoubleClick = false
+          let previousTapPosition = clickDifferentiatorTimer.clickedPoint
+
+          if ( previousTapPosition ) {
+            let tapDistance = rendererPrivate.vectorDistance( clickPosition, previousTapPosition )
+            isDoubleClick = tapDistance < mouseArea.drag.threshold
+          }
+
+          if ( isDoubleClick ) {
+            // do not emit clicked signal when zooming
+            clickDifferentiatorTimer.ignoreNextTrigger = true
+
+            mapRenderer.zoom( Qt.point( mouse.x, mouse.y ), 0.4 )
+          }
+
+          clickDifferentiatorTimer.restart()
+        }
+        else if ( !isDragging )
+        {
           // this is a simple click
 
-          clickDifferentiatorTimer.clickedPoint = Qt.point( mouse.x, mouse.y )
-        }
-        else {
-          // n-th click in a row (second, third,..)
-
-          // do not emit clicked signal for the second click
-          mouse.accepted = true
-
-          clickDifferentiatorTimer.invalidate = true
-
-          mapRenderer.zoom( Qt.point( mouse.x, mouse.y ), 0.4 )
-        }
-
-        if ( !isDragging ) {
-          clickDifferentiatorTimer.restart()
+          clickDifferentiatorTimer.clickedPoint = clickPosition
+          clickDifferentiatorTimer.ignoreNextTrigger = false // just in case
+          clickDifferentiatorTimer.start()
         }
 
         previousPosition = null
@@ -196,11 +208,13 @@ Item {
         isDragging = false
 
         rendererPrivate.unfreeze( mouseArea.freezeId )
+
+        dragDifferentiatorTimer.stop()
       }
 
       onPressAndHold: function ( mouse ) {
         mapRoot.longPressed( Qt.point( mouse.x, mouse.y ) )
-        clickDifferentiatorTimer.invalidate = true
+        clickDifferentiatorTimer.ignoreNextTrigger = true
       }
 
       onWheel: function ( wheel ) {
@@ -230,12 +244,27 @@ Item {
 
         previousPosition = target
 
-        let dragDistance = rendererPrivate.vectorDistance( initialPosition, target )
-        if ( dragDistance > drag.threshold ) {
-          isDragging = true
+        if ( !isDragging ) {
+          // do not compute if we are already dragging
 
-          // do not emit click after drag
-          clickDifferentiatorTimer.reset()
+          let dragDistance = rendererPrivate.vectorDistance( initialPosition, target )
+
+          if ( dragDistance > Application.styleHints.startDragDistance ) {
+            // Drag distance threshold is hit, this is dragging!
+            isDragging = true
+          }
+
+          if ( !dragDifferentiatorTimer.running ) {
+            // User is panning the map for too long (timer already elapsed), this is dragging now!
+            isDragging = true
+          }
+
+          if ( isDragging ) {
+            // do not emit click after drag
+
+            clickDifferentiatorTimer.stop()
+            clickDifferentiatorTimer.ignoreNextTrigger = false
+          }
         }
       }
 
@@ -250,29 +279,32 @@ Item {
         previousPosition = null
         initialPosition = null
         isDragging = false
+
         rendererPrivate.unfreeze( mouseArea.freezeId )
+        dragDifferentiatorTimer.stop()
       }
 
       Timer {
         id: clickDifferentiatorTimer
 
-        property point clickedPoint
-        property bool invalidate
+        property var clickedPoint
+        property bool ignoreNextTrigger
 
-        interval: mapRoot.doubleClickThresholdMilis
-        repeat: false
+        interval: Application.styleHints.mouseDoubleClickInterval
 
         onTriggered: {
-          if ( !invalidate ) {
+          if ( !ignoreNextTrigger ) {
             mapRoot.clicked( clickedPoint )
           }
-          invalidate = false
+          ignoreNextTrigger = false
+          clickedPoint = null
         }
+      }
 
-        function reset() {
-          clickDifferentiatorTimer.stop()
-          clickDifferentiatorTimer.invalidate = false
-        }
+      Timer {
+        id: dragDifferentiatorTimer
+
+        interval: Application.styleHints.startDragTime
       }
     }
   }
