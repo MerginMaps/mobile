@@ -833,7 +833,6 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   expressionContext.setFields( fields );
   expressionContext.setFeature( featureLayerPair().featureRef() );
 
-
   // Evaluate virtual fields
   recalculateVirtualFields( changedFormItems, expressionContext );
 
