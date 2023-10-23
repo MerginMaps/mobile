@@ -813,7 +813,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   }
 
   // Evaluate HTML and Text element expressions
-  recalculateRichTextWidgets(changedFormItems, expressionContext);
+  recalculateRichTextWidgets( changedFormItems, expressionContext );
 
   // Evaluate tab items visiblity
   {
@@ -934,7 +934,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     emit formRecalculated();
 }
 
-void AttributeController::recalculateRichTextWidgets( QSet<QUuid> &changedFormItems, QgsExpressionContext &context)
+void AttributeController::recalculateRichTextWidgets( QSet<QUuid> &changedFormItems, QgsExpressionContext &context )
 {
   QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
@@ -943,9 +943,10 @@ void AttributeController::recalculateRichTextWidgets( QSet<QUuid> &changedFormIt
     if ( itemData->type() == FormItem::RichText )
     {
       QString newValue;
-      QString definition = itemData->editorWidgetConfig().value(QStringLiteral("Definition")).toString();
-      bool isHTML = itemData->editorWidgetConfig().value(QStringLiteral("UseHtml")).toBool();
-      if (isHTML) {
+      QString definition = itemData->editorWidgetConfig().value( QStringLiteral( "Definition" ) ).toString();
+      bool isHTML = itemData->editorWidgetConfig().value( QStringLiteral( "UseHtml" ) ).toBool();
+      if ( isHTML )
+      {
         // evaluate texts like: <script>document.write(expression.evaluate("\TextField\""));</script>
 
         // QML Text does not support document.write, so just remove it
@@ -954,7 +955,7 @@ void AttributeController::recalculateRichTextWidgets( QSet<QUuid> &changedFormIt
         while ( match1.hasMatch() )
         {
           QString expression = match1.captured( 1 );
-          definition = QStringLiteral( "<span>%1</span>" ).arg(definition.mid( 0, match1.capturedStart( 0 ) ) + expression + definition.mid( match1.capturedEnd( 0 ) ));
+          definition = QStringLiteral( "<span>%1</span>" ).arg( definition.mid( 0, match1.capturedStart( 0 ) ) + expression + definition.mid( match1.capturedEnd( 0 ) ) );
           match1 = sRegEx1.match( definition );
         }
 
@@ -974,13 +975,14 @@ void AttributeController::recalculateRichTextWidgets( QSet<QUuid> &changedFormIt
         }
         newValue = definition;
       }
-      else {
+      else
+      {
         newValue = QgsExpression::replaceExpressionText( definition, &context );
       }
-      if (itemData->rawValue() != newValue)
+      if ( itemData->rawValue() != newValue )
       {
         changedFormItems.insert( itemData->id() );
-        itemData->setRawValue(newValue);
+        itemData->setRawValue( newValue );
       }
     }
     ++formItemsIterator;

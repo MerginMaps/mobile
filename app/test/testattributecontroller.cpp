@@ -656,7 +656,7 @@ void TestAttributeController::testFieldsOutsideForm()
 
   const TabItem *tab = controller.tabItem( 0 );
   const QVector<QUuid> items = tab->formItems();
-  QCOMPARE( items.size(), 3 );
+  QCOMPARE( items.size(), 7 );
 
   struct testcase
   {
@@ -744,7 +744,6 @@ void TestAttributeController::testHtmlAndTextWidgets()
 
   QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
 
-  /*
   QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "points" ) ).at( 0 );
   QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
 
@@ -762,43 +761,29 @@ void TestAttributeController::testHtmlAndTextWidgets()
 
   const TabItem *tab = controller.tabItem( 0 );
   const QVector<QUuid> items = tab->formItems();
-  QCOMPARE( items.size(), 3 );
+  QCOMPARE( items.size(), 7 );
 
-  struct testcase
-  {
-    QUuid id;
-    QVariant value;
-    QVariant expectedText;
-    QVariant expectedText2;
-    QVariant expectedNum;
-    QVariant expectedNum2;
-  };
+  const auto htmlItem = controller.formItem( items.at( 3 ) );
+  QCOMPARE( htmlItem->editorWidgetType(), "richtext" );
+  QCOMPARE( htmlItem->editorWidgetConfig().value( "UseHtml" ).toBool(), true );
 
-  QList<testcase> testCases
-      {
-       { items.at( 0 ), QVariant( "1" ), QVariant( "1" ), QVariant( "1 on update" ), QVariant(), QVariant() },
-       { items.at( 2 ), QVariant( 2 ), QVariant( "1" ), QVariant( "1 on update" ), QVariant( 2 ), QVariant( 102 ) },
-       };
+  const auto textItem = controller.formItem( items.at( 4 ) );
+  QCOMPARE( textItem->editorWidgetType(), "richtext" );
+  QCOMPARE( textItem->editorWidgetConfig().value( "UseHtml" ).toBool(), false );
 
-  for ( const testcase &t : testCases )
-  {
-    const FormItem *item = controller.formItem( t.id );
+  const auto spacerItem = controller.formItem( items.at( 5 ) );
+  QCOMPARE( spacerItem->editorWidgetType(), "spacer" );
+  QCOMPARE( spacerItem->editorWidgetConfig().value( "IsHLine" ).toBool(), true );
 
-    controller.setFormValue( t.id, t.value );
+  const auto hLineItem = controller.formItem( items.at( 6 ) );
+  QCOMPARE( hLineItem->editorWidgetType(), "spacer" );
+  QCOMPARE( hLineItem->editorWidgetConfig().value( "IsHLine" ).toBool(), false );
 
-    QCOMPARE( controller.featureLayerPair().feature().attribute( 1 ), t.expectedText );
-    QCOMPARE( controller.featureLayerPair().feature().attribute( 2 ), t.expectedText2 );
-    QCOMPARE( controller.featureLayerPair().feature().attribute( 3 ), t.expectedNum );
-    QVariant v = controller.featureLayerPair().feature().attribute( 4 );
-    if ( v.isNull() )
-    {
-      QVERIFY( t.expectedNum2.isNull() );
-    }
-    else
-    {
-      QCOMPARE( controller.featureLayerPair().feature().attribute( 4 ), t.expectedNum2 );
-    }
-  }
+  // update one field on which both HTML and Text widgets depends
+  auto field = controller.formItem( items.at( 0 ) );
+  QCOMPARE( field->name(), "text" );
+  controller.setFormValue( field->id(), "my new text" );
 
-  */
+  QCOMPARE( htmlItem->rawValue(), "<span>my new text on update</span>" );
+  QCOMPARE( textItem->rawValue(), "my new text on update" );
 }
