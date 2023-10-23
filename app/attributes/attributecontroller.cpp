@@ -833,11 +833,13 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   expressionContext.setFields( fields );
   expressionContext.setFeature( featureLayerPair().featureRef() );
 
+
   // Evaluate virtual fields
   recalculateVirtualFields( changedFormItems, expressionContext );
 
   // Evaluate default values
   recalculateDefaultValues( changedFormItems, expressionContext, isFormValueChange, isFirstUpdateOfNewFeature );
+
 
   // Evaluate HTML and Text element expressions
   recalculateRichTextWidgets( changedFormItems, expressionContext );
