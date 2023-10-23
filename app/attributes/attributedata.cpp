@@ -141,6 +141,7 @@ FormItem *FormItem::createRichTextItem(
 {
   QVariantMap map;
   map["UseHtml"] = isHtml;
+  map["Definition"] = text;
   map["ConfigType"] = "merginmaps-custom-config";
 
   QgsEditorWidgetSetup config( "richtext", map );

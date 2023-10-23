@@ -19,12 +19,10 @@ Rectangle {
   /*required*/ property var config: parent.config
 
   property bool isHLine: config["IsHLine"]
-  property int spacerHeight: customStyle.fields.height
-  property int hLineWidth: 1
 
-  height: isHLine ? hLineWidth : spacerHeight
+  height: 1 // parent form's list inserts space between each 2 elements
   width: parent.width
-  color: isHLine ? customStyle.fields.fontColor : "transparent"
+  color: isHLine ? customStyle.fields.backgroundColor : "transparent"
   anchors {
     right: parent.right
     left: parent.left

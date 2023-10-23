@@ -736,3 +736,69 @@ void TestAttributeController::testPhotoRenaming()
   QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
   QCOMPARE( controller.featureLayerPair().feature().attribute( 3 ), QStringLiteral( "image_test.jpg" ) );
 }
+
+void TestAttributeController::testHtmlAndTextWidgets()
+{
+  QString projectDir = TestUtils::testDataDir() + "/expressions";
+  QString projectName = "project.qgz";
+
+  QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
+
+  /*
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "points" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  QgsFeature feat;
+  feat.setValid( true );
+  feat.setFields( surveyLayer->fields(), true );
+  FeatureLayerPair pair( feat, surveyLayer );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+
+  QCOMPARE( controller.hasValidationErrors(), false );
+
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+  QCOMPARE( items.size(), 3 );
+
+  struct testcase
+  {
+    QUuid id;
+    QVariant value;
+    QVariant expectedText;
+    QVariant expectedText2;
+    QVariant expectedNum;
+    QVariant expectedNum2;
+  };
+
+  QList<testcase> testCases
+      {
+       { items.at( 0 ), QVariant( "1" ), QVariant( "1" ), QVariant( "1 on update" ), QVariant(), QVariant() },
+       { items.at( 2 ), QVariant( 2 ), QVariant( "1" ), QVariant( "1 on update" ), QVariant( 2 ), QVariant( 102 ) },
+       };
+
+  for ( const testcase &t : testCases )
+  {
+    const FormItem *item = controller.formItem( t.id );
+
+    controller.setFormValue( t.id, t.value );
+
+    QCOMPARE( controller.featureLayerPair().feature().attribute( 1 ), t.expectedText );
+    QCOMPARE( controller.featureLayerPair().feature().attribute( 2 ), t.expectedText2 );
+    QCOMPARE( controller.featureLayerPair().feature().attribute( 3 ), t.expectedNum );
+    QVariant v = controller.featureLayerPair().feature().attribute( 4 );
+    if ( v.isNull() )
+    {
+      QVERIFY( t.expectedNum2.isNull() );
+    }
+    else
+    {
+      QCOMPARE( controller.featureLayerPair().feature().attribute( 4 ), t.expectedNum2 );
+    }
+  }
+
+  */
+}
