@@ -29,7 +29,4 @@ Page {
     font.pixelSize: 20
     //font.family: fontx.font.family
   }
-
-  MMBottomBar { state: MMBottomBar.States.First }
-  MMBottomBar { state: MMBottomBar.States.Third; anchors.bottomMargin: 100 }
 }

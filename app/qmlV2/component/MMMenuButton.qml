@@ -7,6 +7,8 @@ import "."
 Item {
   height: Style.menuDrawerHeight
 
+  signal clicked(var button)
+
   Rectangle {
     anchors.top: parent.top
     width: parent.width
@@ -44,5 +46,10 @@ Item {
       verticalAlignment: Text.AlignVCenter
       height: parent.height
     }
+  }
+
+  MouseArea {
+    anchors.fill: parent
+    onClicked: control.clicked(button)
   }
 }

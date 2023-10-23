@@ -28,5 +28,6 @@
         <file>../app/qmlV2/component/MMBottomBarButton.qml</file>
         <file>../app/qmlV2/component/MMMenuDrawer.qml</file>
         <file>../app/qmlV2/component/MMMenuButton.qml</file>
+        <file>qml/pages/BottomBarPage.qml</file>
     </qresource>
 </RCC>

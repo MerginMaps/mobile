@@ -128,6 +128,10 @@ ApplicationWindow {
           title: "Drawers"
           source: "DrawerPage.qml"
         }
+        ListElement {
+          title: "Bottom bars"
+          source: "BottomBarPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}

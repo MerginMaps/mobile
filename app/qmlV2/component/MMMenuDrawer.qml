@@ -19,6 +19,8 @@ Drawer {
   property alias title: title.text
   property alias model: menuView.model
 
+  signal clicked(var button)
+
   width: window.width
   height: mainColumn.height
   edge: Qt.BottomEdge
@@ -79,6 +81,9 @@ Drawer {
         height: model ? model.count * Style.menuDrawerHeight : 0
         delegate: MMMenuButton {
           width: menuView.width
+          onClicked: function (button) {
+            control.clicked(button)
+          }
         }
       }
 
