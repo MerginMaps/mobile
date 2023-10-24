@@ -32,7 +32,7 @@ int main( int argc, char *argv[] )
 #endif
 
   NotificationModel notificationModel;
-  engine.rootContext()->setContextProperty("notificationModel", &notificationModel);
+  engine.rootContext()->setContextProperty( "notificationModel", &notificationModel );
 
   // path to local wrapper pages
   engine.rootContext()->setContextProperty( "_qmlWrapperPath", QGuiApplication::applicationDirPath() + "/HotReload/qml/pages/" );

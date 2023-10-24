@@ -15,5 +15,6 @@
         <file>UploadImage.svg</file>
         <file>ReachedDataLimitImage.svg</file>
         <file>Close.svg</file>
+        <file>Waiting.svg</file>
     </qresource>
 </RCC>

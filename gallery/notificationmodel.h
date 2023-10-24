@@ -16,70 +16,82 @@
 
 class NotificationType
 {
-  Q_GADGET
+    Q_GADGET
   public:
 
-  enum MessageType {
-    Information,
-    Success,
-    Warning,
-    Error
-  };
-  Q_ENUM(MessageType)
+    enum MessageType
+    {
+      Information,
+      Success,
+      Warning,
+      Error
+    };
+    Q_ENUM( MessageType )
+
+    enum IconType
+    {
+      None,
+      Waiting,
+      Check
+    };
+    Q_ENUM( IconType )
 
   private:
-  explicit NotificationType();
+    explicit NotificationType();
 };
 
 class Notification
 {
-  Q_GADGET
+    Q_GADGET
 
   public:
-  Notification(uint id, const QString &message, uint interval, NotificationType::MessageType type);
-  uint id() { return mId; }
-  QString message() { return mMessage; }
-  NotificationType::MessageType type() { return mType; }
-  bool canBeRemoved() { return (mInterval-- == 0); }
+    Notification( uint id, const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon );
+    uint id() { return mId; }
+    QString message() { return mMessage; }
+    NotificationType::MessageType type() { return mType; }
+    NotificationType::IconType icon() { return mIcon; }
+    bool canBeRemoved() { return ( mInterval-- == 0 ); }
 
   private:
-  uint mId;
-  QString mMessage;
-  uint mInterval; // [seconds]
-  NotificationType::MessageType mType;
+    uint mId;
+    QString mMessage;
+    uint mInterval; // [seconds]
+    NotificationType::MessageType mType;
+    NotificationType::IconType mIcon;
 };
 
 class NotificationModel : public QAbstractListModel
 {
-  Q_OBJECT
+    Q_OBJECT
 
   public:
-  enum MyRoles {
-    IdRole = Qt::UserRole + 1, MessageRole, TypeRole
-  };
-  Q_ENUM(MyRoles)
+    enum MyRoles
+    {
+      IdRole = Qt::UserRole + 1, MessageRole, TypeRole, IconRole
+    };
+    Q_ENUM( MyRoles )
 
-  NotificationModel(QObject *parent = nullptr);
-  ~NotificationModel();
+    NotificationModel( QObject *parent = nullptr );
+    ~NotificationModel();
 
-  QHash<int,QByteArray> roleNames() const override;
-  int rowCount(const QModelIndex & parent = QModelIndex()) const override;
-  QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
+    QHash<int, QByteArray> roleNames() const override;
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
+    QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 
-  Q_PROPERTY(int rowCount READ rowCount NOTIFY rowCountChanged);
-  Q_INVOKABLE void remove(uint id);
-  Q_INVOKABLE void add(const QString &message, uint interval, NotificationType::MessageType type);
+    Q_PROPERTY( int rowCount READ rowCount NOTIFY rowCountChanged );
+    Q_INVOKABLE void remove( uint id );
+    Q_INVOKABLE void add( const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon );
 
   private:
-  uint nextId() { static uint id = 0; return id++; }
-  void timerFired();
+    uint nextId() { static uint id = 0; return id++; }
+    void timerFired();
 
   signals:
-  void rowCountChanged();
+    void rowCountChanged();
 
   private:
-  QList<Notification> mNotifications;
-  QTimer *mTimer;
+    QList<Notification> mNotifications;
+    QTimer *mTimer;
 };
 
 #endif // NOTIFICATIONMODEL_H

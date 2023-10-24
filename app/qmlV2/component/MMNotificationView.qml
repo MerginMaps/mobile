@@ -37,7 +37,7 @@ Item {
 
     anchors.top: parent.top
     width: parent.width
-    height: Style.notificationHeight * listView.count + spacing * (listView.count - 1)
+    height: contentHeight
     spacing: Style.notificationSpace
     clip: true
     model: notificationModel

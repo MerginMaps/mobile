@@ -10,25 +10,22 @@
 #include "notificationmodel.h"
 #include <QQmlEngine>
 
-Notification::Notification(uint id, const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information)
+Notification::Notification( uint id, const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information, NotificationType::IconType icon = NotificationType::None )
 {
   mId = id;
   mMessage = message;
   mInterval = interval;
   mType = type;
+  mIcon = icon;
 }
 
-NotificationModel::NotificationModel(QObject *parent) : QAbstractListModel{parent}
+NotificationModel::NotificationModel( QObject *parent ) : QAbstractListModel{parent}
 {
-  qmlRegisterUncreatableType<NotificationType>("notificationType", 1, 0, "NotificationType", "Not creatable as it is an enum type");
+  qmlRegisterUncreatableType<NotificationType>( "notificationType", 1, 0, "NotificationType", "Not creatable as it is an enum type" );
 
-  mTimer = new QTimer(this);
-  connect(mTimer, &QTimer::timeout, this, &NotificationModel::timerFired);
-  mTimer->start(1000);
-
-  // Initial data
-  mNotifications << Notification{ nextId(), "Ahoj", 10, NotificationType::Information };
-  mNotifications << Notification{ nextId(), "Hello all", 5, NotificationType::Information };
+  mTimer = new QTimer( this );
+  connect( mTimer, &QTimer::timeout, this, &NotificationModel::timerFired );
+  mTimer->start( 1000 );
 }
 
 NotificationModel::~NotificationModel()
@@ -39,42 +36,47 @@ NotificationModel::~NotificationModel()
 
 QHash<int, QByteArray> NotificationModel::roleNames() const
 {
-  return {
-      { IdRole, "id" },
-      { MessageRole, "message" },
-      { TypeRole, "type" }
+  return
+  {
+    { IdRole, "id" },
+    { MessageRole, "message" },
+    { TypeRole, "type" },
+    { IconRole, "icon" }
   };
 }
 
-int NotificationModel::rowCount(const QModelIndex &parent) const
+int NotificationModel::rowCount( const QModelIndex &parent ) const
 {
-  Q_UNUSED(parent)
+  Q_UNUSED( parent )
   return mNotifications.size();
 }
 
-QVariant NotificationModel::data(const QModelIndex &index, int role) const
+QVariant NotificationModel::data( const QModelIndex &index, int role ) const
 {
-  if (!hasIndex(index.row(), index.column(), index.parent()))
+  if ( !hasIndex( index.row(), index.column(), index.parent() ) )
     return {};
 
-  Notification notification = mNotifications.at(index.row());
-  if (role == IdRole) return notification.id();
-  if (role == MessageRole) return notification.message();
-  if (role == TypeRole) return notification.type();
+  Notification notification = mNotifications.at( index.row() );
+  if ( role == IdRole ) return notification.id();
+  if ( role == MessageRole ) return notification.message();
+  if ( role == TypeRole ) return notification.type();
+  if ( role == IconRole ) return notification.icon();
 
   return {};
 }
 
 // remove item by message
-void NotificationModel::remove(uint id)
+void NotificationModel::remove( uint id )
 {
-  for(int i=0; i<mNotifications.count(); i++) {
-    if(mNotifications[i].id() == id) {
-      beginRemoveRows(QModelIndex(), i, i);
-      mNotifications.removeAt(i);
+  for ( int i = 0; i < mNotifications.count(); i++ )
+  {
+    if ( mNotifications[i].id() == id )
+    {
+      beginRemoveRows( QModelIndex(), i, i );
+      mNotifications.removeAt( i );
       endRemoveRows();
 
-      emit dataChanged(createIndex(0, 0), createIndex(rowCount(), 0)); // refresh whole model
+      emit dataChanged( createIndex( 0, 0 ), createIndex( rowCount(), 0 ) ); // refresh whole model
       emit rowCountChanged();
       return;
     }
@@ -82,15 +84,16 @@ void NotificationModel::remove(uint id)
 }
 
 // add new unique message with interval
-void NotificationModel::add(const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information)
+void NotificationModel::add( const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information, NotificationType::IconType icon = NotificationType::None )
 {
-  for(Notification &notification : mNotifications) {
-    if(notification.message() == message)
+  for ( Notification &notification : mNotifications )
+  {
+    if ( notification.message() == message )
       return;
   }
 
-  beginInsertRows(QModelIndex(), rowCount(), rowCount());
-  mNotifications << Notification{ nextId(), message, interval, type };
+  beginInsertRows( QModelIndex(), rowCount(), rowCount() );
+  mNotifications << Notification{ nextId(), message, interval, type, icon };
   endInsertRows();
 
   emit rowCountChanged();
@@ -99,9 +102,10 @@ void NotificationModel::add(const QString &message, uint interval, NotificationT
 // check for auto removing notification
 void NotificationModel::timerFired()
 {
-  for(Notification &notification : mNotifications) {
-    if(notification.canBeRemoved())
-      remove(notification.id());
+  for ( Notification &notification : mNotifications )
+  {
+    if ( notification.canBeRemoved() )
+      remove( notification.id() );
   }
 }
 
