@@ -242,43 +242,43 @@ Molimo zatvorite ga ručno na Mergin Maps web stranici.</translation>
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="570"/>
-        <location filename="../attributes/attributecontroller.cpp" line="621"/>
+        <location filename="../attributes/attributecontroller.cpp" line="571"/>
+        <location filename="../attributes/attributecontroller.cpp" line="622"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>Zadana vrijednost izraza za %1:%2 sadrži grešku provjere sintakse: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="580"/>
-        <location filename="../attributes/attributecontroller.cpp" line="631"/>
+        <location filename="../attributes/attributecontroller.cpp" line="581"/>
+        <location filename="../attributes/attributecontroller.cpp" line="632"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>Zadana vrijednost izraza za %1:%2 ima grešku procjene: %3</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="591"/>
-        <location filename="../attributes/attributecontroller.cpp" line="642"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1204"/>
+        <location filename="../attributes/attributecontroller.cpp" line="592"/>
+        <location filename="../attributes/attributecontroller.cpp" line="643"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1205"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>Vrijednost &quot;%1&quot; %4 nije mogla biti pretvorena u odgovarajuću vrijednost za polje %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="901"/>
+        <location filename="../attributes/attributecontroller.cpp" line="902"/>
         <source>Cannot delete feature</source>
         <translation>Nije moguće izbrisati objekt</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="524"/>
-        <location filename="../attributes/attributecontroller.cpp" line="957"/>
+        <location filename="../attributes/attributecontroller.cpp" line="525"/>
+        <location filename="../attributes/attributecontroller.cpp" line="958"/>
         <source>Feature could not be added</source>
         <translation>Objekt nije mogao biti dodan</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="533"/>
-        <location filename="../attributes/attributecontroller.cpp" line="968"/>
+        <location filename="../attributes/attributecontroller.cpp" line="534"/>
+        <location filename="../attributes/attributecontroller.cpp" line="969"/>
         <source>Cannot update feature</source>
         <translation>Nije moguće ažurirati objekt</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="1012"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1013"/>
         <source>Cannot start editing</source>
         <translation>Nije moguće započeti izmjenu</translation>
     </message>
@@ -442,37 +442,37 @@ Molimo zatvorite ga ručno na Mergin Maps web stranici.</translation>
 <context>
     <name>ExternalResourceBundle</name>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="35"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="37"/>
         <source>Could not create directory %1.</source>
         <translation>Nije moguće kreirati direktorij %1.</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="128"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="131"/>
         <source>Failed to copy image file to %1.</source>
         <translation>Neuspješno kopiranje datoteke slike u %1.</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="233"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="237"/>
         <source>Open Image</source>
         <translation>Otvori sliku</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="235"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="239"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Datoteke slika (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="247"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="251"/>
         <source>Remove photo reference</source>
         <translation>Ukloniti referencu na fotografiju</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="248"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="252"/>
         <source>Also permanently delete photo from device?</source>
         <translation>Također pobrisati trajno i fotografiju sa uređaja?</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="270"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="274"/>
         <source>Failed to copy image</source>
         <translation>Neuspješno kopiranje slike</translation>
     </message>
@@ -780,119 +780,119 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="200"/>
+        <location filename="../inpututils.cpp" line="205"/>
         <source>just now</source>
         <translation>upravo</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="205"/>
+        <location filename="../inpututils.cpp" line="210"/>
         <source>%1 minutes ago</source>
         <translation>prije %1 minuta</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="205"/>
+        <location filename="../inpututils.cpp" line="210"/>
         <source>%1 minute ago</source>
         <translation>prije %1 minute</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="210"/>
+        <location filename="../inpututils.cpp" line="215"/>
         <source>%1 hours ago</source>
         <translation>prije %1 sati</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="210"/>
+        <location filename="../inpututils.cpp" line="215"/>
         <source>%1 hour ago</source>
         <translation>prije %1 sata</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="214"/>
         <location filename="../inpututils.cpp" line="219"/>
+        <location filename="../inpututils.cpp" line="224"/>
         <source>%1 days ago</source>
         <translation>prije %1 dana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="214"/>
         <location filename="../inpututils.cpp" line="219"/>
+        <location filename="../inpututils.cpp" line="224"/>
         <source>%1 day ago</source>
         <translation>prije %1 dana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="224"/>
+        <location filename="../inpututils.cpp" line="229"/>
         <source>%1 weeks ago</source>
         <translation>prije %1 tjedana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="224"/>
+        <location filename="../inpututils.cpp" line="229"/>
         <source>%1 week ago</source>
         <translation>prije %1 tjedna</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="229"/>
+        <location filename="../inpututils.cpp" line="234"/>
         <source>%1 months ago</source>
         <translation>prije %1 mjeseci</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="229"/>
+        <location filename="../inpututils.cpp" line="234"/>
         <source>%1 month ago</source>
         <translation>prije %1 mjeseca</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="234"/>
+        <location filename="../inpututils.cpp" line="239"/>
         <source>%1 years ago</source>
         <translation>prije %1 godina</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="234"/>
+        <location filename="../inpututils.cpp" line="239"/>
         <source>%1 year ago</source>
         <translation>prije %1 godine</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1423"/>
+        <location filename="../inpututils.cpp" line="1428"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rezolucija zaslona: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1424"/>
+        <location filename="../inpututils.cpp" line="1429"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI zaslona: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1425"/>
+        <location filename="../inpututils.cpp" line="1430"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>veličina zaslona: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1426"/>
+        <location filename="../inpututils.cpp" line="1431"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>prijavljeni omjer piksela zaslona uređaja: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1427"/>
+        <location filename="../inpututils.cpp" line="1432"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>izračunati omjer piksela zaslona uređaja: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1428"/>
+        <location filename="../inpututils.cpp" line="1433"/>
         <source>used dp scale: %1</source>
         <translation>korišteno dp mjerilo: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1957"/>
+        <location filename="../inpututils.cpp" line="1962"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Morate dodati barem %1 točku(točaka) u svakom od segmenata.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1961"/>
+        <location filename="../inpututils.cpp" line="1966"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Morate dodati barem %1 točku(točaka).</translation>
     </message>
@@ -1035,6 +1035,24 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/LoginForm.qml" line="244"/>
         <source>Forgot password?</source>
         <translation>Zaboravljena zaporka?</translation>
+    </message>
+</context>
+<context>
+    <name>MMComponent_reachedDataLimit</name>
+    <message>
+        <location filename="../qmlV2/component/MMComponent_reachedDataLimit.qml" line="41"/>
+        <source>Data to sync</source>
+        <translation>Podaci za sinkronizaciju</translation>
+    </message>
+    <message>
+        <location filename="../qmlV2/component/MMComponent_reachedDataLimit.qml" line="67"/>
+        <source>Using</source>
+        <translation>Koristi</translation>
+    </message>
+    <message>
+        <location filename="../qmlV2/component/MMComponent_reachedDataLimit.qml" line="97"/>
+        <source>Plan</source>
+        <translation>Plan</translation>
     </message>
 </context>
 <context>
@@ -2484,17 +2502,17 @@ Molimo zatvorite ga ručno na Mergin Maps web stranici.</translation>
 <context>
     <name>inputexternalresource</name>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="236"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="209"/>
         <source>Take a photo</source>
         <translation>Slikaj</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="278"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="247"/>
         <source>From gallery</source>
         <translation>Iz galerije</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="299"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="268"/>
         <source>Image is not available: </source>
         <translation>Slika nije dostupna:</translation>
     </message>
