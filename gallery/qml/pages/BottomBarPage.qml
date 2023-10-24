@@ -37,13 +37,13 @@ in menu of Advenced '-1' button"
     }
   }
   MMBottomBar {
-    state: MMBottomBar.States.Second; anchors.bottomMargin: 100
+    state: MMBottomBar.States.Second; anchors.bottomMargin: 100 * __dp
     Text {
       color: "white"; leftPadding: 20; anchors.bottom: parent.bottom
       text: "Delete:0 - EditGeometry:0"
     }
   }
-  MMBottomBar { state: MMBottomBar.States.Third; anchors.bottomMargin: 200
+  MMBottomBar { state: MMBottomBar.States.Third; anchors.bottomMargin: 200 * __dp
     Text {
       color: "white"; leftPadding: 20; anchors.bottom: parent.bottom
       text: "Delete:2 - EditGeometry:3 - Advanced:-1 - Save:0"
@@ -52,5 +52,12 @@ in menu of Advenced '-1' button"
     onDeleteClicked: console.log("Delete clicked")
     onEditGeometryClicked: console.log("Edit geometry clicked")
     onSaveClicked: console.log("Save clicked")
+  }
+  MMBottomBar {
+    state: MMBottomBar.States.Forth; anchors.bottomMargin: 320 * __dp
+    Text {
+      color: "white"; leftPadding: 20; anchors.bottom: parent.bottom
+      text: "BigEdit:0"
+    }
   }
 }

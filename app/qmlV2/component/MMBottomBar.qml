@@ -27,11 +27,11 @@ Rectangle {
   color: Style.forest
 
   enum Buttons {
-    Delete, EditGeometry, Advanced, Save
+    Delete, EditGeometry, Advanced, Save, BigEdit
   }
 
   enum States {
-    First, Second, Third
+    First, Second, Third, Forth
   }
 
   required property var state
@@ -58,6 +58,12 @@ Rectangle {
     ListElement { button: MMBottomBar.Buttons.EditGeometry; priority: 3 }
     ListElement { button: MMBottomBar.Buttons.Advanced; priority: -1 }
     ListElement { button: MMBottomBar.Buttons.Save; priority: 0 }
+  }
+
+  ListModel {
+    id: modelForth
+
+    ListElement { button: MMBottomBar.Buttons.BigEdit; priority: 0 }
   }
 
   // buttons shown inside bottom bar
@@ -103,6 +109,7 @@ Rectangle {
     case MMBottomBar.States.First: currentFullModel = modelFirst; break
     case MMBottomBar.States.Second: currentFullModel = modelSecond; break
     case MMBottomBar.States.Third: currentFullModel = modelThird; break
+    case MMBottomBar.States.Forth: currentFullModel = modelForth; break
     }
     visibleButtonModel.clear()
     visibleButtonModel.modelReset()
