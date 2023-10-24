@@ -88,9 +88,13 @@ Page {
     spacing: 20
 
     MMMapButton {
+      iconSource: Style.arrowLinkRightIcon
+      onClicked: console.log("Map button clicked")
     }
 
     MMMapButton {
+      iconSource: Style.searchIcon
+      onClicked: console.log("Map button clicked")
     }
   }
 

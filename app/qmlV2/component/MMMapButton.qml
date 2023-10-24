@@ -17,8 +17,10 @@ import "."
 Item {
   id: control
 
-  width: 50
-  height: 50
+  width: height
+  height: Style.commonItemHeight
+
+  property alias iconSource: icon.source
 
   signal clicked
 
@@ -35,7 +37,6 @@ Item {
       id: icon
 
       anchors.centerIn: parent
-      source: Style.arrowLinkRightIcon
       color: Style.forest
     }
 
