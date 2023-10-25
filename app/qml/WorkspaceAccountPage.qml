@@ -177,7 +177,7 @@ Page {
 
         titleText: qsTr( "Subscription status" )
         text: qsTr("Please update your %1billing details%2 as soon as possible")
-                .arg("<a href='" + __purchasing.subscriptionBillingUrl + "'>")
+                .arg("<a href='" + __inputHelp.merginDashboardLink + "'>")
                 .arg("</a>")
 
         textComponent.onLinkActivated: function ( link ) {
@@ -213,33 +213,6 @@ Page {
 
         text: qsTr("Manage account")
         onClicked: root.managePlansClicked()
-      }
-
-      Text {
-        Layout.fillWidth: true
-        Layout.preferredHeight: InputStyle.rowHeightHeader
-
-        leftPadding: InputStyle.formSpacing
-
-        color: InputStyle.fontColor
-        linkColor: InputStyle.highlightColor
-
-        wrapMode: Text.WordWrap
-        textFormat: Text.StyledText
-
-        font.bold: true
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-
-        verticalAlignment: Qt.AlignVCenter
-        horizontalAlignment: Qt.AlignLeft
-
-        visible: __iosUtils.isIos && root.apiSupportsSubscriptions && root.canAccessSubscription
-
-        text: qsTr("You can also %1restore%2 your purchase.")
-          .arg("<a href='http://restore-purchases'>")
-          .arg("</a>")
-
-        onLinkActivated: __purchasing.restore()
       }
 
       // user profile

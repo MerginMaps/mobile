@@ -16,8 +16,6 @@
 #include <QJsonObject>
 
 #include "merginsubscriptionstatus.h"
-#include "merginsubscriptiontype.h"
-
 
 struct MerginInvitation
 {

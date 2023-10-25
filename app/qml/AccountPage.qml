@@ -20,7 +20,6 @@ Page {
   signal back
   signal managePlansClicked
   signal signOutClicked
-  signal restorePurchasesClicked
   signal accountDeleted
   property color bgColor: "white"
   property real fieldHeight: InputStyle.rowHeight
@@ -149,7 +148,7 @@ Page {
           Qt.openUrlExternally(link)
         }
         text: qsTr("Please update your %1billing details%2 as soon as possible")
-                .arg("<a href='" + __purchasing.subscriptionBillingUrl + "'>")
+                .arg("<a href='" + __inputHelp.merginDashboardLink + "'>")
                 .arg("</a>")
         iconColor: InputStyle.highlightColor
       }
@@ -206,13 +205,12 @@ Page {
 
       Button {
         id: subscribeButton
-        enabled: !__purchasing.transactionPending
         width: root.width - 2 * InputStyle.rowHeightHeader
         anchors.horizontalCenter: parent.horizontalCenter
         visible: __merginApi.apiSupportsSubscriptions
 
         height: InputStyle.rowHeightHeader
-        text: __purchasing.transactionPending ? qsTr("Working...") : root.ownsActiveSubscription ? qsTr("Manage Subscription") : qsTr("Subscription plans")
+        text: root.ownsActiveSubscription ? qsTr("Manage Subscription") : qsTr("Subscription plans")
         font.pixelSize: InputStyle.fontPixelSizeBig
 
         background: Rectangle {
@@ -230,33 +228,6 @@ Page {
           verticalAlignment: Text.AlignVCenter
           elide: Text.ElideRight
         }
-      }
-
-      Item {
-        id: spacer
-        visible: textRestore.visible
-        height: InputStyle.rowHeightHeader
-        width:parent.width
-      }
-
-      Text {
-        id: textRestore
-        visible: __iosUtils.isIos && __merginApi.apiSupportsSubscriptions && __purchasing.hasInAppPurchases && !__purchasing.transactionPending
-        textFormat: Text.RichText
-        onLinkActivated: restorePurchasesClicked()
-        elide: Text.ElideRight
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        text: "<style>a:link { color: " + InputStyle.highlightColor
-              + "; text-decoration: underline; }</style>" + qsTr(
-                "You can also %1restore%2 your purchases")
-              .arg("<a href='http://restore-purchases'>")
-              .arg("</a>")
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: InputStyle.fontColor
-        width: root.width
-        leftPadding: InputStyle.rowHeightHeader
-        rightPadding: InputStyle.rowHeightHeader
       }
     }
 

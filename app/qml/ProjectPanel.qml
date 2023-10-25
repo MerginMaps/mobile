@@ -915,9 +915,6 @@ Item {
         stackView.pop( null )
         root.resetView()
       }
-      onRestorePurchasesClicked: {
-        __purchasing.restore()
-      }
       onAccountDeleted: {
         stackView.popOnePageOrClose()
         root.resetView()

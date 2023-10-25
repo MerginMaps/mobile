@@ -16,7 +16,6 @@
 #include <QStringList>
 
 class MerginApi;
-class Purchasing;
 class InputUtils;
 class VariablesManager;
 class PositionKit;
@@ -32,7 +31,7 @@ class InputTests
 
     bool testingRequested() const;
 
-    void init( MerginApi *api, Purchasing *purchasing, InputUtils *utils, VariablesManager *varManager, PositionKit *positionKit, AppSettings *settings );
+    void init( MerginApi *api, InputUtils *utils, VariablesManager *varManager, PositionKit *positionKit, AppSettings *settings );
     void initTestDeclarative();
     QString initTestingDir();
     int runTest() const;
@@ -41,7 +40,6 @@ class InputTests
     QString mTestRequested;
     QStringList mTestArgs;
     MerginApi *mApi = nullptr;
-    Purchasing *mPurchasing = nullptr;
     InputUtils *mInputUtils = nullptr;
     VariablesManager *mVariablesManager = nullptr;
     PositionKit *mPositionKit = nullptr;

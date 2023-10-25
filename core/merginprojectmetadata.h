@@ -62,6 +62,7 @@ struct MerginProjectMetadata
   QList<QString> writersnames;
   int version = -1;
   QList<MerginFile> files;
+  QString projectId; //!< unique project ID (only available in API that supports project IDs)
 
   // no project dir, no sync state, ...
 
