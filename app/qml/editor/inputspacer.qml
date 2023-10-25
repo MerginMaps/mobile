@@ -1,6 +1,4 @@
 /***************************************************************************
- checkbox.qml
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,7 +18,7 @@ Rectangle {
 
   property bool isHLine: config["IsHLine"]
 
-  height: 1 // parent form's list inserts space between each 2 elements
+  height: 1 * __dp < 1 ? 1 : 1 * __dp // parent form's list inserts space between each 2 elements
   width: parent.width
   color: isHLine ? customStyle.fields.backgroundColor : "transparent"
   anchors {
