@@ -194,6 +194,7 @@ class  AttributeController : public QObject
      */
     void recalculateDerivedItems( bool isFormValueChange = false, bool isFirstUpdateOfNewFeature = false );
     bool recalculateDefaultValues( QSet<QUuid> &changedFormItems, QgsExpressionContext &context, bool isFormValueChange = false, bool isFirstUpdateOfNewFeature = false );
+    void recalculateRichTextWidgets( QSet<QUuid> &changedFormItems, QgsExpressionContext &context );
 
     // generate tab
     void createTab( QgsAttributeEditorContainer *container );

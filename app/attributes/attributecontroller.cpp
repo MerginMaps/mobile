@@ -27,6 +27,9 @@
 #include "qgsattributeeditorrelation.h"
 #include "qgsattributeeditorcontainer.h"
 #include "qgsvectorlayerutils.h"
+#include "qgsattributeeditorspacerelement.h"
+#include "qgsattributeeditortextelement.h"
+#include "qgsattributeeditorhtmlelement.h"
 #include "qgsvectorlayereditbuffer.h"
 #include "qgsexpressioncontextutils.h"
 #include "qgsrelation.h"
@@ -223,7 +226,7 @@ void AttributeController::flatten(
         int fieldIndex = editorField->idx();
         if ( fieldIndex < 0 || fieldIndex >= layer->fields().size() )
         {
-          CoreUtils::log( "Forms", QStringLiteral( "Invalid fieldIndex for editorField in layer %1" ).arg( layer->name() ) );
+          CoreUtils::log( "Forms", QStringLiteral( "Invalid fieldIndex for editorField %1 in layer %2" ).arg( editorField->name(), layer->name() ) );
           continue;
         }
         QgsField field = layer->fields().at( fieldIndex );
@@ -246,8 +249,8 @@ void AttributeController::flatten(
               field,
               groupName,
               parentTabRow,
-              FormItem::Field,
               layer->attributeDisplayName( fieldIndex ),
+              editorField->showLabel(),
               !isReadOnly,
               getEditorWidgetSetup( layer, fieldIndex ),
               fieldIndex,
@@ -300,8 +303,8 @@ void AttributeController::flatten(
               widgetUuid,
               groupName,
               parentTabRow,
-              FormItem::Relation,
               label,
+              relationField->showLabel(),
               parentVisibilityExpressions, // relation field doesn't have visibility expression itself
               associatedRelation
             )
@@ -312,9 +315,88 @@ void AttributeController::flatten(
 
         break;
       }
+      case Qgis::AttributeEditorType::SpacerElement:
+      {
+        QUuid fieldUuid = QUuid::createUuid();
+
+        QgsAttributeEditorSpacerElement *spacerElement = static_cast<QgsAttributeEditorSpacerElement *>( element );
+
+        const QString groupName = container->isGroupBox() ? container->name() : QString();
+        std::shared_ptr<FormItem> formItemData =
+          std::shared_ptr<FormItem>(
+            FormItem::createSpacerItem(
+              fieldUuid,
+              groupName,
+              parentTabRow,
+              spacerElement->name(),
+              spacerElement->drawLine(),
+              parentVisibilityExpressions // spacer doesn't have visibility expression itself
+            )
+          );
+
+        mFormItems[formItemData->id()] = formItemData;
+
+
+        items.append( fieldUuid );
+        break;
+      }
+      case Qgis::AttributeEditorType::TextElement:
+      {
+        QUuid fieldUuid = QUuid::createUuid();
+
+        QgsAttributeEditorTextElement *textElement = static_cast<QgsAttributeEditorTextElement *>( element );
+
+
+        const QString groupName = container->isGroupBox() ? container->name() : QString();
+        std::shared_ptr<FormItem> formItemData =
+          std::shared_ptr<FormItem>(
+            FormItem::createRichTextItem(
+              fieldUuid,
+              groupName,
+              parentTabRow,
+              textElement->name(),
+              textElement->showLabel(),
+              textElement->text(),
+              false,
+              parentVisibilityExpressions // text doesn't have visibility expression itself
+            )
+          );
+
+        mFormItems[formItemData->id()] = formItemData;
+
+        items.append( fieldUuid );
+        break;
+      }
+      case Qgis::AttributeEditorType::HtmlElement:
+      {
+        QUuid fieldUuid = QUuid::createUuid();
+
+        QgsAttributeEditorHtmlElement *htmlElement = static_cast<QgsAttributeEditorHtmlElement *>( element );
+
+
+        const QString groupName = container->isGroupBox() ? container->name() : QString();
+        std::shared_ptr<FormItem> formItemData =
+          std::shared_ptr<FormItem>(
+            FormItem::createRichTextItem(
+              fieldUuid,
+              groupName,
+              parentTabRow,
+              htmlElement->name(),
+              htmlElement->showLabel(),
+              htmlElement->htmlCode(),
+              true,
+              parentVisibilityExpressions // text doesn't have visibility expression itself
+            )
+          );
+
+        mFormItems[formItemData->id()] = formItemData;
+
+        items.append( fieldUuid );
+        break;
+      }
 
       default:
-        // Invalid, Action, QmlElement, HtmlElement, TextElement and SpacerElement
+        // Invalid, Action, QmlElement
         // are not supported at the moment
         break;
     }
@@ -730,6 +812,9 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     qDebug() << "Evaluation of default values was not finished in " << LIMIT << " tries. Giving up, sorry!";
   }
 
+  // Evaluate HTML and Text element expressions
+  recalculateRichTextWidgets( changedFormItems, expressionContext );
+
   // Evaluate tab items visiblity
   {
     QVector<std::shared_ptr<TabItem>>::iterator tabItemsIterator = mTabItems.begin();
@@ -847,6 +932,62 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
 
   if ( isFormValueChange )
     emit formRecalculated();
+}
+
+void AttributeController::recalculateRichTextWidgets( QSet<QUuid> &changedFormItems, QgsExpressionContext &context )
+{
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+  while ( formItemsIterator != mFormItems.end() )
+  {
+    std::shared_ptr<FormItem> itemData = formItemsIterator.value();
+    if ( itemData->type() == FormItem::RichText )
+    {
+      QString newValue;
+      QString definition = itemData->editorWidgetConfig().value( QStringLiteral( "Definition" ) ).toString();
+      bool isHTML = itemData->editorWidgetConfig().value( QStringLiteral( "UseHtml" ) ).toBool();
+      if ( isHTML )
+      {
+        // evaluate texts like: <script>document.write(expression.evaluate("\TextField\""));</script>
+
+        // QML Text does not support document.write, so just remove it
+        const thread_local QRegularExpression sRegEx1( "<script>\\s*document\\.write\\(\\s*(.*)\\s*\\)\\s*;\\s*</script>", QRegularExpression::MultilineOption | QRegularExpression::DotMatchesEverythingOption );
+        QRegularExpressionMatch match1 = sRegEx1.match( definition );
+        while ( match1.hasMatch() )
+        {
+          QString expression = match1.captured( 1 );
+          definition = QStringLiteral( "<span>%1</span>" ).arg( definition.mid( 0, match1.capturedStart( 0 ) ) + expression + definition.mid( match1.capturedEnd( 0 ) ) );
+          match1 = sRegEx1.match( definition );
+        }
+
+        // Not evaluate expression with the engine
+        const thread_local QRegularExpression sRegEx( "expression\\.evaluate\\(\\s*\\\"(.*?[^\\\\])\\\"\\s*\\)", QRegularExpression::MultilineOption | QRegularExpression::DotMatchesEverythingOption );
+        QRegularExpressionMatch match = sRegEx.match( definition );
+        while ( match.hasMatch() )
+        {
+          QString expression = match.captured( 1 );
+          expression = expression.replace( QStringLiteral( "\\\"" ), QStringLiteral( "\"" ) );
+
+          QgsExpression exp = QgsExpression( expression );
+          exp.prepare( &context );
+          QString resultString = exp.evaluate( &context ).toString();
+          definition = definition.mid( 0, match.capturedStart( 0 ) ) + resultString + definition.mid( match.capturedEnd( 0 ) );
+          match = sRegEx.match( definition );
+        }
+        newValue = definition;
+      }
+      else
+      {
+        newValue = QgsExpression::replaceExpressionText( definition, &context );
+      }
+      if ( itemData->rawValue() != newValue )
+      {
+        changedFormItems.insert( itemData->id() );
+        itemData->setRawValue( newValue );
+      }
+    }
+    ++formItemsIterator;
+  }
+
 }
 
 bool AttributeController::hasValidationErrors() const

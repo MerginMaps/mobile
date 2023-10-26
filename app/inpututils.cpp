@@ -1054,7 +1054,8 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, cons
     return QUrl( path.arg( QLatin1String( "valuerelationcombobox" ) ) );
   }
 
-  QStringList supportedWidgets = { QStringLiteral( "textedit" ),
+  QStringList supportedWidgets = { QStringLiteral( "richtext" ),
+                                   QStringLiteral( "textedit" ),
                                    QStringLiteral( "valuemap" ),
                                    QStringLiteral( "valuerelation" ),
                                    QStringLiteral( "checkbox" ),
@@ -1062,6 +1063,7 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, cons
                                    QStringLiteral( "datetime" ),
                                    QStringLiteral( "range" ),
                                    QStringLiteral( "relation" ),
+                                   QStringLiteral( "spacer" ),
                                    QStringLiteral( "relationreference" )
                                  };
   if ( supportedWidgets.contains( widgetName ) )

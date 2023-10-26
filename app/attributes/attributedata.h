@@ -45,6 +45,8 @@ class FormItem
       Container,
       Relation,
       Field,
+      Spacer,
+      RichText
     };
     Q_ENUMS( FormItemType )
 
@@ -55,11 +57,12 @@ class FormItem
       int parentTabId,
       FormItem::FormItemType type,
       const QString &name,
+      bool showName,
       bool isEditable,
       const QgsEditorWidgetSetup &editorWidgetSetup,
       int fieldIndex,
       const QgsExpression &visibilityExpression,
-      const QgsRelation &relation = QgsRelation()
+      const QgsRelation &relation
     );
 
     static FormItem *createFieldItem(
@@ -67,8 +70,8 @@ class FormItem
       const QgsField &field,
       const QString &groupName,
       int parentTabId,
-      FormItem::FormItemType type,
       const QString &name,
+      bool showName,
       bool isEditable,
       const QgsEditorWidgetSetup &editorWidgetSetup,
       int fieldIndex,
@@ -79,10 +82,30 @@ class FormItem
       const QUuid &id,
       const QString &groupName,
       int parentTabId,
-      FormItem::FormItemType type,
       const QString &name,
+      bool showName,
       const QgsExpression &visibilityExpression,
       const QgsRelation &relation
+    );
+
+    static FormItem *createSpacerItem(
+      const QUuid &id,
+      const QString &groupName,
+      int parentTabId,
+      const QString &name,
+      bool isHLine,
+      const QgsExpression &visibilityExpression
+    );
+
+    static FormItem *createRichTextItem(
+      const QUuid &id,
+      const QString &groupName,
+      int parentTabId,
+      const QString &name,
+      bool showName,
+      const QString &text,
+      bool isHtml,
+      const QgsExpression &visibilityExpression
     );
 
     FormItem::FormItemType type() const;
@@ -122,6 +145,8 @@ class FormItem
     QgsRelation relation() const;
     QString fieldError() const;
 
+    bool showName() const;
+
   private:
 
     const QUuid mId;
@@ -130,6 +155,7 @@ class FormItem
     const int mParentTabId;
     const FormItem::FormItemType mType;
     const QString mName;
+    const bool mShowName = true; // "Show label" in Widget Display group in QGIS widget settings
     const bool mIsEditable;
     const QgsEditorWidgetSetup mEditorWidgetSetup;
     const int mFieldIndex;
@@ -141,7 +167,7 @@ class FormItem
     QVariant mOriginalValue; // original unmodified value
     QVariant mRawValue;
 
-    const QgsRelation mRelation; // empty if type is field
+    const QgsRelation mRelation; // Only used for FormItemType::Relation
 };
 
 class  TabItem
