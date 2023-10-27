@@ -83,6 +83,11 @@ Item {
   }
 
   function _getActiveForm() {
+    if (formsStack.depth === 0) {
+      // no active form on empty form stack
+      return null
+    }
+
     if ( root.activeFormIndex >= 0 && root.activeFormIndex < formsStack.depth ) {
       return formsStack.get( activeFormIndex )
     }
@@ -137,7 +142,25 @@ Item {
   }
 
   function reload() {
-    formsStack.clear() // removes all objects thanks to Qt parent system
+    // Even after formStack.clear() is called,
+    // forms in the formStack will still
+    // receive and evaluate some signals
+    // and most importantly in some scenarios
+    // featureLayerPair could contain already
+    // dangling pointer to layer and crash the app
+    // https://github.com/MerginMaps/input/issues/2879
+    for ( let i = 0; i < formsStack.depth; i++ ) {
+      let form = formsStack.get( i )
+      form.featureLayerPair = __inputUtils.createFeatureLayerPair()
+      form.relationToApply = null
+      form.controllerToApply = null
+      form.project = null
+      form.linkedRelation = null
+      form.parentController = null
+    }
+
+    // removes all objects thanks to Qt parent system
+    formsStack.clear(StackView.Immediate)
   }
 
   function openLinkedFeature( linkedFeature ) {

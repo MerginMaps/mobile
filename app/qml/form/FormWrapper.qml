@@ -34,7 +34,7 @@ Item {
   property real previewHeight
   property real panelHeight
 
-  property bool isReadOnly: featureLayerPair ? featureLayerPair.layer.readOnly : false
+  property bool isReadOnly: featureLayerPair && featureLayerPair.layer ? featureLayerPair.layer.readOnly : false
 
   signal closed()
   signal editGeometry( var pair )
