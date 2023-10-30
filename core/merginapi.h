@@ -166,7 +166,7 @@ struct TransactionStatus
   // pull replies
   QPointer<QNetworkReply> replyPullProjectInfo;
   QPointer<QNetworkReply> replyPullServerConfig;
-  QSet<QNetworkReply*> replyPullItems;
+  QSet<QNetworkReply *> replyPullItems;
 
   // push replies
   QPointer<QNetworkReply> replyPushProjectInfo;
