@@ -2324,6 +2324,13 @@ void MerginApi::startProjectPull( const QString &projectFullName )
   }
   transaction.totalSize = totalSize;
 
+  // order download queue from the largest to smallest chunks to better
+  // work with parallel downloads
+  std::sort(
+      transaction.downloadQueue.begin(), transaction.downloadQueue.end(),
+      [](const DownloadQueueItem& a, const DownloadQueueItem& b) { return a.size > b.size; }
+  );
+
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "%1 update tasks, %2 items to download (total size %3 bytes)" )
                   .arg( transaction.pullTasks.count() )
                   .arg( transaction.downloadQueue.count() )
