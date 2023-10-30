@@ -193,11 +193,7 @@ class  AttributeController : public QObject
      * @param isFormValueChange True if recalculation has to be done after an attribute has changed (called by setFormValue function).
      */
     void recalculateDerivedItems( bool isFormValueChange = false, bool isFirstUpdateOfNewFeature = false );
-<<<<<<< HEAD
-
     void recalculateRichTextWidgets( QSet<QUuid> &changedFormItems, QgsExpressionContext &context );
-=======
->>>>>>> 824bb37a (test)
     void recalculateDefaultValues( QSet<QUuid> &changedFormItems, QgsExpressionContext &context, bool isFormValueChange = false, bool isFirstUpdateOfNewFeature = false );
     void recalculateVirtualFields( QSet<QUuid> &changedFormItems, QgsExpressionContext &expressionContext );
     void evaluateExpressionAndUpdateValue( QSet<QUuid> &changedFormItems,
