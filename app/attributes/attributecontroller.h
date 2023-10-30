@@ -193,8 +193,11 @@ class  AttributeController : public QObject
      * @param isFormValueChange True if recalculation has to be done after an attribute has changed (called by setFormValue function).
      */
     void recalculateDerivedItems( bool isFormValueChange = false, bool isFirstUpdateOfNewFeature = false );
-    bool recalculateDefaultValues( QSet<QUuid> &changedFormItems, QgsExpressionContext &context, bool isFormValueChange = false, bool isFirstUpdateOfNewFeature = false );
     void recalculateRichTextWidgets( QSet<QUuid> &changedFormItems, QgsExpressionContext &context );
+    void recalculateDefaultValues( QSet<QUuid> &changedFormItems, QgsExpressionContext &context, bool isFormValueChange = false, bool isFirstUpdateOfNewFeature = false );
+    void recalculateVirtualFields( QSet<QUuid> &changedFormItems, QgsExpressionContext &expressionContext );
+    void evaluateExpressionAndUpdateValue( QSet<QUuid> &changedFormItems,
+                                           const QString &expressionString, QgsExpressionContext &expressionContext, int fieldIndex, const QgsField &field, std::shared_ptr<FormItem> formItem );
 
     // generate tab
     void createTab( QgsAttributeEditorContainer *container );
@@ -235,6 +238,7 @@ class  AttributeController : public QObject
     QMap<QUuid, std::shared_ptr<FormItem>> mFormItems; // order of fields in tab is in tab item
     QVector<std::shared_ptr<TabItem>> mTabItems; // order of tabs by tab row number
     QSet<int> mExpressionFieldsOutsideForm; // indices of fields with expressions which are outside of the form
+    QSet<int> mVirtualFieldsOutsideForm; // indices of virtual fields which are outside of the form
 
     RememberAttributesController *mRememberAttributesController = nullptr; // not owned
     VariablesManager *mVariablesManager = nullptr; // not owned
