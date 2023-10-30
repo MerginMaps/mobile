@@ -441,58 +441,58 @@ void AttributeController::clearAll()
 void AttributeController::updateOnLayerChange()
 {
   clearAll();
+  QgsVectorLayer *layer = mFeatureLayerPair.layer();
+  if ( !layer )
+    return;
 
   // 1) DATA
-  QgsVectorLayer *layer = mFeatureLayerPair.layer();
-  if ( layer )
+  if ( layer->editFormConfig().layout() == Qgis::AttributeFormLayout::DragAndDrop )
   {
-    if ( layer->editFormConfig().layout() == Qgis::AttributeFormLayout::DragAndDrop )
+    QgsAttributeEditorContainer *root = layer->editFormConfig().invisibleRootContainer();
+    if ( root->columnCount() > 1 )
     {
-      QgsAttributeEditorContainer *root = layer->editFormConfig().invisibleRootContainer();
-      if ( root->columnCount() > 1 )
-      {
-        qDebug() << "root tab in manual config has multiple columns. not supported on mobile devices!";
-        root->setColumnCount( 1 );
-      }
+      qDebug() << "root tab in manual config has multiple columns. not supported on mobile devices!";
+      root->setColumnCount( 1 );
+    }
 
-      mHasTabs = allowTabs( root );
-      if ( mHasTabs )
+    mHasTabs = allowTabs( root );
+    if ( mHasTabs )
+    {
+      for ( QgsAttributeEditorElement *element : root->children() )
       {
-        for ( QgsAttributeEditorElement *element : root->children() )
+        if ( element->type() == Qgis::AttributeEditorType::Container )
         {
-          if ( element->type() == Qgis::AttributeEditorType::Container )
+          QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
+          if ( container->columnCount() > 1 )
           {
-            QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
-            if ( container->columnCount() > 1 )
-            {
-              qDebug() << "tab " << container->name() << " in manual config has multiple columns. not supported on mobile devices!";
-              container->setColumnCount( 1 );
-            }
-            createTab( container );
+            qDebug() << "tab " << container->name() << " in manual config has multiple columns. not supported on mobile devices!";
+            container->setColumnCount( 1 );
           }
+          createTab( container );
         }
-      }
-      else
-      {
-        createTab( root );
       }
     }
     else
     {
-      // Auto-Generated Layout
-      // We create fake root tab
-      QgsAttributeEditorContainer *tab = autoLayoutTabContainer();
-
-      // We need to look for relations and include them into form,
-      // in auto-generated layout they are not included in form config
-      discoverRelations( tab );
-
-      createTab( tab );
+      createTab( root );
     }
-
-    if ( mRememberAttributesController )
-      mRememberAttributesController->storeLayerFields( layer );
   }
+  else
+  {
+    // Auto-Generated Layout
+    // We create fake root tab
+    QgsAttributeEditorContainer *tab = autoLayoutTabContainer();
+
+    // We need to look for relations and include them into form,
+    // in auto-generated layout they are not included in form config
+    discoverRelations( tab );
+
+    createTab( tab );
+  }
+
+  if ( mRememberAttributesController )
+    mRememberAttributesController->storeLayerFields( layer );
+
 
   // 2) MODELS
   // for all other models, ownership is managed by Qt parent system
@@ -544,6 +544,9 @@ void AttributeController::updateOnLayerChange()
 
 void AttributeController::updateOnFeatureChange()
 {
+  if ( !mFeatureLayerPair.layer() )
+    return;
+
   const QgsFeature feature = mFeatureLayerPair.feature();
 
   QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
