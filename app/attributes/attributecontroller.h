@@ -194,6 +194,7 @@ class  AttributeController : public QObject
      */
     void recalculateDerivedItems( bool isFormValueChange = false, bool isFirstUpdateOfNewFeature = false );
 
+    void recalculateRichTextWidgets( QSet<QUuid> &changedFormItems, QgsExpressionContext &context );
     void recalculateDefaultValues( QSet<QUuid> &changedFormItems, QgsExpressionContext &context, bool isFormValueChange = false, bool isFirstUpdateOfNewFeature = false );
     void recalculateVirtualFields( QSet<QUuid> &changedFormItems, QgsExpressionContext &expressionContext );
     void evaluateExpressionAndUpdateValue( QSet<QUuid> &changedFormItems,

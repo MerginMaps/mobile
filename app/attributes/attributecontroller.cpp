@@ -738,7 +738,7 @@ void AttributeController::recalculateDefaultValues(
                                         expressionContext,
                                         item->fieldIndex(),
                                         field,
-                                        nullptr );
+                                        item );
     }
 
     if ( isFirstUpdateOfNewFeature )
@@ -801,7 +801,7 @@ void AttributeController::recalculateVirtualFields( QSet<QUuid> &changedFormItem
                                         expressionContext,
                                         item->fieldIndex(),
                                         field,
-                                        nullptr );
+                                        item );
     }
     ++formItemsIterator;
   }
@@ -828,7 +828,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   expressionContext.setFields( fields );
   expressionContext.setFeature( featureLayerPair().featureRef() );
 
-  // Evalueate virtual fields
+  // Evaluate virtual fields
   recalculateVirtualFields( changedFormItems, expressionContext );
 
   // Evaluate default values
