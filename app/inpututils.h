@@ -235,18 +235,18 @@ class InputUtils: public QObject
       * Return empty QgsPointXY if the transformation could not be applied or srcPoint is empty
       */
     Q_INVOKABLE static QgsPointXY transformPointXY( const QgsCoordinateReferenceSystem &srcCrs,
-        const QgsCoordinateReferenceSystem &destCrs,
-        const QgsCoordinateTransformContext &context,
-        const QgsPointXY &srcPoint );
+      const QgsCoordinateReferenceSystem &destCrs,
+      const QgsCoordinateTransformContext &context,
+      const QgsPointXY &srcPoint );
 
     /**
       * Transforms point between different crs
       * Return empty QgsPoint if the transformation could not be applied or srcPoint is empty
       */
     Q_INVOKABLE static QgsPoint transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
-        const QgsCoordinateReferenceSystem &destCrs,
-        const QgsCoordinateTransformContext &context,
-        const QgsPoint &srcPoint );
+      const QgsCoordinateReferenceSystem &destCrs,
+      const QgsCoordinateTransformContext &context,
+      const QgsPoint &srcPoint );
 
     /**
       * Transforms point between CRS and screen pixels
@@ -371,9 +371,9 @@ class InputUtils: public QObject
       * \returns string represetation of dist in desired destSystem. For distance less than 0, 0 is returned.
       */
     Q_INVOKABLE static QString formatDistance( double distance,
-        Qgis::DistanceUnit units,
-        int decimals,
-        Qgis::SystemOfMeasurement destSystem = Qgis::SystemOfMeasurement::Metric );
+      Qgis::DistanceUnit units,
+      int decimals,
+      Qgis::SystemOfMeasurement destSystem = Qgis::SystemOfMeasurement::Metric );
 
     /**
       * Deletes file from a given path.
