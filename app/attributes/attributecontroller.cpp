@@ -33,7 +33,6 @@
 #include "qgsvectorlayereditbuffer.h"
 #include "qgsexpressioncontextutils.h"
 #include "qgsrelation.h"
-#include "qgsmessagelog.h"
 #include "inpututils.h"
 #include "coreutils.h"
 
@@ -613,19 +612,18 @@ void AttributeController::acquireId()
   {
     if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
     {
-      QgsMessageLog::logMessage( tr( "Feature could not be added" ),
-                                 QStringLiteral( "Input" ),
-                                 Qgis::Critical );
+      CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Feature could not be added" ) );
 
     }
   }
   else
   {
     if ( !mFeatureLayerPair.layer()->updateFeature( feat ) )
-      QgsMessageLog::logMessage( tr( "Cannot update feature" ),
-                                 QStringLiteral( "Input" ),
-                                 Qgis::Warning );
+    {
+      CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Cannot update feature" ) );
+    }
   }
+
 
   connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
 
@@ -644,49 +642,56 @@ void AttributeController::evaluateExpressionAndUpdateValue( QSet<QUuid> &changed
 
   exp.prepare( &expressionContext );
   if ( exp.hasParserError() )
-    QgsMessageLog::logMessage( tr( "Expression for %1:%2 has parser error: %3" ).arg(
-                                 mFeatureLayerPair.layer()->name(),
-                                 field.name(),
-                                 exp.parserErrorString() ),
-                               QStringLiteral( "Input" ),
-                               Qgis::Warning );
+  {
+    QString msg( QStringLiteral( "Expression for %1:%2 has parser error: %3" ).arg(
+                   mFeatureLayerPair.layer()->name(),
+                   field.name(),
+                   exp.parserErrorString() ) );
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), msg );
+    return;
+  }
 
   QVariant value = exp.evaluate( &expressionContext );
 
   if ( exp.hasEvalError() )
-    QgsMessageLog::logMessage( tr( "Expression for %1:%2 has evaluation error: %3" ).arg(
-                                 mFeatureLayerPair.layer()->name(),
-                                 field.name(),
-                                 exp.evalErrorString() ),
-                               QStringLiteral( "Input" ),
-                               Qgis::Warning );
-  else
   {
-    QVariant val( value );
-    if ( !field.convertCompatible( val ) )
+    QString msg( QStringLiteral( "Expression for %1:%2 has evaluation error: %3" ).arg(
+                   mFeatureLayerPair.layer()->name(),
+                   field.name(),
+                   exp.evalErrorString() ) );
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), msg );
+    return;
+  }
+
+  QVariant val( value );
+  if ( !field.convertCompatible( val ) )
+  {
+    QString msg( QStringLiteral( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg(
+                   value.toString(),
+                   field.name(),
+                   field.typeName(),
+                   value.isNull() ? "NULL" : "NOT NULL" )
+               );
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), msg );
+    return;
+  }
+
+  QVariant oldVal = mFeatureLayerPair.feature().attribute( fieldIndex );
+
+  if ( val != oldVal )
+  {
+    mFeatureLayerPair.featureRef().setAttribute( fieldIndex, val );
+
+    // We need to update form items and emit signals for fields included in the form
+    if ( formItem )
     {
-      QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
-      QgsMessageLog::logMessage( msg );
+      formItem->setRawValue( val );
+      emit formDataChanged( formItem->id(), { AttributeFormModel::RawValue, AttributeFormModel::RawValueIsNull } );
+      changedFormItems.insert( formItem->id() );
     }
-    else
-    {
-      QVariant oldVal = mFeatureLayerPair.feature().attribute( fieldIndex );
 
-      if ( val != oldVal )
-      {
-        mFeatureLayerPair.featureRef().setAttribute( fieldIndex, val );
-
-        if ( formItem )
-        {
-          formItem->setRawValue( val );
-          emit formDataChanged( formItem->id(), { AttributeFormModel::RawValue, AttributeFormModel::RawValueIsNull } );
-          changedFormItems.insert( formItem->id() );
-        }
-
-        // Update also expression context after an attribute change
-        expressionContext.setFeature( featureLayerPair().featureRef() );
-      }
-    }
+    // Update also expression context after an attribute change
+    expressionContext.setFeature( featureLayerPair().featureRef() );
   }
 }
 
@@ -1062,9 +1067,7 @@ bool AttributeController::deleteFeature()
 
   if ( !isDeleted || !rv )
   {
-    QgsMessageLog::logMessage( tr( "Cannot delete feature" ),
-                               QStringLiteral( "Input" ),
-                               Qgis::Warning );
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Cannot delete feature" ) );
     emit commitFailed();
   }
   else
@@ -1118,10 +1121,7 @@ bool AttributeController::save()
   {
     if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
     {
-      QgsMessageLog::logMessage( tr( "Feature could not be added" ),
-                                 QStringLiteral( "Input" ),
-                                 Qgis::Critical );
-
+      CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Feature could not be added" ) );
     }
     connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
   }
@@ -1129,9 +1129,9 @@ bool AttributeController::save()
   {
     // update it instead of adding
     if ( !mFeatureLayerPair.layer()->updateFeature( feat, true ) )
-      QgsMessageLog::logMessage( tr( "Cannot update feature" ),
-                                 QStringLiteral( "Input" ),
-                                 Qgis::Warning );
+    {
+      CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Cannot update feature" ) );
+    }
   }
 
   bool featureIsNew = isNewFeature();
@@ -1173,9 +1173,7 @@ bool AttributeController::startEditing()
 
   if ( !mFeatureLayerPair.layer()->startEditing() )
   {
-    QgsMessageLog::logMessage( tr( "Cannot start editing" ),
-                               QStringLiteral( "Input" ),
-                               Qgis::Warning );
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Cannot start editing" ) );
     return false;
   }
   else
@@ -1365,8 +1363,8 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
 
     if ( !field.convertCompatible( val ) )
     {
-      QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
-      QgsMessageLog::logMessage( msg );
+      QString msg( QStringLiteral( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
+      CoreUtils::log( QStringLiteral( "Attribute Controller" ), msg );
     }
     else
     {
