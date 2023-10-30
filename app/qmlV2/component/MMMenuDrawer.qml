@@ -81,6 +81,7 @@ Drawer {
         height: model ? model.count * Style.menuDrawerHeight : 0
         cellWidth: width
         cellHeight: Style.menuDrawerHeight
+        interactive: false
       }
     }
   }

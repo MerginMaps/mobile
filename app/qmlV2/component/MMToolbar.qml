@@ -46,6 +46,7 @@ Rectangle {
     leftMargin: Style.commonSpacing
     rightMargin: Style.commonSpacing
     cellHeight: Style.toolbarHeight
+    interactive: false
   }
 
   MMMenuDrawer {
@@ -83,10 +84,10 @@ Rectangle {
         button = m.get(i)
         if(button.isMenuButton !== undefined)
           button.isMenuButton = false
-        button.width = w / c
+        button.width = Math.floor(w / c)
         visibleButtonModel.append(button)
       }
-      buttonView.cellWidth = w / c
+      buttonView.cellWidth = Math.floor(w / c)
     }
     else {
       // not all buttons are visible in toolbar due to width
@@ -98,7 +99,7 @@ Rectangle {
         if(maxVisible===4 || w >= i*Style.minimumToolbarButtonWidth) {
           button = m.get(i)
           button.isMenuButton = false
-          button.width = w / maxVisible
+          button.width = Math.floor(w / maxVisible)
           visibleButtonModel.append(button)
         }
       }
@@ -107,7 +108,7 @@ Rectangle {
       button.visible = true
       button.width = maxVisible ? w / maxVisible : w
       visibleButtonModel.append( button )
-      buttonView.cellWidth = maxVisible ? w / maxVisible : w
+      buttonView.cellWidth = Math.floor(maxVisible ? w / maxVisible : w)
 
       // add all other buttons inside the '...' button
       invisibleButtonModel.clear()
@@ -116,7 +117,7 @@ Rectangle {
           continue
         button = m.get(i)
         button.isMenuButton = true
-        button.width = w
+        button.width = Math.floor(w)
         invisibleButtonModel.append(button)
       }
     }
