@@ -755,9 +755,9 @@ QgsPoint InputUtils::coordinateToPoint( const QGeoCoordinate &coor )
 }
 
 QgsPointXY InputUtils::transformPointXY( const QgsCoordinateReferenceSystem &srcCrs,
-  const QgsCoordinateReferenceSystem &destCrs,
-  const QgsCoordinateTransformContext &context,
-  const QgsPointXY &srcPoint )
+    const QgsCoordinateReferenceSystem &destCrs,
+    const QgsCoordinateTransformContext &context,
+    const QgsPointXY &srcPoint )
 {
   // we do not want to transform empty points,
   // QGIS would convert them to a valid (0, 0) points
@@ -1302,9 +1302,9 @@ void InputUtils::humanReadableDistance( double srcDistance, Qgis::DistanceUnit s
 }
 
 void InputUtils::formatToMetricDistance( double srcDistance,
-  Qgis::DistanceUnit srcUnits,
-  double &destDistance,
-  Qgis::DistanceUnit &destUnits )
+    Qgis::DistanceUnit srcUnits,
+    double &destDistance,
+    Qgis::DistanceUnit &destUnits )
 {
   double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, Qgis::DistanceUnit::Millimeters );
   if ( dist < 0 )
@@ -1343,9 +1343,9 @@ void InputUtils::formatToMetricDistance( double srcDistance,
 }
 
 void InputUtils::formatToImperialDistance( double srcDistance,
-  Qgis::DistanceUnit srcUnits,
-  double &destDistance,
-  Qgis::DistanceUnit &destUnits )
+    Qgis::DistanceUnit srcUnits,
+    double &destDistance,
+    Qgis::DistanceUnit &destUnits )
 {
   double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, Qgis::DistanceUnit::Feet );
   if ( dist < 0 )

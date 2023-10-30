@@ -69,8 +69,8 @@ static QStringList detailsToStr( const QgsDatumTransform::TransformDetails &deta
 void InputProjUtils::initCoordinateOperationHandlers()
 {
   QgsCoordinateTransform::setCustomMissingRequiredGridHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-    const QgsCoordinateReferenceSystem & destinationCrs,
-    const QgsDatumTransform::GridDetails & grid )
+      const QgsCoordinateReferenceSystem & destinationCrs,
+      const QgsDatumTransform::GridDetails & grid )
   {
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
@@ -79,9 +79,9 @@ void InputProjUtils::initCoordinateOperationHandlers()
   } );
 
   QgsCoordinateTransform::setCustomMissingPreferredGridHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-    const QgsCoordinateReferenceSystem & destinationCrs,
-    const QgsDatumTransform::TransformDetails & preferredOperation,
-    const QgsDatumTransform::TransformDetails & availableOperation )
+      const QgsCoordinateReferenceSystem & destinationCrs,
+      const QgsDatumTransform::TransformDetails & preferredOperation,
+      const QgsDatumTransform::TransformDetails & availableOperation )
   {
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
@@ -90,8 +90,8 @@ void InputProjUtils::initCoordinateOperationHandlers()
   } );
 
   QgsCoordinateTransform::setCustomCoordinateOperationCreationErrorHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-    const QgsCoordinateReferenceSystem & destinationCrs,
-    const QString & error )
+      const QgsCoordinateReferenceSystem & destinationCrs,
+      const QString & error )
   {
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
@@ -100,8 +100,8 @@ void InputProjUtils::initCoordinateOperationHandlers()
   } );
 
   QgsCoordinateTransform::setCustomMissingGridUsedByContextHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-    const QgsCoordinateReferenceSystem & destinationCrs,
-    const QgsDatumTransform::TransformDetails & desired )
+      const QgsCoordinateReferenceSystem & destinationCrs,
+      const QgsDatumTransform::TransformDetails & desired )
   {
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
@@ -110,8 +110,8 @@ void InputProjUtils::initCoordinateOperationHandlers()
   } );
 
   QgsCoordinateTransform::setFallbackOperationOccurredHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-    const QgsCoordinateReferenceSystem & destinationCrs,
-    const QString & desired )
+      const QgsCoordinateReferenceSystem & destinationCrs,
+      const QString & desired )
   {
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
