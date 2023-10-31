@@ -23,9 +23,9 @@
  * View controller for iOSImagePicker
 */
 @interface IOSViewDelegate : NSObject<UIImagePickerControllerDelegate,
-UINavigationControllerDelegate>
+  UINavigationControllerDelegate>
 {
-  @public
+@public
 
   IOSImagePicker *handler;
   BOOL processingPicture;

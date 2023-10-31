@@ -184,11 +184,11 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
     NSString *alertOkButtonText = @"Ok";
 
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:alertTitle
-                                          message:alertMessage
-                                          preferredStyle:UIAlertControllerStyleAlert];
+                                                            message:alertMessage
+                                                            preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *actionOk = [UIAlertAction actionWithTitle:alertOkButtonText
-                               style:UIAlertActionStyleDefault
-                               handler:nil]; //You can use a block here to handle a press on this button
+                                             style:UIAlertActionStyleDefault
+                                             handler:nil]; //You can use a block here to handle a press on this button
     [alertController addAction:actionOk];
     [rootViewController presentViewController:alertController animated:YES completion:nil];
   }
@@ -201,11 +201,11 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
     delegate = [[IOSViewDelegate alloc] initWithHandler:handler];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:@"_UIImagePickerControllerUserDidCaptureItem" object:nil queue:nil usingBlock: ^ ( NSNotification * _Nonnull notification )
-    {
-      Q_UNUSED( notification )
-      // Fetch GPS data when an image is captured
-      mGpsData = getGPSData( delegate->handler->positionKit(), delegate->handler->compass() );
-    }];
+                                         {
+                                           Q_UNUSED( notification )
+                                           // Fetch GPS data when an image is captured
+                                           mGpsData = getGPSData( delegate->handler->positionKit(), delegate->handler->compass() );
+                                         }];
 
     // Confirm event
     delegate->imagePickerControllerDidFinishPickingMediaWithInfo = ^( UIImagePickerController * picker, NSDictionary * info )
