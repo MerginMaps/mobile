@@ -11,6 +11,7 @@
 #include "androidtrackingbroadcast.h"
 #include "coreutils.h"
 #include "inpututils.h"
+#include "androidutils.h"
 
 #include <QtCore/private/qandroidextras_p.h>
 
@@ -189,8 +190,14 @@ void AndroidTrackingBackend::setupForegroundUpdates()
     &AndroidTrackingBackend::sourceUpdatedState
   );
 
-  // TODO: you need to check if this is starting tracking or just resuming
-  // It should not be an issue to start this if it is already running, but let's double check
+  // We need to ask for a permission to show notifications,
+  // but it is not mandatory to start the foreground service
+  // See: https://developer.android.com/develop/ui/views/notifications/notification-permission
+  if ( !AndroidUtils::requestNotificationPermission() )
+  {
+    emit errorOccured( tr( "Enable notifications to see tracking in the notifications tray" ) );
+    CoreUtils::log( QStringLiteral( "Android Tracking Backend" ), QStringLiteral( "Notifications are disabled" ) );
+  }
 
   auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
   QAndroidIntent serviceIntent( activity.object(), "uk/co/lutraconsulting/PositionTrackingService" );

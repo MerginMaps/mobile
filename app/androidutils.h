@@ -36,6 +36,9 @@ class AndroidUtils: public QObject
 
     static QString externalStorageAppFolder();
 
+    // Android 13+ needs permission for sending notifications
+    static bool requestNotificationPermission();
+
     /**
      * Reads EXIF and returns value for given parameters.
      * @param filePath Absolute path to a file
@@ -69,6 +72,8 @@ class AndroidUtils: public QObject
     const static int BLUETOOTH_CODE = 103;
     const static int INSTALL_QR_SCANNER_CODE = 104;
     const static int QR_SCAN_CODE = 105;
+
+    const static int ANDROID_VERSION_13 = 13;
 
     void handleActivityResult( int receiverRequestCode, int resultCode, const QJniObject &data ) override;
 #endif

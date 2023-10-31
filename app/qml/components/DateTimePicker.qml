@@ -392,7 +392,17 @@ Item {
               MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                  calendar.selectDate(model.date)
+                  let pickedDate = new Date( model.year, model.month, model.day);
+                  // Do NOT use model.date!!
+                  // see https://bugreports.qt.io/browse/QTBUG-72208
+                  // For some timezones model.date.getDate() != model.day
+                  // e.g. you are in timezone TZ=America/Mexico_City
+                  // model.date: Wed Oct 11 18:00:00 2023 GMT-0600
+                  // model.day: 12
+                  // model.date.getDate(): 11
+                  // pickedDate Thu Oct 12 00:00:00 2023 GMT-0600
+                  // pickedDate.getDate(): 12
+                  calendar.selectDate(pickedDate)
                 }
               }
             }

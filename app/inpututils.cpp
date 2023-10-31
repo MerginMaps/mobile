@@ -13,6 +13,7 @@
 #include <QScreen>
 #include <QApplication>
 
+#include "qgsruntimeprofiler.h"
 #include "qcoreapplication.h"
 #include "qgsgeometrycollection.h"
 #include "qgslinestring.h"
@@ -157,6 +158,27 @@ QString InputUtils::formatProjectName( const QString &fullProjectName )
 QString InputUtils::formatNumber( const double number, int precision )
 {
   return QString::number( number, 'f', precision );
+}
+
+QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit )
+{
+  Qgis::DistanceUnit distUnit = destUnit;
+
+  if ( distUnit == Qgis::DistanceUnit::Unknown )
+  {
+    distUnit = QgsProject::instance()->distanceUnits();
+  }
+
+  if ( distUnit == Qgis::DistanceUnit::Unknown )
+  {
+    return QString::number( distanceInMeters, 'f', precision );
+  }
+
+  double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Meters, distUnit );
+  double distance = distanceInMeters * factor;
+  QString abbreviation = QgsUnitTypes::toAbbreviatedString( distUnit );
+
+  return QString( "%1 %2" ).arg( QString::number( distance, 'f', precision ), abbreviation );
 }
 
 QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax )
@@ -1032,7 +1054,8 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, cons
     return QUrl( path.arg( QLatin1String( "valuerelationcombobox" ) ) );
   }
 
-  QStringList supportedWidgets = { QStringLiteral( "textedit" ),
+  QStringList supportedWidgets = { QStringLiteral( "richtext" ),
+                                   QStringLiteral( "textedit" ),
                                    QStringLiteral( "valuemap" ),
                                    QStringLiteral( "valuerelation" ),
                                    QStringLiteral( "checkbox" ),
@@ -1040,6 +1063,7 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, cons
                                    QStringLiteral( "datetime" ),
                                    QStringLiteral( "range" ),
                                    QStringLiteral( "relation" ),
+                                   QStringLiteral( "spacer" ),
                                    QStringLiteral( "relationreference" )
                                  };
   if ( supportedWidgets.contains( widgetName ) )
@@ -1838,7 +1862,6 @@ bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
   return ImageUtils::rescale( path, quality );
 }
 
-
 QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
 {
   QgsGeometry geometry;
@@ -1918,7 +1941,6 @@ QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )
   return geometry;
 }
 
-
 QString InputUtils::invalidGeometryWarning( QgsVectorLayer *layer )
 {
   QString msg;
@@ -1997,6 +2019,59 @@ QString InputUtils::layerAttribution( QgsMapLayer *layer )
   }
 
   return QString();
+}
+
+const double PROFILER_THRESHOLD = 0.001;
+static double qgsRuntimeProfilerExtractModelAsText( QStringList &lines, const QString &group, const QModelIndex &parent, int level )
+{
+  double total_elapsed = 0.0;
+
+  const int rc = QgsApplication::profiler()->rowCount( parent );
+  for ( int r = 0; r < rc; r++ )
+  {
+    QModelIndex rowIndex = QgsApplication::profiler()->index( r, 0, parent );
+    if ( QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Group ).toString() != group )
+      continue;
+    bool ok;
+    double elapsed = QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Elapsed ).toDouble( &ok );
+    if ( !ok )
+      elapsed = 0.0;
+    total_elapsed += elapsed;
+
+    if ( elapsed > PROFILER_THRESHOLD )
+    {
+      QString name = QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Name ).toString();
+      lines << QStringLiteral( "  %1 %2: %3 sec" ).arg( QStringLiteral( ">" ).repeated( level + 1 ),  name, QString::number( elapsed, 'f', 3 ) );
+    }
+    total_elapsed += qgsRuntimeProfilerExtractModelAsText( lines, group, rowIndex, level + 1 );
+  }
+  return total_elapsed;
+}
+
+QVector<QString> InputUtils::qgisProfilerLog()
+{
+  QVector<QString> lines;
+  const QString project = QgsProject::instance()->fileName();
+
+  if ( !project.isEmpty() )
+  {
+    lines << QStringLiteral( "QgsProject filename: %1" ).arg( project );
+  }
+
+  lines << QStringLiteral( "List of QgsRuntimeProfiler events above %1 sec" ).arg( QString::number( PROFILER_THRESHOLD, 'f', 3 ) );
+
+  const auto groups = QgsApplication::profiler()->groups();
+  for ( const QString &g : groups )
+  {
+    QVector<QString> groupLines;
+    double elapsed = qgsRuntimeProfilerExtractModelAsText( groupLines, g, QModelIndex(), 0 );
+    if ( elapsed > PROFILER_THRESHOLD )
+    {
+      lines << QStringLiteral( "  %1: total %2 sec" ).arg( g, QString::number( elapsed, 'f', 3 ) );
+      lines << groupLines;
+    }
+  }
+  return lines;
 }
 
 QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )

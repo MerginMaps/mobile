@@ -51,11 +51,13 @@ set(MM_QML
     editor/inputrangeslider.qml
     editor/inputrelation.qml
     editor/inputrelationreference.qml
+    editor/inputrichtext.qml
     editor/inputtextedit.qml
     editor/inputtexteditmultiline.qml
     editor/inputvaluemap.qml
     editor/inputvaluerelationcombobox.qml
     editor/inputvaluerelationpage.qml
+    editor/inputspacer.qml
     form/FeatureForm.qml
     form/FeatureFormPage.qml
     form/FeatureFormStyling.qml
@@ -73,7 +75,7 @@ set(MM_QML
     map/Crosshair.qml
     map/Highlight.qml
     map/LoadingIndicator.qml
-    map/MapCanvas.qml
+    map/MMMapCanvas.qml
     map/MapWrapper.qml
     map/PositionMarker.qml
     map/RecordingToolbar.qml
@@ -112,7 +114,6 @@ set(MM_QML
     NumberSpin.qml
     PanelItem.qml
     PanelTabButton.qml
-    PhotoPanel.qml
     ProjectIssuesPanel.qml
     ProjectLimitDialog.qml
     ProjectListPage.qml
@@ -130,13 +131,9 @@ set(MM_QML
     SettingsPanel.qml
     StakeoutPanel.qml
     StorageLimitDialog.qml
-    SubscribePage.qml
-    SubscribePlanItem.qml
     SwitchWorkspacePage.qml
     WorkspaceAccountPage.qml
     WhatsNewDialog.qml
-    WorkspaceSubscribePage.qml
-    WorkspaceSubscribePlanItem.qml
     main.qml
     PARENT_SCOPE
 )

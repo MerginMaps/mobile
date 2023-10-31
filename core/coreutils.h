@@ -38,8 +38,13 @@ class CoreUtils
     static QString downloadInProgressFilePath( const QString &projectDir );
 
     static QString uuidWithoutBraces( const QUuid &uuid );
-    static QDateTime getLastModifiedFileDateTime( const QString &path );
-    static int getProjectFilesCount( const QString &path );
+
+    /**
+     * Returns Sha1 checksum of file (no-caching)
+     * This is potentially resourcing-costly operation
+     * \param filePath full path to the file on disk
+     */
+    static QByteArray calculateChecksum( const QString &filePath );
 
     /**
     * Returns given path if it does not exist yet, otherwise adds a number to the path in format:
@@ -90,6 +95,8 @@ class CoreUtils
 
   private:
     static QString sLogFile;
+    static int CHECKSUM_CHUNK_SIZE;
+
     static void appendLog( const QByteArray &data, const QString &path );
 };
 

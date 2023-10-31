@@ -73,9 +73,11 @@ Item {
       width: imageDecrease.width * 3
       height: imageDecrease.height * 3
 
-      TapHandler {  
-        onTapped: function(eventPoint, button) {
-            if (minValue <= root.value - 1) root.value -=1
+      MouseArea {
+        anchors.fill: parent
+
+        onClicked: {
+          if (minValue <= root.value - 1) root.value -=1
         }
       }
     }
@@ -86,9 +88,11 @@ Item {
       width: imageIncrease.width * 3
       height: imageIncrease.height * 3
 
-      TapHandler {
-        onTapped: function(eventPoint, button) {
-            if (maxValue >= root.value + 1) root.value +=1
+      MouseArea {
+        anchors.fill: parent
+
+        onClicked: {
+          if (maxValue >= root.value + 1) root.value +=1
         }
       }
     }

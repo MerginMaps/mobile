@@ -7,29 +7,23 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MERGINSUBSCRIPTIONTYPE_H
-#define MERGINSUBSCRIPTIONTYPE_H
+#ifndef TESTPROJECTCHECKSUMCACHE_H
+#define TESTPROJECTCHECKSUMCACHE_H
 
 #include <QObject>
-#include <QString>
 
-class MerginSubscriptionType
+class TestProjectChecksumCache : public QObject
 {
-    Q_GADGET
+    Q_OBJECT
   public:
-    explicit MerginSubscriptionType();
+    explicit TestProjectChecksumCache( );
+    ~TestProjectChecksumCache();
 
-    enum SubscriptionType
-    {
-      NoneSubscriptionType,
-      AppleSubscriptionType, // in-app purchases (apple provider)
-      StripeSubscriptionType, // stripe provider
-      TestSubscriptionType, // testing (mock) provider
-    };
-    Q_ENUMS( SubscriptionType )
+  private slots:
+    void init();
+    void cleanup();
 
-    static SubscriptionType fromString( const QString &name );
-    static QString toString( const SubscriptionType &type );
+    void testFilesCheckum();
 };
 
-#endif // MERGINSUBSCRIPTIONTYPE_H
+#endif // TESTPROJECTCHECKSUMCACHE_H

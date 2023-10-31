@@ -33,7 +33,7 @@ Item {
     width: parent.width
     height: parent.height
     border.color: customStyle.fields.normalColor
-    border.width: 1 * __dp
+    border.width: 1 * __dp < 1 ? 1 : 1 * __dp
     color: customStyle.fields.backgroundColor
     radius: customStyle.fields.cornerRadius
   }
@@ -60,11 +60,11 @@ Item {
         x: leftActionContainer.actionAllowed ? parent.x - customStyle.fields.sideMargin : parent.x
         height: parent.height
 
-        TapHandler {
-          onPressedChanged: {
-            if ( !pressed ) {
-              root.leftActionClicked()
-            }
+        MouseArea {
+          anchors.fill: parent
+
+          onReleased: {
+            root.leftActionClicked()
           }
         }
       }
@@ -79,8 +79,10 @@ Item {
       height: parent.height
       width: parent.width - ( leftActionContainer.width + rightActionContainer.width )
 
-      TapHandler {
-        onSingleTapped: {
+      MouseArea {
+        anchors.fill: parent
+
+        onClicked: {
           root.contentClicked()
         }
       }
@@ -101,11 +103,11 @@ Item {
         width: rightActionContainer.actionAllowed ? parent.width + customStyle.fields.sideMargin : parent.width
         height: parent.height
 
-        TapHandler {
-          onPressedChanged: {
-            if ( !pressed ) {
-              root.rightActionClicked()
-            }
+        MouseArea {
+          anchors.fill: parent
+
+          onReleased: {
+            root.rightActionClicked()
           }
         }
       }

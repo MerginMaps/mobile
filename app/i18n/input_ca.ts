@@ -122,6 +122,35 @@ Aneu al lloc web de Mergin Maps per eliminar-lo manualment.</translation>
     </message>
 </context>
 <context>
+    <name>ActiveProject</name>
+    <message>
+        <location filename="../activeproject.cpp" line="263"/>
+        <source>General</source>
+        <translation>General</translation>
+    </message>
+    <message>
+        <location filename="../activeproject.cpp" line="263"/>
+        <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
+        <translation>El projecte té assignat un CRS no vàlid. El mapa i les eines tenen un comportament indefinit!</translation>
+    </message>
+    <message>
+        <location filename="../activeproject.cpp" line="275"/>
+        <location filename="../activeproject.cpp" line="284"/>
+        <source>Layer</source>
+        <translation>Capa</translation>
+    </message>
+    <message>
+        <location filename="../activeproject.cpp" line="275"/>
+        <source>Unable to load source </source>
+        <translation>No es pot carregar la font</translation>
+    </message>
+    <message>
+        <location filename="../activeproject.cpp" line="284"/>
+        <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
+        <translation>La capa té assignat un CRS no vàlid. Les eines de gravació tenen un comportament indefinit.</translation>
+    </message>
+</context>
+<context>
     <name>AddPositionProviderPage</name>
     <message>
         <location filename="../qml/misc/AddPositionProviderPage.qml" line="32"/>
@@ -152,47 +181,52 @@ Aneu al lloc web de Mergin Maps per eliminar-lo manualment.</translation>
 <context>
     <name>AndroidTrackingBackend</name>
     <message>
-        <location filename="../position/tracking/androidtrackingbackend.cpp" line="115"/>
-        <location filename="../position/tracking/androidtrackingbackend.cpp" line="158"/>
-        <location filename="../position/tracking/androidtrackingbackend.cpp" line="172"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="116"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="159"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="173"/>
         <source>There was an error and tracking could not start, please contact support</source>
         <translation>S&apos;ha produït un error i no s&apos;ha pogut iniciar el seguiment; poseu-vos en contacte amb el servei d&apos;assistència</translation>
     </message>
     <message>
-        <location filename="../position/tracking/androidtrackingbackend.cpp" line="143"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="144"/>
         <source>Your device does not support tracking, available from Android 8.0</source>
         <translation>El vostre dispositiu no admet el seguiment, disponible des d&apos;Android 8.0</translation>
     </message>
     <message>
-        <location filename="../position/tracking/androidtrackingbackend.cpp" line="148"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="149"/>
         <source>Please enable location permission before starting tracking</source>
         <translation>Activeu el permís d&apos;ubicació abans de començar el seguiment</translation>
     </message>
     <message>
-        <location filename="../position/tracking/androidtrackingbackend.cpp" line="153"/>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="154"/>
         <source>Please enable location services on your device before starting tracking</source>
         <translation>Activeu els serveis d&apos;ubicació al vostre dispositiu abans de començar el seguiment</translation>
+    </message>
+    <message>
+        <location filename="../position/tracking/androidtrackingbackend.cpp" line="198"/>
+        <source>Enable notifications to see tracking in the notifications tray</source>
+        <translation>Activa les notificacions per veure el seguiment a la safata de notificacions</translation>
     </message>
 </context>
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="167"/>
+        <location filename="../androidutils.cpp" line="207"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>El permís d&apos;emmagatzematge està denegat permanentment. Permeteu-lo a la configuració per carregar imatges de la galeria</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="171"/>
+        <location filename="../androidutils.cpp" line="211"/>
         <source>Input needs a storage permission in order to load pictures from gallery</source>
         <translation>Input necessita permís d&apos;emmagatzematge per carregar imatges de la galeria </translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="189"/>
+        <location filename="../androidutils.cpp" line="229"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>El permís per emprar la càmera s&apos;ha denegat permanentment, autoritzeu-lo a la configuració</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="193"/>
+        <location filename="../androidutils.cpp" line="233"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Necessitem permís per la càmera per tal de fer una foto</translation>
     </message>
@@ -208,43 +242,43 @@ Aneu al lloc web de Mergin Maps per eliminar-lo manualment.</translation>
 <context>
     <name>AttributeController</name>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="563"/>
-        <location filename="../attributes/attributecontroller.cpp" line="614"/>
+        <location filename="../attributes/attributecontroller.cpp" line="570"/>
+        <location filename="../attributes/attributecontroller.cpp" line="621"/>
         <source>Default value expression for %1:%2 has parser error: %3</source>
         <translation>L&apos;expressió de valor per defecte per a %1:%2 té un error d&apos;analitzador: %3 </translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="573"/>
-        <location filename="../attributes/attributecontroller.cpp" line="624"/>
+        <location filename="../attributes/attributecontroller.cpp" line="580"/>
+        <location filename="../attributes/attributecontroller.cpp" line="631"/>
         <source>Default value expression for %1:%2 has evaluation error: %3</source>
         <translation>L&apos;expressió de valor per defecte per a %1:%2 té un error d&apos;avaluació: %3 </translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="584"/>
-        <location filename="../attributes/attributecontroller.cpp" line="635"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1197"/>
+        <location filename="../attributes/attributecontroller.cpp" line="591"/>
+        <location filename="../attributes/attributecontroller.cpp" line="642"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1204"/>
         <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
         <translation>El valor &quot;%1&quot; %4 no s&apos;ha pogut convertir en un valor compatible per al camp %2(%3).</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="894"/>
+        <location filename="../attributes/attributecontroller.cpp" line="901"/>
         <source>Cannot delete feature</source>
         <translation>No es pot esborrar la característica</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="517"/>
-        <location filename="../attributes/attributecontroller.cpp" line="950"/>
+        <location filename="../attributes/attributecontroller.cpp" line="524"/>
+        <location filename="../attributes/attributecontroller.cpp" line="957"/>
         <source>Feature could not be added</source>
         <translation>La característica no es pot afegir</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="526"/>
-        <location filename="../attributes/attributecontroller.cpp" line="961"/>
+        <location filename="../attributes/attributecontroller.cpp" line="533"/>
+        <location filename="../attributes/attributecontroller.cpp" line="968"/>
         <source>Cannot update feature</source>
         <translation>No es pot actualitzar la característica</translation>
     </message>
     <message>
-        <location filename="../attributes/attributecontroller.cpp" line="1005"/>
+        <location filename="../attributes/attributecontroller.cpp" line="1012"/>
         <source>Cannot start editing</source>
         <translation>No es pot començar a editar</translation>
     </message>
@@ -716,12 +750,12 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>InputHelp</name>
     <message>
-        <location filename="../inputhelp.cpp" line="242"/>
+        <location filename="../inputhelp.cpp" line="275"/>
         <source>Report submitted.%1Please contact us on%1%2</source>
         <translation>Informe enviat.%1Si us plau poseu-vos en contacte amb nosaltres a%1%2</translation>
     </message>
     <message>
-        <location filename="../inputhelp.cpp" line="247"/>
+        <location filename="../inputhelp.cpp" line="280"/>
         <source>Failed to submit report.%1Please check your internet connection.</source>
         <translation>Error en enviar informe. %1Si us plau comproveu la vostra connexió a internet.</translation>
     </message>
@@ -747,119 +781,119 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="183"/>
+        <location filename="../inpututils.cpp" line="200"/>
         <source>just now</source>
         <translation>ara mateix</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="188"/>
+        <location filename="../inpututils.cpp" line="205"/>
         <source>%1 minutes ago</source>
         <translation>ara fa %1 minuts</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="188"/>
+        <location filename="../inpututils.cpp" line="205"/>
         <source>%1 minute ago</source>
         <translation>ara fa %1 minut</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="193"/>
+        <location filename="../inpututils.cpp" line="210"/>
         <source>%1 hours ago</source>
         <translation>ara fa %1 hores</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="193"/>
+        <location filename="../inpututils.cpp" line="210"/>
         <source>%1 hour ago</source>
         <translation>ara fa %1 hora</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="197"/>
-        <location filename="../inpututils.cpp" line="202"/>
+        <location filename="../inpututils.cpp" line="214"/>
+        <location filename="../inpututils.cpp" line="219"/>
         <source>%1 days ago</source>
         <translation>ara fa %1 dies</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="197"/>
-        <location filename="../inpututils.cpp" line="202"/>
+        <location filename="../inpututils.cpp" line="214"/>
+        <location filename="../inpututils.cpp" line="219"/>
         <source>%1 day ago</source>
         <translation>ara fa %1 dia</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="207"/>
+        <location filename="../inpututils.cpp" line="224"/>
         <source>%1 weeks ago</source>
         <translation>ara fa %1 setmanes</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="207"/>
+        <location filename="../inpututils.cpp" line="224"/>
         <source>%1 week ago</source>
         <translation>ara fa %1 setmana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="212"/>
+        <location filename="../inpututils.cpp" line="229"/>
         <source>%1 months ago</source>
         <translation>ara fa %1 mesos</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="212"/>
+        <location filename="../inpututils.cpp" line="229"/>
         <source>%1 month ago</source>
         <translation>ara fa %1 mes</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="217"/>
+        <location filename="../inpututils.cpp" line="234"/>
         <source>%1 years ago</source>
         <translation>ara fa %1 anys</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="217"/>
+        <location filename="../inpututils.cpp" line="234"/>
         <source>%1 year ago</source>
         <translation>ara fa %1 any</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1406"/>
+        <location filename="../inpututils.cpp" line="1423"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>resolució de pantalla: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1407"/>
+        <location filename="../inpututils.cpp" line="1424"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI de pantalla: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1408"/>
+        <location filename="../inpututils.cpp" line="1425"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>mida de pantalla: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1409"/>
+        <location filename="../inpututils.cpp" line="1426"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>relació de píxels del dispositiu informada: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1410"/>
+        <location filename="../inpututils.cpp" line="1427"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>relació de píxels del dispositiu calculada: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1411"/>
+        <location filename="../inpututils.cpp" line="1428"/>
         <source>used dp scale: %1</source>
         <translation>escala dp utilitzada: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1938"/>
+        <location filename="../inpututils.cpp" line="1957"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Heu d&apos;afegir almenys %1 punt(s) a cada tros.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1942"/>
+        <location filename="../inpututils.cpp" line="1961"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Heu d&apos;afegir com a mínim %1 punt(s).</translation>
     </message>
@@ -1128,12 +1162,12 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MapWrapper</name>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="1283"/>
+        <location filename="../qml/map/MapWrapper.qml" line="1270"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS no disponible</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="444"/>
+        <location filename="../qml/map/MapWrapper.qml" line="431"/>
         <source>Successfully synchronized</source>
         <translation>Correctament sincronitzat</translation>
     </message>
@@ -1143,77 +1177,77 @@ No s&apos;afegirà al projecte.</translation>
         <translation>El seguiment de la posició està actiu</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="460"/>
+        <location filename="../qml/map/MapWrapper.qml" line="447"/>
         <source>Up to date</source>
         <translation>Actualitzat</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="471"/>
+        <location filename="../qml/map/MapWrapper.qml" line="458"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Algú més s&apos;està sincronitzant, ho tornarem a provar més tard</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="483"/>
+        <location filename="../qml/map/MapWrapper.qml" line="470"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation>Hi ha hagut un problema durant la sincronització, ho tornarem a provar. Feu clic per obtenir més informació</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="503"/>
+        <location filename="../qml/map/MapWrapper.qml" line="490"/>
         <source>Splitting done successfully</source>
         <translation>Divisió realitzada amb èxit</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="521"/>
+        <location filename="../qml/map/MapWrapper.qml" line="508"/>
         <source>Create line to split the selected feature</source>
         <translation>Crea una línia per dividir la geometria seleccionada</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="539"/>
+        <location filename="../qml/map/MapWrapper.qml" line="526"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Seleccioneu algun punt per començar a editar la geometria</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="557"/>
+        <location filename="../qml/map/MapWrapper.qml" line="544"/>
         <source>Record new geometry for the feature</source>
         <translation>Enregistreu una geometria nova per a la característica</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="696"/>
+        <location filename="../qml/map/MapWrapper.qml" line="683"/>
         <source>Details</source>
         <translation>Detalls</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="799"/>
+        <location filename="../qml/map/MapWrapper.qml" line="786"/>
         <source>Back</source>
         <translation>Tornar</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="816"/>
+        <location filename="../qml/map/MapWrapper.qml" line="803"/>
         <source>Discard the changes?</source>
         <translation>Descartar els canvis?</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="819"/>
+        <location filename="../qml/map/MapWrapper.qml" line="806"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Si feu clic a &quot;Sí&quot;, es descartarà els canvis a la geometria. Si voleu desar els canvis premeu &quot;No&quot;, i després &quot;Fet&quot; a la barra d&apos;eines.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="823"/>
+        <location filename="../qml/map/MapWrapper.qml" line="810"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
         <translation>Si feu clic a &quot;Sí&quot;, es descarta la vostra nova geometria i no es desarà cap característica. Si voleu desar la geometria premeu &quot;No&quot;, i després &quot;Fet&quot; a la barra d&apos;eines.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="893"/>
+        <location filename="../qml/map/MapWrapper.qml" line="880"/>
         <source>Connecting to %1</source>
         <translation>Connectant amb %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="907"/>
+        <location filename="../qml/map/MapWrapper.qml" line="894"/>
         <source>Connected, no position</source>
         <translation>Connectat, sense posició</translation>
     </message>
     <message>
-        <location filename="../qml/map/MapWrapper.qml" line="911"/>
+        <location filename="../qml/map/MapWrapper.qml" line="898"/>
         <source>Unknown accuracy</source>
         <translation>Precisió desconeguda</translation>
     </message>
@@ -1221,57 +1255,64 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="762"/>
+        <location filename="../../core/merginapi.cpp" line="222"/>
+        <source>Please remove some projects as the app currently
+only allows up to %1 downloaded projects.</source>
+        <translation>Si us plau, elimineu alguns projectes donat que l&apos;aplicació actualment
+només permet fins a %1 projectes baixats.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="778"/>
         <source>Username must have at least 4 characters</source>
         <translation>El nom d&apos;usuari ha de tenir 4 caracters com a mínim</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="769"/>
+        <location filename="../../core/merginapi.cpp" line="785"/>
         <source>Username contains invalid characters</source>
         <translation>El nom d&apos;usuari conté caràcters no vàlids</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="776"/>
+        <location filename="../../core/merginapi.cpp" line="792"/>
         <source>Please enter a valid email</source>
         <translation>Si us plau afegiu una adreça de correu vàlida</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="783"/>
+        <location filename="../../core/merginapi.cpp" line="799"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Contrasenya fluixa. Ha de %1tenir com a mínim 8 caracters%1 minúscules%1 majúscules%1 dígits o caràcters especials</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="796"/>
+        <location filename="../../core/merginapi.cpp" line="812"/>
         <source>Passwords do not match</source>
         <translation>Les contrasenyes no coincideixen</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="803"/>
+        <location filename="../../core/merginapi.cpp" line="819"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Si us plau accepteu els Termes i la Política de Privadesa</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1194"/>
+        <location filename="../../core/merginapi.cpp" line="1225"/>
         <source>Registration successful</source>
         <translation>Registre completat correctament</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1216"/>
+        <location filename="../../core/merginapi.cpp" line="1247"/>
         <source>New registrations are not allowed on the selected Mergin server.%1Please check with your administrator.</source>
         <translation>No es permeten registres nous al servidor Mergin escollit.%1Si us plau consulteu-ho amb el vostre administrador.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1505"/>
+        <location filename="../../core/merginapi.cpp" line="1570"/>
         <source>Project detached from Mergin</source>
         <translation>Projecte desvinculat de Mergin </translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3541"/>
+        <location filename="../../core/merginapi.cpp" line="3656"/>
         <source>Workspace name contains invalid characters</source>
         <translation>El nom de l&apos;espai de treball conté caràcters no vàlids</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3607"/>
+        <location filename="../../core/merginapi.cpp" line="3722"/>
         <source>Workspace %1 already exists</source>
         <translation>L&apos;espai de treball %1 ja existeix</translation>
     </message>
@@ -1477,32 +1518,32 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
 <context>
     <name>ProjectDelegateItem</name>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="95"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="93"/>
         <source>Synchronize project</source>
         <translation>Sincronitzar projecte</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="100"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="98"/>
         <source>Local changes</source>
         <translation>Canvis locals</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="105"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="103"/>
         <source>Remove from device</source>
         <translation>Esborrar del dispositiu</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="110"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="108"/>
         <source>Upload to Mergin</source>
         <translation>Carregar a Mergin</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="115"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="113"/>
         <source>Download from Mergin</source>
         <translation>Descarregar de Mergin</translation>
     </message>
     <message>
-        <location filename="../qml/components/ProjectDelegateItem.qml" line="248"/>
+        <location filename="../qml/components/ProjectDelegateItem.qml" line="246"/>
         <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
         <translation>No s&apos;ha pogut sincronitzar el projecte, comproveu que heu iniciat sessió i que teniu permisos suficients.</translation>
     </message>
@@ -1510,19 +1551,42 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
 <context>
     <name>ProjectIssuesPanel</name>
     <message>
-        <location filename="../qml/ProjectIssuesPanel.qml" line="24"/>
-        <source>The following layers failed loading</source>
-        <translation>Les capes següents no s&apos;han pogut carregar</translation>
-    </message>
-    <message>
         <location filename="../qml/ProjectIssuesPanel.qml" line="71"/>
         <source>Project Issues</source>
         <translation>Problemes del projecte</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectIssuesPanel.qml" line="157"/>
+        <location filename="../qml/ProjectIssuesPanel.qml" line="145"/>
         <source>QGIS log</source>
         <translation>Registre de QGIS</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectLimitDialog</name>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="19"/>
+        <source>You have reached project number limit</source>
+        <translation>Heu assolit el límit de nombre de projectes</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="59"/>
+        <source>Maximum of projects: %1</source>
+        <translation>Màxim de projectes: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="66"/>
+        <source>Plan: %1</source>
+        <translation>Pla: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="79"/>
+        <source>Manage account</source>
+        <translation>Gestiona el compte</translation>
+    </message>
+    <message>
+        <location filename="../qml/ProjectLimitDialog.qml" line="95"/>
+        <source>Cancel</source>
+        <translation>Cancel · lar</translation>
     </message>
 </context>
 <context>
@@ -1592,56 +1656,56 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
 <context>
     <name>ProjectPanel</name>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="100"/>
+        <location filename="../qml/ProjectPanel.qml" line="90"/>
         <source>No Changes</source>
         <translation>Sense canvis</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="257"/>
-        <location filename="../qml/ProjectPanel.qml" line="618"/>
-        <location filename="../qml/ProjectPanel.qml" line="824"/>
+        <location filename="../qml/ProjectPanel.qml" line="247"/>
+        <location filename="../qml/ProjectPanel.qml" line="608"/>
+        <location filename="../qml/ProjectPanel.qml" line="814"/>
         <source>Projects</source>
         <translation>Projectes</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="488"/>
-        <location filename="../qml/ProjectPanel.qml" line="802"/>
+        <location filename="../qml/ProjectPanel.qml" line="478"/>
+        <location filename="../qml/ProjectPanel.qml" line="792"/>
         <source>Home</source>
         <translation>Inici</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="510"/>
+        <location filename="../qml/ProjectPanel.qml" line="500"/>
         <source>My projects</source>
         <translation>Els meus projectes</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="534"/>
+        <location filename="../qml/ProjectPanel.qml" line="524"/>
         <source>Shared with me</source>
         <translation>Compartit amb mi</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="534"/>
+        <location filename="../qml/ProjectPanel.qml" line="524"/>
         <source>Shared</source>
         <translation>Compartit</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="554"/>
-        <location filename="../qml/ProjectPanel.qml" line="846"/>
+        <location filename="../qml/ProjectPanel.qml" line="544"/>
+        <location filename="../qml/ProjectPanel.qml" line="836"/>
         <source>Explore</source>
         <translation>Explora</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="615"/>
+        <location filename="../qml/ProjectPanel.qml" line="605"/>
         <source>Downloaded projects</source>
         <translation>Projectes descarregats</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="620"/>
+        <location filename="../qml/ProjectPanel.qml" line="610"/>
         <source>Public projects</source>
         <translation>Projectes públics</translation>
     </message>
     <message>
-        <location filename="../qml/ProjectPanel.qml" line="623"/>
+        <location filename="../qml/ProjectPanel.qml" line="613"/>
         <source>Your other projects are accessible%1by switching your workspace here</source>
         <translation>Els altres projectes són accessibles%1 canviant el vostre espai de treball aquí</translation>
     </message>
@@ -1717,27 +1781,27 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
 <context>
     <name>Purchasing</name>
     <message>
-        <location filename="../purchasing.cpp" line="539"/>
+        <location filename="../purchasing.cpp" line="526"/>
         <source>Failed to process payment details.%1Subscription is not purchased.</source>
         <translation>No s&apos;ha pogut processar els detalls del pagament.%1La subscripció no s&apos;ha comprat. </translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="547"/>
+        <location filename="../purchasing.cpp" line="534"/>
         <source>Successfully restored your subscription</source>
         <translation>La vostra subscripció s&apos;ha restaurat correctament</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="549"/>
+        <location filename="../purchasing.cpp" line="536"/>
         <source>Successfully purchased subscription</source>
         <translation>La subscripció s&apos;ha comprat correctament</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="561"/>
+        <location filename="../purchasing.cpp" line="548"/>
         <source>Failed to purchase subscription</source>
         <translation>No s&apos;ha pogut comprar la subscripció</translation>
     </message>
     <message>
-        <location filename="../purchasing.cpp" line="559"/>
+        <location filename="../purchasing.cpp" line="546"/>
         <source>Unable to restore your subscription</source>
         <translation>No es pot restaurar la subscripció</translation>
     </message>
@@ -2012,102 +2076,102 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
         <translation>Seguir el GPS amb el mapa</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="128"/>
+        <location filename="../qml/SettingsPanel.qml" line="130"/>
         <source>GPS accuracy</source>
         <translation>Precisió GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="183"/>
+        <location filename="../qml/SettingsPanel.qml" line="185"/>
         <source>Accuracy threshold</source>
         <translation>Llindar de precisió</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="211"/>
+        <location filename="../qml/SettingsPanel.qml" line="213"/>
         <source>Show accuracy warning</source>
         <translation>Mostra l&apos;avís de precisió</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="231"/>
+        <location filename="../qml/SettingsPanel.qml" line="235"/>
         <source>Select GPS receiver</source>
         <translation>Seleccioneu receptor GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="242"/>
+        <location filename="../qml/SettingsPanel.qml" line="246"/>
         <source>GPS antenna height</source>
         <translation>Alçada de l&apos;antena GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="243"/>
+        <location filename="../qml/SettingsPanel.qml" line="247"/>
         <source>Includes pole height and GPS receiver&apos;s antenna height</source>
         <translation>Inclou l&apos;alçada del pal i l&apos;alçada de l&apos;antena del receptor GPS</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="255"/>
+        <location filename="../qml/SettingsPanel.qml" line="259"/>
         <source>Streaming mode</source>
         <translation>Mode d&apos;emissió</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="261"/>
+        <location filename="../qml/SettingsPanel.qml" line="265"/>
         <source>Interval type</source>
         <translation>Tipus d&apos;interval</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="262"/>
+        <location filename="../qml/SettingsPanel.qml" line="266"/>
         <source>Choose action when to add a new point</source>
         <translation>Trieu l&apos;acció quan voleu afegir un punt nou</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="274"/>
+        <location filename="../qml/SettingsPanel.qml" line="278"/>
         <source>in meters</source>
         <translation>en metres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="274"/>
+        <location filename="../qml/SettingsPanel.qml" line="278"/>
         <source>in seconds</source>
         <translation>en segons</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="286"/>
+        <location filename="../qml/SettingsPanel.qml" line="290"/>
         <source>Recording</source>
         <translation>Enregistrant</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="273"/>
+        <location filename="../qml/SettingsPanel.qml" line="277"/>
         <source>Line rec. interval</source>
         <translation>Interval enregistrament línia</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="294"/>
+        <location filename="../qml/SettingsPanel.qml" line="298"/>
         <source>Reuse last value option</source>
         <translation>Reutilitzeu l&apos;opció del darrer valor</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="314"/>
+        <location filename="../qml/SettingsPanel.qml" line="320"/>
         <source>Automatically sync changes</source>
         <translation>Sincronitza automàticament els canvis</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="339"/>
+        <location filename="../qml/SettingsPanel.qml" line="347"/>
         <source>About</source>
         <translation>Sobre</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="348"/>
+        <location filename="../qml/SettingsPanel.qml" line="356"/>
         <source>Help</source>
         <translation>Ajuda</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="357"/>
+        <location filename="../qml/SettingsPanel.qml" line="365"/>
         <source>Privacy policy</source>
         <translation>Política de privadesa</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="366"/>
+        <location filename="../qml/SettingsPanel.qml" line="374"/>
         <source>Terms of service</source>
         <translation>Condicions del servei</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanel.qml" line="375"/>
+        <location filename="../qml/SettingsPanel.qml" line="383"/>
         <source>Diagnostic log</source>
         <translation>Registre de diagnòstic</translation>
     </message>
@@ -2201,61 +2265,13 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="108"/>
-        <source>Manage subscriptions</source>
-        <translation>Gestionar subscripcions</translation>
+        <source>Manage account</source>
+        <translation>Gestiona el compte</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="124"/>
         <source>Cancel</source>
         <translation>Cancel·lar</translation>
-    </message>
-</context>
-<context>
-    <name>SubscribePage</name>
-    <message>
-        <location filename="../qml/SubscribePage.qml" line="61"/>
-        <source>Subscribe</source>
-        <translation>Subscriure&apos;s</translation>
-    </message>
-    <message>
-        <location filename="../qml/SubscribePage.qml" line="97"/>
-        <location filename="../qml/SubscribePage.qml" line="139"/>
-        <source>Individual</source>
-        <translation>Individual</translation>
-    </message>
-    <message>
-        <location filename="../qml/SubscribePage.qml" line="114"/>
-        <location filename="../qml/SubscribePage.qml" line="148"/>
-        <source>Professional</source>
-        <translation>Professional</translation>
-    </message>
-    <message>
-        <location filename="../qml/SubscribePage.qml" line="164"/>
-        <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
-        <translation>La vostra subscripció a Mergin es renovarà automàticament. La podeu canviar o cancel·lar en qualsevol moment. %1Més detalls%2</translation>
-    </message>
-</context>
-<context>
-    <name>SubscribePlanItem</name>
-    <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="38"/>
-        <source>Plan</source>
-        <translation>Pla</translation>
-    </message>
-    <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="59"/>
-        <source>Unlimited collaborators</source>
-        <translation>Col·laboradors il·limitats</translation>
-    </message>
-    <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="66"/>
-        <source>Unlimited projects</source>
-        <translation>Projectes il·limitats</translation>
-    </message>
-    <message>
-        <location filename="../qml/SubscribePlanItem.qml" line="73"/>
-        <source>Email support</source>
-        <translation>Atenció per correu electrònic</translation>
     </message>
 </context>
 <context>
@@ -2393,42 +2409,47 @@ Feu clic a &quot;Sí&quot; per carregar-lo.</translation>
         <translation>La vostra subscripció es va cancel·lar el %1</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="216"/>
-        <source>Subscriptions</source>
-        <translation>Subscripcions</translation>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="214"/>
+        <source>Manage account</source>
+        <translation>Gestiona el compte</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="235"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="238"/>
+        <source>You can also %1restore%2 your purchase.</source>
+        <translation>També podeu %1restaurar%2 la vostra compra.</translation>
+    </message>
+    <message>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="259"/>
         <source>Account</source>
         <translation>Compte</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="244"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="268"/>
         <source>Username</source>
         <translation>Nom d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="251"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="275"/>
         <source>Email</source>
         <translation>Correu electrònic</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="261"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="285"/>
         <source>Sign out</source>
         <translation>Tanca sessió</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="267"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="291"/>
         <source>Delete account</source>
         <translation>Esborrar el compte</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="297"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="321"/>
         <source>Delete account?</source>
         <translation>Esborrar el compte?</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="303"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="327"/>
         <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
 
 In order to delete your account, enter your username in the field below and click Yes.</source>
@@ -2437,79 +2458,28 @@ In order to delete your account, enter your username in the field below and clic
 Per eliminar el vostre compte, introduïu el vostre nom d&apos;usuari al camp següent i feu clic a Sí.</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="312"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="336"/>
         <source>Enter username</source>
         <translation>Introduïu el nom d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="347"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="371"/>
         <source>Failed to remove account</source>
         <translation>No s&apos;ha pogut eliminar el compte</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="348"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="372"/>
         <source>An error occured while removing your account</source>
         <translation>S&apos;ha produït un error en eliminar el vostre compte</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="372"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="396"/>
         <source>Can not close account because user is the only owner of an organisation.
 
 Please go to the Mergin Maps website to remove it manually.</source>
         <translation>No es pot tancar el compte perquè l&apos;usuari és l&apos;únic propietari d&apos;una organització.
 
 Aneu al lloc web de Mergin Maps per eliminar-lo manualment.</translation>
-    </message>
-</context>
-<context>
-    <name>WorkspaceSubscribePage</name>
-    <message>
-        <location filename="../qml/WorkspaceSubscribePage.qml" line="24"/>
-        <source>Subscribe</source>
-        <translation>Subscriviu-vos</translation>
-    </message>
-    <message>
-        <location filename="../qml/WorkspaceSubscribePage.qml" line="58"/>
-        <source>Individual</source>
-        <translation>Individual</translation>
-    </message>
-    <message>
-        <location filename="../qml/WorkspaceSubscribePage.qml" line="75"/>
-        <source>Professional</source>
-        <translation>Professional</translation>
-    </message>
-    <message>
-        <location filename="../qml/WorkspaceSubscribePage.qml" line="137"/>
-        <source>You can also %1restore%2 your purchases.</source>
-        <translation>També podeu %1restaurar%2 les vostres compres.</translation>
-    </message>
-    <message>
-        <location filename="../qml/WorkspaceSubscribePage.qml" line="149"/>
-        <source>Your Mergin subscription plan will renew automatically. You can cancel or change it at any time. %1Learn More%2</source>
-        <translation>El vostre pla de subscripció a Mergin es renovarà automàticament. Podeu cancel·lar-lo o canviar-lo en qualsevol moment. %1Més informació%2</translation>
-    </message>
-</context>
-<context>
-    <name>WorkspaceSubscribePlanItem</name>
-    <message>
-        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="35"/>
-        <source>Commercial use</source>
-        <translation>Ús comercial</translation>
-    </message>
-    <message>
-        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="56"/>
-        <source>Unlimited seats</source>
-        <translation>Seients il·limitats</translation>
-    </message>
-    <message>
-        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="63"/>
-        <source>Unlimited projects</source>
-        <translation>Projectes il·limitats</translation>
-    </message>
-    <message>
-        <location filename="../qml/WorkspaceSubscribePlanItem.qml" line="70"/>
-        <source>Email support</source>
-        <translation>Suport per correu electrònic</translation>
     </message>
 </context>
 <context>
@@ -2567,64 +2537,64 @@ Aneu al lloc web de Mergin Maps per eliminar-lo manualment.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="231"/>
-        <location filename="../qml/main.qml" line="299"/>
+        <location filename="../qml/main.qml" line="218"/>
+        <location filename="../qml/main.qml" line="281"/>
         <source>No Changes</source>
         <translation>Cap canvi</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="274"/>
+        <location filename="../qml/main.qml" line="256"/>
         <source>GPS auto-center mode on</source>
         <translation>Mode autocentrat del GPS activat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="274"/>
+        <location filename="../qml/main.qml" line="256"/>
         <source>GPS auto-center mode off</source>
         <translation>Mode autocentrat del GPS desactivat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="288"/>
+        <location filename="../qml/main.qml" line="270"/>
         <source>No editable layers found.</source>
         <translation>No s&apos;ha trobat cap nivell editable.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="528"/>
-        <location filename="../qml/main.qml" line="539"/>
+        <location filename="../qml/main.qml" line="510"/>
+        <location filename="../qml/main.qml" line="521"/>
         <source>not tracking</source>
         <translation>no seguiment</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="694"/>
+        <location filename="../qml/main.qml" line="686"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>El replanteig està desactivat perquè la ubicació no està disponible!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="706"/>
+        <location filename="../qml/main.qml" line="698"/>
         <source>Failed to open the project</source>
         <translation>No s&apos;ha pogut obrir el projecte</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="731"/>
+        <location filename="../qml/main.qml" line="723"/>
         <source>Failed to communicate with Mergin.%1Try improving your network connection.</source>
         <translation>Error de comunicació amb Mergin.%1Proveu a millorar la vostra connexió de xarxa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="785"/>
+        <location filename="../qml/main.qml" line="786"/>
         <source>There were issues loading the project.</source>
         <translation>Problemes en carregar el projecte.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="809"/>
+        <location filename="../qml/main.qml" line="810"/>
         <source>Could not read the project file:</source>
         <translation>No s&apos;ha pogut llegir el fitxer del projecte:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="829"/>
+        <location filename="../qml/main.qml" line="830"/>
         <source>Press back again to quit the app</source>
         <translation>Premeu enrere un altre cop per sortir de l&apos;aplicació</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="624"/>
+        <location filename="../qml/main.qml" line="616"/>
         <source>PROJ Error</source>
         <translation>Error de PROJ</translation>
     </message>

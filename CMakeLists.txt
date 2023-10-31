@@ -6,9 +6,9 @@ cmake_minimum_required(VERSION 3.22)
 
 # TODO automatically change with the scripts/update version script
 set(MM_VERSION_MAJOR "2")
-set(MM_VERSION_MINOR "3")
+set(MM_VERSION_MINOR "4")
 set(MM_VERSION_PATCH "1")
-set(QT_VERSION_DEFAULT "6.5.2")
+set(QT_VERSION_DEFAULT "6.5.3")
 
 # Note: we cannot set this for non-android build, since CMake will start looking for
 # Qt6AndroidMacros.cmake
@@ -24,6 +24,10 @@ if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
   # Target/Minimum API levels for Android, used as Input target properties
   set(INPUT_ANDROID_TARGET_SDK_VERSION "33")
   set(INPUT_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
+  set(INPUT_ANDROID_NDK_PATH "$ENV{ANDROID_NDK_ROOT}")
+  if (NOT INPUT_ANDROID_NDK_PATH)
+    message(FATAL_ERROR "Set required environment variable ANDROID_NDK_ROOT.")
+  endif ()
 endif ()
 
 if (IOS)
@@ -75,14 +79,6 @@ if (IOS)
   set(HAVE_BLUETOOTH_DEFAULT FALSE)
 else ()
   set(HAVE_BLUETOOTH_DEFAULT TRUE)
-endif ()
-
-if (IOS)
-  set(HAVE_PURCHASING_DEFAULT TRUE)
-  set(HAVE_APPLE_PURCHASING_DEFAULT TRUE)
-else ()
-  set(HAVE_PURCHASING_DEFAULT ${ENABLE_TESTS_DEFAULT})
-  set(HAVE_APPLE_PURCHASING_DEFAULT FALSE)
 endif ()
 
 # on android in multi-ABI build, command line variables are NOT passed to
@@ -146,14 +142,7 @@ set(HAVE_BLUETOOTH
     ${HAVE_BLUETOOTH_DEFAULT}
     CACHE BOOL "Building with bluetooth position provider"
 )
-set(HAVE_PURCHASING
-    ${HAVE_PURCHASING_DEFAULT}
-    CACHE BOOL "Build with purchasing (e.g. for test of purchasing GUI)"
-)
-set(HAVE_APPLE_PURCHASING
-    ${HAVE_APPLE_PURCHASING_DEFAULT}
-    CACHE BOOL "Building with Apple's StoreKit support"
-)
+
 set(QT6_VERSION
     ${QT_VERSION_DEFAULT}
     CACHE STRING "QT6 version to use"
@@ -173,7 +162,16 @@ message(STATUS "Mergin Maps Input ${version_desc} - ${platform_desc}")
 
 if (ANDROID)
   set(INPUT_SDK_PATH_ANDROID_ABI_armeabi-v7a ${INPUT_SDK_PATH}/arm-android)
+
+  if (NOT EXISTS ${INPUT_SDK_PATH_ANDROID_ABI_armeabi-v7a})
+    message(WARNING "INPUT_SDK_PATH arm-android directory does not exist!")
+  endif ()
+
   set(INPUT_SDK_PATH_ANDROID_ABI_arm64-v8a ${INPUT_SDK_PATH}/arm64-android)
+  if (NOT EXISTS ${INPUT_SDK_PATH_ANDROID_ABI_arm64-v8a})
+    message(WARNING "INPUT_SDK_PATH arm64-android directory does not exist!")
+  endif ()
+
   set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH_ANDROID_ABI_${ANDROID_ABI}})
   # allow libraries outside of SDK/NDK directory
   set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
@@ -215,7 +213,7 @@ if (NOT IOS)
   )
 endif ()
 
-if (NOT LINUX)
+if (NOT LNX)
   find_package(Charset REQUIRED)
   find_package(Iconv REQUIRED)
 endif ()
@@ -330,14 +328,6 @@ if (ENABLE_TESTS)
   set(TEST_DATA_DIR "${CMAKE_CURRENT_BINARY_DIR}/test/test_data")
 endif ()
 
-if (HAVE_PURCHASING)
-  set(PURCHASING TRUE)
-endif ()
-
-if (HAVE_APPLE_PURCHASING)
-  set(APPLE_PURCHASING TRUE)
-endif ()
-
 configure_file(
   ${CMAKE_SOURCE_DIR}/cmake_templates/inputconfig.h.in ${CMAKE_BINARY_DIR}/inputconfig.h
 )
@@ -374,10 +364,6 @@ endif ()
 if (IOS)
   # Disabling warnings in qgis qgswkbptr.h
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-shorten-64-to-32")
-endif ()
-
-if (ANDROID)
-  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g0")
 endif ()
 
 # ########################################################################################

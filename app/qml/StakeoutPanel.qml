@@ -240,7 +240,7 @@ Item {
             width: parent.width / 2
 
             titleText: qsTr( "Distance" )
-            text: remainingDistance >= 0 ?__inputUtils.formatNumber( remainingDistance, 2 ) + " m" : "N/A m"
+            text: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2 ) : "N/A"
 
             titleComponent.wrapMode: Text.NoWrap
             titleComponent.elide: Text.ElideRight

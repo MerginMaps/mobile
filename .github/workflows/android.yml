@@ -23,17 +23,17 @@ jobs:
     if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-12
     env:
-      QT_VERSION: '6.5.2'
+      QT_VERSION: '6.5.3' # use scripts/update_qt_version.bash to change
       NDK_VERSION: r25
       NDK_VERSION_FULL: r25b
       JDK_VERSION: 11
       SDK_PLATFORM: android-33
       SDK_BUILD_TOOLS: 33.0.1
-      INPUT_SDK_VERSION_ARM: arm-android-20230824-200
-      INPUT_SDK_VERSION_ARM64: arm64-android-20230824-200
+      INPUT_SDK_VERSION_ARM: arm-android-20231006-201
+      INPUT_SDK_VERSION_ARM64: arm64-android-20231006-201
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-      CACHE_VERSION: 2
+      CACHE_VERSION: 0
       QT_ANDROID_KEYSTORE_ALIAS: input
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}

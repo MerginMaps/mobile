@@ -4,7 +4,6 @@ set(MM_CORE_SRCS
     merginapistatus.cpp
     merginsubscriptioninfo.cpp
     merginsubscriptionstatus.cpp
-    merginsubscriptiontype.cpp
     merginservertype.cpp
     merginprojectstatusmodel.cpp
     merginuserauth.cpp
@@ -14,6 +13,7 @@ set(MM_CORE_SRCS
     merginprojectmetadata.cpp
     project.cpp
     geodiffutils.cpp
+    projectchecksumcache.cpp
 )
 
 set(MM_CORE_HDRS
@@ -22,7 +22,6 @@ set(MM_CORE_HDRS
     merginapistatus.h
     merginsubscriptioninfo.h
     merginsubscriptionstatus.h
-    merginsubscriptiontype.h
     merginservertype.h
     merginprojectstatusmodel.h
     merginuserauth.h
@@ -32,6 +31,7 @@ set(MM_CORE_HDRS
     merginprojectmetadata.h
     project.h
     geodiffutils.h
+    projectchecksumcache.h
 )
 
 if (USE_MM_SERVER_API_KEY)

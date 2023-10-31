@@ -16,10 +16,10 @@ on:
       - published
 
 env:
-  QT_VERSION: '6.5.2'
-  INPUT_SDK_VERSION: x64-osx-20230824-181
+  QT_VERSION: '6.5.3' # use scripts/update_qt_version.bash to change
+  INPUT_SDK_VERSION: x64-osx-20231005-182
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 2
+  CACHE_VERSION: 0
   XC_VERSION: ${{ '14.2' }}
 
 concurrency:
@@ -148,6 +148,8 @@ jobs:
       - name: run tests
         env:
           TEST_MERGIN_URL: https://test.dev.merginmaps.com/
+          TEST_API_USERNAME: test_mobileapp2
+          TEST_API_PASSWORD: ${{ secrets.TEST_API_PASSWORD }}
         run: |
           cd build-Input-db/
           ctest --output-on-failure

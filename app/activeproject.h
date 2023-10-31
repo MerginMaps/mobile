@@ -128,7 +128,7 @@ class ActiveProject: public QObject
     void loadingFinished();
 
     void projectReadingFailed( QString error );
-    void reportIssue( QString layerName, QString message );
+    void reportIssue( QString title, QString message );
     void loadingErrorFound();
     void qgisLogChanged();
 
@@ -154,6 +154,13 @@ class ActiveProject: public QObject
     void requestSync();
 
   private:
+
+    /**
+     * Build up warning list from loaded project
+     * Emits reportIssue for each issue found
+     * Returns true if there were errors found
+     */
+    bool validateProject();
 
     //! Tries to match current visible layers with some theme and if it fails, invalidates current map theme
     void updateMapTheme();

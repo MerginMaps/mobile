@@ -131,7 +131,6 @@ Item {
     let newMarkerItems = []
     let newLineElements = []
     let newPolygonElements = []
-    let newGuideLineElements = []
 
     let geometryType = data[0] // type of geometry - 0: point, 1: linestring, 2: polygon
     let dataStartIndex = ( geometryType === 0 ? 1 : 2 ) // point data starts from index 1, others from index 2
@@ -186,18 +185,18 @@ Item {
             continue
           }
 
-          // Move to the first point
-          let x0 = transformX( data[i] )
-          let y0 = transformY( data[i+1] )
-          elements.push( componentMoveTo.createObject( objOwner, { "x": x0, "y": y0 } ) )
-          // Draw lines for rest of points in the segment
-          for ( k = i + 2; k < i + pointsCount * 2; k += 2 )
+          let newPath = []
+
+          // Draw lines for points in the segment
+          for ( k = i; k < i + pointsCount * 2; k += 2 )
           {
             let x1 = transformX( data[k] )
             let y1 = transformY( data[k+1] )
-            elements.push( componentLineTo.createObject( objOwner, { "x": x1, "y": y1 } ) )
+            newPath.push( Qt.point( x1, y1 ) )
           }
           i = k
+
+          elements.push( componentPathPolyline.createObject( objOwner, { path: newPath } ) )
         }
       }
     }
@@ -284,8 +283,8 @@ Item {
                               0,     0,     0, 1)
     }
 
-    Component {  id: componentLineTo; PathLine { } }
     Component {  id: componentMoveTo; PathMove { } }
+    Component {  id: componentPathPolyline; PathPolyline { } }
 
     ShapePath {
         id: lineBorderShapePath

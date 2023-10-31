@@ -121,6 +121,15 @@ MerginProjectMetadata MerginProjectMetadata::fromJson( const QByteArray &data )
     project.version = versionStr.toInt();
   }
 
+  if ( docObj.contains( QStringLiteral( "id" ) ) )
+  {
+    project.projectId = docObj.value( QStringLiteral( "id" ) ).toString();
+  }
+  else
+  {
+    project.projectId.clear();
+  }
+
   return project;
 }
 

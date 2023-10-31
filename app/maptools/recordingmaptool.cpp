@@ -316,9 +316,14 @@ void RecordingMapTool::removePoint()
         mRecordedGeometry.get()->deleteVertex( current );
       }
 
-      // if this was the last point in the ring and ring is interior
-      // we remove that ring completely
-      if ( r->isEmpty() && current.ring > 0 )
+      // if this was the last point in the ring
+      // and ring is interior we remove that ring completely
+      //
+      // WARNING:
+      // "r" pointer may be invalid for exterior rings at this point!
+      // so dereference it only for interior rings
+      // see https://github.com/MerginMaps/input/issues/2875
+      if ( current.ring > 0 && r->isEmpty() )
       {
         QgsCurvePolygon *p = qgsgeometry_cast<QgsCurvePolygon *>( poly );
         // rings numerarion starts with 0

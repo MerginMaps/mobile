@@ -31,6 +31,8 @@ class TestAttributeController: public QObject
     void testRawValue();
     void testFieldsOutsideForm();
     void testPhotoRenaming();
+    void testHtmlAndTextWidgets();
+    void testVirtualFields();
 };
 
 #endif // TESTATTRIBUTECONTROLLER_H

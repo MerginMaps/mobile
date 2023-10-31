@@ -114,8 +114,10 @@ Item {
               onCheckedChanged: __appSettings.autoCenterMapChecked = checked
             }
 
-            TapHandler {
-              onTapped: function(eventPoint, button) {
+            MouseArea {
+              anchors.fill: parent
+
+              onClicked: {
                 autoCenterMapSwitch.toggle()
               }
             }
@@ -217,8 +219,10 @@ Item {
               onCheckedChanged: __appSettings.gpsAccuracyWarning = checked
             }
 
-            TapHandler {
-              onTapped: function(eventPoint, button) {
+            MouseArea {
+              anchors.fill: parent
+
+              onClicked: {
                 accuracyWarningSwitch.toggle()
               }
             }
@@ -300,8 +304,10 @@ Item {
               onCheckedChanged: __appSettings.reuseLastEnteredValues = checked
             }
 
-            TapHandler {
-              onTapped: function(eventPoint, button) {
+            MouseArea {
+              anchors.fill: parent
+
+              onClicked: {
                 rememberValuesSwitch.toggle()
               }
             }
@@ -320,8 +326,10 @@ Item {
               onCheckedChanged: __appSettings.autosyncAllowed = checked
             }
 
-            TapHandler {
-              onTapped: function(eventPoint, button) {
+            MouseArea {
+              anchors.fill: parent
+
+              onClicked: {
                 autosyncSwitch.toggle()
               }
             }

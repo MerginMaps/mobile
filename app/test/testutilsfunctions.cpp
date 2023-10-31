@@ -822,3 +822,36 @@ void TestUtilsFunctions::testParsePositionUpdates()
     }
   }
 }
+
+void TestUtilsFunctions::testFormatDistanceInDistanceUnit()
+{
+  QString dist2str =  mUtils->formatDistanceInProjectUnit( 1222.234, 2, Qgis::DistanceUnit::Meters );
+  QVERIFY( dist2str == "1222.23 m" );
+
+  dist2str =  mUtils->formatDistanceInProjectUnit( 1222.234, 1, Qgis::DistanceUnit::Meters );
+  QVERIFY( dist2str == "1222.2 m" );
+
+  dist2str =  mUtils->formatDistanceInProjectUnit( 1222.234, 0, Qgis::DistanceUnit::Meters );
+  QVERIFY( dist2str == "1222 m" );
+
+  dist2str =  mUtils->formatDistanceInProjectUnit( 700.22, 1, Qgis::DistanceUnit::Meters );
+  QVERIFY( dist2str == "700.2 m" );
+
+  dist2str =  mUtils->formatDistanceInProjectUnit( 0.22, 0, Qgis::DistanceUnit::Meters );
+  QVERIFY( dist2str == "0 m" );
+
+  dist2str =  mUtils->formatDistanceInProjectUnit( -0.22, 0, Qgis::DistanceUnit::Meters );
+  QVERIFY( dist2str == "-0 m" );
+
+  dist2str =  mUtils->formatDistanceInProjectUnit( 1.222234, 2, Qgis::DistanceUnit::Kilometers );
+  QVERIFY( dist2str == "0.00 km" );
+
+  dist2str =  mUtils->formatDistanceInProjectUnit( 6000, 1, Qgis::DistanceUnit::Feet );
+  QVERIFY( dist2str == "19685.0 ft" );
+
+  dist2str =  mUtils->formatDistanceInProjectUnit( 5, 1, Qgis::DistanceUnit::Feet );
+  QVERIFY( dist2str == "16.4 ft" );
+
+  dist2str =  mUtils->formatDistanceInProjectUnit( 7000, 1, Qgis::DistanceUnit::Feet );
+  QVERIFY( dist2str == "22965.9 ft" );
+}

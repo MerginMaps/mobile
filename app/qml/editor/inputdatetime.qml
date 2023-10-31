@@ -34,82 +34,94 @@ AbstractEditor {
 
   enabled: !isReadOnly
 
-  function timeToString(attrValue) {
-    if (attrValue === undefined)
-    {
-      return ''
-    }
-    else
-    {
-      return Qt.formatDateTime(attrValue, config['display_format'])
-    }
-  }
-
-  function formatText(v) {
-    if ( v === undefined || root.parentValueIsNull )
-    {
-      return ''
-    }
-    else
-    {
-      if ( root.parentField.isDateOrTime )
-      {
-        // if the field is a QDate, the automatic conversion to JS date [1]
-        // leads to the creation of date time object with the time zone.
-        // For instance shapefiles has support for dates but not date/time or time.
-        // So a date coming from a shapefile as 2001-01-01 will become 2000-12-31 19:00:00 -05 in QML/JS in UTC -05 zone.
-        // And when formatting this with the display format, this is shown as 2000-12-31.
-        // So we detect if the field is a date only and revert the time zone offset.
-        // [1] http://doc.qt.io/qt-5/qtqml-cppintegration-data.html#basic-qt-data-types
-        if (root.fieldIsDate)
-        {
-          return Qt.formatDateTime( new Date(v.getTime() + v.getTimezoneOffset() * 60000), config['display_format'])
+  QtObject {
+    id: dateTransformer
+    // When changing this function, test with various timezones!
+    // On desktop, use environment variable TZ, e.g. TZ=America/Mexico_City (UTC-5)
+    function toJsDate(qtDate) {
+      if ( root.parentField.isDateOrTime ) {
+        if (root.fieldIsDate) {
+          if (qtDate.getUTCHours() === 0)
+          {
+            // on cold start of this editor widget, the JS date coming from C++ QDate is shifted.
+            // As [1] docs say: "converting a QDate will result in UTC's start of the
+            // day, which falls on a different date in some other time-zones"
+            // So for example if 2001-01-01 is stored in date file,
+            // it will become 2000-12-31 19:00:00 -05 in QML/JS in UTC -05 zone.
+            // However, we need 2001-01-01 00:00:00 in local timezone.
+            // [1] https://doc.qt.io/qt-6/qml-date.html
+            let date = new Date(qtDate.getUTCFullYear(), qtDate.getUTCMonth(), qtDate.getUTCDate() )
+            return date
+          } else {
+            //
+            // Other issue is that when we already set NEW value by our calendar picker,
+            // the JS date coming from C++ already has correct (local) timezone...
+            // We can distinguish between these two by checking if the UTC hour is midnight
+            // or not and based on that apply or not apply the timezone shift
+            //
+            return qtDate
+          }
         }
-        else
-        {
-          return Qt.formatDateTime(v, config['display_format'])
+        else {
+          return qtDate
         }
       }
-      else
-      {
-        let date = Date.fromLocaleString(Qt.locale(), v, config['field_format'])
-        return Qt.formatDateTime(date, config['display_format'])
+      else {
+        // This is the case when the date coming from C++ is pure string, so we
+        // need to convert it to JS Date ourselves
+        return Date.fromLocaleString(Qt.locale(), qtDate, config['field_format'])
       }
     }
   }
 
-  function openPicker(requestedDate)
-  {
-    // open calendar for today when no date is set
-    if (!requestedDate)
-      requestedDate = new Date()
+  function newDateSelected( jsDate ) {
+    if ( jsDate ) {
+      if ( root.parentField.isDateOrTime ) {
+           // For QDate, the year, month and day is clipped based on
+          // the local timezone in QgsFeature.convertCompatible
+          root.editorValueChanged( jsDate, false  )
+      }
+      else {
+        let qtDate = jsDate.toLocaleString(Qt.locale(), config['field_format'])
+        root.editorValueChanged(qtDate, false)
+      }
+    }
+  }
 
+  function formatText( qtDate ) {
+    if ( qtDate === undefined || root.parentValueIsNull ) {
+      return ''
+    }
+    else {
+      let jsDate = dateTransformer.toJsDate(qtDate)
+      return Qt.formatDateTime(jsDate, config['display_format'])
+    }
+  }
+
+  function openPicker(requestedDate) {
     dateTimeDrawerLoader.active = true
     dateTimeDrawerLoader.focus = true
     dateTimeDrawerLoader.item.dateToOpen = requestedDate
   }
 
   onContentClicked: {
-    if (root.parentValueIsNull)
-    {
-      root.openPicker()
+    if (root.parentValueIsNull) {
+      // open calendar for today when no date is set
+      root.openPicker( new Date() )
     }
-    else
-    {
-      root.openPicker(root.parentValue)
+    else {
+      root.openPicker( dateTransformer.toJsDate(root.parentValue) )
     }
   }
 
   onRightActionClicked: {
-    let newDate = new Date()
-    let newValue = field.isDateOrTime ? newDate : Qt.formatDateTime(newDate, config['field_format'])
-    editorValueChanged(newValue, false)
+    root.newDateSelected( new Date() )
   }
 
   content: Text {
     id: dateText
 
-    text: formatText(root.parentValue)
+    text: formatText( root.parentValue )
 
     anchors.fill: parent
 
@@ -194,9 +206,7 @@ AbstractEditor {
         hasTimePicker: root.includesTime
 
         onSelected: function( selectedDate ) {
-          if ( selectedDate )
-            root.editorValueChanged(selectedDate, false)
-
+          root.newDateSelected( selectedDate )
           dateTimeDrawer.close()
         }
 

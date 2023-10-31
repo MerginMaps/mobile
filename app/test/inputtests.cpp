@@ -30,10 +30,7 @@
 #include "test/testmaptools.h"
 #include "test/testlayertree.h"
 #include "test/testactiveproject.h"
-
-#if not defined APPLE_PURCHASING
-#include "test/testpurchasing.h"
-#endif
+#include "test/testprojectchecksumcache.h"
 
 InputTests::InputTests() = default;
 
@@ -62,10 +59,9 @@ bool InputTests::testingRequested() const
   return !mTestRequested.isEmpty();
 }
 
-void InputTests::init( MerginApi *api, Purchasing *purchasing, InputUtils *utils, VariablesManager *varManager, PositionKit *kit, AppSettings *settings )
+void InputTests::init( MerginApi *api, InputUtils *utils, VariablesManager *varManager, PositionKit *kit, AppSettings *settings )
 {
   mApi = api;
-  mPurchasing = purchasing;
   mInputUtils = utils;
   mVariablesManager = varManager;
   mPositionKit = kit;
@@ -93,7 +89,7 @@ int InputTests::runTest() const
 {
   int nFailed = 0;
 
-  if ( !mApi || !mPurchasing || !mInputUtils )
+  if ( !mApi || !mInputUtils )
   {
     nFailed = 1000;
     qDebug() << "input tests not initialized";
@@ -181,19 +177,25 @@ int InputTests::runTest() const
     TestActiveProject activeProjectTest( mApi );
     nFailed = QTest::qExec( &activeProjectTest, mTestArgs );
   }
-#if not defined APPLE_PURCHASING
-  else if ( mTestRequested == "--testPurchasing" )
+  else if ( mTestRequested == "--testProjectChecksumCache" )
   {
-    TestPurchasing purchasingTest( mApi, mPurchasing );
-    nFailed = QTest::qExec( &purchasingTest, mTestArgs );
+    TestProjectChecksumCache projectChecksumTest;
+    nFailed = QTest::qExec( &projectChecksumTest, mTestArgs );
   }
   else if ( mTestRequested == "--testMerginApi" )
   {
-    TestMerginApi merginApiTest( mApi, mPurchasing );
-    nFailed = QTest::qExec( &merginApiTest, mTestArgs );
-  }
+    TestMerginApi merginApiTest( mApi );
+    QStringList args = mTestArgs;
+    if ( !args.contains( "-maxwarnings" ) )
+    {
+      args << "-maxwarnings" << "0"; //show all debug output
+    }
 
-#endif
+    // To pick just one particular test, uncomment
+    // following line and add function name
+    // args << "testRegisterAndDelete";
+    nFailed = QTest::qExec( &merginApiTest, args );
+  }
   else
   {
     qDebug() << "invalid test requested" << mTestRequested;
