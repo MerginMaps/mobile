@@ -89,7 +89,7 @@ Page {
 
           color: InputStyle.fontColor
           font.bold: true
-          text: model.display.replace(/\n/g, ' ')
+          text: model.display.toString().replace(/\n/g, ' ')
 
           font.pixelSize: InputStyle.fontPixelSizeNormal
 
