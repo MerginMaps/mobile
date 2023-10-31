@@ -83,7 +83,9 @@ const shadowColor = "#66777777"
 
 // Spacing
 const commonSpacing = 20 * __dp
-const commonItemHeight = 50 * __dp
+
+// Map items
+const mapItemHeight = 50 * __dp
 
 function dynamicText() {
   return "Dynamic text"

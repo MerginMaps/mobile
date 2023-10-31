@@ -8,9 +8,6 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
-import Qt5Compat.GraphicalEffects
 import "../Style.js" as Style
 import "."
 
@@ -18,7 +15,7 @@ Item {
   id: control
 
   width: height
-  height: Style.commonItemHeight
+  height: Style.mapItemHeight
 
   property alias iconSource: icon.source
 

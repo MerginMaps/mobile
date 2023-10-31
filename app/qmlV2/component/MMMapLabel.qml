@@ -8,9 +8,6 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
-import Qt5Compat.GraphicalEffects
 import "../Style.js" as Style
 import "."
 
@@ -18,17 +15,17 @@ Item {
   id: control
 
   width: text.width
-  height: Style.commonItemHeight
-  visible: control.text.length > 0
+  height: Style.mapItemHeight
 
   signal clicked
 
   required property string text
+  property url iconSource: ""
   property color bgColor: Style.positive
   property color textColor: Style.forest
 
   Rectangle {
-    width: parent.width
+    width: row.width
     height: parent.height
     radius: control.height / 2
     color: control.bgColor
@@ -36,15 +33,32 @@ Item {
     layer.enabled: true
     layer.effect: MMShadow {}
 
-    Text {
-      id: text
+    Row {
+      id: row
 
       anchors.centerIn: parent
-      color: control.textColor
-      text: control.text
-      font: Qt.font(Style.t3)
-      leftPadding: Style.commonSpacing
-      rightPadding: Style.commonSpacing
+      leftPadding: 20 * __dp
+      rightPadding: leftPadding
+      spacing: 4 * __dp
+      height: parent.height
+
+      MMIcon {
+        id: icon
+
+        source: control.iconSource ? control.iconSource : ""
+        color: text.color
+        height: parent.height
+      }
+
+      Text {
+        id: text
+
+        color: control.textColor
+        text: control.text
+        font: Qt.font(Style.t3)
+        verticalAlignment: Text.AlignVCenter
+        height: parent.height
+      }
     }
 
     MouseArea {

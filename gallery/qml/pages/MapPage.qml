@@ -102,6 +102,16 @@ Page {
     anchors.left: parent.left
     anchors.bottom: parent.bottom
     anchors.leftMargin: 20
+    anchors.bottomMargin: 120
+
+    text: "20.0 m"
+    iconSource: Style.checkmarkIcon
+  }
+
+  MMMapLabel {
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    anchors.leftMargin: 20
     anchors.bottomMargin: 50
 
     text: "20.0 m"
