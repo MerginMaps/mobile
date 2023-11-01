@@ -12,8 +12,8 @@ import "."  // import InputStyle singleton
 
 Rectangle {
     id: root
-    height: InputStyle.rowHeight
-    width: parent.width
+    // height: InputStyle.rowHeight
+    // width: parent.width
     color: InputStyle.clrPanelMain
 
     property string text: ""

@@ -89,21 +89,23 @@ Item {
           color: InputStyle.panelBackgroundDark
         }
 
-        Column {
+        ColumnLayout {
           id: settingListContent
           anchors.fill: parent
           spacing: 1
 
           // Header "GPS"
           PanelItem {
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
             color: InputStyle.panelBackgroundLight
             text: qsTr("GPS")
             bold: true
           }
 
           PanelItem {
-            height: root.rowHeight
-            width: parent.width
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
             color: InputStyle.clrPanelMain
             text: qsTr("Follow GPS with map")
 
@@ -124,8 +126,9 @@ Item {
           }
 
           PanelItem {
-            height: root.rowHeight
-            width: parent.width
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
+
             color: InputStyle.clrPanelMain
             text: qsTr("GPS accuracy")
 
@@ -180,8 +183,8 @@ Item {
           }
 
           PanelItem {
-            height: root.rowHeight
-            width: parent.width
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
             text: qsTr("Accuracy threshold")
 
             MouseArea {
@@ -208,8 +211,8 @@ Item {
           }
 
           PanelItem {
-            height: root.rowHeight
-            width: parent.width
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
             text: qsTr("Show accuracy warning")
 
             SettingsSwitch {
@@ -229,8 +232,8 @@ Item {
           }
 
           PanelItem {
-            height: root.rowHeight
-            width: parent.width
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
             color: InputStyle.clrPanelMain
             text: qsTr("Select GPS receiver")
 
@@ -241,7 +244,8 @@ Item {
           }
 
           SettingsNumberItem {
-            width: parent.width
+            Layout.fillWidth: true
+            Layout.preferredHeight: InputStyle.settingsPanelActionable
 
             title: qsTr("GPS antenna height")
             description: qsTr("Includes pole height and GPS receiver's antenna height")
@@ -255,12 +259,16 @@ Item {
 
           // Header "Streaming mode"
           SettingsHeaderItem {
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
+
             color: InputStyle.panelBackgroundLight
             text: qsTr("Streaming mode")
           }
 
           SettingsComboBoxItem {
-            width: parent.width
+            Layout.fillWidth: true
+            Layout.preferredHeight: InputStyle.settingsPanelActionable
 
             title: qsTr("Interval type")
             description: qsTr("Choose action when to add a new point")
@@ -272,7 +280,8 @@ Item {
           }
 
           SettingsNumberItem {
-            width: parent.width
+            Layout.fillWidth: true
+            Layout.preferredHeight: InputStyle.settingsPanelActionable
 
             title: qsTr("Line rec. interval")
             description: __appSettings.intervalType === StreamingIntervalType.Distance ? qsTr("in meters") : qsTr("in seconds")
@@ -286,14 +295,18 @@ Item {
 
           // Header "Recording"
           PanelItem {
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
+
             color: InputStyle.panelBackgroundLight
             text: qsTr("Recording")
             bold: true
           }
 
           PanelItem {
-            height: root.rowHeight
-            width: parent.width
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
+
             color: InputStyle.clrPanelMain
             text: qsTr("Reuse last value option")
 
@@ -314,8 +327,9 @@ Item {
           }
 
           PanelItem {
-            height: root.rowHeight
-            width: parent.width
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
+
             color: InputStyle.clrPanelMain
             text: qsTr( "Automatically sync changes" )
 
@@ -337,6 +351,9 @@ Item {
 
           // Delimeter
           PanelItem {
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
+
             color: InputStyle.panelBackgroundLight
             text: ""
             height: root.rowHeight / 3
@@ -344,6 +361,9 @@ Item {
 
           // App info
           PanelItem {
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
+
             text: qsTr("About")
             MouseArea {
               anchors.fill: parent
@@ -362,6 +382,9 @@ Item {
 
           // Privacy Policy
           PanelItem {
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
+
             text: qsTr("Privacy policy")
             MouseArea {
               anchors.fill: parent
@@ -371,6 +394,9 @@ Item {
 
           // Terms of Service
           PanelItem {
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
+
             text: qsTr("Terms of service")
             MouseArea {
               anchors.fill: parent
@@ -380,6 +406,9 @@ Item {
 
           // Debug/Logging
           PanelItem {
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.rowHeight
+
             text: qsTr("Diagnostic log")
             MouseArea {
               anchors.fill: parent

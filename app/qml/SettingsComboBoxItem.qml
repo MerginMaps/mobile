@@ -18,7 +18,6 @@ import "."  // import InputStyle singleton
 Rectangle {
   id: root
 
-  height: InputStyle.settingsPanelActionable
   color: InputStyle.clrPanelMain
 
   property int value

@@ -31,6 +31,13 @@ void WorkspacesProxyModel::setSearchExpression( QString searchExpression )
 
   mSearchExpression = searchExpression;
   setFilterFixedString( mSearchExpression );
+
+  // for some reason in Qt 6.5.3 QML Repeater does not
+  // delete all items that are removed from proxy model
+  // immediately without invalidate() command called
+  // see https://github.com/MerginMaps/input/issues/2893
+  invalidate();
+
   emit searchExpressionChanged( mSearchExpression );
 }
 
