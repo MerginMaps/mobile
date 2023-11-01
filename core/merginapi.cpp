@@ -2421,10 +2421,10 @@ void MerginApi::requestServerConfig( const QString &projectFullName )
 QList<DownloadQueueItem> MerginApi::itemsForFileChunks( const MerginFile &file, int version )
 {
   QList<DownloadQueueItem> lst;
-  int from = 0;
+  qint64 from = 0;
   while ( from < file.size )
   {
-    int size = qMin( MerginApi::UPLOAD_CHUNK_SIZE, static_cast<int>( file.size ) - from );
+    qint64 size = qMin( MerginApi::UPLOAD_CHUNK_SIZE, file.size - from );
     lst << DownloadQueueItem( file.path, size, version, from, from + size - 1 );
     from += size;
   }
@@ -3742,7 +3742,7 @@ bool MerginApi::apiSupportsWorkspaces()
   }
 }
 
-DownloadQueueItem::DownloadQueueItem( const QString &fp, int s, int v, int rf, int rt, bool diff )
+DownloadQueueItem::DownloadQueueItem( const QString &fp, qint64 s, int v, qint64 rf, qint64 rt, bool diff )
   : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )
 {
   tempFileName = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
