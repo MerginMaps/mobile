@@ -18,7 +18,7 @@ on:
       - published
 
 env:
-  QT_VERSION: '6.5.3' # use scripts/update_qt_version.bash to change
+  QT_VERSION: '6.5.2' # use scripts/update_qt_version.bash to change
   CACHE_VERSION: 0
   
 jobs:
