@@ -27,5 +27,7 @@
         <file>qml/pages/ChecksPage.qml</file>
         <file>../app/qmlV2/component/MMComponent_reachedDataLimit.qml</file>
         <file>../app/qmlV2/component/MMProgressBar.qml</file>
+        <file>../app/qmlV2/component/MMPasswordInput.qml</file>
+        <file>../app/qmlV2/component/MMButtonInput.qml</file>
     </qresource>
 </RCC>

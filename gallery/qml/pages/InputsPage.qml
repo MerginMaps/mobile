@@ -12,78 +12,107 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qmlV2/component"
+import "../../app/qmlV2/Style.js" as Style
 
-Column {
-  padding: 20
-  spacing: 20
+ScrollView {
+  Column {
+    padding: 20
+    spacing: 20
 
-  GroupBox {
-    title: "MMInput"
-    background: Rectangle {
-      color: "lightGray"
-      border.color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
+    GroupBox {
+      title: "MMInput"
+      background: Rectangle {
+        color: "lightGray"
+        border.color: "gray"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
 
-    Column {
-      spacing: 10
-      anchors.fill: parent
-      MMInput {
-        placeholderText: "Place holder"
-      }
-      MMInput {
-        text: "Disabled"
-        enabled: false
-      }
       Column {
-        TextInput { text: "type: MMInput.Type.Search" }
+        spacing: 10
+        anchors.fill: parent
         MMInput {
-          type: MMInput.Type.Search
-          placeholderText: "Search"
+          placeholderText: "Place holder"
         }
-      }
-      Column {
-      TextInput { text: "type: MMInput.Type.Calendar" }
-      TextInput { text: "warningMsg: ..." }
         MMInput {
-          type: MMInput.Type.Calendar
-          text: "Calendar"
-          warningMsg: "Would you like to be so kind and select a date please?"
-        }
-      }
-      Column {
-      TextInput { text: "type: MMInput.Type.Password" }
-      TextInput { text: "errorMsg: ..." }
-        MMInput {
-          type: MMInput.Type.Password
-          text: "Password"
-          errorMsg: "Password must contain at least 6 characters\nMinimum 1 number\nAnd 1 special character"
-        }
-      }
-      Column {
-      TextInput { text: "type: MMInput.Type.Scan" }
-        MMInput {
-          type: MMInput.Type.Scan
-          text: "QR Code"
-        }
-      }
-      Column {
-      TextInput { text: "type: MMInput.Type.CopyButton" }
-        MMInput {
-          type: MMInput.Type.CopyButton
-          text: "Copy me"
-        }
-      }
-      Column {
-      TextInput { text: "type: MMInput.Type.CopyButton" }
-        MMInput {
-          type: MMInput.Type.CopyButton
-          text: "Copy me"
+          text: "Disabled"
           enabled: false
+        }
+        Column {
+          TextInput { text: "iconSource: Style.searchIcon" }
+          MMInput {
+            placeholderText: "Search"
+            iconSource: Style.searchIcon
+          }
+        }
+        Column {
+          TextInput { text: "iconSource: Style.calendarIcon" }
+          TextInput { text: "warningMsg: ..." }
+          MMInput {
+            text: "Calendar"
+            iconSource: Style.calendarIcon
+            warningMsg: "Would you like to be so kind and select a date please?"
+          }
+        }
+      }
+    }
+
+    GroupBox {
+      title: "MMPasswordInput"
+      background: Rectangle {
+        color: "lightGray"
+        border.color: "gray"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      Column {
+        spacing: 10
+        anchors.fill: parent
+        MMPasswordInput {
+          text: "Password"
+          regexp: '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,})'
+          errorMsg: "Password must contain at least 6 characters\nMinimum 1 number, uppercase and lowercase letter and special character"
+        }
+        MMPasswordInput {
+          text: "Password"
+          regexp: '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,})'
+          enabled: false
+        }
+      }
+    }
+
+    GroupBox {
+      title: "MMButtonInput"
+      background: Rectangle {
+        color: "lightGray"
+        border.color: "gray"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      Column {
+        spacing: 10
+        anchors.fill: parent
+        MMButtonInput {
+          text: "Copy text to clipboard"
+          buttonText: "Copy"
+          onClicked: { textToClipboard(); console.log("Text in clipboard") }
+        }
+        MMButtonInput {
+          text: "Send"
+          buttonText: "Send"
+          enabled: false
+          onClicked: console.log("Clicked")
         }
       }
     }

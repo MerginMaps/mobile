@@ -17,6 +17,7 @@ Item {
 
   property alias text: textField.text
   property alias placeholderText: textField.placeholderText
+  required property string regexp
   property url iconSource: ""
   property string warningMsg
   property string errorMsg
@@ -43,14 +44,16 @@ Item {
 
         source: visible ? Style.errorIcon : ""
         color: errorMsg.length > 0 ? Style.negative : Style.warning
-        visible: errorMsg.length > 0 || warningMsg.length > 0
+        visible: msg.visible
       }
       Text {
+        id: msg
+
         text: errorMsg.length > 0 ? errorMsg : warningMsg
         font: Qt.font(Style.t4)
         wrapMode: Text.WordWrap
         width: messageItem.width - msgRow.spacing - msgIcon.width
-        visible: errorMsg.length > 0 || warningMsg.length > 0
+        visible: (errorMsg.length > 0 || warningMsg.length > 0) && !isPasswordCorrect(textField.text)
       }
     }
   }
@@ -61,7 +64,7 @@ Item {
     height: 40 * __dp
     width: parent.width
     color: (errorMsg.length > 0 || warningMsg.length > 0) ? Style.errorBgInputColor : Style.white
-    border.color: errorMsg.length > 0 ? Style.negative : warningMsg.length > 0 ? Style.warning : Style.forest
+    border.color: isPasswordCorrect(textField.text) ? Style.forest : errorMsg.length > 0 ? Style.negative : warningMsg.length > 0 ? Style.warning : Style.forest
     border.width: enabled ? (textField.activeFocus ? 2*__dp : textField.hovered ? 1*__dp : 0) : 0
     radius: parent.height
 
@@ -87,33 +90,38 @@ Item {
         y: 2 * __dp
         width: control.width - 2 * row.leftPadding
                - (leftIcon.visible ? leftIcon.width : 0)
-               - (clearButton.visible ? clearButton.width : 0)
+               - (eyeButton.visible ? eyeButton.width : 0)
         height: rect.height - 4 * __dp
         color: control.enabled ? Style.night : Style.mediumGreen
         placeholderTextColor: Style.night_6
         font: Qt.font(Style.p5)
         hoverEnabled: true
         anchors.verticalCenter: parent.verticalCenter
+        echoMode: eyeButton.pressed ? TextInput.Normal : TextInput.Password
         background: Rectangle {
           color: Style.transparent
         }
       }
 
       MMIcon {
-        id: clearButton
+        id: eyeButton
 
         property bool pressed: false
-        source: Style.xMarkIcon
+        source: pressed ? Style.hideIcon : Style.showIcon
         color: control.enabled ? Style.forest : Style.mediumGreen
         width: visible ? height : 0
         height: rect.height
-        visible: textField.activeFocus && textField.text.length>0
 
         MouseArea {
           anchors.fill: parent
-          onClicked: textField.text = ""
+          onClicked: eyeButton.pressed = !eyeButton.pressed
         }
       }
     }
+  }
+
+  function isPasswordCorrect(pwd) {
+    let pwdRegexp = new RegExp(control.regexp)
+    return pwdRegexp.test(pwd)
   }
 }

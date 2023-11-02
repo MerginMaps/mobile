@@ -27,35 +27,35 @@ Page {
     spacing: 20
     anchors.centerIn: parent
 
-    MMInput {
-      type: MMInput.Type.SendButton
+    MMButtonInput {
+      buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write an informative message"
-      onSendButtonClicked: { notificationModel.add(text, 60, NotificationType.Information, NotificationType.None); text = "" }
+      onClicked: { notificationModel.add(text, 60, NotificationType.Information, NotificationType.None); text = "" }
     }
-    MMInput {
-      type: MMInput.Type.SendButton
+    MMButtonInput {
+      buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write a success message"
-      onSendButtonClicked: { notificationModel.add(text, 60, NotificationType.Success, NotificationType.Check); text = "" }
+      onClicked: { notificationModel.add(text, 60, NotificationType.Success, NotificationType.Check); text = "" }
     }
-    MMInput {
-      type: MMInput.Type.SendButton
+    MMButtonInput {
+      buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write a warning message"
-      onSendButtonClicked: { notificationModel.add(text, 60, NotificationType.Warning, NotificationType.Waiting); text = "" }
+      onClicked: { notificationModel.add(text, 60, NotificationType.Warning, NotificationType.Waiting); text = "" }
     }
-    MMInput {
-      type: MMInput.Type.SendButton
+    MMButtonInput {
+      buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write an error message"
-      onSendButtonClicked: { notificationModel.add(text, 60, NotificationType.Error, NotificationType.None); text = "" }
+      onClicked: { notificationModel.add(text, 60, NotificationType.Error, NotificationType.None); text = "" }
     }
-    MMInput {
-      type: MMInput.Type.SendButton
+    MMButtonInput {
+      buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       text: "Stojí, stojí mohyla, Na mohyle zlá chvíľa, Na mohyle tŕnie chrastie A v tom tŕní, chrastí rastie, Rastie, kvety rozvíja Jedna žltá ľalia. Tá ľalia smutno vzdychá: „Hlávku moju tŕnie pichá A nožičky oheň páli – Pomôžte mi v mojom žiali!“ "
-      onSendButtonClicked: { notificationModel.add(text, 60, NotificationType.Information, NotificationType.None); text = "" }
+      onClicked: { notificationModel.add(text, 60, NotificationType.Information, NotificationType.None); text = "" }
     }
     Text {
       text: "Note: Notification will be removed in 1 minute"
