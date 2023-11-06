@@ -28,6 +28,14 @@ Item {
     }
   }
 
+  MessageDialog {
+    id: errorDialog
+
+    title: qsTr( "Getting What's new failed" )
+    buttons: MessageDialog.Ok
+    onButtonClicked: close()
+  }
+
   Page {
     width: parent.width
     height: parent.height
@@ -77,19 +85,50 @@ Item {
         anchors.bottom: parent.bottom
         spacing: InputStyle.panelMargin
         clip: true
-        model: ChangelogModel {}
+        model: ChangelogModel {
+          onErrorMsgChanged: function(msg) {
+            errorDialog.text = msg
+            errorDialog.open()
+          }
+        }
+
         delegate: MouseArea {
           width: changeItem.width
           height: changeItem.height
           onClicked: Qt.openUrlExternally(link)
+
           Column {
             id: changeItem
             width: changelogView.width
-            Rectangle { width: parent.width; height: InputStyle.changelogLineWidth; color: InputStyle.changelogLineWColor }
-            Text { text: Qt.locale().dayName( date.getDay(), Locale.ShortFormat ) + ", " + date.getDate() + " " + Qt.locale().monthName( date.getMonth(), Locale.LongFormat )
-              font.italic: true; wrapMode: Text.WordWrap; width: parent.width; font.pixelSize: InputStyle.fontPixelSizeNormal; color: InputStyle.fontColor }
-            Text { text: title; font.bold: true; wrapMode: Text.WordWrap; width: parent.width; font.pixelSize: InputStyle.fontPixelSizeBig; color: InputStyle.fontColor }
-            Text { text: description; wrapMode: Text.WordWrap; width: parent.width; font.pixelSize: InputStyle.fontPixelSizeNormal; color: InputStyle.fontColor }
+
+            Rectangle {
+              width: parent.width
+              height: InputStyle.changelogLineWidth
+              color: InputStyle.changelogLineWColor
+            }
+            Text {
+              text: Qt.locale().dayName( date.getDay(), Locale.ShortFormat ) + ", " + date.getDate() + " " + Qt.locale().monthName( date.getMonth(), Locale.LongFormat )
+              font.italic: true
+              wrapMode: Text.WordWrap
+              width: parent.width
+              font.pixelSize: InputStyle.fontPixelSizeNormal
+              color: InputStyle.fontColor
+            }
+            Text {
+              text: title
+              font.bold: true;
+              wrapMode: Text.WordWrap
+              width: parent.width
+              font.pixelSize: InputStyle.fontPixelSizeBig
+              color: InputStyle.fontColor
+            }
+            Text {
+              text: description
+              wrapMode: Text.WordWrap
+              width: parent.width
+              font.pixelSize: InputStyle.fontPixelSizeNormal
+              color: InputStyle.fontColor
+            }
           }
         }
 
@@ -103,10 +142,12 @@ Item {
     }
 
     footer: DelegateButton {
+      id: refreshButton
+
       width: root.width
       height: InputStyle.rowHeightHeader
-      text: qsTr("Show all changes")
-      visible: false
+      text: qsTr("Refresh")
+      visible: !changelogView.count
 
       onClicked: {
         changelogView.model.seeChangelogs()

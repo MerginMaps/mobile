@@ -76,6 +76,7 @@ void ChangelogModel::onFinished( QNetworkReply *reply )
   else
   {
     CoreUtils::log( QStringLiteral( "Changelog" ), QStringLiteral( "Failed to get changelog. Server Error: %1" ).arg( reply->errorString() ) );
+    emit errorMsgChanged( reply->errorString() );
   }
   reply->deleteLater();
 
@@ -116,15 +117,12 @@ QVariant ChangelogModel::data( const QModelIndex &index, int role ) const
   return {};
 }
 
-// TODO: if all=false, get the date of last seen
-void ChangelogModel::seeChangelogs( bool all )
+// fill the dialog
+void ChangelogModel::seeChangelogs()
 {
   beginResetModel();
   mLogs.clear();
   endResetModel();
-
-  // get all the changes
-  mLastSeen = QDateTime::fromMSecsSinceEpoch( 0 );
   mNetworkManager->get( QNetworkRequest( QUrl( "https://wishlist.merginmaps.com/rss/changelog.xml" ) ) );
 }
 
