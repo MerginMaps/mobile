@@ -34,7 +34,7 @@ void TestProjectChecksumCache::testFilesCheckum()
   QString projectDir = QDir::tempPath() + "/" + projectName;
 
   InputUtils::cpDir( TestUtils::testDataDir() + "/planes", projectDir );
-  InputUtils::copyFile( TestUtils::testDataDir() + "/photo.jpg", projectDir + "/bigfile.jpg" );
+  InputUtils::copyFile( TestUtils::testDataDir() + "/TreeAutumn.png", projectDir + "/TreeAutumn.png" );
 
   QString cacheFilePath = projectDir + "/.mergin/checksum.cache"  ;
   QString checksumDirectTxt1 = CoreUtils::calculateChecksum( projectDir + "/lines.qml" );
@@ -42,7 +42,7 @@ void TestProjectChecksumCache::testFilesCheckum()
 
   QElapsedTimer timer;
   timer.start();
-  QString checksumDirectBigFile = CoreUtils::calculateChecksum( projectDir + "/bigfile.jpg" );
+  QString checksumDirectBigFile = CoreUtils::calculateChecksum( projectDir + "/TreeAutumn.png" );
   qint64 elapsedForChecksumDirectBigFile = timer.elapsed();
   QVERIFY( !checksumDirectBigFile.isEmpty() );
 
@@ -67,7 +67,7 @@ void TestProjectChecksumCache::testFilesCheckum()
     QCOMPARE( checksumDirectTxt1, checksumFromCacheTxt );
 
     // Test photo - big file
-    QString checksumFromCacheBigFile = cache.get( "bigfile.jpg" );
+    QString checksumFromCacheBigFile = cache.get( "TreeAutumn.png" );
     QCOMPARE( checksumDirectBigFile, checksumFromCacheBigFile );
   }
 
@@ -75,7 +75,7 @@ void TestProjectChecksumCache::testFilesCheckum()
   QVERIFY( QFileInfo( cacheFilePath ).exists() );
   QDateTime cacheModifiedTime = QFileInfo( cacheFilePath ).lastModified();
 
-  // Modify txt file, remove constraint-layers.gpkg file and add photo file, do not touch bigfile.jpg
+  // Modify txt file, remove constraint-layers.gpkg file and add photo file, do not touch TreeAutumn.png
   InputUtils::removeFile( projectDir + "/constraint-layers.gpkg" );
   InputUtils::copyFile( TestUtils::testDataDir() + "/photo.jpg", projectDir + "/photo.jpg" );
   QString checksumDirectPhoto = CoreUtils::calculateChecksum( projectDir + "/photo.jpg" );
@@ -109,12 +109,12 @@ void TestProjectChecksumCache::testFilesCheckum()
     QCOMPARE( checksumFromCacheTxt, checksumDirectTxt2 );
 
     // Test bigfile - checksum taken from previous cache!
-    // time should be faster than when calculated directly (let say at least 2 times)
     QElapsedTimer timer2;
     timer2.start();
-    QString checksumFromCacheBigFile = cache.get( "bigfile.jpg" );
+    QString checksumFromCacheBigFile = cache.get( "TreeAutumn.png" );
     qint64 elapsedTimeFromCache = timer2.elapsed();
-    QVERIFY( elapsedTimeFromCache * 2 < elapsedForChecksumDirectBigFile );
+    QVERIFY2( elapsedTimeFromCache < 2, QString::number( elapsedTimeFromCache ).toStdString().c_str() ); // It should be pretty much instant (<1ms)
+    QVERIFY2( elapsedForChecksumDirectBigFile > 4, QString::number( elapsedForChecksumDirectBigFile ).toStdString().c_str() ); // It should take few miliseconds to read and calculate checksum of 4 MB file
     QCOMPARE( checksumDirectBigFile, checksumFromCacheBigFile );
   }
 
@@ -128,7 +128,7 @@ void TestProjectChecksumCache::testFilesCheckum()
     ProjectChecksumCache cache( projectDir );
 
     // Test geo gpkg
-    QString checksumFromCacheGeoGpkg = cache.get( "bigfile.jpg" );
+    QString checksumFromCacheGeoGpkg = cache.get( "TreeAutumn.png" );
     QCOMPARE( checksumDirectBigFile, checksumFromCacheGeoGpkg );
   }
   // Test that cache is NOT re-saved
