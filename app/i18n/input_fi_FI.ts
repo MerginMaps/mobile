@@ -1153,7 +1153,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="470"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
-        <translation>Synkronoinnissa tapahtui virhe, yritämme uudelleen. Klikkaa tietääksesi lisää</translation>
+        <translation>Synkronoinnissa tapahtui virhe, yritämme uudelleen. Klikkaa lukeaksesi lisää.</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="490"/>
