@@ -555,7 +555,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
         <source>Field %1 already exists.</source>
-        <translation>Tieto %1 on jo olemassa.</translation>
+        <translation>Kenttä %1 on jo olemassa.</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="116"/>
