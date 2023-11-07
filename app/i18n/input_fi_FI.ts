@@ -257,7 +257,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/Banner.qml" line="36"/>
         <source>Learn more</source>
-        <translation>Opi lisää</translation>
+        <translation>Lue lisää</translation>
     </message>
 </context>
 <context>
@@ -428,12 +428,12 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="132"/>
         <source>Can not save the form, there are validation errors</source>
-        <translation>Lomaketta ei voi tallentaa, siinä on validointivirheitä</translation>
+        <translation>Lomaketta ei voitu tallentaa, siinä on validointivirheitä</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="133"/>
         <source>Feature could not be saved, please check all required fields</source>
-        <translation>Ominaisuutta ei voitu tallentaa, ole hyvä ja tarkista kaikki pakolliset tiedot</translation>
+        <translation>Kohdetta ei voitu tallentaa, ole hyvä ja tarkista kaikki pakolliset tiedot</translation>
     </message>
 </context>
 <context>
@@ -441,12 +441,12 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="81"/>
         <source>Edit Feature</source>
-        <translation>Muokkaa ominaisuutta</translation>
+        <translation>Muokkaa kohdetta</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="81"/>
         <source>Feature</source>
-        <translation>Ominaisuus</translation>
+        <translation>Kohde</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="91"/>
@@ -456,12 +456,12 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="206"/>
         <source>Delete feature</source>
-        <translation>Poista ominaisuus</translation>
+        <translation>Poista kohde</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="207"/>
         <source>Are you sure you want to delete this feature?</source>
-        <translation>Oletko varma halutessasi poistaa tämän ominaisuuden?</translation>
+        <translation>Oletko varma halutessasi poistaa tämän kohteen?</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="226"/>
@@ -481,7 +481,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="246"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
-        <translation>Muutosten tallennus epäonnistui. Tätä ei tavallisesti tapahdu. Ole hyvä ja käynnistä sovellutus uudestaan jayritä uudelleen --jos tämä ei auta ota yhteyttä tukeen.</translation>
+        <translation>Muutosten tallennus epäonnistui. Tätä ei tavallisesti tapahdu. Ole hyvä ja käynnistä sovellutus uudestaan ja yritä uudelleen — jos tämä ei auta, ota yhteyttä tukeen.</translation>
     </message>
 </context>
 <context>
@@ -524,7 +524,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/FeaturesListPageToolbar.qml" line="53"/>
         <source>Add Feature</source>
-        <translation>Lisää ominaisuus</translation>
+        <translation>Lisää kohde</translation>
     </message>
     <message>
         <location filename="../qml/FeaturesListPageToolbar.qml" line="69"/>
@@ -542,7 +542,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/layers/FeaturesListPageV2.qml" line="170"/>
         <source>Add feature</source>
-        <translation>Lisää ominaisuus</translation>
+        <translation>Lisää kohde</translation>
     </message>
 </context>
 <context>
@@ -555,13 +555,13 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
         <source>Field %1 already exists.</source>
-        <translation>Tieto %1 on jo olemassa.</translation>
+        <translation>Kenttä %1 on jo olemassa.</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="116"/>
         <source>Field %1 already exists. 
 Won&apos;t be added to the project.</source>
-        <translation>Tieto %1 on jo olemassa. 
+        <translation>Kenttä %1 on jo olemassa. 
 Sitä ei lisätä projektiin.</translation>
     </message>
 </context>
@@ -640,7 +640,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="381"/>
         <source>Manage GPS receivers</source>
-        <translation>Hoida GPS vastaanottimia</translation>
+        <translation>Hallinnoi GPS vastaanottimia</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="139"/>
@@ -935,7 +935,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="235"/>
         <source>Failed to find a QGIS project file</source>
-        <translation>Epäonnistuminen haettaessa QGIS projektitiedostoa</translation>
+        <translation>QGIS projektitiedoston haku epäonnistui</translation>
     </message>
 </context>
 <context>
@@ -961,7 +961,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/LoginForm.qml" line="62"/>
         <source>Sync projects with your desktop computer and work collaboratively with others by logging in to your %1Mergin Maps%2 account.</source>
-        <translation>Synkronoi projektit työasemasi kanssa ja työskentele  yhdessä muitten kanssa kirjautumalla Mergin Maps tilillesi.</translation>
+        <translation>Synkronoi projektit työasemaasi ja työskentele muiden kanssa kirjautumalla %1Mergin Maps%2 tilillesi.</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="105"/>
@@ -1153,7 +1153,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="470"/>
         <source>There was an issue during synchronization, we will try again. Click to learn more</source>
-        <translation>Synkronoinnissa tapahtui virhe, yritämme uudelleen. Klikkaa tietääksesi lisää</translation>
+        <translation>Synkronoinnissa tapahtui virhe, yritämme uudelleen. Klikkaa lukeaksesi lisää.</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="490"/>
@@ -1163,7 +1163,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="508"/>
         <source>Create line to split the selected feature</source>
-        <translation>Luo viiva jakaaksesi valitut ominaisuudet</translation>
+        <translation>Piirrä viiva jakaaksesi valittu kohde</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="526"/>
@@ -1173,7 +1173,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="544"/>
         <source>Record new geometry for the feature</source>
-        <translation>Merkitse uusi uusi geometria ominaisuudelle</translation>
+        <translation>Tallenna uusi geometria kohteelle</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="683"/>
@@ -1198,7 +1198,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="810"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Klikkaa ‘Yes’ hylkää muutokset geometriaan eikä ominaisuutta tallenneta. Jos haluat sen sijaan tallentaa muutokset, napsauta ‘No’ ja sitten ‘Done’ työkalupalkissa.</translation>
+        <translation>Klikkaamalla ‘Kyllä’ hylkäät  geometria muutokset eikä kohdetta tallenneta. Jos haluat sen sijaan tallentaa muutokset, napsauta ‘Ei’ ja sitten ‘Valmis’ työkalupalkissa.</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="880"/>
@@ -1788,7 +1788,7 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="69"/>
         <source>Value should be unique</source>
-        <translation>Arvon tulisi olla yksilöllinen</translation>
+        <translation>Arvon tulee olla yksilöllinen</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="70"/>
@@ -1890,7 +1890,7 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
     <message>
         <location filename="../qml/map/RecordingTools.qml" line="281"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
-        <translation>Heikko GPS tarkkuus (%1 m)&lt;br&gt;&lt;br&gt;Ole ystävällinen ja varmista hyvä näkyvyys taivaalle.</translation>
+        <translation>Heikko GPS tarkkuus (%1 m)&lt;br&gt;&lt;br&gt;Varmista, että sinulla on hyvä näkyvyys taivaalle.</translation>
     </message>
     <message>
         <location filename="../qml/map/RecordingTools.qml" line="187"/>
@@ -2103,12 +2103,12 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
     <message>
         <location filename="../qml/dialogs/SplittingFailedDialog.qml" line="16"/>
         <source>We could not split the feature</source>
-        <translation>Emme voineet jakaa ominaisuutta.</translation>
+        <translation>Emme voineet jakaa kohdetta.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/SplittingFailedDialog.qml" line="17"/>
         <source>Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it.</source>
-        <translation>Varmista että viiva risteää ominaisuutesi kanssa. Ominaisuudella tulee olla hyväksyttävä geometria sen jakamiseksi.</translation>
+        <translation>Varmista että viiva risteää kohteen kanssa. Kohteella tulee olla hyväksyttävä geometria sen jakamiseksi.</translation>
     </message>
 </context>
 <context>
@@ -2165,7 +2165,7 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="59"/>
         <source>Data to sync: %1</source>
-        <translation>Data synkronointiin: %1</translation>
+        <translation>Syknronoitava data: %1</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="85"/>
@@ -2362,7 +2362,7 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
         <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
 
 In order to delete your account, enter your username in the field below and click Yes.</source>
-        <translation>Tällä toimenpiteellä poistat Mergin Maps tilisi mukaan lukien kaikki projektisi sekä laitteestasi ja palvelimesta. Tätä toimenpidettä ei voida palauttaa. Jos sinulla on Apple tilaus tulee sinun  peruuttaa manuaalisesti.
+        <translation>Tällä toimenpiteellä poistat Mergin Maps tilisi mukaan lukien kaikki projektisi sekä laitteestasi että palvelimesta. Tätä toimenpidettä ei voida palauttaa. Jos sinulla on Apple tilaus tulee sinun peruuttaa se manuaalisesti.
 
 Poistaaksesi tilisi anna käyttäjänimesi alle ja klikkaa Kyllä.</translation>
     </message>
@@ -2424,7 +2424,7 @@ Ole hyvä ja siirry Mergin Maps verkkosivuille poistaaksesi sen manuaalisesti.</
     <message>
         <location filename="../qml/editor/inputrelation.qml" line="224"/>
         <source>Linked features</source>
-        <translation>Linkitetyt ominaisuudet</translation>
+        <translation>Linkitetyt kohteet</translation>
     </message>
 </context>
 <context>
@@ -2454,12 +2454,12 @@ Ole hyvä ja siirry Mergin Maps verkkosivuille poistaaksesi sen manuaalisesti.</
     <message>
         <location filename="../qml/main.qml" line="256"/>
         <source>GPS auto-center mode on</source>
-        <translation>GPS automaattinen keskitys päälle</translation>
+        <translation>GPS-sijainnin automaattinen keskitys päälle</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="256"/>
         <source>GPS auto-center mode off</source>
-        <translation>GPS automaattinen keskitys pois päältä</translation>
+        <translation>GPS-sijainnin automaattinen keskitys pois päältä</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="270"/>
@@ -2500,7 +2500,7 @@ Ole hyvä ja siirry Mergin Maps verkkosivuille poistaaksesi sen manuaalisesti.</
     <message>
         <location filename="../qml/main.qml" line="830"/>
         <source>Press back again to quit the app</source>
-        <translation>Paina Takaisin uudestaan lopettaaksesi appsin.</translation>
+        <translation>Paina takaisin uudestaan sulkeaksesi sovelluksen.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="616"/>
