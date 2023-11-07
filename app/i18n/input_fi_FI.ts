@@ -640,7 +640,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="381"/>
         <source>Manage GPS receivers</source>
-        <translation>Hoida GPS vastaanottimia</translation>
+        <translation>Hallinnoi GPS vastaanottimia</translation>
     </message>
     <message>
         <location filename="../qml/misc/GpsDataPage.qml" line="139"/>
