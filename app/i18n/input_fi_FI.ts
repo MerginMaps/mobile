@@ -2165,7 +2165,7 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="59"/>
         <source>Data to sync: %1</source>
-        <translation>Data synkronointiin: %1</translation>
+        <translation>Syknronoitava data: %1</translation>
     </message>
     <message>
         <location filename="../qml/StorageLimitDialog.qml" line="85"/>
