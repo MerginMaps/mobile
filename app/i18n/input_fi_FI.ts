@@ -481,7 +481,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="246"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
-        <translation>Muutosten tallennus epäonnistui. Tätä ei tavallisesti tapahdu. Ole hyvä ja käynnistä sovellutus uudestaan jayritä uudelleen --jos tämä ei auta ota yhteyttä tukeen.</translation>
+        <translation>Muutosten tallennus epäonnistui. Tätä ei tavallisesti tapahdu. Ole hyvä ja käynnistä sovellutus uudestaan ja yritä uudelleen --jos tämä ei auta ota yhteyttä tukeen.</translation>
     </message>
 </context>
 <context>
