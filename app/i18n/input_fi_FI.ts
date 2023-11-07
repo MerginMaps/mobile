@@ -1788,7 +1788,7 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="69"/>
         <source>Value should be unique</source>
-        <translation>Arvon tulisi olla yksilöllinen</translation>
+        <translation>Arvon tulee olla yksilöllinen</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="70"/>
