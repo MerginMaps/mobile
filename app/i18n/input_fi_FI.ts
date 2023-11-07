@@ -446,7 +446,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="81"/>
         <source>Feature</source>
-        <translation>Ominaisuus</translation>
+        <translation>Kohde</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="91"/>
@@ -456,7 +456,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="206"/>
         <source>Delete feature</source>
-        <translation>Poista ominaisuus</translation>
+        <translation>Poista kohde</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="207"/>
