@@ -524,7 +524,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/FeaturesListPageToolbar.qml" line="53"/>
         <source>Add Feature</source>
-        <translation>Lisää kohteita</translation>
+        <translation>Lisää kohde</translation>
     </message>
     <message>
         <location filename="../qml/FeaturesListPageToolbar.qml" line="69"/>
@@ -542,7 +542,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/layers/FeaturesListPageV2.qml" line="170"/>
         <source>Add feature</source>
-        <translation>Lisää ominaisuus</translation>
+        <translation>Lisää kohde</translation>
     </message>
 </context>
 <context>
