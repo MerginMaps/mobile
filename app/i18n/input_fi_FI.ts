@@ -1198,7 +1198,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="810"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Klikkaa ‘Yes’ hylkää muutokset geometriaan eikä ominaisuutta tallenneta. Jos haluat sen sijaan tallentaa muutokset, napsauta ‘No’ ja sitten ‘Done’ työkalupalkissa.</translation>
+        <translation>Klikkaamalla ‘Kyllä’ hylkäät  geometria muutokset eikä kohdetta tallenneta. Jos haluat sen sijaan tallentaa muutokset, napsauta ‘Ei’ ja sitten ‘Valmis’ työkalupalkissa.</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="880"/>
