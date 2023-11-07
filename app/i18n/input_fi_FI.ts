@@ -441,7 +441,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="81"/>
         <source>Edit Feature</source>
-        <translation>Muokkaa ominaisuutta</translation>
+        <translation>Muokkaa kohdetta</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="81"/>
