@@ -2362,7 +2362,7 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
         <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
 
 In order to delete your account, enter your username in the field below and click Yes.</source>
-        <translation>Tällä toimenpiteellä poistat Mergin Maps tilisi mukaan lukien kaikki projektisi sekä laitteestasi ja palvelimesta. Tätä toimenpidettä ei voida palauttaa. Jos sinulla on Apple tilaus tulee sinun  peruuttaa manuaalisesti.
+        <translation>Tällä toimenpiteellä poistat Mergin Maps tilisi mukaan lukien kaikki projektisi sekä laitteestasi että palvelimesta. Tätä toimenpidettä ei voida palauttaa. Jos sinulla on Apple tilaus tulee sinun peruuttaa se manuaalisesti.
 
 Poistaaksesi tilisi anna käyttäjänimesi alle ja klikkaa Kyllä.</translation>
     </message>
