@@ -961,7 +961,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/LoginForm.qml" line="62"/>
         <source>Sync projects with your desktop computer and work collaboratively with others by logging in to your %1Mergin Maps%2 account.</source>
-        <translation>Synkronoi projektit työasemasi kanssa ja työskentele  yhdessä muitten kanssa kirjautumalla Mergin Maps tilillesi.</translation>
+        <translation>Synkronoi projektit työasemaasi ja työskentele muiden kanssa kirjautumalla %1Mergin Maps%2 tilillesi.</translation>
     </message>
     <message>
         <location filename="../qml/LoginForm.qml" line="105"/>
