@@ -9,17 +9,20 @@
 #include "testvariablesmanager.h"
 #include "qgsexpression.h"
 #include "qgsexpressioncontext.h"
+#include "qgsexpressioncontextutils.h"
 
 #include "test/testmerginapi.h"
 #include "inputtests.h"
 #include "testutils.h"
 #include "position/providers/bluetoothpositionprovider.h"
+#include "merginapi.h"
 
-TestVariablesManager::TestVariablesManager( VariablesManager *vm, PositionKit *pk, AppSettings *as )
+TestVariablesManager::TestVariablesManager( MerginApi *api, VariablesManager *vm, PositionKit *pk, AppSettings *as )
 {
   mVariablesManager = vm;
   mPositionKit = pk;
   mAppSettings = as;
+  mApi = api;
 
   mPositionKit->setAppSettings( mAppSettings );
   mPositionKit->setPositionProvider( nullptr );
@@ -92,6 +95,24 @@ void TestVariablesManager::positionVariables()
   mAppSettings->setGpsAntennaHeight( 0 );
 }
 
+void TestVariablesManager::userVariables()
+{
+  QString apiRoot, username, password, workspace;
+  TestUtils::merginGetAuthCredentials( mApi, apiRoot, username, password );
+  if ( TestUtils::needsToAuthorizeAgain( mApi, username ) )
+  {
+    TestUtils::authorizeUser( mApi, username, password );
+    TestUtils::selectFirstWorkspace( mApi, workspace );
+  }
+
+  QgsExpressionContext context;
+  context << QgsExpressionContextUtils::globalScope();
+
+  evaluateExpression( QStringLiteral( "@mergin_url" ),  mApi->apiRoot(), &context );
+  evaluateExpression( QStringLiteral( "@mergin_user_email" ), mApi->userInfo()->email(), &context );
+  evaluateExpression( QStringLiteral( "@mergin_username" ), username, &context );
+}
+
 GeoPosition TestVariablesManager::testGeoPosition()
 {
   GeoPosition geoInfo;
@@ -115,9 +136,9 @@ GeoPosition TestVariablesManager::testGeoPosition()
 void TestVariablesManager::evaluateExpression( const QString &expStr, const QString &expectedValue, const QgsExpressionContext *context )
 {
   QgsExpression exp( expStr );
-  QVERIFY( exp.prepare( context ) );
+  QVERIFY2( exp.prepare( context ), expStr.toStdString().c_str() );
   QVERIFY( !exp.hasParserError() );
   QVariant value = exp.evaluate();
-  QVERIFY( !exp.hasEvalError() );
+  QVERIFY2( !exp.hasEvalError(), expStr.toStdString().c_str() );
   QCOMPARE( value, expectedValue );
 }

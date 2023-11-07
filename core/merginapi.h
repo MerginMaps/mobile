@@ -468,8 +468,6 @@ class MerginApi: public QObject
     QString apiRoot() const;
     void setApiRoot( const QString &apiRoot );
 
-    QString merginUserName() const;
-
     MerginApiStatus::VersionStatus apiVersionStatus() const;
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
 

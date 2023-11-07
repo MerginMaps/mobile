@@ -1600,11 +1600,6 @@ void MerginApi::setApiRoot( const QString &apiRoot )
   }
 }
 
-QString MerginApi::merginUserName() const
-{
-  return userAuth()->username();
-}
-
 QList<MerginFile> MerginApi::getLocalProjectFiles( const QString &projectPath )
 {
   QElapsedTimer timer;

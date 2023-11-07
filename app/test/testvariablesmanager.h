@@ -19,17 +19,22 @@
 #ifndef TESTVARIABLESMANAGER_H
 #define TESTVARIABLESMANAGER_H
 
+class MerginApi;
+
 class TestVariablesManager: public QObject
 {
     Q_OBJECT
   public:
-    TestVariablesManager( VariablesManager *vm, PositionKit *pk, AppSettings *as );
+    TestVariablesManager( MerginApi *api, VariablesManager *vm, PositionKit *pk, AppSettings *as );
   private slots:
     void init(); // will be called before each testfunction is executed.
     void cleanup(); // will be called after every testfunction.
 
     void positionVariables();
+    void userVariables();
+
   private:
+    MerginApi *mApi;
     VariablesManager *mVariablesManager;
     PositionKit *mPositionKit;
     AppSettings *mAppSettings;

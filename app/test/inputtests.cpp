@@ -139,7 +139,7 @@ int InputTests::runTest() const
   }
   else if ( mTestRequested == "--testVariablesManager" )
   {
-    TestVariablesManager vmTest( mVariablesManager, mPositionKit, mAppSettings );
+    TestVariablesManager vmTest( mApi, mVariablesManager, mPositionKit, mAppSettings );
     nFailed = QTest::qExec( &vmTest, mTestArgs );
   }
   else if ( mTestRequested == "--testFormEditors" )
