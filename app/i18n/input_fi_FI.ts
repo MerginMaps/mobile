@@ -1890,7 +1890,7 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
     <message>
         <location filename="../qml/map/RecordingTools.qml" line="281"/>
         <source>Low GPS position accuracy (%1 m)&lt;br&gt;&lt;br&gt;Please make sure you have good view of the sky.</source>
-        <translation>Heikko GPS tarkkuus (%1 m)&lt;br&gt;&lt;br&gt;Ole ystävällinen ja varmista hyvä näkyvyys taivaalle.</translation>
+        <translation>Heikko GPS tarkkuus (%1 m)&lt;br&gt;&lt;br&gt;Varmista, että sinulla on hyvä näkyvyys taivaalle.</translation>
     </message>
     <message>
         <location filename="../qml/map/RecordingTools.qml" line="187"/>
