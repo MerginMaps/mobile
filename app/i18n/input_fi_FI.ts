@@ -561,7 +561,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
         <location filename="../fieldsmodel.cpp" line="116"/>
         <source>Field %1 already exists. 
 Won&apos;t be added to the project.</source>
-        <translation>Tieto %1 on jo olemassa. 
+        <translation>Kenttä %1 on jo olemassa. 
 Sitä ei lisätä projektiin.</translation>
     </message>
 </context>
