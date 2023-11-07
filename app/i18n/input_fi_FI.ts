@@ -1163,7 +1163,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="508"/>
         <source>Create line to split the selected feature</source>
-        <translation>Luo viiva jakaaksesi valitut ominaisuudet</translation>
+        <translation>Piirrä viiva jakaaksesi valittu kohde</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="526"/>
