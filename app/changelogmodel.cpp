@@ -12,6 +12,7 @@
 #include <QXmlStreamReader>
 #include <QDebug>
 #include "coreutils.h"
+#include "inputhelp.h"
 
 ChangelogModel::ChangelogModel( QObject *parent ) : QAbstractListModel{parent}
 {
@@ -123,7 +124,7 @@ void ChangelogModel::seeChangelogs()
   beginResetModel();
   mLogs.clear();
   endResetModel();
-  mNetworkManager->get( QNetworkRequest( QUrl( "https://wishlist.merginmaps.com/rss/changelog.xml" ) ) );
+  mNetworkManager->get( QNetworkRequest( QUrl( InputHelp::changelogLink() ) ) );
 }
 
 

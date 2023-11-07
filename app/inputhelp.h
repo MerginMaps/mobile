@@ -73,6 +73,7 @@ class InputHelp: public QObject
     QString merginTermsLink() const;
     QString projectLoadingErrorHelpLink() const;
     QString whatsNewPostLink() const;
+    static QString changelogLink();
 
     bool submitReportPending() const;
     /**
