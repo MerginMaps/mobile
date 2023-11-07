@@ -1173,7 +1173,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="544"/>
         <source>Record new geometry for the feature</source>
-        <translation>Merkitse uusi uusi geometria ominaisuudelle</translation>
+        <translation>Tallenna uusi geometria kohteelle</translation>
     </message>
     <message>
         <location filename="../qml/map/MapWrapper.qml" line="683"/>
