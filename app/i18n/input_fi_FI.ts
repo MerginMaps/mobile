@@ -935,7 +935,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="235"/>
         <source>Failed to find a QGIS project file</source>
-        <translation>Epäonnistuminen haettaessa QGIS projektitiedostoa</translation>
+        <translation>QGIS projektitiedoston haku epäonnistui</translation>
     </message>
 </context>
 <context>
