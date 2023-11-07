@@ -2424,7 +2424,7 @@ Ole hyvä ja siirry Mergin Maps verkkosivuille poistaaksesi sen manuaalisesti.</
     <message>
         <location filename="../qml/editor/inputrelation.qml" line="224"/>
         <source>Linked features</source>
-        <translation>Linkitetyt ominaisuudet</translation>
+        <translation>Linkitetyt kohteet</translation>
     </message>
 </context>
 <context>
