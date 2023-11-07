@@ -257,7 +257,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/Banner.qml" line="36"/>
         <source>Learn more</source>
-        <translation>Opi lisää</translation>
+        <translation>Lue lisää</translation>
     </message>
 </context>
 <context>
