@@ -433,7 +433,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="133"/>
         <source>Feature could not be saved, please check all required fields</source>
-        <translation>Ominaisuutta ei voitu tallentaa, ole hyvä ja tarkista kaikki pakolliset tiedot</translation>
+        <translation>Kohdetta ei voitu tallentaa, ole hyvä ja tarkista kaikki pakolliset tiedot</translation>
     </message>
 </context>
 <context>
