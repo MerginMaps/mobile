@@ -461,7 +461,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="207"/>
         <source>Are you sure you want to delete this feature?</source>
-        <translation>Oletko varma halutessasi poistaa tämän ominaisuuden?</translation>
+        <translation>Oletko varma halutessasi poistaa tämän kohteen?</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureFormPage.qml" line="226"/>
