@@ -1143,7 +1143,7 @@ void TestMerginApi::testDiffSubdirsUpload()
   ProjectDiff diff = MerginApi::localProjectChanges( projectDir );
   ProjectDiff expectedDiff;
   expectedDiff.localUpdated = QSet<QString>() << base ;
-  QVERIFY2( diff == expectedDiff, diff.dump().toStdString().c_str() )
+  QVERIFY2( diff == expectedDiff, diff.dump().toStdString().c_str() );
   QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
 
   GeodiffUtils::ChangesetSummary expectedSummary;
