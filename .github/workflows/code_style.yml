@@ -29,6 +29,7 @@ jobs:
     steps:
       - name: Install astyle
         run: |
+          brew update
           brew install astyle
 
       - name: Checkout input
@@ -68,6 +69,7 @@ jobs:
 
       - name: Install Requirements
         run: |
+          brew update
           brew install cppcheck
 
       - name: Run cppcheck test
