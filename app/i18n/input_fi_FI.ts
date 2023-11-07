@@ -2108,7 +2108,7 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
     <message>
         <location filename="../qml/dialogs/SplittingFailedDialog.qml" line="17"/>
         <source>Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it.</source>
-        <translation>Varmista että viiva risteää ominaisuutesi kanssa. Ominaisuudella tulee olla hyväksyttävä geometria sen jakamiseksi.</translation>
+        <translation>Varmista että viiva risteää kohteen kanssa. Kohteella tulee olla hyväksyttävä geometria sen jakamiseksi.</translation>
     </message>
 </context>
 <context>
