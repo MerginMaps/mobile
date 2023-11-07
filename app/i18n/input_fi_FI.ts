@@ -2454,7 +2454,7 @@ Ole hyvä ja siirry Mergin Maps verkkosivuille poistaaksesi sen manuaalisesti.</
     <message>
         <location filename="../qml/main.qml" line="256"/>
         <source>GPS auto-center mode on</source>
-        <translation>GPS automaattinen keskitys päälle</translation>
+        <translation>GPS-sijainnin automaattinen keskitys päälle</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="256"/>
