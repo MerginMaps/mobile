@@ -428,7 +428,7 @@ Ole hyvä ja mene Mergin Mapsin verkkosivuille poistamaan se manuaalisesti.</tra
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="132"/>
         <source>Can not save the form, there are validation errors</source>
-        <translation>Lomaketta ei voi tallentaa, siinä on validointivirheitä</translation>
+        <translation>Lomaketta ei voitu tallentaa, siinä on validointivirheitä</translation>
     </message>
     <message>
         <location filename="../qml/form/FeatureForm.qml" line="133"/>
