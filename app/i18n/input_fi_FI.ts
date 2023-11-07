@@ -2500,7 +2500,7 @@ Ole hyvä ja siirry Mergin Maps verkkosivuille poistaaksesi sen manuaalisesti.</
     <message>
         <location filename="../qml/main.qml" line="830"/>
         <source>Press back again to quit the app</source>
-        <translation>Paina Takaisin uudestaan lopettaaksesi appsin.</translation>
+        <translation>Paina takaisin uudestaan sulkeaksesi sovelluksen.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="616"/>
