@@ -2103,7 +2103,7 @@ Klikkaa &apos;Kyllä&apos; sisään kirjoitukseen</translation>
     <message>
         <location filename="../qml/dialogs/SplittingFailedDialog.qml" line="16"/>
         <source>We could not split the feature</source>
-        <translation>Emme voineet jakaa ominaisuutta.</translation>
+        <translation>Emme voineet jakaa kohdetta.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/SplittingFailedDialog.qml" line="17"/>
