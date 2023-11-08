@@ -72,7 +72,7 @@ Item {
         id: subTitle
 
         anchors.top: title.bottom
-        text: qsTr("See what changed since you were last here")
+        text: qsTr("Latest Mergin Maps updates")
         wrapMode: Text.WordWrap
         width: parent.width
         font.pixelSize: InputStyle.fontPixelSizeNormal
