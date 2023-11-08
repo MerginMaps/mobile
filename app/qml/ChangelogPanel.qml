@@ -55,7 +55,7 @@ Item {
       width: parent.width
       color: InputStyle.clrPanelMain
       rowHeight: InputStyle.rowHeightHeader
-      titleText: qsTr("What's new")
+      titleText: qsTr("Changelog")
 
       onBack: root.close()
       withBackButton: true
