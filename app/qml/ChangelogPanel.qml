@@ -95,7 +95,7 @@ Item {
         delegate: MouseArea {
           width: changeItem.width
           height: changeItem.height
-          onClicked: Qt.openUrlExternally(link)
+          onClicked: Qt.openUrlExternally(model.link)
 
           Column {
             id: changeItem
