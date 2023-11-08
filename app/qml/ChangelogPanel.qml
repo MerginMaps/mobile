@@ -115,7 +115,7 @@ Item {
               color: InputStyle.fontColor
             }
             Text {
-              text: title
+              text: model.title
               font.bold: true;
               wrapMode: Text.WordWrap
               width: parent.width
