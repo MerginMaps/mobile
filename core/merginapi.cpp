@@ -3473,7 +3473,7 @@ void MerginApi::getServerConfigReplyFinished()
       // will be dropped support for old servers (mostly CE servers without workspaces)
       if ( ( MINIMUM_SERVER_VERSION_MAJOR == major && MINIMUM_SERVER_VERSION_MINOR > minor ) || ( MINIMUM_SERVER_VERSION_MAJOR > major ) )
       {
-        emit migrationRequested();
+        emit migrationRequested( QString( "%1.%2" ).arg( major ).arg( minor ) );
       }
     }
   }
@@ -3483,7 +3483,7 @@ void MerginApi::getServerConfigReplyFinished()
     if ( statusCode == 404 ) // legacy (old) server
     {
       setServerType( MerginServerType::OLD );
-      emit migrationRequested();
+      emit migrationRequested( QString() );
     }
     else
     {
