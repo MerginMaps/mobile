@@ -629,14 +629,9 @@ ApplicationWindow {
       property string version
 
       onAccepted: migrationDialog.close()
-      text: qsTr("Your server will soon be out of date \n\n Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.")
-      buttons: {
-        // show the Ignore button only when a server version is known
-        if( version.length > 0 )
-          return MessageDialog.Close | MessageDialog.Help | MessageDialog.Ignore
-        else
-          return MessageDialog.Close | MessageDialog.Help
-      }
+      title: qsTr("Your server will soon be out of date")
+      text: qsTr("Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.")
+      buttons: MessageDialog.Close | MessageDialog.Help | MessageDialog.Ignore
       onButtonClicked: function(clickedButton) {
         if (clickedButton === MessageDialog.Help) {
           Qt.openUrlExternally(__inputHelp.migrationGuides)

@@ -3483,7 +3483,7 @@ void MerginApi::getServerConfigReplyFinished()
     if ( statusCode == 404 ) // legacy (old) server
     {
       setServerType( MerginServerType::OLD );
-      emit migrationRequested( QString() );
+      emit migrationRequested( "legacy" );
     }
     else
     {
