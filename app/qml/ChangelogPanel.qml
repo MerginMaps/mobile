@@ -33,7 +33,10 @@ Item {
 
     title: qsTr( "Getting What's new failed" )
     buttons: MessageDialog.Ok
-    onButtonClicked: close()
+    onButtonClicked: {
+      errorDialog.close()
+      root.close()
+      }
   }
 
   Page {
