@@ -8,6 +8,7 @@ Building Mergin Maps mobile app from source - step by step
 * [2. Overview](#2-overview)
    * [2.1 Secrets](#21-secrets)
    * [2.2 Code formatting](#22-code-formatting)
+   * [2.3 Required Qt packages](#23-required-qt-packages)
 * [3. Building GNU/Ubuntu](#3-building-gnuubuntu)
 * [4. Building Android (on Ubuntu/macOS/Windows)](#4-building-android-on-ubuntumacoswindows)
    * [4.1. Android on Ubuntu](#41-android-on-ubuntu)
@@ -99,6 +100,20 @@ In order to start using the `pre-commit`, run `pre-commit install` in the reposi
 To manually run the style check, run `pre-commit run --all-files` or optionally run script `format_cpp.sh` (we use this one in CI currently).
 
 In case you want to skip execution of pre-commit hooks, add additional flag `--no-verify` to your commit command, e.g.: `git commit -m "nit" --no-verify`
+
+## 2.3 Required Qt packages
+
+Mergin Maps is built with Qt. If you are using Qt's `Maintenance tool`, make sure to install these packages:
+ - `Android` -> when building for Andoroid
+ - `iOS` -> when building for iOS
+ - `macOS` -> or other desktop platform based on your host machine
+ - `Qt 5 Compatibility Module`
+ - `Qt Shader Tools`
+ - `Additional libraries:`
+   - `Qt Connectivity` -> used for Bluetooth
+   - `Qt Multimedia`
+   - `Qt Positioning`
+   - `Qt Sensors`
 
 # 3. Building GNU/Ubuntu
 
