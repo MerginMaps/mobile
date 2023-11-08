@@ -59,13 +59,9 @@ void ChangelogModel::onFinished( QNetworkReply *reply )
       {
         if ( xml.name().toString() == "item" )
         {
-          QDateTime dt = QDateTime::fromString( pubDate, "ddd, dd MMM yyyy hh:mm:ss t" );
-          if ( dt > mLastSeen )
-          {
-            beginInsertRows( QModelIndex(), rowCount(), rowCount() );
-            mLogs << Changelog{ title, description, link, dt };
-            endInsertRows();
-          }
+          beginInsertRows( QModelIndex(), rowCount(), rowCount() );
+          mLogs << Changelog{ title, description, link, dt }; 
+          endInsertRows();
         }
       }
     }
