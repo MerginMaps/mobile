@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 import "../Style.js" as Style
 import "."
+import ".."
 
 Button {
   id: control
@@ -26,7 +27,7 @@ Button {
     rightPadding: 32 * __dp
     topPadding: 10 * __dp
     bottomPadding: 10 * __dp
-    color: control.enabled ? control.down || control.hovered ? Style.grass : Style.forest : Style.forest
+    color: control.enabled ? control.down || control.hovered ? Style.grass : StyleV2.forestColor : StyleV2.forestColor
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
     elide: Text.ElideRight

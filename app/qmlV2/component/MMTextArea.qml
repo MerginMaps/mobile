@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 import "../Style.js" as Style
+import ".."
 
 Item {
   id: control
@@ -38,7 +39,7 @@ Item {
     height: control.autoHeight ? ( contentHeight+10 > control.minHeight ? contentHeight+10 > control.maxHeight ? control.maxHeight : contentHeight+10 : control.minHeight ) : control.areaHeight
     width: parent.width
     hoverEnabled: true
-    placeholderTextColor: Style.night_6
+    placeholderTextColor: StyleV2.nightAlphaColor
     color: control.enabled ? Style.night : Style.mediumGreen
     font: Qt.font(Style.p5)
 

@@ -6,6 +6,7 @@
         <file>qml/pages/ButtonsPage.qml</file>
         <file>../app/qmlV2/component/MMInput.qml</file>
         <file>../app/qmlV2/Style.js</file>
+        <file>../app/qmlV2/StyleV2.qml</file>
         <file>../app/qmlV2/component/MMButton.qml</file>
         <file>../app/qmlV2/component/MMLinkButton.qml</file>
         <file>../app/qmlV2/component/MMLink.qml</file>

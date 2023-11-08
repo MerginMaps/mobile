@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 import "../Style.js" as Style
+import ".."
 
 Item {
   id: control
@@ -98,7 +99,7 @@ Item {
                - (button.visible ? button.width : 0)
         height: rect.height - 4 * __dp
         color: control.enabled ? Style.night : Style.mediumGreen
-        placeholderTextColor: Style.night_6
+        placeholderTextColor: StyleV2.nightAlphaColor
         font: Qt.font(Style.p5)
         hoverEnabled: true
         anchors.verticalCenter: parent.verticalCenter
