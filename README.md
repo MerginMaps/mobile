@@ -1,4 +1,4 @@
-# Mergin Maps Input App
+# Mergin Maps mobile app
 
 <picture>
   <source media="(prefers-color-scheme: dark)" width=350 srcset="https://raw.githubusercontent.com/MerginMaps/.github/main/images/MM_logo_HORIZ_COLOR_INVERSE_VECTOR.svg">
