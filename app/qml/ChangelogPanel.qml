@@ -107,7 +107,7 @@ Item {
               color: InputStyle.changelogLineWColor
             }
             Text {
-              text: Qt.locale().dayName( date.getDay(), Locale.ShortFormat ) + ", " + date.getDate() + " " + Qt.locale().monthName( date.getMonth(), Locale.LongFormat )
+              text: Qt.locale().dayName( model.date.getDay(), Locale.ShortFormat ) + ", " + model.date.getDate() + " " + Qt.locale().monthName( model.date.getMonth(), Locale.LongFormat )
               font.italic: true
               wrapMode: Text.WordWrap
               width: parent.width
