@@ -22,7 +22,7 @@ MerginFile MerginFile::fromJsonObject( const QJsonObject &merginFileInfo )
   MerginFile merginFile;
   merginFile.checksum = merginFileInfo.value( QStringLiteral( "checksum" ) ).toString();
   merginFile.path = merginFileInfo.value( QStringLiteral( "path" ) ).toString();
-  merginFile.size = merginFileInfo.value( QStringLiteral( "size" ) ).toInt();
+  merginFile.size = merginFileInfo.value( QStringLiteral( "size" ) ).toInteger();
   merginFile.mtime =  QDateTime::fromString( merginFileInfo.value( QStringLiteral( "mtime" ) ).toString(), Qt::ISODateWithMs ).toUTC();
   merginFile.diffSize = 0;
 
@@ -53,7 +53,7 @@ MerginFile MerginFile::fromJsonObject( const QJsonObject &merginFileInfo )
         if ( obj.contains( "diff" ) )
         {
           QJsonObject diffObj = obj["diff"].toObject();
-          int fileSize = diffObj["size"].toInt();
+          qint64 fileSize = diffObj["size"].toInteger();
           merginFile.pullDiffFiles << qMakePair( key, fileSize );
         }
         else

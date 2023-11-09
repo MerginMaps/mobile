@@ -115,13 +115,13 @@ struct ProjectDiff
  */
 struct DownloadQueueItem
 {
-  DownloadQueueItem( const QString &fp, int s, int v, int rf = -1, int rt = -1, bool diff = false );
+  DownloadQueueItem( const QString &fp, qint64 s, int v, qint64 rf = -1, qint64 rt = -1, bool diff = false );
 
   QString filePath;          //!< path within the project
-  int size;                  //!< size of the item in bytes
+  qint64 size;               //!< size of the item in bytes
   int version = -1;          //!< what version to download  (for ordinary files it will be the target version, for diffs it can be different version)
-  int rangeFrom = -1;        //!< what range of bytes to download (-1 if downloading the whole file)
-  int rangeTo = -1;          //!< what range of bytes to download (-1 if downloading the whole file)
+  qint64 rangeFrom = -1;     //!< what range of bytes to download (-1 if downloading the whole file)
+  qint64 rangeTo = -1;       //!< what range of bytes to download (-1 if downloading the whole file)
   bool downloadDiff = false; //!< whether to download just the diff between the previous version and the current one
   QString tempFileName;      //!< relative filename of the temporary file where the downloaded content will be stored
 };
@@ -158,7 +158,7 @@ struct TransactionStatus
   };
 
   qreal totalSize = 0;     //!< total size (in bytes) of files to be pushed or pulled
-  int transferedSize = 0;  //!< size (in bytes) of amount of data transferred so far
+  qint64 transferedSize = 0;  //!< size (in bytes) of amount of data transferred so far
   QString transactionUUID; //!< only for push. Initially dummy non-empty string, after server confirms a valid UUID, on finish/cancel it is empty
 
   // pull replies
