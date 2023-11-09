@@ -163,7 +163,8 @@ struct TransactionStatus
 
   // pull replies
   QPointer<QNetworkReply> replyPullProjectInfo;
-  QPointer<QNetworkReply> replyPullItem;
+  QPointer<QNetworkReply> replyPullServerConfig;
+  QSet<QNetworkReply *> replyPullItems;
 
   // push replies
   QPointer<QNetworkReply> replyPushProjectInfo;
@@ -174,6 +175,7 @@ struct TransactionStatus
   // pull-related data
   QList<DownloadQueueItem> downloadQueue;  //!< pending list of stuff to download - chunks of project files or diff files (at the end of transaction it is empty)
   QList<PullTask> pullTasks;  //!< tasks to do at the end of pull when everything has been downloaded
+  bool pullItemsAborting = false;   //!< indicates whether we have started to abort requests in replyPullItems
 
   // push-related data
   QList<MerginFile> pushQueue; //!< pending list of files to push (at the end of transaction it is empty)
@@ -682,6 +684,7 @@ class MerginApi: public QObject
     static QStringList generateChunkIdsForSize( qint64 fileSize );
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
     static QString getApiKey( const QString &serverName );
+    void abortPullItems( const QString &projectFullName );
 
     /**
      * Sends non-blocking POST request to the server to upload a file (chunk).
