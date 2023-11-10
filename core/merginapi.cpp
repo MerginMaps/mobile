@@ -1397,13 +1397,13 @@ void MerginApi::checkMerginVersion( QString apiVersion, bool serverSupportsSubsc
   {
     int major = -1;
     int minor = -1;
-    QRegularExpression re;
-    re.setPattern( QStringLiteral( "(?<major>\\d+)[.](?<minor>\\d+)" ) );
-    QRegularExpressionMatch match = re.match( apiVersion );
-    if ( match.hasMatch() )
+
+    bool validVersion = parseVersion( apiVersion, major, minor );
+
+    if ( !validVersion )
     {
-      major = match.captured( "major" ).toInt();
-      minor = match.captured( "minor" ).toInt();
+      setApiVersionStatus( MerginApiStatus::NOT_FOUND );
+      return;
     }
 
     if ( ( MERGIN_API_VERSION_MAJOR == major && MERGIN_API_VERSION_MINOR <= minor ) || ( MERGIN_API_VERSION_MAJOR < major ) )
@@ -1522,6 +1522,21 @@ ProjectDiff MerginApi::localProjectChanges( const QString &projectDir )
   MerginConfig config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
 
   return compareProjectFiles( projectMetadata.files, projectMetadata.files, localFiles, projectDir, config.isValid, config );
+}
+
+bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
+{
+  QRegularExpression re;
+  re.setPattern( QStringLiteral( "(?<major>\\d+)[.](?<minor>\\d+)" ) );
+  QRegularExpressionMatch match = re.match( version );
+  if ( match.hasMatch() )
+  {
+    major = match.captured( "major" ).toInt();
+    minor = match.captured( "minor" ).toInt();
+    return true;
+  }
+
+  return false;
 }
 
 bool MerginApi::hasLocalProjectChanges( const QString &projectDir )
@@ -3473,17 +3488,45 @@ void MerginApi::getServerConfigReplyFinished()
     if ( doc.isObject() )
     {
       QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
+      QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
+      int major = -1;
+      int minor = -1;
+      bool validVersion = parseVersion( apiVersion, major, minor );
+
+      if ( !validVersion )
+      {
+        CoreUtils::log( QStringLiteral( "Server version" ), QStringLiteral( "Cannot parse server version" ) );
+      }
+
       if ( serverType == QStringLiteral( "ee" ) )
       {
         setServerType( MerginServerType::EE );
+        if ( validVersion )
+        {
+          CoreUtils::log( QStringLiteral( "Server version:" ), QStringLiteral( "%1.%2 EE" ).arg( major ).arg( minor ) );
+        }
       }
       else if ( serverType == QStringLiteral( "ce" ) )
       {
         setServerType( MerginServerType::CE );
+        if ( validVersion )
+        {
+          CoreUtils::log( QStringLiteral( "Server version:" ), QStringLiteral( "%1.%2 EE" ).arg( major ).arg( minor ) );
+        }
       }
       else if ( serverType == QStringLiteral( "saas" ) )
       {
         setServerType( MerginServerType::SAAS );
+        if ( validVersion )
+        {
+          CoreUtils::log( QStringLiteral( "Server version:" ), QStringLiteral( "%1.%2 EE" ).arg( major ).arg( minor ) );
+        }
+      }
+
+      // will be dropped support for old servers (mostly CE servers without workspaces)
+      if ( ( MINIMUM_SERVER_VERSION_MAJOR == major && MINIMUM_SERVER_VERSION_MINOR > minor ) || ( MINIMUM_SERVER_VERSION_MAJOR > major ) )
+      {
+        emit migrationRequested( QString( "%1.%2" ).arg( major ).arg( minor ) );
       }
     }
   }
@@ -3493,6 +3536,7 @@ void MerginApi::getServerConfigReplyFinished()
     if ( statusCode == 404 ) // legacy (old) server
     {
       setServerType( MerginServerType::OLD );
+      emit migrationRequested( "legacy" );
     }
     else
     {

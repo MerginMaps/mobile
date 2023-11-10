@@ -35,6 +35,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
   mWsTooltipShownCounter = settings.value( QStringLiteral( "wsTooltipCounter" ) ).toInt();
   double gpsHeight = settings.value( "gpsHeight", 0 ).toDouble();
+  QString ignoreMigrateVersion = settings.value( QStringLiteral( "ignoreMigrateVersion" ) ).toString();
 
   settings.endGroup();
 
@@ -51,6 +52,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setActivePositionProviderId( activeProviderId );
   setAutosyncAllowed( autosync );
   setGpsAntennaHeight( gpsHeight );
+  setIgnoreMigrateVersion( ignoreMigrateVersion );
 }
 
 QString AppSettings::defaultLayer() const
@@ -368,4 +370,19 @@ void AppSettings::setGpsAntennaHeight( double gpsAntennaHeight )
 
     emit gpsAntennaHeightChanged( gpsAntennaHeight );
   }
+}
+
+QString AppSettings::ignoreMigrateVersion() const
+{
+  return mIgnoreMigrateVersion;
+}
+
+void AppSettings::setIgnoreMigrateVersion( const QString &version )
+{
+  if ( mIgnoreMigrateVersion == version )
+    return;
+
+  mIgnoreMigrateVersion = version;
+  setValue( QStringLiteral( "ignoreMigrateVersion" ), version );
+  emit ignoreMigrateVersionChanged();
 }

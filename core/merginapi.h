@@ -370,6 +370,8 @@ class MerginApi: public QObject
 
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
+    static const int MINIMUM_SERVER_VERSION_MAJOR = 2023;
+    static const int MINIMUM_SERVER_VERSION_MINOR = 2;
     static const QString sMetadataFile;
     static const QString sMetadataFolder;
     static const QString sMerginConfigFile;
@@ -387,6 +389,15 @@ class MerginApi: public QObject
 
     static ProjectDiff localProjectChanges( const QString &projectDir );
     static bool hasLocalProjectChanges( const QString &projectDir );
+
+    /**
+     * Parse major and minor version number from version string
+     * \param version full server version string
+     * \param major parsed major number
+     * \param minor parsed minor number
+     * @return true when parsing was successful
+     */
+    static bool parseVersion( const QString &version, int &major, int &minor );
 
     /**
     * Finds project in merginProjects list according its full name.
@@ -591,6 +602,7 @@ class MerginApi: public QObject
 
     void storageLimitReached( qreal uploadSize );
     void projectLimitReached( int maxProjects, const QString &message );
+    void migrationRequested( const QString &version );
     void notify( const QString &message );
     void authRequested();
     void authChanged();
