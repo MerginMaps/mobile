@@ -141,7 +141,7 @@ Steps to build and run Input:
    mkdir build
    cd build
    cmake -G Ninja \
-     -DCMAKE_PREFIX_PATH=~/Qt/6.5.2/gcc_64 \
+     -DCMAKE_PREFIX_PATH=~/Qt/6.6.0/gcc_64 \
      -DINPUT_SDK_PATH=~/input-sdk/x64-linux \
      -DQGIS_QUICK_DATA_PATH=~/input/app/android/assets/qgis-data \
      ..
@@ -296,8 +296,8 @@ Now you can create a build (either on commmand line or by setting these variable
 
   cmake \
     -DIOS=TRUE \
-    -DCMAKE_PREFIX_PATH=/opt/Qt/6.5.2/ios \
-    -DQT_HOST_PATH=/opt/Qt/6.5.2/macos \
+    -DCMAKE_PREFIX_PATH=/opt/Qt/6.6.0/ios \
+    -DQT_HOST_PATH=/opt/Qt/6.6.0/macos \
     -DCMAKE_TOOLCHAIN_FILE:PATH="~/input-sdk/ios.toolchain.cmake" \
     -DCMAKE_INSTALL_PREFIX:PATH="../install" \
     -DUSE_SERVER_API_KEY=FALSE \
@@ -333,7 +333,7 @@ export BASE_DIR=~/Projects/quick;
 
 cmake \
   -DCMAKE_BUILD_TYPE=Debug \
-  -DCMAKE_PREFIX_PATH=/opt/Qt/6.5.2/macos \
+  -DCMAKE_PREFIX_PATH=/opt/Qt/6.6.0/macos \
   -DCMAKE_INSTALL_PREFIX:PATH=$BASE_DIR/install-macos \
   -DINPUT_SDK_PATH=$BASE_DIR/sdk/x64-osx \
   -GNinja \
@@ -361,7 +361,7 @@ For version of the tools used, see `.github/workflows/win.yml`
 - setup build environment
 ```
 set ROOT_DIR=C:\Users\zilol\Projects
-set Qt6_DIR=C:\Qt\6.5.2\msvc2019_64
+set Qt6_DIR=C:\Qt\6.6.0\msvc2019_64
 set PATH=%QT_ROOT%\bin;C:\Program Files\CMake\bin\;%PATH%
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=x64
 ```
