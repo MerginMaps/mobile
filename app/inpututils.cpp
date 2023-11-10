@@ -93,7 +93,7 @@ bool InputUtils::copyFile( const QString &srcPath, const QString &dstPath )
     return false;
   }
 
-  // https://github.com/MerginMaps/input/issues/418
+  // https://github.com/MerginMaps/mobile/mobile/418
   // does not work for iOS files with format
   // file:assets-library://asset/asset.PNG%3Fid=A53AB989-6354-433A-9CB9-958179B7C14D&ext=PNG
 

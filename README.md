@@ -7,17 +7,17 @@
 
 Platform builds:
 
-[![Android Build](https://github.com/MerginMaps/input/workflows/Android/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22Android%22)
-[![iOS Build](https://github.com/MerginMaps/input/workflows/iOS%20Build/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22iOS+Build%22)
-[![win64 Build](https://github.com/MerginMaps/input/actions/workflows/win.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/win.yml)
-[![macOS Build](https://github.com/MerginMaps/input/actions/workflows/macos.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/macos.yml)
-[![linux Build](https://github.com/MerginMaps/input/actions/workflows/linux.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/linux.yml)
+[![Android Build](https://github.com/MerginMaps/mobile/workflows/Android/badge.svg)](https://github.com/MerginMaps/mobile/actions?query=workflow%3A%22Android%22)
+[![iOS Build](https://github.com/MerginMaps/mobile/workflows/iOS%20Build/badge.svg)](https://github.com/MerginMaps/mobile/actions?query=workflow%3A%22iOS+Build%22)
+[![win64 Build](https://github.com/MerginMaps/mobile/actions/workflows/win.yml/badge.svg)](https://github.com/MerginMaps/mobile/actions/workflows/win.yml)
+[![macOS Build](https://github.com/MerginMaps/mobile/actions/workflows/macos.yml/badge.svg)](https://github.com/MerginMaps/mobile/actions/workflows/macos.yml)
+[![linux Build](https://github.com/MerginMaps/mobile/actions/workflows/linux.yml/badge.svg)](https://github.com/MerginMaps/mobile/actions/workflows/linux.yml)
 
 Other Checks:
-[![Code Layout](https://github.com/MerginMaps/input/workflows/Code%20Layout/badge.svg)](https://github.com/MerginMaps/input/actions?query=workflow%3A%22Code+Layout%22)
-[![Coverage Status](https://coveralls.io/repos/github/MerginMaps/input/badge.svg?branch=master)](https://coveralls.io/github/MerginMaps/input?branch=master)
-[![Translations](https://github.com/MerginMaps/input/actions/workflows/i18n.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/i18n.yml)
-[![Gallery App](https://github.com/MerginMaps/input/actions/workflows/gallery.yml/badge.svg)](https://github.com/MerginMaps/input/actions/workflows/gallery.yml)
+[![Code Layout](https://github.com/MerginMaps/mobile/workflows/Code%20Layout/badge.svg)](https://github.com/MerginMaps/mobile/actions?query=workflow%3A%22Code+Layout%22)
+[![Coverage Status](https://coveralls.io/repos/github/MerginMaps/mobile/badge.svg?branch=master)](https://coveralls.io/github/MerginMaps/mobile?branch=master)
+[![Translations](https://github.com/MerginMaps/mobile/actions/workflows/i18n.yml/badge.svg)](https://github.com/MerginMaps/mobile/actions/workflows/i18n.yml)
+[![Gallery App](https://github.com/MerginMaps/mobile/actions/workflows/gallery.yml/badge.svg)](https://github.com/MerginMaps/mobile/actions/workflows/gallery.yml)
 
 Citation link:
 
@@ -48,7 +48,7 @@ For more information on how to use the app, see [Documentation](https://merginma
 
 - Help with translations, join [Mergin Maps mobile app Transifex Team](https://explore.transifex.com/lutra-consulting/mergin-maps-input/)
 - Write a review of the application on [App Store](https://apps.apple.com/us/app/mergin-maps/id1478603559) or [Google Play](https://play.google.com/store/apps/details?id=uk.co.lutraconsulting&hl=en&gl=US)
-- Test the application and [report bugs](https://github.com/MerginMaps/input/issues)
+- Test the application and [report bugs](https://github.com/MerginMaps/mobile/issues)
 - Write a blog post or case study or create a Youtube video. We are happy to help to promote it or co-author and place on our websites
 - Software developer? Code and prepare a pull request. We will help you with [setup of the development environment](./INSTALL.md) and answer your questions.
 - Donate or [subscribe](https://merginmaps.com/) to the Mergin Maps Cloud service to help us maintain the project.
@@ -66,10 +66,10 @@ Mergin Maps mobile app features touch optimised GUI components based on Qt Quick
 * Translated to several [languages](https://explore.transifex.com/lutra-consulting/mergin-maps-input/)
 
 <p float="left">
-    <img align="centre" src="https://github.com/MerginMaps/input/blob/master/images/screen1.jpg" width="20%">
-    <img align="centre" src="https://github.com/MerginMaps/input/blob/master/images/screen2.jpg" width="20%">
-    <img align="centre" src="https://github.com/MerginMaps/input/blob/master/images/screen3.jpg" width="20%">
-    <img align="centre" src="https://github.com/MerginMaps/input/blob/master/images/screen4.jpg" width="20%">
+    <img align="centre" src="https://github.com/MerginMaps/mobile/blob/master/images/screen1.jpg" width="20%">
+    <img align="centre" src="https://github.com/MerginMaps/mobile/blob/master/images/screen2.jpg" width="20%">
+    <img align="centre" src="https://github.com/MerginMaps/mobile/blob/master/images/screen3.jpg" width="20%">
+    <img align="centre" src="https://github.com/MerginMaps/mobile/blob/master/images/screen4.jpg" width="20%">
 </p>
 
 ## Documentation

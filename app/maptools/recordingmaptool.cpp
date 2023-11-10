@@ -322,7 +322,7 @@ void RecordingMapTool::removePoint()
       // WARNING:
       // "r" pointer may be invalid for exterior rings at this point!
       // so dereference it only for interior rings
-      // see https://github.com/MerginMaps/input/issues/2875
+      // see https://github.com/MerginMaps/mobile/issues/2875
       if ( current.ring > 0 && r->isEmpty() )
       {
         QgsCurvePolygon *p = qgsgeometry_cast<QgsCurvePolygon *>( poly );

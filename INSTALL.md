@@ -49,13 +49,13 @@ uses [CMake](https://www.cmake.org) for building from source.
 It is C++ application build on top of [Qt](https://www.qt.io), [QGIS](https://www.qgis.org/en/site/)
 and many other FOSS libraries. 
 
-All required libraries (in release configuration) are packaged in the [Input-SDK](https://github.com/MerginMaps/input-sdk).
+All required libraries (in release configuration) are packaged in the [Mobile-SDK](https://github.com/MerginMaps/mobile-sdk).
 If you need to debug some error in the library, you need to compile Input-SDK in debug yourself locally. Otherwise
-it is suggested to download required libraries from [Input-SDK tags](https://github.com/MerginMaps/input-sdk/tags)
-Input-SDK uses vcpkg packaging system, so if the SDK for your target system/architecture you can build it yourself.
+it is suggested to download required libraries from [Mobile-SDK tags](https://github.com/MerginMaps/mobile-sdk/tags)
+Mobile-SDK uses vcpkg packaging system, so if the SDK for your target system/architecture you can build it yourself.
 
 Generally, for building setup, you need the same versions of libraries/SDKs/NDKs/compilers as used in the official 
-[GitHub Actions](https://github.com/MerginMaps/input/tree/master/.github/workflows).
+[GitHub Actions](https://github.com/MerginMaps/mobile/tree/master/.github/workflows).
 Open workflow file for your platform/target and see the version of libraries used and replicate it in your setup.
 
 ## 2.1 Secrets

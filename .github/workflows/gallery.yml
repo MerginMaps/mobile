@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   gallery_build:
-    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     strategy:
       fail-fast: false
       matrix:

@@ -148,7 +148,7 @@ Item {
     // and most importantly in some scenarios
     // featureLayerPair could contain already
     // dangling pointer to layer and crash the app
-    // https://github.com/MerginMaps/input/issues/2879
+    // https://github.com/MerginMaps/mobile/issues/2879
     for ( let i = 0; i < formsStack.depth; i++ ) {
       let form = formsStack.get( i )
       form.featureLayerPair = __inputUtils.createFeatureLayerPair()
