@@ -171,7 +171,7 @@ QString FeaturesModel::searchResultPair( const FeatureLayerPair &pair ) const
   {
     for ( const QgsField &field : fields )
     {
-      if ( field.configurationFlags().testFlag( QgsField::ConfigurationFlag::NotSearchable ) )
+      if ( field.configurationFlags().testFlag( Qgis::FieldConfigurationFlag::NotSearchable ) )
         continue;
 
       QString attrValue = pair.feature().attribute( field.name() ).toString();
@@ -210,7 +210,7 @@ QString FeaturesModel::buildSearchExpression()
 
     for ( const QgsField &field : fields )
     {
-      if ( field.configurationFlags().testFlag( QgsField::ConfigurationFlag::NotSearchable ) ||
+      if ( field.configurationFlags().testFlag( Qgis::FieldConfigurationFlag::NotSearchable ) ||
            ( field.isNumeric() && !searchExpressionIsNumeric ) )
         continue;
       else if ( field.type() == QVariant::String || field.isNumeric() )
