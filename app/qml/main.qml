@@ -24,6 +24,7 @@ import "./popups"
 
 ApplicationWindow {
     id: window
+    
     visible: true
     width:  __appwindowwidth
     height: __appwindowheight
