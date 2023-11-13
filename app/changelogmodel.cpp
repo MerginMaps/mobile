@@ -42,7 +42,7 @@ void ChangelogModel::onFinished( QNetworkReply *reply )
         {
           title = xml.readElementText();
         }
-        else if ( xml.name().toString() == "description" )
+        else if ( xml.name().toString() == QStringLiteral( "description" ) )
         {
           description = xml.readElementText();
         }
