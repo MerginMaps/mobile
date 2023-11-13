@@ -255,7 +255,7 @@ static void init_pg( const QString &dataDir )
   QFileInfo pgFile( QStringLiteral( "%1/pg_service.conf" ).arg( dataDir ) );
   if ( pgFile.exists() && pgFile.isReadable() )
   {
-    setenv( "PGSYSCONFDIR", dataDir.toUtf8(), true );
+    qputenv( "PGSYSCONFDIR", dataDir.toUtf8() );
     CoreUtils::log( QStringLiteral( "PostgreSQL" ), QStringLiteral( "found pg_service.conf, setting PGSYSCONFDIR" ) );
   }
 }
