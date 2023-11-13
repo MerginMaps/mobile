@@ -128,6 +128,10 @@ ApplicationWindow {
           title: "Drawers"
           source: "DrawerPage.qml"
         }
+        ListElement {
+          title: "Photos"
+          source: "PhotosPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}
