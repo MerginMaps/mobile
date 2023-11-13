@@ -31,7 +31,7 @@ Item {
   MessageDialog {
     id: errorDialog
 
-    title: qsTr( "Getting What's new failed" )
+    title: qsTr( "Failed to load changelog" )
     buttons: MessageDialog.Ok
     onButtonClicked: {
       errorDialog.close()
