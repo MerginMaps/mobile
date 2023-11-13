@@ -36,7 +36,7 @@ Item {
     onButtonClicked: {
       errorDialog.close()
       root.close()
-      }
+    }
   }
 
   Page {
@@ -126,7 +126,7 @@ Item {
               color: InputStyle.fontColor
             }
             Text {
-              text: description
+              text: model.description
               wrapMode: Text.WordWrap
               width: parent.width
               font.pixelSize: InputStyle.fontPixelSizeNormal
@@ -141,19 +141,6 @@ Item {
           anchors.left: changelogView.right
           anchors.bottom: changelogView.bottom
         }
-      }
-    }
-
-    footer: DelegateButton {
-      id: refreshButton
-
-      width: root.width
-      height: InputStyle.rowHeightHeader
-      text: qsTr("Refresh")
-      visible: !changelogView.count
-
-      onClicked: {
-        changelogView.model.seeChangelogs()
       }
     }
   }

@@ -59,8 +59,9 @@ void ChangelogModel::onFinished( QNetworkReply *reply )
       {
         if ( xml.name().toString() == "item" )
         {
+          const QDateTime &dt = QDateTime::fromString( pubDate, "ddd, dd MMM yyyy hh:mm:ss t" );
           beginInsertRows( QModelIndex(), rowCount(), rowCount() );
-          mLogs << Changelog{ title, description, link, dt }; 
+          mLogs << Changelog{ title, description, link, dt };
           endInsertRows();
         }
       }
@@ -107,7 +108,7 @@ QVariant ChangelogModel::data( const QModelIndex &index, int role ) const
 
   Changelog log = mLogs.at( index.row() );
   if ( role == TitleRole ) return log.title;
-  if ( role == DescriptionRole ) return log.description;
+  if ( role == DescriptionRole ) return log.descriptionWithoutImages();
   if ( role == LinkRole ) return log.link;
   if ( role == DateRole ) return log.date;
 
@@ -122,5 +123,3 @@ void ChangelogModel::seeChangelogs()
   endResetModel();
   mNetworkManager->get( QNetworkRequest( QUrl( InputHelp::changelogLink() ) ) );
 }
-
-

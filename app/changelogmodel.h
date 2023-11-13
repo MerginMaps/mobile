@@ -13,6 +13,7 @@
 #include "QNetworkAccessManager"
 #include <QAbstractListModel>
 #include <QDate>
+#include <QRegularExpression>
 
 struct Changelog
 {
@@ -20,6 +21,8 @@ struct Changelog
   QString description;
   QString link;
   QDateTime date;
+
+  QString descriptionWithoutImages() { return description.replace(QRegularExpression("<img .*?>"),""); };
 };
 
 class ChangelogModel : public QAbstractListModel
@@ -51,7 +54,6 @@ class ChangelogModel : public QAbstractListModel
   private:
     QList<Changelog> mLogs;
     QNetworkAccessManager *mNetworkManager;
-    QDateTime mLastSeen;
 };
 
 #endif // CHANGELOGMODEL_H
