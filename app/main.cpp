@@ -250,6 +250,16 @@ static void init_qgis( const QString &pkgPath )
   qDebug( "qgis providers:\n%s", QgsProviderRegistry::instance()->pluginList().toLatin1().data() );
 }
 
+static void init_pg( const QString &dataDir )
+{
+  QFileInfo pgFile( QStringLiteral( "%1/pg_service.conf" ).arg( dataDir ) );
+  if ( pgFile.exists() && pgFile.isReadable() )
+  {
+    setenv( "PGSYSCONFDIR", dataDir.toUtf8(), true );
+    CoreUtils::log( QStringLiteral( "PostgreSQL" ), QStringLiteral( "found pg_service.conf, setting PGSYSCONFDIR" ) );
+  }
+}
+
 void initDeclarative()
 {
   qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
@@ -451,6 +461,9 @@ int main( int argc, char *argv[] )
 #endif
   InputProjUtils inputProjUtils;
   inputProjUtils.initProjLib( appBundleDir, dataDir, projectDir );
+
+  init_pg( dataDir );
+
   init_qgis( appBundleDir );
 
   // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
