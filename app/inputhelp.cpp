@@ -168,6 +168,7 @@ QString InputHelp::whatsNewPostLink() const
 QString InputHelp::changelogLink()
 {
   return changelogRss;
+}
 
 QString InputHelp::migrationGuides() const
 {
