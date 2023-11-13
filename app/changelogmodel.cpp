@@ -31,7 +31,7 @@ void ChangelogModel::onFinished( QNetworkReply *reply )
       xml.readNext();
       if ( xml.isStartElement() )
       {
-        if ( xml.name().toString() == "item" )
+        if ( xml.name().toString() == QStringLiteral( "item" ) )
         {
           title.clear();
           description.clear();
