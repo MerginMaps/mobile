@@ -50,7 +50,7 @@ void ChangelogModel::onFinished( QNetworkReply *reply )
         {
           link = xml.readElementText();
         }
-        else if ( xml.name().toString() == "pubDate" )
+        else if ( xml.name().toString() == QStringLiteral( "pubDate" ) )
         {
           pubDate = xml.readElementText();
         }
