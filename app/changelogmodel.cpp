@@ -38,7 +38,7 @@ void ChangelogModel::onFinished( QNetworkReply *reply )
           link.clear();
           pubDate.clear();
         }
-        else if ( xml.name().toString() == "title" )
+        else if ( xml.name().toString() == QStringLiteral( "title" ) )
         {
           title = xml.readElementText();
         }
