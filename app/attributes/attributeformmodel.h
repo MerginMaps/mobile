@@ -46,8 +46,9 @@ class  AttributeFormModel : public QAbstractListModel
 
     enum AttributeFormRoles
     {
-      Type = Qt::UserRole + 1, //!< User role used to identify either "field" or "container" type of item
+      Type = Qt::UserRole + 1, //!< User role used to identify "field" or "container" or other type of item
       Name, //!< Field Name
+      ShowName, //!< Whether to show or hide Name label
       AttributeValue, //!< Field Value
       RawValueIsNull, //!< Whether field raw value is null (QVariant with set type, but NULL flag)
       AttributeEditable,  //!< Whether is field editable

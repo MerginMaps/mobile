@@ -27,10 +27,12 @@
 #include "qgsattributeeditorrelation.h"
 #include "qgsattributeeditorcontainer.h"
 #include "qgsvectorlayerutils.h"
+#include "qgsattributeeditorspacerelement.h"
+#include "qgsattributeeditortextelement.h"
+#include "qgsattributeeditorhtmlelement.h"
 #include "qgsvectorlayereditbuffer.h"
 #include "qgsexpressioncontextutils.h"
 #include "qgsrelation.h"
-#include "qgsmessagelog.h"
 #include "inpututils.h"
 #include "coreutils.h"
 
@@ -223,7 +225,7 @@ void AttributeController::flatten(
         int fieldIndex = editorField->idx();
         if ( fieldIndex < 0 || fieldIndex >= layer->fields().size() )
         {
-          qDebug() << "Invalid fieldIndex for editorField!";
+          CoreUtils::log( "Forms", QStringLiteral( "Invalid fieldIndex for editorField %1 in layer %2" ).arg( editorField->name(), layer->name() ) );
           continue;
         }
         QgsField field = layer->fields().at( fieldIndex );
@@ -246,8 +248,8 @@ void AttributeController::flatten(
               field,
               groupName,
               parentTabRow,
-              FormItem::Field,
               layer->attributeDisplayName( fieldIndex ),
+              editorField->showLabel(),
               !isReadOnly,
               getEditorWidgetSetup( layer, fieldIndex ),
               fieldIndex,
@@ -269,10 +271,17 @@ void AttributeController::flatten(
         QgsAttributeEditorRelation *relationField = static_cast<QgsAttributeEditorRelation *>( element );
         QgsRelation associatedRelation = relationField->relation();
 
+        bool isValid = associatedRelation.isValid();
+        if ( !isValid )
+        {
+          CoreUtils::log( "Relations", QStringLiteral( "Ignoring invalid relation in layer %1" ).arg( layer->name() ) );
+          continue;
+        }
+
         bool isNmRelation = layer->editFormConfig().widgetConfig( associatedRelation.id() )[QStringLiteral( "nm-rel" )].toBool();
         if ( isNmRelation )
         {
-          CoreUtils::log( "Relations", "Nm relations are not supported" );
+          CoreUtils::log( "Relations", QStringLiteral( "Nm relations are not supported in layer %1" ).arg( layer->name() ) );
           continue;
         }
 
@@ -293,8 +302,9 @@ void AttributeController::flatten(
               widgetUuid,
               groupName,
               parentTabRow,
-              FormItem::Relation,
               label,
+              relationField->showLabel(),
+              parentVisibilityExpressions, // relation field doesn't have visibility expression itself
               associatedRelation
             )
           );
@@ -304,9 +314,88 @@ void AttributeController::flatten(
 
         break;
       }
+      case Qgis::AttributeEditorType::SpacerElement:
+      {
+        QUuid fieldUuid = QUuid::createUuid();
+
+        QgsAttributeEditorSpacerElement *spacerElement = static_cast<QgsAttributeEditorSpacerElement *>( element );
+
+        const QString groupName = container->isGroupBox() ? container->name() : QString();
+        std::shared_ptr<FormItem> formItemData =
+          std::shared_ptr<FormItem>(
+            FormItem::createSpacerItem(
+              fieldUuid,
+              groupName,
+              parentTabRow,
+              spacerElement->name(),
+              spacerElement->drawLine(),
+              parentVisibilityExpressions // spacer doesn't have visibility expression itself
+            )
+          );
+
+        mFormItems[formItemData->id()] = formItemData;
+
+
+        items.append( fieldUuid );
+        break;
+      }
+      case Qgis::AttributeEditorType::TextElement:
+      {
+        QUuid fieldUuid = QUuid::createUuid();
+
+        QgsAttributeEditorTextElement *textElement = static_cast<QgsAttributeEditorTextElement *>( element );
+
+
+        const QString groupName = container->isGroupBox() ? container->name() : QString();
+        std::shared_ptr<FormItem> formItemData =
+          std::shared_ptr<FormItem>(
+            FormItem::createRichTextItem(
+              fieldUuid,
+              groupName,
+              parentTabRow,
+              textElement->name(),
+              textElement->showLabel(),
+              textElement->text(),
+              false,
+              parentVisibilityExpressions // text doesn't have visibility expression itself
+            )
+          );
+
+        mFormItems[formItemData->id()] = formItemData;
+
+        items.append( fieldUuid );
+        break;
+      }
+      case Qgis::AttributeEditorType::HtmlElement:
+      {
+        QUuid fieldUuid = QUuid::createUuid();
+
+        QgsAttributeEditorHtmlElement *htmlElement = static_cast<QgsAttributeEditorHtmlElement *>( element );
+
+
+        const QString groupName = container->isGroupBox() ? container->name() : QString();
+        std::shared_ptr<FormItem> formItemData =
+          std::shared_ptr<FormItem>(
+            FormItem::createRichTextItem(
+              fieldUuid,
+              groupName,
+              parentTabRow,
+              htmlElement->name(),
+              htmlElement->showLabel(),
+              htmlElement->htmlCode(),
+              true,
+              parentVisibilityExpressions // text doesn't have visibility expression itself
+            )
+          );
+
+        mFormItems[formItemData->id()] = formItemData;
+
+        items.append( fieldUuid );
+        break;
+      }
 
       default:
-        // Invalid, Action, QmlElement, HtmlElement, TextElement and SpacerElement
+        // Invalid, Action, QmlElement
         // are not supported at the moment
         break;
     }
@@ -345,64 +434,65 @@ void AttributeController::clearAll()
   mFormItems.clear();
   mTabItems.clear();
   mExpressionFieldsOutsideForm.clear();
+  mVirtualFieldsOutsideForm.clear();
   mHasTabs = false;
 }
 
 void AttributeController::updateOnLayerChange()
 {
   clearAll();
+  QgsVectorLayer *layer = mFeatureLayerPair.layer();
+  if ( !layer )
+    return;
 
   // 1) DATA
-  QgsVectorLayer *layer = mFeatureLayerPair.layer();
-  if ( layer )
+  if ( layer->editFormConfig().layout() == Qgis::AttributeFormLayout::DragAndDrop )
   {
-    if ( layer->editFormConfig().layout() == Qgis::AttributeFormLayout::DragAndDrop )
+    QgsAttributeEditorContainer *root = layer->editFormConfig().invisibleRootContainer();
+    if ( root->columnCount() > 1 )
     {
-      QgsAttributeEditorContainer *root = layer->editFormConfig().invisibleRootContainer();
-      if ( root->columnCount() > 1 )
-      {
-        qDebug() << "root tab in manual config has multiple columns. not supported on mobile devices!";
-        root->setColumnCount( 1 );
-      }
+      qDebug() << "root tab in manual config has multiple columns. not supported on mobile devices!";
+      root->setColumnCount( 1 );
+    }
 
-      mHasTabs = allowTabs( root );
-      if ( mHasTabs )
+    mHasTabs = allowTabs( root );
+    if ( mHasTabs )
+    {
+      for ( QgsAttributeEditorElement *element : root->children() )
       {
-        for ( QgsAttributeEditorElement *element : root->children() )
+        if ( element->type() == Qgis::AttributeEditorType::Container )
         {
-          if ( element->type() == Qgis::AttributeEditorType::Container )
+          QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
+          if ( container->columnCount() > 1 )
           {
-            QgsAttributeEditorContainer *container = static_cast<QgsAttributeEditorContainer *>( element );
-            if ( container->columnCount() > 1 )
-            {
-              qDebug() << "tab " << container->name() << " in manual config has multiple columns. not supported on mobile devices!";
-              container->setColumnCount( 1 );
-            }
-            createTab( container );
+            qDebug() << "tab " << container->name() << " in manual config has multiple columns. not supported on mobile devices!";
+            container->setColumnCount( 1 );
           }
+          createTab( container );
         }
-      }
-      else
-      {
-        createTab( root );
       }
     }
     else
     {
-      // Auto-Generated Layout
-      // We create fake root tab
-      QgsAttributeEditorContainer *tab = autoLayoutTabContainer();
-
-      // We need to look for relations and include them into form,
-      // in auto-generated layout they are not included in form config
-      discoverRelations( tab );
-
-      createTab( tab );
+      createTab( root );
     }
-
-    if ( mRememberAttributesController )
-      mRememberAttributesController->storeLayerFields( layer );
   }
+  else
+  {
+    // Auto-Generated Layout
+    // We create fake root tab
+    QgsAttributeEditorContainer *tab = autoLayoutTabContainer();
+
+    // We need to look for relations and include them into form,
+    // in auto-generated layout they are not included in form config
+    discoverRelations( tab );
+
+    createTab( tab );
+  }
+
+  if ( mRememberAttributesController )
+    mRememberAttributesController->storeLayerFields( layer );
+
 
   // 2) MODELS
   // for all other models, ownership is managed by Qt parent system
@@ -447,6 +537,11 @@ void AttributeController::updateOnLayerChange()
       {
         mExpressionFieldsOutsideForm << i;
       }
+
+      if ( mFeatureLayerPair.layer()->fields().fieldOrigin( i ) == QgsFields::OriginExpression )
+      {
+        mVirtualFieldsOutsideForm << i;
+      }
     }
   }
 
@@ -454,6 +549,9 @@ void AttributeController::updateOnLayerChange()
 
 void AttributeController::updateOnFeatureChange()
 {
+  if ( !mFeatureLayerPair.layer() )
+    return;
+
   const QgsFeature feature = mFeatureLayerPair.feature();
 
   QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
@@ -514,19 +612,18 @@ void AttributeController::acquireId()
   {
     if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
     {
-      QgsMessageLog::logMessage( tr( "Feature could not be added" ),
-                                 QStringLiteral( "Input" ),
-                                 Qgis::Critical );
+      CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Feature could not be added" ) );
 
     }
   }
   else
   {
     if ( !mFeatureLayerPair.layer()->updateFeature( feat ) )
-      QgsMessageLog::logMessage( tr( "Cannot update feature" ),
-                                 QStringLiteral( "Input" ),
-                                 Qgis::Warning );
+    {
+      CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Cannot update feature" ) );
+    }
   }
+
 
   connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
 
@@ -538,7 +635,67 @@ void AttributeController::acquireId()
   disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
 }
 
-bool AttributeController::recalculateDefaultValues(
+void AttributeController::evaluateExpressionAndUpdateValue( QSet<QUuid> &changedFormItems,
+    const QString &expressionString, QgsExpressionContext &expressionContext, int fieldIndex, const QgsField &field, std::shared_ptr<FormItem> formItem )
+{
+  QgsExpression exp( expressionString );
+
+  exp.prepare( &expressionContext );
+  if ( exp.hasParserError() )
+  {
+    QString msg( QStringLiteral( "Expression for %1:%2 has parser error: %3" ).arg(
+                   mFeatureLayerPair.layer()->name(),
+                   field.name(),
+                   exp.parserErrorString() ) );
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), msg );
+    return;
+  }
+
+  QVariant value = exp.evaluate( &expressionContext );
+
+  if ( exp.hasEvalError() )
+  {
+    QString msg( QStringLiteral( "Expression for %1:%2 has evaluation error: %3" ).arg(
+                   mFeatureLayerPair.layer()->name(),
+                   field.name(),
+                   exp.evalErrorString() ) );
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), msg );
+    return;
+  }
+
+  QVariant val( value );
+  if ( !field.convertCompatible( val ) )
+  {
+    QString msg( QStringLiteral( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg(
+                   value.toString(),
+                   field.name(),
+                   field.typeName(),
+                   value.isNull() ? "NULL" : "NOT NULL" )
+               );
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), msg );
+    return;
+  }
+
+  QVariant oldVal = mFeatureLayerPair.feature().attribute( fieldIndex );
+
+  if ( val != oldVal )
+  {
+    mFeatureLayerPair.featureRef().setAttribute( fieldIndex, val );
+
+    // We need to update form items and emit signals for fields included in the form
+    if ( formItem )
+    {
+      formItem->setRawValue( val );
+      emit formDataChanged( formItem->id(), { AttributeFormModel::RawValue, AttributeFormModel::RawValueIsNull } );
+      changedFormItems.insert( formItem->id() );
+    }
+
+    // Update also expression context after an attribute change
+    expressionContext.setFeature( featureLayerPair().featureRef() );
+  }
+}
+
+void AttributeController::recalculateDefaultValues(
   QSet<QUuid> &changedFormItems,
   QgsExpressionContext &expressionContext,
   bool isFormValueChange,
@@ -557,48 +714,21 @@ bool AttributeController::recalculateDefaultValues(
 
     if ( shouldApplyDefaultValue )
     {
-      QgsExpression exp( defaultDefinition.expression() );
-      exp.prepare( &expressionContext );
-      if ( exp.hasParserError() )
-        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has parser error: %3" ).arg(
-                                     mFeatureLayerPair.layer()->name(),
-                                     f.name(),
-                                     exp.parserErrorString() ),
-                                   QStringLiteral( "Input" ),
-                                   Qgis::Warning );
-
-      QVariant value = exp.evaluate( &expressionContext );
-
-      if ( exp.hasEvalError() )
-        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has evaluation error: %3" ).arg(
-                                     mFeatureLayerPair.layer()->name(),
-                                     f.name(),
-                                     exp.evalErrorString() ),
-                                   QStringLiteral( "Input" ),
-                                   Qgis::Warning );
-      else
-      {
-        QVariant val( value );
-        if ( !f.convertCompatible( val ) )
-        {
-          QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), f.name(), f.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
-          QgsMessageLog::logMessage( msg );
-        }
-        else
-        {
-          mFeatureLayerPair.featureRef().setAttribute( idx, val );
-          expressionContext.setFeature( featureLayerPair().featureRef() );
-        }
-      }
+      evaluateExpressionAndUpdateValue( changedFormItems,
+                                        defaultDefinition.expression(),
+                                        expressionContext,
+                                        idx,
+                                        f,
+                                        nullptr );
     }
   }
 
   // evaluate default values for fields in the form
-  bool hasChanges = false;
   QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
   {
     std::shared_ptr<FormItem> item = formItemsIterator.value();
+
     const QgsField field = item->field();
     const QgsDefaultValue defaultDefinition = field.defaultValueDefinition();
 
@@ -608,49 +738,12 @@ bool AttributeController::recalculateDefaultValues(
 
     if ( shouldApplyDefaultValue )
     {
-      QgsExpression exp( field.defaultValueDefinition().expression() );
-      exp.prepare( &expressionContext );
-      if ( exp.hasParserError() )
-        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has parser error: %3" ).arg(
-                                     mFeatureLayerPair.layer()->name(),
-                                     field.name(),
-                                     exp.parserErrorString() ),
-                                   QStringLiteral( "Input" ),
-                                   Qgis::Warning );
-
-      QVariant value = exp.evaluate( &expressionContext );
-
-      if ( exp.hasEvalError() )
-        QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has evaluation error: %3" ).arg(
-                                     mFeatureLayerPair.layer()->name(),
-                                     field.name(),
-                                     exp.evalErrorString() ),
-                                   QStringLiteral( "Input" ),
-                                   Qgis::Warning );
-      else
-      {
-        QVariant val( value );
-        if ( !field.convertCompatible( val ) )
-        {
-          QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
-          QgsMessageLog::logMessage( msg );
-        }
-        else
-        {
-          QVariant oldVal = mFeatureLayerPair.feature().attribute( item->fieldIndex() );
-
-          if ( val != oldVal )
-          {
-            mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
-            item->setRawValue( val );
-            emit formDataChanged( item->id(), { AttributeFormModel::RawValue, AttributeFormModel::RawValueIsNull } );
-            // Update also expression context after an attribute change
-            expressionContext.setFeature( featureLayerPair().featureRef() );
-            changedFormItems.insert( item->id() );
-            hasChanges = true;
-          }
-        }
-      }
+      evaluateExpressionAndUpdateValue( changedFormItems,
+                                        defaultDefinition.expression(),
+                                        expressionContext,
+                                        item->fieldIndex(),
+                                        field,
+                                        item );
     }
 
     if ( isFirstUpdateOfNewFeature )
@@ -678,10 +771,45 @@ bool AttributeController::recalculateDefaultValues(
         changedFormItems.insert( item->id() );
       }
     }
-
     ++formItemsIterator;
   }
-  return hasChanges;
+}
+
+void AttributeController::recalculateVirtualFields( QSet<QUuid> &changedFormItems, QgsExpressionContext &expressionContext )
+{
+  // update default values for fields which are not in the form
+  for ( const int idx : mVirtualFieldsOutsideForm )
+  {
+    QgsField f = mFeatureLayerPair.layer()->fields().at( idx );
+    QString expressionString = mFeatureLayerPair.layer()->expressionField( idx );
+    evaluateExpressionAndUpdateValue( changedFormItems,
+                                      expressionString,
+                                      expressionContext,
+                                      idx,
+                                      f,
+                                      nullptr );
+  }
+
+  // evaluate virtual fields in the form
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+  while ( formItemsIterator != mFormItems.end() )
+  {
+    std::shared_ptr<FormItem> item = formItemsIterator.value();
+
+    const QgsField field = item->field();
+
+    if ( mFeatureLayerPair.layer()->fields().fieldOrigin( item->fieldIndex() ) == QgsFields::OriginExpression )
+    {
+      QString expressionString = mFeatureLayerPair.layer()->expressionField( item->fieldIndex() );
+      evaluateExpressionAndUpdateValue( changedFormItems,
+                                        expressionString,
+                                        expressionContext,
+                                        item->fieldIndex(),
+                                        field,
+                                        item );
+    }
+    ++formItemsIterator;
+  }
 }
 
 void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool isFirstUpdateOfNewFeature )
@@ -705,22 +833,15 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   expressionContext.setFields( fields );
   expressionContext.setFeature( featureLayerPair().featureRef() );
 
+  // Evaluate virtual fields
+  recalculateVirtualFields( changedFormItems, expressionContext );
+
   // Evaluate default values
-  // it could be recursive, so
-  // let say try few times
-  const int LIMIT = 3;
-  int tryNumber = 0;
-  bool anyValueChanged = true;
-  while ( anyValueChanged && tryNumber < LIMIT )
-  {
-    anyValueChanged = recalculateDefaultValues( changedFormItems, expressionContext, isFormValueChange, isFirstUpdateOfNewFeature );
-    ++tryNumber;
-  }
-  if ( anyValueChanged )
-  {
-    // ok we cut the loop on limit...
-    qDebug() << "Evaluation of default values was not finished in " << LIMIT << " tries. Giving up, sorry!";
-  }
+  recalculateDefaultValues( changedFormItems, expressionContext, isFormValueChange, isFirstUpdateOfNewFeature );
+
+
+  // Evaluate HTML and Text element expressions
+  recalculateRichTextWidgets( changedFormItems, expressionContext );
 
   // Evaluate tab items visiblity
   {
@@ -841,6 +962,62 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     emit formRecalculated();
 }
 
+void AttributeController::recalculateRichTextWidgets( QSet<QUuid> &changedFormItems, QgsExpressionContext &context )
+{
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+  while ( formItemsIterator != mFormItems.end() )
+  {
+    std::shared_ptr<FormItem> itemData = formItemsIterator.value();
+    if ( itemData->type() == FormItem::RichText )
+    {
+      QString newValue;
+      QString definition = itemData->editorWidgetConfig().value( QStringLiteral( "Definition" ) ).toString();
+      bool isHTML = itemData->editorWidgetConfig().value( QStringLiteral( "UseHtml" ) ).toBool();
+      if ( isHTML )
+      {
+        // evaluate texts like: <script>document.write(expression.evaluate("\TextField\""));</script>
+
+        // QML Text does not support document.write, so just remove it
+        const thread_local QRegularExpression sRegEx1( "<script>\\s*document\\.write\\(\\s*(.*)\\s*\\)\\s*;\\s*</script>", QRegularExpression::MultilineOption | QRegularExpression::DotMatchesEverythingOption );
+        QRegularExpressionMatch match1 = sRegEx1.match( definition );
+        while ( match1.hasMatch() )
+        {
+          QString expression = match1.captured( 1 );
+          definition = QStringLiteral( "<span>%1</span>" ).arg( definition.mid( 0, match1.capturedStart( 0 ) ) + expression + definition.mid( match1.capturedEnd( 0 ) ) );
+          match1 = sRegEx1.match( definition );
+        }
+
+        // Not evaluate expression with the engine
+        const thread_local QRegularExpression sRegEx( "expression\\.evaluate\\(\\s*\\\"(.*?[^\\\\])\\\"\\s*\\)", QRegularExpression::MultilineOption | QRegularExpression::DotMatchesEverythingOption );
+        QRegularExpressionMatch match = sRegEx.match( definition );
+        while ( match.hasMatch() )
+        {
+          QString expression = match.captured( 1 );
+          expression = expression.replace( QStringLiteral( "\\\"" ), QStringLiteral( "\"" ) );
+
+          QgsExpression exp = QgsExpression( expression );
+          exp.prepare( &context );
+          QString resultString = exp.evaluate( &context ).toString();
+          definition = definition.mid( 0, match.capturedStart( 0 ) ) + resultString + definition.mid( match.capturedEnd( 0 ) );
+          match = sRegEx.match( definition );
+        }
+        newValue = definition;
+      }
+      else
+      {
+        newValue = QgsExpression::replaceExpressionText( definition, &context );
+      }
+      if ( itemData->rawValue() != newValue )
+      {
+        changedFormItems.insert( itemData->id() );
+        itemData->setRawValue( newValue );
+      }
+    }
+    ++formItemsIterator;
+  }
+
+}
+
 bool AttributeController::hasValidationErrors() const
 {
   return mHasValidationErrors;
@@ -891,9 +1068,7 @@ bool AttributeController::deleteFeature()
 
   if ( !isDeleted || !rv )
   {
-    QgsMessageLog::logMessage( tr( "Cannot delete feature" ),
-                               QStringLiteral( "Input" ),
-                               Qgis::Warning );
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Cannot delete feature" ) );
     emit commitFailed();
   }
   else
@@ -947,10 +1122,7 @@ bool AttributeController::save()
   {
     if ( !mFeatureLayerPair.layer()->addFeature( feat ) )
     {
-      QgsMessageLog::logMessage( tr( "Feature could not be added" ),
-                                 QStringLiteral( "Input" ),
-                                 Qgis::Critical );
-
+      CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Feature could not be added" ) );
     }
     connect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
   }
@@ -958,9 +1130,9 @@ bool AttributeController::save()
   {
     // update it instead of adding
     if ( !mFeatureLayerPair.layer()->updateFeature( feat, true ) )
-      QgsMessageLog::logMessage( tr( "Cannot update feature" ),
-                                 QStringLiteral( "Input" ),
-                                 Qgis::Warning );
+    {
+      CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Cannot update feature" ) );
+    }
   }
 
   bool featureIsNew = isNewFeature();
@@ -1002,9 +1174,7 @@ bool AttributeController::startEditing()
 
   if ( !mFeatureLayerPair.layer()->startEditing() )
   {
-    QgsMessageLog::logMessage( tr( "Cannot start editing" ),
-                               QStringLiteral( "Input" ),
-                               Qgis::Warning );
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Cannot start editing" ) );
     return false;
   }
   else
@@ -1194,8 +1364,8 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
 
     if ( !field.convertCompatible( val ) )
     {
-      QString msg( tr( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
-      QgsMessageLog::logMessage( msg );
+      QString msg( QStringLiteral( "Value \"%1\" %4 could not be converted to a compatible value for field %2(%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
+      CoreUtils::log( QStringLiteral( "Attribute Controller" ), msg );
     }
     else
     {

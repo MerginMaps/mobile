@@ -75,6 +75,7 @@ class InputUtils: public QObject
     Q_INVOKABLE QString getFileName( const QString &filePath );
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
     Q_INVOKABLE QString formatNumber( const double number, int precision = 1 );
+    Q_INVOKABLE QString formatDistanceInProjectUnit( const double distanceInMeters, int precision = 1, Qgis::DistanceUnit destUnit = Qgis::DistanceUnit::Unknown );
     Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings, double panelOffsetRatio );
 
     // utility functions to extract information from map settings
@@ -299,7 +300,6 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QString resolvePrefixForRelativePath( int relativeStorageMode, const QString &homePath, const QString &targetDir );
 
-
     /**
      * Returns absolute path of the file for given path and its prefix. If prefixPath is empty,
      * returns given path.
@@ -412,7 +412,6 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QString evaluateExpression( const FeatureLayerPair &pair, QgsProject *activeProject, const QString &expression );
 
-
     /**
     * Returns the QVariant typeName of a \a field.
     * This is a stable identifier (compared to the provider field name).
@@ -471,7 +470,7 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );
 
     //! Creates featureLayerPair from geometry and layer, evaluates its expressions and returns it.
-    Q_INVOKABLE static FeatureLayerPair createFeatureLayerPair( QgsVectorLayer *layer, const QgsGeometry &geometry, VariablesManager *variablesmanager, QgsExpressionContextScope *additionalScope = nullptr );
+    Q_INVOKABLE static FeatureLayerPair createFeatureLayerPair( QgsVectorLayer *layer = nullptr, const QgsGeometry &geometry = QgsGeometry(), VariablesManager *variablesmanager = nullptr, QgsExpressionContextScope *additionalScope = nullptr );
 
     Q_INVOKABLE static void createEditBuffer( QgsVectorLayer *layer );
 
@@ -531,6 +530,11 @@ class InputUtils: public QObject
      * Returns string containing attribution information for a given layer
      */
     Q_INVOKABLE static QString layerAttribution( QgsMapLayer *layer );
+
+    /**
+     * Returns QGIS profiler data
+     */
+    static QVector<QString> qgisProfilerLog();
 
   signals:
     Q_INVOKABLE void showNotificationRequested( const QString &message );

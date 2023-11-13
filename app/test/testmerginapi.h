@@ -18,17 +18,14 @@
 #include <merginapi.h>
 #include <projectsmodel.h>
 #include "project.h"
-#include "testingpurchasingbackend.h"
 
 #include <qgsapplication.h>
-
-class Purchasing;
 
 class TestMerginApi: public QObject
 {
     Q_OBJECT
   public:
-    explicit TestMerginApi( MerginApi *api, Purchasing *purchasing );
+    explicit TestMerginApi( MerginApi *api );
     ~TestMerginApi();
 
     static const QString TEST_PROJECT_NAME;
@@ -84,6 +81,7 @@ class TestMerginApi: public QObject
     void testAutosyncFailure();
 
     void testRegisterAndDelete();
+    void testCreateWorkspace();
 
     // mergin functions
     void testExcludeFromSync();
@@ -98,12 +96,12 @@ class TestMerginApi: public QObject
 
   private:
     MerginApi *mApi = nullptr;
-    Purchasing *mPurchasing = nullptr;
 
     std::unique_ptr<ProjectsModel> mLocalProjectsModel;
     std::unique_ptr<ProjectsModel> mCreatedProjectsModel;
     std::unique_ptr<SynchronizationManager> mSyncManager;
     QString mUsername;
+    QString mWorkspaceName;
     QString mTestDataPath;
     //! extra API to do requests we are not testing (as if some other user did those)
     MerginApi *mApiExtra = nullptr;
@@ -113,10 +111,23 @@ class TestMerginApi: public QObject
     MerginProjectsList projectListFromSpy( QSignalSpy &spy );
     int serverVersionFromSpy( QSignalSpy &spy );
 
-    //! Creates a project on the server and pushes an initial version and removes the local copy.
-    void createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath );
-    //! Deletes a project on the server
-    void deleteRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
+    /**
+     *  Creates a project on the server and pushes an initial version and removes the local copy.
+     *  If force is used, the project is first deleted by deleteRemoteProjectNow from remote server
+     */
+    void createRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, const QString &sourcePath, bool force = true );
+
+    /**
+     * Gets project id from project full name
+     * Returns empty string if project is not found on server
+     */
+    QString projectIdFromProjectFullName( MerginApi *api, const QString &projectNamespace, const QString &projectName );
+
+    /**
+     * Immediately deletes a project on the server
+     * If project does not exists, it does nothing.
+     */
+    void deleteRemoteProjectNow( MerginApi *api, const QString &projectNamespace, const QString &projectName );
 
     //! Downloads a remote project to the local drive, extended version also sets server version
     void downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int &serverVersion );

@@ -268,6 +268,9 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Mer
       else if ( project.local.hasMerginMetadata() )
       {
         // App is starting - loads all local projects from a device
+        // OR
+        // We do not have server info because the project was ignored
+        // (listProjectsByName API limits response to max 50 projects)
         project.mergin.projectName = project.local.projectName;
         project.mergin.projectNamespace = project.local.projectNamespace;
         project.mergin.status = ProjectStatus::projectStatus( project );

@@ -14,9 +14,5 @@
   
 #cmakedefine HAVE_BLUETOOTH
 
-#cmakedefine PURCHASING
-
-#cmakedefine APPLE_PURCHASING
-
 #endif
 

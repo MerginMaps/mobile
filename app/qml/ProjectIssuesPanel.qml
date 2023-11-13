@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -21,17 +22,16 @@ Item {
   property real rowHeight: InputStyle.rowHeight
   property var projectIssuesModel: ListModel {}
   property string projectLoadingLog: ""
-  property string headerText: qsTr( "The following layers failed loading" ) + ":"
 
-  function reportIssue( layerName, message ) {
-    projectIssuesModel.append( { name: layerName, message: message } );
+  function reportIssue(title, message) {
+    projectIssuesModel.append( { title: title, message: message } )
   }
 
   function clear() {
-    projectIssuesModel.clear();
+    projectIssuesModel.clear()
   }
 
-  Keys.onReleased: function( event ) {
+  Keys.onReleased: function (event) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true
 
@@ -80,21 +80,10 @@ Item {
         contentWidth: availableWidth // to only scroll vertically
         spacing: InputStyle.panelSpacing
 
-        background: Rectangle {
-          anchors.fill: parent
-          color: InputStyle.panelBackgroundLight
-        }
-
         Column {
           id: settingListContent
           anchors.fill: parent
           spacing: 1
-
-          PanelItem {
-            color: InputStyle.panelBackgroundLight
-            text: headerText
-            bold: true
-          }
 
           PanelItem {
             id: invalidLayersList
@@ -108,37 +97,32 @@ Item {
               spacing: 3
               delegate: PanelItem {
                 anchors.margins: 5
-                width:  ListView.view.width
+                width: ListView.view.width
                 height: row.height
                 color: InputStyle.clrPanelMain
-                Row {
+                Column {
                   id: row
-                   width: parent.width
-                   anchors.left: parent.left
-                   anchors.top: parent.top
-                    Text {
-                      id: nameTextItem
-                      padding: 5
-                      font.pixelSize: InputStyle.fontPixelSizeBig
-                      text:  qsTr( name )
-                      wrapMode: Text.Wrap
-                    }
+                  width: parent.width
+                  anchors.left: parent.left
+                  anchors.top: parent.top
+                  Text {
+                    id: nameTextItem
+                    width: parent.width
+                    padding: 5
+                    font.pixelSize: InputStyle.fontPixelSizeBig
+                    text: title
+                    color: InputStyle.fontColor
+                    wrapMode: Text.Wrap
+                  }
 
-                    Rectangle {
-                        id: seperator
-                        width: 3
-                        height: parent.height
-                        color: "gray"
-                    }
-
-                    Text {
-                      id: messageTextItem
-                      width: parent.width - nameTextItem.width - seperator.width
-                      padding: 5
-                      font.pixelSize: InputStyle.fontPixelSizeBig
-                      text:  qsTr( message )
-                      wrapMode: Text.Wrap
-                    }
+                  Text {
+                    id: messageTextItem
+                    width: parent.width
+                    padding: 10
+                    font.pixelSize: InputStyle.fontPixelSizeNormal
+                    text: message
+                    wrapMode: Text.Wrap
+                  }
                 }
                 onHeightChanged: invalidLayersList.height += height;
               }
@@ -150,12 +134,18 @@ Item {
             }
           }
 
-
           // Debug/Logging
           PanelItem {
-            color: InputStyle.panelBackgroundLight
-            text: qsTr("QGIS log")
-            bold: true
+            height: qgisLogTextHeader.height
+            width: parent.width
+            Text {
+              id: qgisLogTextHeader
+              width: parent.width
+              padding: 5
+              text: qsTr("QGIS log")
+              font.pixelSize: InputStyle.fontPixelSizeBig
+              color: InputStyle.fontColor
+            }
           }
 
           PanelItem {
@@ -164,7 +154,7 @@ Item {
             Text {
               id: qgisLogTextItem
               width: parent.width
-              padding: 5
+              padding: 10
               text: projectLoadingLog
               wrapMode: Text.Wrap
             }

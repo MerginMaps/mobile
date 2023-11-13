@@ -18,17 +18,18 @@ on:
       - published
 
 env:
-  QT_VERSION: '6.5.2'
+  QT_VERSION: '6.5.2' # use scripts/update_qt_version.bash to change
   CACHE_VERSION: 0
   
 jobs:
   code_style_cpp:
     name: C++ code convention check
-    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-latest
     steps:
       - name: Install astyle
         run: |
+          brew update
           brew install astyle
 
       - name: Checkout input
@@ -42,7 +43,7 @@ jobs:
 
   code_style_cmake:
     name: CMake code convention check
-    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: ubuntu-latest
     steps:
       - name: Install cmake-format
@@ -60,7 +61,7 @@ jobs:
 
   cppcheck:
     name: Cppcheck
-    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -68,6 +69,7 @@ jobs:
 
       - name: Install Requirements
         run: |
+          brew update
           brew install cppcheck
 
       - name: Run cppcheck test

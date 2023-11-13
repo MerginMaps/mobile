@@ -11,7 +11,6 @@ set(MM_TESTS
     testUtils
     testAttributePreviewController
     testMerginApi
-    testPurchasing
     testAttributeController
     testIdentifyKit
     testPosition
@@ -24,6 +23,7 @@ set(MM_TESTS
     testMapTools
     testLayerTree
     testActiveProject
+    testProjectChecksumCache
 )
 
 foreach (test ${MM_TESTS})

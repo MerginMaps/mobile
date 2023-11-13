@@ -38,14 +38,16 @@ Rectangle {
         anchors.fill: parent
         enabled: root.enabled && handleClicks
 
-        TapHandler {
-            onTapped: function(eventPoint, button) {
-                root.activated()
-            }
+        MouseArea {
+          anchors.fill: parent
 
-            onLongPressed: {
-                root.activatedOnHold()
-            }
+          onClicked: {
+            root.activated()
+          }
+
+          onPressAndHold: {
+            root.activatedOnHold()
+          }
         }
     }
 

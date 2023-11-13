@@ -21,14 +21,14 @@ concurrency:
   
 jobs:
   win64_build:
-    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: windows-2019
     
     env:
-      QT_VERSION: '6.5.2'
+      QT_VERSION: '6.5.2' # use scripts/update_qt_version.bash to change
       INPUT_SDK_VERSION: x64-windows-20230824-209
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
-      CACHE_VERSION: 3
+      CACHE_VERSION: 0
       VS_VERSION: "2019"
       QT_ARCH: "win64_msvc2019_64"
       
@@ -111,7 +111,7 @@ jobs:
         shell: bash
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
-          URL="https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.zip"
+          URL="https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.zip"
           echo "downloading: $URL"
           curl -fsSL --connect-timeout 60 -o \
             input-sdk.tar.gz \

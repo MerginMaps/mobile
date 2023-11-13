@@ -70,7 +70,7 @@ AbstractEditor {
       root.editorValueChanged( "", true )
     }
 
-    onFetchingResultsChanged: {
+    onFetchingResultsChanged: function(isFetching) {
       if ( !isFetching )
       {
         // we need to re-set the current index every time the model is done re-populating

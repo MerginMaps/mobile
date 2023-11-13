@@ -47,6 +47,7 @@ class TestUtilsFunctions: public QObject
     void testInvalidGeometryWarning();
     void testAttribution();
     void testParsePositionUpdates();
+    void testFormatDistanceInDistanceUnit();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );

@@ -101,6 +101,10 @@ ApplicationWindow {
 
       model: ListModel {
         ListElement {
+          title: "Initial"
+          source: "InitialGalleryPage.qml"
+        }
+        ListElement {
           title: "Buttons"
           source: "ButtonsPage.qml"
         }
@@ -119,6 +123,10 @@ ApplicationWindow {
         ListElement {
           title: "Checks"
           source: "ChecksPage.qml"
+        }
+        ListElement {
+          title: "Drawers"
+          source: "DrawerPage.qml"
         }
       }
 

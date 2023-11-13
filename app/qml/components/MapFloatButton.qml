@@ -50,12 +50,14 @@ Item {
     Item {
       anchors.fill: parent
       
-      TapHandler {
-        onTapped: function(eventPoint, button) {
+      MouseArea {
+        anchors.fill: parent
+
+        onClicked: {
           root.clicked()
         }
 
-        onLongPressed: function() {
+        onPressAndHold: {
           root.pressAndHold()
         }
       }

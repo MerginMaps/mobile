@@ -35,8 +35,6 @@
 #include "merginworkspaceinfo.h"
 #include "merginuserauth.h"
 
-class Purchasing;
-
 class RegistrationError
 {
     Q_GADGET
@@ -117,13 +115,13 @@ struct ProjectDiff
  */
 struct DownloadQueueItem
 {
-  DownloadQueueItem( const QString &fp, int s, int v, int rf = -1, int rt = -1, bool diff = false );
+  DownloadQueueItem( const QString &fp, qint64 s, int v, qint64 rf = -1, qint64 rt = -1, bool diff = false );
 
   QString filePath;          //!< path within the project
-  int size;                  //!< size of the item in bytes
+  qint64 size;               //!< size of the item in bytes
   int version = -1;          //!< what version to download  (for ordinary files it will be the target version, for diffs it can be different version)
-  int rangeFrom = -1;        //!< what range of bytes to download (-1 if downloading the whole file)
-  int rangeTo = -1;          //!< what range of bytes to download (-1 if downloading the whole file)
+  qint64 rangeFrom = -1;     //!< what range of bytes to download (-1 if downloading the whole file)
+  qint64 rangeTo = -1;       //!< what range of bytes to download (-1 if downloading the whole file)
   bool downloadDiff = false; //!< whether to download just the diff between the previous version and the current one
   QString tempFileName;      //!< relative filename of the temporary file where the downloaded content will be stored
 };
@@ -160,12 +158,13 @@ struct TransactionStatus
   };
 
   qreal totalSize = 0;     //!< total size (in bytes) of files to be pushed or pulled
-  int transferedSize = 0;  //!< size (in bytes) of amount of data transferred so far
+  qint64 transferedSize = 0;  //!< size (in bytes) of amount of data transferred so far
   QString transactionUUID; //!< only for push. Initially dummy non-empty string, after server confirms a valid UUID, on finish/cancel it is empty
 
   // pull replies
   QPointer<QNetworkReply> replyPullProjectInfo;
-  QPointer<QNetworkReply> replyPullItem;
+  QPointer<QNetworkReply> replyPullServerConfig;
+  QSet<QNetworkReply *> replyPullItems;
 
   // push replies
   QPointer<QNetworkReply> replyPushProjectInfo;
@@ -176,6 +175,7 @@ struct TransactionStatus
   // pull-related data
   QList<DownloadQueueItem> downloadQueue;  //!< pending list of stuff to download - chunks of project files or diff files (at the end of transaction it is empty)
   QList<PullTask> pullTasks;  //!< tasks to do at the end of pull when everything has been downloaded
+  bool pullItemsAborting = false;   //!< indicates whether we have started to abort requests in replyPullItems
 
   // push-related data
   QList<MerginFile> pushQueue; //!< pending list of files to push (at the end of transaction it is empty)
@@ -370,6 +370,8 @@ class MerginApi: public QObject
 
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
+    static const int MINIMUM_SERVER_VERSION_MAJOR = 2023;
+    static const int MINIMUM_SERVER_VERSION_MINOR = 2;
     static const QString sMetadataFile;
     static const QString sMetadataFolder;
     static const QString sMerginConfigFile;
@@ -386,6 +388,16 @@ class MerginApi: public QObject
     QStringList projectDiffableFiles( const QString &projectFullName );
 
     static ProjectDiff localProjectChanges( const QString &projectDir );
+    static bool hasLocalProjectChanges( const QString &projectDir );
+
+    /**
+     * Parse major and minor version number from version string
+     * \param version full server version string
+     * \param major parsed major number
+     * \param minor parsed minor number
+     * @return true when parsing was successful
+     */
+    static bool parseVersion( const QString &version, int &major, int &minor );
 
     /**
     * Finds project in merginProjects list according its full name.
@@ -406,6 +418,12 @@ class MerginApi: public QObject
     // Test functions
     /**
     * Deletes the project of given namespace and name on Mergin server.
+    * Note that this deletion is not immediately done,
+    * but only scheduled to be deleted in few days.
+    *
+    * TODO - we should use DEL /v2/projects/ if possible, see
+    * TestMerginApi::deleteRemoteProjectNow()
+    *
     * \param projectNamespace
     * \param projectName
     */
@@ -439,6 +457,23 @@ class MerginApi: public QObject
       bool allowConfig = false,
       const MerginConfig &config = MerginConfig(),
       const MerginConfig &lastSyncConfig = MerginConfig()
+    );
+
+    /**
+     * Finds if project files from two sources are same
+     * - "old" server version (what was downloaded from server) - read from the project directory's stored metadata
+     * - local file version (what is currently in the project directory) - created on the fly from the local directory content
+     *
+     * The function returns true if:
+     *   - there is any local file not present in "old" server version files
+     *   - there is any local file missing in "old" server version files
+     *   - there is different checksum of any non-diffable file (e.g. CSV file)
+     *   - there is different content of any diffable file (e.g. GeoPackage)
+     */
+    static bool hasLocalChanges(
+      const QList<MerginFile> &oldServerFiles,
+      const QList<MerginFile> &localFiles,
+      const QString &projectDir
     );
 
     static QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
@@ -567,6 +602,7 @@ class MerginApi: public QObject
 
     void storageLimitReached( qreal uploadSize );
     void projectLimitReached( int maxProjects, const QString &message );
+    void migrationRequested( const QString &version );
     void notify( const QString &message );
     void authRequested();
     void authChanged();
@@ -660,6 +696,7 @@ class MerginApi: public QObject
     static QStringList generateChunkIdsForSize( qint64 fileSize );
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
     static QString getApiKey( const QString &serverName );
+    void abortPullItems( const QString &projectFullName );
 
     /**
      * Sends non-blocking POST request to the server to upload a file (chunk).
@@ -689,7 +726,6 @@ class MerginApi: public QObject
     bool writeData( const QByteArray &data, const QString &path );
     void createPathIfNotExists( const QString &filePath );
 
-    static QByteArray getChecksum( const QString &filePath );
     static QSet<QString> listFiles( const QString &projectPath );
 
     bool validateAuth();
@@ -779,7 +815,6 @@ class MerginApi: public QObject
     bool mApiSupportsSubscriptions = false;
     bool mSupportsSelectiveSync = true;
 
-    static const int CHUNK_SIZE = 65536;
     static const int UPLOAD_CHUNK_SIZE;
     const int PROJECT_PER_PAGE = 50;
     const QString TEMP_FOLDER = QStringLiteral( ".temp/" );
@@ -790,8 +825,6 @@ class MerginApi: public QObject
     MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
 
     friend class TestMerginApi;
-    friend class Purchasing;
-    friend class PurchasingTransaction;
 };
 
 #endif // MERGINAPI_H

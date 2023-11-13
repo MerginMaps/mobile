@@ -24,6 +24,7 @@ import "./popups"
 
 ApplicationWindow {
     id: window
+    
     visible: true
     width:  __appwindowwidth
     height: __appwindowheight
@@ -147,21 +148,6 @@ ApplicationWindow {
           // if feature preview panel is opened
           return formsStackManager.takenVerticalSpace - mainPanel.height
         }
-        else if ( stateManager.state === "projects" || stateManager.state === "misc" )
-        {
-          //
-          // Due to an upstream bug in Qt, see #2387 and #2425 for more info
-          //
-          return window.height
-        }
-        else if ( gpsDataPageLoader.active )
-        {
-          //
-          // Block also GPS data page clicks propagation.
-          // Due to an upstream bug in Qt, see #2387 and #2425 for more info
-          //
-          return window.height
-        }
 
         return 0
       }
@@ -252,11 +238,6 @@ ApplicationWindow {
 
         width: window.width
         height: InputStyle.rowHeightHeader
-
-        //
-        // In order to workaround the QTBUG-108689 - we need to disable main panel's buttons when something else occupies the space
-        //
-        enabled: mainPanel.height > map.mapExtentOffset
 
         y: window.height - height
 
@@ -643,6 +624,27 @@ ApplicationWindow {
         }
     }
 
+    MessageDialog {
+      id: migrationDialog
+
+      property string version
+
+      onAccepted: migrationDialog.close()
+      title: qsTr("Your server will soon be out of date")
+      text: qsTr("Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.")
+      buttons: MessageDialog.Close | MessageDialog.Help | MessageDialog.Ignore
+      onButtonClicked: function(clickedButton) {
+        if (clickedButton === MessageDialog.Help) {
+          Qt.openUrlExternally(__inputHelp.migrationGuides)
+        }
+        else if (clickedButton === MessageDialog.Ignore) {
+          // don't show this dialog for this version
+          __appSettings.ignoreMigrateVersion = version
+        }
+        close()
+      }
+    }
+
     FormsStackManager {
       id: formsStackManager
 
@@ -773,6 +775,13 @@ ApplicationWindow {
             map.mapSettings.extentChanged()
           }
         }
+
+        function onMigrationRequested( version ) {
+          if( __appSettings.ignoreMigrateVersion !== version ) {
+            migrationDialog.version = version
+            migrationDialog.open()
+          }
+        }
     }
 
     Connections {
@@ -806,8 +815,8 @@ ApplicationWindow {
         failedToLoadProjectBanner.pushNotificationMessage( qsTr( "There were issues loading the project." ) )
       }
 
-      function onReportIssue( layerName, message ) {
-        projectIssuesPanel.reportIssue( layerName, message )
+      function onReportIssue( title, message ) {
+        projectIssuesPanel.reportIssue( title, message )
       }
 
       function onProjectReloaded( project ) {

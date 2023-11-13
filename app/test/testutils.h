@@ -15,30 +15,25 @@
 
 #include "inputconfig.h"
 #include "qgsproject.h"
-#include "testingpurchasingbackend.h"
 
 class MerginApi;
-class Purchasing;
-class TestingPurchasingBackend;
 
 namespace TestUtils
 {
   const int SHORT_REPLY = 5000;
   const int LONG_REPLY = 90000;
 
-  const double FREE_STORAGE =  104857600.0; // 100 MB
+  //! authorize user and select the active workspace
+  void authorizeUser( MerginApi *api, const QString &username, const QString &password );
 
-  const QString TIER01_PLAN_ID = "test_mergin_tier_1_1";
-  const double TIER01_STORAGE =  1073741824.0; // 1GB
+  //! select the first workspace as active workspace
+  void selectFirstWorkspace( MerginApi *api, QString &workspace );
 
-  const QString TIER02_PLAN_ID = "test_mergin_tier_1_2";
-  const double TIER02_STORAGE =  10737418240.0; // 10 GB
+  //! Get TEST user credentials from env variables
+  void merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QString &username, QString &password );
 
-  //! Use credentials from env variables if they are set, otherwise register new user and set its credentials to env var
-  void mergin_setup_auth( MerginApi *api, QString &apiRoot, QString &username, QString &password );
-
-  //! Setup professional plan for active workspace
-  void mergin_setup_pro_subscription( MerginApi *api, Purchasing *purchasing );
+  //! Whether we need to auth again
+  bool needsToAuthorizeAgain( MerginApi *api, const QString &username );
 
   QString generateUsername();
   QString generateEmail();
@@ -56,9 +51,6 @@ namespace TestUtils
    * Returns true if files were successfully created
    */
   bool generateProjectFolder( const QString &rootPath, const QJsonDocument &structure );
-
-  //! Test util function to invoke purchasing function and wait for the replies.
-  void runPurchasingCommand( MerginApi *api, Purchasing *purchasing, TestingPurchasingBackend::NextPurchaseResult result, const QString &planId, bool waitForWorkspaceInfoChanged = true );
 }
 
 #define COMPARENEAR(actual, expected, epsilon) \

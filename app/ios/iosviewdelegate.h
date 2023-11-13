@@ -28,6 +28,7 @@ UINavigationControllerDelegate>
   @public
 
   IOSImagePicker *handler;
+  BOOL processingPicture;
 
   void ( ^ imagePickerControllerDidFinishPickingMediaWithInfo )( UIImagePickerController * picker, NSDictionary * info );
   void ( ^ imagePickerControllerDidCancel )( UIImagePickerController * picker );

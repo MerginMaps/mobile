@@ -16,10 +16,10 @@ on:
       - published
 
 env:
-  QT_VERSION: '6.5.2'
+  QT_VERSION: '6.5.2' # use scripts/update_qt_version.bash to change
   INPUT_SDK_VERSION: x64-osx-20230824-181
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 2
+  CACHE_VERSION: 0
   XC_VERSION: ${{ '14.2' }}
 
 concurrency:
@@ -28,7 +28,7 @@ concurrency:
 
 jobs:
   macos_build:
-    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-12
     steps:
       - name: Checkout Input
@@ -113,7 +113,7 @@ jobs:
         run: |
           wget -O \
             ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
+            https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
           mkdir -p ${{ github.workspace }}/input-sdk/x64-osx
           cd ${{ github.workspace }}/input-sdk/x64-osx
           tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
@@ -148,6 +148,8 @@ jobs:
       - name: run tests
         env:
           TEST_MERGIN_URL: https://test.dev.merginmaps.com/
+          TEST_API_USERNAME: test_mobileapp2
+          TEST_API_PASSWORD: ${{ secrets.TEST_API_PASSWORD }}
         run: |
           cd build-Input-db/
           ctest --output-on-failure

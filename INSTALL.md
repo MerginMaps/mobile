@@ -1,4 +1,4 @@
-Building Mergin Maps Input from source - step by step
+Building Mergin Maps mobile app from source - step by step
 
 
 # Table of Contents
@@ -8,6 +8,7 @@ Building Mergin Maps Input from source - step by step
 * [2. Overview](#2-overview)
    * [2.1 Secrets](#21-secrets)
    * [2.2 Code formatting](#22-code-formatting)
+   * [2.3 Required Qt packages](#23-required-qt-packages)
 * [3. Building GNU/Ubuntu](#3-building-gnuubuntu)
 * [4. Building Android (on Ubuntu/macOS/Windows)](#4-building-android-on-ubuntumacoswindows)
    * [4.1. Android on Ubuntu](#41-android-on-ubuntu)
@@ -16,7 +17,7 @@ Building Mergin Maps Input from source - step by step
 * [5. Building iOS](#5-building-ios)
 * [6. Building macOS](#6-building-macos)
 * [7. Building Windows](#7-building-windows)
-
+* [8. Auto Testing](#9-auto-testing)
 
 # 1. Introduction
 
@@ -48,13 +49,13 @@ uses [CMake](https://www.cmake.org) for building from source.
 It is C++ application build on top of [Qt](https://www.qt.io), [QGIS](https://www.qgis.org/en/site/)
 and many other FOSS libraries. 
 
-All required libraries (in release configuration) are packaged in the [Input-SDK](https://github.com/MerginMaps/input-sdk).
+All required libraries (in release configuration) are packaged in the [Mobile-SDK](https://github.com/MerginMaps/mobile-sdk).
 If you need to debug some error in the library, you need to compile Input-SDK in debug yourself locally. Otherwise
-it is suggested to download required libraries from [Input-SDK tags](https://github.com/MerginMaps/input-sdk/tags)
-Input-SDK uses vcpkg packaging system, so if the SDK for your target system/architecture you can build it yourself.
+it is suggested to download required libraries from [Mobile-SDK tags](https://github.com/MerginMaps/mobile-sdk/tags)
+Mobile-SDK uses vcpkg packaging system, so if the SDK for your target system/architecture you can build it yourself.
 
 Generally, for building setup, you need the same versions of libraries/SDKs/NDKs/compilers as used in the official 
-[GitHub Actions](https://github.com/MerginMaps/input/tree/master/.github/workflows).
+[GitHub Actions](https://github.com/MerginMaps/mobile/tree/master/.github/workflows).
 Open workflow file for your platform/target and see the version of libraries used and replicate it in your setup.
 
 ## 2.1 Secrets
@@ -99,6 +100,20 @@ In order to start using the `pre-commit`, run `pre-commit install` in the reposi
 To manually run the style check, run `pre-commit run --all-files` or optionally run script `format_cpp.sh` (we use this one in CI currently).
 
 In case you want to skip execution of pre-commit hooks, add additional flag `--no-verify` to your commit command, e.g.: `git commit -m "nit" --no-verify`
+
+## 2.3 Required Qt packages
+
+Mergin Maps is built with Qt. If you are using Qt's `Maintenance tool`, make sure to install these packages:
+ - `Android` -> when building for Andoroid
+ - `iOS` -> when building for iOS
+ - `macOS` -> or other desktop platform based on your host machine
+ - `Qt 5 Compatibility Module`
+ - `Qt Shader Tools`
+ - `Additional libraries:`
+   - `Qt Connectivity` -> used for Bluetooth
+   - `Qt Multimedia`
+   - `Qt Positioning`
+   - `Qt Sensors`
 
 # 3. Building GNU/Ubuntu
 
@@ -298,10 +313,10 @@ Now you can create a build (either on commmand line or by setting these variable
 2. Get Input SDK - it contains pre-built dependencies of libraries used by Input
 
    - Check what SDK version is currently in use - look for `INPUT_SDK_VERSION` in `.github/workflows/macos.yml`
-   - Download Input SDK for Ubuntu - go to https://github.com/merginmaps/input-sdk/releases and download the built SDK.
+   - Download Input SDK for `osx` - go to https://github.com/merginmaps/input-sdk/releases and download the built SDK.
    - Unpack the downloaded .tar.gz to `~/input-sdk/x64-osx`
 
-3. Get Qt libraries - Ubuntu's system libraries are too old, and currently Input SDK does not include Qt SDK.
+3. Get Qt libraries - Input SDK does not include Qt SDK
 
    - Check what Qt version is currently in use - look for `QT_VERSION` in `.github/workflows/macos.yml`
    - Download Qt online installer from https://www.qt.io/download-open-source
@@ -372,3 +387,20 @@ set CL=/MP
 nmake
 ```
 
+# 8. Auto Testing
+
+You need to add cmake define `-DENABLE_TESTING=TRUE` on your cmake configure line.
+Also you need to open Passbolt and check for password for user `test_mobileapp_dev` on `test.dev.merginmaps.com`, 
+or you need some user with unlimited projects limit. First workspace from list is taken.
+
+! Note that the same user cannot run tests in paraller ! 
+
+now you need to set environment variables: 
+```
+TEST_MERGIN_URL=test.dev.merginmaps.com
+TEST_API_USERNAME=test_mobileapp_dev
+TEST_API_PASSWORD=<your_password>
+```
+
+Build binary and you can run tests either with `ctest` or you can run individual tests by adding `--test<TestName>`
+e.g. ` ./input --testMerginApi`

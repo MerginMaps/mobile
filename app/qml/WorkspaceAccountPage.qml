@@ -177,7 +177,7 @@ Page {
 
         titleText: qsTr( "Subscription status" )
         text: qsTr("Please update your %1billing details%2 as soon as possible")
-                .arg("<a href='" + __purchasing.subscriptionBillingUrl + "'>")
+                .arg("<a href='" + __inputHelp.merginDashboardLink + "'>")
                 .arg("</a>")
 
         textComponent.onLinkActivated: function ( link ) {
@@ -206,15 +206,12 @@ Page {
       }
 
       MMComponents.DelegateButton {
-
         Layout.fillWidth: true
         btnWidth: width
+
         height: InputStyle.rowHeightMedium
 
-        visible: root.apiSupportsSubscriptions && root.canAccessSubscription
-
-        text: qsTr("Subscriptions")
-
+        text: qsTr("Manage account")
         onClicked: root.managePlansClicked()
       }
 

@@ -28,6 +28,7 @@ import android.location.LocationListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Locale;
 
 import uk.co.lutraconsulting.PositionTrackingBroadcastMiddleware;
 
@@ -83,9 +84,10 @@ public class PositionTrackingService extends Service implements LocationListener
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
 
-        locationManager.removeUpdates(this);
+        if (locationManager != null) {
+            locationManager.removeUpdates(this);
+        }
 
         // Close the FileOutputStream when the service is destroyed
         try {
@@ -96,6 +98,8 @@ public class PositionTrackingService extends Service implements LocationListener
             e.printStackTrace();
             sendStatusUpdateMessage("ERROR #SILENT: Could not close file stream: " + e.getMessage() );
         }
+
+        super.onDestroy();
     }
 
     public void sendStatusUpdateMessage( String message ) {
@@ -227,7 +231,7 @@ public class PositionTrackingService extends Service implements LocationListener
     public void onLocationChanged( Location location ) {
 
         long currentTimeSeconds = System.currentTimeMillis() / 1000; // UTC time
-        String positionUpdate = String.format("%f %f %f %d\n", location.getLongitude(), location.getLatitude(), location.getAltitude(), currentTimeSeconds);
+        String positionUpdate = String.format(Locale.US, "%f %f %f %d\n", location.getLongitude(), location.getLatitude(), location.getAltitude(), currentTimeSeconds);
 
         try {
             if ( positionUpdatesStream != null ) {

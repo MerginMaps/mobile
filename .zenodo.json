@@ -1,8 +1,8 @@
 {
-    "description": "<p>Mergin Maps Input app is a QGIS based mobile app for Android and iOS devices.</p>", 
+    "description": "<p>Mergin Maps mobile app is a QGIS powered app for Android and iOS devices.</p>", 
     "license": "GPLv3", 
-    "title": "Mergin Maps Input: QGIS in your pocket", 
-    "version": "2.3.1",
+    "title": "Mergin Maps mobile app", 
+    "version": "2.5.0",
     "upload_type": "software", 
     "publication_date": "2022-02-24", 
     "creators": [
@@ -21,11 +21,7 @@
         {
             "affiliation": "Lutra Consulting", 
             "name": "Saber Razmjooei"
-        }, 
-        {
-            "affiliation": "@lutraconsulting", 
-            "name": "Nedjima Belgacem"
-        }, 
+        },
         {
             "affiliation": "@lutraconsulting", 
             "name": "Martin Varga"
@@ -43,7 +39,7 @@
     "related_identifiers": [
         {
             "scheme": "url", 
-            "identifier": "https://github.com/MerginMaps/input/tree/2.3.1", 
+            "identifier": "https://github.com/MerginMaps/mobile/tree/2.5.0", 
             "relation": "isSupplementTo"
         }, 
         {

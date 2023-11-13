@@ -150,6 +150,8 @@ Item {
       form.controller.deleteFeature()
     }
 
+    parent.focus = true
+
     // rollback all changes if the layer is still editable
     form.controller.rollback()
 
@@ -274,12 +276,6 @@ Item {
       id: swipeView
       currentIndex: form.controller.hasTabs ? tabRow.currentIndex : 0
 
-      //
-      // Known limitation, we can not make swipeview interactive because of https://bugreports.qt.io/browse/QTBUG-109124
-      // It clashes with slider editors, see https://github.com/MerginMaps/input/issues/2411
-      //
-      interactive: false
-
       anchors {
         top: flickable.bottom
         left: container.left
@@ -402,7 +398,7 @@ Item {
       id: fieldContainer
 
       // TODO: filter such fields in field proxy model instead
-      property bool shouldBeVisible: Type === FormItem.Field || Type === FormItem.Relation
+      property bool shouldBeVisible: Type !== FormItem.Invalid && Type !== FormItem.Container
 
       visible: shouldBeVisible
 
@@ -438,6 +434,8 @@ Item {
             id: fieldLabel
 
             text: Name
+            height: visible ? paintedHeight : 0
+            visible: ShowName
             color: form.style.constraint.validColor
             leftPadding: form.style.fields.sideMargin
             font.pixelSize: form.style.fields.labelPixelSize
@@ -516,7 +514,8 @@ Item {
             source: {
               if ( widget !== undefined )
                 return __inputUtils.getEditorComponentSource( widget.toLowerCase(), config, field )
-              else return ''
+              else
+                return ''
             }
           }
 

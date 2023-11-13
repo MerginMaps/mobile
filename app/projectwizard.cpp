@@ -58,18 +58,16 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList
   options.driverName = QStringLiteral( "GPKG" );
   options.layerName = layerName;
   options.fileEncoding = QStringLiteral( "UTF-8" );
-  std::unique_ptr< QgsVectorFileWriter > writer( QgsVectorFileWriter::create( projectGpkgPath, predefinedFields, Qgis::WkbType::PointZ, layerCrs, QgsCoordinateTransformContext(), options ) );
-
 
   QString errorMessage;
-  QgsVectorFileWriter::writeAsVectorFormatV2(
+  QgsVectorFileWriter::writeAsVectorFormatV3(
     layer,
     projectGpkgPath,
     layer->transformContext(),
     options,
+    &errorMessage,
     nullptr,
-    nullptr,
-    &errorMessage );
+    nullptr );
 
   // Check and configure layer
   QgsVectorLayer *l = new QgsVectorLayer( projectGpkgPath, layerName, "ogr" );

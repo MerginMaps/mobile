@@ -57,8 +57,7 @@ Rectangle {
 
     if ( projectIsLocal && projectIsMergin ) {
       // downloaded mergin projects
-      if ( projectStatus === ProjectStatus.OutOfDate ||
-           projectStatus === ProjectStatus.Modified ) {
+      if ( projectStatus === ProjectStatus.NeedsSync ) {
         return InputStyle.syncIcon
       }
       return "" // no icon if this project does not have changes
@@ -76,8 +75,7 @@ Rectangle {
   function getMoreMenuItems() {
     if ( projectIsMergin && projectIsLocal )
     {
-      if ( ( projectStatus === ProjectStatus.OutOfDate ||
-             projectStatus === ProjectStatus.Modified ) )
+      if ( ( projectStatus === ProjectStatus.NeedsSync ) )
         return "sync,changes,remove"
 
       return "changes,remove"

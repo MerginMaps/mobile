@@ -16,13 +16,15 @@
 #include <QFile>
 #include <QDirIterator>
 #include <QTextStream>
+#include <QCryptographicHash>
+#include <QRegularExpression>
 
 #include "qcoreapplication.h"
-#include "merginapi.h"
 
 const QString CoreUtils::LOG_TO_DEVNULL = QStringLiteral();
 const QString CoreUtils::LOG_TO_STDOUT = QStringLiteral( "TO_STDOUT" );
 QString CoreUtils::sLogFile = CoreUtils::LOG_TO_DEVNULL;
+int CoreUtils::CHECKSUM_CHUNK_SIZE = 65536;
 
 QString CoreUtils::appInfo()
 {
@@ -133,39 +135,6 @@ void CoreUtils::appendLog( const QByteArray &data, const QString &path )
   }
 }
 
-QDateTime CoreUtils::getLastModifiedFileDateTime( const QString &path )
-{
-  QDateTime lastModified;
-  QDirIterator it( path, QStringList() << QStringLiteral( "*" ), QDir::Files, QDirIterator::Subdirectories );
-  while ( it.hasNext() )
-  {
-    it.next();
-    if ( !MerginApi::isInIgnore( it.fileInfo() ) )
-    {
-      if ( it.fileInfo().lastModified() > lastModified )
-      {
-        lastModified = it.fileInfo().lastModified();
-      }
-    }
-  }
-  return lastModified.toUTC();
-}
-
-int CoreUtils::getProjectFilesCount( const QString &path )
-{
-  int count = 0;
-  QDirIterator it( path, QStringList() << QStringLiteral( "*" ), QDir::Files, QDirIterator::Subdirectories );
-  while ( it.hasNext() )
-  {
-    it.next();
-    if ( !MerginApi::isInIgnore( it.fileInfo() ) )
-    {
-      count++;
-    }
-  }
-  return count;
-}
-
 QString CoreUtils::findUniquePath( const QString &path )
 {
   QFileInfo originalPath( path );
@@ -193,6 +162,25 @@ QString CoreUtils::findUniquePath( const QString &path )
   }
 
   return uniquePath;
+}
+
+QByteArray CoreUtils::calculateChecksum( const QString &filePath )
+{
+  QFile f( filePath );
+  if ( f.open( QFile::ReadOnly ) )
+  {
+    QCryptographicHash hash( QCryptographicHash::Sha1 );
+    QByteArray chunk = f.read( CHECKSUM_CHUNK_SIZE );
+    while ( !chunk.isEmpty() )
+    {
+      hash.addData( chunk );
+      chunk = f.read( CHECKSUM_CHUNK_SIZE );
+    }
+    f.close();
+    return hash.result().toHex();
+  }
+
+  return QByteArray();
 }
 
 QString CoreUtils::createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName )
