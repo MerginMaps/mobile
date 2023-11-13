@@ -22,7 +22,7 @@ struct Changelog
   QString link;
   QDateTime date;
 
-  QString descriptionWithoutImages() { return description.replace(QRegularExpression("<img .*?>"),""); };
+  QString descriptionWithoutImages() { return description.replace( QRegularExpression( "<img .*?>" ), "" ); };
 };
 
 class ChangelogModel : public QAbstractListModel
