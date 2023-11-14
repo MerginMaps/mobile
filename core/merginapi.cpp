@@ -259,12 +259,7 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
-  if ( transaction.downloadQueue.isEmpty() )
-  {
-    // there's nothing to download so just finalize the pull
-    finalizeProjectPull( projectFullName );
-    return;
-  }
+  Q_ASSERT( !transaction.downloadQueue.isEmpty() );
 
   DownloadQueueItem item = transaction.downloadQueue.takeFirst();
 
@@ -289,9 +284,9 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
     request.setRawHeader( "Range", range.toUtf8() );
   }
 
-  Q_ASSERT( !transaction.replyPullItem );
-  transaction.replyPullItem = mManager.get( request );
-  connect( transaction.replyPullItem, &QNetworkReply::finished, this, &MerginApi::downloadItemReplyFinished );
+  QNetworkReply *reply = mManager.get( request );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::downloadItemReplyFinished );
+  transaction.replyPullItems.insert( reply );
 
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Requesting item: " ) + url.toString() +
                   ( !range.isEmpty() ? " Range: " + range : QString() ) );
@@ -384,7 +379,7 @@ void MerginApi::downloadItemReplyFinished()
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
-  Q_ASSERT( r == transaction.replyPullItem );
+  Q_ASSERT( transaction.replyPullItems.contains( r ) );
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -411,11 +406,23 @@ void MerginApi::downloadItemReplyFinished()
     transaction.transferedSize += data.size();
     emit syncProjectStatusChanged( projectFullName, transaction.transferedSize / transaction.totalSize );
 
-    transaction.replyPullItem->deleteLater();
-    transaction.replyPullItem = nullptr;
+    transaction.replyPullItems.remove( r );
+    r->deleteLater();
 
-    // Send another request (or finish)
-    downloadNextItem( projectFullName );
+    if ( !transaction.downloadQueue.isEmpty() )
+    {
+      // one request finished, let's start another one
+      downloadNextItem( projectFullName );
+    }
+    else if ( transaction.replyPullItems.isEmpty() )
+    {
+      // nothing else to download and all requests are finished, we're done
+      finalizeProjectPull( projectFullName );
+    }
+    else
+    {
+      // no more requests to start, but there are pending requests - let's do nothing and wait
+    }
   }
   else
   {
@@ -426,23 +433,46 @@ void MerginApi::downloadItemReplyFinished()
     }
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
-    transaction.replyPullItem->deleteLater();
-    transaction.replyPullItem = nullptr;
+    transaction.replyPullItems.remove( r );
+    r->deleteLater();
 
-    // get rid of the temporary download dir where we may have left some downloaded files
-    QDir( getTempProjectDir( projectFullName ) ).removeRecursively();
-
-    if ( transaction.firstTimeDownload )
+    if ( !transaction.pullItemsAborting )
     {
-      Q_ASSERT( !transaction.projectDir.isEmpty() );
-      QDir( transaction.projectDir ).removeRecursively();
+      // the first failed request will abort all the other pending requests too, and finish pull with error
+      abortPullItems( projectFullName );
+
+      // signal a networking error - we may retry
+      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName );
     }
-
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName );
-
-    finishProjectSync( projectFullName, false );
+    else
+    {
+      // do nothing more: we are already aborting requests and handling finalization in abortPullItems()
+    }
   }
+}
+
+void MerginApi::abortPullItems( const QString &projectFullName )
+{
+  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
+
+  transaction.pullItemsAborting = true;
+
+  CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Aborting pending downloads" ) );
+  for ( QNetworkReply *r : transaction.replyPullItems )
+    r->abort();  // abort will trigger downloadItemReplyFinished slot
+
+  // get rid of the temporary download dir where we may have left some downloaded files
+  QDir( getTempProjectDir( projectFullName ) ).removeRecursively();
+
+  if ( transaction.firstTimeDownload )
+  {
+    Q_ASSERT( !transaction.projectDir.isEmpty() );
+    QDir( transaction.projectDir ).removeRecursively();
+  }
+
+  finishProjectSync( projectFullName, false );
 }
 
 void MerginApi::cacheServerConfig()
@@ -454,7 +484,7 @@ void MerginApi::cacheServerConfig()
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
-  Q_ASSERT( r == transaction.replyPullItem );
+  Q_ASSERT( r == transaction.replyPullServerConfig );
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -463,8 +493,8 @@ void MerginApi::cacheServerConfig()
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Downloaded mergin config (%1 bytes)" ).arg( data.size() ) );
     transaction.config = MerginConfig::fromJson( data );
 
-    transaction.replyPullItem->deleteLater();
-    transaction.replyPullItem = nullptr;
+    transaction.replyPullServerConfig->deleteLater();
+    transaction.replyPullServerConfig = nullptr;
 
     prepareDownloadConfig( projectFullName, true );
   }
@@ -477,8 +507,8 @@ void MerginApi::cacheServerConfig()
     }
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Failed to cache mergin config - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
-    transaction.replyPullItem->deleteLater();
-    transaction.replyPullItem = nullptr;
+    transaction.replyPullServerConfig->deleteLater();
+    transaction.replyPullServerConfig = nullptr;
 
     // get rid of the temporary download dir where we may have left some downloaded files
     CoreUtils::removeDir( getTempProjectDir( projectFullName ) );
@@ -636,11 +666,16 @@ void MerginApi::cancelPull( const QString &projectFullName )
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Aborting project info request" ) );
     transaction.replyPullProjectInfo->abort();  // abort will trigger pullInfoReplyFinished() slot
   }
-  else if ( transaction.replyPullItem )
+  else if ( transaction.replyPullServerConfig )
+  {
+    // we're getting server config info
+    CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Aborting server config download" ) );
+    transaction.replyPullServerConfig->abort();  // abort will trigger cacheServerConfig slot
+  }
+  else if ( !transaction.replyPullItems.isEmpty() )
   {
     // we're already downloading some files
-    CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Aborting pending download" ) );
-    transaction.replyPullItem->abort();  // abort will trigger downloadItemReplyFinished slot
+    abortPullItems( projectFullName );
   }
   else
   {
@@ -1362,13 +1397,13 @@ void MerginApi::checkMerginVersion( QString apiVersion, bool serverSupportsSubsc
   {
     int major = -1;
     int minor = -1;
-    QRegularExpression re;
-    re.setPattern( QStringLiteral( "(?<major>\\d+)[.](?<minor>\\d+)" ) );
-    QRegularExpressionMatch match = re.match( apiVersion );
-    if ( match.hasMatch() )
+
+    bool validVersion = parseVersion( apiVersion, major, minor );
+
+    if ( !validVersion )
     {
-      major = match.captured( "major" ).toInt();
-      minor = match.captured( "minor" ).toInt();
+      setApiVersionStatus( MerginApiStatus::NOT_FOUND );
+      return;
     }
 
     if ( ( MERGIN_API_VERSION_MAJOR == major && MERGIN_API_VERSION_MINOR <= minor ) || ( MERGIN_API_VERSION_MAJOR < major ) )
@@ -1487,6 +1522,21 @@ ProjectDiff MerginApi::localProjectChanges( const QString &projectDir )
   MerginConfig config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
 
   return compareProjectFiles( projectMetadata.files, projectMetadata.files, localFiles, projectDir, config.isValid, config );
+}
+
+bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
+{
+  QRegularExpression re;
+  re.setPattern( QStringLiteral( "(?<major>\\d+)[.](?<minor>\\d+)" ) );
+  QRegularExpressionMatch match = re.match( version );
+  if ( match.hasMatch() )
+  {
+    major = match.captured( "major" ).toInt();
+    minor = match.captured( "minor" ).toInt();
+    return true;
+  }
+
+  return false;
 }
 
 bool MerginApi::hasLocalProjectChanges( const QString &projectDir )
@@ -2289,13 +2339,31 @@ void MerginApi::startProjectPull( const QString &projectFullName )
   }
   transaction.totalSize = totalSize;
 
+  // order download queue from the largest to smallest chunks to better
+  // work with parallel downloads
+  std::sort(
+    transaction.downloadQueue.begin(), transaction.downloadQueue.end(),
+  []( const DownloadQueueItem & a, const DownloadQueueItem & b ) { return a.size > b.size; }
+  );
+
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "%1 update tasks, %2 items to download (total size %3 bytes)" )
                   .arg( transaction.pullTasks.count() )
                   .arg( transaction.downloadQueue.count() )
                   .arg( transaction.totalSize ) );
 
   emit pullFilesStarted();
-  downloadNextItem( projectFullName );
+
+  if ( transaction.downloadQueue.isEmpty() )
+  {
+    finalizeProjectPull( projectFullName );
+  }
+  else
+  {
+    while ( transaction.replyPullItems.count() < 5 && !transaction.downloadQueue.isEmpty() )
+    {
+      downloadNextItem( projectFullName );
+    }
+  }
 }
 
 void MerginApi::prepareDownloadConfig( const QString &projectFullName, bool downloaded )
@@ -2411,9 +2479,9 @@ void MerginApi::requestServerConfig( const QString &projectFullName )
   request.setUrl( url );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
-  Q_ASSERT( !transaction.replyPullItem );
-  transaction.replyPullItem = mManager.get( request );
-  connect( transaction.replyPullItem, &QNetworkReply::finished, this, &MerginApi::cacheServerConfig );
+  Q_ASSERT( !transaction.replyPullServerConfig );
+  transaction.replyPullServerConfig = mManager.get( request );
+  connect( transaction.replyPullServerConfig, &QNetworkReply::finished, this, &MerginApi::cacheServerConfig );
 
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Requesting mergin config: " ) + url.toString() );
 }
@@ -2421,10 +2489,10 @@ void MerginApi::requestServerConfig( const QString &projectFullName )
 QList<DownloadQueueItem> MerginApi::itemsForFileChunks( const MerginFile &file, int version )
 {
   QList<DownloadQueueItem> lst;
-  int from = 0;
+  qint64 from = 0;
   while ( from < file.size )
   {
-    int size = qMin( MerginApi::UPLOAD_CHUNK_SIZE, static_cast<int>( file.size ) - from );
+    qint64 size = qMin( MerginApi::UPLOAD_CHUNK_SIZE, file.size - from );
     lst << DownloadQueueItem( file.path, size, version, from, from + size - 1 );
     from += size;
   }
@@ -3015,9 +3083,9 @@ ProjectDiff MerginApi::compareProjectFiles(
 
           // check if we should download missing files that were previously ignored (e.g. selective sync has been disabled)
           bool previouslyIgnoredButShouldDownload = \
-              config.downloadMissingFiles &&
-              lastSyncConfig.isValid &&
-              MerginApi::excludeFromSync( file.path, lastSyncConfig );
+            config.downloadMissingFiles &&
+            lastSyncConfig.isValid &&
+            MerginApi::excludeFromSync( file.path, lastSyncConfig );
 
           if ( previouslyIgnoredButShouldDownload )
           {
@@ -3420,17 +3488,45 @@ void MerginApi::getServerConfigReplyFinished()
     if ( doc.isObject() )
     {
       QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
+      QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
+      int major = -1;
+      int minor = -1;
+      bool validVersion = parseVersion( apiVersion, major, minor );
+
+      if ( !validVersion )
+      {
+        CoreUtils::log( QStringLiteral( "Server version" ), QStringLiteral( "Cannot parse server version" ) );
+      }
+
       if ( serverType == QStringLiteral( "ee" ) )
       {
         setServerType( MerginServerType::EE );
+        if ( validVersion )
+        {
+          CoreUtils::log( QStringLiteral( "Server version:" ), QStringLiteral( "%1.%2 EE" ).arg( major ).arg( minor ) );
+        }
       }
       else if ( serverType == QStringLiteral( "ce" ) )
       {
         setServerType( MerginServerType::CE );
+        if ( validVersion )
+        {
+          CoreUtils::log( QStringLiteral( "Server version:" ), QStringLiteral( "%1.%2 EE" ).arg( major ).arg( minor ) );
+        }
       }
       else if ( serverType == QStringLiteral( "saas" ) )
       {
         setServerType( MerginServerType::SAAS );
+        if ( validVersion )
+        {
+          CoreUtils::log( QStringLiteral( "Server version:" ), QStringLiteral( "%1.%2 EE" ).arg( major ).arg( minor ) );
+        }
+      }
+
+      // will be dropped support for old servers (mostly CE servers without workspaces)
+      if ( ( MINIMUM_SERVER_VERSION_MAJOR == major && MINIMUM_SERVER_VERSION_MINOR > minor ) || ( MINIMUM_SERVER_VERSION_MAJOR > major ) )
+      {
+        emit migrationRequested( QString( "%1.%2" ).arg( major ).arg( minor ) );
       }
     }
   }
@@ -3440,6 +3536,7 @@ void MerginApi::getServerConfigReplyFinished()
     if ( statusCode == 404 ) // legacy (old) server
     {
       setServerType( MerginServerType::OLD );
+      emit migrationRequested( "legacy" );
     }
     else
     {
@@ -3742,7 +3839,7 @@ bool MerginApi::apiSupportsWorkspaces()
   }
 }
 
-DownloadQueueItem::DownloadQueueItem( const QString &fp, int s, int v, int rf, int rt, bool diff )
+DownloadQueueItem::DownloadQueueItem( const QString &fp, qint64 s, int v, qint64 rf, qint64 rt, bool diff )
   : filePath( fp ), size( s ), version( v ), rangeFrom( rf ), rangeTo( rt ), downloadDiff( diff )
 {
   tempFileName = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );

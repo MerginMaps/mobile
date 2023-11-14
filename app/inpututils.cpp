@@ -93,7 +93,7 @@ bool InputUtils::copyFile( const QString &srcPath, const QString &dstPath )
     return false;
   }
 
-  // https://github.com/MerginMaps/input/issues/418
+  // https://github.com/MerginMaps/mobile/mobile/418
   // does not work for iOS files with format
   // file:assets-library://asset/asset.PNG%3Fid=A53AB989-6354-433A-9CB9-958179B7C14D&ext=PNG
 
@@ -1054,7 +1054,8 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, cons
     return QUrl( path.arg( QLatin1String( "valuerelationcombobox" ) ) );
   }
 
-  QStringList supportedWidgets = { QStringLiteral( "textedit" ),
+  QStringList supportedWidgets = { QStringLiteral( "richtext" ),
+                                   QStringLiteral( "textedit" ),
                                    QStringLiteral( "valuemap" ),
                                    QStringLiteral( "valuerelation" ),
                                    QStringLiteral( "checkbox" ),
@@ -1062,6 +1063,7 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, cons
                                    QStringLiteral( "datetime" ),
                                    QStringLiteral( "range" ),
                                    QStringLiteral( "relation" ),
+                                   QStringLiteral( "spacer" ),
                                    QStringLiteral( "relationreference" )
                                  };
   if ( supportedWidgets.contains( widgetName ) )

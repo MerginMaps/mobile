@@ -10,72 +10,62 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../qml/AccountPage.qml" line="172"/>
+        <location filename="../qml/AccountPage.qml" line="171"/>
         <source>Your subscription was cancelled on %1</source>
         <translation>Vaša pretplata je otkazana %1</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="51"/>
+        <location filename="../qml/AccountPage.qml" line="50"/>
         <source>My Account</source>
         <translation>Moj račun</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="139"/>
+        <location filename="../qml/AccountPage.qml" line="138"/>
         <source>Your subscription will not auto-renew after %1</source>
         <translation>Vaša pretplata neće biti produžena nakon %1</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="151"/>
+        <location filename="../qml/AccountPage.qml" line="150"/>
         <source>Please update your %1billing details%2 as soon as possible</source>
         <translation>Molimo ispravite %1postavke naplate%2 što prije</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="162"/>
+        <location filename="../qml/AccountPage.qml" line="161"/>
         <source>Your next bill will be for %1 on %2</source>
         <translation>Vaš slijedeći račun iznosi %1 na dan %2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="197"/>
+        <location filename="../qml/AccountPage.qml" line="196"/>
         <source>Using %1 / %2</source>
         <translation>Iskorišteno %1/%2</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="215"/>
+        <location filename="../qml/AccountPage.qml" line="213"/>
         <source>Manage Subscription</source>
         <translation>Upravljanje pretplatom</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="215"/>
-        <source>Working...</source>
-        <translation>Radim...</translation>
-    </message>
-    <message>
-        <location filename="../qml/AccountPage.qml" line="215"/>
+        <location filename="../qml/AccountPage.qml" line="213"/>
         <source>Subscription plans</source>
         <translation>Plan pretplate</translation>
     </message>
     <message>
         <location filename="../qml/AccountPage.qml" line="251"/>
-        <source>You can also %1restore%2 your purchases</source>
-        <translation>Možete također %1obnoviti%2 vašu kupnju</translation>
-    </message>
-    <message>
-        <location filename="../qml/AccountPage.qml" line="280"/>
         <source>Sign out</source>
         <translation>Odjava</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="303"/>
+        <location filename="../qml/AccountPage.qml" line="274"/>
         <source>Delete account</source>
         <translation>Izbriši račun</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="334"/>
+        <location filename="../qml/AccountPage.qml" line="305"/>
         <source>Delete account?</source>
         <translation>Izbriši račun?</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="340"/>
+        <location filename="../qml/AccountPage.qml" line="311"/>
         <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
 
 In order to delete your account, enter your username in the field below and click Yes.</source>
@@ -84,22 +74,22 @@ In order to delete your account, enter your username in the field below and clic
 Kako bi izbrisali Vaš račun, unesite korisničko ime u polju ispod i kliknite Da.</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="349"/>
+        <location filename="../qml/AccountPage.qml" line="320"/>
         <source>Enter username</source>
         <translation>Unesi korisničko ime</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="384"/>
+        <location filename="../qml/AccountPage.qml" line="355"/>
         <source>Failed to remove account</source>
         <translation>Neuspješno brisanje korisničkog računa</translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="385"/>
+        <location filename="../qml/AccountPage.qml" line="356"/>
         <source>An error occured while removing your account</source>
         <translation>Došlo je do greške prilikom zatvaranja Vašeg računa </translation>
     </message>
     <message>
-        <location filename="../qml/AccountPage.qml" line="408"/>
+        <location filename="../qml/AccountPage.qml" line="379"/>
         <source>Can not close account because user is the only owner of an organisation.
 
 Please go to the Mergin Maps website to remove it manually.</source>
@@ -237,50 +227,6 @@ Molimo zatvorite ga ručno na Mergin Maps web stranici.</translation>
         <location filename="../qml/misc/AttentionBanner.qml" line="26"/>
         <source>Your attention is required. Please visit the %1Mergin dashboard%2.</source>
         <translation>Pažnja! Molimo posjetite %1Mergin radnu ploču%2.</translation>
-    </message>
-</context>
-<context>
-    <name>AttributeController</name>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="570"/>
-        <location filename="../attributes/attributecontroller.cpp" line="621"/>
-        <source>Default value expression for %1:%2 has parser error: %3</source>
-        <translation>Zadana vrijednost izraza za %1:%2 sadrži grešku provjere sintakse: %3</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="580"/>
-        <location filename="../attributes/attributecontroller.cpp" line="631"/>
-        <source>Default value expression for %1:%2 has evaluation error: %3</source>
-        <translation>Zadana vrijednost izraza za %1:%2 ima grešku procjene: %3</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="591"/>
-        <location filename="../attributes/attributecontroller.cpp" line="642"/>
-        <location filename="../attributes/attributecontroller.cpp" line="1204"/>
-        <source>Value &quot;%1&quot; %4 could not be converted to a compatible value for field %2(%3).</source>
-        <translation>Vrijednost &quot;%1&quot; %4 nije mogla biti pretvorena u odgovarajuću vrijednost za polje %2(%3).</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="901"/>
-        <source>Cannot delete feature</source>
-        <translation>Nije moguće izbrisati objekt</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="524"/>
-        <location filename="../attributes/attributecontroller.cpp" line="957"/>
-        <source>Feature could not be added</source>
-        <translation>Objekt nije mogao biti dodan</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="533"/>
-        <location filename="../attributes/attributecontroller.cpp" line="968"/>
-        <source>Cannot update feature</source>
-        <translation>Nije moguće ažurirati objekt</translation>
-    </message>
-    <message>
-        <location filename="../attributes/attributecontroller.cpp" line="1012"/>
-        <source>Cannot start editing</source>
-        <translation>Nije moguće započeti izmjenu</translation>
     </message>
 </context>
 <context>
@@ -442,37 +388,37 @@ Molimo zatvorite ga ručno na Mergin Maps web stranici.</translation>
 <context>
     <name>ExternalResourceBundle</name>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="35"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="37"/>
         <source>Could not create directory %1.</source>
         <translation>Nije moguće kreirati direktorij %1.</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="128"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="131"/>
         <source>Failed to copy image file to %1.</source>
         <translation>Neuspješno kopiranje datoteke slike u %1.</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="233"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="237"/>
         <source>Open Image</source>
         <translation>Otvori sliku</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="235"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="239"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Datoteke slika (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="247"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="251"/>
         <source>Remove photo reference</source>
         <translation>Ukloniti referencu na fotografiju</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="248"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="252"/>
         <source>Also permanently delete photo from device?</source>
         <translation>Također pobrisati trajno i fotografiju sa uređaja?</translation>
     </message>
     <message>
-        <location filename="../qml/ExternalResourceBundle.qml" line="270"/>
+        <location filename="../qml/ExternalResourceBundle.qml" line="274"/>
         <source>Failed to copy image</source>
         <translation>Neuspješno kopiranje slike</translation>
     </message>
@@ -780,119 +726,119 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="200"/>
+        <location filename="../inpututils.cpp" line="205"/>
         <source>just now</source>
         <translation>upravo</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="205"/>
+        <location filename="../inpututils.cpp" line="210"/>
         <source>%1 minutes ago</source>
         <translation>prije %1 minuta</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="205"/>
+        <location filename="../inpututils.cpp" line="210"/>
         <source>%1 minute ago</source>
         <translation>prije %1 minute</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="210"/>
+        <location filename="../inpututils.cpp" line="215"/>
         <source>%1 hours ago</source>
         <translation>prije %1 sati</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="210"/>
+        <location filename="../inpututils.cpp" line="215"/>
         <source>%1 hour ago</source>
         <translation>prije %1 sata</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="214"/>
         <location filename="../inpututils.cpp" line="219"/>
+        <location filename="../inpututils.cpp" line="224"/>
         <source>%1 days ago</source>
         <translation>prije %1 dana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="214"/>
         <location filename="../inpututils.cpp" line="219"/>
+        <location filename="../inpututils.cpp" line="224"/>
         <source>%1 day ago</source>
         <translation>prije %1 dana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="224"/>
+        <location filename="../inpututils.cpp" line="229"/>
         <source>%1 weeks ago</source>
         <translation>prije %1 tjedana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="224"/>
+        <location filename="../inpututils.cpp" line="229"/>
         <source>%1 week ago</source>
         <translation>prije %1 tjedna</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="229"/>
+        <location filename="../inpututils.cpp" line="234"/>
         <source>%1 months ago</source>
         <translation>prije %1 mjeseci</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="229"/>
+        <location filename="../inpututils.cpp" line="234"/>
         <source>%1 month ago</source>
         <translation>prije %1 mjeseca</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="234"/>
+        <location filename="../inpututils.cpp" line="239"/>
         <source>%1 years ago</source>
         <translation>prije %1 godina</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="234"/>
+        <location filename="../inpututils.cpp" line="239"/>
         <source>%1 year ago</source>
         <translation>prije %1 godine</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1423"/>
+        <location filename="../inpututils.cpp" line="1430"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rezolucija zaslona: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1424"/>
+        <location filename="../inpututils.cpp" line="1431"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI zaslona: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1425"/>
+        <location filename="../inpututils.cpp" line="1432"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>veličina zaslona: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1426"/>
+        <location filename="../inpututils.cpp" line="1433"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>prijavljeni omjer piksela zaslona uređaja: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1427"/>
+        <location filename="../inpututils.cpp" line="1434"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>izračunati omjer piksela zaslona uređaja: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1428"/>
+        <location filename="../inpututils.cpp" line="1435"/>
         <source>used dp scale: %1</source>
         <translation>korišteno dp mjerilo: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1957"/>
+        <location filename="../inpututils.cpp" line="1964"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Morate dodati barem %1 točku u svakom od segmenata.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1961"/>
+        <location filename="../inpututils.cpp" line="1968"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Morate dodati barem %1 točku(točaka).</translation>
     </message>
@@ -1035,6 +981,24 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/LoginForm.qml" line="244"/>
         <source>Forgot password?</source>
         <translation>Zaboravljena zaporka?</translation>
+    </message>
+</context>
+<context>
+    <name>MMComponent_reachedDataLimit</name>
+    <message>
+        <location filename="../qmlV2/component/MMComponent_reachedDataLimit.qml" line="41"/>
+        <source>Data to sync</source>
+        <translation>Podaci za sinkronizaciju</translation>
+    </message>
+    <message>
+        <location filename="../qmlV2/component/MMComponent_reachedDataLimit.qml" line="67"/>
+        <source>Using</source>
+        <translation>Koristi</translation>
+    </message>
+    <message>
+        <location filename="../qmlV2/component/MMComponent_reachedDataLimit.qml" line="97"/>
+        <source>Plan</source>
+        <translation>Plan</translation>
     </message>
 </context>
 <context>
@@ -1725,12 +1689,12 @@ Stisnite &apos;Da&apos; za prijenos.</translation>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="95"/>
+        <location filename="../projectwizard.cpp" line="93"/>
         <source>Project name contains invalid characters</source>
         <translation>Naziv projekta sadrži nevažeće znakove</translation>
     </message>
     <message>
-        <location filename="../projectwizard.cpp" line="139"/>
+        <location filename="../projectwizard.cpp" line="137"/>
         <source>Project %1 created</source>
         <translation>Projekt %1 stvoren</translation>
     </message>
@@ -1775,57 +1739,6 @@ Stisnite &apos;Da&apos; za prijenos.</translation>
         <location filename="../projectsmodel.cpp" line="102"/>
         <source>Updated %1</source>
         <translation>Ažurirano %1</translation>
-    </message>
-</context>
-<context>
-    <name>Purchasing</name>
-    <message>
-        <location filename="../purchasing.cpp" line="526"/>
-        <source>Failed to process payment details.%1Subscription is not purchased.</source>
-        <translation>Neuspjela obrada podataka za plaćanje.%1Pretplata nije kupljena.</translation>
-    </message>
-    <message>
-        <location filename="../purchasing.cpp" line="534"/>
-        <source>Successfully restored your subscription</source>
-        <translation>Uspješno obnovljena pretplata</translation>
-    </message>
-    <message>
-        <location filename="../purchasing.cpp" line="536"/>
-        <source>Successfully purchased subscription</source>
-        <translation>Uspješno kupljena pretplata</translation>
-    </message>
-    <message>
-        <location filename="../purchasing.cpp" line="548"/>
-        <source>Failed to purchase subscription</source>
-        <translation>Neuspješni pokušaj kupnje pretplate</translation>
-    </message>
-    <message>
-        <location filename="../purchasing.cpp" line="546"/>
-        <source>Unable to restore your subscription</source>
-        <translation>Nije moguće obnoviti pretplatu</translation>
-    </message>
-</context>
-<context>
-    <name>PurchasingPlan</name>
-    <message>
-        <location filename="../purchasing.cpp" line="120"/>
-        <source>Monthly subscription</source>
-        <translation>Mjesečna pretplata</translation>
-    </message>
-    <message>
-        <location filename="../purchasing.cpp" line="124"/>
-        <source>Annual subscription</source>
-        <translation>Godišnja pretplata</translation>
-    </message>
-    <message>
-        <location filename="../purchasing.cpp" line="129"/>
-        <source>month</source>
-        <translation>mjesec</translation>
-    </message>
-    <message>
-        <location filename="../purchasing.cpp" line="133"/>
-        <source>year</source>
-        <translation>godina</translation>
     </message>
 </context>
 <context>
@@ -2413,42 +2326,37 @@ Stisnite &apos;Da&apos; za prijenos.</translation>
         <translation>Upravljaj računom</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="238"/>
-        <source>You can also %1restore%2 your purchase.</source>
-        <translation>Možete također %1obnoviti%2 vašu kupnju</translation>
-    </message>
-    <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="259"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="232"/>
         <source>Account</source>
         <translation>Račun</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="268"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="241"/>
         <source>Username</source>
         <translation>Korisničko ime</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="275"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="248"/>
         <source>Email</source>
         <translation>Email</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="285"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="258"/>
         <source>Sign out</source>
         <translation>Odjava</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="291"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="264"/>
         <source>Delete account</source>
         <translation>Izbriši račun</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="321"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="294"/>
         <source>Delete account?</source>
         <translation>Izbrisati račun?</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="327"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="300"/>
         <source>This action will delete your Mergin Maps account with all your projects, both on the device and on the server. This action cannot be undone. If you have an Apple subscription you need to cancel it manually.
 
 In order to delete your account, enter your username in the field below and click Yes.</source>
@@ -2457,22 +2365,22 @@ In order to delete your account, enter your username in the field below and clic
 Kako bi izbrisali Vaš račun, unesite korisničko ime u polju ispod i kliknite Da.</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="336"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="309"/>
         <source>Enter username</source>
         <translation>Unesi korisničko ime</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="371"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="344"/>
         <source>Failed to remove account</source>
         <translation>Neuspješno brisanje korisničkog računa</translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="372"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="345"/>
         <source>An error occured while removing your account</source>
         <translation>Došlo je do greške prilikom zatvaranja Vašeg računa </translation>
     </message>
     <message>
-        <location filename="../qml/WorkspaceAccountPage.qml" line="396"/>
+        <location filename="../qml/WorkspaceAccountPage.qml" line="369"/>
         <source>Can not close account because user is the only owner of an organisation.
 
 Please go to the Mergin Maps website to remove it manually.</source>
@@ -2484,17 +2392,17 @@ Molimo zatvorite ga ručno na Mergin Maps web stranici.</translation>
 <context>
     <name>inputexternalresource</name>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="236"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="209"/>
         <source>Take a photo</source>
         <translation>Slikaj</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="278"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="247"/>
         <source>From gallery</source>
         <translation>Iz galerije</translation>
     </message>
     <message>
-        <location filename="../qml/editor/inputexternalresource.qml" line="299"/>
+        <location filename="../qml/editor/inputexternalresource.qml" line="268"/>
         <source>Image is not available: </source>
         <translation>Slika nije dostupna:</translation>
     </message>

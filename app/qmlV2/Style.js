@@ -72,6 +72,10 @@ const checkmarkIcon = "qrc:/Checkmark.svg"
 const closeButtonIcon = "qrc:/CloseButton.svg"
 const closeIcon = "qrc:/Close.svg"
 const waitingIcon = "qrc:/Waiting.svg"
+const deleteIcon = "qrc:/Delete.svg"
+const doneIcon = "qrc:/Done.svg"
+const editIcon = "qrc:/Edit.svg"
+const moreIcon = "qrc:/More.svg"
 
 // Images
 const uploadImage = "qrc:/UploadImage.svg"
@@ -83,6 +87,14 @@ const commonSpacing = 20 * __dp
 // Notification
 const notificationRadius = 12 * __dp
 const notificationSpace = 3 * __dp
+
+// Toolbar
+const toolbarHeight = 89 * __dp
+const minimumToolbarButtonWidth = 100 * __dp
+const menuDrawerHeight = 67 * __dp
+const toolbarLongButtonWidth = 50 * __dp
+const minimumToolbarLongButtonWidth = 200 * __dp
+const maximumToolbarLongButtonWidth = 500 * __dp
 
 function dynamicText() {
   return "Dynamic text"

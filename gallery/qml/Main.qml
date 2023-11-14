@@ -132,6 +132,10 @@ ApplicationWindow {
           title: "Drawers"
           source: "DrawerPage.qml"
         }
+        ListElement {
+          title: "Toolbars"
+          source: "ToolbarPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}

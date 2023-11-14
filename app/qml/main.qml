@@ -24,6 +24,7 @@ import "./popups"
 
 ApplicationWindow {
     id: window
+    
     visible: true
     width:  __appwindowwidth
     height: __appwindowheight
@@ -623,6 +624,27 @@ ApplicationWindow {
         }
     }
 
+    MessageDialog {
+      id: migrationDialog
+
+      property string version
+
+      onAccepted: migrationDialog.close()
+      title: qsTr("Your server will soon be out of date")
+      text: qsTr("Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.")
+      buttons: MessageDialog.Close | MessageDialog.Help | MessageDialog.Ignore
+      onButtonClicked: function(clickedButton) {
+        if (clickedButton === MessageDialog.Help) {
+          Qt.openUrlExternally(__inputHelp.migrationGuides)
+        }
+        else if (clickedButton === MessageDialog.Ignore) {
+          // don't show this dialog for this version
+          __appSettings.ignoreMigrateVersion = version
+        }
+        close()
+      }
+    }
+
     FormsStackManager {
       id: formsStackManager
 
@@ -751,6 +773,13 @@ ApplicationWindow {
           //! if current project has been updated, refresh canvas
           if ( projectFullName === projectPanel.activeProjectId ) {
             map.mapSettings.extentChanged()
+          }
+        }
+
+        function onMigrationRequested( version ) {
+          if( __appSettings.ignoreMigrateVersion !== version ) {
+            migrationDialog.version = version
+            migrationDialog.open()
           }
         }
     }

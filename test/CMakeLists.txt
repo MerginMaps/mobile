@@ -11,7 +11,6 @@ set(MM_TESTS
     testUtils
     testAttributePreviewController
     testMerginApi
-    testPurchasing
     testAttributeController
     testIdentifyKit
     testPosition

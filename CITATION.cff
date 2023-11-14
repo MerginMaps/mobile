@@ -1,4 +1,4 @@
-cff-version: 2.4.0
+cff-version: 2.5.0
 message: "If you use this software, please cite it as below."
 authors:
 - family-names: "Martin"
@@ -7,7 +7,7 @@ authors:
   given-names: "Petrik"
 - family-names: "Tomas"
   given-names: "Mizera"
-title: "Mergin Maps Input app"
+title: "Mergin Maps mobile app"
 doi: 10.5281/zenodo.6375198
 date-released: 2017-12-18
-url: "https://github.com/MerginMaps/input"
+url: "https://github.com/MerginMaps/mobile"

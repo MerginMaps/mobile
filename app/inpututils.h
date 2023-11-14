@@ -470,7 +470,7 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );
 
     //! Creates featureLayerPair from geometry and layer, evaluates its expressions and returns it.
-    Q_INVOKABLE static FeatureLayerPair createFeatureLayerPair( QgsVectorLayer *layer, const QgsGeometry &geometry, VariablesManager *variablesmanager, QgsExpressionContextScope *additionalScope = nullptr );
+    Q_INVOKABLE static FeatureLayerPair createFeatureLayerPair( QgsVectorLayer *layer = nullptr, const QgsGeometry &geometry = QgsGeometry(), VariablesManager *variablesmanager = nullptr, QgsExpressionContextScope *additionalScope = nullptr );
 
     Q_INVOKABLE static void createEditBuffer( QgsVectorLayer *layer );
 
