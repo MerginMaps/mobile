@@ -393,7 +393,7 @@ int main( int argc, char *argv[] )
   tests.parseArgs( argc, argv );
 #endif
   qDebug() << "Mergin Maps Input App" << version << InputUtils::appPlatform() << "(" << CoreUtils::appVersionCode() << ")";
-  qDebug() << "Built with QGIS version " << VERSION_INT;
+  qDebug() << "Built with QGIS " << VERSION_INT << " and QT " << qVersion();
 
   // Set/Get enviroment
   QString dataDir = getDataDir();
@@ -413,6 +413,8 @@ int main( int argc, char *argv[] )
   }
 
   CoreUtils::setLogFilename( projectDir + "/.logs" );
+  CoreUtils::log( QStringLiteral( "Input" ), QStringLiteral( "Application has started: %1 (%2)" ).arg( version ).arg( CoreUtils::appVersionCode() ) );
+
   setEnvironmentQgisPrefixPath();
 
   // Initialize translations
