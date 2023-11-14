@@ -18,8 +18,11 @@ Item {
   property alias text: textField.text
   property alias placeholderText: textField.placeholderText
   property url iconSource: ""
+  required property string buttonText
   property string warningMsg
   property string errorMsg
+
+  signal clicked
 
   width: 280 * __dp
   height: rect.height + messageItem.height
@@ -87,7 +90,7 @@ Item {
         y: 2 * __dp
         width: control.width - 2 * row.leftPadding
                - (leftIcon.visible ? leftIcon.width : 0)
-               - (clearButton.visible ? clearButton.width : 0)
+               - (button.visible ? button.width : 0)
         height: rect.height - 4 * __dp
         color: control.enabled ? Style.night : Style.mediumGreen
         placeholderTextColor: Style.night_6
@@ -99,21 +102,39 @@ Item {
         }
       }
 
-      MMIcon {
-        id: clearButton
+      Button {
+        id: button
 
-        property bool pressed: false
-        source: Style.xMarkIcon
-        color: control.enabled ? Style.forest : Style.mediumGreen
-        width: visible ? height : 0
-        height: rect.height
-        visible: textField.activeFocus && textField.text.length>0
+        anchors.verticalCenter: parent.verticalCenter
 
-        MouseArea {
-          anchors.fill: parent
-          onClicked: textField.text = ""
+        contentItem: Text {
+          anchors.centerIn: button
+          font: Qt.font(Style.t5)
+          text: control.buttonText
+          leftPadding: 2 * __dp
+          rightPadding: 2 * __dp
+          topPadding: 2 * __dp
+          bottomPadding: 2 * __dp
+          color: Style.deepOcean
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          elide: Text.ElideRight
         }
+
+        background: Rectangle {
+          color: button.enabled ? Style.grass : Style.mediumGreen
+          radius: height / 2
+        }
+
+        onClicked: control.clicked()
       }
     }
+  }
+
+  // add whole text to clipboard
+  function textToClipboard() {
+    textField.selectAll()
+    textField.copy()
+    textField.deselect()
   }
 }

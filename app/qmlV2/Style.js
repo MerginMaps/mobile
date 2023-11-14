@@ -70,6 +70,8 @@ const arrowDownIcon = "qrc:/Arrow Down.svg"
 const qrCodeIcon = "qrc:/QR Code.svg"
 const checkmarkIcon = "qrc:/Checkmark.svg"
 const closeButtonIcon = "qrc:/CloseButton.svg"
+const closeIcon = "qrc:/Close.svg"
+const waitingIcon = "qrc:/Waiting.svg"
 const deleteIcon = "qrc:/Delete.svg"
 const doneIcon = "qrc:/Done.svg"
 const editIcon = "qrc:/Edit.svg"
@@ -90,6 +92,10 @@ const commonSpacing = 20 * __dp
 
 // Map items
 const mapItemHeight = 50 * __dp
+
+// Notification
+const notificationRadius = 12 * __dp
+const notificationSpace = 3 * __dp
 
 // Toolbar
 const toolbarHeight = 89 * __dp
