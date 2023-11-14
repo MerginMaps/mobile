@@ -133,6 +133,10 @@ ApplicationWindow {
           source: "DrawerPage.qml"
         }
         ListElement {
+          title: "Map"
+          source: "MapPage.qml"
+        }
+        ListElement {
           title: "Toolbars"
           source: "ToolbarPage.qml"
         }

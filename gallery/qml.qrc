@@ -27,6 +27,10 @@
         <file>qml/pages/ChecksPage.qml</file>
         <file>../app/qmlV2/component/MMComponent_reachedDataLimit.qml</file>
         <file>../app/qmlV2/component/MMProgressBar.qml</file>
+        <file>qml/pages/MapPage.qml</file>
+        <file>../app/qmlV2/component/MMMapButton.qml</file>
+        <file>../app/qmlV2/component/MMShadow.qml</file>
+        <file>../app/qmlV2/component/MMMapLabel.qml</file>
         <file>../app/qmlV2/component/MMPasswordInput.qml</file>
         <file>../app/qmlV2/component/MMButtonInput.qml</file>
         <file>../app/qmlV2/component/MMToolbarButton.qml</file>
