@@ -64,7 +64,7 @@ Rectangle {
   Component {
     id: componentMore
     MMToolbarButton {
-      text: "..."
+      text: qsTr("More")
       iconSource: Style.deleteIcon
       onClicked: menu.visible = true
     }
