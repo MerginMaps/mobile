@@ -104,7 +104,7 @@ void NotificationModel::timerFired()
 {
   for ( Notification &notification : mNotifications )
   {
-    if ( notification.canBeRemoved() )
+    if ( notification.isRemovableAfterDecrement() )
       remove( notification.id() );
   }
 }
