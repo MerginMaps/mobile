@@ -29,9 +29,9 @@ find_package(
 qt_standard_project_setup()
 qt_policy(SET QTP0001 NEW)
 
-set(GALLERY_HDRS helper.h)
+set(GALLERY_HDRS helper.h notificationmodel.h)
 
-set(GALLERY_SRCS helper.cpp)
+set(GALLERY_SRCS helper.cpp notificationmodel.cpp)
 
 if (IOS OR ANDROID)
   add_compile_definitions(MOBILE_OS)
