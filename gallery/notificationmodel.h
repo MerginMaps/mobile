@@ -50,7 +50,7 @@ class Notification
     QString message() { return mMessage; }
     NotificationType::MessageType type() { return mType; }
     NotificationType::IconType icon() { return mIcon; }
-    bool canBeRemoved() { return ( mInterval-- == 0 ); }
+    bool isRemovableAfterDecrement() { return ( mInterval-- <= 0 ); }
 
   private:
     uint mId;
