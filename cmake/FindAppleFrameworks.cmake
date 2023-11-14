@@ -20,10 +20,6 @@ set(APPLE_FRAMEWORKS
     CoreLocation
 )
 
-if (HAVE_APPLE_PURCHASING)
-  set(APPLE_FRAMEWORKS ${APPLE_FRAMEWORKS} Foundation StoreKit)
-endif ()
-
 foreach (framework ${APPLE_FRAMEWORKS})
   find_library(APPLE_${framework}_LIBRARY NAMES ${framework})
   set(APPLE_REQUIRED_VARS ${APPLE_REQUIRED_VARS} APPLE_${framework}_LIBRARY)

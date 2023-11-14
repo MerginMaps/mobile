@@ -45,12 +45,10 @@
 #include "merginservertype.h"
 #include "merginsubscriptioninfo.h"
 #include "merginsubscriptionstatus.h"
-#include "merginsubscriptiontype.h"
 #include "merginprojectstatusmodel.h"
 #include "layersproxymodel.h"
 #include "layersmodel.h"
 #include "activelayer.h"
-#include "purchasing.h"
 #include "merginuserauth.h"
 #include "merginuserinfo.h"
 #include "variablesmanager.h"
@@ -128,6 +126,7 @@
 #include "workspacesproxymodel.h"
 #include "invitationsmodel.h"
 #include "invitationsproxymodel.h"
+#include "changelogmodel.h"
 
 #include "streamingintervaltype.h"
 
@@ -257,7 +256,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
   qmlRegisterUncreatableType<MerginUserInfo>( "lc", 1, 0, "MerginUserInfo", "" );
   qmlRegisterUncreatableType<MerginSubscriptionInfo>( "lc", 1, 0, "MerginSubscriptionInfo", "" );
-  qmlRegisterUncreatableType<PurchasingPlan>( "lc", 1, 0, "MerginPlan", "" );
   qmlRegisterUncreatableType<ActiveProject>( "lc", 1, 0, "ActiveProject", "" );
   qmlRegisterUncreatableType<SynchronizationManager>( "lc", 1, 0, "SynchronizationManager", "" );
   qmlRegisterUncreatableType<SynchronizationError>( "lc", 1, 0, "SyncError", "SyncError Enum" );
@@ -265,7 +263,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginApiStatus>( "lc", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginServerType>( "lc", 1, 0, "MerginServerType", "MerginServerType Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionStatus>( "lc", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
-  qmlRegisterUncreatableType<MerginSubscriptionType>( "lc", 1, 0, "MerginSubscriptionType", "MerginSubscriptionType Enum" );
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "lc", 1, 0, "MerginProjectStatusModel", "Enum" );
   qmlRegisterUncreatableType<LayersModel>( "lc", 1, 0, "LayersModel", "" );
   qmlRegisterUncreatableType<LayersProxyModel>( "lc", 1, 0, "LayersProxyModel", "" );
@@ -283,6 +280,7 @@ void initDeclarative()
   qmlRegisterType<WorkspacesProxyModel>( "lc", 1, 0, "WorkspacesProxyModel" );
   qmlRegisterType<InvitationsModel>( "lc", 1, 0, "InvitationsModel" );
   qmlRegisterType<InvitationsProxyModel>( "lc", 1, 0, "InvitationsProxyModel" );
+  qmlRegisterType<ChangelogModel>( "lc", 1, 0, "ChangelogModel" );
   qmlRegisterUncreatableType<AttributePreviewModel>( "lc", 1, 0, "AttributePreviewModel", "" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
   qRegisterMetaType< FeatureLayerPair >( "FeatureLayerPair" );
@@ -397,7 +395,7 @@ int main( int argc, char *argv[] )
   tests.parseArgs( argc, argv );
 #endif
   qDebug() << "Mergin Maps Input App" << version << InputUtils::appPlatform() << "(" << CoreUtils::appVersionCode() << ")";
-  qDebug() << "Built with QGIS version " << VERSION_INT;
+  qDebug() << "Built with QGIS " << VERSION_INT << " and QT " << qVersion();
 
   // Set/Get enviroment
   QString dataDir = getDataDir();
@@ -417,6 +415,8 @@ int main( int argc, char *argv[] )
   }
 
   CoreUtils::setLogFilename( projectDir + "/.logs" );
+  CoreUtils::log( QStringLiteral( "Input" ), QStringLiteral( "Application has started: %1 (%2)" ).arg( version ).arg( CoreUtils::appVersionCode() ) );
+
   setEnvironmentQgisPrefixPath();
 
   // Initialize translations
@@ -491,7 +491,6 @@ int main( int argc, char *argv[] )
 
   ActiveLayer al;
   ActiveProject activeProject( as, al, recordingLpm, localProjectsManager );
-  std::unique_ptr<Purchasing> purchasing( new Purchasing( ma.get() ) );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
 
@@ -570,7 +569,7 @@ int main( int argc, char *argv[] )
   if ( tests.testingRequested() )
   {
     tests.initTestDeclarative();
-    tests.init( ma.get(), purchasing.get(), &iu, vm.get(), &pk, &as );
+    tests.init( ma.get(), &iu, vm.get(), &pk, &as );
     return tests.runTest();
   }
 #endif
@@ -611,7 +610,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
   engine.rootContext()->setContextProperty( "__recordingLayersModel", &recordingLpm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
-  engine.rootContext()->setContextProperty( "__purchasing", purchasing.get() );
   engine.rootContext()->setContextProperty( "__projectWizard", &pw );
   engine.rootContext()->setContextProperty( "__localProjectsManager", &localProjectsManager );
   engine.rootContext()->setContextProperty( "__variablesManager", vm.get() );

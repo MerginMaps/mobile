@@ -656,7 +656,7 @@ void TestAttributeController::testFieldsOutsideForm()
 
   const TabItem *tab = controller.tabItem( 0 );
   const QVector<QUuid> items = tab->formItems();
-  QCOMPARE( items.size(), 3 );
+  QCOMPARE( items.size(), 8 );
 
   struct testcase
   {
@@ -735,4 +735,103 @@ void TestAttributeController::testPhotoRenaming()
   QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
   QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
   QCOMPARE( controller.featureLayerPair().feature().attribute( 3 ), QStringLiteral( "image_test.jpg" ) );
+}
+
+void TestAttributeController::testHtmlAndTextWidgets()
+{
+  QString projectDir = TestUtils::testDataDir() + "/expressions";
+  QString projectName = "project.qgz";
+
+  QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "points" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  QgsFeature feat;
+  feat.setValid( true );
+  feat.setFields( surveyLayer->fields(), true );
+  FeatureLayerPair pair( feat, surveyLayer );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+
+  QCOMPARE( controller.hasValidationErrors(), false );
+
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+  QCOMPARE( items.size(), 8 );
+
+  const auto htmlItem = controller.formItem( items.at( 3 ) );
+  QCOMPARE( htmlItem->editorWidgetType(), "richtext" );
+  QCOMPARE( htmlItem->editorWidgetConfig().value( "UseHtml" ).toBool(), true );
+
+  const auto textItem = controller.formItem( items.at( 4 ) );
+  QCOMPARE( textItem->editorWidgetType(), "richtext" );
+  QCOMPARE( textItem->editorWidgetConfig().value( "UseHtml" ).toBool(), false );
+
+  const auto spacerItem = controller.formItem( items.at( 5 ) );
+  QCOMPARE( spacerItem->editorWidgetType(), "spacer" );
+  QCOMPARE( spacerItem->editorWidgetConfig().value( "IsHLine" ).toBool(), true );
+
+  const auto hLineItem = controller.formItem( items.at( 6 ) );
+  QCOMPARE( hLineItem->editorWidgetType(), "spacer" );
+  QCOMPARE( hLineItem->editorWidgetConfig().value( "IsHLine" ).toBool(), false );
+
+  // update one field on which both HTML and Text widgets depends
+  auto field = controller.formItem( items.at( 0 ) );
+  QCOMPARE( field->name(), "text" );
+  controller.setFormValue( field->id(), "my new text" );
+
+  QCOMPARE( htmlItem->rawValue(), "<span>my new text on update</span>" );
+  QCOMPARE( textItem->rawValue(), "my new text on update" );
+}
+
+void TestAttributeController::testVirtualFields()
+{
+  QString projectDir = TestUtils::testDataDir() + "/expressions";
+  QString projectName = "project.qgz";
+
+  QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "points" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  QgsFeature feat;
+  feat.setValid( true );
+  feat.setFields( surveyLayer->fields(), true );
+  FeatureLayerPair pair( feat, surveyLayer );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+
+  QCOMPARE( controller.hasValidationErrors(), false );
+
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+  QCOMPARE( items.size(), 8 );
+
+  // A/ virtual field in form
+  const auto virtualFieldItem = controller.formItem( items.at( 7 ) );
+  QCOMPARE( virtualFieldItem->name(), "vitualfield2" );
+
+  // update  field on which virtualField2 in form depends ("num" field)
+  auto field = controller.formItem( items.at( 2 ) );
+  QCOMPARE( field->name(), "num" );
+  controller.setFormValue( field->id(), 333 );
+  QCOMPARE( virtualFieldItem->rawValue(), 333 );
+
+  // B/ virtual field not in form
+  QCOMPARE( controller.featureLayerPair().feature().fieldNameIndex( "vitualfield2" ), 6 );
+  // update  field on which virtualField in form depends ("text" field)
+  auto field2 = controller.formItem( items.at( 0 ) );
+  QCOMPARE( field2->name(), "text" );
+
+  controller.setFormValue( field2->id(), "my new text" );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 1 ), "my new text" );
+  controller.setFormValue( field2->id(), "my new text2" );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 1 ), "my new text2" );
 }

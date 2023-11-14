@@ -16,25 +16,26 @@
 
 #include "attributedata.h"
 
-FormItem::FormItem(
-  const QUuid &id,
-  const QgsField &field,
-  const QString &groupName,
-  const int parentTabId,
-  FormItem::FormItemType type,
-  const QString &name,
-  bool isEditable,
-  const QgsEditorWidgetSetup &editorWidgetSetup,
-  int fieldIndex,
-  const QgsExpression &visibilityExpression,
-  const QgsRelation &relation
-)
+FormItem::FormItem( const QUuid &id,
+                    const QgsField &field,
+                    const QString &groupName,
+                    const int parentTabId,
+                    FormItem::FormItemType type,
+                    const QString &name,
+                    bool showName,
+                    bool isEditable,
+                    const QgsEditorWidgetSetup &editorWidgetSetup,
+                    int fieldIndex,
+                    const QgsExpression &visibilityExpression,
+                    const QgsRelation &relation
+                  )
   : mId( id )
   , mField( field )
   , mGroupName( groupName )
   , mParentTabId( parentTabId )
   , mType( type )
   , mName( name )
+  , mShowName( showName )
   , mIsEditable( isEditable )
   , mEditorWidgetSetup( editorWidgetSetup )
   , mFieldIndex( fieldIndex )
@@ -43,57 +44,125 @@ FormItem::FormItem(
 {
 }
 
-FormItem *FormItem::createFieldItem(
-  const QUuid &id,
-  const QgsField &field,
-  const QString &groupName,
-  int parentTabId,
-  FormItemType type,
-  const QString &name,
-  bool isEditable,
-  const QgsEditorWidgetSetup
-  &editorWidgetSetup,
-  int fieldIndex,
-  const QgsExpression &visibilityExpression
-)
+FormItem *FormItem::createFieldItem( const QUuid &id,
+                                     const QgsField &field,
+                                     const QString &groupName,
+                                     int parentTabId,
+                                     const QString &name, bool showName,
+                                     bool isEditable,
+                                     const QgsEditorWidgetSetup
+                                     &editorWidgetSetup,
+                                     int fieldIndex,
+                                     const QgsExpression &visibilityExpression
+                                   )
 {
   return new FormItem(
            id,
            field,
            groupName,
            parentTabId,
-           type,
+           FormItem::Field,
            name,
+           showName,
            isEditable,
            editorWidgetSetup,
            fieldIndex,
-           visibilityExpression
+           visibilityExpression,
+           QgsRelation()
          );
 }
 
-FormItem *FormItem::createRelationItem(
-  const QUuid &id,
-  const QString &groupName,
-  int parentTabId,
-  FormItemType type,
-  const QString &name,
-  const QgsRelation &relation
-)
+FormItem *FormItem::createRelationItem( const QUuid &id,
+                                        const QString &groupName,
+                                        int parentTabId,
+                                        const QString &name,
+                                        bool showName,
+                                        const QgsExpression &visibilityExpression,
+                                        const QgsRelation &relation
+                                      )
 {
   FormItem *item = new FormItem(
     id,
     QgsField(),
     groupName,
     parentTabId,
-    type,
+    FormItem::Relation,
     name,
+    showName,
     true,
     QgsEditorWidgetSetup(),
     -1,
-    QgsExpression(),
+    visibilityExpression,
     relation
   );
   return item;
+}
+
+FormItem *FormItem::createSpacerItem(
+  const QUuid &id,
+  const QString &groupName,
+  int parentTabId,
+  const QString &name,
+  bool isHLine,
+  const QgsExpression &visibilityExpression
+)
+{
+  QVariantMap map;
+  map["IsHLine"] = isHLine;
+  map["ConfigType"] = "merginmaps-custom-config";
+  QgsEditorWidgetSetup config( "spacer", map );
+
+  return new FormItem(
+           id,
+           QgsField(),
+           groupName,
+           parentTabId,
+           FormItem::Spacer,
+           name,
+           false, // label is never shown for spacer
+           false,
+           config,
+           -1,
+           visibilityExpression,
+           QgsRelation()
+         );
+}
+
+FormItem *FormItem::createRichTextItem(
+  const QUuid &id,
+  const QString &groupName,
+  int parentTabId,
+  const QString &name,
+  bool showName,
+  const QString &text,
+  bool isHtml,
+  const QgsExpression &visibilityExpression
+)
+{
+  QVariantMap map;
+  map["UseHtml"] = isHtml;
+  map["Definition"] = text;
+  map["ConfigType"] = "merginmaps-custom-config";
+
+  QgsEditorWidgetSetup config( "richtext", map );
+
+  FormItem *fi = new FormItem(
+    id,
+    QgsField(),
+    groupName,
+    parentTabId,
+    FormItem::RichText,
+    name,
+    showName,
+    false,
+    config,
+    -1,
+    visibilityExpression,
+    QgsRelation()
+  );
+
+  fi->setRawValue( text );
+  return fi;
 }
 
 FormItem::FormItemType FormItem::type() const
@@ -202,6 +271,11 @@ void FormItem::setOriginalValue( const QVariant &originalValue )
 QgsRelation FormItem::relation() const
 {
   return mRelation;
+}
+
+bool FormItem::showName() const
+{
+  return mShowName;
 }
 
 QVariant FormItem::rawValue() const

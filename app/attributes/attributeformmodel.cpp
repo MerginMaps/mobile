@@ -54,6 +54,8 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
   {
     case Name:
       return item->name();
+    case ShowName:
+      return item->showName();
     case Type:
       return item->type();
     case AttributeValue:
@@ -116,6 +118,7 @@ QHash<int, QByteArray> AttributeFormModel::roleNames() const
 
   roles[Type] = QByteArray( "Type" );
   roles[Name] = QByteArray( "Name" );
+  roles[ShowName] = QByteArray( "ShowName" );
   roles[AttributeValue] = QByteArray( "AttributeValue" );
   roles[RawValueIsNull] = QByteArray( "RawValueIsNull" );
   roles[AttributeEditable] = QByteArray( "AttributeEditable" );

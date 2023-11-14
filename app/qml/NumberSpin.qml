@@ -66,7 +66,7 @@ Item {
         rotation: imageIncrease.rotation
     }
 
-//  Click areas enlarging clickable areas for arrows, see https://github.com/MerginMaps/input/pull/1055
+//  Click areas enlarging clickable areas for arrows, see https://github.com/MerginMaps/mobile/pull/1055
     Item {
       y: imageDecrease.y - imageDecrease.height
       x: imageDecrease.x - imageDecrease.width

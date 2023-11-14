@@ -51,11 +51,13 @@ set(MM_QML
     editor/inputrangeslider.qml
     editor/inputrelation.qml
     editor/inputrelationreference.qml
+    editor/inputrichtext.qml
     editor/inputtextedit.qml
     editor/inputtexteditmultiline.qml
     editor/inputvaluemap.qml
     editor/inputvaluerelationcombobox.qml
     editor/inputvaluerelationpage.qml
+    editor/inputspacer.qml
     form/FeatureForm.qml
     form/FeatureFormPage.qml
     form/FeatureFormStyling.qml
@@ -91,6 +93,7 @@ set(MM_QML
     AccountPage.qml
     AuthPanel.qml
     Banner.qml
+    ChangelogPanel.qml
     CircularProgressBar.qml
     CodeScanner.qml
     CodeScannerOverlay.qml
@@ -112,7 +115,6 @@ set(MM_QML
     NumberSpin.qml
     PanelItem.qml
     PanelTabButton.qml
-    PhotoPanel.qml
     ProjectIssuesPanel.qml
     ProjectLimitDialog.qml
     ProjectListPage.qml

@@ -132,6 +132,10 @@ ApplicationWindow {
           title: "Map"
           source: "MapPage.qml"
         }
+        ListElement {
+          title: "Toolbars"
+          source: "ToolbarPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}

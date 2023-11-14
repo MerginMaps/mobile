@@ -47,6 +47,7 @@ set(MM_SRCS
     appsettings.cpp
     autosynccontroller.cpp
     bluetoothdiscoverymodel.cpp
+    changelogmodel.cpp
     codescanner.cpp
     compass.cpp
     featurelayerpair.cpp
@@ -68,7 +69,6 @@ set(MM_SRCS
     projectsmodel.cpp
     projectsproxymodel.cpp
     projectwizard.cpp
-    purchasing.cpp
     qrdecoder.cpp
     relationfeaturesmodel.cpp
     relationreferencefeaturesmodel.cpp
@@ -128,6 +128,7 @@ set(MM_HDRS
     appsettings.h
     autosynccontroller.h
     bluetoothdiscoverymodel.h
+    changelogmodel.h
     codescanner.h
     compass.h
     enumhelper.h
@@ -149,7 +150,6 @@ set(MM_HDRS
     projectsmodel.h
     projectsproxymodel.h
     projectwizard.h
-    purchasing.h
     qrdecoder.h
     relationfeaturesmodel.h
     relationreferencefeaturesmodel.h
@@ -181,14 +181,12 @@ if (ENABLE_TESTS)
       test/testformeditors.cpp
       test/testidentifykit.cpp
       test/testimageutils.cpp
-      test/testingpurchasingbackend.cpp
       test/testlayertree.cpp
       test/testlinks.cpp
       test/testmaptools.cpp
       test/testmerginapi.cpp
       test/testmodels.cpp
       test/testposition.cpp
-      test/testpurchasing.cpp
       test/testrememberattributescontroller.cpp
       test/testscalebarkit.cpp
       test/testutils.cpp
@@ -207,14 +205,12 @@ if (ENABLE_TESTS)
       test/testformeditors.h
       test/testidentifykit.h
       test/testimageutils.h
-      test/testingpurchasingbackend.h
       test/testlayertree.h
       test/testlinks.h
       test/testmaptools.h
       test/testmerginapi.h
       test/testmodels.h
       test/testposition.h
-      test/testpurchasing.h
       test/testrememberattributescontroller.h
       test/testscalebarkit.h
       test/testutils.h
@@ -223,6 +219,12 @@ if (ENABLE_TESTS)
       test/testactiveproject.h
       test/testprojectchecksumcache.h
   )
+
+  if (NOT USE_MM_SERVER_API_KEY)
+    set_property(
+      SOURCE test/testmerginapi.cpp PROPERTY COMPILE_DEFINITIONS USE_MERGIN_DUMMY_API_KEY
+    )
+  endif ()
 endif ()
 
 if (IOS)
@@ -244,12 +246,6 @@ if (IOS)
       position/tracking/iostrackingbackend.mm
       position/tracking/iostrackingbackendimpl.mm
   )
-endif ()
-
-if (HAVE_APPLE_PURCHASING)
-  set(MM_HDRS ${MM_HDRS} ios/iospurchasing.h)
-
-  set(MM_SRCS ${MM_SRCS} ios/iospurchasing.mm)
 endif ()
 
 if (ANDROID)
@@ -536,12 +532,6 @@ endif ()
 
 if (IOS)
   target_link_libraries(Input PUBLIC AppleFrameworks::CoreLocation)
-endif ()
-
-if (HAVE_APPLE_PURCHASING)
-  target_link_libraries(
-    Input PUBLIC AppleFrameworks::StoreKit AppleFrameworks::Foundation
-  )
 endif ()
 
 if (ENABLE_TESTS)

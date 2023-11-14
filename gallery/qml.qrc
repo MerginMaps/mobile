@@ -28,5 +28,11 @@
         <file>../app/qmlV2/component/MMMapButton.qml</file>
         <file>../app/qmlV2/component/MMShadow.qml</file>
         <file>../app/qmlV2/component/MMMapLabel.qml</file>
+        <file>../app/qmlV2/component/MMToolbarButton.qml</file>
+        <file>../app/qmlV2/component/MMToolbar.qml</file>
+        <file>qml/pages/ToolbarPage.qml</file>
+        <file>../app/qmlV2/component/MMMenuDrawer.qml</file>
+        <file>../app/qmlV2/component/MMToolbarMenuButton.qml</file>
+        <file>../app/qmlV2/component/MMToolbarLongButton.qml</file>
     </qresource>
 </RCC>

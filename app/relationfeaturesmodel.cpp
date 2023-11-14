@@ -112,12 +112,12 @@ QgsRelation RelationFeaturesModel::relation() const
 
 QVariant RelationFeaturesModel::relationPhotoPath( const FeatureLayerPair &featurePair ) const
 {
-  // Feature title used to get path of the referenced image.
-  QString path = featureTitle( featurePair ).toString();
-
   int fieldIndex = photoFieldIndex( featurePair.layer() );
   QgsEditorWidgetSetup setup = featurePair.layer()->editorWidgetSetup( fieldIndex );
   QVariantMap config = setup.config();
+
+  const QgsFeature feature = featurePair.feature();
+  QString path = feature.attribute( fieldIndex ).toString();
 
   QString finalPath = InputUtils::resolvePath( path, homePath(), config, featurePair, QgsProject::instance() );
 
@@ -126,6 +126,10 @@ QVariant RelationFeaturesModel::relationPhotoPath( const FeatureLayerPair &featu
 
 int RelationFeaturesModel::photoFieldIndex( QgsVectorLayer *layer ) const
 {
+  if ( !layer )
+  {
+    return -1;
+  }
 
   QgsFields fields = layer->fields();
   for ( int i = 0; i < fields.size(); i++ )
