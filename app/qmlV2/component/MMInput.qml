@@ -10,7 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
 import ".."
 
 Item {
@@ -44,13 +43,13 @@ Item {
       MMIcon {
         id: msgIcon
 
-        source: visible ? Style.errorIcon : ""
-        color: errorMsg.length > 0 ? Style.negative : Style.warning
+        source: visible ? StyleV2.errorIcon : ""
+        color: errorMsg.length > 0 ? StyleV2.negativeColor : StyleV2.warningColor
         visible: errorMsg.length > 0 || warningMsg.length > 0
       }
       Text {
         text: errorMsg.length > 0 ? errorMsg : warningMsg
-        font: Qt.font(Style.t4)
+        font: StyleV2.t4
         wrapMode: Text.WordWrap
         width: messageItem.width - msgRow.spacing - msgIcon.width
         visible: errorMsg.length > 0 || warningMsg.length > 0
@@ -63,10 +62,10 @@ Item {
 
     height: 40 * __dp
     width: parent.width
-    color: (errorMsg.length > 0 || warningMsg.length > 0) ? Style.errorBgInputColor : Style.white
-    border.color: (textField.activeFocus || textField.hovered) ? (errorMsg.length > 0 ? Style.negative :
-                                                                                        warningMsg.length > 0 ? Style.warning :
-                                                                                                                Style.forest) : "transparent"
+    color: (errorMsg.length > 0 || warningMsg.length > 0) ? StyleV2.errorBgInputColor : StyleV2.whiteColor
+    border.color: (textField.activeFocus || textField.hovered) ? (errorMsg.length > 0 ? StyleV2.negativeColor :
+                                                                                        warningMsg.length > 0 ? StyleV2.warningColor :
+                                                                                                                StyleV2.forestColor) : StyleV2.transparentColor
     border.width: enabled ? (textField.activeFocus ? 2*__dp : 1*__dp) : 0
     radius: parent.height
 
@@ -79,11 +78,11 @@ Item {
       MMIcon {
         id: leftIcon
 
-        source: control.type === MMInput.Type.Search ? Style.searchIcon :
-                                                       control.type === MMInput.Type.Calendar ? Style.calendarIcon : ""
-        color: errorMsg.length > 0 ? Style.negative :
-                                     warningMsg.length > 0 ? Style.warning :
-                                                             control.enabled ? Style.forest : Style.mediumGreen
+        source: control.type === MMInput.Type.Search ? StyleV2.searchIcon :
+                                                       control.type === MMInput.Type.Calendar ? StyleV2.calendarIcon : ""
+        color: errorMsg.length > 0 ? StyleV2.negativeColor :
+                                     warningMsg.length > 0 ? StyleV2.warningColor :
+                                                             control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
         width: height
         height: rect.height
         visible: control.type === MMInput.Type.Search || control.type === MMInput.Type.Calendar
@@ -98,14 +97,14 @@ Item {
                - (rightIcon.visible ? rightIcon.width : 0)
                - (button.visible ? button.width : 0)
         height: rect.height - 4 * __dp
-        color: control.enabled ? Style.night : Style.mediumGreen
+        color: control.enabled ? StyleV2.nightColor : StyleV2.mediumGreenColor
         placeholderTextColor: StyleV2.nightAlphaColor
-        font: Qt.font(Style.p5)
+        font: StyleV2.p5
         hoverEnabled: true
         anchors.verticalCenter: parent.verticalCenter
         echoMode: (control.type === MMInput.Type.Password && !rightIcon.pressed) ? TextInput.Password : TextInput.Normal
         background: Rectangle {
-          color: Style.transparent
+          color: StyleV2.transparentColor
         }
       }
 
@@ -113,10 +112,10 @@ Item {
         id: rightIcon
 
         property bool pressed: false
-        source: control.type === MMInput.Type.Password ? (pressed ? Style.hideIcon : Style.showIcon) :
-                                                         control.type === MMInput.Type.Scan ? Style.qrCodeIcon :
-                                                                                              (textField.activeFocus && textField.text.length>0) ? Style.xMarkIcon : ""
-        color: control.enabled ? Style.forest : Style.mediumGreen
+        source: control.type === MMInput.Type.Password ? (pressed ? StyleV2.hideIcon : StyleV2.showIcon) :
+                                                         control.type === MMInput.Type.Scan ? StyleV2.qrCodeIcon :
+                                                                                              (textField.activeFocus && textField.text.length>0) ? StyleV2.xMarkIcon : ""
+        color: control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
         width: visible ? height : 0
         height: rect.height
         visible: control.type === MMInput.Type.Password ||
@@ -146,20 +145,20 @@ Item {
 
         contentItem: Text {
           anchors.centerIn: button
-          font: Qt.font(Style.t5)
+          font: StyleV2.t5
           text: qsTr("Copy")
           leftPadding: 2 * __dp
           rightPadding: 2 * __dp
           topPadding: 2 * __dp
           bottomPadding: 2 * __dp
-          color: Style.deepOcean
+          color: StyleV2.deepOceanColor
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
           elide: Text.ElideRight
         }
 
         background: Rectangle {
-          color: button.enabled ? Style.grass : Style.mediumGreen
+          color: button.enabled ? StyleV2.grassColor : StyleV2.mediumGreenColor
           radius: height / 2
         }
 

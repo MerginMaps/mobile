@@ -10,8 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
 import "."
+import ".."
 
 RoundButton {
   id: control
@@ -22,12 +22,12 @@ RoundButton {
   contentItem: MMIcon {
     id: icon
 
-    source: Style.arrowLinkRightIcon
-    color: control.enabled ? control.down || control.hovered ? Style.grass : Style.forest : Style.forest
+    source: StyleV2.arrowLinkRightIcon
+    color: control.enabled ? control.down || control.hovered ? StyleV2.grassColor : StyleV2.forestColor : StyleV2.forestColor
   }
 
   background: Rectangle {
-    color: control.enabled ? control.down || control.hovered ? Style.forest : Style.grass : Style.mediumGreen
+    color: control.enabled ? control.down || control.hovered ? StyleV2.forestColor : StyleV2.grassColor : StyleV2.mediumGreenColor
     radius: control.implicitHeight / 2
   }
 }

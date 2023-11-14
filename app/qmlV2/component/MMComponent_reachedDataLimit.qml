@@ -10,8 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
 import "."
+import ".."
 
 Item {
   id: control
@@ -28,9 +28,9 @@ Item {
     id: component
 
     Column {
-      width: control.width - 2 * Style.commonSpacing
-      spacing: Style.commonSpacing / 2
-      topPadding: Style.commonSpacing
+      width: control.width - 40 * __dp
+      spacing: 10 * __dp
+      topPadding: 20 * __dp
 
       Item {
         width: parent.width
@@ -39,8 +39,8 @@ Item {
         Text {
           width: parent.width
           text: qsTr("Data to sync")
-          font: Qt.font(Style.p5)
-          color: Style.night
+          font: StyleV2.p5
+          color: StyleV2.nightColor
           horizontalAlignment: Text.AlignLeft
           verticalAlignment: Text.AlignVCenter
         }
@@ -49,14 +49,14 @@ Item {
 
           width: parent.width
           text: control.dataToSync
-          font: Qt.font(Style.t3)
-          color: Style.night
+          font: StyleV2.t3
+          color: StyleV2.nightColor
           horizontalAlignment: Text.AlignRight
           verticalAlignment: Text.AlignVCenter
         }
       }
 
-      Rectangle { width: parent.width; height: 1; color: Style.gray }
+      Rectangle { width: parent.width; height: 1; color: StyleV2.grayColor }
 
       Item {
         width: parent.width
@@ -65,8 +65,8 @@ Item {
         Text {
           width: parent.width
           text: qsTr("Using")
-          font: Qt.font(Style.p5)
-          color: Style.night
+          font: StyleV2.p5
+          color: StyleV2.nightColor
           horizontalAlignment: Text.AlignLeft
           verticalAlignment: Text.AlignVCenter
         }
@@ -75,8 +75,8 @@ Item {
 
           width: parent.width
           text: control.dataUsing
-          font: Qt.font(Style.t3)
-          color: Style.night
+          font: StyleV2.t3
+          color: StyleV2.nightColor
           horizontalAlignment: Text.AlignRight
           verticalAlignment: Text.AlignVCenter
         }
@@ -86,7 +86,7 @@ Item {
         position: control.usedData
       }
 
-      Rectangle { width: parent.width; height: 1; color: Style.gray }
+      Rectangle { width: parent.width; height: 1; color: StyleV2.grayColor }
 
       Item {
         width: parent.width
@@ -95,8 +95,8 @@ Item {
         Text {
           width: parent.width
           text: qsTr("Plan")
-          font: Qt.font(Style.p5)
-          color: Style.night
+          font: StyleV2.p5
+          color: StyleV2.nightColor
           horizontalAlignment: Text.AlignLeft
           verticalAlignment: Text.AlignVCenter
         }
@@ -105,8 +105,8 @@ Item {
 
           width: parent.width
           text: control.plan
-          font: Qt.font(Style.t3)
-          color: Style.night
+          font: StyleV2.t3
+          color: StyleV2.nightColor
           horizontalAlignment: Text.AlignRight
           verticalAlignment: Text.AlignVCenter
         }

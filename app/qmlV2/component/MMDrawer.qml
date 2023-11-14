@@ -10,8 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
 import "."
+import ".."
 
 Drawer {
   id: control
@@ -38,30 +38,30 @@ Drawer {
     anchors.right: parent.right
     height: 2 * radius
     anchors.topMargin: -radius
-    radius: Style.commonSpacing
+    radius: 20 * __dp
   }
 
   Rectangle {
     id: roundedRect
 
     anchors.fill: parent
-    color: Style.white
+    color: StyleV2.whiteColor
 
     Column {
       id: mainColumn
 
       width: parent.width
-      spacing: Style.commonSpacing
-      leftPadding: Style.commonSpacing
-      rightPadding: Style.commonSpacing
-      bottomPadding: Style.commonSpacing
+      spacing: 20 * __dp
+      leftPadding: 20 * __dp
+      rightPadding: 20 * __dp
+      bottomPadding: 20 * __dp
 
       Image {
         id: closeButton
 
-        source: Style.closeButtonIcon
+        source: StyleV2.closeButtonIcon
         anchors.right: parent.right
-        anchors.rightMargin: Style.commonSpacing
+        anchors.rightMargin: 20 * __dp
 
         MouseArea {
           anchors.fill: parent
@@ -79,9 +79,9 @@ Drawer {
         id: title
 
         anchors.horizontalCenter: parent.horizontalCenter
-        font: Qt.font(Style.t1)
-        width: parent.width - 2*Style.commonSpacing
-        color: Style.forest
+        font: StyleV2.t1
+        width: parent.width - 2*20 * __dp
+        color: StyleV2.forestColor
         visible: text.length > 0
         horizontalAlignment: Text.AlignHCenter
       }
@@ -90,9 +90,9 @@ Drawer {
         id: description
 
         anchors.horizontalCenter: parent.horizontalCenter
-        font: Qt.font(Style.p5)
-        width: parent.width - 2*Style.commonSpacing
-        color: Style.night
+        font: StyleV2.p5
+        width: parent.width - 2*20 * __dp
+        color: StyleV2.nightColor
         visible: text.length > 0
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.WordWrap
@@ -102,24 +102,23 @@ Drawer {
       Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         visible: boundedDescription.text.length > 0
-        width: parent.width - 2*Style.commonSpacing
+        width: parent.width - 2*20 * __dp
         height: boundedDescription.height
         radius: 16 * __dp
-
-        color: Style.lightGreen
+        color: StyleV2.lightGreenColor
 
         Text {
           id: boundedDescription
 
           anchors.horizontalCenter: parent.horizontalCenter
-          font: Qt.font(Style.p6)
+          font: StyleV2.p6
           width: parent.width
-          color: Style.night
+          color: StyleV2.nightColor
           visible: text.length > 0
           horizontalAlignment: Text.AlignLeft
           wrapMode: Text.WordWrap
           lineHeight: 1.6
-          padding: Style.commonSpacing
+          padding: 20 * __dp
         }
       }
 
@@ -134,7 +133,7 @@ Drawer {
       MMButton {
         id: primaryButton
 
-        width: parent.width - 2*Style.commonSpacing
+        width: parent.width - 2*20 * __dp
         visible: text.length > 0
 
         onClicked: primaryButtonClicked()
@@ -143,7 +142,7 @@ Drawer {
       MMButton {
         id: secondaryButton
 
-        width: parent.width - 2*Style.commonSpacing
+        width: parent.width - 2*20 * __dp
         visible: text.length > 0
         transparent: true
         topPadding: 0

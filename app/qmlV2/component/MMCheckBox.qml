@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
+import ".."
 
 CheckBox {
   id: control
@@ -23,23 +23,23 @@ CheckBox {
     x: control.leftPadding
     y: parent.height / 2 - height / 2
     radius: 5
-    color: enabled ? ( control.checked ? Style.grass: Style.white ) : Style.white
-    border.color: enabled ? ( control.checked ? Style.grass: Style.forest ) : Style.mediumGreen
+    color: enabled ? ( control.checked ? StyleV2.grassColor: StyleV2.whiteColor ) : StyleV2.whiteColor
+    border.color: enabled ? ( control.checked ? StyleV2.grassColor: StyleV2.forestColor ) : StyleV2.mediumGreenColor
     border.width: control.hovered ? 2.5 : 2
 
     MMIcon {
       id: icon
 
       anchors.centerIn: parent
-      source: Style.checkmarkIcon
-      color: control.enabled ? Style.forest : Style.mediumGreen
+      source: StyleV2.checkmarkIcon
+      color: control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
       visible: control.checked
     }
   }
 
   contentItem: Text {
     text: control.text
-    font: Qt.font(Style.p5)
+    font: StyleV2.p5
     color: icon.color
     verticalAlignment: Text.AlignVCenter
     leftPadding: control.indicator.width + control.spacing

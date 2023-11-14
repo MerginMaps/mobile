@@ -11,37 +11,71 @@ pragma Singleton
 import QtQuick
 
 QtObject {
+  // Fonts - Title
+  readonly property font t1: Qt.font({ pixelSize: 18 * __dp, bold: true })
+  readonly property font t2: Qt.font({ pixelSize: 16 * __dp, bold: true })
+  readonly property font t3: Qt.font({ pixelSize: 14 * __dp, bold: true })
+  readonly property font t4: Qt.font({ pixelSize: 12 * __dp, bold: true })
+  readonly property font t5: Qt.font({ pixelSize: 10 * __dp, bold: true })
+
+  // Fonts - Paragraph
+  readonly property font p1: Qt.font({ pixelSize: 32 * __dp })
+  readonly property font p2: Qt.font({ pixelSize: 24 * __dp })
+  readonly property font p3: Qt.font({ pixelSize: 20 * __dp })
+  readonly property font p4: Qt.font({ pixelSize: 16 * __dp })
+  readonly property font p5: Qt.font({ pixelSize: 14 * __dp })
+  readonly property font p6: Qt.font({ pixelSize: 12 * __dp })
+  readonly property font p7: Qt.font({ pixelSize: 10 * __dp })
+
   // Colors - pripary palette
-  property color grassColor: "#73D19C"
-  property color forestColor: "#004C45"
-  property color nightColor: "#12181F"
-  property color whiteColor: "#FFFFFF"
-  property color transparentColor: "transparent"
+  readonly property color grassColor: "#73D19C"
+  readonly property color forestColor: "#004C45"
+  readonly property color nightColor: "#12181F"
+  readonly property color whiteColor: "#FFFFFF"
+  readonly property color transparentColor: "transparent"
 
   // Colors - secondary palette
-  property color lightGreenColor: "#EFF5F3"
-  property color mediumGreenColor: "#B7CDC4"
-  property color grayColor: "#E2E2E2"
+  readonly property color lightGreenColor: "#EFF5F3"
+  readonly property color mediumGreenColor: "#B7CDC4"
+  readonly property color grayColor: "#E2E2E2"
 
   // Colors - additional colors
-  property color sendColor: "#FFF4E2"
-  property color sunsetColor: "#FFB673"
-  property color sunColor: "#F4CB46"
-  property color earthColor: "#4D2A24"
-  property color roseColor: "#FFBABC"
-  property color skyColor: "#A6CBF4"
-  property color grapeColor: "#5A2740"
-  property color deepOceanColor: "#1C324A"
-  property color purpleColor: "#CCBDF5"
-  property color fieldColor: "#9BD1A9"
+  readonly property color sendColor: "#FFF4E2"
+  readonly property color sunsetColor: "#FFB673"
+  readonly property color sunColor: "#F4CB46"
+  readonly property color earthColor: "#4D2A24"
+  readonly property color roseColor: "#FFBABC"
+  readonly property color skyColor: "#A6CBF4"
+  readonly property color grapeColor: "#5A2740"
+  readonly property color deepOceanColor: "#1C324A"
+  readonly property color purpleColor: "#CCBDF5"
+  readonly property color fieldColor: "#9BD1A9"
 
   // Colors - sentiment colors
-  property color positiveColor: "#C2FFA6"
-  property color warningColor: "#FFD6A6"
-  property color negativeColor: "#FFA6A6"
-  property color informativeColor: "#A6F4FF"
+  readonly property color positiveColor: "#C2FFA6"
+  readonly property color warningColor: "#FFD6A6"
+  readonly property color negativeColor: "#FFA6A6"
+  readonly property color informativeColor: "#A6F4FF"
 
-  // Colors - special
-  property color nightAlphaColor: "#AA12181F" // placeholder input color
-  property color errorBgInputColor: "#FEFAF9" // error bg input color
+  // Colors - others
+  readonly property color nightAlphaColor: "#AA12181F" // placeholder input color
+  readonly property color errorBgInputColor: "#FEFAF9" // error bg input color
+
+  // Icons
+  readonly property url arrowLinkRightIcon: "qrc:/Arrow Link Right.svg"
+  readonly property url searchIcon: "qrc:/Search.svg"
+  readonly property url calendarIcon: "qrc:/Calendar.svg"
+  readonly property url showIcon: "qrc:/Show.svg"
+  readonly property url hideIcon: "qrc:/Hide.svg"
+  readonly property url xMarkIcon: "qrc:/X Mark.svg"
+  readonly property url errorIcon: "qrc:/Error.svg"
+  readonly property url arrowUpIcon: "qrc:/Arrow Up.svg"
+  readonly property url arrowDownIcon: "qrc:/Arrow Down.svg"
+  readonly property url qrCodeIcon: "qrc:/QR Code.svg"
+  readonly property url checkmarkIcon: "qrc:/Checkmark.svg"
+  readonly property url closeButtonIcon: "qrc:/CloseButton.svg"
+
+  // Images
+  readonly property url uploadImage: "qrc:/UploadImage.svg"
+  readonly property url reachedDataLimitImage: "qrc:/ReachedDataLimitImage.svg"
 }
