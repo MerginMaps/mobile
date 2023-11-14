@@ -52,7 +52,7 @@ Rectangle {
   MMMenuDrawer {
     id: menu
 
-    title: qsTr("More Options")
+    title: qsTr("More options")
     model: invisibleButtonModel
     onClicked: function(button) {
       menu.visible = false
