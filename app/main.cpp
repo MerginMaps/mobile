@@ -393,7 +393,7 @@ int main( int argc, char *argv[] )
   tests.parseArgs( argc, argv );
 #endif
   qDebug() << "Mergin Maps Input App" << version << InputUtils::appPlatform() << "(" << CoreUtils::appVersionCode() << ")";
-  qDebug() << "Built with QGIS " << VERSION_INT << " and QT" << qVersion();
+  qDebug() << "Built with QGIS " << VERSION_INT << " and QT " << qVersion();
 
   // Set/Get enviroment
   QString dataDir = getDataDir();
