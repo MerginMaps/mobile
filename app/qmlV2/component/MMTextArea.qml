@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
+import ".."
 
 Item {
   id: control
@@ -38,15 +38,15 @@ Item {
     height: control.autoHeight ? ( contentHeight+10 > control.minHeight ? contentHeight+10 > control.maxHeight ? control.maxHeight : contentHeight+10 : control.minHeight ) : control.areaHeight
     width: parent.width
     hoverEnabled: true
-    placeholderTextColor: Style.night_6
-    color: control.enabled ? Style.night : Style.mediumGreen
-    font: Qt.font(Style.p5)
+    placeholderTextColor: StyleV2.nightAlphaColor
+    color: control.enabled ? StyleV2.nightColor : StyleV2.mediumGreenColor
+    font: StyleV2.p5
 
     background: Rectangle {
-      color: (errorMsg.length > 0 || warningMsg.length > 0) ? Style.errorBgInputColor : Style.white
-      border.color: (textArea.activeFocus || textArea.hovered) ? (errorMsg.length > 0 ? Style.negative :
-                                                                                      warningMsg.length > 0 ? Style.warning :
-                                                                                                              Style.forest) : "transparent"
+      color: (errorMsg.length > 0 || warningMsg.length > 0) ? StyleV2.errorBgInputColor : StyleV2.whiteColor
+      border.color: (textArea.activeFocus || textArea.hovered) ? (errorMsg.length > 0 ? StyleV2.negativeColor :
+                                                                                        warningMsg.length > 0 ? StyleV2.warningColor :
+                                                                                                                StyleV2.forestColor) : StyleV2.transparentColor
       border.width: enabled ? (textArea.activeFocus ? 2*__dp : 1*__dp) : 0
       radius: 10 * __dp
     }
@@ -69,13 +69,13 @@ Item {
       MMIcon {
         id: msgIcon
 
-        source: visible ? Style.errorIcon : ""
-        color: errorMsg.length > 0 ? Style.negative : Style.warning
+        source: visible ? StyleV2.errorIcon : ""
+        color: errorMsg.length > 0 ? StyleV2.negativeColor : StyleV2.warningColor
         visible: errorMsg.length > 0 || warningMsg.length > 0
       }
       Text {
         text: errorMsg.length > 0 ? errorMsg : warningMsg
-        font: Qt.font(Style.t4)
+        font: StyleV2.t4
         wrapMode: Text.WordWrap
         width: messageItem.width - msgRow.spacing - msgIcon.width
         visible: errorMsg.length > 0 || warningMsg.length > 0

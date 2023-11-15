@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
+import ".."
 
 Item {
   id: control
@@ -24,28 +24,28 @@ Item {
     id: menuButton
 
     width: control.width
-    height: Style.menuDrawerHeight
+    height: StyleV2.menuDrawerHeight
 
     Rectangle {
       anchors.top: parent.top
       width: parent.width
       height: 1 * __dp
-      color: Style.gray
+      color: StyleV2.grayColor
     }
 
     Row {
       height: parent.height
       width: parent.width
-      spacing: Style.commonSpacing
+      spacing: 20 * __dp
       MMIcon {
         height: parent.height
-        color: Style.forest
+        color: StyleV2.forestColor
         source: control.iconSource
       }
       Text {
         text: control.text
-        color: Style.forest
-        font: Qt.font(Style.t3)
+        color: StyleV2.forestColor
+        font: StyleV2.t3
         verticalAlignment: Text.AlignVCenter
         height: parent.height
       }

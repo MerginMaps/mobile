@@ -12,7 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qmlV2/component"
-import "../../app/qmlV2/Style.js" as Style
+import "../../app/qmlV2/"
 
 ScrollView {
   Column {
@@ -42,18 +42,18 @@ ScrollView {
           enabled: false
         }
         Column {
-          TextInput { text: "iconSource: Style.searchIcon" }
+          TextInput { text: "iconSource: StyleV2.searchIcon" }
           MMInput {
             placeholderText: "Search"
-            iconSource: Style.searchIcon
+            iconSource: StyleV2.searchIcon
           }
         }
         Column {
-          TextInput { text: "iconSource: Style.calendarIcon" }
+          TextInput { text: "iconSource: StyleV2.calendarIcon" }
           TextInput { text: "warningMsg: ..." }
           MMInput {
             text: "Calendar"
-            iconSource: Style.calendarIcon
+            iconSource: StyleV2.calendarIcon
             warningMsg: "Would you like to be so kind and select a date please?"
           }
         }

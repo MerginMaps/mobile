@@ -8,8 +8,8 @@
  ***************************************************************************/
 
 import QtQuick
-import "../Style.js" as Style
 import "."
+import ".."
 
 Rectangle {
   id: control
@@ -18,13 +18,13 @@ Rectangle {
 
   width: parent.width
   height: 12 * __dp
-  color: Style.lightGreen
+  color: StyleV2.lightGreenColor
   radius: height / 2
 
   Rectangle {
     width: parent.width * control.position
     height: parent.height
-    color: Style.grass
+    color: StyleV2.grassColor
     radius: height / 2
   }
 }

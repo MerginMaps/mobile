@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
+import ".."
 
 Item {
   id: control
@@ -31,8 +31,8 @@ Item {
     height: 40 * __dp
 
     indicator: MMIcon {
-      source: popup.visible ? Style.arrowUpIcon : Style.arrowDownIcon
-      color: control.enabled ? Style.forest : Style.mediumGreen
+      source: popup.visible ? StyleV2.arrowUpIcon : StyleV2.arrowDownIcon
+      color: control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
       x: combobox.width - width - combobox.rightPadding
       anchors.verticalCenter: parent.verticalCenter
     }
@@ -42,17 +42,17 @@ Item {
       rightPadding: combobox.indicator.width + combobox.spacing
 
       text: combobox.displayText
-      font: Qt.font(Style.p4)
-      color: control.enabled ? Style.night : Style.mediumGreen
+      font: StyleV2.p4
+      color: control.enabled ? StyleV2.nightColor : StyleV2.mediumGreenColor
       verticalAlignment: Text.AlignVCenter
       elide: Text.ElideRight
     }
 
     background: Rectangle {
-      color: (errorMsg.length > 0 || warningMsg.length > 0) ? Style.errorBgInputColor : Style.white
-      border.color: (combobox.activeFocus || combobox.hovered) ? (errorMsg.length > 0 ? Style.negative :
-                                                                                        warningMsg.length > 0 ? Style.warning :
-                                                                                                                Style.forest) : "transparent"
+      color: (errorMsg.length > 0 || warningMsg.length > 0) ? StyleV2.errorBgInputColor : StyleV2.whiteColor
+      border.color: (combobox.activeFocus || combobox.hovered) ? (errorMsg.length > 0 ? StyleV2.negativeColor :
+                                                                                        warningMsg.length > 0 ? StyleV2.warningColor :
+                                                                                                                StyleV2.forestColor) : StyleV2.transparentColor
       border.width: enabled ? (combobox.activeFocus ? 2*__dp : 1*__dp) : 0
       radius: parent.height
     }
@@ -75,7 +75,7 @@ Item {
       }
 
       background: Rectangle {
-        border.color: Style.forest
+        border.color: StyleV2.forestColor
         radius: 2
       }
     }
@@ -87,13 +87,13 @@ Item {
       height: 30 * __dp
       contentItem: Text {
         text: modelData
-        color: combobox.highlightedIndex === index ? Style.grass : Style.forest
-        font: Qt.font(Style.p4)
+        color: combobox.highlightedIndex === index ? StyleV2.grassColor : StyleV2.forestColor
+        font: StyleV2.p4
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter
       }
       background: Rectangle {
-        border.color: Style.white
+        border.color: StyleV2.whiteColor
       }
     }
 
@@ -117,13 +117,13 @@ Item {
       MMIcon {
         id: msgIcon
 
-        source: visible ? Style.errorIcon : ""
-        color: errorMsg.length > 0 ? Style.negative : Style.warning
+        source: visible ? StyleV2.errorIcon : ""
+        color: errorMsg.length > 0 ? StyleV2.negativeColor : StyleV2.warningColor
         visible: errorMsg.length > 0 || warningMsg.length > 0
       }
       Text {
         text: errorMsg.length > 0 ? errorMsg : warningMsg
-        font: Qt.font(Style.t4)
+        font: StyleV2.t4
         wrapMode: Text.WordWrap
         width: messageItem.width - msgRow.spacing - msgIcon.width
         visible: errorMsg.length > 0 || warningMsg.length > 0

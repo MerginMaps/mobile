@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
+import ".."
 
 Item {
   id: control
@@ -20,18 +20,22 @@ Item {
   required property var iconSource
   required property string text
 
-  height: Style.toolbarHeight
+  readonly property double toolbarLongButtonWidth: 50 * __dp
+  readonly property double minimumToolbarLongButtonWidth: 200 * __dp
+  readonly property double maximumToolbarLongButtonWidth: 500 * __dp
+
+  height: StyleV2.toolbarHeight
 
   Button {
     width: {
-      var w = parent.width - Style.commonSpacing/2
-      if(w < Style.minimumToolbarLongButtonWidth)
-        return Style.minimumToolbarLongButtonWidth
-      else if(w > Style.maximumToolbarLongButtonWidth)
-        return Style.maximumToolbarLongButtonWidth
+      var w = parent.width - 10 * __dp
+      if(w < control.minimumToolbarLongButtonWidth)
+        return control.minimumToolbarLongButtonWidth
+      else if(w > control.maximumToolbarLongButtonWidth)
+        return control.maximumToolbarLongButtonWidth
       return w
     }
-    height: Style.toolbarLongButtonWidth
+    height: control.toolbarLongButtonWidth
     anchors.centerIn: parent
 
     contentItem: Item {
@@ -53,8 +57,8 @@ Item {
           id: text
 
           text: control.text
-          color: Style.forest
-          font: Qt.font(Style.t3)
+          color: StyleV2.forestColor
+          font: StyleV2.t3
           verticalAlignment: Text.AlignVCenter
           topPadding: 10 * __dp
           bottomPadding: 10 * __dp
@@ -63,7 +67,7 @@ Item {
     }
 
     background: Rectangle {
-      color: Style.grass
+      color: StyleV2.grassColor
       radius: height / 2
     }
 
