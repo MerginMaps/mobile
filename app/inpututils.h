@@ -169,6 +169,8 @@ class InputUtils: public QObject
     static QString appPlatform();
     static bool isMobilePlatform();
 
+    static QString appDataDir();
+
     /**
      * Converts string in rational number format to double.
      * @param rationalValue String - expecting value in format "numerator/denominator" (e.g "123/100").
