@@ -43,6 +43,7 @@ Page {
     id: captureSession
     camera: Camera {
       id: camera
+      active: true
       focusMode: Camera.FocusModeAutoNear
     }
     videoOutput: videoOutput

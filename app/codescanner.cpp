@@ -18,6 +18,8 @@ CodeScanner::CodeScanner( QObject *parent )
 
 CodeScanner::~CodeScanner() = default;
 
+#include <QDebug>
+
 void CodeScanner::processFrame( const QVideoFrame &frame )
 {
   if ( mIgnoreFrames )
@@ -25,8 +27,7 @@ void CodeScanner::processFrame( const QVideoFrame &frame )
     return;
   }
 
-  QImage image = frame.toImage();
-
+  const QImage image = frame.toImage();
   QString response = mDecoder.processImage( image );
 
   if ( !response.isEmpty() )

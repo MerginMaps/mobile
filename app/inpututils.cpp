@@ -552,6 +552,7 @@ bool InputUtils::acquireCameraPermission()
 
     if ( Qt::PermissionStatus::Undetermined == status )
     {
+      // TODO this is async so it should be treated as such
       qApp->requestPermission( QCameraPermission{}, []( const QPermission & permission ) {} );
       return false;
     }

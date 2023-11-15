@@ -3,11 +3,13 @@
 #include <QImage>
 #include <ZXing/ReadBarcode.h>
 
+
 static ZXing::ImageFormat formatFromQImage( const QImage &img )
 {
   switch ( img.format() )
   {
     case QImage::Format_ARGB32:
+    case QImage::Format_ARGB32_Premultiplied:
     case QImage::Format_RGB32:
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
       return ZXing::ImageFormat::BGRX;
@@ -18,6 +20,7 @@ static ZXing::ImageFormat formatFromQImage( const QImage &img )
       return ZXing::ImageFormat::RGB;
     case QImage::Format_RGBX8888:
     case QImage::Format_RGBA8888:
+    case QImage::Format_RGBA8888_Premultiplied:
       return ZXing::ImageFormat::RGBX;
     case QImage::Format_Grayscale8:
       return ZXing::ImageFormat::Lum;
@@ -31,7 +34,7 @@ QRDecoder::QRDecoder( QObject *parent )
 {
 }
 
-QString QRDecoder::processImage( const QImage capturedImage )
+QString QRDecoder::processImage( const QImage &capturedImage )
 {
   QString resultText;
 
@@ -40,10 +43,24 @@ QString QRDecoder::processImage( const QImage capturedImage )
     return QString();
   }
 
+  if ( capturedImage.isNull() )
+  {
+    return QString();
+  }
+
   setIsDecoding( true );
-  ZXing::ImageFormat imageFormat = formatFromQImage( capturedImage );
+
+  QImage img = capturedImage;
+  ZXing::ImageFormat imageFormat = formatFromQImage( img );
   if ( imageFormat != ZXing::ImageFormat::None )
   {
+    img = capturedImage.convertToFormat( QImage::Format_RGB888 );
+    imageFormat = formatFromQImage( img );
+  }
+
+  if ( imageFormat != ZXing::ImageFormat::None )
+  {
+    const ZXing::ImageFormat imageFormat = ZXing::ImageFormat::RGBX;
     ZXing::ImageView imageView( capturedImage.bits(), capturedImage.width(), capturedImage.height(), imageFormat, static_cast<int>( capturedImage.bytesPerLine() ) );
 
     ZXing::DecodeHints hints = ZXing::DecodeHints()
