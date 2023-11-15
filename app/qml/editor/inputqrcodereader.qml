@@ -13,7 +13,6 @@ import Qt5Compat.GraphicalEffects
 
 import lc 1.0
 import ".."
-import "../dialogs" as MMDialogs
 
 AbstractEditor {
   id: root
@@ -79,14 +78,8 @@ AbstractEditor {
   onRightActionClicked: {
     if ( root.parent.readOnly ) return
 
-    if ( __androidUtils.isAndroid ) {
-      androidConnection.enabled = true // start listening to scan results
-      __androidUtils.scanQRCode()
-    }
-    else {
-      let page = root.formView.push( readerComponent, {} )
-      page.forceActiveFocus()
-    }
+    let page = root.formView.push( readerComponent, {} )
+    page.forceActiveFocus()
   }
 
   Component {
@@ -106,33 +99,5 @@ AbstractEditor {
         root.formView.pop()
       }
     }
-  }
-
-  Connections {
-    id: androidConnection
-
-    target: __androidUtils
-    enabled: false // false by default to ignore scans to other fields
-
-    function onQrScanFinished( scanValue ) {
-      root.editorValueChanged( scanValue, false )
-      androidConnection.enabled = false
-    }
-
-    function onQrScannerMissing() {
-      // show install app rationale
-      installAppConsentDialog.open()
-      androidConnection.enabled = false
-    }
-
-    function onQrScanAborted() {
-      androidConnection.enabled = false
-    }
-  }
-
-  MMDialogs.InstallScannerAppDialog {
-    id: installAppConsentDialog
-
-    onInstallRequested: __androidUtils.installQRCodeScanner()
   }
 }
