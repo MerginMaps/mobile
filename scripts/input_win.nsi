@@ -2,7 +2,7 @@
 !define COMPANYNAME "Lutra Consulting Ltd."
 !define DESCRIPTION "Survey made easy"
 !define HELPURL "https://merginmaps.com/docs"
-!define UPDATEURL "https://github.com/MerginMaps/input/releases"
+!define UPDATEURL "https://github.com/MerginMaps/mobile/releases"
 !define ABOUTURL "https://merginmaps.com"
  
 RequestExecutionLevel admin ;Require admin rights on NT6+ (When UAC is turned on)

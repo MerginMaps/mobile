@@ -21,7 +21,7 @@ concurrency:
   
 jobs:
   win64_build:
-    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: windows-2019
     
     env:
@@ -111,7 +111,7 @@ jobs:
         shell: bash
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
         run: |
-          URL="https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.zip"
+          URL="https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.zip"
           echo "downloading: $URL"
           curl -fsSL --connect-timeout 60 -o \
             input-sdk.tar.gz \

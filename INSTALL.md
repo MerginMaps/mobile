@@ -8,6 +8,7 @@ Building Mergin Maps mobile app from source - step by step
 * [2. Overview](#2-overview)
    * [2.1 Secrets](#21-secrets)
    * [2.2 Code formatting](#22-code-formatting)
+   * [2.3 Required Qt packages](#23-required-qt-packages)
 * [3. Building GNU/Ubuntu](#3-building-gnuubuntu)
 * [4. Building Android (on Ubuntu/macOS/Windows)](#4-building-android-on-ubuntumacoswindows)
    * [4.1. Android on Ubuntu](#41-android-on-ubuntu)
@@ -48,13 +49,13 @@ uses [CMake](https://www.cmake.org) for building from source.
 It is C++ application build on top of [Qt](https://www.qt.io), [QGIS](https://www.qgis.org/en/site/)
 and many other FOSS libraries. 
 
-All required libraries (in release configuration) are packaged in the [Input-SDK](https://github.com/MerginMaps/input-sdk).
+All required libraries (in release configuration) are packaged in the [Mobile-SDK](https://github.com/MerginMaps/mobile-sdk).
 If you need to debug some error in the library, you need to compile Input-SDK in debug yourself locally. Otherwise
-it is suggested to download required libraries from [Input-SDK tags](https://github.com/MerginMaps/input-sdk/tags)
-Input-SDK uses vcpkg packaging system, so if the SDK for your target system/architecture you can build it yourself.
+it is suggested to download required libraries from [Mobile-SDK tags](https://github.com/MerginMaps/mobile-sdk/tags)
+Mobile-SDK uses vcpkg packaging system, so if the SDK for your target system/architecture you can build it yourself.
 
 Generally, for building setup, you need the same versions of libraries/SDKs/NDKs/compilers as used in the official 
-[GitHub Actions](https://github.com/MerginMaps/input/tree/master/.github/workflows).
+[GitHub Actions](https://github.com/MerginMaps/mobile/tree/master/.github/workflows).
 Open workflow file for your platform/target and see the version of libraries used and replicate it in your setup.
 
 ## 2.1 Secrets
@@ -99,6 +100,20 @@ In order to start using the `pre-commit`, run `pre-commit install` in the reposi
 To manually run the style check, run `pre-commit run --all-files` or optionally run script `format_cpp.sh` (we use this one in CI currently).
 
 In case you want to skip execution of pre-commit hooks, add additional flag `--no-verify` to your commit command, e.g.: `git commit -m "nit" --no-verify`
+
+## 2.3 Required Qt packages
+
+Mergin Maps is built with Qt. If you are using Qt's `Maintenance tool`, make sure to install these packages:
+ - `Android` -> when building for Andoroid
+ - `iOS` -> when building for iOS
+ - `macOS` -> or other desktop platform based on your host machine
+ - `Qt 5 Compatibility Module`
+ - `Qt Shader Tools`
+ - `Additional libraries:`
+   - `Qt Connectivity` -> used for Bluetooth
+   - `Qt Multimedia`
+   - `Qt Positioning`
+   - `Qt Sensors`
 
 # 3. Building GNU/Ubuntu
 

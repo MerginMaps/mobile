@@ -208,6 +208,9 @@ QtObject {
     property color guidelineColor: mapObjectsColor
     property real guidelineWidth: 4 * __dp
 
+    property real changelogLineWidth: 2 * __dp
+    property color changelogLineWColor: "lightGray"
+
     property color mapMarkerColor: mapObjectsColor
     property color mapMarkerBorderColor: "white"
 

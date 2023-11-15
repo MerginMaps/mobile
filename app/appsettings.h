@@ -36,6 +36,7 @@ class AppSettings: public QObject
     Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
     Q_PROPERTY( bool ignoreWsTooltip READ ignoreWsTooltip NOTIFY ignoreWsTooltipChanged )
     Q_PROPERTY( double gpsAntennaHeight READ gpsAntennaHeight WRITE setGpsAntennaHeight NOTIFY gpsAntennaHeightChanged )
+    Q_PROPERTY( QString ignoreMigrateVersion READ ignoreMigrateVersion WRITE setIgnoreMigrateVersion NOTIFY ignoreMigrateVersionChanged )
 
   public:
     explicit AppSettings( QObject *parent = nullptr );
@@ -88,6 +89,9 @@ class AppSettings: public QObject
     double gpsAntennaHeight() const;
     void setGpsAntennaHeight( double gpsAntennaHeight );
 
+    QString ignoreMigrateVersion() const;
+    void setIgnoreMigrateVersion( const QString &version );
+
     Q_INVOKABLE void wsTooltipShown();
     bool ignoreWsTooltip() const; // ---> can be removed after migration to ws
 
@@ -116,6 +120,7 @@ class AppSettings: public QObject
     void autosyncAllowedChanged( bool autosyncAllowed );
 
     void ignoreWsTooltipChanged(); // ---> can be removed after migration to ws
+    void ignoreMigrateVersionChanged();
 
   private:
     // Projects path
@@ -151,6 +156,7 @@ class AppSettings: public QObject
     bool mAutosyncAllowed = false;
     int mWsTooltipShownCounter = 0; // ---> can be removed after migration to ws
     double mGpsAntennaHeight = 0;
+    QString mIgnoreMigrateVersion;
 };
 
 #endif // APPSETTINGS_H

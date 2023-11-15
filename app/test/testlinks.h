@@ -134,6 +134,11 @@ class TestLinks: public QObject
       _run( mHelp.whatsNewPostLink() );
     }
 
+    void testChangelogLink()
+    {
+      _run( mHelp.changelogLink() );
+    }
+
   private:
     InputHelp mHelp;
     QNetworkAccessManager mManager;

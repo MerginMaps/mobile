@@ -37,7 +37,7 @@ struct MerginFile
   //
 
   bool pullCanUseDiff = false;  //!< whether or not we can update the local file by downloading and applying diffs
-  QList< QPair<int, int> > pullDiffFiles;   //!< list of diffs that will need to be fetched: the version and their sizes
+  QList< QPair<int, qint64> > pullDiffFiles;   //!< list of diffs that will need to be fetched: the version and their sizes
 
   static MerginFile fromJsonObject( const QJsonObject &merginFileInfo );
 };

@@ -31,7 +31,7 @@ concurrency:
 
 jobs:
   ios_build:
-    if: ( github.repository == 'MerginMaps/input' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-12
     steps:
       - name: Select latest Xcode
@@ -135,7 +135,7 @@ jobs:
         run: |
           wget -O \
             ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/MerginMaps/input-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
+            https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
           mkdir -p ${{ github.workspace }}/input-sdk/arm64-ios
           cd ${{ github.workspace }}/input-sdk/arm64-ios
           tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
@@ -231,5 +231,5 @@ jobs:
           xcrun altool --upload-app -t ios -f build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
 
           # Add comment to GitHub
-          GITHUB_API=https://api.github.com/repos/MerginMaps/input/commits/${GITHUB_SHA}/comments
+          GITHUB_API=https://api.github.com/repos/MerginMaps/mobile/commits/${GITHUB_SHA}/comments
           curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "iOS - version '${CF_BUNDLE_VERSION}' just submitted!"}' ${GITHUB_API}

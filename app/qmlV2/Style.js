@@ -71,13 +71,51 @@
 //const checkmarkIcon = "qrc:/Checkmark.svg"
 //const closeButtonIcon = "qrc:/CloseButton.svg"
 
+// Icons
+const arrowLinkRightIcon= "qrc:/Arrow Link Right.svg"
+const searchIcon = "qrc:/Search.svg"
+const calendarIcon = "qrc:/Calendar.svg"
+const showIcon = "qrc:/Show.svg"
+const hideIcon = "qrc:/Hide.svg"
+const xMarkIcon = "qrc:/X Mark.svg"
+const errorIcon = "qrc:/Error.svg"
+const arrowUpIcon = "qrc:/Arrow Up.svg"
+const arrowDownIcon = "qrc:/Arrow Down.svg"
+const qrCodeIcon = "qrc:/QR Code.svg"
+const checkmarkIcon = "qrc:/Checkmark.svg"
+const closeButtonIcon = "qrc:/CloseButton.svg"
+const closeIcon = "qrc:/Close.svg"
+const waitingIcon = "qrc:/Waiting.svg"
+const deleteIcon = "qrc:/Delete.svg"
+const doneIcon = "qrc:/Done.svg"
+const editIcon = "qrc:/Edit.svg"
+const moreIcon = "qrc:/More.svg"
+
 //// Images
 //const uploadImage = "qrc:/UploadImage.svg"
 //const reachedDataLimitImage = "qrc:/ReachedDataLimitImage.svg"
 
-//// Spacing
-//const commonSpacing = 20 * __dp
+// Shadow
+const shadowVerticalOffset = 3 * __dp
+const shadowHorizontalOffset = 2 * __dp
+const shadowRadius = 7 * __dp
+const shadowColor = "#66777777"
 
-//function dynamicText() {
-//  return "Dynamic text"
-//}
+// Spacing
+const commonSpacing = 20 * __dp
+
+// Map items
+const mapItemHeight = 50 * __dp
+
+// Notification
+const notificationRadius = 12 * __dp
+const notificationSpace = 3 * __dp
+
+// Toolbar
+const toolbarHeight = 89 * __dp
+const minimumToolbarButtonWidth = 100 * __dp
+const menuDrawerHeight = 67 * __dp
+const toolbarLongButtonWidth = 50 * __dp
+const minimumToolbarLongButtonWidth = 200 * __dp
+const maximumToolbarLongButtonWidth = 500 * __dp
+
