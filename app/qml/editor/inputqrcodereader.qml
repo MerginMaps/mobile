@@ -78,6 +78,8 @@ AbstractEditor {
   onRightActionClicked: {
     if ( root.parent.readOnly ) return
 
+    if (!__inputUtils.acquireCameraPermission()) return
+
     let page = root.formView.push( readerComponent, {} )
     page.forceActiveFocus()
   }
