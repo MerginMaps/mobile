@@ -14,7 +14,7 @@ import QtLocation
 import QtPositioning
 
 import "../../app/qmlV2/component"
-import "../../app/qmlV2/Style.js" as Style
+import "../../app/qmlV2/"
 
 Page {
   id: pane
@@ -88,12 +88,12 @@ Page {
     spacing: 20
 
     MMMapButton {
-      iconSource: Style.arrowLinkRightIcon
+      iconSource: StyleV2.arrowLinkRightIcon
       onClicked: console.log("Map button clicked")
     }
 
     MMMapButton {
-      iconSource: Style.searchIcon
+      iconSource: StyleV2.searchIcon
       onClicked: console.log("Map button clicked")
     }
   }
@@ -105,7 +105,7 @@ Page {
     anchors.bottomMargin: 120
 
     text: "20.0 m"
-    iconSource: Style.checkmarkIcon
+    iconSource: StyleV2.checkmarkIcon
   }
 
   MMMapLabel {

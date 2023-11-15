@@ -45,8 +45,8 @@ Item {
     background: Rectangle {
       color: (errorMsg.length > 0 || warningMsg.length > 0) ? StyleV2.errorBgInputColor : StyleV2.whiteColor
       border.color: (textArea.activeFocus || textArea.hovered) ? (errorMsg.length > 0 ? StyleV2.negativeColor :
-                                                                                      warningMsg.length > 0 ? StyleV2.warningColor :
-                                                                                                              StyleV2.forestColor) : StyleV2.transparentColor
+                                                                                        warningMsg.length > 0 ? StyleV2.warningColor :
+                                                                                                                StyleV2.forestColor) : StyleV2.transparentColor
       border.width: enabled ? (textArea.activeFocus ? 2*__dp : 1*__dp) : 0
       radius: 10 * __dp
     }

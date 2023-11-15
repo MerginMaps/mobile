@@ -8,26 +8,26 @@
  ***************************************************************************/
 
 import QtQuick
-import "../Style.js" as Style
 import notificationType 1.0
+import ".."
 
 Rectangle {
   id: notification
 
-  width: listView.width - 2 * Style.commonSpacing
+  width: listView.width - 40 * __dp
   height: text.height + 2 * 15 * __dp
   anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
 
   readonly property int innerSpacing: 5 * __dp
 
-  radius: Style.notificationRadius
+  radius: 12 * __dp
   color: {
     switch( type ) {
-    case NotificationType.Information: return Style.informative
-    case NotificationType.Success: return Style.positive
-    case NotificationType.Warning: return Style.warning
-    case NotificationType.Error: return Style.negative
-    default: return Style.positive
+    case NotificationType.Information: return StyleV2.informativeColor
+    case NotificationType.Success: return StyleV2.positiveColor
+    case NotificationType.Warning: return StyleV2.warningColor
+    case NotificationType.Error: return StyleV2.negativeColor
+    default: return StyleV2.positiveColor
     }
   }
 
@@ -43,9 +43,9 @@ Rectangle {
     visible: icon !== NotificationType.None
     source: {
       switch( icon ) {
-      case NotificationType.None: return Style.checkmarkIcon
-      case NotificationType.Waiting: return Style.waitingIcon
-      case NotificationType.Check: return Style.checkmarkIcon
+      case NotificationType.None: return StyleV2.checkmarkIcon
+      case NotificationType.Waiting: return StyleV2.waitingIcon
+      case NotificationType.Check: return StyleV2.checkmarkIcon
       }
     }
   }
@@ -55,12 +55,12 @@ Rectangle {
 
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: leftIcon.right
-    width: parent.width - 3 * Style.commonSpacing - closeButton.width - leftIcon.width
+    width: parent.width - 60 * __dp - closeButton.width - leftIcon.width
     text: message
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignLeft
-    leftPadding: Style.commonSpacing - notification.innerSpacing
-    font: Qt.font(Style.t3)
+    leftPadding: 20 * __dp - notification.innerSpacing
+    font: StyleV2.t3
     clip: true
     maximumLineCount: 3
     wrapMode: Text.WordWrap
@@ -68,10 +68,10 @@ Rectangle {
     elide: Text.ElideRight
     color: {
       switch( type ) {
-      case NotificationType.Information: return Style.deepOcean
-      case NotificationType.Success: return Style.forest
-      case NotificationType.Warning: return Style.earth
-      case NotificationType.Error: return Style.grape
+      case NotificationType.Information: return StyleV2.deepOceanColor
+      case NotificationType.Success: return StyleV2.forestColor
+      case NotificationType.Warning: return StyleV2.earthColor
+      case NotificationType.Error: return StyleV2.grapeColor
       }
     }
   }
@@ -80,10 +80,10 @@ Rectangle {
     id: closeButton
 
     anchors.right: parent.right
-    anchors.rightMargin: Style.commonSpacing
+    anchors.rightMargin: 20 * __dp
     anchors.verticalCenter: parent.verticalCenter
     scale: maRemove.containsMouse ? 1.2 : 1
-    source: Style.closeIcon
+    source: StyleV2.closeIcon
     color: text.color
 
     MouseArea {

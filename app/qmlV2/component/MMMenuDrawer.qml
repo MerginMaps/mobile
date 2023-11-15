@@ -10,8 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
 import "."
+import ".."
 
 Drawer {
   id: control
@@ -32,30 +32,30 @@ Drawer {
     anchors.right: parent.right
     height: 2 * radius
     anchors.topMargin: -radius
-    radius: Style.commonSpacing
+    radius: 20 * __dp
   }
 
   Rectangle {
     id: roundedRect
 
     anchors.fill: parent
-    color: Style.white
+    color: StyleV2.whiteColor
 
     Column {
       id: mainColumn
 
       width: parent.width
-      spacing: Style.commonSpacing
-      leftPadding: Style.commonSpacing
-      rightPadding: Style.commonSpacing
-      bottomPadding: Style.commonSpacing
+      spacing: 20 * __dp
+      leftPadding: 20 * __dp
+      rightPadding: 20 * __dp
+      bottomPadding: 20 * __dp
 
       Image {
         id: closeButton
 
-        source: Style.closeButtonIcon
+        source: StyleV2.closeButtonIcon
         anchors.right: parent.right
-        anchors.rightMargin: Style.commonSpacing
+        anchors.rightMargin: 20 * __dp
 
         MouseArea {
           anchors.fill: parent
@@ -67,9 +67,9 @@ Drawer {
         id: title
 
         anchors.horizontalCenter: parent.horizontalCenter
-        font: Qt.font(Style.t1)
-        width: parent.width - 2*Style.commonSpacing
-        color: Style.forest
+        font: StyleV2.t1
+        width: parent.width - 40 * __dp
+        color: StyleV2.forestColor
         visible: text.length > 0
         horizontalAlignment: Text.AlignHCenter
       }
@@ -77,10 +77,10 @@ Drawer {
       GridView {
         id: menuView
 
-        width: parent.width - 2 * Style.commonSpacing
-        height: model ? model.count * Style.menuDrawerHeight : 0
+        width: parent.width - 40 * __dp
+        height: model ? model.count * StyleV2.menuDrawerHeight : 0
         cellWidth: width
-        cellHeight: Style.menuDrawerHeight
+        cellHeight: StyleV2.menuDrawerHeight
         interactive: false
       }
     }

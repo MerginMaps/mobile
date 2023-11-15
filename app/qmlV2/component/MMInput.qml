@@ -60,8 +60,8 @@ Item {
 
     height: 40 * __dp
     width: parent.width
-    color: (errorMsg.length > 0 || warningMsg.length > 0) ? Style.errorBgInputColor : Style.white
-    border.color: errorMsg.length > 0 ? Style.negative : warningMsg.length > 0 ? Style.warning : Style.forest
+    color: (errorMsg.length > 0 || warningMsg.length > 0) ? StyleV2.errorBgInputColor : StyleV2.whiteColor
+    border.color: errorMsg.length > 0 ? StyleV2.negativeColor : warningMsg.length > 0 ? StyleV2.warningColor : StyleV2.forestColor
     border.width: enabled ? (textField.activeFocus ? 2*__dp : textField.hovered ? 1*__dp : 0) : 0
     radius: parent.height
 
@@ -75,9 +75,9 @@ Item {
         id: leftIcon
 
         source: control.iconSource
-        color: errorMsg.length > 0 ? Style.negative :
-                                     warningMsg.length > 0 ? Style.warning :
-                                                             control.enabled ? Style.forest : Style.mediumGreen
+        color: errorMsg.length > 0 ? StyleV2.negativeColor :
+                                     warningMsg.length > 0 ? StyleV2.warningColor :
+                                                             control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
         height: rect.height
       }
 
@@ -103,8 +103,8 @@ Item {
         id: clearButton
 
         property bool pressed: false
-        source: Style.xMarkIcon
-        color: control.enabled ? Style.forest : Style.mediumGreen
+        source: StyleV2.xMarkIcon
+        color: control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
         width: visible ? height : 0
         height: rect.height
         visible: textField.activeFocus && textField.text.length>0

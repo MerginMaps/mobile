@@ -11,6 +11,10 @@ pragma Singleton
 import QtQuick
 
 QtObject {
+  // Fonts - how to use
+  // standard - font: StyleV2.p5
+  // extended - font.pixelSize: StyleV2.p5.pixelSize; font.italic: true
+
   // Fonts - Title
   readonly property font t1: Qt.font({ pixelSize: 18 * __dp, bold: true })
   readonly property font t2: Qt.font({ pixelSize: 16 * __dp, bold: true })
@@ -60,6 +64,7 @@ QtObject {
   // Colors - others
   readonly property color nightAlphaColor: "#AA12181F" // placeholder input color
   readonly property color errorBgInputColor: "#FEFAF9" // error bg input color
+  readonly property color shadowColor: "#66777777"
 
   // Icons
   readonly property url arrowLinkRightIcon: "qrc:/Arrow Link Right.svg"
@@ -74,8 +79,21 @@ QtObject {
   readonly property url qrCodeIcon: "qrc:/QR Code.svg"
   readonly property url checkmarkIcon: "qrc:/Checkmark.svg"
   readonly property url closeButtonIcon: "qrc:/CloseButton.svg"
+  readonly property url closeIcon: "qrc:/Close.svg"
+  readonly property url waitingIcon: "qrc:/Waiting.svg"
+  readonly property url deleteIcon: "qrc:/Delete.svg"
+  readonly property url doneIcon: "qrc:/Done.svg"
+  readonly property url editIcon: "qrc:/Edit.svg"
+  readonly property url moreIcon: "qrc:/More.svg"
 
   // Images
   readonly property url uploadImage: "qrc:/UploadImage.svg"
   readonly property url reachedDataLimitImage: "qrc:/ReachedDataLimitImage.svg"
+
+  // Map items
+  readonly property double mapItemHeight: 50 * __dp
+
+  // Toolbar
+  readonly property double toolbarHeight: 89 * __dp
+  readonly property double menuDrawerHeight: 67 * __dp
 }

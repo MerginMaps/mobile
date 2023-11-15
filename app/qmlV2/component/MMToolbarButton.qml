@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
+import ".."
 
 Item {
   id: control
@@ -24,14 +24,14 @@ Item {
 
   enum Button { Normal, Save }
 
-  height: isMenuButton ? Style.menuDrawerHeight/2 : Style.toolbarHeight
+  height: isMenuButton ? StyleV2.menuDrawerHeight/2 : StyleV2.toolbarHeight
 
   Rectangle {
-    width: parent.width - Style.commonSpacing/2
-    height: parent.height - Style.commonSpacing/2
+    width: parent.width - 10 * __dp
+    height: parent.height - 10 * __dp
     anchors.centerIn: parent
     clip: control.type !== MMToolbarButton.Button.Save
-    color: Style.transparent
+    color: StyleV2.transparentColor
     visible: !control.isMenuButton
 
     Image {
@@ -40,7 +40,7 @@ Item {
       source: control.iconSource
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.bottom: parent.bottom
-      anchors.bottomMargin: 2 * Style.commonSpacing + (control.type === MMToolbarButton.Button.Save ? 14 * __dp : 0)
+      anchors.bottomMargin: 40 * __dp + (control.type === MMToolbarButton.Button.Save ? 14 * __dp : 0)
 
       Rectangle {
         visible: control.type === MMToolbarButton.Button.Save
@@ -48,8 +48,8 @@ Item {
         width: 56 * __dp
         height: width
         radius: width / 2
-        color: Style.transparent
-        border.color: Style.grass
+        color: StyleV2.transparentColor
+        border.color: StyleV2.grassColor
         border.width: 14 * __dp
       }
     }
@@ -58,11 +58,11 @@ Item {
 
       text: control.text
       width: parent.width
-      color: Style.white
-      font: Qt.font(Style.t4)
+      color: StyleV2.whiteColor
+      font: StyleV2.t4
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.bottom: parent.bottom
-      anchors.bottomMargin: Style.commonSpacing
+      anchors.bottomMargin: 20 * __dp
       horizontalAlignment: Text.AlignHCenter
     }
 
@@ -75,7 +75,7 @@ Item {
   // Menu button
   MMToolbarMenuButton {
     width: control.width
-    height: Style.menuDrawerHeight
+    height: StyleV2.menuDrawerHeight
     visible: control.isMenuButton
     iconSource: control.iconSource
     text: control.text

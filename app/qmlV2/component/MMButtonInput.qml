@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
+import ".."
 
 Item {
   id: control
@@ -44,13 +44,13 @@ Item {
       MMIcon {
         id: msgIcon
 
-        source: visible ? Style.errorIcon : ""
-        color: errorMsg.length > 0 ? Style.negative : Style.warning
+        source: visible ? StyleV2.errorIcon : ""
+        color: errorMsg.length > 0 ? StyleV2.negativeColor : StyleV2.warningColor
         visible: errorMsg.length > 0 || warningMsg.length > 0
       }
       Text {
         text: errorMsg.length > 0 ? errorMsg : warningMsg
-        font: Qt.font(Style.t4)
+        font: StyleV2.t4
         wrapMode: Text.WordWrap
         width: messageItem.width - msgRow.spacing - msgIcon.width
         visible: errorMsg.length > 0 || warningMsg.length > 0
@@ -63,8 +63,8 @@ Item {
 
     height: 40 * __dp
     width: parent.width
-    color: (errorMsg.length > 0 || warningMsg.length > 0) ? Style.errorBgInputColor : Style.white
-    border.color: errorMsg.length > 0 ? Style.negative : warningMsg.length > 0 ? Style.warning : Style.forest
+    color: (errorMsg.length > 0 || warningMsg.length > 0) ? StyleV2.errorBgInputColor : StyleV2.whiteColor
+    border.color: errorMsg.length > 0 ? StyleV2.negativeColor : warningMsg.length > 0 ? StyleV2.warningColor : StyleV2.forestColor
     border.width: enabled ? (textField.activeFocus ? 2*__dp : textField.hovered ? 1*__dp : 0) : 0
     radius: parent.height
 
@@ -78,9 +78,9 @@ Item {
         id: leftIcon
 
         source: control.iconSource
-        color: errorMsg.length > 0 ? Style.negative :
-                                     warningMsg.length > 0 ? Style.warning :
-                                                             control.enabled ? Style.forest : Style.mediumGreen
+        color: errorMsg.length > 0 ? StyleV2.negativeColor :
+                                     warningMsg.length > 0 ? StyleV2.warningColor :
+                                                             control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
         height: rect.height
       }
 
@@ -92,13 +92,13 @@ Item {
                - (leftIcon.visible ? leftIcon.width : 0)
                - (button.visible ? button.width : 0)
         height: rect.height - 4 * __dp
-        color: control.enabled ? Style.night : Style.mediumGreen
-        placeholderTextColor: Style.night_6
-        font: Qt.font(Style.p5)
+        color: control.enabled ? StyleV2.nightColor : StyleV2.mediumGreenColor
+        placeholderTextColor: StyleV2.nightAlphaColor
+        font: StyleV2.p5
         hoverEnabled: true
         anchors.verticalCenter: parent.verticalCenter
         background: Rectangle {
-          color: Style.transparent
+          color: StyleV2.transparentColor
         }
       }
 
@@ -109,20 +109,20 @@ Item {
 
         contentItem: Text {
           anchors.centerIn: button
-          font: Qt.font(Style.t5)
+          font: StyleV2.t5
           text: control.buttonText
           leftPadding: 2 * __dp
           rightPadding: 2 * __dp
           topPadding: 2 * __dp
           bottomPadding: 2 * __dp
-          color: Style.deepOcean
+          color: StyleV2.deepOceanColor
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
           elide: Text.ElideRight
         }
 
         background: Rectangle {
-          color: button.enabled ? Style.grass : Style.mediumGreen
+          color: button.enabled ? StyleV2.grassColor : StyleV2.mediumGreenColor
           radius: height / 2
         }
 

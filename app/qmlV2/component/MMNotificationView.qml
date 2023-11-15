@@ -8,13 +8,13 @@
  ***************************************************************************/
 
 import QtQuick
-import "../Style.js" as Style
+import ".."
 
 Item {
   id: control
 
   anchors.top: parent.top
-  anchors.topMargin: Style.commonSpacing
+  anchors.topMargin: 20 * __dp
   width: parent.width
   height: parent.height
 
@@ -23,12 +23,12 @@ Item {
     anchors.bottom: parent.bottom
     width: control.width
     height: 20
-    color: Style.white
+    color: StyleV2.whiteColor
 
     Text {
       text: listView.count
       anchors.centerIn: parent
-      color: Style.forest
+      color: StyleV2.forestColor
     }
   }
 
@@ -38,7 +38,7 @@ Item {
     anchors.top: parent.top
     width: parent.width
     height: contentHeight
-    spacing: Style.notificationSpace
+    spacing: 3 * __dp
     clip: true
     model: notificationModel
     delegate: MMNotification {

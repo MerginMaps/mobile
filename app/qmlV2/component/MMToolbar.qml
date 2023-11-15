@@ -9,7 +9,7 @@
 
 import QtQuick
 import Qt5Compat.GraphicalEffects
-import "../Style.js" as Style
+import ".."
 
 Rectangle {
   id: control
@@ -18,13 +18,15 @@ Rectangle {
 
   required property var model
 
+  readonly property double minimumToolbarButtonWidth: 100 * __dp
+
   anchors {
     left: parent.left
     right: parent.right
     bottom: parent.bottom
   }
-  height: Style.toolbarHeight
-  color: Style.forest
+  height: StyleV2.toolbarHeight
+  color: StyleV2.forestColor
 
   onWidthChanged: setupBottomBar()
 
@@ -43,9 +45,9 @@ Rectangle {
 
     model: visibleButtonModel
     anchors.fill: parent
-    leftMargin: Style.commonSpacing
-    rightMargin: Style.commonSpacing
-    cellHeight: Style.toolbarHeight
+    leftMargin: 20 * __dp
+    rightMargin: 20 * __dp
+    cellHeight: StyleV2.toolbarHeight
     interactive: false
   }
 
@@ -65,7 +67,7 @@ Rectangle {
     id: componentMore
     MMToolbarButton {
       text: qsTr("More")
-      iconSource: Style.moreIcon
+      iconSource: StyleV2.moreIcon
       onClicked: menu.visible = true
     }
   }
@@ -74,12 +76,12 @@ Rectangle {
   function setupBottomBar() {
     var m = control.model
     var c = m.count
-    var w = control.width - 2 * Style.commonSpacing
+    var w = control.width - 40 * __dp
     var button
 
     // add all buttons (max 4) into toolbar
     visibleButtonModel.clear()
-    if(c <= 4 || w >= c*Style.minimumToolbarButtonWidth) {
+    if(c <= 4 || w >= c*control.minimumToolbarButtonWidth) {
       for( var i = 0; i < c; i++ ) {
         button = m.get(i)
         if(button.isMenuButton !== undefined)
@@ -92,11 +94,11 @@ Rectangle {
     else {
       // not all buttons are visible in toolbar due to width
       // the past of them will apper in the menu inside '...' button
-      var maxVisible = Math.floor(w/Style.minimumToolbarButtonWidth)
+      var maxVisible = Math.floor(w/control.minimumToolbarButtonWidth)
       if(maxVisible<4)
         maxVisible = 4
       for( i = 0; i < maxVisible-1; i++ ) {
-        if(maxVisible===4 || w >= i*Style.minimumToolbarButtonWidth) {
+        if(maxVisible===4 || w >= i*control.minimumToolbarButtonWidth) {
           button = m.get(i)
           button.isMenuButton = false
           button.width = Math.floor(w / maxVisible)
