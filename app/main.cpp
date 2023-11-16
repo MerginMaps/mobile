@@ -480,7 +480,6 @@ int main( int argc, char *argv[] )
   MerginProjectStatusModel mpsm( localProjectsManager );
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );
-  // QrCodeDecoder qrCodeDecoder;
 
   // layer models
   LayersModel lm;
@@ -611,7 +610,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__localProjectsManager", &localProjectsManager );
   engine.rootContext()->setContextProperty( "__variablesManager", vm.get() );
   engine.rootContext()->setContextProperty( "__positionKit", &pk );
-  // engine.rootContext()->setContextProperty( "__qrCodeDecoder", &qrCodeDecoder );
 
   // add image provider to pass QIcons/QImages from C++ to QML
   engine.rootContext()->setContextProperty( "__layerTreeModelPixmapProvider", layerTreeModelPixmapProvider );
