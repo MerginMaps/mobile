@@ -7,25 +7,23 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CODESCANNER_H
-#define CODESCANNER_H
+#ifndef QRCODEDECODER_H
+#define QRCODEDECODER_H
 
 #include <QObject>
 #include <QVideoSink>
 #include <QPointer>
 #include <QVideoFrame>
+#include <QFutureWatcher>
 
 #include "inputconfig.h"
 
-#include "qrdecoder.h"
-
-class QRWorker;
-
 /**
- * Converts frames from videoSink (from QML) to images and sends to QRDecoder.
+ * Converts frames from videoSink (from QML) to images and decodes QR codes from them
  * It ignores most of the frames and process only few of them per second.
+ * Processing of a single frame is in new thread.
  */
-class CodeScanner : public QObject
+class QrCodeDecoder : public QObject
 {
     Q_OBJECT
 
@@ -33,29 +31,31 @@ class CodeScanner : public QObject
 
   public:
 
-    explicit CodeScanner( QObject *parent = nullptr );
-    ~CodeScanner() override;
+    explicit QrCodeDecoder( QObject *parent = nullptr );
+    ~QrCodeDecoder() override;
 
     QVideoSink *videoSink() const;
     void setVideoSink( QVideoSink *videoSink );
 
-  public slots:
-    void processFrame( const QVideoFrame &frame );
-    void ignoreTimeout();
-
   signals:
-    void startProcessing( const QVideoFrame &frame );
-
     void codeScanned( const QString &codeData );
     void videoSinkChanged();
 
-  private:
-    QPointer<QVideoSink> mVideoSink;
+  private slots:
+    void onFutureFinished();
+    void ignoreTimeout();
+    void processFrame( const QVideoFrame &frame );
 
-    QRDecoder mDecoder;
+  private:
+    QString processImage( QImage capturedImage );
+
+    QPointer<QVideoSink> mVideoSink;
+    QFutureWatcher<QString> mQrCodeWatcher;
+
+    bool mIsDecoding = false;
     bool mIgnoreFrames = false;
 
     const int IGNORE_TIMER_INTERVAL = 1000; // in ms
 };
 
-#endif // CODESCANNER_H
+#endif // QRCODEDECODER_H

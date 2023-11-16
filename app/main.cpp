@@ -56,7 +56,7 @@
 #include "inputprojutils.h"
 #include "fieldsmodel.h"
 #include "projectwizard.h"
-#include "codescanner.h"
+#include "qrcodedecoder.h"
 #include "inputexpressionfunctions.h"
 #include "compass.h"
 #include "attributepreviewcontroller.h"
@@ -271,7 +271,7 @@ void initDeclarative()
   qmlRegisterType<PositionDirection>( "lc", 1, 0, "PositionDirection" );
   qmlRegisterType<Compass>( "lc", 1, 0, "Compass" );
   qmlRegisterType<FieldsModel>( "lc", 1, 0, "FieldsModel" );
-  qmlRegisterType<CodeScanner>( "lc", 1, 0, "CodeScanner" );
+  qmlRegisterType<QrCodeDecoder>( "lc", 1, 0, "QrCodeDecoder" );
   qmlRegisterType<ProjectsModel>( "lc", 1, 0, "ProjectsModel" );
   qmlRegisterType<ProjectsProxyModel>( "lc", 1, 0, "ProjectsProxyModel" );
   qmlRegisterType<AttributePreviewController>( "lc", 1, 0, "AttributePreviewController" );
@@ -480,6 +480,7 @@ int main( int argc, char *argv[] )
   MerginProjectStatusModel mpsm( localProjectsManager );
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );
+  // QrCodeDecoder qrCodeDecoder;
 
   // layer models
   LayersModel lm;
@@ -610,6 +611,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__localProjectsManager", &localProjectsManager );
   engine.rootContext()->setContextProperty( "__variablesManager", vm.get() );
   engine.rootContext()->setContextProperty( "__positionKit", &pk );
+  // engine.rootContext()->setContextProperty( "__qrCodeDecoder", &qrCodeDecoder );
 
   // add image provider to pass QIcons/QImages from C++ to QML
   engine.rootContext()->setContextProperty( "__layerTreeModelPixmapProvider", layerTreeModelPixmapProvider );

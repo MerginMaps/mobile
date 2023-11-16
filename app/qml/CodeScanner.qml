@@ -12,7 +12,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtMultimedia
 import lc 1.0 as InputClass
-
 import "./components"
 
 Page {
@@ -20,6 +19,16 @@ Page {
 
   signal backButtonClicked()
   signal scanFinished( var data )
+
+  function unload() {
+    // unlink camera and qr decoder
+    // otherwise on iOS there are some
+    // crashes time to time on back button click
+    qrcodeScanner.videoSink = null
+    camera.active = false
+    captureSession.videoOutput = null
+    captureSession.camera = null
+  }
 
   header: PanelHeader {
     id: scannerPageHeader
@@ -33,8 +42,9 @@ Page {
     titleText: qsTr( "Scan code" )
 
     onBack: {
+      root.unload()
       root.backButtonClicked()
-     }
+    }
 
     withBackButton: true
   }
@@ -49,12 +59,14 @@ Page {
     videoOutput: videoOutput
   }
 
-  InputClass.CodeScanner {
+
+  InputClass.QrCodeDecoder {
     id: qrcodeScanner
 
     videoSink: videoOutput.videoSink
 
     onCodeScanned: function( codeData ) {
+      root.unload()
       root.scanFinished( codeData )
     }
   }
