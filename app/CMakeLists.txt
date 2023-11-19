@@ -47,7 +47,7 @@ set(MM_SRCS
     appsettings.cpp
     autosynccontroller.cpp
     bluetoothdiscoverymodel.cpp
-    codescanner.cpp
+    qrcodedecoder.cpp
     compass.cpp
     featurelayerpair.cpp
     featuresmodel.cpp
@@ -68,7 +68,6 @@ set(MM_SRCS
     projectsmodel.cpp
     projectsproxymodel.cpp
     projectwizard.cpp
-    qrdecoder.cpp
     relationfeaturesmodel.cpp
     relationreferencefeaturesmodel.cpp
     scalebarkit.cpp
@@ -127,7 +126,7 @@ set(MM_HDRS
     appsettings.h
     autosynccontroller.h
     bluetoothdiscoverymodel.h
-    codescanner.h
+    qrcodedecoder.h
     compass.h
     enumhelper.h
     featurelayerpair.h
@@ -148,7 +147,6 @@ set(MM_HDRS
     projectsmodel.h
     projectsproxymodel.h
     projectwizard.h
-    qrdecoder.h
     relationfeaturesmodel.h
     relationreferencefeaturesmodel.h
     scalebarkit.h
@@ -544,7 +542,6 @@ add_subdirectory(qml)
 
 # register Singleton
 set_source_files_properties(qml/InputStyle.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
-set_source_files_properties(qml/MMCamera.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 # make sure the QML files are not prefixed with "qml/" in the qmldir
 set(MM_QML_SRCS)

@@ -38,7 +38,6 @@ set(MM_QML
     dialogs/NoPermissionsDialog.qml
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
-    dialogs/InstallScannerAppDialog.qml
     editor/AbstractEditor.qml
     editor/RelationPhotoDelegate.qml
     editor/RelationPhotoFooterDelegate.qml
@@ -108,7 +107,6 @@ set(MM_QML
     MainPanel.qml
     ManageInvitationsPage.qml
     MapThemePanel.qml
-    MMCamera.qml
     Notification.qml
     NotificationBanner.qml
     NumberSpin.qml
