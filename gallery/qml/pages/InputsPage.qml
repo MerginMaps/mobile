@@ -35,22 +35,22 @@ ScrollView {
         spacing: 10
         anchors.fill: parent
         MMInput {
+          title: "Title"
           placeholderText: "Place holder"
         }
         MMInput {
+          title: "Title"
           text: "Disabled"
           enabled: false
         }
         Column {
-          TextInput { text: "iconSource: StyleV2.searchIcon" }
           MMInput {
+            title: "Search ..."
             placeholderText: "Search"
             iconSource: StyleV2.searchIcon
           }
         }
         Column {
-          TextInput { text: "iconSource: StyleV2.calendarIcon" }
-          TextInput { text: "warningMsg: ..." }
           MMInput {
             text: "Calendar"
             iconSource: StyleV2.calendarIcon
@@ -76,6 +76,7 @@ ScrollView {
         spacing: 10
         anchors.fill: parent
         MMPasswordInput {
+          title: "Username password"
           text: "Password"
           regexp: '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,})'
           errorMsg: "Password must contain at least 6 characters\nMinimum 1 number, uppercase and lowercase letter and special character"
@@ -104,6 +105,7 @@ ScrollView {
         spacing: 10
         anchors.fill: parent
         MMButtonInput {
+          title: "Title"
           text: "Copy text to clipboard"
           buttonText: "Copy"
           onClicked: { textToClipboard(); console.log("Text in clipboard") }

@@ -12,9 +12,10 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 import ".."
 
-Item {
+Column {
   id: control
 
+  property alias title: titleItem.text
   property alias text: textField.text
   property alias placeholderText: textField.placeholderText
   property url iconSource: ""
@@ -24,38 +25,16 @@ Item {
 
   signal clicked
 
+  spacing: 6 * __dp
   width: 280 * __dp
-  height: rect.height + messageItem.height
 
-  Item {
-    id: messageItem
+  Text {
+    id: titleItem
 
     width: parent.width
-    anchors.left: parent.left
-    anchors.top: rect.bottom
-    anchors.topMargin: 6 * __dp
-    height: msgRow.height
-
-    Row {
-      id: msgRow
-
-      spacing: 4 * __dp
-
-      MMIcon {
-        id: msgIcon
-
-        source: visible ? StyleV2.errorIcon : ""
-        color: errorMsg.length > 0 ? StyleV2.negativeColor : StyleV2.warningColor
-        visible: errorMsg.length > 0 || warningMsg.length > 0
-      }
-      Text {
-        text: errorMsg.length > 0 ? errorMsg : warningMsg
-        font: StyleV2.t4
-        wrapMode: Text.WordWrap
-        width: messageItem.width - msgRow.spacing - msgIcon.width
-        visible: errorMsg.length > 0 || warningMsg.length > 0
-      }
-    }
+    font: StyleV2.p6
+    wrapMode: Text.WordWrap
+    visible: text.length > 0
   }
 
   Rectangle {
@@ -127,6 +106,34 @@ Item {
         }
 
         onClicked: control.clicked()
+      }
+    }
+  }
+
+  Item {
+    id: messageItem
+
+    width: parent.width
+    height: msgRow.height
+
+    Row {
+      id: msgRow
+
+      spacing: 4 * __dp
+
+      MMIcon {
+        id: msgIcon
+
+        source: visible ? StyleV2.errorIcon : ""
+        color: errorMsg.length > 0 ? StyleV2.negativeColor : StyleV2.warningColor
+        visible: errorMsg.length > 0 || warningMsg.length > 0
+      }
+      Text {
+        text: errorMsg.length > 0 ? errorMsg : warningMsg
+        font: StyleV2.t4
+        wrapMode: Text.WordWrap
+        width: messageItem.width - msgRow.spacing - msgIcon.width
+        visible: errorMsg.length > 0 || warningMsg.length > 0
       }
     }
   }
