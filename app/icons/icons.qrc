@@ -14,5 +14,6 @@
         <file>CloseButton.svg</file>
         <file>UploadImage.svg</file>
         <file>ReachedDataLimitImage.svg</file>
+        <file>MorePhotos.svg</file>
     </qresource>
 </RCC>

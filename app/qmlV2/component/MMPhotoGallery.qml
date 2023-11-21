@@ -14,10 +14,19 @@ import "../Style.js" as Style
 import "."
 
 Item {
+  id: control
+
   width: parent.width
   height: column.height
 
   property alias model: rowView.model
+  property string title
+  property string warningMsg
+  property string errorMsg
+  property int maxVisiblePhotos: 5
+
+  signal showAll()
+  signal clicked( var path )
 
   Column {
     id: column
@@ -31,53 +40,72 @@ Item {
       height: 15 * __dp
 
       Text {
-        text: "Gallery"
+        text: control.title
+        font: Qt.font(Style.p6)
+        wrapMode: Text.WordWrap
+        width: column.width - showAllButton.width - 10 * __dp
+        color: Style.night
       }
 
       Text {
+        id: showAllButton
+
+        text: qsTr("Show all")
         anchors.right: parent.right
-        text: "Show all"
+        font: Qt.font(Style.t4)
+        wrapMode: Text.WordWrap
+        color: Style.forest
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: control.showAll()
+        }
       }
     }
 
     ScrollView {
       width: parent.width
-      height: 130 + __dp
+      height: 120 * __dp
+
+      ScrollBar.horizontal: ScrollBar {
+        policy: ScrollBar.AlwaysOff
+      }
 
       ListView {
         id: rowView
 
-        model: 5
         spacing: 20 * __dp
         orientation: ListView.Horizontal
-        width: 200
         height: 120 * __dp
-        delegate: Image {
-          id: img
-          width: 120 * __dp
-          height: width
-          source: modelData
-          layer.enabled: true
-          layer.effect: OpacityMask {
-            maskSource: Item {
-              width: img.width
-              height: img.height
-              Rectangle {
-                anchors.centerIn: parent
-                width: parent.width
-                height: parent.height
-                radius: 20 * __dp
-              }
-            }
-          }
+
+        delegate: MMPhoto {
+          visible: model.index < control.maxVisiblePhotos
+          hiddenPhotoCount: (rowView.count > control.maxVisiblePhotos && model.index === control.maxVisiblePhotos - 1) ? rowView.count - control.maxVisiblePhotos + 1 : 0
+          onClicked: control.clicked(path)
+          onShowWholeGallery: control.showAll()
         }
       }
     }
 
-    Text {
-      text: "The size of image is too big"
-      visible: false
+    Row {
+      id: msgRow
+
+      spacing: 4 * __dp
+
+      MMIcon {
+        id: msgIcon
+
+        source: visible ? Style.errorIcon : ""
+        color: errorMsg.length > 0 ? Style.negative : Style.warning
+        visible: errorMsg.length > 0 || warningMsg.length > 0
+      }
+      Text {
+        text: errorMsg.length > 0 ? errorMsg : warningMsg
+        font: Qt.font(Style.t4)
+        wrapMode: Text.WordWrap
+        width: column.width - msgRow.spacing - msgIcon.width
+        visible: errorMsg.length > 0 || warningMsg.length > 0
+      }
     }
   }
-
 }

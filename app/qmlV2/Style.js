@@ -70,6 +70,7 @@ const arrowDownIcon = "qrc:/Arrow Down.svg"
 const qrCodeIcon = "qrc:/QR Code.svg"
 const checkmarkIcon = "qrc:/Checkmark.svg"
 const closeButtonIcon = "qrc:/CloseButton.svg"
+const morePhotosIcon = "qrc:/MorePhotos.svg"
 
 // Images
 const uploadImage = "qrc:/UploadImage.svg"

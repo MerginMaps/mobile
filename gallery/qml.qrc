@@ -26,5 +26,6 @@
         <file>../app/qmlV2/component/MMProgressBar.qml</file>
         <file>qml/pages/PhotosPage.qml</file>
         <file>../app/qmlV2/component/MMPhotoGallery.qml</file>
+        <file>../app/qmlV2/component/MMPhoto.qml</file>
     </qresource>
 </RCC>
