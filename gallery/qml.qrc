@@ -5,7 +5,7 @@
         <file>qml/pages/InputsPage.qml</file>
         <file>qml/pages/ButtonsPage.qml</file>
         <file>../app/qmlV2/component/MMInput.qml</file>
-        <file>../app/qmlV2/Style.js</file>
+        <file>../app/qmlV2/StyleV2.qml</file>
         <file>../app/qmlV2/component/MMButton.qml</file>
         <file>../app/qmlV2/component/MMLinkButton.qml</file>
         <file>../app/qmlV2/component/MMLink.qml</file>
@@ -19,6 +19,9 @@
         <file>../app/qmlV2/component/MMCheckBox.qml</file>
         <file>../app/qmlV2/component/MMRadioButton.qml</file>
         <file>../app/qmlV2/component/MMSwitch.qml</file>
+        <file>qml/pages/NotificationPage.qml</file>
+        <file>../app/qmlV2/component/MMNotification.qml</file>
+        <file>../app/qmlV2/component/MMNotificationView.qml</file>
         <file>../app/qmlV2/component/MMDrawer.qml</file>
         <file>qml/pages/DrawerPage.qml</file>
         <file>qml/pages/ChecksPage.qml</file>
@@ -27,5 +30,17 @@
         <file>qml/pages/PhotosPage.qml</file>
         <file>../app/qmlV2/component/MMPhotoGallery.qml</file>
         <file>../app/qmlV2/component/MMPhoto.qml</file>
+        <file>qml/pages/MapPage.qml</file>
+        <file>../app/qmlV2/component/MMMapButton.qml</file>
+        <file>../app/qmlV2/component/MMShadow.qml</file>
+        <file>../app/qmlV2/component/MMMapLabel.qml</file>
+        <file>../app/qmlV2/component/MMPasswordInput.qml</file>
+        <file>../app/qmlV2/component/MMButtonInput.qml</file>
+        <file>../app/qmlV2/component/MMToolbarButton.qml</file>
+        <file>../app/qmlV2/component/MMToolbar.qml</file>
+        <file>qml/pages/ToolbarPage.qml</file>
+        <file>../app/qmlV2/component/MMMenuDrawer.qml</file>
+        <file>../app/qmlV2/component/MMToolbarMenuButton.qml</file>
+        <file>../app/qmlV2/component/MMToolbarLongButton.qml</file>
     </qresource>
 </RCC>

@@ -351,6 +351,15 @@ Item {
             }
           }
 
+          // Changelog
+          PanelItem {
+            text: qsTr("Changelog")
+            MouseArea {
+              anchors.fill: parent
+              onClicked: stackview.push(changelogPanelComponent)
+            }
+          }
+
           // Help
           PanelItem {
             text: qsTr("Help")
@@ -394,6 +403,14 @@ Item {
   Component {
     id: aboutPanelComponent
     AboutPanel {
+      onClose: stackview.pop(null)
+      Component.onCompleted: forceActiveFocus()
+    }
+  }
+
+  Component {
+    id: changelogPanelComponent
+    ChangelogPanel {
       onClose: stackview.pop(null)
       Component.onCompleted: forceActiveFocus()
     }

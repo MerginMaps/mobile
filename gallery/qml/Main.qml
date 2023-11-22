@@ -125,12 +125,24 @@ ApplicationWindow {
           source: "ChecksPage.qml"
         }
         ListElement {
+          title: "Notifications"
+          source: "NotificationPage.qml"
+        }
+        ListElement {
           title: "Drawers"
           source: "DrawerPage.qml"
         }
         ListElement {
           title: "Photos"
           source: "PhotosPage.qml"
+        }
+        ListElement {
+          title: "Map"
+          source: "MapPage.qml"
+        }
+        ListElement {
+          title: "Toolbars"
+          source: "ToolbarPage.qml"
         }
       }
 

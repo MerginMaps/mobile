@@ -10,8 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
-import "../Style.js" as Style
 import "."
+import ".."
 
 Item {
   id: control
@@ -41,10 +41,10 @@ Item {
 
       Text {
         text: control.title
-        font: Qt.font(Style.p6)
+        font: StyleV2.p6
         wrapMode: Text.WordWrap
         width: column.width - showAllButton.width - 10 * __dp
-        color: Style.night
+        color: StyleV2.nightColor
       }
 
       Text {
@@ -52,9 +52,9 @@ Item {
 
         text: qsTr("Show all")
         anchors.right: parent.right
-        font: Qt.font(Style.t4)
+        font: StyleV2.t4
         wrapMode: Text.WordWrap
-        color: Style.forest
+        color: StyleV2.forestColor
 
         MouseArea {
           anchors.fill: parent
@@ -95,13 +95,13 @@ Item {
       MMIcon {
         id: msgIcon
 
-        source: visible ? Style.errorIcon : ""
-        color: errorMsg.length > 0 ? Style.negative : Style.warning
+        source: visible ? StyleV2.errorIcon : ""
+        color: errorMsg.length > 0 ? StyleV2.negativeColor : StyleV2.warningColor
         visible: errorMsg.length > 0 || warningMsg.length > 0
       }
       Text {
         text: errorMsg.length > 0 ? errorMsg : warningMsg
-        font: Qt.font(Style.t4)
+        font: StyleV2.t4
         wrapMode: Text.WordWrap
         width: column.width - msgRow.spacing - msgIcon.width
         visible: errorMsg.length > 0 || warningMsg.length > 0

@@ -8,23 +8,14 @@
  ***************************************************************************/
 
 import QtQuick
-import "."
+import Qt5Compat.GraphicalEffects
 import ".."
 
-Rectangle {
-  id: control
-
-  required property real position // [0 - 1]
-
-  width: parent.width
-  height: 12 * __dp
-  color: StyleV2.lightGreenColor
-  radius: height / 2
-
-  Rectangle {
-    width: parent.width * control.position
-    height: parent.height
-    color: StyleV2.grassColor
-    radius: height / 2
-  }
+DropShadow {
+  id: shadow
+  horizontalOffset: 2 * __dp
+  verticalOffset: 3 * __dp
+  radius: 7 * __dp
+  color: StyleV2.shadowColor
+  transparentBorder: true
 }

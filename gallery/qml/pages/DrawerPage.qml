@@ -12,7 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qmlV2/component"
-import "../../app/qmlV2/Style.js" as Style
+import "../../app/qmlV2"
 
 Page {
   id: pane
@@ -38,7 +38,7 @@ Page {
   MMDrawer {
     id: drawer1
 
-    picture: Style.uploadImage
+    picture: StyleV2.uploadImage
     title: "Upload project to Margin?"
     description: "This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration."
     primaryButton: "Yes, Upload Project"
@@ -51,7 +51,7 @@ Page {
   MMDrawer {
     id: drawer2
 
-    picture: Style.ReachedDataLimitImage
+    picture: StyleV2.reachedDataLimitImage
     title: "You have reached a data limit"
     primaryButton: "Manage Subscription"
     specialComponent: component.comp
@@ -72,7 +72,7 @@ Page {
   MMDrawer {
     id: drawer3
 
-    picture: Style.uploadImage
+    picture: StyleV2.uploadImage
     title: "Failed to synchronize your changes"
     description: "Your changes could not be sent to server, make sure you are connected to internet and have write access to this project."
     primaryButton: "Ok, I understand"

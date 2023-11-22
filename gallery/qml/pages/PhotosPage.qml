@@ -12,13 +12,13 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qmlV2/component"
-import "../../app/qmlV2/Style.js" as Style
+import "../../app/qmlV2"
 
 Page {
 
   Rectangle {
     anchors.fill: parent
-    color: Style.lightGreen
+    color: StyleV2.lightGreenColor
   }
 
   Column {

@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
-import "../Style.js" as Style
 import "."
+import ".."
 
 Image {
   id: control
@@ -40,8 +40,8 @@ Image {
     width: parent.width
     height: parent.height
     radius: 20 * __dp
-    color: Style.transparent
-    border.color: Style.forest
+    color: StyleV2.transparentColor
+    border.color: StyleV2.forestColor
     border.width: 1 * __dp
   }
   Image {
@@ -67,13 +67,13 @@ Image {
     visible: control.hiddenPhotoCount > 0
 
     Image {
-      source: Style.morePhotosIcon
+      source: StyleV2.morePhotosIcon
       anchors.horizontalCenter: parent.horizontalCenter
     }
     Text {
-      font: Qt.font(Style.t4)
+      font: StyleV2.t4
       text: qsTr("+%1 more").arg(control.hiddenPhotoCount)
-      color: Style.white
+      color: StyleV2.whiteColor
       horizontalAlignment: Text.AlignHCenter
       verticalAlignment: Text.AlignVCenter
       elide: Text.ElideRight

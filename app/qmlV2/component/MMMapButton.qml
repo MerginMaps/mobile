@@ -8,23 +8,37 @@
  ***************************************************************************/
 
 import QtQuick
-import "."
 import ".."
 
-Rectangle {
+Item {
   id: control
 
-  required property real position // [0 - 1]
+  width: height
+  height: StyleV2.mapItemHeight
 
-  width: parent.width
-  height: 12 * __dp
-  color: StyleV2.lightGreenColor
-  radius: height / 2
+  property alias iconSource: icon.source
+
+  signal clicked
 
   Rectangle {
-    width: parent.width * control.position
+    width: parent.width
     height: parent.height
-    color: StyleV2.grassColor
-    radius: height / 2
+    radius: control.height / 2
+    color: StyleV2.whiteColor
+
+    layer.enabled: true
+    layer.effect: MMShadow {}
+
+    MMIcon {
+      id: icon
+
+      anchors.centerIn: parent
+      color: StyleV2.forestColor
+    }
+
+    MouseArea {
+      anchors.fill: parent
+      onClicked: control.clicked()
+    }
   }
 }
