@@ -140,6 +140,10 @@ ApplicationWindow {
           title: "Toolbars"
           source: "ToolbarPage.qml"
         }
+        ListElement {
+          title: "Editors"
+          source: "EditorsPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}

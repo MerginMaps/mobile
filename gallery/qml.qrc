@@ -39,5 +39,10 @@
         <file>../app/qmlV2/component/MMMenuDrawer.qml</file>
         <file>../app/qmlV2/component/MMToolbarMenuButton.qml</file>
         <file>../app/qmlV2/component/MMToolbarLongButton.qml</file>
+        <file>../app/qmlV2/component/MMAbstractEditor.qml</file>
+        <file>../app/qmlV2/component/MMSliderEditor.qml</file>
+        <file>qml/pages/EditorsPage.qml</file>
+        <file>../app/qmlV2/component/MMInputEditor.qml</file>
+        <file>../app/qmlV2/component/MMPasswordEditor.qml</file>
     </qresource>
 </RCC>
