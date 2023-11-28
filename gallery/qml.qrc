@@ -42,5 +42,6 @@
         <file>../app/qmlV2/component/MMMenuDrawer.qml</file>
         <file>../app/qmlV2/component/MMToolbarMenuButton.qml</file>
         <file>../app/qmlV2/component/MMToolbarLongButton.qml</file>
+        <file>../app/qmlV2/component/MMMorePhoto.qml</file>
     </qresource>
 </RCC>

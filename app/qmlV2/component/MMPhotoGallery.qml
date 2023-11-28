@@ -63,27 +63,24 @@ Item {
       }
     }
 
-    ScrollView {
-      width: parent.width
-      height: 120 * __dp
+    ListView {
+      id: rowView
 
-      ScrollBar.horizontal: ScrollBar {
-        policy: ScrollBar.AlwaysOff
+      spacing: 20 * __dp
+      orientation: ListView.Horizontal
+      height: 120 * __dp
+      width: parent.width
+
+      delegate: MMPhoto {
+        visible: model.index < control.maxVisiblePhotos
+        onClicked: function(path) { control.clicked(path) }
       }
 
-      ListView {
-        id: rowView
-
-        spacing: 20 * __dp
-        orientation: ListView.Horizontal
-        height: 120 * __dp
-
-        delegate: MMPhoto {
-          visible: model.index < control.maxVisiblePhotos
-          hiddenPhotoCount: (rowView.count > control.maxVisiblePhotos && model.index === control.maxVisiblePhotos - 1) ? rowView.count - control.maxVisiblePhotos + 1 : 0
-          onClicked: control.clicked(path)
-          onShowWholeGallery: control.showAll()
-        }
+      footer: MMMorePhoto {
+        hiddenPhotoCount: model.length - control.maxVisiblePhotos + 1
+        visible: model.length > control.maxVisiblePhotos
+        source: visible ? model[control.maxVisiblePhotos] : ""
+        onClicked: control.showAll()
       }
     }
 

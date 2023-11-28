@@ -7,11 +7,12 @@ import ".."
 Image {
   id: control
 
-  signal clicked( var path )
+  property int hiddenPhotoCount: 0
+
+  signal clicked()
 
   width: visible ? 120 * __dp : 0
   height: width
-  source: model.modelData
   asynchronous: true
   layer.enabled: true
   layer {
@@ -30,7 +31,7 @@ Image {
   }
   MouseArea {
     anchors.fill: parent
-    onClicked: control.clicked(model.modelData)
+    onClicked: control.clicked()
   }
   Rectangle {
     anchors.centerIn: parent
@@ -41,10 +42,43 @@ Image {
     border.color: StyleV2.forestColor
     border.width: 1 * __dp
   }
+  Image {
+    id: bluredImage
+
+    anchors.fill: parent
+    source: control.source
+    asynchronous: true
+    layer.enabled: true
+
+    layer {
+      effect: FastBlur {
+        anchors.fill: bluredImage
+        source: bluredImage
+        radius: 32
+      }
+    }
+  }
+
+  Column {
+    anchors.centerIn: parent
+
+    Image {
+      source: StyleV2.morePhotosIcon
+      anchors.horizontalCenter: parent.horizontalCenter
+    }
+    Text {
+      font: StyleV2.t4
+      text: qsTr("+%1 more").arg(control.hiddenPhotoCount)
+      color: StyleV2.whiteColor
+      horizontalAlignment: Text.AlignHCenter
+      verticalAlignment: Text.AlignVCenter
+      elide: Text.ElideRight
+    }
+  }
 
   onStatusChanged: {
     if (status === Image.Error) {
-      console.error("MMPhoto: Error loading image: " + model.modelData);
+      console.error("MMMorePhoto: Error loading image");
     }
   }
 }
