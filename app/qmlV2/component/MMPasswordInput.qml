@@ -12,9 +12,10 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 import ".."
 
-Item {
+Column {
   id: control
 
+  property alias title: titleItem.text
   property alias text: textField.text
   property alias placeholderText: textField.placeholderText
   required property string regexp
@@ -22,40 +23,16 @@ Item {
   property string warningMsg
   property string errorMsg
 
+  spacing: 6 * __dp
   width: 280 * __dp
-  height: rect.height + messageItem.height
 
-  Item {
-    id: messageItem
+  Text {
+    id: titleItem
 
     width: parent.width
-    anchors.left: parent.left
-    anchors.top: rect.bottom
-    anchors.topMargin: 6 * __dp
-    height: msgRow.height
-
-    Row {
-      id: msgRow
-
-      spacing: 4 * __dp
-
-      MMIcon {
-        id: msgIcon
-
-        source: visible ? StyleV2.errorIcon : ""
-        color: errorMsg.length > 0 ? StyleV2.negativeColor : StyleV2.warningColor
-        visible: msg.visible
-      }
-      Text {
-        id: msg
-
-        text: errorMsg.length > 0 ? errorMsg : warningMsg
-        font: StyleV2.t4
-        wrapMode: Text.WordWrap
-        width: messageItem.width - msgRow.spacing - msgIcon.width
-        visible: (errorMsg.length > 0 || warningMsg.length > 0) && !isPasswordCorrect(textField.text)
-      }
-    }
+    font: StyleV2.p6
+    wrapMode: Text.WordWrap
+    visible: text.length > 0
   }
 
   Rectangle {
@@ -116,6 +93,36 @@ Item {
           anchors.fill: parent
           onClicked: eyeButton.pressed = !eyeButton.pressed
         }
+      }
+    }
+  }
+
+  Item {
+    id: messageItem
+
+    width: parent.width
+    height: msgRow.height
+
+    Row {
+      id: msgRow
+
+      spacing: 4 * __dp
+
+      MMIcon {
+        id: msgIcon
+
+        source: visible ? StyleV2.errorIcon : ""
+        color: errorMsg.length > 0 ? StyleV2.negativeColor : StyleV2.warningColor
+        visible: msg.visible
+      }
+      Text {
+        id: msg
+
+        text: errorMsg.length > 0 ? errorMsg : warningMsg
+        font: StyleV2.t4
+        wrapMode: Text.WordWrap
+        width: messageItem.width - msgRow.spacing - msgIcon.width
+        visible: (errorMsg.length > 0 || warningMsg.length > 0) && !isPasswordCorrect(textField.text)
       }
     }
   }

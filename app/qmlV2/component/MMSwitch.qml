@@ -39,9 +39,7 @@ Switch {
       width: 20
       height: width
       radius: width / 2
-      color: control.down ? StyleV2.mediumGreenColor : StyleV2.whiteColor
-      border.color: control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
-      border.width: 6
+      color: control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
       anchors.verticalCenter: parent.verticalCenter
     }
   }
