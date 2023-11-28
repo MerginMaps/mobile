@@ -28,6 +28,9 @@ Item {
   property string warningMsg
   property string errorMsg
   property bool hasFocus: false
+  property color bgColor: StyleV2.whiteColor
+  property bool hasCheckbox: false
+  property bool checkboxChecked: false
 
   readonly property real spacing: 15 * __dp
 
@@ -40,16 +43,29 @@ Item {
     spacing: 6 * __dp
     anchors.left: parent.left
     anchors.right: parent.right
-    //      anchors.leftMargin: root.spacing
-    //      anchors.rightMargin: root.spacing
 
-    Text {
-      id: titleItem
+    Row {
+      id: titleRow
 
+      spacing: 4 * __dp
       width: parent.width
-      font: StyleV2.p6
-      wrapMode: Text.WordWrap
-      visible: text.length > 0
+      visible: titleItem.text.length > 0
+
+      MMCheckBox {
+        id: checkbox
+
+        width: 16 * __dp
+        height: 16 * __dp
+        visible: root.hasCheckbox
+        checked: root.checkboxChecked
+      }
+      Text {
+        id: titleItem
+
+        width: parent.width - checkbox.width - titleRow.spacing
+        font: StyleV2.p6
+        wrapMode: Text.WordWrap
+      }
     }
 
     Item {
@@ -64,7 +80,7 @@ Item {
         height: parent.height
         border.color: root.hasFocus ? ( errorMsg.length > 0 ? StyleV2.negativeColor : warningMsg.length > 0 ? StyleV2.warningColor : StyleV2.forestColor ) : StyleV2.transparentColor
         border.width: 2 * __dp
-        color: StyleV2.whiteColor
+        color: root.bgColor
         radius: 12 * __dp
       }
 

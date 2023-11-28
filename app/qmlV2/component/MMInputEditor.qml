@@ -29,24 +29,12 @@ MMAbstractEditor {
   /*required*/ property bool parentValueIsNull: parent.valueIsNull ?? false
   /*required*/ property bool isReadOnly: parent.readOnly ?? false
 
-  property url leftIconSource: ""
   property alias placeholderText: textField.placeholderText
   readonly property alias text: textField.text
 
   signal editorValueChanged( var newValue, var isNull )
 
   hasFocus: textField.activeFocus
-
-  leftAction: MMIcon {
-    id: leftIcon
-
-    source: root.leftIconSource
-    color: errorMsg.length > 0 ? StyleV2.negativeColor :
-                                 warningMsg.length > 0 ? StyleV2.warningColor :
-                                                         root.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
-    height: parent.height
-    visible: root.leftIconSource != ""
-  }
 
   content: TextField {
     id: textField

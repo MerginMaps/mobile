@@ -15,13 +15,15 @@ import ".."
 CheckBox {
   id: control
 
-  checked: true
+  checked: false
+
+  width: 24 * __dp
+  height: 24 * __dp
 
   indicator: Rectangle {
-    implicitWidth: 24
-    implicitHeight: 24
-    x: control.leftPadding
-    y: parent.height / 2 - height / 2
+    width: control.width
+    height: control.height
+    y: control.height / 2 - height / 2
     radius: 5
     color: enabled ? ( control.checked ? StyleV2.grassColor: StyleV2.whiteColor ) : StyleV2.whiteColor
     border.color: enabled ? ( control.checked ? StyleV2.grassColor: StyleV2.forestColor ) : StyleV2.mediumGreenColor
@@ -34,6 +36,7 @@ CheckBox {
       source: StyleV2.checkmarkIcon
       color: control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
       visible: control.checked
+      scale: control.width / 24 * __dp
     }
   }
 

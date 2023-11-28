@@ -33,38 +33,41 @@ ScrollView {
 
       Column {
         spacing: 10
-        anchors.fill: parent
+        width: 300
 
         MMCheckBox {
           id: checkbox
           text: checked ? "enabled" : "disabled"
+          checked: true
         }
 
         MMSliderEditor {
           title: "MMSliderEditor"
-          width: 300
           from: -100
           to: 100
           parentValue: -100
           suffix: " s"
+          width: parent.width
           enabled: checkbox.checked
           onEditorValueChanged: function(newValue) { errorMsg = newValue > 0 ? "" : "Set positive value!" }
+          hasCheckbox: true
+          checkboxChecked: true
         }
 
         MMInputEditor {
-          title: "MMInputEditor with Icon"
+          title: "MMInputEditor"
           parentValue: "Text"
-          width: 300
-          leftIconSource: StyleV2.calendarIcon
           enabled: checkbox.checked
-          onLeftActionClicked: console.log("left icon clicked")
+          width: parent.width
+          hasCheckbox: true
+          checkboxChecked: false
         }
 
         MMInputEditor {
           title: "MMInputEditor"
           placeholderText: "Placeholder"
-          width: 300
           enabled: checkbox.checked
+          width: parent.width
           warningMsg: text.length > 0 ? "" : "Write something"
         }
 
@@ -74,40 +77,7 @@ ScrollView {
           regexp: '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,})'
           errorMsg: isPasswordCorrect(text) ? "" : "Password must contain at least 6 characters\nMinimum 1 number, uppercase and lowercase letter and special character"
           enabled: checkbox.checked
-        }
-      }
-    }
-
-    GroupBox {
-      title: "MMSliderInput"
-      background: Rectangle {
-        color: "lightGray"
-        border.color: "gray"
-      }
-      label: Label {
-        color: "black"
-        text: parent.title
-        padding: 5
-      }
-
-      Column {
-        spacing: 10
-        anchors.fill: parent
-        MMSliderInput {
-          title: "Title"
-          from: -100
-          to: 100
-          parentValue: -100
-          suffix: " s"
-
-          onEditorValueChanged: function(newValue) { errorMsg = newValue > 0 ? "" : "Set positive value!" }
-        }
-        MMSliderInput {
-          title: "Title"
-          enabled: false
-          from: 0
-          to: 10
-          parentValue: 5
+          width: parent.width
         }
       }
     }
