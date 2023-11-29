@@ -17,6 +17,8 @@ import "../../app/qmlV2"
 Page {
   id: pane
 
+  StyleV2 { id: styleV2 }
+
   Column {
     width: parent.width
     spacing: 10
@@ -38,7 +40,7 @@ Page {
   MMDrawer {
     id: drawer1
 
-    picture: StyleV2.uploadImage
+    picture: styleV2.uploadImage
     title: "Upload project to Margin?"
     description: "This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration."
     primaryButton: "Yes, Upload Project"
@@ -51,7 +53,7 @@ Page {
   MMDrawer {
     id: drawer2
 
-    picture: StyleV2.reachedDataLimitImage
+    picture: styleV2.reachedDataLimitImage
     title: "You have reached a data limit"
     primaryButton: "Manage Subscription"
     specialComponent: component.comp
@@ -72,7 +74,7 @@ Page {
   MMDrawer {
     id: drawer3
 
-    picture: StyleV2.uploadImage
+    picture: styleV2.uploadImage
     title: "Failed to synchronize your changes"
     description: "Your changes could not be sent to server, make sure you are connected to internet and have write access to this project."
     primaryButton: "Ok, I understand"

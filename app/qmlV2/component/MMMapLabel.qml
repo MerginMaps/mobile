@@ -15,14 +15,16 @@ Item {
   id: control
 
   width: text.width
-  height: StyleV2.mapItemHeight
+  height: styleV2.mapItemHeight
 
   signal clicked
 
   required property string text
   property url iconSource: ""
-  property color bgColor: StyleV2.positiveColor
-  property color textColor: StyleV2.forestColor
+  property color bgColor: styleV2.positiveColor
+  property color textColor: styleV2.forestColor
+
+  StyleV2 { id: styleV2 }
 
   Rectangle {
     width: row.width
@@ -55,7 +57,7 @@ Item {
 
         color: control.textColor
         text: control.text
-        font: StyleV2.t3
+        font: styleV2.t3
         verticalAlignment: Text.AlignVCenter
         height: parent.height
       }

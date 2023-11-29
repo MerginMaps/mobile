@@ -25,11 +25,13 @@ Column {
   spacing: 6 * __dp
   width: 280 * __dp
 
+  StyleV2 { id: styleV2 }
+
   Text {
     id: titleItem
 
     width: parent.width
-    font: StyleV2.p6
+    font: styleV2.p6
     wrapMode: Text.WordWrap
     visible: text.length > 0
   }
@@ -39,8 +41,8 @@ Column {
 
     height: 40 * __dp
     width: parent.width
-    color: (errorMsg.length > 0 || warningMsg.length > 0) ? StyleV2.errorBgInputColor : StyleV2.whiteColor
-    border.color: errorMsg.length > 0 ? StyleV2.negativeColor : warningMsg.length > 0 ? StyleV2.warningColor : StyleV2.forestColor
+    color: (errorMsg.length > 0 || warningMsg.length > 0) ? styleV2.errorBgInputColor : styleV2.whiteColor
+    border.color: errorMsg.length > 0 ? styleV2.negativeColor : warningMsg.length > 0 ? styleV2.warningColor : styleV2.forestColor
     border.width: enabled ? (textField.activeFocus ? 2*__dp : textField.hovered ? 1*__dp : 0) : 0
     radius: parent.height
 
@@ -54,9 +56,9 @@ Column {
         id: leftIcon
 
         source: control.iconSource
-        color: errorMsg.length > 0 ? StyleV2.negativeColor :
-                                     warningMsg.length > 0 ? StyleV2.warningColor :
-                                                             control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
+        color: errorMsg.length > 0 ? styleV2.negativeColor :
+                                     warningMsg.length > 0 ? styleV2.warningColor :
+                                                             control.enabled ? styleV2.forestColor : styleV2.mediumGreenColor
         height: rect.height
       }
 
@@ -68,13 +70,13 @@ Column {
                - (leftIcon.visible ? leftIcon.width : 0)
                - (clearButton.visible ? clearButton.width : 0)
         height: rect.height - 4 * __dp
-        color: control.enabled ? StyleV2.nightColor : StyleV2.mediumGreenColor
-        placeholderTextColor: StyleV2.nightAlphaColor
-        font: StyleV2.p5
+        color: control.enabled ? styleV2.nightColor : styleV2.mediumGreenColor
+        placeholderTextColor: styleV2.nightAlphaColor
+        font: styleV2.p5
         hoverEnabled: true
         anchors.verticalCenter: parent.verticalCenter
         background: Rectangle {
-          color: StyleV2.transparentColor
+          color: styleV2.transparentColor
         }
       }
 
@@ -82,8 +84,8 @@ Column {
         id: clearButton
 
         property bool pressed: false
-        source: StyleV2.xMarkIcon
-        color: control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
+        source: styleV2.xMarkIcon
+        color: control.enabled ? styleV2.forestColor : styleV2.mediumGreenColor
         width: visible ? height : 0
         height: rect.height
         visible: textField.activeFocus && textField.text.length>0
@@ -110,13 +112,13 @@ Column {
       MMIcon {
         id: msgIcon
 
-        source: visible ? StyleV2.errorIcon : ""
-        color: errorMsg.length > 0 ? StyleV2.negativeColor : StyleV2.warningColor
+        source: visible ? styleV2.errorIcon : ""
+        color: errorMsg.length > 0 ? styleV2.negativeColor : styleV2.warningColor
         visible: errorMsg.length > 0 || warningMsg.length > 0
       }
       Text {
         text: errorMsg.length > 0 ? errorMsg : warningMsg
-        font: StyleV2.t4
+        font: styleV2.t4
         wrapMode: Text.WordWrap
         width: messageItem.width - msgRow.spacing - msgIcon.width
         visible: errorMsg.length > 0 || warningMsg.length > 0

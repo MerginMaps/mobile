@@ -16,6 +16,8 @@ Rectangle {
 
   required property real position // [0 - 1]
 
+  StyleV2 { id: styleV2 }
+
   width: parent.width
   height: 12 * __dp
   color: StyleV2.lightGreenColor

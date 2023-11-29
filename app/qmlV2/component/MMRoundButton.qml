@@ -19,15 +19,17 @@ RoundButton {
   implicitWidth: icon.width * 2
   implicitHeight: icon.height * 2
 
+  StyleV2 { id: styleV2 }
+
   contentItem: MMIcon {
     id: icon
 
-    source: StyleV2.arrowLinkRightIcon
-    color: control.enabled ? control.down || control.hovered ? StyleV2.grassColor : StyleV2.forestColor : StyleV2.forestColor
+    source: styleV2.arrowLinkRightIcon
+    color: control.enabled ? control.down || control.hovered ? styleV2.grassColor : styleV2.forestColor : styleV2.forestColor
   }
 
   background: Rectangle {
-    color: control.enabled ? control.down || control.hovered ? StyleV2.forestColor : StyleV2.grassColor : StyleV2.mediumGreenColor
+    color: control.enabled ? control.down || control.hovered ? styleV2.forestColor : styleV2.grassColor : styleV2.mediumGreenColor
     radius: control.implicitHeight / 2
   }
 }

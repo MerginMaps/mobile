@@ -19,6 +19,8 @@ import "../../app/qmlV2/"
 Page {
   id: pane
 
+  StyleV2 { id: styleV2 }
+
   Plugin {
     id: mapPlugin
     name: "osm"
@@ -88,12 +90,12 @@ Page {
     spacing: 20
 
     MMMapButton {
-      iconSource: StyleV2.arrowLinkRightIcon
+      iconSource: styleV2.arrowLinkRightIcon
       onClicked: console.log("Map button clicked")
     }
 
     MMMapButton {
-      iconSource: StyleV2.searchIcon
+      iconSource: styleV2.searchIcon
       onClicked: console.log("Map button clicked")
     }
   }
@@ -105,7 +107,7 @@ Page {
     anchors.bottomMargin: 120
 
     text: "20.0 m"
-    iconSource: StyleV2.checkmarkIcon
+    iconSource: styleV2.checkmarkIcon
   }
 
   MMMapLabel {

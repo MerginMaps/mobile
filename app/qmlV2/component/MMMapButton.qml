@@ -14,17 +14,19 @@ Item {
   id: control
 
   width: height
-  height: StyleV2.mapItemHeight
+  height: styleV2.mapItemHeight
 
   property alias iconSource: icon.source
 
   signal clicked
 
+  StyleV2 { id: styleV2 }
+
   Rectangle {
     width: parent.width
     height: parent.height
     radius: control.height / 2
-    color: StyleV2.whiteColor
+    color: styleV2.whiteColor
 
     layer.enabled: true
     layer.effect: MMShadow {}
@@ -33,7 +35,7 @@ Item {
       id: icon
 
       anchors.centerIn: parent
-      color: StyleV2.forestColor
+      color: styleV2.forestColor
     }
 
     MouseArea {

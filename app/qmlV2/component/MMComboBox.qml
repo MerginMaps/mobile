@@ -24,6 +24,8 @@ Item {
   width: 280 * __dp
   height: combobox.height + messageItem.height
 
+  StyleV2 { id: styleV2 }
+
   ComboBox {
     id: combobox
 
@@ -31,8 +33,8 @@ Item {
     height: 40 * __dp
 
     indicator: MMIcon {
-      source: popup.visible ? StyleV2.arrowUpIcon : StyleV2.arrowDownIcon
-      color: control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
+      source: popup.visible ? styleV2.arrowUpIcon : styleV2.arrowDownIcon
+      color: control.enabled ? styleV2.forestColor : styleV2.mediumGreenColor
       x: combobox.width - width - combobox.rightPadding
       anchors.verticalCenter: parent.verticalCenter
     }
@@ -42,17 +44,17 @@ Item {
       rightPadding: combobox.indicator.width + combobox.spacing
 
       text: combobox.displayText
-      font: StyleV2.p4
-      color: control.enabled ? StyleV2.nightColor : StyleV2.mediumGreenColor
+      font: styleV2.p4
+      color: control.enabled ? styleV2.nightColor : styleV2.mediumGreenColor
       verticalAlignment: Text.AlignVCenter
       elide: Text.ElideRight
     }
 
     background: Rectangle {
-      color: (errorMsg.length > 0 || warningMsg.length > 0) ? StyleV2.errorBgInputColor : StyleV2.whiteColor
-      border.color: (combobox.activeFocus || combobox.hovered) ? (errorMsg.length > 0 ? StyleV2.negativeColor :
-                                                                                        warningMsg.length > 0 ? StyleV2.warningColor :
-                                                                                                                StyleV2.forestColor) : StyleV2.transparentColor
+      color: (errorMsg.length > 0 || warningMsg.length > 0) ? styleV2.errorBgInputColor : styleV2.whiteColor
+      border.color: (combobox.activeFocus || combobox.hovered) ? (errorMsg.length > 0 ? styleV2.negativeColor :
+                                                                                        warningMsg.length > 0 ? styleV2.warningColor :
+                                                                                                                styleV2.forestColor) : styleV2.transparentColor
       border.width: enabled ? (combobox.activeFocus ? 2*__dp : 1*__dp) : 0
       radius: parent.height
     }
@@ -75,7 +77,7 @@ Item {
       }
 
       background: Rectangle {
-        border.color: StyleV2.forestColor
+        border.color: styleV2.forestColor
         radius: 2
       }
     }
@@ -87,13 +89,13 @@ Item {
       height: 30 * __dp
       contentItem: Text {
         text: modelData
-        color: combobox.highlightedIndex === index ? StyleV2.grassColor : StyleV2.forestColor
-        font: StyleV2.p4
+        color: combobox.highlightedIndex === index ? styleV2.grassColor : styleV2.forestColor
+        font: styleV2.p4
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter
       }
       background: Rectangle {
-        border.color: StyleV2.whiteColor
+        border.color: styleV2.whiteColor
       }
     }
 
@@ -117,13 +119,13 @@ Item {
       MMIcon {
         id: msgIcon
 
-        source: visible ? StyleV2.errorIcon : ""
-        color: errorMsg.length > 0 ? StyleV2.negativeColor : StyleV2.warningColor
+        source: visible ? styleV2.errorIcon : ""
+        color: errorMsg.length > 0 ? styleV2.negativeColor : styleV2.warningColor
         visible: errorMsg.length > 0 || warningMsg.length > 0
       }
       Text {
         text: errorMsg.length > 0 ? errorMsg : warningMsg
-        font: StyleV2.t4
+        font: styleV2.t4
         wrapMode: Text.WordWrap
         width: messageItem.width - msgRow.spacing - msgIcon.width
         visible: errorMsg.length > 0 || warningMsg.length > 0

@@ -16,6 +16,8 @@ import ".."
 Button {
   id: control
 
+  StyleV2 { id: styleV2 }
+
   contentItem: Row {
     anchors.centerIn: control
     spacing: 10 * __dp
@@ -23,9 +25,9 @@ Button {
     Text {
       id: text
 
-      font: StyleV2.t3
+      font: styleV2.t3
       text: control.text
-      color: control.enabled ? control.down || control.hovered ? StyleV2.nightColor : StyleV2.forestColor : StyleV2.mediumGreenColor
+      color: control.enabled ? control.down || control.hovered ? styleV2.nightColor : styleV2.forestColor : styleV2.mediumGreenColor
       horizontalAlignment: Text.AlignHCenter
       verticalAlignment: Text.AlignVCenter
       elide: Text.ElideRight
@@ -33,12 +35,12 @@ Button {
     }
 
     MMIcon {
-      source: StyleV2.arrowLinkRightIcon
+      source: styleV2.arrowLinkRightIcon
       color: text.color
     }
   }
 
   background: Rectangle {
-    color: StyleV2.transparentColor
+    color: styleV2.transparentColor
   }
 }

@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-pragma Singleton
+//pragma Singleton
 import QtQuick
 
 QtObject {

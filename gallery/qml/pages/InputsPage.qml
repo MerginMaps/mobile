@@ -15,6 +15,9 @@ import "../../app/qmlV2/component"
 import "../../app/qmlV2/"
 
 ScrollView {
+
+  StyleV2 { id: styleV2 }
+
   Column {
     padding: 20
     spacing: 20
@@ -47,13 +50,13 @@ ScrollView {
           MMInput {
             title: "Search ..."
             placeholderText: "Search"
-            iconSource: StyleV2.searchIcon
+            iconSource: styleV2.searchIcon
           }
         }
         Column {
           MMInput {
             text: "Calendar"
-            iconSource: StyleV2.calendarIcon
+            iconSource: styleV2.calendarIcon
             warningMsg: "Would you like to be so kind and select a date please?"
           }
         }
