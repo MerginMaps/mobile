@@ -25,12 +25,10 @@ Rectangle {
     right: parent.right
     bottom: parent.bottom
   }
-  height: styleV2.toolbarHeight
-  color: styleV2.forestColor
+  height: StyleV2.toolbarHeight
+  color: StyleV2.forestColor
 
   onWidthChanged: setupBottomBar()
-
-  StyleV2 { id: styleV2 }
 
   // buttons shown inside toolbar
   ObjectModel {
@@ -49,7 +47,7 @@ Rectangle {
     anchors.fill: parent
     leftMargin: 20 * __dp
     rightMargin: 20 * __dp
-    cellHeight: styleV2.toolbarHeight
+    cellHeight: StyleV2.toolbarHeight
     interactive: false
   }
 
@@ -69,7 +67,7 @@ Rectangle {
     id: componentMore
     MMToolbarButton {
       text: qsTr("More")
-      iconSource: styleV2.moreIcon
+      iconSource: StyleV2.moreIcon
       onClicked: menu.visible = true
     }
   }

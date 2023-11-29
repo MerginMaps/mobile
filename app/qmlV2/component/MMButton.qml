@@ -18,24 +18,22 @@ Button {
 
   property bool transparent: false
 
-  StyleV2 { id: styleV2 }
-
   contentItem: Text {
     anchors.centerIn: control
-    font: styleV2.t3
+    font: StyleV2.t3
     text: control.text
     leftPadding: 32 * __dp
     rightPadding: 32 * __dp
     topPadding: 10 * __dp
     bottomPadding: 10 * __dp
-    color: control.enabled ? control.down || control.hovered ? styleV2.grassColor : styleV2.forestColor : styleV2.forestColor
+    color: control.enabled ? control.down || control.hovered ? StyleV2.grassColor : StyleV2.forestColor : StyleV2.forestColor
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
     elide: Text.ElideRight
   }
 
   background: Rectangle {
-    color: transparent ? "transparent" : control.enabled ? control.down || control.hovered ? styleV2.forestColor : styleV2.grassColor : styleV2.mediumGreenColor
+    color: transparent ? "transparent" : control.enabled ? control.down || control.hovered ? StyleV2.forestColor : StyleV2.grassColor : StyleV2.mediumGreenColor
     radius: height / 2
   }
 }

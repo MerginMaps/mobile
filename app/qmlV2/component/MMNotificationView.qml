@@ -18,19 +18,17 @@ Item {
   width: parent.width
   height: parent.height
 
-  StyleV2 { id: styleV2 }
-
   // just for information - will be removed in release version
   Rectangle {
     anchors.bottom: parent.bottom
     width: control.width
     height: 20
-    color: styleV2.whiteColor
+    color: StyleV2.whiteColor
 
     Text {
       text: listView.count
       anchors.centerIn: parent
-      color: styleV2.forestColor
+      color: StyleV2.forestColor
     }
   }
 

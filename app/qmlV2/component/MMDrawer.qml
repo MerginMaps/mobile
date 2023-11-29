@@ -31,8 +31,6 @@ Drawer {
   height: mainColumn.height
   edge: Qt.BottomEdge
 
-  StyleV2 { id: styleV2 }
-
   Rectangle {
     color: roundedRect.color
     anchors.top: parent.top
@@ -47,7 +45,7 @@ Drawer {
     id: roundedRect
 
     anchors.fill: parent
-    color: styleV2.whiteColor
+    color: StyleV2.whiteColor
 
     Column {
       id: mainColumn
@@ -61,7 +59,7 @@ Drawer {
       Image {
         id: closeButton
 
-        source: styleV2.closeButtonIcon
+        source: StyleV2.closeButtonIcon
         anchors.right: parent.right
         anchors.rightMargin: 20 * __dp
 
@@ -81,9 +79,9 @@ Drawer {
         id: title
 
         anchors.horizontalCenter: parent.horizontalCenter
-        font: styleV2.t1
+        font: StyleV2.t1
         width: parent.width - 2*20 * __dp
-        color: styleV2.forestColor
+        color: StyleV2.forestColor
         visible: text.length > 0
         horizontalAlignment: Text.AlignHCenter
       }
@@ -92,9 +90,9 @@ Drawer {
         id: description
 
         anchors.horizontalCenter: parent.horizontalCenter
-        font: styleV2.p5
+        font: StyleV2.p5
         width: parent.width - 2*20 * __dp
-        color: styleV2.nightColor
+        color: StyleV2.nightColor
         visible: text.length > 0
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.WordWrap
@@ -107,15 +105,15 @@ Drawer {
         width: parent.width - 2*20 * __dp
         height: boundedDescription.height
         radius: 16 * __dp
-        color: styleV2.lightGreenColor
+        color: StyleV2.lightGreenColor
 
         Text {
           id: boundedDescription
 
           anchors.horizontalCenter: parent.horizontalCenter
-          font: styleV2.p6
+          font: StyleV2.p6
           width: parent.width
-          color: styleV2.nightColor
+          color: StyleV2.nightColor
           visible: text.length > 0
           horizontalAlignment: Text.AlignLeft
           wrapMode: Text.WordWrap

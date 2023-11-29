@@ -20,19 +20,17 @@ Item {
   required property var iconSource
   required property string text
 
-  StyleV2 { id: styleV2 }
-
   Item {
     id: menuButton
 
     width: control.width
-    height: styleV2.menuDrawerHeight
+    height: StyleV2.menuDrawerHeight
 
     Rectangle {
       anchors.top: parent.top
       width: parent.width
       height: 1 * __dp
-      color: styleV2.grayColor
+      color: StyleV2.grayColor
     }
 
     Row {
@@ -41,13 +39,13 @@ Item {
       spacing: 20 * __dp
       MMIcon {
         height: parent.height
-        color: styleV2.forestColor
+        color: StyleV2.forestColor
         source: control.iconSource
       }
       Text {
         text: control.text
-        color: styleV2.forestColor
-        font: styleV2.t3
+        color: StyleV2.forestColor
+        font: StyleV2.t3
         verticalAlignment: Text.AlignVCenter
         height: parent.height
       }

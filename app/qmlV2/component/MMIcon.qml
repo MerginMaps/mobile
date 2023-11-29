@@ -20,12 +20,10 @@ Item {
   width: icon.implicitWidth
   height: icon.implicitHeight
 
-  StyleV2 { id: styleV2 }
-
   Image {
     id: icon
 
-    source: styleV2.arrowLinkRightIcon
+    source: StyleV2.arrowLinkRightIcon
     anchors.centerIn: control
   }
 

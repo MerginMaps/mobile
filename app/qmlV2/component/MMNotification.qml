@@ -23,15 +23,13 @@ Rectangle {
   radius: 12 * __dp
   color: {
     switch( type ) {
-    case NotificationType.Information: return styleV2.informativeColor
-    case NotificationType.Success: return styleV2.positiveColor
-    case NotificationType.Warning: return styleV2.warningColor
-    case NotificationType.Error: return styleV2.negativeColor
-    default: return styleV2.positiveColor
+    case NotificationType.Information: return StyleV2.informativeColor
+    case NotificationType.Success: return StyleV2.positiveColor
+    case NotificationType.Warning: return StyleV2.warningColor
+    case NotificationType.Error: return StyleV2.negativeColor
+    default: return StyleV2.positiveColor
     }
   }
-
-  StyleV2 { id: styleV2 }
 
   MMIcon {
     id: leftIcon
@@ -45,9 +43,9 @@ Rectangle {
     visible: icon !== NotificationType.None
     source: {
       switch( icon ) {
-      case NotificationType.None: return styleV2.checkmarkIcon
-      case NotificationType.Waiting: return styleV2.waitingIcon
-      case NotificationType.Check: return styleV2.checkmarkIcon
+      case NotificationType.None: return StyleV2.checkmarkIcon
+      case NotificationType.Waiting: return StyleV2.waitingIcon
+      case NotificationType.Check: return StyleV2.checkmarkIcon
       }
     }
   }
@@ -62,7 +60,7 @@ Rectangle {
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignLeft
     leftPadding: 20 * __dp - notification.innerSpacing
-    font: styleV2.t3
+    font: StyleV2.t3
     clip: true
     maximumLineCount: 3
     wrapMode: Text.WordWrap
@@ -70,10 +68,10 @@ Rectangle {
     elide: Text.ElideRight
     color: {
       switch( type ) {
-      case NotificationType.Information: return styleV2.deepOceanColor
-      case NotificationType.Success: return styleV2.forestColor
-      case NotificationType.Warning: return styleV2.earthColor
-      case NotificationType.Error: return styleV2.grapeColor
+      case NotificationType.Information: return StyleV2.deepOceanColor
+      case NotificationType.Success: return StyleV2.forestColor
+      case NotificationType.Warning: return StyleV2.earthColor
+      case NotificationType.Error: return StyleV2.grapeColor
       }
     }
   }
@@ -85,7 +83,7 @@ Rectangle {
     anchors.rightMargin: 20 * __dp
     anchors.verticalCenter: parent.verticalCenter
     scale: maRemove.containsMouse ? 1.2 : 1
-    source: styleV2.closeIcon
+    source: StyleV2.closeIcon
     color: text.color
 
     MouseArea {

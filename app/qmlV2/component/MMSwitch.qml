@@ -18,12 +18,10 @@ Switch {
   property string textOn
   property string textOff
 
-  StyleV2 { id: styleV2 }
-
   contentItem: Text {
     text: (control.textOn.length > 0 && control.textOff.length > 0) ? (control.checked ? control.textOn : control.textOff) : control.text
-    font: styleV2.p5
-    color: control.enabled ? styleV2.forestColor : styleV2.mediumGreenColor
+    font: StyleV2.p5
+    color: control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
     verticalAlignment: Text.AlignVCenter
     leftPadding: control.indicator.width + control.spacing
   }
@@ -34,14 +32,14 @@ Switch {
     x: control.leftPadding
     y: parent.height / 2 - height / 2
     radius: implicitHeight / 2
-    color: control.checked ? styleV2.grassColor : styleV2.whiteColor
+    color: control.checked ? StyleV2.grassColor : StyleV2.whiteColor
 
     Rectangle {
       x: control.checked ? parent.width - width - radius/2 : radius/2
       width: 20
       height: width
       radius: width / 2
-      color: control.enabled ? styleV2.forestColor : styleV2.mediumGreenColor
+      color: control.enabled ? StyleV2.forestColor : StyleV2.mediumGreenColor
       anchors.verticalCenter: parent.verticalCenter
     }
   }

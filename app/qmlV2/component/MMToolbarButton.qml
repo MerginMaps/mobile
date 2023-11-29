@@ -24,16 +24,14 @@ Item {
 
   enum Button { Normal, Save }
 
-  height: isMenuButton ? styleV2.menuDrawerHeight/2 : styleV2.toolbarHeight
-
-  StyleV2 { id: styleV2 }
+  height: isMenuButton ? StyleV2.menuDrawerHeight/2 : StyleV2.toolbarHeight
 
   Rectangle {
     width: parent.width - 10 * __dp
     height: parent.height - 10 * __dp
     anchors.centerIn: parent
     clip: control.type !== MMToolbarButton.Button.Save
-    color: styleV2.transparentColor
+    color: StyleV2.transparentColor
     visible: !control.isMenuButton
 
     Image {
@@ -50,8 +48,8 @@ Item {
         width: 56 * __dp
         height: width
         radius: width / 2
-        color: styleV2.transparentColor
-        border.color: styleV2.grassColor
+        color: StyleV2.transparentColor
+        border.color: StyleV2.grassColor
         border.width: 14 * __dp
       }
     }
@@ -60,8 +58,8 @@ Item {
 
       text: control.text
       width: parent.width
-      color: styleV2.whiteColor
-      font: styleV2.t4
+      color: StyleV2.whiteColor
+      font: StyleV2.t4
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.bottom: parent.bottom
       anchors.bottomMargin: 20 * __dp
@@ -77,7 +75,7 @@ Item {
   // Menu button
   MMToolbarMenuButton {
     width: control.width
-    height: styleV2.menuDrawerHeight
+    height: StyleV2.menuDrawerHeight
     visible: control.isMenuButton
     iconSource: control.iconSource
     text: control.text

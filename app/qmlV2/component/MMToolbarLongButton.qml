@@ -24,9 +24,7 @@ Item {
   readonly property double minimumToolbarLongButtonWidth: 200 * __dp
   readonly property double maximumToolbarLongButtonWidth: 500 * __dp
 
-  height: styleV2.toolbarHeight
-
-  StyleV2 { id: styleV2 }
+  height: StyleV2.toolbarHeight
 
   Button {
     width: {
@@ -59,8 +57,8 @@ Item {
           id: text
 
           text: control.text
-          color: styleV2.forestColor
-          font: styleV2.t3
+          color: StyleV2.forestColor
+          font: StyleV2.t3
           verticalAlignment: Text.AlignVCenter
           topPadding: 10 * __dp
           bottomPadding: 10 * __dp
@@ -69,7 +67,7 @@ Item {
     }
 
     background: Rectangle {
-      color: styleV2.grassColor
+      color: StyleV2.grassColor
       radius: height / 2
     }
 

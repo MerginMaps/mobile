@@ -25,8 +25,6 @@ Drawer {
   height: mainColumn.height
   edge: Qt.BottomEdge
 
-  StyleV2 { id: styleV2 }
-
   Rectangle {
     color: roundedRect.color
     anchors.top: parent.top
@@ -41,7 +39,7 @@ Drawer {
     id: roundedRect
 
     anchors.fill: parent
-    color: styleV2.whiteColor
+    color: StyleV2.whiteColor
 
     Column {
       id: mainColumn
@@ -55,7 +53,7 @@ Drawer {
       Image {
         id: closeButton
 
-        source: styleV2.closeButtonIcon
+        source: StyleV2.closeButtonIcon
         anchors.right: parent.right
         anchors.rightMargin: 20 * __dp
 
@@ -69,9 +67,9 @@ Drawer {
         id: title
 
         anchors.horizontalCenter: parent.horizontalCenter
-        font: styleV2.t1
+        font: StyleV2.t1
         width: parent.width - 40 * __dp
-        color: styleV2.forestColor
+        color: StyleV2.forestColor
         visible: text.length > 0
         horizontalAlignment: Text.AlignHCenter
       }
@@ -80,9 +78,9 @@ Drawer {
         id: menuView
 
         width: parent.width - 40 * __dp
-        height: model ? model.count * styleV2.menuDrawerHeight : 0
+        height: model ? model.count * StyleV2.menuDrawerHeight : 0
         cellWidth: width
-        cellHeight: styleV2.menuDrawerHeight
+        cellHeight: StyleV2.menuDrawerHeight
         interactive: false
       }
     }
