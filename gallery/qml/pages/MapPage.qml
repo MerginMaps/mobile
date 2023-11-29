@@ -45,6 +45,7 @@ Page {
       onScaleChanged: (delta) => {
                         map.zoomLevel += Math.log2(delta)
                         map.alignCoordinateToPoint(map.startCentroid, pinch.centroid.position)
+                        scaleBar.visible = true
                       }
       onRotationChanged: (delta) => {
                            map.bearing -= delta
@@ -63,7 +64,7 @@ Page {
 
     DragHandler {
       target: null
-      onTranslationChanged: (delta) => map.pan(-delta.x, -delta.y)
+      onTranslationChanged: (delta) => { map.pan(-delta.x, -delta.y); scaleBar.visible = true }
     }
   }
 
@@ -80,6 +81,15 @@ Page {
       anchors.centerIn: parent
       text: map.center + "\tzoom: " + map.zoomLevel.toFixed(2)
     }
+  }
+
+  MMMapScaleLabel {
+    id: scaleBar
+
+    anchors.horizontalCenter: parent.horizontalCenter
+    anchors.top: parent.top
+    anchors.topMargin: 60
+    mapItem: map
   }
 
   Column {

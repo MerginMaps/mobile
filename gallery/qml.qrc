@@ -31,6 +31,7 @@
         <file>../app/qmlV2/component/MMMapButton.qml</file>
         <file>../app/qmlV2/component/MMShadow.qml</file>
         <file>../app/qmlV2/component/MMMapLabel.qml</file>
+        <file>../app/qmlV2/component/MMMapScaleLabel.qml</file>
         <file>../app/qmlV2/component/MMPasswordInput.qml</file>
         <file>../app/qmlV2/component/MMButtonInput.qml</file>
         <file>../app/qmlV2/component/MMToolbarButton.qml</file>
