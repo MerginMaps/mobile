@@ -10,8 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
-import "../../app/qmlV2/component"
-import "../../app/qmlV2/"
+import "qmlV2/component"
+import "qmlV2"
 
 Page {
   id: pane

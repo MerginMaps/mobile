@@ -65,6 +65,23 @@ qt_add_qml_module(
             qml.qrc
 )
 
+add_subdirectory(qmlV2)
+set_source_files_properties(qmlV2/StyleV2.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+
+set(MM_QMLV2_SRCS)
+foreach (src ${MM_QMLV2})
+  set(MM_QMLV2_SRCS ${MM_QMLV2_SRCS} qmlV2/${src})
+  set_source_files_properties(qmlV2/${src} PROPERTIES QT_RESOURCE_ALIAS ${src})
+endforeach ()
+
+qt_add_qml_module(
+  MerginMapsGallery
+  URI mmqmlv2
+  VERSION 1.0
+  QML_FILES ${MM_QMLV2_SRCS}
+  RESOURCE_PREFIX /com.merginmaps/imports NO_GENERATE_QMLTYPES
+)
+
 qt_add_resources(fonts.qrc)
 
 set_target_properties(

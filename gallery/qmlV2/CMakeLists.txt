@@ -1,0 +1,37 @@
+set(MM_QMLV2
+    StyleV2.qml
+    component/MMButtonInput.qml
+    component/MMMenuDrawer.qml
+    component/MMRoundLinkButton.qml
+    component/MMNumberInput.qml
+    component/MMMapScaleLabel.qml
+    component/MMNotification.qml
+    component/MMTextArea.qml
+    component/MMCheckBox.qml
+    component/MMLabel.qml
+    component/MMRoundButton.qml
+    component/MMRadioButton.qml
+    component/MMDrawer.qml
+    component/MMMapButton.qml
+    component/MMLink.qml
+    component/MMToolbarLongButton.qml
+    component/MMToolbar.qml
+    component/map/MMPositionMarker.qml
+    component/MMSwitch.qml
+    component/MMLinkButton.qml
+    component/MMProgressBar.qml
+    component/MMMapLabel.qml
+    component/MMIcon.qml
+    component/MMToolbarMenuButton.qml
+    component/MMToolbarButton.qml
+    component/MMPasswordInput.qml
+    component/MMButton.qml
+    component/MMIconInputEditor.qml
+    component/MMComponent_reachedDataLimit.qml
+    component/MMNotificationView.qml
+    component/MMComboBox.qml
+    component/MMInput.qml
+    component/MMSliderInput.qml
+    component/MMShadow.qml
+    PARENT_SCOPE
+)

@@ -21,7 +21,7 @@ QString HotReload::syncScript() const
 echo running hot reload sync directories ... \n\
 while true; do \n\
   rsync -ra ../../../../gallery/qml/ HotReload/qml/ \n\
-  rsync -ra ../../../../app/qmlV2/ HotReload/app/qmlV2/ \n\
+  rsync -ra ../../../../qmlV2/ HotReload/qmlV2/ \n\
   sleep 1 \n\
 done";
 }
@@ -32,8 +32,8 @@ HotReload::HotReload( QQmlApplicationEngine &engine, QObject *parent ):
   // create dirs for sync (near the app)
   if ( !QDir( "HotReload/qml/" ).exists() )
     QDir().mkpath( QGuiApplication::applicationDirPath() + "/HotReload/qml/" );
-  if ( !QDir( "HotReload/app/qmlV2/" ).exists() )
-    QDir().mkpath( QGuiApplication::applicationDirPath() + "/HotReload/app/qmlV2/" );
+  if ( !QDir( "HotReload/qmlV2/" ).exists() )
+    QDir().mkpath( QGuiApplication::applicationDirPath() + "/HotReload/qmlV2/" );
 
   // create runnable sync script (near the app)
   QString scriptFilename = QGuiApplication::applicationDirPath() + "/syncGallery.sh";
@@ -69,8 +69,8 @@ void HotReload::startHotReload()
 {
   _watcher = new QFileSystemWatcher( this );
   _watcher->addPath( "HotReload/qml/Pages" );
-  _watcher->addPath( "HotReload/app/qmlV2" );
-  _watcher->addPath( "HotReload/app/qmlV2/component" );
+  _watcher->addPath( "HotReload/qmlV2" );
+  _watcher->addPath( "HotReload/qmlV2/component" );
 
   // send signal for hot reloading
   connect( _watcher, &QFileSystemWatcher::directoryChanged, this, [this]( const QString & path )
