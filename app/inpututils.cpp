@@ -2113,11 +2113,14 @@ QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
       continue;
     }
 
-    QgsPoint geop;
-    geop.setX( coordinates[0].toDouble() ); // long
-    geop.setY( coordinates[1].toDouble() ); // lat
-    geop.setZ( coordinates[2].toDouble() ); // alt
-    geop.setM( coordinates[3].toDouble() ); // UTC time in secs
+    QgsPoint geop(
+      coordinates[0].toDouble(), // long
+      coordinates[1].toDouble(), // lat
+      coordinates[2].toDouble(), // alt
+      coordinates[3].toDouble(), // UTC time in secs
+      Qgis::WkbType::PointZM // explicitly mention the point type
+    );
+
     parsedUpdates << geop;
   }
 
