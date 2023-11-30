@@ -11,6 +11,7 @@
 #include "coreutils.h"
 #include "androidutils.h"
 #include "inpututils.h"
+#include <QPermissions>
 
 NmeaParser::NmeaParser() : QgsNmeaConnection( new QBluetoothSocket() )
 {
@@ -134,8 +135,22 @@ void BluetoothPositionProvider::startReconnectionTime()
 void BluetoothPositionProvider::handleLostConnection()
 {
   // we want to reconnect, but only to devices that are paired
+  QBluetoothPermission btPermission;
+  Qt::PermissionStatus permissionStatus;
 
-  if ( mReceiverDevice->pairingStatus( mTargetAddress ) == QBluetoothLocalDevice::Unpaired )
+  if ( qApp && ( permissionStatus = qApp->checkPermission( btPermission ) ) != Qt::PermissionStatus::Granted )
+  {
+    if ( permissionStatus == Qt::PermissionStatus::Undetermined )
+    {
+      qApp->requestPermission( btPermission, []() {} );
+      startReconnectionTime();
+    }
+    else
+    {
+      setState( tr( "Bluetooth permission disabled" ), State::NoConnection ); // permanent error
+    }
+  }
+  else if ( mReceiverDevice->pairingStatus( mTargetAddress ) == QBluetoothLocalDevice::Unpaired )
   {
     setState( tr( "Could not connect to device, not paired" ), State::NoConnection );
   }
