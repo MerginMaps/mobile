@@ -7,6 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
+import QtCore
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
@@ -39,6 +40,14 @@ Page {
     withBackButton: true
   }
 
+  BluetoothPermission {
+    id: btPermission
+
+    communicationModes: BluetoothPermission.Access
+
+    onStatusChanged: btModel.initiateBtDiscovery()
+  }
+
   focus: true
 
   Keys.onReleased: function( event ) {
@@ -57,20 +66,34 @@ Page {
     model: BluetoothDiscoveryModel {
       id: btModel
       discovering: false
+
+      function initiateBtDiscovery() {
+        // Is bluetooth permission granted and is bluetooth turned on?
+        // For Android we need to opt to enable Bluetooth and listen on response in the connections component.
+
+        if ( btPermission.status === Qt.Granted )
+        {
+          if ( __inputUtils.isBluetoothTurnedOn() )
+          {
+            btModel.discovering = true
+          }
+          else
+          {
+            __inputUtils.turnBluetoothOn()
+          }
+        }
+        else if ( btPermission.status === Qt.Denied )
+        {
+          __inputUtils.showNotification( qsTr( "Bluetooth permission is required in order to connect to external receivers. Please enable it in system settings" ) )
+        }
+        else
+        {
+          btPermission.request()
+        }
+      }
     }
 
-    Component.onCompleted: {
-      // Is bluetooth turned on?
-      // For Android we need to opt to enable Bluetooth and listen on response in the connections component.
-      if ( __inputUtils.isBluetoothTurnedOn() )
-      {
-        btModel.discovering = true
-      }
-      else
-      {
-        __inputUtils.turnBluetoothOn()
-      }
-    }
+    Component.onCompleted: btModel.initiateBtDiscovery()
 
     Connections {
       target: __androidUtils
