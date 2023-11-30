@@ -305,40 +305,40 @@ Please go to the Mergin Maps website to remove it manually.</source>
 <context>
     <name>BluetoothPositionProvider</name>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="43"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="178"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="46"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="190"/>
         <source>No connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="84"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="87"/>
         <source>Reconnecting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="116"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="124"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="119"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="127"/>
         <source>No connection, reconnecting in (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="150"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="155"/>
         <source>Bluetooth permission disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="155"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="166"/>
         <source>Could not connect to device, not paired</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="170"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="182"/>
         <source>Connecting to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="174"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="192"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="186"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="204"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
