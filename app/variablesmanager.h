@@ -65,6 +65,7 @@ class VariablesManager : public QObject
   private slots:
     void apiRootChanged();
     void authChanged();
+    void setUserVariables();
     void setVersionVariable( const QString &projectFullName );
 
   private:

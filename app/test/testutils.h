@@ -29,7 +29,12 @@ namespace TestUtils
   //! select the first workspace as active workspace
   void selectFirstWorkspace( MerginApi *api, QString &workspace );
 
-  //! Get TEST user credentials from env variables
+  /**
+   *  Get TEST user credentials from env variables
+   *  - TEST_MERGIN_URL
+   *  - TEST_API_USERNAME
+   *  - TEST_API_PASSWORD
+   */
   void merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QString &username, QString &password );
 
   //! Whether we need to auth again

@@ -131,7 +131,7 @@ void SynchronizationManager::migrateProjectToMergin( const QString &projectName 
 
     if ( mMerginApi->serverType() == MerginServerType::OLD )
     {
-      hasStarted = mMerginApi->createProject( mMerginApi->merginUserName(), projectName );
+      hasStarted = mMerginApi->createProject( mMerginApi->userAuth()->username(), projectName );
     }
     else
     {
