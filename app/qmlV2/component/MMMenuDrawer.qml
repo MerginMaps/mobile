@@ -11,7 +11,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 import "."
-import ".."
 
 Drawer {
   id: control
@@ -39,7 +38,7 @@ Drawer {
     id: roundedRect
 
     anchors.fill: parent
-    color: StyleV2.whiteColor
+    color: __style.whiteColor
 
     Column {
       id: mainColumn
@@ -53,7 +52,7 @@ Drawer {
       Image {
         id: closeButton
 
-        source: StyleV2.closeButtonIcon
+        source: __style.closeButtonIcon
         anchors.right: parent.right
         anchors.rightMargin: 20 * __dp
 
@@ -67,9 +66,9 @@ Drawer {
         id: title
 
         anchors.horizontalCenter: parent.horizontalCenter
-        font: StyleV2.t1
+        font: __style.t1
         width: parent.width - 40 * __dp
-        color: StyleV2.forestColor
+        color: __style.forestColor
         visible: text.length > 0
         horizontalAlignment: Text.AlignHCenter
       }
@@ -78,9 +77,9 @@ Drawer {
         id: menuView
 
         width: parent.width - 40 * __dp
-        height: model ? model.count * StyleV2.menuDrawerHeight : 0
+        height: model ? model.count * __style.menuDrawerHeight : 0
         cellWidth: width
-        cellHeight: StyleV2.menuDrawerHeight
+        cellHeight: __style.menuDrawerHeight
         interactive: false
       }
     }

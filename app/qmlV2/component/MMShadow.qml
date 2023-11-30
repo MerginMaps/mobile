@@ -9,13 +9,12 @@
 
 import QtQuick
 import Qt5Compat.GraphicalEffects
-import ".."
 
 DropShadow {
   id: shadow
   horizontalOffset: 2 * __dp
   verticalOffset: 3 * __dp
   radius: 7 * __dp
-  color: StyleV2.shadowColor
+  color: __style.shadowColor
   transparentBorder: true
 }

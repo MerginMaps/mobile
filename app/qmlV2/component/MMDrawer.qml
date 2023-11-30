@@ -11,7 +11,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 import "."
-import ".."
 
 Drawer {
   id: control
@@ -45,7 +44,7 @@ Drawer {
     id: roundedRect
 
     anchors.fill: parent
-    color: StyleV2.whiteColor
+    color: __style.whiteColor
 
     Column {
       id: mainColumn
@@ -59,7 +58,7 @@ Drawer {
       Image {
         id: closeButton
 
-        source: StyleV2.closeButtonIcon
+        source: __style.closeButtonIcon
         anchors.right: parent.right
         anchors.rightMargin: 20 * __dp
 
@@ -79,9 +78,9 @@ Drawer {
         id: title
 
         anchors.horizontalCenter: parent.horizontalCenter
-        font: StyleV2.t1
+        font: __style.t1
         width: parent.width - 2*20 * __dp
-        color: StyleV2.forestColor
+        color: __style.forestColor
         visible: text.length > 0
         horizontalAlignment: Text.AlignHCenter
       }
@@ -90,9 +89,9 @@ Drawer {
         id: description
 
         anchors.horizontalCenter: parent.horizontalCenter
-        font: StyleV2.p5
+        font: __style.p5
         width: parent.width - 2*20 * __dp
-        color: StyleV2.nightColor
+        color: __style.nightColor
         visible: text.length > 0
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.WordWrap
@@ -105,15 +104,15 @@ Drawer {
         width: parent.width - 2*20 * __dp
         height: boundedDescription.height
         radius: 16 * __dp
-        color: StyleV2.lightGreenColor
+        color: __style.lightGreenColor
 
         Text {
           id: boundedDescription
 
           anchors.horizontalCenter: parent.horizontalCenter
-          font: StyleV2.p6
+          font: __style.p6
           width: parent.width
-          color: StyleV2.nightColor
+          color: __style.nightColor
           visible: text.length > 0
           horizontalAlignment: Text.AlignLeft
           wrapMode: Text.WordWrap

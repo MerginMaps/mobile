@@ -10,7 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import ".."
 
 Item {
   id: control
@@ -24,7 +23,7 @@ Item {
   readonly property double minimumToolbarLongButtonWidth: 200 * __dp
   readonly property double maximumToolbarLongButtonWidth: 500 * __dp
 
-  height: StyleV2.toolbarHeight
+  height: __style.toolbarHeight
 
   Button {
     width: {
@@ -57,8 +56,8 @@ Item {
           id: text
 
           text: control.text
-          color: StyleV2.forestColor
-          font: StyleV2.t3
+          color: __style.forestColor
+          font: __style.t3
           verticalAlignment: Text.AlignVCenter
           topPadding: 10 * __dp
           bottomPadding: 10 * __dp
@@ -67,7 +66,7 @@ Item {
     }
 
     background: Rectangle {
-      color: StyleV2.grassColor
+      color: __style.grassColor
       radius: height / 2
     }
 

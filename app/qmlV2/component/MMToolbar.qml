@@ -9,7 +9,6 @@
 
 import QtQuick
 import Qt5Compat.GraphicalEffects
-import ".."
 
 Rectangle {
   id: control
@@ -25,8 +24,8 @@ Rectangle {
     right: parent.right
     bottom: parent.bottom
   }
-  height: StyleV2.toolbarHeight
-  color: StyleV2.forestColor
+  height: __style.toolbarHeight
+  color: __style.forestColor
 
   onWidthChanged: setupBottomBar()
 
@@ -47,7 +46,7 @@ Rectangle {
     anchors.fill: parent
     leftMargin: 20 * __dp
     rightMargin: 20 * __dp
-    cellHeight: StyleV2.toolbarHeight
+    cellHeight: __style.toolbarHeight
     interactive: false
   }
 
@@ -67,7 +66,7 @@ Rectangle {
     id: componentMore
     MMToolbarButton {
       text: qsTr("More")
-      iconSource: StyleV2.moreIcon
+      iconSource: __style.moreIcon
       onClicked: menu.visible = true
     }
   }

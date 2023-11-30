@@ -8,13 +8,12 @@
  ***************************************************************************/
 
 import QtQuick
-import ".."
 
 Item {
   id: control
 
   width: height
-  height: StyleV2.mapItemHeight
+  height: __style.mapItemHeight
 
   property alias iconSource: icon.source
 
@@ -24,7 +23,7 @@ Item {
     width: parent.width
     height: parent.height
     radius: control.height / 2
-    color: StyleV2.whiteColor
+    color: __style.whiteColor
 
     layer.enabled: true
     layer.effect: MMShadow {}
@@ -33,7 +32,7 @@ Item {
       id: icon
 
       anchors.centerIn: parent
-      color: StyleV2.forestColor
+      color: __style.forestColor
     }
 
     MouseArea {
