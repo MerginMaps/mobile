@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.22)
 set(MM_VERSION_MAJOR "2")
 set(MM_VERSION_MINOR "5")
 set(MM_VERSION_PATCH "0")
-set(QT_VERSION_DEFAULT "6.5.2")
+set(QT_VERSION_DEFAULT "6.6.0")
 
 # Note: we cannot set this for non-android build, since CMake will start looking for
 # Qt6AndroidMacros.cmake

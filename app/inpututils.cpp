@@ -12,6 +12,8 @@
 #include <QWindow>
 #include <QScreen>
 #include <QApplication>
+#include <QCoreApplication>
+#include <QPermissions>
 
 #include "qgsruntimeprofiler.h"
 #include "qcoreapplication.h"
@@ -544,7 +546,19 @@ bool InputUtils::acquireCameraPermission()
   {
     return mAndroidUtils->requestCameraPermission();
   }
-  return true;
+  else
+  {
+    auto status = qApp->checkPermission( QCameraPermission{} );
+
+    if ( Qt::PermissionStatus::Undetermined == status )
+    {
+      // TODO this is async so it should be treated as such
+      qApp->requestPermission( QCameraPermission{}, []( const QPermission & permission ) {} );
+      return false;
+    }
+
+    return status == Qt::PermissionStatus::Granted;
+  }
 }
 
 bool InputUtils::isBluetoothTurnedOn()

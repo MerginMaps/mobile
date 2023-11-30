@@ -16,14 +16,14 @@ on:
       - published
 
 env:   
-  QT_VERSION: '6.5.2' # use scripts/update_qt_version.bash to change
+  QT_VERSION: '6.6.0' # use scripts/update_qt_version.bash to change
   XC_VERSION: ${{ '14.2' }}
   IOS_CMAKE_TOOLCHAIN_VERSION: "4.4.0" 
-  INPUT_SDK_VERSION: arm64-ios-20230824-157
+  INPUT_SDK_VERSION: arm64-ios-20231110-162
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 0
+  CACHE_VERSION: 1
 
 concurrency:
   group: ci-${{github.ref}}-ios
@@ -146,7 +146,7 @@ jobs:
         uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v2-${{ env.QT_VERSION }}-ios
+          key: ${{ runner.os }}-QtCache-v3-${{ env.QT_VERSION }}-ios
           
       - name: Install Qt
         if: steps.cache-qt.outputs.cache-hit != 'true'
