@@ -8,25 +8,36 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
-import "."
 
-RoundButton {
+Item {
   id: control
 
-  implicitWidth: icon.width * 2
-  implicitHeight: icon.height * 2
+  width: height
+  height: __style.mapItemHeight
 
-  contentItem: MMIcon {
-    id: icon
+  property alias iconSource: icon.source
 
-    source: __style.arrowLinkRightIcon
-    color: control.enabled ? control.down || control.hovered ? __style.grassColor : __style.forestColor : __style.forestColor
-  }
+  signal clicked
 
-  background: Rectangle {
-    color: control.enabled ? control.down || control.hovered ? __style.forestColor : __style.grassColor : __style.mediumGreenColor
-    radius: control.implicitHeight / 2
+  Rectangle {
+    width: parent.width
+    height: parent.height
+    radius: control.height / 2
+    color: __style.whiteColor
+
+    layer.enabled: true
+    layer.effect: MMShadow {}
+
+    MMIcon {
+      id: icon
+
+      anchors.centerIn: parent
+      color: __style.forestColor
+    }
+
+    MouseArea {
+      anchors.fill: parent
+      onClicked: control.clicked()
+    }
   }
 }

@@ -10,7 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
 import "."
 
 Button {
@@ -18,21 +17,21 @@ Button {
 
   contentItem: Text {
     anchors.centerIn: control
-    font: Qt.font(Style.t3)
+    font: __style.t3
     text: control.text
     leftPadding: 32 * __dp
     rightPadding: 32 * __dp
     topPadding: 10 * __dp
     bottomPadding: 10 * __dp
-    color: control.enabled ? Style.forest : Style.mediumGreen
+    color: control.enabled ? __style.forestColor : __style.mediumGreenColor
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
     elide: Text.ElideRight
   }
 
   background: Rectangle {
-    color: control.enabled ? control.down || control.hovered ? Style.grass : Style.white : Style.white
-    border.color: control.enabled ? control.down || control.hovered ? Style.transparent : Style.forest : Style.mediumGreen
+    color: control.enabled ? control.down || control.hovered ? __style.grassColor : __style.whiteColor : __style.whiteColor
+    border.color: control.enabled ? control.down || control.hovered ? __style.transparentColor : __style.forestColor : __style.mediumGreenColor
     border.width: 2 * __dp
     radius: height / 2
   }

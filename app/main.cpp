@@ -126,6 +126,7 @@
 #include "workspacesproxymodel.h"
 #include "invitationsmodel.h"
 #include "invitationsproxymodel.h"
+#include "changelogmodel.h"
 
 #include "streamingintervaltype.h"
 
@@ -250,6 +251,16 @@ static void init_qgis( const QString &pkgPath )
   qDebug( "qgis providers:\n%s", QgsProviderRegistry::instance()->pluginList().toLatin1().data() );
 }
 
+static void init_pg( const QString &dataDir )
+{
+  QFileInfo pgFile( QStringLiteral( "%1/pg_service.conf" ).arg( dataDir ) );
+  if ( pgFile.exists() && pgFile.isReadable() )
+  {
+    qputenv( "PGSYSCONFDIR", dataDir.toUtf8() );
+    CoreUtils::log( QStringLiteral( "PostgreSQL" ), QStringLiteral( "found pg_service.conf, setting PGSYSCONFDIR" ) );
+  }
+}
+
 void initDeclarative()
 {
   qmlRegisterUncreatableType<MerginUserAuth>( "lc", 1, 0, "MerginUserAuth", "" );
@@ -279,6 +290,7 @@ void initDeclarative()
   qmlRegisterType<WorkspacesProxyModel>( "lc", 1, 0, "WorkspacesProxyModel" );
   qmlRegisterType<InvitationsModel>( "lc", 1, 0, "InvitationsModel" );
   qmlRegisterType<InvitationsProxyModel>( "lc", 1, 0, "InvitationsProxyModel" );
+  qmlRegisterType<ChangelogModel>( "lc", 1, 0, "ChangelogModel" );
   qmlRegisterUncreatableType<AttributePreviewModel>( "lc", 1, 0, "AttributePreviewModel", "" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
   qRegisterMetaType< FeatureLayerPair >( "FeatureLayerPair" );
@@ -393,7 +405,7 @@ int main( int argc, char *argv[] )
   tests.parseArgs( argc, argv );
 #endif
   qDebug() << "Mergin Maps Input App" << version << InputUtils::appPlatform() << "(" << CoreUtils::appVersionCode() << ")";
-  qDebug() << "Built with QGIS version " << VERSION_INT;
+  qDebug() << "Built with QGIS " << VERSION_INT << " and QT " << qVersion();
 
   // Set/Get enviroment
   QString dataDir = getDataDir();
@@ -413,6 +425,8 @@ int main( int argc, char *argv[] )
   }
 
   CoreUtils::setLogFilename( projectDir + "/.logs" );
+  CoreUtils::log( QStringLiteral( "Input" ), QStringLiteral( "Application has started: %1 (%2)" ).arg( version ).arg( CoreUtils::appVersionCode() ) );
+
   setEnvironmentQgisPrefixPath();
 
   // Initialize translations
@@ -451,6 +465,9 @@ int main( int argc, char *argv[] )
 #endif
   InputProjUtils inputProjUtils;
   inputProjUtils.initProjLib( appBundleDir, dataDir, projectDir );
+
+  init_pg( dataDir );
+
   init_qgis( appBundleDir );
 
   // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).

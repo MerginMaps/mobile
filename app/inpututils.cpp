@@ -614,6 +614,12 @@ bool InputUtils::isMobilePlatform()
   return platform == QStringLiteral( "android" ) || platform == QStringLiteral( "ios" );
 }
 
+QString InputUtils::appDataDir()
+{
+  QString dataDir = QString::fromLocal8Bit( qgetenv( "QGIS_QUICK_DATA_PATH" ) ) ;
+  return dataDir;
+}
+
 void InputUtils::onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level )
 {
   QString levelStr;

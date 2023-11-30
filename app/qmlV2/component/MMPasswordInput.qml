@@ -17,6 +17,7 @@ Column {
   property alias title: titleItem.text
   property alias text: textField.text
   property alias placeholderText: textField.placeholderText
+  required property string regexp
   property url iconSource: ""
   property string warningMsg
   property string errorMsg
@@ -39,7 +40,7 @@ Column {
     height: 40 * __dp
     width: parent.width
     color: (errorMsg.length > 0 || warningMsg.length > 0) ? __style.errorBgInputColor : __style.whiteColor
-    border.color: errorMsg.length > 0 ? __style.negativeColor : warningMsg.length > 0 ? __style.warningColor : __style.forestColor
+    border.color: isPasswordCorrect(textField.text) ? __style.forestColor : errorMsg.length > 0 ? __style.negativeColor : warningMsg.length > 0 ? __style.warningColor : __style.forestColor
     border.width: enabled ? (textField.activeFocus ? 2*__dp : textField.hovered ? 1*__dp : 0) : 0
     radius: parent.height
 
@@ -65,31 +66,31 @@ Column {
         y: 2 * __dp
         width: control.width - 2 * row.leftPadding
                - (leftIcon.visible ? leftIcon.width : 0)
-               - (clearButton.visible ? clearButton.width : 0)
+               - (eyeButton.visible ? eyeButton.width : 0)
         height: rect.height - 4 * __dp
         color: control.enabled ? __style.nightColor : __style.mediumGreenColor
         placeholderTextColor: __style.nightAlphaColor
         font: __style.p5
         hoverEnabled: true
         anchors.verticalCenter: parent.verticalCenter
+        echoMode: eyeButton.pressed ? TextInput.Normal : TextInput.Password
         background: Rectangle {
           color: __style.transparentColor
         }
       }
 
       MMIcon {
-        id: clearButton
+        id: eyeButton
 
         property bool pressed: false
-        source: __style.xMarkIcon
+        source: pressed ? __style.hideIcon : __style.showIcon
         color: control.enabled ? __style.forestColor : __style.mediumGreenColor
         width: visible ? height : 0
         height: rect.height
-        visible: textField.activeFocus && textField.text.length>0
 
         MouseArea {
           anchors.fill: parent
-          onClicked: textField.text = ""
+          onClicked: eyeButton.pressed = !eyeButton.pressed
         }
       }
     }
@@ -111,15 +112,22 @@ Column {
 
         source: visible ? __style.errorIcon : ""
         color: errorMsg.length > 0 ? __style.negativeColor : __style.warningColor
-        visible: errorMsg.length > 0 || warningMsg.length > 0
+        visible: msg.visible
       }
       Text {
+        id: msg
+
         text: errorMsg.length > 0 ? errorMsg : warningMsg
         font: __style.t4
         wrapMode: Text.WordWrap
         width: messageItem.width - msgRow.spacing - msgIcon.width
-        visible: errorMsg.length > 0 || warningMsg.length > 0
+        visible: (errorMsg.length > 0 || warningMsg.length > 0) && !isPasswordCorrect(textField.text)
       }
     }
+  }
+
+  function isPasswordCorrect(pwd) {
+    let pwdRegexp = new RegExp(control.regexp)
+    return pwdRegexp.test(pwd)
   }
 }

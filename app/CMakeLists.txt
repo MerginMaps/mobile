@@ -48,6 +48,7 @@ set(MM_SRCS
     autosynccontroller.cpp
     bluetoothdiscoverymodel.cpp
     qrcodedecoder.cpp
+    changelogmodel.cpp
     compass.cpp
     featurelayerpair.cpp
     featuresmodel.cpp
@@ -127,6 +128,7 @@ set(MM_HDRS
     autosynccontroller.h
     bluetoothdiscoverymodel.h
     qrcodedecoder.h
+    changelogmodel.h
     compass.h
     enumhelper.h
     featurelayerpair.h

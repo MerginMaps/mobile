@@ -10,7 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
 
 Switch {
   id: control
@@ -20,8 +19,8 @@ Switch {
 
   contentItem: Text {
     text: (control.textOn.length > 0 && control.textOff.length > 0) ? (control.checked ? control.textOn : control.textOff) : control.text
-    font: Qt.font(Style.p5)
-    color: control.enabled ? Style.forest : Style.mediumGreen
+    font: __style.p5
+    color: control.enabled ? __style.forestColor : __style.mediumGreenColor
     verticalAlignment: Text.AlignVCenter
     leftPadding: control.indicator.width + control.spacing
   }
@@ -32,16 +31,14 @@ Switch {
     x: control.leftPadding
     y: parent.height / 2 - height / 2
     radius: implicitHeight / 2
-    color: control.checked ? Style.grass : Style.white
+    color: control.checked ? __style.grassColor : __style.whiteColor
 
     Rectangle {
       x: control.checked ? parent.width - width - radius/2 : radius/2
       width: 20
       height: width
       radius: width / 2
-      color: control.down ? Style.mediumGreen : Style.white
-      border.color: control.enabled ? Style.forest : Style.mediumGreen
-      border.width: 6
+      color: control.enabled ? __style.forestColor : __style.mediumGreenColor
       anchors.verticalCenter: parent.verticalCenter
     }
   }

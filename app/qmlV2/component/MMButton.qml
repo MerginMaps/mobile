@@ -10,7 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../Style.js" as Style
 import "."
 
 Button {
@@ -20,42 +19,20 @@ Button {
 
   contentItem: Text {
     anchors.centerIn: control
-    font: Qt.font(Style.t3)
+    font: __style.t3
     text: control.text
     leftPadding: 32 * __dp
     rightPadding: 32 * __dp
     topPadding: 10 * __dp
     bottomPadding: 10 * __dp
-    color: control.enabled ? control.down || control.hovered ? Style.grass : Style.forest : Style.forest
+    color: control.enabled ? control.down || control.hovered ? __style.grassColor : __style.forestColor : __style.forestColor
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
     elide: Text.ElideRight
   }
 
   background: Rectangle {
-    color: transparent ? "transparent" : control.enabled ? control.down || control.hovered ? Style.forest : Style.grass : Style.mediumGreen
+    color: transparent ? "transparent" : control.enabled ? control.down || control.hovered ? __style.forestColor : __style.grassColor : __style.mediumGreenColor
     radius: height / 2
   }
-
-//  onPressed: clickTransition.running = true
-
-//  SequentialAnimation {
-//    id: clickTransition
-
-//    PropertyAnimation {
-//      target: control
-//      properties: "scale"
-//      from: 1
-//      to: 0.9
-//      duration: 100
-//    }
-
-//    PropertyAnimation {
-//      target: control
-//      properties: "scale"
-//      from: 0.9
-//      to: 1
-//      duration: 100
-//    }
-//  }
 }

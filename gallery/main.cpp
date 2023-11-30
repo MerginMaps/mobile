@@ -13,10 +13,11 @@
 #ifdef DESKTOP_OS
 #include "hotreload.h"
 #endif
+#include "mmstyle.h"
 #include "helper.h"
 #include <QFont>
 #include <QFontDatabase>
-
+#include "notificationmodel.h"
 int main( int argc, char *argv[] )
 {
   QGuiApplication app( argc, argv );
@@ -30,9 +31,15 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "_hotReload", &hotReload );
 #endif
 
+  qreal dp = Helper::calculateDpRatio();
+  MMStyle style( dp );
+  NotificationModel notificationModel;
+
+  engine.rootContext()->setContextProperty( "notificationModel", &notificationModel );
   // path to local wrapper pages
   engine.rootContext()->setContextProperty( "_qmlWrapperPath", QGuiApplication::applicationDirPath() + "/HotReload/qml/pages/" );
-  engine.rootContext()->setContextProperty( "__dp", Helper::calculateDpRatio() );
+  engine.rootContext()->setContextProperty( "__dp", dp );
+  engine.rootContext()->setContextProperty( "__style", &style );
   engine.rootContext()->setContextProperty( "__isMobile", Helper::isMobile() );
 
   QObject::connect( &engine, &QQmlApplicationEngine::objectCreationFailed,

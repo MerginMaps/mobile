@@ -18,8 +18,11 @@ Column {
   property alias text: textField.text
   property alias placeholderText: textField.placeholderText
   property url iconSource: ""
+  required property string buttonText
   property string warningMsg
   property string errorMsg
+
+  signal clicked
 
   spacing: 6 * __dp
   width: 280 * __dp
@@ -65,7 +68,7 @@ Column {
         y: 2 * __dp
         width: control.width - 2 * row.leftPadding
                - (leftIcon.visible ? leftIcon.width : 0)
-               - (clearButton.visible ? clearButton.width : 0)
+               - (button.visible ? button.width : 0)
         height: rect.height - 4 * __dp
         color: control.enabled ? __style.nightColor : __style.mediumGreenColor
         placeholderTextColor: __style.nightAlphaColor
@@ -77,20 +80,31 @@ Column {
         }
       }
 
-      MMIcon {
-        id: clearButton
+      Button {
+        id: button
 
-        property bool pressed: false
-        source: __style.xMarkIcon
-        color: control.enabled ? __style.forestColor : __style.mediumGreenColor
-        width: visible ? height : 0
-        height: rect.height
-        visible: textField.activeFocus && textField.text.length>0
+        anchors.verticalCenter: parent.verticalCenter
 
-        MouseArea {
-          anchors.fill: parent
-          onClicked: textField.text = ""
+        contentItem: Text {
+          anchors.centerIn: button
+          font: __style.t5
+          text: control.buttonText
+          leftPadding: 2 * __dp
+          rightPadding: 2 * __dp
+          topPadding: 2 * __dp
+          bottomPadding: 2 * __dp
+          color: __style.deepOceanColor
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          elide: Text.ElideRight
         }
+
+        background: Rectangle {
+          color: button.enabled ? __style.grassColor : __style.mediumGreenColor
+          radius: height / 2
+        }
+
+        onClicked: control.clicked()
       }
     }
   }
@@ -121,5 +135,12 @@ Column {
         visible: errorMsg.length > 0 || warningMsg.length > 0
       }
     }
+  }
+
+  // add whole text to clipboard
+  function textToClipboard() {
+    textField.selectAll()
+    textField.copy()
+    textField.deselect()
   }
 }
