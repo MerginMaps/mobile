@@ -11,7 +11,10 @@
 #include "coreutils.h"
 #include "androidutils.h"
 #include "inpututils.h"
+
+#ifdef ANDROID
 #include <QPermissions>
+#endif
 
 NmeaParser::NmeaParser() : QgsNmeaConnection( new QBluetoothSocket() )
 {
@@ -134,9 +137,11 @@ void BluetoothPositionProvider::startReconnectionTime()
 
 void BluetoothPositionProvider::handleLostConnection()
 {
-  // we want to reconnect, but only to devices that are paired
+  // first, check the permission status (Android-only)
+  Qt::PermissionStatus permissionStatus = Qt::PermissionStatus::Granted;
+
+#ifdef ANDROID
   QBluetoothPermission btPermission;
-  Qt::PermissionStatus permissionStatus;
 
   if ( qApp && ( permissionStatus = qApp->checkPermission( btPermission ) ) != Qt::PermissionStatus::Granted )
   {
@@ -150,13 +155,20 @@ void BluetoothPositionProvider::handleLostConnection()
       setState( tr( "Bluetooth permission disabled" ), State::NoConnection ); // permanent error
     }
   }
-  else if ( mReceiverDevice->pairingStatus( mTargetAddress ) == QBluetoothLocalDevice::Unpaired )
+
+#endif
+
+  if ( permissionStatus == Qt::PermissionStatus::Granted )
   {
-    setState( tr( "Could not connect to device, not paired" ), State::NoConnection );
-  }
-  else if ( mState != WaitingToReconnect && mState != Connecting )
-  {
-    startReconnectionTime();
+    // we want to reconnect, but only to devices that are paired
+    if ( mReceiverDevice->pairingStatus( mTargetAddress ) == QBluetoothLocalDevice::Unpaired )
+    {
+      setState( tr( "Could not connect to device, not paired" ), State::NoConnection );
+    }
+    else if ( mState != WaitingToReconnect && mState != Connecting )
+    {
+      startReconnectionTime();
+    }
   }
 
   // let's also invalidate current position since we no longer have connection
