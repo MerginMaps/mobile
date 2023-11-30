@@ -233,6 +233,25 @@ ApplicationWindow {
       }
     }
 
+    LocationPermission {
+      id: locationPermission
+      accuracy: LocationPermission.Precise
+
+      function requestPermissionAsync() {
+        if ( locationPermission.status === Qt.Granted ) {
+          return true;
+        }
+        else if ( locationPermission.status === Qt.Undetermined ) {
+          locationPermission.request()
+        }
+        else if ( locationPermission.status === Qt.Denied ) {
+          __inputUtils.log("Permissions", "Location permission is denied")
+          showMessage( qsTr( "Location permission is required to show your location on map. Please enable it in system settings." ) );
+        }
+        return false;
+      }
+    }
+
     MainPanel {
         id: mainPanel
 
@@ -250,11 +269,17 @@ ApplicationWindow {
           mapThemesPanel.visible = true
           stateManager.state = "misc"
         }
-        onMyLocationClicked: map.centerToPosition()
+        onMyLocationClicked: {
+          if ( locationPermission.requestPermissionAsync() ) {
+            map.centerToPosition()
+          }
+        }
 
         onMyLocationHold: {
+          if ( locationPermission.requestPermissionAsync() ) {
             __appSettings.autoCenterMapChecked = !__appSettings.autoCenterMapChecked
             showMessage( __appSettings.autoCenterMapChecked ? qsTr("GPS auto-center mode on") : qsTr("GPS auto-center mode off") )
+          }
         }
         onOpenSettingsClicked: settingsPanel.visible = true
         onZoomToProject: {
@@ -809,6 +834,14 @@ ApplicationWindow {
 
       function onLoadingFinished() {
         projectLoadingScreen.visible = false
+
+        // check location permission
+        if ( locationPermission.status === Qt.Undetermined ) {
+          locationPermission.request();
+        }
+        else if ( locationPermission.status === Qt.Denied ) {
+          __inputUtils.log("Permissions", "Location permission is denied")
+        }
       }
 
       function onLoadingErrorFound() {
