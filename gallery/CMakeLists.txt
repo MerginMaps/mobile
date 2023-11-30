@@ -29,9 +29,9 @@ find_package(
 qt_standard_project_setup()
 qt_policy(SET QTP0001 NEW)
 
-set(GALLERY_HDRS helper.h notificationmodel.h)
+set(GALLERY_HDRS helper.h notificationmodel.h ../app/mmstyle.h)
 
-set(GALLERY_SRCS helper.cpp notificationmodel.cpp)
+set(GALLERY_SRCS helper.cpp notificationmodel.cpp main.cpp)
 
 if (IOS OR ANDROID)
   add_compile_definitions(MOBILE_OS)
@@ -49,7 +49,6 @@ qt_add_executable(
   MerginMapsGallery
   ${GALLERY_SRCS}
   ${GALLERY_HDRS}
-  main.cpp
   qml.qrc
   fonts.qrc
   ../app/icons/icons.qrc
@@ -69,7 +68,7 @@ qt_add_resources(fonts.qrc)
 
 set_target_properties(
   MerginMapsGallery
-  PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+  PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER uk.co.lutraconsulting.merginmaps.gallery
              MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
              MACOSX_BUNDLE_SHORT_VERSION_STRING
              ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -78,6 +77,7 @@ set_target_properties(
 )
 
 target_link_libraries(MerginMapsGallery PRIVATE Qt6::Quick)
+target_include_directories(MerginMapsGallery PRIVATE ../app)
 
 install(
   TARGETS MerginMapsGallery

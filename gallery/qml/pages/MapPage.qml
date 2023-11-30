@@ -88,12 +88,12 @@ Page {
     spacing: 20
 
     MMMapButton {
-      iconSource: StyleV2.arrowLinkRightIcon
+      iconSource: __style.arrowLinkRightIcon
       onClicked: console.log("Map button clicked")
     }
 
     MMMapButton {
-      iconSource: StyleV2.searchIcon
+      iconSource: __style.searchIcon
       onClicked: console.log("Map button clicked")
     }
   }
@@ -105,7 +105,7 @@ Page {
     anchors.bottomMargin: 120
 
     text: "20.0 m"
-    iconSource: StyleV2.checkmarkIcon
+    iconSource: __style.checkmarkIcon
   }
 
   MMMapLabel {

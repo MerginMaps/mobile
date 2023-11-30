@@ -11,7 +11,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 import "."
-import ".."
 
 RoundButton {
   id: control
@@ -22,12 +21,12 @@ RoundButton {
   contentItem: MMIcon {
     id: icon
 
-    source: StyleV2.arrowLinkRightIcon
-    color: control.enabled ? control.down || control.hovered ? StyleV2.grassColor : StyleV2.forestColor : StyleV2.forestColor
+    source: __style.arrowLinkRightIcon
+    color: control.enabled ? control.down || control.hovered ? __style.grassColor : __style.forestColor : __style.forestColor
   }
 
   background: Rectangle {
-    color: control.enabled ? control.down || control.hovered ? StyleV2.forestColor : StyleV2.grassColor : StyleV2.mediumGreenColor
+    color: control.enabled ? control.down || control.hovered ? __style.forestColor : __style.grassColor : __style.mediumGreenColor
     radius: control.implicitHeight / 2
   }
 }

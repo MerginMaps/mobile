@@ -9,7 +9,6 @@
 
 import QtQuick
 import "."
-import ".."
 
 Rectangle {
   id: control
@@ -18,13 +17,13 @@ Rectangle {
 
   width: parent.width
   height: 12 * __dp
-  color: StyleV2.lightGreenColor
+  color: __style.lightGreenColor
   radius: height / 2
 
   Rectangle {
     width: parent.width * control.position
     height: parent.height
-    color: StyleV2.grassColor
+    color: __style.grassColor
     radius: height / 2
   }
 }

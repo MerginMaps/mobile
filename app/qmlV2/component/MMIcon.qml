@@ -9,7 +9,6 @@
 
 import QtQuick
 import Qt5Compat.GraphicalEffects
-import ".."
 
 Item {
   id: control
@@ -23,7 +22,7 @@ Item {
   Image {
     id: icon
 
-    source: StyleV2.arrowLinkRightIcon
+    source: __style.arrowLinkRightIcon
     anchors.centerIn: control
   }
 

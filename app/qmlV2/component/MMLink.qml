@@ -11,7 +11,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 import "."
-import ".."
 
 Button {
   id: control
@@ -23,9 +22,9 @@ Button {
     Text {
       id: text
 
-      font: StyleV2.t3
+      font: __style.t3
       text: control.text
-      color: control.enabled ? control.down || control.hovered ? StyleV2.nightColor : StyleV2.forestColor : StyleV2.mediumGreenColor
+      color: control.enabled ? control.down || control.hovered ? __style.nightColor : __style.forestColor : __style.mediumGreenColor
       horizontalAlignment: Text.AlignHCenter
       verticalAlignment: Text.AlignVCenter
       elide: Text.ElideRight
@@ -33,12 +32,12 @@ Button {
     }
 
     MMIcon {
-      source: StyleV2.arrowLinkRightIcon
+      source: __style.arrowLinkRightIcon
       color: text.color
     }
   }
 
   background: Rectangle {
-    color: StyleV2.transparentColor
+    color: __style.transparentColor
   }
 }

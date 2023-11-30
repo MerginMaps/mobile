@@ -8,7 +8,6 @@
  ***************************************************************************/
 
 import QtQuick
-import ".."
 
 Item {
   id: control
@@ -23,12 +22,12 @@ Item {
     anchors.bottom: parent.bottom
     width: control.width
     height: 20
-    color: StyleV2.whiteColor
+    color: __style.whiteColor
 
     Text {
       text: listView.count
       anchors.centerIn: parent
-      color: StyleV2.forestColor
+      color: __style.forestColor
     }
   }
 

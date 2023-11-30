@@ -10,7 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import ".."
 
 Item {
   id: control
@@ -24,13 +23,13 @@ Item {
     id: menuButton
 
     width: control.width
-    height: StyleV2.menuDrawerHeight
+    height: __style.menuDrawerHeight
 
     Rectangle {
       anchors.top: parent.top
       width: parent.width
       height: 1 * __dp
-      color: StyleV2.grayColor
+      color: __style.grayColor
     }
 
     Row {
@@ -39,13 +38,13 @@ Item {
       spacing: 20 * __dp
       MMIcon {
         height: parent.height
-        color: StyleV2.forestColor
+        color: __style.forestColor
         source: control.iconSource
       }
       Text {
         text: control.text
-        color: StyleV2.forestColor
-        font: StyleV2.t3
+        color: __style.forestColor
+        font: __style.t3
         verticalAlignment: Text.AlignVCenter
         height: parent.height
       }

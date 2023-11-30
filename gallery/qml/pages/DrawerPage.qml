@@ -38,7 +38,7 @@ Page {
   MMDrawer {
     id: drawer1
 
-    picture: StyleV2.uploadImage
+    picture: __style.uploadImage
     title: "Upload project to Margin?"
     description: "This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration."
     primaryButton: "Yes, Upload Project"
@@ -51,7 +51,7 @@ Page {
   MMDrawer {
     id: drawer2
 
-    picture: StyleV2.reachedDataLimitImage
+    picture: __style.reachedDataLimitImage
     title: "You have reached a data limit"
     primaryButton: "Manage Subscription"
     specialComponent: component.comp
@@ -72,7 +72,7 @@ Page {
   MMDrawer {
     id: drawer3
 
-    picture: StyleV2.uploadImage
+    picture: __style.uploadImage
     title: "Failed to synchronize your changes"
     description: "Your changes could not be sent to server, make sure you are connected to internet and have write access to this project."
     primaryButton: "Ok, I understand"

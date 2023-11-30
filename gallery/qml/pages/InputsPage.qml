@@ -47,13 +47,13 @@ ScrollView {
           MMInput {
             title: "Search ..."
             placeholderText: "Search"
-            iconSource: StyleV2.searchIcon
+            iconSource: __style.searchIcon
           }
         }
         Column {
           MMInput {
             text: "Calendar"
-            iconSource: StyleV2.calendarIcon
+            iconSource: __style.calendarIcon
             warningMsg: "Would you like to be so kind and select a date please?"
           }
         }

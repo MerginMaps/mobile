@@ -9,20 +9,19 @@
 
 import QtQuick
 import "."
-import ".."
 
 Item {
   id: control
 
   width: text.width
-  height: StyleV2.mapItemHeight
+  height: __style.mapItemHeight
 
   signal clicked
 
   required property string text
   property url iconSource: ""
-  property color bgColor: StyleV2.positiveColor
-  property color textColor: StyleV2.forestColor
+  property color bgColor: __style.positiveColor
+  property color textColor: __style.forestColor
 
   Rectangle {
     width: row.width
@@ -55,7 +54,7 @@ Item {
 
         color: control.textColor
         text: control.text
-        font: StyleV2.t3
+        font: __style.t3
         verticalAlignment: Text.AlignVCenter
         height: parent.height
       }

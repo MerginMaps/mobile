@@ -9,7 +9,6 @@
 
 import QtQuick
 import notificationType 1.0
-import ".."
 
 Rectangle {
   id: notification
@@ -23,11 +22,11 @@ Rectangle {
   radius: 12 * __dp
   color: {
     switch( type ) {
-    case NotificationType.Information: return StyleV2.informativeColor
-    case NotificationType.Success: return StyleV2.positiveColor
-    case NotificationType.Warning: return StyleV2.warningColor
-    case NotificationType.Error: return StyleV2.negativeColor
-    default: return StyleV2.positiveColor
+    case NotificationType.Information: return __style.informativeColor
+    case NotificationType.Success: return __style.positiveColor
+    case NotificationType.Warning: return __style.warningColor
+    case NotificationType.Error: return __style.negativeColor
+    default: return __style.positiveColor
     }
   }
 
@@ -43,9 +42,9 @@ Rectangle {
     visible: icon !== NotificationType.None
     source: {
       switch( icon ) {
-      case NotificationType.None: return StyleV2.checkmarkIcon
-      case NotificationType.Waiting: return StyleV2.waitingIcon
-      case NotificationType.Check: return StyleV2.checkmarkIcon
+      case NotificationType.None: return __style.checkmarkIcon
+      case NotificationType.Waiting: return __style.waitingIcon
+      case NotificationType.Check: return __style.checkmarkIcon
       }
     }
   }
@@ -60,7 +59,7 @@ Rectangle {
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignLeft
     leftPadding: 20 * __dp - notification.innerSpacing
-    font: StyleV2.t3
+    font: __style.t3
     clip: true
     maximumLineCount: 3
     wrapMode: Text.WordWrap
@@ -68,10 +67,10 @@ Rectangle {
     elide: Text.ElideRight
     color: {
       switch( type ) {
-      case NotificationType.Information: return StyleV2.deepOceanColor
-      case NotificationType.Success: return StyleV2.forestColor
-      case NotificationType.Warning: return StyleV2.earthColor
-      case NotificationType.Error: return StyleV2.grapeColor
+      case NotificationType.Information: return __style.deepOceanColor
+      case NotificationType.Success: return __style.forestColor
+      case NotificationType.Warning: return __style.earthColor
+      case NotificationType.Error: return __style.grapeColor
       }
     }
   }
@@ -83,7 +82,7 @@ Rectangle {
     anchors.rightMargin: 20 * __dp
     anchors.verticalCenter: parent.verticalCenter
     scale: maRemove.containsMouse ? 1.2 : 1
-    source: StyleV2.closeIcon
+    source: __style.closeIcon
     color: text.color
 
     MouseArea {

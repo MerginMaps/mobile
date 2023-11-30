@@ -10,7 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import ".."
 
 Item {
   id: control
@@ -24,14 +23,14 @@ Item {
 
   enum Button { Normal, Save }
 
-  height: isMenuButton ? StyleV2.menuDrawerHeight/2 : StyleV2.toolbarHeight
+  height: isMenuButton ? __style.menuDrawerHeight/2 : __style.toolbarHeight
 
   Rectangle {
     width: parent.width - 10 * __dp
     height: parent.height - 10 * __dp
     anchors.centerIn: parent
     clip: control.type !== MMToolbarButton.Button.Save
-    color: StyleV2.transparentColor
+    color: __style.transparentColor
     visible: !control.isMenuButton
 
     Image {
@@ -48,8 +47,8 @@ Item {
         width: 56 * __dp
         height: width
         radius: width / 2
-        color: StyleV2.transparentColor
-        border.color: StyleV2.grassColor
+        color: __style.transparentColor
+        border.color: __style.grassColor
         border.width: 14 * __dp
       }
     }
@@ -58,8 +57,8 @@ Item {
 
       text: control.text
       width: parent.width
-      color: StyleV2.whiteColor
-      font: StyleV2.t4
+      color: __style.whiteColor
+      font: __style.t4
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.bottom: parent.bottom
       anchors.bottomMargin: 20 * __dp
@@ -75,7 +74,7 @@ Item {
   // Menu button
   MMToolbarMenuButton {
     width: control.width
-    height: StyleV2.menuDrawerHeight
+    height: __style.menuDrawerHeight
     visible: control.isMenuButton
     iconSource: control.iconSource
     text: control.text
