@@ -11,8 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-import "../../app/qmlV2/component"
-import "../../app/qmlV2/"
+import "../../app/qml/components"
+import "../../app/qml/"
 
 ScrollView {
   Column {

@@ -10,8 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
-import "../../app/qmlV2/component"
-import "../../app/qmlV2/"
+import "../../app/qml/components"
+import "../../app/qml/"
 
 Page {
   id: pane
@@ -47,9 +47,9 @@ Page {
 
   MMToolbar {
     model: ObjectModel {
-      MMToolbarButton { text: qsTr("Delete"); iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
-      MMToolbarButton { text: qsTr("Edit Geometry"); iconSource: __style.editIcon; onClicked: console.log("tapped "+text) }
-      MMToolbarButton { text: qsTr("Save"); iconSource: __style.doneIcon; type: MMToolbarButton.Button.Save; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "Delete"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "Edit Geometry"; iconSource: __style.editIcon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "Save"; iconSource: __style.doneIcon; type: MMToolbarButton.Button.Save; onClicked: console.log("tapped "+text) }
     }
   }
 }

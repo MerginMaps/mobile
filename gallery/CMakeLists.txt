@@ -40,9 +40,6 @@ else ()
 
   set(GALLERY_HDRS ${GALLERY_HDRS} hotreload.h)
   set(GALLERY_SRCS ${GALLERY_SRCS} hotreload.cpp)
-
-  # todo: cp -r app/qmlV2 gallery/app/
-
 endif ()
 
 qt_add_executable(

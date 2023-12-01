@@ -160,7 +160,7 @@ class MMStyle: public QObject
     QUrl calendarIcon() {return QUrl( "qrc:/Calendar.svg" );}
     QUrl showIcon() {return QUrl( "qrc:/Show.svg" );}
     QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
-    QUrl xMarkIcon() {return QUrl( "qrc:/X Mark..svg" );}
+    QUrl xMarkIcon() {return QUrl( "qrc:/X Mark.svg" );}
     QUrl errorIcon() {return QUrl( "qrc:/Error.svg" );}
     QUrl arrowUpIcon() {return QUrl( "qrc:/Arrow Up.svg" );}
     QUrl arrowDownIcon() {return QUrl( "qrc:/Arrow Down.svg" );}

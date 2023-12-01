@@ -13,8 +13,8 @@ import QtQuick.Controls.Basic
 import QtLocation
 import QtPositioning
 
-import "../../app/qmlV2/component"
-import "../../app/qmlV2/"
+import "../../app/qml/components"
+import "../../app/qml/"
 
 Page {
   id: pane
