@@ -13,7 +13,6 @@ import QtQuick.Controls
 Page {
   id: pane
 
-  //FontLoader { id: fontx; source: "qrc:/fonts/SquarePeg-Regular.ttf" }
   Label {
     width: parent.width / 2
     text: "DP ratio: ~" + Math.round(__dp * 1000) / 1000 + "\n" +
@@ -25,6 +24,5 @@ Page {
     color: "red"
     font.family: "Inter"
     font.pixelSize: 20
-    //font.family: fontx.font.family
   }
 }
