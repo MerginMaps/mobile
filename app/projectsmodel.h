@@ -163,6 +163,8 @@ class ProjectsModel : public QAbstractListModel
     void onAboutToRemoveProject( const LocalProject &project );
     void onProjectDataChanged( const LocalProject &project );
 
+    void onAuthChanged();
+
     void setMerginApi( MerginApi *merginApi );
     void setModelType( ProjectModelTypes modelType );
     void setSyncManager( SynchronizationManager *newSyncManager );

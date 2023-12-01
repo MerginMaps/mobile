@@ -34,6 +34,7 @@ void ProjectsModel::initializeProjectsModel()
 
   QObject::connect( mBackend, &MerginApi::projectDetached, this, &ProjectsModel::onProjectDetachedFromMergin );
   QObject::connect( mBackend, &MerginApi::projectAttachedToMergin, this, &ProjectsModel::onProjectAttachedToMergin );
+  QObject::connect( mBackend, &MerginApi::authChanged, this, &ProjectsModel::onAuthChanged );
 
   if ( mModelType == ProjectModelTypes::LocalProjectsModel )
   {
@@ -541,6 +542,17 @@ void ProjectsModel::onProjectAttachedToMergin( const QString & )
   // To ensure project will be in sync with server, send listProjectByName request.
   // In theory we could send that request only for this one project.
   listProjectsByName();
+}
+
+void ProjectsModel::onAuthChanged()
+{
+  if ( !mBackend->userAuth() || !mBackend->userAuth()->hasAuthData() ) // user logged out, clear created and shared lists
+  {
+    if ( mModelType == WorkspaceProjectsModel )
+    {
+      clearProjects();
+    }
+  }
 }
 
 void ProjectsModel::setMerginApi( MerginApi *merginApi )
