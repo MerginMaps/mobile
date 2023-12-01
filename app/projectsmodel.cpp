@@ -34,7 +34,6 @@ void ProjectsModel::initializeProjectsModel()
 
   QObject::connect( mBackend, &MerginApi::projectDetached, this, &ProjectsModel::onProjectDetachedFromMergin );
   QObject::connect( mBackend, &MerginApi::projectAttachedToMergin, this, &ProjectsModel::onProjectAttachedToMergin );
-  QObject::connect( mBackend, &MerginApi::authChanged, this, &ProjectsModel::onAuthChanged );
 
   if ( mModelType == ProjectModelTypes::LocalProjectsModel )
   {
@@ -544,17 +543,6 @@ void ProjectsModel::onProjectAttachedToMergin( const QString & )
   listProjectsByName();
 }
 
-void ProjectsModel::onAuthChanged()
-{
-  if ( !mBackend->userAuth() || !mBackend->userAuth()->hasAuthData() ) // user logged out, clear created and shared lists
-  {
-    if ( mModelType == CreatedProjectsModel || mModelType == SharedProjectsModel )
-    {
-      clearProjects();
-    }
-  }
-}
-
 void ProjectsModel::setMerginApi( MerginApi *merginApi )
 {
   if ( !merginApi || mBackend == merginApi )
@@ -586,10 +574,6 @@ QString ProjectsModel::modelTypeToFlag() const
 {
   switch ( mModelType )
   {
-    case CreatedProjectsModel:
-      return QStringLiteral( "created" );
-    case SharedProjectsModel:
-      return QStringLiteral( "shared" );
     case WorkspaceProjectsModel:
       return QStringLiteral( "workspace" );
     case PublicProjectsModel:
