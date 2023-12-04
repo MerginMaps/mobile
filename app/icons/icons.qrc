@@ -20,5 +20,6 @@
         <file>Done.svg</file>
         <file>Edit.svg</file>
         <file>More.svg</file>
+        <file>MorePhotos.svg</file>
     </qresource>
 </RCC>
