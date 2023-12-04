@@ -63,7 +63,9 @@ void TestMerginApi::initTestCase()
   {
     TestUtils::authorizeUser( mApi, username, password );
     TestUtils::selectFirstWorkspace( mApi, workspace );
-  } else {
+  }
+  else
+  {
     workspace = mApi->userInfo()->activeWorkspaceName();
   }
 
