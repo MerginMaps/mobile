@@ -89,8 +89,7 @@ openssl aes-256-cbc -d -in merginsecrets.cpp.enc -out merginsecrets.cpp -md md5
 ## 2.2 Code formatting
 
 We use `astyle` to format CPP and Objective-C files. Format is similar to what QGIS has.
-
-For QML files we use latest version of `jesperhh/qmlfmt`. To install, follow instruction on the GitHub of the project. 
+For more details about code conventions, please read [our code conventions doc](./docs/code_convention.md).
 
 We also use software [pre-commit](https://pre-commit.com/) to automatically check format when doing a commit.
 You need to install it via `brew`/`pip`, see [installation details](https://pre-commit.com/#installation).
