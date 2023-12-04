@@ -93,6 +93,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl doneIcon READ doneIcon CONSTANT )
     Q_PROPERTY( QUrl editIcon READ editIcon CONSTANT )
     Q_PROPERTY( QUrl moreIcon READ moreIcon CONSTANT )
+    Q_PROPERTY( QUrl projectButtonMoreIcon READ projectButtonMoreIcon CONSTANT )
+    Q_PROPERTY( QUrl stopIcon READ stopIcon CONSTANT )
 
     // Images
     Q_PROPERTY( QUrl uploadImage READ uploadImage CONSTANT )
@@ -173,6 +175,8 @@ class MMStyle: public QObject
     QUrl doneIcon() {return QUrl( "qrc:/Done.svg" );}
     QUrl editIcon() {return QUrl( "qrc:/Edit.svg" );}
     QUrl moreIcon() {return QUrl( "qrc:/More.svg" );}
+    QUrl projectButtonMoreIcon() {return QUrl( "qrc:/ProjectButtonMore.svg" );}
+    QUrl stopIcon() {return QUrl( "qrc:/Stop.svg" );}
 
     QUrl uploadImage() {return QUrl( "qrc:/UploadImage.svg" );}
     QUrl reachedDataLimitImage() {return QUrl( "qrc:/ReachedDataLimitImage.svg" );}
