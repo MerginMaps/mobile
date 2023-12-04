@@ -17,7 +17,7 @@ Building Mergin Maps mobile app from source - step by step
 * [5. Building iOS](#5-building-ios)
 * [6. Building macOS](#6-building-macos)
 * [7. Building Windows](#7-building-windows)
-* [8. Auto Testing](#9-auto-testing)
+* [8. Auto Testing](#8-auto-testing)
 
 # 1. Introduction
 
@@ -397,7 +397,7 @@ or you need some user with unlimited projects limit. First workspace from list i
 
 now you need to set environment variables: 
 ```
-TEST_MERGIN_URL=test.dev.merginmaps.com
+TEST_MERGIN_URL=https://test.dev.merginmaps.com/
 TEST_API_USERNAME=test_mobileapp_dev
 TEST_API_PASSWORD=<your_password>
 ```
