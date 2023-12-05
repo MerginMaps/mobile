@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qml/components"
+import "../../app/qml/inputs"
 
 Column {
   padding: 20
@@ -19,6 +20,7 @@ Column {
 
   GroupBox {
     title: "MMCheckBox"
+    width: 200
     background: Rectangle {
       color: "lightGray"
       border.color: "gray"
@@ -29,7 +31,7 @@ Column {
       padding: 5
     }
 
-    Row {
+    Column {
       spacing: 20
       anchors.fill: parent
       MMCheckBox {
