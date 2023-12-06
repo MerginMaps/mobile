@@ -142,6 +142,7 @@ void BluetoothPositionProvider::handleLostConnection()
 
 #ifdef ANDROID
   QBluetoothPermission btPermission;
+  btPermission.setCommunicationModes( QBluetoothPermission::Access );
 
   if ( qApp && ( permissionStatus = qApp->checkPermission( btPermission ) ) != Qt::PermissionStatus::Granted )
   {
