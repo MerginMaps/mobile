@@ -548,7 +548,7 @@ void ProjectsModel::onAuthChanged()
 {
   if ( !mBackend->userAuth() || !mBackend->userAuth()->hasAuthData() ) // user logged out, clear created and shared lists
   {
-    if ( mModelType == CreatedProjectsModel || mModelType == SharedProjectsModel )
+    if ( mModelType == WorkspaceProjectsModel )
     {
       clearProjects();
     }
@@ -586,10 +586,6 @@ QString ProjectsModel::modelTypeToFlag() const
 {
   switch ( mModelType )
   {
-    case CreatedProjectsModel:
-      return QStringLiteral( "created" );
-    case SharedProjectsModel:
-      return QStringLiteral( "shared" );
     case WorkspaceProjectsModel:
       return QStringLiteral( "workspace" );
     case PublicProjectsModel:
