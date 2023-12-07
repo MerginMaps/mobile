@@ -9,38 +9,21 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
-import QtQml.Models
 
-import ".."
+import "../components"
 
 Rectangle {
   id: root
 
-  // Required properties
-  property string projectDisplayName: "TITLE"
-  property string projectId: "ID"
-  property string projectDescription: "DESC"
-  property int projectStatus: 0
-  property bool projectIsValid: true
+  required property string projectDisplayName
+  required property string projectId
+  required property string projectDescription
+  required property int projectStatus
+  required property bool projectIsValid
+  required property bool projectIsLocal
+  required property bool projectIsMergin
   property bool projectIsPending: false
-  property real projectSyncProgress: 10
-  property bool projectIsLocal: true
-  property bool projectIsMergin: true
-  property string projectRemoteError: "ERROR"
-
-  property color primaryColor: "red" //InputStyle.clrPanelMain
-  property color secondaryColor: "green"// InputStyle.fontColor
-  property real itemMargin: 20 //InputStyle.panelMargin
-
-  property color iconColor: "yellow" // root.highlight ? root.primaryColor : InputStyle.actionColor
-  property real iconSize: height * 0.3
-  property real borderWidth: 1 * __dp
-  property real menuItemHeight: height * 0.8
-
-  property real viewContentY: 0
-  property real viewHeight: 0
+  property real projectSyncProgress: 0.0
   property bool highlight: false
 
   signal openRequested()
@@ -50,10 +33,15 @@ Rectangle {
   signal stopSyncRequested()
   signal showChangesRequested()
 
-
   color: root.highlight ? __style.forestColor : __style.whiteColor
   radius: 12 * __dp
   height: mainColumn.height
+
+  MouseArea {
+    anchors.fill: parent
+    enabled: root.projectIsValid
+    onClicked: openRequested()
+  }
 
   Column {
     id: mainColumn
@@ -64,383 +52,208 @@ Rectangle {
 
     Row {
       id: row
+
       spacing: 6 * __dp
 
       Column {
         id: column
+
         spacing: 6 * __dp
 
         Text {
+          width: mainColumn.width - 2 * mainColumn.padding - icon.width - row.spacing
+
           text: root.projectDisplayName
           font: __style.t3
           color: root.highlight ? __style.whiteColor : __style.nightColor
           elide: Text.ElideRight
-          width: mainColumn.width - 2 * mainColumn.padding - icon.width - row.spacing
+          opacity: root.projectIsValid ? 1.0 : 0.4
         }
 
-        Text {
-          text: root.projectDescription
-          font: __style.p6
-          color: root.highlight ? __style.whiteColor : __style.nightColor
-          elide: Text.ElideRight
+        Row {
           width: mainColumn.width - 2 * mainColumn.padding - icon.width - row.spacing
+          spacing: 4 * __dp
+
+          MMIcon {
+            id: errorIcon
+
+            source: visible ? __style.errorIcon : ""
+            color: __style.negativeColor
+            visible: !root.projectIsValid
+          }
+
+          Text {
+            width: parent.width - errorIcon.width
+
+            text: root.projectDescription
+            font: __style.p6
+            elide: Text.ElideRight
+            color: {
+              if(root.projectIsValid) {
+                if(root.highlight) {
+                  return __style.whiteColor
+                }
+                return __style.nightColor
+              }
+              return __style.grapeColor
+            }
+          }
         }
       }
 
       Image {
         id: icon
 
-        source: __style.projectButtonMoreIcon
         height: column.height
+        width: height
+
+        source: __style.projectButtonMoreIcon
         fillMode: Image.PreserveAspectFit
-      }
-    }
-
-    MMProgressBar {
-      position: 0.5
-      width: mainColumn.width - 2 * mainColumn.padding
-    }
-
-    Row {
-      id: syncRow
-      spacing: 6 * __dp
-
-      Text {
-        text: qsTr("Synchronising...")
-        font: __style.p6
-        color: root.highlight ? __style.whiteColor : __style.nightColor
-        elide: Text.ElideRight
-        width: mainColumn.width - 2 * mainColumn.padding - stopIcon.width - syncRow.spacing * 2 - stopText.width
-        verticalAlignment: Text.AlignVCenter
-        anchors.verticalCenter: parent.verticalCenter
-      }
-      MMIcon {
-        id: stopIcon
-
-        source: __style.stopIcon
-        anchors.verticalCenter: parent.verticalCenter
-        color: root.highlight ? __style.whiteColor : __style.forestColor
 
         MouseArea {
           anchors.fill: parent
-          onClicked: root.stopSyncRequested()
+          onClicked: {
+            root.fillMoreMenu()
+            listDrawer.visible = true
+          }
         }
       }
-      Text {
-        id: stopText
+    }
 
-        text: qsTr("Stop")
-        font: __style.t4
-        color: root.highlight ? __style.whiteColor : __style.nightColor
-        verticalAlignment: Text.AlignVCenter
-        anchors.verticalCenter: parent.verticalCenter
+    Item {
+      height: root.projectIsPending ? syncColumn.height : 0
+      width: parent.width
+      clip: true
 
-        MouseArea {
-          anchors.fill: parent
-          onClicked: root.stopSyncRequested()
+      Behavior on height {
+        NumberAnimation { duration: 250 }
+      }
+
+      Column {
+        id: syncColumn
+
+        spacing: mainColumn.spacing
+
+        MMProgressBar {
+          position: root.projectSyncProgress
+          width: mainColumn.width - 2 * mainColumn.padding
+        }
+
+        Row {
+          id: syncRow
+
+          spacing: 6 * __dp
+
+          Text {
+            width: mainColumn.width - 2 * mainColumn.padding - stopIcon.width - syncRow.spacing * 2 - stopText.width
+            anchors.verticalCenter: parent.verticalCenter
+
+            text: qsTr("Synchronising...")
+            font: __style.p6
+            color: root.highlight ? __style.whiteColor : __style.nightColor
+            elide: Text.ElideRight
+            verticalAlignment: Text.AlignVCenter
+          }
+
+          MMIcon {
+            id: stopIcon
+
+            anchors.verticalCenter: parent.verticalCenter
+
+            source: __style.stopIcon
+            color: root.highlight ? __style.whiteColor : __style.forestColor
+
+            MouseArea {
+              anchors.fill: parent
+              onClicked: root.stopSyncRequested()
+            }
+          }
+
+          Text {
+            id: stopText
+
+            anchors.verticalCenter: parent.verticalCenter
+
+            text: qsTr("Stop")
+            font: __style.t4
+            color: root.highlight ? __style.whiteColor : __style.nightColor
+            verticalAlignment: Text.AlignVCenter
+
+            MouseArea {
+              anchors.fill: parent
+              onClicked: root.stopSyncRequested()
+            }
+          }
         }
       }
     }
   }
 
-  ///*
-  //  function getStatusIcon() {
-  //    if ( projectIsPending )
-  //      return InputStyle.stopIcon
+  MMListDrawer {
+    id: listDrawer
 
-  //    if ( projectIsLocal && projectIsMergin ) {
-  //      // downloaded mergin projects
-  //      if ( projectStatus === ProjectStatus.NeedsSync ) {
-  //        return InputStyle.syncIcon
-  //      }
-  //      return "" // no icon if this project does not have changes
-  //    }
+    title: qsTr("More options")
+    model: ListModel {
+      id: menuModel
+    }
 
-  //    if ( projectIsMergin && projectStatus === ProjectStatus.NoVersion )
-  //      return InputStyle.downloadIcon
+    onClicked: function(type) {
+      console.log(type)
+      switch(type) {
+      case "download": root.syncRequested(); break
+      case "sync": root.syncRequested(); break
+      case "changes": root.showChangesRequested(); break
+      case "remove": root.removeRequested(); break
+      case "upload": root.migrateRequested(); break
+      }
+    }
+  }
 
-  //    if ( projectIsLocal && projectStatus === ProjectStatus.NoVersion )
-  //      return InputStyle.uploadIcon
+  function getMoreMenuItems() {
+    if ( projectIsMergin && projectIsLocal )
+    {
+      if ( ( projectStatus === 2 /*ProjectStatus.NeedsSync*/ ) ) { // uncomment when using this component
+        return "sync,changes,remove"
+      }
+      return "changes,remove"
+    }
+    else if ( !projectIsMergin && projectIsLocal ) {
+      return "upload,remove"
+    }
+    return "download"
+  }
 
-  //    return ""
-  //  }
+  function fillMoreMenu() {
+    // fill more menu with corresponding items
+    let itemsMap = {
+      "download": {
+        "name": qsTr("Download from Mergin"),
+        "iconSource": __style.downloadIcon
+      },
+      "sync": {
+        "name": qsTr("Synchronize project"),
+        "iconSource": __style.syncIcon
+      },
+      "changes": {
+        "name": qsTr("Local changes"),
+        "iconSource": __style.infoIcon
+      },
+      "remove": {
+        "name": qsTr("Remove from device"),
+        "iconSource": __style.deleteIcon
+      },
+      "upload": {
+        "name": qsTr("Upload to Mergin"),
+        "iconSource": __style.uploadIcon
+      }
+    }
 
-  //  function getMoreMenuItems() {
-  //    if ( projectIsMergin && projectIsLocal )
-  //    {
-  //      if ( ( projectStatus === ProjectStatus.NeedsSync ) )
-  //        return "sync,changes,remove"
-
-  //      return "changes,remove"
-  //    }
-  //    else if ( !projectIsMergin && projectIsLocal )
-  //      return "upload,remove"
-  //    else
-  //      return "download"
-  //  }
-
-  //  function fillMoreMenu() {
-  //    // fill more menu with corresponding items
-  //    let itemsMap = {
-  //      "sync": {
-  //        "name": qsTr("Synchronize project"),
-  //        "iconSource": InputStyle.syncIcon,
-  //        "callback": function() { root.syncRequested() }
-  //      },
-  //      "changes": {
-  //        "name": qsTr("Local changes"),
-  //        "iconSource": InputStyle.infoIcon,
-  //        "callback": function() { root.showChangesRequested() }
-  //      },
-  //      "remove": {
-  //        "name": qsTr("Remove from device"),
-  //        "iconSource": InputStyle.removeIcon,
-  //        "callback": function() { root.removeRequested() }
-  //      },
-  //      "upload": {
-  //        "name": qsTr("Upload to Mergin"),
-  //        "iconSource": InputStyle.uploadIcon,
-  //        "callback": function() { root.migrateRequested() }
-  //      },
-  //      "download": {
-  //        "name": qsTr("Download from Mergin"),
-  //        "iconSource": InputStyle.downloadIcon,
-  //        "callback": function() { root.syncRequested() }
-  //      }
-  //    }
-
-  //    let items = getMoreMenuItems()
-  //    items = items.split(',')
-
-  //    // clear previous items
-  //    while( contextMenu.count > 0 )
-  //      contextMenu.takeItem( 0 );
-
-  //    items.forEach( function(item) { contextMenu.addItem(
-  //                      menuItemComponent.createObject( contextMenu, itemsMap[item] ) )
-  //                  })
-  //    contextMenu.height = items.length * root.menuItemHeight
-  //  }
-  //*/
-  //  color: "cyan" //root.highlight ? InputStyle.panelItemHighlight : root.primaryColor
-
-  //  MouseArea {
-  //    anchors.fill: parent
-  //    enabled: projectIsValid
-  //    onClicked: openRequested()
-  //  }
-
-  //  RowLayout {
-  //    id: row
-
-  //    anchors.fill: parent
-  //    anchors.leftMargin: root.itemMargin
-  //    spacing: 0
-
-  //    Item {
-  //      id: textContainer
-
-  //      height: root.height
-  //      Layout.fillWidth: true
-
-  //      Text {
-  //        id: mainText
-
-  //        text: "Ahoj" //__inputUtils.formatProjectName( projectDisplayName )
-  //        height: textContainer.height/2
-  //        width: textContainer.width
-  //        font.pixelSize: 20 //InputStyle.fontPixelSizeNormal
-  //        color: "grey" /*if (root.highlight) root.primaryColor
-  //               else if (!projectIsValid) InputStyle.panelBackgroundDark
-  //               else root.secondaryColor*/
-  //        horizontalAlignment: Text.AlignLeft
-  //        verticalAlignment: Text.AlignBottom
-  //        elide: Text.ElideLeft
-  //      }
-
-  //      Text {
-  //        id: secondaryText
-
-  //        visible: !projectIsPending
-  //        height: textContainer.height/2
-  //        text: projectDescription
-  //        anchors.right: parent.right
-  //        anchors.bottom: parent.bottom
-  //        anchors.left: parent.left
-  //        anchors.top: mainText.bottom
-  //        font.pixelSize: 20 //InputStyle.fontPixelSizeSmall
-  //        color: "orange" // root.highlight ? root.primaryColor : InputStyle.panelBackgroundDark
-  //        horizontalAlignment: Text.AlignLeft
-  //        verticalAlignment: Text.AlignTop
-  //        elide: Text.ElideRight
-  //      }
-
-  ////      ProgressBar {
-  ////        id: progressBar
-
-  ////        property real itemHeight: 10 //InputStyle.rowHeightSmall
-
-  ////        anchors.top: mainText.bottom
-  ////        height: itemHeight
-  ////        width: secondaryText.width
-  ////        value: projectSyncProgress
-  ////        visible: projectIsPending
-
-  ////        background: Rectangle {
-  ////          implicitWidth: parent.width
-  ////          implicitHeight: progressBar.itemHeight
-  ////          color: "blue" //InputStyle.panelBackgroundLight
-  ////        }
-
-  ////        contentItem: Item {
-  ////          implicitWidth: parent.width
-  ////          implicitHeight: progressBar.itemHeight
-
-  ////          Rectangle {
-  ////            width: progressBar.visualPosition * parent.width
-  ////            height: parent.height
-  ////            color: "brown" //InputStyle.fontColor
-  ////          }
-  ////        }
-  ////      }
-  //    }
-
-  //    Item {
-  //      id: statusIconContainer
-
-  //      //property string iconSource: getStatusIcon()
-
-  //      //visible: iconSource !== ""
-  //      Layout.preferredWidth: root.height
-  //      height: root.height
-
-  //      Image {
-  //        id: statusIcon
-
-  //        anchors.centerIn: parent
-  //        //source: statusIconContainer.iconSource
-  //        height: root.iconSize
-  //        width: height
-  //        sourceSize.width: width
-  //        sourceSize.height: height
-  //        fillMode: Image.PreserveAspectFit
-  //      }
-
-  //      ColorOverlay {
-  //        anchors.fill: statusIcon
-  //        source: statusIcon
-  //        color: root.iconColor
-  //      }
-
-  //      MouseArea {
-  //        anchors.fill: parent
-  //        onClicked: {
-  //          if ( projectRemoteError ) {
-  //            __inputUtils.showNotification( qsTr( "Could not synchronize project, please make sure you are logged in and have sufficient rights." ) )
-  //            return
-  //          }
-  //          if ( projectIsPending )
-  //            stopSyncRequested()
-  //          else if ( !projectIsMergin )
-  //            migrateRequested()
-  //          else
-  //            syncRequested()
-  //        }
-  //      }
-  //    }
-
-  //    Item {
-  //      id: moreMenuContainer
-
-  //      Layout.preferredWidth: root.height
-  //      height: root.height
-
-  //      Image {
-  //        id: moreMenuIcon
-
-  //        anchors.centerIn: parent
-  //        //source: InputStyle.moreMenuIcon
-  //        height: root.iconSize
-  //        width: height
-  //        sourceSize.width: width
-  //        sourceSize.height: height
-  //        fillMode: Image.PreserveAspectFit
-  //      }
-
-  //      ColorOverlay {
-  //        anchors.fill: moreMenuIcon
-  //        source: moreMenuIcon
-  //        color: root.iconColor
-  //      }
-
-  //      MouseArea {
-  //        anchors.fill: parent
-  //        onClicked: {
-  //          fillMoreMenu()
-  //          contextMenu.open()
-  //        }
-  //      }
-  //    }
-  //  }
-
-  //  Rectangle { // border line
-  //      color: "white" //InputStyle.panelBackground2
-  //      width: root.width
-  //      height: root.borderWidth
-  //      anchors.bottom: parent.bottom
-  //  }
-  ///*
-  //  // More Menu
-  //  Menu {
-  //    id: contextMenu
-
-  //    width: Math.min( root.width, 300 * __dp )
-  //    leftMargin: Math.max( root.width - width, 0 )
-  //    z: 100
-
-  //    enter: Transition {
-  //      ParallelAnimation {
-  //        NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 100 }
-  //      }
-  //    }
-  //    exit: Transition {
-  //      ParallelAnimation {
-  //        NumberAnimation { property: "opacity"; from: 1.0; to: 0; duration: 100 }
-  //      }
-  //    }
-
-  //    //! sets y-offset either above or below related item according relative position to end of the list
-  //    onAboutToShow: {
-  //      let itemRelativeY = parent.y - root.viewContentY
-  //      if ( itemRelativeY + contextMenu.height >= root.viewHeight )
-  //        contextMenu.y = -contextMenu.height + parent.height / 3
-  //      else
-  //        contextMenu.y = ( parent.height * 2 ) / 3
-  //    }
-  //  }
-
-  //  Component {
-  //    id: menuItemComponent
-
-  //    MenuItem {
-  //      id: menuItem
-
-  //      property string name: ""
-  //      property var callback: function cb() {} // default callback
-  //      property string iconSource: ""
-
-  //      height: root.menuItemHeight
-
-  //      ExtendedMenuItem {
-  //        height: parent.height
-  //        rowHeight: parent.height * 0.8
-  //        width: parent.width
-  //        contentText: menuItem.name
-  //        imageSource: menuItem.iconSource
-  //        overlayImage: true
-  //      }
-
-  //      onClicked: callback()
-  //    }
-  //  }*/
+    let items = getMoreMenuItems().split(',')
+    menuModel.clear()
+    items.forEach( function(item) {
+      var json = itemsMap[item]
+      json.type = item
+      menuModel.append( json )
+    } )
+  }
 }

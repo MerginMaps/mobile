@@ -9,24 +9,99 @@
 
 import QtQuick
 import QtQuick.Controls
-import "../../app/qmlV2/component"
+import "../../app/qml/components"
 
 Page {
   id: pane
 
-  MMProjectItem {
-    width: 300
-    anchors.horizontalCenter: parent.horizontalCenter
+  Column {
+    width: parent.width
     anchors.top: parent.top
     anchors.topMargin: 20
-    highlight: true
-  }
+    anchors.left: parent.left
+    anchors.leftMargin: 20
+    spacing: 20
 
-  MMProjectItem {
-    width: 300
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.top: parent.top
-    anchors.topMargin: 200
-    highlight: false
+    MMProjectItem {
+      width: 350
+
+      highlight: true
+      projectId: "1"
+      projectStatus: 2
+      projectDisplayName: "Mergin local project"
+      projectDescription: "Highlighted"
+      projectIsValid: true
+      projectIsLocal: true
+      projectIsMergin: true
+      projectIsPending: true
+
+      onOpenRequested: console.log("onOpenRequested")
+      onStopSyncRequested: projectIsPending = false
+      onShowChangesRequested: console.log("onShowChangesRequested")
+      onSyncRequested: projectIsPending = true
+      onRemoveRequested: console.log("onRemoveRequested")
+      onMigrateRequested: console.log("onMigrateRequested")
+    }
+
+    MMProjectItem {
+      width: 350
+
+      highlight: false
+      projectId: "1"
+      projectStatus: 2
+      projectDisplayName: "Mergin local project"
+      projectDescription: "Highlighted"
+      projectIsValid: true
+      projectIsLocal: true
+      projectIsMergin: true
+
+      onOpenRequested: console.log("onOpenRequested")
+      onStopSyncRequested: projectIsPending = false
+      onShowChangesRequested: console.log("onShowChangesRequested")
+      onSyncRequested: projectIsPending = true
+      onRemoveRequested: console.log("onRemoveRequested")
+      onMigrateRequested: console.log("onMigrateRequested")
+    }
+
+    MMProjectItem {
+      width: 350
+
+      highlight: false
+      projectId: "1"
+      projectStatus: 2
+      projectDisplayName: "Mergin local project Long Long Long Long Long Long Long"
+      projectDescription: "Description Description Description Description Description"
+      projectIsValid: true
+      projectIsLocal: true
+      projectIsMergin: true
+
+      onOpenRequested: console.log("onOpenRequested")
+      onStopSyncRequested: projectIsPending = false
+      onShowChangesRequested: console.log("onShowChangesRequested")
+      onSyncRequested: projectIsPending = true
+      onRemoveRequested: console.log("onRemoveRequested")
+      onMigrateRequested: console.log("onMigrateRequested")
+    }
+
+    MMProjectItem {
+      width: 350
+
+      highlight: false
+      projectId: "2"
+      projectStatus: 0
+      projectDisplayName: "Invalid project"
+      projectDescription: "A project error. A project error. A project error."
+      projectIsValid: false
+      projectIsLocal: false
+      projectIsMergin: false
+
+      onOpenRequested: console.log("onOpenRequested")
+      onStopSyncRequested: console.log("onStopSyncRequested")
+      onShowChangesRequested: console.log("onShowChangesRequested")
+      onSyncRequested: { console.log("onSyncRequested"); projectIsPending = true }
+      onRemoveRequested: console.log("onRemoveRequested")
+      onMigrateRequested: console.log("onMigrateRequested")
+    }
+
   }
 }

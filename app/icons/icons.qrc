@@ -22,5 +22,8 @@
         <file>More.svg</file>
         <file>ProjectButtonMore.svg</file>
         <file>Stop.svg</file>
+        <file>Download.svg</file>
+        <file>Info.svg</file>
+        <file>Sync.svg</file>
     </qresource>
 </RCC>

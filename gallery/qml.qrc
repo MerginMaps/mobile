@@ -39,5 +39,7 @@
         <file>../app/qml/components/MMToolbarMenuButton.qml</file>
         <file>../app/qml/components/MMToolbarLongButton.qml</file>
         <file>qml/pages/ProjectItemsPage.qml</file>
+        <file>../app/qml/components/MMListDrawer.qml</file>
+        <file>../app/qml/components/MMListDrawerItem.qml</file>
     </qresource>
 </RCC>
