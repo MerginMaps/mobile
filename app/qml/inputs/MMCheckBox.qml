@@ -10,21 +10,32 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
+import "../components"
 
 CheckBox {
   id: control
 
-  checked: true
+  property bool small: false
+
+  width: (control.small ? 16 : 24) * __dp
+  height: width
 
   indicator: Rectangle {
-    implicitWidth: 24
-    implicitHeight: 24
-    x: control.leftPadding
-    y: parent.height / 2 - height / 2
-    radius: 5
-    color: enabled ? ( control.checked ? __style.grassColor: __style.whiteColor ) : __style.whiteColor
-    border.color: enabled ? ( control.checked ? __style.grassColor: __style.forestColor ) : __style.mediumGreenColor
-    border.width: control.hovered ? 2.5 : 2
+    width: control.width
+    height: control.height
+    y: control.height / 2 - height / 2
+    radius: 5 * __dp
+    color: (enabled && control.checked) ? __style.grassColor: __style.whiteColor
+    border.color: {
+      if(enabled) {
+        if(checked) {
+          return __style.grassColor
+        }
+        return __style.forestColor
+      }
+      return __style.mediumGreenColor
+    }
+    border.width: (control.hovered ? 2.5 : 2) * __dp
 
     MMIcon {
       id: icon
@@ -33,6 +44,7 @@ CheckBox {
       source: __style.checkmarkIcon
       color: control.enabled ? __style.forestColor : __style.mediumGreenColor
       visible: control.checked
+      scale: control.width / (24 * __dp)
     }
   }
 
@@ -41,6 +53,6 @@ CheckBox {
     font: __style.p5
     color: icon.color
     verticalAlignment: Text.AlignVCenter
-    leftPadding: control.indicator.width + control.spacing
+    leftPadding: control.indicator.width
   }
 }
