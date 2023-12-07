@@ -306,7 +306,7 @@ Please go to the Mergin Maps website to remove it manually.</source>
     <name>BluetoothPositionProvider</name>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="46"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="190"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="191"/>
         <source>No connection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -322,23 +322,23 @@ Please go to the Mergin Maps website to remove it manually.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="155"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="156"/>
         <source>Bluetooth permission disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="166"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="167"/>
         <source>Could not connect to device, not paired</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="182"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="183"/>
         <source>Connecting to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="186"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="204"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="187"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="205"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -991,17 +991,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMComponent_reachedDataLimit</name>
     <message>
-        <location filename="../qmlV2/component/MMComponent_reachedDataLimit.qml" line="40"/>
+        <location filename="../qml/components/MMComponent_reachedDataLimit.qml" line="40"/>
         <source>Data to sync</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlV2/component/MMComponent_reachedDataLimit.qml" line="66"/>
+        <location filename="../qml/components/MMComponent_reachedDataLimit.qml" line="66"/>
         <source>Using</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlV2/component/MMComponent_reachedDataLimit.qml" line="96"/>
+        <location filename="../qml/components/MMComponent_reachedDataLimit.qml" line="96"/>
         <source>Plan</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1009,12 +1009,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMToolbar</name>
     <message>
-        <location filename="../qmlV2/component/MMToolbar.qml" line="56"/>
+        <location filename="../qml/components/MMToolbar.qml" line="56"/>
         <source>More options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlV2/component/MMToolbar.qml" line="68"/>
+        <location filename="../qml/components/MMToolbar.qml" line="68"/>
         <source>More</source>
         <translation type="unfinished">More</translation>
     </message>
