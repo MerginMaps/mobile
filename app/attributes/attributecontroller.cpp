@@ -1056,15 +1056,13 @@ bool AttributeController::deleteFeature()
   if ( !mFeatureLayerPair.layer() )
     return false;
 
-  bool rv = true;
-
   if ( !startEditing() )
   {
-    rv = false;
+    return false;
   }
 
   bool isDeleted = mFeatureLayerPair.layer()->deleteFeature( mFeatureLayerPair.feature().id() );
-  rv = commit();
+  bool rv = commit();
 
   if ( !isDeleted || !rv )
   {
