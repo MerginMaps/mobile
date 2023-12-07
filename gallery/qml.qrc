@@ -41,5 +41,6 @@
         <file>qml/pages/ProjectItemsPage.qml</file>
         <file>../app/qml/components/MMListDrawer.qml</file>
         <file>../app/qml/components/MMListDrawerItem.qml</file>
+        <file>../app/qml/components/MMProjectItem.qml</file>
     </qresource>
 </RCC>
