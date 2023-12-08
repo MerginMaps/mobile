@@ -1,3 +1,5 @@
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -6,7 +8,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtCore
 import QtQuick
 import QtQuick.Layouts
@@ -90,7 +91,7 @@ ApplicationWindow {
         onClicked: {
           window.currentPageSource = model.source
           listView.currentIndex = index
-          if( __isMobile )
+          if (__isMobile)
             stackView.push("qrc:/qml/pages/" + model.source)
           else
             stackView.push("file://" + _qmlWrapperPath + model.source)
@@ -152,6 +153,10 @@ ApplicationWindow {
           title: "Project items"
           source: "ProjectItemsPage.qml"
         }
+        ListElement {
+          title: "Onboarding"
+          source: "OnboardingPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}
@@ -164,7 +169,7 @@ ApplicationWindow {
 
     initialItem: Loader {
       id: mainLoader
-      source: ( __isMobile ? "qrc:/qml/pages/" : ("file://" + _qmlWrapperPath ) ) + currentPageSource
+      source: (__isMobile ? "qrc:/qml/pages/" : ("file://" + _qmlWrapperPath)) + currentPageSource
       scale: 1.0
     }
   }
