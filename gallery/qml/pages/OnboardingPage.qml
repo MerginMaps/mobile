@@ -31,8 +31,15 @@ Page {
     id: layout
 
     Label {
-      id: label
       text: "Onboarding (Login, Sign Up)"
+    }
+
+    Label {
+      text: "Username: test"
+    }
+
+    Label {
+      text: "Password: test"
     }
 
     ToolButton {

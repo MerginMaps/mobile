@@ -1,5 +1,4 @@
 
-
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,36 +8,27 @@
  *                                                                         *
  ***************************************************************************/
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Layouts
 
 RowLayout {
+
+  required property var title
+
   id: root
+  spacing: 10
 
-  signal backClicked
-
-  /* translate in parent! */
-  required property var headerTitle
-
-  /* -1 no step bar shown; 1, 2, 3 */
-  property int step: -1
-
-  property bool backVisible: true
-
-  RoundButton {
-    visible: backVisible
-    onClicked: root.backClicked()
-    text: "<"
+  Rectangle {
+    width: 50
+    height: 1
   }
 
   Label {
-    text: headerTitle
+    text: title
   }
 
-  ProgressBar {
-    visible: step > 0
-    from: 0
-    to: 3
-    value: step > 0 ? step : 0
+  Rectangle {
+    width: 50
+    height: 1
   }
 }

@@ -52,6 +52,8 @@
         <file>../app/qml/inputs/MMPasswordEditor.qml</file>
         <file>../app/qml/inputs/MMSliderEditor.qml</file>
         <file>qml/pages/OnboardingPage.qml</file>
+        <file>../app/qml/onboarding/MMOnboardingHlineText.qml</file>
+        <file>../app/qml/onboarding/MMChangeServerButton.qml</file>
         <file>../app/qml/onboarding/MMOnboardingHeader.qml</file>
         <file>../app/qml/onboarding/MMAcceptInvitation.qml</file>
         <file>../app/qml/onboarding/MMCreateWorkspace.qml</file>

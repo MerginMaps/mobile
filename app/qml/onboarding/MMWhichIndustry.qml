@@ -1,3 +1,5 @@
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -6,16 +8,27 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
 Page {
   id: root
+
+  signal backClicked
+  signal continueClicked
+
   ColumnLayout {
-      MMOnboardingHeader {
-        headerTitle: tr("Which industry")
-      }
+    MMOnboardingHeader {
+      headerTitle: qsTr("Which industry")
+      step: 3
+
+      onBackClicked: root.backClicked()
+    }
+
+    ToolButton {
+      onClicked: root.continueClicked()
+      text: qsTr("Continue")
+    }
   }
 }

@@ -1,5 +1,4 @@
 
-
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,36 +8,12 @@
  *                                                                         *
  ***************************************************************************/
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Layouts
 
-RowLayout {
+Button {
   id: root
 
-  signal backClicked
-
-  /* translate in parent! */
-  required property var headerTitle
-
-  /* -1 no step bar shown; 1, 2, 3 */
-  property int step: -1
-
-  property bool backVisible: true
-
-  RoundButton {
-    visible: backVisible
-    onClicked: root.backClicked()
-    text: "<"
-  }
-
-  Label {
-    text: headerTitle
-  }
-
-  ProgressBar {
-    visible: step > 0
-    from: 0
-    to: 3
-    value: step > 0 ? step : 0
-  }
+  // TODO
+  text: "https://app.merginmaps.com"
 }

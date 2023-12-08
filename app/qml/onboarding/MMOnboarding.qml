@@ -1,3 +1,5 @@
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -6,7 +8,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -14,61 +15,110 @@ import QtQuick.Controls
 Item {
   id: root
 
-  signal closeOnboarding()
+  signal backClicked
+  signal closeOnboarding
+  signal signInRequested
+  signal signUpRequested
+  signal createWorkspaceRequested
+  signal submitWorkspaceInfoRequested
 
   Component {
-      id: mmsignup
-      MMSignUp
-      {
-          onBackClicked: {
-              console.log("Back Clicked on Sign Up Page")
-              stackView.pop()
-          }
+    id: mmsignup
+    MMSignUp {
+      onBackClicked: {
+        stackView.pop()
+      }
 
-          onSignInClicked: {
-            console.log("Sign In Clicked on Sign Up Page")
-            stackView.pop()
-          }
+      onSignInClicked: {
+        stackView.pop()
+      }
 
-          onSignUpClicked: {
-            console.log("Sign Up Clicked on Sign Up Page")
-            stackView.push( mmcreateworkspace )
-          }
-     }
+      onSignUpClicked: {
+        // TODO depends on invitations either create or accept invitation page
+        stackView.push(mmcreateworkspace)
+        // stackView.push(mmacceptinvitation)
+      }
+    }
   }
 
+  Component {
+    id: mmlogin
+    MMLogin {
+      onBackClicked: {
+        root.closeOnboarding()
+      }
 
-  MMLogin { id: mmlogin }
-  MMAcceptInvitation { id: mmacceptinvitation }
-  MMCreateWorkspace { id: mmcreateworkspace }
-  MMHowYouFoundUs { id: mmhowyoufoundus }
-  MMWhichIndustry { id: mmwhichindustry }
+      onSignInClicked: {
+        root.signInRequested()
+      }
+
+      onSignUpClicked: {
+        stackView.push(mmsignup, {})
+      }
+
+      onChangeServerClicked: {
+
+      }
+    }
+  }
+
+  Component {
+    id: mmacceptinvitation
+    MMAcceptInvitation {
+      onBackClicked: {
+        stackView.pop()
+      }
+
+      onCreateWorkspaceClicked: {
+        stackView.push(mmcreateworkspace, {})
+      }
+
+      onContinueClicked: {
+        root.closeOnboarding()
+      }
+    }
+  }
+
+  Component {
+    id: mmcreateworkspace
+    MMCreateWorkspace {
+
+      // no back button
+      onContinueClicked: {
+        stackView.push(mmhowyoufoundus, {})
+      }
+    }
+  }
+
+  Component {
+    id: mmhowyoufoundus
+    MMHowYouFoundUs {
+      onBackClicked: {
+        stackView.pop()
+      }
+
+      onContinueClicked: {
+        stackView.push(mmwhichindustry, {})
+      }
+    }
+  }
+
+  Component {
+    id: mmwhichindustry
+    MMWhichIndustry {
+      onBackClicked: {
+        stackView.pop()
+      }
+
+      onContinueClicked: {
+        root.submitWorkspaceInfoRequested()
+      }
+    }
+  }
 
   StackView {
     id: stackView
     anchors.fill: parent
     initialItem: mmlogin
-  }
-
-  Connections {
-      target: mmlogin
-
-      function onBackClicked( ) {
-          console.log("Back Clicked on Login Page")
-          root.closeOnboarding()
-      }
-
-      function onSignInClicked( ) {
-        console.log("Sign In Clicked on Login Page")
-      }
-
-      function onSignUpClicked( ) {
-        console.log("Sign Up Clicked on Login Page")
-        stackView.push( mmsignup, {} )
-      }
-
-      function onChangeServerClicked( ) {
-        console.log("Change Server Clicked on Login Page")
-      }
   }
 }

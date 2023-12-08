@@ -1,3 +1,5 @@
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -6,7 +8,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -14,9 +15,25 @@ import QtQuick.Controls
 Page {
   id: root
 
+  signal backClicked
+  signal continueClicked
+  signal createWorkspaceClicked
+
   ColumnLayout {
-      MMOnboardingHeader {
-        headerTitle: tr("Accept Invitation")
-      }
+    MMOnboardingHeader {
+      headerTitle: qsTr("Accept Invitation")
+
+      onBackClicked: root.backClicked()
+    }
+
+    ToolButton {
+      onClicked: root.continueClicked()
+      text: qsTr("Continue")
+    }
+
+    ToolButton {
+      onClicked: root.createWorkspaceClicked()
+      text: qsTr("Create Workspace")
+    }
   }
 }
