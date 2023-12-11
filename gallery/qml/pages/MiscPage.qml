@@ -15,12 +15,12 @@ import "../../app/qml/components"
 
 ScrollView {
   id: page
-  width: mainColumn.width - 20
 
   Column {
     id: mainColumn
+
+    x: 20
     width: page.width
-    padding: 20
     spacing: 5
 
     Row {
@@ -86,7 +86,7 @@ ScrollView {
 
     GroupBox {
       title: "MMHeader"
-      width: page.width - 2 * page.padding
+      width: page.width - 40
 
       background: Rectangle {
         color: __style.lightGreenColor
@@ -129,7 +129,7 @@ ScrollView {
 
     GroupBox {
       title: "MMHeader (for Drawer)"
-      width: page.width - 2 * page.padding
+      width: page.width - 40
 
       background: Rectangle {
         color: "white"
@@ -169,6 +169,7 @@ ScrollView {
         spacing: 20
         anchors.fill: parent
         MMHlineText {
+          width: page.width - 64
           title: "My text is great"
         }
       }

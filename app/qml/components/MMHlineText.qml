@@ -8,32 +8,38 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
 
-RowLayout {
-
-  required property var title
-
+Row {
   id: root
-  spacing: 10
+
+  required property string title
+  property color lineColor: __style.grayColor
+  property color textColor: __style.nightColor
+
+  spacing: 15
 
   Rectangle {
-    id: topRect
-    width: 50
+    id: leftLine
+
+    width: (root.width - text.width) / 2 - root.spacing
     height: 1
-    color: __style.forestColor
+    anchors.verticalCenter: parent.verticalCenter
+    color: root.lineColor
   }
 
-  Label {
-    text: title
-    font: __style.p5
-    color: topRect.color
+  Text {
+    id: text
+
+    text: root.title
+    font: __style.t3
+    color: root.textColor
+    wrapMode: Text.WordWrap
   }
 
   Rectangle {
-    width: topRect.width
-    height: topRect.height
-    color: topRect.color
+    width: leftLine.width
+    height: leftLine.height
+    color: leftLine.color
+    anchors.verticalCenter: parent.verticalCenter
   }
 }
