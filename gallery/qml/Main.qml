@@ -148,6 +148,10 @@ ApplicationWindow {
           title: "Toolbars"
           source: "ToolbarPage.qml"
         }
+        ListElement {
+          title: "Project items"
+          source: "ProjectItemsPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}

@@ -93,6 +93,11 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl doneIcon READ doneIcon CONSTANT )
     Q_PROPERTY( QUrl editIcon READ editIcon CONSTANT )
     Q_PROPERTY( QUrl moreIcon READ moreIcon CONSTANT )
+    Q_PROPERTY( QUrl projectButtonMoreIcon READ projectButtonMoreIcon CONSTANT )
+    Q_PROPERTY( QUrl stopIcon READ stopIcon CONSTANT )
+    Q_PROPERTY( QUrl syncIcon READ syncIcon CONSTANT )
+    Q_PROPERTY( QUrl infoIcon READ infoIcon CONSTANT )
+    Q_PROPERTY( QUrl downloadIcon READ downloadIcon CONSTANT )
     Q_PROPERTY( QUrl morePhotosIcon READ morePhotosIcon CONSTANT )
 
     // Images
@@ -177,6 +182,11 @@ class MMStyle: public QObject
     QUrl doneIcon() {return QUrl( "qrc:/Done.svg" );}
     QUrl editIcon() {return QUrl( "qrc:/Edit.svg" );}
     QUrl moreIcon() {return QUrl( "qrc:/More.svg" );}
+    QUrl projectButtonMoreIcon() {return QUrl( "qrc:/ProjectButtonMore.svg" );}
+    QUrl stopIcon() {return QUrl( "qrc:/Stop.svg" );}
+    QUrl syncIcon() {return QUrl( "qrc:/Sync.svg" );}
+    QUrl infoIcon() {return QUrl( "qrc:/Info.svg" );}
+    QUrl downloadIcon() {return QUrl( "qrc:/Download.svg" );}
     QUrl morePhotosIcon() {return QUrl( "qrc:/MorePhotos.svg" );}
 
     QUrl uploadImage() {return QUrl( "qrc:/UploadImage.svg" );}

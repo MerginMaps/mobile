@@ -20,6 +20,11 @@
         <file>Done.svg</file>
         <file>Edit.svg</file>
         <file>More.svg</file>
+        <file>ProjectButtonMore.svg</file>
+        <file>Stop.svg</file>
+        <file>Download.svg</file>
+        <file>Info.svg</file>
+        <file>Sync.svg</file>
         <file>MorePhotos.svg</file>
     </qresource>
 </RCC>
