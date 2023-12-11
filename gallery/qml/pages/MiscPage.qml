@@ -14,6 +14,8 @@ import QtQuick.Controls.Basic
 import "../../app/qml/components"
 
 Column {
+  id: page
+
   padding: 20
   spacing: 5
 
@@ -80,8 +82,10 @@ Column {
 
   GroupBox {
     title: "MMHeader"
+    width: page.width - 2 * page.padding
+
     background: Rectangle {
-      color: "white"
+      color: __style.lightGreenColor
       border.color: "gray"
     }
     label: Label {
@@ -93,14 +97,27 @@ Column {
     Column {
       spacing: 20
       anchors.fill: parent
+
+
       MMHeader {
-        headerTitle: "With Progress"
+        headerTitle: "Only title"
+        backVisible: false
+        step: -1
+      }
+
+      MMHeader {
+        headerTitle: "Title with back button"
+        step: 0
+      }
+
+      MMHeader {
+        headerTitle: "Title with progress bar"
+        backVisible: false
         step: 1
       }
 
       MMHeader {
-        headerTitle: "No Back"
-        backVisible: false
+        headerTitle: "Title with back button and Progress bar"
         step: 2
       }
     }

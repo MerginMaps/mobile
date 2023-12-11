@@ -1,5 +1,3 @@
-
-
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -8,37 +6,74 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
 
-RowLayout {
+Row {
   id: root
-
-  signal backClicked
 
   /* translate in parent! */
   required property var headerTitle
-
   /* -1 no step bar shown; 1, 2, 3 */
   property int step: -1
-
   property bool backVisible: true
 
-  MMBackButton {
-    visible: backVisible
-    onClicked: root.backClicked()
+  signal backClicked
+
+  width: parent.width
+  spacing: 5 * __dp
+
+  Row {
+    id: backButton
+
+    width: 60 * __dp
+
+    MMBackButton {
+      visible: backVisible
+
+      onClicked: root.backClicked()
+    }
+
+    Item {
+      id: space
+
+      width: 20 * __dp
+      height: 1
+      visible: backButton.visible
+    }
   }
 
-  Label {
-    text: headerTitle
-    font: __style.p2
+  Text {
+    anchors.verticalCenter: parent.verticalCenter
+    width: {
+      if(backButton.visible || progressBar.visible)
+        return root.width - (backButton.visible ? backButton.width + root.spacing : 0)
+            - progressBar.width - root.spacing
+      return root.width
+    }
+    text: root.headerTitle
+    font: __style.t4
     color: __style.forestColor
+    wrapMode: Text.WordWrap
+    horizontalAlignment: Text.AlignHCenter
   }
 
-  MMProgressBar {
-    width: 50
-    visible: step > 0
-    position: step > 0 ? step / 3 : 0
+  Item {
+    width: progressBar.width
+    height: progressBar.height
+    anchors.verticalCenter: parent.verticalCenter
+
+    MMProgressBar {
+      id: progressBar
+
+      width: 60 * __dp
+      height: 4 * __dp
+
+      color: __style.grassColor
+      progressColor: __style.forestColor
+      visible: root.step > 0
+      position: root.step > 0 ? root.step / 3 : 0
+    }
   }
 }

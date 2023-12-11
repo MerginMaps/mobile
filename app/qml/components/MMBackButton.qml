@@ -15,8 +15,11 @@ import "."
 RoundButton {
   id: control
 
-  implicitWidth: icon.width * 2
-  implicitHeight: icon.height * 2
+  implicitWidth: 40 * __dp
+  implicitHeight: 40 * __dp
+
+  property color color: __style.whiteColor
+  property color hoverColor: __style.mediumGreenColor
 
   contentItem: MMIcon {
     id: icon
@@ -26,7 +29,7 @@ RoundButton {
   }
 
   background: Rectangle {
-    color: control.down || control.hovered ? __style.mediumGreenColor : __style.lightGreenColor
+    color: control.down || control.hovered ? control.hoverColor : control.color
     radius: control.implicitHeight / 2
   }
 }
