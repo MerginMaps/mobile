@@ -122,7 +122,7 @@ Column {
       MMIconCheckBoxVertical {
         checked: true
         sourceIcon: __style.tractorIcon
-        text: "Agriculture"
+        text: "Agriculture Long text"
         bgColorIcon: __style.sunColor
       }
     }
