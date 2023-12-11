@@ -52,11 +52,11 @@ Page {
 
     var items = [
       youtubeSocialMediaSource,
-             twitterSocialMediaSource,
-             facebookSocialMediaSource,
-             linkedinSocialMediaSource,
-             mastodonSocialMediaSource,
-             redditSocialMediaSource,
+      twitterSocialMediaSource,
+      facebookSocialMediaSource,
+      linkedinSocialMediaSource,
+      mastodonSocialMediaSource,
+      redditSocialMediaSource,
     ]
 
     uncheck(except, isChecked, items)
