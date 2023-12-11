@@ -124,6 +124,32 @@ Column {
   }
 
   GroupBox {
+    title: "MMHeader (for Drawer)"
+    width: page.width - 2 * page.padding
+
+    background: Rectangle {
+      color: "white"
+      border.color: "gray"
+    }
+    label: Label {
+      color: "black"
+      text: parent.title
+      padding: 5
+    }
+
+    Column {
+      spacing: 20
+      anchors.fill: parent
+
+      MMHeader {
+        headerTitle: "Drawer title"
+        titleFont: __style.h3
+        backColor: __style.lightGreenColor
+      }
+    }
+  }
+
+  GroupBox {
     title: "MMHlineText"
     background: Rectangle {
       color: "white"

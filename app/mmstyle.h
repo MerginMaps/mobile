@@ -23,6 +23,11 @@ class MMStyle: public QObject
     // standard - font: __style.p5
     // extended - font.pixelSize: __style.p5.pixelSize; font.italic: true
 
+    // Fonts - Heading
+    Q_PROPERTY( QFont h1 READ h1 CONSTANT )
+    Q_PROPERTY( QFont h2 READ h2 CONSTANT )
+    Q_PROPERTY( QFont h3 READ h3 CONSTANT )
+
     // Fonts - Title
     Q_PROPERTY( QFont t1 READ t1 CONSTANT )
     Q_PROPERTY( QFont t2 READ t2 CONSTANT )
@@ -123,6 +128,10 @@ class MMStyle: public QObject
       : mDp( dp )
     {}
     ~MMStyle() = default;
+
+    QFont h1() {return fontFactory( 48, true );}
+    QFont h2() {return fontFactory( 36, true );}
+    QFont h3() {return fontFactory( 24, true );}
 
     QFont t1() {return fontFactory( 18, true );}
     QFont t2() {return fontFactory( 16, true );}
