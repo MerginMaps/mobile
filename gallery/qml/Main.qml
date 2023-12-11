@@ -110,6 +110,10 @@ ApplicationWindow {
           source: "StylePage.qml"
         }
         ListElement {
+          title: "Icons"
+          source: "IconsPage.qml"
+        }
+        ListElement {
           title: "Buttons"
           source: "ButtonsPage.qml"
         }

@@ -1,8 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/Main.qml</file>
-	<file>qml/pages/StylePage.qml</file>
-	<file>qml/pages/MiscPage.qml</file>
+        <file>qml/pages/IconsPage.qml</file>
+        <file>qml/IconBox.qml</file>
+        <file>qml/pages/StylePage.qml</file>
+        <file>qml/pages/MiscPage.qml</file>
         <file>qml/pages/InitialGalleryPage.qml</file>
         <file>qml/pages/InputsPage.qml</file>
         <file>qml/pages/ButtonsPage.qml</file>

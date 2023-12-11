@@ -1,34 +1,59 @@
 <RCC>
     <qresource prefix="/">
-        <file>Arrow Link Right.svg</file>
-        <file>Back.svg</file>
-        <file>Bubble.svg</file>
         <file>AcceptInvitationImage.svg</file>
         <file>AcceptInvitationLogoImage.svg</file>
-        <file>Calendar.svg</file>
-        <file>Hide.svg</file>
-        <file>Search.svg</file>
-        <file>Show.svg</file>
-        <file>X Mark.svg</file>
-        <file>Error.svg</file>
+        <file>Archaeology.svg</file>
         <file>Arrow Down.svg</file>
+        <file>Arrow Link Right.svg</file>
         <file>Arrow Up.svg</file>
-        <file>QR Code.svg</file>
+        <file>Back.svg</file>
+        <file>Briefcase.svg</file>
+        <file>Bubble.svg</file>
+        <file>Calendar.svg</file>
         <file>Checkmark.svg</file>
-        <file>CloseButton.svg</file>
-        <file>UploadImage.svg</file>
-        <file>ReachedDataLimitImage.svg</file>
         <file>Close.svg</file>
-        <file>Waiting.svg</file>
+        <file>CloseButton.svg</file>
         <file>Delete.svg</file>
         <file>Done.svg</file>
-        <file>Edit.svg</file>
-        <file>More.svg</file>
-        <file>ProjectButtonMore.svg</file>
-        <file>Stop.svg</file>
         <file>Download.svg</file>
+        <file>Edit.svg</file>
+        <file>Electricity.svg</file>
+        <file>Engineering.svg</file>
+        <file>Environmental.svg</file>
+        <file>Error.svg</file>
+        <file>Facebook.svg</file>
+        <file>Hide.svg</file>
         <file>Info.svg</file>
-        <file>Sync.svg</file>
+        <file>Linkedin.svg</file>
+        <file>Mastodon.svg</file>
+        <file>More.svg</file>
         <file>MorePhotos.svg</file>
+        <file>Mouth.svg</file>
+        <file>Natural Resources.svg</file>
+        <file>Other.svg</file>
+        <file>Others.svg</file>
+        <file>ProjectButtonMore.svg</file>
+        <file>QGIS.svg</file>
+        <file>QR Code.svg</file>
+        <file>ReachedDataLimitImage.svg</file>
+        <file>Reddit.svg</file>
+        <file>Search.svg</file>
+        <file>Show.svg</file>
+        <file>Social media.svg</file>
+        <file>State and Local.svg</file>
+        <file>Stop.svg</file>
+        <file>Subscriptions.svg</file>
+        <file>Sync.svg</file>
+        <file>Teacher.svg</file>
+        <file>Telecommunication.svg</file>
+        <file>Terms.svg</file>
+        <file>Tractor.svg</file>
+        <file>Transportation.svg</file>
+        <file>UploadImage.svg</file>
+        <file>Waiting.svg</file>
+        <file>Water resources.svg</file>
+        <file>X Mark.svg</file>
+        <file>X Twitter.svg</file>
+        <file>Youtube.svg</file>
     </qresource>
 </RCC>

@@ -75,38 +75,63 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor shadowColor READ shadowColor CONSTANT )
 
     // Icons
+    Q_PROPERTY( QUrl archaeologyIcon READ archaeologyIcon CONSTANT )
+    Q_PROPERTY( QUrl arrowDownIcon READ arrowDownIcon CONSTANT )
     Q_PROPERTY( QUrl arrowLinkRightIcon READ arrowLinkRightIcon CONSTANT )
-    Q_PROPERTY( QUrl searchIcon READ searchIcon CONSTANT )
+    Q_PROPERTY( QUrl arrowUpIcon READ arrowUpIcon CONSTANT )
     Q_PROPERTY( QUrl backIcon READ backIcon CONSTANT )
+    Q_PROPERTY( QUrl briefcaseIcon READ briefcaseIcon CONSTANT )
     Q_PROPERTY( QUrl bubbleIcon READ bubbleIcon CONSTANT )
     Q_PROPERTY( QUrl calendarIcon READ calendarIcon CONSTANT )
-    Q_PROPERTY( QUrl showIcon READ showIcon CONSTANT )
-    Q_PROPERTY( QUrl hideIcon READ hideIcon CONSTANT )
-    Q_PROPERTY( QUrl xMarkIcon READ xMarkIcon CONSTANT )
-    Q_PROPERTY( QUrl errorIcon READ errorIcon CONSTANT )
-    Q_PROPERTY( QUrl arrowUpIcon READ arrowUpIcon CONSTANT )
-    Q_PROPERTY( QUrl arrowDownIcon READ arrowDownIcon CONSTANT )
-    Q_PROPERTY( QUrl qrCodeIcon READ qrCodeIcon CONSTANT )
     Q_PROPERTY( QUrl checkmarkIcon READ checkmarkIcon CONSTANT )
     Q_PROPERTY( QUrl closeButtonIcon READ closeButtonIcon CONSTANT )
     Q_PROPERTY( QUrl closeIcon READ closeIcon CONSTANT )
-    Q_PROPERTY( QUrl waitingIcon READ waitingIcon CONSTANT )
     Q_PROPERTY( QUrl deleteIcon READ deleteIcon CONSTANT )
     Q_PROPERTY( QUrl doneIcon READ doneIcon CONSTANT )
-    Q_PROPERTY( QUrl editIcon READ editIcon CONSTANT )
-    Q_PROPERTY( QUrl moreIcon READ moreIcon CONSTANT )
-    Q_PROPERTY( QUrl projectButtonMoreIcon READ projectButtonMoreIcon CONSTANT )
-    Q_PROPERTY( QUrl stopIcon READ stopIcon CONSTANT )
-    Q_PROPERTY( QUrl syncIcon READ syncIcon CONSTANT )
-    Q_PROPERTY( QUrl infoIcon READ infoIcon CONSTANT )
     Q_PROPERTY( QUrl downloadIcon READ downloadIcon CONSTANT )
+    Q_PROPERTY( QUrl editIcon READ editIcon CONSTANT )
+    Q_PROPERTY( QUrl electricityIcon READ electricityIcon CONSTANT )
+    Q_PROPERTY( QUrl engineeringIcon READ engineeringIcon CONSTANT )
+    Q_PROPERTY( QUrl environmentalIcon READ environmentalIcon CONSTANT )
+    Q_PROPERTY( QUrl errorIcon READ errorIcon CONSTANT )
+    Q_PROPERTY( QUrl facebookIcon READ facebookIcon CONSTANT )
+    Q_PROPERTY( QUrl hideIcon READ hideIcon CONSTANT )
+    Q_PROPERTY( QUrl infoIcon READ infoIcon CONSTANT )
+    Q_PROPERTY( QUrl linkedinIcon READ linkedinIcon CONSTANT )
+    Q_PROPERTY( QUrl mastodonIcon READ mastodonIcon CONSTANT )
+    Q_PROPERTY( QUrl moreIcon READ moreIcon CONSTANT )
     Q_PROPERTY( QUrl morePhotosIcon READ morePhotosIcon CONSTANT )
+    Q_PROPERTY( QUrl mouthIcon READ mouthIcon CONSTANT )
+    Q_PROPERTY( QUrl naturalResourcesIcon READ naturalResourcesIcon CONSTANT )
+    Q_PROPERTY( QUrl otherIcon READ otherIcon CONSTANT )
+    Q_PROPERTY( QUrl othersIcon READ othersIcon CONSTANT )
+    Q_PROPERTY( QUrl projectButtonMoreIcon READ projectButtonMoreIcon CONSTANT )
+    Q_PROPERTY( QUrl qgisIcon READ qgisIcon CONSTANT )
+    Q_PROPERTY( QUrl qrCodeIcon READ qrCodeIcon CONSTANT )
+    Q_PROPERTY( QUrl redditIcon READ redditIcon CONSTANT )
+    Q_PROPERTY( QUrl searchIcon READ searchIcon CONSTANT )
+    Q_PROPERTY( QUrl showIcon READ showIcon CONSTANT )
+    Q_PROPERTY( QUrl socialMediaIcon READ socialMediaIcon CONSTANT )
+    Q_PROPERTY( QUrl stateAndLocalIcon READ stateAndLocalIcon CONSTANT )
+    Q_PROPERTY( QUrl stopIcon READ stopIcon CONSTANT )
+    Q_PROPERTY( QUrl subscriptionsIcon READ subscriptionsIcon CONSTANT )
+    Q_PROPERTY( QUrl syncIcon READ syncIcon CONSTANT )
+    Q_PROPERTY( QUrl teacherIcon READ teacherIcon CONSTANT )
+    Q_PROPERTY( QUrl telecommunicationIcon READ telecommunicationIcon CONSTANT )
+    Q_PROPERTY( QUrl termsIcon READ termsIcon CONSTANT )
+    Q_PROPERTY( QUrl tractorIcon READ tractorIcon CONSTANT )
+    Q_PROPERTY( QUrl transportationIcon READ transportationIcon CONSTANT )
+    Q_PROPERTY( QUrl waitingIcon READ waitingIcon CONSTANT )
+    Q_PROPERTY( QUrl waterResourcesIcon READ waterResourcesIcon CONSTANT )
+    Q_PROPERTY( QUrl xMarkIcon READ xMarkIcon CONSTANT )
+    Q_PROPERTY( QUrl xTwitterIcon READ xTwitterIcon CONSTANT )
+    Q_PROPERTY( QUrl youtubeIcon READ youtubeIcon CONSTANT )
 
     // Images
-    Q_PROPERTY( QUrl uploadImage READ uploadImage CONSTANT )
-    Q_PROPERTY( QUrl reachedDataLimitImage READ reachedDataLimitImage CONSTANT )
     Q_PROPERTY( QUrl acceptInvitationImage READ acceptInvitationImage CONSTANT )
     Q_PROPERTY( QUrl acceptInvitationLogoImage READ acceptInvitationLogoImage CONSTANT )
+    Q_PROPERTY( QUrl reachedDataLimitImage READ reachedDataLimitImage CONSTANT )
+    Q_PROPERTY( QUrl uploadImage READ uploadImage CONSTANT )
 
     // Map items
     Q_PROPERTY( double mapItemHeight READ mapItemHeight CONSTANT )
@@ -194,6 +219,31 @@ class MMStyle: public QObject
     QUrl infoIcon() {return QUrl( "qrc:/Info.svg" );}
     QUrl downloadIcon() {return QUrl( "qrc:/Download.svg" );}
     QUrl morePhotosIcon() {return QUrl( "qrc:/MorePhotos.svg" );}
+    QUrl archaeologyIcon() {return QUrl( "qrc:/Archaeology.svg" );}
+    QUrl briefcaseIcon() {return QUrl( "qrc:/Briefcase.svg" );}
+    QUrl electricityIcon() {return QUrl( "qrc:/Electricity.svg" );}
+    QUrl engineeringIcon() {return QUrl( "qrc:/Engineering.svg" );}
+    QUrl environmentalIcon() {return QUrl( "qrc:/Environmental.svg" );}
+    QUrl facebookIcon() {return QUrl( "qrc:/Facebook.svg" );}
+    QUrl linkedinIcon() {return QUrl( "qrc:/Linkedin.svg" );}
+    QUrl mastodonIcon() {return QUrl( "qrc:/Mastodon.svg" );}
+    QUrl mouthIcon() {return QUrl( "qrc:/Mouth.svg" );}
+    QUrl naturalResourcesIcon() {return QUrl( "qrc:/Natural Resources.svg" );}
+    QUrl otherIcon() {return QUrl( "qrc:/Other.svg" );}
+    QUrl othersIcon() {return QUrl( "qrc:/Others.svg" );}
+    QUrl qgisIcon() {return QUrl( "qrc:/QGIS.svg" );}
+    QUrl redditIcon() {return QUrl( "qrc:/Reddit.svg" );}
+    QUrl socialMediaIcon() {return QUrl( "qrc:/Social media.svg" );}
+    QUrl stateAndLocalIcon() {return QUrl( "qrc:/State and Local.svg" );}
+    QUrl subscriptionsIcon() {return QUrl( "qrc:/Subscriptions.svg" );}
+    QUrl teacherIcon() {return QUrl( "qrc:/Teacher.svg" );}
+    QUrl telecommunicationIcon() {return QUrl( "qrc:/Telecommunication.svg" );}
+    QUrl termsIcon() {return QUrl( "qrc:/Terms.svg" );}
+    QUrl tractorIcon() {return QUrl( "qrc:/Tractor.svg" );}
+    QUrl transportationIcon() {return QUrl( "qrc:/Transportation.svg" );}
+    QUrl waterResourcesIcon() {return QUrl( "qrc:/Water resources.svg" );}
+    QUrl xTwitterIcon() {return QUrl( "qrc:/X Twitter.svg" );}
+    QUrl youtubeIcon() {return QUrl( "qrc:/Toutube.svg" );}
 
     QUrl acceptInvitationLogoImage() {return QUrl( "qrc:/AcceptInvitationLogoImage.svg" ); }
     QUrl acceptInvitationImage() {return QUrl( "qrc:/AcceptInvitationImage.svg" ); }
