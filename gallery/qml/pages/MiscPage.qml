@@ -13,16 +13,124 @@ import QtQuick.Controls.Basic
 
 import "../../app/qml/components"
 
-Column {
+ScrollView {
   id: page
+  width: mainColumn.width - 20
 
-  padding: 20
-  spacing: 5
-
-  Row {
+  Column {
+    id: mainColumn
+    width: page.width
+    padding: 20
     spacing: 5
+
+    Row {
+      spacing: 5
+      GroupBox {
+        title: "MMProgressBar"
+        background: Rectangle {
+          color: "white"
+          border.color: "gray"
+        }
+        label: Label {
+          color: "black"
+          text: parent.title
+          padding: 5
+        }
+
+        Column {
+          spacing: 20
+          anchors.fill: parent
+          MMProgressBar {
+            position: 0
+          }
+          MMProgressBar {
+            position: 0.6
+          }
+        }
+      }
+
+      GroupBox {
+        title: "MMProgressBar"
+        background: Rectangle {
+          color: "white"
+          border.color: "gray"
+        }
+        label: Label {
+          color: "black"
+          text: parent.title
+          padding: 5
+        }
+
+        Column {
+          spacing: 20
+          anchors.fill: parent
+          MMProgressBar {
+            width: 60 * __dp
+            height: 4 * __dp
+
+            position: 0
+            color: __style.grassColor
+            progressColor: __style.forestColor
+          }
+          MMProgressBar {
+            width: 60 * __dp
+            height: 4 * __dp
+
+            position: 0.6
+            color: __style.grassColor
+            progressColor: __style.forestColor
+          }
+        }
+      }
+    }
+
     GroupBox {
-      title: "MMProgressBar"
+      title: "MMHeader"
+      width: page.width - 2 * page.padding
+
+      background: Rectangle {
+        color: __style.lightGreenColor
+        border.color: "gray"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      Column {
+        spacing: 20
+        anchors.fill: parent
+
+
+        MMHeader {
+          headerTitle: "Only title"
+          backVisible: false
+          step: -1
+        }
+
+        MMHeader {
+          headerTitle: "Title with back button"
+          step: 0
+        }
+
+        MMHeader {
+          headerTitle: "Title with progress bar"
+          backVisible: false
+          step: 1
+        }
+
+        MMHeader {
+          headerTitle: "Title with back button and Progress bar"
+          step: 2
+        }
+      }
+    }
+
+    GroupBox {
+      title: "MMHeader (for Drawer)"
+      width: page.width - 2 * page.padding
+
       background: Rectangle {
         color: "white"
         border.color: "gray"
@@ -36,17 +144,17 @@ Column {
       Column {
         spacing: 20
         anchors.fill: parent
-        MMProgressBar {
-          position: 0
-        }
-        MMProgressBar {
-          position: 0.6
+
+        MMHeader {
+          headerTitle: "Drawer title"
+          titleFont: __style.h3
+          backColor: __style.lightGreenColor
         }
       }
     }
 
     GroupBox {
-      title: "MMProgressBar"
+      title: "MMHlineText"
       background: Rectangle {
         color: "white"
         border.color: "gray"
@@ -60,133 +168,30 @@ Column {
       Column {
         spacing: 20
         anchors.fill: parent
-        MMProgressBar {
-          width: 60 * __dp
-          height: 4 * __dp
-
-          position: 0
-          color: __style.grassColor
-          progressColor: __style.forestColor
-        }
-        MMProgressBar {
-          width: 60 * __dp
-          height: 4 * __dp
-
-          position: 0.6
-          color: __style.grassColor
-          progressColor: __style.forestColor
+        MMHlineText {
+          title: "My text is great"
         }
       }
     }
-  }
 
-  GroupBox {
-    title: "MMHeader"
-    width: page.width - 2 * page.padding
-
-    background: Rectangle {
-      color: __style.lightGreenColor
-      border.color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
-
-    Column {
-      spacing: 20
-      anchors.fill: parent
-
-
-      MMHeader {
-        headerTitle: "Only title"
-        backVisible: false
-        step: -1
+    GroupBox {
+      title: "MMTextBubble"
+      background: Rectangle {
+        color: "gray"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
       }
 
-      MMHeader {
-        headerTitle: "Title with back button"
-        step: 0
-      }
-
-      MMHeader {
-        headerTitle: "Title with progress bar"
-        backVisible: false
-        step: 1
-      }
-
-      MMHeader {
-        headerTitle: "Title with back button and Progress bar"
-        step: 2
-      }
-    }
-  }
-
-  GroupBox {
-    title: "MMHeader (for Drawer)"
-    width: page.width - 2 * page.padding
-
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
-
-    Column {
-      spacing: 20
-      anchors.fill: parent
-
-      MMHeader {
-        headerTitle: "Drawer title"
-        titleFont: __style.h3
-        backColor: __style.lightGreenColor
-      }
-    }
-  }
-
-  GroupBox {
-    title: "MMHlineText"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
-
-    Column {
-      spacing: 20
-      anchors.fill: parent
-      MMHlineText {
-        title: "My text is great"
-      }
-    }
-  }
-
-  GroupBox {
-    title: "MMTextBubble"
-    background: Rectangle {
-      color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
-
-    Column {
-      spacing: 20
-      anchors.fill: parent
-      MMTextBubble {
-        title: "My text is great"
-        description: "My text is great. y text is great My text is great. y text is great. y text is great"
+      Column {
+        spacing: 20
+        anchors.fill: parent
+        MMTextBubble {
+          title: "My text is great"
+          description: "My text is great. y text is great My text is great. y text is great. y text is great"
+        }
       }
     }
   }
