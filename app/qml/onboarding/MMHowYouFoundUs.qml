@@ -22,13 +22,13 @@ Page {
 
   Column {
     MMHeader {
-      headerTitle: qsTr("HowYouFoundUs")
+      headerTitle: qsTr("How did you learn about us")
       step: 2
 
       onBackClicked: root.backClicked()
     }
 
-    ToolButton {
+    MMButton {
       onClicked: root.continueClicked()
       text: qsTr("Continue")
     }

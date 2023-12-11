@@ -27,9 +27,9 @@ Page {
     }
 
     Label {
-        text: qsTr("Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects.")
-        font: __style.p5
-        color: __style.forestColor
+      text: qsTr("Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects.")
+      font: __style.p5
+      color: __style.forestColor
     }
 
     MMInput {
@@ -38,11 +38,11 @@ Page {
     }
 
     MMTextBubble {
-        title: qsTr("Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects.")
-        description: qsTr("A good candidate for a workspace name is the name of your team or organisation.")
+      title: qsTr("Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects.")
+      description: qsTr("A good candidate for a workspace name is the name of your team or organisation.")
     }
 
-    ToolButton {
+    MMButton {
       onClicked: root.continueClicked()
       text: qsTr("Create workspace")
     }
