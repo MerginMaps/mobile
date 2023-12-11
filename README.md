@@ -82,5 +82,9 @@ To setup your development environment, read [INSTALL](./INSTALL.md)
 
 New sub-project 'gallery' app is used to develop/design all UI components, used in the Mergin Maps app
 
+### Code conventions
+
+To learn about our code conventions, please see the [code conventions](./docs/code_convention.md) file.
+
 ## Privacy policy
 Read more about the app privacy policy [here](https://merginmaps.com/docs/reference/privacy/)

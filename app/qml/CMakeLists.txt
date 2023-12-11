@@ -89,7 +89,6 @@ set(MM_QML
     misc/NoWorkspaceBanner.qml
     misc/PositionProviderPage.qml
     AboutPanel.qml
-    AccountPage.qml
     AuthPanel.qml
     Banner.qml
     ChangelogPanel.qml

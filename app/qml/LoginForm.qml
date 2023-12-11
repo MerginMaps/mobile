@@ -230,9 +230,14 @@ Rectangle {
         }
 
         visible: {
+          if ( __merginApi.serverType !== MerginServerType.OLD ) {
+            return false;
+          }
+
           if ( __merginApi.serverType === MerginServerType.CE ) {
             return false;
           }
+
           return true;
         }
       }

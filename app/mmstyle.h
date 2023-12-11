@@ -106,6 +106,9 @@ class MMStyle: public QObject
     Q_PROPERTY( double toolbarHeight READ toolbarHeight CONSTANT )
     Q_PROPERTY( double menuDrawerHeight READ menuDrawerHeight CONSTANT )
 
+    // Other
+    Q_PROPERTY( double inputRadius READ inputRadius CONSTANT )
+
   public:
     explicit MMStyle( qreal dp )
       : mDp( dp )
@@ -183,6 +186,8 @@ class MMStyle: public QObject
 
     double toolbarHeight() {return 89 * mDp;}
     double menuDrawerHeight() {return 67 * mDp;}
+
+    double inputRadius() {return 12 * mDp;}
 
   signals:
     void styleChanged();

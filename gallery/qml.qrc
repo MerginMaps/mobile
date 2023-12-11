@@ -15,7 +15,6 @@
         <file>../app/qml/components/MMTextArea.qml</file>
         <file>qml/pages/ComboBoxPage.qml</file>
         <file>../app/qml/components/MMComboBox.qml</file>
-        <file>../app/qml/components/MMCheckBox.qml</file>
         <file>../app/qml/components/MMRadioButton.qml</file>
         <file>../app/qml/components/MMSwitch.qml</file>
         <file>qml/pages/NotificationPage.qml</file>
@@ -42,5 +41,11 @@
         <file>../app/qml/components/MMPhoto.qml</file>
         <file>../app/qml/components/MMPhotoGallery.qml</file>
         <file>qml/pages/PhotosPage.qml</file>
+        <file>qml/pages/EditorsPage.qml</file>
+        <file>../app/qml/inputs/MMAbstractEditor.qml</file>
+        <file>../app/qml/inputs/MMCheckBox.qml</file>
+        <file>../app/qml/inputs/MMInputEditor.qml</file>
+        <file>../app/qml/inputs/MMPasswordEditor.qml</file>
+        <file>../app/qml/inputs/MMSliderEditor.qml</file>
     </qresource>
 </RCC>
