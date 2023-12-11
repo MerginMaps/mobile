@@ -137,6 +137,10 @@ ApplicationWindow {
           source: "DrawerPage.qml"
         }
         ListElement {
+          title: "Photos"
+          source: "PhotosPage.qml"
+        }
+        ListElement {
           title: "Map"
           source: "MapPage.qml"
         }

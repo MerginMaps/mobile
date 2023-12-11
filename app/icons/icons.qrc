@@ -25,5 +25,6 @@
         <file>Download.svg</file>
         <file>Info.svg</file>
         <file>Sync.svg</file>
+        <file>MorePhotos.svg</file>
     </qresource>
 </RCC>

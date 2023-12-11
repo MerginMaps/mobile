@@ -41,6 +41,10 @@
         <file>../app/qml/components/MMListDrawer.qml</file>
         <file>../app/qml/components/MMListDrawerItem.qml</file>
         <file>../app/qml/components/MMProjectItem.qml</file>
+        <file>../app/qml/components/MMMorePhoto.qml</file>
+        <file>../app/qml/components/MMPhoto.qml</file>
+        <file>../app/qml/components/MMPhotoGallery.qml</file>
+        <file>qml/pages/PhotosPage.qml</file>
         <file>qml/pages/EditorsPage.qml</file>
         <file>../app/qml/inputs/MMAbstractEditor.qml</file>
         <file>../app/qml/inputs/MMCheckBox.qml</file>
