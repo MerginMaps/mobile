@@ -18,7 +18,7 @@ Column {
   property var color
   property var text
 
-  Label {
+  Text {
       text: root.text
   }
 

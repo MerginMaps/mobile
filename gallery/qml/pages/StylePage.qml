@@ -15,6 +15,8 @@ import "../../app/qml/components"
 import "../"
 
 Column {
+  id: page
+
   padding: 20
   spacing: 5
 
@@ -26,62 +28,78 @@ Column {
       color: "white"
       border.color: "gray"
     }
-    label: Label {
+    label: Text {
       color: "black"
       text: parent.title
       padding: 5
     }
 
-    Row {
-      spacing: 20
-      anchors.fill: parent
-      Label {
-        text: "t1"
-        font: __style.t1
-      }
-      Label {
-        text: "t2"
-        font: __style.t2
-      }
-      Label {
-        text: "t3"
-        font: __style.t3
-      }
-      Label {
-        text: "t4"
-        font: __style.t4
-      }
-      Label {
-        text: "t5"
-        font: __style.t5
-      }
-      Label {
-        text: "p1"
-        font: __style.p1
-      }
-      Label {
-        text: "p2"
-        font: __style.p2
-      }
-      Label {
-        text: "p3"
-        font: __style.p3
-      }
-      Label {
-        text: "p4"
-        font: __style.p4
-      }
-      Label {
-        text: "p5"
-        font: __style.p5
-      }
-      Label {
-        text: "p6"
-        font: __style.p6
-      }
-      Label {
-        text: "p7"
-        font: __style.p7
+    ScrollView {
+      width: page.width
+
+      Row {
+        spacing: 20
+        anchors.fill: parent
+        Text {
+          text: "h1"
+          font: __style.h1
+        }
+        Text {
+          text: "h2"
+          font: __style.h2
+        }
+        Text {
+          text: "h3"
+          font: __style.h3
+        }
+        Text {
+          text: "t1"
+          font: __style.t1
+        }
+        Text {
+          text: "t2"
+          font: __style.t2
+        }
+        Text {
+          text: "t3"
+          font: __style.t3
+        }
+        Text {
+          text: "t4"
+          font: __style.t4
+        }
+        Text {
+          text: "t5"
+          font: __style.t5
+        }
+        Text {
+          text: "p1"
+          font: __style.p1
+        }
+        Text {
+          text: "p2"
+          font: __style.p2
+        }
+        Text {
+          text: "p3"
+          font: __style.p3
+        }
+        Text {
+          text: "p4"
+          font: __style.p4
+        }
+        Text {
+          text: "p5"
+          font: __style.p5
+        }
+        Text {
+          text: "p6"
+          font: __style.p6
+        }
+        Text {
+          text: "p7"
+          font: __style.p7
+        }
       }
     }
   }
@@ -92,34 +110,38 @@ Column {
       color: "white"
       border.color: "gray"
     }
-    label: Label {
+    label: Text {
       color: "black"
       text: parent.title
       padding: 5
     }
 
-    Row {
-      spacing: 20
-      anchors.fill: parent
-      ColorBox {
-        text: "grassColor"
-        color: __style.grassColor
-      }
-      ColorBox {
-        text: "forestColor"
-        color: __style.forestColor
-      }
-      ColorBox {
-        text: "nightColor"
-        color: __style.nightColor
-      }
-      ColorBox {
-        text: "whiteColor"
-        color: __style.whiteColor
-      }
-      ColorBox {
-        text: "transparentColor"
-        color: __style.transparentColor
+    ScrollView {
+      width: page.width
+
+      Row {
+        spacing: 20
+        anchors.fill: parent
+        ColorBox {
+          text: "grassColor"
+          color: __style.grassColor
+        }
+        ColorBox {
+          text: "forestColor"
+          color: __style.forestColor
+        }
+        ColorBox {
+          text: "nightColor"
+          color: __style.nightColor
+        }
+        ColorBox {
+          text: "whiteColor"
+          color: __style.whiteColor
+        }
+        ColorBox {
+          text: "transparentColor"
+          color: __style.transparentColor
+        }
       }
     }
   }
@@ -130,54 +152,58 @@ Column {
       color: "white"
       border.color: "gray"
     }
-    label: Label {
+    label: Text {
       color: "black"
       text: parent.title
       padding: 5
     }
 
-    Row {
-      spacing: 20
-      anchors.fill: parent
-      ColorBox {
-        text: "sandColor"
-        color: __style.sandColor
-      }
-      ColorBox {
-        text: "sunsetColor"
-        color: __style.sunsetColor
-      }
-      ColorBox {
-        text: "sunColor"
-        color: __style.sunColor
-      }
-      ColorBox {
-        text: "earthColor"
-        color: __style.earthColor
-      }
-      ColorBox {
-        text: "roseColor"
-        color: __style.roseColor
-      }
-      ColorBox {
-        text: "skyColor"
-        color: __style.skyColor
-      }
-      ColorBox {
-        text: "grapeColor"
-        color: __style.grapeColor
-      }
-      ColorBox {
-        text: "deepOceanColor"
-        color: __style.deepOceanColor
-      }
-      ColorBox {
-        text: "purpleColor"
-        color: __style.purpleColor
-      }
-      ColorBox {
-        text: "fieldColor"
-        color: __style.fieldColor
+    ScrollView {
+      width: page.width
+
+      Row {
+        spacing: 20
+        anchors.fill: parent
+        ColorBox {
+          text: "sandColor"
+          color: __style.sandColor
+        }
+        ColorBox {
+          text: "sunsetColor"
+          color: __style.sunsetColor
+        }
+        ColorBox {
+          text: "sunColor"
+          color: __style.sunColor
+        }
+        ColorBox {
+          text: "earthColor"
+          color: __style.earthColor
+        }
+        ColorBox {
+          text: "roseColor"
+          color: __style.roseColor
+        }
+        ColorBox {
+          text: "skyColor"
+          color: __style.skyColor
+        }
+        ColorBox {
+          text: "grapeColor"
+          color: __style.grapeColor
+        }
+        ColorBox {
+          text: "deepOceanColor"
+          color: __style.deepOceanColor
+        }
+        ColorBox {
+          text: "purpleColor"
+          color: __style.purpleColor
+        }
+        ColorBox {
+          text: "fieldColor"
+          color: __style.fieldColor
+        }
       }
     }
   }
@@ -188,30 +214,34 @@ Column {
       color: "white"
       border.color: "gray"
     }
-    label: Label {
+    label: Text {
       color: "black"
       text: parent.title
       padding: 5
     }
 
-    Row {
-      spacing: 20
-      anchors.fill: parent
-      ColorBox {
-        text: "positiveColor"
-        color: __style.positiveColor
-      }
-      ColorBox {
-        text: "warningColor"
-        color: __style.warningColor
-      }
-      ColorBox {
-        text: "negativeColor"
-        color: __style.negativeColor
-      }
-      ColorBox {
-        text: "informativeColor"
-        color: __style.informativeColor
+    ScrollView {
+      width: page.width
+
+      Row {
+        spacing: 20
+        anchors.fill: parent
+        ColorBox {
+          text: "positiveColor"
+          color: __style.positiveColor
+        }
+        ColorBox {
+          text: "warningColor"
+          color: __style.warningColor
+        }
+        ColorBox {
+          text: "negativeColor"
+          color: __style.negativeColor
+        }
+        ColorBox {
+          text: "informativeColor"
+          color: __style.informativeColor
+        }
       }
     }
   }
@@ -222,38 +252,42 @@ Column {
       color: "white"
       border.color: "gray"
     }
-    label: Label {
+    label: Text {
       color: "black"
       text: parent.title
       padding: 5
     }
 
-    Row {
-      spacing: 20
-      anchors.fill: parent
-      ColorBox {
-        text: "nightAlphaColor"
-        color: __style.nightAlphaColor
-      }
-      ColorBox {
-        text: "errorBgInputColor"
-        color: __style.errorBgInputColor
-      }
-      ColorBox {
-        text: "shadowColor"
-        color: __style.shadowColor
-      }
-      ColorBox {
-        text: "lightGreenColor"
-        color: __style.lightGreenColor
-      }
-      ColorBox {
-        text: "mediumGreenColor"
-        color: __style.mediumGreenColor
-      }
-      ColorBox {
-        text: "grayColor"
-        color: __style.grayColor
+    ScrollView {
+      width: page.width
+
+      Row {
+        spacing: 20
+        anchors.fill: parent
+        ColorBox {
+          text: "nightAlphaColor"
+          color: __style.nightAlphaColor
+        }
+        ColorBox {
+          text: "errorBgInputColor"
+          color: __style.errorBgInputColor
+        }
+        ColorBox {
+          text: "shadowColor"
+          color: __style.shadowColor
+        }
+        ColorBox {
+          text: "lightGreenColor"
+          color: __style.lightGreenColor
+        }
+        ColorBox {
+          text: "mediumGreenColor"
+          color: __style.mediumGreenColor
+        }
+        ColorBox {
+          text: "grayColor"
+          color: __style.grayColor
+        }
       }
     }
   }

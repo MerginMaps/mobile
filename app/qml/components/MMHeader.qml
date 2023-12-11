@@ -14,10 +14,12 @@ Row {
   id: root
 
   /* translate in parent! */
-  required property var headerTitle
+  required property string headerTitle
   /* -1 no step bar shown; 1, 2, 3 */
   property int step: -1
   property bool backVisible: true
+  property color backColor: __style.whiteColor
+  property font titleFont: __style.t4
 
   signal backClicked
 
@@ -30,7 +32,8 @@ Row {
     width: 60 * __dp
 
     MMBackButton {
-      visible: backVisible
+      visible: root.backVisible
+      color: root.backColor
 
       onClicked: root.backClicked()
     }
@@ -53,7 +56,7 @@ Row {
       return root.width
     }
     text: root.headerTitle
-    font: __style.t4
+    font: root.titleFont
     color: __style.forestColor
     wrapMode: Text.WordWrap
     horizontalAlignment: Text.AlignHCenter
