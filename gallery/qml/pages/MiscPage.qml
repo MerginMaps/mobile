@@ -17,26 +17,63 @@ Column {
   padding: 20
   spacing: 5
 
-  GroupBox {
-    title: "MMProgressBar"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
+  Row {
+    spacing: 5
+    GroupBox {
+      title: "MMProgressBar"
+      background: Rectangle {
+        color: "white"
+        border.color: "gray"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      Column {
+        spacing: 20
+        anchors.fill: parent
+        MMProgressBar {
+          position: 0
+        }
+        MMProgressBar {
+          position: 0.6
+        }
+      }
     }
 
-    Column {
-      spacing: 20
-      anchors.fill: parent
-      MMProgressBar {
-        position: 0
+    GroupBox {
+      title: "MMProgressBar"
+      background: Rectangle {
+        color: "white"
+        border.color: "gray"
       }
-      MMProgressBar {
-        position: 0.4
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      Column {
+        spacing: 20
+        anchors.fill: parent
+        MMProgressBar {
+          width: 60 * __dp
+          height: 4 * __dp
+
+          position: 0
+          color: __style.grassColor
+          progressColor: __style.forestColor
+        }
+        MMProgressBar {
+          width: 60 * __dp
+          height: 4 * __dp
+
+          position: 0.6
+          color: __style.grassColor
+          progressColor: __style.forestColor
+        }
       }
     }
   }

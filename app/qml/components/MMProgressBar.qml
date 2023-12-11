@@ -14,6 +14,7 @@ Rectangle {
   id: control
 
   required property real position // [0 - 1]
+  property color progressColor: __style.grassColor
 
   width: parent.width
   height: 12 * __dp
@@ -23,7 +24,7 @@ Rectangle {
   Rectangle {
     width: parent.width * control.position
     height: parent.height
-    color: __style.grassColor
+    color: control.progressColor
     radius: height / 2
   }
 }
