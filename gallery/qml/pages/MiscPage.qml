@@ -190,8 +190,9 @@ ScrollView {
         spacing: 20
         anchors.fill: parent
         MMTextBubble {
-          title: "My text is great"
-          description: "My text is great. y text is great My text is great. y text is great. y text is great"
+          width: page.width - 64
+          title: "Tip from Mergin Maps"
+          description: "A good candidate for a workspace name is the name of your team or organisation"
         }
       }
     }
