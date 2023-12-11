@@ -17,7 +17,7 @@ Building Mergin Maps mobile app from source - step by step
 * [5. Building iOS](#5-building-ios)
 * [6. Building macOS](#6-building-macos)
 * [7. Building Windows](#7-building-windows)
-* [8. Auto Testing](#9-auto-testing)
+* [8. Auto Testing](#8-auto-testing)
 
 # 1. Introduction
 
@@ -89,8 +89,7 @@ openssl aes-256-cbc -d -in merginsecrets.cpp.enc -out merginsecrets.cpp -md md5
 ## 2.2 Code formatting
 
 We use `astyle` to format CPP and Objective-C files. Format is similar to what QGIS has.
-
-For QML files we use latest version of `jesperhh/qmlfmt`. To install, follow instruction on the GitHub of the project. 
+For more details about code conventions, please read [our code conventions doc](./docs/code_convention.md).
 
 We also use software [pre-commit](https://pre-commit.com/) to automatically check format when doing a commit.
 You need to install it via `brew`/`pip`, see [installation details](https://pre-commit.com/#installation).
@@ -397,7 +396,7 @@ or you need some user with unlimited projects limit. First workspace from list i
 
 now you need to set environment variables: 
 ```
-TEST_MERGIN_URL=test.dev.merginmaps.com
+TEST_MERGIN_URL=https://test.dev.merginmaps.com/
 TEST_API_USERNAME=test_mobileapp_dev
 TEST_API_PASSWORD=<your_password>
 ```

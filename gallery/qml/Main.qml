@@ -109,6 +109,10 @@ ApplicationWindow {
           source: "ButtonsPage.qml"
         }
         ListElement {
+          title: "Editors"
+          source: "EditorsPage.qml"
+        }
+        ListElement {
           title: "Inputs"
           source: "InputsPage.qml"
         }

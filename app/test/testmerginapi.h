@@ -98,7 +98,7 @@ class TestMerginApi: public QObject
     MerginApi *mApi = nullptr;
 
     std::unique_ptr<ProjectsModel> mLocalProjectsModel;
-    std::unique_ptr<ProjectsModel> mCreatedProjectsModel;
+    std::unique_ptr<ProjectsModel> mWorkspaceProjectsModel;
     std::unique_ptr<SynchronizationManager> mSyncManager;
     QString mUsername;
     QString mWorkspaceName;

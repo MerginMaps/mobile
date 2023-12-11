@@ -110,6 +110,9 @@ class MMStyle: public QObject
     Q_PROPERTY( double toolbarHeight READ toolbarHeight CONSTANT )
     Q_PROPERTY( double menuDrawerHeight READ menuDrawerHeight CONSTANT )
 
+    // Other
+    Q_PROPERTY( double inputRadius READ inputRadius CONSTANT )
+
   public:
     explicit MMStyle( qreal dp )
       : mDp( dp )
@@ -119,7 +122,7 @@ class MMStyle: public QObject
     QFont t1() {return fontFactory( 18, true );}
     QFont t2() {return fontFactory( 16, true );}
     QFont t3() {return fontFactory( 14, true );}
-    QFont t4() {return fontFactory( 18, true );}
+    QFont t4() {return fontFactory( 12, true );}
     QFont t5() {return fontFactory( 10, true );}
 
     QFont p1() {return fontFactory( 32, false );}
@@ -191,6 +194,8 @@ class MMStyle: public QObject
 
     double toolbarHeight() {return 89 * mDp;}
     double menuDrawerHeight() {return 67 * mDp;}
+
+    double inputRadius() {return 12 * mDp;}
 
   signals:
     void styleChanged();
