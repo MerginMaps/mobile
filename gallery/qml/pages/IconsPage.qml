@@ -21,7 +21,7 @@ Column {
   property int rectSize: 10
 
   GroupBox {
-    title: "Fonts"
+    title: "Icons"
     background: Rectangle {
       color: "white"
       border.color: "gray"
@@ -35,59 +35,118 @@ Column {
     Row {
       spacing: 20
       anchors.fill: parent
-      Label {
-        text: "t1"
-        font: __style.t1
+      IconBox {
+        text: "arrowDownIcon"
+        source: __style.arrowDownIcon
       }
-      Label {
-        text: "t2"
-        font: __style.t2
+      IconBox {
+        text: "arrowLinkRightIcon"
+        source: __style.arrowLinkRightIcon
+        colorise: true
       }
-      Label {
-        text: "t3"
-        font: __style.t3
+      IconBox {
+        text: "arrowUpIcon"
+        source: __style.arrowUpIcon
       }
-      Label {
-        text: "t4"
-        font: __style.t4
+      IconBox {
+        text: "backIcon"
+        source: __style.backIcon
       }
-      Label {
-        text: "t5"
-        font: __style.t5
+      IconBox {
+        text: "calendarIcon"
+        source: __style.calendarIcon
       }
-      Label {
-        text: "p1"
-        font: __style.p1
+      IconBox {
+        text: "checkmarkIcon"
+        source: __style.checkmarkIcon
       }
-      Label {
-        text: "p2"
-        font: __style.p2
+      IconBox {
+        text: "closeButtonIcon"
+        source: __style.closeButtonIcon
       }
-      Label {
-        text: "p3"
-        font: __style.p3
+      IconBox {
+        text: "closeIcon"
+        source: __style.closeIcon
+        colorise: true
       }
-      Label {
-        text: "p4"
-        font: __style.p4
+      IconBox {
+        text: "deleteIcon"
+        source: __style.deleteIcon
+        colorise: true
       }
-      Label {
-        text: "p5"
-        font: __style.p5
+      IconBox {
+        text: "doneIcon"
+        source: __style.doneIcon
       }
-      Label {
-        text: "p6"
-        font: __style.p6
+      IconBox {
+        text: "downloadIcon"
+        source: __style.downloadIcon
       }
-      Label {
-        text: "p7"
-        font: __style.p7
+      IconBox {
+        text: "editIcon"
+        source: __style.editIcon
+        colorise: true
+      }
+      IconBox {
+        text: "errorIcon"
+        source: __style.errorIcon
+      }
+      IconBox {
+        text: "hideIcon"
+        source: __style.hideIcon
+      }
+      IconBox {
+        text: "infoIcon"
+        source: __style.infoIcon
+      }
+      IconBox {
+        text: "moreIcon"
+        source: __style.moreIcon
+        colorise: true
+      }
+      IconBox {
+        text: "morePhotosIcon"
+        source: __style.morePhotosIcon
+        colorise: true
+      }
+      IconBox {
+        text: "projectButtonMoreIcon"
+        source: __style.projectButtonMoreIcon
+      }
+      IconBox {
+        text: "qrCodeIcon"
+        source: __style.qrCodeIcon
+      }
+      IconBox {
+        text: "searchIcon"
+        source: __style.searchIcon
+      }
+      IconBox {
+        text: "showIcon"
+        source: __style.showIcon
+      }
+      IconBox {
+        text: "stopIcon"
+        source: __style.stopIcon
+        colorise: true
+      }
+      IconBox {
+        text: "syncIcon"
+        source: __style.syncIcon
+      }
+      IconBox {
+        text: "waitingIcon"
+        source: __style.waitingIcon
+      }
+      IconBox {
+        text: "xMarkIcon"
+        source: __style.xMarkIcon
       }
     }
   }
 
   GroupBox {
-    title: "Colors - primary palette"
+    title: "Icons - How you found us"
     background: Rectangle {
       color: "white"
       border.color: "gray"
@@ -101,31 +160,47 @@ Column {
     Row {
       spacing: 20
       anchors.fill: parent
-      ColorBox {
-        text: "grassColor"
-        color: __style.grassColor
+      IconBox {
+        text: "searchIcon"
+        source: __style.searchIcon
       }
-      ColorBox {
-        text: "forestColor"
-        color: __style.forestColor
+      IconBox {
+        text: "termsIcon"
+        source: __style.termsIcon
       }
-      ColorBox {
-        text: "nightColor"
-        color: __style.nightColor
+      IconBox {
+        text: "mouthIcon"
+        source: __style.mouthIcon
       }
-      ColorBox {
-        text: "whiteColor"
-        color: __style.whiteColor
+      IconBox {
+        text: "qgisIcon"
+        source: __style.qgisIcon
       }
-      ColorBox {
-        text: "transparentColor"
-        color: __style.transparentColor
+      IconBox {
+        text: "subscriptionsIcon"
+        source: __style.subscriptionsIcon
+      }
+      IconBox {
+        text: "teacherIcon"
+        source: __style.teacherIcon
+      }
+      IconBox {
+        text: "briefcaseIcon"
+        source: __style.briefcaseIcon
+      }
+      IconBox {
+        text: "socialMediaIcon"
+        source: __style.socialMediaIcon
+      }
+      IconBox {
+        text: "otherIcon"
+        source: __style.otherIcon
       }
     }
   }
 
   GroupBox {
-    title: "Colors - additional colors"
+    title: "Icons - Social"
     background: Rectangle {
       color: "white"
       border.color: "gray"
@@ -139,51 +214,35 @@ Column {
     Row {
       spacing: 20
       anchors.fill: parent
-      ColorBox {
-        text: "sandColor"
-        color: __style.sandColor
+      IconBox {
+        text: "youtubeIcon"
+        source: __style.youtubeIcon
       }
-      ColorBox {
-        text: "sunsetColor"
-        color: __style.sunsetColor
+      IconBox {
+        text: "xTwitterIcon"
+        source: __style.xTwitterIcon
       }
-      ColorBox {
-        text: "sunColor"
-        color: __style.sunColor
+      IconBox {
+        text: "facebookIcon"
+        source: __style.facebookIcon
       }
-      ColorBox {
-        text: "earthColor"
-        color: __style.earthColor
+      IconBox {
+        text: "linkedinIcon"
+        source: __style.linkedinIcon
       }
-      ColorBox {
-        text: "roseColor"
-        color: __style.roseColor
+      IconBox {
+        text: "mastodonIcon"
+        source: __style.mastodonIcon
       }
-      ColorBox {
-        text: "skyColor"
-        color: __style.skyColor
-      }
-      ColorBox {
-        text: "grapeColor"
-        color: __style.grapeColor
-      }
-      ColorBox {
-        text: "deepOceanColor"
-        color: __style.deepOceanColor
-      }
-      ColorBox {
-        text: "purpleColor"
-        color: __style.purpleColor
-      }
-      ColorBox {
-        text: "fieldColor"
-        color: __style.fieldColor
+      IconBox {
+        text: "redditIcon"
+        source: __style.redditIcon
       }
     }
   }
 
   GroupBox {
-    title: "Colors - additional colors"
+    title: "Icons - Industries"
     background: Rectangle {
       color: "white"
       border.color: "gray"
@@ -197,63 +256,49 @@ Column {
     Row {
       spacing: 20
       anchors.fill: parent
-      ColorBox {
-        text: "positiveColor"
-        color: __style.positiveColor
+      IconBox {
+        text: "tractorIcon"
+        source: __style.tractorIcon
       }
-      ColorBox {
-        text: "warningColor"
-        color: __style.warningColor
+      IconBox {
+        text: "archaeologyIcon"
+        source: __style.archaeologyIcon
       }
-      ColorBox {
-        text: "negativeColor"
-        color: __style.negativeColor
+      IconBox {
+        text: "engineeringIcon"
+        source: __style.engineeringIcon
       }
-      ColorBox {
-        text: "informativeColor"
-        color: __style.informativeColor
+      IconBox {
+        text: "electricityIcon"
+        source: __style.electricityIcon
       }
-    }
-  }
-
-  GroupBox {
-    title: "Colors - others"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
-
-    Row {
-      spacing: 20
-      anchors.fill: parent
-      ColorBox {
-        text: "nightAlphaColor"
-        color: __style.nightAlphaColor
+      IconBox {
+        text: "environmentalIcon"
+        source: __style.environmentalIcon
       }
-      ColorBox {
-        text: "errorBgInputColor"
-        color: __style.errorBgInputColor
+      IconBox {
+        text: "stateAndLocalIcon"
+        source: __style.stateAndLocalIcon
       }
-      ColorBox {
-        text: "shadowColor"
-        color: __style.shadowColor
+      IconBox {
+        text: "naturalResourcesIcon"
+        source: __style.naturalResourcesIcon
       }
-      ColorBox {
-        text: "lightGreenColor"
-        color: __style.lightGreenColor
+      IconBox {
+        text: "telecommunicationIcon"
+        source: __style.telecommunicationIcon
       }
-      ColorBox {
-        text: "mediumGreenColor"
-        color: __style.mediumGreenColor
+      IconBox {
+        text: "transportationIcon"
+        source: __style.transportationIcon
       }
-      ColorBox {
-        text: "grayColor"
-        color: __style.grayColor
+      IconBox {
+        text: "waterResourcesIcon"
+        source: __style.waterResourcesIcon
+      }
+      IconBox {
+        text: "othersIcon"
+        source: __style.othersIcon
       }
     }
   }

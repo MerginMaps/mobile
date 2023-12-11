@@ -11,14 +11,15 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-import "../../app/qml/components"
+import "../app/qml/components"
 
 Column {
   spacing: 5
   id: root
 
-  property var source
-  property var text
+  required property var source
+  required property var text
+  property bool colorise: false
 
   Label {
       text: root.text
@@ -27,14 +28,22 @@ Column {
   Rectangle {
       width: 50
       height: 50
-      // color: root.color
       border.color: "gray"
 
       MMIcon {
+        id: icon
+
         width: parent.width
         height: parent.height
         source: root.source
       }
+
+
   }
 
+  Component.onCompleted: {
+    if (root.colorise) {
+      icon.color = "black"
+    }
+  }
 }

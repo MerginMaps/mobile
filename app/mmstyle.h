@@ -243,7 +243,7 @@ class MMStyle: public QObject
     QUrl transportationIcon() {return QUrl( "qrc:/Transportation.svg" );}
     QUrl waterResourcesIcon() {return QUrl( "qrc:/Water resources.svg" );}
     QUrl xTwitterIcon() {return QUrl( "qrc:/X Twitter.svg" );}
-    QUrl youtubeIcon() {return QUrl( "qrc:/Toutube.svg" );}
+    QUrl youtubeIcon() {return QUrl( "qrc:/Youtube.svg" );}
 
     QUrl acceptInvitationLogoImage() {return QUrl( "qrc:/AcceptInvitationLogoImage.svg" ); }
     QUrl acceptInvitationImage() {return QUrl( "qrc:/AcceptInvitationImage.svg" ); }
