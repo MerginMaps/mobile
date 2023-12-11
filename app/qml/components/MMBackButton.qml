@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -7,28 +6,27 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
+import QtQuick.Controls.Basic
+import "."
 
-RowLayout {
+RoundButton {
+  id: control
 
-  required property var title
+  implicitWidth: icon.width * 2
+  implicitHeight: icon.height * 2
 
-  id: root
-  spacing: 10
+  contentItem: MMIcon {
+    id: icon
 
-  Rectangle {
-    width: 50
-    height: 1
+    source: __style.backIcon
+    color: __style.forestColor
   }
 
-  Label {
-    text: title
-  }
-
-  Rectangle {
-    width: 50
-    height: 1
+  background: Rectangle {
+    color: control.down || control.hovered ? __style.mediumGreenColor : __style.lightGreenColor
+    radius: control.implicitHeight / 2
   }
 }

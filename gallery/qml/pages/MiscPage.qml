@@ -18,7 +18,7 @@ Column {
   spacing: 5
 
   GroupBox {
-    title: "MMButton"
+    title: "MMProgressBar"
     background: Rectangle {
       color: "white"
       border.color: "gray"
@@ -29,22 +29,20 @@ Column {
       padding: 5
     }
 
-    Row {
+    Column {
       spacing: 20
       anchors.fill: parent
-      MMButton {
-        text: "Primary"
-        onClicked: text = (text === "Clicked" ? "Primary" : "Clicked")
+      MMProgressBar {
+        position: 0
       }
-      MMButton {
-        text: "Disabled"
-        enabled: false
+      MMProgressBar {
+        position: 0.4
       }
     }
   }
 
   GroupBox {
-    title: "MMLinkButton"
+    title: "MMHeader"
     background: Rectangle {
       color: "white"
       border.color: "gray"
@@ -55,22 +53,24 @@ Column {
       padding: 5
     }
 
-    Row {
+    Column {
       spacing: 20
       anchors.fill: parent
-      MMLinkButton {
-        text: "Secondary"
-        onClicked: text = (text === "Clicked" ? "Secondary" : "Clicked")
+      MMHeader {
+        headerTitle: "With Progress"
+        step: 1
       }
-      MMLinkButton {
-        text: "Disabled"
-        enabled: false
+
+      MMHeader {
+        headerTitle: "No Back"
+        backVisible: false
+        step: 2
       }
     }
   }
 
   GroupBox {
-    title: "MMLink"
+    title: "MMHlineText"
     background: Rectangle {
       color: "white"
       border.color: "gray"
@@ -81,25 +81,19 @@ Column {
       padding: 5
     }
 
-    Row {
+    Column {
       spacing: 20
       anchors.fill: parent
-      MMLink {
-        text: "Tertriary"
-        onClicked: text = (text === "Clicked" ? "Tertriary" : "Clicked")
-      }
-      MMLink {
-        text: "Disabled"
-        enabled: false
+      MMHlineText {
+        title: "My text is great"
       }
     }
   }
 
   GroupBox {
-    title: "MMRoundButton"
+    title: "MMTextBubble"
     background: Rectangle {
-      color: "white"
-      border.color: "gray"
+      color: "gray"
     }
     label: Label {
       color: "black"
@@ -107,58 +101,12 @@ Column {
       padding: 5
     }
 
-    Row {
+    Column {
       spacing: 20
       anchors.fill: parent
-      MMRoundButton {
-      }
-      MMRoundButton {
-        enabled: false
-      }
-    }
-  }
-
-  GroupBox {
-    title: "MMRoundLinkButton"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
-
-    Row {
-      spacing: 20
-      anchors.fill: parent
-      MMRoundLinkButton {
-      }
-      MMRoundLinkButton {
-        enabled: false
-      }
-    }
-  }
-
-  GroupBox {
-    title: "MMBackButton"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
-
-    Row {
-      spacing: 10
-      anchors.fill: parent
-
-      MMBackButton {
-        enabled: false
+      MMTextBubble {
+        title: "My text is great"
+        description: "My text is great. y text is great My text is great. y text is great. y text is great"
       }
     }
   }

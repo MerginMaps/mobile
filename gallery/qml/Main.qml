@@ -106,6 +106,10 @@ ApplicationWindow {
           source: "InitialGalleryPage.qml"
         }
         ListElement {
+          title: "Style"
+          source: "StylePage.qml"
+        }
+        ListElement {
           title: "Buttons"
           source: "ButtonsPage.qml"
         }
@@ -152,6 +156,10 @@ ApplicationWindow {
         ListElement {
           title: "Project items"
           source: "ProjectItemsPage.qml"
+        }
+        ListElement {
+          title: "Misc"
+          source: "MiscPage.qml"
         }
         ListElement {
           title: "Onboarding"

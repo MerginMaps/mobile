@@ -1,6 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>Arrow Link Right.svg</file>
+        <file>Back.svg</file>
+        <file>Bubble.svg</file>
+        <file>AcceptInvitationImage.svg</file>
+        <file>AcceptInvitationLogoImage.svg</file>
         <file>Calendar.svg</file>
         <file>Hide.svg</file>
         <file>Search.svg</file>

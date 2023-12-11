@@ -18,7 +18,7 @@ CheckBox {
   property bool small: false
 
   width: (control.small ? 16 : 24) * __dp
-  height: width
+  height: control.width
 
   indicator: Rectangle {
     width: control.width

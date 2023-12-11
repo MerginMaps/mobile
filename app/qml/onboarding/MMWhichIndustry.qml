@@ -12,14 +12,16 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "../components"
+
 Page {
   id: root
 
   signal backClicked
   signal continueClicked
 
-  ColumnLayout {
-    MMOnboardingHeader {
+  Column {
+    MMHeader {
       headerTitle: qsTr("Which industry")
       step: 3
 

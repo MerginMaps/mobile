@@ -22,6 +22,26 @@ Item {
   signal createWorkspaceRequested
   signal submitWorkspaceInfoRequested
 
+  /*
+  Component {
+      id: onboarding
+      MMOnboarding {
+          anchors.fill: parent
+
+          onCloseOnboarding: {
+              loader.active = false
+          }
+      }
+  }
+
+  Loader {
+      id: loader
+      sourceComponent: onboarding
+      anchors.fill: parent
+      active: false
+  }
+  */
+
   Component {
     id: mmsignup
     MMSignUp {

@@ -77,6 +77,8 @@ class MMStyle: public QObject
     // Icons
     Q_PROPERTY( QUrl arrowLinkRightIcon READ arrowLinkRightIcon CONSTANT )
     Q_PROPERTY( QUrl searchIcon READ searchIcon CONSTANT )
+    Q_PROPERTY( QUrl backIcon READ backIcon CONSTANT )
+    Q_PROPERTY( QUrl bubbleIcon READ bubbleIcon CONSTANT )
     Q_PROPERTY( QUrl calendarIcon READ calendarIcon CONSTANT )
     Q_PROPERTY( QUrl showIcon READ showIcon CONSTANT )
     Q_PROPERTY( QUrl hideIcon READ hideIcon CONSTANT )
@@ -103,6 +105,8 @@ class MMStyle: public QObject
     // Images
     Q_PROPERTY( QUrl uploadImage READ uploadImage CONSTANT )
     Q_PROPERTY( QUrl reachedDataLimitImage READ reachedDataLimitImage CONSTANT )
+    Q_PROPERTY( QUrl acceptInvitationImage READ acceptInvitationImage CONSTANT )
+    Q_PROPERTY( QUrl acceptInvitationLogoImage READ acceptInvitationLogoImage CONSTANT )
 
     // Map items
     Q_PROPERTY( double mapItemHeight READ mapItemHeight CONSTANT )
@@ -166,6 +170,8 @@ class MMStyle: public QObject
 
     QUrl arrowLinkRightIcon() {return QUrl( "qrc:/Arrow Link Right.svg" );}
     QUrl searchIcon() {return QUrl( "qrc:/Search.svg" );}
+    QUrl backIcon() {return QUrl( "qrc:/Back.svg" );}
+    QUrl bubbleIcon() {return QUrl( "qrc:/Bubble.svg" );}
     QUrl calendarIcon() {return QUrl( "qrc:/Calendar.svg" );}
     QUrl showIcon() {return QUrl( "qrc:/Show.svg" );}
     QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
@@ -189,6 +195,8 @@ class MMStyle: public QObject
     QUrl downloadIcon() {return QUrl( "qrc:/Download.svg" );}
     QUrl morePhotosIcon() {return QUrl( "qrc:/MorePhotos.svg" );}
 
+    QUrl acceptInvitationLogoImage() {return QUrl( "qrc:/AcceptInvitationLogoImage.svg" ); }
+    QUrl acceptInvitationImage() {return QUrl( "qrc:/AcceptInvitationImage.svg" ); }
     QUrl uploadImage() {return QUrl( "qrc:/UploadImage.svg" );}
     QUrl reachedDataLimitImage() {return QUrl( "qrc:/ReachedDataLimitImage.svg" );}
 

@@ -12,6 +12,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "../components"
+
 Page {
   id: root
 
@@ -19,21 +21,60 @@ Page {
   signal continueClicked
   signal createWorkspaceClicked
 
-  ColumnLayout {
-    MMOnboardingHeader {
+  Column {
+    spacing: 20
+
+    MMHeader {
       headerTitle: qsTr("Accept Invitation")
 
       onBackClicked: root.backClicked()
     }
 
-    ToolButton {
-      onClicked: root.continueClicked()
-      text: qsTr("Continue")
+   Item {
+     width: bg.width
+     height: bg.height
+
+     MMIcon {
+       id: bg
+       source: __style.acceptInvitationImage
+     }
+
+     MMIcon {
+        id: fg
+        x: ( bg.width - fg.width ) / 2 + 7
+        y: ( bg.height - fg.height ) / 2 + 5
+        source: __style.acceptInvitationLogoImage
+     }
+   }
+
+    Label {
+        text: qsTr("You have been invited to workspace")
+        font: __style.t1
+        color: __style.forestColor
     }
 
-    ToolButton {
+    Label {
+        text: qsTr("User %1 has invited you to join his workspace").arg("andrej")
+        font: __style.p2
+    }
+
+    Label {
+        text: "my-workspace-funny"
+        font: __style.p2
+    }
+
+    MMButton {
+      onClicked: root.continueClicked()
+      text: qsTr("Join workspace")
+    }
+
+    MMHlineText {
+      title: qsTr("or")
+    }
+
+    MMLinkButton {
       onClicked: root.createWorkspaceClicked()
-      text: qsTr("Create Workspace")
+      text: qsTr("Create new workspace")
     }
   }
 }

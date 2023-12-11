@@ -14,10 +14,19 @@ import QtQuick.Controls.Basic
 Column {
   id: control
 
+  signal textEdited
+
+  enum MsgShowBehaviour {
+      Never,
+      OnNotMatchingRegex,
+      Always
+  }
+
   property alias title: titleItem.text
   property alias text: textField.text
   property alias placeholderText: textField.placeholderText
-  required property string regexp
+  property string regexp: '.*'
+  property int msgShowBehaviour: MMPasswordInput.OnNotMatchingRegex
   property url iconSource: ""
   property string warningMsg
   property string errorMsg
@@ -77,6 +86,10 @@ Column {
         background: Rectangle {
           color: __style.transparentColor
         }
+
+        onTextEdited: {
+            control.textEdited()
+        }
       }
 
       MMIcon {
@@ -127,6 +140,11 @@ Column {
   }
 
   function isPasswordCorrect(pwd) {
+    if (msgShowBehaviour === MMPasswordInput.Never)
+        return true
+    else if (msgShowBehaviour === MMPasswordInput.Always)
+        return false
+
     let pwdRegexp = new RegExp(control.regexp)
     return pwdRegexp.test(pwd)
   }

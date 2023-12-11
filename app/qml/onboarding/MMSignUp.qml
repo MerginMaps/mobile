@@ -11,6 +11,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+
 import "../components"
 import "../inputs"
 
@@ -21,14 +22,13 @@ Page {
   signal signInClicked
   signal signUpClicked
 
-  ColumnLayout {
+  Column {
     id: layout
 
     anchors.fill: parent
 
-    MMOnboardingHeader {
+    MMHeader {
       headerTitle: qsTr("Sign Up")
-      Layout.fillWidth: true
       onBackClicked: root.backClicked()
     }
 
@@ -37,20 +37,31 @@ Page {
     }
 
     MMPasswordInput {
+      id: password
       title: qsTr("Password")
       regexp: '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,})'
       errorMsg: qsTr("Password must contain at least 6 characters\nMinimum 1 number, uppercase and lowercase letter and special character.")
+      msgShowBehaviour: MMPasswordInput.Never
+      onTextEdited: {
+          msgShowBehaviour = MMPasswordInput.OnNotMatchingRegex
+      }
     }
 
     MMPasswordInput {
+      id: confirmPassword
       title: qsTr("Confirm Password")
-      regexp: '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,})'
-      errorMsg: qsTr("Password must contain at least 6 characters\nMinimum 1 number, uppercase and lowercase letter and special character.")
-    }
+      errorMsg: qsTr("Passwords do not match")
+      onTextEdited: {
+          if (password.text === confirmPassword.text)
+             msgShowBehaviour = MMPasswordInput.Never
+          else
+             msgShowBehaviour = MMPasswordInput.Always
+      }
+   }
 
-    CheckBox {
+    MMCheckBox {
       // TODO external links
-      // TODO branded checkbox
+      small: false
       text: qsTr("I accept the terms and Conditions and Privacy Policy")
     }
 
@@ -60,7 +71,7 @@ Page {
       onClicked: root.signUpClicked()
     }
 
-    MMOnboardingHlineText {
+    MMHlineText {
       title: qsTr("Already have an account?")
     }
     MMLinkButton {

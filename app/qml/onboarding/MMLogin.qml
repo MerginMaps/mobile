@@ -11,6 +11,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+
 import "../components"
 
 Page {
@@ -42,14 +43,13 @@ Page {
     }
   }
 
-  ColumnLayout {
+  Column {
     id: layout
 
     anchors.fill: parent
 
-    MMOnboardingHeader {
+    MMHeader {
       headerTitle: qsTr("Log In")
-      Layout.fillWidth: true
       onBackClicked: root.backClicked()
     }
 
@@ -59,8 +59,7 @@ Page {
 
     MMPasswordInput {
       title: qsTr("Password")
-      regexp: '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,})'
-      errorMsg: qsTr("Password must contain at least 6 characters\nMinimum 1 number, uppercase and lowercase letter and special character.")
+      regexp: '.*'
     }
 
     MMButton {
@@ -75,7 +74,7 @@ Page {
       onClicked: root.signInClicked()
     }
 
-    MMOnboardingHlineText {
+    MMHlineText {
       title: qsTr("Don't have an account?")
     }
 
@@ -85,8 +84,10 @@ Page {
       onClicked: root.signUpClicked()
     }
 
-    MMChangeServerButton {
+    MMLinkButton {
       id: changeServerButton
+
+      text: "https://app.merginmaps.com/"
 
       onClicked: {
         changeServerDrawer.visible = true
