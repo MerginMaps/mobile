@@ -10,13 +10,12 @@
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
-import "."
 
 Row {
   id: control
 
+  required property url photoUrl
   property int hiddenPhotoCount: 0
-  property alias source: image.source
   property int space: 0
 
   signal clicked()
@@ -29,6 +28,8 @@ Row {
 
     width: control.width - control.space
     height: width
+
+    source: control.photoUrl
     asynchronous: true
     layer.enabled: true
     layer {
@@ -55,6 +56,7 @@ Row {
       anchors.centerIn: parent
       width: image.width
       height: parent.height
+
       radius: 20 * __dp
       color: __style.transparentColor
       border.color: __style.forestColor
@@ -66,6 +68,7 @@ Row {
 
       anchors.fill: parent
       source: image.source
+
       asynchronous: true
       layer.enabled: true
 

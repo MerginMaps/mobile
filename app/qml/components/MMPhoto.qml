@@ -15,10 +15,12 @@ import "."
 Image {
   id: control
 
+  property url photoUrl
+
   signal clicked( var path )
 
   height: width
-  source: model.modelData
+  source: control.photoUrl
   asynchronous: true
   layer.enabled: true
   layer {
@@ -38,7 +40,7 @@ Image {
 
   MouseArea {
     anchors.fill: parent
-    onClicked: control.clicked(model.modelData)
+    onClicked: control.clicked(control.photoUrl)
   }
 
   Rectangle {
@@ -53,7 +55,7 @@ Image {
 
   onStatusChanged: {
     if (status === Image.Error) {
-      console.error("MMPhoto: Error loading image: " + model.modelData);
+      console.error("MMPhoto: Error loading image: " + control.photoUrl);
     }
   }
 }
