@@ -18,13 +18,13 @@ CheckBox {
   required property var sourceIcon
   property bool small: false
 
-  width: (control.small ? 90 : 220) * __dp
-  height: (control.small ? 30 : 50) * __dp
+  height: (control.small ? 50 : 80) * __dp
 
   indicator: Rectangle {
     id: iconBgRectangle
     width: (control.small ? 24 : 40) * __dp
     height: (control.small ? 24 : 40) * __dp
+    x: 20 * __dp
     y: control.height / 2 - height / 2
     radius: width / 2
     color: control.checked ? __style.whiteColor : __style.lightGreenColor
@@ -44,11 +44,12 @@ CheckBox {
     font: __style.t3
     color: control.checked ? __style.whiteColor : __style.nightColor
     verticalAlignment: Text.AlignVCenter
-    leftPadding: control.indicator.width
+    leftPadding: control.indicator.width + 30 * __dp
+    rightPadding: 20 * __dp
   }
 
   background: Rectangle {
-    radius: 12 * __dp
+    radius: __style.inputRadius
     color: control.checked ? __style.forestColor: __style.whiteColor
   }
 }

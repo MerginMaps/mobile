@@ -18,36 +18,56 @@ CheckBox {
   required property var sourceIcon
   required property var bgColorIcon
 
-  width: (control.small ? 90 : 220) * __dp
-  height: (control.small ? 30 : 50) * __dp
+  width: 170 * __dp
+  height: 158 * __dp
 
-  indicator: Rectangle {
-    id: iconBgRectangle
-    width: (control.small ? 24 : 40) * __dp
-    height: (control.small ? 24 : 40) * __dp
-    y: control.height / 2 - height / 2
-    radius: width / 2
-    color: control.bgColorIcon
+  indicator: Item {}
 
-    MMIcon {
-      id: icon
-      width: (control.small ? 16 : 24) * __dp
-      height: (control.small ? 16 : 24) * __dp
-      anchors.centerIn: parent
-      source: control.sourceIcon
+  contentItem: Column {
+    padding: 20 * __dp
+    spacing: 10 * __dp
+
+    Item {
+      width: parent.width
+      height: 50 * __dp
+      anchors.horizontalCenter: parent.horizontalCenter
+
+      Rectangle {
+        id: iconBgRectangle
+
+        width: 50 * __dp
+        height: width
+        radius: width / 2
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: control.bgColorIcon
+
+        MMIcon {
+          id: icon
+
+          width: (control.small ? 16 : 24) * __dp
+          height: (control.small ? 16 : 24) * __dp
+          anchors.centerIn: parent
+          source: control.sourceIcon
+        }
+      }
+    }
+    Text {
+      width: parent.width - 2 * parent.padding
+      height: control.height - 2 * parent.padding - parent.spacing - iconBgRectangle.height
+      anchors.horizontalCenter: parent.horizontalCenter
+
+      text: control.text
+      font: __style.t3
+      color: control.checked ? __style.whiteColor : __style.nightColor
+      verticalAlignment: Text.AlignVCenter
+      horizontalAlignment: Text.AlignHCenter
+      wrapMode: Text.WordWrap
+      lineHeight: 1.5
     }
   }
 
-  contentItem: Text {
-    text: control.text
-    font: __style.t3
-    color: control.checked ? __style.whiteColor : __style.nightColor
-    verticalAlignment: Text.AlignVCenter
-    leftPadding: control.indicator.width
-  }
-
   background: Rectangle {
-    radius: 12 * __dp
+    radius: __style.inputRadius
     color: control.checked ? __style.forestColor: __style.whiteColor
   }
 }
