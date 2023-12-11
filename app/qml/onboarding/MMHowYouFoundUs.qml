@@ -18,37 +18,6 @@ Page {
   signal backClicked
   signal continueClicked
 
-
-  ListModel {
-      id: howYouFoundUsModel
-
-      /*
-      ListElement {
-          channel: qsTr("Search engine (Google, ...)")
-          //channelIcon: __style.searchIcon
-      }
-      ListElement {
-        channel: qsTr("Social Media")
-        //channelIcon: __style.socialMediaIcon
-        details: [
-              ListElement {
-                media: "YouTube"
-                //mediaIcon: __style.youtubeIcon
-              },
-              ListElement {
-                media: "X (formerly Twitter)"
-                //mediaIcon: __style.xTwitterIcon
-              }
-          ]
-      }
-      ListElement {
-          channel: qsTr("Other")
-          // channelIcon: __style.otherIcon
-      }
-
-      */
-  }
-
   Column {
     MMHeader {
       headerTitle: qsTr("How did you learn about us")
