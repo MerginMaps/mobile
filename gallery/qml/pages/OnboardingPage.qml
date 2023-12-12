@@ -17,109 +17,121 @@ Page {
   id: pane
 
   function hideAll() {
-      acceptInvitation.visible = false
-      createWorkspace = false
-      howYouFoundUs = false
-      login = false
-      signUp = false
-      whichIndustry = false
+    acceptInvitation.visible = false
+    createWorkspace = false
+    howYouFoundUs = false
+    login = false
+    signUp = false
+    whichIndustry = false
   }
 
   Column {
     id: layout
+    padding: 20
+    spacing: 10
 
-    Label {
+    Text {
       text: "Onboarding (Login, Sign Up, ...)"
+      color: "green"
     }
 
     Button {
       onClicked: {
-         login.visible = true
+        login.visible = true
       }
       text: "Login"
     }
 
     Button {
       onClicked: {
-         signUp.visible = true
+        signUp.visible = true
       }
       text: "Sign Up"
     }
 
     Button {
       onClicked: {
-         createWorkspace.visible = true
+        createWorkspace.visible = true
       }
       text: "Create Workspace"
     }
 
     Button {
       onClicked: {
-         acceptInvitation.visible = true
+        acceptInvitation.visible = true
       }
       text: "Accept Invitation"
     }
 
     Button {
       onClicked: {
-         howYouFoundUs.visible = true
+        howYouFoundUs.visible = true
       }
       text: "How You Found Us"
     }
 
     Button {
       onClicked: {
-         whichIndustry.visible = true
+        whichIndustry.visible = true
       }
       text: "Which Industry"
     }
   }
 
-  MMAcceptInvitation {
-      id: acceptInvitation
-      anchors.fill: parent
-      visible: false
-
-      onBackClicked: {visible=false}
-  }
-
-  MMCreateWorkspace {
-      id: createWorkspace
-      anchors.fill: parent
-      visible: false
-
-      onContinueClicked: {visible=false}
-  }
-
-  MMHowYouFoundUs {
-      id: howYouFoundUs
-      anchors.fill: parent
-      visible: false
-
-      onBackClicked: {visible=false}
-  }
-
   MMLogin {
-      id: login
-      anchors.fill: parent
-      visible: false
+    id: login
 
-      onBackClicked: {visible=false}
+    anchors.fill: parent
+    visible: false
+
+    onSignInClicked: console.log("Sign in clicked")
+    onSignUpClicked: console.log("Sign up clicked")
+    onChangeServerClicked: console.log("Change server clicked")
+    onBackClicked: visible = false
   }
 
   MMSignUp {
-      id: signUp
-      anchors.fill: parent
-      visible: false
+    id: signUp
 
-      onBackClicked: {visible=false}
+    anchors.fill: parent
+    visible: false
+
+    onSignInClicked: console.log("Sign in clicked")
+    onSignUpClicked: console.log("Sign up clicked")
+    onBackClicked: visible = false
+  }
+
+
+
+  MMAcceptInvitation {
+    id: acceptInvitation
+    anchors.fill: parent
+    visible: false
+
+    onBackClicked: {visible=false}
+  }
+
+  MMCreateWorkspace {
+    id: createWorkspace
+    anchors.fill: parent
+    visible: false
+
+    onContinueClicked: {visible=false}
+  }
+
+  MMHowYouFoundUs {
+    id: howYouFoundUs
+    anchors.fill: parent
+    visible: false
+
+    onBackClicked: {visible=false}
   }
 
   MMWhichIndustry {
-      id: whichIndustry
-      anchors.fill: parent
-      visible: false
+    id: whichIndustry
+    anchors.fill: parent
+    visible: false
 
-      onBackClicked: {visible=false}
+    onBackClicked: {visible=false}
   }
 }
