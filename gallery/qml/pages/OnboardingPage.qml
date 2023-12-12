@@ -51,16 +51,16 @@ Page {
 
     Button {
       onClicked: {
-        createWorkspace.visible = true
+        acceptInvitation.visible = true
       }
-      text: "Create Workspace"
+      text: "Accept Invitation"
     }
 
     Button {
       onClicked: {
-        acceptInvitation.visible = true
+        createWorkspace.visible = true
       }
-      text: "Accept Invitation"
+      text: "Create Workspace"
     }
 
     Button {
@@ -94,7 +94,7 @@ Page {
     id: signUp
 
     anchors.fill: parent
-    visible: false
+    //visible: false
 
     onSignInClicked: console.log("Sign in clicked")
     onSignUpClicked: console.log("Sign up clicked")
@@ -114,15 +114,15 @@ Page {
     onCreateWorkspaceClicked: console.log("Create new workspace clicked")
   }
 
-
-
   MMCreateWorkspace {
     id: createWorkspace
+
     anchors.fill: parent
     visible: false
 
-    onContinueClicked: {visible=false}
+    onContinueClicked: visible = false
   }
+
 
   MMHowYouFoundUs {
     id: howYouFoundUs

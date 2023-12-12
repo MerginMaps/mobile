@@ -43,9 +43,24 @@ Page {
     }
   }
 
+  MMHeader {
+    id: header
+
+    x: mainColumn.padding
+    y: mainColumn.padding
+    width: parent.width - 2 * mainColumn.padding
+    headerTitle: qsTr("Log In")
+    titleFont: __style.h3
+    backColor: __style.lightGreenColor
+
+    onBackClicked: root.backClicked()
+  }
+
   ScrollView {
     width: parent.width
-    height: parent.height - changeServerButton.height
+    height: parent.height - changeServerButton.height - header.height - 60 * __dp
+    anchors.top: header.bottom
+    anchors.topMargin: 20 * __dp
 
     ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
     ScrollBar.vertical.policy: ScrollBar.AlwaysOff
@@ -56,15 +71,6 @@ Page {
       width: root.width
       spacing: 20 * __dp
       padding: 20 * __dp
-
-      MMHeader {
-        width: parent.width - 2 * mainColumn.padding
-        headerTitle: qsTr("Log In")
-        titleFont: __style.h3
-        backColor: __style.lightGreenColor
-
-        onBackClicked: root.backClicked()
-      }
 
       Item { width: 1; height: 1 }
 
