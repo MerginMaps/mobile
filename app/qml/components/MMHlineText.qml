@@ -8,23 +8,38 @@
  ***************************************************************************/
 
 import QtQuick
-import "."
 
-Rectangle {
-  id: control
+Row {
+  id: root
 
-  required property real position // [0 - 1]
-  property color progressColor: __style.grassColor
+  required property string title
+  property color lineColor: __style.grayColor
+  property color textColor: __style.nightColor
 
-  width: parent.width
-  height: 12 * __dp
-  color: __style.lightGreenColor
-  radius: height / 2
+  spacing: 15
 
   Rectangle {
-    width: parent.width * control.position
-    height: parent.height
-    color: control.progressColor
-    radius: height / 2
+    id: leftLine
+
+    width: (root.width - text.width) / 2 - root.spacing
+    height: 1
+    anchors.verticalCenter: parent.verticalCenter
+    color: root.lineColor
+  }
+
+  Text {
+    id: text
+
+    text: root.title
+    font: __style.t3
+    color: root.textColor
+    wrapMode: Text.WordWrap
+  }
+
+  Rectangle {
+    width: leftLine.width
+    height: leftLine.height
+    color: leftLine.color
+    anchors.verticalCenter: parent.verticalCenter
   }
 }

@@ -1,6 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/Main.qml</file>
+        <file>qml/pages/IconsPage.qml</file>
+        <file>qml/IconBox.qml</file>
+        <file>qml/pages/StylePage.qml</file>
+        <file>qml/pages/MiscPage.qml</file>
         <file>qml/pages/InitialGalleryPage.qml</file>
         <file>qml/pages/InputsPage.qml</file>
         <file>qml/pages/ButtonsPage.qml</file>
@@ -51,5 +55,19 @@
         <file>../app/qml/inputs/MMInputEditor.qml</file>
         <file>../app/qml/inputs/MMPasswordEditor.qml</file>
         <file>../app/qml/inputs/MMSliderEditor.qml</file>
+        <file>qml/pages/OnboardingPage.qml</file>
+        <file>../app/qml/onboarding/MMAcceptInvitation.qml</file>
+        <file>../app/qml/onboarding/MMCreateWorkspace.qml</file>
+        <file>../app/qml/onboarding/MMHowYouFoundUs.qml</file>
+        <file>../app/qml/onboarding/MMLogin.qml</file>
+        <file>../app/qml/onboarding/MMOnboarding.qml</file>
+        <file>../app/qml/onboarding/MMSignUp.qml</file>
+        <file>../app/qml/onboarding/MMWhichIndustry.qml</file> 
+        <file>../app/qml/components/MMHeader.qml</file>
+        <file>../app/qml/components/MMHlineText.qml</file>
+        <file>../app/qml/components/MMTextBubble.qml</file>
+        <file>../app/qml/components/MMBackButton.qml</file>
+        <file>../app/qml/components/MMIconCheckBoxHorizontal.qml</file>
+        <file>../app/qml/components/MMIconCheckBoxVertical.qml</file>
     </qresource>
 </RCC>

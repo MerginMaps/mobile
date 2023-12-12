@@ -8,23 +8,28 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.Basic
 import "."
 
-Rectangle {
+RoundButton {
   id: control
 
-  required property real position // [0 - 1]
-  property color progressColor: __style.grassColor
+  implicitWidth: 40 * __dp
+  implicitHeight: 40 * __dp
 
-  width: parent.width
-  height: 12 * __dp
-  color: __style.lightGreenColor
-  radius: height / 2
+  property color color: __style.whiteColor
+  property color hoverColor: __style.mediumGreenColor
 
-  Rectangle {
-    width: parent.width * control.position
-    height: parent.height
-    color: control.progressColor
-    radius: height / 2
+  contentItem: MMIcon {
+    id: icon
+
+    source: __style.backIcon
+    color: __style.forestColor
+  }
+
+  background: Rectangle {
+    color: control.down || control.hovered ? control.hoverColor : control.color
+    radius: control.implicitHeight / 2
   }
 }

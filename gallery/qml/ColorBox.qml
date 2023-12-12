@@ -8,23 +8,25 @@
  ***************************************************************************/
 
 import QtQuick
-import "."
+import QtQuick.Controls
+import QtQuick.Controls.Basic
 
-Rectangle {
-  id: control
+Column {
+  spacing: 5
+  id: root
 
-  required property real position // [0 - 1]
-  property color progressColor: __style.grassColor
+  property var color
+  property var text
 
-  width: parent.width
-  height: 12 * __dp
-  color: __style.lightGreenColor
-  radius: height / 2
+  Text {
+      text: root.text
+  }
 
   Rectangle {
-    width: parent.width * control.position
-    height: parent.height
-    color: control.progressColor
-    radius: height / 2
+      width: 40
+      height: 40
+      color: root.color
+      border.color: "gray"
   }
+
 }

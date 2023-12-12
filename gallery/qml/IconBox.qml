@@ -8,23 +8,42 @@
  ***************************************************************************/
 
 import QtQuick
-import "."
+import QtQuick.Controls
+import QtQuick.Controls.Basic
 
-Rectangle {
-  id: control
+import "../app/qml/components"
 
-  required property real position // [0 - 1]
-  property color progressColor: __style.grassColor
+Column {
+  spacing: 5
+  id: root
 
-  width: parent.width
-  height: 12 * __dp
-  color: __style.lightGreenColor
-  radius: height / 2
+  required property var source
+  required property var text
+  property bool colorise: false
+
+  Label {
+      text: root.text
+  }
 
   Rectangle {
-    width: parent.width * control.position
-    height: parent.height
-    color: control.progressColor
-    radius: height / 2
+      width: 50
+      height: 50
+      border.color: "gray"
+
+      MMIcon {
+        id: icon
+
+        width: parent.width
+        height: parent.height
+        source: root.source
+      }
+
+
+  }
+
+  Component.onCompleted: {
+    if (root.colorise) {
+      icon.color = "black"
+    }
   }
 }

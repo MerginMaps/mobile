@@ -10,49 +10,46 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../components"
+import "."
 
 CheckBox {
   id: control
 
+  required property var sourceIcon
   property bool small: false
 
-  width: (control.small ? 16 : 24) * __dp
-  height: control.width
+  height: (control.small ? 50 : 80) * __dp
 
   indicator: Rectangle {
-    width: control.width
-    height: control.height
+    id: iconBgRectangle
+    width: (control.small ? 24 : 40) * __dp
+    height: (control.small ? 24 : 40) * __dp
+    x: 20 * __dp
     y: control.height / 2 - height / 2
-    radius: 5 * __dp
-    color: (enabled && control.checked) ? __style.grassColor: __style.whiteColor
-    border.color: {
-      if(enabled) {
-        if(checked) {
-          return __style.grassColor
-        }
-        return __style.forestColor
-      }
-      return __style.mediumGreenColor
-    }
-    border.width: (control.hovered ? 2.5 : 2) * __dp
+    radius: width / 2
+    color: control.checked ? __style.whiteColor : __style.lightGreenColor
 
     MMIcon {
       id: icon
-
+      width: (control.small ? 16 : 24) * __dp
+      height: (control.small ? 16 : 24) * __dp
       anchors.centerIn: parent
-      source: __style.checkmarkIcon
-      color: control.enabled ? __style.forestColor : __style.mediumGreenColor
-      visible: control.checked
-      scale: control.width / (24 * __dp)
+      source: control.sourceIcon
+      color: __style.forestColor
     }
   }
 
   contentItem: Text {
     text: control.text
-    font: __style.p5
-    color: icon.color
+    font: __style.t3
+    color: control.checked ? __style.whiteColor : __style.nightColor
     verticalAlignment: Text.AlignVCenter
-    leftPadding: control.indicator.width
+    leftPadding: control.indicator.width + 30 * __dp
+    rightPadding: 20 * __dp
+  }
+
+  background: Rectangle {
+    radius: __style.inputRadius
+    color: control.checked ? __style.forestColor: __style.whiteColor
   }
 }

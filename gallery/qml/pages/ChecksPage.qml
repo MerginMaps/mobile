@@ -53,6 +53,82 @@ Column {
   }
 
   GroupBox {
+    title: "MMIconCheckBoxHorizontal"
+    background: Rectangle {
+      color: __style.lightGreenColor
+      border.color: "gray"
+    }
+    label: Label {
+      color: "black"
+      text: parent.title
+      padding: 5
+    }
+
+    Row {
+      spacing: 10
+      anchors.fill: parent
+
+      MMIconCheckBoxHorizontal {
+        checked: false
+        sourceIcon: __style.qgisIcon
+        text: "QGIS website"
+      }
+
+      MMIconCheckBoxHorizontal {
+        checked: true
+        sourceIcon: __style.qgisIcon
+        text: "QGIS website"
+      }
+
+      MMIconCheckBoxHorizontal {
+        checked: false
+        sourceIcon: __style.redditIcon
+        text: "Reddit"
+        small: true
+      }
+
+      MMIconCheckBoxHorizontal {
+        checked: true
+        sourceIcon: __style.redditIcon
+        text: "Reddit"
+        small: true
+      }
+    }
+  }
+
+  GroupBox {
+    title: "MMIconCheckBoxVertical"
+    background: Rectangle {
+      color: __style.lightGreenColor
+      border.color: "gray"
+    }
+    label: Label {
+      color: "black"
+      text: parent.title
+      padding: 5
+    }
+
+    Row {
+      spacing: 10
+      anchors.fill: parent
+
+      MMIconCheckBoxVertical {
+        checked: false
+        sourceIcon: __style.archaeologyIcon
+        text: "Archeology"
+        bgColorIcon: __style.sandColor
+      }
+
+      MMIconCheckBoxVertical {
+        checked: true
+        sourceIcon: __style.tractorIcon
+        text: "Agriculture Long text"
+        bgColorIcon: __style.sunColor
+      }
+    }
+  }
+
+  GroupBox {
     title: "MMRadioButton"
     background: Rectangle {
       color: "lightGray"

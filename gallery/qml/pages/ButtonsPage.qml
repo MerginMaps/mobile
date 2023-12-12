@@ -15,7 +15,7 @@ import "../../app/qml/components"
 
 Column {
   padding: 20
-  spacing: 20
+  spacing: 5
 
   GroupBox {
     title: "MMButton"
@@ -136,6 +136,28 @@ Column {
       MMRoundLinkButton {
       }
       MMRoundLinkButton {
+        enabled: false
+      }
+    }
+  }
+
+  GroupBox {
+    title: "MMBackButton"
+    background: Rectangle {
+      color: "white"
+      border.color: "gray"
+    }
+    label: Label {
+      color: "black"
+      text: parent.title
+      padding: 5
+    }
+
+    Row {
+      spacing: 10
+      anchors.fill: parent
+
+      MMBackButton {
         enabled: false
       }
     }
