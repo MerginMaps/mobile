@@ -51,7 +51,7 @@ Button {
 
   background: Rectangle {
     width: control.width
-    height: control,height
+    height: control.height
     color: __style.transparentColor
   }
 }

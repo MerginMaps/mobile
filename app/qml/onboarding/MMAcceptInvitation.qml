@@ -11,68 +11,111 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../components"
+import "../inputs"
 
 Page {
   id: root
+
+  required property string user
+  required property string workspace
 
   signal backClicked
   signal continueClicked
   signal createWorkspaceClicked
 
-  Column {
-    spacing: 20
+  Rectangle {
+    anchors.fill: parent
+    color: __style.lightGreenColor
+  }
 
-    MMHeader {
-      headerTitle: qsTr("Accept Invitation")
+  ScrollView {
+    width: parent.width
+    height: parent.height
 
-      onBackClicked: root.backClicked()
-    }
+    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
-   Item {
-     width: bg.width
-     height: bg.height
+    Column {
+      id: mainColumn
 
-     MMIcon {
-       id: bg
-       source: __style.acceptInvitationImage
-     }
+      width: root.width
+      spacing: 20 * __dp
+      leftPadding: 20 * __dp
+      rightPadding: 20 * __dp
+      topPadding: 100 * __dp
+      bottomPadding: 20 * __dp
 
-     MMIcon {
-        id: fg
-        x: ( bg.width - fg.width ) / 2 + 7
-        y: ( bg.height - fg.height ) / 2 + 5
-        source: __style.acceptInvitationLogoImage
-     }
-   }
+      Item {
+        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
+        height: bg.height
 
-    Label {
+        Image {
+          id: bg
+
+          anchors.horizontalCenter: parent.horizontalCenter
+          source: __style.acceptInvitationImage
+
+          Image {
+            id: fg
+            x: ( bg.width - fg.width ) / 2 + 7
+            y: ( bg.height - fg.height ) / 2 + 5
+            source: __style.acceptInvitationLogoImage
+          }
+        }
+      }
+
+      Text {
+        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
         text: qsTr("You have been invited to workspace")
-        font: __style.t1
+        font: __style.h3
         color: __style.forestColor
-    }
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignHCenter
+        lineHeight: 1.2
+      }
 
-    Label {
-        text: qsTr("User %1 has invited you to join his workspace").arg("andrej")
-        font: __style.p2
-    }
+      Text {
+        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
+        text: qsTr("User %1 has invited you to join his workspace").arg(root.user)
+        font: __style.p5
+        color: __style.nightColor
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignHCenter
+        lineHeight: 1.5
+      }
 
-    Label {
-        text: "my-workspace-funny"
-        font: __style.p2
-    }
+      Item { width: 1; height: 1 }
 
-    MMButton {
-      onClicked: root.continueClicked()
-      text: qsTr("Join workspace")
-    }
+      Text {
+        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
+        text: root.workspace
+        font: __style.t1
+        color: __style.nightColor
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignHCenter
+        lineHeight: 1.5
+      }
 
-    MMHlineText {
-      title: qsTr("or")
-    }
+      Item { width: 1; height: 50 }
 
-    MMLinkButton {
-      onClicked: root.createWorkspaceClicked()
-      text: qsTr("Create new workspace")
+      MMButton {
+        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
+        text: qsTr("Join workspace")
+
+        onClicked: root.continueClicked()
+      }
+
+      MMHlineText {
+        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
+        title: qsTr("or")
+      }
+
+      MMLinkButton {
+        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
+        text: qsTr("Create new workspace")
+
+        onClicked: root.createWorkspaceClicked()
+      }
     }
   }
 }

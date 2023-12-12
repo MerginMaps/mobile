@@ -82,8 +82,6 @@ Drawer {
           id: closeButton
 
           source: __style.closeButtonIcon
-          //anchors.right: parent.right
-          //anchors.rightMargin: 20 * __dp
 
           MouseArea {
             anchors.fill: parent

@@ -101,15 +101,20 @@ Page {
     onBackClicked: visible = false
   }
 
-
-
   MMAcceptInvitation {
     id: acceptInvitation
+
     anchors.fill: parent
     visible: false
+    user: "Lubos"
+    workspace: "my-workspace.funny"
 
-    onBackClicked: {visible=false}
+    onBackClicked: visible = false
+    onContinueClicked: console.log("Join workspace clicked")
+    onCreateWorkspaceClicked: console.log("Create new workspace clicked")
   }
+
+
 
   MMCreateWorkspace {
     id: createWorkspace
