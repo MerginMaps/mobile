@@ -94,7 +94,7 @@ Page {
     id: signUp
 
     anchors.fill: parent
-    //visible: false
+    visible: false
 
     onSignInClicked: console.log("Sign in clicked")
     onSignUpClicked: console.log("Sign up clicked")
