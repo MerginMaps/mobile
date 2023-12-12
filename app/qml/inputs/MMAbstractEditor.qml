@@ -13,6 +13,7 @@ import QtQml.Models
 import QtQuick.Layouts
 
 import "../components"
+import "."
 
 Item {
   id: root
