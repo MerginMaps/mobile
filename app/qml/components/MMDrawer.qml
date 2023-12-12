@@ -17,6 +17,7 @@ Drawer {
 
   property alias picture: picture.source
   property alias title: title.text
+  property alias bigTitle: bigTitle.text
   property alias description: description.text
   property alias boundedDescription: boundedDescription.text
   property alias primaryButton: primaryButton.text
@@ -55,16 +56,39 @@ Drawer {
       rightPadding: 20 * __dp
       bottomPadding: 20 * __dp
 
-      Image {
-        id: closeButton
+      Row {
+        width: parent.width
+        spacing: 10 * __dp
 
-        source: __style.closeButtonIcon
-        anchors.right: parent.right
-        anchors.rightMargin: 20 * __dp
+        Item {
+          id: emptyItem
 
-        MouseArea {
-          anchors.fill: parent
-          onClicked: control.visible = false
+          width: closeButton.width
+          height: 1
+        }
+
+        Text {
+          id: title
+
+          anchors.verticalCenter: parent.verticalCenter
+          width: parent.width - emptyItem.width - closeButton.width - mainColumn.leftPadding - mainColumn.rightPadding - 2 * parent.spacing
+          horizontalAlignment: Text.AlignHCenter
+          wrapMode: Text.WordWrap
+          font: __style.t2
+          color: __style.forestColor
+        }
+
+        Image {
+          id: closeButton
+
+          source: __style.closeButtonIcon
+          //anchors.right: parent.right
+          //anchors.rightMargin: 20 * __dp
+
+          MouseArea {
+            anchors.fill: parent
+            onClicked: control.visible = false
+          }
         }
       }
 
@@ -75,7 +99,7 @@ Drawer {
       }
 
       Text {
-        id: title
+        id: bigTitle
 
         anchors.horizontalCenter: parent.horizontalCenter
         font: __style.t1

@@ -86,10 +86,14 @@ Column {
       anchors.fill: parent
       MMLink {
         text: "Tertriary"
+        width: 150
+        rightIcon: __style.arrowLinkRightIcon
         onClicked: text = (text === "Clicked" ? "Tertriary" : "Clicked")
       }
       MMLink {
         text: "Disabled"
+        rightIcon: __style.arrowLinkRightIcon
+        width: 150
         enabled: false
       }
     }

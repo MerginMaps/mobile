@@ -26,7 +26,7 @@ Column {
       color: "white"
       border.color: "gray"
     }
-    label: Label {
+    label: Text {
       color: "black"
       text: parent.title
       padding: 5
@@ -142,6 +142,10 @@ Column {
         text: "xMarkIcon"
         source: __style.xMarkIcon
       }
+      IconBox {
+        text: "globeIcon"
+        source: __style.globeIcon
+      }
     }
   }
 
@@ -151,7 +155,7 @@ Column {
       color: "white"
       border.color: "gray"
     }
-    label: Label {
+    label: Text {
       color: "black"
       text: parent.title
       padding: 5
@@ -205,7 +209,7 @@ Column {
       color: "white"
       border.color: "gray"
     }
-    label: Label {
+    label: Text {
       color: "black"
       text: parent.title
       padding: 5
@@ -247,7 +251,7 @@ Column {
       color: "white"
       border.color: "gray"
     }
-    label: Label {
+    label: Text {
       color: "black"
       text: parent.title
       padding: 5

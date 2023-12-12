@@ -11,37 +11,11 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-import "../app/qml/components"
+import "../../app/qml/onboarding"
 
-Column {
-  spacing: 5
-  id: root
-
-  required property var source
-  required property var text
-  property bool colorise: false
-
-  Text {
-    text: root.text
-  }
-
-  Rectangle {
-    width: 50
-    height: 50
-    border.color: "gray"
-
-    MMIcon {
-      id: icon
-
-      width: parent.width
-      height: parent.height
-      source: root.source
-    }
-  }
-
-  Component.onCompleted: {
-    if (root.colorise) {
-      icon.color = "black"
-    }
-  }
+MMLogin {
+  onBackClicked: console.log("Back button clicked")
+  onSignInClicked: console.log("Sign in clicked")
+  onSignUpClicked: console.log("Sign up clicked")
+  onChangeServerClicked: console.log("Change server clicked")
 }
