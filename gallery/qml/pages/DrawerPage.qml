@@ -39,7 +39,7 @@ Page {
     id: drawer1
 
     picture: __style.uploadImage
-    title: "Upload project to Margin?"
+    bigTitle: "Upload project to Margin?"
     description: "This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration."
     primaryButton: "Yes, Upload Project"
     secondaryButton: "No Cancel"
@@ -52,7 +52,7 @@ Page {
     id: drawer2
 
     picture: __style.reachedDataLimitImage
-    title: "You have reached a data limit"
+    bigTitle: "You have reached a data limit"
     primaryButton: "Manage Subscription"
     specialComponent: component.comp
     visible: true
@@ -73,7 +73,7 @@ Page {
     id: drawer3
 
     picture: __style.uploadImage
-    title: "Failed to synchronize your changes"
+    bigTitle: "Failed to synchronize your changes"
     description: "Your changes could not be sent to server, make sure you are connected to internet and have write access to this project."
     primaryButton: "Ok, I understand"
     boundedDescription: "Failed to push changes. Ask the project workspace owner to log in to their Mergin Maps dashboard for more information."

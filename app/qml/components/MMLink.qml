@@ -15,29 +15,43 @@ import "."
 Button {
   id: control
 
-  contentItem: Row {
-    anchors.centerIn: control
-    spacing: 10 * __dp
+  property url leftIcon: ""
+  property url rightIcon: ""
 
-    Text {
-      id: text
+  height: 50 * __dp
 
-      font: __style.t3
-      text: control.text
-      color: control.enabled ? control.down || control.hovered ? __style.nightColor : __style.forestColor : __style.mediumGreenColor
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
-      elide: Text.ElideRight
-      anchors.verticalCenter: parent.verticalCenter
-    }
+  contentItem: Item {
+    Row {
+      anchors.centerIn: parent
+      spacing: 5 * __dp
 
-    MMIcon {
-      source: __style.arrowLinkRightIcon
-      color: text.color
+      MMIcon {
+        source: control.leftIcon
+        color: text.color
+      }
+
+      Text {
+        id: text
+
+        font: __style.t3
+        text: control.text
+        color: control.enabled ? control.down || control.hovered ? __style.nightColor : __style.forestColor : __style.mediumGreenColor
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
+        anchors.verticalCenter: parent.verticalCenter
+      }
+
+      MMIcon {
+        source: control.rightIcon
+        color: text.color
+      }
     }
   }
 
   background: Rectangle {
+    width: control.width
+    height: control,height
     color: __style.transparentColor
   }
 }

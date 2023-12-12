@@ -169,6 +169,10 @@ ApplicationWindow {
           title: "Onboarding"
           source: "OnboardingPage.qml"
         }
+        ListElement {
+          title: "Login page"
+          source: "LoginPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}

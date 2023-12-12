@@ -11,11 +11,10 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../components"
+import "../inputs"
 
 Page {
   id: root
-
-  anchors.fill: parent
 
   signal backClicked
   signal signInClicked
@@ -23,73 +22,121 @@ Page {
   signal changeServerClicked
   signal forgotPasswordClicked
 
-  // TODO - lazy loaded?
-  MMDrawer {
-    id: changeServerDrawer
+  // background as Drawer design
+  Rectangle {
+    anchors.fill: parent
+    color: __style.whiteColor
 
-    title: qsTr("Change server")
-    primaryButton: qsTr("Confirm")
-    visible: false
-    specialComponent: MMInput {
-      title: qsTr("Server address")
+    Rectangle {
+      width: parent.width
+      height: 20 * __dp
+      color: __style.forestColor
     }
 
-    onPrimaryButtonClicked: {
-      changeServerButton.text = specialComponent.text
-      visible = false
-      root.changeServerClicked()
+    Rectangle {
+      width: parent.width
+      height: 40 * __dp
+      color: __style.whiteColor
+      radius: height / 2
     }
   }
 
   Column {
-    id: layout
+    id: mainColumn
 
     anchors.fill: parent
+    spacing: 20 * __dp
+    padding: 20 * __dp
 
     MMHeader {
+      width: parent.width - 2 * mainColumn.padding
       headerTitle: qsTr("Log In")
+      titleFont: __style.h3
+      backColor: __style.lightGreenColor
+
       onBackClicked: root.backClicked()
     }
 
-    MMInput {
+    Item { width: 1; height: 1 }
+
+    MMInputEditor {
+      width: parent.width - 2 * mainColumn.padding
       title: qsTr("Username")
+      bgColor: __style.lightGreenColor
     }
 
-    MMPasswordInput {
+    MMPasswordEditor {
+      width: parent.width - 2 * mainColumn.padding
       title: qsTr("Password")
-      regexp: '.*'
+      bgColor: __style.lightGreenColor
     }
 
-    MMButton {
+    MMLink {
+      width: parent.width - 2 * mainColumn.padding
+      height: 20 * __dp
       text: qsTr("Forgot password?")
-      transparent: true
+
       onClicked: root.signInClicked()
     }
 
+    Item { width: 1; height: 1 }
+
     MMButton {
+      width: parent.width - 2 * mainColumn.padding
       text: qsTr("Sign in")
 
       onClicked: root.signInClicked()
     }
 
+    Item { width: 1; height: 1 }
+
     MMHlineText {
+      width: parent.width - 2 * mainColumn.padding
       title: qsTr("Don't have an account?")
     }
 
     MMLinkButton {
+      width: parent.width - 2 * mainColumn.padding
       text: qsTr("Sign up")
 
       onClicked: root.signUpClicked()
     }
 
-    MMLinkButton {
+    Item { width: 1; height: 1 }
+
+    MMLink {
       id: changeServerButton
 
+      width: parent.width - 2 * mainColumn.padding
       text: "https://app.merginmaps.com/"
+      leftIcon: __style.globeIcon
 
-      onClicked: {
-        changeServerDrawer.visible = true
-      }
+      onClicked: changeServerDrawer.visible = true
+    }
+  }
+
+  MMDrawer {
+    id: changeServerDrawer
+
+    property string newServerUrl
+
+    title: qsTr("Change server")
+    primaryButton: qsTr("Confirm")
+    visible: false
+    specialComponent: MMInputEditor {
+      width: changeServerDrawer.width - 40 * __dp
+      title: qsTr("Server address")
+      bgColor: __style.lightGreenColor
+      text: changeServerButton.text
+
+      onTextChanged: changeServerDrawer.newServerUrl = text
+    }
+
+    onPrimaryButtonClicked: {
+      changeServerButton.text = changeServerDrawer.newServerUrl
+      visible = false
+
+      root.changeServerClicked()
     }
   }
 }

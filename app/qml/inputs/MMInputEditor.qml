@@ -22,7 +22,7 @@ MMAbstractEditor {
   property bool isReadOnly: parent.readOnly ?? false
 
   property alias placeholderText: textField.placeholderText
-  readonly property alias text: textField.text
+  property alias text: textField.text
 
   signal editorValueChanged( var newValue, var isNull )
 

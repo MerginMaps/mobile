@@ -131,6 +131,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl xMarkIcon READ xMarkIcon CONSTANT )
     Q_PROPERTY( QUrl xTwitterIcon READ xTwitterIcon CONSTANT )
     Q_PROPERTY( QUrl youtubeIcon READ youtubeIcon CONSTANT )
+    Q_PROPERTY( QUrl globeIcon READ globeIcon CONSTANT )
 
     // Images
     Q_PROPERTY( QUrl acceptInvitationImage READ acceptInvitationImage CONSTANT )
@@ -253,6 +254,7 @@ class MMStyle: public QObject
     QUrl waterResourcesIcon() {return QUrl( "qrc:/Water resources.svg" );}
     QUrl xTwitterIcon() {return QUrl( "qrc:/X Twitter.svg" );}
     QUrl youtubeIcon() {return QUrl( "qrc:/Youtube.svg" );}
+    QUrl globeIcon() {return QUrl( "qrc:/Globe.svg" );}
 
     QUrl acceptInvitationLogoImage() {return QUrl( "qrc:/AcceptInvitationLogoImage.svg" ); }
     QUrl acceptInvitationImage() {return QUrl( "qrc:/AcceptInvitationImage.svg" ); }

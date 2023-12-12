@@ -128,7 +128,7 @@ ScrollView {
     }
 
     GroupBox {
-      title: "MMHeader (for Drawer)"
+      title: "MMHeader (bigger title)"
       width: page.width - 40
 
       background: Rectangle {
