@@ -142,6 +142,8 @@ Page {
 
     property string newServerUrl
 
+    width: root.width < __style.maxPageWidth ? root.width : root.width - 2 * root.hPadding
+    x: root.width < __style.maxPageWidth ? 0 : root.hPadding
     title: qsTr("Change server")
     primaryButton: qsTr("Confirm")
     visible: false
