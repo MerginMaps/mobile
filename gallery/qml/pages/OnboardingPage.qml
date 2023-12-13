@@ -123,14 +123,16 @@ Page {
     onContinueClicked: visible = false
   }
 
-
   MMHowYouFoundUs {
     id: howYouFoundUs
-    anchors.fill: parent
-    visible: false
 
-    onBackClicked: {visible=false}
+    anchors.fill: parent
+    //visible: false
+
+    onContinueClicked: visible = false
+    onBackClicked: visible = false
   }
+
 
   MMWhichIndustry {
     id: whichIndustry
