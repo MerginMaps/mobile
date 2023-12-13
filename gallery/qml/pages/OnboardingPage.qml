@@ -136,12 +136,16 @@ Page {
     }
   }
 
-
   MMWhichIndustry {
     id: whichIndustry
+
     anchors.fill: parent
     visible: false
 
-    onBackClicked: {visible=false}
+    onBackClicked: visible = false
+    onContinueClicked: function(selectedText) {
+      console.log("Selected: " + selectedText)
+      visible = false
+    }
   }
 }

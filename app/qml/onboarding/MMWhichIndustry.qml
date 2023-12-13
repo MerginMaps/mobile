@@ -11,140 +11,137 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../components"
+import "../inputs"
 
 Page {
   id: root
 
+  width: parent.width
+
+  property string selectedText: ""
+
   signal backClicked
-  signal continueClicked
+  signal continueClicked(var selectedText)
 
-  function uncheckAll(except, isChecked) {
-    if (!isChecked)
-      return;
+  readonly property string headerTitle: qsTr("In which industry do you work?")
+  readonly property real hPadding: width < __style.maxPageWidth
+                                   ? 20 * __dp
+                                   : (20 + (width - __style.maxPageWidth) / 2) * __dp
 
-    var items = [
-      agricultureSource,
-      archaeologySource,
-      engineeringSource,
-      electricitySource,
-      environmentalSource,
-      stateAndLocalSource,
-      naturalResourcesSource,
-      telecommunicationSource,
-      transportationSource,
-      waterResourcesSource,
-      othersSource
-    ]
-
-    items.forEach( function(item) {
-      if (item !== except) {
-        item.checked = false
-      }
-    } )
+  Rectangle {
+    anchors.fill: parent
+    color: __style.lightGreenColor
   }
 
-  Column {
-    MMHeader {
-      headerTitle: qsTr("Which industry")
-      step: 3
+  MMHeader {
+    id: header
 
-      onBackClicked: root.backClicked()
+    x: root.hPadding
+    y: 20 * __dp
+    width: root.width - 2 * root.hPadding
+    headerTitle: listView.contentY > -30 * __dp ? root.headerTitle : ""
+    step: 2
+
+    onBackClicked: root.backClicked()
+  }
+
+  Item {
+    width: parent.width
+    height: parent.height - (listView.model.count === listView.currentIndex + 1 ? header.height + 50 * __dp : 0)
+    anchors.top: header.bottom
+    anchors.topMargin: 20 * __dp
+
+    GridView {
+      id: listView
+
+      property real spacing: 10 * __dp
+
+      width: parent.width - 2 * root.hPadding
+      anchors.horizontalCenter: parent.horizontalCenter
+      height: parent.height - header.height
+      clip: true
+      cellHeight: 158 * __dp + listView.spacing
+
+      onWidthChanged: {
+        if(listView.width < 150 * __dp)
+          listView.cellWidth = 150 * __dp + listView.spacing
+        else if(listView.width < 250 * __dp)
+          listView.cellWidth = listView.width + listView.spacing
+        else
+          listView.cellWidth = listView.width / 2
+      }
+
+      Component.onCompleted: currentIndex = -1
+
+      model: ListModel {
+        Component.onCompleted: {
+          listView.model.append({name: qsTr("Agriculture"), icon: __style.tractorIcon, colorx: __style.sunColor, color: "#F4CB46"})
+          listView.model.append({name: qsTr("Archaeology"), icon: __style.archaeologyIcon, colorx: __style.sandColor, color: "#FFF4E2"})
+          listView.model.append({name: qsTr("onstruction and engineering"), icon: __style.engineeringIcon, colorx: __style.roseColor, color: "#FFBABC"})
+          listView.model.append({name: qsTr("Electric utilities"), icon: __style.electricityIcon, colorx: __style.nightColor, color: "#12181F"})
+          listView.model.append({name: qsTr("Environmental protection"), icon: __style.environmentalIcon, colorx: __style.fieldColor, color: "#9BD1A9"})
+          listView.model.append({name: qsTr("Local governments"), icon: __style.stateAndLocalIcon, colorx: __style.purpleColor, color: "#CCBDF5"})
+          listView.model.append({name: qsTr("Natural resources"), icon: __style.naturalResourcesIcon, colorx: __style.earthColor, color: "#4D2A24"})
+          listView.model.append({name: qsTr("Telecom"), icon: __style.telecommunicationIcon, colorx: __style.deepOceanColor, color: "#1C324A"})
+          listView.model.append({name: qsTr("Transportation"), icon: __style.transportationIcon, colorx: __style.skyColor, color: "#A6CBF4"})
+          listView.model.append({name: qsTr("Water utilities"), icon: __style.waterResourcesIcon, colorx: __style.lightGreenColor, color: "#EFF5F3"})
+          listView.model.append({name: qsTr("Other"), icon: __style.otherIcon, colorx: __style.sunsetColor, color: "#FFB673"})
+        }
+      }
+
+      header: Text {
+        id: listHeader
+
+        width: root.width - 2 * root.hPadding
+        padding: 20 * __dp
+        text: root.headerTitle
+        font: __style.h3
+        color: __style.forestColor
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignHCenter
+        lineHeight: 1.2
+      }
+
+      delegate: MMIconCheckBoxVertical {
+        width: listView.cellWidth - listView.spacing
+        sourceIcon: model.icon
+        text: model.name
+        bgColorIcon: model.color
+        checked: listView.currentIndex === index
+
+        onClicked: {
+          root.selectedText = model.name
+          listView.currentIndex = index
+
+          if(listView.model.count === listView.currentIndex + 1)
+            listView.positionViewAtEnd()
+        }
+      }
+
+      footer: Column {
+        width: root.width - 2 * root.hPadding
+        topPadding: 20 * __dp
+        visible: listView.model.count === listView.currentIndex + 1
+
+        MMInputEditor {
+          title: qsTr("Source")
+          placeholderText: qsTr("Please specify the source")
+          onTextChanged: root.selectedText = text
+          onVisibleChanged: if(visible) hasFocus = true
+        }
+
+        Item { width: 1; height: 60 * __dp }
+      }
     }
+  }
 
-    Grid {
-        columns: 2
-        spacing: 10
+  MMButton {
+    width: root.width - 2 * root.hPadding
+    anchors.horizontalCenter: parent.horizontalCenter
+    anchors.bottom: parent.bottom
+    anchors.bottomMargin: 20 * __dp
+    text: qsTr("Continue")
 
-        MMIconCheckBoxVertical {
-          id: agricultureSource
-          sourceIcon: __style.tractorIcon
-          text: qsTr("Agriculture")
-          onToggled: uncheckAll(agricultureSource, checked)
-          bgColorIcon: __style.sunColor
-        }
-        MMIconCheckBoxVertical {
-          id: archaeologySource
-          sourceIcon: __style.archaeologyIcon
-          text: qsTr("Archaeology")
-          onToggled: uncheckAll(archaeologySource, checked)
-          bgColorIcon: __style.sandColor
-        }
-        MMIconCheckBoxVertical {
-          id: engineeringSource
-          sourceIcon: __style.engineeringIcon
-          text: qsTr("Construction and engineering")
-          onToggled: uncheckAll(engineeringSource, checked)
-          bgColorIcon: __style.roseColor
-        }
-        MMIconCheckBoxVertical {
-          id: electricitySource
-          sourceIcon: __style.electricityIcon
-          text: qsTr("Electric utilities")
-          onToggled: uncheckAll(electricitySource, checked)
-          bgColorIcon: __style.nightColor
-        }
-        MMIconCheckBoxVertical {
-          id: environmentalSource
-          sourceIcon: __style.environmentalIcon
-          text: qsTr("Environmental protection")
-          onToggled: uncheckAll(environmentalSource, checked)
-          bgColorIcon: __style.fieldColor
-        }
-        MMIconCheckBoxVertical {
-          id: stateAndLocalSource
-          sourceIcon: __style.stateAndLocalIcon
-          text: qsTr("Local governments")
-          onToggled: uncheckAll(stateAndLocalSource, checked)
-          bgColorIcon: __style.purpleColor
-        }
-        MMIconCheckBoxVertical {
-          id: naturalResourcesSource
-          sourceIcon: __style.naturalResourcesIcon
-          text: qsTr("Natural resources")
-          onToggled: uncheckAll(naturalResourcesSource, checked)
-          bgColorIcon: __style.earthColor
-        }
-        MMIconCheckBoxVertical {
-          id: telecommunicationSource
-          sourceIcon: __style.telecommunicationIcon
-          text: qsTr("Telecom")
-          onToggled: uncheckAll(telecommunicationSource, checked)
-          bgColorIcon: __style.deepOceanColor
-        }
-        MMIconCheckBoxVertical {
-          id: transportationSource
-          sourceIcon: __style.transportationIcon
-          text: qsTr("Transportation")
-          onToggled: uncheckAll(transportationSource, checked)
-          bgColorIcon: __style.skyColor
-        }
-        MMIconCheckBoxVertical {
-          id: waterResourcesSource
-          sourceIcon: __style.waterResourcesIcon
-          text: qsTr("Water utilities")
-          onToggled: uncheckAll(waterResourcesSource, checked)
-          bgColorIcon: __style.lightGreenColor
-        }
-
-        MMIconCheckBoxVertical {
-          id: othersSource
-          sourceIcon: __style.othersIcon
-          text: qsTr("Others")
-          onToggled: uncheckAll(othersSource, checked)
-          bgColorIcon: __style.sunsetColor
-        }
-    }
-
-    MMInput {
-      id: othersSourceDescription
-      visible: othersSource.checked
-      title: qsTr("Industry")
-      placeholderText: qsTr("Please specify the industry")
-    }
-
-    MMButton {
-      onClicked: root.continueClicked()
-      text: qsTr("Continue")
-    }
+    onClicked: root.continueClicked(root.selectedText)
   }
 }

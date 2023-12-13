@@ -40,7 +40,6 @@ Page {
     y: 20 * __dp
     width: root.width - 2 * root.hPadding
     headerTitle: listView.contentY > -30 * __dp ? root.headerTitle : ""
-    backVisible: false
     step: 2
 
     onBackClicked: root.backClicked()
