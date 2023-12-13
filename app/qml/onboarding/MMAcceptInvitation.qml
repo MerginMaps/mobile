@@ -23,6 +23,9 @@ Page {
   signal continueClicked
   signal createWorkspaceClicked
 
+  readonly property real hPadding: width < __style.maxPageWidth
+                                   ? 20 * __dp
+                                   : (20 + (width - __style.maxPageWidth) / 2) * __dp
   Rectangle {
     anchors.fill: parent
     color: __style.lightGreenColor
@@ -40,13 +43,13 @@ Page {
 
       width: root.width
       spacing: 20 * __dp
-      leftPadding: 20 * __dp
-      rightPadding: 20 * __dp
+      leftPadding: root.hPadding
+      rightPadding: root.hPadding
       topPadding: 100 * __dp
       bottomPadding: 20 * __dp
 
       Item {
-        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
+        width: parent.width - 2 * root.hPadding
         height: bg.height
 
         Image {
@@ -65,7 +68,7 @@ Page {
       }
 
       Text {
-        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
+        width: parent.width - 2 * root.hPadding
         text: qsTr("You have been invited to workspace")
         font: __style.h3
         color: __style.forestColor
@@ -75,7 +78,7 @@ Page {
       }
 
       Text {
-        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
+        width: parent.width - 2 * root.hPadding
         text: qsTr("User %1 has invited you to join his workspace").arg(root.user)
         font: __style.p5
         color: __style.nightColor
@@ -87,7 +90,7 @@ Page {
       Item { width: 1; height: 1 }
 
       Text {
-        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
+        width: parent.width - 2 * root.hPadding
         text: root.workspace
         font: __style.t1
         color: __style.nightColor
@@ -99,19 +102,19 @@ Page {
       Item { width: 1; height: 50 }
 
       MMButton {
-        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
+        width: parent.width - 2 * root.hPadding
         text: qsTr("Join workspace")
 
         onClicked: root.continueClicked()
       }
 
       MMHlineText {
-        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
+        width: parent.width - 2 * root.hPadding
         title: qsTr("or")
       }
 
       MMLinkButton {
-        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding
+        width: parent.width - 2 * root.hPadding
         text: qsTr("Create new workspace")
 
         onClicked: root.createWorkspaceClicked()

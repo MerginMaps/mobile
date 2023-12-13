@@ -148,6 +148,7 @@ class MMStyle: public QObject
 
     // Other
     Q_PROPERTY( double inputRadius READ inputRadius CONSTANT )
+    Q_PROPERTY( double maxPageWidth READ maxPageWidth CONSTANT )
 
   public:
     explicit MMStyle( qreal dp )
@@ -267,6 +268,7 @@ class MMStyle: public QObject
     double menuDrawerHeight() {return 67 * mDp;}
 
     double inputRadius() {return 12 * mDp;}
+    double maxPageWidth() {return 500 * mDp;}
 
   signals:
     void styleChanged();
