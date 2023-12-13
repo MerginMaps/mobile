@@ -14,30 +14,29 @@ import QtQuick.Controls.Basic
 import "../../app/qml/components"
 import "../"
 
-Column {
-  id: page
+ScrollView {
+  Column {
+    id: page
 
-  padding: 20
-  spacing: 5
+    padding: 20
+    spacing: 5
 
-  property int rectSize: 10
+    property int rectSize: 10
 
-  GroupBox {
-    title: "Fonts"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Text {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
+    GroupBox {
+      title: "Fonts"
+      background: Rectangle {
+        color: "white"
+        border.color: "gray"
+      }
+      label: Text {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
 
-    ScrollView {
-      width: page.width
-
-      Row {
+      Grid {
+        columns: 7
         spacing: 20
         anchors.fill: parent
         Text {
@@ -51,6 +50,22 @@ Column {
         Text {
           text: "h3"
           font: __style.h3
+        }
+        Item {
+          width: 1
+          height: 1
+        }
+        Item {
+          width: 1
+          height: 1
+        }
+        Item {
+          width: 1
+          height: 1
+        }
+        Item {
+          width: 1
+          height: 1
         }
         Text {
           text: "t1"
@@ -71,6 +86,14 @@ Column {
         Text {
           text: "t5"
           font: __style.t5
+        }
+        Item {
+          width: 1
+          height: 1
+        }
+        Item {
+          width: 1
+          height: 1
         }
         Text {
           text: "p1"
@@ -101,25 +124,24 @@ Column {
           font: __style.p7
         }
       }
-    }
-  }
 
-  GroupBox {
-    title: "Colors - primary palette"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Text {
-      color: "black"
-      text: parent.title
-      padding: 5
     }
 
-    ScrollView {
-      width: page.width
+    GroupBox {
+      title: "Colors - primary palette"
+      background: Rectangle {
+        color: "white"
+        border.color: "gray"
+      }
+      label: Text {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
 
-      Row {
+
+      Grid {
+        columns: 3
         spacing: 20
         anchors.fill: parent
         ColorBox {
@@ -144,24 +166,21 @@ Column {
         }
       }
     }
-  }
 
-  GroupBox {
-    title: "Colors - additional colors"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Text {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
+    GroupBox {
+      title: "Colors - additional colors"
+      background: Rectangle {
+        color: "white"
+        border.color: "gray"
+      }
+      label: Text {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
 
-    ScrollView {
-      width: page.width
-
-      Row {
+      Grid {
+        columns: 3
         spacing: 20
         anchors.fill: parent
         ColorBox {
@@ -205,25 +224,23 @@ Column {
           color: __style.fieldColor
         }
       }
-    }
-  }
 
-  GroupBox {
-    title: "Colors - additional colors"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Text {
-      color: "black"
-      text: parent.title
-      padding: 5
     }
 
-    ScrollView {
-      width: page.width
+    GroupBox {
+      title: "Colors - additional colors"
+      background: Rectangle {
+        color: "white"
+        border.color: "gray"
+      }
+      label: Text {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
 
-      Row {
+      Grid {
+        columns: 2
         spacing: 20
         anchors.fill: parent
         ColorBox {
@@ -244,24 +261,21 @@ Column {
         }
       }
     }
-  }
 
-  GroupBox {
-    title: "Colors - others"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Text {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
+    GroupBox {
+      title: "Colors - others"
+      background: Rectangle {
+        color: "white"
+        border.color: "gray"
+      }
+      label: Text {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
 
-    ScrollView {
-      width: page.width
-
-      Row {
+      Grid {
+        columns: 3
         spacing: 20
         anchors.fill: parent
         ColorBox {

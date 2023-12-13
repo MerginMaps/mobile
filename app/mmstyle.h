@@ -203,58 +203,58 @@ class MMStyle: public QObject
     QColor errorBgInputColor() {return QColor::fromString( "#FEFAF9" );}
     QColor shadowColor() {return QColor::fromString( "#66777777" );}
 
-    QUrl arrowLinkRightIcon() {return QUrl( "qrc:/Arrow Link Right.svg" );}
-    QUrl searchIcon() {return QUrl( "qrc:/Search.svg" );}
+    QUrl archaeologyIcon() {return QUrl( "qrc:/Archaeology.svg" );}
+    QUrl arrowDownIcon() {return QUrl( "qrc:/ArrowDown.svg" );}
+    QUrl arrowLinkRightIcon() {return QUrl( "qrc:/ArrowLinkRight.svg" );}
+    QUrl arrowUpIcon() {return QUrl( "qrc:/ArrowUp.svg" );}
     QUrl backIcon() {return QUrl( "qrc:/Back.svg" );}
+    QUrl briefcaseIcon() {return QUrl( "qrc:/Briefcase.svg" );}
     QUrl bubbleIcon() {return QUrl( "qrc:/Bubble.svg" );}
     QUrl calendarIcon() {return QUrl( "qrc:/Calendar.svg" );}
-    QUrl showIcon() {return QUrl( "qrc:/Show.svg" );}
-    QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
-    QUrl xMarkIcon() {return QUrl( "qrc:/X Mark.svg" );}
-    QUrl errorIcon() {return QUrl( "qrc:/Error.svg" );}
-    QUrl arrowUpIcon() {return QUrl( "qrc:/Arrow Up.svg" );}
-    QUrl arrowDownIcon() {return QUrl( "qrc:/Arrow Down.svg" );}
-    QUrl qrCodeIcon() {return QUrl( "qrc:/QR Code.svg" );}
     QUrl checkmarkIcon() {return QUrl( "qrc:/Checkmark.svg" );}
     QUrl closeButtonIcon() {return QUrl( "qrc:/CloseButton.svg" );}
     QUrl closeIcon() {return QUrl( "qrc:/Close.svg" );}
-    QUrl waitingIcon() {return QUrl( "qrc:/Waiting.svg" );}
     QUrl deleteIcon() {return QUrl( "qrc:/Delete.svg" );}
     QUrl doneIcon() {return QUrl( "qrc:/Done.svg" );}
-    QUrl editIcon() {return QUrl( "qrc:/Edit.svg" );}
-    QUrl moreIcon() {return QUrl( "qrc:/More.svg" );}
-    QUrl projectButtonMoreIcon() {return QUrl( "qrc:/ProjectButtonMore.svg" );}
-    QUrl stopIcon() {return QUrl( "qrc:/Stop.svg" );}
-    QUrl syncIcon() {return QUrl( "qrc:/Sync.svg" );}
-    QUrl infoIcon() {return QUrl( "qrc:/Info.svg" );}
     QUrl downloadIcon() {return QUrl( "qrc:/Download.svg" );}
-    QUrl morePhotosIcon() {return QUrl( "qrc:/MorePhotos.svg" );}
-    QUrl archaeologyIcon() {return QUrl( "qrc:/Archaeology.svg" );}
-    QUrl briefcaseIcon() {return QUrl( "qrc:/Briefcase.svg" );}
+    QUrl editIcon() {return QUrl( "qrc:/Edit.svg" );}
     QUrl electricityIcon() {return QUrl( "qrc:/Electricity.svg" );}
     QUrl engineeringIcon() {return QUrl( "qrc:/Engineering.svg" );}
     QUrl environmentalIcon() {return QUrl( "qrc:/Environmental.svg" );}
+    QUrl errorIcon() {return QUrl( "qrc:/Error.svg" );}
     QUrl facebookIcon() {return QUrl( "qrc:/Facebook.svg" );}
+    QUrl globeIcon() {return QUrl( "qrc:/Globe.svg" );}
+    QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
+    QUrl infoIcon() {return QUrl( "qrc:/Info.svg" );}
     QUrl linkedinIcon() {return QUrl( "qrc:/Linkedin.svg" );}
     QUrl mastodonIcon() {return QUrl( "qrc:/Mastodon.svg" );}
+    QUrl moreIcon() {return QUrl( "qrc:/More.svg" );}
+    QUrl morePhotosIcon() {return QUrl( "qrc:/MorePhotos.svg" );}
     QUrl mouthIcon() {return QUrl( "qrc:/Mouth.svg" );}
     QUrl naturalResourcesIcon() {return QUrl( "qrc:/Natural Resources.svg" );}
     QUrl otherIcon() {return QUrl( "qrc:/Other.svg" );}
     QUrl othersIcon() {return QUrl( "qrc:/Others.svg" );}
+    QUrl projectButtonMoreIcon() {return QUrl( "qrc:/ProjectButtonMore.svg" );}
     QUrl qgisIcon() {return QUrl( "qrc:/QGIS.svg" );}
+    QUrl qrCodeIcon() {return QUrl( "qrc:/QRCode.svg" );}
     QUrl redditIcon() {return QUrl( "qrc:/Reddit.svg" );}
-    QUrl socialMediaIcon() {return QUrl( "qrc:/Social media.svg" );}
-    QUrl stateAndLocalIcon() {return QUrl( "qrc:/State and Local.svg" );}
+    QUrl searchIcon() {return QUrl( "qrc:/Search.svg" );}
+    QUrl showIcon() {return QUrl( "qrc:/Show.svg" );}
+    QUrl socialMediaIcon() {return QUrl( "qrc:/SocialMedia.svg" );}
+    QUrl stateAndLocalIcon() {return QUrl( "qrc:/StateAndLocal.svg" );}
+    QUrl stopIcon() {return QUrl( "qrc:/Stop.svg" );}
     QUrl subscriptionsIcon() {return QUrl( "qrc:/Subscriptions.svg" );}
+    QUrl syncIcon() {return QUrl( "qrc:/Sync.svg" );}
     QUrl teacherIcon() {return QUrl( "qrc:/Teacher.svg" );}
     QUrl telecommunicationIcon() {return QUrl( "qrc:/Telecommunication.svg" );}
     QUrl termsIcon() {return QUrl( "qrc:/Terms.svg" );}
     QUrl tractorIcon() {return QUrl( "qrc:/Tractor.svg" );}
     QUrl transportationIcon() {return QUrl( "qrc:/Transportation.svg" );}
-    QUrl waterResourcesIcon() {return QUrl( "qrc:/Water resources.svg" );}
-    QUrl xTwitterIcon() {return QUrl( "qrc:/X Twitter.svg" );}
+    QUrl waitingIcon() {return QUrl( "qrc:/Waiting.svg" );}
+    QUrl waterResourcesIcon() {return QUrl( "qrc:/WaterResources.svg" );}
+    QUrl xMarkIcon() {return QUrl( "qrc:/XMark.svg" );}
+    QUrl xTwitterIcon() {return QUrl( "qrc:/XTwitter.svg" );}
     QUrl youtubeIcon() {return QUrl( "qrc:/Youtube.svg" );}
-    QUrl globeIcon() {return QUrl( "qrc:/Globe.svg" );}
 
     QUrl acceptInvitationLogoImage() {return QUrl( "qrc:/AcceptInvitationLogoImage.svg" ); }
     QUrl acceptInvitationImage() {return QUrl( "qrc:/AcceptInvitationImage.svg" ); }

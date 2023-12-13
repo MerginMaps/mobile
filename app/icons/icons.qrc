@@ -3,9 +3,9 @@
         <file>AcceptInvitationImage.svg</file>
         <file>AcceptInvitationLogoImage.svg</file>
         <file>Archaeology.svg</file>
-        <file>Arrow Down.svg</file>
-        <file>Arrow Link Right.svg</file>
-        <file>Arrow Up.svg</file>
+        <file>ArrowDown.svg</file>
+        <file>ArrowLinkRight.svg</file>
+        <file>ArrowUp.svg</file>
         <file>Back.svg</file>
         <file>Briefcase.svg</file>
         <file>Bubble.svg</file>
@@ -34,13 +34,13 @@
         <file>Others.svg</file>
         <file>ProjectButtonMore.svg</file>
         <file>QGIS.svg</file>
-        <file>QR Code.svg</file>
+        <file>QRCode.svg</file>
         <file>ReachedDataLimitImage.svg</file>
         <file>Reddit.svg</file>
         <file>Search.svg</file>
         <file>Show.svg</file>
-        <file>Social media.svg</file>
-        <file>State and Local.svg</file>
+        <file>SocialMedia.svg</file>
+        <file>StateAndLocal.svg</file>
         <file>Stop.svg</file>
         <file>Subscriptions.svg</file>
         <file>Sync.svg</file>
@@ -51,9 +51,9 @@
         <file>Transportation.svg</file>
         <file>UploadImage.svg</file>
         <file>Waiting.svg</file>
-        <file>Water resources.svg</file>
-        <file>X Mark.svg</file>
-        <file>X Twitter.svg</file>
+        <file>WaterResources.svg</file>
+        <file>XMark.svg</file>
+        <file>XTwitter.svg</file>
         <file>Youtube.svg</file>
         <file>Globe.svg</file>
     </qresource>
