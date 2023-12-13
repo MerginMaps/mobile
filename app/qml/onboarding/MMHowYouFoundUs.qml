@@ -11,14 +11,17 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../components"
+import "../inputs"
 
 Page {
   id: root
 
   width: parent.width
 
+  property string selectedText: ""
+
   signal backClicked
-  signal continueClicked
+  signal continueClicked(var selectedText)
 
   readonly property string headerTitle: qsTr("How did you learn about us?")
   readonly property real hPadding: width < __style.maxPageWidth
@@ -45,7 +48,7 @@ Page {
 
   Item {
     width: parent.width
-    height: parent.height - header.height - 40 * __dp
+    height: parent.height - (listView.model.count === listView.currentIndex + 1 ? header.height + 50 * __dp : 0)
     anchors.top: header.bottom
     anchors.topMargin: 20 * __dp
 
@@ -57,6 +60,8 @@ Page {
       height: parent.height - header.height
       spacing: 10 * __dp
       clip: true
+
+      Component.onCompleted: currentIndex = -1
 
       model: ListModel {
         Component.onCompleted: {
@@ -99,7 +104,28 @@ Page {
         small: model.submenu
         checked: listView.currentIndex === index
 
-        onClicked: listView.currentIndex = index
+        onClicked: {
+          root.selectedText = model.name
+          listView.currentIndex = index
+
+          if(listView.model.count === listView.currentIndex + 1)
+            listView.positionViewAtEnd()
+        }
+      }
+
+      footer: Column {
+        width: root.width - 2 * root.hPadding
+        topPadding: 20 * __dp
+        visible: listView.model.count === listView.currentIndex + 1
+
+        MMInputEditor {
+          title: qsTr("Source")
+          placeholderText: qsTr("Please specify the source")
+          onTextChanged: root.selectedText = text
+          onVisibleChanged: if(visible) hasFocus = true
+        }
+
+        Item { width: 1; height: 60 * __dp }
       }
     }
   }
@@ -111,6 +137,6 @@ Page {
     anchors.bottomMargin: 20 * __dp
     text: qsTr("Continue")
 
-    onClicked: root.continueClicked()
+    onClicked: root.continueClicked(root.selectedText)
   }
 }

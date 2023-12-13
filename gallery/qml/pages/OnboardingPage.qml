@@ -127,10 +127,13 @@ Page {
     id: howYouFoundUs
 
     anchors.fill: parent
-    //visible: false
+    visible: false
 
-    onContinueClicked: visible = false
     onBackClicked: visible = false
+    onContinueClicked: function(selectedText) {
+      console.log("Selected: " + selectedText)
+      visible = false
+    }
   }
 
 
