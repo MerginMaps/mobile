@@ -17,14 +17,8 @@ import "../components"
 MMAbstractEditor {
   id: root
 
-  property var parentValue: parent.value
-  property bool parentValueIsNull: parent.valueIsNull ?? false
-  property bool isReadOnly: parent.readOnly ?? false
-
   property alias placeholderText: textField.placeholderText
   readonly property alias text: textField.text
-
-  signal editorValueChanged( var newValue, var isNull )
 
   hasFocus: textField.activeFocus
 
@@ -34,7 +28,6 @@ MMAbstractEditor {
     anchors.fill: parent
     anchors.verticalCenter: parent.verticalCenter
 
-    text: root.parentValue
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
     placeholderTextColor: __style.nightAlphaColor
     font: __style.p5

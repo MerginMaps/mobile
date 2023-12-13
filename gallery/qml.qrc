@@ -62,7 +62,7 @@
         <file>../app/qml/onboarding/MMLogin.qml</file>
         <file>../app/qml/onboarding/MMOnboarding.qml</file>
         <file>../app/qml/onboarding/MMSignUp.qml</file>
-        <file>../app/qml/onboarding/MMWhichIndustry.qml</file> 
+        <file>../app/qml/onboarding/MMWhichIndustry.qml</file>
         <file>../app/qml/components/MMHeader.qml</file>
         <file>../app/qml/components/MMHlineText.qml</file>
         <file>../app/qml/components/MMTextBubble.qml</file>

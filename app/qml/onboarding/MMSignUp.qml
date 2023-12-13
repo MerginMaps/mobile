@@ -16,66 +16,136 @@ import "../inputs"
 Page {
   id: root
 
+  width: parent.width
+
   signal backClicked
   signal signInClicked
   signal signUpClicked
+  signal changeServerClicked
+  signal forgotPasswordClicked
 
-  Column {
-    id: layout
-
+  // background as Drawer design
+  Rectangle {
     anchors.fill: parent
+    color: __style.whiteColor
 
-    MMHeader {
-      headerTitle: qsTr("Sign Up")
-      onBackClicked: root.backClicked()
+    Rectangle {
+      width: parent.width
+      height: 20 * __dp
+      color: __style.forestColor
     }
 
-    MMInput {
-      title: qsTr("Username")
+    Rectangle {
+      width: parent.width
+      height: 40 * __dp
+      color: __style.whiteColor
+      radius: height / 2
     }
+  }
 
-    MMPasswordInput {
-      id: password
-      title: qsTr("Password")
-      regexp: '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,})'
-      errorMsg: qsTr("Password must contain at least 6 characters\nMinimum 1 number, uppercase and lowercase letter and special character.")
-      msgShowBehaviour: MMPasswordInput.Never
-      onTextEdited: {
-          msgShowBehaviour = MMPasswordInput.OnNotMatchingRegex
+  MMHeader {
+    id: header
+
+    x: mainColumn.padding
+    y: mainColumn.padding
+    width: parent.width - 2 * mainColumn.padding
+    headerTitle: qsTr("Sign Up")
+    titleFont: __style.h3
+    backColor: __style.lightGreenColor
+
+    onBackClicked: root.backClicked()
+  }
+
+  ScrollView {
+    width: parent.width + 40 * __dp
+    height: parent.height - header.height - 40 * __dp
+    anchors.top: header.bottom
+    anchors.topMargin: 20 * __dp
+
+    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+
+    Column {
+      id: mainColumn
+
+      width: root.width
+      spacing: 20 * __dp
+      padding: 20 * __dp
+
+      MMInputEditor {
+        width: parent.width - 2 * mainColumn.padding
+        title: qsTr("Username")
+        bgColor: __style.lightGreenColor
       }
-    }
 
-    MMPasswordInput {
-      id: confirmPassword
-      title: qsTr("Confirm Password")
-      errorMsg: qsTr("Passwords do not match")
-      onTextEdited: {
-          if (password.text === confirmPassword.text)
-             msgShowBehaviour = MMPasswordInput.Never
-          else
-             msgShowBehaviour = MMPasswordInput.Always
+      MMInputEditor {
+        width: parent.width - 2 * mainColumn.padding
+        title: qsTr("Email address")
+        bgColor: __style.lightGreenColor
       }
-   }
 
-    MMCheckBox {
-      // TODO external links
-      small: false
-      text: qsTr("I accept the terms and Conditions and Privacy Policy")
-    }
+      MMPasswordEditor {
+        width: parent.width - 2 * mainColumn.padding
+        title: qsTr("Password")
+        bgColor: __style.lightGreenColor
+      }
 
-    MMButton {
-      text: qsTr("Sign up")
+      MMPasswordEditor {
+        width: parent.width - 2 * mainColumn.padding
+        title: qsTr("Confirm password")
+        bgColor: __style.lightGreenColor
+      }
 
-      onClicked: root.signUpClicked()
-    }
+      Row {
+        width: parent.width
+        spacing: 10 * __dp
 
-    MMHlineText {
-      title: qsTr("Already have an account?")
-    }
-    MMLinkButton {
-      text: qsTr("Sign in")
+        MMCheckBox {
+          id: checkbox
 
-      onClicked: root.signInClicked()
+          width: 24 * __dp
+          anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Text {
+          width: parent.width - checkbox.width - parent.spacing - 2 * mainColumn.padding
+          anchors.verticalCenter: parent.verticalCenter
+
+          text: qsTr("I accept the Mergin <a href='https://merginmaps.com'>Terms and Conditions and Privacy Policy</a>")
+          font: __style.p5
+          color: __style.nightColor
+          linkColor: __style.forestColor
+          wrapMode: Text.WordWrap
+          lineHeight: 1.5
+
+          onLinkActivated: function(link) {
+            Qt.openUrlExternally(link)
+          }
+        }
+      }
+
+      Item { width: 1; height: 1 }
+
+      MMButton {
+        width: parent.width - 2 * mainColumn.padding
+        text: qsTr("Sign up")
+
+        onClicked: root.signUpClicked()
+      }
+
+      Item { width: 1; height: 1 }
+
+      MMHlineText {
+        width: parent.width - 2 * mainColumn.padding
+        title: qsTr("Already have an account?")
+      }
+
+      MMLinkButton {
+        width: parent.width - 2 * mainColumn.padding
+        text: qsTr("Sign in")
+
+        onClicked: root.signUpClicked()
+      }
     }
   }
 }

@@ -21,24 +21,22 @@ Column {
   required property var text
   property bool colorise: false
 
-  Label {
-      text: root.text
+  Text {
+    text: root.text
   }
 
   Rectangle {
-      width: 50
-      height: 50
-      border.color: "gray"
+    width: 50
+    height: 50
+    border.color: "gray"
 
-      MMIcon {
-        id: icon
+    MMIcon {
+      id: icon
 
-        width: parent.width
-        height: parent.height
-        source: root.source
-      }
-
-
+      width: parent.width
+      height: parent.height
+      source: root.source
+    }
   }
 
   Component.onCompleted: {

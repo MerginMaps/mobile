@@ -13,10 +13,8 @@ import QtQuick.Controls
 Row {
   id: root
 
-  /* translate in parent! */
-  required property string headerTitle
-  /* -1 no step bar shown; 1, 2, 3 */
-  property int step: -1
+  property string headerTitle
+  property int step: -1 // -1 no step bar shown; 1, 2, 3
   property bool backVisible: true
   property color backColor: __style.whiteColor
   property font titleFont: __style.t4
