@@ -15,7 +15,7 @@ import "."
 CheckBox {
   id: control
 
-  required property var sourceIcon
+  property string sourceIcon: ""
   property bool small: false
 
   height: (control.small ? 50 : 80) * __dp

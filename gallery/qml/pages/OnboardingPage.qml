@@ -123,20 +123,29 @@ Page {
     onContinueClicked: visible = false
   }
 
-
   MMHowYouFoundUs {
     id: howYouFoundUs
+
     anchors.fill: parent
     visible: false
 
-    onBackClicked: {visible=false}
+    onBackClicked: visible = false
+    onContinueClicked: function(selectedText) {
+      console.log("Selected: " + selectedText)
+      visible = false
+    }
   }
 
   MMWhichIndustry {
     id: whichIndustry
+
     anchors.fill: parent
     visible: false
 
-    onBackClicked: {visible=false}
+    onBackClicked: visible = false
+    onContinueClicked: function(selectedText) {
+      console.log("Selected: " + selectedText)
+      visible = false
+    }
   }
 }

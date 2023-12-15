@@ -24,6 +24,10 @@ Page {
   signal changeServerClicked
   signal forgotPasswordClicked
 
+  readonly property real hPadding: width < __style.maxPageWidth
+                                   ? 20 * __dp
+                                   : (20 + (width - __style.maxPageWidth) / 2) * __dp
+
   // background as Drawer design
   Rectangle {
     anchors.fill: parent
@@ -46,9 +50,9 @@ Page {
   MMHeader {
     id: header
 
-    x: mainColumn.padding
-    y: mainColumn.padding
-    width: parent.width - 2 * mainColumn.padding
+    x: mainColumn.leftPadding
+    y: mainColumn.topPadding
+    width: parent.width - 2 * root.hPadding
     headerTitle: qsTr("Log In")
     titleFont: __style.h3
     backColor: __style.lightGreenColor
@@ -70,24 +74,26 @@ Page {
 
       width: root.width
       spacing: 20 * __dp
-      padding: 20 * __dp
+      leftPadding: root.hPadding
+      rightPadding: root.hPadding
+      topPadding: 20 * __dp
 
       Item { width: 1; height: 1 }
 
       MMInputEditor {
-        width: parent.width - 2 * mainColumn.padding
+        width: parent.width - 2 * root.hPadding
         title: qsTr("Username")
         bgColor: __style.lightGreenColor
       }
 
       MMPasswordEditor {
-        width: parent.width - 2 * mainColumn.padding
+        width: parent.width - 2 * root.hPadding
         title: qsTr("Password")
         bgColor: __style.lightGreenColor
       }
 
       MMLink {
-        width: parent.width - 2 * mainColumn.padding
+        width: parent.width - 2 * root.hPadding
         height: 20 * __dp
         text: qsTr("Forgot password?")
 
@@ -97,7 +103,7 @@ Page {
       Item { width: 1; height: 1 }
 
       MMButton {
-        width: parent.width - 2 * mainColumn.padding
+        width: parent.width - 2 * root.hPadding
         text: qsTr("Sign in")
 
         onClicked: root.signInClicked()
@@ -106,12 +112,12 @@ Page {
       Item { width: 1; height: 1 }
 
       MMHlineText {
-        width: parent.width - 2 * mainColumn.padding
+        width: parent.width - 2 * root.hPadding
         title: qsTr("Don't have an account?")
       }
 
       MMLinkButton {
-        width: parent.width - 2 * mainColumn.padding
+        width: parent.width - 2 * root.hPadding
         text: qsTr("Sign up")
 
         onClicked: root.signUpClicked()
@@ -136,6 +142,8 @@ Page {
 
     property string newServerUrl
 
+    width: root.width < __style.maxPageWidth ? root.width : root.width - 2 * root.hPadding
+    x: root.width < __style.maxPageWidth ? 0 : root.hPadding
     title: qsTr("Change server")
     primaryButton: qsTr("Confirm")
     visible: false

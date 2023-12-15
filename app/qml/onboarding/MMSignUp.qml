@@ -24,6 +24,10 @@ Page {
   signal changeServerClicked
   signal forgotPasswordClicked
 
+  readonly property real hPadding: width < __style.maxPageWidth
+                                   ? 20 * __dp
+                                   : (20 + (width - __style.maxPageWidth) / 2) * __dp
+
   // background as Drawer design
   Rectangle {
     anchors.fill: parent
@@ -46,9 +50,9 @@ Page {
   MMHeader {
     id: header
 
-    x: mainColumn.padding
-    y: mainColumn.padding
-    width: parent.width - 2 * mainColumn.padding
+    x: mainColumn.leftPadding
+    y: mainColumn.topPadding
+    width: parent.width - 2 * root.hPadding
     headerTitle: qsTr("Sign Up")
     titleFont: __style.h3
     backColor: __style.lightGreenColor
@@ -61,6 +65,7 @@ Page {
     height: parent.height - header.height - 40 * __dp
     anchors.top: header.bottom
     anchors.topMargin: 20 * __dp
+    anchors.bottomMargin: 20 * __dp
 
     ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
     ScrollBar.vertical.policy: ScrollBar.AlwaysOff
@@ -70,28 +75,31 @@ Page {
 
       width: root.width
       spacing: 20 * __dp
-      padding: 20 * __dp
+      leftPadding: root.hPadding
+      rightPadding: root.hPadding
+      topPadding: 20 * __dp
+      bottomPadding: 20 * __dp
 
       MMInputEditor {
-        width: parent.width - 2 * mainColumn.padding
+        width: parent.width - 2 * root.hPadding
         title: qsTr("Username")
         bgColor: __style.lightGreenColor
       }
 
       MMInputEditor {
-        width: parent.width - 2 * mainColumn.padding
+        width: parent.width - 2 * root.hPadding
         title: qsTr("Email address")
         bgColor: __style.lightGreenColor
       }
 
       MMPasswordEditor {
-        width: parent.width - 2 * mainColumn.padding
+        width: parent.width - 2 * root.hPadding
         title: qsTr("Password")
         bgColor: __style.lightGreenColor
       }
 
       MMPasswordEditor {
-        width: parent.width - 2 * mainColumn.padding
+        width: parent.width - 2 * root.hPadding
         title: qsTr("Confirm password")
         bgColor: __style.lightGreenColor
       }
@@ -108,7 +116,7 @@ Page {
         }
 
         Text {
-          width: parent.width - checkbox.width - parent.spacing - 2 * mainColumn.padding
+          width: parent.width - checkbox.width - parent.spacing - 2 * root.hPadding
           anchors.verticalCenter: parent.verticalCenter
 
           text: qsTr("I accept the Mergin <a href='https://merginmaps.com'>Terms and Conditions and Privacy Policy</a>")
@@ -127,7 +135,7 @@ Page {
       Item { width: 1; height: 1 }
 
       MMButton {
-        width: parent.width - 2 * mainColumn.padding
+        width: parent.width - 2 * root.hPadding
         text: qsTr("Sign up")
 
         onClicked: root.signUpClicked()
@@ -136,12 +144,12 @@ Page {
       Item { width: 1; height: 1 }
 
       MMHlineText {
-        width: parent.width - 2 * mainColumn.padding
+        width: parent.width - 2 * root.hPadding
         title: qsTr("Already have an account?")
       }
 
       MMLinkButton {
-        width: parent.width - 2 * mainColumn.padding
+        width: parent.width - 2 * root.hPadding
         text: qsTr("Sign in")
 
         onClicked: root.signUpClicked()

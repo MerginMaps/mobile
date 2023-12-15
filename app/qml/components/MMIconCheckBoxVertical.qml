@@ -15,8 +15,8 @@ import "."
 CheckBox {
   id: control
 
-  required property var sourceIcon
-  required property var bgColorIcon
+  property string sourceIcon: ""
+  property color bgColorIcon: __style.forestColor
 
   width: 170 * __dp
   height: 158 * __dp
