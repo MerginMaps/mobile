@@ -33,6 +33,8 @@ Item {
   property bool hasCheckbox: false
   property bool checkboxChecked: false
 
+  property real innerHeight: 50 * __dp
+
   readonly property real spacing: 15 * __dp
 
   width: parent.width
@@ -70,7 +72,7 @@ Item {
     }
 
     Item {
-      height: 50 * __dp
+      height: root.innerHeight
       anchors.left: parent.left
       anchors.right: parent.right
 
