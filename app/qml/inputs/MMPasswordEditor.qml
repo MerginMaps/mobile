@@ -18,7 +18,7 @@ MMAbstractEditor {
   id: root
 
   property alias placeholderText: textField.placeholderText
-  property alias text: textField.text
+  readonly property alias text: textField.text
 
   hasFocus: textField.activeFocus
 
