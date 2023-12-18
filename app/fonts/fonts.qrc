@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>Lato-Regular.ttf</file>
-        <file>Lato-Bold.ttf</file>
+        <file>Inter-Regular.ttf</file>
+        <file>Inter-SemiBold.ttf</file>
     </qresource>
 </RCC>

@@ -47,7 +47,7 @@ qt_add_executable(
   ${GALLERY_SRCS}
   ${GALLERY_HDRS}
   qml.qrc
-  fonts.qrc
+  ../app/fonts/fonts.qrc
   ../app/icons/icons.qrc
 )
 
@@ -61,7 +61,7 @@ qt_add_qml_module(
             qml.qrc
 )
 
-qt_add_resources(fonts.qrc)
+qt_add_resources(../app/fonts/fonts.qrc)
 
 set_target_properties(
   MerginMapsGallery

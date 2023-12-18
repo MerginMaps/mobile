@@ -161,6 +161,7 @@ set(MM_HDRS
     variablesmanager.h
     workspacesmodel.h
     workspacesproxymodel.h
+    mmstyle.h
 )
 
 if (HAVE_BLUETOOTH)
@@ -259,6 +260,7 @@ endif ()
 qt_add_resources(
   MM_SRCS
   img/pics.qrc
+  icons/icons.qrc # TODO merge with pics.qrc?
   i18n/input_i18n.qrc
   fonts/fonts.qrc
 )
@@ -542,7 +544,7 @@ endif ()
 
 add_subdirectory(qml)
 
-# register Singleton
+# register Singleton TODO REMOVE!
 set_source_files_properties(qml/InputStyle.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 # make sure the QML files are not prefixed with "qml/" in the qmldir
