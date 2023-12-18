@@ -232,7 +232,7 @@ class MMStyle: public QObject
     QUrl moreIcon() {return QUrl( "qrc:/More.svg" );}
     QUrl morePhotosIcon() {return QUrl( "qrc:/MorePhotos.svg" );}
     QUrl mouthIcon() {return QUrl( "qrc:/Mouth.svg" );}
-    QUrl naturalResourcesIcon() {return QUrl( "qrc:/Natural Resources.svg" );}
+    QUrl naturalResourcesIcon() {return QUrl( "qrc:/NaturalResources.svg" );}
     QUrl otherIcon() {return QUrl( "qrc:/Other.svg" );}
     QUrl othersIcon() {return QUrl( "qrc:/Others.svg" );}
     QUrl projectButtonMoreIcon() {return QUrl( "qrc:/ProjectButtonMore.svg" );}

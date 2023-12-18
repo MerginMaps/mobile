@@ -24,6 +24,14 @@ Page {
   signal changeServerClicked
   signal forgotPasswordClicked
 
+  property string apiRoot
+  /**
+  * Suppose to be true if auth request is pending. Then busy indicator is running and
+  * the login button is disabled.
+  */
+  //TODO!!
+  property bool pending: false
+
   readonly property real hPadding: width < __style.maxPageWidth
                                    ? 20 * __dp
                                    : (20 + (width - __style.maxPageWidth) / 2) * __dp
@@ -131,7 +139,7 @@ Page {
     width: parent.width
     height: 50 * __dp
     anchors.bottom: parent.bottom
-    text: "https://app.merginmaps.com/"
+    text: root.apiRoot
     leftIcon: __style.globeIcon
 
     onClicked: changeServerDrawer.visible = true
