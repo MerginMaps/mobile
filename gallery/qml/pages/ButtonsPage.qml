@@ -15,7 +15,7 @@ import "../../app/qml/components"
 
 Column {
   padding: 20
-  spacing: 20
+  spacing: 5
 
   GroupBox {
     title: "MMButton"
@@ -86,10 +86,14 @@ Column {
       anchors.fill: parent
       MMLink {
         text: "Tertriary"
+        width: 150
+        rightIcon: __style.arrowLinkRightIcon
         onClicked: text = (text === "Clicked" ? "Tertriary" : "Clicked")
       }
       MMLink {
         text: "Disabled"
+        rightIcon: __style.arrowLinkRightIcon
+        width: 150
         enabled: false
       }
     }
@@ -136,6 +140,28 @@ Column {
       MMRoundLinkButton {
       }
       MMRoundLinkButton {
+        enabled: false
+      }
+    }
+  }
+
+  GroupBox {
+    title: "MMBackButton"
+    background: Rectangle {
+      color: "white"
+      border.color: "gray"
+    }
+    label: Label {
+      color: "black"
+      text: parent.title
+      padding: 5
+    }
+
+    Row {
+      spacing: 10
+      anchors.fill: parent
+
+      MMBackButton {
         enabled: false
       }
     }

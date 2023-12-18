@@ -10,37 +10,46 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
+import "."
 
 CheckBox {
   id: control
 
-  checked: true
+  property string sourceIcon: ""
+  property bool small: false
+
+  height: (control.small ? 50 : 80) * __dp
 
   indicator: Rectangle {
-    implicitWidth: 24
-    implicitHeight: 24
-    x: control.leftPadding
-    y: parent.height / 2 - height / 2
-    radius: 5
-    color: enabled ? ( control.checked ? __style.grassColor: __style.whiteColor ) : __style.whiteColor
-    border.color: enabled ? ( control.checked ? __style.grassColor: __style.forestColor ) : __style.mediumGreenColor
-    border.width: control.hovered ? 2.5 : 2
+    id: iconBgRectangle
+    width: (control.small ? 24 : 40) * __dp
+    height: (control.small ? 24 : 40) * __dp
+    x: 20 * __dp
+    y: control.height / 2 - height / 2
+    radius: width / 2
+    color: control.checked ? __style.whiteColor : __style.lightGreenColor
 
     MMIcon {
       id: icon
-
+      width: (control.small ? 16 : 24) * __dp
+      height: (control.small ? 16 : 24) * __dp
       anchors.centerIn: parent
-      source: __style.checkmarkIcon
-      color: control.enabled ? __style.forestColor : __style.mediumGreenColor
-      visible: control.checked
+      source: control.sourceIcon
+      color: __style.forestColor
     }
   }
 
   contentItem: Text {
     text: control.text
-    font: __style.p5
-    color: icon.color
+    font: __style.t3
+    color: control.checked ? __style.whiteColor : __style.nightColor
     verticalAlignment: Text.AlignVCenter
-    leftPadding: control.indicator.width + control.spacing
+    leftPadding: control.indicator.width + 30 * __dp
+    rightPadding: 20 * __dp
+  }
+
+  background: Rectangle {
+    radius: __style.inputRadius
+    color: control.checked ? __style.forestColor: __style.whiteColor
   }
 }

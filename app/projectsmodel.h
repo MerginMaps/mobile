@@ -29,7 +29,7 @@ class LocalProjectsManager;
  *
  * Model can have different types that affect handling of the projects.
  *  - LocalProjectsModel always keeps all local projects and seek their mergin part when listProjectsByNameFinished
- *  - Created-, Shared-, and PublicProjectsModel does the opposite, keeps all mergin projects and seeks their local part in projects from LocalProjectsManager
+ *  - Workspace-, and PublicProjectsModel does the opposite, keeps all mergin projects and seeks their local part in projects from LocalProjectsManager
  *  - EmptyProjectsModel is default state
  *
  *  To avoid overriding of requests, model remembers last sent request ID and upon receiving signal from MerginAPI about listProjectsFinished, it firsts compares
@@ -68,15 +68,13 @@ class ProjectsModel : public QAbstractListModel
     /**
      * \brief The ProjectModelTypes enum:
      * - LocalProjectsModel always keeps all local projects and seek their mergin part when listProjectsByNameFinished
-     * - Created-, Shared-, and PublicProjectsModel does the opposite, keeps all mergin projects and seeks their local part in projects from LocalProjectsManager
+     * - Workspace-, and PublicProjectsModel does the opposite, keeps all mergin projects and seeks their local part in projects from LocalProjectsManager
      * - EmptyProjectsModel is default state
      */
     enum ProjectModelTypes
     {
       EmptyProjectsModel = 0, // default, holding no projects ~ invalid model
       LocalProjectsModel,
-      CreatedProjectsModel,
-      SharedProjectsModel,
       PublicProjectsModel,
       WorkspaceProjectsModel,
       RecentProjectsModel

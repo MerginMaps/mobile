@@ -1,3 +1,5 @@
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -6,7 +8,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 import QtCore
 import QtQuick
 import QtQuick.Layouts
@@ -90,7 +91,7 @@ ApplicationWindow {
         onClicked: {
           window.currentPageSource = model.source
           listView.currentIndex = index
-          if( __isMobile )
+          if (__isMobile)
             stackView.push("qrc:/qml/pages/" + model.source)
           else
             stackView.push("file://" + _qmlWrapperPath + model.source)
@@ -105,8 +106,20 @@ ApplicationWindow {
           source: "InitialGalleryPage.qml"
         }
         ListElement {
+          title: "Style"
+          source: "StylePage.qml"
+        }
+        ListElement {
+          title: "Icons"
+          source: "IconsPage.qml"
+        }
+        ListElement {
           title: "Buttons"
           source: "ButtonsPage.qml"
+        }
+        ListElement {
+          title: "Editors"
+          source: "EditorsPage.qml"
         }
         ListElement {
           title: "Inputs"
@@ -133,12 +146,28 @@ ApplicationWindow {
           source: "DrawerPage.qml"
         }
         ListElement {
+          title: "Photos"
+          source: "PhotosPage.qml"
+        }
+        ListElement {
           title: "Map"
           source: "MapPage.qml"
         }
         ListElement {
           title: "Toolbars"
           source: "ToolbarPage.qml"
+        }
+        ListElement {
+          title: "Project items"
+          source: "ProjectItemsPage.qml"
+        }
+        ListElement {
+          title: "Misc"
+          source: "MiscPage.qml"
+        }
+        ListElement {
+          title: "Onboarding"
+          source: "OnboardingPage.qml"
         }
       }
 
@@ -152,7 +181,7 @@ ApplicationWindow {
 
     initialItem: Loader {
       id: mainLoader
-      source: ( __isMobile ? "qrc:/qml/pages/" : ("file://" + _qmlWrapperPath ) ) + currentPageSource
+      source: (__isMobile ? "qrc:/qml/pages/" : ("file://" + _qmlWrapperPath)) + currentPageSource
       scale: 1.0
     }
   }
