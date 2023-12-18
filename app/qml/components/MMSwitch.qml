@@ -16,9 +16,19 @@ Switch {
 
   property string textOn
   property string textOff
+  property bool visibleText: true
 
   contentItem: Text {
-    text: (control.textOn.length > 0 && control.textOff.length > 0) ? (control.checked ? control.textOn : control.textOff) : control.text
+    text: {
+      if(control.visibleText) {
+        if(control.textOn.length > 0 && control.textOff.length > 0) {
+          if(control.checked)
+            return control.textOn
+          return control.textOff
+        }
+        return control.text
+      }
+    }
     font: __style.p5
     color: control.enabled ? __style.forestColor : __style.mediumGreenColor
     verticalAlignment: Text.AlignVCenter

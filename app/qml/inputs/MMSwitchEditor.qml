@@ -17,37 +17,42 @@ import "../components"
 MMAbstractEditor {
   id: root
 
-  property alias placeholderText: textField.placeholderText
-  property alias text: textField.text
+  property var parentValue: parent.value ?? false
+  property bool parentValueIsNull: parent.valueIsNull ?? false
+  property bool isReadOnly: parent.readOnly ?? false
 
-  hasFocus: textField.activeFocus
+  property string textOn: qsTr("True")
+  property string textOff: qsTr("False")
+  property alias checked: rightSwitch.checked
 
-  content: TextField {
+  signal editorValueChanged( var newValue, var isNull )
+
+  hasFocus: rightSwitch.focus
+
+  content: Text {
     id: textField
 
-    anchors.fill: parent
+    width: parent.width + rightSwitch.x
     anchors.verticalCenter: parent.verticalCenter
 
+    text: root.checked ? root.textOn : root.textOff
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
-    placeholderTextColor: __style.nightAlphaColor
     font: __style.p5
-    hoverEnabled: true
-    echoMode: eyeButton.pressed ? TextInput.Normal : TextInput.Password
-    background: Rectangle {
-      color: __style.transparentColor
-    }
+    elide: Text.ElideRight
   }
 
-  rightAction: MMIcon {
-    id: eyeButton
+  rightAction: MMSwitch {
+    id: rightSwitch
 
-    property bool pressed: false
-
+    width: 50
     height: parent.height
+    x: -30 * __dp
 
-    source: pressed ? __style.hideIcon : __style.showIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    checked: root.checked
+    textOn: root.textOn
+    textOff: root.textOff
+    visibleText: false
+
+    onCheckedChanged: focus = true
   }
-
-  onRightActionClicked: eyeButton.pressed = !eyeButton.pressed
 }
