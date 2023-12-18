@@ -70,9 +70,17 @@ ScrollView {
           warningMsg: text.length > 0 ? "" : "Write something"
         }
 
+        MMTextAreaEditor {
+          title: "MMTextAreaEditor"
+          placeholderText: "Place for multi row text"
+          enabled: checkbox.checked
+          width: parent.width
+          warningMsg: text.length > 0 ? "" : "Write something"
+        }
+
         MMPasswordEditor {
           title: "MMPasswordEditor"
-          parentValue: "Password"
+          text: "Password"
           //regexp: '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,})'
           errorMsg: "Password must contain at least 6 characters\nMinimum 1 number, uppercase and lowercase letter and special character"
           enabled: checkbox.checked
