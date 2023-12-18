@@ -544,8 +544,7 @@ endif ()
 
 add_subdirectory(qml)
 
-# register Singleton
-# TODO REMOVE!
+# register Singleton TODO REMOVE!
 set_source_files_properties(qml/InputStyle.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 # make sure the QML files are not prefixed with "qml/" in the qmldir
