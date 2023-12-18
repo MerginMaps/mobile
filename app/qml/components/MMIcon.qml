@@ -14,7 +14,7 @@ Item {
   id: control
 
   property alias source: icon.source
-  property alias color: color.color
+  property alias color: overlay.color
 
   width: icon.implicitWidth
   height: icon.implicitHeight
@@ -27,7 +27,7 @@ Item {
   }
 
   ColorOverlay {
-    id: color
+    id: overlay
 
     anchors.fill: icon
     source: icon
