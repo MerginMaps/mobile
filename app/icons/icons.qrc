@@ -56,5 +56,8 @@
         <file>XTwitter.svg</file>
         <file>Youtube.svg</file>
         <file>Globe.svg</file>
+        <file>Global.svg</file>
+        <file>Home.svg</file>
+        <file>Projects.svg</file>
     </qresource>
 </RCC>

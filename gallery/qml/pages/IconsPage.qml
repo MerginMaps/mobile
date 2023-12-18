@@ -94,8 +94,22 @@ ScrollView {
           source: __style.errorIcon
         }
         IconBox {
+          text: "globeIcon"
+          source: __style.globeIcon
+        }
+        IconBox {
+          text: "globalIcon"
+          source: __style.globalIcon
+          colorise: true
+        }
+        IconBox {
           text: "hideIcon"
           source: __style.hideIcon
+        }
+        IconBox {
+          text: "homeIcon"
+          source: __style.homeIcon
+          colorise: true
         }
         IconBox {
           text: "infoIcon"
@@ -114,6 +128,11 @@ ScrollView {
         IconBox {
           text: "projectButtonMoreIcon"
           source: __style.projectButtonMoreIcon
+        }
+        IconBox {
+          text: "projectsIcon"
+          source: __style.projectsIcon
+          colorise: true
         }
         IconBox {
           text: "qrCodeIcon"
@@ -143,10 +162,6 @@ ScrollView {
         IconBox {
           text: "xMarkIcon"
           source: __style.xMarkIcon
-        }
-        IconBox {
-          text: "globeIcon"
-          source: __style.globeIcon
         }
       }
     }

@@ -16,6 +16,46 @@ import "../../app/qml/"
 Page {
   id: pane
 
+  MMSelectableToolbar {
+    id: selectableToolbar
+
+    Component.onCompleted: index = 1
+
+    model: ObjectModel {
+      MMSelectableToolbarButton {
+        width: Math.floor((pane.width - 40 * __dp) / 3)
+        text: "Home"
+        iconSource: __style.homeIcon
+        checked: selectableToolbar.index === 0
+        onClicked: {
+          selectableToolbar.index = 0
+          console.log("tapped "+text)
+        }
+      }
+      MMSelectableToolbarButton {
+        width: Math.floor((pane.width - 40 * __dp) / 3)
+        text: "Projects"
+        iconSource: __style.projectsIcon
+        checked: selectableToolbar.index === 1
+        onClicked: {
+          selectableToolbar.index = 1
+          console.log("tapped "+text)
+        }
+      }
+      MMSelectableToolbarButton {
+        width: Math.floor((pane.width - 40 * __dp) / 3)
+        text: "Explore"
+        iconSource: __style.globalIcon
+        checked: selectableToolbar.index === 2
+        onClicked: {
+          selectableToolbar.index = 2
+          console.log("tapped "+text)
+        }
+      }
+    }
+    anchors.bottomMargin: 480 * __dp
+  }
+
   MMToolbar {
     model: ObjectModel {
       MMToolbarLongButton { text: "Long button"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
