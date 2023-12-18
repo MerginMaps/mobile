@@ -138,7 +138,6 @@ set(MM_QML
     misc/NoWorkspaceBanner.qml
     misc/PositionProviderPage.qml
     AboutPanel.qml
-    AuthPanel.qml
     Banner.qml
     ChangelogPanel.qml
     CircularProgressBar.qml
@@ -152,7 +151,7 @@ set(MM_QML
     FormsStackManager.qml
     InputStyle.qml
     LogPanel.qml
-    LoginForm.qml
+    MainPanel.qml
     ManageInvitationsPage.qml
     MapThemePanel.qml
     Notification.qml
@@ -167,7 +166,6 @@ set(MM_QML
     ProjectPanel.qml
     ProjectStatusPanel.qml
     ProjectWizardPage.qml
-    RegistrationForm.qml
     RegistrationFinishPage.qml
     RoundIndicator.qml
     SearchBar.qml
