@@ -80,6 +80,14 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor shadowColor READ shadowColor CONSTANT )
 
     // Icons
+    Q_PROPERTY( QUrl addIcon READ addIcon CONSTANT )
+    Q_PROPERTY( QUrl homeIcon READ homeIcon CONSTANT )
+    Q_PROPERTY( QUrl layersIcon READ layersIcon CONSTANT )
+    Q_PROPERTY( QUrl localChangesIcon READ localChangesIcon CONSTANT )
+    Q_PROPERTY( QUrl mapThemesIcon READ mapThemesIcon CONSTANT )
+    Q_PROPERTY( QUrl positionTrackingIcon READ positionTrackingIcon CONSTANT )
+    Q_PROPERTY( QUrl zoomToProjectIcon READ zoomToProjectIcon CONSTANT )
+    Q_PROPERTY( QUrl settingsIcon READ settingsIcon CONSTANT )
     Q_PROPERTY( QUrl archaeologyIcon READ archaeologyIcon CONSTANT )
     Q_PROPERTY( QUrl arrowDownIcon READ arrowDownIcon CONSTANT )
     Q_PROPERTY( QUrl arrowLinkRightIcon READ arrowLinkRightIcon CONSTANT )
@@ -121,6 +129,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl stopIcon READ stopIcon CONSTANT )
     Q_PROPERTY( QUrl subscriptionsIcon READ subscriptionsIcon CONSTANT )
     Q_PROPERTY( QUrl syncIcon READ syncIcon CONSTANT )
+    Q_PROPERTY( QUrl syncGreenIcon READ syncGreenIcon CONSTANT )
     Q_PROPERTY( QUrl teacherIcon READ teacherIcon CONSTANT )
     Q_PROPERTY( QUrl telecommunicationIcon READ telecommunicationIcon CONSTANT )
     Q_PROPERTY( QUrl termsIcon READ termsIcon CONSTANT )
@@ -204,6 +213,14 @@ class MMStyle: public QObject
     QColor errorBgInputColor() {return QColor::fromString( "#FEFAF9" );}
     QColor shadowColor() {return QColor::fromString( "#66777777" );}
 
+    QUrl addIcon() {return QUrl( "qrc:/Add.svg" );}
+    QUrl layersIcon() {return QUrl( "qrc:/Layers.svg" );}
+    QUrl homeIcon() {return QUrl( "qrc:/Home.svg" );}
+    QUrl localChangesIcon() {return QUrl( "qrc:/LocalChanges.svg" );}
+    QUrl mapThemesIcon() {return QUrl( "qrc:/MapThemes.svg" );}
+    QUrl positionTrackingIcon() {return QUrl( "qrc:/PositionTracking.svg" );}
+    QUrl settingsIcon() {return QUrl( "qrc:/Settings.svg" );}
+    QUrl zoomToProjectIcon() {return QUrl( "qrc:/ZoomToProject.svg" );}
     QUrl archaeologyIcon() {return QUrl( "qrc:/Archaeology.svg" );}
     QUrl arrowDownIcon() {return QUrl( "qrc:/ArrowDown.svg" );}
     QUrl arrowLinkRightIcon() {return QUrl( "qrc:/ArrowLinkRight.svg" );}
@@ -246,6 +263,7 @@ class MMStyle: public QObject
     QUrl stopIcon() {return QUrl( "qrc:/Stop.svg" );}
     QUrl subscriptionsIcon() {return QUrl( "qrc:/Subscriptions.svg" );}
     QUrl syncIcon() {return QUrl( "qrc:/Sync.svg" );}
+    QUrl syncGreenIcon() {return QUrl( "qrc:/SyncGreen.svg" );}
     QUrl teacherIcon() {return QUrl( "qrc:/Teacher.svg" );}
     QUrl telecommunicationIcon() {return QUrl( "qrc:/Telecommunication.svg" );}
     QUrl termsIcon() {return QUrl( "qrc:/Terms.svg" );}
