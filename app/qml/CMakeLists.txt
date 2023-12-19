@@ -153,7 +153,6 @@ set(MM_QML
     InputStyle.qml
     LogPanel.qml
     LoginForm.qml
-    MainPanel.qml
     ManageInvitationsPage.qml
     MapThemePanel.qml
     Notification.qml
