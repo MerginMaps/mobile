@@ -10,44 +10,71 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import "../components"
 
 MMAbstractEditor {
   id: root
 
   property alias placeholderText: textField.placeholderText
-  property alias text: textField.text
+  property int number: 0
+
+  signal editorValueChanged( var newValue, var isNull )
 
   hasFocus: textField.activeFocus
+
+  leftAction: MMIcon {
+    id: leftIcon
+
+    height: parent.height
+
+    source: __style.minusIcon
+    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+  }
 
   content: TextField {
     id: textField
 
     anchors.fill: parent
-    anchors.verticalCenter: parent.verticalCenter
 
+    text: root.number
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
     placeholderTextColor: __style.nightAlphaColor
     font: __style.p5
     hoverEnabled: true
-    echoMode: eyeButton.pressed ? TextInput.Normal : TextInput.Password
+    horizontalAlignment: TextInput.AlignHCenter
+    inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+    // taking care to show numbers only
+    onTextChanged: {
+      const newNumber = parseInt(textField.text, 10)
+
+      if(textField.text === "" || textField.text === "-") {
+        root.number = 0
+        textField.text = ""
+        return
+      }
+
+      if(Number.isInteger(newNumber)) {
+        root.number = newNumber
+      }
+      textField.text = root.number
+      console.log(newNumber)
+    }
+
     background: Rectangle {
       color: __style.transparentColor
     }
   }
 
   rightAction: MMIcon {
-    id: eyeButton
-
-    property bool pressed: false
+    id: rightIcon
 
     height: parent.height
 
-    source: pressed ? __style.hideIcon : __style.showIcon
+    source: __style.plusIcon
     color: root.enabled ? __style.forestColor : __style.mediumGreenColor
   }
 
-  onRightActionClicked: eyeButton.pressed = !eyeButton.pressed
+  onLeftActionClicked: { textField.forceActiveFocus(); textField.text = --root.number }
+  onRightActionClicked: { textField.forceActiveFocus(); textField.text = ++root.number }
 }
