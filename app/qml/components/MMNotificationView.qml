@@ -39,7 +39,7 @@ Item {
     height: contentHeight
     spacing: 3 * __dp
     clip: true
-    model: notificationModel
+    model: __notificationModel
     delegate: MMNotification {
 
     }

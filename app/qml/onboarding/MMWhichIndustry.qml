@@ -13,6 +13,8 @@ import QtQuick.Controls
 import "../components"
 import "../inputs"
 
+import notificationType 1.0
+
 Page {
   id: root
 
@@ -21,12 +23,14 @@ Page {
   property string selectedText: ""
 
   signal backClicked
-  signal continueClicked(var selectedText)
+  signal industrySelected(var selectedText)
 
   readonly property string headerTitle: qsTr("In which industry do you work?")
   readonly property real hPadding: width < __style.maxPageWidth
                                    ? 20 * __dp
                                    : (20 + (width - __style.maxPageWidth) / 2) * __dp
+
+  readonly property string specifyIndustryText : qsTr("Please specify the industry")
 
   Rectangle {
     anchors.fill: parent
@@ -110,11 +114,14 @@ Page {
         checked: listView.currentIndex === index
 
         onClicked: {
-          root.selectedText = model.name
           listView.currentIndex = index
-
-          if(listView.model.count === listView.currentIndex + 1)
+          if(listView.model.count === listView.currentIndex + 1) {
             listView.positionViewAtEnd()
+            // for other you need to type string
+            root.selectedText = ""
+          } else {
+            root.selectedText = model.name
+          }
         }
       }
 
@@ -125,7 +132,7 @@ Page {
 
         MMInputEditor {
           title: qsTr("Source")
-          placeholderText: qsTr("Please specify the source")
+          placeholderText: root.specifyIndustryText
           onTextChanged: root.selectedText = text
           onVisibleChanged: if(visible) hasFocus = true
         }
@@ -142,6 +149,17 @@ Page {
     anchors.bottomMargin: 20 * __dp
     text: qsTr("Continue")
 
-    onClicked: root.continueClicked(root.selectedText)
+    onClicked: {     
+      if (root.selectedText.length > 0 ) {
+        root.industrySelected(root.selectedText)
+      } else {
+        __notificationModel.add(
+          root.specifyIndustryText,
+          3,
+          NotificationType.Error,
+          NotificationType.None
+        )
+      }
+    }
   }
 }

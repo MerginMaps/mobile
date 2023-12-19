@@ -12,6 +12,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import "../../app/qml/onboarding"
+import "../../app/qml/components"
+import notificationType 1.0
 
 Page {
   id: pane
@@ -80,14 +82,25 @@ Page {
 
   MMLogin {
     id: login
+    apiRoot: "app.merginmaps.com"
+    warningMsg: "This is warning message like server offline"
 
     anchors.fill: parent
     visible: false
 
-    onSignInClicked: console.log("Sign in clicked")
+    onSignInClicked: function(username, password) {
+      pending = true
+      console.log("Sign in clicked: " + username + " ; " + password)
+    }
     onSignUpClicked: console.log("Sign up clicked")
-    onChangeServerClicked: console.log("Change server clicked")
-    onBackClicked: visible = false
+    onChangeServerClicked: function (newServer) {
+      console.log("Change server clicked: " + newServer)
+    }
+    onBackClicked: {
+      pending = false
+      visible = false
+    }
+    onForgotPasswordClicked: console.log("Forgot password clicked")
   }
 
   MMSignUp {
@@ -96,9 +109,14 @@ Page {
     anchors.fill: parent
     visible: false
 
+    tocString: "Please read our Terms and Conditions"
+
     onSignInClicked: console.log("Sign in clicked")
-    onSignUpClicked: console.log("Sign up clicked")
+    onSignUpClicked: function(username, email, password, passwordConfirm, tocAccept, newsletterSubscribe) {
+      console.log("Sign up clicked: " + username + ";" +  email + ";" + password + ";" + passwordConfirm + ";" + tocAccept + ";" + newsletterSubscribe)
+    }
     onBackClicked: visible = false
+
   }
 
   MMAcceptInvitation {
@@ -108,9 +126,12 @@ Page {
     visible: false
     user: "Lubos"
     workspace: "my-workspace.funny"
+    workspaceUuid: "86c4c459-bb7b-4baa-b5d1-690fb05a9310"
+    haveBack: true
+    showCreate: true
 
     onBackClicked: visible = false
-    onContinueClicked: console.log("Join workspace clicked")
+    onJoinWorkspaceClicked: function(workspaceUuid) { console.log("Join workspace clicked " + workspaceUuid) }
     onCreateWorkspaceClicked: console.log("Create new workspace clicked")
   }
 
@@ -120,7 +141,10 @@ Page {
     anchors.fill: parent
     visible: false
 
-    onContinueClicked: visible = false
+    onCreateWorkspaceClicked: function (name) {
+      visible = false
+      console.log("Create workspace clicked " + name)
+    }
   }
 
   MMHowYouFoundUs {
@@ -130,8 +154,8 @@ Page {
     visible: false
 
     onBackClicked: visible = false
-    onContinueClicked: function(selectedText) {
-      console.log("Selected: " + selectedText)
+    onHowYouFoundUsSelected: function(selectedText) {
+      console.log("Selected how you found us: " + selectedText)
       visible = false
     }
   }
@@ -143,9 +167,11 @@ Page {
     visible: false
 
     onBackClicked: visible = false
-    onContinueClicked: function(selectedText) {
-      console.log("Selected: " + selectedText)
+    onIndustrySelected: function(selectedText) {
+      console.log("Selected industry: " + selectedText)
       visible = false
     }
   }
+
+  MMNotificationView {}
 }

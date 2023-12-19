@@ -18,6 +18,8 @@
 #include <QFont>
 #include <QFontDatabase>
 #include "notificationmodel.h"
+#include "merginerrortypes.h"
+
 int main( int argc, char *argv[] )
 {
   QGuiApplication app( argc, argv );
@@ -25,6 +27,10 @@ int main( int argc, char *argv[] )
   app.setFont( QFont( Helper::installFonts() ) );
 
   QQmlApplicationEngine engine;
+
+  // Register C++ enums
+  qmlRegisterUncreatableType<RegistrationError>( "lc", 1, 0, "RegistrationError", "RegistrationError Enum" );
+
 
 #ifdef DESKTOP_OS
   HotReload hotReload( engine );
@@ -35,7 +41,8 @@ int main( int argc, char *argv[] )
   MMStyle style( dp );
   NotificationModel notificationModel;
 
-  engine.rootContext()->setContextProperty( "notificationModel", &notificationModel );
+  engine.rootContext()->setContextProperty( "__notificationModel", &notificationModel );
+
   // path to local wrapper pages
   engine.rootContext()->setContextProperty( "_qmlWrapperPath", QGuiApplication::applicationDirPath() + "/HotReload/qml/pages/" );
   engine.rootContext()->setContextProperty( "__dp", dp );

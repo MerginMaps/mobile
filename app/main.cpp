@@ -33,7 +33,7 @@
 #include "qgsmaplayerproxymodel.h"
 #include "qgsnetworkaccessmanager.h"
 #include "geodiffutils.h"
-
+#include "merginerrortypes.h"
 #include "androidutils.h"
 #include "ios/iosutils.h"
 #include "inpututils.h"
@@ -71,6 +71,7 @@
 #include "qgsvectorlayer.h"
 #include "qgsunittypes.h"
 #include "mmstyle.h"
+#include "notificationmodel.h"
 
 #include "rememberattributescontroller.h"
 #include "attributecontroller.h"
@@ -498,6 +499,7 @@ int main( int argc, char *argv[] )
   MerginProjectStatusModel mpsm( localProjectsManager );
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );
+  NotificationModel notificationModel;
 
   // layer models
   LayersModel lm;
@@ -614,6 +616,7 @@ int main( int argc, char *argv[] )
 
 
   // Register to QQmlEngine
+  engine.rootContext()->setContextProperty( "__notificationModel", &notificationModel );
   engine.rootContext()->setContextProperty( "__androidUtils", &au );
   engine.rootContext()->setContextProperty( "__iosUtils", &iosUtils );
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );

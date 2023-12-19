@@ -71,12 +71,16 @@ set(MM_QML
     components/MMToolbarButton.qml
     components/MMToolbarLongButton.qml
     components/MMToolbarMenuButton.qml
+    components/MMWarningBubble.qml
     onboarding/MMAcceptInvitation.qml
     onboarding/MMCreateWorkspace.qml
     onboarding/MMHowYouFoundUs.qml
     onboarding/MMLogin.qml
     onboarding/MMSignUp.qml
     onboarding/MMWhichIndustry.qml
+    onboarding/MMOnboardingController.qml
+    onboarding/MMCreateWorkspaceController.qml
+    onboarding/MMAcceptInvitationController.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
     dialogs/NoPermissionsDialog.qml

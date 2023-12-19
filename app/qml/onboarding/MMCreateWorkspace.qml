@@ -16,11 +16,16 @@ import "../inputs"
 Page {
   id: root
 
-  signal continueClicked
+  signal createWorkspaceClicked(string name)
 
   readonly property real hPadding: width < __style.maxPageWidth
                                    ? 20 * __dp
                                    : (20 + (width - __style.maxPageWidth) / 2) * __dp
+
+  // show error message under the respective field
+  function showErrorMessage( msg ) {
+    workspaceName.errorMsg = msg
+  }
 
   Rectangle {
     anchors.fill: parent
@@ -81,6 +86,7 @@ Page {
       Item { width: 1; height: 1 }
 
       MMInputEditor {
+        id: workspaceName
         width: parent.width - 2 * root.hPadding
         title: qsTr("Workspace name")
         placeholderText: qsTr("Your Workspace")
@@ -101,15 +107,21 @@ Page {
 
     MMTextBubble {
       width: root.width - 2 * root.hPadding
-      title: "Tip from Mergin Maps"
-      description: "A good candidate for a workspace name is the name of your team or organisation"
+      title: qsTr("Tip from Mergin Maps")
+      description: qsTr("A good candidate for a workspace name is the name of your team or organisation")
     }
 
     MMButton {
       width: parent.width - 2 * root.hPadding
       text: qsTr("Create workspace")
 
-      onClicked: root.continueClicked()
+      onClicked: {
+        if (workspaceName.text.length > 0 ) {
+          root.createWorkspaceClicked(workspaceName.text)
+        } else {
+          showErrorMessage(qsTr("Workspace name cannot be empty."))
+        }
+      }
     }
   }
 }

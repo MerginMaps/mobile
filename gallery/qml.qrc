@@ -70,5 +70,6 @@
         <file>../app/qml/components/MMIconCheckBoxVertical.qml</file>
         <file>../app/qml/inputs/MMNumberEditor.qml</file>
         <file>../app/qml/inputs/MMButtonInputEditor.qml</file>
+        <file>../app/qml/components/MMWarningBubble.qml</file>
     </qresource>
 </RCC>

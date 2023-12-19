@@ -25,6 +25,7 @@
 #include "geodiffutils.h"
 #include "localprojectsmanager.h"
 #include "../app/enumhelper.h"
+#include "merginerrortypes.h"
 
 #include <geodiff.h>
 
@@ -876,6 +877,42 @@ void MerginApi::registerUser( const QString &username,
   CoreUtils::log( "auth", QStringLiteral( "Requesting registration: " ) + url.toString() );
 }
 
+void MerginApi::postRegisterUser( const QString &marketingChannel, const QString &industry, bool wantsNewsletter )
+{
+  // Some very basic checks, so we do not validate everything
+  if ( marketingChannel.isEmpty() || industry.isEmpty() )
+  {
+    QString msg = tr( "Marketing source cannot be empty" );
+    emit postRegistrationFailed( msg );
+    return;
+  }
+
+  // Some very basic checks, so we do not validate everything
+  if ( industry.isEmpty() )
+  {
+    QString msg = tr( "Industry cannot be empty" );
+    emit postRegistrationFailed( msg );
+    return;
+  }
+  // request
+  QNetworkRequest request = getDefaultRequest( false );
+  QString urlString = mApiRoot + QStringLiteral( "v1/post-register" );
+  QUrl url( urlString );
+  request.setUrl( url );
+  request.setRawHeader( "Content-Type", "application/json" );
+
+  QJsonDocument jsonDoc;
+  QJsonObject jsonObject;
+  jsonObject.insert( QStringLiteral( "industry" ), industry );
+  jsonObject.insert( QStringLiteral( "marketing_channel" ), marketingChannel );
+  jsonObject.insert( QStringLiteral( "subscribe" ), wantsNewsletter );
+  jsonDoc.setObject( jsonObject );
+  QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
+  QNetworkReply *reply = mManager.post( request, json );
+  connect( reply, &QNetworkReply::finished, this, [ = ]() { this->postRegistrationFinished(); } );
+  CoreUtils::log( "auth", QStringLiteral( "Requesting post-registration: " ) + url.toString() );
+}
+
 void MerginApi::getUserInfo()
 {
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
@@ -1289,6 +1326,32 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
       emit registrationFailed( msg, RegistrationError::RegistrationErrorType::OTHER );
       emit networkErrorOccurred( serverMsg, msg );
     }
+  }
+  r->deleteLater();
+}
+
+void MerginApi::postRegistrationFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( "post-register", QStringLiteral( "Success" ) );
+    QString msg = tr( "Workspace created" );
+    emit notify( msg );
+    emit postRegistrationSucceeded();
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    CoreUtils::log( "post-register", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+    QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
+    int status = statusCode.toInt();
+    emit postRegistrationFailed( QStringLiteral( "Post-registation failed %1" ).arg( serverMsg ) );
+
+    QString msg = tr( "Unable to send post registration information" );
+    emit notify( msg );
   }
   r->deleteLater();
 }
