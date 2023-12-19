@@ -151,7 +151,6 @@ set(MM_QML
     FormsStackManager.qml
     InputStyle.qml
     LogPanel.qml
-    MainPanel.qml
     ManageInvitationsPage.qml
     MapThemePanel.qml
     Notification.qml
