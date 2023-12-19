@@ -27,15 +27,15 @@ MMAbstractEditor {
   signal editorValueChanged( var newValue, var isNull )
 
   hasFocus: textArea.activeFocus
-  innerHeight: textArea.vertSpace + textArea.contentHeight + 2 * textArea.vertSpace
+  contentItemHeight: textArea.y + textArea.contentHeight + 2 * textArea.verticalPadding
 
   content: TextArea {
     id: textArea
 
-    property real vertSpace: 11 * __dp
+    property real verticalPadding: 11 * __dp
 
-    y: textArea.vertSpace
-    height: contentHeight + textArea.vertSpace
+    y: textArea.verticalPadding
+    height: contentHeight + textArea.verticalPadding
     width: parent.width
 
     hoverEnabled: true
