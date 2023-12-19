@@ -10,23 +10,68 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import lc 1.0
+
 import "../components"
 import "../inputs"
 
 Page {
   id: root
 
-  width: parent.width
+  // width: parent.width
+
+  /**
+  * Suppose to be true if register request is pending. Then busy indicator is running and
+  * the sign up button is disabled.
+  */
+  //TODO!!
+  property bool pending: false
 
   signal backClicked
   signal signInClicked
-  signal signUpClicked
-  signal changeServerClicked
-  signal forgotPasswordClicked
+  signal signUpClicked ( string username, string email, string password, string passwordConfirm, bool tocAccept )
 
+  required property string tocString
   readonly property real hPadding: width < __style.maxPageWidth
                                    ? 20 * __dp
                                    : (20 + (width - __style.maxPageWidth) / 2) * __dp
+
+  // show error message under the respective field
+  function showErrorMessage( msg, field ) {
+
+    // clear previous error messages
+    username.errorMsg = ""
+    email.errorMsg = ""
+    password.errorMsg = ""
+    passwordConfirm.errorMsg = ""
+    tocAccept.errorMsg = ""
+    // TODO errorText.text = ""
+
+    if( field === RegistrationError.USERNAME ) {
+      username.errorMsg = msg
+      username.focus = true
+    }
+    else if( field === RegistrationError.EMAIL ) {
+      email.errorMsg = msg
+      email.focus = true
+    }
+    else if( field === RegistrationError.PASSWORD ) {
+      password.errorMsg = msg
+      password.focus = true
+    }
+    else if( field === RegistrationError.CONFIRM_PASSWORD ) {
+      passwordConfirm.errorMsg = msg
+      passwordConfirm.focus = true
+    }
+    else if( field === RegistrationError.TOC ) {
+      tocAccept.errorMsg = msg
+      tocAccept.focus = true
+    }
+    else if( field === RegistrationError.OTHER ) {
+      // TODO where to show
+      console.log("error " + msg)
+    }
+  }
 
   // background as Drawer design
   Rectangle {
@@ -81,24 +126,28 @@ Page {
       bottomPadding: 20 * __dp
 
       MMInputEditor {
+        id: username
         width: parent.width - 2 * root.hPadding
         title: qsTr("Username")
         bgColor: __style.lightGreenColor
       }
 
       MMInputEditor {
+        id: email
         width: parent.width - 2 * root.hPadding
         title: qsTr("Email address")
         bgColor: __style.lightGreenColor
       }
 
       MMPasswordEditor {
+        id: password
         width: parent.width - 2 * root.hPadding
         title: qsTr("Password")
         bgColor: __style.lightGreenColor
       }
 
       MMPasswordEditor {
+        id: passwordConfirm
         width: parent.width - 2 * root.hPadding
         title: qsTr("Confirm password")
         bgColor: __style.lightGreenColor
@@ -109,17 +158,17 @@ Page {
         spacing: 10 * __dp
 
         MMCheckBox {
-          id: checkbox
+          id: tocAccept
 
           width: 24 * __dp
           anchors.verticalCenter: parent.verticalCenter
         }
 
         Text {
-          width: parent.width - checkbox.width - parent.spacing - 2 * root.hPadding
+          width: parent.width - tocAccept.width - parent.spacing - 2 * root.hPadding
           anchors.verticalCenter: parent.verticalCenter
 
-          text: qsTr("I accept the Mergin <a href='https://merginmaps.com'>Terms and Conditions and Privacy Policy</a>")
+          text: root.tocString
           font: __style.p5
           color: __style.nightColor
           linkColor: __style.forestColor
@@ -137,8 +186,16 @@ Page {
       MMButton {
         width: parent.width - 2 * root.hPadding
         text: qsTr("Sign up")
-
-        onClicked: root.signUpClicked()
+        enabled: !pending
+        onClicked: {
+          root.signUpClicked(
+                username.text,
+                email.text,
+                password.text,
+                passwordConfirm.text,
+                tocAccept.checked
+          )
+        }
       }
 
       Item { width: 1; height: 1 }
@@ -151,8 +208,9 @@ Page {
       MMLinkButton {
         width: parent.width - 2 * root.hPadding
         text: qsTr("Sign in")
+        enabled: !pending
 
-        onClicked: root.signUpClicked()
+        onClicked: root.signInClicked()
       }
     }
   }

@@ -600,7 +600,7 @@ int main( int argc, char *argv[] )
     else
       qDebug() << "Loaded font" << font;
   }
-  app.setFont( QFont( "Lato" ) );
+  app.setFont( QFont( "Inter" ) );
 
   QQuickStyle::setStyle( "Basic" );
   QQmlEngine engine;

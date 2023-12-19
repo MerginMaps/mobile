@@ -200,7 +200,7 @@ ApplicationWindow {
 
       onSignInRequested: {
         stateManager.state = "projects"
-        projectPanel.openAuthPanel()
+        projectPanel.openLoginPage()
       }
 
       onLocalChangesPanelRequested: {
