@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file>AcceptInvitationImage.svg</file>
         <file>AcceptInvitationLogoImage.svg</file>
+        <file>Add.svg</file>
         <file>Archaeology.svg</file>
         <file>ArrowDown.svg</file>
         <file>ArrowLinkRight.svg</file>
@@ -22,16 +23,22 @@
         <file>Environmental.svg</file>
         <file>Error.svg</file>
         <file>Facebook.svg</file>
+        <file>Globe.svg</file>
         <file>Hide.svg</file>
+        <file>Home.svg</file>
         <file>Info.svg</file>
+        <file>Layers.svg</file>
         <file>Linkedin.svg</file>
+        <file>LocalChanges.svg</file>
         <file>Mastodon.svg</file>
+        <file>MapThemes.svg</file>
         <file>More.svg</file>
         <file>MorePhotos.svg</file>
         <file>Mouth.svg</file>
         <file>NaturalResources.svg</file>
         <file>Other.svg</file>
         <file>Others.svg</file>
+        <file>PositionTracking.svg</file>
         <file>ProjectButtonMore.svg</file>
         <file>QGIS.svg</file>
         <file>QRCode.svg</file>
@@ -40,10 +47,12 @@
         <file>Search.svg</file>
         <file>Show.svg</file>
         <file>SocialMedia.svg</file>
+        <file>Settings.svg</file>
         <file>StateAndLocal.svg</file>
         <file>Stop.svg</file>
         <file>Subscriptions.svg</file>
         <file>Sync.svg</file>
+        <file>SyncGreen.svg</file>
         <file>Teacher.svg</file>
         <file>Telecommunication.svg</file>
         <file>Terms.svg</file>
@@ -59,5 +68,6 @@
         <file>Global.svg</file>
         <file>Home.svg</file>
         <file>Projects.svg</file>
+        <file>ZoomToProject.svg</file>
     </qresource>
 </RCC>
