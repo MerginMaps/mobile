@@ -8,14 +8,13 @@
  ***************************************************************************/
 
 import QtQuick
-import Qt5Compat.GraphicalEffects
 
 Rectangle {
   id: control
 
   signal clicked
 
-  required property alias model
+  property alias model: buttonView.model
   property alias index: buttonView.currentIndex
 
   anchors {
@@ -35,7 +34,6 @@ Rectangle {
     cellHeight: __style.toolbarHeight
     cellWidth: Math.floor((control.width - leftMargin - rightMargin) / control.model.count)
 
-    model: control.model
     highlightFollowsCurrentItem: false
   }
 }
