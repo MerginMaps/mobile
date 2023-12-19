@@ -9,26 +9,12 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.Basic
 
 Switch {
   id: control
 
-  property string textOn
-  property string textOff
-  property bool visibleText: true
-
   contentItem: Text {
-    text: {
-      if(control.visibleText) {
-        if(control.textOn.length > 0 && control.textOff.length > 0) {
-          if(control.checked)
-            return control.textOn
-          return control.textOff
-        }
-        return control.text
-      }
-    }
+    text: control.text
     font: __style.p5
     color: control.enabled ? __style.forestColor : __style.mediumGreenColor
     verticalAlignment: Text.AlignVCenter
@@ -36,8 +22,8 @@ Switch {
   }
 
   indicator: Rectangle {
-    implicitWidth: 48
-    implicitHeight: 28
+    implicitWidth: 48 * __dp
+    implicitHeight: 28 * __dp
     x: control.leftPadding
     y: parent.height / 2 - height / 2
     radius: implicitHeight / 2
@@ -45,7 +31,7 @@ Switch {
 
     Rectangle {
       x: control.checked ? parent.width - width - radius/2 : radius/2
-      width: 20
+      width: 20 * __dp
       height: width
       radius: width / 2
       color: control.enabled ? __style.forestColor : __style.mediumGreenColor

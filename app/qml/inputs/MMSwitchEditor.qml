@@ -10,8 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import "../components"
 
 MMAbstractEditor {
@@ -49,9 +47,6 @@ MMAbstractEditor {
     x: -30 * __dp
 
     checked: root.checked
-    textOn: root.textOn
-    textOff: root.textOff
-    visibleText: false
 
     onCheckedChanged: focus = true
   }
