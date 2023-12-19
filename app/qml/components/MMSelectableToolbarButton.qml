@@ -16,7 +16,8 @@ Item {
 
   signal clicked
 
-  required property var iconSource
+  required property url iconSource
+  required property url selectedIconSource
   required property string text
 
   property bool checked: false
@@ -36,9 +37,9 @@ Item {
 
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.bottom: parent.bottom
-      anchors.bottomMargin: 40 * __dp
+      anchors.bottomMargin: 44 * __dp
 
-      source: control.iconSource
+      source: control.checked ? control.selectedIconSource : control.iconSource
       color: control.checked ? __style.whiteColor : __style.mediumGreenColor
     }
 

@@ -19,6 +19,12 @@ Page {
   MMSelectableToolbar {
     id: selectableToolbar
 
+    anchors {
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
+    }
+
     Component.onCompleted: index = 1
 
     model: ObjectModel {
@@ -26,6 +32,7 @@ Page {
         width: Math.floor((pane.width - 40 * __dp) / 3)
         text: "Home"
         iconSource: __style.homeIcon
+        selectedIconSource: __style.homeFilledIcon
         checked: selectableToolbar.index === 0
         onClicked: {
           selectableToolbar.index = 0
@@ -36,6 +43,7 @@ Page {
         width: Math.floor((pane.width - 40 * __dp) / 3)
         text: "Projects"
         iconSource: __style.projectsIcon
+        selectedIconSource: __style.projectsFilledIcon
         checked: selectableToolbar.index === 1
         onClicked: {
           selectableToolbar.index = 1
@@ -46,6 +54,7 @@ Page {
         width: Math.floor((pane.width - 40 * __dp) / 3)
         text: "Explore"
         iconSource: __style.globalIcon
+        selectedIconSource: __style.globalFilledIcon
         checked: selectableToolbar.index === 2
         onClicked: {
           selectableToolbar.index = 2

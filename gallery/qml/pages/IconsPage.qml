@@ -103,12 +103,22 @@ ScrollView {
           colorise: true
         }
         IconBox {
+          text: "globalFilledIcon"
+          source: __style.globalFilledIcon
+          colorise: true
+        }
+        IconBox {
           text: "hideIcon"
           source: __style.hideIcon
         }
         IconBox {
           text: "homeIcon"
           source: __style.homeIcon
+          colorise: true
+        }
+        IconBox {
+          text: "homeFilledIcon"
+          source: __style.homeFilledIcon
           colorise: true
         }
         IconBox {
@@ -132,6 +142,11 @@ ScrollView {
         IconBox {
           text: "projectsIcon"
           source: __style.projectsIcon
+          colorise: true
+        }
+        IconBox {
+          text: "projectsFilledIcon"
+          source: __style.projectsFilledIcon
           colorise: true
         }
         IconBox {

@@ -27,7 +27,7 @@ Item {
 
   Button {
     width: {
-      var w = parent.width - 10 * __dp
+      var w = parent.width - 40 * __dp
       if(w < control.minimumToolbarLongButtonWidth)
         return control.minimumToolbarLongButtonWidth
       else if(w > control.maximumToolbarLongButtonWidth)

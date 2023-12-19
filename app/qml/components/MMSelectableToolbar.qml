@@ -17,11 +17,6 @@ Rectangle {
   property alias model: buttonView.model
   property alias index: buttonView.currentIndex
 
-  anchors {
-    left: parent.left
-    right: parent.right
-    bottom: parent.bottom
-  }
   height: __style.toolbarHeight
   color: __style.forestColor
 
@@ -29,10 +24,9 @@ Rectangle {
     id: buttonView
 
     anchors.fill: parent
-    leftMargin: 20 * __dp
-    rightMargin: 20 * __dp
+
     cellHeight: __style.toolbarHeight
-    cellWidth: Math.floor((control.width - leftMargin - rightMargin) / control.model.count)
+    cellWidth: Math.floor(control.width / control.model.count)
 
     highlightFollowsCurrentItem: false
   }

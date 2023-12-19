@@ -69,5 +69,8 @@
         <file>Home.svg</file>
         <file>Projects.svg</file>
         <file>ZoomToProject.svg</file>
+        <file>GlobalFilled.svg</file>
+        <file>HomeFilled.svg</file>
+        <file>ProjectsFilled.svg</file>
     </qresource>
 </RCC>
