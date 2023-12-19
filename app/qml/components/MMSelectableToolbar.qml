@@ -15,7 +15,7 @@ Rectangle {
 
   signal clicked
 
-  required property var model
+  required property alias model
   property alias index: buttonView.currentIndex
 
   anchors {
