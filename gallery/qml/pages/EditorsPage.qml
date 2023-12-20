@@ -70,7 +70,7 @@ ScrollView {
           warningMsg: text.length > 0 ? "" : "Write something"
         }
 
-        MMInputWithRightIconEditor {
+        MMIconInputEditor {
           title: "MMInputWithRightIconEditor"
           placeholderText: "Placeholder"
           enabled: checkbox.checked
