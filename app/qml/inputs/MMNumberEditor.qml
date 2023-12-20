@@ -15,12 +15,28 @@ import "../components"
 MMAbstractEditor {
   id: root
 
-  property alias placeholderText: textField.placeholderText
-  property int number: 0
+  property var parentValue: parent.value ?? 0
+  property bool parentValueIsNull: parent.valueIsNull ?? false
+  property bool isReadOnly: parent.readOnly ?? false
+
+  property var locale: Qt.locale()
+  // TODO: uncomment in Input app
+  property real precision//: config['Precision'] ? config['Precision'] : 0
+  property string suffix//: config['Suffix'] ? config['Suffix'] : ''
+  property real from //: config["Min"]
+  property real to //: config["Max"]
+
+  property alias placeholderText: numberInput.placeholderText
+
+  // don't ever use a step smaller than would be visible in the widget
+  // i.e. if showing 2 decimals, smallest increment will be 0.01
+  // https://github.com/qgis/QGIS/blob/a038a79997fb560e797daf3903d94c7d68e25f42/src/gui/editorwidgets/qgsdoublespinbox.cpp#L83-L87
+  property real step//: Math.max(config["Step"], Math.pow( 10.0, 0.0 - precision ))
 
   signal editorValueChanged( var newValue, var isNull )
 
-  hasFocus: textField.activeFocus
+  enabled: !isReadOnly
+  hasFocus: numberInput.activeFocus
 
   leftAction: MMIcon {
     id: leftIcon
@@ -28,41 +44,55 @@ MMAbstractEditor {
     height: parent.height
 
     source: __style.minusIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    color: enabled ? __style.forestColor : __style.mediumGreenColor
+    enabled: Number( numberInput.text ) - root.step >= root.from
   }
 
-  content: TextField {
-    id: textField
-
+  content: Item {
     anchors.fill: parent
+    Row {
+      height: parent.height
+      anchors.horizontalCenter: parent.horizontalCenter
+      clip: true
 
-    text: root.number
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
-    placeholderTextColor: __style.nightAlphaColor
-    font: __style.p5
-    hoverEnabled: true
-    horizontalAlignment: TextInput.AlignHCenter
-    inputMethodHints: Qt.ImhFormattedNumbersOnly
+      TextField {
+        id: numberInput
 
-    // taking care to show numbers only
-    onTextChanged: {
-      const newNumber = parseInt(textField.text, 10)
+        height: parent.height
 
-      if(textField.text === "" || textField.text === "-") {
-        root.number = 0
-        textField.text = ""
-        return
+        clip: true
+        text: root.parentValue === undefined || root.parentValueIsNull ? "" : root.parentValue
+        color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+        placeholderTextColor: __style.nightAlphaColor
+        font: __style.p5
+        hoverEnabled: true
+        verticalAlignment: Qt.AlignVCenter
+        inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+        onTextEdited: {
+          let val = text.replace( ",", "." ).replace( / /g, '' ) // replace comma with dot
+
+          root.editorValueChanged( val, val  === "" )
+        }
+
+        background: Rectangle {
+          color: __style.transparentColor
+        }
       }
 
-      if(Number.isInteger(newNumber)) {
-        root.number = newNumber
-      }
-      textField.text = root.number
-      console.log(newNumber)
-    }
+      Text {
+        id: suffix
 
-    background: Rectangle {
-      color: __style.transparentColor
+        text: root.suffix
+
+        visible: root.suffix !== "" && numberInput.text !== ""
+
+        height: parent.height
+        verticalAlignment: Qt.AlignVCenter
+
+        font: __style.p5
+        color: numberInput.color
+      }
     }
   }
 
@@ -72,9 +102,22 @@ MMAbstractEditor {
     height: parent.height
 
     source: __style.plusIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    color: enabled ? __style.forestColor : __style.mediumGreenColor
+    enabled: Number( numberInput.text ) + root.step <= root.to
   }
 
-  onLeftActionClicked: { textField.forceActiveFocus(); textField.text = --root.number }
-  onRightActionClicked: { textField.forceActiveFocus(); textField.text = ++root.number }
+  onLeftActionClicked: {
+    numberInput.forceActiveFocus()
+    if ( leftIcon.enabled ) {
+      let decremented = Number( numberInput.text ) - root.step
+      root.editorValueChanged( decremented.toFixed( root.precision ), false )
+    }
+  }
+  onRightActionClicked: {
+    numberInput.forceActiveFocus();
+    if ( rightIcon.enabled ) {
+      let incremented = Number( numberInput.text ) + root.step
+      root.editorValueChanged( incremented.toFixed( root.precision ), false )
+    }
+  }
 }
