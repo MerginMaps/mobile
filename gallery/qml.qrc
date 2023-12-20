@@ -68,5 +68,6 @@
         <file>../app/qml/components/MMBackButton.qml</file>
         <file>../app/qml/components/MMIconCheckBoxHorizontal.qml</file>
         <file>../app/qml/components/MMIconCheckBoxVertical.qml</file>
+        <file>../app/qml/inputs/MMInputWithRightIconEditor.qml</file>
     </qresource>
 </RCC>
