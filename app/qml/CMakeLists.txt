@@ -33,6 +33,50 @@ set(MM_QML
     components/TextRowWithTitle.qml
     components/TextWithIcon.qml
     components/ToolbarButton.qml
+    components/MMBackButton.qml
+    components/MMButton.qml
+    components/MMButtonInput.qml
+    components/MMComboBox.qml
+    components/MMComponent_reachedDataLimit.qml
+    components/MMDrawer.qml
+    components/MMHeader.qml
+    components/MMHlineText.qml
+    components/MMIcon.qml
+    components/MMIconCheckBoxHorizontal.qml
+    components/MMIconCheckBoxVertical.qml
+    components/MMInput.qml
+    components/MMLink.qml
+    components/MMLinkButton.qml
+    components/MMListDrawer.qml
+    components/MMListDrawerItem.qml
+    components/MMMapButton.qml
+    components/MMMapLabel.qml
+    components/MMMenuDrawer.qml
+    components/MMMorePhoto.qml
+    components/MMNotification.qml
+    components/MMNotificationView.qml
+    components/MMPasswordInput.qml
+    components/MMPhoto.qml
+    components/MMPhotoGallery.qml
+    components/MMProgressBar.qml
+    components/MMProjectItem.qml
+    components/MMRadioButton.qml
+    components/MMRoundButton.qml
+    components/MMRoundLinkButton.qml
+    components/MMShadow.qml
+    components/MMSwitch.qml
+    components/MMTextArea.qml
+    components/MMTextBubble.qml
+    components/MMToolbar.qml
+    components/MMToolbarButton.qml
+    components/MMToolbarLongButton.qml
+    components/MMToolbarMenuButton.qml
+    onboarding/MMAcceptInvitation.qml
+    onboarding/MMCreateWorkspace.qml
+    onboarding/MMHowYouFoundUs.qml
+    onboarding/MMLogin.qml
+    onboarding/MMSignUp.qml
+    onboarding/MMWhichIndustry.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
     dialogs/NoPermissionsDialog.qml
@@ -57,6 +101,11 @@ set(MM_QML
     editor/inputvaluerelationcombobox.qml
     editor/inputvaluerelationpage.qml
     editor/inputspacer.qml
+    inputs/MMAbstractEditor.qml
+    inputs/MMCheckBox.qml
+    inputs/MMInputEditor.qml
+    inputs/MMPasswordEditor.qml
+    inputs/MMSliderEditor.qml
     form/FeatureForm.qml
     form/FeatureFormPage.qml
     form/FeatureFormStyling.qml
@@ -89,7 +138,6 @@ set(MM_QML
     misc/NoWorkspaceBanner.qml
     misc/PositionProviderPage.qml
     AboutPanel.qml
-    AuthPanel.qml
     Banner.qml
     ChangelogPanel.qml
     CircularProgressBar.qml
@@ -103,8 +151,6 @@ set(MM_QML
     FormsStackManager.qml
     InputStyle.qml
     LogPanel.qml
-    LoginForm.qml
-    MainPanel.qml
     ManageInvitationsPage.qml
     MapThemePanel.qml
     Notification.qml
@@ -119,7 +165,6 @@ set(MM_QML
     ProjectPanel.qml
     ProjectStatusPanel.qml
     ProjectWizardPage.qml
-    RegistrationForm.qml
     RegistrationFinishPage.qml
     RoundIndicator.qml
     SearchBar.qml

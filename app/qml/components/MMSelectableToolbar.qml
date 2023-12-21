@@ -8,28 +8,26 @@
  ***************************************************************************/
 
 import QtQuick
-import Qt5Compat.GraphicalEffects
 
-Item {
+Rectangle {
   id: control
 
-  property alias source: icon.source
-  property alias color: overlay.color
+  signal clicked
 
-  width: icon.implicitWidth
-  height: icon.implicitHeight
+  property alias model: buttonView.model
+  property alias index: buttonView.currentIndex
 
-  Image {
-    id: icon
+  height: __style.toolbarHeight
+  color: __style.forestColor
 
-    source: __style.arrowLinkRightIcon
-    anchors.centerIn: control
-  }
+  GridView {
+    id: buttonView
 
-  ColorOverlay {
-    id: overlay
+    anchors.fill: parent
 
-    anchors.fill: icon
-    source: icon
+    cellHeight: __style.toolbarHeight
+    cellWidth: Math.floor(control.width / control.model.count)
+
+    highlightFollowsCurrentItem: false
   }
 }

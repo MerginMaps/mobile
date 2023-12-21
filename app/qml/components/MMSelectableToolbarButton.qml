@@ -16,52 +16,44 @@ Item {
 
   signal clicked
 
-  required property var iconSource
+  required property url iconSource
+  required property url selectedIconSource
   required property string text
-  property var type: MMToolbarButton.Button.Normal
-  property bool isMenuButton: false
 
-  enum Button { Normal, Save }
+  property bool checked: false
 
-  height: isMenuButton ? __style.menuDrawerHeight/2 : __style.toolbarHeight
+  height: __style.toolbarHeight
 
   Rectangle {
     width: parent.width - 10 * __dp
     height: parent.height - 10 * __dp
     anchors.centerIn: parent
-    clip: control.type !== MMToolbarButton.Button.Save
-    color: __style.transparentColor
-    visible: !control.isMenuButton
 
-    Image {
+    clip: true
+    color: __style.transparentColor
+
+    MMIcon {
       id: icon
 
-      source: control.iconSource
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.bottom: parent.bottom
-      anchors.bottomMargin: 40 * __dp + (control.type === MMToolbarButton.Button.Save ? 14 * __dp : 0)
+      anchors.bottomMargin: 44 * __dp
 
-      Rectangle {
-        visible: control.type === MMToolbarButton.Button.Save
-        anchors.centerIn: parent
-        width: 56 * __dp
-        height: width
-        radius: width / 2
-        color: __style.transparentColor
-        border.color: __style.grassColor
-        border.width: 14 * __dp
-      }
+      source: control.checked ? control.selectedIconSource : control.iconSource
+      color: control.checked ? __style.whiteColor : __style.mediumGreenColor
     }
+
     Text {
       id: text
 
-      text: control.text
       width: parent.width
-      color: __style.whiteColor
-      font: __style.t4
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.bottom: parent.bottom
       anchors.bottomMargin: 20 * __dp
+
+      text: control.text
+      color: icon.color
+      font: __style.t4
       horizontalAlignment: Text.AlignHCenter
       elide: Text.ElideMiddle
     }
@@ -70,15 +62,5 @@ Item {
       anchors.fill: parent
       onClicked: control.clicked()
     }
-  }
-
-  // Menu button
-  MMToolbarMenuButton {
-    width: control.width
-    height: __style.menuDrawerHeight
-    visible: control.isMenuButton
-    iconSource: control.iconSource
-    text: control.text
-    onClicked: control.clicked()
   }
 }

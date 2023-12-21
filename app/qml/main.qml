@@ -110,11 +110,6 @@ ApplicationWindow {
         stateManager.state = "projects"
       }
 
-      // get focus when any project is active, otherwise let focus to project panel
-      if ( __appSettings.activeProject )
-        mainPanel.forceActiveFocus()
-
-
       // Catch back button click (if no other component catched it so far)
       // to prevent QT from quitting the APP immediately
       contentItem.Keys.released.connect( function( event ) {
@@ -130,23 +125,23 @@ ApplicationWindow {
     MapWrapper {
       id: map
 
-      height: window.height - mainPanel.height
+      height: window.height - mapToolbar.height
       width: window.width
 
       mapExtentOffset: {
         // offset depends on what panels are visible.
-        // we need to subtract mainPanel (toolbar)'s height from any visible panel
+        // we need to subtract mapToolbar's height from any visible panel
         // because panels start at the bottom of the screen, but map canvas's height is lowered
-        // by mainPanels's height.
+        // by mapToolbar's height.
         if ( stakeoutPanelLoader.active )
         {
           // if stakeout panel is opened
-          return stakeoutPanelLoader.item.panelHeight - mainPanel.height
+          return stakeoutPanelLoader.item.panelHeight - mapToolbar.height
         }
         else if ( formsStackManager.takenVerticalSpace > 0 )
         {
           // if feature preview panel is opened
-          return formsStackManager.takenVerticalSpace - mainPanel.height
+          return formsStackManager.takenVerticalSpace - mapToolbar.height
         }
 
         return 0
@@ -205,7 +200,7 @@ ApplicationWindow {
 
       onSignInRequested: {
         stateManager.state = "projects"
-        projectPanel.openAuthPanel()
+        projectPanel.openLoginPage()
       }
 
       onLocalChangesPanelRequested: {
@@ -252,69 +247,106 @@ ApplicationWindow {
       }
     }
 
-    MainPanel {
-        id: mainPanel
+    MMToolbar {
+      id: mapToolbar
 
-        width: window.width
-        height: InputStyle.rowHeightHeader
+      anchors {
+        left: parent.left
+        bottom: parent.bottom
+        right: parent.right
+      }
 
-        y: window.height - height
+      visible: map.state === "view"
 
-        visible: map.state === "view"
+      model: ObjectModel {
 
-        gpsIndicatorColor: map.gpsIndicatorColor
-
-        onOpenProjectClicked: stateManager.state = "projects"
-        onOpenMapThemesClicked: {
-          mapThemesPanel.visible = true
-          stateManager.state = "misc"
-        }
-        onMyLocationClicked: {
-          if ( locationPermission.requestPermissionAsync() ) {
-            map.centerToPosition()
+        MMToolbarButton {
+          text: qsTr("Sync")
+          iconSource: __style.syncIcon
+          onClicked: {
+            __activeProject.requestSync()
           }
         }
 
-        onMyLocationHold: {
-          if ( locationPermission.requestPermissionAsync() ) {
-            __appSettings.autoCenterMapChecked = !__appSettings.autoCenterMapChecked
-            showMessage( __appSettings.autoCenterMapChecked ? qsTr("GPS auto-center mode on") : qsTr("GPS auto-center mode off") )
-          }
-        }
-        onOpenSettingsClicked: settingsPanel.visible = true
-        onZoomToProject: {
-          if ( __appSettings.autoCenterMapChecked ) {
-            mainPanel.myLocationHold()
-          }
-          __inputUtils.zoomToProject( __activeProject.qgsProject, map.mapSettings )
-        }
-        onRecordClicked: {
+        MMToolbarButton {
+          text: qsTr("Add")
+          iconSource: __style.addIcon
+          onClicked: {
             if ( __recordingLayersModel.rowCount() > 0 ) {
               stateManager.state = "map"
               map.record()
-            } else {
-                showMessage( qsTr( "No editable layers found." ) )
             }
-        }
-        onLocalChangesClicked: {
-          if ( __merginProjectStatusModel.loadProjectInfo( __activeProject.projectFullName() ) )
-          {
-            stateManager.state = "projects"
-            projectPanel.openChangesPanel()
+            else {
+              showMessage( qsTr( "No editable layers found." ) )
+            }
           }
-          else
-          {
-            __inputUtils.showNotification( qsTr( "No Changes" ) )
-          }
-        }
-        onLayersClicked: {
-          stateManager.state = "misc"
-          let layerspanel = mapPanelsStackView.push( layersPanelComponent, {}, StackView.PushTransition )
         }
 
-        onPositionTrackingClicked: {
-          trackingPanelLoader.active = true
+        MMToolbarButton {
+          text: qsTr("Layers")
+          iconSource: __style.layersIcon
+          onClicked: {
+            stateManager.state = "misc"
+            let layerspanel = mapPanelsStackView.push( layersPanelComponent, {}, StackView.PushTransition )
+          }
         }
+
+        MMToolbarButton {
+          text: qsTr("Back home")
+          iconSource: __style.homeIcon
+          onClicked: {
+            stateManager.state = "projects"
+          }
+        }
+
+        MMToolbarButton {
+          text: qsTr("Zoom to project")
+          iconSource: __style.zoomToProjectIcon
+          onClicked: {
+            __inputUtils.zoomToProject( __activeProject.qgsProject, map.mapSettings )
+          }
+        }
+
+        MMToolbarButton {
+          text: qsTr("Map themes")
+          iconSource: __style.mapThemesIcon
+          onClicked: {
+            mapThemesPanel.visible = true
+            stateManager.state = "misc"
+          }
+        }
+
+        MMToolbarButton {
+          text: qsTr("Position tracking")
+          iconSource: __style.positionTrackingIcon
+          onClicked: {
+            trackingPanelLoader.active = true
+          }
+        }
+
+        MMToolbarButton {
+          text: qsTr("Local changes")
+          iconSource: __style.localChangesIcon
+          onClicked: {
+            if ( __merginProjectStatusModel.loadProjectInfo( __activeProject.projectFullName() ) )
+            {
+              stateManager.state = "projects"
+              projectPanel.openChangesPanel()
+            }
+            else {
+              __inputUtils.showNotification( qsTr( "No Changes" ) )
+            }
+          }
+        }
+
+        MMToolbarButton {
+          text: qsTr("Settings")
+          iconSource: __style.settingsIcon
+          onClicked: {
+            settingsPanel.visible = true
+          }
+        }
+      }
     }
 
     NotificationBanner {
@@ -342,7 +374,6 @@ ApplicationWindow {
           stateManager.state = "misc"
         }
         else {
-          mainPanel.focus = true; // pass focus back to main panel
           stateManager.state = "map"
         }
       }
@@ -361,9 +392,6 @@ ApplicationWindow {
         onVisibleChanged: {
           if ( projectPanel.visible ) {
             projectPanel.forceActiveFocus()
-          }
-          else {
-            mainPanel.forceActiveFocus()
           }
         }
 
@@ -413,7 +441,6 @@ ApplicationWindow {
       LayersPanelV2 {
 
         onClose: function() {
-          mainPanel.forceActiveFocus()
           mapPanelsStackView.clear( StackView.PopTransition )
           stateManager.state = "map"
         }
@@ -445,7 +472,6 @@ ApplicationWindow {
         id: gpsDataPage
 
         onBack: {
-          mainPanel.focus = true
           gpsDataPageLoader.active = false
         }
 
@@ -569,8 +595,6 @@ ApplicationWindow {
       onVisibleChanged: {
         if (projectIssuesPanel.visible)
           projectIssuesPanel.focus = true; // get focus
-        else
-          mainPanel.focus = true; // pass focus back to main panel
       }
     }
 
@@ -719,7 +743,6 @@ ApplicationWindow {
         }
         else {
           stateManager.state = "map"
-          mainPanel.focus = true
         }
 
         map.hideHighlight()

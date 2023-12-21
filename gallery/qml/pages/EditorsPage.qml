@@ -53,6 +53,19 @@ ScrollView {
           checkboxChecked: true
         }
 
+        MMNumberEditor {
+          title: "MMNumberEditor"
+          parentValue: "2.0"
+          from: 1.0
+          to: 3.0
+          width: parent.width
+          enabled: checkbox.checked
+          precision: 1
+          suffix: "s."
+          step: Math.pow( 10.0, 0.0 - precision )
+          onEditorValueChanged: function(newValue) { parentValue = newValue }
+        }
+
         MMInputEditor {
           title: "MMInputEditor"
           parentValue: "Text"
@@ -60,6 +73,26 @@ ScrollView {
           width: parent.width
           hasCheckbox: true
           checkboxChecked: false
+        }
+
+        MMButtonInputEditor {
+          title: "MMButtonInputEditor"
+          placeholderText: "Write something"
+          text: "Text to copy"
+          buttonText: "Copy"
+          enabled: checkbox.checked
+          width: parent.width
+          onButtonClicked: console.log("Copy pressed")
+          buttonEnabled: text.length > 0
+        }
+
+        MMButtonInputEditor {
+          title: "MMButtonInputEditor"
+          placeholderText: "Píš"
+          buttonText: "Kopíruj"
+          enabled: checkbox.checked
+          width: parent.width
+          buttonEnabled: text.length > 0
         }
 
         MMInputEditor {

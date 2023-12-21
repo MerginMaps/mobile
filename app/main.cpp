@@ -70,6 +70,7 @@
 #include "qgscoordinatetransformcontext.h"
 #include "qgsvectorlayer.h"
 #include "qgsunittypes.h"
+#include "mmstyle.h"
 
 #include "rememberattributescontroller.h"
 #include "attributecontroller.h"
@@ -589,8 +590,9 @@ int main( int argc, char *argv[] )
 
   // we ship our fonts because they do not need to be installed on the target platform
   QStringList fonts;
-  fonts << ":/Lato-Regular.ttf"
-        << ":/Lato-Bold.ttf";
+  fonts << ":/Inter-Regular.ttf"
+        << ":/Inter-SemiBold.ttf";
+
   for ( QString font : fonts )
   {
     if ( QFontDatabase::addApplicationFont( font ) == -1 )
@@ -598,7 +600,7 @@ int main( int argc, char *argv[] )
     else
       qDebug() << "Loaded font" << font;
   }
-  app.setFont( QFont( "Lato" ) );
+  app.setFont( QFont( "Inter" ) );
 
   QQuickStyle::setStyle( "Basic" );
   QQmlEngine engine;
@@ -609,6 +611,7 @@ int main( int argc, char *argv[] )
   // OGR_SQLITE_JOURNAL is set to DELETE to avoid working with WAL files
   // and properly close connection after writting changes to gpkg.
   qputenv( "OGR_SQLITE_JOURNAL", "DELETE" );
+
 
   // Register to QQmlEngine
   engine.rootContext()->setContextProperty( "__androidUtils", &au );
@@ -657,12 +660,11 @@ int main( int argc, char *argv[] )
   // there are screens that need a "little help", because system DPR has different value than the
   // one we calculated. In these scenarios we use a ratio between real (our) DPR and DPR reported by QT.
   // Use `value * __dp` for each pixel value in QML
-  engine.rootContext()->setContextProperty( "__dp", InputUtils::calculateDpRatio() );
+  qreal dp = InputUtils::calculateDpRatio();
+  engine.rootContext()->setContextProperty( "__dp", dp );
 
-// due to https://bugreports.qt.io/browse/QTBUG-113751, the right DPI is set when app is created (after this pool)
-#if (defined ANDROID && QT_VERSION >= QT_VERSION_CHECK(6, 5, 0) )
-  QTimer::singleShot( 100, [&engine]() { engine.rootContext()->setContextProperty( "__dp", InputUtils::calculateDpRatio() );} );
-#endif
+  MMStyle mmstyle( dp );
+  engine.rootContext()->setContextProperty( "__style", &mmstyle );
 
   // Set simulated position for desktop builds
 #ifdef DESKTOP_OS

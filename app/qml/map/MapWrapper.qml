@@ -573,6 +573,10 @@ Item {
 
         // Find out if sync would collide with acc button
         // based on distance between them
+
+        // TODO: Change to GPS button + design
+        visible: false
+
         function wouldCollideWithAccBtn()
         {
           let accBtnRightMostX = accuracyButton.x + accuracyButton.width
@@ -592,7 +596,7 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: InputStyle.smallGap
 
-        visible: root.state === "view"
+//        visible: root.state === "view"
 
         content: Item {
 
