@@ -19,8 +19,7 @@ MMAbstractEditor {
   property bool parentValueIsNull: parent.valueIsNull ?? false
   property bool isReadOnly: parent.readOnly ?? false
 
-  property string textOn: qsTr("True")
-  property string textOff: qsTr("False")
+  property alias text: textField.text
   property alias checked: rightSwitch.checked
 
   signal editorValueChanged( var newValue, var isNull )
@@ -33,7 +32,6 @@ MMAbstractEditor {
     width: parent.width + rightSwitch.x
     anchors.verticalCenter: parent.verticalCenter
 
-    text: root.checked ? root.textOn : root.textOff
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
     font: __style.p5
     elide: Text.ElideRight

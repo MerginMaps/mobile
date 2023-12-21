@@ -82,6 +82,7 @@ ScrollView {
         MMSwitchEditor {
           title: "MMSwitchEditor"
           checked: true
+          text: checked ? "True" : "False"
           warningMsg: checked ? "" : "Should be checked :)"
           enabled: checkbox.checked
           width: parent.width
