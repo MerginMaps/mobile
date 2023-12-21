@@ -31,9 +31,10 @@ Item {
     enabled: root.enabled && root.showInvitationList
 
     function onUserInfoReplyFinished() {
-      // controller.showInvitationsList = false;
+     controller.showInvitationsList = false;
 
       /*
+        TODO - interactions with onboarding!
         it should be enabled = false in this case from parent!
 
       // let's not show invitations when registration finish page is opened
