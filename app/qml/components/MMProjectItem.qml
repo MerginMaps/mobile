@@ -230,7 +230,7 @@ Rectangle {
       },
       "sync": {
         "name": qsTr("Synchronize project"),
-        "iconSource": __style.syncIcon
+        "iconSource": __style.syncGreenIcon
       },
       "changes": {
         "name": qsTr("Local changes"),

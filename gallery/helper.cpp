@@ -20,8 +20,8 @@ Helper::Helper( QObject *parent ) : QObject{parent}
 QString Helper::installFonts()
 {
   QStringList fonts;
-  fonts << ":/fonts/Inter-Regular.ttf"
-        << ":/fonts/Inter-SemiBold.ttf";
+  fonts << ":/Inter-Regular.ttf"
+        << ":/Inter-SemiBold.ttf";
   for ( const QString &font : fonts )
   {
     if ( QFontDatabase::addApplicationFont( font ) == -1 )

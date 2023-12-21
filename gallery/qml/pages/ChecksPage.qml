@@ -175,9 +175,8 @@ Column {
       spacing: 20
       anchors.fill: parent
       MMSwitch {
-        textOn: "ON"
-        textOff: "OFF"
         checked: false
+        text: checked ? "ON" : "OFF"
       }
       MMSwitch {
         text: "static"
