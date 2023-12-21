@@ -75,6 +75,26 @@ ScrollView {
           checkboxChecked: false
         }
 
+        MMButtonInputEditor {
+          title: "MMButtonInputEditor"
+          placeholderText: "Write something"
+          text: "Text to copy"
+          buttonText: "Copy"
+          enabled: checkbox.checked
+          width: parent.width
+          onButtonClicked: console.log("Copy pressed")
+          buttonEnabled: text.length > 0
+        }
+
+        MMButtonInputEditor {
+          title: "MMButtonInputEditor"
+          placeholderText: "Píš"
+          buttonText: "Kopíruj"
+          enabled: checkbox.checked
+          width: parent.width
+          buttonEnabled: text.length > 0
+        }
+
         MMInputEditor {
           title: "MMInputEditor"
           placeholderText: "Placeholder"
