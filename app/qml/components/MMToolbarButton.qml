@@ -63,6 +63,7 @@ Item {
       anchors.bottom: parent.bottom
       anchors.bottomMargin: 20 * __dp
       horizontalAlignment: Text.AlignHCenter
+      elide: Text.ElideMiddle
     }
 
     MouseArea {

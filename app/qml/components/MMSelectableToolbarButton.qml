@@ -55,6 +55,7 @@ Item {
       color: icon.color
       font: __style.t4
       horizontalAlignment: Text.AlignHCenter
+      elide: Text.ElideMiddle
     }
 
     MouseArea {
