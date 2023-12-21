@@ -27,7 +27,11 @@ MMAbstractEditor {
   signal editorValueChanged( var newValue, var isNull )
 
   hasFocus: textArea.activeFocus
-  contentItemHeight: textArea.y + textArea.contentHeight + 2 * textArea.verticalPadding
+  contentItemHeight: {
+    const minHeight = 85 * __dp // min height for 3 rows
+    var realHeight = textArea.y + textArea.contentHeight + 2 * textArea.verticalPadding
+    return realHeight < minHeight ? minHeight : realHeight
+  }
 
   content: TextArea {
     id: textArea
