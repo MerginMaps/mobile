@@ -72,5 +72,7 @@
         <file>GlobalFilled.svg</file>
         <file>HomeFilled.svg</file>
         <file>ProjectsFilled.svg</file>
+        <file>Minus.svg</file>
+        <file>Plus.svg</file>
     </qresource>
 </RCC>

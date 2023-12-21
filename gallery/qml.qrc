@@ -70,5 +70,7 @@
         <file>../app/qml/components/MMIconCheckBoxVertical.qml</file>
         <file>../app/qml/components/MMSelectableToolbar.qml</file>
         <file>../app/qml/components/MMSelectableToolbarButton.qml</file>
+        <file>../app/qml/inputs/MMNumberEditor.qml</file>
+        <file>../app/qml/inputs/MMButtonInputEditor.qml</file>
     </qresource>
 </RCC>

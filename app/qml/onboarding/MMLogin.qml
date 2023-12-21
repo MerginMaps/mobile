@@ -19,12 +19,15 @@ Page {
   width: parent.width
 
   signal backClicked
-  signal signInClicked
+  signal signInClicked ( string username, string password )
   signal signUpClicked
-  signal changeServerClicked
+  signal changeServerClicked ( string newServer )
   signal forgotPasswordClicked
 
+  property string warningMsg //TODO
+  property bool canSignUp: true //TODO
   property string apiRoot
+
   /**
   * Suppose to be true if auth request is pending. Then busy indicator is running and
   * the login button is disabled.
@@ -86,15 +89,29 @@ Page {
       rightPadding: root.hPadding
       topPadding: 20 * __dp
 
+
       Item { width: 1; height: 1 }
 
+      Text {
+        // !TODO - need graphic designer input!
+        visible: root.warningMsg
+        width: parent.width - 2 * root.hPadding
+        text: root.warningMsg
+        font: __style.h2
+        color: __style.negativeColor
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignHCenter
+      }
+
       MMInputEditor {
+        id: username
         width: parent.width - 2 * root.hPadding
         title: qsTr("Username")
         bgColor: __style.lightGreenColor
       }
 
       MMPasswordEditor {
+        id: password
         width: parent.width - 2 * root.hPadding
         title: qsTr("Password")
         bgColor: __style.lightGreenColor
@@ -105,7 +122,7 @@ Page {
         height: 20 * __dp
         text: qsTr("Forgot password?")
 
-        onClicked: root.signInClicked()
+        onClicked: root.forgotPasswordClicked()
       }
 
       Item { width: 1; height: 1 }
@@ -113,8 +130,13 @@ Page {
       MMButton {
         width: parent.width - 2 * root.hPadding
         text: qsTr("Sign in")
-
-        onClicked: root.signInClicked()
+        enabled: !pending
+        onClicked: {
+          root.signInClicked(
+            username.text,
+            password.text
+          )
+        }
       }
 
       Item { width: 1; height: 1 }
@@ -122,11 +144,14 @@ Page {
       MMHlineText {
         width: parent.width - 2 * root.hPadding
         title: qsTr("Don't have an account?")
+        visible: root.canSignUp
       }
 
       MMLinkButton {
         width: parent.width - 2 * root.hPadding
         text: qsTr("Sign up")
+        enabled: !pending
+        visible: root.canSignUp
 
         onClicked: root.signUpClicked()
       }
@@ -139,10 +164,14 @@ Page {
     width: parent.width
     height: 50 * __dp
     anchors.bottom: parent.bottom
+    enabled: !pending
     text: root.apiRoot
     leftIcon: __style.globeIcon
 
-    onClicked: changeServerDrawer.visible = true
+    onClicked: {
+      changeServerDrawer.newServerUrl = root.apiRoot
+      changeServerDrawer.visible = true
+    }
   }
 
   MMDrawer {
@@ -159,16 +188,13 @@ Page {
       width: changeServerDrawer.width - 40 * __dp
       title: qsTr("Server address")
       bgColor: __style.lightGreenColor
-      text: changeServerButton.text
-
+      text: changeServerDrawer.newServerUrl
       onTextChanged: changeServerDrawer.newServerUrl = text
     }
 
     onPrimaryButtonClicked: {
-      changeServerButton.text = changeServerDrawer.newServerUrl
+      root.changeServerClicked( newServerUrl )
       visible = false
-
-      root.changeServerClicked()
     }
   }
 }

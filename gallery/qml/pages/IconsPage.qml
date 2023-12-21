@@ -126,6 +126,10 @@ ScrollView {
           source: __style.infoIcon
         }
         IconBox {
+          text: "minusIcon"
+          source: __style.minusIcon
+        }
+        IconBox {
           text: "moreIcon"
           source: __style.moreIcon
           colorise: true
@@ -134,6 +138,10 @@ ScrollView {
           text: "morePhotosIcon"
           source: __style.morePhotosIcon
           colorise: true
+        }
+        IconBox {
+          text: "plusIcon"
+          source: __style.plusIcon
         }
         IconBox {
           text: "projectButtonMoreIcon"

@@ -17,6 +17,7 @@ import lc 1.0
 import "."  // import InputStyle singleton
 import "./misc"
 import "./components/"
+import "./onboarding/"
 
 Item {
   id: root
@@ -63,18 +64,18 @@ Item {
     }
   }
 
-  function openAuthPanel( authstate = "login" )
+  function openLoginPage()
   {
     for ( let i = 0; i < stackView.depth; i++ ) {
       let item = stackView.get( i )
 
-      if ( item && item.objectName && item.objectName === "authPanel" ) {
+      if ( item && item.objectName && item.objectName === "loginPage" ) {
         // sorry, it is already opened, let's not open it again
         return;
       }
     }
 
-    stackView.push( authPanelComp, { state: authstate }, StackView.PushTransition )
+    stackView.push( loginPageComp, {}, StackView.PushTransition )
   }
 
   function openChangesPanel()
@@ -261,7 +262,7 @@ Item {
             }
           }
           else {
-            root.openAuthPanel()
+            root.openLoginPage()
           }
         }
       }
@@ -499,22 +500,114 @@ Item {
   }
 
   Component {
-    id: authPanelComp
+    id: loginPageComp
 
-    AuthPanel {
-      id: authPanel
+    MMLogin {
+      id: loginPage
 
-      objectName: "authPanel"
+      objectName: "loginPage"
       visible: false
+      apiRoot: __merginApi.apiRoot
       pending: stackView.pending
       height: root.height
       width: root.width
-      toolbarHeight: InputStyle.rowHeightHeader
-      onBack: {
+      canSignUp:  (__merginApi.serverType === MerginServerType.EE ) || ( __merginApi.serverType === MerginServerType.SAAS )
+      warningMsg: {
+        if (__merginApi.apiVersionStatus === MerginApiStatus.OK) {
+          ""
+        } else
+        {
+          if (__merginApi.apiVersionStatus === MerginApiStatus.INCOMPATIBLE) {
+            qsTr("Please update the app to use the latest features.")
+          } else if (__merginApi.apiVersionStatus === MerginApiStatus.PENDING) {
+            ""
+          } else {
+            qsTr("Server is currently unavailable - please try again later.")
+          }
+        }
+      }
+
+      onSignInClicked: function ( username, password ) {
+        stackView.pending = true
+        __merginApi.authorize(username, password)
+      }
+
+      onBackClicked: {
         stackView.popOnePageOrClose()
         if ( !__merginApi.userAuth.hasAuthData() ) {
           root.resetView()
         }
+      }
+
+      onSignUpClicked: {
+        if (!canSignUp) // should not happen
+          return;
+
+        if ( __merginApi.serverType === MerginServerType.EE ) {
+          Qt.openUrlExternally( __merginApi.apiRoot )
+        }
+        else {
+          stackView.push( registrationPanel )
+        }
+      }
+
+      onChangeServerClicked: function ( newServer ) {
+        __merginApi.apiRoot = newServer
+      }
+
+      onForgotPasswordClicked: {
+        Qt.openUrlExternally(__merginApi.resetPasswordUrl());
+      }
+
+    }
+  }
+
+  Component {
+    id: registrationPanel
+
+    MMSignUp {
+
+      objectName: "registrationPanel"
+      tocString: qsTr("I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3")
+      .arg("<a href='"+ __inputHelp.merginTermsLink + "'>")
+      .arg("<a href='"+ __inputHelp.privacyPolicyLink +"'>")
+      .arg("</a>")
+
+      onBackClicked: {
+        stackView.popOnePageOrClose()
+        if ( !__merginApi.userAuth.hasAuthData() ) {
+          root.resetView()
+        }
+      }
+
+      onSignInClicked: {
+        stackView.popOnePageOrClose()
+      }
+
+      onSignUpClicked: function ( username, email, password, passwordConfirm, tocAccept ) {
+        if ( __merginApi.serverType !== MerginServerType.SAAS ) {
+          return; //should not happen
+        }
+        else {
+          stackView.pending = true
+          __merginApi.registerUser( username,
+                                   email,
+                                   password,
+                                   passwordConfirm,
+                                   tocAccept )
+        }
+      }
+    }
+  }
+
+  Component {
+    id: registrationFinishComponent
+
+    RegistrationFinishPage {
+
+      objectName: "registrationFinishPanel"
+      onFinished: {
+        stackView.pop( null )
       }
     }
   }
@@ -627,17 +720,6 @@ Item {
     }
   }
 
-  Component {
-    id: registrationFinishComponent
-
-    RegistrationFinishPage {
-
-      objectName: "registrationFinishPanel"
-      onFinished: {
-        stackView.pop( null )
-      }
-    }
-  }
 
   Connections {
     target: __merginApi
@@ -664,7 +746,7 @@ Item {
     function onAuthRequested() {
       stackView.pending = false
 
-      root.openAuthPanel()
+      root.openLoginPage()
     }
 
     function onAuthChanged() {
@@ -672,8 +754,8 @@ Item {
 
       if ( __merginApi.userAuth.hasAuthData() ) {
 
-        if ( __merginApi.serverType === MerginServerType.OLD || ( stackView.currentItem.objectName === "authPanel" && stackView.currentItem.state === "login" ) ) {
-          stackView.popPage( "authPanel" )
+        if ( __merginApi.serverType === MerginServerType.OLD || ( stackView.currentItem.objectName === "loginPage" ) ) {
+          stackView.popPage( "loginPage" )
         }
 
         root.refreshProjects()
@@ -691,6 +773,9 @@ Item {
 
     function onRegistrationFailed( msg, field ) {
       stackView.pending = false
+      if ( stackView.currentItem.objectName === "registrationPanel" ) {
+        stackView.currentItem.showErrorMessage(msg, field)
+      }
     }
 
     function onRegistrationSucceeded() {
