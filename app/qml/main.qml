@@ -21,6 +21,8 @@ import "./map"
 import "./dialogs"
 import "./layers"
 import "./popups"
+import "./components"
+import notificationType 1.0
 
 ApplicationWindow {
     id: window
@@ -70,8 +72,15 @@ ApplicationWindow {
     }
 
     function showMessage(message) {
-      popup.text = message
-      popup.open()
+      __notificationModel.add(
+        message,
+        3,
+        NotificationType.Information,
+        NotificationType.None
+      )
+
+      // popup.text = message
+      // popup.open()
     }
 
     function showProjError(message) {
@@ -200,7 +209,7 @@ ApplicationWindow {
 
       onSignInRequested: {
         stateManager.state = "projects"
-        projectPanel.openLoginPage()
+        projectPanel.showLogin()
       }
 
       onLocalChangesPanelRequested: {
@@ -631,6 +640,7 @@ ApplicationWindow {
     }
 
     Notification {
+        // TODO remove!
         id: popup
 
         text: ""
@@ -915,4 +925,7 @@ ApplicationWindow {
         showMessage( qsTr( "Press back again to quit the app" ) )
       }
     }
+
+    // Should be last so it is displayed on very top
+    MMNotificationView {}
 }

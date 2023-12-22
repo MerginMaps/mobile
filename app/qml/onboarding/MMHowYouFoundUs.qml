@@ -13,6 +13,8 @@ import QtQuick.Controls
 import "../components"
 import "../inputs"
 
+import notificationType 1.0
+
 Page {
   id: root
 
@@ -21,12 +23,14 @@ Page {
   property string selectedText: ""
 
   signal backClicked
-  signal continueClicked(var selectedText)
+  signal howYouFoundUsSelected(var selectedText)
 
   readonly property string headerTitle: qsTr("How did you learn about us?")
   readonly property real hPadding: width < __style.maxPageWidth
                                    ? 20 * __dp
                                    : (20 + (width - __style.maxPageWidth) / 2) * __dp
+
+  readonly property string specifySourceText: qsTr("Please specify the source")
 
   Rectangle {
     anchors.fill: parent
@@ -104,22 +108,34 @@ Page {
         checked: listView.currentIndex === index
 
         onClicked: {
-          root.selectedText = model.name
+
           listView.currentIndex = index
 
           if(listView.model.count === listView.currentIndex + 1)
+          {
+            root.selectedText = ""
             listView.positionViewAtEnd()
+          }
+          else {
+            if (model.icon === __style.socialMediaIcon) {
+              // need to select subcategory
+              root.selectedText = ""
+            } else {
+              root.selectedText = model.name
+            }
+          }
         }
       }
 
       footer: Column {
         width: root.width - 2 * root.hPadding
         topPadding: 20 * __dp
-        visible: listView.model.count === listView.currentIndex + 1
+        visible: listView.model.count === listView.currentIndex + 1 // === Other
 
         MMInputEditor {
+          id: otherSourceText
           title: qsTr("Source")
-          placeholderText: qsTr("Please specify the source")
+          placeholderText: root.specifySourceText
           onTextChanged: root.selectedText = text
           onVisibleChanged: if(visible) hasFocus = true
         }
@@ -136,6 +152,17 @@ Page {
     anchors.bottomMargin: 20 * __dp
     text: qsTr("Continue")
 
-    onClicked: root.continueClicked(root.selectedText)
+    onClicked: {
+      if (root.selectedText.length > 0 ) {
+        root.howYouFoundUsSelected(root.selectedText)
+      } else {
+        __notificationModel.add(
+          root.specifySourceText,
+          3,
+          NotificationType.Error,
+          NotificationType.None
+        )
+      }
+    }
   }
 }

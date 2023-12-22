@@ -29,7 +29,7 @@ Page {
 
   signal backClicked
   signal signInClicked
-  signal signUpClicked ( string username, string email, string password, string passwordConfirm, bool tocAccept )
+  signal signUpClicked ( string username, string email, string password, string passwordConfirm, bool tocAccept, bool newsletterSubscribe )
 
   required property string tocString
   readonly property real hPadding: width < __style.maxPageWidth
@@ -44,7 +44,7 @@ Page {
     email.errorMsg = ""
     password.errorMsg = ""
     passwordConfirm.errorMsg = ""
-    tocAccept.errorMsg = ""
+    // TODO tocAccept.errorMsg = ""
     // TODO errorText.text = ""
 
     if( field === RegistrationError.USERNAME ) {
@@ -64,12 +64,23 @@ Page {
       passwordConfirm.focus = true
     }
     else if( field === RegistrationError.TOC ) {
-      tocAccept.errorMsg = msg
-      tocAccept.focus = true
+      // TODO where to show MMCheckBox missing errorMsg
+      // tocAccept.errorMsg = msg
+      // tocAccept.focus = true
+      __notificationModel.add(
+          msg,
+          3,
+          NotificationType.Error,
+          NotificationType.None
+      )
     }
     else if( field === RegistrationError.OTHER ) {
-      // TODO where to show
-      console.log("error " + msg)
+      __notificationModel.add(
+          msg,
+          3,
+          NotificationType.Error,
+          NotificationType.None
+      )
     }
   }
 
@@ -165,6 +176,7 @@ Page {
         }
 
         Text {
+          // TODO replace with text in MMCheckBox
           width: parent.width - tocAccept.width - parent.spacing - 2 * root.hPadding
           anchors.verticalCenter: parent.verticalCenter
 
@@ -181,6 +193,31 @@ Page {
         }
       }
 
+      Row {
+        width: parent.width
+        spacing: 10 * __dp
+
+        MMCheckBox {
+          id: newsletterSubscribe
+
+          width: 24 * __dp
+          anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Text {
+          // TODO replace with text in MMCheckBox
+          width: parent.width - newsletterSubscribe.width - parent.spacing - 2 * root.hPadding
+          anchors.verticalCenter: parent.verticalCenter
+
+          text: qsTr("I want to subscribe to the newsletter")
+          font: __style.p5
+          color: __style.nightColor
+          linkColor: __style.forestColor
+          wrapMode: Text.WordWrap
+          lineHeight: 1.5
+        }
+      }
+
       Item { width: 1; height: 1 }
 
       MMButton {
@@ -193,7 +230,8 @@ Page {
                 email.text,
                 password.text,
                 passwordConfirm.text,
-                tocAccept.checked
+                tocAccept.checked,
+                newsletterSubscribe.checked
           )
         }
       }

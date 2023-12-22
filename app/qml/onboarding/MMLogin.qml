@@ -24,15 +24,14 @@ Page {
   signal changeServerClicked ( string newServer )
   signal forgotPasswordClicked
 
-  property string warningMsg //TODO
-  property bool canSignUp: true //TODO
+  property string warningMsg
+  property bool canSignUp: true
   property string apiRoot
 
   /**
   * Suppose to be true if auth request is pending. Then busy indicator is running and
   * the login button is disabled.
   */
-  //TODO!!
   property bool pending: false
 
   readonly property real hPadding: width < __style.maxPageWidth
@@ -94,13 +93,19 @@ Page {
 
       Text {
         // !TODO - need graphic designer input!
-        visible: root.warningMsg
+
         width: parent.width - 2 * root.hPadding
-        text: root.warningMsg
+
         font: __style.h2
         color: __style.negativeColor
         wrapMode: Text.WordWrap
         horizontalAlignment: Text.AlignHCenter
+      }
+
+      MMWarningBubble {
+        visible: root.warningMsg
+        text: root.warningMsg
+        width: root.width - 2 * root.hPadding
       }
 
       MMInputEditor {

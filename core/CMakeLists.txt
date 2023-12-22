@@ -20,6 +20,7 @@ set(MM_CORE_HDRS
     coreutils.h
     merginapi.h
     merginapistatus.h
+    merginerrortypes.h
     merginsubscriptioninfo.h
     merginsubscriptionstatus.h
     merginservertype.h

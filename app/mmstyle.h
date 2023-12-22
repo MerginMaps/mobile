@@ -154,6 +154,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl acceptInvitationLogoImage READ acceptInvitationLogoImage CONSTANT )
     Q_PROPERTY( QUrl reachedDataLimitImage READ reachedDataLimitImage CONSTANT )
     Q_PROPERTY( QUrl uploadImage READ uploadImage CONSTANT )
+    Q_PROPERTY( QUrl warnLogoImage READ warnLogoImage CONSTANT )
 
     // Map items
     Q_PROPERTY( double mapItemHeight READ mapItemHeight CONSTANT )
@@ -293,6 +294,7 @@ class MMStyle: public QObject
     QUrl acceptInvitationImage() {return QUrl( "qrc:/AcceptInvitationImage.svg" ); }
     QUrl uploadImage() {return QUrl( "qrc:/UploadImage.svg" );}
     QUrl reachedDataLimitImage() {return QUrl( "qrc:/ReachedDataLimitImage.svg" );}
+    QUrl warnLogoImage() {return QUrl( "qrc:/WarnLogoImage.svg" );}
 
     double mapItemHeight() {return 50 * mDp;}
 

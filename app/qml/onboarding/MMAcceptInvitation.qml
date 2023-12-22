@@ -18,10 +18,14 @@ Page {
 
   required property string user
   required property string workspace
+  required property string workspaceUuid
 
-  signal backClicked
-  signal continueClicked
+  property bool haveBack: true
+  property bool showCreate: true
+
+  signal joinWorkspaceClicked(string workspaceUuid)
   signal createWorkspaceClicked
+  signal backClicked
 
   readonly property real hPadding: width < __style.maxPageWidth
                                    ? 20 * __dp
@@ -29,6 +33,17 @@ Page {
   Rectangle {
     anchors.fill: parent
     color: __style.lightGreenColor
+  }
+
+  MMHeader {
+    id: header
+
+    x: mainColumn.leftPadding
+    y: mainColumn.topPadding
+    width: parent.width - 2 * root.hPadding
+    visible: haveBack
+
+    onBackClicked: root.backClicked()
   }
 
   ScrollView {
@@ -105,19 +120,27 @@ Page {
         width: parent.width - 2 * root.hPadding
         text: qsTr("Join workspace")
 
-        onClicked: root.continueClicked()
+        onClicked: root.joinWorkspaceClicked(root.workspaceUuid)
       }
 
       MMHlineText {
         width: parent.width - 2 * root.hPadding
         title: qsTr("or")
+        visible: root.showCreate
       }
 
-      MMLinkButton {
+      Text {
         width: parent.width - 2 * root.hPadding
-        text: qsTr("Create new workspace")
+        text: qsTr("Want to create a new workspace instead? %1Click here%2").arg("<a href='internal-signal'>").arg("</a>")
+        font: __style.t3
+        color: __style.nightColor
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignHCenter
+        lineHeight: 1.2
 
-        onClicked: root.createWorkspaceClicked()
+        onLinkActivated: function(link) {
+          root.createWorkspaceClicked()
+        }
       }
     }
   }
