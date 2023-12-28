@@ -46,11 +46,18 @@ class Notification
 
   public:
     Notification( uint id, const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon );
-    uint id() { return mId; }
-    QString message() { return mMessage; }
-    NotificationType::MessageType type() { return mType; }
-    NotificationType::IconType icon() { return mIcon; }
-    bool isRemovableAfterDecrement() { return ( mInterval-- <= 0 ); }
+    uint id() const { return mId; }
+    QString message() const { return mMessage; }
+    NotificationType::MessageType type() const { return mType; }
+    NotificationType::IconType icon() const { return mIcon; }
+    bool isRemovableAfterDecrement()
+    {
+      if ( mInterval > 0 )
+      {
+        --mInterval;
+      }
+      return ( mInterval == 0 );
+    }
 
   private:
     uint mId;

@@ -196,5 +196,26 @@ ScrollView {
         }
       }
     }
+
+    GroupBox {
+      title: "MMWarningBubble"
+      background: Rectangle {
+        color: "white"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      Column {
+        spacing: 20
+        anchors.fill: parent
+        MMWarningBubble {
+          width: page.width - 64
+          text: "Server is broken, sorry. \n Please wait for tomorrow"
+        }
+      }
+    }
   }
 }

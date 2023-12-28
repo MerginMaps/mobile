@@ -66,6 +66,7 @@ set(MM_SRCS
     layersproxymodel.cpp
     main.cpp
     mapthemesmodel.cpp
+    notificationmodel.cpp
     projectsmodel.cpp
     projectsproxymodel.cpp
     projectwizard.cpp
@@ -146,6 +147,7 @@ set(MM_HDRS
     layersmodel.h
     layersproxymodel.h
     mapthemesmodel.h
+    notificationmodel.h
     projectsmodel.h
     projectsproxymodel.h
     projectwizard.h

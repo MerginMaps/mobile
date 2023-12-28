@@ -64,18 +64,9 @@ Item {
     }
   }
 
-  function openLoginPage()
+  function showLogin()
   {
-    for ( let i = 0; i < stackView.depth; i++ ) {
-      let item = stackView.get( i )
-
-      if ( item && item.objectName && item.objectName === "loginPage" ) {
-        // sorry, it is already opened, let's not open it again
-        return;
-      }
-    }
-
-    stackView.push( loginPageComp, {}, StackView.PushTransition )
+    onboardingController.start()
   }
 
   function openChangesPanel()
@@ -108,7 +99,7 @@ Item {
         return false;
       }
       // do not show the banner in case of accepting invitation or creating a workspace
-      if (stackView.currentItem && (stackView.currentItem.objectName === "registrationFinishPanel" || stackView.currentItem.objectName === "createWorkspacePanel")) {
+      if (onboardingController.inProgress) {
         return false;
       }
       return !__merginApi.userInfo.hasWorkspaces
@@ -121,7 +112,7 @@ Item {
     }
 
     onCreateWorkspaceRequested: {
-      stackView.push(createWorkspaceComponent)
+      createWorkspaceController.createNewWorkspace()
     }
   }
 
@@ -262,7 +253,7 @@ Item {
             }
           }
           else {
-            root.openLoginPage()
+            root.showLogin()
           }
         }
       }
@@ -499,117 +490,25 @@ Item {
     }
   }
 
-  Component {
-    id: loginPageComp
-
-    MMLogin {
-      id: loginPage
-
-      objectName: "loginPage"
-      visible: false
-      apiRoot: __merginApi.apiRoot
-      pending: stackView.pending
-      height: root.height
-      width: root.width
-      canSignUp:  (__merginApi.serverType === MerginServerType.EE ) || ( __merginApi.serverType === MerginServerType.SAAS )
-      warningMsg: {
-        if (__merginApi.apiVersionStatus === MerginApiStatus.OK) {
-          ""
-        } else
-        {
-          if (__merginApi.apiVersionStatus === MerginApiStatus.INCOMPATIBLE) {
-            qsTr("Please update the app to use the latest features.")
-          } else if (__merginApi.apiVersionStatus === MerginApiStatus.PENDING) {
-            ""
-          } else {
-            qsTr("Server is currently unavailable - please try again later.")
-          }
-        }
-      }
-
-      onSignInClicked: function ( username, password ) {
-        stackView.pending = true
-        __merginApi.authorize(username, password)
-      }
-
-      onBackClicked: {
-        stackView.popOnePageOrClose()
-        if ( !__merginApi.userAuth.hasAuthData() ) {
-          root.resetView()
-        }
-      }
-
-      onSignUpClicked: {
-        if (!canSignUp) // should not happen
-          return;
-
-        if ( __merginApi.serverType === MerginServerType.EE ) {
-          Qt.openUrlExternally( __merginApi.apiRoot )
-        }
-        else {
-          stackView.push( registrationPanel )
-        }
-      }
-
-      onChangeServerClicked: function ( newServer ) {
-        __merginApi.apiRoot = newServer
-      }
-
-      onForgotPasswordClicked: {
-        Qt.openUrlExternally(__merginApi.resetPasswordUrl());
-      }
-
-    }
+  MMOnboardingController {
+    id: onboardingController
+    enabled: root.visible
+    stackView: stackView
   }
 
-  Component {
-    id: registrationPanel
-
-    MMSignUp {
-
-      objectName: "registrationPanel"
-      tocString: qsTr("I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3")
-      .arg("<a href='"+ __inputHelp.merginTermsLink + "'>")
-      .arg("<a href='"+ __inputHelp.privacyPolicyLink +"'>")
-      .arg("</a>")
-
-      onBackClicked: {
-        stackView.popOnePageOrClose()
-        if ( !__merginApi.userAuth.hasAuthData() ) {
-          root.resetView()
-        }
-      }
-
-      onSignInClicked: {
-        stackView.popOnePageOrClose()
-      }
-
-      onSignUpClicked: function ( username, email, password, passwordConfirm, tocAccept ) {
-        if ( __merginApi.serverType !== MerginServerType.SAAS ) {
-          return; //should not happen
-        }
-        else {
-          stackView.pending = true
-          __merginApi.registerUser( username,
-                                   email,
-                                   password,
-                                   passwordConfirm,
-                                   tocAccept )
-        }
-      }
-    }
+  MMCreateWorkspaceController {
+    // TODO move to main.qml?
+    id: createWorkspaceController
+    enabled: root.visible
+    stackView: stackView
   }
 
-  Component {
-    id: registrationFinishComponent
-
-    RegistrationFinishPage {
-
-      objectName: "registrationFinishPanel"
-      onFinished: {
-        stackView.pop( null )
-      }
-    }
+  MMAcceptInvitationController {
+    // TODO move to main.qml?
+    id: acceptInvitationController
+    // TODO enabled add controller.showInvitationsList
+    enabled: root.visible && __merginApi.apiSupportsWorkspaces
+    stackView: stackView
   }
 
   Component {
@@ -678,48 +577,10 @@ Item {
       }
 
       onCreateWorkspaceRequested: {
-        stackView.push( createWorkspaceComponent )
+        onboardingController.createNewWorkspace()
       }
     }
   }
-
-  Component {
-    id: createWorkspaceComponent
-
-    CreateWorkspacePage {
-      id: createWorkspacePanel
-
-      objectName: "createWorkspacePanel"
-      onBack: {
-        stackView.popOnePageOrClose()
-      }
-    }
-  }
-
-  Component {
-    id: invitationsPanelComponent
-
-    ManageInvitationsPage {
-      objectName: "invitationsPanel"
-      haveBack: true
-      showCreate: false
-      onBack: {
-        stackView.pop( null )
-      }
-
-      Connections {
-        target: __merginApi
-
-        function onProcessInvitationFinished( accepted ) {
-          stackView.pop(null)
-          if ( __merginApi.userInfo.hasWorkspaces && accepted ) {
-            stackView.push(workspaceListComponent)
-          }
-        }
-      }
-    }
-  }
-
 
   Connections {
     target: __merginApi
@@ -746,7 +607,7 @@ Item {
     function onAuthRequested() {
       stackView.pending = false
 
-      root.openLoginPage()
+      root.showLogin()
     }
 
     function onAuthChanged() {
@@ -763,7 +624,7 @@ Item {
       }
       else {
         // log out - reenable openInvitationsListener
-        openInvitationsListener.showInvitationsList = true
+        acceptInvitationController.showInvitationList = true
       }
     }
 
@@ -771,52 +632,8 @@ Item {
       stackView.pending = false
     }
 
-    function onRegistrationFailed( msg, field ) {
-      stackView.pending = false
-      if ( stackView.currentItem.objectName === "registrationPanel" ) {
-        stackView.currentItem.showErrorMessage(msg, field)
-      }
-    }
-
-    function onRegistrationSucceeded() {
-      stackView.pending = false
-      stackView.push( registrationFinishComponent )
-    }
-
     function onActiveWorkspaceChanged() {
       root.refreshProjects()
-    }
-
-    function onWorkspaceCreated(workspace, result) {
-      if (result) {
-        stackView.popPage("createWorkspacePanel")
-      }
-    }
-  }
-
-  Connections {
-    id: openInvitationsListener
-
-    property bool showInvitationsList: true
-
-    target: __merginApi
-    enabled: __merginApi.apiSupportsWorkspaces && openInvitationsListener.showInvitationsList
-
-    function onUserInfoReplyFinished() {
-      openInvitationsListener.showInvitationsList = false;
-
-      // let's not show invitations when registration finish page is opened
-      if ( stackView.containsPage("registrationFinishPanel") ) {
-        return;
-      }
-
-      if ( !__merginApi.userAuth.hasAuthData() ) {
-        return;
-      }
-
-      if ( __merginApi.userInfo.hasInvitations ) {
-        stackView.push( invitationsPanelComponent )
-      }
     }
   }
 }

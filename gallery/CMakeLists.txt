@@ -29,9 +29,14 @@ find_package(
 qt_standard_project_setup()
 qt_policy(SET QTP0001 NEW)
 
-set(GALLERY_HDRS helper.h notificationmodel.h ../app/mmstyle.h)
+set(GALLERY_HDRS
+    helper.h
+    ../app/notificationmodel.h
+    ../app/mmstyle.h
+    ../core/merginerrortypes.h
+)
 
-set(GALLERY_SRCS helper.cpp notificationmodel.cpp main.cpp)
+set(GALLERY_SRCS helper.cpp ../app/notificationmodel.cpp main.cpp)
 
 if (IOS OR ANDROID)
   add_compile_definitions(MOBILE_OS)
@@ -74,7 +79,7 @@ set_target_properties(
 )
 
 target_link_libraries(MerginMapsGallery PRIVATE Qt6::Quick)
-target_include_directories(MerginMapsGallery PRIVATE ../app)
+target_include_directories(MerginMapsGallery PRIVATE ../app ../core)
 
 install(
   TARGETS MerginMapsGallery

@@ -81,7 +81,6 @@ class MMStyle: public QObject
 
     // Icons
     Q_PROPERTY( QUrl addIcon READ addIcon CONSTANT )
-    Q_PROPERTY( QUrl homeIcon READ homeIcon CONSTANT )
     Q_PROPERTY( QUrl layersIcon READ layersIcon CONSTANT )
     Q_PROPERTY( QUrl localChangesIcon READ localChangesIcon CONSTANT )
     Q_PROPERTY( QUrl mapThemesIcon READ mapThemesIcon CONSTANT )
@@ -108,10 +107,16 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl environmentalIcon READ environmentalIcon CONSTANT )
     Q_PROPERTY( QUrl errorIcon READ errorIcon CONSTANT )
     Q_PROPERTY( QUrl facebookIcon READ facebookIcon CONSTANT )
+    Q_PROPERTY( QUrl globeIcon READ globeIcon CONSTANT )
+    Q_PROPERTY( QUrl globalIcon READ globalIcon CONSTANT )
+    Q_PROPERTY( QUrl globalFilledIcon READ globalFilledIcon CONSTANT )
     Q_PROPERTY( QUrl hideIcon READ hideIcon CONSTANT )
+    Q_PROPERTY( QUrl homeIcon READ homeIcon CONSTANT )
+    Q_PROPERTY( QUrl homeFilledIcon READ homeFilledIcon CONSTANT )
     Q_PROPERTY( QUrl infoIcon READ infoIcon CONSTANT )
     Q_PROPERTY( QUrl linkedinIcon READ linkedinIcon CONSTANT )
     Q_PROPERTY( QUrl mastodonIcon READ mastodonIcon CONSTANT )
+    Q_PROPERTY( QUrl minusIcon READ minusIcon CONSTANT )
     Q_PROPERTY( QUrl moreIcon READ moreIcon CONSTANT )
     Q_PROPERTY( QUrl morePhotosIcon READ morePhotosIcon CONSTANT )
     Q_PROPERTY( QUrl mouthIcon READ mouthIcon CONSTANT )
@@ -119,8 +124,11 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl nextIcon READ nextIcon CONSTANT )
     Q_PROPERTY( QUrl otherIcon READ otherIcon CONSTANT )
     Q_PROPERTY( QUrl othersIcon READ othersIcon CONSTANT )
+    Q_PROPERTY( QUrl plusIcon READ plusIcon CONSTANT )
     Q_PROPERTY( QUrl previousIcon READ previousIcon CONSTANT )
     Q_PROPERTY( QUrl projectButtonMoreIcon READ projectButtonMoreIcon CONSTANT )
+    Q_PROPERTY( QUrl projectsIcon READ projectsIcon CONSTANT )
+    Q_PROPERTY( QUrl projectsFilledIcon READ projectsFilledIcon CONSTANT )
     Q_PROPERTY( QUrl qgisIcon READ qgisIcon CONSTANT )
     Q_PROPERTY( QUrl qrCodeIcon READ qrCodeIcon CONSTANT )
     Q_PROPERTY( QUrl redditIcon READ redditIcon CONSTANT )
@@ -142,13 +150,13 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl xMarkIcon READ xMarkIcon CONSTANT )
     Q_PROPERTY( QUrl xTwitterIcon READ xTwitterIcon CONSTANT )
     Q_PROPERTY( QUrl youtubeIcon READ youtubeIcon CONSTANT )
-    Q_PROPERTY( QUrl globeIcon READ globeIcon CONSTANT )
 
     // Images
     Q_PROPERTY( QUrl acceptInvitationImage READ acceptInvitationImage CONSTANT )
     Q_PROPERTY( QUrl acceptInvitationLogoImage READ acceptInvitationLogoImage CONSTANT )
     Q_PROPERTY( QUrl reachedDataLimitImage READ reachedDataLimitImage CONSTANT )
     Q_PROPERTY( QUrl uploadImage READ uploadImage CONSTANT )
+    Q_PROPERTY( QUrl warnLogoImage READ warnLogoImage CONSTANT )
 
     // Map items
     Q_PROPERTY( double mapItemHeight READ mapItemHeight CONSTANT )
@@ -217,7 +225,6 @@ class MMStyle: public QObject
 
     QUrl addIcon() {return QUrl( "qrc:/Add.svg" );}
     QUrl layersIcon() {return QUrl( "qrc:/Layers.svg" );}
-    QUrl homeIcon() {return QUrl( "qrc:/Home.svg" );}
     QUrl localChangesIcon() {return QUrl( "qrc:/LocalChanges.svg" );}
     QUrl mapThemesIcon() {return QUrl( "qrc:/MapThemes.svg" );}
     QUrl positionTrackingIcon() {return QUrl( "qrc:/PositionTracking.svg" );}
@@ -244,10 +251,15 @@ class MMStyle: public QObject
     QUrl errorIcon() {return QUrl( "qrc:/Error.svg" );}
     QUrl facebookIcon() {return QUrl( "qrc:/Facebook.svg" );}
     QUrl globeIcon() {return QUrl( "qrc:/Globe.svg" );}
+    QUrl globalIcon() {return QUrl( "qrc:/Global.svg" );}
+    QUrl globalFilledIcon() {return QUrl( "qrc:/GlobalFilled.svg" );}
     QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
+    QUrl homeIcon() {return QUrl( "qrc:/Home.svg" );}
+    QUrl homeFilledIcon() {return QUrl( "qrc:/HomeFilled.svg" );}
     QUrl infoIcon() {return QUrl( "qrc:/Info.svg" );}
     QUrl linkedinIcon() {return QUrl( "qrc:/Linkedin.svg" );}
     QUrl mastodonIcon() {return QUrl( "qrc:/Mastodon.svg" );}
+    QUrl minusIcon() {return QUrl( "qrc:/Minus.svg" );}
     QUrl moreIcon() {return QUrl( "qrc:/More.svg" );}
     QUrl morePhotosIcon() {return QUrl( "qrc:/MorePhotos.svg" );}
     QUrl mouthIcon() {return QUrl( "qrc:/Mouth.svg" );}
@@ -255,8 +267,11 @@ class MMStyle: public QObject
     QUrl nextIcon() {return QUrl( "qrc:/Next.svg" );}
     QUrl otherIcon() {return QUrl( "qrc:/Other.svg" );}
     QUrl othersIcon() {return QUrl( "qrc:/Others.svg" );}
+    QUrl plusIcon() {return QUrl( "qrc:/Plus.svg" );}
     QUrl previousIcon() {return QUrl( "qrc:/Previous.svg" );}
     QUrl projectButtonMoreIcon() {return QUrl( "qrc:/ProjectButtonMore.svg" );}
+    QUrl projectsIcon() {return QUrl( "qrc:/Projects.svg" );}
+    QUrl projectsFilledIcon() {return QUrl( "qrc:/ProjectsFilled.svg" );}
     QUrl qgisIcon() {return QUrl( "qrc:/QGIS.svg" );}
     QUrl qrCodeIcon() {return QUrl( "qrc:/QRCode.svg" );}
     QUrl redditIcon() {return QUrl( "qrc:/Reddit.svg" );}
@@ -283,6 +298,7 @@ class MMStyle: public QObject
     QUrl acceptInvitationImage() {return QUrl( "qrc:/AcceptInvitationImage.svg" ); }
     QUrl uploadImage() {return QUrl( "qrc:/UploadImage.svg" );}
     QUrl reachedDataLimitImage() {return QUrl( "qrc:/ReachedDataLimitImage.svg" );}
+    QUrl warnLogoImage() {return QUrl( "qrc:/WarnLogoImage.svg" );}
 
     double mapItemHeight() {return 50 * mDp;}
 

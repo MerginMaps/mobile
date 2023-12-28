@@ -27,6 +27,7 @@
 #include "merginapistatus.h"
 #include "merginservertype.h"
 #include "merginsubscriptionstatus.h"
+#include "merginerrortypes.h"
 #include "merginprojectmetadata.h"
 #include "localprojectsmanager.h"
 #include "project.h"
@@ -34,22 +35,6 @@
 #include "merginuserinfo.h"
 #include "merginworkspaceinfo.h"
 #include "merginuserauth.h"
-
-class RegistrationError
-{
-    Q_GADGET
-  public:
-    enum RegistrationErrorType
-    {
-      OTHER = 0,
-      USERNAME,
-      EMAIL,
-      PASSWORD,
-      CONFIRM_PASSWORD,
-      TOC
-    };
-    Q_ENUM( RegistrationErrorType )
-};
 
 struct ProjectDiff
 {
@@ -343,6 +328,18 @@ class MerginApi: public QObject
     );
 
     /**
+    * Store extra marketing information for new user that created workspace
+    * \param marketingChannel How you found us?
+    * \param industry Which industry?
+    * \param wantsNewsletter Whether user wants to receive newsletter
+    */
+    Q_INVOKABLE void postRegisterUser(
+      const QString &marketingChannel,
+      const QString &industry,
+      bool wantsNewsletter
+    );
+
+    /**
     * Pings Mergin server and checks its version with required version defined in version.pri
     * Accordingly sets mApiVersionStatus variable (reset when mergin url is changed).
     * The function is skipped if version has been checked and passed.
@@ -607,6 +604,8 @@ class MerginApi: public QObject
     void authFailed();
     void registrationSucceeded();
     void registrationFailed( const QString &msg, RegistrationError::RegistrationErrorType type = RegistrationError::RegistrationErrorType::OTHER );
+    void postRegistrationSucceeded();
+    void postRegistrationFailed( const QString &msg );
     void apiRootChanged();
     void apiVersionStatusChanged();
     void projectCreated( const QString &projectFullName, bool result );
@@ -673,6 +672,7 @@ class MerginApi: public QObject
     void deleteProjectFinished( bool informUser = true );
     void authorizeFinished();
     void registrationFinished( const QString &username = QStringLiteral(), const QString &password = QStringLiteral() );
+    void postRegistrationFinished();
     void pingMerginReplyFinished();
     void deleteAccountFinished();
 

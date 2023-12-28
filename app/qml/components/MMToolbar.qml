@@ -44,8 +44,6 @@ Rectangle {
 
     model: visibleButtonModel
     anchors.fill: parent
-    leftMargin: 20 * __dp
-    rightMargin: 20 * __dp
     cellHeight: __style.toolbarHeight
     interactive: false
   }
@@ -75,7 +73,7 @@ Rectangle {
   function setupBottomBar() {
     var m = control.model
     var c = m.count
-    var w = control.width - 40 * __dp
+    var w = control.width
     var button
 
     // add all buttons (max 4) into toolbar

@@ -63,9 +63,19 @@
         <file>WaterResources.svg</file>
         <file>XMark.svg</file>
         <file>XTwitter.svg</file>
+        <file>WarnLogoImage.svg</file>
         <file>Youtube.svg</file>
+        <file>Globe.svg</file>
+        <file>Global.svg</file>
+        <file>Home.svg</file>
+        <file>Projects.svg</file>
         <file>ZoomToProject.svg</file>
         <file>Next.svg</file>
         <file>Previous.svg</file>
+        <file>GlobalFilled.svg</file>
+        <file>HomeFilled.svg</file>
+        <file>ProjectsFilled.svg</file>
+        <file>Minus.svg</file>
+        <file>Plus.svg</file>
     </qresource>
 </RCC>

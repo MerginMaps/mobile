@@ -74,5 +74,11 @@
         <file>../app/qml/components/MMMonthGrid.qml</file>
         <file>../app/qml/components/MMAmPmSwitch.qml</file>
         <file>../app/qml/components/MMCalendarDrawer.qml</file>
+        <file>../app/qml/inputs/MMSwitchEditor.qml</file>
+        <file>../app/qml/components/MMSelectableToolbar.qml</file>
+        <file>../app/qml/components/MMSelectableToolbarButton.qml</file>
+        <file>../app/qml/inputs/MMNumberEditor.qml</file>
+        <file>../app/qml/inputs/MMButtonInputEditor.qml</file>
+        <file>../app/qml/components/MMWarningBubble.qml</file>
     </qresource>
 </RCC>
