@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qml/inputs"
+import "../../app/qml/components"
 
 ScrollView {
   Column {
@@ -70,14 +71,19 @@ ScrollView {
           warningMsg: text.length > 0 ? "" : "Write something"
         }
 
-        MMIconInputEditor {
-          title: "MMInputWithRightIconEditor"
-          placeholderText: "Placeholder"
+        MMCalendarEditor {
+          title: "MMCalendarEditor"
+          placeholderText: "YYYY/MM/DD"
           enabled: checkbox.checked
           width: parent.width
-          warningMsg: text.length > 0 ? "" : "Press button to scan"
-          iconSource: __style.qrCodeIcon
-          onRightActionClicked: { console.log("Show scan input"); text = "Scanned text ..." }
+          warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
+
+          fieldIsDate: false
+          typeFromFieldFormat: "?"
+          includesTime: true
+          includesDate: true
+
+          onSelected: function(dateTime) { text = dateTime }
         }
 
         MMPasswordEditor {

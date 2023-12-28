@@ -116,8 +116,10 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl morePhotosIcon READ morePhotosIcon CONSTANT )
     Q_PROPERTY( QUrl mouthIcon READ mouthIcon CONSTANT )
     Q_PROPERTY( QUrl naturalResourcesIcon READ naturalResourcesIcon CONSTANT )
+    Q_PROPERTY( QUrl nextIcon READ nextIcon CONSTANT )
     Q_PROPERTY( QUrl otherIcon READ otherIcon CONSTANT )
     Q_PROPERTY( QUrl othersIcon READ othersIcon CONSTANT )
+    Q_PROPERTY( QUrl previousIcon READ previousIcon CONSTANT )
     Q_PROPERTY( QUrl projectButtonMoreIcon READ projectButtonMoreIcon CONSTANT )
     Q_PROPERTY( QUrl qgisIcon READ qgisIcon CONSTANT )
     Q_PROPERTY( QUrl qrCodeIcon READ qrCodeIcon CONSTANT )
@@ -250,8 +252,10 @@ class MMStyle: public QObject
     QUrl morePhotosIcon() {return QUrl( "qrc:/MorePhotos.svg" );}
     QUrl mouthIcon() {return QUrl( "qrc:/Mouth.svg" );}
     QUrl naturalResourcesIcon() {return QUrl( "qrc:/NaturalResources.svg" );}
+    QUrl nextIcon() {return QUrl( "qrc:/Next.svg" );}
     QUrl otherIcon() {return QUrl( "qrc:/Other.svg" );}
     QUrl othersIcon() {return QUrl( "qrc:/Others.svg" );}
+    QUrl previousIcon() {return QUrl( "qrc:/Previous.svg" );}
     QUrl projectButtonMoreIcon() {return QUrl( "qrc:/ProjectButtonMore.svg" );}
     QUrl qgisIcon() {return QUrl( "qrc:/QGIS.svg" );}
     QUrl qrCodeIcon() {return QUrl( "qrc:/QRCode.svg" );}

@@ -15,17 +15,11 @@ import "."
 Drawer {
   id: control
 
-  property alias picture: picture.source
   property alias title: title.text
-  property alias bigTitle: bigTitle.text
-  property alias description: description.text
-  property alias boundedDescription: boundedDescription.text
   property alias primaryButton: primaryButton.text
-  property alias secondaryButton: secondaryButton.text
-  property alias specialComponent: loader.sourceComponent
+  property alias dateTime: dateTimePicker.dateToSelect
 
   signal primaryButtonClicked
-  signal secondaryButtonClicked
 
   width: window.width
   height: mainColumn.height
@@ -94,85 +88,21 @@ Drawer {
         }
       }
 
-      Image {
-        id: picture
-
-        anchors.horizontalCenter: parent.horizontalCenter
+      MMDateTimePicker {
+        id: dateTimePicker
+        width: parent.width
       }
-
-      Text {
-        id: bigTitle
-
-        anchors.horizontalCenter: parent.horizontalCenter
-        font: __style.t1
-        width: parent.width - 2*20 * __dp
-        color: __style.forestColor
-        visible: text.length > 0
-        horizontalAlignment: Text.AlignHCenter
-      }
-
-      Text {
-        id: description
-
-        anchors.horizontalCenter: parent.horizontalCenter
-        font: __style.p5
-        width: parent.width - 2*20 * __dp
-        color: __style.nightColor
-        visible: text.length > 0
-        horizontalAlignment: Text.AlignHCenter
-        wrapMode: Text.WordWrap
-        lineHeight: 1.6
-      }
-
-      Rectangle {
-        anchors.horizontalCenter: parent.horizontalCenter
-        visible: boundedDescription.text.length > 0
-        width: parent.width - 2*20 * __dp
-        height: boundedDescription.height
-        radius: 16 * __dp
-        color: __style.lightGreenColor
-
-        Text {
-          id: boundedDescription
-
-          anchors.horizontalCenter: parent.horizontalCenter
-          font: __style.p6
-          width: parent.width
-          color: __style.nightColor
-          visible: text.length > 0
-          horizontalAlignment: Text.AlignLeft
-          wrapMode: Text.WordWrap
-          lineHeight: 1.6
-          padding: 20 * __dp
-        }
-      }
-
-      Loader {
-        id: loader
-
-        anchors.horizontalCenter: parent.horizontalCenter
-      }
-
-      Item { width: 1; height: 1 }
 
       MMButton {
         id: primaryButton
 
-        width: parent.width - 2*20 * __dp
+        width: parent.width - 2 * 20 * __dp
         visible: text.length > 0
 
-        onClicked: primaryButtonClicked()
-      }
-
-      MMButton {
-        id: secondaryButton
-
-        width: parent.width - 2*20 * __dp
-        visible: text.length > 0
-        transparent: true
-        topPadding: 0
-
-        onClicked: secondaryButtonClicked()
+        onClicked: {
+          primaryButtonClicked()
+          close()
+        }
       }
     }
   }

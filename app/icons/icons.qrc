@@ -65,5 +65,7 @@
         <file>XTwitter.svg</file>
         <file>Youtube.svg</file>
         <file>ZoomToProject.svg</file>
+        <file>Next.svg</file>
+        <file>Previous.svg</file>
     </qresource>
 </RCC>

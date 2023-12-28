@@ -1,0 +1,31 @@
+// Copyright (C) 2022 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+
+import QtQuick
+import QtQuick.Templates as T
+
+T.AbstractDayOfWeekRow {
+  id: control
+
+  implicitWidth: Math.max(background ? background.implicitWidth : 0,
+                          contentItem.implicitWidth + leftPadding + rightPadding)
+  implicitHeight: Math.max(background ? background.implicitHeight : 0,
+                           contentItem.implicitHeight + topPadding + bottomPadding)
+
+  delegate: Text {
+    required property string shortName
+
+    text: shortName
+    font: __style.t4
+    horizontalAlignment: Text.AlignHCenter
+    verticalAlignment: Text.AlignVCenter
+    color: __style.mediumGreenColor
+  }
+
+  contentItem: Row {
+    Repeater {
+      model: control.source
+      delegate: control.delegate
+    }
+  }
+}

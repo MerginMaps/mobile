@@ -112,8 +112,16 @@ ScrollView {
           colorise: true
         }
         IconBox {
+          text: "nextIcon"
+          source: __style.nextIcon
+        }
+        IconBox {
           text: "projectButtonMoreIcon"
           source: __style.projectButtonMoreIcon
+        }
+        IconBox {
+          text: "previousIcon"
+          source: __style.previousIcon
         }
         IconBox {
           text: "qrCodeIcon"
