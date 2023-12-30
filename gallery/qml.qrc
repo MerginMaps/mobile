@@ -80,5 +80,7 @@
         <file>../app/qml/inputs/MMNumberEditor.qml</file>
         <file>../app/qml/inputs/MMButtonInputEditor.qml</file>
         <file>../app/qml/components/MMWarningBubble.qml</file>
+        <file>../app/qml/components/MMTumbler.qml</file>
+        <file>../app/qml/components/MMTimeTumbler.qml</file>
     </qresource>
 </RCC>

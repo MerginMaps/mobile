@@ -39,7 +39,7 @@ Item {
     spacing: 20 * __dp
     topPadding: 20 * __dp
 
-    // Mounts and Years
+    // Mount and Year
     Row {
       width: parent.width
 
@@ -47,8 +47,11 @@ Item {
 
       Item {
         width: parent.width
+        height: monthYearRow.height
 
         Row {
+          id: monthYearRow
+
           width: parent.width
           spacing: 5 * __dp
 
@@ -73,6 +76,20 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
           }
         }
+
+//        MouseArea {
+//          anchors.fill: parent
+//          onClicked: dateYearTumbler.visible = !dateYearTumbler.visible
+//        }
+
+//        MMTimeTumbler {
+//          id: dateYearTumbler
+
+//          anchors.left: monthYearRow.left
+//          anchors.top: monthYearRow.bottom
+//          anchors.topMargin: 15 * __dp
+//          visible: false
+//        }
 
         Row {
           x: parent.width - spacing - previousIcon.width - nextIcon.width - 10 * __dp
@@ -120,7 +137,7 @@ Item {
     // Weekdays
     MMDayOfWeekRow {
       width: parent.width
-      topPadding: 20 * __dp
+      topPadding: 2 * __dp
       visible: root.hasDatePicker
     }
 
@@ -188,6 +205,11 @@ Item {
             color: __style.forestColor
             text: "11:38:00"
 
+            MouseArea {
+              anchors.fill: parent
+              onClicked: timeTumbler.visible = !timeTumbler.visible
+            }
+
             function setTime(ddatetime) {
               let hour = ddatetime.getHours()
               let minutes = ddatetime.getMinutes()
@@ -200,6 +222,14 @@ Item {
               //                secondsTumbler.currentIndex = seconds
             }
           }
+          MMTimeTumbler {
+            id: timeTumbler
+
+            anchors.right: timeText.right
+            anchors.bottom: timeText.top
+            anchors.bottomMargin: 25 * __dp
+            visible: false
+          }
         }
 
         MMAmPmSwitch {}
@@ -207,5 +237,4 @@ Item {
     }
 
   }
-
 }
