@@ -21,12 +21,13 @@ MMAbstractEditor {
 
   property alias placeholderText: textArea.placeholderText
   property alias text: textArea.text
+  property int minimumRows: 3
 
   signal editorValueChanged( var newValue, var isNull )
 
   hasFocus: textArea.activeFocus
   contentItemHeight: {
-    const minHeight = 34 * __dp + metrics.height * 3 // min height for 3 rows
+    const minHeight = 34 * __dp + metrics.height * root.minimumRows
     var realHeight = textArea.y + textArea.contentHeight + 2 * textArea.verticalPadding
     return realHeight < minHeight ? minHeight : realHeight
   }
