@@ -42,7 +42,6 @@ set(MM_QML
     components/MMIcon.qml
     components/MMIconCheckBoxHorizontal.qml
     components/MMIconCheckBoxVertical.qml
-    components/MMInput.qml
     components/MMLink.qml
     components/MMLinkButton.qml
     components/MMListDrawer.qml
