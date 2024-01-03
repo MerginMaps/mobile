@@ -29,5 +29,6 @@ Rectangle {
     cellWidth: Math.floor(control.width / control.model.count)
 
     highlightFollowsCurrentItem: false
+    interactive: false
   }
 }
