@@ -52,7 +52,6 @@ set(MM_QML
     components/MMMorePhoto.qml
     components/MMNotification.qml
     components/MMNotificationView.qml
-    components/MMPasswordInput.qml
     components/MMPhoto.qml
     components/MMPhotoGallery.qml
     components/MMProgressBar.qml
