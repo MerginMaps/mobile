@@ -61,7 +61,6 @@ set(MM_QML
     components/MMRoundLinkButton.qml
     components/MMShadow.qml
     components/MMSwitch.qml
-    components/MMTextArea.qml
     components/MMTextBubble.qml
     components/MMToolbar.qml
     components/MMToolbarButton.qml
