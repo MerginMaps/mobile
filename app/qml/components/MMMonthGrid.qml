@@ -49,6 +49,8 @@ T.AbstractMonthGrid {
     columns: 7
     rowSpacing: 15 * __dp
 
+    width: control.width
+
     Repeater {
       model: control.source
       delegate: control.delegate

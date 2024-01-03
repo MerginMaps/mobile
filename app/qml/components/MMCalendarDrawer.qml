@@ -18,6 +18,8 @@ Drawer {
   property alias title: title.text
   property alias primaryButton: primaryButton.text
   property alias dateTime: dateTimePicker.dateToSelect
+  property alias hasDatePicker: dateTimePicker.hasDatePicker
+  property alias hasTimePicker: dateTimePicker.hasTimePicker
 
   signal primaryButtonClicked
 
@@ -90,6 +92,7 @@ Drawer {
 
       MMDateTimePicker {
         id: dateTimePicker
+
         width: parent.width
       }
 
@@ -100,6 +103,7 @@ Drawer {
         visible: text.length > 0
 
         onClicked: {
+          dateTimePicker.visible = false
           primaryButtonClicked()
           close()
         }

@@ -104,21 +104,6 @@ ScrollView {
           warningMsg: text.length > 0 ? "" : "Write something"
         }
 
-        MMCalendarEditor {
-          title: "MMCalendarEditor"
-          placeholderText: "YYYY/MM/DD"
-          enabled: checkbox.checked
-          width: parent.width
-          warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
-
-          fieldIsDate: false
-          typeFromFieldFormat: "?"
-          includesTime: true
-          includesDate: true
-
-          onSelected: function(dateTime) { text = dateTime }
-        }
-
         MMPasswordEditor {
           title: "MMPasswordEditor"
           text: "Password"

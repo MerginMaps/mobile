@@ -14,6 +14,8 @@ Tumbler {
   id: control
 
   delegate: Text {
+    id: text
+
     text: modelData
     font: Math.abs(Tumbler.displacement) < 0.4 ? __style.t1 : __style.p4
     horizontalAlignment: Text.AlignHCenter
@@ -28,7 +30,7 @@ Tumbler {
   Rectangle {
     anchors.horizontalCenter: control.horizontalCenter
     y: (control.height - height) / 2
-    width: control.width + 2 * radius
+    width: text.width + 2 * radius
     height: control.height * 0.26
     color: __style.lightGreenColor
     radius: 8 * __dp

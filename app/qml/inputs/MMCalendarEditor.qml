@@ -20,22 +20,21 @@ MMAbstractEditor {
   property bool parentValueIsNull: parent.valueIsNull ?? true
   property bool isReadOnly: parent.readOnly ?? false
 
-  // TODO: Uncomment to use it in Input app
+  // TODO: Uncomment to use it in MM
   property bool fieldIsDate //__inputUtils.fieldType( field ) === 'QDate'
   property var typeFromFieldFormat //__inputUtils.dateTimeFieldFormat( config['field_format'] )
   property bool includesTime //typeFromFieldFormat.includes("Time")
   property bool includesDate //typeFromFieldFormat.includes("Date")
 
+  property date dateTime
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
 
   signal editorValueChanged( var newValue, var isNull )
-  signal selected(date dateTime)
+  signal selected(date newDateTime)
 
   enabled: !isReadOnly
   hasFocus: textField.activeFocus
-
-  Component.onCompleted: dateTimeDrawerLoader.active = true
 
   content: TextField {
     id: textField
@@ -64,7 +63,6 @@ MMAbstractEditor {
 
   onRightActionClicked: {
     if (root.parentValueIsNull) {
-      // open calendar for today when no date is set
       root.openPicker( new Date() )
     }
     else {
@@ -86,10 +84,11 @@ MMAbstractEditor {
     MMCalendarDrawer {
       id: dateTimeDrawer
 
-//      property alias dateToOpen: picker.dateToSelect
-
       title: root.fieldIsDate ? qsTr("Date") : qsTr("Date & Time")
       primaryButton: qsTr("Confirm")
+      dateTime: root.dateTime
+      hasDatePicker: root.includesDate
+      hasTimePicker: root.includesTime
 
       onPrimaryButtonClicked: root.selected(dateTimeDrawer.dateTime)
       onClosed: dateTimeDrawerLoader.active = false
@@ -132,11 +131,12 @@ MMAbstractEditor {
       else {
         // This is the case when the date coming from C++ is pure string, so we
         // need to convert it to JS Date ourselves
-        //        return Date.fromLocaleString(Qt.locale(), qtDate, config['field_format'])
+        /* uncomment, should be helpful in MM */
+        // return Date.fromLocaleString(Qt.locale(), qtDate, config['field_format'])
       }
     }
   }
-
+  /* uncomment, should be helpful in MM
   function newDateSelected( jsDate ) {
     if ( jsDate ) {
       if ( root.parentField.isDateOrTime ) {
@@ -145,8 +145,8 @@ MMAbstractEditor {
         root.editorValueChanged( jsDate, false  )
       }
       else {
-        //        let qtDate = jsDate.toLocaleString(Qt.locale(), config['field_format'])
-        //        root.editorValueChanged(qtDate, false)
+        let qtDate = jsDate.toLocaleString(Qt.locale(), config['field_format'])
+        root.editorValueChanged(qtDate, false)
       }
     }
   }
@@ -157,13 +157,13 @@ MMAbstractEditor {
     }
     else {
       let jsDate = dateTransformer.toJsDate(qtDate)
-      //      return Qt.formatDateTime(jsDate, config['display_format'])
+      return Qt.formatDateTime(jsDate, config['display_format'])
     }
   }
+  */
 
   function openPicker(requestedDate) {
     dateTimeDrawerLoader.active = true
     dateTimeDrawerLoader.focus = true
-//    dateTimeDrawerLoader.item.dateToOpen = requestedDate
   }
 }

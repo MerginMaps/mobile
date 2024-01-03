@@ -82,5 +82,7 @@
         <file>../app/qml/components/MMWarningBubble.qml</file>
         <file>../app/qml/components/MMTumbler.qml</file>
         <file>../app/qml/components/MMTimeTumbler.qml</file>
+        <file>../app/qml/components/MMDateTumbler.qml</file>
+        <file>qml/pages/CalendarPage.qml</file>
     </qresource>
 </RCC>

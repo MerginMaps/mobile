@@ -168,6 +168,8 @@ class MMStyle: public QObject
     // Other
     Q_PROPERTY( double inputRadius READ inputRadius CONSTANT )
     Q_PROPERTY( double maxPageWidth READ maxPageWidth CONSTANT )
+    Q_PROPERTY( int calendarYearFrom READ calendarYearFrom CONSTANT )
+    Q_PROPERTY( int calendarYearTo READ calendarYearTo CONSTANT )
 
   public:
     explicit MMStyle( qreal dp )
@@ -307,6 +309,9 @@ class MMStyle: public QObject
 
     double inputRadius() {return 12 * mDp;}
     double maxPageWidth() {return 500 * mDp;}
+
+    int calendarYearFrom() {return 2000;}
+    int calendarYearTo() {return 2040;}
 
   signals:
     void styleChanged();

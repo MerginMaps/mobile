@@ -11,6 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
+// Prepared switch, but to used yet
+
 Switch {
   id: control
 

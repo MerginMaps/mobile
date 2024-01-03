@@ -30,11 +30,12 @@ Item {
   function setDate(toDate) {
     monthGrid.date = toDate
     monthGrid.navigateToDate(toDate)
-    //timepicker.setTime(toDate)
+    timeText.time = toDate
   }
 
   Column {
     id: mainColumn
+
     width: root.width - 40 * __dp
     spacing: 20 * __dp
     topPadding: 20 * __dp
@@ -52,7 +53,6 @@ Item {
         Row {
           id: monthYearRow
 
-          width: parent.width
           spacing: 5 * __dp
 
           Text {
@@ -77,20 +77,15 @@ Item {
           }
         }
 
-//        MouseArea {
-//          anchors.fill: parent
-//          onClicked: dateYearTumbler.visible = !dateYearTumbler.visible
-//        }
+        MouseArea {
+          anchors.fill: monthYearRow
+          onClicked: {
+            tumblerBgArea.visible = true
+            dateYearTumbler.visible = true
+          }
+        }
 
-//        MMTimeTumbler {
-//          id: dateYearTumbler
-
-//          anchors.left: monthYearRow.left
-//          anchors.top: monthYearRow.bottom
-//          anchors.topMargin: 15 * __dp
-//          visible: false
-//        }
-
+        // Right icons for changing months
         Row {
           x: parent.width - spacing - previousIcon.width - nextIcon.width - 10 * __dp
           spacing: 30 * __dp
@@ -152,11 +147,37 @@ Item {
       locale: root.locale
       visible: root.hasDatePicker
 
-      onSelectedDate: function (date) { root.dateToSelect = date }
+      onSelectedDate: function (date) {
+        root.dateToSelect.setDate(date.getDate())
+        root.dateToSelect.setMonth(date.getMonth())
+        root.dateToSelect.setFullYear(date.getFullYear())
+      }
 
-      function navigateToDate(ddate) {
-        monthGrid.year = ddate.getFullYear()
-        monthGrid.month = ddate.getMonth()
+// FIXME: Trying to refresh GUI, sometimes contains wrong inplicit size and set it explicit doesn't work
+//      Timer {
+//        id: timer
+
+//        interval: 1000
+//        repeat: false
+//        onTriggered: monthGrid.refresh()
+//      }
+
+//      Component.onCompleted: {
+//        //Qt.callLater(monthGrid.refresh)
+//        console.log("Ela implicitContentWidth = " + implicitContentWidth + " (parent width = " + parent.width + ")")
+//        timer.start()
+//        contentWidth = parent.width
+//      }
+
+//      function refresh() {
+//        console.log("Hop implicitContentWidth = " + implicitContentWidth + " (parent width = " + parent.width + ")")
+//        contentWidth = parent.width
+//        monthGrid.update()
+//      }
+
+      function navigateToDate(date) {
+        monthGrid.year = date.getFullYear()
+        monthGrid.month = date.getMonth()
       }
     }
 
@@ -177,7 +198,7 @@ Item {
 
       Text {
         anchors.verticalCenter: parent.verticalCenter
-        text: "Time"
+        text: qsTr("Time")
         font: __style.t1
         color: __style.nightColor
         horizontalAlignment: Text.AlignLeft
@@ -186,6 +207,7 @@ Item {
 
       Row {
         anchors.right: parent.right
+        anchors.rightMargin: 20 * __dp
         spacing: 10 * __dp
 
         Rectangle {
@@ -197,44 +219,80 @@ Item {
           Text {
             id: timeText
 
+            property date time
+
             anchors.centerIn: parent
             leftPadding: 20 * __dp
             rightPadding: 20 * __dp
 
             font:  __style.h3
             color: __style.forestColor
-            text: "11:38:00"
 
             MouseArea {
               anchors.fill: parent
-              onClicked: timeTumbler.visible = !timeTumbler.visible
+              onClicked: {
+                tumblerBgArea.visible = true
+                timeTumbler.visible = true
+              }
             }
 
-            function setTime(ddatetime) {
-              let hour = ddatetime.getHours()
-              let minutes = ddatetime.getMinutes()
-              let seconds = ddatetime.getSeconds()
+            onTimeChanged: {
+              let hours = time.getHours()
+              let minutes = time.getMinutes()
+              let seconds = time.getSeconds()
 
-              text = (hour + ":" + minutes + ":" + seconds)
+              timeText.text = (String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0'))
 
-              //                hoursTumbler.currentIndex = hour
-              //                minutesTumbler.currentIndex = minutes
-              //                secondsTumbler.currentIndex = seconds
+              timeTumbler.hours = hours
+              timeTumbler.minutes = minutes
+              timeTumbler.seconds = seconds
             }
-          }
-          MMTimeTumbler {
-            id: timeTumbler
-
-            anchors.right: timeText.right
-            anchors.bottom: timeText.top
-            anchors.bottomMargin: 25 * __dp
-            visible: false
           }
         }
-
-        MMAmPmSwitch {}
       }
     }
+  }
 
+  // visible area when a tumbler is visible. Waits for a click to cloase the tumbler
+  MouseArea {
+    id: tumblerBgArea
+
+    anchors.fill: mainColumn
+    visible: false
+    onClicked: {
+      visible = false
+      dateYearTumbler.visible = false
+      timeTumbler.visible = false
+    }
+  }
+
+  MMDateTumbler {
+    id: dateYearTumbler
+
+    visible: false
+    y: 50 * __dp
+
+    initMonthIndex: root.dateToSelect.getMonth()
+    initYear: root.dateToSelect.getFullYear()
+
+    onMonthIndexChanged: function(monthIndex) {
+      monthGrid.month = monthIndex
+    }
+
+    onYearChanged: function(year) {
+      monthGrid.year = year
+    }
+  }
+
+  MMTimeTumbler {
+    id: timeTumbler
+
+    x: mainColumn.width - timeTumbler.width
+    y: mainColumn.height - timeTumbler.height - timeRow.height - 10 * __dp
+    visible: false
+
+    onHoursChanged: { timeText.time.setHours(hours); root.dateToSelect.setHours(hours) }
+    onMinutesChanged: { timeText.time.setMinutes(minutes); root.dateToSelect.setMinutes(minutes) }
+    onSecondsChanged: { timeText.time.setSeconds(seconds); root.dateToSelect.setSeconds(seconds) }
   }
 }
