@@ -10,8 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import "../components"
 
 MMAbstractEditor {
@@ -28,7 +26,7 @@ MMAbstractEditor {
 
   hasFocus: textArea.activeFocus
   contentItemHeight: {
-    const minHeight = 85 * __dp // min height for 3 rows
+    const minHeight = 34 * __dp + metrics.height * 3 // min height for 3 rows
     var realHeight = textArea.y + textArea.contentHeight + 2 * textArea.verticalPadding
     return realHeight < minHeight ? minHeight : realHeight
   }
@@ -47,5 +45,10 @@ MMAbstractEditor {
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
     font: __style.p5
     wrapMode: Text.WordWrap
+  }
+
+  FontMetrics {
+    id: metrics
+    font: textArea.font
   }
 }
