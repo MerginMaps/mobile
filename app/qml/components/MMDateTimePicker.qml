@@ -38,7 +38,7 @@ Item {
 
     width: root.width - 40 * __dp
     spacing: 20 * __dp
-    topPadding: 20 * __dp
+    topPadding: 10 * __dp
 
     // Mount and Year
     Row {
@@ -131,9 +131,12 @@ Item {
 
     // Weekdays
     MMDayOfWeekRow {
+      id: weekdays
+
       width: parent.width
       topPadding: 2 * __dp
       visible: root.hasDatePicker
+      height: 14 * __dp
     }
 
     // Calendar
@@ -142,7 +145,11 @@ Item {
 
       bottomPadding: 70 * __dp
       width: parent.width
-      height: 330 * __dp
+      height: {
+        if(Window.height > 680)
+          return 330 * __dp
+        return 330 - (680 - Window.height)
+      }
 
       locale: root.locale
       visible: root.hasDatePicker
@@ -153,27 +160,21 @@ Item {
         root.dateToSelect.setFullYear(date.getFullYear())
       }
 
-// FIXME: Trying to refresh GUI, sometimes contains wrong inplicit size and set it explicit doesn't work
-//      Timer {
-//        id: timer
+      Timer {
+        id: fixHeightTimer
 
-//        interval: 1000
-//        repeat: false
-//        onTriggered: monthGrid.refresh()
-//      }
+        interval: 100
+        repeat: false
+        onTriggered: monthGrid.refresh()
+      }
 
-//      Component.onCompleted: {
-//        //Qt.callLater(monthGrid.refresh)
-//        console.log("Ela implicitContentWidth = " + implicitContentWidth + " (parent width = " + parent.width + ")")
-//        timer.start()
-//        contentWidth = parent.width
-//      }
+      Component.onCompleted: fixHeightTimer.start()
 
-//      function refresh() {
-//        console.log("Hop implicitContentWidth = " + implicitContentWidth + " (parent width = " + parent.width + ")")
-//        contentWidth = parent.width
-//        monthGrid.update()
-//      }
+      // update height to fit the content
+      function refresh() {
+        height--
+        weekdays.height--
+      }
 
       function navigateToDate(date) {
         monthGrid.year = date.getFullYear()
