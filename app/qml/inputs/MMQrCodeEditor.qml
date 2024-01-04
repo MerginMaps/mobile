@@ -30,22 +30,19 @@ MMAbstractEditor {
     placeholderTextColor: __style.nightAlphaColor
     font: __style.p5
     hoverEnabled: true
-    echoMode: eyeButton.pressed ? TextInput.Normal : TextInput.Password
     background: Rectangle {
       color: __style.transparentColor
     }
   }
 
   rightAction: MMIcon {
-    id: eyeButton
-
     property bool pressed: false
 
     height: parent.height
 
-    source: pressed ? __style.hideIcon : __style.showIcon
+    source: __style.qrCodeIcon
     color: root.enabled ? __style.forestColor : __style.mediumGreenColor
   }
 
-  onRightActionClicked: eyeButton.pressed = !eyeButton.pressed
+  onRightActionClicked: console.log("kuk")
 }
