@@ -103,6 +103,14 @@ ScrollView {
           warningMsg: text.length > 0 ? "" : "Write something"
         }
 
+        MMTextAreaEditor {
+          title: "MMTextAreaEditor"
+          placeholderText: "Place for multi row text"
+          enabled: checkbox.checked
+          width: parent.width
+          warningMsg: text.length > 0 ? "" : "Write something"
+        }
+
         MMPasswordEditor {
           title: "MMPasswordEditor"
           text: "Password"

@@ -6,19 +6,13 @@
         <file>qml/pages/StylePage.qml</file>
         <file>qml/pages/MiscPage.qml</file>
         <file>qml/pages/InitialGalleryPage.qml</file>
-        <file>qml/pages/InputsPage.qml</file>
         <file>qml/pages/ButtonsPage.qml</file>
-        <file>../app/qml/components/MMInput.qml</file>
         <file>../app/qml/components/MMButton.qml</file>
         <file>../app/qml/components/MMLinkButton.qml</file>
         <file>../app/qml/components/MMLink.qml</file>
         <file>../app/qml/components/MMIcon.qml</file>
         <file>../app/qml/components/MMRoundButton.qml</file>
         <file>../app/qml/components/MMRoundLinkButton.qml</file>
-        <file>qml/pages/TextAreaPage.qml</file>
-        <file>../app/qml/components/MMTextArea.qml</file>
-        <file>qml/pages/ComboBoxPage.qml</file>
-        <file>../app/qml/components/MMComboBox.qml</file>
         <file>../app/qml/components/MMRadioButton.qml</file>
         <file>../app/qml/components/MMSwitch.qml</file>
         <file>qml/pages/NotificationPage.qml</file>
@@ -33,8 +27,6 @@
         <file>../app/qml/components/MMMapButton.qml</file>
         <file>../app/qml/components/MMShadow.qml</file>
         <file>../app/qml/components/MMMapLabel.qml</file>
-        <file>../app/qml/components/MMPasswordInput.qml</file>
-        <file>../app/qml/components/MMButtonInput.qml</file>
         <file>../app/qml/components/MMToolbarButton.qml</file>
         <file>../app/qml/components/MMToolbar.qml</file>
         <file>qml/pages/ToolbarPage.qml</file>
@@ -68,6 +60,7 @@
         <file>../app/qml/components/MMBackButton.qml</file>
         <file>../app/qml/components/MMIconCheckBoxHorizontal.qml</file>
         <file>../app/qml/components/MMIconCheckBoxVertical.qml</file>
+        <file>../app/qml/inputs/MMTextAreaEditor.qml</file>
         <file>../app/qml/inputs/MMSwitchEditor.qml</file>
         <file>../app/qml/components/MMSelectableToolbar.qml</file>
         <file>../app/qml/components/MMSelectableToolbarButton.qml</file>
