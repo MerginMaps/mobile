@@ -15,10 +15,16 @@ import "../components"
 MMAbstractEditor {
   id: root
 
+  property var parentValue: parent.value
+  property bool isReadOnly: parent.readOnly ?? false
+
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
 
+  signal editorValueChanged( var newValue, bool isNull )
+
   hasFocus: textField.activeFocus
+  enabled: !root.isReadOnly
 
   content: TextField {
     id: textField
@@ -26,6 +32,8 @@ MMAbstractEditor {
     anchors.fill: parent
     anchors.verticalCenter: parent.verticalCenter
 
+    text: root.parentValue !== undefined ? root.parentValue : ''
+    readOnly: !root.enabled
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
     placeholderTextColor: __style.nightAlphaColor
     font: __style.p5
@@ -44,5 +52,36 @@ MMAbstractEditor {
     color: root.enabled ? __style.forestColor : __style.mediumGreenColor
   }
 
-  onRightActionClicked: console.log("kuk")
+  onRightActionClicked: {
+    if ( !root.enabled )
+      return
+    // uncomment when using in MM
+    // if (!__inputUtils.acquireCameraPermission())
+      // return
+
+    codeScannerLoader.active = true
+    codeScannerLoader.focus = true
+  }
+
+  Loader {
+    id: codeScannerLoader
+
+    asynchronous: true
+    active: false
+    sourceComponent: readerComponent
+  }
+
+  Component {
+    id: readerComponent
+
+    MMCodeScanner {
+      focus: true
+
+      Component.onCompleted: open()
+      onClosed: codeScannerLoader.active = false
+      onScanFinished: function( captured ) {
+        root.editorValueChanged( captured, false )
+      }
+    }
+  }
 }

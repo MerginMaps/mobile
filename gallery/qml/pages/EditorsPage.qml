@@ -77,10 +77,12 @@ ScrollView {
 
         MMQrCodeEditor {
           title: "MMQrCodeEditor"
-          placeholderText: "QR CODE"
+          placeholderText: "QR code"
           warningMsg: text.length > 0 ? "" : "Click to icon and scan the code"
           enabled: checkbox.checked
           width: parent.width
+
+          onEditorValueChanged: function(newValue, isNull) { console.log("QR code: " + newValue) }
         }
 
         MMButtonInputEditor {

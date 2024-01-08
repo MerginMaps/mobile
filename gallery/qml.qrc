@@ -75,5 +75,6 @@
         <file>../app/qml/inputs/MMButtonInputEditor.qml</file>
         <file>../app/qml/components/MMWarningBubble.qml</file>
         <file>../app/qml/inputs/MMQrCodeEditor.qml</file>
+        <file>../app/qml/components/MMCodeScanner.qml</file>
     </qresource>
 </RCC>
