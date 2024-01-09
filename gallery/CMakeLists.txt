@@ -17,12 +17,17 @@ find_package(
   Qt6 ${QT6_VERSION}
   COMPONENTS Quick
              Qml
+             Xml
              Concurrent
              Positioning
+             Sensors
              QuickControls2
+             Network
              Svg
+             Sql
              Core
              Core5Compat
+             Multimedia
   REQUIRED
 )
 
@@ -31,6 +36,8 @@ qt_policy(SET QTP0001 NEW)
 
 set(GALLERY_HDRS
     helper.h
+    qrcodedecoder.h
+    inpututils.h
     ../app/notificationmodel.h
     ../app/mmstyle.h
     ../core/merginerrortypes.h
@@ -78,7 +85,7 @@ set_target_properties(
              WIN32_EXECUTABLE TRUE
 )
 
-target_link_libraries(MerginMapsGallery PRIVATE Qt6::Quick)
+target_link_libraries(MerginMapsGallery PRIVATE Qt6::Quick Qt6::Multimedia)
 target_include_directories(MerginMapsGallery PRIVATE ../app ../core)
 
 install(

@@ -19,6 +19,8 @@
 #include <QFontDatabase>
 #include "notificationmodel.h"
 #include "merginerrortypes.h"
+#include "qrcodedecoder.h"
+#include "inpututils.h"
 
 int main( int argc, char *argv[] )
 {
@@ -30,11 +32,13 @@ int main( int argc, char *argv[] )
 
   // Register C++ enums
   qmlRegisterUncreatableType<RegistrationError>( "lc", 1, 0, "RegistrationError", "RegistrationError Enum" );
-
+  qmlRegisterType<QrCodeDecoder>( "lc", 1, 0, "QrCodeDecoder" );
 
 #ifdef DESKTOP_OS
   HotReload hotReload( engine );
   engine.rootContext()->setContextProperty( "_hotReload", &hotReload );
+  InputUtils iu;
+  engine.rootContext()->setContextProperty( "__inputUtils", &iu );
 #endif
 
   qreal dp = Helper::calculateDpRatio();

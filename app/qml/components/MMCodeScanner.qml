@@ -10,8 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtMultimedia
-// uncomment when using in MM
-// import lc 1.0 as InputClass
+import lc 1.0 as InputClass
 
 Drawer {
   id: root
@@ -44,17 +43,16 @@ Drawer {
     fillMode: VideoOutput.PreserveAspectCrop
   }
 
-//  uncomment when using in MM
-//  InputClass.QrCodeDecoder {
-//    id: qrcodeScanner
+  InputClass.QrCodeDecoder {
+    id: qrcodeScanner
 
-//    videoSink: videoOutput.videoSink
+    videoSink: videoOutput.videoSink
 
-//    onCodeScanned: function( codeData ) {
-//      root.unload()
-//      root.scanFinished( codeData )
-//    }
-//  }
+    onCodeScanned: function( codeData ) {
+      root.unload()
+      root.scanFinished( codeData )
+    }
+  }
 
   Canvas {
     id: canvas
@@ -128,8 +126,7 @@ Drawer {
   }
 
   function unload() {
-    // uncomment when using in MM
-    // qrcodeScanner.videoSink = null
+    qrcodeScanner.videoSink = null
     camera.active = false
     captureSession.videoOutput = null
     captureSession.camera = null

@@ -55,10 +55,8 @@ MMAbstractEditor {
   onRightActionClicked: {
     if ( !root.enabled )
       return
-    // uncomment when using in MM
-    // if (!__inputUtils.acquireCameraPermission())
-      // return
-
+    if (!__inputUtils.acquireCameraPermission())
+      return
     codeScannerLoader.active = true
     codeScannerLoader.focus = true
   }
