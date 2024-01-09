@@ -67,5 +67,7 @@
         <file>../app/qml/inputs/MMNumberEditor.qml</file>
         <file>../app/qml/inputs/MMButtonInputEditor.qml</file>
         <file>../app/qml/components/MMWarningBubble.qml</file>
+        <file>../app/qml/inputs/MMComboBoxEditor.qml</file>
+        <file>../app/qml/components/MMComboBoxDrawer.qml</file>
     </qresource>
 </RCC>

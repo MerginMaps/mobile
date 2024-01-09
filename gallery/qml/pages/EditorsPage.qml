@@ -40,6 +40,36 @@ ScrollView {
           checked: true
         }
 
+        MMComboBoxEditor {
+          title: "MMComboBoxEditor"
+          text: "Drop down"
+          enabled: checkbox.checked
+          width: parent.width
+          featuresModel: ListModel {
+            ListElement {
+              FeatureId: 1
+              FeatureTitle: "Title 1"
+              Description: "Description 1"
+              SearchResult: "SearchResult 1"
+              Feature: "Feature 1"
+            }
+            ListElement {
+              FeatureId: 2
+              FeatureTitle: "Title 2"
+              Description: "Description 2"
+              SearchResult: "SearchResult 2"
+              Feature: "Feature 2"
+            }
+            ListElement {
+              FeatureId: 1
+              FeatureTitle: "Title 3"
+              Description: "Description 3"
+              SearchResult: "SearchResult 3"
+              Feature: "Feature 3"
+            }
+          }
+        }
+
         MMSliderEditor {
           title: "MMSliderEditor"
           from: -100
