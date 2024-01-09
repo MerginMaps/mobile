@@ -17,8 +17,8 @@ Drawer {
 
   signal scanFinished( var data )
 
-  width: window.width
-  height: window.height
+  width: ApplicationWindow.window.width
+  height: ApplicationWindow.window.height
   edge: Qt.BottomEdge
   dim: true
   interactive: false
@@ -113,7 +113,7 @@ Drawer {
 
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.bottom: parent.bottom
-    anchors.bottomMargin: 10 * __dp
+    anchors.bottomMargin: 20 * __dp
     source: __style.closeButtonIcon
 
     MouseArea {

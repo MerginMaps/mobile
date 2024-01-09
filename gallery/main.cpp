@@ -37,9 +37,9 @@ int main( int argc, char *argv[] )
 #ifdef DESKTOP_OS
   HotReload hotReload( engine );
   engine.rootContext()->setContextProperty( "_hotReload", &hotReload );
+#endif
   InputUtils iu;
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
-#endif
 
   qreal dp = Helper::calculateDpRatio();
   MMStyle style( dp );
