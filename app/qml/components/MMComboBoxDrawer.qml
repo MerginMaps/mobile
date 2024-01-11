@@ -17,13 +17,15 @@ Drawer {
 
   property alias title: title.text
   property alias model: listView.model
+  property alias dropDownTitle: title.text
+  property bool multiSelect: false
 
   padding: 20 * __dp
 
   signal clicked(type: string)
 
   width: ApplicationWindow.window.width
-  height: mainColumn.height
+  height: (mainColumn.height > ApplicationWindow.window.height ? ApplicationWindow.window.height : mainColumn.height) - 20 * __dp
   edge: Qt.BottomEdge
 
   Rectangle {
@@ -84,14 +86,21 @@ Drawer {
       ListView {
         id: listView
 
+        bottomMargin: primaryButton.height + 20 * __dp
         width: parent.width - 2 * control.padding
-        height: control.model ? control.model.count * __style.menuDrawerHeight : 0
-        interactive: false
+        height: {
+          if(control.model.count > 4)
+            return ApplicationWindow.window.height - 100 * __dp
+          if(control.model)
+            return (1 + control.model.count) * __style.menuDrawerHeight
+          return 0
+        }
+        clip: true
 
         delegate: Item {
           id: delegate
 
-          //signal clicked(type: string)
+          property bool checked: root.multiSelect ? false : listView.currentIndex === model.index
 
           width: listView.width
           height: __style.menuDrawerHeight
@@ -101,6 +110,7 @@ Drawer {
             width: parent.width
             height: 1 * __dp
             color: __style.grayColor
+            visible: model.index
           }
 
           Row {
@@ -109,20 +119,51 @@ Drawer {
             spacing: 10 * __dp
 
             Text {
+              width: parent.width - icon.width - parent.spacing
               height: parent.height
               verticalAlignment: Text.AlignVCenter
               text: model.FeatureTitle
               color: __style.nightColor
               font: __style.t3
+              elide: Text.ElideRight
+            }
+
+            MMIcon {
+              id: icon
+              height: parent.height
+              width: 20 * __dp
+              color: __style.forestColor
+              source: __style.comboBoxCheckIcon
+              visible: delegate.checked
             }
           }
 
           MouseArea {
             anchors.fill: parent
-            //onClicked: control.clicked(control.type)
+            onClicked: {
+              if(root.multiSelect)
+                delegate.checked = !delegate.checked
+              listView.currentIndex = model.index
+            }
           }
         }
+      }
+    }
 
+    MMButton {
+      id: primaryButton
+
+      width: parent.width - 2 * 20 * __dp
+      anchors.horizontalCenter: parent.horizontalCenter
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: 20 * __dp
+
+      text: qsTr("Confirm selection")
+
+      onClicked: {
+        for(let i=0; i<listView.model.count; i++)
+          console.log(i + " " + listView.itemAtIndex(i).checked)
+        close()
       }
     }
   }

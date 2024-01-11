@@ -43,6 +43,7 @@ ScrollView {
         MMComboBoxEditor {
           title: "MMComboBoxEditor"
           text: "Drop down"
+          dropDownTitle: "Select one"
           enabled: checkbox.checked
           width: parent.width
           featuresModel: ListModel {
@@ -63,6 +64,66 @@ ScrollView {
             ListElement {
               FeatureId: 1
               FeatureTitle: "Title 3"
+              Description: "Description 3"
+              SearchResult: "SearchResult 3"
+              Feature: "Feature 3"
+            }
+          }
+        }
+
+        MMComboBoxEditor {
+          title: "MMComboBoxEditor Multi select"
+          text: "Drop down"
+          dropDownTitle: "Multi select"
+          enabled: checkbox.checked
+          width: parent.width
+          multiSelect: true
+          featuresModel: ListModel {
+            ListElement {
+              FeatureId: 1
+              FeatureTitle: "Title 1"
+              Description: "Description 1"
+              SearchResult: "SearchResult 1"
+              Feature: "Feature 1"
+            }
+            ListElement {
+              FeatureId: 2
+              FeatureTitle: "Title 2"
+              Description: "Description 2"
+              SearchResult: "SearchResult 2"
+              Feature: "Feature 2"
+            }
+            ListElement {
+              FeatureId: 1
+              FeatureTitle: "Title 3"
+              Description: "Description 3"
+              SearchResult: "SearchResult 3"
+              Feature: "Feature 3"
+            }
+            ListElement {
+              FeatureId: 1
+              FeatureTitle: "Title 4"
+              Description: "Description 3"
+              SearchResult: "SearchResult 3"
+              Feature: "Feature 3"
+            }
+            ListElement {
+              FeatureId: 1
+              FeatureTitle: "Title 5"
+              Description: "Description 3"
+              SearchResult: "SearchResult 3"
+              Feature: "Feature 3"
+            }
+            ListElement {
+              FeatureId: 1
+              FeatureTitle: "Title 6"
+              Description: "Description 3"
+              SearchResult: "SearchResult 3"
+              Feature: "Feature 3"
+            }
+            ListElement {
+              FeatureId: 1
+              FeatureTitle: "Title 7"
               Description: "Description 3"
               SearchResult: "SearchResult 3"
               Feature: "Feature 3"

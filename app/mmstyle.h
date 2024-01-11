@@ -98,6 +98,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl checkmarkIcon READ checkmarkIcon CONSTANT )
     Q_PROPERTY( QUrl closeButtonIcon READ closeButtonIcon CONSTANT )
     Q_PROPERTY( QUrl closeIcon READ closeIcon CONSTANT )
+    Q_PROPERTY( QUrl comboBoxCheckIcon READ comboBoxCheckIcon CONSTANT )
     Q_PROPERTY( QUrl deleteIcon READ deleteIcon CONSTANT )
     Q_PROPERTY( QUrl doneIcon READ doneIcon CONSTANT )
     Q_PROPERTY( QUrl downloadIcon READ downloadIcon CONSTANT )
@@ -239,6 +240,7 @@ class MMStyle: public QObject
     QUrl checkmarkIcon() {return QUrl( "qrc:/Checkmark.svg" );}
     QUrl closeButtonIcon() {return QUrl( "qrc:/CloseButton.svg" );}
     QUrl closeIcon() {return QUrl( "qrc:/Close.svg" );}
+    QUrl comboBoxCheckIcon() {return QUrl( "qrc:/ComboBoxCheck.svg" );}
     QUrl deleteIcon() {return QUrl( "qrc:/Delete.svg" );}
     QUrl doneIcon() {return QUrl( "qrc:/Done.svg" );}
     QUrl downloadIcon() {return QUrl( "qrc:/Download.svg" );}

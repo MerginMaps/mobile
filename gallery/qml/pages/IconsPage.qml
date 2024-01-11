@@ -72,6 +72,10 @@ ScrollView {
           colorise: true
         }
         IconBox {
+          text: "comboBoxCheckIcon"
+          source: __style.comboBoxCheckIcon
+        }
+        IconBox {
           text: "deleteIcon"
           source: __style.deleteIcon
           colorise: true
@@ -177,6 +181,7 @@ ScrollView {
         IconBox {
           text: "syncIcon"
           source: __style.syncIcon
+          colorise: true
         }
         IconBox {
           text: "waitingIcon"

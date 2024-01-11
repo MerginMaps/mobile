@@ -19,7 +19,9 @@ MMAbstractEditor {
 
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
-  property ListModel featuresModel
+  property bool multiSelect: false
+  required property ListModel featuresModel
+  required property string dropDownTitle
 
   hasFocus: textField.activeFocus
 
@@ -70,6 +72,8 @@ MMAbstractEditor {
     MMComboBoxDrawer {
       focus: true
       model: root.featuresModel
+      dropDownTitle: root.dropDownTitle
+      multiSelect: root.multiSelect
 
       Component.onCompleted: open()
       onClosed: listLoader.active = false
