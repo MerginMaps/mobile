@@ -17,13 +17,12 @@ MMAbstractEditor {
 
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
-  property bool multiSelect: false
-  required property ListModel featuresModel
-  required property string dropDownTitle
+  property bool allowTimer: false
+  property int emitInterval: 200
 
   hasFocus: textField.activeFocus
 
-  signal featureClicked( var selectedFeatures )
+  signal searchTextChanged( string text )
 
   content: TextField {
     id: textField
@@ -38,48 +37,40 @@ MMAbstractEditor {
     background: Rectangle {
       color: __style.transparentColor
     }
+
+    onDisplayTextChanged: {
+      if ( root.allowTimer ) {
+        if ( searchTimer.running )
+          searchTimer.restart()
+        else
+          searchTimer.start()
+      }
+      else
+      {
+        root.searchTextChanged( textField.displayText )
+      }
+    }
   }
 
-  rightAction: MMIcon {
-    id: eyeButton
+  leftAction: MMIcon {
+    id: searchIcon
 
     property bool pressed: false
 
     height: parent.height
 
-    source: __style.arrowDownIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    source: __style.searchIcon
+    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
   }
 
-  onRightActionClicked: {
-    if ( !root.enabled )
-      return
-    listLoader.active = true
-    listLoader.focus = true
-  }
+  Timer {
+    id: searchTimer
 
-  Loader {
-    id: listLoader
+    interval: root.emitInterval
+    running: false
 
-    asynchronous: true
-    active: false
-    sourceComponent: listComponent
-  }
-
-  Component {
-    id: listComponent
-
-    MMComboBoxDrawer {
-      focus: true
-      model: root.featuresModel
-      dropDownTitle: root.dropDownTitle
-      multiSelect: root.multiSelect
-
-      Component.onCompleted: open()
-      onClosed: listLoader.active = false
-      onFeatureClicked: function(selectedFeatures) {
-        root.featureClicked( selectedFeatures )
-      }
+    onTriggered: {
+      searchTextChanged( root.text )
     }
   }
 }

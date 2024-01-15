@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "."
+import "../inputs"
 
 Drawer {
   id: control
@@ -22,7 +22,7 @@ Drawer {
 
   padding: 20 * __dp
 
-  signal clicked(type: string)
+  signal featureClicked( var selectedFeatures )
 
   width: ApplicationWindow.window.width
   height: (mainColumn.height > ApplicationWindow.window.height ? ApplicationWindow.window.height : mainColumn.height) - 20 * __dp
@@ -83,19 +83,36 @@ Drawer {
         }
       }
 
+      MMSearchEditor {
+        id: searchBar
+
+        width: parent.width - 2 * control.padding
+        placeholderText: qsTr("Text value")
+        bgColor: __style.lightGreenColor
+        visible: control.model.count > 4
+
+        onSearchTextChanged: function(text) {
+          control.model.searchExpression = text
+        }
+      }
+
       ListView {
         id: listView
 
-        bottomMargin: primaryButton.height + 20 * __dp
+        bottomMargin: primaryButton.visible ? primaryButton.height + 20 * __dp : 0
         width: parent.width - 2 * control.padding
         height: {
-          if(control.model.count > 4)
-            return ApplicationWindow.window.height - 100 * __dp
+          if(control.model.count > 4) {
+            if(ApplicationWindow.window)
+              return ApplicationWindow.window.height - searchBar.height - 100 * __dp
+            else return 0
+          }
           if(control.model)
-            return (1 + control.model.count) * __style.menuDrawerHeight
+            return control.model.count * __style.menuDrawerHeight //+ primaryButton.height
           return 0
         }
         clip: true
+        currentIndex: -1
 
         delegate: Item {
           id: delegate
@@ -141,9 +158,15 @@ Drawer {
           MouseArea {
             anchors.fill: parent
             onClicked: {
-              if(root.multiSelect)
-                delegate.checked = !delegate.checked
               listView.currentIndex = model.index
+              if(root.multiSelect) {
+                delegate.checked = !delegate.checked
+                delegate.forceActiveFocus()
+              }
+              else {
+                control.featureClicked(model.FeatureId)
+                close()
+              }
             }
           }
         }
@@ -159,10 +182,15 @@ Drawer {
       anchors.bottomMargin: 20 * __dp
 
       text: qsTr("Confirm selection")
+      visible: control.multiSelect
 
       onClicked: {
-        for(let i=0; i<listView.model.count; i++)
-          console.log(i + " " + listView.itemAtIndex(i).checked)
+        let selectedFeatures = []
+        for(let i=0; i<listView.model.count; i++) {
+          if(listView.itemAtIndex(i).checked)
+            selectedFeatures.push(listView.model.get(i).FeatureId)
+        }
+        control.featureClicked(selectedFeatures)
         close()
       }
     }

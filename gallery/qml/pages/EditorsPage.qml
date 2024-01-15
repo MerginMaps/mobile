@@ -40,9 +40,15 @@ ScrollView {
           checked: true
         }
 
+        MMSearchEditor {
+          title: "MMSearchEditor"
+          placeholderText: "Text value"
+          onSearchTextChanged: function(text) { console.log("Searched string: " + text) }
+        }
+
         MMComboBoxEditor {
           title: "MMComboBoxEditor"
-          text: "Drop down"
+          placeholderText: "Select one"
           dropDownTitle: "Select one"
           enabled: checkbox.checked
           width: parent.width
@@ -62,23 +68,26 @@ ScrollView {
               Feature: "Feature 2"
             }
             ListElement {
-              FeatureId: 1
+              FeatureId: 3
               FeatureTitle: "Title 3"
               Description: "Description 3"
               SearchResult: "SearchResult 3"
               Feature: "Feature 3"
             }
           }
+          onFeatureClicked: function(selectedFeatures) { text = selectedFeatures }
         }
 
         MMComboBoxEditor {
           title: "MMComboBoxEditor Multi select"
-          text: "Drop down"
+          placeholderText: "Select multiple"
           dropDownTitle: "Multi select"
           enabled: checkbox.checked
           width: parent.width
           multiSelect: true
           featuresModel: ListModel {
+            property string searchExpression
+
             ListElement {
               FeatureId: 1
               FeatureTitle: "Title 1"
@@ -94,41 +103,42 @@ ScrollView {
               Feature: "Feature 2"
             }
             ListElement {
-              FeatureId: 1
+              FeatureId: 3
               FeatureTitle: "Title 3"
               Description: "Description 3"
               SearchResult: "SearchResult 3"
               Feature: "Feature 3"
             }
             ListElement {
-              FeatureId: 1
+              FeatureId: 4
               FeatureTitle: "Title 4"
-              Description: "Description 3"
-              SearchResult: "SearchResult 3"
-              Feature: "Feature 3"
+              Description: "Description 4"
+              SearchResult: "SearchResult 4"
+              Feature: "Feature 4"
             }
             ListElement {
-              FeatureId: 1
+              FeatureId: 5
               FeatureTitle: "Title 5"
-              Description: "Description 3"
-              SearchResult: "SearchResult 3"
-              Feature: "Feature 3"
+              Description: "Description 5"
+              SearchResult: "SearchResult 5"
+              Feature: "Feature 5"
             }
             ListElement {
-              FeatureId: 1
+              FeatureId: 6
               FeatureTitle: "Title 6"
-              Description: "Description 3"
-              SearchResult: "SearchResult 3"
-              Feature: "Feature 3"
+              Description: "Description 6"
+              SearchResult: "SearchResult 6"
+              Feature: "Feature 6"
             }
             ListElement {
-              FeatureId: 1
+              FeatureId: 7
               FeatureTitle: "Title 7"
-              Description: "Description 3"
-              SearchResult: "SearchResult 3"
-              Feature: "Feature 3"
+              Description: "Description 7"
+              SearchResult: "SearchResult 7"
+              Feature: "Feature 7"
             }
           }
+          onFeatureClicked: function(selectedFeatures) { text = selectedFeatures.toString() }
         }
 
         MMSliderEditor {
