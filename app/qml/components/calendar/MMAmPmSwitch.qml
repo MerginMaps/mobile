@@ -11,7 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-// Prepared switch, but to used yet
+// Prepared AM/PM switch, but QGIS is not prepared yet
 
 Switch {
   id: control

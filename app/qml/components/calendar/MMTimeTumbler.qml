@@ -9,17 +9,15 @@
 
 import QtQuick
 import QtQuick.Controls
+import ".."
 
 Item {
-  id: control
-
   width: row.width + 40 * __dp
   height: row.height
 
-  signal monthIndexChanged(var monthIndex)
-  signal yearChanged(var year)
-  property int initMonthIndex
-  property int initYear
+  property alias hours: hoursTumbler.currentIndex
+  property alias minutes: minutesTumbler.currentIndex
+  property alias seconds: secondsTumbler.currentIndex
 
   Rectangle {
     width: parent.width
@@ -45,33 +43,18 @@ Item {
     anchors.horizontalCenter: parent.horizontalCenter
 
     MMTumbler {
-      id: monthsTumbler
-
-      model: control.monthList()
-      currentIndex: control.initMonthIndex
-      width: 120 * __dp
-      onCurrentIndexChanged: control.monthIndexChanged(currentIndex)
+      id: hoursTumbler
+      model: 24
     }
 
     MMTumbler {
-      id: yearsTumble
-
-      model: control.yearList()
-      currentIndex: control.initYear - __style.calendarYearFrom
-      onCurrentItemChanged: control.yearChanged(parseInt(currentItem.text))
+      id: minutesTumbler
+      model: 60
     }
-  }
 
-  function monthList() {
-    const monthList = Array(12).keys();
-    const getMonthName = (monthIndex) => Qt.locale().monthName(monthIndex)
-    return Array.from(monthList, getMonthName)
-  }
-
-  function yearList() {
-    var years = []
-    for (var i = __style.calendarYearFrom; i <= __style.calendarYearTo; ++i)
-      years.push(i)
-    return years
+    MMTumbler {
+      id: secondsTumbler
+      model: 60
+    }
   }
 }
