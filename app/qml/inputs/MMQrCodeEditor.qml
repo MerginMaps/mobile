@@ -79,6 +79,7 @@ MMAbstractEditor {
       onClosed: codeScannerLoader.active = false
       onScanFinished: function( captured ) {
         root.editorValueChanged( captured, false )
+        codeScannerLoader.active = false
       }
     }
   }

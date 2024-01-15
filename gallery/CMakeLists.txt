@@ -17,14 +17,10 @@ find_package(
   Qt6 ${QT6_VERSION}
   COMPONENTS Quick
              Qml
-             Xml
              Concurrent
              Positioning
-             Sensors
              QuickControls2
-             Network
              Svg
-             Sql
              Core
              Core5Compat
              Multimedia

@@ -14,7 +14,7 @@ class QrCodeDecoder : public QObject
 
     explicit QrCodeDecoder( QObject *parent = nullptr ) {};
 
-    QObject *videoSink() {};
+    QObject *videoSink() {return nullptr;};
     void setVideoSink( QObject *videoSink ) {};
 
   signals:

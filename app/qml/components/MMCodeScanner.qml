@@ -18,7 +18,7 @@ Drawer {
   signal scanFinished( var data )
 
   width: ApplicationWindow.window.width
-  height: ApplicationWindow.window.height
+  height: ApplicationWindow.window.height + 40 * __dp
   edge: Qt.BottomEdge
   dim: true
   interactive: false
