@@ -19,6 +19,7 @@ Item {
 
   property bool hasTimePicker: true
   property bool hasDatePicker: true
+  property bool showSeconds: false
 
   property date dateToSelect: new Date()
   property var locale: Qt.locale()
@@ -243,7 +244,10 @@ Item {
               let minutes = time.getMinutes()
               let seconds = time.getSeconds()
 
-              timeText.text = (String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0'))
+              if(root.showSeconds)
+                timeText.text = (String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0'))
+              else
+                timeText.text = (String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0'))
 
               timeTumbler.hours = hours
               timeTumbler.minutes = minutes
@@ -292,6 +296,7 @@ Item {
     x: mainColumn.width - timeTumbler.width
     y: mainColumn.height - timeTumbler.height - timeRow.height - 10 * __dp
     visible: false
+    showSeconds: root.showSeconds
 
     onHoursChanged: { timeText.time.setHours(hours); root.dateToSelect.setHours(hours) }
     onMinutesChanged: { timeText.time.setMinutes(minutes); root.dateToSelect.setMinutes(minutes) }

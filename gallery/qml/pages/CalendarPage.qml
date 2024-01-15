@@ -43,17 +43,18 @@ ScrollView {
 
         MMCalendarEditor {
           title: "Date & Time"
-          placeholderText: "YYYY/MM/DD HH:MM:SS"
+          placeholderText: "YYYY/MM/DD HH:MM"
           enabled: checkbox.checked
           width: parent.width
           warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
+          config: {'field_format':'?', 'display_format':'yyyy'}
 
           dateTime: new Date()
           fieldIsDate: false
           includesTime: true
           includesDate: true
 
-          onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "yyyy/MM/dd hh:mm:ss") }
+          onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "yyyy/MM/dd hh:mm") }
         }
 
         MMCalendarEditor {
@@ -62,6 +63,7 @@ ScrollView {
           enabled: checkbox.checked
           width: parent.width
           warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
+          config: {'field_format':'?', 'display_format':'yyyy'}
 
           dateTime: new Date()
           fieldIsDate: false
@@ -77,17 +79,17 @@ ScrollView {
           enabled: checkbox.checked
           width: parent.width
           warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
+          config: {'field_format':'?', 'display_format':'yyyy'}
 
           dateTime: new Date()
           fieldIsDate: false
           includesTime: true
           includesDate: false
+          showSeconds: true
 
           onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "hh:mm:ss") }
         }
-
       }
     }
-
   }
 }

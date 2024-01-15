@@ -21,6 +21,7 @@ Drawer {
   property alias dateTime: dateTimePicker.dateToSelect
   property alias hasDatePicker: dateTimePicker.hasDatePicker
   property alias hasTimePicker: dateTimePicker.hasTimePicker
+  property bool showSeconds: false
 
   signal primaryButtonClicked
 
@@ -95,6 +96,7 @@ Drawer {
         id: dateTimePicker
 
         width: parent.width
+        showSeconds: control.showSeconds
       }
 
       MMButton {

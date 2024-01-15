@@ -12,12 +12,15 @@ import QtQuick.Controls
 import ".."
 
 Item {
+  id: control
+
   width: row.width + 40 * __dp
   height: row.height
 
   property alias hours: hoursTumbler.currentIndex
   property alias minutes: minutesTumbler.currentIndex
   property alias seconds: secondsTumbler.currentIndex
+  property bool showSeconds: false
 
   Rectangle {
     width: parent.width
@@ -55,6 +58,7 @@ Item {
     MMTumbler {
       id: secondsTumbler
       model: 60
+      visible: control.showSeconds
     }
   }
 }

@@ -19,6 +19,7 @@
 #include <QFontDatabase>
 #include "notificationmodel.h"
 #include "merginerrortypes.h"
+#include "inpututils.h"
 
 int main( int argc, char *argv[] )
 {
@@ -36,6 +37,8 @@ int main( int argc, char *argv[] )
   HotReload hotReload( engine );
   engine.rootContext()->setContextProperty( "_hotReload", &hotReload );
 #endif
+  InputUtils iu;
+  engine.rootContext()->setContextProperty( "__inputUtils", &iu );
 
   qreal dp = Helper::calculateDpRatio();
   MMStyle style( dp );

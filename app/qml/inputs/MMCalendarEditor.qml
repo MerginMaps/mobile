@@ -20,11 +20,12 @@ MMAbstractEditor {
   property bool parentValueIsNull: parent.valueIsNull ?? true
   property bool isReadOnly: parent.readOnly ?? false
 
-  // TODO: Uncomment to use it in MM
-  property bool fieldIsDate //__inputUtils.fieldType( field ) === 'QDate'
-  property var typeFromFieldFormat //__inputUtils.dateTimeFieldFormat( config['field_format'] )
-  property bool includesTime //typeFromFieldFormat.includes("Time")
-  property bool includesDate //typeFromFieldFormat.includes("Date")
+  property var config
+  property bool fieldIsDate: __inputUtils.fieldType( field ) === 'QDate'
+  property var typeFromFieldFormat: __inputUtils.dateTimeFieldFormat( config['field_format'] )
+  property bool includesTime: typeFromFieldFormat.includes("Time")
+  property bool includesDate: typeFromFieldFormat.includes("Date")
+  property bool showSeconds: false
 
   property date dateTime
   property alias placeholderText: textField.placeholderText
@@ -89,6 +90,7 @@ MMAbstractEditor {
       dateTime: root.dateTime
       hasDatePicker: root.includesDate
       hasTimePicker: root.includesTime
+      showSeconds: root.showSeconds
 
       onPrimaryButtonClicked: root.selected(dateTimeDrawer.dateTime)
       onClosed: dateTimeDrawerLoader.active = false
@@ -131,12 +133,11 @@ MMAbstractEditor {
       else {
         // This is the case when the date coming from C++ is pure string, so we
         // need to convert it to JS Date ourselves
-        /* uncomment, should be helpful in MM */
-        // return Date.fromLocaleString(Qt.locale(), qtDate, config['field_format'])
+        return Date.fromLocaleString(Qt.locale(), qtDate, config['field_format'])
       }
     }
   }
-  /* uncomment, should be helpful in MM
+
   function newDateSelected( jsDate ) {
     if ( jsDate ) {
       if ( root.parentField.isDateOrTime ) {
@@ -160,7 +161,6 @@ MMAbstractEditor {
       return Qt.formatDateTime(jsDate, config['display_format'])
     }
   }
-  */
 
   function openPicker(requestedDate) {
     dateTimeDrawerLoader.active = true

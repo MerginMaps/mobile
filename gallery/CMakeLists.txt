@@ -31,6 +31,7 @@ qt_policy(SET QTP0001 NEW)
 
 set(GALLERY_HDRS
     helper.h
+    inpututils.h
     ../app/notificationmodel.h
     ../app/mmstyle.h
     ../core/merginerrortypes.h
