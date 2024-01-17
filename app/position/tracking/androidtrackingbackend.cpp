@@ -57,9 +57,9 @@ AndroidTrackingBackend::~AndroidTrackingBackend()
   QAndroidIntent serviceIntent( activity.object(), "uk/co/lutraconsulting/PositionTrackingService" );
 
   activity.callMethod<jboolean>(
-            "stopService",
-            "(Landroid/content/Intent;)Z",
-            serviceIntent.handle().object() );
+    "stopService",
+    "(Landroid/content/Intent;)Z",
+    serviceIntent.handle().object() );
 
   if ( mTrackingFile.isOpen() )
   {
