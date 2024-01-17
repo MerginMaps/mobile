@@ -12,7 +12,7 @@ import Qt5Compat.GraphicalEffects
 import "."
 
 Item {
-  id: control
+  id: root
 
   property alias sourceItem: effect.sourceItem
   property alias text: text.text
@@ -37,7 +37,7 @@ Item {
     source: ShaderEffectSource {
       id: effect
 
-      sourceRect: Qt.rect(fastBlur.x, control.y, fastBlur.width, fastBlur.height)
+      sourceRect: Qt.rect(fastBlur.x, root.y, fastBlur.width, fastBlur.height)
     }
 
     Text {
