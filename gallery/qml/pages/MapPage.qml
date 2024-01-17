@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 import QtLocation
 import QtPositioning
+import Qt5Compat.GraphicalEffects
 
 import "../../app/qml/components"
 import "../../app/qml/"
@@ -63,6 +64,13 @@ Page {
       target: null
       onTranslationChanged: (delta) => map.pan(-delta.x, -delta.y)
     }
+  }
+
+  MMMapBlurLabel {
+    y: 20
+    width: parent.width
+    sourceItem: map
+    text: "Mark the geometry on the map and click record"
   }
 
   Rectangle {
