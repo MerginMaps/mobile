@@ -53,10 +53,10 @@ bool AndroidTrackingBroadcast::registerBroadcastPrivate()
   javaenv->DeleteLocalRef( objectClass );
 
   mBroadcastReceiver.callMethod<void>(
-                      "registerBroadcastReceiver",
-                      "(Landroid/content/Context;)V",
-                      QNativeInterface::QAndroidApplication::context()
-                    );
+    "registerBroadcastReceiver",
+    "(Landroid/content/Context;)V",
+    QNativeInterface::QAndroidApplication::context()
+  );
 
   mBroadcastIsRegistered = true;
 
