@@ -8,16 +8,15 @@
  ***************************************************************************/
 
 import QtQuick
-import lc 1.0
 
 Item {
-  id: control
+  id: root
 
   required property real xPos
   required property real yPos
   property real direction: 0
   property int size: 24 * __dp
-  property real screenAccuracy: 50
+  property real accuracyRingSize: 50
 
   property bool trackingMode: false
   property bool withAccuracy: true
@@ -25,18 +24,16 @@ Item {
   property bool hasDirection: true
   property real horizontalAccuracy: 0.5
 
+  visible: root.hasPosition
+
   Rectangle {
     id: accuracyIndicator
 
-    x: control.xPos - width / 2
-    y: control.yPos - height / 2
-    width: control.screenAccuracy
+    x: root.xPos - width / 2
+    y: root.yPos - height / 2
+    width: root.accuracyRingSize
     height: width
-    visible: withAccuracy &&
-             control.hasPosition &&
-             (control.horizontalAccuracy > 0) &&
-             (accuracyIndicator.width > control.size / 2.0)
-    color: control.trackingMode ? __style.earthColor : __style.forestColor
+    color: root.trackingMode ? __style.earthColor : __style.forestColor
     radius: width / 2
     opacity: 0.2
 
@@ -46,14 +43,14 @@ Item {
   Image {
     id: direction
 
-    x: control.xPos - width / 2
-    y: control.yPos - height
-    width: control.size * 2
+    x: root.xPos - width / 2
+    y: root.yPos - height
+    width: root.size * 2
     height: width
-    visible: control.hasPosition && control.hasDirection
-    source: control.trackingMode ? __style.trackingDirectionIcon : __style.directionIcon
+    visible: root.hasDirection
+    source: root.trackingMode ? __style.trackingDirectionIcon : __style.directionIcon
     fillMode: Image.PreserveAspectFit
-    rotation: control.direction
+    rotation: root.direction
     transformOrigin: Item.Bottom
     smooth: true
 
@@ -64,25 +61,24 @@ Item {
     id: navigation
 
     anchors.centerIn: accuracyIndicator
-    width: control.size
+    width: root.size
     height: width
-    visible: control.hasPosition
     radius: width / 2
     color: __style.whiteColor
 
     Rectangle {
       anchors.centerIn: parent
-      width: control.size * 2 / 3
+      width: root.size * 2 / 3
       height: width
       radius: width / 2
       color: __style.earthColor
 
       Rectangle {
         anchors.centerIn: parent
-        width: control.size / 3
+        width: root.size / 3
         height: width
         radius: width / 2
-        color: control.trackingMode ? __style.sunsetColor : __style.grassColor
+        color: root.trackingMode ? __style.sunsetColor : __style.grassColor
       }
     }
   }

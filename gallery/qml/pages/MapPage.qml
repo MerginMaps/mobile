@@ -122,7 +122,7 @@ Page {
     xPos: 100
     yPos: 100
     direction: 30
-    screenAccuracy: 50
+    accuracyRingSize: 50
 
     Timer {
       interval: 2000; running: true; repeat: true
@@ -131,7 +131,7 @@ Page {
 
     Timer {
       interval: 5000; running: true; repeat: true
-      onTriggered: parent.screenAccuracy = 40 + Math.floor(Math.random() * 100)
+      onTriggered: parent.accuracyRingSize = 40 + Math.floor(Math.random() * 100)
     }
   }
 
@@ -139,7 +139,7 @@ Page {
     xPos: 200
     yPos: 100
     direction: 330
-    screenAccuracy: 50
+    accuracyRingSize: 50
     trackingMode: true
   }
 }
