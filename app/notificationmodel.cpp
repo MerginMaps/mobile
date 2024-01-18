@@ -99,6 +99,26 @@ void NotificationModel::add( const QString &message, uint interval, Notification
   emit rowCountChanged();
 }
 
+void NotificationModel::addSuccess( const QString &message )
+{
+  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Success, NotificationType::Check );
+}
+
+void NotificationModel::addError( const QString &message )
+{
+  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Error, NotificationType::None );
+}
+
+void NotificationModel::addInfo( const QString &message )
+{
+  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Information, NotificationType::None );
+}
+
+void NotificationModel::addWarning( const QString &message )
+{
+  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Warning, NotificationType::None );
+}
+
 // check for auto removing notification
 void NotificationModel::timerFired()
 {

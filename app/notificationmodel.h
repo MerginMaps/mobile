@@ -28,7 +28,7 @@ class NotificationType
     };
     Q_ENUM( MessageType )
 
-    enum IconType
+    enum IconType // TODO: add more icons in the future
     {
       None,
       Waiting,
@@ -87,7 +87,17 @@ class NotificationModel : public QAbstractListModel
 
     Q_PROPERTY( int rowCount READ rowCount NOTIFY rowCountChanged );
     Q_INVOKABLE void remove( uint id );
+
+    //! Adds a new notification with message, interval (in seconds), type and icon
     Q_INVOKABLE void add( const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon );
+
+    //! Convinient methods to save typing of some parameters
+    Q_INVOKABLE void addSuccess( const QString &message );
+    Q_INVOKABLE void addError( const QString &message );
+    Q_INVOKABLE void addInfo( const QString &message );
+    Q_INVOKABLE void addWarning( const QString &message );
+
+    uint DEFAULT_NOTIFICATION_EXPIRATION_SECS = 3;
 
   private:
     uint nextId() { static uint id = 0; return id++; }
