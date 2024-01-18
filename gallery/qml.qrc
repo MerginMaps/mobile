@@ -70,5 +70,7 @@
         <file>../app/qml/inputs/MMComboBoxEditor.qml</file>
         <file>../app/qml/components/MMComboBoxDrawer.qml</file>
         <file>../app/qml/inputs/MMSearchEditor.qml</file>
+        <file>../app/qml/inputs/MMQrCodeEditor.qml</file>
+        <file>../app/qml/components/MMCodeScanner.qml</file>
     </qresource>
 </RCC>
