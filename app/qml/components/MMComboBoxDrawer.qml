@@ -13,12 +13,13 @@ import QtQuick.Controls.Basic
 import "../inputs"
 
 Drawer {
-  id: control
+  id: root
 
   property alias title: title.text
   property alias model: listView.model
-  property alias dropDownTitle: title.text
   property bool multiSelect: false
+  property int minFeaturesCountToFullScreenMode: 4
+  property var preselectedFeatures: []
 
   padding: 20 * __dp
 
@@ -49,12 +50,12 @@ Drawer {
 
       width: parent.width
       spacing: 20 * __dp
-      leftPadding: control.padding
-      rightPadding: control.padding
-      bottomPadding: control.padding
+      leftPadding: root.padding
+      rightPadding: root.padding
+      bottomPadding: root.padding
 
       Row {
-        width: parent.width - 2 * control.padding
+        width: parent.width - 2 * root.padding
         anchors.horizontalCenter: parent.horizontalCenter
 
         Item { width: closeButton.width; height: 1 }
@@ -78,7 +79,7 @@ Drawer {
 
           MouseArea {
             anchors.fill: parent
-            onClicked: control.visible = false
+            onClicked: root.visible = false
           }
         }
       }
@@ -86,13 +87,13 @@ Drawer {
       MMSearchEditor {
         id: searchBar
 
-        width: parent.width - 2 * control.padding
+        width: parent.width - 2 * root.padding
         placeholderText: qsTr("Text value")
         bgColor: __style.lightGreenColor
-        visible: control.model.count > 4
+        visible: root.model.count >= root.minFeaturesCountToFullScreenMode
 
         onSearchTextChanged: function(text) {
-          control.model.searchExpression = text
+          root.model.searchExpression = text
         }
       }
 
@@ -100,15 +101,15 @@ Drawer {
         id: listView
 
         bottomMargin: primaryButton.visible ? primaryButton.height + 20 * __dp : 0
-        width: parent.width - 2 * control.padding
+        width: parent.width - 2 * root.padding
         height: {
-          if(control.model.count > 4) {
+          if(root.model.count >= root.minFeaturesCountToFullScreenMode) {
             if(ApplicationWindow.window)
               return ApplicationWindow.window.height - searchBar.height - 100 * __dp
             else return 0
           }
-          if(control.model)
-            return control.model.count * __style.menuDrawerHeight //+ primaryButton.height
+          if(root.model)
+            return root.model.count * __style.comboBoxItemHeight
           return 0
         }
         clip: true
@@ -117,10 +118,10 @@ Drawer {
         delegate: Item {
           id: delegate
 
-          property bool checked: root.multiSelect ? false : listView.currentIndex === model.index
+          property bool checked: root.multiSelect ? root.preselectedFeatures.includes(model.FeatureId) : listView.currentIndex === model.index
 
           width: listView.width
-          height: __style.menuDrawerHeight
+          height: __style.comboBoxItemHeight
 
           Rectangle {
             anchors.top: parent.top
@@ -164,7 +165,7 @@ Drawer {
                 delegate.forceActiveFocus()
               }
               else {
-                control.featureClicked(model.FeatureId)
+                root.featureClicked(model.FeatureId)
                 close()
               }
             }
@@ -182,7 +183,7 @@ Drawer {
       anchors.bottomMargin: 20 * __dp
 
       text: qsTr("Confirm selection")
-      visible: control.multiSelect
+      visible: root.multiSelect
 
       onClicked: {
         let selectedFeatures = []
@@ -190,7 +191,7 @@ Drawer {
           if(listView.itemAtIndex(i).checked)
             selectedFeatures.push(listView.model.get(i).FeatureId)
         }
-        control.featureClicked(selectedFeatures)
+        root.featureClicked(selectedFeatures)
         close()
       }
     }

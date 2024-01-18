@@ -85,6 +85,8 @@ ScrollView {
           enabled: checkbox.checked
           width: parent.width
           multiSelect: true
+          preselectedFeatures: []
+
           featuresModel: ListModel {
             property string searchExpression
 
@@ -138,7 +140,10 @@ ScrollView {
               Feature: "Feature 7"
             }
           }
-          onFeatureClicked: function(selectedFeatures) { text = selectedFeatures.toString() }
+          onFeatureClicked: function(selectedFeatures) {
+            preselectedFeatures = selectedFeatures
+            text = selectedFeatures.toString()
+          }
         }
 
         MMSliderEditor {

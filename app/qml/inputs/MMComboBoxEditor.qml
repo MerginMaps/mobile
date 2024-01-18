@@ -20,6 +20,7 @@ MMAbstractEditor {
   property bool multiSelect: false
   required property ListModel featuresModel
   required property string dropDownTitle
+  property var preselectedFeatures: []
 
   hasFocus: textField.activeFocus
 
@@ -72,8 +73,9 @@ MMAbstractEditor {
     MMComboBoxDrawer {
       focus: true
       model: root.featuresModel
-      dropDownTitle: root.dropDownTitle
+      title: root.dropDownTitle
       multiSelect: root.multiSelect
+      preselectedFeatures: root.preselectedFeatures
 
       Component.onCompleted: open()
       onClosed: listLoader.active = false
