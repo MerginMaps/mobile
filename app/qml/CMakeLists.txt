@@ -130,10 +130,8 @@ set(MM_QML
     map/MMMapCanvas.qml
     map/MapWrapper.qml
     map/PositionMarker.qml
-    map/RecordingToolbar.qml
     map/RecordingTools.qml
     map/ScaleBar.qml
-    map/SplittingToolbar.qml
     map/SplittingTools.qml
     map/StakeoutTools.qml
     misc/AddPositionProviderPage.qml
