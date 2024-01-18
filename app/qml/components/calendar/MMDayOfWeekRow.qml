@@ -1,11 +1,17 @@
-// Copyright (C) 2022 The Qt Company Ltd.
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 import QtQuick
 import QtQuick.Templates as T
 
 T.AbstractDayOfWeekRow {
-  id: control
+  id: root
 
   implicitWidth: Math.max(background ? background.implicitWidth : 0,
                           contentItem.implicitWidth + leftPadding + rightPadding)
@@ -24,8 +30,8 @@ T.AbstractDayOfWeekRow {
 
   contentItem: Row {
     Repeater {
-      model: control.source
-      delegate: control.delegate
+      model: root.source
+      delegate: root.delegate
     }
   }
 }

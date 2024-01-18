@@ -12,7 +12,7 @@ import QtQuick.Controls
 import ".."
 
 Item {
-  id: control
+  id: root
 
   width: row.width + 40 * __dp
   height: row.height
@@ -58,7 +58,7 @@ Item {
     MMTumbler {
       id: secondsTumbler
       model: 60
-      visible: control.showSeconds
+      visible: root.showSeconds
     }
   }
 }

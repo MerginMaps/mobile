@@ -1,11 +1,17 @@
-// Copyright (C) 2022 The Qt Company Ltd.
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 import QtQuick
 import QtQuick.Templates as T
 
 T.AbstractMonthGrid {
-  id: control
+  id: root
 
   property date date: new Date()
 
@@ -17,13 +23,13 @@ T.AbstractMonthGrid {
   signal selectedDate(var date)
 
   delegate: Text {
-    property bool highlighted: model.day === control.date.getDate()
-                               && model.month === control.date.getMonth()
-                               && model.year === control.date.getFullYear()
+    property bool highlighted: model.day === root.date.getDate()
+                               && model.month === root.date.getMonth()
+                               && model.year === root.date.getFullYear()
 
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
-    opacity: model.month === control.month ? 1 : 0.2
+    opacity: model.month === root.month ? 1 : 0.2
     text: model.day
     font: highlighted ? __style.h3 : __style.p2
     color: highlighted ? __style.forestColor : __style.nightColor
@@ -49,11 +55,11 @@ T.AbstractMonthGrid {
     columns: 7
     rowSpacing: 15 * __dp
 
-    width: control.width
+    width: root.width
 
     Repeater {
-      model: control.source
-      delegate: control.delegate
+      model: root.source
+      delegate: root.delegate
     }
   }
 }

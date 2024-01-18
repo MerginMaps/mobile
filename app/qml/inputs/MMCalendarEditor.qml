@@ -86,7 +86,6 @@ MMAbstractEditor {
       id: dateTimeDrawer
 
       title: root.fieldIsDate ? qsTr("Date") : qsTr("Date & Time")
-      primaryButton: qsTr("Confirm")
       dateTime: root.dateTime
       hasDatePicker: root.includesDate
       hasTimePicker: root.includesTime

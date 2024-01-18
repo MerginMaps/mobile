@@ -14,7 +14,7 @@ import QtQuick.Controls.Basic
 // Prepared AM/PM switch, but QGIS is not prepared yet
 
 Switch {
-  id: control
+  id: root
 
   indicator: Rectangle {
     implicitWidth: 120 * __dp
@@ -23,11 +23,11 @@ Switch {
     color: __style.lightGreenColor
 
     Rectangle {
-      x: control.checked ? parent.width - width - 5 * __dp : 5 * __dp
+      x: root.checked ? parent.width - width - 5 * __dp : 5 * __dp
       width: 55 * __dp
       height: 40 * __dp
       radius: width / 2
-      color: control.enabled ? __style.grassColor : __style.mediumGreenColor
+      color: root.enabled ? __style.grassColor : __style.mediumGreenColor
       anchors.verticalCenter: parent.verticalCenter
     }
 

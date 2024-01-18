@@ -12,7 +12,7 @@ import QtQuick.Controls
 import ".."
 
 Item {
-  id: control
+  id: root
 
   width: row.width + 40 * __dp
   height: row.height
@@ -21,6 +21,9 @@ Item {
   signal yearChanged(var year)
   property int initMonthIndex
   property int initYear
+
+  readonly property int calendarYearFrom: 1900
+  readonly property int calendarYearTo: 2050
 
   Rectangle {
     width: parent.width
@@ -48,18 +51,18 @@ Item {
     MMTumbler {
       id: monthsTumbler
 
-      model: control.monthList()
-      currentIndex: control.initMonthIndex
+      model: root.monthList()
+      currentIndex: root.initMonthIndex
       width: 120 * __dp
-      onCurrentIndexChanged: control.monthIndexChanged(currentIndex)
+      onCurrentIndexChanged: root.monthIndexChanged(currentIndex)
     }
 
     MMTumbler {
       id: yearsTumble
 
-      model: control.yearList()
-      currentIndex: control.initYear - __style.calendarYearFrom
-      onCurrentItemChanged: control.yearChanged(parseInt(currentItem.text))
+      model: root.yearList()
+      currentIndex: root.initYear - root.calendarYearFrom
+      onCurrentItemChanged: root.yearChanged(parseInt(currentItem.text))
     }
   }
 
@@ -71,7 +74,7 @@ Item {
 
   function yearList() {
     var years = []
-    for (var i = __style.calendarYearFrom; i <= __style.calendarYearTo; ++i)
+    for (var i = root.calendarYearFrom; i <= root.calendarYearTo; ++i)
       years.push(i)
     return years
   }

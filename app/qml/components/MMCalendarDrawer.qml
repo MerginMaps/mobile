@@ -14,10 +14,9 @@ import "."
 import "calendar"
 
 Drawer {
-  id: control
+  id: root
 
   property alias title: title.text
-  property alias primaryButton: primaryButton.text
   property alias dateTime: dateTimePicker.dateToSelect
   property alias hasDatePicker: dateTimePicker.hasDatePicker
   property alias hasTimePicker: dateTimePicker.hasTimePicker
@@ -25,7 +24,7 @@ Drawer {
 
   signal primaryButtonClicked
 
-  width: window.width
+  width: ApplicationWindow.window.width
   height: mainColumn.height
   edge: Qt.BottomEdge
   dim: true
@@ -87,7 +86,7 @@ Drawer {
 
           MouseArea {
             anchors.fill: parent
-            onClicked: control.visible = false
+            onClicked: root.visible = false
           }
         }
       }
@@ -96,7 +95,7 @@ Drawer {
         id: dateTimePicker
 
         width: parent.width
-        showSeconds: control.showSeconds
+        showSeconds: root.showSeconds
       }
 
       MMButton {
@@ -104,6 +103,7 @@ Drawer {
 
         width: parent.width - 2 * 20 * __dp
         visible: text.length > 0
+        text: qsTr("Confirm")
 
         onClicked: {
           dateTimePicker.visible = false
