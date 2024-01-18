@@ -27,8 +27,7 @@ Item {
   FastBlur {
     id: fastBlur
 
-    x: 20 * __dp
-    width: parent.width - 40 * __dp
+    width: parent.width
     height: 42 * __dp
 
     radius: 32
@@ -37,7 +36,7 @@ Item {
     source: ShaderEffectSource {
       id: effect
 
-      sourceRect: Qt.rect(fastBlur.x, root.y, fastBlur.width, fastBlur.height)
+      sourceRect: Qt.rect(root.x, root.y, fastBlur.width, fastBlur.height)
     }
 
     Text {

@@ -12,7 +12,6 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 import QtLocation
 import QtPositioning
-import Qt5Compat.GraphicalEffects
 
 import "../../app/qml/components"
 import "../../app/qml/"
@@ -67,8 +66,9 @@ Page {
   }
 
   MMMapBlurLabel {
+    x: 20
     y: 20
-    width: parent.width
+    width: parent.width - 40
     sourceItem: map
     text: "Mark the geometry on the map and click record"
   }
