@@ -26,6 +26,8 @@ Item {
     height: root.map.height
     width: root.map.width
 
+    lineColor: __style.forestColor
+
     mapSettings: root.map.mapSettings
     lineWidth: InputStyle.mapLineWidth
   }
