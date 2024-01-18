@@ -77,5 +77,7 @@
         <file>../app/qml/components/calendar/MMTimeTumbler.qml</file>
         <file>../app/qml/components/calendar/MMDateTumbler.qml</file>
         <file>qml/pages/CalendarPage.qml</file>
+        <file>../app/qml/inputs/MMQrCodeEditor.qml</file>
+        <file>../app/qml/components/MMCodeScanner.qml</file>
     </qresource>
 </RCC>
