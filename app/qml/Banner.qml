@@ -15,6 +15,8 @@ import "./components"
 Rectangle {
   id: banner
 
+  // TODO: replace use of this class with Notifications
+
   property color fontColor: "black"
   property color linkColor: fontColor
   property color bgColor: InputStyle.warningBannerColor

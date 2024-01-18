@@ -25,7 +25,6 @@ Item {
   /*required*/ property var gpsState
   /*required*/ property var compass
 
-  property alias gpsBanner: gpsAccuracyBanner
 
   property bool centerToGPSOnStartup: false
   property var activeFeature
@@ -258,32 +257,6 @@ Item {
         root.map.mapSettings.setCenter( mapPositioning.mapPosition )
       }
     }
-  }
-
-  Banner {
-    id: gpsAccuracyBanner
-
-    property bool shouldShowAccuracyWarning: {
-      let isLowAccuracy = gpsState.state === "low" || gpsState.state === "unavailable"
-      let isBannerAllowed = __appSettings.gpsAccuracyWarning
-      let isUsingPosition = mapTool.isUsingPosition
-      let isGpsWorking = __positionKit.hasPosition
-
-      return isLowAccuracy  &&
-          isBannerAllowed   &&
-          isGpsWorking      &&
-          isUsingPosition
-    }
-
-    width: parent.width - InputStyle.innerFieldMargin * 2
-    height: InputStyle.rowHeight * 2
-
-    text: qsTr( "Low GPS position accuracy (%1 m)<br><br>Please make sure you have good view of the sky." )
-    .arg( __inputUtils.formatNumber( __positionKit.horizontalAccuracy ) )
-    withLink: true
-    link: __inputHelp.gpsAccuracyHelpLink
-
-    showBanner: shouldShowAccuracyWarning
   }
 
   Connections {
