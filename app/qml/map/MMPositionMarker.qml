@@ -16,7 +16,7 @@ Item {
   required property real yPos
   property real direction: 0
   property int size: 24 * __dp
-  property real accuracyRingSize: 50
+  property real accuracyRingSize: 50 * __dp
 
   property bool trackingMode: false
   property bool withAccuracy: true
@@ -33,6 +33,9 @@ Item {
     y: root.yPos - height / 2
     width: root.accuracyRingSize
     height: width
+    visible: root.withAccuracy &&
+             (root.horizontalAccuracy > 0) &&
+             (accuracyIndicator.width > root.size / 2.0)
     color: root.trackingMode ? __style.earthColor : __style.forestColor
     radius: width / 2
     opacity: 0.2
