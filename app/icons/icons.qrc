@@ -75,5 +75,11 @@
         <file>ProjectsFilled.svg</file>
         <file>Minus.svg</file>
         <file>Plus.svg</file>
+        <file>satellite.svg</file>
+        <file>MapPin.svg</file>
+        <file>GPSIcon.svg</file>
+        <file>GPSIconFilled.svg</file>
+        <file>Undo.svg</file>
+        <file>GPSAntennaHeight.svg</file>
     </qresource>
 </RCC>

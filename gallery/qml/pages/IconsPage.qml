@@ -186,6 +186,38 @@ ScrollView {
           text: "xMarkIcon"
           source: __style.xMarkIcon
         }
+        IconBox {
+          text: "Antenna"
+          source: __style.gpsAntennaHeightIcon
+        }
+        IconBox {
+          text: "GPS"
+          source: __style.gpsIcon
+        }
+        IconBox {
+          text: "GPS Filled"
+          source: __style.gpsIconFilled
+        }
+        IconBox {
+          text: "Layers"
+          source: __style.layersIcon
+        }
+        IconBox {
+          text: "Map pin"
+          source: __style.mapPinIcon
+        }
+        IconBox {
+          text: "Tracking"
+          source: __style.positionTrackingIcon
+        }
+        IconBox {
+          text: "Satellite"
+          source: __style.satelliteIcon
+        }
+        IconBox {
+          text: "Undo"
+          source: __style.undoIcon
+        }
       }
     }
 
