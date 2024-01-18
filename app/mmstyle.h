@@ -54,7 +54,7 @@ class MMStyle: public QObject
     // Colors - secondary palette
     Q_PROPERTY( QColor lightGreenColor READ lightGreenColor CONSTANT )
     Q_PROPERTY( QColor mediumGreenColor READ mediumGreenColor CONSTANT )
-    Q_PROPERTY( QColor grayColor READ grayColor CONSTANT )
+    Q_PROPERTY( QColor greyColor READ greyColor CONSTANT )
 
     // Colors - additional colors
     Q_PROPERTY( QColor sandColor READ sandColor CONSTANT )
