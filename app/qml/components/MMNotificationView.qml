@@ -26,6 +26,7 @@ Item {
     model: __notificationModel
     delegate: MMNotification {
       width: repeater.width - 40 * __dp
+      visible: index === repeater.count - 1 // visible only the last notification
     }
   }
 }
