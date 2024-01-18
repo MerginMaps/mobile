@@ -103,7 +103,7 @@ Item {
     ColorOverlay {
       anchors.fill: crosshairForeground
       source: crosshairForeground
-      color: snapUtils.snapped ? "#8a2be2" : InputStyle.fontColor
+      color: snapUtils.snapped ? "#8a2be2" : __style.forestColor // grapeColor replaced previous "#8a2be2" used for snapping
     }
 
     Image {
