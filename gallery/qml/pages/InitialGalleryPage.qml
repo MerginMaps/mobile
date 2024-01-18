@@ -15,7 +15,7 @@ Page {
 
   Label {
     width: parent.width / 2
-    text: "DP ratio: ~" + Math.round(__dp * 1000) / 1000 + "\n" +
+    text: "DP ratio: " + __dp.toPrecision(6) + "\n" +
           "Used font: " + font.family
     anchors.centerIn: parent
     horizontalAlignment: Label.AlignHCenter

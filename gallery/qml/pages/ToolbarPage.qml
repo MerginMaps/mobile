@@ -62,25 +62,46 @@ Page {
         }
       }
     }
-    anchors.bottomMargin: 480 * __dp
   }
 
   MMToolbar {
+
+    anchors {
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
+      bottomMargin: 360
+    }
+
     model: ObjectModel {
       MMToolbarLongButton { text: "Long button"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
     }
-    anchors.bottomMargin: 360 * __dp
   }
 
   MMToolbar {
+
+    anchors {
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
+      bottomMargin: 240
+    }
+
     model: ObjectModel {
       MMToolbarButton { text: "aaa"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "bbb"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
     }
-    anchors.bottomMargin: 240 * __dp
   }
 
   MMToolbar {
+
+    anchors {
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
+      bottomMargin: 120
+    }
+
     model: ObjectModel {
       MMToolbarButton { text: "1/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "2/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
@@ -91,14 +112,21 @@ Page {
       MMToolbarButton { text: "7/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "8/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
     }
-    anchors.bottomMargin: 120 * __dp
   }
 
   MMToolbar {
+
+    anchors {
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
+      bottomMargin: 480
+    }
+
     model: ObjectModel {
       MMToolbarButton { text: "Delete"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "Edit Geometry"; iconSource: __style.editIcon; onClicked: console.log("tapped "+text) }
-      MMToolbarButton { text: "Save"; iconSource: __style.doneIcon; type: MMToolbarButton.Button.Save; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "Save"; iconSource: __style.doneIcon; type: MMToolbarButton.Button.Emphasized; onClicked: console.log("tapped "+text) }
     }
   }
 }

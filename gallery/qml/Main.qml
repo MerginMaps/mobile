@@ -33,6 +33,14 @@ ApplicationWindow {
     }
   }
 
+  Settings {
+    // start window where it was closed last time
+    property alias x: window.x
+    property alias y: window.y
+    property alias width: window.width
+    property alias height: window.height
+  }
+
   Shortcut {
     sequences: ["Esc", "Back"]
     enabled: stackView.depth > 1

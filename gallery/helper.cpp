@@ -56,7 +56,6 @@ qreal Helper::calculateScreenDpr()
 
 qreal Helper::calculateDpRatio()
 {
-#if MOBILE_OS
   const QList<QScreen *> screens = QGuiApplication::screens();
 
   if ( !screens.isEmpty() )
@@ -66,7 +65,7 @@ qreal Helper::calculateDpRatio()
     qreal realDpr = calculateScreenDpr();
     return realDpr / screen->devicePixelRatio();
   }
-#endif
+
   return 1;
 }
 
