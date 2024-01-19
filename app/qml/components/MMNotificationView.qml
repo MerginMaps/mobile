@@ -12,25 +12,6 @@ import QtQuick
 Item {
   id: control
 
-  anchors.top: parent.top
-  anchors.topMargin: 20 * __dp
-  width: parent.width
-  height: parent.height
-
-  // just for information - will be removed in release version
-  Rectangle {
-    anchors.bottom: parent.bottom
-    width: control.width
-    height: 20
-    color: __style.whiteColor
-
-    Text {
-      text: listView.count
-      anchors.centerIn: parent
-      color: __style.forestColor
-    }
-  }
-
   ListView {
     id: listView
 
@@ -48,6 +29,5 @@ Item {
       NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 200 }
       NumberAnimation { property: "scale"; easing.type: Easing.OutCubic; from: 0; to: 1.0; duration: 200 }
     }
-
   }
 }
