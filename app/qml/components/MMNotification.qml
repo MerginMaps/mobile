@@ -11,9 +11,8 @@ import QtQuick
 import notificationType 1.0
 
 Rectangle {
-  id: notification
+  id: root
 
-  width: listView.width - 40 * __dp
   height: text.height + 2 * 15 * __dp
   anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
 
@@ -29,6 +28,8 @@ Rectangle {
     default: return __style.positiveColor
     }
   }
+
+  Component.onCompleted: scale = 0.0
 
   MMIcon {
     id: leftIcon
@@ -58,7 +59,7 @@ Rectangle {
     text: message
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignLeft
-    leftPadding: 20 * __dp - notification.innerSpacing
+    leftPadding: 20 * __dp - root.innerSpacing
     font: __style.t3
     clip: true
     maximumLineCount: 3
@@ -90,7 +91,9 @@ Rectangle {
 
       anchors.fill: parent
       hoverEnabled: true
-      onClicked: notificationModel.remove(id)
+      onClicked: __notificationModel.remove(id)
     }
   }
+
+  Behavior on scale { NumberAnimation { easing.type: Easing.OutCubic; from: 0; to: 1.0; duration: 200 } }
 }
