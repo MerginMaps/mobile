@@ -98,6 +98,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl checkmarkIcon READ checkmarkIcon CONSTANT )
     Q_PROPERTY( QUrl closeButtonIcon READ closeButtonIcon CONSTANT )
     Q_PROPERTY( QUrl closeIcon READ closeIcon CONSTANT )
+    Q_PROPERTY( QUrl comboBoxCheckIcon READ comboBoxCheckIcon CONSTANT )
     Q_PROPERTY( QUrl deleteIcon READ deleteIcon CONSTANT )
     Q_PROPERTY( QUrl directionIcon READ directionIcon CONSTANT )
     Q_PROPERTY( QUrl doneIcon READ doneIcon CONSTANT )
@@ -168,6 +169,7 @@ class MMStyle: public QObject
     // Other
     Q_PROPERTY( double inputRadius READ inputRadius CONSTANT )
     Q_PROPERTY( double maxPageWidth READ maxPageWidth CONSTANT )
+    Q_PROPERTY( double comboBoxItemHeight READ comboBoxItemHeight CONSTANT )
 
   public:
     explicit MMStyle( qreal dp )
@@ -241,6 +243,7 @@ class MMStyle: public QObject
     QUrl checkmarkIcon() {return QUrl( "qrc:/Checkmark.svg" );}
     QUrl closeButtonIcon() {return QUrl( "qrc:/CloseButton.svg" );}
     QUrl closeIcon() {return QUrl( "qrc:/Close.svg" );}
+    QUrl comboBoxCheckIcon() {return QUrl( "qrc:/ComboBoxCheck.svg" );}
     QUrl deleteIcon() {return QUrl( "qrc:/Delete.svg" );}
     QUrl directionIcon() {return QUrl( "qrc:/Direction.svg" );}
     QUrl doneIcon() {return QUrl( "qrc:/Done.svg" );}
@@ -307,6 +310,7 @@ class MMStyle: public QObject
 
     double inputRadius() {return 12 * mDp;}
     double maxPageWidth() {return 500 * mDp;}
+    double comboBoxItemHeight() {return 67 * mDp;}
 
   signals:
     void styleChanged();
