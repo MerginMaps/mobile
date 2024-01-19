@@ -67,6 +67,7 @@
         <file>../app/qml/inputs/MMNumberEditor.qml</file>
         <file>../app/qml/inputs/MMButtonInputEditor.qml</file>
         <file>../app/qml/components/MMWarningBubble.qml</file>
+        <file>../app/qml/map/MMPositionMarker.qml</file>
         <file>../app/qml/components/MMMapBlurLabel.qml</file>
         <file>../app/qml/inputs/MMQrCodeEditor.qml</file>
         <file>../app/qml/components/MMCodeScanner.qml</file>
