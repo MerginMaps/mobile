@@ -68,7 +68,7 @@ Page {
 
   MMMapBlurLabel {
     x: 20
-    y: 20
+    y: 80
     width: parent.width - 40
     sourceItem: map
     text: "Mark the geometry on the map and click record"
@@ -172,8 +172,8 @@ Page {
   }
   
   MMPositionMarker {
-    xPos: 100
-    yPos: 100
+    xPos: 300
+    yPos: 200
     direction: 30
     accuracyRingSize: 50
 
@@ -190,7 +190,7 @@ Page {
 
   MMPositionMarker {
     xPos: 200
-    yPos: 100
+    yPos: 300
     direction: 330
     accuracyRingSize: 50
     trackingMode: true
