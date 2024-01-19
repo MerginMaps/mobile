@@ -30,6 +30,10 @@ Drawer {
   width: window.width
   height: mainColumn.height
   edge: Qt.BottomEdge
+  dim: true
+  interactive: false
+  dragMargin: 0
+  closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
   Rectangle {
     color: roundedRect.color

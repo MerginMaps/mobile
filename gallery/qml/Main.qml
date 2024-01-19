@@ -122,6 +122,22 @@ ApplicationWindow {
           source: "EditorsPage.qml"
         }
         ListElement {
+          title: "Calendar"
+          source: "CalendarPage.qml"
+        }
+        ListElement {
+          title: "Inputs"
+          source: "InputsPage.qml"
+        }
+        ListElement {
+          title: "Text areas"
+          source: "TextAreaPage.qml"
+        }
+        ListElement {
+          title: "Combo boxes"
+          source: "ComboBoxPage.qml"
+        }
+        ListElement {
           title: "Checks"
           source: "ChecksPage.qml"
         }
