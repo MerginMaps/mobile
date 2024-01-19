@@ -41,7 +41,7 @@ Item {
 
     Item {
       id: contentContainer
-      // component placeholder, component passed via content property will be child of this element
+      // component placeholder, component passed via content property will become children of this element
 
       height: parent.height
       anchors.horizontalCenter: parent.horizontalCenter

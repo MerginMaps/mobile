@@ -51,6 +51,7 @@ set(MM_QML
     components/MMListDrawerItem.qml
     components/MMMapButton.qml
     components/MMMapLabel.qml
+    components/MMMapPicker.qml
     components/MMMenuDrawer.qml
     components/MMMorePhoto.qml
     components/MMNotification.qml
