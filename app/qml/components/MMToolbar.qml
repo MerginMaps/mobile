@@ -19,15 +19,11 @@ Rectangle {
 
   readonly property double minimumToolbarButtonWidth: 100 * __dp
 
-  anchors {
-    left: parent.left
-    right: parent.right
-    bottom: parent.bottom
-  }
   height: __style.toolbarHeight
   color: __style.forestColor
 
   onWidthChanged: setupBottomBar()
+  onModelChanged: setupBottomBar()
 
   // buttons shown inside toolbar
   ObjectModel {
