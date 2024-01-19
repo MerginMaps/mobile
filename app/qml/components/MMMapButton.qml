@@ -18,6 +18,7 @@ Item {
   property alias iconSource: icon.source
 
   signal clicked
+  signal clickAndHold
 
   Rectangle {
     width: parent.width
@@ -38,6 +39,7 @@ Item {
     MouseArea {
       anchors.fill: parent
       onClicked: control.clicked()
+      onPressAndHold: control.clickAndHold()
     }
   }
 }
