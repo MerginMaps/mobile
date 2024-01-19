@@ -81,6 +81,10 @@ ScrollView {
           colorise: true
         }
         IconBox {
+          text: "directionIcon"
+          source: __style.directionIcon
+        }
+        IconBox {
           text: "doneIcon"
           source: __style.doneIcon
         }
@@ -182,6 +186,10 @@ ScrollView {
           text: "syncIcon"
           source: __style.syncIcon
           colorise: true
+        }
+        IconBox {
+          text: "trackingDirectionIcon"
+          source: __style.trackingDirectionIcon
         }
         IconBox {
           text: "waitingIcon"
