@@ -10,24 +10,21 @@
 import QtQuick
 
 Item {
-  id: control
 
-  ListView {
-    id: listView
+  height: repeater.height
+
+  Repeater {
+    id: repeater
 
     anchors.top: parent.top
     width: parent.width
     height: contentHeight
-    spacing: 3 * __dp
     clip: true
+
     model: __notificationModel
     delegate: MMNotification {
-
-    }
-
-    add: Transition {
-      NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 200 }
-      NumberAnimation { property: "scale"; easing.type: Easing.OutCubic; from: 0; to: 1.0; duration: 200 }
+      width: repeater.width - 40 * __dp
+      visible: index === repeater.count - 1 // visible only the last notification
     }
   }
 }

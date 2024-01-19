@@ -35,8 +35,6 @@ set(MM_QML
     components/ToolbarButton.qml
     components/MMBackButton.qml
     components/MMButton.qml
-    components/MMButtonInput.qml
-    components/MMComboBox.qml
     components/MMComponent_reachedDataLimit.qml
     components/MMDrawer.qml
     components/MMHeader.qml
@@ -44,7 +42,6 @@ set(MM_QML
     components/MMIcon.qml
     components/MMIconCheckBoxHorizontal.qml
     components/MMIconCheckBoxVertical.qml
-    components/MMInput.qml
     components/MMLink.qml
     components/MMLinkButton.qml
     components/MMListDrawer.qml
@@ -56,7 +53,6 @@ set(MM_QML
     components/MMMorePhoto.qml
     components/MMNotification.qml
     components/MMNotificationView.qml
-    components/MMPasswordInput.qml
     components/MMPhoto.qml
     components/MMPhotoGallery.qml
     components/MMProgressBar.qml
@@ -66,7 +62,6 @@ set(MM_QML
     components/MMRoundLinkButton.qml
     components/MMShadow.qml
     components/MMSwitch.qml
-    components/MMTextArea.qml
     components/MMTextBubble.qml
     components/MMToolbar.qml
     components/MMToolbarButton.qml

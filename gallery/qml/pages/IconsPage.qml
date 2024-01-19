@@ -72,9 +72,17 @@ ScrollView {
           colorise: true
         }
         IconBox {
+          text: "comboBoxCheckIcon"
+          source: __style.comboBoxCheckIcon
+        }
+        IconBox {
           text: "deleteIcon"
           source: __style.deleteIcon
           colorise: true
+        }
+        IconBox {
+          text: "directionIcon"
+          source: __style.directionIcon
         }
         IconBox {
           text: "doneIcon"
@@ -140,12 +148,20 @@ ScrollView {
           colorise: true
         }
         IconBox {
+          text: "nextIcon"
+          source: __style.nextIcon
+        }
+        IconBox {
           text: "plusIcon"
           source: __style.plusIcon
         }
         IconBox {
           text: "projectButtonMoreIcon"
           source: __style.projectButtonMoreIcon
+        }
+        IconBox {
+          text: "previousIcon"
+          source: __style.previousIcon
         }
         IconBox {
           text: "projectsIcon"
@@ -177,6 +193,11 @@ ScrollView {
         IconBox {
           text: "syncIcon"
           source: __style.syncIcon
+          colorise: true
+        }
+        IconBox {
+          text: "trackingDirectionIcon"
+          source: __style.trackingDirectionIcon
         }
         IconBox {
           text: "waitingIcon"

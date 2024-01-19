@@ -19,38 +19,37 @@ MMAbstractEditor {
   property bool parentValueIsNull: parent.valueIsNull ?? false
   property bool isReadOnly: parent.readOnly ?? false
 
-  property alias placeholderText: textField.placeholderText
-  property alias text: textField.text
+  property alias placeholderText: textArea.placeholderText
+  property alias text: textArea.text
+  property int minimumRows: 3
 
   signal editorValueChanged( var newValue, var isNull )
 
-  hasFocus: textField.activeFocus
+  hasFocus: textArea.activeFocus
+  contentItemHeight: {
+    const minHeight = 34 * __dp + metrics.height * root.minimumRows
+    var realHeight = textArea.y + textArea.contentHeight + 2 * textArea.verticalPadding
+    return realHeight < minHeight ? minHeight : realHeight
+  }
 
-  content: TextField {
-    id: textField
+  content: TextArea {
+    id: textArea
 
-    anchors.fill: parent
+    property real verticalPadding: 11 * __dp
 
-    text: root.parentValue
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
-    placeholderTextColor: __style.nightAlphaColor
-    font: __style.p5
+    y: textArea.verticalPadding
+    height: contentHeight + textArea.verticalPadding
+    width: parent.width
+
     hoverEnabled: true
-
-    background: Rectangle {
-      color: __style.transparentColor
-    }
+    placeholderTextColor: __style.nightAlphaColor
+    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+    font: __style.p5
+    wrapMode: Text.WordWrap
   }
 
-  rightAction: MMIcon {
-    id: rightIcon
-
-    height: parent.height
-
-    source: __style.xMarkIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
-    visible: textField.activeFocus && textField.text.length>0
+  FontMetrics {
+    id: metrics
+    font: textArea.font
   }
-
-  onRightActionClicked: textField.text = ""
 }

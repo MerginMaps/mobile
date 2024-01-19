@@ -70,6 +70,8 @@
         <file>Home.svg</file>
         <file>Projects.svg</file>
         <file>ZoomToProject.svg</file>
+        <file>Next.svg</file>
+        <file>Previous.svg</file>
         <file>GlobalFilled.svg</file>
         <file>HomeFilled.svg</file>
         <file>ProjectsFilled.svg</file>
@@ -81,5 +83,8 @@
         <file>GPSIconFilled.svg</file>
         <file>Undo.svg</file>
         <file>GPSAntennaHeight.svg</file>
+        <file>ComboBoxCheck.svg</file>
+        <file>Direction.svg</file>
+        <file>TrackingDirection.svg</file>
     </qresource>
 </RCC>

@@ -15,42 +15,73 @@ import "../components"
 MMAbstractEditor {
   id: root
 
-  property var parentValue: parent.value ?? ""
-  property bool parentValueIsNull: parent.valueIsNull ?? false
-  property bool isReadOnly: parent.readOnly ?? false
-
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
-
-  signal editorValueChanged( var newValue, var isNull )
+  property bool multiSelect: false
+  required property ListModel featuresModel
+  required property string dropDownTitle
+  property var preselectedFeatures: []
 
   hasFocus: textField.activeFocus
+
+  signal featureClicked( var selectedFeatures )
 
   content: TextField {
     id: textField
 
     anchors.fill: parent
+    anchors.verticalCenter: parent.verticalCenter
 
-    text: root.parentValue
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
     placeholderTextColor: __style.nightAlphaColor
     font: __style.p5
     hoverEnabled: true
-
     background: Rectangle {
       color: __style.transparentColor
     }
   }
 
   rightAction: MMIcon {
-    id: rightIcon
+    id: eyeButton
+
+    property bool pressed: false
 
     height: parent.height
 
-    source: __style.xMarkIcon
+    source: __style.arrowDownIcon
     color: root.enabled ? __style.forestColor : __style.mediumGreenColor
-    visible: textField.activeFocus && textField.text.length>0
   }
 
-  onRightActionClicked: textField.text = ""
+  onRightActionClicked: {
+    if ( !root.enabled )
+      return
+    listLoader.active = true
+    listLoader.focus = true
+  }
+
+  Loader {
+    id: listLoader
+
+    asynchronous: true
+    active: false
+    sourceComponent: listComponent
+  }
+
+  Component {
+    id: listComponent
+
+    MMComboBoxDrawer {
+      focus: true
+      model: root.featuresModel
+      title: root.dropDownTitle
+      multiSelect: root.multiSelect
+      preselectedFeatures: root.preselectedFeatures
+
+      Component.onCompleted: open()
+      onClosed: listLoader.active = false
+      onFeatureClicked: function(selectedFeatures) {
+        root.featureClicked( selectedFeatures )
+      }
+    }
+  }
 }

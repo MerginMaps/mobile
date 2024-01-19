@@ -15,42 +15,62 @@ import "../components"
 MMAbstractEditor {
   id: root
 
-  property var parentValue: parent.value ?? ""
-  property bool parentValueIsNull: parent.valueIsNull ?? false
-  property bool isReadOnly: parent.readOnly ?? false
-
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
-
-  signal editorValueChanged( var newValue, var isNull )
+  property bool allowTimer: false
+  property int emitInterval: 200
 
   hasFocus: textField.activeFocus
+
+  signal searchTextChanged( string text )
 
   content: TextField {
     id: textField
 
     anchors.fill: parent
+    anchors.verticalCenter: parent.verticalCenter
 
-    text: root.parentValue
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
     placeholderTextColor: __style.nightAlphaColor
     font: __style.p5
     hoverEnabled: true
-
     background: Rectangle {
       color: __style.transparentColor
     }
+
+    onDisplayTextChanged: {
+      if ( root.allowTimer ) {
+        if ( searchTimer.running )
+          searchTimer.restart()
+        else
+          searchTimer.start()
+      }
+      else
+      {
+        root.searchTextChanged( textField.displayText )
+      }
+    }
   }
 
-  rightAction: MMIcon {
-    id: rightIcon
+  leftAction: MMIcon {
+    id: searchIcon
+
+    property bool pressed: false
 
     height: parent.height
 
-    source: __style.xMarkIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
-    visible: textField.activeFocus && textField.text.length>0
+    source: __style.searchIcon
+    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
   }
 
-  onRightActionClicked: textField.text = ""
+  Timer {
+    id: searchTimer
+
+    interval: root.emitInterval
+    running: false
+
+    onTriggered: {
+      searchTextChanged( root.text )
+    }
+  }
 }

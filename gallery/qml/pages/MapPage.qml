@@ -14,6 +14,7 @@ import QtLocation
 import QtPositioning
 
 import "../../app/qml/components"
+import "../../app/qml/map"
 import "../../app/qml/"
 
 Page {
@@ -63,6 +64,14 @@ Page {
       target: null
       onTranslationChanged: (delta) => map.pan(-delta.x, -delta.y)
     }
+  }
+
+  MMMapBlurLabel {
+    x: 20
+    y: 20
+    width: parent.width - 40
+    sourceItem: map
+    text: "Mark the geometry on the map and click record"
   }
 
   Rectangle {
@@ -160,5 +169,30 @@ Page {
       MMToolbarButton { text: "Edit Geometry"; iconSource: __style.editIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "Save"; iconSource: __style.doneIcon; type: MMToolbarButton.Button.Emphasized; onClicked: console.log("tapped "+text) }
     }
+  }
+  
+  MMPositionMarker {
+    xPos: 100
+    yPos: 100
+    direction: 30
+    accuracyRingSize: 50
+
+    Timer {
+      interval: 2000; running: true; repeat: true
+      onTriggered: parent.direction = Math.floor(Math.random() * 360)
+    }
+
+    Timer {
+      interval: 5000; running: true; repeat: true
+      onTriggered: parent.accuracyRingSize = 40 + Math.floor(Math.random() * 100)
+    }
+  }
+
+  MMPositionMarker {
+    xPos: 200
+    yPos: 100
+    direction: 330
+    accuracyRingSize: 50
+    trackingMode: true
   }
 }

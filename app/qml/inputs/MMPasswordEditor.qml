@@ -10,8 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import "../components"
 
 MMAbstractEditor {

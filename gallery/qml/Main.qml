@@ -130,6 +130,10 @@ ApplicationWindow {
           source: "EditorsPage.qml"
         }
         ListElement {
+          title: "Calendar"
+          source: "CalendarPage.qml"
+        }
+        ListElement {
           title: "Inputs"
           source: "InputsPage.qml"
         }
