@@ -52,6 +52,16 @@ ApplicationWindow {
       onStateChanged: {
         if ( stateManager.state === "map" ) {
           map.state = "view"
+
+          // Stop/Start sync animation when user goes to map
+          if ( __syncManager.hasPendingSync( __activeProject.projectFullName() ) )
+          {
+            syncInProgressAnimation.start()
+          }
+          else
+          {
+            syncInProgressAnimation.stop()
+          }
         }
         else if ( stateManager.state === "projects" ) {
           projectPanel.openPanel()
@@ -78,9 +88,6 @@ ApplicationWindow {
         NotificationType.Information,
         NotificationType.None
       )
-
-      // popup.text = message
-      // popup.open()
     }
 
     function showProjError(message) {
@@ -207,11 +214,6 @@ ApplicationWindow {
         stakeoutPanelLoader.item.targetPair = pair
       }
 
-      onSignInRequested: {
-        stateManager.state = "projects"
-        projectPanel.showLogin()
-      }
-
       onLocalChangesPanelRequested: {
           if ( __merginProjectStatusModel.loadProjectInfo( __activeProject.projectFullName() ) )
           {
@@ -270,10 +272,26 @@ ApplicationWindow {
       model: ObjectModel {
 
         MMToolbarButton {
+          id: syncButton
+
           text: qsTr("Sync")
           iconSource: __style.syncIcon
           onClicked: {
             __activeProject.requestSync()
+          }
+
+          RotationAnimation {
+            id: syncInProgressAnimation
+
+            target: syncButton.buttonIcon
+
+            from: 0
+            to: 720
+            duration: 1000
+
+            alwaysRunToEnd: true
+            loops: Animation.Infinite
+            easing.type: Easing.InOutSine
           }
         }
 
@@ -360,6 +378,8 @@ ApplicationWindow {
 
     NotificationBanner {
       id: failedToLoadProjectBanner
+
+      // TODO: replace with notifications
 
       width: parent.width - failedToLoadProjectBanner.anchors.margins * 2
       height: InputStyle.rowHeight * 2
@@ -639,71 +659,6 @@ ApplicationWindow {
       }
     }
 
-    Notification {
-        // TODO remove!
-        id: popup
-
-        text: ""
-        width: 400 * __dp
-        height: 160 * __dp
-        x: ( parent.width - width ) / 2
-        y: ( parent.height - height ) / 2
-    }
-
-    StorageLimitDialog {
-        id: storageLimitDialog
-        onOpenSubscriptionPlans: {
-          storageLimitDialog.close()
-          if (__merginApi.apiSupportsSubscriptions) {
-            projectPanel.manageSubscriptionPlans()
-          }
-        }
-    }
-
-    ProjectLimitDialog {
-        id: projectLimitDialog
-        onOpenSubscriptionPlans: {
-          projectLimitDialog.close()
-          if (__merginApi.apiSupportsSubscriptions) {
-            projectPanel.manageSubscriptionPlans()
-          }
-        }
-    }
-
-    MessageDialog {
-        id: projDialog
-        onAccepted: projDialog.close()
-        title: qsTr("PROJ Error")
-        buttons: MessageDialog.Ignore | MessageDialog.Help
-        onButtonClicked: function(clickedButton) {
-          if (clickedButton === MessageDialog.Help) {
-            Qt.openUrlExternally(__inputHelp.howToSetupProj)
-          }
-          close()
-        }
-    }
-
-    MessageDialog {
-      id: migrationDialog
-
-      property string version
-
-      onAccepted: migrationDialog.close()
-      title: qsTr("Your server will soon be out of date")
-      text: qsTr("Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.")
-      buttons: MessageDialog.Close | MessageDialog.Help | MessageDialog.Ignore
-      onButtonClicked: function(clickedButton) {
-        if (clickedButton === MessageDialog.Help) {
-          Qt.openUrlExternally(__inputHelp.migrationGuides)
-        }
-        else if (clickedButton === MessageDialog.Ignore) {
-          // don't show this dialog for this version
-          __appSettings.ignoreMigrateVersion = version
-        }
-        close()
-      }
-    }
-
     FormsStackManager {
       id: formsStackManager
 
@@ -772,6 +727,67 @@ ApplicationWindow {
       }
     }
 
+    ProjectLoadingScreen {
+      id: projectLoadingScreen
+
+      anchors.fill: parent
+      visible: false
+    }
+
+    StorageLimitDialog {
+        id: storageLimitDialog
+        onOpenSubscriptionPlans: {
+          storageLimitDialog.close()
+          if (__merginApi.apiSupportsSubscriptions) {
+            projectPanel.manageSubscriptionPlans()
+          }
+        }
+    }
+
+    ProjectLimitDialog {
+        id: projectLimitDialog
+        onOpenSubscriptionPlans: {
+          projectLimitDialog.close()
+          if (__merginApi.apiSupportsSubscriptions) {
+            projectPanel.manageSubscriptionPlans()
+          }
+        }
+    }
+
+    MessageDialog {
+        id: projDialog
+        onAccepted: projDialog.close()
+        title: qsTr("PROJ Error")
+        buttons: MessageDialog.Ignore | MessageDialog.Help
+        onButtonClicked: function(clickedButton) {
+          if (clickedButton === MessageDialog.Help) {
+            Qt.openUrlExternally(__inputHelp.howToSetupProj)
+          }
+          close()
+        }
+    }
+
+    MessageDialog {
+      id: migrationDialog
+
+      property string version
+
+      onAccepted: migrationDialog.close()
+      title: qsTr("Your server will soon be out of date")
+      text: qsTr("Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.")
+      buttons: MessageDialog.Close | MessageDialog.Help | MessageDialog.Ignore
+      onButtonClicked: function(clickedButton) {
+        if (clickedButton === MessageDialog.Help) {
+          Qt.openUrlExternally(__inputHelp.migrationGuides)
+        }
+        else if (clickedButton === MessageDialog.Ignore) {
+          // don't show this dialog for this version
+          __appSettings.ignoreMigrateVersion = version
+        }
+        close()
+      }
+    }
+
     MessageDialog {
       id: projectErrorDialog
 
@@ -788,11 +804,107 @@ ApplicationWindow {
       }
     }
 
-    ProjectLoadingScreen {
-      id: projectLoadingScreen
+    MigrateToMerginDialog {
+      id: migrateToMerginDialog
 
-      anchors.fill: parent
-      visible: false
+      onMigrationRequested: __syncManager.migrateProjectToMergin( __activeProject.projectFullName() )
+    }
+
+    NoPermissionsDialog {
+      id: noPermissionsDialog
+    }
+
+    SyncFailedDialog {
+      id: syncFailedDialog
+    }
+
+    MissingAuthDialog {
+      id: missingAuthDialog
+
+      onSingInRequested: {
+        stateManager.state = "projects"
+        projectPanel.showLogin()
+      }
+    }
+
+    // Should be the top-most visual item
+    MMNotificationView {
+      anchors {
+        top: parent.top
+        left: parent.left
+        right: parent.right
+        topMargin: 20 * __dp
+      }
+    }
+
+    Connections {
+      target: __syncManager
+      enabled: stateManager.state === "map"
+
+      function onSyncStarted( projectFullName )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          syncInProgressAnimation.start()
+        }
+      }
+
+      function onSyncFinished( projectFullName, success )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          syncInProgressAnimation.stop()
+
+          if ( success )
+          {
+            __notificationModel.addSuccess( qsTr( "Successfully synchronized" ) )
+
+            // refresh canvas
+            map.refreshMap()
+          }
+        }
+      }
+
+      function onSyncCancelled( projectFullName )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          syncInProgressAnimation.stop()
+        }
+      }
+
+      function onSyncError( projectFullName, errorType, willRetry, errorMessage )
+      {
+        if ( projectFullName === __activeProject.projectFullName() )
+        {
+          if ( errorType === SyncError.NotAMerginProject )
+          {
+            migrateToMerginDialog.open()
+          }
+          else if ( errorType === SyncError.NoPermissions )
+          {
+            noPermissionsDialog.open()
+          }
+          else if ( errorType === SyncError.AnotherProcessIsRunning && willRetry )
+          {
+            // just banner that we will try again
+            __notificationModel.addInfo( qsTr( "Somebody else is syncing, we will try again later" ) )
+          }
+          else
+          {
+            syncFailedDialog.detailedText = qsTr( "Details" ) + ": " + errorMessage
+            if ( willRetry )
+            {
+              // TODO: open sync failed dialogue when clicked on the notification
+              __notificationModel.addError( qsTr( "There was an issue during synchronization, we will try again. Click to learn more" ) )
+            }
+            else
+            {
+              syncFailedDialog.open()
+            }
+          }
+        }
+      }
     }
 
     Connections {
@@ -838,6 +950,23 @@ ApplicationWindow {
           if( __appSettings.ignoreMigrateVersion !== version ) {
             migrationDialog.version = version
             migrationDialog.open()
+          }
+        }
+
+        function onMissingAuthorizationError( projectFullName )
+        {
+          if ( projectFullName === __activeProject.projectFullName() )
+          {
+            syncInProgressAnimation.stop()
+            missingAuthDialog.open()
+          }
+        }
+
+        function onProjectAlreadyOnLatestVersion( projectFullName )
+        {
+          if ( projectFullName === __activeProject.projectFullName() )
+          {
+            __notificationModel.addInfo( qsTr( "Up to date" ) )
           }
         }
     }
@@ -925,7 +1054,4 @@ ApplicationWindow {
         showMessage( qsTr( "Press back again to quit the app" ) )
       }
     }
-
-    // Should be last so it is displayed on very top
-    MMNotificationView {}
 }
