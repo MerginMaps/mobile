@@ -98,7 +98,9 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl checkmarkIcon READ checkmarkIcon CONSTANT )
     Q_PROPERTY( QUrl closeButtonIcon READ closeButtonIcon CONSTANT )
     Q_PROPERTY( QUrl closeIcon READ closeIcon CONSTANT )
+    Q_PROPERTY( QUrl comboBoxCheckIcon READ comboBoxCheckIcon CONSTANT )
     Q_PROPERTY( QUrl deleteIcon READ deleteIcon CONSTANT )
+    Q_PROPERTY( QUrl directionIcon READ directionIcon CONSTANT )
     Q_PROPERTY( QUrl doneIcon READ doneIcon CONSTANT )
     Q_PROPERTY( QUrl downloadIcon READ downloadIcon CONSTANT )
     Q_PROPERTY( QUrl editIcon READ editIcon CONSTANT )
@@ -143,6 +145,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl teacherIcon READ teacherIcon CONSTANT )
     Q_PROPERTY( QUrl telecommunicationIcon READ telecommunicationIcon CONSTANT )
     Q_PROPERTY( QUrl termsIcon READ termsIcon CONSTANT )
+    Q_PROPERTY( QUrl trackingDirectionIcon READ trackingDirectionIcon CONSTANT )
     Q_PROPERTY( QUrl tractorIcon READ tractorIcon CONSTANT )
     Q_PROPERTY( QUrl transportationIcon READ transportationIcon CONSTANT )
     Q_PROPERTY( QUrl waitingIcon READ waitingIcon CONSTANT )
@@ -168,6 +171,7 @@ class MMStyle: public QObject
     // Other
     Q_PROPERTY( double inputRadius READ inputRadius CONSTANT )
     Q_PROPERTY( double maxPageWidth READ maxPageWidth CONSTANT )
+    Q_PROPERTY( double comboBoxItemHeight READ comboBoxItemHeight CONSTANT )
 
   public:
     explicit MMStyle( qreal dp )
@@ -241,7 +245,9 @@ class MMStyle: public QObject
     QUrl checkmarkIcon() {return QUrl( "qrc:/Checkmark.svg" );}
     QUrl closeButtonIcon() {return QUrl( "qrc:/CloseButton.svg" );}
     QUrl closeIcon() {return QUrl( "qrc:/Close.svg" );}
+    QUrl comboBoxCheckIcon() {return QUrl( "qrc:/ComboBoxCheck.svg" );}
     QUrl deleteIcon() {return QUrl( "qrc:/Delete.svg" );}
+    QUrl directionIcon() {return QUrl( "qrc:/Direction.svg" );}
     QUrl doneIcon() {return QUrl( "qrc:/Done.svg" );}
     QUrl downloadIcon() {return QUrl( "qrc:/Download.svg" );}
     QUrl editIcon() {return QUrl( "qrc:/Edit.svg" );}
@@ -286,6 +292,7 @@ class MMStyle: public QObject
     QUrl teacherIcon() {return QUrl( "qrc:/Teacher.svg" );}
     QUrl telecommunicationIcon() {return QUrl( "qrc:/Telecommunication.svg" );}
     QUrl termsIcon() {return QUrl( "qrc:/Terms.svg" );}
+    QUrl trackingDirectionIcon() {return QUrl( "qrc:/TrackingDirection.svg" );}
     QUrl tractorIcon() {return QUrl( "qrc:/Tractor.svg" );}
     QUrl transportationIcon() {return QUrl( "qrc:/Transportation.svg" );}
     QUrl waitingIcon() {return QUrl( "qrc:/Waiting.svg" );}
@@ -307,6 +314,7 @@ class MMStyle: public QObject
 
     double inputRadius() {return 12 * mDp;}
     double maxPageWidth() {return 500 * mDp;}
+    double comboBoxItemHeight() {return 67 * mDp;}
 
   signals:
     void styleChanged();

@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qml/components"
+import "../../app/qml/inputs"
 import notificationType 1.0
 
 Page {
@@ -27,35 +28,35 @@ Page {
     spacing: 20
     anchors.centerIn: parent
 
-    MMButtonInput {
+    MMButtonInputEditor {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write an informative message"
-      onClicked: { __notificationModel.add(text, 60, NotificationType.Information, NotificationType.None); text = "" }
+      onButtonClicked: { __notificationModel.add(text, 60, NotificationType.Information, NotificationType.None); text = "" }
     }
-    MMButtonInput {
+    MMButtonInputEditor {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write a success message"
-      onClicked: { __notificationModel.add(text, 60, NotificationType.Success, NotificationType.Check); text = "" }
+      onButtonClicked: { __notificationModel.add(text, 60, NotificationType.Success, NotificationType.Check); text = "" }
     }
-    MMButtonInput {
+    MMButtonInputEditor {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write a warning message"
-      onClicked: { __notificationModel.add(text, 60, NotificationType.Warning, NotificationType.Waiting); text = "" }
+      onButtonClicked: { __notificationModel.add(text, 60, NotificationType.Warning, NotificationType.Waiting); text = "" }
     }
-    MMButtonInput {
+    MMButtonInputEditor {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write an error message"
-      onClicked: { __notificationModel.add(text, 60, NotificationType.Error, NotificationType.None); text = "" }
+      onButtonClicked: { __notificationModel.add(text, 60, NotificationType.Error, NotificationType.None); text = "" }
     }
-    MMButtonInput {
+    MMButtonInputEditor {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       text: "Stojí, stojí mohyla, Na mohyle zlá chvíľa, Na mohyle tŕnie chrastie A v tom tŕní, chrastí rastie, Rastie, kvety rozvíja Jedna žltá ľalia. Tá ľalia smutno vzdychá: „Hlávku moju tŕnie pichá A nožičky oheň páli – Pomôžte mi v mojom žiali!“ "
-      onClicked: { __notificationModel.add(text, 60, NotificationType.Information, NotificationType.None); text = "" }
+      onButtonClicked: { __notificationModel.add(text, 60, NotificationType.Information, NotificationType.None); text = "" }
     }
     Text {
       text: "Note: Notification will be removed in 1 minute"

@@ -77,5 +77,8 @@
         <file>ProjectsFilled.svg</file>
         <file>Minus.svg</file>
         <file>Plus.svg</file>
+        <file>ComboBoxCheck.svg</file>
+        <file>Direction.svg</file>
+        <file>TrackingDirection.svg</file>
     </qresource>
 </RCC>
