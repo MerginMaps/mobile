@@ -65,6 +65,14 @@ Page {
     }
   }
 
+  MMMapBlurLabel {
+    x: 20
+    y: 20
+    width: parent.width - 40
+    sourceItem: map
+    text: "Mark the geometry on the map and click record"
+  }
+
   Rectangle {
     anchors {
       bottom: parent.bottom
