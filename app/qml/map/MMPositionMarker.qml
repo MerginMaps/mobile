@@ -71,14 +71,14 @@ Item {
 
     Rectangle {
       anchors.centerIn: parent
-      width: root.size * 2 / 3
+      width: root.size * 2 / 3.
       height: width
       radius: width / 2
       color: __style.earthColor
 
       Rectangle {
         anchors.centerIn: parent
-        width: root.size / 3
+        width: root.size / 3.
         height: width
         radius: width / 2
         color: root.trackingMode ? __style.sunsetColor : __style.grassColor
