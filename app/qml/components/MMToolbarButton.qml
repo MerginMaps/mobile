@@ -18,10 +18,13 @@ Item {
 
   required property var iconSource
   required property string text
+
+  property alias buttonIcon: icon
+
   property var type: MMToolbarButton.Button.Normal
   property bool isMenuButton: false
 
-  enum Button { Normal, Save }
+  enum Button { Normal, Emphasized }
 
   height: isMenuButton ? __style.menuDrawerHeight/2 : __style.toolbarHeight
 
@@ -29,7 +32,7 @@ Item {
     width: parent.width - 10 * __dp
     height: parent.height - 10 * __dp
     anchors.centerIn: parent
-    clip: control.type !== MMToolbarButton.Button.Save
+    clip: control.type !== MMToolbarButton.Button.Emphasized
     color: __style.transparentColor
     visible: !control.isMenuButton
 
@@ -39,19 +42,26 @@ Item {
       source: control.iconSource
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.bottom: parent.bottom
-      anchors.bottomMargin: 40 * __dp + (control.type === MMToolbarButton.Button.Save ? 14 * __dp : 0)
+      anchors.bottomMargin: 40 * __dp + (control.type === MMToolbarButton.Button.Emphasized ? 14 * __dp : 0)
 
       Rectangle {
-        visible: control.type === MMToolbarButton.Button.Save
+        visible: control.type === MMToolbarButton.Button.Emphasized
         anchors.centerIn: parent
-        width: 56 * __dp
+        width: 60 * __dp
         height: width
         radius: width / 2
         color: __style.transparentColor
         border.color: __style.grassColor
-        border.width: 14 * __dp
+        border.width: 16 * __dp
+
+        // handle clicks above the toolbar
+        MouseArea {
+          anchors.fill: parent
+          onClicked: control.clicked()
+        }
       }
     }
+
     Text {
       id: text
 

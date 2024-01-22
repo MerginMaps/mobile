@@ -54,7 +54,7 @@ class MMStyle: public QObject
     // Colors - secondary palette
     Q_PROPERTY( QColor lightGreenColor READ lightGreenColor CONSTANT )
     Q_PROPERTY( QColor mediumGreenColor READ mediumGreenColor CONSTANT )
-    Q_PROPERTY( QColor grayColor READ grayColor CONSTANT )
+    Q_PROPERTY( QColor greyColor READ greyColor CONSTANT )
 
     // Colors - additional colors
     Q_PROPERTY( QColor sandColor READ sandColor CONSTANT )
@@ -64,6 +64,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor roseColor READ roseColor CONSTANT )
     Q_PROPERTY( QColor skyColor READ skyColor CONSTANT )
     Q_PROPERTY( QColor grapeColor READ grapeColor CONSTANT )
+    Q_PROPERTY( QColor grapeTransparentColor READ grapeTransparentColor CONSTANT )
     Q_PROPERTY( QColor deepOceanColor READ deepOceanColor CONSTANT )
     Q_PROPERTY( QColor purpleColor READ purpleColor CONSTANT )
     Q_PROPERTY( QColor fieldColor READ fieldColor CONSTANT )
@@ -112,11 +113,15 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl globeIcon READ globeIcon CONSTANT )
     Q_PROPERTY( QUrl globalIcon READ globalIcon CONSTANT )
     Q_PROPERTY( QUrl globalFilledIcon READ globalFilledIcon CONSTANT )
+    Q_PROPERTY( QUrl gpsIcon READ gpsIcon CONSTANT )
+    Q_PROPERTY( QUrl gpsAntennaHeightIcon READ gpsAntennaHeightIcon CONSTANT )
+    Q_PROPERTY( QUrl gpsIconFilled READ gpsIconFilled CONSTANT )
     Q_PROPERTY( QUrl hideIcon READ hideIcon CONSTANT )
     Q_PROPERTY( QUrl homeIcon READ homeIcon CONSTANT )
     Q_PROPERTY( QUrl homeFilledIcon READ homeFilledIcon CONSTANT )
     Q_PROPERTY( QUrl infoIcon READ infoIcon CONSTANT )
     Q_PROPERTY( QUrl linkedinIcon READ linkedinIcon CONSTANT )
+    Q_PROPERTY( QUrl mapPinIcon READ mapPinIcon CONSTANT )
     Q_PROPERTY( QUrl mastodonIcon READ mastodonIcon CONSTANT )
     Q_PROPERTY( QUrl minusIcon READ minusIcon CONSTANT )
     Q_PROPERTY( QUrl moreIcon READ moreIcon CONSTANT )
@@ -134,6 +139,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl qgisIcon READ qgisIcon CONSTANT )
     Q_PROPERTY( QUrl qrCodeIcon READ qrCodeIcon CONSTANT )
     Q_PROPERTY( QUrl redditIcon READ redditIcon CONSTANT )
+    Q_PROPERTY( QUrl satelliteIcon READ satelliteIcon CONSTANT )
     Q_PROPERTY( QUrl searchIcon READ searchIcon CONSTANT )
     Q_PROPERTY( QUrl showIcon READ showIcon CONSTANT )
     Q_PROPERTY( QUrl socialMediaIcon READ socialMediaIcon CONSTANT )
@@ -148,6 +154,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl trackingDirectionIcon READ trackingDirectionIcon CONSTANT )
     Q_PROPERTY( QUrl tractorIcon READ tractorIcon CONSTANT )
     Q_PROPERTY( QUrl transportationIcon READ transportationIcon CONSTANT )
+    Q_PROPERTY( QUrl undoIcon READ undoIcon CONSTANT )
     Q_PROPERTY( QUrl waitingIcon READ waitingIcon CONSTANT )
     Q_PROPERTY( QUrl waterResourcesIcon READ waterResourcesIcon CONSTANT )
     Q_PROPERTY( QUrl xMarkIcon READ xMarkIcon CONSTANT )
@@ -163,6 +170,7 @@ class MMStyle: public QObject
 
     // Map items
     Q_PROPERTY( double mapItemHeight READ mapItemHeight CONSTANT )
+    Q_PROPERTY( double mapButtonsMargin READ mapButtonsMargin CONSTANT )
 
     // Toolbar
     Q_PROPERTY( double toolbarHeight READ toolbarHeight CONSTANT )
@@ -205,7 +213,7 @@ class MMStyle: public QObject
 
     QColor lightGreenColor() {return QColor::fromString( "#EFF5F3" );}
     QColor mediumGreenColor() {return QColor::fromString( "#B7CDC4" );}
-    QColor grayColor() {return QColor::fromString( "#E2E2E2" );}
+    QColor greyColor() {return QColor::fromString( "#E2E2E2" );}
 
     QColor sandColor() {return QColor::fromString( "#FFF4E2" );}
     QColor sunsetColor() {return QColor::fromString( "#FFB673" );}
@@ -214,14 +222,15 @@ class MMStyle: public QObject
     QColor roseColor() {return QColor::fromString( "#FFBABC" );}
     QColor skyColor() {return QColor::fromString( "#A6CBF4" );}
     QColor grapeColor() {return QColor::fromString( "#5A2740" );}
+    QColor grapeTransparentColor() {return QColor( 0x5A, 0x27, 0x40, 102 );}
     QColor deepOceanColor() {return QColor::fromString( "#1C324A" );}
     QColor purpleColor() {return QColor::fromString( "#CCBDF5" );}
     QColor fieldColor() {return QColor::fromString( "#9BD1A9" );}
 
-    QColor positiveColor() {return QColor::fromString( "#C2FFA6" );}
-    QColor warningColor() {return QColor::fromString( "#FFD6A6" );}
-    QColor negativeColor() {return QColor::fromString( "#FFA6A6" );}
-    QColor informativeColor() {return QColor::fromString( "#A6F4FF" );}
+    QColor positiveColor() {return QColor::fromString( "#C0EBCF" );}
+    QColor warningColor() {return QColor::fromString( "#F7DDAF" );}
+    QColor negativeColor() {return QColor::fromString( "#F0C4BC" );}
+    QColor informativeColor() {return QColor::fromString( "#BEDAF0" );}
 
     QColor nightAlphaColor() {return QColor::fromString( "#AA12181F" );}
     QColor errorBgInputColor() {return QColor::fromString( "#FEFAF9" );}
@@ -259,11 +268,15 @@ class MMStyle: public QObject
     QUrl globeIcon() {return QUrl( "qrc:/Globe.svg" );}
     QUrl globalIcon() {return QUrl( "qrc:/Global.svg" );}
     QUrl globalFilledIcon() {return QUrl( "qrc:/GlobalFilled.svg" );}
+    QUrl gpsIcon() {return QUrl( "qrc:/GPSIcon.svg" );}
+    QUrl gpsAntennaHeightIcon() {return QUrl( "qrc:/GPSAntennaHeight.svg" );}
+    QUrl gpsIconFilled() {return QUrl( "qrc:/GPSIconFilled.svg" );}
     QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
     QUrl homeIcon() {return QUrl( "qrc:/Home.svg" );}
     QUrl homeFilledIcon() {return QUrl( "qrc:/HomeFilled.svg" );}
     QUrl infoIcon() {return QUrl( "qrc:/Info.svg" );}
     QUrl linkedinIcon() {return QUrl( "qrc:/Linkedin.svg" );}
+    QUrl mapPinIcon() {return QUrl( "qrc:/MapPin.svg" );}
     QUrl mastodonIcon() {return QUrl( "qrc:/Mastodon.svg" );}
     QUrl minusIcon() {return QUrl( "qrc:/Minus.svg" );}
     QUrl moreIcon() {return QUrl( "qrc:/More.svg" );}
@@ -281,6 +294,7 @@ class MMStyle: public QObject
     QUrl qgisIcon() {return QUrl( "qrc:/QGIS.svg" );}
     QUrl qrCodeIcon() {return QUrl( "qrc:/QRCode.svg" );}
     QUrl redditIcon() {return QUrl( "qrc:/Reddit.svg" );}
+    QUrl satelliteIcon() {return QUrl( "qrc:/GPSSatellite.svg" );}
     QUrl searchIcon() {return QUrl( "qrc:/Search.svg" );}
     QUrl showIcon() {return QUrl( "qrc:/Show.svg" );}
     QUrl socialMediaIcon() {return QUrl( "qrc:/SocialMedia.svg" );}
@@ -295,6 +309,7 @@ class MMStyle: public QObject
     QUrl trackingDirectionIcon() {return QUrl( "qrc:/TrackingDirection.svg" );}
     QUrl tractorIcon() {return QUrl( "qrc:/Tractor.svg" );}
     QUrl transportationIcon() {return QUrl( "qrc:/Transportation.svg" );}
+    QUrl undoIcon() {return QUrl( "qrc:/Undo.svg" );}
     QUrl waitingIcon() {return QUrl( "qrc:/Waiting.svg" );}
     QUrl waterResourcesIcon() {return QUrl( "qrc:/WaterResources.svg" );}
     QUrl xMarkIcon() {return QUrl( "qrc:/XMark.svg" );}
@@ -307,7 +322,8 @@ class MMStyle: public QObject
     QUrl reachedDataLimitImage() {return QUrl( "qrc:/ReachedDataLimitImage.svg" );}
     QUrl warnLogoImage() {return QUrl( "qrc:/WarnLogoImage.svg" );}
 
-    double mapItemHeight() {return 50 * mDp;}
+    double mapItemHeight() {return 60 * mDp;}
+    double mapButtonsMargin() {return 25 * mDp;}
 
     double toolbarHeight() {return 89 * mDp;}
     double menuDrawerHeight() {return 67 * mDp;}

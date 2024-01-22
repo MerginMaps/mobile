@@ -262,7 +262,7 @@ Item {
             },
             State {
               name: "notAtTarget"
-              when: state != "atTarget"
+              when: state !== "atTarget"
             }
           ]
 
@@ -283,8 +283,8 @@ Item {
             anchors.fill: parent
 
             ShapePath {
-              strokeColor: closeRangeModeComponent.state === "notAtTarget" ? InputStyle.labelColor : InputStyle.fontColorBright
-              fillColor: closeRangeModeComponent.state === "notAtTarget" ? "white" : InputStyle.fontColorBright
+              strokeColor: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.positiveColor
+              fillColor: closeRangeModeComponent.state === "notAtTarget" ? __style.whiteColor : __style.positiveColor
 
               strokeWidth: 2 * __dp
 

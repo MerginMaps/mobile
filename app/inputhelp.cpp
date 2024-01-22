@@ -142,7 +142,7 @@ QString InputHelp::howToSetupProj() const
 
 QString InputHelp::gpsAccuracyHelpLink() const
 {
-  return helpRoot + "/field/gps_accuracy/" + utmTagHelp;
+  return helpRoot + "/field/gps_accuracy/" + utmTagHelp; // NOTE: keeping here for future use
 }
 
 QString InputHelp::howToConnectGPSLink() const

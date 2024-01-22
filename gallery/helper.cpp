@@ -65,6 +65,7 @@ qreal Helper::calculateDpRatio()
     qreal realDpr = calculateScreenDpr();
     return realDpr / screen->devicePixelRatio();
   }
+
   return 1;
 }
 

@@ -20,7 +20,7 @@ Rectangle {
 
   radius: 12 * __dp
   color: {
-    switch( type ) {
+    switch( model.type ) {
     case NotificationType.Information: return __style.informativeColor
     case NotificationType.Success: return __style.positiveColor
     case NotificationType.Warning: return __style.warningColor
@@ -40,10 +40,10 @@ Rectangle {
     width: 18 * __dp
     height: 18 * __dp
     color: text.color
-    visible: icon !== NotificationType.None
+    visible: model.icon !== NotificationType.None
     source: {
-      switch( icon ) {
-      case NotificationType.None: return __style.checkmarkIcon
+      switch( model.icon ) {
+      case NotificationType.None: return ""
       case NotificationType.Waiting: return __style.waitingIcon
       case NotificationType.Check: return __style.checkmarkIcon
       }
@@ -56,7 +56,7 @@ Rectangle {
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: leftIcon.right
     width: parent.width - 60 * __dp - closeButton.width - leftIcon.width
-    text: message
+    text: model.message
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignLeft
     leftPadding: 20 * __dp - root.innerSpacing
@@ -91,7 +91,7 @@ Rectangle {
 
       anchors.fill: parent
       hoverEnabled: true
-      onClicked: __notificationModel.remove(id)
+      onClicked: __notificationModel.remove(model.id)
     }
   }
 

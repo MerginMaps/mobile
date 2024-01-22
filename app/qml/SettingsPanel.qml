@@ -210,27 +210,6 @@ Item {
           PanelItem {
             height: root.rowHeight
             width: parent.width
-            text: qsTr("Show accuracy warning")
-
-            SettingsSwitch {
-              id: accuracyWarningSwitch
-
-              checked: __appSettings.gpsAccuracyWarning
-              onCheckedChanged: __appSettings.gpsAccuracyWarning = checked
-            }
-
-            MouseArea {
-              anchors.fill: parent
-
-              onClicked: {
-                accuracyWarningSwitch.toggle()
-              }
-            }
-          }
-
-          PanelItem {
-            height: root.rowHeight
-            width: parent.width
             color: InputStyle.clrPanelMain
             text: qsTr("Select GPS receiver")
 

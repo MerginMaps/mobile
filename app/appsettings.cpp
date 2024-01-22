@@ -25,7 +25,6 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
   bool autoCenter = settings.value( "autoCenter", false ).toBool();
   double gpsTolerance = settings.value( "gpsTolerance", 10 ).toDouble();
-  bool gpsAccuracyWarning = settings.value( "gpsAccuracyWarning", true ).toBool();
   int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
   int streamingIntervalType = settings.value( "intervalType", 0 ).toInt();
   StreamingIntervalType::IntervalType intervalType = static_cast<StreamingIntervalType::IntervalType>( streamingIntervalType );
@@ -44,7 +43,6 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setDefaultLayer( layer );
   setAutoCenterMapChecked( autoCenter );
   setGpsAccuracyTolerance( gpsTolerance );
-  setGpsAccuracyWarning( gpsAccuracyWarning );
   setLineRecordingInterval( lineRecordingInterval );
   setIntervalType( intervalType );
   setReuseLastEnteredValues( reuseLastEnteredValues );
@@ -200,21 +198,6 @@ void AppSettings::setReuseLastEnteredValues( bool reuseLastEnteredValues )
     setValue( "reuseLastEnteredValues", reuseLastEnteredValues );
     mReuseLastEnteredValues = reuseLastEnteredValues;
     emit reuseLastEnteredValuesChanged( mReuseLastEnteredValues );
-  }
-}
-
-bool AppSettings::gpsAccuracyWarning() const
-{
-  return mGpsAccuracyWarning;
-}
-
-void AppSettings::setGpsAccuracyWarning( bool gpsAccuracyWarning )
-{
-  if ( mGpsAccuracyWarning != gpsAccuracyWarning )
-  {
-    mGpsAccuracyWarning = gpsAccuracyWarning;
-    setValue( "gpsAccuracyWarning", gpsAccuracyWarning );
-    emit gpsAccuracyWarningChanged();
   }
 }
 

@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Shapes
 import Input 0.1
 import lc 1.0
+import "../components"
 
 import "../"
 
@@ -25,7 +26,7 @@ Item {
   /*required*/ property var gpsState
   /*required*/ property var compass
 
-  property alias gpsBanner: gpsAccuracyBanner
+  property alias recordingMapTool: mapTool
 
   property bool centerToGPSOnStartup: false
   property var activeFeature
@@ -167,83 +168,86 @@ Item {
     shouldUseSnapping: !mapTool.isUsingPosition
   }
 
-  RecordingToolbar {
-    id: toolbar
+  MMToolbar {
 
     y: parent.height
 
     width: parent.width
-    height: InputStyle.rowHeightHeader
 
-    gpsIndicatorColor: root.gpsState.indicatorColor
-    pointLayerSelected: __inputUtils.isPointLayer( __activeLayer.vectorLayer ) && !__inputUtils.isMultiPartLayer( __activeLayer.vectorLayer )
+    ObjectModel {
+      id: polygonToolbarButtons
 
-    manualRecording: mapTool.recordingType === RecordingMapTool.Manual
-
-    recordingMapTool: mapTool
-
-    onGpsSwitchClicked: {
-      if ( root.gpsState.state === "unavailable" ) {
-        showMessage( qsTr( "GPS currently unavailable." ) )
-        return
+      MMToolbarButton {
+        text: qsTr( "Undo" )
+        iconSource: __style.undoIcon
+        onClicked: mapTool.undo()
       }
 
-      mapTool.centeredToGPS = true
-      root.map.mapSettings.setCenter( mapPositioning.mapPosition )
-    }
-
-    onGpsSwithHeld: {
-      // start / stop streaming mode
-      if ( mapTool.recordingType === RecordingMapTool.Manual )
-      {
-        mapTool.recordingType = RecordingMapTool.StreamMode
-
-        // add first point immediately
-        mapTool.addPoint( crosshair.recordPoint )
-        root.map.mapSettings.setCenter( mapPositioning.mapPosition )
+      MMToolbarButton {
+        text: qsTr( "Remove" )
+        iconSource: __style.minusIcon
+        onClicked: mapTool.removePoint()
       }
-      else
-      {
-        mapTool.recordingType = RecordingMapTool.Manual
-      }
-    }
 
-    onAddClicked: {
-      mapTool.addPoint( crosshair.recordPoint )
-
-      if ( pointLayerSelected )
-      {
-        let pair = mapTool.getFeatureLayerPair()
-        root.done( pair )
-      }
-    }
-
-    onReleaseClicked: {
-      mapTool.releaseVertex( crosshair.recordPoint )
-    }
-
-    onRemoveClicked: mapTool.removePoint()
-
-    onUndoClicked: {
-      mapTool.undo()
-    }
-
-    onDoneClicked: {
-      if ( mapTool.hasValidGeometry() )
-      {
-        // If we currently grab a point
-        if ( mapTool.state == RecordingMapTool.Grab )
-        {
-          mapTool.releaseVertex( crosshair.recordPoint )
+      MMToolbarButton {
+        text: mapTool.state === RecordingMapTool.Grab ? qsTr( "Release" ) : qsTr( "Add" )
+        iconSource: __style.addIcon
+        onClicked: {
+          if ( mapTool.state === RecordingMapTool.Grab ) {
+            mapTool.releaseVertex( crosshair.recordPoint )
+          }
+          else {
+            mapTool.addPoint( crosshair.recordPoint )
+          }
         }
+      }
 
-        let pair = mapTool.getFeatureLayerPair()
-        root.done( pair )
+      MMToolbarButton {
+        text: qsTr( "Record" );
+        iconSource: __style.doneIcon;
+        type: MMToolbarButton.Button.Emphasized;
+        onClicked: {
+          if ( mapTool.hasValidGeometry() )
+          {
+            // If we currently grab a point
+            if ( mapTool.state == RecordingMapTool.Grab )
+            {
+              mapTool.releaseVertex( crosshair.recordPoint )
+            }
+
+            let pair = mapTool.getFeatureLayerPair()
+            root.done( pair )
+          }
+          else
+          {
+            showMessage( __inputUtils.invalidGeometryWarning( mapTool.activeLayer ) )
+          }
+        }
       }
-      else
-      {
-        showMessage( __inputUtils.invalidGeometryWarning( mapTool.activeLayer ) )
+    }
+
+    ObjectModel {
+      id: pointToolbarButtons
+
+      MMToolbarLongButton {
+        text: qsTr( "Record" );
+        iconSource: __style.deleteIcon;
+        onClicked: {
+          mapTool.addPoint( crosshair.recordPoint )
+          let pair = mapTool.getFeatureLayerPair()
+          root.done( pair )
+        }
       }
+    }
+
+    model: {
+      let pointLayerSelected = __inputUtils.isPointLayer( __activeLayer.vectorLayer )
+      let isMultiPartLayerSelected = __inputUtils.isMultiPartLayer( __activeLayer.vectorLayer )
+
+      if ( pointLayerSelected && !isMultiPartLayerSelected ) {
+        return pointToolbarButtons
+      }
+      return polygonToolbarButtons
     }
   }
 
@@ -258,32 +262,6 @@ Item {
         root.map.mapSettings.setCenter( mapPositioning.mapPosition )
       }
     }
-  }
-
-  Banner {
-    id: gpsAccuracyBanner
-
-    property bool shouldShowAccuracyWarning: {
-      let isLowAccuracy = gpsState.state === "low" || gpsState.state === "unavailable"
-      let isBannerAllowed = __appSettings.gpsAccuracyWarning
-      let isUsingPosition = mapTool.isUsingPosition
-      let isGpsWorking = __positionKit.hasPosition
-
-      return isLowAccuracy  &&
-          isBannerAllowed   &&
-          isGpsWorking      &&
-          isUsingPosition
-    }
-
-    width: parent.width - InputStyle.innerFieldMargin * 2
-    height: InputStyle.rowHeight * 2
-
-    text: qsTr( "Low GPS position accuracy (%1 m)<br><br>Please make sure you have good view of the sky." )
-    .arg( __inputUtils.formatNumber( __positionKit.horizontalAccuracy ) )
-    withLink: true
-    link: __inputHelp.gpsAccuracyHelpLink
-
-    showBanner: shouldShowAccuracyWarning
   }
 
   Connections {

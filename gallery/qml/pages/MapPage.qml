@@ -68,7 +68,7 @@ Page {
 
   MMMapBlurLabel {
     x: 20
-    y: 20
+    y: 80
     width: parent.width - 40
     sourceItem: map
     text: "Mark the geometry on the map and click record"
@@ -91,7 +91,7 @@ Page {
 
   Column {
     anchors.right: parent.right
-    anchors.bottom: parent.bottom
+    anchors.bottom: toolbar.top
     anchors.rightMargin: 20
     anchors.bottomMargin: 50
     spacing: 20
@@ -109,26 +109,71 @@ Page {
 
   MMMapLabel {
     anchors.left: parent.left
-    anchors.bottom: parent.bottom
+    anchors.bottom: toolbar.top
     anchors.leftMargin: 20
     anchors.bottomMargin: 120
 
     text: "20.0 m"
-    iconSource: __style.checkmarkIcon
+    iconSource: __style.satelliteIcon
   }
 
   MMMapLabel {
     anchors.left: parent.left
-    anchors.bottom: parent.bottom
+    anchors.bottom: toolbar.top
     anchors.leftMargin: 20
     anchors.bottomMargin: 50
 
     text: "20.0 m"
   }
 
+  MMMapButton {
+    id: backButton
+
+    anchors {
+      left: parent.left
+      top: parent.top
+      leftMargin: 20
+      topMargin: 20
+    }
+
+    iconSource: __style.backIcon
+    onClicked: console.log("Map button clicked")
+  }
+
+  MMMapPicker {
+
+    anchors {
+      top: parent.top
+      topMargin: 20
+      left: backButton.right
+      leftMargin: 20
+    }
+
+    width: Math.min( parent.width - backButton.width - 20 - 20 - 20, 500 )
+
+    text: "Linestring layer ABCDEFGH"
+    leftIconSource: __style.settingsIcon
+  }
+
+  MMToolbar {
+    id: toolbar
+
+    anchors {
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
+    }
+
+    model: ObjectModel {
+      MMToolbarButton { text: "Delete"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "Edit Geometry"; iconSource: __style.editIcon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "Save"; iconSource: __style.doneIcon; type: MMToolbarButton.Button.Emphasized; onClicked: console.log("tapped "+text) }
+    }
+  }
+  
   MMPositionMarker {
-    xPos: 100
-    yPos: 100
+    xPos: 300
+    yPos: 200
     direction: 30
     accuracyRingSize: 50
 
@@ -145,7 +190,7 @@ Page {
 
   MMPositionMarker {
     xPos: 200
-    yPos: 100
+    yPos: 300
     direction: 330
     accuracyRingSize: 50
     trackingMode: true
