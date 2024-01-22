@@ -18,7 +18,6 @@ Item {
 
     anchors.top: parent.top
     width: parent.width
-    height: contentHeight
     clip: true
 
     model: __notificationModel

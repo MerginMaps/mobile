@@ -15,7 +15,7 @@ Item {
   required property real xPos
   required property real yPos
   property real direction: 0
-  property int size: 24 * __dp
+  property int size: 23 * __dp
   property real accuracyRingSize: 50 * __dp
 
   property bool trackingMode: false
@@ -74,7 +74,7 @@ Item {
       width: root.size * 2 / 3
       height: width
       radius: width / 2
-      color: __style.earthColor
+      color: root.trackingMode ? __style.earthColor : __style.forestColor
 
       Rectangle {
         anchors.centerIn: parent
