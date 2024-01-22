@@ -21,14 +21,14 @@ Item {
     anchors.fill: fastBlur
     color: __style.forestColor
     opacity: 0.8
-    radius: 21
+    radius: fastBlur.height / 2
   }
 
   FastBlur {
     id: fastBlur
 
     width: parent.width
-    height: 42 * __dp
+    height: 41 * __dp
 
     radius: 32
     opacity: 0.8
