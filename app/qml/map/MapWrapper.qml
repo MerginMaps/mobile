@@ -579,6 +579,10 @@ Item {
         }
       }
 
+      SplittingFailedDialog {
+        id: splittingFailedDialog
+      }
+
       MMMapLabel { // accuracy button
         anchors.left: parent.left
         anchors.bottom: parent.bottom
