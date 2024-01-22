@@ -6,6 +6,7 @@
 app/config.pri
 core/merginsecrets.cpp
 *.idea
+*.vscode
 test/temp_projects/
 test/temp_extra_projects/
 input.pro.user*

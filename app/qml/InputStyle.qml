@@ -236,8 +236,6 @@ QtObject {
     property real mapPolygonRingWidth: 8 * __dp
     property real mapPolygonRingBorderWidth: 0 * __dp
 
-    property real mapOutOfExtentBorder: scale(64) // when pair lays very close to device display border, center map extent
-
     function scale(size)
     {
         return size * __dp

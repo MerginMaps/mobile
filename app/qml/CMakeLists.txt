@@ -48,6 +48,7 @@ set(MM_QML
     components/MMListDrawerItem.qml
     components/MMMapButton.qml
     components/MMMapLabel.qml
+    components/MMMapPicker.qml
     components/MMMenuDrawer.qml
     components/MMMorePhoto.qml
     components/MMNotification.qml
@@ -125,10 +126,8 @@ set(MM_QML
     map/MMMapCanvas.qml
     map/MapWrapper.qml
     map/PositionMarker.qml
-    map/RecordingToolbar.qml
     map/RecordingTools.qml
     map/ScaleBar.qml
-    map/SplittingToolbar.qml
     map/SplittingTools.qml
     map/StakeoutTools.qml
     misc/AddPositionProviderPage.qml

@@ -10,9 +10,7 @@
 import QtQuick
 
 Item {
-  anchors.top: parent.top
-  anchors.topMargin: 20 * __dp
-  width: parent.width
+
   height: parent.height
 
   Repeater {

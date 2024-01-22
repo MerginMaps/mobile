@@ -23,6 +23,7 @@ Drawer {
   width: window.width
   height: mainColumn.height
   edge: Qt.BottomEdge
+  dragMargin: 0 // do not open by drag gesture
 
   Rectangle {
     color: roundedRect.color

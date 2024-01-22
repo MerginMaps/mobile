@@ -15,6 +15,7 @@ import Input 0.1
 import lc 1.0
 
 import "../"
+import "../components"
 
 /**
   * SplittingTools is a set of tools that are used during recording/editing of a geometry.
@@ -50,7 +51,7 @@ Item {
     height: root.map.height
     width: root.map.width
 
-    lineColor: InputStyle.guidelineColor
+    lineColor: __style.deepOceanColor
 
     mapSettings: root.map.mapSettings
     geometry: guidelineController.guidelineGeometry
@@ -62,8 +63,8 @@ Item {
     height: map.height
     width: map.width
 
-    markerColor: "black"
-    lineColor: "black"
+    markerColor: __style.deepOceanColor
+    lineColor: __style.deepOceanColor
     lineStrokeStyle: ShapePath.DashLine
 
     mapSettings: root.map.mapSettings
@@ -79,25 +80,41 @@ Item {
     mapSettings: root.map.mapSettings
   }
 
-  SplittingToolbar {
+  MMToolbar {
     y: parent.height
 
     width: parent.width
-    height: InputStyle.rowHeightHeader
 
-    onAddClicked: mapTool.addPoint( crosshair.recordPoint )
-    onRemoveClicked: mapTool.removePoint()
-    onDoneClicked: {
-      if ( mapTool.hasValidGeometry() )
-      {
-        let result = mapTool.commitSplit()
-        root.done( result )
+    model: ObjectModel {
+
+      MMToolbarButton {
+        text: qsTr( "Undo" )
+        iconSource: __style.undoIcon
+        onClicked: mapTool.removePoint()
       }
-      else
-      {
-        showMessage( qsTr( "You need to add at least 2 points." ) )
+
+      MMToolbarButton {
+        text: qsTr( "Add point" )
+        iconSource: __style.addIcon
+        onClicked: mapTool.addPoint( crosshair.recordPoint )
+      }
+
+      MMToolbarButton {
+        text: qsTr( "Done" )
+        iconSource: __style.doneIcon
+        type: MMToolbarButton.Button.Emphasized;
+        onClicked: {
+          if ( mapTool.hasValidGeometry() )
+          {
+            let result = mapTool.commitSplit()
+            root.done( result )
+          }
+          else
+          {
+            __notificationModel.addWarning( qsTr( "You need to add at least 2 points." ) )
+          }
+        }
       }
     }
-    onCancelClicked: root.canceled()
   }
 }

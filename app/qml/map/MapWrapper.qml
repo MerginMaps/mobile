@@ -19,6 +19,8 @@ import "../components"
 import "../dialogs"
 import "../banners"
 
+import notificationType 1.0
+
 Item {
   id: root
 
@@ -59,7 +61,6 @@ Item {
   signal stakeoutStarted( var pair )
   signal accuracyButtonClicked()
 
-  signal signInRequested()
   signal localChangesPanelRequested()
 
   signal openTrackingPanel()
@@ -118,17 +119,6 @@ Item {
 
     case "view": {
       root.hideHighlight()
-
-      // Stop/Start sync animation when user goes to map
-      if ( __syncManager.hasPendingSync( __activeProject.projectFullName() ) )
-      {
-        syncInProgressAnimation.start()
-      }
-      else
-      {
-        syncInProgressAnimation.stop()
-      }
-
       break
     }
 
@@ -376,10 +366,20 @@ Item {
         }
       }
 
+      Loader {
+        id: stakeoutLoader
+
+        anchors.fill: mapCanvas
+
+        asynchronous: true
+        active: root.state === "stakeout"
+
+        sourceComponent: stakeoutToolsComponent
+      }
+
       PositionMarker {
         mapPosition: mapPositioning
         compass: deviceCompass
-        visible: !internal.isInRecordState
       }
 
       Loader {
@@ -394,17 +394,6 @@ Item {
       }
 
       Loader {
-        id: stakeoutLoader
-
-        anchors.fill: mapCanvas
-
-        asynchronous: true
-        active: root.state === "stakeout"
-
-        sourceComponent: stakeoutToolsComponent
-      }
-
-      Loader {
         id: splittingLoader
 
         anchors.fill: mapCanvas
@@ -415,82 +404,7 @@ Item {
         sourceComponent: splittingToolsComponent
       }
 
-      AutoHideBanner {
-        id: syncSuccessfulBanner
-
-        width: parent.width - InputStyle.innerFieldMargin * 2
-        height: InputStyle.rowHeight
-
-        anchors.top: canvasRoot.top
-
-        bgColor: InputStyle.clrPanelBackground
-        fontColor: "white"
-
-        source: InputStyle.yesIcon
-
-        text: qsTr( "Successfully synchronized" )
-      }
-
-      AutoHideBanner {
-        id: upToDateBanner
-
-        width: parent.width - InputStyle.innerFieldMargin * 2
-        height: InputStyle.rowHeight
-
-        anchors.top: canvasRoot.top
-
-        bgColor: InputStyle.secondaryBackgroundColor
-        fontColor: "white"
-
-        source: InputStyle.yesIcon
-
-        text: qsTr( "Up to date" )
-      }
-
-      AutoHideBanner {
-        id: anotherProcessIsRunningBanner
-
-        width: parent.width - InputStyle.innerFieldMargin * 2
-        height: InputStyle.rowHeight
-
-        anchors.top: canvasRoot.top
-
-        text: qsTr( "Somebody else is syncing, we will try again later" )
-      }
-
-      AutoHideBanner {
-        id: retryableSyncErrorBanner
-
-        width: parent.width - InputStyle.innerFieldMargin * 2
-        height: InputStyle.rowHeight
-
-        anchors.top: canvasRoot.top
-
-        visibleInterval: 10000
-        text: qsTr( "There was an issue during synchronization, we will try again. Click to learn more" )
-
-        onClicked: syncFailedDialog.open()
-      }
-
-      AutoHideBanner {
-        id: splittingDoneBanner
-
-        width: parent.width - InputStyle.innerFieldMargin * 2
-        height: InputStyle.rowHeight
-
-        anchors.top: canvasRoot.top
-
-        bgColor: InputStyle.darkGreen
-        fontColor: "white"
-
-        source: InputStyle.yesIcon
-
-        visibleInterval: 2000
-
-        text: qsTr( "Splitting done successfully" )
-      }
-
-      AutoHideBanner {
+      AutoHideBanner { // TODO: Replace by MapBlurItem later
         id: howtoSplittingBanner
 
         width: parent.width - InputStyle.innerFieldMargin * 2
@@ -508,7 +422,7 @@ Item {
         text: qsTr( "Create line to split the selected feature" )
       }
 
-      AutoHideBanner {
+      AutoHideBanner { // TODO: Replace by MapBlurItem later
         id: howtoEditingBanner
 
         width: parent.width - InputStyle.innerFieldMargin * 2
@@ -526,7 +440,7 @@ Item {
         text: qsTr( "Select some point to start editing the geometry" )
       }
 
-      AutoHideBanner {
+      AutoHideBanner { // TODO: Replace by MapBlurItem later
         id: redrawGeometryBanner
 
         width: parent.width - InputStyle.innerFieldMargin * 2
@@ -544,185 +458,63 @@ Item {
         text: qsTr( "Record new geometry for the feature" )
       }
 
-      MissingAuthDialog {
-        id: missingAuthDialog
+      MMMapButton {
+        id: gpsButton
 
-        onSingInRequested: root.signInRequested()
-      }
-
-      SyncFailedDialog {
-        id: syncFailedDialog
-      }
-
-      MigrateToMerginDialog {
-        id: migrateToMerginDialog
-
-        onMigrationRequested: __syncManager.migrateProjectToMergin( __activeProject.projectFullName() )
-      }
-
-      NoPermissionsDialog {
-        id: noPermissionsDialog
-      }
-
-      SplittingFailedDialog {
-        id: splittingFailedDialog
-      }
-
-      MapFloatButton {
-        id: syncButton
-
-        // Find out if sync would collide with acc button
-        // based on distance between them
-
-        // TODO: Change to GPS button + design
-        visible: false
-
-        function wouldCollideWithAccBtn()
-        {
-          let accBtnRightMostX = accuracyButton.x + accuracyButton.width
-          let syncBtnLeftMostX = syncButton.x
-          let distance = syncBtnLeftMostX - accBtnRightMostX
-          return distance < InputStyle.smallGap / 2
+        anchors {
+          right: parent.right
+          rightMargin: __style.mapButtonsMargin
+          bottom: parent.bottom
+          bottomMargin: internal.bottomMapButtonsMargin
         }
 
-        onClicked: __activeProject.requestSync()
-        onPressAndHold: root.localChangesPanelRequested()
+        iconSource: __style.gpsIcon
 
-        maxWidth: InputStyle.mapBtnHeight
-        withImplicitMargins: false
-
-        anchors.bottom: wouldCollideWithAccBtn() ? accuracyButton.top : parent.bottom
-        anchors.bottomMargin: root.mapExtentOffset + InputStyle.smallGap
-        anchors.right: parent.right
-        anchors.rightMargin: InputStyle.smallGap
-
-//        visible: root.state === "view"
-
-        content: Item {
-
-          implicitWidth: InputStyle.mapBtnHeight
-          height: parent.height
-
-          anchors.horizontalCenter: parent.horizontalCenter
-
-          Symbol {
-            id: syncicon
-
-            iconSize: parent.height / 2
-            source: InputStyle.syncIcon
-
-            anchors.centerIn: parent
+        onClicked: {
+          if ( gpsStateGroup.state === "unavailable" ) {
+            __notificationModel.add( qsTr( "GPS currently unavailable" ), 5, NotificationType.Error, NotificationType.None )
+            return
           }
 
-          RotationAnimation {
-            id: syncInProgressAnimation
-
-            target: syncicon
-
-            from: 0
-            to: 720
-            duration: 1000
-
-            alwaysRunToEnd: true
-            loops: Animation.Infinite
-            easing.type: Easing.InOutSine
+          if ( recordingToolsLoader.active ) {
+            recordingToolsLoader.item.recordingMapTool.centeredToGPS = true
           }
+
+          mapSettings.setCenter( mapPositioning.mapPosition )
         }
 
-        Connections {
-          target: __syncManager
-          enabled: root.state !== "inactive"
-
-          function onSyncStarted( projectFullName )
-          {
-            if ( projectFullName === __activeProject.projectFullName() )
+        onClickAndHold: {
+          // start/stop the streaming mode
+          if ( recordingToolsLoader.active ) {
+            if ( recordingToolsLoader.item.recordingMapTool.recordingType === RecordingMapTool.Manual )
             {
-              syncInProgressAnimation.start()
+              recordingToolsLoader.item.recordingMapTool.recordingType = RecordingMapTool.StreamMode
+
+              // add first point immediately
+              recordingToolsLoader.item.recordingMapTool.addPoint( crosshair.recordPoint )
+              root.map.mapSettings.setCenter( mapPositioning.mapPosition )
             }
-          }
-
-          function onSyncFinished( projectFullName, success )
-          {
-            if ( projectFullName === __activeProject.projectFullName() )
+            else
             {
-              syncInProgressAnimation.stop()
-
-              if ( success )
-              {
-                // just banner
-                syncSuccessfulBanner.show()
-                // refresh canvas
-                mapCanvas.refresh()
-              }
-            }
-          }
-
-          function onSyncCancelled( projectFullName )
-          {
-            if ( projectFullName === __activeProject.projectFullName() )
-            {
-              syncInProgressAnimation.stop()
-            }
-          }
-
-          function onSyncError( projectFullName, errorType, willRetry, errorMessage )
-          {
-            if ( projectFullName === __activeProject.projectFullName() )
-            {
-              if ( errorType === SyncError.NotAMerginProject )
-              {
-                migrateToMerginDialog.open()
-              }
-              else if ( errorType === SyncError.NoPermissions )
-              {
-                noPermissionsDialog.open()
-              }
-              else if ( errorType === SyncError.AnotherProcessIsRunning && willRetry )
-              {
-                // just banner that we will try again
-                anotherProcessIsRunningBanner.show()
-              }
-              else
-              {
-                syncFailedDialog.detailedText = qsTr( "Details" ) + ": " + errorMessage
-                if ( willRetry )
-                {
-                  retryableSyncErrorBanner.show()
-                }
-                else
-                {
-                  syncFailedDialog.open()
-                }
-              }
-            }
-          }
-        }
-
-        Connections {
-          target: __merginApi
-          enabled: root.state !== "inactive"
-
-          function onMissingAuthorizationError( projectFullName )
-          {
-            if ( projectFullName === __activeProject.projectFullName() )
-            {
-              syncInProgressAnimation.stop()
-              missingAuthDialog.open()
-            }
-          }
-
-          function onProjectAlreadyOnLatestVersion( projectFullName )
-          {
-            if ( projectFullName === __activeProject.projectFullName() )
-            {
-              upToDateBanner.show()
+              recordingToolsLoader.item.recordingMapTool.recordingType = RecordingMapTool.Manual
             }
           }
         }
       }
 
-      MapFloatButton {
+      MMMapButton {
         id: backButton
+
+        anchors {
+          top: parent.top
+          topMargin: __style.mapButtonsMargin
+          left: parent.left
+          leftMargin: __style.mapButtonsMargin
+        }
+
+        iconSource: __style.backIcon
+
+        visible: internal.isInRecordState || root.state === "split"
 
         onClicked: {
           if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer") {
@@ -739,66 +531,25 @@ Item {
             root.state = "view"
           }
         }
+      }
 
-        maxWidth: parent.width * 0.8
-        anchors.top: parent.top
-        anchors.topMargin: internal.visibleBannerHeight + InputStyle.smallGap
-        anchors.left: parent.left
-        anchors.leftMargin: InputStyle.smallGap
+      MMMapPicker {
 
-        visible: root.state === "record" || root.state === "edit" || root.state === "split" || root.state === "recordInLayer"
-
-        content: Item {
-
-          implicitWidth: backtext.implicitWidth + backicon.width + InputStyle.tinyGap
-          height: parent.height
-
-          anchors.horizontalCenter: parent.horizontalCenter
-
-          Symbol {
-            id: backicon
-
-            iconSize: parent.height / 2
-            source: InputStyle.backIcon
-
-            anchors.verticalCenter: parent.verticalCenter
-          }
-
-          Text {
-            id: backtext
-
-            property real maxTextWidth: backButton.maxWidth - ( backicon.width + InputStyle.tinyGap + leftPadding ) // used offsets
-
-            text: captionmetrics.elidedText
-            elide: Text.ElideRight
-            wrapMode: Text.NoWrap
-
-            font.pixelSize: InputStyle.fontPixelSizeNormal
-            color: InputStyle.fontColor
-
-            height: parent.height
-
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-
-            leftPadding: height / 3 // small gap between icon and caption
-
-            TextMetrics { // element holding metrics about printed text to be able to scale text without binding loops
-              id: captionmetrics
-
-              font: backtext.font
-              text: qsTr( "Back" )
-              elide: backtext.elide
-              elideWidth: backtext.maxTextWidth
-            }
-
-            anchors {
-              left: backicon.right
-              right: parent.right
-              verticalCenter: parent.verticalCenter
-            }
-          }
+        anchors {
+          top: parent.top
+          topMargin: __style.mapButtonsMargin
+          left: backButton.right
+          leftMargin: __style.mapButtonsMargin
         }
+
+        width: Math.min( parent.width - backButton.width - ( 3 * __style.mapButtonsMargin ), 500 * __dp )
+
+        text: __activeLayer.layerName
+        leftIconSource: __inputUtils.loadIconFromLayer( __activeLayer.layer )
+
+        visible: root.state === "record"
+
+        onClicked: activeLayerPanel.openPanel()
       }
 
       MessageDialog {
@@ -828,178 +579,95 @@ Item {
         }
       }
 
-      MapFloatButton {
-        id: accuracyButton
+      SplittingFailedDialog {
+        id: splittingFailedDialog
+      }
 
-        property int accuracyPrecision: __positionKit.horizontalAccuracy > 1 ? 1 : 2
+      MMMapLabel { // accuracy button
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: 20
+        anchors.bottomMargin: internal.bottomMapButtonsMargin
 
-        onClicked: accuracyButtonClicked()
+        onClicked: root.accuracyButtonClicked()
 
-        maxWidth: parent.width - ( InputStyle.panelMargin * 2 )
+        iconSource: __style.satelliteIcon
 
-        anchors.bottom: root.state === "record" ? activeLayerButton.top : parent.bottom
-        anchors.bottomMargin: root.mapExtentOffset + InputStyle.smallGap
-        anchors.horizontalCenter: parent.horizontalCenter
+        bgColor: {
+          if ( gpsStateGroup.state === "good" ) {
+            return __style.positiveColor
+          }
+          else if ( gpsStateGroup.state === "low" ) {
+            return __style.warningColor
+          }
+          return __style.negativeColor
+        }
+
+        textColor: {
+          if ( gpsStateGroup.state === "good" ) {
+            return __style.forestColor
+          }
+          else if ( gpsStateGroup.state === "low" ) {
+            return __style.earthColor
+          }
+          return __style.grapeColor
+        }
 
         visible: {
-          if ( root.state === "inactive" )
-          {
-            return false
-          }
-          else if ( __positionKit.positionProvider && __positionKit.positionProvider.type() === "external" )
-          {
+          if ( __positionKit.positionProvider && __positionKit.positionProvider.type() === "external" ) {
             // for external receivers we want to show gps panel and accuracy button
             // even when the GPS receiver is not sending position data
             return true
           }
-          else return ( gpsStateGroup.state !== "unavailable" )
+          else {
+            if ( gpsStateGroup.state !== "unavailable" ) {
+              return true
+            }
+            else {
+              return false
+            }
+          }
         }
 
-        content: RowLayout {
-          height: parent.height
-          Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-
-          anchors.horizontalCenter: parent.horizontalCenter
-
-          Symbol {
-            id: gpsicon
-
-            iconSize: parent.height / 2
-            source: InputStyle.gpsAntennaIcon
-            visible: __appSettings.gpsAntennaHeight > 0 && !Number.isNaN( __positionKit.horizontalAccuracy ) && __positionKit.horizontalAccuracy > 0
+        text: {
+          if ( !__positionKit.positionProvider )
+          {
+            return ""
           }
-
-          Text {
-            id: acctext
-
-            text: {
-              if ( !__positionKit.positionProvider )
-              {
-                return ""
-              }
-              else if ( __positionKit.positionProvider.type() === "external" )
-              {
-                if ( __positionKit.positionProvider.state === PositionProvider.Connecting )
-                {
-                  return qsTr( "Connecting to %1" ).arg( __positionKit.positionProvider.name() )
-                }
-                else if ( __positionKit.positionProvider.state === PositionProvider.WaitingToReconnect )
-                {
-                  return __positionKit.positionProvider.stateMessage
-                }
-                else if ( __positionKit.positionProvider.state === PositionProvider.NoConnection )
-                {
-                  return __positionKit.positionProvider.stateMessage
-                }
-              }
-
-              if ( !__positionKit.hasPosition )
-              {
-                return qsTr( "Connected, no position" )
-              }
-              else if ( Number.isNaN( __positionKit.horizontalAccuracy ) || __positionKit.horizontalAccuracy < 0 )
-              {
-                return qsTr( "Unknown accuracy" )
-              }
-
-              let accuracyText = __inputUtils.formatNumber( __positionKit.horizontalAccuracy, accuracyButton.accuracyPrecision ) + " m"
-              if ( __appSettings.gpsAntennaHeight > 0 )
-              {
-                let gpsText = Number( __appSettings.gpsAntennaHeight.toFixed( 3 ) ) + " m"
-                return gpsText + " / " + accuracyText
-              }
-              else
-              {
-                return accuracyText
-              }
+          else if ( __positionKit.positionProvider.type() === "external" )
+          {
+            if ( __positionKit.positionProvider.state === PositionProvider.Connecting )
+            {
+              return qsTr( "Connecting to %1" ).arg( __positionKit.positionProvider.name() )
             }
-            elide: Text.ElideRight
-            wrapMode: Text.NoWrap
-
-            font.pixelSize: InputStyle.fontPixelSizeNormal
-            color: InputStyle.fontColor
-
-            height: parent.height
-
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-          }
-
-          RoundIndicator {
-            id: indicator
-
-            Layout.alignment: Qt.AlignTop
-            Layout.topMargin: InputStyle.tinyGap
-
-            width: parent.height / 4
-            height: width
-            color: gpsStateGroup.indicatorColor
-          }
-        }
-      }
-
-      MapFloatButton {
-        id: activeLayerButton
-
-        onClicked: activeLayerPanel.openPanel()
-
-        maxWidth: parent.width * 0.8
-
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: InputStyle.smallGap
-        anchors.horizontalCenter: accuracyButton.horizontalCenter
-
-        visible: root.state === "record"
-
-        content: Item {
-
-          implicitWidth: layername.implicitWidth + layericon.width + InputStyle.tinyGap
-          height: parent.height
-
-          anchors.horizontalCenter: parent.horizontalCenter
-
-          Symbol {
-            id: layericon
-
-            iconSize: parent.height / 2
-            source: __inputUtils.loadIconFromLayer( __activeLayer.layer )
-
-            anchors.verticalCenter: parent.verticalCenter
-          }
-
-          Text {
-            id: layername
-
-            property real maxTextWidth: activeLayerButton.maxWidth - ( layericon.width + InputStyle.tinyGap + leftPadding ) // used offsets
-
-            text: textmetrics.elidedText
-            elide: Text.ElideRight
-            wrapMode: Text.NoWrap
-
-            font.pixelSize: InputStyle.fontPixelSizeNormal
-            color: InputStyle.fontColor
-
-            height: parent.height
-
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-
-            leftPadding: height / 3 // small gap between layer icon and layer name
-
-            TextMetrics { // element holding metrics about printed text to be able to scale text without binding loops
-              id: textmetrics
-
-              font: layername.font
-              text: __activeLayer.layerName
-              elide: layername.elide
-              elideWidth: layername.maxTextWidth
+            else if ( __positionKit.positionProvider.state === PositionProvider.WaitingToReconnect )
+            {
+              return __positionKit.positionProvider.stateMessage
             }
-
-            anchors {
-              left: layericon.right
-              right: parent.right
-              verticalCenter: parent.verticalCenter
+            else if ( __positionKit.positionProvider.state === PositionProvider.NoConnection )
+            {
+              return __positionKit.positionProvider.stateMessage
             }
+          }
+
+          if ( !__positionKit.hasPosition )
+          {
+            return qsTr( "Connected, no position" )
+          }
+          else if ( Number.isNaN( __positionKit.horizontalAccuracy ) || __positionKit.horizontalAccuracy < 0 )
+          {
+            return qsTr( "Unknown accuracy" )
+          }
+
+          let accuracyText = __inputUtils.formatNumber( __positionKit.horizontalAccuracy, __positionKit.horizontalAccuracy > 1 ? 1 : 2 ) + " m"
+          if ( __appSettings.gpsAntennaHeight > 0 )
+          {
+            let gpsText = Number( __appSettings.gpsAntennaHeight.toFixed( 3 ) ) + " m"
+            return gpsText + " / " + accuracyText
+          }
+          else
+          {
+            return accuracyText
           }
         }
       }
@@ -1100,7 +768,7 @@ Item {
 
             if ( success )
             {
-              splittingDoneBanner.show()
+              __notificationModel.addSuccess( qsTr( "Splitting done successfully" ) )
             }
             else
             {
@@ -1147,36 +815,18 @@ Item {
 
         property bool isInRecordState: root.state === "record" || root.state === "recordInLayer" || root.state === "edit"
 
-        // If any banner is visible this property has its height.
-        // Usefull to calculate a top margin of map floating buttons.
-        property real visibleBannerHeight: {
-          if ( recordingToolsLoader.active )
-          {
-            let gps_banner = recordingToolsLoader.item.gpsBanner
-            if ( gps_banner.showBanner )
-            {
-              return gps_banner.height
-            }
+        // bottomMapButtonsMargin represents distance between toolbar and the bottom of the map buttons (gps and accuracy)
+        // in case the toolbar has the overlaying "record" button, we need to move these two buttons a little higher
+        property real bottomMapButtonsMargin: {
+          let mapDrawersOffset = root.mapExtentOffset
+          let mapMinMargin = __style.mapButtonsMargin
+          let toolbarRequiredOffset = 0
+
+          if ( root.state !== "view" && __inputUtils.isLineLayer( __activeLayer.vectorLayer ) ) {
+            toolbarRequiredOffset = 16 * __dp
           }
 
-          const active = ( banner ) => banner.showBanner;
-          const banners = [
-                          howtoEditingBanner,
-                          howtoSplittingBanner,
-                          redrawGeometryBanner,
-                          splittingDoneBanner,
-                          retryableSyncErrorBanner,
-                          anotherProcessIsRunningBanner,
-                          upToDateBanner,
-                          syncSuccessfulBanner
-                        ]
-
-          if ( banners.some( active ) )
-          {
-            return howtoEditingBanner.height
-          }
-
-          return 0
+          return mapDrawersOffset + mapMinMargin + toolbarRequiredOffset
         }
       }
     }
@@ -1276,11 +926,11 @@ Item {
   }
 
   function isPositionOutOfExtent() {
-    let border = InputStyle.mapOutOfExtentBorder
-    return ( ( mapPositioning.screenPosition.x < border ) ||
-            ( mapPositioning.screenPosition.y < border ) ||
-            ( mapPositioning.screenPosition.x > mapCanvas.width - border ) ||
-            ( mapPositioning.screenPosition.y > mapCanvas.height - border )
+    let minDistanceToScreenEdge = 64 * __dp
+    return ( ( mapPositioning.screenPosition.x < minDistanceToScreenEdge ) ||
+            ( mapPositioning.screenPosition.y < minDistanceToScreenEdge ) ||
+            ( mapPositioning.screenPosition.x > mapCanvas.width - minDistanceToScreenEdge ) ||
+            ( mapPositioning.screenPosition.y > mapCanvas.height - minDistanceToScreenEdge )
             )
   }
 
@@ -1292,6 +942,11 @@ Item {
         root.centerToPosition()
       }
     }
+  }
+
+  // Request map repaint
+  function refreshMap() {
+    mapCanvas.refresh()
   }
 
   function clear() {

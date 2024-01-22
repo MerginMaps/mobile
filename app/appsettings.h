@@ -29,7 +29,6 @@ class AppSettings: public QObject
     Q_PROPERTY( int lineRecordingInterval READ lineRecordingInterval WRITE setLineRecordingInterval NOTIFY lineRecordingIntervalChanged )
     Q_PROPERTY( StreamingIntervalType::IntervalType intervalType READ intervalType WRITE setIntervalType NOTIFY intervalTypeChanged )
     Q_PROPERTY( double gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged )
-    Q_PROPERTY( bool gpsAccuracyWarning READ gpsAccuracyWarning WRITE setGpsAccuracyWarning NOTIFY gpsAccuracyWarningChanged )
     Q_PROPERTY( bool reuseLastEnteredValues READ reuseLastEnteredValues WRITE setReuseLastEnteredValues NOTIFY reuseLastEnteredValuesChanged )
     Q_PROPERTY( QString appVersion READ appVersion WRITE setAppVersion NOTIFY appVersionChanged )
     Q_PROPERTY( QString activePositionProviderId READ activePositionProviderId WRITE setActivePositionProviderId NOTIFY activePositionProviderIdChanged )
@@ -69,9 +68,6 @@ class AppSettings: public QObject
 
     bool reuseLastEnteredValues() const;
 
-    bool gpsAccuracyWarning() const;
-    void setGpsAccuracyWarning( bool gpsAccuracyWarning );
-
     QString appVersion() const;
     void setAppVersion( const QString &newAppVersion );
 
@@ -108,7 +104,6 @@ class AppSettings: public QObject
     void defaultLayerChanged();
     void autoCenterMapCheckedChanged();
     void gpsAccuracyToleranceChanged();
-    void gpsAccuracyWarningChanged();
     void gpsAntennaHeightChanged( double antennaHeight );
     void lineRecordingIntervalChanged();
     void intervalTypeChanged();
@@ -131,8 +126,6 @@ class AppSettings: public QObject
     bool mAutoCenterMapChecked = false;
     // used in GPS signal indicator
     double mGpsAccuracyTolerance = -1;
-    // flag for showing accuracy warning if is above tolerance
-    bool mGpsAccuracyWarning = true;
     // Digitizing period in seconds
     int mLineRecordingInterval = 3;
     StreamingIntervalType::IntervalType mIntervalType = StreamingIntervalType::IntervalType::Time;
