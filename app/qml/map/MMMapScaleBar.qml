@@ -91,4 +91,32 @@ Item {
       }
     }
   }
+
+  NumberAnimation on opacity {
+    id: fadeOut
+
+    from: 0.4
+    to: 0.0
+    duration: 1000
+
+    onStopped: {
+      root.visible = false
+      root.opacity = 1.0
+    }
+  }
+
+  Timer {
+    id: scaleBarTimer
+    interval: 3000; running: false; repeat: false
+    onTriggered: {
+      fadeOut.start()
+    }
+  }
+
+  onVisibleChanged: {
+    if (root.visible) {
+      fadeOut.stop()
+      scaleBarTimer.restart()
+    }
+  }
 }

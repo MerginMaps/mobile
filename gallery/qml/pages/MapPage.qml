@@ -72,6 +72,7 @@ Page {
     sourceItem: map
     text: Math.floor(map.zoomLevel) + " zoom"
     barWidth: map.zoomLevel * 10
+    onBarWidthChanged: visible = true
   }
 
   MMMapBlurLabel {
