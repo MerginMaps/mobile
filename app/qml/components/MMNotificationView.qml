@@ -11,7 +11,7 @@ import QtQuick
 
 Item {
 
-  height: repeater.height
+  height: parent.height
 
   Repeater {
     id: repeater
