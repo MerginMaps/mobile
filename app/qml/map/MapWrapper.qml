@@ -342,9 +342,9 @@ Item {
               height: mapCanvas.height
               width: mapCanvas.width
 
-              markerColor: InputStyle.highlightColor
-              lineColor: InputStyle.highlightColor
-              lineWidth: InputStyle.mapLineWidth / 2
+              markerColor: __style.sunsetColor
+              lineColor: __style.sunsetColor
+              lineWidth: Highlight.LineWidths.Narrow
 
               mapSettings: mapCanvas.mapSettings
               geometry: trackingHighlight.highlightGeometry

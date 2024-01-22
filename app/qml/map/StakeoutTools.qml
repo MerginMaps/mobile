@@ -29,7 +29,6 @@ Item {
     lineColor: __style.forestColor
 
     mapSettings: root.map.mapSettings
-    lineWidth: InputStyle.mapLineWidth
   }
 
   MapPosition {
