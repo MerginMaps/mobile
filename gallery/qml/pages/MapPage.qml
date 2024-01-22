@@ -66,9 +66,17 @@ Page {
     }
   }
 
+  MMMapScaleBar {
+    anchors.horizontalCenter: parent.horizontalCenter
+    y: 20
+    sourceItem: map
+    text: Math.floor(map.zoomLevel) + " zoom"
+    barWidth: map.zoomLevel * 10
+  }
+
   MMMapBlurLabel {
     x: 20
-    y: 20
+    y: 80
     width: parent.width - 40
     sourceItem: map
     text: "Mark the geometry on the map and click record"
