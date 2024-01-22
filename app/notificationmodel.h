@@ -91,7 +91,7 @@ class NotificationModel : public QAbstractListModel
     //! Adds a new notification with message, interval (in seconds), type and icon
     Q_INVOKABLE void add( const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon );
 
-    //! Convinient methods to save typing of some parameters
+    //! Convenient methods to save typing of some parameters
     Q_INVOKABLE void addSuccess( const QString &message );
     Q_INVOKABLE void addError( const QString &message );
     Q_INVOKABLE void addInfo( const QString &message );
