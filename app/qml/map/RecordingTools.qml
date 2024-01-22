@@ -108,7 +108,7 @@ Item {
     geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
 
     lineStrokeStyle: ShapePath.DashLine
-    lineWidth: InputStyle.guidelineWidth
+    lineWidth: Highlight.LineWidths.Narrow
   }
 
   Highlight {
@@ -117,7 +117,7 @@ Item {
     height: root.map.height
     width: root.map.width
 
-    lineWidth: InputStyle.guidelineWidth
+    lineWidth: Highlight.LineWidths.Narrow
     lineStrokeStyle: ShapePath.DashLine
 
     mapSettings: root.map.mapSettings
@@ -133,9 +133,8 @@ Item {
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
 
-    markerType: "circle"
-    markerSize: InputStyle.mapMarkerSize
-    markerBorderColor: InputStyle.mapMarkerColor
+    markerType: Highlight.MarkerTypes.Circle
+    markerBorderColor: __style.grapeColor
   }
 
   Highlight {
@@ -147,13 +146,8 @@ Item {
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
 
-    markerType: "circle"
-    markerSize: InputStyle.mapMarkerSizeBig
-  }
-
-  PositionMarker {
-    mapPosition: mapPositioning
-    compass: root.compass
+    markerType: Highlight.MarkerTypes.Circle
+    markerSize: Highlight.MarkerSizes.Bigger
   }
 
   Crosshair {

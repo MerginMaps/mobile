@@ -45,8 +45,6 @@ QtObject {
     property color darkOrange: "#FD9626"
     property color softGreen: "#32AA3A"
     property color darkGreen: "#006146"
-    property color mapObjectsColor: "#EF4444"
-    property color mapObjectsColorTransparent: "#80EF4444"
 
     property int fontPixelSizeSmall: scaleFont(15)
     property int fontPixelSizeNormal: scaleFont(18)
@@ -205,36 +203,10 @@ QtObject {
 
     property real scrollVelocityAndroid: 10000 // [px/s] scrolling on Android devices is too slow by default
 
-    property color guidelineColor: mapObjectsColor
-    property real guidelineWidth: 4 * __dp
-
     property real changelogLineWidth: 2 * __dp
     property color changelogLineWColor: "lightGray"
 
-    property color mapMarkerColor: mapObjectsColor
-    property color mapMarkerBorderColor: "white"
-
     property real mapLoadingIndicatorHeight: 7 * __dp
-
-    property real mapMarkerWidth: 60 * __dp
-    property real mapMarkerBorderWidth: 2 * __dp
-    property real mapMarkerHeight: 70 * __dp
-    property real mapMarkerAnchorY: 48 * __dp
-    property real mapMarkerSize: 18 * __dp
-    property real mapMarkerSizeBig: 21 * __dp
-
-    property color mapLineColor: mapObjectsColor
-    property color mapLineBorderColor: "white"
-
-    property real mapLineWidth: 8 * __dp
-    property real mapLineBorderWidth: 4 * __dp
-
-    property color mapPolygonRingColor: mapObjectsColor
-    property color mapPolygonRingBorderColor: "white"
-    property color mapPolygonFillColor: mapObjectsColorTransparent
-
-    property real mapPolygonRingWidth: 8 * __dp
-    property real mapPolygonRingBorderWidth: 0 * __dp
 
     function scale(size)
     {
