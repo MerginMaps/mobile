@@ -294,7 +294,7 @@ class MMStyle: public QObject
     QUrl qgisIcon() {return QUrl( "qrc:/QGIS.svg" );}
     QUrl qrCodeIcon() {return QUrl( "qrc:/QRCode.svg" );}
     QUrl redditIcon() {return QUrl( "qrc:/Reddit.svg" );}
-    QUrl satelliteIcon() {return QUrl( "qrc:/satellite.svg" );}
+    QUrl satelliteIcon() {return QUrl( "qrc:/Satellite.svg" );}
     QUrl searchIcon() {return QUrl( "qrc:/Search.svg" );}
     QUrl showIcon() {return QUrl( "qrc:/Show.svg" );}
     QUrl socialMediaIcon() {return QUrl( "qrc:/SocialMedia.svg" );}
