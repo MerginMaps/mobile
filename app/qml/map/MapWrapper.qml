@@ -231,14 +231,6 @@ Item {
         }
       }
 
-      MapPosition {
-        id: mapPositioning
-
-        mapSettings: mapCanvas.mapSettings
-        positionKit: __positionKit
-        onScreenPositionChanged: root.updatePosition()
-      }
-
       Compass { id: deviceCompass }
 
       StateGroup {
@@ -334,7 +326,7 @@ Item {
             PositionTrackingHighlight {
               id: trackingHighlight
 
-              mapPosition: mapPositioning.mapPosition
+              mapPosition: mapPositionSource.mapPosition
               trackedGeometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
             }
 
@@ -377,9 +369,33 @@ Item {
         sourceComponent: stakeoutToolsComponent
       }
 
-      PositionMarker {
-        mapPosition: mapPositioning
+      MapPosition {
+        id: mapPositionSource
+
+        mapSettings: mapCanvas.mapSettings
+        positionKit: __positionKit
+        onScreenPositionChanged: root.updatePosition()
+      }
+
+      PositionDirection {
+        id: positionDirectionSource
+
+        positionKit: __positionKit
         compass: deviceCompass
+      }
+
+      MMPositionMarker {
+        id: positionMarker
+
+        xPos: mapPositionSource.screenPosition.x
+        yPos: mapPositionSource.screenPosition.y
+        hasDirection: positionDirectionSource.hasDirection
+
+        direction: positionDirectionSource.direction
+        hasPosition: __positionKit.hasPosition
+
+        horizontalAccuracy: __positionKit.horizontalAccuracy
+        accuracyRingSize: mapPositionSource.screenAccuracy
       }
 
       Loader {
@@ -480,7 +496,7 @@ Item {
             recordingToolsLoader.item.recordingMapTool.centeredToGPS = true
           }
 
-          mapSettings.setCenter( mapPositioning.mapPosition )
+          mapSettings.setCenter( mapPositionSource.mapPosition )
         }
 
         onClickAndHold: {
@@ -492,7 +508,7 @@ Item {
 
               // add first point immediately
               recordingToolsLoader.item.recordingMapTool.addPoint( crosshair.recordPoint )
-              root.map.mapSettings.setCenter( mapPositioning.mapPosition )
+              root.map.mapSettings.setCenter( mapPositionSource.mapPosition )
             }
             else
             {
@@ -694,11 +710,9 @@ Item {
           anchors.fill: parent
 
           map: mapCanvas
-          gpsState: gpsStateGroup
-          compass: deviceCompass
-          activeFeature: root.state === "edit" ? internal.featurePairToEdit.feature : __inputUtils.emptyFeature()
+          positionMarkerComponent: positionMarker
 
-          centerToGPSOnStartup: root.state !== "edit"
+          activeFeature: root.state === "edit" ? internal.featurePairToEdit.feature : __inputUtils.emptyFeature()
 
           onCanceled: {
             howtoEditingBanner.hide()
@@ -736,6 +750,20 @@ Item {
             }
 
             root.state = "view"
+          }
+
+          Component.onCompleted: {
+            if ( root.state !== "edit" )
+            {
+              // center to GPS
+              if ( gpsStateGroup.state === "unavailable" ) {
+                __notificationModel.addError( qsTr( "GPS currently unavailable." ) )
+                return
+              }
+
+              recordingMapTool.centeredToGPS = true
+              mapSettings.setCenter( mapPositionSource.mapPosition )
+            }
           }
         }
       }
@@ -918,7 +946,7 @@ Item {
 
   function centerToPosition() {
     if ( __positionKit.hasPosition ) {
-      mapCanvas.mapSettings.setCenter( mapPositioning.mapPosition )
+      mapCanvas.mapSettings.setCenter( mapPositionSource.mapPosition )
     }
     else {
       showMessage( qsTr( "GPS currently unavailable." ) )
@@ -927,10 +955,10 @@ Item {
 
   function isPositionOutOfExtent() {
     let minDistanceToScreenEdge = 64 * __dp
-    return ( ( mapPositioning.screenPosition.x < minDistanceToScreenEdge ) ||
-            ( mapPositioning.screenPosition.y < minDistanceToScreenEdge ) ||
-            ( mapPositioning.screenPosition.x > mapCanvas.width - minDistanceToScreenEdge ) ||
-            ( mapPositioning.screenPosition.y > mapCanvas.height - minDistanceToScreenEdge )
+    return ( ( mapPositionSource.screenPosition.x < minDistanceToScreenEdge ) ||
+            ( mapPositionSource.screenPosition.y < minDistanceToScreenEdge ) ||
+            ( mapPositionSource.screenPosition.x > mapCanvas.width - minDistanceToScreenEdge ) ||
+            ( mapPositionSource.screenPosition.y > mapCanvas.height - minDistanceToScreenEdge )
             )
   }
 

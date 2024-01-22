@@ -125,7 +125,7 @@ set(MM_QML
     map/LoadingIndicator.qml
     map/MMMapCanvas.qml
     map/MapWrapper.qml
-    map/PositionMarker.qml
+    map/MMPositionMarker.qml
     map/RecordingTools.qml
     map/ScaleBar.qml
     map/SplittingTools.qml
