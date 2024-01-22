@@ -22,9 +22,8 @@ import "../"
 Item {
   id: root
 
-  /*required*/ property var map
-  /*required*/ property var gpsState
-  /*required*/ property var compass
+  required property MMMapCanvas map
+  required property MMPositionMarker positionMarkerComponent
 
   property alias recordingMapTool: mapTool
 
@@ -150,6 +149,19 @@ Item {
     markerSize: Highlight.MarkerSizes.Bigger
   }
 
+  // Duplicate position marker to be painted on the top of highlights
+  MMPositionMarker {
+    xPos: positionMarkerComponent.xPos
+    yPos: positionMarkerComponent.yPos
+    hasDirection: positionMarkerComponent.hasDirection
+
+    direction: positionMarkerComponent.direction
+    hasPosition: positionMarkerComponent.hasPosition
+
+    horizontalAccuracy: positionMarkerComponent.horizontalAccuracy
+    accuracyRingSize: positionMarkerComponent.accuracyRingSize
+  }
+
   Crosshair {
     id: crosshair
 
@@ -245,19 +257,6 @@ Item {
     }
   }
 
-  MapPosition {
-    id: mapPositioning
-
-    mapSettings: root.map.mapSettings
-    positionKit: __positionKit
-    onScreenPositionChanged: {
-      if ( mapTool.isUsingPosition )
-      {
-        root.map.mapSettings.setCenter( mapPositioning.mapPosition )
-      }
-    }
-  }
-
   Connections {
     target: map
     function onUserInteractedWithMap() {
@@ -268,20 +267,6 @@ Item {
       let screenPoint = Qt.point( point.x, point.y )
 
       mapTool.lookForVertex( screenPoint )
-    }
-  }
-
-  Component.onCompleted: {
-    if ( root.centerToGPSOnStartup )
-    {
-      // center to GPS
-      if ( root.gpsState.state === "unavailable" ) {
-        showMessage( qsTr( "GPS currently unavailable." ) )
-        return
-      }
-
-      mapTool.centeredToGPS = true
-      root.map.mapSettings.setCenter( mapPositioning.mapPosition )
     }
   }
 
