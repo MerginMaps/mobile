@@ -11,7 +11,7 @@ import QtQuick
 import QtQuick.Controls
 
 Item {
-  id: control
+  id: root
 
   width: parent.width
   height: column.height
@@ -21,9 +21,11 @@ Item {
   property string warningMsg
   property string errorMsg
   property int maxVisiblePhotos: 5 // -1 for showing all photos
+  property bool showAddImage: false
 
   signal showAll()
   signal clicked( var path )
+  signal addImage()
 
   Column {
     id: column
@@ -39,7 +41,7 @@ Item {
       Text {
         width: column.width - showAllButton.width - 10 * __dp
 
-        text: control.title
+        text: root.title
         font: __style.p6
         elide: Text.ElideRight
         color: __style.nightColor
@@ -56,7 +58,7 @@ Item {
 
         MouseArea {
           anchors.fill: parent
-          onClicked: control.showAll()
+          onClicked: root.showAll()
         }
       }
     }
@@ -66,14 +68,14 @@ Item {
 
       height: 120 * __dp
       width: parent.width
-      spacing: control.maxVisiblePhotos !== 0 ? 20 * __dp : 0
+      spacing: root.maxVisiblePhotos !== 0 ? 20 * __dp : 0
       orientation: ListView.Horizontal
 
       model: {
-        if(control.maxVisiblePhotos >= 0 && control.model.length > control.maxVisiblePhotos) {
-          return control.model.slice(0, control.maxVisiblePhotos)
+        if(root.maxVisiblePhotos >= 0 && root.model.length > root.maxVisiblePhotos) {
+          return root.model.slice(0, root.maxVisiblePhotos)
         }
-        return control.model
+        return root.model
       }
 
       delegate: MMPhoto {
@@ -81,18 +83,47 @@ Item {
 
         photoUrl: model.modelData
 
-        onClicked: function(path) { control.clicked(path) }
+        onClicked: function(path) { root.clicked(path) }
+      }
+
+      header: Row {
+        visible: root.showAddImage
+
+        Rectangle {
+          width: visible ? height : 0
+          height: rowView.height
+          radius: 20 * __dp
+          border.width: 2 * __dp
+          border.color: errorMsg.length > 0 ? __style.negativeColor : warningMsg.length > 0 ? __style.warningColor : __style.whiteColor
+          color: (errorMsg.length > 0 || warningMsg.length > 0) ? __style.errorBgInputColor : __style.whiteColor
+
+          MMIcon {
+            anchors.centerIn: parent
+            source: __style.addImageIcon
+            color: errorMsg.length > 0 ? __style.grapeColor : warningMsg.length > 0 ? __style.earthColor : __style.forestColor
+          }
+
+          MouseArea {
+            anchors.fill: parent
+            onClicked: root.addImage()
+          }
+        }
+
+        Item {
+          width: visible ? rowView.spacing : 0
+          height: rowView.height
+        }
       }
 
       footer: MMMorePhoto {
         width: visible ? rowView.height + rowView.spacing: 0
 
-        hiddenPhotoCount: control.model.length - control.maxVisiblePhotos
-        visible: control.maxVisiblePhotos >= 0 && control.model.length > control.maxVisiblePhotos
-        photoUrl: visible ? model[control.maxVisiblePhotos] : ""
+        hiddenPhotoCount: root.model.length - root.maxVisiblePhotos
+        visible: root.maxVisiblePhotos >= 0 && root.model.length > root.maxVisiblePhotos
+        photoUrl: visible ? model[root.maxVisiblePhotos] : ""
         space: visible ? rowView.spacing : 0
 
-        onClicked: control.showAll()
+        onClicked: root.showAll()
       }
     }
 

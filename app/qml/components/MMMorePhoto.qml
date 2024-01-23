@@ -90,6 +90,7 @@ Row {
       }
 
       Text {
+        height: 26 * __dp
         font: __style.t4
         text: qsTr("+%1 more").arg(control.hiddenPhotoCount)
         color: __style.whiteColor

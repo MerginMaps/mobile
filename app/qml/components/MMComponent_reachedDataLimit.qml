@@ -55,7 +55,7 @@ Item {
         }
       }
 
-      Rectangle { width: parent.width; height: 1; color: __style.greyColor }
+      Rectangle { width: parent.width; height: 1; color: __style.grayColor }
 
       Item {
         width: parent.width
@@ -85,7 +85,7 @@ Item {
         position: control.usedData
       }
 
-      Rectangle { width: parent.width; height: 1; color: __style.greyColor }
+      Rectangle { width: parent.width; height: 1; color: __style.grayColor }
 
       Item {
         width: parent.width

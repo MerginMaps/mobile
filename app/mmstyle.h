@@ -54,7 +54,7 @@ class MMStyle: public QObject
     // Colors - secondary palette
     Q_PROPERTY( QColor lightGreenColor READ lightGreenColor CONSTANT )
     Q_PROPERTY( QColor mediumGreenColor READ mediumGreenColor CONSTANT )
-    Q_PROPERTY( QColor greyColor READ greyColor CONSTANT )
+    Q_PROPERTY( QColor grayColor READ grayColor CONSTANT )
 
     // Colors - additional colors
     Q_PROPERTY( QColor sandColor READ sandColor CONSTANT )
@@ -88,6 +88,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl positionTrackingIcon READ positionTrackingIcon CONSTANT )
     Q_PROPERTY( QUrl zoomToProjectIcon READ zoomToProjectIcon CONSTANT )
     Q_PROPERTY( QUrl settingsIcon READ settingsIcon CONSTANT )
+    Q_PROPERTY( QUrl addImageIcon READ addImageIcon CONSTANT )
     Q_PROPERTY( QUrl archaeologyIcon READ archaeologyIcon CONSTANT )
     Q_PROPERTY( QUrl arrowDownIcon READ arrowDownIcon CONSTANT )
     Q_PROPERTY( QUrl arrowLinkRightIcon READ arrowLinkRightIcon CONSTANT )
@@ -213,7 +214,7 @@ class MMStyle: public QObject
 
     QColor lightGreenColor() {return QColor::fromString( "#EFF5F3" );}
     QColor mediumGreenColor() {return QColor::fromString( "#B7CDC4" );}
-    QColor greyColor() {return QColor::fromString( "#E2E2E2" );}
+    QColor grayColor() {return QColor::fromString( "#E2E2E2" );}
 
     QColor sandColor() {return QColor::fromString( "#FFF4E2" );}
     QColor sunsetColor() {return QColor::fromString( "#FFB673" );}
@@ -243,6 +244,7 @@ class MMStyle: public QObject
     QUrl positionTrackingIcon() {return QUrl( "qrc:/PositionTracking.svg" );}
     QUrl settingsIcon() {return QUrl( "qrc:/Settings.svg" );}
     QUrl zoomToProjectIcon() {return QUrl( "qrc:/ZoomToProject.svg" );}
+    QUrl addImageIcon() {return QUrl( "qrc:/AddImage.svg" );}
     QUrl archaeologyIcon() {return QUrl( "qrc:/Archaeology.svg" );}
     QUrl arrowDownIcon() {return QUrl( "qrc:/ArrowDown.svg" );}
     QUrl arrowLinkRightIcon() {return QUrl( "qrc:/ArrowLinkRight.svg" );}

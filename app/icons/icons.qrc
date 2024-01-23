@@ -86,5 +86,6 @@
         <file>ComboBoxCheck.svg</file>
         <file>Direction.svg</file>
         <file>TrackingDirection.svg</file>
+        <file>AddImage.svg</file>
     </qresource>
 </RCC>

@@ -15,18 +15,17 @@ Column {
   spacing: 5
   id: root
 
-  property var color
-  property var text
+  required property var color
+  required property var text
 
   Text {
-      text: root.text
+    text: root.text
   }
 
   Rectangle {
-      width: 40
-      height: 40
-      color: root.color
-      border.color: "gray"
+    width: 40
+    height: 40
+    color: root.color
+    border.color: "gray"
   }
-
 }

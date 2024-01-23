@@ -29,7 +29,7 @@ Column {
     width: 50
     height: 50
     border.color: "gray"
-    color: __style.greyColor
+    color: __style.grayColor
 
     MMIcon {
       id: icon

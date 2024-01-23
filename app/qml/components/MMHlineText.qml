@@ -13,7 +13,7 @@ Row {
   id: root
 
   required property string title
-  property color lineColor: __style.greyColor
+  property color lineColor: __style.grayColor
   property color textColor: __style.nightColor
 
   spacing: 15

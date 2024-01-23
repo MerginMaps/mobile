@@ -29,7 +29,7 @@ Item {
       anchors.top: parent.top
       width: parent.width
       height: 1 * __dp
-      color: __style.greyColor
+      color: __style.grayColor
     }
 
     Row {
