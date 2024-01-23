@@ -54,7 +54,7 @@ class MMStyle: public QObject
     // Colors - secondary palette
     Q_PROPERTY( QColor lightGreenColor READ lightGreenColor CONSTANT )
     Q_PROPERTY( QColor mediumGreenColor READ mediumGreenColor CONSTANT )
-    Q_PROPERTY( QColor grayColor READ grayColor CONSTANT )
+    Q_PROPERTY( QColor greyColor READ greyColor CONSTANT )
 
     // Colors - additional colors
     Q_PROPERTY( QColor sandColor READ sandColor CONSTANT )
@@ -214,7 +214,7 @@ class MMStyle: public QObject
 
     QColor lightGreenColor() {return QColor::fromString( "#EFF5F3" );}
     QColor mediumGreenColor() {return QColor::fromString( "#B7CDC4" );}
-    QColor grayColor() {return QColor::fromString( "#E2E2E2" );}
+    QColor greyColor() {return QColor::fromString( "#E2E2E2" );}
 
     QColor sandColor() {return QColor::fromString( "#FFF4E2" );}
     QColor sunsetColor() {return QColor::fromString( "#FFB673" );}

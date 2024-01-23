@@ -299,8 +299,8 @@ ScrollView {
           color: __style.mediumGreenColor
         }
         ColorBox {
-          text: "grayColor"
-          color: __style.grayColor
+          text: "greyColor"
+          color: __style.greyColor
         }
       }
     }

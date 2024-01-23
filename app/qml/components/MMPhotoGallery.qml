@@ -20,7 +20,7 @@ Item {
   property string title
   property string warningMsg
   property string errorMsg
-  property int maxVisiblePhotos: 5 // -1 for showing all photos
+  property int maxVisiblePhotos: -1 // -1 for showing all photos
   property bool showAddImage: false
 
   signal showAll()
