@@ -66,6 +66,15 @@ Page {
     }
   }
 
+  MMMapScaleBar {
+    anchors.horizontalCenter: parent.horizontalCenter
+    y: 20
+    sourceItem: map
+    text: Math.floor(map.zoomLevel) + " zoom"
+    barWidth: map.zoomLevel * 10
+    onBarWidthChanged: visible = true
+  }
+
   MMMapBlurLabel {
     x: 20
     y: 80

@@ -34,6 +34,7 @@ set(GALLERY_HDRS
     helper.h
     qrcodedecoder.h
     inpututils.h
+    scalebarkit.h
     ../app/notificationmodel.h
     ../app/mmstyle.h
     ../core/merginerrortypes.h
