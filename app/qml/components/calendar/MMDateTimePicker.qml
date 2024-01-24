@@ -187,7 +187,7 @@ Item {
     Rectangle {
       width: parent.width
       height: 1 * __dp
-      color: __style.grayColor
+      color: __style.greyColor
       visible: root.hasDatePicker && root.hasTimePicker
     }
 

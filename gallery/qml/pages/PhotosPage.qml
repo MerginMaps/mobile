@@ -43,6 +43,7 @@ Page {
     MMPhotoGallery {
       title: "Gallery 7 photos - show all"
       maxVisiblePhotos: -1
+      showAddImage: true
       model: [
         "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
         "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
@@ -54,11 +55,13 @@ Page {
       ]
       onShowAll: console.log("Open Gallery")
       onClicked: function( path ) { console.log("Open " + path) }
+      onAddImage: console.log("Open camera")
     }
 
     MMPhotoGallery {
       title: "Gallery 3 photos"
       warningMsg: "The size of image is too big"
+      showAddImage: true
       model: [
         "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
         "https://images.pexels.com/photos/955656/pexels-photo-955656.jpeg",
@@ -66,6 +69,7 @@ Page {
       ]
       onShowAll: console.log("Open Gallery")
       onClicked: function( path ) { console.log("Open " + path) }
+      onAddImage: console.log("Open camera")
     }
   }
 }

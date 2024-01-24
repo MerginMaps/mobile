@@ -88,6 +88,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl positionTrackingIcon READ positionTrackingIcon CONSTANT )
     Q_PROPERTY( QUrl zoomToProjectIcon READ zoomToProjectIcon CONSTANT )
     Q_PROPERTY( QUrl settingsIcon READ settingsIcon CONSTANT )
+    Q_PROPERTY( QUrl addImageIcon READ addImageIcon CONSTANT )
     Q_PROPERTY( QUrl archaeologyIcon READ archaeologyIcon CONSTANT )
     Q_PROPERTY( QUrl arrowDownIcon READ arrowDownIcon CONSTANT )
     Q_PROPERTY( QUrl arrowLinkRightIcon READ arrowLinkRightIcon CONSTANT )
@@ -243,6 +244,7 @@ class MMStyle: public QObject
     QUrl positionTrackingIcon() {return QUrl( "qrc:/PositionTracking.svg" );}
     QUrl settingsIcon() {return QUrl( "qrc:/Settings.svg" );}
     QUrl zoomToProjectIcon() {return QUrl( "qrc:/ZoomToProject.svg" );}
+    QUrl addImageIcon() {return QUrl( "qrc:/AddImage.svg" );}
     QUrl archaeologyIcon() {return QUrl( "qrc:/Archaeology.svg" );}
     QUrl arrowDownIcon() {return QUrl( "qrc:/ArrowDown.svg" );}
     QUrl arrowLinkRightIcon() {return QUrl( "qrc:/ArrowLinkRight.svg" );}
