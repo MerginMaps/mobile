@@ -11,10 +11,11 @@ import QtQuick
 import Qt5Compat.GraphicalEffects
 
 Item {
-  id: control
+  id: root
 
   property alias source: icon.source
   property alias color: overlay.color
+  property bool useCustomSize: false
 
   width: icon.implicitWidth
   height: icon.implicitHeight
@@ -23,7 +24,8 @@ Item {
     id: icon
 
     source: __style.arrowLinkRightIcon
-    anchors.centerIn: control
+    anchors.fill: root.useCustomSize ? root : undefined
+    anchors.centerIn: root.useCustomSize ? undefined : root
   }
 
   ColorOverlay {
