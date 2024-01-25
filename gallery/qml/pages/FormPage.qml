@@ -20,30 +20,12 @@ Item {
   }
 
   Form.MMFormTabBar {
-    tabButtonsModel: tabModel
-  }
-
-  ListModel {
-    id: tabModel
-
-    ListElement {
-      Name: "Address of the object"
-    }
-
-    ListElement {
-      Name: "Description of the object xyz"
-    }
-
-    ListElement {
-      Name: "Meta"
-    }
-
-    ListElement {
-      Name: "For future use"
-    }
-
-    ListElement {
-      Name: "For the 2nd stage of survey"
+    tabButtonsModel: ListModel {
+      ListElement { Name: "Address of the object" }
+      ListElement { Name: "Description of the object xyz" }
+      ListElement { Name: "Meta" }
+      ListElement { Name: "For future use" }
+      ListElement { Name: "For the 2nd stage of survey" }
     }
   }
 }
