@@ -28,32 +28,22 @@ Item {
 
     ListElement {
       Name: "Address of the object"
-      Visible: true
-      TabIndex: 0
     }
 
     ListElement {
       Name: "Description of the object xyz"
-      Visible: true
-      TabIndex: 0
     }
 
     ListElement {
       Name: "Meta"
-      Visible: true
-      TabIndex: 0
     }
 
     ListElement {
       Name: "For future use"
-      Visible: true
-      TabIndex: 0
     }
 
     ListElement {
       Name: "For the 2nd stage of survey"
-      Visible: true
-      TabIndex: 0
     }
   }
 }
