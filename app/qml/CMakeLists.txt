@@ -111,6 +111,7 @@ set(MM_QML
     form/FeatureFormStyling.qml
     form/FeatureToolbar.qml
     form/FormWrapper.qml
+    form/MMFormTabBar.qml
     form/PreviewPanel.qml
     layers/FeaturesListPageV2.qml
     layers/LayerDetail.qml
