@@ -85,5 +85,6 @@
         <file>../app/qml/inputs/MMQrCodeEditor.qml</file>
         <file>../app/qml/components/MMCodeScanner.qml</file>
         <file>../app/qml/map/MMMapScaleBar.qml</file>
+        <file>../app/qml/inputs/MMTextBubblesEditor.qml</file>
     </qresource>
 </RCC>

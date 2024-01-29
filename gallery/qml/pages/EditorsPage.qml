@@ -33,12 +33,72 @@ ScrollView {
 
       Column {
         spacing: 10
-        width: 300
+        width: ApplicationWindow.window ? ApplicationWindow.window.width - 40 : 0
 
         MMCheckBox {
           id: checkbox
           text: checked ? "enabled" : "disabled"
           checked: true
+        }
+
+        MMTextBubblesEditor {
+          title: "MMTextAreaEditor"
+          enabled: checkbox.checked
+          width: parent.width
+
+          featuresModel: ListModel {
+            property string searchExpression
+
+            ListElement {
+              FeatureId: 1
+              FeatureTitle: "Title 1"
+              Description: "Description 1"
+              SearchResult: "SearchResult 1"
+              Feature: "Feature 1"
+            }
+            ListElement {
+              FeatureId: 2
+              FeatureTitle: "Title 2"
+              Description: "Description 2"
+              SearchResult: "SearchResult 2"
+              Feature: "Feature 2"
+            }
+            ListElement {
+              FeatureId: 3
+              FeatureTitle: "Title 3"
+              Description: "Description 3"
+              SearchResult: "SearchResult 3"
+              Feature: "Feature 3"
+            }
+            ListElement {
+              FeatureId: 4
+              FeatureTitle: "Title 4"
+              Description: "Description 4"
+              SearchResult: "SearchResult 4"
+              Feature: "Feature 4"
+            }
+            ListElement {
+              FeatureId: 5
+              FeatureTitle: "Title 5"
+              Description: "Description 5"
+              SearchResult: "SearchResult 5"
+              Feature: "Feature 5"
+            }
+            ListElement {
+              FeatureId: 6
+              FeatureTitle: "Title 6"
+              Description: "Description 6"
+              SearchResult: "SearchResult 6"
+              Feature: "Feature 6"
+            }
+            ListElement {
+              FeatureId: 7
+              FeatureTitle: "Title 7"
+              Description: "Description 7"
+              SearchResult: "SearchResult 7"
+              Feature: "Feature 7"
+            }
+          }
         }
 
         MMSearchEditor {
