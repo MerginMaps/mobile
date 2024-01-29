@@ -41,10 +41,21 @@ ScrollView {
           checked: true
         }
 
+        property var featurePair: "parentFeature"
+        property var associatedRelation: "associatedRelation"
+
         MMTextBubblesEditor {
           title: "MMTextAreaEditor"
           enabled: checkbox.checked
           width: parent.width
+
+          onCreateLinkedFeature: function(parentFeature, relation) {
+            console.log("Add feature: " + parentFeature + " " + relation)
+          }
+
+          onOpenLinkedFeature: function(linkedFeature) {
+            console.log("Feature: " + linkedFeature)
+          }
 
           featuresModel: ListModel {
             property string searchExpression
@@ -52,6 +63,7 @@ ScrollView {
             ListElement {
               FeatureId: 1
               FeatureTitle: "Title 1"
+              FeaturePair: "Pair 1"
               Description: "Description 1"
               SearchResult: "SearchResult 1"
               Feature: "Feature 1"
@@ -59,6 +71,7 @@ ScrollView {
             ListElement {
               FeatureId: 2
               FeatureTitle: "Title 2"
+              FeaturePair: "Pair 2"
               Description: "Description 2"
               SearchResult: "SearchResult 2"
               Feature: "Feature 2"
@@ -66,6 +79,7 @@ ScrollView {
             ListElement {
               FeatureId: 3
               FeatureTitle: "Title 3"
+              FeaturePair: "Pair 3"
               Description: "Description 3"
               SearchResult: "SearchResult 3"
               Feature: "Feature 3"
@@ -73,6 +87,7 @@ ScrollView {
             ListElement {
               FeatureId: 4
               FeatureTitle: "Title 4"
+              FeaturePair: "Pair 4"
               Description: "Description 4"
               SearchResult: "SearchResult 4"
               Feature: "Feature 4"
@@ -80,6 +95,7 @@ ScrollView {
             ListElement {
               FeatureId: 5
               FeatureTitle: "Title 5"
+              FeaturePair: "Pair 5"
               Description: "Description 5"
               SearchResult: "SearchResult 5"
               Feature: "Feature 5"
@@ -87,6 +103,7 @@ ScrollView {
             ListElement {
               FeatureId: 6
               FeatureTitle: "Title 6"
+              FeaturePair: "Pair 6"
               Description: "Description 6"
               SearchResult: "SearchResult 6"
               Feature: "Feature 6"
@@ -94,6 +111,7 @@ ScrollView {
             ListElement {
               FeatureId: 7
               FeatureTitle: "Title 7"
+              FeaturePair: "Pair 7"
               Description: "Description 7"
               SearchResult: "SearchResult 7"
               Feature: "Feature 7"

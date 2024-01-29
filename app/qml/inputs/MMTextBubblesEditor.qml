@@ -24,6 +24,8 @@ MMAbstractEditor {
   required property ListModel featuresModel
 
   signal editorValueChanged( var newValue, var isNull )
+  signal openLinkedFeature( var linkedFeature )
+  signal createLinkedFeature( var parentFeature, var relation )
 
   contentItemHeight: itemHeight * rows + 2 * flow.spacing + 20 * __dp
 
@@ -56,6 +58,11 @@ MMAbstractEditor {
           width: 16 * __dp
           height: width
         }
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
+        }
       }
 
       Repeater {
@@ -84,10 +91,15 @@ MMAbstractEditor {
 
             anchors.centerIn: parent
             font: __style.t4
-            text: model.FeatureTitle + model.Description
+            text: model.FeatureTitle
             color: __style.forestColor
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
+          }
+
+          MouseArea {
+            anchors.fill: parent
+            onClicked: root.openLinkedFeature( model.FeaturePair )
           }
         }
       }
@@ -108,6 +120,11 @@ MMAbstractEditor {
           color: __style.forestColor
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
+        }
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: console.log("Open page with all features")
         }
       }
     }
