@@ -86,5 +86,7 @@
         <file>../app/qml/components/MMCodeScanner.qml</file>
         <file>../app/qml/map/MMMapScaleBar.qml</file>
         <file>../app/qml/inputs/MMTextBubblesEditor.qml</file>
+        <file>qml/pages/FormPage.qml</file>
+        <file>../app/qml/form/MMFormTabBar.qml</file>
     </qresource>
 </RCC>
