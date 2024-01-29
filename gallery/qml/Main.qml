@@ -30,6 +30,7 @@ ApplicationWindow {
       _hotReload.clearCache()
       mainLoader.setSource("file://" + _qmlWrapperPath + currentPageSource)
       mainLoader.active = true
+      console.log( new Date().toLocaleTimeString().split(' ')[0] + " ------ App reloaded 🔥 ------ ")
     }
   }
 
@@ -180,6 +181,10 @@ ApplicationWindow {
         ListElement {
           title: "Onboarding"
           source: "OnboardingPage.qml"
+        }
+        ListElement {
+          title: "Feature form"
+          source: "FormPage.qml"
         }
       }
 
