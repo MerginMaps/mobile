@@ -33,7 +33,7 @@ set(MM_QML
     components/TextRowWithTitle.qml
     components/TextWithIcon.qml
     components/ToolbarButton.qml
-    components/MMBackButton.qml
+    components/MMRoundButton.qml
     components/MMButton.qml
     components/MMComponent_reachedDataLimit.qml
     components/MMDrawer.qml

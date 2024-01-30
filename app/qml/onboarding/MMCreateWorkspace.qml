@@ -35,13 +35,26 @@ Page {
   MMHeader {
     id: header
 
-    x: mainColumn.leftPadding
-    y: mainColumn.topPadding
-    width: parent.width - 2 * root.hPadding
     backVisible: false
-    step: 1
 
     onBackClicked: root.backClicked()
+
+    rightMarginShift: progressBar.width
+
+    MMProgressBar {
+      id: progressBar
+
+      anchors.right: parent.right
+      anchors.rightMargin: __style.pageMargins
+      anchors.verticalCenter: parent.verticalCenter
+
+      width: 60 * __dp
+      height: 4 * __dp
+
+      color: __style.grassColor
+      progressColor: __style.forestColor
+      position: 1/3
+    }
   }
 
   ScrollView {

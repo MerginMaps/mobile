@@ -146,7 +146,7 @@ Column {
   }
 
   GroupBox {
-    title: "MMBackButton"
+    title: "MMRoundButton"
     background: Rectangle {
       color: "white"
       border.color: "gray"
@@ -161,7 +161,7 @@ Column {
       spacing: 10
       anchors.fill: parent
 
-      MMBackButton {
+      MMRoundButton {
         enabled: false
       }
     }

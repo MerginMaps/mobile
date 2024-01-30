@@ -38,10 +38,7 @@ Page {
   MMHeader {
     id: header
 
-    x: mainColumn.leftPadding
-    y: mainColumn.topPadding
-    width: parent.width - 2 * root.hPadding
-    visible: haveBack
+    backVisible: root.haveBack
 
     onBackClicked: root.backClicked()
   }

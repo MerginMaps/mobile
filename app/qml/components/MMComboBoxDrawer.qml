@@ -109,7 +109,7 @@ Drawer {
             else return 0
           }
           if(root.model)
-            return root.model.count * __style.comboBoxItemHeight
+            return root.model.count * internal.comboBoxItemHeight
           return 0
         }
         clip: true
@@ -121,7 +121,7 @@ Drawer {
           property bool checked: root.multiSelect ? root.preselectedFeatures.includes(model.FeatureId) : listView.currentIndex === model.index
 
           width: listView.width
-          height: __style.comboBoxItemHeight
+          height: internal.comboBoxItemHeight
 
           Rectangle {
             anchors.top: parent.top
@@ -195,5 +195,11 @@ Drawer {
         close()
       }
     }
+  }
+
+  QtObject {
+    id: internal
+
+    property real comboBoxItemHeight: 67 * __dp
   }
 }
