@@ -124,7 +124,12 @@ MMAbstractEditor {
 
         MouseArea {
           anchors.fill: parent
-          onClicked: console.log("Open page with all features")
+          onClicked: {
+            if ( !root.enabled )
+              return
+            listLoader.active = true
+            listLoader.focus = true
+          }
         }
       }
     }
@@ -134,5 +139,30 @@ MMAbstractEditor {
     repeater.invisibleIds = []
     repeater.model = undefined
     repeater.model = root.featuresModel
+  }
+
+  Loader {
+    id: listLoader
+
+    asynchronous: true
+    active: false
+    sourceComponent: listComponent
+  }
+
+  Component {
+    id: listComponent
+
+    MMLinkedFeaturesDrawer {
+      focus: true
+      model: root.featuresModel
+      title: qsTr("Linked features")
+
+      Component.onCompleted: open()
+      onClosed: listLoader.active = false
+      onFeatureClicked: function(selectedFeatures) {
+        root.openLinkedFeature( selectedFeatures )
+      }
+      onCreateLinkedFeature: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
+    }
   }
 }
