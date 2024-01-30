@@ -19,8 +19,11 @@ ScrollView {
   Column {
     id: mainColumn
 
-    x: 20
-    width: page.width
+    anchors {
+      fill: parent
+      margins: __style.pageMargins
+    }
+
     spacing: 5
 
     Row {
@@ -86,12 +89,14 @@ ScrollView {
 
     GroupBox {
       title: "MMHeader"
-      width: page.width - 40
+
+      width: parent.width
 
       background: Rectangle {
         color: __style.lightGreenColor
         border.color: "gray"
       }
+
       label: Label {
         color: "black"
         text: parent.title
@@ -102,27 +107,66 @@ ScrollView {
         spacing: 20
         anchors.fill: parent
 
-
         MMHeader {
-          headerTitle: "Only title"
+          title: "Only title without anything on left nor right"
+          width: parent.width
+
           backVisible: false
-          step: -1
+
+          Rectangle { anchors.fill: parent; color: "red"; opacity: .3 }
         }
 
         MMHeader {
-          headerTitle: "Title with back button"
-          step: 0
+          title: "Title with back button"
+          width: parent.width
+
+          backVisible: true
         }
 
         MMHeader {
-          headerTitle: "Title with progress bar"
+          title: "Title with progress bar"
+          width: parent.width
+
           backVisible: false
-          step: 1
+          rightMarginShift: progressBar.width
+
+          MMProgressBar {
+            id: progressBar
+
+            anchors.right: parent.right
+            anchors.rightMargin: __style.pageMargins
+            anchors.verticalCenter: parent.verticalCenter
+
+            width: 60 * __dp
+            height: 4 * __dp
+
+            color: __style.grassColor
+            progressColor: __style.forestColor
+            position: 0.5
+          }
         }
 
         MMHeader {
-          headerTitle: "Title with back button and Progress bar"
-          step: 2
+          title: "Title with back button and Progress bar"
+          width: parent.width
+          backVisible: true
+
+          rightMarginShift: progressBar2.width
+
+          MMProgressBar {
+            id: progressBar2
+
+            anchors.right: parent.right
+            anchors.rightMargin: __style.pageMargins
+            anchors.verticalCenter: parent.verticalCenter
+
+            width: 60 * __dp
+            height: 4 * __dp
+
+            color: __style.grassColor
+            progressColor: __style.forestColor
+            position: 0.9
+          }
         }
       }
     }
@@ -146,9 +190,8 @@ ScrollView {
         anchors.fill: parent
 
         MMHeader {
-          headerTitle: "Drawer title"
+          title: "Drawer title"
           titleFont: __style.h3
-          backColor: __style.lightGreenColor
         }
       }
     }

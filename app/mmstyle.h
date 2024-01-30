@@ -169,6 +169,11 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl uploadImage READ uploadImage CONSTANT )
     Q_PROPERTY( QUrl warnLogoImage READ warnLogoImage CONSTANT )
 
+    /*
+     * Pixel sizes used across the app
+     * Add new sizes here only if they need to be used in multiple files
+     */
+
     // Map items
     Q_PROPERTY( double mapItemHeight READ mapItemHeight CONSTANT )
     Q_PROPERTY( double mapButtonsMargin READ mapButtonsMargin CONSTANT )
@@ -177,10 +182,12 @@ class MMStyle: public QObject
     Q_PROPERTY( double toolbarHeight READ toolbarHeight CONSTANT )
     Q_PROPERTY( double menuDrawerHeight READ menuDrawerHeight CONSTANT )
 
+    // Page
+    Q_PROPERTY( double pageMargins READ pageMargins CONSTANT ) // distance between screen edge and components
+    Q_PROPERTY( double maxPageWidth READ maxPageWidth CONSTANT ) // maximum page width (desktop, tablets, landscape)
+
     // Other
     Q_PROPERTY( double inputRadius READ inputRadius CONSTANT )
-    Q_PROPERTY( double maxPageWidth READ maxPageWidth CONSTANT )
-    Q_PROPERTY( double comboBoxItemHeight READ comboBoxItemHeight CONSTANT )
 
   public:
     explicit MMStyle( qreal dp )
@@ -331,8 +338,9 @@ class MMStyle: public QObject
     double menuDrawerHeight() {return 67 * mDp;}
 
     double inputRadius() {return 12 * mDp;}
-    double maxPageWidth() {return 500 * mDp;}
-    double comboBoxItemHeight() {return 67 * mDp;}
+
+    double pageMargins() {return 20 * mDp;}
+    double maxPageWidth() {return 720 * mDp;}
 
   signals:
     void styleChanged();

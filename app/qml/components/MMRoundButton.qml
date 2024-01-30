@@ -13,20 +13,24 @@ import QtQuick.Controls.Basic
 import "."
 
 RoundButton {
-  id: control
+  id: root
 
-  implicitWidth: icon.width * 2
-  implicitHeight: icon.height * 2
+  implicitWidth: 40 * __dp
+  implicitHeight: 40 * __dp
+
+  property url iconSource: __style.backIcon
+  property color iconColor: __style.forestColor
+
+  property color bgndColor: __style.whiteColor
+  property color bgndHoverColor: __style.mediumGreenColor
 
   contentItem: MMIcon {
-    id: icon
-
-    source: __style.arrowLinkRightIcon
-    color: control.enabled ? control.down || control.hovered ? __style.grassColor : __style.forestColor : __style.forestColor
+    color: root.iconColor
+    source: root.iconSource
   }
 
   background: Rectangle {
-    color: control.enabled ? control.down || control.hovered ? __style.forestColor : __style.grassColor : __style.mediumGreenColor
-    radius: control.implicitHeight / 2
+    color: root.down || root.hovered ? root.bgndHoverColor : root.bgndColor
+    radius: root.implicitHeight / 2
   }
 }
