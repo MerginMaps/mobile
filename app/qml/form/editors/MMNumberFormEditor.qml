@@ -36,17 +36,7 @@ MMBaseInput {
   property string _fieldErrorMessage: parent.fieldErrorMessage
   property string _fieldWarningMessage: parent.fieldWarningMessage
 
-  property real to: _fieldConfig["Max"]
-  property real from: _fieldConfig["Min"]
-  property string suffix: _fieldConfig['Suffix'] ? _fieldConfig['Suffix'] : ''
-  property real precision: _fieldConfig['Precision'] ? _fieldConfig['Precision'] : 0
-
   property alias placeholderText: numberInput.placeholderText
-
-  // don't ever use a step smaller than would be visible in the widget
-  // i.e. if showing 2 decimals, smallest increment will be 0.01
-  // https://github.com/qgis/QGIS/blob/a038a79997fb560e797daf3903d94c7d68e25f42/src/gui/editorwidgets/qgsdoublespinbox.cpp#L83-L87
-  property real step: Math.max(_fieldConfig["Step"], Math.pow( 10.0, 0.0 - precision ))
 
   signal editorValueChanged( var newValue, var isNull )
 
@@ -65,14 +55,14 @@ MMBaseInput {
 
     source: __style.minusIcon
     color: enabled ? __style.forestColor : __style.mediumGreenColor
-    enabled: Number( numberInput.text ) - root.step >= root.from
+    enabled: Number( numberInput.text ) - internal.step >= internal.from
   }
 
   onLeftActionClicked: {
     if ( leftIcon.enabled )
     {
-      let decremented = Number( numberInput.text ) - root.step
-      root.editorValueChanged( decremented.toFixed( root.precision ), false )
+      let decremented = Number( numberInput.text ) - internal.step
+      root.editorValueChanged( decremented.toFixed( internal.precision ), false )
     }
   }
 
@@ -116,9 +106,9 @@ MMBaseInput {
       Text {
         id: suffix
 
-        text: root.suffix ? ' ' + root.suffix : "" // to make sure there is a space between the number and the suffix
+        text: internal.suffix ? ' ' + internal.suffix : "" // to make sure there is a space between the number and the suffix
 
-        visible: root.suffix !== "" && numberInput.text !== ""
+        visible: internal.suffix !== "" && numberInput.text !== ""
 
         height: parent.height
         verticalAlignment: Qt.AlignVCenter
@@ -136,15 +126,30 @@ MMBaseInput {
 
     source: __style.plusIcon
     color: enabled ? __style.forestColor : __style.mediumGreenColor
-    enabled: Number( numberInput.text ) + root.step <= root.to
+    enabled: Number( numberInput.text ) + internal.step <= internal.to
   }
 
   onRightActionClicked: {
     if ( rightIcon.enabled )
     {
-      let incremented = Number( numberInput.text ) + root.step
-      root.editorValueChanged( incremented.toFixed( root.precision ), false )
+      let incremented = Number( numberInput.text ) + internal.step
+      root.editorValueChanged( incremented.toFixed( internal.precision ), false )
     }
+  }
+
+  QtObject {
+    id: internal
+
+    property real to: _fieldConfig["Max"]
+    property real from: _fieldConfig["Min"]
+    property string suffix: _fieldConfig['Suffix'] ? _fieldConfig['Suffix'] : ''
+    property real precision: _fieldConfig['Precision'] ? _fieldConfig['Precision'] : 0
+
+
+    // don't ever use a step smaller than would be visible in the widget
+    // i.e. if showing 2 decimals, smallest increment will be 0.01
+    // https://github.com/qgis/QGIS/blob/a038a79997fb560e797daf3903d94c7d68e25f42/src/gui/editorwidgets/qgsdoublespinbox.cpp#L83-L87
+    property real step: Math.max(_fieldConfig["Step"], Math.pow( 10.0, 0.0 - precision ))
   }
 
   // on press and hold behavior can be used from here:
