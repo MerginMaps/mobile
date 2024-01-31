@@ -13,6 +13,11 @@ import QtQuick.Controls.Basic
 import "../../components"
 import "../../inputs"
 
+/*
+ * This editor is not maintaned as it is not used in the app at the moment.
+ * We might need it in the future though.
+ */
+
 MMBaseInput {
   id: root
 
