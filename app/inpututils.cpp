@@ -1020,9 +1020,11 @@ const QUrl InputUtils::getThemeIcon( const QString &name )
   return QUrl( path );
 }
 
-const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, const QVariantMap &config, const QgsField &field )
+const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVariantMap &config, const QgsField &field )
 {
-  QString path( "../editor/input%1.qml" );
+  QString widgetName = widgetNameIn.toLower();
+
+  QString path( "../form/editors/%1.qml" );
 
   if ( widgetName == QStringLiteral( "range" ) )
   {
@@ -1030,15 +1032,17 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, cons
     {
       if ( config["Style"] == QStringLiteral( "Slider" ) )
       {
-        return QUrl( path.arg( QLatin1String( "rangeslider" ) ) );
+        return QUrl( path.arg( QLatin1String( "MMSliderFormEditor" ) ) );
       }
       else if ( config["Style"] == QStringLiteral( "SpinBox" ) )
       {
-        return QUrl( path.arg( QLatin1String( "rangeeditable" ) ) );
+        return QUrl( path.arg( QLatin1String( "MMNumberFormEditor" ) ) );
       }
     }
-    return QUrl( path.arg( QLatin1String( "textedit" ) ) );
+    return QUrl( path.arg( QLatin1String( "MMTextFormEditor" ) ) );
   }
+
+  return QUrl( path.arg( QLatin1String( "MMTextFormEditor" ) ) ); // <<------ Mind!
 
   if ( field.name().contains( "qrcode", Qt::CaseInsensitive ) || field.alias().contains( "qrcode", Qt::CaseInsensitive ) )
   {
