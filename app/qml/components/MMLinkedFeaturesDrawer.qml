@@ -18,7 +18,6 @@ Drawer {
   property alias title: title.text
   property alias model: listView.model
   property bool withSearch: false
-  property var preselectedFeatures: []
 
   padding: 20 * __dp
 
