@@ -28,6 +28,8 @@ MMAbstractEditor {
   radius: 20 * __dp
 
   content: MMPhoto {
+    id: photo
+
     width: root.width
     height: root.contentItemHeight
     photoUrl: root.photoUrl
@@ -46,6 +48,7 @@ MMAbstractEditor {
       anchors.bottom: parent.bottom
       anchors.rightMargin: 10 * __dp
       anchors.bottomMargin: 10 * __dp
+      visible: photo.status === Image.Ready
 
       MMIcon {
         anchors.centerIn: parent
