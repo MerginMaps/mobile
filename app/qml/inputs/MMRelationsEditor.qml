@@ -35,7 +35,7 @@ MMAbstractEditor {
     height: root.contentItemHeight
     color: __style.whiteColor
 
-    Flow{
+    Flow {
       id: flow
 
       anchors.fill: parent
@@ -66,7 +66,7 @@ MMAbstractEditor {
       Repeater {
         id: repeater
 
-        property var invisibleIds: []
+        property var invisibleIds: 0
 
         model: root.featuresModel
 
@@ -75,15 +75,7 @@ MMAbstractEditor {
           height: privates.itemHeight
           radius: 8 * __dp
           color: __style.mediumGreenColor
-          visible: {
-            let isVisible = (y < 2 * privates.itemHeight || (y < 3 * privates.itemHeight && x + width < flow.width - footer.width - flow.spacing))
-            if(!isVisible && !repeater.invisibleIds.includes(model.FeatureId)) {
-              repeater.invisibleIds.push(model.FeatureId)
-            }
-            footer.visible = repeater.invisibleIds.length > 0
-            moreText.text = ("+" + repeater.invisibleIds.length + qsTr(" more"))
-            return isVisible
-          }
+          visible: (y < 2 * privates.itemHeight || (y < 3 * privates.itemHeight && x + width < flow.width - footer.width - flow.spacing))
 
           Text {
             id: text
@@ -100,6 +92,12 @@ MMAbstractEditor {
             anchors.fill: parent
             onClicked: root.openLinkedFeature( model.FeaturePair )
           }
+
+          onVisibleChanged: {
+            if(!visible) {
+              repeater.invisibleIds++
+            }
+          }
         }
       }
 
@@ -108,6 +106,7 @@ MMAbstractEditor {
 
         width: 100 * __dp
         height: privates.itemHeight
+        visible: repeater.invisibleIds > 0
         radius: 8 * __dp
         color: __style.lightGreenColor
 
@@ -119,6 +118,7 @@ MMAbstractEditor {
           color: __style.forestColor
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
+          text: "+" + repeater.invisibleIds + qsTr(" more")
         }
 
         MouseArea {
@@ -135,7 +135,7 @@ MMAbstractEditor {
   }
 
   function recalculate() {
-    repeater.invisibleIds = []
+    repeater.invisibleIds = 0
     repeater.model = null
     repeater.model = root.featuresModel
   }
