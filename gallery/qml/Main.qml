@@ -167,6 +167,10 @@ ApplicationWindow {
           source: "ToolbarPage.qml"
         }
         ListElement {
+          title: "Project list"
+          source: "ProjectListPage.qml"
+        }
+        ListElement {
           title: "Project items"
           source: "ProjectItemsPage.qml"
         }

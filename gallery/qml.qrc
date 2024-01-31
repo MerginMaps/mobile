@@ -86,5 +86,7 @@
         <file>../app/qml/map/MMMapScaleBar.qml</file>
         <file>qml/pages/FormPage.qml</file>
         <file>../app/qml/form/MMFormTabBar.qml</file>
+        <file>../app/qml/project/MMProjectListPage.qml</file>
+        <file>qml/pages/ProjectListPage.qml</file>
     </qresource>
 </RCC>
