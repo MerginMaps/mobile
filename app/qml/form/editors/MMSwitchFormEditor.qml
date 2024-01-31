@@ -10,47 +10,43 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../components"
+import "../../components"
+import "../../inputs"
 
-MMAbstractEditor {
+MMBaseInput {
   id: root
 
-  property var parentValue: parent.value ?? ""
+  property var parentValue: parent.value ?? false
   property bool parentValueIsNull: parent.valueIsNull ?? false
   property bool isReadOnly: parent.readOnly ?? false
 
-  property alias placeholderText: textField.placeholderText
   property alias text: textField.text
+  property alias checked: rightSwitch.checked
 
   signal editorValueChanged( var newValue, var isNull )
 
-  hasFocus: textField.activeFocus
+  hasFocus: rightSwitch.focus
 
-  content: TextField {
+  content: Text {
     id: textField
 
-    anchors.fill: parent
+    width: parent.width + rightSwitch.x
+    anchors.verticalCenter: parent.verticalCenter
 
-    text: root.parentValue
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
-    placeholderTextColor: __style.nightAlphaColor
     font: __style.p5
-    hoverEnabled: true
-
-    background: Rectangle {
-      color: __style.transparentColor
-    }
+    elide: Text.ElideRight
   }
 
-  rightAction: MMIcon {
-    id: rightIcon
+  rightAction: MMSwitch {
+    id: rightSwitch
 
+    width: 50
     height: parent.height
+    x: -30 * __dp
 
-    source: __style.xMarkIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
-    visible: textField.activeFocus && textField.text.length>0
+    checked: root.checked
+
+    onCheckedChanged: focus = true
   }
-
-  onRightActionClicked: textField.text = ""
 }

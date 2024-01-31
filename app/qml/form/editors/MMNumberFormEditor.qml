@@ -10,32 +10,52 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../components"
 
-MMAbstractEditor {
+import "../../components"
+import "../../inputs"
+
+/*
+ * Number (range editable) editor for QGIS Attribute Form
+ * Requires various global properties set to function, see featureform Loader section.
+ * These properties are injected here via 'fieldXYZ' properties and captured with underscore `_`.
+ *
+ * Should be used only within feature form.
+ */
+
+MMBaseInput {
   id: root
 
-  property var parentValue: parent.value ?? 0
-  property bool parentValueIsNull: parent.valueIsNull ?? false
-  property bool isReadOnly: parent.readOnly ?? false
+  property var _fieldValue: parent.fieldValue
+  property var _fieldConfig: parent.fieldConfig
+  property bool _fieldValueIsNull: parent.fieldValueIsNull
 
-  property var locale: Qt.locale()
-  // TODO: uncomment in Input app
-  property real precision//: config['Precision'] ? config['Precision'] : 0
-  property string suffix//: config['Suffix'] ? config['Suffix'] : ''
-  property real from //: config["Min"]
-  property real to //: config["Max"]
+  property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
+  property bool _fieldIsReadOnly: parent.fieldIsReadOnly
+
+  property string _fieldTitle: parent.fieldTitle
+  property string _fieldErrorMessage: parent.fieldErrorMessage
+  property string _fieldWarningMessage: parent.fieldWarningMessage
+
+  property real to: _fieldConfig["Max"]
+  property real from: _fieldConfig["Min"]
+  property string suffix: _fieldConfig['Suffix'] ? _fieldConfig['Suffix'] : ''
+  property real precision: _fieldConfig['Precision'] ? _fieldConfig['Precision'] : 0
 
   property alias placeholderText: numberInput.placeholderText
 
   // don't ever use a step smaller than would be visible in the widget
   // i.e. if showing 2 decimals, smallest increment will be 0.01
   // https://github.com/qgis/QGIS/blob/a038a79997fb560e797daf3903d94c7d68e25f42/src/gui/editorwidgets/qgsdoublespinbox.cpp#L83-L87
-  property real step//: Math.max(config["Step"], Math.pow( 10.0, 0.0 - precision ))
+  property real step: Math.max(_fieldConfig["Step"], Math.pow( 10.0, 0.0 - precision ))
 
   signal editorValueChanged( var newValue, var isNull )
 
-  enabled: !isReadOnly
+  title: _fieldShouldShowTitle ? _fieldTitle : ""
+
+  errorMsg: _fieldErrorMessage
+  warningMsg: _fieldWarningMessage
+
+  enabled: !_fieldIsReadOnly
   hasFocus: numberInput.activeFocus
 
   leftAction: MMIcon {
@@ -48,8 +68,17 @@ MMAbstractEditor {
     enabled: Number( numberInput.text ) - root.step >= root.from
   }
 
+  onLeftActionClicked: {
+    if ( leftIcon.enabled )
+    {
+      let decremented = Number( numberInput.text ) - root.step
+      root.editorValueChanged( decremented.toFixed( root.precision ), false )
+    }
+  }
+
   content: Item {
     anchors.fill: parent
+
     Row {
       height: parent.height
       anchors.horizontalCenter: parent.horizontalCenter
@@ -60,12 +89,16 @@ MMAbstractEditor {
 
         height: parent.height
 
-        clip: true
-        text: root.parentValue === undefined || root.parentValueIsNull ? "" : root.parentValue
-        color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+        text: root._fieldValue === undefined || root._fieldValueIsNull ? '' : root._fieldValue
+
         placeholderTextColor: __style.nightAlphaColor
+        color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+
         font: __style.p5
+
+        clip: true
         hoverEnabled: true
+
         verticalAlignment: Qt.AlignVCenter
         inputMethodHints: Qt.ImhFormattedNumbersOnly
 
@@ -83,7 +116,7 @@ MMAbstractEditor {
       Text {
         id: suffix
 
-        text: root.suffix
+        text: root.suffix ? ' ' + root.suffix : "" // to make sure there is a space between the number and the suffix
 
         visible: root.suffix !== "" && numberInput.text !== ""
 
@@ -106,18 +139,14 @@ MMAbstractEditor {
     enabled: Number( numberInput.text ) + root.step <= root.to
   }
 
-  onLeftActionClicked: {
-    numberInput.forceActiveFocus()
-    if ( leftIcon.enabled ) {
-      let decremented = Number( numberInput.text ) - root.step
-      root.editorValueChanged( decremented.toFixed( root.precision ), false )
-    }
-  }
   onRightActionClicked: {
-    numberInput.forceActiveFocus();
-    if ( rightIcon.enabled ) {
+    if ( rightIcon.enabled )
+    {
       let incremented = Number( numberInput.text ) + root.step
       root.editorValueChanged( incremented.toFixed( root.precision ), false )
     }
   }
+
+  // on press and hold behavior can be used from here:
+  // https://github.com/mburakov/qt5/blob/93bfa3874c10f6cb5aa376f24363513ba8264117/qtquickcontrols/src/controls/SpinBox.qml#L306-L309
 }

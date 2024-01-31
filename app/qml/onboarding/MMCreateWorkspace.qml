@@ -98,7 +98,7 @@ Page {
 
       Item { width: 1; height: 1 }
 
-      MMInputEditor {
+      MMTextInput {
         id: workspaceName
         width: parent.width - 2 * root.hPadding
         title: qsTr("Workspace name")

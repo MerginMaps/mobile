@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qml/inputs"
+import "../../app/qml/form/editors"
 import "../../app/qml/components"
 
 ScrollView {
@@ -20,7 +21,7 @@ ScrollView {
     spacing: 20
 
     GroupBox {
-      title: "Items based on MMAbstractEditor"
+      title: "Items based on MMBaseInput"
       background: Rectangle {
         color: "lightGray"
         border.color: "gray"
@@ -41,13 +42,13 @@ ScrollView {
           checked: true
         }
 
-        MMSearchEditor {
+        MMSearchInput {
           title: "MMSearchEditor"
           placeholderText: "Text value"
           onSearchTextChanged: function(text) { console.log("Searched string: " + text) }
         }
 
-        MMComboBoxEditor {
+        MMDropdownFormEditor {
           title: "MMComboBoxEditor"
           placeholderText: "Select one"
           dropDownTitle: "Select one"
@@ -79,7 +80,7 @@ ScrollView {
           onFeatureClicked: function(selectedFeatures) { text = selectedFeatures }
         }
 
-        MMComboBoxEditor {
+        MMDropdownFormEditor {
           title: "MMComboBoxEditor Multi select"
           placeholderText: "Select multiple"
           dropDownTitle: "Multi select"
@@ -147,7 +148,7 @@ ScrollView {
           }
         }
 
-        MMSliderEditor {
+        MMSliderFormEditor {
           title: "MMSliderEditor"
           from: -100
           to: 100
@@ -160,7 +161,7 @@ ScrollView {
           checkboxChecked: true
         }
 
-        MMNumberEditor {
+        MMNumberFormEditor {
           title: "MMNumberEditor"
           parentValue: "2.0"
           from: 1.0
@@ -173,16 +174,16 @@ ScrollView {
           onEditorValueChanged: function(newValue) { parentValue = newValue }
         }
 
-        MMInputEditor {
+        MMTextInput {
           title: "MMInputEditor"
-          parentValue: "Text"
+          text: "Text"
           enabled: checkbox.checked
           width: parent.width
           hasCheckbox: true
           checkboxChecked: false
         }
 
-        MMQrCodeEditor {
+        MMScannerFormEditor {
           title: "MMQrCodeEditor"
           placeholderText: "QR code"
           warningMsg: text.length > 0 ? "" : "Click to icon and scan the code"
@@ -192,7 +193,7 @@ ScrollView {
           onEditorValueChanged: function(newValue, isNull) { console.log("QR code: " + newValue) }
         }
 
-        MMPhotoEditor {
+        MMPhotoFormEditor {
           title: "MMPhotoEditor"
           width: parent.width
           photoUrl: "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg"
@@ -201,7 +202,7 @@ ScrollView {
           onContentClicked: console.log("Open photo")
         }
 
-        MMButtonInputEditor {
+        MMButtonFormEditor {
           title: "MMButtonInputEditor"
           placeholderText: "Write something"
           text: "Text to copy"
@@ -212,7 +213,7 @@ ScrollView {
           buttonEnabled: text.length > 0
         }
 
-        MMButtonInputEditor {
+        MMButtonFormEditor {
           title: "MMButtonInputEditor"
           placeholderText: "Píš"
           buttonText: "Kopíruj"
@@ -221,7 +222,7 @@ ScrollView {
           buttonEnabled: text.length > 0
         }
 
-        MMInputEditor {
+        MMTextInput {
           title: "MMInputEditor"
           placeholderText: "Placeholder"
           enabled: checkbox.checked
@@ -229,7 +230,7 @@ ScrollView {
           warningMsg: text.length > 0 ? "" : "Write something"
         }
 
-        MMTextAreaEditor {
+        MMTextMultilineFormEditor {
           title: "MMTextAreaEditor"
           placeholderText: "Place for multi row text"
           enabled: checkbox.checked
@@ -237,7 +238,7 @@ ScrollView {
           warningMsg: text.length > 0 ? "" : "Write something"
         }
 
-        MMPasswordEditor {
+        MMPasswordInput {
           title: "MMPasswordEditor"
           text: "Password"
           //regexp: '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,})'
@@ -246,7 +247,7 @@ ScrollView {
           width: parent.width
         }
 
-        MMSwitchEditor {
+        MMSwitchFormEditor {
           title: "MMSwitchEditor"
           checked: true
           text: checked ? "True" : "False"
@@ -256,6 +257,5 @@ ScrollView {
         }
       }
     }
-
   }
 }

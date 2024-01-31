@@ -36,6 +36,7 @@ set(MM_QML
     components/MMRoundButton.qml
     components/MMButton.qml
     components/MMComponent_reachedDataLimit.qml
+    components/MMCheckBox.qml
     components/MMDrawer.qml
     components/MMHeader.qml
     components/MMHlineText.qml
@@ -54,7 +55,6 @@ set(MM_QML
     components/MMNotification.qml
     components/MMNotificationView.qml
     components/MMPhoto.qml
-    components/MMPhotoGallery.qml
     components/MMProgressBar.qml
     components/MMProjectItem.qml
     components/MMRadioButton.qml
@@ -100,11 +100,20 @@ set(MM_QML
     editor/inputvaluerelationcombobox.qml
     editor/inputvaluerelationpage.qml
     editor/inputspacer.qml
-    inputs/MMAbstractEditor.qml
-    inputs/MMCheckBox.qml
-    inputs/MMInputEditor.qml
-    inputs/MMPasswordEditor.qml
-    inputs/MMSliderEditor.qml
+
+    #
+    # Inputs
+    #
+
+    inputs/MMBaseInput.qml
+    inputs/MMPasswordInput.qml
+    inputs/MMTextInput.qml
+    inputs/MMSearchInput.qml
+
+    #
+    # Forms
+    #
+
     form/FeatureForm.qml
     form/FeatureFormPage.qml
     form/FeatureFormStyling.qml
@@ -112,6 +121,23 @@ set(MM_QML
     form/FormWrapper.qml
     form/MMFormTabBar.qml
     form/PreviewPanel.qml
+    form/editors/MMButtonFormEditor.qml
+    form/editors/MMCalendarFormEditor.qml
+    form/editors/MMDropdownFormEditor.qml
+    form/editors/MMGalleryFormEditor.qml
+    form/editors/MMNumberFormEditor.qml
+    form/editors/MMPhotoFormEditor.qml
+    form/editors/MMScannerFormEditor.qml
+    form/editors/MMSliderFormEditor.qml
+    form/editors/MMSwitchFormEditor.qml
+    form/editors/MMTextMultilineFormEditor.qml
+    form/editors/MMTextFormEditor.qml
+    # we are missing the following form editors:
+    # - Spacer
+    # - Text / HTML widget
+    # - Relation reference
+    # - Relations
+
     layers/FeaturesListPageV2.qml
     layers/LayerDetail.qml
     layers/LayersListPageV2.qml

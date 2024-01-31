@@ -10,9 +10,10 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../components"
+import "../../components"
+import "../../inputs"
 
-MMAbstractEditor {
+MMBaseInput {
   id: root
 
   property var parentValue: parent.value ?? ""

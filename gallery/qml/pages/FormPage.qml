@@ -171,7 +171,7 @@ Page {
   Component {
     id: fieldDelegate
 
-    MMInputEditor {
+    MMTextInput {
       width: ListView.view.width
       title: qsTr("Field title")
       placeholderText: qsTr("placeholder...")

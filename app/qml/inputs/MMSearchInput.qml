@@ -12,13 +12,17 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 import "../components"
 
-MMAbstractEditor {
+MMBaseInput {
   id: root
 
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
+  property bool allowTimer: false
+  property int emitInterval: 200
 
   hasFocus: textField.activeFocus
+
+  signal searchTextChanged( string text )
 
   content: TextField {
     id: textField
@@ -30,22 +34,43 @@ MMAbstractEditor {
     placeholderTextColor: __style.nightAlphaColor
     font: __style.p5
     hoverEnabled: true
-    echoMode: eyeButton.pressed ? TextInput.Normal : TextInput.Password
     background: Rectangle {
       color: __style.transparentColor
     }
+
+    onDisplayTextChanged: {
+      if ( root.allowTimer ) {
+        if ( searchTimer.running )
+          searchTimer.restart()
+        else
+          searchTimer.start()
+      }
+      else
+      {
+        root.searchTextChanged( textField.displayText )
+      }
+    }
   }
 
-  rightAction: MMIcon {
-    id: eyeButton
+  leftAction: MMIcon {
+    id: searchIcon
 
     property bool pressed: false
 
     height: parent.height
 
-    source: pressed ? __style.hideIcon : __style.showIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    source: __style.searchIcon
+    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
   }
 
-  onRightActionClicked: eyeButton.pressed = !eyeButton.pressed
+  Timer {
+    id: searchTimer
+
+    interval: root.emitInterval
+    running: false
+
+    onTriggered: {
+      searchTextChanged( root.text )
+    }
+  }
 }

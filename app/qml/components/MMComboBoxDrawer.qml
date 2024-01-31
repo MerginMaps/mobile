@@ -12,6 +12,8 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 import "../inputs"
 
+
+// TODO: rename to MMDropdownDrawer
 Drawer {
   id: root
 
@@ -84,7 +86,7 @@ Drawer {
         }
       }
 
-      MMSearchEditor {
+      MMSearchInput {
         id: searchBar
 
         width: parent.width - 2 * root.padding

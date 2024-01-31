@@ -12,65 +12,61 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 import "../components"
 
-MMAbstractEditor {
+/*
+ * Common text input to use in the app.
+ * Disabled state can be achieved by setting `enabled: false`.
+ *
+ * See MMBaseInput for more properties.
+ */
+
+MMBaseInput {
   id: root
 
-  property alias placeholderText: textField.placeholderText
+  property bool showClearIcon: true
   property alias text: textField.text
-  property bool allowTimer: false
-  property int emitInterval: 200
+  property alias placeholderText: textField.placeholderText
+
+  property alias textFieldComponent: textField
+
+  signal textEdited( string text )
 
   hasFocus: textField.activeFocus
-
-  signal searchTextChanged( string text )
 
   content: TextField {
     id: textField
 
     anchors.fill: parent
-    anchors.verticalCenter: parent.verticalCenter
 
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
     placeholderTextColor: __style.nightAlphaColor
+    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+
     font: __style.p5
     hoverEnabled: true
+
     background: Rectangle {
       color: __style.transparentColor
     }
 
-    onDisplayTextChanged: {
-      if ( root.allowTimer ) {
-        if ( searchTimer.running )
-          searchTimer.restart()
-        else
-          searchTimer.start()
-      }
-      else
-      {
-        root.searchTextChanged( textField.displayText )
-      }
-    }
+    onTextEdited: root.textEdited( textField.text )
   }
 
-  leftAction: MMIcon {
-    id: searchIcon
-
-    property bool pressed: false
+  rightAction: MMIcon {
+    id: rightIcon
 
     height: parent.height
 
-    source: __style.searchIcon
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+    source: __style.xMarkIcon
+    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    visible: root.showClearIcon && textField.activeFocus && textField.text.length > 0
   }
 
-  Timer {
-    id: searchTimer
-
-    interval: root.emitInterval
-    running: false
-
-    onTriggered: {
-      searchTextChanged( root.text )
+  onRightActionClicked: {
+    if (root.showClearIcon) {
+      textField.clear()
+    }
+    else {
+      // if the clear button should not be there, let's open keyboard instead
+      textField.forceActiveFocus()
     }
   }
 }

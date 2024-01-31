@@ -134,28 +134,28 @@ Page {
       topPadding: 20 * __dp
       bottomPadding: 20 * __dp
 
-      MMInputEditor {
+      MMTextInput {
         id: username
         width: parent.width - 2 * root.hPadding
         title: qsTr("Username")
         bgColor: __style.lightGreenColor
       }
 
-      MMInputEditor {
+      MMTextInput {
         id: email
         width: parent.width - 2 * root.hPadding
         title: qsTr("Email address")
         bgColor: __style.lightGreenColor
       }
 
-      MMPasswordEditor {
+      MMPasswordInput {
         id: password
         width: parent.width - 2 * root.hPadding
         title: qsTr("Password")
         bgColor: __style.lightGreenColor
       }
 
-      MMPasswordEditor {
+      MMPasswordInput {
         id: passwordConfirm
         width: parent.width - 2 * root.hPadding
         title: qsTr("Confirm password")

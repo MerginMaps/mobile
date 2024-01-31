@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import "../../components"
+
 Item {
   id: root
 

@@ -15,6 +15,8 @@ import QtQuick.Layouts
 import "../components"
 import "."
 
+//! This is a base class for all inputs/form editors, do not use this in the app directly
+
 Item {
   id: root
 

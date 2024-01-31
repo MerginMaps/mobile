@@ -1,91 +1,98 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/Main.qml</file>
-        <file>qml/pages/IconsPage.qml</file>
         <file>qml/IconBox.qml</file>
+
+        <file>qml/pages/IconsPage.qml</file>
         <file>qml/pages/StylePage.qml</file>
         <file>qml/pages/MiscPage.qml</file>
         <file>qml/pages/InitialGalleryPage.qml</file>
         <file>qml/pages/ButtonsPage.qml</file>
+        <file>qml/pages/NotificationPage.qml</file>
+        <file>qml/pages/DrawerPage.qml</file>
+        <file>qml/pages/ChecksPage.qml</file>
+        <file>qml/pages/MapPage.qml</file>
+        <file>qml/pages/ToolbarPage.qml</file>
+        <file>qml/pages/ProjectItemsPage.qml</file>
+        <file>qml/pages/PhotosPage.qml</file>
+        <file>qml/pages/EditorsPage.qml</file>
+        <file>qml/pages/OnboardingPage.qml</file>
+        <file>qml/pages/CalendarPage.qml</file>
+        <file>qml/pages/FormPage.qml</file>
+
         <file>../app/qml/components/MMButton.qml</file>
         <file>../app/qml/components/MMLinkButton.qml</file>
-        <file>../app/qml/components/MMLink.qml</file>
         <file>../app/qml/components/MMIcon.qml</file>
         <file>../app/qml/components/MMRoundButton.qml</file>
+        <file>../app/qml/components/MMLink.qml</file>
         <file>../app/qml/components/MMRoundLinkButton.qml</file>
         <file>../app/qml/components/MMRadioButton.qml</file>
         <file>../app/qml/components/MMSwitch.qml</file>
-        <file>qml/pages/NotificationPage.qml</file>
         <file>../app/qml/components/MMNotification.qml</file>
         <file>../app/qml/components/MMNotificationView.qml</file>
         <file>../app/qml/components/MMDrawer.qml</file>
-        <file>qml/pages/DrawerPage.qml</file>
-        <file>qml/pages/ChecksPage.qml</file>
         <file>../app/qml/components/MMComponent_reachedDataLimit.qml</file>
         <file>../app/qml/components/MMProgressBar.qml</file>
-        <file>qml/pages/MapPage.qml</file>
         <file>../app/qml/components/MMMapButton.qml</file>
         <file>../app/qml/components/MMShadow.qml</file>
         <file>../app/qml/components/MMMapLabel.qml</file>
         <file>../app/qml/components/MMToolbarButton.qml</file>
         <file>../app/qml/components/MMToolbar.qml</file>
-        <file>qml/pages/ToolbarPage.qml</file>
         <file>../app/qml/components/MMMenuDrawer.qml</file>
         <file>../app/qml/components/MMToolbarMenuButton.qml</file>
         <file>../app/qml/components/MMToolbarLongButton.qml</file>
-        <file>qml/pages/ProjectItemsPage.qml</file>
         <file>../app/qml/components/MMListDrawer.qml</file>
         <file>../app/qml/components/MMListDrawerItem.qml</file>
         <file>../app/qml/components/MMProjectItem.qml</file>
         <file>../app/qml/components/MMMorePhoto.qml</file>
         <file>../app/qml/components/MMPhoto.qml</file>
-        <file>../app/qml/components/MMPhotoGallery.qml</file>
-        <file>qml/pages/PhotosPage.qml</file>
-        <file>qml/pages/EditorsPage.qml</file>
-        <file>../app/qml/inputs/MMAbstractEditor.qml</file>
-        <file>../app/qml/inputs/MMCheckBox.qml</file>
-        <file>../app/qml/inputs/MMInputEditor.qml</file>
-        <file>../app/qml/inputs/MMPasswordEditor.qml</file>
-        <file>../app/qml/inputs/MMSliderEditor.qml</file>
-        <file>qml/pages/OnboardingPage.qml</file>
+        <file>../app/qml/components/MMCheckBox.qml</file>
+        <file>../app/qml/components/MMHeader.qml</file>
+        <file>../app/qml/components/MMHlineText.qml</file>
+        <file>../app/qml/components/MMTextBubble.qml</file>
+        <file>../app/qml/components/MMIconCheckBoxHorizontal.qml</file>
+        <file>../app/qml/components/MMIconCheckBoxVertical.qml</file>
+        <file>../app/qml/components/calendar/MMDateTimePicker.qml</file>
+        <file>../app/qml/components/calendar/MMDayOfWeekRow.qml</file>
+        <file>../app/qml/components/calendar/MMMonthGrid.qml</file>
+        <file>../app/qml/components/calendar/MMAmPmSwitch.qml</file>
+        <file>../app/qml/components/MMCalendarDrawer.qml</file>
+        <file>../app/qml/components/MMSelectableToolbar.qml</file>
+        <file>../app/qml/components/MMSelectableToolbarButton.qml</file>
+        <file>../app/qml/components/MMWarningBubble.qml</file>
+        <file>../app/qml/components/MMTumbler.qml</file>
+        <file>../app/qml/components/calendar/MMTimeTumbler.qml</file>
+        <file>../app/qml/components/calendar/MMDateTumbler.qml</file>
+        <file>../app/qml/components/MMComboBoxDrawer.qml</file>
+        <file>../app/qml/components/MMMapBlurLabel.qml</file>
+        <file>../app/qml/components/MMCodeScanner.qml</file>
+
+        <file>../app/qml/inputs/MMBaseInput.qml</file>
+        <file>../app/qml/inputs/MMPasswordInput.qml</file>
+        <file>../app/qml/inputs/MMTextInput.qml</file>
+        <file>../app/qml/inputs/MMSearchInput.qml</file>
+        
+        <file>../app/qml/form/MMFormTabBar.qml</file>
+        <file>../app/qml/form/editors/MMButtonFormEditor.qml</file>
+        <file>../app/qml/form/editors/MMCalendarFormEditor.qml</file>
+        <file>../app/qml/form/editors/MMDropdownFormEditor.qml</file>
+        <file>../app/qml/form/editors/MMGalleryFormEditor.qml</file>
+        <file>../app/qml/form/editors/MMNumberFormEditor.qml</file>
+        <file>../app/qml/form/editors/MMPhotoFormEditor.qml</file>
+        <file>../app/qml/form/editors/MMScannerFormEditor.qml</file>
+        <file>../app/qml/form/editors/MMSliderFormEditor.qml</file>
+        <file>../app/qml/form/editors/MMSwitchFormEditor.qml</file>
+        <file>../app/qml/form/editors/MMTextFormEditor.qml</file>
+        <file>../app/qml/form/editors/MMTextMultilineFormEditor.qml</file>
+
         <file>../app/qml/onboarding/MMAcceptInvitation.qml</file>
         <file>../app/qml/onboarding/MMCreateWorkspace.qml</file>
         <file>../app/qml/onboarding/MMHowYouFoundUs.qml</file>
         <file>../app/qml/onboarding/MMLogin.qml</file>
         <file>../app/qml/onboarding/MMSignUp.qml</file>
         <file>../app/qml/onboarding/MMWhichIndustry.qml</file>
-        <file>../app/qml/components/MMHeader.qml</file>
-        <file>../app/qml/components/MMHlineText.qml</file>
-        <file>../app/qml/components/MMTextBubble.qml</file>
-        <file>../app/qml/components/MMIconCheckBoxHorizontal.qml</file>
-        <file>../app/qml/components/MMIconCheckBoxVertical.qml</file>
-        <file>../app/qml/inputs/MMCalendarEditor.qml</file>
-        <file>../app/qml/components/calendar/MMDateTimePicker.qml</file>
-        <file>../app/qml/components/calendar/MMDayOfWeekRow.qml</file>
-        <file>../app/qml/components/calendar/MMMonthGrid.qml</file>
-        <file>../app/qml/components/calendar/MMAmPmSwitch.qml</file>
-        <file>../app/qml/components/MMCalendarDrawer.qml</file>
-        <file>../app/qml/inputs/MMTextAreaEditor.qml</file>
-        <file>../app/qml/inputs/MMSwitchEditor.qml</file>
-        <file>../app/qml/components/MMSelectableToolbar.qml</file>
-        <file>../app/qml/components/MMSelectableToolbarButton.qml</file>
-        <file>../app/qml/inputs/MMNumberEditor.qml</file>
-        <file>../app/qml/inputs/MMButtonInputEditor.qml</file>
-        <file>../app/qml/components/MMWarningBubble.qml</file>
-        <file>../app/qml/components/MMTumbler.qml</file>
-        <file>../app/qml/components/calendar/MMTimeTumbler.qml</file>
-        <file>../app/qml/components/calendar/MMDateTumbler.qml</file>
-        <file>qml/pages/CalendarPage.qml</file>
-        <file>../app/qml/inputs/MMComboBoxEditor.qml</file>
-        <file>../app/qml/components/MMComboBoxDrawer.qml</file>
-        <file>../app/qml/inputs/MMSearchEditor.qml</file>
+
         <file>../app/qml/map/MMPositionMarker.qml</file>
-        <file>../app/qml/components/MMMapBlurLabel.qml</file>
-        <file>../app/qml/inputs/MMQrCodeEditor.qml</file>
-        <file>../app/qml/components/MMCodeScanner.qml</file>
         <file>../app/qml/map/MMMapScaleBar.qml</file>
-        <file>../app/qml/inputs/MMPhotoEditor.qml</file>
-        <file>qml/pages/FormPage.qml</file>
-        <file>../app/qml/form/MMFormTabBar.qml</file>
     </qresource>
 </RCC>
