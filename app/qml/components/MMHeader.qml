@@ -9,72 +9,76 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
-Row {
+
+//! Best to use MMHeader as the header component for the Page{} object or anchor it to the top of Drawer/Item
+
+Item {
   id: root
 
-  property string headerTitle
-  property int step: -1 // -1 no step bar shown; 1, 2, 3
+  property string title: ""
+  property font titleFont: __style.t3
+
   property bool backVisible: true
-  property color backColor: __style.whiteColor
-  property font titleFont: __style.t4
+  property alias backButton: backBtn
+
+  //! When adding items on the right side of MMHeader (account icon, save button, slider, ...),
+  //! make sure to set the width of the item via this property to keep the title centred to
+  //! the page and elide properly
+  property real rightMarginShift: 0
 
   signal backClicked
 
-  width: parent.width
-  spacing: 5 * __dp
-
-  Row {
-    id: backButton
-
-    width: 60 * __dp
-
-    MMBackButton {
-      visible: root.backVisible
-      color: root.backColor
-
-      onClicked: root.backClicked()
-    }
-
-    Item {
-      id: space
-
-      width: 20 * __dp
-      height: 1
-      visible: backButton.visible
-    }
-  }
+  implicitHeight: 60 * __dp
+  implicitWidth: Window.width
 
   Text {
-    anchors.verticalCenter: parent.verticalCenter
-    width: {
-      if(backButton.visible || progressBar.visible)
-        return root.width - (backButton.visible ? backButton.width + root.spacing : 0)
-            - progressBar.width - root.spacing
-      return root.width
+    // If there is a right or a left icon, we need to shift the margin
+    // of the opposite side to keep the text centred to the center of the screen
+    property real leftMarginShift: {
+      return Math.max( internal.backBtnRealWidth, root.rightMarginShift ) + internal.headerSpacing + internal.pageMargin
     }
-    text: root.headerTitle
+
+    property real rightMarginShift: {
+      return Math.max( internal.backBtnRealWidth, root.rightMarginShift ) + internal.headerSpacing + internal.pageMargin
+    }
+
+    anchors {
+      fill: parent
+      leftMargin: leftMarginShift
+      rightMargin: rightMarginShift
+    }
+
+    text: root.title
+    elide: Text.ElideMiddle
+
     font: root.titleFont
     color: __style.forestColor
-    wrapMode: Text.WordWrap
+
+    verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignHCenter
   }
 
-  Item {
-    width: progressBar.width
-    height: progressBar.height
-    anchors.verticalCenter: parent.verticalCenter
+  MMRoundButton {
+    id: backBtn
 
-    MMProgressBar {
-      id: progressBar
-
-      width: 60 * __dp
-      height: 4 * __dp
-
-      color: __style.grassColor
-      progressColor: __style.forestColor
-      visible: root.step > 0
-      position: root.step > 0 ? root.step / 3 : 0
+    anchors {
+      left: parent.left
+      leftMargin: internal.pageMargin
+      verticalCenter: parent.verticalCenter
     }
+
+    visible: root.backVisible
+    onClicked: root.backClicked()
+  }
+
+  QtObject {
+    id: internal
+
+    property real headerSpacing: 10 * __dp
+    property real pageMargin: 20 * __dp // TODO: move to mmstyle.h
+
+    property real backBtnRealWidth: backBtn.visible ? backBtn.width : 0
   }
 }

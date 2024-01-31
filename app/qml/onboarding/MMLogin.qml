@@ -60,12 +60,10 @@ Page {
   MMHeader {
     id: header
 
-    x: mainColumn.leftPadding
-    y: mainColumn.topPadding
-    width: parent.width - 2 * root.hPadding
-    headerTitle: qsTr("Log In")
+    title: qsTr("Log In")
     titleFont: __style.h3
-    backColor: __style.lightGreenColor
+
+    backButton.bgndColor: __style.lightGreenColor
 
     onBackClicked: root.backClicked()
   }

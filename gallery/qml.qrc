@@ -57,7 +57,6 @@
         <file>../app/qml/components/MMHeader.qml</file>
         <file>../app/qml/components/MMHlineText.qml</file>
         <file>../app/qml/components/MMTextBubble.qml</file>
-        <file>../app/qml/components/MMBackButton.qml</file>
         <file>../app/qml/components/MMIconCheckBoxHorizontal.qml</file>
         <file>../app/qml/components/MMIconCheckBoxVertical.qml</file>
         <file>../app/qml/inputs/MMCalendarEditor.qml</file>
@@ -86,6 +85,7 @@
         <file>../app/qml/components/MMCodeScanner.qml</file>
         <file>../app/qml/map/MMMapScaleBar.qml</file>
         <file>../app/qml/inputs/MMRelationsEditor.qml</file>
+        <file>../app/qml/inputs/MMPhotoEditor.qml</file>
         <file>qml/pages/FormPage.qml</file>
         <file>../app/qml/form/MMFormTabBar.qml</file>
         <file>../app/qml/components/MMLinkedFeaturesDrawer.qml</file>

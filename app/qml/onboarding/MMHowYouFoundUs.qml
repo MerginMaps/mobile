@@ -40,13 +40,26 @@ Page {
   MMHeader {
     id: header
 
-    x: root.hPadding
-    y: 20 * __dp
-    width: root.width - 2 * root.hPadding
-    headerTitle: listView.contentY > -30 * __dp ? root.headerTitle : ""
-    step: 2
+    title: listView.contentY > -30 * __dp ? root.headerTitle : ""
 
     onBackClicked: root.backClicked()
+
+    rightMarginShift: progressBar.width
+
+    MMProgressBar {
+      id: progressBar
+
+      anchors.right: parent.right
+      anchors.rightMargin: __style.pageMargins
+      anchors.verticalCenter: parent.verticalCenter
+
+      width: 60 * __dp
+      height: 4 * __dp
+
+      color: __style.grassColor
+      progressColor: __style.forestColor
+      position: 2/3
+    }
   }
 
   Item {
