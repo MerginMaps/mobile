@@ -192,6 +192,15 @@ ScrollView {
           onEditorValueChanged: function(newValue, isNull) { console.log("QR code: " + newValue) }
         }
 
+        MMPhotoEditor {
+          title: "MMPhotoEditor"
+          width: parent.width
+          photoUrl: "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg"
+
+          onTrashClicked: console.log("Move to trash")
+          onContentClicked: console.log("Open photo")
+        }
+
         MMButtonInputEditor {
           title: "MMButtonInputEditor"
           placeholderText: "Write something"

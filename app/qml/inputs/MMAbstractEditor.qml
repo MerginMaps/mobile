@@ -35,7 +35,8 @@ Item {
 
   property real contentItemHeight: 50 * __dp
 
-  readonly property real spacing: 15 * __dp
+  property real spacing: 15 * __dp
+  property real radius: __style.inputRadius
 
   width: parent.width
   height: mainColumn.height
@@ -84,7 +85,7 @@ Item {
 
         border.width: 2 * __dp
         color: root.bgColor
-        radius: __style.inputRadius
+        radius: root.radius
         border.color: {
           if (root.hasFocus) {
             if (errorMsg.length > 0) {
