@@ -44,7 +44,7 @@ ScrollView {
         property var featurePair: "parentFeature"
         property var associatedRelation: "associatedRelation"
 
-        MMTextBubblesEditor {
+        MMRelationsEditor {
           title: "MMTextAreaEditor"
           enabled: checkbox.checked
           width: parent.width

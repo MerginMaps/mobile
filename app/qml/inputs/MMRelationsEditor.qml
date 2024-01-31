@@ -19,18 +19,16 @@ MMAbstractEditor {
   property bool parentValueIsNull: parent.valueIsNull ?? false
   property bool isReadOnly: parent.readOnly ?? false
 
-  readonly property real itemHeight: 36 * __dp
-  readonly property int rows: 3
   required property ListModel featuresModel
 
   signal editorValueChanged( var newValue, var isNull )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentFeature, var relation )
 
-  contentItemHeight: itemHeight * rows + 2 * flow.spacing + 20 * __dp
+  contentItemHeight: privates.itemHeight * privates.rows + 2 * flow.spacing + 20 * __dp
 
-  Component.onCompleted: root.hideFeaturesIfNeeded()
-  onWidthChanged: root.hideFeaturesIfNeeded()
+  Component.onCompleted: root.recalculate()
+  onWidthChanged: root.recalculate()
 
   content: Rectangle {
     width: root.width - 2 * root.spacing
@@ -47,7 +45,7 @@ MMAbstractEditor {
 
       Rectangle {
         width: 40 * __dp
-        height: root.itemHeight
+        height: privates.itemHeight
         radius: 8 * __dp
         color: __style.lightGreenColor
 
@@ -74,13 +72,14 @@ MMAbstractEditor {
 
         delegate: Rectangle {
           width: text.contentWidth + 24 * __dp
-          height: root.itemHeight
+          height: privates.itemHeight
           radius: 8 * __dp
           color: __style.mediumGreenColor
           visible: {
-            let isVisible = (y < 2 * root.itemHeight || (y < 3 * root.itemHeight && x + width < flow.width - footer.width - flow.spacing))
-            if(!isVisible && !repeater.invisibleIds.includes(model.FeatureId))
+            let isVisible = (y < 2 * privates.itemHeight || (y < 3 * privates.itemHeight && x + width < flow.width - footer.width - flow.spacing))
+            if(!isVisible && !repeater.invisibleIds.includes(model.FeatureId)) {
               repeater.invisibleIds.push(model.FeatureId)
+            }
             footer.visible = repeater.invisibleIds.length > 0
             moreText.text = ("+" + repeater.invisibleIds.length + qsTr(" more"))
             return isVisible
@@ -108,7 +107,7 @@ MMAbstractEditor {
         id: footer
 
         width: 100 * __dp
-        height: root.itemHeight
+        height: privates.itemHeight
         radius: 8 * __dp
         color: __style.lightGreenColor
 
@@ -135,9 +134,9 @@ MMAbstractEditor {
     }
   }
 
-  function hideFeaturesIfNeeded() {
+  function recalculate() {
     repeater.invisibleIds = []
-    repeater.model = undefined
+    repeater.model = null
     repeater.model = root.featuresModel
   }
 
@@ -156,6 +155,7 @@ MMAbstractEditor {
       focus: true
       model: root.featuresModel
       title: qsTr("Linked features")
+      withSearch: true
 
       Component.onCompleted: open()
       onClosed: listLoader.active = false
@@ -164,5 +164,12 @@ MMAbstractEditor {
       }
       onCreateLinkedFeature: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
     }
+  }
+
+  QtObject {
+    id: privates
+
+    readonly property real itemHeight: 36 * __dp
+    readonly property int rows: 3
   }
 }

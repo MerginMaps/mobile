@@ -17,7 +17,7 @@ Drawer {
 
   property alias title: title.text
   property alias model: listView.model
-  property int minFeaturesCountToFullScreenMode: 4
+  property bool withSearch: false
   property var preselectedFeatures: []
 
   padding: 20 * __dp
@@ -82,7 +82,7 @@ Drawer {
 
         width: parent.width - 2 * root.padding
         placeholderText: qsTr("Search for features...")
-        visible: root.model.count >= root.minFeaturesCountToFullScreenMode
+        visible: root.withSearch
 
         onSearchTextChanged: function(text) {
           root.model.searchExpression = text
