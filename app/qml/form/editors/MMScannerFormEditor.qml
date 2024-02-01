@@ -16,16 +16,29 @@ import "../../inputs"
 MMBaseInput {
   id: root
 
-  property var parentValue: parent.value
-  property bool isReadOnly: parent.readOnly ?? false
+  property var _fieldValue: parent.fieldValue
+  property var _fieldConfig: parent.fieldConfig
+  property bool _fieldValueIsNull: parent.fieldValueIsNull
+
+  property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
+  property bool _fieldIsReadOnly: parent.fieldIsReadOnly
+
+  property string _fieldTitle: parent.fieldTitle
+  property string _fieldErrorMessage: parent.fieldErrorMessage
+  property string _fieldWarningMessage: parent.fieldWarningMessage
 
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
 
   signal editorValueChanged( var newValue, bool isNull )
 
+  title: _fieldShouldShowTitle ? _fieldTitle : ""
+
+  warningMsg: _fieldWarningMessage
+  errorMsg: _fieldErrorMessage
+
   hasFocus: textField.activeFocus
-  enabled: !root.isReadOnly
+  enabled: !_fieldIsReadOnly
 
   content: TextField {
     id: textField
@@ -33,17 +46,19 @@ MMBaseInput {
     anchors.fill: parent
     anchors.verticalCenter: parent.verticalCenter
 
-    text: root.parentValue !== undefined ? root.parentValue : ''
     readOnly: !root.enabled
+
+    text: root._fieldValue === undefined || root._fieldValueIsNull ? '' : root._fieldValue
+
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
     placeholderTextColor: __style.nightAlphaColor
+
     font: __style.p5
     hoverEnabled: true
-    background: Rectangle {
-      color: __style.transparentColor
-    }
 
-    onTextChanged: root.editorValueChanged( text, text === "" )
+    background: Rectangle { color: __style.transparentColor }
+
+    onTextEdited: root.editorValueChanged( textField.text, textField.text === "" )
   }
 
   rightAction: MMIcon {
@@ -58,8 +73,10 @@ MMBaseInput {
   onRightActionClicked: {
     if ( !root.enabled )
       return
+
     if (!__inputUtils.acquireCameraPermission())
       return
+
     codeScannerLoader.active = true
     codeScannerLoader.focus = true
   }
@@ -78,11 +95,13 @@ MMBaseInput {
     MMCodeScanner {
       focus: true
 
-      Component.onCompleted: open()
       onClosed: codeScannerLoader.active = false
+
+      Component.onCompleted: open()
+
       onScanFinished: function( captured ) {
         root.editorValueChanged( captured, false )
-        codeScannerLoader.active = false
+        close()
       }
     }
   }

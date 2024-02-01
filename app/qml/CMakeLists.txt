@@ -35,6 +35,7 @@ set(MM_QML
     components/ToolbarButton.qml
     components/MMRoundButton.qml
     components/MMButton.qml
+    components/MMCodeScanner.qml
     components/MMComponent_reachedDataLimit.qml
     components/MMCheckBox.qml
     components/MMDrawer.qml

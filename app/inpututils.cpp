@@ -1041,13 +1041,13 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
     }
     return QUrl( path.arg( QLatin1String( "MMTextFormEditor" ) ) );
   }
+  else if ( field.name().contains( "qrcode", Qt::CaseInsensitive ) || field.alias().contains( "qrcode", Qt::CaseInsensitive ) )
+  {
+    return QUrl( path.arg( QStringLiteral( "MMScannerFormEditor" ) ) );
+  }
 
   return QUrl( path.arg( QLatin1String( "MMTextFormEditor" ) ) ); // <<------ Mind!
 
-  if ( field.name().contains( "qrcode", Qt::CaseInsensitive ) || field.alias().contains( "qrcode", Qt::CaseInsensitive ) )
-  {
-    return QUrl( path.arg( QStringLiteral( "qrcodereader" ) ) );
-  }
 
   if ( widgetName == QStringLiteral( "textedit" ) )
   {
