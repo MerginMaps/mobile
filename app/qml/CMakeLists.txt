@@ -39,6 +39,7 @@ set(MM_QML
     components/MMComponent_reachedDataLimit.qml
     components/MMCheckBox.qml
     components/MMDrawer.qml
+    components/MMDropdownDrawer.qml
     components/MMHeader.qml
     components/MMHlineText.qml
     components/MMIcon.qml
@@ -110,6 +111,7 @@ set(MM_QML
     inputs/MMPasswordInput.qml
     inputs/MMTextInput.qml
     inputs/MMSearchInput.qml
+    inputs/MMDropdownInput.qml
 
     #
     # Forms
@@ -124,7 +126,6 @@ set(MM_QML
     form/PreviewPanel.qml
     form/editors/MMButtonFormEditor.qml
     form/editors/MMCalendarFormEditor.qml
-    form/editors/MMDropdownFormEditor.qml
     form/editors/MMGalleryFormEditor.qml
     form/editors/MMNumberFormEditor.qml
     form/editors/MMPhotoFormEditor.qml
@@ -133,6 +134,8 @@ set(MM_QML
     form/editors/MMSwitchFormEditor.qml
     form/editors/MMTextMultilineFormEditor.qml
     form/editors/MMTextFormEditor.qml
+    form/editors/MMValueMapFormEditor.qml
+    form/editors/MMValueRelationFormEditor.qml
     # we are missing the following form editors:
     # - Spacer
     # - Text / HTML widget

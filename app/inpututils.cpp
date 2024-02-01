@@ -1045,8 +1045,7 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   {
     return QUrl( path.arg( QStringLiteral( "MMScannerFormEditor" ) ) );
   }
-
-  if ( widgetName == QStringLiteral( "textedit" ) )
+  else if ( widgetName == QStringLiteral( "textedit" ) )
   {
     if ( config.value( "IsMultiline" ).toBool() )
     {
@@ -1054,28 +1053,20 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
     }
     return QUrl( path.arg( QLatin1String( "MMTextFormEditor" ) ) );
   }
+  else if ( widgetName == QStringLiteral( "checkbox" ) )
+  {
+    return QUrl( path.arg( QLatin1String( "MMSwitchFormEditor" ) ) );
+  }
+  else if ( widgetName == QStringLiteral( "valuerelation" ) )
+  {
+    return QUrl( path.arg( QLatin1String( "MMValueRelationFormEditor" ) ) );
+  }
+  else if ( widgetName == QStringLiteral( "valuemap" ) )
+  {
+    return QUrl( path.arg( QLatin1String( "MMValueMapFormEditor" ) ) );
+  }
 
   return QUrl( path.arg( QLatin1String( "MMTextFormEditor" ) ) ); // <<------ Mind!
-
-  if ( widgetName == QStringLiteral( "valuerelation" ) )
-  {
-    const QgsMapLayer *referencedLayer = QgsProject::instance()->mapLayer( config.value( "Layer" ).toString() );
-    const QgsVectorLayer *layer = qobject_cast<const QgsVectorLayer *>( referencedLayer );
-
-    if ( layer )
-    {
-      int featuresCount = layer->dataProvider()->featureCount();
-      if ( featuresCount > 4 )
-        return QUrl( path.arg( QLatin1String( "valuerelationpage" ) ) );
-    }
-
-    if ( config.value( "AllowMulti" ).toBool() )
-    {
-      return QUrl( path.arg( QLatin1String( "valuerelationpage" ) ) );
-    }
-
-    return QUrl( path.arg( QLatin1String( "valuerelationcombobox" ) ) );
-  }
 
   QStringList supportedWidgets = { QStringLiteral( "richtext" ),
                                    QStringLiteral( "textedit" ),

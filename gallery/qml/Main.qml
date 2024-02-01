@@ -139,10 +139,6 @@ ApplicationWindow {
           source: "TextAreaPage.qml"
         }
         ListElement {
-          title: "Combo boxes"
-          source: "ComboBoxPage.qml"
-        }
-        ListElement {
           title: "Checks"
           source: "ChecksPage.qml"
         }

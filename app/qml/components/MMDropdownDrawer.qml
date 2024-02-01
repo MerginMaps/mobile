@@ -10,10 +10,9 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
+
 import "../inputs"
 
-
-// TODO: rename to MMDropdownDrawer
 Drawer {
   id: root
 

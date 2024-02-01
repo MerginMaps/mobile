@@ -10,17 +10,17 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../../components"
-import "../../inputs"
+import "../components"
 
 MMBaseInput {
   id: root
 
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
+
   property bool multiSelect: false
-  required property ListModel featuresModel
-  required property string dropDownTitle
+  property var featuresModel
+  property string dropDownTitle
   property var preselectedFeatures: []
 
   hasFocus: textField.activeFocus
@@ -33,13 +33,26 @@ MMBaseInput {
     anchors.fill: parent
     anchors.verticalCenter: parent.verticalCenter
 
+    readOnly: true
+
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
     placeholderTextColor: __style.nightAlphaColor
+
     font: __style.p5
     hoverEnabled: true
+
     background: Rectangle {
       color: __style.transparentColor
     }
+
+    MouseArea {
+      anchors.fill: parent
+      onClicked: function( mouse ) {
+        mouse.accepted = true
+        console.log( "Open draweeer!" )
+      }
+    }
+
   }
 
   rightAction: MMIcon {
@@ -56,33 +69,35 @@ MMBaseInput {
   onRightActionClicked: {
     if ( !root.enabled )
       return
-    listLoader.active = true
-    listLoader.focus = true
+
+    console.log( "Open draweeer!" )
+//    listLoader.active = true
+//    listLoader.focus = true
   }
 
-  Loader {
-    id: listLoader
+//  Loader {
+//    id: listLoader
 
-    asynchronous: true
-    active: false
-    sourceComponent: listComponent
-  }
+//    asynchronous: true
+//    active: false
+//    sourceComponent: listComponent
+//  }
 
-  Component {
-    id: listComponent
+//  Component {
+//    id: listComponent
 
-    MMComboBoxDrawer {
-      focus: true
-      model: root.featuresModel
-      title: root.dropDownTitle
-      multiSelect: root.multiSelect
-      preselectedFeatures: root.preselectedFeatures
+//    MMDropdownDrawer {
+//      focus: true
+//      model: root.featuresModel
+//      title: root.dropDownTitle
+//      multiSelect: root.multiSelect
+//      preselectedFeatures: root.preselectedFeatures
 
-      Component.onCompleted: open()
-      onClosed: listLoader.active = false
-      onFeatureClicked: function(selectedFeatures) {
-        root.featureClicked( selectedFeatures )
-      }
-    }
-  }
+//      Component.onCompleted: open()
+//      onClosed: listLoader.active = false
+//      onFeatureClicked: function(selectedFeatures) {
+//        root.featureClicked( selectedFeatures )
+//      }
+//    }
+//  }
 }
