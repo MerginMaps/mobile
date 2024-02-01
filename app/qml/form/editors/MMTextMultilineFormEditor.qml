@@ -13,20 +13,43 @@ import QtQuick.Controls.Basic
 import "../../components"
 import "../../inputs"
 
+/*
+ * Text multiline editor for QGIS Attribute Form
+ * Requires various global properties set to function, see featureform Loader section.
+ * These properties are injected here via 'fieldXYZ' properties and captured with underscore `_`.
+ *
+ * Should be used only within feature form.
+ */
 MMBaseInput {
   id: root
 
-  property var parentValue: parent.value ?? ""
-  property bool parentValueIsNull: parent.valueIsNull ?? false
-  property bool isReadOnly: parent.readOnly ?? false
+  property var _fieldValue: parent.fieldValue
+  property var _fieldConfig: parent.fieldConfig
+  property bool _fieldValueIsNull: parent.fieldValueIsNull
+
+  property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
+  property bool _fieldIsReadOnly: parent.fieldIsReadOnly
+
+  property string _fieldTitle: parent.fieldTitle
+  property string _fieldErrorMessage: parent.fieldErrorMessage
+  property string _fieldWarningMessage: parent.fieldWarningMessage
 
   property alias placeholderText: textArea.placeholderText
   property alias text: textArea.text
+
   property int minimumRows: 3
 
   signal editorValueChanged( var newValue, var isNull )
 
+  title: _fieldShouldShowTitle ? _fieldTitle : ""
+
+  warningMsg: _fieldWarningMessage
+  errorMsg: _fieldErrorMessage
+
+  enabled: !_fieldIsReadOnly
+
   hasFocus: textArea.activeFocus
+
   contentItemHeight: {
     const minHeight = 34 * __dp + metrics.height * root.minimumRows
     var realHeight = textArea.y + textArea.contentHeight + 2 * textArea.verticalPadding
@@ -42,11 +65,23 @@ MMBaseInput {
     height: contentHeight + textArea.verticalPadding
     width: parent.width
 
+    text: root._fieldValue === undefined || root._fieldValueIsNull ? '' : root._fieldValue
+    textFormat: root._fieldConfig['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
+
     hoverEnabled: true
     placeholderTextColor: __style.nightAlphaColor
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+
     font: __style.p5
     wrapMode: Text.WordWrap
+
+    onLinkActivated: function( link ) {
+      Qt.openUrlExternally( link )
+    }
+
+    onTextChanged: root.editorValueChanged( text, text === "" )
+
+    onPreeditTextChanged: Qt.inputMethod.commit() // to avoid Android's uncommited text
   }
 
   FontMetrics {

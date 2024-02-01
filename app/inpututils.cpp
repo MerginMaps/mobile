@@ -1046,17 +1046,16 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
     return QUrl( path.arg( QStringLiteral( "MMScannerFormEditor" ) ) );
   }
 
-  return QUrl( path.arg( QLatin1String( "MMTextFormEditor" ) ) ); // <<------ Mind!
-
-
   if ( widgetName == QStringLiteral( "textedit" ) )
   {
     if ( config.value( "IsMultiline" ).toBool() )
     {
-      return QUrl( path.arg( QStringLiteral( "texteditmultiline" ) ) );
+      return QUrl( path.arg( QStringLiteral( "MMTextMultilineFormEditor" ) ) );
     }
-    return QUrl( path.arg( QLatin1String( "textedit" ) ) );
+    return QUrl( path.arg( QLatin1String( "MMTextFormEditor" ) ) );
   }
+
+  return QUrl( path.arg( QLatin1String( "MMTextFormEditor" ) ) ); // <<------ Mind!
 
   if ( widgetName == QStringLiteral( "valuerelation" ) )
   {

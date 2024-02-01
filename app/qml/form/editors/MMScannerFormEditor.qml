@@ -13,6 +13,14 @@ import QtQuick.Controls.Basic
 import "../../components"
 import "../../inputs"
 
+
+/*
+ * QR/Barcode scanner editor for QGIS Attribute Form
+ * Requires various global properties set to function, see featureform Loader section.
+ * These properties are injected here via 'fieldXYZ' properties and captured with underscore `_`.
+ *
+ * Should be used only within feature form.
+ */
 MMBaseInput {
   id: root
 
