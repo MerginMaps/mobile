@@ -19,7 +19,6 @@ Drawer {
 
   property alias title: title.text
   property int minFeaturesCountToFullScreenMode: 4
-  //property string coordinatesInDegrees: __inputUtils.degreesString( __positionKit.positionCoordinate )
 
   padding: 20 * __dp
 
@@ -41,29 +40,23 @@ Drawer {
     id : model
 
     Component.onCompleted: {
-
-      var source = __positionKit.positionProvider ? __positionKit.providerName: qsTr( "No receiver" )
-      var status = __positionKit.positionProvider ? __positionKit.providerMessage : ""
-
-      //var string latitude = { return __positionKit.latitude}
-      // var longitude = {
-      //     if (!__positionKit.hasPosition || Number.isNaN(__positionKit.latitude)) {
-      //         return "N/A";
-      //     }
-
-      //     let coordParts = root.coordinatesInDegrees.split(", ")
-      //     if (coordParts.length > 1) {
-      //         return coordParts[0];
-      //     }
-
-      //     return "N/A";
-      // }
-
-      //var latitude = 22
-
       append({ FeatureId: 1,
                FeatureTitleLeft: "Source",
-               //DescriptionLeft: source,
+               DescriptionLeft: function() {
+                return __positionKit.positionProvider ? __positionKit.positionProvider.name() : qsTr( "No receiver" )
+               },
+               showLeftColumn: true,
+               FeatureTitleRight: "Status",
+               DescriptionRight: function() {
+                 return __positionKit.positionProvider ? __positionKit.positionProvider.stateMessage : ""
+               },
+               showRightColumn: function() {
+                 return __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+               }
+             });
+
+      append({ FeatureId: 2,
+               FeatureTitleLeft: "Latitude",
                DescriptionLeft: function () {
                    if (!__positionKit.hasPosition || Number.isNaN(__positionKit.latitude)) {
                        return "N/A";
@@ -77,57 +70,38 @@ Drawer {
                    return "N/A";
                },
                showLeftColumn: true,
-               FeatureTitleRight: "Status",
-               DescriptionRight: status,
-               showRightColumn: true
-               // showRightColumn: function() {
-               //   return (__positionKit.positionProvider && __positionKit.providerType) === "external" ? true: false;
-               // }
-             });
-
-      append({ FeatureId: 2,
-               FeatureTitleLeft: "Latitude",
-               DescriptionLeft: function () {
-                 return  __positionKit.latitude
-               },
-               // DescriptionLeft: function () {
-               //     if (!__positionKit.hasPosition || Number.isNaN(__positionKit.latitude)) {
-               //         return "N/A";
-               //     }
-
-               //     let coordParts = root.coordinatesInDegrees.split(", ")
-               //     if (coordParts.length > 1) {
-               //         return coordParts[0];
-               //     }
-
-               //     return "N/A";
-               // },
-               showLeftColumn: __positionKit.hasPosition,
                FeatureTitleRight: "Longitude",
-               DescriptionRight: __positionKit.longitude,
-               // DescriptionRight: {
-               //   if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.longitude ) ) {
-               //     return "N/A";
-               //   }
+               DescriptionRight: function () {
+                 if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.longitude ) ) {
+                   return "N/A";
+                 }
 
-               //   let coordParts = root.coordinatesInDegrees.split(", ")
-               //   if ( coordParts.length > 1 )
-               //     return coordParts[0]
+                 let coordParts = root.coordinatesInDegrees.split(", ")
+                 if ( coordParts.length > 1 )
+                   return coordParts[0]
 
-               //   return "N/A";
-               // },
-               showRightColumn: __positionKit.hasPosition 
+                 return "N/A";
+               },
+               showRightColumn: true
              });
 
       append({ FeatureId: 3,
                FeatureTitleLeft: "X",
                DescriptionLeft: function () {
-                 return __positionKit.x
+                 if ( !__positionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.x ) ) {
+                   return qsTr( "N/A" )
+                 }
+
+                 return __inputUtils.formatNumber( mapPositioning.mapPosition.x, 2 )
                },
                showLeftColumn: true,
                FeatureTitleRight: "Y",
                DescriptionRight: function (){
-                 return __positionKit.y
+                 if ( !__positionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.y ) ) {
+                   return qsTr( "N/A" )
+                 }
+
+                 return __inputUtils.formatNumber( mapPositioning.mapPosition.y, 2 )
                },
                showRightColumn: true
              });
@@ -135,12 +109,20 @@ Drawer {
       append({ FeatureId: 4,
                FeatureTitleLeft: "Horizontal accuracy",
                DescriptionLeft: function () {
-                 return __positionKit.horizontalAccuracy
+                 if ( !__positionKit.hasPosition || __positionKit.horizontalAccuracy < 0 ) {
+                   return qsTr( "N/A" )
+                 }
+
+                 return __inputUtils.formatNumber( __positionKit.horizontalAccuracy, 2 ) + " m"
                },
                showLeftColumn: true,
                FeatureTitleRight: "Vertical accuracy",
                DescriptionRight: function () {
-                 return __positionKit.verticalAccuracy
+                 if ( !__positionKit.hasPosition || __positionKit.verticalAccuracy < 0 ) {
+                   return qsTr( "N/A" )
+                 }
+
+                 return __inputUtils.formatNumber( __positionKit.verticalAccuracy, 2 ) + " m";
                },
                showRightColumn: true
              });
@@ -148,11 +130,18 @@ Drawer {
       append({ FeatureId: 5,
                FeatureTitleLeft: "Altitude",
                DescriptionLeft: function () {
-                 return __positionKit.altitude + " m";
+                 if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.altitude ) ) {
+                   return qsTr( "N/A" )
+                 }
+                 return __inputUtils.formatNumber( __positionKit.altitude, 2 ) + " m";
                },
                showLeftColumn: true,
                FeatureTitleRight: "Satellites (in use/view)",
                DescriptionRight: function () {
+                 if ( __positionKit.satellitesUsed < 0 || __positionKit.satellitesVisible < 0 )
+                 {
+                   return qsTr( "N/A" )
+                 }
                  return __positionKit.satellitesUsed + "/" + __positionKit.satellitesVisible;
                },
                showRightColumn: true
@@ -161,12 +150,15 @@ Drawer {
       append({ FeatureId: 6,
                FeatureTitleLeft: "Speed",
                DescriptionLeft: function () {
-                 return __positionKit.speed + " km/h";
+                 if ( !__positionKit.hasPosition || __positionKit.speed < 0 ) {
+                   return qsTr( "N/A" )
+                 }
+                 return __inputUtils.formatNumber( __positionKit.speed, 2 ) + " km/h";
                },
                showLeftColumn: true,
                FeatureTitleRight: "Last Fix",
                DescriptionRight: function() {
-                 return __positionKit.lastRead
+                 return __positionKit.lastRead.toLocaleTimeString( Qt.locale() ) || qsTr( "N/A" )
                 },
                showRightColumn: true
              });
@@ -174,7 +166,7 @@ Drawer {
       append({ FeatureId: 7,
                FeatureTitleLeft: "GPS antenna height",
                DescriptionLeft: function() {
-                 return __positionKit.gpsAntennaHeight > 0 ? __positionKit.gpsAntennaHeight + " m" : qsTr( "Not set" )
+                 return __appSettings.gpsAntennaHeight > 0 ? __inputUtils.formatNumber(__appSettings.gpsAntennaHeight, 3) + " m" : qsTr( "Not set" )
                },
                showLeftColumn: true,
              });
@@ -262,7 +254,7 @@ Drawer {
             Column {
               width: parent.width * 0.5
               height: parent.height
-              visible: showLeftColumn
+              visible: showLeftColumn ? true : false
 
               Text {
                 text: FeatureTitleLeft
@@ -289,7 +281,7 @@ Drawer {
             Column {
               width: parent.width * 0.5
               height: parent.height
-              visible: showRightColumn
+              visible: showRightColumn ? true : false
 
               Text {
                 text: FeatureTitleRight
@@ -304,7 +296,7 @@ Drawer {
               }
 
               Text {
-                text: DescriptionRight
+                text: DescriptionRight.toString()
                 color: __style.nightColor
                 font: __style.t3
                 width: parent.width
@@ -348,13 +340,13 @@ Drawer {
       }
     }
 
-    // Component {
-    //   id: positionProviderComponent
-    //   PositionProviderPage {
-    //     onClose: additionalContent.pop(null)
-    //     stackView: additionalContent
-    //     Component.onCompleted: forceActiveFocus()
-    //   }
-    // }
+    Component {
+      id: positionProviderComponent
+      PositionProviderPage {
+        onClose: additionalContent.pop(null)
+        stackView: additionalContent
+        Component.onCompleted: forceActiveFocus()
+      }
+    }
   }
 }

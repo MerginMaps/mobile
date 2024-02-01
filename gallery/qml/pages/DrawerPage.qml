@@ -33,6 +33,10 @@ Page {
       text: "Synchronization Failed"
       onClicked: drawer3.visible = true
     }
+    MMButton {
+      text: "Gps Data Page"
+      onClicked: drawer4.visible = true
+    }
   }
 
   MMDrawer {
@@ -55,7 +59,6 @@ Page {
     bigTitle: "You have reached a data limit"
     primaryButton: "Manage Subscription"
     specialComponent: component.comp
-    visible: true
 
     MMComponent_reachedDataLimit {
       id: component
@@ -80,5 +83,11 @@ Page {
 
     onPrimaryButtonClicked: visible = false
     onSecondaryButtonClicked: visible = false
+  }
+
+  MMGpsDataDrawer {
+    id: drawer4
+    title: "Gps Info"
+    visible: true
   }
 }
