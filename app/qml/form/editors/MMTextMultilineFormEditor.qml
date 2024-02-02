@@ -81,6 +81,7 @@ MMBaseInput {
 
     onTextChanged: root.editorValueChanged( text, text === "" )
 
+    // Could in theory be fixed with `inputMethodComposing` TextInput property instead
     onPreeditTextChanged: Qt.inputMethod.commit() // to avoid Android's uncommited text
   }
 

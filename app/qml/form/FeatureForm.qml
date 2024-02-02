@@ -354,7 +354,7 @@ Item {
 
             model: swipeViewRepeater.model.attributeFormProxyModel(formPage.tabIndex)
 
-            delegate: fieldItem
+            delegate: editorComponent
 
             header: Rectangle {
               opacity: 1

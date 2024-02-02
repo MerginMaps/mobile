@@ -31,7 +31,7 @@ Item {
   signal backClicked
 
   implicitHeight: 60 * __dp
-  implicitWidth: Window.width
+  implicitWidth: ApplicationWindow.window.width
 
   Text {
     // If there is a right or a left icon, we need to shift the margin

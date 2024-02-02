@@ -68,6 +68,7 @@ MMTextInput {
   }
 
   // Avoid Android's uncommited text
+  // Could in theory be fixed with `inputMethodComposing` TextInput property instead
   textFieldComponent.onPreeditTextChanged: if ( __androidUtils.isAndroid ) Qt.inputMethod.commit()
 
   QtObject {
