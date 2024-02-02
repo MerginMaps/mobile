@@ -12,20 +12,35 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 import "../components"
 
+/*
+ * Common dropdown input to use in the app.
+ * Disabled state can be achieved by setting `enabled: false`.
+ *
+ * See MMDropdownDrawer to see required roles for dataModel.
+ * See MMBaseInput for more properties.
+ */
+
 MMBaseInput {
   id: root
 
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
 
+  // dataModel is used in the drawer. It must have these roles:
+  // - FeatureId
+  // - FeatureTitle
+  // and it must have `count` function to get the number of items
+  // one can use qml's ListModel or our FeaturesModel.h
+  property var dataModel
+
+  property string dropDownTitle: ""
   property bool multiSelect: false
-  property var featuresModel
-  property string dropDownTitle
+  property bool withSearchbar: false
   property var preselectedFeatures: []
 
   hasFocus: textField.activeFocus
 
-  signal featureClicked( var selectedFeatures )
+  signal selectionFinished( var selectedFeatures )
 
   content: TextField {
     id: textField
@@ -49,7 +64,7 @@ MMBaseInput {
       anchors.fill: parent
       onClicked: function( mouse ) {
         mouse.accepted = true
-        console.log( "Open draweeer!" )
+        openDrawer()
       }
     }
 
@@ -70,34 +85,40 @@ MMBaseInput {
     if ( !root.enabled )
       return
 
-    console.log( "Open draweeer!" )
-//    listLoader.active = true
-//    listLoader.focus = true
+    openDrawer()
   }
 
-//  Loader {
-//    id: listLoader
+  Loader {
+    id: drawerLoader
 
-//    asynchronous: true
-//    active: false
-//    sourceComponent: listComponent
-//  }
+    asynchronous: true
+    active: false
+    sourceComponent: listComponent
+  }
 
-//  Component {
-//    id: listComponent
+  Component {
+    id: listComponent
 
-//    MMDropdownDrawer {
-//      focus: true
-//      model: root.featuresModel
-//      title: root.dropDownTitle
-//      multiSelect: root.multiSelect
-//      preselectedFeatures: root.preselectedFeatures
+    MMDropdownDrawer {
+      focus: true
+      model: root.dataModel
+      title: root.dropDownTitle
+      multiSelect: root.multiSelect
+      withSearchbar: root.withSearchbar
+      selectedFeatures: root.preselectedFeatures
 
-//      Component.onCompleted: open()
-//      onClosed: listLoader.active = false
-//      onFeatureClicked: function(selectedFeatures) {
-//        root.featureClicked( selectedFeatures )
-//      }
-//    }
-//  }
+      onClosed: drawerLoader.active = false
+
+      onSelectionFinished: function ( selectedFeatures ) {
+        root.selectionFinished( selectedFeatures )
+      }
+
+      Component.onCompleted: open()
+    }
+  }
+
+  function openDrawer() {
+    drawerLoader.active = true
+    drawerLoader.focus = true
+  }
 }

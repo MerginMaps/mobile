@@ -44,65 +44,81 @@ MMDropdownInput {
 
   enabled: !_fieldIsReadOnly
 
+  dataModel: listModel
+  multiSelect: false
+  withSearchbar: false
+
+  onSelectionFinished: function ( selectedFeatures ) {
+
+    if ( !selectedFeatures || ( Array.isArray( selectedFeatures ) && selectedFeatures.length !== 1 ) ) {
+      // should not happen...
+      __inputUtils.log( "Value map", root._fieldTitle + " received unexpected values" )
+      return
+    }
+
+    root.editorValueChanged( selectedFeatures[0], selectedFeatures[0] === null )
+  }
+
   on_FieldValueChanged: {
 
     if ( _fieldValueIsNull ) {
       text = ""
+      preselectedFeatures = []
     }
 
     // let's find the new value in the model
-    for ( let i = 0; i < internal.modelData.count; i++ ) {
-      let item_i = internal.modelData.get( i )
+    for ( let i = 0; i < listModel.count; i++ ) {
+      let item_i = listModel.get( i )
 
-      if ( _fieldValue.toString() === item_i.data.toString() ) {
-        text = item_i.display
+      if ( _fieldValue.toString() === item_i.FeatureId.toString() ) {
+        text = item_i.FeatureTitle
+        preselectedFeatures = [item_i.FeatureId]
       }
     }
   }
 
-  QtObject {
-    id: internal
+  ListModel { id: listModel }
 
-    property ListModel modelData: ListModel { id: listModel }
+  Component.onCompleted: {
 
-    Component.onCompleted: {
+    //
+    // Parses value map options from config into ListModel.
+    // This functionality should be moved to FeaturesListModel(?) in order to support search.
+    //
 
-      //
-      // Parses value map options from config into ListModel.
-      // This functionality should be moved to FeaturesListModel(?) in order to support search.
-      //
+    if ( !root._fieldConfig['map'] ) {
+      __inputUtils.log( "Value map", root._fieldTitle + " config is not configured properly" )
+    }
 
-      if ( !root._fieldConfig['map'] ) {
-        __inputUtils.log( "Value map", root._fieldTitle + " config is not configured properly" )
-      }
+    let config = root._fieldConfig['map']
 
-      let config = root._fieldConfig['map']
-
-      if ( config.length )
+    if ( config.length )
+    {
+      //it's a list (>=QGIS3.0)
+      for ( var i = 0; i < config.length; i++ )
       {
-        //it's a list (>=QGIS3.0)
-        for ( var i = 0; i < config.length; i++ )
-        {
-          let modelItem = {
-            display: Object.keys( config[i] )[0],
-            data: Object.values( config[i] )[0]
-          }
+        // Intentionally using roles "FeatureXYZ" here so that it mimics
+        // the FeaturesListModel and can be used in the DropdownDrawer
+        let modelItem = {
+          FeatureTitle: Object.keys( config[i] )[0],
+          FeatureId: Object.values( config[i] )[0]
+        }
 
-          listModel.append( modelItem )
+        listModel.append( modelItem )
 
-          // Is this the current item? If so, set the text
-          if ( !root._fieldValueIsNull ) {
-            if ( root._fieldValue.toString() === modelItem.data.toString() ) {
-              root.text = modelItem.display
-            }
+        // Is this the current item? If so, set the text
+        if ( !root._fieldValueIsNull ) {
+          if ( root._fieldValue.toString() === modelItem.FeatureId.toString() ) {
+            root.text = modelItem.FeatureTitle
+            root.preselectedFeatures = [modelItem.FeatureId]
           }
         }
       }
-      else
-      {
-        //it's a map (<=QGIS2.18) <--- sorry, dropped support for that in 2024.1.0
-        __inputUtils.log( "Value map", root._fieldTitle + " is using unsupported format (list, <=QGIS2.18)" )
-      }
+    }
+    else
+    {
+      //it's a map (<=QGIS2.18) <--- sorry, dropped support for that in 2024.1.0
+      __inputUtils.log( "Value map", root._fieldTitle + " is using unsupported format (list, <=QGIS2.18)" )
     }
   }
 }

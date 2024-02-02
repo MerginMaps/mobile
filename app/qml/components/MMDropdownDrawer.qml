@@ -18,13 +18,16 @@ Drawer {
 
   property alias title: title.text
   property alias model: listView.model
+
+  property bool withSearchbar: true
+
   property bool multiSelect: false
-  property int minFeaturesCountToFullScreenMode: 4
-  property var preselectedFeatures: []
+  property var selectedFeatures: [] // in/out property, contains list of selected feature ids
+  property int minFeaturesCountToFullScreenMode: 6
 
   padding: 20 * __dp
 
-  signal featureClicked( var selectedFeatures )
+  signal selectionFinished( var selectedFeatures )
 
   width: ApplicationWindow.window.width
   height: (mainColumn.height > ApplicationWindow.window.height ? ApplicationWindow.window.height : mainColumn.height) - 20 * __dp
@@ -80,7 +83,7 @@ Drawer {
 
           MouseArea {
             anchors.fill: parent
-            onClicked: root.visible = false
+            onClicked: root.close()
           }
         }
       }
@@ -91,7 +94,7 @@ Drawer {
         width: parent.width - 2 * root.padding
         placeholderText: qsTr("Text value")
         bgColor: __style.lightGreenColor
-        visible: root.model.count >= root.minFeaturesCountToFullScreenMode
+        visible: root.withSearchbar
 
         onSearchTextChanged: function(text) {
           root.model.searchExpression = text
@@ -114,12 +117,11 @@ Drawer {
           return 0
         }
         clip: true
-        currentIndex: -1
 
         delegate: Item {
           id: delegate
 
-          property bool checked: root.multiSelect ? root.preselectedFeatures.includes(model.FeatureId) : listView.currentIndex === model.index
+          property bool checked: root.selectedFeatures.includes( model.FeatureId )
 
           width: listView.width
           height: internal.comboBoxItemHeight
@@ -160,14 +162,15 @@ Drawer {
           MouseArea {
             anchors.fill: parent
             onClicked: {
-              listView.currentIndex = model.index
-              if(root.multiSelect) {
+              if ( root.multiSelect ) {
                 delegate.checked = !delegate.checked
-                delegate.forceActiveFocus()
+
+                // add or remove the item from the selected features list
+                addOrRemoveFeature( model.FeatureId )
               }
               else {
-                root.featureClicked(model.FeatureId)
-                close()
+                root.selectionFinished( [model.FeatureId] )
+                root.close()
               }
             }
           }
@@ -188,13 +191,27 @@ Drawer {
 
       onClicked: {
         let selectedFeatures = []
-        for(let i=0; i<listView.model.count; i++) {
-          if(listView.itemAtIndex(i).checked)
-            selectedFeatures.push(listView.model.get(i).FeatureId)
+
+        for ( let i = 0; i < listView.model.count; i++ ) {
+          if ( listView.itemAtIndex(i).checked )
+            selectedFeatures.push( listView.model.get(i).FeatureId )
         }
-        root.featureClicked(selectedFeatures)
+
+        root.selectionFinished( selectedFeatures )
         close()
       }
+    }
+  }
+
+  function addOrRemoveFeature( fid )
+  {
+    if ( selectedFeatures.indexOf( fid ) === -1 )
+    {
+      root.selectedFeatures.push( fid )
+    }
+    else
+    {
+      root.selectedFeatures = root.selectedFeatures.filter( function (_id) { return _id !== fid } )
     }
   }
 
