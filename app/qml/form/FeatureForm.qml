@@ -388,6 +388,111 @@ Item {
     }
   }
 
+  Component {
+    id: editorComponent
+
+    Item {
+
+      width: ListView.view.width
+      implicitHeight: childrenRect.height
+
+      // TODO: filter such fields in field proxy model instead
+//      property bool shouldBeVisible: Type !== FormItem.Invalid && Type !== FormItem.Container
+      visible: Type !== FormItem.Invalid && Type !== FormItem.Container
+
+
+      Loader {
+        id: formEditorsLoader
+
+        //
+        // Maybe one day we could use DelegateChooser instead of this hack-ish approach, see:
+        // https://doc.qt.io/qt-6/qml-qt-labs-qmlmodels-delegatechooser.html
+        //
+
+        width: parent.width
+
+        property var fieldValue: model.RawValue
+        property bool fieldValueIsNull: model.RawValueIsNull
+
+        property var field: model.Field
+        property var fieldWidget: model.EditorWidget
+        property var fieldConfig: model.EditorWidgetConfig
+
+//        property var homePath: form.project ? form.project.homePath : ""
+//        property var externalResourceHandler: form.externalResourceHandler
+
+        property bool fieldIsReadOnly: form.state === "readOnly" || !AttributeEditable
+        property bool fieldShouldShowTitle: model.ShowName
+
+        property string fieldTitle: model.Name
+        property string fieldErrorMessage: model.ValidationStatus === FieldValidator.Error ? model.ValidationMessage : ""
+        property string fieldWarningMessage: model.ValidationStatus === FieldValidator.Warning ? model.ValidationMessage : ""
+
+        property var fieldActiveProject: form.project
+        property var fieldAssociatedRelation: model.Relation
+        property var fieldFeatureLayerPair: form.controller.featureLayerPair
+
+        active: fieldWidget !== 'Hidden'
+
+        Keys.forwardTo: backHandler
+
+        source: {
+          if ( model.EditorWidget !== undefined ) {
+            return __inputUtils.getFormEditorType( model.EditorWidget, model.EditorWidgetConfig, model.Field )
+          }
+
+          return ''
+        }
+      }
+
+      Connections {
+        target: formEditorsLoader.item
+        ignoreUnknownSignals: true
+
+        function onEditorValueChanged( newVal, isNull ) {
+          model.AttributeValue = isNull ? undefined : newVal
+        }
+      }
+
+      Connections {
+        target: form.controller
+
+        // Important for relation form editors
+        function onFeatureLayerPairChanged() {
+          if ( formEditorsLoader.item && formEditorsLoader.item.featureLayerPairChanged )
+          {
+            formEditorsLoader.item.featureLayerPairChanged()
+          }
+        }
+
+        // Important for value relation form editors
+        function onFormRecalculated() {
+          if ( formEditorsLoader.item && formEditorsLoader.item.reload )
+          {
+            formEditorsLoader.item.reload()
+          }
+        }
+      }
+
+      Connections {
+        target: form
+        ignoreUnknownSignals: true
+
+        function onSaved() {
+          if (formEditorsLoader.item && typeof formEditorsLoader.item.callbackOnSave === "function") {
+            formEditorsLoader.item.callbackOnSave()
+          }
+        }
+
+        function onCanceled() {
+          if (formEditorsLoader.item && typeof formEditorsLoader.item.callbackOnCancel === "function") {
+            formEditorsLoader.item.callbackOnCancel()
+          }
+        }
+      }
+    }
+  }
+
   /**
    * A field editor
    */

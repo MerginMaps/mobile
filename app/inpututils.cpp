@@ -1041,6 +1041,10 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
     }
     return QUrl( path.arg( QLatin1String( "MMTextFormEditor" ) ) );
   }
+  else if ( widgetName == QStringLiteral( "datetime" ) )
+  {
+    return QUrl( path.arg( QLatin1String( "MMCalendarFormEditor" ) ) );
+  }
   else if ( field.name().contains( "qrcode", Qt::CaseInsensitive ) || field.alias().contains( "qrcode", Qt::CaseInsensitive ) )
   {
     return QUrl( path.arg( QStringLiteral( "MMScannerFormEditor" ) ) );
