@@ -16,6 +16,8 @@ class  GpsDataHelper : public QObject
     Q_PROPERTY( double horizontalAccuracy READ horizontalAccuracy CONSTANT )
     Q_PROPERTY( double altitude READ altitude CONSTANT )
     Q_PROPERTY( double speed READ speed CONSTANT )
+    Q_PROPERTY( double x READ x CONSTANT )
+    Q_PROPERTY( double y READ y CONSTANT )
     Q_PROPERTY( int satellitesUsed READ satellitesUsed CONSTANT )
     Q_PROPERTY( int satellitesVisible READ satellitesVisible CONSTANT )
     Q_PROPERTY( bool hasPosition READ hasPosition CONSTANT )

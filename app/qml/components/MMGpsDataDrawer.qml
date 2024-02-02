@@ -87,13 +87,13 @@ Drawer {
       ScrollView {
 
         width: parent.width
-        height: (7 * (__style.comboBoxItemHeight + 20)) * __dp
+        height: ( 7 * ( __style.comboBoxItemHeight + 20 ) ) * __dp
         contentWidth: rectangleContent.width
         contentHeight: rectangleContent.height
 
         Rectangle {
           id: rectangleContent
-          width: parent.width - 2 * root.padding
+          width: parent.width - (2 * root.padding)
           height: childrenRect.height
 
           Column{
@@ -106,12 +106,12 @@ Drawer {
 
               MMGpsDataText{
                 titleText: "Source"
-                descriptionText: "desc"
+                descriptionText: __positionKit.positionProvider ? __positionKit.providerName : qsTr( "No receiver" )
               }
 
               MMGpsDataText{
                 titleText: "Status"
-                descriptionText: "desc2"
+                descriptionText: __positionKit.positionProvider ? __positionKit.providerMessage : ""
                 alignmentRight: true
               }
             }
@@ -124,12 +124,22 @@ Drawer {
 
               MMGpsDataText{
                 titleText: "Latitude"
-                descriptionText: "desc"
+                descriptionText: {
+                  if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.latitude ) ) {
+                    qsTr( "N/A" )
+                  }
+                  __positionKit.latitude
+                }
               }
 
               MMGpsDataText{
                 titleText: "Longitude"
-                descriptionText: "desc2"
+                descriptionText: {
+                  if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.longitude ) ) {
+                    qsTr( "N/A" )
+                  }
+                  __positionKit.longitude
+                }
                 alignmentRight: true
               }
             }
@@ -142,12 +152,22 @@ Drawer {
 
               MMGpsDataText{
                 titleText: "X"
-                descriptionText: "desc"
+                descriptionText: {
+                  if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.x ) ) {
+                    qsTr( "N/A" )
+                  }
+                  __positionKit.x.toFixed(2)
+                }
               }
 
               MMGpsDataText{
                 titleText: "Y"
-                descriptionText: "desc2"
+                descriptionText: {
+                  if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.x ) ) {
+                    qsTr( "N/A" )
+                  }
+                  __positionKit.y.toFixed(2)
+                }
                 alignmentRight: true
               }
             }
@@ -160,12 +180,24 @@ Drawer {
 
               MMGpsDataText{
                 titleText: "Horizontal accuracy"
-                descriptionText: "desc"
+                descriptionText: {
+                  if ( !__positionKit.hasPosition || __positionKit.horizontalAccuracy < 0 ) {
+                    return qsTr( "N/A" )
+                  }
+
+                  __positionKit.horizontalAccuracy.toFixed(2) + " m"
+                }
               }
 
               MMGpsDataText{
                 titleText: "Vertical accuracy"
-                descriptionText: "desc2"
+                descriptionText: {
+                  if ( !__positionKit.hasPosition || __positionKit.verticalAccuracy < 0 ) {
+                    return qsTr( "N/A" )
+                  }
+
+                  __positionKit.verticalAccuracy.toFixed(2) + " m"
+                }
                 alignmentRight: true
               }
             }
@@ -178,12 +210,24 @@ Drawer {
 
               MMGpsDataText{
                 titleText: "Altitude"
-                descriptionText: "desc"
+                descriptionText: {
+                  if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.altitude ) ) {
+                    return qsTr( "N/A" )
+                  }
+                  __positionKit.altitude.toString() + " m"
+                }
               }
 
               MMGpsDataText{
                 titleText: "Satellites (in use/view)"
-                descriptionText: "desc2"
+                descriptionText: {
+                  if ( __positionKit.satellitesUsed < 0 || __positionKit.satellitesVisible < 0 )
+                  {
+                    return qsTr( "N/A" )
+                  }
+
+                  __positionKit.satellitesUsed + "/" + __positionKit.satellitesVisible
+                }
                 alignmentRight: true
               }
             }
@@ -196,12 +240,18 @@ Drawer {
 
               MMGpsDataText{
                 titleText: "Speed"
-                descriptionText: "desc"
+                descriptionText: {
+                  if ( !__positionKit.hasPosition || __positionKit.speed < 0 ) {
+                    return qsTr( "N/A" )
+                  }
+
+                  __positionKit.speed.toString(2) + " km/h"
+                }
               }
 
               MMGpsDataText{
                 titleText: "Last Fix"
-                descriptionText: "desc2"
+                descriptionText: __positionKit.lastRead || qsTr( "N/A" )
                 alignmentRight: true
               }
             }
@@ -214,7 +264,7 @@ Drawer {
 
               MMGpsDataText{
                 titleText: "GPS antenna height"
-                descriptionText: "desc"
+                descriptionText: __positionKit.gpsAntennaHeight > 0 ? __positionKit.gpsAntennaHeight.toString(3) + " m" : qsTr( "Not set" )
               }
             }
           }
