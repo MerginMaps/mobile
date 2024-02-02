@@ -38,19 +38,21 @@ Image {
     }
   }
 
+  Rectangle {
+    anchors.fill: parent
+    color: __style.whiteColor
+    z: -1
+
+    MMIcon {
+      anchors.centerIn: parent
+      source: __style.morePhotosIcon
+      color: __style.mediumGreenColor
+    }
+  }
+
   MouseArea {
     anchors.fill: parent
     onClicked: control.clicked(control.photoUrl)
-  }
-
-  Rectangle {
-    anchors.centerIn: parent
-    width: parent.width
-    height: parent.height
-    radius: 20 * __dp
-    color: __style.transparentColor
-    border.color: __style.forestColor
-    border.width: 1 * __dp
   }
 
   onStatusChanged: {
