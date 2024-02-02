@@ -16,26 +16,36 @@ import "../../inputs"
 MMBaseInput {
   id: root
 
-  property var parentField: parent.field ?? ""
-  property var parentValue: parent.value ?? ""
-  property bool parentValueIsNull: parent.valueIsNull ?? true
-  property bool isReadOnly: parent.readOnly ?? false
+  property var _field: parent.field
+  property var _fieldValue: parent.fieldValue
+  property var _fieldConfig: parent.fieldConfig
+  property bool _fieldValueIsNull: parent.fieldValueIsNull
 
-  property var config
-  property bool fieldIsDate: __inputUtils.fieldType( field ) === 'QDate'
-  property var typeFromFieldFormat: __inputUtils.dateTimeFieldFormat( config['field_format'] )
+  property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
+  property bool _fieldIsReadOnly: parent.fieldIsReadOnly
+
+  property string _fieldTitle: parent.fieldTitle
+  property string _fieldErrorMessage: parent.fieldErrorMessage
+  property string _fieldWarningMessage: parent.fieldWarningMessage
+
+  signal editorValueChanged( var newValue, var isNull )
+
+  property bool fieldIsDate: __inputUtils.fieldType( _field ) === 'QDate'
+  property var typeFromFieldFormat: __inputUtils.dateTimeFieldFormat( _fieldConfig['field_format'] )
   property bool includesTime: typeFromFieldFormat.includes("Time")
   property bool includesDate: typeFromFieldFormat.includes("Date")
-  property bool showSeconds: false
+  property bool showSeconds: true
 
   property date dateTime
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
 
-  signal editorValueChanged( var newValue, var isNull )
-  signal selected(date newDateTime)
+  title: _fieldShouldShowTitle ? _fieldTitle : ""
 
-  enabled: !isReadOnly
+  warningMsg: _fieldWarningMessage
+  errorMsg: _fieldErrorMessage
+
+  enabled: !_fieldIsReadOnly
   hasFocus: textField.activeFocus
 
   content: TextField {
@@ -43,11 +53,18 @@ MMBaseInput {
 
     anchors.fill: parent
 
-    text: root.parentValue
+    text: formatText( root._fieldValue )
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
     placeholderTextColor: __style.nightAlphaColor
     font: __style.p5
     hoverEnabled: true
+
+    // Not decided yet if we want to keep this editable or not... test and see!
+    inputMethodHints: Qt.ImhDate | Qt.ImhTime
+
+    onTextEdited: {
+      root.editorValueChanged( textField.text, textField.text === "" )
+    }
 
     background: Rectangle {
       color: __style.transparentColor
@@ -64,11 +81,11 @@ MMBaseInput {
   }
 
   onRightActionClicked: {
-    if (root.parentValueIsNull) {
+    if (root._fieldValueIsNull) {
       root.openPicker( new Date() )
     }
     else {
-      root.openPicker( dateTransformer.toJsDate(root.parentValue) )
+      root.openPicker( dateTransformer.toJsDate(root._fieldValue) )
     }
   }
 
@@ -86,14 +103,18 @@ MMBaseInput {
     MMCalendarDrawer {
       id: dateTimeDrawer
 
-      title: root.fieldIsDate ? qsTr("Date") : qsTr("Date & Time")
-      dateTime: root.dateTime
+      title: root._fieldTitle
+      dateTime: root._fieldValueIsNull ? new Date() : dateTransformer.toJsDate( root._fieldValue )
       hasDatePicker: root.includesDate
       hasTimePicker: root.includesTime
       showSeconds: root.showSeconds
 
-      onPrimaryButtonClicked: root.selected(dateTimeDrawer.dateTime)
+      onPrimaryButtonClicked: {
+        root.newDateSelected( dateTime )
+      }
+
       onClosed: dateTimeDrawerLoader.active = false
+
       Component.onCompleted: open()
     }
   }
@@ -103,7 +124,7 @@ MMBaseInput {
     // When changing this function, test with various timezones!
     // On desktop, use environment variable TZ, e.g. TZ=America/Mexico_City (UTC-5)
     function toJsDate(qtDate) {
-      if ( root.parentField.isDateOrTime ) {
+      if ( root._field.isDateOrTime ) {
         if (root.fieldIsDate) {
           if (qtDate.getUTCHours() === 0)
           {
@@ -133,32 +154,33 @@ MMBaseInput {
       else {
         // This is the case when the date coming from C++ is pure string, so we
         // need to convert it to JS Date ourselves
-        return Date.fromLocaleString(Qt.locale(), qtDate, config['field_format'])
+        return Date.fromLocaleString(Qt.locale(), qtDate, root._fieldConfig['field_format'])
       }
     }
   }
 
   function newDateSelected( jsDate ) {
+
     if ( jsDate ) {
-      if ( root.parentField.isDateOrTime ) {
+      if ( root._field.isDateOrTime ) {
         // For QDate, the year, month and day is clipped based on
         // the local timezone in QgsFeature.convertCompatible
-        root.editorValueChanged( jsDate, false  )
+        root.editorValueChanged( jsDate, false )
       }
       else {
-        let qtDate = jsDate.toLocaleString(Qt.locale(), config['field_format'])
+        let qtDate = jsDate.toLocaleString(Qt.locale(), root._fieldConfig['field_format'])
         root.editorValueChanged(qtDate, false)
       }
     }
   }
 
   function formatText( qtDate ) {
-    if ( qtDate === undefined || root.parentValueIsNull ) {
+    if ( qtDate === undefined || root._fieldValueIsNull ) {
       return ''
     }
     else {
       let jsDate = dateTransformer.toJsDate(qtDate)
-      return Qt.formatDateTime(jsDate, config['display_format'])
+      return Qt.formatDateTime(jsDate, root._fieldConfig['display_format'])
     }
   }
 

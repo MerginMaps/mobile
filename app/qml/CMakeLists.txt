@@ -69,6 +69,16 @@ set(MM_QML
     components/MMToolbarLongButton.qml
     components/MMToolbarMenuButton.qml
     components/MMWarningBubble.qml
+
+    components/MMCalendarDrawer.qml
+    components/MMTumbler.qml
+    components/calendar/MMDateTimePicker.qml
+    components/calendar/MMTimeTumbler.qml
+    components/calendar/MMMonthGrid.qml
+    components/calendar/MMDayOfWeekRow.qml
+    components/calendar/MMDateTumbler.qml
+    components/calendar/MMAmPmSwitch.qml
+
     onboarding/MMAcceptInvitation.qml
     onboarding/MMCreateWorkspace.qml
     onboarding/MMHowYouFoundUs.qml
