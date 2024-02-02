@@ -53,7 +53,7 @@ public:
 
 private:
     QString pProviderName = "Gps Source is ok!";
-    QString pProviderType = "Internal";
+    QString pProviderType = "external";
     QString pProviderMessage = "Connected";
     QString pStateMessage = "Message";
     QString pLastRead = "17:19:08 CEST";

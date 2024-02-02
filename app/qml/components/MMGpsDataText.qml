@@ -7,13 +7,14 @@ Item {
     property string titleText: "Title"
     property string descriptionText: "Description goes here"
     property bool alignmentRight: false
+    property bool itemVisible: true
 
     width: parent.width / 2
     height: parent.height
 
     Column {
-        anchors.fill: parent
-        spacing: 10
+        width: parent.width
+        visible: itemVisible
 
         Text {
             text: titleText
@@ -21,6 +22,8 @@ Item {
             font: __style.p6
             wrapMode: Text.WordWrap
             horizontalAlignment: alignmentRight ? Text.AlignRight : Text.AlignLeft
+            anchors.top: parent.top
+            anchors.topMargin: 8
             width: parent.width
         }
 
@@ -30,6 +33,8 @@ Item {
             font: __style.t3
             wrapMode: Text.WordWrap
             horizontalAlignment: alignmentRight ? Text.AlignRight : Text.AlignLeft
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 8
             width: parent.width
         }
     }

@@ -23,8 +23,7 @@ Drawer {
   padding: 20 * __dp
 
   width: ApplicationWindow.window.width
-  //height: (mainColumn.height > ApplicationWindow.window.height ? ApplicationWindow.window.height : mainColumn.height) - 20 * __dp
-  height: ApplicationWindow.window.height - 200
+  height: (mainColumn.height > ApplicationWindow.window.height ? ApplicationWindow.window.height : mainColumn.height) - 20 * __dp
   edge: Qt.BottomEdge
 
   Rectangle {
@@ -44,6 +43,7 @@ Drawer {
     color: __style.whiteColor
 
     Column {
+
       id: mainColumn
 
       width: parent.width
@@ -87,14 +87,13 @@ Drawer {
       ScrollView {
 
         width: parent.width
-        height: ( 7 * ( __style.comboBoxItemHeight + 20 ) ) * __dp
-        contentWidth: rectangleContent.width
+        contentWidth: parent.width
         contentHeight: rectangleContent.height
 
         Rectangle {
           id: rectangleContent
           width: parent.width - (2 * root.padding)
-          height: childrenRect.height
+          height: (__style.comboBoxItemHeight * 7) + header.height + primaryButton.height
 
           Column{
             width: parent.width
@@ -113,6 +112,7 @@ Drawer {
                 titleText: "Status"
                 descriptionText: __positionKit.positionProvider ? __positionKit.providerMessage : ""
                 alignmentRight: true
+                itemVisible: __positionKit.positionProvider && __positionKit.providerType === "external"
               }
             }
 
@@ -283,7 +283,8 @@ Drawer {
       text: qsTr("Manage GPS receivers")
 
       onClicked: {
-        additionalContent.push( positionProviderComponent )
+        //additionalContent.push( positionProviderComponent )
+        console.log("GPS data drawer button test OK")
       }
     }
   }
