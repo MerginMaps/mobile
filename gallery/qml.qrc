@@ -88,5 +88,7 @@
         <file>qml/pages/FormPage.qml</file>
         <file>../app/qml/form/MMFormTabBar.qml</file>
         <file>../app/qml/components/MMGpsDataDrawer.qml</file>
+        <file>../app/qml/components/MMGpsDataText.qml</file>
+        <file>../app/qml/components/MMSpacer.qml</file>
     </qresource>
 </RCC>

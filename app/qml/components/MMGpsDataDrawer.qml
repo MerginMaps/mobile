@@ -19,12 +19,12 @@ Drawer {
 
   property alias title: title.text
   property int minFeaturesCountToFullScreenMode: 4
-  //property string coordinatesInDegrees: __inputUtils.degreesString( __positionKit.positionCoordinate )
 
   padding: 20 * __dp
 
   width: ApplicationWindow.window.width
-  height: (mainColumn.height > ApplicationWindow.window.height ? ApplicationWindow.window.height : mainColumn.height) - 20 * __dp
+  //height: (mainColumn.height > ApplicationWindow.window.height ? ApplicationWindow.window.height : mainColumn.height) - 20 * __dp
+  height: ApplicationWindow.window.height - 200
   edge: Qt.BottomEdge
 
   Rectangle {
@@ -35,150 +35,6 @@ Drawer {
     height: 2 * radius
     anchors.topMargin: -radius
     radius: 20 * __dp
-  }
-
-  ListModel {
-    id : model
-
-    Component.onCompleted: {
-
-      var source = __positionKit.positionProvider ? __positionKit.providerName: qsTr( "No receiver" )
-      var status = __positionKit.positionProvider ? __positionKit.providerMessage : ""
-
-      //var string latitude = { return __positionKit.latitude}
-      // var longitude = {
-      //     if (!__positionKit.hasPosition || Number.isNaN(__positionKit.latitude)) {
-      //         return "N/A";
-      //     }
-
-      //     let coordParts = root.coordinatesInDegrees.split(", ")
-      //     if (coordParts.length > 1) {
-      //         return coordParts[0];
-      //     }
-
-      //     return "N/A";
-      // }
-
-      //var latitude = 22
-
-      append({ FeatureId: 1,
-               FeatureTitleLeft: "Source",
-               //DescriptionLeft: source,
-               DescriptionLeft: function () {
-                   if (!__positionKit.hasPosition || Number.isNaN(__positionKit.latitude)) {
-                       return "N/A";
-                   }
-
-                   let coordParts = root.coordinatesInDegrees.split(", ")
-                   if (coordParts.length > 1) {
-                       return coordParts[0];
-                   }
-
-                   return "N/A";
-               },
-               showLeftColumn: true,
-               FeatureTitleRight: "Status",
-               DescriptionRight: status,
-               showRightColumn: true
-               // showRightColumn: function() {
-               //   return (__positionKit.positionProvider && __positionKit.providerType) === "external" ? true: false;
-               // }
-             });
-
-      append({ FeatureId: 2,
-               FeatureTitleLeft: "Latitude",
-               DescriptionLeft: function () {
-                 return  __positionKit.latitude
-               },
-               // DescriptionLeft: function () {
-               //     if (!__positionKit.hasPosition || Number.isNaN(__positionKit.latitude)) {
-               //         return "N/A";
-               //     }
-
-               //     let coordParts = root.coordinatesInDegrees.split(", ")
-               //     if (coordParts.length > 1) {
-               //         return coordParts[0];
-               //     }
-
-               //     return "N/A";
-               // },
-               showLeftColumn: __positionKit.hasPosition,
-               FeatureTitleRight: "Longitude",
-               DescriptionRight: __positionKit.longitude,
-               // DescriptionRight: {
-               //   if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.longitude ) ) {
-               //     return "N/A";
-               //   }
-
-               //   let coordParts = root.coordinatesInDegrees.split(", ")
-               //   if ( coordParts.length > 1 )
-               //     return coordParts[0]
-
-               //   return "N/A";
-               // },
-               showRightColumn: __positionKit.hasPosition 
-             });
-
-      append({ FeatureId: 3,
-               FeatureTitleLeft: "X",
-               DescriptionLeft: function () {
-                 return __positionKit.x
-               },
-               showLeftColumn: true,
-               FeatureTitleRight: "Y",
-               DescriptionRight: function (){
-                 return __positionKit.y
-               },
-               showRightColumn: true
-             });
-
-      append({ FeatureId: 4,
-               FeatureTitleLeft: "Horizontal accuracy",
-               DescriptionLeft: function () {
-                 return __positionKit.horizontalAccuracy
-               },
-               showLeftColumn: true,
-               FeatureTitleRight: "Vertical accuracy",
-               DescriptionRight: function () {
-                 return __positionKit.verticalAccuracy
-               },
-               showRightColumn: true
-             });
-
-      append({ FeatureId: 5,
-               FeatureTitleLeft: "Altitude",
-               DescriptionLeft: function () {
-                 return __positionKit.altitude + " m";
-               },
-               showLeftColumn: true,
-               FeatureTitleRight: "Satellites (in use/view)",
-               DescriptionRight: function () {
-                 return __positionKit.satellitesUsed + "/" + __positionKit.satellitesVisible;
-               },
-               showRightColumn: true
-             });
-
-      append({ FeatureId: 6,
-               FeatureTitleLeft: "Speed",
-               DescriptionLeft: function () {
-                 return __positionKit.speed + " km/h";
-               },
-               showLeftColumn: true,
-               FeatureTitleRight: "Last Fix",
-               DescriptionRight: function() {
-                 return __positionKit.lastRead
-                },
-               showRightColumn: true
-             });
-
-      append({ FeatureId: 7,
-               FeatureTitleLeft: "GPS antenna height",
-               DescriptionLeft: function() {
-                 return __positionKit.gpsAntennaHeight > 0 ? __positionKit.gpsAntennaHeight + " m" : qsTr( "Not set" )
-               },
-               showLeftColumn: true,
-             });
-    }
   }
 
   Rectangle {
@@ -197,6 +53,8 @@ Drawer {
       bottomPadding: root.padding
 
       Row {
+
+        id: header
         width: parent.width - 2 * root.padding
         anchors.horizontalCenter: parent.horizontalCenter
 
@@ -226,111 +84,142 @@ Drawer {
         }
       }
 
-      ListView {
-        id: listView
+      ScrollView {
 
-        bottomMargin: primaryButton.height + 80 * __dp
-        width: parent.width - 2 * root.padding
-        height: {
-          if(model.count >= root.minFeaturesCountToFullScreenMode) {
-            if(ApplicationWindow.window)
-              return (ApplicationWindow.window.height) * __dp
-            else return 0
-          }
-          if(model)
-            return model.count * __style.comboBoxItemHeight
-          return 0
-        }
+        width: parent.width
+        height: (7 * (__style.comboBoxItemHeight + 20)) * __dp
+        contentWidth: rectangleContent.width
+        contentHeight: rectangleContent.height
 
-        clip: true
+        Rectangle {
+          id: rectangleContent
+          width: parent.width - 2 * root.padding
+          height: childrenRect.height
 
-        model: model
-
-        delegate: Item {
-          id: delegate
-
-          width: listView.width
-          height: __style.comboBoxItemHeight
-
-          Row {
-            id: itemsRow
+          Column{
+            width: parent.width
             height: parent.height
-            width: parent.width
-            anchors.left: parent.left
-            anchors.right: parent.right
 
-            Column {
-              width: parent.width * 0.5
-              height: parent.height
-              visible: showLeftColumn
+            Row {
+              width: parent.width
+              height: __style.comboBoxItemHeight
 
-              Text {
-                text: FeatureTitleLeft
-                color: __style.nightColor
-                font: __style.p6
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.topMargin: 8
+              MMGpsDataText{
+                titleText: "Source"
+                descriptionText: "desc"
               }
 
-              Text {
-                text: DescriptionLeft
-                color: __style.nightColor
-                font: __style.t3
-                elide: Text.ElideLeft
-                horizontalAlignment: Text.AlignRight
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                anchors.bottomMargin: 8
+              MMGpsDataText{
+                titleText: "Status"
+                descriptionText: "desc2"
+                alignmentRight: true
               }
             }
 
-            Column {
-              width: parent.width * 0.5
-              height: parent.height
-              visible: showRightColumn
+            MMSpacer {}
 
-              Text {
-                text: FeatureTitleRight
-                color: __style.nightColor
-                font: __style.p6
-                width: parent.width
-                horizontalAlignment: Text.AlignRight
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.topMargin: 8
+            Row {
+              width: parent.width
+              height: __style.comboBoxItemHeight
+
+              MMGpsDataText{
+                titleText: "Latitude"
+                descriptionText: "desc"
               }
 
-              Text {
-                text: DescriptionRight
-                color: __style.nightColor
-                font: __style.t3
-                width: parent.width
-                horizontalAlignment: Text.AlignRight
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottomMargin: 8
+              MMGpsDataText{
+                titleText: "Longitude"
+                descriptionText: "desc2"
+                alignmentRight: true
               }
             }
-          }
 
-          Rectangle {
-            width: parent.width
-            height: (1 * __dp) < 1 ? 1 : 1 * __dp
-            color: __style.greyColor
-            visible: true
-            anchors.bottom: parent.bottom
+            MMSpacer {}
+
+            Row {
+              width: parent.width
+              height: __style.comboBoxItemHeight
+
+              MMGpsDataText{
+                titleText: "X"
+                descriptionText: "desc"
+              }
+
+              MMGpsDataText{
+                titleText: "Y"
+                descriptionText: "desc2"
+                alignmentRight: true
+              }
+            }
+
+            MMSpacer {}
+
+            Row {
+              width: parent.width
+              height: __style.comboBoxItemHeight
+
+              MMGpsDataText{
+                titleText: "Horizontal accuracy"
+                descriptionText: "desc"
+              }
+
+              MMGpsDataText{
+                titleText: "Vertical accuracy"
+                descriptionText: "desc2"
+                alignmentRight: true
+              }
+            }
+
+            MMSpacer {}
+
+            Row {
+              width: parent.width
+              height: __style.comboBoxItemHeight
+
+              MMGpsDataText{
+                titleText: "Altitude"
+                descriptionText: "desc"
+              }
+
+              MMGpsDataText{
+                titleText: "Satellites (in use/view)"
+                descriptionText: "desc2"
+                alignmentRight: true
+              }
+            }
+
+            MMSpacer {}
+
+            Row {
+              width: parent.width
+              height: __style.comboBoxItemHeight
+
+              MMGpsDataText{
+                titleText: "Speed"
+                descriptionText: "desc"
+              }
+
+              MMGpsDataText{
+                titleText: "Last Fix"
+                descriptionText: "desc2"
+                alignmentRight: true
+              }
+            }
+
+            MMSpacer {}
+
+            Row {
+              width: parent.width
+              height: __style.comboBoxItemHeight
+
+              MMGpsDataText{
+                titleText: "GPS antenna height"
+                descriptionText: "desc"
+              }
+            }
           }
         }
       }
-    }
-
-    Item {
-      anchors.fill: parent
-      height: 5
     }
 
     MMButton {
@@ -347,14 +236,5 @@ Drawer {
         additionalContent.push( positionProviderComponent )
       }
     }
-
-    // Component {
-    //   id: positionProviderComponent
-    //   PositionProviderPage {
-    //     onClose: additionalContent.pop(null)
-    //     stackView: additionalContent
-    //     Component.onCompleted: forceActiveFocus()
-    //   }
-    // }
   }
 }
