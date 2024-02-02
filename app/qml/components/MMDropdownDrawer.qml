@@ -92,11 +92,17 @@ Drawer {
         id: searchBar
 
         width: parent.width - 2 * root.padding
-        placeholderText: qsTr("Text value")
+        placeholderText: qsTr("Search")
         bgColor: __style.lightGreenColor
         visible: root.withSearchbar
 
         onSearchTextChanged: function(text) {
+
+          // Listview height is derived from the number of items in the model.
+          // We intenionally break the binding here in order to stop evaluating height -
+          // the drawer would jump places otherwise
+          listView.height = listView.height
+
           root.model.searchExpression = text
         }
       }
@@ -107,12 +113,12 @@ Drawer {
         bottomMargin: primaryButton.visible ? primaryButton.height + 20 * __dp : 0
         width: parent.width - 2 * root.padding
         height: {
-          if(root.model.count >= root.minFeaturesCountToFullScreenMode) {
-            if(ApplicationWindow.window)
+          if ( root.model.count >= root.minFeaturesCountToFullScreenMode ) {
+            if ( ApplicationWindow.window )
               return ApplicationWindow.window.height - searchBar.height - 100 * __dp
             else return 0
           }
-          if(root.model)
+          if ( root.model )
             return root.model.count * internal.comboBoxItemHeight
           return 0
         }
@@ -190,14 +196,7 @@ Drawer {
       visible: root.multiSelect
 
       onClicked: {
-        let selectedFeatures = []
-
-        for ( let i = 0; i < listView.model.count; i++ ) {
-          if ( listView.itemAtIndex(i).checked )
-            selectedFeatures.push( listView.model.get(i).FeatureId )
-        }
-
-        root.selectionFinished( selectedFeatures )
+        root.selectionFinished( root.selectedFeatures )
         close()
       }
     }

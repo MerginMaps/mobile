@@ -26,6 +26,8 @@ MMBaseInput {
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
 
+  property alias dropdownLoader: drawerLoader
+
   // dataModel is used in the drawer. It must have these roles:
   // - FeatureId
   // - FeatureTitle

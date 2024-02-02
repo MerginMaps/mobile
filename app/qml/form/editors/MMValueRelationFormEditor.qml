@@ -9,6 +9,7 @@
 
 import QtQuick
 
+import "../../components"
 import "../../inputs"
 import lc 1.0
 
@@ -39,8 +40,6 @@ MMDropdownInput {
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
-  dropDownTitle: _fieldTitle
-
   errorMsg: _fieldErrorMessage
   warningMsg: _fieldWarningMessage
 
@@ -48,6 +47,61 @@ MMDropdownInput {
 
   on_FieldValueChanged: {
     vrModel.pair = root._fieldFeatureLayerPair
+  }
+
+  dropdownLoader.sourceComponent: Component {
+    MMDropdownDrawer {
+      focus: true
+
+      title: root._fieldTitle
+
+      multiSelect: internal.allowMultivalue
+      withSearchbar: vrModel.count > 5
+
+      selectedFeatures: {
+        if ( internal.allowMultivalue ) {
+          root.preselectedFeatures = vrModel.convertFromQgisType( root._fieldValue, FeaturesModel.FeatureId )
+        }
+        else {
+          root.preselectedFeatures = [root._fieldValue]
+        }
+      }
+
+      model: ValueRelationFeaturesModel {
+        id: vrDropdownModel
+
+        config: root._fieldConfig
+        pair: root._fieldFeatureLayerPair
+      }
+
+      onClosed: dropdownLoader.active = false
+
+      onSelectionFinished: function ( selectedFeatures ) {
+
+        if ( internal.allowMultivalue )
+        {
+          let isNull = selectedFeatures.length === 0
+
+          if ( !isNull )
+          {
+            // We need to convert feature id to string prior to sending it to C++ in order to
+            // avoid conversion to scientific notation.
+            selectedFeatures = selectedFeatures.map( function(x) { return x.toString() } )
+          }
+          root.editorValueChanged( vrModel.convertToQgisType( selectedFeatures ), isNull )
+        }
+        else
+        {
+          // We need to convert feature id to string prior to sending it to C++ in order to
+          // avoid conversion to scientific notation.
+          selectedFeatures = selectedFeatures.toString()
+
+          root.editorValueChanged( vrModel.convertToKey( selectedFeatures ), false )
+        }
+      }
+
+      Component.onCompleted: open()
+    }
   }
 
   ValueRelationFeaturesModel {
