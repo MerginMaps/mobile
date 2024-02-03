@@ -1032,45 +1032,45 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
     {
       if ( config["Style"] == QStringLiteral( "Slider" ) )
       {
-        return QUrl( path.arg( QLatin1String( "MMSliderFormEditor" ) ) );
+        return QUrl( path.arg( QLatin1String( "MMFormSliderEditor" ) ) );
       }
       else if ( config["Style"] == QStringLiteral( "SpinBox" ) )
       {
-        return QUrl( path.arg( QLatin1String( "MMNumberFormEditor" ) ) );
+        return QUrl( path.arg( QLatin1String( "MMFormNumberEditor" ) ) );
       }
     }
-    return QUrl( path.arg( QLatin1String( "MMTextFormEditor" ) ) );
+    return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) );
   }
   else if ( widgetName == QStringLiteral( "datetime" ) )
   {
-    return QUrl( path.arg( QLatin1String( "MMCalendarFormEditor" ) ) );
+    return QUrl( path.arg( QLatin1String( "MMFormCalendarEditor" ) ) );
   }
   else if ( field.name().contains( "qrcode", Qt::CaseInsensitive ) || field.alias().contains( "qrcode", Qt::CaseInsensitive ) )
   {
-    return QUrl( path.arg( QStringLiteral( "MMScannerFormEditor" ) ) );
+    return QUrl( path.arg( QStringLiteral( "MMFormScannerEditor" ) ) );
   }
   else if ( widgetName == QStringLiteral( "textedit" ) )
   {
     if ( config.value( "IsMultiline" ).toBool() )
     {
-      return QUrl( path.arg( QStringLiteral( "MMTextMultilineFormEditor" ) ) );
+      return QUrl( path.arg( QStringLiteral( "MMFormTextMultilineEditor" ) ) );
     }
-    return QUrl( path.arg( QLatin1String( "MMTextFormEditor" ) ) );
+    return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) );
   }
   else if ( widgetName == QStringLiteral( "checkbox" ) )
   {
-    return QUrl( path.arg( QLatin1String( "MMSwitchFormEditor" ) ) );
+    return QUrl( path.arg( QLatin1String( "MMFormSwitchEditor" ) ) );
   }
   else if ( widgetName == QStringLiteral( "valuerelation" ) )
   {
-    return QUrl( path.arg( QLatin1String( "MMValueRelationFormEditor" ) ) );
+    return QUrl( path.arg( QLatin1String( "MMFormValueRelationEditor" ) ) );
   }
   else if ( widgetName == QStringLiteral( "valuemap" ) )
   {
-    return QUrl( path.arg( QLatin1String( "MMValueMapFormEditor" ) ) );
+    return QUrl( path.arg( QLatin1String( "MMFormValueMapEditor" ) ) );
   }
 
-  return QUrl( path.arg( QLatin1String( "MMTextFormEditor" ) ) ); // <<------ Mind!
+  return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) ); // <<------ Mind!
 
   QStringList supportedWidgets = { QStringLiteral( "richtext" ),
                                    QStringLiteral( "textedit" ),
