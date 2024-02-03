@@ -9,21 +9,38 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.Basic
 import "../../components"
 import "../../inputs"
 
+/*
+ * Switch (boolean) editor for QGIS Attribute Form
+ * Requires various global properties set to function, see featureform Loader section.
+ * These properties are injected here via 'fieldXYZ' properties and captured with underscore `_`.
+ *
+ * Should be used only within feature form.
+ */
 MMBaseInput {
   id: root
 
-  property var parentValue: parent.value ?? false
-  property bool parentValueIsNull: parent.valueIsNull ?? false
-  property bool isReadOnly: parent.readOnly ?? false
+  property var _field: parent.field
+  property var _fieldValue: parent.fieldValue
+  property var _fieldConfig: parent.fieldConfig
 
-  property alias text: textField.text
-  property alias checked: rightSwitch.checked
+  property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
+  property bool _fieldIsReadOnly: parent.fieldIsReadOnly
+
+  property string _fieldTitle: parent.fieldTitle
+  property string _fieldErrorMessage: parent.fieldErrorMessage
+  property string _fieldWarningMessage: parent.fieldWarningMessage
 
   signal editorValueChanged( var newValue, var isNull )
+
+  title: _fieldShouldShowTitle ? _fieldTitle : ""
+
+  warningMsg: _fieldWarningMessage
+  errorMsg: _fieldErrorMessage
+
+  enabled: !_fieldIsReadOnly
 
   hasFocus: rightSwitch.focus
 
@@ -33,9 +50,15 @@ MMBaseInput {
     width: parent.width + rightSwitch.x
     anchors.verticalCenter: parent.verticalCenter
 
+    text: rightSwitch.checked ? internal.checkedStateValue : internal.uncheckedStateValue
+
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
     font: __style.p5
     elide: Text.ElideRight
+  }
+
+  onContentClicked: {
+    rightSwitch.toggle()
   }
 
   rightAction: MMSwitch {
@@ -45,8 +68,25 @@ MMBaseInput {
     height: parent.height
     x: -30 * __dp
 
-    checked: root.checked
+    checked: root._fieldValue === internal.checkedStateValue
 
-    onCheckedChanged: focus = true
+    onCheckedChanged: {
+      let newVal = rightSwitch.checked ? internal.checkedStateValue : internal.uncheckedStateValue
+      root.editorValueChanged( newVal, false )
+    }
+  }
+
+  function getConfigValue( configValue, defaultValue ) {
+    if ( !configValue && root._field.type + "" === internal.booleanEnum ) {
+      return defaultValue
+    } else return configValue
+  }
+
+  QtObject {
+    id: internal
+
+    property var checkedStateValue: getConfigValue( root._fieldConfig['CheckedState'], true )
+    property var uncheckedStateValue: getConfigValue( root._fieldConfig['UncheckedState'], false )
+    property string booleanEnum: "1" // QMetaType::Bool Enum of Qvariant::Type
   }
 }
