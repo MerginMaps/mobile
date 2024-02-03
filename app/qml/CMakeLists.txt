@@ -134,18 +134,18 @@ set(MM_QML
     form/FormWrapper.qml
     form/MMFormTabBar.qml
     form/PreviewPanel.qml
-    form/editors/MMButtonFormEditor.qml
-    form/editors/MMCalendarFormEditor.qml
-    form/editors/MMGalleryFormEditor.qml
-    form/editors/MMNumberFormEditor.qml
-    form/editors/MMPhotoFormEditor.qml
-    form/editors/MMScannerFormEditor.qml
-    form/editors/MMSliderFormEditor.qml
-    form/editors/MMSwitchFormEditor.qml
-    form/editors/MMTextMultilineFormEditor.qml
-    form/editors/MMTextFormEditor.qml
-    form/editors/MMValueMapFormEditor.qml
-    form/editors/MMValueRelationFormEditor.qml
+    form/editors/MMFormButtonEditor.qml
+    form/editors/MMFormCalendarEditor.qml
+    form/editors/MMFormGalleryEditor.qml
+    form/editors/MMFormNumberEditor.qml
+    form/editors/MMFormPhotoViewer.qml
+    form/editors/MMFormScannerEditor.qml
+    form/editors/MMFormSliderEditor.qml
+    form/editors/MMFormSwitchEditor.qml
+    form/editors/MMFormTextMultilineEditor.qml
+    form/editors/MMFormTextEditor.qml
+    form/editors/MMFormValueMapEditor.qml
+    form/editors/MMFormValueRelationEditor.qml
     # we are missing the following form editors:
     # - Spacer
     # - Text / HTML widget
