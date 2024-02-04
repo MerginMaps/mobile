@@ -42,52 +42,6 @@ Item {
    */
   signal createLinkedFeature( var parentController, var relation )
 
-   /**
-    * A handler for extra events in externalSourceWidget.
-    */
-  property var externalResourceHandler: QtObject {
-
-        /**
-         * Called when clicked on the camera icon to capture an image.
-         * \param itemWidget editorWidget for modified field to send valueChanged signal.
-         */
-        property var capturePhoto: function captureImage(itemWidget) {
-        }
-
-        /**
-         * Called when clicked on the gallery icon to choose a file in a gallery.
-         * \param itemWidget editorWidget for modified field to send valueChanged signal.
-         */
-        property var chooseImage: function chooseImage(itemWidget) {
-        }
-
-        /**
-          * Called when clicked on the photo image. Suppose to be used to bring a bigger preview.
-          * \param imagePath Absolute path to the image.
-          */
-        property var previewImage: function previewImage(imagePath) {
-        }
-
-        /**
-          * Called when clicked on the trash icon. Suppose to delete the value and optionally also the image.
-          * \param itemWidget editorWidget for modified field to send valueChanged signal.
-          * \param imagePath Absolute path to the image.
-          */
-        property var removeImage: function removeImage(itemWidget, imagePath) {
-        }
-
-        /**
-          * Called when clicked on the OK icon after taking a photo with the Photo panel.
-          * \param itemWidget editorWidget for modified field to send valueChanged signal.
-          * \param prefixToRelativePath Together with the value creates absolute path
-          * \param value Relative path of taken photo.
-          */
-        property var confirmImage: function confirmImage(itemWidget, prefixToRelativePath, value) {
-          itemWidget.image.source = prefixToRelativePath + "/" + value
-          itemWidget.editorValueChanged(value, value === "" || value === null)
-        }
-    }
-
   /**
    * Active project.
    */
@@ -415,11 +369,9 @@ Item {
         property bool fieldValueIsNull: model.RawValueIsNull
 
         property var field: model.Field
+        property var fieldIndex: model.FieldIndex
         property var fieldWidget: model.EditorWidget
         property var fieldConfig: model.EditorWidgetConfig
-
-//        property var homePath: form.project ? form.project.homePath : ""
-//        property var externalResourceHandler: form.externalResourceHandler
 
         property bool fieldIsReadOnly: form.state === "readOnly" || !AttributeEditable
         property bool fieldShouldShowTitle: model.ShowName
@@ -431,6 +383,7 @@ Item {
         property var fieldActiveProject: form.project
         property var fieldAssociatedRelation: model.Relation
         property var fieldFeatureLayerPair: form.controller.featureLayerPair
+        property string fieldHomePath: form.project ? form.project.homePath : "" // for photo editor
 
         active: fieldWidget !== 'Hidden'
 
@@ -480,13 +433,13 @@ Item {
 
         function onSaved() {
           if (formEditorsLoader.item && typeof formEditorsLoader.item.callbackOnSave === "function") {
-            formEditorsLoader.item.callbackOnSave()
+            formEditorsLoader.item.callbackOnFormSaved()
           }
         }
 
         function onCanceled() {
           if (formEditorsLoader.item && typeof formEditorsLoader.item.callbackOnCancel === "function") {
-            formEditorsLoader.item.callbackOnCancel()
+            formEditorsLoader.item.callbackOnFormCanceled()
           }
         }
       }

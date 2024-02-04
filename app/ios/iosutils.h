@@ -36,13 +36,13 @@ class IosUtils: public QObject
     explicit IosUtils( QObject *parent = nullptr );
     bool isIos() const;
 
-    Q_INVOKABLE void callImagePicker( const QString &targetPath );
-    Q_INVOKABLE void callCamera( const QString &targetPath );
+    Q_INVOKABLE void callImagePicker( const QString &targetPath, const QString &code = "" );
+    Q_INVOKABLE void callCamera( const QString &targetPath, const QString &code = "" );
     IOSImagePicker *imagePicker() const;
     static QString readExif( const QString &filepath, const QString &tag );
 
   signals:
-    void imageSelected( const QString &imagePath );
+    void imageSelected( const QString &imagePath, const QString &code );
     //! Used to show a notification to a user. Can be replaced by slot function similar to AndroidUtils::showToast using native Alert dialog.
     void showToast( const QString &message );
     void positionKitChanged();
@@ -52,6 +52,8 @@ class IosUtils: public QObject
     IOSImagePicker *mImagePicker = nullptr;
     PositionKit *mPositionKit = nullptr;
     Compass *mCompass = nullptr;
+
+    QString mLastCode;
     /**
      * Calls the objective-c function to disable idle timer to prevent screen from sleeping.
      */

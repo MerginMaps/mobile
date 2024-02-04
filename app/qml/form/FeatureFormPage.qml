@@ -151,7 +151,6 @@ Item {
           /*required*/ featureLayerPair: root.featureLayerPair
         }
 
-        externalResourceHandler: externalResourceBundle.handler
         state: root.formState
 
         onSaved: root.close()
@@ -247,10 +246,6 @@ Item {
         buttons: MessageDialog.Close
 
         onButtonClicked: close()
-      }
-
-      ExternalResourceBundle {
-        id: externalResourceBundle
       }
     }
   }

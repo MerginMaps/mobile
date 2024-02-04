@@ -138,6 +138,7 @@ set(MM_QML
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormGalleryEditor.qml
     form/editors/MMFormNumberEditor.qml
+    form/editors/MMFormPhotoEditor.qml
     form/editors/MMFormPhotoViewer.qml
     form/editors/MMFormScannerEditor.qml
     form/editors/MMFormSliderEditor.qml

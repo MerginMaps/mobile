@@ -1069,6 +1069,10 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   {
     return QUrl( path.arg( QLatin1String( "MMFormValueMapEditor" ) ) );
   }
+  else if ( widgetName == QStringLiteral( "externalresource" ) )
+  {
+    return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
+  }
 
   return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) ); // <<------ Mind!
 
