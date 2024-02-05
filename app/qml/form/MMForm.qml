@@ -310,7 +310,7 @@ Page {
 
         source: {
           if ( model.EditorWidget !== undefined ) {
-            return __inputUtils.getFormEditorType( model.EditorWidget, model.EditorWidgetConfig, model.Field )
+            return __inputUtils.getFormEditorType( model.EditorWidget, model.EditorWidgetConfig, model.Field, model.Relation )
           }
 
           return ''

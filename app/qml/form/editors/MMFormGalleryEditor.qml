@@ -10,6 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 
+import lc 1.0
 import "../../components"
 
 Item {
@@ -18,16 +19,26 @@ Item {
   width: parent.width
   height: column.height
 
-  required property var model
-  property string title
+  property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
+  property var _fieldFeatureLayerPair: parent.fieldFeatureLayerPair
+  property var _fieldActiveProject: parent.fieldActiveProject
+
+  property string _fieldTitle: parent.fieldTitle
+  property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
+
+  property var model
+  property string title: _fieldShouldShowTitle ? _fieldTitle : ""
   property string warningMsg
   property string errorMsg
   property int maxVisiblePhotos: -1 // -1 for showing all photos
-  property bool showAddImage: false
+  property bool showAddImage: true
 
   signal showAll()
   signal clicked( var path )
   signal addImage()
+
+  signal openLinkedFeature( var linkedFeature )
+  signal createLinkedFeature( var parentFeature, var relation )
 
   Column {
     id: column
@@ -54,6 +65,8 @@ Item {
 
         anchors.right: parent.right
 
+        visible: false // for now
+
         text: qsTr("Show all")
         font: __style.t4
         color: __style.forestColor
@@ -73,19 +86,39 @@ Item {
       spacing: root.maxVisiblePhotos !== 0 ? 20 * __dp : 0
       orientation: ListView.Horizontal
 
-      model: {
-        if(root.maxVisiblePhotos >= 0 && root.model.length > root.maxVisiblePhotos) {
-          return root.model.slice(0, root.maxVisiblePhotos)
-        }
-        return root.model
+//      model: {
+//        if(root.maxVisiblePhotos >= 0 && root.model.length > root.maxVisiblePhotos) {
+//          return root.model.slice(0, root.maxVisiblePhotos)
+//        }
+//        return root.model
+//      }
+
+      model: RelationFeaturesModel {
+        id: rmodel
+
+        relation: root._fieldAssociatedRelation
+        parentFeatureLayerPair: root._fieldFeatureLayerPair
+        homePath: root._fieldActiveProject.homePath
       }
 
       delegate: MMPhoto {
         width: rowView.height
 
-        photoUrl: model.modelData
+        fillMode: Image.PreserveAspectCrop
 
-        onClicked: function(path) { root.clicked(path) }
+        photoUrl: {
+          let absolutePath = model.PhotoPath
+
+          if ( absolutePath !== '' && __inputUtils.fileExists( absolutePath ) ) {
+            return "file://" + absolutePath
+          }
+          return ''
+        }
+
+        onClicked: function(path) {
+          root.clicked(path)
+          root.openLinkedFeature( model.FeaturePair )
+        }
       }
 
       header: Row {
@@ -107,7 +140,10 @@ Item {
 
           MouseArea {
             anchors.fill: parent
-            onClicked: root.addImage()
+            onClicked: {
+              root.addImage()
+              root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
+            }
           }
         }
 
@@ -120,10 +156,12 @@ Item {
       footer: MMMorePhoto {
         width: visible ? rowView.height + rowView.spacing: 0
 
-        hiddenPhotoCount: root.model.length - root.maxVisiblePhotos
-        visible: root.maxVisiblePhotos >= 0 && root.model.length > root.maxVisiblePhotos
-        photoUrl: visible ? model[root.maxVisiblePhotos] : ""
-        space: visible ? rowView.spacing : 0
+//        hiddenPhotoCount: root.model.length - root.maxVisiblePhotos
+//        visible: root.maxVisiblePhotos >= 0 && root.model.length > root.maxVisiblePhotos
+//        photoUrl: visible ? model[root.maxVisiblePhotos] : ""
+//        space: visible ? rowView.spacing : 0
+
+        visible: false
 
         onClicked: root.showAll()
       }

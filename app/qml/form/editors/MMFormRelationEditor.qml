@@ -30,7 +30,9 @@ MMBaseInput {
   property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
   property var _fieldFeatureLayerPair: parent.fieldFeatureLayerPair
   property var _fieldActiveProject: parent.fieldActiveProject
+
   property string _fieldTitle: parent.fieldTitle
+  property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
 
   property ListModel featuresModel // <---- what to do here?
 
@@ -41,6 +43,8 @@ MMBaseInput {
 
   Component.onCompleted: root.recalculate()
   onWidthChanged: root.recalculate()
+
+  title: _fieldShouldShowTitle ? _fieldTitle : ""
 
   content: Rectangle {
     width: root.width - 2 * root.spacing

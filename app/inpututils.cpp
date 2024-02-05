@@ -1020,7 +1020,7 @@ const QUrl InputUtils::getThemeIcon( const QString &name )
   return QUrl( path );
 }
 
-const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVariantMap &config, const QgsField &field )
+const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVariantMap &config, const QgsField &field, const QgsRelation &relation )
 {
   QString widgetName = widgetNameIn.toLower();
 
@@ -1075,23 +1075,49 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   }
   else if ( widgetName == QStringLiteral( "relation" ) )
   {
-    return QUrl( path.arg( QLatin1String( "MMFormRelationEditor" ) ) );
+    // check if we should use gallery or word tags
+    bool useGallery = false;
+
+    QgsVectorLayer *layer = relation.referencingLayer();
+    if ( layer && layer->isValid() )
+    {
+      QgsFields fields = layer->fields();
+      for ( int i = 0; i < fields.size(); i++ )
+      {
+        // Lets try by widget type
+        QgsEditorWidgetSetup setup = layer->editorWidgetSetup( i );
+        if ( setup.type() == QStringLiteral( "ExternalResource" ) )
+        {
+          useGallery = true;
+          break;
+        }
+      }
+    }
+
+    // Mind this hack - fields with `no-gallery-use` won't use gallery, but normal word tags instead
+    if ( field.name().contains( "no-gallery-use", Qt::CaseInsensitive ) || field.alias().contains( "no-gallery-use", Qt::CaseInsensitive ) )
+    {
+      useGallery = false;
+    }
+
+    if ( useGallery )
+    {
+      return QUrl( path.arg( QLatin1String( "MMFormGalleryEditor" ) ) );
+    }
+    else
+    {
+      return QUrl( path.arg( QLatin1String( "MMFormRelationEditor" ) ) );
+    }
   }
 
   return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) ); // <<------ Mind!
 
+  // Missing editors:
   QStringList supportedWidgets = { QStringLiteral( "richtext" ),
-                                   QStringLiteral( "textedit" ),
-                                   QStringLiteral( "valuemap" ),
-                                   QStringLiteral( "valuerelation" ),
-                                   QStringLiteral( "checkbox" ),
-                                   QStringLiteral( "externalresource" ),
-                                   QStringLiteral( "datetime" ),
-                                   QStringLiteral( "range" ),
-                                   QStringLiteral( "relation" ),
                                    QStringLiteral( "spacer" ),
                                    QStringLiteral( "relationreference" )
                                  };
+
   if ( supportedWidgets.contains( widgetName ) )
   {
     return QUrl( path.arg( widgetName ) );

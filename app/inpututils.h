@@ -346,7 +346,7 @@ class InputUtils: public QObject
       * \param config map coming from QGIS describing this field
       * \param field qgsfield instance of this field
       */
-    Q_INVOKABLE static const QUrl getFormEditorType( const QString &widgetNameIn, const QVariantMap &config = QVariantMap(), const QgsField &field = QgsField() );
+    Q_INVOKABLE static const QUrl getFormEditorType( const QString &widgetNameIn, const QVariantMap &config = QVariantMap(), const QgsField &field = QgsField(), const QgsRelation &relation = QgsRelation() );
 
     /**
      * \copydoc QgsCoordinateFormatter::format()
