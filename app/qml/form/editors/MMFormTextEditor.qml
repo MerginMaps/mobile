@@ -35,7 +35,11 @@ MMTextInput {
   property string _fieldErrorMessage: parent.fieldErrorMessage
   property string _fieldWarningMessage: parent.fieldWarningMessage
 
+  property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
+  property bool _fieldRememberValueState: parent.fieldRememberValueState
+
   signal editorValueChanged( var newValue, bool isNull )
+  signal rememberValueBoxClicked( bool state )
 
   text: _fieldValue === undefined || _fieldValueIsNull ? '' : _fieldValue
 
@@ -50,11 +54,18 @@ MMTextInput {
   warningMsg: _fieldWarningMessage
   errorMsg: _fieldErrorMessage
 
+  hasCheckbox: _fieldRememberValueSupported
+  checkboxChecked: _fieldRememberValueState
+
   textFieldComponent.maximumLength: {
     if ( ( !root._field.isNumeric ) && ( root._field.length > 0 ) ) {
       return root._field.length
     }
     return internal.textMaxCharactersLimit
+  }
+
+  onCheckboxCheckedChanged: {
+    root.rememberValueBoxClicked( checkboxChecked )
   }
 
   onTextEdited: function ( text ) {

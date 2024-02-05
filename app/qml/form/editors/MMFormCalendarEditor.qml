@@ -13,6 +13,14 @@ import QtQuick.Controls.Basic
 import "../../components"
 import "../../inputs"
 
+/*
+ * Calendar (datetime) editor for QGIS Attribute Form
+ * Requires various global properties set to function, see featureform Loader section.
+ * These properties are injected here via 'fieldXYZ' properties and captured with underscore `_`.
+ *
+ * Should be used only within feature form.
+ */
+
 MMBaseInput {
   id: root
 
@@ -28,7 +36,11 @@ MMBaseInput {
   property string _fieldErrorMessage: parent.fieldErrorMessage
   property string _fieldWarningMessage: parent.fieldWarningMessage
 
+  property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
+  property bool _fieldRememberValueState: parent.fieldRememberValueState
+
   signal editorValueChanged( var newValue, var isNull )
+  signal rememberValueBoxClicked( bool state )
 
   property bool fieldIsDate: __inputUtils.fieldType( _field ) === 'QDate'
   property var typeFromFieldFormat: __inputUtils.dateTimeFieldFormat( _fieldConfig['field_format'] )
@@ -45,8 +57,15 @@ MMBaseInput {
   warningMsg: _fieldWarningMessage
   errorMsg: _fieldErrorMessage
 
+  hasCheckbox: _fieldRememberValueSupported
+  checkboxChecked: _fieldRememberValueState
+
   enabled: !_fieldIsReadOnly
   hasFocus: textField.activeFocus
+
+  onCheckboxCheckedChanged: {
+    root.rememberValueBoxClicked( checkboxChecked )
+  }
 
   content: TextField {
     id: textField

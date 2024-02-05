@@ -36,9 +36,14 @@ MMBaseInput {
   property string _fieldErrorMessage: parent.fieldErrorMessage
   property string _fieldWarningMessage: parent.fieldWarningMessage
 
+  property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
+  property bool _fieldRememberValueState: parent.fieldRememberValueState
+
   property alias placeholderText: numberInput.placeholderText
 
   signal editorValueChanged( var newValue, var isNull )
+  signal rememberValueBoxClicked( bool state )
+
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
@@ -47,6 +52,13 @@ MMBaseInput {
 
   enabled: !_fieldIsReadOnly
   hasFocus: numberInput.activeFocus
+
+  hasCheckbox: _fieldRememberValueSupported
+  checkboxChecked: _fieldRememberValueState
+
+  onCheckboxCheckedChanged: {
+    root.rememberValueBoxClicked( checkboxChecked )
+  }
 
   leftAction: MMIcon {
     id: leftIcon

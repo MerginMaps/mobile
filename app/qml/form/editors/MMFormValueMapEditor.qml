@@ -33,7 +33,11 @@ MMDropdownInput {
   property string _fieldErrorMessage: parent.fieldErrorMessage
   property string _fieldWarningMessage: parent.fieldWarningMessage
 
+  property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
+  property bool _fieldRememberValueState: parent.fieldRememberValueState
+
   signal editorValueChanged( var newValue, bool isNull )
+  signal rememberValueBoxClicked( bool state )
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
@@ -44,9 +48,16 @@ MMDropdownInput {
 
   enabled: !_fieldIsReadOnly
 
+  hasCheckbox: _fieldRememberValueSupported
+  checkboxChecked: _fieldRememberValueState
+
   dataModel: listModel
   multiSelect: false
   withSearchbar: false
+
+  onCheckboxCheckedChanged: {
+    root.rememberValueBoxClicked( checkboxChecked )
+  }
 
   onSelectionFinished: function ( selectedFeatures ) {
 

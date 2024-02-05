@@ -34,12 +34,16 @@ MMBaseInput {
   property string _fieldErrorMessage: parent.fieldErrorMessage
   property string _fieldWarningMessage: parent.fieldWarningMessage
 
+  property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
+  property bool _fieldRememberValueState: parent.fieldRememberValueState
+
   property alias placeholderText: textArea.placeholderText
   property alias text: textArea.text
 
   property int minimumRows: 3
 
   signal editorValueChanged( var newValue, var isNull )
+  signal rememberValueBoxClicked( bool state )
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
@@ -49,6 +53,13 @@ MMBaseInput {
   enabled: !_fieldIsReadOnly
 
   hasFocus: textArea.activeFocus
+
+  hasCheckbox: _fieldRememberValueSupported
+  checkboxChecked: _fieldRememberValueState
+
+  onCheckboxCheckedChanged: {
+    root.rememberValueBoxClicked( checkboxChecked )
+  }
 
   contentItemHeight: {
     const minHeight = 34 * __dp + metrics.height * root.minimumRows

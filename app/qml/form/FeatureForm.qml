@@ -385,6 +385,9 @@ Item {
         property var fieldFeatureLayerPair: form.controller.featureLayerPair
         property string fieldHomePath: form.project ? form.project.homePath : "" // for photo editor
 
+        property bool fieldRememberValueSupported: form.controller.rememberAttributesController.rememberValuesAllowed && form.state === "add" && model.EditorWidget !== "Hidden" && Type === FormItem.Field
+        property bool fieldRememberValueState: model.RememberValue ? true : false
+
         active: fieldWidget !== 'Hidden'
 
         Keys.forwardTo: backHandler
@@ -404,6 +407,10 @@ Item {
 
         function onEditorValueChanged( newVal, isNull ) {
           model.AttributeValue = isNull ? undefined : newVal
+        }
+
+        function onRememberValueBoxClicked( state ) {
+          model.RememberValue = state
         }
       }
 

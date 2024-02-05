@@ -13,7 +13,6 @@ import QtQuick.Controls.Basic
 import "../../components"
 import "../../inputs"
 
-
 /*
  * QR/Barcode scanner editor for QGIS Attribute Form
  * Requires various global properties set to function, see featureform Loader section.
@@ -21,6 +20,7 @@ import "../../inputs"
  *
  * Should be used only within feature form.
  */
+
 MMBaseInput {
   id: root
 
@@ -35,10 +35,14 @@ MMBaseInput {
   property string _fieldErrorMessage: parent.fieldErrorMessage
   property string _fieldWarningMessage: parent.fieldWarningMessage
 
+  property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
+  property bool _fieldRememberValueState: parent.fieldRememberValueState
+
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
 
   signal editorValueChanged( var newValue, bool isNull )
+  signal rememberValueBoxClicked( bool state )
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
@@ -47,6 +51,13 @@ MMBaseInput {
 
   hasFocus: textField.activeFocus
   enabled: !_fieldIsReadOnly
+
+  hasCheckbox: _fieldRememberValueSupported
+  checkboxChecked: _fieldRememberValueState
+
+  onCheckboxCheckedChanged: {
+    root.rememberValueBoxClicked( checkboxChecked )
+  }
 
   content: TextField {
     id: textField

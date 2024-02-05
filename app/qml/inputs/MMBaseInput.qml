@@ -33,7 +33,7 @@ Item {
   property bool hasFocus: false
   property color bgColor: __style.whiteColor
   property bool hasCheckbox: false
-  property bool checkboxChecked: false
+  property alias checkboxChecked: checkbox.checked
 
   property real contentItemHeight: 50 * __dp
 
@@ -62,7 +62,6 @@ Item {
 
         small: true
         visible: root.hasCheckbox
-        checked: root.checkboxChecked
       }
       Text {
         id: titleItem

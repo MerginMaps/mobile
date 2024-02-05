@@ -69,7 +69,11 @@ MMFormPhotoViewer {
   property string _fieldErrorMessage: parent.fieldErrorMessage
   property string _fieldWarningMessage: parent.fieldWarningMessage
 
+  property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
+  property bool _fieldRememberValueState: parent.fieldRememberValueState
+
   signal editorValueChanged( var newValue, bool isNull )
+  signal rememberValueBoxClicked( bool state )
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
@@ -77,6 +81,9 @@ MMFormPhotoViewer {
   errorMsg: _fieldErrorMessage
 
   enabled: !_fieldIsReadOnly
+
+  hasCheckbox: _fieldRememberValueSupported
+  checkboxChecked: _fieldRememberValueState
 
   photoUrl: internal.absoluteImagePath
   hasCameraCapability: __androidUtils.isAndroid || __iosUtils.isIos
@@ -86,6 +93,10 @@ MMFormPhotoViewer {
   onCapturePhotoClicked: internal.capturePhoto()
   onChooseFromGalleryClicked: internal.chooseFromGallery()
   onTrashClicked: internal.removeImage( __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath ) )
+
+  onCheckboxCheckedChanged: {
+    root.rememberValueBoxClicked( checkboxChecked )
+  }
 
   // used only on desktop builds
   FileDialog {
