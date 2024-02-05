@@ -17,33 +17,29 @@ Drawer {
 
   property alias title: title.text
   property alias model: listView.model
-  property bool multiSelect: false
-  property int minFeaturesCountToFullScreenMode: 4
-  property var preselectedFeatures: []
+  property bool withSearch: false
 
   padding: 20 * __dp
 
   signal featureClicked( var selectedFeatures )
+  signal createLinkedFeature()
 
   width: ApplicationWindow.window.width
-  height: (mainColumn.height > ApplicationWindow.window.height ? ApplicationWindow.window.height : mainColumn.height) - 20 * __dp
+  height: ApplicationWindow.window.height
   edge: Qt.BottomEdge
 
   Rectangle {
-    color: roundedRect.color
+    color: __style.lightGreenColor
     anchors.top: parent.top
     anchors.left: parent.left
     anchors.right: parent.right
-    height: 2 * radius
-    anchors.topMargin: -radius
-    radius: 20 * __dp
+    height: 20 * __dp
+    anchors.topMargin: -height
   }
 
   Rectangle {
-    id: roundedRect
-
     anchors.fill: parent
-    color: __style.whiteColor
+    color: __style.lightGreenColor
 
     Column {
       id: mainColumn
@@ -54,11 +50,16 @@ Drawer {
       rightPadding: root.padding
       bottomPadding: root.padding
 
+      Item { width: 1; height: 1 }
+
       Row {
         width: parent.width - 2 * root.padding
         anchors.horizontalCenter: parent.horizontalCenter
 
-        Item { width: closeButton.width; height: 1 }
+        MMBackButton {
+          id: closeButton
+          onClicked: root.close()
+        }
 
         Text {
           id: title
@@ -72,29 +73,25 @@ Drawer {
           elide: Text.ElideRight
         }
 
-        Image {
-          id: closeButton
-
-          source: __style.closeButtonIcon
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: root.visible = false
-          }
-        }
+        Item { width: closeButton.width; height: 1 }
       }
 
       MMSearchEditor {
         id: searchBar
 
         width: parent.width - 2 * root.padding
-        placeholderText: qsTr("Text value")
-        bgColor: __style.lightGreenColor
-        visible: root.model.count >= root.minFeaturesCountToFullScreenMode
+        placeholderText: qsTr("Search for features...")
+        visible: root.withSearch
 
         onSearchTextChanged: function(text) {
           root.model.searchExpression = text
         }
+      }
+
+      Item {
+        width: 1
+        height: 10 * __dp
+        visible: !searchBar.visible
       }
 
       ListView {
@@ -102,72 +99,49 @@ Drawer {
 
         bottomMargin: primaryButton.visible ? primaryButton.height + 20 * __dp : 0
         width: parent.width - 2 * root.padding
-        height: {
-          if(root.model.count >= root.minFeaturesCountToFullScreenMode) {
-            if(ApplicationWindow.window)
-              return ApplicationWindow.window.height - searchBar.height - 100 * __dp
-            else return 0
-          }
-          if(root.model)
-            return root.model.count * internal.comboBoxItemHeight
-          return 0
-        }
+        height: ApplicationWindow.window ? ApplicationWindow.window.height - searchBar.height - 100 * __dp : 0
         clip: true
-        currentIndex: -1
 
         delegate: Item {
           id: delegate
 
-          property bool checked: root.multiSelect ? root.preselectedFeatures.includes(model.FeatureId) : listView.currentIndex === model.index
-
           width: listView.width
-          height: internal.comboBoxItemHeight
+          height: 59 * __dp
 
           Rectangle {
-            anchors.top: parent.top
+            anchors.top: parent.bottom
             width: parent.width
-            height: 1 * __dp
+            height: 1
             color: __style.greyColor
-            visible: model.index
           }
 
-          Row {
+          Column {
+            y: 10 * __dp
             height: parent.height
             width: parent.width
-            spacing: 10 * __dp
+            spacing: 6 * __dp
 
             Text {
-              width: parent.width - icon.width - parent.spacing
-              height: parent.height
-              verticalAlignment: Text.AlignVCenter
+              width: parent.width
               text: model.FeatureTitle
               color: __style.nightColor
               font: __style.t3
               elide: Text.ElideRight
             }
 
-            MMIcon {
-              id: icon
-              height: parent.height
-              width: 20 * __dp
-              color: __style.forestColor
-              source: __style.comboBoxCheckIcon
-              visible: delegate.checked
+            Text {
+              width: parent.width
+              text: qsTr("Feature ID ") + model.FeatureId
+              color: __style.nightColor
+              font: __style.p6
             }
           }
 
           MouseArea {
             anchors.fill: parent
             onClicked: {
-              listView.currentIndex = model.index
-              if(root.multiSelect) {
-                delegate.checked = !delegate.checked
-                delegate.forceActiveFocus()
-              }
-              else {
-                root.featureClicked(model.FeatureId)
-                close()
-              }
+              root.featureClicked(model.FeaturePair)
+              close()
             }
           }
         }
@@ -182,24 +156,12 @@ Drawer {
       anchors.bottom: parent.bottom
       anchors.bottomMargin: 20 * __dp
 
-      text: qsTr("Confirm selection")
-      visible: root.multiSelect
+      text: qsTr("Add feature")
 
       onClicked: {
-        let selectedFeatures = []
-        for(let i=0; i<listView.model.count; i++) {
-          if(listView.itemAtIndex(i).checked)
-            selectedFeatures.push(listView.model.get(i).FeatureId)
-        }
-        root.featureClicked(selectedFeatures)
+        root.createLinkedFeature()
         close()
       }
     }
-  }
-
-  QtObject {
-    id: internal
-
-    property real comboBoxItemHeight: 67 * __dp
   }
 }

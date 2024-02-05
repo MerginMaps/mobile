@@ -33,7 +33,7 @@ set(MM_QML
     components/TextRowWithTitle.qml
     components/TextWithIcon.qml
     components/ToolbarButton.qml
-    components/MMBackButton.qml
+    components/MMRoundButton.qml
     components/MMButton.qml
     components/MMComponent_reachedDataLimit.qml
     components/MMDrawer.qml
@@ -59,7 +59,6 @@ set(MM_QML
     components/MMProgressBar.qml
     components/MMProjectItem.qml
     components/MMRadioButton.qml
-    components/MMRoundButton.qml
     components/MMRoundLinkButton.qml
     components/MMShadow.qml
     components/MMSwitch.qml

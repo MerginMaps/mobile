@@ -28,6 +28,12 @@ int main( int argc, char *argv[] )
 {
   QGuiApplication app( argc, argv );
 
+  // These must be set so that QSettings work properly
+  QCoreApplication::setOrganizationName( "Lutra Consulting" );
+  QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
+  QCoreApplication::setApplicationName( "Mobile gallery" ); // used by QSettings
+  QCoreApplication::setApplicationVersion( "0.1" );
+
   app.setFont( QFont( Helper::installFonts() ) );
 
   QQmlApplicationEngine engine;
