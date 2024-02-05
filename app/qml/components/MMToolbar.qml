@@ -19,6 +19,8 @@ Rectangle {
 
   readonly property double minimumToolbarButtonWidth: 100 * __dp
 
+  property int maxButtonsInToolbar: 4
+
   height: __style.toolbarHeight
   color: __style.forestColor
 
@@ -72,9 +74,9 @@ Rectangle {
     var w = control.width
     var button
 
-    // add all buttons (max 4) into toolbar
+    // add all buttons (max maxButtonsInToolbar) into toolbar
     visibleButtonModel.clear()
-    if(c <= 4 || w >= c*control.minimumToolbarButtonWidth) {
+    if(c <= maxButtonsInToolbar || w >= c*control.minimumToolbarButtonWidth) {
       for( var i = 0; i < c; i++ ) {
         button = m.get(i)
         if(button.isMenuButton !== undefined)
@@ -88,10 +90,10 @@ Rectangle {
       // not all buttons are visible in toolbar due to width
       // the past of them will apper in the menu inside '...' button
       var maxVisible = Math.floor(w/control.minimumToolbarButtonWidth)
-      if(maxVisible<4)
-        maxVisible = 4
+      if(maxVisible<maxButtonsInToolbar)
+        maxVisible = maxButtonsInToolbar
       for( i = 0; i < maxVisible-1; i++ ) {
-        if(maxVisible===4 || w >= i*control.minimumToolbarButtonWidth) {
+        if(maxVisible===maxButtonsInToolbar || w >= i*control.minimumToolbarButtonWidth) {
           button = m.get(i)
           button.isMenuButton = false
           button.width = Math.floor(w / maxVisible)
@@ -116,5 +118,9 @@ Rectangle {
         invisibleButtonModel.append(button)
       }
     }
+  }
+
+  function closeMenu() {
+    menu.close()
   }
 }

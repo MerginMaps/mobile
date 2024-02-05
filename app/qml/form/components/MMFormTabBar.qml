@@ -16,7 +16,7 @@ TabBar {
   property alias tabButtonsModel: tabBarRepeater.model
 
   implicitHeight: 56 * __dp
-  implicitWidth: ApplicationWindow.window.width
+  implicitWidth: ApplicationWindow.window?.width ?? 0
 
   spacing: 20 * __dp
 

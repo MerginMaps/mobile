@@ -13,6 +13,8 @@ import QtQuick.Controls
 import lc 1.0
 import ".."
 
+// Wraps preview panel and feature form
+
 Item {
   id: root
 
@@ -28,13 +30,13 @@ Item {
   property var relationToApply
   property var controllerToApply
 
-  property alias formState: formContainer.formState // add, edit or ReadOnly
+  property alias formState: featureForm.state // add, edit or ReadOnly
   property alias panelState: statesManager.state
 
   property real previewHeight
   property real panelHeight
 
-  property bool isReadOnly: featureLayerPair?.layer?.readOnly ?? false
+  property bool layerIsReadOnly: featureLayerPair?.layer?.readOnly ?? false
 
   signal closed()
   signal editGeometry( var pair )
@@ -64,18 +66,18 @@ Item {
           name: "preview"
           PropertyChanges { target: drawer; height: root.previewHeight }
           PropertyChanges { target: drawer; interactive: true }
-          PropertyChanges { target: formContainer; visible: false }
+          PropertyChanges { target: featureForm; visible: false }
           PropertyChanges { target: previewPanel; visible: true }
         },
         State {
           name: "form"
           PropertyChanges { target: drawer; height: root.height }
           PropertyChanges { target: drawer; interactive: false }
-          PropertyChanges { target: formContainer; visible: true }
+          PropertyChanges { target: featureForm; visible: true }
           PropertyChanges { target: previewPanel; visible: false }
           StateChangeScript {
             script: {
-              formContainer.opened()
+              featureForm.forceActiveFocus()
             }
           }
         },
@@ -106,10 +108,36 @@ Item {
       PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
     }
 
+    background: Rectangle { // rounded drawer
+      color: __style.whiteColor
+      radius: 20 * __dp
+
+      Rectangle {
+        width: parent.width / 10
+        height: 4 * __dp
+
+        anchors.top: parent.top
+        anchors.topMargin: 8 * __dp
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        radius: 20 * __dp
+
+        color: __style.lightGreenColor
+      }
+
+      Rectangle {
+        color: __style.whiteColor
+        width: parent.width
+        height: parent.height
+        y: parent.height / 2
+      }
+    }
+
     width: parent.width
-    z: 0
+
     modal: false
     dragMargin: 0 // prevents opening the drawer by dragging.
+
     edge: Qt.BottomEdge
     closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
 
@@ -121,56 +149,85 @@ Item {
     PreviewPanel {
       id: previewPanel
 
-      onStakeoutFeature: function( feature ) {
-        root.stakeoutFeature( feature )
-      }
-
-      isReadOnly: root.isReadOnly
+      layerIsReadOnly: root.layerIsReadOnly
       controller: AttributePreviewController { project: root.project; featureLayerPair: root.featureLayerPair }
 
       height: root.previewHeight
       width: root.width
 
-      onContentClicked: root.panelState = "form"
+      onStakeoutClicked: function( feature ) {
+        root.stakeoutFeature( feature )
+      }
+
+//      onContentClicked: root.panelState = "form"
+
       onEditClicked: {
         root.panelState = "form"
-        formContainer.formState = "edit"
+        featureForm.state = "edit"
       }
     }
 
-    FeatureFormPage {
-      id: formContainer
+    MMForm {
+      id: featureForm
 
       anchors.fill: parent
 
       project: root.project
-      featureLayerPair: root.featureLayerPair
 
-      linkedRelation: root.linkedRelation
-      parentController: root.parentController
+      controller: AttributeController {
+        variablesManager: __variablesManager
 
-      formState: root.formState
+        rememberAttributesController: RememberAttributesController {
+          rememberValuesAllowed: __appSettings.reuseLastEnteredValues
+        }
+        // NOTE: order matters, we want to init variables manager before
+        // assingning FeatureLayerPair, as VariablesManager is required
+        // for correct expression evaluation
+        featureLayerPair: root.featureLayerPair
+      }
 
-      onClose: root.panelState = "closed"
-      onEditGeometryClicked: function( pair ) {
+      state: root.formState
+
+      onSaved: root.panelState = "closed"
+      onCanceled: root.panelState = "closed"
+
+      onEditGeometryRequested: function( pair ) {
         root.panelState = "hidden"
         root.editGeometry( pair )
       }
+
+      onRedrawGeometryRequested: function( pair ) {
+        root.panelState = "hidden"
+        root.redrawGeometry( pair )
+      }
+
+      onSplitGeometryRequested: {
+        root.panelState = "hidden"
+        root.splitGeometry( root.featureLayerPair )
+      }
+
       onOpenLinkedFeature: function( linkedFeature ) {
         root.openLinkedFeature( linkedFeature )
       }
+
       onCreateLinkedFeature: function( parentController, relation ) {
         root.controllerToApply = parentController
         root.relationToApply = relation
         root.createLinkedFeature( relation.referencingLayer, root.featureLayerPair )
       }
-      onSplitGeometryClicked: {
-        root.panelState = "hidden"
-        root.splitGeometry( root.featureLayerPair )
+
+      Connections {
+        target: root
+        function onFormStateChanged() {
+          featureForm.state = root.formState
+        }
       }
-      onRedrawGeometryClicked: function( pair ) {
-        root.panelState = "hidden"
-        root.redrawGeometry( pair )
+
+      Component.onCompleted: {
+        if ( root.parentController && root.linkedRelation ) {
+          featureForm.controller.parentController = root.parentController
+          featureForm.controller.linkedRelation = root.linkedRelation
+        }
       }
     }
   }

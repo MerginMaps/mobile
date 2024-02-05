@@ -140,9 +140,7 @@ MMFormPhotoViewer {
 
     // used for both gallery and camera
     function onImageSelected( imagePath, index ) {
-      console.log( "Returned from Android activity, imagePath", imagePath, "indexes:", root._fieldIndex, index )
       if ( root._fieldIndex.toString() === index.toString() ) {
-        console.log( "It is the same!" )
         internal.imageSelected( imagePath )
       }
     }
@@ -153,7 +151,6 @@ MMFormPhotoViewer {
 
     // used for both gallery and camera
     function onImageSelected( imagePath, index ) {
-      console.log( "Returned from iOS activity, imagePath", imagePath, "indexes:", root._fieldIndex, index )
       if ( root._fieldIndex.toString() === index.toString() ) {
         internal.imageCaptured( imagePath )
       }
@@ -277,15 +274,11 @@ MMFormPhotoViewer {
      * \param imagePath Absolute path to an image.
      */
     function removeImage( path ) {
-      console.info("removeImage 1")
       if ( __inputUtils.fileExists( path ) ) {
-        console.info("removeImage 2")
         imageDeleteDialog.imagePath = path
         imageDeleteDialog.open()
-        console.info("removeImage 3")
       }
       else {
-        console.info("removeImage 4")
         root.editorValueChanged( "", false )
       }
     }
@@ -340,12 +333,10 @@ MMFormPhotoViewer {
      * \param imgPath
      */
     function confirmImage( prefixToRelativePath, imgPath ) {
-      console.log( "Confirming image", imgPath, prefixToRelativePath )
       if ( imgPath ) {
         __inputUtils.rescaleImage( imgPath, __activeProject.qgsProject )
         let newImgPath = __inputUtils.getRelativePath( imgPath, prefixToRelativePath )
 
-        console.log( "Sending changed signale", newImgPath )
         root.editorValueChanged( newImgPath, newImgPath === "" || newImgPath === null )
       }
     }

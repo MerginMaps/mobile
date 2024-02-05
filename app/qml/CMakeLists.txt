@@ -127,13 +127,10 @@ set(MM_QML
     # Forms
     #
 
-    form/FeatureForm.qml
-    form/FeatureFormPage.qml
-    form/FeatureFormStyling.qml
-    form/FeatureToolbar.qml
-    form/FormWrapper.qml
-    form/MMFormTabBar.qml
-    form/PreviewPanel.qml
+    form/MMFormWrapper.qml
+    form/MMForm.qml
+    form/MMPreviewPanel.qml
+    form/componentMMFormTabBar.qml
     form/editors/MMFormButtonEditor.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormGalleryEditor.qml
