@@ -42,7 +42,7 @@ ScrollView {
           checked: true
         }
 
-        MMRelationsEditor {
+        MMFormRelationEditor {
           title: "MMTextAreaEditor"
           enabled: checkbox.checked
           width: parent.width

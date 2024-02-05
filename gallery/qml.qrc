@@ -73,8 +73,6 @@
         <file>../app/qml/inputs/MMPasswordInput.qml</file>
         <file>../app/qml/inputs/MMTextInput.qml</file>
         <file>../app/qml/inputs/MMSearchInput.qml</file>
-        <file>../app/qml/inputs/MMRelationsEditor.qml</file>
-        <file>../app/qml/inputs/MMPhotoEditor.qml</file>
         
         <file>../app/qml/form/MMFormTabBar.qml</file>
         <file>../app/qml/form/editors/MMFormButtonEditor.qml</file>
@@ -82,6 +80,7 @@
         <file>../app/qml/form/editors/MMFormGalleryEditor.qml</file>
         <file>../app/qml/form/editors/MMFormNumberEditor.qml</file>
         <file>../app/qml/form/editors/MMFormPhotoViewer.qml</file>
+        <file>../app/qml/form/editors/MMFormRelationEditor.qml</file>
         <file>../app/qml/form/editors/MMFormScannerEditor.qml</file>
         <file>../app/qml/form/editors/MMFormSliderEditor.qml</file>
         <file>../app/qml/form/editors/MMFormSwitchEditor.qml</file>

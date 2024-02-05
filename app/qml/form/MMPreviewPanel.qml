@@ -22,7 +22,7 @@ Item {
   property bool layerIsReadOnly: false
   property AttributePreviewController controller
 
-//  signal contentClicked()
+  signal contentClicked()
   signal editClicked()
   signal stakeoutClicked( var feature ) // TODO: remove the feature
 
@@ -85,7 +85,13 @@ Item {
     }
   }
 
-
+  MouseArea {
+    anchors.fill: parent
+    onClicked: function( mouse ) {
+      mouse.accepted = true
+      root.contentClicked()
+    }
+  }
 
 
 //    property real rowHeight: InputStyle.rowHeight

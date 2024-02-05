@@ -10,18 +10,30 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../components"
 
-MMAbstractEditor {
+import lc 1.0
+
+import "../../components"
+import "../../inputs"
+
+/*
+ * Relation editor (text mode ~~ bubbles/word cloud) for QGIS Attribute Form
+ * Requires various global properties set to function, see featureform Loader section.
+ * These properties are injected here via 'fieldXYZ' properties and captured with underscore `_`.
+ *
+ * Should be used only within feature form.
+ */
+
+MMBaseInput {
   id: root
 
-  property var parentValue: parent.value ?? ""
-  property bool parentValueIsNull: parent.valueIsNull ?? false
-  property bool isReadOnly: parent.readOnly ?? false
+  property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
+  property var _fieldFeatureLayerPair: parent.fieldFeatureLayerPair
+  property var _fieldActiveProject: parent.fieldActiveProject
+  property string _fieldTitle: parent.fieldTitle
 
-  required property ListModel featuresModel
+  property ListModel featuresModel // <---- what to do here?
 
-  signal editorValueChanged( var newValue, var isNull )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentFeature, var relation )
 
@@ -59,7 +71,7 @@ MMAbstractEditor {
 
         MouseArea {
           anchors.fill: parent
-          onClicked: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
+          onClicked: root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
         }
       }
 
@@ -68,7 +80,20 @@ MMAbstractEditor {
 
         property var invisibleIds: 0
 
-        model: root.featuresModel
+        model: RelationFeaturesModel {
+          id: rmodel
+
+          relation: root._fieldAssociatedRelation
+          parentFeatureLayerPair: root._fieldFeatureLayerPair
+          homePath: root._fieldActiveProject.homePath
+
+          onModelReset: {
+            // Repeater does not necesarry clear delegates immediately if they are invisible,
+            // we need to do hard reload in this case so that recalculateVisibleItems() is triggered
+
+            root.recalculate()
+          }
+        }
 
         delegate: Rectangle {
           width: text.contentWidth + 24 * __dp
@@ -137,7 +162,7 @@ MMAbstractEditor {
   function recalculate() {
     repeater.invisibleIds = 0
     repeater.model = null
-    repeater.model = root.featuresModel
+    repeater.model = rmodel
   }
 
   Loader {
@@ -151,18 +176,18 @@ MMAbstractEditor {
   Component {
     id: listComponent
 
-    MMLinkedFeaturesDrawer {
+    MMFeaturesListDrawer {
       focus: true
-      model: root.featuresModel
-      title: qsTr("Linked features")
-      withSearch: true
+      model: rmodel
+      title: root._fieldTitle
+      withSearch: false
 
       Component.onCompleted: open()
       onClosed: listLoader.active = false
       onFeatureClicked: function(selectedFeatures) {
         root.openLinkedFeature( selectedFeatures )
       }
-      onCreateLinkedFeature: root.createLinkedFeature( root.parent.featurePair, root.parent.associatedRelation )
+      onCreateLinkedFeature: root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
     }
   }
 

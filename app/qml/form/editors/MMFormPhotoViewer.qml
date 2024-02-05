@@ -67,6 +67,8 @@ MMBaseInput {
     height: root.contentItemHeight
     photoUrl: root.photoUrl
 
+    fillMode: Image.PreserveAspectCrop
+
     MouseArea {
       anchors.fill: parent
       onClicked: root.contentClicked()

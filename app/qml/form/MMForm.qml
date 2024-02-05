@@ -16,6 +16,7 @@ import QtQuick.Dialogs
 import lc 1.0
 
 import "../components"
+import "./components"
 import Input 0.1 as Input
 
 Page {
@@ -328,13 +329,29 @@ Page {
           model.RememberValue = state
         }
 
-        // TODO: support for relations
+        function onCreateLinkedFeature( parentFeature, relation ) {
+          let parentHasValidId = __inputUtils.isFeatureIdValid( parentFeature.feature.id )
+
+          if ( parentHasValidId ) {
+            // parent feature in this case already have valid id, so we can open new form
+            root.createLinkedFeature( root.controller, relation )
+          }
+          else {
+            // parent feature does not have a valid ID yet, we need to save it and acquire ID
+            root.controller.acquireId()
+            root.createLinkedFeature( root.controller, relation )
+          }
+        }
+
+        function onOpenLinkedFeature( linkedFeature ) {
+          root.openLinkedFeature( linkedFeature )
+        }
       }
 
       Connections {
         target: root.controller
 
-        // Important for relation form editors
+        // Important for relation form editors // <--- TODO: remove me if all works, unused
         function onFeatureLayerPairChanged() {
           if ( formEditorsLoader.item && formEditorsLoader.item.featureLayerPairChanged )
           {

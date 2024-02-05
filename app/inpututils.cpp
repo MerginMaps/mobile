@@ -1073,6 +1073,10 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   {
     return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
   }
+  else if ( widgetName == QStringLiteral( "relation" ) )
+  {
+    return QUrl( path.arg( QLatin1String( "MMFormRelationEditor" ) ) );
+  }
 
   return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) ); // <<------ Mind!
 

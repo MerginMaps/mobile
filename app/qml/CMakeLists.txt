@@ -47,6 +47,7 @@ set(MM_QML
     components/MMIconCheckBoxVertical.qml
     components/MMLink.qml
     components/MMLinkButton.qml
+    components/MMFeaturesListDrawer.qml
     components/MMListDrawer.qml
     components/MMListDrawerItem.qml
     components/MMMapButton.qml
@@ -130,13 +131,14 @@ set(MM_QML
     form/MMFormWrapper.qml
     form/MMForm.qml
     form/MMPreviewPanel.qml
-    form/componentMMFormTabBar.qml
+    form/components/MMFormTabBar.qml
     form/editors/MMFormButtonEditor.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormGalleryEditor.qml
     form/editors/MMFormNumberEditor.qml
     form/editors/MMFormPhotoEditor.qml
     form/editors/MMFormPhotoViewer.qml
+    form/editors/MMFormRelationEditor.qml
     form/editors/MMFormScannerEditor.qml
     form/editors/MMFormSliderEditor.qml
     form/editors/MMFormSwitchEditor.qml

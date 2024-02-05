@@ -146,7 +146,7 @@ Item {
         statesManager.state = "closed"
     }
 
-    PreviewPanel {
+    MMPreviewPanel {
       id: previewPanel
 
       layerIsReadOnly: root.layerIsReadOnly
@@ -159,7 +159,7 @@ Item {
         root.stakeoutFeature( feature )
       }
 
-//      onContentClicked: root.panelState = "form"
+      onContentClicked: root.panelState = "form"
 
       onEditClicked: {
         root.panelState = "form"

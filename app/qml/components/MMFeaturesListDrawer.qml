@@ -15,7 +15,7 @@ import "../inputs"
 Drawer {
   id: root
 
-  property alias title: title.text
+  property alias title: header.title
   property alias model: listView.model
   property bool withSearch: false
 
@@ -28,6 +28,10 @@ Drawer {
   height: ApplicationWindow.window.height
   edge: Qt.BottomEdge
 
+  background: Rectangle {
+    color: __style.lightGreenColor
+  }
+
   Rectangle {
     color: __style.lightGreenColor
     anchors.top: parent.top
@@ -37,8 +41,19 @@ Drawer {
     anchors.topMargin: -height
   }
 
+  MMHeader {
+    id: header
+    onBackClicked: root.close()
+  }
+
   Rectangle {
-    anchors.fill: parent
+    anchors {
+      top: header.bottom
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
+    }
+
     color: __style.lightGreenColor
 
     Column {
@@ -50,33 +65,7 @@ Drawer {
       rightPadding: root.padding
       bottomPadding: root.padding
 
-      Item { width: 1; height: 1 }
-
-      Row {
-        width: parent.width - 2 * root.padding
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        MMBackButton {
-          id: closeButton
-          onClicked: root.close()
-        }
-
-        Text {
-          id: title
-
-          anchors.verticalCenter: parent.verticalCenter
-          font: __style.t2
-          width: parent.width - closeButton.width * 2
-          color: __style.forestColor
-          horizontalAlignment: Text.AlignHCenter
-          verticalAlignment: Text.AlignVCenter
-          elide: Text.ElideRight
-        }
-
-        Item { width: closeButton.width; height: 1 }
-      }
-
-      MMSearchEditor {
+      MMSearchInput {
         id: searchBar
 
         width: parent.width - 2 * root.padding
@@ -140,8 +129,7 @@ Drawer {
           MouseArea {
             anchors.fill: parent
             onClicked: {
-              root.featureClicked(model.FeaturePair)
-              close()
+              root.featureClicked( model.FeaturePair )
             }
           }
         }
@@ -160,7 +148,6 @@ Drawer {
 
       onClicked: {
         root.createLinkedFeature()
-        close()
       }
     }
   }
