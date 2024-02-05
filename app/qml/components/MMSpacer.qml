@@ -12,6 +12,5 @@ Item {
     width: parent.width
     height: parent.height
     color: __style.greyColor
-    visible: true
   }
 }

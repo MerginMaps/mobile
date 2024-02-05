@@ -14,7 +14,9 @@ Item {
 
     Column {
         width: parent.width
+        height: parent.height
         visible: itemVisible
+        spacing: 0
 
         Text {
             text: titleText
@@ -22,9 +24,9 @@ Item {
             font: __style.p6
             wrapMode: Text.WordWrap
             horizontalAlignment: alignmentRight ? Text.AlignRight : Text.AlignLeft
+            width: parent.width
             anchors.top: parent.top
             anchors.topMargin: 8
-            width: parent.width
         }
 
         Text {
@@ -33,9 +35,9 @@ Item {
             font: __style.t3
             wrapMode: Text.WordWrap
             horizontalAlignment: alignmentRight ? Text.AlignRight : Text.AlignLeft
+            width: parent.width
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 8
-            width: parent.width
         }
     }
 }
