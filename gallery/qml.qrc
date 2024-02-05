@@ -66,12 +66,15 @@
         <file>../app/qml/components/MMDropdownDrawer.qml</file>
         <file>../app/qml/components/MMMapBlurLabel.qml</file>
         <file>../app/qml/components/MMCodeScanner.qml</file>
+        <file>../app/qml/components/MMLinkedFeaturesDrawer.qml</file>
 
         <file>../app/qml/inputs/MMBaseInput.qml</file>
         <file>../app/qml/inputs/MMDropdownInput.qml</file>
         <file>../app/qml/inputs/MMPasswordInput.qml</file>
         <file>../app/qml/inputs/MMTextInput.qml</file>
         <file>../app/qml/inputs/MMSearchInput.qml</file>
+        <file>../app/qml/inputs/MMRelationsEditor.qml</file>
+        <file>../app/qml/inputs/MMPhotoEditor.qml</file>
         
         <file>../app/qml/form/MMFormTabBar.qml</file>
         <file>../app/qml/form/editors/MMFormButtonEditor.qml</file>
