@@ -156,6 +156,10 @@ ScrollView {
           source: __style.nextIcon
         }
         IconBox {
+          text: "personalIcon"
+          source: __style.personalIcon
+        }
+        IconBox {
           text: "plusIcon"
           source: __style.plusIcon
         }

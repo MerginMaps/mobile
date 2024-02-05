@@ -132,6 +132,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl nextIcon READ nextIcon CONSTANT )
     Q_PROPERTY( QUrl otherIcon READ otherIcon CONSTANT )
     Q_PROPERTY( QUrl othersIcon READ othersIcon CONSTANT )
+    Q_PROPERTY( QUrl personalIcon READ personalIcon CONSTANT )
     Q_PROPERTY( QUrl plusIcon READ plusIcon CONSTANT )
     Q_PROPERTY( QUrl previousIcon READ previousIcon CONSTANT )
     Q_PROPERTY( QUrl projectButtonMoreIcon READ projectButtonMoreIcon CONSTANT )
@@ -295,6 +296,7 @@ class MMStyle: public QObject
     QUrl nextIcon() {return QUrl( "qrc:/Next.svg" );}
     QUrl otherIcon() {return QUrl( "qrc:/Other.svg" );}
     QUrl othersIcon() {return QUrl( "qrc:/Others.svg" );}
+    QUrl personalIcon() {return QUrl( "qrc:/Personal.svg" );}
     QUrl plusIcon() {return QUrl( "qrc:/Plus.svg" );}
     QUrl previousIcon() {return QUrl( "qrc:/Previous.svg" );}
     QUrl projectButtonMoreIcon() {return QUrl( "qrc:/ProjectButtonMore.svg" );}

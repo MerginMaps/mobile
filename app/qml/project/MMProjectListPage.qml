@@ -7,38 +7,48 @@
  *                                                                         *
  ***************************************************************************/
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
 
+import lc 1.0
 import "../components"
 import "../inputs"
-
-import notificationType 1.0
 
 Page {
   id: root
 
   property string headerTitle: qsTr("Projects")
   property bool withSearch: false
+  property alias model: listView.model
+  property bool showCreateProjectButton: false
+
+  property string activeProjectId: ""
+  property int projectModelType: ProjectsModel.EmptyProjectsModel
 
   signal backClicked
+  signal createProjectClicked
+  signal personIconClicked
 
   Rectangle {
     anchors.fill: parent
     color: __style.lightGreenColor
   }
 
-  MMHeader {
+  header: MMHeader {
     id: header
 
     title: root.headerTitle
+    color: __style.lightGreenColor
+    personIconVisible: true
+    rightMarginShift: 40 * __dp
+
     onBackClicked: root.backClicked()
+    onPersonIconClicked: root.personIconClicked()
   }
 
   Column {
     width: parent.width - 40 * __dp
     anchors.horizontalCenter: parent.horizontalCenter
-    anchors.top: header.bottom
+    anchors.top: parent.top
     anchors.topMargin: 10 * __dp
     spacing: 20 * __dp
 
@@ -57,26 +67,25 @@ Page {
     ListView {
       id: listView
 
-      bottomMargin: primaryButton.visible ? primaryButton.height + 20 * __dp : 0
       width: parent.width - 2 * root.padding
-      height: ApplicationWindow.window ? ApplicationWindow.window.height - searchBar.height - 150 * __dp : 0
+      height: ApplicationWindow.window ? ApplicationWindow.window.height - searchBar.height - 130 * __dp : 0
       clip: true
       spacing: 10 * __dp
-
-      model: 10
 
       delegate: MMProjectItem {
         width: listView.width
 
-        highlight: false
-        projectId: "1"
-        projectStatus: 2
-        projectDisplayName: "Mergin local project"
-        projectDescription: "Highlighted"
-        projectIsValid: true
-        projectIsLocal: true
-        projectIsMergin: true
-        projectIsPending: false
+        highlight: model.ProjectId === root.activeProjectId
+        projectId: model.ProjectId
+        projectStatus: model.ProjectStatus ? model.ProjectStatus : ProjectStatus.NoVersion
+        projectDisplayName: root.projectModelType === ProjectsModel.CreatedProjectsModel ? model.ProjectName : model.ProjectFullName
+        projectDescription: model.ProjectDescription
+        projectIsValid: model.ProjectIsValid
+        projectIsLocal: model.ProjectIsLocal
+        projectIsMergin: model.ProjectIsMergin
+        projectIsPending: model.ProjectSyncPending ? model.ProjectSyncPending : false
+        projectSyncProgress: model.ProjectSyncProgress ? model.ProjectSyncProgress : -1
+        projectRemoteError: model.ProjectRemoteError ? model.ProjectRemoteError : ""
 
         onOpenRequested: console.log("onOpenRequested")
         onStopSyncRequested: projectIsPending = false
@@ -85,7 +94,23 @@ Page {
         onRemoveRequested: console.log("onRemoveRequested")
         onMigrateRequested: console.log("onMigrateRequested")
       }
+
+      footer: Item { width: 1; height: createProjectButton.visible ? 80 * __dp : 0 }
     }
+  }
+
+  MMButton {
+    id: createProjectButton
+
+    width: root.width - 2 * 20 * __dp
+    anchors.horizontalCenter: parent.horizontalCenter
+    anchors.bottom: parent.bottom
+    anchors.bottomMargin: 20 * __dp
+
+    visible: root.showCreateProjectButton
+    text: qsTr("Create project")
+
+    onClicked: root.createProjectClicked()
   }
 }
 

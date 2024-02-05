@@ -87,5 +87,6 @@
         <file>Direction.svg</file>
         <file>TrackingDirection.svg</file>
         <file>AddImage.svg</file>
+        <file>Personal.svg</file>
     </qresource>
 </RCC>

@@ -32,6 +32,7 @@ qt_policy(SET QTP0001 NEW)
 
 set(GALLERY_HDRS
     helper.h
+    project.h
     qrcodedecoder.h
     inpututils.h
     scalebarkit.h
@@ -40,7 +41,7 @@ set(GALLERY_HDRS
     ../core/merginerrortypes.h
 )
 
-set(GALLERY_SRCS helper.cpp ../app/notificationmodel.cpp main.cpp)
+set(GALLERY_SRCS helper.cpp project.cpp ../app/notificationmodel.cpp main.cpp)
 
 if (IOS OR ANDROID)
   add_compile_definitions(MOBILE_OS)

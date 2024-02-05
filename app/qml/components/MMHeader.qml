@@ -19,7 +19,9 @@ Item {
 
   property string title: ""
   property font titleFont: __style.t3
+  property color color: __style.transparentColor
 
+  property bool personIconVisible: false
   property bool backVisible: true
   property alias backButton: backBtn
 
@@ -29,9 +31,15 @@ Item {
   property real rightMarginShift: 0
 
   signal backClicked
+  signal personIconClicked
 
   implicitHeight: 60 * __dp
   implicitWidth: Window.width
+
+  Rectangle {
+    anchors.fill: parent
+    color: root.color
+  }
 
   Text {
     // If there is a right or a left icon, we need to shift the margin
@@ -71,6 +79,35 @@ Item {
 
     visible: root.backVisible
     onClicked: root.backClicked()
+  }
+
+  Rectangle {
+    id: personIconRect
+
+    anchors {
+      right: parent.right
+      rightMargin: internal.pageMargin
+      verticalCenter: parent.verticalCenter
+    }
+
+    width: 40 * __dp
+    height: width
+    radius: width / 2
+    color: __style.fieldColor
+    visible: root.personIconVisible
+
+    MMIcon {
+      anchors.centerIn: parent
+      source: __style.personalIcon
+      useCustomSize: true
+      width: 24 * __dp
+      height: 24 * __dp
+    }
+
+    MouseArea {
+      anchors.fill: parent
+      onClicked: root.personIconClicked()
+    }
   }
 
   QtObject {

@@ -22,6 +22,7 @@
 #include "qrcodedecoder.h"
 #include "inpututils.h"
 #include "scalebarkit.h"
+#include "project.h"
 
 int main( int argc, char *argv[] )
 {
@@ -41,6 +42,8 @@ int main( int argc, char *argv[] )
   qmlRegisterUncreatableType<RegistrationError>( "lc", 1, 0, "RegistrationError", "RegistrationError Enum" );
   qmlRegisterType<QrCodeDecoder>( "lc", 1, 0, "QrCodeDecoder" );
   qmlRegisterType<ScaleBarKit>( "lc", 1, 0, "ScaleBarKit" );
+  qmlRegisterType<ProjectsModel>( "lc", 1, 0, "ProjectsModel" );
+  qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
 
 #ifdef DESKTOP_OS
   HotReload hotReload( engine );
