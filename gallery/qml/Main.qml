@@ -178,6 +178,10 @@ ApplicationWindow {
           title: "Feature form"
           source: "FormPage.qml"
         }
+        ListElement {
+          title: "GPS Info"
+          source: "GpsInfoPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}

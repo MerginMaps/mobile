@@ -40,6 +40,7 @@ set(MM_QML
     components/MMCheckBox.qml
     components/MMDrawer.qml
     components/MMDropdownDrawer.qml
+    components/MMGpsDataDrawer.qml
     components/MMHeader.qml
     components/MMHlineText.qml
     components/MMIcon.qml

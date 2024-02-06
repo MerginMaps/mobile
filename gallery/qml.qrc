@@ -19,6 +19,7 @@
         <file>qml/pages/OnboardingPage.qml</file>
         <file>qml/pages/CalendarPage.qml</file>
         <file>qml/pages/FormPage.qml</file>
+        <file>qml/pages/GpsInfoPage.qml</file>
 
         <file>../app/qml/components/MMButton.qml</file>
         <file>../app/qml/components/MMLinkButton.qml</file>
@@ -66,6 +67,10 @@
         <file>../app/qml/components/MMDropdownDrawer.qml</file>
         <file>../app/qml/components/MMMapBlurLabel.qml</file>
         <file>../app/qml/components/MMCodeScanner.qml</file>
+        <file>../app/qml/components/MMFeaturesListDrawer.qml</file>
+        <file>../app/qml/components/MMGpsDataDrawer.qml</file>
+        <file>../app/qml/components/MMGpsDataText.qml</file>
+        <file>../app/qml/components/MMLine.qml</file>
         <file>../app/qml/components/MMFeaturesListDrawer.qml</file>
 
         <file>../app/qml/inputs/MMBaseInput.qml</file>

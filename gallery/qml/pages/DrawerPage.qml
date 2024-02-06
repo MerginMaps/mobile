@@ -80,4 +80,10 @@ Page {
     onPrimaryButtonClicked: close()
     onSecondaryButtonClicked: close()
   }
+
+  MMGpsDataDrawer {
+    id: drawer4
+    title: "Gps Info"
+    visible: true
+  }
 }
