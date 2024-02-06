@@ -222,10 +222,10 @@ void TestUtilsFunctions::fileExists()
 void TestUtilsFunctions::loadQmlComponent()
 {
   QUrl dummy =  mUtils->getFormEditorType( "dummy" );
-  QCOMPARE( dummy.path(), QString( "../editor/inputtextedit.qml" ) );
+  QCOMPARE( dummy.path(), QString( "../editor/MMFormTextEditor.qml" ) );
 
   QUrl valuemap =  mUtils->getFormEditorType( "valuemap" );
-  QCOMPARE( valuemap.path(), QString( "../editor/inputvaluemap.qml" ) );
+  QCOMPARE( valuemap.path(), QString( "../editor/MMFormValueMapEditor.qml" ) );
 }
 
 void TestUtilsFunctions::getRelativePath()

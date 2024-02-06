@@ -70,7 +70,6 @@ set(MM_QML
     components/MMToolbarLongButton.qml
     components/MMToolbarMenuButton.qml
     components/MMWarningBubble.qml
-
     components/MMCalendarDrawer.qml
     components/MMTumbler.qml
     components/calendar/MMDateTimePicker.qml
@@ -79,7 +78,6 @@ set(MM_QML
     components/calendar/MMDayOfWeekRow.qml
     components/calendar/MMDateTumbler.qml
     components/calendar/MMAmPmSwitch.qml
-
     onboarding/MMAcceptInvitation.qml
     onboarding/MMCreateWorkspace.qml
     onboarding/MMHowYouFoundUs.qml
@@ -113,21 +111,11 @@ set(MM_QML
     editor/inputvaluerelationcombobox.qml
     editor/inputvaluerelationpage.qml
     editor/inputspacer.qml
-
-    #
-    # Inputs
-    #
-
     inputs/MMBaseInput.qml
     inputs/MMPasswordInput.qml
     inputs/MMTextInput.qml
     inputs/MMSearchInput.qml
     inputs/MMDropdownInput.qml
-
-    #
-    # Forms
-    #
-
     form/MMFormWrapper.qml
     form/MMForm.qml
     form/MMPreviewPanel.qml
@@ -146,12 +134,6 @@ set(MM_QML
     form/editors/MMFormTextEditor.qml
     form/editors/MMFormValueMapEditor.qml
     form/editors/MMFormValueRelationEditor.qml
-    # we are missing the following form editors:
-    # - Spacer
-    # - Text / HTML widget
-    # - Relation reference
-    # - Relations
-
     layers/FeaturesListPageV2.qml
     layers/LayerDetail.qml
     layers/LayersListPageV2.qml

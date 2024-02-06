@@ -1110,22 +1110,12 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
     }
   }
 
-  return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) ); // <<------ Mind!
+  // TODO == Missing editors:
+  // - QStringLiteral( "richtext" ) -> text and HTML form widget
+  // - QStringLiteral( "spacer" )
+  // - QStringLiteral( "relationreference" )
 
-  // Missing editors:
-  QStringList supportedWidgets = { QStringLiteral( "richtext" ),
-                                   QStringLiteral( "spacer" ),
-                                   QStringLiteral( "relationreference" )
-                                 };
-
-  if ( supportedWidgets.contains( widgetName ) )
-  {
-    return QUrl( path.arg( widgetName ) );
-  }
-  else
-  {
-    return QUrl( path.arg( QLatin1String( "textedit" ) ) );
-  }
+  return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) );
 }
 
 const QgsEditorWidgetSetup InputUtils::getEditorWidgetSetup( const QgsField &field )
