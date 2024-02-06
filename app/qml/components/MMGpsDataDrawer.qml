@@ -276,6 +276,10 @@ Drawer {
             }
           }
 
+          Item {
+            width: 1
+            height: 20
+          }
           MMButton {
             id: primaryButton
 
