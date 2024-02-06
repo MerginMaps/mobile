@@ -35,7 +35,7 @@ class  PositionKit : public QObject
     Q_PROPERTY( QString stateMessage READ stateMessage CONSTANT )
     Q_PROPERTY( QString lastRead READ lastRead CONSTANT )
 
-public:
+  public:
     explicit PositionKit( QObject *parent = nullptr ) {};
 
     double latitude() const { return hLatitude; }
@@ -56,7 +56,7 @@ public:
     QString stateMessage() const { return pStateMessage; }
     QString lastRead() const { return pLastRead; }
 
-private:
+  private:
     QString pProviderName = "Gps Source is ok!";
     QString pProviderType = "external";
     QString pProviderMessage = "Connected";
