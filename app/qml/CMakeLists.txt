@@ -92,24 +92,8 @@ set(MM_QML
     dialogs/NoPermissionsDialog.qml
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
-    editor/AbstractEditor.qml
-    editor/RelationPhotoDelegate.qml
-    editor/RelationPhotoFooterDelegate.qml
-    editor/RelationTextDelegate.qml
-    editor/inputcheckbox.qml
-    editor/inputdatetime.qml
-    editor/inputexternalresource.qml
-    editor/inputqrcodereader.qml
-    editor/inputrangeeditable.qml
-    editor/inputrangeslider.qml
-    editor/inputrelation.qml
     editor/inputrelationreference.qml
     editor/inputrichtext.qml
-    editor/inputtextedit.qml
-    editor/inputtexteditmultiline.qml
-    editor/inputvaluemap.qml
-    editor/inputvaluerelationcombobox.qml
-    editor/inputvaluerelationpage.qml
     editor/inputspacer.qml
     inputs/MMBaseInput.qml
     inputs/MMPasswordInput.qml
