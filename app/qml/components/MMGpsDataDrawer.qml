@@ -85,8 +85,8 @@ Drawer {
         Layout.alignment: Qt.AlignHCenter
         Layout.preferredHeight: {
           if (ApplicationWindow.window){
-            var availableHeight = ApplicationWindow.window.height - header.height
-            var totalHeight = scrollColumn.childrenRect.height + (20 * __dp)
+            var availableHeight = ApplicationWindow.window.height - header.height - mainColumn.spacing
+            var totalHeight = scrollColumn.childrenRect.height + 20 * __dp
 
             if(totalHeight >= ApplicationWindow.window.height) {
               return availableHeight
@@ -112,26 +112,26 @@ Drawer {
             height: rowHeight
 
             MMGpsDataText{
-              titleText: "Source"
+              titleText: qsTr( "Source" )
               descriptionText: __positionKit.positionProvider ? __positionKit.providerName : qsTr( "No receiver" )
             }
 
             MMGpsDataText{
-              titleText: "Status"
+              titleText: qsTr( "Status" )
               descriptionText: __positionKit.positionProvider ? __positionKit.providerMessage : ""
               alignmentRight: true
               itemVisible: __positionKit.positionProvider && __positionKit.providerType === "external"
             }
           }
 
-          MMSpacer {}
+          MMLine {}
 
           Row {
             width: parent.width
             height: rowHeight
 
             MMGpsDataText{
-              titleText: "Latitude"
+              titleText: qsTr( "Latitude" )
               descriptionText: {
                 if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.latitude ) ) {
                   qsTr( "N/A" )
@@ -141,7 +141,7 @@ Drawer {
             }
 
             MMGpsDataText{
-              titleText: "Longitude"
+              titleText: qsTr( "Longitude")
               descriptionText: {
                 if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.longitude ) ) {
                   qsTr( "N/A" )
@@ -152,14 +152,14 @@ Drawer {
             }
           }
 
-          MMSpacer {}
+          MMLine {}
 
           Row {
             width: parent.width
             height: rowHeight
 
             MMGpsDataText{
-              titleText: "X"
+              titleText: qsTr( "X" )
               descriptionText: {
                 if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.x ) ) {
                   qsTr( "N/A" )
@@ -169,7 +169,7 @@ Drawer {
             }
 
             MMGpsDataText{
-              titleText: "Y"
+              titleText: qsTr( "Y" )
               descriptionText: {
                 if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.x ) ) {
                   qsTr( "N/A" )
@@ -180,14 +180,14 @@ Drawer {
             }
           }
 
-          MMSpacer {}
+          MMLine {}
 
           Row {
             width: parent.width
             height: rowHeight
 
             MMGpsDataText{
-              titleText: "Horizontal accuracy"
+              titleText: qsTr( "Horizontal accuracy" )
               descriptionText: {
                 if ( !__positionKit.hasPosition || __positionKit.horizontalAccuracy < 0 ) {
                   return qsTr( "N/A" )
@@ -198,7 +198,7 @@ Drawer {
             }
 
             MMGpsDataText{
-              titleText: "Vertical accuracy"
+              titleText: qsTr( "Vertical accuracy" )
               descriptionText: {
                 if ( !__positionKit.hasPosition || __positionKit.verticalAccuracy < 0 ) {
                   return qsTr( "N/A" )
@@ -210,14 +210,14 @@ Drawer {
             }
           }
 
-          MMSpacer {}
+          MMLine {}
 
           Row {
             width: parent.width
             height: rowHeight
 
             MMGpsDataText{
-              titleText: "Altitude"
+              titleText: qsTr( "Altitude" )
               descriptionText: {
                 if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.altitude ) ) {
                   return qsTr( "N/A" )
@@ -227,7 +227,7 @@ Drawer {
             }
 
             MMGpsDataText{
-              titleText: "Satellites (in use/view)"
+              titleText: qsTr( "Satellites (in use/view)" )
               descriptionText: {
                 if ( __positionKit.satellitesUsed < 0 || __positionKit.satellitesVisible < 0 )
                 {
@@ -240,14 +240,14 @@ Drawer {
             }
           }
 
-          MMSpacer {}
+          MMLine {}
 
           Row {
             width: parent.width
             height: rowHeight
 
             MMGpsDataText{
-              titleText: "Speed"
+              titleText: qsTr( "Speed" )
               descriptionText: {
                 if ( !__positionKit.hasPosition || __positionKit.speed < 0 ) {
                   return qsTr( "N/A" )
@@ -258,20 +258,20 @@ Drawer {
             }
 
             MMGpsDataText{
-              titleText: "Last Fix"
+              titleText: qsTr( "Last Fix" )
               descriptionText: __positionKit.lastRead || qsTr( "N/A" )
               alignmentRight: true
             }
           }
 
-          MMSpacer {}
+          MMLine {}
 
           Row {
             width: parent.width
             height: rowHeight
 
             MMGpsDataText{
-              titleText: "GPS antenna height"
+              titleText: qsTr( "GPS antenna height" )
               descriptionText: __positionKit.gpsAntennaHeight > 0 ? __positionKit.gpsAntennaHeight.toString(3) + " m" : qsTr( "Not set" )
             }
           }
@@ -286,6 +286,7 @@ Drawer {
 
             width: parent.width - 2 * 20 * __dp
             anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottomMargin: 20
 
             text: qsTr("Manage GPS receivers")
 
@@ -296,11 +297,7 @@ Drawer {
 
           Item {
             width: 2
-            height: {
-              if (ApplicationWindow.window){
-                scrollColumn.childrenRect.height + (20 * __dp) >= ApplicationWindow.window.height ? mainColumn.spacing + (20 * __dp) :  20 * __dp
-              }
-            }
+            height: 20 * __dp
           }
         }
       }

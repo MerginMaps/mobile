@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick
 import "."
 import ".."
@@ -5,8 +14,8 @@ import lc 1.0
 import QtQuick.Layouts
 
 Item {
-    property string titleText: "Default title"
-    property string descriptionText: "Default description"
+    property string titleText: "title"
+    property string descriptionText: "description"
     property bool alignmentRight: false
     property bool itemVisible: true
 

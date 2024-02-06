@@ -21,21 +21,17 @@ Page {
     width: parent.width
     spacing: 10
 
-    // MMButton {
-    //   text: "Upload"
-    //   onClicked: drawer1.visible = true
-    // }
-    // MMButton {
-    //   text: "Reached Data Limit"
-    //   onClicked: drawer2.visible = true
-    // }
-    // MMButton {
-    //   text: "Synchronization Failed"
-    //   onClicked: drawer3.visible = true
-    // }
     MMButton {
-      text: "Gps Data Page"
-      onClicked: drawer4.visible = true
+      text: "Upload"
+      onClicked: drawer1.visible = true
+    }
+    MMButton {
+      text: "Reached Data Limit"
+      onClicked: drawer2.visible = true
+    }
+    MMButton {
+      text: "Synchronization Failed"
+      onClicked: drawer3.visible = true
     }
   }
 

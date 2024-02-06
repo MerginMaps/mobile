@@ -1,15 +1,22 @@
-#ifndef GPSDRAWERHELPER_H
-#define GPSDRAWERHELPER_H
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef POSITIONKIT_H
+#define POSITIONKIT_H
 
 #include <QObject>
 #include <QString>
-#include "qgispoint.h"
 
-class  GpsDataHelper : public QObject
+class  PositionKit : public QObject
 {
     Q_OBJECT
 
-    //Q_PROPERTY( PositionProvider* positionProvider READ positionProvider CONSTANT )
     Q_PROPERTY( double latitude READ latitude CONSTANT )
     Q_PROPERTY( double longitude READ longitude CONSTANT )
     Q_PROPERTY( double verticalAccuracy READ verticalAccuracy CONSTANT )
@@ -27,10 +34,9 @@ class  GpsDataHelper : public QObject
     Q_PROPERTY( QString providerMessage READ providerMessage CONSTANT )
     Q_PROPERTY( QString stateMessage READ stateMessage CONSTANT )
     Q_PROPERTY( QString lastRead READ lastRead CONSTANT )
-    Q_PROPERTY( QgisPoint positionCoordinate READ positionCoordinate CONSTANT )
 
 public:
-    explicit GpsDataHelper( QObject *parent = nullptr ) {};
+    explicit PositionKit( QObject *parent = nullptr ) {};
 
     double latitude() const { return hLatitude; }
     double longitude() const { return hLongitude; }
@@ -49,7 +55,6 @@ public:
     QString providerType() const { return pProviderType; }
     QString stateMessage() const { return pStateMessage; }
     QString lastRead() const { return pLastRead; }
-    QgisPoint positionCoordinate() const { return point; }
 
 private:
     QString pProviderName = "Gps Source is ok!";
@@ -57,7 +62,6 @@ private:
     QString pProviderMessage = "Connected";
     QString pStateMessage = "Message";
     QString pLastRead = "17:19:08 CEST";
-    QgisPoint point;
     bool pPositionProvider = true;
     int pSatellitesVisible = 40;
     int pSatellitesUsed = 1;
@@ -73,4 +77,4 @@ private:
 
 };
 
-#endif // GPSDRAWERHELPER_H
+#endif // POSITIONKIT_H

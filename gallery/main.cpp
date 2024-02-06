@@ -22,7 +22,7 @@
 #include "qrcodedecoder.h"
 #include "inpututils.h"
 #include "scalebarkit.h"
-#include "gpsdrawerhelper.h"
+#include "positionkit.h"
 
 int main( int argc, char *argv[] )
 {
@@ -54,7 +54,7 @@ int main( int argc, char *argv[] )
   MMStyle style( dp );
   NotificationModel notificationModel;
 
-  GpsDataHelper pk;
+  PositionKit pk;
   engine.rootContext()->setContextProperty( "__positionKit", &pk );
 
   engine.rootContext()->setContextProperty( "__notificationModel", &notificationModel );

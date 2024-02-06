@@ -90,7 +90,8 @@
         <file>../app/qml/form/MMFormTabBar.qml</file>
         <file>../app/qml/components/MMGpsDataDrawer.qml</file>
         <file>../app/qml/components/MMGpsDataText.qml</file>
-        <file>../app/qml/components/MMSpacer.qml</file>
+        <file>../app/qml/components/MMLine.qml</file>
         <file>../app/qml/components/MMLinkedFeaturesDrawer.qml</file>
+        <file>qml/pages/GpsInfoPage.qml</file>
     </qresource>
 </RCC>
