@@ -10,10 +10,9 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-//import Qt5Compat.GraphicalEffects
 
-//import ".."  // import InputStyle singleton
 import "../components" as Components
+import "./components" as FormComponents
 import lc 1.0
 
 Item {
@@ -24,66 +23,7 @@ Item {
 
   signal contentClicked()
   signal editClicked()
-  signal stakeoutClicked( var feature ) // TODO: remove the feature
-
-  ColumnLayout {
-    anchors {
-      fill: parent
-      margins: __style.pageMargins
-    }
-
-    spacing: 20 * __dp
-
-    Item {
-      id: photoContainer
-
-      Layout.fillWidth: true
-      Layout.preferredHeight: 160 * __dp
-
-      visible: root.controller.type === AttributePreviewController.Photo
-
-      Components.MMPhoto {
-        width: parent.width
-        height: parent.height
-
-        photoUrl: root.controller.photo
-
-        fillMode: Image.PreserveAspectCrop
-      }
-    }
-
-    Text {
-      Layout.fillWidth: true
-      Layout.preferredHeight: paintedHeight
-
-      text: root.controller.title
-
-      font: __style.t1
-      color: __style.forestColor
-
-      horizontalAlignment: Text.AlignLeft
-      verticalAlignment: Text.AlignVCenter
-
-      maximumLineCount: 2
-      elide: Text.ElideRight
-      wrapMode: Text.WordWrap
-    }
-
-    // TODO: HTML type
-
-    Item {
-      id: buttonGroup
-
-      Layout.fillWidth: true
-      Layout.preferredHeight: 40 * __dp
-
-    }
-
-    Item {
-      Layout.fillHeight: true
-      Layout.fillWidth: true
-    }
-  }
+  signal stakeoutClicked( var feature )
 
   MouseArea {
     anchors.fill: parent
@@ -93,199 +33,175 @@ Item {
     }
   }
 
+  // TODO: this needs to be revisited, the layout does not work very well
 
-//    property real rowHeight: InputStyle.rowHeight
+  Item {
+    x: parent.width / 2 - width / 2
+    width: parent.width > __style.maxPageWidth ? __style.maxPageWidth : parent.width
+    height: parent.height
 
+    ColumnLayout {
+      id: layout
 
+      anchors {
+        fill: parent
+        leftMargin: __style.pageMargins
+        topMargin: __style.pageMargins
+        rightMargin: __style.pageMargins
+        bottomMargin: __style.pageMargins
+      }
 
-//    MouseArea {
-//      anchors.fill: parent
-//      onClicked: {
-//        contentClicked()
-//      }
-//    }
+      spacing: 20 * __dp
 
-//    layer.enabled: true
-//    layer.effect: Components.Shadow {}
+      Item {
+        id: photoContainer
 
-//    Rectangle {
-//        anchors.fill: parent
-//        color: InputStyle.clrPanelMain
+        Layout.fillWidth: true
+        Layout.preferredHeight: 160 * __dp
 
-//        Rectangle {
-//            anchors.fill: parent
-//            anchors.margins: InputStyle.panelMargin
-//            anchors.topMargin: 0
+        visible: root.controller.type === AttributePreviewController.Photo
 
-//            Item {
-//                id: header
-//                width: parent.width
-//                height: previewPanel.rowHeight
+        Components.MMPhoto {
+          width: parent.width
+          height: parent.height
 
-//                Row {
-//                  id: title
-//                  height: rowHeight
-//                  width: parent.width
+          photoUrl: root.controller.photo
 
-//                  Text {
-//                    id: titleText
+          fillMode: Image.PreserveAspectCrop
+        }
+      }
 
-////                    height: rowHeight
-//                    width: parent.width
+      Text {
+        Layout.fillWidth: true
+        Layout.preferredHeight: paintedHeight
 
-//                    text: controller.title
+        text: root.controller.title
 
-//                    wrapMode: Text.WordWrap
-//                    maximumLineCount: 2
-//                    elide: Text.ElideRight
+        font: __style.t1
+        color: __style.forestColor
 
-//                    font: __style.t1
+        horizontalAlignment: Text.AlignLeft
+        verticalAlignment: Text.AlignVCenter
 
-//                    color: __style.forestColor
+        maximumLineCount: 2
+        elide: Text.ElideRight
+        wrapMode: Text.WordWrap
+      }
 
-//                    horizontalAlignment: Text.AlignLeft
-//                    verticalAlignment: Text.AlignVCenter
-//                  }
+      Text {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-////                  Button {
-////                    id: stakeoutIconContainerSpace
-////                    height: rowHeight
-////                    width: rowHeight
+        text: controller.html
+        visible: root.controller.type === AttributePreviewController.HTML
 
-////                    background: Item {
-////                      visible: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
-////                      enabled: visible
+        clip: true
+      }
 
-////                      anchors.fill: parent
+      Text {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-////                      Image {
-////                        id: stakeoutIcon
+        text: qsTr("No map tip available.")
+        visible: root.controller.type === AttributePreviewController.Empty
 
-////                        anchors.fill: parent
-////                        anchors.margins: rowHeight/8
-////                        anchors.rightMargin: 0
-////                        source: InputStyle.stakeoutIcon
-////                        sourceSize.width: width
-////                        sourceSize.height: height
-////                        fillMode: Image.PreserveAspectFit
-////                      }
+        font: __style.p6
+        color: __style.nightColor
+      }
 
-////                      ColorOverlay {
-////                        anchors.fill: stakeoutIcon
-////                        source: stakeoutIcon
-////                        color: InputStyle.fontColor
-////                      }
-////                    }
+      Item {
+        id:  fieldsContainer
 
-////                    onClicked: previewPanel.stakeoutFeature( controller.featureLayerPair )
-////                  }
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-////                  Button {
-////                    id: iconContainer
-////                    height: rowHeight
-////                    width: rowHeight
-////                    visible: !previewPanel.isReadOnly
+        visible: root.controller.type === AttributePreviewController.Fields
 
-////                    background: Item {
-////                      anchors.fill: parent
+        ListView {
+          anchors.fill: parent
 
-////                      Image {
-////                        id: icon
-////                        anchors.fill: parent
-////                        anchors.margins: rowHeight/4
-////                        anchors.rightMargin: 0
-////                        source: InputStyle.editIcon
-////                        sourceSize.width: width
-////                        sourceSize.height: height
-////                        fillMode: Image.PreserveAspectFit
-////                      }
+          spacing: 20 * __dp
+          interactive: false
 
-////                      ColorOverlay {
-////                        anchors.fill: icon
-////                        source: icon
-////                        color: InputStyle.fontColor
-////                      }
-////                    }
+          model: root.controller.fieldModel
 
-////                    onClicked: editClicked()
-////                  }
-//                }
+          delegate: Item {
+            width: ListView.view.width
+            height: childrenRect.height
 
-////                Rectangle {
-////                    id: titleBorder
-////                    width: parent.width
-////                    height: 1
-////                    color: InputStyle.fontColor
-////                    anchors.bottom: title.bottom
-////                }
-//            }
+            Column {
+              width: parent.width
+              spacing: 0
 
-//            Item {
-//                id: content
-//                width: parent.width
-//                anchors.top: header.bottom
-//                anchors.bottom: parent.bottom
+              Text {
+                width: parent.width
 
-//                // we have three options what will be in the preview content: html content, image or field values
+                text: model.Name
+                font: __style.p6
+                color: __style.nightColor
 
-//                Text {
-//                    visible: controller.type == AttributePreviewController.Empty
-//                    text: qsTr("No map tip available.")
-//                    anchors.fill: parent
-//                    anchors.topMargin: InputStyle.panelMargin
-//                }
+                elide: Text.ElideRight
+                wrapMode: Text.NoWrap
+              }
 
-//                Text {
-//                    visible: controller.type == AttributePreviewController.HTML
-//                    text: controller.html
-//                    anchors.fill: parent
-//                    anchors.topMargin: InputStyle.panelMargin
-//                }
+              Text {
+                width: parent.width
 
-//                Image {
-//                    visible: controller.type == AttributePreviewController.Photo
-//                    source: controller.photo
-//                    sourceSize: Qt.size(width, height)
-//                    fillMode: Image.PreserveAspectFit
-//                    autoTransform : true
-//                    anchors.fill: parent
-//                    anchors.topMargin: InputStyle.panelMargin
-//                }
+                text: model.Value
+                font: __style.p5
+                color: __style.nightColor
 
-//                ListView {
-//                    visible: controller.type == AttributePreviewController.Fields
-//                    model: controller.fieldModel
-//                    anchors.fill: parent
-//                    anchors.topMargin: InputStyle.panelMargin
-//                    spacing: 2 * __dp
-//                    interactive: false
+                elide: Text.ElideRight
+                wrapMode: Text.NoWrap
+              }
+            }
+          }
+        }
+      }
 
-//                    delegate: Row {
-//                        id: root
-//                        spacing: InputStyle.panelMargin
-//                        width: ListView.view.width
+      Item {
+        // Vertical spacer to keep action buttons on the bottom with photo type
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-//                        Text {
-//                            id: fieldName
-//                            text: Name
-//                            width: root.width / 2
-//                            font.pixelSize: InputStyle.fontPixelSizeNormal
-//                            color: InputStyle.fontColorBright
-//                            elide: Text.ElideRight
-//                        }
+        visible: root.controller.type === AttributePreviewController.Photo
+      }
 
-//                        Text {
-//                            id: fieldValue
-//                            text: Value ? Value : ""
-//                            width: root.width / 2 - root.spacing
-//                            font.pixelSize: InputStyle.fontPixelSizeNormal
-//                            color: InputStyle.fontColor
-//                            elide: Text.ElideRight
+      ScrollView {
 
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40 * __dp
+
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+
+        Row {
+          height: parent.height
+          spacing: 12 * __dp
+
+          FormComponents.MMPreviewPanelActionButton {
+            height: parent.height
+
+            visible: !root.layerIsReadOnly
+
+            buttonText: qsTr( "Edit" )
+            iconSource: __style.editIcon
+
+            onClicked: root.editClicked()
+          }
+
+          FormComponents.MMPreviewPanelActionButton {
+            height: parent.height
+
+            visible: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
+
+            buttonText: qsTr( "Stake out" )
+            iconSource: __style.positionTrackingIcon // TODO: change to stakeout icon
+
+            onClicked: root.editClicked()
+          }
+        }
+      }
+    }
+  }
 }

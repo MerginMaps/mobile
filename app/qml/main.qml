@@ -664,7 +664,7 @@ ApplicationWindow {
 
       height: window.height
       width: window.width
-      previewHeight: window.height / 3
+      previewHeight: window.height * 0.4
 
       project: __activeProject.qgsProject
 
