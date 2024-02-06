@@ -1095,7 +1095,7 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
     }
 
     // Mind this hack - fields with `no-gallery-use` won't use gallery, but normal word tags instead
-    if ( field.name().contains( "no-gallery-use", Qt::CaseInsensitive ) || field.alias().contains( "no-gallery-use", Qt::CaseInsensitive ) )
+    if ( field.name().contains( "nogallery", Qt::CaseInsensitive ) || field.alias().contains( "nogallery", Qt::CaseInsensitive ) )
     {
       useGallery = false;
     }
