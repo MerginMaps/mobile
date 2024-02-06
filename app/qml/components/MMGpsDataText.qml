@@ -2,17 +2,18 @@ import QtQuick
 import "."
 import ".."
 import lc 1.0
+import QtQuick.Layouts
 
 Item {
-    property string titleText: "Title"
-    property string descriptionText: "Description goes here"
+    property string titleText: "Default title"
+    property string descriptionText: "Default description"
     property bool alignmentRight: false
     property bool itemVisible: true
 
     width: parent.width / 2
     height: parent.height
 
-    Column {
+    ColumnLayout {
         width: parent.width
         height: parent.height
         visible: itemVisible
@@ -22,22 +23,22 @@ Item {
             text: titleText
             color: __style.nightColor
             font: __style.p6
-            wrapMode: Text.WordWrap
+            elide: Text.ElideRight
             horizontalAlignment: alignmentRight ? Text.AlignRight : Text.AlignLeft
+            Layout.fillWidth: true
             width: parent.width
-            anchors.top: parent.top
-            anchors.topMargin: 8
+            Layout.topMargin: 8
         }
 
         Text {
             text: descriptionText
             color: __style.nightColor
             font: __style.t3
-            wrapMode: Text.WordWrap
+            elide: Text.ElideMiddle
             horizontalAlignment: alignmentRight ? Text.AlignRight : Text.AlignLeft
+            Layout.fillWidth: true
             width: parent.width
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 8
+            Layout.bottomMargin: 8
         }
     }
 }
