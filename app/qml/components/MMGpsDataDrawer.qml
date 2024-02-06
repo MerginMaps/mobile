@@ -280,6 +280,7 @@ Drawer {
             width: 1
             height: 20 * __dp
           }
+
           MMButton {
             id: primaryButton
 
@@ -295,7 +296,11 @@ Drawer {
 
           Item {
             width: 2
-            height: scrollColumn.childrenRect.height + (20 * __dp) >= ApplicationWindow.window.height ? mainColumn.spacing + (20 * __dp) :  20 * __dp
+            height: {
+              if (ApplicationWindow.window){
+                scrollColumn.childrenRect.height + (20 * __dp) >= ApplicationWindow.window.height ? mainColumn.spacing + (20 * __dp) :  20 * __dp
+              }
+            }
           }
         }
       }
