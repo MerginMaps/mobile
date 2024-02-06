@@ -37,6 +37,7 @@ set(MM_QML
     components/MMButton.qml
     components/MMComponent_reachedDataLimit.qml
     components/MMDrawer.qml
+    components/MMGpsDataDrawer.qml
     components/MMHeader.qml
     components/MMHlineText.qml
     components/MMIcon.qml

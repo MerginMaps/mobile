@@ -22,6 +22,7 @@
 #include "qrcodedecoder.h"
 #include "inpututils.h"
 #include "scalebarkit.h"
+#include "positionkit.h"
 
 int main( int argc, char *argv[] )
 {
@@ -53,8 +54,10 @@ int main( int argc, char *argv[] )
   MMStyle style( dp );
   NotificationModel notificationModel;
 
-  engine.rootContext()->setContextProperty( "__notificationModel", &notificationModel );
+  PositionKit pk;
+  engine.rootContext()->setContextProperty( "__positionKit", &pk );
 
+  engine.rootContext()->setContextProperty( "__notificationModel", &notificationModel );
   // path to local wrapper pages
   engine.rootContext()->setContextProperty( "_qmlWrapperPath", QGuiApplication::applicationDirPath() + "/HotReload/qml/pages/" );
   engine.rootContext()->setContextProperty( "__dp", dp );
