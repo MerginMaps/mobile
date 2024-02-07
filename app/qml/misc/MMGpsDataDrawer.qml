@@ -11,19 +11,30 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 import QtQuick.Layouts
-import "."
 import ".."
+import "../components"
 import lc 1.0
 
 Drawer {
   id: root
 
+  property var mapSettings
+  property string coordinatesInDegrees: __inputUtils.degreesString( __positionKit.positionCoordinate )
   property var title
   property real rowHeight: 67 * __dp
 
   width: ApplicationWindow.window.width
   height: (mainColumn.height > ApplicationWindow.window.height ? ApplicationWindow.window.height : mainColumn.height) - 20 * __dp
   edge: Qt.BottomEdge
+
+  Component.onCompleted: forceActiveFocus()
+
+  MapPosition {
+    id: mapPositioning
+
+    positionKit: __positionKit
+    mapSettings: root.mapSettings
+  }
 
   Rectangle {
     color: roundedRect.color
@@ -113,14 +124,14 @@ Drawer {
 
             MMGpsDataText{
               titleText: qsTr( "Source" )
-              descriptionText: __positionKit.positionProvider ? __positionKit.providerName : qsTr( "No receiver" )
+              descriptionText: __positionKit.positionProvider ? __positionKit.positionProvider.name() : qsTr( "No receiver" )
             }
 
             MMGpsDataText{
               titleText: qsTr( "Status" )
-              descriptionText: __positionKit.positionProvider ? __positionKit.providerMessage : ""
+              descriptionText: __positionKit.positionProvider ? __positionKit.positionProvider.stateMessage : ""
               alignmentRight: true
-              itemVisible: __positionKit.positionProvider && __positionKit.providerType === "external"
+              itemVisible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
             }
           }
 
@@ -134,9 +145,14 @@ Drawer {
               titleText: qsTr( "Latitude" )
               descriptionText: {
                 if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.latitude ) ) {
-                  qsTr( "N/A" )
+                  return qsTr( "N/A" )
                 }
-                __positionKit.latitude
+
+                let coordParts = root.coordinatesInDegrees.split(", ")
+                if ( coordParts.length > 1 )
+                  return coordParts[0]
+
+                return qsTr( "N/A" )
               }
             }
 
@@ -144,9 +160,14 @@ Drawer {
               titleText: qsTr( "Longitude")
               descriptionText: {
                 if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.longitude ) ) {
-                  qsTr( "N/A" )
+                  return qsTr( "N/A" )
                 }
-                __positionKit.longitude
+
+                let coordParts = root.coordinatesInDegrees.split(", ")
+                if ( coordParts.length > 1 )
+                  return coordParts[1]
+
+                return qsTr( "N/A" )
               }
               alignmentRight: true
             }
@@ -161,20 +182,22 @@ Drawer {
             MMGpsDataText{
               titleText: qsTr( "X" )
               descriptionText: {
-                if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.x ) ) {
-                  qsTr( "N/A" )
+                if ( !__positionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.x ) ) {
+                  return qsTr( "N/A" )
                 }
-                __positionKit.x.toFixed(2)
+
+                __inputUtils.formatNumber( mapPositioning.mapPosition.x, 2 )
               }
             }
 
             MMGpsDataText{
               titleText: qsTr( "Y" )
               descriptionText: {
-                if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.x ) ) {
-                  qsTr( "N/A" )
+                if ( !__positionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.y ) ) {
+                  return qsTr( "N/A" )
                 }
-                __positionKit.y.toFixed(2)
+
+                __inputUtils.formatNumber( mapPositioning.mapPosition.y, 2 )
               }
               alignmentRight: true
             }
@@ -193,7 +216,7 @@ Drawer {
                   return qsTr( "N/A" )
                 }
 
-                __positionKit.horizontalAccuracy.toFixed(2) + " m"
+                __inputUtils.formatNumber( __positionKit.horizontalAccuracy, 2 ) + " m"
               }
             }
 
@@ -204,7 +227,7 @@ Drawer {
                   return qsTr( "N/A" )
                 }
 
-                __positionKit.verticalAccuracy.toFixed(2) + " m"
+                __inputUtils.formatNumber( __positionKit.verticalAccuracy, 2 ) + " m"
               }
               alignmentRight: true
             }
@@ -222,7 +245,7 @@ Drawer {
                 if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.altitude ) ) {
                   return qsTr( "N/A" )
                 }
-                __positionKit.altitude.toString() + " m"
+                __inputUtils.formatNumber( __positionKit.altitude, 2 ) + " m"
               }
             }
 
@@ -253,13 +276,13 @@ Drawer {
                   return qsTr( "N/A" )
                 }
 
-                __positionKit.speed.toString(2) + " km/h"
+                __inputUtils.formatNumber( __positionKit.speed, 2 ) + " km/h"
               }
             }
 
             MMGpsDataText{
               titleText: qsTr( "Last Fix" )
-              descriptionText: __positionKit.lastRead || qsTr( "N/A" )
+              descriptionText: __positionKit.lastRead.toLocaleTimeString( Qt.locale() ) || qsTr( "N/A" )
               alignmentRight: true
             }
           }
@@ -272,7 +295,7 @@ Drawer {
 
             MMGpsDataText{
               titleText: qsTr( "GPS antenna height" )
-              descriptionText: __positionKit.gpsAntennaHeight > 0 ? __positionKit.gpsAntennaHeight.toString(3) + " m" : qsTr( "Not set" )
+              descriptionText: __appSettings.gpsAntennaHeight > 0 ? __inputUtils.formatNumber(__appSettings.gpsAntennaHeight, 3) + " m" : qsTr( "Not set" )
             }
           }
 
@@ -291,7 +314,7 @@ Drawer {
             text: qsTr("Manage GPS receivers")
 
             onClicked: {
-              console.log("GPS data drawer button test OK")
+              additionalContent.push( positionProviderComponent )
             }
           }
 
@@ -301,6 +324,15 @@ Drawer {
           }
         }
       }
+    }
+  }
+
+  Component {
+    id: positionProviderComponent
+    PositionProviderPage {
+      onClose: additionalContent.pop(null)
+      stackView: additionalContent
+      Component.onCompleted: forceActiveFocus()
     }
   }
 }
