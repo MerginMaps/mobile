@@ -24,9 +24,15 @@ Page {
   property string activeProjectId: ""
   property int projectModelType: ProjectsModel.EmptyProjectsModel
 
+  property var controllerModel
+
   signal backClicked
   signal createProjectClicked
   signal personIconClicked
+
+  signal openProjectRequested( string projectFilePath )
+  signal showLocalChangesRequested( string projectId )
+  signal activeProjectDeleted()
 
   Rectangle {
     anchors.fill: parent
@@ -87,12 +93,18 @@ Page {
         projectSyncProgress: model.ProjectSyncProgress ? model.ProjectSyncProgress : -1
         projectRemoteError: model.ProjectRemoteError ? model.ProjectRemoteError : ""
 
-        onOpenRequested: console.log("onOpenRequested")
-        onStopSyncRequested: projectIsPending = false
-        onShowChangesRequested: console.log("onShowChangesRequested")
-        onSyncRequested: projectIsPending = true
-        onRemoveRequested: console.log("onRemoveRequested")
-        onMigrateRequested: console.log("onMigrateRequested")
+        onOpenRequested: {
+          if ( model.ProjectIsLocal )
+            root.openProjectRequested( model.ProjectFilePath )
+          else if ( !model.ProjectIsLocal && model.ProjectIsMergin && !model.ProjectSyncPending) {
+            console.log("Download project with Id: " + model.ProjectId)
+          }
+        }
+        onStopSyncRequested: controllerModel.stopProjectSync( model.ProjectId )
+        onShowChangesRequested: root.showLocalChangesRequested( model.ProjectId )
+        onSyncRequested: controllerModel.syncProject( model.ProjectId )
+        onRemoveRequested: console.log("Remove project with Id: " + model.ProjectId)
+        onMigrateRequested: controllerModel.migrateProject( model.ProjectId )
       }
 
       footer: Item { width: 1; height: createProjectButton.visible ? 80 * __dp : 0 }

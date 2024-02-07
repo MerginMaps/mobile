@@ -23,7 +23,18 @@ MMProjectListPage {
 
   activeProjectId: "1"
 
+  controllerModel: QtObject {
+    signal syncProject( var projectId )
+    signal migrateProject( var projectId )
+    signal stopProjectSync( var projectId )
+
+    onSyncProject: function (projectId) { console.log("onSyncProject " + projectId) }
+    onMigrateProject: function (projectId) { console.log("onMigrateProject " + projectId) }
+    onStopProjectSync: function (projectId) { console.log("onStopProjectSync " + projectId) }
+  }
+
   model: ListModel {
+
     Component.onCompleted: {
       append( {ProjectId: "1",
                ProjectStatus: ProjectStatus.NoVersion,
@@ -49,10 +60,10 @@ MMProjectListPage {
                ProjectRemoteError: "ProjectRemoteError"
              } )
       append( {ProjectId: "3",
-               ProjectStatus: ProjectStatus.NoVersion,
+               ProjectStatus: ProjectStatus.NeedsSync,
                ProjectName: "ProjectName 3",
                ProjectFullName: "ProjectFullName 3",
-               ProjectDescription: "Mergin Local Valid",
+               ProjectDescription: "Mergin Local Valid NeedsSync",
                ProjectIsValid: true,
                ProjectIsLocal: true,
                ProjectIsMergin: true,
@@ -88,10 +99,21 @@ MMProjectListPage {
                ProjectIsMergin: false,
                ProjectSyncPending: false
              } )
+      append( {ProjectId: "7",
+               ProjectStatus: ProjectStatus.NoVersion,
+               ProjectName: "ProjectName 7",
+               ProjectFullName: "ProjectFullName 7",
+               ProjectDescription: "Mergin Valid",
+               ProjectIsValid: true,
+               ProjectIsLocal: false,
+               ProjectIsMergin: true,
+               ProjectSyncPending: false
+             } )
     }
   }
 
   onBackClicked: console.log("Back clicked")
   onCreateProjectClicked: console.log("Create project clicked")
   onPersonIconClicked: console.log("Person icon clicked")
+  onShowLocalChangesRequested: function (projectId) { console.log("Show Local Changes " + projectId) }
 }
