@@ -33,7 +33,7 @@ Rectangle {
   height: 1 * __dp < 1 ? 1 : 1 * __dp // parent form's list inserts space between each 2 elements
   width: parent.width
 
-  color: _fieldConfig["IsHLine"] ? __style.forestColor : "transparent"
+  color: _fieldConfig["IsHLine"] ? __style.forestColor : __style.transparentColor
 
   anchors {
     right: parent.right

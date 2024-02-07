@@ -25,10 +25,10 @@ Item {
   Rectangle { // background
     width: root.width
     height: root.height
-    border.color: customStyle.fields.normalColor
-    border.width: 1 * __dp
-    color: customStyle.fields.backgroundColor
-    radius: customStyle.fields.cornerRadius
+    border.width: 2 * __dp
+    border.color: __style.transparentColor
+    color: __style.whiteColor
+    radius: __style.inputRadius
   }
 
   Text {
