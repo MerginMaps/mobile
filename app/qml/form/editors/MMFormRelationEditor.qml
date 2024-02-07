@@ -34,8 +34,6 @@ MMBaseInput {
   property string _fieldTitle: parent.fieldTitle
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
 
-  property ListModel featuresModel // <---- what to do here?
-
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentFeature, var relation )
 

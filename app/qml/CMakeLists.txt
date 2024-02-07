@@ -101,12 +101,12 @@ set(MM_QML
     inputs/MMTextInput.qml
     inputs/MMSearchInput.qml
     inputs/MMDropdownInput.qml
+    inputs/MMTextWithButtonInput.qml
     form/MMFormWrapper.qml
     form/MMForm.qml
     form/MMPreviewPanel.qml
     form/components/MMFormTabBar.qml
     form/components/MMPreviewPanelActionButton.qml
-    form/editors/MMFormButtonEditor.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormGalleryEditor.qml
     form/editors/MMFormNumberEditor.qml

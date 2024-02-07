@@ -38,297 +38,220 @@ ScrollView {
 
         MMCheckBox {
           id: checkbox
-          text: checked ? "enabled" : "disabled"
+          text: checked ? "enabled: yes" : "enabled: no"
           checked: true
         }
 
-        MMFormRelationEditor {
-          title: "MMTextAreaEditor"
-          enabled: checkbox.checked
-          width: parent.width
-
-          onCreateLinkedFeature: function(parentFeature, relation) {
-            console.log("Add feature: " + parentFeature + " " + relation)
-          }
-
-          onOpenLinkedFeature: function(linkedFeature) {
-            console.log("Feature: " + linkedFeature)
-          }
-
-          featuresModel: ListModel {
-            property string searchExpression
-
-            ListElement {
-              FeatureId: 1
-              FeatureTitle: "Title 1"
-              FeaturePair: "Pair 1"
-              Description: "Description 1"
-              SearchResult: "SearchResult 1"
-              Feature: "Feature 1"
-            }
-            ListElement {
-              FeatureId: 2
-              FeatureTitle: "Title 2"
-              FeaturePair: "Pair 2"
-              Description: "Description 2"
-              SearchResult: "SearchResult 2"
-              Feature: "Feature 2"
-            }
-            ListElement {
-              FeatureId: 3
-              FeatureTitle: "Title 3"
-              FeaturePair: "Pair 3"
-              Description: "Description 3"
-              SearchResult: "SearchResult 3"
-              Feature: "Feature 3"
-            }
-            ListElement {
-              FeatureId: 4
-              FeatureTitle: "Title 4"
-              FeaturePair: "Pair 4"
-              Description: "Description 4"
-              SearchResult: "SearchResult 4"
-              Feature: "Feature 4"
-            }
-            ListElement {
-              FeatureId: 5
-              FeatureTitle: "Title 5"
-              FeaturePair: "Pair 5"
-              Description: "Description 5"
-              SearchResult: "SearchResult 5"
-              Feature: "Feature 5"
-            }
-            ListElement {
-              FeatureId: 6
-              FeatureTitle: "Title 6"
-              FeaturePair: "Pair 6"
-              Description: "Description 6"
-              SearchResult: "SearchResult 6"
-              Feature: "Feature 6"
-            }
-            ListElement {
-              FeatureId: 7
-              FeatureTitle: "Title 7"
-              FeaturePair: "Pair 7"
-              Description: "Description 7"
-              SearchResult: "SearchResult 7"
-              Feature: "Feature 7"
-            }
-          }
+        MMCheckBox {
+          id: checkboxRemember
+          text: checked ? "remeber: yes" : "remember: no"
+          checked: false
         }
 
-        MMSearchEditor {
-          title: "MMSearchEditor"
-          placeholderText: "Text value"
-          onSearchTextChanged: function(text) { console.log("Searched string: " + text) }
-        }
-
-        MMDropdownFormEditor {
-          title: "MMComboBoxEditor"
-          placeholderText: "Select one"
-          dropDownTitle: "Select one"
-          enabled: checkbox.checked
-          width: parent.width
-          featuresModel: ListModel {
-            ListElement {
-              FeatureId: 1
-              FeatureTitle: "Title 1"
-              Description: "Description 1"
-              SearchResult: "SearchResult 1"
-              Feature: "Feature 1"
-            }
-            ListElement {
-              FeatureId: 2
-              FeatureTitle: "Title 2"
-              Description: "Description 2"
-              SearchResult: "SearchResult 2"
-              Feature: "Feature 2"
-            }
-            ListElement {
-              FeatureId: 3
-              FeatureTitle: "Title 3"
-              Description: "Description 3"
-              SearchResult: "SearchResult 3"
-              Feature: "Feature 3"
-            }
-          }
-          onFeatureClicked: function(selectedFeatures) { text = selectedFeatures }
-        }
-
-        MMDropdownFormEditor {
-          title: "MMComboBoxEditor Multi select"
-          placeholderText: "Select multiple"
-          dropDownTitle: "Multi select"
-          enabled: checkbox.checked
-          width: parent.width
-          multiSelect: true
-          preselectedFeatures: []
-
-          featuresModel: ListModel {
-            property string searchExpression
-
-            ListElement {
-              FeatureId: 1
-              FeatureTitle: "Title 1"
-              Description: "Description 1"
-              SearchResult: "SearchResult 1"
-              Feature: "Feature 1"
-            }
-            ListElement {
-              FeatureId: 2
-              FeatureTitle: "Title 2"
-              Description: "Description 2"
-              SearchResult: "SearchResult 2"
-              Feature: "Feature 2"
-            }
-            ListElement {
-              FeatureId: 3
-              FeatureTitle: "Title 3"
-              Description: "Description 3"
-              SearchResult: "SearchResult 3"
-              Feature: "Feature 3"
-            }
-            ListElement {
-              FeatureId: 4
-              FeatureTitle: "Title 4"
-              Description: "Description 4"
-              SearchResult: "SearchResult 4"
-              Feature: "Feature 4"
-            }
-            ListElement {
-              FeatureId: 5
-              FeatureTitle: "Title 5"
-              Description: "Description 5"
-              SearchResult: "SearchResult 5"
-              Feature: "Feature 5"
-            }
-            ListElement {
-              FeatureId: 6
-              FeatureTitle: "Title 6"
-              Description: "Description 6"
-              SearchResult: "SearchResult 6"
-              Feature: "Feature 6"
-            }
-            ListElement {
-              FeatureId: 7
-              FeatureTitle: "Title 7"
-              Description: "Description 7"
-              SearchResult: "SearchResult 7"
-              Feature: "Feature 7"
-            }
-          }
-          onFeatureClicked: function(selectedFeatures) {
-            preselectedFeatures = selectedFeatures
-            text = selectedFeatures.toString()
-          }
-        }
-
-        MMSliderFormEditor {
-          title: "MMSliderEditor"
-          from: -100
-          to: 100
-          parentValue: -100
-          suffix: " s"
-          width: parent.width
-          enabled: checkbox.checked
-          onEditorValueChanged: function(newValue) { errorMsg = newValue > 0 ? "" : "Set positive value!" }
-          hasCheckbox: true
-          checkboxChecked: true
-        }
-
-        MMNumberFormEditor {
-          title: "MMNumberEditor"
-          parentValue: "2.0"
-          from: 1.0
-          to: 3.0
-          width: parent.width
-          enabled: checkbox.checked
-          precision: 1
-          suffix: "s."
-          step: Math.pow( 10.0, 0.0 - precision )
-          onEditorValueChanged: function(newValue) { parentValue = newValue }
-        }
-
-        MMTextInput {
-          title: "MMInputEditor"
-          text: "Text"
-          enabled: checkbox.checked
-          width: parent.width
-          hasCheckbox: true
-          checkboxChecked: false
-        }
-
-        MMScannerFormEditor {
-          title: "MMQrCodeEditor"
-          placeholderText: "QR code"
-          warningMsg: text.length > 0 ? "" : "Click to icon and scan the code"
-          enabled: checkbox.checked
-          width: parent.width
-
-          onEditorValueChanged: function(newValue, isNull) { console.log("QR code: " + newValue) }
-        }
-
-        MMPhotoFormEditor {
-          title: "MMPhotoEditor"
-          width: parent.width
-          photoUrl: "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg"
-
-          onTrashClicked: console.log("Move to trash")
-          onContentClicked: console.log("Open photo")
-        }
-
-        MMButtonFormEditor {
-          title: "MMButtonInputEditor"
-          placeholderText: "Write something"
-          text: "Text to copy"
-          buttonText: "Copy"
-          enabled: checkbox.checked
-          width: parent.width
-          onButtonClicked: console.log("Copy pressed")
-          buttonEnabled: text.length > 0
-        }
-
-        MMButtonFormEditor {
-          title: "MMButtonInputEditor"
-          placeholderText: "Píš"
-          buttonText: "Kopíruj"
-          enabled: checkbox.checked
-          width: parent.width
-          buttonEnabled: text.length > 0
-        }
-
-        MMTextInput {
-          title: "MMInputEditor"
-          placeholderText: "Placeholder"
-          enabled: checkbox.checked
-          width: parent.width
-          warningMsg: text.length > 0 ? "" : "Write something"
-        }
-
-        MMTextMultilineFormEditor {
-          title: "MMTextAreaEditor"
-          placeholderText: "Place for multi row text"
-          enabled: checkbox.checked
-          width: parent.width
-          warningMsg: text.length > 0 ? "" : "Write something"
-        }
-
-        MMPasswordInput {
-          title: "MMPasswordEditor"
-          text: "Password"
-          //regexp: '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,})'
-          errorMsg: "Password must contain at least 6 characters\nMinimum 1 number, uppercase and lowercase letter and special character"
-          enabled: checkbox.checked
-          width: parent.width
-        }
-
-        MMSwitchFormEditor {
-          title: "MMSwitchEditor"
+        MMCheckBox {
+          id: checkboxTitle
+          text: checked ? "show title: yes" : "show title: no"
           checked: true
-          text: checked ? "True" : "False"
-          warningMsg: checked ? "" : "Should be checked :)"
-          enabled: checkbox.checked
+        }
+
+        MMCheckBox {
+          id: checkboxWarning
+          text: checked ? "show warning: yes" : "show warning: no"
+          checked: false
+        }
+
+        MMCheckBox {
+          id: checkboxError
+          text: checked ? "show error: yes" : "show error: no"
+          checked: false
+        }
+
+        Item {
           width: parent.width
+          height: relationEditor.height
+
+          property var fieldValue: ""
+          property var fieldConfig:  ({})
+          property bool fieldShouldShowTitle: checkboxTitle.checked
+          property bool fieldIsReadOnly: !checkbox.checked
+          property string fieldTitle: "MMFormRelationEditor"
+          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
+          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
+          property bool fieldRememberValueSupported: checkboxRemember.checked
+          property bool fieldRememberValueState: false
+
+          MMFormRelationEditor {
+            id: relationEditor
+            width: parent.width
+
+            onCreateLinkedFeature: function(parentFeature, relation) {
+              console.log("Add feature: " + parentFeature + " " + relation)
+            }
+
+            onOpenLinkedFeature: function(linkedFeature) {
+              console.log("Feature: " + linkedFeature)
+            }
+          }
+        }
+
+        Item {
+          width: parent.width
+          height: galleryEditor.height
+
+          property var fieldValue: ""
+          property var fieldConfig: ({})
+          property bool fieldShouldShowTitle: checkboxTitle.checked
+          property bool fieldIsReadOnly: !checkbox.checked
+          property string fieldTitle: "MMFormGalleryEditor"
+          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
+          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
+          property bool fieldRememberValueSupported: checkboxRemember.checked
+          property bool fieldRememberValueState: false
+
+          MMFormGalleryEditor {
+            id: galleryEditor
+            width: parent.width
+
+            onCreateLinkedFeature: function(parentFeature, relation) {
+              console.log("Add feature: " + parentFeature + " " + relation)
+            }
+
+            onOpenLinkedFeature: function(linkedFeature) {
+              console.log("Feature: " + linkedFeature)
+            }
+          }
+        }
+
+        Item {
+          width: parent.width
+          height: sliderEditor.height
+
+          property var fieldValue: -100
+          property var fieldConfig: {["Min",-100],["Max", 100], ["Suffix", "s"], ["Precision", 1]}
+          property bool fieldShouldShowTitle: checkboxTitle.checked
+          property bool fieldIsReadOnly: !checkbox.checked
+          property string fieldTitle: "MMFormSliderEditor"
+          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
+          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
+          property bool fieldRememberValueSupported: checkboxRemember.checked
+          property bool fieldRememberValueState: false
+
+          MMFormSliderEditor {
+            id: sliderEditor
+            width: parent.width
+            onEditorValueChanged: function(newValue, isNull ) { parent.fieldValue = newValue }
+          }
+        }
+
+        Item {
+          width: parent.width
+          height: numberEditor.height
+
+          property var fieldValue: 2
+          property var fieldConfig: {["Min",1.0], ["Max", 3.0], ["Precition", 1], ["Suffix", "s."], ["Step", 0.1]}
+          property bool fieldShouldShowTitle: checkboxTitle.checked
+          property bool fieldIsReadOnly: !checkbox.checked
+          property string fieldTitle: "MMFormNumberEditor"
+          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
+          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
+          property bool fieldRememberValueSupported: checkboxRemember.checked
+          property bool fieldRememberValueState: false
+          property bool fieldValueIsNull: false
+
+          MMFormNumberEditor {
+            id: numberEditor
+            width: parent.width
+            onEditorValueChanged: function(newValue, isNull) { parent.fieldValue = newValue }
+          }
+        }
+
+        Item {
+          width: parent.width
+          height: scannerEditor.height
+
+          property var fieldValue: ""
+          property var fieldConfig: ({})
+          property bool fieldShouldShowTitle: checkboxTitle.checked
+          property bool fieldIsReadOnly: !checkbox.checked
+          property string fieldTitle: "MMFormScannerEditor"
+          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
+          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
+          property bool fieldRememberValueSupported: checkboxRemember.checked
+          property bool fieldRememberValueState: false
+          property bool fieldValueIsNull: false
+
+          MMFormScannerEditor {
+            id: scannerEditor
+            placeholderText: "QR code"
+            width: parent.width
+            onEditorValueChanged: function(newValue, isNull) { parent.fieldValue = newValue }
+          }
+        }
+
+        Item {
+          width: parent.width
+          height: photoEditor.height
+          property var fieldValue: ""
+          property var fieldConfig: {["RelativeStorage", ""]}
+          property bool fieldShouldShowTitle: checkboxTitle.checked
+          property bool fieldIsReadOnly: !checkbox.checked
+          property string fieldTitle: "MMFormPhotoEditor"
+          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
+          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
+          property bool fieldRememberValueSupported: checkboxRemember.checked
+          property bool fieldRememberValueState: false
+          property bool fieldValueIsNull: false
+
+          MMFormPhotoEditor {
+            id: photoEditor
+            width: parent.width
+
+            onTrashClicked: console.log("Move to trash")
+            onContentClicked: console.log("Open photo")
+          }
+        }
+
+        Item {
+          width: parent.width
+          height: textMultilineEditor.height
+
+          property var fieldValue: ""
+          property var fieldConfig: ({})
+          property bool fieldShouldShowTitle: checkboxTitle.checked
+          property bool fieldIsReadOnly: !checkbox.checked
+          property string fieldTitle: "MMFormTextMultilineEditor"
+          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
+          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
+          property bool fieldRememberValueSupported: checkboxRemember.checked
+          property bool fieldRememberValueState: false
+          property bool fieldValueIsNull: false
+
+          MMFormTextMultilineEditor {
+            id: textMultilineEditor
+            placeholderText: "Place for multi row text"
+            width: parent.width
+          }
+        }
+
+        Item {
+          width: parent.width
+          height: switchEditor.height
+
+          property var fieldValue: ""
+          property var fieldConfig: {["CheckedState", "checked"], ["UncheckedState", "unchecked"]}
+          property bool fieldShouldShowTitle: checkboxTitle.checked
+          property bool fieldIsReadOnly: !checkbox.checked
+          property string fieldTitle: "MMFormSwitchEditor"
+          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
+          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
+          property bool fieldRememberValueSupported: checkboxRemember.checked
+          property bool fieldRememberValueState: false
+          property bool fieldValueIsNull: false
+
+          MMFormSwitchEditor {
+            id: switchEditor
+            width: parent.width
+          }
         }
       }
     }

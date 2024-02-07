@@ -23,6 +23,7 @@
 #include "inpututils.h"
 #include "scalebarkit.h"
 #include "positionkit.h"
+#include "relationfeaturesmodel.h"
 
 int main( int argc, char *argv[] )
 {
@@ -42,6 +43,7 @@ int main( int argc, char *argv[] )
   qmlRegisterUncreatableType<RegistrationError>( "lc", 1, 0, "RegistrationError", "RegistrationError Enum" );
   qmlRegisterType<QrCodeDecoder>( "lc", 1, 0, "QrCodeDecoder" );
   qmlRegisterType<ScaleBarKit>( "lc", 1, 0, "ScaleBarKit" );
+  qmlRegisterType<RelationFeaturesModel>( "lc", 1, 0, "RelationFeaturesModel" );
 
 #ifdef DESKTOP_OS
   HotReload hotReload( engine );

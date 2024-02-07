@@ -10,27 +10,24 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../../components"
-import "../../inputs"
+import "../components"
 
 /*
- * This editor is not maintaned as it is not used in the app at the moment.
- * We might need it in the future though.
+ * Common text input to use in the app, with button on right
+ * Disabled state can be achieved by setting `enabled: false`.
+ *
+ * See MMBaseInput for more properties.
  */
 
 MMBaseInput {
   id: root
-
-  property var parentValue: parent.value ?? ""
-  property bool parentValueIsNull: parent.valueIsNull ?? false
-  property bool isReadOnly: parent.readOnly ?? false
 
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
   property alias buttonText: buttonText.text
   property alias buttonEnabled: rightButton.enabled
 
-  signal editorValueChanged( var newValue, var isNull )
+  signal textEdited( string text )
   signal buttonClicked()
 
   hasFocus: textField.activeFocus
@@ -41,7 +38,6 @@ MMBaseInput {
     anchors.verticalCenter: parent.verticalCenter
     width: parent.width + rightButton.x
 
-    text: root.parentValue
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
     placeholderTextColor: __style.nightAlphaColor
     font: __style.p5
@@ -50,6 +46,8 @@ MMBaseInput {
     background: Rectangle {
       color: __style.transparentColor
     }
+
+    onTextEdited: root.textEdited( textField.text )
   }
 
   rightAction: Button {

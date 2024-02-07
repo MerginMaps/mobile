@@ -14,6 +14,7 @@ import QtQuick.Layouts
 import "../../app/qml/components"
 import "../../app/qml/inputs"
 import "../../app/qml/form"
+import "../../app/qml/form/components"
 
 Page {
   id: root
@@ -173,8 +174,8 @@ Page {
 
     MMTextInput {
       width: ListView.view.width
-      title: qsTr("Field title")
-      placeholderText: qsTr("placeholder...")
+      title: "Field title"
+      placeholderText: "placeholder..."
     }
   }
 
