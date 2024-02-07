@@ -14,6 +14,7 @@ import QtQuick.Controls.Basic
 import "../../app/qml/inputs"
 import "../../app/qml/form/editors"
 import "../../app/qml/components"
+import "../"
 
 ScrollView {
   Column {
@@ -66,19 +67,10 @@ ScrollView {
           checked: false
         }
 
-        Item {
+        EditorItem {
           width: parent.width
           height: relationEditor.height
-
-          property var fieldValue: ""
-          property var fieldConfig:  ({})
-          property bool fieldShouldShowTitle: checkboxTitle.checked
-          property bool fieldIsReadOnly: !checkbox.checked
-          property string fieldTitle: "MMFormRelationEditor"
-          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
-          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
-          property bool fieldRememberValueSupported: checkboxRemember.checked
-          property bool fieldRememberValueState: false
+          fieldTitle: "MMFormRelationEditor"
 
           MMFormRelationEditor {
             id: relationEditor
@@ -94,19 +86,10 @@ ScrollView {
           }
         }
 
-        Item {
+        EditorItem {
           width: parent.width
           height: galleryEditor.height
-
-          property var fieldValue: ""
-          property var fieldConfig: ({})
-          property bool fieldShouldShowTitle: checkboxTitle.checked
-          property bool fieldIsReadOnly: !checkbox.checked
-          property string fieldTitle: "MMFormGalleryEditor"
-          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
-          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
-          property bool fieldRememberValueSupported: checkboxRemember.checked
-          property bool fieldRememberValueState: false
+          fieldTitle: "MMFormGalleryEditor"
 
           MMFormGalleryEditor {
             id: galleryEditor
@@ -122,19 +105,13 @@ ScrollView {
           }
         }
 
-        Item {
+        EditorItem {
           width: parent.width
           height: sliderEditor.height
 
-          property var fieldValue: -100
-          property var fieldConfig: {["Min",-100],["Max", 100], ["Suffix", "s"], ["Precision", 1]}
-          property bool fieldShouldShowTitle: checkboxTitle.checked
-          property bool fieldIsReadOnly: !checkbox.checked
-          property string fieldTitle: "MMFormSliderEditor"
-          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
-          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
-          property bool fieldRememberValueSupported: checkboxRemember.checked
-          property bool fieldRememberValueState: false
+          fieldValue: "100"
+          fieldConfig: ({Min:-100, Max: 100, Suffix: "s", Precision: 1})
+          fieldTitle: "MMFormSliderEditor"
 
           MMFormSliderEditor {
             id: sliderEditor
@@ -143,20 +120,13 @@ ScrollView {
           }
         }
 
-        Item {
+        EditorItem {
           width: parent.width
           height: numberEditor.height
 
-          property var fieldValue: 2
-          property var fieldConfig: {["Min",1.0], ["Max", 3.0], ["Precition", 1], ["Suffix", "s."], ["Step", 0.1]}
-          property bool fieldShouldShowTitle: checkboxTitle.checked
-          property bool fieldIsReadOnly: !checkbox.checked
-          property string fieldTitle: "MMFormNumberEditor"
-          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
-          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
-          property bool fieldRememberValueSupported: checkboxRemember.checked
-          property bool fieldRememberValueState: false
-          property bool fieldValueIsNull: false
+          fieldValue: "2"
+          fieldConfig: ({Min: 1.0, Max: 3.0, Precition: 1, Suffix: "s.", Step: 0.1})
+          fieldTitle: "MMFormNumberEditor"
 
           MMFormNumberEditor {
             id: numberEditor
@@ -165,20 +135,11 @@ ScrollView {
           }
         }
 
-        Item {
+        EditorItem {
           width: parent.width
           height: scannerEditor.height
 
-          property var fieldValue: ""
-          property var fieldConfig: ({})
-          property bool fieldShouldShowTitle: checkboxTitle.checked
-          property bool fieldIsReadOnly: !checkbox.checked
-          property string fieldTitle: "MMFormScannerEditor"
-          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
-          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
-          property bool fieldRememberValueSupported: checkboxRemember.checked
-          property bool fieldRememberValueState: false
-          property bool fieldValueIsNull: false
+          fieldTitle: "MMFormScannerEditor"
 
           MMFormScannerEditor {
             id: scannerEditor
@@ -188,19 +149,12 @@ ScrollView {
           }
         }
 
-        Item {
+        EditorItem {
           width: parent.width
           height: photoEditor.height
-          property var fieldValue: ""
-          property var fieldConfig: {["RelativeStorage", ""]}
-          property bool fieldShouldShowTitle: checkboxTitle.checked
-          property bool fieldIsReadOnly: !checkbox.checked
-          property string fieldTitle: "MMFormPhotoEditor"
-          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
-          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
-          property bool fieldRememberValueSupported: checkboxRemember.checked
-          property bool fieldRememberValueState: false
-          property bool fieldValueIsNull: false
+
+          fieldConfig: ({RelativeStorage: ""})
+          fieldTitle: "MMFormPhotoEditor"
 
           MMFormPhotoEditor {
             id: photoEditor
@@ -211,20 +165,11 @@ ScrollView {
           }
         }
 
-        Item {
+        EditorItem {
           width: parent.width
           height: textMultilineEditor.height
 
-          property var fieldValue: ""
-          property var fieldConfig: ({})
-          property bool fieldShouldShowTitle: checkboxTitle.checked
-          property bool fieldIsReadOnly: !checkbox.checked
-          property string fieldTitle: "MMFormTextMultilineEditor"
-          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
-          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
-          property bool fieldRememberValueSupported: checkboxRemember.checked
-          property bool fieldRememberValueState: false
-          property bool fieldValueIsNull: false
+          fieldTitle: "MMFormTextMultilineEditor"
 
           MMFormTextMultilineEditor {
             id: textMultilineEditor
@@ -233,23 +178,55 @@ ScrollView {
           }
         }
 
-        Item {
+        EditorItem {
           width: parent.width
           height: switchEditor.height
 
-          property var fieldValue: ""
-          property var fieldConfig: {["CheckedState", "checked"], ["UncheckedState", "unchecked"]}
-          property bool fieldShouldShowTitle: checkboxTitle.checked
-          property bool fieldIsReadOnly: !checkbox.checked
-          property string fieldTitle: "MMFormSwitchEditor"
-          property string fieldErrorMessage: checkboxError.checked ? "error" : ""
-          property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
-          property bool fieldRememberValueSupported: checkboxRemember.checked
-          property bool fieldRememberValueState: false
-          property bool fieldValueIsNull: false
+          fieldConfig: ({ CheckedState: "checked", UncheckedState: "unchecked"})
+          fieldTitle: "MMFormSwitchEditor"
 
           MMFormSwitchEditor {
             id: switchEditor
+            width: parent.width
+          }
+        }
+
+        Label {
+          text: "MMFormSpacer - HLine"
+        }
+
+        EditorItem {
+          width: parent.width
+          height: spacer2.height
+
+          fieldConfig: ({IsHLine: true})
+          fieldTitle: "title not shown for spacer"
+
+          MMFormSpacer {
+            id: spacer2
+            width: parent.width
+          }
+        }
+
+
+        Label {
+          text: "MMFormRichTextViewer - Text"
+        }
+
+        EditorItem {
+          width: parent.width
+          height: richTextViewer.height
+
+          fieldValue: "Lorem ipsum dolor sit amet, consectetur adipiscing elit," +
+                      " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n\n" +
+                      " Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris" +
+                      " nisi ut aliquip ex ea commodo consequat."
+
+          fieldConfig: ({UseHtml: false})
+          fieldTitle: ""
+
+          MMFormRichTextViewer {
+            id: richTextViewer
             width: parent.width
           }
         }

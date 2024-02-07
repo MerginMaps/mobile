@@ -9,20 +9,35 @@
 
 import QtQuick
 import QtQuick.Controls
-import "../components"
+
+import "../../components"
+import "../../inputs"
+
+/*
+ * Spacer for QGIS Attribute Form
+ * Has 2 forms: with HLine and without
+ * It does not have title
+ * Read-Only, user cannot modify the content
+ *
+ * Requires various global properties set to function, see featureform Loader section.
+ * These properties are injected here via 'fieldXYZ' properties and captured with underscore `_`.
+ *
+ * Should be used only within feature form.
+ */
 
 Rectangle {
-  id: spacer
+  id: root
 
-  /*required*/ property var config: parent.config
-
-  property bool isHLine: config["IsHLine"]
+  property var _fieldConfig: parent.fieldConfig
 
   height: 1 * __dp < 1 ? 1 : 1 * __dp // parent form's list inserts space between each 2 elements
   width: parent.width
-  color: isHLine ? customStyle.fields.backgroundColor : "transparent"
+
+  color: _fieldConfig["IsHLine"] ? __style.forestColor : "transparent"
+
   anchors {
     right: parent.right
     left: parent.left
   }
+
 }

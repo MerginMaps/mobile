@@ -94,8 +94,6 @@ set(MM_QML
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
     editor/inputrelationreference.qml
-    editor/inputrichtext.qml
-    editor/inputspacer.qml
     inputs/MMBaseInput.qml
     inputs/MMPasswordInput.qml
     inputs/MMTextInput.qml
@@ -120,6 +118,8 @@ set(MM_QML
     form/editors/MMFormTextEditor.qml
     form/editors/MMFormValueMapEditor.qml
     form/editors/MMFormValueRelationEditor.qml
+    form/editors/MMFormSpacer.qml
+    form/editors/MMFormRichTextViewer.qml
     layers/FeaturesListPageV2.qml
     layers/LayerDetail.qml
     layers/LayersListPageV2.qml

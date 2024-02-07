@@ -51,6 +51,8 @@ int main( int argc, char *argv[] )
 #endif
   InputUtils iu;
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
+  engine.rootContext()->setContextProperty( "__androidUtils", &iu );
+  engine.rootContext()->setContextProperty( "__iosUtils", &iu );
 
   qreal dp = Helper::calculateDpRatio();
   MMStyle style( dp );

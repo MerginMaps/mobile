@@ -13,8 +13,11 @@ import "../components"
 
 Item {
   id: root
-  /*required*/ property var parentValue: parent.value
-  /*required*/ property var config: parent.config
+
+  property var _fieldValue: parent.fieldValue
+  property var _fieldConfig: parent.fieldConfig
+
+  property real padding: 11 * __dp
 
   height: textArea.height
   width: parent.width
@@ -32,18 +35,18 @@ Item {
     id: textArea
 
     wrapMode: Text.Wrap
-    color: customStyle.fields.fontColor
-    font.pixelSize: customStyle.fields.fontPixelSize
+    font: __style.p5
+    color: __style.nightColor
 
-    text: root.parentValue !== undefined ? root.parentValue : ''
-    textFormat: config['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
+    text: root._fieldValue !== undefined ? root._fieldValue : ''
+    textFormat: _fieldConfig['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
 
     width: root.width
 
-    topPadding: customStyle.fields.height * 0.25
-    bottomPadding: customStyle.fields.height * 0.25
-    leftPadding: customStyle.fields.sideMargin
-    rightPadding: customStyle.fields.sideMargin
+    topPadding: root.padding
+    bottomPadding: root.padding
+    leftPadding: root.padding
+    rightPadding: root.padding
 
     onLinkActivated: function( link ) {
       Qt.openUrlExternally( link )

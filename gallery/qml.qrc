@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file>qml/Main.qml</file>
         <file>qml/IconBox.qml</file>
+        <file>qml/EditorItem.qml</file>
 
         <file>qml/pages/IconsPage.qml</file>
         <file>qml/pages/StylePage.qml</file>
@@ -93,6 +94,8 @@
         <file>../app/qml/form/editors/MMFormSwitchEditor.qml</file>
         <file>../app/qml/form/editors/MMFormTextEditor.qml</file>
         <file>../app/qml/form/editors/MMFormTextMultilineEditor.qml</file>
+        <file>../app/qml/form/editors/MMFormSpacer.qml</file>
+        <file>../app/qml/form/editors/MMFormRichTextViewer.qml</file>
 
         <file>../app/qml/onboarding/MMAcceptInvitation.qml</file>
         <file>../app/qml/onboarding/MMCreateWorkspace.qml</file>
