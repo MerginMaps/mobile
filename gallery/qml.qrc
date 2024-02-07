@@ -106,12 +106,12 @@
 
         <file>../app/qml/map/MMPositionMarker.qml</file>
         <file>../app/qml/map/MMMapScaleBar.qml</file>
-        <file>../app/qml/inputs/MMRelationsEditor.qml</file>
-        <file>../app/qml/inputs/MMPhotoEditor.qml</file>
+        <file>../app/qml/form/editors/MMFormRelationEditor.qml</file>
+        <file>../app/qml/form/editors/MMFormPhotoEditor.qml</file>
         <file>qml/pages/FormPage.qml</file>
-        <file>../app/qml/form/MMFormTabBar.qml</file>
+        <file>../app/qml/form/components/MMFormTabBar.qml</file>
         <file>../app/qml/project/MMProjectListPage.qml</file>
         <file>qml/pages/ProjectListPage.qml</file>
-        <file>../app/qml/components/MMLinkedFeaturesDrawer.qml</file>
+        <file>../app/qml/components/MMFeaturesListDrawer.qml</file>
     </qresource>
 </RCC>
