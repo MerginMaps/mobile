@@ -195,175 +195,175 @@ Q_DECLARE_METATYPE( MerginProjectsList )
 
 class ProjectsModel : public QAbstractListModel
 {
-  Q_OBJECT
+    Q_OBJECT
 
   public:
 
-  enum Roles
-  {
-    ProjectName = Qt::UserRole + 1,
-    ProjectNamespace,
-    ProjectFullName,
-    ProjectId,
-    ProjectDirectory,
-    ProjectDescription,
-    ProjectIsMergin,
-    ProjectIsLocal,
-    ProjectFilePath,
-    ProjectIsValid,
-    ProjectStatus,
-    ProjectSyncPending,
-    ProjectSyncProgress,
-    ProjectRemoteError
-  };
-  Q_ENUM( Roles )
+    enum Roles
+    {
+      ProjectName = Qt::UserRole + 1,
+      ProjectNamespace,
+      ProjectFullName,
+      ProjectId,
+      ProjectDirectory,
+      ProjectDescription,
+      ProjectIsMergin,
+      ProjectIsLocal,
+      ProjectFilePath,
+      ProjectIsValid,
+      ProjectStatus,
+      ProjectSyncPending,
+      ProjectSyncProgress,
+      ProjectRemoteError
+    };
+    Q_ENUM( Roles )
 
-  /**
-     * \brief The ProjectModelTypes enum:
-     * - LocalProjectsModel always keeps all local projects and seek their mergin part when listProjectsByNameFinished
-     * - Workspace-, and PublicProjectsModel does the opposite, keeps all mergin projects and seeks their local part in projects from LocalProjectsManager
-     * - EmptyProjectsModel is default state
-     */
-  enum ProjectModelTypes
-  {
-    EmptyProjectsModel = 0, // default, holding no projects ~ invalid model
-    LocalProjectsModel,
-    PublicProjectsModel,
-    WorkspaceProjectsModel,
-    RecentProjectsModel
-  };
-  Q_ENUM( ProjectModelTypes )
+    /**
+       * \brief The ProjectModelTypes enum:
+       * - LocalProjectsModel always keeps all local projects and seek their mergin part when listProjectsByNameFinished
+       * - Workspace-, and PublicProjectsModel does the opposite, keeps all mergin projects and seeks their local part in projects from LocalProjectsManager
+       * - EmptyProjectsModel is default state
+       */
+    enum ProjectModelTypes
+    {
+      EmptyProjectsModel = 0, // default, holding no projects ~ invalid model
+      LocalProjectsModel,
+      PublicProjectsModel,
+      WorkspaceProjectsModel,
+      RecentProjectsModel
+    };
+    Q_ENUM( ProjectModelTypes )
 
-  enum MergeStrategy
-  {
-    KeepPrevious = 0,
-    DiscardPrevious
-  };
+    enum MergeStrategy
+    {
+      KeepPrevious = 0,
+      DiscardPrevious
+    };
 
-  ProjectsModel( QObject *parent = nullptr );
-  ~ProjectsModel() override {};
+    ProjectsModel( QObject *parent = nullptr );
+    ~ProjectsModel() override {};
 
-  /*
-  // From Qt 5.15 we can use REQUIRED keyword here, that will ensure object will be always instantiated from QML with these mandatory properties
-  Q_PROPERTY( MerginApi *merginApi READ merginApi WRITE setMerginApi NOTIFY merginApiChanged )
-  Q_PROPERTY( ProjectModelTypes modelType READ modelType WRITE setModelType NOTIFY modelTypeChanged )
-  Q_PROPERTY( SynchronizationManager *syncManager READ syncManager WRITE setSyncManager NOTIFY syncManagerChanged )
-  Q_PROPERTY( LocalProjectsManager *localProjectsManager READ localProjectsManager WRITE setLocalProjectsManager NOTIFY localProjectsManagerChanged )
+    /*
+    // From Qt 5.15 we can use REQUIRED keyword here, that will ensure object will be always instantiated from QML with these mandatory properties
+    Q_PROPERTY( MerginApi *merginApi READ merginApi WRITE setMerginApi NOTIFY merginApiChanged )
+    Q_PROPERTY( ProjectModelTypes modelType READ modelType WRITE setModelType NOTIFY modelTypeChanged )
+    Q_PROPERTY( SynchronizationManager *syncManager READ syncManager WRITE setSyncManager NOTIFY syncManagerChanged )
+    Q_PROPERTY( LocalProjectsManager *localProjectsManager READ localProjectsManager WRITE setLocalProjectsManager NOTIFY localProjectsManagerChanged )
 
-  //! Indicates that model has more projects to fetch, so view can call fetchAnotherPage
-  Q_PROPERTY( bool hasMoreProjects READ hasMoreProjects NOTIFY hasMoreProjectsChanged )
+    //! Indicates that model has more projects to fetch, so view can call fetchAnotherPage
+    Q_PROPERTY( bool hasMoreProjects READ hasMoreProjects NOTIFY hasMoreProjectsChanged )
 
-  //! Indicates that model is currently processing projects, filling its storage.
-  //! Models loading starts when listProjectsAPI is sent and finishes after endResetModel signal is emitted when projects are merged.
-  Q_PROPERTY( bool isLoading READ isLoading NOTIFY isLoadingChanged )
+    //! Indicates that model is currently processing projects, filling its storage.
+    //! Models loading starts when listProjectsAPI is sent and finishes after endResetModel signal is emitted when projects are merged.
+    Q_PROPERTY( bool isLoading READ isLoading NOTIFY isLoadingChanged )
 
-  // Needed methods from QAbstractListModel
-  Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
-  Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
-  QHash<int, QByteArray> roleNames() const override;
-  int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
+    // Needed methods from QAbstractListModel
+    Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
+    Q_INVOKABLE QModelIndex index( int row, int column = 0, const QModelIndex &parent = QModelIndex() ) const override;
+    QHash<int, QByteArray> roleNames() const override;
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
 
-  //! lists projects, either fetch more or get first, search expression
-  Q_INVOKABLE void listProjects( const QString &searchExpression = QString(), int page = 1 );
+    //! lists projects, either fetch more or get first, search expression
+    Q_INVOKABLE void listProjects( const QString &searchExpression = QString(), int page = 1 );
 
-  //! lists projects via listProjectsByName API, used in LocalProjectsModel
-  Q_INVOKABLE void listProjectsByName();
+    //! lists projects via listProjectsByName API, used in LocalProjectsModel
+    Q_INVOKABLE void listProjectsByName();
 
-  //! Syncs specified project - upload or update
-  Q_INVOKABLE void syncProject( const QString &projectId );
+    //! Syncs specified project - upload or update
+    Q_INVOKABLE void syncProject( const QString &projectId );
 
-  //! Stops running project upload or update
-  Q_INVOKABLE void stopProjectSync( const QString &projectId );
+    //! Stops running project upload or update
+    Q_INVOKABLE void stopProjectSync( const QString &projectId );
 
-  //! Forwards call to LocalProjectsManager to remove local project
-  Q_INVOKABLE void removeLocalProject( const QString &projectId );
+    //! Forwards call to LocalProjectsManager to remove local project
+    Q_INVOKABLE void removeLocalProject( const QString &projectId );
 
-  //! Migrates local project to mergin
-  Q_INVOKABLE void migrateProject( const QString &projectId );
+    //! Migrates local project to mergin
+    Q_INVOKABLE void migrateProject( const QString &projectId );
 
-  //! Calls listProjects with incremented page
-  Q_INVOKABLE void fetchAnotherPage( const QString &searchExpression );
+    //! Calls listProjects with incremented page
+    Q_INVOKABLE void fetchAnotherPage( const QString &searchExpression );
 
-  //! Merges local and remote projects based on the model type
-  void mergeProjects( const MerginProjectsList &merginProjects, MergeStrategy mergeStrategy = DiscardPrevious );
+    //! Merges local and remote projects based on the model type
+    void mergeProjects( const MerginProjectsList &merginProjects, MergeStrategy mergeStrategy = DiscardPrevious );
 
-  //! Returns Project deep copy from projectId
-  Project projectFromId( const QString &projectId ) const;
+    //! Returns Project deep copy from projectId
+    Project projectFromId( const QString &projectId ) const;
 
-  MerginApi *merginApi() const;
-  SynchronizationManager *syncManager() const;
-  LocalProjectsManager *localProjectsManager() const;
-  ProjectsModel::ProjectModelTypes modelType() const;
+    MerginApi *merginApi() const;
+    SynchronizationManager *syncManager() const;
+    LocalProjectsManager *localProjectsManager() const;
+    ProjectsModel::ProjectModelTypes modelType() const;
 
-  bool isLoading() const;
-  bool hasMoreProjects() const;
+    bool isLoading() const;
+    bool hasMoreProjects() const;
 
-  public slots:
-  // MerginAPI - project list signals
-  void onListProjectsFinished( const MerginProjectsList &merginProjects, int projectsCount, int page, QString requestId );
-  void onListProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId );
+    public slots:
+    // MerginAPI - project list signals
+    void onListProjectsFinished( const MerginProjectsList &merginProjects, int projectsCount, int page, QString requestId );
+    void onListProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId );
 
-  // Synchonization signals
-  void onProjectSyncStarted( const QString &projectFullName );
-  void onProjectSyncCancelled( const QString &projectFullName );
-  void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
-  void onProjectSyncFinished( const QString &projectFullName, bool successfully, int newVersion );
+    // Synchonization signals
+    void onProjectSyncStarted( const QString &projectFullName );
+    void onProjectSyncCancelled( const QString &projectFullName );
+    void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
+    void onProjectSyncFinished( const QString &projectFullName, bool successfully, int newVersion );
 
-  void onProjectDetachedFromMergin( const QString &projectFullName );
-  void onProjectAttachedToMergin( const QString &projectFullName );
+    void onProjectDetachedFromMergin( const QString &projectFullName );
+    void onProjectAttachedToMergin( const QString &projectFullName );
 
-  // LocalProjectsManager signals
-  void onProjectAdded( const LocalProject &project );
-  void onAboutToRemoveProject( const LocalProject &project );
-  void onProjectDataChanged( const LocalProject &project );
+    // LocalProjectsManager signals
+    void onProjectAdded( const LocalProject &project );
+    void onAboutToRemoveProject( const LocalProject &project );
+    void onProjectDataChanged( const LocalProject &project );
 
-  void onAuthChanged();
+    void onAuthChanged();
 
-  void setMerginApi( MerginApi *merginApi );
-  void setModelType( ProjectModelTypes modelType );
-  void setSyncManager( SynchronizationManager *newSyncManager );
-  void setLocalProjectsManager( LocalProjectsManager *localProjectsManager );
+    void setMerginApi( MerginApi *merginApi );
+    void setModelType( ProjectModelTypes modelType );
+    void setSyncManager( SynchronizationManager *newSyncManager );
+    void setLocalProjectsManager( LocalProjectsManager *localProjectsManager );
 
-  signals:
-  void modelInitialized();
-  void hasMoreProjectsChanged();
+    signals:
+    void modelInitialized();
+    void hasMoreProjectsChanged();
 
-  void isLoadingChanged( bool isLoading );
+    void isLoadingChanged( bool isLoading );
 
-  void merginApiChanged( MerginApi *api );
-  void modelTypeChanged( ProjectModelTypes type );
-  void syncManagerChanged( SynchronizationManager *syncManager );
-  void localProjectsManagerChanged( LocalProjectsManager *projectsManager );
+    void merginApiChanged( MerginApi *api );
+    void modelTypeChanged( ProjectModelTypes type );
+    void syncManagerChanged( SynchronizationManager *syncManager );
+    void localProjectsManagerChanged( LocalProjectsManager *projectsManager );
 
-  private:
+    private:
 
-  int projectIndexFromId( const QString &projectId ) const;
+    int projectIndexFromId( const QString &projectId ) const;
 
-  void setModelIsLoading( bool state );
+    void setModelIsLoading( bool state );
 
-  QString modelTypeToFlag() const;
-  QStringList projectNames() const;
-  void clearProjects();
-  void loadLocalProjects();
-  void initializeProjectsModel();
+    QString modelTypeToFlag() const;
+    QStringList projectNames() const;
+    void clearProjects();
+    void loadLocalProjects();
+    void initializeProjectsModel();
 
-  QList<Project> mProjects;
+    QList<Project> mProjects;
 
-  ProjectModelTypes mModelType = EmptyProjectsModel;
+    ProjectModelTypes mModelType = EmptyProjectsModel;
 
-  //! For pagination
-  int mServerProjectsCount = -1;
-  int mPaginatedPage = 1;
+    //! For pagination
+    int mServerProjectsCount = -1;
+    int mPaginatedPage = 1;
 
-  //! For processing requests sent via this model
-  QString mLastRequestId;
+    //! For processing requests sent via this model
+    QString mLastRequestId;
 
-  bool mModelIsLoading;
+    bool mModelIsLoading;
 
-  MerginApi *mBackend = nullptr; // not owned
-  LocalProjectsManager *mLocalProjectsManager = nullptr; // not owned
-  SynchronizationManager *mSyncManager = nullptr; // not owned
-*/
+    MerginApi *mBackend = nullptr; // not owned
+    LocalProjectsManager *mLocalProjectsManager = nullptr; // not owned
+    SynchronizationManager *mSyncManager = nullptr; // not owned
+    */
 };
 
 

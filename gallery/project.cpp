@@ -17,7 +17,7 @@ QString LocalProject::id() const
 QString LocalProject::fullName() const
 {
   if ( !projectName.isEmpty() && !projectNamespace.isEmpty() )
-    return QString("/getFullProjectName/%1/%2").arg( projectNamespace, projectName );
+    return QString( "/getFullProjectName/%1/%2" ).arg( projectNamespace, projectName );
 
   if ( projectDir.isEmpty() )
     return QString();
@@ -28,7 +28,7 @@ QString LocalProject::fullName() const
 
 QString MerginProject::id() const
 {
-  return QString("/getFullProjectName/%1/%2").arg( projectNamespace, projectName );
+  return QString( "/getFullProjectName/%1/%2" ).arg( projectNamespace, projectName );
 }
 
 ProjectStatus::Status ProjectStatus::projectStatus( const Project &project )
