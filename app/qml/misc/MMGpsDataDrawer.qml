@@ -75,7 +75,7 @@ Drawer {
         backVisible: false
 
         title: qsTr("GPS info")
-        titleFont: __style.h3
+        titleFont: __style.t2
 
         MMRoundButton {
           id: backBtn
