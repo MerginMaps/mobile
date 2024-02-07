@@ -11,7 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-import "../../app/qml/inputs"
+import "../../app/qml/form/editors"
 import "../../app/qml/components"
 
 ScrollView {
@@ -41,7 +41,7 @@ ScrollView {
           checked: true
         }
 
-        MMCalendarEditor {
+        MMCalendarFormEditor {
           title: "Date & Time"
           placeholderText: "YYYY/MM/DD HH:MM"
           enabled: checkbox.checked
@@ -57,7 +57,7 @@ ScrollView {
           onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "yyyy/MM/dd hh:mm") }
         }
 
-        MMCalendarEditor {
+        MMCalendarFormEditor {
           title: "Date"
           placeholderText: "YYYY/MM/DD"
           enabled: checkbox.checked
@@ -73,7 +73,7 @@ ScrollView {
           onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "yyyy/MM/dd") }
         }
 
-        MMCalendarEditor {
+        MMCalendarFormEditor {
           title: "Time"
           placeholderText: "HH:MM:SS"
           enabled: checkbox.checked

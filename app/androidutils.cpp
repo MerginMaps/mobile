@@ -247,7 +247,7 @@ bool AndroidUtils::requestMediaLocationPermission()
   return true;
 }
 
-void AndroidUtils::callImagePicker()
+void AndroidUtils::callImagePicker( const QString &code )
 {
 #ifdef ANDROID
 
@@ -255,6 +255,8 @@ void AndroidUtils::callImagePicker()
   {
     return;
   }
+
+  mLastCode = code;
 
   // request media location permission to be able to read EXIF metadata from gallery image
   // it is not a mandatory permission, so continue even if it is rejected
@@ -273,13 +275,15 @@ void AndroidUtils::callImagePicker()
 #endif
 }
 
-void AndroidUtils::callCamera( const QString &targetPath )
+void AndroidUtils::callCamera( const QString &targetPath, const QString &code )
 {
 #ifdef ANDROID
   if ( !requestCameraPermission() )
   {
     return;
   }
+
+  mLastCode = code;
 
   // request media location permission to be able to read EXIF metadata from captured image
   // it is not a mandatory permission, so continue even if it is rejected
@@ -363,7 +367,7 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
     cursor.callMethod<jboolean>( "moveToFirst", "()Z" );
     QJniObject result = cursor.callObjectMethod( "getString", "(I)Ljava/lang/String;", columnIndex );
     QString selectedImagePath = "file://" + result.toString();
-    emit imageSelected( selectedImagePath );
+    emit imageSelected( selectedImagePath, mLastCode );
   }
   else if ( receiverRequestCode == CAMERA_CODE && resultCode == RESULT_OK )
   {
@@ -373,7 +377,7 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
 
     QString selectedImagePath = "file://" + absolutePath;
 
-    emit imageSelected( absolutePath );
+    emit imageSelected( absolutePath, mLastCode );
   }
   else
   {

@@ -484,6 +484,8 @@ Item {
           bottomMargin: internal.bottomMapButtonsMargin
         }
 
+        visible: root.mapExtentOffset > 0 ? false : true
+
         iconSource: __style.gpsIcon
 
         onClicked: {
@@ -630,6 +632,8 @@ Item {
         }
 
         visible: {
+          if ( root.mapExtentOffset > 0 ) return false
+
           if ( __positionKit.positionProvider && __positionKit.positionProvider.type() === "external" ) {
             // for external receivers we want to show gps panel and accuracy button
             // even when the GPS receiver is not sending position data

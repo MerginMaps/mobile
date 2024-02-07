@@ -94,7 +94,7 @@ Page {
         Component.onCompleted: {
           listView.model.append({name: qsTr("Agriculture"), icon: __style.tractorIcon, colorx: __style.sunColor, color: "#F4CB46"})
           listView.model.append({name: qsTr("Archaeology"), icon: __style.archaeologyIcon, colorx: __style.sandColor, color: "#FFF4E2"})
-          listView.model.append({name: qsTr("onstruction and engineering"), icon: __style.engineeringIcon, colorx: __style.roseColor, color: "#FFBABC"})
+          listView.model.append({name: qsTr("Construction and engineering"), icon: __style.engineeringIcon, colorx: __style.roseColor, color: "#FFBABC"})
           listView.model.append({name: qsTr("Electric utilities"), icon: __style.electricityIcon, colorx: __style.nightColor, color: "#12181F"})
           listView.model.append({name: qsTr("Environmental protection"), icon: __style.environmentalIcon, colorx: __style.fieldColor, color: "#9BD1A9"})
           listView.model.append({name: qsTr("Local governments"), icon: __style.stateAndLocalIcon, colorx: __style.purpleColor, color: "#CCBDF5"})
@@ -143,7 +143,7 @@ Page {
         topPadding: 20 * __dp
         visible: listView.model.count === listView.currentIndex + 1
 
-        MMInputEditor {
+        MMTextInput {
           title: qsTr("Source")
           placeholderText: root.specifyIndustryText
           onTextChanged: root.selectedText = text

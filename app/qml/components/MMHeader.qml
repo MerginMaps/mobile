@@ -34,7 +34,7 @@ Item {
   signal personIconClicked
 
   implicitHeight: 60 * __dp
-  implicitWidth: Window.width
+  implicitWidth: ApplicationWindow.window?.width ?? 0
 
   Rectangle {
     anchors.fill: parent

@@ -59,9 +59,10 @@ class AndroidUtils: public QObject
     /**
       * Starts ACTION_PICK activity which opens a gallery. If an image is selected,
       * handler of the activity emits imageSelected signal.
-      * */
-    Q_INVOKABLE void callImagePicker();
-    Q_INVOKABLE void callCamera( const QString &targetPath );
+      * The code parameter will be used in response (signal)
+      */
+    Q_INVOKABLE void callImagePicker( const QString &code = "" );
+    Q_INVOKABLE void callCamera( const QString &targetPath, const QString &code = "" );
 
 #ifdef ANDROID
     const static int MEDIA_CODE = 101;
@@ -74,7 +75,7 @@ class AndroidUtils: public QObject
 #endif
 
   signals:
-    void imageSelected( QString imagePath );
+    void imageSelected( QString imagePath, QString code );
 
     void bluetoothEnabled( bool state );
 
@@ -82,6 +83,8 @@ class AndroidUtils: public QObject
     void showToast( QString message );
 
   private:
+
+    QString mLastCode;
 
 #ifdef ANDROID
     QBluetoothLocalDevice mBluetooth;

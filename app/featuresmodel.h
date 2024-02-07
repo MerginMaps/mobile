@@ -47,6 +47,11 @@ class FeaturesModel : public QAbstractListModel
     // Returns if there is a pending feature request that will populate the model
     Q_PROPERTY( bool fetchingResults MEMBER mFetchingResults NOTIFY fetchingResultsChanged )
 
+    // Returns a number of fetched features currently in the model
+    // It is different from layerFeaturesCount -> it says how many features are in the layer
+    // Name of the property is intentionally `count` so that it matches ListModel's count property
+    Q_PROPERTY( int count READ count NOTIFY countChanged )
+
   public:
 
     enum ModelRoles
@@ -95,6 +100,8 @@ class FeaturesModel : public QAbstractListModel
     QgsVectorLayer *layer() const;
     QString searchExpression() const;
 
+    int count() const;
+
     void setSearchExpression( const QString &searchExpression );
     void setLayer( QgsVectorLayer *newLayer );
 
@@ -107,6 +114,7 @@ class FeaturesModel : public QAbstractListModel
     void layerChanged( QgsVectorLayer *layer );
 
     void layerFeaturesCountChanged( int layerFeaturesCount );
+    void countChanged( int featuresCount );
 
     //! \a isFetching is TRUE when still fetching results, FALSE when done fetching
     bool fetchingResultsChanged( bool isFetching );

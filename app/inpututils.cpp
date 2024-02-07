@@ -1020,9 +1020,11 @@ const QUrl InputUtils::getThemeIcon( const QString &name )
   return QUrl( path );
 }
 
-const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, const QVariantMap &config, const QgsField &field )
+const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVariantMap &config, const QgsField &field, const QgsRelation &relation )
 {
-  QString path( "../editor/input%1.qml" );
+  QString widgetName = widgetNameIn.toLower();
+
+  QString path( "../form/editors/%1.qml" );
 
   if ( widgetName == QStringLiteral( "range" ) )
   {
@@ -1030,70 +1032,90 @@ const QUrl InputUtils::getEditorComponentSource( const QString &widgetName, cons
     {
       if ( config["Style"] == QStringLiteral( "Slider" ) )
       {
-        return QUrl( path.arg( QLatin1String( "rangeslider" ) ) );
+        return QUrl( path.arg( QLatin1String( "MMFormSliderEditor" ) ) );
       }
       else if ( config["Style"] == QStringLiteral( "SpinBox" ) )
       {
-        return QUrl( path.arg( QLatin1String( "rangeeditable" ) ) );
+        return QUrl( path.arg( QLatin1String( "MMFormNumberEditor" ) ) );
       }
     }
-    return QUrl( path.arg( QLatin1String( "textedit" ) ) );
+    return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) );
   }
-
-  if ( field.name().contains( "qrcode", Qt::CaseInsensitive ) || field.alias().contains( "qrcode", Qt::CaseInsensitive ) )
+  else if ( widgetName == QStringLiteral( "datetime" ) )
   {
-    return QUrl( path.arg( QStringLiteral( "qrcodereader" ) ) );
+    return QUrl( path.arg( QLatin1String( "MMFormCalendarEditor" ) ) );
   }
-
-  if ( widgetName == QStringLiteral( "textedit" ) )
+  else if ( field.name().contains( "qrcode", Qt::CaseInsensitive ) || field.alias().contains( "qrcode", Qt::CaseInsensitive ) )
+  {
+    return QUrl( path.arg( QStringLiteral( "MMFormScannerEditor" ) ) );
+  }
+  else if ( widgetName == QStringLiteral( "textedit" ) )
   {
     if ( config.value( "IsMultiline" ).toBool() )
     {
-      return QUrl( path.arg( QStringLiteral( "texteditmultiline" ) ) );
+      return QUrl( path.arg( QStringLiteral( "MMFormTextMultilineEditor" ) ) );
     }
-    return QUrl( path.arg( QLatin1String( "textedit" ) ) );
+    return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) );
   }
-
-  if ( widgetName == QStringLiteral( "valuerelation" ) )
+  else if ( widgetName == QStringLiteral( "checkbox" ) )
   {
-    const QgsMapLayer *referencedLayer = QgsProject::instance()->mapLayer( config.value( "Layer" ).toString() );
-    const QgsVectorLayer *layer = qobject_cast<const QgsVectorLayer *>( referencedLayer );
+    return QUrl( path.arg( QLatin1String( "MMFormSwitchEditor" ) ) );
+  }
+  else if ( widgetName == QStringLiteral( "valuerelation" ) )
+  {
+    return QUrl( path.arg( QLatin1String( "MMFormValueRelationEditor" ) ) );
+  }
+  else if ( widgetName == QStringLiteral( "valuemap" ) )
+  {
+    return QUrl( path.arg( QLatin1String( "MMFormValueMapEditor" ) ) );
+  }
+  else if ( widgetName == QStringLiteral( "externalresource" ) )
+  {
+    return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
+  }
+  else if ( widgetName == QStringLiteral( "relation" ) )
+  {
+    // check if we should use gallery or word tags
+    bool useGallery = false;
 
-    if ( layer )
+    QgsVectorLayer *layer = relation.referencingLayer();
+    if ( layer && layer->isValid() )
     {
-      int featuresCount = layer->dataProvider()->featureCount();
-      if ( featuresCount > 4 )
-        return QUrl( path.arg( QLatin1String( "valuerelationpage" ) ) );
+      QgsFields fields = layer->fields();
+      for ( int i = 0; i < fields.size(); i++ )
+      {
+        // Lets try by widget type
+        QgsEditorWidgetSetup setup = layer->editorWidgetSetup( i );
+        if ( setup.type() == QStringLiteral( "ExternalResource" ) )
+        {
+          useGallery = true;
+          break;
+        }
+      }
     }
 
-    if ( config.value( "AllowMulti" ).toBool() )
+    // Mind this hack - fields with `no-gallery-use` won't use gallery, but normal word tags instead
+    if ( field.name().contains( "nogallery", Qt::CaseInsensitive ) || field.alias().contains( "nogallery", Qt::CaseInsensitive ) )
     {
-      return QUrl( path.arg( QLatin1String( "valuerelationpage" ) ) );
+      useGallery = false;
     }
 
-    return QUrl( path.arg( QLatin1String( "valuerelationcombobox" ) ) );
+    if ( useGallery )
+    {
+      return QUrl( path.arg( QLatin1String( "MMFormGalleryEditor" ) ) );
+    }
+    else
+    {
+      return QUrl( path.arg( QLatin1String( "MMFormRelationEditor" ) ) );
+    }
   }
 
-  QStringList supportedWidgets = { QStringLiteral( "richtext" ),
-                                   QStringLiteral( "textedit" ),
-                                   QStringLiteral( "valuemap" ),
-                                   QStringLiteral( "valuerelation" ),
-                                   QStringLiteral( "checkbox" ),
-                                   QStringLiteral( "externalresource" ),
-                                   QStringLiteral( "datetime" ),
-                                   QStringLiteral( "range" ),
-                                   QStringLiteral( "relation" ),
-                                   QStringLiteral( "spacer" ),
-                                   QStringLiteral( "relationreference" )
-                                 };
-  if ( supportedWidgets.contains( widgetName ) )
-  {
-    return QUrl( path.arg( widgetName ) );
-  }
-  else
-  {
-    return QUrl( path.arg( QLatin1String( "textedit" ) ) );
-  }
+  // TODO == Missing editors:
+  // - QStringLiteral( "richtext" ) -> text and HTML form widget
+  // - QStringLiteral( "spacer" )
+  // - QStringLiteral( "relationreference" )
+
+  return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) );
 }
 
 const QgsEditorWidgetSetup InputUtils::getEditorWidgetSetup( const QgsField &field )

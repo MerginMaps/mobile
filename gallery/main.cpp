@@ -23,6 +23,8 @@
 #include "inpututils.h"
 #include "scalebarkit.h"
 #include "project.h"
+#include "positionkit.h"
+#include "relationfeaturesmodel.h"
 
 int main( int argc, char *argv[] )
 {
@@ -44,6 +46,7 @@ int main( int argc, char *argv[] )
   qmlRegisterType<ScaleBarKit>( "lc", 1, 0, "ScaleBarKit" );
   qmlRegisterType<ProjectsModel>( "lc", 1, 0, "ProjectsModel" );
   qmlRegisterUncreatableMetaObject( ProjectStatus::staticMetaObject, "lc", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
+  qmlRegisterType<RelationFeaturesModel>( "lc", 1, 0, "RelationFeaturesModel" );
 
 #ifdef DESKTOP_OS
   HotReload hotReload( engine );
@@ -51,13 +54,17 @@ int main( int argc, char *argv[] )
 #endif
   InputUtils iu;
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
+  engine.rootContext()->setContextProperty( "__androidUtils", &iu );
+  engine.rootContext()->setContextProperty( "__iosUtils", &iu );
 
   qreal dp = Helper::calculateDpRatio();
   MMStyle style( dp );
   NotificationModel notificationModel;
 
-  engine.rootContext()->setContextProperty( "__notificationModel", &notificationModel );
+  PositionKit pk;
+  engine.rootContext()->setContextProperty( "__positionKit", &pk );
 
+  engine.rootContext()->setContextProperty( "__notificationModel", &notificationModel );
   // path to local wrapper pages
   engine.rootContext()->setContextProperty( "_qmlWrapperPath", QGuiApplication::applicationDirPath() + "/HotReload/qml/pages/" );
   engine.rootContext()->setContextProperty( "__dp", dp );

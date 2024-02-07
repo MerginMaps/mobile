@@ -131,16 +131,16 @@ ApplicationWindow {
           source: "EditorsPage.qml"
         }
         ListElement {
+          title: "Inputs"
+          source: "InputsPage.qml"
+        }
+        ListElement {
           title: "Calendar"
           source: "CalendarPage.qml"
         }
         ListElement {
           title: "Text areas"
           source: "TextAreaPage.qml"
-        }
-        ListElement {
-          title: "Combo boxes"
-          source: "ComboBoxPage.qml"
         }
         ListElement {
           title: "Checks"
@@ -185,6 +185,10 @@ ApplicationWindow {
         ListElement {
           title: "Feature form"
           source: "FormPage.qml"
+        }
+        ListElement {
+          title: "GPS Info"
+          source: "GpsInfoPage.qml"
         }
       }
 

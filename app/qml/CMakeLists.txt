@@ -35,8 +35,12 @@ set(MM_QML
     components/ToolbarButton.qml
     components/MMRoundButton.qml
     components/MMButton.qml
+    components/MMCodeScanner.qml
     components/MMComponent_reachedDataLimit.qml
+    components/MMCheckBox.qml
     components/MMDrawer.qml
+    components/MMDropdownDrawer.qml
+    components/MMGpsDataDrawer.qml
     components/MMHeader.qml
     components/MMHlineText.qml
     components/MMIcon.qml
@@ -44,6 +48,7 @@ set(MM_QML
     components/MMIconCheckBoxVertical.qml
     components/MMLink.qml
     components/MMLinkButton.qml
+    components/MMFeaturesListDrawer.qml
     components/MMListDrawer.qml
     components/MMListDrawerItem.qml
     components/MMMapButton.qml
@@ -54,7 +59,6 @@ set(MM_QML
     components/MMNotification.qml
     components/MMNotificationView.qml
     components/MMPhoto.qml
-    components/MMPhotoGallery.qml
     components/MMProgressBar.qml
     components/MMProjectItem.qml
     components/MMRadioButton.qml
@@ -67,6 +71,14 @@ set(MM_QML
     components/MMToolbarLongButton.qml
     components/MMToolbarMenuButton.qml
     components/MMWarningBubble.qml
+    components/MMCalendarDrawer.qml
+    components/MMTumbler.qml
+    components/calendar/MMDateTimePicker.qml
+    components/calendar/MMTimeTumbler.qml
+    components/calendar/MMMonthGrid.qml
+    components/calendar/MMDayOfWeekRow.qml
+    components/calendar/MMDateTumbler.qml
+    components/calendar/MMAmPmSwitch.qml
     onboarding/MMAcceptInvitation.qml
     onboarding/MMCreateWorkspace.qml
     onboarding/MMHowYouFoundUs.qml
@@ -81,37 +93,33 @@ set(MM_QML
     dialogs/NoPermissionsDialog.qml
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
-    editor/AbstractEditor.qml
-    editor/RelationPhotoDelegate.qml
-    editor/RelationPhotoFooterDelegate.qml
-    editor/RelationTextDelegate.qml
-    editor/inputcheckbox.qml
-    editor/inputdatetime.qml
-    editor/inputexternalresource.qml
-    editor/inputqrcodereader.qml
-    editor/inputrangeeditable.qml
-    editor/inputrangeslider.qml
-    editor/inputrelation.qml
     editor/inputrelationreference.qml
-    editor/inputrichtext.qml
-    editor/inputtextedit.qml
-    editor/inputtexteditmultiline.qml
-    editor/inputvaluemap.qml
-    editor/inputvaluerelationcombobox.qml
-    editor/inputvaluerelationpage.qml
-    editor/inputspacer.qml
-    inputs/MMAbstractEditor.qml
-    inputs/MMCheckBox.qml
-    inputs/MMInputEditor.qml
-    inputs/MMPasswordEditor.qml
-    inputs/MMSliderEditor.qml
-    form/FeatureForm.qml
-    form/FeatureFormPage.qml
-    form/FeatureFormStyling.qml
-    form/FeatureToolbar.qml
-    form/FormWrapper.qml
-    form/MMFormTabBar.qml
-    form/PreviewPanel.qml
+    inputs/MMBaseInput.qml
+    inputs/MMPasswordInput.qml
+    inputs/MMTextInput.qml
+    inputs/MMSearchInput.qml
+    inputs/MMDropdownInput.qml
+    inputs/MMTextWithButtonInput.qml
+    form/MMFormWrapper.qml
+    form/MMForm.qml
+    form/MMPreviewPanel.qml
+    form/components/MMFormTabBar.qml
+    form/components/MMPreviewPanelActionButton.qml
+    form/editors/MMFormCalendarEditor.qml
+    form/editors/MMFormGalleryEditor.qml
+    form/editors/MMFormNumberEditor.qml
+    form/editors/MMFormPhotoEditor.qml
+    form/editors/MMFormPhotoViewer.qml
+    form/editors/MMFormRelationEditor.qml
+    form/editors/MMFormScannerEditor.qml
+    form/editors/MMFormSliderEditor.qml
+    form/editors/MMFormSwitchEditor.qml
+    form/editors/MMFormTextMultilineEditor.qml
+    form/editors/MMFormTextEditor.qml
+    form/editors/MMFormValueMapEditor.qml
+    form/editors/MMFormValueRelationEditor.qml
+    form/editors/MMFormSpacer.qml
+    form/editors/MMFormRichTextViewer.qml
     layers/FeaturesListPageV2.qml
     layers/LayerDetail.qml
     layers/LayersListPageV2.qml
