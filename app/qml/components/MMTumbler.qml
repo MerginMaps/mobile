@@ -22,17 +22,5 @@ Tumbler {
     verticalAlignment: Text.AlignVCenter
     opacity: 1.0 - Math.abs(Tumbler.displacement) / (control.visibleItemCount / 2)
     color: Math.abs(Tumbler.displacement) < 0.4 ? __style.forestColor : __style.nightColor
-
-    required property var modelData
-    required property int index
-  }
-
-  Rectangle {
-    anchors.horizontalCenter: control.horizontalCenter
-    y: (control.height - height) / 2
-    width: text.width + 2 * radius
-    height: control.height * 0.26
-    color: __style.lightGreenColor
-    radius: 8 * __dp
   }
 }

@@ -106,14 +106,14 @@ Page {
         width: root.width - 2 * root.hPadding
       }
 
-      MMInputEditor {
+      MMTextInput {
         id: username
         width: parent.width - 2 * root.hPadding
-        title: qsTr("Username")
+        title: qsTr("Email or username")
         bgColor: __style.lightGreenColor
       }
 
-      MMPasswordEditor {
+      MMPasswordInput {
         id: password
         width: parent.width - 2 * root.hPadding
         title: qsTr("Password")
@@ -187,7 +187,7 @@ Page {
     title: qsTr("Change server")
     primaryButton: qsTr("Confirm")
     visible: false
-    specialComponent: MMInputEditor {
+    specialComponent: MMTextInput {
       width: changeServerDrawer.width - 40 * __dp
       title: qsTr("Server address")
       bgColor: __style.lightGreenColor

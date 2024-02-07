@@ -125,8 +125,9 @@ QHash<int, QByteArray> AttributeFormModel::roleNames() const
   roles[EditorWidget] = QByteArray( "EditorWidget" );
   roles[EditorWidgetConfig] = QByteArray( "EditorWidgetConfig" );
   roles[RememberValue] = QByteArray( "RememberValue" );
-  roles[AttributeFormModel::Field] = QByteArray( "Field" );
-  roles[AttributeFormModel::Group] = QByteArray( "Group" );
+  roles[Field] = QByteArray( "Field" );
+  roles[FieldIndex] = QByteArray( "FieldIndex" );
+  roles[Group] = QByteArray( "Group" );
   roles[ValidationMessage] = QByteArray( "ValidationMessage" );
   roles[ValidationStatus] = QByteArray( "ValidationStatus" );
   roles[Relation] = QByteArray( "Relation" );

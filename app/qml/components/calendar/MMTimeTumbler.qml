@@ -40,6 +40,21 @@ Item {
     }
   }
 
+  Rectangle {
+    anchors {
+      left: parent.left
+      leftMargin: 12 * __dp
+      right: parent.right
+      rightMargin: 12 * __dp
+      verticalCenter: parent.verticalCenter
+    }
+
+    height: 54 * __dp
+    radius: 8 * __dp
+
+    color: __style.lightGreenColor
+  }
+
   Row {
     id: row
 

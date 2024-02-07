@@ -281,7 +281,7 @@ Item {
   Component {
     id: formComponent
 
-    Forms.FormWrapper {
+    Forms.MMFormWrapper {
       id: wrapper
 
       project: root.project

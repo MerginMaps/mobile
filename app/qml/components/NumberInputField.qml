@@ -36,6 +36,7 @@ Item {
       }
     }
 
+    // Could in theory be fixed with `inputMethodComposing` TextInput property instead
     onPreeditTextChanged: if ( __androidUtils.isAndroid ) Qt.inputMethod.commit() // to avoid Android's uncommited text
 
     text: root.number

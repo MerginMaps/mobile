@@ -145,7 +145,7 @@ Page {
         topPadding: 20 * __dp
         visible: listView.model.count === listView.currentIndex + 1 // === Other
 
-        MMInputEditor {
+        MMTextInput {
           id: otherSourceText
           title: qsTr("Source")
           placeholderText: root.specifySourceText

@@ -15,7 +15,10 @@ IosUtils::IosUtils( QObject *parent ): QObject( parent )
   setIdleTimerDisabled();
 #endif
   mImagePicker = new IOSImagePicker();
-  QObject::connect( mImagePicker, &IOSImagePicker::imageCaptured, this, &IosUtils::imageSelected );
+  QObject::connect( mImagePicker, &IOSImagePicker::imageCaptured, this, [this]( const QString & absoluteImagePath )
+  {
+    emit imageSelected( absoluteImagePath, mLastCode );
+  } );
   QObject::connect( mImagePicker, &IOSImagePicker::notify, this, &IosUtils::showToast );
 }
 
@@ -28,13 +31,15 @@ bool IosUtils::isIos() const
 #endif
 }
 
-void IosUtils::callImagePicker( const QString &targetPath )
+void IosUtils::callImagePicker( const QString &targetPath, const QString &code )
 {
+  mLastCode = code;
   mImagePicker->showImagePicker( targetPath );
 }
 
-void IosUtils::callCamera( const QString &targetPath )
+void IosUtils::callCamera( const QString &targetPath, const QString &code )
 {
+  mLastCode = code;
   mImagePicker->callCamera( targetPath, mPositionKit, mCompass );
 }
 

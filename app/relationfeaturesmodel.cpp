@@ -49,8 +49,6 @@ void RelationFeaturesModel::setup()
   if ( !mRelation.isValid() || !mParentFeatureLayerPair.isValid() )
     return;
 
-  setIsTextType( photoFieldIndex( mRelation.referencingLayer() ) == -1 );
-
   QObject::connect( mRelation.referencingLayer(), &QgsVectorLayer::afterCommitChanges, this, &RelationFeaturesModel::populate );
 
   FeaturesModel::setLayer( mRelation.referencingLayer() );
@@ -142,20 +140,6 @@ int RelationFeaturesModel::photoFieldIndex( QgsVectorLayer *layer ) const
     }
   }
   return -1;
-}
-
-bool RelationFeaturesModel::isTextType() const
-{
-  return mIsTextType;
-}
-
-void RelationFeaturesModel::setIsTextType( bool isTextType )
-{
-  if ( isTextType != mIsTextType )
-  {
-    mIsTextType = isTextType;
-    emit isTextTypeChanged();
-  }
 }
 
 QString RelationFeaturesModel::homePath() const

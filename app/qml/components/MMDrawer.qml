@@ -89,7 +89,7 @@ Drawer {
 
           MouseArea {
             anchors.fill: parent
-            onClicked: control.visible = false
+            onClicked: control.close()
           }
         }
       }

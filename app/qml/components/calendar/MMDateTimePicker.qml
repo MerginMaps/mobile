@@ -82,7 +82,6 @@ Item {
         MouseArea {
           anchors.fill: monthYearRow
           onClicked: {
-            tumblerBgArea.visible = true
             dateYearTumbler.visible = true
           }
         }
@@ -148,9 +147,16 @@ Item {
       bottomPadding: 70 * __dp
       width: parent.width
       height: {
-        if(Window.height > 680)
+
+        // ApplicationWindow.window might not be attached when calculating this for the first time,
+        // it will get recalculated automatically once the window is attached so we just need to
+        // make sure this won't fail the first time.
+
+        if ( ApplicationWindow.window?.height ?? 0 > 680 ) {
           return 330 * __dp
-        return 330 - (680 - Window.height)
+        }
+
+        return 330 - ( 680 - ApplicationWindow.window?.height ?? 0 )
       }
 
       locale: root.locale
@@ -234,7 +240,6 @@ Item {
             MouseArea {
               anchors.fill: parent
               onClicked: {
-                tumblerBgArea.visible = true
                 timeTumbler.visible = true
               }
             }
@@ -259,14 +264,13 @@ Item {
     }
   }
 
-  // visible area when a tumbler is visible. Waits for a click to cloase the tumbler
+  // Area to close tumbler when clicked away from it - does not propagate the click further to the calendar
   MouseArea {
-    id: tumblerBgArea
-
     anchors.fill: mainColumn
-    visible: false
+
+    enabled: dateYearTumbler.visible || timeTumbler.visible
+
     onClicked: {
-      visible = false
       dateYearTumbler.visible = false
       timeTumbler.visible = false
     }

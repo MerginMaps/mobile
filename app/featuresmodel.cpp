@@ -97,6 +97,7 @@ void FeaturesModel::onFutureFinished()
     mFeatures << FeatureLayerPair( f, mLayer );
   }
   emit layerFeaturesCountChanged( layerFeaturesCount() );
+  emit countChanged( rowCount() );
   endResetModel();
   mFetchingResults = false;
   emit fetchingResultsChanged( mFetchingResults );
@@ -299,6 +300,11 @@ void FeaturesModel::reset()
 QString FeaturesModel::searchExpression() const
 {
   return mSearchExpression;
+}
+
+int FeaturesModel::count() const
+{
+  return rowCount();
 }
 
 void FeaturesModel::setSearchExpression( const QString &searchExpression )

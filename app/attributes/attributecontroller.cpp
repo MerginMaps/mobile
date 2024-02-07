@@ -1328,7 +1328,7 @@ bool AttributeController::setFormShouldRememberValue( const QUuid &id, bool shou
     bool changed = mRememberAttributesController->setShouldRememberValue( mFeatureLayerPair.layer(), data->fieldIndex(), shouldRememberValue );
     if ( changed )
     {
-      emit formDataChanged( id );
+      emit formDataChanged( id ); // It _should_ be enough to emit only the RememberValue role here, not all of them
     }
     return true;
   }

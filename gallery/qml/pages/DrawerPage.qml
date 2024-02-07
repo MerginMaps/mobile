@@ -23,15 +23,15 @@ Page {
 
     MMButton {
       text: "Upload"
-      onClicked: drawer1.visible = true
+      onClicked: drawer1.open()
     }
     MMButton {
       text: "Reached Data Limit"
-      onClicked: drawer2.visible = true
+      onClicked: drawer2.open()
     }
     MMButton {
       text: "Synchronization Failed"
-      onClicked: drawer3.visible = true
+      onClicked: drawer3.open()
     }
   }
 
@@ -44,8 +44,8 @@ Page {
     primaryButton: "Yes, Upload Project"
     secondaryButton: "No Cancel"
 
-    onPrimaryButtonClicked: visible = false
-    onSecondaryButtonClicked: visible = false
+    onPrimaryButtonClicked: close()
+    onSecondaryButtonClicked: close()
   }
 
   MMDrawer {
@@ -64,8 +64,8 @@ Page {
       usedData: 0.923
     }
 
-    onPrimaryButtonClicked: visible = false
-    onSecondaryButtonClicked: visible = false
+    onPrimaryButtonClicked: close()
+    onSecondaryButtonClicked: close()
   }
 
   MMDrawer {
@@ -77,8 +77,8 @@ Page {
     primaryButton: "Ok, I understand"
     boundedDescription: "Failed to push changes. Ask the project workspace owner to log in to their Mergin Maps dashboard for more information."
 
-    onPrimaryButtonClicked: visible = false
-    onSecondaryButtonClicked: visible = false
+    onPrimaryButtonClicked: close()
+    onSecondaryButtonClicked: close()
   }
 
   MMGpsDataDrawer {
