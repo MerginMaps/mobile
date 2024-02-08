@@ -28,6 +28,7 @@ Drawer {
   edge: Qt.BottomEdge
 
   focus: true
+
   Keys.onReleased: function( event ) {
     if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
       event.accepted = true
@@ -35,13 +36,32 @@ Drawer {
     }
   }
 
-  //Component.onCompleted: forceActiveFocus()
+  Component.onCompleted: {
+    console.log("Drawer is completed");
+    forceActiveFocus()
+  }
 
   MapPosition {
     id: mapPositioning
 
     positionKit: __positionKit
     mapSettings: root.mapSettings
+  }
+
+  StackView {
+    id: additionalContent
+
+    anchors.fill: parent
+  }
+
+  Component {
+    id: positionProviderComponent
+
+    PositionProviderPage {
+      onClose: additionalContent.pop(null)
+      stackView: additionalContent
+      Component.onCompleted: forceActiveFocus()
+    }
   }
 
   Rectangle {
@@ -55,7 +75,6 @@ Drawer {
   }
 
   Rectangle {
-
     id: roundedRect
 
     anchors.fill: parent
@@ -322,7 +341,7 @@ Drawer {
             text: qsTr("Manage GPS receivers")
 
             onClicked: {
-              console.log("Clicked!!!") //additionalContent.push( positionProviderComponent )
+              additionalContent.push( positionProviderComponent )
             }
           }
 
