@@ -29,15 +29,7 @@ Drawer {
 
   focus: true
 
-  Keys.onReleased: function( event ) {
-    if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
-      event.accepted = true
-      root.back()
-    }
-  }
-
   Component.onCompleted: {
-    console.log("Drawer is completed");
     forceActiveFocus()
   }
 
