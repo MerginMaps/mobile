@@ -126,7 +126,7 @@ Page {
     model: ObjectModel {
       MMToolbarButton { text: "Delete"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "Edit Geometry"; iconSource: __style.editIcon; onClicked: console.log("tapped "+text) }
-      MMToolbarButton { text: "Save"; iconSource: __style.doneIcon; type: MMToolbarButton.Button.Emphasized; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "Save"; iconSource: __style.checkmarkIcon; type: MMToolbarButton.Button.Emphasized; onClicked: console.log("tapped "+text) }
     }
   }
 }

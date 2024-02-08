@@ -25,6 +25,7 @@ Item {
   height: __style.toolbarHeight
 
   Rectangle {
+    id: container
     width: parent.width - 10 * __dp
     height: parent.height - 10 * __dp
     anchors.centerIn: parent
@@ -36,8 +37,8 @@ Item {
       id: icon
 
       anchors.horizontalCenter: parent.horizontalCenter
-      anchors.bottom: parent.bottom
-      anchors.bottomMargin: 44 * __dp
+      anchors.top: parent.top
+      anchors.topMargin: (container.height - (icon.height + text.height + 5 * __dp) ) / 2
 
       source: control.checked ? control.selectedIconSource : control.iconSource
       color: control.checked ? __style.whiteColor : __style.mediumGreenColor
@@ -48,8 +49,8 @@ Item {
 
       width: parent.width
       anchors.horizontalCenter: parent.horizontalCenter
-      anchors.bottom: parent.bottom
-      anchors.bottomMargin: 20 * __dp
+      anchors.top: icon.bottom
+      anchors.topMargin: 5 * __dp
 
       text: control.text
       color: icon.color

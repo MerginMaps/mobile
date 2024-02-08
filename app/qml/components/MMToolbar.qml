@@ -60,6 +60,7 @@ Rectangle {
   // Button More '...'
   Component {
     id: componentMore
+
     MMToolbarButton {
       text: qsTr("More")
       iconSource: __style.moreIcon
