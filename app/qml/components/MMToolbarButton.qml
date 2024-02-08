@@ -28,59 +28,53 @@ Item {
 
   height: isMenuButton ? __style.menuDrawerHeight/2 : __style.toolbarHeight
 
+  // Toolbar button
   Rectangle {
+    id: container
     width: parent.width - 10 * __dp
     height: parent.height - 10 * __dp
     anchors.centerIn: parent
-    clip: control.type !== MMToolbarButton.Button.Emphasized
-    color: __style.transparentColor
     visible: !control.isMenuButton
 
-    Image {
-      id: icon
+    color: __style.transparentColor
 
-      source: control.iconSource
+    Rectangle {
+      id: iconBg
       anchors.horizontalCenter: parent.horizontalCenter
-      anchors.bottom: parent.bottom
-      anchors.bottomMargin: 40 * __dp + (control.type === MMToolbarButton.Button.Emphasized ? 14 * __dp : 0)
+      anchors.top: parent.top
+      anchors.topMargin: ( container.height - (iconBg.height + text.height + 5 * __dp) ) / 2
 
-      Rectangle {
-        visible: control.type === MMToolbarButton.Button.Emphasized
+      width: control.height * 0.5
+      height: width
+      radius: width / 2
+      color: control.type === MMToolbarButton.Button.Emphasized ? __style.grassColor : __style.transparentColor
+
+      MMIcon {
+        id: icon
+        source: control.iconSource
         anchors.centerIn: parent
-        width: 60 * __dp
-        height: width
-        radius: width / 2
-        color: __style.transparentColor
-        border.color: __style.grassColor
-        border.width: 16 * __dp
-
-        // handle clicks above the toolbar
-        MouseArea {
-          anchors.fill: parent
-          onClicked: control.clicked()
         }
       }
-    }
 
-    Text {
-      id: text
+      Text {
+        id: text
 
-      text: control.text
-      width: parent.width
-      color: __style.whiteColor
-      font: __style.t4
-      anchors.horizontalCenter: parent.horizontalCenter
-      anchors.bottom: parent.bottom
-      anchors.bottomMargin: 20 * __dp
-      horizontalAlignment: Text.AlignHCenter
-      elide: Text.ElideMiddle
-    }
+        text: control.text
+        color: __style.whiteColor
+        font: __style.t4
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: iconBg.bottom
+        anchors.topMargin: 5 * __dp
+        horizontalAlignment: Text.AlignHCenter
+        elide: Text.ElideMiddle
+      }
 
-    MouseArea {
-      anchors.fill: parent
-      onClicked: control.clicked()
+      MouseArea {
+        anchors.fill: parent
+        enabled: !control.isMenuButton
+        onClicked: control.clicked()
+      }
     }
-  }
 
   // Menu button
   MMToolbarMenuButton {

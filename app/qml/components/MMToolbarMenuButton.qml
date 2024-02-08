@@ -36,11 +36,13 @@ Item {
       height: parent.height
       width: parent.width
       spacing: 20 * __dp
+
       MMIcon {
         height: parent.height
         color: __style.forestColor
         source: control.iconSource
       }
+
       Text {
         text: control.text
         color: __style.forestColor
