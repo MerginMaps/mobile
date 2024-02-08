@@ -280,8 +280,6 @@ Item {
 
         mapSettings: mapCanvas.mapSettings
         sourceItem: mapCanvas
-
-        // height: InputStyle.scaleBarHeight
         preferredWidth: Math.min( window.width, 180 * __dp )
 
         anchors.horizontalCenter: parent.horizontalCenter
