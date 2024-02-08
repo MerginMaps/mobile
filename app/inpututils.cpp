@@ -1073,6 +1073,14 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   {
     return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
   }
+  else if ( widgetName == QStringLiteral( "richtext" ) )
+  {
+    return QUrl( path.arg( QLatin1String( "MMFormRichTextViewer.qml" ) ) );
+  }
+  else if ( widgetName == QStringLiteral( "spacer" ) )
+  {
+    return QUrl( path.arg( QLatin1String( "MMFormSpacer.qml" ) ) );
+  }
   else if ( widgetName == QStringLiteral( "relation" ) )
   {
     // check if we should use gallery or word tags
@@ -1111,8 +1119,6 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   }
 
   // TODO == Missing editors:
-  // - QStringLiteral( "richtext" ) -> text and HTML form widget
-  // - QStringLiteral( "spacer" )
   // - QStringLiteral( "relationreference" )
 
   return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) );
