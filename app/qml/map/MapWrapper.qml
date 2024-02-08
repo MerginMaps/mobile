@@ -275,12 +275,13 @@ Item {
         visible: mapCanvas.isRendering && root.state !== "inactive"
       }
 
-      ScaleBar {
+      MMMapScaleBar {
         id: scaleBar
 
         mapSettings: mapCanvas.mapSettings
+        sourceItem: mapCanvas
 
-        height: InputStyle.scaleBarHeight
+        // height: InputStyle.scaleBarHeight
         preferredWidth: Math.min( window.width, 180 * __dp )
 
         anchors.horizontalCenter: parent.horizontalCenter
