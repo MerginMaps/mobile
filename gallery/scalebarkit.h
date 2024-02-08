@@ -1,3 +1,12 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef SCALEBARKIT_H
 #define SCALEBARKIT_H
 
@@ -12,12 +21,17 @@ class  ScaleBarKit : public QObject
     Q_PROPERTY( int distance READ distance NOTIFY scaleBarChanged )
     Q_PROPERTY( int width READ width NOTIFY scaleBarChanged )
 
+    Q_PROPERTY( QString mapSettings MEMBER mMapSettings WRITE setMapSettings NOTIFY scaleBarChanged )
+    Q_PROPERTY( int preferredWidth MEMBER mPreferredWidth NOTIFY scaleBarChanged )
+
   public:
     explicit ScaleBarKit( QObject *parent = nullptr ) {};
 
     int width() const {return mWidth;}
     int distance() const {return mDistance;}
     QString units() const {return mUnits;}
+
+    void setMapSettings( const QString &mapSettings ) {mMapSettings = mapSettings;}
 
   signals:
     void scaleBarChanged();
@@ -28,6 +42,7 @@ class  ScaleBarKit : public QObject
     int mDistance = 100; // in meters or kilometers, rounded
     QString mUnits = "m"; // e.g. km or m
 
+    QString mMapSettings;
 };
 
 #endif // SCALEBARKIT_H

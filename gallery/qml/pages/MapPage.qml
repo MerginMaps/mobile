@@ -68,11 +68,14 @@ Page {
 
   MMMapScaleBar {
     anchors.horizontalCenter: parent.horizontalCenter
-    y: 20
+    y: 120
     sourceItem: map
-    text: Math.floor(map.zoomLevel) + " zoom"
-    barWidth: map.zoomLevel * 10
-    onBarWidthChanged: visible = true
+    preferredWidth: map.zoomLevel * 10
+    visible: true
+    onVisibleChanged: {
+      if (!visible)
+        visible = true
+    }
   }
 
   MMMapBlurLabel {

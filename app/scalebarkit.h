@@ -1,10 +1,4 @@
 /***************************************************************************
-  scalebarkit.h
-  --------------------------------------
-  Date                 : Nov 2017
-  Copyright            : (C) 2017 by Peter Petrik
-  Email                : zilolv at gmail dot com
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,13 +13,11 @@
 #include <QObject>
 #include <QString>
 
-#include "inputconfig.h"
-#include "inpututils.h"
 #include "inputmapsettings.h"
 
 /**
  *
- * \brief The class ScaleBarKit encapsulates the utilities to calculate
+ * The class ScaleBarKit encapsulates the utilities to calculate
  * scale bar properties
  *
  * It requires connection to mapSettings of the active canvas to automatically
@@ -37,8 +29,6 @@
  *
  * System of measurement for result could be set too, so for example the resulting scalebar
  * can show results in the imperial units.
- *
- * \note QML Type: ScaleBarKit
  */
 class  ScaleBarKit : public QObject
 {
@@ -78,46 +68,23 @@ class  ScaleBarKit : public QObject
     Q_PROPERTY( int width READ width NOTIFY scaleBarChanged )
 
   public:
-    //! create new scale bar kit
     explicit ScaleBarKit( QObject *parent = nullptr );
     ~ScaleBarKit() = default;
 
-    //! \copydoc ScaleBarKit::mapSettings
     void setMapSettings( InputMapSettings *mapSettings );
-
-    //! \copydoc ScaleBarKit::width
     int width() const;
-
-    /**
-     * \copydoc ScaleBarKit::units
-     * \see ScaleBarKit::units()
-     */
     int distance() const;
-
-    /**
-     * \copydoc ScaleBarKit::units
-     * \see ScaleBarKit::distance()
-     */
     QString units() const;
 
   signals:
 
-    /**
-     * width, distance and/or units changed
-     */
     void scaleBarChanged();
-
-    //! \copydoc ScaleBarKit::mapSettings
     void mapSettingsChanged();
-
-    //! \copydoc ScaleBarKit::preferredWidth
     void preferredWidthChanged();
-
-    //! \copydoc ScaleBarKit::systemOfMeasurement
     void systemOfMeasurementChanged();
 
   public slots:
-    //! recalculate width, distance and units.
+    //! Recalculate width, distance and units.
     void updateScaleBar();
 
   private:
@@ -128,6 +95,5 @@ class  ScaleBarKit : public QObject
     QString mUnits; // e.g. km or m
     Qgis::SystemOfMeasurement mSystemOfMeasurement = Qgis::SystemOfMeasurement::Metric;
 };
-
 
 #endif // SCALEBARKIT_H

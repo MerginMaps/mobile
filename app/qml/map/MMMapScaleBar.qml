@@ -15,15 +15,16 @@ import "."
 Item {
   id: root
 
+  property alias mapSettings: scaleBarKit.mapSettings
+  property alias preferredWidth: scaleBarKit.preferredWidth
+  // Item to blur (map)
   property alias sourceItem: effect.sourceItem
-  property string text: scaleBarKit.distance + " " + scaleBarKit.units
-  property real barWidth: scaleBarKit.width
-
-  width: root.barWidth + 48 * __dp
 
   ScaleBarKit {
     id: scaleBarKit
   }
+
+  width: scaleBarKit.width + 48 * __dp
 
   Rectangle {
     anchors.fill: fastBlur
@@ -48,7 +49,7 @@ Item {
     }
 
     Column {
-      width: root.barWidth
+      width: scaleBarKit.width
       anchors.centerIn: parent
 
       Rectangle {
@@ -83,7 +84,7 @@ Item {
         height: 26 * __dp
         anchors.horizontalCenter: parent.horizontalCenter
 
-        text: root.text
+        text: scaleBarKit.distance + " " + scaleBarKit.units
         color: __style.forestColor
         font: __style.t3
         horizontalAlignment: Text.AlignHCenter
