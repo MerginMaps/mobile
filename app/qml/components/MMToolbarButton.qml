@@ -24,6 +24,7 @@ Item {
   property var type: MMToolbarButton.Button.Normal
   property bool isMenuButton: false
 
+  property int buttonSpacing: control.type === MMToolbarButton.Button.Emphasized ? 7 * __dp : 5 * __dp
   enum Button { Normal, Emphasized }
 
   height: isMenuButton ? __style.menuDrawerHeight/2 : __style.toolbarHeight
@@ -42,15 +43,18 @@ Item {
       id: iconBg
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.top: parent.top
-      anchors.topMargin: ( container.height - (iconBg.height + text.height + 5 * __dp) ) / 2
+      anchors.topMargin: ( container.height - (iconBg.height + text.height + control.buttonSpacing) ) / 2
 
       width: control.height * 0.5
       height: width
       radius: width / 2
-      color: control.type === MMToolbarButton.Button.Emphasized ? __style.grassColor : __style.transparentColor
+      color: control.type === MMToolbarButton.Button.Emphasized ? __style.grassColor :  __style.transparentColor
 
       MMIcon {
         id: icon
+        useCustomSize: true
+        width: parent.width
+        height: parent.height
         source: control.iconSource
         anchors.centerIn: parent
         }
@@ -64,7 +68,7 @@ Item {
         font: __style.t4
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: iconBg.bottom
-        anchors.topMargin: 5 * __dp
+        anchors.topMargin: control.buttonSpacing
         horizontalAlignment: Text.AlignHCenter
         elide: Text.ElideMiddle
       }
