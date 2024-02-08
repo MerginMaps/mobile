@@ -502,6 +502,10 @@ ApplicationWindow {
         id: gpsDataDrawer
         title: qsTr("GPS info")
         mapSettings: map.mapSettings
+
+        onClosed: {
+          gpsDataDrawerLoader.active = false
+        }
       }
     }
 
@@ -523,29 +527,6 @@ ApplicationWindow {
             gpsDataDrawerLoader.item?.open()
           }
         }
-        console.log("Test 2")
-        // if ( gpsDataDrawerLoader.active )
-        // {
-        //   lastState = stateManager.state
-        //   lastMapState = map.state
-        //   //formsStackManager.closeDrawer();
-
-        //   if ( stakeoutPanelLoader.active )
-        //   {
-        //     // if we are in stakeout mode
-        //     stakeoutPanelLoader.item.hide()
-        //   }
-        // }
-        // else
-        // {
-        //   if ( stakeoutPanelLoader.active )
-        //   {
-        //     // user closed GPS panel and we are in stakeout mode - reopen stakeout panel
-        //     stakeoutPanelLoader.item.restore()
-        //   }
-        //   stateManager.state = lastState
-        //   map.state = lastMapState
-        // }
       }
     }
 

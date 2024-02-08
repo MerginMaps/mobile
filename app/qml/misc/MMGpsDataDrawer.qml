@@ -35,7 +35,7 @@ Drawer {
     }
   }
 
-  Component.onCompleted: forceActiveFocus()
+  //Component.onCompleted: forceActiveFocus()
 
   MapPosition {
     id: mapPositioning
@@ -90,7 +90,7 @@ Drawer {
           bgndColor: __style.lightGreenColor
           bgndHoverColor: __style.mediumGreenColor
 
-          onClicked: gpsDrawerComponent.visible = false
+          onClicked: root.visible = false
         }
       }
 
