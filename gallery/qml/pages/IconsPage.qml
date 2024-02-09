@@ -93,6 +93,10 @@ ScrollView {
           source: __style.doneIcon
         }
         IconBox {
+          text: "done2Icon"
+          source: __style.done2Icon
+        }
+        IconBox {
           text: "downloadIcon"
           source: __style.downloadIcon
         }
@@ -100,6 +104,10 @@ ScrollView {
           text: "editIcon"
           source: __style.editIcon
           colorise: true
+        }
+        IconBox {
+          text: "edit2Icon"
+          source: __style.edit2Icon
         }
         IconBox {
           text: "errorIcon"
@@ -198,6 +206,10 @@ ScrollView {
           text: "syncIcon"
           source: __style.syncIcon
           colorise: true
+        }
+        IconBox {
+          text: "sync2Icon"
+          source: __style.syncIcon
         }
         IconBox {
           text: "trackingDirectionIcon"

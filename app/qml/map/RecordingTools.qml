@@ -237,7 +237,7 @@ Item {
 
       MMToolbarLongButton {
         text: qsTr( "Record" );
-        iconSource: __style.deleteIcon;
+        iconSource: __style.doneIcon;
         onClicked: {
           mapTool.addPoint( crosshair.recordPoint )
           let pair = mapTool.getFeatureLayerPair()
