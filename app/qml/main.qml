@@ -512,9 +512,6 @@ ApplicationWindow {
     Loader {
       id: gpsDataDrawerLoader
 
-      property string lastState
-      property string lastMapState
-
       asynchronous: true
       active: false
       focus: true
@@ -522,12 +519,9 @@ ApplicationWindow {
       sourceComponent: gpsDataDrawerComponent
 
       onActiveChanged: {
-        onActiveChanged: {
-          if ( active )
-          {
-            lastState = stateManager.state
-            gpsDataDrawerLoader.item?.open()
-          }
+        if ( active )
+        {
+          gpsDataDrawerLoader.item?.open()
         }
       }
     }
