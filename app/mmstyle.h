@@ -104,8 +104,10 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl deleteIcon READ deleteIcon CONSTANT )
     Q_PROPERTY( QUrl directionIcon READ directionIcon CONSTANT )
     Q_PROPERTY( QUrl doneIcon READ doneIcon CONSTANT )
+    Q_PROPERTY( QUrl done2Icon READ done2Icon CONSTANT )
     Q_PROPERTY( QUrl downloadIcon READ downloadIcon CONSTANT )
     Q_PROPERTY( QUrl editIcon READ editIcon CONSTANT )
+    Q_PROPERTY( QUrl edit2Icon READ edit2Icon CONSTANT )
     Q_PROPERTY( QUrl electricityIcon READ electricityIcon CONSTANT )
     Q_PROPERTY( QUrl engineeringIcon READ engineeringIcon CONSTANT )
     Q_PROPERTY( QUrl environmentalIcon READ environmentalIcon CONSTANT )
@@ -148,6 +150,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl stopIcon READ stopIcon CONSTANT )
     Q_PROPERTY( QUrl subscriptionsIcon READ subscriptionsIcon CONSTANT )
     Q_PROPERTY( QUrl syncIcon READ syncIcon CONSTANT )
+    Q_PROPERTY( QUrl sync2Icon READ sync2Icon CONSTANT )
     Q_PROPERTY( QUrl syncGreenIcon READ syncGreenIcon CONSTANT )
     Q_PROPERTY( QUrl teacherIcon READ teacherIcon CONSTANT )
     Q_PROPERTY( QUrl telecommunicationIcon READ telecommunicationIcon CONSTANT )
@@ -267,8 +270,10 @@ class MMStyle: public QObject
     QUrl deleteIcon() {return QUrl( "qrc:/Delete.svg" );}
     QUrl directionIcon() {return QUrl( "qrc:/Direction.svg" );}
     QUrl doneIcon() {return QUrl( "qrc:/Done.svg" );}
+    QUrl done2Icon() {return QUrl( "qrc:/Done2.svg" );}
     QUrl downloadIcon() {return QUrl( "qrc:/Download.svg" );}
     QUrl editIcon() {return QUrl( "qrc:/Edit.svg" );}
+    QUrl edit2Icon() {return QUrl( "qrc:/Edit2.svg" );}
     QUrl electricityIcon() {return QUrl( "qrc:/Electricity.svg" );}
     QUrl engineeringIcon() {return QUrl( "qrc:/Engineering.svg" );}
     QUrl environmentalIcon() {return QUrl( "qrc:/Environmental.svg" );}
@@ -311,6 +316,7 @@ class MMStyle: public QObject
     QUrl stopIcon() {return QUrl( "qrc:/Stop.svg" );}
     QUrl subscriptionsIcon() {return QUrl( "qrc:/Subscriptions.svg" );}
     QUrl syncIcon() {return QUrl( "qrc:/Sync.svg" );}
+    QUrl sync2Icon() {return QUrl( "qrc:/Sync2.svg" );}
     QUrl syncGreenIcon() {return QUrl( "qrc:/SyncGreen.svg" );}
     QUrl teacherIcon() {return QUrl( "qrc:/Teacher.svg" );}
     QUrl telecommunicationIcon() {return QUrl( "qrc:/Telecommunication.svg" );}

@@ -16,6 +16,11 @@ import "../../app/qml/"
 Page {
   id: pane
 
+  Rectangle {
+    anchors.fill: parent
+    color: __style.lightGreenColor
+  }
+
   MMSelectableToolbar {
     id: selectableToolbar
 
@@ -74,7 +79,7 @@ Page {
     }
 
     model: ObjectModel {
-      MMToolbarLongButton { text: "Long button"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
+      MMToolbarLongButton { text: "Long button"; iconSource: __style.doneIcon; onClicked: console.log("tapped "+text) }
     }
   }
 
@@ -88,8 +93,8 @@ Page {
     }
 
     model: ObjectModel {
-      MMToolbarButton { text: "aaa"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
-      MMToolbarButton { text: "bbb"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "Sync"; iconSource: __style.sync2Icon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "Layers"; iconSource: __style.layersIcon; onClicked: console.log("tapped "+text) }
     }
   }
 
@@ -126,7 +131,7 @@ Page {
     model: ObjectModel {
       MMToolbarButton { text: "Delete"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "Edit Geometry"; iconSource: __style.editIcon; onClicked: console.log("tapped "+text) }
-      MMToolbarButton { text: "Save"; iconSource: __style.checkmarkIcon; type: MMToolbarButton.Button.Emphasized; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "Save"; iconSource: __style.done2Icon; onClicked: console.log("tapped "+text) }
     }
   }
 }

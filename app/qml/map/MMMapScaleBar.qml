@@ -25,19 +25,14 @@ Item {
   }
 
   width: scaleBarKit.width + 48 * __dp
+  height: 45 * __dp
 
-  Rectangle {
-    anchors.fill: fastBlur
-    color: __style.forestColor
-    opacity: 0.8
-    radius: fastBlur.height / 2
-  }
-
+  // Blurred map
   FastBlur {
     id: fastBlur
 
     width: parent.width
-    height: 45 * __dp
+    height: parent.height
 
     radius: 32
     opacity: 0.8
@@ -47,56 +42,65 @@ Item {
 
       sourceRect: Qt.rect(root.x, root.y, fastBlur.width, fastBlur.height)
     }
+   }
 
-    Column {
-      width: scaleBarKit.width
-      anchors.centerIn: parent
+  // Colored background rectangle
+  Rectangle {
+    anchors.fill: parent
+    color: __style.forestColor
+    opacity: 0.1
+    radius: parent.height / 2
+  }
+
+  // Scale + text
+  Column {
+    width: scaleBarKit.width
+    anchors.centerIn: parent
+
+    Rectangle {
+      width: parent.width
+      height: 2 * __dp
+      color: __style.forestColor
 
       Rectangle {
-        width: parent.width
-        height: 2 * __dp
-        color: __style.forestColor
-
-        Rectangle {
-          anchors.top: parent.top
-          anchors.left: parent.left
-          anchors.topMargin: (width - height) / 2
-          width: parent.height
-          height: 6 * __dp
-          color: parent.color
-          radius: width / 2
-        }
-
-        Rectangle {
-          anchors.top: parent.top
-          anchors.right: parent.right
-          anchors.topMargin: (width - height) / 2
-          width: parent.height
-          height: 6 * __dp
-          color: parent.color
-          radius: width / 2
-        }
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.topMargin: (width - height) / 2
+        width: parent.height
+        height: 6 * __dp
+        color: parent.color
+        radius: width / 2
       }
 
-      Text {
-        id: text
-
-        height: 26 * __dp
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        text: scaleBarKit.distance + " " + scaleBarKit.units
-        color: __style.forestColor
-        font: __style.t3
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
+      Rectangle {
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: (width - height) / 2
+        width: parent.height
+        height: 6 * __dp
+        color: parent.color
+        radius: width / 2
       }
+    }
+
+    Text {
+      id: text
+
+      height: 26 * __dp
+      anchors.horizontalCenter: parent.horizontalCenter
+
+      text: scaleBarKit.distance + " " + scaleBarKit.units
+      color: __style.forestColor
+      font: __style.t3
+      horizontalAlignment: Text.AlignHCenter
+      verticalAlignment: Text.AlignVCenter
     }
   }
 
   NumberAnimation on opacity {
     id: fadeOut
 
-    from: 0.4
+    from: 1
     to: 0.0
     duration: 1000
 

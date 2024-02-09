@@ -275,7 +275,7 @@ ApplicationWindow {
           id: syncButton
 
           text: qsTr("Sync")
-          iconSource: __style.syncIcon
+          iconSource: __style.sync2Icon
           onClicked: {
             __activeProject.requestSync()
           }

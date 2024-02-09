@@ -50,7 +50,7 @@ Item {
 
         MMIcon {
           source: control.iconSource
-          color: text.color
+          anchors.verticalCenter: parent.verticalCenter
         }
         Text {
           id: text
