@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qml/components"
+import "../../app/qml/misc"
 
 ScrollView {
   id: page
@@ -258,6 +259,42 @@ ScrollView {
           width: page.width - 64
           text: "Server is broken, sorry. \n Please wait for tomorrow"
         }
+      }
+    }
+
+    GroupBox {
+      width: page.width - 40
+      title: "MMGpsDataText"
+      background: Rectangle {
+        color: "white"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      Column {
+        spacing: 20
+        anchors.fill: parent
+
+        Row {
+          width: parent.width
+          height: 67 * __dp
+
+          MMGpsDataText {
+            titleText: "Gps Data Title"
+            descriptionText: "Gps Data Description"
+          }
+
+          MMGpsDataText {
+            titleText: "Gps Data Right Title"
+            descriptionText: "Gps Data Right Description"
+            alignmentRight: true
+          }
+        }
+
+        MMLine {}
       }
     }
   }
