@@ -23,7 +23,7 @@ env:
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 1
+  CACHE_VERSION: 2
 
 concurrency:
   group: ci-${{github.ref}}-ios
