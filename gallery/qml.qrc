@@ -99,7 +99,5 @@
         <file>../app/qml/map/MMPositionMarker.qml</file>
         <file>../app/qml/map/MMMapScaleBar.qml</file>
         <file>qml/pages/FormPage.qml</file>
-        <file>../app/qml/components/MMGpsDataText.qml</file>
-        <file>../app/qml/components/MMLine.qml</file>
     </qresource>
 </RCC>
