@@ -96,6 +96,5 @@
         <file>../app/qml/onboarding/MMWhichIndustry.qml</file>
         <file>../app/qml/map/MMPositionMarker.qml</file>
         <file>../app/qml/map/MMMapScaleBar.qml</file>
-        <file>qml/pages/FormPage.qml</file>
     </qresource>
 </RCC>
