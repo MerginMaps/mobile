@@ -184,7 +184,7 @@ Item {
       Layout.fillHeight: true
 
       Rectangle {
-        // background
+        id: canvasBackground
         color: InputStyle.clrPanelMain
         anchors.fill: parent
       }
