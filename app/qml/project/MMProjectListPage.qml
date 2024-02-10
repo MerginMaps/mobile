@@ -10,8 +10,10 @@
 import QtQuick
 import lc 1.0
 
-import "./components"
-import "./misc"
+import "../components"
+import "../misc"
+import "../inputs"
+import "."
 
 Item {
   id: root
@@ -28,6 +30,8 @@ Item {
     projectlist.refreshProjectList( searchBar.text )
   }
 
+  property int spacing: 10 * __dp
+
   AttentionBanner {
     id: attentionBanner
     visible: __merginApi.subscriptionInfo ? __merginApi.subscriptionInfo.actionRequired : false
@@ -38,8 +42,16 @@ Item {
     }
   }
 
-  SearchBar {
+  MMSearchInput {
     id: searchBar
+
+    width: parent.width - 2 * root.padding
+    placeholderText: qsTr("Search for projects...")
+    // visible: root.withSearch
+
+    onSearchTextChanged: function(text) {
+      //root.model.searchExpression = text
+    }
 
     anchors {
       top: attentionBanner.visible ? attentionBanner.bottom : parent.top
@@ -50,18 +62,21 @@ Item {
     allowTimer: true
   }
 
-  ProjectList {
+
+  MMProjectList {
     id: projectlist
 
     projectModelType: root.projectModelType
     activeProjectId: root.activeProjectId
     searchText: searchBar.text
+    spacing: root.spacing
 
     anchors {
       left: parent.left
       right: parent.right
       top: searchBar.bottom
       bottom: parent.bottom
+      topMargin: root.spacing
     }
 
     onOpenProjectRequested: function( projectFilePath ) {

@@ -14,10 +14,13 @@ import Qt5Compat.GraphicalEffects
 import QtQuick.Dialogs
 
 import lc 1.0
-import "."  // import InputStyle singleton
-import "./misc"
-import "./components/"
-import "./onboarding/"
+
+import "."
+import ".."
+import "../misc"
+import "../components"
+import "../onboarding"
+import "../inputs"
 
 Item {
   id: root
@@ -219,48 +222,70 @@ Item {
         }
       }
 
-      header: PanelHeaderV2 {
+      header: MMHeader {
         id: headerRow
 
-        width: projectsPage.width
-
-        headerTitle: {
+        title: {
           if ( pageContent.state === "local" ) {
-            return qsTr("Downloaded projects")
+            return qsTr("Home")
           }
           else if ( pageContent.state === "created" ) {
             return __merginApi.userInfo.hasWorkspaces ? __merginApi.userInfo.activeWorkspaceName : qsTr("Projects")
           }
-          return qsTr("Public projects")
+          return qsTr("Explore")
         }
 
-        tooltipText: qsTr("Your other projects are accessible%1by switching your workspace here").arg("\n")
-
-        haveBackButton: root.activeProjectId
-        haveAccountButton: true
+        rightMarginShift: personIconRect.width + __style.pageMargins
 
         onBackClicked: root.hidePanel()
-        onAccountClicked: {
-          if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK ) {
 
-            __merginApi.refreshUserData()
+        Rectangle {
+          id: personIconRect
 
-            if ( __merginApi.serverType === MerginServerType.OLD ) {
-              __inputUtils.showNotification( qsTr( "Unsupported server, please contact your server administrator." ) )
-            }
-            else {
-              stackView.push( workspaceAccountPageComp )
-            }
+          anchors {
+            right: parent.right
+            rightMargin: __style.pageMargins
+            verticalCenter: parent.verticalCenter
           }
-          else {
-            root.showLogin()
+
+          width: 40 * __dp
+          height: width
+          radius: width / 2
+          color: __style.fieldColor
+
+          MMIcon {
+            anchors.centerIn: parent
+            source: __style.personalIcon
+            useCustomSize: true
+            width: 24 * __dp
+            height: 24 * __dp
+          }
+
+          MouseArea {
+            anchors.fill: parent
+            onClicked: {
+              if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK ) {
+
+                __merginApi.refreshUserData()
+
+                if ( __merginApi.serverType === MerginServerType.OLD ) {
+                  __inputUtils.showNotification( qsTr( "Unsupported server, please contact your server administrator." ) )
+                }
+                else {
+                  stackView.push( workspaceAccountPageComp )
+                }
+              }
+              else {
+                root.showLogin()
+              }
+            }
           }
         }
       }
 
       background: Rectangle {
         anchors.fill: parent
-        color: InputStyle.clrPanelMain
+        color: __style.lightGreenColor
       }
 
       Item {
@@ -285,6 +310,7 @@ Item {
         onStateChanged: {
           __merginApi.pingMergin()
           projectsPage.refreshProjectList()
+
           pageFooter.setActiveButton( pageContent.state )
 
           //
@@ -326,15 +352,13 @@ Item {
         StackLayout {
           id: projectListLayout
 
-          anchors {
-              left: parent.left
-              right: parent.right
-              top: parent.top
-              bottom: parent.bottom
-          }
+          width: parent.width - 2*__style.pageMargins
+          height: parent.height
+          anchors.horizontalCenter: parent.horizontalCenter
+
           currentIndex: pageFooter.currentIndex
 
-          ProjectListPage {
+          MMProjectListPage {
             id: localProjectsPage
 
             projectModelType: ProjectsModel.LocalProjectsModel
@@ -350,7 +374,7 @@ Item {
             list.onActiveProjectDeleted: setupProjectOpen( "" )
           }
 
-          ProjectListPage {
+          MMProjectListPage {
             id: workspaceProjectsPage
 
             projectModelType: ProjectsModel.WorkspaceProjectsModel
@@ -366,7 +390,7 @@ Item {
             list.onActiveProjectDeleted: setupProjectOpen( "" )
           }
 
-          ProjectListPage {
+          MMProjectListPage {
             id: publicProjectsPage
 
             projectModelType: ProjectsModel.PublicProjectsModel
@@ -386,86 +410,53 @@ Item {
         }
       }
 
-      footer: TabBar {
+      footer: MMSelectableToolbar {
         id: pageFooter
 
-        property int itemSize: pageFooter.height * 0.8
+        width: projectsPage.width
+        property int buttonWidth: Math.floor((projectsPage.width - 2 * __style.pageMargins) / 3)
+
+        Component.onCompleted: setActiveState( pageContent.state )
 
         function setActiveButton( state ) {
           switch( state ) {
-            case "local": pageFooter.setCurrentIndex( 0 ); break
-            case "created": pageFooter.setCurrentIndex( 1 ); break
-            case "public": pageFooter.setCurrentIndex( 2 ); break
+            case "local": pageFooter.index = 0; break
+            case "created": pageFooter.index = 1; break
+            case "public": pageFooter.index = 2; break
           }
         }
 
-        spacing: 0
-        contentHeight: InputStyle.rowHeightHeader
+        model: ObjectModel {
 
-        TabButton {
-          id: localProjectsBtn
-
-          background: Rectangle {
-            anchors.fill: parent
-            color: InputStyle.fontColor
-          }
-
-          MainPanelButton {
-            id: localProjectsInnerBtn
-
+          MMSelectableToolbarButton {
+            id: localProjectsBtn
+            width: pageFooter.buttonWidth
             text: qsTr("Home")
-            imageSource: InputStyle.homeIcon
-            width: pageFooter.itemSize
-
-            handleClicks: false
-            faded: pageFooter.currentIndex !== localProjectsBtn.TabBar.index
+            iconSource: __style.homeIcon
+            selectedIconSource: __style.homeFilledIcon
+            checked: pageFooter.index === 0
+            onClicked: pageContent.state = "local"
           }
 
-          onClicked: pageContent.state = "local"
-        }
-
-        TabButton {
-          id: createdProjectsBtn
-
-          background: Rectangle {
-            anchors.fill: parent
-            color: InputStyle.fontColor
-          }
-
-          MainPanelButton {
-            id: createdProjectsInnerBtn
-
+          MMSelectableToolbarButton {
+            id: createdProjectsBtn
+            width: pageFooter.buttonWidth
             text: qsTr("Projects")
-            imageSource: InputStyle.mapSearchIcon
-            width: pageFooter.itemSize
-
-            handleClicks: false
-            faded: pageFooter.currentIndex !== createdProjectsBtn.TabBar.index
+            iconSource: __style.projectsIcon
+            selectedIconSource: __style.projectsFilledIcon
+            checked: pageFooter.index === 1
+            onClicked: pageContent.state = "created"
           }
 
-          onClicked: pageContent.state = "created"
-        }
-
-        TabButton {
-          id: publicProjectsBtn
-
-          background: Rectangle {
-            anchors.fill: parent
-            color: InputStyle.fontColor
-          }
-
-          MainPanelButton {
-            id: publicProjectsInnerBtn
-
+          MMSelectableToolbarButton {
+            id: publicProjectsBtn
+            width: pageFooter.buttonWidth
             text: qsTr("Explore")
-            imageSource: InputStyle.exploreIcon
-            width: pageFooter.itemSize
-
-            handleClicks: false
-            faded: pageFooter.currentIndex !== publicProjectsBtn.TabBar.index
+            iconSource: __style.globalIcon
+            selectedIconSource: __style.globalFilledIcon
+            checked: pageFooter.index === 2
+            onClicked: pageContent.state = "public"
           }
-
-          onClicked: pageContent.state = "public"
         }
       }
 

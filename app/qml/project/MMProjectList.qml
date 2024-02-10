@@ -12,6 +12,8 @@ import QtQuick.Controls
 import QtQuick.Dialogs
 import QtQuick.Layouts
 import lc 1.0
+
+import "../components"
 import "../"
 import "."
 
@@ -21,6 +23,7 @@ Item {
   property int projectModelType: ProjectsModel.EmptyProjectsModel
   property string activeProjectId: ""
   property string searchText: ""
+  property int spacing: 0
 
   signal openProjectRequested( string projectFilePath )
   signal showLocalChangesRequested( string projectId )
@@ -58,6 +61,8 @@ Item {
 
     anchors.fill: parent
     clip: true
+    spacing: root.spacing
+
     maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
 
     // Proxy model with source projects model
@@ -75,7 +80,7 @@ Item {
     }
 
     // Project delegate
-    delegate: ProjectDelegateItem {
+    delegate: MMProjectItem {
       id: projectDelegate
 
       width: ListView.view.width
@@ -93,9 +98,6 @@ Item {
       projectRemoteError: model.ProjectRemoteError ? model.ProjectRemoteError : ""
 
       highlight: model.ProjectId === root.activeProjectId
-
-      viewContentY: ListView.view.contentY
-      viewHeight: ListView.view.height
 
       onOpenRequested: {
         if ( model.ProjectIsLocal )
@@ -128,14 +130,17 @@ Item {
   Component {
     id: addProjectButtonComponent
 
-    DelegateButton {
-      width: parent.width
-      height: InputStyle.rowHeight
-      text: qsTr("Create project")
-      visible: listview.count > 0
+    MMButton {
+        width: parent.width - 2 * 20 * __dp
+        // anchors.horizontalCenter: parent.horizontalCenter
+        // anchors.bottom: parent.bottom
+        // anchors.bottomMargin: 20 * __dp
 
-      onClicked: stackView.push(projectWizardComp)
-    }
+        visible: listview.count > 0
+        text: qsTr("Create project")
+
+        onClicked: stackView.push(projectWizardComp)
+      }
   }
 
   Item {
@@ -182,13 +187,13 @@ Item {
         text: qsTr( "You can also create new project by clicking button below." )
       }
 
-      DelegateButton {
+
+      MMButton {
         id: createdProjectsWhenNone
-
-        Layout.preferredHeight: InputStyle.rowHeight
         Layout.fillWidth: true
+        // Layout.preferredHeight: InputStyle.rowHeight
+        text: qsTr("Create project")
 
-        text: qsTr( "Create project" )
         onClicked: stackView.push(projectWizardComp)
       }
     }

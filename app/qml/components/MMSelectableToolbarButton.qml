@@ -11,6 +11,9 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
+import lc 1.0
+import "."
+
 Item {
   id: control
 

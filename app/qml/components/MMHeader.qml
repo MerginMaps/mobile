@@ -37,11 +37,11 @@ Item {
     // If there is a right or a left icon, we need to shift the margin
     // of the opposite side to keep the text centred to the center of the screen
     property real leftMarginShift: {
-      return Math.max( internal.backBtnRealWidth, root.rightMarginShift ) + internal.headerSpacing + internal.pageMargin
+      return Math.max( internal.backBtnRealWidth, root.rightMarginShift ) + internal.headerSpacing + __style.pageMargins
     }
 
     property real rightMarginShift: {
-      return Math.max( internal.backBtnRealWidth, root.rightMarginShift ) + internal.headerSpacing + internal.pageMargin
+      return Math.max( internal.backBtnRealWidth, root.rightMarginShift ) + internal.headerSpacing + __style.pageMargins
     }
 
     anchors {
@@ -65,7 +65,7 @@ Item {
 
     anchors {
       left: parent.left
-      leftMargin: internal.pageMargin
+      leftMargin: __style.pageMargins
       verticalCenter: parent.verticalCenter
     }
 
@@ -77,8 +77,6 @@ Item {
     id: internal
 
     property real headerSpacing: 10 * __dp
-    property real pageMargin: 20 * __dp // TODO: move to mmstyle.h
-
     property real backBtnRealWidth: backBtn.visible ? backBtn.width : 0
   }
 }

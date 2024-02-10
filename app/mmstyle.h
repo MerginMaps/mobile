@@ -135,6 +135,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl otherIcon READ otherIcon CONSTANT )
     Q_PROPERTY( QUrl othersIcon READ othersIcon CONSTANT )
     Q_PROPERTY( QUrl plusIcon READ plusIcon CONSTANT )
+    Q_PROPERTY( QUrl personalIcon READ personalIcon CONSTANT )
     Q_PROPERTY( QUrl previousIcon READ previousIcon CONSTANT )
     Q_PROPERTY( QUrl projectButtonMoreIcon READ projectButtonMoreIcon CONSTANT )
     Q_PROPERTY( QUrl projectsIcon READ projectsIcon CONSTANT )
@@ -302,6 +303,7 @@ class MMStyle: public QObject
     QUrl othersIcon() {return QUrl( "qrc:/Others.svg" );}
     QUrl plusIcon() {return QUrl( "qrc:/Plus.svg" );}
     QUrl previousIcon() {return QUrl( "qrc:/Previous.svg" );}
+    QUrl personalIcon() {return QUrl( "qrc:/Personal.svg" );}
     QUrl projectButtonMoreIcon() {return QUrl( "qrc:/ProjectButtonMore.svg" );}
     QUrl projectsIcon() {return QUrl( "qrc:/Projects.svg" );}
     QUrl projectsFilledIcon() {return QUrl( "qrc:/ProjectsFilled.svg" );}
@@ -340,7 +342,7 @@ class MMStyle: public QObject
     double mapItemHeight() {return 60 * mDp;}
     double mapButtonsMargin() {return 25 * mDp;}
 
-    double toolbarHeight() {return 89 * mDp;}
+    double toolbarHeight() {return 68 * mDp;}
     double menuDrawerHeight() {return 67 * mDp;}
 
     double inputRadius() {return 12 * mDp;}
