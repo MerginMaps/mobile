@@ -666,8 +666,8 @@ int main( int argc, char *argv[] )
   qreal dp = InputUtils::calculateDpRatio();
   engine.rootContext()->setContextProperty( "__dp", dp );
 
-  MMStyle mmstyle( dp );
-  engine.rootContext()->setContextProperty( "__style", &mmstyle );
+  MMStyle *style = new MMStyle( &engine, dp );
+  engine.rootContext()->setContextProperty( "__style", style );
 
   // Set simulated position for desktop builds
 #ifdef DESKTOP_OS

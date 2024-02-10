@@ -194,8 +194,8 @@ class MMStyle: public QObject
     Q_PROPERTY( double inputRadius READ inputRadius CONSTANT )
 
   public:
-    explicit MMStyle( qreal dp )
-      : mDp( dp )
+    explicit MMStyle( QObject *parent,  qreal dp )
+      : QObject( parent ), mDp( dp )
     {}
     ~MMStyle() = default;
 

@@ -37,6 +37,8 @@ int main( int argc, char *argv[] )
 
   app.setFont( QFont( Helper::installFonts() ) );
 
+  InputUtils iu;
+
   QQmlApplicationEngine engine;
 
   // Register C++ enums
@@ -49,13 +51,17 @@ int main( int argc, char *argv[] )
   HotReload hotReload( engine );
   engine.rootContext()->setContextProperty( "_hotReload", &hotReload );
 #endif
-  InputUtils iu;
+
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__androidUtils", &iu );
   engine.rootContext()->setContextProperty( "__iosUtils", &iu );
 
   qreal dp = Helper::calculateDpRatio();
-  MMStyle style( dp );
+
+  // MMStyle must be destructed after engine
+  // see https://tobiasmarciszko.github.io/qml-binding-errors/
+  MMStyle *style = new MMStyle( &engine, dp );
+
   NotificationModel notificationModel;
 
   PositionKit pk;
@@ -65,7 +71,7 @@ int main( int argc, char *argv[] )
   // path to local wrapper pages
   engine.rootContext()->setContextProperty( "_qmlWrapperPath", QGuiApplication::applicationDirPath() + "/HotReload/qml/pages/" );
   engine.rootContext()->setContextProperty( "__dp", dp );
-  engine.rootContext()->setContextProperty( "__style", &style );
+  engine.rootContext()->setContextProperty( "__style", style );
   engine.rootContext()->setContextProperty( "__isMobile", Helper::isMobile() );
 
   QObject::connect( &engine, &QQmlApplicationEngine::objectCreationFailed,
