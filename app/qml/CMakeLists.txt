@@ -40,7 +40,6 @@ set(MM_QML
     components/MMCheckBox.qml
     components/MMDrawer.qml
     components/MMDropdownDrawer.qml
-    components/MMGpsDataDrawer.qml
     components/MMHeader.qml
     components/MMHlineText.qml
     components/MMIcon.qml
@@ -140,7 +139,9 @@ set(MM_QML
     map/StakeoutTools.qml
     misc/AddPositionProviderPage.qml
     misc/AttentionBanner.qml
-    misc/GpsDataPage.qml
+    misc/MMGpsDataDrawer.qml
+    misc/MMLine.qml
+    misc/MMGpsDataText.qml
     misc/NoWorkspaceBanner.qml
     misc/PositionProviderPage.qml
     AboutPanel.qml

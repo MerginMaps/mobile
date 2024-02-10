@@ -22,6 +22,7 @@ import "./dialogs"
 import "./layers"
 import "./popups"
 import "./components"
+import "./misc"
 import notificationType 1.0
 
 ApplicationWindow {
@@ -204,8 +205,8 @@ ApplicationWindow {
         showMessage( message )
       }
       onAccuracyButtonClicked: {
-        gpsDataPageLoader.active = true
-        gpsDataPageLoader.focus = true
+        gpsDataDrawerLoader.active = true
+        gpsDataDrawerLoader.focus = true
       }
 
       onStakeoutStarted: function( pair ) {
@@ -495,54 +496,32 @@ ApplicationWindow {
     }
 
     Component {
-      id: gpsDataPageComponent
+      id: gpsDataDrawerComponent
 
-      GpsDataPage {
-        id: gpsDataPage
-
-        onBack: {
-          gpsDataPageLoader.active = false
-        }
-
+      MMGpsDataDrawer {
+        id: gpsDataDrawer
+        title: qsTr("GPS info")
         mapSettings: map.mapSettings
 
-        height: window.height
-        width: window.width
+        onClosed: {
+          gpsDataDrawerLoader.active = false
+        }
       }
     }
 
     Loader {
-      id: gpsDataPageLoader
-
-      property string lastState
-      property string lastMapState
+      id: gpsDataDrawerLoader
 
       asynchronous: true
       active: false
       focus: true
-      sourceComponent: gpsDataPageComponent
-      onActiveChanged: {
-        if ( gpsDataPageLoader.active )
-        {
-          lastState = stateManager.state
-          lastMapState = map.state
-          formsStackManager.closeDrawer();
 
-          if ( stakeoutPanelLoader.active )
-          {
-            // if we are in stakeout mode
-            stakeoutPanelLoader.item.hide()
-          }
-        }
-        else
+      sourceComponent: gpsDataDrawerComponent
+
+      onActiveChanged: {
+        if ( active )
         {
-          if ( stakeoutPanelLoader.active )
-          {
-            // user closed GPS panel and we are in stakeout mode - reopen stakeout panel
-            stakeoutPanelLoader.item.restore()
-          }
-          stateManager.state = lastState
-          map.state = lastMapState
+          gpsDataDrawerLoader.item?.open()
         }
       }
     }
@@ -701,7 +680,7 @@ ApplicationWindow {
           item.forceActiveFocus()
           stateManager.state = "misc"
         }
-        else if ( gpsDataPageLoader.active )
+        else if ( gpsDataDrawerLoader.active )
         {
           stateManager.state = "misc"
           // do nothing, gps page already has focus
