@@ -11,6 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
+import lc 1.0
+
 Item {
   id: control
 
@@ -21,7 +23,6 @@ Item {
 
   property alias buttonIcon: icon
 
-  property var type: MMToolbarButton.Button.Normal
   property bool isMenuButton: false
 
   property int buttonSpacing: 5 * __dp

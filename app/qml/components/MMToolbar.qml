@@ -10,6 +10,9 @@
 import QtQuick
 import Qt5Compat.GraphicalEffects
 
+import "."
+import lc 1.0
+
 Rectangle {
   id: control
 

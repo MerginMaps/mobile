@@ -70,7 +70,6 @@ Page {
   }
 
   MMToolbar {
-
     anchors {
       left: parent.left
       right: parent.right

@@ -23,6 +23,7 @@ import "./layers"
 import "./popups"
 import "./components"
 import "./misc"
+import "./project"
 import notificationType 1.0
 
 ApplicationWindow {
@@ -411,7 +412,7 @@ ApplicationWindow {
       gpsIndicatorColor: map.gpsIndicatorColor
     }
 
-    ProjectPanel {
+    MMProjectPanel {
         id: projectPanel
 
         height: window.height

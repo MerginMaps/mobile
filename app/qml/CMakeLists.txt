@@ -20,8 +20,6 @@ set(MM_QML
     components/PanelHeader.qml
     components/PanelHeaderV2.qml
     components/PasswordField.qml
-    components/ProjectDelegateItem.qml
-    components/ProjectList.qml
     components/RichTextBlock.qml
     components/SearchBoxV2.qml
     components/SettingsSwitch.qml
@@ -69,6 +67,8 @@ set(MM_QML
     components/MMToolbarButton.qml
     components/MMToolbarLongButton.qml
     components/MMToolbarMenuButton.qml
+    components/MMSelectableToolbar.qml
+    components/MMSelectableToolbarButton.qml
     components/MMWarningBubble.qml
     components/MMCalendarDrawer.qml
     components/MMTumbler.qml
@@ -87,6 +87,9 @@ set(MM_QML
     onboarding/MMOnboardingController.qml
     onboarding/MMCreateWorkspaceController.qml
     onboarding/MMAcceptInvitationController.qml
+    project/MMProjectList.qml
+    project/MMProjectListPage.qml
+    project/MMProjectPanel.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
     dialogs/NoPermissionsDialog.qml
@@ -167,9 +170,7 @@ set(MM_QML
     PanelTabButton.qml
     ProjectIssuesPanel.qml
     ProjectLimitDialog.qml
-    ProjectListPage.qml
     ProjectLoadingScreen.qml
-    ProjectPanel.qml
     ProjectStatusPanel.qml
     ProjectWizardPage.qml
     RegistrationFinishPage.qml

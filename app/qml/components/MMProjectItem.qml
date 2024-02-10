@@ -10,19 +10,22 @@
 import QtQuick
 import QtQuick.Controls
 
+import notificationType 1.0
+
 Rectangle {
   id: root
 
-  required property string projectDisplayName
-  required property string projectId
-  required property string projectDescription
-  required property int projectStatus
-  required property bool projectIsValid
-  required property bool projectIsLocal
-  required property bool projectIsMergin
+  property string projectDisplayName
+  property string projectId
+  property string projectDescription
+  property int projectStatus
+  property bool projectIsValid
+  property bool projectIsLocal
+  property bool projectIsMergin
   property bool projectIsPending: false
   property real projectSyncProgress: 0.0
   property bool highlight: false
+  property string projectRemoteError
 
   signal openRequested()
   signal syncRequested()
@@ -46,7 +49,7 @@ Rectangle {
 
     width: parent.width
     padding: 20 * __dp
-    spacing: 12 * __dp
+    spacing: 15 * __dp
 
     Row {
       id: row
@@ -56,12 +59,12 @@ Rectangle {
       Column {
         id: column
 
-        spacing: 6 * __dp
-
         Text {
           width: mainColumn.width - 2 * mainColumn.padding - icon.width - row.spacing
+          height: 26 * __dp
 
           text: root.projectDisplayName
+          verticalAlignment: Text.AlignVCenter
           font: __style.t3
           color: root.highlight ? __style.whiteColor : __style.nightColor
           elide: Text.ElideRight
@@ -82,8 +85,10 @@ Rectangle {
 
           Text {
             width: parent.width - errorIcon.width
+            height: 24 * __dp
 
             text: root.projectDescription
+            verticalAlignment: Text.AlignVCenter
             font: __style.p6
             elide: Text.ElideRight
             color: {
@@ -196,7 +201,15 @@ Rectangle {
     }
 
     onClicked: function(type) {
-      console.log(type)
+      if ( projectRemoteError ) {
+        __notificationModel.add(
+              qsTr( "Notification: Could not synchronize project, please make sure you are logged in and have sufficient rights." ),
+              3,
+              NotificationType.Error,
+              NotificationType.None
+              )
+        return
+      }
       switch(type) {
       case "download": root.syncRequested(); break
       case "sync": root.syncRequested(); break
@@ -225,7 +238,7 @@ Rectangle {
     // fill more menu with corresponding items
     let itemsMap = {
       "download": {
-        "name": qsTr("Download from Mergin"),
+        "name": qsTr("Download"),
         "iconSource": __style.downloadIcon
       },
       "sync": {
@@ -241,8 +254,8 @@ Rectangle {
         "iconSource": __style.deleteIcon
       },
       "upload": {
-        "name": qsTr("Upload to Mergin"),
-        "iconSource": __style.uploadIcon
+        "name": qsTr("Upload"),
+        "iconSource": __style.addIcon
       }
     }
 

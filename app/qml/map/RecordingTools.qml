@@ -210,8 +210,7 @@ Item {
 
       MMToolbarButton {
         text: qsTr( "Record" );
-        iconSource: __style.doneIcon;
-        type: MMToolbarButton.Button.Emphasized;
+        iconSource: __style.done2Icon;
         onClicked: {
           if ( mapTool.hasValidGeometry() )
           {

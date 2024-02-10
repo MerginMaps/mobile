@@ -24,6 +24,17 @@ MMBaseInput {
 
   signal searchTextChanged( string text )
 
+  /**
+    * Used for deactivating focus on MMSearchInput when another component should have focus.
+    * and the current element's forceActiveFocus() doesnt deactivates SearchBar focus.
+    */
+  function deactivate() {
+    textField.focus = false
+    if ( textField.length > 0 )
+      textField.clear()
+    searchTextChanged("")
+  }
+
   content: TextField {
     id: textField
 

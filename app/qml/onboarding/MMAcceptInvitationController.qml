@@ -31,7 +31,8 @@ Item {
     enabled: root.enabled && root.showInvitationList
 
     function onUserInfoReplyFinished() {
-     controller.showInvitationsList = false;
+     console.log("TODO!!")
+     // controller.showInvitationsList = false;
 
       /*
         TODO - interactions with onboarding!
