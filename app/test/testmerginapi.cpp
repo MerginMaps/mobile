@@ -1106,8 +1106,10 @@ void TestMerginApi::testDiffUpload()
   QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
 
   // replace gpkg with a new version with a modified geometry
-  QFile::remove( projectDir + "/base.gpkg" );
-  QFile::copy( mTestDataPath + "/modified_1_geom.gpkg", projectDir + "/base.gpkg" );
+  // but make sure time it gets a different timestamp or its checksum will be read from the cache
+  QTest::qSleep( 1000 );
+  QVERIFY( QFile::remove( projectDir + "/base.gpkg" ) );
+  QVERIFY( QFile::copy( mTestDataPath + "/modified_1_geom.gpkg", projectDir + "/base.gpkg" ) );
 
   ProjectDiff diff = MerginApi::localProjectChanges( projectDir );
   ProjectDiff expectedDiff;
@@ -1143,8 +1145,10 @@ void TestMerginApi::testDiffSubdirsUpload()
   QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
 
   // replace gpkg with a new version with a modified geometry
-  QFile::remove( projectDir + "/" + base );
-  QFile::copy( mTestDataPath + "/modified_1_geom.gpkg", projectDir + "/" + base );
+  // but make sure time it gets a different timestamp or its checksum will be read from the cache
+  QTest::qSleep( 1000 );
+  QVERIFY( QFile::remove( projectDir + "/" + base ) );
+  QVERIFY( QFile::copy( mTestDataPath + "/modified_1_geom.gpkg", projectDir + "/" + base ) );
 
   ProjectDiff diff = MerginApi::localProjectChanges( projectDir );
   ProjectDiff expectedDiff;
