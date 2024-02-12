@@ -90,6 +90,7 @@ set(MM_QML
     project/MMProjectList.qml
     project/MMProjectListPage.qml
     project/MMProjectPanel.qml
+    project/MMProjectLoadingScreen.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
     dialogs/NoPermissionsDialog.qml
@@ -170,7 +171,6 @@ set(MM_QML
     PanelTabButton.qml
     ProjectIssuesPanel.qml
     ProjectLimitDialog.qml
-    ProjectLoadingScreen.qml
     ProjectStatusPanel.qml
     ProjectWizardPage.qml
     RegistrationFinishPage.qml

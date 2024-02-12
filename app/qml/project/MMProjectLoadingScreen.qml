@@ -11,17 +11,19 @@ import QtQuick
 import QtQuick.Controls
 
 Item {
+  id: root
 
   Rectangle {
     anchors.fill: parent
-    color: InputStyle.clrPanelMain
+    color: __style.lightGreenColor
   }
 
   Image {
     id: logo
     anchors.centerIn: parent
-    source: InputStyle.mmLogoVertical
-    width: parent.width/2
+    source: __style.mmSymbol
+    width: 60 * __dp
+    height: width
     sourceSize.height: 0
     fillMode: Image.PreserveAspectFit
     sourceSize.width: width
@@ -29,10 +31,10 @@ Item {
 
   Text {
     text: qsTr("Opening project ...")
-    anchors.top: logo.bottom
-    anchors.topMargin: InputStyle.smallGap
+    anchors.bottom: root.bottom
+    anchors.bottomMargin: 32 * __dp
     anchors.horizontalCenter: parent.horizontalCenter
-    font.pixelSize: InputStyle.fontPixelSizeNormal
-    color: InputStyle.fontColor
+    font: __style.t1
+    color: __style.forestColor
   }
 }

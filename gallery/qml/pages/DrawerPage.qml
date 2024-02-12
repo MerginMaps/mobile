@@ -13,6 +13,7 @@ import QtQuick.Controls.Basic
 
 import "../../app/qml/components"
 import "../../app/qml"
+import "../../app/qml/project"
 
 Page {
   id: pane
@@ -20,6 +21,10 @@ Page {
   Column {
     width: parent.width
     spacing: 10
+
+    Label {
+      text: "Drawers"
+    }
 
     MMButton {
       text: "Upload"
@@ -32,6 +37,33 @@ Page {
     MMButton {
       text: "Synchronization Failed"
       onClicked: drawer3.open()
+    }
+
+    Label {
+      text: "Pages"
+    }
+
+    MMButton {
+      text: "MMProjectLoadingScreen"
+      onClicked: {
+        loadingScreen.visible = true
+        loadingTimer.start()
+      }
+    }
+  }
+
+  MMProjectLoadingScreen {
+    id: loadingScreen
+    width: parent.width
+    height: parent.height
+    visible: false
+
+    Timer {
+      id: loadingTimer
+      interval: 3000; running: false; repeat: false
+      onTriggered: {
+        loadingScreen.visible = false
+      }
     }
   }
 
