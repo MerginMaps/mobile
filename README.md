@@ -30,16 +30,16 @@ Click below to download the app on your mobile device:
 
 **Current Release**
 <p>
-<a href='https://play.google.com/store/apps/details?id=uk.co.lutraconsulting&ah=GSqwibzO2n63iMlCjHmMuBk89t4&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='images/google-play-store.png' height="57" /></a>
-<a href='https://apps.apple.com/us/app/input/id1478603559?ls=1'><img alt='Download it from TestFlight' src='images/app-store.png' width="170" /></a>
-<a href='https://github.com/MerginMaps/mobile/releases/latest'><img alt='Available on Windows' src='images/app_download_windows.png' height="57" /></a>
+<a href='https://play.google.com/store/apps/details?id=uk.co.lutraconsulting&ah=GSqwibzO2n63iMlCjHmMuBk89t4&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://raw.githubusercontent.com/MerginMaps/.github/main/images/google-play-store.png' height="57" /></a>
+<a href='https://apps.apple.com/us/app/input/id1478603559?ls=1'><img alt='Download it from TestFlight' src='https://raw.githubusercontent.com/MerginMaps/.github/main/images/app-store.png' width="170" /></a>
+<a href='https://github.com/MerginMaps/mobile/releases/latest'><img alt='Available on Windows' src='https://raw.githubusercontent.com/MerginMaps/.github/main/images/app_download_windows.png' height="57" /></a>
 </p>
 
 **Beta Release**
 <p>
-<a href='https://play.google.com/apps/testing/uk.co.lutraconsulting'><img alt='Get it on Google Play' src='images/google-play-store.png' height="28.5" /></a>
-<a href='https://testflight.apple.com/join/JO5EIywn'><img alt='Download it from TestFlight' src='images/app-store.png' width="85" /></a>
-<a href='https://github.com/MerginMaps/mobile/actions/workflows/win.yml'><img alt='Available on Windows' src='images/app_download_windows.png' height="28.5" /></a>
+<a href='https://play.google.com/apps/testing/uk.co.lutraconsulting'><img alt='Get it on Google Play' src='https://raw.githubusercontent.com/MerginMaps/.github/main/images/google-play-store.png' height="28.5" /></a>
+<a href='https://testflight.apple.com/join/JO5EIywn'><img alt='Download it from TestFlight' src='https://raw.githubusercontent.com/MerginMaps/.github/main/images/app-store.png' width="85" /></a>
+<a href='https://github.com/MerginMaps/mobile/actions/workflows/win.yml'><img alt='Available on Windows' src='https://raw.githubusercontent.com/MerginMaps/.github/main/images/app_download_windows.png' height="28.5" /></a>
 </p>
 
 For more information on how to use the app, see [Documentation](https://merginmaps.com/docs).
@@ -62,15 +62,10 @@ Mergin Maps mobile app features touch optimised GUI components based on Qt Quick
 * Mapping components - map canvas, GPS position, scale bar, markers
 * Support for capturing of new geometries
 * Display and editing of feature forms
-* Built-in service for storing and synchronising data ([Mergin Maps](https://merginmaps.com/))
+* Built-in service for [storing and synchronising data](https://github.com/MerginMaps/server))
 * Translated to several [languages](https://explore.transifex.com/lutra-consulting/mergin-maps-input/)
 
-<p float="left">
-    <img align="centre" src="https://github.com/MerginMaps/mobile/blob/master/images/screen1.jpg" width="20%">
-    <img align="centre" src="https://github.com/MerginMaps/mobile/blob/master/images/screen2.jpg" width="20%">
-    <img align="centre" src="https://github.com/MerginMaps/mobile/blob/master/images/screen3.jpg" width="20%">
-    <img align="centre" src="https://github.com/MerginMaps/mobile/blob/master/images/screen4.jpg" width="20%">
-</p>
+<div><a href="https://merginmaps.com/product"><img src="https://raw.githubusercontent.com/MerginMaps/.github/main/images/mm_app-1-800x600.jpg"></div>
 
 ## Documentation
 
