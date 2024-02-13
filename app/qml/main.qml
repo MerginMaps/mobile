@@ -707,7 +707,7 @@ ApplicationWindow {
       }
     }
 
-    ProjectLoadingScreen {
+    MMProjectLoadingScreen {
       id: projectLoadingScreen
 
       anchors.fill: parent

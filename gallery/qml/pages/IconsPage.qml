@@ -38,6 +38,10 @@ ScrollView {
         spacing: 20
         anchors.fill: parent
         IconBox {
+          text: "MMSymbol"
+          source: __style.mmSymbol
+        }
+        IconBox {
           text: "addImageIcon"
           source: __style.addImageIcon
         }

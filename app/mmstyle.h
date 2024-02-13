@@ -130,6 +130,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl moreIcon READ moreIcon CONSTANT )
     Q_PROPERTY( QUrl morePhotosIcon READ morePhotosIcon CONSTANT )
     Q_PROPERTY( QUrl mouthIcon READ mouthIcon CONSTANT )
+    Q_PROPERTY( QUrl mmSymbol READ mmSymbol CONSTANT )
     Q_PROPERTY( QUrl naturalResourcesIcon READ naturalResourcesIcon CONSTANT )
     Q_PROPERTY( QUrl nextIcon READ nextIcon CONSTANT )
     Q_PROPERTY( QUrl otherIcon READ otherIcon CONSTANT )
@@ -288,6 +289,7 @@ class MMStyle: public QObject
     QUrl gpsIconFilled() {return QUrl( "qrc:/GPSIconFilled.svg" );}
     QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
     QUrl homeIcon() {return QUrl( "qrc:/Home.svg" );}
+    QUrl mmSymbol() {return QUrl( "qrc:/MMSymbol.svg" );}
     QUrl homeFilledIcon() {return QUrl( "qrc:/HomeFilled.svg" );}
     QUrl infoIcon() {return QUrl( "qrc:/Info.svg" );}
     QUrl linkedinIcon() {return QUrl( "qrc:/Linkedin.svg" );}

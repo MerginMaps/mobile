@@ -151,7 +151,7 @@ ApplicationWindow {
           source: "NotificationPage.qml"
         }
         ListElement {
-          title: "Drawers"
+          title: "Drawers and Pages"
           source: "DrawerPage.qml"
         }
         ListElement {
