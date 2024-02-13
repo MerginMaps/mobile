@@ -13,14 +13,15 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 import Qt5Compat.GraphicalEffects
 
-import "."  // import InputStyle singleton
-import "./components"
+import "../components"
 
 Item {
   id: root
   property string text: "(no-entries)"
   property bool enableSendToDev: true
+  property bool submitReportPending: __inputHelp.submitReportPending
 
+  signal submitReport //! todo __inputHelp.submitReport()
   signal close
 
   Keys.onReleased: function( event ) {
@@ -40,38 +41,39 @@ Item {
     clip: true
 
     background: Rectangle {
-      color: "white"
+      color: __style.lightGreenColor
     }
 
-    header: PanelHeader {
+    header: MMHeader {
       id: header
-      height: InputStyle.rowHeightHeader
-      width: parent.width
-      color: "white"
-      rowHeight: InputStyle.rowHeightHeader
-      titleText: qsTr("Diagnostic Log")
+      // height: InputStyle.rowHeightHeader
+      // width: parent.width
+      // color: "white"
+      // rowHeight: InputStyle.rowHeightHeader
+      title: qsTr("Diagnostic log")
+      titleFont: __style.h3
 
-      onBack: root.close()
-      withBackButton: true
+      onBackClicked: root.close()
+      backVisible: true
     }
 
     Flickable {
       id: flickableItem
       clip: true
       anchors.horizontalCenter: parent.horizontalCenter
-      width: root.width - InputStyle.panelMargin
+      width: root.width - __style.pageMargins * 2
       height: parent.height
       contentHeight: txt.height
       contentWidth: width
-      maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
+      maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
 
       Text {
         id: txt
         text: "<style>" + "a:link { color: " + InputStyle.highlightColor
               + "; text-decoration: underline; }" + "p.odd { color: "
-              + InputStyle.fontColorBright + "; }" + "</style>" + root.text
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: InputStyle.fontColor
+              + __style.nightColor + "; }" + "</style>" + root.text
+        font: __style.t3
+        color: __style.forestColor
         textFormat: Text.RichText
         wrapMode: Text.WordWrap
         width: parent.width
@@ -79,19 +81,21 @@ Item {
 
       ScrollBar.vertical: ScrollBar { }
     }
+  }
 
-    footer: DelegateButton {
-      id: sendButton
-      visible: enableSendToDev
+  MMButton {
+        id: sendButton
+        visible: enableSendToDev
+        anchors.bottom: root.bottom
+        anchors.bottomMargin: 32 * __dp
+        anchors.horizontalCenter: parent.horizontalCenter
 
-      width: root.width
-      height: InputStyle.rowHeightHeader
-      text: __inputHelp.submitReportPending ? qsTr("Sending...") : qsTr("Send to Developers")
+        width: root.width - __style.pageMargins * 2
+        text: root.submitReportPending ? qsTr("Sending...") : qsTr("Send")
 
-      onClicked: {
-        if (!__inputHelp.submitReportPending)
-          __inputHelp.submitReport()
-      }
-    }
+        onClicked: {
+          if (!root.submitReportPending)
+            root.submitReport()
+        }
   }
 }

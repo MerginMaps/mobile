@@ -193,6 +193,7 @@ class MMStyle: public QObject
 
     // Other
     Q_PROPERTY( double inputRadius READ inputRadius CONSTANT )
+    Q_PROPERTY( double scrollVelocityAndroid READ scrollVelocityAndroid CONSTANT ) // [px/s] scrolling on Android devices is too slow by default
 
   public:
     explicit MMStyle( QObject *parent,  qreal dp )
@@ -351,6 +352,8 @@ class MMStyle: public QObject
 
     double pageMargins() {return 20 * mDp;}
     double maxPageWidth() {return 720 * mDp;}
+
+    double scrollVelocityAndroid() { return 10000; }
 
   signals:
     void styleChanged();

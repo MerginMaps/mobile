@@ -15,6 +15,7 @@ import lc 1.0
 import "." // import InputStyle singleton
 import "./components"
 import "./misc"
+import "./settings"
 
 Item {
   id: root
@@ -381,7 +382,7 @@ Item {
 
   Component {
     id: aboutPanelComponent
-    AboutPanel {
+    MMAboutPanel {
       onClose: stackview.pop(null)
       Component.onCompleted: forceActiveFocus()
     }
@@ -389,7 +390,7 @@ Item {
 
   Component {
     id: changelogPanelComponent
-    ChangelogPanel {
+    MMChangelogPanel {
       onClose: stackview.pop(null)
       Component.onCompleted: forceActiveFocus()
     }
@@ -397,7 +398,7 @@ Item {
 
   Component {
     id: logPanelComponent
-    LogPanel {
+    MMLogPanel {
       onClose: stackview.pop(null)
       Component.onCompleted: forceActiveFocus()
     }

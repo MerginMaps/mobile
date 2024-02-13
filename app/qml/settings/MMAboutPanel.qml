@@ -14,8 +14,8 @@ import QtQuick.Dialogs
 import Qt5Compat.GraphicalEffects
 import QtQuick.Window
 
-import "."  // import InputStyle singleton
-import "./components"
+import ".."  // import InputStyle singleton
+import "../components"
 
 Page {
   id: root

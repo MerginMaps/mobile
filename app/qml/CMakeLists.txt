@@ -148,9 +148,10 @@ set(MM_QML
     misc/MMGpsDataText.qml
     misc/NoWorkspaceBanner.qml
     misc/PositionProviderPage.qml
-    AboutPanel.qml
+    settings/MMLogPanel.qml
+    settings/MMAboutPanel.qml
+    settings/MMChangelogPanel.qml
     Banner.qml
-    ChangelogPanel.qml
     CircularProgressBar.qml
     CodeScanner.qml
     CodeScannerOverlay.qml
@@ -161,7 +162,6 @@ set(MM_QML
     FeaturesListPageToolbar.qml
     FormsStackManager.qml
     InputStyle.qml
-    LogPanel.qml
     ManageInvitationsPage.qml
     MapThemePanel.qml
     Notification.qml

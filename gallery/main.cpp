@@ -73,6 +73,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__dp", dp );
   engine.rootContext()->setContextProperty( "__style", style );
   engine.rootContext()->setContextProperty( "__isMobile", Helper::isMobile() );
+  engine.rootContext()->setContextProperty( "__logText", Helper::logText() );
 
   QObject::connect( &engine, &QQmlApplicationEngine::objectCreationFailed,
   &app, []() { QCoreApplication::exit( -1 ); }, Qt::QueuedConnection );

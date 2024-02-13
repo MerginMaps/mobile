@@ -12,8 +12,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
 
-import "."  // import InputStyle singleton
-import "./components"
+import ".."  // import InputStyle singleton
+import "../components"
 import lc 1.0
 
 Item {
@@ -78,7 +78,7 @@ Item {
         font.pixelSize: InputStyle.fontPixelSizeNormal
         color: InputStyle.fontColor
       }
-
+/*
       ListView {
         id: changelogView
 
@@ -142,6 +142,7 @@ Item {
           anchors.bottom: changelogView.bottom
         }
       }
+      */
     }
   }
 }
