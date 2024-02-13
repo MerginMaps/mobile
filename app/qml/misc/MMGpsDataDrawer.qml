@@ -80,6 +80,7 @@ Drawer {
       spacing: 40 * __dp
 
       MMHeader {
+
         id: header
 
         rightMarginShift: 0
@@ -114,18 +115,6 @@ Drawer {
         Layout.maximumWidth: __style.maxPageWidth
         Layout.alignment: Qt.AlignHCenter
         Layout.preferredHeight: ApplicationWindow.window.height - header.height - primaryButton.height - mainColumn.spacing * 3
-        // Layout.preferredHeight: {
-        //   if (ApplicationWindow.window){
-        //     var availableHeight = ApplicationWindow.window.height - header.height - mainColumn.spacing
-        //     var totalHeight = scrollColumn.childrenRect.height + 20 * __dp
-
-        //     if(totalHeight >= ApplicationWindow.window.height) {
-        //       return availableHeight
-        //     }
-        //     return totalHeight
-        //   }
-        //   return 0
-        // }
         contentWidth: availableWidth
         contentHeight: scrollColumn.childrenRect.height
 
@@ -324,7 +313,7 @@ Drawer {
         id: primaryButton
         text: qsTr("Manage GPS receivers")
         Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-        Layout.margins: 20 * __dp
+        Layout.margins: ( mainColumn.spacing / 2 ) * __dp
         width: parent.width - 2 * 20 * __dp
         onClicked: {
           additionalContent.push(positionProviderComponent)
