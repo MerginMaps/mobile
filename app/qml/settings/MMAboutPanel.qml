@@ -11,10 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
-import Qt5Compat.GraphicalEffects
 import QtQuick.Window
 
-import ".."  // import InputStyle singleton
 import "../components"
 
 Page {
@@ -95,16 +93,12 @@ Page {
       font: __style.t4
       color: __style.deepOceanColor
       anchors.horizontalCenter: lutraLogo.horizontalCenter
-      // anchors.bottom: lutraLogo.top
-      // anchors.bottomMargin: __style.pageMargins
     }
 
     Image {
       id: lutraLogo
       source: __style.lutraLogoImage
       anchors.horizontalCenter: parent.horizontalCenter
-      // anchors.bottom: parent.bottom
-      // anchors.bottomMargin: __style.pageMargins
     }
   }
 }

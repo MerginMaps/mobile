@@ -65,7 +65,7 @@ Item {
 
       Text {
         id: txt
-        text: "<style>" + "a:link { color: " + InputStyle.highlightColor
+        text: "<style>" + "a:link { color: " + __style.earthColor
               + "; text-decoration: underline; }" + "p.odd { color: "
               + __style.nightColor + "; }" + "</style>" + root.text
         font: __style.t3
