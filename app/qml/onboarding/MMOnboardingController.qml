@@ -249,7 +249,19 @@ Item {
 
       onIndustrySelected: function (selectedText) {
         postRegisterData.whichIndustry = selectedText
-        controller.end()
+        __merginApi.postRegisterUser( postRegisterData.howYouFoundUs, postRegisterData.whichIndustry, postRegisterData.wantNewsletter )
+      }
+
+      Connections {
+        target: __merginApi
+
+        function onPostRegistrationSucceeded() {
+          controller.end()
+        }
+
+        function onPostRegistrationFailed() {
+          controller.end()
+        }
       }
     }
   }

@@ -1338,8 +1338,6 @@ void MerginApi::postRegistrationFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "post-register", QStringLiteral( "Success" ) );
-    QString msg = tr( "Workspace created" );
-    emit notify( msg );
     emit postRegistrationSucceeded();
   }
   else
@@ -1349,10 +1347,9 @@ void MerginApi::postRegistrationFinished()
     QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
     int status = statusCode.toInt();
     emit postRegistrationFailed( QStringLiteral( "Post-registation failed %1" ).arg( serverMsg ) );
-
-    QString msg = tr( "Unable to send post registration information" );
-    emit notify( msg );
   }
+  QString msg = tr( "Workspace created" );
+  emit notify( msg );
   r->deleteLater();
 }
 
