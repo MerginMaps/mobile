@@ -220,6 +220,27 @@ ScrollView {
     }
 
     GroupBox {
+      title: "MMLine"
+      background: Rectangle {
+        color: "white"
+        border.color: "gray"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      Column {
+        spacing: 20
+        anchors.fill: parent
+        MMLine {
+          width: page.width - 64
+        }
+      }
+    }
+
+    GroupBox {
       title: "MMTextBubble"
       background: Rectangle {
         color: "gray"
@@ -293,8 +314,6 @@ ScrollView {
             alignmentRight: true
           }
         }
-
-        MMLine {}
       }
     }
   }

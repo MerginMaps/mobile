@@ -123,6 +123,10 @@ ApplicationWindow {
           source: "IconsPage.qml"
         }
         ListElement {
+          title: "Images"
+          source: "ImagesPage.qml"
+        }
+        ListElement {
           title: "Buttons"
           source: "ButtonsPage.qml"
         }
@@ -149,6 +153,10 @@ ApplicationWindow {
         ListElement {
           title: "Drawers"
           source: "DrawerPage.qml"
+        }
+        ListElement {
+          title: "Pages"
+          source: "PagesPage.qml"
         }
         ListElement {
           title: "Photos"

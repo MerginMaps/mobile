@@ -130,6 +130,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl moreIcon READ moreIcon CONSTANT )
     Q_PROPERTY( QUrl morePhotosIcon READ morePhotosIcon CONSTANT )
     Q_PROPERTY( QUrl mouthIcon READ mouthIcon CONSTANT )
+    Q_PROPERTY( QUrl mmSymbol READ mmSymbol CONSTANT )
     Q_PROPERTY( QUrl naturalResourcesIcon READ naturalResourcesIcon CONSTANT )
     Q_PROPERTY( QUrl nextIcon READ nextIcon CONSTANT )
     Q_PROPERTY( QUrl otherIcon READ otherIcon CONSTANT )
@@ -175,6 +176,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl reachedDataLimitImage READ reachedDataLimitImage CONSTANT )
     Q_PROPERTY( QUrl uploadImage READ uploadImage CONSTANT )
     Q_PROPERTY( QUrl warnLogoImage READ warnLogoImage CONSTANT )
+    Q_PROPERTY( QUrl mmLogoImage READ mmLogoImage CONSTANT )
+    Q_PROPERTY( QUrl lutraLogoImage READ lutraLogoImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -201,6 +204,7 @@ class MMStyle: public QObject
 
     // Other
     Q_PROPERTY( double inputRadius READ inputRadius CONSTANT )
+    Q_PROPERTY( double scrollVelocityAndroid READ scrollVelocityAndroid CONSTANT ) // [px/s] scrolling on Android devices is too slow by default
 
   public:
     explicit MMStyle( QObject *parent,  qreal dp )
@@ -297,6 +301,7 @@ class MMStyle: public QObject
     QUrl gpsIconFilled() {return QUrl( "qrc:/GPSIconFilled.svg" );}
     QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
     QUrl homeIcon() {return QUrl( "qrc:/Home.svg" );}
+    QUrl mmSymbol() {return QUrl( "qrc:/MMSymbol.svg" );}
     QUrl homeFilledIcon() {return QUrl( "qrc:/HomeFilled.svg" );}
     QUrl infoIcon() {return QUrl( "qrc:/Info.svg" );}
     QUrl linkedinIcon() {return QUrl( "qrc:/Linkedin.svg" );}
@@ -350,6 +355,8 @@ class MMStyle: public QObject
     QUrl uploadImage() {return QUrl( "qrc:/UploadImage.svg" );}
     QUrl reachedDataLimitImage() {return QUrl( "qrc:/ReachedDataLimitImage.svg" );}
     QUrl warnLogoImage() {return QUrl( "qrc:/WarnLogoImage.svg" );}
+    QUrl mmLogoImage() {return QUrl( "qrc:/images/MMLogo.svg" );}
+    QUrl lutraLogoImage() {return QUrl( "qrc:/images/LutraLogo.png" );}
 
     double icon16() {return 16 * mDp;}
     double icon24() {return 24 * mDp;}
@@ -366,6 +373,8 @@ class MMStyle: public QObject
 
     double pageMargins() {return 20 * mDp;}
     double maxPageWidth() {return 720 * mDp;}
+
+    double scrollVelocityAndroid() { return 10000; }
 
   signals:
     void styleChanged();

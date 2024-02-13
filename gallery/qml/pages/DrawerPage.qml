@@ -13,6 +13,7 @@ import QtQuick.Controls.Basic
 
 import "../../app/qml/components"
 import "../../app/qml"
+import "../../app/qml/project"
 
 Page {
   id: pane
@@ -20,6 +21,11 @@ Page {
   Column {
     width: parent.width
     spacing: 10
+    padding: 10
+
+    Label {
+      text: "Drawers"
+    }
 
     MMButton {
       text: "Upload"

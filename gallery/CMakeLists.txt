@@ -8,7 +8,7 @@ project(
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(QT6_VERSION
-    6.5.2
+    6.6.0
     CACHE STRING "QT6 version to use"
 )
 set(CMAKE_AUTORCC ON)
@@ -60,6 +60,7 @@ qt_add_executable(
   qml.qrc
   ../app/fonts/fonts.qrc
   ../app/icons/icons.qrc
+  ../app/images/images.qrc
 )
 
 qt_add_qml_module(

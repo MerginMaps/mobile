@@ -11,6 +11,7 @@
 #define HELPER_H
 
 #include <QObject>
+#include <QString>
 
 class Helper : public QObject
 {
@@ -29,6 +30,10 @@ class Helper : public QObject
 
     // flag, if app is running on mobile device
     static bool isMobile();
+
+    // get some text diagnostics log
+    static QString logText();
+
 };
 
 #endif // HELPER_H

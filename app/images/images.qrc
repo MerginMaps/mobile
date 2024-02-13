@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images/">
+        <file>MMLogo.svg</file>
+        <file>LutraLogo.png</file>
+    </qresource>
+</RCC>

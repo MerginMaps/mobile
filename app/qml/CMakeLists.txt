@@ -78,6 +78,7 @@ set(MM_QML
     components/calendar/MMDayOfWeekRow.qml
     components/calendar/MMDateTumbler.qml
     components/calendar/MMAmPmSwitch.qml
+    components/MMLine.qml
     onboarding/MMAcceptInvitation.qml
     onboarding/MMCreateWorkspace.qml
     onboarding/MMHowYouFoundUs.qml
@@ -90,6 +91,7 @@ set(MM_QML
     project/MMProjectList.qml
     project/MMProjectListPage.qml
     project/MMProjectPanel.qml
+    project/MMProjectLoadingScreen.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
     dialogs/NoPermissionsDialog.qml
@@ -143,13 +145,13 @@ set(MM_QML
     misc/AddPositionProviderPage.qml
     misc/AttentionBanner.qml
     misc/MMGpsDataDrawer.qml
-    misc/MMLine.qml
     misc/MMGpsDataText.qml
     misc/NoWorkspaceBanner.qml
     misc/PositionProviderPage.qml
-    AboutPanel.qml
+    settings/MMLogPanel.qml
+    settings/MMAboutPanel.qml
+    settings/MMChangelogPanel.qml
     Banner.qml
-    ChangelogPanel.qml
     CircularProgressBar.qml
     CodeScanner.qml
     CodeScannerOverlay.qml
@@ -160,7 +162,6 @@ set(MM_QML
     FeaturesListPageToolbar.qml
     FormsStackManager.qml
     InputStyle.qml
-    LogPanel.qml
     ManageInvitationsPage.qml
     MapThemePanel.qml
     Notification.qml
@@ -170,7 +171,6 @@ set(MM_QML
     PanelTabButton.qml
     ProjectIssuesPanel.qml
     ProjectLimitDialog.qml
-    ProjectLoadingScreen.qml
     ProjectStatusPanel.qml
     ProjectWizardPage.qml
     RegistrationFinishPage.qml
