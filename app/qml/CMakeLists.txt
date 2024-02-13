@@ -78,6 +78,7 @@ set(MM_QML
     components/calendar/MMDayOfWeekRow.qml
     components/calendar/MMDateTumbler.qml
     components/calendar/MMAmPmSwitch.qml
+    components/MMLine.qml
     onboarding/MMAcceptInvitation.qml
     onboarding/MMCreateWorkspace.qml
     onboarding/MMHowYouFoundUs.qml
@@ -144,7 +145,6 @@ set(MM_QML
     misc/AddPositionProviderPage.qml
     misc/AttentionBanner.qml
     misc/MMGpsDataDrawer.qml
-    misc/MMLine.qml
     misc/MMGpsDataText.qml
     misc/NoWorkspaceBanner.qml
     misc/PositionProviderPage.qml
