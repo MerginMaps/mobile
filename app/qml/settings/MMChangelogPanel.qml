@@ -13,7 +13,6 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 
 import "../components"
-import "../misc" // TODO remove and move MMLine to components
 
 import lc 1.0
 

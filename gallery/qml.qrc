@@ -25,6 +25,7 @@
         <file>../app/qml/components/MMButton.qml</file>
         <file>../app/qml/components/MMLinkButton.qml</file>
         <file>../app/qml/components/MMIcon.qml</file>
+        <file>../app/qml/components/MMLine.qml</file>
         <file>../app/qml/components/MMRoundButton.qml</file>
         <file>../app/qml/components/MMLink.qml</file>
         <file>../app/qml/components/MMRoundLinkButton.qml</file>
