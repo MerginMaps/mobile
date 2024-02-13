@@ -392,8 +392,15 @@ Item {
   Component {
     id: changelogPanelComponent
     MMChangelogPanel {
+      id: changelogPanel
       onClose: stackview.pop(null)
       Component.onCompleted: forceActiveFocus()
+      model: ChangelogModel {
+        onErrorMsgChanged: function(msg) {
+          changelogPanel.errorDialog.text = msg
+          changelogPanel.errorDialog.open()
+        }
+      }
     }
   }
 

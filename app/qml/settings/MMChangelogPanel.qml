@@ -22,15 +22,7 @@ Item {
 
   signal close
 
-  required property var model /*use ChangelogModel */
-  /*
-  : ChangelogModel {
-    onErrorMsgChanged: function(msg) {
-      errorDialog.text = msg
-      errorDialog.open()
-    }
-  }
-  */
+  required property var model /* ChangelogModel */
 
   Keys.onReleased: function( event ) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
