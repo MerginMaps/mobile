@@ -145,6 +145,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl redditIcon READ redditIcon CONSTANT )
     Q_PROPERTY( QUrl satelliteIcon READ satelliteIcon CONSTANT )
     Q_PROPERTY( QUrl searchIcon READ searchIcon CONSTANT )
+    Q_PROPERTY( QUrl smallCheckmarkIcon READ smallCheckmarkIcon CONSTANT )
+    Q_PROPERTY( QUrl smallEditIcon READ smallEditIcon CONSTANT )
     Q_PROPERTY( QUrl showIcon READ showIcon CONSTANT )
     Q_PROPERTY( QUrl socialMediaIcon READ socialMediaIcon CONSTANT )
     Q_PROPERTY( QUrl stateAndLocalIcon READ stateAndLocalIcon CONSTANT )
@@ -162,6 +164,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl undoIcon READ undoIcon CONSTANT )
     Q_PROPERTY( QUrl waitingIcon READ waitingIcon CONSTANT )
     Q_PROPERTY( QUrl waterResourcesIcon READ waterResourcesIcon CONSTANT )
+    Q_PROPERTY( QUrl xIcon READ xIcon CONSTANT )
     Q_PROPERTY( QUrl xMarkIcon READ xMarkIcon CONSTANT )
     Q_PROPERTY( QUrl xTwitterIcon READ xTwitterIcon CONSTANT )
     Q_PROPERTY( QUrl youtubeIcon READ youtubeIcon CONSTANT )
@@ -177,6 +180,12 @@ class MMStyle: public QObject
      * Pixel sizes used across the app
      * Add new sizes here only if they need to be used in multiple files
      */
+
+    // Icon sizes
+    Q_PROPERTY( double icon16 READ icon16 CONSTANT )
+    Q_PROPERTY( double icon24 READ icon24 CONSTANT )
+    Q_PROPERTY( double icon32 READ icon32 CONSTANT )
+    Q_PROPERTY( double icon40 READ icon40 CONSTANT )
 
     // Map items
     Q_PROPERTY( double mapItemHeight READ mapItemHeight CONSTANT )
@@ -313,6 +322,8 @@ class MMStyle: public QObject
     QUrl satelliteIcon() {return QUrl( "qrc:/GPSSatellite.svg" );}
     QUrl searchIcon() {return QUrl( "qrc:/Search.svg" );}
     QUrl showIcon() {return QUrl( "qrc:/Show.svg" );}
+    QUrl smallCheckmarkIcon() {return QUrl( "qrc:/SmallCheckmark.svg" );}
+    QUrl smallEditIcon() {return QUrl( "qrc:/SmallEdit.svg" );}
     QUrl socialMediaIcon() {return QUrl( "qrc:/SocialMedia.svg" );}
     QUrl stateAndLocalIcon() {return QUrl( "qrc:/StateAndLocal.svg" );}
     QUrl stopIcon() {return QUrl( "qrc:/Stop.svg" );}
@@ -329,6 +340,7 @@ class MMStyle: public QObject
     QUrl undoIcon() {return QUrl( "qrc:/Undo.svg" );}
     QUrl waitingIcon() {return QUrl( "qrc:/Waiting.svg" );}
     QUrl waterResourcesIcon() {return QUrl( "qrc:/WaterResources.svg" );}
+    QUrl xIcon() {return QUrl( "qrc:/X.svg" );}
     QUrl xMarkIcon() {return QUrl( "qrc:/XMark.svg" );}
     QUrl xTwitterIcon() {return QUrl( "qrc:/XTwitter.svg" );}
     QUrl youtubeIcon() {return QUrl( "qrc:/Youtube.svg" );}
@@ -338,6 +350,11 @@ class MMStyle: public QObject
     QUrl uploadImage() {return QUrl( "qrc:/UploadImage.svg" );}
     QUrl reachedDataLimitImage() {return QUrl( "qrc:/ReachedDataLimitImage.svg" );}
     QUrl warnLogoImage() {return QUrl( "qrc:/WarnLogoImage.svg" );}
+
+    double icon16() {return 16 * mDp;}
+    double icon24() {return 24 * mDp;}
+    double icon32() {return 32 * mDp;}
+    double icon40() {return 40 * mDp;}
 
     double mapItemHeight() {return 60 * mDp;}
     double mapButtonsMargin() {return 25 * mDp;}

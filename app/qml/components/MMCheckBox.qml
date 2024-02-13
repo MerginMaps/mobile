@@ -45,6 +45,7 @@ CheckBox {
       color: control.enabled ? __style.forestColor : __style.mediumGreenColor
       visible: control.checked
       scale: control.width / (24 * __dp)
+      size: 32 * __dp
     }
   }
 

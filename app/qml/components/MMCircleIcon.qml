@@ -8,30 +8,40 @@
  ***************************************************************************/
 
 import QtQuick
-import Qt5Compat.GraphicalEffects
 
-Item {
+Rectangle {
   id: root
 
-  required property real size
-  required property url source
-  required property color color
+  enum Type {Edit, Checkbox, Close, SmallCheckmark}
 
+  required property int type
+  required property url source
+  required property real size
+  property color iconColor: __style.forestColor
+
+  color: __style.grassColor
   width: size
   height: size
+  radius: size / 2
 
-  Image {
-    id: icon
-
+  MMIcon {
+    anchors.centerIn: parent
     source: root.source
-    anchors.fill: parent
-  }
-
-  ColorOverlay {
-    id: overlay
-
-    color: root.color
-    anchors.fill: icon
-    source: icon
+    color: root.iconColor
+    size: __style.icon24
+    width: {
+      if( root.type === MMCircleIcon.Type.Edit )
+        return 7 * __dp
+      if( root.type === MMCircleIcon.Type.SmallCheckmark )
+        return 8 * __dp
+      return __style.icon24
+    }
+    height: {
+      if( root.type === MMCircleIcon.Type.Edit )
+        return 8 * __dp
+      if( root.type === MMCircleIcon.Type.SmallCheckmark )
+        return 6 * __dp
+      return __style.icon24
+    }
   }
 }
