@@ -384,6 +384,7 @@ Item {
     id: aboutPanelComponent
     MMAboutPanel {
       onClose: stackview.pop(null)
+      onVisitWebsiteClicked: Qt.openUrlExternally( __inputHelp.inputWebLink )
       Component.onCompleted: forceActiveFocus()
     }
   }

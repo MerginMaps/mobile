@@ -54,7 +54,7 @@ Item {
         MMButton {
           text: "MMAboutPanel"
           onClicked: {
-            aboutPanel.visible = true
+            stackview.push(aboutPanelComponent)
           }
         }
 
@@ -62,7 +62,7 @@ Item {
         MMButton {
           text: "MMChangelogPanel"
           onClicked: {
-            changelogPanel.visible = true
+            stackview.push(changelogPanelComponent)
           }
         }
         */
@@ -112,12 +112,8 @@ Item {
       width: parent.width
       height: parent.height
       visible: false
-
-      MouseArea {
-        width: parent.width
-        height: parent.height
-        onClicked: aboutPanel.visible = false
-      }
+      onVisitWebsiteClicked: Qt.openUrlExternally( "https://merginmaps.com" )
+      onClose: stackview.pop()
     }
   }
 

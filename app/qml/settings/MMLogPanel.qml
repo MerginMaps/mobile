@@ -17,7 +17,7 @@ import "../components"
 
 Item {
   id: root
-  property string text: "(no-entries)"
+  property string text: qsTr("(no-entries)")
   property bool enableSendToDev: true
   property bool submitReportPending: __inputHelp.submitReportPending
 

@@ -20,30 +20,8 @@ import "../components"
 Page {
   id: root
 
-  property real fieldHeight: InputStyle.rowHeight
-  property real panelMargin: fieldHeight / 4
-  property color fontColor: InputStyle.fontColor
-  property color bgColor: InputStyle.panelBackgroundLight
-  property bool isPortraitOrientation: Screen.primaryOrientation === Qt.PortraitOrientation
-
   signal close()
-
-  function setAnchors() {
-    if ( isPortraitOrientation )
-    {
-      lutraLogo.anchors.right = undefined
-      lutraLogo.anchors.horizontalCenter = content.horizontalCenter
-      lutraLogo.anchors.bottomMargin = 2 * InputStyle.panelMargin
-      lutraLogo.anchors.rightMargin = undefined
-    }
-    else // landscape
-    {
-      lutraLogo.anchors.horizontalCenter = undefined
-      lutraLogo.anchors.right = content.right
-      lutraLogo.anchors.bottomMargin = InputStyle.panelMargin
-      lutraLogo.anchors.rightMargin = InputStyle.panelMargin
-    }
-  }
+  signal visitWebsiteClicked()
 
   Keys.onReleased: function( event ) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
@@ -52,94 +30,81 @@ Page {
     }
   }
 
-  onIsPortraitOrientationChanged: setAnchors()
-  Component.onCompleted: setAnchors()
-
   background: Rectangle {
-    color: root.bgColor
+    color: __style.lightGreenColor
   }
 
-  header: PanelHeader {
+  header: MMHeader {
     id: header
-    height: InputStyle.rowHeightHeader
-    width: parent.width
-    color: root.bgColor
-    rowHeight: InputStyle.rowHeightHeader
-    titleText: ""
+    title: qsTr("About Mergin Maps")
+    titleFont: __style.t3
 
-    onBack: root.close()
-    withBackButton: true
+    onBackClicked: root.close()
+    backVisible: true
   }
 
   Item {
     id: content
     anchors.fill: parent
-    anchors.bottomMargin: Qt.inputMethod.keyboardRectangle.height ? Qt.inputMethod.keyboardRectangle.height : 0
 
     Column {
-      id: columnLayout
       anchors.verticalCenter: parent.verticalCenter
       width: parent.width
+      spacing: __style.pageMargins
+
+      Text {
+        text: "v" + __version
+        font: __style.t4
+        color: __style.deepOceanColor
+        anchors.horizontalCenter: parent.horizontalCenter
+      }
 
       Image {
         id: mmLogo
-        source: InputStyle.mmLogoHorizontal
-        width: content.width / 2
-        sourceSize.width: width
+        source: __style.mmLogoImage
         anchors.horizontalCenter: parent.horizontalCenter
       }
 
       Text {
-        text: "v" + __version
-        font.pixelSize: InputStyle.fontPixelSizeSmall
+        text: qsTr("We are bringing the benefits of open source GIS to businesses without compromises")
+        font: __style.p5
+        color: __style.nightColor
+        wrapMode: Text.WordWrap
+        width: webLinkBtn.width
+        horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        color: fontColor
       }
 
-      Button {
-        id: inputLinkBtn
-        width: content.width - 2 * root.panelMargin
-        height: fieldHeight * 0.7
+      MMButton {
+        id: webLinkBtn
+        width: Math.min(__style.maxPageWidth, content.width - 2* __style.pageMargins)
         anchors.horizontalCenter: parent.horizontalCenter
-        onClicked: Qt.openUrlExternally( __inputHelp.inputWebLink )
-        background: Rectangle {
-          color: root.bgColor
-        }
-
-        contentItem: Text {
-          text: __inputHelp.inputWebLink.split( '?' )[0] // do not show utm tags
-          font.pixelSize: InputStyle.fontPixelSizeNormal
-          color: InputStyle.highlightColor
-          horizontalAlignment: Text.AlignHCenter
-          verticalAlignment: Text.AlignVCenter
-          elide: Text.ElideRight
-        }
+        onClicked: root.visitWebsiteClicked()
+        text: qsTr("Visit website")
       }
     }
+  }
+
+  footer: Column {
+    spacing: __style.pageMargins
+    bottomPadding: __style.pageMargins
 
     Text {
       id: developedText
       text: qsTr("Developed by")
-      font.pixelSize: InputStyle.fontPixelSizeSmall
+      font: __style.t4
+      color: __style.deepOceanColor
       anchors.horizontalCenter: lutraLogo.horizontalCenter
-      anchors.bottom: lutraLogo.top
-      color: fontColor
+      // anchors.bottom: lutraLogo.top
+      // anchors.bottomMargin: __style.pageMargins
     }
 
     Image {
       id: lutraLogo
-      source: InputStyle.lutraLogo
-      width: mmLogo.width / 2
-      sourceSize.width: width
+      source: __style.lutraLogoImage
       anchors.horizontalCenter: parent.horizontalCenter
-      anchors.bottom: parent.bottom
-      anchors.bottomMargin: InputStyle.panelMargin * 2
-    }
-
-    ColorOverlay {
-      anchors.fill: lutraLogo
-      source: lutraLogo
-      color: fontColor
+      // anchors.bottom: parent.bottom
+      // anchors.bottomMargin: __style.pageMargins
     }
   }
 }
