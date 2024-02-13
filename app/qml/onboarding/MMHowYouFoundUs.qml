@@ -41,6 +41,7 @@ Page {
     id: header
 
     title: listView.contentY > -30 * __dp ? root.headerTitle : ""
+    backVisible: false
 
     onBackClicked: root.backClicked()
 

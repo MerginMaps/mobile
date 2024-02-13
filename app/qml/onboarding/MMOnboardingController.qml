@@ -224,9 +224,6 @@ Item {
       id: howYouFoundUsPanel
 
       objectName: "howYouFoundUsPanel"
-      onBackClicked: {
-        stackView.popOnePageOrClose()
-      }
 
       onHowYouFoundUsSelected: function (selectedText) {
         postRegisterData.howYouFoundUs = selectedText
@@ -249,7 +246,19 @@ Item {
 
       onIndustrySelected: function (selectedText) {
         postRegisterData.whichIndustry = selectedText
-        controller.end()
+        __merginApi.postRegisterUser( postRegisterData.howYouFoundUs, postRegisterData.whichIndustry, postRegisterData.wantNewsletter )
+      }
+
+      Connections {
+        target: __merginApi
+
+        function onPostRegistrationSucceeded() {
+          controller.end()
+        }
+
+        function onPostRegistrationFailed() {
+          controller.end()
+        }
       }
     }
   }
