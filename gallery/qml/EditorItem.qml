@@ -19,12 +19,16 @@ Item {
   required property string fieldTitle
 
   property variant fieldValue: ""
-  property var fieldConfig:  ({})
+  property var fieldConfig: ({'field_format':'?', 'display_format':'yyyy'})
   property bool fieldShouldShowTitle: checkboxTitle.checked
   property bool fieldIsReadOnly: !checkbox.checked
   property string fieldErrorMessage: checkboxError.checked ? "error" : ""
   property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
   property bool fieldRememberValueSupported: checkboxRemember.checked
   property bool fieldRememberValueState: false
-
+  property string fieldHomePath: ""
+  property bool fieldValueIsNull: false
+  property variant fieldAssociatedRelation: ""
+  property variant fieldFeatureLayerPair: ""
+  property variant fieldActiveProject: ({homePath: ""})  
 }

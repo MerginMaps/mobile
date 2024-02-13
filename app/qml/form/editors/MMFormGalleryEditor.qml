@@ -129,13 +129,14 @@ Item {
           height: rowView.height
           radius: 20 * __dp
           border.width: 2 * __dp
-          border.color: errorMsg.length > 0 ? __style.negativeColor : warningMsg.length > 0 ? __style.warningColor : __style.whiteColor
-          color: (errorMsg.length > 0 || warningMsg.length > 0) ? __style.errorBgInputColor : __style.whiteColor
+          border.color: root.errorMsg.length > 0 ? __style.negativeColor : root.warningMsg.length > 0 ? __style.warningColor : __style.whiteColor
+          color: (root.errorMsg.length > 0 || root.warningMsg.length > 0) ? __style.errorBgInputColor : __style.whiteColor
 
           MMIcon {
             anchors.centerIn: parent
             source: __style.addImageIcon
-            color: errorMsg.length > 0 ? __style.grapeColor : warningMsg.length > 0 ? __style.earthColor : __style.forestColor
+            color: root.errorMsg.length > 0 ? __style.grapeColor : root.warningMsg.length > 0 ? __style.earthColor : __style.forestColor
+            size: __style.icon40
           }
 
           MouseArea {
@@ -176,17 +177,18 @@ Item {
         id: msgIcon
 
         source: visible ? __style.errorIcon : ""
-        color: errorMsg.length > 0 ? __style.negativeColor : __style.warningColor
-        visible: errorMsg.length > 0 || warningMsg.length > 0
+        color: root.errorMsg.length > 0 ? __style.negativeColor : __style.warningColor
+        size: __style.icon16
+        visible: root.errorMsg.length > 0 || root.warningMsg.length > 0
       }
 
       Text {
-        width: column.width - msgRow.spacing - msgIcon.width
+        width: column.width - msgRow.spacing - msgIcon.size
 
-        text: errorMsg.length > 0 ? errorMsg : warningMsg
+        text: root.errorMsg.length > 0 ? root.errorMsg : root.warningMsg
         font: __style.t4
         wrapMode: Text.WordWrap
-        visible: errorMsg.length > 0 || warningMsg.length > 0
+        visible: root.errorMsg.length > 0 || root.warningMsg.length > 0
       }
     }
   }

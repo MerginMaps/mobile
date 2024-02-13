@@ -68,8 +68,9 @@ MMBaseInput {
 
     property bool pressed: false
 
-    height: parent.height
+    anchors.verticalCenter: parent.verticalCenter
 
+    size: __style.icon24
     source: __style.searchIcon
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
   }

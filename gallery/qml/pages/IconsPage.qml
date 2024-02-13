@@ -19,8 +19,6 @@ ScrollView {
     padding: 20
     spacing: 5
 
-    property int rectSize: 10
-
     GroupBox {
       title: "MMIcon"
       background: Rectangle {
@@ -34,13 +32,14 @@ ScrollView {
       }
 
       Column {
-        MMCheckBox { id: checkbox; text: "Show in rectangle" }
+        spacing: 5
+        MMCheckBox { id: checkbox; text: "Show border" }
         Item { width: 1; height: 10 }
         Row {
           Repeater {
             model: ["Icon", "16px", "24px", "32px", "40px"]
             delegate: Text {
-              width: model.index ?  50 * __dp : 100 * __dp
+              width: model.index ? 50 * __dp : 100 * __dp
               height: 20
               text: modelData
               font.bold: true
@@ -99,10 +98,9 @@ ScrollView {
         Item { width: 1; height: 30 }
 
         Text { text: "Icons - in Circle"; font.underline: true }
-        Row { MMCircleIcon { size: __style.icon40; source: __style.checkmarkIcon; type: MMCircleIcon.Type.Checkbox } Text { text: "checkmarkIcon" } }
-        Row { MMCircleIcon { size: __style.icon40; source: __style.xIcon; type: MMCircleIcon.Type.Close; color: __style.lightGreenColor } Text { text: "xIcon" } }
-        Row { MMCircleIcon { size: __style.icon24; source: __style.smallEditIcon; type: MMCircleIcon.Type.Edit; color: __style.forestColor; iconColor: __style.grassColor } Text { text: "smallEditIcon" } }
-        Row { MMCircleIcon { size: __style.icon24; source: __style.smallCheckmarkIcon; type: MMCircleIcon.Type.SmallCheckmark; color: __style.forestColor; iconColor: __style.grassColor } Text { text: "smallCheckmarkIcon" } }
+        Row { MMCircleIcon { size: __style.icon24; type: MMCircleIcon.Type.Checkmark; color: __style.forestColor; iconColor: __style.grassColor } Text { text: "Type.Checkmark" } }
+        Row { MMCircleIcon { size: __style.icon24; type: MMCircleIcon.Type.Edit; color: __style.forestColor; iconColor: __style.grassColor } Text { text: "Type.Edit" } }
+        Row { MMCircleIcon { size: __style.icon40; type: MMCircleIcon.Type.Delete; color: __style.negativeColor; iconColor: __style.grapeColor } Text { text: "Type.Delete" } }
         Item { width: 1; height: 30 }
 
         Text { text: "Icons - Map"; font.underline: true }

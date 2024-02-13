@@ -13,9 +13,9 @@ import Qt5Compat.GraphicalEffects
 Item {
   id: root
 
-  required property real size
   required property url source
-  required property color color
+  property real size: __style.icon24
+  property color color: __style.forestColor
 
   width: size
   height: size

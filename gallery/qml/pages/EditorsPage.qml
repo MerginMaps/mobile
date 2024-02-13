@@ -153,7 +153,7 @@ ScrollView {
           width: parent.width
           height: photoEditor.height
 
-          fieldConfig: ({RelativeStorage: ""})
+          fieldConfig: ({RelativeStorage: 0})
           fieldTitle: "MMFormPhotoEditor"
 
           MMFormPhotoEditor {

@@ -93,8 +93,9 @@ MMBaseInput {
   rightAction: MMIcon {
     id: rightIcon
 
-    height: parent.height
+    anchors.verticalCenter: parent.verticalCenter
 
+    size: __style.icon24
     source: __style.calendarIcon
     color: root.enabled ? __style.forestColor : __style.mediumGreenColor
   }

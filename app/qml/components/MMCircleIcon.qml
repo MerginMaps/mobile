@@ -12,11 +12,10 @@ import QtQuick
 Rectangle {
   id: root
 
-  enum Type {Edit, Checkbox, Close, SmallCheckmark}
+  enum Type {Edit, Checkmark, Delete}
 
   required property int type
-  required property url source
-  required property real size
+  property real size: __style.icon40
   property color iconColor: __style.forestColor
 
   color: __style.grassColor
@@ -26,21 +25,18 @@ Rectangle {
 
   MMIcon {
     anchors.centerIn: parent
-    source: root.source
     color: root.iconColor
-    size: __style.icon24
-    width: {
+    source: {
       if( root.type === MMCircleIcon.Type.Edit )
-        return 7 * __dp
-      if( root.type === MMCircleIcon.Type.SmallCheckmark )
-        return 8 * __dp
-      return __style.icon24
+        return __style.editIcon
+      if( root.type === MMCircleIcon.Type.Checkmark )
+        return __style.checkmarkIcon
+      if( root.type === MMCircleIcon.Type.Delete )
+        return __style.deleteIcon
     }
-    height: {
+    size: {
       if( root.type === MMCircleIcon.Type.Edit )
-        return 8 * __dp
-      if( root.type === MMCircleIcon.Type.SmallCheckmark )
-        return 6 * __dp
+        return __style.icon16
       return __style.icon24
     }
   }
