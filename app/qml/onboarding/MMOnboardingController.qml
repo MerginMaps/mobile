@@ -224,9 +224,6 @@ Item {
       id: howYouFoundUsPanel
 
       objectName: "howYouFoundUsPanel"
-      onBackClicked: {
-        stackView.popOnePageOrClose()
-      }
 
       onHowYouFoundUsSelected: function (selectedText) {
         postRegisterData.howYouFoundUs = selectedText
