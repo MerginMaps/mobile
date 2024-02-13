@@ -14,145 +14,32 @@ import QtQuick.Controls.Basic
 import "../../app/qml/components"
 import "../../app/qml"
 import "../../app/qml/project"
-import "../../app/qml/settings"
 
-Item {
-  id: root
-  anchors.fill: parent
+Page {
+  id: pane
 
-  StackView {
-    id: stackview
+  Column {
+    width: parent.width
+    spacing: 10
+    padding: 10
 
-    anchors.fill: parent
+    Label {
+      text: "Drawers"
+    }
 
-    initialItem: Page {
-      id: pane
-
-      Column {
-        width: parent.width
-        spacing: 10
-
-        Label {
-          text: "Drawers"
-        }
-
-        MMButton {
-          text: "Upload"
-          onClicked: drawer1.open()
-        }
-        MMButton {
-          text: "Reached Data Limit"
-          onClicked: drawer2.open()
-        }
-        MMButton {
-          text: "Synchronization Failed"
-          onClicked: drawer3.open()
-        }
-
-        Label {
-          text: "Pages"
-        }
-
-        MMButton {
-          text: "MMProjectLoadingScreen"
-          onClicked: {
-            stackview.push(loadingScreenComponent)
-          }
-        }
-
-        MMButton {
-          text: "MMLogPanel"
-          onClicked: {
-            stackview.push(logPanelComponent)
-          }
-        }
-/*
-        MMButton {
-          text: "MMAboutPanel"
-          onClicked: {
-            aboutPanel.visible = true
-          }
-        }
-
-        MMButton {
-          text: "MMChangelogPanel"
-          onClicked: {
-            changelogPanel.visible = true
-          }
-        }
-        */
-      }
-  }
-}
-
-
-  Component {
-    id: loadingScreenComponent
-    MMProjectLoadingScreen {
-      id: loadingScreen
-      width: root.width
-      height: root.height
-
-      MouseArea {
-        width: parent.width
-        height: parent.height
-
-        onClicked: {
-          stackview.pop()
-        }
-      }
+    MMButton {
+      text: "Upload"
+      onClicked: drawer1.open()
+    }
+    MMButton {
+      text: "Reached Data Limit"
+      onClicked: drawer2.open()
+    }
+    MMButton {
+      text: "Synchronization Failed"
+      onClicked: drawer3.open()
     }
   }
-
-  Component {
-    id: logPanelComponent
-
-    MMLogPanel {
-      id: logPanel
-      width: root.width
-      height: root.height
-      visible: false
-      submitReportPending: false
-      text: __logText
-      onSubmitReport: submitReportPending = !submitReportPending
-      onClose: stackview.pop()
-    }
-  }
-
-  /*
-  Component {
-    id: aboutPanelComponent
-    MMAboutPanel {
-      id: aboutPanel
-      width: parent.width
-      height: parent.height
-      visible: false
-
-      MouseArea {
-        width: parent.width
-        height: parent.height
-        onClicked: aboutPanel.visible = false
-      }
-    }
-  }
-
-  Component {
-    id: changelogPanelComponent
-    MMChangelogPanel {
-      id: changelogPanel
-      width: parent.width
-      height: parent.height
-      visible: false
-
-      MouseArea {
-        width: parent.width
-        height: parent.height
-        onClicked: changelogPanel.visible = false
-      }
-    }
-  }
-
-*/
 
   MMDrawer {
     id: drawer1

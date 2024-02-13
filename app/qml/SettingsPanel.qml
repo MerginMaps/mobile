@@ -400,6 +400,7 @@ Item {
     id: logPanelComponent
     MMLogPanel {
       onClose: stackview.pop(null)
+      onSubmitReport: __inputHelp.submitReport()
       Component.onCompleted: forceActiveFocus()
     }
   }

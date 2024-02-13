@@ -4,12 +4,14 @@
         <file>qml/IconBox.qml</file>
         <file>qml/EditorItem.qml</file>
         <file>qml/pages/IconsPage.qml</file>
+        <file>qml/pages/ImagesPage.qml</file>
         <file>qml/pages/StylePage.qml</file>
         <file>qml/pages/MiscPage.qml</file>
         <file>qml/pages/InitialGalleryPage.qml</file>
         <file>qml/pages/ButtonsPage.qml</file>
         <file>qml/pages/NotificationPage.qml</file>
         <file>qml/pages/DrawerPage.qml</file>
+        <file>qml/pages/PagesPage.qml</file>
         <file>qml/pages/ChecksPage.qml</file>
         <file>qml/pages/MapPage.qml</file>
         <file>qml/pages/ToolbarPage.qml</file>

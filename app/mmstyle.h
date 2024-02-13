@@ -173,6 +173,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl reachedDataLimitImage READ reachedDataLimitImage CONSTANT )
     Q_PROPERTY( QUrl uploadImage READ uploadImage CONSTANT )
     Q_PROPERTY( QUrl warnLogoImage READ warnLogoImage CONSTANT )
+    Q_PROPERTY( QUrl mmLogoImage READ mmLogoImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -341,6 +342,7 @@ class MMStyle: public QObject
     QUrl uploadImage() {return QUrl( "qrc:/UploadImage.svg" );}
     QUrl reachedDataLimitImage() {return QUrl( "qrc:/ReachedDataLimitImage.svg" );}
     QUrl warnLogoImage() {return QUrl( "qrc:/WarnLogoImage.svg" );}
+    QUrl mmLogoImage() {return QUrl( "qrc:/images/MMLogo.svg" );}
 
     double mapItemHeight() {return 60 * mDp;}
     double mapButtonsMargin() {return 25 * mDp;}

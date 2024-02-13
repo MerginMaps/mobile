@@ -21,7 +21,7 @@ Item {
   property bool enableSendToDev: true
   property bool submitReportPending: __inputHelp.submitReportPending
 
-  signal submitReport //! todo __inputHelp.submitReport()
+  signal submitReport
   signal close
 
   Keys.onReleased: function( event ) {
@@ -46,10 +46,6 @@ Item {
 
     header: MMHeader {
       id: header
-      // height: InputStyle.rowHeightHeader
-      // width: parent.width
-      // color: "white"
-      // rowHeight: InputStyle.rowHeightHeader
       title: qsTr("Diagnostic log")
       titleFont: __style.h3
 

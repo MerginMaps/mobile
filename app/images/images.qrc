@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/images/">
+        <file>MMLogo.svg</file>
+    </qresource>
+</RCC>
