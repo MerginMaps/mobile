@@ -24,7 +24,7 @@ Drawer {
   property real rowHeight: 67 * __dp
 
   width: ApplicationWindow.window.width
-  height: (mainColumn.height > ApplicationWindow.window.height ? ApplicationWindow.window.height : mainColumn.height) - 20 * __dp
+  height: (mainColumn.height > ApplicationWindow.window.height ? ApplicationWindow.window.height : mainColumn.height)
   edge: Qt.BottomEdge
 
   focus: true
@@ -113,18 +113,19 @@ Drawer {
         Layout.rightMargin: 20 * __dp
         Layout.maximumWidth: __style.maxPageWidth
         Layout.alignment: Qt.AlignHCenter
-        Layout.preferredHeight: {
-          if (ApplicationWindow.window){
-            var availableHeight = ApplicationWindow.window.height - header.height - mainColumn.spacing
-            var totalHeight = scrollColumn.childrenRect.height + 20 * __dp
+        Layout.preferredHeight: ApplicationWindow.window.height - header.height - primaryButton.height - mainColumn.spacing * 3
+        // Layout.preferredHeight: {
+        //   if (ApplicationWindow.window){
+        //     var availableHeight = ApplicationWindow.window.height - header.height - mainColumn.spacing
+        //     var totalHeight = scrollColumn.childrenRect.height + 20 * __dp
 
-            if(totalHeight >= ApplicationWindow.window.height) {
-              return availableHeight
-            }
-            return totalHeight
-          }
-          return 0
-        }
+        //     if(totalHeight >= ApplicationWindow.window.height) {
+        //       return availableHeight
+        //     }
+        //     return totalHeight
+        //   }
+        //   return 0
+        // }
         contentWidth: availableWidth
         contentHeight: scrollColumn.childrenRect.height
 
@@ -317,30 +318,16 @@ Drawer {
               descriptionText: __appSettings.gpsAntennaHeight > 0 ? __inputUtils.formatNumber(__appSettings.gpsAntennaHeight, 3) + " m" : qsTr( "Not set" )
             }
           }
-
-          Item {
-            width: 1
-            height: 20 * __dp
-          }
-
-          MMButton {
-            id: primaryButton
-
-            width: parent.width - 2 * 20 * __dp
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottomMargin: 20
-
-            text: qsTr("Manage GPS receivers")
-
-            onClicked: {
-              additionalContent.push( positionProviderComponent )
-            }
-          }
-
-          Item {
-            width: 2
-            height: 20 * __dp
-          }
+        }
+      }
+      MMButton {
+        id: primaryButton
+        text: qsTr("Manage GPS receivers")
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+        Layout.margins: 20 * __dp
+        width: parent.width - 2 * 20 * __dp
+        onClicked: {
+          additionalContent.push(positionProviderComponent)
         }
       }
     }
