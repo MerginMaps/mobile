@@ -12,14 +12,16 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
 
-import "."  // import InputStyle singleton
-import "./components"
+import "../components"
+
 import lc 1.0
 
 Item {
   id: root
 
   signal close
+
+  required property var model /* ChangelogModel */
 
   Keys.onReleased: function( event ) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
@@ -47,23 +49,21 @@ Item {
     clip: true
 
     background: Rectangle {
-      color: InputStyle.panelBackgroundWhite
+      color: __style.lightGreenColor
     }
 
-    header: PanelHeader {
-      height: InputStyle.rowHeightHeader
-      width: parent.width
-      color: InputStyle.clrPanelMain
-      rowHeight: InputStyle.rowHeightHeader
-      titleText: qsTr("Changelog")
+    header: MMHeader {
+      id: header
+      title: qsTr("Changelog")
+      titleFont: __style.t3
 
-      onBack: root.close()
-      withBackButton: true
+      onBackClicked: root.close()
+      backVisible: true
     }
 
     Item {
       anchors.horizontalCenter: parent.horizontalCenter
-      width: root.width - InputStyle.panelMargin
+      width: root.width - 2 * __style.pageMargins
       height: parent.height
 
       Component.onCompleted: changelogView.model.seeChangelogs()
@@ -72,28 +72,35 @@ Item {
         id: subTitle
 
         anchors.top: title.bottom
-        text: qsTr("Latest Mergin Maps updates")
+        text: qsTr("What's new")
         wrapMode: Text.WordWrap
         width: parent.width
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: InputStyle.fontColor
+        font: __style.t1
+        color: __style.forestColor
+      }
+
+      Text {
+        id: description
+
+        anchors.top: subTitle.bottom
+        anchors.topMargin: 10 * __dp
+        text: qsTr("See what changed since you were last here.")
+        wrapMode: Text.WordWrap
+        width: parent.width
+        font: __style.p5
+        color: __style.nightColor
       }
 
       ListView {
         id: changelogView
 
         width: parent.width
-        anchors.top: subTitle.bottom
-        anchors.topMargin: InputStyle.panelMargin
+        anchors.top: description.bottom
+        anchors.topMargin: __style.pageMargins
         anchors.bottom: parent.bottom
-        spacing: InputStyle.panelMargin
+        spacing: __style.pageMargins
         clip: true
-        model: ChangelogModel {
-          onErrorMsgChanged: function(msg) {
-            errorDialog.text = msg
-            errorDialog.open()
-          }
-        }
+        model: root.model
 
         delegate: MouseArea {
           width: changeItem.width
@@ -103,35 +110,35 @@ Item {
           Column {
             id: changeItem
             width: changelogView.width
+            spacing: 10 * __dp
 
-            Rectangle {
-              width: parent.width
-              height: InputStyle.changelogLineWidth
-              color: InputStyle.changelogLineWColor
-            }
-            Text {
-              text: Qt.locale().dayName( model.date.getDay(), Locale.ShortFormat ) + ", " + model.date.getDate() + " " + Qt.locale().monthName( model.date.getMonth(), Locale.LongFormat )
-              font.italic: true
-              wrapMode: Text.WordWrap
-              width: parent.width
-              font.pixelSize: InputStyle.fontPixelSizeNormal
-              color: InputStyle.fontColor
-            }
+            MMLine {}
+
             Text {
               text: model.title
-              font.bold: true;
               wrapMode: Text.WordWrap
               width: parent.width
-              font.pixelSize: InputStyle.fontPixelSizeBig
-              color: InputStyle.fontColor
+              font: __style.t1
+              color: __style.nightColor
             }
+
+            Text {
+              // TODO move date formatting to c++
+              text: model.date instanceof Date ? Qt.locale().dayName( model.date.getDay(), Locale.ShortFormat ) + ", " + model.date.getDate() + " " + Qt.locale().monthName( model.date.getMonth(), Locale.LongFormat ) : model.date
+              wrapMode: Text.WordWrap
+              width: parent.width
+              font: __style.p6
+              color: __style.forestColor
+            }
+
             Text {
               text: model.description
               wrapMode: Text.WordWrap
               width: parent.width
-              font.pixelSize: InputStyle.fontPixelSizeNormal
-              color: InputStyle.fontColor
+              font: __style.p5
+              color: __style.nightColor
             }
+
           }
         }
 

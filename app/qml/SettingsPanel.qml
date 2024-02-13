@@ -15,6 +15,7 @@ import lc 1.0
 import "." // import InputStyle singleton
 import "./components"
 import "./misc"
+import "./settings"
 
 Item {
   id: root
@@ -381,24 +382,33 @@ Item {
 
   Component {
     id: aboutPanelComponent
-    AboutPanel {
+    MMAboutPanel {
       onClose: stackview.pop(null)
+      onVisitWebsiteClicked: Qt.openUrlExternally( __inputHelp.inputWebLink )
       Component.onCompleted: forceActiveFocus()
     }
   }
 
   Component {
     id: changelogPanelComponent
-    ChangelogPanel {
+    MMChangelogPanel {
+      id: changelogPanel
       onClose: stackview.pop(null)
       Component.onCompleted: forceActiveFocus()
+      model: ChangelogModel {
+        onErrorMsgChanged: function(msg) {
+          changelogPanel.errorDialog.text = msg
+          changelogPanel.errorDialog.open()
+        }
+      }
     }
   }
 
   Component {
     id: logPanelComponent
-    LogPanel {
+    MMLogPanel {
       onClose: stackview.pop(null)
+      onSubmitReport: __inputHelp.submitReport()
       Component.onCompleted: forceActiveFocus()
     }
   }

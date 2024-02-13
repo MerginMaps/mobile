@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "."
 
 //! Best to use MMHeader as the header component for the Page{} object or anchor it to the top of Drawer/Item
 
