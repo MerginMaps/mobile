@@ -11,9 +11,9 @@
         <file>Bubble.svg</file>
         <file>Calendar.svg</file>
         <file>Checkmark.svg</file>
+        <file>CheckmarkCircle.svg</file>
         <file>Close.svg</file>
         <file>CloseButton.svg</file>
-        <file>ComboBoxCheck.svg</file>
         <file>Delete.svg</file>
         <file>Done.svg</file>
         <file>Done2.svg</file>
@@ -23,7 +23,7 @@
         <file>Electricity.svg</file>
         <file>Engineering.svg</file>
         <file>Environmental.svg</file>
-        <file>Error.svg</file>
+        <file>ErrorCircle.svg</file>
         <file>Facebook.svg</file>
         <file>GPSAntennaHeight.svg</file>
         <file>GPSIcon.svg</file>
@@ -82,7 +82,7 @@
         <file>Waiting.svg</file>
         <file>WaterResources.svg</file>
         <file>X.svg</file>
-        <file>XMark.svg</file>
+        <file>XMarkCircle.svg</file>
         <file>XTwitter.svg</file>
         <file>Youtube.svg</file>
         <file>ZoomToProject.svg</file>

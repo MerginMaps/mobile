@@ -100,7 +100,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl checkmarkIcon READ checkmarkIcon CONSTANT )
     Q_PROPERTY( QUrl closeButtonIcon READ closeButtonIcon CONSTANT )
     Q_PROPERTY( QUrl closeIcon READ closeIcon CONSTANT )
-    Q_PROPERTY( QUrl comboBoxCheckIcon READ comboBoxCheckIcon CONSTANT )
     Q_PROPERTY( QUrl deleteIcon READ deleteIcon CONSTANT )
     Q_PROPERTY( QUrl doneIcon READ doneIcon CONSTANT )
     Q_PROPERTY( QUrl done2Icon READ done2Icon CONSTANT )
@@ -110,7 +109,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl electricityIcon READ electricityIcon CONSTANT )
     Q_PROPERTY( QUrl engineeringIcon READ engineeringIcon CONSTANT )
     Q_PROPERTY( QUrl environmentalIcon READ environmentalIcon CONSTANT )
-    Q_PROPERTY( QUrl errorIcon READ errorIcon CONSTANT )
     Q_PROPERTY( QUrl facebookIcon READ facebookIcon CONSTANT )
     Q_PROPERTY( QUrl globeIcon READ globeIcon CONSTANT )
     Q_PROPERTY( QUrl globalIcon READ globalIcon CONSTANT )
@@ -162,9 +160,13 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl waitingIcon READ waitingIcon CONSTANT )
     Q_PROPERTY( QUrl waterResourcesIcon READ waterResourcesIcon CONSTANT )
     Q_PROPERTY( QUrl xIcon READ xIcon CONSTANT )
-    Q_PROPERTY( QUrl xMarkIcon READ xMarkIcon CONSTANT )
     Q_PROPERTY( QUrl xTwitterIcon READ xTwitterIcon CONSTANT )
     Q_PROPERTY( QUrl youtubeIcon READ youtubeIcon CONSTANT )
+
+    // Icons with filled circle background
+    Q_PROPERTY( QUrl xMarkCircleIcon READ xMarkCircleIcon CONSTANT )
+    Q_PROPERTY( QUrl checkmarkCircleIcon READ checkmarkCircleIcon CONSTANT )
+    Q_PROPERTY( QUrl errorCircleIcon READ errorCircleIcon CONSTANT )
 
     // Images
     Q_PROPERTY( QUrl acceptInvitationImage READ acceptInvitationImage CONSTANT )
@@ -281,7 +283,6 @@ class MMStyle: public QObject
     QUrl checkmarkIcon() {return QUrl( "qrc:/Checkmark.svg" );}
     QUrl closeButtonIcon() {return QUrl( "qrc:/CloseButton.svg" );}
     QUrl closeIcon() {return QUrl( "qrc:/Close.svg" );}
-    QUrl comboBoxCheckIcon() {return QUrl( "qrc:/ComboBoxCheck.svg" );}
     QUrl deleteIcon() {return QUrl( "qrc:/Delete.svg" );}
     QUrl doneIcon() {return QUrl( "qrc:/Done.svg" );}
     QUrl done2Icon() {return QUrl( "qrc:/Done2.svg" );}
@@ -291,7 +292,6 @@ class MMStyle: public QObject
     QUrl electricityIcon() {return QUrl( "qrc:/Electricity.svg" );}
     QUrl engineeringIcon() {return QUrl( "qrc:/Engineering.svg" );}
     QUrl environmentalIcon() {return QUrl( "qrc:/Environmental.svg" );}
-    QUrl errorIcon() {return QUrl( "qrc:/Error.svg" );}
     QUrl facebookIcon() {return QUrl( "qrc:/Facebook.svg" );}
     QUrl globeIcon() {return QUrl( "qrc:/Globe.svg" );}
     QUrl globalIcon() {return QUrl( "qrc:/Global.svg" );}
@@ -343,9 +343,12 @@ class MMStyle: public QObject
     QUrl waitingIcon() {return QUrl( "qrc:/Waiting.svg" );}
     QUrl waterResourcesIcon() {return QUrl( "qrc:/WaterResources.svg" );}
     QUrl xIcon() {return QUrl( "qrc:/X.svg" );}
-    QUrl xMarkIcon() {return QUrl( "qrc:/XMark.svg" );}
     QUrl xTwitterIcon() {return QUrl( "qrc:/XTwitter.svg" );}
     QUrl youtubeIcon() {return QUrl( "qrc:/Youtube.svg" );}
+
+    QUrl xMarkCircleIcon() {return QUrl( "qrc:/XMarkCircle.svg" );}
+    QUrl checkmarkCircleIcon() {return QUrl( "qrc:/CheckmarkCircle.svg" );}
+    QUrl errorCircleIcon() {return QUrl( "qrc:/ErrorCircle.svg" );}
 
     QUrl mmLogoImage() {return QUrl( "qrc:/images/MMLogo.svg" );}
     QUrl lutraLogoImage() {return QUrl( "qrc:/images/LutraLogo4x.png" );}
