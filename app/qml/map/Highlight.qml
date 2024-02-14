@@ -268,7 +268,7 @@ Item {
       Image {
         visible: markerType === Highlight.MarkerTypes.Image
 
-        source: __style.mapPinIcon
+        source: __style.mapPinImage
         sourceSize.width: parent.width
         sourceSize.height: parent.height
       }

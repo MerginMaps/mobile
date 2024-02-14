@@ -56,7 +56,7 @@ MMBaseInput {
     anchors.verticalCenter: parent.verticalCenter
 
     size: __style.icon24
-    source: __style.xMarkIcon
+    source: __style.xIcon
     color: root.enabled ? __style.forestColor : __style.mediumGreenColor
     visible: root.showClearIcon && textField.activeFocus && textField.text.length > 0
   }
