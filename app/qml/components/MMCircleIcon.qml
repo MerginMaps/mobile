@@ -8,32 +8,35 @@
  ***************************************************************************/
 
 import QtQuick
-import Qt5Compat.GraphicalEffects
 
 // Recommendation: use the size property instead of width and height
 
-Item {
+Rectangle {
   id: root
 
-  required property url source
-  property real size: __style.icon24
-  property color color: __style.forestColor
+  enum Type {Edit, Checkmark, Delete}
 
+  required property int type
+  property real size: __style.icon40
+  property real iconSize: __style.icon24
+  property color iconColor: __style.forestColor
+
+  color: __style.grassColor
   width: size
   height: size
+  radius: size / 2
 
-  Image {
-    id: icon
-
-    source: root.source
-    anchors.fill: parent
-  }
-
-  ColorOverlay {
-    id: overlay
-
-    color: root.color
-    anchors.fill: icon
-    source: icon
+  MMIcon {
+    anchors.centerIn: parent
+    color: root.iconColor
+    source: {
+      if( root.type === MMCircleIcon.Type.Edit )
+        return __style.editIcon
+      if( root.type === MMCircleIcon.Type.Checkmark )
+        return __style.checkmarkIcon
+      if( root.type === MMCircleIcon.Type.Delete )
+        return __style.deleteIcon
+    }
+    size: root.iconSize
   }
 }

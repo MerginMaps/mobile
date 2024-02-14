@@ -74,25 +74,19 @@ MMBaseInput {
       onClicked: root.contentClicked()
     }
 
-    Rectangle {
-      width: 40 * __dp
-      height: width
-      radius: width / 2
-      color: __style.negativeColor
-      anchors.right: parent.right
-      anchors.bottom: parent.bottom
-      anchors.rightMargin: 10 * __dp
-      anchors.bottomMargin: 10 * __dp
-      visible: enabled && ( photo.status === Image.Ready || photo.status === Image.Error )
-
-      MMIcon {
-        anchors.centerIn: parent
-        source: __style.deleteIcon
-        useCustomSize: true
-        width: 30 * __dp
-        height: width
-        color: __style.grapeColor
+    MMCircleIcon {
+      anchors {
+        right: parent.right
+        bottom: parent.bottom
+        rightMargin: 10 * __dp
+        bottomMargin: 10 * __dp
       }
+
+      size: __style.icon40
+      type: MMCircleIcon.Type.Delete
+      color: __style.negativeColor
+      iconColor: __style.grapeColor
+      visible: true//enabled && ( photo.status === Image.Ready || photo.status === Image.Error )
 
       MouseArea {
         anchors.centerIn: parent

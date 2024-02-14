@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file>qml/Main.qml</file>
         <file>qml/IconBox.qml</file>
+        <file>qml/IconLine.qml</file>
         <file>qml/EditorItem.qml</file>
         <file>qml/pages/IconsPage.qml</file>
         <file>qml/pages/ImagesPage.qml</file>
@@ -99,9 +100,10 @@
         <file>../app/qml/onboarding/MMWhichIndustry.qml</file>
         <file>../app/qml/map/MMPositionMarker.qml</file>
         <file>../app/qml/map/MMMapScaleBar.qml</file>
+        <file>../app/qml/components/MMCircleIcon.qml</file>
         <file>../app/qml/project/MMProjectLoadingScreen.qml</file> 
         <file>../app/qml/settings/MMLogPanel.qml</file>
         <file>../app/qml/settings/MMAboutPanel.qml</file>
         <file>../app/qml/settings/MMChangelogPanel.qml</file>
-  </qresource>
+    </qresource>
 </RCC>

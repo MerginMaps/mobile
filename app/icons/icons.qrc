@@ -92,5 +92,8 @@
         <file>Direction.svg</file>
         <file>TrackingDirection.svg</file>
         <file>AddImage.svg</file>
+        <file>X.svg</file>
+        <file>SmallEdit.svg</file>
+        <file>SmallCheckmark.svg</file>
     </qresource>
 </RCC>

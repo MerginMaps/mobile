@@ -37,17 +37,31 @@ Rectangle {
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: parent.left
     anchors.leftMargin: 20 * __dp
-    width: 18 * __dp
-    height: 18 * __dp
+    size: __style.icon24
     color: text.color
-    visible: model.icon !== NotificationType.None
+    visible: model.icon === NotificationType.Waiting || model.type === NotificationType.Check || model.type === NotificationType.Exclamation
     source: {
       switch( model.icon ) {
       case NotificationType.None: return ""
       case NotificationType.Waiting: return __style.waitingIcon
-      case NotificationType.Check: return __style.checkmarkIcon
+      case NotificationType.Exclamation: return __style.errorIcon
+      default: return ""
       }
     }
+  }
+
+  MMCircleIcon {
+    id: checkmarkIcon
+
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: 20 * __dp
+    size: __style.icon16
+    iconSize: __style.icon16
+    color: text.color
+    iconColor: root.color
+    visible: model.icon === NotificationType.Check
+    type: MMCircleIcon.Type.Checkmark
   }
 
   Text {

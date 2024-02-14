@@ -66,8 +66,7 @@ MMBaseInput {
         MMIcon {
           anchors.centerIn: parent
           source: __style.plusIcon
-          useCustomSize: true
-          width: 16 * __dp
+          size: __style.icon16
           height: width
         }
 

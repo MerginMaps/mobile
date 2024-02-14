@@ -73,12 +73,11 @@ MMBaseInput {
   }
 
   rightAction: MMIcon {
-    id: eyeButton
-
     property bool pressed: false
 
-    height: parent.height
+    anchors.verticalCenter: parent.verticalCenter
 
+    size: __style.icon24
     source: __style.arrowDownIcon
     color: root.enabled ? __style.forestColor : __style.mediumGreenColor
   }

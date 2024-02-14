@@ -139,14 +139,6 @@ ApplicationWindow {
           source: "InputsPage.qml"
         }
         ListElement {
-          title: "Calendar"
-          source: "CalendarPage.qml"
-        }
-        ListElement {
-          title: "Text areas"
-          source: "TextAreaPage.qml"
-        }
-        ListElement {
           title: "Checks"
           source: "ChecksPage.qml"
         }

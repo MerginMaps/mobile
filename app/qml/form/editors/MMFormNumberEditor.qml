@@ -63,8 +63,9 @@ MMBaseInput {
   leftAction: MMIcon {
     id: leftIcon
 
-    height: parent.height
+    anchors.verticalCenter: parent.verticalCenter
 
+    size: __style.icon24
     source: __style.minusIcon
     color: enabled ? __style.forestColor : __style.mediumGreenColor
     enabled: Number( numberInput.text ) - internal.step >= internal.from
@@ -134,8 +135,9 @@ MMBaseInput {
   rightAction: MMIcon {
     id: rightIcon
 
-    height: parent.height
+    anchors.verticalCenter: parent.verticalCenter
 
+    size: __style.icon24
     source: __style.plusIcon
     color: enabled ? __style.forestColor : __style.mediumGreenColor
     enabled: Number( numberInput.text ) + internal.step <= internal.to

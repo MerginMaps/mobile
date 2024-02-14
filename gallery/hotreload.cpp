@@ -68,9 +68,12 @@ void HotReload::clearCache()
 void HotReload::startHotReload()
 {
   _watcher = new QFileSystemWatcher( this );
+  _watcher->addPath( "HotReload/qml" );
   _watcher->addPath( "HotReload/qml/Pages" );
   _watcher->addPath( "HotReload/app/qml" );
   _watcher->addPath( "HotReload/app/qml/components" );
+  _watcher->addPath( "HotReload/app/qml/form" );
+  _watcher->addPath( "HotReload/app/qml/form/editors" );
 
   // send signal for hot reloading
   connect( _watcher, &QFileSystemWatcher::directoryChanged, this, [this]( const QString & path )

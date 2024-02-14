@@ -181,6 +181,7 @@ Item {
 
           source: visible ? __style.errorIcon : ""
           color: errorMsg.length > 0 ? __style.negativeColor : __style.warningColor
+          size: __style.icon16
           visible: errorMsg.length > 0 || warningMsg.length > 0
         }
         Text {

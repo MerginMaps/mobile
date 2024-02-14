@@ -32,7 +32,8 @@ class NotificationType
     {
       None,
       Waiting,
-      Check
+      Check,
+      Exclamation
     };
     Q_ENUM( IconType )
 

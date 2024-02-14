@@ -53,8 +53,9 @@ MMBaseInput {
   rightAction: MMIcon {
     id: rightIcon
 
-    height: parent.height
+    anchors.verticalCenter: parent.verticalCenter
 
+    size: __style.icon24
     source: __style.xMarkIcon
     color: root.enabled ? __style.forestColor : __style.mediumGreenColor
     visible: root.showClearIcon && textField.activeFocus && textField.text.length > 0
