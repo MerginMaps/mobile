@@ -45,6 +45,7 @@ Item {
       anchors.topMargin: ( container.height - (icon.height + text.height + control.buttonSpacing) ) / 2
 
       source: control.iconSource
+      color: __style.whiteColor
     }
 
     Text {

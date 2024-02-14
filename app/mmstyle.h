@@ -102,7 +102,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl closeIcon READ closeIcon CONSTANT )
     Q_PROPERTY( QUrl comboBoxCheckIcon READ comboBoxCheckIcon CONSTANT )
     Q_PROPERTY( QUrl deleteIcon READ deleteIcon CONSTANT )
-    Q_PROPERTY( QUrl directionIcon READ directionIcon CONSTANT )
     Q_PROPERTY( QUrl doneIcon READ doneIcon CONSTANT )
     Q_PROPERTY( QUrl done2Icon READ done2Icon CONSTANT )
     Q_PROPERTY( QUrl downloadIcon READ downloadIcon CONSTANT )
@@ -124,7 +123,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl homeFilledIcon READ homeFilledIcon CONSTANT )
     Q_PROPERTY( QUrl infoIcon READ infoIcon CONSTANT )
     Q_PROPERTY( QUrl linkedinIcon READ linkedinIcon CONSTANT )
-    Q_PROPERTY( QUrl mapPinIcon READ mapPinIcon CONSTANT )
     Q_PROPERTY( QUrl mastodonIcon READ mastodonIcon CONSTANT )
     Q_PROPERTY( QUrl minusIcon READ minusIcon CONSTANT )
     Q_PROPERTY( QUrl moreIcon READ moreIcon CONSTANT )
@@ -159,7 +157,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl teacherIcon READ teacherIcon CONSTANT )
     Q_PROPERTY( QUrl telecommunicationIcon READ telecommunicationIcon CONSTANT )
     Q_PROPERTY( QUrl termsIcon READ termsIcon CONSTANT )
-    Q_PROPERTY( QUrl trackingDirectionIcon READ trackingDirectionIcon CONSTANT )
     Q_PROPERTY( QUrl tractorIcon READ tractorIcon CONSTANT )
     Q_PROPERTY( QUrl transportationIcon READ transportationIcon CONSTANT )
     Q_PROPERTY( QUrl undoIcon READ undoIcon CONSTANT )
@@ -178,6 +175,9 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl warnLogoImage READ warnLogoImage CONSTANT )
     Q_PROPERTY( QUrl mmLogoImage READ mmLogoImage CONSTANT )
     Q_PROPERTY( QUrl lutraLogoImage READ lutraLogoImage CONSTANT )
+    Q_PROPERTY( QUrl directionImage READ directionImage CONSTANT )
+    Q_PROPERTY( QUrl mapPinImage READ mapPinImage CONSTANT )
+    Q_PROPERTY( QUrl trackingDirectionImage READ trackingDirectionImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -186,6 +186,7 @@ class MMStyle: public QObject
 
     // Icon sizes
     Q_PROPERTY( double icon16 READ icon16 CONSTANT )
+    Q_PROPERTY( double icon18 READ icon18 CONSTANT )
     Q_PROPERTY( double icon24 READ icon24 CONSTANT )
     Q_PROPERTY( double icon32 READ icon32 CONSTANT )
     Q_PROPERTY( double icon40 READ icon40 CONSTANT )
@@ -282,7 +283,6 @@ class MMStyle: public QObject
     QUrl closeIcon() {return QUrl( "qrc:/Close.svg" );}
     QUrl comboBoxCheckIcon() {return QUrl( "qrc:/ComboBoxCheck.svg" );}
     QUrl deleteIcon() {return QUrl( "qrc:/Delete.svg" );}
-    QUrl directionIcon() {return QUrl( "qrc:/Direction.svg" );}
     QUrl doneIcon() {return QUrl( "qrc:/Done.svg" );}
     QUrl done2Icon() {return QUrl( "qrc:/Done2.svg" );}
     QUrl downloadIcon() {return QUrl( "qrc:/Download.svg" );}
@@ -305,7 +305,6 @@ class MMStyle: public QObject
     QUrl homeFilledIcon() {return QUrl( "qrc:/HomeFilled.svg" );}
     QUrl infoIcon() {return QUrl( "qrc:/Info.svg" );}
     QUrl linkedinIcon() {return QUrl( "qrc:/Linkedin.svg" );}
-    QUrl mapPinIcon() {return QUrl( "qrc:/MapPin.svg" );}
     QUrl mastodonIcon() {return QUrl( "qrc:/Mastodon.svg" );}
     QUrl minusIcon() {return QUrl( "qrc:/Minus.svg" );}
     QUrl moreIcon() {return QUrl( "qrc:/More.svg" );}
@@ -339,7 +338,6 @@ class MMStyle: public QObject
     QUrl teacherIcon() {return QUrl( "qrc:/Teacher.svg" );}
     QUrl telecommunicationIcon() {return QUrl( "qrc:/Telecommunication.svg" );}
     QUrl termsIcon() {return QUrl( "qrc:/Terms.svg" );}
-    QUrl trackingDirectionIcon() {return QUrl( "qrc:/TrackingDirection.svg" );}
     QUrl tractorIcon() {return QUrl( "qrc:/Tractor.svg" );}
     QUrl transportationIcon() {return QUrl( "qrc:/Transportation.svg" );}
     QUrl undoIcon() {return QUrl( "qrc:/Undo.svg" );}
@@ -357,8 +355,13 @@ class MMStyle: public QObject
     QUrl warnLogoImage() {return QUrl( "qrc:/WarnLogoImage.svg" );}
     QUrl mmLogoImage() {return QUrl( "qrc:/images/MMLogo.svg" );}
     QUrl lutraLogoImage() {return QUrl( "qrc:/images/LutraLogo.png" );}
+    QUrl directionImage() {return QUrl( "qrc:/Direction.svg" );}
+    QUrl mapPinImage() {return QUrl( "qrc:/MapPin.svg" );}
+    QUrl trackingDirectionImage() {return QUrl( "qrc:/TrackingDirection.svg" );}
+
 
     double icon16() {return 16 * mDp;}
+    double icon18() {return 18 * mDp;}
     double icon24() {return 24 * mDp;}
     double icon32() {return 32 * mDp;}
     double icon40() {return 40 * mDp;}

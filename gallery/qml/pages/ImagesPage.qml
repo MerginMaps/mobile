@@ -33,8 +33,13 @@ ScrollView {
         padding: 5
       }
 
-      Image {
-        source: __style.mmLogoImage
+      contentData: Column {
+        spacing: 10
+        Column { Image { source: __style.mmLogoImage } Text { text: "mmLogoImage" } }
+        Column { Image { source: __style.directionImage } Text { text: "directionImage" } }
+        Column { Image { source: __style.trackingDirectionImage } Text { text: "trackingDirectionImage" } }
+        Column { Image { source: __style.mapPinImage } Text { text: "mapPinImage" } }
+        Column { Image { source: __style.warnLogoImage } Text { text: "warnLogoImage" } }
       }
     }
   }

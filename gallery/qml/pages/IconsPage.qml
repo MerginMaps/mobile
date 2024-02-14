@@ -41,7 +41,7 @@ ScrollView {
           Repeater {
             model: ["16px", "18px", "24px", "32px", "40px"]
             delegate: Text {
-              width:  60 * __dp
+              width: 50 * __dp
               height: 20
               text: modelData
               font.bold: true
@@ -97,57 +97,21 @@ ScrollView {
         IconLine { name: "waitingIcon"; source: __style.waitingIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
         IconLine { name: "xIcon"; source: __style.xIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
         IconLine { name: "xMarkIcon"; source: __style.xMarkIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
-        Item { width: 1; height: 30 }
-
-        Text { text: "Icons - in Circle"; font.underline: true }
-        Row { MMCircleIcon { size: __style.icon24; type: MMCircleIcon.Type.Checkmark; color: __style.forestColor; iconColor: __style.grassColor } Text { text: "Type.Checkmark" } }
-        Row { MMCircleIcon { size: __style.icon24; iconSize: __style.icon16; type: MMCircleIcon.Type.Edit; color: __style.forestColor; iconColor: __style.grassColor } Text { text: "Type.Edit" } }
-        // Remove this one - not icon
-        Row { MMCircleIcon { size: __style.icon40; type: MMCircleIcon.Type.Delete; color: __style.negativeColor; iconColor: __style.grapeColor } Text { text: "Type.Delete" } }
-        Item { width: 1; height: 30 }
-
-        // REMOVE alebo presun do ImagesPage + images (qrc aj nazov aj vsetko)
-        Text { text: "Icons - Map"; font.underline: true }
-        Row { Image { source: __style.directionIcon } Text { text: "directionIcon" } }
-        Row { Image { source: __style.mapPinIcon } Text { text: "mapPinIcon" } }
-        Row { Image { source: __style.trackingDirectionIcon } Text { text: "trackingDirectionIcon" } }
-        Item { width: 1; height: 30 }
-
-        // use IconLine
-        Text { text: "Icons - How you found us"; font.underline: true }
-        Row { Image { source: __style.termsIcon } Text { text: "termsIcon" } }
-        Row { Image { source: __style.mouthIcon } Text { text: "mouthIcon" } }
-        Row { Image { source: __style.qgisIcon } Text { text: "qgisIcon" } }
-        Row { Image { source: __style.subscriptionsIcon } Text { text: "subscriptionsIcon" } }
-        Row { Image { source: __style.teacherIcon } Text { text: "teacherIcon" } }
-        Row { Image { source: __style.briefcaseIcon } Text { text: "briefcaseIcon" } }
-        Row { Image { source: __style.socialMediaIcon } Text { text: "socialMediaIcon" } }
-        Row { Image { source: __style.otherIcon } Text { text: "otherIcon" } }
-        Item { width: 1; height: 30 }
-
-         // use IconLine
-        Text { text: "Icons - Social"; font.underline: true }
-        Row { Image { source: __style.youtubeIcon } Text { text: "youtubeIcon" } }
-        Row { Image { source: __style.xTwitterIcon } Text { text: "xTwitterIcon" } }
-        Row { Image { source: __style.facebookIcon } Text { text: "facebookIcon" } }
-        Row { Image { source: __style.linkedinIcon } Text { text: "linkedinIcon" } }
-        Row { Image { source: __style.mastodonIcon } Text { text: "mastodonIcon" } }
-        Row { Image { source: __style.redditIcon } Text { text: "redditIcon" } }
-        Item { width: 1; height: 30 }
-
-        // REMOVE - mame to aj tak v onboarding page
-        Text { text: "Icons - Social"; font.underline: true }
-        Row { Image { source: __style.tractorIcon } Text { text: "tractorIcon" } }
-        Row { Image { source: __style.archaeologyIcon } Text { text: "archaeologyIcon" } }
-        Row { Image { source: __style.engineeringIcon } Text { text: "engineeringIcon" } }
-        Row { Image { source: __style.electricityIcon } Text { text: "electricityIcon" } }
-        Row { Image { source: __style.environmentalIcon } Text { text: "environmentalIcon" } }
-        Row { Image { source: __style.stateAndLocalIcon } Text { text: "stateAndLocalIcon" } }
-        Row { Image { source: __style.naturalResourcesIcon } Text { text: "naturalResourcesIcon" } }
-        Row { Image { source: __style.telecommunicationIcon } Text { text: "telecommunicationIcon" } }
-        Row { Image { source: __style.transportationIcon } Text { text: "transportationIcon" } }
-        Row { Image { source: __style.waterResourcesIcon } Text { text: "waterResourcesIcon" } }
-        Row { Image { source: __style.othersIcon } Text { text: "othersIcon" } }
+        Item { width: 1; height: 50 }
+        IconLine { name: "termsIcon"; source: __style.termsIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+        IconLine { name: "mouthIcon"; source: __style.mouthIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+        IconLine { name: "qgisIcon"; source: __style.qgisIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+        IconLine { name: "subscriptionsIcon"; source: __style.subscriptionsIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+        IconLine { name: "teacherIcon"; source: __style.teacherIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+        IconLine { name: "briefcaseIcon"; source: __style.briefcaseIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+        IconLine { name: "socialMediaIcon"; source: __style.socialMediaIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+        IconLine { name: "otherIcon"; source: __style.otherIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+        IconLine { name: "youtubeIcon"; source: __style.youtubeIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+        IconLine { name: "xTwitterIcon"; source: __style.xTwitterIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+        IconLine { name: "facebookIcon"; source: __style.facebookIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+        IconLine { name: "linkedinIcon"; source: __style.linkedinIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+        IconLine { name: "mastodonIcon"; source: __style.mastodonIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+        IconLine { name: "redditIcon"; source: __style.redditIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
       }
     }
   }

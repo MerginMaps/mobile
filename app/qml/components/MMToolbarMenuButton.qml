@@ -37,12 +37,13 @@ Item {
     Row {
       height: parent.height
       width: parent.width
-      spacing: 20 * __dp
+      spacing: 12 * __dp
 
       MMIcon {
-        height: parent.height
+        anchors.verticalCenter: parent.verticalCenter
         color: __style.forestColor
         source: control.iconSource
+        size: __style.icon24
       }
 
       Text {
