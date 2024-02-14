@@ -128,7 +128,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl moreIcon READ moreIcon CONSTANT )
     Q_PROPERTY( QUrl morePhotosIcon READ morePhotosIcon CONSTANT )
     Q_PROPERTY( QUrl mouthIcon READ mouthIcon CONSTANT )
-    Q_PROPERTY( QUrl mmSymbol READ mmSymbol CONSTANT )
     Q_PROPERTY( QUrl naturalResourcesIcon READ naturalResourcesIcon CONSTANT )
     Q_PROPERTY( QUrl nextIcon READ nextIcon CONSTANT )
     Q_PROPERTY( QUrl otherIcon READ otherIcon CONSTANT )
@@ -178,6 +177,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl directionImage READ directionImage CONSTANT )
     Q_PROPERTY( QUrl mapPinImage READ mapPinImage CONSTANT )
     Q_PROPERTY( QUrl trackingDirectionImage READ trackingDirectionImage CONSTANT )
+    Q_PROPERTY( QUrl mmSymbolImage READ mmSymbolImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -301,7 +301,6 @@ class MMStyle: public QObject
     QUrl gpsIconFilled() {return QUrl( "qrc:/GPSIconFilled.svg" );}
     QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
     QUrl homeIcon() {return QUrl( "qrc:/Home.svg" );}
-    QUrl mmSymbol() {return QUrl( "qrc:/MMSymbol.svg" );}
     QUrl homeFilledIcon() {return QUrl( "qrc:/HomeFilled.svg" );}
     QUrl infoIcon() {return QUrl( "qrc:/Info.svg" );}
     QUrl linkedinIcon() {return QUrl( "qrc:/Linkedin.svg" );}
@@ -348,17 +347,17 @@ class MMStyle: public QObject
     QUrl xTwitterIcon() {return QUrl( "qrc:/XTwitter.svg" );}
     QUrl youtubeIcon() {return QUrl( "qrc:/Youtube.svg" );}
 
-    QUrl acceptInvitationLogoImage() {return QUrl( "qrc:/AcceptInvitationLogoImage.svg" ); }
-    QUrl acceptInvitationImage() {return QUrl( "qrc:/AcceptInvitationImage.svg" ); }
-    QUrl uploadImage() {return QUrl( "qrc:/UploadImage.svg" );}
-    QUrl reachedDataLimitImage() {return QUrl( "qrc:/ReachedDataLimitImage.svg" );}
-    QUrl warnLogoImage() {return QUrl( "qrc:/WarnLogoImage.svg" );}
     QUrl mmLogoImage() {return QUrl( "qrc:/images/MMLogo.svg" );}
-    QUrl lutraLogoImage() {return QUrl( "qrc:/images/LutraLogo.png" );}
-    QUrl directionImage() {return QUrl( "qrc:/Direction.svg" );}
-    QUrl mapPinImage() {return QUrl( "qrc:/MapPin.svg" );}
-    QUrl trackingDirectionImage() {return QUrl( "qrc:/TrackingDirection.svg" );}
-
+    QUrl lutraLogoImage() {return QUrl( "qrc:/images/LutraLogo4x.png" );}
+    QUrl trackingDirectionImage() {return QUrl( "qrc:/images/TrackingDirection.svg" );}
+    QUrl directionImage() {return QUrl( "qrc:/images/Direction.svg" );}
+    QUrl mmSymbolImage() {return QUrl( "qrc:/images/MMSymbol.svg" );}
+    QUrl acceptInvitationLogoImage() {return QUrl( "qrc:/images/AcceptInvitationLogoImage.svg" ); }
+    QUrl acceptInvitationImage() {return QUrl( "qrc:/images/AcceptInvitationImage.svg" ); }
+    QUrl uploadImage() {return QUrl( "qrc:/images/UploadImage.svg" );}
+    QUrl reachedDataLimitImage() {return QUrl( "qrc:/images/ReachedDataLimitImage.svg" );}
+    QUrl warnLogoImage() {return QUrl( "qrc:/images/WarnLogoImage.svg" );}
+    QUrl mapPinImage() {return QUrl( "qrc:/images/MapPin.svg" );}
 
     double icon16() {return 16 * mDp;}
     double icon18() {return 18 * mDp;}

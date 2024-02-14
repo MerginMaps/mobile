@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/Main.qml</file>
-        <file>qml/IconBox.qml</file>
         <file>qml/IconLine.qml</file>
         <file>qml/EditorItem.qml</file>
         <file>qml/pages/IconsPage.qml</file>
