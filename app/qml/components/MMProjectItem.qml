@@ -104,21 +104,15 @@ Rectangle {
         }
       }
 
-      Image {
+      MMRoundButton {
         id: icon
 
-        height: column.height
-        width: height
+        bgndColor: __style.lightGreenColor
+        iconSource: __style.moreVerticalIcon
 
-        source: __style.projectButtonMoreIcon
-        fillMode: Image.PreserveAspectFit
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            root.fillMoreMenu()
-            listDrawer.visible = true
-          }
+        onClicked: {
+          root.fillMoreMenu()
+          listDrawer.visible = true
         }
       }
     }
