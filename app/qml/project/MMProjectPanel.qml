@@ -256,9 +256,7 @@ Item {
           MMIcon {
             anchors.centerIn: parent
             source: __style.personalIcon
-            useCustomSize: true
-            width: 24 * __dp
-            height: 24 * __dp
+            size: __style.icon24
           }
 
           MouseArea {
@@ -356,7 +354,7 @@ Item {
           height: parent.height
           anchors.horizontalCenter: parent.horizontalCenter
 
-          currentIndex: pageFooter.currentIndex
+          currentIndex: pageFooter.index
 
           MMProjectListPage {
             id: localProjectsPage
@@ -416,7 +414,7 @@ Item {
         width: projectsPage.width
         property int buttonWidth: Math.floor((projectsPage.width - 2 * __style.pageMargins) / 3)
 
-        Component.onCompleted: setActiveState( pageContent.state )
+        Component.onCompleted: setActiveButton( pageContent.state )
 
         function setActiveButton( state ) {
           switch( state ) {

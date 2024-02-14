@@ -19,6 +19,8 @@ Item {
   signal clicked
 
   required property var iconSource
+  property color iconColor: __style.whiteColor
+
   required property string text
 
   readonly property double toolbarLongButtonWidth: 50 * __dp
@@ -52,6 +54,7 @@ Item {
 
         MMIcon {
           source: control.iconSource
+          color: control.iconColor
           anchors.verticalCenter: parent.verticalCenter
         }
         Text {

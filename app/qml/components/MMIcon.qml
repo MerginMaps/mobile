@@ -10,8 +10,9 @@
 import QtQuick
 import Qt5Compat.GraphicalEffects
 
-// Recommendation: use the size property instead of width and height
-
+/**
+ Use the size property instead of width and height
+*/
 Item {
   id: root
 
@@ -26,9 +27,13 @@ Item {
     id: icon
 
     source: root.source
-    anchors.fill: parent
+    sourceSize.width: root.width
+    sourceSize.height: root.height
   }
 
+  // TODO: ideally all icons should be white (fix color in svg)
+  // and the colorize will be done only if used does not want
+  // white.
   ColorOverlay {
     id: overlay
 

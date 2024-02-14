@@ -210,7 +210,8 @@ Item {
 
       MMToolbarButton {
         text: qsTr( "Record" );
-        iconSource: __style.done2Icon;
+        iconSource: __style.doneCircleIcon;
+        iconColor: __style.grassColor
         onClicked: {
           if ( mapTool.hasValidGeometry() )
           {
@@ -236,7 +237,8 @@ Item {
 
       MMToolbarLongButton {
         text: qsTr( "Record" );
-        iconSource: __style.doneIcon;
+        iconSource: __style.doneCircleIcon;
+        iconColor: __style.forestColor
         onClicked: {
           mapTool.addPoint( crosshair.recordPoint )
           let pair = mapTool.getFeatureLayerPair()

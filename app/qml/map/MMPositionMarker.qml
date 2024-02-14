@@ -52,7 +52,7 @@ Item {
     width: root.size * 2
     height: width
     visible: root.hasDirection
-    source: root.trackingMode ? __style.trackingDirectionIcon : __style.directionIcon
+    source: root.trackingMode ? __style.trackingDirectionImage : __style.directionImage
     fillMode: Image.PreserveAspectFit
     rotation: root.direction
     transformOrigin: Item.Bottom

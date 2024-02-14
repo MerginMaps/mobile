@@ -50,17 +50,13 @@ Drawer {
       rightPadding: 20 * __dp
       bottomPadding: 20 * __dp
 
-      Image {
+      MMRoundButton {
         id: closeButton
-
-        source: __style.closeButtonIcon
+        iconSource: __style.xIcon
+        bgndColor: __style.lightGreenColor
         anchors.right: parent.right
         anchors.rightMargin: 20 * __dp
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: control.visible = false
-        }
+        onClicked: control.visible = false
       }
 
       Text {

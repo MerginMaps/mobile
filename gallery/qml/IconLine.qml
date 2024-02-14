@@ -20,34 +20,63 @@ Column {
   required property string name
   required property url source
   required property bool showRect
+  required property bool invertColors
+  property bool isCircle: false
+
+  property color borderColor: invertColors ? __style.whiteColor : __style.forestColor
+
+  // Normal Icon
+  property color iconColor: {
+    if (root.isCircle) {
+      if (invertColors)
+        return __style.grassColor
+      else
+        return __style.forestColor
+    } else {
+      if (invertColors)
+        return __style.whiteColor
+      else
+        return __style.forestColor
+    }
+  }
+
+  property color bgColor: {
+    if (root.isCircle) {
+      if (invertColors)
+        return __style.forestColor
+      else
+        return __style.grassColor
+    } else {
+      if (invertColors)
+        return __style.forestColor
+      else
+        return __style.whiteColor
+    }
+  }
+
+  Text { text: root.name; width: 250 * __dp; font.bold: true }
+
+  Item{ width: parent.width; height: 3 }
 
   Row {
-    Rectangle { width: 100 * __dp; height: 50 * __dp
-      Image { source: root.source; anchors.verticalCenter: parent.verticalCenter
-        Rectangle { anchors.fill: parent; color: "#ff8888"; z: -1 }
+    anchors.horizontalCenter: parent.horizontalCenter
+
+    Rectangle { width: 50 * __dp; height: 50 * __dp; color: root.bgColor
+      MMIcon { size: __style.icon16; source: root.source; anchors.verticalCenter: parent.verticalCenter; color: root.iconColor
+        Rectangle { anchors.fill: parent; color: "transparent"; border.color: root.borderColor; z: -1; visible: root.showRect }
       }
     }
-    Rectangle { width: 50 * __dp; height: 50 * __dp
-      MMIcon { size: __style.icon16; source: root.source; anchors.verticalCenter: parent.verticalCenter; color: __style.forestColor
-        Rectangle { anchors.fill: parent; border.color: __style.grassColor; z: -1; visible: root.showRect }
+    Rectangle { width: 50 * __dp; height: 50 * __dp; color: root.bgColor
+      MMIcon { size: __style.icon24; source: root.source; anchors.verticalCenter: parent.verticalCenter; color: root.iconColor
+        Rectangle { anchors.fill: parent; color: "transparent"; border.color: root.borderColor; z: -1; visible: root.showRect }
       }
     }
-    Rectangle { width: 50 * __dp; height: 50 * __dp
-      MMIcon { size: __style.icon24; source: root.source; anchors.verticalCenter: parent.verticalCenter; color: __style.forestColor
-        Rectangle { anchors.fill: parent; border.color: __style.grassColor; z: -1; visible: root.showRect }
-      }
-    }
-    Rectangle { width: 50 * __dp; height: 50 * __dp
-      MMIcon { size: __style.icon32; source: root.source; anchors.verticalCenter: parent.verticalCenter; color: __style.forestColor
-        Rectangle { anchors.fill: parent; border.color: __style.grassColor; z: -1; visible: root.showRect }
-      }
-    }
-    Rectangle { width: 50 * __dp; height: 50 * __dp
-      MMIcon { size: __style.icon40; source: root.source; anchors.verticalCenter: parent.verticalCenter; color: __style.forestColor
-        Rectangle { anchors.fill: parent; border.color: __style.grassColor; z: -1; visible: root.showRect }
+    Rectangle { width: 50 * __dp; height: 50 * __dp; color: root.bgColor
+      MMIcon { size: __style.icon32; source: root.source; anchors.verticalCenter: parent.verticalCenter; color: root.iconColor
+        Rectangle { anchors.fill: parent; color: "transparent"; border.color: root.borderColor; z: -1; visible: root.showRect }
       }
     }
   }
-  Text { text: root.name; width: 250 * __dp; font.bold: true }
+  Item{ width: parent.width; height: 3 }
   Rectangle { width: parent.width; height: 1; color: "gray" }
 }

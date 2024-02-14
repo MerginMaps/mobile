@@ -19,6 +19,7 @@ Item {
   signal clicked
 
   required property var iconSource
+  property color iconColor: __style.whiteColor
   required property string text
 
   property alias buttonIcon: icon
@@ -45,6 +46,7 @@ Item {
       anchors.topMargin: ( container.height - (icon.height + text.height + control.buttonSpacing) ) / 2
 
       source: control.iconSource
+      color: control.iconColor
     }
 
     Text {

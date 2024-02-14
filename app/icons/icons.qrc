@@ -1,8 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>AcceptInvitationImage.svg</file>
-        <file>AcceptInvitationLogoImage.svg</file>
         <file>Add.svg</file>
+        <file>AddImage.svg</file>
         <file>Archaeology.svg</file>
         <file>ArrowDown.svg</file>
         <file>ArrowLinkRight.svg</file>
@@ -13,45 +12,57 @@
         <file>Calendar.svg</file>
         <file>Checkmark.svg</file>
         <file>Close.svg</file>
-        <file>CloseButton.svg</file>
         <file>Delete.svg</file>
-        <file>Done.svg</file>
-        <file>Done2.svg</file>
+        <file>DoneCircle.svg</file>
         <file>Download.svg</file>
         <file>Edit.svg</file>
-        <file>Edit2.svg</file>
+        <file>EditCircle.svg</file>
         <file>Electricity.svg</file>
         <file>Engineering.svg</file>
         <file>Environmental.svg</file>
-        <file>Error.svg</file>
+        <file>ErrorCircle.svg</file>
         <file>Facebook.svg</file>
+        <file>GPSAntennaHeight.svg</file>
+        <file>GPSIcon.svg</file>
+        <file>GPSSatellite.svg</file>
+        <file>Global.svg</file>
+        <file>GlobalFilled.svg</file>
+        <file>Globe.svg</file>
         <file>Globe.svg</file>
         <file>Hide.svg</file>
         <file>Home.svg</file>
+        <file>Home.svg</file>
+        <file>HomeFilled.svg</file>
         <file>Info.svg</file>
         <file>Layers.svg</file>
         <file>Linkedin.svg</file>
         <file>LocalChanges.svg</file>
-        <file>Mastodon.svg</file>
         <file>MapThemes.svg</file>
+        <file>Mastodon.svg</file>
+        <file>Minus.svg</file>
         <file>More.svg</file>
-        <file>MMSymbol.svg</file>
+        <file>MoreVertical.svg</file>
         <file>MorePhotos.svg</file>
         <file>Mouth.svg</file>
         <file>NaturalResources.svg</file>
+        <file>Next.svg</file>
         <file>Other.svg</file>
         <file>Others.svg</file>
         <file>Personal.svg</file>
+        <file>Plus.svg</file>
         <file>PositionTracking.svg</file>
-        <file>ProjectButtonMore.svg</file>
+        <file>Previous.svg</file>
+        <file>Projects.svg</file>
+        <file>ProjectsFilled.svg</file>
         <file>QGIS.svg</file>
         <file>QRCode.svg</file>
-        <file>ReachedDataLimitImage.svg</file>
         <file>Reddit.svg</file>
         <file>Search.svg</file>
-        <file>Show.svg</file>
-        <file>SocialMedia.svg</file>
         <file>Settings.svg</file>
+        <file>Show.svg</file>
+        <file>SmallCheckmark.svg</file>
+        <file>SmallEdit.svg</file>
+        <file>SocialMedia.svg</file>
         <file>StateAndLocal.svg</file>
         <file>Stop.svg</file>
         <file>Subscriptions.svg</file>
@@ -63,37 +74,15 @@
         <file>Terms.svg</file>
         <file>Tractor.svg</file>
         <file>Transportation.svg</file>
-        <file>UploadImage.svg</file>
-        <file>Waiting.svg</file>
-        <file>WaterResources.svg</file>
-        <file>XMark.svg</file>
-        <file>XTwitter.svg</file>
-        <file>WarnLogoImage.svg</file>
-        <file>Youtube.svg</file>
-        <file>Globe.svg</file>
-        <file>Global.svg</file>
-        <file>Home.svg</file>
-        <file>Projects.svg</file>
-        <file>ZoomToProject.svg</file>
-        <file>Next.svg</file>
-        <file>Previous.svg</file>
-        <file>GlobalFilled.svg</file>
-        <file>HomeFilled.svg</file>
-        <file>ProjectsFilled.svg</file>
-        <file>Minus.svg</file>
-        <file>Plus.svg</file>
-        <file>GPSSatellite.svg</file>
-        <file>MapPin.svg</file>
-        <file>GPSIcon.svg</file>
-        <file>GPSIconFilled.svg</file>
         <file>Undo.svg</file>
-        <file>GPSAntennaHeight.svg</file>
-        <file>ComboBoxCheck.svg</file>
-        <file>Direction.svg</file>
-        <file>TrackingDirection.svg</file>
-        <file>AddImage.svg</file>
+        <file>Upload.svg</file>
+        <file>Waiting.svg</file>
+        <file>WarningCircle.svg</file>
+        <file>WaterResources.svg</file>
         <file>X.svg</file>
-        <file>SmallEdit.svg</file>
-        <file>SmallCheckmark.svg</file>
+        <file>XMarkCircle.svg</file>
+        <file>XTwitter.svg</file>
+        <file>Youtube.svg</file>
+        <file>ZoomToProject.svg</file>
     </qresource>
 </RCC>

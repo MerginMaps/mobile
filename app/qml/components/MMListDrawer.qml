@@ -68,15 +68,11 @@ Drawer {
           elide: Text.ElideRight
         }
 
-        Image {
+        MMRoundButton {
           id: closeButton
-
-          source: __style.closeButtonIcon
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: control.visible = false
-          }
+          iconSource: __style.xIcon
+          bgndColor: __style.lightGreenColor
+          onClicked: control.visible = false
         }
       }
 

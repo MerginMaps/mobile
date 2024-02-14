@@ -21,7 +21,7 @@ Item {
   Image {
     id: logo
     anchors.centerIn: parent
-    source: __style.mmSymbol
+    source: __style.mmSymbolImage
     width: 60 * __dp
     height: width
     sourceSize.height: 0

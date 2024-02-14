@@ -47,7 +47,7 @@ Image {
       anchors.centerIn: parent
       source: __style.morePhotosIcon
       color: __style.mediumGreenColor
-      size: __style.icon40
+      size: __style.icon32
     }
   }
 
