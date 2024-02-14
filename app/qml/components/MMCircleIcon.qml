@@ -9,6 +9,8 @@
 
 import QtQuick
 
+// Recommendation: use the size property instead of width and height
+
 Rectangle {
   id: root
 
@@ -16,6 +18,7 @@ Rectangle {
 
   required property int type
   property real size: __style.icon40
+  property real iconSize: __style.icon24
   property color iconColor: __style.forestColor
 
   color: __style.grassColor
@@ -34,10 +37,6 @@ Rectangle {
       if( root.type === MMCircleIcon.Type.Delete )
         return __style.deleteIcon
     }
-    size: {
-      if( root.type === MMCircleIcon.Type.Edit )
-        return __style.icon16
-      return __style.icon24
-    }
+    size: root.iconSize
   }
 }

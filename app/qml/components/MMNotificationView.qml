@@ -10,7 +10,6 @@
 import QtQuick
 
 Item {
-
   height: parent.height
 
   Repeater {

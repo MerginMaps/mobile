@@ -31,4 +31,5 @@ Item {
   property variant fieldAssociatedRelation: ""
   property variant fieldFeatureLayerPair: ""
   property variant fieldActiveProject: ({homePath: ""})  
+  property var field: ({'isDateOrTime':'true'})
 }

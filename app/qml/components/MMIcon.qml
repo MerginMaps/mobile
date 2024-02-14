@@ -10,6 +10,8 @@
 import QtQuick
 import Qt5Compat.GraphicalEffects
 
+// Recommendation: use the size property instead of width and height
+
 Item {
   id: root
 

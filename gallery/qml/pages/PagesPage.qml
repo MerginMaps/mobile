@@ -16,9 +16,8 @@ import "../../app/qml"
 import "../../app/qml/project"
 import "../../app/qml/settings"
 
-Item {
+Page {
   id: root
-  anchors.fill: parent
 
   StackView {
     id: stackview

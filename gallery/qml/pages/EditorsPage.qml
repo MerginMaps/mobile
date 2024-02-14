@@ -191,6 +191,73 @@ ScrollView {
           }
         }
 
+        EditorItem {
+          width: parent.width
+          height: dateTimeCalendar.height
+          fieldTitle: "MMFormGalleryEditor"
+
+          MMFormCalendarEditor {
+            id: dateTimeCalendar
+            title: "Date & Time"
+            placeholderText: "YYYY/MM/DD HH:MM"
+            enabled: checkbox.checked
+            width: parent.width
+            warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
+
+            dateTime: new Date()
+            fieldIsDate: false
+            includesTime: true
+            includesDate: true
+
+            //onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "yyyy/MM/dd hh:mm") }
+          }
+        }
+
+        EditorItem {
+          width: parent.width
+          height: dateCalendar.height
+          fieldTitle: "MMFormGalleryEditor"
+
+          MMFormCalendarEditor {
+            id: dateCalendar
+            title: "Date"
+            placeholderText: "YYYY/MM/DD"
+            enabled: checkbox.checked
+            width: parent.width
+            warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
+
+            dateTime: new Date()
+            fieldIsDate: false
+            includesTime: false
+            includesDate: true
+
+            //onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "yyyy/MM/dd") }
+          }
+        }
+
+        EditorItem {
+          width: parent.width
+          height: timeCalendar.height
+          fieldTitle: "MMFormGalleryEditor"
+
+          MMFormCalendarEditor {
+            id: timeCalendar
+            title: "Time"
+            placeholderText: "HH:MM:SS"
+            enabled: checkbox.checked
+            width: parent.width
+            warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
+
+            dateTime: new Date()
+            fieldIsDate: false
+            includesTime: true
+            includesDate: false
+            showSeconds: true
+
+            //onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "hh:mm:ss") }
+          }
+        }
+
         Label {
           text: "MMFormSpacer - HLine"
         }

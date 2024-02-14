@@ -31,8 +31,7 @@ CheckBox {
 
     MMIcon {
       id: icon
-      width: (control.small ? 16 : 24) * __dp
-      height: (control.small ? 16 : 24) * __dp
+      size: control.small ? __style.icon16 : __style.icon24
       anchors.centerIn: parent
       source: control.sourceIcon
       color: __style.forestColor

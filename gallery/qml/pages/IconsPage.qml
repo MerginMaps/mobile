@@ -99,7 +99,7 @@ ScrollView {
 
         Text { text: "Icons - in Circle"; font.underline: true }
         Row { MMCircleIcon { size: __style.icon24; type: MMCircleIcon.Type.Checkmark; color: __style.forestColor; iconColor: __style.grassColor } Text { text: "Type.Checkmark" } }
-        Row { MMCircleIcon { size: __style.icon24; type: MMCircleIcon.Type.Edit; color: __style.forestColor; iconColor: __style.grassColor } Text { text: "Type.Edit" } }
+        Row { MMCircleIcon { size: __style.icon24; iconSize: __style.icon16; type: MMCircleIcon.Type.Edit; color: __style.forestColor; iconColor: __style.grassColor } Text { text: "Type.Edit" } }
         Row { MMCircleIcon { size: __style.icon40; type: MMCircleIcon.Type.Delete; color: __style.negativeColor; iconColor: __style.grapeColor } Text { text: "Type.Delete" } }
         Item { width: 1; height: 30 }
 
