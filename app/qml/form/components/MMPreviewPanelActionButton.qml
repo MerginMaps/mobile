@@ -35,12 +35,8 @@ Rectangle {
       id: icon
 
       y: parent.height / 2 - height / 2
-      width: 24 * __dp
-      height: 24 * __dp
-
+      size: __style.icon24
       color: __style.forestColor
-
-      useCustomSize: true
     }
 
     Text {

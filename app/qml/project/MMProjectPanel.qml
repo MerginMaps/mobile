@@ -256,9 +256,7 @@ Item {
           MMIcon {
             anchors.centerIn: parent
             source: __style.personalIcon
-            useCustomSize: true
-            width: 24 * __dp
-            height: 24 * __dp
+            size: __style.icon24
           }
 
           MouseArea {

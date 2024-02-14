@@ -9,19 +9,25 @@
 
 import QtQuick
 
-// Recommendation: use the size property instead of width and height
+/**
+ Do not set width and height from parent!
+*/
 
 Rectangle {
   id: root
 
-  enum Type {Edit, Checkmark, Delete}
+  enum Type {Edit24px, Checkmark24px}
+
+  // enum Type {Edit, Checkmark, Delete}
 
   required property int type
-  property real size: __style.icon40
-  property real iconSize: __style.icon24
-  property color iconColor: __style.forestColor
 
+  property color iconColor: __style.forestColor
   color: __style.grassColor
+
+  // REMOVE property real size: __style.icon40
+  //REMOVE property real iconSize: __style.icon24
+
   width: size
   height: size
   radius: size / 2

@@ -13,6 +13,9 @@ import QtQuick.Controls.Basic
 
 import "../app/qml/components"
 
+//******
+// TODO REMOVE!
+
 Column {
   spacing: 5
   id: root
