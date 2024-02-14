@@ -11,9 +11,9 @@
         <file>Bubble.svg</file>
         <file>Calendar.svg</file>
         <file>Checkmark.svg</file>
-        <file>CheckmarkCircle.svg</file>
         <file>Close.svg</file>
         <file>Delete.svg</file>
+        <file>DoneCircle.svg</file>
         <file>Download.svg</file>
         <file>Edit.svg</file>
         <file>EditCircle.svg</file>
@@ -41,6 +41,7 @@
         <file>Mastodon.svg</file>
         <file>Minus.svg</file>
         <file>More.svg</file>
+        <file>MoreVertical.svg</file>
         <file>MorePhotos.svg</file>
         <file>Mouth.svg</file>
         <file>NaturalResources.svg</file>
@@ -74,7 +75,9 @@
         <file>Tractor.svg</file>
         <file>Transportation.svg</file>
         <file>Undo.svg</file>
+        <file>Upload.svg</file>
         <file>Waiting.svg</file>
+        <file>WarningCircle.svg</file>
         <file>WaterResources.svg</file>
         <file>X.svg</file>
         <file>XMarkCircle.svg</file>

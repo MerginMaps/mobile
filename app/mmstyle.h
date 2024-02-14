@@ -101,6 +101,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl closeIcon READ closeIcon CONSTANT )
     Q_PROPERTY( QUrl deleteIcon READ deleteIcon CONSTANT )
     Q_PROPERTY( QUrl downloadIcon READ downloadIcon CONSTANT )
+    Q_PROPERTY( QUrl uploadIcon READ uploadIcon CONSTANT )
     Q_PROPERTY( QUrl editIcon READ editIcon CONSTANT )
     Q_PROPERTY( QUrl electricityIcon READ electricityIcon CONSTANT )
     Q_PROPERTY( QUrl engineeringIcon READ engineeringIcon CONSTANT )
@@ -119,6 +120,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl mastodonIcon READ mastodonIcon CONSTANT )
     Q_PROPERTY( QUrl minusIcon READ minusIcon CONSTANT )
     Q_PROPERTY( QUrl moreIcon READ moreIcon CONSTANT )
+    Q_PROPERTY( QUrl moreVerticalIcon READ moreVerticalIcon CONSTANT )
     Q_PROPERTY( QUrl morePhotosIcon READ morePhotosIcon CONSTANT )
     Q_PROPERTY( QUrl mouthIcon READ mouthIcon CONSTANT )
     Q_PROPERTY( QUrl naturalResourcesIcon READ naturalResourcesIcon CONSTANT )
@@ -159,9 +161,10 @@ class MMStyle: public QObject
 
     // Icons with filled circle background
     Q_PROPERTY( QUrl xMarkCircleIcon READ xMarkCircleIcon CONSTANT )
-    Q_PROPERTY( QUrl checkmarkCircleIcon READ checkmarkCircleIcon CONSTANT )
+    Q_PROPERTY( QUrl doneCircleIcon READ doneCircleIcon CONSTANT )
     Q_PROPERTY( QUrl errorCircleIcon READ errorCircleIcon CONSTANT )
     Q_PROPERTY( QUrl editCircleIcon READ editCircleIcon CONSTANT )
+    Q_PROPERTY( QUrl warningCircleIcon READ warningCircleIcon CONSTANT )
 
     // Images
     Q_PROPERTY( QUrl acceptInvitationImage READ acceptInvitationImage CONSTANT )
@@ -178,15 +181,12 @@ class MMStyle: public QObject
 
     /*
      * Pixel sizes used across the app
-     * Add new sizes here only if they need to be used in multiple files
      */
 
     // Icon sizes
     Q_PROPERTY( double icon16 READ icon16 CONSTANT )
-    Q_PROPERTY( double icon18 READ icon18 CONSTANT )
     Q_PROPERTY( double icon24 READ icon24 CONSTANT )
     Q_PROPERTY( double icon32 READ icon32 CONSTANT )
-    Q_PROPERTY( double icon40 READ icon40 CONSTANT )
 
     // Map items
     Q_PROPERTY( double mapItemHeight READ mapItemHeight CONSTANT )
@@ -279,6 +279,7 @@ class MMStyle: public QObject
     QUrl closeIcon() {return QUrl( "qrc:/Close.svg" );}
     QUrl deleteIcon() {return QUrl( "qrc:/Delete.svg" );}
     QUrl downloadIcon() {return QUrl( "qrc:/Download.svg" );}
+    QUrl uploadIcon() {return QUrl( "qrc:/Upload.svg" );}
     QUrl editIcon() {return QUrl( "qrc:/Edit.svg" );}
     QUrl electricityIcon() {return QUrl( "qrc:/Electricity.svg" );}
     QUrl engineeringIcon() {return QUrl( "qrc:/Engineering.svg" );}
@@ -297,6 +298,7 @@ class MMStyle: public QObject
     QUrl mastodonIcon() {return QUrl( "qrc:/Mastodon.svg" );}
     QUrl minusIcon() {return QUrl( "qrc:/Minus.svg" );}
     QUrl moreIcon() {return QUrl( "qrc:/More.svg" );}
+    QUrl moreVerticalIcon() {return QUrl( "qrc:/MoreVertical.svg" );}
     QUrl morePhotosIcon() {return QUrl( "qrc:/MorePhotos.svg" );}
     QUrl mouthIcon() {return QUrl( "qrc:/Mouth.svg" );}
     QUrl naturalResourcesIcon() {return QUrl( "qrc:/NaturalResources.svg" );}
@@ -336,8 +338,9 @@ class MMStyle: public QObject
     QUrl youtubeIcon() {return QUrl( "qrc:/Youtube.svg" );}
 
     QUrl xMarkCircleIcon() {return QUrl( "qrc:/XMarkCircle.svg" );}
-    QUrl checkmarkCircleIcon() {return QUrl( "qrc:/CheckmarkCircle.svg" );}
+    QUrl doneCircleIcon() {return QUrl( "qrc:/DoneCircle.svg" );}
     QUrl errorCircleIcon() {return QUrl( "qrc:/ErrorCircle.svg" );}
+    QUrl warningCircleIcon() {return QUrl( "qrc:/WarningCircle.svg" );}
     QUrl editCircleIcon() {return QUrl( "qrc:/EditCircle.svg" );}
 
     QUrl mmLogoImage() {return QUrl( "qrc:/images/MMLogo.svg" );}
@@ -353,10 +356,8 @@ class MMStyle: public QObject
     QUrl mapPinImage() {return QUrl( "qrc:/images/MapPin.svg" );}
 
     double icon16() {return 16 * mDp;}
-    double icon18() {return 18 * mDp;}
     double icon24() {return 24 * mDp;}
     double icon32() {return 32 * mDp;}
-    double icon40() {return 40 * mDp;}
 
     double mapItemHeight() {return 60 * mDp;}
     double mapButtonsMargin() {return 25 * mDp;}

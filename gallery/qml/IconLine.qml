@@ -20,11 +20,39 @@ Column {
   required property string name
   required property url source
   required property bool showRect
-  required property bool showWhite
+  required property bool invertColors
+  property bool isCircle: false
 
-  property color iconColor: showWhite ? __style.whiteColor : __style.forestColor
-  property color bgColor: showWhite ? __style.forestColor : __style.whiteColor
-  property color borderColor: showWhite ? __style.whiteColor : __style.forestColor
+  property color borderColor: invertColors ? __style.whiteColor : __style.forestColor
+
+  // Normal Icon
+  property color iconColor: {
+    if (root.isCircle) {
+      if (invertColors)
+        return __style.grassColor
+      else
+        return __style.forestColor
+    } else {
+      if (invertColors)
+        return __style.whiteColor
+      else
+        return __style.forestColor
+    }
+  }
+
+  property color bgColor: {
+    if (root.isCircle) {
+      if (invertColors)
+        return __style.forestColor
+      else
+        return __style.grassColor
+    } else {
+      if (invertColors)
+        return __style.forestColor
+      else
+        return __style.whiteColor
+    }
+  }
 
   Text { text: root.name; width: 250 * __dp; font.bold: true }
 
@@ -39,22 +67,12 @@ Column {
       }
     }
     Rectangle { width: 50 * __dp; height: 50 * __dp; color: root.bgColor
-      MMIcon { size: __style.icon18; source: root.source; anchors.verticalCenter: parent.verticalCenter; color: root.iconColor
-        Rectangle { anchors.fill: parent; color: "transparent"; border.color: root.borderColor; z: -1; visible: root.showRect }
-      }
-    }
-    Rectangle { width: 50 * __dp; height: 50 * __dp; color: root.bgColor
       MMIcon { size: __style.icon24; source: root.source; anchors.verticalCenter: parent.verticalCenter; color: root.iconColor
         Rectangle { anchors.fill: parent; color: "transparent"; border.color: root.borderColor; z: -1; visible: root.showRect }
       }
     }
     Rectangle { width: 50 * __dp; height: 50 * __dp; color: root.bgColor
       MMIcon { size: __style.icon32; source: root.source; anchors.verticalCenter: parent.verticalCenter; color: root.iconColor
-        Rectangle { anchors.fill: parent; color: "transparent"; border.color: root.borderColor; z: -1; visible: root.showRect }
-      }
-    }
-    Rectangle { width: 50 * __dp; height: 50 * __dp; color: root.bgColor
-      MMIcon { size: __style.icon40; source: root.source; anchors.verticalCenter: parent.verticalCenter; color: root.iconColor
         Rectangle { anchors.fill: parent; color: "transparent"; border.color: root.borderColor; z: -1; visible: root.showRect }
       }
     }

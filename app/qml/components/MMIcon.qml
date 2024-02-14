@@ -27,9 +27,13 @@ Item {
     id: icon
 
     source: root.source
-    anchors.fill: parent
+    sourceSize.width: root.width
+    sourceSize.height: root.height
   }
 
+  // TODO: ideally all icons should be white (fix color in svg)
+  // and the colorize will be done only if used does not want
+  // white.
   ColorOverlay {
     id: overlay
 
