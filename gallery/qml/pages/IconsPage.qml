@@ -142,23 +142,9 @@ ScrollView {
             IconLine { name: "xMarkCircleIcon"; source: __style.xMarkCircleIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
             IconLine { name: "checkmarkCircleIcon"; source: __style.checkmarkCircleIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
             IconLine { name: "errorCircleIcon"; source: __style.errorCircleIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
-
-            // REMOVE - replace with checkmarkCircleIcon
-            IconLine { name: "doneIcon"; source: __style.doneIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
-            IconLine { name: "done2Icon"; source: __style.done2Icon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
-
-            // REMOVE replace with xMarkCircleIcon?
-            IconLine { name: "closeButtonIcon"; source: __style.closeButtonIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
-
             // TODO we need icon!
-            IconLine { name: "edit2Icon"; source: __style.edit2Icon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
-
-            // REMOVE
-            IconLine { name: "gpsIconFilled"; source: __style.gpsIconFilled; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
-
-            // TODO convert to button!
-            IconLine { name: "projectButtonMoreIcon"; source: __style.projectButtonMoreIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
-           }
+            IconLine { name: "editCircleIcon"; source: __style.editCircleIcon; showRect: checkboxBorder.checked; showWhite: checkboxWhite.checked }
+            }
         }
       }
     }

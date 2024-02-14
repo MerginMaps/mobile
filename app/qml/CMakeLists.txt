@@ -40,7 +40,6 @@ set(MM_QML
     components/MMDropdownDrawer.qml
     components/MMHeader.qml
     components/MMHlineText.qml
-    components/MMCircleIcon.qml
     components/MMIcon.qml
     components/MMIconCheckBoxHorizontal.qml
     components/MMIconCheckBoxVertical.qml

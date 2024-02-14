@@ -13,13 +13,10 @@
         <file>Checkmark.svg</file>
         <file>CheckmarkCircle.svg</file>
         <file>Close.svg</file>
-        <file>CloseButton.svg</file>
         <file>Delete.svg</file>
-        <file>Done.svg</file>
-        <file>Done2.svg</file>
         <file>Download.svg</file>
         <file>Edit.svg</file>
-        <file>Edit2.svg</file>
+        <file>EditCircle.svg</file>
         <file>Electricity.svg</file>
         <file>Engineering.svg</file>
         <file>Environmental.svg</file>
@@ -27,7 +24,6 @@
         <file>Facebook.svg</file>
         <file>GPSAntennaHeight.svg</file>
         <file>GPSIcon.svg</file>
-        <file>GPSIconFilled.svg</file>
         <file>GPSSatellite.svg</file>
         <file>Global.svg</file>
         <file>GlobalFilled.svg</file>
@@ -55,7 +51,6 @@
         <file>Plus.svg</file>
         <file>PositionTracking.svg</file>
         <file>Previous.svg</file>
-        <file>ProjectButtonMore.svg</file>
         <file>Projects.svg</file>
         <file>ProjectsFilled.svg</file>
         <file>QGIS.svg</file>
