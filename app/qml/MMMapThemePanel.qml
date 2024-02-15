@@ -82,9 +82,9 @@ Drawer {
     ListView {
       id: listView
 
-      height: root.height - header.height
+      height: root.height - header.height - 40 * __dp
       width: parent.width
-      y: header.height
+      y: header.height + 40 * __dp
       implicitWidth: parent.width
       implicitHeight: contentHeight
 
@@ -166,7 +166,7 @@ Drawer {
         }
       }
 
-      //MMLine {}
+      MMLine {}
 
       MouseArea {
         anchors.fill: parent
