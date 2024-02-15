@@ -102,7 +102,7 @@ Drawer {
 
       TextHyperlink {
         anchors.fill: parent
-        visible: parent.count == 0
+        visible: parent.count === 0
         text: qsTr("Project has no themes defined. See %1how to setup themes%2.")
         .arg("<a href='"+ __inputHelp.howToSetupThemesLink +"'>")
         .arg("</a>")
@@ -135,9 +135,7 @@ Drawer {
       }
 
       width: listView.cellWidth - 2 * root.padding
-      height: 67 * __dp
-
-      //property bool isSelected: __activeProject.mapTheme === model.display
+      height: internal.comboBoxItemHeight
 
       x: root.padding
 
@@ -176,15 +174,11 @@ Drawer {
           id: grid
           visible: index !== mapThemesModel.rowCount() - 1
         }
-
       }
-
-      //MMLine {}
 
       MouseArea {
         anchors.fill: parent
         onClicked: {
-          //root.selectedIndex = index
           __activeProject.mapTheme = model.display
           root.close()
         }
@@ -202,5 +196,11 @@ Drawer {
     function onProjectReloaded( qgsProject ) {
       mapThemesModel.qgsProject = __activeProject.qgsProject
     }
+  }
+
+  QtObject {
+    id: internal
+
+    property real comboBoxItemHeight: 67 * __dp
   }
 }
