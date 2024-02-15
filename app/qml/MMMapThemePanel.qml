@@ -22,6 +22,8 @@ Drawer {
   interactive: false
   dragMargin: 0 // prevents opening the drawer by dragging.
 
+  padding: 20
+
   width: ApplicationWindow.window.width
   height: ApplicationWindow.window.height / 2
   edge: Qt.BottomEdge
@@ -104,6 +106,8 @@ Drawer {
         text: qsTr("Project has no themes defined. See %1how to setup themes%2.")
         .arg("<a href='"+ __inputHelp.howToSetupThemesLink +"'>")
         .arg("</a>")
+        color: __style.nightColor
+        font: __style.t3
       }
     }
   }
@@ -132,11 +136,10 @@ Drawer {
 
       width: listView.cellWidth
       height: 67 * __dp
-      anchors.leftMargin: InputStyle.panelMargin
-      anchors.rightMargin: InputStyle.panelMargin
-      //color: item.highlight ? InputStyle.panelItemHighlight : InputStyle.clrPanelMain
 
-      MMLine {}
+      anchors.leftMargin: root.padding
+      anchors.rightMargin: root.padding
+      //color: item.highlight ? InputStyle.panelItemHighlight : InputStyle.clrPanelMain
 
       Row {
         height: parent.height
@@ -163,25 +166,16 @@ Drawer {
         }
       }
 
+      //MMLine {}
+
       MouseArea {
         anchors.fill: parent
         onClicked: {
           __activeProject.mapTheme = model.display
+          delegateItem.checked = true
           root.close()
         }
       }
-
-      // ExtendedMenuItem {
-      //   id: item
-      //   panelMargin: InputStyle.panelMargin
-      //   contentText: model.display
-      //   imageSource: InputStyle.mapThemesIcon
-      //   anchors.rightMargin: panelMargin
-      //   anchors.leftMargin: panelMargin
-      //   highlight: itemContainer.isSelected
-      //   // Do not show border line for selected item and one before selected
-      //   showBorder: !itemContainer.isSelected && !itemContainer.isOneBeforeSelected
-      // }
     }
   }
 
