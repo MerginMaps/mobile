@@ -58,7 +58,7 @@ void TestActiveProject::testProjectLoadFailure()
 {
   QString projectname = QStringLiteral( "testProjectLoadFailure" );
   QString projectdir = QDir::tempPath() + "/" + projectname;
-  QString projectfilename = "project.qgz";
+  QString projectfilename = "broken_project.qgs";
 
   InputUtils::cpDir( TestUtils::testDataDir() + "/load_failure", projectdir );
 
