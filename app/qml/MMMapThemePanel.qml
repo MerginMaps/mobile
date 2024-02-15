@@ -23,6 +23,7 @@ Drawer {
   dragMargin: 0 // prevents opening the drawer by dragging.
 
   padding: 20
+  property int selectedIndex: -1
 
   width: ApplicationWindow.window.width
   height: ApplicationWindow.window.height / 2
@@ -161,7 +162,7 @@ Drawer {
           width: 20 * __dp
           color: __style.forestColor
           source: __style.comboBoxCheckIcon
-          visible: delegateItem.checked
+          visible: index === root.selectedIndex
         }
       }
 
@@ -170,8 +171,8 @@ Drawer {
       MouseArea {
         anchors.fill: parent
         onClicked: {
+          root.selectedIndex = index
           __activeProject.mapTheme = model.display
-          delegateItem.checked = true
           root.close()
         }
       }
