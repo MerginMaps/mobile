@@ -499,6 +499,7 @@ target_link_libraries(
          Exiv2::Exiv2-xmp
          Tiff::Tiff
          Sqlite3::Sqlite3
+         MiniZip::MiniZip
          ZLIB::ZLIB
          Zip::Zip
          WebP::WebP

@@ -17,13 +17,13 @@ on:
 
 env:   
   QT_VERSION: '6.6.0' # use scripts/update_qt_version.bash to change
-  XC_VERSION: ${{ '14.2' }}
+  XC_VERSION: ${{ '15.2' }}
   IOS_CMAKE_TOOLCHAIN_VERSION: "4.4.0" 
-  INPUT_SDK_VERSION: arm64-ios-20231110-162
+  INPUT_SDK_VERSION: arm64-ios-20240215-166
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 2
+  CACHE_VERSION: 3
 
 concurrency:
   group: ci-${{github.ref}}-ios
@@ -32,7 +32,7 @@ concurrency:
 jobs:
   ios_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
