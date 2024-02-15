@@ -131,10 +131,37 @@ Drawer {
       }
 
       width: listView.cellWidth
-      height: listView.cellHeight
+      height: 67 * __dp
       anchors.leftMargin: InputStyle.panelMargin
       anchors.rightMargin: InputStyle.panelMargin
-      color: item.highlight ? InputStyle.panelItemHighlight : InputStyle.clrPanelMain
+      //color: item.highlight ? InputStyle.panelItemHighlight : InputStyle.clrPanelMain
+
+      MMLine {}
+
+      Row {
+        height: parent.height
+        width: parent.width
+        spacing: 10 * __dp
+
+        Text {
+          width: parent.width - icon.width - parent.spacing
+          height: parent.height
+          verticalAlignment: Text.AlignVCenter
+          text: model.display
+          color: __style.nightColor
+          font: __style.t3
+          elide: Text.ElideRight
+        }
+
+        MMIcon {
+          id: icon
+          height: parent.height
+          width: 20 * __dp
+          color: __style.forestColor
+          source: __style.comboBoxCheckIcon
+          visible: delegateItem.checked
+        }
+      }
 
       MouseArea {
         anchors.fill: parent
@@ -144,17 +171,17 @@ Drawer {
         }
       }
 
-      ExtendedMenuItem {
-        id: item
-        panelMargin: InputStyle.panelMargin
-        contentText: model.display
-        imageSource: InputStyle.mapThemesIcon
-        anchors.rightMargin: panelMargin
-        anchors.leftMargin: panelMargin
-        highlight: itemContainer.isSelected
-        // Do not show border line for selected item and one before selected
-        showBorder: !itemContainer.isSelected && !itemContainer.isOneBeforeSelected
-      }
+      // ExtendedMenuItem {
+      //   id: item
+      //   panelMargin: InputStyle.panelMargin
+      //   contentText: model.display
+      //   imageSource: InputStyle.mapThemesIcon
+      //   anchors.rightMargin: panelMargin
+      //   anchors.leftMargin: panelMargin
+      //   highlight: itemContainer.isSelected
+      //   // Do not show border line for selected item and one before selected
+      //   showBorder: !itemContainer.isSelected && !itemContainer.isOneBeforeSelected
+      // }
     }
   }
 
