@@ -107,6 +107,7 @@ Drawer {
         .arg("<a href='"+ __inputHelp.howToSetupThemesLink +"'>")
         .arg("</a>")
         color: __style.nightColor
+        linkColor: __style.forestColor
         font: __style.t3
       }
     }
