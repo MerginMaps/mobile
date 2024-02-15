@@ -23,7 +23,6 @@ Drawer {
   dragMargin: 0 // prevents opening the drawer by dragging.
 
   padding: 20
-  property int selectedIndex: -1
 
   width: ApplicationWindow.window.width
   height: ApplicationWindow.window.height / 2
@@ -138,40 +137,54 @@ Drawer {
       width: listView.cellWidth - 2 * root.padding
       height: 67 * __dp
 
-      x: root.padding
-      //color: item.highlight ? InputStyle.panelItemHighlight : InputStyle.clrPanelMain
+      //property bool isSelected: __activeProject.mapTheme === model.display
 
-      Row {
+      x: root.padding
+
+      Column {
         height: parent.height
         width: parent.width
-        spacing: 10 * __dp
 
-        Text {
-          width: parent.width - icon.width - parent.spacing
-          height: parent.height
-          verticalAlignment: Text.AlignVCenter
-          text: model.display
-          color: __style.nightColor
-          font: __style.t3
-          elide: Text.ElideRight
+        Row {
+          id: itemRow
+
+          height: parent.height - grid.height
+          width: parent.width
+          spacing: 10 * __dp
+
+          Text {
+            width: parent.width - icon.width - parent.spacing
+            height: parent.height
+            verticalAlignment: Text.AlignVCenter
+            text: model.display
+            color: __style.nightColor
+            font: __style.t3
+            elide: Text.ElideRight
+          }
+
+          MMIcon {
+            id: icon
+            height: parent.height
+            width: 20 * __dp
+            color: __style.forestColor
+            source: __style.comboBoxCheckIcon
+            visible: itemContainer.isSelected
+          }
         }
 
-        MMIcon {
-          id: icon
-          height: parent.height
-          width: 20 * __dp
-          color: __style.forestColor
-          source: __style.comboBoxCheckIcon
-          visible: index === root.selectedIndex
+        MMLine {
+          id: grid
+          visible: index !== mapThemesModel.rowCount() - 1
         }
+
       }
 
-      MMLine {}
+      //MMLine {}
 
       MouseArea {
         anchors.fill: parent
         onClicked: {
-          root.selectedIndex = index
+          //root.selectedIndex = index
           __activeProject.mapTheme = model.display
           root.close()
         }
