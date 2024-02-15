@@ -26,9 +26,9 @@ jobs:
     
     env:
       QT_VERSION: '6.6.0' # use scripts/update_qt_version.bash to change
-      INPUT_SDK_VERSION: x64-windows-20231110-215
+      INPUT_SDK_VERSION: x64-windows-20240215-217
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
-      CACHE_VERSION: 1
+      CACHE_VERSION: 2
       VS_VERSION: "2019"
       QT_ARCH: "win64_msvc2019_64"
       
