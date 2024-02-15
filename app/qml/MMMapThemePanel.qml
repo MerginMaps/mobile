@@ -134,11 +134,10 @@ Drawer {
         return false
       }
 
-      width: listView.cellWidth
+      width: listView.cellWidth - 2 * root.padding
       height: 67 * __dp
 
-      anchors.leftMargin: root.padding
-      anchors.rightMargin: root.padding
+      x: root.padding
       //color: item.highlight ? InputStyle.panelItemHighlight : InputStyle.clrPanelMain
 
       Row {
