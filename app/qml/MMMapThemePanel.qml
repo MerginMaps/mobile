@@ -94,11 +94,6 @@ Drawer {
       }
 
       delegate: delegateItem
-      clip: true
-
-      property int cellWidth: width
-      property int cellHeight: InputStyle.rowHeight
-      property int borderWidth: 1
 
       TextHyperlink {
         anchors.fill: parent
@@ -120,22 +115,8 @@ Drawer {
       id: itemContainer
 
       property bool isSelected: __activeProject.mapTheme === model.display
-      property bool isOneBeforeSelected: {
-        if ( index + 1 >= mapThemesModel.rowCount() ) {
-          return false
-        }
 
-        const modelindex = mapThemesModel.index( index + 1, 0 )
-        const previousThemeName = mapThemesModel.data( modelindex, 0 )
-
-        if ( previousThemeName === __activeProject.mapTheme ) {
-          return true
-        }
-
-        return false
-      }
-
-      width: listView.cellWidth - 2 * root.padding
+      width: listView.width - 2 * root.padding
       height: internal.comboBoxItemHeight
 
       x: root.padding
@@ -163,11 +144,9 @@ Drawer {
 
           MMIcon {
             id: icon
-            height: parent.height
-            width: 20 * __dp
-            color: __style.forestColor
-            source: __style.comboBoxCheckIcon
+            source: __style.mapThemesIcon
             visible: itemContainer.isSelected
+            anchors.verticalCenter: parent.verticalCenter
           }
         }
 
@@ -205,3 +184,5 @@ Drawer {
     property real comboBoxItemHeight: 67 * __dp
   }
 }
+
+
