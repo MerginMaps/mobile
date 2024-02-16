@@ -249,7 +249,7 @@ Rectangle {
       },
       "upload": {
         "name": qsTr("Upload"),
-        "iconSource": __style.addIcon
+        "iconSource": __style.uploadIcon
       }
     }
 
