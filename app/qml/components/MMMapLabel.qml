@@ -43,10 +43,10 @@ Item {
 
       MMIcon {
         id: icon
-
+        anchors.verticalCenter: parent.verticalCenter
         source: control.iconSource ? control.iconSource : ""
         color: text.color
-        height: parent.height
+        size: __style.icon24
       }
 
       Text {
