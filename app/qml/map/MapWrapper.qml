@@ -283,8 +283,8 @@ Item {
         preferredWidth: Math.min( window.width, 180 * __dp )
 
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: canvasRoot.top
-        anchors.topMargin: InputStyle.smallGap
+        anchors.top: mapPicker.visible ? mapPicker.bottom : canvasRoot.top
+        anchors.topMargin: 8 * __dp
       }
 
       Highlight {
@@ -551,6 +551,7 @@ Item {
       }
 
       MMMapPicker {
+        id: mapPicker
 
         anchors {
           top: parent.top
