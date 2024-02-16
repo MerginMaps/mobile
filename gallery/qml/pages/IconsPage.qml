@@ -54,6 +54,10 @@ ScrollView {
                 }
               }
             }
+            IconLine { name: "closeAccountIcon"; source: __style.closeAccountIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            IconLine { name: "signOutIcon"; source: __style.signOutIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            IconLine { name: "workspacesIcon"; source: __style.workspacesIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            IconLine { name: "settingsIcon"; source: __style.settingsIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "addImageIcon"; source: __style.addImageIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "arrowDownIcon"; source: __style.arrowDownIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "arrowLinkRightIcon"; source: __style.arrowLinkRightIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }

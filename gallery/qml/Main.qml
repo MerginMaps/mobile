@@ -175,7 +175,7 @@ ApplicationWindow {
           source: "MiscPage.qml"
         }
         ListElement {
-          title: "Onboarding"
+          title: "Account and Onboarding"
           source: "OnboardingPage.qml"
         }
         ListElement {

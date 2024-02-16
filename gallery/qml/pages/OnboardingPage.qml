@@ -13,163 +13,206 @@ import QtQuick.Layouts
 
 import "../../app/qml/onboarding"
 import "../../app/qml/components"
+import "../../app/qml/account"
 import notificationType 1.0
 
 Page {
-  id: pane
+  id: root
 
-  function hideAll() {
-    acceptInvitation.visible = false
-    createWorkspace = false
-    howYouFoundUs = false
-    login = false
-    signUp = false
-    whichIndustry = false
-  }
-
-  Column {
-    id: layout
-    padding: 20
-    spacing: 10
-
-    Text {
-      text: "Onboarding (Login, Sign Up, ...)"
-      color: "green"
-    }
-
-    Button {
-      onClicked: {
-        login.visible = true
-      }
-      text: "Login"
-    }
-
-    Button {
-      onClicked: {
-        signUp.visible = true
-      }
-      text: "Sign Up"
-    }
-
-    Button {
-      onClicked: {
-        acceptInvitation.visible = true
-      }
-      text: "Accept Invitation"
-    }
-
-    Button {
-      onClicked: {
-        createWorkspace.visible = true
-      }
-      text: "Create Workspace"
-    }
-
-    Button {
-      onClicked: {
-        howYouFoundUs.visible = true
-      }
-      text: "How You Found Us"
-    }
-
-    Button {
-      onClicked: {
-        whichIndustry.visible = true
-      }
-      text: "Which Industry"
-    }
-  }
-
-  MMLogin {
-    id: login
-    apiRoot: "app.merginmaps.com"
-    warningMsg: "This is warning message like server offline"
+  StackView {
+    id: stackview
 
     anchors.fill: parent
-    visible: false
 
-    onSignInClicked: function(username, password) {
-      pending = true
-      console.log("Sign in clicked: " + username + " ; " + password)
-    }
-    onSignUpClicked: console.log("Sign up clicked")
-    onChangeServerClicked: function (newServer) {
-      console.log("Change server clicked: " + newServer)
-    }
-    onBackClicked: {
-      pending = false
-      visible = false
-    }
-    onForgotPasswordClicked: console.log("Forgot password clicked")
-  }
+    initialItem: Page {
+      id: pane
 
-  MMSignUp {
-    id: signUp
+      Column {
 
-    anchors.fill: parent
-    visible: false
+        id: layout
+        padding: 20
+        spacing: 5
 
-    tocString: "Please read our Terms and Conditions"
+        Label {
+          text: "Onboarding (Login, Sign Up, ...)"
+          color: "green"
+        }
 
-    onSignInClicked: console.log("Sign in clicked")
-    onSignUpClicked: function(username, email, password, passwordConfirm, tocAccept, newsletterSubscribe) {
-      console.log("Sign up clicked: " + username + ";" +  email + ";" + password + ";" + passwordConfirm + ";" + tocAccept + ";" + newsletterSubscribe)
-    }
-    onBackClicked: visible = false
+        Button {
+          onClicked: {
+            stackview.push(loginComponent)
+          }
+          text: "Login"
+        }
 
-  }
+        Button {
+          onClicked: {
+            stackview.push(signUpComponent)
+          }
+          text: "Sign Up"
+        }
 
-  MMAcceptInvitation {
-    id: acceptInvitation
+        Button {
+          onClicked: {
+            stackview.push(acceptInvitationComponent)
+          }
+          text: "Accept Invitation"
+        }
 
-    anchors.fill: parent
-    visible: false
-    user: "Lubos"
-    workspace: "my-workspace.funny"
-    workspaceUuid: "86c4c459-bb7b-4baa-b5d1-690fb05a9310"
-    haveBack: true
-    showCreate: true
+        Button {
+          onClicked: {
+            stackview.push(createWorkspaceComponent)
+          }
+          text: "Create Workspace"
+        }
 
-    onBackClicked: visible = false
-    onJoinWorkspaceClicked: function(workspaceUuid) { console.log("Join workspace clicked " + workspaceUuid) }
-    onCreateWorkspaceClicked: console.log("Create new workspace clicked")
-  }
+        Button {
+          onClicked: {
+            stackview.push(howYouFoundUsComponent)
+          }
+          text: "How You Found Us"
+        }
 
-  MMCreateWorkspace {
-    id: createWorkspace
+        Button {
+          onClicked: {
+            stackview.push(whichIndustryComponent)
+          }
+          text: "Which Industry"
+        }
 
-    anchors.fill: parent
-    visible: false
+        Label {
+          text: "Account"
+          color: "green"
+        }
 
-    onCreateWorkspaceClicked: function (name) {
-      visible = false
-      console.log("Create workspace clicked " + name)
-    }
-  }
-
-  MMHowYouFoundUs {
-    id: howYouFoundUs
-
-    anchors.fill: parent
-    visible: false
-
-    onBackClicked: visible = false
-    onHowYouFoundUsSelected: function(selectedText) {
-      console.log("Selected how you found us: " + selectedText)
-      visible = false
+        Button {
+          onClicked: {
+            stackview.push(accountComponent)
+          }
+          text: "Account Page"
+        }
+      }
     }
   }
 
-  MMWhichIndustry {
-    id: whichIndustry
+  Component {
+    id: accountComponent
+    MMAcountPage {
+      width: root.width
+      height: root.height
 
-    anchors.fill: parent
-    visible: false
+      onBackClicked: {
+        stackview.pop()
+      }
 
-    onBackClicked: visible = false
-    onIndustrySelected: function(selectedText) {
-      console.log("Selected industry: " + selectedText)
-      visible = false
+      onSelectWorkspaceClicked: console.log("selectWorkspaceClicked")
+      onManageAccountClicked: console.log("manageAccountClicked")
+      onCloseAccountClicked: console.log("closeAccountClicked")
+      onSignOutClicked: console.log("signOutClicked")
+    }
+  }
+
+  Component {
+    id: loginComponent
+    MMLogin {
+      id: login
+      apiRoot: "app.merginmaps.com"
+      warningMsg: "This is warning message like server offline"
+
+      width: root.width
+      height: root.height
+
+      onSignInClicked: function(username, password) {
+        pending = true
+        console.log("Sign in clicked: " + username + " ; " + password)
+      }
+      onSignUpClicked: console.log("Sign up clicked")
+      onChangeServerClicked: function (newServer) {
+        console.log("Change server clicked: " + newServer)
+      }
+      onBackClicked: {
+        pending = false
+        stackview.pop()
+      }
+      onForgotPasswordClicked: console.log("Forgot password clicked")
+    }
+  }
+
+  Component {
+    id: signUpComponent
+    MMSignUp {
+      width: root.width
+      height: root.height
+
+      tocString: "Please read our Terms and Conditions"
+
+      onSignInClicked: console.log("Sign in clicked")
+      onSignUpClicked: function(username, email, password, passwordConfirm, tocAccept, newsletterSubscribe) {
+        console.log("Sign up clicked: " + username + ";" +  email + ";" + password + ";" + passwordConfirm + ";" + tocAccept + ";" + newsletterSubscribe)
+      }
+      onBackClicked: stackview.pop()
+    }
+  }
+
+  Component {
+    id: acceptInvitationComponent
+    MMAcceptInvitation {
+
+      width: root.width
+      height: root.height
+      user: "Lubos"
+      workspace: "my-workspace.funny"
+      workspaceUuid: "86c4c459-bb7b-4baa-b5d1-690fb05a9310"
+      haveBack: true
+      showCreate: true
+
+      onBackClicked: stackview.pop()
+      onJoinWorkspaceClicked: function(workspaceUuid) { console.log("Join workspace clicked " + workspaceUuid) }
+      onCreateWorkspaceClicked: console.log("Create new workspace clicked")
+    }
+  }
+
+  Component {
+    id: createWorkspaceComponent
+    MMCreateWorkspace {
+      width: root.width
+      height: root.height
+
+      onCreateWorkspaceClicked: function (name) {
+        stackview.pop()
+        console.log("Create workspace clicked " + name)
+      }
+    }
+  }
+
+  Component {
+    id: howYouFoundUsComponent
+    MMHowYouFoundUs {
+
+      width: root.width
+      height: root.height
+
+      onBackClicked: stackview.pop()
+      onHowYouFoundUsSelected: function(selectedText) {
+        console.log("Selected how you found us: " + selectedText)
+        stackview.pop()
+      }
+    }
+  }
+
+  Component {
+    id: whichIndustryComponent
+    MMWhichIndustry {
+      id: whichIndustry
+
+      width: root.width
+      height: root.height
+
+      onBackClicked: stackview.pop()
+      onIndustrySelected: function(selectedText) {
+        console.log("Selected industry: " + selectedText)
+        stackview.pop()
+      }
     }
   }
 
