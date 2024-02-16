@@ -175,7 +175,6 @@ Page {
       MMAcountPageItem {
         width: parent.width
         title: qsTr("Sign out")
-        desc: root.workspaceRole
         iconSource: __style.signOutIcon
         onLinkClicked: root.signOutClicked()
       }
