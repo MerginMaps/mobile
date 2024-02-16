@@ -21,6 +21,7 @@ import "../misc"
 import "../components"
 import "../onboarding"
 import "../inputs"
+import "../account"
 
 Item {
   id: root
@@ -514,12 +515,29 @@ Item {
   Component {
     id: workspaceAccountPageComp
 
-    WorkspaceAccountPage {
+    MMAcountPage {
       id: workspaceAccountPage
 
-      onBack: stackView.popOnePageOrClose()
+      abbrName: __merginApi.userInfo.nameAbbr
+      fullName: __merginApi.userInfo.name
+      userName: __merginApi.userAuth.username
+      email: __merginApi.userInfo.email
+      invitationsCount: 0 // TODO connect to invitation count
 
-      onManagePlansClicked: manageSubscriptionPlans()
+      workspaceRole: __merginApi.workspaceInfo.role
+
+      subscription: __merginApi.subscriptionInfo.planAlias
+      storage: "%1/%2".arg(__inputUtils.bytesToHumanSize(__merginApi.workspaceInfo.diskUsage)).arg(__inputUtils.bytesToHumanSize(__merginApi.workspaceInfo.storageLimit))
+      storageFill: {
+        if (__merginApi.workspaceInfo.storageLimit > 0 )
+          return __merginApi.workspaceInfo.diskUsage / __merginApi.workspaceInfo.storageLimit
+        else
+          return 0.0
+      }
+
+      onBackClicked: stackView.popOnePageOrClose()
+
+      onManageAccountClicked: manageSubscriptionPlans()
 
       onSignOutClicked: {
         __merginApi.signOut()
@@ -527,12 +545,13 @@ Item {
         root.resetView()
       }
 
-      onAccountDeleted: {
+      onCloseAccountClicked: {
         stackView.popOnePageOrClose()
+        // TODO!!
         root.resetView()
       }
 
-      onSwitchWorkspace: {
+      onSelectWorkspaceClicked: {
         stackView.push( workspaceListComponent )
       }
     }

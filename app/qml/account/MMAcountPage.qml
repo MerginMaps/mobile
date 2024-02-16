@@ -22,40 +22,45 @@ Page {
   signal closeAccountClicked
   signal signOutClicked
 
-  property string abbrName: "PB"
-  property string fullName: "Patrik Bell"
-  property string userName: "Chuck Norris"
-  property string workspaceRole: "owner"
-  property string email: "patrik.bell@merginmaps.com"
-  property string subscription: "Professional v2 (10GB)"
-  property string storage: "120.6 MB / 1.8 GB"
-  property real storageFill: 0.2
+  required property string abbrName
+  required property string fullName
+  required property string userName
+  required property string workspaceRole
+  required property string email
+  required property string subscription
+  required property string storage
+  required property real storageFill // [0-1]
+  required property int invitationsCount
+
+  header: MMHeader {
+    id: header
+    color: __style.lightGreenColor
+    backVisible: true
+    onBackClicked: root.backClicked()
+  }
 
   Rectangle {
     anchors.fill: parent
     color: __style.lightGreenColor
   }
 
-  header: MMHeader {
-    id: header
-    backVisible: true
-    onBackClicked: root.backClicked()
-  }
-
   Item {
     id: bodyItem
     width: Math.min(parent.width - 2 * __style.pageMargins, __style.maxPageWidth)
+    anchors.horizontalCenter: parent.horizontalCenter
+    x: __style.pageMargins
 
     Column {
       id: infoPanel
-      width: parent.width
+
+      anchors.horizontalCenter: parent.horizontalCenter
       spacing: 8 * __dp
       Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         width: 80 * __dp
         height: width
         radius: width / 2
-        color: __style.grassColor
+        color: __style.fieldColor
 
         Text {
           text: root.abbrName
@@ -84,9 +89,8 @@ Page {
 
     Column {
       id: workspacePanel
-      padding: __style.pageMargins
       anchors.top: infoPanel.bottom
-      anchors.topMargin: 2 * __style.pageMargins
+      anchors.topMargin: __style.pageMargins
       width: parent.width
       spacing: 8 * __dp
 
@@ -105,7 +109,7 @@ Page {
         title: root.fullName
         desc: root.workspaceRole
         iconSource: __style.workspacesIcon
-        notificationCount: 1
+        notificationCount: root.invitationsCount
         onLinkClicked: root.selectWorkspaceClicked()
       }
 
@@ -117,15 +121,45 @@ Page {
         onLinkClicked: root.manageAccountClicked()
       }
 
-      // TODO storage progress bar
+      Item {
+        width: parent.width
+        height: progressBar.height + storageText.height + 8 * __dp
+
+        Text {
+          id: storateLabel
+          anchors.top: parent.top
+          anchors.left: parent.left
+          text: qsTr("Storage")
+          color: __style.nightColor
+          font: __style.p4
+        }
+
+        Text {
+          id: storageText
+          anchors.top: parent.top
+          anchors.right: parent.right
+          text: root.storage
+          color: __style.forestColor
+          font: __style.t4
+        }
+
+        MMProgressBar {
+          id: progressBar
+          anchors.bottom: parent.bottom
+          anchors.left: parent.left
+          width: parent.width
+          position: root.storageFill
+          color: __style.grassColor
+          progressColor: __style.forestColor
+        }
+      }
     }
 
     Column {
       id: generalPanel
-      padding: __style.pageMargins
       width: bodyItem.width
       anchors.top: workspacePanel.bottom
-      anchors.topMargin: 2 * __style.pageMargins
+      anchors.topMargin: __style.pageMargins
       spacing: 8 * __dp
 
       Text {

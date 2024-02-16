@@ -26,6 +26,7 @@ class TestCoreUtils : public QObject
     void testFindUniquePath();
     void testHasProjectFileExtension();
     void testNameValidation();
+    void testNameAbbr();
 };
 
 #endif // TESTCOREUTILS_H

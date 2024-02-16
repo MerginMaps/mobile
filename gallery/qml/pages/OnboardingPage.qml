@@ -98,6 +98,16 @@ Page {
   Component {
     id: accountComponent
     MMAcountPage {
+      abbrName: "PB"
+      fullName: "Patrik Bell"
+      userName: "Chuck Norris"
+      workspaceRole: "owner"
+      email: "patrik.bell@merginmaps.com"
+      subscription: "Professional v2 (10GB)"
+      storage: "120.6 MB / 1.8 GB"
+      storageFill: 0.2
+      invitationsCount: 2
+
       width: root.width
       height: root.height
 

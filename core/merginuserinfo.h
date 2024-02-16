@@ -31,6 +31,7 @@ struct MerginInvitation
 class MerginUserInfo: public QObject
 {
     Q_OBJECT
+    Q_PROPERTY( QString nameAbbr READ nameAbbr NOTIFY userInfoChanged )
     Q_PROPERTY( QString name READ name NOTIFY userInfoChanged )
     Q_PROPERTY( QString email READ email NOTIFY userInfoChanged )
     Q_PROPERTY( QString activeWorkspaceName READ activeWorkspaceName NOTIFY activeWorkspaceChanged )
@@ -46,6 +47,7 @@ class MerginUserInfo: public QObject
     void clear();
     void setFromJson( QJsonObject docObj );
 
+    QString nameAbbr() const;
     QString name() const;
     QString email() const;
     QString activeWorkspaceName() const;
@@ -73,6 +75,7 @@ class MerginUserInfo: public QObject
 
   private:
     QString mName;
+    QString mNameAbbr;
     QString mEmail;
     QMap<int, QString> mWorkspaces;
     QList<MerginInvitation> mInvitations;
