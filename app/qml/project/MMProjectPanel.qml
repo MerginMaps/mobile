@@ -231,7 +231,7 @@ Item {
             return qsTr("Home")
           }
           else if ( pageContent.state === "created" ) {
-            return __merginApi.userInfo.hasWorkspaces ? __merginApi.userInfo.activeWorkspaceName : qsTr("Projects")
+            return qsTr("Projects")
           }
           return qsTr("Explore")
         }
@@ -241,6 +241,7 @@ Item {
         onBackClicked: root.hidePanel()
 
         Rectangle {
+          visible: pageContent.state === "local"
           id: personIconRect
 
           anchors {
@@ -255,9 +256,22 @@ Item {
           color: __style.fieldColor
 
           MMIcon {
+            id: genericAccountIcon
+            visible: !accountNameAbbIcon.visible
             anchors.centerIn: parent
             source: __style.personalIcon
             size: __style.icon24
+          }
+
+          Text {
+            id: accountNameAbbIcon
+            visible: text
+            text: __merginApi.userInfo.nameAbbr
+            anchors.centerIn: parent
+            color: __style.forestColor
+            font: __style.t2
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
           }
 
           MouseArea {
@@ -560,12 +574,12 @@ Item {
   Component {
     id: projectWizardComp
 
-    ProjectWizardPage {
+    MMProjectWizardPage {
       id: projectWizardPanel
       objectName: "projectWizard"
       height: root.height
       width: root.width
-      onBack: {
+      onBackClicked: {
         stackView.popOnePageOrClose()
       }
     }

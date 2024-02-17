@@ -45,10 +45,13 @@ Item {
 
     Component.onCompleted: {
       // set proper footer (add project / fetch more)
-      if ( root.projectModelType === ProjectsModel.LocalProjectsModel )
-        listview.footer = addProjectButtonComponent
+      if ( root.projectModelType === ProjectsModel.LocalProjectsModel ) {
+        addProjectButton.addToPanel = true
+      }
       else
+      {
         listview.footer = loadingSpinnerComponent
+      }
     }
 
     onAtYEndChanged: {
@@ -127,21 +130,19 @@ Item {
     }
   }
 
-  Component {
-    id: addProjectButtonComponent
-
-    MMButton {
-        width: parent.width - 2 * 20 * __dp
-        // anchors.horizontalCenter: parent.horizontalCenter
-        // anchors.bottom: parent.bottom
-        // anchors.bottomMargin: 20 * __dp
-
-        visible: listview.count > 0
-        text: qsTr("Create project")
-
-        onClicked: stackView.push(projectWizardComp)
-      }
+  MMButton {
+    // TODO move to parent
+    id: addProjectButton
+    property bool addToPanel: false
+    width: parent.width - 2 * __style.pageMargins
+    anchors.bottom: parent.bottom
+    anchors.bottomMargin: __style.pageMargins
+    anchors.horizontalCenter: parent.horizontalCenter
+    visible: addToPanel && (listview.count > 0)
+    text: qsTr("Create project")
+    onClicked: stackView.push(projectWizardComp)
   }
+
 
   Item {
     id: noLocalProjectsMessageContainer

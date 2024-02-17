@@ -8,7 +8,6 @@ set(MM_QML
     components/DelegateButton.qml
     components/ErrorText.qml
     components/ExtendedMenuItem.qml
-    components/FieldRow.qml
     components/IconTextItem.qml
     components/InputComboBox.qml
     components/InputText.qml
@@ -94,6 +93,8 @@ set(MM_QML
     project/MMProjectListPage.qml
     project/MMProjectPanel.qml
     project/MMProjectLoadingScreen.qml
+    project/MMProjectWizardPage.qml
+    project/MMProjectWizardFieldRow.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
     dialogs/NoPermissionsDialog.qml
@@ -174,7 +175,6 @@ set(MM_QML
     ProjectIssuesPanel.qml
     ProjectLimitDialog.qml
     ProjectStatusPanel.qml
-    ProjectWizardPage.qml
     RegistrationFinishPage.qml
     RoundIndicator.qml
     SearchBar.qml
