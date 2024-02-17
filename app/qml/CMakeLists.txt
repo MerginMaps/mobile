@@ -165,7 +165,7 @@ set(MM_QML
     FormsStackManager.qml
     InputStyle.qml
     ManageInvitationsPage.qml
-    MapThemePanel.qml
+    MMMapThemePanel.qml
     Notification.qml
     NotificationBanner.qml
     NumberSpin.qml

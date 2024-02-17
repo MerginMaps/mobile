@@ -527,14 +527,14 @@ ApplicationWindow {
       }
     }
 
-    MapThemePanel {
-        id: mapThemesPanel
+    MMMapThemePanel {
+      id: mapThemesPanel
 
-        height: window.height/2
-        width: window.width
-        edge: Qt.BottomEdge
+      height: ( window.height / 2 )
+      width: window.width
+      edge: Qt.BottomEdge
 
-        onClosed: stateManager.state = "map"
+      onClosed: stateManager.state = "map"
     }
 
     Loader {
