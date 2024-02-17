@@ -93,6 +93,15 @@ class CoreUtils
      */
     static bool isValidName( const QString &name );
 
+    /**
+     * Get name abbreviation
+     * E.g.
+     *   Pat Norris -> PN
+     *   Pat -> P
+     *   from <empty> -> <empty>
+     */
+    static QString nameAbbr( const QString &name );
+
   private:
     static QString sLogFile;
     static int CHECKSUM_CHUNK_SIZE;

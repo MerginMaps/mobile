@@ -81,6 +81,9 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor shadowColor READ shadowColor CONSTANT )
 
     // Icons
+    Q_PROPERTY( QUrl closeAccountIcon READ closeAccountIcon CONSTANT )
+    Q_PROPERTY( QUrl signOutIcon READ signOutIcon CONSTANT )
+    Q_PROPERTY( QUrl workspacesIcon READ workspacesIcon CONSTANT )
     Q_PROPERTY( QUrl addIcon READ addIcon CONSTANT )
     Q_PROPERTY( QUrl layersIcon READ layersIcon CONSTANT )
     Q_PROPERTY( QUrl localChangesIcon READ localChangesIcon CONSTANT )
@@ -259,6 +262,9 @@ class MMStyle: public QObject
     QColor errorBgInputColor() {return QColor::fromString( "#FEFAF9" );}
     QColor shadowColor() {return QColor::fromString( "#66777777" );}
 
+    QUrl closeAccountIcon() {return QUrl( "qrc:/CloseAccount.svg" );}
+    QUrl signOutIcon() {return QUrl( "qrc:/SignOut.svg" );}
+    QUrl workspacesIcon() {return QUrl( "qrc:/Workspaces.svg" );}
     QUrl addIcon() {return QUrl( "qrc:/Add.svg" );}
     QUrl layersIcon() {return QUrl( "qrc:/Layers.svg" );}
     QUrl localChangesIcon() {return QUrl( "qrc:/LocalChanges.svg" );}

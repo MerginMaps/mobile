@@ -248,3 +248,20 @@ void TestCoreUtils::testNameValidation()
     QCOMPARE( CoreUtils::isValidName( test.first ), test.second );
   }
 }
+
+void TestCoreUtils::testNameAbbr()
+{
+  QVector< QPair< QString, QString > > testcases =
+  {
+    { QStringLiteral( "" ), QStringLiteral( "" ) },
+    { QStringLiteral( "Chuck Brave Norris" ), QStringLiteral( "CN" ) },
+    { QStringLiteral( "Chuck Norris" ), QStringLiteral( "CN" ) },
+    { QStringLiteral( "Chuck" ), QStringLiteral( "C" ) },
+    { QStringLiteral( "C" ), QStringLiteral( "C" ) },
+  };
+
+  for ( const auto &test : testcases )
+  {
+    QCOMPARE( CoreUtils::nameAbbr( test.first ), test.second );
+  }
+}

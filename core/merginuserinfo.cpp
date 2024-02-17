@@ -11,6 +11,7 @@
 #include <QSettings>
 
 #include "merginuserinfo.h"
+#include "coreutils.h"
 
 MerginUserInfo::MerginUserInfo( QObject *parent )
   : QObject( parent )
@@ -21,6 +22,7 @@ MerginUserInfo::MerginUserInfo( QObject *parent )
 void MerginUserInfo::clear()
 {
   mName = "";
+  mNameAbbr = "";
   mEmail = "";
   mActiveWorkspace = -1;
   mWorkspaces.clear();
@@ -36,6 +38,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   // parse profile data
   mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
   mName = docObj.value( QStringLiteral( "name" ) ).toString();
+  mNameAbbr = CoreUtils::nameAbbr( mName );
 
   int preferredWorkspace = -1;
   if ( docObj.contains( QStringLiteral( "preferred_workspace" ) ) )
@@ -71,6 +74,11 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   emit userInfoChanged();
   emit hasWorkspacesChanged();
   emit hasMoreThanOneWorkspaceChanged();
+}
+
+QString MerginUserInfo::nameAbbr() const
+{
+  return mNameAbbr;
 }
 
 QString MerginUserInfo::email() const

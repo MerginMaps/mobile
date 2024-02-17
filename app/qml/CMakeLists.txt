@@ -1,4 +1,6 @@
 set(MM_QML
+    account/MMAcountPage.qml
+    account/MMAcountPageItem.qml
     banners/AutoHideBanner.qml
     components/BluetoothConnectionDialog.qml
     components/CheckboxComponent.qml
@@ -183,7 +185,6 @@ set(MM_QML
     StakeoutPanel.qml
     StorageLimitDialog.qml
     SwitchWorkspacePage.qml
-    WorkspaceAccountPage.qml
     WhatsNewDialog.qml
     main.qml
     PARENT_SCOPE

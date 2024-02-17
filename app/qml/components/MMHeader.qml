@@ -15,12 +15,12 @@ import "."
 
 //! Best to use MMHeader as the header component for the Page{} object or anchor it to the top of Drawer/Item
 
-Item {
+Rectangle {
   id: root
 
   property string title: ""
   property font titleFont: __style.t3
-
+  color: __style.transparentColor
   property bool backVisible: true
   property alias backButton: backBtn
 
