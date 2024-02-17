@@ -36,8 +36,8 @@ Item {
     spacing: 10 * __dp
 
     MMIcon {
-      height: parent.height
-      width: 20 * __dp
+      anchors.verticalCenter: parent.verticalCenter
+      size: __style.icon24
       color: __style.forestColor
       source: control.iconSource ?? ""
     }

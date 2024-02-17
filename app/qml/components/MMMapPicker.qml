@@ -44,8 +44,7 @@ Item {
       spacing: 0
 
       MMIcon {
-        Layout.preferredHeight: row.height
-        Layout.preferredWidth: row.height / 2
+        size: __style.icon24
 
         source: root.leftIconSource
       }
@@ -67,7 +66,7 @@ Item {
       }
 
       MMIcon {
-        Layout.preferredHeight: row.height
+        size: __style.icon24
 
         color: __style.forestColor
         source: __style.arrowDownIcon
