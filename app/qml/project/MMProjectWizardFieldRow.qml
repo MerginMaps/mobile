@@ -51,6 +51,8 @@ Item {
       dropDownTitle: qsTr("Widget")
       preselectedFeatures: [WidgetType]
       dataModel: widgetList
+      valueRole: "WidgetType"
+      textRole: "AttributeName"
     }
 
     MouseArea {

@@ -31,9 +31,7 @@ Item {
   property bool isWidgetModelReady: {
     var types = fieldsModel.supportedTypes()
     for (var prop in types) {
-      // TODO - refactor, it is not  FeatureId and  FeatureTitle, but MMDropdownDrawer assumes it!
-      // see ComboBox  - textRole: "display" and valueRole: "widget"
-      projectWizardPanel.widgetsModel.append({ "FeatureTitle": types[prop], "FeatureId": prop })
+      projectWizardPanel.widgetsModel.append({ "AttributeName": types[prop], "WidgetType": prop })
     }
 
     true
