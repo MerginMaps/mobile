@@ -95,15 +95,13 @@ Drawer {
 
       delegate: delegateItem
 
+      // No themes message + link
       Rectangle {
-        id: noThemesRectangle
-
         anchors.fill: parent
         color: __style.whiteColor
+        visible: parent.count === 0
 
         Column {
-          id: noThemesColumn
-
           width: parent.width
           spacing: 20 * __dp
           leftPadding: 20 * __dp
@@ -111,50 +109,41 @@ Drawer {
           bottomPadding: 20 * __dp
 
           Image {
-            id: picture
-
+            source: __style.uploadImage
             anchors.horizontalCenter: parent.horizontalCenter
           }
 
           Text {
-            id: bigTitle
-
+            text: qsTr("There are currently no map themes")
             anchors.horizontalCenter: parent.horizontalCenter
             font: __style.t1
             width: parent.width - 2*20 * __dp
             color: __style.forestColor
             visible: text.length > 0
             horizontalAlignment: Text.AlignHCenter
-            text: qsTr("There are currently no map themes")
           }
 
           Text {
-            id: description
-
+            id: textHyperlink
             anchors.horizontalCenter: parent.horizontalCenter
-            font: __style.p5
-            width: parent.width - 2*20 * __dp
+            width: parent.width
             color: __style.nightColor
-            visible: text.length > 0
-            horizontalAlignment: Text.AlignHCenter
+            textFormat: Text.RichText
             wrapMode: Text.WordWrap
-            lineHeight: 1.6
-            text: qsTr("Learn more about %1how to setup themes%2.")
-            .arg("<a href='"+ __inputHelp.howToSetupThemesLink +"'>")
+            font: __style.t3
+            horizontalAlignment: Qt.AlignHCenter
+            verticalAlignment: Qt.AlignVCenter
+            linkColor: __style.forestColor
+            text: qsTr("Learn more about <a href='%1' style='color: %2;'>how to setup themes</a>.")
+                .arg(__inputHelp.howToSetupThemesLink)
+                .arg(__style.forestColor)
+
+            onLinkActivated: function(link) {
+                Qt.openUrlExternally(link)
+            }
           }
         }
       }
-
-      // TextHyperlink {
-      //   anchors.fill: parent
-      //   visible: parent.count === 0
-      //   text: qsTr("Project has no themes defined. See %1how to setup themes%2.")
-      //   .arg("<a href='"+ __inputHelp.howToSetupThemesLink +"'>")
-      //   .arg("</a>")
-      //   color: __style.nightColor
-      //   linkColor: __style.forestColor
-      //   font: __style.t3
-      // }
     }
   }
 
