@@ -126,7 +126,7 @@ Drawer {
         delegate: Item {
           id: delegate
 
-          property bool checked: root.selectedFeatures.includes( root.valueRole === "value" ? model.value : model.FeatureId )
+          property bool checked: root.selectedFeatures.includes( model[root.valueRole] )
 
           width: listView.width
           height: internal.comboBoxItemHeight
@@ -148,7 +148,7 @@ Drawer {
               width: parent.width - icon.width - parent.spacing
               height: parent.height
               verticalAlignment: Text.AlignVCenter
-              text: root.textRole === "text" ? model.text : model.FeatureTitle
+              text: model[root.textRole]
               color: __style.nightColor
               font: __style.t3
               elide: Text.ElideRight
@@ -171,10 +171,10 @@ Drawer {
                 delegate.checked = !delegate.checked
 
                 // add or remove the item from the selected features list
-                addOrRemoveFeature( root.valueRole === "value" ? model.value : model.FeatureId )
+                addOrRemoveFeature( model[root.valueRole] )
               }
               else {
-                root.selectionFinished( [root.valueRole === "value" ? model.value : model.FeatureId] )
+                root.selectionFinished( [model[root.valueRole]] )
                 root.close()
               }
             }
