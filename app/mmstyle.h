@@ -81,6 +81,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor shadowColor READ shadowColor CONSTANT )
 
     // Icons
+    Q_PROPERTY( QUrl linkIcon READ linkIcon CONSTANT )
     Q_PROPERTY( QUrl closeAccountIcon READ closeAccountIcon CONSTANT )
     Q_PROPERTY( QUrl signOutIcon READ signOutIcon CONSTANT )
     Q_PROPERTY( QUrl workspacesIcon READ workspacesIcon CONSTANT )
@@ -262,6 +263,7 @@ class MMStyle: public QObject
     QColor errorBgInputColor() {return QColor::fromString( "#FEFAF9" );}
     QColor shadowColor() {return QColor::fromString( "#66777777" );}
 
+    QUrl linkIcon() {return QUrl( "qrc:/Link.svg" );}
     QUrl closeAccountIcon() {return QUrl( "qrc:/CloseAccount.svg" );}
     QUrl signOutIcon() {return QUrl( "qrc:/SignOut.svg" );}
     QUrl workspacesIcon() {return QUrl( "qrc:/Workspaces.svg" );}

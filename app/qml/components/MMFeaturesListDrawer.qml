@@ -18,11 +18,13 @@ Drawer {
   property alias title: header.title
   property alias model: listView.model
   property bool withSearch: false
+  property alias buttonText: primaryButton.text
+  property alias buttonVisible: primaryButton.visible
 
   padding: 20 * __dp
 
   signal featureClicked( var selectedFeatures )
-  signal createLinkedFeature()
+  signal buttonClicked()
 
   width: ApplicationWindow.window.width
   height: ApplicationWindow.window.height
@@ -147,7 +149,7 @@ Drawer {
       text: qsTr("Add feature")
 
       onClicked: {
-        root.createLinkedFeature()
+        root.buttonClicked()
       }
     }
   }

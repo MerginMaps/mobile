@@ -88,6 +88,22 @@ ScrollView {
 
         EditorItem {
           width: parent.width
+          height: relationEditor.height
+          fieldTitle: "MMFormRelationReferenceEditor"
+
+          MMFormRelationReferenceEditor {
+            id: relationReferenceEditor
+            width: parent.width
+            _fieldValue: "feature1"
+
+            onOpenLinkedFeature: function(linkedFeature) {
+              console.log("Feature: " + linkedFeature)
+            }
+          }
+        }
+
+        EditorItem {
+          width: parent.width
           height: galleryEditor.height
           fieldTitle: "MMFormGalleryEditor"
 

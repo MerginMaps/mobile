@@ -36,7 +36,7 @@ set(GALLERY_HDRS
     inpututils.h
     scalebarkit.h
     positionkit.h
-    relationfeaturesmodel.h
+    formfeaturesmodel.h
     ../app/notificationmodel.h
     ../app/mmstyle.h
     ../core/merginerrortypes.h

@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef RELATIONFEATURESMODEL_H
-#define RELATIONFEATURESMODEL_H
+#ifndef FORMFEATURESMODEL_H
+#define FORMFEATURESMODEL_H
 
 #include <QAbstractListModel>
 
@@ -17,15 +17,17 @@
 #include <QList>
 
 /**
- * Mockup of RelationFeaturesModel class
+ * Mockup of RelationFeaturesModel and RelationReferenceFeaturesModel class for gallery
  */
-class RelationFeaturesModel : public QAbstractListModel
+class FormFeaturesModel : public QAbstractListModel
 {
     Q_OBJECT
 
     Q_PROPERTY( /*QgsRelation*/ QString relation READ relation WRITE setRelation NOTIFY relationChanged )
     Q_PROPERTY( QString homePath READ homePath WRITE setHomePath NOTIFY homePathChanged )
     Q_PROPERTY( /*FeatureLayerPair*/ QString parentFeatureLayerPair READ parentFeatureLayerPair WRITE setParentFeatureLayerPair NOTIFY parentFeatureLayerPairChanged )
+    Q_PROPERTY( /*QgsProject */ QString project READ project WRITE setProject NOTIFY projectChanged )
+    Q_PROPERTY( QString config READ config WRITE setConfig NOTIFY configChanged )
 
   public:
 
@@ -41,7 +43,7 @@ class RelationFeaturesModel : public QAbstractListModel
     };
     Q_ENUM( relationModelRoles );
 
-    explicit RelationFeaturesModel( QObject *parent = nullptr )
+    explicit FormFeaturesModel( QObject *parent = nullptr )
     {
       for ( int i = 0; i <= mRows; ++i )
       {
@@ -53,7 +55,7 @@ class RelationFeaturesModel : public QAbstractListModel
       }
     }
 
-    ~RelationFeaturesModel() {};
+    ~FormFeaturesModel() {};
 
     QVariant data( const QModelIndex &index, int role ) const override
     {
@@ -124,10 +126,18 @@ class RelationFeaturesModel : public QAbstractListModel
     QString homePath() const {return mHomePath;}
     void setHomePath( const QString &homePath ) {mHomePath = homePath; emit homePathChanged();}
 
+    QString project() const {return mProject;}
+    void setProject( const QString &project ) {mProject = project; emit projectChanged();}
+
+    QString config() const {return mConfig;}
+    void setConfig( const QString &project ) {mConfig = project; emit configChanged();}
+
   signals:
     void parentFeatureLayerPairChanged( QString pair );
     void relationChanged( QString relation );
     void homePathChanged();
+    void projectChanged();
+    void configChanged();
 
   private:
     /**
@@ -164,10 +174,12 @@ class RelationFeaturesModel : public QAbstractListModel
     QString mRelation; // associated relation
     QString mParentFeatureLayerPair; // parent feature (with relation widget in form)
     QString mHomePath;
+    QString mProject;
+    QString mConfig;
 
     int mPhotoIndex = -1;
     int mRows = 10;
 
 };
 
-#endif // RELATIONFEATURESMODEL_H
+#endif // FORMFEATURESMODEL_H
