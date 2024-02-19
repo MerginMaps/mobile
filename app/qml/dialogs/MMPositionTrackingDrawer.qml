@@ -11,9 +11,9 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "./components" as MMComponents
+import "../components"
 
-Drawer {
+MMDrawer {
   id: root
 
   property bool trackingActive: false
@@ -22,111 +22,56 @@ Drawer {
 
   signal trackingBtnClicked()
 
-  edge: Qt.BottomEdge
-  closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+  picture: root.trackingActive ? __style.positionTrackingRunningImage : __style.positionTrackingStartImage
+  bigTitle: qsTr("Position tracking")
+  description: root.trackingActive ? qsTr("Mergin Maps can track your position on this project."): qsTr("Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.")
+  primaryButton: root.trackingActive ? qsTr("Stop tracking") : qsTr("Start tracking")
 
-  leftPadding: InputStyle.panelMargin
-  rightPadding: InputStyle.panelMargin
-  bottomPadding: InputStyle.smallGap
-  topPadding: InputStyle.panelMarginV2
+  specialComponent: trackingInfoPanel
 
-  ColumnLayout {
-    anchors.fill: parent
-
-    spacing: 0
-
-    MMComponents.PanelHeaderV2 {
-      Layout.fillWidth: true
-      headerTitle: qsTr("Position tracking")
-      haveBackButton: false
-      onBackClicked: root.close()
-    }
-
-    // spacer
+  Component {
+    id: trackingInfoPanel
     Item {
-      Layout.preferredHeight: InputStyle.verticalSpaceM
-    }
+      width: root.width - 2 * __style.pageMargins
+      height: 100
 
-    Text {
-      text: qsTr("Mergin Maps can track your position on this project.")
-      horizontalAlignment: Text.AlignHCenter
-      Layout.fillWidth: true
-      wrapMode: Text.WordWrap
-    }
-
-    // spacer
-    Item {
-      Layout.preferredHeight: InputStyle.verticalSpaceM
-    }
-
-    // data
-
-    RowLayout {
-      Layout.fillWidth: true
-
-      Label {
-        text: "Tracked distance:"
-        elide: Text.ElideRight
-        Layout.preferredWidth: contentWidth
+      Column {
+        anchors.left: parent.left
+        anchors.leftMargin: __style.pageMargins
+        height: parent.height
+        Text {
+          text: qsTr("Tracked distance")
+          font: __style.p6
+          color: __style.nightColor
+        }
+        Text {
+          text: root.trackingActive ? root.distanceTraveled : "-"
+          font: __style.t3
+          color: __style.nightColor
+        }
       }
 
-      Label {
-        font.bold: true
-        text: root.distanceTraveled ?? "---"
-        Layout.fillWidth: true
-        horizontalAlignment: Text.AlignRight
+      Column {
+        anchors.right: parent.right
+        anchors.rightMargin: __style.pageMargins
+        height: parent.height
+
+        Text {
+          text: qsTr("Started at")
+          font: __style.p6
+          color: __style.nightColor
+        }
+        Text {
+          text: root.trackingActive ? root.trackingStartedAt : "-"
+          font: __style.t3
+          color: __style.nightColor
+        }
       }
     }
+  }
 
-    RowLayout {
-      Layout.fillWidth: true
-
-      Label {
-        text: "Started at:"
-        elide: Text.ElideRight
-        Layout.preferredWidth: contentWidth
-      }
-
-      Label {
-        font.bold: true
-        text: root.trackingStartedAt ?? "---"
-        Layout.fillWidth: true
-        horizontalAlignment: Text.AlignRight
-      }
-    }
-
-    // spacer
-    Item {
-      Layout.preferredHeight: InputStyle.verticalSpaceM
-    }
-
-    Button {
-      id: trackingButton
-
-      text: root.trackingActive ? qsTr("Stop tracking") : qsTr("Start tracking")
-
-      Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-
-      background: Rectangle {
-        color: trackingButton.down ? InputStyle.actionColorDown : InputStyle.actionColor
-        radius: InputStyle.cornerRadius
-      }
-
-      contentItem: Text {
-        color: "white"
-        font.bold: true
-        text: trackingButton.text
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
-      }
-
-      Layout.fillWidth: true
-      Layout.preferredHeight: InputStyle.mediumBtnHeight
-
-      onClicked: {
-        root.trackingBtnClicked()
-      }
-    }
+  onPrimaryButtonClicked: {
+    close()
+    root.trackingBtnClicked()
   }
 }

@@ -20,7 +20,6 @@ import lc 1.0 as InputClass
 import "./map"
 import "./dialogs"
 import "./layers"
-import "./popups"
 import "./components"
 import "./misc"
 import "./project"
@@ -546,7 +545,7 @@ ApplicationWindow {
 
       sourceComponent: Component {
 
-        PositionTrackingDrawer {
+        MMPositionTrackingDrawer {
 
           width: window.width
 

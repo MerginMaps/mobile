@@ -14,6 +14,7 @@ import QtQuick.Controls.Basic
 import "../../app/qml/components"
 import "../../app/qml"
 import "../../app/qml/project"
+import "../../app/qml/dialogs"
 
 Page {
   id: pane
@@ -48,12 +49,9 @@ Page {
 
   MMPositionTrackingDrawer {
     id: drawerPositionTracking
-
-    onTrackingBtnClicked: {
-      trackingActive = true
-      distanceTraveled = "5m"
-      trackingStartedAt = "10:00:01"
-    }
+    distanceTraveled: "5m"
+    trackingStartedAt: "10:00:01"
+    onTrackingBtnClicked: trackingActive = !trackingActive
   }
 
   MMDrawer {

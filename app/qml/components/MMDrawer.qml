@@ -27,7 +27,7 @@ Drawer {
   signal primaryButtonClicked
   signal secondaryButtonClicked
 
-  width: window.width
+  width: window.width // TODO maximum size
   height: mainColumn.height
   edge: Qt.BottomEdge
   dim: true
@@ -82,15 +82,11 @@ Drawer {
           color: __style.forestColor
         }
 
-        Image {
+        MMRoundButton {
           id: closeButton
-
-          source: __style.closeButtonIcon
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: control.close()
-          }
+          bgndColor: __style.lightGreenColor
+          iconSource: __style.closeIcon
+          onClicked: control.close()
         }
       }
 
