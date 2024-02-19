@@ -188,7 +188,8 @@ MMBaseInput {
       onFeatureClicked: function(selectedFeatures) {
         root.openLinkedFeature( selectedFeatures )
       }
-      onCreateLinkedFeature: root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
+
+      onButtonClicked: root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
     }
   }
 

@@ -1117,9 +1117,10 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
       return QUrl( path.arg( QLatin1String( "MMFormRelationEditor" ) ) );
     }
   }
-
-  // TODO == Missing editors:
-  // - QStringLiteral( "relationreference" )
+  else if ( widgetName == QStringLiteral( "relationreference" ) )
+  {
+    return QUrl( path.arg( QLatin1String( "MMFormRelationReferenceEditor" ) ) );
+  }
 
   return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) );
 }

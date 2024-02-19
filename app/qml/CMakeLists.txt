@@ -100,7 +100,6 @@ set(MM_QML
     dialogs/NoPermissionsDialog.qml
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
-    editor/inputrelationreference.qml
     inputs/MMBaseInput.qml
     inputs/MMPasswordInput.qml
     inputs/MMTextInput.qml
@@ -118,6 +117,7 @@ set(MM_QML
     form/editors/MMFormPhotoEditor.qml
     form/editors/MMFormPhotoViewer.qml
     form/editors/MMFormRelationEditor.qml
+    form/editors/MMFormRelationReferenceEditor.qml
     form/editors/MMFormScannerEditor.qml
     form/editors/MMFormSliderEditor.qml
     form/editors/MMFormSwitchEditor.qml

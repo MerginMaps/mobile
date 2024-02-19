@@ -54,6 +54,7 @@ ScrollView {
                 }
               }
             }
+            IconLine { name: "linkIcon"; source: __style.linkIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "closeAccountIcon"; source: __style.closeAccountIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "signOutIcon"; source: __style.signOutIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "workspacesIcon"; source: __style.workspacesIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }

@@ -136,7 +136,7 @@ Item {
             anchors.centerIn: parent
             source: __style.addImageIcon
             color: root.errorMsg.length > 0 ? __style.grapeColor : root.warningMsg.length > 0 ? __style.earthColor : __style.forestColor
-            size: __style.icon40
+            size: __style.icon32
           }
 
           MouseArea {
