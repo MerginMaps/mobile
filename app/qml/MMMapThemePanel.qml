@@ -95,16 +95,66 @@ Drawer {
 
       delegate: delegateItem
 
-      TextHyperlink {
+      Rectangle {
+        id: noThemesRectangle
+
         anchors.fill: parent
-        visible: parent.count === 0
-        text: qsTr("Project has no themes defined. See %1how to setup themes%2.")
-        .arg("<a href='"+ __inputHelp.howToSetupThemesLink +"'>")
-        .arg("</a>")
-        color: __style.nightColor
-        linkColor: __style.forestColor
-        font: __style.t3
+        color: __style.whiteColor
+
+        Column {
+          id: noThemesColumn
+
+          width: parent.width
+          spacing: 20 * __dp
+          leftPadding: 20 * __dp
+          rightPadding: 20 * __dp
+          bottomPadding: 20 * __dp
+
+          Image {
+            id: picture
+
+            anchors.horizontalCenter: parent.horizontalCenter
+          }
+
+          Text {
+            id: bigTitle
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            font: __style.t1
+            width: parent.width - 2*20 * __dp
+            color: __style.forestColor
+            visible: text.length > 0
+            horizontalAlignment: Text.AlignHCenter
+            text: qsTr("There are currently no map themes")
+          }
+
+          Text {
+            id: description
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            font: __style.p5
+            width: parent.width - 2*20 * __dp
+            color: __style.nightColor
+            visible: text.length > 0
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+            lineHeight: 1.6
+            text: qsTr("Learn more about %1how to setup themes%2.")
+            .arg("<a href='"+ __inputHelp.howToSetupThemesLink +"'>")
+          }
+        }
       }
+
+      // TextHyperlink {
+      //   anchors.fill: parent
+      //   visible: parent.count === 0
+      //   text: qsTr("Project has no themes defined. See %1how to setup themes%2.")
+      //   .arg("<a href='"+ __inputHelp.howToSetupThemesLink +"'>")
+      //   .arg("</a>")
+      //   color: __style.nightColor
+      //   linkColor: __style.forestColor
+      //   font: __style.t3
+      // }
     }
   }
 
@@ -144,7 +194,7 @@ Drawer {
 
           MMIcon {
             id: icon
-            source: __style.mapThemesIcon
+            source: __style.doneCircleIcon
             visible: itemContainer.isSelected
             anchors.verticalCenter: parent.verticalCenter
           }
