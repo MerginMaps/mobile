@@ -28,6 +28,11 @@ Page {
     }
 
     MMButton {
+      text: "PositionTrakcing"
+      onClicked: drawer1.open()
+    }
+
+    MMButton {
       text: "Upload"
       onClicked: drawer1.open()
     }

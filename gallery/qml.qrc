@@ -22,6 +22,7 @@
         <file>qml/pages/CalendarPage.qml</file>
         <file>qml/pages/FormPage.qml</file>
         <file>qml/pages/InputsPage.qml</file>
+        <file>../app/qml/MMPositionTrackingDrawer.qml</file>
         <file>../app/qml/components/MMButton.qml</file>
         <file>../app/qml/components/MMLinkButton.qml</file>
         <file>../app/qml/components/MMIcon.qml</file>
