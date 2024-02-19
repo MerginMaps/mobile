@@ -30,7 +30,6 @@ MMBaseInput {
   signal editorValueChanged( var newValue, bool isNull )
 
   on_FieldValueChanged: {
-    console.log("value " + root._fieldValue)
     title.text = rModel.attributeFromForeignKey( root._fieldValue, FeaturesModel.FeatureTitle ) || ""
   }
 
