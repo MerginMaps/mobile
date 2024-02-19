@@ -25,6 +25,9 @@ Drawer {
   property var selectedFeatures: [] // in/out property, contains list of selected feature ids
   property int minFeaturesCountToFullScreenMode: 6
 
+  required property string valueRole
+  required property string textRole
+
   padding: 20 * __dp
 
   signal selectionFinished( var selectedFeatures )
@@ -123,7 +126,7 @@ Drawer {
         delegate: Item {
           id: delegate
 
-          property bool checked: root.selectedFeatures.includes( model.FeatureId )
+          property bool checked: root.selectedFeatures.includes( model[root.valueRole] )
 
           width: listView.width
           height: internal.comboBoxItemHeight
@@ -131,7 +134,7 @@ Drawer {
           Rectangle {
             anchors.top: parent.top
             width: parent.width
-            height: 1 * __dp
+            height: 1
             color: __style.greyColor
             visible: model.index
           }
@@ -145,7 +148,7 @@ Drawer {
               width: parent.width - icon.width - parent.spacing
               height: parent.height
               verticalAlignment: Text.AlignVCenter
-              text: model.FeatureTitle
+              text: model[root.textRole]
               color: __style.nightColor
               font: __style.t3
               elide: Text.ElideRight
@@ -168,10 +171,10 @@ Drawer {
                 delegate.checked = !delegate.checked
 
                 // add or remove the item from the selected features list
-                addOrRemoveFeature( model.FeatureId )
+                addOrRemoveFeature( model[root.valueRole] )
               }
               else {
-                root.selectionFinished( [model.FeatureId] )
+                root.selectionFinished( [model[root.valueRole]] )
                 root.close()
               }
             }
@@ -200,7 +203,7 @@ Drawer {
 
   function addOrRemoveFeature( fid )
   {
-    if ( selectedFeatures.indexOf( fid ) === -1 )
+    if ( root.selectedFeatures.indexOf( fid ) === -1 )
     {
       root.selectedFeatures.push( fid )
     }

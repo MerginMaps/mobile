@@ -53,6 +53,34 @@ ScrollView {
           dropDownTitle: "Select one"
           enabled: checkbox.checked
           width: parent.width
+          valueRole: "value"
+          textRole: "text"
+          dataModel: ListModel {
+            ListElement {
+              value: 1
+              text: "Text 1"
+            }
+            ListElement {
+              value: 2
+              text: "Text 2"
+            }
+            ListElement {
+              value: 3
+              text: "Text 3"
+            }
+          }
+          onSelectionFinished: function(selectedFeatures) {
+            preselectedFeatures = selectedFeatures
+            text = selectedFeatures.toString()
+          }
+        }
+
+        MMDropdownInput {
+          title: "MMDropdownInput"
+          placeholderText: "Select one"
+          dropDownTitle: "Select one"
+          enabled: checkbox.checked
+          width: parent.width
           dataModel: ListModel {
             ListElement {
               FeatureId: 1
@@ -76,7 +104,10 @@ ScrollView {
               Feature: "Feature 3"
             }
           }
-          onSelectionFinished: function(selectedFeatures) { text = selectedFeatures }
+          onSelectionFinished: function(selectedFeatures) {
+            preselectedFeatures = selectedFeatures
+            text = selectedFeatures.toString()
+          }
         }
 
         MMDropdownInput {

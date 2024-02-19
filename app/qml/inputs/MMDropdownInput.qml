@@ -39,6 +39,8 @@ MMBaseInput {
   property bool multiSelect: false
   property bool withSearchbar: false
   property var preselectedFeatures: []
+  property string valueRole: "FeatureId"
+  property string textRole: "FeatureTitle"
 
   hasFocus: textField.activeFocus
 
@@ -107,6 +109,8 @@ MMBaseInput {
       multiSelect: root.multiSelect
       withSearchbar: root.withSearchbar
       selectedFeatures: root.preselectedFeatures
+      valueRole: root.valueRole
+      textRole: root.textRole
 
       onClosed: drawerLoader.active = false
 
