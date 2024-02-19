@@ -153,7 +153,7 @@ set(MM_QML
     settings/MMLogPanel.qml
     settings/MMAboutPanel.qml
     settings/MMChangelogPanel.qml
-    MMPositionTrackingDrawer.qml
+    dialogs/MMPositionTrackingDrawer.qml
     Banner.qml
     CircularProgressBar.qml
     CodeScanner.qml

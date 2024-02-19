@@ -11,8 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import ".."
-import "../components" as MMComponents
+import "./components" as MMComponents
 
 Drawer {
   id: root

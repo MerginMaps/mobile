@@ -28,8 +28,8 @@ Page {
     }
 
     MMButton {
-      text: "PositionTrakcing"
-      onClicked: drawer1.open()
+      text: "Position Tracking"
+      onClicked: drawerPositionTracking.open()
     }
 
     MMButton {
@@ -43,6 +43,16 @@ Page {
     MMButton {
       text: "Synchronization Failed"
       onClicked: drawer3.open()
+    }
+  }
+
+  MMPositionTrackingDrawer {
+    id: drawerPositionTracking
+
+    onTrackingBtnClicked: {
+      trackingActive = true
+      distanceTraveled = "5m"
+      trackingStartedAt = "10:00:01"
     }
   }
 
