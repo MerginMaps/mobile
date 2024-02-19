@@ -120,22 +120,29 @@ Page {
   }
 
   MMMapLabel {
+    id: gpsButton
     anchors.left: parent.left
     anchors.bottom: toolbar.top
     anchors.leftMargin: 20
-    anchors.bottomMargin: 120
-
+    anchors.bottomMargin: 20
     text: "20.0 m"
     iconSource: __style.satelliteIcon
+    onClicked: console.log("GPS button clicked")
   }
 
   MMMapLabel {
-    anchors.left: parent.left
-    anchors.bottom: toolbar.top
-    anchors.leftMargin: 20
-    anchors.bottomMargin: 50
+    id: positionTrackingButton
 
-    text: "20.0 m"
+    anchors {
+      left: parent.left
+      leftMargin: 20
+      bottom: gpsButton.top
+      bottomMargin: 20
+    }
+
+    iconSource: __style.positionTrackingIcon
+    text: "11:23:23"
+    textBgColorInverted: true
   }
 
   MMMapButton {

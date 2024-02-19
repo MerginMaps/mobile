@@ -350,6 +350,7 @@ ApplicationWindow {
           onClicked: {
             trackingPanelLoader.active = true
           }
+          menuButtonRightText: map.isTrackingPosition ? "Active" : ""
         }
 
         MMToolbarButton {

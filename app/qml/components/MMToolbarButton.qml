@@ -21,6 +21,7 @@ Item {
   required property var iconSource
   property color iconColor: __style.whiteColor
   required property string text
+  property string menuButtonRightText: ""
 
   property alias buttonIcon: icon
 
@@ -76,6 +77,7 @@ Item {
     visible: control.isMenuButton
     iconSource: control.iconSource
     text: control.text
+    rightText: control.menuButtonRightText
     onClicked: control.clicked()
   }
 }
