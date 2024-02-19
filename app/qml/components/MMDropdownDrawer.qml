@@ -76,15 +76,11 @@ Drawer {
           elide: Text.ElideRight
         }
 
-        Image {
+        MMRoundButton {
           id: closeButton
 
-          source: __style.closeButtonIcon
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: root.close()
-          }
+          iconSource: __style.xIcon
+          onClicked: root.close()
         }
       }
 
@@ -156,11 +152,11 @@ Drawer {
             }
 
             MMIcon {
+              anchors.verticalCenter: parent.verticalCenter
               id: icon
-              height: parent.height
-              width: 20 * __dp
+              size: __style.icon24
               color: __style.forestColor
-              source: __style.comboBoxCheckIcon
+              source: __style.doneCircleIcon
               visible: delegate.checked
             }
           }
