@@ -95,15 +95,55 @@ Drawer {
 
       delegate: delegateItem
 
-      TextHyperlink {
+      // No themes message + link
+      Rectangle {
         anchors.fill: parent
+        color: __style.whiteColor
         visible: parent.count === 0
-        text: qsTr("Project has no themes defined. See %1how to setup themes%2.")
-        .arg("<a href='"+ __inputHelp.howToSetupThemesLink +"'>")
-        .arg("</a>")
-        color: __style.nightColor
-        linkColor: __style.forestColor
-        font: __style.t3
+
+        Column {
+          width: parent.width
+          spacing: 20 * __dp
+          leftPadding: 20 * __dp
+          rightPadding: 20 * __dp
+          bottomPadding: 20 * __dp
+          anchors.horizontalCenter: parent.verticalCenter
+
+          Image {
+            source: __style.uploadImage
+            anchors.horizontalCenter: parent.horizontalCenter
+          }
+
+          Text {
+            text: qsTr("There are currently no map themes")
+            anchors.horizontalCenter: parent.horizontalCenter
+            font: __style.t1
+            width: parent.width - 2*20 * __dp
+            color: __style.forestColor
+            visible: text.length > 0
+            horizontalAlignment: Text.AlignHCenter
+          }
+
+          Text {
+            id: textHyperlink
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width
+            color: __style.nightColor
+            textFormat: Text.RichText
+            wrapMode: Text.WordWrap
+            font: __style.t3
+            horizontalAlignment: Qt.AlignHCenter
+            verticalAlignment: Qt.AlignVCenter
+            linkColor: __style.forestColor
+            text: qsTr("Learn more about <a href='%1' style='color: %2;'>how to setup themes</a>.")
+                .arg(__inputHelp.howToSetupThemesLink)
+                .arg(__style.forestColor)
+
+            onLinkActivated: function(link) {
+                Qt.openUrlExternally(link)
+            }
+          }
+        }
       }
     }
   }
@@ -144,7 +184,7 @@ Drawer {
 
           MMIcon {
             id: icon
-            source: __style.mapThemesIcon
+            source: __style.doneCircleIcon
             visible: itemContainer.isSelected
             anchors.verticalCenter: parent.verticalCenter
           }
@@ -184,5 +224,3 @@ Drawer {
     property real comboBoxItemHeight: 67 * __dp
   }
 }
-
-
