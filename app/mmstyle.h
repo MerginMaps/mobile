@@ -207,12 +207,22 @@ class MMStyle: public QObject
     Q_PROPERTY( double toolbarHeight READ toolbarHeight CONSTANT )
     Q_PROPERTY( double menuDrawerHeight READ menuDrawerHeight CONSTANT )
 
+    // Margins
+    Q_PROPERTY( double margin4 READ margin4 CONSTANT )
+    Q_PROPERTY( double margin6 READ margin6 CONSTANT )
+    Q_PROPERTY( double margin8 READ margin8 CONSTANT )
+    Q_PROPERTY( double margin12 READ margin12 CONSTANT )
+    Q_PROPERTY( double margin20 READ margin20 CONSTANT )
+    Q_PROPERTY( double margin40 READ margin40 CONSTANT )
+
     // Page
-    Q_PROPERTY( double pageMargins READ pageMargins CONSTANT ) // distance between screen edge and components
+    Q_PROPERTY( double pageMargins READ margin20 CONSTANT ) // distance between screen edge and components
     Q_PROPERTY( double maxPageWidth READ maxPageWidth CONSTANT ) // maximum page width (desktop, tablets, landscape)
 
     // Other
-    Q_PROPERTY( double inputRadius READ inputRadius CONSTANT )
+    Q_PROPERTY( double row49 READ row49 CONSTANT )
+    Q_PROPERTY( double row63 READ row63 CONSTANT )
+    Q_PROPERTY( double inputRadius READ margin12 CONSTANT )
     Q_PROPERTY( double scrollVelocityAndroid READ scrollVelocityAndroid CONSTANT ) // [px/s] scrolling on Android devices is too slow by default
 
   public:
@@ -387,10 +397,16 @@ class MMStyle: public QObject
     double toolbarHeight() {return 68 * mDp;}
     double menuDrawerHeight() {return 67 * mDp;}
 
-    double inputRadius() {return 12 * mDp;}
-
-    double pageMargins() {return 20 * mDp;}
     double maxPageWidth() {return 720 * mDp;}
+
+    double margin4() {return 4 * mDp;}
+    double margin6() {return 6 * mDp;}
+    double margin8() {return 8 * mDp;}
+    double margin12() {return 12 * mDp;}
+    double margin20() {return 20 * mDp;}
+    double margin40() {return 40 * mDp;}
+    double row49() {return 49 * mDp;}
+    double row63() {return 63 * mDp;}
 
     double scrollVelocityAndroid() { return 10000; }
 
