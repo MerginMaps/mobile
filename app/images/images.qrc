@@ -14,5 +14,19 @@
         <file>UploadImage.svg</file>
         <file>WarnLogoImage.svg</file>
         <file>NoMapThemesImage.svg</file>
+        <file>mActionFolder.svg</file>
+        <file>mIconAnnotationLayer.svg</file>
+        <file>mIconGeometryCollectionLayer.svg</file>
+        <file>mIconGroup.svg</file>
+        <file>mIconLayer.png</file>
+        <file>mIconLineLayer.svg</file>
+        <file>mIconMeshLayer.svg</file>
+        <file>mIconPointCloudLayer.svg</file>
+        <file>mIconPointLayer.svg</file>
+        <file>mIconPolygonLayer.svg</file>
+        <file>mIconRasterLayer.svg</file>
+        <file>mIconTableLayer.svg</file>
+        <file>mIconVectorTileLayer.svg</file>
+        <file>mIndicatorBadLayer.svg</file>
     </qresource>
 </RCC>
