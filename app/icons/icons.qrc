@@ -23,6 +23,8 @@
         <file>Environmental.svg</file>
         <file>ErrorCircle.svg</file>
         <file>Facebook.svg</file>
+        <file>Features.svg</file>
+        <file>FeaturesFilled.svg</file>
         <file>GPSAntennaHeight.svg</file>
         <file>GPSIcon.svg</file>
         <file>GPSSatellite.svg</file>
@@ -35,6 +37,7 @@
         <file>Home.svg</file>
         <file>HomeFilled.svg</file>
         <file>Info.svg</file>
+        <file>InfoFilled.svg</file>
         <file>Layers.svg</file>
         <file>Link.svg</file>
         <file>Linkedin.svg</file>
@@ -53,7 +56,6 @@
         <file>Personal.svg</file>
         <file>Plus.svg</file>
         <file>PositionTracking.svg</file>
-        <file>Previous.svg</file>
         <file>Projects.svg</file>
         <file>ProjectsFilled.svg</file>
         <file>QGIS.svg</file>
@@ -82,7 +84,6 @@
         <file>WarningCircle.svg</file>
         <file>WaterResources.svg</file>
         <file>Workspaces.svg</file>
-        <file>X.svg</file>
         <file>XMarkCircle.svg</file>
         <file>XTwitter.svg</file>
         <file>Youtube.svg</file>

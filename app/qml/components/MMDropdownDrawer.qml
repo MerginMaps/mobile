@@ -82,7 +82,7 @@ Drawer {
         MMRoundButton {
           id: closeButton
 
-          iconSource: __style.xIcon
+          iconSource: __style.closeIcon
           onClicked: root.close()
         }
       }

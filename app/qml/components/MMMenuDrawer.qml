@@ -52,7 +52,7 @@ Drawer {
 
       MMRoundButton {
         id: closeButton
-        iconSource: __style.xIcon
+        iconSource: __style.closeIcon
         bgndColor: __style.lightGreenColor
         anchors.right: parent.right
         anchors.rightMargin: 20 * __dp
