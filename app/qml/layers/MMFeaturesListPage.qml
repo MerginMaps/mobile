@@ -139,30 +139,23 @@ Page {
     anchors.centerIn: parent
   }
 
-  Component {
-    id: addFeatureHeaderComponent
-
-    MMButton {
-      width: root.width - 2 * __style.pageMargins
-      anchors {
-        left: root.left
-        leftMargin: __style.pageMargins
-        right: root.right
-        rightMargin: __style.pageMargins
-        bottom: root.bottom
-        bottomMargin: __style.margin20
-      }
-
-      text: qsTr("Add feature")
-      onClicked: root.addFeatureClicked( root.selectedLayer )
+  MMButton {
+    width: root.width - 2 * __style.pageMargins
+    visible: __inputUtils.isNoGeometryLayer( root.selectedLayer )
+    anchors {
+      left: parent.left
+      leftMargin: __style.pageMargins
+      right: parent.right
+      rightMargin: __style.pageMargins
+      bottom: parent.bottom
+      bottomMargin: __style.margin20
     }
+
+    text: qsTr("Add feature")
+    onClicked: root.addFeatureClicked( root.selectedLayer )
   }
 
   Component.onCompleted: {
     featuresModel.reloadFeatures()
-
-    if ( __inputUtils.isNoGeometryLayer( root.selectedLayer ) ) {
-      listView.header = addFeatureHeaderComponent
-    }
   }
 }

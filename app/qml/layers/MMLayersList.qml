@@ -12,8 +12,8 @@ import QtQuick.Controls
 import QtQml.Models
 import QtQuick.Layouts
 
-import "../components" as MMComponents
-import ".."
+import "../components"
+import "../inputs"
 
 Item {
   id: root
@@ -41,7 +41,7 @@ Item {
         id: layerrow
 
         width: ListView.view.width
-        height: InputStyle.rowHeightMedium * ( root.showNodePath ? 1.5 : 1 )
+        height: __style.row49 * ( root.showNodePath ? 1.5 : 1 )
 
         Rectangle {
           anchors {
@@ -50,16 +50,16 @@ Item {
             right: parent.right
           }
 
-          height: InputStyle.borderSize
-          color: InputStyle.panelBackgroundLight
+          height: 2 * __dp
+          color: __style.lightGreenColor
         }
 
         MouseArea {
           anchors {
             fill: layerRow // make the click area bigger
-            leftMargin: -InputStyle.buttonClickArea
-            rightMargin: -InputStyle.buttonClickArea
-            bottomMargin: -InputStyle.buttonClickArea
+            leftMargin: -__style.margin12
+            rightMargin: -__style.margin12
+            bottomMargin: -__style.margin12
           }
 
           onClicked: root.nodeClicked( model.node, model.nodeType, model.display )
@@ -75,8 +75,8 @@ Item {
           }
 
           Item {
-            Layout.preferredWidth: InputStyle.iconSizeMedium
-            Layout.preferredHeight: InputStyle.iconSizeMedium
+            Layout.preferredWidth: __style.icon24
+            Layout.preferredHeight: __style.icon24
 
             Image {
               anchors.fill: parent
@@ -98,12 +98,10 @@ Item {
 
               Layout.fillWidth: true
               Layout.fillHeight: true
+              verticalAlignment: Text.AlignVCenter
 
-              color: InputStyle.fontColor
-
-              font.bold: true
-              font.pixelSize: InputStyle.fontPixelSizeBig
-
+              color: __style.nightColor
+              font: __style.t3
               elide: Text.ElideMiddle
             }
 
@@ -111,44 +109,25 @@ Item {
               text: model.nodePath
               Layout.fillWidth: true
               Layout.fillHeight: true
+              verticalAlignment: Text.AlignVCenter
 
               // show it only if there is some path
               visible: root.showNodePath && model.nodePath
 
-              color: InputStyle.secondaryFontColor
-              font.pixelSize: InputStyle.fontPixelSizeNormal
+              color: __style.nightColor
+              font: __style.t3
 
               elide: Text.ElideMiddle
             }
           }
 
-          Image {
-            Layout.rightMargin: InputStyle.listMargins
-            Layout.preferredWidth: InputStyle.iconSizeMedium
-            Layout.preferredHeight: InputStyle.iconSizeMedium
+          MMSwitch {
+            id: visibleSwitch
 
-            source: {
-              if ( model.nodeIsVisible === "yes" )
-              {
-                return InputStyle.eyeIconV2
-              }
-              else if ( model.nodeIsVisible === "no" )
-              {
-                return InputStyle.eyeSlashIconV2
-              }
-              return "" // not a spatial layer
-            }
-
-            MouseArea {
-              anchors {
-                fill: parent // make the click area bigger
-                leftMargin: -InputStyle.buttonClickArea
-                topMargin: -InputStyle.buttonClickArea
-                rightMargin: -InputStyle.buttonClickArea
-                bottomMargin: -InputStyle.buttonClickArea
-              }
-
-              onClicked: root.nodeVisibilityClicked( model.node )
+            checked: model.nodeIsVisible === "yes"
+            Layout.rightMargin: __style.pageMargins
+            onReleased: function() {
+              root.nodeVisibilityClicked( model.node )
             }
           }
         }

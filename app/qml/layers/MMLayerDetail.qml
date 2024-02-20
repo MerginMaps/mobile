@@ -291,7 +291,7 @@ Page {
     visible: featureButton.visible && layerInfoButton.visible
 
     Component.onCompleted: {
-      selectableToolbar.index = content.index
+      selectableToolbar.index = content.index ?? 0
     }
 
     model: ObjectModel {

@@ -11,8 +11,8 @@ import QtQuick
 import QtQuick.Controls
 
 import lc 1.0
-import "../components" as MMComponents
-import ".."
+import "../components"
+import "../inputs"
 
 Page {
   id: root
@@ -33,22 +33,29 @@ Page {
     }
   }
 
-  header: MMComponents.PanelHeaderV2 {
+  header: MMHeader {
     width: parent.width
-    headerTitle: root.pageTitle
+    title: root.pageTitle
+    color: __style.lightGreenColor
+
     onBackClicked: root.close()
   }
 
-  MMComponents.SearchBoxV2 {
+  Rectangle {
+    anchors.fill: parent
+    color: __style.lightGreenColor
+  }
+
+  MMSearchInput {
     id: searchbox
 
     anchors {
       left: parent.left
-      leftMargin: InputStyle.panelMargin
+      leftMargin: __style.pageMargins
       right: parent.right
-      rightMargin: InputStyle.panelMargin
+      rightMargin: __style.pageMargins
       top: parent.top
-      topMargin: InputStyle.panelMarginV2
+      topMargin: __style.margin20
     }
   }
 
@@ -62,11 +69,11 @@ Page {
 
     anchors {
       top: searchbox.bottom
-      topMargin: InputStyle.panelMarginV2
+      topMargin: __style.margin20
       left: parent.left
-      leftMargin: InputStyle.panelMargin
+      leftMargin: __style.pageMargins
       right: parent.right
-      rightMargin: InputStyle.panelMargin
+      rightMargin: __style.pageMargins
       bottom: parent.bottom
     }
 

@@ -11,8 +11,8 @@ import QtQuick
 import QtQuick.Controls
 
 import lc 1.0
-import "../components" as MMComponents
-import ".."
+import "../components"
+import "../inputs"
 
 Item {
   id: root
