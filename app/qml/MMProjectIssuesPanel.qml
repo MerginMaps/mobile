@@ -43,13 +43,6 @@ Item {
     }
   }
 
-  // StackView {
-  //   id: stackview
-
-  //   anchors.fill: parent
-  //   initialItem: projectIssuesContentComponent
-  // }
-
   Rectangle {
     id: roundedRect
 
@@ -92,24 +85,29 @@ Item {
 
             ListView {
               id: invalidLayersListView
-              anchors.fill: parent
 
+              anchors.fill: parent
               model: projectIssuesModel
               spacing: 3
+
               delegate: PanelItem {
+                color: roundedRect.color
                 anchors.margins: 5
                 width: ListView.view.width
                 height: row.height
+
                 Column {
                   id: row
+
                   width: parent.width
                   anchors.left: parent.left
                   anchors.top: parent.top
+
                   Text {
                     id: nameTextItem
                     width: parent.width
                     padding: 5
-                    font.pixelSize: __style.t1
+                    font: __style.t1
                     text: title
                     color: __style.forestColor
                     wrapMode: Text.Wrap
@@ -119,10 +117,9 @@ Item {
                     id: messageTextItem
                     width: parent.width
                     padding: 10
-                    //font.pixelSize: __style.t3
                     text: message
                     wrapMode: Text.Wrap
-                    font.pixelSize: __style.p5
+                    font: __style.p5
                     color:  __style.nightColor
                   }
                 }
@@ -136,16 +133,17 @@ Item {
             }
           }
 
-          // Debug/Logging
           PanelItem {
             height: qgisLogTextHeader.height
             width: parent.width
+            color: roundedRect.color
+
             Text {
               id: qgisLogTextHeader
               width: parent.width
               padding: 5
               text: qsTr("QGIS log")
-              font.pixelSize: __style.t1
+              font: __style.t1
               color:  __style.forestColor
             }
           }
@@ -153,142 +151,20 @@ Item {
           PanelItem {
             height: qgisLogTextItem.height
             width: parent.width
+            color: roundedRect.color
+
             Text {
               id: qgisLogTextItem
               width: parent.width
               padding: 10
               text: projectLoadingLog
               wrapMode: Text.Wrap
-              font.pixelSize: __style.p5
+              font: __style.p5
               color:  __style.nightColor
             }
           }
         }
       }
-
-    }
-  }
-
-  Component {
-    Page {
-      padding: 0
-
-      background: Rectangle {
-        anchors.fill: parent
-        color: InputStyle.clrPanelMain
-      }
-
-      MMHeader {
-        id: header
-
-        height: root.rowHeight
-        width: parent.width
-        rightMarginShift: 0
-        backVisible: false
-
-        title: qsTr("Project issues")
-        titleFont: __style.t2
-      }
-
-      // header: PanelHeader {
-      //   id: header
-      //   height: root.rowHeight
-      //   width: parent.width
-      //   color: InputStyle.clrPanelMain
-      //   rowHeight: InputStyle.rowHeightHeader
-      //   titleText: qsTr("Project Issues")
-
-      //   onBack: root.visible = false
-      // }
-
-      ScrollView {
-        id: scrollPage
-        width: projectIssuesPanel.width
-        height: projectIssuesPanel.height - header.height
-        contentWidth: availableWidth // to only scroll vertically
-        spacing: InputStyle.panelSpacing
-
-        Column {
-          id: settingListContent
-          anchors.fill: parent
-          spacing: 1
-
-          PanelItem {
-            id: invalidLayersList
-            height: 0
-
-            ListView {
-              id: invalidLayersListView
-              anchors.fill: parent
-
-              model: projectIssuesModel
-              spacing: 3
-              delegate: PanelItem {
-                anchors.margins: 5
-                width: ListView.view.width
-                height: row.height
-                color: InputStyle.clrPanelMain
-                Column {
-                  id: row
-                  width: parent.width
-                  anchors.left: parent.left
-                  anchors.top: parent.top
-                  Text {
-                    id: nameTextItem
-                    width: parent.width
-                    padding: 5
-                    font.pixelSize: InputStyle.fontPixelSizeBig
-                    text: title
-                    color: InputStyle.fontColor
-                    wrapMode: Text.Wrap
-                  }
-
-                  Text {
-                    id: messageTextItem
-                    width: parent.width
-                    padding: 10
-                    font.pixelSize: InputStyle.fontPixelSizeNormal
-                    text: message
-                    wrapMode: Text.Wrap
-                  }
-                }
-                onHeightChanged: invalidLayersList.height += height;
-              }
-
-              onCountChanged: {
-                if ( count === 0 )
-                  invalidLayersList.height = 0;
-              }
-            }
-          }
-
-          // Debug/Logging
-          PanelItem {
-            height: qgisLogTextHeader.height
-            width: parent.width
-            Text {
-              id: qgisLogTextHeader
-              width: parent.width
-              padding: 5
-              text: qsTr("QGIS log")
-              font.pixelSize: InputStyle.fontPixelSizeBig
-              color: InputStyle.fontColor
-            }
-          }
-
-          PanelItem {
-            height: qgisLogTextItem.height
-            width: parent.width
-            Text {
-              id: qgisLogTextItem
-              width: parent.width
-              padding: 10
-              text: projectLoadingLog
-              wrapMode: Text.Wrap
-            }
-          }
-        }
-      }//
     }
   }
 }
