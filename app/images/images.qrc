@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/images/">
+    <qresource prefix="/images">
         <file>AcceptInvitationImage.svg</file>
         <file>AcceptInvitationLogoImage.svg</file>
         <file>Direction.svg</file>
@@ -13,5 +13,6 @@
         <file>TrackingDirection.svg</file>
         <file>UploadImage.svg</file>
         <file>WarnLogoImage.svg</file>
+        <file>NoMapThemesImage.svg</file>
     </qresource>
 </RCC>
