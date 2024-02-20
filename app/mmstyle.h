@@ -149,7 +149,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl stopIcon READ stopIcon CONSTANT )
     Q_PROPERTY( QUrl subscriptionsIcon READ subscriptionsIcon CONSTANT )
     Q_PROPERTY( QUrl syncIcon READ syncIcon CONSTANT )
-    Q_PROPERTY( QUrl sync2Icon READ sync2Icon CONSTANT )
     Q_PROPERTY( QUrl syncGreenIcon READ syncGreenIcon CONSTANT )
     Q_PROPERTY( QUrl teacherIcon READ teacherIcon CONSTANT )
     Q_PROPERTY( QUrl telecommunicationIcon READ telecommunicationIcon CONSTANT )
@@ -185,19 +184,11 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl mmSymbolImage READ mmSymbolImage CONSTANT )
     Q_PROPERTY( QUrl positionTrackingRunningImage READ positionTrackingRunningImage CONSTANT )
     Q_PROPERTY( QUrl positionTrackingStartImage READ positionTrackingStartImage CONSTANT )
-    Q_PROPERTY( QUrl actionFolderImage READ actionFolderImage CONSTANT )
-    Q_PROPERTY( QUrl annotationLayerImage READ annotationLayerImage CONSTANT )
-    Q_PROPERTY( QUrl geometryCollectionLayerImage READ geometryCollectionLayerImage CONSTANT )
-    Q_PROPERTY( QUrl groupImage READ groupImage CONSTANT )
-    Q_PROPERTY( QUrl layerImage READ layerImage CONSTANT )
     Q_PROPERTY( QUrl lineLayerImage READ lineLayerImage CONSTANT )
-    Q_PROPERTY( QUrl meshLayerImage READ meshLayerImage CONSTANT )
-    Q_PROPERTY( QUrl pointCloudLayerImage READ pointCloudLayerImage CONSTANT )
     Q_PROPERTY( QUrl polygonLayerImage READ polygonLayerImage CONSTANT )
     Q_PROPERTY( QUrl rasterLayerImage READ rasterLayerImage CONSTANT )
     Q_PROPERTY( QUrl tableLayerImage READ tableLayerImage CONSTANT )
-    Q_PROPERTY( QUrl vectorTileLayerImage READ vectorTileLayerImage CONSTANT )
-    Q_PROPERTY( QUrl indicatorBadLayerImage READ indicatorBadLayerImage CONSTANT )
+    Q_PROPERTY( QUrl pointLayerImage READ pointLayerImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -347,7 +338,6 @@ class MMStyle: public QObject
     QUrl stopIcon() {return QUrl( "qrc:/Stop.svg" );}
     QUrl subscriptionsIcon() {return QUrl( "qrc:/Subscriptions.svg" );}
     QUrl syncIcon() {return QUrl( "qrc:/Sync.svg" );}
-    QUrl sync2Icon() {return QUrl( "qrc:/Sync2.svg" );}
     QUrl syncGreenIcon() {return QUrl( "qrc:/SyncGreen.svg" );}
     QUrl teacherIcon() {return QUrl( "qrc:/Teacher.svg" );}
     QUrl telecommunicationIcon() {return QUrl( "qrc:/Telecommunication.svg" );}
@@ -381,20 +371,11 @@ class MMStyle: public QObject
     QUrl mapPinImage() {return QUrl( "qrc:/images/MapPin.svg" );}
     QUrl positionTrackingRunningImage() {return QUrl( "qrc:/images/PositionTrackingRunning.svg" );}
     QUrl positionTrackingStartImage() {return QUrl( "qrc:/images/PositionTrackingStart.svg" );}
-    static QUrl actionFolderImage() {return QUrl( "qrc:/images/mActionFolder.svg" );}
-    static QUrl annotationLayerImage() {return QUrl( "qrc:/images/mIconAnnotationLayer.svg" );}
-    static QUrl geometryCollectionLayerImage() {return QUrl( "qrc:/images/mIconGeometryCollectionLayer.svg" );}
-    static QUrl groupImage() {return QUrl( "qrc:/images/mIconGroup.svg" );}
-    static QUrl layerImage() {return QUrl( "qrc:/images/mIconLayer.png" );}
     static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
-    static QUrl meshLayerImage() {return QUrl( "qrc:/images/mIconMeshLayer.svg" );}
-    static QUrl pointCloudLayerImage() {return QUrl( "qrc:/images/mIconPointCloudLayer.svg" );}
     static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}
     static QUrl polygonLayerImage() {return QUrl( "qrc:/images/mIconPolygonLayer.svg" );}
     static QUrl rasterLayerImage() {return QUrl( "qrc:/images/mIconRasterLayer.svg" );}
     static QUrl tableLayerImage() {return QUrl( "qrc:/images/mIconTableLayer.svg" );}
-    static QUrl vectorTileLayerImage() {return QUrl( "qrc:/images/mIconVectorTileLayer.svg" );}
-    static QUrl indicatorBadLayerImage() {return QUrl( "qrc:/images/mIndicatorBadLayer.svg" );}
 
     double icon16() {return 16 * mDp;}
     double icon24() {return 24 * mDp;}

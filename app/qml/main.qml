@@ -276,7 +276,7 @@ ApplicationWindow {
           id: syncButton
 
           text: qsTr("Sync")
-          iconSource: __style.sync2Icon
+          iconSource: __style.syncIcon
           onClicked: {
             __activeProject.requestSync()
           }
@@ -471,7 +471,7 @@ ApplicationWindow {
     Component {
       id: layersPanelComponent
 
-      LayersPanelV2 {
+      MMLayersPanel {
 
         onClose: function() {
           mapPanelsStackView.clear( StackView.PopTransition )

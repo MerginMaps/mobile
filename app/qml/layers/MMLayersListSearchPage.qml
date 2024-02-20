@@ -55,7 +55,7 @@ Page {
     }
   }
 
-  LayersListV2 {
+  MMLayersList {
     id: layers
 
     anchors {

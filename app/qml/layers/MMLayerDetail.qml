@@ -270,7 +270,7 @@ Page {
   Component {
     id: featuresListPageComponent
 
-    FeaturesListPageV2 {
+    MMFeaturesListPage {
       selectedLayer: layerDetailData.vectorLayer
 
       onFeatureClicked: function( featurePair ) {

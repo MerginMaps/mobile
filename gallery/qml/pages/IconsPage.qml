@@ -97,7 +97,6 @@ ScrollView {
             IconLine { name: "showIcon"; source: __style.showIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "stopIcon"; source: __style.stopIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "syncIcon"; source: __style.syncIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
-            IconLine { name: "sync2Icon"; source: __style.sync2Icon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "undoIcon"; source: __style.undoIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "waitingIcon"; source: __style.waitingIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "xIcon"; source: __style.xIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }

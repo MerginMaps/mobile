@@ -57,7 +57,7 @@ Page {
     onClicked: root.searchboxClicked()
   }
 
-  LayersListV2 {
+  MMLayersList {
     id: layers
 
     anchors {

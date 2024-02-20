@@ -62,7 +62,7 @@ Item {
   Component {
     id: layersListPage
 
-    LayersListPageV2 {
+    MMLayersListPage {
       model: layerTreeProxyModel
 
       onNodeClicked: function ( node, nodeType, nodeName ) {
@@ -111,7 +111,7 @@ Item {
   Component {
     id: layerDetailsPage
 
-    LayerDetail {
+    MMLayerDetail {
       onClose: function() {
         if (pagesStackView.depth > 1) {
           pagesStackView.pop( StackView.PopTransition )
@@ -134,7 +134,7 @@ Item {
   Component {
     id: searchLayersPage
 
-    LayersListSearchPage {
+    MMLayersListSearchPage {
 
       model: layerTreeFlatSortFilterModel
 
