@@ -175,6 +175,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl acceptInvitationLogoImage READ acceptInvitationLogoImage CONSTANT )
     Q_PROPERTY( QUrl reachedDataLimitImage READ reachedDataLimitImage CONSTANT )
     Q_PROPERTY( QUrl uploadImage READ uploadImage CONSTANT )
+    Q_PROPERTY( QUrl noMapThemesImage READ noMapThemesImage CONSTANT )
     Q_PROPERTY( QUrl warnLogoImage READ warnLogoImage CONSTANT )
     Q_PROPERTY( QUrl mmLogoImage READ mmLogoImage CONSTANT )
     Q_PROPERTY( QUrl lutraLogoImage READ lutraLogoImage CONSTANT )
@@ -361,6 +362,7 @@ class MMStyle: public QObject
     QUrl acceptInvitationLogoImage() {return QUrl( "qrc:/images/AcceptInvitationLogoImage.svg" ); }
     QUrl acceptInvitationImage() {return QUrl( "qrc:/images/AcceptInvitationImage.svg" ); }
     QUrl uploadImage() {return QUrl( "qrc:/images/UploadImage.svg" );}
+    QUrl noMapThemesImage() {return QUrl( "qrc:/images/NoMapThemesImage.svg" );}
     QUrl reachedDataLimitImage() {return QUrl( "qrc:/images/ReachedDataLimitImage.svg" );}
     QUrl warnLogoImage() {return QUrl( "qrc:/images/WarnLogoImage.svg" );}
     QUrl mapPinImage() {return QUrl( "qrc:/images/MapPin.svg" );}

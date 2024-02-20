@@ -12,7 +12,7 @@ import QtQuick.Controls
 
 import lc 1.0
 import "."
-import "./components"
+import "../components"
 
 Drawer {
   id: root
@@ -44,7 +44,7 @@ Drawer {
     anchors.right: parent.right
     height: 2 * radius
     anchors.topMargin: -radius
-    radius: 20 * __dp
+    radius: __style.pageMargins
   }
 
   Rectangle {
@@ -95,15 +95,56 @@ Drawer {
 
       delegate: delegateItem
 
-      TextHyperlink {
+      // No themes message + link
+      Rectangle {
+        id: noMapThemesRectangle
         anchors.fill: parent
+        color: __style.whiteColor
         visible: parent.count === 0
-        text: qsTr("Project has no themes defined. See %1how to setup themes%2.")
-        .arg("<a href='"+ __inputHelp.howToSetupThemesLink +"'>")
-        .arg("</a>")
-        color: __style.nightColor
-        linkColor: __style.forestColor
-        font: __style.t3
+
+        Column {
+          width: parent.width
+          spacing: __style.pageMargins
+          leftPadding: __style.pageMargins
+          rightPadding: __style.pageMargins
+          bottomPadding: __style.pageMargins
+          anchors.horizontalCenter: parent.verticalCenter
+
+          Image {
+            source: __style.noMapThemesImage
+            anchors.horizontalCenter: parent.horizontalCenter
+          }
+
+          Text {
+            text: qsTr("There are currently no map themes")
+            elide: Text.ElideMiddle
+            anchors.horizontalCenter: parent.horizontalCenter
+            font: __style.t1
+            width: parent.width - 2*__style.pageMargins
+            color: __style.forestColor
+            horizontalAlignment: Text.AlignHCenter
+          }
+
+          Text {
+            elide: Text.ElideMiddle
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width
+            color: __style.nightColor
+            textFormat: Text.RichText
+            wrapMode: Text.WordWrap
+            font: __style.t3
+            horizontalAlignment: Qt.AlignHCenter
+            verticalAlignment: Qt.AlignVCenter
+            linkColor: __style.forestColor
+            text: qsTr("Learn more about <a href='%1' style='color: %2;'>how to setup themes</a>.")
+            .arg(__inputHelp.howToSetupThemesLink)
+            .arg(__style.forestColor)
+
+            onLinkActivated: function(link) {
+              Qt.openUrlExternally(link)
+            }
+          }
+        }
       }
     }
   }
@@ -144,7 +185,7 @@ Drawer {
 
           MMIcon {
             id: icon
-            source: __style.mapThemesIcon
+            source: __style.doneCircleIcon
             visible: itemContainer.isSelected
             anchors.verticalCenter: parent.verticalCenter
           }
@@ -184,5 +225,3 @@ Drawer {
     property real comboBoxItemHeight: 67 * __dp
   }
 }
-
-

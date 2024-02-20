@@ -100,6 +100,7 @@ set(MM_QML
     dialogs/NoPermissionsDialog.qml
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
+    dialogs/MMMapThemePanel.qml
     inputs/MMBaseInput.qml
     inputs/MMPasswordInput.qml
     inputs/MMTextInput.qml
@@ -166,7 +167,6 @@ set(MM_QML
     FormsStackManager.qml
     InputStyle.qml
     ManageInvitationsPage.qml
-    MMMapThemePanel.qml
     Notification.qml
     NotificationBanner.qml
     NumberSpin.qml

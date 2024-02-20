@@ -43,9 +43,9 @@ ScrollView {
         Column { Image { source: __style.trackingDirectionImage } Text { text: "trackingDirectionImage" } }
         Column { Image { source: __style.mapPinImage } Text { text: "mapPinImage" } }
         Column { Image { source: __style.warnLogoImage } Text { text: "warnLogoImage" } }
-
         Column { Image { source: __style.positionTrackingStartImage } Text { text: "positionTrackingStartImage" } }
         Column { Image { source: __style.positionTrackingRunningImage } Text { text: "positionTrackingRunningImage" } }
+        Column { Image { source: __style.noMapThemesImage } Text { text: "noMapThemesImage" } }
       }
     }
   }
