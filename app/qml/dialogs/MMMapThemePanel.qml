@@ -102,55 +102,49 @@ Drawer {
         color: __style.whiteColor
         visible: parent.count === 0
 
-        ScrollView {
-          anchors.fill: parent
-          height: Math.min(contentItem.height, parent.height)
-          ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        Column {
+          width: parent.width
+          spacing: __style.pageMargins
+          leftPadding: __style.pageMargins
+          rightPadding: __style.pageMargins
+          bottomPadding: __style.pageMargins
+          anchors.horizontalCenter: parent.verticalCenter
 
-          Column {
+          Image {
+            source: __style.noMapThemesImage
+            anchors.horizontalCenter: parent.horizontalCenter
+          }
+
+          Text {
+            text: qsTr("There are currently no map themes")
+            elide: Text.ElideMiddle
+            anchors.horizontalCenter: parent.horizontalCenter
+            font: __style.t1
+            width: parent.width - 2*__style.pageMargins
+            color: __style.forestColor
+            horizontalAlignment: Text.AlignHCenter
+          }
+
+          Text {
+            elide: Text.ElideMiddle
+            anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width
-            spacing: __style.pageMargins
-            leftPadding: __style.pageMargins
-            rightPadding: __style.pageMargins
-            bottomPadding: __style.pageMargins
-            anchors.horizontalCenter: parent.verticalCenter
+            color: __style.nightColor
+            textFormat: Text.RichText
+            wrapMode: Text.WordWrap
+            font: __style.t3
+            horizontalAlignment: Qt.AlignHCenter
+            verticalAlignment: Qt.AlignVCenter
+            linkColor: __style.forestColor
+            text: qsTr("Learn more about <a href='%1' style='color: %2;'>how to setup themes</a>.")
+            .arg(__inputHelp.howToSetupThemesLink)
+            .arg(__style.forestColor)
 
-            Image {
-              source: __style.noMapThemesImage
-              anchors.horizontalCenter: parent.horizontalCenter
-            }
-
-            Text {
-              text: qsTr("There are currently no map themes")
-              elide: Text.ElideMiddle
-              anchors.horizontalCenter: parent.horizontalCenter
-              font: __style.t1
-              width: parent.width - 2*__style.pageMargins
-              color: __style.forestColor
-              horizontalAlignment: Text.AlignHCenter
-            }
-
-            Text {
-              elide: Text.ElideMiddle
-              anchors.horizontalCenter: parent.horizontalCenter
-              width: parent.width
-              color: __style.nightColor
-              textFormat: Text.RichText
-              wrapMode: Text.WordWrap
-              font: __style.t3
-              horizontalAlignment: Qt.AlignHCenter
-              verticalAlignment: Qt.AlignVCenter
-              linkColor: __style.forestColor
-              text: qsTr("Learn more about <a href='%1' style='color: %2;'>how to setup themes</a>.")
-              .arg(__inputHelp.howToSetupThemesLink)
-              .arg(__style.forestColor)
-
-              onLinkActivated: function(link) {
-                Qt.openUrlExternally(link)
-              }
+            onLinkActivated: function(link) {
+              Qt.openUrlExternally(link)
             }
           }
-        } //
+        }
       }
     }
   }
