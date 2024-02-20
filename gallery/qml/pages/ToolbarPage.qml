@@ -92,7 +92,7 @@ Page {
     }
 
     model: ObjectModel {
-      MMToolbarButton { text: "Sync"; iconSource: __style.sync2Icon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "Sync"; iconSource: __style.syncIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "Layers"; iconSource: __style.layersIcon; onClicked: console.log("tapped "+text) }
     }
   }

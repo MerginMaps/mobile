@@ -204,7 +204,7 @@ class MMStyle: public QObject
 
     // Map items
     Q_PROPERTY( double mapItemHeight READ mapItemHeight CONSTANT )
-    Q_PROPERTY( double mapButtonsMargin READ mapButtonsMargin CONSTANT )
+    Q_PROPERTY( double mapButtonsMargin READ margin20 CONSTANT )
 
     // Toolbar
     Q_PROPERTY( double toolbarHeight READ toolbarHeight CONSTANT )
@@ -397,11 +397,8 @@ class MMStyle: public QObject
     double icon32() {return 32 * mDp;}
 
     double mapItemHeight() {return 60 * mDp;}
-    double mapButtonsMargin() {return 25 * mDp;}
-
     double toolbarHeight() {return 68 * mDp;}
     double menuDrawerHeight() {return 67 * mDp;}
-
     double maxPageWidth() {return 720 * mDp;}
 
     double margin4() {return 4 * mDp;}

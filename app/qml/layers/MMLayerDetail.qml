@@ -12,8 +12,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import lc 1.0
-import "../components" as MMComponents
-import ".."
+import "../components"
+import "../inputs"
 
 Page {
   id: root
@@ -54,17 +54,17 @@ Page {
     Page {
       id: layerDetailPage
 
-      header: MMComponents.PanelHeaderV2 {
+      header: MMHeader {
         width: parent.width
-        color: InputStyle.clrPanelMain
+        color: __style.lightGreenColor
 
-        headerTitle: layerDetailData.name
+        title: layerDetailData.name
 
         onBackClicked: root.closePage()
       }
 
       background: Rectangle {
-        color: InputStyle.clrPanelMain
+        color: __style.lightGreenColor
       }
 
       ScrollView {
@@ -72,11 +72,11 @@ Page {
 
         anchors {
           left: parent.left
-          leftMargin: InputStyle.panelMargin
+          leftMargin: __style.pageMargins
           right: parent.right
-          rightMargin: InputStyle.panelMargin
+          rightMargin: __style.pageMargins
           top: parent.top
-          topMargin: InputStyle.panelMarginV2
+          topMargin: __style.margin40
           bottom: parent.bottom
         }
 
@@ -85,43 +85,35 @@ Page {
         ColumnLayout {
 
           width: scrollview.width
-          spacing: InputStyle.bigGap
+          spacing: __style.margin8
 
           // visibility
           Column {
             Layout.fillWidth: true
-            Layout.preferredHeight: InputStyle.rowHeightListEntry
+            Layout.preferredHeight: __style.row63
 
-            spacing: InputStyle.panelSpacing
+            spacing: __style.margin12
 
             Text {
               text: qsTr( "Settings" )
-              font.bold: true
-              font.pixelSize: InputStyle.fontPixelSizeNormal
+              font: __style.p6
+              color: __style.nightColor
             }
 
             Rectangle {
               width: parent.width
-              height: InputStyle.rowHeightMedium
+              height: __style.row49
 
-              color: InputStyle.panelBackgroundLight
-              radius: InputStyle.cornerRadius
+              color: __style.whiteColor
+              radius: __style.inputRadius
 
               RowLayout {
                 id: visibleSwitchContent
 
                 anchors {
                   fill: parent
-                  leftMargin: InputStyle.panelMarginV2
-                  rightMargin: InputStyle.panelMarginV2
-                }
-
-                Image {
-                  Layout.preferredWidth: InputStyle.iconSizeMedium
-                  Layout.preferredHeight: InputStyle.iconSizeMedium
-
-                  source: layerDetailData.isVisible ? InputStyle.eyeIconV2 : InputStyle.eyeSlashIconV2
-
+                  leftMargin: __style.margin4
+                  rightMargin: __style.margin4
                 }
 
                 Text {
@@ -130,14 +122,15 @@ Page {
                   text: qsTr( "Visible on map" )
 
                   elide: Text.ElideMiddle
-                  font.pixelSize: InputStyle.fontPixelSizeNormal
+                  font: __style.p5
+                  color: __style.nightColor
                 }
 
-                MMComponents.Switch {
+                MMSwitch {
                   id: visibleSwitch
 
-                  Layout.preferredWidth: InputStyle.switchWidth
-                  Layout.preferredHeight: InputStyle.switchHeight
+                  //Layout.preferredWidth: InputStyle.switchWidth
+                  //Layout.preferredHeight: InputStyle.switchHeight
 
                   onReleased: function() {
                     __activeProject.switchLayerTreeNodeVisibility( layerDetailData.layerTreeNode )
@@ -158,17 +151,19 @@ Page {
           Column {
             id: legendWrapper
 
-            Layout.fillWidth: true
-            Layout.preferredHeight: legend.height + symbologyTitle.height + 2 * InputStyle.panelMarginV2
+            property var border: __style.margin12
 
-            spacing: InputStyle.panelSpacing
+            Layout.fillWidth: true
+            Layout.preferredHeight: legend.height + symbologyTitle.height + 2 * legendWrapper.border
+
+            spacing: __style.margin8
 
             Text {
               id: symbologyTitle
 
               text: qsTr( "Legend" )
-              font.bold: true
-              font.pixelSize: InputStyle.fontPixelSizeNormal
+              font: __style.p5
+              color: __style.nightColor
             }
 
             Rectangle {
@@ -177,15 +172,15 @@ Page {
               width: parent.width
               height: parent.height - symbologyTitle.height
 
-              color: InputStyle.panelBackgroundLight
-              radius: InputStyle.cornerRadius
+              color: __style.whiteColor
+              radius: __style.inputRadius
 
               Item {
-                height: parent.height - 2 * InputStyle.panelMarginV2
-                width: parent.width - 2 * InputStyle.panelMarginV2
+                height: parent.height - 2 * legendWrapper.border
+                width: parent.width - 2 * legendWrapper.border
 
-                x: legendItem.x + InputStyle.panelMarginV2
-                y: legendItem.y - InputStyle.panelMarginV2
+                x: legendItem.x + legendWrapper.border
+                y: legendItem.y - legendWrapper.border
 
                 Image {
                   id: legend
@@ -208,34 +203,36 @@ Page {
 
             visible: __inputUtils.layerAttribution(layerDetailData.mapLayer) != ""
 
-            Layout.fillWidth: true
-            Layout.preferredHeight: 1.5 * InputStyle.rowHeightListEntry + attributionTitle.height + 2 * InputStyle.panelMarginV2
+            property var border: __style.margin12
 
-            spacing: InputStyle.panelSpacing
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1.5 * __style.row63 + attributionTitle.height + 2 * layerAttribution.border
+
+            spacing: __style.margin8
 
             Text {
               id: attributionTitle
 
               text: qsTr( "Attribution" )
-              font.bold: true
-              font.pixelSize: InputStyle.fontPixelSizeNormal
+              font: __style.p5
+              color: __style.nightColor
             }
 
             Rectangle {
               id: attributionItem
 
               width: parent.width
-              height: 1.5 * InputStyle.rowHeightListEntry
+              height: 1.5 * __style.row63
 
-              color: InputStyle.panelBackgroundLight
-              radius: InputStyle.cornerRadius
+              color: __style.whiteColor
+              radius: __style.inputRadius
 
               Item {
-                height: parent.height - 2 * InputStyle.panelMarginV2
-                width: parent.width - 2 * InputStyle.panelMarginV2
+                height: parent.height - 2 * layerAttribution.border
+                width: parent.width - 2 * layerAttribution.border
 
-                x: legendItem.x + InputStyle.panelMarginV2
-                y: legendItem.y - InputStyle.panelMarginV2
+                x: legendItem.x + layerAttribution.border
+                y: legendItem.y - layerAttribution.border
 
 
                 Flickable {
@@ -246,13 +243,14 @@ Page {
                   height: parent.height
                   contentHeight: attributionText.height
                   contentWidth: width
-                  maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
+                  maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
 
                   Text {
                     id: attributionText
 
                     width: parent.width
-                    font.pixelSize: InputStyle.fontPixelSizeNormal
+                    font: __style.p5
+                    color: __style.nightColor
                     wrapMode: Text.WordWrap
                     text: __inputUtils.layerAttribution(layerDetailData.mapLayer)
                   }
@@ -287,71 +285,47 @@ Page {
     }
   }
 
-  footer: Rectangle {
+  footer:  MMSelectableToolbar {
+    id: selectableToolbar
 
-    height: InputStyle.toolbarHeight
-    color: InputStyle.clrPanelBackground
+    visible: featureButton.visible && layerInfoButton.visible
 
-    RowLayout {
-      anchors.fill: parent
+    Component.onCompleted: {
+      selectableToolbar.index = content.index
+    }
 
-      Item {
-        id: featuresButtonParent
-
-        property bool isSelected: content.currentIndex === 0
-
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+    model: ObjectModel {
+      MMSelectableToolbarButton {
+        id: featureButton
 
         visible: layerDetailData.isVectorLayer
 
-        MMComponents.ToolbarButton {
-
-          text: qsTr( "Features" )
-
-          fontColor: featuresButtonParent.isSelected ? InputStyle.fontColorWhite : InputStyle.secondaryFontColor
-          imageSource: featuresButtonParent.isSelected ? InputStyle.tableV2Icon : InputStyle.tableInactiveV2Icon
-
-          anchors.centerIn: parent
-
-          onClicked: {
-            if ( layerDetailData.isVectorLayer ) {
-              content.setCurrentIndex( 0 )
-            }
+        width: Math.floor((root.width - 40 * __dp) / 2)
+        text: qsTr( "Features" )
+        iconSource: __style.featuresIcon
+        selectedIconSource: __style.featuresFilledIcon
+        checked: selectableToolbar.index === 0
+        onClicked: {
+          if ( layerDetailData.isVectorLayer ) {
+            selectableToolbar.index = 0
+            content.setCurrentIndex( 0 )
           }
         }
       }
-
-      Item {
-        id: layerInfoButtonParent
-
-        property bool isSelected: {
-          if ( featuresButtonParent.visible ) {
-            if ( content.currentIndex === 0 ) {
-              return false
-            }
-          }
-          return true
-        }
-
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+      MMSelectableToolbarButton {
+        id: layerInfoButton
 
         visible: !layerDetailData.isVectorLayer || layerDetailData.isSpatial
 
-        MMComponents.ToolbarButton {
-
-          text: qsTr( "Layer info" )
-
-          fontColor: layerInfoButtonParent.isSelected ? InputStyle.fontColorWhite : InputStyle.secondaryFontColor
-          imageSource: layerInfoButtonParent.isSelected ? InputStyle.fileInfoIcon : InputStyle.fileInfoInactiveIcon
-
-          anchors.centerIn: parent
-
-          onClicked: {
-            if ( layerDetailData.isVectorLayer ) {
-              content.setCurrentIndex( 1 )
-            }
+        width: Math.floor((root.width - 40 * __dp) / 2)
+        text: qsTr( "Layer info" )
+        iconSource: __style.infoIcon
+        selectedIconSource: __style.infoFilledIcon
+        checked: selectableToolbar.index === 1
+        onClicked: {
+          if ( layerDetailData.isVectorLayer ) {
+            selectableToolbar.index = 1
+            content.setCurrentIndex( 1 )
           }
         }
       }
