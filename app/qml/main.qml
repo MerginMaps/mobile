@@ -29,7 +29,7 @@ import notificationType 1.0
 
 ApplicationWindow {
     id: window
-    
+
     visible: true
     width:  __appwindowwidth
     height: __appwindowheight
@@ -586,7 +586,7 @@ ApplicationWindow {
       }
     }
 
-    ProjectIssuesPanel {
+    MMProjectIssuesPanel {
       id: projectIssuesPanel
 
       height: window.height
@@ -987,8 +987,9 @@ ApplicationWindow {
       target: __activeProject
 
       function onLoadingStarted() {
-        projectLoadingScreen.visible = true;
-        failedToLoadProjectBanner.reset();
+        //projectLoadingScreen.visible = true;
+        projectIssuesPanel.visible = true;
+        //failedToLoadProjectBanner.reset();
         projectIssuesPanel.clear();
       }
 

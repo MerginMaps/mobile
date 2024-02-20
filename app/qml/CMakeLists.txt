@@ -180,7 +180,7 @@ set(MM_QML
     NumberSpin.qml
     PanelItem.qml
     PanelTabButton.qml
-    ProjectIssuesPanel.qml
+    MMProjectIssuesPanel.qml
     ProjectLimitDialog.qml
     RegistrationFinishPage.qml
     RoundIndicator.qml
