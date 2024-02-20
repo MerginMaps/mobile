@@ -20,7 +20,6 @@ import lc 1.0 as InputClass
 import "./map"
 import "./dialogs"
 import "./layers"
-import "./popups"
 import "./components"
 import "./misc"
 import "./project"
@@ -348,9 +347,12 @@ ApplicationWindow {
         MMToolbarButton {
           text: qsTr("Position tracking")
           iconSource: __style.positionTrackingIcon
+          menuButtonRightText: map.isTrackingPosition ? "Active" : ""
+
           onClicked: {
             trackingPanelLoader.active = true
           }
+
         }
 
         MMToolbarButton {
@@ -546,7 +548,7 @@ ApplicationWindow {
 
       sourceComponent: Component {
 
-        PositionTrackingDrawer {
+        MMPositionTrackingDrawer {
 
           width: window.width
 

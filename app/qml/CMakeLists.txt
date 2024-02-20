@@ -133,7 +133,6 @@ set(MM_QML
     layers/LayersListSearchPage.qml
     layers/LayersListV2.qml
     layers/LayersPanelV2.qml
-    popups/PositionTrackingDrawer.qml
     map/ActiveLayerPanel.qml
     map/Crosshair.qml
     map/Highlight.qml
@@ -154,6 +153,7 @@ set(MM_QML
     settings/MMLogPanel.qml
     settings/MMAboutPanel.qml
     settings/MMChangelogPanel.qml
+    dialogs/MMPositionTrackingDrawer.qml
     Banner.qml
     CircularProgressBar.qml
     CodeScanner.qml

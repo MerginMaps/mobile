@@ -78,7 +78,7 @@ Page {
     }
 
     model: ObjectModel {
-      MMToolbarLongButton { text: "Long button"; iconSource: __style.doneIcon; onClicked: console.log("tapped "+text) }
+      MMToolbarLongButton { text: "Long button"; iconSource: __style.editIcon; iconColor: __style.forestColor; onClicked: console.log("tapped "+text) }
     }
   }
 
@@ -113,7 +113,7 @@ Page {
       MMToolbarButton { text: "4/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "5/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "6/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
-      MMToolbarButton { text: "7/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "7/8"; menuButtonRightText: "active"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "8/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
     }
   }
@@ -130,7 +130,7 @@ Page {
     model: ObjectModel {
       MMToolbarButton { text: "Delete"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "Edit Geometry"; iconSource: __style.editIcon; onClicked: console.log("tapped "+text) }
-      MMToolbarButton { text: "Save"; iconSource: __style.done2Icon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "Save"; iconSource: __style.doneCircleIcon; onClicked: console.log("tapped "+text) }
     }
   }
 }

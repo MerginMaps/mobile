@@ -182,6 +182,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl mapPinImage READ mapPinImage CONSTANT )
     Q_PROPERTY( QUrl trackingDirectionImage READ trackingDirectionImage CONSTANT )
     Q_PROPERTY( QUrl mmSymbolImage READ mmSymbolImage CONSTANT )
+    Q_PROPERTY( QUrl positionTrackingRunningImage READ positionTrackingRunningImage CONSTANT )
+    Q_PROPERTY( QUrl positionTrackingStartImage READ positionTrackingStartImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -362,6 +364,8 @@ class MMStyle: public QObject
     QUrl reachedDataLimitImage() {return QUrl( "qrc:/images/ReachedDataLimitImage.svg" );}
     QUrl warnLogoImage() {return QUrl( "qrc:/images/WarnLogoImage.svg" );}
     QUrl mapPinImage() {return QUrl( "qrc:/images/MapPin.svg" );}
+    QUrl positionTrackingRunningImage() {return QUrl( "qrc:/images/PositionTrackingRunning.svg" );}
+    QUrl positionTrackingStartImage() {return QUrl( "qrc:/images/PositionTrackingStart.svg" );}
 
     double icon16() {return 16 * mDp;}
     double icon24() {return 24 * mDp;}

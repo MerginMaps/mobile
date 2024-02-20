@@ -36,13 +36,16 @@ ScrollView {
       contentData: Column {
         spacing: 10
         Column { Image { source: __style.mmLogoImage } Text { text: "mmLogoImage" } }
-        Column { Image { source: __style.lutraLogoImage; width:120; fillMode: Image.PreserveAspectFit } Text { text: "lutraLogoImage" } }
+        Column { Image { source: __style.lutraLogoImage; sourceSize.width:120; fillMode: Image.PreserveAspectFit } Text { text: "lutraLogoImage" } }
         Column { Image { source: __style.mmSymbolImage } Text { text: "mmSymbolImage" } }
 
         Column { Image { source: __style.directionImage } Text { text: "directionImage" } }
         Column { Image { source: __style.trackingDirectionImage } Text { text: "trackingDirectionImage" } }
         Column { Image { source: __style.mapPinImage } Text { text: "mapPinImage" } }
         Column { Image { source: __style.warnLogoImage } Text { text: "warnLogoImage" } }
+
+        Column { Image { source: __style.positionTrackingStartImage } Text { text: "positionTrackingStartImage" } }
+        Column { Image { source: __style.positionTrackingRunningImage } Text { text: "positionTrackingRunningImage" } }
       }
     }
   }

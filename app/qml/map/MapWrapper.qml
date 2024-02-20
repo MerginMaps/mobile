@@ -143,40 +143,6 @@ Item {
 
     spacing: 0
 
-    Rectangle {
-      id: trackingIndicator
-
-      Layout.fillWidth: true
-      Layout.preferredHeight: InputStyle.rowHeightMedium
-
-      z: 10 // in order to write this indicator on top of all map components
-
-      visible: root.state !== "inactive" && tracking.active
-
-      color: InputStyle.contrastFontColor
-
-      Text {
-        anchors.fill: parent
-
-        text: qsTr( "Position tracking is running" )
-
-        horizontalAlignment: Qt.AlignHCenter
-        verticalAlignment: Qt.AlignVCenter
-
-        color: InputStyle.fontColor
-
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-      }
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: function( mouse ) {
-          mouse.accepted = true
-          root.openTrackingPanel()
-        }
-      }
-    }
-
     Item {
       id: canvasRoot
 
@@ -395,6 +361,8 @@ Item {
 
         horizontalAccuracy: __positionKit.horizontalAccuracy
         accuracyRingSize: mapPositionSource.screenAccuracy
+
+        trackingMode: root.state !== "inactive" && tracking.active
       }
 
       Loader {
@@ -601,7 +569,40 @@ Item {
         id: splittingFailedDialog
       }
 
-      MMMapLabel { // accuracy button
+      MMMapLabel {
+        id: positionTrackingButton
+
+        anchors {
+          left: parent.left
+          leftMargin: __style.mapButtonsMargin
+          bottom: accuracyButton.top
+          bottomMargin: internal.bottomMapButtonsMargin
+        }
+
+        visible: root.state !== "inactive" && tracking.active
+        iconSource: __style.positionTrackingIcon
+
+        text: {
+          if (visible) {
+            // TODO make some merge with main.qml:trackingPrivate.getStartingTime()
+            let date = root.trackingManager?.startTime
+            if ( date ) {
+              return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+            }
+          }
+          else
+            return ""
+        }
+        textBgColorInverted: true
+
+        onClicked: function( mouse ) {
+          mouse.accepted = true
+          root.openTrackingPanel()
+        }
+      }
+
+      MMMapLabel {
+        id: accuracyButton
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.leftMargin: 20

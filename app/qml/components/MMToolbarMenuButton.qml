@@ -20,6 +20,7 @@ Item {
 
   required property var iconSource
   required property string text
+  property string rightText
 
   Item {
     id: menuButton
@@ -35,8 +36,9 @@ Item {
     }
 
     Row {
+      id: row
       height: parent.height
-      width: parent.width
+      width: parent.width - rightTextBg.width
       spacing: 12 * __dp
 
       MMIcon {
@@ -52,6 +54,27 @@ Item {
         font: __style.t3
         verticalAlignment: Text.AlignVCenter
         height: parent.height
+      }
+    }
+
+    Rectangle {
+      id: rightTextBg
+      visible: control.rightText && row.width > 100
+      property real spacing: 5 * __dp
+      anchors.right: menuButton.right
+      anchors.rightMargin: row.spacing + 5 * spacing
+      anchors.verticalCenter: parent.verticalCenter
+      color: __style.forestColor
+      height: rightText.height + spacing
+      width: rightText.width + 3 * spacing
+      radius: height / 2
+
+      Text {
+        id: rightText
+        anchors.centerIn: parent
+        color: __style.whiteColor
+        text: control.rightText
+        font: __style.t4
       }
     }
 

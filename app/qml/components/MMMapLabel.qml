@@ -22,6 +22,7 @@ Item {
   property url iconSource: ""
   property color bgColor: __style.positiveColor
   property color textColor: __style.forestColor
+  property bool textBgColorInverted: false
 
   Rectangle {
     width: row.width
@@ -45,18 +46,26 @@ Item {
         id: icon
         anchors.verticalCenter: parent.verticalCenter
         source: control.iconSource ? control.iconSource : ""
-        color: text.color
+        color: control.textColor
         size: __style.icon24
       }
 
-      Text {
-        id: text
+      Rectangle {
+        id: textBg
+        property real spacing:  5 * __dp
+        anchors.verticalCenter: parent.verticalCenter
+        color: control.textBgColorInverted ? control.textColor : control.bgColor
+        height: text.height + spacing
+        width: text.width + 3 * spacing
+        radius: height / 2
 
-        color: control.textColor
-        text: control.text
-        font: __style.t3
-        verticalAlignment: Text.AlignVCenter
-        height: parent.height
+        Text {
+          id: text
+          anchors.centerIn: parent
+          color: control.textBgColorInverted ? control.bgColor : control.textColor
+          text: control.text
+          font: __style.t3
+        }
       }
     }
 

@@ -14,6 +14,7 @@ import QtQuick.Controls.Basic
 import "../../app/qml/components"
 import "../../app/qml"
 import "../../app/qml/project"
+import "../../app/qml/dialogs"
 
 Page {
   id: pane
@@ -28,6 +29,11 @@ Page {
     }
 
     MMButton {
+      text: "Position Tracking"
+      onClicked: drawerPositionTracking.open()
+    }
+
+    MMButton {
       text: "Upload"
       onClicked: drawer1.open()
     }
@@ -39,6 +45,13 @@ Page {
       text: "Synchronization Failed"
       onClicked: drawer3.open()
     }
+  }
+
+  MMPositionTrackingDrawer {
+    id: drawerPositionTracking
+    distanceTraveled: "5m"
+    trackingStartedAt: "10:00:01"
+    onTrackingBtnClicked: trackingActive = !trackingActive
   }
 
   MMDrawer {
