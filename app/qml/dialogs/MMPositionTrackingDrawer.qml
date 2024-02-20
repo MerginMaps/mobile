@@ -33,7 +33,7 @@ MMDrawer {
     id: trackingInfoPanel
     Item {
       width: root.width - 2 * __style.pageMargins
-      height: 100
+      height: 100 * __dp // TODO needs to be adjusted
 
       Column {
         anchors.left: parent.left

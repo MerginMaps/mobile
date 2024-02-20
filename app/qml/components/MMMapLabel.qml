@@ -52,7 +52,7 @@ Item {
 
       Rectangle {
         id: textBg
-        property real spacing: 5
+        property real spacing:  5 * __dp
         anchors.verticalCenter: parent.verticalCenter
         color: control.textBgColorInverted ? control.textColor : control.bgColor
         height: text.height + spacing

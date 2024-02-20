@@ -98,7 +98,7 @@ Page {
     Image {
       id: lutraLogo
       source: __style.lutraLogoImage
-      sourceSize.width: 120
+      sourceSize.width: 120 * __dp
       fillMode: Image.PreserveAspectFit
       anchors.horizontalCenter: parent.horizontalCenter
     }

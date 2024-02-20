@@ -347,10 +347,12 @@ ApplicationWindow {
         MMToolbarButton {
           text: qsTr("Position tracking")
           iconSource: __style.positionTrackingIcon
+          menuButtonRightText: map.isTrackingPosition ? "Active" : ""
+
           onClicked: {
             trackingPanelLoader.active = true
           }
-          menuButtonRightText: map.isTrackingPosition ? "Active" : ""
+
         }
 
         MMToolbarButton {

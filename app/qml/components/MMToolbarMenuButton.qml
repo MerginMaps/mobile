@@ -38,7 +38,7 @@ Item {
     Row {
       id: row
       height: parent.height
-      width: parent.width - 2 * rightTextBg.width
+      width: parent.width - rightTextBg.width
       spacing: 12 * __dp
 
       MMIcon {
@@ -58,11 +58,11 @@ Item {
     }
 
     Rectangle {
-      // TODO: the layout of this active to right needs to be fixed!
       id: rightTextBg
       visible: control.rightText && row.width > 100
-      property real spacing: 5
-      anchors.left: row.right
+      property real spacing: 5 * __dp
+      anchors.right: menuButton.right
+      anchors.rightMargin: row.spacing + 5 * spacing
       anchors.verticalCenter: parent.verticalCenter
       color: __style.forestColor
       height: rightText.height + spacing
