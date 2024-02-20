@@ -54,10 +54,12 @@ Item {
     id: roundedRect
 
     anchors.fill: parent
-    color: __style.whiteColor
+    color: __style.lightGreenColor
 
     ColumnLayout {
       anchors.fill: parent
+      width: parent.width
+      spacing: 40 * __dp
 
       MMHeader {
         id: header
@@ -76,6 +78,8 @@ Item {
 
         Layout.fillWidth: true
         Layout.fillHeight: true
+        Layout.leftMargin: __style.pageMargins
+        Layout.rightMargin: __style.pageMargins
 
         Column {
           id: settingListContent
@@ -96,7 +100,6 @@ Item {
                 anchors.margins: 5
                 width: ListView.view.width
                 height: row.height
-                color: InputStyle.clrPanelMain
                 Column {
                   id: row
                   width: parent.width
@@ -167,10 +170,7 @@ Item {
   }
 
   Component {
-    id: projectIssuesContentComponent
-
     Page {
-      id: projectIssuesPanel
       padding: 0
 
       background: Rectangle {

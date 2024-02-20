@@ -59,7 +59,7 @@ Item {
 
       background: Rectangle {
         anchors.fill: parent
-        color: InputStyle.clrPanelMain
+        color: InputStyclrPanelMainle.
       }
 
       header: PanelHeader {
