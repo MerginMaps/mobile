@@ -156,7 +156,7 @@ class FormFeaturesModel : public QAbstractListModel
         , description( desc )
         , searchResult( search )
         , feature( feat ),
-          photoPath( photo )
+        photoPath( photo )
       {
       }
 
