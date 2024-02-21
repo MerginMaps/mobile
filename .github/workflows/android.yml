@@ -80,12 +80,10 @@ jobs:
 
       - name: Install Build Dependencies
         run: |
-          brew install bison flex automake shtool gtk-doc
-          echo "/usr/local/opt/flex/bin" >> $GITHUB_PATH
-          echo "/usr/local/opt/bison/bin" >> $GITHUB_PATH
           brew install gnupg
           brew install openssl@1.1
           brew install ninja
+          
           pip3 install -U pip
           pip3 install aqtinstall
           
