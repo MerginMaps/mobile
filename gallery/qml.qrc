@@ -108,9 +108,9 @@
         <file>../app/qml/settings/MMAboutPanel.qml</file>
         <file>../app/qml/settings/MMChangelogPanel.qml</file>
         <file>../app/qml/settings/MMSettingsPanel.qml</file>
-        <file>../app/qml/components/MMSettingItem.qml</file>
-        <file>../app/qml/components/MMSettingInput.qml</file>
-        <file>../app/qml/components/MMSettingDropdown.qml</file>
-        <file>../app/qml/components/MMSettingSwitch.qml</file>
+        <file>../app/qml/settings/MMSettingItem.qml</file>
+        <file>../app/qml/settings/MMSettingInput.qml</file>
+        <file>../app/qml/settings/MMSettingDropdown.qml</file>
+        <file>../app/qml/settings/MMSettingSwitch.qml</file>
     </qresource>
 </RCC>

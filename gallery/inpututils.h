@@ -24,12 +24,14 @@ class InputUtils: public QObject
 
     Q_PROPERTY( bool isIos READ isIos CONSTANT )
     Q_PROPERTY( bool isAndroid READ isAndroid CONSTANT )
+
     Q_PROPERTY( double gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged )
     Q_PROPERTY( double gpsAntennaHeight READ gpsAntennaHeight WRITE setGpsAntennaHeight NOTIFY gpsAntennaHeightChanged )
     Q_PROPERTY( int lineRecordingInterval READ lineRecordingInterval WRITE setLineRecordingInterval NOTIFY lineRecordingIntervalChanged )
     Q_PROPERTY( StreamingIntervalType::IntervalType intervalType READ intervalType WRITE setIntervalType NOTIFY intervalTypeChanged )
     Q_PROPERTY( bool reuseLastEnteredValues READ reuseLastEnteredValues WRITE setReuseLastEnteredValues NOTIFY reuseLastEnteredValuesChanged )
     Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
+    Q_PROPERTY( bool autoCenterMapChecked READ autoCenterMapChecked WRITE setAutoCenterMapChecked NOTIFY autoCenterMapCheckedChanged )
 
     bool isIos() { return false; }
     bool isAndroid() { return true; }
@@ -38,6 +40,8 @@ class InputUtils: public QObject
     double gpsAntennaHeight() { return mGpsAntennaHeightcy; }
     void setGpsAntennaHeight( double gpsAntennaHeight ) { mGpsAntennaHeightcy = gpsAntennaHeight; emit gpsAntennaHeightChanged(); }
     int lineRecordingInterval() { return mLineRecordingInterval; }
+    bool autoCenterMapChecked() { return mAutoCenterMapChecked; }
+
     void setLineRecordingInterval( int lineRecordingInterval ) { mLineRecordingInterval = lineRecordingInterval; emit lineRecordingIntervalChanged(); }
     StreamingIntervalType::IntervalType intervalType() { return mIntervalType; }
     void setIntervalType( StreamingIntervalType::IntervalType intervalType ) { mIntervalType = intervalType; emit intervalTypeChanged(); }
@@ -45,6 +49,7 @@ class InputUtils: public QObject
     void setReuseLastEnteredValues( bool reuseLastEnteredValues ) { mReuseLastEnteredValues = reuseLastEnteredValues; emit reuseLastEnteredValuesChanged(); }
     bool autosyncAllowed() { return mNewAutosyncAllowed; }
     void setAutosyncAllowed( bool newAutosyncAllowed ) { mNewAutosyncAllowed = newAutosyncAllowed; emit autosyncAllowedChanged( mNewAutosyncAllowed ); }
+    void setAutoCenterMapChecked( bool newAutoCenterMapChecked ) { mAutoCenterMapChecked = newAutoCenterMapChecked; emit autoCenterMapCheckedChanged(); }
 
   signals:
     void imageSelected( QString imagePath, QString code );
@@ -54,6 +59,7 @@ class InputUtils: public QObject
     void intervalTypeChanged();
     void reuseLastEnteredValuesChanged();
     void autosyncAllowedChanged( bool autosyncAllowed );
+    void autoCenterMapCheckedChanged();
 
   private:
     double mGpsAccuracy = 10;
@@ -62,6 +68,7 @@ class InputUtils: public QObject
     StreamingIntervalType::IntervalType mIntervalType = StreamingIntervalType::IntervalType::Distance;
     bool mReuseLastEnteredValues = false;
     bool mNewAutosyncAllowed = true;
+    bool mAutoCenterMapChecked = true;
 };
 
 #endif // INPUTUTILS_H

@@ -156,6 +156,13 @@ Page {
       width: root.width
       height: root.height
       onClose: stackview.pop()
+      onManageGpsClicked: console.log("onManageGpsClicked clicked")
+      onAboutClicked: console.log("onAboutClicked clicked")
+      onChangelogClicked: console.log("onChangelogClicked clicked")
+      onHelpClicked: console.log("onHelpClicked clicked")
+      onPrivacyPolicyClicked: console.log("onPrivacyPolicyClicked clicked")
+      onTermsOfServiceClicked: console.log("onTermsOfServiceClicked clicked")
+      onDiagnosticLogClicked: console.log("onDiagnosticLogClicked clicked")
     }
   }
 }

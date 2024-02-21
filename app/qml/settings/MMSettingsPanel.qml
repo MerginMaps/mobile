@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
+
 import lc 1.0
 import "."
 import "../components"
@@ -22,6 +22,13 @@ Item {
   visible: false
 
   signal close
+  signal manageGpsClicked
+  signal aboutClicked()
+  signal changelogClicked()
+  signal helpClicked()
+  signal privacyPolicyClicked()
+  signal termsOfServiceClicked()
+  signal diagnosticLogClicked()
 
   function open( subsetting="" )
   {
@@ -103,6 +110,18 @@ Item {
 
           Item { width: 1; height: 1 }
 
+          MMSettingSwitch {
+            width: parent.width
+            title: qsTr("Follow GPS with map")
+            description: qsTr("Determines whether the map automatically centers to your GPS position")
+            checked: __appSettings.autoCenterMapChecked
+            onClicked: __appSettings.autoCenterMapChecked = !checked
+          }
+
+          MMLine {}
+
+          Item { width: 1; height: 1 }
+
           MMSettingInput {
             width: parent.width
             title: qsTr("GPS accuracy treshold")
@@ -123,7 +142,7 @@ Item {
             title: qsTr("Manage GPS receivers")
             value: "Internal"
 
-            onClicked: console.log("TODO: follow new design ...") // stackview.push( positionProviderComponent )
+            onClicked: root.manageGpsClicked()
           }
 
           MMLine {}
@@ -172,7 +191,7 @@ Item {
             }
 
             onValueWasChanged: function( newValue ) {
-              __appSettings.intervalType = (newValue == 1 ? StreamingIntervalType.Distance : StreamingIntervalType.Time)
+              __appSettings.intervalType = (newValue === 1 ? StreamingIntervalType.Distance : StreamingIntervalType.Time)
             }
           }
 
@@ -222,6 +241,78 @@ Item {
 
             onClicked: __appSettings.autosyncAllowed = !checked
           }
+
+          Item { width: 1; height: 1 }
+
+          Text {
+            text: qsTr("General")
+            wrapMode: Text.WordWrap
+            width: parent.width
+            font: __style.h3
+            color: __style.forestColor
+          }
+
+          Item { width: 1; height: 1 }
+
+          MMSettingItem {
+            width: parent.width
+            title: qsTr("About")
+            value: ""
+
+            onClicked: root.aboutClicked()
+          }
+
+          MMLine {}
+
+          MMSettingItem {
+            width: parent.width
+            title: qsTr("Changelog")
+            value: ""
+
+            onClicked: root.changelogClicked()
+          }
+
+          MMLine {}
+
+          MMSettingItem {
+            width: parent.width
+            title: qsTr("Help")
+            value: ""
+
+            onClicked: root.helpClicked()
+          }
+
+          MMLine {}
+
+          MMSettingItem {
+            width: parent.width
+            title: qsTr("Privacy policy")
+            value: ""
+
+            onClicked: root.privacyPolicyClicked()
+          }
+
+          MMLine {}
+
+          MMSettingItem {
+            width: parent.width
+            title: qsTr("Terms of service")
+            value: ""
+
+            onClicked: root.termsOfServiceClicked()
+          }
+
+          MMLine {}
+
+          MMSettingItem {
+            width: parent.width
+            title: qsTr("Diagnostic log")
+            value: ""
+
+            onClicked: root.diagnosticLogClicked()
+          }
+
+          Item { width: 1; height: 10 }
         }
       }
     }
