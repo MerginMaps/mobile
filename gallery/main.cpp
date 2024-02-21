@@ -24,6 +24,7 @@
 #include "scalebarkit.h"
 #include "positionkit.h"
 #include "formfeaturesmodel.h"
+#include "streamingintervaltype.h"
 
 int main( int argc, char *argv[] )
 {
@@ -43,6 +44,7 @@ int main( int argc, char *argv[] )
 
   // Register C++ enums
   qmlRegisterUncreatableType<RegistrationError>( "lc", 1, 0, "RegistrationError", "RegistrationError Enum" );
+  qmlRegisterUncreatableType<StreamingIntervalType>( "lc", 1, 0, "StreamingIntervalType", "StreamingIntervalType Enum" );
   qmlRegisterType<QrCodeDecoder>( "lc", 1, 0, "QrCodeDecoder" );
   qmlRegisterType<ScaleBarKit>( "lc", 1, 0, "ScaleBarKit" );
   qmlRegisterType<FormFeaturesModel>( "lc", 1, 0, "RelationFeaturesModel" );
@@ -57,6 +59,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__androidUtils", &iu );
   engine.rootContext()->setContextProperty( "__iosUtils", &iu );
+  engine.rootContext()->setContextProperty( "__appSettings", &iu );
 
   qreal dp = Helper::calculateDpRatio();
 

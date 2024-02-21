@@ -112,7 +112,7 @@ Drawer {
         bottomMargin: primaryButton.visible ? primaryButton.height + 20 * __dp : 0
         width: parent.width - 2 * root.padding
         height: {
-          if ( root.model.count >= root.minFeaturesCountToFullScreenMode ) {
+          if ( root.model?.count >= root.minFeaturesCountToFullScreenMode ) {
             if ( ApplicationWindow.window )
               return ApplicationWindow.window.height - searchBar.height - 100 * __dp
             else return 0
