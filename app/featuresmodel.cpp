@@ -28,6 +28,15 @@ FeaturesModel::FeaturesModel( QObject *parent )
 
 FeaturesModel::~FeaturesModel() = default;
 
+void FeaturesModel::populateStaticModel( FeatureLayerPairs pairs )
+{
+  beginResetModel();
+  mFeatures.clear();
+  mFeatures.append( pairs );
+  endResetModel();
+  emit countChanged( rowCount() );
+}
+
 void FeaturesModel::populate()
 {
   if ( mLayer )

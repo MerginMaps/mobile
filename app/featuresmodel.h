@@ -73,6 +73,14 @@ class FeaturesModel : public QAbstractListModel
     QHash<int, QByteArray> roleNames() const override;
 
     /**
+     * \brief populateStatic populates a static model using the supplied \a pairs
+     * \param pairs to populate the model with
+     * This method allows to use a model that is not tied to a specific layer and
+     * has a fixed set of FeatureLayerPairs
+     */
+    Q_INVOKABLE void populateStaticModel( FeatureLayerPairs pairs );
+
+    /**
      * \brief reloadFeatures reloads features from current layer
      */
     Q_INVOKABLE void reloadFeatures();

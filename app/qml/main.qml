@@ -168,6 +168,11 @@ ApplicationWindow {
         formsStackManager.openForm( pair, "readOnly", "preview" );
       }
 
+      onFeaturesIdentified: function( pairs ) {
+        formsStackManager.closeDrawer()
+        featurePairSelection.showPairs( pairs );
+      }
+
       onNothingIdentified: {
         formsStackManager.closeDrawer()
       }
@@ -803,6 +808,31 @@ ApplicationWindow {
         left: parent.left
         right: parent.right
         topMargin: 20 * __dp
+      }
+    }
+
+    MMDropdownDrawer {
+      id: featurePairSelection
+
+      title: qsTr( "Select feature" )
+      withSearchbar: false
+      model: InputClass.FeaturesModel {}
+      valueRole: "FeaturePair"
+      textRole: "FeatureTitle"
+
+      onSelectionFinished: function( pairs ) {
+        var pair = pairs[0]
+        featurePairSelection.close()
+        map.highlightPair( pair )
+        formsStackManager.openForm( pair, "readOnly", "preview" );
+      }
+
+      function showPairs( pairs ) {
+        if ( pairs.length > 0 )
+        {
+          model.populateStaticModel( pairs )
+          open()
+        }
       }
     }
 

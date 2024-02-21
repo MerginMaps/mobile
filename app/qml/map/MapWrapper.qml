@@ -38,6 +38,7 @@ Item {
   property PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
   signal featureIdentified( var pair )
+  signal featuresIdentified( var pairs )
   signal nothingIdentified()
 
   signal recordingStarted()
@@ -193,6 +194,22 @@ Item {
           if ( __positionKit.positionProvider && __positionKit.positionProvider.id() === "simulated" )
           {
             __positionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), mapCanvas.mapSettings ) )
+          }
+
+          if ( root.state === "view" )
+          {
+            let screenPoint = Qt.point( point.x, point.y )
+            let pairs = identifyKit.identify( screenPoint )
+
+            if ( !pairs.isEmpty )
+            {
+              root.featuresIdentified( pairs )
+            }
+            else
+            {
+              root.hideHighlight()
+              root.nothingIdentified()
+            }
           }
         }
       }

@@ -194,13 +194,19 @@ Item {
 
           clickDifferentiatorTimer.restart()
         }
-        else if ( !isDragging )
+        else if ( !isDragging && !clickDifferentiatorTimer.ignoreNextTrigger )
         {
           // this is a simple click
 
           clickDifferentiatorTimer.clickedPoint = clickPosition
           clickDifferentiatorTimer.ignoreNextTrigger = false // just in case
           clickDifferentiatorTimer.start()
+        }
+        else
+        {
+          // this was a pressAndHold or a drag release
+
+          clickDifferentiatorTimer.ignoreNextTrigger = false
         }
 
         previousPosition = null
@@ -213,7 +219,10 @@ Item {
       }
 
       onPressAndHold: function ( mouse ) {
-        mapRoot.longPressed( Qt.point( mouse.x, mouse.y ) )
+        if ( !isDragging ) {
+          mapRoot.longPressed( Qt.point( mouse.x, mouse.y ) )
+        }
+
         clickDifferentiatorTimer.ignoreNextTrigger = true
       }
 
