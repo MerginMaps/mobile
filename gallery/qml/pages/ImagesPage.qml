@@ -46,6 +46,7 @@ ScrollView {
         Column { Image { source: __style.positionTrackingStartImage } Text { text: "positionTrackingStartImage" } }
         Column { Image { source: __style.positionTrackingRunningImage } Text { text: "positionTrackingRunningImage" } }
         Column { Image { source: __style.noMapThemesImage } Text { text: "noMapThemesImage" } }
+        Column { Image { source: __style.syncImage } Text { text: "syncImage" } }
       }
     }
 

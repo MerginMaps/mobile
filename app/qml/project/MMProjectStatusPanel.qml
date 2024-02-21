@@ -13,46 +13,77 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import lc 1.0
 
-import "./components"
+import "../components"
+
+import "../" // TODO Remove
 
 Item {
   id: statusPanel
-  property real rowHeight: InputStyle.rowHeight * 1.2
-  signal back()
+  property real rowHeight: __style.row49 // TODO 36px?
+  property bool hasChanges: true
 
-  function open(projectFullName) {
-    if (__merginProjectStatusModel.loadProjectInfo(projectFullName)) {
-      statusPanel.visible = true;
-    } else __inputUtils.showNotification(qsTr("No Changes"))
-  }
+  signal back()
 
   // background
   Rectangle {
     width: parent.width
     height: parent.height
-    color: InputStyle.clrPanelMain
+    color: __style.lightGreenColor
   }
 
-  PanelHeader {
+  MMHeader {
     id: header
-    height: InputStyle.rowHeightHeader
     width: parent.width
-    color: InputStyle.clrPanelMain
-    rowHeight: InputStyle.rowHeightHeader
-    titleText: qsTr("Project Status")
+    color: __style.lightGreenColor
+    title: statusPanel.hasChanges ? qsTr("Your local changes") : qsTr("Project Status")
     z: contentLayout.z + 1
-
-    onBack: {
+    onBackClicked: {
       statusPanel.back()
     }
-    withBackButton: true
-
   }
 
-  // Content
+  // No changes content
+  Column {
+    id: noChangesContent
+    visible: !statusPanel.hasChanges
+    anchors.verticalCenter: parent.verticalCenter
+    // height: statusPanel.height - header.height
+    width: statusPanel.width
+    y: header.height
+    spacing: __style.margin12
+
+    Image {
+      anchors.horizontalCenter: parent.horizontalCenter
+      source: __style.syncImage
+    }
+
+    Text {
+      anchors.horizontalCenter: parent.horizontalCenter
+      horizontalAlignment: Text.AlignHCenter
+      width: parent.width - 2 * __style.pageMargins
+      wrapMode: Text.WordWrap
+      text: qsTr("There are currently no local changes")
+      font: __style.t1
+      color: __style.forestColor
+    }
+
+    Text {
+      anchors.horizontalCenter: parent.horizontalCenter
+      horizontalAlignment: Text.AlignHCenter
+      width: parent.width - 2 * __style.pageMargins
+      wrapMode: Text.WordWrap
+      text: qsTr("Once you have made some changes, they will appear here.")
+      font: __style.p5
+      color: __style.nightColor
+    }
+  }
+
+  // With changes content
   ColumnLayout {
     id: contentLayout
-    height: statusPanel.height-header.height
+    visible: statusPanel.hasChanges
+
+    height: statusPanel.height - header.height
     width: statusPanel.width
     y: header.height
     spacing: 0
