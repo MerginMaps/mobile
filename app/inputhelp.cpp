@@ -102,7 +102,7 @@ QString InputHelp::merginDashboardLink() const
 
 QString InputHelp::privacyPolicyLink() const
 {
-  return helpRoot + "/misc/privacy/" + utmTagOther;
+  return inputWeb + "/privacy-policy" + utmTagOther;
 }
 
 QString InputHelp::merginSubscriptionDetailsLink() const

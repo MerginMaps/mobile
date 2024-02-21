@@ -11,13 +11,15 @@ import QtQuick
 import QtQuick.Controls
 
 import "../inputs"
+import "../components"
 
 Item {
   id: root
 
   required property string title
+  property string value
   property string description
-  required property bool checked
+  property string suffix
 
   height: mainRow.height
 
@@ -52,19 +54,20 @@ Item {
         font: __style.p6
         color: __style.nightColor
         lineHeight: 1.6
+        visible: text.length > 0
       }
     }
 
-    Item {
+    Text {
       width: parent.width * 0.4
       height: mainColumn.height
 
-      MMSwitch {
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: -8 * __dp
-        checked: root.checked
-      }
+      text: root.value + root.suffix
+      wrapMode: Text.WordWrap
+      font: __style.t3
+      color: __style.forestColor
+      horizontalAlignment: Text.AlignRight
+      verticalAlignment: Text.AlignVCenter
     }
   }
 

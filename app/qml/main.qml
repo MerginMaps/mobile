@@ -23,6 +23,8 @@ import "./layers"
 import "./components"
 import "./misc"
 import "./project"
+import "./settings"
+
 import notificationType 1.0
 
 ApplicationWindow {
@@ -386,12 +388,11 @@ ApplicationWindow {
       }
     }
 
-    SettingsPanel {
+    MMSettingsController {
       id: settingsPanel
 
       height: window.height
       width: window.width
-      rowHeight: InputStyle.rowHeight
 
       onVisibleChanged: {
         if (settingsPanel.visible) {
@@ -402,8 +403,6 @@ ApplicationWindow {
           stateManager.state = "map"
         }
       }
-
-      gpsIndicatorColor: map.gpsIndicatorColor
     }
 
     MMProjectPanel {

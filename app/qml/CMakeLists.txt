@@ -153,9 +153,15 @@ set(MM_QML
     misc/MMGpsDataText.qml
     misc/NoWorkspaceBanner.qml
     misc/PositionProviderPage.qml
-    settings/MMLogPanel.qml
     settings/MMAboutPanel.qml
     settings/MMChangelogPanel.qml
+    settings/MMLogPanel.qml
+    settings/MMSettingDropdown.qml
+    settings/MMSettingInput.qml
+    settings/MMSettingItem.qml
+    settings/MMSettingSwitch.qml
+    settings/MMSettingsPanel.qml
+    settings/MMSettingsController.qml
     dialogs/MMPositionTrackingDrawer.qml
     Banner.qml
     CircularProgressBar.qml
@@ -179,10 +185,6 @@ set(MM_QML
     RegistrationFinishPage.qml
     RoundIndicator.qml
     SearchBar.qml
-    SettingsComboBoxItem.qml
-    SettingsHeaderItem.qml
-    SettingsNumberItem.qml
-    SettingsPanel.qml
     StakeoutPanel.qml
     StorageLimitDialog.qml
     SwitchWorkspacePage.qml
