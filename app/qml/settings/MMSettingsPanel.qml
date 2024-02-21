@@ -102,14 +102,13 @@ Item {
 
           Item { width: 1; height: 1 }
 
-          MMSettingItem {
+          MMSettingInput {
             width: parent.width
             title: qsTr("GPS accuracy treshold")
             description: qsTr("Determines when the accuracy indicator turns yellow")
             valueDescription: qsTr("GPS accuracy treshold, in meters")
             value: __appSettings.gpsAccuracyTolerance
             suffix: " m"
-            editable: true
 
             onValueWasChanged: function( newValue ) {
               __appSettings.gpsAccuracyTolerance = newValue
@@ -128,14 +127,13 @@ Item {
 
           MMLine {}
 
-          MMSettingItem {
+          MMSettingInput {
             width: parent.width
             title: qsTr("GPS antenna height")
             description: qsTr("Includes pole height and GPS receiver’s antenna height")
             valueDescription: qsTr("GPS antenna height, in meters")
             value: __appSettings.gpsAntennaHeight
             suffix: " m"
-            editable: true
 
             onValueWasChanged: function( newValue ) {
               __appSettings.gpsAntennaHeight = newValue
@@ -154,7 +152,7 @@ Item {
 
           Item { width: 1; height: 1 }
 
-          MMSettingItem {
+          MMSettingDropdown {
             width: parent.width
             title: qsTr("Interval threshold type")
             description: qsTr("Choose a type of threshold for streaming mode")
@@ -179,14 +177,13 @@ Item {
 
           MMLine {}
 
-          MMSettingItem {
+          MMSettingInput {
             width: parent.width
             title: qsTr("Threshold interval")
             description: qsTr("Streaming mode will add a point to the object at each interval")
             valueDescription:  __appSettings.intervalType === StreamingIntervalType.Distance ? qsTr("Threshold interval, in meters") : qsTr("Threshold interval, in seconds")
             value: __appSettings.lineRecordingInterval
             suffix: __appSettings.intervalType === StreamingIntervalType.Distance ? " m" : " s"
-            editable: true
 
             onValueWasChanged: function( newValue ) {
               __appSettings.lineRecordingInterval = newValue
@@ -206,7 +203,6 @@ Item {
           Item { width: 1; height: 1 }
 
         }
-
       }
     }
   }
