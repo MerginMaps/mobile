@@ -96,6 +96,7 @@ set(MM_QML
     project/MMProjectWizardPage.qml
     project/MMProjectWizardFieldRow.qml
     project/MMProjectStatusPanel.qml
+    project/MMProjectStatusItem.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
     dialogs/NoPermissionsDialog.qml
