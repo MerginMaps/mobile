@@ -986,9 +986,8 @@ ApplicationWindow {
       target: __activeProject
 
       function onLoadingStarted() {
-        //projectLoadingScreen.visible = true;
-        projectIssuesPanel.visible = true;
-        //failedToLoadProjectBanner.reset();
+        projectLoadingScreen.visible = true;
+        failedToLoadProjectBanner.reset();
         projectIssuesPanel.clear();
       }
 
