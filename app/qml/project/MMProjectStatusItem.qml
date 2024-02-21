@@ -16,6 +16,7 @@ import lc 1.0
 
 Rectangle {
   id: root
+
   height: __style.row36
   required property var /* MerginProjectStatusModel */ type
   property int count: -1 // negative number: do not show count

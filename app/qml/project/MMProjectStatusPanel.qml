@@ -10,27 +10,21 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
-import lc 1.0
 
+import lc 1.0
 import "../components"
 
-Item {
+Page {
   id: statusPanel
+
   property real rowHeight: __style.row49
   property bool hasChanges: true
 
   signal back()
 
-  // background
-  Rectangle {
-    width: parent.width
-    height: parent.height
-    color: __style.lightGreenColor
-  }
-
-  MMHeader {
+  header: MMHeader {
     id: header
+
     width: parent.width
     color: __style.lightGreenColor
     title: statusPanel.hasChanges ? qsTr("Your local changes") : qsTr("Project Status")
@@ -40,14 +34,17 @@ Item {
     }
   }
 
+  background: Rectangle {
+    color: __style.lightGreenColor
+  }
+
   // No changes content
   Column {
     id: noChangesContent
+
     visible: !statusPanel.hasChanges
     anchors.verticalCenter: parent.verticalCenter
-    // height: statusPanel.height - header.height
     width: statusPanel.width
-    y: header.height
     spacing: __style.margin12
 
     Image {
@@ -79,16 +76,16 @@ Item {
   // With changes content
   ColumnLayout {
     id: contentLayout
-    visible: statusPanel.hasChanges
 
+    visible: statusPanel.hasChanges
     height: statusPanel.height - header.height
     width: statusPanel.width - 2*__style.pageMargins
-    y: header.height
     x: __style.pageMargins
     spacing: 0
 
     ListView {
       id: statusList
+
       model: __merginProjectStatusModel
       Layout.fillWidth: true
       Layout.fillHeight: true
@@ -113,12 +110,14 @@ Item {
 
       delegate: Item {
         id: delegateItem
+
         height: fileLabel.visible ? fileLabel.height : row.height
         width: ListView.view.width
 
         /* A/ Pending changes entries - File name */
         MMProjectStatusItem {
           id: fileLabel
+
           width: delegateItem.width
           visible: fileStatus !== MerginProjectStatusModel.Changelog
           type: fileStatus
@@ -137,6 +136,7 @@ Item {
           Text {
             /* Table name within single file */
             id: mainText
+
             text:itemText
             font: __style.p6
             color: __style.nightColor
@@ -148,6 +148,7 @@ Item {
           MMProjectStatusItem {
             /* Added rows for table */
             id: addedItem
+
             width: delegateItem.width
             count: inserts
             visible: inserts > 0
@@ -166,6 +167,7 @@ Item {
           MMProjectStatusItem {
             /* Deleted rows for table */
             id: deletedItem
+
             width: delegateItem.width
             count: deletes
             visible: deletes > 0
