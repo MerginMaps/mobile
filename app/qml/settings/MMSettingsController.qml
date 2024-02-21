@@ -35,15 +35,19 @@ Item {
     }
   }
 
+  function close()
+  {
+    if (stackview.depth > 1) {
+      // hide about or log panel
+      stackview.pop(null)
+    } else
+      root.visible = false
+  }
+
   Keys.onReleased: function( event ) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
       event.accepted = true
-
-      if (stackview.depth > 1) {
-        // hide about or log panel
-        stackview.pop(null)
-      } else
-        root.visible = false
+      root.close()
     }
   }
 
@@ -54,7 +58,8 @@ Item {
     initialItem: MMSettingsPanel {
       id: settingsPanel
 
-      onManageGpsClicked: stackview.push( positioniderComponent )
+      onClose: root.close()
+      onManageGpsClicked: stackview.push( positionProviderComponent )
       onAboutClicked: stackview.push(aboutPanelComponent)
       onChangelogClicked: stackview.push(changelogPanelComponent)
       onHelpClicked: Qt.openUrlExternally(__inputHelp.helpRootLink)
@@ -66,6 +71,7 @@ Item {
 
   Component {
     id: aboutPanelComponent
+
     MMAboutPanel {
       onClose: stackview.pop(null)
       onVisitWebsiteClicked: Qt.openUrlExternally( __inputHelp.inputWebLink )
@@ -75,6 +81,7 @@ Item {
 
   Component {
     id: changelogPanelComponent
+
     MMChangelogPanel {
       id: changelogPanel
       onClose: stackview.pop(null)
@@ -90,6 +97,7 @@ Item {
 
   Component {
     id: logPanelComponent
+
     MMLogPanel {
       onClose: stackview.pop(null)
       onSubmitReport: __inputHelp.submitReport()
@@ -99,6 +107,7 @@ Item {
 
   Component {
     id: positionProviderComponent
+
     PositionProviderPage {
       onClose: stackview.pop(null)
       stackView: stackview
