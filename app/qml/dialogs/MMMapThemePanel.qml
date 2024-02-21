@@ -108,7 +108,7 @@ Drawer {
           leftPadding: __style.pageMargins
           rightPadding: __style.pageMargins
           bottomPadding: __style.pageMargins
-          anchors.horizontalCenter: parent.verticalCenter
+          anchors.horizontalCenter: parent.horizontalCenter
 
           Image {
             source: __style.noMapThemesImage

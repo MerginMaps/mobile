@@ -26,12 +26,15 @@
 #include "qgsrasterlayer.h"
 #include "qgspolygon.h"
 
+#include "mmstyle.h"
+
 #include "testutils.h"
 
 #include <QtTest/QtTest>
 #include <QtCore/QObject>
 #include <QTemporaryDir>
 #include <QLocale>
+#include <QUrl>
 
 const int DAY_IN_SECS = 60 * 60 * 24;
 const int MONTH_IN_SECS = 60 * 60 * 24 * 31;
@@ -637,30 +640,30 @@ void TestUtilsFunctions::testEquals()
 
 void TestUtilsFunctions::testGeometryIcons()
 {
-  QVector<QPair< QgsMapLayer *, QString > > testcases =
+  QVector<QPair< QgsMapLayer *, QUrl > > testcases =
   {
-    { QgsMemoryProviderUtils::createMemoryLayer( "P1", QgsFields(), Qgis::WkbType::Point ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "P2", QgsFields(), Qgis::WkbType::PointZ ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "P3", QgsFields(), Qgis::WkbType::PointM ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "P4", QgsFields(), Qgis::WkbType::PointZM ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "P5", QgsFields(), Qgis::WkbType::MultiPoint ), QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P1", QgsFields(), Qgis::WkbType::Point ), MMStyle::pointLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P2", QgsFields(), Qgis::WkbType::PointZ ), MMStyle::pointLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P3", QgsFields(), Qgis::WkbType::PointM ), MMStyle::pointLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P4", QgsFields(), Qgis::WkbType::PointZM ), MMStyle::pointLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P5", QgsFields(), Qgis::WkbType::MultiPoint ), MMStyle::pointLayerImage() },
 
-    { QgsMemoryProviderUtils::createMemoryLayer( "L1", QgsFields(), Qgis::WkbType::LineString ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "L2", QgsFields(), Qgis::WkbType::LineStringZ ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "L3", QgsFields(), Qgis::WkbType::LineStringM ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "L4", QgsFields(), Qgis::WkbType::LineStringZM ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "L5", QgsFields(), Qgis::WkbType::MultiLineString ), QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L1", QgsFields(), Qgis::WkbType::LineString ), MMStyle::lineLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L2", QgsFields(), Qgis::WkbType::LineStringZ ), MMStyle::lineLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L3", QgsFields(), Qgis::WkbType::LineStringM ), MMStyle::lineLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L4", QgsFields(), Qgis::WkbType::LineStringZM ), MMStyle::lineLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L5", QgsFields(), Qgis::WkbType::MultiLineString ), MMStyle::lineLayerImage() },
 
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO1", QgsFields(), Qgis::WkbType::Polygon ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO2", QgsFields(), Qgis::WkbType::PolygonZ ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO3", QgsFields(), Qgis::WkbType::PolygonM ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO4", QgsFields(), Qgis::WkbType::PolygonZM ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO5", QgsFields(), Qgis::WkbType::MultiPolygon ), QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO1", QgsFields(), Qgis::WkbType::Polygon ), MMStyle::polygonLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO2", QgsFields(), Qgis::WkbType::PolygonZ ), MMStyle::polygonLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO3", QgsFields(), Qgis::WkbType::PolygonM ), MMStyle::polygonLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO4", QgsFields(), Qgis::WkbType::PolygonZM ), MMStyle::polygonLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO5", QgsFields(), Qgis::WkbType::MultiPolygon ), MMStyle::polygonLayerImage() },
 
-    { QgsMemoryProviderUtils::createMemoryLayer( "N1", QgsFields(), Qgis::WkbType::Unknown ), QStringLiteral( "qrc:/mIconTableLayer.svg" ) },
-    { QgsMemoryProviderUtils::createMemoryLayer( "N2", QgsFields(), Qgis::WkbType::NoGeometry ), QStringLiteral( "qrc:/mIconTableLayer.svg" ) },
+    { QgsMemoryProviderUtils::createMemoryLayer( "N1", QgsFields(), Qgis::WkbType::Unknown ), MMStyle::tableLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "N2", QgsFields(), Qgis::WkbType::NoGeometry ), MMStyle::tableLayerImage() },
 
-    { new QgsRasterLayer(), QStringLiteral( "qrc:/mIconRasterLayer.svg" ) }
+    { new QgsRasterLayer(), MMStyle::rasterLayerImage() }
   };
 
   for ( const auto &test : testcases )
@@ -691,12 +694,12 @@ void TestUtilsFunctions::testGeometryIcons()
   QgsGeometry emptyGeom;
   emptyFeature.setGeometry( emptyGeom );
 
-  QVector< QPair< QgsFeature, QString > > testcases_features =
+  QVector< QPair< QgsFeature, QUrl > > testcases_features =
   {
-    { pointFeature, QStringLiteral( "qrc:/mIconPointLayer.svg" ) },
-    { lineFeature, QStringLiteral( "qrc:/mIconLineLayer.svg" ) },
-    { polygonFeature, QStringLiteral( "qrc:/mIconPolygonLayer.svg" ) },
-    { emptyFeature, QStringLiteral( "qrc:/mIconTableLayer.svg" ) }
+    { pointFeature, MMStyle::pointLayerImage() },
+    { lineFeature, MMStyle::lineLayerImage() },
+    { polygonFeature, MMStyle::polygonLayerImage() },
+    { emptyFeature, MMStyle::tableLayerImage() }
   };
 
   for ( const auto &test : testcases_features )

@@ -42,6 +42,7 @@
 #include "qgsmultilinestring.h"
 #include "qgsmultipolygon.h"
 
+#include "mmstyle.h"
 #include "featurelayerpair.h"
 #include "inputmapsettings.h"
 #include "qgsunittypes.h"
@@ -1873,7 +1874,7 @@ void InputUtils::zoomToProject( QgsProject *qgsProject, InputMapSettings *mapSet
   mapSettings->setExtent( extent );
 }
 
-QString InputUtils::loadIconFromLayer( QgsMapLayer *layer )
+QUrl InputUtils::loadIconFromLayer( QgsMapLayer *layer )
 {
   if ( !layer )
     return QString();
@@ -1886,22 +1887,22 @@ QString InputUtils::loadIconFromLayer( QgsMapLayer *layer )
     return iconFromGeometry( geometry );
   }
   else
-    return QString( "qrc:/mIconRasterLayer.svg" );
+    return MMStyle::rasterLayerImage();
 }
 
-QString InputUtils::loadIconFromFeature( QgsFeature feature )
+QUrl InputUtils::loadIconFromFeature( QgsFeature feature )
 {
   return iconFromGeometry( feature.geometry().type() );
 }
 
-QString InputUtils::iconFromGeometry( const Qgis::GeometryType &geometry )
+QUrl InputUtils::iconFromGeometry( const Qgis::GeometryType &geometry )
 {
   switch ( geometry )
   {
-    case Qgis::GeometryType::Point: return QString( "qrc:/mIconPointLayer.svg" );
-    case Qgis::GeometryType::Line: return QString( "qrc:/mIconLineLayer.svg" );
-    case Qgis::GeometryType::Polygon: return QString( "qrc:/mIconPolygonLayer.svg" );
-    default: return QString( "qrc:/mIconTableLayer.svg" );
+    case Qgis::GeometryType::Point: return MMStyle::pointLayerImage();
+    case Qgis::GeometryType::Line: return MMStyle::lineLayerImage();
+    case Qgis::GeometryType::Polygon: return MMStyle::polygonLayerImage();
+    default: return MMStyle::tableLayerImage();
   }
 }
 

@@ -70,7 +70,7 @@ Drawer {
 
         MMRoundButton {
           id: closeButton
-          iconSource: __style.xIcon
+          iconSource: __style.closeIcon
           bgndColor: __style.lightGreenColor
           onClicked: control.visible = false
         }

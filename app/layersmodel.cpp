@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 #include "qgsvectorlayer.h"
-
+#include "mmstyle.h"
 #include "layersmodel.h"
 
 LayersModel::LayersModel()
@@ -40,16 +40,16 @@ QVariant LayersModel::data( const QModelIndex &index, int role ) const
         Qgis::GeometryType type = vectorLayer->geometryType();
         switch ( type )
         {
-          case Qgis::GeometryType::Point: return QStringLiteral( "qrc:/mIconPointLayer.svg" );
-          case Qgis::GeometryType::Line: return QStringLiteral( "qrc:/mIconLineLayer.svg" );
-          case Qgis::GeometryType::Polygon: return QStringLiteral( "qrc:/mIconPolygonLayer.svg" );
+          case Qgis::GeometryType::Point: return MMStyle::pointLayerImage();
+          case Qgis::GeometryType::Line: return MMStyle::lineLayerImage();
+          case Qgis::GeometryType::Polygon: return MMStyle::polygonLayerImage();
 
           case Qgis::GeometryType::Unknown: // fall through
-          case Qgis::GeometryType::Null: return QStringLiteral( "qrc:/mIconTableLayer.svg" );
+          case Qgis::GeometryType::Null: return MMStyle::tableLayerImage();
         }
         return QVariant();
       }
-      else return QStringLiteral( "qrc:/mIconRaster.svg" );
+      else return MMStyle::rasterLayerImage();
     }
     case LayerIdRole: return layer->id();
   }

@@ -12,8 +12,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import lc 1.0
-import ".."
-import "../components" as MMComponents
+import "../inputs"
+import "../components"
 
 Page {
   id: root
@@ -24,21 +24,27 @@ Page {
   signal featureClicked( var featurePair )
   signal addFeatureClicked( var toLayer )
 
-  header: MMComponents.PanelHeaderV2 {
+  header: MMHeader {
     width: parent.width
-    headerTitle: root.selectedLayer ? root.selectedLayer.name + " (" + featuresModel.layerFeaturesCount + ")": ""
+    color: __style.lightGreenColor
+    title: root.selectedLayer ? root.selectedLayer.name + " (" + featuresModel.layerFeaturesCount + ")": ""
     onBackClicked: root.close()
   }
 
-  MMComponents.SearchBoxV2 {
+  Rectangle {
+    anchors.fill: parent
+    color: __style.lightGreenColor
+  }
+
+  MMSearchInput {
     id: searchbox
     anchors {
       left: parent.left
-      leftMargin: InputStyle.panelMargin
+      leftMargin: __style.pageMargins
       right: parent.right
-      rightMargin: InputStyle.panelMargin
+      rightMargin: __style.pageMargins
       top: parent.top
-      topMargin: InputStyle.panelMarginV2
+      topMargin: __style.margin20
     }
 
     onSearchTextChanged: searchDelay.restart()
@@ -55,18 +61,18 @@ Page {
 
     anchors {
       top: searchbox.bottom
-      topMargin: InputStyle.panelMarginV2
+      topMargin: __style.margin20
       left: parent.left
-      leftMargin: InputStyle.panelMargin
+      leftMargin: __style.pageMargins
       right: parent.right
-      rightMargin: InputStyle.panelMargin
+      rightMargin: __style.pageMargins
       bottom: parent.bottom
     }
 
     clip: true
 
     delegate: Item {
-      height: InputStyle.rowHeight
+      height: __style.row63
       width: ListView.view.width
 
       ColumnLayout {
@@ -74,9 +80,9 @@ Page {
 
         anchors {
           left: parent.left
-          leftMargin: InputStyle.listMarginsSmall
+          leftMargin: __style.margin4
           right: parent.right
-          rightMargin: InputStyle.listMarginsSmall
+          rightMargin: __style.margin4
           top: parent.top
         }
 
@@ -87,11 +93,9 @@ Page {
         Text {
           Layout.fillWidth: true
 
-          color: InputStyle.fontColor
-          font.bold: true
+          color: __style.nightColor
+          font: __style.t3
           text: model.display?.toString()?.replace(/\n/g, ' ') ?? ''
-
-          font.pixelSize: InputStyle.fontPixelSizeNormal
 
           elide: Text.ElideMiddle
         }
@@ -99,24 +103,16 @@ Page {
         Text {
           Layout.fillWidth: true
 
-          color: InputStyle.secondaryFontColor
           text: model.Description + ( model.SearchResult ? ", " + model.SearchResult.replace(/\n/g, ' ') : "" )
-
-          font.pixelSize: InputStyle.fontPixelSizeSmall
+          color: __style.nightColor
+          font: __style.p6
 
           elide: Text.ElideMiddle
         }
-      }
 
-      Rectangle {
-        anchors {
-          bottom: parent.bottom
-          left: parent.left
-          right: parent.right
+        MMLine {
+          Layout.fillWidth: true
         }
-
-        height: InputStyle.borderSize
-        color: InputStyle.panelBackgroundLight
       }
 
       MouseArea {
@@ -131,7 +127,7 @@ Page {
     interval: 500
     running: false
     repeat: false
-    onTriggered: featuresModel.searchExpression = searchbox.searchText()
+    onTriggered: featuresModel.searchExpression = searchbox.text
   }
 
   BusyIndicator {
@@ -143,59 +139,23 @@ Page {
     anchors.centerIn: parent
   }
 
-  Component {
-    id: addFeatureHeaderComponent
-
-    Item {
-      height: InputStyle.rowHeightMedium
-      width: ListView.view.width
-
-      RowLayout {
-        id: content
-
-        anchors.fill: parent
-
-        Image {
-          Layout.preferredHeight: InputStyle.iconSizeMedium
-          Layout.preferredWidth: InputStyle.iconSizeMedium
-
-          source: InputStyle.plusIconV2
-        }
-
-        Text {
-          Layout.fillWidth: true
-
-          color: InputStyle.actionColor
-          font.bold: true
-          text: qsTr( "Add feature" )
-          elide: Text.ElideRight
-          font.pixelSize: InputStyle.fontPixelSizeNormal
-        }
-      }
-
-      Rectangle {
-        anchors {
-          bottom: parent.bottom
-          left: parent.left
-          right: parent.right
-        }
-
-        height: InputStyle.borderSize
-        color: InputStyle.panelBackgroundLight
-      }
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: root.addFeatureClicked( root.selectedLayer )
-      }
+  MMButton {
+    width: root.width - 2 * __style.pageMargins
+    visible: __inputUtils.isNoGeometryLayer( root.selectedLayer )
+    anchors {
+      left: parent.left
+      leftMargin: __style.pageMargins
+      right: parent.right
+      rightMargin: __style.pageMargins
+      bottom: parent.bottom
+      bottomMargin: __style.margin20
     }
+
+    text: qsTr("Add feature")
+    onClicked: root.addFeatureClicked( root.selectedLayer )
   }
 
   Component.onCompleted: {
     featuresModel.reloadFeatures()
-
-    if ( __inputUtils.isNoGeometryLayer( root.selectedLayer ) ) {
-      listView.header = addFeatureHeaderComponent
-    }
   }
 }

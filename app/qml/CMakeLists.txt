@@ -128,12 +128,12 @@ set(MM_QML
     form/editors/MMFormValueRelationEditor.qml
     form/editors/MMFormSpacer.qml
     form/editors/MMFormRichTextViewer.qml
-    layers/FeaturesListPageV2.qml
-    layers/LayerDetail.qml
-    layers/LayersListPageV2.qml
-    layers/LayersListSearchPage.qml
-    layers/LayersListV2.qml
-    layers/LayersPanelV2.qml
+    layers/MMFeaturesListPage.qml
+    layers/MMLayerDetail.qml
+    layers/MMLayersListPage.qml
+    layers/MMLayersListSearchPage.qml
+    layers/MMLayersList.qml
+    layers/MMLayersPanel.qml
     map/ActiveLayerPanel.qml
     map/Crosshair.qml
     map/Highlight.qml

@@ -11,19 +11,20 @@ import QtQuick
 import QtQuick.Controls
 
 import lc 1.0
-import "../components" as MMComponents
-import ".."
+import "../components"
+import "../inputs"
 
 Page {
   id: root
 
   property var model: null
   property var parentNodeIndex: null
+  property string pageTitle: qsTr("Layers")
 
   signal close()
   signal nodeClicked( var node, string nodeType, string nodeName )
-  signal searchTextChanged( string searchText )
   signal nodeVisibilityClicked( var node )
+  signal searchboxClicked()
 
   Keys.onReleased: function( event ) {
     if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
@@ -32,39 +33,47 @@ Page {
     }
   }
 
-  header: MMComponents.PanelHeaderV2 {
+  header: MMHeader {
     width: parent.width
-    headerTitle: qsTr("Search layers")
+    title: root.pageTitle
+    color: __style.lightGreenColor
+
     onBackClicked: root.close()
   }
 
-  MMComponents.SearchBoxV2 {
+  Rectangle {
+    anchors.fill: parent
+    color: __style.lightGreenColor
+  }
+
+  MMSearchInput {
     id: searchbox
 
     anchors {
       left: parent.left
-      leftMargin: InputStyle.panelMargin
+      leftMargin: __style.pageMargins
       right: parent.right
-      rightMargin: InputStyle.panelMargin
+      rightMargin: __style.pageMargins
       top: parent.top
-      topMargin: InputStyle.panelMarginV2
-    }
-
-    onSearchTextChanged: function( searchText ) {
-      root.searchTextChanged( searchText )
+      topMargin: __style.margin20
     }
   }
 
-  LayersListV2 {
+  MouseArea {
+    anchors.fill: searchbox
+    onClicked: root.searchboxClicked()
+  }
+
+  MMLayersList {
     id: layers
 
     anchors {
       top: searchbox.bottom
-      topMargin: InputStyle.panelMarginV2
+      topMargin: __style.margin20
       left: parent.left
-      leftMargin: InputStyle.panelMargin
+      leftMargin: __style.pageMargins
       right: parent.right
-      rightMargin: InputStyle.panelMargin
+      rightMargin: __style.pageMargins
       bottom: parent.bottom
     }
 
@@ -73,8 +82,7 @@ Page {
     model: root.model
     parentNodeIndex: root.parentNodeIndex
 
-    showNodePath: true
-    imageProviderPath: "image://LayerTreeFlatModelPixmapProvider/"
+    imageProviderPath: "image://LayerTreeModelPixmapProvider/"
 
     onNodeClicked: function( node, nodeType, nodeName ) {
       root.nodeClicked( node, nodeType, nodeName )
@@ -83,9 +91,5 @@ Page {
     onNodeVisibilityClicked: function( node ) {
       root.nodeVisibilityClicked( node )
     }
-  }
-
-  Component.onCompleted: {
-    searchbox.setActive()
   }
 }

@@ -22,7 +22,7 @@ ScrollView {
     property int rectSize: 10
 
     GroupBox {
-      title: "mmLogoImage"
+      title: "Images"
       background: Rectangle {
         color: __style.lightGreenColor
         border.color: "gray"
@@ -46,6 +46,28 @@ ScrollView {
         Column { Image { source: __style.positionTrackingStartImage } Text { text: "positionTrackingStartImage" } }
         Column { Image { source: __style.positionTrackingRunningImage } Text { text: "positionTrackingRunningImage" } }
         Column { Image { source: __style.noMapThemesImage } Text { text: "noMapThemesImage" } }
+      }
+    }
+
+    GroupBox {
+      title: "Layers (QGIS)"
+      background: Rectangle {
+        color: __style.lightGreenColor
+        border.color: "gray"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      contentData: Column {
+        spacing: 10
+        Column { Image { sourceSize.width:32; source: __style.pointLayerImage } Text { text: "pointLayerImage" } }
+        Column { Image { sourceSize.width:32; source: __style.lineLayerImage } Text { text: "lineLayerImage" } }
+        Column { Image { sourceSize.width:32; source: __style.polygonLayerImage } Text { text: "polygonLayerImage" } }
+        Column { Image { sourceSize.width:32; source: __style.rasterLayerImage } Text { text: "rasterLayerImage" } }
+        Column { Image { sourceSize.width:32; source: __style.tableLayerImage } Text { text: "tableLayerImage" } }
       }
     }
   }

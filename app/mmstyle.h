@@ -111,14 +111,13 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl engineeringIcon READ engineeringIcon CONSTANT )
     Q_PROPERTY( QUrl environmentalIcon READ environmentalIcon CONSTANT )
     Q_PROPERTY( QUrl facebookIcon READ facebookIcon CONSTANT )
+    Q_PROPERTY( QUrl featuresIcon READ featuresIcon CONSTANT )
     Q_PROPERTY( QUrl globeIcon READ globeIcon CONSTANT )
     Q_PROPERTY( QUrl globalIcon READ globalIcon CONSTANT )
-    Q_PROPERTY( QUrl globalFilledIcon READ globalFilledIcon CONSTANT )
     Q_PROPERTY( QUrl gpsIcon READ gpsIcon CONSTANT )
     Q_PROPERTY( QUrl gpsAntennaHeightIcon READ gpsAntennaHeightIcon CONSTANT )
     Q_PROPERTY( QUrl hideIcon READ hideIcon CONSTANT )
     Q_PROPERTY( QUrl homeIcon READ homeIcon CONSTANT )
-    Q_PROPERTY( QUrl homeFilledIcon READ homeFilledIcon CONSTANT )
     Q_PROPERTY( QUrl infoIcon READ infoIcon CONSTANT )
     Q_PROPERTY( QUrl linkedinIcon READ linkedinIcon CONSTANT )
     Q_PROPERTY( QUrl mastodonIcon READ mastodonIcon CONSTANT )
@@ -133,9 +132,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl othersIcon READ othersIcon CONSTANT )
     Q_PROPERTY( QUrl plusIcon READ plusIcon CONSTANT )
     Q_PROPERTY( QUrl personalIcon READ personalIcon CONSTANT )
-    Q_PROPERTY( QUrl previousIcon READ previousIcon CONSTANT )
     Q_PROPERTY( QUrl projectsIcon READ projectsIcon CONSTANT )
-    Q_PROPERTY( QUrl projectsFilledIcon READ projectsFilledIcon CONSTANT )
     Q_PROPERTY( QUrl qgisIcon READ qgisIcon CONSTANT )
     Q_PROPERTY( QUrl qrCodeIcon READ qrCodeIcon CONSTANT )
     Q_PROPERTY( QUrl redditIcon READ redditIcon CONSTANT )
@@ -149,7 +146,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl stopIcon READ stopIcon CONSTANT )
     Q_PROPERTY( QUrl subscriptionsIcon READ subscriptionsIcon CONSTANT )
     Q_PROPERTY( QUrl syncIcon READ syncIcon CONSTANT )
-    Q_PROPERTY( QUrl sync2Icon READ sync2Icon CONSTANT )
     Q_PROPERTY( QUrl syncGreenIcon READ syncGreenIcon CONSTANT )
     Q_PROPERTY( QUrl teacherIcon READ teacherIcon CONSTANT )
     Q_PROPERTY( QUrl telecommunicationIcon READ telecommunicationIcon CONSTANT )
@@ -159,9 +155,15 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl undoIcon READ undoIcon CONSTANT )
     Q_PROPERTY( QUrl waitingIcon READ waitingIcon CONSTANT )
     Q_PROPERTY( QUrl waterResourcesIcon READ waterResourcesIcon CONSTANT )
-    Q_PROPERTY( QUrl xIcon READ xIcon CONSTANT )
     Q_PROPERTY( QUrl xTwitterIcon READ xTwitterIcon CONSTANT )
     Q_PROPERTY( QUrl youtubeIcon READ youtubeIcon CONSTANT )
+
+    // Filled Icons - for visualizing of selected item in toolbar
+    Q_PROPERTY( QUrl projectsFilledIcon READ projectsFilledIcon CONSTANT )
+    Q_PROPERTY( QUrl globalFilledIcon READ globalFilledIcon CONSTANT )
+    Q_PROPERTY( QUrl homeFilledIcon READ homeFilledIcon CONSTANT )
+    Q_PROPERTY( QUrl infoFilledIcon READ infoFilledIcon CONSTANT )
+    Q_PROPERTY( QUrl featuresFilledIcon READ featuresFilledIcon CONSTANT )
 
     // Icons with filled circle background
     Q_PROPERTY( QUrl xMarkCircleIcon READ xMarkCircleIcon CONSTANT )
@@ -185,6 +187,11 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl mmSymbolImage READ mmSymbolImage CONSTANT )
     Q_PROPERTY( QUrl positionTrackingRunningImage READ positionTrackingRunningImage CONSTANT )
     Q_PROPERTY( QUrl positionTrackingStartImage READ positionTrackingStartImage CONSTANT )
+    Q_PROPERTY( QUrl lineLayerImage READ lineLayerImage CONSTANT )
+    Q_PROPERTY( QUrl polygonLayerImage READ polygonLayerImage CONSTANT )
+    Q_PROPERTY( QUrl rasterLayerImage READ rasterLayerImage CONSTANT )
+    Q_PROPERTY( QUrl tableLayerImage READ tableLayerImage CONSTANT )
+    Q_PROPERTY( QUrl pointLayerImage READ pointLayerImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -197,18 +204,28 @@ class MMStyle: public QObject
 
     // Map items
     Q_PROPERTY( double mapItemHeight READ mapItemHeight CONSTANT )
-    Q_PROPERTY( double mapButtonsMargin READ mapButtonsMargin CONSTANT )
+    Q_PROPERTY( double mapButtonsMargin READ margin20 CONSTANT )
 
     // Toolbar
     Q_PROPERTY( double toolbarHeight READ toolbarHeight CONSTANT )
     Q_PROPERTY( double menuDrawerHeight READ menuDrawerHeight CONSTANT )
 
+    // Margins
+    Q_PROPERTY( double margin4 READ margin4 CONSTANT )
+    Q_PROPERTY( double margin6 READ margin6 CONSTANT )
+    Q_PROPERTY( double margin8 READ margin8 CONSTANT )
+    Q_PROPERTY( double margin12 READ margin12 CONSTANT )
+    Q_PROPERTY( double margin20 READ margin20 CONSTANT )
+    Q_PROPERTY( double margin40 READ margin40 CONSTANT )
+
     // Page
-    Q_PROPERTY( double pageMargins READ pageMargins CONSTANT ) // distance between screen edge and components
+    Q_PROPERTY( double pageMargins READ margin20 CONSTANT ) // distance between screen edge and components
     Q_PROPERTY( double maxPageWidth READ maxPageWidth CONSTANT ) // maximum page width (desktop, tablets, landscape)
 
     // Other
-    Q_PROPERTY( double inputRadius READ inputRadius CONSTANT )
+    Q_PROPERTY( double row49 READ row49 CONSTANT )
+    Q_PROPERTY( double row63 READ row63 CONSTANT )
+    Q_PROPERTY( double inputRadius READ margin12 CONSTANT )
     Q_PROPERTY( double scrollVelocityAndroid READ scrollVelocityAndroid CONSTANT ) // [px/s] scrolling on Android devices is too slow by default
 
   public:
@@ -289,6 +306,7 @@ class MMStyle: public QObject
     QUrl checkmarkIcon() {return QUrl( "qrc:/Checkmark.svg" );}
     QUrl closeIcon() {return QUrl( "qrc:/Close.svg" );}
     QUrl deleteIcon() {return QUrl( "qrc:/Delete.svg" );}
+    QUrl featuresIcon() {return QUrl( "qrc:/Features.svg" );}
     QUrl downloadIcon() {return QUrl( "qrc:/Download.svg" );}
     QUrl uploadIcon() {return QUrl( "qrc:/Upload.svg" );}
     QUrl editIcon() {return QUrl( "qrc:/Edit.svg" );}
@@ -298,12 +316,10 @@ class MMStyle: public QObject
     QUrl facebookIcon() {return QUrl( "qrc:/Facebook.svg" );}
     QUrl globeIcon() {return QUrl( "qrc:/Globe.svg" );}
     QUrl globalIcon() {return QUrl( "qrc:/Global.svg" );}
-    QUrl globalFilledIcon() {return QUrl( "qrc:/GlobalFilled.svg" );}
     QUrl gpsIcon() {return QUrl( "qrc:/GPSIcon.svg" );}
     QUrl gpsAntennaHeightIcon() {return QUrl( "qrc:/GPSAntennaHeight.svg" );}
     QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
     QUrl homeIcon() {return QUrl( "qrc:/Home.svg" );}
-    QUrl homeFilledIcon() {return QUrl( "qrc:/HomeFilled.svg" );}
     QUrl infoIcon() {return QUrl( "qrc:/Info.svg" );}
     QUrl linkedinIcon() {return QUrl( "qrc:/Linkedin.svg" );}
     QUrl mastodonIcon() {return QUrl( "qrc:/Mastodon.svg" );}
@@ -317,10 +333,8 @@ class MMStyle: public QObject
     QUrl otherIcon() {return QUrl( "qrc:/Other.svg" );}
     QUrl othersIcon() {return QUrl( "qrc:/Others.svg" );}
     QUrl plusIcon() {return QUrl( "qrc:/Plus.svg" );}
-    QUrl previousIcon() {return QUrl( "qrc:/Previous.svg" );}
     QUrl personalIcon() {return QUrl( "qrc:/Personal.svg" );}
     QUrl projectsIcon() {return QUrl( "qrc:/Projects.svg" );}
-    QUrl projectsFilledIcon() {return QUrl( "qrc:/ProjectsFilled.svg" );}
     QUrl qgisIcon() {return QUrl( "qrc:/QGIS.svg" );}
     QUrl qrCodeIcon() {return QUrl( "qrc:/QRCode.svg" );}
     QUrl redditIcon() {return QUrl( "qrc:/Reddit.svg" );}
@@ -334,7 +348,6 @@ class MMStyle: public QObject
     QUrl stopIcon() {return QUrl( "qrc:/Stop.svg" );}
     QUrl subscriptionsIcon() {return QUrl( "qrc:/Subscriptions.svg" );}
     QUrl syncIcon() {return QUrl( "qrc:/Sync.svg" );}
-    QUrl sync2Icon() {return QUrl( "qrc:/Sync2.svg" );}
     QUrl syncGreenIcon() {return QUrl( "qrc:/SyncGreen.svg" );}
     QUrl teacherIcon() {return QUrl( "qrc:/Teacher.svg" );}
     QUrl telecommunicationIcon() {return QUrl( "qrc:/Telecommunication.svg" );}
@@ -344,9 +357,14 @@ class MMStyle: public QObject
     QUrl undoIcon() {return QUrl( "qrc:/Undo.svg" );}
     QUrl waitingIcon() {return QUrl( "qrc:/Waiting.svg" );}
     QUrl waterResourcesIcon() {return QUrl( "qrc:/WaterResources.svg" );}
-    QUrl xIcon() {return QUrl( "qrc:/X.svg" );}
     QUrl xTwitterIcon() {return QUrl( "qrc:/XTwitter.svg" );}
     QUrl youtubeIcon() {return QUrl( "qrc:/Youtube.svg" );}
+
+    QUrl projectsFilledIcon() {return QUrl( "qrc:/ProjectsFilled.svg" );}
+    QUrl globalFilledIcon() {return QUrl( "qrc:/GlobalFilled.svg" );}
+    QUrl infoFilledIcon() {return QUrl( "qrc:/InfoFilled.svg" );}
+    QUrl featuresFilledIcon() {return QUrl( "qrc:/FeaturesFilled.svg" );}
+    QUrl homeFilledIcon() {return QUrl( "qrc:/HomeFilled.svg" );}
 
     QUrl xMarkCircleIcon() {return QUrl( "qrc:/XMarkCircle.svg" );}
     QUrl doneCircleIcon() {return QUrl( "qrc:/DoneCircle.svg" );}
@@ -368,21 +386,29 @@ class MMStyle: public QObject
     QUrl mapPinImage() {return QUrl( "qrc:/images/MapPin.svg" );}
     QUrl positionTrackingRunningImage() {return QUrl( "qrc:/images/PositionTrackingRunning.svg" );}
     QUrl positionTrackingStartImage() {return QUrl( "qrc:/images/PositionTrackingStart.svg" );}
+    static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
+    static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}
+    static QUrl polygonLayerImage() {return QUrl( "qrc:/images/mIconPolygonLayer.svg" );}
+    static QUrl rasterLayerImage() {return QUrl( "qrc:/images/mIconRasterLayer.svg" );}
+    static QUrl tableLayerImage() {return QUrl( "qrc:/images/mIconTableLayer.svg" );}
 
     double icon16() {return 16 * mDp;}
     double icon24() {return 24 * mDp;}
     double icon32() {return 32 * mDp;}
 
     double mapItemHeight() {return 60 * mDp;}
-    double mapButtonsMargin() {return 25 * mDp;}
-
     double toolbarHeight() {return 68 * mDp;}
     double menuDrawerHeight() {return 67 * mDp;}
-
-    double inputRadius() {return 12 * mDp;}
-
-    double pageMargins() {return 20 * mDp;}
     double maxPageWidth() {return 720 * mDp;}
+
+    double margin4() {return 4 * mDp;}
+    double margin6() {return 6 * mDp;}
+    double margin8() {return 8 * mDp;}
+    double margin12() {return 12 * mDp;}
+    double margin20() {return 20 * mDp;}
+    double margin40() {return 40 * mDp;}
+    double row49() {return 49 * mDp;}
+    double row63() {return 63 * mDp;}
 
     double scrollVelocityAndroid() { return 10000; }
 

@@ -93,7 +93,7 @@ Item {
 
           MMIcon {
             id: previousIcon
-            source: __style.previousIcon
+            source: __style.backIcon
             anchors.verticalCenter: parent.verticalCenter
 
             MouseArea {
