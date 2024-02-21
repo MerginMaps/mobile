@@ -97,6 +97,7 @@ set(MM_QML
     project/MMProjectWizardFieldRow.qml
     project/MMProjectStatusPanel.qml
     project/MMProjectStatusItem.qml
+    project/MMProjectIssuesPanel.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
     dialogs/NoPermissionsDialog.qml
@@ -180,7 +181,6 @@ set(MM_QML
     NumberSpin.qml
     PanelItem.qml
     PanelTabButton.qml
-    MMProjectIssuesPanel.qml
     ProjectLimitDialog.qml
     RegistrationFinishPage.qml
     RoundIndicator.qml
