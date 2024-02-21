@@ -29,7 +29,7 @@ import notificationType 1.0
 
 ApplicationWindow {
     id: window
-    
+
     visible: true
     width:  __appwindowwidth
     height: __appwindowheight
@@ -586,12 +586,11 @@ ApplicationWindow {
       }
     }
 
-    ProjectIssuesPanel {
+    MMProjectIssuesPanel {
       id: projectIssuesPanel
 
       height: window.height
       width: window.width
-      rowHeight: InputStyle.rowHeight
       visible: false;
 
       onVisibleChanged: {

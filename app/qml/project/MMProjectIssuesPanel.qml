@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -12,14 +11,13 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import lc 1.0
-import "." // import InputStyle singleton
-import "./components"
+import ".."
+import "../components"
 
 Item {
   id: root
 
   visible: false
-  property real rowHeight: InputStyle.rowHeight
   property var projectIssuesModel: ListModel {}
   property string projectLoadingLog: ""
 
@@ -43,42 +41,40 @@ Item {
     }
   }
 
-  StackView {
-    id: stackview
+  Rectangle {
+    id: roundedRect
 
     anchors.fill: parent
-    initialItem: projectIssuesContentComponent
-  }
+    color: __style.lightGreenColor
 
-  Component {
-    id: projectIssuesContentComponent
+    ColumnLayout {
+      anchors.fill: parent
+      width: parent.width
+      spacing: 40 * __dp
 
-    Page {
-      id: projectIssuesPanel
-      padding: 0
-
-      background: Rectangle {
-        anchors.fill: parent
-        color: InputStyle.clrPanelMain
-      }
-
-      header: PanelHeader {
+      MMHeader {
         id: header
-        height: root.rowHeight
-        width: parent.width
-        color: InputStyle.clrPanelMain
-        rowHeight: InputStyle.rowHeightHeader
-        titleText: qsTr("Project Issues")
 
-        onBack: root.visible = false
+        Layout.fillWidth: true
+        width: parent.width
+        onBackClicked: root.visible = false
+
+        title: qsTr("Project issues")
+        titleFont: __style.t3
       }
 
       ScrollView {
         id: scrollPage
-        width: projectIssuesPanel.width
-        height: projectIssuesPanel.height - header.height
-        contentWidth: availableWidth // to only scroll vertically
-        spacing: InputStyle.panelSpacing
+
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.leftMargin: __style.pageMargins
+        Layout.rightMargin: __style.pageMargins
+        Layout.maximumWidth: __style.maxPageWidth
+        Layout.alignment: Qt.AlignHCenter
+
+        contentWidth: availableWidth
+        Layout.preferredHeight: settingListContent.childrenRect.height
 
         Column {
           id: settingListContent
@@ -87,31 +83,36 @@ Item {
 
           PanelItem {
             id: invalidLayersList
+            color: roundedRect.color
             height: 0
 
             ListView {
               id: invalidLayersListView
-              anchors.fill: parent
 
+              anchors.fill: parent
               model: projectIssuesModel
               spacing: 3
+
               delegate: PanelItem {
+                color: __style.lightGreenColor
                 anchors.margins: 5
                 width: ListView.view.width
                 height: row.height
-                color: InputStyle.clrPanelMain
+
                 Column {
                   id: row
+
                   width: parent.width
                   anchors.left: parent.left
                   anchors.top: parent.top
+
                   Text {
                     id: nameTextItem
                     width: parent.width
                     padding: 5
-                    font.pixelSize: InputStyle.fontPixelSizeBig
+                    font: __style.t1
                     text: title
-                    color: InputStyle.fontColor
+                    color: __style.forestColor
                     wrapMode: Text.Wrap
                   }
 
@@ -119,44 +120,51 @@ Item {
                     id: messageTextItem
                     width: parent.width
                     padding: 10
-                    font.pixelSize: InputStyle.fontPixelSizeNormal
                     text: message
                     wrapMode: Text.Wrap
+                    font: __style.p5
+                    color:  __style.nightColor
                   }
                 }
+
                 onHeightChanged: invalidLayersList.height += height;
               }
 
               onCountChanged: {
-                if ( count == 0 )
+                if ( count === 0 )
                   invalidLayersList.height = 0;
               }
             }
           }
 
-          // Debug/Logging
           PanelItem {
             height: qgisLogTextHeader.height
             width: parent.width
+            color: roundedRect.color
+
             Text {
               id: qgisLogTextHeader
               width: parent.width
               padding: 5
               text: qsTr("QGIS log")
-              font.pixelSize: InputStyle.fontPixelSizeBig
-              color: InputStyle.fontColor
+              font: __style.t1
+              color:  __style.forestColor
             }
           }
 
           PanelItem {
             height: qgisLogTextItem.height
             width: parent.width
+            color: roundedRect.color
+
             Text {
               id: qgisLogTextItem
               width: parent.width
               padding: 10
               text: projectLoadingLog
               wrapMode: Text.Wrap
+              font: __style.p5
+              color:  __style.nightColor
             }
           }
         }
