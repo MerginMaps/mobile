@@ -44,7 +44,7 @@ class InputUtils: public QObject
     bool reuseLastEnteredValues() { return mReuseLastEnteredValues; }
     void setReuseLastEnteredValues( bool reuseLastEnteredValues ) { mReuseLastEnteredValues = reuseLastEnteredValues; emit reuseLastEnteredValuesChanged(); }
     bool autosyncAllowed() { return mNewAutosyncAllowed; }
-    void setAutosyncAllowed( bool newAutosyncAllowed ) { mNewAutosyncAllowed = newAutosyncAllowed; emit autosyncAllowedChanged(mNewAutosyncAllowed); }
+    void setAutosyncAllowed( bool newAutosyncAllowed ) { mNewAutosyncAllowed = newAutosyncAllowed; emit autosyncAllowedChanged( mNewAutosyncAllowed ); }
 
   signals:
     void imageSelected( QString imagePath, QString code );
