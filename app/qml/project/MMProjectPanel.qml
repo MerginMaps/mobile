@@ -73,17 +73,13 @@ Item {
     onboardingController.start()
   }
 
-  function openChangesPanel()
+  function openChangesPanel( projectId )
   {
-    stackView.push( statusPanelComp )
+    stackView.push( statusPanelComp, {hasChanges: __merginProjectStatusModel.loadProjectInfo( projectId )} )
   }
 
   function showChanges( projectId ) {
-    if ( __merginProjectStatusModel.loadProjectInfo( projectId ) )
-    {
-      root.openChangesPanel()
-    }
-    else __inputUtils.showNotification( qsTr( "No Changes" ) )
+    root.openChangesPanel( projectId )
   }
 
   visible: false
@@ -517,11 +513,10 @@ Item {
 
   Component {
     id: statusPanelComp
-    ProjectStatusPanel {
+    MMProjectStatusPanel {
       id: statusPanel
       height: root.height
       width: root.width
-      visible: false
       onBack: stackView.popOnePageOrClose()
     }
   }

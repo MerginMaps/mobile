@@ -95,6 +95,8 @@ set(MM_QML
     project/MMProjectLoadingScreen.qml
     project/MMProjectWizardPage.qml
     project/MMProjectWizardFieldRow.qml
+    project/MMProjectStatusPanel.qml
+    project/MMProjectStatusItem.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
     dialogs/NoPermissionsDialog.qml
@@ -174,7 +176,6 @@ set(MM_QML
     PanelTabButton.qml
     ProjectIssuesPanel.qml
     ProjectLimitDialog.qml
-    ProjectStatusPanel.qml
     RegistrationFinishPage.qml
     RoundIndicator.qml
     SearchBar.qml

@@ -192,6 +192,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl rasterLayerImage READ rasterLayerImage CONSTANT )
     Q_PROPERTY( QUrl tableLayerImage READ tableLayerImage CONSTANT )
     Q_PROPERTY( QUrl pointLayerImage READ pointLayerImage CONSTANT )
+    Q_PROPERTY( QUrl syncImage READ syncImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -223,6 +224,8 @@ class MMStyle: public QObject
     Q_PROPERTY( double maxPageWidth READ maxPageWidth CONSTANT ) // maximum page width (desktop, tablets, landscape)
 
     // Other
+    Q_PROPERTY( double row24 READ row24 CONSTANT )
+    Q_PROPERTY( double row36 READ row36 CONSTANT )
     Q_PROPERTY( double row49 READ row49 CONSTANT )
     Q_PROPERTY( double row63 READ row63 CONSTANT )
     Q_PROPERTY( double inputRadius READ margin12 CONSTANT )
@@ -386,6 +389,8 @@ class MMStyle: public QObject
     QUrl mapPinImage() {return QUrl( "qrc:/images/MapPin.svg" );}
     QUrl positionTrackingRunningImage() {return QUrl( "qrc:/images/PositionTrackingRunning.svg" );}
     QUrl positionTrackingStartImage() {return QUrl( "qrc:/images/PositionTrackingStart.svg" );}
+    QUrl syncImage() {return QUrl( "qrc:/images/SyncImage.svg" );}
+
     static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
     static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}
     static QUrl polygonLayerImage() {return QUrl( "qrc:/images/mIconPolygonLayer.svg" );}
@@ -407,6 +412,9 @@ class MMStyle: public QObject
     double margin12() {return 12 * mDp;}
     double margin20() {return 20 * mDp;}
     double margin40() {return 40 * mDp;}
+
+    double row24() {return 24 * mDp;}
+    double row36() {return 36 * mDp;}
     double row49() {return 49 * mDp;}
     double row63() {return 63 * mDp;}
 

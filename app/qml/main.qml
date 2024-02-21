@@ -216,15 +216,8 @@ ApplicationWindow {
       }
 
       onLocalChangesPanelRequested: {
-          if ( __merginProjectStatusModel.loadProjectInfo( __activeProject.projectFullName() ) )
-          {
-            stateManager.state = "projects"
-            projectPanel.openChangesPanel()
-          }
-          else
-          {
-            __inputUtils.showNotification( qsTr( "No Changes" ) )
-          }
+        stateManager.state = "projects"
+        projectPanel.openChangesPanel( __activeProject.projectFullName() )
       }
 
       onOpenTrackingPanel: {
@@ -359,14 +352,8 @@ ApplicationWindow {
           text: qsTr("Local changes")
           iconSource: __style.localChangesIcon
           onClicked: {
-            if ( __merginProjectStatusModel.loadProjectInfo( __activeProject.projectFullName() ) )
-            {
-              stateManager.state = "projects"
-              projectPanel.openChangesPanel()
-            }
-            else {
-              __inputUtils.showNotification( qsTr( "No Changes" ) )
-            }
+            stateManager.state = "projects"
+            projectPanel.openChangesPanel( __activeProject.projectFullName() )
           }
         }
 
