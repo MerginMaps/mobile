@@ -63,6 +63,13 @@ Page {
             stackview.push(changelogPanelComponent)
           }
         }
+
+        MMButton {
+          text: "MMSettingsPanel"
+          onClicked: {
+            stackview.push(settingsPanelComponent)
+          }
+        }
       }
     }
   }
@@ -139,6 +146,16 @@ Page {
           console.log("see changelogs requested")
         }
       }
+    }
+  }
+
+  Component {
+    id: settingsPanelComponent
+    MMSettingsPanel {
+      id: settingsPanel
+      width: root.width
+      height: root.height
+      onClose: stackview.pop()
     }
   }
 }

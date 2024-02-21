@@ -2,6 +2,9 @@
 #define INPUTUTILS_H
 
 #include <QObject>
+#include <QDebug>
+
+#include "streamingintervaltype.h"
 
 class InputUtils: public QObject
 {
@@ -21,12 +24,44 @@ class InputUtils: public QObject
 
     Q_PROPERTY( bool isIos READ isIos CONSTANT )
     Q_PROPERTY( bool isAndroid READ isAndroid CONSTANT )
+    Q_PROPERTY( double gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged )
+    Q_PROPERTY( double gpsAntennaHeight READ gpsAntennaHeight WRITE setGpsAntennaHeight NOTIFY gpsAntennaHeightChanged )
+    Q_PROPERTY( int lineRecordingInterval READ lineRecordingInterval WRITE setLineRecordingInterval NOTIFY lineRecordingIntervalChanged )
+    Q_PROPERTY( StreamingIntervalType::IntervalType intervalType READ intervalType WRITE setIntervalType NOTIFY intervalTypeChanged )
+    Q_PROPERTY( bool reuseLastEnteredValues READ reuseLastEnteredValues WRITE setReuseLastEnteredValues NOTIFY reuseLastEnteredValuesChanged )
+    Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
 
     bool isIos() { return false; }
     bool isAndroid() { return true; }
+    double gpsAccuracyTolerance() { return mGpsAccuracy; }
+    void setGpsAccuracyTolerance( double gpsAccuracyTolerance ) { mGpsAccuracy = gpsAccuracyTolerance; emit gpsAccuracyToleranceChanged(); }
+    double gpsAntennaHeight() { return mGpsAntennaHeightcy; }
+    void setGpsAntennaHeight( double gpsAntennaHeight ) { mGpsAntennaHeightcy = gpsAntennaHeight; emit gpsAntennaHeightChanged(); }
+    int lineRecordingInterval() { return mLineRecordingInterval; }
+    void setLineRecordingInterval( int lineRecordingInterval ) { mLineRecordingInterval = lineRecordingInterval; emit lineRecordingIntervalChanged(); }
+    StreamingIntervalType::IntervalType intervalType() { return mIntervalType; }
+    void setIntervalType( StreamingIntervalType::IntervalType intervalType ) { mIntervalType = intervalType; emit intervalTypeChanged(); }
+    bool reuseLastEnteredValues() { return mReuseLastEnteredValues; }
+    void setReuseLastEnteredValues( bool reuseLastEnteredValues ) { mReuseLastEnteredValues = reuseLastEnteredValues; emit reuseLastEnteredValuesChanged(); }
+    bool autosyncAllowed() { return mNewAutosyncAllowed; }
+    void setAutosyncAllowed( bool newAutosyncAllowed ) { mNewAutosyncAllowed = newAutosyncAllowed; emit autosyncAllowedChanged( mNewAutosyncAllowed ); }
 
   signals:
     void imageSelected( QString imagePath, QString code );
+    void gpsAccuracyToleranceChanged();
+    void gpsAntennaHeightChanged();
+    void lineRecordingIntervalChanged();
+    void intervalTypeChanged();
+    void reuseLastEnteredValuesChanged();
+    void autosyncAllowedChanged( bool autosyncAllowed );
+
+  private:
+    double mGpsAccuracy = 10;
+    double mGpsAntennaHeightcy = 23;
+    int mLineRecordingInterval = 3;
+    StreamingIntervalType::IntervalType mIntervalType = StreamingIntervalType::IntervalType::Distance;
+    bool mReuseLastEnteredValues = false;
+    bool mNewAutosyncAllowed = true;
 };
 
 #endif // INPUTUTILS_H

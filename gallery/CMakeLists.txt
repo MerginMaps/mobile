@@ -37,6 +37,7 @@ set(GALLERY_HDRS
     scalebarkit.h
     positionkit.h
     formfeaturesmodel.h
+    streamingintervaltype.h
     ../app/notificationmodel.h
     ../app/mmstyle.h
     ../core/merginerrortypes.h
