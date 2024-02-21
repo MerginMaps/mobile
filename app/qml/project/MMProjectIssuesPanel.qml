@@ -12,14 +12,13 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import lc 1.0
-import "." // import InputStyle singleton
-import "./components"
+import ".."
+import "../components"
 
 Item {
   id: root
 
   visible: false
-  property real rowHeight: InputStyle.rowHeight
   property var projectIssuesModel: ListModel {}
   property string projectLoadingLog: ""
 
@@ -58,7 +57,6 @@ Item {
         id: header
 
         Layout.fillWidth: true
-        height: root.rowHeight
         width: parent.width
         onBackClicked: root.visible = false
 
@@ -73,6 +71,11 @@ Item {
         Layout.fillHeight: true
         Layout.leftMargin: __style.pageMargins
         Layout.rightMargin: __style.pageMargins
+        Layout.maximumWidth: __style.maxPageWidth
+        Layout.alignment: Qt.AlignHCenter
+
+        contentWidth: availableWidth
+        Layout.preferredHeight: settingListContent.childrenRect.height
 
         Column {
           id: settingListContent
@@ -81,6 +84,7 @@ Item {
 
           PanelItem {
             id: invalidLayersList
+            color: roundedRect.color
             height: 0
 
             ListView {
@@ -91,7 +95,7 @@ Item {
               spacing: 3
 
               delegate: PanelItem {
-                color: roundedRect.color
+                color: __style.lightGreenColor
                 anchors.margins: 5
                 width: ListView.view.width
                 height: row.height
@@ -123,6 +127,7 @@ Item {
                     color:  __style.nightColor
                   }
                 }
+
                 onHeightChanged: invalidLayersList.height += height;
               }
 

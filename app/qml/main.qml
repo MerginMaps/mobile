@@ -591,7 +591,6 @@ ApplicationWindow {
 
       height: window.height
       width: window.width
-      rowHeight: InputStyle.rowHeight
       visible: false;
 
       onVisibleChanged: {
