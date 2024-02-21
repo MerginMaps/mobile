@@ -43,15 +43,12 @@ Item {
         width: ListView.view.width
         height: __style.row49 * ( root.showNodePath ? 1.5 : 1 )
 
-        Rectangle {
+        MMLine {
           anchors {
             bottom: parent.bottom
             left: parent.left
             right: parent.right
           }
-
-          height: 2 * __dp
-          color: __style.lightGreenColor
         }
 
         MouseArea {

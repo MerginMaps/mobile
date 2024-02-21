@@ -85,7 +85,7 @@ Page {
         ColumnLayout {
 
           width: scrollview.width
-          spacing: __style.margin8
+          spacing: __style.margin20
 
           // visibility
           Column {
@@ -129,9 +129,6 @@ Page {
                 MMSwitch {
                   id: visibleSwitch
 
-                  //Layout.preferredWidth: InputStyle.switchWidth
-                  //Layout.preferredHeight: InputStyle.switchHeight
-
                   onReleased: function() {
                     __activeProject.switchLayerTreeNodeVisibility( layerDetailData.layerTreeNode )
                   }
@@ -162,7 +159,7 @@ Page {
               id: symbologyTitle
 
               text: qsTr( "Legend" )
-              font: __style.p5
+              font: __style.p6
               color: __style.nightColor
             }
 
@@ -214,7 +211,7 @@ Page {
               id: attributionTitle
 
               text: qsTr( "Attribution" )
-              font: __style.p5
+              font: __style.p6
               color: __style.nightColor
             }
 
