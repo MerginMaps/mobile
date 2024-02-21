@@ -15,6 +15,7 @@ import "../inputs"
 MMSettingItem {
   id: root
 
+  property string valueDescription
   property bool multiSelect: false
   property var model
   property var selected

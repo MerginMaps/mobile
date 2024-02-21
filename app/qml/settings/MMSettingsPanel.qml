@@ -78,7 +78,8 @@ Item {
         height: settingsPanel.height - header.height
         contentWidth: availableWidth // to only scroll vertically
         anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 0 * __dp
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
         background: Rectangle {
           anchors.fill: parent
@@ -202,17 +203,27 @@ Item {
 
           Item { width: 1; height: 1 }
 
+          MMSettingSwitch {
+            width: parent.width
+            title: qsTr("Reuse last entered value")
+            description: qsTr("Each field offers an option to reuse its value on the next feature")
+            checked: __appSettings.reuseLastEnteredValues
+
+            onClicked: __appSettings.reuseLastEnteredValues = !checked
+          }
+
+          MMLine {}
+
+          MMSettingSwitch {
+            width: parent.width
+            title: qsTr("Automatically sync changes")
+            description: qsTr("Each time you save changes, the app will sync automatically")
+            checked: __appSettings.autosyncAllowed
+
+            onClicked: __appSettings.autosyncAllowed = !checked
+          }
         }
       }
-    }
-  }
-
-  Component {
-    id: aboutPanelComponent
-    MMAboutPanel {
-      onClose: stackview.pop(null)
-      onVisitWebsiteClicked: Qt.openUrlExternally( __inputHelp.inputWebLink )
-      Component.onCompleted: forceActiveFocus()
     }
   }
 }

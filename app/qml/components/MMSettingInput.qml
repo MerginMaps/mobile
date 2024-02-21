@@ -15,6 +15,8 @@ import "../inputs"
 MMSettingItem {
   id: root
 
+  property string valueDescription
+
   onClicked: {
     inputDrawer.value = root.value
     inputDrawer.visible = true

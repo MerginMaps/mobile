@@ -16,9 +16,8 @@ Item {
   id: root
 
   required property string title
-  property string value
   property string description
-  property string suffix
+  required property bool checked
 
   height: mainRow.height
 
@@ -53,20 +52,19 @@ Item {
         font: __style.p6
         color: __style.nightColor
         lineHeight: 1.6
-        visible: text.length > 0
       }
     }
 
-    Text {
+    Item {
       width: parent.width * 0.4
       height: mainColumn.height
 
-      text: root.value + root.suffix
-      wrapMode: Text.WordWrap
-      font: __style.t3
-      color: __style.forestColor
-      horizontalAlignment: Text.AlignRight
-      verticalAlignment: Text.AlignVCenter
+      MMSwitch {
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: -8 * __dp
+        checked: root.checked
+      }
     }
   }
 
