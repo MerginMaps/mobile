@@ -167,10 +167,6 @@ set(MM_QML
     settings/MMSettingsController.qml
     dialogs/MMPositionTrackingDrawer.qml
     Banner.qml
-    FeaturesList.qml
-    FeaturesListPage.qml
-    FeaturesListPageToolbar.qml
-   
     InputStyle.qml
     ManageInvitationsPage.qml
     Notification.qml
@@ -178,7 +174,6 @@ set(MM_QML
     PanelItem.qml
     PanelTabButton.qml
     ProjectLimitDialog.qml
-    SearchBar.qml
     StakeoutPanel.qml
     SwitchWorkspacePage.qml
     main.qml
