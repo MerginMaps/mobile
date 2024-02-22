@@ -34,7 +34,6 @@ set(MM_QML
     components/MMRoundButton.qml
     components/MMButton.qml
     components/MMCodeScanner.qml
-    components/MMComponent_reachedDataLimit.qml
     components/MMCheckBox.qml
     components/MMDrawerDialog.qml
     components/MMDropdownDrawer.qml
@@ -103,6 +102,7 @@ set(MM_QML
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
     dialogs/MMMapThemePanel.qml
+    dialogs/MMStorageLimitDialog.qml
     inputs/MMBaseInput.qml
     inputs/MMPasswordInput.qml
     inputs/MMTextInput.qml
@@ -166,9 +166,6 @@ set(MM_QML
     settings/MMSettingsController.qml
     dialogs/MMPositionTrackingDrawer.qml
     Banner.qml
-    CircularProgressBar.qml
-    CodeScanner.qml
-    CodeScannerOverlay.qml
     CreateWorkspacePage.qml
     ExternalResourceBundle.qml
     FeaturesList.qml
@@ -187,7 +184,6 @@ set(MM_QML
     RoundIndicator.qml
     SearchBar.qml
     StakeoutPanel.qml
-    StorageLimitDialog.qml
     SwitchWorkspacePage.qml
     WhatsNewDialog.qml
     main.qml
