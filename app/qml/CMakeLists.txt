@@ -2,7 +2,6 @@ set(MM_QML
     account/MMAcountPage.qml
     account/MMAcountPageItem.qml
     banners/AutoHideBanner.qml
-    components/BluetoothConnectionDialog.qml
     components/CheckboxComponent.qml
     components/DateTimePicker.qml
     components/DelegateButton.qml
@@ -37,7 +36,7 @@ set(MM_QML
     components/MMCodeScanner.qml
     components/MMComponent_reachedDataLimit.qml
     components/MMCheckBox.qml
-    components/MMDrawer.qml
+    components/MMDrawerDialog.qml
     components/MMDropdownDrawer.qml
     components/MMHeader.qml
     components/MMHlineText.qml
@@ -148,12 +147,14 @@ set(MM_QML
     map/MMMapScaleBar.qml
     map/SplittingTools.qml
     map/StakeoutTools.qml
-    misc/AddPositionProviderPage.qml
     misc/AttentionBanner.qml
-    misc/MMGpsDataDrawer.qml
-    misc/MMGpsDataText.qml
     misc/NoWorkspaceBanner.qml
-    misc/PositionProviderPage.qml
+    gps/MMAddPositionProviderDrawer.qml
+    gps/MMBluetoothConnectionDrawer.qml
+    gps/MMGpsDataDrawer.qml
+    gps/MMGpsDataText.qml
+    gps/MMPositionProviderPage.qml
+    gps/MMExternalGpsNotSupportedComponent.qml
     settings/MMAboutPanel.qml
     settings/MMChangelogPanel.qml
     settings/MMLogPanel.qml

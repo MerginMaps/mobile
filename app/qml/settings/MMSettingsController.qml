@@ -15,6 +15,7 @@ import lc 1.0
 
 import "../components"
 import "../misc"
+import "../gps"
 
 Item {
   id: root
@@ -108,9 +109,8 @@ Item {
   Component {
     id: positionProviderComponent
 
-    PositionProviderPage {
+    MMPositionProviderPage {
       onClose: stackview.pop(null)
-      stackView: stackview
       Component.onCompleted: forceActiveFocus()
     }
   }

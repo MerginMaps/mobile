@@ -20,8 +20,6 @@
 	<string>${QMAKE_PKGINFO_TYPEINFO}</string>
 	<key>CFBundleVersion</key>
 	<string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>MinimumOSVersion</key>
@@ -40,6 +38,8 @@
 	<string>Program requires access to gallery to attach pictures to features on map</string>
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>Program requires access to gallery to attach pictures to features on map</string>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>Program requires access to bluetooth to connect to external GPS receivers</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>
@@ -85,10 +85,6 @@
 	<true/>
 	<key>UILaunchStoryboardName</key>
     <string>InputScreen</string>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>arm64</string>
-	</array>
 	<!-- Run the app when minimised while tracking position -->
 	<key>UIBackgroundModes</key>
 	<array>

@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QDebug>
 
-#include "streamingintervaltype.h"
+#include "enums.h"
 
 class InputUtils: public QObject
 {

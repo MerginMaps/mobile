@@ -34,7 +34,7 @@
         <file>../app/qml/components/MMSwitch.qml</file>
         <file>../app/qml/components/MMNotification.qml</file>
         <file>../app/qml/components/MMNotificationView.qml</file>
-        <file>../app/qml/components/MMDrawer.qml</file>
+        <file>../app/qml/components/MMDrawerDialog.qml</file>
         <file>../app/qml/components/MMComponent_reachedDataLimit.qml</file>
         <file>../app/qml/components/MMProgressBar.qml</file>
         <file>../app/qml/components/MMMapButton.qml</file>
@@ -112,5 +112,7 @@
         <file>../app/qml/settings/MMSettingInput.qml</file>
         <file>../app/qml/settings/MMSettingDropdown.qml</file>
         <file>../app/qml/settings/MMSettingSwitch.qml</file>
-    </qresource>
+        <file>../app/qml/gps/MMBluetoothConnectionDrawer.qml</file>
+        <file>../app/qml/gps/MMExternalGpsNotSupportedComponent.qml</file>
+  </qresource>
 </RCC>

@@ -15,6 +15,7 @@ import "../../app/qml/components"
 import "../../app/qml"
 import "../../app/qml/project"
 import "../../app/qml/settings"
+import "../../app/qml/gps"
 
 Page {
   id: root
@@ -68,6 +69,13 @@ Page {
           text: "MMSettingsPanel"
           onClicked: {
             stackview.push(settingsPanelComponent)
+          }
+        }
+
+        MMButton {
+          text: "MMExternalGpsNotSupportedComponent"
+          onClicked: {
+            stackview.push(externalGpsNotAllowedComponent)
           }
         }
       }
@@ -145,6 +153,23 @@ Page {
         function seeChangelogs() {
           console.log("see changelogs requested")
         }
+      }
+    }
+  }
+
+  Component {
+    id: externalGpsNotAllowedComponent
+    Page {
+      background: Rectangle {color: __style.lightGreenColor}
+      width: root.width
+      height: root.height
+      header: Button { text: "Close"; onClicked: stackview.pop()}
+
+      MMExternalGpsNotSupportedComponent {
+        id: settingsPanel
+        link: "www.merginmaps.com/docs"
+        width: root.width
+        height: root.height
       }
     }
   }

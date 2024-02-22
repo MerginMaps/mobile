@@ -20,5 +20,7 @@
         <file>mIconPolygonLayer.svg</file>
         <file>mIconRasterLayer.svg</file>
         <file>mIconTableLayer.svg</file>
+        <file>ExternalGpsRed.svg</file>
+        <file>ExternalGpsGreen.svg</file>
     </qresource>
 </RCC>
