@@ -386,7 +386,7 @@ class MMStyle: public QObject
     QUrl acceptInvitationImage() {return QUrl( "qrc:/images/AcceptInvitationImage.svg" ); }
     QUrl uploadImage() {return QUrl( "qrc:/images/UploadImage.svg" );}
     QUrl noMapThemesImage() {return QUrl( "qrc:/images/NoMapThemesImage.svg" );}
-    QUrl reachedDataLimitImage() {return QUrl( "qrc:/images/ReachedDataLimitImage.svg" );}
+    QUrl reachedDataLimitImage() {return QUrl( "qrc:/images/ReachedDataLimit.svg" );}
     QUrl warnLogoImage() {return QUrl( "qrc:/images/WarnLogoImage.svg" );}
     QUrl mapPinImage() {return QUrl( "qrc:/images/MapPin.svg" );}
     QUrl positionTrackingRunningImage() {return QUrl( "qrc:/images/PositionTrackingRunning.svg" );}

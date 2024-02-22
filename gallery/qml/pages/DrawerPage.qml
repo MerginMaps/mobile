@@ -41,8 +41,8 @@ Page {
       onClicked: drawer1.open()
     }
     MMButton {
-      text: "Reached Data Limit"
-      onClicked: drawer2.open()
+      text: "MMStorageLimitDialog"
+      onClicked: storageLimitDialog.open()
     }
     MMButton {
       text: "Synchronization Failed"
@@ -108,24 +108,19 @@ Page {
     onSecondaryButtonClicked: close()
   }
 
-  MMDrawerDialog {
-    id: drawer2
+  MMStorageLimitDialog {
+    id: storageLimitDialog
 
-    picture: __style.reachedDataLimitImage
-    bigTitle: "You have reached a data limit"
-    primaryButton: "Manage Subscription"
-    specialComponent: component.comp
+    dataToSync: "643.8 MB"
+    dataUsing: "9.23 MB / 10.0 MB"
+    plan: "Individual"
+    usedData: 0.923
+    apiSupportsSubscription: true
 
-    MMComponent_reachedDataLimit {
-      id: component
-      dataToSync: "643.8 MB"
-      dataUsing: "9.23 MB / 10.0 MB"
-      plan: "Individual"
-      usedData: 0.923
+    onPrimaryButtonClicked: {
+      console.log("Manage workspace clicked")
+      close()
     }
-
-    onPrimaryButtonClicked: close()
-    onSecondaryButtonClicked: close()
   }
 
   MMDrawerDialog {

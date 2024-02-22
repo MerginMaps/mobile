@@ -34,7 +34,6 @@ set(MM_QML
     components/MMRoundButton.qml
     components/MMButton.qml
     components/MMCodeScanner.qml
-    components/MMComponent_reachedDataLimit.qml
     components/MMCheckBox.qml
     components/MMDrawerDialog.qml
     components/MMDropdownDrawer.qml
@@ -103,6 +102,7 @@ set(MM_QML
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
     dialogs/MMMapThemePanel.qml
+    dialogs/MMStorageLimitDialog.qml
     inputs/MMBaseInput.qml
     inputs/MMPasswordInput.qml
     inputs/MMTextInput.qml
@@ -130,6 +130,7 @@ set(MM_QML
     form/editors/MMFormValueRelationEditor.qml
     form/editors/MMFormSpacer.qml
     form/editors/MMFormRichTextViewer.qml
+    form/MMFormStackManager.qml
     layers/MMFeaturesListPage.qml
     layers/MMLayerDetail.qml
     layers/MMLayersListPage.qml
@@ -166,30 +167,13 @@ set(MM_QML
     settings/MMSettingsController.qml
     dialogs/MMPositionTrackingDrawer.qml
     Banner.qml
-    CircularProgressBar.qml
-    CodeScanner.qml
-    CodeScannerOverlay.qml
-    CreateWorkspacePage.qml
-    ExternalResourceBundle.qml
-    FeaturesList.qml
-    FeaturesListPage.qml
-    FeaturesListPageToolbar.qml
-    FormsStackManager.qml
     InputStyle.qml
     ManageInvitationsPage.qml
     Notification.qml
     NotificationBanner.qml
-    NumberSpin.qml
-    PanelItem.qml
-    PanelTabButton.qml
     ProjectLimitDialog.qml
-    RegistrationFinishPage.qml
-    RoundIndicator.qml
-    SearchBar.qml
     StakeoutPanel.qml
-    StorageLimitDialog.qml
     SwitchWorkspacePage.qml
-    WhatsNewDialog.qml
     main.qml
     PARENT_SCOPE
 )

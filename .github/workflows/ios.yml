@@ -76,9 +76,9 @@ jobs:
         run: |
           brew install gnupg
           brew install openssl@1.1
-          brew install python3
           brew install ccache
           brew install ninja
+          
           pip3 install -U pip
           pip3 install aqtinstall
           

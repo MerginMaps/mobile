@@ -25,6 +25,7 @@ import "./misc"
 import "./project"
 import "./settings"
 import "./gps"
+import "./form"
 
 import notificationType 1.0
 
@@ -138,10 +139,6 @@ ApplicationWindow {
           window.backButtonPressed()
         }
       } )
-
-
-      // TODO REMOVE
-      settingsPanel.openConnectGps()
 
       console.log("Application initialized!")
     }
@@ -605,7 +602,7 @@ ApplicationWindow {
 
       height: window.height
       width: window.width
-      visible: false;
+      visible: false
 
       onVisibleChanged: {
         if (projectIssuesPanel.visible)
@@ -645,7 +642,7 @@ ApplicationWindow {
       }
     }
 
-    FormsStackManager {
+    MMFormsStackManager {
       id: formsStackManager
 
       height: window.height
@@ -720,9 +717,15 @@ ApplicationWindow {
       visible: false
     }
 
-    StorageLimitDialog {
+    MMStorageLimitDialog {
         id: storageLimitDialog
-        onOpenSubscriptionPlans: {
+
+        plan: __merginApi.subscriptionInfo.planAlias
+        dataUsing: "%1 / %2".arg(__inputUtils.bytesToHumanSize(diskUsage)).arg(__inputUtils.bytesToHumanSize(storageLimit))
+        usedData: __merginApi.workspaceInfo.storageLimit > 0 ? __merginApi.workspaceInfo.diskUsage / __merginApi.workspaceInfo.storageLimit : 0
+        apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
+
+        onManageAccountClicked: {
           storageLimitDialog.close()
           if (__merginApi.apiSupportsSubscriptions) {
             projectPanel.manageSubscriptionPlans()
@@ -933,7 +936,7 @@ ApplicationWindow {
           if (__merginApi.apiSupportsSubscriptions) {
             __merginApi.getWorkspaceInfo()
           }
-          storageLimitDialog.uploadSize = uploadSize
+          storageLimitDialog.dataToSync = __inputUtils.bytesToHumanSize(uploadSize)
           storageLimitDialog.open()
         }
 

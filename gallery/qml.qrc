@@ -23,6 +23,7 @@
         <file>qml/pages/FormPage.qml</file>
         <file>qml/pages/InputsPage.qml</file>
         <file>../app/qml/dialogs/MMPositionTrackingDrawer.qml</file>
+        <file>../app/qml/dialogs/MMStorageLimitDialog.qml</file>
         <file>../app/qml/components/MMButton.qml</file>
         <file>../app/qml/components/MMLinkButton.qml</file>
         <file>../app/qml/components/MMIcon.qml</file>
@@ -35,7 +36,6 @@
         <file>../app/qml/components/MMNotification.qml</file>
         <file>../app/qml/components/MMNotificationView.qml</file>
         <file>../app/qml/components/MMDrawerDialog.qml</file>
-        <file>../app/qml/components/MMComponent_reachedDataLimit.qml</file>
         <file>../app/qml/components/MMProgressBar.qml</file>
         <file>../app/qml/components/MMMapButton.qml</file>
         <file>../app/qml/components/MMShadow.qml</file>
@@ -104,6 +104,7 @@
         <file>../app/qml/map/MMPositionMarker.qml</file>
         <file>../app/qml/map/MMMapScaleBar.qml</file>
         <file>../app/qml/project/MMProjectLoadingScreen.qml</file>
+        <file>../app/qml/project/MMProjectIssuesPanel.qml</file>
         <file>../app/qml/settings/MMLogPanel.qml</file>
         <file>../app/qml/settings/MMAboutPanel.qml</file>
         <file>../app/qml/settings/MMChangelogPanel.qml</file>

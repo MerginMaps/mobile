@@ -49,6 +49,7 @@ ScrollView {
         Column { Image { source: __style.syncImage } Text { text: "syncImage" } }
         Column { Image { source: __style.externalGpsGreenImage } Text { text: "externalGpsGreenImage" } }
         Column { Image { source: __style.externalGpsRedImage } Text { text: "externalGpsRedImage" } }
+        Column { Image { source: __style.reachedDataLimitImage } Text { text: "reachedDataLimitImage" } }
       }
     }
 
