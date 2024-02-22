@@ -78,16 +78,63 @@ Page {
             stackview.push(externalGpsNotAllowedComponent)
           }
         }
+
+        MMButton {
+          text: "MMProjectIssuesPanel"
+          onClicked: {
+            stackview.push(projectIssuesPanelComponent)
+          }
+        }
       }
     }
   }
 
   Component {
     id: loadingScreenComponent
+
     MMProjectLoadingScreen {
       id: loadingScreen
+
       width: root.width
       height: root.height
+
+      MouseArea {
+        width: parent.width
+        height: parent.height
+
+        onClicked: {
+          stackview.pop()
+        }
+      }
+    }
+  }
+
+  Component {
+    id: projectIssuesPanelComponent
+
+    MMProjectIssuesPanel {
+
+      id: projectIssuesPanel
+
+      width: root.width
+      height: root.height
+
+      projectIssuesModel: ListModel {
+          ListElement { title: "Apple" ; message: "2.45" }
+          ListElement { title: "ipsum" ; message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit" }
+          ListElement { title: "Lorem" ; message: "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exerci" }
+          ListElement { title: "sit" ; message: "dunt ut labore et dolore magna aliqua." }
+          ListElement { title: "amet" ; message: "adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo" }
+          ListElement { title: "consectetur adipiscing" ; message: "amet" }
+          ListElement { title: "Apple" ; message: "2.45" }
+          ListElement { title: "ipsum" ; message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit" }
+          ListElement { title: "Lorem" ; message: "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exerci" }
+          ListElement { title: "sit" ; message: "dunt ut labore et dolore magna aliqua." }
+          ListElement { title: "amet" ; message: "adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo" }
+          ListElement { title: "consectetur adipiscing" ; message: "amet" }
+      }
+
+      projectLoadingLog: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
       MouseArea {
         width: parent.width

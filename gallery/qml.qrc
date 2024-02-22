@@ -104,6 +104,7 @@
         <file>../app/qml/map/MMPositionMarker.qml</file>
         <file>../app/qml/map/MMMapScaleBar.qml</file>
         <file>../app/qml/project/MMProjectLoadingScreen.qml</file>
+        <file>../app/qml/project/MMProjectIssuesPanel.qml</file>
         <file>../app/qml/settings/MMLogPanel.qml</file>
         <file>../app/qml/settings/MMAboutPanel.qml</file>
         <file>../app/qml/settings/MMChangelogPanel.qml</file>
