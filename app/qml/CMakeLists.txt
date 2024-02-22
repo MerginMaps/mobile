@@ -166,8 +166,6 @@ set(MM_QML
     settings/MMSettingsController.qml
     dialogs/MMPositionTrackingDrawer.qml
     Banner.qml
-    CreateWorkspacePage.qml
-    ExternalResourceBundle.qml
     FeaturesList.qml
     FeaturesListPage.qml
     FeaturesListPageToolbar.qml
@@ -176,16 +174,12 @@ set(MM_QML
     ManageInvitationsPage.qml
     Notification.qml
     NotificationBanner.qml
-    NumberSpin.qml
     PanelItem.qml
     PanelTabButton.qml
     ProjectLimitDialog.qml
-    RegistrationFinishPage.qml
-    RoundIndicator.qml
     SearchBar.qml
     StakeoutPanel.qml
     SwitchWorkspacePage.qml
-    WhatsNewDialog.qml
     main.qml
     PARENT_SCOPE
 )
