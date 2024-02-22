@@ -602,7 +602,7 @@ ApplicationWindow {
 
       height: window.height
       width: window.width
-      visible: false;
+      visible: false
 
       onVisibleChanged: {
         if (projectIssuesPanel.visible)

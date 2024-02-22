@@ -171,8 +171,6 @@ set(MM_QML
     ManageInvitationsPage.qml
     Notification.qml
     NotificationBanner.qml
-    PanelItem.qml
-    PanelTabButton.qml
     ProjectLimitDialog.qml
     StakeoutPanel.qml
     SwitchWorkspacePage.qml
