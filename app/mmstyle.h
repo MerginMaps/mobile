@@ -193,6 +193,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl tableLayerImage READ tableLayerImage CONSTANT )
     Q_PROPERTY( QUrl pointLayerImage READ pointLayerImage CONSTANT )
     Q_PROPERTY( QUrl syncImage READ syncImage CONSTANT )
+    Q_PROPERTY( QUrl externalGpsGreenImage READ externalGpsGreenImage CONSTANT )
+    Q_PROPERTY( QUrl externalGpsRedImage READ externalGpsRedImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -390,6 +392,8 @@ class MMStyle: public QObject
     QUrl positionTrackingRunningImage() {return QUrl( "qrc:/images/PositionTrackingRunning.svg" );}
     QUrl positionTrackingStartImage() {return QUrl( "qrc:/images/PositionTrackingStart.svg" );}
     QUrl syncImage() {return QUrl( "qrc:/images/SyncImage.svg" );}
+    QUrl externalGpsGreenImage() {return QUrl( "qrc:/images/ExternalGpsGreen.svg" );}
+    QUrl externalGpsRedImage() {return QUrl( "qrc:/images/ExternalGpsRed.svg" );}
 
     static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
     static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}

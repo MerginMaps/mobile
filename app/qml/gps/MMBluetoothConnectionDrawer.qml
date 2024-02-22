@@ -11,16 +11,32 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import ".."
+import "../components"
 import lc 1.0
 
-Dialog {
+Drawer {
   id: root
+
+  height: mainColumn.height + header.height + borderRectangle.height
+  width: window.width
+  edge: Qt.BottomEdge
+  focus: true
+  dim: true
+  interactive: false
+  dragMargin: 0
+  closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+  Component.onCompleted: {
+    forceActiveFocus()
+  }
+
+  property var positionProvider: __positionKit.positionProvider
+  property string howToConnectGPSLink: __inputHelp.howToConnectGPSLink
 
   property string titleText: {
     if ( rootstate.state === "working" )
     {
-      return qsTr( "Connecting to" ) + " " + ( __positionKit.positionProvider ? __positionKit.positionProvider.name() : "" )
+      return qsTr( "Connecting to" ) + " " + ( root.positionProvider ? root.positionProvider.name() : "" )
     }
     else if ( rootstate.state === "success" )
     {
@@ -29,7 +45,7 @@ Dialog {
     else
     {
       // either NoConnection or WaitingToReconnect
-      return qsTr( "Failed to connect to" ) + " " + ( __positionKit.positionProvider ? __positionKit.positionProvider.name() : "" )
+      return qsTr( "Failed to connect to" ) + " " + ( root.positionProvider ? root.positionProvider.name() : "" )
     }
   }
 
@@ -47,7 +63,7 @@ Dialog {
       return __positionKit.positionProvider.stateMessage + "<br><br>" +
           qsTr( "You can close this message, we will try to repeatedly connect to your device.%1 If you need more help, %2click here%3" )
       .arg("<br>")
-      .arg("<a style=\"text-decoration: underline; color:" + InputStyle.fontColor + ";\" href='" + __inputHelp.howToConnectGPSLink + "'>")
+      .arg("<a style=\"text-decoration: underline; color:" + __style.forestColor + ";\" href='" + root.howToConnectGPSLink + "'>")
       .arg("</a>")
     }
 
@@ -56,15 +72,23 @@ Dialog {
       return qsTr( "We were not able to connect to the specified device.
         Please make sure your device is powered on and can be connected to.%1 %2Learn more here%3." )
       .arg("<br>")
-      .arg("<a style=\"text-decoration: underline; color:" + InputStyle.fontColor + ";\" href='" + __inputHelp.howToConnectGPSLink + "'>")
+      .arg("<a style=\"text-decoration: underline; color:" + __style.forestColor + ";\" href='" + root.howToConnectGPSLink + "'>")
       .arg("</a>")
+    }
+  }
+
+  property var imageSource: {
+    if ( rootstate.state === "fail" )
+    {
+      return __style.externalGpsRedImage
+    }
+    else {
+      return __style.externalGpsGreenImage
     }
   }
 
   signal success()
   signal failure()
-
-  focus: true
 
   Item {
     focus: true
@@ -102,30 +126,23 @@ Dialog {
     states: [
       State {
         name: "working"
-        when: __positionKit.positionProvider && __positionKit.positionProvider.state === PositionProvider.Connecting
+        when: root.positionProvider && root.positionProvider.state === PositionProvider.Connecting
         PropertyChanges { target: loadingSpinner; opacity: 1.0 }
-        PropertyChanges { target: resultIcon; opacity: 0.0 }
       },
       State {
         name: "success"
-        when: __positionKit.positionProvider && __positionKit.positionProvider.state === PositionProvider.Connected
-        PropertyChanges { target: resultIcon; source: InputStyle.yesIcon }
+        when: root.positionProvider && root.positionProvider.state === PositionProvider.Connected
         PropertyChanges { target: loadingSpinner; opacity: 0.0 }
-        PropertyChanges { target: resultIcon; opacity: 1.0 }
       },
       State {
         name: "fail"
-        when: !__positionKit.positionProvider || __positionKit.positionProvider.state === PositionProvider.NoConnection
-        PropertyChanges { target: resultIcon; source: InputStyle.noIcon }
+        when: !root.positionProvider || root.positionProvider.state === PositionProvider.NoConnection
         PropertyChanges { target: loadingSpinner; opacity: 0.0 }
-        PropertyChanges { target: resultIcon; opacity: 1.0 }
       },
       State {
         name: "waitingToReconnect"
-        when: !__positionKit.positionProvider || __positionKit.positionProvider.state === PositionProvider.WaitingToReconnect
-        PropertyChanges { target: resultIcon; source: InputStyle.noIcon }
+        when: !root.positionProvider || root.positionProvider.state === PositionProvider.WaitingToReconnect
         PropertyChanges { target: loadingSpinner; opacity: 0.0 }
-        PropertyChanges { target: resultIcon; opacity: 1.0 }
       }
     ]
 
@@ -136,7 +153,6 @@ Dialog {
 
         SequentialAnimation {
           NumberAnimation { target:loadingSpinner; property: "opacity"; duration: 200 }
-          NumberAnimation { target:resultIcon; property: "opacity"; duration: 200 }
           ScriptAction {
             script: {
               closeTimer.start()
@@ -150,7 +166,6 @@ Dialog {
 
         SequentialAnimation {
           NumberAnimation { target:loadingSpinner; property: "opacity"; duration: 200 }
-          NumberAnimation { target:resultIcon; property: "opacity"; duration: 200 }
         }
       },
       Transition {
@@ -159,7 +174,6 @@ Dialog {
 
         SequentialAnimation {
           NumberAnimation { target:loadingSpinner; property: "opacity"; duration: 200 }
-          NumberAnimation { target:resultIcon; property: "opacity"; duration: 200 }
         }
       },
       Transition {
@@ -168,7 +182,6 @@ Dialog {
 
         SequentialAnimation {
           NumberAnimation { target:loadingSpinner; property: "opacity"; from: 0.0; to: 1.0; duration: 200 }
-          NumberAnimation { target:resultIcon; property: "opacity"; from: 1.0; to: 0.0; duration: 200 }
         }
       }
     ]
@@ -176,125 +189,112 @@ Dialog {
     state: "working"
   }
 
-  modal: true
 
-  enter: Transition {
-    NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 200 }
-  }
-  exit: Transition {
-    NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 200 }
-  }
-
-  closePolicy: Popup.CloseOnEscape
-
-  background: Rectangle {
-    width: root.width
-    height: root.height
-    radius: InputStyle.cornerRadius
-  }
-
-  // content
   Rectangle {
+    id: borderRectangle
+
+    color: roundedRect.color
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 2 * radius
+    anchors.topMargin: -radius
+    radius: 20 * __dp
+  }
+
+  Rectangle {
+    id: roundedRect
+
     anchors.fill: parent
+    color: __style.whiteColor
 
-    opacity: root.opacity
-    radius: InputStyle.cornerRadius
+    MMHeader {
+      id: header
 
-    ColumnLayout {
-      anchors.fill: parent
-      spacing: 5 * __dp
+      backVisible: false
+
+      MMRoundButton {
+        id: backBtn
+
+        anchors.right: parent.right
+        anchors.rightMargin: __style.pageMargins
+        anchors.verticalCenter: parent.verticalCenter
+
+        iconSource: __style.closeIcon
+        iconColor: __style.forestColor
+
+        bgndColor: __style.lightGreenColor
+        bgndHoverColor: __style.mediumGreenColor
+
+        onClicked: close()
+      }
+    }
+
+    Column {
+      id: mainColumn
+
+      width: parent.width
+      anchors.left: parent.left
+      anchors.leftMargin: __style.pageMargins
+      anchors.top: header.top
+      anchors.topMargin: __style.margin40
+
+      spacing: __style.margin12
 
       Item {
         id: statusIconContainer
 
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 2 / 6
+        width: parent.width
+        height: resultIcon.height
 
-        // either loading spinner when dialog is in working state or success / failure
-        LoadingSpinner {
+        BusyIndicator {
           id: loadingSpinner
-
           height: parent.height / 2
           width: parent.height / 2
 
           anchors.centerIn: parent
-          iconSize: width
-
-          speed: 1600
           running: rootstate.state === "working"
         }
 
-        Symbol {
+        Image {
           id: resultIcon
-
-          height: parent.height / 2
-          width: parent.height / 2
-
           anchors.centerIn: parent
-          iconSize: width
+          source: root.imageSource
+        }
+      }
+
+      Text {
+        text: root.titleText
+
+        width: parent.width
+
+        horizontalAlignment: Text.AlignHCenter
+
+        elide: Text.ElideRight
+        color: __style.forestColor
+        font: __style.t1
+      }
+
+      Text {
+        text: root.descriptionText
+
+        width: parent.width
+        horizontalAlignment: Text.AlignHCenter
+
+        elide: Text.ElideRight
+        wrapMode: Text.WordWrap
+        textFormat: Text.RichText
+        color: __style.nightColor
+        font: __style.p5
+
+        onLinkActivated: function( link ) {
+          Qt.openUrlExternally( link )
         }
       }
 
       Item {
-        id: titleContainer
-
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 1 / 6
-
-        Text {
-          text: root.titleText
-
-          anchors.fill: parent
-
-          horizontalAlignment: Text.AlignHCenter
-
-          elide: Text.ElideRight
-          color: InputStyle.fontColor
-          font.pixelSize: InputStyle.fontPixelSizeNormal
-        }
-      }
-
-      Item {
-        id: descriptionContainer
-
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 2 / 6
-
-        Text {
-          text: root.descriptionText
-
-          anchors.fill: parent
-          horizontalAlignment: Text.AlignHCenter
-
-          elide: Text.ElideRight
-          wrapMode: Text.WordWrap
-          textFormat: Text.RichText
-          color: InputStyle.fontColor
-          font.pixelSize: InputStyle.fontPixelSizeNormal
-
-          onLinkActivated: function( link ) {
-            Qt.openUrlExternally( link )
-          }
-        }
-      }
-
-      Item {
-        id: closeButtonContainer
-
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 1 / 6
-
-        DelegateButton {
-          width: parent.width
-          height: InputStyle.rowHeight > parent.height ? parent.height : InputStyle.rowHeight
-          text: qsTr( "Close" )
-          visible: rootstate.state === "fail" || rootstate.state === "waitingToReconnect"
-
-          onClicked: {
-            root.failure()
-            root.close()
-          }
-        }
+        width: parent.width
+        height: __style.margin40
       }
     }
   }

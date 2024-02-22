@@ -23,7 +23,7 @@ MMSettingItem {
     inputDrawer.visible = true
   }
 
-  MMDrawer {
+  MMDrawerDialog {
     id: inputDrawer
 
     property string value

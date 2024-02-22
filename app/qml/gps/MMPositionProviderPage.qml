@@ -9,18 +9,13 @@
 
 import QtQuick
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
 import QtQuick.Dialogs
 
 import lc 1.0
-
-import "../" // import InputStyle singleton
-import "../components" as Components
+import "../components"
 
 Page {
   id: root
-
-  property var stackView
 
   signal close
 
@@ -50,18 +45,15 @@ Page {
     }
   }
 
-  header: Components.PanelHeader {
+  header: MMHeader {
     id: header
 
-    height: InputStyle.rowHeightHeader
     width: parent.width
-    color: InputStyle.clrPanelMain
-    rowHeight: InputStyle.rowHeightHeader
-    titleText: qsTr( "GPS receivers" )
-
-    onBack: root.close()
-    withBackButton: true
+    color: __style.lightGreenColor
+    onBackClicked: root.close()
   }
+
+  background: Rectangle {color: __style.lightGreenColor}
 
   focus: true
 
@@ -72,10 +64,46 @@ Page {
     }
   }
 
+  Text {
+    id: title
+
+    anchors.left: parent.left
+    anchors.leftMargin: __style.pageMargins
+    anchors.top: parent.top
+    anchors.topMargin: __style.margin40
+
+    text: qsTr( "Manage GPS receivers" )
+    font: __style.h3
+    color: __style.forestColor
+  }
+
+  MMButton {
+    id: connectNewReceiverButton
+
+    visible: false
+
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.leftMargin: __style.pageMargins
+    anchors.bottomMargin: __style.pageMargins
+
+    width: parent.width - 2 * __style.pageMargins
+    text: qsTr( "Connect new receiver" )
+
+    onClicked: {
+      bluetoothDiscoveryLoader.active = true
+    }
+  }
+
   ListView {
     id: view
 
-    anchors.fill: parent
+    anchors.left: parent.left
+    anchors.leftMargin: __style.pageMargins
+    anchors.top: title.bottom
+    anchors.topMargin: __style.margin40
+
+    width: root.width - 2 * __style.pageMargins
 
     model: PositionProvidersModel {
       id: providersModel
@@ -85,11 +113,13 @@ Page {
 
     section {
       property: "ProviderType"
-      delegate: Components.RichTextBlock {
+      delegate: Text {
         property string sectionTitle: section === "internal" ? qsTr( "Internal receivers" ) : qsTr( "External receivers" )
 
         text: sectionTitle
         width: ListView.view.width
+        font: __style.p6
+        color: __style.nightColor
         horizontalAlignment: Text.AlignLeft
       }
     }
@@ -100,7 +130,8 @@ Page {
       property bool isActiveProvider: __appSettings.activePositionProviderId === model.ProviderId
 
       width: ListView.view.width
-      height: InputStyle.rowHeight
+      height: __style.row49
+      color: __style.lightGreenColor
 
       MouseArea {
         anchors.fill: parent
@@ -111,10 +142,6 @@ Page {
         id: row
 
         anchors.fill: parent
-        anchors.leftMargin: InputStyle.panelMargin
-        anchors.rightMargin: InputStyle.panelMargin
-        anchors.bottomMargin: 5 * __dp
-        anchors.topMargin: 5 * __dp
 
         RadioButton {
           id: isActiveButton
@@ -126,25 +153,22 @@ Page {
           checked: providerDelegate.isActiveProvider
 
           indicator: Rectangle {
-            implicitWidth: isActiveButton.height / 2.3
-            implicitHeight: isActiveButton.height / 2.3
+            width: isActiveButton.height / 2.3
+            height: isActiveButton.height / 2.3
 
             anchors.centerIn: isActiveButton
 
-            radius: InputStyle.circleRadius
-            border.color: InputStyle.darkGreen
+            color: providerDelegate.isActiveProvider ? __style.forestColor : __style.lightGreenColor
+            radius: __style.margin12
+            border.color: __style.forestColor
 
-            Rectangle {
-              width: parent.width / 1.5
-              height: parent.height / 1.5
-
-
+            MMIcon {
+              size: __style.icon24
+              source: __style.doneCircleIcon
               x: parent.width / 2 - width / 2
               y: parent.height / 2 - height / 2
-
-              radius: InputStyle.circleRadius
-              color: InputStyle.darkGreen
               visible: providerDelegate.isActiveProvider
+              color: __style.grassColor
             }
           }
 
@@ -157,80 +181,44 @@ Page {
 
         Column {
           width: row.width - isActiveButton.width - removeIconContainer.width
-          height: row.height
+          height: providerDelegate.height
 
           Text {
             id: deviceName
 
-            width: parent.width
-            height: parent.height * 0.4
-
             text: model.ProviderName ? model.ProviderName : qsTr( "Unknown device" )
 
+            verticalAlignment: Text.AlignBottom
             elide: Text.ElideRight
-            color: InputStyle.fontColor
-            font.pixelSize: InputStyle.fontPixelSizeNormal
+            color: __style.nightColor
+            font: __style.t3
           }
 
           Text {
             id: deviceSecondaryText
 
-            width: parent.width
-            height: parent.height * 0.3
-
             text: model.ProviderDescription
 
+            verticalAlignment: Text.AlignTop
             elide: Text.ElideRight
-            color: InputStyle.secondaryFontColor
-            font.pixelSize: InputStyle.fontPixelSizeSmall
-          }
-
-          Text {
-            id: deviceStatusText
-
-            width: parent.width
-            height: parent.height * 0.3
-
-            visible: providerDelegate.isActiveProvider
-            text: __positionKit.positionProvider ? __positionKit.positionProvider.stateMessage : ""
-
-            elide: Text.ElideRight
-            color: InputStyle.secondaryFontColor
-            font.pixelSize: InputStyle.fontPixelSizeSmall
+            color: __style.nightColor
+            font: __style.p6
           }
         }
 
-        Item {
+        MMRoundButton {
           id: removeIconContainer
 
+          anchors.verticalCenter: parent.verticalCenter
+
           height: parent.height
-          width: parent.height
+          width: height
 
-          enabled: model.ProviderType === "external"
+          bgndColor: __style.whiteColor
+          iconSource: __style.deleteIcon
+          visible: model.ProviderType === "external"
 
-          Image {
-            id: removeIcon
-
-            anchors.centerIn: parent
-
-            width: parent.height / 2
-            sourceSize.width: parent.height / 2
-
-            source: InputStyle.removeIcon
-            visible: parent.enabled
-          }
-
-          ColorOverlay {
-            anchors.fill: removeIcon
-            source: removeIcon
-            color: InputStyle.darkGreen
-            visible: parent.enabled
-          }
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: removeDialog.openDialog( model.ProviderId )
-          }
+          onClicked: removeDialog.openDialog( model.ProviderId )
         }
       }
     }
@@ -239,7 +227,7 @@ Page {
       // select appropriate footer, on iOS say that you can not connect via BT
       if ( __haveBluetooth )
       {
-        view.footer = connectNewReceiverButtonComponent
+        connectNewReceiverButton.visible = true
       }
       else
       {
@@ -249,69 +237,25 @@ Page {
   }
 
   Component {
-    id: connectNewReceiverButtonComponent
+    id: btNotSupportedComponent
 
-    Rectangle {
-      height: InputStyle.rowHeightHeader
+    MMExternalGpsNotSupportedComponent {
+      link: __inputHelp.howToConnectGPSLink
       width: ListView.view.width
-
-      Components.TextWithIcon {
-        width: parent.width
-        height: parent.height
-        source: InputStyle.plusIcon
-
-        fontColor: InputStyle.actionColor
-        iconColor: InputStyle.actionColor
-
-        leftPadding: InputStyle.panelMargin
-
-        text: qsTr( "Connect new receiver" )
-      }
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: {
-          let page = root.stackView.push( bluetoothDiscoveryComponent )
-          page.focus = true
-        }
-      }
     }
   }
 
-  Component {
-    id: btNotSupportedComponent
+  Loader {
+    id: bluetoothDiscoveryLoader
 
-    Rectangle {
-      height: InputStyle.rowHeightHeader * 5
-      width: ListView.view.width
-
-
-      Text {
-        id: textItem
-
-        anchors.fill: parent
-        anchors.topMargin: InputStyle.panelMargin
-
-        verticalAlignment: Text.AlignTop
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-
-        color: InputStyle.fontColor
-        text: qsTr( "Connecting to receivers via Bluetooth directly in Input is not possible on iOS." +
-                   " Your hardware vendor may provide a custom app that connects to the receiver and sets position." +
-                   " Input will still think it is the internal GPS of your phone/tablet." +
-                   "%1%2Click here to learn more.%3" )
-        .arg( "<br><br>" )
-        .arg( "<a style=\"text-decoration: underline; color:" + InputStyle.fontColor + ";\" href='" + __inputHelp.howToConnectGPSLink + "'>" )
-        .arg( "</a>" )
-
-        wrapMode: Text.Wrap
-        textFormat: Text.RichText
-        leftPadding: InputStyle.panelMargin
-        rightPadding: InputStyle.panelMargin
-
-        onLinkActivated: function( link ) {
-          Qt.openUrlExternally( link )
-        }
+    sourceComponent: bluetoothDiscoveryComponent
+    active: false
+    asynchronous: true
+    anchors.fill: parent
+    onActiveChanged: {
+      if ( active )
+      {
+        bluetoothDiscoveryLoader.item?.open()
       }
     }
   }
@@ -319,14 +263,11 @@ Page {
   Component {
     id: bluetoothDiscoveryComponent
 
-    AddPositionProviderPage {
-      height: root.height + header.height
-      width: root.width
-
+    MMAddPositionProviderDrawer {
       onInitiatedConnectionTo: function( deviceAddress, deviceName ) {
         providersModel.addProvider( deviceName, deviceAddress )
       }
-      onClose: root.stackView.pop()
+      onClose: bluetoothDiscoveryLoader.active = false
     }
   }
 
@@ -337,21 +278,19 @@ Page {
     active: false
     asynchronous: true
     anchors.fill: parent
-
-    onLoaded: item.open()
+    onActiveChanged: {
+      if ( active )
+      {
+        dialogLoader.item?.open()
+      }
+    }
   }
 
   Component {
     id: connectionToSavedProviderDialogBlueprint
 
-    Components.BluetoothConnectionDialog {
+    MMBluetoothConnectionDrawer {
       id: connectionToSavedProviderDialog
-
-      width: root.width * 0.8
-      height: root.height / 2
-
-      anchors.centerIn: parent
-
       onClosed: dialogLoader.active = false
     }
   }

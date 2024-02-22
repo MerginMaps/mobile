@@ -15,6 +15,9 @@ import "../../app/qml/components"
 import "../../app/qml"
 import "../../app/qml/project"
 import "../../app/qml/dialogs"
+import "../../app/qml/gps"
+
+import lc 1.0
 
 Page {
   id: pane
@@ -45,6 +48,44 @@ Page {
       text: "Synchronization Failed"
       onClicked: drawer3.open()
     }
+
+    MMButton {
+      text: "MMBluetoothConnectionDrawer"
+      onClicked: {
+        bluetoothConnectionDrawer.positionProvider.state = PositionProvider.Connecting
+        bluetoothConnectionTimer.start()
+        bluetoothConnectionDrawer.open()
+      }
+    }
+  }
+
+  MMBluetoothConnectionDrawer {
+    id: bluetoothConnectionDrawer
+
+    howToConnectGPSLink: "www.merginmaps.com"
+    positionProvider: QtObject {
+      function name() { return "Cool Phone" }
+      property var state
+    }
+
+    Timer {
+      id: bluetoothConnectionTimer
+      interval: 2000
+      repeat: true
+      running: false
+      onTriggered: {
+        if ( bluetoothConnectionDrawer.positionProvider.state === PositionProvider.Connecting )
+          bluetoothConnectionDrawer.positionProvider.state = PositionProvider.WaitingToReconnect
+        else if ( bluetoothConnectionDrawer.positionProvider.state === PositionProvider.WaitingToReconnect )
+          bluetoothConnectionDrawer.positionProvider.state = PositionProvider.NoConnection
+        else if ( bluetoothConnectionDrawer.positionProvider.state === PositionProvider.NoConnection )
+        {
+          bluetoothConnectionDrawer.positionProvider.state = PositionProvider.Connected
+        } else {
+          bluetoothConnectionTimer.stop()
+        }
+      }
+    }
   }
 
   MMPositionTrackingDrawer {
@@ -54,7 +95,7 @@ Page {
     onTrackingBtnClicked: trackingActive = !trackingActive
   }
 
-  MMDrawer {
+  MMDrawerDialog {
     id: drawer1
 
     picture: __style.uploadImage
@@ -67,7 +108,7 @@ Page {
     onSecondaryButtonClicked: close()
   }
 
-  MMDrawer {
+  MMDrawerDialog {
     id: drawer2
 
     picture: __style.reachedDataLimitImage
@@ -87,7 +128,7 @@ Page {
     onSecondaryButtonClicked: close()
   }
 
-  MMDrawer {
+  MMDrawerDialog {
     id: drawer3
 
     picture: __style.uploadImage

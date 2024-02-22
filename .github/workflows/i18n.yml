@@ -58,11 +58,20 @@ jobs:
             exit 1
           fi
 
-      - name: Info.plist translations check
+      - name: iOS Info.plist translations check
         run: |
           ./scripts/check_ios_translations.py ./cmake_templates/iOSInfo.plist.in ./app/i18n/input_i18n.qrc
 
           if [ $? -gt "0" ]; then
-            echo "Info.plist does not include the same translations as input_i18n.qrc, exit.."
+            echo "iOSInfo.plist.in does not include the same translations as input_i18n.qrc, exit.."
+            exit 1
+          fi
+
+      - name: macOS Info.plist translations check
+        run: |
+          ./scripts/check_ios_translations.py ./cmake_templates/macOSInfo.plist.in ./app/i18n/input_i18n.qrc
+
+          if [ $? -gt "0" ]; then
+            echo "macOSInfo.plist.in does not include the same translations as input_i18n.qrc, exit.."
             exit 1
           fi

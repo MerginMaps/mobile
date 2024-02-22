@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 import QtQuick.Layouts
+
 import ".."
 import "../components"
 import lc 1.0
@@ -20,8 +21,10 @@ Drawer {
 
   property var mapSettings
   property string coordinatesInDegrees: __inputUtils.degreesString( __positionKit.positionCoordinate )
-  property var title
+  property var title: qsTr("GPS info")
   property real rowHeight: 67 * __dp
+
+  signal manageGpsClicked()
 
   width: ApplicationWindow.window.width
   height: (mainColumn.height > ApplicationWindow.window.height ? ApplicationWindow.window.height : mainColumn.height)
@@ -38,22 +41,6 @@ Drawer {
 
     positionKit: __positionKit
     mapSettings: root.mapSettings
-  }
-
-  StackView {
-    id: additionalContent
-
-    anchors.fill: parent
-  }
-
-  Component {
-    id: positionProviderComponent
-
-    PositionProviderPage {
-      onClose: additionalContent.pop(null)
-      stackView: additionalContent
-      Component.onCompleted: forceActiveFocus()
-    }
   }
 
   Rectangle {
@@ -114,7 +101,7 @@ Drawer {
         Layout.rightMargin: 20 * __dp
         Layout.maximumWidth: __style.maxPageWidth
         Layout.alignment: Qt.AlignHCenter
-        Layout.preferredHeight: ApplicationWindow.window.height - header.height - primaryButton.height - mainColumn.spacing * 3
+        Layout.preferredHeight: window.height - header.height - primaryButton.height - mainColumn.spacing * 3
         contentWidth: availableWidth
         contentHeight: scrollColumn.childrenRect.height
 
@@ -315,9 +302,7 @@ Drawer {
         Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
         Layout.margins: ( mainColumn.spacing / 2 ) * __dp
         width: parent.width - 2 * 20 * __dp
-        onClicked: {
-          additionalContent.push(positionProviderComponent)
-        }
+        onClicked: root.manageGpsClicked()
       }
     }
   }

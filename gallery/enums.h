@@ -7,8 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef STREAMINGINTERVALTYPE_H
-#define STREAMINGINTERVALTYPE_H
+#ifndef ENUMS_H
+#define ENUMS_H
 
 #include <QObject>
 
@@ -26,4 +26,20 @@ class StreamingIntervalType
     Q_ENUMS( IntervalType )
 };
 
-#endif // STREAMINGINTERVALTYPE_H
+class PositionProviderType
+{
+    Q_GADGET
+  public:
+    explicit PositionProviderType() {}
+
+    enum ProviderType
+    {
+      Connecting = 0,
+      Connected,
+      NoConnection,
+      WaitingToReconnect
+    };
+    Q_ENUMS( ProviderType )
+};
+
+#endif // ENUMS_H

@@ -13,7 +13,7 @@ import QtQuick.Layouts
 
 import "../components"
 
-MMDrawer {
+MMDrawerDialog {
   id: root
 
   property bool trackingActive: false

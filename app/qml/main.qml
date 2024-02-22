@@ -24,6 +24,7 @@ import "./components"
 import "./misc"
 import "./project"
 import "./settings"
+import "./gps"
 
 import notificationType 1.0
 
@@ -138,7 +139,11 @@ ApplicationWindow {
         }
       } )
 
-        console.log("Application initialized!")
+
+      // TODO REMOVE
+      settingsPanel.openConnectGps()
+
+      console.log("Application initialized!")
     }
 
     MapWrapper {
@@ -394,6 +399,10 @@ ApplicationWindow {
       height: window.height
       width: window.width
 
+      function openConnectGps() {
+        settingsPanel.open("gps")
+      }
+
       onVisibleChanged: {
         if (settingsPanel.visible) {
           settingsPanel.focus = true; // get focus
@@ -496,6 +505,11 @@ ApplicationWindow {
         id: gpsDataDrawer
         title: qsTr("GPS info")
         mapSettings: map.mapSettings
+
+        onManageGpsClicked: {
+          gpsDataDrawer.close()
+          settingsPanel.openConnectGps()
+        }
 
         onClosed: {
           gpsDataDrawerLoader.active = false

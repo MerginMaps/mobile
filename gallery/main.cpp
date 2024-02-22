@@ -24,7 +24,7 @@
 #include "scalebarkit.h"
 #include "positionkit.h"
 #include "formfeaturesmodel.h"
-#include "streamingintervaltype.h"
+#include "enums.h"
 
 int main( int argc, char *argv[] )
 {
@@ -45,6 +45,9 @@ int main( int argc, char *argv[] )
   // Register C++ enums
   qmlRegisterUncreatableType<RegistrationError>( "lc", 1, 0, "RegistrationError", "RegistrationError Enum" );
   qmlRegisterUncreatableType<StreamingIntervalType>( "lc", 1, 0, "StreamingIntervalType", "StreamingIntervalType Enum" );
+  qmlRegisterUncreatableType<PositionProviderType>( "lc", 1, 0, "PositionProvider", "PositionProvider Enum" );
+
+  // Register C++ types
   qmlRegisterType<QrCodeDecoder>( "lc", 1, 0, "QrCodeDecoder" );
   qmlRegisterType<ScaleBarKit>( "lc", 1, 0, "ScaleBarKit" );
   qmlRegisterType<FormFeaturesModel>( "lc", 1, 0, "RelationFeaturesModel" );

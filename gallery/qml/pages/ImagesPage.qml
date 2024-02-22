@@ -47,6 +47,8 @@ ScrollView {
         Column { Image { source: __style.positionTrackingRunningImage } Text { text: "positionTrackingRunningImage" } }
         Column { Image { source: __style.noMapThemesImage } Text { text: "noMapThemesImage" } }
         Column { Image { source: __style.syncImage } Text { text: "syncImage" } }
+        Column { Image { source: __style.externalGpsGreenImage } Text { text: "externalGpsGreenImage" } }
+        Column { Image { source: __style.externalGpsRedImage } Text { text: "externalGpsRedImage" } }
       }
     }
 

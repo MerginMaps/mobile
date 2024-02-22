@@ -177,7 +177,7 @@ Page {
     }
   }
 
-  MMDrawer {
+  MMDrawerDialog {
     id: changeServerDrawer
 
     property string newServerUrl
