@@ -25,6 +25,7 @@ import "./misc"
 import "./project"
 import "./settings"
 import "./gps"
+import "./form"
 
 import notificationType 1.0
 
@@ -641,7 +642,7 @@ ApplicationWindow {
       }
     }
 
-    FormsStackManager {
+    MMFormsStackManager {
       id: formsStackManager
 
       height: window.height

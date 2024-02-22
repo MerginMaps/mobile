@@ -11,14 +11,12 @@ import QtQuick
 import QtQuick.Controls
 
 import lc 1.0
-import "./form" as Forms
-import "."
 
 Item {
   id: root
 
   /*
-   * FormsStackManager component is responsible for viewing feature forms, both preview and fullscreen form
+   * MMFormsStackManager component is responsible for viewing feature forms, both preview and fullscreen form
    * It contains a stackview where instances of FormWrapper are pushed. Latest form is not destroyed, but reused
    * for next feature to reduce a cost of initializing form and AttributeController each time user selects feature.
    */
@@ -281,7 +279,7 @@ Item {
   Component {
     id: formComponent
 
-    Forms.MMFormWrapper {
+    MMFormWrapper {
       id: wrapper
 
       project: root.project

@@ -130,6 +130,7 @@ set(MM_QML
     form/editors/MMFormValueRelationEditor.qml
     form/editors/MMFormSpacer.qml
     form/editors/MMFormRichTextViewer.qml
+    form/MMFormStackManager.qml
     layers/MMFeaturesListPage.qml
     layers/MMLayerDetail.qml
     layers/MMLayersListPage.qml
@@ -169,7 +170,7 @@ set(MM_QML
     FeaturesList.qml
     FeaturesListPage.qml
     FeaturesListPageToolbar.qml
-    FormsStackManager.qml
+   
     InputStyle.qml
     ManageInvitationsPage.qml
     Notification.qml
