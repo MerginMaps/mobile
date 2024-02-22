@@ -96,7 +96,7 @@ Page {
       Item {
         id: spacer
 
-        width: ListView.view.width
+        width: mainList.width
         height: __style.margin40
       }
 
