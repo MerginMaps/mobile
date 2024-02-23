@@ -22,7 +22,7 @@ class LayersModel : public QgsMapLayerModel
 {
     Q_OBJECT
 
-    Q_PROPERTY( int count READ rowCount NOTIFY countChanged)
+    Q_PROPERTY( int count READ rowCount NOTIFY countChanged )
 
 
   public:
@@ -45,7 +45,7 @@ class LayersModel : public QgsMapLayerModel
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-signals:
+  signals:
     void countChanged();
 };
 

@@ -30,7 +30,7 @@ class LayersProxyModel : public QgsMapLayerProxyModel
 {
     Q_OBJECT
 
-    Q_PROPERTY( int count READ rowCount NOTIFY countChanged)
+    Q_PROPERTY( int count READ rowCount NOTIFY countChanged )
 
   public:
     LayersProxyModel( LayersModel *model, LayerModelTypes modelType = LayerModelTypes::AllLayers );
@@ -54,7 +54,7 @@ class LayersProxyModel : public QgsMapLayerProxyModel
      */
     QList<QgsMapLayer *> layers() const;
 
-signals:
+  signals:
     void countChanged();
 
   public slots:

@@ -29,8 +29,8 @@ LayersProxyModel::LayersProxyModel( LayersModel *model, LayerModelTypes modelTyp
       break;
   }
 
-    QObject::connect( this, &LayersProxyModel::rowsInserted, this, &LayersProxyModel::countChanged );
-    QObject::connect( this, &LayersProxyModel::rowsRemoved, this, &LayersProxyModel::countChanged );
+  QObject::connect( this, &LayersProxyModel::rowsInserted, this, &LayersProxyModel::countChanged );
+  QObject::connect( this, &LayersProxyModel::rowsRemoved, this, &LayersProxyModel::countChanged );
 }
 
 bool LayersProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
