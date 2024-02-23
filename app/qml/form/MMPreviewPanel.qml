@@ -198,7 +198,7 @@ Item {
             buttonText: qsTr( "Stake out" )
             iconSource: __style.positionTrackingIcon // TODO: change to stakeout icon
 
-            onClicked: root.editClicked()
+            onClicked: root.stakeoutClicked( controller.featureLayerPair )
           }
         }
       }

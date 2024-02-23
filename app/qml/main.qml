@@ -623,7 +623,7 @@ ApplicationWindow {
     Component {
       id: stakeoutPanelComponent
 
-      StakeoutPanel {
+      MMStakeoutPanel {
         id: stakeoutPanel
 
         height: window.height
