@@ -11,10 +11,10 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-/*
- This is a white drawer with close button that shows items from model with icon + title
- You can specify element to show where there are no items (use MMMessage component)
-*/
+/**
+ * This is a white drawer with close button that shows items from model with icon + title
+ * You can specify element to show where there are no items (use MMMessage component)
+ */
 Drawer {
   id: control
 
@@ -29,7 +29,7 @@ Drawer {
 
   property var activeValue /* which value defined by valueRole should be highlighted */
 
-  property bool modelIsEmpty: control.model? control.model.count === 0 : true
+  property bool modelIsEmpty: control.model ? control.model.count === 0 : true
 
   padding: 20 * __dp
 

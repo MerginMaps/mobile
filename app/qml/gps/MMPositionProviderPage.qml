@@ -243,10 +243,10 @@ Page {
       image: __style.externalGpsRedImage
       title: qsTr( "Connecting to external receivers via bluetooth is not supported" )
       description: qsTr( "This function is not available on iOS. " +
-                        "Your hardware vendor may provide a custom " +
-                       "app that connects to the receiver and sets position. " +
-                       "Mergin Maps will still think it is the internal GPS of " +
-                       "your phone/tablet.")
+                         "Your hardware vendor may provide a custom " +
+                         "app that connects to the receiver and sets position. " +
+                         "Mergin Maps will still think it is the internal GPS of " +
+                         "your phone/tablet." )
       link: __inputHelp.howToConnectGPSLink
     }
   }

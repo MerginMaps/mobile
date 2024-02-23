@@ -519,7 +519,7 @@ Item {
         visible: internal.isInRecordState || root.state === "split"
 
         onClicked: {
-          if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer") {
+          if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer" ) {
             if ( recordingToolsLoader.item.hasChanges() ) {
               cancelEditDialog.open()
             }
@@ -713,7 +713,7 @@ Item {
       MMListDrawer {
         id: activeLayerPanel
 
-        title: qsTr("Choose Active Layer")
+        title: qsTr( "Choose Active Layer" )
 
         model: __recordingLayersModel
         activeValue: __activeLayer.layerId
@@ -725,8 +725,8 @@ Item {
 
         noItemsDelegate: MMMessage {
           image: __style.negativeMMSymbolImage
-          description: qsTr( "Could not find any editable layers in the project.")
-          linkText: qsTr( "See how to enable digitizing in your project.")
+          description: qsTr( "Could not find any editable layers in the project." )
+          linkText: qsTr( "See how to enable digitizing in your project." )
           link: __inputHelp.howToEnableDigitizingLink
         }
 

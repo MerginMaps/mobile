@@ -11,19 +11,18 @@ import QtQuick
 
 import "../components"
 
-/*
-  Component that shows
-    Image,
-    Title (e.g. Select Layer)
-    Description (e.g. No layers available, set them in QGIS)
-    Link (e.g. Learn More with link to merginmaps.com/docs)
-  all centered
+/**
+ * Component that shows
+ *   Image,
+ *   Title (e.g. Select Layer)
+ *   Description (e.g. No layers available, set them in QGIS)
+ *   Link (e.g. Learn More with link to merginmaps.com/docs)
+ * all centered
  */
-
 Column {
   id: root
 
-  width: __style.maxPageWidth- 2 * __style.pageMargins
+  width: __style.maxPageWidth - 2 * __style.pageMargins
   height: illustration.height + titleItem.height + descItem.height + linkItem.height + 7 * spacing
 
   property alias image: illustration.source
