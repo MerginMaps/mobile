@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/images">
-        <file>AcceptInvitationImage.svg</file>
-        <file>AcceptInvitationLogoImage.svg</file>
         <file>Direction.svg</file>
         <file>LutraLogo4x.png</file>
         <file>MapPin.svg</file>

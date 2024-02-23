@@ -22,61 +22,28 @@ Item {
   required property bool enabled
   required property var stackView
 
-  property bool showInvitationList: false // TODO merge with enabled ?
+  property MerginInvitation invitation
 
   Connections {
     id: openInvitationsListener
 
     target: __merginApi
-    enabled: root.enabled && root.showInvitationList
+    enabled: controller.enabled && !stackView.containsPage("signUpPanel")
 
     function onUserInfoReplyFinished() {
-     console.log("TODO!!")
-     // controller.showInvitationsList = false;
-
-      /*
-        TODO - interactions with onboarding!
-        it should be enabled = false in this case from parent!
-
       // let's not show invitations when registration finish page is opened
-      if ( stackView.containsPage("registrationFinishPanel") ) {
+      // this should be redundant - never reached
+      if ( stackView.containsPage("signUpPanel") ) {
         return;
       }
-      */
 
       if ( !__merginApi.userAuth.hasAuthData() ) {
         return;
       }
 
       if ( __merginApi.userInfo.hasInvitations ) {
-        stackView.push( acceptInvitationsPanelComponent )
-      }
-    }
-  }
-
-  Connections {
-    target: __merginApi
-    enabled: root.enabled && root.showInvitationList
-
-    function onProcessInvitationFinished( accepted ) {
-      stackView.pop(null)
-    }
-  }
-
-  Component {
-    id: acceptInvitationsPanelComponent
-
-    MMAcceptInvitation {
-      objectName: "acceptInvitationsPanelDirect"
-      haveBack: true
-      showCreate: false
-
-      onBackClicked: {
-        stackView.popOnePageOrClose()
-      }
-
-      onJoinWorkspaceClicked: function (workspaceUuid) {
-        __merginApi.processInvitation( workspaceUuid, true )
+        controller.invitation = __merginApi.userInfo.invitations()[0]
+        __notificationModel.addWarning( qsTr( "You have pending workspace invitations! You may accept or reject them in your workspace selection page" ) )
       }
     }
   }

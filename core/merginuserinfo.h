@@ -19,14 +19,21 @@
 
 struct MerginInvitation
 {
-  QString uuid;
-  QString workspace;
-  QString role;
-  QDateTime expiration;
+    Q_GADGET
 
-  static MerginInvitation fromJsonObject( const QJsonObject &invitationInfo );
+  public:
+    Q_PROPERTY( QString workspace MEMBER workspace )
+    Q_PROPERTY( QString uuid MEMBER uuid )
+    Q_PROPERTY( QString role MEMBER role )
+    Q_PROPERTY( QDateTime expiration MEMBER expiration )
+
+    QString uuid;
+    QString workspace;
+    QString role;
+    QDateTime expiration;
+
+    static MerginInvitation fromJsonObject( const QJsonObject &invitationInfo );
 };
-
 
 class MerginUserInfo: public QObject
 {
@@ -54,7 +61,7 @@ class MerginUserInfo: public QObject
     QString activeWorkspaceName() const;
     int activeWorkspaceId() const;
     QMap<int, QString> workspaces() const;
-    QList<MerginInvitation> invitations() const;
+    Q_INVOKABLE QList<MerginInvitation> invitations() const;
     bool hasInvitations() const;
     bool hasWorkspaces() const;
     int invitationsCount() const;
