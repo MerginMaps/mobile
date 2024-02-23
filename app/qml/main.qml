@@ -642,7 +642,7 @@ ApplicationWindow {
       }
     }
 
-    MMFormsStackManager {
+    MMFormStackManager {
       id: formsStackManager
 
       height: window.height
