@@ -11,11 +11,25 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
+/**
+ * This is a white drawer with close button that shows items from model with icon + title
+ * You can specify element to show where there are no items (use MMMessage component)
+ */
 Drawer {
   id: control
 
   property alias title: title.text
-  property alias model: listView.model
+  property alias model: listView.model //! Model must implement count property, e.g. QML ListModel
+
+  property alias noItemsDelegate: noItemsDelegate.sourceComponent /* usually MMMessage */
+
+  property string valueRole: "type"
+  property string textRole: "name"
+  property string imageRole: "iconSource"
+
+  property var activeValue /* which value defined by valueRole should be highlighted */
+
+  property bool modelIsEmpty: control.model ? control.model.count === 0 : true
 
   padding: 20 * __dp
 
@@ -50,6 +64,7 @@ Drawer {
       rightPadding: control.padding
       bottomPadding: control.padding
 
+      // TODO use MMHeader
       Row {
         width: parent.width - 2 * control.padding
         anchors.horizontalCenter: parent.horizontalCenter
@@ -76,12 +91,22 @@ Drawer {
         }
       }
 
+      Loader {
+        id: noItemsDelegate
+
+        height: control.modelIsEmpty ? item.height : 0
+        active: control.modelIsEmpty
+        anchors.horizontalCenter: parent.horizontalCenter
+      }
+
       ListView {
         id: listView
 
         width: parent.width - 2 * control.padding
-        height: control.model ? control.model.count * __style.menuDrawerHeight : 0
         interactive: false
+
+        height: control.model ? control.model.count * __style.menuDrawerHeight : 0
+        maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
 
         delegate: Item {
           width: listView.width
@@ -90,9 +115,10 @@ Drawer {
           MMListDrawerItem {
             width: listView.width
 
-            type: model.type
-            text: model.name
-            iconSource: model.iconSource
+            type: model[control.valueRole]
+            text: model[control.textRole]
+            iconSource: model[control.imageRole]
+            isActive: control.activeValue ? control.activeValue === model[control.valueRole] : false
 
             onClicked: function(type) { control.clicked(type); control.visible = false }
           }

@@ -519,7 +519,7 @@ Item {
         visible: internal.isInRecordState || root.state === "split"
 
         onClicked: {
-          if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer") {
+          if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer" ) {
             if ( recordingToolsLoader.item.hasChanges() ) {
               cancelEditDialog.open()
             }
@@ -552,7 +552,7 @@ Item {
 
         visible: root.state === "record"
 
-        onClicked: activeLayerPanel.openPanel()
+        onClicked: activeLayerPanel.open()
       }
 
       MessageDialog {
@@ -710,12 +710,30 @@ Item {
         }
       }
 
-      ActiveLayerPanel {
+      MMListDrawer {
         id: activeLayerPanel
 
-        height: window.height/2
-        width: window.width
-        edge: Qt.BottomEdge
+        title: qsTr( "Choose Active Layer" )
+
+        model: __recordingLayersModel
+        activeValue: __activeLayer.layerId
+
+        valueRole: "layerId"
+        textRole: "layerName"
+
+        // TODO select active layer in list?
+
+        noItemsDelegate: MMMessage {
+          image: __style.negativeMMSymbolImage
+          description: qsTr( "Could not find any editable layers in the project." )
+          linkText: qsTr( "See how to enable digitizing in your project." )
+          link: __inputHelp.howToEnableDigitizingLink
+        }
+
+        onClicked: function ( layerId ) {
+          __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
+          activeLayerPanel.close()
+        }
       }
 
       Connections {

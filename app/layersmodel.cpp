@@ -13,6 +13,8 @@
 
 LayersModel::LayersModel()
 {
+  QObject::connect( this, &LayersModel::rowsInserted, this, &LayersModel::countChanged );
+  QObject::connect( this, &LayersModel::rowsRemoved, this, &LayersModel::countChanged );
 }
 
 QVariant LayersModel::data( const QModelIndex &index, int role ) const

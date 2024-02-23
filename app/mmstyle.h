@@ -195,6 +195,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl syncImage READ syncImage CONSTANT )
     Q_PROPERTY( QUrl externalGpsGreenImage READ externalGpsGreenImage CONSTANT )
     Q_PROPERTY( QUrl externalGpsRedImage READ externalGpsRedImage CONSTANT )
+    Q_PROPERTY( QUrl negativeMMSymbolImage READ negativeMMSymbolImage CONSTANT )
+    Q_PROPERTY( QUrl positiveMMSymbolImage READ positiveMMSymbolImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -394,6 +396,8 @@ class MMStyle: public QObject
     QUrl syncImage() {return QUrl( "qrc:/images/SyncImage.svg" );}
     QUrl externalGpsGreenImage() {return QUrl( "qrc:/images/ExternalGpsGreen.svg" );}
     QUrl externalGpsRedImage() {return QUrl( "qrc:/images/ExternalGpsRed.svg" );}
+    QUrl negativeMMSymbolImage() {return QUrl( "qrc:/images/NegativeMMSymbol.svg" );}
+    QUrl positiveMMSymbolImage() {return QUrl( "qrc:/images/PositiveMMSymbol.svg" );}
 
     static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
     static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}

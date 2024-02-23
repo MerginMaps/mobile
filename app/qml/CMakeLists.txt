@@ -2,7 +2,6 @@ set(MM_QML
     banners/AutoHideBanner.qml
     components/DelegateButton.qml
     components/ExtendedMenuItem.qml
-    components/LayerList.qml
     components/LoadingSpinner.qml
     components/PanelHeader.qml
     components/PanelHeaderV2.qml
@@ -27,7 +26,6 @@ set(MM_QML
     ProjectLimitDialog.qml
     StakeoutPanel.qml
     SwitchWorkspacePage.qml
-    map/ActiveLayerPanel.qml
     map/Crosshair.qml
     map/Highlight.qml
     map/LoadingIndicator.qml
@@ -35,9 +33,9 @@ set(MM_QML
     map/StakeoutTools.qml
     misc/AttentionBanner.qml
     misc/NoWorkspaceBanner.qml
-
     account/MMAcountPage.qml
     account/MMAcountPageItem.qml
+    components/MMMessage.qml
     components/MMRoundButton.qml
     components/MMButton.qml
     components/MMCodeScanner.qml
@@ -149,7 +147,6 @@ set(MM_QML
     gps/MMGpsDataDrawer.qml
     gps/MMGpsDataText.qml
     gps/MMPositionProviderPage.qml
-    gps/MMExternalGpsNotSupportedComponent.qml
     settings/MMAboutPanel.qml
     settings/MMChangelogPanel.qml
     settings/MMLogPanel.qml
