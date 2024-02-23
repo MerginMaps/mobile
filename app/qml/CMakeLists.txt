@@ -1,36 +1,43 @@
 set(MM_QML
-    account/MMAcountPage.qml
-    account/MMAcountPageItem.qml
     banners/AutoHideBanner.qml
-    components/CheckboxComponent.qml
-    components/DateTimePicker.qml
     components/DelegateButton.qml
-    components/ErrorText.qml
     components/ExtendedMenuItem.qml
-    components/IconTextItem.qml
-    components/InputComboBox.qml
-    components/InputText.qml
-    components/InputTextField.qml
     components/LayerList.qml
-    components/LeftCheckBox.qml
     components/LoadingSpinner.qml
-    components/MainPanelButton.qml
-    components/MapFloatButton.qml
-    components/NumberInputField.qml
     components/PanelHeader.qml
     components/PanelHeaderV2.qml
-    components/PasswordField.qml
     components/RichTextBlock.qml
     components/SearchBoxV2.qml
-    components/SettingsSwitch.qml
     components/Shadow.qml
     components/SimpleTextWithIcon.qml
-    components/Switch.qml
     components/Symbol.qml
     components/TextHyperlink.qml
     components/TextRowWithTitle.qml
     components/TextWithIcon.qml
-    components/ToolbarButton.qml
+    dialogs/MigrateToMerginDialog.qml
+    dialogs/MissingAuthDialog.qml
+    dialogs/NoPermissionsDialog.qml
+    dialogs/SplittingFailedDialog.qml
+    dialogs/SyncFailedDialog.qml
+    Banner.qml
+    InputStyle.qml
+    ManageInvitationsPage.qml
+    Notification.qml
+    NotificationBanner.qml
+    ProjectLimitDialog.qml
+    StakeoutPanel.qml
+    SwitchWorkspacePage.qml
+    map/ActiveLayerPanel.qml
+    map/Crosshair.qml
+    map/Highlight.qml
+    map/LoadingIndicator.qml
+    map/SplittingTools.qml
+    map/StakeoutTools.qml
+    misc/AttentionBanner.qml
+    misc/NoWorkspaceBanner.qml
+
+    account/MMAcountPage.qml
+    account/MMAcountPageItem.qml
     components/MMRoundButton.qml
     components/MMButton.qml
     components/MMCodeScanner.qml
@@ -96,11 +103,6 @@ set(MM_QML
     project/MMProjectStatusPanel.qml
     project/MMProjectStatusItem.qml
     project/MMProjectIssuesPanel.qml
-    dialogs/MigrateToMerginDialog.qml
-    dialogs/MissingAuthDialog.qml
-    dialogs/NoPermissionsDialog.qml
-    dialogs/SplittingFailedDialog.qml
-    dialogs/SyncFailedDialog.qml
     dialogs/MMMapThemePanel.qml
     dialogs/MMStorageLimitDialog.qml
     inputs/MMBaseInput.qml
@@ -137,19 +139,11 @@ set(MM_QML
     layers/MMLayersListSearchPage.qml
     layers/MMLayersList.qml
     layers/MMLayersPanel.qml
-    map/ActiveLayerPanel.qml
-    map/Crosshair.qml
-    map/Highlight.qml
-    map/LoadingIndicator.qml
     map/MMMapCanvas.qml
     map/MapWrapper.qml
     map/MMPositionMarker.qml
     map/RecordingTools.qml
     map/MMMapScaleBar.qml
-    map/SplittingTools.qml
-    map/StakeoutTools.qml
-    misc/AttentionBanner.qml
-    misc/NoWorkspaceBanner.qml
     gps/MMAddPositionProviderDrawer.qml
     gps/MMBluetoothConnectionDrawer.qml
     gps/MMGpsDataDrawer.qml
@@ -166,14 +160,6 @@ set(MM_QML
     settings/MMSettingsPanel.qml
     settings/MMSettingsController.qml
     dialogs/MMPositionTrackingDrawer.qml
-    Banner.qml
-    InputStyle.qml
-    ManageInvitationsPage.qml
-    Notification.qml
-    NotificationBanner.qml
-    ProjectLimitDialog.qml
-    StakeoutPanel.qml
-    SwitchWorkspacePage.qml
     main.qml
     PARENT_SCOPE
 )
