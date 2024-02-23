@@ -33,10 +33,8 @@ set(MM_QML
     map/StakeoutTools.qml
     misc/AttentionBanner.qml
     misc/NoWorkspaceBanner.qml
-
     account/MMAcountPage.qml
     account/MMAcountPageItem.qml
-
     components/MMMessage.qml
     components/MMRoundButton.qml
     components/MMButton.qml
@@ -85,7 +83,6 @@ set(MM_QML
     components/calendar/MMDateTumbler.qml
     components/calendar/MMAmPmSwitch.qml
     components/MMLine.qml
-
     onboarding/MMAcceptInvitation.qml
     onboarding/MMCreateWorkspace.qml
     onboarding/MMHowYouFoundUs.qml
