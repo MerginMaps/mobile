@@ -22,5 +22,7 @@
         <file>mIconTableLayer.svg</file>
         <file>ExternalGpsRed.svg</file>
         <file>ExternalGpsGreen.svg</file>
+        <file>NegativeMMSymbol.svg</file>
+        <file>PositiveMMSymbol.svg</file>
     </qresource>
 </RCC>

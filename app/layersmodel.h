@@ -22,6 +22,9 @@ class LayersModel : public QgsMapLayerModel
 {
     Q_OBJECT
 
+    Q_PROPERTY( int count READ rowCount NOTIFY countChanged)
+
+
   public:
     LayersModel();
 
@@ -41,6 +44,9 @@ class LayersModel : public QgsMapLayerModel
     //! Methods overridden from QgsMapLayerModel
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
     QHash<int, QByteArray> roleNames() const override;
+
+signals:
+    void countChanged();
 };
 
 #endif // LAYERSMODEL_H

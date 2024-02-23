@@ -22,6 +22,32 @@ ScrollView {
     property int rectSize: 10
 
     GroupBox {
+      title: "Images (for dialogs 160 x 140)"
+      background: Rectangle {
+        color: __style.lightGreenColor
+        border.color: "gray"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      contentData: Column {
+        spacing: 10
+        Column { Image { source: __style.positionTrackingStartImage } Text { text: "positionTrackingStartImage" } }
+        Column { Image { source: __style.positionTrackingRunningImage } Text { text: "positionTrackingRunningImage" } }
+        Column { Image { source: __style.noMapThemesImage } Text { text: "noMapThemesImage" } }
+        Column { Image { source: __style.syncImage } Text { text: "syncImage" } }
+        Column { Image { source: __style.externalGpsGreenImage } Text { text: "externalGpsGreenImage" } }
+        Column { Image { source: __style.externalGpsRedImage } Text { text: "externalGpsRedImage" } }
+        Column { Image { source: __style.reachedDataLimitImage } Text { text: "reachedDataLimitImage" } }
+        Column { Image { source: __style.positiveMMSymbolImage } Text { text: "positiveMMSymbolImage" } }
+        Column { Image { source: __style.negativeMMSymbolImage } Text { text: "negativeMMSymbolImage" } }
+      }
+    }
+
+    GroupBox {
       title: "Images"
       background: Rectangle {
         color: __style.lightGreenColor
@@ -43,13 +69,6 @@ ScrollView {
         Column { Image { source: __style.trackingDirectionImage } Text { text: "trackingDirectionImage" } }
         Column { Image { source: __style.mapPinImage } Text { text: "mapPinImage" } }
         Column { Image { source: __style.warnLogoImage } Text { text: "warnLogoImage" } }
-        Column { Image { source: __style.positionTrackingStartImage } Text { text: "positionTrackingStartImage" } }
-        Column { Image { source: __style.positionTrackingRunningImage } Text { text: "positionTrackingRunningImage" } }
-        Column { Image { source: __style.noMapThemesImage } Text { text: "noMapThemesImage" } }
-        Column { Image { source: __style.syncImage } Text { text: "syncImage" } }
-        Column { Image { source: __style.externalGpsGreenImage } Text { text: "externalGpsGreenImage" } }
-        Column { Image { source: __style.externalGpsRedImage } Text { text: "externalGpsRedImage" } }
-        Column { Image { source: __style.reachedDataLimitImage } Text { text: "reachedDataLimitImage" } }
       }
     }
 

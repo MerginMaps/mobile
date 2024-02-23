@@ -30,6 +30,8 @@ class LayersProxyModel : public QgsMapLayerProxyModel
 {
     Q_OBJECT
 
+    Q_PROPERTY( int count READ rowCount NOTIFY countChanged)
+
   public:
     LayersProxyModel( LayersModel *model, LayerModelTypes modelType = LayerModelTypes::AllLayers );
 
@@ -51,6 +53,9 @@ class LayersProxyModel : public QgsMapLayerProxyModel
      * @brief layers method return layers from source model filtered with filter function
      */
     QList<QgsMapLayer *> layers() const;
+
+signals:
+    void countChanged();
 
   public slots:
     void refreshData();

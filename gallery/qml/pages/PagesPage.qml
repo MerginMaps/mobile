@@ -73,13 +73,6 @@ Page {
         }
 
         MMButton {
-          text: "MMExternalGpsNotSupportedComponent"
-          onClicked: {
-            stackview.push(externalGpsNotAllowedComponent)
-          }
-        }
-
-        MMButton {
           text: "MMProjectIssuesPanel"
           onClicked: {
             stackview.push(projectIssuesPanelComponent)
@@ -200,23 +193,6 @@ Page {
         function seeChangelogs() {
           console.log("see changelogs requested")
         }
-      }
-    }
-  }
-
-  Component {
-    id: externalGpsNotAllowedComponent
-    Page {
-      background: Rectangle {color: __style.lightGreenColor}
-      width: root.width
-      height: root.height
-      header: Button { text: "Close"; onClicked: stackview.pop()}
-
-      MMExternalGpsNotSupportedComponent {
-        id: settingsPanel
-        link: "www.merginmaps.com/docs"
-        width: root.width
-        height: root.height
       }
     }
   }
