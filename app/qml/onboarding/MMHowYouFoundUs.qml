@@ -82,21 +82,21 @@ Page {
 
       model: ListModel {
         Component.onCompleted: {
-          listView.model.append({name: qsTr("Search engine (Google, ...)"), icon: __style.searchIcon, submenu: false})
-          listView.model.append({name: qsTr("Blog"), icon: __style.termsIcon, submenu: false})
-          listView.model.append({name: qsTr("Mouth"), icon: __style.mouthIcon, submenu: false})
-          listView.model.append({name: qsTr("QGIS website"), icon: __style.qgisIcon, submenu: false})
-          listView.model.append({name: qsTr("Application store"), icon: __style.subscriptionsIcon, submenu: false})
-          listView.model.append({name: qsTr("Teacher"), icon: __style.teacherIcon, submenu: false})
-          listView.model.append({name: qsTr("Conference"), icon: __style.briefcaseIcon, submenu: false})
-          listView.model.append({name: qsTr("Social media"), icon: __style.socialMediaIcon, submenu: false})
-          listView.model.append({name: qsTr("YouTube"), icon: __style.youtubeIcon, submenu: true})
-          listView.model.append({name: qsTr("Twitter"), icon: __style.xTwitterIcon, submenu: true})
-          listView.model.append({name: qsTr("Facebook"), icon: __style.facebookIcon, submenu: true})
-          listView.model.append({name: qsTr("LinkedIn"), icon: __style.linkedinIcon, submenu: true})
-          listView.model.append({name: qsTr("Mastodon"), icon: __style.mastodonIcon, submenu: true})
-          listView.model.append({name: qsTr("Reddit"), icon: __style.redditIcon, submenu: true})
-          listView.model.append({name: qsTr("Other"), icon: __style.otherIcon, submenu: false})
+          listView.model.append({name: qsTr("Search engine (Google, ...)"), key: "search_engine", icon: __style.searchIcon, submenu: false})
+          listView.model.append({name: qsTr("Blog"), key: "blog", icon: __style.termsIcon, submenu: false})
+          listView.model.append({name: qsTr("Mouth"), key: "mouth", icon: __style.mouthIcon, submenu: false})
+          listView.model.append({name: qsTr("QGIS website"), key: "qgis_website", icon: __style.qgisIcon, submenu: false})
+          listView.model.append({name: qsTr("Application store"), key: "app_store", icon: __style.subscriptionsIcon, submenu: false})
+          listView.model.append({name: qsTr("Teacher"), key: "teacher", icon: __style.teacherIcon, submenu: false})
+          listView.model.append({name: qsTr("Conference"), key: "conference", icon: __style.briefcaseIcon, submenu: false})
+          listView.model.append({name: qsTr("Social media"), key: "social", icon: __style.socialMediaIcon, submenu: false})
+          listView.model.append({name: qsTr("YouTube"), key: "youtube", icon: __style.youtubeIcon, submenu: true})
+          listView.model.append({name: qsTr("Twitter"), ikey: "twitter", icon: __style.xTwitterIcon, submenu: true})
+          listView.model.append({name: qsTr("Facebook"), key: "facebook", icon: __style.facebookIcon, submenu: true})
+          listView.model.append({name: qsTr("LinkedIn"), key: "linkedIn", icon: __style.linkedinIcon, submenu: true})
+          listView.model.append({name: qsTr("Mastodon"), key: "mastodon", icon: __style.mastodonIcon, submenu: true})
+          listView.model.append({name: qsTr("Reddit"), key: "reddit", icon: __style.redditIcon, submenu: true})
+          listView.model.append({name: qsTr("Other"), key: "other", icon: __style.otherIcon, submenu: false})
         }
       }
 
@@ -131,11 +131,11 @@ Page {
             listView.positionViewAtEnd()
           }
           else {
-            if (model.icon === __style.socialMediaIcon) {
+            if ( model.key === "social" ) {
               // need to select subcategory
               root.selectedText = ""
             } else {
-              root.selectedText = model.name
+              root.selectedText = model.key
             }
           }
         }

@@ -92,17 +92,17 @@ Page {
 
       model: ListModel {
         Component.onCompleted: {
-          listView.model.append({name: qsTr("Agriculture"), icon: __style.tractorIcon, colorx: __style.sunColor, color: "#F4CB46"})
-          listView.model.append({name: qsTr("Archaeology"), icon: __style.archaeologyIcon, colorx: __style.sandColor, color: "#FFF4E2"})
-          listView.model.append({name: qsTr("Construction and engineering"), icon: __style.engineeringIcon, colorx: __style.roseColor, color: "#FFBABC"})
-          listView.model.append({name: qsTr("Electric utilities"), icon: __style.electricityIcon, colorx: __style.nightColor, color: "#12181F"})
-          listView.model.append({name: qsTr("Environmental protection"), icon: __style.environmentalIcon, colorx: __style.fieldColor, color: "#9BD1A9"})
-          listView.model.append({name: qsTr("Local governments"), icon: __style.stateAndLocalIcon, colorx: __style.purpleColor, color: "#CCBDF5"})
-          listView.model.append({name: qsTr("Natural resources"), icon: __style.naturalResourcesIcon, colorx: __style.earthColor, color: "#4D2A24"})
-          listView.model.append({name: qsTr("Telecom"), icon: __style.telecommunicationIcon, colorx: __style.deepOceanColor, color: "#1C324A"})
-          listView.model.append({name: qsTr("Transportation"), icon: __style.transportationIcon, colorx: __style.skyColor, color: "#A6CBF4"})
-          listView.model.append({name: qsTr("Water utilities"), icon: __style.waterResourcesIcon, colorx: __style.lightGreenColor, color: "#EFF5F3"})
-          listView.model.append({name: qsTr("Other"), icon: __style.otherIcon, colorx: __style.sunsetColor, color: "#FFB673"})
+          listView.model.append({name: qsTr("Agriculture"), key: "agriculture", icon: __style.tractorIcon, colorx: __style.sunColor, color: "#F4CB46"})
+          listView.model.append({name: qsTr("Archaeology"), key: "archaeology", icon: __style.archaeologyIcon, colorx: __style.sandColor, color: "#FFF4E2"})
+          listView.model.append({name: qsTr("Construction and engineering"), key: "engineering", icon: __style.engineeringIcon, colorx: __style.roseColor, color: "#FFBABC"})
+          listView.model.append({name: qsTr("Electric utilities"), key: "electricity", icon: __style.electricityIcon, colorx: __style.nightColor, color: "#12181F"})
+          listView.model.append({name: qsTr("Environmental protection"), key: "environmental", icon: __style.environmentalIcon, colorx: __style.fieldColor, color: "#9BD1A9"})
+          listView.model.append({name: qsTr("Local governments"), key: "gov", icon: __style.stateAndLocalIcon, colorx: __style.purpleColor, color: "#CCBDF5"})
+          listView.model.append({name: qsTr("Natural resources"), key: "natural", icon: __style.naturalResourcesIcon, colorx: __style.earthColor, color: "#4D2A24"})
+          listView.model.append({name: qsTr("Telecom"), key: "telecom", icon: __style.telecommunicationIcon, colorx: __style.deepOceanColor, color: "#1C324A"})
+          listView.model.append({name: qsTr("Transportation"), key: "transportation", icon: __style.transportationIcon, colorx: __style.skyColor, color: "#A6CBF4"})
+          listView.model.append({name: qsTr("Water utilities"), key: "water", icon: __style.waterResourcesIcon, colorx: __style.lightGreenColor, color: "#EFF5F3"})
+          listView.model.append({name: qsTr("Other"), key: "other", icon: __style.otherIcon, colorx: __style.sunsetColor, color: "#FFB673"})
         }
       }
 
@@ -133,7 +133,7 @@ Page {
             // for other you need to type string
             root.selectedText = ""
           } else {
-            root.selectedText = model.name
+            root.selectedText = model.key
           }
         }
       }
