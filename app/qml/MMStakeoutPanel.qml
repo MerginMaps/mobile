@@ -66,7 +66,7 @@ Drawer {
     root.open()
   }
 
-  height: ApplicationWindow.window.height
+  height: ApplicationWindow.window.height / 3
   width: ApplicationWindow.window.width
 
   Behavior on height {
@@ -179,56 +179,57 @@ Drawer {
 
         // Position indicator with direction
         Item {
+          width: parent.width
+          height: __style.pageMargins
+        }
+
+        Item {
           id: positionMarker
+          width: parent.width
+          height: childrenRect.height
 
-          PositionDirection {
-            id: positionDirection
+          // PositionDirection {
+          //   id: positionDirection
 
-            positionKit: __positionKit
-            compass: Compass { id: ccompass }
-          }
-
-          Image {
-            id: direction
-
-            property real bearing: root.targetPair ? __inputUtils.angleBetweenGpsAndFeature(
-                                                       __positionKit.positionCoordinate,
-                                                       root.targetPair,
-                                                       root.mapCanvas.mapSettings ) : 0
-
-            source: InputStyle.gpsDirectionIcon
-            fillMode: Image.PreserveAspectFit
-            rotation: positionDirection.direction
-            transformOrigin: Item.Bottom
-            width: InputStyle.rowHeightHeader
-            height: width
-            smooth: true
-            visible: __positionKit.hasPosition && positionDirection.hasDirection
-
-            /**
-            * Formula to calculate GPS position in the short-range window goes like this:
-            *   center of the window +
-            *   sin<or cos> of angle between GPS position and the target feature *
-            *   distance to the feature *
-            *   scale by size of the outer circle /
-            *   distance of the outer circle in metres (closeRangeModeDistanceThreshold)
-            */
-            x: ( rootShape.centerX + ( Math.sin( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
-            y: ( rootShape.centerY + ( Math.cos( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height
-
-            Behavior on rotation { RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }}
-          }
+          //   positionKit: __positionKit
+          //   compass: Compass { id: ccompass }
+          // }
 
           Image {
-            source: __positionKit.hasPosition ? InputStyle.gpsMarkerPositionIcon : InputStyle.gpsMarkerNoPositionIcon
-            visible: __positionKit.hasPosition
-            fillMode: Image.PreserveAspectFit
-            width: InputStyle.rowHeightHeader / 2
-            height: width
-            smooth: true
-            x: ( rootShape.centerX + ( Math.sin( -direction.bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
-            y: ( rootShape.centerY + ( Math.cos( -direction.bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height / 2
+              id: direction
+
+              property real bearing: root.targetPair ? __inputUtils.angleBetweenGpsAndFeature(
+                                                                      __positionKit.positionCoordinate,
+                                                                      root.targetPair,
+                                                                      root.mapCanvas.mapSettings ) : 0
+
+              anchors.horizontalCenter: parent.horizontalCenter
+              source: __style.gpsDirectionIcon
+              fillMode: Image.PreserveAspectFit
+              rotation: positionDirection.direction
+              transformOrigin: Item.Bottom
+              width: 50
+              height: width
+              smooth: true
+              visible: true
+
+              x: ( rootShape.centerX + ( Math.sin( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
+              y: ( rootShape.centerY + ( Math.cos( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height
+
+              Behavior on rotation { RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }}
           }
+
+          //Prob not needed
+          // Image {
+          //     source: __positionKit.hasPosition ? InputStyle.gpsMarkerPositionIcon : InputStyle.gpsMarkerNoPositionIcon
+          //     visible: __positionKit.hasPosition
+          //     fillMode: Image.PreserveAspectFit
+          //     width: InputStyle.rowHeightHeader / 2
+          //     height: width
+          //     smooth: true
+          //     x: ( rootShape.centerX + ( Math.sin( -direction.bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
+          //     y: ( rootShape.centerY + ( Math.cos( -direction.bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height / 2
+          // }
         }
       }
     }

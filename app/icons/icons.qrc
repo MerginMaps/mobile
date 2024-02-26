@@ -87,5 +87,6 @@
         <file>XTwitter.svg</file>
         <file>Youtube.svg</file>
         <file>ZoomToProject.svg</file>
+        <file>GpsDirection.svg</file>
     </qresource>
 </RCC>

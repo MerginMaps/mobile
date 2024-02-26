@@ -626,7 +626,7 @@ ApplicationWindow {
       MMStakeoutPanel {
         id: stakeoutPanel
 
-        height: window.height
+        //height: window.height
         width: window.width
 
         mapCanvas: map
