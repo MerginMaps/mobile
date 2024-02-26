@@ -23,6 +23,9 @@ Drawer {
 
   id: root
 
+  property int gpsIconHeight: 70
+  property int gpsIconWidth: 58
+
   property var mapCanvas
 
   property var targetPair: null
@@ -208,8 +211,8 @@ Drawer {
               fillMode: Image.PreserveAspectFit
               rotation: positionDirection.direction
               transformOrigin: Item.Bottom
-              width: 50
-              height: width
+              width: root.gpsIconWidth
+              height: root.gpsIconHeight
               smooth: true
               visible: true
 
