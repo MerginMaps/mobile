@@ -32,25 +32,27 @@ Drawer {
                                                   __positionKit.positionCoordinate,
                                                   targetPair,
                                                   mapCanvas.mapSettings ) : -1
-
   property var extent
-
   property real closeRangeModeDistanceThreshold: 1 // in metres
   property real targetReachedDistanceThreshold: 0.1 // in metres
 
   readonly property alias panelHeight: root.height
 
-  // Intentionally create additional signal that signalizes when stakeout panel changes its height
-  // panelHeightUpdated is emitted after animation for panel height is finished! panelHeight property contains also
-  // intermediary values during animation
   signal panelHeightUpdated()
-
   signal autoFollowClicked()
   signal stakeoutFinished()
 
+  width: window.width
+  height: roundedRect.childrenRect.height + borderRectangle.height
+  edge: Qt.BottomEdge
+  focus: true
+  dim: true
+  interactive: false
+  dragMargin: 0
+  closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
   Component.onCompleted: {
-    // stakeout starts
-    root.open()
+    forceActiveFocus()
   }
 
   function endStakeout() {
@@ -69,9 +71,6 @@ Drawer {
     root.open()
   }
 
-  height: ApplicationWindow.window.height
-  width: ApplicationWindow.window.width
-
   Behavior on height {
     SequentialAnimation {
       PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
@@ -80,64 +79,52 @@ Drawer {
   }
 
   Item {
-    id: drawerContent
-    states: [
-        State {
-            name: "longRange"
-            when: remainingDistance >= closeRangeModeDistanceThreshold || remainingDistance < 0
-            PropertyChanges {
-                target: drawer
-                height: Math.max( 2 * InputStyle.rowHeight, root.height / 6 )
-            }
-        },
-        State {
-            name: "closeRange"
-            when: remainingDistance >= 0 && remainingDistance < closeRangeModeDistanceThreshold
-            PropertyChanges {
-                target: drawer
-                height: Math.max( 4 * InputStyle.rowHeight, root.height / 2 )
-            }
-        }
-    ]
-  }
-
-  modal: false
-  edge: Qt.BottomEdge
-  interactive: false // prevents closing by swiping the window down
-  dragMargin: 0 // prevents opening the root by dragging.
-  //closePolicy: Popup.NoAutoClose
-
-  Item {
-    // back handler
     focus: true
 
     Keys.onReleased: function( event ) {
       if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-        event.accepted = true;
-        endStakeout()
+        event.accepted = true
+        close()
       }
     }
   }
 
-  Rectangle {
-    anchors.fill: parent
-    color: __style.whiteColor
-    anchors.topMargin: -radius
-    radius: __style.inputRadius
+  StateGroup {
+    id: distanceState
+
+    states: [
+        State {
+            name: "longRange"
+            when: root.remainingDistance >= root.closeRangeModeDistanceThreshold || root.remainingDistance < 0
+        },
+        State {
+            name: "closeRange"
+            when: root.remainingDistance >= 0 && root.remainingDistance < root.closeRangeModeDistanceThreshold
+        }
+    ]
   }
 
-  ColumnLayout {
+  Rectangle {
+    id: borderRectangle
 
-    id: mainColumn
+    color: roundedRect.color
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 2 * radius
+    anchors.topMargin: -radius
+    radius: 20 * __dp
+  }
 
-    width: parent.width
-    spacing: 40 * __dp
+  Rectangle {
+    id: roundedRect
+
+    anchors.fill: parent
+    color: __style.whiteColor
 
     MMHeader {
-
       id: header
 
-      rightMarginShift: 0
       backVisible: false
 
       title: qsTr("Stake out")
@@ -156,7 +143,50 @@ Drawer {
         bgndColor: __style.lightGreenColor
         bgndHoverColor: __style.mediumGreenColor
 
-        onClicked: root.visible = false
+        onClicked: close()
+      }
+    }
+
+    Column {
+      id: mainColumn
+
+      width: parent.width
+      anchors.left: parent.left
+      anchors.leftMargin: __style.pageMargins
+      anchors.right: parent.right
+      anchors.rightMargin: __style.pageMargins
+      anchors.top: header.bottom
+      anchors.topMargin: __style.pageMargins
+
+      spacing: __style.margin12
+
+      Column {
+        id: dataTextColumn
+
+        width: parent.width
+        spacing: 0
+
+        Row {
+          width: parent.width
+          height: 67 * __dp
+
+          MMGpsDataText{
+            titleText: qsTr( "Feature" )
+            descriptionText: "Feature 11"
+            //descriptionText: root.targetPair ? __inputUtils.featureTitle( root.targetPair, __activeProject.qgsProject ) : ""
+          }
+
+          MMGpsDataText{
+            titleText: qsTr( "Distance" )
+            descriptionText: "2.05 m"
+            //descriptionText: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2 ) : "N/A"
+            alignmentRight: true
+          }
+        }
+      }
+
+      MMLine {
+        visible: distanceState.state === "closeRange"
       }
     }
 
@@ -168,7 +198,7 @@ Drawer {
       Layout.rightMargin: __style.pageMargins
       Layout.maximumWidth: __style.maxPageWidth
       Layout.alignment: Qt.AlignHCenter
-      Layout.preferredHeight: window.height - header.height
+      Layout.preferredHeight: window.height - roundedRect.childrenRect.height
       contentWidth: availableWidth
       contentHeight: scrollColumn.childrenRect.height
 
@@ -180,32 +210,6 @@ Drawer {
 
         width: parent.width
         spacing: 0
-
-        Row {
-          width: parent.width
-          height: 67 * __dp
-
-          MMGpsDataText{
-            titleText: qsTr( "Feature" )
-            descriptionText: root.targetPair ? __inputUtils.featureTitle( root.targetPair, __activeProject.qgsProject ) : ""
-          }
-
-          MMGpsDataText{
-            titleText: qsTr( "Distance" )
-            descriptionText: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2 ) : "N/A"
-            alignmentRight: true
-          }
-        }
-
-        MMLine {
-          visible: drawerContent.state === "closeRange"
-        }
-
-        // Position indicator with direction
-        Item {
-          width: parent.width
-          height: __style.pageMargins
-        }
 
         Item {
           id: closeRangeModeComponent
@@ -224,10 +228,7 @@ Drawer {
             }
           ]
 
-          //state: "notAtTarget"
-          //state: "atTarget"
-
-          visible: drawerContent.state === "closeRange"
+          visible: distanceState.state === "closeRange"
 
           // enable antialiasing
           layer.enabled: true
@@ -286,7 +287,6 @@ Drawer {
 
           Symbol {
             source: __style.stakeOutDotIcon
-            //iconColor: closeRangeModeComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
             iconSize: rootShape.height / 12
             x: rootShape.centerX - width / 2
             y: rootShape.centerY - height / 2
@@ -297,12 +297,12 @@ Drawer {
             width: parent.width
             height: childrenRect.height
 
-            PositionDirection {
-              id: positionDirection
+            // PositionDirection {
+            //   id: positionDirection
 
-              positionKit: __positionKit
-              compass: Compass { id: ccompass }
-            }
+            //   positionKit: __positionKit
+            //   compass: Compass { id: ccompass }
+            // }
 
             Image {
                 id: direction
@@ -327,22 +327,11 @@ Drawer {
 
                 Behavior on rotation { RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }}
             }
-
-            //Prob not needed
-            // Image {
-            //     source: __positionKit.hasPosition ? InputStyle.gpsMarkerPositionIcon : InputStyle.gpsMarkerNoPositionIcon
-            //     visible: __positionKit.hasPosition
-            //     fillMode: Image.PreserveAspectFit
-            //     width: InputStyle.rowHeightHeader / 2
-            //     height: width
-            //     smooth: true
-            //     x: ( rootShape.centerX + ( Math.sin( -direction.bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
-            //     y: ( rootShape.centerY + ( Math.cos( -direction.bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height / 2
-            // }
           }
         }
       }
     }
   }
 }
+
 
