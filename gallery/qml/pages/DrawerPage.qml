@@ -40,10 +40,17 @@ Page {
       text: "Upload"
       onClicked: drawer1.open()
     }
+
     MMButton {
       text: "MMStorageLimitDialog"
       onClicked: storageLimitDialog.open()
     }
+
+    MMButton {
+      text: "MMCloseAccountDialog"
+      onClicked: closeAccountDialog.open()
+    }
+
     MMButton {
       text: "Synchronization Failed"
       onClicked: drawer3.open()
@@ -86,6 +93,12 @@ Page {
         }
       }
     }
+  }
+
+  MMCloseAccountDialog {
+    id: closeAccountDialog
+
+    username: "Superman"
   }
 
   MMPositionTrackingDrawer {

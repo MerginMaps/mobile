@@ -24,6 +24,7 @@
         <file>qml/pages/InputsPage.qml</file>
         <file>../app/qml/dialogs/MMPositionTrackingDrawer.qml</file>
         <file>../app/qml/dialogs/MMStorageLimitDialog.qml</file>
+        <file>../app/qml/dialogs/MMCloseAccountDialog.qml</file>
         <file>../app/qml/components/MMButton.qml</file>
         <file>../app/qml/components/MMLinkButton.qml</file>
         <file>../app/qml/components/MMIcon.qml</file>

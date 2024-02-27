@@ -44,6 +44,27 @@ ScrollView {
         Column { Image { source: __style.reachedDataLimitImage } Text { text: "reachedDataLimitImage" } }
         Column { Image { source: __style.positiveMMSymbolImage } Text { text: "positiveMMSymbolImage" } }
         Column { Image { source: __style.negativeMMSymbolImage } Text { text: "negativeMMSymbolImage" } }
+        Column { Image { source: __style.closeAccountImage } Text { text: "closeAccountImage" } }
+      }
+    }
+
+    GroupBox {
+      title: "Images (for tips/bubbles 50 x 50)"
+      background: Rectangle {
+        color: __style.lightGreenColor
+        border.color: "gray"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      contentData: Column {
+        spacing: 10
+        Column { Image { source: __style.warnLogoImage } Text { text: "warnLogoImage" } }
+        Column { Image { source: __style.attentionImage } Text { text: "attentionImage" } }
+        Column { Image { source: __style.bubbleImage } Text { text: "bubbleImage" } }
       }
     }
 
@@ -68,7 +89,6 @@ ScrollView {
         Column { Image { source: __style.directionImage } Text { text: "directionImage" } }
         Column { Image { source: __style.trackingDirectionImage } Text { text: "trackingDirectionImage" } }
         Column { Image { source: __style.mapPinImage } Text { text: "mapPinImage" } }
-        Column { Image { source: __style.warnLogoImage } Text { text: "warnLogoImage" } }
       }
     }
 

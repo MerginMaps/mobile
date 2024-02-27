@@ -99,7 +99,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl arrowUpIcon READ arrowUpIcon CONSTANT )
     Q_PROPERTY( QUrl backIcon READ backIcon CONSTANT )
     Q_PROPERTY( QUrl briefcaseIcon READ briefcaseIcon CONSTANT )
-    Q_PROPERTY( QUrl bubbleIcon READ bubbleIcon CONSTANT )
     Q_PROPERTY( QUrl calendarIcon READ calendarIcon CONSTANT )
     Q_PROPERTY( QUrl checkmarkIcon READ checkmarkIcon CONSTANT )
     Q_PROPERTY( QUrl closeIcon READ closeIcon CONSTANT )
@@ -197,6 +196,9 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl externalGpsRedImage READ externalGpsRedImage CONSTANT )
     Q_PROPERTY( QUrl negativeMMSymbolImage READ negativeMMSymbolImage CONSTANT )
     Q_PROPERTY( QUrl positiveMMSymbolImage READ positiveMMSymbolImage CONSTANT )
+    Q_PROPERTY( QUrl closeAccountImage READ closeAccountImage CONSTANT )
+    Q_PROPERTY( QUrl attentionImage READ attentionImage CONSTANT )
+    Q_PROPERTY( QUrl bubbleImage READ bubbleImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -311,7 +313,6 @@ class MMStyle: public QObject
     QUrl arrowUpIcon() {return QUrl( "qrc:/ArrowUp.svg" );}
     QUrl backIcon() {return QUrl( "qrc:/Back.svg" );}
     QUrl briefcaseIcon() {return QUrl( "qrc:/Briefcase.svg" );}
-    QUrl bubbleIcon() {return QUrl( "qrc:/Bubble.svg" );}
     QUrl calendarIcon() {return QUrl( "qrc:/Calendar.svg" );}
     QUrl checkmarkIcon() {return QUrl( "qrc:/Checkmark.svg" );}
     QUrl closeIcon() {return QUrl( "qrc:/Close.svg" );}
@@ -401,6 +402,9 @@ class MMStyle: public QObject
     QUrl externalGpsRedImage() {return QUrl( "qrc:/images/ExternalGpsRed.svg" );}
     QUrl negativeMMSymbolImage() {return QUrl( "qrc:/images/NegativeMMSymbol.svg" );}
     QUrl positiveMMSymbolImage() {return QUrl( "qrc:/images/PositiveMMSymbol.svg" );}
+    QUrl closeAccountImage() {return QUrl( "qrc:/images/CloseAccount.svg" );}
+    QUrl attentionImage() {return QUrl( "qrc:/images/Attention.svg" );}
+    QUrl bubbleImage() {return QUrl( "qrc:/images/Bubble.svg" );}
 
     static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
     static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}

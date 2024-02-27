@@ -22,6 +22,7 @@ import "../components"
 import "../onboarding"
 import "../inputs"
 import "../account"
+import "../dialogs"
 
 Item {
   id: root
@@ -557,13 +558,22 @@ Item {
 
       onCloseAccountClicked: {
         stackView.popOnePageOrClose()
-        // TODO!!
+        closeAccountDialog.open()
         root.resetView()
       }
 
       onSelectWorkspaceClicked: {
         stackView.push( workspaceListComponent )
       }
+    }
+  }
+
+  MMCloseAccountDialog {
+    id: closeAccountDialog
+    username: __merginApi.userAuth.username
+
+    onCloseAccountClicked: {
+      __merginApi.deleteAccount()
     }
   }
 

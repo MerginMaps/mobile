@@ -17,6 +17,7 @@ set(MM_QML
     dialogs/NoPermissionsDialog.qml
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
+    dialogs/MMCloseAccountDialog.qml
     Banner.qml
     InputStyle.qml
     Notification.qml
