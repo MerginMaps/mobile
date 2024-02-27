@@ -38,7 +38,5 @@ Button {
   background: Rectangle {
     color: control.transparent ? __style.transparentColor : control.enabled ? control.down || control.hovered ? control.colorPrimary : control.colorSecondary : control.colorTertiary
     radius: height / 2
-    //border: control.transparent ? control.colorPrimary : __style.transparentColor
-    //border.width: control.transparent ? 1 * __dp : 0
   }
 }
