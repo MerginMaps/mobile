@@ -36,6 +36,20 @@ ApplicationWindow {
     width:  __appwindowwidth
     height: __appwindowheight
     visibility: __appwindowvisibility
+    flags: {
+      //TODO: see if we can move this to main.cpp instead and expose as __property
+
+      if ( Qt.platform.os === "ios" ) {
+        return Qt.Window | Qt.MaximizeUsingFullscreenGeometryHint
+      }
+      else if ( Qt.platform.os !== "ios" && Qt.platform.os !== "android" ) {
+        return Qt.Window | Qt.WindowTitleHint | Qt.WindowSystemMenuHint |
+            Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
+      }
+
+      return Qt.Window
+    }
+
     title: "Mergin Maps" // Do not translate
 
     Item {
