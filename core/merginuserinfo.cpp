@@ -128,6 +128,11 @@ bool MerginUserInfo::hasWorkspaces() const
   return mWorkspaces.count() > 0;
 }
 
+int MerginUserInfo::invitationsCount() const
+{
+  return mInvitations.count();
+}
+
 void MerginUserInfo::saveWorkspacesData()
 {
   QSettings settings;

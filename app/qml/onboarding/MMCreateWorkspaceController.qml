@@ -22,13 +22,17 @@ Item {
   required property var stackView
   required property bool enabled
 
+  function createNewWorkspace() {
+    stackView.push(createWorkspaceComponent)
+  }
+
   Connections {
     target: __merginApi
     enabled: controller.enabled
 
     function onWorkspaceCreated(workspace, result) {
       if (result) {
-          stackView.pop("createWorkspaceDirectPanel")
+        stackView.pop("createWorkspaceDirectPanel")
       }
     }
   }

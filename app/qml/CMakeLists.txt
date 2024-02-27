@@ -4,7 +4,6 @@ set(MM_QML
     components/ExtendedMenuItem.qml
     components/LoadingSpinner.qml
     components/PanelHeader.qml
-    components/PanelHeaderV2.qml
     components/RichTextBlock.qml
     components/SearchBoxV2.qml
     components/Shadow.qml
@@ -20,12 +19,10 @@ set(MM_QML
     dialogs/SyncFailedDialog.qml
     Banner.qml
     InputStyle.qml
-    ManageInvitationsPage.qml
     Notification.qml
     NotificationBanner.qml
     ProjectLimitDialog.qml
     StakeoutPanel.qml
-    SwitchWorkspacePage.qml
     map/Crosshair.qml
     map/Highlight.qml
     map/LoadingIndicator.qml
@@ -35,6 +32,7 @@ set(MM_QML
     misc/NoWorkspaceBanner.qml
     account/MMAcountPage.qml
     account/MMAcountPageItem.qml
+    account/MMSwitchWorkspacePage.qml
     components/MMMessage.qml
     components/MMRoundButton.qml
     components/MMButton.qml

@@ -531,7 +531,8 @@ Item {
       fullName: __merginApi.userInfo.name
       userName: __merginApi.userAuth.username
       email: __merginApi.userInfo.email
-      invitationsCount: 0 // TODO connect to invitation count
+      workspaceName: __merginApi.userInfo.activeWorkspaceName
+      invitationsCount: __merginApi.userInfo.invitationsCount
 
       workspaceRole: __merginApi.workspaceInfo.role
 
@@ -583,7 +584,7 @@ Item {
   Component {
     id: workspaceListComponent
 
-    SwitchWorkspacePage {
+    MMSwitchWorkspacePage {
       id: switchWorkspacePanel
 
       height: root.height
@@ -594,7 +595,7 @@ Item {
       }
 
       onCreateWorkspaceRequested: {
-        onboardingController.createNewWorkspace()
+        createWorkspaceController.createNewWorkspace()
       }
     }
   }

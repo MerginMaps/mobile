@@ -106,6 +106,7 @@ Page {
       subscription: "Professional v2 (10GB)"
       storage: "120.6 MB / 1.8 GB"
       storageFill: 0.2
+      workspaceName: "My-Workspace"
       invitationsCount: 2
 
       width: root.width
