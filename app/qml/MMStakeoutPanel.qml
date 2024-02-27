@@ -20,7 +20,6 @@ import ".."
 import lc 1.0
 
 Drawer {
-
   id: root
 
   property int gpsIconHeight: 70
@@ -40,6 +39,7 @@ Drawer {
   property real targetReachedDistanceThreshold: 0.1 // in metres
 
   readonly property alias panelHeight: root.height
+
   // Intentionally create additional signal that signalizes when stakeout panel changes its height
   // panelHeightUpdated is emitted after animation for panel height is finished! panelHeight property contains also
   // intermediary values during animation
@@ -69,7 +69,7 @@ Drawer {
     root.open()
   }
 
-  height: ApplicationWindow.window.height / 3
+  height: ApplicationWindow.window.height
   width: ApplicationWindow.window.width
 
   Behavior on height {
@@ -79,12 +79,33 @@ Drawer {
     }
   }
 
+  Item {
+    id: drawerContent
+    states: [
+        State {
+            name: "longRange"
+            when: remainingDistance >= closeRangeModeDistanceThreshold || remainingDistance < 0
+            PropertyChanges {
+                target: drawer
+                height: Math.max( 2 * InputStyle.rowHeight, root.height / 6 )
+            }
+        },
+        State {
+            name: "closeRange"
+            when: remainingDistance >= 0 && remainingDistance < closeRangeModeDistanceThreshold
+            PropertyChanges {
+                target: drawer
+                height: Math.max( 4 * InputStyle.rowHeight, root.height / 2 )
+            }
+        }
+    ]
+  }
 
   modal: false
   edge: Qt.BottomEdge
   interactive: false // prevents closing by swiping the window down
   dragMargin: 0 // prevents opening the root by dragging.
-  closePolicy: Popup.NoAutoClose
+  //closePolicy: Popup.NoAutoClose
 
   Item {
     // back handler
@@ -166,19 +187,19 @@ Drawer {
 
           MMGpsDataText{
             titleText: qsTr( "Feature" )
-            //descriptionText: "Feature 3"
             descriptionText: root.targetPair ? __inputUtils.featureTitle( root.targetPair, __activeProject.qgsProject ) : ""
           }
 
           MMGpsDataText{
             titleText: qsTr( "Distance" )
-            //descriptionText: "30.00 m"
             descriptionText: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2 ) : "N/A"
             alignmentRight: true
           }
         }
 
-        MMLine {}
+        MMLine {
+          visible: drawerContent.state === "closeRange"
+        }
 
         // Position indicator with direction
         Item {
@@ -187,52 +208,138 @@ Drawer {
         }
 
         Item {
-          id: positionMarker
+          id: closeRangeModeComponent
+
           width: parent.width
           height: childrenRect.height
 
-          // PositionDirection {
-          //   id: positionDirection
+          states: [
+            State {
+              name: "atTarget"
+              when: root.remainingDistance < root.targetReachedDistanceThreshold
+            },
+            State {
+              name: "notAtTarget"
+              when: state !== "atTarget"
+            }
+          ]
 
-          //   positionKit: __positionKit
-          //   compass: Compass { id: ccompass }
-          // }
+          //state: "notAtTarget"
+          //state: "atTarget"
 
-          Image {
-              id: direction
+          visible: drawerContent.state === "closeRange"
 
-              property real bearing: root.targetPair ? __inputUtils.angleBetweenGpsAndFeature(
-                                                                      __positionKit.positionCoordinate,
-                                                                      root.targetPair,
-                                                                      root.mapCanvas.mapSettings ) : 0
+          // enable antialiasing
+          layer.enabled: true
+          layer.samples: 4
 
-              anchors.horizontalCenter: parent.horizontalCenter
-              source: __style.gpsDirectionIcon
-              fillMode: Image.PreserveAspectFit
-              rotation: positionDirection.direction
-              transformOrigin: Item.Bottom
-              width: root.gpsIconWidth
-              height: root.gpsIconHeight
-              smooth: true
-              visible: true
+          Shape {
+            id: rootShape
 
-              x: ( rootShape.centerX + ( Math.sin( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
-              y: ( rootShape.centerY + ( Math.cos( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height
+            property real centerX: width / 2
+            property real centerY: height / 2
 
-              Behavior on rotation { RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }}
+            anchors.fill: parent
+
+            ShapePath {
+              strokeColor: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.positiveColor
+              fillColor: closeRangeModeComponent.state === "notAtTarget" ? __style.whiteColor : __style.positiveColor
+
+              strokeWidth: 2 * __dp
+
+              PathAngleArc {
+                id: innerArc
+
+                centerX: rootShape.centerX
+                centerY: rootShape.centerY
+
+                radiusX: outerArc.radiusX / 2
+                radiusY: outerArc.radiusY / 2
+
+                startAngle: 0
+                sweepAngle: 360
+              }
+            }
+
+            ShapePath {
+              strokeColor: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.positiveColor
+              fillColor: "transparent"
+
+              strokeWidth: 2 * __dp
+
+              PathAngleArc {
+                id: outerArc
+
+                property real outerRadius: rootShape.height / 2.5
+
+                centerX: rootShape.centerX
+                centerY: rootShape.centerY
+
+                radiusX: outerRadius * __dp
+                radiusY: outerRadius * __dp
+
+                startAngle: 0
+                sweepAngle: 360
+              }
+            }
           }
 
-          //Prob not needed
-          // Image {
-          //     source: __positionKit.hasPosition ? InputStyle.gpsMarkerPositionIcon : InputStyle.gpsMarkerNoPositionIcon
-          //     visible: __positionKit.hasPosition
-          //     fillMode: Image.PreserveAspectFit
-          //     width: InputStyle.rowHeightHeader / 2
-          //     height: width
-          //     smooth: true
-          //     x: ( rootShape.centerX + ( Math.sin( -direction.bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
-          //     y: ( rootShape.centerY + ( Math.cos( -direction.bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height / 2
-          // }
+          Symbol {
+            source: __style.stakeOutDotIcon
+            //iconColor: closeRangeModeComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
+            iconSize: rootShape.height / 12
+            x: rootShape.centerX - width / 2
+            y: rootShape.centerY - height / 2
+          }
+
+          Item {
+            id: positionMarker
+            width: parent.width
+            height: childrenRect.height
+
+            PositionDirection {
+              id: positionDirection
+
+              positionKit: __positionKit
+              compass: Compass { id: ccompass }
+            }
+
+            Image {
+                id: direction
+
+                property real bearing: root.targetPair ? __inputUtils.angleBetweenGpsAndFeature(
+                                                                        __positionKit.positionCoordinate,
+                                                                        root.targetPair,
+                                                                        root.mapCanvas.mapSettings ) : 0
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                source: __style.gpsDirectionIcon
+                fillMode: Image.PreserveAspectFit
+                rotation: positionDirection.direction
+                transformOrigin: Item.Bottom
+                width: root.gpsIconWidth
+                height: root.gpsIconHeight
+                smooth: true
+                visible: __positionKit.hasPosition && positionDirection.hasDirection
+
+                x: ( rootShape.centerX + ( Math.sin( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
+                y: ( rootShape.centerY + ( Math.cos( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height
+
+                Behavior on rotation { RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }}
+            }
+
+            //Prob not needed
+            // Image {
+            //     source: __positionKit.hasPosition ? InputStyle.gpsMarkerPositionIcon : InputStyle.gpsMarkerNoPositionIcon
+            //     visible: __positionKit.hasPosition
+            //     fillMode: Image.PreserveAspectFit
+            //     width: InputStyle.rowHeightHeader / 2
+            //     height: width
+            //     smooth: true
+            //     x: ( rootShape.centerX + ( Math.sin( -direction.bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
+            //     y: ( rootShape.centerY + ( Math.cos( -direction.bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height / 2
+            // }
+          }
         }
       }
     }
