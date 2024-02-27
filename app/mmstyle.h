@@ -156,6 +156,9 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl waterResourcesIcon READ waterResourcesIcon CONSTANT )
     Q_PROPERTY( QUrl xTwitterIcon READ xTwitterIcon CONSTANT )
     Q_PROPERTY( QUrl youtubeIcon READ youtubeIcon CONSTANT )
+    Q_PROPERTY( QUrl splitGeometryIcon READ splitGeometryIcon CONSTANT )
+    Q_PROPERTY( QUrl streamingIcon READ streamingIcon CONSTANT )
+    Q_PROPERTY( QUrl redrawGeometryIcon READ redrawGeometryIcon CONSTANT )
 
     // Filled Icons - for visualizing of selected item in toolbar
     Q_PROPERTY( QUrl projectsFilledIcon READ projectsFilledIcon CONSTANT )
@@ -295,6 +298,9 @@ class MMStyle: public QObject
     QColor errorBgInputColor() {return QColor::fromString( "#FEFAF9" );}
     QColor shadowColor() {return QColor::fromString( "#66777777" );}
 
+    QUrl splitGeometryIcon() {return QUrl( "qrc:/SplitGeometry.svg" );}
+    QUrl streamingIcon() {return QUrl( "qrc:/Streaming.svg" );}
+    QUrl redrawGeometryIcon() {return QUrl( "qrc:/RedrawGeometry.svg" );}
     QUrl linkIcon() {return QUrl( "qrc:/Link.svg" );}
     QUrl closeAccountIcon() {return QUrl( "qrc:/CloseAccount.svg" );}
     QUrl signOutIcon() {return QUrl( "qrc:/SignOut.svg" );}

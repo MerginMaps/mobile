@@ -35,6 +35,8 @@ Item {
   readonly property alias compass: deviceCompass
 
   property bool isTrackingPosition: trackingManager?.isTrackingPosition ?? false
+  property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType = RecordingMapTool.StreamMode : false
+
   property PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
   signal featureIdentified( var pair )
@@ -65,6 +67,8 @@ Item {
   signal localChangesPanelRequested()
 
   signal openTrackingPanel()
+
+  signal openStreamingPanel()
 
   states: [
     State {
@@ -584,6 +588,28 @@ Item {
 
       SplittingFailedDialog {
         id: splittingFailedDialog
+      }
+
+      MMMapLabel {
+        id: streamingModeButton
+
+        anchors {
+          left: parent.left
+          leftMargin: __style.mapButtonsMargin
+          bottom: positionTrackingButton.visible ? positionTrackingButton.top : accuracyButton.top
+          bottomMargin: internal.bottomMapButtonsMargin
+        }
+
+        visible: root.state !== "inactive" && root.streaming
+        iconSource: __style.moreVerticalIcon
+
+        text: qsTr("streaming")
+        textBgColorInverted: true
+
+        onClicked: function( mouse ) {
+          mouse.accepted = true
+          root.openSteamingPanel()
+        }
       }
 
       MMMapLabel {

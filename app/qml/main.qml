@@ -233,6 +233,10 @@ ApplicationWindow {
         trackingPanelLoader.active = true
       }
 
+      onOpenStreamingPanel: {
+        console.log("TODO")
+      }
+
       Component.onCompleted: {
         __activeProject.mapSettings = map.mapSettings
         __iosUtils.positionKit = __positionKit
