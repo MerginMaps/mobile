@@ -19,40 +19,53 @@ Item {
   required property string title
   required property string description
 
+  property color bgColor: __style.whiteColor
+  property var image: __style.bubbleImage
+
   Rectangle {
     width: root.width
     height: row.height
-    color: __style.whiteColor
+    color: root.bgColor
     radius: __style.inputRadius
   }
 
-  Row {
+  RowLayout {
     id: row
 
-    padding: 20 * __dp
-    spacing: 10 * __dp
+    spacing: 0
+    height: __style.row114
 
-    Rectangle {
-      width: 50 * __dp
-      height: width
-      radius: height / 2
-      color: __style.forestColor
-
-      Image {
-        id: icon
-        anchors.centerIn: parent
-        source: __style.bubbleIcon
-      }
+    Item {
+      height: row.height
+      width: __style.margin12
     }
 
-    Column {
+    Image {
+      id: icon
+
+      Layout.alignment: Qt.AlignLeft
+      Layout.minimumWidth: width
+
+      width: 50 * __dp
+      height: width
+      source: root.image
+    }
+
+    Item {
+      height: row.height
+      width: __style.margin20
+    }
+
+    ColumnLayout {
       id: column
 
-      width: root.width - icon.width - 4 * row.spacing - 2 * row.padding
-      spacing: 10 * __dp
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      spacing: __style.margin12
 
       Text {
-        width: parent.width
+        width: column.width
+        height: __style.row36
 
         text: root.title
         font: __style.t3
@@ -69,6 +82,11 @@ Item {
         wrapMode: Label.WordWrap
         lineHeight: 1.5
       }
+    }
+
+    Item {
+      height: row.height
+      width: __style.margin12
     }
   }
 }
