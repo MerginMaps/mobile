@@ -94,7 +94,7 @@ Drawer {
       Loader {
         id: noItemsDelegate
 
-        height: control.modelIsEmpty ? item?.height : 0
+        height: control.modelIsEmpty ? item?.height ?? 0 : 0
         active: control.modelIsEmpty
         anchors.horizontalCenter: parent.horizontalCenter
       }
