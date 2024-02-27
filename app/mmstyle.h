@@ -230,8 +230,11 @@ class MMStyle: public QObject
     // Other
     Q_PROPERTY( double row24 READ row24 CONSTANT )
     Q_PROPERTY( double row36 READ row36 CONSTANT )
+    Q_PROPERTY( double row40 READ row40 CONSTANT )
     Q_PROPERTY( double row49 READ row49 CONSTANT )
     Q_PROPERTY( double row63 READ row63 CONSTANT )
+    Q_PROPERTY( double row80 READ row80 CONSTANT )
+    Q_PROPERTY( double row114 READ row114 CONSTANT )
     Q_PROPERTY( double inputRadius READ margin12 CONSTANT )
     Q_PROPERTY( double scrollVelocityAndroid READ scrollVelocityAndroid CONSTANT ) // [px/s] scrolling on Android devices is too slow by default
 
@@ -423,8 +426,11 @@ class MMStyle: public QObject
 
     double row24() {return 24 * mDp;}
     double row36() {return 36 * mDp;}
+    double row40() {return 40 * mDp;}
     double row49() {return 49 * mDp;}
     double row63() {return 63 * mDp;}
+    double row80() {return 80 * mDp;}
+    double row114() {return 114 * mDp;}
 
     double scrollVelocityAndroid() { return 10000; }
 

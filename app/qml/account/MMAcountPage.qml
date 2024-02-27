@@ -25,6 +25,7 @@ Page {
   required property string abbrName
   required property string fullName
   required property string userName
+  required property string workspaceName
   required property string workspaceRole
   required property string email
   required property string subscription
@@ -106,7 +107,7 @@ Page {
 
       MMAcountPageItem {
         width: parent.width
-        title: root.fullName
+        title: root.workspaceName
         desc: root.workspaceRole
         iconSource: __style.workspacesIcon
         notificationCount: root.invitationsCount

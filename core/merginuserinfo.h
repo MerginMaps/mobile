@@ -37,6 +37,7 @@ class MerginUserInfo: public QObject
     Q_PROPERTY( QString activeWorkspaceName READ activeWorkspaceName NOTIFY activeWorkspaceChanged )
     Q_PROPERTY( int activeWorkspaceId READ activeWorkspaceId NOTIFY activeWorkspaceChanged )
     Q_PROPERTY( bool hasInvitations READ hasInvitations NOTIFY userInfoChanged )
+    Q_PROPERTY( bool invitationsCount READ invitationsCount NOTIFY userInfoChanged )
     Q_PROPERTY( bool hasWorkspaces READ hasWorkspaces NOTIFY hasWorkspacesChanged )
     Q_PROPERTY( bool hasMoreThanOneWorkspace READ hasMoreThanOneWorkspace NOTIFY hasMoreThanOneWorkspaceChanged )
 
@@ -56,6 +57,7 @@ class MerginUserInfo: public QObject
     QList<MerginInvitation> invitations() const;
     bool hasInvitations() const;
     bool hasWorkspaces() const;
+    int invitationsCount() const;
 
     void saveWorkspacesData();
     void loadWorkspacesData();

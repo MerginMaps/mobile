@@ -12,9 +12,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import lc 1.0
 
-import "."
-import "./components"
-import "./misc"
+import "../inputs"
+import "../components"
 
 Page {
   id: root
@@ -22,22 +21,44 @@ Page {
   signal back
   signal createWorkspaceRequested()
 
-  header: PanelHeaderV2 {
+  header: MMHeader {
     width: root.width
-    headerTitle: qsTr( "Select a workspace" )
+    title: qsTr( "Select Workspace" )
     onBackClicked: root.back()
+
+    rightMarginShift: backBtn.width
+    backVisible: true
+    color: __style.lightGreenColor
+
+    MMRoundButton {
+      id: backBtn
+
+      anchors.right: parent.right
+      anchors.rightMargin: __style.pageMargins
+      anchors.verticalCenter: parent.verticalCenter
+
+      iconSource: __style.addIcon
+      iconColor: __style.forestColor
+
+      bgndColor: __style.grassColor
+      bgndHoverColor: __style.mediumGreenColor
+
+      onClicked: root.createWorkspaceRequested()
+    }
   }
 
-  SearchBoxV2 {
+  background: Rectangle { color: __style.lightGreenColor }
+
+  MMSearchInput {
     id: searchBar
 
     anchors {
       top: parent.top
-      topMargin: InputStyle.panelMarginV2
+      topMargin: __style.margin20
       left: parent.left
-      leftMargin: InputStyle.outerFieldMargin
+      leftMargin: __style.pageMargins
       right: parent.right
-      rightMargin: InputStyle.outerFieldMargin
+      rightMargin: __style.pageMargins
     }
 
     onSearchTextChanged: function( searchText ) {
@@ -49,9 +70,11 @@ Page {
 
     anchors {
       top: searchBar.bottom
+      topMargin: __style.margin40
       left: parent.left
+      leftMargin: __style.pageMargins
       right: parent.right
-      bottom: parent.bottom
+      rightMargin: __style.pageMargins
     }
 
     contentWidth: availableWidth // only scroll vertically
@@ -59,25 +82,17 @@ Page {
     ColumnLayout {
       anchors {
         fill: parent
-        leftMargin: InputStyle.outerFieldMargin
-        rightMargin: InputStyle.outerFieldMargin
-      }
-
-      Rectangle {
-        Layout.fillWidth: true
-        Layout.preferredHeight: InputStyle.xSmallGap
-        color: "transparent"
       }
 
       // invitations
       Label {
         Layout.fillWidth: true
-        Layout.preferredHeight: InputStyle.rowHeightSmall
+        Layout.preferredHeight: __style.row24
 
         text: qsTr("You have a pending invitation")
 
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: InputStyle.fontColor
+        font: __style.p6
+        color: __style.nightColor
 
         wrapMode: Text.Wrap
         horizontalAlignment: Text.AlignLeft
@@ -99,26 +114,24 @@ Page {
           id: invDelegate
 
           Layout.fillWidth: true
-          Layout.preferredHeight: InputStyle.rowHeightListClickable
+          Layout.preferredHeight: __style.row80
 
-          border.color: InputStyle.panelBackgroundLight
-          border.width: InputStyle.borderSize
-          radius: InputStyle.cornerRadius
+          border.color: __style.whiteColor
+          radius: __style.inputRadius
 
           ColumnLayout {
             anchors.fill: parent
             spacing: 0
 
             Label {
-              text: qsTr("Workspace") + ": " + model.display
+              text: model.display
 
               Layout.fillWidth: true
               Layout.preferredHeight: parent.height / 2
 
               wrapMode: Text.Wrap
-              color: InputStyle.fontColor
-              font.pixelSize: InputStyle.fontPixelSizeBig
-              font.bold: true
+              color: __style.nightColor
+              font: __style.t3
 
               horizontalAlignment: Text.AlignHCenter
               verticalAlignment: Text.AlignVCenter
@@ -127,45 +140,38 @@ Page {
             RowLayout {
 
               Layout.fillWidth: true
-              Layout.preferredHeight: 50
-              Layout.bottomMargin: InputStyle.tinyGap
+              Layout.preferredHeight: __style.row40
+              spacing: __style.margin12
 
-              spacing: InputStyle.formSpacing
+              MMRoundButton {
+                // Reject
 
-              DelegateButton {
                 Layout.preferredWidth: invDelegate.width / 2
-                Layout.preferredHeight: InputStyle.mediumBtnHeight
+                Layout.preferredHeight: __style.row40
 
-                btnWidth: width - 2 * InputStyle.formSpacing
-                btnHeight: InputStyle.mediumBtnHeight
+                iconSource: __style.closeIcon
+                iconColor: __style.grapeColor
 
-                bgColor: InputStyle.clrPanelBackground
-
-                fontPixelSize: InputStyle.fontPixelSizeSmall
-
-                text: qsTr("Accept")
-
-                onClicked: {
-                  __merginApi.processInvitation( model.whatsThis, true )
-                }
-              }
-
-              DelegateButton {
-                Layout.preferredWidth: invDelegate.width / 2
-                Layout.preferredHeight: InputStyle.mediumBtnHeight
-
-                btnWidth: width - 2 * InputStyle.formSpacing
-                btnHeight: InputStyle.mediumBtnHeight
-
-                bgColor: InputStyle.clrPanelMain
-                fontColor: InputStyle.invalidButtonColor
-
-                fontPixelSize: InputStyle.fontPixelSizeSmall
-
-                text: qsTr("Reject")
+                bgndColor: __style.negativeColor
 
                 onClicked: {
                   __merginApi.processInvitation( model.whatsThis, false )
+                }
+              }
+
+              MMRoundButton {
+                // Accept
+
+                Layout.preferredWidth: invDelegate.width / 2
+                Layout.preferredHeight: __style.row40
+
+                iconSource: __style.checkmarkIcon
+                iconColor: __style.forestColor
+
+                bgndColor: __style.positiveColor
+
+                onClicked: {
+                  __merginApi.processInvitation( model.whatsThis, true )
                 }
               }
             }
@@ -174,16 +180,15 @@ Page {
       }
 
       // workspaces
-
       Label {
         Layout.fillWidth: true
-        Layout.topMargin: InputStyle.xSmallGap
-        Layout.preferredHeight: InputStyle.rowHeightSmall
+        Layout.topMargin: __style.margin40
+        Layout.preferredHeight: __style.row24
 
         text: qsTr("Workspaces")
 
-        font.pixelSize: InputStyle.fontPixelSizeNormal
-        color: InputStyle.fontColor
+        font: __style.p6
+        color: __style.nightColor
 
         wrapMode: Text.Wrap
         horizontalAlignment: Text.AlignLeft
@@ -206,10 +211,10 @@ Page {
           property bool isActive: model.whatsThis === __merginApi.userInfo.activeWorkspaceId
 
           Layout.fillWidth: true
-          Layout.preferredHeight: InputStyle.rowHeightListEntry
+          Layout.preferredHeight: __style.row40
 
-          radius: InputStyle.cornerRadius
-          color: isActive ? InputStyle.fontColorBright : InputStyle.clrPanelMain
+          radius: __style.inputRadius
+          color: isActive ? __style.forestColor : __style.whiteColor
 
           ColumnLayout {
             anchors.fill: parent
@@ -219,13 +224,12 @@ Page {
               text: model.display
 
               Layout.fillWidth: true
-              Layout.leftMargin: InputStyle.panelSpacing
+              Layout.leftMargin: __style.margin12
               Layout.fillHeight: true
 
               wrapMode: Text.Wrap
-              color: isActive ? InputStyle.clrPanelMain : InputStyle.fontColor
-              font.pixelSize: InputStyle.fontPixelSizeBig
-              font.bold: true
+              color: isActive ? __style.whiteColor : __style.nightColor
+              font: __style.t3
 
               horizontalAlignment: Text.AlignLeft
               verticalAlignment: Text.AlignVCenter
@@ -240,21 +244,6 @@ Page {
               root.back()
             }
           }
-        }
-      }
-
-      DelegateButton {
-        id: createWorkspaceButton
-
-        Layout.fillWidth: true
-        Layout.preferredHeight: InputStyle.fieldHeight
-        Layout.bottomMargin: InputStyle.panelMarginV2
-
-        btnWidth: width / 2
-
-        text: qsTr("Create new workspace")
-        onClicked: {
-          root.createWorkspaceRequested()
         }
       }
     }
