@@ -39,9 +39,7 @@
         <file>../app/qml/components/MMNotificationView.qml</file>
         <file>../app/qml/components/MMDrawerDialog.qml</file>
         <file>../app/qml/components/MMProgressBar.qml</file>
-        <file>../app/qml/components/MMMapButton.qml</file>
         <file>../app/qml/components/MMShadow.qml</file>
-        <file>../app/qml/components/MMMapLabel.qml</file>
         <file>../app/qml/components/MMToolbarButton.qml</file>
         <file>../app/qml/components/MMToolbar.qml</file>
         <file>../app/qml/components/MMMenuDrawer.qml</file>
@@ -70,7 +68,6 @@
         <file>../app/qml/components/calendar/MMTimeTumbler.qml</file>
         <file>../app/qml/components/calendar/MMDateTumbler.qml</file>
         <file>../app/qml/components/MMDropdownDrawer.qml</file>
-        <file>../app/qml/components/MMMapBlurLabel.qml</file>
         <file>../app/qml/components/MMCodeScanner.qml</file>
         <file>../app/qml/components/MMFeaturesListDrawer.qml</file>
         <file>../app/qml/components/MMFeaturesListDrawer.qml</file>
@@ -105,7 +102,13 @@
         <file>../app/qml/onboarding/MMSignUp.qml</file>
         <file>../app/qml/onboarding/MMWhichIndustry.qml</file>
         <file>../app/qml/map/MMPositionMarker.qml</file>
-        <file>../app/qml/map/MMMapScaleBar.qml</file>
+        <file>../app/qml/map/components/MMBlurBox.qml</file>
+        <file>../app/qml/map/components/MMLoadingIndicator.qml</file>
+        <file>../app/qml/map/components/MMMapBlurLabel.qml</file>
+        <file>../app/qml/map/components/MMMapButton.qml</file>
+        <file>../app/qml/map/components/MMMapLabel.qml</file>
+        <file>../app/qml/map/components/MMMapPicker.qml</file>
+        <file>../app/qml/map/components/MMMapScaleBar.qml</file>
         <file>../app/qml/project/MMProjectLoadingScreen.qml</file>
         <file>../app/qml/project/MMProjectIssuesPanel.qml</file>
         <file>../app/qml/settings/MMLogPanel.qml</file>

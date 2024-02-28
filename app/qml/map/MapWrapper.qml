@@ -14,10 +14,10 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Shapes
 
-import ".."
+import "."
 import "../components"
+import "./components"
 import "../dialogs"
-import "../banners"
 
 import notificationType 1.0
 
@@ -155,7 +155,7 @@ Item {
 
       Rectangle {
         id: canvasBackground
-        color: InputStyle.clrPanelMain
+        color: __style.whiteColor
         anchors.fill: parent
       }
 
@@ -222,7 +222,7 @@ Item {
       StateGroup {
         id: gpsStateGroup
 
-        property color indicatorColor: InputStyle.softRed
+        property color indicatorColor: __style.negativeColor
 
         states: [
           State {
@@ -230,7 +230,7 @@ Item {
             when: __positionKit.hasPosition && __positionKit.horizontalAccuracy > 0 && __positionKit.horizontalAccuracy <= __appSettings.gpsAccuracyTolerance
             PropertyChanges {
               target: gpsStateGroup
-              indicatorColor: InputStyle.softGreen
+              indicatorColor: __style.positiveColor
             }
           },
           State {
@@ -238,7 +238,7 @@ Item {
             when: __positionKit.hasPosition &&  (__positionKit.horizontalAccuracy < 0 || __positionKit.horizontalAccuracy > __appSettings.gpsAccuracyTolerance )
             PropertyChanges {
               target: gpsStateGroup
-              indicatorColor: InputStyle.softOrange
+              indicatorColor: __style.warningColor
             }
           },
           State {
@@ -246,123 +246,116 @@ Item {
             when: !__positionKit.hasPosition
             PropertyChanges {
               target: gpsStateGroup
-              indicatorColor: InputStyle.softRed
+              indicatorColor: __style.negativeColor
             }
           }
         ]
       }
 
-      LoadingIndicator {
+      // TOP elements
+      MMLoadingIndicator {
+        id: loadingIndicator
+
         width: mapCanvas.width
-        height: InputStyle.mapLoadingIndicatorHeight
-
+        height: visible ? 7 * __dp : 0
         anchors.top: canvasRoot.top
-
-        visible: mapCanvas.isRendering && root.state !== "inactive"
+        visible: true // mapCanvas.isRendering && root.state !== "inactive"
       }
 
-      Item {
-        id: topGuiElements
+      MMMapButton {
+        id: backButton
 
+        height: visible ? __style.mapItemHeight : 0
         anchors {
-          top: parent.top
-          topMargin: __style.mapButtonsMargin
+          top: loadingIndicator.bottom
+          topMargin: __style.margin8
           left: parent.left
           leftMargin: __style.mapButtonsMargin
-          right: parent.right
-          rightMargin: __style.mapButtonsMargin
         }
+        visible: internal.isInRecordState || root.state === "split"
+        iconSource: __style.backIcon
 
-        MMMapButton {
-          id: backButton
-
-          anchors {
-            top: parent.top
-            topMargin: __style.mapButtonsMargin
-            left: parent.left
-            leftMargin: __style.mapButtonsMargin
-          }
-
-          iconSource: __style.backIcon
-
-          visible: internal.isInRecordState || root.state === "split"
-
-          onClicked: {
-            if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer" ) {
-              if ( recordingToolsLoader.item.hasChanges() ) {
-                cancelEditDialog.open()
-              }
-              else {
-                recordingToolsLoader.item.discardChanges()
-              }
+        onClicked: {
+          if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer" ) {
+            if ( recordingToolsLoader.item.hasChanges() ) {
+              cancelEditDialog.open()
             }
-            else if ( root.state === "split" ) {
-              howtoSplittingBanner.hide()
-              root.splittingCanceled()
-              root.state = "view"
+            else {
+              recordingToolsLoader.item.discardChanges()
             }
           }
-        }
-
-        MMMapPicker {
-          id: mapPicker
-
-          anchors {
-            top: parent.top
-            topMargin: __style.mapButtonsMargin
-            left: backButton.right
-            leftMargin: __style.mapButtonsMargin
+          else if ( root.state === "split" ) {
+            howtoSplittingBanner.hide()
+            root.splittingCanceled()
+            root.state = "view"
           }
-
-          width: Math.min( parent.width - backButton.width - ( 3 * __style.mapButtonsMargin ), 500 * __dp )
-
-          text: __activeLayer.layerName
-          leftIconSource: __inputUtils.loadIconFromLayer( __activeLayer.layer )
-
-          visible: root.state === "record"
-
-          onClicked: activeLayerPanel.open()
-        }
-
-        MMMapBlurLabel {
-          id: howtoSplittingBanner
-
-          width: parent.width - 2 * __style.pageMargins
-          anchors.top: mapPicker.visible ? mapPicker.bottom : canvasRoot.top
-          sourceItem: map
-          text: qsTr( "Create line to split the selected feature" )
-        }
-
-        MMMapBlurLabel {
-          id: howtoEditingBanner
-
-          width: parent.width - 2 * __style.pageMargins
-          anchors.top: mapPicker.visible ? mapPicker.bottom : canvasRoot.top
-          sourceItem: map
-          text: qsTr( "Select some point to start editing the geometry" )
-        }
-
-        MMMapBlurLabel {
-          id: redrawGeometryBanner
-
-          width: parent.width - 2 * __style.pageMargins
-          anchors.top: mapPicker.visible ? mapPicker.bottom : canvasRoot.top
-          sourceItem: map
-          text: qsTr( "Record new geometry for the feature" )
-        }
-
-        MMMapScaleBar {
-          id: scaleBar
-
-          mapSettings: mapCanvas.mapSettings
-          sourceItem: mapCanvas
-          preferredWidth: Math.min( window.width, 180 * __dp )
-
-          anchors.horizontalCenter: parent.horizontalCenter
-          anchors.top: mapPicker.visible ? mapPicker.bottom : canvasRoot.top
-          anchors.topMargin: 8 * __dp
         }
       }
+
+      MMMapPicker {
+        id: mapPicker
+
+        width: Math.min( parent.width - backButton.width - ( 3 * __style.mapButtonsMargin ), 500 * __dp )
+        height: visible ? __style.mapItemHeight : 0
+        anchors {
+          top: loadingIndicator.bottom
+          topMargin: __style.margin8
+          left: backButton.right
+          leftMargin: __style.mapButtonsMargin
+        }
+        visible: root.state === "record"
+        text: __activeLayer.layerName
+        leftIconSource: __inputUtils.loadIconFromLayer( __activeLayer.layer )
+
+        onClicked: activeLayerPanel.open()
+      }
+
+      MMMapBlurLabel {
+        id: howtoSplittingBanner
+
+        visible: false
+        width: parent.width - 2 * __style.pageMargins
+        height: visible ?  __style.row40 : 0
+        anchors.top: backButton.bottom
+        anchors.topMargin: __style.margin8
+        sourceItem: mapCanvas
+        text: qsTr( "Create line to split the selected feature" )
+      }
+
+      MMMapBlurLabel {
+        id: howtoEditingBanner
+
+        width: parent.width - 2 * __style.pageMargins
+        height: visible ?  __style.row40 : 0
+        anchors.top: howtoSplittingBanner.bottom
+        anchors.topMargin: __style.margin8
+        sourceItem: mapCanvas
+        text: qsTr( "Select some point to start editing the geometry" )
+      }
+
+      MMMapBlurLabel {
+        id: redrawGeometryBanner
+
+        width: parent.width - 2 * __style.pageMargins
+        height: visible ?  __style.row40 : 0
+        anchors.top: howtoEditingBanner.bottom
+        anchors.topMargin: __style.margin8
+        sourceItem: mapCanvas
+        text: qsTr( "Record new geometry for the feature" )
+      }
+
+      MMMapScaleBar {
+        id: scaleBar
+
+        mapSettings: mapCanvas.mapSettings
+        sourceItem: mapCanvas
+        preferredWidth: Math.min( window.width, 180 * __dp )
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: redrawGeometryBanner.bottom
+        anchors.topMargin: __style.margin8
+      }
+      // END OF: TOP elements
 
       Highlight {
         id: identifyHighlight

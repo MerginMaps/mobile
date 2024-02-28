@@ -8,7 +8,10 @@
  ***************************************************************************/
 
 import QtQuick
+
 import "."
+import "../../components"
+
 
 Item {
   id: control

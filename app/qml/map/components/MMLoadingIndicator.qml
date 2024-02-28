@@ -8,38 +8,38 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
-Item {
-  id: control
-
-  width: height
-  height: __style.mapItemHeight
-
-  property alias iconSource: icon.source
-
-  signal clicked
-  signal clickAndHold
+Rectangle {
+  id: loadingIndicator
+  color: __style.forestColor
 
   Rectangle {
+    id: bar
     width: parent.width
     height: parent.height
-    radius: control.height / 2
-    color: __style.whiteColor
 
-    layer.enabled: true
-    layer.effect: MMShadow {}
-
-    MMIcon {
-      id: icon
-
-      anchors.centerIn: parent
-      color: __style.forestColor
+    PropertyAnimation {
+      running: loadingIndicator.visible
+      target: bar
+      property: "x"
+      from: -bar.width
+      to: bar.width
+      duration: 1500
+      loops: Animation.Infinite
     }
 
-    MouseArea {
-      anchors.fill: parent
-      onClicked: control.clicked()
-      onPressAndHold: control.clickAndHold()
+    LinearGradient {
+      anchors.fill: bar
+      start: Qt.point(0, 0)
+      end: Qt.point(bar.width, 0)
+      source: bar
+      gradient: Gradient {
+        GradientStop { position: 0.0; color: __style.forestColor }
+        GradientStop { position: 0.5; color: Qt.lighter(__style.forestColor, 2) }
+        GradientStop { position: 1.0; color: __style.forestColor }
+      }
     }
   }
 }
