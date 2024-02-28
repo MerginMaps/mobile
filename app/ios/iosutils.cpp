@@ -61,5 +61,7 @@ QString IosUtils::readExif( const QString &filepath, const QString &tag )
 
 QVector<int> IosUtils::getSafeArea()
 {
+#ifdef Q_OS_IOS
   return getSafeAreaImpl();
+#endif
 }
