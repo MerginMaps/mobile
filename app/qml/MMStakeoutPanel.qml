@@ -267,7 +267,6 @@ Drawer {
             // Target X icon
             Symbol {
               source: __style.stakeOutDotIcon
-              iconColor: closeRangeModeComponent.state === "notAtTarget" ? InputStyle.panelBackgroundDarker : InputStyle.fontColorBright
               iconSize: rootShape.height / 12
               x: rootShape.centerX - width / 2
               y: rootShape.centerY - height / 2
@@ -299,7 +298,7 @@ Drawer {
                   width: 58 //InputStyle.rowHeightHeader
                   height: 70
                   smooth: true
-                  visible: true//__positionKit.hasPosition && positionDirection.hasDirection
+                  visible: __positionKit.hasPosition && positionDirection.hasDirection
 
                   /**
                     * Formula to calculate GPS position in the short-range window goes like this:
