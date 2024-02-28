@@ -675,10 +675,12 @@ int main( int argc, char *argv[] )
 
   if ( safeAreaInsets.length() == 4 )
   {
-    style->setSafeAreaTop( safeAreaInsets[0] );
-    style->setSafeAreaRight( safeAreaInsets[1] );
-    style->setSafeAreaBottom( safeAreaInsets[2] );
-    style->setSafeAreaLeft( safeAreaInsets[3] );
+    // Values from Android API must be scaled with dpr
+    qreal dpr = QGuiApplication::primaryScreen()->devicePixelRatio();
+    style->setSafeAreaTop( safeAreaInsets[0] / dpr );
+    style->setSafeAreaRight( safeAreaInsets[1] / dpr );
+    style->setSafeAreaBottom( safeAreaInsets[2] / dpr );
+    style->setSafeAreaLeft( safeAreaInsets[3] / dpr );
   }
 #elif defined( Q_OS_IOS )
   auto safeAreaInsets = iosUtils.getSafeArea();
