@@ -182,6 +182,42 @@ void AndroidUtils::quitApp()
 #endif
 }
 
+QVector<int> AndroidUtils::getSafeArea()
+{
+  QVector<int> ret;
+
+#ifdef ANDROID
+  auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+  auto safeArrayStringObj = activity.callMethod<jintArray>( "getSafeArea", "()Ljava/lang/String;" );
+
+  if ( safeArrayStringObj.isValid() )
+  {
+    QString safeArrayString = safeArrayStringObj.toString();
+
+    QStringList stringParts = safeArrayString.split( "," );
+    if ( stringParts.length() != 4 )
+    {
+      CoreUtils::log( "SafeArea", "Android returned malformed string from getSafeArea method" );
+      return ret;
+    }
+
+    int top = stringParts[0].toInt(); // top inset
+    int right = stringParts[1].toInt(); // right inset
+    int bottom = stringParts[2].toInt(); // bottom inset
+    int left = stringParts[3].toInt(); // left inset
+
+    ret << top << right << bottom << left;
+    return ret;
+  }
+  else
+  {
+    CoreUtils::log( "SafeArea", "Android returned null from getSafeArea method" );
+    return ret;
+  }
+#endif
+  return ret;
+}
+
 bool AndroidUtils::requestStoragePermission()
 {
 #ifdef ANDROID

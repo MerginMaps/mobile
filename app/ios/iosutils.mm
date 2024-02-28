@@ -20,3 +20,23 @@ void IosUtils::setIdleTimerDisabled()
 {
   [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 }
+
+QVector<int> IosUtils::getSafeAreaImpl()
+{
+  QVector<int> ret;
+
+  if ( @available( iOS 11.0, * ) )
+  {
+    UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
+
+    int top = window.safeAreaInsets.top;
+    int right = window.safeAreaInsets.right;
+    int bottom = window.safeAreaInsets.bottom;
+    int left = window.safeAreaInsets.left;
+
+    ret << top << right << bottom << left;
+    return ret;
+  }
+
+  return ret;
+}

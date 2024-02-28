@@ -36,7 +36,24 @@ ApplicationWindow {
     width:  __appwindowwidth
     height: __appwindowheight
     visibility: __appwindowvisibility
+    flags: {
+      if ( Qt.platform.os === "ios" ) {
+        return Qt.Window | Qt.MaximizeUsingFullscreenGeometryHint
+      }
+      else if ( Qt.platform.os !== "ios" && Qt.platform.os !== "android" ) {
+        return Qt.Window | Qt.WindowTitleHint | Qt.WindowSystemMenuHint |
+            Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
+      }
+
+      return Qt.Window
+    }
+
     title: "Mergin Maps" // Do not translate
+
+    readonly property bool isPortraitOrientation: ( Screen.primaryOrientation === Qt.PortraitOrientation
+                                                   || Screen.primaryOrientation === Qt.InvertedPortraitOrientation )
+
+    onIsPortraitOrientationChanged: recalculateSafeArea()
 
     Item {
       id: stateManager
@@ -1067,4 +1084,63 @@ ApplicationWindow {
         showMessage( qsTr( "Press back again to quit the app" ) )
       }
     }
+
+  Rectangle {
+    width: 20
+    color: "lightblue"
+    x: parent.width / 2
+    opacity: .5
+    height: __style.safeAreaTop
+  }
+
+  Rectangle {
+    width: 20
+    color: "lightblue"
+    x: parent.width / 2
+    y: parent.height - __style.safeAreaBottom
+    opacity: .5
+    height: __style.safeAreaBottom
+  }
+
+  Rectangle {
+    width: __style.safeAreaLeft
+    color: "lightblue"
+    y: parent.height/2 - height/2
+    opacity: .5
+    height: 20
+  }
+
+  Rectangle {
+    width: __style.safeAreaRight
+    color: "lightblue"
+    x: parent.width - __style.safeAreaRight
+    y: parent.height/2 - height / 2
+    opacity: .5
+    height: 20
+  }
+
+  function recalculateSafeArea() {
+    let safeArea = []
+
+    // Should be merged in future with the same code in main.cpp
+    if ( Qt.platform.os === "ios" ) {
+      safeArea = Array.from( __iosUtils.getSafeArea() )
+    }
+    else if ( Qt.platform.os === "android" ) {
+      safeArea = Array.from( __androidUtils.getSafeArea() )
+
+      // Values from Android API must be divided by dpr
+      safeArea[0] = safeArea[0] / Screen.devicePixelRatio
+      safeArea[1] = safeArea[1] / Screen.devicePixelRatio
+      safeArea[2] = safeArea[2] / Screen.devicePixelRatio
+      safeArea[3] = safeArea[3] / Screen.devicePixelRatio
+    }
+
+    if ( safeArea.length === 4 ) {
+      __style.safeAreaTop = safeArea[0]
+      __style.safeAreaRight = safeArea[1]
+      __style.safeAreaBottom = safeArea[2]
+      __style.safeAreaLeft = safeArea[3]
+    }
+  }
 }

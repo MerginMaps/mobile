@@ -9,11 +9,25 @@
 
 package uk.co.lutraconsulting;
 import android.os.Bundle;
-import android.view.WindowManager;
 import org.qtproject.qt.android.bindings.QtActivity;
 import android.util.Log;
 import android.os.Build;
 import java.lang.Exception;
+
+import android.view.Display;
+import android.view.Surface;
+import android.view.View;
+import android.view.DisplayCutout;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.WindowInsets;
+import android.graphics.Insets;
+import android.view.WindowInsets.Type;
+import android.graphics.Color;
+
+import androidx.core.view.WindowCompat;
+import android.view.WindowInsetsController;
+
 
 public class InputActivity extends QtActivity
 {
@@ -27,11 +41,57 @@ public class InputActivity extends QtActivity
     // this is to keep the screen on all the time so the device does not
     // go into sleep and recording is not interrupted
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    setCustomStatusAndNavBar();
   }
 
   public String homePath()
   {
     return getFilesDir().getAbsolutePath();
+  }
+
+  void setCustomStatusAndNavBar() 
+  {
+    WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+    Window window = getWindow();
+
+    // draw app edge-to-edge
+    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+    
+    // make the status bar background color transparent
+    window.setStatusBarColor(Color.TRANSPARENT);
+    
+    // make the navigation button background color transparent
+    window.setNavigationBarColor(Color.TRANSPARENT);
+
+    // do not show background dim for the navigation buttons
+    window.setNavigationBarContrastEnforced(false); 
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+
+      // change the status bar text color to black
+      WindowInsetsController insetsController = window.getDecorView().getWindowInsetsController();
+    
+      if (insetsController != null) {
+          insetsController.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+      }
+    }
+  }
+
+  public String getSafeArea() {
+
+    WindowInsets windowInsets = getWindow().getDecorView().getRootWindowInsets();
+
+    if ( windowInsets == null ) {
+      Log.d( TAG, "Try to ask for insets later" );
+      return null;
+    }
+
+    Insets safeArea = windowInsets.getInsets( android.view.WindowInsets.Type.statusBars() | 
+                                              android.view.WindowInsets.Type.navigationBars() | 
+                                              android.view.WindowInsets.Type.displayCutout() );
+                                              
+    return ( "" + safeArea.top + "," + safeArea.right + "," + safeArea.bottom + "," + safeArea.left );
   }
 
   public void quitGracefully()

@@ -491,11 +491,11 @@ int main( int argc, char *argv[] )
 
   // Create Input classes
   GeodiffUtils::init();
-  AndroidUtils au;
+  AndroidUtils androidUtils;
   IosUtils iosUtils;
   LocalProjectsManager localProjectsManager( projectDir );
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjectsManager ) );
-  InputUtils iu( &au );
+  InputUtils iu( &androidUtils );
   MerginProjectStatusModel mpsm( localProjectsManager );
   InputHelp help( ma.get(), &iu );
   ProjectWizard pw( projectDir );
@@ -617,7 +617,7 @@ int main( int argc, char *argv[] )
 
   // Register to QQmlEngine
   engine.rootContext()->setContextProperty( "__notificationModel", &notificationModel );
-  engine.rootContext()->setContextProperty( "__androidUtils", &au );
+  engine.rootContext()->setContextProperty( "__androidUtils", &androidUtils );
   engine.rootContext()->setContextProperty( "__iosUtils", &iosUtils );
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__inputProjUtils", &inputProjUtils );
@@ -668,6 +668,31 @@ int main( int argc, char *argv[] )
 
   MMStyle *style = new MMStyle( &engine, dp );
   engine.rootContext()->setContextProperty( "__style", style );
+
+  // Set safe areas for mobile devices
+#ifdef ANDROID
+  auto safeAreaInsets = androidUtils.getSafeArea();
+
+  if ( safeAreaInsets.length() == 4 )
+  {
+    // Values from Android API must be scaled with dpr
+    qreal dpr = QGuiApplication::primaryScreen()->devicePixelRatio();
+    style->setSafeAreaTop( safeAreaInsets[0] / dpr );
+    style->setSafeAreaRight( safeAreaInsets[1] / dpr );
+    style->setSafeAreaBottom( safeAreaInsets[2] / dpr );
+    style->setSafeAreaLeft( safeAreaInsets[3] / dpr );
+  }
+#elif defined( Q_OS_IOS )
+  auto safeAreaInsets = iosUtils.getSafeArea();
+
+  if ( safeAreaInsets.length() == 4 )
+  {
+    style->setSafeAreaTop( safeAreaInsets[0] );
+    style->setSafeAreaRight( safeAreaInsets[1] );
+    style->setSafeAreaBottom( safeAreaInsets[2] );
+    style->setSafeAreaLeft( safeAreaInsets[3] );
+  }
+#endif
 
   // Set simulated position for desktop builds
 #ifdef DESKTOP_OS
