@@ -202,6 +202,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl closeAccountImage READ closeAccountImage CONSTANT )
     Q_PROPERTY( QUrl attentionImage READ attentionImage CONSTANT )
     Q_PROPERTY( QUrl bubbleImage READ bubbleImage CONSTANT )
+    Q_PROPERTY( QUrl streamingBootsImage READ streamingBootsImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -411,6 +412,8 @@ class MMStyle: public QObject
     QUrl closeAccountImage() {return QUrl( "qrc:/images/CloseAccount.svg" );}
     QUrl attentionImage() {return QUrl( "qrc:/images/Attention.svg" );}
     QUrl bubbleImage() {return QUrl( "qrc:/images/Bubble.svg" );}
+    QUrl streamingBootsImage() {return QUrl( "qrc:/images/StreamingBoots.svg" );}
+
 
     static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
     static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}

@@ -57,6 +57,11 @@ Page {
     }
 
     MMButton {
+      text: "MMStreamingModeDialog"
+      onClicked: streamingModeDialog.open()
+    }
+
+    MMButton {
       text: "MMBluetoothConnectionDrawer"
       onClicked: {
         bluetoothConnectionDrawer.positionProvider.state = PositionProvider.Connecting
@@ -92,6 +97,16 @@ Page {
           bluetoothConnectionTimer.stop()
         }
       }
+    }
+  }
+
+  MMStreamingModeDialog {
+    id: streamingModeDialog
+
+    streamingActive: false
+
+    onStreamingBtnClicked: {
+      streamingActive = !streamingActive
     }
   }
 

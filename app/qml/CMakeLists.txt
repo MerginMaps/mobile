@@ -18,6 +18,7 @@ set(MM_QML
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
     dialogs/MMCloseAccountDialog.qml
+    dialogs/MMStreamingModeDialog.qml
     Banner.qml
     InputStyle.qml
     Notification.qml

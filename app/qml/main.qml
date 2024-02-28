@@ -545,6 +545,16 @@ ApplicationWindow {
       onClosed: stateManager.state = "map"
     }
 
+    MMStreamingModeDialog {
+      id: streamingModeDialog
+
+      streamingActive: map.isStreaming
+
+      onStreamingBtnClicked: {
+        map.toggleStreaming()
+      }
+    }
+
     Loader {
       id: trackingPanelLoader
 

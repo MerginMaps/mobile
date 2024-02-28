@@ -67,7 +67,6 @@ Item {
   signal localChangesPanelRequested()
 
   signal openTrackingPanel()
-
   signal openStreamingPanel()
 
   states: [
@@ -512,10 +511,38 @@ Item {
 
         title: qsTr("More options")
         model: ObjectModel {
-          // TODO ; height: __style.menuDrawerHeight/2; width: window.width <-- why it needs to be there, shouldn't it be in the MMToolbarMenuButton?
-          MMToolbarMenuButton { text: qsTr("Split geometry"); iconSource: __style.splitGeometryIcon; visible: !internal.isPointLayer; onClicked: root.toggleSplitting(); height: visible ? __style.menuDrawerHeight/2 : 0; width: window.width }
-          MMToolbarMenuButton { text: qsTr("Redraw geometry"); iconSource: __style.redrawGeometryIcon; onClicked: root.toggleRedraw(); height: __style.menuDrawerHeight/2; width: window.width }
-          MMToolbarMenuButton { text: qsTr("Streaming mode"); iconSource: __style.streamingIcon; visible: !internal.isPointLayer; rightText: root.isStreaming ? qsTr("active") : ""; onClicked: root.toggleStreaming(); height: visible ? __style.menuDrawerHeight/2 : 0; width: window.width }
+          MMToolbarMenuButton {
+            height: visible ? __style.menuDrawerHeight/2 : 0
+            width: window.width
+
+            text: qsTr("Split geometry")
+            iconSource: __style.splitGeometryIcon
+            visible: !internal.isPointLayer
+
+            onClicked: root.openStreamingPanel()
+          }
+
+          MMToolbarMenuButton {
+            height: __style.menuDrawerHeight/2
+            width: window.width
+
+            text: qsTr("Redraw geometry")
+            iconSource: __style.redrawGeometryIcon
+
+            onClicked: root.toggleRedraw()
+          }
+
+          MMToolbarMenuButton {
+            height: visible ? __style.menuDrawerHeight/2 : 0
+            width: window.width
+
+            text: qsTr("Streaming mode")
+            iconSource: __style.streamingIcon
+            visible: !internal.isPointLayer
+            rightText: root.isStreaming ? qsTr("active") : ""
+
+            onClicked: root.toggleStreaming()
+          }
         }
         onClicked: moreToolsMenu.close()
       }
@@ -615,7 +642,7 @@ Item {
         visible: root.state !== "inactive" && root.isStreaming
         iconSource: __style.streamingIcon
 
-        text: qsTr("stream")
+        text: qsTr("streaming")
         textBgColorInverted: true
 
         onClicked: function( mouse ) {
