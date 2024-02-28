@@ -21,6 +21,8 @@ import android.view.DisplayCutout;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowInsets;
+import android.graphics.Insets;
+import android.view.WindowInsets.Type;
 import android.graphics.Color;
 
 import androidx.core.view.WindowCompat;
@@ -68,12 +70,28 @@ public class InputActivity extends QtActivity
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
       // change the status bar text color to black
-      WindowInsetsController insetsController = getWindow().getDecorView().getWindowInsetsController();
+      WindowInsetsController insetsController = window.getDecorView().getWindowInsetsController();
     
       if (insetsController != null) {
           insetsController.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
       }
     }
+  }
+
+  public String getSafeArea() {
+
+    WindowInsets windowInsets = getWindow().getDecorView().getRootWindowInsets();
+
+    if ( windowInsets == null ) {
+      Log.d( TAG, "Try to ask for insets later" );
+      return null;
+    }
+
+    Insets safeArea = windowInsets.getInsets( android.view.WindowInsets.Type.statusBars() | 
+                                              android.view.WindowInsets.Type.navigationBars() | 
+                                              android.view.WindowInsets.Type.displayCutout() );
+                                              
+    return ( "" + safeArea.top + "," + safeArea.right + "," + safeArea.bottom + "," + safeArea.left );
   }
 
   public void quitGracefully()

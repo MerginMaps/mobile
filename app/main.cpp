@@ -669,6 +669,21 @@ int main( int argc, char *argv[] )
   MMStyle *style = new MMStyle( &engine, dp );
   engine.rootContext()->setContextProperty( "__style", style );
 
+  // Set safe areas for mobile devices
+#ifdef ANDROID
+  auto safeAreaInsets = AndroidUtils::getSafeArea();
+
+  if ( safeAreaInsets.length() == 4 )
+  {
+    style->setSafeAreaTop( safeAreaInsets[0] );
+    style->setSafeAreaRight( safeAreaInsets[1] );
+    style->setSafeAreaBottom( safeAreaInsets[2] );
+    style->setSafeAreaLeft( safeAreaInsets[3] );
+  }
+#elif Q_OS_IOS
+  // TODO: iOS safe margin
+#endif
+
   // Set simulated position for desktop builds
 #ifdef DESKTOP_OS
   bool use_simulated_position = true;

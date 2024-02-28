@@ -56,6 +56,8 @@ class AndroidUtils: public QObject
 
     static void quitApp();
 
+    Q_INVOKABLE static QVector<int> getSafeArea();
+
     /**
       * Starts ACTION_PICK activity which opens a gallery. If an image is selected,
       * handler of the activity emits imageSelected signal.

@@ -217,6 +217,12 @@ class MMStyle: public QObject
     Q_PROPERTY( double toolbarHeight READ toolbarHeight CONSTANT )
     Q_PROPERTY( double menuDrawerHeight READ menuDrawerHeight CONSTANT )
 
+    // Safe area sizes - to not draw content over notch and system bars (used on mobile devices)
+    Q_PROPERTY( double safeAreaTop READ safeAreaTop WRITE setSafeAreaTop NOTIFY safeAreaTopChanged )
+    Q_PROPERTY( double safeAreaRight READ safeAreaRight WRITE setSafeAreaRight NOTIFY safeAreaRightChanged )
+    Q_PROPERTY( double safeAreaBottom READ safeAreaBottom WRITE setSafeAreaBottom NOTIFY safeAreaBottomChanged )
+    Q_PROPERTY( double safeAreaLeft READ safeAreaLeft WRITE setSafeAreaLeft NOTIFY safeAreaLeftChanged )
+
     // Margins
     Q_PROPERTY( double margin4 READ margin4 CONSTANT )
     Q_PROPERTY( double margin6 READ margin6 CONSTANT )
@@ -421,6 +427,11 @@ class MMStyle: public QObject
     double menuDrawerHeight() {return 67 * mDp;}
     double maxPageWidth() {return 720 * mDp;}
 
+    double safeAreaTop() const { return mSafeAreaTop; };
+    double safeAreaRight() const { return mSafeAreaRight; };
+    double safeAreaBottom() const { return mSafeAreaBottom; };
+    double safeAreaLeft() const { return mSafeAreaLeft; };
+
     double margin4() {return 4 * mDp;}
     double margin6() {return 6 * mDp;}
     double margin8() {return 8 * mDp;}
@@ -438,8 +449,46 @@ class MMStyle: public QObject
 
     double scrollVelocityAndroid() { return 10000; }
 
+    void setSafeAreaTop( double newSafeAreaTop )
+    {
+      if ( qFuzzyCompare( mSafeAreaTop, newSafeAreaTop ) )
+        return;
+      mSafeAreaTop = newSafeAreaTop;
+      emit safeAreaTopChanged( mSafeAreaTop );
+    }
+
+    void setSafeAreaRight( double newSafeAreaRight )
+    {
+      if ( qFuzzyCompare( mSafeAreaRight, newSafeAreaRight ) )
+        return;
+      mSafeAreaRight = newSafeAreaRight;
+      emit safeAreaRightChanged( mSafeAreaRight );
+    }
+
+    void setSafeAreaBottom( double newSafeAreaBottom )
+    {
+      if ( qFuzzyCompare( mSafeAreaBottom, newSafeAreaBottom ) )
+        return;
+
+      mSafeAreaBottom = newSafeAreaBottom;
+      emit safeAreaBottomChanged( mSafeAreaBottom );
+    }
+
+    void setSafeAreaLeft( double newSafeAreaLeft )
+    {
+      if ( qFuzzyCompare( mSafeAreaLeft, newSafeAreaLeft ) )
+        return;
+      mSafeAreaLeft = newSafeAreaLeft;
+      emit safeAreaLeftChanged( mSafeAreaLeft );
+    }
+
   signals:
     void styleChanged();
+
+    void safeAreaTopChanged( double safeAreaTop );
+    void safeAreaRightChanged( double safeAreaRight );
+    void safeAreaBottomChanged( double safeAreaBottom );
+    void safeAreaLeftChanged( double safeAreaLeft );
 
   private:
     QFont fontFactory( int pixelSize, bool bold )
@@ -452,6 +501,10 @@ class MMStyle: public QObject
 
     qreal mDp;
 
+    double mSafeAreaTop = 0;
+    double mSafeAreaRight = 0;
+    double mSafeAreaBottom = 0;
+    double mSafeAreaLeft = 0;
 };
 
 #endif // MMSTYLE_H
