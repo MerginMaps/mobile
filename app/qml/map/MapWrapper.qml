@@ -259,7 +259,7 @@ Item {
         width: mapCanvas.width
         height: visible ? 7 * __dp : 0
         anchors.top: canvasRoot.top
-        visible: true // mapCanvas.isRendering && root.state !== "inactive"
+        visible: mapCanvas.isRendering && root.state !== "inactive"
       }
 
       MMMapButton {

@@ -13,23 +13,30 @@ import "."
 
 MMBlurBox {
   id: root
+
+  required property string text
+
+  function show() {
+    root.visible = true
+  }
+
+  function hide() {
+    root.visible = false
+  }
+
   height: __style.row40
-
-  property alias text: text.text
-
   timerInterval: 10000
   fadeOutDuration: 1000
 
   // Text
   Text {
-    id: text
-
     height: parent.height
     width: parent.width - 2 * __style.pageMargins
     anchors.verticalCenter: parent.verticalCenter
     anchors.horizontalCenter: parent.horizontalCenter
 
     color: __style.forestColor
+    text: root.text
     font: __style.t3
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
