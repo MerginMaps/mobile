@@ -41,6 +41,8 @@ class IosUtils: public QObject
     IOSImagePicker *imagePicker() const;
     static QString readExif( const QString &filepath, const QString &tag );
 
+    Q_INVOKABLE QVector<int> getSafeArea();
+
   signals:
     void imageSelected( const QString &imagePath, const QString &code );
     //! Used to show a notification to a user. Can be replaced by slot function similar to AndroidUtils::showToast using native Alert dialog.
@@ -58,6 +60,8 @@ class IosUtils: public QObject
      * Calls the objective-c function to disable idle timer to prevent screen from sleeping.
      */
     void setIdleTimerDisabled();
+
+    QVector<int> getSafeAreaImpl();
 };
 
 #endif // IOSUTILS_H
