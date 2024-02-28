@@ -499,7 +499,7 @@ Item {
           bottomMargin: internal.bottomMapButtonsMargin
         }
 
-        visible: root.state === "edit" && internal.isSpatialLayer && !root.isStreaming
+        visible: internal.isInRecordState && internal.isSpatialLayer && !root.isStreaming
 
         iconSource: __style.moreIcon
 
@@ -517,15 +517,16 @@ Item {
 
             text: qsTr("Split geometry")
             iconSource: __style.splitGeometryIcon
-            visible: !internal.isPointLayer
+            visible: !internal.isPointLayer && !root.isStreaming
 
-            onClicked: root.openStreamingPanel()
+            onClicked: root.toggleSplitting()
           }
 
           MMToolbarMenuButton {
             height: __style.menuDrawerHeight/2
             width: window.width
 
+            visible: !root.isStreaming
             text: qsTr("Redraw geometry")
             iconSource: __style.redrawGeometryIcon
 
@@ -541,7 +542,7 @@ Item {
             visible: !internal.isPointLayer
             rightText: root.isStreaming ? qsTr("active") : ""
 
-            onClicked: root.toggleStreaming()
+            onClicked: root.openStreamingPanel()
           }
         }
         onClicked: moreToolsMenu.close()

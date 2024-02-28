@@ -234,7 +234,7 @@ ApplicationWindow {
       }
 
       onOpenStreamingPanel: {
-        console.log("TODO")
+        streamingModeDialog.open()
       }
 
       Component.onCompleted: {
