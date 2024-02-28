@@ -64,11 +64,6 @@ Page {
         bluetoothConnectionDrawer.open()
       }
     }
-
-    MMButton {
-      text: "Stake out panel"
-      onClicked: stakeoutPanel.open()
-    }
   }
 
   MMBluetoothConnectionDrawer {
@@ -152,16 +147,5 @@ Page {
 
     onPrimaryButtonClicked: close()
     onSecondaryButtonClicked: close()
-  }
-
-  MMStakeoutPanel {
-    id: stakeoutPanel
-    // feature: "what"
-    // distance: " anything"
-    // directionBearing: 0
-    // positionKit: __positionKit
-    // directionVisible: true
-    // iconHasPosition: true
-
   }
 }
