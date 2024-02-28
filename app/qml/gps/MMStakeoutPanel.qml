@@ -128,7 +128,7 @@ Drawer {
       titleFont: __style.t2
 
       MMRoundButton {
-        id: backBtn
+        id: closeBtn
 
         anchors.right: parent.right
         anchors.rightMargin: __style.pageMargins
@@ -159,7 +159,7 @@ Drawer {
 
       Row {
         width: parent.width
-        height: 67 * __dp
+        height: __style.row67
 
         MMGpsDataText{
           titleText: qsTr( "Feature" )
@@ -168,7 +168,7 @@ Drawer {
 
         MMGpsDataText{
           titleText: qsTr( "Distance" )
-          descriptionText: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2 ) : "N/A"
+          descriptionText: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2 ) : qsTr( "N/A" )
           alignmentRight: true
         }
       }
@@ -223,8 +223,8 @@ Drawer {
               anchors.fill: parent
 
               ShapePath {
-                strokeColor: closeRangeModeComponent.state === "notAtTarget" ? InputStyle.labelColor : InputStyle.fontColorBright
-                fillColor: closeRangeModeComponent.state === "notAtTarget" ? "white" : InputStyle.fontColorBright
+                strokeColor: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.lightGreenColor
+                fillColor: closeRangeModeComponent.state === "notAtTarget" ? "white" : __style.lightGreenColor
 
                 strokeWidth: 2 * __dp
 
@@ -243,7 +243,7 @@ Drawer {
               }
 
               ShapePath {
-                strokeColor: closeRangeModeComponent.state === "notAtTarget" ? InputStyle.labelColor : InputStyle.fontColorBright
+                strokeColor: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.lightGreenColor
                 fillColor: "transparent"
 
                 strokeWidth: 2 * __dp
