@@ -634,7 +634,6 @@ ApplicationWindow {
           map.stopStakeout()
           formsStackManager.openForm( targetPair, "readOnly", "preview" )
           stakeoutPanelLoader.active = false
-          stakeoutPanel.visible = false
         }
 
         onAutoFollowClicked: map.autoFollowStakeoutPath()
