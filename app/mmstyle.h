@@ -114,7 +114,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl globeIcon READ globeIcon CONSTANT )
     Q_PROPERTY( QUrl globalIcon READ globalIcon CONSTANT )
     Q_PROPERTY( QUrl gpsIcon READ gpsIcon CONSTANT )
-    Q_PROPERTY( QUrl gpsDirectionIcon READ gpsDirectionIcon CONSTANT )
     Q_PROPERTY( QUrl gpsAntennaHeightIcon READ gpsAntennaHeightIcon CONSTANT )
     Q_PROPERTY( QUrl hideIcon READ hideIcon CONSTANT )
     Q_PROPERTY( QUrl homeIcon READ homeIcon CONSTANT )
@@ -142,6 +141,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl smallEditIcon READ smallEditIcon CONSTANT )
     Q_PROPERTY( QUrl showIcon READ showIcon CONSTANT )
     Q_PROPERTY( QUrl socialMediaIcon READ socialMediaIcon CONSTANT )
+    Q_PROPERTY( QUrl stakeOutIcon READ stakeOutIcon CONSTANT )
     Q_PROPERTY( QUrl stateAndLocalIcon READ stateAndLocalIcon CONSTANT )
     Q_PROPERTY( QUrl stopIcon READ stopIcon CONSTANT )
     Q_PROPERTY( QUrl subscriptionsIcon READ subscriptionsIcon CONSTANT )
@@ -329,7 +329,6 @@ class MMStyle: public QObject
     QUrl globeIcon() {return QUrl( "qrc:/Globe.svg" );}
     QUrl globalIcon() {return QUrl( "qrc:/Global.svg" );}
     QUrl gpsIcon() {return QUrl( "qrc:/GPSIcon.svg" );}
-    QUrl gpsDirectionIcon() {return QUrl( "qrc:/GpsDirection.svg" );}
     QUrl gpsAntennaHeightIcon() {return QUrl( "qrc:/GPSAntennaHeight.svg" );}
     QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
     QUrl homeIcon() {return QUrl( "qrc:/Home.svg" );}
@@ -357,6 +356,7 @@ class MMStyle: public QObject
     QUrl smallCheckmarkIcon() {return QUrl( "qrc:/SmallCheckmark.svg" );}
     QUrl smallEditIcon() {return QUrl( "qrc:/SmallEdit.svg" );}
     QUrl socialMediaIcon() {return QUrl( "qrc:/SocialMedia.svg" );}
+    QUrl stakeOutIcon() {return QUrl( "qrc:/StakeOut.svg" );}
     QUrl stateAndLocalIcon() {return QUrl( "qrc:/StateAndLocal.svg" );}
     QUrl stopIcon() {return QUrl( "qrc:/Stop.svg" );}
     QUrl subscriptionsIcon() {return QUrl( "qrc:/Subscriptions.svg" );}

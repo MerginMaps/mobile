@@ -23,7 +23,6 @@ set(MM_QML
     Notification.qml
     NotificationBanner.qml
     ProjectLimitDialog.qml
-    StakeoutPanel.qml
     map/Crosshair.qml
     map/Highlight.qml
     map/LoadingIndicator.qml
@@ -146,6 +145,7 @@ set(MM_QML
     gps/MMGpsDataDrawer.qml
     gps/MMGpsDataText.qml
     gps/MMPositionProviderPage.qml
+    gps/MMStakeoutPanel.qml
     settings/MMAboutPanel.qml
     settings/MMChangelogPanel.qml
     settings/MMLogPanel.qml
@@ -177,7 +177,6 @@ set(MM_QML
     RegistrationFinishPage.qml
     RoundIndicator.qml
     SearchBar.qml
-    MMStakeoutPanel.qml
     StorageLimitDialog.qml
     SwitchWorkspacePage.qml
     WhatsNewDialog.qml
