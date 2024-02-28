@@ -13,9 +13,11 @@ import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import QtQuick.Shapes
 
+import "../components"
+import "../map"
 import "."
 import ".."
-import "../components"
+
 import lc 1.0
 
 Drawer {
@@ -120,7 +122,6 @@ Drawer {
     MMHeader {
       id: header
 
-      rightMarginShift: closeBtn.width + __style.pageMargins
       backVisible: false
 
       title: qsTr("Stake out")
@@ -158,7 +159,7 @@ Drawer {
 
       Row {
         width: parent.width
-        height: __style.row67
+        height: 67 * __dp
 
         MMGpsDataText{
           titleText: qsTr( "Feature" )
@@ -167,7 +168,7 @@ Drawer {
 
         MMGpsDataText{
           titleText: qsTr( "Distance" )
-          descriptionText: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2 ) : qsTr( "N/A" )
+          descriptionText: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2 ) : "N/A"
           alignmentRight: true
         }
       }
@@ -222,8 +223,8 @@ Drawer {
               anchors.fill: parent
 
               ShapePath {
-                strokeColor: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.lightGreenColor
-                fillColor: closeRangeModeComponent.state === "notAtTarget" ? "white" : __style.lightGreenColor
+                strokeColor: closeRangeModeComponent.state === "notAtTarget" ? InputStyle.labelColor : InputStyle.fontColorBright
+                fillColor: closeRangeModeComponent.state === "notAtTarget" ? "white" : InputStyle.fontColorBright
 
                 strokeWidth: 2 * __dp
 
@@ -242,7 +243,7 @@ Drawer {
               }
 
               ShapePath {
-                strokeColor: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.lightGreenColor
+                strokeColor: closeRangeModeComponent.state === "notAtTarget" ? InputStyle.labelColor : InputStyle.fontColorBright
                 fillColor: "transparent"
 
                 strokeWidth: 2 * __dp
@@ -274,7 +275,7 @@ Drawer {
 
             // Position indicator with direction
             Item {
-              id: positionMarker
+              id: positionIndicatorItem
 
               PositionDirection {
                 id: positionDirection
@@ -283,35 +284,35 @@ Drawer {
                 compass: Compass { id: ccompass }
               }
 
-              Image {
-                  id: direction
+              MapPosition {
+                id: mapPositionSource
 
-                  property real bearing: root.targetPair ? __inputUtils.angleBetweenGpsAndFeature(
-                                                                          __positionKit.positionCoordinate,
-                                                                          root.targetPair,
-                                                                          root.mapCanvas.mapSettings ) : 0
+                mapSettings: root.mapCanvas.mapSettings
+                positionKit: __positionKit
+                onScreenPositionChanged: root.updatePosition()
+              }
 
-                  source: __style.gpsDirectionIcon
-                  fillMode: Image.PreserveAspectFit
-                  rotation: positionDirection.direction
-                  transformOrigin: Item.Bottom
-                  width: 58 //InputStyle.rowHeightHeader
-                  height: 70
-                  smooth: true
-                  visible: __positionKit.hasPosition && positionDirection.hasDirection
+              MMPositionMarker {
+                id: positionMarker
 
-                  /**
-                    * Formula to calculate GPS position in the short-range window goes like this:
-                    *   center of the window +
-                    *   sin<or cos> of angle between GPS position and the target feature *
-                    *   distance to the feature *
-                    *   scale by size of the outer circle /
-                    *   distance of the outer circle in metres (closeRangeModeDistanceThreshold)
-                    */
-                  x: ( rootShape.centerX + ( Math.sin( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
-                  y: ( rootShape.centerY + ( Math.cos( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height
+                property real bearing: root.targetPair ? __inputUtils.angleBetweenGpsAndFeature(
+                                                                                                __positionKit.positionCoordinate,
+                                                                                                root.targetPair,
+                                                                                                root.mapCanvas.mapSettings ) : 0
 
-                  Behavior on rotation { RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }}
+                xPos: ( rootShape.centerX + ( Math.sin( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
+                yPos: ( rootShape.centerY + ( Math.cos( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height
+
+                hasDirection: positionDirection.hasDirection
+
+                direction: positionDirection.direction
+                hasPosition: __positionKit.hasPosition
+
+                horizontalAccuracy: __positionKit.horizontalAccuracy
+                accuracyRingSize: mapPositionSource.screenAccuracy
+
+                trackingMode: closeRangeModeComponent.state === "notAtTarget"
+
               }
             }
           }

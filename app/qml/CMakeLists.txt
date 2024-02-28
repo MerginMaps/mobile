@@ -156,30 +156,6 @@ set(MM_QML
     settings/MMSettingsPanel.qml
     settings/MMSettingsController.qml
     dialogs/MMPositionTrackingDrawer.qml
-    Banner.qml
-    CircularProgressBar.qml
-    CodeScanner.qml
-    CodeScannerOverlay.qml
-    CreateWorkspacePage.qml
-    ExternalResourceBundle.qml
-    FeaturesList.qml
-    FeaturesListPage.qml
-    FeaturesListPageToolbar.qml
-    FormsStackManager.qml
-    InputStyle.qml
-    ManageInvitationsPage.qml
-    Notification.qml
-    NotificationBanner.qml
-    NumberSpin.qml
-    PanelItem.qml
-    PanelTabButton.qml
-    ProjectLimitDialog.qml
-    RegistrationFinishPage.qml
-    RoundIndicator.qml
-    SearchBar.qml
-    StorageLimitDialog.qml
-    SwitchWorkspacePage.qml
-    WhatsNewDialog.qml
     main.qml
     PARENT_SCOPE
 )
