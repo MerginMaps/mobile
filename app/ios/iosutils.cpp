@@ -64,4 +64,5 @@ QVector<int> IosUtils::getSafeArea()
 #ifdef Q_OS_IOS
   return getSafeAreaImpl();
 #endif
+  return QVector<int>();
 }
