@@ -189,7 +189,8 @@ Page {
       MMToolbarLongButton {
         text: qsTr( "Edit feature" );
 
-        iconSource: __style.editIcon;
+        iconSource: __style.editCircleIcon
+        iconColor: __style.forestColor
 
         onClicked: {
           root.state = "edit"
