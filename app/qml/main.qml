@@ -37,8 +37,6 @@ ApplicationWindow {
     height: __appwindowheight
     visibility: __appwindowvisibility
     flags: {
-      //TODO: see if we can move this to main.cpp instead and expose as __property
-
       if ( Qt.platform.os === "ios" ) {
         return Qt.Window | Qt.MaximizeUsingFullscreenGeometryHint
       }
@@ -1124,8 +1122,8 @@ ApplicationWindow {
 
   function recalculateSafeArea() {
     let safeArea = []
-    console.log(Qt.platform.os)
 
+    // Should be merged in future with the same code in main.cpp
     if ( Qt.platform.os === "ios" ) {
       safeArea = Array.from( __iosUtils.getSafeArea() )
     }
