@@ -196,9 +196,9 @@ Item {
             visible: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
 
             buttonText: qsTr( "Stake out" )
-            iconSource: __style.positionTrackingIcon // TODO: change to stakeout icon
+            iconSource: __style.stakeOutIcon
 
-            onClicked: root.editClicked()
+            onClicked: root.stakeoutClicked( controller.featureLayerPair )
           }
         }
       }

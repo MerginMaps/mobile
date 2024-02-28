@@ -623,10 +623,9 @@ ApplicationWindow {
     Component {
       id: stakeoutPanelComponent
 
-      StakeoutPanel {
+      MMStakeoutPanel {
         id: stakeoutPanel
 
-        height: window.height
         width: window.width
 
         mapCanvas: map

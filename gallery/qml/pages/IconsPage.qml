@@ -91,6 +91,7 @@ ScrollView {
             IconLine { name: "arrowDownIcon"; source: __style.arrowDownIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "arrowLinkRightIcon"; source: __style.arrowLinkRightIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "arrowUpIcon"; source: __style.arrowUpIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            IconLine { name: "stakeOutIcon"; source: __style.stakeOutIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
           }
         }
       }
