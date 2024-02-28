@@ -261,16 +261,107 @@ Item {
         visible: mapCanvas.isRendering && root.state !== "inactive"
       }
 
-      MMMapScaleBar {
-        id: scaleBar
+      Item {
+        id: topGuiElements
 
-        mapSettings: mapCanvas.mapSettings
-        sourceItem: mapCanvas
-        preferredWidth: Math.min( window.width, 180 * __dp )
+        anchors {
+          top: parent.top
+          topMargin: __style.mapButtonsMargin
+          left: parent.left
+          leftMargin: __style.mapButtonsMargin
+          right: parent.right
+          rightMargin: __style.mapButtonsMargin
+        }
 
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: mapPicker.visible ? mapPicker.bottom : canvasRoot.top
-        anchors.topMargin: 8 * __dp
+        MMMapButton {
+          id: backButton
+
+          anchors {
+            top: parent.top
+            topMargin: __style.mapButtonsMargin
+            left: parent.left
+            leftMargin: __style.mapButtonsMargin
+          }
+
+          iconSource: __style.backIcon
+
+          visible: internal.isInRecordState || root.state === "split"
+
+          onClicked: {
+            if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer" ) {
+              if ( recordingToolsLoader.item.hasChanges() ) {
+                cancelEditDialog.open()
+              }
+              else {
+                recordingToolsLoader.item.discardChanges()
+              }
+            }
+            else if ( root.state === "split" ) {
+              howtoSplittingBanner.hide()
+              root.splittingCanceled()
+              root.state = "view"
+            }
+          }
+        }
+
+        MMMapPicker {
+          id: mapPicker
+
+          anchors {
+            top: parent.top
+            topMargin: __style.mapButtonsMargin
+            left: backButton.right
+            leftMargin: __style.mapButtonsMargin
+          }
+
+          width: Math.min( parent.width - backButton.width - ( 3 * __style.mapButtonsMargin ), 500 * __dp )
+
+          text: __activeLayer.layerName
+          leftIconSource: __inputUtils.loadIconFromLayer( __activeLayer.layer )
+
+          visible: root.state === "record"
+
+          onClicked: activeLayerPanel.open()
+        }
+
+        MMMapBlurLabel {
+          id: howtoSplittingBanner
+
+          width: parent.width - 2 * __style.pageMargins
+          anchors.top: mapPicker.visible ? mapPicker.bottom : canvasRoot.top
+          sourceItem: map
+          text: qsTr( "Create line to split the selected feature" )
+        }
+
+        MMMapBlurLabel {
+          id: howtoEditingBanner
+
+          width: parent.width - 2 * __style.pageMargins
+          anchors.top: mapPicker.visible ? mapPicker.bottom : canvasRoot.top
+          sourceItem: map
+          text: qsTr( "Select some point to start editing the geometry" )
+        }
+
+        MMMapBlurLabel {
+          id: redrawGeometryBanner
+
+          width: parent.width - 2 * __style.pageMargins
+          anchors.top: mapPicker.visible ? mapPicker.bottom : canvasRoot.top
+          sourceItem: map
+          text: qsTr( "Record new geometry for the feature" )
+        }
+
+        MMMapScaleBar {
+          id: scaleBar
+
+          mapSettings: mapCanvas.mapSettings
+          sourceItem: mapCanvas
+          preferredWidth: Math.min( window.width, 180 * __dp )
+
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.top: mapPicker.visible ? mapPicker.bottom : canvasRoot.top
+          anchors.topMargin: 8 * __dp
+        }
       }
 
       Highlight {
@@ -407,60 +498,6 @@ Item {
         sourceComponent: splittingToolsComponent
       }
 
-      AutoHideBanner { // TODO: Replace by MapBlurItem later
-        id: howtoSplittingBanner
-
-        width: parent.width - InputStyle.innerFieldMargin * 2
-        height: InputStyle.rowHeight
-
-        anchors.top: canvasRoot.top
-
-        bgColor: InputStyle.secondaryBackgroundColor
-        fontColor: "white"
-
-        source: InputStyle.infoIcon
-
-        visibleInterval: 10000
-
-        text: qsTr( "Create line to split the selected feature" )
-      }
-
-      AutoHideBanner { // TODO: Replace by MapBlurItem later
-        id: howtoEditingBanner
-
-        width: parent.width - InputStyle.innerFieldMargin * 2
-        height: InputStyle.rowHeight
-
-        anchors.top: canvasRoot.top
-
-        bgColor: InputStyle.secondaryBackgroundColor
-        fontColor: "white"
-
-        source: InputStyle.infoIcon
-
-        visibleInterval: 10000
-
-        text: qsTr( "Select some point to start editing the geometry" )
-      }
-
-      AutoHideBanner { // TODO: Replace by MapBlurItem later
-        id: redrawGeometryBanner
-
-        width: parent.width - InputStyle.innerFieldMargin * 2
-        height: InputStyle.rowHeight
-
-        anchors.top: canvasRoot.top
-
-        bgColor: InputStyle.secondaryBackgroundColor
-        fontColor: "white"
-
-        source: InputStyle.infoIcon
-
-        visibleInterval: 10000
-
-        text: qsTr( "Record new geometry for the feature" )
-      }
-
       MMMapButton {
         id: gpsButton
 
@@ -546,57 +583,6 @@ Item {
           }
         }
         onClicked: moreToolsMenu.close()
-      }
-
-      MMMapButton {
-        id: backButton
-
-        anchors {
-          top: parent.top
-          topMargin: __style.mapButtonsMargin
-          left: parent.left
-          leftMargin: __style.mapButtonsMargin
-        }
-
-        iconSource: __style.backIcon
-
-        visible: internal.isInRecordState || root.state === "split"
-
-        onClicked: {
-          if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer" ) {
-            if ( recordingToolsLoader.item.hasChanges() ) {
-              cancelEditDialog.open()
-            }
-            else {
-              recordingToolsLoader.item.discardChanges()
-            }
-          }
-          else if ( root.state === "split" ) {
-            howtoSplittingBanner.hide()
-            root.splittingCanceled()
-            root.state = "view"
-          }
-        }
-      }
-
-      MMMapPicker {
-        id: mapPicker
-
-        anchors {
-          top: parent.top
-          topMargin: __style.mapButtonsMargin
-          left: backButton.right
-          leftMargin: __style.mapButtonsMargin
-        }
-
-        width: Math.min( parent.width - backButton.width - ( 3 * __style.mapButtonsMargin ), 500 * __dp )
-
-        text: __activeLayer.layerName
-        leftIconSource: __inputUtils.loadIconFromLayer( __activeLayer.layer )
-
-        visible: root.state === "record"
-
-        onClicked: activeLayerPanel.open()
       }
 
       MessageDialog {

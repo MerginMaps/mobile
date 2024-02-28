@@ -179,7 +179,7 @@ Page {
 
   footer: MMToolbar {
 
-//    TODO: visible: !root.layerIsReadOnly
+    visible: root.state !== "readOnly"
 
     maxButtonsInToolbar: 3
 

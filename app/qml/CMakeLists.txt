@@ -1,5 +1,4 @@
 set(MM_QML
-    banners/AutoHideBanner.qml
     components/DelegateButton.qml
     components/ExtendedMenuItem.qml
     components/LoadingSpinner.qml

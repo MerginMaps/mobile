@@ -14,21 +14,19 @@ import "."
 Item {
   id: root
 
+  height: 41 * __dp
+
+  // Item to blur (map)
   property alias sourceItem: effect.sourceItem
+
   property alias text: text.text
 
-  Rectangle {
-    anchors.fill: fastBlur
-    color: __style.forestColor
-    opacity: 0.8
-    radius: fastBlur.height / 2
-  }
-
+  // Blurred map
   FastBlur {
     id: fastBlur
 
     width: parent.width
-    height: 41 * __dp
+    height: parent.height
 
     radius: 32
     opacity: 0.8
@@ -38,20 +36,29 @@ Item {
 
       sourceRect: Qt.rect(root.x, root.y, fastBlur.width, fastBlur.height)
     }
+   }
 
-    Text {
-      id: text
+  // Colored background rectangle
+  Rectangle {
+    anchors.fill: parent
+    color: __style.forestColor
+    opacity: 0.1
+    radius: parent.height / 2
+  }
 
-      height: parent.height
-      width: parent.width - 40 * __dp
-      anchors.verticalCenter: parent.verticalCenter
-      anchors.horizontalCenter: parent.horizontalCenter
+  // Text
+  Text {
+    id: text
 
-      color: __style.forestColor
-      font: __style.t3
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
-      elide: Text.ElideRight
-    }
+    height: parent.height
+    width: parent.width - 40 * __dp
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.horizontalCenter: parent.horizontalCenter
+
+    color: __style.forestColor
+    font: __style.t3
+    horizontalAlignment: Text.AlignHCenter
+    verticalAlignment: Text.AlignVCenter
+    elide: Text.ElideRight
   }
 }
