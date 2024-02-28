@@ -8,31 +8,38 @@
  ***************************************************************************/
 
 import QtQuick
-import ".."
 
-Banner {
+import "."
+
+MMBlurBox {
   id: root
 
-  property int visibleInterval: 3000 // [ms]
+  required property string text
 
-  function show()
-  {
-    hideTimer.interval = root.visibleInterval
-    hideTimer.start()
+  function show() {
+    root.visible = true
   }
 
-  function hide()
-  {
-    hideTimer.stop()
+  function hide() {
+    root.visible = false
   }
 
-  showBanner: hideTimer.running
+  height: __style.row40
+  timerInterval: 10000
+  fadeOutDuration: 1000
 
-  Timer {
-    id: hideTimer
+  // Text
+  Text {
+    height: parent.height
+    width: parent.width - 2 * __style.pageMargins
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.horizontalCenter: parent.horizontalCenter
 
-    interval: 3000
-    running: false
-    repeat: false
+    color: __style.forestColor
+    text: root.text
+    font: __style.t3
+    horizontalAlignment: Text.AlignHCenter
+    verticalAlignment: Text.AlignVCenter
+    elide: Text.ElideRight
   }
 }

@@ -55,6 +55,8 @@ ScrollView {
               }
             }
             IconLine { name: "linkIcon"; source: __style.linkIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            IconLine { name: "splitGeometryIcon"; source: __style.splitGeometryIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            IconLine { name: "streamingIcon"; source: __style.streamingIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "workspacesIcon"; source: __style.workspacesIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "settingsIcon"; source: __style.settingsIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "addImageIcon"; source: __style.addImageIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
@@ -62,6 +64,7 @@ ScrollView {
             IconLine { name: "checkmarkIcon"; source: __style.checkmarkIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "deleteIcon"; source: __style.deleteIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "editIcon"; source: __style.editIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            IconLine { name: "redrawGeometryIcon"; source: __style.redrawGeometryIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "globeIcon"; source: __style.globeIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "gpsAntennaHeightIcon"; source: __style.gpsAntennaHeightIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "gpsIcon"; source: __style.gpsIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }

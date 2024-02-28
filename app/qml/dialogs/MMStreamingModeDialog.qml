@@ -9,37 +9,22 @@
 
 import QtQuick
 
-Item {
-  id: control
+import "../components"
 
-  width: height
-  height: __style.mapItemHeight
+MMDrawerDialog {
+  id: root
 
-  property alias iconSource: icon.source
+  property bool streamingActive: false
 
-  signal clicked
-  signal clickAndHold
+  signal streamingBtnClicked()
 
-  Rectangle {
-    width: parent.width
-    height: parent.height
-    radius: control.height / 2
-    color: __style.whiteColor
+  picture: __style.streamingBootsImage
+  bigTitle: qsTr("Streaming mode")
+  description: qsTr("Move around your designated object to record its geometry. You can stop this anytime.")
+  primaryButton: root.streamingActive ? qsTr("Stop streaming mode") : qsTr("Start streaming mode")
 
-    layer.enabled: true
-    layer.effect: MMShadow {}
-
-    MMIcon {
-      id: icon
-
-      anchors.centerIn: parent
-      color: __style.forestColor
-    }
-
-    MouseArea {
-      anchors.fill: parent
-      onClicked: control.clicked()
-      onPressAndHold: control.clickAndHold()
-    }
+  onPrimaryButtonClicked: {
+    close()
+    root.streamingBtnClicked()
   }
 }

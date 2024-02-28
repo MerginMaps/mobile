@@ -14,10 +14,10 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Shapes
 
-import ".."
+import "."
 import "../components"
+import "./components"
 import "../dialogs"
-import "../banners"
 
 import notificationType 1.0
 
@@ -35,6 +35,8 @@ Item {
   readonly property alias compass: deviceCompass
 
   property bool isTrackingPosition: trackingManager?.isTrackingPosition ?? false
+  property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType = RecordingMapTool.StreamMode : false
+
   property PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
   signal featureIdentified( var pair )
@@ -65,6 +67,7 @@ Item {
   signal localChangesPanelRequested()
 
   signal openTrackingPanel()
+  signal openStreamingPanel()
 
   states: [
     State {
@@ -152,7 +155,7 @@ Item {
 
       Rectangle {
         id: canvasBackground
-        color: InputStyle.clrPanelMain
+        color: __style.whiteColor
         anchors.fill: parent
       }
 
@@ -219,7 +222,7 @@ Item {
       StateGroup {
         id: gpsStateGroup
 
-        property color indicatorColor: InputStyle.softRed
+        property color indicatorColor: __style.negativeColor
 
         states: [
           State {
@@ -227,7 +230,7 @@ Item {
             when: __positionKit.hasPosition && __positionKit.horizontalAccuracy > 0 && __positionKit.horizontalAccuracy <= __appSettings.gpsAccuracyTolerance
             PropertyChanges {
               target: gpsStateGroup
-              indicatorColor: InputStyle.softGreen
+              indicatorColor: __style.positiveColor
             }
           },
           State {
@@ -235,7 +238,7 @@ Item {
             when: __positionKit.hasPosition &&  (__positionKit.horizontalAccuracy < 0 || __positionKit.horizontalAccuracy > __appSettings.gpsAccuracyTolerance )
             PropertyChanges {
               target: gpsStateGroup
-              indicatorColor: InputStyle.softOrange
+              indicatorColor: __style.warningColor
             }
           },
           State {
@@ -243,19 +246,102 @@ Item {
             when: !__positionKit.hasPosition
             PropertyChanges {
               target: gpsStateGroup
-              indicatorColor: InputStyle.softRed
+              indicatorColor: __style.negativeColor
             }
           }
         ]
       }
 
-      LoadingIndicator {
+      // TOP elements
+      MMLoadingIndicator {
+        id: loadingIndicator
+
         width: mapCanvas.width
-        height: InputStyle.mapLoadingIndicatorHeight
-
+        height: visible ? 7 * __dp : 0
         anchors.top: canvasRoot.top
-
         visible: mapCanvas.isRendering && root.state !== "inactive"
+      }
+
+      MMMapButton {
+        id: backButton
+
+        height: visible ? __style.mapItemHeight : 0
+        anchors {
+          top: loadingIndicator.bottom
+          topMargin: __style.margin8
+          left: parent.left
+          leftMargin: __style.mapButtonsMargin
+        }
+        visible: internal.isInRecordState || root.state === "split"
+        iconSource: __style.backIcon
+
+        onClicked: {
+          if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer" ) {
+            if ( recordingToolsLoader.item.hasChanges() ) {
+              cancelEditDialog.open()
+            }
+            else {
+              recordingToolsLoader.item.discardChanges()
+            }
+          }
+          else if ( root.state === "split" ) {
+            howtoSplittingBanner.hide()
+            root.splittingCanceled()
+            root.state = "view"
+          }
+        }
+      }
+
+      MMMapPicker {
+        id: mapPicker
+
+        width: Math.min( parent.width - backButton.width - ( 3 * __style.mapButtonsMargin ), 500 * __dp )
+        height: visible ? __style.mapItemHeight : 0
+        anchors {
+          top: loadingIndicator.bottom
+          topMargin: __style.margin8
+          left: backButton.right
+          leftMargin: __style.mapButtonsMargin
+        }
+        visible: root.state === "record"
+        text: __activeLayer.layerName
+        leftIconSource: __inputUtils.loadIconFromLayer( __activeLayer.layer )
+
+        onClicked: activeLayerPanel.open()
+      }
+
+      MMMapBlurLabel {
+        id: howtoSplittingBanner
+
+        visible: false
+        width: parent.width - 2 * __style.pageMargins
+        height: visible ?  __style.row40 : 0
+        anchors.top: backButton.bottom
+        anchors.topMargin: __style.margin8
+        sourceItem: mapCanvas
+        text: qsTr( "Create line to split the selected feature" )
+      }
+
+      MMMapBlurLabel {
+        id: howtoEditingBanner
+
+        width: parent.width - 2 * __style.pageMargins
+        height: visible ?  __style.row40 : 0
+        anchors.top: howtoSplittingBanner.bottom
+        anchors.topMargin: __style.margin8
+        sourceItem: mapCanvas
+        text: qsTr( "Select some point to start editing the geometry" )
+      }
+
+      MMMapBlurLabel {
+        id: redrawGeometryBanner
+
+        width: parent.width - 2 * __style.pageMargins
+        height: visible ?  __style.row40 : 0
+        anchors.top: howtoEditingBanner.bottom
+        anchors.topMargin: __style.margin8
+        sourceItem: mapCanvas
+        text: qsTr( "Record new geometry for the feature" )
       }
 
       MMMapScaleBar {
@@ -266,9 +352,10 @@ Item {
         preferredWidth: Math.min( window.width, 180 * __dp )
 
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: mapPicker.visible ? mapPicker.bottom : canvasRoot.top
-        anchors.topMargin: 8 * __dp
+        anchors.top: redrawGeometryBanner.bottom
+        anchors.topMargin: __style.margin8
       }
+      // END OF: TOP elements
 
       Highlight {
         id: identifyHighlight
@@ -404,60 +491,6 @@ Item {
         sourceComponent: splittingToolsComponent
       }
 
-      AutoHideBanner { // TODO: Replace by MapBlurItem later
-        id: howtoSplittingBanner
-
-        width: parent.width - InputStyle.innerFieldMargin * 2
-        height: InputStyle.rowHeight
-
-        anchors.top: canvasRoot.top
-
-        bgColor: InputStyle.secondaryBackgroundColor
-        fontColor: "white"
-
-        source: InputStyle.infoIcon
-
-        visibleInterval: 10000
-
-        text: qsTr( "Create line to split the selected feature" )
-      }
-
-      AutoHideBanner { // TODO: Replace by MapBlurItem later
-        id: howtoEditingBanner
-
-        width: parent.width - InputStyle.innerFieldMargin * 2
-        height: InputStyle.rowHeight
-
-        anchors.top: canvasRoot.top
-
-        bgColor: InputStyle.secondaryBackgroundColor
-        fontColor: "white"
-
-        source: InputStyle.infoIcon
-
-        visibleInterval: 10000
-
-        text: qsTr( "Select some point to start editing the geometry" )
-      }
-
-      AutoHideBanner { // TODO: Replace by MapBlurItem later
-        id: redrawGeometryBanner
-
-        width: parent.width - InputStyle.innerFieldMargin * 2
-        height: InputStyle.rowHeight
-
-        anchors.top: canvasRoot.top
-
-        bgColor: InputStyle.secondaryBackgroundColor
-        fontColor: "white"
-
-        source: InputStyle.infoIcon
-
-        visibleInterval: 10000
-
-        text: qsTr( "Record new geometry for the feature" )
-      }
-
       MMMapButton {
         id: gpsButton
 
@@ -484,75 +517,65 @@ Item {
 
           mapSettings.setCenter( mapPositionSource.mapPosition )
         }
-
-        onClickAndHold: {
-          // start/stop the streaming mode
-          if ( recordingToolsLoader.active ) {
-            if ( recordingToolsLoader.item.recordingMapTool.recordingType === RecordingMapTool.Manual )
-            {
-              recordingToolsLoader.item.recordingMapTool.recordingType = RecordingMapTool.StreamMode
-
-              // add first point immediately
-              recordingToolsLoader.item.recordingMapTool.addPoint( crosshair.recordPoint )
-              root.map.mapSettings.setCenter( mapPositionSource.mapPosition )
-            }
-            else
-            {
-              recordingToolsLoader.item.recordingMapTool.recordingType = RecordingMapTool.Manual
-            }
-          }
-        }
       }
 
       MMMapButton {
-        id: backButton
+        id: moreToolsButton
 
         anchors {
-          top: parent.top
-          topMargin: __style.mapButtonsMargin
-          left: parent.left
-          leftMargin: __style.mapButtonsMargin
+          right: parent.right
+          rightMargin: __style.mapButtonsMargin
+          bottom: gpsButton.visible ? gpsButton.top : parent.bottom
+          bottomMargin: internal.bottomMapButtonsMargin
         }
 
-        iconSource: __style.backIcon
+        visible: internal.isInRecordState && internal.isSpatialLayer && !root.isStreaming
 
-        visible: internal.isInRecordState || root.state === "split"
+        iconSource: __style.moreIcon
 
-        onClicked: {
-          if ( root.state === "edit" || root.state === "record" || root.state === "recordInLayer" ) {
-            if ( recordingToolsLoader.item.hasChanges() ) {
-              cancelEditDialog.open()
-            }
-            else {
-              recordingToolsLoader.item.discardChanges()
-            }
-          }
-          else if ( root.state === "split" ) {
-            howtoSplittingBanner.hide()
-            root.splittingCanceled()
-            root.state = "view"
-          }
-        }
+        onClicked: moreToolsMenu.open()
       }
 
-      MMMapPicker {
-        id: mapPicker
+      MMMenuDrawer {
+        id: moreToolsMenu
 
-        anchors {
-          top: parent.top
-          topMargin: __style.mapButtonsMargin
-          left: backButton.right
-          leftMargin: __style.mapButtonsMargin
+        title: qsTr("More options")
+        model: ObjectModel {
+          MMToolbarMenuButton {
+            height: visible ? __style.menuDrawerHeight/2 : 0
+            width: window.width
+
+            text: qsTr("Split geometry")
+            iconSource: __style.splitGeometryIcon
+            visible: !internal.isPointLayer && !root.isStreaming
+
+            onClicked: root.toggleSplitting()
+          }
+
+          MMToolbarMenuButton {
+            height: __style.menuDrawerHeight/2
+            width: window.width
+
+            visible: !root.isStreaming
+            text: qsTr("Redraw geometry")
+            iconSource: __style.redrawGeometryIcon
+
+            onClicked: root.toggleRedraw()
+          }
+
+          MMToolbarMenuButton {
+            height: visible ? __style.menuDrawerHeight/2 : 0
+            width: window.width
+
+            text: qsTr("Streaming mode")
+            iconSource: __style.streamingIcon
+            visible: !internal.isPointLayer
+            rightText: root.isStreaming ? qsTr("active") : ""
+
+            onClicked: root.openStreamingPanel()
+          }
         }
-
-        width: Math.min( parent.width - backButton.width - ( 3 * __style.mapButtonsMargin ), 500 * __dp )
-
-        text: __activeLayer.layerName
-        leftIconSource: __inputUtils.loadIconFromLayer( __activeLayer.layer )
-
-        visible: root.state === "record"
-
-        onClicked: activeLayerPanel.open()
+        onClicked: moreToolsMenu.close()
       }
 
       MessageDialog {
@@ -584,6 +607,28 @@ Item {
 
       SplittingFailedDialog {
         id: splittingFailedDialog
+      }
+
+      MMMapLabel {
+        id: streamingModeButton
+
+        anchors {
+          left: parent.left
+          leftMargin: __style.mapButtonsMargin
+          bottom: positionTrackingButton.visible ? positionTrackingButton.top : accuracyButton.top
+          bottomMargin: internal.bottomMapButtonsMargin
+        }
+
+        visible: root.state !== "inactive" && root.isStreaming
+        iconSource: __style.streamingIcon
+
+        text: qsTr("streaming")
+        textBgColorInverted: true
+
+        onClicked: function( mouse ) {
+          mouse.accepted = true
+          root.openSteamingPanel()
+        }
       }
 
       MMMapLabel {
@@ -877,6 +922,8 @@ Item {
         // private properties - not accessible by other components
 
         property var featurePairToEdit // we are editing geometry of this feature layer pair
+        property bool isSpatialLayer: internal.featurePairToEdit ? __inputUtils.isSpatialLayer( internal.featurePairToEdit.layer ) : false // featurePairToEdit is valid and contains layer with features with geometry
+        property bool isPointLayer: internal.featurePairToEdit ? __inputUtils.isPointLayer( internal.featurePairToEdit.layer ) : false // featurePairToEdit is valid and contains layer with point geometry features
 
         property var extentBeforeStakeout // extent that we return to once stakeout finishes
         property var stakeoutTarget
@@ -924,6 +971,11 @@ Item {
     state = "edit"
   }
 
+
+  function toggleRedraw() {
+    redraw(internal.featurePairToEdit)
+  }
+
   function redraw( featurepair ) {
     __activeProject.setActiveLayer( featurepair.layer )
     root.centerToPair( featurepair )
@@ -933,6 +985,10 @@ Item {
     internal.featurePairToEdit = __inputUtils.changeFeaturePairGeometry( featurepair, __inputUtils.emptyGeometry() )
 
     state = "edit"
+  }
+
+  function toggleSplitting() {
+    split(internal.featurePairToEdit)
   }
 
   function split( featurepair ) {
@@ -947,6 +1003,13 @@ Item {
     internal.extentBeforeStakeout = mapCanvas.mapSettings.extent
     internal.stakeoutTarget = featurepair
     state = "stakeout"
+  }
+
+  function toggleStreaming() {
+    // start/stop the streaming mode
+    if ( recordingToolsLoader.active ) {
+      recordingToolsLoader.item.toggleStreaming()
+    }
   }
 
   function autoFollowStakeoutPath()

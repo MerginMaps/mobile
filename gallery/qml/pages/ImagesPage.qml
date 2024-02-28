@@ -45,6 +45,7 @@ ScrollView {
         Column { Image { source: __style.positiveMMSymbolImage } Text { text: "positiveMMSymbolImage" } }
         Column { Image { source: __style.negativeMMSymbolImage } Text { text: "negativeMMSymbolImage" } }
         Column { Image { source: __style.closeAccountImage } Text { text: "closeAccountImage" } }
+        Column { Image { source: __style.streamingBootsImage } Text { text: "streamingBootsImage" } }
       }
     }
 

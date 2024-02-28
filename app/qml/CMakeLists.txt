@@ -1,5 +1,4 @@
 set(MM_QML
-    banners/AutoHideBanner.qml
     components/DelegateButton.qml
     components/ExtendedMenuItem.qml
     components/LoadingSpinner.qml
@@ -18,6 +17,7 @@ set(MM_QML
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
     dialogs/MMCloseAccountDialog.qml
+    dialogs/MMStreamingModeDialog.qml
     Banner.qml
     InputStyle.qml
     Notification.qml
@@ -25,7 +25,6 @@ set(MM_QML
     ProjectLimitDialog.qml
     map/Crosshair.qml
     map/Highlight.qml
-    map/LoadingIndicator.qml
     map/SplittingTools.qml
     map/StakeoutTools.qml
     misc/AttentionBanner.qml
@@ -50,9 +49,6 @@ set(MM_QML
     components/MMFeaturesListDrawer.qml
     components/MMListDrawer.qml
     components/MMListDrawerItem.qml
-    components/MMMapButton.qml
-    components/MMMapLabel.qml
-    components/MMMapPicker.qml
     components/MMMenuDrawer.qml
     components/MMMorePhoto.qml
     components/MMNotification.qml
@@ -139,7 +135,13 @@ set(MM_QML
     map/MapWrapper.qml
     map/MMPositionMarker.qml
     map/RecordingTools.qml
-    map/MMMapScaleBar.qml
+    map/components/MMBlurBox.qml
+    map/components/MMLoadingIndicator.qml
+    map/components/MMMapBlurLabel.qml
+    map/components/MMMapButton.qml
+    map/components/MMMapLabel.qml
+    map/components/MMMapPicker.qml
+    map/components/MMMapScaleBar.qml
     gps/MMAddPositionProviderDrawer.qml
     gps/MMBluetoothConnectionDrawer.qml
     gps/MMGpsDataDrawer.qml

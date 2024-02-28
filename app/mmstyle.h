@@ -157,6 +157,9 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl waterResourcesIcon READ waterResourcesIcon CONSTANT )
     Q_PROPERTY( QUrl xTwitterIcon READ xTwitterIcon CONSTANT )
     Q_PROPERTY( QUrl youtubeIcon READ youtubeIcon CONSTANT )
+    Q_PROPERTY( QUrl splitGeometryIcon READ splitGeometryIcon CONSTANT )
+    Q_PROPERTY( QUrl streamingIcon READ streamingIcon CONSTANT )
+    Q_PROPERTY( QUrl redrawGeometryIcon READ redrawGeometryIcon CONSTANT )
 
     // Filled Icons - for visualizing of selected item in toolbar
     Q_PROPERTY( QUrl projectsFilledIcon READ projectsFilledIcon CONSTANT )
@@ -200,6 +203,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl closeAccountImage READ closeAccountImage CONSTANT )
     Q_PROPERTY( QUrl attentionImage READ attentionImage CONSTANT )
     Q_PROPERTY( QUrl bubbleImage READ bubbleImage CONSTANT )
+    Q_PROPERTY( QUrl streamingBootsImage READ streamingBootsImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -303,6 +307,9 @@ class MMStyle: public QObject
     QColor errorBgInputColor() {return QColor::fromString( "#FEFAF9" );}
     QColor shadowColor() {return QColor::fromString( "#66777777" );}
 
+    QUrl splitGeometryIcon() {return QUrl( "qrc:/SplitGeometry.svg" );}
+    QUrl streamingIcon() {return QUrl( "qrc:/Streaming.svg" );}
+    QUrl redrawGeometryIcon() {return QUrl( "qrc:/RedrawGeometry.svg" );}
     QUrl linkIcon() {return QUrl( "qrc:/Link.svg" );}
     QUrl closeAccountIcon() {return QUrl( "qrc:/CloseAccount.svg" );}
     QUrl signOutIcon() {return QUrl( "qrc:/SignOut.svg" );}
@@ -414,6 +421,8 @@ class MMStyle: public QObject
     QUrl closeAccountImage() {return QUrl( "qrc:/images/CloseAccount.svg" );}
     QUrl attentionImage() {return QUrl( "qrc:/images/Attention.svg" );}
     QUrl bubbleImage() {return QUrl( "qrc:/images/Bubble.svg" );}
+    QUrl streamingBootsImage() {return QUrl( "qrc:/images/StreamingBoots.svg" );}
+
 
     static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
     static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}

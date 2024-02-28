@@ -101,7 +101,7 @@ Item {
 
       MMToolbarButton {
         text: qsTr( "Done" )
-        iconSource: __style.done2Icon
+        iconSource: __style.doneCircleIcon
         onClicked: {
           if ( mapTool.hasValidGeometry() )
           {

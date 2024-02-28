@@ -250,6 +250,10 @@ ApplicationWindow {
         trackingPanelLoader.active = true
       }
 
+      onOpenStreamingPanel: {
+        streamingModeDialog.open()
+      }
+
       Component.onCompleted: {
         __activeProject.mapSettings = map.mapSettings
         __iosUtils.positionKit = __positionKit
@@ -558,6 +562,16 @@ ApplicationWindow {
       onClosed: stateManager.state = "map"
     }
 
+    MMStreamingModeDialog {
+      id: streamingModeDialog
+
+      streamingActive: map.isStreaming
+
+      onStreamingBtnClicked: {
+        map.toggleStreaming()
+      }
+    }
+
     Loader {
       id: trackingPanelLoader
 
@@ -681,16 +695,6 @@ ApplicationWindow {
       onEditGeometryRequested: function( pair ) {
         stateManager.state = "map"
         map.edit( pair )
-      }
-
-      onSplitGeometryRequested: function( pair ) {
-        stateManager.state = "map"
-        map.split( pair )
-      }
-
-      onRedrawGeometryRequested: function( pair ) {
-        stateManager.state = "map"
-        map.redraw( pair )
       }
 
       onClosed: {

@@ -60,14 +60,17 @@
         <file>QGIS.svg</file>
         <file>QRCode.svg</file>
         <file>Reddit.svg</file>
+        <file>RedrawGeometry.svg</file>
         <file>Search.svg</file>
         <file>Settings.svg</file>
         <file>Show.svg</file>
         <file>SmallCheckmark.svg</file>
         <file>SmallEdit.svg</file>
         <file>SocialMedia.svg</file>
+        <file>SplitGeometry.svg</file>
         <file>StateAndLocal.svg</file>
         <file>Stop.svg</file>
+        <file>Streaming.svg</file>
         <file>Subscriptions.svg</file>
         <file>SignOut.svg</file>
         <file>Sync.svg</file>

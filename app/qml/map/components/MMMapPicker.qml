@@ -9,7 +9,8 @@
 
 import QtQuick
 import QtQuick.Layouts
-import "."
+
+import "../../components"
 
 Item {
   id: root

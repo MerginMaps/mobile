@@ -15,7 +15,7 @@ import "."
 Drawer {
   id: control
 
-  property alias title: title.text
+  property alias title: header.title
   property alias model: menuView.model
 
   signal clicked(var button)
@@ -45,29 +45,26 @@ Drawer {
       id: mainColumn
 
       width: parent.width
-      spacing: 20 * __dp
-      leftPadding: 20 * __dp
-      rightPadding: 20 * __dp
-      bottomPadding: 20 * __dp
+      spacing: __style.pageMargins
+      leftPadding: __style.pageMargins
+      rightPadding:__style.pageMargins
+      bottomPadding: __style.pageMargins
 
-      MMRoundButton {
-        id: closeButton
-        iconSource: __style.closeIcon
-        bgndColor: __style.lightGreenColor
-        anchors.right: parent.right
-        anchors.rightMargin: 20 * __dp
-        onClicked: control.visible = false
-      }
+      MMHeader {
+        id: header
+        backVisible: false
+        width: parent.width
+        titleFont: __style.t2
+        rightMarginShift: closeButton.width + __style.pageMargins
 
-      Text {
-        id: title
-
-        anchors.horizontalCenter: parent.horizontalCenter
-        font: __style.t1
-        width: parent.width - 40 * __dp
-        color: __style.forestColor
-        visible: text.length > 0
-        horizontalAlignment: Text.AlignHCenter
+        MMRoundButton {
+          id: closeButton
+          iconSource: __style.closeIcon
+          bgndColor: __style.lightGreenColor
+          anchors.right: parent.right
+          anchors.rightMargin: 2 * __style.pageMargins
+          onClicked: control.visible = false
+        }
       }
 
       GridView {

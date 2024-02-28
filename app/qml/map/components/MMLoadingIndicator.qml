@@ -10,12 +10,10 @@
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
-import ".."
 
 Rectangle {
   id: loadingIndicator
-  anchors.top: parent.top
-  color: InputStyle.fontColor
+  color: __style.forestColor
 
   Rectangle {
     id: bar
@@ -38,9 +36,9 @@ Rectangle {
       end: Qt.point(bar.width, 0)
       source: bar
       gradient: Gradient {
-        GradientStop { position: 0.0; color: InputStyle.fontColor }
-        GradientStop { position: 0.5; color: Qt.lighter(InputStyle.fontColor, 2) }
-        GradientStop { position: 1.0; color: InputStyle.fontColor }
+        GradientStop { position: 0.0; color: __style.forestColor }
+        GradientStop { position: 0.5; color: Qt.lighter(__style.forestColor, 2) }
+        GradientStop { position: 1.0; color: __style.forestColor }
       }
     }
   }
