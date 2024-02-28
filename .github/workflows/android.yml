@@ -33,7 +33,7 @@ jobs:
       INPUT_SDK_VERSION_ARM64: arm64-android-20240215-206
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-      CACHE_VERSION: 3
+      CACHE_VERSION: 4
       QT_ANDROID_KEYSTORE_ALIAS: input
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
@@ -105,7 +105,7 @@ jobs:
         uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v3-${{ env.QT_VERSION }}-android
+          key: ${{ runner.os }}-QtCache-v6-${{ env.QT_VERSION }}-android
           
       - name: Install Qt
         if: steps.cache-qt.outputs.cache-hit != 'true'
