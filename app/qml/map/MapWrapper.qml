@@ -488,24 +488,36 @@ Item {
 
           mapSettings.setCenter( mapPositionSource.mapPosition )
         }
+      }
 
-        onClickAndHold: {
-          // start/stop the streaming mode
-          if ( recordingToolsLoader.active ) {
-            if ( recordingToolsLoader.item.recordingMapTool.recordingType === RecordingMapTool.Manual )
-            {
-              recordingToolsLoader.item.recordingMapTool.recordingType = RecordingMapTool.StreamMode
+      MMMapButton {
+        id: moreToolsButton
 
-              // add first point immediately
-              recordingToolsLoader.item.recordingMapTool.addPoint( crosshair.recordPoint )
-              root.map.mapSettings.setCenter( mapPositionSource.mapPosition )
-            }
-            else
-            {
-              recordingToolsLoader.item.recordingMapTool.recordingType = RecordingMapTool.Manual
-            }
-          }
+        anchors {
+          right: parent.right
+          rightMargin: __style.mapButtonsMargin
+          bottom: gpsButton.visible ? gpsButton.top : parent.bottom
+          bottomMargin: internal.bottomMapButtonsMargin
         }
+
+        visible: root.state === "edit" && internal.isSpatialLayer && !root.isStreaming
+
+        iconSource: __style.moreIcon
+
+        onClicked: moreToolsMenu.open()
+      }
+
+      MMMenuDrawer {
+        id: moreToolsMenu
+
+        title: qsTr("More options")
+        model: ObjectModel {
+          // TODO ; height: __style.menuDrawerHeight/2; width: window.width <-- why it needs to be there, shouldn't it be in the MMToolbarMenuButton?
+          MMToolbarMenuButton { text: qsTr("Split geometry"); iconSource: __style.splitGeometryIcon; visible: !internal.isPointLayer; onClicked: root.toggleSplitting(); height: visible ? __style.menuDrawerHeight/2 : 0; width: window.width }
+          MMToolbarMenuButton { text: qsTr("Redraw geometry"); iconSource: __style.redrawGeometryIcon; onClicked: root.toggleRedraw(); height: __style.menuDrawerHeight/2; width: window.width }
+          MMToolbarMenuButton { text: qsTr("Streaming mode"); iconSource: __style.streamingIcon; visible: !internal.isPointLayer; rightText: root.isStreaming ? qsTr("active") : ""; onClicked: root.toggleStreaming(); height: visible ? __style.menuDrawerHeight/2 : 0; width: window.width }
+        }
+        onClicked: moreToolsMenu.close()
       }
 
       MMMapButton {
@@ -600,10 +612,10 @@ Item {
           bottomMargin: internal.bottomMapButtonsMargin
         }
 
-        visible: root.state !== "inactive" && root.streaming
-        iconSource: __style.moreVerticalIcon
+        visible: root.state !== "inactive" && root.isStreaming
+        iconSource: __style.streamingIcon
 
-        text: qsTr("streaming")
+        text: qsTr("stream")
         textBgColorInverted: true
 
         onClicked: function( mouse ) {
@@ -903,6 +915,8 @@ Item {
         // private properties - not accessible by other components
 
         property var featurePairToEdit // we are editing geometry of this feature layer pair
+        property bool isSpatialLayer: internal.featurePairToEdit ? __inputUtils.isSpatialLayer( internal.featurePairToEdit.layer ) : false // featurePairToEdit is valid and contains layer with features with geometry
+        property bool isPointLayer: internal.featurePairToEdit ? __inputUtils.isPointLayer( internal.featurePairToEdit.layer ) : false // featurePairToEdit is valid and contains layer with point geometry features
 
         property var extentBeforeStakeout // extent that we return to once stakeout finishes
         property var stakeoutTarget
@@ -950,6 +964,11 @@ Item {
     state = "edit"
   }
 
+
+  function toggleRedraw() {
+    redraw(internal.featurePairToEdit)
+  }
+
   function redraw( featurepair ) {
     __activeProject.setActiveLayer( featurepair.layer )
     root.centerToPair( featurepair )
@@ -959,6 +978,10 @@ Item {
     internal.featurePairToEdit = __inputUtils.changeFeaturePairGeometry( featurepair, __inputUtils.emptyGeometry() )
 
     state = "edit"
+  }
+
+  function toggleSplitting() {
+    split(internal.featurePairToEdit)
   }
 
   function split( featurepair ) {
@@ -973,6 +996,13 @@ Item {
     internal.extentBeforeStakeout = mapCanvas.mapSettings.extent
     internal.stakeoutTarget = featurepair
     state = "stakeout"
+  }
+
+  function toggleStreaming() {
+    // start/stop the streaming mode
+    if ( recordingToolsLoader.active ) {
+      recordingToolsLoader.item.toggleStreaming()
+    }
   }
 
   function autoFollowStakeoutPath()

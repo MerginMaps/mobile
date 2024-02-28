@@ -33,6 +33,21 @@ Item {
   signal canceled()
   signal done( var featureLayerPair )
 
+  function toggleStreaming() {
+    if (  recordingMapTool.recordingType === RecordingMapTool.Manual )
+    {
+      recordingMapTool.recordingType = RecordingMapTool.StreamMode
+
+      // add first point immediately
+      recordingMapTool.addPoint( crosshair.recordPoint )
+      root.map.mapSettings.setCenter( mapPositionSource.mapPosition )
+    }
+    else
+    {
+      recordingMapTool.recordingType = RecordingMapTool.Manual
+    }
+  }
+
   RecordingMapTool {
     id: mapTool
 

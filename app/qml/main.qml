@@ -671,16 +671,6 @@ ApplicationWindow {
         map.edit( pair )
       }
 
-      onSplitGeometryRequested: function( pair ) {
-        stateManager.state = "map"
-        map.split( pair )
-      }
-
-      onRedrawGeometryRequested: function( pair ) {
-        stateManager.state = "map"
-        map.redraw( pair )
-      }
-
       onClosed: {
         if ( mapPanelsStackView.depth ) {
           // this must be layers panel as it is the only thing on the stackview currently

@@ -50,7 +50,7 @@ Item {
 
       Text {
         text: control.text
-        color: __style.forestColor
+        color: __style.nightColor
         font: __style.t3
         verticalAlignment: Text.AlignVCenter
         height: parent.height
