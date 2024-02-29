@@ -13,6 +13,9 @@ set(MM_QML
     components/TextRowWithTitle.qml
     components/TextWithIcon.qml
     components/MMPage.qml
+    components/MMPageHeader.qml
+    components/MMDrawer.qml
+    components/MMDrawerHeader.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
     dialogs/NoPermissionsDialog.qml
@@ -41,7 +44,6 @@ set(MM_QML
     components/MMCheckBox.qml
     components/MMDrawerDialog.qml
     components/MMDropdownDrawer.qml
-    components/MMPageHeader.qml
     components/MMHlineText.qml
     components/MMIcon.qml
     components/MMIconCheckBoxHorizontal.qml

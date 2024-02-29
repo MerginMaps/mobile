@@ -186,6 +186,10 @@ ApplicationWindow {
           title: "Feature form"
           source: "FormPage.qml"
         }
+        ListElement {
+          title: "Sandbox"
+          source: "SandboxPage.qml"
+        }
       }
 
       ScrollIndicator.vertical: ScrollIndicator {}
