@@ -819,7 +819,7 @@ ApplicationWindow {
       onMigrationRequested: __syncManager.migrateProjectToMergin( __activeProject.projectFullName() )
     }
 
-    NoPermissionsDialog {
+    MMNoPermissionsDialog {
       id: noPermissionsDialog
     }
 
