@@ -28,5 +28,6 @@
         <file>StreamingBoots.svg</file>
         <file>StreamingBootsOrange.svg</file>
         <file>NoWifi.svg</file>
+        <file>SyncFailed.svg</file>
     </qresource>
 </RCC>

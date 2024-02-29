@@ -79,6 +79,13 @@ Page {
         bluetoothConnectionDrawer.open()
       }
     }
+
+    MMButton {
+      text: "MMSyncFailedDialog"
+      onClicked: {
+        drawer4.open()
+      }
+    }
   }
 
   MMBluetoothConnectionDrawer {
@@ -188,5 +195,9 @@ Page {
 
     onPrimaryButtonClicked: close()
     onSecondaryButtonClicked: close()
+  }
+
+  MMSyncFailedDialog {
+    id: drawer4
   }
 }

@@ -122,5 +122,6 @@
         <file>../app/qml/settings/MMSettingDropdown.qml</file>
         <file>../app/qml/settings/MMSettingSwitch.qml</file>
         <file>../app/qml/gps/MMBluetoothConnectionDrawer.qml</file>
-  </qresource>
+        <file>../app/qml/dialogs/MMSyncFailedDialog.qml</file>
+    </qresource>
 </RCC>

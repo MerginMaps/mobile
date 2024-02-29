@@ -11,6 +11,7 @@ set(MM_QML
     dialogs/NoPermissionsDialog.qml
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
+    dialogs/MMSyncFailedDialog.qml
     dialogs/MMCloseAccountDialog.qml
     dialogs/MMStreamingModeDialog.qml
     dialogs/MMRemoveProjectDialog.qml

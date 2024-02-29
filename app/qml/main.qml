@@ -823,7 +823,7 @@ ApplicationWindow {
       id: noPermissionsDialog
     }
 
-    SyncFailedDialog {
+    MMSyncFailedDialog {
       id: syncFailedDialog
     }
 
