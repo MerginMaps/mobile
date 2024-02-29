@@ -9,16 +9,24 @@
 
 import QtQuick
 
-import ".."
-
-Symbol {
+Item {
   id: root
 
   property bool running: false
   property int speed: 800
 
+  width: __style.row63
+  height: width
   visible: running
-  source: InputStyle.loadingIndicatorIcon
+
+  Image {
+    id: icon
+    anchors.fill: parent
+    source: __style.loadingIndicatorImage
+    sourceSize.width: width
+    sourceSize.height: height
+    fillMode: Image.PreserveAspectFit
+  }
 
   RotationAnimation {
     target: root

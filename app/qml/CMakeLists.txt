@@ -1,6 +1,5 @@
 set(MM_QML
     components/DelegateButton.qml
-    components/LoadingSpinner.qml
     components/RichTextBlock.qml
     components/Shadow.qml
     components/SimpleTextWithIcon.qml
@@ -43,6 +42,7 @@ set(MM_QML
     components/MMIconCheckBoxVertical.qml
     components/MMLink.qml
     components/MMLinkButton.qml
+    components/MMLoadingSpinner.qml
     components/MMFeaturesListDrawer.qml
     components/MMListDrawer.qml
     components/MMListDrawerItem.qml

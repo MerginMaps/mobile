@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/images">
+        <file>LoadingIndicator.svg</file>
         <file>CrosshairBackground.svg</file>
         <file>CrosshairCenter.svg</file>
         <file>CrosshairCircle.svg</file>

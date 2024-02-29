@@ -73,6 +73,7 @@
         <file>../app/qml/components/MMFeaturesListDrawer.qml</file>
         <file>../app/qml/components/MMFeaturesListDrawer.qml</file>
         <file>../app/qml/components/MMMessage.qml</file>
+        <file>../app/qml/components/MMLoadingSpinner.qml</file>
         <file>../app/qml/account/MMAcountPage.qml</file>
         <file>../app/qml/account/MMAcountPageItem.qml</file>
         <file>../app/qml/inputs/MMBaseInput.qml</file>
