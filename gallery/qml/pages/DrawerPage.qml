@@ -98,6 +98,14 @@ Page {
           noPermissionsDialog.open()
         }
       }
+
+      MMButton {
+        text: "MMMissingAuthDialog"
+
+        onClicked: {
+          missingAuthDialog.open()
+        }
+      }
     }
   }
 
@@ -216,5 +224,9 @@ Page {
 
   MMNoPermissionsDialog {
     id: noPermissionsDialog
+  }
+
+  MMMissingAuthDialog {
+    id: missingAuthDialog
   }
 }
