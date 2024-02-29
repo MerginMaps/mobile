@@ -20,6 +20,10 @@ For various how-tos, please see [howto dev docs](howto.md).
 
 ![](media/projects-sync.png)
 
+## Manage invitations
+
+![](media/invitation_logic.png)
+
 ## Fields in more menu:
 
 ![](media/more-menu.png)
