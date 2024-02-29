@@ -368,10 +368,9 @@ Item {
 
           currentIndex: pageFooter.index
 
-          MMProjectListPage {
+          MMProjectHomePage {
             id: localProjectsPage
 
-            projectModelType: ProjectsModel.LocalProjectsModel
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
 

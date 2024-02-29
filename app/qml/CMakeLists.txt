@@ -23,7 +23,6 @@ set(MM_QML
     map/Highlight.qml
     map/SplittingTools.qml
     map/StakeoutTools.qml
-    misc/AttentionBanner.qml
     misc/NoWorkspaceBanner.qml
     account/MMAcountPage.qml
     account/MMAcountPageItem.qml
@@ -82,6 +81,7 @@ set(MM_QML
     onboarding/MMOnboardingController.qml
     onboarding/MMCreateWorkspaceController.qml
     onboarding/MMAcceptInvitationController.qml
+    project/MMProjectHomePage.qml
     project/MMProjectList.qml
     project/MMProjectItem.qml
     project/MMProjectListPage.qml

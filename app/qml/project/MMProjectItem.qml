@@ -80,7 +80,7 @@ Rectangle {
           MMIcon {
             id: errorIcon
 
-            source: visible ? __style.errorIcon : ""
+            source: visible ? __style.errorCircleIcon : ""
             color: __style.negativeColor
             visible: !root.projectIsValid
           }

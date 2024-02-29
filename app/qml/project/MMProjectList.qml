@@ -24,6 +24,7 @@ Item {
   property string activeProjectId: ""
   property string searchText: ""
   property int spacing: 0
+  property bool hideActiveProject: false
 
   signal openProjectRequested( string projectFilePath )
   signal showLocalChangesRequested( string projectId )
@@ -100,6 +101,7 @@ Item {
       projectRemoteError: model.ProjectRemoteError ? model.ProjectRemoteError : ""
 
       highlight: model.ProjectId === root.activeProjectId
+      visible: !root.hideActiveProject || !highlight
 
       onOpenRequested: {
         if ( model.ProjectIsLocal )
