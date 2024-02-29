@@ -29,7 +29,7 @@ Item {
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp
 
-    property color snappingColor: __style.grapeColor
+    property color snappingColor: "#8a2be2" // TODO use some our color + recolor the icons too!
 
     SnapUtils {
       id: snapUtils
@@ -198,13 +198,6 @@ Item {
       source: __style.crosshairPlusImage
     }
 
-    // TODO - if the source has root.snappingColor we do not need overlay
-    ColorOverlay {
-      anchors.fill: crossCenterPlus
-      source: crossCenterPlus
-      color: root.snappingColor
-    }
-
     Image {
       id: crossCenterCircle // Center circle - visible when snapped to segment
 
@@ -243,13 +236,6 @@ Item {
       sourceSize.height: height
 
       source: __style.crosshairCircleImage
-    }
-
-    // TODO - if the source has root.snappingColor we do not need overlay
-    ColorOverlay {
-      anchors.fill: crossCenterCircle
-      source: crossCenterCircle
-      color: root.snappingColor
     }
 
     Connections {
