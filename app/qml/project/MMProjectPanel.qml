@@ -220,7 +220,7 @@ Item {
         }
       }
 
-      header: MMHeader {
+      header: MMPageHeader {
         id: headerRow
 
         title: {

@@ -12,6 +12,7 @@ set(MM_QML
     components/TextHyperlink.qml
     components/TextRowWithTitle.qml
     components/TextWithIcon.qml
+    components/MMPage.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
     dialogs/NoPermissionsDialog.qml
@@ -40,7 +41,7 @@ set(MM_QML
     components/MMCheckBox.qml
     components/MMDrawerDialog.qml
     components/MMDropdownDrawer.qml
-    components/MMHeader.qml
+    components/MMPageHeader.qml
     components/MMHlineText.qml
     components/MMIcon.qml
     components/MMIconCheckBoxHorizontal.qml

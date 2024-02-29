@@ -57,7 +57,7 @@ Page {
     }
   }
 
-  MMHeader {
+  MMPageHeader {
     id: header
 
     title: qsTr("Log In")

@@ -33,7 +33,7 @@ Page {
   required property real storageFill // [0-1]
   required property int invitationsCount
 
-  header: MMHeader {
+  header: MMPageHeader {
     id: header
     color: __style.lightGreenColor
     backVisible: true

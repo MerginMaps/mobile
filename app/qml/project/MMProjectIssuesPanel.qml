@@ -37,7 +37,7 @@ Page {
     }
   }
 
-  header: MMHeader {
+  header: MMPageHeader {
     id: header
 
     width: parent.width

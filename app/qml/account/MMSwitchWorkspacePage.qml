@@ -21,7 +21,7 @@ Page {
   signal back
   signal createWorkspaceRequested()
 
-  header: MMHeader {
+  header: MMPageHeader {
     width: root.width
     title: qsTr( "Select Workspace" )
     onBackClicked: root.back()

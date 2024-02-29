@@ -24,7 +24,7 @@ Page {
   signal featureClicked( var featurePair )
   signal addFeatureClicked( var toLayer )
 
-  header: MMHeader {
+  header: MMPageHeader {
     width: parent.width
     color: __style.lightGreenColor
     title: root.selectedLayer ? root.selectedLayer.name + " (" + featuresModel.layerFeaturesCount + ")": ""

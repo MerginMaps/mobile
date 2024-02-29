@@ -37,7 +37,7 @@ Page {
     color: __style.lightGreenColor
   }
 
-  MMHeader {
+  MMPageHeader {
     id: header
 
     title: listView.contentY > -30 * __dp ? root.headerTitle : ""

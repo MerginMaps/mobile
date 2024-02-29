@@ -3,6 +3,8 @@
         <file>qml/Main.qml</file>
         <file>qml/IconLine.qml</file>
         <file>qml/EditorItem.qml</file>
+        <file>qml/pages/ComponentsPage.qml</file>
+        <file>qml/pages/SandboxPage.qml</file>
         <file>qml/pages/IconsPage.qml</file>
         <file>qml/pages/ImagesPage.qml</file>
         <file>qml/pages/StylePage.qml</file>
@@ -52,7 +54,7 @@
         <file>../app/qml/components/MMMorePhoto.qml</file>
         <file>../app/qml/components/MMPhoto.qml</file>
         <file>../app/qml/components/MMCheckBox.qml</file>
-        <file>../app/qml/components/MMHeader.qml</file>
+        <file>../app/qml/components/MMPageHeader.qml</file>
         <file>../app/qml/components/MMHlineText.qml</file>
         <file>../app/qml/components/MMTextBubble.qml</file>
         <file>../app/qml/components/MMIconCheckBoxHorizontal.qml</file>
@@ -74,6 +76,7 @@
         <file>../app/qml/components/MMFeaturesListDrawer.qml</file>
         <file>../app/qml/components/MMFeaturesListDrawer.qml</file>
         <file>../app/qml/components/MMMessage.qml</file>
+        <file>../app/qml/components/MMPage.qml</file>
         <file>../app/qml/account/MMAcountPage.qml</file>
         <file>../app/qml/account/MMAcountPageItem.qml</file>
         <file>../app/qml/inputs/MMBaseInput.qml</file>

@@ -53,7 +53,7 @@ Drawer {
     anchors.fill: parent
     color: __style.whiteColor
 
-    MMHeader {
+    MMPageHeader {
       id: header
 
       rightMarginShift: 0

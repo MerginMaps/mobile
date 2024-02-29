@@ -64,7 +64,7 @@ Drawer {
       rightPadding: control.padding
       bottomPadding: control.padding
 
-      // TODO use MMHeader
+      // TODO use MMPageHeader
       Row {
         width: parent.width - 2 * control.padding
         anchors.horizontalCenter: parent.horizontalCenter

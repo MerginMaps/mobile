@@ -75,7 +75,7 @@ Page {
     color: __style.lightGreenColor
   }
 
-  header: MMHeader {
+  header: MMPageHeader {
     title: {
       if ( root.state === "add" ) return qsTr( "New feature" )
       else if ( root.state === "edit" ) return qsTr( "Edit feature" )

@@ -13,25 +13,27 @@ import QtQuick.Layouts
 
 import "."
 
-//! Best to use MMHeader as the header component for the Page{} object or anchor it to the top of Drawer/Item
+//! Best to use MMPageHeader as the header component for the MMPage object
 
 Rectangle {
   id: root
 
   property string title: ""
   property font titleFont: __style.t3
-  color: __style.transparentColor
+
   property bool backVisible: true
   property alias backButton: backBtn
 
-  //! When adding items on the right side of MMHeader (account icon, save button, slider, ...),
+  color: __style.transparentColor
+
+  //! When adding items on the right side of MMPageHeader (account icon, save button, slider, ...),
   //! make sure to set the width of the item via this property to keep the title centred to
   //! the page and elide properly
   property real rightMarginShift: 0
 
   signal backClicked
 
-  implicitHeight: 60 * __dp
+  implicitHeight: 60 * __dp + __style.safeAreaTop
   implicitWidth: ApplicationWindow.window?.width ?? 0
 
   Text {
@@ -49,6 +51,7 @@ Rectangle {
       fill: parent
       leftMargin: leftMarginShift
       rightMargin: rightMarginShift
+      topMargin: __style.safeAreaTop
     }
 
     text: root.title
@@ -66,6 +69,7 @@ Rectangle {
 
     anchors {
       left: parent.left
+      topMargin: __style.safeAreaTop
       leftMargin: __style.pageMargins
       verticalCenter: parent.verticalCenter
     }

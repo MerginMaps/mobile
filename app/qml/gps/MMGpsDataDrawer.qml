@@ -66,7 +66,7 @@ Drawer {
       width: parent.width
       spacing: 40 * __dp
 
-      MMHeader {
+      MMPageHeader {
 
         id: header
 

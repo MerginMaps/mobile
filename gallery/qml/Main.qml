@@ -111,8 +111,12 @@ ApplicationWindow {
 
       model: ListModel {
         ListElement {
-          title: "Initial"
+          title: "Home"
           source: "InitialGalleryPage.qml"
+        }
+        ListElement {
+          title: "Components"
+          source: "ComponentsPage.qml"
         }
         ListElement {
           title: "Style"
