@@ -26,6 +26,8 @@
         <file>../app/qml/dialogs/MMPositionTrackingDrawer.qml</file>
         <file>../app/qml/dialogs/MMStorageLimitDialog.qml</file>
         <file>../app/qml/dialogs/MMCloseAccountDialog.qml</file>
+        <file>../app/qml/dialogs/MMRemoveProjectDialog.qml</file>
+        <file>../app/qml/dialogs/MMDownloadProjectDialog.qml</file>
         <file>../app/qml/components/MMButton.qml</file>
         <file>../app/qml/components/MMLinkButton.qml</file>
         <file>../app/qml/components/MMIcon.qml</file>
@@ -47,7 +49,6 @@
         <file>../app/qml/components/MMToolbarLongButton.qml</file>
         <file>../app/qml/components/MMListDrawer.qml</file>
         <file>../app/qml/components/MMListDrawerItem.qml</file>
-        <file>../app/qml/components/MMProjectItem.qml</file>
         <file>../app/qml/components/MMMorePhoto.qml</file>
         <file>../app/qml/components/MMPhoto.qml</file>
         <file>../app/qml/components/MMCheckBox.qml</file>
@@ -111,6 +112,7 @@
         <file>../app/qml/map/components/MMMapScaleBar.qml</file>
         <file>../app/qml/project/MMProjectLoadingScreen.qml</file>
         <file>../app/qml/project/MMProjectIssuesPanel.qml</file>
+        <file>../app/qml/project/MMProjectItem.qml</file>
         <file>../app/qml/settings/MMLogPanel.qml</file>
         <file>../app/qml/settings/MMAboutPanel.qml</file>
         <file>../app/qml/settings/MMChangelogPanel.qml</file>

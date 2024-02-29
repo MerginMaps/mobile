@@ -9,21 +9,30 @@
 
 import QtQuick
 import QtQuick.Controls
-import ".."  // import InputStyle singleton
 
-Text {
-    width: parent.width
-    height: parent.height
-    color: InputStyle.fontColor
-    onLinkActivated: function( link ) {
-      Qt.openUrlExternally(link)
-    }
-    textFormat: Text.StyledText
-    wrapMode: Text.WordWrap
-    font.pixelSize: InputStyle.fontPixelSizeNormal
-    font.bold: true
-    horizontalAlignment: Qt.AlignHCenter
-    verticalAlignment: Qt.AlignVCenter
-    text: "(no-text)"
-    linkColor: InputStyle.highlightColor
+import "../components"
+import "../inputs"
+
+MMDrawerDialog {
+  id: root
+
+  property string relatedProjectId: ""
+
+  signal removeClicked()
+
+  picture: __style.negativeMMSymbolImage
+  bigTitle: qsTr( "Remove project" )
+  description: qsTr( "Any unsynchronized changes will be lost in project \n %1" ).arg( relatedProjectId )
+  primaryButton: qsTr("Remove")
+  secondaryButton: qsTr("Cancel")
+
+  onPrimaryButtonClicked: {
+    removeClicked()
+    close()
+  }
+
+  onSecondaryButtonClicked: {
+    root.relatedProjectId = ""
+    close()
+  }
 }

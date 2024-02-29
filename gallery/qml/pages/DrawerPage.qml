@@ -52,6 +52,16 @@ Page {
     }
 
     MMButton {
+      text: "MMRemoveProjectDialog"
+      onClicked: removeProjectDialog.open()
+    }
+
+    MMButton {
+      text: "MMDownloadProjectDialog"
+      onClicked: downloadProjectDialog.open()
+    }
+
+    MMButton {
       text: "Synchronization Failed"
       onClicked: drawer3.open()
     }
@@ -114,6 +124,22 @@ Page {
     id: closeAccountDialog
 
     username: "Superman"
+  }
+
+  MMRemoveProjectDialog {
+    id: removeProjectDialog
+
+    relatedProjectId: "Cool Project"
+
+    onRemoveClicked: console.log("on remove clicked")
+  }
+
+  MMDownloadProjectDialog {
+    id: downloadProjectDialog
+
+    relatedProjectId: "Best Project"
+
+    onDownloadClicked: console.log("on download clicked")
   }
 
   MMPositionTrackingDrawer {

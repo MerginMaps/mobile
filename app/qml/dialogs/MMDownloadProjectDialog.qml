@@ -8,23 +8,31 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQuick.Controls
 
 import "../components"
+import "../inputs"
 
 MMDrawerDialog {
   id: root
 
-  property bool streamingActive: false
+  property string relatedProjectId: ""
 
-  signal streamingBtnClicked()
+  signal downloadClicked()
 
-  picture: root.streamingActive ? __style.streamingBootsOrangeImage : __style.streamingBootsImage
-  bigTitle: qsTr("Streaming mode")
-  description: qsTr("Move around your designated object to record its geometry. You can stop this anytime.")
-  primaryButton: root.streamingActive ? qsTr("Stop streaming mode") : qsTr("Start streaming mode")
+  picture: __style.positiveMMSymbolImage
+  bigTitle: qsTr( "Download project" )
+  description: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
+  primaryButton: qsTr("Download")
+  secondaryButton: qsTr("Cancel")
 
   onPrimaryButtonClicked: {
+    downloadClicked()
     close()
-    root.streamingBtnClicked()
+  }
+
+  onSecondaryButtonClicked: {
+    root.relatedProjectId = ""
+    close()
   }
 }

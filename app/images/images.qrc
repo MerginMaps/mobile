@@ -28,5 +28,7 @@
         <file>Attention.svg</file>
         <file>Bubble.svg</file>
         <file>StreamingBoots.svg</file>
+        <file>StreamingBootsOrange.svg</file>
+        <file>NoWifi.svg</file>
     </qresource>
 </RCC>
