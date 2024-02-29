@@ -22,77 +22,81 @@ import lc 1.0
 Page {
   id: pane
 
-  Column {
-    width: parent.width
-    spacing: 10
-    padding: 10
+  ScrollView {
+    anchors.fill: parent
 
-    Label {
-      text: "Drawers"
-    }
+    Column {
+      width: parent.width
+      spacing: 10
+      padding: 10
 
-    MMButton {
-      text: "Position Tracking"
-      onClicked: drawerPositionTracking.open()
-    }
-
-    MMButton {
-      text: "Upload"
-      onClicked: drawer1.open()
-    }
-
-    MMButton {
-      text: "MMStorageLimitDialog"
-      onClicked: storageLimitDialog.open()
-    }
-
-    MMButton {
-      text: "MMCloseAccountDialog"
-      onClicked: closeAccountDialog.open()
-    }
-
-    MMButton {
-      text: "MMRemoveProjectDialog"
-      onClicked: removeProjectDialog.open()
-    }
-
-    MMButton {
-      text: "MMDownloadProjectDialog"
-      onClicked: downloadProjectDialog.open()
-    }
-
-    MMButton {
-      text: "Synchronization Failed"
-      onClicked: drawer3.open()
-    }
-
-    MMButton {
-      text: "MMStreamingModeDialog"
-      onClicked: streamingModeDialog.open()
-    }
-
-    MMButton {
-      text: "MMBluetoothConnectionDrawer"
-      onClicked: {
-        bluetoothConnectionDrawer.positionProvider.state = PositionProvider.Connecting
-        bluetoothConnectionTimer.start()
-        bluetoothConnectionDrawer.open()
+      Label {
+        text: "Drawers"
       }
-    }
 
-    MMButton {
-      text: "MMSyncFailedDialog"
-
-      onClicked: {
-        syncFailedDialog.open()
+      MMButton {
+        text: "Position Tracking"
+        onClicked: drawerPositionTracking.open()
       }
-    }
 
-    MMButton {
-      text: "MMNoPermissionsDialog"
+      MMButton {
+        text: "Upload"
+        onClicked: drawer1.open()
+      }
 
-      onClicked: {
-        noPermissionsDialog.open()
+      MMButton {
+        text: "MMStorageLimitDialog"
+        onClicked: storageLimitDialog.open()
+      }
+
+      MMButton {
+        text: "MMCloseAccountDialog"
+        onClicked: closeAccountDialog.open()
+      }
+
+      MMButton {
+        text: "MMRemoveProjectDialog"
+        onClicked: removeProjectDialog.open()
+      }
+
+      MMButton {
+        text: "MMDownloadProjectDialog"
+        onClicked: downloadProjectDialog.open()
+      }
+
+      MMButton {
+        text: "Synchronization Failed"
+        onClicked: drawer3.open()
+      }
+
+      MMButton {
+        text: "MMStreamingModeDialog"
+        onClicked: streamingModeDialog.open()
+      }
+
+      MMButton {
+        text: "MMBluetoothConnectionDrawer"
+        onClicked: {
+          bluetoothConnectionDrawer.positionProvider.state = PositionProvider.Connecting
+          bluetoothConnectionTimer.start()
+          bluetoothConnectionDrawer.open()
+        }
+      }
+
+      MMButton {
+        text: "MMSyncFailedDialog"
+
+        onClicked: {
+          syncFailedDialog.open()
+        }
+      }
+
+      MMButton {
+        text: "MMNoPermissionsDialog"
+
+        onClicked: {
+          noPermissionsDialog.open()
+        }
       }
     }
   }

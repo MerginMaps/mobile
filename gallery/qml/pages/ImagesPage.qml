@@ -48,6 +48,8 @@ ScrollView {
         Column { Image { source: __style.streamingBootsImage } Text { text: "streamingBootsImage" } }
         Column { Image { source: __style.streamingBootsOrangeImage } Text { text: "streamingBootsOrangeImage" } }
         Column { Image { source: __style.noWifiImage } Text { text: "noWifiImage" } }
+        Column { Image { source: __style.syncFailedImage  } Text { text: "syncFailedImage " } }
+        Column { Image { source: __style.noPermissionsImage } Text { text: "noPermissionsImage" } }
       }
     }
 
