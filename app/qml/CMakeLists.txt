@@ -1,15 +1,10 @@
 set(MM_QML
     components/DelegateButton.qml
-    components/ExtendedMenuItem.qml
     components/LoadingSpinner.qml
-    components/PanelHeader.qml
     components/RichTextBlock.qml
-    components/SearchBoxV2.qml
     components/Shadow.qml
     components/SimpleTextWithIcon.qml
     components/Symbol.qml
-    components/TextHyperlink.qml
-    components/TextRowWithTitle.qml
     components/TextWithIcon.qml
     dialogs/MigrateToMerginDialog.qml
     dialogs/MissingAuthDialog.qml
