@@ -29,8 +29,6 @@ Item {
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp
 
-    property color snappingColor: "#8a2be2" // TODO use some our color + recolor the icons too!
-
     SnapUtils {
       id: snapUtils
 
@@ -105,11 +103,11 @@ Item {
     ColorOverlay {
       anchors.fill: crosshairForeground
       source: crosshairForeground
-      color: snapUtils.snapped ? root.snappingColor : __style.forestColor
+      color: snapUtils.snapped ? __style.snappingColor : __style.forestColor
     }
 
     Image {
-      id: crossCenterDot // Center dot - visible when not snapped
+      id: crossCenterDot // Center dot - visible when not snapped (green)
 
       x: root.screenPoint.x - width / 2
       y: root.screenPoint.y - height / 2
@@ -149,7 +147,7 @@ Item {
     }
 
     Image {
-      id: crossCenterPlus // Center dot - visible when not snapped
+      id: crossCenterPlus // Center plus - visible when not snapped (purple)
 
       x: root.screenPoint.x - width / 2
       y: root.screenPoint.y - height / 2
@@ -195,11 +193,12 @@ Item {
       sourceSize.width: width
       sourceSize.height: height
 
+      // Important: must be same color as __style.snappingColor
       source: __style.crosshairPlusImage
     }
 
     Image {
-      id: crossCenterCircle // Center circle - visible when snapped to segment
+      id: crossCenterCircle // Center circle - visible when snapped to segment (purple)
 
       x: root.screenPoint.x - width / 2
       y: root.screenPoint.y - height / 2
@@ -235,6 +234,7 @@ Item {
       sourceSize.width: width
       sourceSize.height: height
 
+      // Important: must be same color as __style.snappingColor
       source: __style.crosshairCircleImage
     }
 

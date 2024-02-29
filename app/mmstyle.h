@@ -79,6 +79,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor nightAlphaColor READ nightAlphaColor CONSTANT ) // placeholder input color
     Q_PROPERTY( QColor errorBgInputColor READ errorBgInputColor CONSTANT ) // error bg input color
     Q_PROPERTY( QColor shadowColor READ shadowColor CONSTANT )
+    Q_PROPERTY( QColor snappingColor READ snappingColor CONSTANT )
 
     // Icons
     Q_PROPERTY( QUrl linkIcon READ linkIcon CONSTANT )
@@ -313,6 +314,7 @@ class MMStyle: public QObject
     QColor nightAlphaColor() {return QColor::fromString( "#AA12181F" );}
     QColor errorBgInputColor() {return QColor::fromString( "#FEFAF9" );}
     QColor shadowColor() {return QColor::fromString( "#66777777" );}
+    QColor snappingColor() {return QColor::fromString( "#BD74FF" );}
 
     QUrl splitGeometryIcon() {return QUrl( "qrc:/SplitGeometry.svg" );}
     QUrl streamingIcon() {return QUrl( "qrc:/Streaming.svg" );}
