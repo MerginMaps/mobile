@@ -123,7 +123,7 @@ Item {
   Component {
     id: loadingSpinnerComponent
 
-    LoadingSpinner {
+    MMLoadingSpinner {
       x: parent.width / 2 - width / 2
       running: controllerModel.isLoading
     }

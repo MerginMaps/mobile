@@ -13,6 +13,7 @@ import QtQuick.Controls.Basic
 
 import "../../app/qml/components"
 import "../../app/qml/misc"
+import "../../app/qml/gps"
 
 ScrollView {
   id: page
@@ -215,6 +216,27 @@ ScrollView {
         MMHlineText {
           width: page.width - 64
           title: "My text is great"
+        }
+      }
+    }
+
+    GroupBox {
+      title: "MMLoadingSpinner"
+      background: Rectangle {
+        color: "white"
+        border.color: "gray"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      Column {
+        spacing: 20
+        anchors.fill: parent
+        MMLoadingSpinner {
+          running: true
         }
       }
     }

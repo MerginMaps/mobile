@@ -177,6 +177,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl warningCircleIcon READ warningCircleIcon CONSTANT )
 
     // Images
+    Q_PROPERTY( QUrl loadingIndicatorImage READ loadingIndicatorImage CONSTANT )
     Q_PROPERTY( QUrl acceptInvitationImage READ acceptInvitationImage CONSTANT )
     Q_PROPERTY( QUrl acceptInvitationLogoImage READ acceptInvitationLogoImage CONSTANT )
     Q_PROPERTY( QUrl reachedDataLimitImage READ reachedDataLimitImage CONSTANT )
@@ -410,6 +411,7 @@ class MMStyle: public QObject
     QUrl warningCircleIcon() {return QUrl( "qrc:/WarningCircle.svg" );}
     QUrl editCircleIcon() {return QUrl( "qrc:/EditCircle.svg" );}
 
+    QUrl loadingIndicatorImage() {return QUrl( "qrc:/images/LoadingIndicator.svg" );}
     QUrl mmLogoImage() {return QUrl( "qrc:/images/MMLogo.svg" );}
     QUrl lutraLogoImage() {return QUrl( "qrc:/images/LutraLogo4x.png" );}
     QUrl trackingDirectionImage() {return QUrl( "qrc:/images/TrackingDirection.svg" );}
