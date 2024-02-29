@@ -13,14 +13,14 @@ import QtQuick.Controls
 import "../components"
 import "../inputs"
 
+import lc 1.0
+
 Page {
   id: root
 
-  required property string user
-  required property string workspace
-  required property string workspaceUuid
+  required property MerginInvitation invitation
 
-  property bool haveBack: true
+  property bool haveBack: false
   property bool showCreate: true
 
   signal joinWorkspaceClicked(string workspaceUuid)
@@ -68,20 +68,13 @@ Page {
           id: bg
 
           anchors.horizontalCenter: parent.horizontalCenter
-          source: __style.acceptInvitationImage
-
-          Image {
-            id: fg
-            x: ( bg.width - fg.width ) / 2 + 7
-            y: ( bg.height - fg.height ) / 2 + 5
-            source: __style.acceptInvitationLogoImage
-          }
+          source: __style.positiveMMSymbolImage
         }
       }
 
       Text {
         width: parent.width - 2 * root.hPadding
-        text: qsTr("You have been invited to workspace")
+        text: qsTr("You have been invited to a workspace")
         font: __style.h3
         color: __style.forestColor
         wrapMode: Text.WordWrap
@@ -91,7 +84,7 @@ Page {
 
       Text {
         width: parent.width - 2 * root.hPadding
-        text: qsTr("User %1 has invited you to join his workspace").arg(root.user)
+        text: qsTr("It is better to work together, join the workspace and explore Mergin Maps together!")
         font: __style.p5
         color: __style.nightColor
         wrapMode: Text.WordWrap
@@ -103,7 +96,7 @@ Page {
 
       Text {
         width: parent.width - 2 * root.hPadding
-        text: root.workspace
+        text: root.invitation.workspace
         font: __style.t1
         color: __style.nightColor
         wrapMode: Text.WordWrap
@@ -117,7 +110,7 @@ Page {
         width: parent.width - 2 * root.hPadding
         text: qsTr("Join workspace")
 
-        onClicked: root.joinWorkspaceClicked(root.workspaceUuid)
+        onClicked: root.joinWorkspaceClicked(root.invitation.uuid)
       }
 
       MMHlineText {
@@ -129,6 +122,7 @@ Page {
       Text {
         width: parent.width - 2 * root.hPadding
         text: qsTr("Want to create a new workspace instead? %1Click here%2").arg("<a href='internal-signal'>").arg("</a>")
+        visible: root.showCreate
         font: __style.t3
         color: __style.nightColor
         wrapMode: Text.WordWrap

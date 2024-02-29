@@ -290,6 +290,7 @@ void initDeclarative()
   qmlRegisterType<AttributePreviewController>( "lc", 1, 0, "AttributePreviewController" );
   qmlRegisterType<WorkspacesModel>( "lc", 1, 0, "WorkspacesModel" );
   qmlRegisterType<WorkspacesProxyModel>( "lc", 1, 0, "WorkspacesProxyModel" );
+  qmlRegisterType<MerginInvitation>( "lc", 1, 0, "MerginInvitation" );
   qmlRegisterType<InvitationsModel>( "lc", 1, 0, "InvitationsModel" );
   qmlRegisterType<InvitationsProxyModel>( "lc", 1, 0, "InvitationsProxyModel" );
   qmlRegisterType<ChangelogModel>( "lc", 1, 0, "ChangelogModel" );

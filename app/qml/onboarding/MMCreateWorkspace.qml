@@ -17,6 +17,10 @@ Page {
   id: root
 
   signal createWorkspaceClicked(string name)
+  signal backClicked
+
+  property bool showProgress: true
+  property bool backVisible: false
 
   readonly property real hPadding: width < __style.maxPageWidth
                                    ? 20 * __dp
@@ -35,7 +39,7 @@ Page {
   MMHeader {
     id: header
 
-    backVisible: false
+    backVisible: root.backVisible
 
     onBackClicked: root.backClicked()
 
@@ -54,6 +58,7 @@ Page {
       color: __style.grassColor
       progressColor: __style.forestColor
       position: 1/3
+      visible: root.showProgress
     }
   }
 

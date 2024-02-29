@@ -2488,7 +2488,7 @@ void TestMerginApi::testCreateWorkspace()
   QSignalSpy wsSpy( mApi, &MerginApi::workspaceCreated );
   mApi->createWorkspace( username );
   QVERIFY( wsSpy.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( wsSpy.takeFirst().at( 1 ), true );
+  QCOMPARE( wsSpy.takeFirst().at( 0 ), username );
 
   qDebug() << "CREATED NEW WORKSPACE:" << username;
 

@@ -3859,7 +3859,7 @@ void MerginApi::createWorkspaceReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "create " + workspaceName, QStringLiteral( "Success" ) );
-    emit workspaceCreated( workspaceName, true );
+    emit workspaceCreated( workspaceName );
   }
   else
   {
@@ -3877,7 +3877,6 @@ void MerginApi::createWorkspaceReplyFinished()
     {
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName );
     }
-    emit workspaceCreated( workspaceName, false );
   }
   r->deleteLater();
 }
