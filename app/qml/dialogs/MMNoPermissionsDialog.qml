@@ -16,7 +16,7 @@ MMDrawerDialog {
 
   picture: __style.noPermissionsImage
   bigTitle: qsTr( "No rights to access the project" )
-  description: qsTr( "You are not allowed to synchronize your changes. Contact the Mergin project owner to assign you the correct permission. If you are the project owner, log into Mergin dashboard." )
+  description: qsTr( "You are not allowed to synchronize your changes. Contact the Mergin Maps project owner to assign you the correct permission. If you are the project owner, log into Mergin Maps dashboard." )
   primaryButton: qsTr( "Ok, I understand" )
 
   onPrimaryButtonClicked: {
