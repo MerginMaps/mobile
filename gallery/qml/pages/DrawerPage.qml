@@ -95,6 +95,14 @@ Page {
         noPermissionsDialog.open()
       }
     }
+
+    MMButton {
+      text: "MMNoPermissionsDialog"
+
+      onClicked: {
+        drawer5.open()
+      }
+    }
   }
 
   MMBluetoothConnectionDrawer {
@@ -212,5 +220,9 @@ Page {
 
   MMNoPermissionsDialog {
     id: noPermissionsDialog
+  }
+
+  MMNoPermissionsDialog {
+    id: drawer5
   }
 }
