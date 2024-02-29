@@ -123,5 +123,6 @@
         <file>../app/qml/settings/MMSettingSwitch.qml</file>
         <file>../app/qml/gps/MMBluetoothConnectionDrawer.qml</file>
         <file>../app/qml/dialogs/MMSyncFailedDialog.qml</file>
+        <file>../app/qml/dialogs/MMNoPermissionsDialog.qml</file>
     </qresource>
 </RCC>

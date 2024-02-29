@@ -82,8 +82,17 @@ Page {
 
     MMButton {
       text: "MMSyncFailedDialog"
+
       onClicked: {
         drawer4.open()
+      }
+    }
+
+    MMButton {
+      text: "MMNoPermissionsDialog"
+
+      onClicked: {
+        drawer5.open()
       }
     }
   }
@@ -199,5 +208,9 @@ Page {
 
   MMSyncFailedDialog {
     id: drawer4
+  }
+
+  MMNoPermissionsDialog {
+    id: drawer5
   }
 }

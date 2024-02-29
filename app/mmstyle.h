@@ -182,6 +182,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl uploadImage READ uploadImage CONSTANT )
     Q_PROPERTY( QUrl noMapThemesImage READ noMapThemesImage CONSTANT )
     Q_PROPERTY( QUrl syncFailedImage READ syncFailedImage CONSTANT )
+    Q_PROPERTY( QUrl noPermissionsImage READ noPermissionsImage CONSTANT )
     Q_PROPERTY( QUrl warnLogoImage READ warnLogoImage CONSTANT )
     Q_PROPERTY( QUrl mmLogoImage READ mmLogoImage CONSTANT )
     Q_PROPERTY( QUrl lutraLogoImage READ lutraLogoImage CONSTANT )
@@ -412,6 +413,7 @@ class MMStyle: public QObject
     QUrl uploadImage() {return QUrl( "qrc:/images/UploadImage.svg" );}
     QUrl noMapThemesImage() {return QUrl( "qrc:/images/NoMapThemesImage.svg" );}
     QUrl syncFailedImage() {return QUrl( "qrc:/images/SyncFailed.svg" );}
+    QUrl noPermissionsImage() {return QUrl( "qrc:/images/NoPermissions.svg" );}
     QUrl reachedDataLimitImage() {return QUrl( "qrc:/images/ReachedDataLimit.svg" );}
     QUrl warnLogoImage() {return QUrl( "qrc:/images/WarnLogoImage.svg" );}
     QUrl mapPinImage() {return QUrl( "qrc:/images/MapPin.svg" );}
