@@ -827,7 +827,7 @@ ApplicationWindow {
       id: syncFailedDialog
     }
 
-    MissingAuthDialog {
+    MMMissingAuthDialog {
       id: missingAuthDialog
 
       onSingInRequested: {

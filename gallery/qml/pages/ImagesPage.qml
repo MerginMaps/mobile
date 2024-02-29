@@ -50,6 +50,7 @@ ScrollView {
         Column { Image { source: __style.noWifiImage } Text { text: "noWifiImage" } }
         Column { Image { source: __style.syncFailedImage  } Text { text: "syncFailedImage " } }
         Column { Image { source: __style.noPermissionsImage } Text { text: "noPermissionsImage" } }
+        Column { Image { source: __style.signInImage } Text { text: "signInImage" } }
       }
     }
 

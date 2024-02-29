@@ -7,7 +7,7 @@ set(MM_QML
     components/Symbol.qml
     components/TextWithIcon.qml
     dialogs/MigrateToMerginDialog.qml
-    dialogs/MissingAuthDialog.qml
+    dialogs/MMMissingAuthDialog.qml
     dialogs/MMNoPermissionsDialog.qml
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml

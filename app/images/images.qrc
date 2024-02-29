@@ -35,5 +35,6 @@
         <file>NoWifi.svg</file>
         <file>SyncFailed.svg</file>
         <file>NoPermissions.svg</file>
+        <file>SignIn.svg</file>
     </qresource>
 </RCC>
