@@ -29,6 +29,8 @@ Item {
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp
 
+    property color snappingColor: __style.grapeColor
+
     SnapUtils {
       id: snapUtils
 
@@ -65,7 +67,7 @@ Item {
       height: root.outerSize
       width: height
 
-      source: InputStyle.crosshairBakcgroundIcon
+      source: __style.crosshairBackgroundImage
       sourceSize.width: width
       sourceSize.height: height
     }
@@ -95,7 +97,7 @@ Item {
       height: root.outerSize
       width: height
 
-      source: InputStyle.crosshairForegroundIcon
+      source: __style.crosshairForegroundImage
       sourceSize.width: width
       sourceSize.height: height
     }
@@ -103,7 +105,7 @@ Item {
     ColorOverlay {
       anchors.fill: crosshairForeground
       source: crosshairForeground
-      color: snapUtils.snapped ? "#8a2be2" : __style.forestColor
+      color: snapUtils.snapped ? root.snappingColor : __style.forestColor
     }
 
     Image {
@@ -143,7 +145,7 @@ Item {
       sourceSize.width: width
       sourceSize.height: height
 
-      source: InputStyle.crosshairCenterDotIcon
+      source: __style.crosshairCenterImage
     }
 
     Image {
@@ -193,7 +195,14 @@ Item {
       sourceSize.width: width
       sourceSize.height: height
 
-      source: InputStyle.crosshairCenterPlusIcon
+      source: __style.crosshairPlusImage
+    }
+
+    // TODO - if the source has root.snappingColor we do not need overlay
+    ColorOverlay {
+      anchors.fill: crossCenterPlus
+      source: crossCenterPlus
+      color: root.snappingColor
     }
 
     Image {
@@ -233,7 +242,14 @@ Item {
       sourceSize.width: width
       sourceSize.height: height
 
-      source: InputStyle.crosshairCenterCircleIcon
+      source: __style.crosshairCircleImage
+    }
+
+    // TODO - if the source has root.snappingColor we do not need overlay
+    ColorOverlay {
+      anchors.fill: crossCenterCircle
+      source: crossCenterCircle
+      color: root.snappingColor
     }
 
     Connections {

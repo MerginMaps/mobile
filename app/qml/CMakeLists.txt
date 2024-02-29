@@ -20,7 +20,6 @@ set(MM_QML
     Notification.qml
     NotificationBanner.qml
     ProjectLimitDialog.qml
-    map/Crosshair.qml
     map/Highlight.qml
     map/SplittingTools.qml
     map/StakeoutTools.qml
@@ -132,6 +131,7 @@ set(MM_QML
     map/MapWrapper.qml
     map/MMPositionMarker.qml
     map/RecordingTools.qml
+    map/components/MMCrosshair.qml
     map/components/MMBlurBox.qml
     map/components/MMLoadingIndicator.qml
     map/components/MMMapBlurLabel.qml

@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/images">
+        <file>CrosshairBackground.svg</file>
+        <file>CrosshairCenter.svg</file>
+        <file>CrosshairCircle.svg</file>
+        <file>CrosshairForeground.svg</file>
+        <file>CrosshairPlus.svg</file>
         <file>Direction.svg</file>
         <file>LutraLogo4x.png</file>
         <file>MapPin.svg</file>

@@ -206,6 +206,11 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl streamingBootsImage READ streamingBootsImage CONSTANT )
     Q_PROPERTY( QUrl streamingBootsOrangeImage READ streamingBootsOrangeImage CONSTANT )
     Q_PROPERTY( QUrl noWifiImage READ noWifiImage CONSTANT )
+    Q_PROPERTY( QUrl crosshairBackgroundImage READ crosshairBackgroundImage CONSTANT )
+    Q_PROPERTY( QUrl crosshairCenterImage READ crosshairCenterImage CONSTANT )
+    Q_PROPERTY( QUrl crosshairCircleImage READ crosshairCircleImage CONSTANT )
+    Q_PROPERTY( QUrl crosshairForegroundImage READ crosshairForegroundImage CONSTANT )
+    Q_PROPERTY( QUrl crosshairPlusImage READ crosshairPlusImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -426,6 +431,11 @@ class MMStyle: public QObject
     QUrl streamingBootsImage() {return QUrl( "qrc:/images/StreamingBoots.svg" );}
     QUrl streamingBootsOrangeImage() {return QUrl( "qrc:/images/StreamingBootsOrange.svg" );}
     QUrl noWifiImage() {return QUrl( "qrc:/images/NoWifi.svg" );}
+    QUrl crosshairBackgroundImage() {return QUrl( "qrc:/images/CrosshairBackground.svg" );}
+    QUrl crosshairCenterImage() {return QUrl( "qrc:/images/CrosshairCenter.svg" );}
+    QUrl crosshairCircleImage() {return QUrl( "qrc:/images/CrosshairCircle.svg" );}
+    QUrl crosshairForegroundImage() {return QUrl( "qrc:/images/CrosshairForeground.svg" );}
+    QUrl crosshairPlusImage() {return QUrl( "qrc:/images/CrosshairPlus.svg" );}
 
     static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
     static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}
