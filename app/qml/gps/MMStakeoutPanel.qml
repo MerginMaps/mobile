@@ -266,9 +266,10 @@ Drawer {
             }
 
             // Target X icon
-            Symbol {
-              source: __style.stakeOutDotIcon
-              iconSize: rootShape.height / 12
+            MMIcon {
+              source: __style.closeIcon
+              size: rootShape.height / 12
+              color: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.lightGreenColor
               x: rootShape.centerX - width / 2
               y: rootShape.centerY - height / 2
             }
