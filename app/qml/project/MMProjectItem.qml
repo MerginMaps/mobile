@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import "../components"
+
 import notificationType 1.0
 
 Rectangle {

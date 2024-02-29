@@ -13,6 +13,8 @@ set(MM_QML
     dialogs/SyncFailedDialog.qml
     dialogs/MMCloseAccountDialog.qml
     dialogs/MMStreamingModeDialog.qml
+    dialogs/MMRemoveProjectDialog.qml
+    dialogs/MMDownloadProjectDialog.qml
     Banner.qml
     InputStyle.qml
     Notification.qml
@@ -50,7 +52,6 @@ set(MM_QML
     components/MMNotificationView.qml
     components/MMPhoto.qml
     components/MMProgressBar.qml
-    components/MMProjectItem.qml
     components/MMRadioButton.qml
     components/MMRoundLinkButton.qml
     components/MMShadow.qml
@@ -82,6 +83,7 @@ set(MM_QML
     onboarding/MMCreateWorkspaceController.qml
     onboarding/MMAcceptInvitationController.qml
     project/MMProjectList.qml
+    project/MMProjectItem.qml
     project/MMProjectListPage.qml
     project/MMProjectPanel.qml
     project/MMProjectLoadingScreen.qml

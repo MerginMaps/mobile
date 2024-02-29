@@ -204,6 +204,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl attentionImage READ attentionImage CONSTANT )
     Q_PROPERTY( QUrl bubbleImage READ bubbleImage CONSTANT )
     Q_PROPERTY( QUrl streamingBootsImage READ streamingBootsImage CONSTANT )
+    Q_PROPERTY( QUrl noWifiImage READ noWifiImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -422,7 +423,7 @@ class MMStyle: public QObject
     QUrl attentionImage() {return QUrl( "qrc:/images/Attention.svg" );}
     QUrl bubbleImage() {return QUrl( "qrc:/images/Bubble.svg" );}
     QUrl streamingBootsImage() {return QUrl( "qrc:/images/StreamingBoots.svg" );}
-
+    QUrl noWifiImage() {return QUrl( "qrc:/images/NoWifi.svg" );}
 
     static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
     static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}
