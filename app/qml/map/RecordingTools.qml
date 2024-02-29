@@ -12,7 +12,7 @@ import QtQuick.Shapes
 import Input 0.1
 import lc 1.0
 import "../components"
-
+import "./components"
 import "../"
 
 /**
@@ -177,7 +177,7 @@ Item {
     accuracyRingSize: positionMarkerComponent.accuracyRingSize
   }
 
-  Crosshair {
+  MMCrosshair {
     id: crosshair
 
     anchors.fill: parent

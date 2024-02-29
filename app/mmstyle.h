@@ -79,6 +79,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor nightAlphaColor READ nightAlphaColor CONSTANT ) // placeholder input color
     Q_PROPERTY( QColor errorBgInputColor READ errorBgInputColor CONSTANT ) // error bg input color
     Q_PROPERTY( QColor shadowColor READ shadowColor CONSTANT )
+    Q_PROPERTY( QColor snappingColor READ snappingColor CONSTANT )
 
     // Icons
     Q_PROPERTY( QUrl linkIcon READ linkIcon CONSTANT )
@@ -208,6 +209,11 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl streamingBootsImage READ streamingBootsImage CONSTANT )
     Q_PROPERTY( QUrl streamingBootsOrangeImage READ streamingBootsOrangeImage CONSTANT )
     Q_PROPERTY( QUrl noWifiImage READ noWifiImage CONSTANT )
+    Q_PROPERTY( QUrl crosshairBackgroundImage READ crosshairBackgroundImage CONSTANT )
+    Q_PROPERTY( QUrl crosshairCenterImage READ crosshairCenterImage CONSTANT )
+    Q_PROPERTY( QUrl crosshairCircleImage READ crosshairCircleImage CONSTANT )
+    Q_PROPERTY( QUrl crosshairForegroundImage READ crosshairForegroundImage CONSTANT )
+    Q_PROPERTY( QUrl crosshairPlusImage READ crosshairPlusImage CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -310,6 +316,7 @@ class MMStyle: public QObject
     QColor nightAlphaColor() {return QColor::fromString( "#AA12181F" );}
     QColor errorBgInputColor() {return QColor::fromString( "#FEFAF9" );}
     QColor shadowColor() {return QColor::fromString( "#66777777" );}
+    QColor snappingColor() {return QColor::fromString( "#BD74FF" );}
 
     QUrl splitGeometryIcon() {return QUrl( "qrc:/SplitGeometry.svg" );}
     QUrl streamingIcon() {return QUrl( "qrc:/Streaming.svg" );}
@@ -430,6 +437,11 @@ class MMStyle: public QObject
     QUrl streamingBootsImage() {return QUrl( "qrc:/images/StreamingBoots.svg" );}
     QUrl streamingBootsOrangeImage() {return QUrl( "qrc:/images/StreamingBootsOrange.svg" );}
     QUrl noWifiImage() {return QUrl( "qrc:/images/NoWifi.svg" );}
+    QUrl crosshairBackgroundImage() {return QUrl( "qrc:/images/CrosshairBackground.svg" );}
+    QUrl crosshairCenterImage() {return QUrl( "qrc:/images/CrosshairCenter.svg" );}
+    QUrl crosshairCircleImage() {return QUrl( "qrc:/images/CrosshairCircle.svg" );}
+    QUrl crosshairForegroundImage() {return QUrl( "qrc:/images/CrosshairForeground.svg" );}
+    QUrl crosshairPlusImage() {return QUrl( "qrc:/images/CrosshairPlus.svg" );}
 
     static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
     static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}

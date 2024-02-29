@@ -98,6 +98,28 @@ ScrollView {
     }
 
     GroupBox {
+      title: "Crosshair components for MMCrosshair"
+      background: Rectangle {
+        color: __style.lightGreenColor
+        border.color: "gray"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      contentData: Column {
+        spacing: 10
+        Column { Image { source: __style.crosshairBackgroundImage } Text { text: "crosshairBackgroundImage" } }
+        Column { Image { source: __style.crosshairCenterImage } Text { text: "crosshairCenterImage" } }
+        Column { Image { source: __style.crosshairCircleImage } Text { text: "crosshairCircleImage" } }
+        Column { Image { source: __style.crosshairForegroundImage } Text { text: "crosshairForegroundImage" } }
+        Column { Image { source: __style.crosshairPlusImage } Text { text: "crosshairPlusImage" } }
+      }
+    }
+
+    GroupBox {
       title: "Layers (QGIS)"
       background: Rectangle {
         color: __style.lightGreenColor

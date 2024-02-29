@@ -65,7 +65,7 @@ Item {
       height: root.outerSize
       width: height
 
-      source: InputStyle.crosshairBakcgroundIcon
+      source: __style.crosshairBackgroundImage
       sourceSize.width: width
       sourceSize.height: height
     }
@@ -95,7 +95,7 @@ Item {
       height: root.outerSize
       width: height
 
-      source: InputStyle.crosshairForegroundIcon
+      source: __style.crosshairForegroundImage
       sourceSize.width: width
       sourceSize.height: height
     }
@@ -103,11 +103,11 @@ Item {
     ColorOverlay {
       anchors.fill: crosshairForeground
       source: crosshairForeground
-      color: snapUtils.snapped ? "#8a2be2" : __style.forestColor
+      color: snapUtils.snapped ? __style.snappingColor : __style.forestColor
     }
 
     Image {
-      id: crossCenterDot // Center dot - visible when not snapped
+      id: crossCenterDot // Center dot - visible when not snapped (green)
 
       x: root.screenPoint.x - width / 2
       y: root.screenPoint.y - height / 2
@@ -143,11 +143,11 @@ Item {
       sourceSize.width: width
       sourceSize.height: height
 
-      source: InputStyle.crosshairCenterDotIcon
+      source: __style.crosshairCenterImage
     }
 
     Image {
-      id: crossCenterPlus // Center dot - visible when not snapped
+      id: crossCenterPlus // Center plus - visible when not snapped (purple)
 
       x: root.screenPoint.x - width / 2
       y: root.screenPoint.y - height / 2
@@ -193,11 +193,12 @@ Item {
       sourceSize.width: width
       sourceSize.height: height
 
-      source: InputStyle.crosshairCenterPlusIcon
+      // Important: must be same color as __style.snappingColor
+      source: __style.crosshairPlusImage
     }
 
     Image {
-      id: crossCenterCircle // Center circle - visible when snapped to segment
+      id: crossCenterCircle // Center circle - visible when snapped to segment (purple)
 
       x: root.screenPoint.x - width / 2
       y: root.screenPoint.y - height / 2
@@ -233,7 +234,8 @@ Item {
       sourceSize.width: width
       sourceSize.height: height
 
-      source: InputStyle.crosshairCenterCircleIcon
+      // Important: must be same color as __style.snappingColor
+      source: __style.crosshairCircleImage
     }
 
     Connections {
