@@ -17,8 +17,8 @@ MMDrawerDialog {
   signal migrationRequested()
 
   picture: __style.positiveMMSymbolImage
-  bigTitle: qsTr( "Upload project to Mergin?" )
-  description: qsTr( "This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration." )
+  bigTitle: qsTr( "Upload project?" )
+  description: qsTr( "This project is currently not uploaded on cloud. Upload it in order to activate synchronization and collaboration." )
   primaryButton: qsTr( "Yes, I want to upload it" )
   secondaryButton: qsTr( "No, thanks" )
 
