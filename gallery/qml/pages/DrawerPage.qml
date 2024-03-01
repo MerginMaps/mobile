@@ -22,46 +22,89 @@ import lc 1.0
 Page {
   id: pane
 
-  Column {
-    width: parent.width
-    spacing: 10
-    padding: 10
+  ScrollView {
+    anchors.fill: parent
 
-    Label {
-      text: "Drawers"
-    }
+    Column {
+      width: parent.width
+      spacing: 10
+      padding: 10
 
-    MMButton {
-      text: "Position Tracking"
-      onClicked: drawerPositionTracking.open()
-    }
+      Label {
+        text: "Drawers"
+      }
 
-    MMButton {
-      text: "Upload"
-      onClicked: drawer1.open()
-    }
+      MMButton {
+        text: "Position Tracking"
+        onClicked: drawerPositionTracking.open()
+      }
 
-    MMButton {
-      text: "MMStorageLimitDialog"
-      onClicked: storageLimitDialog.open()
-    }
+      MMButton {
+        text: "Upload"
+        onClicked: drawer1.open()
+      }
 
-    MMButton {
-      text: "MMCloseAccountDialog"
-      onClicked: closeAccountDialog.open()
-    }
+      MMButton {
+        text: "MMStorageLimitDialog"
+        onClicked: storageLimitDialog.open()
+      }
 
-    MMButton {
-      text: "Synchronization Failed"
-      onClicked: drawer3.open()
-    }
+      MMButton {
+        text: "MMCloseAccountDialog"
+        onClicked: closeAccountDialog.open()
+      }
 
-    MMButton {
-      text: "MMBluetoothConnectionDrawer"
-      onClicked: {
-        bluetoothConnectionDrawer.positionProvider.state = PositionProvider.Connecting
-        bluetoothConnectionTimer.start()
-        bluetoothConnectionDrawer.open()
+      MMButton {
+        text: "MMRemoveProjectDialog"
+        onClicked: removeProjectDialog.open()
+      }
+
+      MMButton {
+        text: "MMDownloadProjectDialog"
+        onClicked: downloadProjectDialog.open()
+      }
+
+      MMButton {
+        text: "Synchronization Failed"
+        onClicked: drawer3.open()
+      }
+
+      MMButton {
+        text: "MMStreamingModeDialog"
+        onClicked: streamingModeDialog.open()
+      }
+
+      MMButton {
+        text: "MMBluetoothConnectionDrawer"
+        onClicked: {
+          bluetoothConnectionDrawer.positionProvider.state = PositionProvider.Connecting
+          bluetoothConnectionTimer.start()
+          bluetoothConnectionDrawer.open()
+        }
+      }
+
+      MMButton {
+        text: "MMSyncFailedDialog"
+
+        onClicked: {
+          syncFailedDialog.open()
+        }
+      }
+
+      MMButton {
+        text: "MMNoPermissionsDialog"
+
+        onClicked: {
+          noPermissionsDialog.open()
+        }
+      }
+
+      MMButton {
+        text: "MMMissingAuthDialog"
+
+        onClicked: {
+          missingAuthDialog.open()
+        }
       }
     }
   }
@@ -95,10 +138,36 @@ Page {
     }
   }
 
+  MMStreamingModeDialog {
+    id: streamingModeDialog
+
+    streamingActive: false
+
+    onStreamingBtnClicked: {
+      streamingActive = !streamingActive
+    }
+  }
+
   MMCloseAccountDialog {
     id: closeAccountDialog
 
     username: "Superman"
+  }
+
+  MMRemoveProjectDialog {
+    id: removeProjectDialog
+
+    relatedProjectId: "Cool Project"
+
+    onRemoveClicked: console.log("on remove clicked")
+  }
+
+  MMDownloadProjectDialog {
+    id: downloadProjectDialog
+
+    relatedProjectId: "Best Project"
+
+    onDownloadClicked: console.log("on download clicked")
   }
 
   MMPositionTrackingDrawer {
@@ -147,5 +216,17 @@ Page {
 
     onPrimaryButtonClicked: close()
     onSecondaryButtonClicked: close()
+  }
+
+  MMSyncFailedDialog {
+    id: syncFailedDialog
+  }
+
+  MMNoPermissionsDialog {
+    id: noPermissionsDialog
+  }
+
+  MMMissingAuthDialog {
+    id: missingAuthDialog
   }
 }

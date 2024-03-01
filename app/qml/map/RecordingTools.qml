@@ -12,7 +12,7 @@ import QtQuick.Shapes
 import Input 0.1
 import lc 1.0
 import "../components"
-
+import "./components"
 import "../"
 
 /**
@@ -32,6 +32,21 @@ Item {
 
   signal canceled()
   signal done( var featureLayerPair )
+
+  function toggleStreaming() {
+    if (  recordingMapTool.recordingType === RecordingMapTool.Manual )
+    {
+      recordingMapTool.recordingType = RecordingMapTool.StreamMode
+
+      // add first point immediately
+      recordingMapTool.addPoint( crosshair.recordPoint )
+      root.map.mapSettings.setCenter( mapPositionSource.mapPosition )
+    }
+    else
+    {
+      recordingMapTool.recordingType = RecordingMapTool.Manual
+    }
+  }
 
   RecordingMapTool {
     id: mapTool
@@ -162,7 +177,7 @@ Item {
     accuracyRingSize: positionMarkerComponent.accuracyRingSize
   }
 
-  Crosshair {
+  MMCrosshair {
     id: crosshair
 
     anchors.fill: parent

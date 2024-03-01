@@ -24,9 +24,12 @@
         <file>qml/pages/CalendarPage.qml</file>
         <file>qml/pages/FormPage.qml</file>
         <file>qml/pages/InputsPage.qml</file>
+        <file>../app/qml/dialogs/MMStreamingModeDialog.qml</file>
         <file>../app/qml/dialogs/MMPositionTrackingDrawer.qml</file>
         <file>../app/qml/dialogs/MMStorageLimitDialog.qml</file>
         <file>../app/qml/dialogs/MMCloseAccountDialog.qml</file>
+        <file>../app/qml/dialogs/MMRemoveProjectDialog.qml</file>
+        <file>../app/qml/dialogs/MMDownloadProjectDialog.qml</file>
         <file>../app/qml/components/MMButton.qml</file>
         <file>../app/qml/components/MMLinkButton.qml</file>
         <file>../app/qml/components/MMIcon.qml</file>
@@ -40,9 +43,7 @@
         <file>../app/qml/components/MMNotificationView.qml</file>
         <file>../app/qml/components/MMDrawerDialog.qml</file>
         <file>../app/qml/components/MMProgressBar.qml</file>
-        <file>../app/qml/components/MMMapButton.qml</file>
         <file>../app/qml/components/MMShadow.qml</file>
-        <file>../app/qml/components/MMMapLabel.qml</file>
         <file>../app/qml/components/MMToolbarButton.qml</file>
         <file>../app/qml/components/MMToolbar.qml</file>
         <file>../app/qml/components/MMMenuDrawer.qml</file>
@@ -50,7 +51,6 @@
         <file>../app/qml/components/MMToolbarLongButton.qml</file>
         <file>../app/qml/components/MMListDrawer.qml</file>
         <file>../app/qml/components/MMListDrawerItem.qml</file>
-        <file>../app/qml/components/MMProjectItem.qml</file>
         <file>../app/qml/components/MMMorePhoto.qml</file>
         <file>../app/qml/components/MMPhoto.qml</file>
         <file>../app/qml/components/MMCheckBox.qml</file>
@@ -70,7 +70,6 @@
         <file>../app/qml/components/calendar/MMTimeTumbler.qml</file>
         <file>../app/qml/components/calendar/MMDateTumbler.qml</file>
         <file>../app/qml/components/MMDropdownDrawer.qml</file>
-        <file>../app/qml/components/MMMapBlurLabel.qml</file>
         <file>../app/qml/components/MMCodeScanner.qml</file>
         <file>../app/qml/components/MMFeaturesListDrawer.qml</file>
         <file>../app/qml/components/MMFeaturesListDrawer.qml</file>
@@ -79,6 +78,7 @@
         <file>../app/qml/components/MMPageHeader.qml</file>
         <file>../app/qml/components/MMDrawer.qml</file>
         <file>../app/qml/components/MMDrawerHeader.qml</file>
+        <file>../app/qml/components/MMLoadingSpinner.qml</file>
         <file>../app/qml/account/MMAcountPage.qml</file>
         <file>../app/qml/account/MMAcountPageItem.qml</file>
         <file>../app/qml/inputs/MMBaseInput.qml</file>
@@ -109,9 +109,16 @@
         <file>../app/qml/onboarding/MMSignUp.qml</file>
         <file>../app/qml/onboarding/MMWhichIndustry.qml</file>
         <file>../app/qml/map/MMPositionMarker.qml</file>
-        <file>../app/qml/map/MMMapScaleBar.qml</file>
+        <file>../app/qml/map/components/MMBlurBox.qml</file>
+        <file>../app/qml/map/components/MMLoadingIndicator.qml</file>
+        <file>../app/qml/map/components/MMMapBlurLabel.qml</file>
+        <file>../app/qml/map/components/MMMapButton.qml</file>
+        <file>../app/qml/map/components/MMMapLabel.qml</file>
+        <file>../app/qml/map/components/MMMapPicker.qml</file>
+        <file>../app/qml/map/components/MMMapScaleBar.qml</file>
         <file>../app/qml/project/MMProjectLoadingScreen.qml</file>
         <file>../app/qml/project/MMProjectIssuesPanel.qml</file>
+        <file>../app/qml/project/MMProjectItem.qml</file>
         <file>../app/qml/settings/MMLogPanel.qml</file>
         <file>../app/qml/settings/MMAboutPanel.qml</file>
         <file>../app/qml/settings/MMChangelogPanel.qml</file>
@@ -121,5 +128,8 @@
         <file>../app/qml/settings/MMSettingDropdown.qml</file>
         <file>../app/qml/settings/MMSettingSwitch.qml</file>
         <file>../app/qml/gps/MMBluetoothConnectionDrawer.qml</file>
-  </qresource>
+        <file>../app/qml/dialogs/MMSyncFailedDialog.qml</file>
+        <file>../app/qml/dialogs/MMNoPermissionsDialog.qml</file>
+        <file>../app/qml/dialogs/MMMissingAuthDialog.qml</file>
+    </qresource>
 </RCC>

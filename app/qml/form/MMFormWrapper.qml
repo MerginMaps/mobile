@@ -40,8 +40,6 @@ Item {
 
   signal closed()
   signal editGeometry( var pair )
-  signal splitGeometry( var pair )
-  signal redrawGeometry( var pair )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var targetLayer, var parentPair )
   signal stakeoutFeature( var feature )
@@ -194,16 +192,6 @@ Item {
       onEditGeometryRequested: function( pair ) {
         root.panelState = "hidden"
         root.editGeometry( pair )
-      }
-
-      onRedrawGeometryRequested: function( pair ) {
-        root.panelState = "hidden"
-        root.redrawGeometry( pair )
-      }
-
-      onSplitGeometryRequested: {
-        root.panelState = "hidden"
-        root.splitGeometry( root.featureLayerPair )
       }
 
       onOpenLinkedFeature: function( linkedFeature ) {

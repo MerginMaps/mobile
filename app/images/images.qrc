@@ -1,7 +1,11 @@
 <RCC>
     <qresource prefix="/images">
-        <file>AcceptInvitationImage.svg</file>
-        <file>AcceptInvitationLogoImage.svg</file>
+        <file>LoadingIndicator.svg</file>
+        <file>CrosshairBackground.svg</file>
+        <file>CrosshairCenter.svg</file>
+        <file>CrosshairCircle.svg</file>
+        <file>CrosshairForeground.svg</file>
+        <file>CrosshairPlus.svg</file>
         <file>Direction.svg</file>
         <file>LutraLogo4x.png</file>
         <file>MapPin.svg</file>
@@ -27,5 +31,11 @@
         <file>CloseAccount.svg</file>
         <file>Attention.svg</file>
         <file>Bubble.svg</file>
+        <file>StreamingBoots.svg</file>
+        <file>StreamingBootsOrange.svg</file>
+        <file>NoWifi.svg</file>
+        <file>SyncFailed.svg</file>
+        <file>NoPermissions.svg</file>
+        <file>SignIn.svg</file>
     </qresource>
 </RCC>

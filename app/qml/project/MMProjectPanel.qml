@@ -651,8 +651,7 @@ Item {
         root.forceActiveFocus()
       }
       else {
-        // log out - reenable openInvitationsListener
-        acceptInvitationController.showInvitationList = true
+        // logged out
       }
     }
 

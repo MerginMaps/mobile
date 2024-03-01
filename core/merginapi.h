@@ -639,7 +639,7 @@ class MerginApi: public QObject
     void processInvitationFailed();
     void processInvitationFinished( bool accepted );
 
-    void workspaceCreated( const QString &workspaceName, bool result );
+    void workspaceCreated( const QString &workspaceName );
     void userInfoReplyFinished();
     void getWorkspaceInfoFinished();
 

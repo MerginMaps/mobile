@@ -28,12 +28,10 @@ Item {
 
   Connections {
     target: __merginApi
-    enabled: controller.enabled
+    enabled: controller.enabled && stackView.currentItem.objectName === "createWorkspaceDirectPanel"
 
-    function onWorkspaceCreated(workspace, result) {
-      if (result) {
-        stackView.pop("createWorkspaceDirectPanel")
-      }
+    function onWorkspaceCreated(workspace) {
+      stackView.pop()
     }
   }
 
@@ -44,10 +42,14 @@ Item {
       id: createWorkspacePanel
 
       objectName: "createWorkspaceDirectPanel"
+      showProgress: false
+      backVisible: true
 
       onCreateWorkspaceClicked: function (workspaceName) {
         __merginApi.createWorkspace(workspaceName)
       }
+
+      onBackClicked: stackView.pop()
     }
   }
 }

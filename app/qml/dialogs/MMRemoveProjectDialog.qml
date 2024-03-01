@@ -8,27 +8,31 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQuick.Controls
 
-import ".."
+import "../components"
+import "../inputs"
 
-Symbol {
+MMDrawerDialog {
   id: root
 
-  property bool running: false
-  property int speed: 800
+  property string relatedProjectId: ""
 
-  visible: running
-  source: InputStyle.loadingIndicatorIcon
+  signal removeClicked()
 
-  RotationAnimation {
-    target: root
+  picture: __style.negativeMMSymbolImage
+  bigTitle: qsTr( "Remove project" )
+  description: qsTr( "Any unsynchronized changes will be lost in project \n %1" ).arg( relatedProjectId )
+  primaryButton: qsTr("Remove")
+  secondaryButton: qsTr("Cancel")
 
-    from: 0
-    to: 360
+  onPrimaryButtonClicked: {
+    removeClicked()
+    close()
+  }
 
-    duration: root.speed
-
-    running: root.running
-    loops: Animation.Infinite
+  onSecondaryButtonClicked: {
+    root.relatedProjectId = ""
+    close()
   }
 }

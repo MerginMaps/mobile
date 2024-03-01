@@ -16,6 +16,7 @@ import lc 1.0
 
 import "../"
 import "../components"
+import "./components"
 
 /**
   * SplittingTools is a set of tools that are used during recording/editing of a geometry.
@@ -71,7 +72,7 @@ Item {
     geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
   }
 
-  Crosshair {
+  MMCrosshair {
     id: crosshair
 
     anchors.fill: parent
@@ -101,7 +102,7 @@ Item {
 
       MMToolbarButton {
         text: qsTr( "Done" )
-        iconSource: __style.done2Icon
+        iconSource: __style.doneCircleIcon
         onClicked: {
           if ( mapTool.hasValidGeometry() )
           {

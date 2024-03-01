@@ -16,6 +16,7 @@ import QtPositioning
 import "../../app/qml/components"
 import "../../app/qml/map"
 import "../../app/qml/"
+import "../../app/qml/map/components"
 
 Page {
   id: pane

@@ -42,8 +42,6 @@ Page {
    */
   signal createLinkedFeature( var parentController, var relation )
 
-  signal splitGeometryRequested()
-  signal redrawGeometryRequested( var layerPair )
   signal editGeometryRequested( var layerPair )
 
   /**
@@ -181,7 +179,7 @@ Page {
 
   footer: MMToolbar {
 
-//    TODO: visible: !root.layerIsReadOnly
+    visible: root.state !== "readOnly"
 
     maxButtonsInToolbar: 3
 
@@ -191,7 +189,8 @@ Page {
       MMToolbarLongButton {
         text: qsTr( "Edit feature" );
 
-        iconSource: __style.editIcon;
+        iconSource: __style.editCircleIcon
+        iconColor: __style.forestColor
 
         onClicked: {
           root.state = "edit"
@@ -212,18 +211,6 @@ Page {
         text: qsTr( "Edit geometry" )
         iconSource: __style.editIcon
         onClicked: root.editGeometryRequested( root.controller.featureLayerPair )
-      }
-
-      MMToolbarButton {
-        text: qsTr( "Redraw geometry" )
-        iconSource: __style.editIcon
-        onClicked: root.redrawGeometryRequested( root.controller.featureLayerPair )
-      }
-
-      MMToolbarButton {
-        text: qsTr( "Split geometry" )
-        iconSource: __style.editIcon
-        onClicked: root.splitGeometryRequested()
       }
     }
 

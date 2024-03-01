@@ -1,35 +1,30 @@
 set(MM_QML
-    banners/AutoHideBanner.qml
     components/DelegateButton.qml
-    components/ExtendedMenuItem.qml
-    components/LoadingSpinner.qml
-    components/PanelHeader.qml
     components/RichTextBlock.qml
-    components/SearchBoxV2.qml
     components/Shadow.qml
     components/SimpleTextWithIcon.qml
     components/Symbol.qml
-    components/TextHyperlink.qml
-    components/TextRowWithTitle.qml
     components/TextWithIcon.qml
     components/MMPage.qml
     components/MMPageHeader.qml
     components/MMDrawer.qml
     components/MMDrawerHeader.qml
     dialogs/MigrateToMerginDialog.qml
-    dialogs/MissingAuthDialog.qml
-    dialogs/NoPermissionsDialog.qml
+    dialogs/MMMissingAuthDialog.qml
+    dialogs/MMNoPermissionsDialog.qml
     dialogs/SplittingFailedDialog.qml
     dialogs/SyncFailedDialog.qml
+    dialogs/MMSyncFailedDialog.qml
     dialogs/MMCloseAccountDialog.qml
+    dialogs/MMStreamingModeDialog.qml
+    dialogs/MMRemoveProjectDialog.qml
+    dialogs/MMDownloadProjectDialog.qml
     Banner.qml
     InputStyle.qml
     Notification.qml
     NotificationBanner.qml
     ProjectLimitDialog.qml
-    map/Crosshair.qml
     map/Highlight.qml
-    map/LoadingIndicator.qml
     map/SplittingTools.qml
     map/StakeoutTools.qml
     misc/AttentionBanner.qml
@@ -50,19 +45,16 @@ set(MM_QML
     components/MMIconCheckBoxVertical.qml
     components/MMLink.qml
     components/MMLinkButton.qml
+    components/MMLoadingSpinner.qml
     components/MMFeaturesListDrawer.qml
     components/MMListDrawer.qml
     components/MMListDrawerItem.qml
-    components/MMMapButton.qml
-    components/MMMapLabel.qml
-    components/MMMapPicker.qml
     components/MMMenuDrawer.qml
     components/MMMorePhoto.qml
     components/MMNotification.qml
     components/MMNotificationView.qml
     components/MMPhoto.qml
     components/MMProgressBar.qml
-    components/MMProjectItem.qml
     components/MMRadioButton.qml
     components/MMRoundLinkButton.qml
     components/MMShadow.qml
@@ -94,6 +86,7 @@ set(MM_QML
     onboarding/MMCreateWorkspaceController.qml
     onboarding/MMAcceptInvitationController.qml
     project/MMProjectList.qml
+    project/MMProjectItem.qml
     project/MMProjectListPage.qml
     project/MMProjectPanel.qml
     project/MMProjectLoadingScreen.qml
@@ -142,7 +135,14 @@ set(MM_QML
     map/MapWrapper.qml
     map/MMPositionMarker.qml
     map/RecordingTools.qml
-    map/MMMapScaleBar.qml
+    map/components/MMCrosshair.qml
+    map/components/MMBlurBox.qml
+    map/components/MMLoadingIndicator.qml
+    map/components/MMMapBlurLabel.qml
+    map/components/MMMapButton.qml
+    map/components/MMMapLabel.qml
+    map/components/MMMapPicker.qml
+    map/components/MMMapScaleBar.qml
     gps/MMAddPositionProviderDrawer.qml
     gps/MMBluetoothConnectionDrawer.qml
     gps/MMGpsDataDrawer.qml

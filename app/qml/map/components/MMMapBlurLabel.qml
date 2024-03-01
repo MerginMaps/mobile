@@ -8,22 +8,38 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import ".."  // import InputStyle singleton
 
-Text {
-    width: parent.width
+import "."
+
+MMBlurBox {
+  id: root
+
+  required property string text
+
+  function show() {
+    root.visible = true
+  }
+
+  function hide() {
+    root.visible = false
+  }
+
+  height: __style.row40
+  timerInterval: 10000
+  fadeOutDuration: 1000
+
+  // Text
+  Text {
     height: parent.height
-    color: InputStyle.fontColor
-    onLinkActivated: function( link ) {
-      Qt.openUrlExternally(link)
-    }
-    textFormat: Text.StyledText
-    wrapMode: Text.WordWrap
-    font.pixelSize: InputStyle.fontPixelSizeNormal
-    font.bold: true
-    horizontalAlignment: Qt.AlignHCenter
-    verticalAlignment: Qt.AlignVCenter
-    text: "(no-text)"
-    linkColor: InputStyle.highlightColor
+    width: parent.width - 2 * __style.pageMargins
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.horizontalCenter: parent.horizontalCenter
+
+    color: __style.forestColor
+    text: root.text
+    font: __style.t3
+    horizontalAlignment: Text.AlignHCenter
+    verticalAlignment: Text.AlignVCenter
+    elide: Text.ElideRight
+  }
 }

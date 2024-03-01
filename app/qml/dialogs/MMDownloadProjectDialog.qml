@@ -8,31 +8,31 @@
  ***************************************************************************/
 
 import QtQuick
-import ".."
+import QtQuick.Controls
 
-Banner {
+import "../components"
+import "../inputs"
+
+MMDrawerDialog {
   id: root
 
-  property int visibleInterval: 3000 // [ms]
+  property string relatedProjectId: ""
 
-  function show()
-  {
-    hideTimer.interval = root.visibleInterval
-    hideTimer.start()
+  signal downloadClicked()
+
+  picture: __style.positiveMMSymbolImage
+  bigTitle: qsTr( "Download project" )
+  description: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
+  primaryButton: qsTr("Download")
+  secondaryButton: qsTr("Cancel")
+
+  onPrimaryButtonClicked: {
+    downloadClicked()
+    close()
   }
 
-  function hide()
-  {
-    hideTimer.stop()
-  }
-
-  showBanner: hideTimer.running
-
-  Timer {
-    id: hideTimer
-
-    interval: 3000
-    running: false
-    repeat: false
+  onSecondaryButtonClicked: {
+    root.relatedProjectId = ""
+    close()
   }
 }

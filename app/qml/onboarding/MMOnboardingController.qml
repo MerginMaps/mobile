@@ -19,6 +19,7 @@ Item {
   required property var stackView
 
   property bool inProgress: false
+  property MerginInvitation invitation
 
   QtObject {
     //! Data to send to postRegister endpoint
@@ -48,23 +49,12 @@ Item {
 
   Connections {
     target: __merginApi
-    enabled: controller.enabled
+    enabled: controller.inProgress
 
     function onRegistrationFailed( msg, field ) {
       stackView.pending = false
       if ( stackView.currentItem.objectName === "signUpPanel" ) {
         stackView.currentItem.showErrorMessage(msg, field)
-      }
-    }
-
-    function onRegistrationSucceeded() {
-      stackView.pending = false
-      stackView.push(createWorkspaceComponent)
-    }
-
-    function onWorkspaceCreated(workspace, result) {
-      if (result) {
-        stackView.push(howYouFoundUsComponent)
       }
     }
   }
@@ -169,6 +159,30 @@ Item {
           postRegisterData.wantNewsletter = newsletterSubscribe
         }
       }
+
+      Connections {
+        target: __merginApi
+        enabled: stackView.currentItem.objectName === "signUpPanel"
+
+        function onRegistrationSucceeded() {
+          // Nothing to do yet, user info data are not yet updated
+          // we need to act after userInfoReplyFinished
+          stackView.pending = true
+        }
+
+        function onUserInfoReplyFinished() {
+          if ( controller.inProgress )
+          {
+            stackView.pending = false
+            if ( __merginApi.userInfo.hasInvitations ) {
+              controller.invitation = __merginApi.userInfo.invitations()[0]
+              stackView.push( acceptInvitationsPanelComponent )
+            } else {
+              stackView.push( createWorkspaceComponent )
+            }
+          }
+        }
+      }
     }
   }
 
@@ -182,17 +196,26 @@ Item {
       onCreateWorkspaceClicked: function (workspaceName) {
         __merginApi.createWorkspace(workspaceName)
       }
+
+      Connections {
+        target: __merginApi
+        enabled: stackView.currentItem.objectName === "createWorkspacePanel"
+
+        function onWorkspaceCreated(workspace) {
+          stackView.push(howYouFoundUsComponent)
+        }
+      }
     }
   }
 
   Component {
-    // TODO -- open and test!
     id: acceptInvitationsPanelComponent
 
     MMAcceptInvitation {
       objectName: "acceptInvitationsPanel"
       haveBack: false
       showCreate: true
+      invitation: controller.invitation
 
       onJoinWorkspaceClicked: function (workspaceUuid) {
         __merginApi.processInvitation( workspaceUuid, true )

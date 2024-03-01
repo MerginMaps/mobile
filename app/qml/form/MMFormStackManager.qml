@@ -55,8 +55,6 @@ Item {
 
   signal closed()
   signal editGeometryRequested( var pair )
-  signal splitGeometryRequested( var pair )
-  signal redrawGeometryRequested( var pair )
   signal createLinkedFeatureRequested( var targetLayer, var parentPair )
   signal stakeoutFeature( var feature );
 
@@ -293,12 +291,6 @@ Item {
       }
       onEditGeometry: function( pair ) {
         root.editGeometryRequested( pair )
-      }
-      onSplitGeometry: function( pair ) {
-        root.splitGeometryRequested( pair )
-      }
-      onRedrawGeometry: function( pair ) {
-        root.redrawGeometryRequested( pair )
       }
       onOpenLinkedFeature: function( linkedFeature ) {
         root.openLinkedFeature( linkedFeature )

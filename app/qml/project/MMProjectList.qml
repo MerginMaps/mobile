@@ -14,7 +14,7 @@ import QtQuick.Layouts
 import lc 1.0
 
 import "../components"
-import "../"
+import "../dialogs"
 import "."
 
 Item {
@@ -66,7 +66,7 @@ Item {
     clip: true
     spacing: root.spacing
 
-    maximumFlickVelocity: __androidUtils.isAndroid ? InputStyle.scrollVelocityAndroid : maximumFlickVelocity
+    maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
 
     // Proxy model with source projects model
     model: ProjectsProxyModel {
@@ -87,7 +87,6 @@ Item {
       id: projectDelegate
 
       width: ListView.view.width
-      height: InputStyle.projectItemHeight
 
       projectDisplayName: root.projectModelType === ProjectsModel.CreatedProjectsModel ? model.ProjectName : model.ProjectFullName
       projectId: model.ProjectId
@@ -124,14 +123,13 @@ Item {
   Component {
     id: loadingSpinnerComponent
 
-    LoadingSpinner {
+    MMLoadingSpinner {
       x: parent.width / 2 - width / 2
       running: controllerModel.isLoading
     }
   }
 
   MMButton {
-    // TODO move to parent
     id: addProjectButton
     property bool addToPanel: false
     width: parent.width - 2 * __style.pageMargins
@@ -160,39 +158,24 @@ Item {
       anchors.fill: parent
       spacing: 0
 
-      RichTextBlock {
+      MMMessage {
         id: noLocalProjectsText
 
         Layout.fillHeight: true
         Layout.fillWidth: true
 
-        text: "<style>a:link { color: " + InputStyle.fontColor + "; }</style>" +
-              qsTr( "No downloaded projects found.%1Learn %2how to create projects%3 and %4download them%3 onto your device." )
-        .arg("<br/>")
-        .arg("<a href='"+ __inputHelp.howToCreateNewProjectLink +"'>")
-        .arg("</a>")
-        .arg("<a href='"+ __inputHelp.howToDownloadProjectLink +"'>")
-
-        onLinkActivated: function( link ) {
-          Qt.openUrlExternally(link)
-        }
+        image: __style.positiveMMSymbolImage
+        title: qsTr( "No downloaded projects found")
+        description: "<style>a:link { color: " + __style.forestColor + "; }</style>" +
+                     qsTr( "Learn %1how to create projects%2 and %3download them%2 onto your device. You can also create new project by clicking button below." )
+                    .arg("<a href='"+ __inputHelp.howToCreateNewProjectLink +"'>")
+                    .arg("</a>")
+                    .arg("<a href='"+ __inputHelp.howToDownloadProjectLink +"'>")
       }
-
-
-      RichTextBlock {
-        id: createProjectText
-
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-
-        text: qsTr( "You can also create new project by clicking button below." )
-      }
-
 
       MMButton {
         id: createdProjectsWhenNone
         Layout.fillWidth: true
-        // Layout.preferredHeight: InputStyle.rowHeight
         text: qsTr("Create project")
 
         onClicked: stackView.push(projectWizardComp)
@@ -200,24 +183,20 @@ Item {
     }
   }
 
-  Label {
+  MMMessage {
     id: noMerginProjectsTexts
 
-    anchors.fill: parent
-    horizontalAlignment: Qt.AlignHCenter
-    verticalAlignment: Qt.AlignVCenter
+    anchors.centerIn: parent
     visible: reloadList.visible || !controllerModel.isLoading && ( projectModelType !== ProjectsModel.LocalProjectsModel && listview.count === 0 )
-    text: reloadList.visible ? qsTr("Unable to get the list of projects.") : qsTr("No projects found!")
-    color: InputStyle.fontColor
-    font.pixelSize: InputStyle.fontPixelSizeNormal
-    font.bold: true
+    title: reloadList.visible ? qsTr("Unable to get the list of projects.") : qsTr("No projects found!")
+    image: __style.noWifiImage
   }
 
   Item {
     id: reloadList
 
     width: parent.width
-    height: InputStyle.rowHeightHeader
+    height: __style.row63
     visible: false
     y: root.height/3 * 2
 
@@ -234,80 +213,49 @@ Item {
       }
     }
 
-    Button {
+    MMButton {
       id: reloadBtn
-      width: reloadList.width - 2* InputStyle.panelMargin
+
+      width: reloadList.width - 2* __style.pageMargins
       height: reloadList.height
       text: qsTr("Retry")
-      font.pixelSize: InputStyle.fontPixelSizeNormal
+
       anchors.horizontalCenter: parent.horizontalCenter
       onClicked: {
         // filters suppose to not change
         controllerModel.listProjects( root.searchText )
       }
-      background: Rectangle {
-        color: InputStyle.highlightColor
-        radius: InputStyle.cornerRadius
-      }
-
-      contentItem: Text {
-        text: reloadBtn.text
-        font: reloadBtn.font
-        color: InputStyle.clrPanelMain
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
-      }
     }
   }
 
-  MessageDialog {
+  MMRemoveProjectDialog {
     id: removeDialog
 
-    property string relatedProjectId
-
-    title: qsTr( "Remove project" )
-    text: qsTr( "Any unsynchronized changes will be lost." )
-    buttons: MessageDialog.Ok | MessageDialog.Cancel
-
-    onButtonClicked: function(clickedButton) {
-      if (clickedButton === MessageDialog.Ok) {
-        if (relatedProjectId === "") {
-          close()
-          return
-        }
-
-        if ( root.activeProjectId === relatedProjectId )
-          root.activeProjectDeleted()
-
-        __inputUtils.log(
-              "Delete project",
-              "Project " + __localProjectsManager.projectName( relatedProjectId ) + " deleted by " +
-              ( __merginApi.userAuth ? __merginApi.userAuth.username : "unknown" ) + " (" + __localProjectsManager.projectChanges( relatedProjectId ) + ")" )
-
-        controllerModel.removeLocalProject( relatedProjectId )
+    onRemoveClicked: {
+      if (relatedProjectId === "") {
+        return
       }
 
+      if ( root.activeProjectId === relatedProjectId )
+        root.activeProjectDeleted()
+
+      __inputUtils.log(
+            "Delete project",
+            "Project " + __localProjectsManager.projectName( relatedProjectId ) + " deleted by " +
+            ( __merginApi.userAuth ? __merginApi.userAuth.username : "unknown" ) + " (" + __localProjectsManager.projectChanges( relatedProjectId ) + ")" )
+
+      controllerModel.removeLocalProject( relatedProjectId )
+
       removeDialog.relatedProjectId = ""
-      close()
     }
   }
 
-  MessageDialog {
+  MMDownloadProjectDialog {
     id: downloadProjectDialog
 
-    property string relatedProjectId
-
-    title: qsTr( "Download project" )
-    text: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
-    buttons: MessageDialog.Yes | MessageDialog.No
-
-    onButtonClicked: function( clickedButton ) {
-      if (clickedButton === MessageDialog.Yes) {
-        controllerModel.syncProject( relatedProjectId )
-      }
-
-      downloadProjectDialog.close()
+    onDownloadClicked: {
+      controllerModel.syncProject( relatedProjectId )
+      downloadProjectDialog.relatedProjectId = ""
     }
   }
 }
