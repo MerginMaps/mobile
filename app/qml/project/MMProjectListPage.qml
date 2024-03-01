@@ -18,7 +18,7 @@ import "../inputs"
 Item {
   id: root
 
-  property int projectModelType: MM.ProjectsModel.EmptyMM.ProjectsModel
+  property int projectModelType: MM.ProjectsModel.EmptyProjectsModel
   property string activeProjectId: ""
   property alias list: projectlist
 
