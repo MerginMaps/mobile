@@ -605,7 +605,7 @@ Item {
         }
       }
 
-      SplittingFailedDialog {
+      MMSplittingFailedDialog {
         id: splittingFailedDialog
       }
 
