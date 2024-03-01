@@ -10,6 +10,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import mm 1.0 as MM
+
 import "../components"
 import "../inputs"
 
@@ -68,16 +70,16 @@ Page {
       __notificationModel.add(
           msg,
           3,
-          NotificationType.Error,
-          NotificationType.None
+          MM.NotificationType.Error,
+          MM.NotificationType.None
       )
     }
     else if( field === RegistrationError.OTHER ) {
       __notificationModel.add(
           msg,
           3,
-          NotificationType.Error,
-          NotificationType.None
+          MM.NotificationType.Error,
+          MM.NotificationType.None
       )
     }
   }

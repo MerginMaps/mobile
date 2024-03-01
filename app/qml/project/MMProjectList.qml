@@ -96,7 +96,7 @@ Item {
       projectDisplayName: root.projectModelType === MM.ProjectsModel.CreatedProjectsModel ? model.ProjectName : model.ProjectFullName
       projectId: model.ProjectId
       projectDescription: model.ProjectDescription
-      projectStatus: model.ProjectStatus ? model.ProjectStatus : ProjectStatus.NoVersion
+      projectStatus: model.ProjectStatus ? model.ProjectStatus : MM.ProjectStatus.NoVersion
       projectIsValid: model.ProjectIsValid
       projectIsPending: model.ProjectSyncPending ? model.ProjectSyncPending : false
       projectSyncProgress: model.ProjectSyncProgress ? model.ProjectSyncProgress : -1

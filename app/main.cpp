@@ -299,6 +299,7 @@ void initDeclarative()
   qRegisterMetaType< FeatureLayerPair >( "FeatureLayerPair" );
   qRegisterMetaType< FeatureLayerPair * >( "FeatureLayerPair*" );
   qRegisterMetaType< AttributeController * >( "AttributeController*" );
+  qmlRegisterUncreatableType<NotificationType>( "mm", 1, 0, "NotificationType", "NotificationType Enum" );
 
   qRegisterMetaType< QList<QgsMapLayer *> >( "QList<QgsMapLayer*>" );
   qRegisterMetaType< QgsAttributes > ( "QgsAttributes" );

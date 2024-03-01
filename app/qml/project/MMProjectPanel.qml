@@ -62,7 +62,7 @@ Item {
   }
 
   function getServiceInfo() {
-    if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK && __merginApi.apiSupportsSubscriptions) {
+    if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MM.MerginApiStatus.OK && __merginApi.apiSupportsSubscriptions) {
         __merginApi.getServiceInfo()
     }
   }
@@ -384,9 +384,9 @@ Item {
           MMProjectListPage {
             id: workspaceProjectsPage
 
-            projectModelType: MM.ProjectsModel.WorkspaceMM.ProjectsModel
+            projectModelType: MM.ProjectsModel.WorkspaceProjectsModel
             activeProjectId: root.activeProjectId
-            list.visible: !stackView.pending && __merginApi.serverType !== MerginServerType.OLD
+            list.visible: !stackView.pending && __merginApi.serverType !== MM.MerginServerType.OLD
 
             onOpenProjectRequested: function( projectFilePath ) {
               setupProjectOpen( projectFilePath )
@@ -400,9 +400,9 @@ Item {
           MMProjectListPage {
             id: publicProjectsPage
 
-            projectModelType: MM.ProjectsModel.PublicMM.ProjectsModel
+            projectModelType: MM.ProjectsModel.PublicProjectsModel
             activeProjectId: root.activeProjectId
-            list.visible: !stackView.pending && __merginApi.serverType !== MerginServerType.OLD
+            list.visible: !stackView.pending && __merginApi.serverType !== MM.MerginServerType.OLD
 
             onOpenProjectRequested: function( projectFilePath ) {
               setupProjectOpen( projectFilePath )

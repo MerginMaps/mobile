@@ -141,7 +141,7 @@ Page {
         title: qsTr("Interval threshold type")
         description: qsTr("Choose a type of threshold for streaming mode")
         valueDescription: qsTr("Interval threshold type")
-        value: __appSettings.intervalType === StreamingIntervalType.Distance ? qsTr("Distance Traveled") : qsTr("Time elapsed")
+        value: __appSettings.intervalType === MM.StreamingIntervalType.Distance ? qsTr("Distance Traveled") : qsTr("Time elapsed")
         selected: [__appSettings.intervalType]
         model: ListModel {
           ListElement {
@@ -166,9 +166,9 @@ Page {
         width: parent.width
         title: qsTr("Threshold interval")
         description: qsTr("Streaming mode will add a point to the object at each interval")
-        valueDescription:  __appSettings.intervalType === StreamingIntervalType.Distance ? qsTr("Threshold interval, in meters") : qsTr("Threshold interval, in seconds")
+        valueDescription:  __appSettings.intervalType === MM.StreamingIntervalType.Distance ? qsTr("Threshold interval, in meters") : qsTr("Threshold interval, in seconds")
         value: __appSettings.lineRecordingInterval
-        suffix: __appSettings.intervalType === StreamingIntervalType.Distance ? " m" : " s"
+        suffix: __appSettings.intervalType === MM.StreamingIntervalType.Distance ? " m" : " s"
 
         onValueWasChanged: function( newValue ) {
           __appSettings.lineRecordingInterval = newValue

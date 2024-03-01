@@ -91,8 +91,8 @@ Item {
       MMProjectItem {
         id: activeProjectItem
 
-        property var model: projectlist.MM.ProjectsModel
-        property var index: projectlist.MM.ProjectsModel.projectModelIndexFromId(root.activeProjectId)
+        property var model: projectlist.projectsModel
+        property var index: projectlist.projectsModel.projectModelIndexFromId(root.activeProjectId)
 
         width: parent.width
 
@@ -100,7 +100,7 @@ Item {
         projectDisplayName: model.data(index, MM.ProjectsModel.ProjectFullName)
         projectId: model.data(index, MM.ProjectsModel.ProjectId)
         projectDescription: model.data(index, MM.ProjectsModel.ProjectDescription)
-        projectStatus: model.data(index, MM.ProjectsModel.ProjectStatus) ? model.data(index, MM.ProjectsModel.ProjectStatus) : ProjectStatus.NoVersion
+        projectStatus: model.data(index, MM.ProjectsModel.ProjectStatus) ? model.data(index, MM.ProjectsModel.ProjectStatus) : MM.ProjectStatus.NoVersion
         projectIsValid: model.data(index, MM.ProjectsModel.ProjectIsValid)
         projectIsPending: model.data(index, MM.ProjectsModel.ProjectSyncPending) ? model.data(index, MM.ProjectsModel.ProjectSyncPending) : false
         projectSyncProgress: model.data(index, MM.ProjectsModel.ProjectSyncProgress) ? model.data(index, MM.ProjectsModel.ProjectSyncProgress) : -1
@@ -149,7 +149,7 @@ Item {
   MMProjectList {
     id: projectlist
 
-    projectModelType: MM.ProjectsModel.LocalMM.ProjectsModel
+    projectModelType: MM.ProjectsModel.LocalProjectsModel
     activeProjectId: root.activeProjectId
     hideActiveProject: true
     searchText: searchBar.text

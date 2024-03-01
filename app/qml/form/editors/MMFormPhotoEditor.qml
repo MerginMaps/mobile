@@ -10,8 +10,6 @@
 import QtQuick
 import QtQuick.Dialogs
 
-import notificationType 1.0
-
 /*
  * Photo form editor (external resource) for QGIS Attribute Form
  * Requires various global properties set to function, see featureform Loader section.

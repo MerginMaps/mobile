@@ -18,7 +18,6 @@ import QtQuick.Layouts
 
 import mm 1.0 as MM
 import qgs 1.0 as QGS
-import notificationType 1.0
 
 import "./map"
 import "./dialogs"
@@ -84,8 +83,8 @@ ApplicationWindow {
       __notificationModel.add(
         message,
         3,
-        NotificationType.Information,
-        NotificationType.None
+        MM.NotificationType.Information,
+        MM.NotificationType.None
       )
     }
 

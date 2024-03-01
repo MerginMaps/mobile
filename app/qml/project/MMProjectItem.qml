@@ -12,7 +12,7 @@ import QtQuick.Controls
 
 import "../components"
 
-import notificationType 1.0
+import mm 1.0 as MM
 
 Rectangle {
   id: root
@@ -201,8 +201,8 @@ Rectangle {
         __notificationModel.add(
               qsTr( "Notification: Could not synchronize project, please make sure you are logged in and have sufficient rights." ),
               3,
-              NotificationType.Error,
-              NotificationType.None
+              MM.NotificationType.Error,
+              MM.NotificationType.None
               )
         return
       }

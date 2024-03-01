@@ -8,7 +8,8 @@
  ***************************************************************************/
 
 import QtQuick
-import notificationType 1.0
+
+import mm 1.0 as MM
 
 Rectangle {
   id: root
@@ -21,10 +22,10 @@ Rectangle {
   radius: 12 * __dp
   color: {
     switch( model.type ) {
-    case NotificationType.Information: return __style.informativeColor
-    case NotificationType.Success: return __style.positiveColor
-    case NotificationType.Warning: return __style.warningColor
-    case NotificationType.Error: return __style.negativeColor
+    case MM.NotificationType.Information: return __style.informativeColor
+    case MM.NotificationType.Success: return __style.positiveColor
+    case MM.NotificationType.Warning: return __style.warningColor
+    case MM.NotificationType.Error: return __style.negativeColor
     default: return __style.positiveColor
     }
   }
@@ -37,15 +38,15 @@ Rectangle {
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: parent.left
     anchors.leftMargin: 20 * __dp
-    size: model.icon === NotificationType.Check ? __style.icon18 : __style.icon24
+    size: model.icon === MM.NotificationType.Check ? __style.icon18 : __style.icon24
     color: text.color
-    visible: model.icon !== NotificationType.None
+    visible: model.icon !== MM.NotificationType.None
     source: {
       switch( model.icon ) {
-      case NotificationType.None: return ""
-      case NotificationType.Waiting: return __style.waitingIcon
-      case NotificationType.Exclamation: return __style.errorCircleIcon
-      case NotificationType.Check: return __style.comboBoxCheckIcon
+      case MM.NotificationType.None: return ""
+      case MM.NotificationType.Waiting: return __style.waitingIcon
+      case MM.NotificationType.Exclamation: return __style.errorCircleIcon
+      case MM.NotificationType.Check: return __style.comboBoxCheckIcon
       default: return ""
       }
     }
@@ -69,10 +70,10 @@ Rectangle {
     elide: Text.ElideRight
     color: {
       switch( type ) {
-      case NotificationType.Information: return __style.deepOceanColor
-      case NotificationType.Success: return __style.forestColor
-      case NotificationType.Warning: return __style.earthColor
-      case NotificationType.Error: return __style.grapeColor
+      case MM.NotificationType.Information: return __style.deepOceanColor
+      case MM.NotificationType.Success: return __style.forestColor
+      case MM.NotificationType.Warning: return __style.earthColor
+      case MM.NotificationType.Error: return __style.grapeColor
       }
     }
   }

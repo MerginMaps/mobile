@@ -13,7 +13,6 @@ import QtQuick.Layouts
 import QtQuick.Shapes
 
 import mm 1.0 as MM
-import notificationType 1.0
 
 import "../components"
 import "./components"
@@ -168,7 +167,7 @@ Item {
           id: identifyKit
 
           mapSettings: mapCanvas.mapSettings
-          identifyMode: IdentifyKit.TopDownAll
+          identifyMode: MM.IdentifyKit.TopDownAll
         }
 
         onClicked: function( point ) {
@@ -505,7 +504,10 @@ Item {
 
         onClicked: {
           if ( gpsStateGroup.state === "unavailable" ) {
-            __notificationModel.add( qsTr( "GPS currently unavailable" ), 5, NotificationType.Error, NotificationType.None )
+            __notificationModel.add( qsTr( "GPS currently unavailable" ),
+                                    5,
+                                    MM.NotificationType.Error,
+                                    MM.NotificationType.None )
             return
           }
 
