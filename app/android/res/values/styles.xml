@@ -1,0 +1,10 @@
+<resources>
+    <style name="MMStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="colorPrimary">@color/forestColor</item>
+
+        <item name="colorPrimaryDark">@color/nightColor</item>
+
+        <item name="colorAccent">@color/grassColor</item>
+    </style>
+</resources>

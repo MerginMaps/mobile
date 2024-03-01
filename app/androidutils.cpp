@@ -218,6 +218,14 @@ QVector<int> AndroidUtils::getSafeArea()
   return ret;
 }
 
+void AndroidUtils::hideSplashScreen()
+{
+#ifdef ANDROID
+  auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+  activity.callMethod<void>( "hideSplashScreen", "()V" );
+#endif
+}
+
 bool AndroidUtils::requestStoragePermission()
 {
 #ifdef ANDROID

@@ -58,6 +58,8 @@ class AndroidUtils: public QObject
 
     Q_INVOKABLE QVector<int> getSafeArea();
 
+    void hideSplashScreen();
+
     /**
       * Starts ACTION_PICK activity which opens a gallery. If an image is selected,
       * handler of the activity emits imageSelected signal.

@@ -2,6 +2,21 @@
 
 This documents is storage for various how-tos for development and distribution team
 
+## Android assets
+
+### application icon
+ - all app icon variants are stored in app/android/res subfolders
+
+ - use Android Studio to generate all app icon variants from svg (see https://developer.android.com/studio/write/create-app-icons#create-adaptive)
+   - command `find . -name 'ic_appicon*' -exec sh -c 'cp {} "<path to app/android/res>/$(dirname {})/"' \;` might be handy - it copies all generated icons in subfolders to correct subfolders in the destination
+   - note: you need to have some project opened in Android Studio, you can open the generated android project from QtCreator
+
+ - last step is to change `android:icon=@mipmap/<generated_icon_name>` in AndroidManifest
+
+### launch screen
+ - we are using SplashScreen API (introduced in Android 12), see https://developer.android.com/develop/ui/views/launch/splash-screen 
+ - open splasscreentheme.xml and simply edit parameters there to adjust the splashscreen
+
 ## iOS assets 
 
 ### application icon

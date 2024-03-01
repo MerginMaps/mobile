@@ -8,12 +8,14 @@
  ***************************************************************************/
 
 package uk.co.lutraconsulting;
-import android.os.Bundle;
+
 import org.qtproject.qt.android.bindings.QtActivity;
-import android.util.Log;
-import android.os.Build;
+
 import java.lang.Exception;
 
+import android.util.Log;
+import android.os.Bundle;
+import android.os.Build;
 import android.view.Display;
 import android.view.Surface;
 import android.view.View;
@@ -21,26 +23,31 @@ import android.view.DisplayCutout;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowInsets;
-import android.graphics.Insets;
 import android.view.WindowInsets.Type;
+import android.view.WindowInsetsController;
+import android.graphics.Insets;
 import android.graphics.Color;
 
 import androidx.core.view.WindowCompat;
-import android.view.WindowInsetsController;
-
+import androidx.core.splashscreen.SplashScreen;
 
 public class InputActivity extends QtActivity
 {
   private static final String TAG = "Mergin Maps Input Activity";
+  private boolean keepSplashScreenVisible = true;
 
   @Override
   public void onCreate(Bundle savedInstanceState)
   {
+    SplashScreen splashScreen = SplashScreen.installSplashScreen( this );
     super.onCreate(savedInstanceState);
     
     // this is to keep the screen on all the time so the device does not
     // go into sleep and recording is not interrupted
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+    splashScreen.setKeepOnScreenCondition( () -> keepSplashScreenVisible );
+
     setCustomStatusAndNavBar();
   }
 
@@ -92,6 +99,11 @@ public class InputActivity extends QtActivity
                                               android.view.WindowInsets.Type.displayCutout() );
                                               
     return ( "" + safeArea.top + "," + safeArea.right + "," + safeArea.bottom + "," + safeArea.left );
+  }
+
+  public void hideSplashScreen()
+  {
+    keepSplashScreenVisible = false;
   }
 
   public void quitGracefully()
