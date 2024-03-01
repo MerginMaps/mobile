@@ -8,15 +8,17 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Dialogs
 
-MessageDialog {
+import "../components"
+
+MMDrawerDialog {
   id: root
 
-  title: qsTr( "We could not split the feature" )
-  text: qsTr( "Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it." )
+  picture: __style.negativeMMSymbolImage
+  bigTitle: qsTr( "We could not split the feature" )
+  description: qsTr( "Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it." )
+  primaryButton: qsTr( "Ok, I understand" )
 
-  buttons: MessageDialog.Ok
+  onPrimaryButtonClicked: close()
 
-  onButtonClicked: close()
 }

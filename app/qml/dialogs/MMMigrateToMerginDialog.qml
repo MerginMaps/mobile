@@ -8,22 +8,26 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Dialogs
 
-MessageDialog {
+import "../components"
+
+MMDrawerDialog {
   id: root
 
   signal migrationRequested()
 
-  title: qsTr( "Upload project to Mergin?" )
-  text: qsTr( "This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration. \nClick 'Yes' to upload it." )
+  picture: __style.positiveMMSymbolImage
+  bigTitle: qsTr( "Upload project?" )
+  description: qsTr( "This project is currently not uploaded on cloud. Upload it in order to activate synchronization and collaboration." )
+  primaryButton: qsTr( "Yes, I want to upload it" )
+  secondaryButton: qsTr( "No, thanks" )
 
-  buttons: MessageDialog.Yes | MessageDialog.Cancel
+  onPrimaryButtonClicked: {
+    root.migrationRequested()
+    close()
+  }
 
-  onButtonClicked: function(clickedButton) {
-    if ( clickedButton === MessageDialog.Yes ) {
-      root.migrationRequested()
-    }
+  onSecondaryButtonClicked: {
     close()
   }
 }

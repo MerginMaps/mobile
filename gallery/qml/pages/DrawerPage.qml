@@ -106,6 +106,22 @@ Page {
           missingAuthDialog.open()
         }
       }
+
+      MMButton {
+        text: "MMSplittingFailedDialog"
+
+        onClicked: {
+          splittingFailedDialog.open()
+        }
+      }
+
+      MMButton {
+        text: "MMMigrateToMerginDialog"
+
+        onClicked: {
+          migrateToMerginDialog.open()
+        }
+      }
     }
   }
 
@@ -228,5 +244,13 @@ Page {
 
   MMMissingAuthDialog {
     id: missingAuthDialog
+  }
+
+  MMSplittingFailedDialog {
+    id: splittingFailedDialog
+  }
+
+  MMMigrateToMerginDialog {
+    id: migrateToMerginDialog
   }
 }

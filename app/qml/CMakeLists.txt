@@ -9,11 +9,10 @@ set(MM_QML
     components/MMPageHeader.qml
     components/MMDrawer.qml
     components/MMDrawerHeader.qml
-    dialogs/MigrateToMerginDialog.qml
+    dialogs/MMMigrateToMerginDialog.qml
     dialogs/MMMissingAuthDialog.qml
     dialogs/MMNoPermissionsDialog.qml
-    dialogs/SplittingFailedDialog.qml
-    dialogs/SyncFailedDialog.qml
+    dialogs/MMSplittingFailedDialog.qml
     dialogs/MMSyncFailedDialog.qml
     dialogs/MMCloseAccountDialog.qml
     dialogs/MMStreamingModeDialog.qml
