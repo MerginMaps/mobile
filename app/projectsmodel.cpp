@@ -652,6 +652,12 @@ Project ProjectsModel::projectFromId( const QString &projectId ) const
   return Project();
 }
 
+QModelIndex ProjectsModel::projectModelIndexFromId( const QString &projectId ) const
+{
+  int row = projectIndexFromId( projectId );
+  return index( row );
+}
+
 bool ProjectsModel::isLoading() const
 {
   return mModelIsLoading;

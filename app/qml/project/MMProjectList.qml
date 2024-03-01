@@ -25,6 +25,10 @@ Item {
   property string searchText: ""
   property int spacing: 0
   property bool hideActiveProject: false
+  property alias projectsProxyModel: viewModel
+  property alias projectsModel: controllerModel
+  property alias listHeader: listview.header
+  property alias listFooter: listview.footer
 
   signal openProjectRequested( string projectFilePath )
   signal showLocalChangesRequested( string projectId )
@@ -47,7 +51,7 @@ Item {
     Component.onCompleted: {
       // set proper footer (add project / fetch more)
       if ( root.projectModelType === ProjectsModel.LocalProjectsModel ) {
-        addProjectButton.addToPanel = true
+        listview.footer = addProjectComponent
       }
       else
       {
@@ -131,20 +135,31 @@ Item {
     }
   }
 
-  MMButton {
-    id: addProjectButton
-    property bool addToPanel: false
-    width: parent.width - 2 * __style.pageMargins
-    anchors.bottom: parent.bottom
-    anchors.bottomMargin: __style.pageMargins
-    anchors.horizontalCenter: parent.horizontalCenter
-    visible: addToPanel && (listview.count > 0)
-    text: qsTr("Create project")
-    onClicked: stackView.push(projectWizardComp)
+  Component {
+    id: addProjectComponent
+
+    Column {
+      width: ListView.view.width
+
+      Item {
+        width: parent.width
+        height: root.spacing
+      }
+
+      MMButton {
+        width: parent.width
+        text: qsTr("Create project")
+        onClicked: stackView.push(projectWizardComp)
+      }
+
+      Item {
+        width: parent.width
+        height: root.spacing
+      }
+    }
   }
 
-
-  Item {
+  MMMessage {
     id: noLocalProjectsMessageContainer
 
     visible: listview.count === 0 && // this check is getting longer and longer, would be good to replace with states
@@ -154,35 +169,13 @@ Item {
 
     anchors.fill: parent
 
-    ColumnLayout {
-      id: colayout
-
-      anchors.fill: parent
-      spacing: 0
-
-      MMMessage {
-        id: noLocalProjectsText
-
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-
-        image: __style.positiveMMSymbolImage
-        title: qsTr( "No downloaded projects found")
-        description: "<style>a:link { color: " + __style.forestColor + "; }</style>" +
-                     qsTr( "Learn %1how to create projects%2 and %3download them%2 onto your device. You can also create new project by clicking button below." )
-                    .arg("<a href='"+ __inputHelp.howToCreateNewProjectLink +"'>")
-                    .arg("</a>")
-                    .arg("<a href='"+ __inputHelp.howToDownloadProjectLink +"'>")
-      }
-
-      MMButton {
-        id: createdProjectsWhenNone
-        Layout.fillWidth: true
-        text: qsTr("Create project")
-
-        onClicked: stackView.push(projectWizardComp)
-      }
-    }
+    image: __style.positiveMMSymbolImage
+    title: qsTr( "No downloaded projects found")
+    description: "<style>a:link { color: " + __style.forestColor + "; }</style>" +
+                 qsTr( "Learn %1how to create projects%2 and %3download them%2 onto your device. You can also create new project by clicking button below." )
+    .arg("<a href='"+ __inputHelp.howToCreateNewProjectLink +"'>")
+    .arg("</a>")
+    .arg("<a href='"+ __inputHelp.howToDownloadProjectLink +"'>")
   }
 
   MMMessage {

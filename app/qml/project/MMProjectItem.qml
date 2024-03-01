@@ -38,7 +38,7 @@ Rectangle {
 
   color: root.highlight ? __style.forestColor : __style.whiteColor
   radius: 12 * __dp
-  height: mainColumn.height
+  height: visible ? mainColumn.height : 0
 
   MouseArea {
     anchors.fill: parent
