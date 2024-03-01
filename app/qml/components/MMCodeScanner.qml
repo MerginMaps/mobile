@@ -55,27 +55,16 @@ Drawer {
     }
   }
 
-  Canvas {
-    id: canvas
-
-    anchors.fill: parent
-    opacity: 0.8
-
-    onPaint: {
-      var ctx = getContext("2d");
-      let w = parent.width
-      let h = parent.height
-      ctx.fillStyle = __style.nightColor
-      ctx.fillRect(0, 0, parent.width, parent.height);
-      ctx.fill();
-      if(parent.width < parent.height)
-        ctx.clearRect(w / 4, h / 2 - w / 4, w / 2, w / 2)
-      else
-        ctx.clearRect(w / 2 - h / 4, h / 4, h / 2, h / 2)
-    }
+  function unload() {
+    qrcodeScanner.videoSink = null
+    camera.active = false
+    captureSession.videoOutput = null
+    captureSession.camera = null
   }
 
   Item {
+    id: scannerText
+
     width: parent.width
     height: (parent.width < parent.height) ? parent.height / 2 - parent.width / 4 : parent.height / 4
     anchors.horizontalCenter: parent.horizontalCenter
@@ -114,8 +103,8 @@ Drawer {
 
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.bottom: parent.bottom
-    anchors.bottomMargin: 20 * __dp
-    source: __style.closeButtonIcon
+    anchors.bottomMargin: 2 * __style.pageMargins
+    source: __style.closeIcon
 
     MouseArea {
       anchors.fill: parent
@@ -124,12 +113,5 @@ Drawer {
         close()
       }
     }
-  }
-
-  function unload() {
-    qrcodeScanner.videoSink = null
-    camera.active = false
-    captureSession.videoOutput = null
-    captureSession.camera = null
   }
 }
