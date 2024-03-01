@@ -41,7 +41,8 @@
         android:allowNativeHeapPointerTagging="false"
         android:allowBackup="true"
         android:fullBackupOnly="false"
-        android:icon="@mipmap/ic_merginmaps_launcher">
+        android:icon="@mipmap/ic_appicon"
+        android:roundIcon="@mipmap/ic_appicon_round">
         <activity
             android:name="uk.co.lutraconsulting.InputActivity"
             android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
@@ -105,10 +106,6 @@
         </provider>
 
         <service android:process=":trackingThread" android:name=".PositionTrackingService" android:foregroundServiceType="location" android:stopWithTask="true"/>
-        <!-- <service> -->
-        <!-- android:process=":tracking"  -->
-        <!-- </service> -->
-
     </application>
 
     <!-- Explicitly mention that we need to use external app for capturing an image -->
