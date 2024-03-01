@@ -44,7 +44,7 @@ Item {
       color: __style.lightGreenColor
     }
 
-    header: MMHeader {
+    header: MMPageHeader {
       id: header
       title: qsTr("Diagnostic log")
       titleFont: __style.h3

@@ -43,7 +43,7 @@ Drawer {
     anchors.topMargin: -height
   }
 
-  MMHeader {
+  MMPageHeader {
     id: header
     onBackClicked: root.close()
   }

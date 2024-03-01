@@ -54,7 +54,7 @@ Page {
     Page {
       id: layerDetailPage
 
-      header: MMHeader {
+      header: MMPageHeader {
         width: parent.width
         color: __style.lightGreenColor
 

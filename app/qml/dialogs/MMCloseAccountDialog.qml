@@ -54,7 +54,7 @@ Drawer {
       rightPadding: 20 * __dp
       bottomPadding: 20 * __dp
 
-      MMHeader {
+      MMPageHeader {
         width: parent.width
         backVisible: false
 

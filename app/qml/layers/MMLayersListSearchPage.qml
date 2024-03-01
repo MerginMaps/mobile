@@ -33,7 +33,7 @@ Page {
     }
   }
 
-  header: MMHeader {
+  header: MMPageHeader {
     width: parent.width
     title: root.pageTitle
     color: __style.lightGreenColor

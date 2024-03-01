@@ -52,7 +52,7 @@ Item {
     color: __style.lightGreenColor
   }
 
-  MMHeader {
+  MMPageHeader {
     id: header
     width: projectWizardPanel.width
     color: __style.lightGreenColor

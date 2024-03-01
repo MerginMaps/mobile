@@ -60,7 +60,7 @@ Drawer {
       rightPadding: 20 * __dp
       bottomPadding: 20 * __dp
 
-      // TODO replace with MMHeader?
+      // TODO replace with MMPageHeader?
       Row {
         width: parent.width
         spacing: 10 * __dp

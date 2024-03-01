@@ -103,7 +103,7 @@ Page {
     }
   }
 
-  MMHeader {
+  MMPageHeader {
     id: header
 
     title: qsTr("Sign Up")

@@ -208,7 +208,7 @@ Drawer {
     anchors.fill: parent
     color: __style.whiteColor
 
-    MMHeader {
+    MMPageHeader {
       id: header
 
       backVisible: false

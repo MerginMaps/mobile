@@ -22,7 +22,7 @@ Page {
 
   signal back()
 
-  header: MMHeader {
+  header: MMPageHeader {
     id: header
 
     width: parent.width

@@ -34,7 +34,7 @@ Page {
     color: __style.lightGreenColor
   }
 
-  header: MMHeader {
+  header: MMPageHeader {
     id: header
     titleFont: __style.t3
 

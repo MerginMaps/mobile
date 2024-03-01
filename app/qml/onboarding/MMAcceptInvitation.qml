@@ -35,7 +35,7 @@ Page {
     color: __style.lightGreenColor
   }
 
-  MMHeader {
+  MMPageHeader {
     id: header
 
     backVisible: root.haveBack

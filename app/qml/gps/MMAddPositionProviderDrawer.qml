@@ -69,7 +69,7 @@ Drawer {
     anchors.fill: parent
     color: __style.whiteColor
 
-    MMHeader {
+    MMPageHeader {
       id: header
 
       title: qsTr( "Connect to bluetooth device" )

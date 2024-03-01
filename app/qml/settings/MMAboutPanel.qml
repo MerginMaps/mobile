@@ -32,7 +32,7 @@ Page {
     color: __style.lightGreenColor
   }
 
-  header: MMHeader {
+  header: MMPageHeader {
     id: header
     title: qsTr("About Mergin Maps")
     titleFont: __style.t3

@@ -52,7 +52,7 @@ Item {
       color: __style.lightGreenColor
     }
 
-    header: MMHeader {
+    header: MMPageHeader {
       id: header
       title: qsTr("Changelog")
       titleFont: __style.t3
