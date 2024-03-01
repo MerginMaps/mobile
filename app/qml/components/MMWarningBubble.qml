@@ -16,7 +16,10 @@ Item {
 
   height: row.height
 
-  required property string text
+  required property string title
+  property string description
+
+  signal clicked
 
   Rectangle {
     width: root.width
@@ -40,14 +43,41 @@ Item {
       source: __style.warnLogoImage
     }
 
-    Text {
+    Column {
       width: root.width - icon.width - 4 * row.spacing - 2 * row.padding
-      height: icon.height
-      text: root.text
-      font: __style.t3
-      color: __style.whiteColor
-      wrapMode: Label.WordWrap
-      lineHeight: 1.5
+
+      Text {
+        width: parent.width
+        height: root.description.length > 0 ? icon.height / 2 : icon.height
+        text: root.title
+        font: __style.t3
+        color: __style.whiteColor
+        wrapMode: Label.WordWrap
+        lineHeight: 1.5
+        maximumLineCount: root.description.length > 0 ? 1 : 2
+        verticalAlignment: Text.AlignVCenter
+        elide: root.description.length > 0 ? Text.ElideRight : Text.ElideNone
+        textFormat: Text.RichText
+      }
+
+      Text {
+        width: parent.width
+        height: root.description.length > 0 ? icon.height / 2 : 0
+        text: root.description
+        font: __style.p6
+        color: __style.whiteColor
+        wrapMode: Label.WordWrap
+        lineHeight: 1.5
+        maximumLineCount: root.title.length > 0 ? 1 : 2
+        elide: Text.ElideRight
+        verticalAlignment: Text.AlignVCenter
+        textFormat: Text.RichText
+      }
     }
+  }
+
+  MouseArea {
+    anchors.fill: parent
+    onClicked: root.clicked()
   }
 }

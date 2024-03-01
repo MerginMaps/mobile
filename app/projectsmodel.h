@@ -136,6 +136,9 @@ class ProjectsModel : public QAbstractListModel
     //! Returns Project deep copy from projectId
     Project projectFromId( const QString &projectId ) const;
 
+    //! Returns model index from projectId
+    Q_INVOKABLE QModelIndex projectModelIndexFromId( const QString &projectId ) const;
+
     MerginApi *merginApi() const;
     SynchronizationManager *syncManager() const;
     LocalProjectsManager *localProjectsManager() const;

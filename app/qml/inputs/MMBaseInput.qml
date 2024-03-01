@@ -179,7 +179,7 @@ Item {
         MMIcon {
           id: msgIcon
 
-          source: visible ? __style.errorIcon : ""
+          source: visible ? __style.errorCircleIcon : ""
           color: errorMsg.length > 0 ? __style.negativeColor : __style.warningColor
           size: __style.icon16
           visible: errorMsg.length > 0 || warningMsg.length > 0

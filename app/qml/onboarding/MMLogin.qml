@@ -102,7 +102,7 @@ Page {
 
       MMWarningBubble {
         visible: root.warningMsg
-        text: root.warningMsg
+        title: root.warningMsg
         width: root.width - 2 * root.hPadding
       }
 

@@ -32,16 +32,6 @@ Item {
 
   property int spacing: 10 * __dp
 
-  AttentionBanner {
-    id: attentionBanner
-    visible: __merginApi.subscriptionInfo ? __merginApi.subscriptionInfo.actionRequired : false
-    anchors {
-      top: parent.top
-      left: parent.left
-      right: parent.right
-    }
-  }
-
   MMSearchInput {
     id: searchBar
 
@@ -54,7 +44,7 @@ Item {
     }
 
     anchors {
-      top: attentionBanner.visible ? attentionBanner.bottom : parent.top
+      top: parent.top
       left: parent.left
       right: parent.right
     }

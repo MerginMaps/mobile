@@ -44,7 +44,7 @@ Rectangle {
       switch( model.icon ) {
       case NotificationType.None: return ""
       case NotificationType.Waiting: return __style.waitingIcon
-      case NotificationType.Exclamation: return __style.errorIcon
+      case NotificationType.Exclamation: return __style.errorCircleIcon
       case NotificationType.Check: return __style.comboBoxCheckIcon
       default: return ""
       }
