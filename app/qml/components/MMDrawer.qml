@@ -18,9 +18,12 @@ Drawer {
   property alias drawerHeader: mmDrawerHeader
   property alias content: contentGroup.children
 
-  property double drawerSpacing: __style.pageSpacing40 // Change this to 20 if using searchbar
+  property double drawerSpacing: __style.spacing40 // Change this to 20 if using searchbar
 
-  implicitHeight: mainColumn.height
+  property real maxHeight: ( ApplicationWindow.window?.height ?? 0 ) - __style.safeAreaTop
+
+
+  implicitHeight: contentHeight > maxHeight ? maxHeight : contentHeight
   implicitWidth: ApplicationWindow.window?.width ?? 0
 
   edge: Qt.BottomEdge
@@ -54,13 +57,13 @@ Drawer {
     }
   }
 
-  Column {
+  contentItem: Column {
     id: mainColumn
 
     anchors.fill: parent
     spacing: root.drawerSpacing
 
-    height: mmDrawerHeader.height + contentGroup.height
+    height: mmDrawerHeader.height + contentGroup.height + root.drawerSpacing
 
     MMDrawerHeader {
       id: mmDrawerHeader

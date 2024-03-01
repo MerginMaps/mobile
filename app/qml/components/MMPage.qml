@@ -16,7 +16,7 @@ Page {
   property alias pageHeader: mmheader
   property alias content: contentGroup.children
 
-  property double pageSpacing: __style.pageSpacing40 // Change this to 20 if using searchbar
+  property double pageSpacing: __style.spacing40 // Change this to 20 if using searchbar
 
   signal backClicked()
 
