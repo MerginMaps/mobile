@@ -11,8 +11,6 @@ import QtCore
 import QtQuick
 import QtQuick.Controls
 
-import lc 1.0
-
 import "../components"
 
 Drawer {
@@ -49,7 +47,6 @@ Drawer {
       close()
     }
   }
-
 
   Rectangle {
     id: borderRectangle

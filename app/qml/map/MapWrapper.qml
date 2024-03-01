@@ -8,18 +8,16 @@
  ***************************************************************************/
 
 import QtQuick
-
-import lc 1.0
 import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Shapes
 
-import "."
+import mm 1.0 as MM
+import notificationType 1.0
+
 import "../components"
 import "./components"
 import "../dialogs"
-
-import notificationType 1.0
 
 Item {
   id: root
@@ -166,7 +164,7 @@ Item {
 
         mapSettings.project: __activeProject.qgsProject
 
-        IdentifyKit {
+        MM.IdentifyKit {
           id: identifyKit
 
           mapSettings: mapCanvas.mapSettings
@@ -217,7 +215,7 @@ Item {
         }
       }
 
-      Compass { id: deviceCompass }
+      MM.Compass { id: deviceCompass }
 
       StateGroup {
         id: gpsStateGroup
@@ -377,7 +375,7 @@ Item {
           Item {
             property alias manager: trackingManager
 
-            PositionTrackingManager {
+            MM.PositionTrackingManager {
               id: trackingManager
 
               variablesManager: __variablesManager
@@ -392,7 +390,7 @@ Item {
                        }
             }
 
-            PositionTrackingHighlight {
+            MM.PositionTrackingHighlight {
               id: trackingHighlight
 
               mapPosition: mapPositionSource.mapPosition
@@ -438,7 +436,7 @@ Item {
         sourceComponent: stakeoutToolsComponent
       }
 
-      MapPosition {
+      MM.MapPosition {
         id: mapPositionSource
 
         mapSettings: mapCanvas.mapSettings
@@ -446,7 +444,7 @@ Item {
         onScreenPositionChanged: root.updatePosition()
       }
 
-      PositionDirection {
+      MM.PositionDirection {
         id: positionDirectionSource
 
         positionKit: __positionKit

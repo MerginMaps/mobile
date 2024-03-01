@@ -10,9 +10,7 @@
 import QtQuick
 import QtQuick.Shapes
 
-import Input 0.1 as Input
-
-import lc 1.0
+import mm 1.0 as MM
 
 import ".."
 
@@ -24,7 +22,7 @@ Item {
   property var geometry
 
   // for transformation of the highlight to the correct location on the map
-  property Input.MapSettings mapSettings
+  property MM.MapSettings mapSettings
 
   // point (marker) properties
   enum MarkerSizes { Normal, Bigger }

@@ -7,10 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 import QtQuick
-
-import "../"
 import QtQuick.Controls
-import lc 1.0
 
 Item {
   id: controller

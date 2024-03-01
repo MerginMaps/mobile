@@ -12,9 +12,9 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 import QtQuick.Layouts
 
-import ".."
+import mm 1.0 as MM
+
 import "../components"
-import lc 1.0
 
 Drawer {
   id: root
@@ -36,7 +36,7 @@ Drawer {
     forceActiveFocus()
   }
 
-  MapPosition {
+  MM.MapPosition {
     id: mapPositioning
 
     positionKit: __positionKit

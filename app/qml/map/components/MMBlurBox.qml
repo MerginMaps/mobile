@@ -9,8 +9,6 @@
 
 import QtQuick
 import Qt5Compat.GraphicalEffects
-import lc 1.0
-import "."
 
 Item {
   id: root

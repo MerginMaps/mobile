@@ -9,8 +9,7 @@
 
 import QtQuick
 
-import lc 1.0
-import ".."
+import mm 1.0 as MM
 
 Item {
   id: root
@@ -31,7 +30,7 @@ Item {
     mapSettings: root.map.mapSettings
   }
 
-  MapPosition {
+  MM.MapPosition {
     id: mapPositioning
 
     mapSettings: map.mapSettings

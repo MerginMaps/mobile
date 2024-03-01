@@ -11,14 +11,15 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import mm 1.0 as MM
+
 import "../components"
-import lc 1.0
 
 Rectangle {
   id: root
 
   height: __style.row36
-  required property var /* MerginProjectStatusModel */ type
+  required property var /* MM.MerginProjectStatusModel */ type
   property int count: -1 // negative number: do not show count
   property string title: "" // empty string: show Added, Removed or Edited based on type
 
@@ -79,9 +80,9 @@ Rectangle {
     id: internal
 
     property var icon: {
-      if (root.type === MerginProjectStatusModel.Added ) return __style.plusIcon
-      else if (root.type === MerginProjectStatusModel.Deleted) return __style.deleteIcon
-      else if (root.type === MerginProjectStatusModel.Updated) return __style.editIcon
+      if (root.type === MM.MerginProjectStatusModel.Added ) return __style.plusIcon
+      else if (root.type === MM.MerginProjectStatusModel.Deleted) return __style.deleteIcon
+      else if (root.type === MM.MerginProjectStatusModel.Updated) return __style.editIcon
       else return ""
     }
 
@@ -89,22 +90,22 @@ Rectangle {
       if (root.title)
         return root.title
 
-      if (root.type === MerginProjectStatusModel.Added ) return qsTr("Added")
-      else if (root.type === MerginProjectStatusModel.Deleted) return qsTr("Removed")
-      else if (root.type === MerginProjectStatusModel.Updated) return qsTr("Edited")
+      if (root.type === MM.MerginProjectStatusModel.Added ) return qsTr("Added")
+      else if (root.type === MM.MerginProjectStatusModel.Deleted) return qsTr("Removed")
+      else if (root.type === MM.MerginProjectStatusModel.Updated) return qsTr("Edited")
       else return ""
     }
     property color bgColor: {
-      if (root.type === MerginProjectStatusModel.Added ) return __style.positiveColor
-      else if (root.type === MerginProjectStatusModel.Deleted) return __style.negativeColor
-      else if (root.type === MerginProjectStatusModel.Updated) return __style.warningColor
+      if (root.type === MM.MerginProjectStatusModel.Added ) return __style.positiveColor
+      else if (root.type === MM.MerginProjectStatusModel.Deleted) return __style.negativeColor
+      else if (root.type === MM.MerginProjectStatusModel.Updated) return __style.warningColor
       else return __style.transparentColor
     }
 
     property color fgColor: {
-      if (root.type === MerginProjectStatusModel.Added ) return __style.forestColor
-      else if (root.type === MerginProjectStatusModel.Deleted) return __style.earthColor
-      else if (root.type === MerginProjectStatusModel.Updated) return __style.grapeColor
+      if (root.type === MM.MerginProjectStatusModel.Added ) return __style.forestColor
+      else if (root.type === MM.MerginProjectStatusModel.Deleted) return __style.earthColor
+      else if (root.type === MM.MerginProjectStatusModel.Updated) return __style.grapeColor
       else return __style.transparentColor
     }
   }

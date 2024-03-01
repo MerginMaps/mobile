@@ -11,8 +11,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-import lc 1.0
-
 Item {
   id: control
 

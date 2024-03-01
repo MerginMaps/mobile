@@ -8,17 +8,17 @@
  ***************************************************************************/
 
 import QtQuick
-import lc 1.0
+
+import mm 1.0 as MM
 
 import "../components"
 import "../misc"
 import "../inputs"
-import "."
 
 Item {
   id: root
 
-  property int projectModelType: ProjectsModel.EmptyProjectsModel
+  property int projectModelType: MM.ProjectsModel.EmptyMM.ProjectsModel
   property string activeProjectId: ""
   property alias list: projectlist
 

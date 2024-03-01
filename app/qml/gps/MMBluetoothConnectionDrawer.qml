@@ -12,7 +12,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import "../components"
-import lc 1.0
 
 Drawer {
   id: root

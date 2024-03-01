@@ -12,8 +12,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
-import lc 1.0
-import ".."
 import "../components"
 
 Page {

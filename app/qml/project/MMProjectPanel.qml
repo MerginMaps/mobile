@@ -13,10 +13,8 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import QtQuick.Dialogs
 
-import lc 1.0
+import mm 1.0 as MM
 
-import "."
-import ".."
 import "../misc"
 import "../components"
 import "../onboarding"
@@ -386,7 +384,7 @@ Item {
           MMProjectListPage {
             id: workspaceProjectsPage
 
-            projectModelType: ProjectsModel.WorkspaceProjectsModel
+            projectModelType: MM.ProjectsModel.WorkspaceMM.ProjectsModel
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending && __merginApi.serverType !== MerginServerType.OLD
 
@@ -402,7 +400,7 @@ Item {
           MMProjectListPage {
             id: publicProjectsPage
 
-            projectModelType: ProjectsModel.PublicProjectsModel
+            projectModelType: MM.ProjectsModel.PublicMM.ProjectsModel
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending && __merginApi.serverType !== MerginServerType.OLD
 

@@ -13,8 +13,6 @@ import QtQuick.Controls
 import "../components"
 import "../inputs"
 
-import lc 1.0
-
 Page {
   id: root
 

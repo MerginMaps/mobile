@@ -18,7 +18,7 @@ import "../map"
 import "."
 import ".."
 
-import lc 1.0
+import mm 1.0 as MM
 
 Drawer {
   id: root
@@ -285,7 +285,7 @@ Drawer {
                 compass: Compass { id: ccompass }
               }
 
-              MapPosition {
+              MM.MapPosition {
                 id: mapPositionSource
 
                 mapSettings: root.mapCanvas.mapSettings

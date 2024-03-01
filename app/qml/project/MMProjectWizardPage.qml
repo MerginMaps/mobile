@@ -13,7 +13,8 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import QtQuick.Dialogs
 
-import lc 1.0
+import notificationType 1.0
+
 import "."
 import "../components"
 import "../inputs"
@@ -37,7 +38,7 @@ Item {
     true
   }
 
-  FieldsModel {
+  MM.FieldsModel {
     id: fieldsModel
     onNotify: function( message ) {
       __inputUtils.showNotification(message)

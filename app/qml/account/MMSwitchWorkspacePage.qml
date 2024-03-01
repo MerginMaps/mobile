@@ -10,7 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import lc 1.0
+
+import mm 1.0 as MM
 
 import "../inputs"
 import "../components"
@@ -104,8 +105,8 @@ Page {
       Repeater {
         id: invRepeater
 
-        model: InvitationsProxyModel {
-          invitationsSourceModel: InvitationsModel {
+        model: MM.InvitationsProxyModel {
+          invitationsSourceModel: MM.InvitationsModel {
             merginApi: __merginApi
           }
         }
@@ -198,10 +199,10 @@ Page {
       }
 
       Repeater {
-        model: WorkspacesProxyModel {
+        model: MM.WorkspacesProxyModel {
           id: wsProxyModel
 
-          workspacesSourceModel: WorkspacesModel {
+          workspacesSourceModel: MM.WorkspacesModel {
             merginApi: __merginApi
           }
         }

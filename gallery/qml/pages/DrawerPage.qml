@@ -17,8 +17,6 @@ import "../../app/qml/project"
 import "../../app/qml/dialogs"
 import "../../app/qml/gps"
 
-import lc 1.0
-
 Page {
   id: pane
 

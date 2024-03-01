@@ -11,7 +11,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import lc 1.0
 import "."
 import "../components"
 import "../misc"

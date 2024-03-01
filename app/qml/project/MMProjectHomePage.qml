@@ -8,12 +8,12 @@
  ***************************************************************************/
 
 import QtQuick
-import lc 1.0
+
+import mm 1.0 as MM
 
 import "../components"
 import "../misc"
 import "../inputs"
-import "."
 
 Item {
   id: root
@@ -91,23 +91,23 @@ Item {
       MMProjectItem {
         id: activeProjectItem
 
-        property var model: projectlist.projectsModel
-        property var index: projectlist.projectsModel.projectModelIndexFromId(root.activeProjectId)
+        property var model: projectlist.MM.ProjectsModel
+        property var index: projectlist.MM.ProjectsModel.projectModelIndexFromId(root.activeProjectId)
 
         width: parent.width
 
         highlight: true
-        projectDisplayName: model.data(index, ProjectsModel.ProjectFullName)
-        projectId: model.data(index, ProjectsModel.ProjectId)
-        projectDescription: model.data(index, ProjectsModel.ProjectDescription)
-        projectStatus: model.data(index, ProjectsModel.ProjectStatus) ? model.data(index, ProjectsModel.ProjectStatus) : ProjectStatus.NoVersion
-        projectIsValid: model.data(index, ProjectsModel.ProjectIsValid)
-        projectIsPending: model.data(index, ProjectsModel.ProjectSyncPending) ? model.data(index, ProjectsModel.ProjectSyncPending) : false
-        projectSyncProgress: model.data(index, ProjectsModel.ProjectSyncProgress) ? model.data(index, ProjectsModel.ProjectSyncProgress) : -1
-        projectIsLocal: model.data(index, ProjectsModel.ProjectIsLocal)
-        projectIsMergin: model.data(index, ProjectsModel.ProjectIsMergin)
-        projectRemoteError: model.data(index, ProjectsModel.ProjectRemoteError) ? model.data(index, ProjectsModel.ProjectRemoteError) : ""
-        property string projectFilePath: model.data(index, ProjectsModel.ProjectFilePath)
+        projectDisplayName: model.data(index, MM.ProjectsModel.ProjectFullName)
+        projectId: model.data(index, MM.ProjectsModel.ProjectId)
+        projectDescription: model.data(index, MM.ProjectsModel.ProjectDescription)
+        projectStatus: model.data(index, MM.ProjectsModel.ProjectStatus) ? model.data(index, MM.ProjectsModel.ProjectStatus) : ProjectStatus.NoVersion
+        projectIsValid: model.data(index, MM.ProjectsModel.ProjectIsValid)
+        projectIsPending: model.data(index, MM.ProjectsModel.ProjectSyncPending) ? model.data(index, MM.ProjectsModel.ProjectSyncPending) : false
+        projectSyncProgress: model.data(index, MM.ProjectsModel.ProjectSyncProgress) ? model.data(index, MM.ProjectsModel.ProjectSyncProgress) : -1
+        projectIsLocal: model.data(index, MM.ProjectsModel.ProjectIsLocal)
+        projectIsMergin: model.data(index, MM.ProjectsModel.ProjectIsMergin)
+        projectRemoteError: model.data(index, MM.ProjectsModel.ProjectRemoteError) ? model.data(index, MM.ProjectsModel.ProjectRemoteError) : ""
+        property string projectFilePath: model.data(index, MM.ProjectsModel.ProjectFilePath)
 
         onOpenRequested: {
           if ( projectIsLocal )
@@ -117,13 +117,13 @@ Item {
             projectlist.downloadProjectDialog.open()
           }
         }
-        onSyncRequested: projectlist.projectsModel.syncProject( projectId )
-        onMigrateRequested: projectlist.projectsModel.migrateProject( projectId )
+        onSyncRequested: projectlist.MM.ProjectsModel.syncProject( projectId )
+        onMigrateRequested: projectlist.MM.ProjectsModel.migrateProject( projectId )
         onRemoveRequested: {
           removeDialog.relatedProjectId = projectId
           removeDialog.open()
         }
-        onStopSyncRequested: projectlist.projectsModel.stopProjectSync( projectId )
+        onStopSyncRequested: projectlist.MM.ProjectsModel.stopProjectSync( projectId )
         onShowChangesRequested: root.showLocalChangesRequested( projectId )
       }
 
@@ -149,7 +149,7 @@ Item {
   MMProjectList {
     id: projectlist
 
-    projectModelType: ProjectsModel.LocalProjectsModel
+    projectModelType: MM.ProjectsModel.LocalMM.ProjectsModel
     activeProjectId: root.activeProjectId
     hideActiveProject: true
     searchText: searchBar.text

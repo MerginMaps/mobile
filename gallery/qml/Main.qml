@@ -1,5 +1,3 @@
-
-
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -8,6 +6,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtCore
 import QtQuick
 import QtQuick.Layouts
