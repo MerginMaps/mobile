@@ -9,6 +9,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import mm 1.0 as MM
+
 Item {
   id: controller
 
@@ -16,7 +18,7 @@ Item {
   required property var stackView
 
   property bool inProgress: false
-  property MerginInvitation invitation
+  property MM.MerginInvitation invitation
 
   QtObject {
     //! Data to send to postRegister endpoint

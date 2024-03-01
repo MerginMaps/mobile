@@ -13,12 +13,12 @@ import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import QtQuick.Shapes
 
+import mm 1.0 as MM
+
 import "../components"
 import "../map"
 import "."
 import ".."
-
-import mm 1.0 as MM
 
 Drawer {
   id: root
@@ -278,11 +278,11 @@ Drawer {
             Item {
               id: positionIndicatorItem
 
-              PositionDirection {
+              MM.PositionDirection {
                 id: positionDirection
 
                 positionKit: __positionKit
-                compass: Compass { id: ccompass }
+                compass: MM.Compass { id: ccompass }
               }
 
               MM.MapPosition {

@@ -35,7 +35,7 @@ Item {
   property bool isTrackingPosition: trackingManager?.isTrackingPosition ?? false
   property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType = RecordingMapTool.StreamMode : false
 
-  property PositionTrackingManager trackingManager: tracking.item?.manager ?? null
+  property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
   signal featureIdentified( var pair )
   signal featuresIdentified( var pairs )

@@ -14,7 +14,7 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 
 import mm 1.0 as MM
-import qgs 0.1 as QGS
+import qgs 1.0 as QGS
 
 import "../components"
 import "./components"

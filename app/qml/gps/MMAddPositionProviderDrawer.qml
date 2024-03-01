@@ -11,6 +11,8 @@ import QtCore
 import QtQuick
 import QtQuick.Controls
 
+import mm 1.0 as MM
+
 import "../components"
 
 Drawer {
@@ -134,7 +136,7 @@ Drawer {
 
       spacing: __style.margin12
 
-      model: BluetoothDiscoveryModel {
+      model: MM.BluetoothDiscoveryModel {
         id: btModel
         discovering: false
 

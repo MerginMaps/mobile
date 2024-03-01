@@ -10,13 +10,15 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import mm 1.0 as MM
+
 import "../components"
 import "../inputs"
 
 Page {
   id: root
 
-  required property MerginInvitation invitation
+  required property MM.MerginInvitation invitation
 
   property bool haveBack: false
   property bool showCreate: true

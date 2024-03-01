@@ -11,6 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import mm 1.0 as MM
+
 import "."
 import "../components"
 import "../misc"
@@ -143,11 +145,11 @@ Page {
         selected: [__appSettings.intervalType]
         model: ListModel {
           ListElement {
-            value: StreamingIntervalType.Time
+            value: MM.StreamingIntervalType.Time
             text: qsTr("Time elapsed")
           }
           ListElement {
-            value: StreamingIntervalType.Distance
+            value: MM.StreamingIntervalType.Distance
             text: qsTr("Distance traveled")
           }
         }
