@@ -11,7 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-import lc 1.0
+import mm 1.0 as MM
 
 import "../../components"
 import "../../inputs"
@@ -81,7 +81,7 @@ MMBaseInput {
 
         property var invisibleIds: 0
 
-        model: RelationFeaturesModel {
+        model: MM.RelationFeaturesModel {
           id: rmodel
 
           relation: root._fieldAssociatedRelation

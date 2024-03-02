@@ -11,15 +11,16 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import mm 1.0 as MM
+
 import "../components" as Components
 import "./components" as FormComponents
-import lc 1.0
 
 Item {
   id: root
 
   property bool layerIsReadOnly: false
-  property AttributePreviewController controller
+  property MM.AttributePreviewController controller
 
   signal contentClicked()
   signal editClicked()

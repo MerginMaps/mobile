@@ -10,7 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtMultimedia
-import lc 1.0 as InputClass
+
+import mm 1.0 as MM
 
 Drawer {
   id: root
@@ -43,7 +44,7 @@ Drawer {
     fillMode: VideoOutput.PreserveAspectCrop
   }
 
-  InputClass.QrCodeDecoder {
+  MM.QrCodeDecoder {
     id: qrcodeScanner
 
     videoSink: videoOutput.videoSink

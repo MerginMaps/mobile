@@ -11,7 +11,7 @@ import QtQuick
 import QtCore
 import QtQuick.Controls
 
-import Input 0.1 as Input
+import mm 1.0 as MM
 
 //
 // MapCanvas QML object is a utility class for rendering map layers and handling user interaction
@@ -94,7 +94,7 @@ Item {
     }
   }
 
-  Input.MapCanvasMap {
+  MM.MapCanvasMap {
     id: mapRenderer
 
     width: mapRoot.width

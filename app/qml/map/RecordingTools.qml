@@ -9,11 +9,11 @@
 
 import QtQuick
 import QtQuick.Shapes
-import Input 0.1
-import lc 1.0
+
+import mm 1.0 as MM
+
 import "../components"
 import "./components"
-import "../"
 
 /**
   * RecordingTools is a set of tools that are used during recording/editing of a geometry.
@@ -48,7 +48,7 @@ Item {
     }
   }
 
-  RecordingMapTool {
+  MM.RecordingMapTool {
     id: mapTool
 
     property bool isUsingPosition: centeredToGPS || mapTool.recordingType == RecordingMapTool.StreamMode
@@ -83,7 +83,7 @@ Item {
     }
   }
 
-  GuidelineController {
+  MM.GuidelineController {
     id: guidelineController
 
     allowed: mapTool.state !== RecordingMapTool.View

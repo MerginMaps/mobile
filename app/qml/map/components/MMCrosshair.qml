@@ -10,8 +10,7 @@
 import QtQuick
 import Qt5Compat.GraphicalEffects
 
-import lc 1.0
-import ".."
+import mm 1.0 as MM
 
 Item {
     id: root
@@ -29,7 +28,7 @@ Item {
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp
 
-    SnapUtils {
+    MM.SnapUtils {
       id: snapUtils
 
       centerPosition: root.center

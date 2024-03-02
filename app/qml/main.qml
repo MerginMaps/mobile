@@ -16,7 +16,8 @@ import QtPositioning
 import QtQuick.Dialogs
 import QtQuick.Layouts
 
-import lc 1.0 as InputClass
+import mm 1.0 as MM
+
 import "./map"
 import "./dialogs"
 import "./layers"
@@ -26,8 +27,6 @@ import "./project"
 import "./settings"
 import "./gps"
 import "./form"
-
-import notificationType 1.0
 
 ApplicationWindow {
   id: window
@@ -107,8 +106,8 @@ ApplicationWindow {
     __notificationModel.add(
           message,
           3,
-          NotificationType.Information,
-          NotificationType.None
+          MM.NotificationType.Information,
+          MM.NotificationType.None
           )
   }
 
@@ -851,7 +850,7 @@ ApplicationWindow {
 
     title: qsTr( "Select feature" )
     withSearchbar: false
-    model: InputClass.FeaturesModel {}
+    model: MM.FeaturesModel {}
     valueRole: "FeaturePair"
     textRole: "FeatureTitle"
 

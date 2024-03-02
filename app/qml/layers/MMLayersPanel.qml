@@ -10,7 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
-import lc 1.0
+import mm 1.0 as MM
+
 import "../components"
 import "../inputs"
 
@@ -22,19 +23,19 @@ Item {
   signal addFeature( var targetLayer )
   signal selectFeature( var featurePair )
 
-  LayerTreeSortFilterModel {
+  MM.LayerTreeSortFilterModel {
     id: layerTreeProxyModel
 
-    layerTreeModel: LayerTreeModel {
+    layerTreeModel: MM.LayerTreeModel {
       id: layerTreeModel
       qgsProject: __activeProject.qgsProject
     }
   }
 
-  LayerTreeFlatSortFilterModel {
+  MM.LayerTreeFlatSortFilterModel {
     id: layerTreeFlatSortFilterModel
 
-    layerTreeFlatModel: LayerTreeFlatModel {
+    layerTreeFlatModel: MM.LayerTreeFlatModel {
       id: layerTreeFlatModel
       qgsProject: __activeProject.qgsProject
     }

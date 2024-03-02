@@ -11,7 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import lc 1.0
+import mm 1.0 as MM
+
 import "../components"
 import "../inputs"
 
@@ -24,7 +25,7 @@ Page {
 
   property var layerTreeNode: null
 
-  LayerDetailData {
+  MM.LayerDetailData {
     id: layerDetailData
     layerTreeNode: root.layerTreeNode
 
@@ -148,7 +149,7 @@ Page {
           Column {
             id: legendWrapper
 
-            property var border: __style.margin12
+            property real border: __style.margin12
 
             Layout.fillWidth: true
             Layout.preferredHeight: legend.height + symbologyTitle.height + 2 * legendWrapper.border
@@ -198,9 +199,9 @@ Page {
           Column {
             id: layerAttribution
 
-            visible: __inputUtils.layerAttribution(layerDetailData.mapLayer) != ""
+            visible: __inputUtils.layerAttribution(layerDetailData.mapLayer) !== ""
 
-            property var border: __style.margin12
+            property real border: __style.margin12
 
             Layout.fillWidth: true
             Layout.preferredHeight: 1.5 * __style.row63 + attributionTitle.height + 2 * layerAttribution.border

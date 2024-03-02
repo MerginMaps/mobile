@@ -11,10 +11,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Shapes
 
-import Input 0.1
-import lc 1.0
+import mm 1.0 as MM
 
-import "../"
 import "../components"
 import "./components"
 
@@ -31,14 +29,14 @@ Item {
   signal canceled()
   signal done( bool success )
 
-  SplittingMapTool {
+  MM.SplittingMapTool {
     id: mapTool
 
     featureToSplit: root.featureToSplit
     mapSettings: root.map.mapSettings
   }
 
-  GuidelineController {
+  MM.GuidelineController {
     id: guidelineController
 
     mapSettings: root.map.mapSettings

@@ -43,15 +43,15 @@ int main( int argc, char *argv[] )
   QQmlApplicationEngine engine;
 
   // Register C++ enums
-  qmlRegisterUncreatableType<RegistrationError>( "lc", 1, 0, "RegistrationError", "RegistrationError Enum" );
-  qmlRegisterUncreatableType<StreamingIntervalType>( "lc", 1, 0, "StreamingIntervalType", "StreamingIntervalType Enum" );
-  qmlRegisterUncreatableType<PositionProviderType>( "lc", 1, 0, "PositionProvider", "PositionProvider Enum" );
+  qmlRegisterUncreatableType<RegistrationError>( "mm", 1, 0, "RegistrationError", "RegistrationError Enum" );
+  qmlRegisterUncreatableType<StreamingIntervalType>( "mm", 1, 0, "StreamingIntervalType", "StreamingIntervalType Enum" );
+  qmlRegisterUncreatableType<PositionProviderType>( "mm", 1, 0, "PositionProvider", "PositionProvider Enum" );
 
   // Register C++ types
-  qmlRegisterType<QrCodeDecoder>( "lc", 1, 0, "QrCodeDecoder" );
-  qmlRegisterType<ScaleBarKit>( "lc", 1, 0, "ScaleBarKit" );
-  qmlRegisterType<FormFeaturesModel>( "lc", 1, 0, "RelationFeaturesModel" );
-  qmlRegisterType<FormFeaturesModel>( "lc", 1, 0, "RelationReferenceFeaturesModel" );
+  qmlRegisterType<QrCodeDecoder>( "mm", 1, 0, "QrCodeDecoder" );
+  qmlRegisterType<ScaleBarKit>( "mm", 1, 0, "ScaleBarKit" );
+  qmlRegisterType<FormFeaturesModel>( "mm", 1, 0, "RelationFeaturesModel" );
+  qmlRegisterType<FormFeaturesModel>( "mm", 1, 0, "RelationReferenceFeaturesModel" );
 
 
 #ifdef DESKTOP_OS

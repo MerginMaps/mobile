@@ -9,9 +9,10 @@
 
 import QtQuick
 
+import mm 1.0 as MM
+
 import "../../components"
 import "../../inputs"
-import lc 1.0
 
 /*
  * Dropdown (value relation) editor for QGIS Attribute Form
@@ -78,7 +79,7 @@ MMDropdownInput {
         }
       }
 
-      model: ValueRelationFeaturesModel {
+      model: MM.ValueRelationFeaturesModel {
         id: vrDropdownModel
 
         config: root._fieldConfig
@@ -115,7 +116,7 @@ MMDropdownInput {
     }
   }
 
-  ValueRelationFeaturesModel {
+  MM.ValueRelationFeaturesModel {
     id: vrModel
 
     config: root._fieldConfig

@@ -11,7 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
 
-import lc 1.0
+import mm 1.0 as MM
+
 import "../components"
 
 Page {
@@ -105,7 +106,7 @@ Page {
 
     width: root.width - 2 * __style.pageMargins
 
-    model: PositionProvidersModel {
+    model: MM.PositionProvidersModel {
       id: providersModel
 
       appSettings: __appSettings

@@ -10,10 +10,10 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import mm 1.0 as MM
+
 import "../components"
 import "../inputs"
-
-import notificationType 1.0
 
 Page {
   id: root
@@ -169,8 +169,8 @@ Page {
         __notificationModel.add(
           root.specifyIndustryText,
           3,
-          NotificationType.Error,
-          NotificationType.None
+          MM.NotificationType.Error,
+          MM.NotificationType.None
         )
       }
     }

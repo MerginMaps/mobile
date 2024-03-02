@@ -11,7 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import lc 1.0
+import mm 1.0 as MM
+
 import "../inputs"
 import "../components"
 
@@ -53,7 +54,7 @@ Page {
   ListView {
     id: listView
 
-    model: FeaturesModel {
+    model: MM.FeaturesModel {
       id: featuresModel
 
       layer: root.selectedLayer

@@ -10,8 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 
-import lc 1.0
-
 import "../../components"
 import "../../inputs"
 

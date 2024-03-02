@@ -11,7 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import lc 1.0
+import mm 1.0 as MM
+
 import "."
 import "../components"
 import "../misc"
@@ -140,15 +141,15 @@ Page {
         title: qsTr("Interval threshold type")
         description: qsTr("Choose a type of threshold for streaming mode")
         valueDescription: qsTr("Interval threshold type")
-        value: __appSettings.intervalType === StreamingIntervalType.Distance ? qsTr("Distance Traveled") : qsTr("Time elapsed")
+        value: __appSettings.intervalType === MM.StreamingIntervalType.Distance ? qsTr("Distance Traveled") : qsTr("Time elapsed")
         selected: [__appSettings.intervalType]
         model: ListModel {
           ListElement {
-            value: StreamingIntervalType.Time
+            value: MM.StreamingIntervalType.Time
             text: qsTr("Time elapsed")
           }
           ListElement {
-            value: StreamingIntervalType.Distance
+            value: MM.StreamingIntervalType.Distance
             text: qsTr("Distance traveled")
           }
         }
@@ -165,9 +166,9 @@ Page {
         width: parent.width
         title: qsTr("Threshold interval")
         description: qsTr("Streaming mode will add a point to the object at each interval")
-        valueDescription:  __appSettings.intervalType === StreamingIntervalType.Distance ? qsTr("Threshold interval, in meters") : qsTr("Threshold interval, in seconds")
+        valueDescription:  __appSettings.intervalType === MM.StreamingIntervalType.Distance ? qsTr("Threshold interval, in meters") : qsTr("Threshold interval, in seconds")
         value: __appSettings.lineRecordingInterval
-        suffix: __appSettings.intervalType === StreamingIntervalType.Distance ? " m" : " s"
+        suffix: __appSettings.intervalType === MM.StreamingIntervalType.Distance ? " m" : " s"
 
         onValueWasChanged: function( newValue ) {
           __appSettings.lineRecordingInterval = newValue

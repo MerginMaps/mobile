@@ -8,9 +8,6 @@
  ***************************************************************************/
 
 import QtQuick
-import "."
-import ".."
-import lc 1.0
 import QtQuick.Layouts
 
 Item {

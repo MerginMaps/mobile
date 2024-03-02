@@ -10,6 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
+
 import "."
 
 Drawer {
@@ -50,7 +51,7 @@ Drawer {
       rightPadding:__style.pageMargins
       bottomPadding: __style.pageMargins
 
-      MMHeader {
+      MMPageHeader {
         id: header
         backVisible: false
         width: parent.width

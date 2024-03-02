@@ -10,7 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
-import lc 1.0
+import mm 1.0 as MM
+
 import "../../components"
 
 Item {
@@ -93,7 +94,7 @@ Item {
 //        return root.model
 //      }
 
-      model: RelationFeaturesModel {
+      model: MM.RelationFeaturesModel {
         id: rmodel
 
         relation: root._fieldAssociatedRelation

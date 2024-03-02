@@ -13,10 +13,8 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import QtQuick.Dialogs
 
-import lc 1.0
+import mm 1.0 as MM
 
-import "."
-import ".."
 import "../misc"
 import "../components"
 import "../onboarding"
@@ -64,7 +62,7 @@ Item {
   }
 
   function getServiceInfo() {
-    if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK && __merginApi.apiSupportsSubscriptions) {
+    if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MM.MerginApiStatus.OK && __merginApi.apiSupportsSubscriptions) {
         __merginApi.getServiceInfo()
     }
   }
@@ -386,9 +384,9 @@ Item {
           MMProjectListPage {
             id: workspaceProjectsPage
 
-            projectModelType: ProjectsModel.WorkspaceProjectsModel
+            projectModelType: MM.ProjectsModel.WorkspaceProjectsModel
             activeProjectId: root.activeProjectId
-            list.visible: !stackView.pending && __merginApi.serverType !== MerginServerType.OLD
+            list.visible: !stackView.pending && __merginApi.serverType !== MM.MerginServerType.OLD
 
             onOpenProjectRequested: function( projectFilePath ) {
               setupProjectOpen( projectFilePath )
@@ -402,9 +400,9 @@ Item {
           MMProjectListPage {
             id: publicProjectsPage
 
-            projectModelType: ProjectsModel.PublicProjectsModel
+            projectModelType: MM.ProjectsModel.PublicProjectsModel
             activeProjectId: root.activeProjectId
-            list.visible: !stackView.pending && __merginApi.serverType !== MerginServerType.OLD
+            list.visible: !stackView.pending && __merginApi.serverType !== MM.MerginServerType.OLD
 
             onOpenProjectRequested: function( projectFilePath ) {
               setupProjectOpen( projectFilePath )

@@ -7,10 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 import QtQuick
-
-import "../"
 import QtQuick.Controls
-import lc 1.0
+
+import mm 1.0 as MM
 
 /**
  * Show accept invitation page directly without onboarding
@@ -22,7 +21,7 @@ Item {
   required property bool enabled
   required property var stackView
 
-  property MerginInvitation invitation
+  property MM.MerginInvitation invitation
 
   Connections {
     id: openInvitationsListener

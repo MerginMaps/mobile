@@ -13,11 +13,12 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
 
-import lc 1.0
+import mm 1.0 as MM
+import qgs 1.0 as QGS
 
 import "../components"
 import "./components"
-import Input 0.1 as Input
+
 
 Page {
   id: root
@@ -47,12 +48,12 @@ Page {
   /**
    * Active project.
    */
-  property Input.Project project
+  property QGS.Project project
 
   /**
    * Controller
    */
-  property AttributeController controller
+  property MM.AttributeController controller
 
   implicitWidth: ApplicationWindow.window?.width ?? 0
   implicitHeight: ApplicationWindow.window?.height ?? 0

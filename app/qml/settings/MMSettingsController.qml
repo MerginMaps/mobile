@@ -11,7 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import lc 1.0
+import mm 1.0 as MM
 
 import "../components"
 import "../misc"
@@ -87,7 +87,7 @@ Item {
       id: changelogPanel
       onClose: stackview.pop(null)
       Component.onCompleted: forceActiveFocus()
-      model: ChangelogModel {
+      model: MM.ChangelogModel {
         onErrorMsgChanged: function(msg) {
           changelogPanel.errorDialog.text = msg
           changelogPanel.errorDialog.open()

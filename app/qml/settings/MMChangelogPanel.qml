@@ -14,8 +14,6 @@ import QtQuick.Dialogs
 
 import "../components"
 
-import lc 1.0
-
 Item {
   id: root
 

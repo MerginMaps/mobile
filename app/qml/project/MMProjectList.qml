@@ -11,16 +11,16 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
 import QtQuick.Layouts
-import lc 1.0
+
+import mm 1.0 as MM
 
 import "../components"
 import "../dialogs"
-import "."
 
 Item {
   id: root
 
-  property int projectModelType: ProjectsModel.EmptyProjectsModel
+  property int projectModelType: MM.ProjectsModel.EmptyProjectsModel
   property string activeProjectId: ""
   property string searchText: ""
   property int spacing: 0
@@ -35,7 +35,7 @@ Item {
   signal activeProjectDeleted()
 
   onSearchTextChanged: {
-    if ( projectModelType !== ProjectsModel.LocalProjectsModel ) {
+    if ( projectModelType !== MM.ProjectsModel.LocalProjectsModel ) {
       controllerModel.listProjects( root.searchText )
     }
     else viewModel.searchExpression = root.searchText
@@ -50,7 +50,7 @@ Item {
 
     Component.onCompleted: {
       // set proper footer (add project / fetch more)
-      if ( root.projectModelType === ProjectsModel.LocalProjectsModel ) {
+      if ( root.projectModelType === MM.ProjectsModel.LocalProjectsModel ) {
         listview.footer = addProjectComponent
       }
       else
@@ -74,10 +74,10 @@ Item {
     maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
 
     // Proxy model with source projects model
-    model: ProjectsProxyModel {
+    model: MM.ProjectsProxyModel {
       id: viewModel
 
-      projectSourceModel: ProjectsModel {
+      projectSourceModel: MM.ProjectsModel {
         id: controllerModel
 
         merginApi: __merginApi
@@ -93,10 +93,10 @@ Item {
 
       width: ListView.view.width
 
-      projectDisplayName: root.projectModelType === ProjectsModel.CreatedProjectsModel ? model.ProjectName : model.ProjectFullName
+      projectDisplayName: root.projectModelType === MM.ProjectsModel.CreatedProjectsModel ? model.ProjectName : model.ProjectFullName
       projectId: model.ProjectId
       projectDescription: model.ProjectDescription
-      projectStatus: model.ProjectStatus ? model.ProjectStatus : ProjectStatus.NoVersion
+      projectStatus: model.ProjectStatus ? model.ProjectStatus : MM.ProjectStatus.NoVersion
       projectIsValid: model.ProjectIsValid
       projectIsPending: model.ProjectSyncPending ? model.ProjectSyncPending : false
       projectSyncProgress: model.ProjectSyncProgress ? model.ProjectSyncProgress : -1
@@ -163,7 +163,7 @@ Item {
     id: noLocalProjectsMessageContainer
 
     visible: listview.count === 0 && // this check is getting longer and longer, would be good to replace with states
-             projectModelType === ProjectsModel.LocalProjectsModel &&
+             projectModelType === MM.ProjectsModel.LocalProjectsModel &&
              root.searchText === "" &&
              !controllerModel.isLoading
 
@@ -182,7 +182,7 @@ Item {
     id: noMerginProjectsTexts
 
     anchors.centerIn: parent
-    visible: reloadList.visible || !controllerModel.isLoading && ( projectModelType !== ProjectsModel.LocalProjectsModel && listview.count === 0 )
+    visible: reloadList.visible || !controllerModel.isLoading && ( projectModelType !== MM.ProjectsModel.LocalProjectsModel && listview.count === 0 )
     title: reloadList.visible ? qsTr("Unable to get the list of projects.") : qsTr("No projects found!")
     image: __style.noWifiImage
   }
@@ -199,7 +199,7 @@ Item {
       target: __merginApi
 
       function onListProjectsFailed() {
-        reloadList.visible = root.projectModelType !== ProjectsModel.LocalProjectsModel // show reload list to all models except local
+        reloadList.visible = root.projectModelType !== MM.ProjectsModel.LocalProjectsModel // show reload list to all models except local
       }
 
       function onListProjectsFinished( merginProjects, projectCount, page, requestId ) {

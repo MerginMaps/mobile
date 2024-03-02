@@ -13,7 +13,6 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import QtQuick.Dialogs
 
-import lc 1.0
 import "../components"
 import "../inputs"
 

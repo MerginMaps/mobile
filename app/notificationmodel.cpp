@@ -21,8 +21,6 @@ Notification::Notification( uint id, const QString &message, uint interval, Noti
 
 NotificationModel::NotificationModel( QObject *parent ) : QAbstractListModel{parent}
 {
-  qmlRegisterUncreatableType<NotificationType>( "notificationType", 1, 0, "NotificationType", "Not creatable as it is an enum type" );
-
   mTimer = new QTimer( this );
   connect( mTimer, &QTimer::timeout, this, &NotificationModel::timerFired );
   mTimer->start( 1000 );

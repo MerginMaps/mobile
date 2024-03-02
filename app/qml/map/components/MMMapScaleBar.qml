@@ -9,8 +9,7 @@
 
 import QtQuick
 
-import lc 1.0
-import "."
+import mm 1.0 as MM
 
 MMBlurBox {
   id: root
@@ -24,7 +23,7 @@ MMBlurBox {
   width: scaleBarKit.width + 48 * __dp
   height: 45 * __dp
 
-  ScaleBarKit {
+  MM.ScaleBarKit {
     id: scaleBarKit
   }
 

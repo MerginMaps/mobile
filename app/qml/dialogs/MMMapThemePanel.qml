@@ -10,8 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
-import lc 1.0
-import "."
+import mm 1.0 as MM
+
 import "../components"
 
 Drawer {
@@ -88,7 +88,7 @@ Drawer {
       implicitWidth: parent.width
       implicitHeight: contentHeight
 
-      model: MapThemesModel {
+      model: MM.MapThemesModel {
         id: mapThemesModel
         qgsProject: __activeProject.qgsProject
       }

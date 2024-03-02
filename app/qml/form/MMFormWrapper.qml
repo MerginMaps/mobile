@@ -10,11 +10,9 @@
 import QtQuick
 import QtQuick.Controls
 
-import lc 1.0
-import ".."
+import mm 1.0 as MM
 
 // Wraps preview panel and feature form
-
 Item {
   id: root
 
@@ -148,7 +146,7 @@ Item {
       id: previewPanel
 
       layerIsReadOnly: root.layerIsReadOnly
-      controller: AttributePreviewController { project: root.project; featureLayerPair: root.featureLayerPair }
+      controller: MM.AttributePreviewController { project: root.project; featureLayerPair: root.featureLayerPair }
 
       height: root.previewHeight
       width: root.width
@@ -172,10 +170,10 @@ Item {
 
       project: root.project
 
-      controller: AttributeController {
+      controller: MM.AttributeController {
         variablesManager: __variablesManager
 
-        rememberAttributesController: RememberAttributesController {
+        rememberAttributesController: MM.RememberAttributesController {
           rememberValuesAllowed: __appSettings.reuseLastEnteredValues
         }
         // NOTE: order matters, we want to init variables manager before

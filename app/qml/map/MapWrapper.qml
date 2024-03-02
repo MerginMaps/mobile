@@ -8,18 +8,15 @@
  ***************************************************************************/
 
 import QtQuick
-
-import lc 1.0
 import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Shapes
 
-import "."
+import mm 1.0 as MM
+
 import "../components"
 import "./components"
 import "../dialogs"
-
-import notificationType 1.0
 
 Item {
   id: root
@@ -37,7 +34,7 @@ Item {
   property bool isTrackingPosition: trackingManager?.isTrackingPosition ?? false
   property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType = RecordingMapTool.StreamMode : false
 
-  property PositionTrackingManager trackingManager: tracking.item?.manager ?? null
+  property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
   signal featureIdentified( var pair )
   signal featuresIdentified( var pairs )
@@ -166,11 +163,11 @@ Item {
 
         mapSettings.project: __activeProject.qgsProject
 
-        IdentifyKit {
+        MM.IdentifyKit {
           id: identifyKit
 
           mapSettings: mapCanvas.mapSettings
-          identifyMode: IdentifyKit.TopDownAll
+          identifyMode: MM.IdentifyKit.TopDownAll
         }
 
         onClicked: function( point ) {
@@ -217,7 +214,7 @@ Item {
         }
       }
 
-      Compass { id: deviceCompass }
+      MM.Compass { id: deviceCompass }
 
       StateGroup {
         id: gpsStateGroup
@@ -377,7 +374,7 @@ Item {
           Item {
             property alias manager: trackingManager
 
-            PositionTrackingManager {
+            MM.PositionTrackingManager {
               id: trackingManager
 
               variablesManager: __variablesManager
@@ -392,7 +389,7 @@ Item {
                        }
             }
 
-            PositionTrackingHighlight {
+            MM.PositionTrackingHighlight {
               id: trackingHighlight
 
               mapPosition: mapPositionSource.mapPosition
@@ -438,7 +435,7 @@ Item {
         sourceComponent: stakeoutToolsComponent
       }
 
-      MapPosition {
+      MM.MapPosition {
         id: mapPositionSource
 
         mapSettings: mapCanvas.mapSettings
@@ -446,7 +443,7 @@ Item {
         onScreenPositionChanged: root.updatePosition()
       }
 
-      PositionDirection {
+      MM.PositionDirection {
         id: positionDirectionSource
 
         positionKit: __positionKit
@@ -507,7 +504,10 @@ Item {
 
         onClicked: {
           if ( gpsStateGroup.state === "unavailable" ) {
-            __notificationModel.add( qsTr( "GPS currently unavailable" ), 5, NotificationType.Error, NotificationType.None )
+            __notificationModel.add( qsTr( "GPS currently unavailable" ),
+                                    5,
+                                    MM.NotificationType.Error,
+                                    MM.NotificationType.None )
             return
           }
 
