@@ -22,6 +22,7 @@ Drawer {
 
   property real maxHeight: ( ApplicationWindow.window?.height ?? 0 ) - __style.safeAreaTop
 
+  signal backClicked()
 
   implicitHeight: contentHeight > maxHeight ? maxHeight : contentHeight
   implicitWidth: ApplicationWindow.window?.width ?? 0
@@ -54,6 +55,13 @@ Drawer {
       width: parent.width
       height: parent.height / 2
       y: parent.height / 2
+    }
+
+    Keys.onReleased: function( event ) {
+      if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
+        root.backClicked()
+        event.accepted = true
+      }
     }
   }
 

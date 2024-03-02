@@ -17,10 +17,8 @@ import mm 1.0 as MM
 
 import "../components"
 import "../map"
-import "."
-import ".."
 
-Drawer {
+MMDrawer {
   id: root
 
   property int gpsIconHeight: 70
@@ -42,15 +40,6 @@ Drawer {
   signal panelHeightUpdated()
   signal autoFollowClicked()
   signal stakeoutFinished()
-
-  width: ApplicationWindow.window.width
-  height: roundedRect.childrenRect.height + borderRectangle.height
-  edge: Qt.BottomEdge
-  focus: true
-  dim: true
-  interactive: false
-  dragMargin: 0
-  closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
   Component.onCompleted: {
     root.open()
@@ -79,242 +68,180 @@ Drawer {
     }
   }
 
-  Keys.onReleased: function( event ) {
-    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true;
-      endStakeout()
-    }
-  }
+  onBackClicked: endStakeout()
 
   StateGroup {
     id: distanceState
 
     states: [
-        State {
-            name: "longRange"
-            when: root.remainingDistance >= root.closeRangeModeDistanceThreshold || root.remainingDistance < 0
-        },
-        State {
-            name: "closeRange"
-            when: root.remainingDistance >= 0 && root.remainingDistance < root.closeRangeModeDistanceThreshold
-        }
+      State {
+        name: "longRange"
+        when: root.remainingDistance >= root.closeRangeModeDistanceThreshold || root.remainingDistance < 0
+      },
+      State {
+        name: "closeRange"
+        when: root.remainingDistance >= 0 && root.remainingDistance < root.closeRangeModeDistanceThreshold
+      }
     ]
   }
 
-  Rectangle {
-    id: borderRectangle
+  drawerHeader.title: qsTr("Stake out")
 
-    color: roundedRect.color
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.right: parent.right
-    height: 2 * radius
-    anchors.topMargin: -radius
-    radius: 20 * __dp
-  }
-
-  Rectangle {
-    id: roundedRect
+  content: Column {
+    id: mainColumn
 
     anchors.fill: parent
-    color: __style.whiteColor
+    spacing: __style.margin12
 
-    MMPageHeader {
-      id: header
+    Row {
+      width: parent.width
+      height: __style.row67
 
-      backVisible: false
+      MMGpsDataText{
+        titleText: qsTr( "Feature" )
+        descriptionText: root.targetPair ? __inputUtils.featureTitle( root.targetPair, __activeProject.qgsProject ) : ""
+      }
 
-      title: qsTr("Stake out")
-      titleFont: __style.t2
-
-      MMRoundButton {
-        id: closeBtn
-
-        anchors.right: parent.right
-        anchors.rightMargin: __style.pageMargins
-        anchors.verticalCenter: parent.verticalCenter
-
-        iconSource: __style.closeIcon
-        iconColor: __style.forestColor
-
-        bgndColor: __style.lightGreenColor
-        bgndHoverColor: __style.mediumGreenColor
-
-        onClicked: close()
+      MMGpsDataText{
+        titleText: qsTr( "Distance" )
+        descriptionText: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2 ) : qsTr( "N/A" )
+        alignmentRight: true
       }
     }
 
-    Column {
-      id: mainColumn
+    MMLine {
+      visible: distanceState.state === "closeRange"
+    }
+
+    ScrollView {
+      id: gpsScrollView
 
       width: parent.width
-      anchors.left: parent.left
-      anchors.right: parent.right
-      anchors.top: header.bottom
-      anchors.leftMargin: __style.pageMargins
-      anchors.rightMargin: __style.pageMargins
-      anchors.topMargin: __style.pageMargins
+      ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+      ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
-      spacing: __style.margin12
+      visible: root.state === "closeRange"
 
-      Row {
-        width: parent.width
-        height: __style.row67
+      Column {
+        width:parent.width
+        anchors.fill: parent
+        spacing: 0
 
-        MMGpsDataText{
-          titleText: qsTr( "Feature" )
-          descriptionText: root.targetPair ? __inputUtils.featureTitle( root.targetPair, __activeProject.qgsProject ) : ""
-        }
+        Item {
+          id: closeRangeModeComponent
 
-        MMGpsDataText{
-          titleText: qsTr( "Distance" )
-          descriptionText: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2 ) : qsTr( "N/A" )
-          alignmentRight: true
-        }
-      }
+          height: 200 * __dp
+          width: parent.width
 
-      MMLine {
-        visible: distanceState.state === "closeRange"
-      }
+          states: [
+            State {
+              name: "atTarget"
+              when: root.remainingDistance < root.targetReachedDistanceThreshold
+            },
+            State {
+              name: "notAtTarget"
+              when: state !== "atTarget"
+            }
+          ]
 
-      ScrollView {
-        id: gpsScrollView
+          state: "notAtTarget"
 
-        width: parent.width
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-        ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+          // enable antialiasing
+          layer.enabled: true
+          layer.samples: 4
 
-        visible: root.state === "closeRange"
+          Shape {
+            id: rootShape
 
-        Column {
-          width:parent.width
-          anchors.fill: parent
-          spacing: 0
+            property real centerX: width / 2
+            property real centerY: height / 2
 
+            anchors.fill: parent
+
+            ShapePath {
+              strokeColor: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.lightGreenColor
+              fillColor: closeRangeModeComponent.state === "notAtTarget" ? "white" : __style.lightGreenColor
+
+              strokeWidth: 2 * __dp
+
+              PathAngleArc {
+                id: innerArc
+
+                centerX: rootShape.centerX
+                centerY: rootShape.centerY
+
+                radiusX: outerArc.radiusX / 2
+                radiusY: outerArc.radiusY / 2
+
+                startAngle: 0
+                sweepAngle: 360
+              }
+            }
+
+            ShapePath {
+              strokeColor: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.lightGreenColor
+              fillColor: "transparent"
+
+              strokeWidth: 2 * __dp
+
+              PathAngleArc {
+                id: outerArc
+
+                property real outerRadius: rootShape.height / 2.5
+
+                centerX: rootShape.centerX
+                centerY: rootShape.centerY
+
+                radiusX: outerRadius * __dp
+                radiusY: outerRadius * __dp
+
+                startAngle: 0
+                sweepAngle: 360
+              }
+            }
+          }
+
+          // Target X icon
+          MMIcon {
+            source: __style.closeIcon
+            size: rootShape.height / 12
+            color: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.lightGreenColor
+            x: rootShape.centerX - width / 2
+            y: rootShape.centerY - height / 2
+          }
+
+          // Position indicator with direction
           Item {
-            id: closeRangeModeComponent
+            id: positionIndicatorItem
 
-            height: 200 * __dp
-            width: parent.width
+            MM.PositionDirection {
+              id: positionDirection
 
-            states: [
-              State {
-                name: "atTarget"
-                when: root.remainingDistance < root.targetReachedDistanceThreshold
-              },
-              State {
-                name: "notAtTarget"
-                when: state !== "atTarget"
-              }
-            ]
-
-            state: "notAtTarget"
-
-            // enable antialiasing
-            layer.enabled: true
-            layer.samples: 4
-
-            Shape {
-              id: rootShape
-
-              property real centerX: width / 2
-              property real centerY: height / 2
-
-              anchors.fill: parent
-
-              ShapePath {
-                strokeColor: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.lightGreenColor
-                fillColor: closeRangeModeComponent.state === "notAtTarget" ? "white" : __style.lightGreenColor
-
-                strokeWidth: 2 * __dp
-
-                PathAngleArc {
-                  id: innerArc
-
-                  centerX: rootShape.centerX
-                  centerY: rootShape.centerY
-
-                  radiusX: outerArc.radiusX / 2
-                  radiusY: outerArc.radiusY / 2
-
-                  startAngle: 0
-                  sweepAngle: 360
-                }
-              }
-
-              ShapePath {
-                strokeColor: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.lightGreenColor
-                fillColor: "transparent"
-
-                strokeWidth: 2 * __dp
-
-                PathAngleArc {
-                  id: outerArc
-
-                  property real outerRadius: rootShape.height / 2.5
-
-                  centerX: rootShape.centerX
-                  centerY: rootShape.centerY
-
-                  radiusX: outerRadius * __dp
-                  radiusY: outerRadius * __dp
-
-                  startAngle: 0
-                  sweepAngle: 360
-                }
-              }
+              positionKit: __positionKit
+              compass: MM.Compass { id: ccompass }
             }
 
-            // Target X icon
-            MMIcon {
-              source: __style.closeIcon
-              size: rootShape.height / 12
-              color: closeRangeModeComponent.state === "notAtTarget" ? __style.greyColor : __style.lightGreenColor
-              x: rootShape.centerX - width / 2
-              y: rootShape.centerY - height / 2
-            }
+            MMPositionMarker {
+              id: positionMarker
 
-            // Position indicator with direction
-            Item {
-              id: positionIndicatorItem
+              property real bearing: root.targetPair ? __inputUtils.angleBetweenGpsAndFeature(
+                                                         __positionKit.positionCoordinate,
+                                                         root.targetPair,
+                                                         root.mapCanvas.mapSettings ) : 0
 
-              MM.PositionDirection {
-                id: positionDirection
+              xPos: ( rootShape.centerX + ( Math.sin( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
+              yPos: ( rootShape.centerY + ( Math.cos( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height
 
-                positionKit: __positionKit
-                compass: MM.Compass { id: ccompass }
-              }
+              hasDirection: positionDirection.hasDirection
 
-              MM.MapPosition {
-                id: mapPositionSource
+              direction: positionDirection.direction
+              hasPosition: __positionKit.hasPosition
 
-                mapSettings: root.mapCanvas.mapSettings
-                positionKit: __positionKit
-                onScreenPositionChanged: root.updatePosition()
-              }
+              horizontalAccuracy: __positionKit.horizontalAccuracy
+              accuracyRingSize: 0 // do not show any accuracy ring in stakeout mode
 
-              MMPositionMarker {
-                id: positionMarker
+              trackingMode: closeRangeModeComponent.state === "notAtTarget"
 
-                property real bearing: root.targetPair ? __inputUtils.angleBetweenGpsAndFeature(
-                                                                                                __positionKit.positionCoordinate,
-                                                                                                root.targetPair,
-                                                                                                root.mapCanvas.mapSettings ) : 0
-
-                xPos: ( rootShape.centerX + ( Math.sin( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - width / 2
-                yPos: ( rootShape.centerY + ( Math.cos( -bearing ) * root.remainingDistance ) * outerArc.outerRadius / root.closeRangeModeDistanceThreshold * __dp ) - height
-
-                hasDirection: positionDirection.hasDirection
-
-                direction: positionDirection.direction
-                hasPosition: __positionKit.hasPosition
-
-                horizontalAccuracy: __positionKit.horizontalAccuracy
-                accuracyRingSize: mapPositionSource.screenAccuracy
-
-                trackingMode: closeRangeModeComponent.state === "notAtTarget"
-
-              }
             }
           }
         }
@@ -322,5 +249,3 @@ Drawer {
     }
   }
 }
-
-
