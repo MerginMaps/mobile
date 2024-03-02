@@ -257,7 +257,7 @@ Page {
       implicitHeight: childrenRect.height
 
       // In future, better to filter such fields in the field proxy model instead
-      visible: Type !== FormItem.Invalid && Type !== FormItem.Container
+      visible: Type !== MM.FormItem.Invalid && Type !== MM.FormItem.Container
 
       Loader {
         id: formEditorsLoader
@@ -281,8 +281,8 @@ Page {
         property bool fieldShouldShowTitle: model.ShowName
 
         property string fieldTitle: model.Name
-        property string fieldErrorMessage: model.ValidationStatus === FieldValidator.Error ? model.ValidationMessage : ""
-        property string fieldWarningMessage: model.ValidationStatus === FieldValidator.Warning ? model.ValidationMessage : ""
+        property string fieldErrorMessage: model.ValidationStatus === MM.FieldValidator.Error ? model.ValidationMessage : ""
+        property string fieldWarningMessage: model.ValidationStatus === MM.FieldValidator.Warning ? model.ValidationMessage : ""
 
         property var fieldActiveProject: root.project
         property var fieldAssociatedRelation: model.Relation

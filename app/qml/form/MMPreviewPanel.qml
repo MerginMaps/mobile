@@ -60,7 +60,7 @@ Item {
         Layout.fillWidth: true
         Layout.preferredHeight: 160 * __dp
 
-        visible: root.controller.type === AttributePreviewController.Photo
+        visible: root.controller.type === MM.AttributePreviewController.Photo
 
         Components.MMPhoto {
           width: parent.width
@@ -94,7 +94,7 @@ Item {
         Layout.fillHeight: true
 
         text: controller.html
-        visible: root.controller.type === AttributePreviewController.HTML
+        visible: root.controller.type === MM.AttributePreviewController.HTML
 
         clip: true
       }
@@ -104,7 +104,7 @@ Item {
         Layout.fillHeight: true
 
         text: qsTr("No map tip available.")
-        visible: root.controller.type === AttributePreviewController.Empty
+        visible: root.controller.type === MM.AttributePreviewController.Empty
 
         font: __style.p6
         color: __style.nightColor
@@ -116,7 +116,7 @@ Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        visible: root.controller.type === AttributePreviewController.Fields
+        visible: root.controller.type === MM.AttributePreviewController.Fields
 
         ListView {
           anchors.fill: parent
@@ -165,7 +165,7 @@ Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        visible: root.controller.type === AttributePreviewController.Photo
+        visible: root.controller.type === MM.AttributePreviewController.Photo
       }
 
       ScrollView {
