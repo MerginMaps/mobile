@@ -21,9 +21,6 @@ import "../map"
 MMDrawer {
   id: root
 
-  property int gpsIconHeight: 70
-  property int gpsIconWidth: 58
-
   property var mapCanvas
 
   property var targetPair: null
@@ -90,7 +87,7 @@ MMDrawer {
   content: Column {
     id: mainColumn
 
-    anchors.fill: parent
+    width: parent.width
     spacing: __style.margin12
 
     Row {

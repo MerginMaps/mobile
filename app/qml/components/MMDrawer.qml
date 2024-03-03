@@ -18,8 +18,8 @@ Drawer {
   property alias drawerHeader: mmDrawerHeader
   property alias content: contentGroup.children
 
-  property double drawerSpacing: __style.spacing40 // Change this to 20 if using searchbar
-
+  property double drawerSpacing: __style.spacing20
+  property double drawerBottomMargin: __style.margin8
   property real maxHeight: ( ApplicationWindow.window?.height ?? 0 ) - __style.safeAreaTop
 
   signal backClicked()
@@ -69,7 +69,7 @@ Drawer {
     id: mainColumn
 
     anchors.fill: parent
-    spacing: root.drawerSpacing
+    spacing: 0
 
     height: mmDrawerHeader.height + contentGroup.height + root.drawerSpacing
 
@@ -81,6 +81,11 @@ Drawer {
       onCloseClicked: {
         root.close()
       }
+    }
+
+    Item {
+      width: parent.width
+      height: root.drawerSpacing
     }
 
     Item {
@@ -113,6 +118,12 @@ Drawer {
 
       // center the content
       x: leftPadding
+    }
+
+    // Bottom spacer
+    Item {
+      width: parent.width
+      height: root.drawerBottomMargin
     }
   }
 
