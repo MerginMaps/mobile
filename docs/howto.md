@@ -21,17 +21,10 @@ This documents is storage for various how-tos for development and distribution t
 
 ### application icon
 
-see: https://appbus.wordpress.com/2017/10/06/ios-11-and-xcode-9-in-qt-5-9-x-projects/
+NOTE: icon must be without transparency
 
-NOTE: icon must be without transparency!
-
-```
-brew install ImageMagick
-git clone https://github.com/smallmuou/ios-icon-generator
-chmod 777 ios-icon-generator.sh
-cd <repo>/input/app/ios
-<path_to_generator>/ios-icon-generator.sh ic_input_no_transparency.png appicon/
-```
+ - replace icon in `ios/Images.xcassets/AppIcon.appiconset/appicon.png` with 1024x1024px variant
+ - you can also do it via XCode - in file browser navigate to `Input -> Resources -> Images` and choose `AppIcon`. Make sure that it says `Single Size` for iOS in the right panel. This way you need only one 1024x1024 image for all icon variants.
 
 ### launch screen
 - iOS7: use http://ticons.fokkezb.nl/ and rename
