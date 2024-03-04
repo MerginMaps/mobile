@@ -6,7 +6,6 @@ set(MM_QML
     Notification.qml
     NotificationBanner.qml
     misc/NoWorkspaceBanner.qml
-
     account/MMAcountPage.qml
     account/MMAcountPageItem.qml
     account/MMSwitchWorkspacePage.qml
