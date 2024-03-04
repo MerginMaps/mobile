@@ -58,7 +58,7 @@ MMDrawerDialog {
       }
     }
 
-    Rectangle { width: parent.width; height: 1; color: __style.greyColor }
+    MMLine { width: parent.width }
 
     Item {
       width: parent.width
@@ -88,7 +88,7 @@ MMDrawerDialog {
       position: root.usedData
     }
 
-    Rectangle { width: parent.width; height: 1; color: __style.greyColor }
+    MMLine { width: parent.width }
 
     Item {
       width: parent.width

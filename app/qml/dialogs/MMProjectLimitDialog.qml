@@ -29,7 +29,7 @@ MMDrawerDialog {
   signal manageAccountClicked()
 
   specialComponent: Column {
-    width: root.width - 40 * __dp
+    width: root.width - 2 * __style.pageMargins
     spacing: 10 * __dp
     topPadding: 20 * __dp
 
@@ -57,7 +57,7 @@ MMDrawerDialog {
       }
     }
 
-    Rectangle { width: parent.width; height: 1; color: __style.greyColor }
+    MMLine { width: parent.width }
 
     Item {
       width: parent.width

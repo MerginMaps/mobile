@@ -22,7 +22,7 @@ Drawer {
   interactive: false
   dragMargin: 0 // prevents opening the drawer by dragging.
 
-  padding: 20
+  padding: 20 * __dp
 
   width: ApplicationWindow.window.width
   height: ApplicationWindow.window.height / 2
@@ -42,8 +42,9 @@ Drawer {
     anchors.top: parent.top
     anchors.left: parent.left
     anchors.right: parent.right
-    height: 2 * radius
     anchors.topMargin: -radius
+
+    height: 2 * radius
     radius: __style.pageMargins
   }
 
@@ -82,7 +83,7 @@ Drawer {
     ListView {
       id: listView
 
-      height: root.height - header.height - 40 * __dp
+      height: root.height - header.height - 2 * __style.pageMargins
       width: parent.width
       y: header.height + 40 * __dp
       implicitWidth: parent.width
@@ -98,6 +99,7 @@ Drawer {
       // No themes message + link
       Rectangle {
         id: noMapThemesRectangle
+
         anchors.fill: parent
         color: __style.whiteColor
         visible: parent.count === 0
