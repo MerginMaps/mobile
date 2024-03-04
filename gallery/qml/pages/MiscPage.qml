@@ -191,7 +191,6 @@ ScrollView {
         anchors.fill: parent
         MMBusyIndicator {
           running: true
-          size: 55
         }
       }
     }

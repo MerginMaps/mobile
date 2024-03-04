@@ -189,7 +189,6 @@ Item {
 
   MMBusyIndicator {
     id: busyIndicator
-    size: parent.width/8
     running: stackView.pending
     anchors.centerIn: parent
     z: parent.z + 1
