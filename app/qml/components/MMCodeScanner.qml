@@ -70,8 +70,8 @@ Drawer {
 
     MMTextBubble {
       width: parent.width - 40 * __dp
-      title: "Scan the QR code"
-      description: "Please make sure that the lense is clear."
+      title: qsTr( "Scan the QR code" )
+      description: qsTr( "Please make sure that the lense is clear." )
       image: __style.blueInfoImage
       anchors.centerIn: parent
     }
