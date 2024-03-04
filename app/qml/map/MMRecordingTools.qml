@@ -34,9 +34,9 @@ Item {
   signal done( var featureLayerPair )
 
   function toggleStreaming() {
-    if (  recordingMapTool.recordingType === RecordingMapTool.Manual )
+    if (  recordingMapTool.recordingType === MM.RecordingMapTool.Manual )
     {
-      recordingMapTool.recordingType = RecordingMapTool.StreamMode
+      recordingMapTool.recordingType = MM.RecordingMapTool.StreamMode
 
       // add first point immediately
       recordingMapTool.addPoint( crosshair.recordPoint )
@@ -44,21 +44,21 @@ Item {
     }
     else
     {
-      recordingMapTool.recordingType = RecordingMapTool.Manual
+      recordingMapTool.recordingType = MM.RecordingMapTool.Manual
     }
   }
 
   MM.RecordingMapTool {
     id: mapTool
 
-    property bool isUsingPosition: centeredToGPS || mapTool.recordingType == RecordingMapTool.StreamMode
+    property bool isUsingPosition: centeredToGPS || mapTool.recordingType == MM.RecordingMapTool.StreamMode
 
     centeredToGPS: false
     mapSettings: root.map.mapSettings
 
     recordPoint: crosshair.recordPoint
 
-    recordingType: RecordingMapTool.Manual
+    recordingType: MM.RecordingMapTool.Manual
     recordingInterval: __appSettings.lineRecordingInterval
     recordingIntervalType: __appSettings.intervalType
 
@@ -86,7 +86,7 @@ Item {
   MM.GuidelineController {
     id: guidelineController
 
-    allowed: mapTool.state !== RecordingMapTool.View
+    allowed: mapTool.state !== MM.RecordingMapTool.View
 
     mapSettings: root.map.mapSettings
     insertPolicy: mapTool.insertPolicy
@@ -98,7 +98,7 @@ Item {
     activeRing: mapTool.activeRing
   }
 
-  Highlight {
+  MMHighlight {
     id: highlight
 
     height: root.map.height
@@ -112,7 +112,7 @@ Item {
     lineBorderWidth: 0
   }
 
-  Highlight {
+  MMHighlight {
     id: handlesHighlight
 
     height: root.map.height
@@ -122,23 +122,23 @@ Item {
     geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
 
     lineStrokeStyle: ShapePath.DashLine
-    lineWidth: Highlight.LineWidths.Narrow
+    lineWidth: MMHighlight.LineWidths.Narrow
   }
 
-  Highlight {
+  MMHighlight {
     id: guideline
 
     height: root.map.height
     width: root.map.width
 
-    lineWidth: Highlight.LineWidths.Narrow
+    lineWidth: MMHighlight.LineWidths.Narrow
     lineStrokeStyle: ShapePath.DashLine
 
     mapSettings: root.map.mapSettings
     geometry: guidelineController.guidelineGeometry
   }
 
-  Highlight {
+  MMHighlight {
     id: midSegmentsHighlight
 
     height: root.map.height
@@ -147,11 +147,11 @@ Item {
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
 
-    markerType: Highlight.MarkerTypes.Circle
+    markerType: MMHighlight.MarkerTypes.Circle
     markerBorderColor: __style.grapeColor
   }
 
-  Highlight {
+  MMHighlight {
     id: existingVerticesHighlight
 
     height: root.map.height
@@ -160,8 +160,8 @@ Item {
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
 
-    markerType: Highlight.MarkerTypes.Circle
-    markerSize: Highlight.MarkerSizes.Bigger
+    markerType: MMHighlight.MarkerTypes.Circle
+    markerSize: MMHighlight.MarkerSizes.Bigger
   }
 
   // Duplicate position marker to be painted on the top of highlights
@@ -182,7 +182,7 @@ Item {
 
     anchors.fill: parent
 
-    visible: mapTool.state !== RecordingMapTool.View
+    visible: mapTool.state !== MM.RecordingMapTool.View
 
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
@@ -211,10 +211,10 @@ Item {
       }
 
       MMToolbarButton {
-        text: mapTool.state === RecordingMapTool.Grab ? qsTr( "Release" ) : qsTr( "Add" )
+        text: mapTool.state === MM.RecordingMapTool.Grab ? qsTr( "Release" ) : qsTr( "Add" )
         iconSource: __style.addIcon
         onClicked: {
-          if ( mapTool.state === RecordingMapTool.Grab ) {
+          if ( mapTool.state === MM.RecordingMapTool.Grab ) {
             mapTool.releaseVertex( crosshair.recordPoint )
           }
           else {
@@ -231,7 +231,7 @@ Item {
           if ( mapTool.hasValidGeometry() )
           {
             // If we currently grab a point
-            if ( mapTool.state == RecordingMapTool.Grab )
+            if ( mapTool.state == MM.RecordingMapTool.Grab )
             {
               mapTool.releaseVertex( crosshair.recordPoint )
             }

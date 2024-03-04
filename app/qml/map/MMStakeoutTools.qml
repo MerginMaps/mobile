@@ -19,7 +19,7 @@ Item {
 
   property real mapExtentOffset: 0
 
-  Highlight {
+  MMHighlight {
     id: highlight
 
     height: root.map.height

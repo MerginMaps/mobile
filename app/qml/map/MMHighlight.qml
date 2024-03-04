@@ -28,8 +28,8 @@ Item {
   enum MarkerSizes { Normal, Bigger }
   enum MarkerTypes { Circle, Image }
 
-  property int markerType: Highlight.MarkerTypes.Image
-  property int markerSize: Highlight.MarkerSizes.Normal
+  property int markerType: MMHighlight.MarkerTypes.Image
+  property int markerSize: MMHighlight.MarkerSizes.Normal
 
   property color markerColor: __style.grapeColor
   property color markerBorderColor: __style.whiteColor
@@ -41,7 +41,7 @@ Item {
   // line properties
   enum LineWidths { Normal, Narrow }
 
-  property int lineWidth: Highlight.LineWidths.Normal
+  property int lineWidth: MMHighlight.LineWidths.Normal
   property real lineBorderWidth: 4 * __dp // on top of width
 
   property color lineColor: __style.grapeColor
@@ -76,8 +76,8 @@ Item {
   QtObject {
     id: internal
 
-    property real markerSize: highlight.markerSize === Highlight.MarkerSizes.Normal ? 18 * __dp : 21 * __dp
-    property real lineWidth: highlight.lineWidth === Highlight.LineWidths.Normal ? 8 * __dp : 4 * __dp
+    property real markerSize: highlight.markerSize === MMHighlight.MarkerSizes.Normal ? 18 * __dp : 21 * __dp
+    property real lineWidth: highlight.lineWidth === MMHighlight.LineWidths.Normal ? 8 * __dp : 4 * __dp
   }
 
   Connections {
@@ -170,7 +170,7 @@ Item {
           newMarkerItems.push( componentMarker.createObject( highlight, {
                                                               "posX": data[ dataStartIndex ],
                                                               "posY": data[ dataStartIndex + 1 ],
-                                                              "markerType": Highlight.MarkerTypes.Circle
+                                                              "markerType": MMHighlight.MarkerTypes.Circle
                                                             } ) )
         }
 
@@ -249,7 +249,7 @@ Item {
         width: internal.markerSize
         height: width
 
-        visible: markerType === Highlight.MarkerTypes.Circle
+        visible: markerType === MMHighlight.MarkerTypes.Circle
 
         anchors {
           bottom: parent.bottom
@@ -264,7 +264,7 @@ Item {
       }
 
       Image {
-        visible: markerType === Highlight.MarkerTypes.Image
+        visible: markerType === MMHighlight.MarkerTypes.Image
 
         source: __style.mapPinImage
         sourceSize.width: parent.width

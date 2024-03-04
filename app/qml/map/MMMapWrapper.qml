@@ -354,7 +354,7 @@ Item {
       }
       // END OF: TOP elements
 
-      Highlight {
+      MMHighlight {
         id: identifyHighlight
 
         visible: root.state === "view"
@@ -396,13 +396,13 @@ Item {
               trackedGeometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
             }
 
-            Highlight {
+            MMHighlight {
               height: mapCanvas.height
               width: mapCanvas.width
 
               markerColor: __style.sunsetColor
               lineColor: __style.sunsetColor
-              lineWidth: Highlight.LineWidths.Narrow
+              lineWidth: MMHighlight.LineWidths.Narrow
 
               mapSettings: mapCanvas.mapSettings
               geometry: trackingHighlight.highlightGeometry
@@ -791,7 +791,7 @@ Item {
       Component {
         id: recordingToolsComponent
 
-        RecordingTools {
+        MMRecordingTools {
           anchors.fill: parent
 
           map: mapCanvas
@@ -856,7 +856,7 @@ Item {
       Component {
         id: stakeoutToolsComponent
 
-        StakeoutTools {
+        MMStakeoutTools {
           anchors.fill: parent
 
           map: mapCanvas
@@ -869,7 +869,7 @@ Item {
       Component {
         id: splittingToolsComponent
 
-        SplittingTools {
+        MMSplittingTools {
           anchors.fill: parent
 
           map: mapCanvas
