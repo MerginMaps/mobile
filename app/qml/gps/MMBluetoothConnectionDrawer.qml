@@ -248,11 +248,8 @@ Drawer {
         width: parent.width
         height: resultIcon.height
 
-        BusyIndicator {
+        MMBusyIndicator {
           id: loadingSpinner
-          height: parent.height / 2
-          width: parent.height / 2
-
           anchors.centerIn: parent
           running: rootstate.state === "working"
         }

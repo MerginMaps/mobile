@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="forestColor">#004C45</color>
+    <color name="grassColor">#73D19C</color>
+    <color name="nightColor">#12181F</color>
+    <color name="lightGreenColor">#EFF5F3</color>
+</resources>

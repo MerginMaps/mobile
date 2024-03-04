@@ -750,7 +750,7 @@ int main( int argc, char *argv[] )
   qDebug() <<  "All up and running";
 
 #ifdef ANDROID
-  QNativeInterface::QAndroidApplication::hideSplashScreen();
+  androidUtils.hideSplashScreen();
 #endif
 
   // save app version to settings

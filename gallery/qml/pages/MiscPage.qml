@@ -12,7 +12,6 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qml/components"
-import "../../app/qml/misc"
 import "../../app/qml/gps"
 
 ScrollView {
@@ -90,7 +89,7 @@ ScrollView {
     }
 
     GroupBox {
-      title: "MMHeader"
+      title: "MMPageHeader"
 
       width: parent.width
 
@@ -109,7 +108,7 @@ ScrollView {
         spacing: 20
         anchors.fill: parent
 
-        MMHeader {
+        MMPageHeader {
           title: "Only title without anything on left nor right"
           width: parent.width
 
@@ -118,63 +117,18 @@ ScrollView {
           Rectangle { anchors.fill: parent; color: "red"; opacity: .3 }
         }
 
-        MMHeader {
+        MMPageHeader {
           title: "Title with back button"
           width: parent.width
 
           backVisible: true
         }
 
-        MMHeader {
-          title: "Title with progress bar"
-          width: parent.width
-
-          backVisible: false
-          rightMarginShift: progressBar.width
-
-          MMProgressBar {
-            id: progressBar
-
-            anchors.right: parent.right
-            anchors.rightMargin: __style.pageMargins
-            anchors.verticalCenter: parent.verticalCenter
-
-            width: 60 * __dp
-            height: 4 * __dp
-
-            color: __style.grassColor
-            progressColor: __style.forestColor
-            position: 0.5
-          }
-        }
-
-        MMHeader {
-          title: "Title with back button and Progress bar"
-          width: parent.width
-          backVisible: true
-
-          rightMarginShift: progressBar2.width
-
-          MMProgressBar {
-            id: progressBar2
-
-            anchors.right: parent.right
-            anchors.rightMargin: __style.pageMargins
-            anchors.verticalCenter: parent.verticalCenter
-
-            width: 60 * __dp
-            height: 4 * __dp
-
-            color: __style.grassColor
-            progressColor: __style.forestColor
-            position: 0.9
-          }
-        }
       }
     }
 
     GroupBox {
-      title: "MMHeader (bigger title)"
+      title: "MMDrawerHeader"
       width: page.width - 40
 
       background: Rectangle {
@@ -191,7 +145,7 @@ ScrollView {
         spacing: 20
         anchors.fill: parent
 
-        MMHeader {
+        MMDrawerHeader {
           title: "Drawer title"
           titleFont: __style.h3
         }
@@ -221,7 +175,7 @@ ScrollView {
     }
 
     GroupBox {
-      title: "MMLoadingSpinner"
+      title: "MMBusyIndicator"
       background: Rectangle {
         color: "white"
         border.color: "gray"
@@ -235,7 +189,7 @@ ScrollView {
       Column {
         spacing: 20
         anchors.fill: parent
-        MMLoadingSpinner {
+        MMBusyIndicator {
           running: true
         }
       }
@@ -300,7 +254,8 @@ ScrollView {
         anchors.fill: parent
         MMWarningBubble {
           width: page.width - 64
-          text: "Server is broken, sorry. \n Please wait for tomorrow"
+          title: "Server is broken, sorry"
+          description: "Please wait for tomorrow"
         }
       }
     }

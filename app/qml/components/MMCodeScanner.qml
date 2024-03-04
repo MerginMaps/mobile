@@ -55,81 +55,39 @@ Drawer {
     }
   }
 
-  Canvas {
-    id: canvas
-
-    anchors.fill: parent
-    opacity: 0.8
-
-    onPaint: {
-      var ctx = getContext("2d");
-      let w = parent.width
-      let h = parent.height
-      ctx.fillStyle = __style.nightColor
-      ctx.fillRect(0, 0, parent.width, parent.height);
-      ctx.fill();
-      if(parent.width < parent.height)
-        ctx.clearRect(w / 4, h / 2 - w / 4, w / 2, w / 2)
-      else
-        ctx.clearRect(w / 2 - h / 4, h / 4, h / 2, h / 2)
-    }
-  }
-
-  Item {
-    width: parent.width
-    height: (parent.width < parent.height) ? parent.height / 2 - parent.width / 4 : parent.height / 4
-    anchors.horizontalCenter: parent.horizontalCenter
-
-    Column {
-      id: textColumn
-
-      width: parent.width - 40 * __dp
-      anchors.centerIn: parent
-      spacing: 10 * __dp
-
-      Text {
-        width: parent.width
-        text: qsTr("Scan the QR code")
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        font: __style.t1
-        wrapMode: Text.WordWrap
-        color: __style.whiteColor
-      }
-
-      Text {
-        width: parent.width
-        text: qsTr("Please make sure that the lense is clear.")
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        font: __style.p5
-        wrapMode: Text.WordWrap
-        color: __style.whiteColor
-      }
-    }
-  }
-
-  Image {
-    id: closeButton
-
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.bottom: parent.bottom
-    anchors.bottomMargin: 20 * __dp
-    source: __style.closeButtonIcon
-
-    MouseArea {
-      anchors.fill: parent
-      onClicked: {
-        unload()
-        close()
-      }
-    }
-  }
-
   function unload() {
     qrcodeScanner.videoSink = null
     camera.active = false
     captureSession.videoOutput = null
     captureSession.camera = null
+  }
+
+  Item {
+    id: scannerText
+    width: parent.width
+    height: (parent.width < parent.height) ? parent.height / 2 - parent.width / 4 : parent.height / 4
+    anchors.horizontalCenter: parent.horizontalCenter
+
+    MMTextBubble {
+      width: parent.width - 40 * __dp
+      title: qsTr( "Scan the QR code" )
+      description: qsTr( "Please make sure that the lense is clear." )
+      image: __style.blueInfoImage
+      anchors.centerIn: parent
+    }
+  }
+
+  MMRoundButton {
+    id: closeButton
+
+    anchors.horizontalCenter: parent.horizontalCenter
+    anchors.bottom: parent.bottom
+    anchors.bottomMargin: 2 * __style.pageMargins
+    bgndColor: __style.lightGreenColor
+    iconSource: __style.closeIcon
+    onClicked: {
+      root.unload()
+      close()
+    }
   }
 }

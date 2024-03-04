@@ -114,6 +114,14 @@ Page {
           projectLimitDialog.open()
         }
       }
+
+      Button {
+        text: "codeScanner"
+
+        onClicked: {
+          codeScanner.open()
+        }
+      }
     }
   }
 
@@ -229,5 +237,9 @@ Page {
 
   MMMigrateToMerginDialog {
     id: migrateToMerginDialog
+  }
+
+  MMCodeScanner {
+    id: codeScanner
   }
 }

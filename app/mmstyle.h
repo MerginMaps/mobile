@@ -207,6 +207,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl positiveMMSymbolImage READ positiveMMSymbolImage CONSTANT )
     Q_PROPERTY( QUrl closeAccountImage READ closeAccountImage CONSTANT )
     Q_PROPERTY( QUrl attentionImage READ attentionImage CONSTANT )
+    Q_PROPERTY( QUrl blueInfoImage READ blueInfoImage CONSTANT )
     Q_PROPERTY( QUrl bubbleImage READ bubbleImage CONSTANT )
     Q_PROPERTY( QUrl streamingBootsImage READ streamingBootsImage CONSTANT )
     Q_PROPERTY( QUrl streamingBootsOrangeImage READ streamingBootsOrangeImage CONSTANT )
@@ -216,6 +217,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl crosshairCircleImage READ crosshairCircleImage CONSTANT )
     Q_PROPERTY( QUrl crosshairForegroundImage READ crosshairForegroundImage CONSTANT )
     Q_PROPERTY( QUrl crosshairPlusImage READ crosshairPlusImage CONSTANT )
+    Q_PROPERTY( QUrl noWorkspaceImage READ noWorkspaceImage CONSTANT )
+
 
     /*
      * Pixel sizes used across the app
@@ -439,6 +442,7 @@ class MMStyle: public QObject
     QUrl positiveMMSymbolImage() {return QUrl( "qrc:/images/PositiveMMSymbol.svg" );}
     QUrl closeAccountImage() {return QUrl( "qrc:/images/CloseAccount.svg" );}
     QUrl attentionImage() {return QUrl( "qrc:/images/Attention.svg" );}
+    QUrl blueInfoImage() {return QUrl( "qrc:/images/BlueInfo.svg" );}
     QUrl bubbleImage() {return QUrl( "qrc:/images/Bubble.svg" );}
     QUrl streamingBootsImage() {return QUrl( "qrc:/images/StreamingBoots.svg" );}
     QUrl streamingBootsOrangeImage() {return QUrl( "qrc:/images/StreamingBootsOrange.svg" );}
@@ -448,6 +452,7 @@ class MMStyle: public QObject
     QUrl crosshairCircleImage() {return QUrl( "qrc:/images/CrosshairCircle.svg" );}
     QUrl crosshairForegroundImage() {return QUrl( "qrc:/images/CrosshairForeground.svg" );}
     QUrl crosshairPlusImage() {return QUrl( "qrc:/images/CrosshairPlus.svg" );}
+    QUrl noWorkspaceImage() {return QUrl( "qrc:/images/NoWorkspace.svg" );}
 
     static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
     static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}

@@ -131,12 +131,9 @@ Page {
     onTriggered: featuresModel.searchExpression = searchbox.text
   }
 
-  BusyIndicator {
+  MMBusyIndicator {
     id: busyIndicator
-    width: parent.width/8
-    height: width
     running: featuresModel.fetchingResults
-    visible: running
     anchors.centerIn: parent
   }
 
