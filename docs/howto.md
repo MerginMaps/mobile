@@ -27,8 +27,9 @@ NOTE: icon must be without transparency
  - you can also do it via XCode - in file browser navigate to `Input -> Resources -> Images` and choose `AppIcon`. Make sure that it says `Single Size` for iOS in the right panel. This way you need only one 1024x1024 image for all icon variants.
 
 ### launch screen
-- iOS7: use http://ticons.fokkezb.nl/ and rename
-- iPhone6: (XIB) generate in XCode (https://medium.com/better-programming/swift-3-creating-a-custom-view-from-a-xib-ecdfe5b3a960)
+
+ - defined in `app/ios/launchscreen/MMLaunchScreen.storyboard` - open in XCode and edit.
+ - if you need to add a new one, open the configured project in XCode and add a new storyboard following: https://appbus.wordpress.com/2020/04/15/qt-ios-splash-storyboard/#:~:text=Create%20a%20new%20Storyboard%20Splash%20Screen
 
 ## iOS dist certificates
 
