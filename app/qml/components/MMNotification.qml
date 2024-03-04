@@ -80,7 +80,7 @@ Rectangle {
 
   MouseArea {
     anchors.fill: parent
-    onClicked: __notificationModel.doAction(model.id)
+    onClicked: __notificationModel.onNotificationClicked(model.id)
   }
 
   MMRoundButton {

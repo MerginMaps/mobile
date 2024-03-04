@@ -10,7 +10,7 @@
 #include "notificationmodel.h"
 #include <QQmlEngine>
 
-Notification::Notification( uint id, const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information, NotificationType::IconType icon = NotificationType::NoneIcon, NotificationType::ActionType action = NotificationType::NoAction )
+Notification::Notification( uint id, const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon, NotificationType::ActionType action )
 {
   mId = id;
   mMessage = message;
@@ -83,7 +83,7 @@ void NotificationModel::remove( uint id )
 }
 
 // add new unique message with interval
-void NotificationModel::add( const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information, NotificationType::IconType icon = NotificationType::NoneIcon, NotificationType::ActionType action = NotificationType::ActionType::NoAction )
+void NotificationModel::add( const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon, NotificationType::ActionType action )
 {
   for ( Notification &notification : mNotifications )
   {
@@ -128,14 +128,23 @@ void NotificationModel::timerFired()
 }
 
 // do action, added when Notification was created
-void NotificationModel::doAction(uint id)
+void NotificationModel::onNotificationClicked( uint id )
 {
   for ( int i = 0; i < mNotifications.count(); i++ )
   {
-    if ( mNotifications[i].id() == id &&
-        mNotifications[i].action() == NotificationType::ActionType::ShowProjectIssuesAction )
+    auto notification = mNotifications.at( i );
+
+    if ( notification.id() == id )
     {
-      emit showProjectIssuesActionClicked();
+      switch ( notification.action() )
+      {
+        case NotificationType::ActionType::ShowProjectIssuesAction:
+        {
+          emit showProjectIssuesActionClicked();
+          break;
+        }
+        default: break;
+      }
     }
   }
 }
