@@ -12,8 +12,11 @@ import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 
 Rectangle {
-  id: loadingIndicator
+  id: root
   color: __style.forestColor
+
+  height: root.visible ? 7 * __dp : 0
+  property alias running: root.visible
 
   Rectangle {
     id: bar
@@ -21,7 +24,7 @@ Rectangle {
     height: parent.height
 
     PropertyAnimation {
-      running: loadingIndicator.visible
+      running: root.visible
       target: bar
       property: "x"
       from: -bar.width

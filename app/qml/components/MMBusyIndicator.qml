@@ -12,12 +12,13 @@ import QtQuick
 Item {
   id: root
 
-  property bool running: false
+  required property real size
+  property alias running: root.visible
   property int speed: 800
 
-  width: __style.row63
-  height: width
-  visible: running
+  width: root.size
+  height: root.size
+  visible: false
 
   Image {
     id: icon

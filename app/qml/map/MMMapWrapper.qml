@@ -250,13 +250,12 @@ Item {
       }
 
       // TOP elements
-      MMLoadingIndicator {
+      MMMapLoadingIndicator {
         id: loadingIndicator
 
         width: mapCanvas.width
-        height: visible ? 7 * __dp : 0
         anchors.top: canvasRoot.top
-        visible: mapCanvas.isRendering && root.state !== "inactive"
+        running: mapCanvas.isRendering && root.state !== "inactive"
       }
 
       MMMapButton {
