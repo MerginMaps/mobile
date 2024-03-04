@@ -135,7 +135,7 @@ void NotificationModel::doAction(uint id)
     if ( mNotifications[i].id() == id &&
         mNotifications[i].action() == NotificationType::ActionType::ShowProjectIssuesAction )
     {
-      qInfo() << "TODO: ShowProjectIssuesAction";
+      emit showProjectIssuesActionClicked();
     }
   }
 }
