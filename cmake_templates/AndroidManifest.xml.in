@@ -41,7 +41,8 @@
         android:allowNativeHeapPointerTagging="false"
         android:allowBackup="true"
         android:fullBackupOnly="false"
-        android:icon="@mipmap/ic_merginmaps_launcher">
+        android:icon="@mipmap/ic_appicon"
+        android:roundIcon="@mipmap/ic_appicon_round">
         <activity
             android:name="uk.co.lutraconsulting.InputActivity"
             android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
@@ -49,7 +50,8 @@
             android:launchMode="singleTop"
             android:screenOrientation="unspecified"
             android:exported="true"
-            android:theme="@style/SplashScreenTheme">
+            android:theme="@style/Theme.App.Starting"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -62,15 +64,6 @@
             <meta-data 
                 android:name="android.app.arguments" 
                 android:value="-- %%INSERT_APP_ARGUMENTS%% --" />
-
-            <!-- Splash screen -->
-            <meta-data 
-                android:name="android.app.splash_screen_drawable" 
-                android:resource="@drawable/splashscreen" />
-            <meta-data 
-                android:name="android.app.splash_screen_sticky" 
-                android:value="true" />
-            <!-- Splash screen -->
 
             <!-- Background running -->
             <!-- Warning: changing this value to true may cause unexpected crashes if the
@@ -105,10 +98,6 @@
         </provider>
 
         <service android:process=":trackingThread" android:name=".PositionTrackingService" android:foregroundServiceType="location" android:stopWithTask="true"/>
-        <!-- <service> -->
-        <!-- android:process=":tracking"  -->
-        <!-- </service> -->
-
     </application>
 
     <!-- Explicitly mention that we need to use external app for capturing an image -->
