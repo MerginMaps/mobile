@@ -63,10 +63,12 @@ Page {
 
       onButtonClicked: { __notificationModel.addInfo(text); text = "" }
     }
-    Text {
-      text: "Note: Notification will be removed in 1 minute"
+    MMTextWithButtonInput {
+      buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
-      color: "green"
+      placeholderText: "Click on notification to invoke ShowProjectIssuesAction action"
+
+      onButtonClicked: { __notificationModel.addInfo(text, MM.NotificationType.ShowProjectIssuesAction); text = "" }
     }
   }
 

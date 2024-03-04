@@ -37,6 +37,13 @@ class NotificationType
     };
     Q_ENUM( IconType )
 
+    enum ActionType
+    {
+      NoAction,
+      ShowProjectIssuesAction
+    };
+    Q_ENUM( ActionType )
+
   private:
     explicit NotificationType();
 };
@@ -46,11 +53,12 @@ class Notification
     Q_GADGET
 
   public:
-    Notification( uint id, const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon );
+    Notification( uint id, const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon, NotificationType::ActionType action );
     uint id() const { return mId; }
     QString message() const { return mMessage; }
     NotificationType::MessageType type() const { return mType; }
     NotificationType::IconType icon() const { return mIcon; }
+    NotificationType::ActionType action() const { return mAction; }
     bool isRemovableAfterDecrement()
     {
       if ( mInterval > 0 )
@@ -66,6 +74,7 @@ class Notification
     uint mInterval; // [seconds]
     NotificationType::MessageType mType;
     NotificationType::IconType mIcon;
+    NotificationType::ActionType mAction;
 };
 
 class NotificationModel : public QAbstractListModel
@@ -84,11 +93,12 @@ class NotificationModel : public QAbstractListModel
     NotificationModel( QObject *parent = nullptr );
     ~NotificationModel();
 
-    Q_INVOKABLE void addSuccess( const QString &message );
-    Q_INVOKABLE void addError( const QString &message );
-    Q_INVOKABLE void addInfo( const QString &message );
-    Q_INVOKABLE void addWarning( const QString &message );
+    Q_INVOKABLE void addSuccess( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction );
+    Q_INVOKABLE void addError( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction );
+    Q_INVOKABLE void addInfo( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction );
+    Q_INVOKABLE void addWarning( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction );
     Q_INVOKABLE void remove( uint id );
+    Q_INVOKABLE void doAction( uint id );
 
     QHash<int, QByteArray> roleNames() const override;
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
@@ -96,9 +106,10 @@ class NotificationModel : public QAbstractListModel
 
   signals:
     void rowCountChanged();
+    void showProjectIssuesActionClicked();
 
   private:
-    void add( const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon );
+    void add( const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon, NotificationType::ActionType );
     uint nextId() { static uint id = 0; return id++; }
     void timerFired();
 

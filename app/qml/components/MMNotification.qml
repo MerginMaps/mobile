@@ -78,23 +78,25 @@ Rectangle {
     }
   }
 
-  MMIcon {
+  MouseArea {
+    anchors.fill: parent
+    onClicked: __notificationModel.doAction(model.id)
+  }
+
+  MMRoundButton {
     id: closeButton
 
-    anchors.right: parent.right
-    anchors.rightMargin: 20 * __dp
-    anchors.verticalCenter: parent.verticalCenter
-    scale: maRemove.containsMouse ? 1.2 : 1
-    source: __style.closeIcon
-    color: text.color
-
-    MouseArea {
-      id: maRemove
-
-      anchors.fill: parent
-      hoverEnabled: true
-      onClicked: __notificationModel.remove(model.id)
+    anchors {
+      right: parent.right
+      verticalCenter: parent.verticalCenter
+      rightMargin: 20 * __dp
     }
+    iconSource: __style.closeIcon
+    iconColor: text.color
+    bgndColor: __style.transparentColor
+    bgndHoverColor: __style.transparentColor
+
+    onClicked: __notificationModel.remove(model.id)
   }
 
   Behavior on scale { NumberAnimation { easing.type: Easing.OutCubic; from: 0; to: 1.0; duration: 200 } }
