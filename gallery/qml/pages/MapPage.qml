@@ -67,6 +67,11 @@ Page {
     }
   }
 
+  MMMapLoadingIndicator {
+    running: true
+    width: parent.width
+  }
+
   MMMapScaleBar {
     anchors.horizontalCenter: parent.horizontalCenter
     y: 120

@@ -6,7 +6,6 @@ set(MM_QML
     Notification.qml
     NotificationBanner.qml
     misc/NoWorkspaceBanner.qml
-
     account/MMAcountPage.qml
     account/MMAcountPageItem.qml
     account/MMSwitchWorkspacePage.qml
@@ -28,7 +27,7 @@ set(MM_QML
     components/MMLinkButton.qml
     components/MMListDrawer.qml
     components/MMListDrawerItem.qml
-    components/MMLoadingSpinner.qml
+    components/MMBusyIndicator.qml
     components/MMMenuDrawer.qml
     components/MMMessage.qml
     components/MMMorePhoto.qml
@@ -120,7 +119,7 @@ set(MM_QML
     map/MMRecordingTools.qml
     map/components/MMBlurBox.qml
     map/components/MMCrosshair.qml
-    map/components/MMLoadingIndicator.qml
+    map/components/MMMapLoadingIndicator.qml
     map/components/MMMapBlurLabel.qml
     map/components/MMMapButton.qml
     map/components/MMMapLabel.qml

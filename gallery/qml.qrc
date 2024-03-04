@@ -32,7 +32,10 @@
         <file>../app/qml/dialogs/MMDownloadProjectDialog.qml</file>
         <file>../app/qml/dialogs/MMProjectLimitDialog.qml</file>
         <file>../app/qml/components/MMButton.qml</file>
+        <file>../app/qml/components/MMPageHeader.qml</file>
+        <file>../app/qml/components/MMDrawerHeader.qml</file>
         <file>../app/qml/components/MMLinkButton.qml</file>
+        <file>../app/qml/components/MMLine.qml</file>
         <file>../app/qml/components/MMIcon.qml</file>
         <file>../app/qml/components/MMLine.qml</file>
         <file>../app/qml/components/MMRoundButton.qml</file>
@@ -79,7 +82,7 @@
         <file>../app/qml/components/MMPageHeader.qml</file>
         <file>../app/qml/components/MMDrawer.qml</file>
         <file>../app/qml/components/MMDrawerHeader.qml</file>
-        <file>../app/qml/components/MMLoadingSpinner.qml</file>
+        <file>../app/qml/components/MMBusyIndicator.qml</file>
         <file>../app/qml/account/MMAcountPage.qml</file>
         <file>../app/qml/account/MMAcountPageItem.qml</file>
         <file>../app/qml/inputs/MMBaseInput.qml</file>
@@ -111,7 +114,7 @@
         <file>../app/qml/onboarding/MMWhichIndustry.qml</file>
         <file>../app/qml/map/MMPositionMarker.qml</file>
         <file>../app/qml/map/components/MMBlurBox.qml</file>
-        <file>../app/qml/map/components/MMLoadingIndicator.qml</file>
+        <file>../app/qml/map/components/MMMapLoadingIndicator.qml</file>
         <file>../app/qml/map/components/MMMapBlurLabel.qml</file>
         <file>../app/qml/map/components/MMMapButton.qml</file>
         <file>../app/qml/map/components/MMMapLabel.qml</file>

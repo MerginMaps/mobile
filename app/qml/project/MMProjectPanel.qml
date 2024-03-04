@@ -187,12 +187,10 @@ Item {
     }
   }
 
-  BusyIndicator {
+  MMBusyIndicator {
     id: busyIndicator
-    width: parent.width/8
-    height: width
+    size: parent.width/8
     running: stackView.pending
-    visible: running
     anchors.centerIn: parent
     z: parent.z + 1
   }
