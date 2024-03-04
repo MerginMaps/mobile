@@ -216,6 +216,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl crosshairCircleImage READ crosshairCircleImage CONSTANT )
     Q_PROPERTY( QUrl crosshairForegroundImage READ crosshairForegroundImage CONSTANT )
     Q_PROPERTY( QUrl crosshairPlusImage READ crosshairPlusImage CONSTANT )
+    Q_PROPERTY( QUrl noWorkspaceImage READ noWorkspaceImage CONSTANT )
+
 
     /*
      * Pixel sizes used across the app
@@ -448,6 +450,7 @@ class MMStyle: public QObject
     QUrl crosshairCircleImage() {return QUrl( "qrc:/images/CrosshairCircle.svg" );}
     QUrl crosshairForegroundImage() {return QUrl( "qrc:/images/CrosshairForeground.svg" );}
     QUrl crosshairPlusImage() {return QUrl( "qrc:/images/CrosshairPlus.svg" );}
+    QUrl noWorkspaceImage() {return QUrl( "qrc:/images/NoWorkspace.svg" );}
 
     static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
     static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}
