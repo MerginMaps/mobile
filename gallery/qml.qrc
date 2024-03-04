@@ -120,9 +120,9 @@
         <file>../app/qml/map/components/MMMapLabel.qml</file>
         <file>../app/qml/map/components/MMMapPicker.qml</file>
         <file>../app/qml/map/components/MMMapScaleBar.qml</file>
-        <file>../app/qml/project/MMProjectLoadingScreen.qml</file>
-        <file>../app/qml/project/MMProjectIssuesPanel.qml</file>
-        <file>../app/qml/project/MMProjectItem.qml</file>
+        <file>../app/qml/project/components/MMProjectDelegate.qml</file>
+        <file>../app/qml/project/MMProjectLoadingPage.qml</file>
+        <file>../app/qml/project/MMProjectIssuesPage.qml</file>
         <file>../app/qml/settings/MMLogPanel.qml</file>
         <file>../app/qml/settings/MMAboutPanel.qml</file>
         <file>../app/qml/settings/MMChangelogPanel.qml</file>

@@ -133,17 +133,17 @@ set(MM_QML
     map/components/MMMapLabel.qml
     map/components/MMMapPicker.qml
     map/components/MMMapScaleBar.qml
-    project/MMProjectHomePage.qml
-    project/MMProjectIssuesPanel.qml
-    project/MMProjectItem.qml
-    project/MMProjectList.qml
-    project/MMProjectListPage.qml
-    project/MMProjectLoadingScreen.qml
-    project/MMProjectPanel.qml
-    project/MMProjectStatusItem.qml
-    project/MMProjectStatusPanel.qml
-    project/MMProjectWizardFieldRow.qml
+    project/MMProjectIssuesPage.qml
+    project/MMProjectStatusPage.qml
+    project/MMProjectHomeTab.qml
     project/MMProjectWizardPage.qml
+    project/MMProjectController.qml
+    project/MMProjectServerTab.qml
+    project/MMProjectLoadingPage.qml
+    project/MMProjectList.qml
+    project/components/MMProjectStatusItem.qml
+    project/components/MMProjectWizardDelegate.qml
+    project/components/MMProjectDelegate.qml
     settings/MMAboutPanel.qml
     settings/MMChangelogPanel.qml
     settings/MMLogPanel.qml

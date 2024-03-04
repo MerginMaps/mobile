@@ -11,6 +11,7 @@ import QtQuick
 
 import mm 1.0 as MM
 
+import "./components"
 import "../components"
 import "../inputs"
 
@@ -107,7 +108,7 @@ Item {
 
       Item { width: 1; height: 20 * __dp }
 
-      MMProjectItem {
+      MMProjectDelegate {
         id: activeProjectItem
 
         property var model: projectlist.projectsModel

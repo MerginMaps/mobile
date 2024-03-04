@@ -38,9 +38,9 @@ Page {
         }
 
         MMButton {
-          text: "MMProjectLoadingScreen"
+          text: "MMProjectLoadingPage"
           onClicked: {
-            stackview.push(loadingScreenComponent)
+            stackview.push(loadingPageComponent)
           }
         }
 
@@ -73,9 +73,9 @@ Page {
         }
 
         MMButton {
-          text: "MMProjectIssuesPanel"
+          text: "MMProjectIssuesPage"
           onClicked: {
-            stackview.push(projectIssuesPanelComponent)
+            stackview.push(projectIssuesPageComponent)
           }
         }
       }
@@ -83,9 +83,9 @@ Page {
   }
 
   Component {
-    id: loadingScreenComponent
+    id: loadingPageComponent
 
-    MMProjectLoadingScreen {
+    MMProjectLoadingPage {
       id: loadingScreen
 
       width: root.width
@@ -103,11 +103,11 @@ Page {
   }
 
   Component {
-    id: projectIssuesPanelComponent
+    id: projectIssuesPageComponent
 
-    MMProjectIssuesPanel {
+    MMProjectIssuesPage {
 
-      id: projectIssuesPanel
+      id: projectIssuesPage
 
       width: root.width
       height: root.height
