@@ -133,7 +133,6 @@ Page {
 
   MMBusyIndicator {
     id: busyIndicator
-    size: parent.width/8
     running: featuresModel.fetchingResults
     anchors.centerIn: parent
   }

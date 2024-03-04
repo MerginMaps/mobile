@@ -132,7 +132,6 @@ Item {
     MMBusyIndicator {
       x: parent.width / 2 - width / 2
       running: controllerModel.isLoading
-      size: __style.row63
     }
   }
 

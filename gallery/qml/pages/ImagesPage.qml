@@ -71,6 +71,7 @@ ScrollView {
         Column { Image { source: __style.warnLogoImage } Text { text: "warnLogoImage" } }
         Column { Image { source: __style.attentionImage } Text { text: "attentionImage" } }
         Column { Image { source: __style.bubbleImage } Text { text: "bubbleImage" } }
+        Column { Image { source: __style.noWorkspaceImage } Text { text: "noWorkspaceImage" } }
       }
     }
 

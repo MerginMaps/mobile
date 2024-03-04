@@ -18,6 +18,7 @@ Item {
 
   required property string title
   property string description
+  property alias imageSource: icon.source
 
   signal clicked
 
