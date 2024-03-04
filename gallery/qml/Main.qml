@@ -170,7 +170,7 @@ ApplicationWindow {
           source: "ToolbarPage.qml"
         }
         ListElement {
-          title: "Project items"
+          title: "Project delegate"
           source: "ProjectItemsPage.qml"
         }
         ListElement {

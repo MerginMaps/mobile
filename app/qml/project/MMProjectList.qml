@@ -14,6 +14,7 @@ import QtQuick.Layouts
 
 import mm 1.0 as MM
 
+import "./components"
 import "../components"
 import "../dialogs"
 
@@ -88,7 +89,7 @@ Item {
     }
 
     // Project delegate
-    delegate: MMProjectItem {
+    delegate: MMProjectDelegate {
       id: projectDelegate
 
       width: ListView.view.width

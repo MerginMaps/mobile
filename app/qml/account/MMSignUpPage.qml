@@ -47,29 +47,29 @@ Page {
     // TODO tocAccept.errorMsg = ""
     // TODO errorText.text = ""
 
-    if( field === RegistrationError.USERNAME ) {
+    if( field === MM.RegistrationError.USERNAME ) {
       username.errorMsg = msg
       username.focus = true
     }
-    else if( field === RegistrationError.EMAIL ) {
+    else if( field === MM.RegistrationError.EMAIL ) {
       email.errorMsg = msg
       email.focus = true
     }
-    else if( field === RegistrationError.PASSWORD ) {
+    else if( field === MM.RegistrationError.PASSWORD ) {
       password.errorMsg = msg
       password.focus = true
     }
-    else if( field === RegistrationError.CONFIRM_PASSWORD ) {
+    else if( field === MM.RegistrationError.CONFIRM_PASSWORD ) {
       passwordConfirm.errorMsg = msg
       passwordConfirm.focus = true
     }
-    else if( field === RegistrationError.TOC ) {
+    else if( field === MM.RegistrationError.TOC ) {
       // TODO where to show MMCheckBox missing errorMsg
       // tocAccept.errorMsg = msg
       // tocAccept.focus = true
       __notificationModel.addError( msg )
     }
-    else if( field === RegistrationError.OTHER ) {
+    else if( field === MM.RegistrationError.OTHER ) {
       __notificationModel.addError( msg )
     }
   }

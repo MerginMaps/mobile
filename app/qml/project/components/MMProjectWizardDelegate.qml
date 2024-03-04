@@ -13,8 +13,8 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import QtQuick.Dialogs
 
-import "../components"
-import "../inputs"
+import "../../components"
+import "../../inputs"
 
 Item {
   id: fieldDelegate

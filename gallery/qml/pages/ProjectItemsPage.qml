@@ -9,7 +9,9 @@
 
 import QtQuick
 import QtQuick.Controls
+
 import "../../app/qml/project"
+import "../../app/qml/project/components"
 
 Page {
   id: pane
@@ -22,7 +24,7 @@ Page {
     anchors.leftMargin: 20
     spacing: 20
 
-    MMProjectItem {
+    MMProjectDelegate {
       width: 350
 
       highlight: true
@@ -43,7 +45,7 @@ Page {
       onMigrateRequested: console.log("onMigrateRequested")
     }
 
-    MMProjectItem {
+    MMProjectDelegate {
       width: 350
 
       highlight: false
@@ -63,7 +65,7 @@ Page {
       onMigrateRequested: console.log("onMigrateRequested")
     }
 
-    MMProjectItem {
+    MMProjectDelegate {
       width: 350
 
       highlight: false
@@ -83,7 +85,7 @@ Page {
       onMigrateRequested: console.log("onMigrateRequested")
     }
 
-    MMProjectItem {
+    MMProjectDelegate {
       width: 350
 
       highlight: false

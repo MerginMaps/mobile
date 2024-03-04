@@ -72,7 +72,7 @@ Item {
 
   function openChangesPanel( projectId )
   {
-    stackView.push( statusPanelComp, {hasChanges: __merginProjectStatusModel.loadProjectInfo( projectId )} )
+    stackView.push( statusPageComp, {hasChanges: __merginProjectStatusModel.loadProjectInfo( projectId )} )
   }
 
   function showChanges( projectId ) {
@@ -175,13 +175,13 @@ Item {
         stackView.pending = true
         switch( pageContent.state ) {
           case "local":
-            localProjectsPage.refreshProjectsList( keepSearchFilter )
+            homeTab.refreshProjectsList( keepSearchFilter )
             break
           case "created":
-            workspaceProjectsPage.refreshProjectsList( keepSearchFilter )
+            workspaceProjectsTab.refreshProjectsList( keepSearchFilter )
             break
           case "public":
-            publicProjectsPage.refreshProjectsList( keepSearchFilter )
+            publicProjectsTab.refreshProjectsList( keepSearchFilter )
             break
         }
       }
@@ -334,8 +334,8 @@ Item {
 
           currentIndex: pageFooter.index
 
-          MMProjectHomePage {
-            id: localProjectsPage
+          MMProjectHomeTab {
+            id: homeTab
 
             activeProjectId: root.activeProjectId
             list.visible: !stackView.pending
@@ -367,8 +367,8 @@ Item {
             }
           }
 
-          MMProjectListPage {
-            id: workspaceProjectsPage
+          MMProjectServerTab {
+            id: workspaceProjectsTab
 
             projectModelType: MM.ProjectsModel.WorkspaceProjectsModel
             activeProjectId: root.activeProjectId
@@ -383,8 +383,8 @@ Item {
             list.onActiveProjectDeleted: setupProjectOpen( "" )
           }
 
-          MMProjectListPage {
-            id: publicProjectsPage
+          MMProjectServerTab {
+            id: publicProjectsTab
 
             projectModelType: MM.ProjectsModel.PublicProjectsModel
             activeProjectId: root.activeProjectId
@@ -494,9 +494,9 @@ Item {
   }
 
   Component {
-    id: statusPanelComp
-    MMProjectStatusPanel {
-      id: statusPanel
+    id: statusPageComp
+    MMProjectStatusPage {
+      id: statusPage
       height: root.height
       width: root.width
       onBack: stackView.popOnePageOrClose()

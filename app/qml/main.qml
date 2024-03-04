@@ -84,7 +84,7 @@ ApplicationWindow {
         }
       }
       else if ( stateManager.state === "projects" ) {
-        projectPanel.openPanel()
+        projectController.openPanel()
       }
 
       if ( stateManager.state !== "map" ) {
@@ -235,7 +235,7 @@ ApplicationWindow {
 
     onLocalChangesPanelRequested: {
       stateManager.state = "projects"
-      projectPanel.openChangesPanel( __activeProject.projectFullName() )
+      projectController.openChangesPanel( __activeProject.projectFullName() )
     }
 
     onOpenTrackingPanel: {
@@ -375,7 +375,7 @@ ApplicationWindow {
         iconSource: __style.localChangesIcon
         onClicked: {
           stateManager.state = "projects"
-          projectPanel.openChangesPanel( __activeProject.projectFullName() )
+          projectController.openChangesPanel( __activeProject.projectFullName() )
         }
       }
 
@@ -398,8 +398,8 @@ ApplicationWindow {
     height: InputStyle.rowHeight * 2
 
     onDetailsClicked: {
-      projectIssuesPanel.projectLoadingLog = __activeProject.projectLoadingLog();
-      projectIssuesPanel.visible = true;
+      projectIssuesPage.projectLoadingLog = __activeProject.projectLoadingLog();
+      projectIssuesPage.visible = true;
     }
   }
 
@@ -424,8 +424,8 @@ ApplicationWindow {
     }
   }
 
-  MMProjectPanel {
-    id: projectPanel
+  MMProjectController {
+    id: projectController
 
     height: window.height
     width: window.width
@@ -433,8 +433,8 @@ ApplicationWindow {
     activeProjectId: __activeProject.localProject.id() ?? ""
 
     onVisibleChanged: {
-      if ( projectPanel.visible ) {
-        projectPanel.forceActiveFocus()
+      if ( projectController.visible ) {
+        projectController.forceActiveFocus()
       }
     }
 
@@ -620,16 +620,16 @@ ApplicationWindow {
     }
   }
 
-  MMProjectIssuesPanel {
-    id: projectIssuesPanel
+  MMProjectIssuesPage {
+    id: projectIssuesPage
 
     height: window.height
     width: window.width
     visible: false
 
     onVisibleChanged: {
-      if (projectIssuesPanel.visible)
-        projectIssuesPanel.focus = true; // get focus
+      if (projectIssuesPage.visible)
+        projectIssuesPage.focus = true; // get focus
     }
   }
 
@@ -722,8 +722,8 @@ ApplicationWindow {
     }
   }
 
-  MMProjectLoadingScreen {
-    id: projectLoadingScreen
+  MMProjectLoadingPage {
+    id: projectLoadingPage
 
     anchors.fill: parent
     visible: false
@@ -739,7 +739,7 @@ ApplicationWindow {
 
     onManageAccountClicked: {
       if (__merginApi.apiSupportsSubscriptions) {
-        projectPanel.manageSubscriptionPlans()
+        projectController.manageSubscriptionPlans()
       }
     }
   }
@@ -752,7 +752,7 @@ ApplicationWindow {
 
     onManageAccountClicked: {
       if (__merginApi.apiSupportsSubscriptions) {
-        projectPanel.manageSubscriptionPlans()
+        projectController.manageSubscriptionPlans()
       }
     }
   }
@@ -801,8 +801,8 @@ ApplicationWindow {
       if ( button === MessageDialog.Help ) {
         Qt.openUrlExternally(__inputHelp.projectLoadingErrorHelpLink)
       }
-      projectLoadingScreen.visible = false
-      projectPanel.openPanel()
+      projectLoadingPage.visible = false
+      projectController.openPanel()
       close()
     }
   }
@@ -826,7 +826,7 @@ ApplicationWindow {
 
     onSingInRequested: {
       stateManager.state = "projects"
-      projectPanel.showLogin()
+      projectController.showLogin()
     }
   }
 
@@ -969,7 +969,7 @@ ApplicationWindow {
 
     function onProjectDataChanged( projectFullName ) {
       //! if current project has been updated, refresh canvas
-      if ( projectFullName === projectPanel.activeProjectId ) {
+      if ( projectFullName === projectController.activeProjectId ) {
         map.mapSettings.extentChanged()
       }
     }
@@ -1017,13 +1017,13 @@ ApplicationWindow {
     target: __activeProject
 
     function onLoadingStarted() {
-      projectLoadingScreen.visible = true;
+      projectLoadingPage.visible = true;
       failedToLoadProjectBanner.reset();
-      projectIssuesPanel.clear();
+      projectIssuesPage.clear();
     }
 
     function onLoadingFinished() {
-      projectLoadingScreen.visible = false
+      projectLoadingPage.visible = false
 
       // check location permission
       if ( locationPermission.status === Qt.Undetermined ) {
@@ -1039,7 +1039,7 @@ ApplicationWindow {
     }
 
     function onReportIssue( title, message ) {
-      projectIssuesPanel.reportIssue( title, message )
+      projectIssuesPage.reportIssue( title, message )
     }
 
     function onProjectReloaded( project ) {
@@ -1047,7 +1047,7 @@ ApplicationWindow {
 
       if ( __activeProject.isProjectLoaded() )
       {
-        projectPanel.hidePanel()
+        projectController.hidePanel()
       }
 
       __appSettings.defaultProject = __activeProject.localProject.qgisProjectFilePath ?? ""

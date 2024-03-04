@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 
-import "../components"
+import "../../components"
 
 import mm 1.0 as MM
 

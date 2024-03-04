@@ -15,7 +15,7 @@ import QtQuick.Dialogs
 
 import mm 1.0 as MM
 
-import "."
+import "./components"
 import "../components"
 import "../inputs"
 
@@ -106,7 +106,7 @@ Item {
         clip: true
         spacing: 10 * __dp
 
-        delegate: MMProjectWizardFieldRow {
+        delegate: MMProjectWizardDelegate {
           height: projectWizardPanel.rowHeight
           width: contentLayout.width
           widgetList: projectWizardPanel.widgetsModel
@@ -117,7 +117,7 @@ Item {
 
         footer: MMLink {
               text: qsTr("Add field")
-              anchors.centerIn: parent
+              anchors.centerIn: parent // TODO: fix anchor loop + button does not work
               rightIcon: __style.addIcon
               onClicked: {
                 fieldsModel.addField("", "TextEdit")
