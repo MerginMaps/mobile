@@ -6,6 +6,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick
 import QtQuick.Controls
 
@@ -35,7 +36,7 @@ Item {
   Component {
     id: createWorkspaceComponent
 
-    MMCreateWorkspace {
+    MMCreateWorkspacePage {
       id: createWorkspacePanel
 
       objectName: "createWorkspaceDirectPanel"
