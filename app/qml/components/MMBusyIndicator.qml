@@ -12,7 +12,7 @@ import QtQuick
 Item {
   id: root
 
-  required property real size
+  property real size: 60 * __dp
   property alias running: root.visible
   property int speed: 800
 
