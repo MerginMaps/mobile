@@ -38,15 +38,15 @@ Rectangle {
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: parent.left
     anchors.leftMargin: 20 * __dp
-    size: model.icon === MM.NotificationType.Check ? __style.icon18 : __style.icon24
+    size: __style.icon24
     color: text.color
     visible: model.icon !== MM.NotificationType.None
     source: {
       switch( model.icon ) {
-      case MM.NotificationType.None: return ""
-      case MM.NotificationType.Waiting: return __style.waitingIcon
-      case MM.NotificationType.Exclamation: return __style.errorCircleIcon
-      case MM.NotificationType.Check: return __style.comboBoxCheckIcon
+      case MM.NotificationType.NoneIcon: return ""
+      case MM.NotificationType.WaitingIcon: return __style.waitingIcon
+      case MM.NotificationType.ExclamationIcon: return __style.errorCircleIcon
+      case MM.NotificationType.CheckIcon: return __style.doneCircleIcon
       default: return ""
       }
     }

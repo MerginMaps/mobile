@@ -10,7 +10,7 @@
 #include "notificationmodel.h"
 #include <QQmlEngine>
 
-Notification::Notification( uint id, const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information, NotificationType::IconType icon = NotificationType::None )
+Notification::Notification( uint id, const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information, NotificationType::IconType icon = NotificationType::NoneIcon )
 {
   mId = id;
   mMessage = message;
@@ -75,14 +75,13 @@ void NotificationModel::remove( uint id )
       endRemoveRows();
 
       emit dataChanged( createIndex( 0, 0 ), createIndex( rowCount(), 0 ) ); // refresh whole model
-      emit rowCountChanged();
       return;
     }
   }
 }
 
 // add new unique message with interval
-void NotificationModel::add( const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information, NotificationType::IconType icon = NotificationType::None )
+void NotificationModel::add( const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information, NotificationType::IconType icon = NotificationType::NoneIcon )
 {
   for ( Notification &notification : mNotifications )
   {
@@ -93,28 +92,26 @@ void NotificationModel::add( const QString &message, uint interval, Notification
   beginInsertRows( QModelIndex(), rowCount(), rowCount() );
   mNotifications << Notification{ nextId(), message, interval, type, icon };
   endInsertRows();
-
-  emit rowCountChanged();
 }
 
 void NotificationModel::addSuccess( const QString &message )
 {
-  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Success, NotificationType::Check );
+  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Success, NotificationType::CheckIcon );
 }
 
 void NotificationModel::addError( const QString &message )
 {
-  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Error, NotificationType::None );
+  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Error, NotificationType::ExclamationIcon );
 }
 
 void NotificationModel::addInfo( const QString &message )
 {
-  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Information, NotificationType::None );
+  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Information, NotificationType::WaitingIcon );
 }
 
 void NotificationModel::addWarning( const QString &message )
 {
-  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Warning, NotificationType::None );
+  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Warning, NotificationType::WaitingIcon );
 }
 
 // check for auto removing notification

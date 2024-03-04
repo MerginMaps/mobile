@@ -166,12 +166,7 @@ Page {
       if (root.selectedText.length > 0 ) {
         root.industrySelected(root.selectedText)
       } else {
-        __notificationModel.add(
-          root.specifyIndustryText,
-          3,
-          MM.NotificationType.Error,
-          MM.NotificationType.None
-        )
+        __notificationModel.addError( root.specifyIndustryText )
       }
     }
   }

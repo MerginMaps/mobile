@@ -170,12 +170,7 @@ Page {
       if (root.selectedText.length > 0 ) {
         root.howYouFoundUsSelected(root.selectedText)
       } else {
-        __notificationModel.add(
-          root.specifySourceText,
-          3,
-          MM.NotificationType.Error,
-          MM.NotificationType.None
-        )
+        __notificationModel.addError( root.specifySourceText )
       }
     }
   }

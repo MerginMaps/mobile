@@ -28,12 +28,12 @@ class NotificationType
     };
     Q_ENUM( MessageType )
 
-    enum IconType // TODO: add more icons in the future
+    enum IconType
     {
-      None,
-      Waiting,
-      Check,
-      Exclamation
+      NoneIcon,
+      WaitingIcon,
+      CheckIcon,
+      ExclamationIcon
     };
     Q_ENUM( IconType )
 
@@ -73,41 +73,32 @@ class NotificationModel : public QAbstractListModel
     Q_OBJECT
 
   public:
-    enum MyRoles
+    enum NotificationModelRoles
     {
       IdRole = Qt::UserRole + 1, MessageRole, TypeRole, IconRole
     };
-    Q_ENUM( MyRoles )
+    Q_ENUM( NotificationModelRoles )
 
     NotificationModel( QObject *parent = nullptr );
     ~NotificationModel();
+
+    Q_INVOKABLE void addSuccess( const QString &message );
+    Q_INVOKABLE void addError( const QString &message );
+    Q_INVOKABLE void addInfo( const QString &message );
+    Q_INVOKABLE void addWarning( const QString &message );
+    Q_INVOKABLE void remove( uint id );
 
     QHash<int, QByteArray> roleNames() const override;
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 
-    Q_PROPERTY( int rowCount READ rowCount NOTIFY rowCountChanged );
-    Q_INVOKABLE void remove( uint id );
-
-    //! Adds a new notification with message, interval (in seconds), type and icon
-    Q_INVOKABLE void add( const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon );
-
-    //! Convenient methods to save typing of some parameters
-    Q_INVOKABLE void addSuccess( const QString &message );
-    Q_INVOKABLE void addError( const QString &message );
-    Q_INVOKABLE void addInfo( const QString &message );
-    Q_INVOKABLE void addWarning( const QString &message );
-
-    uint DEFAULT_NOTIFICATION_EXPIRATION_SECS = 3;
-
   private:
+    void add( const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon );
     uint nextId() { static uint id = 0; return id++; }
     void timerFired();
 
-  signals:
-    void rowCountChanged();
-
   private:
+    uint DEFAULT_NOTIFICATION_EXPIRATION_SECS = 3;
     QList<Notification> mNotifications;
     QTimer *mTimer;
 };

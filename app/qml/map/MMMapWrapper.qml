@@ -504,10 +504,7 @@ Item {
 
         onClicked: {
           if ( gpsStateGroup.state === "unavailable" ) {
-            __notificationModel.add( qsTr( "GPS currently unavailable" ),
-                                    5,
-                                    MM.NotificationType.Error,
-                                    MM.NotificationType.None )
+            __notificationModel.addError( qsTr( "GPS currently unavailable" ) )
             return
           }
 
