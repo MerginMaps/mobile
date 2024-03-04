@@ -18,10 +18,12 @@ Drawer {
   property alias drawerHeader: mmDrawerHeader
   property alias content: contentGroup.children
 
-  property double drawerSpacing: __style.spacing40 // Change this to 20 if using searchbar
+  property double drawerSpacing: __style.spacing20
+  property double drawerBottomMargin: __style.margin8 // set to 0 to draw behind navigation bar
 
   property real maxHeight: ( ApplicationWindow.window?.height ?? 0 ) - __style.safeAreaTop
 
+  signal backClicked()
 
   implicitHeight: contentHeight > maxHeight ? maxHeight : contentHeight
   implicitWidth: ApplicationWindow.window?.width ?? 0
@@ -55,13 +57,20 @@ Drawer {
       height: parent.height / 2
       y: parent.height / 2
     }
+
+    Keys.onReleased: function( event ) {
+      if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
+        root.backClicked()
+        event.accepted = true
+      }
+    }
   }
 
   contentItem: Column {
     id: mainColumn
 
     anchors.fill: parent
-    spacing: root.drawerSpacing
+    spacing: 0
 
     height: mmDrawerHeader.height + contentGroup.height + root.drawerSpacing
 
@@ -73,6 +82,11 @@ Drawer {
       onCloseClicked: {
         root.close()
       }
+    }
+
+    Item {
+      width: parent.width
+      height: root.drawerSpacing
     }
 
     Item {
@@ -105,6 +119,12 @@ Drawer {
 
       // center the content
       x: leftPadding
+    }
+
+    // Bottom spacer
+    Item {
+      width: parent.width
+      height: root.drawerBottomMargin > 0 ? __style.safeAreaBottom + root.drawerBottomMargin :0
     }
   }
 

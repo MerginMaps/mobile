@@ -17,6 +17,7 @@ Page {
   property alias content: contentGroup.children
 
   property double pageSpacing: __style.spacing40 // Change this to 20 if using searchbar
+  property real pageBottomMargin: __style.margin20 // Set to 0 to draw behind navigation bar
 
   signal backClicked()
 
@@ -63,7 +64,7 @@ Page {
       return minRightPadding
     }
 
-    height: parent.height - root.pageSpacing
+    height: parent.height - root.pageSpacing - root.pageBottomMargin
     width: parent.width - leftPadding - rightPadding
 
     // center the content
