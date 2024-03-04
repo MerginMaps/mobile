@@ -52,6 +52,7 @@ Item {
 
   MMWarningBubble {
     id: attentionRequiredBanner
+
     visible: !noWorkspaceBanner.visible && (__merginApi.subscriptionInfo ? __merginApi.subscriptionInfo.actionRequired : false)
     width: root.width - 2 * root.hPadding
     anchors {
@@ -67,6 +68,7 @@ Item {
 
   MMWarningBubble {
     id: noWorkspaceBanner
+
     visible: false // Set from parent
     width: root.width - 2 * root.hPadding
     anchors {
