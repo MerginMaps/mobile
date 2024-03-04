@@ -1,60 +1,48 @@
 set(MM_QML
-    components/DelegateButton.qml
-    components/RichTextBlock.qml
     components/Shadow.qml
-    components/SimpleTextWithIcon.qml
-    components/Symbol.qml
     components/TextWithIcon.qml
-    components/MMPage.qml
-    components/MMPageHeader.qml
-    components/MMDrawer.qml
-    components/MMDrawerHeader.qml
-    dialogs/MMMigrateToMerginDialog.qml
-    dialogs/MMMissingAuthDialog.qml
-    dialogs/MMNoPermissionsDialog.qml
-    dialogs/MMSplittingFailedDialog.qml
-    dialogs/MMSyncFailedDialog.qml
-    dialogs/MMCloseAccountDialog.qml
-    dialogs/MMStreamingModeDialog.qml
-    dialogs/MMRemoveProjectDialog.qml
-    dialogs/MMDownloadProjectDialog.qml
     Banner.qml
     InputStyle.qml
     Notification.qml
     NotificationBanner.qml
-    ProjectLimitDialog.qml
-    map/Highlight.qml
-    map/SplittingTools.qml
-    map/StakeoutTools.qml
     misc/NoWorkspaceBanner.qml
+
     account/MMAcountPage.qml
     account/MMAcountPageItem.qml
     account/MMSwitchWorkspacePage.qml
-    components/MMMessage.qml
-    components/MMRoundButton.qml
     components/MMButton.qml
-    components/MMCodeScanner.qml
+    components/MMCalendarDrawer.qml
     components/MMCheckBox.qml
+    components/MMCodeScanner.qml
+    components/MMDrawer.qml
     components/MMDrawerDialog.qml
+    components/MMDrawerHeader.qml
     components/MMDropdownDrawer.qml
+    components/MMFeaturesListDrawer.qml
     components/MMHlineText.qml
     components/MMIcon.qml
     components/MMIconCheckBoxHorizontal.qml
     components/MMIconCheckBoxVertical.qml
+    components/MMLine.qml
     components/MMLink.qml
     components/MMLinkButton.qml
-    components/MMLoadingSpinner.qml
-    components/MMFeaturesListDrawer.qml
     components/MMListDrawer.qml
     components/MMListDrawerItem.qml
+    components/MMLoadingSpinner.qml
     components/MMMenuDrawer.qml
+    components/MMMessage.qml
     components/MMMorePhoto.qml
     components/MMNotification.qml
     components/MMNotificationView.qml
+    components/MMPage.qml
+    components/MMPageHeader.qml
     components/MMPhoto.qml
     components/MMProgressBar.qml
     components/MMRadioButton.qml
+    components/MMRoundButton.qml
     components/MMRoundLinkButton.qml
+    components/MMSelectableToolbar.qml
+    components/MMSelectableToolbarButton.qml
     components/MMShadow.qml
     components/MMSwitch.qml
     components/MMTextBubble.qml
@@ -62,48 +50,29 @@ set(MM_QML
     components/MMToolbarButton.qml
     components/MMToolbarLongButton.qml
     components/MMToolbarMenuButton.qml
-    components/MMSelectableToolbar.qml
-    components/MMSelectableToolbarButton.qml
-    components/MMWarningBubble.qml
-    components/MMCalendarDrawer.qml
     components/MMTumbler.qml
-    components/calendar/MMDateTimePicker.qml
-    components/calendar/MMTimeTumbler.qml
-    components/calendar/MMMonthGrid.qml
-    components/calendar/MMDayOfWeekRow.qml
-    components/calendar/MMDateTumbler.qml
+    components/MMWarningBubble.qml
     components/calendar/MMAmPmSwitch.qml
-    components/MMLine.qml
-    onboarding/MMAcceptInvitation.qml
-    onboarding/MMCreateWorkspace.qml
-    onboarding/MMHowYouFoundUs.qml
-    onboarding/MMLogin.qml
-    onboarding/MMSignUp.qml
-    onboarding/MMWhichIndustry.qml
-    onboarding/MMOnboardingController.qml
-    onboarding/MMCreateWorkspaceController.qml
-    onboarding/MMAcceptInvitationController.qml
-    project/MMProjectHomePage.qml
-    project/MMProjectList.qml
-    project/MMProjectItem.qml
-    project/MMProjectListPage.qml
-    project/MMProjectPanel.qml
-    project/MMProjectLoadingScreen.qml
-    project/MMProjectWizardPage.qml
-    project/MMProjectWizardFieldRow.qml
-    project/MMProjectStatusPanel.qml
-    project/MMProjectStatusItem.qml
-    project/MMProjectIssuesPanel.qml
-    dialogs/MMMapThemePanel.qml
+    components/calendar/MMDateTimePicker.qml
+    components/calendar/MMDateTumbler.qml
+    components/calendar/MMDayOfWeekRow.qml
+    components/calendar/MMMonthGrid.qml
+    components/calendar/MMTimeTumbler.qml
+    dialogs/MMCloseAccountDialog.qml
+    dialogs/MMDownloadProjectDialog.qml
+    dialogs/MMMigrateToMerginDialog.qml
+    dialogs/MMMissingAuthDialog.qml
+    dialogs/MMNoPermissionsDialog.qml
+    dialogs/MMPositionTrackingDialog.qml
+    dialogs/MMProjectLimitDialog.qml
+    dialogs/MMRemoveProjectDialog.qml
+    dialogs/MMSplittingFailedDialog.qml
     dialogs/MMStorageLimitDialog.qml
-    inputs/MMBaseInput.qml
-    inputs/MMPasswordInput.qml
-    inputs/MMTextInput.qml
-    inputs/MMSearchInput.qml
-    inputs/MMDropdownInput.qml
-    inputs/MMTextWithButtonInput.qml
-    form/MMFormWrapper.qml
+    dialogs/MMStreamingModeDialog.qml
+    dialogs/MMSyncFailedDialog.qml
     form/MMForm.qml
+    form/MMFormStackManager.qml
+    form/MMFormWrapper.qml
     form/MMPreviewPanel.qml
     form/components/MMFormTabBar.qml
     form/components/MMPreviewPanelActionButton.qml
@@ -114,40 +83,69 @@ set(MM_QML
     form/editors/MMFormPhotoViewer.qml
     form/editors/MMFormRelationEditor.qml
     form/editors/MMFormRelationReferenceEditor.qml
+    form/editors/MMFormRichTextViewer.qml
     form/editors/MMFormScannerEditor.qml
     form/editors/MMFormSliderEditor.qml
+    form/editors/MMFormSpacer.qml
     form/editors/MMFormSwitchEditor.qml
-    form/editors/MMFormTextMultilineEditor.qml
     form/editors/MMFormTextEditor.qml
+    form/editors/MMFormTextMultilineEditor.qml
     form/editors/MMFormValueMapEditor.qml
     form/editors/MMFormValueRelationEditor.qml
-    form/editors/MMFormSpacer.qml
-    form/editors/MMFormRichTextViewer.qml
-    form/MMFormStackManager.qml
-    layers/MMFeaturesListPage.qml
-    layers/MMLayerDetail.qml
-    layers/MMLayersListPage.qml
-    layers/MMLayersListSearchPage.qml
-    layers/MMLayersList.qml
-    layers/MMLayersPanel.qml
-    map/MMMapCanvas.qml
-    map/MapWrapper.qml
-    map/MMPositionMarker.qml
-    map/RecordingTools.qml
-    map/components/MMCrosshair.qml
-    map/components/MMBlurBox.qml
-    map/components/MMLoadingIndicator.qml
-    map/components/MMMapBlurLabel.qml
-    map/components/MMMapButton.qml
-    map/components/MMMapLabel.qml
-    map/components/MMMapPicker.qml
-    map/components/MMMapScaleBar.qml
     gps/MMAddPositionProviderDrawer.qml
     gps/MMBluetoothConnectionDrawer.qml
     gps/MMGpsDataDrawer.qml
     gps/MMGpsDataText.qml
     gps/MMPositionProviderPage.qml
     gps/MMStakeoutPanel.qml
+    inputs/MMBaseInput.qml
+    inputs/MMDropdownInput.qml
+    inputs/MMPasswordInput.qml
+    inputs/MMSearchInput.qml
+    inputs/MMTextInput.qml
+    inputs/MMTextWithButtonInput.qml
+    layers/MMFeaturesListPage.qml
+    layers/MMLayerDetail.qml
+    layers/MMLayersList.qml
+    layers/MMLayersListPage.qml
+    layers/MMLayersListSearchPage.qml
+    layers/MMLayersPanel.qml
+    map/MMHighlight.qml
+    map/MMMapCanvas.qml
+    map/MMMapThemeDrawer.qml
+    map/MMMapWrapper.qml
+    map/MMPositionMarker.qml
+    map/MMSplittingTools.qml
+    map/MMStakeoutTools.qml
+    map/RecordingTools.qml
+    map/components/MMBlurBox.qml
+    map/components/MMCrosshair.qml
+    map/components/MMLoadingIndicator.qml
+    map/components/MMMapBlurLabel.qml
+    map/components/MMMapButton.qml
+    map/components/MMMapLabel.qml
+    map/components/MMMapPicker.qml
+    map/components/MMMapScaleBar.qml
+    onboarding/MMAcceptInvitation.qml
+    onboarding/MMAcceptInvitationController.qml
+    onboarding/MMCreateWorkspace.qml
+    onboarding/MMCreateWorkspaceController.qml
+    onboarding/MMHowYouFoundUs.qml
+    onboarding/MMLogin.qml
+    onboarding/MMOnboardingController.qml
+    onboarding/MMSignUp.qml
+    onboarding/MMWhichIndustry.qml
+    project/MMProjectHomePage.qml
+    project/MMProjectIssuesPanel.qml
+    project/MMProjectItem.qml
+    project/MMProjectList.qml
+    project/MMProjectListPage.qml
+    project/MMProjectLoadingScreen.qml
+    project/MMProjectPanel.qml
+    project/MMProjectStatusItem.qml
+    project/MMProjectStatusPanel.qml
+    project/MMProjectWizardFieldRow.qml
+    project/MMProjectWizardPage.qml
     settings/MMAboutPanel.qml
     settings/MMChangelogPanel.qml
     settings/MMLogPanel.qml
@@ -155,9 +153,8 @@ set(MM_QML
     settings/MMSettingInput.qml
     settings/MMSettingItem.qml
     settings/MMSettingSwitch.qml
-    settings/MMSettingsPanel.qml
     settings/MMSettingsController.qml
-    dialogs/MMPositionTrackingDrawer.qml
+    settings/MMSettingsPanel.qml
     main.qml
     PARENT_SCOPE
 )

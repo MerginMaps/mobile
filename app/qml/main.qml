@@ -159,7 +159,7 @@ ApplicationWindow {
     console.log("Application initialized!")
   }
 
-  MapWrapper {
+  MMMapWrapper {
     id: map
 
     height: window.height - mapToolbar.height
@@ -580,7 +580,7 @@ ApplicationWindow {
 
     sourceComponent: Component {
 
-      MMPositionTrackingDrawer {
+      MMPositionTrackingDialog {
 
         width: window.width
 
@@ -745,17 +745,19 @@ ApplicationWindow {
     apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
 
     onManageAccountClicked: {
-      storageLimitDialog.close()
       if (__merginApi.apiSupportsSubscriptions) {
         projectPanel.manageSubscriptionPlans()
       }
     }
   }
 
-  ProjectLimitDialog {
+  MMProjectLimitDialog {
     id: projectLimitDialog
-    onOpenSubscriptionPlans: {
-      projectLimitDialog.close()
+
+    plan: __merginApi.subscriptionInfo.planAlias
+    apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
+
+    onManageAccountClicked: {
       if (__merginApi.apiSupportsSubscriptions) {
         projectPanel.manageSubscriptionPlans()
       }
