@@ -72,6 +72,8 @@ class NotificationModel : public QAbstractListModel
 {
     Q_OBJECT
 
+    Q_PROPERTY( int rowCount READ rowCount NOTIFY rowCountChanged );
+
   public:
     enum NotificationModelRoles
     {
@@ -91,6 +93,9 @@ class NotificationModel : public QAbstractListModel
     QHash<int, QByteArray> roleNames() const override;
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
+
+  signals:
+    void rowCountChanged();
 
   private:
     void add( const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon );

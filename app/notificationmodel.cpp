@@ -75,6 +75,7 @@ void NotificationModel::remove( uint id )
       endRemoveRows();
 
       emit dataChanged( createIndex( 0, 0 ), createIndex( rowCount(), 0 ) ); // refresh whole model
+      emit rowCountChanged();
       return;
     }
   }
@@ -92,6 +93,8 @@ void NotificationModel::add( const QString &message, uint interval, Notification
   beginInsertRows( QModelIndex(), rowCount(), rowCount() );
   mNotifications << Notification{ nextId(), message, interval, type, icon };
   endInsertRows();
+
+  emit rowCountChanged();
 }
 
 void NotificationModel::addSuccess( const QString &message )
