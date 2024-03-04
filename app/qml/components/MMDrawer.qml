@@ -19,7 +19,8 @@ Drawer {
   property alias content: contentGroup.children
 
   property double drawerSpacing: __style.spacing20
-  property double drawerBottomMargin: __style.margin8
+  property double drawerBottomMargin: __style.margin8 // set to 0 to draw behind navigation bar
+
   property real maxHeight: ( ApplicationWindow.window?.height ?? 0 ) - __style.safeAreaTop
 
   signal backClicked()
@@ -123,7 +124,7 @@ Drawer {
     // Bottom spacer
     Item {
       width: parent.width
-      height: root.drawerBottomMargin
+      height: root.drawerBottomMargin > 0 ? __style.safeAreaBottom + root.drawerBottomMargin :0
     }
   }
 
