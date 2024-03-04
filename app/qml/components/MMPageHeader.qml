@@ -33,7 +33,7 @@ Rectangle {
 
   signal backClicked
 
-  implicitHeight: 60 * __dp + __style.safeAreaTop
+  implicitHeight: internal.baseHeaderHeight + __style.safeAreaTop
   implicitWidth: ApplicationWindow.window?.width ?? 0
 
   Text {
@@ -67,12 +67,8 @@ Rectangle {
   MMRoundButton {
     id: backBtn
 
-    anchors {
-      left: parent.left
-      topMargin: __style.safeAreaTop
-      leftMargin: __style.pageMargins
-      verticalCenter: parent.verticalCenter
-    }
+    x: __style.pageMargins
+    y: ( internal.baseHeaderHeight / 2 - height / 2 ) + __style.safeAreaTop
 
     visible: root.backVisible
     onClicked: root.backClicked()
@@ -82,6 +78,7 @@ Rectangle {
     id: internal
 
     property real headerSpacing: 10 * __dp
+    property real baseHeaderHeight: __style.row60
     property real backBtnRealWidth: backBtn.visible ? backBtn.width : 0
   }
 }
