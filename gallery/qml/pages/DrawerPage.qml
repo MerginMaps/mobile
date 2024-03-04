@@ -28,51 +28,37 @@ Page {
       spacing: 10
       padding: 10
 
-      Label {
-        text: "Drawers"
+      Button {
+        text: "MMPositionTrackingDialog"
+        onClicked: positionTrackingDialog.open()
       }
 
-      MMButton {
-        text: "Position Tracking"
-        onClicked: drawerPositionTracking.open()
-      }
-
-      MMButton {
-        text: "Upload"
-        onClicked: drawer1.open()
-      }
-
-      MMButton {
+      Button {
         text: "MMStorageLimitDialog"
         onClicked: storageLimitDialog.open()
       }
 
-      MMButton {
+      Button {
         text: "MMCloseAccountDialog"
         onClicked: closeAccountDialog.open()
       }
 
-      MMButton {
+      Button {
         text: "MMRemoveProjectDialog"
         onClicked: removeProjectDialog.open()
       }
 
-      MMButton {
+      Button {
         text: "MMDownloadProjectDialog"
         onClicked: downloadProjectDialog.open()
       }
 
-      MMButton {
-        text: "Synchronization Failed"
-        onClicked: drawer3.open()
-      }
-
-      MMButton {
+      Button {
         text: "MMStreamingModeDialog"
         onClicked: streamingModeDialog.open()
       }
 
-      MMButton {
+      Button {
         text: "MMBluetoothConnectionDrawer"
         onClicked: {
           bluetoothConnectionDrawer.positionProvider.state = PositionProvider.Connecting
@@ -81,7 +67,7 @@ Page {
         }
       }
 
-      MMButton {
+      Button {
         text: "MMSyncFailedDialog"
 
         onClicked: {
@@ -89,7 +75,7 @@ Page {
         }
       }
 
-      MMButton {
+      Button {
         text: "MMNoPermissionsDialog"
 
         onClicked: {
@@ -97,7 +83,7 @@ Page {
         }
       }
 
-      MMButton {
+      Button {
         text: "MMMissingAuthDialog"
 
         onClicked: {
@@ -105,7 +91,7 @@ Page {
         }
       }
 
-      MMButton {
+      Button {
         text: "MMSplittingFailedDialog"
 
         onClicked: {
@@ -113,11 +99,19 @@ Page {
         }
       }
 
-      MMButton {
+      Button {
         text: "MMMigrateToMerginDialog"
 
         onClicked: {
           migrateToMerginDialog.open()
+        }
+      }
+
+      Button {
+        text: "MMProjectLimitDialog"
+
+        onClicked: {
+          projectLimitDialog.open()
         }
       }
     }
@@ -176,6 +170,18 @@ Page {
     onRemoveClicked: console.log("on remove clicked")
   }
 
+  MMProjectLimitDialog {
+    id: projectLimitDialog
+
+    maxProjectNumber: 2
+    plan: "Individual"
+    apiSupportsSubscription: true
+
+    onPrimaryButtonClicked: {
+      console.log("Manage workspace clicked")
+    }
+  }
+
   MMDownloadProjectDialog {
     id: downloadProjectDialog
 
@@ -184,24 +190,11 @@ Page {
     onDownloadClicked: console.log("on download clicked")
   }
 
-  MMPositionTrackingDrawer {
-    id: drawerPositionTracking
+  MMPositionTrackingDialog {
+    id: positionTrackingDialog
     distanceTraveled: "5m"
     trackingStartedAt: "10:00:01"
     onTrackingBtnClicked: trackingActive = !trackingActive
-  }
-
-  MMDrawerDialog {
-    id: drawer1
-
-    picture: __style.uploadImage
-    bigTitle: "Upload project to Margin?"
-    description: "This project is currently not uploaded on Mergin. Upload it to Mergin in order to activate synchronization and collaboration."
-    primaryButton: "Yes, Upload Project"
-    secondaryButton: "No Cancel"
-
-    onPrimaryButtonClicked: close()
-    onSecondaryButtonClicked: close()
   }
 
   MMStorageLimitDialog {
@@ -215,21 +208,7 @@ Page {
 
     onPrimaryButtonClicked: {
       console.log("Manage workspace clicked")
-      close()
     }
-  }
-
-  MMDrawerDialog {
-    id: drawer3
-
-    picture: __style.uploadImage
-    bigTitle: "Failed to synchronize your changes"
-    description: "Your changes could not be sent to server, make sure you are connected to internet and have write access to this project."
-    primaryButton: "Ok, I understand"
-    boundedDescription: "Failed to push changes. Ask the project workspace owner to log in to their Mergin Maps dashboard for more information."
-
-    onPrimaryButtonClicked: close()
-    onSecondaryButtonClicked: close()
   }
 
   MMSyncFailedDialog {

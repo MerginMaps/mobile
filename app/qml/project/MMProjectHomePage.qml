@@ -12,7 +12,6 @@ import QtQuick
 import mm 1.0 as MM
 
 import "../components"
-import "../misc"
 import "../inputs"
 
 Item {
@@ -20,9 +19,11 @@ Item {
 
   property string activeProjectId: ""
   property alias list: projectlist
+  property alias noWorkspaceBannerVisible: noWorkspaceBanner.visible
 
   signal openProjectRequested( string projectFilePath )
   signal showLocalChangesRequested( string projectId )
+  signal createWorkspaceRequested()
 
   function refreshProjectsList() {
     searchBar.deactivate()
@@ -50,8 +51,9 @@ Item {
   }
 
   MMWarningBubble {
-    id: warningBubble
-    visible: __merginApi.subscriptionInfo ? __merginApi.subscriptionInfo.actionRequired : false
+    id: attentionRequiredBanner
+
+    visible: !noWorkspaceBanner.visible && (__merginApi.subscriptionInfo ? __merginApi.subscriptionInfo.actionRequired : false)
     width: root.width - 2 * root.hPadding
     anchors {
       top: searchBar.bottom
@@ -59,9 +61,26 @@ Item {
       right: parent.right
       topMargin: root.spacing
     }
-    title: qsTr("Your attention is required.")
+    title: qsTr("Your attention is required")
     description: qsTr("Click here to visit Mergin Maps dashboard")
     onClicked: Qt.openUrlExternally( __inputHelp.merginDashboardLink )
+  }
+
+  MMWarningBubble {
+    id: noWorkspaceBanner
+
+    visible: false // Set from parent
+    width: root.width - 2 * root.hPadding
+    anchors {
+      top: searchBar.bottom
+      left: parent.left
+      right: parent.right
+      topMargin: root.spacing
+    }
+    title: qsTr("No workspace detected")
+    description: qsTr("Create your workspace by clicking here")
+    imageSource: __style.noWorkspaceImage
+    onClicked: root.createWorkspaceRequested()
   }
 
   Component {
@@ -161,8 +180,10 @@ Item {
       left: parent.left
       right: parent.right
       top: {
-        if( warningBubble.visible )
-          return warningBubble.bottom
+        if( attentionRequiredBanner.visible )
+          return attentionRequiredBanner.bottom
+        if( noWorkspaceBanner.visible )
+          return noWorkspaceBanner.bottom
         return searchBar.bottom
       }
       bottom: parent.bottom

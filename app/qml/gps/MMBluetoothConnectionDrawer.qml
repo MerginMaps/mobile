@@ -11,6 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import mm 1.0 as MM
+
 import "../components"
 
 Drawer {
@@ -125,22 +127,22 @@ Drawer {
     states: [
       State {
         name: "working"
-        when: root.positionProvider && root.positionProvider.state === PositionProvider.Connecting
+        when: root.positionProvider && root.positionProvider.state === MM.PositionProvider.Connecting
         PropertyChanges { target: loadingSpinner; opacity: 1.0 }
       },
       State {
         name: "success"
-        when: root.positionProvider && root.positionProvider.state === PositionProvider.Connected
+        when: root.positionProvider && root.positionProvider.state === MM.PositionProvider.Connected
         PropertyChanges { target: loadingSpinner; opacity: 0.0 }
       },
       State {
         name: "fail"
-        when: !root.positionProvider || root.positionProvider.state === PositionProvider.NoConnection
+        when: !root.positionProvider || root.positionProvider.state === MM.PositionProvider.NoConnection
         PropertyChanges { target: loadingSpinner; opacity: 0.0 }
       },
       State {
         name: "waitingToReconnect"
-        when: !root.positionProvider || root.positionProvider.state === PositionProvider.WaitingToReconnect
+        when: !root.positionProvider || root.positionProvider.state === MM.PositionProvider.WaitingToReconnect
         PropertyChanges { target: loadingSpinner; opacity: 0.0 }
       }
     ]
@@ -246,11 +248,8 @@ Drawer {
         width: parent.width
         height: resultIcon.height
 
-        BusyIndicator {
+        MMBusyIndicator {
           id: loadingSpinner
-          height: parent.height / 2
-          width: parent.height / 2
-
           anchors.centerIn: parent
           running: rootstate.state === "working"
         }

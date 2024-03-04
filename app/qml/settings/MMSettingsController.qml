@@ -14,7 +14,6 @@ import QtQuick.Layouts
 import mm 1.0 as MM
 
 import "../components"
-import "../misc"
 import "../gps"
 
 Item {

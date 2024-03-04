@@ -158,7 +158,6 @@ public class PositionTrackingService extends Service implements LocationListener
             .setContentTitle( getText( R.string.notification_title ) )
             .setContentText( getText( R.string.notification_message ) )
             .setContentIntent( pendingIntent )
-            .setSmallIcon( R.drawable.ic_merginmaps_launcher_background )
             .setTicker( getText( R.string.ticker_text ) )
             .build();
 

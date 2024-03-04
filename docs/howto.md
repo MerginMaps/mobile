@@ -2,25 +2,34 @@
 
 This documents is storage for various how-tos for development and distribution team
 
+## Android assets
+
+### application icon
+ - all app icon variants are stored in app/android/res subfolders
+
+ - use Android Studio to generate all app icon variants from svg (see https://developer.android.com/studio/write/create-app-icons#create-adaptive)
+   - command `find . -name 'ic_appicon*' -exec sh -c 'cp {} "<path to app/android/res>/$(dirname {})/"' \;` might be handy - it copies all generated icons in subfolders to correct subfolders in the destination
+   - note: you need to have some project opened in Android Studio, you can open the generated android project from QtCreator
+
+ - last step is to change `android:icon=@mipmap/<generated_icon_name>` in AndroidManifest
+
+### launch screen
+ - we are using SplashScreen API (introduced in Android 12), see https://developer.android.com/develop/ui/views/launch/splash-screen 
+ - open splasscreentheme.xml and simply edit parameters there to adjust the splashscreen
+
 ## iOS assets 
 
 ### application icon
 
-see: https://appbus.wordpress.com/2017/10/06/ios-11-and-xcode-9-in-qt-5-9-x-projects/
+NOTE: icon must be without transparency
 
-NOTE: icon must be without transparency!
-
-```
-brew install ImageMagick
-git clone https://github.com/smallmuou/ios-icon-generator
-chmod 777 ios-icon-generator.sh
-cd <repo>/input/app/ios
-<path_to_generator>/ios-icon-generator.sh ic_input_no_transparency.png appicon/
-```
+ - replace icon in `ios/Images.xcassets/AppIcon.appiconset/appicon.png` with 1024x1024px variant
+ - you can also do it via XCode - in file browser navigate to `Input -> Resources -> Images` and choose `AppIcon`. Make sure that it says `Single Size` for iOS in the right panel. This way you need only one 1024x1024 image for all icon variants.
 
 ### launch screen
-- iOS7: use http://ticons.fokkezb.nl/ and rename
-- iPhone6: (XIB) generate in XCode (https://medium.com/better-programming/swift-3-creating-a-custom-view-from-a-xib-ecdfe5b3a960)
+
+ - defined in `app/ios/launchscreen/MMLaunchScreen.storyboard` - open in XCode and edit.
+ - if you need to add a new one, open the configured project in XCode and add a new storyboard following: https://appbus.wordpress.com/2020/04/15/qt-ios-splash-storyboard/#:~:text=Create%20a%20new%20Storyboard%20Splash%20Screen
 
 ## iOS dist certificates
 

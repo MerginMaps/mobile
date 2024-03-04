@@ -15,7 +15,6 @@ import mm 1.0 as MM
 
 import "."
 import "../components"
-import "../misc"
 
 Page {
   id: root

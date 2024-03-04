@@ -22,7 +22,6 @@ import "./map"
 import "./dialogs"
 import "./layers"
 import "./components"
-import "./misc"
 import "./project"
 import "./settings"
 import "./gps"
@@ -159,7 +158,7 @@ ApplicationWindow {
     console.log("Application initialized!")
   }
 
-  MapWrapper {
+  MMMapWrapper {
     id: map
 
     height: window.height - mapToolbar.height
@@ -551,7 +550,7 @@ ApplicationWindow {
     }
   }
 
-  MMMapThemePanel {
+  MMMapThemeDrawer {
     id: mapThemesPanel
 
     height: ( window.height / 2 )
@@ -580,7 +579,7 @@ ApplicationWindow {
 
     sourceComponent: Component {
 
-      MMPositionTrackingDrawer {
+      MMPositionTrackingDialog {
 
         width: window.width
 
@@ -745,17 +744,19 @@ ApplicationWindow {
     apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
 
     onManageAccountClicked: {
-      storageLimitDialog.close()
       if (__merginApi.apiSupportsSubscriptions) {
         projectPanel.manageSubscriptionPlans()
       }
     }
   }
 
-  ProjectLimitDialog {
+  MMProjectLimitDialog {
     id: projectLimitDialog
-    onOpenSubscriptionPlans: {
-      projectLimitDialog.close()
+
+    plan: __merginApi.subscriptionInfo.planAlias
+    apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
+
+    onManageAccountClicked: {
       if (__merginApi.apiSupportsSubscriptions) {
         projectPanel.manageSubscriptionPlans()
       }

@@ -15,7 +15,6 @@ import QtQuick.Dialogs
 
 import mm 1.0 as MM
 
-import "../misc"
 import "../components"
 import "../onboarding"
 import "../inputs"
@@ -88,40 +87,13 @@ Item {
     stackView.focus = true
   }
 
-  NoWorkspaceBanner {
-    id: noWorkspaceBanner
-    visible: {
-      if ( !__merginApi.apiSupportsWorkspaces ) {
-        return false;
-      }
-      if ( !__merginApi.userAuth.hasAuthData() ) {
-        return false;
-      }
-      // do not show the banner in case of accepting invitation or creating a workspace
-      if (onboardingController.inProgress) {
-        return false;
-      }
-      return !__merginApi.userInfo.hasWorkspaces
-    }
-    z: parent.z + 1
-    anchors {
-      top: parent.top
-      left: parent.left
-      right: parent.right
-    }
-
-    onCreateWorkspaceRequested: {
-      createWorkspaceController.createNewWorkspace()
-    }
-  }
-
   StackView {
     id: stackView
 
     initialItem: workspaceProjectsPanelComp
 
     anchors {
-      top: noWorkspaceBanner.visible ? noWorkspaceBanner.bottom : parent.top
+      top: parent.top
       left: parent.left
       right: parent.right
       bottom: parent.bottom
@@ -187,12 +159,9 @@ Item {
     }
   }
 
-  BusyIndicator {
+  MMBusyIndicator {
     id: busyIndicator
-    width: parent.width/8
-    height: width
     running: stackView.pending
-    visible: running
     anchors.centerIn: parent
     z: parent.z + 1
   }
@@ -379,6 +348,24 @@ Item {
               showChanges( projectId )
             }
             list.onActiveProjectDeleted: setupProjectOpen( "" )
+
+            noWorkspaceBannerVisible: {
+              if ( !__merginApi.apiSupportsWorkspaces ) {
+                return false;
+              }
+              if ( !__merginApi.userAuth.hasAuthData() ) {
+                return false;
+              }
+              // do not show the banner in case of accepting invitation or creating a workspace
+              if (onboardingController.inProgress) {
+                return false;
+              }
+              return !__merginApi.userInfo.hasWorkspaces
+            }
+
+            onCreateWorkspaceRequested: {
+              createWorkspaceController.createNewWorkspace()
+            }
           }
 
           MMProjectListPage {

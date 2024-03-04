@@ -360,10 +360,10 @@ if (IOS)
   )
 
   # launch screen
-  set(IOS_LAUNCHSCREEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ios/launchscreen/InputScreen.xib)
-  target_sources(Input PRIVATE ${IOS_LAUNCHSCREEN_DIR})
-  set_source_files_properties(
-    ${IOS_LAUNCHSCREEN_DIR} PROPERTIES MACOSX_PACKAGE_LOCATION Resources
+  set_target_properties(
+    Input
+    PROPERTIES QT_IOS_LAUNCH_SCREEN
+               ${CMAKE_CURRENT_SOURCE_DIR}/ios/launchscreen/MMLaunchScreen.storyboard
   )
 
   set_target_properties(
