@@ -64,54 +64,30 @@ Drawer {
 
   Item {
     id: scannerText
-
     width: parent.width
     height: (parent.width < parent.height) ? parent.height / 2 - parent.width / 4 : parent.height / 4
     anchors.horizontalCenter: parent.horizontalCenter
 
-    Column {
-      id: textColumn
-
+    MMTextBubble {
       width: parent.width - 40 * __dp
+      title: "Scan the QR code"
+      description: "Please make sure that the lense is clear."
+      image: __style.attentionImage
       anchors.centerIn: parent
-      spacing: 10 * __dp
-
-      Text {
-        width: parent.width
-        text: qsTr("Scan the QR code")
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        font: __style.t1
-        wrapMode: Text.WordWrap
-        color: __style.whiteColor
-      }
-
-      Text {
-        width: parent.width
-        text: qsTr("Please make sure that the lense is clear.")
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        font: __style.p5
-        wrapMode: Text.WordWrap
-        color: __style.whiteColor
-      }
     }
   }
 
-  Image {
+  MMRoundButton {
     id: closeButton
 
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.bottom: parent.bottom
     anchors.bottomMargin: 2 * __style.pageMargins
-    source: __style.closeIcon
-
-    MouseArea {
-      anchors.fill: parent
-      onClicked: {
-        unload()
-        close()
-      }
+    bgndColor: __style.lightGreenColor
+    iconSource: __style.closeIcon
+    onClicked: {
+      root.unload()
+      close()
     }
   }
 }
