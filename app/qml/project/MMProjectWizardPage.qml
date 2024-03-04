@@ -117,7 +117,7 @@ Item {
 
         footer: MMLink {
               text: qsTr("Add field")
-              anchors.centerIn: parent
+              anchors.centerIn: parent // TODO: fix anchor loop + button does not work
               rightIcon: __style.addIcon
               onClicked: {
                 fieldsModel.addField("", "TextEdit")

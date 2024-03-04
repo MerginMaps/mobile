@@ -70,15 +70,15 @@ Item {
       pending: stackView.pending
       height: root.height
       width: root.width
-      canSignUp:  (__merginApi.serverType === MerginServerType.EE ) || ( __merginApi.serverType === MerginServerType.SAAS )
+      canSignUp:  (__merginApi.serverType === MM.MerginServerType.EE ) || ( __merginApi.serverType === MM.MerginServerType.SAAS )
       warningMsg: {
-        if (__merginApi.apiVersionStatus === MerginApiStatus.OK) {
+        if (__merginApi.apiVersionStatus === MM.MerginApiStatus.OK) {
           ""
         } else
         {
-          if (__merginApi.apiVersionStatus === MerginApiStatus.INCOMPATIBLE) {
+          if (__merginApi.apiVersionStatus === MM.MerginApiStatus.INCOMPATIBLE) {
             qsTr("Please update the app to use the latest features.")
-          } else if (__merginApi.apiVersionStatus === MerginApiStatus.PENDING) {
+          } else if (__merginApi.apiVersionStatus === MM.MerginApiStatus.PENDING) {
             ""
           } else {
             qsTr("Server is currently unavailable - please try again later.")
@@ -102,7 +102,7 @@ Item {
         if (!canSignUp) // should not happen
           return;
 
-        if ( __merginApi.serverType === MerginServerType.EE ) {
+        if ( __merginApi.serverType === MM.MerginServerType.EE ) {
           Qt.openUrlExternally( __merginApi.apiRoot )
         }
         else {
@@ -144,7 +144,7 @@ Item {
       }
 
       onSignUpClicked: function ( username, email, password, passwordConfirm, tocAccept, newsletterSubscribe ) {
-        if ( __merginApi.serverType !== MerginServerType.SAAS ) {
+        if ( __merginApi.serverType !== MM.MerginServerType.SAAS ) {
           return; //should not happen
         }
         else {

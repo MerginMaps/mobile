@@ -11,6 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import mm 1.0 as MM
+
 import "./components"
 import "../components"
 
@@ -119,7 +121,7 @@ Page {
           id: fileLabel
 
           width: delegateItem.width
-          visible: fileStatus !== MerginProjectStatusModel.Changelog
+          visible: fileStatus !== MM.MerginProjectStatusModel.Changelog
           type: fileStatus
           title: itemText
         }
@@ -128,7 +130,7 @@ Page {
         ColumnLayout {
           id: row
 
-          visible: fileStatus === MerginProjectStatusModel.Changelog
+          visible: fileStatus === MM.MerginProjectStatusModel.Changelog
           width: parent.width
 
           spacing: __style.margin8
@@ -152,7 +154,7 @@ Page {
             width: delegateItem.width
             count: inserts
             visible: inserts > 0
-            type: MerginProjectStatusModel.Added
+            type: MM.MerginProjectStatusModel.Added
           }
 
           MMProjectStatusItem {
@@ -161,7 +163,7 @@ Page {
             width: delegateItem.width
             count: updates
             visible: updates > 0
-            type: MerginProjectStatusModel.Updated
+            type: MM.MerginProjectStatusModel.Updated
           }
 
           MMProjectStatusItem {
@@ -171,7 +173,7 @@ Page {
             width: delegateItem.width
             count: deletes
             visible: deletes > 0
-            type: MerginProjectStatusModel.Deleted
+            type: MM.MerginProjectStatusModel.Deleted
           }
         }
       }
