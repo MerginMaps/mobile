@@ -207,6 +207,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl positiveMMSymbolImage READ positiveMMSymbolImage CONSTANT )
     Q_PROPERTY( QUrl closeAccountImage READ closeAccountImage CONSTANT )
     Q_PROPERTY( QUrl attentionImage READ attentionImage CONSTANT )
+    Q_PROPERTY( QUrl blueInfoImage READ blueInfoImage CONSTANT )
     Q_PROPERTY( QUrl bubbleImage READ bubbleImage CONSTANT )
     Q_PROPERTY( QUrl streamingBootsImage READ streamingBootsImage CONSTANT )
     Q_PROPERTY( QUrl streamingBootsOrangeImage READ streamingBootsOrangeImage CONSTANT )
@@ -441,6 +442,7 @@ class MMStyle: public QObject
     QUrl positiveMMSymbolImage() {return QUrl( "qrc:/images/PositiveMMSymbol.svg" );}
     QUrl closeAccountImage() {return QUrl( "qrc:/images/CloseAccount.svg" );}
     QUrl attentionImage() {return QUrl( "qrc:/images/Attention.svg" );}
+    QUrl blueInfoImage() {return QUrl( "qrc:/images/BlueInfo.svg" );}
     QUrl bubbleImage() {return QUrl( "qrc:/images/Bubble.svg" );}
     QUrl streamingBootsImage() {return QUrl( "qrc:/images/StreamingBoots.svg" );}
     QUrl streamingBootsOrangeImage() {return QUrl( "qrc:/images/StreamingBootsOrange.svg" );}

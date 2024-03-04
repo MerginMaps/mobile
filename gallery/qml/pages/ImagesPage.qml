@@ -72,6 +72,7 @@ ScrollView {
         Column { Image { source: __style.attentionImage } Text { text: "attentionImage" } }
         Column { Image { source: __style.bubbleImage } Text { text: "bubbleImage" } }
         Column { Image { source: __style.noWorkspaceImage } Text { text: "noWorkspaceImage" } }
+        Column { Image { source: __style.blueInfoImage } Text { text: "blueInfoImage" } }
       }
     }
 
