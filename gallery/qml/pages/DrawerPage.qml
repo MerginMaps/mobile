@@ -91,7 +91,6 @@ Page {
         }
       }
 
-<<<<<<< HEAD
       Button {
         text: "MMSplittingFailedDialog"
 
@@ -113,13 +112,14 @@ Page {
 
         onClicked: {
           projectLimitDialog.open()
-=======
-      MMButton {
+        }
+      }
+
+      Button {
         text: "codeScanner"
 
         onClicked: {
           codeScanner.open()
->>>>>>> 311c2c01 (blue info image)
         }
       }
     }
