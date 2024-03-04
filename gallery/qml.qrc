@@ -60,8 +60,6 @@
         <file>../app/qml/components/MMCheckBox.qml</file>
         <file>../app/qml/components/MMHlineText.qml</file>
         <file>../app/qml/components/MMTextBubble.qml</file>
-        <file>../app/qml/components/MMIconCheckBoxHorizontal.qml</file>
-        <file>../app/qml/components/MMIconCheckBoxVertical.qml</file>
         <file>../app/qml/components/calendar/MMDateTimePicker.qml</file>
         <file>../app/qml/components/calendar/MMDayOfWeekRow.qml</file>
         <file>../app/qml/components/calendar/MMMonthGrid.qml</file>
@@ -83,8 +81,16 @@
         <file>../app/qml/components/MMDrawer.qml</file>
         <file>../app/qml/components/MMDrawerHeader.qml</file>
         <file>../app/qml/components/MMBusyIndicator.qml</file>
-        <file>../app/qml/account/MMAcountPage.qml</file>
-        <file>../app/qml/account/MMAcountPageItem.qml</file>
+        <file>../app/qml/account/components/MMAccountPageItem.qml</file>
+        <file>../app/qml/account/components/MMIconCheckBoxHorizontal.qml</file>
+        <file>../app/qml/account/components/MMIconCheckBoxVertical.qml</file>
+        <file>../app/qml/account/MMAccountPage.qml</file>
+        <file>../app/qml/account/MMAcceptInvitationPage.qml</file>
+        <file>../app/qml/account/MMCreateWorkspacePage.qml</file>
+        <file>../app/qml/account/MMHowYouFoundUsPage.qml</file>
+        <file>../app/qml/account/MMLoginPage.qml</file>
+        <file>../app/qml/account/MMSignUpPage.qml</file>
+        <file>../app/qml/account/MMWhichIndustryPage.qml</file>
         <file>../app/qml/inputs/MMBaseInput.qml</file>
         <file>../app/qml/inputs/MMDropdownInput.qml</file>
         <file>../app/qml/inputs/MMPasswordInput.qml</file>
@@ -106,12 +112,6 @@
         <file>../app/qml/form/editors/MMFormSpacer.qml</file>
         <file>../app/qml/form/editors/MMFormRichTextViewer.qml</file>
         <file>../app/qml/form/editors/MMFormRelationReferenceEditor.qml</file>
-        <file>../app/qml/onboarding/MMAcceptInvitation.qml</file>
-        <file>../app/qml/onboarding/MMCreateWorkspace.qml</file>
-        <file>../app/qml/onboarding/MMHowYouFoundUs.qml</file>
-        <file>../app/qml/onboarding/MMLogin.qml</file>
-        <file>../app/qml/onboarding/MMSignUp.qml</file>
-        <file>../app/qml/onboarding/MMWhichIndustry.qml</file>
         <file>../app/qml/map/MMPositionMarker.qml</file>
         <file>../app/qml/map/components/MMBlurBox.qml</file>
         <file>../app/qml/map/components/MMMapLoadingIndicator.qml</file>

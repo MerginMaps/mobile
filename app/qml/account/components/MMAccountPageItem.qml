@@ -8,8 +8,8 @@
  ***************************************************************************/
 import QtQuick
 
-import "../components"
-import "../inputs"
+import "../../components"
+import "../../inputs"
 
 Item {
   id: root
