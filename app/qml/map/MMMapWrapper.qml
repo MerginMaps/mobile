@@ -354,7 +354,7 @@ Item {
       }
       // END OF: TOP elements
 
-      Highlight {
+      MMHighlight {
         id: identifyHighlight
 
         visible: root.state === "view"
@@ -396,13 +396,13 @@ Item {
               trackedGeometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
             }
 
-            Highlight {
+            MMHighlight {
               height: mapCanvas.height
               width: mapCanvas.width
 
               markerColor: __style.sunsetColor
               lineColor: __style.sunsetColor
-              lineWidth: Highlight.LineWidths.Narrow
+              lineWidth: MMHighlight.LineWidths.Narrow
 
               mapSettings: mapCanvas.mapSettings
               geometry: trackingHighlight.highlightGeometry

@@ -117,7 +117,7 @@ set(MM_QML
     map/MMPositionMarker.qml
     map/MMSplittingTools.qml
     map/MMStakeoutTools.qml
-    map/RecordingTools.qml
+    map/MMRecordingTools.qml
     map/components/MMBlurBox.qml
     map/components/MMCrosshair.qml
     map/components/MMLoadingIndicator.qml

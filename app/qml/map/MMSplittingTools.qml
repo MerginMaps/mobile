@@ -44,7 +44,7 @@ Item {
     realGeometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
   }
 
-  Highlight {
+  MMHighlight {
     id: guideline
 
     height: root.map.height
@@ -56,7 +56,7 @@ Item {
     geometry: guidelineController.guidelineGeometry
   }
 
-  Highlight {
+  MMHighlight {
     id: highlight
 
     height: map.height
