@@ -551,7 +551,7 @@ ApplicationWindow {
     }
   }
 
-  MMMapThemePanel {
+  MMMapThemeDrawer {
     id: mapThemesPanel
 
     height: ( window.height / 2 )
