@@ -24,27 +24,24 @@ Rectangle {
   property bool backVisible: true
   property alias backButton: backBtn
 
-  color: __style.transparentColor
+  property alias rightItemContent: rightButtonGroup.children
 
-  //! When adding items on the right side of MMPageHeader (account icon, save button, slider, ...),
-  //! make sure to set the width of the item via this property to keep the title centred to
-  //! the page and elide properly
-  property real rightMarginShift: 0
+  color: __style.transparentColor
 
   signal backClicked
 
-  implicitHeight: 60 * __dp + __style.safeAreaTop
+  implicitHeight: internal.baseHeaderHeight + __style.safeAreaTop
   implicitWidth: ApplicationWindow.window?.width ?? 0
 
   Text {
     // If there is a right or a left icon, we need to shift the margin
     // of the opposite side to keep the text centred to the center of the screen
     property real leftMarginShift: {
-      return Math.max( internal.backBtnRealWidth, root.rightMarginShift ) + internal.headerSpacing + __style.pageMargins
+      return Math.max( internal.backBtnRealWidth, rightButtonGroup.width ) + internal.headerSpacing + __style.pageMargins
     }
 
     property real rightMarginShift: {
-      return Math.max( internal.backBtnRealWidth, root.rightMarginShift ) + internal.headerSpacing + __style.pageMargins
+      return Math.max( internal.backBtnRealWidth, rightButtonGroup.width ) + internal.headerSpacing + __style.pageMargins
     }
 
     anchors {
@@ -67,21 +64,28 @@ Rectangle {
   MMRoundButton {
     id: backBtn
 
-    anchors {
-      left: parent.left
-      topMargin: __style.safeAreaTop
-      leftMargin: __style.pageMargins
-      verticalCenter: parent.verticalCenter
-    }
+    x: __style.pageMargins + __style.safeAreaLeft
+    y: ( internal.baseHeaderHeight / 2 - height / 2 ) + __style.safeAreaTop
 
     visible: root.backVisible
     onClicked: root.backClicked()
+  }
+
+  Item {
+    id: rightButtonGroup
+
+    x: parent.width - __style.pageMargins - __style.safeAreaRight - width
+    y: ( internal.baseHeaderHeight / 2 - height / 2 ) + __style.safeAreaTop
+
+    width: childrenRect.width
+    height: parent.height
   }
 
   QtObject {
     id: internal
 
     property real headerSpacing: 10 * __dp
+    property real baseHeaderHeight: __style.row60
     property real backBtnRealWidth: backBtn.visible ? backBtn.width : 0
   }
 }
