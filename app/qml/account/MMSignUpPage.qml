@@ -67,20 +67,10 @@ Page {
       // TODO where to show MMCheckBox missing errorMsg
       // tocAccept.errorMsg = msg
       // tocAccept.focus = true
-      __notificationModel.add(
-          msg,
-          3,
-          MM.NotificationType.Error,
-          MM.NotificationType.None
-      )
+      __notificationModel.addError( msg )
     }
     else if( field === RegistrationError.OTHER ) {
-      __notificationModel.add(
-          msg,
-          3,
-          MM.NotificationType.Error,
-          MM.NotificationType.None
-      )
+      __notificationModel.addError( msg )
     }
   }
 

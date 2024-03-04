@@ -102,12 +102,6 @@ ApplicationWindow {
   }
 
   function showMessage(message) {
-    __notificationModel.add(
-          message,
-          3,
-          MM.NotificationType.Information,
-          MM.NotificationType.None
-          )
   }
 
   function showProjError(message) {

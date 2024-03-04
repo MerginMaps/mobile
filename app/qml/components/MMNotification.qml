@@ -38,15 +38,15 @@ Rectangle {
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: parent.left
     anchors.leftMargin: 20 * __dp
-    size: model.icon === MM.NotificationType.Check ? __style.icon18 : __style.icon24
+    size: __style.icon24
     color: text.color
     visible: model.icon !== MM.NotificationType.None
     source: {
       switch( model.icon ) {
-      case MM.NotificationType.None: return ""
-      case MM.NotificationType.Waiting: return __style.waitingIcon
-      case MM.NotificationType.Exclamation: return __style.errorCircleIcon
-      case MM.NotificationType.Check: return __style.comboBoxCheckIcon
+      case MM.NotificationType.NoneIcon: return ""
+      case MM.NotificationType.WaitingIcon: return __style.waitingIcon
+      case MM.NotificationType.ExclamationIcon: return __style.errorCircleIcon
+      case MM.NotificationType.CheckIcon: return __style.doneCircleIcon
       default: return ""
       }
     }
@@ -78,23 +78,25 @@ Rectangle {
     }
   }
 
-  MMIcon {
+  MouseArea {
+    anchors.fill: parent
+    onClicked: __notificationModel.onNotificationClicked(model.id)
+  }
+
+  MMRoundButton {
     id: closeButton
 
-    anchors.right: parent.right
-    anchors.rightMargin: 20 * __dp
-    anchors.verticalCenter: parent.verticalCenter
-    scale: maRemove.containsMouse ? 1.2 : 1
-    source: __style.closeIcon
-    color: text.color
-
-    MouseArea {
-      id: maRemove
-
-      anchors.fill: parent
-      hoverEnabled: true
-      onClicked: __notificationModel.remove(model.id)
+    anchors {
+      right: parent.right
+      verticalCenter: parent.verticalCenter
+      rightMargin: 20 * __dp
     }
+    iconSource: __style.closeIcon
+    iconColor: text.color
+    bgndColor: __style.transparentColor
+    bgndHoverColor: __style.transparentColor
+
+    onClicked: __notificationModel.remove(model.id)
   }
 
   Behavior on scale { NumberAnimation { easing.type: Easing.OutCubic; from: 0; to: 1.0; duration: 200 } }

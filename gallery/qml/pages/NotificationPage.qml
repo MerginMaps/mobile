@@ -13,7 +13,7 @@ import QtQuick.Controls.Basic
 
 import "../../app/qml/components"
 import "../../app/qml/inputs"
-import notificationType 1.0
+import mm 1.0 as MM
 
 Page {
   id: pane
@@ -32,36 +32,43 @@ Page {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write an informative message"
-      onButtonClicked: { __notificationModel.add(text, 60, NotificationType.Information, NotificationType.Waiting); text = "" }
+
+      onButtonClicked: { __notificationModel.addInfo(text); text = "" }
     }
     MMTextWithButtonInput {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write a success message"
-      onButtonClicked: { __notificationModel.add(text, 60, NotificationType.Success, NotificationType.Check); text = "" }
+
+      onButtonClicked: { __notificationModel.addSuccess(text); text = "" }
     }
     MMTextWithButtonInput {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write a warning message"
-      onButtonClicked: { __notificationModel.add(text, 60, NotificationType.Warning, NotificationType.Waiting); text = "" }
+
+      onButtonClicked: { __notificationModel.addWarning(text); text = "" }
     }
     MMTextWithButtonInput {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       placeholderText: "Write an error message"
-      onButtonClicked: { __notificationModel.add(text, 60, NotificationType.Error, NotificationType.Exclamation); text = "" }
+
+      onButtonClicked: { __notificationModel.addError(text); text = "" }
     }
     MMTextWithButtonInput {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       text: "Stojí, stojí mohyla, Na mohyle zlá chvíľa, Na mohyle tŕnie chrastie A v tom tŕní, chrastí rastie, Rastie, kvety rozvíja Jedna žltá ľalia. Tá ľalia smutno vzdychá: „Hlávku moju tŕnie pichá A nožičky oheň páli – Pomôžte mi v mojom žiali!“ "
-      onButtonClicked: { __notificationModel.add(text, 60, NotificationType.Information, NotificationType.Waiting); text = "" }
+
+      onButtonClicked: { __notificationModel.addInfo(text); text = "" }
     }
-    Text {
-      text: "Note: Notification will be removed in 1 minute"
+    MMTextWithButtonInput {
+      buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
-      color: "green"
+      placeholderText: "Click on notification to invoke ShowProjectIssuesAction action"
+
+      onButtonClicked: { __notificationModel.addInfo(text, MM.NotificationType.ShowProjectIssuesAction); text = "" }
     }
   }
 

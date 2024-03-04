@@ -198,12 +198,7 @@ Rectangle {
 
     onClicked: function(type) {
       if ( projectRemoteError ) {
-        __notificationModel.add(
-              qsTr( "Notification: Could not synchronize project, please make sure you are logged in and have sufficient rights." ),
-              3,
-              MM.NotificationType.Error,
-              MM.NotificationType.None
-              )
+        __notificationModel.addError( qsTr( "Notification: Could not synchronize project, please make sure you are logged in and have sufficient rights." ) )
         return
       }
       switch(type) {

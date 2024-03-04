@@ -10,13 +10,14 @@
 #include "notificationmodel.h"
 #include <QQmlEngine>
 
-Notification::Notification( uint id, const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information, NotificationType::IconType icon = NotificationType::None )
+Notification::Notification( uint id, const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon, NotificationType::ActionType action )
 {
   mId = id;
   mMessage = message;
   mInterval = interval;
   mType = type;
   mIcon = icon;
+  mAction = action;
 }
 
 NotificationModel::NotificationModel( QObject *parent ) : QAbstractListModel{parent}
@@ -82,39 +83,38 @@ void NotificationModel::remove( uint id )
 }
 
 // add new unique message with interval
-void NotificationModel::add( const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information, NotificationType::IconType icon = NotificationType::None )
+void NotificationModel::add( const QString &message, uint interval, NotificationType::MessageType type, NotificationType::IconType icon, NotificationType::ActionType action )
 {
   for ( Notification &notification : mNotifications )
   {
     if ( notification.message() == message )
       return;
   }
-
   beginInsertRows( QModelIndex(), rowCount(), rowCount() );
-  mNotifications << Notification{ nextId(), message, interval, type, icon };
+  mNotifications << Notification{ nextId(), message, interval, type, icon, action };
   endInsertRows();
 
   emit rowCountChanged();
 }
 
-void NotificationModel::addSuccess( const QString &message )
+void NotificationModel::addSuccess( const QString &message, NotificationType::ActionType action )
 {
-  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Success, NotificationType::Check );
+  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Success, NotificationType::CheckIcon, action );
 }
 
-void NotificationModel::addError( const QString &message )
+void NotificationModel::addError( const QString &message, NotificationType::ActionType action )
 {
-  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Error, NotificationType::None );
+  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Error, NotificationType::ExclamationIcon, action );
 }
 
-void NotificationModel::addInfo( const QString &message )
+void NotificationModel::addInfo( const QString &message, NotificationType::ActionType action )
 {
-  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Information, NotificationType::None );
+  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Information, NotificationType::WaitingIcon, action );
 }
 
-void NotificationModel::addWarning( const QString &message )
+void NotificationModel::addWarning( const QString &message, NotificationType::ActionType action )
 {
-  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Warning, NotificationType::None );
+  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Warning, NotificationType::WaitingIcon, action );
 }
 
 // check for auto removing notification
@@ -127,4 +127,24 @@ void NotificationModel::timerFired()
   }
 }
 
+// do action, added when Notification was created
+void NotificationModel::onNotificationClicked( uint id )
+{
+  for ( int i = 0; i < mNotifications.count(); i++ )
+  {
+    auto notification = mNotifications.at( i );
 
+    if ( notification.id() == id )
+    {
+      switch ( notification.action() )
+      {
+        case NotificationType::ActionType::ShowProjectIssuesAction:
+        {
+          emit showProjectIssuesActionClicked();
+          break;
+        }
+        default: break;
+      }
+    }
+  }
+}
