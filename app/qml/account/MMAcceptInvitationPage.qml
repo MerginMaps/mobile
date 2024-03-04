@@ -10,15 +10,13 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import mm 1.0 as MM
-
 import "../components"
 import "../inputs"
 
 Page {
   id: root
 
-  required property MM.MerginInvitation invitation
+  required property var invitation /* MM.MerginInvitation */
 
   property bool haveBack: false
   property bool showCreate: true
@@ -121,13 +119,14 @@ Page {
 
       Text {
         width: parent.width - 2 * root.hPadding
-        text: qsTr("Want to create a new workspace instead? %1Click here%2").arg("<a href='internal-signal'>").arg("</a>")
+        text: qsTr("Want to create a new workspace instead? %1Click here%2").arg("<a href='internal-signal' style='color:" + __style.forestColor + "'>").arg("</a>")
         visible: root.showCreate
         font: __style.t3
         color: __style.nightColor
         wrapMode: Text.WordWrap
         horizontalAlignment: Text.AlignHCenter
         lineHeight: 1.2
+        textFormat: Text.RichText
 
         onLinkActivated: function(link) {
           root.createWorkspaceClicked()

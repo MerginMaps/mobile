@@ -16,7 +16,6 @@ import QtQuick.Dialogs
 import mm 1.0 as MM
 
 import "../components"
-import "../onboarding"
 import "../inputs"
 import "../account"
 import "../dialogs"
@@ -68,7 +67,7 @@ Item {
 
   function showLogin()
   {
-    onboardingController.start()
+    accountController.start()
   }
 
   function openChangesPanel( projectId )
@@ -357,7 +356,7 @@ Item {
                 return false;
               }
               // do not show the banner in case of accepting invitation or creating a workspace
-              if (onboardingController.inProgress) {
+              if (accountController.inProgress) {
                 return false;
               }
               return !__merginApi.userInfo.hasWorkspaces
@@ -475,21 +474,19 @@ Item {
     }
   }
 
-  MMOnboardingController {
-    id: onboardingController
+  MMAccountController {
+    id: accountController
     enabled: root.visible
     stackView: stackView
   }
 
   MMCreateWorkspaceController {
-    // TODO move to main.qml?
     id: createWorkspaceController
     enabled: root.visible
     stackView: stackView
   }
 
   MMAcceptInvitationController {
-    // TODO move to main.qml?
     id: acceptInvitationController
     // TODO enabled add controller.showInvitationsList
     enabled: root.visible && __merginApi.apiSupportsWorkspaces
@@ -509,7 +506,7 @@ Item {
   Component {
     id: workspaceAccountPageComp
 
-    MMAcountPage {
+    MMAccountPage {
       id: workspaceAccountPage
 
       abbrName: __merginApi.userInfo.nameAbbr

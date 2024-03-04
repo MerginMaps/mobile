@@ -11,10 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "../../app/qml/onboarding"
 import "../../app/qml/components"
 import "../../app/qml/account"
-import notificationType 1.0
 
 Page {
   id: root
@@ -97,7 +95,8 @@ Page {
 
   Component {
     id: accountComponent
-    MMAcountPage {
+
+    MMAccountPage {
       abbrName: "PB"
       fullName: "Patrik Bell"
       userName: "Chuck Norris"
@@ -125,7 +124,8 @@ Page {
 
   Component {
     id: loginComponent
-    MMLogin {
+
+    MMLoginPage {
       id: login
       apiRoot: "app.merginmaps.com"
       warningMsg: "This is warning message like server offline"
@@ -151,7 +151,8 @@ Page {
 
   Component {
     id: signUpComponent
-    MMSignUp {
+
+    MMSignUpPage {
       width: root.width
       height: root.height
 
@@ -167,13 +168,15 @@ Page {
 
   Component {
     id: acceptInvitationComponent
-    MMAcceptInvitation {
+
+    MMAcceptInvitationPage {
 
       width: root.width
       height: root.height
-      user: "Lubos"
-      workspace: "my-workspace.funny"
-      workspaceUuid: "86c4c459-bb7b-4baa-b5d1-690fb05a9310"
+      invitation: QtObject {
+        property string workspace: "my-workspace.funny"
+        property string uuid: "86c4c459-bb7b-4baa-b5d1-690fb05a9310"
+      }
       haveBack: true
       showCreate: true
 
@@ -185,7 +188,8 @@ Page {
 
   Component {
     id: createWorkspaceComponent
-    MMCreateWorkspace {
+
+    MMCreateWorkspacePage {
       width: root.width
       height: root.height
 
@@ -198,7 +202,8 @@ Page {
 
   Component {
     id: howYouFoundUsComponent
-    MMHowYouFoundUs {
+
+    MMHowYouFoundUsPage {
 
       width: root.width
       height: root.height
@@ -213,7 +218,8 @@ Page {
 
   Component {
     id: whichIndustryComponent
-    MMWhichIndustry {
+
+    MMWhichIndustryPage {
       id: whichIndustry
 
       width: root.width

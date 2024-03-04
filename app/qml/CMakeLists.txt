@@ -5,9 +5,20 @@ set(MM_QML
     InputStyle.qml
     Notification.qml
     NotificationBanner.qml
-    account/MMAcountPage.qml
-    account/MMAcountPageItem.qml
+    account/components/MMIconCheckBoxHorizontal.qml
+    account/components/MMIconCheckBoxVertical.qml
+    account/components/MMAccountPageItem.qml
+    account/MMAcceptInvitationPage.qml
+    account/MMAcceptInvitationController.qml
+    account/MMAccountController.qml
+    account/MMAccountPage.qml
+    account/MMCreateWorkspacePage.qml
+    account/MMCreateWorkspaceController.qml
+    account/MMHowYouFoundUsPage.qml
+    account/MMLoginPage.qml
+    account/MMSignUpPage.qml
     account/MMSwitchWorkspacePage.qml
+    account/MMWhichIndustryPage.qml
     components/MMButton.qml
     components/MMCalendarDrawer.qml
     components/MMCheckBox.qml
@@ -19,8 +30,6 @@ set(MM_QML
     components/MMFeaturesListDrawer.qml
     components/MMHlineText.qml
     components/MMIcon.qml
-    components/MMIconCheckBoxHorizontal.qml
-    components/MMIconCheckBoxVertical.qml
     components/MMLine.qml
     components/MMLink.qml
     components/MMLinkButton.qml
@@ -124,15 +133,6 @@ set(MM_QML
     map/components/MMMapLabel.qml
     map/components/MMMapPicker.qml
     map/components/MMMapScaleBar.qml
-    onboarding/MMAcceptInvitation.qml
-    onboarding/MMAcceptInvitationController.qml
-    onboarding/MMCreateWorkspace.qml
-    onboarding/MMCreateWorkspaceController.qml
-    onboarding/MMHowYouFoundUs.qml
-    onboarding/MMLogin.qml
-    onboarding/MMOnboardingController.qml
-    onboarding/MMSignUp.qml
-    onboarding/MMWhichIndustry.qml
     project/MMProjectHomePage.qml
     project/MMProjectIssuesPanel.qml
     project/MMProjectItem.qml

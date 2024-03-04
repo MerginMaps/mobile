@@ -61,7 +61,7 @@ Item {
   Component {
     id: loginPageComp
 
-    MMLogin {
+    MMLoginPage {
       id: loginPage
 
       objectName: "loginPage"
@@ -124,7 +124,7 @@ Item {
   Component {
     id: signUpPanel
 
-    MMSignUp {
+    MMSignUpPage {
 
       objectName: "signUpPanel"
       tocString: qsTr("I accept the Mergin %1Terms and Conditions%3 and %2Privacy Policy%3")
@@ -188,7 +188,7 @@ Item {
   Component {
     id: createWorkspaceComponent
 
-    MMCreateWorkspace {
+    MMCreateWorkspacePage {
       id: createWorkspacePanel
 
       objectName: "createWorkspacePanel"
@@ -210,7 +210,7 @@ Item {
   Component {
     id: acceptInvitationsPanelComponent
 
-    MMAcceptInvitation {
+    MMAcceptInvitationPage {
       objectName: "acceptInvitationsPanel"
       haveBack: false
       showCreate: true
@@ -242,7 +242,7 @@ Item {
   Component {
     id: howYouFoundUsComponent
 
-    MMHowYouFoundUs {
+    MMHowYouFoundUsPage {
       id: howYouFoundUsPanel
 
       objectName: "howYouFoundUsPanel"
@@ -257,7 +257,7 @@ Item {
   Component {
     id: whichIndustryComponent
 
-    MMWhichIndustry {
+    MMWhichIndustryPage {
       id: whichIndustryPanel
 
       objectName: "whichIndustryPanel"

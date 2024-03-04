@@ -10,6 +10,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "./components"
 import "../components"
 import "../inputs"
 
@@ -105,7 +106,7 @@ Page {
         width: parent.width
       }
 
-      MMAcountPageItem {
+      MMAccountPageItem {
         width: parent.width
         title: root.workspaceName
         desc: root.workspaceRole
@@ -114,7 +115,7 @@ Page {
         onLinkClicked: root.selectWorkspaceClicked()
       }
 
-      MMAcountPageItem {
+      MMAccountPageItem {
         width: parent.width
         title: qsTr("Manage Account")
         desc: root.subscription
@@ -173,14 +174,14 @@ Page {
         width: parent.width
       }
 
-      MMAcountPageItem {
+      MMAccountPageItem {
         width: parent.width
         title: qsTr("Sign out")
         iconSource: __style.signOutIcon
         onLinkClicked: root.signOutClicked()
       }
 
-      MMAcountPageItem {
+      MMAccountPageItem {
         width: parent.width
         title: qsTr("Close account")
         desc: qsTr("This will delete all your data")

@@ -38,5 +38,6 @@
         <file>NoPermissions.svg</file>
         <file>SignIn.svg</file>
         <file>NoWorkspace.svg</file>
+        <file>BlueInfo.svg</file>
     </qresource>
 </RCC>
