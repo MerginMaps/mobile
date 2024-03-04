@@ -72,7 +72,7 @@ Drawer {
       width: parent.width - 40 * __dp
       title: "Scan the QR code"
       description: "Please make sure that the lense is clear."
-      image: __style.attentionImage
+      image: __style.blueInfoImage
       anchors.centerIn: parent
     }
   }

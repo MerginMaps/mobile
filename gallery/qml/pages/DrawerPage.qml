@@ -91,6 +91,7 @@ Page {
         }
       }
 
+<<<<<<< HEAD
       Button {
         text: "MMSplittingFailedDialog"
 
@@ -112,6 +113,13 @@ Page {
 
         onClicked: {
           projectLimitDialog.open()
+=======
+      MMButton {
+        text: "codeScanner"
+
+        onClicked: {
+          codeScanner.open()
+>>>>>>> 311c2c01 (blue info image)
         }
       }
     }
@@ -229,5 +237,9 @@ Page {
 
   MMMigrateToMerginDialog {
     id: migrateToMerginDialog
+  }
+
+  MMCodeScanner {
+    id: codeScanner
   }
 }
