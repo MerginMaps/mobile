@@ -138,6 +138,22 @@ Page {
           formSaveChangesDialog.open()
         }
       }
+
+      Button {
+        text: "FormEditingFailedDialog"
+
+        onClicked: {
+          editingFailedDialog.open()
+        }
+      }
+
+      Button {
+        text: "FormDeleteFeatureDialog"
+
+        onClicked: {
+          deleteDialog.open()
+        }
+      }
     }
   }
 
@@ -265,5 +281,13 @@ Page {
 
   MMFormSaveChangesDialog {
     id: formSaveChangesDialog
+  }
+
+  MMFormEditFailedDialog {
+    id: editingFailedDialog
+  }
+
+  MMFormDeleteFeatureDialog {
+    id: deleteDialog
   }
 }

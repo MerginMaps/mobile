@@ -75,6 +75,8 @@ set(MM_QML
     dialogs/MMSyncFailedDialog.qml
     dialogs/MMRemovePhotoDialog.qml
     dialogs/MMFormSaveChangesDialog.qml
+    dialogs/MMFormEditFailedDialog.qml
+    dialogs/MMFormDeleteFeatureDialog.qml
     form/MMFormPage.qml
     form/MMFormStackController.qml
     form/MMFormController.qml
