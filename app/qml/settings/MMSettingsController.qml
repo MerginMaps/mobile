@@ -95,14 +95,7 @@ Item {
       onBackClicked: root.back()
 
       model: MM.ChangelogModel {
-<<<<<<< HEAD
         onLoadingFailure: __notificationModel.addError( qsTr("Changelog could not be loaded") )
-=======
-        onErrorMsgChanged: function(msg) {
-          changelogPanel.errorDialog.boundedDescription = msg
-          changelogPanel.errorDialog.open()
-        }
->>>>>>> 011b8b1a (first stack of dialogs)
       }
     }
   }
