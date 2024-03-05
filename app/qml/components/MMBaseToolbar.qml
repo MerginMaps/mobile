@@ -9,23 +9,27 @@
 
 import QtQuick
 
-MMBaseToolbar {
+/**
+  Base toolbar - take care of safe margins and width and height.
+  Do not use directly in-app, see MMSelectableToolbar and MMToolbar
+*/
+Rectangle {
   id: root
 
-  signal clicked
+  property alias toolbarContent: contentGroup.children
 
-  property alias model: buttonView.model
-  property alias index: buttonView.currentIndex
+  height: __style.toolbarHeight + __style.safeAreaBottom
+  width: window?.width ?? __style.safeAreaLeft + __style.safeAreaRight
+  color: __style.forestColor
 
-  toolbarContent: GridView {
-    id: buttonView
+  Item {
+    id: contentGroup
 
-    anchors.fill: parent
+    height: __style.toolbarHeight
+    width: parent.width - __style.safeAreaLeft - __style.safeAreaRight
 
-    cellHeight: parent.height
-    cellWidth: Math.floor(parent.width / root.model.count) - 1
-
-    highlightFollowsCurrentItem: false
-    interactive: false
+    // center the content
+    x: __style.safeAreaLeft
   }
+
 }

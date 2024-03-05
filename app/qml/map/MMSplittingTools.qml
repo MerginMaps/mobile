@@ -80,9 +80,7 @@ Item {
   }
 
   MMToolbar {
-    y: parent.height
-
-    width: parent.width
+    anchors.bottom: parent.bottom
 
     model: ObjectModel {
 

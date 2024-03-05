@@ -183,11 +183,7 @@ Page {
   MMToolbar {
     id: toolbar
 
-    anchors {
-      left: parent.left
-      right: parent.right
-      bottom: parent.bottom
-    }
+    anchors.bottom: parent.bottom
 
     model: ObjectModel {
       MMToolbarButton { text: "Delete"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }

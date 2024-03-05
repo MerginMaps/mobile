@@ -16,19 +16,22 @@ import "../../app/qml/"
 Page {
   id: pane
 
+  property real offset: __style.toolbarHeight + __style.safeAreaBottom + 40
+
   Rectangle {
     anchors.fill: parent
     color: __style.lightGreenColor
   }
 
+  Label {
+    y: pane.offset  - 20
+    text: "MMSelectableToolbar"
+  }
+
   MMSelectableToolbar {
     id: selectableToolbar
 
-    anchors {
-      left: parent.left
-      right: parent.right
-      bottom: parent.bottom
-    }
+    y: pane.offset
 
     Component.onCompleted: index = 1
 
@@ -69,27 +72,27 @@ Page {
     }
   }
 
+  Label {
+    y: 2 * pane.offset  - 20
+    text: "MMToolbar"
+  }
+
   MMToolbar {
-    anchors {
-      left: parent.left
-      right: parent.right
-      bottom: parent.bottom
-      bottomMargin: 360
-    }
+    y: 2 * pane.offset
 
     model: ObjectModel {
-      MMToolbarLongButton { text: "Long button"; iconSource: __style.editIcon; iconColor: __style.forestColor; onClicked: console.log("tapped "+text) }
+      MMToolbarLongButton { text: "Long button"; iconSource: __style.editCircleIcon; iconColor: __style.forestColor; onClicked: console.log("tapped "+text) }
     }
+  }
+
+  Label {
+    y: 3 * pane.offset  - 20
+    text: "MMToolbar"
   }
 
   MMToolbar {
 
-    anchors {
-      left: parent.left
-      right: parent.right
-      bottom: parent.bottom
-      bottomMargin: 240
-    }
+    y: 3 * pane.offset
 
     model: ObjectModel {
       MMToolbarButton { text: "Sync"; iconSource: __style.syncIcon; onClicked: console.log("tapped "+text) }
@@ -97,14 +100,14 @@ Page {
     }
   }
 
+  Label {
+    y: 4 * pane.offset  - 20
+    text: "MMToolbar"
+  }
+
   MMToolbar {
 
-    anchors {
-      left: parent.left
-      right: parent.right
-      bottom: parent.bottom
-      bottomMargin: 120
-    }
+    y: 4 * pane.offset
 
     model: ObjectModel {
       MMToolbarButton { text: "1/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
@@ -118,14 +121,14 @@ Page {
     }
   }
 
+  Label {
+    y: 5 * pane.offset  - 20
+    text: "MMToolbar"
+  }
+
   MMToolbar {
 
-    anchors {
-      left: parent.left
-      right: parent.right
-      bottom: parent.bottom
-      bottomMargin: 480
-    }
+    y: 5 * pane.offset
 
     model: ObjectModel {
       MMToolbarButton { text: "Delete"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
