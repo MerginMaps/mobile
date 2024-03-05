@@ -21,7 +21,7 @@ Item {
 
   required property string text
 
-  readonly property double toolbarLongButtonWidth: 50 * __dp
+  readonly property double toolbarLongButtonWidth: 48 * __dp
   readonly property double minimumToolbarLongButtonWidth: 200 * __dp
   readonly property double maximumToolbarLongButtonWidth: 500 * __dp
 
@@ -29,7 +29,7 @@ Item {
 
   Button {
     width: {
-      var w = parent.width - 40 * __dp
+      var w = parent.width
       if(w < control.minimumToolbarLongButtonWidth)
         return control.minimumToolbarLongButtonWidth
       else if(w > control.maximumToolbarLongButtonWidth)
@@ -62,8 +62,8 @@ Item {
           color: __style.forestColor
           font: __style.t3
           verticalAlignment: Text.AlignVCenter
-          topPadding: 10 * __dp
-          bottomPadding: 10 * __dp
+          topPadding: 9 * __dp
+          bottomPadding: 9 * __dp
         }
       }
     }

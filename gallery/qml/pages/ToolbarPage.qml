@@ -24,6 +24,25 @@ Page {
   }
 
   Label {
+    id: safeAreaLabel
+    y: 20
+    text: "safe bottom area: " + __style.safeAreaBottom
+  }
+
+  CheckBox {
+    y: 35
+    checked: true
+    text: "use safe bottom area"
+
+    onCheckedChanged: {
+      if (checked)
+        __style.safeAreaBottom = 20
+      else
+        __style.safeAreaBottom = 0
+    }
+  }
+
+  Label {
     y: pane.offset  - 20
     text: "MMSelectableToolbar"
   }
