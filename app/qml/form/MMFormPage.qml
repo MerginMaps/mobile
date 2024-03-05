@@ -379,32 +379,17 @@ Page {
     onDiscardChanges: root.rollbackAndClose()
   }
 
-  MessageDialog {
+  MMFormDeleteFeatureDialog {
     id: deleteDialog
 
-    title: qsTr( "Delete feature" )
-    text: qsTr( "Are you sure you want to delete this feature?" )
-    buttons: MessageDialog.Yes | MessageDialog.No
-
-    onButtonClicked: function( clickedButton ) {
-      if ( clickedButton === MessageDialog.Yes ) {
-        root.controller.deleteFeature()
-        root.canceled()
-        deleteDialog.close()
-      }
-
-      deleteDialog.close()
+    onDeleteFeature: {
+      root.controller.deleteFeature()
+      root.canceled()
     }
   }
 
-  MessageDialog {
+  MMFormEditFailedDialog {
     id: editingFailedDialog
-
-    title: qsTr( "Saving failed" )
-    text: qsTr( "Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support." )
-    buttons: MessageDialog.Close
-
-    onButtonClicked: close()
   }
 
   Item {

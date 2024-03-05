@@ -139,5 +139,7 @@
         <file>../app/qml/dialogs/MMMissingAuthDialog.qml</file>
         <file>../app/qml/dialogs/MMFormSaveChangesDialog.qml</file>
         <file>../app/qml/dialogs/MMRemovePhotoDialog.qml</file>
+        <file>../app/qml/dialogs/MMFormDeleteFeatureDialog.qml</file>
+        <file>../app/qml/dialogs/MMFormEditFailedDialog.qml</file>
     </qresource>
 </RCC>
