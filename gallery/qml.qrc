@@ -142,5 +142,7 @@
         <file>../app/qml/dialogs/MMRemovePhotoDialog.qml</file>
         <file>../app/qml/dialogs/MMFormDeleteFeatureDialog.qml</file>
         <file>../app/qml/dialogs/MMFormEditFailedDialog.qml</file>
+        <file>../app/qml/dialogs/MMProjErrorDialog.qml</file>
+        <file>../app/qml/dialogs/MMOutOfDateCustomServerDialog.qml</file>
     </qresource>
 </RCC>

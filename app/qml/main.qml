@@ -102,7 +102,7 @@ ApplicationWindow {
   }
 
   function showProjError(message) {
-    projDialog.text  = message
+    projDialog.descriptionText  = message
     projDialog.open()
   }
 
@@ -722,37 +722,17 @@ ApplicationWindow {
     }
   }
 
-  MessageDialog {
+  MMProjErrorDialog {
     id: projDialog
-    onAccepted: projDialog.close()
-    title: qsTr("PROJ Error")
-    buttons: MessageDialog.Ignore | MessageDialog.Help
-    onButtonClicked: function(clickedButton) {
-      if (clickedButton === MessageDialog.Help) {
-        Qt.openUrlExternally(__inputHelp.howToSetupProj)
-      }
-      close()
-    }
   }
 
-  MessageDialog {
+  MMOutOfDateCustomServerDialog{
     id: migrationDialog
 
     property string version
 
-    onAccepted: migrationDialog.close()
-    title: qsTr("Your server will soon be out of date")
-    text: qsTr("Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.")
-    buttons: MessageDialog.Close | MessageDialog.Help | MessageDialog.Ignore
-    onButtonClicked: function(clickedButton) {
-      if (clickedButton === MessageDialog.Help) {
-        Qt.openUrlExternally(__inputHelp.migrationGuides)
-      }
-      else if (clickedButton === MessageDialog.Ignore) {
-        // don't show this dialog for this version
-        __appSettings.ignoreMigrateVersion = version
-      }
-      close()
+    onIgnoreClicked: {
+      __appSettings.ignoreMigrateVersion = version
     }
   }
 

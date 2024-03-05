@@ -154,6 +154,14 @@ Page {
           deleteDialog.open()
         }
       }
+
+      Button {
+        text: "projErrorDialog"
+
+        onClicked: {
+          projErrorDialog.open()
+        }
+      }
     }
   }
 
@@ -289,5 +297,9 @@ Page {
 
   MMFormDeleteFeatureDialog {
     id: deleteDialog
+  }
+
+  MMProjErrorDialog {
+    id: projErrorDialog
   }
 }

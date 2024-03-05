@@ -78,6 +78,8 @@ set(MM_QML
     dialogs/MMFormSaveChangesDialog.qml
     dialogs/MMFormEditFailedDialog.qml
     dialogs/MMFormDeleteFeatureDialog.qml
+    dialogs/MMProjErrorDialog.qml
+    dialogs/MMOutOfDateCustomServerDialog.qml
     form/MMFormPage.qml
     form/MMFormStackController.qml
     form/MMFormController.qml
