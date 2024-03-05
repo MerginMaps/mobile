@@ -29,6 +29,7 @@ set(MM_QML
     components/MMLinkButton.qml
     components/MMListDrawer.qml
     components/MMListDrawerItem.qml
+    components/MMListFooterSpacer.qml
     components/MMBusyIndicator.qml
     components/MMMenuDrawer.qml
     components/MMMessage.qml
@@ -143,6 +144,7 @@ set(MM_QML
     settings/MMLogPage.qml
     settings/MMSettingsController.qml
     settings/MMSettingsPage.qml
+    settings/components/MMChangelogEntryDelegate.qml
     settings/components/MMSettingDropdown.qml
     settings/components/MMSettingInput.qml
     settings/components/MMSettingItem.qml

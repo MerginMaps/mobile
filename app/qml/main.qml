@@ -376,30 +376,21 @@ ApplicationWindow {
         text: qsTr("Settings")
         iconSource: __style.settingsIcon
         onClicked: {
-          settingsPanel.visible = true
+          settingsController.open()
         }
       }
     }
   }
 
   MMSettingsController {
-    id: settingsPanel
+    id: settingsController
 
-    height: window.height
-    width: window.width
-
-    function openConnectGps() {
-      settingsPanel.open("gps")
+    onOpened: {
+      stateManager.state = "misc"
     }
 
-    onVisibleChanged: {
-      if (settingsPanel.visible) {
-        settingsPanel.focus = true; // get focus
-        stateManager.state = "misc"
-      }
-      else {
-        stateManager.state = "map"
-      }
+    onClosed: {
+      stateManager.state = "map"
     }
   }
 
@@ -497,7 +488,7 @@ ApplicationWindow {
 
       onManageGpsClicked: {
         gpsDataDrawer.close()
-        settingsPanel.openConnectGps()
+        settingsController.open( MMSettingsController.Pages.GPSConnection )
       }
 
       onClosed: {

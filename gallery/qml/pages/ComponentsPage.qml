@@ -22,7 +22,7 @@ Item {
 
     pageHeader.title: "MMPage component 🤩"
 
-    content: Item {
+    pageContent: Item {
       width: parent.width
       height: parent.height
 

@@ -420,7 +420,7 @@ class MMStyle: public QObject
 
     QUrl loadingIndicatorImage() {return QUrl( "qrc:/images/LoadingIndicator.svg" );}
     QUrl mmLogoImage() {return QUrl( "qrc:/images/MMLogo.svg" );}
-    QUrl lutraLogoImage() {return QUrl( "qrc:/images/LutraLogo4x.png" );}
+    QUrl lutraLogoImage() {return QUrl( "qrc:/images/LutraLogo.svg" );}
     QUrl trackingDirectionImage() {return QUrl( "qrc:/images/TrackingDirection.svg" );}
     QUrl directionImage() {return QUrl( "qrc:/images/Direction.svg" );}
     QUrl mmSymbolImage() {return QUrl( "qrc:/images/MMSymbol.svg" );}

@@ -19,46 +19,54 @@ import "../gps"
 Item {
   id: root
 
-  visible: false
-
   property string defaultLayer: __appSettings.defaultLayer
 
+  signal closed()
+  signal opened()
 
-  function open( subsetting="" )
+  enum Pages { Normal, GPSConnection }
+
+  function open( subpage = MMSettingsController.Pages.Normal )
   {
-    // opens settings panel and if subsetting is provided, opens directly that
-    root.visible = true
-
-    if ( subsetting === "gps" )
+    // opens settings panel and if subpage is provided, opens directly that
+    if ( subpage === MMSettingsController.Pages.GPSConnection )
     {
       stackview.push( positionProviderComponent )
     }
+    else {
+      stackview.push( settingsPageComponent )
+    }
+
+    stackview.forceActiveFocus()
+    root.opened()
   }
 
-  function close()
+  function back()
   {
-    if (stackview.depth > 1) {
-      // hide about or log panel
-      stackview.pop(null)
-    } else
-      root.visible = false
-  }
+    // close the last page; if there is only one, close the controller
 
-  Keys.onReleased: function( event ) {
-    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true
-      root.close()
+    if (stackview.depth > 1) {
+      stackview.pop( null )
+    }
+    else {
+      stackview.clear()
+      root.closed()
     }
   }
+
 
   StackView {
     id: stackview
 
-    anchors.fill: parent
-    initialItem: MMSettingsPage {
-      id: settingsPanel
+    width: ApplicationWindow.window?.width ?? 0
+    height: ApplicationWindow.window?.height ?? 0
+  }
 
-      onClose: root.close()
+  Component {
+    id: settingsPageComponent
+
+    MMSettingsPage {
+      onBackClicked: root.back()
       onManageGpsClicked: stackview.push( positionProviderComponent )
       onAboutClicked: stackview.push(aboutPanelComponent)
       onChangelogClicked: stackview.push(changelogPanelComponent)
@@ -73,9 +81,8 @@ Item {
     id: aboutPanelComponent
 
     MMAboutPage {
-      onClose: stackview.pop(null)
+      onBackClicked: root.back()
       onVisitWebsiteClicked: Qt.openUrlExternally( __inputHelp.inputWebLink )
-      Component.onCompleted: forceActiveFocus()
     }
   }
 
@@ -84,13 +91,11 @@ Item {
 
     MMChangelogPage {
       id: changelogPanel
-      onClose: stackview.pop(null)
-      Component.onCompleted: forceActiveFocus()
+
+      onBackClicked: root.back()
+
       model: MM.ChangelogModel {
-        onErrorMsgChanged: function(msg) {
-          changelogPanel.errorDialog.text = msg
-          changelogPanel.errorDialog.open()
-        }
+        onLoadingFailure: __notificationModel.addError( qsTr("Changelog could not be loaded") )
       }
     }
   }
@@ -99,9 +104,8 @@ Item {
     id: logPanelComponent
 
     MMLogPage {
-      onClose: stackview.pop(null)
+      onBackClicked: root.back()
       onSubmitReport: __inputHelp.submitReport()
-      Component.onCompleted: forceActiveFocus()
     }
   }
 
@@ -109,8 +113,7 @@ Item {
     id: positionProviderComponent
 
     MMPositionProviderPage {
-      onClose: stackview.pop(null)
-      Component.onCompleted: forceActiveFocus()
+      onClose: root.back()
     }
   }
 }

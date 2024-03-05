@@ -150,7 +150,7 @@ Page {
       submitReportPending: false
       text: __logText
       onSubmitReport: submitReportPending = !submitReportPending
-      onClose: stackview.pop()
+      onBackClicked: stackview.pop()
     }
   }
 
@@ -161,7 +161,7 @@ Page {
       width: root.width
       height: root.height
       onVisitWebsiteClicked: Qt.openUrlExternally( "https://merginmaps.com" )
-      onClose: stackview.pop()
+      onBackClicked: stackview.pop()
     }
   }
 
@@ -171,7 +171,7 @@ Page {
       id: changelogPanel
       width: root.width
       height: root.height
-      onClose: stackview.pop()
+      onBackClicked: stackview.pop()
 
       property date today: new Date()
 
@@ -204,7 +204,7 @@ Page {
       id: settingsPanel
       width: root.width
       height: root.height
-      onClose: stackview.pop()
+      onBackClicked: stackview.pop()
       onManageGpsClicked: console.log("onManageGpsClicked clicked")
       onAboutClicked: console.log("onAboutClicked clicked")
       onChangelogClicked: console.log("onChangelogClicked clicked")

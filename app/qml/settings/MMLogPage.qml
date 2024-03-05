@@ -9,58 +9,32 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
-import QtQuick.Dialogs
-import Qt5Compat.GraphicalEffects
 
 import "../components"
 
-Item {
+MMPage {
   id: root
-  property string text: qsTr("(no-entries)")
+
+  property string text: qsTr( "(no-entries)" )
+
   property bool enableSendToDev: true
   property bool submitReportPending: __inputHelp.submitReportPending
 
-  signal submitReport
-  signal close
+  signal submitReport()
 
-  Keys.onReleased: function( event ) {
-    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true
-      close()
-    }
-  }
+  pageHeader.title: qsTr( "Diagnostic log" )
 
-  Page {
-    id: pane
-
+  pageContent: Item {
     width: parent.width
     height: parent.height
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.horizontalCenter: parent.horizontalCenter
-    clip: true
-
-    background: Rectangle {
-      color: __style.lightGreenColor
-    }
-
-    header: MMPageHeader {
-      id: header
-      title: qsTr("Diagnostic log")
-      titleFont: __style.h3
-
-      onBackClicked: root.close()
-      backVisible: true
-    }
 
     Flickable {
-      id: flickableItem
-      clip: true
-      anchors.horizontalCenter: parent.horizontalCenter
-      width: root.width - __style.pageMargins * 2
+      width: parent.width
       height: parent.height
-      contentHeight: txt.height
+
       contentWidth: width
+      contentHeight: txt.height + __style.margin40 + sendButton.height
+
       maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
 
       Text {
@@ -77,21 +51,23 @@ Item {
 
       ScrollBar.vertical: ScrollBar { }
     }
-  }
 
-  MMButton {
-        id: sendButton
-        visible: enableSendToDev
-        anchors.bottom: root.bottom
-        anchors.bottomMargin: 32 * __dp
-        anchors.horizontalCenter: parent.horizontalCenter
+    MMButton {
+      id: sendButton
 
-        width: root.width - __style.pageMargins * 2
-        text: root.submitReportPending ? qsTr("Sending...") : qsTr("Send")
+      visible: root.enableSendToDev
 
-        onClicked: {
-          if (!root.submitReportPending)
-            root.submitReport()
-        }
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: __style.margin8 + __style.safeAreaBottom
+
+      width: parent.width
+
+      text: root.submitReportPending ? qsTr( "Sending..." ) : qsTr( "Send to developers" )
+
+      onClicked: {
+        if ( !root.submitReportPending )
+          root.submitReport()
+      }
+    }
   }
 }
