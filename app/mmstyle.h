@@ -244,6 +244,7 @@ class MMStyle: public QObject
     Q_PROPERTY( double safeAreaLeft READ safeAreaLeft WRITE setSafeAreaLeft NOTIFY safeAreaLeftChanged )
 
     // Margins
+    Q_PROPERTY( double margin2 READ margin2 CONSTANT )
     Q_PROPERTY( double margin4 READ margin4 CONSTANT )
     Q_PROPERTY( double margin6 READ margin6 CONSTANT )
     Q_PROPERTY( double margin8 READ margin8 CONSTANT )
@@ -253,8 +254,9 @@ class MMStyle: public QObject
 
     // Page
     Q_PROPERTY( double pageMargins READ margin20 CONSTANT ) // distance between screen edge and components
-    Q_PROPERTY( double spacing20 READ margin20 CONSTANT ) // distance between page header, page content and page footer
-    Q_PROPERTY( double spacing40 READ margin40 CONSTANT ) // bigger distance between page header, page content and page footer
+    Q_PROPERTY( double spacing12 READ margin12 CONSTANT ) // distance between page header, page content and page footer
+    Q_PROPERTY( double spacing20 READ margin20 CONSTANT )
+    Q_PROPERTY( double spacing40 READ margin40 CONSTANT )
     Q_PROPERTY( double maxPageWidth READ maxPageWidth CONSTANT ) // maximum page width (desktop, tablets, landscape)
 
     // Other
@@ -475,6 +477,7 @@ class MMStyle: public QObject
     double safeAreaBottom() const { return mSafeAreaBottom; };
     double safeAreaLeft() const { return mSafeAreaLeft; };
 
+    double margin2() {return 2 * mDp;}
     double margin4() {return 4 * mDp;}
     double margin6() {return 6 * mDp;}
     double margin8() {return 8 * mDp;}

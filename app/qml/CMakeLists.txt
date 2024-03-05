@@ -1,6 +1,7 @@
 set(MM_QML
     account/components/MMIconCheckBoxHorizontal.qml
     account/components/MMIconCheckBoxVertical.qml
+    account/components/MMAccountHeadItem.qml
     account/components/MMAccountPageItem.qml
     account/MMAcceptInvitationPage.qml
     account/MMAcceptInvitationController.qml

@@ -6,22 +6,17 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "./components"
-import "../components"
+import "./components" as MMAccountComponents
+import "../components/"
 import "../inputs"
 
-Page {
+MMPage {
   id: root
-
-  signal backClicked
-  signal selectWorkspaceClicked
-  signal manageAccountClicked
-  signal closeAccountClicked
-  signal signOutClicked
 
   required property string abbrName
   required property string fullName
@@ -34,160 +29,203 @@ Page {
   required property real storageFill // [0-1]
   required property int invitationsCount
 
-  header: MMPageHeader {
-    id: header
-    color: __style.lightGreenColor
-    backVisible: true
-    onBackClicked: root.backClicked()
-  }
+  signal selectWorkspaceClicked
+  signal manageAccountClicked
+  signal closeAccountClicked
+  signal signOutClicked
 
-  Rectangle {
-    anchors.fill: parent
-    color: __style.lightGreenColor
-  }
+  pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
-  Item {
-    id: bodyItem
-    width: Math.min(parent.width - 2 * __style.pageMargins, __style.maxPageWidth)
-    anchors.horizontalCenter: parent.horizontalCenter
-    x: __style.pageMargins
+  pageContent: ScrollView {
 
-    Column {
-      id: infoPanel
+    width: parent.width
+    height: parent.height
 
-      anchors.horizontalCenter: parent.horizontalCenter
-      spacing: 8 * __dp
-      Rectangle {
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: 80 * __dp
-        height: width
-        radius: width / 2
-        color: __style.fieldColor
+    contentWidth: availableWidth // to only scroll vertically
+    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
-        Text {
-          text: root.abbrName
-          anchors.fill: parent
-          color: __style.forestColor
-          font: __style.h2
-          horizontalAlignment: Text.AlignHCenter
-          verticalAlignment: Text.AlignVCenter
-        }
+    ColumnLayout {
+
+      width: parent.width
+      height: parent.height
+
+      spacing: 0
+
+      MMAccountComponents.MMAccountHeadItem {
+
+        abbrv: root.abbrName
+
+        Layout.preferredWidth: width
+        Layout.preferredHeight: height
+
+        Layout.alignment: Qt.AlignHCenter
       }
 
       Text {
-        anchors.horizontalCenter: parent.horizontalCenter
+        Layout.fillWidth: true
+        Layout.topMargin: __style.margin12
+
+        maximumLineCount: 2
+        elide: Text.ElideRight
+        wrapMode: Text.WrapAnywhere
+
         text: root.fullName + " (" + root.userName + ")"
         color: __style.nightColor
         font: __style.t1
+
+        horizontalAlignment: Text.AlignHCenter
       }
 
       Text {
-        anchors.horizontalCenter: parent.horizontalCenter
+        Layout.fillWidth: true
+        Layout.topMargin: __style.margin12
+
+        maximumLineCount: 2
+        elide: Text.ElideRight
+        wrapMode: Text.WrapAnywhere
+
         text: root.email
         color: __style.nightColor
         font: __style.p5
-      }
-    }
 
-    Column {
-      id: workspacePanel
-      anchors.top: infoPanel.bottom
-      anchors.topMargin: __style.pageMargins
-      width: parent.width
-      spacing: 8 * __dp
+        horizontalAlignment: Text.AlignHCenter
+      }
 
       Text {
+        Layout.fillWidth: true
+        Layout.topMargin: __style.margin40
+
         text: qsTr("Workspaces")
         color: __style.nightColor
-        font: __style.t1
+        font: __style.p6
       }
 
       MMLine {
         width: parent.width
       }
 
-      MMAccountPageItem {
-        width: parent.width
+      MMAccountComponents.MMAccountPageItem {
+
+        Layout.fillWidth: true
+        Layout.preferredHeight: height
+        Layout.topMargin: __style.margin20
+
         title: root.workspaceName
         desc: root.workspaceRole
         iconSource: __style.workspacesIcon
         notificationCount: root.invitationsCount
-        onLinkClicked: root.selectWorkspaceClicked()
+
+        onClicked: root.selectWorkspaceClicked()
       }
 
-      MMAccountPageItem {
-        width: parent.width
+      MMAccountComponents.MMAccountPageItem {
+
+        Layout.fillWidth: true
+        Layout.preferredHeight: height
+        Layout.topMargin: __style.margin20
+
         title: qsTr("Manage Account")
         desc: root.subscription
         iconSource: __style.settingsIcon
-        onLinkClicked: root.manageAccountClicked()
+
+        onClicked: root.manageAccountClicked()
       }
 
       Item {
-        width: parent.width
-        height: progressBar.height + storageText.height + 8 * __dp
 
-        Text {
-          id: storateLabel
-          anchors.top: parent.top
-          anchors.left: parent.left
-          text: qsTr("Storage")
-          color: __style.nightColor
-          font: __style.p4
-        }
+        Layout.fillWidth: true
+        Layout.preferredHeight: progressBar.height + storageText.height + __style.margin6
+        Layout.topMargin: __style.margin20
 
-        Text {
-          id: storageText
-          anchors.top: parent.top
-          anchors.right: parent.right
-          text: root.storage
-          color: __style.forestColor
-          font: __style.t4
+        Row {
+          width: parent.width
+          height: 24 * __dp
+
+          spacing: __style.spacing20
+
+          Text {
+            id: storageTitleText
+
+            width: parent.width - parent.spacing - storageText.paintedWidth
+            height: parent.height
+
+            text: qsTr("Storage")
+            color: __style.nightColor
+            font: __style.p4
+
+            verticalAlignment: Text.AlignVCenter
+          }
+
+          Text {
+            id: storageText
+
+            width: paintedWidth
+            height: parent.height
+
+            text: root.storage
+
+
+            color: __style.forestColor
+            font: __style.t4
+
+            verticalAlignment: Text.AlignVCenter
+          }
         }
 
         MMProgressBar {
           id: progressBar
+
           anchors.bottom: parent.bottom
           anchors.left: parent.left
           width: parent.width
+
           position: root.storageFill
+
           color: __style.grassColor
           progressColor: __style.forestColor
         }
       }
-    }
-
-    Column {
-      id: generalPanel
-      width: bodyItem.width
-      anchors.top: workspacePanel.bottom
-      anchors.topMargin: __style.pageMargins
-      spacing: 8 * __dp
 
       Text {
+        Layout.fillWidth: true
+        Layout.topMargin: __style.margin40
+
         text: qsTr("General")
         color: __style.nightColor
-        font: __style.t1
+        font: __style.p6
       }
 
       MMLine {
         width: parent.width
       }
 
-      MMAccountPageItem {
-        width: parent.width
+      MMAccountComponents.MMAccountPageItem {
+
+        Layout.fillWidth: true
+        Layout.preferredHeight: height
+        Layout.topMargin: __style.margin20
+
         title: qsTr("Sign out")
         iconSource: __style.signOutIcon
-        onLinkClicked: root.signOutClicked()
+
+        onClicked: root.signOutClicked()
       }
 
-      MMAccountPageItem {
-        width: parent.width
+      MMAccountComponents.MMAccountPageItem {
+
+        Layout.fillWidth: true
+        Layout.preferredHeight: height
+        Layout.topMargin: __style.margin20
+
         title: qsTr("Close account")
         desc: qsTr("This will delete all your data")
         iconSource: __style.closeAccountIcon
-        onLinkClicked: root.closeAccountClicked()
+
+        onClicked: root.closeAccountClicked()
       }
+
+      MMListFooterSpacer {}
     }
   }
 }
