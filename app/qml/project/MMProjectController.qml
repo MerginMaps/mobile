@@ -234,11 +234,11 @@ Item {
           MouseArea {
             anchors.fill: parent
             onClicked: {
-              if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MerginApiStatus.OK ) {
+              if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MM.MerginApiStatus.OK ) {
 
                 __merginApi.refreshUserData()
 
-                if ( __merginApi.serverType === MerginServerType.OLD ) {
+                if ( __merginApi.serverType === MM.MerginServerType.OLD ) {
                   __notificationModel.addWarning( qsTr( "Unsupported server, please contact your server administrator." ) )
                 }
                 else {

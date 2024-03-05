@@ -23,7 +23,7 @@ MMBaseToolbar {
     anchors.fill: parent
 
     cellHeight: parent.height
-    cellWidth: Math.floor(parent.width / root.model.count) - 1
+    cellWidth: Math.floor(parent.width / root.model.count)
 
     highlightFollowsCurrentItem: false
     interactive: false
