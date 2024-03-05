@@ -13,7 +13,7 @@ import QtQuick.Layouts
 
 import mm 1.0 as MM
 
-import "./components"
+import "./components" as  MMSettingsComponents
 import "../components"
 
 Page {
@@ -73,7 +73,7 @@ Page {
 
       Item { width: 1; height: 1 }
 
-      MMSettingSwitch {
+      MMSettingsComponents.MMSettingSwitch {
         width: parent.width
         title: qsTr("Follow GPS with map")
         description: qsTr("Determines whether the map automatically centers to your GPS position")
@@ -85,7 +85,7 @@ Page {
 
       Item { width: 1; height: 1 }
 
-      MMSettingInput {
+      MMSettingsComponents.MMSettingInput {
         width: parent.width
         title: qsTr("GPS accuracy treshold")
         description: qsTr("Determines when the accuracy indicator turns yellow")
@@ -100,7 +100,7 @@ Page {
 
       MMLine {}
 
-      MMSettingItem {
+      MMSettingsComponents.MMSettingItem {
         width: parent.width
         title: qsTr("Manage GPS receivers")
         value: "Internal"
@@ -110,7 +110,7 @@ Page {
 
       MMLine {}
 
-      MMSettingInput {
+      MMSettingsComponents.MMSettingInput {
         width: parent.width
         title: qsTr("GPS antenna height")
         description: qsTr("Includes pole height and GPS receiver’s antenna height")
@@ -135,7 +135,7 @@ Page {
 
       Item { width: 1; height: 1 }
 
-      MMSettingDropdown {
+      MMSettingsComponents.MMSettingDropdown {
         width: parent.width
         title: qsTr("Interval threshold type")
         description: qsTr("Choose a type of threshold for streaming mode")
@@ -161,7 +161,7 @@ Page {
 
       MMLine {}
 
-      MMSettingInput {
+      MMSettingsComponents.MMSettingInput {
         width: parent.width
         title: qsTr("Threshold interval")
         description: qsTr("Streaming mode will add a point to the object at each interval")
@@ -186,7 +186,7 @@ Page {
 
       Item { width: 1; height: 1 }
 
-      MMSettingSwitch {
+      MMSettingsComponents.MMSettingSwitch {
         width: parent.width
         title: qsTr("Reuse last entered value")
         description: qsTr("Each field offers an option to reuse its value on the next feature")
@@ -197,7 +197,7 @@ Page {
 
       MMLine {}
 
-      MMSettingSwitch {
+      MMSettingsComponents.MMSettingSwitch {
         width: parent.width
         title: qsTr("Automatically sync changes")
         description: qsTr("Each time you save changes, the app will sync automatically")
@@ -218,7 +218,7 @@ Page {
 
       Item { width: 1; height: 1 }
 
-      MMSettingItem {
+      MMSettingsComponents.MMSettingItem {
         width: parent.width
         title: qsTr("About")
         value: ""
@@ -228,7 +228,7 @@ Page {
 
       MMLine {}
 
-      MMSettingItem {
+      MMSettingsComponents.MMSettingItem {
         width: parent.width
         title: qsTr("Changelog")
         value: ""
@@ -238,7 +238,7 @@ Page {
 
       MMLine {}
 
-      MMSettingItem {
+      MMSettingsComponents.MMSettingItem {
         width: parent.width
         title: qsTr("Help")
         value: ""
@@ -248,7 +248,7 @@ Page {
 
       MMLine {}
 
-      MMSettingItem {
+      MMSettingsComponents.MMSettingItem {
         width: parent.width
         title: qsTr("Privacy policy")
         value: ""
@@ -258,7 +258,7 @@ Page {
 
       MMLine {}
 
-      MMSettingItem {
+      MMSettingsComponents.MMSettingItem {
         width: parent.width
         title: qsTr("Terms of service")
         value: ""
@@ -268,7 +268,7 @@ Page {
 
       MMLine {}
 
-      MMSettingItem {
+      MMSettingsComponents.MMSettingItem {
         width: parent.width
         title: qsTr("Diagnostic log")
         value: ""

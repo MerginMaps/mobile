@@ -199,6 +199,7 @@ Page {
 
   Component {
     id: settingsPanelComponent
+
     MMSettingsPage {
       id: settingsPanel
       width: root.width
