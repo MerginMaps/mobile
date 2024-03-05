@@ -79,10 +79,6 @@ set(MM_QML
     form/MMFormStackController.qml
     form/MMFormController.qml
     form/MMPreviewDrawer.qml
-    form/MMForm.qml
-    form/MMFormStackManager.qml
-    form/MMFormWrapper.qml
-    form/MMPreviewPanel.qml
     form/components/MMFormTabBar.qml
     form/components/MMPreviewActionButton.qml
     form/editors/MMFormCalendarEditor.qml
