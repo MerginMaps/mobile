@@ -122,6 +122,22 @@ Page {
           codeScanner.open()
         }
       }
+
+      Button {
+        text: "removePhotoDialog"
+
+        onClicked: {
+          removePhotoDialog.open()
+        }
+      }
+
+      Button {
+        text: "formSaveChangesDialog"
+
+        onClicked: {
+          formSaveChangesDialog.open()
+        }
+      }
     }
   }
 
@@ -241,5 +257,13 @@ Page {
 
   MMCodeScanner {
     id: codeScanner
+  }
+
+  MMRemovePhotoDialog {
+    id: removePhotoDialog
+  }
+
+  MMFormSaveChangesDialog {
+    id: formSaveChangesDialog
   }
 }

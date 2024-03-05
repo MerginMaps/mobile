@@ -72,6 +72,8 @@ set(MM_QML
     dialogs/MMStorageLimitDialog.qml
     dialogs/MMStreamingModeDialog.qml
     dialogs/MMSyncFailedDialog.qml
+    dialogs/MMRemovePhotoDialog.qml
+    dialogs/MMFormSaveChangesDialog.qml
     form/MMFormPage.qml
     form/MMFormStackController.qml
     form/MMFormController.qml
