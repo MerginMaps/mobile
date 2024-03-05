@@ -157,7 +157,7 @@ Drawer {
           }
           else if ( btPermission.status === Qt.Denied )
           {
-            __inputUtils.showNotification( qsTr( "Bluetooth permission is required in order to connect to external receivers. Please enable it in system settings" ) )
+            __notificationModel.addInfo( qsTr( "Bluetooth permission is required in order to connect to external receivers. Please enable it in system settings" ) )
           }
           else
           {
@@ -179,7 +179,7 @@ Drawer {
           }
           else
           {
-            __inputUtils.showNotification( qsTr( "You need to enable Bluetooth in order to connect new GPS receiver" ) )
+            __notificationModel.addInfo( qsTr( "You need to enable Bluetooth in order to connect new GPS receiver" ) )
             root.close()
           }
         }

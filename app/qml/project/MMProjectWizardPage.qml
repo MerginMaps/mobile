@@ -41,7 +41,7 @@ Item {
   MM.FieldsModel {
     id: fieldsModel
     onNotify: function( message ) {
-      __inputUtils.showNotification(message)
+      __notificationModel.addInfo( message )
     }
     Component.onCompleted: fieldsModel.initModel()
   }
@@ -143,7 +143,7 @@ Item {
         iconColor: toolbar.color
         onClicked: {
           if (!projectNameField.text) {
-            __inputUtils.showNotification(qsTr("Empty project name"))
+            __notificationModel.addWarning( qsTr("Empty project name") )
           } else {
             __projectWizard.createProject(projectNameField.text, fieldsModel )
           }
