@@ -67,21 +67,15 @@ Drawer {
       spacing: 40 * __dp
 
       MMPageHeader {
-
         id: header
 
-        // TODO
-        // rightMarginShift: 0
         backVisible: false
 
         title: qsTr("GPS info")
         titleFont: __style.t2
 
-        MMRoundButton {
-          id: backBtn
+        rightItemContent: MMRoundButton {
 
-          anchors.right: parent.right
-          anchors.rightMargin: __style.pageMargins
           anchors.verticalCenter: parent.verticalCenter
 
           iconSource: __style.closeIcon

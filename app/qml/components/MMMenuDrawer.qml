@@ -56,15 +56,11 @@ Drawer {
         backVisible: false
         width: parent.width
         titleFont: __style.t2
-        // TODO
-        // rightMarginShift: closeButton.width + __style.pageMargins
 
-        MMRoundButton {
-          id: closeButton
+        rightItemContent: MMRoundButton {
           iconSource: __style.closeIcon
           bgndColor: __style.lightGreenColor
-          anchors.right: parent.right
-          anchors.rightMargin: 2 * __style.pageMargins
+
           onClicked: control.visible = false
         }
       }

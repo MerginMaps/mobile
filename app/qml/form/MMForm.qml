@@ -75,23 +75,18 @@ Page {
   }
 
   header: MMPageHeader {
+
+    onBackClicked: root.rollbackAndClose()
+
     title: {
       if ( root.state === "add" ) return qsTr( "New feature" )
       else if ( root.state === "edit" ) return qsTr( "Edit feature" )
       return __inputUtils.featureTitle( root.controller.featureLayerPair, __activeProject.qgsProject )
     }
 
-    // TODO
-    // rightMarginShift: saveButton.visible ? saveButton.width : 0
+    rightItemContent: MMRoundButton {
 
-    onBackClicked: root.rollbackAndClose()
-
-    MMRoundButton {
-      id: saveButton
-
-      anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter
-      anchors.rightMargin: __style.pageMargins
 
       visible: root.state === "add" || root.state === "edit"
 

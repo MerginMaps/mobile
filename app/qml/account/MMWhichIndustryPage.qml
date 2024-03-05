@@ -45,14 +45,7 @@ Page {
 
     onBackClicked: root.backClicked()
 
-    // TODO
-    // rightMarginShift: progressBar.width
-
-    MMProgressBar {
-      id: progressBar
-
-      anchors.right: parent.right
-      anchors.rightMargin: __style.pageMargins
+    rightItemContent: MMProgressBar {
       anchors.verticalCenter: parent.verticalCenter
 
       width: 60 * __dp
@@ -60,7 +53,9 @@ Page {
 
       color: __style.grassColor
       progressColor: __style.forestColor
+
       position: 3/3
+      visible: root.showProgress
     }
   }
 

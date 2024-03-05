@@ -27,16 +27,11 @@ Page {
     title: qsTr( "Select Workspace" )
     onBackClicked: root.back()
 
-    // TODO
-    // rightMarginShift: addButton.width
     backVisible: true
     color: __style.lightGreenColor
 
-    MMRoundButton {
-      id: addButton
+    rightItemContent: MMRoundButton {
 
-      anchors.right: parent.right
-      anchors.rightMargin: __style.pageMargins
       anchors.verticalCenter: parent.verticalCenter
 
       iconSource: __style.addIcon

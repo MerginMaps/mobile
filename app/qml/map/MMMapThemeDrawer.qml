@@ -57,18 +57,13 @@ Drawer {
     MMPageHeader {
       id: header
 
-      // TODO
-      // rightMarginShift: 0
       backVisible: false
 
       title: qsTr("Map Themes")
       titleFont: __style.t2
 
-      MMRoundButton {
-        id: backBtn
+      rightItemContent: MMRoundButton {
 
-        anchors.right: parent.right
-        anchors.rightMargin: __style.pageMargins
         anchors.verticalCenter: parent.verticalCenter
 
         iconSource: __style.closeIcon
