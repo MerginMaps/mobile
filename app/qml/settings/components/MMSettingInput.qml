@@ -10,8 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
-import "../inputs"
-import "../components"
+import "../../inputs"
+import "../../components"
 
 MMSettingItem {
   id: root
