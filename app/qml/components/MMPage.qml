@@ -14,12 +14,16 @@ Page {
   id: root
 
   property alias pageHeader: mmheader
-  property alias content: contentGroup.children
+  property alias pageContent: contentGroup.children
 
   property double pageSpacing: __style.spacing40 // Change this to 20 if using searchbar
-  property real pageBottomMargin: __style.margin20 // Set to 0 to draw behind navigation bar
+
+  property real pageBottomMargin: __style.margin20
+  property int pageBottomMarginPolicy: MMPage.BottomMarginPolicy.UseMargin
 
   signal backClicked()
+
+  enum BottomMarginPolicy { UseMargin, PaintBehindSystemBar }
 
   implicitHeight: ApplicationWindow.window?.height ?? 0
   implicitWidth: ApplicationWindow.window?.width ?? 0
@@ -64,7 +68,14 @@ Page {
       return minRightPadding
     }
 
-    height: parent.height - root.pageSpacing - root.pageBottomMargin
+    height: {
+      if ( pageBottomMarginPolicy === MMPage.BottomMarginPolicy.UseMargin ) {
+        return parent.height - root.pageSpacing - root.pageBottomMargin
+      }
+      else {
+        return parent.height - root.pageSpacing
+      }
+    }
     width: parent.width - leftPadding - rightPadding
 
     // center the content
