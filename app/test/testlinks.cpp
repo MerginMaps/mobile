@@ -45,7 +45,7 @@ void UrlTester::open()
 }
 
 TestLinks::TestLinks( MerginApi *api, InputUtils *utils ):
-  mHelp( api, utils )
+  mHelp( api )
 {
 }
 

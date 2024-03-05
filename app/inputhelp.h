@@ -50,12 +50,14 @@ class InputHelp: public QObject
     void linkChanged();
     void merginLinkChanged();
     void submitReportPendingChanged();
+    void submitReportSuccessful();
+    void submitReportFailed();
 
   public slots:
     void onSubmitReportReplyFinished();
 
   public:
-    explicit InputHelp( MerginApi *merginApi, InputUtils *utils );
+    explicit InputHelp( MerginApi *merginApi );
 
     QString helpRootLink() const;
     QString inputWebLink() const;
@@ -75,6 +77,7 @@ class InputHelp: public QObject
     QString projectLoadingErrorHelpLink() const;
     QString whatsNewPostLink() const;
     static QString changelogLink();
+    static QString helpdeskMail();
     QString migrationGuides() const;
 
     bool submitReportPending() const;
@@ -96,7 +99,6 @@ class InputHelp: public QObject
 
   private:
     MerginApi *mMerginApi = nullptr;
-    InputUtils *mInputUtils = nullptr;
     QNetworkAccessManager mManager;
     bool mSubmitReportPending = false;
 };

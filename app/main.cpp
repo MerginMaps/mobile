@@ -499,7 +499,7 @@ int main( int argc, char *argv[] )
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjectsManager ) );
   InputUtils iu( &androidUtils );
   MerginProjectStatusModel mpsm( localProjectsManager );
-  InputHelp help( ma.get(), &iu );
+  InputHelp help( ma.get() );
   ProjectWizard pw( projectDir );
   NotificationModel notificationModel;
 
@@ -546,6 +546,16 @@ int main( int argc, char *argv[] )
   QObject::connect( &app, &QCoreApplication::aboutToQuit, &lambdaContext, []()
   {
     CoreUtils::log( QStringLiteral( "Input" ), QStringLiteral( "Application has quit" ) );
+  } );
+
+  QObject::connect( &help, &InputHelp::submitReportSuccessful, &lambdaContext, [&notificationModel]()
+  {
+    notificationModel.addSuccess( QObject::tr( "Report submitted. Please contact us on %1" ).arg( InputHelp::helpdeskMail() ) );
+  } );
+
+  QObject::connect( &help, &InputHelp::submitReportFailed, &lambdaContext, [&notificationModel]()
+  {
+    notificationModel.addError( QObject::tr( "Failed to submit report. Please check your internet connection." ) );
   } );
 
   QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project )

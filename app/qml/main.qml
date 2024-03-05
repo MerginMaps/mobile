@@ -220,7 +220,7 @@ ApplicationWindow {
     }
 
     onNotify: function ( message ) {
-      showMessage( message )
+      __notificationModel.addInfo( message )
     }
     onAccuracyButtonClicked: {
       gpsDataDrawerLoader.active = true
@@ -268,7 +268,7 @@ ApplicationWindow {
       }
       else if ( locationPermission.status === Qt.Denied ) {
         __inputUtils.log("Permissions", "Location permission is denied")
-        showMessage( qsTr( "Location permission is required to show your location on map. Please enable it in system settings." ) );
+        __notificationModel.addInfo( qsTr( "Location permission is required to show your location on map. Please enable it in system settings." ) );
       }
       return false;
     }
@@ -320,7 +320,7 @@ ApplicationWindow {
             map.record()
           }
           else {
-            showMessage( qsTr( "No editable layers found." ) )
+            __notificationModel.addInfo( qsTr( "No editable layers found." ) )
           }
         }
       }
@@ -713,7 +713,7 @@ ApplicationWindow {
         return;
       if ( !__positionKit.hasPosition )
       {
-        showMessage( qsTr( "Stake out is disabled because location is unavailable!" ) );
+        __notificationModel.addWarning( qsTr( "Stake out is disabled because location is unavailable!" ) );
         return;
       }
 
@@ -941,7 +941,7 @@ ApplicationWindow {
       if ( stateManager.state === "projects" )
       {
         var msg = message ? message : qsTr( "Failed to communicate with Mergin.%1Try improving your network connection." ).arg( "\n" )
-        showMessage( msg )
+        __notificationModel.addError( msg )
       }
     }
 
@@ -964,7 +964,7 @@ ApplicationWindow {
     }
 
     function onNotify( message ) {
-      showMessage(message)
+      __notificationModel.addInfo(message)
     }
 
     function onProjectDataChanged( projectFullName ) {
@@ -1009,7 +1009,7 @@ ApplicationWindow {
   Connections {
     target: __inputUtils
     function onShowNotificationRequested( message ) {
-      showMessage(message)
+      __notificationModel.addInfo(message)
     }
   }
 
@@ -1079,7 +1079,7 @@ ApplicationWindow {
     }
     else {
       closeAppTimer.start()
-      showMessage( qsTr( "Press back again to quit the app" ) )
+      __notificationModel.addInfo( qsTr( "Press back again to quit the app" ) )
     }
   }
 

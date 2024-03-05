@@ -1048,7 +1048,7 @@ Item {
       mapCanvas.mapSettings.setCenter( mapPositionSource.mapPosition )
     }
     else {
-      showMessage( qsTr( "GPS currently unavailable." ) )
+      __notificationModel.addWarning( qsTr( "GPS currently unavailable." ) )
     }
   }
 
