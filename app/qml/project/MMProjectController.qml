@@ -199,20 +199,13 @@ Item {
           return qsTr("Explore")
         }
 
-        // TODO
-        // rightMarginShift: personIconRect.width + __style.pageMargins
-
         onBackClicked: root.hidePanel()
 
-        Rectangle {
-          visible: pageContent.state === "local"
-          id: personIconRect
+        rightItemContent: Rectangle {
 
-          anchors {
-            right: parent.right
-            rightMargin: __style.pageMargins
-            verticalCenter: parent.verticalCenter
-          }
+          visible: pageContent.state === "local"
+
+          anchors.verticalCenter: parent.verticalCenter
 
           width: 40 * __dp
           height: width
@@ -625,7 +618,7 @@ Item {
 
       if ( __merginApi.userAuth.hasAuthData() ) {
 
-        if ( __merginApi.serverType === MerginServerType.OLD || ( stackView.currentItem.objectName === "loginPage" ) ) {
+        if ( __merginApi.serverType === MM.MerginServerType.OLD || ( stackView.currentItem.objectName === "loginPage" ) ) {
           stackView.popPage( "loginPage" )
         }
 
