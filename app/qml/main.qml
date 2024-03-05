@@ -152,7 +152,7 @@ ApplicationWindow {
     console.log("Application initialized!")
   }
 
-  MMMapWrapper {
+  MMMapController {
     id: map
 
     height: window.height - mapToolbar.height

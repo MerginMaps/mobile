@@ -77,7 +77,7 @@ set(MM_QML
     dialogs/MMStorageLimitDialog.qml
     dialogs/MMStreamingModeDialog.qml
     dialogs/MMSyncFailedDialog.qml
-    form/MMForm.qml
+    form/MMFormPage.qml
     form/MMFormStackController.qml
     form/MMFormController.qml
     form/MMPreviewDrawer.qml
@@ -120,8 +120,7 @@ set(MM_QML
     map/MMHighlight.qml
     map/MMMapCanvas.qml
     map/MMMapThemeDrawer.qml
-    map/MMMapWrapper.qml
-    map/MMPositionMarker.qml
+    map/MMMapController.qml
     map/MMSplittingTools.qml
     map/MMStakeoutTools.qml
     map/MMRecordingTools.qml
@@ -133,6 +132,7 @@ set(MM_QML
     map/components/MMMapLabel.qml
     map/components/MMMapPicker.qml
     map/components/MMMapScaleBar.qml
+    map/components/MMPositionMarker.qml
     project/MMProjectIssuesPage.qml
     project/MMProjectStatusPage.qml
     project/MMProjectHomeTab.qml

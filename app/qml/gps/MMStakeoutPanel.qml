@@ -16,7 +16,7 @@ import QtQuick.Shapes
 import mm 1.0 as MM
 
 import "../components"
-import "../map"
+import "../map/components"
 
 MMDrawer {
   id: root
