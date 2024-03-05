@@ -51,6 +51,7 @@ int main( int argc, char *argv[] )
   // Register C++ types
   qmlRegisterType<QrCodeDecoder>( "mm", 1, 0, "QrCodeDecoder" );
   qmlRegisterType<ScaleBarKit>( "mm", 1, 0, "ScaleBarKit" );
+  qmlRegisterType<FormFeaturesModel>( "mm", 1, 0, "FeaturesModel" );
   qmlRegisterType<FormFeaturesModel>( "mm", 1, 0, "RelationFeaturesModel" );
   qmlRegisterType<FormFeaturesModel>( "mm", 1, 0, "RelationReferenceFeaturesModel" );
 

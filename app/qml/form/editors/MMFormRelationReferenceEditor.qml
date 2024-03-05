@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import mm 1.0 as MM
+
 import "../../components"
 import "../../inputs"
 
@@ -28,18 +30,18 @@ MMBaseInput {
   signal editorValueChanged( var newValue, bool isNull )
 
   on_FieldValueChanged: {
-    title.text = rModel.attributeFromForeignKey( root._fieldValue, FeaturesModel.FeatureTitle ) || ""
+    title.text = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeatureTitle ) || ""
   }
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
-  RelationReferenceFeaturesModel {
+  MM.RelationReferenceFeaturesModel {
     id: rModel
 
     config: root._fieldConfig
     project: root._fieldActiveProject
 
-    onModelReset: title.text = rModel.attributeFromForeignKey( root._fieldValue, FeaturesModel.FeatureTitle ) || ""
+    onModelReset: title.text = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeatureTitle ) || ""
   }
 
   content: Text {
@@ -53,7 +55,7 @@ MMBaseInput {
   }
 
   onContentClicked: {
-    let featurePair = rModel.attributeFromForeignKey( root._fieldValue, FeaturesModel.FeaturePair )
+    let featurePair = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeaturePair )
 
     if ( featurePair == null || !featurePair.valid ) return
 
@@ -102,7 +104,7 @@ MMBaseInput {
       onClosed: listLoader.active = false
 
       onFeatureClicked: function(selectedFeatures) {
-        let fk = rModel.foreignKeyFromAttribute( FeaturesModel.FeatureId, selectedFeatures.feature.id )
+        let fk = rModel.foreignKeyFromAttribute( MM.FeaturesModel.FeatureId, selectedFeatures.feature.id )
         root.editorValueChanged( fk, false )
         featuresDrawer.close()
 
