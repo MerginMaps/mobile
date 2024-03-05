@@ -9,59 +9,39 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 
 import mm 1.0 as MM
 
 import "./components" as  MMSettingsComponents
 import "../components"
 
-Page {
+MMPage {
   id: root
 
-  signal close
-  signal manageGpsClicked
-  signal aboutClicked()
-  signal changelogClicked()
   signal helpClicked()
+  signal aboutClicked()
+  signal manageGpsClicked()
+  signal changelogClicked()
   signal privacyPolicyClicked()
-  signal termsOfServiceClicked()
   signal diagnosticLogClicked()
+  signal termsOfServiceClicked()
 
-  padding: 0
+  pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
-  background: Rectangle {
-    color: __style.lightGreenColor
-  }
+  pageContent: ScrollView {
 
-  header: MMPageHeader {
-    id: header
-    titleFont: __style.t3
+    width: parent.width
+    height: parent.height
 
-    onBackClicked: root.close()
-    backVisible: true
-  }
-
-  ScrollView {
-    id: scrollPage
-    width: root.width - 2 * __style.pageMargins
-    height: root.height - header.height
     contentWidth: availableWidth // to only scroll vertically
-    anchors.horizontalCenter: parent.horizontalCenter
-    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
     ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-
-    background: Rectangle {
-      anchors.fill: parent
-      color: __style.lightGreenColor
-    }
+    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
     Column {
-      id: settingListContent
-      anchors.fill: parent
-      spacing: 20 * __dp
+      width: parent.width
+      height: childrenRect.height
 
-      Item { width: 1; height: 1 }
+      spacing: __style.spacing20
 
       Text {
         text: qsTr("GPS")
@@ -70,8 +50,6 @@ Page {
         font: __style.h3
         color: __style.forestColor
       }
-
-      Item { width: 1; height: 1 }
 
       MMSettingsComponents.MMSettingSwitch {
         width: parent.width
@@ -137,11 +115,14 @@ Page {
 
       MMSettingsComponents.MMSettingDropdown {
         width: parent.width
+
         title: qsTr("Interval threshold type")
         description: qsTr("Choose a type of threshold for streaming mode")
         valueDescription: qsTr("Interval threshold type")
+
         value: __appSettings.intervalType === MM.StreamingIntervalType.Distance ? qsTr("Distance Traveled") : qsTr("Time elapsed")
         selected: [__appSettings.intervalType]
+
         model: ListModel {
           ListElement {
             value: MM.StreamingIntervalType.Time
@@ -155,7 +136,7 @@ Page {
 
         onValueWasChanged: function( newValue ) {
           //  comparing enum with QJSValue
-          __appSettings.intervalType = (newValue == 1 ? StreamingIntervalType.Distance : StreamingIntervalType.Time)
+          __appSettings.intervalType = (newValue == 1 ? MM.StreamingIntervalType.Distance : MM.StreamingIntervalType.Time)
         }
       }
 
@@ -276,7 +257,7 @@ Page {
         onClicked: root.diagnosticLogClicked()
       }
 
-      Item { width: 1; height: 10 }
+      Item { width: 1; height: __style.margin6 + __style.safeAreaBottom }
     }
   }
 }

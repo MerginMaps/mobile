@@ -204,7 +204,7 @@ Page {
       id: settingsPanel
       width: root.width
       height: root.height
-      onClose: stackview.pop()
+      onBackClicked: stackview.pop()
       onManageGpsClicked: console.log("onManageGpsClicked clicked")
       onAboutClicked: console.log("onAboutClicked clicked")
       onChangelogClicked: console.log("onChangelogClicked clicked")
