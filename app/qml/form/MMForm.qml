@@ -81,7 +81,8 @@ Page {
       return __inputUtils.featureTitle( root.controller.featureLayerPair, __activeProject.qgsProject )
     }
 
-    rightMarginShift: saveButton.visible ? saveButton.width : 0
+    // TODO
+    // rightMarginShift: saveButton.visible ? saveButton.width : 0
 
     onBackClicked: root.rollbackAndClose()
 

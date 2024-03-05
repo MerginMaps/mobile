@@ -70,7 +70,8 @@ Drawer {
 
         id: header
 
-        rightMarginShift: 0
+        // TODO
+        // rightMarginShift: 0
         backVisible: false
 
         title: qsTr("GPS info")

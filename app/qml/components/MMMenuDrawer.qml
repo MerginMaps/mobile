@@ -56,7 +56,8 @@ Drawer {
         backVisible: false
         width: parent.width
         titleFont: __style.t2
-        rightMarginShift: closeButton.width + __style.pageMargins
+        // TODO
+        // rightMarginShift: closeButton.width + __style.pageMargins
 
         MMRoundButton {
           id: closeButton

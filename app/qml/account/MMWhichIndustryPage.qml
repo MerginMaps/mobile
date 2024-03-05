@@ -45,7 +45,8 @@ Page {
 
     onBackClicked: root.backClicked()
 
-    rightMarginShift: progressBar.width
+    // TODO
+    // rightMarginShift: progressBar.width
 
     MMProgressBar {
       id: progressBar

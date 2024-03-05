@@ -199,7 +199,8 @@ Item {
           return qsTr("Explore")
         }
 
-        rightMarginShift: personIconRect.width + __style.pageMargins
+        // TODO
+        // rightMarginShift: personIconRect.width + __style.pageMargins
 
         onBackClicked: root.hidePanel()
 

@@ -27,7 +27,8 @@ Page {
     title: qsTr( "Select Workspace" )
     onBackClicked: root.back()
 
-    rightMarginShift: addButton.width
+    // TODO
+    // rightMarginShift: addButton.width
     backVisible: true
     color: __style.lightGreenColor
 
