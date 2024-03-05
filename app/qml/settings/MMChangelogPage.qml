@@ -10,7 +10,6 @@
 import QtQuick
 
 import "../components"
-import "../dialogs"
 import "./components" as MMSettingsComponents
 
 MMPage {
@@ -20,12 +19,6 @@ MMPage {
 
   pageHeader.title: qsTr( "Changelog" )
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
-
-  MMChangelogErrorDialog {
-    id: errorDialog
-
-    onOkButtonClicked: root.close()
-  }
 
   pageContent: ListView {
 
