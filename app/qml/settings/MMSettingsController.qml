@@ -99,7 +99,7 @@ Item {
         onLoadingFailure: __notificationModel.addError( qsTr("Changelog could not be loaded") )
 =======
         onErrorMsgChanged: function(msg) {
-          changelogPanel.errorDialog.detailedText = msg
+          changelogPanel.errorDialog.boundedDescription = msg
           changelogPanel.errorDialog.open()
         }
 >>>>>>> 011b8b1a (first stack of dialogs)

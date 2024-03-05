@@ -17,7 +17,7 @@ MMDrawerDialog {
   signal saveChanges()
   signal discardChanges()
 
-  picture: __style.negativeMMSymbolImage
+  picture: __style.positiveMMSymbolImage
   bigTitle: qsTr( "Unsaved changes" )
   description: qsTr( "Do you want to save the changes?" )
   primaryButton: qsTr( "Yes, I want to save" )

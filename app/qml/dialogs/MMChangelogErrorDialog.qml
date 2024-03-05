@@ -12,24 +12,17 @@ import QtQuick.Controls
 
 import "../components"
 
-/**
-  * Dialog bearing information about synchronization failure.
-  * By default it has some text, but it is also possible to set "detailedText"
-  * "detailedText" will be visible either under "details" button or appended to
-  * the default text (based on platform).
-  */
-
 MMDrawerDialog {
   id: root
 
-  property string detailedText
+  signal okButtonClicked()
 
   picture: __style.negativeMMSymbolImage
   bigTitle: qsTr( "Failed to load changelog" )
   primaryButton: qsTr( "Ok, I understand" )
-  boundedDescription: detailedText
 
   onPrimaryButtonClicked: {
+    root.okButtonClicked()
     close()
   }
 }

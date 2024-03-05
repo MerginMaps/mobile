@@ -119,10 +119,10 @@ MMFormPhotoViewer {
 
     onDeleteImage: {
       internal.imageSourceToDelete = imageDeleteDialog.imagePath
-      root.editorValueChanged( "", true )
+      root.editorValueChanged( "", false ) // Shouldn't this be true?
     }
     onKeepImage: {
-      root.editorValueChanged( "", true )
+      root.editorValueChanged( "", false ) // Shouldn't this be true?
     }
   }
 

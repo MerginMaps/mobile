@@ -23,6 +23,8 @@ MMPage {
 
   MMChangelogErrorDialog {
     id: errorDialog
+
+    onOkButtonClicked: root.close()
   }
 
   pageContent: ListView {

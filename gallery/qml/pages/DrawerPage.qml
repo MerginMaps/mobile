@@ -127,7 +127,7 @@ Page {
         text: "MMChangelogErrorDialog"
 
         onClicked: {
-          changelogErrorDialog.detailedText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra placerat purus nec pretium. Maecenas ac sapien velit. Mauris sodales neque sed eros tempor, vitae pellentesque risus porta. Suspendisse aliquam varius sapien quis ultricies. Integer risus arcu, consectetur ut accumsan at, vehicula vel urna. Mauris in ante placerat, convallis erat eget, sagittis magna. Phasellus malesuada justo non interdum dictum. Suspendisse imperdiet odio et lorem sagittis lacinia nec ut justo. Etiam viverra pretium arcu, sit amet congue augue pellentesque sed. Aenean in diam et nunc elementum gravida."
+          changelogErrorDialog.boundedDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra placerat purus nec pretium. Maecenas ac sapien velit. Mauris sodales neque sed eros tempor, vitae pellentesque risus porta. Suspendisse aliquam varius sapien quis ultricies. Integer risus arcu, consectetur ut accumsan at, vehicula vel urna. Mauris in ante placerat, convallis erat eget, sagittis magna. Phasellus malesuada justo non interdum dictum. Suspendisse imperdiet odio et lorem sagittis lacinia nec ut justo. Etiam viverra pretium arcu, sit amet congue augue pellentesque sed. Aenean in diam et nunc elementum gravida."
           changelogErrorDialog.open()
         }
       }
