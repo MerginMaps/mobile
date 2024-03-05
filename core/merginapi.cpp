@@ -1259,7 +1259,7 @@ void MerginApi::authorizeFinished()
       // our user got blocked on the server by admin or owner
       // lets show error to user and let him try different credentials
       emit authFailed();
-      emit notify( serverMsg );
+      emit notifyError( serverMsg );
 
       mUserAuth->blockSignals( true );
       mUserAuth->setUsername( QString() );
