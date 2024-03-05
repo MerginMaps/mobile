@@ -4,7 +4,6 @@ set(MM_QML
     Banner.qml
     InputStyle.qml
     Notification.qml
-    NotificationBanner.qml
     account/components/MMIconCheckBoxHorizontal.qml
     account/components/MMIconCheckBoxVertical.qml
     account/components/MMAccountPageItem.qml

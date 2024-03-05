@@ -101,9 +101,6 @@ ApplicationWindow {
     property alias height: window.height
   }
 
-  function showMessage(message) {
-  }
-
   function showProjError(message) {
     projDialog.text  = message
     projDialog.open()
@@ -386,20 +383,6 @@ ApplicationWindow {
           settingsPanel.visible = true
         }
       }
-    }
-  }
-
-  NotificationBanner {
-    id: failedToLoadProjectBanner
-
-    // TODO: replace with notifications
-
-    width: parent.width - failedToLoadProjectBanner.anchors.margins * 2
-    height: InputStyle.rowHeight * 2
-
-    onDetailsClicked: {
-      projectIssuesPage.projectLoadingLog = __activeProject.projectLoadingLog();
-      projectIssuesPage.visible = true;
     }
   }
 
@@ -1014,11 +997,18 @@ ApplicationWindow {
   }
 
   Connections {
+    target: __notificationModel
+    function showProjectIssuesActionClicked() {
+      projectIssuesPage.projectLoadingLog = __activeProject.projectLoadingLog();
+      projectIssuesPage.visible = true;
+    }
+  }
+
+  Connections {
     target: __activeProject
 
     function onLoadingStarted() {
       projectLoadingPage.visible = true;
-      failedToLoadProjectBanner.reset();
       projectIssuesPage.clear();
     }
 
@@ -1035,7 +1025,7 @@ ApplicationWindow {
     }
 
     function onLoadingErrorFound() {
-      failedToLoadProjectBanner.pushNotificationMessage( qsTr( "There were issues loading the project." ) )
+      __notificationModel.addError( qsTr( "There were issues loading the project." ) )
     }
 
     function onReportIssue( title, message ) {
