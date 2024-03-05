@@ -101,9 +101,6 @@ ApplicationWindow {
     property alias height: window.height
   }
 
-  function showMessage(message) {
-  }
-
   function showProjError(message) {
     projDialog.text  = message
     projDialog.open()
@@ -218,10 +215,6 @@ ApplicationWindow {
     onSplittingCanceled: {
       formsStackManager.reopenAll()
     }
-
-    onNotify: function ( message ) {
-      showMessage( message )
-    }
     onAccuracyButtonClicked: {
       gpsDataDrawerLoader.active = true
       gpsDataDrawerLoader.focus = true
@@ -268,7 +261,7 @@ ApplicationWindow {
       }
       else if ( locationPermission.status === Qt.Denied ) {
         __inputUtils.log("Permissions", "Location permission is denied")
-        showMessage( qsTr( "Location permission is required to show your location on map. Please enable it in system settings." ) );
+        __notificationModel.addInfo( qsTr( "Location permission is required to show your location on map. Please enable it in system settings." ) );
       }
       return false;
     }
@@ -320,7 +313,7 @@ ApplicationWindow {
             map.record()
           }
           else {
-            showMessage( qsTr( "No editable layers found." ) )
+            __notificationModel.addInfo( qsTr( "No editable layers found." ) )
           }
         }
       }
@@ -386,20 +379,6 @@ ApplicationWindow {
           settingsPanel.visible = true
         }
       }
-    }
-  }
-
-  NotificationBanner {
-    id: failedToLoadProjectBanner
-
-    // TODO: replace with notifications
-
-    width: parent.width - failedToLoadProjectBanner.anchors.margins * 2
-    height: InputStyle.rowHeight * 2
-
-    onDetailsClicked: {
-      projectIssuesPage.projectLoadingLog = __activeProject.projectLoadingLog();
-      projectIssuesPage.visible = true;
     }
   }
 
@@ -713,7 +692,7 @@ ApplicationWindow {
         return;
       if ( !__positionKit.hasPosition )
       {
-        showMessage( qsTr( "Stake out is disabled because location is unavailable!" ) );
+        __notificationModel.addWarning( qsTr( "Stake out is disabled because location is unavailable!" ) );
         return;
       }
 
@@ -940,8 +919,8 @@ ApplicationWindow {
     function onNetworkErrorOccurred( message, topic, httpCode, projectFullName ) {
       if ( stateManager.state === "projects" )
       {
-        var msg = message ? message : qsTr( "Failed to communicate with Mergin.%1Try improving your network connection." ).arg( "\n" )
-        showMessage( msg )
+        var msg = message ? message : qsTr( "Failed to communicate with server. Try improving your network connection." )
+        __notificationModel.addError( msg )
       }
     }
 
@@ -961,10 +940,6 @@ ApplicationWindow {
       }
       projectLimitDialog.maxProjectNumber = maxProjects
       projectLimitDialog.open()
-    }
-
-    function onNotify( message ) {
-      showMessage(message)
     }
 
     function onProjectDataChanged( projectFullName ) {
@@ -1007,9 +982,10 @@ ApplicationWindow {
   }
 
   Connections {
-    target: __inputUtils
-    function onShowNotificationRequested( message ) {
-      showMessage(message)
+    target: __notificationModel
+    function showProjectIssuesActionClicked() {
+      projectIssuesPage.projectLoadingLog = __activeProject.projectLoadingLog();
+      projectIssuesPage.visible = true;
     }
   }
 
@@ -1018,7 +994,6 @@ ApplicationWindow {
 
     function onLoadingStarted() {
       projectLoadingPage.visible = true;
-      failedToLoadProjectBanner.reset();
       projectIssuesPage.clear();
     }
 
@@ -1035,7 +1010,7 @@ ApplicationWindow {
     }
 
     function onLoadingErrorFound() {
-      failedToLoadProjectBanner.pushNotificationMessage( qsTr( "There were issues loading the project." ) )
+      __notificationModel.addError( qsTr( "There were issues loading the project." ) )
     }
 
     function onReportIssue( title, message ) {
@@ -1079,7 +1054,7 @@ ApplicationWindow {
     }
     else {
       closeAppTimer.start()
-      showMessage( qsTr( "Press back again to quit the app" ) )
+      __notificationModel.addInfo( qsTr( "Press back again to quit the app" ) )
     }
   }
 

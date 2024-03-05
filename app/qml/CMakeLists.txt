@@ -1,10 +1,4 @@
 set(MM_QML
-    components/Shadow.qml
-    components/TextWithIcon.qml
-    Banner.qml
-    InputStyle.qml
-    Notification.qml
-    NotificationBanner.qml
     account/components/MMIconCheckBoxHorizontal.qml
     account/components/MMIconCheckBoxVertical.qml
     account/components/MMAccountPageItem.qml

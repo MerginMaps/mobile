@@ -261,7 +261,6 @@ endif ()
 
 qt_add_resources(
   MM_SRCS
-  img/pics.qrc # TODO remove <- this is old design
   icons/icons.qrc
   images/images.qrc
   i18n/input_i18n.qrc

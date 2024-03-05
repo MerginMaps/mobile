@@ -241,7 +241,7 @@ Item {
           }
           else
           {
-            showMessage( __inputUtils.invalidGeometryWarning( mapTool.activeLayer ) )
+            __notificationModel.addWarning( __inputUtils.invalidGeometryWarning( mapTool.activeLayer ) )
           }
         }
       }

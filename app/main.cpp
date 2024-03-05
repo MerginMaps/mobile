@@ -499,7 +499,7 @@ int main( int argc, char *argv[] )
   std::unique_ptr<MerginApi> ma =  std::unique_ptr<MerginApi>( new MerginApi( localProjectsManager ) );
   InputUtils iu( &androidUtils );
   MerginProjectStatusModel mpsm( localProjectsManager );
-  InputHelp help( ma.get(), &iu );
+  InputHelp help( ma.get() );
   ProjectWizard pw( projectDir );
   NotificationModel notificationModel;
 
@@ -548,18 +548,60 @@ int main( int argc, char *argv[] )
     CoreUtils::log( QStringLiteral( "Input" ), QStringLiteral( "Application has quit" ) );
   } );
 
+  QObject::connect( &help, &InputHelp::submitReportSuccessful, &lambdaContext, [&notificationModel]()
+  {
+    notificationModel.addSuccess( QObject::tr( "Report submitted. Please contact us on %1" ).arg( InputHelp::helpdeskMail() ) );
+  } );
+
+  QObject::connect( &help, &InputHelp::submitReportFailed, &lambdaContext, [&notificationModel]()
+  {
+    notificationModel.addError( QObject::tr( "Failed to submit report. Please check your internet connection." ) );
+  } );
+
+  QObject::connect( &pw, &ProjectWizard::notifySuccess, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addSuccess( message );
+  } );
+
+  QObject::connect( &iosUtils, &IosUtils::notifyError, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addError( message );
+  } );
+
+  QObject::connect( &androidUtils, &AndroidUtils::notifyInfo, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addInfo( message );
+  } );
+
+  QObject::connect( &androidUtils, &AndroidUtils::notifyError, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addError( message );
+  } );
+
   QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project )
   {
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry );
   } );
 
+  QObject::connect( ma.get(), &MerginApi::notifyInfo, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addInfo( message );
+  } );
+
+  QObject::connect( ma.get(), &MerginApi::notifySuccess, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addSuccess( message );
+  } );
+
+  QObject::connect( ma.get(), &MerginApi::notifyError, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addError( message );
+  } );
   // Direct connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &pk, &PositionKit::appStateChanged );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
-  QObject::connect( &pw, &ProjectWizard::notify, &iu, &InputUtils::showNotificationRequested );
-  QObject::connect( &iosUtils, &IosUtils::showToast, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]( const QString & projectFullName, bool successfully, int version, bool reloadNeeded )
   {
     Q_UNUSED( successfully );

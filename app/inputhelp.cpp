@@ -33,9 +33,8 @@ const QString utmTagOther = QStringLiteral( "?utm_source=input-other&utm_medium=
 const QString utmTagAttention = QStringLiteral( "?utm_source=input-app&utm_medium=attention-required" );
 
 
-InputHelp::InputHelp( MerginApi *merginApi, InputUtils *utils ):
-  mMerginApi( merginApi ),
-  mInputUtils( utils )
+InputHelp::InputHelp( MerginApi *merginApi ):
+  mMerginApi( merginApi )
 {
   connect( mMerginApi, &MerginApi::apiRootChanged, this, &InputHelp::merginLinkChanged );
 
@@ -170,6 +169,11 @@ QString InputHelp::changelogLink()
   return changelogRss;
 }
 
+QString InputHelp::helpdeskMail()
+{
+  return helpDeskMail;
+}
+
 QString InputHelp::migrationGuides() const
 {
   return helpRoot + "/dev/ce-migration/" + utmTagHelp;
@@ -284,11 +288,11 @@ void InputHelp::onSubmitReportReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "submit report", "Report submitted!" );
-    emit mInputUtils->showNotification( tr( "Report submitted.%1Please contact us on%1%2" ).arg( "<br />" ).arg( helpDeskMail ) );
+    emit submitReportSuccessful();
   }
   else
   {
     CoreUtils::log( "submit report", QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
-    emit mInputUtils->showNotification( tr( "Failed to submit report.%1Please check your internet connection." ).arg( "<br>" ) );
+    emit submitReportFailed();
   }
 }

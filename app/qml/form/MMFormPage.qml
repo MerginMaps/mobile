@@ -468,7 +468,7 @@ Page {
     if ( controller.hasValidationErrors )
     {
       console.log( qsTr( 'Can not save the form, there are validation errors' ) )
-      __inputUtils.showNotification( qsTr( 'Feature could not be saved, please check all required fields' ) )
+      __notificationModel.addError( qsTr( 'Feature could not be saved, please check all required fields' ) )
 
       // In future we could navigate user to a field that contains validation error
       return

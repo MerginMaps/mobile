@@ -80,14 +80,11 @@ class AndroidUtils: public QObject
 
   signals:
     void imageSelected( QString imagePath, QString code );
-
     void bluetoothEnabled( bool state );
-
-  public slots:
-    void showToast( QString message );
+    void notifyInfo( const QString &msg );
+    void notifyError( const QString &msg );
 
   private:
-
     QString mLastCode;
 
 #ifdef ANDROID

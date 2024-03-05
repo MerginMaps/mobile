@@ -46,7 +46,7 @@ class ProjectWizard : public QObject
      */
     void projectCreationFailed( const QString &message );
     void projectCreated( const QString &projectDir, const QString &projectName );
-    void notify( const QString &message );
+    void notifySuccess( const QString &message );
   private:
     QgsVectorLayer *createGpkgLayer( QString const &projectDir, QList<FieldConfiguration> const &fieldsConfig );
     QgsFields createFields( const QList<FieldConfiguration> fieldsConfig ) const;

@@ -239,7 +239,7 @@ Item {
                 __merginApi.refreshUserData()
 
                 if ( __merginApi.serverType === MerginServerType.OLD ) {
-                  __inputUtils.showNotification( qsTr( "Unsupported server, please contact your server administrator." ) )
+                  __notificationModel.addWarning( qsTr( "Unsupported server, please contact your server administrator." ) )
                 }
                 else {
                   stackView.push( workspaceAccountPageComp )
@@ -452,7 +452,7 @@ Item {
       Connections {
         target: __projectWizard
         function onProjectCreationFailed(message) {
-          __inputUtils.showNotification(message)
+          __notificationModel.addError( message )
           stackView.pending = false
         }
         function onProjectCreated( projectDir, projectName ) {

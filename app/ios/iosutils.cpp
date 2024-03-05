@@ -19,7 +19,7 @@ IosUtils::IosUtils( QObject *parent ): QObject( parent )
   {
     emit imageSelected( absoluteImagePath, mLastCode );
   } );
-  QObject::connect( mImagePicker, &IOSImagePicker::notify, this, &IosUtils::showToast );
+  QObject::connect( mImagePicker, &IOSImagePicker::notifyError, this, &IosUtils::notifyError );
 }
 
 bool IosUtils::isIos() const
