@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Dialogs
 
+import "../../dialogs"
+
 /*
  * Photo form editor (external resource) for QGIS Attribute Form
  * Requires various global properties set to function, see featureform Loader section.
@@ -110,26 +112,17 @@ MMFormPhotoViewer {
     }
   }
 
-  MessageDialog { // TODO: We might want to redesign this dialogue
+  MMRemovePhotoDialog {
     id: imageDeleteDialog
 
     property string imagePath
 
-    title: qsTr( "Remove photo reference" )
-    text: qsTr( "Also permanently delete photo from device?" )
-
-    buttons: MessageDialog.Yes | MessageDialog.No | MessageDialog.Cancel
-
-    onButtonClicked: function( clickedButton ) {
-      if ( clickedButton === MessageDialog.Yes ) {
-        internal.imageSourceToDelete = imageDeleteDialog.imagePath
-        root.editorValueChanged( "", false ) // Shouldn't this be true?
-      }
-      else if ( clickedButton === MessageDialog.No ) {
-        root.editorValueChanged( "", false ) // Shouldn't this be true?
-      }
-
-      close()
+    onDeleteImage: {
+      internal.imageSourceToDelete = imageDeleteDialog.imagePath
+      root.editorValueChanged( "", true )
+    }
+    onKeepImage: {
+      root.editorValueChanged( "", true )
     }
   }
 

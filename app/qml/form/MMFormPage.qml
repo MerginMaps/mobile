@@ -18,6 +18,7 @@ import qgs 1.0 as QGS
 
 import "../components"
 import "./components"
+import "../dialogs"
 
 
 Page {
@@ -371,23 +372,11 @@ Page {
     }
   }
 
-  MessageDialog {
+  MMFormSaveChangesDialog {
     id: saveChangesDialog
 
-    visible: false
-    title: qsTr( "Unsaved changes" )
-    text: qsTr( "Do you want to save changes?" )
-    buttons: MessageDialog.Yes | MessageDialog.No | MessageDialog.Cancel
-
-    onButtonClicked: function( clickedButton ) {
-      if ( clickedButton === MessageDialog.Yes ) {
-        root.save()
-      }
-      else if ( clickedButton === MessageDialog.No ) {
-        root.rollbackAndClose()
-      }
-      saveChangesDialog.close()
-    }
+    onSaveChanges: root.save()
+    onDiscardChanges: root.rollbackAndClose()
   }
 
   MessageDialog {
