@@ -142,7 +142,7 @@ Item {
         statesManager.state = "closed"
     }
 
-    MMPreviewPanel {
+    MMPreviewDrawer {
       id: previewPanel
 
       layerIsReadOnly: root.layerIsReadOnly
@@ -163,7 +163,7 @@ Item {
       }
     }
 
-    MMForm {
+    MMFormPage {
       id: featureForm
 
       anchors.fill: parent

@@ -481,7 +481,7 @@ ApplicationWindow {
   Component {
     id: layersPanelComponent
 
-    MMLayersPanel {
+    MMLayersController {
 
       onClose: function() {
         mapPanelsStackView.clear( StackView.PopTransition )
@@ -664,7 +664,7 @@ ApplicationWindow {
     }
   }
 
-  MMFormStackManager {
+  MMFormStackController {
     id: formsStackManager
 
     height: window.height

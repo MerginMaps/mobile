@@ -78,11 +78,11 @@ set(MM_QML
     dialogs/MMStreamingModeDialog.qml
     dialogs/MMSyncFailedDialog.qml
     form/MMForm.qml
-    form/MMFormStackManager.qml
-    form/MMFormWrapper.qml
-    form/MMPreviewPanel.qml
+    form/MMFormStackController.qml
+    form/MMFormController.qml
+    form/MMPreviewDrawer.qml
     form/components/MMFormTabBar.qml
-    form/components/MMPreviewPanelActionButton.qml
+    form/components/MMPreviewActionButton.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormGalleryEditor.qml
     form/editors/MMFormNumberEditor.qml
@@ -112,11 +112,11 @@ set(MM_QML
     inputs/MMTextInput.qml
     inputs/MMTextWithButtonInput.qml
     layers/MMFeaturesListPage.qml
-    layers/MMLayerDetail.qml
+    layers/MMLayerDetailPage.qml
     layers/MMLayersList.qml
     layers/MMLayersListPage.qml
     layers/MMLayersListSearchPage.qml
-    layers/MMLayersPanel.qml
+    layers/MMLayersController.qml
     map/MMHighlight.qml
     map/MMMapCanvas.qml
     map/MMMapThemeDrawer.qml

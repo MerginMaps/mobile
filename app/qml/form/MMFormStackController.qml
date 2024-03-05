@@ -275,7 +275,7 @@ Item {
   Component {
     id: formComponent
 
-    MMFormWrapper {
+    MMFormController {
       id: wrapper
 
       project: root.project

@@ -112,7 +112,7 @@ Item {
   Component {
     id: layerDetailsPage
 
-    MMLayerDetail {
+    MMLayerDetailPage {
       onClose: function() {
         if (pagesStackView.depth > 1) {
           pagesStackView.pop( StackView.PopTransition )
