@@ -180,7 +180,7 @@ Item {
           height: parent.height
           spacing: 12 * __dp
 
-          FormComponents.MMPreviewPanelActionButton {
+          FormComponents.MMPreviewActionButton {
             height: parent.height
 
             visible: !root.layerIsReadOnly
@@ -191,7 +191,7 @@ Item {
             onClicked: root.editClicked()
           }
 
-          FormComponents.MMPreviewPanelActionButton {
+          FormComponents.MMPreviewActionButton {
             height: parent.height
 
             visible: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
