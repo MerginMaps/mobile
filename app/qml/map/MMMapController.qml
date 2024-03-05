@@ -56,8 +56,6 @@ Item {
   signal splittingFinished()
   signal splittingCanceled()
 
-  signal notify( string message )
-
   signal stakeoutStarted( var pair )
   signal accuracyButtonClicked()
 
@@ -380,7 +378,7 @@ Item {
               qgsProject: __activeProject.qgsProject
 
               onTrackingErrorOccured: (message) => {
-                                        notify( message )
+                                        __notificationModel.addError( message )
                                       }
 
               onAbort: () => {

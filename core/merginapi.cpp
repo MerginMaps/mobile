@@ -221,7 +221,7 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
     CoreUtils::log( "list projects by name", QStringLiteral( "Too many local projects: " ) + QString::number( projectNames.count(), 'f', 0 ) );
     const int projectsToRemoveCount = projectNames.count() - listProjectsByNameApiLimit;
     QString msg = tr( "Please remove some projects as the app currently\nonly allows up to %1 downloaded projects." ).arg( listProjectsByNameApiLimit );
-    notify( msg );
+    notifyInfo( msg );
     projectNamesToRequest.erase( projectNamesToRequest.begin() + listProjectsByNameApiLimit, projectNamesToRequest.end() );
     Q_ASSERT( projectNamesToRequest.count() == listProjectsByNameApiLimit );
   }
@@ -776,7 +776,7 @@ void MerginApi::authorize( const QString &login, const QString &password )
   if ( login.isEmpty() || password.isEmpty() )
   {
     emit authFailed();
-    emit notify( QStringLiteral( "Please enter your login details" ) );
+    emit notifyError( QStringLiteral( "Please enter your login details" ) );
     return;
   }
 
@@ -1206,7 +1206,7 @@ void MerginApi::deleteProjectFinished( bool informUser )
     CoreUtils::log( "delete " + projectFullName, QStringLiteral( "Success" ) );
 
     if ( informUser )
-      emit notify( QStringLiteral( "Project deleted" ) );
+      emit notifySuccess( QStringLiteral( "Project deleted" ) );
 
     emit serverProjectDeleted( projectFullName, true );
   }
@@ -1243,7 +1243,7 @@ void MerginApi::authorizeFinished()
       mUserAuth->clearTokenData();
       emit authFailed();
       CoreUtils::log( "Auth", QStringLiteral( "FAILED - invalid JSON response" ) );
-      emit notify( "Internal server error during authorization" );
+      emit notifyError( "Internal server error during authorization" );
     }
   }
   else
@@ -1295,7 +1295,7 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
   {
     CoreUtils::log( "register", QStringLiteral( "Success" ) );
     QString msg = tr( "Registration successful" );
-    emit notify( msg );
+    emit notifySuccess( msg );
 
     if ( !username.isEmpty() && !password.isEmpty() ) // log in immediately
       authorize( username, password );
@@ -1311,14 +1311,14 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
     if ( status == 401 || status == 400 )
     {
       emit registrationFailed( serverMsg, RegistrationError::RegistrationErrorType::OTHER );
-      emit notify( serverMsg );
+      emit notifyError( serverMsg );
     }
     else if ( status == 404 )
     {
       // the self-registration is not allowed on the server
-      QString msg = tr( "New registrations are not allowed on the selected Mergin server.%1Please check with your administrator." ).arg( "\n" );
+      QString msg = tr( "New registrations are not allowed on the selected server. Please check with your administrator." );
       emit registrationFailed( msg, RegistrationError::RegistrationErrorType::OTHER );
-      emit notify( msg );
+      emit notifyError( msg );
     }
     else
     {
@@ -1348,8 +1348,7 @@ void MerginApi::postRegistrationFinished()
     int status = statusCode.toInt();
     emit postRegistrationFailed( QStringLiteral( "Post-registation failed %1" ).arg( serverMsg ) );
   }
-  QString msg = tr( "Workspace created" );
-  emit notify( msg );
+  emit notifySuccess( tr( "Workspace created" ) );
   r->deleteLater();
 }
 
@@ -1677,7 +1676,7 @@ void MerginApi::detachProjectFromMergin( const QString &projectNamespace, const 
   mLocalProjects.updateLocalVersion( projectInfo.projectDir, -1 );
 
   if ( informUser )
-    emit notify( tr( "Project detached from Mergin" ) );
+    emit notifySuccess( tr( "Project detached from the server" ) );
 
   emit projectDetached( projectFullName );
 }
@@ -3805,7 +3804,7 @@ bool MerginApi::createWorkspace( const QString &workspaceName )
 
   if ( !CoreUtils::isValidName( workspaceName ) )
   {
-    emit notify( tr( "Workspace name contains invalid characters" ) );
+    emit notifyError( tr( "Workspace name contains invalid characters" ) );
     return false;
   }
 

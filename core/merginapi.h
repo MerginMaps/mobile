@@ -598,7 +598,9 @@ class MerginApi: public QObject
     void storageLimitReached( qreal uploadSize );
     void projectLimitReached( int maxProjects, const QString &message );
     void migrationRequested( const QString &version );
-    void notify( const QString &message );
+    void notifySuccess( const QString &message );
+    void notifyInfo( const QString &message );
+    void notifyError( const QString &message );
     void authRequested();
     void authChanged();
     void authFailed();

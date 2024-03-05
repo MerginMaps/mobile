@@ -53,7 +53,7 @@ class FieldsModel: public QAbstractListModel
 
   signals:
     void widgetListChanged();
-    void notify( const QString &message );
+    void notifyError( const QString &message );
 
   private:
     QList<FieldConfiguration> mFields;

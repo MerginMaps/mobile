@@ -40,8 +40,8 @@ Item {
 
   MM.FieldsModel {
     id: fieldsModel
-    onNotify: function( message ) {
-      __notificationModel.addInfo( message )
+    onNotifyError: function( message ) {
+      __notificationModel.addError( message )
     }
     Component.onCompleted: fieldsModel.initModel()
   }

@@ -215,10 +215,6 @@ ApplicationWindow {
     onSplittingCanceled: {
       formsStackManager.reopenAll()
     }
-
-    onNotify: function ( message ) {
-      __notificationModel.addInfo( message )
-    }
     onAccuracyButtonClicked: {
       gpsDataDrawerLoader.active = true
       gpsDataDrawerLoader.focus = true
@@ -923,7 +919,7 @@ ApplicationWindow {
     function onNetworkErrorOccurred( message, topic, httpCode, projectFullName ) {
       if ( stateManager.state === "projects" )
       {
-        var msg = message ? message : qsTr( "Failed to communicate with Mergin.%1Try improving your network connection." ).arg( "\n" )
+        var msg = message ? message : qsTr( "Failed to communicate with server. Try improving your network connection." )
         __notificationModel.addError( msg )
       }
     }
@@ -944,10 +940,6 @@ ApplicationWindow {
       }
       projectLimitDialog.maxProjectNumber = maxProjects
       projectLimitDialog.open()
-    }
-
-    function onNotify( message ) {
-      __notificationModel.addInfo(message)
     }
 
     function onProjectDataChanged( projectFullName ) {

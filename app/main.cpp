@@ -583,6 +583,20 @@ int main( int argc, char *argv[] )
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry );
   } );
 
+  QObject::connect( ma.get(), &MerginApi::notifyInfo, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addInfo( message );
+  } );
+
+  QObject::connect( ma.get(), &MerginApi::notifySuccess, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addSuccess( message );
+  } );
+
+  QObject::connect( ma.get(), &MerginApi::notifyError, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addError( message );
+  } );
   // Direct connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &pk, &PositionKit::appStateChanged );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );

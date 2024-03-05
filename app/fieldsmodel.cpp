@@ -12,11 +12,11 @@ bool FieldsModel::addField( const QString &name, const QString &widgetType )
   {
     if ( name.isEmpty() )
     {
-      emit notify( tr( "Please fill a name of previous field before adding a new field." ) );
+      emit notifyError( tr( "Please fill a name of previous field before adding a new field." ) );
     }
     else
     {
-      emit notify( tr( "Field %1 already exists." ).arg( name ) );
+      emit notifyError( tr( "Field %1 already exists." ).arg( name ) );
     }
     return false;
   }
@@ -113,7 +113,7 @@ bool FieldsModel::setData( const QModelIndex &index, const QVariant &value, int 
     {
       if ( contains( value.toString() ) )
       {
-        emit notify( tr( "Field %1 already exists. \nWon't be added to the project." ).arg( value.toString() ) );
+        emit notifyError( tr( "Field %1 already exists. \nWon't be added to the project." ).arg( value.toString() ) );
       }
       mFields[row].attributeName = value.toString();
       emit dataChanged( index, index, {AttributeName} );
