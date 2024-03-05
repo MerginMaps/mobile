@@ -8,145 +8,57 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import QtQuick.Dialogs
 
 import "../components"
+import "./components" as MMSettingsComponents
 
-Item {
+MMPage {
   id: root
-
-  signal close
 
   required property var model /* ChangelogModel */
 
-  Keys.onReleased: function( event ) {
-    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true
-      close()
-    }
-  }
+  pageHeader.title: qsTr( "Changelog" )
+  pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
-  MessageDialog {
-    id: errorDialog
+  pageContent: ListView {
 
-    title: qsTr( "Failed to load changelog" )
-    buttons: MessageDialog.Ok
-    onButtonClicked: {
-      errorDialog.close()
-      root.close()
-    }
-  }
-
-  Page {
     width: parent.width
     height: parent.height
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.horizontalCenter: parent.horizontalCenter
-    clip: true
 
-    background: Rectangle {
-      color: __style.lightGreenColor
+    spacing: __style.spacing20
+
+    model: root.model
+
+    header: MMSettingsComponents.MMChangelogEntryDelegate {
+      width: ListView.view.width
+
+      title: qsTr( "What's new" )
+      description: qsTr( "See what changed since you were last here." )
+      hasLine: false
     }
 
-    header: MMPageHeader {
-      id: header
-      title: qsTr("Changelog")
-      titleFont: __style.t3
+    delegate: MMSettingsComponents.MMChangelogEntryDelegate {
+      width: ListView.view.width
 
-      onBackClicked: root.close()
-      backVisible: true
+      title: model.title
+      datetime: root.formatDate( model.date )
+      description: model.description
+
+      onClicked: Qt.openUrlExternally( model.link )
     }
 
-    Item {
-      anchors.horizontalCenter: parent.horizontalCenter
-      width: root.width - 2 * __style.pageMargins
-      height: parent.height
+    footer: Item { width: 1; height: __style.margin6 + __style.safeAreaBottom }
+  }
 
-      Component.onCompleted: changelogView.model.seeChangelogs()
+  function formatDate( d ) {
 
-      Text {
-        id: subTitle
+    // TODO: Could be moved to C++
 
-        anchors.top: title.bottom
-        text: qsTr("What's new")
-        wrapMode: Text.WordWrap
-        width: parent.width
-        font: __style.t1
-        color: __style.forestColor
-      }
-
-      Text {
-        id: description
-
-        anchors.top: subTitle.bottom
-        anchors.topMargin: 10 * __dp
-        text: qsTr("See what changed since you were last here.")
-        wrapMode: Text.WordWrap
-        width: parent.width
-        font: __style.p5
-        color: __style.nightColor
-      }
-
-      ListView {
-        id: changelogView
-
-        width: parent.width
-        anchors.top: description.bottom
-        anchors.topMargin: __style.pageMargins
-        anchors.bottom: parent.bottom
-        spacing: __style.pageMargins
-        clip: true
-        model: root.model
-
-        delegate: MouseArea {
-          width: changeItem.width
-          height: changeItem.height
-          onClicked: Qt.openUrlExternally(model.link)
-
-          Column {
-            id: changeItem
-            width: changelogView.width
-            spacing: 10 * __dp
-
-            MMLine {}
-
-            Text {
-              text: model.title
-              wrapMode: Text.WordWrap
-              width: parent.width
-              font: __style.t1
-              color: __style.nightColor
-            }
-
-            Text {
-              // TODO move date formatting to c++
-              text: model.date instanceof Date ? Qt.locale().dayName( model.date.getDay(), Locale.ShortFormat ) + ", " + model.date.getDate() + " " + Qt.locale().monthName( model.date.getMonth(), Locale.LongFormat ) : model.date
-              wrapMode: Text.WordWrap
-              width: parent.width
-              font: __style.p6
-              color: __style.forestColor
-            }
-
-            Text {
-              text: model.description
-              wrapMode: Text.WordWrap
-              width: parent.width
-              font: __style.p5
-              color: __style.nightColor
-            }
-
-          }
-        }
-
-        ScrollBar.vertical: ScrollBar {
-          parent: changelogView.parent
-          anchors.top: changelogView.top
-          anchors.left: changelogView.right
-          anchors.bottom: changelogView.bottom
-        }
-      }
+    if ( d instanceof Date ) {
+      return Qt.locale().dayName( d.getDay(), Locale.ShortFormat ) + ", " + d.getDate() + " " + Qt.locale().monthName( d.getMonth(), Locale.LongFormat )
+    }
+    else {
+      return d
     }
   }
 }

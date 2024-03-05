@@ -17,7 +17,10 @@
 ChangelogModel::ChangelogModel( QObject *parent ) : QAbstractListModel{parent}
 {
   mNetworkManager = new QNetworkAccessManager( this );
+
   connect( mNetworkManager, &QNetworkAccessManager::finished, this, &ChangelogModel::onFinished );
+
+  mNetworkManager->get( QNetworkRequest( QUrl( InputHelp::changelogLink() ) ) );
 }
 
 void ChangelogModel::onFinished( QNetworkReply *reply )
@@ -74,7 +77,7 @@ void ChangelogModel::onFinished( QNetworkReply *reply )
   else
   {
     CoreUtils::log( QStringLiteral( "Changelog" ), QStringLiteral( "Failed to get changelog. Server Error: %1" ).arg( reply->errorString() ) );
-    emit errorMsgChanged( reply->errorString() );
+    emit loadingFailure();
   }
   reply->deleteLater();
 
@@ -113,13 +116,4 @@ QVariant ChangelogModel::data( const QModelIndex &index, int role ) const
   if ( role == DateRole ) return log.date;
 
   return {};
-}
-
-// fill the dialog
-void ChangelogModel::seeChangelogs()
-{
-  beginResetModel();
-  mLogs.clear();
-  endResetModel();
-  mNetworkManager->get( QNetworkRequest( QUrl( InputHelp::changelogLink() ) ) );
 }

@@ -171,7 +171,7 @@ Page {
       id: changelogPanel
       width: root.width
       height: root.height
-      onClose: stackview.pop()
+      onBackClicked: stackview.pop()
 
       property date today: new Date()
 

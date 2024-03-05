@@ -149,6 +149,7 @@ set(MM_QML
     settings/MMLogPage.qml
     settings/MMSettingsController.qml
     settings/MMSettingsPage.qml
+    settings/components/MMChangelogEntryDelegate.qml
     settings/components/MMSettingDropdown.qml
     settings/components/MMSettingInput.qml
     settings/components/MMSettingItem.qml

@@ -127,6 +127,7 @@
         <file>../app/qml/settings/MMAboutPage.qml</file>
         <file>../app/qml/settings/MMChangelogPage.qml</file>
         <file>../app/qml/settings/MMSettingsPage.qml</file>
+        <file>../app/qml/settings/components/MMChangelogEntryDelegate.qml</file>
         <file>../app/qml/settings/components/MMSettingItem.qml</file>
         <file>../app/qml/settings/components/MMSettingInput.qml</file>
         <file>../app/qml/settings/components/MMSettingDropdown.qml</file>
