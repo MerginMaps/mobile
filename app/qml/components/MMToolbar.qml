@@ -21,7 +21,7 @@ Rectangle {
 
   property int maxButtonsInToolbar: 4
 
-  height: __style.toolbarHeight
+  height: __style.toolbarHeight + __style.safeAreaBottom
   color: __style.forestColor
 
   onWidthChanged: setupBottomBar()

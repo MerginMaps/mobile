@@ -15,8 +15,14 @@ Page {
 
   Label {
     width: parent.width / 2
+
     text: "DP ratio: " + __dp.toPrecision(6) + "\n" +
-          "Used font: " + font.family
+          "Used font: " + font.family + "\n" +
+          "Safe area - top: " + __style.safeAreaTop + "\n" +
+          "Safe area - right: " + __style.safeAreaRight + "\n" +
+          "Safe area - left: " + __style.safeAreaLeft + "\n" +
+          "Safe area - bottom: " + __style.safeAreaBottom
+
     anchors.centerIn: parent
     horizontalAlignment: Label.AlignHCenter
     verticalAlignment: Label.AlignVCenter
