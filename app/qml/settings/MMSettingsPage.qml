@@ -257,7 +257,7 @@ MMPage {
         onClicked: root.diagnosticLogClicked()
       }
 
-      Item { width: 1; height: __style.margin6 + __style.safeAreaBottom }
+      MMListFooterSpacer{}
     }
   }
 }

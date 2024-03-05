@@ -81,7 +81,7 @@ Item {
     id: aboutPanelComponent
 
     MMAboutPage {
-      onClose: root.back()
+      onBackClicked: root.back()
       onVisitWebsiteClicked: Qt.openUrlExternally( __inputHelp.inputWebLink )
     }
   }

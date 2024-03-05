@@ -47,7 +47,7 @@ MMPage {
       onClicked: Qt.openUrlExternally( model.link )
     }
 
-    footer: Item { width: 1; height: __style.margin6 + __style.safeAreaBottom }
+    footer: MMListFooterSpacer {}
   }
 
   function formatDate( d ) {
