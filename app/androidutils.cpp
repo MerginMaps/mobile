@@ -26,25 +26,6 @@ AndroidUtils::AndroidUtils( QObject *parent ): QObject( parent )
 {
 }
 
-void AndroidUtils::showToast( QString message )
-{
-#ifdef ANDROID
-  QNativeInterface::QAndroidApplication::runOnAndroidMainThread( [message]()
-  {
-    QJniObject toast = QJniObject::callStaticObjectMethod(
-                         "android.widget.Toast",
-                         "makeText",
-                         "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
-                         QNativeInterface::QAndroidApplication::context(),
-                         QJniObject::fromString( message ).object(),
-                         jint( 1 ) );
-    toast.callMethod<void>( "show" );
-  } );
-#else
-  Q_UNUSED( message )
-#endif
-}
-
 bool AndroidUtils::isAndroid() const
 {
 #ifdef ANDROID
@@ -248,11 +229,11 @@ bool AndroidUtils::requestStoragePermission()
     if ( !res )
     {
       // permanently denied permission, user needs to go to settings to allow permission
-      showToast( tr( "Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery" ) );
+      emit notifyInfo( tr( "Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery" ) );
     }
     else
     {
-      showToast( tr( "Input needs a storage permission in order to load pictures from gallery" ) );
+      emit notifyInfo( tr( "Input needs a storage permission in order to load pictures from gallery" ) );
     }
     return false;
   }
@@ -270,11 +251,11 @@ bool AndroidUtils::requestCameraPermission()
     if ( !res )
     {
       // permanently denied permission, user needs to go to settings to allow permission
-      showToast( tr( "Camera permission is permanently denied, please allow it in settings" ) );
+      emit notifyInfo( tr( "Camera permission is permanently denied, please allow it in settings" ) );
     }
     else
     {
-      showToast( tr( "We need a camera permission in order to take a photo" ) );
+      emit notifyInfo( tr( "We need a camera permission in order to take a photo" ) );
     }
     return false;
   }
@@ -392,7 +373,7 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
     QJniObject errorJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
     // Internal cancelation due to an error
     QString errorMsg = errorJNI.toString();
-    showToast( errorMsg );
+    emit notifyError( errorMsg );
     return;
   }
 
@@ -427,7 +408,7 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
   {
     QString msg( "Something went wrong with media store activity" );
     qDebug() << msg;
-    showToast( msg );
+    emit notifyError( msg );
   }
 
 }

@@ -568,6 +568,16 @@ int main( int argc, char *argv[] )
     notificationModel.addError( message );
   } );
 
+  QObject::connect( &androidUtils, &AndroidUtils::notifyInfo, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addInfo( message );
+  } );
+
+  QObject::connect( &androidUtils, &AndroidUtils::notifyError, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addError( message );
+  } );
+
   QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project )
   {
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry );
