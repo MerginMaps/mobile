@@ -23,19 +23,14 @@ Page {
     color: __style.lightGreenColor
   }
 
-  header: MMHeader {
+  header: MMPageHeader {
     title: "Edit feature"
-
-    rightMarginShift: saveButton.width
 
     onBackClicked: console.log("back")
 
-    MMRoundButton {
-      id: saveButton
+    rightItemContent: MMRoundButton {
 
-      anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter
-      anchors.rightMargin: __style.pageMargins
 
       iconSource: __style.checkmarkIcon
       iconColor: __style.forestColor
