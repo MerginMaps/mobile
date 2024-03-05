@@ -133,7 +133,6 @@ Item {
   // footer toolbar
   MMToolbar {
     id: toolbar
-    width: parent.width
     anchors.bottom: parent.bottom
 
     model: ObjectModel {

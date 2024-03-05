@@ -270,12 +270,7 @@ ApplicationWindow {
   MMToolbar {
     id: mapToolbar
 
-    anchors {
-      left: parent.left
-      bottom: parent.bottom
-      right: parent.right
-    }
-
+    anchors.bottom: parent.bottom
     visible: map.state === "view"
 
     model: ObjectModel {

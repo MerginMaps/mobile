@@ -190,10 +190,7 @@ Item {
   }
 
   MMToolbar {
-
-    y: parent.height
-
-    width: parent.width
+    anchors.bottom: parent.bottom
 
     ObjectModel {
       id: polygonToolbarButtons

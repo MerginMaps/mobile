@@ -9,24 +9,21 @@
 
 import QtQuick
 
-Rectangle {
-  id: control
+MMBaseToolbar {
+  id: root
 
   signal clicked
 
   property alias model: buttonView.model
   property alias index: buttonView.currentIndex
 
-  height: __style.toolbarHeight
-  color: __style.forestColor
-
-  GridView {
+  toolbarContent: GridView {
     id: buttonView
 
     anchors.fill: parent
 
-    cellHeight: __style.toolbarHeight
-    cellWidth: Math.floor(control.width / control.model.count)
+    cellHeight: parent.height
+    cellWidth: Math.floor(parent.width / root.model.count)
 
     highlightFollowsCurrentItem: false
     interactive: false

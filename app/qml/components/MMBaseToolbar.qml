@@ -8,27 +8,28 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
 
-Page {
-  id: pane
+/**
+  Base toolbar - take care of safe margins and width and height.
+  Do not use directly in-app, see MMSelectableToolbar and MMToolbar
+*/
+Rectangle {
+  id: root
 
-  Label {
-    width: parent.width / 2
+  property alias toolbarContent: contentGroup.children
 
-    text: "DP ratio: " + __dp.toPrecision(6) + "\n" +
-          "Used font: " + font.family + "\n" +
-          "Safe area - top: " + __style.safeAreaTop + "\n" +
-          "Safe area - right: " + __style.safeAreaRight + "\n" +
-          "Safe area - left: " + __style.safeAreaLeft + "\n" +
-          "Safe area - bottom: " + __style.safeAreaBottom
+  height: __style.toolbarHeight + __style.safeAreaBottom
+  width: window?.width ?? __style.safeAreaLeft + __style.safeAreaRight
+  color: __style.forestColor
 
-    anchors.centerIn: parent
-    horizontalAlignment: Label.AlignHCenter
-    verticalAlignment: Label.AlignVCenter
-    wrapMode: Label.Wrap
-    color: "red"
-    font.family: "Inter"
-    font.pixelSize: 20
+  Item {
+    id: contentGroup
+
+    height: __style.toolbarHeight
+    width: parent.width - __style.safeAreaLeft - __style.safeAreaRight
+
+    // center the content
+    x: __style.safeAreaLeft
   }
+
 }

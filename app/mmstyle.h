@@ -234,7 +234,7 @@ class MMStyle: public QObject
     Q_PROPERTY( double mapButtonsMargin READ margin20 CONSTANT )
 
     // Toolbar
-    Q_PROPERTY( double toolbarHeight READ toolbarHeight CONSTANT )
+    Q_PROPERTY( double toolbarHeight READ toolbarHeight NOTIFY safeAreaBottomChanged )
     Q_PROPERTY( double menuDrawerHeight READ menuDrawerHeight CONSTANT )
 
     // Safe area sizes - to not draw content over notch and system bars (used on mobile devices)
@@ -468,7 +468,17 @@ class MMStyle: public QObject
     double icon32() {return 32 * mDp;}
 
     double mapItemHeight() {return 60 * mDp;}
-    double toolbarHeight() {return 68 * mDp;}
+    double toolbarHeight()
+    {
+      if ( mSafeAreaBottom > 2 )
+      {
+        return 54 * mDp;
+      }
+      else
+      {
+        return 68 * mDp;
+      }
+    }
     double menuDrawerHeight() {return 67 * mDp;}
     double maxPageWidth() {return 720 * mDp;}
 

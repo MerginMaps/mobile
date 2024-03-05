@@ -8,24 +8,27 @@
  ***************************************************************************/
 
 import QtQuick
-import Qt5Compat.GraphicalEffects
 
-Rectangle {
-  id: control
+MMBaseToolbar {
+  id: root
+
+  required property var model
+  readonly property double minimumToolbarButtonWidth: 100 * __dp
+  property int maxButtonsInToolbar: 4
 
   signal clicked
 
-  required property var model
+  toolbarContent: GridView {
+    id: buttonView
 
-  readonly property double minimumToolbarButtonWidth: 100 * __dp
+    onWidthChanged: setupBottomBar()
+    onModelChanged: setupBottomBar()
 
-  property int maxButtonsInToolbar: 4
-
-  height: __style.toolbarHeight
-  color: __style.forestColor
-
-  onWidthChanged: setupBottomBar()
-  onModelChanged: setupBottomBar()
+    model: visibleButtonModel
+    anchors.fill: parent
+    cellHeight: parent.height
+    interactive: false
+  }
 
   // buttons shown inside toolbar
   ObjectModel {
@@ -35,15 +38,6 @@ Rectangle {
   // buttons that are not shown inside toolbar, due to small space
   ObjectModel {
     id: invisibleButtonModel
-  }
-
-  GridView {
-    id: buttonView
-
-    model: visibleButtonModel
-    anchors.fill: parent
-    cellHeight: __style.toolbarHeight
-    interactive: false
   }
 
   MMMenuDrawer {
@@ -70,14 +64,14 @@ Rectangle {
   Loader { id: buttonMore; sourceComponent: componentMore; visible: false }
 
   function setupBottomBar() {
-    var m = control.model
+    var m = root.model
     var c = m.count
-    var w = control.width
+    var w = buttonView.width
     var button
 
     // add all buttons (max maxButtonsInToolbar) into toolbar
     visibleButtonModel.clear()
-    if(c <= maxButtonsInToolbar || w >= c*control.minimumToolbarButtonWidth) {
+    if(c <= maxButtonsInToolbar || w >= c*root.minimumToolbarButtonWidth) {
       for( var i = 0; i < c; i++ ) {
         button = m.get(i)
         if(button.isMenuButton !== undefined)
@@ -90,11 +84,11 @@ Rectangle {
     else {
       // not all buttons are visible in toolbar due to width
       // the past of them will apper in the menu inside '...' button
-      var maxVisible = Math.floor(w/control.minimumToolbarButtonWidth)
+      var maxVisible = Math.floor(w/root.minimumToolbarButtonWidth)
       if(maxVisible<maxButtonsInToolbar)
         maxVisible = maxButtonsInToolbar
       for( i = 0; i < maxVisible-1; i++ ) {
-        if(maxVisible===maxButtonsInToolbar || w >= i*control.minimumToolbarButtonWidth) {
+        if(maxVisible===maxButtonsInToolbar || w >= i*root.minimumToolbarButtonWidth) {
           button = m.get(i)
           button.isMenuButton = false
           button.width = Math.floor(w / maxVisible)

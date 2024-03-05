@@ -14,6 +14,7 @@ set(MM_QML
     account/MMSignUpPage.qml
     account/MMSwitchWorkspacePage.qml
     account/MMWhichIndustryPage.qml
+    components/MMBaseToolbar.qml
     components/MMButton.qml
     components/MMCalendarDrawer.qml
     components/MMCheckBox.qml
