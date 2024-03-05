@@ -727,11 +727,6 @@ bool InputUtils::renameFile( const QString &srcPath, const QString &dstPath )
   return QFile::rename( srcPath, dstPath );
 }
 
-void InputUtils::showNotification( const QString &message )
-{
-  emit showNotificationRequested( message );
-}
-
 double InputUtils::ratherZeroThanNaN( double d )
 {
   return ( isnan( d ) ) ? 0.0 : d;

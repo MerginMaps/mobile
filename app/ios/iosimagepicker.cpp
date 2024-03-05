@@ -73,7 +73,7 @@ void IOSImagePicker::onImagePickerFinished( bool successful, const QVariantMap &
   {
     QString msg = QString( "Error:%1" ).arg( data["error"].value<QString>() );
     qWarning() << msg;
-    emit notify( msg );
+    emit notifyError( msg );
   }
 }
 

@@ -64,7 +64,7 @@ class IOSImagePicker : public QObject
     void positionKitChanged();
     void compassChanged();
     void imageCaptured( const QString &absoluteImagePath );
-    void notify( const QString &message );
+    void notifyError( const QString &message );
 
   public slots:
     /**

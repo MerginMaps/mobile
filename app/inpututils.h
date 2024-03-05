@@ -137,11 +137,6 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool renameFile( const QString &srcPath, const QString &dstPath );
 
     /**
-     * Shows notification
-     */
-    Q_INVOKABLE void showNotification( const QString &message );
-
-    /**
      * Converts bytes to human readable size (e.g. 1GB, 500MB)
      */
     Q_INVOKABLE static QString bytesToHumanSize( double bytes );
@@ -539,9 +534,6 @@ class InputUtils: public QObject
      * Returns QGIS profiler data
      */
     static QVector<QString> qgisProfilerLog();
-
-  signals:
-    Q_INVOKABLE void showNotificationRequested( const QString &message );
 
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );

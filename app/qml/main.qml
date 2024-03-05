@@ -990,13 +990,6 @@ ApplicationWindow {
   }
 
   Connections {
-    target: __inputUtils
-    function onShowNotificationRequested( message ) {
-      __notificationModel.addInfo(message)
-    }
-  }
-
-  Connections {
     target: __notificationModel
     function showProjectIssuesActionClicked() {
       projectIssuesPage.projectLoadingLog = __activeProject.projectLoadingLog();

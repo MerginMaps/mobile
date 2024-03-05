@@ -558,6 +558,16 @@ int main( int argc, char *argv[] )
     notificationModel.addError( QObject::tr( "Failed to submit report. Please check your internet connection." ) );
   } );
 
+  QObject::connect( &pw, &ProjectWizard::notifySuccess, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addSuccess( message );
+  } );
+
+  QObject::connect( &iosUtils, &IosUtils::notifyError, &lambdaContext, [&notificationModel]( const QString & message )
+  {
+    notificationModel.addError( message );
+  } );
+
   QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project )
   {
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry );
@@ -568,8 +578,6 @@ int main( int argc, char *argv[] )
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
-  QObject::connect( &pw, &ProjectWizard::notify, &iu, &InputUtils::showNotificationRequested );
-  QObject::connect( &iosUtils, &IosUtils::showToast, &iu, &InputUtils::showNotificationRequested );
   QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]( const QString & projectFullName, bool successfully, int version, bool reloadNeeded )
   {
     Q_UNUSED( successfully );
