@@ -13,7 +13,7 @@ import QtQuick.Layouts
 
 import mm 1.0 as MM
 
-import "."
+import "./components"
 import "../components"
 
 Page {

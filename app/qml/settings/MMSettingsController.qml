@@ -55,7 +55,7 @@ Item {
     id: stackview
 
     anchors.fill: parent
-    initialItem: MMSettingsPanel {
+    initialItem: MMSettingsPage {
       id: settingsPanel
 
       onClose: root.close()
@@ -72,7 +72,7 @@ Item {
   Component {
     id: aboutPanelComponent
 
-    MMAboutPanel {
+    MMAboutPage {
       onClose: stackview.pop(null)
       onVisitWebsiteClicked: Qt.openUrlExternally( __inputHelp.inputWebLink )
       Component.onCompleted: forceActiveFocus()
@@ -82,7 +82,7 @@ Item {
   Component {
     id: changelogPanelComponent
 
-    MMChangelogPanel {
+    MMChangelogPage {
       id: changelogPanel
       onClose: stackview.pop(null)
       Component.onCompleted: forceActiveFocus()
@@ -98,7 +98,7 @@ Item {
   Component {
     id: logPanelComponent
 
-    MMLogPanel {
+    MMLogPage {
       onClose: stackview.pop(null)
       onSubmitReport: __inputHelp.submitReport()
       Component.onCompleted: forceActiveFocus()

@@ -302,6 +302,10 @@ ScrollView {
           text: "greyColor"
           color: __style.greyColor
         }
+        ColorBox {
+          text: "snappingColor"
+          color: __style.snappingColor
+        }
       }
     }
   }

@@ -45,28 +45,28 @@ Page {
         }
 
         MMButton {
-          text: "MMLogPanel"
+          text: "MMLogPage"
           onClicked: {
             stackview.push(logPanelComponent)
           }
         }
 
         MMButton {
-          text: "MMAboutPanel"
+          text: "MMAboutPage"
           onClicked: {
             stackview.push(aboutPanelComponent)
           }
         }
 
         MMButton {
-          text: "MMChangelogPanel"
+          text: "MMChangelogPage"
           onClicked: {
             stackview.push(changelogPanelComponent)
           }
         }
 
         MMButton {
-          text: "MMSettingsPanel"
+          text: "MMSettingsPage"
           onClicked: {
             stackview.push(settingsPanelComponent)
           }
@@ -143,7 +143,7 @@ Page {
   Component {
     id: logPanelComponent
 
-    MMLogPanel {
+    MMLogPage {
       id: logPanel
       width: root.width
       height: root.height
@@ -156,7 +156,7 @@ Page {
 
   Component {
     id: aboutPanelComponent
-    MMAboutPanel {
+    MMAboutPage {
       id: aboutPanel
       width: root.width
       height: root.height
@@ -167,7 +167,7 @@ Page {
 
   Component {
     id: changelogPanelComponent
-    MMChangelogPanel {
+    MMChangelogPage {
       id: changelogPanel
       width: root.width
       height: root.height
@@ -199,7 +199,7 @@ Page {
 
   Component {
     id: settingsPanelComponent
-    MMSettingsPanel {
+    MMSettingsPage {
       id: settingsPanel
       width: root.width
       height: root.height

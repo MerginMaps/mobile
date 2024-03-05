@@ -144,15 +144,15 @@ set(MM_QML
     project/components/MMProjectStatusItem.qml
     project/components/MMProjectWizardDelegate.qml
     project/components/MMProjectDelegate.qml
-    settings/MMAboutPanel.qml
-    settings/MMChangelogPanel.qml
-    settings/MMLogPanel.qml
-    settings/MMSettingDropdown.qml
-    settings/MMSettingInput.qml
-    settings/MMSettingItem.qml
-    settings/MMSettingSwitch.qml
+    settings/MMAboutPage.qml
+    settings/MMChangelogPage.qml
+    settings/MMLogPage.qml
     settings/MMSettingsController.qml
-    settings/MMSettingsPanel.qml
+    settings/MMSettingsPage.qml
+    settings/components/MMSettingDropdown.qml
+    settings/components/MMSettingInput.qml
+    settings/components/MMSettingItem.qml
+    settings/components/MMSettingSwitch.qml
     main.qml
     PARENT_SCOPE
 )
