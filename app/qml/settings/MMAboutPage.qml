@@ -10,97 +10,110 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Dialogs
-import QtQuick.Window
 
 import "../components"
 
-Page {
+MMPage {
   id: root
 
-  signal close()
   signal visitWebsiteClicked()
 
-  Keys.onReleased: function( event ) {
-    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true
-      close()
-    }
-  }
+  pageHeader.title: qsTr( "About Mergin Maps" )
 
-  background: Rectangle {
-    color: __style.lightGreenColor
-  }
+  pageContent: ScrollView {
 
-  header: MMPageHeader {
-    id: header
-    title: qsTr("About Mergin Maps")
-    titleFont: __style.t3
+    width: parent.width
+    height: parent.height
 
-    onBackClicked: root.close()
-    backVisible: true
-  }
+    contentWidth: availableWidth // to only scroll vertically
+    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
-  Item {
-    id: content
-    anchors.fill: parent
-
-    Column {
-      anchors.verticalCenter: parent.verticalCenter
+    ColumnLayout {
       width: parent.width
-      spacing: __style.pageMargins
+      height: parent.height
 
-      Text {
-        text: "v" + __version
-        font: __style.t4
-        color: __style.deepOceanColor
-        anchors.horizontalCenter: parent.horizontalCenter
+
+      Item {
+        Layout.preferredHeight: __style.margin40
+        Layout.fillWidth: true
       }
 
-      Image {
-        id: mmLogo
-        source: __style.mmLogoImage
-        anchors.horizontalCenter: parent.horizontalCenter
+      Column {
+        id: middleContentGroup
+
+        Layout.fillWidth: true
+        Layout.preferredHeight: childrenRect.height
+
+        spacing: __style.spacing20
+
+        Text {
+          id: vText
+
+          text: "v" + __version
+          font: __style.t4
+          color: __style.deepOceanColor
+          anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Image {
+          id: mmLogo
+
+          source: __style.mmLogoImage
+          sourceSize.width: 150 * __dp
+          anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Text {
+          id: descText
+
+          text: qsTr("We are bringing the benefits of open source GIS to businesses without compromises")
+          font: __style.p5
+          color: __style.nightColor
+          wrapMode: Text.WordWrap
+          width: webLinkBtn.width
+          horizontalAlignment: Text.AlignHCenter
+          anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        MMButton {
+          id: webLinkBtn
+
+          width: parent.width
+          anchors.horizontalCenter: parent.horizontalCenter
+          onClicked: root.visitWebsiteClicked()
+          text: qsTr("Visit website")
+        }
       }
 
-      Text {
-        text: qsTr("We are bringing the benefits of open source GIS to businesses without compromises")
-        font: __style.p5
-        color: __style.nightColor
-        wrapMode: Text.WordWrap
-        width: webLinkBtn.width
-        horizontalAlignment: Text.AlignHCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+      Item {
+        Layout.preferredHeight: __style.margin40
+        Layout.fillWidth: true
       }
 
-      MMButton {
-        id: webLinkBtn
-        width: Math.min(__style.maxPageWidth, content.width - 2* __style.pageMargins)
-        anchors.horizontalCenter: parent.horizontalCenter
-        onClicked: root.visitWebsiteClicked()
-        text: qsTr("Visit website")
+      Column {
+        Layout.fillWidth: true
+        Layout.preferredHeight: childrenRect.height
+
+        spacing: 0
+
+        Text {
+          id: developedText
+          text: qsTr( "Developed by" )
+          font: __style.t4
+          color: __style.deepOceanColor
+          anchors.horizontalCenter: lutraLogo.horizontalCenter
+        }
+
+        Image {
+          id: lutraLogo
+          source: __style.lutraLogoImage
+          anchors.horizontalCenter: parent.horizontalCenter
+
+          height: 80 * __dp
+          sourceSize.height: height
+        }
       }
-    }
-  }
-
-  footer: Column {
-    spacing: __style.pageMargins
-    bottomPadding: __style.pageMargins
-
-    Text {
-      id: developedText
-      text: qsTr("Developed by")
-      font: __style.t4
-      color: __style.deepOceanColor
-      anchors.horizontalCenter: lutraLogo.horizontalCenter
-    }
-
-    Image {
-      id: lutraLogo
-      source: __style.lutraLogoImage
-      sourceSize.width: 120 * __dp
-      fillMode: Image.PreserveAspectFit
-      anchors.horizontalCenter: parent.horizontalCenter
     }
   }
 }

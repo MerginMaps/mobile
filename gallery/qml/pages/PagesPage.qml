@@ -161,7 +161,7 @@ Page {
       width: root.width
       height: root.height
       onVisitWebsiteClicked: Qt.openUrlExternally( "https://merginmaps.com" )
-      onClose: stackview.pop()
+      onBackClicked: stackview.pop()
     }
   }
 
