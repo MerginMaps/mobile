@@ -150,7 +150,7 @@ Page {
       submitReportPending: false
       text: __logText
       onSubmitReport: submitReportPending = !submitReportPending
-      onClose: stackview.pop()
+      onBackClicked: stackview.pop()
     }
   }
 

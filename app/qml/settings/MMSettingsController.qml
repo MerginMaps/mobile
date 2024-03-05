@@ -104,7 +104,7 @@ Item {
     id: logPanelComponent
 
     MMLogPage {
-      onClose: root.back()
+      onBackClicked: root.back()
       onSubmitReport: __inputHelp.submitReport()
     }
   }
