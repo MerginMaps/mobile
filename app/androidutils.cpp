@@ -233,7 +233,7 @@ bool AndroidUtils::requestStoragePermission()
     }
     else
     {
-      emit notifyInfo( tr( "Input needs a storage permission in order to load pictures from gallery" ) );
+      emit notifyInfo( tr( "Mergin Maps needs a storage permission in order to load pictures from gallery" ) );
     }
     return false;
   }
