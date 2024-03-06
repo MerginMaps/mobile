@@ -82,7 +82,7 @@ Drawer {
         Image {
           id: closeButton
 
-          source: __style.closeButtonIcon
+          source: __style.closeIcon
 
           MouseArea {
             anchors.fill: parent

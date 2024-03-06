@@ -48,7 +48,6 @@ MMBaseInput {
   property bool includesDate: typeFromFieldFormat.includes("Date")
   property bool showSeconds: true
 
-  property date dateTime
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
 

@@ -216,11 +216,11 @@ ScrollView {
         EditorItem {
           width: parent.width
           height: dateTimeCalendar.height
-          fieldTitle: "MMFormGalleryEditor"
-          fieldValue: "2013-09-17"
+          fieldTitle: "MMFormCalendarEditor (Date & Time)"
+          fieldValue: "2013-09-17 10:22"
           fieldConfig: ({
-            field_format: "yyyy-MM-dd",
-            display_format: "yyyy-MM-dd"
+            field_format: "yyyy-MM-dd hh:mm",
+            display_format: "yyyy-MM-dd hh:mm"
           })
           field: ""
 
@@ -228,10 +228,14 @@ ScrollView {
             id: dateTimeCalendar
 
             title: "Date & Time"
-            placeholderText: "YYYY/MM/DD HH:MM"
+            placeholderText: "yyyy-MM-dd hh:mm"
             enabled: checkbox.checked
             width: parent.width
             warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
+
+            fieldIsDate: false
+            includesTime: true
+            includesDate: true
 
             onEditorValueChanged: function(newValue, isNull) { console.log("new value: " + newValue) }
           }
@@ -240,7 +244,7 @@ ScrollView {
         EditorItem {
           width: parent.width
           height: dateCalendar.height
-          fieldTitle: "MMFormGalleryEditor"
+          fieldTitle: "MMFormCalendarEditor (Date)"
           fieldValue: "2013-09-17"
           fieldConfig: ({
             field_format: "yyyy-MM-dd",
@@ -252,12 +256,11 @@ ScrollView {
             id: dateCalendar
 
             title: "Date"
-            placeholderText: "YYYY/MM/DD"
+            placeholderText: "yyyy-MM-dd"
             enabled: checkbox.checked
             width: parent.width
             warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
 
-            dateTime: new Date()
             fieldIsDate: false
             includesTime: false
             includesDate: true
@@ -269,23 +272,22 @@ ScrollView {
         EditorItem {
           width: parent.width
           height: timeCalendar.height
-          fieldTitle: "MMFormGalleryEditor"
-          fieldValue: "2013-09-17"
+          fieldTitle: "MMFormCalendarEditor (Time)"
+          fieldValue: "2013-09-17 11:22"
           fieldConfig: ({
-            field_format: "yyyy-MM-dd",
-            display_format: "yyyy-MM-dd"
+            field_format: "yyyy-MM-dd hh:mm",
+            display_format: "hh:mm"
           })
           field: ""
 
           MMFormEditors.MMFormCalendarEditor {
             id: timeCalendar
             title: "Time"
-            placeholderText: "HH:MM:SS"
+            placeholderText: "hh:mm"
             enabled: checkbox.checked
             width: parent.width
             warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
 
-            dateTime: new Date()
             fieldIsDate: false
             includesTime: true
             includesDate: false
