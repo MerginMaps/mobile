@@ -14,6 +14,7 @@ import QtQuick.Dialogs
 import mm 1.0 as MM
 
 import "../components"
+import "../dialogs"
 
 Page {
   id: root
@@ -219,7 +220,7 @@ Page {
           iconSource: __style.deleteIcon
           visible: model.ProviderType === "external"
 
-          onClicked: removeDialog.openDialog( model.ProviderId )
+          onClicked: removeDialog.open( model.ProviderId )
         }
       }
     }
@@ -302,38 +303,27 @@ Page {
     }
   }
 
-  MessageDialog {
+  MMProviderRemoveReceiverDialog {
     id: removeDialog
 
-    function openDialog( providerId )
-    {
-      relatedProviderId = providerId
+    function open( providerId ) {
+      this.providerId = providerId
       visible = true
     }
 
-    property string relatedProviderId
-
-    title: qsTr( "Remove receiver" )
-    text: qsTr( "Do you want to remove receiver from the list of recent receivers?" )
-    buttons: MessageDialog.Ok | MessageDialog.Cancel
-
-    onButtonClicked: function(clickedButton) {
-      if (clickedButton === MessageDialog.Ok) {
-        if (relatedProviderId === "") {
-          close()
-          return
-        }
-
-        if ( __appSettings.activePositionProviderId === relatedProviderId )
-        {
-          // we are removing an active provider, replace it with internal provider
-          root.constructProvider( "internal", "devicegps", qsTr( "Internal" ) )
-        }
-
-        providersModel.removeProvider( relatedProviderId )
+    onRemoveProvider: {
+      if (providerId === "") {
+        close()
+        return
       }
-      removeDialog.relatedProviderId = ""
-      close()
+
+      if ( __appSettings.activePositionProviderId === providerId )
+      {
+        // we are removing an active provider, replace it with internal provider
+        root.constructProvider( "internal", "devicegps", qsTr( "Internal" ) )
+      }
+
+      providersModel.removeProvider( providerId )
     }
   }
 }
