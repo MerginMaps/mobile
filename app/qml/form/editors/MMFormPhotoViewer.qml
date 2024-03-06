@@ -57,7 +57,10 @@ MMBaseInput {
   state: "notSet"
 
   onContentClicked: {
-    // TODO: open preview
+    if ( !root.enabled )
+      return
+    previewLoader.active = true
+    previewLoader.focus = true
   }
 
   content: Item {
@@ -99,6 +102,57 @@ MMBaseInput {
 
       onCapturePhotoClicked: root.capturePhotoClicked()
       onChooseFromGalleryClicked: root.chooseFromGalleryClicked()
+    }
+  }
+
+  Loader {
+    id: previewLoader
+
+    asynchronous: true
+    active: false
+    sourceComponent: previewComponent
+  }
+
+  Component {
+    id: previewComponent
+
+    // TODO: create MMPhotoPreview component
+    Popup {
+      id: drawer
+
+      parent: Overlay.overlay
+      visible: true
+      width: ApplicationWindow.window.width
+      height: ApplicationWindow.window.height
+      closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+      background: Rectangle {
+        color: "#cc000000" // TODO: add the right color to mmstyle
+      }
+
+      MMRoundButton {
+        id: closeButton
+
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 2 * __style.pageMargins
+        anchors.rightMargin: 2 * __style.pageMargins
+        bgndColor: __style.lightGreenColor
+        iconSource: __style.closeIcon
+        onClicked: {
+          previewLoader.active = false
+        }
+      }
+
+      Image {
+        width: drawer.width
+        height: drawer.height / 2
+        anchors.centerIn: parent
+        focus: true
+        asynchronous: true
+        source: root.photoUrl
+        fillMode: Image.PreserveAspectCrop
+      }
     }
   }
 }
