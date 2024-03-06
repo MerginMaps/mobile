@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/images/themes/default">
+        <file>mIconAnnotationLayer.svg</file>
+        <file>mIconGeometryCollectionLayer.svg</file>
+        <file>mIconGroup.svg</file>
+        <file>mIconLayer.png</file>
+        <file>mIconLineLayer.svg</file>
+        <file>mIconMeshLayer.svg</file>
+        <file>mIconPointCloudLayer.svg</file>
+        <file>mIconPointLayer.svg</file>
+        <file>mIconPolygonLayer.svg</file>
+        <file>mIconRaster.svg</file>
+        <file>mIconRasterLayer.svg</file>
+        <file>mIconTableLayer.svg</file>
+        <file>mIconVectorTileLayer.svg</file>
+    </qresource>
+</RCC>
