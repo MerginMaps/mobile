@@ -127,7 +127,6 @@ set(MM_QML
     map/MMRecordingTools.qml
     map/components/MMBlurBox.qml
     map/components/MMCrosshair.qml
-    map/components/MMMapLoadingIndicator.qml
     map/components/MMMapBlurLabel.qml
     map/components/MMMapButton.qml
     map/components/MMMapLabel.qml

@@ -20,6 +20,7 @@ Rectangle {
 
   Rectangle {
     id: bar
+
     width: parent.width
     height: parent.height
 
