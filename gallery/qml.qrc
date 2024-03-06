@@ -117,7 +117,6 @@
         <file>../app/qml/form/editors/MMFormRelationReferenceEditor.qml</file>
         <file>../app/qml/map/components/MMPositionMarker.qml</file>
         <file>../app/qml/map/components/MMBlurBox.qml</file>
-        <file>../app/qml/map/components/MMMapLoadingIndicator.qml</file>
         <file>../app/qml/map/components/MMMapBlurLabel.qml</file>
         <file>../app/qml/map/components/MMMapButton.qml</file>
         <file>../app/qml/map/components/MMMapLabel.qml</file>

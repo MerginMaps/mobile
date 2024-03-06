@@ -110,6 +110,7 @@ MMBaseToolbar {
         button = m.get(i)
         button.isMenuButton = true
         button.width = Math.floor(w)
+        button.parentMenu = menu
         invisibleButtonModel.append(button)
       }
     }

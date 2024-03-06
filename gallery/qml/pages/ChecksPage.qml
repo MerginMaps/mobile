@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
+import "../../app/qml/account/components"
 import "../../app/qml/components"
 import "../../app/qml/inputs"
 

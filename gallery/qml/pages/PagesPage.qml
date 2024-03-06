@@ -30,49 +30,45 @@ Page {
 
       Column {
         width: parent.width
-        spacing: 10
+        spacing: 5
         padding: 10
 
-        Label {
-          text: "Pages"
-        }
-
-        MMButton {
+        Button {
           text: "MMProjectLoadingPage"
           onClicked: {
             stackview.push(loadingPageComponent)
           }
         }
 
-        MMButton {
+        Button {
           text: "MMLogPage"
           onClicked: {
             stackview.push(logPanelComponent)
           }
         }
 
-        MMButton {
+        Button {
           text: "MMAboutPage"
           onClicked: {
             stackview.push(aboutPanelComponent)
           }
         }
 
-        MMButton {
+        Button {
           text: "MMChangelogPage"
           onClicked: {
             stackview.push(changelogPanelComponent)
           }
         }
 
-        MMButton {
+        Button {
           text: "MMSettingsPage"
           onClicked: {
             stackview.push(settingsPanelComponent)
           }
         }
 
-        MMButton {
+        Button {
           text: "MMProjectIssuesPage"
           onClicked: {
             stackview.push(projectIssuesPageComponent)

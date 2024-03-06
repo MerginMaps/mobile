@@ -177,7 +177,7 @@ Item {
         }
       }
 
-      rotation: snapUtils.snapType === SnapUtils.Other ? 0 : 45
+      rotation: snapUtils.snapType === MM.SnapUtils.Other ? 0 : 45
 
       Behavior on rotation {
         PropertyAnimation {

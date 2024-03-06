@@ -32,7 +32,7 @@ Item {
   readonly property alias compass: deviceCompass
 
   property bool isTrackingPosition: trackingManager?.isTrackingPosition ?? false
-  property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType = RecordingMapTool.StreamMode : false
+  property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType = MM.RecordingMapTool.StreamMode : false
 
   property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
@@ -247,12 +247,13 @@ Item {
         ]
       }
 
+
       // TOP elements
-      MMMapLoadingIndicator {
+      MMBusyIndicator {
         id: loadingIndicator
 
-        width: mapCanvas.width
-        anchors.top: canvasRoot.top
+        x: parent.width - __style.mapButtonsMargin - loadingIndicator.width
+        y: parent.height * 1 / 4
         running: mapCanvas.isRendering && root.state !== "inactive"
       }
 
@@ -261,7 +262,7 @@ Item {
 
         height: visible ? __style.mapItemHeight : 0
         anchors {
-          top: loadingIndicator.bottom
+          top: parent.top
           topMargin: __style.margin8
           left: parent.left
           leftMargin: __style.mapButtonsMargin
@@ -292,7 +293,7 @@ Item {
         width: Math.min( parent.width - backButton.width - ( 3 * __style.mapButtonsMargin ), 500 * __dp )
         height: visible ? __style.mapItemHeight : 0
         anchors {
-          top: loadingIndicator.bottom
+          top: parent.top
           topMargin: __style.margin8
           left: backButton.right
           leftMargin: __style.mapButtonsMargin

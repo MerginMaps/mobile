@@ -31,11 +31,12 @@ Item {
     sourceSize.height: root.height
   }
 
-  // TODO: ideally all icons should be white (fix color in svg)
-  // and the colorize will be done only if used does not want
-  // white.
+  // TODO: if all icons are white, we do not need Qt5Compat.GraphicalEffects
   ColorOverlay {
     id: overlay
+
+    // Use original colors for some icons, e.g. QGIS layer icons
+    visible: !root.source.toString().endsWith("-nocoloroverlay.svg")
 
     color: root.color
     anchors.fill: icon

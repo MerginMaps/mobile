@@ -67,11 +67,6 @@ Page {
     }
   }
 
-  MMMapLoadingIndicator {
-    running: true
-    width: parent.width
-  }
-
   MMMapScaleBar {
     anchors.horizontalCenter: parent.horizontalCenter
     y: 120
@@ -90,6 +85,8 @@ Page {
     width: parent.width - 40
     sourceItem: map
     text: "Mark the geometry on the map and click record"
+
+    Component.onCompleted: show()
   }
 
   Rectangle {
@@ -113,6 +110,15 @@ Page {
     anchors.rightMargin: 20
     anchors.bottomMargin: 50
     spacing: 20
+
+    MMBusyIndicator {
+      running: true
+
+      Timer {
+        interval: 4000; running: true; repeat: true
+        onTriggered: parent.running = !parent.running
+      }
+    }
 
     MMMapButton {
       iconSource: __style.arrowLinkRightIcon
@@ -196,7 +202,7 @@ Page {
     xPos: 300
     yPos: 200
     direction: 30
-    accuracyRingSize: 50
+    accuracyRingSize: 60
 
     Timer {
       interval: 2000; running: true; repeat: true
@@ -213,7 +219,7 @@ Page {
     xPos: 200
     yPos: 300
     direction: 330
-    accuracyRingSize: 50
+    accuracyRingSize: 30
     trackingMode: true
   }
 }

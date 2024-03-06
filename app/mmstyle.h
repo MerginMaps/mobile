@@ -176,6 +176,13 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl editCircleIcon READ editCircleIcon CONSTANT )
     Q_PROPERTY( QUrl warningCircleIcon READ warningCircleIcon CONSTANT )
 
+    // Icons for which we do not use color overlay (so they have original color)
+    Q_PROPERTY( QUrl lineLayerNoColorOverlayIcon READ lineLayerNoColorOverlayIcon CONSTANT )
+    Q_PROPERTY( QUrl polygonLayerNoColorOverlayIcon READ polygonLayerNoColorOverlayIcon CONSTANT )
+    Q_PROPERTY( QUrl rasterLayerNoColorOverlayIcon READ rasterLayerNoColorOverlayIcon CONSTANT )
+    Q_PROPERTY( QUrl tableLayerNoColorOverlayIcon READ tableLayerNoColorOverlayIcon CONSTANT )
+    Q_PROPERTY( QUrl pointLayerNoColorOverlayIcon READ pointLayerNoColorOverlayIcon CONSTANT )
+
     // Images
     Q_PROPERTY( QUrl loadingIndicatorImage READ loadingIndicatorImage CONSTANT )
     Q_PROPERTY( QUrl acceptInvitationImage READ acceptInvitationImage CONSTANT )
@@ -195,11 +202,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl mmSymbolImage READ mmSymbolImage CONSTANT )
     Q_PROPERTY( QUrl positionTrackingRunningImage READ positionTrackingRunningImage CONSTANT )
     Q_PROPERTY( QUrl positionTrackingStartImage READ positionTrackingStartImage CONSTANT )
-    Q_PROPERTY( QUrl lineLayerImage READ lineLayerImage CONSTANT )
-    Q_PROPERTY( QUrl polygonLayerImage READ polygonLayerImage CONSTANT )
-    Q_PROPERTY( QUrl rasterLayerImage READ rasterLayerImage CONSTANT )
-    Q_PROPERTY( QUrl tableLayerImage READ tableLayerImage CONSTANT )
-    Q_PROPERTY( QUrl pointLayerImage READ pointLayerImage CONSTANT )
     Q_PROPERTY( QUrl syncImage READ syncImage CONSTANT )
     Q_PROPERTY( QUrl externalGpsGreenImage READ externalGpsGreenImage CONSTANT )
     Q_PROPERTY( QUrl externalGpsRedImage READ externalGpsRedImage CONSTANT )
@@ -420,6 +422,12 @@ class MMStyle: public QObject
     QUrl warningCircleIcon() {return QUrl( "qrc:/WarningCircle.svg" );}
     QUrl editCircleIcon() {return QUrl( "qrc:/EditCircle.svg" );}
 
+    static QUrl lineLayerNoColorOverlayIcon() {return QUrl( "qrc:/mIconLineLayer-nocoloroverlay.svg" );}
+    static QUrl pointLayerNoColorOverlayIcon() {return QUrl( "qrc:/mIconPointLayer-nocoloroverlay.svg" );}
+    static QUrl polygonLayerNoColorOverlayIcon() {return QUrl( "qrc:/mIconPolygonLayer-nocoloroverlay.svg" );}
+    static QUrl rasterLayerNoColorOverlayIcon() {return QUrl( "qrc:/mIconRasterLayer-nocoloroverlay.svg" );}
+    static QUrl tableLayerNoColorOverlayIcon() {return QUrl( "qrc:/mIconTableLayer-nocoloroverlay.svg" );}
+
     QUrl loadingIndicatorImage() {return QUrl( "qrc:/images/LoadingIndicator.svg" );}
     QUrl mmLogoImage() {return QUrl( "qrc:/images/MMLogo.svg" );}
     QUrl lutraLogoImage() {return QUrl( "qrc:/images/LutraLogo.svg" );}
@@ -457,12 +465,6 @@ class MMStyle: public QObject
     QUrl crosshairPlusImage() {return QUrl( "qrc:/images/CrosshairPlus.svg" );}
     QUrl noWorkspaceImage() {return QUrl( "qrc:/images/NoWorkspace.svg" );}
 
-    static QUrl lineLayerImage() {return QUrl( "qrc:/images/mIconLineLayer.svg" );}
-    static QUrl pointLayerImage() {return QUrl( "qrc:/images/mIconPointLayer.svg" );}
-    static QUrl polygonLayerImage() {return QUrl( "qrc:/images/mIconPolygonLayer.svg" );}
-    static QUrl rasterLayerImage() {return QUrl( "qrc:/images/mIconRasterLayer.svg" );}
-    static QUrl tableLayerImage() {return QUrl( "qrc:/images/mIconTableLayer.svg" );}
-
     double icon16() {return 16 * mDp;}
     double icon24() {return 24 * mDp;}
     double icon32() {return 32 * mDp;}
@@ -476,7 +478,7 @@ class MMStyle: public QObject
       }
       else
       {
-        return 68 * mDp;
+        return 58 * mDp;
       }
     }
     double menuDrawerHeight() {return 67 * mDp;}

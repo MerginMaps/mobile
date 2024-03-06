@@ -42,12 +42,16 @@ CheckBox {
         anchors.horizontalCenter: parent.horizontalCenter
         color: control.bgColorIcon
 
-        MMIcon {
+        Image {
           id: icon
 
-          size: control.small ? __style.icon16 : __style.icon24
+          width: control.small ? __style.icon16 : __style.icon24
+          height: width
+
           anchors.centerIn: parent
           source: control.sourceIcon
+          sourceSize.width: width
+          sourceSize.height: width
         }
       }
     }

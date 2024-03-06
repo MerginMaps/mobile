@@ -1044,40 +1044,6 @@ ApplicationWindow {
     }
   }
 
-  Rectangle {
-    width: 20
-    color: "lightblue"
-    x: parent.width / 2
-    opacity: .5
-    height: __style.safeAreaTop
-  }
-
-  Rectangle {
-    width: 20
-    color: "lightblue"
-    x: parent.width / 2
-    y: parent.height - __style.safeAreaBottom
-    opacity: .5
-    height: __style.safeAreaBottom
-  }
-
-  Rectangle {
-    width: __style.safeAreaLeft
-    color: "lightblue"
-    y: parent.height/2 - height/2
-    opacity: .5
-    height: 20
-  }
-
-  Rectangle {
-    width: __style.safeAreaRight
-    color: "lightblue"
-    x: parent.width - __style.safeAreaRight
-    y: parent.height/2 - height / 2
-    opacity: .5
-    height: 20
-  }
-
   function recalculateSafeArea() {
     let safeArea = []
 
