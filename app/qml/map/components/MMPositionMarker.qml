@@ -62,29 +62,30 @@ Item {
   }
 
   Rectangle {
-    id: navigation
-
-    anchors.centerIn: accuracyIndicator
+    x: root.xPos - width / 2
+    y: root.yPos - height / 2
     width: root.size
     height: width
     radius: width / 2
     color: __style.whiteColor
+  }
 
-    Rectangle {
-      anchors.centerIn: parent
-      width: root.size * 2 / 3
-      height: width
-      radius: width / 2
-      color: root.trackingMode ? __style.earthColor : __style.forestColor
+  Rectangle {
+    x: root.xPos - width / 2
+    y: root.yPos - height / 2
+    width: root.size * 2 / 3
+    height: width
+    radius: width / 2
+    color: root.trackingMode ? __style.earthColor : __style.forestColor
+  }
 
-      Rectangle {
-        anchors.centerIn: parent
-        width: root.size / 3
-        height: width
-        radius: width / 2
-        color: root.trackingMode ? __style.sunsetColor : __style.grassColor
-      }
-    }
+  Rectangle {
+    x: root.xPos - width / 2
+    y: root.yPos - height / 2
+    width: root.size / 3
+    height: width
+    radius: width / 2
+    color: root.trackingMode ? __style.sunsetColor : __style.grassColor
   }
 }
 
