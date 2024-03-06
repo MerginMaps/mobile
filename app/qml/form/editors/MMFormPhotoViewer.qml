@@ -60,33 +60,45 @@ MMBaseInput {
     // TODO: open preview
   }
 
-  content: MMPhoto {
-    id: photo
+  content: Item {
+    MMPhoto {
+      id: photo
 
-    width: root.width
-    height: root.contentItemHeight
-    photoUrl: root.photoUrl
+      width: root.width
+      height: root.contentItemHeight
+      visible: root.state !== "notSet"
+      photoUrl: root.photoUrl
 
-    fillMode: Image.PreserveAspectCrop
+      fillMode: Image.PreserveAspectCrop
 
-    MouseArea {
-      anchors.fill: parent
-      onClicked: root.contentClicked()
-    }
-
-    MMRoundButton {
-      anchors {
-        right: parent.right
-        bottom: parent.bottom
-        rightMargin: 10 * __dp
-        bottomMargin: 10 * __dp
+      MouseArea {
+        anchors.fill: parent
+        onClicked: root.contentClicked()
       }
 
-      bgndColor: __style.negativeColor
-      iconSource: __style.deleteIcon
-      iconColor: __style.grapeColor
-      visible: true//enabled && ( photo.status === Image.Ready || photo.status === Image.Error )
-      onClicked: root.trashClicked()
+      MMRoundButton {
+        anchors {
+          right: parent.right
+          bottom: parent.bottom
+          rightMargin: 10 * __dp
+          bottomMargin: 10 * __dp
+        }
+
+        bgndColor: __style.negativeColor
+        iconSource: __style.deleteIcon
+        iconColor: __style.grapeColor
+        visible: enabled && ( photo.status === Image.Ready || photo.status === Image.Error )
+        onClicked: root.trashClicked()
+      }
+    }
+
+    MMPhotoAttachment {
+      width: root.width
+      height: root.contentItemHeight
+      visible: root.state === "notSet"
+
+      onCapturePhotoClicked: root.capturePhotoClicked()
+      onChooseFromGalleryClicked: root.chooseFromGalleryClicked()
     }
   }
 }

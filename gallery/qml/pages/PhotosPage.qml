@@ -13,6 +13,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qml/components"
+import "../../app/qml/form/editors"
 
 Page {
 
@@ -23,53 +24,38 @@ Page {
 
   Column {
     width: parent.width
+    spacing: 20
+    anchors.horizontalCenter: parent.horizontalCenter
+    anchors.top: parent.top
+    anchors.topMargin: 20
+    anchors.left: parent.left
+    anchors.leftMargin: 20
 
-    MMPhotoGallery {
-      title: "Gallery 7 photos - show just 5"
-      maxVisiblePhotos: 5
-      model: [
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg"
-      ]
-      onShowAll: console.log("Open Gallery")
-      onClicked: function( path ) { console.log("Open " + path) }
+    MMFormPhotoViewer {
+      width: parent.width
+
+      onCapturePhotoClicked: console.log("onCapturePhotoClicked")
+      onChooseFromGalleryClicked: console.log("onChooseFromGalleryClicked")
     }
 
-    MMPhotoGallery {
-      title: "Gallery 7 photos - show all"
-      maxVisiblePhotos: -1
-      showAddImage: true
-      model: [
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg"
-      ]
-      onShowAll: console.log("Open Gallery")
-      onClicked: function( path ) { console.log("Open " + path) }
-      onAddImage: console.log("Open camera")
+    MMFormPhotoViewer {
+      width: parent.width
+
+      photoUrl: "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg"
+      state: "valid"
     }
 
-    MMPhotoGallery {
-      title: "Gallery 3 photos"
-      warningMsg: "The size of image is too big"
-      showAddImage: true
-      model: [
-        "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg",
-        "https://images.pexels.com/photos/955656/pexels-photo-955656.jpeg",
-        "https://images.pexels.com/photos/559422/pexels-photo-559422.jpeg"
-      ]
-      onShowAll: console.log("Open Gallery")
-      onClicked: function( path ) { console.log("Open " + path) }
-      onAddImage: console.log("Open camera")
+    MMFormPhotoViewer {
+      width: 200
+
+      photoUrl: "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg"
+      state: "valid"
+    }
+
+    MMFormPhotoViewer {
+      width: 200
+
+      state: "notAvailable"
     }
   }
 }
