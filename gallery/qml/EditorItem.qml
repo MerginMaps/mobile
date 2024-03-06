@@ -18,8 +18,8 @@ import "../app/qml/form/editors"
 Item {
   required property string fieldTitle
 
-  property variant fieldValue: ""
-  property var fieldConfig: ({'field_format':'?', 'display_format':'yyyy'})
+  property string fieldValue: ""
+  property var fieldConfig: ({})
   property bool fieldShouldShowTitle: checkboxTitle.checked
   property bool fieldIsReadOnly: !checkbox.checked
   property string fieldErrorMessage: checkboxError.checked ? "error" : ""
@@ -28,8 +28,8 @@ Item {
   property bool fieldRememberValueState: false
   property string fieldHomePath: ""
   property bool fieldValueIsNull: false
-  property variant fieldAssociatedRelation: ""
-  property variant fieldFeatureLayerPair: ""
-  property variant fieldActiveProject: ({homePath: ""})  
-  property var field: ({'isDateOrTime':'true'})
+  property string fieldAssociatedRelation: ""
+  property string fieldFeatureLayerPair: ""
+  property variant fieldActiveProject: ({homePath: ""})
+  property string field: ""
 }

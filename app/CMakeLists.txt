@@ -262,6 +262,7 @@ endif ()
 qt_add_resources(
   MM_SRCS
   icons/icons.qrc
+  images/qgis/qgisicons.qrc
   images/images.qrc
   i18n/input_i18n.qrc
   fonts/fonts.qrc

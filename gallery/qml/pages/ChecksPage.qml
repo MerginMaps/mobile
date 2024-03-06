@@ -11,7 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-import "../../app/qml/account/components"
+import "../../app/qml/account/components" as MMAccountComponents
 import "../../app/qml/components"
 import "../../app/qml/inputs"
 
@@ -69,26 +69,26 @@ Column {
       spacing: 10
       anchors.fill: parent
 
-      MMIconCheckBoxHorizontal {
+      MMAccountComponents.MMIconCheckBoxHorizontal {
         checked: false
         sourceIcon: __style.qgisIcon
         text: "QGIS website"
       }
 
-      MMIconCheckBoxHorizontal {
+      MMAccountComponents.MMIconCheckBoxHorizontal {
         checked: true
         sourceIcon: __style.qgisIcon
         text: "QGIS website"
       }
 
-      MMIconCheckBoxHorizontal {
+      MMAccountComponents.MMIconCheckBoxHorizontal {
         checked: false
         sourceIcon: __style.redditIcon
         text: "Reddit"
         small: true
       }
 
-      MMIconCheckBoxHorizontal {
+      MMAccountComponents.MMIconCheckBoxHorizontal {
         checked: true
         sourceIcon: __style.redditIcon
         text: "Reddit"
@@ -113,14 +113,14 @@ Column {
       spacing: 10
       anchors.fill: parent
 
-      MMIconCheckBoxVertical {
+      MMAccountComponents.MMIconCheckBoxVertical {
         checked: false
         sourceIcon: __style.archaeologyIcon
         text: "Archeology"
         bgColorIcon: __style.sandColor
       }
 
-      MMIconCheckBoxVertical {
+      MMAccountComponents.MMIconCheckBoxVertical {
         checked: true
         sourceIcon: __style.tractorIcon
         text: "Agriculture Long text"

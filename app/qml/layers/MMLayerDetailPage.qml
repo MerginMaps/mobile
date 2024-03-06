@@ -130,6 +130,8 @@ Page {
                 MMSwitch {
                   id: visibleSwitch
 
+                  uncheckedBgColor: __style.lightGreenColor
+
                   onReleased: function() {
                     __activeProject.switchLayerTreeNodeVisibility( layerDetailData.layerTreeNode )
                   }
