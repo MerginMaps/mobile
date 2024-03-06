@@ -575,7 +575,29 @@ Item {
       height: root.height
       width: root.width
 
-      onBack: {
+      activeWorkspaceId: __merginApi.userInfo.activeWorkspaceId
+
+      invitationsModel: MM.InvitationsProxyModel {
+        invitationsSourceModel: MM.InvitationsModel {
+          merginApi: __merginApi
+        }
+      }
+
+      workspacesModel: MM.WorkspacesProxyModel {
+        id: wsProxyModel
+
+        workspacesSourceModel: MM.WorkspacesModel {
+          merginApi: __merginApi
+        }
+      }
+
+      onWorkspaceClicked: ( workspaceId ) => { __merginApi.userInfo.setActiveWorkspace( workspaceId ) }
+
+      onInvitationClicked: ( uuid, accepted ) => { __merginApi.processInvitation( uuid, accepted ) }
+
+      onSearchTextChanged: ( searchText ) => { wsProxyModel.searchExpression = searchText }
+
+      onBackClicked: {
         stackView.popOnePageOrClose()
       }
 

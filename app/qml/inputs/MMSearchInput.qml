@@ -16,6 +16,9 @@ import "../components"
 MMBaseInput {
   id: root
 
+  // TODO: searchInput should have x mark on the right side to clear the search text
+  // ... and maybe inherit from MMTextInput?
+
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
   property bool allowTimer: false

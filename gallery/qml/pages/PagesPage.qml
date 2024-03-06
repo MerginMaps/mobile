@@ -16,6 +16,7 @@ import "../../app/qml"
 import "../../app/qml/project"
 import "../../app/qml/settings"
 import "../../app/qml/gps"
+import "../../app/qml/account"
 
 Page {
   id: root
@@ -72,6 +73,13 @@ Page {
           text: "MMProjectIssuesPage"
           onClicked: {
             stackview.push(projectIssuesPageComponent)
+          }
+        }
+
+        Button {
+          text: "MMSwitchWorkspacePage"
+          onClicked: {
+            stackview.push(switchWorkspacePageComponent)
           }
         }
       }
@@ -208,6 +216,29 @@ Page {
       onPrivacyPolicyClicked: console.log("onPrivacyPolicyClicked clicked")
       onTermsOfServiceClicked: console.log("onTermsOfServiceClicked clicked")
       onDiagnosticLogClicked: console.log("onDiagnosticLogClicked clicked")
+    }
+  }
+
+  Component {
+    id: switchWorkspacePageComponent
+
+    MMSwitchWorkspacePage {
+      id: switchWorkspacePanel
+
+      activeWorkspaceId: "aaa-111-ddd"
+
+      invitationsModel: ListModel {
+        ListElement { display: "Workspace-ABC"; whatsThis: "aaa-111-bbb" }
+        ListElement { display: "Workspace-EFG"; whatsThis: "aaa-111-bbb" }
+      }
+
+      workspacesModel: ListModel {
+        ListElement { display: "Workspace-123"; whatsThis: "aaa-111-ccc" }
+        ListElement { display: "Workspace-456"; whatsThis: "aaa-111-ddd" }
+      }
+
+      onBackClicked: { console.log("BACK") }
+      onCreateWorkspaceRequested: { console.log("CREATE WS") }
     }
   }
 }

@@ -89,6 +89,8 @@
         <file>../app/qml/account/components/MMAccountHeadItem.qml</file>
         <file>../app/qml/account/components/MMIconCheckBoxHorizontal.qml</file>
         <file>../app/qml/account/components/MMIconCheckBoxVertical.qml</file>
+        <file>../app/qml/account/components/MMWorkspaceDelegate.qml</file>
+        <file>../app/qml/account/components/MMWorkspaceInvitationDelegate.qml</file>
         <file>../app/qml/account/MMAccountPage.qml</file>
         <file>../app/qml/account/MMAcceptInvitationPage.qml</file>
         <file>../app/qml/account/MMCreateWorkspacePage.qml</file>
