@@ -186,6 +186,14 @@ Page {
           discardGeometryChangesDlg.open()
         }
       }
+
+      Button {
+        text: "removeReceiverDialog"
+
+        onClicked: {
+          removeReceiverDialog.open( testModelItem.providerId )
+        }
+      }
     }
   }
 
@@ -339,5 +347,20 @@ Page {
     id: discardGeometryChangesDlg
 
     state: "record"
+  }
+
+  Item {
+    id: testModelItem
+
+    property string providerId: "123"
+  }
+
+  MMProviderRemoveReceiverDialog {
+    id: removeReceiverDialog
+
+    function open( providerId ) {
+      this.providerId = providerId
+      visible = true
+    }
   }
 }
