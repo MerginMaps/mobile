@@ -32,6 +32,7 @@ set(MM_QML
     components/MMListDrawer.qml
     components/MMListDrawerItem.qml
     components/MMListFooterSpacer.qml
+    components/MMListSpacer.qml
     components/MMBusyIndicator.qml
     components/MMMenuDrawer.qml
     components/MMMessage.qml
@@ -45,6 +46,7 @@ set(MM_QML
     components/MMRadioButton.qml
     components/MMRoundButton.qml
     components/MMRoundLinkButton.qml
+    components/MMScrollView.qml
     components/MMSelectableToolbar.qml
     components/MMSelectableToolbarButton.qml
     components/MMShadow.qml

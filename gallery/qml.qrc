@@ -57,6 +57,7 @@
         <file>../app/qml/components/MMListDrawer.qml</file>
         <file>../app/qml/components/MMListDrawerItem.qml</file>
         <file>../app/qml/components/MMListFooterSpacer.qml</file>
+        <file>../app/qml/components/MMListSpacer.qml</file>
         <file>../app/qml/components/MMMorePhoto.qml</file>
         <file>../app/qml/components/MMPhoto.qml</file>
         <file>../app/qml/components/MMCheckBox.qml</file>
@@ -67,6 +68,7 @@
         <file>../app/qml/components/calendar/MMMonthGrid.qml</file>
         <file>../app/qml/components/calendar/MMAmPmSwitch.qml</file>
         <file>../app/qml/components/MMCalendarDrawer.qml</file>
+        <file>../app/qml/components/MMScrollView.qml</file>
         <file>../app/qml/components/MMSelectableToolbar.qml</file>
         <file>../app/qml/components/MMSelectableToolbarButton.qml</file>
         <file>../app/qml/components/MMWarningBubble.qml</file>
