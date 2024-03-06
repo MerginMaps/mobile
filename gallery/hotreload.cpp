@@ -70,10 +70,21 @@ void HotReload::startHotReload()
   _watcher = new QFileSystemWatcher( this );
   _watcher->addPath( "HotReload/qml" );
   _watcher->addPath( "HotReload/qml/Pages" );
-  _watcher->addPath( "HotReload/app/qml" );
+  _watcher->addPath( "HotReload/app/qml/account" );
+  _watcher->addPath( "HotReload/app/qml/account/components" );
   _watcher->addPath( "HotReload/app/qml/components" );
+  _watcher->addPath( "HotReload/app/qml/dialogs" );
   _watcher->addPath( "HotReload/app/qml/form" );
+  _watcher->addPath( "HotReload/app/qml/form/components" );
   _watcher->addPath( "HotReload/app/qml/form/editors" );
+  _watcher->addPath( "HotReload/app/qml/gps" );
+  _watcher->addPath( "HotReload/app/qml/inputs" );
+  _watcher->addPath( "HotReload/app/qml/layers" );
+  _watcher->addPath( "HotReload/app/qml/map" );
+  _watcher->addPath( "HotReload/app/qml/project" );
+  _watcher->addPath( "HotReload/app/qml/project/components" );
+  _watcher->addPath( "HotReload/app/qml/settings" );
+  _watcher->addPath( "HotReload/app/qml/settings/components" );
 
   // send signal for hot reloading
   connect( _watcher, &QFileSystemWatcher::directoryChanged, this, [this]( const QString & path )
