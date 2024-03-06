@@ -9,7 +9,6 @@
 
 import QtQuick
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
 import "."
 
 Rectangle {
