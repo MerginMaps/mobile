@@ -144,6 +144,7 @@ Drawer {
           wrapMode: Text.WordWrap
           lineHeight: 1.6
           padding: 20 * __dp
+          textFormat: Text.RichText
           onLinkActivated: function( link ) {
             Qt.openUrlExternally( link )
           }
