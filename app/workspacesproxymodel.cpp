@@ -32,6 +32,8 @@ void WorkspacesProxyModel::setSearchExpression( QString searchExpression )
   mSearchExpression = searchExpression;
   setFilterFixedString( mSearchExpression );
   emit searchExpressionChanged( mSearchExpression );
+  beginResetModel();
+  endResetModel();
 }
 
 void WorkspacesProxyModel::setWorkspacesSourceModel( WorkspacesModel *sourceModel )
