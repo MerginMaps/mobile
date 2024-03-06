@@ -21,10 +21,10 @@ Item {
   required property string text
   property string menuButtonRightText: ""
 
+  property var parentMenu // drawer to close
   property alias buttonIcon: icon
 
   property bool isMenuButton: false
-
   property int buttonSpacing: 5 * __dp
 
   height: isMenuButton ? __style.menuDrawerHeight/2 : __style.toolbarHeight
@@ -70,12 +70,17 @@ Item {
 
   // Menu button
   MMToolbarMenuButton {
+    id: menuButton
+
     width: control.width
     height: __style.menuDrawerHeight
     visible: control.isMenuButton
     iconSource: control.iconSource
     text: control.text
     rightText: control.menuButtonRightText
-    onClicked: control.clicked()
+    onClicked: {
+      parentMenu.close()
+      control.clicked()
+    }
   }
 }
