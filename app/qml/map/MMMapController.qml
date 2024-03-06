@@ -573,30 +573,13 @@ Item {
         onClicked: moreToolsMenu.close()
       }
 
-      MessageDialog {
+      MMDiscardGeometryChangesDialog {
         id: cancelEditDialog
 
-        title: qsTr( "Discard the changes?" )
-        text: {
-          if ( root.state === "edit" ) {
-            return qsTr( "Clicking ‘Yes’ discards your changes to the geometry. If you would like " +
-                        "to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar." )
-          }
-          else if ( root.state === "record" || root.state === "recordInLayer" ) {
-            return qsTr( "Clicking ‘Yes’ discards your new geometry and no feature will be saved. " +
-                        "If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ " +
-                        "in the toolbar." )
-          }
-          return ""
-        }
+        state: root.state
 
-        buttons: MessageDialog.Yes | MessageDialog.No
-
-        onButtonClicked: function(clickedButton) {
-          if ( clickedButton === MessageDialog.Yes ) {
-            recordingToolsLoader.item.discardChanges()
-          }
-          cancelEditDialog.close()
+        onDiscardChanges: {
+          recordingToolsLoader.item.discardChanges()
         }
       }
 

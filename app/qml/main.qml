@@ -736,19 +736,13 @@ ApplicationWindow {
     }
   }
 
-  MessageDialog {
+  MMProjectLoadErrorDialog {
     id: projectErrorDialog
 
-    title: qsTr("Failed to open the project")
-    buttons: MessageDialog.Close | MessageDialog.Help
-
-    onButtonClicked: function(button, role) {
-      if ( button === MessageDialog.Help ) {
-        Qt.openUrlExternally(__inputHelp.projectLoadingErrorHelpLink)
-      }
+    onClosed: {
+      console.log("working")
       projectLoadingPage.visible = false
       projectController.openPanel()
-      close()
     }
   }
 

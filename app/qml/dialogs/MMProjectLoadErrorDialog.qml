@@ -16,8 +16,8 @@ MMDrawerDialog {
   id: root
 
   picture: __style.negativeMMSymbolImage
-  bigTitle: qsTr( "PROJ Error" )
-  description: qsTr("Learn more about <a href='%1' style='color: %2;'>how to setup PROJ</a>.")
-  .arg(__inputHelp.howToSetupProj)
+  bigTitle: qsTr( "Failed to open the project" )
+  description: qsTr("Learn more about <a href='%1' style='color: %2;'>loading errors</a>.")
+  .arg(__inputHelp.projectLoadingErrorHelpLink)
   .arg(__style.forestColor)
 }

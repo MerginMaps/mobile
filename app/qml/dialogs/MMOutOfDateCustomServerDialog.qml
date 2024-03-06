@@ -17,18 +17,17 @@ MMDrawerDialog {
 
   signal ignoreClicked()
 
-  picture: __style.negativeMMSymbolImage
+  picture: __style.positiveMMSymbolImage
   bigTitle: qsTr( "Your server will soon be out of date" )
-  description: qsTr("Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.")
-  primaryButton: qsTr( "Learn more about how to migrate" )
-  secondaryButton: qsTr( "Ignore" )
+  description: qsTr("Please contact your server administrator to upgrade your server to the latest version. " +
+                    "Subsequent releases of our mobile app may not be compatible with your current server version. \n" +
+                    "Learn more about <a href='%1' style='color: %2;'>how to migrate</a>.")
+                    .arg( __inputHelp.migrationGuides )
+                    .arg( __style.forestColor )
+
+  primaryButton: qsTr( "Ignore" )
 
   onPrimaryButtonClicked: {
-    Qt.openUrlExternally( __inputHelp.migrationGuides )
-    close()
-  }
-
-  onSecondaryButtonClicked: {
     root.ignoreClicked()
     close()
   }

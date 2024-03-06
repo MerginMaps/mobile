@@ -80,6 +80,8 @@ set(MM_QML
     dialogs/MMFormDeleteFeatureDialog.qml
     dialogs/MMProjErrorDialog.qml
     dialogs/MMOutOfDateCustomServerDialog.qml
+    dialogs/MMDiscardGeometryChangesDialog.qml
+    dialogs/MMProjectLoadErrorDialog.qml
     form/MMFormPage.qml
     form/MMFormStackController.qml
     form/MMFormController.qml

@@ -144,5 +144,7 @@
         <file>../app/qml/dialogs/MMFormEditFailedDialog.qml</file>
         <file>../app/qml/dialogs/MMProjErrorDialog.qml</file>
         <file>../app/qml/dialogs/MMOutOfDateCustomServerDialog.qml</file>
+        <file>../app/qml/dialogs/MMProjectLoadErrorDialog.qml</file>
+        <file>../app/qml/dialogs/MMDiscardGeometryChangesDialog.qml</file>
     </qresource>
 </RCC>

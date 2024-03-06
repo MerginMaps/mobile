@@ -162,6 +162,30 @@ Page {
           projErrorDialog.open()
         }
       }
+
+      Button {
+        text: "outOfDateServerDialog"
+
+        onClicked: {
+          outOfDateServerDialog.open()
+        }
+      }
+
+      Button {
+        text: "projectLoadErrorDialog"
+
+        onClicked: {
+          projectLoadErrorDialog.open()
+        }
+      }
+
+      Button {
+        text: "discardGeometryChangesDlg"
+
+        onClicked: {
+          discardGeometryChangesDlg.open()
+        }
+      }
     }
   }
 
@@ -301,5 +325,19 @@ Page {
 
   MMProjErrorDialog {
     id: projErrorDialog
+  }
+
+  MMOutOfDateCustomServerDialog {
+    id: outOfDateServerDialog
+  }
+
+  MMProjectLoadErrorDialog {
+    id: projectLoadErrorDialog
+  }
+
+  MMDiscardGeometryChangesDialog {
+    id: discardGeometryChangesDlg
+
+    state: "record"
   }
 }
