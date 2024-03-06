@@ -28,6 +28,7 @@ set(MM_QML
     components/MMFeaturesListDrawer.qml
     components/MMHlineText.qml
     components/MMIcon.qml
+    components/MMInfoBox.qml
     components/MMLine.qml
     components/MMLink.qml
     components/MMLinkButton.qml
@@ -53,13 +54,11 @@ set(MM_QML
     components/MMSelectableToolbarButton.qml
     components/MMShadow.qml
     components/MMSwitch.qml
-    components/MMTextBubble.qml
     components/MMToolbar.qml
     components/MMToolbarButton.qml
     components/MMToolbarLongButton.qml
     components/MMToolbarMenuButton.qml
     components/MMTumbler.qml
-    components/MMWarningBubble.qml
     components/calendar/MMAmPmSwitch.qml
     components/calendar/MMDateTimePicker.qml
     components/calendar/MMDateTumbler.qml

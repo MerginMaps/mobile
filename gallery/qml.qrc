@@ -62,7 +62,7 @@
         <file>../app/qml/components/MMPhoto.qml</file>
         <file>../app/qml/components/MMCheckBox.qml</file>
         <file>../app/qml/components/MMHlineText.qml</file>
-        <file>../app/qml/components/MMTextBubble.qml</file>
+        <file>../app/qml/components/MMInfoBox.qml</file>
         <file>../app/qml/components/calendar/MMDateTimePicker.qml</file>
         <file>../app/qml/components/calendar/MMDayOfWeekRow.qml</file>
         <file>../app/qml/components/calendar/MMMonthGrid.qml</file>
@@ -71,7 +71,6 @@
         <file>../app/qml/components/MMScrollView.qml</file>
         <file>../app/qml/components/MMSelectableToolbar.qml</file>
         <file>../app/qml/components/MMSelectableToolbarButton.qml</file>
-        <file>../app/qml/components/MMWarningBubble.qml</file>
         <file>../app/qml/components/MMTumbler.qml</file>
         <file>../app/qml/components/calendar/MMTimeTumbler.qml</file>
         <file>../app/qml/components/calendar/MMDateTumbler.qml</file>

@@ -44,6 +44,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QFont p6 READ p6 CONSTANT )
     Q_PROPERTY( QFont p7 READ p7 CONSTANT )
 
+    Q_PROPERTY( double fontLineHeight24 READ fontLineHeight24 CONSTANT )
+
     // Colors - primary palette
     Q_PROPERTY( QColor grassColor READ grassColor CONSTANT )
     Q_PROPERTY( QColor forestColor READ forestColor CONSTANT )
@@ -251,6 +253,7 @@ class MMStyle: public QObject
     Q_PROPERTY( double margin6 READ margin6 CONSTANT )
     Q_PROPERTY( double margin8 READ margin8 CONSTANT )
     Q_PROPERTY( double margin12 READ margin12 CONSTANT )
+    Q_PROPERTY( double margin16 READ margin16 CONSTANT )
     Q_PROPERTY( double margin20 READ margin20 CONSTANT )
     Q_PROPERTY( double margin40 READ margin40 CONSTANT )
 
@@ -297,6 +300,8 @@ class MMStyle: public QObject
     QFont p5() {return fontFactory( 14, false );}
     QFont p6() {return fontFactory( 12, false );}
     QFont p7() {return fontFactory( 10, false );}
+
+    double fontLineHeight24() {return 24 * mDp;}
 
     QColor grassColor() {return QColor::fromString( "#73D19C" );}
     QColor forestColor() {return QColor::fromString( "#004C45" );}
@@ -494,6 +499,7 @@ class MMStyle: public QObject
     double margin6() {return 6 * mDp;}
     double margin8() {return 8 * mDp;}
     double margin12() {return 12 * mDp;}
+    double margin16() {return 16 * mDp;}
     double margin20() {return 20 * mDp;}
     double margin40() {return 40 * mDp;}
 

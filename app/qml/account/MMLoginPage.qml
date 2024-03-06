@@ -100,9 +100,15 @@ Page {
         horizontalAlignment: Text.AlignHCenter
       }
 
-      MMWarningBubble {
+      MMInfoBox {
         visible: root.warningMsg
+
         title: root.warningMsg
+        imageSource: __style.warnLogoImage
+
+        color: __style.nightColor
+        textColor: __style.whiteColor
+
         width: root.width - 2 * root.hPadding
       }
 

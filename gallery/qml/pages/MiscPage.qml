@@ -217,9 +217,9 @@ ScrollView {
     }
 
     GroupBox {
-      title: "MMTextBubble"
+      title: "MMInfoBox"
       background: Rectangle {
-        color: "gray"
+        color: __style.lightGreenColor
       }
       label: Label {
         color: "black"
@@ -230,32 +230,33 @@ ScrollView {
       Column {
         spacing: 20
         anchors.fill: parent
-        MMTextBubble {
+
+        MMInfoBox {
           width: page.width - 64
           title: "Tip from Mergin Maps"
           description: "A good candidate for a workspace name is the name of your team or organisation"
+          imageSource: __style.bubbleImage
         }
-      }
-    }
 
-    GroupBox {
-      title: "MMWarningBubble"
-      background: Rectangle {
-        color: "white"
-      }
-      label: Label {
-        color: "black"
-        text: parent.title
-        padding: 5
-      }
-
-      Column {
-        spacing: 20
-        anchors.fill: parent
-        MMWarningBubble {
+        MMInfoBox {
           width: page.width - 64
           title: "Server is broken, sorry"
           description: "Please wait for tomorrow"
+
+          color: __style.nightColor
+          textColor: __style.whiteColor
+
+          imageSource: __style.warnLogoImage
+        }
+
+        MMInfoBox {
+          width: page.width - 64
+          title: "Info box with a link!"
+          linkText: "Learn more"
+
+          imageSource: __style.noWorkspaceImage
+
+          onClicked: console.log("No workspaces brooo")
         }
       }
     }

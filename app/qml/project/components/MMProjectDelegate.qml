@@ -37,7 +37,7 @@ Rectangle {
   signal showChangesRequested()
 
   color: root.highlight ? __style.forestColor : __style.whiteColor
-  radius: 12 * __dp
+  radius: __style.radius12
   height: visible ? mainColumn.height : 0
 
   MouseArea {
