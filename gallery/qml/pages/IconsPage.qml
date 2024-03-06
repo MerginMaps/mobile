@@ -226,6 +226,44 @@ ScrollView {
           }
         }
       }
+
+      Column {
+        spacing: 5
+
+        GroupBox {
+          title: "MMIcon - do not color overlay"
+          background: Rectangle {
+            color: "white"
+            border.color: "gray"
+          }
+          label: Text {
+            color: "black"
+            text: parent.title
+            padding: 5
+          }
+
+          Column {
+            spacing: 5
+            Row {
+              anchors.horizontalCenter: parent.horizontalCenter
+              Repeater {
+                model: ["16px", "24px", "32px"]
+                delegate: Text {
+                  width: 50 * __dp
+                  height: 20
+                  text: modelData
+                  font.bold: true
+                }
+              }
+            }
+            IconLine { name: "lineLayerNoColorOverlayIcon"; source: __style.lineLayerNoColorOverlayIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            IconLine { name: "pointLayerNoColorOverlayIcon"; source: __style.pointLayerNoColorOverlayIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            IconLine { name: "polygonLayerNoColorOverlayIcon"; source: __style.polygonLayerNoColorOverlayIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            IconLine { name: "rasterLayerNoColorOverlayIcon"; source: __style.rasterLayerNoColorOverlayIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            IconLine { name: "tableLayerNoColorOverlayIcon"; source: __style.tableLayerNoColorOverlayIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+          }
+        }
+      }
     }
   }
 }

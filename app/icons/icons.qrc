@@ -41,6 +41,11 @@
         <file>Link.svg</file>
         <file>Linkedin.svg</file>
         <file>LocalChanges.svg</file>
+        <file>mIconLineLayer-nocoloroverlay.svg</file>
+        <file>mIconPointLayer-nocoloroverlay.svg</file>
+        <file>mIconPolygonLayer-nocoloroverlay.svg</file>
+        <file>mIconRasterLayer-nocoloroverlay.svg</file>
+        <file>mIconTableLayer-nocoloroverlay.svg</file>
         <file>MapThemes.svg</file>
         <file>Mastodon.svg</file>
         <file>Minus.svg</file>

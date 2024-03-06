@@ -1882,7 +1882,7 @@ QUrl InputUtils::loadIconFromLayer( QgsMapLayer *layer )
     return iconFromGeometry( geometry );
   }
   else
-    return MMStyle::rasterLayerImage();
+    return MMStyle::rasterLayerNoColorOverlayIcon();
 }
 
 QUrl InputUtils::loadIconFromFeature( QgsFeature feature )
@@ -1894,10 +1894,10 @@ QUrl InputUtils::iconFromGeometry( const Qgis::GeometryType &geometry )
 {
   switch ( geometry )
   {
-    case Qgis::GeometryType::Point: return MMStyle::pointLayerImage();
-    case Qgis::GeometryType::Line: return MMStyle::lineLayerImage();
-    case Qgis::GeometryType::Polygon: return MMStyle::polygonLayerImage();
-    default: return MMStyle::tableLayerImage();
+    case Qgis::GeometryType::Point: return MMStyle::pointLayerNoColorOverlayIcon();
+    case Qgis::GeometryType::Line: return MMStyle::lineLayerNoColorOverlayIcon();
+    case Qgis::GeometryType::Polygon: return MMStyle::polygonLayerNoColorOverlayIcon();
+    default: return MMStyle::tableLayerNoColorOverlayIcon();
   }
 }
 

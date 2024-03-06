@@ -642,28 +642,28 @@ void TestUtilsFunctions::testGeometryIcons()
 {
   QVector<QPair< QgsMapLayer *, QUrl > > testcases =
   {
-    { QgsMemoryProviderUtils::createMemoryLayer( "P1", QgsFields(), Qgis::WkbType::Point ), MMStyle::pointLayerImage() },
-    { QgsMemoryProviderUtils::createMemoryLayer( "P2", QgsFields(), Qgis::WkbType::PointZ ), MMStyle::pointLayerImage() },
-    { QgsMemoryProviderUtils::createMemoryLayer( "P3", QgsFields(), Qgis::WkbType::PointM ), MMStyle::pointLayerImage() },
-    { QgsMemoryProviderUtils::createMemoryLayer( "P4", QgsFields(), Qgis::WkbType::PointZM ), MMStyle::pointLayerImage() },
-    { QgsMemoryProviderUtils::createMemoryLayer( "P5", QgsFields(), Qgis::WkbType::MultiPoint ), MMStyle::pointLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P1", QgsFields(), Qgis::WkbType::Point ), MMStyle::pointLayerNoColorOverlayIcon() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P2", QgsFields(), Qgis::WkbType::PointZ ), MMStyle::pointLayerNoColorOverlayIcon() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P3", QgsFields(), Qgis::WkbType::PointM ), MMStyle::pointLayerNoColorOverlayIcon() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P4", QgsFields(), Qgis::WkbType::PointZM ), MMStyle::pointLayerNoColorOverlayIcon() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "P5", QgsFields(), Qgis::WkbType::MultiPoint ), MMStyle::pointLayerNoColorOverlayIcon() },
 
-    { QgsMemoryProviderUtils::createMemoryLayer( "L1", QgsFields(), Qgis::WkbType::LineString ), MMStyle::lineLayerImage() },
-    { QgsMemoryProviderUtils::createMemoryLayer( "L2", QgsFields(), Qgis::WkbType::LineStringZ ), MMStyle::lineLayerImage() },
-    { QgsMemoryProviderUtils::createMemoryLayer( "L3", QgsFields(), Qgis::WkbType::LineStringM ), MMStyle::lineLayerImage() },
-    { QgsMemoryProviderUtils::createMemoryLayer( "L4", QgsFields(), Qgis::WkbType::LineStringZM ), MMStyle::lineLayerImage() },
-    { QgsMemoryProviderUtils::createMemoryLayer( "L5", QgsFields(), Qgis::WkbType::MultiLineString ), MMStyle::lineLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L1", QgsFields(), Qgis::WkbType::LineString ), MMStyle::lineLayerNoColorOverlayIcon() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L2", QgsFields(), Qgis::WkbType::LineStringZ ), MMStyle::lineLayerNoColorOverlayIcon() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L3", QgsFields(), Qgis::WkbType::LineStringM ), MMStyle::lineLayerNoColorOverlayIcon() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L4", QgsFields(), Qgis::WkbType::LineStringZM ), MMStyle::lineLayerNoColorOverlayIcon() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "L5", QgsFields(), Qgis::WkbType::MultiLineString ), MMStyle::lineLayerNoColorOverlayIcon() },
 
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO1", QgsFields(), Qgis::WkbType::Polygon ), MMStyle::polygonLayerImage() },
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO2", QgsFields(), Qgis::WkbType::PolygonZ ), MMStyle::polygonLayerImage() },
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO3", QgsFields(), Qgis::WkbType::PolygonM ), MMStyle::polygonLayerImage() },
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO4", QgsFields(), Qgis::WkbType::PolygonZM ), MMStyle::polygonLayerImage() },
-    { QgsMemoryProviderUtils::createMemoryLayer( "PO5", QgsFields(), Qgis::WkbType::MultiPolygon ), MMStyle::polygonLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO1", QgsFields(), Qgis::WkbType::Polygon ), MMStyle::polygonLayerNoColorOverlayIcon() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO2", QgsFields(), Qgis::WkbType::PolygonZ ), MMStyle::polygonLayerNoColorOverlayIcon() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO3", QgsFields(), Qgis::WkbType::PolygonM ), MMStyle::polygonLayerNoColorOverlayIcon() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO4", QgsFields(), Qgis::WkbType::PolygonZM ), MMStyle::polygonLayerNoColorOverlayIcon() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "PO5", QgsFields(), Qgis::WkbType::MultiPolygon ), MMStyle::polygonLayerNoColorOverlayIcon() },
 
-    { QgsMemoryProviderUtils::createMemoryLayer( "N1", QgsFields(), Qgis::WkbType::Unknown ), MMStyle::tableLayerImage() },
-    { QgsMemoryProviderUtils::createMemoryLayer( "N2", QgsFields(), Qgis::WkbType::NoGeometry ), MMStyle::tableLayerImage() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "N1", QgsFields(), Qgis::WkbType::Unknown ), MMStyle::tableLayerNoColorOverlayIcon() },
+    { QgsMemoryProviderUtils::createMemoryLayer( "N2", QgsFields(), Qgis::WkbType::NoGeometry ), MMStyle::tableLayerNoColorOverlayIcon() },
 
-    { new QgsRasterLayer(), MMStyle::rasterLayerImage() }
+    { new QgsRasterLayer(), MMStyle::rasterLayerNoColorOverlayIcon() }
   };
 
   for ( const auto &test : testcases )
@@ -696,10 +696,10 @@ void TestUtilsFunctions::testGeometryIcons()
 
   QVector< QPair< QgsFeature, QUrl > > testcases_features =
   {
-    { pointFeature, MMStyle::pointLayerImage() },
-    { lineFeature, MMStyle::lineLayerImage() },
-    { polygonFeature, MMStyle::polygonLayerImage() },
-    { emptyFeature, MMStyle::tableLayerImage() }
+    { pointFeature, MMStyle::pointLayerNoColorOverlayIcon() },
+    { lineFeature, MMStyle::lineLayerNoColorOverlayIcon() },
+    { polygonFeature, MMStyle::polygonLayerNoColorOverlayIcon() },
+    { emptyFeature, MMStyle::tableLayerNoColorOverlayIcon() }
   };
 
   for ( const auto &test : testcases_features )

@@ -42,16 +42,16 @@ QVariant LayersModel::data( const QModelIndex &index, int role ) const
         Qgis::GeometryType type = vectorLayer->geometryType();
         switch ( type )
         {
-          case Qgis::GeometryType::Point: return MMStyle::pointLayerImage();
-          case Qgis::GeometryType::Line: return MMStyle::lineLayerImage();
-          case Qgis::GeometryType::Polygon: return MMStyle::polygonLayerImage();
+          case Qgis::GeometryType::Point: return MMStyle::pointLayerNoColorOverlayIcon();
+          case Qgis::GeometryType::Line: return MMStyle::lineLayerNoColorOverlayIcon();
+          case Qgis::GeometryType::Polygon: return MMStyle::polygonLayerNoColorOverlayIcon();
 
           case Qgis::GeometryType::Unknown: // fall through
-          case Qgis::GeometryType::Null: return MMStyle::tableLayerImage();
+          case Qgis::GeometryType::Null: return MMStyle::tableLayerNoColorOverlayIcon();
         }
         return QVariant();
       }
-      else return MMStyle::rasterLayerImage();
+      else return MMStyle::rasterLayerNoColorOverlayIcon();
     }
     case LayerIdRole: return layer->id();
   }

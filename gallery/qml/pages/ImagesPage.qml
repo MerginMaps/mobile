@@ -121,27 +121,5 @@ ScrollView {
         Column { Image { source: __style.crosshairPlusImage } Text { text: "crosshairPlusImage" } }
       }
     }
-
-    GroupBox {
-      title: "Layers (QGIS)"
-      background: Rectangle {
-        color: __style.lightGreenColor
-        border.color: "gray"
-      }
-      label: Label {
-        color: "black"
-        text: parent.title
-        padding: 5
-      }
-
-      contentData: Column {
-        spacing: 10
-        Column { Image { sourceSize.width:32; source: __style.pointLayerImage } Text { text: "pointLayerImage" } }
-        Column { Image { sourceSize.width:32; source: __style.lineLayerImage } Text { text: "lineLayerImage" } }
-        Column { Image { sourceSize.width:32; source: __style.polygonLayerImage } Text { text: "polygonLayerImage" } }
-        Column { Image { sourceSize.width:32; source: __style.rasterLayerImage } Text { text: "rasterLayerImage" } }
-        Column { Image { sourceSize.width:32; source: __style.tableLayerImage } Text { text: "tableLayerImage" } }
-      }
-    }
   }
 }
