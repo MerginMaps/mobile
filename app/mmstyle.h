@@ -476,7 +476,7 @@ class MMStyle: public QObject
       }
       else
       {
-        return 68 * mDp;
+        return 58 * mDp;
       }
     }
     double menuDrawerHeight() {return 67 * mDp;}
