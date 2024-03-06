@@ -44,6 +44,7 @@ set(MM_QML
     components/MMPage.qml
     components/MMPageHeader.qml
     components/MMPhoto.qml
+    components/MMPhotoAttachment.qml
     components/MMProgressBar.qml
     components/MMRadioButton.qml
     components/MMRoundButton.qml
