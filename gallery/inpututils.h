@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QDebug>
-
 #include "enums.h"
 
 class InputUtils: public QObject
@@ -14,8 +13,8 @@ class InputUtils: public QObject
     explicit InputUtils( QObject *parent = nullptr ) {}
 
     Q_INVOKABLE bool acquireCameraPermission() { return true; }
-    Q_INVOKABLE static QString fieldType( const QObject &field ) { return "QDate"; }
-    Q_INVOKABLE static QString dateTimeFieldFormat( const QString &fieldFormat ) { return "QDateTime"; }
+    Q_INVOKABLE static QString fieldType( const QString &field ) { return "QString"; }
+    Q_INVOKABLE static QString dateTimeFieldFormat( const QString &fieldFormat ) { return "QString"; }
     Q_INVOKABLE bool fileExists( const QString &path ) { return false; }
     Q_INVOKABLE static QString resolveTargetDir( const QString &homePath, const QVariantMap &config, const QString &pair, QString activeProject ) { return ""; }
     Q_INVOKABLE static QString resolvePrefixForRelativePath( int relativeStorageMode, const QString &homePath, const QString &targetDir ) { return ""; }

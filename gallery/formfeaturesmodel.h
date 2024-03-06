@@ -15,6 +15,7 @@
 #include <QObject>
 #include <QString>
 #include <QList>
+#include <QJSValue>
 
 /**
  * Mockup of RelationFeaturesModel and RelationReferenceFeaturesModel class for gallery
@@ -26,8 +27,8 @@ class FormFeaturesModel : public QAbstractListModel
     Q_PROPERTY( /*QgsRelation*/ QString relation READ relation WRITE setRelation NOTIFY relationChanged )
     Q_PROPERTY( QString homePath READ homePath WRITE setHomePath NOTIFY homePathChanged )
     Q_PROPERTY( /*FeatureLayerPair*/ QString parentFeatureLayerPair READ parentFeatureLayerPair WRITE setParentFeatureLayerPair NOTIFY parentFeatureLayerPairChanged )
-    Q_PROPERTY( /*QgsProject */ QString project READ project WRITE setProject NOTIFY projectChanged )
-    Q_PROPERTY( QString config READ config WRITE setConfig NOTIFY configChanged )
+    Q_PROPERTY( /*QgsProject */ QJSValue project READ project WRITE setProject NOTIFY projectChanged )
+    Q_PROPERTY( QJSValue config READ config WRITE setConfig NOTIFY configChanged )
 
   public:
 
@@ -120,17 +121,18 @@ class FormFeaturesModel : public QAbstractListModel
     void setParentFeatureLayerPair( QString pair ) { mParentFeatureLayerPair = pair; emit parentFeatureLayerPairChanged( pair ); }
     void setRelation( QString relation ) {mRelation = relation; emit relationChanged( mRelation );}
 
+    Q_INVOKABLE QString attributeFromForeignKey( QString , QString ) const { return "fk-title"; }
     QString parentFeatureLayerPair() const {return mParentFeatureLayerPair;}
     QString relation() const {return mRelation;}
 
     QString homePath() const {return mHomePath;}
     void setHomePath( const QString &homePath ) {mHomePath = homePath; emit homePathChanged();}
 
-    QString project() const {return mProject;}
-    void setProject( const QString &project ) {mProject = project; emit projectChanged();}
+    QJSValue project() const {return mProject;}
+    void setProject( const QJSValue &project ) {mProject = project; emit projectChanged();}
 
-    QString config() const {return mConfig;}
-    void setConfig( const QString &project ) {mConfig = project; emit configChanged();}
+    QJSValue config() const {return mConfig;}
+    void setConfig( const QJSValue &config ) {mConfig = config; emit configChanged();}
 
   signals:
     void parentFeatureLayerPairChanged( QString pair );
@@ -174,8 +176,8 @@ class FormFeaturesModel : public QAbstractListModel
     QString mRelation; // associated relation
     QString mParentFeatureLayerPair; // parent feature (with relation widget in form)
     QString mHomePath;
-    QString mProject;
-    QString mConfig;
+    QJSValue mProject;
+    QJSValue mConfig;
 
     int mPhotoIndex = -1;
     int mRows = 10;

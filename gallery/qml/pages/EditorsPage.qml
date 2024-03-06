@@ -12,7 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qml/inputs"
-import "../../app/qml/form/editors"
+import "../../app/qml/form/editors" as MMFormEditors
 import "../../app/qml/components"
 import "../"
 
@@ -72,7 +72,7 @@ ScrollView {
           height: relationEditor.height
           fieldTitle: "MMFormRelationEditor"
 
-          MMFormRelationEditor {
+          MMFormEditors.MMFormRelationEditor {
             id: relationEditor
             width: parent.width
 
@@ -91,7 +91,7 @@ ScrollView {
           height: relationEditor.height
           fieldTitle: "MMFormRelationReferenceEditor"
 
-          MMFormRelationReferenceEditor {
+          MMFormEditors.MMFormRelationReferenceEditor {
             id: relationReferenceEditor
             width: parent.width
             _fieldValue: "feature1"
@@ -107,7 +107,7 @@ ScrollView {
           height: galleryEditor.height
           fieldTitle: "MMFormGalleryEditor"
 
-          MMFormGalleryEditor {
+          MMFormEditors.MMFormGalleryEditor {
             id: galleryEditor
             width: parent.width
 
@@ -129,10 +129,12 @@ ScrollView {
           fieldConfig: ({Min:-100, Max: 100, Suffix: "s", Precision: 1})
           fieldTitle: "MMFormSliderEditor"
 
-          MMFormSliderEditor {
+          MMFormEditors.MMFormSliderEditor {
             id: sliderEditor
+
             width: parent.width
-            onEditorValueChanged: function(newValue, isNull ) { parent.fieldValue = newValue }
+
+            onEditorValueChanged: function(newValue, isNull) { console.log("new value: " + newValue) }
           }
         }
 
@@ -144,10 +146,12 @@ ScrollView {
           fieldConfig: ({Min: 1.0, Max: 3.0, Precition: 1, Suffix: "s.", Step: 0.1})
           fieldTitle: "MMFormNumberEditor"
 
-          MMFormNumberEditor {
+          MMFormEditors.MMFormNumberEditor {
             id: numberEditor
+
             width: parent.width
-            onEditorValueChanged: function(newValue, isNull) { parent.fieldValue = newValue }
+
+            onEditorValueChanged: function(newValue, isNull) { console.log("new value: " + newValue) }
           }
         }
 
@@ -157,11 +161,13 @@ ScrollView {
 
           fieldTitle: "MMFormScannerEditor"
 
-          MMFormScannerEditor {
+          MMFormEditors.MMFormScannerEditor {
             id: scannerEditor
+
             placeholderText: "QR code"
             width: parent.width
-            onEditorValueChanged: function(newValue, isNull) { parent.fieldValue = newValue }
+
+            onEditorValueChanged: function(newValue, isNull) { console.log("new value: " + newValue) }
           }
         }
 
@@ -172,7 +178,7 @@ ScrollView {
           fieldConfig: ({RelativeStorage: 0})
           fieldTitle: "MMFormPhotoEditor"
 
-          MMFormPhotoEditor {
+          MMFormEditors.MMFormPhotoEditor {
             id: photoEditor
             width: parent.width
 
@@ -187,7 +193,7 @@ ScrollView {
 
           fieldTitle: "MMFormTextMultilineEditor"
 
-          MMFormTextMultilineEditor {
+          MMFormEditors.MMFormTextMultilineEditor {
             id: textMultilineEditor
             placeholderText: "Place for multi row text"
             width: parent.width
@@ -201,7 +207,7 @@ ScrollView {
           fieldConfig: ({ CheckedState: "checked", UncheckedState: "unchecked"})
           fieldTitle: "MMFormSwitchEditor"
 
-          MMFormSwitchEditor {
+          MMFormEditors.MMFormSwitchEditor {
             id: switchEditor
             width: parent.width
           }
@@ -211,21 +217,23 @@ ScrollView {
           width: parent.width
           height: dateTimeCalendar.height
           fieldTitle: "MMFormGalleryEditor"
+          fieldValue: "2013-09-17"
+          fieldConfig: ({
+            field_format: "yyyy-MM-dd",
+            display_format: "yyyy-MM-dd"
+          })
+          field: ""
 
-          MMFormCalendarEditor {
+          MMFormEditors.MMFormCalendarEditor {
             id: dateTimeCalendar
+
             title: "Date & Time"
             placeholderText: "YYYY/MM/DD HH:MM"
             enabled: checkbox.checked
             width: parent.width
             warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
 
-            dateTime: new Date()
-            fieldIsDate: false
-            includesTime: true
-            includesDate: true
-
-            //onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "yyyy/MM/dd hh:mm") }
+            onEditorValueChanged: function(newValue, isNull) { console.log("new value: " + newValue) }
           }
         }
 
@@ -233,9 +241,16 @@ ScrollView {
           width: parent.width
           height: dateCalendar.height
           fieldTitle: "MMFormGalleryEditor"
+          fieldValue: "2013-09-17"
+          fieldConfig: ({
+            field_format: "yyyy-MM-dd",
+            display_format: "yyyy-MM-dd"
+          })
+          field: ""
 
-          MMFormCalendarEditor {
+          MMFormEditors.MMFormCalendarEditor {
             id: dateCalendar
+
             title: "Date"
             placeholderText: "YYYY/MM/DD"
             enabled: checkbox.checked
@@ -247,7 +262,7 @@ ScrollView {
             includesTime: false
             includesDate: true
 
-            //onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "yyyy/MM/dd") }
+            onEditorValueChanged: function(newValue, isNull) { console.log("new value: " + newValue) }
           }
         }
 
@@ -255,8 +270,14 @@ ScrollView {
           width: parent.width
           height: timeCalendar.height
           fieldTitle: "MMFormGalleryEditor"
+          fieldValue: "2013-09-17"
+          fieldConfig: ({
+            field_format: "yyyy-MM-dd",
+            display_format: "yyyy-MM-dd"
+          })
+          field: ""
 
-          MMFormCalendarEditor {
+          MMFormEditors.MMFormCalendarEditor {
             id: timeCalendar
             title: "Time"
             placeholderText: "HH:MM:SS"
@@ -270,7 +291,7 @@ ScrollView {
             includesDate: false
             showSeconds: true
 
-            //onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "hh:mm:ss") }
+            onEditorValueChanged: function(newValue, isNull) { console.log("new value: " + newValue) }
           }
         }
 
@@ -285,7 +306,7 @@ ScrollView {
           fieldConfig: ({IsHLine: true})
           fieldTitle: "title not shown for spacer"
 
-          MMFormSpacer {
+          MMFormEditors.MMFormSpacer {
             id: spacer2
             width: parent.width
           }
@@ -308,7 +329,7 @@ ScrollView {
           fieldConfig: ({UseHtml: false})
           fieldTitle: ""
 
-          MMFormRichTextViewer {
+          MMFormEditors.MMFormRichTextViewer {
             id: richTextViewer
             width: parent.width
           }
