@@ -71,7 +71,7 @@ CheckBox {
   }
 
   background: Rectangle {
-    radius: __style.inputRadius
+    radius: __style.radius12
     color: control.checked ? __style.forestColor: __style.whiteColor
   }
 }

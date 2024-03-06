@@ -106,7 +106,7 @@ Page {
               height: __style.row49
 
               color: __style.whiteColor
-              radius: __style.inputRadius
+              radius: __style.radius12
 
               RowLayout {
                 id: visibleSwitchContent
@@ -171,7 +171,7 @@ Page {
               height: parent.height - symbologyTitle.height
 
               color: __style.whiteColor
-              radius: __style.inputRadius
+              radius: __style.radius12
 
               Item {
                 height: parent.height - 2 * legendWrapper.border
@@ -223,7 +223,7 @@ Page {
               height: 1.5 * __style.row63
 
               color: __style.whiteColor
-              radius: __style.inputRadius
+              radius: __style.radius12
 
               Item {
                 height: parent.height - 2 * layerAttribution.border

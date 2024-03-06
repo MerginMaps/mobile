@@ -28,7 +28,7 @@ Item {
     border.width: 2 * __dp
     border.color: __style.transparentColor
     color: __style.whiteColor
-    radius: __style.inputRadius
+    radius: __style.radius12
   }
 
   Text {

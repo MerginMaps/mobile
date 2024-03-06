@@ -26,7 +26,7 @@ Item {
     width: root.width
     height: row.height
     color: __style.nightColor
-    radius: __style.inputRadius
+    radius: __style.radius12
   }
 
   Row {
