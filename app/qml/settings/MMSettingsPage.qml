@@ -28,14 +28,10 @@ MMPage {
 
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
-  pageContent: ScrollView {
+  pageContent: MMScrollView {
 
     width: parent.width
     height: parent.height
-
-    contentWidth: availableWidth // to only scroll vertically
-    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
     Column {
       width: parent.width
