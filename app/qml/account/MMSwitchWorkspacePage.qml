@@ -15,233 +15,168 @@ import mm 1.0 as MM
 
 import "../inputs"
 import "../components"
+import "./components" as MMAccountComponents
 
-Page {
+MMPage {
   id: root
 
-  signal back
+  required property var invitationsModel // MM.InvitationsProxyModel
+  required property var workspacesModel // MM.WorkspacesProxyModel
+
+  property int activeWorkspaceId
+
+  signal workspaceClicked( int workspaceId )
+  signal invitationClicked( string uuid, bool accepted )
+  signal searchTextChanged( string text )
+
   signal createWorkspaceRequested()
 
-  header: MMPageHeader {
-    width: root.width
-    title: qsTr( "Select Workspace" )
-    onBackClicked: root.back()
+  pageHeader.title: qsTr( "Select workspace" )
 
-    backVisible: true
-    color: __style.lightGreenColor
+  pageSpacing: __style.spacing20
+  pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
-    rightItemContent: MMRoundButton {
+  pageHeader.rightItemContent: MMRoundButton {
 
-      anchors.verticalCenter: parent.verticalCenter
+    anchors.verticalCenter: parent.verticalCenter
 
-      iconSource: __style.addIcon
-      iconColor: __style.forestColor
+    iconSource: __style.addIcon
+    iconColor: __style.forestColor
 
-      bgndColor: __style.grassColor
-      bgndHoverColor: __style.mediumGreenColor
+    bgndColor: __style.grassColor
+    bgndHoverColor: __style.mediumGreenColor
 
-      onClicked: root.createWorkspaceRequested()
-    }
+    onClicked: root.createWorkspaceRequested()
   }
 
-  background: Rectangle { color: __style.lightGreenColor }
+  pageContent: Item {
 
-  MMSearchInput {
-    id: searchBar
+    width: parent.width
+    height: parent.height
 
-    anchors {
-      top: parent.top
-      topMargin: __style.margin20
-      left: parent.left
-      leftMargin: __style.pageMargins
-      right: parent.right
-      rightMargin: __style.pageMargins
+    MMSearchInput {
+      id: searchBar
+
+      width: parent.width
+
+      placeholderText: qsTr( "Search" ) + "..."
+
+      onSearchTextChanged: function( searchText ) { root.searchTextChanged( searchText ) }
     }
 
-    onSearchTextChanged: function( searchText ) {
-      wsProxyModel.searchExpression = searchText
-    }
-  }
+    MMScrollView {
 
-  ScrollView {
-
-    anchors {
-      top: searchBar.bottom
-      topMargin: __style.margin40
-      left: parent.left
-      leftMargin: __style.pageMargins
-      right: parent.right
-      rightMargin: __style.pageMargins
-    }
-
-    contentWidth: availableWidth // only scroll vertically
-
-    ColumnLayout {
       anchors {
-        fill: parent
+        top: searchBar.bottom
+        topMargin: __style.margin20
+        left: parent.left
+        right: parent.right
+        bottom: parent.bottom
       }
 
-      // invitations
-      Label {
-        Layout.fillWidth: true
-        Layout.preferredHeight: __style.row24
+      Column {
+        width: parent.width
+        height: childrenRect.height
 
-        text: qsTr("You have a pending invitation")
+        spacing: 0
 
-        font: __style.p6
-        color: __style.nightColor
+        MMListSpacer { height: __style.margin20 }
 
-        wrapMode: Text.Wrap
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
+        Column {
+          id: invitationsGroup
 
-        visible: invRepeater.count > 0
-      }
+          width: parent.width
+          height: childrenRect.height
 
-      Repeater {
-        id: invRepeater
+          visible: invRepeater.count > 0 && !searchBar.text
 
-        model: MM.InvitationsProxyModel {
-          invitationsSourceModel: MM.InvitationsModel {
-            merginApi: __merginApi
+          Text {
+            text: qsTr( "Pending invitations" )
+
+            width: parent.width
+            height: paintedHeight
+            elide: Text.ElideRight
+
+            color: __style.nightColor
+            font: __style.p6
           }
-        }
 
-        delegate: Rectangle {
-          id: invDelegate
+          MMListSpacer { height: __style.margin6 }
 
-          Layout.fillWidth: true
-          Layout.preferredHeight: __style.row80
+          MMLine {}
 
-          border.color: __style.whiteColor
-          radius: __style.inputRadius
+          MMListSpacer { height: __style.margin20 }
 
-          ColumnLayout {
-            anchors.fill: parent
-            spacing: 0
+          Column {
+            width: parent.width
+            height: childrenRect.height
 
-            Label {
-              text: model.display
+            spacing: __style.spacing12
 
-              Layout.fillWidth: true
-              Layout.preferredHeight: parent.height / 2
+            Repeater {
+              id: invRepeater
 
-              wrapMode: Text.Wrap
-              color: __style.nightColor
-              font: __style.t3
+              model: root.invitationsModel
 
-              horizontalAlignment: Text.AlignHCenter
-              verticalAlignment: Text.AlignVCenter
-            }
+              delegate: MMAccountComponents.MMWorkspaceInvitationDelegate {
+                width: parent.width
 
-            RowLayout {
+                text: model.display
 
-              Layout.fillWidth: true
-              Layout.preferredHeight: __style.row40
-              spacing: __style.margin12
-
-              MMRoundButton {
-                // Reject
-
-                Layout.preferredWidth: invDelegate.width / 2
-                Layout.preferredHeight: __style.row40
-
-                iconSource: __style.closeIcon
-                iconColor: __style.grapeColor
-
-                bgndColor: __style.negativeColor
-
-                onClicked: {
-                  __merginApi.processInvitation( model.whatsThis, false )
-                }
-              }
-
-              MMRoundButton {
-                // Accept
-
-                Layout.preferredWidth: invDelegate.width / 2
-                Layout.preferredHeight: __style.row40
-
-                iconSource: __style.checkmarkIcon
-                iconColor: __style.forestColor
-
-                bgndColor: __style.positiveColor
-
-                onClicked: {
-                  __merginApi.processInvitation( model.whatsThis, true )
-                }
+                onAccepted: root.invitationClicked( model.whatsThis, true )
+                onRejected: root.invitationClicked( model.whatsThis, false )
               }
             }
           }
         }
-      }
 
-      // workspaces
-      Label {
-        Layout.fillWidth: true
-        Layout.topMargin: __style.margin40
-        Layout.preferredHeight: __style.row24
+        MMListSpacer { height: __style.margin20 }
 
-        text: qsTr("Workspaces")
+        Column {
+          // workspace group
 
-        font: __style.p6
-        color: __style.nightColor
+          width: parent.width
+          height: childrenRect.height
 
-        wrapMode: Text.Wrap
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
+          Text {
+            text: qsTr( "Your workspaces" )
 
-        visible: invRepeater.count > 0
-      }
+            width: parent.width
+            height: paintedHeight
+            elide: Text.ElideRight
 
-      Repeater {
-        model: MM.WorkspacesProxyModel {
-          id: wsProxyModel
-
-          workspacesSourceModel: MM.WorkspacesModel {
-            merginApi: __merginApi
-          }
-        }
-
-        delegate: Rectangle {
-
-          property bool isActive: model.whatsThis === __merginApi.userInfo.activeWorkspaceId
-
-          Layout.fillWidth: true
-          Layout.preferredHeight: __style.row40
-
-          radius: __style.inputRadius
-          color: isActive ? __style.forestColor : __style.whiteColor
-
-          ColumnLayout {
-            anchors.fill: parent
-            spacing: 0
-
-            Label {
-              text: model.display
-
-              Layout.fillWidth: true
-              Layout.leftMargin: __style.margin12
-              Layout.fillHeight: true
-
-              wrapMode: Text.Wrap
-              color: isActive ? __style.whiteColor : __style.nightColor
-              font: __style.t3
-
-              horizontalAlignment: Text.AlignLeft
-              verticalAlignment: Text.AlignVCenter
-            }
+            color: __style.nightColor
+            font: __style.p6
           }
 
-          MouseArea {
-            anchors.fill: parent
-            onClicked: function( mouse ) {
-              mouse.accepted = true
-              __merginApi.userInfo.setActiveWorkspace( model.whatsThis )
-              root.back()
+          MMListSpacer { height: __style.margin6 }
+
+          MMLine {}
+
+          MMListSpacer { height: __style.margin20 }
+
+          Column {
+            width: parent.width
+            height: childrenRect.height
+
+            spacing: __style.spacing12
+
+            Repeater {
+              model: root.workspacesModel
+
+              delegate: MMAccountComponents.MMWorkspaceDelegate {
+                width: parent.width
+
+                workspaceName: model.display
+                isHighlighted: model.whatsThis === root.activeWorkspaceId
+
+                onClicked: root.workspaceClicked( model.whatsThis )
+              }
             }
           }
         }
+
+        MMListFooterSpacer {}
       }
     }
   }

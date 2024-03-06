@@ -57,6 +57,7 @@
         <file>../app/qml/components/MMListDrawer.qml</file>
         <file>../app/qml/components/MMListDrawerItem.qml</file>
         <file>../app/qml/components/MMListFooterSpacer.qml</file>
+        <file>../app/qml/components/MMListSpacer.qml</file>
         <file>../app/qml/components/MMMorePhoto.qml</file>
         <file>../app/qml/components/MMPhoto.qml</file>
         <file>../app/qml/components/MMCheckBox.qml</file>
@@ -67,6 +68,7 @@
         <file>../app/qml/components/calendar/MMMonthGrid.qml</file>
         <file>../app/qml/components/calendar/MMAmPmSwitch.qml</file>
         <file>../app/qml/components/MMCalendarDrawer.qml</file>
+        <file>../app/qml/components/MMScrollView.qml</file>
         <file>../app/qml/components/MMSelectableToolbar.qml</file>
         <file>../app/qml/components/MMSelectableToolbarButton.qml</file>
         <file>../app/qml/components/MMWarningBubble.qml</file>
@@ -87,6 +89,8 @@
         <file>../app/qml/account/components/MMAccountHeadItem.qml</file>
         <file>../app/qml/account/components/MMIconCheckBoxHorizontal.qml</file>
         <file>../app/qml/account/components/MMIconCheckBoxVertical.qml</file>
+        <file>../app/qml/account/components/MMWorkspaceDelegate.qml</file>
+        <file>../app/qml/account/components/MMWorkspaceInvitationDelegate.qml</file>
         <file>../app/qml/account/MMAccountPage.qml</file>
         <file>../app/qml/account/MMAcceptInvitationPage.qml</file>
         <file>../app/qml/account/MMCreateWorkspacePage.qml</file>

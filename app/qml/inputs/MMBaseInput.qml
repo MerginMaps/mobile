@@ -38,7 +38,7 @@ Item {
   property real contentItemHeight: 50 * __dp
 
   property real spacing: 15 * __dp
-  property real radius: __style.inputRadius
+  property real radius: __style.radius12
 
   width: parent.width
   height: mainColumn.height

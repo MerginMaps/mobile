@@ -26,7 +26,7 @@ Item {
     width: root.width
     height: row.height
     color: root.bgColor
-    radius: __style.inputRadius
+    radius: __style.radius12
   }
 
   RowLayout {
