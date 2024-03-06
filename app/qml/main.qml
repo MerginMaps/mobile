@@ -740,7 +740,6 @@ ApplicationWindow {
     id: projectErrorDialog
 
     onClosed: {
-      console.log("working")
       projectLoadingPage.visible = false
       projectController.openPanel()
     }
