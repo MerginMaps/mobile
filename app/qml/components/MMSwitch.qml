@@ -11,30 +11,37 @@ import QtQuick
 import QtQuick.Controls
 
 Switch {
-  id: control
+  id: root
+
+  property color uncheckedBgColor: __style.whiteColor
+  property color checkedBgColor: __style.grassColor
+  property color disabledFgColor: __style.mediumGreenColor
+  property color enabledFgColor: __style.forestColor
 
   contentItem: Text {
-    text: control.text
+    text: root.text
     font: __style.p5
-    color: control.enabled ? __style.forestColor : __style.mediumGreenColor
+    color: root.enabled ? root.enabledFgColor : root.disabledFgColor
     verticalAlignment: Text.AlignVCenter
-    leftPadding: control.indicator.width + control.spacing
+    leftPadding: root.indicator.width + root.spacing
   }
 
   indicator: Rectangle {
+    id: indicatorRectangle
+
     implicitWidth: 48 * __dp
     implicitHeight: 28 * __dp
-    x: control.leftPadding
+    x: root.leftPadding
     y: parent.height / 2 - height / 2
     radius: implicitHeight / 2
-    color: control.checked ? __style.grassColor : __style.whiteColor
+    color: root.checked ? root.checkedBgColor : root.uncheckedBgColor
 
     Rectangle {
-      x: control.checked ? parent.width - width - radius/2 : radius/2
+      x: root.checked ? parent.width - width - radius/2 : radius/2
       width: 20 * __dp
       height: width
       radius: width / 2
-      color: control.enabled ? __style.forestColor : __style.mediumGreenColor
+      color: root.enabled ? root.enabledFgColor : root.disabledFgColor
       anchors.verticalCenter: parent.verticalCenter
     }
   }

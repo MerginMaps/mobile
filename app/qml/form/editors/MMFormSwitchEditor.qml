@@ -76,10 +76,11 @@ MMBaseInput {
   rightAction: MMSwitch {
     id: rightSwitch
 
-    width: 50
+    width: 50 * __dp
     height: parent.height
     x: -30 * __dp
 
+    uncheckedBgColor: __style.lightGreenColor
     checked: root._fieldValue === internal.checkedStateValue
 
     onCheckedChanged: {
