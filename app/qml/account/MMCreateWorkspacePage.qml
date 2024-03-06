@@ -6,6 +6,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -13,128 +14,118 @@ import QtQuick.Controls
 import "../components"
 import "../inputs"
 
-Page {
+MMPage {
   id: root
 
-  signal createWorkspaceClicked(string name)
-  signal backClicked
-
   property bool showProgress: true
-  property bool backVisible: false
 
-  readonly property real hPadding: width < __style.maxPageWidth
-                                   ? 20 * __dp
-                                   : (20 + (width - __style.maxPageWidth) / 2) * __dp
+  signal createWorkspaceClicked( string name )
+
+  pageHeader.rightItemContent: MMProgressBar {
+    anchors.verticalCenter: parent.verticalCenter
+
+    width: 60 * __dp
+    height: 4 * __dp
+
+    color: __style.grassColor
+    progressColor: __style.forestColor
+
+    position: 1/3
+    visible: root.showProgress
+  }
+
+  pageContent: Item {
+    width: parent.width
+    height: parent.height
+
+    MMScrollView {
+      width: parent.width
+      height: parent.height
+
+      Column {
+        id: dynamicContent
+
+        width: parent.width
+        height: childrenRect.height
+
+        Text {
+          width: parent.width
+
+          text: qsTr( "Name your workspace" )
+
+          elide: Text.ElideRight
+
+          font: __style.h3
+          color: __style.forestColor
+
+          horizontalAlignment: Text.AlignHCenter
+        }
+
+        MMListSpacer { height: __style.margin16 }
+
+        Text {
+          width: parent.width
+          height: paintedHeight
+
+          text: qsTr(
+                  "Workspace is a place to store your projects. " +
+                  "Colleagues can be invited to your workspace to collaborate on projects. " +
+                  "Let’s start by giving it a name." )
+
+          lineHeight: __style.fontLineHeight24
+          lineHeightMode: Text.FixedHeight
+
+          font: __style.p5
+          color: __style.nightColor
+          wrapMode: Text.Wrap
+          horizontalAlignment: Text.AlignHCenter
+        }
+
+        MMListSpacer { height: __style.margin16 }
+
+        MMTextInput {
+          id: workspaceName
+
+          width: parent.width
+          title: qsTr( "Workspace name" )
+          placeholderText: qsTr( "Your Workspace" )
+        }
+
+        MMListSpacer { height: createButton.height + __style.margin16 }
+      }
+    }
+
+    MMInfoBox {
+      width: parent.width
+
+      anchors.bottom: createButton.top
+      anchors.bottomMargin: __style.margin20
+
+      // hide the bubble on small screens
+      visible: root.height - dynamicContent.height - root.pageHeader.height - 2 * height > 0
+
+      title: qsTr( "Tip from Mergin Maps" )
+      description: qsTr( "A good candidate for a workspace name is the name of your team or organisation" )
+
+      imageSource: __style.bubbleImage
+    }
+
+    MMButton {
+      id: createButton
+
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: __style.margin8
+
+      width: parent.width
+
+      text: qsTr( "Create workspace" )
+
+      onClicked: root.createWorkspaceClicked( workspaceName.text )
+    }
+  }
 
   // show error message under the respective field
   function showErrorMessage( msg ) {
     workspaceName.errorMsg = msg
-  }
-
-  Rectangle {
-    anchors.fill: parent
-    color: __style.lightGreenColor
-  }
-
-  MMPageHeader {
-    id: header
-
-    backVisible: root.backVisible
-
-    onBackClicked: root.backClicked()
-
-    rightItemContent: MMProgressBar {
-      anchors.verticalCenter: parent.verticalCenter
-
-      width: 60 * __dp
-      height: 4 * __dp
-
-      color: __style.grassColor
-      progressColor: __style.forestColor
-
-      position: 1/3
-      visible: root.showProgress
-    }
-  }
-
-  ScrollView {
-    width: parent.width
-    height: parent.height - header.height - bottomColumn.height - 40 * __dp
-    anchors.top: header.bottom
-    anchors.topMargin: 20 * __dp
-
-    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-
-    Column {
-      id: mainColumn
-
-      width: root.width
-      spacing: 20 * __dp
-      leftPadding: root.hPadding
-      rightPadding: root.hPadding
-      topPadding: 20 * __dp
-      bottomPadding: 20 * __dp
-
-      Text {
-        width: parent.width - 2 * root.hPadding
-        text: qsTr("Create a workspace")
-        font: __style.h3
-        color: __style.forestColor
-        wrapMode: Text.WordWrap
-        horizontalAlignment: Text.AlignHCenter
-        lineHeight: 1.2
-      }
-
-      Text {
-        width: parent.width - 2 * root.hPadding
-        text: qsTr("Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects.")
-        font: __style.p5
-        color: __style.nightColor
-        wrapMode: Text.WordWrap
-        horizontalAlignment: Text.AlignHCenter
-        lineHeight: 1.5
-      }
-
-      Item { width: 1; height: 1 }
-
-      MMTextInput {
-        id: workspaceName
-        width: parent.width - 2 * root.hPadding
-        title: qsTr("Workspace name")
-        placeholderText: qsTr("Your Workspace")
-      }
-    }
-  }
-
-  Column {
-    id: bottomColumn
-
-    width: root.width
-    spacing: 20 * __dp
-    leftPadding: root.hPadding
-    rightPadding: root.hPadding
-    topPadding: 20 * __dp
-    bottomPadding: 20 * __dp
-    anchors.bottom: parent.bottom
-
-    MMTextBubble {
-      width: root.width - 2 * root.hPadding
-      title: qsTr("Tip from Mergin Maps")
-      description: qsTr("A good candidate for a workspace name is the name of your team or organisation")
-    }
-
-    MMButton {
-      width: parent.width - 2 * root.hPadding
-      text: qsTr("Create workspace")
-
-      onClicked: {
-        if (workspaceName.text.length > 0 ) {
-          root.createWorkspaceClicked(workspaceName.text)
-        } else {
-          showErrorMessage(qsTr("Workspace name cannot be empty."))
-        }
-      }
-    }
   }
 }

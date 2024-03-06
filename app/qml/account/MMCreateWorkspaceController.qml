@@ -41,7 +41,6 @@ Item {
 
       objectName: "createWorkspaceDirectPanel"
       showProgress: false
-      backVisible: true
 
       onCreateWorkspaceClicked: function (workspaceName) {
         __merginApi.createWorkspace(workspaceName)

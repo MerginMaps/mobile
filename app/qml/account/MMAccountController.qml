@@ -192,6 +192,8 @@ Item {
       id: createWorkspacePanel
 
       objectName: "createWorkspacePanel"
+
+      pageHeader.backVisible: false
       onCreateWorkspaceClicked: function (workspaceName) {
         __merginApi.createWorkspace(workspaceName)
       }
