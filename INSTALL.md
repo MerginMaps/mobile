@@ -143,6 +143,7 @@ Steps to build and run Input:
      -DCMAKE_PREFIX_PATH=~/Qt/6.6.0/gcc_64 \
      -DINPUT_SDK_PATH=~/input-sdk/x64-linux \
      -DQGIS_QUICK_DATA_PATH=~/input/app/android/assets/qgis-data \
+     -DUSE_MM_SERVER_API_KEY=FALSE \
      ..
    ninja
    ```
