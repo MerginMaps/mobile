@@ -121,7 +121,7 @@ class FormFeaturesModel : public QAbstractListModel
     void setParentFeatureLayerPair( QString pair ) { mParentFeatureLayerPair = pair; emit parentFeatureLayerPairChanged( pair ); }
     void setRelation( QString relation ) {mRelation = relation; emit relationChanged( mRelation );}
 
-    Q_INVOKABLE QString attributeFromForeignKey( QString , QString ) const { return "fk-title"; }
+    Q_INVOKABLE QString attributeFromForeignKey( QString, QString ) const { return "fk-title"; }
     QString parentFeatureLayerPair() const {return mParentFeatureLayerPair;}
     QString relation() const {return mRelation;}
 
