@@ -18,12 +18,12 @@ MMBaseToolbar {
 
   signal clicked
 
+  onModelChanged: root.setupBottomBar()
+
   toolbarContent: GridView {
     id: buttonView
 
-    onWidthChanged: setupBottomBar()
-    onModelChanged: setupBottomBar()
-
+    onWidthChanged: root.setupBottomBar()
     model: visibleButtonModel
     anchors.fill: parent
     cellHeight: parent.height

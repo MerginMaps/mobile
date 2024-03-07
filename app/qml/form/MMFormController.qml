@@ -182,7 +182,7 @@ Item {
         featureLayerPair: root.featureLayerPair
       }
 
-      state: root.formState
+      layerIsReadOnly: root.layerIsReadOnly
 
       onSaved: root.panelState = "closed"
       onCanceled: root.panelState = "closed"
