@@ -814,20 +814,6 @@ Item {
 
             root.state = "view"
           }
-
-          Component.onCompleted: {
-            if ( root.state !== "edit" )
-            {
-              // center to GPS
-              if ( gpsStateGroup.state === "unavailable" ) {
-                __notificationModel.addError( qsTr( "GPS currently unavailable." ) )
-                return
-              }
-
-              root.centeredToGPS = true
-              mapSettings.setCenter( mapPositionSource.mapPosition )
-            }
-          }
         }
       }
 
