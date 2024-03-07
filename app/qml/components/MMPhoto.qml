@@ -13,21 +13,21 @@ import Qt5Compat.GraphicalEffects
 import "."
 
 Image {
-  id: control
+  id: root
 
   property url photoUrl
 
   signal clicked( var path )
 
   height: width
-  source: control.photoUrl
+  source: root.photoUrl
   asynchronous: true
   layer.enabled: true
   layer {
     effect: OpacityMask {
       maskSource: Item {
-        width: control.width
-        height: control.height
+        width: root.width
+        height: root.height
         Rectangle {
           anchors.centerIn: parent
           width: parent.width
@@ -53,12 +53,12 @@ Image {
 
   MouseArea {
     anchors.fill: parent
-    onClicked: control.clicked(control.photoUrl)
+    onClicked: root.clicked(root.photoUrl)
   }
 
   onStatusChanged: {
     if (status === Image.Error) {
-      console.error("MMPhoto: Error loading image: " + control.photoUrl);
+      console.error("MMPhoto: Error loading image: " + root.photoUrl);
     }
   }
 }

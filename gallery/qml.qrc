@@ -84,6 +84,8 @@
         <file>../app/qml/components/MMDrawer.qml</file>
         <file>../app/qml/components/MMDrawerHeader.qml</file>
         <file>../app/qml/components/MMBusyIndicator.qml</file>
+        <file>../app/qml/components/MMPhotoAttachment.qml</file>
+        <file>../app/qml/components/MMPhotoPreview.qml</file>
         <file>../app/qml/account/components/MMAccountPageItem.qml</file>
         <file>../app/qml/account/components/MMAccountHeadItem.qml</file>
         <file>../app/qml/account/components/MMIconCheckBoxHorizontal.qml</file>
