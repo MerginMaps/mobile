@@ -68,11 +68,11 @@ Drawer {
     height: (parent.width < parent.height) ? parent.height / 2 - parent.width / 4 : parent.height / 4
     anchors.horizontalCenter: parent.horizontalCenter
 
-    MMTextBubble {
+    MMInfoBox {
       width: parent.width - 40 * __dp
       title: qsTr( "Scan the QR code" )
       description: qsTr( "Please make sure that the lense is clear." )
-      image: __style.blueInfoImage
+      imageSource: __style.blueInfoImage
       anchors.centerIn: parent
     }
   }

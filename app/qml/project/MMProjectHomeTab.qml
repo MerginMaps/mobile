@@ -51,7 +51,7 @@ Item {
     allowTimer: true
   }
 
-  MMWarningBubble {
+  MMInfoBox {
     id: attentionRequiredBanner
 
     visible: !noWorkspaceBanner.visible && (__merginApi.subscriptionInfo ? __merginApi.subscriptionInfo.actionRequired : false)
@@ -64,10 +64,15 @@ Item {
     }
     title: qsTr("Your attention is required")
     description: qsTr("Click here to visit Mergin Maps dashboard")
+    imageSource: __style.warnLogoImage
+
+    color: __style.nightColor
+    textColor: __style.whiteColor
+
     onClicked: Qt.openUrlExternally( __inputHelp.merginDashboardLink )
   }
 
-  MMWarningBubble {
+  MMInfoBox {
     id: noWorkspaceBanner
 
     visible: false // Set from parent
@@ -81,6 +86,10 @@ Item {
     title: qsTr("No workspace detected")
     description: qsTr("Create your workspace by clicking here")
     imageSource: __style.noWorkspaceImage
+
+    color: __style.nightColor
+    textColor: __style.whiteColor
+
     onClicked: root.createWorkspaceRequested()
   }
 

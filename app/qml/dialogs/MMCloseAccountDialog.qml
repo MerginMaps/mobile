@@ -99,7 +99,7 @@ Drawer {
 
       Item { width: 1; height: 1 }
 
-      MMTextBubble {
+      MMInfoBox {
         id: noteBubble
 
         width: parent.width
@@ -108,8 +108,8 @@ Drawer {
         title: qsTr("Please note")
         description: qsTr("Type in your username and click ‘Yes’ to delete your account.")
 
-        bgColor: __style.lightGreenColor
-        image: __style.attentionImage
+        color: __style.lightGreenColor
+        imageSource: __style.warnLogoImage
       }
 
       Row {

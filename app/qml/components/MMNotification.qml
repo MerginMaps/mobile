@@ -19,7 +19,7 @@ Rectangle {
 
   readonly property int innerSpacing: 5 * __dp
 
-  radius: 12 * __dp
+  radius: __style.radius12
   color: {
     switch( model.type ) {
     case MM.NotificationType.Information: return __style.informativeColor
