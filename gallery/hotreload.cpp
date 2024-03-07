@@ -20,8 +20,8 @@ QString HotReload::syncScript() const
   return "#!/bin/sh \n\
 echo running hot reload sync directories ... \n\
 while true; do \n\
-  rsync -ra ../../../../gallery/qml/ HotReload/qml/ \n\
-  rsync -ra ../../../../app/qml/ HotReload/app/qml/ \n\
+  rsync -ra " GALLERY_SOURCE_DIR "/qml/ HotReload/qml/ \n\
+  rsync -ra " GALLERY_SOURCE_DIR "/../app/qml/ HotReload/app/qml/ \n\
   sleep 1 \n\
 done";
 }
@@ -38,7 +38,6 @@ HotReload::HotReload( QQmlApplicationEngine &engine, QObject *parent ):
   // create runnable sync script (near the app)
   QString scriptFilename = QGuiApplication::applicationDirPath() + "/syncGallery.sh";
   qInfo() << "Sync script location: " << scriptFilename;
-  if ( !QFileInfo::exists( scriptFilename ) )
   {
     QFile file( QFileInfo( scriptFilename ).absoluteFilePath() );
     const QString script = syncScript();
