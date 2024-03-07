@@ -736,7 +736,7 @@ Item {
       MMListDrawer {
         id: activeLayerPanel
 
-        title: qsTr( "Choose Active Layer" )
+        drawerHeader.title: qsTr( "Choose Active Layer" )
 
         model: __recordingLayersModel
         activeValue: __activeLayer.layerId

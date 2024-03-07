@@ -41,7 +41,6 @@ Item {
       }
 
       if ( __merginApi.userInfo.hasInvitations ) {
-        controller.invitation = __merginApi.userInfo.invitations()[0]
         __notificationModel.addWarning( qsTr( "You have pending workspace invitations! You may accept or reject them in your workspace selection page" ) )
       }
     }

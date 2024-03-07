@@ -84,7 +84,7 @@ MMDrawer {
 
   drawerHeader.title: qsTr("Stake out")
 
-  content: Column {
+  drawerContent: Column {
     id: mainColumn
 
     width: parent.width

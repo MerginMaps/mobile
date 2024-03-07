@@ -1,7 +1,6 @@
 set(MM_QML
     account/components/MMIconCheckBoxHorizontal.qml
     account/components/MMIconCheckBoxVertical.qml
-    account/components/MMAccountHeadItem.qml
     account/components/MMAccountPageItem.qml
     account/components/MMWorkspaceDelegate.qml
     account/components/MMWorkspaceInvitationDelegate.qml
@@ -16,6 +15,7 @@ set(MM_QML
     account/MMSignUpPage.qml
     account/MMSwitchWorkspacePage.qml
     account/MMWhichIndustryPage.qml
+    components/MMAvatarLettersItem.qml
     components/MMBaseToolbar.qml
     components/MMButton.qml
     components/MMCalendarDrawer.qml

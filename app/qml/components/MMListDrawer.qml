@@ -15,10 +15,9 @@ import QtQuick.Controls.Basic
  * This is a white drawer with close button that shows items from model with icon + title
  * You can specify element to show where there are no items (use MMMessage component)
  */
-Drawer {
-  id: control
+MMDrawer {
+  id: root
 
-  property alias title: title.text
   property alias model: listView.model //! Model must implement count property, e.g. QML ListModel
 
   property alias noItemsDelegate: noItemsDelegate.sourceComponent /* usually MMMessage */
@@ -29,100 +28,44 @@ Drawer {
 
   property var activeValue /* which value defined by valueRole should be highlighted */
 
-  property bool modelIsEmpty: control.model ? control.model.count === 0 : true
+  property bool modelIsEmpty: root.model ? root.model.count === 0 : true
 
-  padding: 20 * __dp
+  signal clicked( string type )
 
-  signal clicked(type: string)
+  drawerContent: Item {
+    width: parent.width
 
-  width: window.width
-  height: mainColumn.height
-  edge: Qt.BottomEdge
+    Loader {
+      id: noItemsDelegate
 
-  Rectangle {
-    color: roundedRect.color
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.right: parent.right
-    height: 2 * radius
-    anchors.topMargin: -radius
-    radius: 20 * __dp
-  }
+      height: root.modelIsEmpty ? ( item?.height ?? 0 ) : 0
+      anchors.horizontalCenter: parent.horizontalCenter
 
-  Rectangle {
-    id: roundedRect
+      active: root.modelIsEmpty
+    }
 
-    anchors.fill: parent
-    color: __style.whiteColor
-
-    Column {
-      id: mainColumn
+    ListView {
+      id: listView
 
       width: parent.width
-      spacing: 20 * __dp
-      leftPadding: control.padding
-      rightPadding: control.padding
-      bottomPadding: control.padding
+      interactive: false // TODO: make it interactive if you hit screen height max
 
-      // TODO use MMPageHeader
-      Row {
-        width: parent.width - 2 * control.padding
-        anchors.horizontalCenter: parent.horizontalCenter
+      height: root.model ? root.model.count * __style.menuDrawerHeight : 0
+      maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
 
-        Item { width: closeButton.width; height: 1 }
+      delegate: MMListDrawerItem {
 
-        Text {
-          id: title
+        width: ListView.view.width
+        height: __style.menuDrawerHeight
 
-          anchors.verticalCenter: parent.verticalCenter
-          font: __style.t2
-          width: parent.width - closeButton.width * 2
-          color: __style.forestColor
-          horizontalAlignment: Text.AlignHCenter
-          verticalAlignment: Text.AlignVCenter
-          elide: Text.ElideRight
-        }
+        Component.onCompleted: console.log(model, root.valueRole, root.textRole)
 
-        MMRoundButton {
-          id: closeButton
-          iconSource: __style.closeIcon
-          bgndColor: __style.lightGreenColor
-          onClicked: control.visible = false
-        }
-      }
+        type: model[root.valueRole]
+        text: model[root.textRole]
+        iconSource: model[root.imageRole]
+        isActive: root.activeValue ? root.activeValue === model[root.valueRole] : false
 
-      Loader {
-        id: noItemsDelegate
-
-        height: control.modelIsEmpty ? item?.height ?? 0 : 0
-        active: control.modelIsEmpty
-        anchors.horizontalCenter: parent.horizontalCenter
-      }
-
-      ListView {
-        id: listView
-
-        width: parent.width - 2 * control.padding
-        interactive: false
-
-        height: control.model ? control.model.count * __style.menuDrawerHeight : 0
-        maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
-
-        delegate: Item {
-          width: listView.width
-          height: __style.menuDrawerHeight
-
-          MMListDrawerItem {
-            width: listView.width
-
-            type: model[control.valueRole]
-            text: model[control.textRole]
-            iconSource: model[control.imageRole]
-            isActive: control.activeValue ? control.activeValue === model[control.valueRole] : false
-
-            onClicked: function(type) { control.clicked(type); control.visible = false }
-          }
-        }
+        onClicked: function(type) { root.clicked(type); root.visible = false }
       }
     }
   }

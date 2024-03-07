@@ -48,7 +48,7 @@ MMPage {
 
       spacing: 0
 
-      MMAccountComponents.MMAccountHeadItem {
+      MMAvatarLettersItem {
 
         abbrv: root.abbrName
 

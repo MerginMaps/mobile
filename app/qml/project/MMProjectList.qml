@@ -140,6 +140,9 @@ Item {
     id: addProjectComponent
 
     Column {
+
+      topPadding: noLocalProjectsMessageContainer.visible ? noLocalProjectsMessageContainer.height + __style.margin40 : 0
+
       width: ListView.view.width
 
       Item {
@@ -168,7 +171,10 @@ Item {
              root.searchText === "" &&
              !controllerModel.isLoading
 
-    anchors.fill: parent
+    anchors {
+      left: parent.left
+      right: parent.right
+    }
 
     image: __style.positiveMMSymbolImage
     title: qsTr( "No downloaded projects found")

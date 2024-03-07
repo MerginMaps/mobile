@@ -16,7 +16,7 @@ Drawer {
   property bool hasHandle: false
 
   property alias drawerHeader: mmDrawerHeader
-  property alias content: contentGroup.children
+  property alias drawerContent: contentGroup.children
 
   property double drawerSpacing: __style.spacing20
   property double drawerBottomMargin: __style.margin8 // set to 0 to draw behind navigation bar

@@ -14,6 +14,7 @@ import mm 1.0 as MM
 import "./components"
 import "../components"
 import "../inputs"
+import "../dialogs"
 
 Item {
   id: root
@@ -100,7 +101,6 @@ Item {
       id: currentProjectColumn
 
       width: ListView.view.width
-      visible: activeProjectItem.model !== undefined
 
       Text {
         width: parent.width
@@ -149,8 +149,8 @@ Item {
         onSyncRequested: projectlist.MM.ProjectsModel.syncProject( projectId )
         onMigrateRequested: projectlist.MM.ProjectsModel.migrateProject( projectId )
         onRemoveRequested: {
-          removeDialog.relatedProjectId = projectId
-          removeDialog.open()
+          removeProjectDialog.relatedProjectId = projectId
+          removeProjectDialog.open()
         }
         onStopSyncRequested: projectlist.MM.ProjectsModel.stopProjectSync( projectId )
         onShowChangesRequested: root.showLocalChangesRequested( projectId )
@@ -184,7 +184,7 @@ Item {
     searchText: searchBar.text
     spacing: root.spacing
 
-    listHeader: activeProjectComponent
+    listHeader: root.activeProjectId ? activeProjectComponent : null
 
     anchors {
       left: parent.left
@@ -205,6 +205,28 @@ Item {
     }
     onShowLocalChangesRequested: function( projectId ) {
       root.showLocalChangesRequested( projectId )
+    }
+  }
+
+  MMRemoveProjectDialog {
+    id: removeProjectDialog
+
+    onRemoveClicked: {
+      if (relatedProjectId === "") {
+        return
+      }
+
+      if ( root.activeProjectId === relatedProjectId )
+        projectlist.activeProjectDeleted() // ugly, ugly, ugly
+
+      __inputUtils.log(
+            "Delete project",
+            "Project " + __localProjectsManager.projectName( relatedProjectId ) + " deleted by " +
+            ( __merginApi.userAuth ? __merginApi.userAuth.username : "unknown" ) + " (" + __localProjectsManager.projectChanges( relatedProjectId ) + ")" )
+
+      projectlist.projectsModel.removeLocalProject( relatedProjectId )
+
+      removeProjectDialog.relatedProjectId = ""
     }
   }
 }

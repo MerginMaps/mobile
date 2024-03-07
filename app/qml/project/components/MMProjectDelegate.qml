@@ -191,7 +191,7 @@ Rectangle {
   MMListDrawer {
     id: listDrawer
 
-    title: qsTr("More options")
+    drawerHeader.title: qsTr("More options")
     model: ListModel {
       id: menuModel
     }
