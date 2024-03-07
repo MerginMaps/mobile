@@ -32,7 +32,8 @@ Item {
   readonly property alias compass: deviceCompass
 
   property bool isTrackingPosition: trackingManager?.isTrackingPosition ?? false
-  property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType = MM.RecordingMapTool.StreamMode : false
+  property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType === MM.RecordingMapTool.StreamMode : false
+  property bool centeredToGPS: false
 
   property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
@@ -186,6 +187,8 @@ Item {
             }
           }
         }
+
+        onUserInteractedWithMap: root.centeredToGPS = false
 
         onLongPressed: function( point ) {
           // Alter position of simulated provider
@@ -498,18 +501,14 @@ Item {
 
         visible: root.mapExtentOffset > 0 ? false : true
 
-        iconSource: __style.gpsIcon
+        iconSource: root.centeredToGPS ? __style.followGPSNoColorOverlayIcon : __style.gpsIcon
 
         onClicked: {
           if ( gpsStateGroup.state === "unavailable" ) {
             __notificationModel.addError( qsTr( "GPS currently unavailable" ) )
             return
           }
-
-          if ( recordingToolsLoader.active ) {
-            recordingToolsLoader.item.recordingMapTool.centeredToGPS = true
-          }
-
+          root.centeredToGPS = true
           mapSettings.setCenter( mapPositionSource.mapPosition )
         }
       }
@@ -774,6 +773,7 @@ Item {
 
           map: mapCanvas
           positionMarkerComponent: positionMarker
+          recordingMapTool.centeredToGPS: root.centeredToGPS
 
           activeFeature: root.state === "edit" ? internal.featurePairToEdit.feature : __inputUtils.emptyFeature()
 
@@ -813,20 +813,6 @@ Item {
             }
 
             root.state = "view"
-          }
-
-          Component.onCompleted: {
-            if ( root.state !== "edit" )
-            {
-              // center to GPS
-              if ( gpsStateGroup.state === "unavailable" ) {
-                __notificationModel.addError( qsTr( "GPS currently unavailable." ) )
-                return
-              }
-
-              recordingMapTool.centeredToGPS = true
-              mapSettings.setCenter( mapPositionSource.mapPosition )
-            }
           }
         }
       }
@@ -1046,7 +1032,7 @@ Item {
   function updatePosition() {
     if ( root.state === "view" )
     {
-      if ( __appSettings.autoCenterMapChecked && root.isPositionOutOfExtent() )
+      if ( root.centeredToGPS && root.isPositionOutOfExtent() )
       {
         root.centerToPosition()
       }

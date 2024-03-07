@@ -70,6 +70,9 @@ MMDropdownInput {
       multiSelect: internal.allowMultivalue
       withSearchbar: vrModel.count > 5
 
+      valueRole: "FeatureId"
+      textRole: "FeatureTitle"
+
       selectedFeatures: {
         if ( internal.allowMultivalue ) {
           root.preselectedFeatures = vrModel.convertFromQgisType( root._fieldValue, FeaturesModel.FeatureId )
@@ -152,7 +155,7 @@ MMDropdownInput {
 
   function setText()
   {
-    root.text = vrModel.convertFromQgisType( root._fieldValue, FeaturesModel.FeatureTitle ).join( ', ' )
+    root.text = vrModel.convertFromQgisType( root._fieldValue, MM.FeaturesModel.FeatureTitle ).join( ', ' )
   }
 
   QtObject {
