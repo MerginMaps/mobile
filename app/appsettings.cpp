@@ -23,7 +23,6 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   settings.beginGroup( INPUTAPP_GROUP_NAME );
   QString path = settings.value( "defaultProject", "" ).toString();
   QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
-  bool autoCenter = settings.value( "autoCenter", false ).toBool();
   double gpsTolerance = settings.value( "gpsTolerance", 10 ).toDouble();
   int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
   int streamingIntervalType = settings.value( "intervalType", 0 ).toInt();
@@ -41,7 +40,6 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setDefaultProject( path );
   setActiveProject( path );
   setDefaultLayer( layer );
-  setAutoCenterMapChecked( autoCenter );
   setGpsAccuracyTolerance( gpsTolerance );
   setLineRecordingInterval( lineRecordingInterval );
   setIntervalType( intervalType );
@@ -97,25 +95,6 @@ void AppSettings::setActiveProject( const QString &value )
 
     emit activeProjectChanged();
   }
-}
-
-bool AppSettings::autoCenterMapChecked()
-{
-  return mAutoCenterMapChecked;
-}
-
-
-void AppSettings::setAutoCenterMapChecked( bool value )
-{
-
-  if ( mAutoCenterMapChecked != value )
-  {
-    mAutoCenterMapChecked = value;
-    setValue( "autoCenter", value );
-
-    emit autoCenterMapCheckedChanged();
-  }
-
 }
 
 QString AppSettings::defaultProjectName() const

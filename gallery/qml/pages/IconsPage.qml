@@ -261,6 +261,7 @@ ScrollView {
             IconLine { name: "polygonLayerNoColorOverlayIcon"; source: __style.polygonLayerNoColorOverlayIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "rasterLayerNoColorOverlayIcon"; source: __style.rasterLayerNoColorOverlayIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             IconLine { name: "tableLayerNoColorOverlayIcon"; source: __style.tableLayerNoColorOverlayIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            IconLine { name: "followGPSNoColorOverlayIcon"; source: __style.followGPSNoColorOverlayIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
           }
         }
       }

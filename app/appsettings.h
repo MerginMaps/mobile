@@ -25,7 +25,6 @@ class AppSettings: public QObject
     Q_PROPERTY( QString activeProject READ activeProject WRITE setActiveProject NOTIFY activeProjectChanged )
     Q_PROPERTY( QString defaultProjectName READ defaultProjectName NOTIFY defaultProjectChanged )
     Q_PROPERTY( QString defaultLayer READ defaultLayer WRITE setDefaultLayer NOTIFY defaultLayerChanged )
-    Q_PROPERTY( bool autoCenterMapChecked READ autoCenterMapChecked WRITE setAutoCenterMapChecked NOTIFY autoCenterMapCheckedChanged )
     Q_PROPERTY( int lineRecordingInterval READ lineRecordingInterval WRITE setLineRecordingInterval NOTIFY lineRecordingIntervalChanged )
     Q_PROPERTY( StreamingIntervalType::IntervalType intervalType READ intervalType WRITE setIntervalType NOTIFY intervalTypeChanged )
     Q_PROPERTY( double gpsAccuracyTolerance READ gpsAccuracyTolerance WRITE setGpsAccuracyTolerance NOTIFY gpsAccuracyToleranceChanged )
@@ -50,9 +49,6 @@ class AppSettings: public QObject
 
     QString defaultLayer() const;
     void setDefaultLayer( const QString &value );
-
-    bool autoCenterMapChecked();
-    void setAutoCenterMapChecked( const bool value );
 
     double gpsAccuracyTolerance() const;
     void setGpsAccuracyTolerance( double gpsAccuracyTolerance );
@@ -102,7 +98,6 @@ class AppSettings: public QObject
     void defaultProjectChanged();
     void activeProjectChanged();
     void defaultLayerChanged();
-    void autoCenterMapCheckedChanged();
     void gpsAccuracyToleranceChanged();
     void gpsAntennaHeightChanged( double antennaHeight );
     void lineRecordingIntervalChanged();

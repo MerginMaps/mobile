@@ -25,7 +25,7 @@ Item {
 
   signal longPressed( point p )
 
-  // UserInteractedWithMap signal is sent each time user pans/zooms the map
+  // userInteractedWithMap signal is sent each time user pans/zooms the map
   signal userInteractedWithMap()
 
   property alias mapSettings: mapRenderer.mapSettings
