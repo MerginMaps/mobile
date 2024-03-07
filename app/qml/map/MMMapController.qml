@@ -32,7 +32,7 @@ Item {
   readonly property alias compass: deviceCompass
 
   property bool isTrackingPosition: trackingManager?.isTrackingPosition ?? false
-  property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType = MM.RecordingMapTool.StreamMode : false
+  property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType === MM.RecordingMapTool.StreamMode : false
   property bool centeredToGPS: false
 
   property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
