@@ -8,9 +8,11 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQuick.Controls
 
 Item {
-  height: parent.height
+  implicitHeight: ApplicationWindow.window?.height ?? 0
+  implicitWidth: ApplicationWindow.window?.width ?? 0
 
   Repeater {
     id: repeater
@@ -21,7 +23,9 @@ Item {
 
     model: __notificationModel
     delegate: MMNotification {
-      width: repeater.width - 40 * __dp
+      x: __style.safeAreaLeft
+      y: __style.safeAreaTop > __style.margin12 ? __style.safeAreaTop : __style.margin12
+      width: repeater.width - 2 * __style.pageMargins - __style.safeAreaLeft - __style.safeAreaRight
       visible: index === repeater.count - 1 // visible only the last notification
     }
   }
