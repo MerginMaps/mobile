@@ -118,8 +118,12 @@ ApplicationWindow {
           source: "ComponentsPage.qml"
         }
         ListElement {
-          title: "Style"
-          source: "StylePage.qml"
+          title: "Colors"
+          source: "ColorsPage.qml"
+        }
+        ListElement {
+          title: "Texts (Fonts)"
+          source: "TextsPage.qml"
         }
         ListElement {
           title: "Icons"

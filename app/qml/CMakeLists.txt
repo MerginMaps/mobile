@@ -56,6 +56,7 @@ set(MM_QML
     components/MMSelectableToolbarButton.qml
     components/MMShadow.qml
     components/MMSwitch.qml
+    components/MMText.qml
     components/MMToolbar.qml
     components/MMToolbarButton.qml
     components/MMToolbarLongButton.qml
