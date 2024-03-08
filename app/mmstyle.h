@@ -477,7 +477,7 @@ class MMStyle: public QObject
     double icon24() {return 24 * mDp;}
     double icon32() {return 32 * mDp;}
 
-    double mapItemHeight() {return 60 * mDp;}
+    double mapItemHeight() {return 50 * mDp;}
     double toolbarHeight()
     {
       if ( mSafeAreaBottom > 2 )
