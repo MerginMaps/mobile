@@ -35,19 +35,16 @@ class MMStyle: public QObject
     Q_PROPERTY( QFont p5 READ p5 CONSTANT )
     Q_PROPERTY( QFont p6 READ p6 CONSTANT )
     Q_PROPERTY( QFont p7 READ p7 CONSTANT )
+    Q_PROPERTY( double fontLineHeight60 READ fontLineHeight60 CONSTANT )
     Q_PROPERTY( double fontLineHeight48 READ fontLineHeight48 CONSTANT )
     Q_PROPERTY( double fontLineHeight44 READ fontLineHeight44 CONSTANT )
     Q_PROPERTY( double fontLineHeight36 READ fontLineHeight36 CONSTANT )
     Q_PROPERTY( double fontLineHeight32 READ fontLineHeight32 CONSTANT )
+    Q_PROPERTY( double fontLineHeight30 READ fontLineHeight30 CONSTANT )
     Q_PROPERTY( double fontLineHeight28 READ fontLineHeight28 CONSTANT )
     Q_PROPERTY( double fontLineHeight26 READ fontLineHeight26 CONSTANT )
     Q_PROPERTY( double fontLineHeight24 READ fontLineHeight24 CONSTANT )
     Q_PROPERTY( double fontLineHeight22 READ fontLineHeight22 CONSTANT )
-    Q_PROPERTY( double fontLineHeight18 READ fontLineHeight18 CONSTANT )
-    Q_PROPERTY( double fontLineHeight16 READ fontLineHeight16 CONSTANT )
-    Q_PROPERTY( double fontLineHeight14 READ fontLineHeight14 CONSTANT )
-    Q_PROPERTY( double fontLineHeight12 READ fontLineHeight12 CONSTANT )
-    Q_PROPERTY( double fontLineHeight10 READ fontLineHeight10 CONSTANT )
 
     // Colors - primary palette
     Q_PROPERTY( QColor grassColor READ grassColor CONSTANT )
@@ -305,21 +302,16 @@ class MMStyle: public QObject
     QFont p6() {return fontFactory( 12, false );}
     QFont p7() {return fontFactory( 10, false );}
 
+    double fontLineHeight60() {return 60 * mDp;}
     double fontLineHeight48() {return 48 * mDp;}
     double fontLineHeight44() {return 44 * mDp;}
     double fontLineHeight36() {return 36 * mDp;}
     double fontLineHeight32() {return 32 * mDp;}
+    double fontLineHeight30() {return 30 * mDp;}
     double fontLineHeight28() {return 28 * mDp;}
     double fontLineHeight26() {return 26 * mDp;}
     double fontLineHeight24() {return 24 * mDp;}
     double fontLineHeight22() {return 22 * mDp;}
-    double fontLineHeight18() {return 18 * mDp;}
-    double fontLineHeight16() {return 16 * mDp;}
-    double fontLineHeight14() {return 14 * mDp;}
-    double fontLineHeight12() {return 12 * mDp;}
-    double fontLineHeight10() {return 10 * mDp;}
-
-
 
     QColor grassColor() {return QColor::fromString( "#73D19C" );}
     QColor forestColor() {return QColor::fromString( "#004C45" );}
