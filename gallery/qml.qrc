@@ -4,8 +4,6 @@
         <file>qml/IconLine.qml</file>
         <file>qml/EditorItem.qml</file>
         <file>qml/TextItem.qml</file>
-        <file>qml/GalleryGrid.qml</file>
-        <file>qml/GalleryGridItem.qml</file>
         <file>qml/pages/ComponentsPage.qml</file>
         <file>qml/pages/SandboxPage.qml</file>
         <file>qml/pages/IconsPage.qml</file>

@@ -83,7 +83,6 @@ Rectangle {
     clip: true
     maximumLineCount: 3
     wrapMode: Text.WordWrap
-    // lineHeight: 1.4
     elide: Text.ElideRight
     color: {
       switch( type ) {
