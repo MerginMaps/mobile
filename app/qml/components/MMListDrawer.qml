@@ -18,7 +18,7 @@ import QtQuick.Controls.Basic
 MMDrawer {
   id: root
 
-  property alias model: listView.model //! Model must implement count property, e.g. QML ListModel
+  property alias listModel: listView.model //! Model must implement count property, e.g. QML ListModel
 
   property alias noItemsDelegate: noItemsDelegate.sourceComponent /* usually MMMessage */
 
@@ -28,12 +28,13 @@ MMDrawer {
 
   property var activeValue /* which value defined by valueRole should be highlighted */
 
-  property bool modelIsEmpty: root.model ? root.model.count === 0 : true
+  property bool modelIsEmpty: root.listModel ? root.listModel.count === 0 : true
 
   signal clicked( string type )
 
   drawerContent: Item {
     width: parent.width
+    height: noItemsDelegate.height + listView.height
 
     Loader {
       id: noItemsDelegate
@@ -48,9 +49,9 @@ MMDrawer {
       id: listView
 
       width: parent.width
-      interactive: false // TODO: make it interactive if you hit screen height max
+      interactive: root.maxHeightHit ? true : false
 
-      height: root.model ? root.model.count * __style.menuDrawerHeight : 0
+      height: root.listModel ? root.listModel.count * __style.menuDrawerHeight : 0
       maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
 
       delegate: MMListDrawerItem {
@@ -58,14 +59,12 @@ MMDrawer {
         width: ListView.view.width
         height: __style.menuDrawerHeight
 
-        Component.onCompleted: console.log(model, root.valueRole, root.textRole)
-
         type: model[root.valueRole]
         text: model[root.textRole]
         iconSource: model[root.imageRole]
         isActive: root.activeValue ? root.activeValue === model[root.valueRole] : false
 
-        onClicked: function(type) { root.clicked(type); root.visible = false }
+        onClicked: function( type ) { root.clicked(type); root.visible = false }
       }
     }
   }

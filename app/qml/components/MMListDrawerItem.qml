@@ -17,9 +17,9 @@ Item {
 
   signal clicked(type: string)
 
-  required property string type
-  required property string text
-  required property var iconSource
+  property string type
+  property string text
+  property var iconSource
 
   property bool isActive
 

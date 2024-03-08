@@ -23,6 +23,8 @@ Drawer {
 
   property real maxHeight: ( ApplicationWindow.window?.height ?? 0 ) - __style.safeAreaTop
 
+  readonly property bool maxHeightHit: implicitHeight >= maxHeight
+
   signal backClicked()
 
   implicitHeight: contentHeight > maxHeight ? maxHeight : contentHeight

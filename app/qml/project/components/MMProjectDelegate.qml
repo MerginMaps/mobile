@@ -192,9 +192,7 @@ Rectangle {
     id: listDrawer
 
     drawerHeader.title: qsTr("More options")
-    model: ListModel {
-      id: menuModel
-    }
+    listModel: ListModel { id: menuModel }
 
     onClicked: function(type) {
       if ( projectRemoteError ) {
