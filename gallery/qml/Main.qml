@@ -52,6 +52,11 @@ ApplicationWindow {
     onTriggered: drawer.open()
   }
 
+  Action {
+    id: showGridAction
+    onTriggered: grid.toggle()
+  }
+
   header: ToolBar {
     RowLayout {
       spacing: 20
@@ -67,9 +72,14 @@ ApplicationWindow {
         text: listView.currentItem ? listView.currentItem.text : "Gallery"
         font.pixelSize: 20
         elide: Label.ElideRight
-        horizontalAlignment: Qt.AlignHCenter
+        horizontalAlignment: Qt.AlignLeft
         verticalAlignment: Qt.AlignVCenter
         Layout.fillWidth: true
+      }
+
+      ToolButton {
+        action: showGridAction
+        text: "Grid"
       }
 
       ToolButton {
@@ -210,37 +220,82 @@ ApplicationWindow {
     }
   }
 
-  Rectangle {
-    width: 20
-    color: "lightblue"
-    x: parent.width / 2
-    opacity: .5
-    height: __style.safeAreaTop
-  }
+  Item {
+    id: grid
 
-  Rectangle {
-    width: 20
-    color: "lightblue"
-    x: parent.width / 2
-    y: parent.height - __style.safeAreaBottom
-    opacity: .5
-    height: __style.safeAreaBottom
-  }
+    function toggle() {
+      if (!safeArea.visible)
+      {
+        safeArea.visible = true
+      } else {
+        if ( gridMargins.visible ) {
+          safeArea.visible = false
+          gridMargins.visible = false
+        } else {
+          gridMargins.visible = true
+        }
+      }
+    }
 
-  Rectangle {
-    width: __style.safeAreaLeft
-    color: "lightblue"
-    y: parent.height/2 - height/2
-    opacity: .5
-    height: 20
-  }
+    anchors.fill: parent
+    property real bw: 2
+    property real step: 20
 
-  Rectangle {
-    width: __style.safeAreaRight
-    color: "lightblue"
-    x: parent.width - __style.safeAreaRight
-    y: parent.height/2 - height / 2
-    opacity: .5
-    height: 20
+    Rectangle {
+      id: safeArea
+
+      visible: true
+      color: "transparent"
+      border.width: grid.bw
+      border.color: "lightblue"
+      width: parent.width - __style.safeAreaLeft - __style.safeAreaRight + 2 * grid.bw
+      height: parent.height - __style.safeAreaTop - __style.safeAreaBottom + 2 * grid.bw
+      x: __style.safeAreaLeft - grid.bw
+      y: __style.safeAreaTop - grid.bw
+    }
+
+
+    Item {
+      id: gridMargins
+      visible: false
+      anchors.fill: parent
+
+      Repeater {
+        model: 9
+
+        Rectangle {
+          id: gridRectangle
+
+          required property int index
+          property int i: index + 1
+          property color fgColor: {
+            if (! (index % 4) ) {
+              return "lightpink"
+            } else if (index % 2) {
+              return "navajowhite"
+            } else {
+              return "lightgreen"
+            }
+          }
+
+          color: "transparent"
+          border.width: grid.bw
+          border.color: fgColor
+          width: parent.width - __style.safeAreaLeft - __style.safeAreaRight - i * 2 * grid.step * __dp + 2 * grid.bw
+          height: parent.height - __style.safeAreaTop - __style.safeAreaBottom - i *  2 * grid.step * __dp + 2 * grid.bw
+          x: __style.safeAreaLeft + i * grid.step * __dp - grid.bw
+          y: __style.safeAreaTop + i * grid.step * __dp - grid.bw
+
+          Text {
+            text: (i * grid.step).toFixed(0)
+            color: gridRectangle.fgColor
+            x: 5
+            y: -10
+            style: Text.Outline
+            styleColor: "white"
+          }
+        }
+      }
+    }
   }
 }
