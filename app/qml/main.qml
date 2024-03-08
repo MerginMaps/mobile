@@ -769,14 +769,7 @@ ApplicationWindow {
   }
 
   // Should be the top-most visual item
-  MMNotificationView {
-    anchors {
-      top: parent.top
-      left: parent.left
-      right: parent.right
-      topMargin: 20 * __dp
-    }
-  }
+  MMNotificationView {}
 
   MMDropdownDrawer {
     id: featurePairSelection
