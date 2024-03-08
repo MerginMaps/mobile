@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import mm 1.0 as MM
+
 import "../../app/qml/project"
 import "../../app/qml/project/components"
 
@@ -29,7 +31,7 @@ Page {
 
       highlight: true
       projectId: "1"
-      projectStatus: 2
+      projectStatus: MM.ProjectStatus.NeedsSync
       projectDisplayName: "Mergin local project"
       projectDescription: "Highlighted"
       projectIsValid: true
@@ -50,7 +52,7 @@ Page {
 
       highlight: false
       projectId: "1"
-      projectStatus: 2
+      projectStatus: MM.ProjectStatus.NoVersion
       projectDisplayName: "Mergin local project"
       projectDescription: "Highlighted"
       projectIsValid: true
@@ -70,7 +72,7 @@ Page {
 
       highlight: false
       projectId: "1"
-      projectStatus: 2
+      projectStatus: MM.ProjectStatus.UpToDate
       projectDisplayName: "Mergin local project Long Long Long Long Long Long Long"
       projectDescription: "Description Description Description Description Description"
       projectIsValid: true
@@ -90,7 +92,7 @@ Page {
 
       highlight: false
       projectId: "2"
-      projectStatus: 0
+      projectStatus: MM.ProjectStatus.UpToDate
       projectDisplayName: "Invalid project"
       projectDescription: "A project error. A project error. A project error."
       projectIsValid: false

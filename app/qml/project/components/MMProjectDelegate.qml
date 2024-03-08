@@ -212,7 +212,7 @@ Rectangle {
   function getMoreMenuItems() {
     if ( projectIsMergin && projectIsLocal )
     {
-      if ( ( projectStatus === 2 /*ProjectStatus.NeedsSync*/ ) ) { // uncomment when using this component
+      if ( ( projectStatus === MM.ProjectStatus.NeedsSync ) ) {
         return "sync,changes,remove"
       }
       return "changes,remove"

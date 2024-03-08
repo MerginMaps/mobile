@@ -42,4 +42,19 @@ class PositionProviderType
     Q_ENUMS( ProviderType )
 };
 
+class ProjectStatus
+{
+    Q_GADGET
+    public:
+    explicit ProjectStatus() {}
+
+    enum Status
+    {
+      NoVersion,  //!< the project is not downloaded
+      UpToDate,   //!< both server and local copy are in sync with no extra modifications
+      NeedsSync,  //!< server has newer version than what is available locally and/or the project is modified locally
+    };
+    Q_ENUMS( Status )
+};
+
 #endif // ENUMS_H
