@@ -253,6 +253,7 @@ class MMStyle: public QObject
     Q_PROPERTY( double margin4 READ margin4 CONSTANT )
     Q_PROPERTY( double margin6 READ margin6 CONSTANT )
     Q_PROPERTY( double margin8 READ margin8 CONSTANT )
+    Q_PROPERTY( double margin10 READ margin10 CONSTANT )
     Q_PROPERTY( double margin12 READ margin12 CONSTANT )
     Q_PROPERTY( double margin16 READ margin16 CONSTANT )
     Q_PROPERTY( double margin20 READ margin20 CONSTANT )
@@ -500,6 +501,7 @@ class MMStyle: public QObject
     double margin4() {return 4 * mDp;}
     double margin6() {return 6 * mDp;}
     double margin8() {return 8 * mDp;}
+    double margin10() {return 10 * mDp;}
     double margin12() {return 12 * mDp;}
     double margin16() {return 16 * mDp;}
     double margin20() {return 20 * mDp;}
