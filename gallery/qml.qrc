@@ -3,11 +3,13 @@
         <file>qml/Main.qml</file>
         <file>qml/IconLine.qml</file>
         <file>qml/EditorItem.qml</file>
+        <file>qml/TextItem.qml</file>
         <file>qml/pages/ComponentsPage.qml</file>
         <file>qml/pages/SandboxPage.qml</file>
         <file>qml/pages/IconsPage.qml</file>
         <file>qml/pages/ImagesPage.qml</file>
-        <file>qml/pages/StylePage.qml</file>
+        <file>qml/pages/ColorsPage.qml</file>
+        <file>qml/pages/TextsPage.qml</file>
         <file>qml/pages/MiscPage.qml</file>
         <file>qml/pages/InitialGalleryPage.qml</file>
         <file>qml/pages/ButtonsPage.qml</file>
@@ -39,6 +41,7 @@
         <file>../app/qml/components/MMLine.qml</file>
         <file>../app/qml/components/MMIcon.qml</file>
         <file>../app/qml/components/MMLine.qml</file>
+        <file>../app/qml/components/MMText.qml</file>
         <file>../app/qml/components/MMRoundButton.qml</file>
         <file>../app/qml/components/MMLink.qml</file>
         <file>../app/qml/components/MMRoundLinkButton.qml</file>

@@ -71,6 +71,8 @@ Page {
     }
   ]
 
+  property bool layerIsReadOnly: true
+
   background: Rectangle {
     color: __style.lightGreenColor
   }
@@ -177,7 +179,7 @@ Page {
 
   footer: MMToolbar {
 
-    visible: root.state !== "readOnly"
+    visible: !root.layerIsReadOnly
 
     maxButtonsInToolbar: 3
 

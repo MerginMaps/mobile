@@ -12,7 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 Item {
-  id: control
+  id: root
 
   signal clicked
 
@@ -21,22 +21,16 @@ Item {
 
   required property string text
 
-  readonly property double toolbarLongButtonWidth: 48 * __dp
-  readonly property double minimumToolbarLongButtonWidth: 200 * __dp
-  readonly property double maximumToolbarLongButtonWidth: 500 * __dp
-
   height: __style.toolbarHeight
 
   Button {
-    width: {
-      var w = parent.width
-      if(w < control.minimumToolbarLongButtonWidth)
-        return control.minimumToolbarLongButtonWidth
-      else if(w > control.maximumToolbarLongButtonWidth)
-        return control.maximumToolbarLongButtonWidth
-      return w
-    }
-    height: control.toolbarLongButtonWidth
+    id: button
+
+    readonly property double maximumToolbarLongButtonWidth: 353 * __dp
+
+    width: parent.width - 2 * __style.pageMargins < maximumToolbarLongButtonWidth ? parent.width - 2 * __style.pageMargins : maximumToolbarLongButtonWidth
+    height: root.height - 2 * __style.margin10
+
     anchors.centerIn: parent
 
     contentItem: Item {
@@ -46,24 +40,26 @@ Item {
       Row {
         id: row
 
-        spacing: 5 * __dp
+        spacing: __style.margin6
         height: parent.height
         anchors.centerIn: parent
 
         MMIcon {
-          source: control.iconSource
-          color: control.iconColor
+          id: icon
+
+          source: root.iconSource
+          color: root.iconColor
           anchors.verticalCenter: parent.verticalCenter
         }
+
         Text {
           id: text
 
-          text: control.text
+          visible: button.width > 130 * __dp
+          text: root.text
           color: __style.forestColor
           font: __style.t3
-          verticalAlignment: Text.AlignVCenter
-          topPadding: 9 * __dp
-          bottomPadding: 9 * __dp
+          anchors.verticalCenter: parent.verticalCenter
         }
       }
     }
@@ -73,6 +69,6 @@ Item {
       radius: height / 2
     }
 
-    onClicked: control.clicked()
+    onClicked: root.clicked()
   }
 }

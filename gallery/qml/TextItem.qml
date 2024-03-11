@@ -9,24 +9,30 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Basic
 
-Item {
-  implicitHeight: ApplicationWindow.window?.height ?? 0
-  implicitWidth: ApplicationWindow.window?.width ?? 0
+import "../app/qml/components"
+import "../"
 
-  Repeater {
-    id: repeater
+Column {
+  id: root
 
-    anchors.top: parent.top
-    width: parent.width
-    clip: true
+  property alias font: textArea.font
+  property alias testText: textArea.text
+  property alias text: fontName.text
 
-    model: __notificationModel
-    delegate: MMNotification {
-      x: __style.safeAreaLeft
-      y: __style.safeAreaTop > __style.margin12 ? __style.safeAreaTop : __style.margin12
-      width: repeater.width - 2 * __style.pageMargins - __style.safeAreaLeft - __style.safeAreaRight
-      visible: index === repeater.count - 1 // visible only the last notification
+  Text { id: fontName; width: 250 * __dp; font.bold: true }
+  Item{ width: parent.width; height: 1 }
+  Rectangle {
+    width: textArea.width
+    height: textArea.height
+    color: "white"
+
+    MMText {
+      id: textArea
+      font: root.font
     }
   }
+
+  Item{ width: parent.width; height: 15 }
 }

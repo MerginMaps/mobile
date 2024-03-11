@@ -19,23 +19,15 @@ class MMStyle: public QObject
 {
     Q_OBJECT
 
-    // Fonts - how to use
-    // standard - font: __style.p5
-    // extended - font.pixelSize: __style.p5.pixelSize; font.italic: true
-
-    // Fonts - Heading
+    // Fonts
     Q_PROPERTY( QFont h1 READ h1 CONSTANT )
     Q_PROPERTY( QFont h2 READ h2 CONSTANT )
     Q_PROPERTY( QFont h3 READ h3 CONSTANT )
-
-    // Fonts - Title
     Q_PROPERTY( QFont t1 READ t1 CONSTANT )
     Q_PROPERTY( QFont t2 READ t2 CONSTANT )
     Q_PROPERTY( QFont t3 READ t3 CONSTANT )
     Q_PROPERTY( QFont t4 READ t4 CONSTANT )
     Q_PROPERTY( QFont t5 READ t5 CONSTANT )
-
-    // Fonts - Paragraph
     Q_PROPERTY( QFont p1 READ p1 CONSTANT )
     Q_PROPERTY( QFont p2 READ p2 CONSTANT )
     Q_PROPERTY( QFont p3 READ p3 CONSTANT )
@@ -43,8 +35,16 @@ class MMStyle: public QObject
     Q_PROPERTY( QFont p5 READ p5 CONSTANT )
     Q_PROPERTY( QFont p6 READ p6 CONSTANT )
     Q_PROPERTY( QFont p7 READ p7 CONSTANT )
-
+    Q_PROPERTY( double fontLineHeight60 READ fontLineHeight60 CONSTANT )
+    Q_PROPERTY( double fontLineHeight48 READ fontLineHeight48 CONSTANT )
+    Q_PROPERTY( double fontLineHeight44 READ fontLineHeight44 CONSTANT )
+    Q_PROPERTY( double fontLineHeight36 READ fontLineHeight36 CONSTANT )
+    Q_PROPERTY( double fontLineHeight32 READ fontLineHeight32 CONSTANT )
+    Q_PROPERTY( double fontLineHeight30 READ fontLineHeight30 CONSTANT )
+    Q_PROPERTY( double fontLineHeight28 READ fontLineHeight28 CONSTANT )
+    Q_PROPERTY( double fontLineHeight26 READ fontLineHeight26 CONSTANT )
     Q_PROPERTY( double fontLineHeight24 READ fontLineHeight24 CONSTANT )
+    Q_PROPERTY( double fontLineHeight22 READ fontLineHeight22 CONSTANT )
 
     // Colors - primary palette
     Q_PROPERTY( QColor grassColor READ grassColor CONSTANT )
@@ -184,6 +184,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl rasterLayerNoColorOverlayIcon READ rasterLayerNoColorOverlayIcon CONSTANT )
     Q_PROPERTY( QUrl tableLayerNoColorOverlayIcon READ tableLayerNoColorOverlayIcon CONSTANT )
     Q_PROPERTY( QUrl pointLayerNoColorOverlayIcon READ pointLayerNoColorOverlayIcon CONSTANT )
+    Q_PROPERTY( QUrl followGPSNoColorOverlayIcon READ followGPSNoColorOverlayIcon CONSTANT )
 
     // Images
     Q_PROPERTY( QUrl loadingIndicatorImage READ loadingIndicatorImage CONSTANT )
@@ -252,6 +253,7 @@ class MMStyle: public QObject
     Q_PROPERTY( double margin4 READ margin4 CONSTANT )
     Q_PROPERTY( double margin6 READ margin6 CONSTANT )
     Q_PROPERTY( double margin8 READ margin8 CONSTANT )
+    Q_PROPERTY( double margin10 READ margin10 CONSTANT )
     Q_PROPERTY( double margin12 READ margin12 CONSTANT )
     Q_PROPERTY( double margin16 READ margin16 CONSTANT )
     Q_PROPERTY( double margin20 READ margin20 CONSTANT )
@@ -301,7 +303,16 @@ class MMStyle: public QObject
     QFont p6() {return fontFactory( 12, false );}
     QFont p7() {return fontFactory( 10, false );}
 
+    double fontLineHeight60() {return 60 * mDp;}
+    double fontLineHeight48() {return 48 * mDp;}
+    double fontLineHeight44() {return 44 * mDp;}
+    double fontLineHeight36() {return 36 * mDp;}
+    double fontLineHeight32() {return 32 * mDp;}
+    double fontLineHeight30() {return 30 * mDp;}
+    double fontLineHeight28() {return 28 * mDp;}
+    double fontLineHeight26() {return 26 * mDp;}
     double fontLineHeight24() {return 24 * mDp;}
+    double fontLineHeight22() {return 22 * mDp;}
 
     QColor grassColor() {return QColor::fromString( "#73D19C" );}
     QColor forestColor() {return QColor::fromString( "#004C45" );}
@@ -432,6 +443,7 @@ class MMStyle: public QObject
     static QUrl polygonLayerNoColorOverlayIcon() {return QUrl( "qrc:/mIconPolygonLayer-nocoloroverlay.svg" );}
     static QUrl rasterLayerNoColorOverlayIcon() {return QUrl( "qrc:/mIconRasterLayer-nocoloroverlay.svg" );}
     static QUrl tableLayerNoColorOverlayIcon() {return QUrl( "qrc:/mIconTableLayer-nocoloroverlay.svg" );}
+    static QUrl followGPSNoColorOverlayIcon() {return QUrl( "qrc:/FollowGPS-nocoloroverlay.svg" );}
 
     QUrl loadingIndicatorImage() {return QUrl( "qrc:/images/LoadingIndicator.svg" );}
     QUrl mmLogoImage() {return QUrl( "qrc:/images/MMLogo.svg" );}
@@ -474,7 +486,7 @@ class MMStyle: public QObject
     double icon24() {return 24 * mDp;}
     double icon32() {return 32 * mDp;}
 
-    double mapItemHeight() {return 60 * mDp;}
+    double mapItemHeight() {return 50 * mDp;}
     double toolbarHeight()
     {
       if ( mSafeAreaBottom > 2 )
@@ -498,6 +510,7 @@ class MMStyle: public QObject
     double margin4() {return 4 * mDp;}
     double margin6() {return 6 * mDp;}
     double margin8() {return 8 * mDp;}
+    double margin10() {return 10 * mDp;}
     double margin12() {return 12 * mDp;}
     double margin16() {return 16 * mDp;}
     double margin20() {return 20 * mDp;}

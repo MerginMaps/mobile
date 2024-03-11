@@ -85,8 +85,7 @@ Page {
     width: parent.width - 40
     sourceItem: map
     text: "Mark the geometry on the map and click record"
-
-    Component.onCompleted: show()
+    visible: true
   }
 
   Rectangle {

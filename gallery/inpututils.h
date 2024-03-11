@@ -30,7 +30,6 @@ class InputUtils: public QObject
     Q_PROPERTY( StreamingIntervalType::IntervalType intervalType READ intervalType WRITE setIntervalType NOTIFY intervalTypeChanged )
     Q_PROPERTY( bool reuseLastEnteredValues READ reuseLastEnteredValues WRITE setReuseLastEnteredValues NOTIFY reuseLastEnteredValuesChanged )
     Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
-    Q_PROPERTY( bool autoCenterMapChecked READ autoCenterMapChecked WRITE setAutoCenterMapChecked NOTIFY autoCenterMapCheckedChanged )
 
     bool isIos() { return false; }
     bool isAndroid() { return true; }
@@ -39,7 +38,6 @@ class InputUtils: public QObject
     double gpsAntennaHeight() { return mGpsAntennaHeightcy; }
     void setGpsAntennaHeight( double gpsAntennaHeight ) { mGpsAntennaHeightcy = gpsAntennaHeight; emit gpsAntennaHeightChanged(); }
     int lineRecordingInterval() { return mLineRecordingInterval; }
-    bool autoCenterMapChecked() { return mAutoCenterMapChecked; }
 
     void setLineRecordingInterval( int lineRecordingInterval ) { mLineRecordingInterval = lineRecordingInterval; emit lineRecordingIntervalChanged(); }
     StreamingIntervalType::IntervalType intervalType() { return mIntervalType; }
@@ -48,7 +46,6 @@ class InputUtils: public QObject
     void setReuseLastEnteredValues( bool reuseLastEnteredValues ) { mReuseLastEnteredValues = reuseLastEnteredValues; emit reuseLastEnteredValuesChanged(); }
     bool autosyncAllowed() { return mNewAutosyncAllowed; }
     void setAutosyncAllowed( bool newAutosyncAllowed ) { mNewAutosyncAllowed = newAutosyncAllowed; emit autosyncAllowedChanged( mNewAutosyncAllowed ); }
-    void setAutoCenterMapChecked( bool newAutoCenterMapChecked ) { mAutoCenterMapChecked = newAutoCenterMapChecked; emit autoCenterMapCheckedChanged(); }
 
   signals:
     void imageSelected( QString imagePath, QString code );
@@ -67,7 +64,6 @@ class InputUtils: public QObject
     StreamingIntervalType::IntervalType mIntervalType = StreamingIntervalType::IntervalType::Distance;
     bool mReuseLastEnteredValues = false;
     bool mNewAutosyncAllowed = true;
-    bool mAutoCenterMapChecked = true;
 };
 
 #endif // INPUTUTILS_H

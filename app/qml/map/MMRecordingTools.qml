@@ -27,7 +27,6 @@ Item {
 
   property alias recordingMapTool: mapTool
 
-  property bool centerToGPSOnStartup: false
   property var activeFeature
 
   signal canceled()
@@ -51,9 +50,8 @@ Item {
   MM.RecordingMapTool {
     id: mapTool
 
-    property bool isUsingPosition: centeredToGPS || mapTool.recordingType == MM.RecordingMapTool.StreamMode
+    property bool isUsingPosition: mapTool.centeredToGPS || mapTool.recordingType == MM.RecordingMapTool.StreamMode
 
-    centeredToGPS: false
     mapSettings: root.map.mapSettings
 
     recordPoint: crosshair.recordPoint
@@ -190,7 +188,7 @@ Item {
   }
 
   MMToolbar {
-    anchors.bottom: parent.bottom
+    y: parent.height
 
     ObjectModel {
       id: polygonToolbarButtons
@@ -272,10 +270,6 @@ Item {
 
   Connections {
     target: map
-    function onUserInteractedWithMap() {
-      mapTool.centeredToGPS = false
-    }
-
     function onClicked( point ) {
       let screenPoint = Qt.point( point.x, point.y )
 

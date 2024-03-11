@@ -14,7 +14,10 @@ import mm 1.0 as MM
 Rectangle {
   id: root
 
-  height: text.height + 2 * 15 * __dp
+  property real minHeight: 66 * __dp
+
+  height: Math.max(minHeight, text.height + 2 * 15 * __dp)
+
   anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
 
   readonly property int innerSpacing: 5 * __dp
@@ -52,21 +55,34 @@ Rectangle {
     }
   }
 
-  Text {
+  RotationAnimation {
+    target: leftIcon
+
+    from: 0
+    to: 360
+
+    duration: 1800
+
+    running: model.icon === MM.NotificationType.WaitingIcon
+    loops: Animation.Infinite
+  }
+
+  MMText {
     id: text
 
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: leftIcon.right
     width: parent.width - 60 * __dp - closeButton.width - leftIcon.width
     text: model.message
+
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignLeft
     leftPadding: 20 * __dp - root.innerSpacing
     font: __style.t3
+
     clip: true
     maximumLineCount: 3
     wrapMode: Text.WordWrap
-    lineHeight: 1.4
     elide: Text.ElideRight
     color: {
       switch( type ) {

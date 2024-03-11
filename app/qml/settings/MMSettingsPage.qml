@@ -47,16 +47,6 @@ MMPage {
         color: __style.forestColor
       }
 
-      MMSettingsComponents.MMSettingSwitch {
-        width: parent.width
-        title: qsTr("Follow GPS with map")
-        description: qsTr("Determines whether the map automatically centers to your GPS position")
-        checked: __appSettings.autoCenterMapChecked
-        onClicked: __appSettings.autoCenterMapChecked = !checked
-      }
-
-      MMLine {}
-
       Item { width: 1; height: 1 }
 
       MMSettingsComponents.MMSettingInput {

@@ -24,55 +24,53 @@ Page {
   }
 
   Column {
-    width: parent.width
+    width: parent.width - 60
     spacing: 20
     anchors.centerIn: parent
 
     MMTextWithButtonInput {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
-      placeholderText: "Write an informative message"
+      text: "Write an informative message"
 
-      onButtonClicked: { __notificationModel.addInfo(text); text = "" }
+      onButtonClicked: { __notificationModel.addInfo(text) }
     }
     MMTextWithButtonInput {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
-      placeholderText: "Write a success message"
+      text: "Write a success message"
 
-      onButtonClicked: { __notificationModel.addSuccess(text); text = "" }
+      onButtonClicked: { __notificationModel.addSuccess(text) }
     }
     MMTextWithButtonInput {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
-      placeholderText: "Write a warning message"
+      text: "Write a warning message"
 
-      onButtonClicked: { __notificationModel.addWarning(text); text = "" }
+      onButtonClicked: { __notificationModel.addWarning(text) }
     }
     MMTextWithButtonInput {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
-      placeholderText: "Write an error message"
+      text: "Write an error message"
 
-      onButtonClicked: { __notificationModel.addError(text); text = "" }
+      onButtonClicked: { __notificationModel.addError(text) }
     }
     MMTextWithButtonInput {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
       text: "Stojí, stojí mohyla, Na mohyle zlá chvíľa, Na mohyle tŕnie chrastie A v tom tŕní, chrastí rastie, Rastie, kvety rozvíja Jedna žltá ľalia. Tá ľalia smutno vzdychá: „Hlávku moju tŕnie pichá A nožičky oheň páli – Pomôžte mi v mojom žiali!“ "
 
-      onButtonClicked: { __notificationModel.addInfo(text); text = "" }
+      onButtonClicked: { __notificationModel.addInfo(text) }
     }
     MMTextWithButtonInput {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
-      placeholderText: "Click on notification to invoke ShowProjectIssuesAction action"
+      text: "Click on notification to invoke ShowProjectIssuesAction action"
 
-      onButtonClicked: { __notificationModel.addInfo(text, MM.NotificationType.ShowProjectIssuesAction); text = "" }
+      onButtonClicked: { __notificationModel.addInfo(text, MM.NotificationType.ShowProjectIssuesAction) }
     }
   }
 
-  MMNotificationView {
-    width: parent.width
-  }
+  MMNotificationView {}
 }
