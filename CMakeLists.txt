@@ -252,10 +252,6 @@ if (IOS OR MACOS)
   find_package(Tasn1 REQUIRED)
 endif ()
 
-if (LNX)
-  find_package(Glib2 REQUIRED)
-endif ()
-
 if (HAVE_BLUETOOTH)
   find_package(
     Qt6 ${QT6_VERSION}
