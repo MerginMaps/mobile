@@ -45,7 +45,7 @@ class PositionProviderType
 class ProjectStatus
 {
     Q_GADGET
-    public:
+  public:
     explicit ProjectStatus() {}
 
     enum Status
