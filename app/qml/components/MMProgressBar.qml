@@ -22,9 +22,13 @@ Rectangle {
   radius: height / 2
 
   Rectangle {
-    width: parent.width * control.position
+    width: control.position > 1 ? parent.width : control.position * parent.width
     height: parent.height
     color: control.progressColor
     radius: height / 2
+
+    Behavior on width {
+      NumberAnimation { duration: 150 }
+    }
   }
 }

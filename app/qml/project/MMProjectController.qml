@@ -234,6 +234,7 @@ Item {
         }
 
         MMAvatarLettersItem {
+          id: accountNameAbbIcon
 
           width: parent.width
           height: parent.height
@@ -242,6 +243,7 @@ Item {
           hasNotification: false // TODO: link notification
 
           abbrv: __merginApi.userInfo.nameAbbr
+          visible: abbrv
         }
 
         MouseArea {
@@ -366,8 +368,6 @@ Item {
             case "workspace": pageFooter.index = 1; break
             case "explore": pageFooter.index = 2; break
           }
-
-          console.log("Set active:", state)
         }
 
         model: ObjectModel {

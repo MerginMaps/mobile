@@ -93,7 +93,24 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
         {
           return QVariant( project.local.projectError );
         }
+        else
+        {
+          ProjectStatus::Status status = ProjectStatus::projectStatus( project );
+
+          if ( status == ProjectStatus::NeedsSync )
+          {
+            return QVariant( tr( "Pending changes to synchronise" ) );
+          }
+
+          if ( status == ProjectStatus::NoVersion )
+          {
+            return QVariant( tr( "Local project, not uploaded" ) );
+          }
+        }
+
         QFileInfo fi( project.local.projectDir );
+
+        // Up to date
         // lastModified of projectDir is not reliable - gpkg file may have modified header after opening it. See more #1320
         return QVariant( tr( "Updated %1" ).arg( InputUtils::formatDateTimeDiff( fi.lastModified().toUTC() ) ) );
       }

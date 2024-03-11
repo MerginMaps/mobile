@@ -14,98 +14,140 @@ import mm 1.0 as MM
 
 import "../../app/qml/project"
 import "../../app/qml/project/components"
+import "../../app/qml/components"
 
-Page {
-  id: pane
+MMPage {
+  id: root
 
-  Column {
+  pageHeader.title: "Project delegates"
+
+  pageBottomMargin: 0
+  pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
+
+  pageContent: MMScrollView {
     width: parent.width
-    anchors.top: parent.top
-    anchors.topMargin: 20
-    anchors.left: parent.left
-    anchors.leftMargin: 20
-    spacing: 20
+    height: parent.height
 
-    MMProjectDelegate {
-      width: 350
+    Column {
+      width: parent.width
+      height: childrenRect.height
 
-      highlight: true
-      projectId: "1"
-      projectStatus: MM.ProjectStatus.NeedsSync
-      projectDisplayName: "Mergin local project"
-      projectDescription: "Highlighted"
-      projectIsValid: true
-      projectIsLocal: true
-      projectIsMergin: true
-      projectIsPending: true
+      spacing: __style.spacing12
 
-      onOpenRequested: console.log("onOpenRequested")
-      onStopSyncRequested: projectIsPending = false
-      onShowChangesRequested: console.log("onShowChangesRequested")
-      onSyncRequested: projectIsPending = true
-      onRemoveRequested: console.log("onRemoveRequested")
-      onMigrateRequested: console.log("onMigrateRequested")
+      MMListSpacer { height: __style.margin30 }
+
+      MMProjectDelegate {
+        id: syncingItem
+
+        width: parent.width
+
+        projectIsOpened: true
+        projectId: "1"
+        projectDisplayName: "Mergin local project"
+        projectDescription: "Highlighted"
+        projectIsInSync: true
+        projectSyncProgress: 1/4
+
+        projectActionButtons: ["download", "sync", "remove"]
+
+        state: "NeedsSync"
+
+        onOpenRequested: console.log("onOpenRequested")
+        onStopSyncRequested: projectIsInSync = false
+        onShowChangesRequested: console.log("onShowChangesRequested")
+        onSyncRequested: {
+          projectIsInSync = true
+          syncAnimator.start()
+        }
+        onRemoveRequested: console.log("onRemoveRequested")
+        onMigrateRequested: console.log("onMigrateRequested")
+
+        Timer {
+          id: syncAnimator
+
+          interval: 300
+          repeat: true
+          running: true
+
+          onTriggered: {
+            if ( syncingItem.projectSyncProgress > 1 ) {
+              syncingItem.projectIsInSync = false
+              syncingItem.projectSyncProgress = 0
+              syncAnimator.running = false
+            }
+
+            syncingItem.projectSyncProgress += 1/4
+          }
+        }
+      }
+
+      MMProjectDelegate {
+        width: parent.width
+
+        projectIsOpened: false
+        projectId: "1"
+        projectDisplayName: "Mergin remote project"
+        projectDescription: "Highlighted"
+
+        projectActionButtons: ["download"]
+
+        state: "OnServer"
+
+        height: visible ? implicitHeight : 0
+//        visible: true
+
+        onOpenRequested: console.log("onOpenRequested")
+        onStopSyncRequested: projectIsInSync = false
+        onShowChangesRequested: console.log("onShowChangesRequested")
+        onSyncRequested: projectIsInSync = true
+        onRemoveRequested: console.log("onRemoveRequested")
+        onMigrateRequested: console.log("onMigrateRequested")
+      }
+
+      MMProjectDelegate {
+        width: parent.width
+
+        projectIsOpened: false
+        projectId: "1"
+        projectDisplayName: "Mergin local project Long Long Long Long Long Long Long"
+        projectDescription: "Description Description Description Description Description"
+
+        projectActionButtons: ["upload", "changes", "remove"]
+
+        projectIsInSync: true
+        projectSyncProgress: 1/3
+
+        state: "UpToDate"
+
+        onOpenRequested: console.log("onOpenRequested")
+        onStopSyncRequested: projectIsInSync = false
+        onShowChangesRequested: console.log("onShowChangesRequested")
+        onSyncRequested: projectIsInSync = true
+        onRemoveRequested: console.log("onRemoveRequested")
+        onMigrateRequested: console.log("onMigrateRequested")
+      }
+
+      MMProjectDelegate {
+        width: parent.width
+
+        projectIsOpened: false
+        projectId: "2"
+        projectDisplayName: "Invalid project"
+        projectDescription: "A project error. A project error. A project error."
+
+        projectActionButtons: ["changes", "remove"]
+
+        state: "Error"
+
+        onOpenRequested: console.log("onOpenRequested")
+        onStopSyncRequested: console.log("onStopSyncRequested")
+        onShowChangesRequested: console.log("onShowChangesRequested")
+        onSyncRequested: { console.log("onSyncRequested"); projectIsInSync = true }
+        onRemoveRequested: console.log("onRemoveRequested")
+        onMigrateRequested: console.log("onMigrateRequested")
+      }
+
+      MMListFooterSpacer {}
     }
-
-    MMProjectDelegate {
-      width: 350
-
-      highlight: false
-      projectId: "1"
-      projectStatus: MM.ProjectStatus.NoVersion
-      projectDisplayName: "Mergin local project"
-      projectDescription: "Highlighted"
-      projectIsValid: true
-      projectIsLocal: true
-      projectIsMergin: true
-
-      onOpenRequested: console.log("onOpenRequested")
-      onStopSyncRequested: projectIsPending = false
-      onShowChangesRequested: console.log("onShowChangesRequested")
-      onSyncRequested: projectIsPending = true
-      onRemoveRequested: console.log("onRemoveRequested")
-      onMigrateRequested: console.log("onMigrateRequested")
-    }
-
-    MMProjectDelegate {
-      width: 350
-
-      highlight: false
-      projectId: "1"
-      projectStatus: MM.ProjectStatus.UpToDate
-      projectDisplayName: "Mergin local project Long Long Long Long Long Long Long"
-      projectDescription: "Description Description Description Description Description"
-      projectIsValid: true
-      projectIsLocal: true
-      projectIsMergin: true
-
-      onOpenRequested: console.log("onOpenRequested")
-      onStopSyncRequested: projectIsPending = false
-      onShowChangesRequested: console.log("onShowChangesRequested")
-      onSyncRequested: projectIsPending = true
-      onRemoveRequested: console.log("onRemoveRequested")
-      onMigrateRequested: console.log("onMigrateRequested")
-    }
-
-    MMProjectDelegate {
-      width: 350
-
-      highlight: false
-      projectId: "2"
-      projectStatus: MM.ProjectStatus.UpToDate
-      projectDisplayName: "Invalid project"
-      projectDescription: "A project error. A project error. A project error."
-      projectIsValid: false
-      projectIsLocal: false
-      projectIsMergin: false
-
-      onOpenRequested: console.log("onOpenRequested")
-      onStopSyncRequested: console.log("onStopSyncRequested")
-      onShowChangesRequested: console.log("onShowChangesRequested")
-      onSyncRequested: { console.log("onSyncRequested"); projectIsPending = true }
-      onRemoveRequested: console.log("onRemoveRequested")
-      onMigrateRequested: console.log("onMigrateRequested")
-    }
-
   }
 }
