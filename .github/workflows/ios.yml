@@ -82,7 +82,7 @@ jobs:
           brew uninstall --force aws-sam-cli
           brew uninstall --force pipx
           brew uninstall --force python@3.11
-          brew uninstall --force python@3.12
+          # brew uninstall --force python@3.12
           rm -f '/usr/local/bin/2to3'
           rm -f '/usr/local/bin/2to3-3.11'
           rm -f '/usr/local/bin/idle3'
