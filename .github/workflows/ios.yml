@@ -77,7 +77,7 @@ jobs:
           # FIXME: We should not need to do this, but there are currently some complications with Github CI.
           # See https://github.com/actions/runner-images/issues/4020.
           # See https://github.com/actions/runner-images/issues/8838.
-          brew unlink python@3.12
+          # brew unlink python@3.12
           brew uninstall --force azure-cli
           brew uninstall --force aws-sam-cli
           brew uninstall --force pipx
