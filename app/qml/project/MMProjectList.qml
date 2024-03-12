@@ -93,20 +93,56 @@ Item {
       id: projectDelegate
 
       width: ListView.view.width
+      height: visible ? implicitHeight : 0
+
+      visible: root.hideActiveProject ? !projectIsOpened : true
 
       projectDisplayName: root.projectModelType === MM.ProjectsModel.CreatedProjectsModel ? model.ProjectName : model.ProjectFullName
-      projectId: model.ProjectId
-      projectDescription: model.ProjectDescription
-      projectStatus: model.ProjectStatus ? model.ProjectStatus : MM.ProjectStatus.NoVersion
-      projectIsValid: model.ProjectIsValid
-      projectIsPending: model.ProjectSyncPending ? model.ProjectSyncPending : false
+      projectId: model.ProjectId ? model.ProjectId : ""
+      projectDescription: model.ProjectDescription ? model.ProjectDescription : ""
+      projectIsInSync: model.ProjectSyncPending ? model.ProjectSyncPending : false
       projectSyncProgress: model.ProjectSyncProgress ? model.ProjectSyncProgress : -1
-      projectIsLocal: model.ProjectIsLocal
-      projectIsMergin: model.ProjectIsMergin
-      projectRemoteError: model.ProjectRemoteError ? model.ProjectRemoteError : ""
+      projectIsOpened: model.ProjectId === root.activeProjectId
 
-      highlight: model.ProjectId === root.activeProjectId
-      visible: !root.hideActiveProject || !highlight
+      state: {
+        let status = model.ProjectStatus ? model.ProjectStatus : MM.ProjectStatus.NoVersion
+
+        if ( status === MM.ProjectStatus.NeedsSync ) {
+          return "NeedsSync"
+        }
+        else if ( model.ProjectIsMergin && model.ProjectIsLocal )
+        {
+          return "UpToDate"
+        }
+        else if ( model.ProjectIsMergin && !model.ProjectIsLocal )
+        {
+          return "OnServer"
+        }
+        else if ( !model.ProjectIsMergin && !model.ProjectIsLocal )
+        {
+          return "NeedsSync" // TODO: what to do here? Locally created project!
+        }
+        else if ( !model.ProjectIsValid )
+        {
+          return "Error"
+        }
+
+        return "UpToDate" // fallback, should never happen
+      }
+
+      projectActionButtons: {
+        if ( model.ProjectIsMergin && model.ProjectIsLocal )
+        {
+          if ( ( ( model.ProjectStatus ? model.ProjectStatus : MM.ProjectStatus.NoVersion ) === MM.ProjectStatus.NeedsSync ) ) {
+            return ["sync", "changes", "remove"]
+          }
+          return ["changes", "remove"]
+        }
+        else if ( !model.ProjectIsMergin && model.ProjectIsLocal ) {
+          return ["upload", "remove"]
+        }
+        return ["download"]
+      }
 
       onOpenRequested: {
         if ( model.ProjectIsLocal )
@@ -116,7 +152,19 @@ Item {
           downloadProjectDialog.open()
         }
       }
-      onSyncRequested: controllerModel.syncProject( projectId )
+
+      onSyncRequested: {
+        if ( model.ProjectRemoteError ) {
+          __notificationModel.addError( qsTr( "Could not synchronize project, please make sure you are logged in and have sufficient rights." ) )
+        }
+        else if ( !model.ProjectIsMergin ) {
+          controllerModel.migrateProject( projectId )
+        }
+        else {
+          controllerModel.syncProject( projectId )
+        }
+      }
+
       onMigrateRequested: controllerModel.migrateProject( projectId )
       onRemoveRequested: {
         removeDialog.relatedProjectId = projectId
@@ -140,6 +188,9 @@ Item {
     id: addProjectComponent
 
     Column {
+
+      topPadding: noLocalProjectsMessageContainer.visible ? noLocalProjectsMessageContainer.height + __style.margin40 : 0
+
       width: ListView.view.width
 
       Item {
@@ -168,7 +219,10 @@ Item {
              root.searchText === "" &&
              !controllerModel.isLoading
 
-    anchors.fill: parent
+    anchors {
+      left: parent.left
+      right: parent.right
+    }
 
     image: __style.positiveMMSymbolImage
     title: qsTr( "No downloaded projects found")
@@ -184,8 +238,8 @@ Item {
 
     anchors.centerIn: parent
     visible: reloadList.visible || !controllerModel.isLoading && ( projectModelType !== MM.ProjectsModel.LocalProjectsModel && listview.count === 0 )
-    title: reloadList.visible ? qsTr("Unable to get the list of projects.") : qsTr("No projects found!")
-    image: __style.noWifiImage
+    title: reloadList.visible ? qsTr("Unable to get the list of projects.") : qsTr("No projects found")
+    image: reloadList.visible ? __style.noWifiImage : __style.negativeMMSymbolImage
   }
 
   Item {

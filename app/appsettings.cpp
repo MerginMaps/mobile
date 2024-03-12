@@ -15,7 +15,6 @@
 
 const QString AppSettings::INPUTAPP_GROUP_NAME = QStringLiteral( "inputApp" );
 const QString AppSettings::POSITION_PROVIDERS_GROUP = QStringLiteral( "inputApp/positionProviders" );
-const int AppSettings::WS_TOOLTIP_MAX_NUM_OF_OCCURENCIES = 5;
 
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
@@ -31,7 +30,6 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   QString savedAppVersion = settings.value( QStringLiteral( "appVersion" ), QStringLiteral() ).toString();
   QString activeProviderId = settings.value( QStringLiteral( "activePositionProviderId" ) ).toString();
   bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
-  mWsTooltipShownCounter = settings.value( QStringLiteral( "wsTooltipCounter" ) ).toInt();
   double gpsHeight = settings.value( "gpsHeight", 0 ).toDouble();
   QString ignoreMigrateVersion = settings.value( QStringLiteral( "ignoreMigrateVersion" ) ).toString();
 
@@ -290,22 +288,6 @@ void AppSettings::setAutosyncAllowed( bool newAutosyncAllowed )
   mAutosyncAllowed = newAutosyncAllowed;
   setValue( QStringLiteral( "autosyncAllowed" ), newAutosyncAllowed );
   emit autosyncAllowedChanged( mAutosyncAllowed );
-}
-
-void AppSettings::wsTooltipShown()
-{
-  if ( mWsTooltipShownCounter < WS_TOOLTIP_MAX_NUM_OF_OCCURENCIES )
-  {
-    mWsTooltipShownCounter += 1;
-    setValue( QStringLiteral( "wsTooltipCounter" ), mWsTooltipShownCounter );
-
-    emit ignoreWsTooltipChanged();
-  }
-}
-
-bool AppSettings::ignoreWsTooltip() const
-{
-  return mWsTooltipShownCounter >= WS_TOOLTIP_MAX_NUM_OF_OCCURENCIES;
 }
 
 double AppSettings::gpsAntennaHeight() const

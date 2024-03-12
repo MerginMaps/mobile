@@ -225,7 +225,7 @@ Page {
     MMSwitchWorkspacePage {
       id: switchWorkspacePanel
 
-      activeWorkspaceId: "aaa-111-ddd"
+      activeWorkspaceId: 111
 
       invitationsModel: ListModel {
         ListElement { display: "Workspace-ABC"; whatsThis: "aaa-111-bbb" }

@@ -32,7 +32,6 @@ class AppSettings: public QObject
     Q_PROPERTY( QString appVersion READ appVersion WRITE setAppVersion NOTIFY appVersionChanged )
     Q_PROPERTY( QString activePositionProviderId READ activePositionProviderId WRITE setActivePositionProviderId NOTIFY activePositionProviderIdChanged )
     Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
-    Q_PROPERTY( bool ignoreWsTooltip READ ignoreWsTooltip NOTIFY ignoreWsTooltipChanged )
     Q_PROPERTY( double gpsAntennaHeight READ gpsAntennaHeight WRITE setGpsAntennaHeight NOTIFY gpsAntennaHeightChanged )
     Q_PROPERTY( QString ignoreMigrateVersion READ ignoreMigrateVersion WRITE setIgnoreMigrateVersion NOTIFY ignoreMigrateVersionChanged )
 
@@ -84,12 +83,8 @@ class AppSettings: public QObject
     QString ignoreMigrateVersion() const;
     void setIgnoreMigrateVersion( const QString &version );
 
-    Q_INVOKABLE void wsTooltipShown();
-    bool ignoreWsTooltip() const; // ---> can be removed after migration to ws
-
     static const QString INPUTAPP_GROUP_NAME;
     static const QString POSITION_PROVIDERS_GROUP;
-    static const int WS_TOOLTIP_MAX_NUM_OF_OCCURENCIES; // ---> can be removed after migration to ws
 
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
@@ -109,7 +104,6 @@ class AppSettings: public QObject
 
     void autosyncAllowedChanged( bool autosyncAllowed );
 
-    void ignoreWsTooltipChanged(); // ---> can be removed after migration to ws
     void ignoreMigrateVersionChanged();
 
   private:
@@ -142,7 +136,6 @@ class AppSettings: public QObject
     QVariant value( const QString &key, const QVariant &defaultValue = QVariant() );
     QString mActivePositionProviderId;
     bool mAutosyncAllowed = false;
-    int mWsTooltipShownCounter = 0; // ---> can be removed after migration to ws
     double mGpsAntennaHeight = 0;
     QString mIgnoreMigrateVersion;
 };

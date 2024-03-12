@@ -14,6 +14,7 @@ import mm 1.0 as MM
 import "./components"
 import "../components"
 import "../inputs"
+import "../dialogs"
 
 Item {
   id: root
@@ -100,7 +101,6 @@ Item {
       id: currentProjectColumn
 
       width: ListView.view.width
-      visible: activeProjectItem.model !== undefined
 
       Text {
         width: parent.width
@@ -123,36 +123,68 @@ Item {
         property var model: projectlist.projectsModel
         property var index: projectlist.projectsModel.projectModelIndexFromId(root.activeProjectId)
 
+        property string projectRemoteError: model.data(index, MM.ProjectsModel.ProjectRemoteError) ? model.data(index, MM.ProjectsModel.ProjectRemoteError) : ""
+
         width: parent.width
 
-        highlight: true
-        projectDisplayName: model.data(index, MM.ProjectsModel.ProjectFullName)
-        projectId: model.data(index, MM.ProjectsModel.ProjectId)
-        projectDescription: model.data(index, MM.ProjectsModel.ProjectDescription)
-        projectStatus: model.data(index, MM.ProjectsModel.ProjectStatus) ? model.data(index, MM.ProjectsModel.ProjectStatus) : MM.ProjectStatus.NoVersion
-        projectIsValid: model.data(index, MM.ProjectsModel.ProjectIsValid)
-        projectIsPending: model.data(index, MM.ProjectsModel.ProjectSyncPending) ? model.data(index, MM.ProjectsModel.ProjectSyncPending) : false
+        projectIsOpened: true
+        projectDisplayName: model.data(index, MM.ProjectsModel.ProjectFullName) ? model.data(index, MM.ProjectsModel.ProjectFullName) : ""
+        projectId: model.data(index, MM.ProjectsModel.ProjectId) ? model.data(index, MM.ProjectsModel.ProjectId) : ""
+        projectDescription: model.data(index, MM.ProjectsModel.ProjectDescription) ? model.data(index, MM.ProjectsModel.ProjectDescription) : ""
+        projectIsInSync: model.data(index, MM.ProjectsModel.ProjectSyncPending) ? model.data(index, MM.ProjectsModel.ProjectSyncPending) : false
         projectSyncProgress: model.data(index, MM.ProjectsModel.ProjectSyncProgress) ? model.data(index, MM.ProjectsModel.ProjectSyncProgress) : -1
-        projectIsLocal: model.data(index, MM.ProjectsModel.ProjectIsLocal)
-        projectIsMergin: model.data(index, MM.ProjectsModel.ProjectIsMergin)
-        projectRemoteError: model.data(index, MM.ProjectsModel.ProjectRemoteError) ? model.data(index, MM.ProjectsModel.ProjectRemoteError) : ""
-        property string projectFilePath: model.data(index, MM.ProjectsModel.ProjectFilePath)
+        property string projectFilePath: model.data(index, MM.ProjectsModel.ProjectFilePath) ? model.data(index, MM.ProjectsModel.ProjectFilePath) : ""
 
-        onOpenRequested: {
-          if ( projectIsLocal )
-            root.openProjectRequested( projectFilePath )
-          else if ( !projectIsLocal && projectIsMergin && !projectSyncPending) {
-            projectlist.downloadProjectDialog.relatedProjectId = projectId
-            projectlist.downloadProjectDialog.open()
+        state: {
+          let status = model.data(index, MM.ProjectsModel.ProjectStatus) ? model.data(index, MM.ProjectsModel.ProjectStatus) : MM.ProjectStatus.NoVersion
+
+          if ( status === MM.ProjectStatus.NeedsSync ) {
+            return "NeedsSync"
+          }
+          else if ( status === MM.ProjectStatus.UpToDate )
+          {
+            return "UpToDate"
+          }
+          else if ( status === MM.ProjectStatus.NoVersion )
+          {
+            return "NeedsSync"
+          }
+
+          return "UpToDate" // fallback, should never happen
+        }
+
+        projectActionButtons: {
+          let status = model.data(index, MM.ProjectsModel.ProjectStatus) ? model.data(index, MM.ProjectsModel.ProjectStatus) : MM.ProjectStatus.NoVersion
+
+          if ( status === MM.ProjectStatus.NeedsSync ) {
+            return ["sync", "changes", "remove"]
+          }
+          else if ( status === MM.ProjectStatus.NoVersion ) {
+            return ["upload", "remove"]
+          }
+          return ["changes", "remove"] // UpToDate
+        }
+
+        onOpenRequested: root.openProjectRequested( projectFilePath )
+
+        onSyncRequested: {
+          if ( projectRemoteError ) {
+            __notificationModel.addError( qsTr( "Could not synchronize project, please make sure you are logged in and have sufficient rights." ) )
+          }
+          else if ( !model.data(index, MM.ProjectsModel.ProjectIsMergin) ) {
+            projectlist.projectsModel.migrateProject( projectId )
+          }
+          else {
+            projectlist.projectsModel.syncProject( projectId )
           }
         }
-        onSyncRequested: projectlist.MM.ProjectsModel.syncProject( projectId )
-        onMigrateRequested: projectlist.MM.ProjectsModel.migrateProject( projectId )
+
+        onMigrateRequested: projectlist.projectsModel.migrateProject( projectId )
         onRemoveRequested: {
-          removeDialog.relatedProjectId = projectId
-          removeDialog.open()
+          removeProjectDialog.relatedProjectId = projectId
+          removeProjectDialog.open()
         }
-        onStopSyncRequested: projectlist.MM.ProjectsModel.stopProjectSync( projectId )
+        onStopSyncRequested: projectlist.projectsModel.stopProjectSync( projectId )
         onShowChangesRequested: root.showLocalChangesRequested( projectId )
       }
 
@@ -180,11 +212,11 @@ Item {
 
     projectModelType: MM.ProjectsModel.LocalProjectsModel
     activeProjectId: root.activeProjectId
-    hideActiveProject: true
+    hideActiveProject: true // TODO: do not hide when searching!
     searchText: searchBar.text
     spacing: root.spacing
 
-    listHeader: activeProjectComponent
+    listHeader: root.activeProjectId ? activeProjectComponent : null
 
     anchors {
       left: parent.left
@@ -205,6 +237,38 @@ Item {
     }
     onShowLocalChangesRequested: function( projectId ) {
       root.showLocalChangesRequested( projectId )
+    }
+
+    Connections {
+      target: projectlist.projectsModel
+
+      function onModelReset() {
+        // ugly ugly ugly #2
+        projectlist.listHeader = null
+        projectlist.listHeader = activeProjectComponent
+      }
+    }
+  }
+
+  MMRemoveProjectDialog {
+    id: removeProjectDialog
+
+    onRemoveClicked: {
+      if (relatedProjectId === "") {
+        return
+      }
+
+      if ( root.activeProjectId === relatedProjectId )
+        projectlist.activeProjectDeleted() // ugly, ugly, ugly
+
+      __inputUtils.log(
+            "Delete project",
+            "Project " + __localProjectsManager.projectName( relatedProjectId ) + " deleted by " +
+            ( __merginApi.userAuth ? __merginApi.userAuth.username : "unknown" ) + " (" + __localProjectsManager.projectChanges( relatedProjectId ) + ")" )
+
+      projectlist.projectsModel.removeLocalProject( relatedProjectId )
+
+      removeProjectDialog.relatedProjectId = ""
     }
   }
 }

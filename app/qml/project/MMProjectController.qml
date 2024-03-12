@@ -38,9 +38,11 @@ Item {
   }
 
   function hidePanel() {
-    root.visible = false
-    stackView.clearStackAndClose()
-    root.closed()
+    if ( root.activeProjectId ) {
+      root.visible = false
+      stackView.clearStackAndClose()
+      root.closed()
+    }
   }
 
   function setupProjectOpen( projectPath ) {
@@ -168,163 +170,118 @@ Item {
   Component {
     id: workspaceProjectsPanelComp
 
-    Page {
+    MMPage {
       id: projectsPage
 
-      function refreshProjectList( keepSearchFilter = false ) {
-        stackView.pending = true
-        switch( pageContent.state ) {
-          case "local":
-            homeTab.refreshProjectsList( keepSearchFilter )
-            break
-          case "created":
-            workspaceProjectsTab.refreshProjectsList( keepSearchFilter )
-            break
-          case "public":
-            publicProjectsTab.refreshProjectsList( keepSearchFilter )
-            break
-        }
+      state: root.visible ? "home" : ""
+
+      states: [
+        State { name: "home" },
+        State { name: "workspace" },
+        State { name: "explore" }
+      ]
+
+      pageBottomMargin: 0
+      pageHeader.backVisible: root.activeProjectId
+
+      onBackClicked: root.hidePanel()
+
+      onStateChanged: {
+        __merginApi.pingMergin()
+        projectsPage.refreshProjectList()
+
+        pageFooter.setActiveButton( projectsPage.state )
+
+        // NOTE: we do not have any tooltip ATM - TODO: what to do?
+        //
+        // Show ws explanation tooltip if user is in workspace projects, on the ws server,
+        // has more than one ws and has not seen it yet for too many times
+        //
       }
 
-      header: MMPageHeader {
-        id: headerRow
-
-        title: {
-          if ( pageContent.state === "local" ) {
-            return qsTr("Home")
-          }
-          else if ( pageContent.state === "created" ) {
-            return qsTr("Projects")
-          }
-          return qsTr("Explore")
+      pageHeader.title: {
+        if ( projectsPage.state === "home" ) {
+          return qsTr("Home")
         }
+        else if ( projectsPage.state === "workspace" ) {
+          return qsTr("Projects")
+        }
+        return qsTr("Explore")
+      }
 
-        onBackClicked: root.hidePanel()
+      pageHeader.rightItemContent: Item {
 
-        rightItemContent: Rectangle {
+        width: 40 * __dp
+        height: width
 
-          visible: pageContent.state === "local"
+        anchors.verticalCenter: parent.verticalCenter
 
-          anchors.verticalCenter: parent.verticalCenter
-
-          width: 40 * __dp
-          height: width
+        Rectangle {
+          width: parent.width
+          height: parent.height
           radius: width / 2
+
           color: __style.fieldColor
 
           MMIcon {
-            id: genericAccountIcon
+            anchors.centerIn: parent
+
             visible: !accountNameAbbIcon.visible
-            anchors.centerIn: parent
-            source: __style.personalIcon
+
             size: __style.icon24
+            source: __style.personalIcon
+          }
+        }
+
+        MMAvatarLettersItem {
+          id: accountNameAbbIcon
+
+          width: parent.width
+          height: parent.height
+
+          text.font: __style.t4
+          hasNotification: false // TODO: link notification
+
+          abbrv: __merginApi.userInfo.nameAbbr
+          visible: abbrv
+        }
+
+        MouseArea {
+          anchors {
+            fill: parent
+            margins: -__style.margin12
           }
 
-          Text {
-            id: accountNameAbbIcon
-            visible: text
-            text: __merginApi.userInfo.nameAbbr
-            anchors.centerIn: parent
-            color: __style.forestColor
-            font: __style.t2
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-          }
+          onClicked: {
+            if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MM.MerginApiStatus.OK ) {
 
-          MouseArea {
-            anchors.fill: parent
-            onClicked: {
-              if ( __merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MM.MerginApiStatus.OK ) {
+              __merginApi.refreshUserData()
 
-                __merginApi.refreshUserData()
-
-                if ( __merginApi.serverType === MM.MerginServerType.OLD ) {
-                  __notificationModel.addWarning( qsTr( "Unsupported server, please contact your server administrator." ) )
-                }
-                else {
-                  stackView.push( workspaceAccountPageComp )
-                }
+              if ( __merginApi.serverType === MM.MerginServerType.OLD ) {
+                __notificationModel.addWarning( qsTr( "Unsupported server, please contact your server administrator." ) )
               }
               else {
-                root.showLogin()
+                stackView.push( workspaceAccountPageComp )
               }
             }
+            else {
+              root.showLogin()
+            }
           }
         }
       }
 
-      background: Rectangle {
-        anchors.fill: parent
-        color: __style.lightGreenColor
-      }
-
-      Item {
+      pageContent: Item {
         id: pageContent
 
-        anchors.fill: parent
-
-        states: [
-          State {
-            name: "local"
-          },
-          State {
-            name: "created"
-          },
-          State {
-            name: "public"
-          }
-        ]
-
-        state: root.visible ? "local" : ""
-
-        onStateChanged: {
-          __merginApi.pingMergin()
-          projectsPage.refreshProjectList()
-
-          pageFooter.setActiveButton( pageContent.state )
-
-          //
-          // Show ws explanation tooltip if user is in workspace projects, on the ws server,
-          // has more than one ws and has not seen it yet for too many times
-          //
-          if ( state === "created" ) {
-            if (__merginApi.apiSupportsWorkspaces &&
-                __merginApi.userInfo.hasMoreThanOneWorkspace &&
-                !__appSettings.ignoreWsTooltip ) {
-
-              __appSettings.wsTooltipShown()
-              headerRow.openTooltip()
-            }
-          }
-        }
-
-        Connections {
-          target: root
-          function onVisibleChanged() {
-            if ( root.visible ) { // projectsPanel opened
-              pageContent.state = "local"
-            }
-            else {
-              pageContent.state = ""
-            }
-          }
-
-          function onResetView() {
-            if ( pageContent.state === "created" )
-              pageContent.state = "local"
-          }
-
-          function onRefreshProjects() {
-            projectsPage.refreshProjectList()
-          }
-        }
+        width: parent.width
+        height: parent.height
 
         StackLayout {
           id: projectListLayout
 
-          width: parent.width - 2*__style.pageMargins
+          width: parent.width
           height: parent.height
-          anchors.horizontalCenter: parent.horizontalCenter
 
           currentIndex: pageFooter.index
 
@@ -403,13 +360,13 @@ Item {
         width: projectsPage.width
         property int buttonWidth: Math.floor((projectsPage.width - 2 * __style.pageMargins) / 3)
 
-        Component.onCompleted: setActiveButton( pageContent.state )
+        Component.onCompleted: setActiveButton( projectsPage.state )
 
         function setActiveButton( state ) {
           switch( state ) {
-            case "local": pageFooter.index = 0; break
-            case "created": pageFooter.index = 1; break
-            case "public": pageFooter.index = 2; break
+            case "home": pageFooter.index = 0; break
+            case "workspace": pageFooter.index = 1; break
+            case "explore": pageFooter.index = 2; break
           }
         }
 
@@ -417,44 +374,84 @@ Item {
 
           MMSelectableToolbarButton {
             id: localProjectsBtn
+
             width: pageFooter.buttonWidth
             text: qsTr("Home")
             iconSource: __style.homeIcon
             selectedIconSource: __style.homeFilledIcon
             checked: pageFooter.index === 0
-            onClicked: pageContent.state = "local"
+            onClicked: projectsPage.state = "home"
           }
 
           MMSelectableToolbarButton {
             id: createdProjectsBtn
+
             width: pageFooter.buttonWidth
             text: qsTr("Projects")
             iconSource: __style.projectsIcon
             selectedIconSource: __style.projectsFilledIcon
             checked: pageFooter.index === 1
-            onClicked: pageContent.state = "created"
+            onClicked: projectsPage.state = "workspace"
           }
 
           MMSelectableToolbarButton {
             id: publicProjectsBtn
+
             width: pageFooter.buttonWidth
             text: qsTr("Explore")
             iconSource: __style.globalIcon
             selectedIconSource: __style.globalFilledIcon
             checked: pageFooter.index === 2
-            onClicked: pageContent.state = "public"
+            onClicked: projectsPage.state = "explore"
           }
         }
       }
 
-      // Other components
+      function refreshProjectList( keepSearchFilter = false ) {
+        stackView.pending = true
+        switch( projectsPage.state ) {
+          case "home":
+            homeTab.refreshProjectsList( keepSearchFilter )
+            break
+          case "workspace":
+            workspaceProjectsTab.refreshProjectsList( keepSearchFilter )
+            break
+          case "explore":
+            publicProjectsTab.refreshProjectsList( keepSearchFilter )
+            break
+        }
+      }
+
+      Connections {
+        target: root
+
+        function onVisibleChanged() {
+          if ( root.visible ) { // projectsPanel opened
+            projectsPage.state = "home"
+          }
+          else {
+            projectsPage.state = ""
+          }
+        }
+
+        function onResetView() {
+          if ( projectsPage.state === "workspace" )
+            projectsPage.state = "home"
+        }
+
+        function onRefreshProjects() {
+          projectsPage.refreshProjectList()
+        }
+      }
 
       Connections {
         target: __projectWizard
-        function onProjectCreationFailed(message) {
+
+        function onProjectCreationFailed( message ) {
           __notificationModel.addError( message )
           stackView.pending = false
         }
+
         function onProjectCreated( projectDir, projectName ) {
           if  (stackView.currentItem.objectName === "projectWizard") {
             __inputUtils.log(
@@ -622,7 +619,7 @@ Item {
     function onApiVersionStatusChanged() {
       stackView.pending = false
 
-      if (__merginApi.apiVersionStatus === MerginApiStatus.OK) {
+      if (__merginApi.apiVersionStatus === MM.MerginApiStatus.OK) {
         if (__merginApi.userAuth.hasAuthData()) {
           root.refreshProjects()
         }

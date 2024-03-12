@@ -163,6 +163,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl splitGeometryIcon READ splitGeometryIcon CONSTANT )
     Q_PROPERTY( QUrl streamingIcon READ streamingIcon CONSTANT )
     Q_PROPERTY( QUrl redrawGeometryIcon READ redrawGeometryIcon CONSTANT )
+    Q_PROPERTY( QUrl cloudIcon READ cloudIcon CONSTANT )
 
     // Filled Icons - for visualizing of selected item in toolbar
     Q_PROPERTY( QUrl projectsFilledIcon READ projectsFilledIcon CONSTANT )
@@ -257,6 +258,7 @@ class MMStyle: public QObject
     Q_PROPERTY( double margin12 READ margin12 CONSTANT )
     Q_PROPERTY( double margin16 READ margin16 CONSTANT )
     Q_PROPERTY( double margin20 READ margin20 CONSTANT )
+    Q_PROPERTY( double margin30 READ margin30 CONSTANT )
     Q_PROPERTY( double margin40 READ margin40 CONSTANT )
 
     // Page
@@ -349,6 +351,7 @@ class MMStyle: public QObject
     QUrl splitGeometryIcon() {return QUrl( "qrc:/SplitGeometry.svg" );}
     QUrl streamingIcon() {return QUrl( "qrc:/Streaming.svg" );}
     QUrl redrawGeometryIcon() {return QUrl( "qrc:/RedrawGeometry.svg" );}
+    QUrl cloudIcon() {return QUrl( "qrc:/Cloud.svg" );}
     QUrl linkIcon() {return QUrl( "qrc:/Link.svg" );}
     QUrl closeAccountIcon() {return QUrl( "qrc:/CloseAccount.svg" );}
     QUrl signOutIcon() {return QUrl( "qrc:/SignOut.svg" );}
@@ -514,6 +517,7 @@ class MMStyle: public QObject
     double margin12() {return 12 * mDp;}
     double margin16() {return 16 * mDp;}
     double margin20() {return 20 * mDp;}
+    double margin30() {return 30 * mDp;}
     double margin40() {return 40 * mDp;}
 
     double row24() {return 24 * mDp;}

@@ -69,4 +69,6 @@ Text {
 
     return __style.nightColor
   }
+
+  elide: Text.ElideRight
 }

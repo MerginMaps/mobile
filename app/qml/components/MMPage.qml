@@ -16,7 +16,7 @@ Page {
   property alias pageHeader: mmheader
   property alias pageContent: contentGroup.children
 
-  property double pageSpacing: __style.spacing40 // Change this to 20 if using searchbar
+  property double pageSpacing: __style.spacing20 // Change this to 20 if using searchbar
 
   property real pageBottomMargin: __style.margin20
   property int pageBottomMarginPolicy: MMPage.BottomMarginPolicy.UseMargin
@@ -43,6 +43,7 @@ Page {
     onBackClicked: root.backClicked()
   }
 
+  // TODO: use content item for this element
   Item {
     id: contentGroup
 
@@ -70,17 +71,16 @@ Page {
 
     height: {
       if ( pageBottomMarginPolicy === MMPage.BottomMarginPolicy.UseMargin ) {
-        return parent.height - root.pageSpacing - root.pageBottomMargin
+        return parent.height - root.pageBottomMargin
       }
       else {
-        return parent.height - root.pageSpacing
+        return parent.height
       }
     }
     width: parent.width - leftPadding - rightPadding
 
     // center the content
     x: leftPadding
-    y: root.pageSpacing
   }
 
   Keys.onReleased: function( event ) {

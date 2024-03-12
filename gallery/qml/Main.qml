@@ -244,7 +244,7 @@ ApplicationWindow {
     Rectangle {
       id: safeArea
 
-      visible: true
+      visible: false
       color: "transparent"
       border.width: grid.bw
       border.color: "lightblue"

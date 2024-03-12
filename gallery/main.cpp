@@ -47,6 +47,7 @@ int main( int argc, char *argv[] )
   qmlRegisterUncreatableType<StreamingIntervalType>( "mm", 1, 0, "StreamingIntervalType", "StreamingIntervalType Enum" );
   qmlRegisterUncreatableType<PositionProviderType>( "mm", 1, 0, "PositionProvider", "PositionProvider Enum" );
   qmlRegisterUncreatableType<NotificationType>( "mm", 1, 0, "NotificationType", "NotificationType Enum" );
+  qmlRegisterUncreatableType<ProjectStatus>( "mm", 1, 0, "ProjectStatus", "ProjectStatus Enum" );
 
   // Register C++ types
   qmlRegisterType<QrCodeDecoder>( "mm", 1, 0, "QrCodeDecoder" );
