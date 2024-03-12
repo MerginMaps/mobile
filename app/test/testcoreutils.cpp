@@ -256,12 +256,17 @@ void TestCoreUtils::testNameAbbr()
     { QStringLiteral( "" ), QStringLiteral( "" ) },
     { QStringLiteral( "Chuck Brave Norris" ), QStringLiteral( "CN" ) },
     { QStringLiteral( "Chuck Norris" ), QStringLiteral( "CN" ) },
+    { QStringLiteral( "chuck@example.com" ), QStringLiteral( "CH" ) },
     { QStringLiteral( "Chuck" ), QStringLiteral( "C" ) },
     { QStringLiteral( "C" ), QStringLiteral( "C" ) },
   };
 
   for ( const auto &test : testcases )
   {
-    QCOMPARE( CoreUtils::nameAbbr( test.first ), test.second );
+    QStringList nameAndEmail = test.first.split('|');
+    QString name = nameAndEmail.size() > 0 ? nameAndEmail.at(0) : "";
+    QString email = nameAndEmail.size() > 1 ? nameAndEmail.at(1) : "";
+
+    QCOMPARE(CoreUtils::nameAbbr(name, email), test.second);
   }
 }

@@ -241,24 +241,16 @@ bool CoreUtils::isValidName( const QString &name )
   return !matchForbiddenNames.hasMatch();
 }
 
-QString CoreUtils::nameAbbr( const QString &name )
+QString CoreUtils::nameAbbr(const QString &name, const QString &email)
 {
-  QString ret;
+    if ( name.isEmpty() )
+        return email.left( 2 ).toUpper();
 
-  if ( name.isEmpty() )
-    return ret;
+    static QRegularExpression re( R"([\r\n\t ]+)" );
+    QStringList list = name.split( re, Qt::SplitBehaviorFlags::SkipEmptyParts );
 
-  static QRegularExpression re( R"([\r\n\t ]+)" );
-  QStringList list = name.split( re, Qt::SplitBehaviorFlags::SkipEmptyParts );
-  if ( !list.empty() )
-  {
-    ret += list.at( 0 )[0];
-  }
+    if ( list.size() > 1 )
+      return QString( "%1%2" ).arg( list.first()[0], list.last()[0] ).toUpper();
 
-  if ( list.size() > 1 )
-  {
-    ret += list.at( list.size() - 1 )[0];
-  }
-
-  return ret;
+    return email.left( 2 ).toUpper();
 }
