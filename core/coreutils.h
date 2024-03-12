@@ -100,7 +100,7 @@ class CoreUtils
      *   Pat -> P
      *   from <empty> -> <empty>
      */
-    static QString nameAbbr( const QString &name , const QString &email);
+    static QString nameAbbr( const QString &name, const QString &email );
 
   private:
     static QString sLogFile;

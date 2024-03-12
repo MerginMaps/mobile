@@ -252,23 +252,23 @@ void TestCoreUtils::testNameValidation()
 void TestCoreUtils::testNameAbbr()
 {
   QVector< QPair< QString, QString > > testcases =
-    {
-      { QStringLiteral( "" ), QStringLiteral( "" ) },
-      { QStringLiteral( "Chuck Brave|chuck@example.com" ), QStringLiteral( "CB" ) },
-      { QStringLiteral( "Chuck Norris|chuck@example.com" ), QStringLiteral( "CN" ) },
-      { QStringLiteral( "Chuck Norris Carlos|chuck@example.com" ), QStringLiteral( "CC" ) },
-      { QStringLiteral( "Chuck|chuck@example.com" ), QStringLiteral( "CH" ) },
-      { QStringLiteral( "|chuck@example.com" ), QStringLiteral( "CH" ) },
-      { QStringLiteral( "Chuck|" ), QStringLiteral( "CH" ) },
-      { QStringLiteral( "C|" ), QStringLiteral( "C" ) },
-    };
+  {
+    { QStringLiteral( "" ), QStringLiteral( "" ) },
+    { QStringLiteral( "Chuck Brave|chuck@example.com" ), QStringLiteral( "CB" ) },
+    { QStringLiteral( "Chuck Norris|chuck@example.com" ), QStringLiteral( "CN" ) },
+    { QStringLiteral( "Chuck Norris Carlos|chuck@example.com" ), QStringLiteral( "CC" ) },
+    { QStringLiteral( "Chuck|chuck@example.com" ), QStringLiteral( "CH" ) },
+    { QStringLiteral( "|chuck@example.com" ), QStringLiteral( "CH" ) },
+    { QStringLiteral( "Chuck|" ), QStringLiteral( "CH" ) },
+    { QStringLiteral( "C|" ), QStringLiteral( "C" ) },
+  };
 
   for ( const auto &test : testcases )
   {
-    QStringList nameAndEmail = test.first.split('|');
-    QString name = nameAndEmail.size() > 0 ? nameAndEmail.at(0) : "";
-    QString email = nameAndEmail.size() > 1 ? nameAndEmail.at(1) : "";
+    QStringList nameAndEmail = test.first.split( '|' );
+    QString name = nameAndEmail.size() > 0 ? nameAndEmail.at( 0 ) : "";
+    QString email = nameAndEmail.size() > 1 ? nameAndEmail.at( 1 ) : "";
 
-    QCOMPARE(CoreUtils::nameAbbr(name, email), test.second);
+    QCOMPARE( CoreUtils::nameAbbr( name, email ), test.second );
   }
 }
