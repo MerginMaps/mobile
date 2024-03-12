@@ -252,14 +252,14 @@ void TestCoreUtils::testNameValidation()
 void TestCoreUtils::testNameAbbr()
 {
   QVector< QPair< QString, QString > > testcases =
-  {
-    { QStringLiteral( "" ), QStringLiteral( "" ) },
-    { QStringLiteral( "Chuck Brave Norris" ), QStringLiteral( "CN" ) },
-    { QStringLiteral( "Chuck Norris" ), QStringLiteral( "CN" ) },
-    { QStringLiteral( "chuck@example.com" ), QStringLiteral( "CH" ) },
-    { QStringLiteral( "Chuck" ), QStringLiteral( "C" ) },
-    { QStringLiteral( "C" ), QStringLiteral( "C" ) },
-  };
+    {
+      { QStringLiteral( "" ), QStringLiteral( "CH" ) },
+      { QStringLiteral( "Chuck Brave|chuck@example.com" ), QStringLiteral( "CB" ) },
+      { QStringLiteral( "Chuck Norris|chuck@example.com" ), QStringLiteral( "CN" ) },
+      { QStringLiteral( "chuck@example.com" ), QStringLiteral( "CH" ) },
+      { QStringLiteral( "Chuck|" ), QStringLiteral( "C" ) },
+      { QStringLiteral( "C|" ), QStringLiteral( "C" ) },
+    };
 
   for ( const auto &test : testcases )
   {
