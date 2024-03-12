@@ -252,5 +252,8 @@ QString CoreUtils::nameAbbr(const QString &name, const QString &email)
     if ( list.size() > 1 )
       return QString( "%1%2" ).arg( list.first()[0], list.last()[0] ).toUpper();
 
-    return email.left( 2 ).toUpper();
+    if ( email.isEmpty() )
+        return name.left(2).toUpper();
+
+    return email.left(2).toUpper();
 }
