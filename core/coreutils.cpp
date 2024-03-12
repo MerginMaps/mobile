@@ -241,7 +241,7 @@ bool CoreUtils::isValidName( const QString &name )
   return !matchForbiddenNames.hasMatch();
 }
 
-QString CoreUtils::nameAbbr(const QString &name, const QString &email)
+QString CoreUtils::nameAbbr( const QString &name, const QString &email )
 {
   if ( name.isEmpty() )
     return email.left( 2 ).toUpper();
