@@ -16,13 +16,11 @@ import "../components"
 MMBaseInput {
   id: root
 
-  // TODO: searchInput should have x mark on the right side to clear the search text
-  // ... and maybe inherit from MMTextInput?
-
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
   property bool allowTimer: false
   property int emitInterval: 200
+  property bool showClearIcon: true
 
   hasFocus: textField.activeFocus
 
@@ -77,6 +75,28 @@ MMBaseInput {
     size: __style.icon24
     source: __style.searchIcon
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+  }
+
+  rightAction: MMIcon {
+    id: rightIcon
+
+    anchors.verticalCenter: parent.verticalCenter
+
+    size: __style.icon24
+    source: __style.closeIcon
+    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    visible: root.showClearIcon && textField.activeFocus && textField.text.length > 0
+  }
+
+  onRightActionClicked: {
+    if (root.showClearIcon) {
+      textField.clear()
+      root.searchTextChanged("")
+    }
+    else {
+      // if the clear button should not be there, let's open keyboard instead
+      textField.forceActiveFocus()
+    }
   }
 
   Timer {

@@ -117,6 +117,7 @@ ScrollView {
           enabled: checkbox.checked
           width: parent.width
           multiSelect: true
+          withSearchbar: true
           preselectedFeatures: []
 
           dataModel: ListModel {
