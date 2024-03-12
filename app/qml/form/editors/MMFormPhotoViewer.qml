@@ -56,10 +56,10 @@ MMBaseInput {
   state: "notSet"
 
   onContentClicked: {
-    if ( !root.enabled )
-      return
-    previewLoader.active = true
-    previewLoader.focus = true
+    if ( root.enabled && photo.status === Image.Ready ) {
+      previewLoader.active = true
+      previewLoader.focus = true
+    }
   }
 
   content: Item {
@@ -89,7 +89,7 @@ MMBaseInput {
         bgndColor: __style.negativeColor
         iconSource: __style.deleteIcon
         iconColor: __style.grapeColor
-        visible: enabled && ( photo.status === Image.Ready || photo.status === Image.Error )
+        visible: root.enabled && photo.status === Image.Ready
         onClicked: root.trashClicked()
       }
     }
