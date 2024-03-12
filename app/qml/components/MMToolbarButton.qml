@@ -27,6 +27,8 @@ Item {
   property bool isMenuButton: false
   property int buttonSpacing: 5 * __dp
 
+  visible: true
+
   height: isMenuButton ? __style.menuDrawerHeight/2 : __style.toolbarHeight
 
   // Toolbar button

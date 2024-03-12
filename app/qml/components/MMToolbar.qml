@@ -69,6 +69,13 @@ MMBaseToolbar {
     var w = buttonView.width
     var button
 
+    for (var j = 0; j < c; j++)
+    {
+      if (m.get(j).visible === false) {
+          m.remove(j);
+      }
+    }
+
     // add all buttons (max maxButtonsInToolbar) into toolbar
     visibleButtonModel.clear()
     if(c <= maxButtonsInToolbar || w >= c*root.minimumToolbarButtonWidth) {

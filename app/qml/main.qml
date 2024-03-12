@@ -352,6 +352,8 @@ ApplicationWindow {
         iconSource: __style.positionTrackingIcon
         menuButtonRightText: map.isTrackingPosition ? "Active" : ""
 
+        visible: true
+
         onClicked: {
           trackingPanelLoader.active = true
         }
