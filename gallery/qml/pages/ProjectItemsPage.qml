@@ -94,7 +94,6 @@ MMPage {
         state: "OnServer"
 
         height: visible ? implicitHeight : 0
-//        visible: true
 
         onOpenRequested: console.log("onOpenRequested")
         onStopSyncRequested: projectIsInSync = false

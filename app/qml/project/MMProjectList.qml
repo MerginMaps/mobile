@@ -98,11 +98,8 @@ Item {
       visible: root.hideActiveProject ? !projectIsOpened : true
 
       projectDisplayName: root.projectModelType === MM.ProjectsModel.CreatedProjectsModel ? model.ProjectName : model.ProjectFullName
-      projectId: model.ProjectId
-      projectDescription: {
-        console.log("--->",index, model.ProjectDescription, projectDisplayName)
-        return model.ProjectDescription
-      }
+      projectId: model.ProjectId ? model.ProjectId : ""
+      projectDescription: model.ProjectDescription ? model.ProjectDescription : ""
       projectIsInSync: model.ProjectSyncPending ? model.ProjectSyncPending : false
       projectSyncProgress: model.ProjectSyncProgress ? model.ProjectSyncProgress : -1
       projectIsOpened: model.ProjectId === root.activeProjectId

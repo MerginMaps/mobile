@@ -36,11 +36,6 @@ Item {
 
     width: parent.width - 2 * root.padding
     placeholderText: qsTr("Search for projects...")
-    // visible: root.withSearch
-
-    onSearchTextChanged: function(text) {
-      //root.model.searchExpression = text
-    }
 
     anchors {
       top: parent.top

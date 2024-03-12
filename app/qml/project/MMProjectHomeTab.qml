@@ -130,10 +130,7 @@ Item {
         projectIsOpened: true
         projectDisplayName: model.data(index, MM.ProjectsModel.ProjectFullName) ? model.data(index, MM.ProjectsModel.ProjectFullName) : ""
         projectId: model.data(index, MM.ProjectsModel.ProjectId) ? model.data(index, MM.ProjectsModel.ProjectId) : ""
-        projectDescription: {
-          console.log("--->",index, model.data(index, MM.ProjectsModel.ProjectDescription), projectDisplayName)
-          model.data(index, MM.ProjectsModel.ProjectDescription) ? model.data(index, MM.ProjectsModel.ProjectDescription) : ""
-        }
+        projectDescription: model.data(index, MM.ProjectsModel.ProjectDescription) ? model.data(index, MM.ProjectsModel.ProjectDescription) : ""
         projectIsInSync: model.data(index, MM.ProjectsModel.ProjectSyncPending) ? model.data(index, MM.ProjectsModel.ProjectSyncPending) : false
         projectSyncProgress: model.data(index, MM.ProjectsModel.ProjectSyncProgress) ? model.data(index, MM.ProjectsModel.ProjectSyncProgress) : -1
         property string projectFilePath: model.data(index, MM.ProjectsModel.ProjectFilePath) ? model.data(index, MM.ProjectsModel.ProjectFilePath) : ""
