@@ -69,8 +69,8 @@ MMBaseInput {
       Text {
         id: valueLabel
 
-        Layout.preferredWidth: rowLayout.width / 2 - root.spacing
-        Layout.maximumWidth: rowLayout.width / 2 - root.spacing
+        Layout.preferredWidth: rowLayout.width / 2 - root.spacing - 14 * __dp
+        Layout.maximumWidth: rowLayout.width / 2 - root.spacing - 14 * __dp
         Layout.preferredHeight: input.height
         Layout.maximumHeight: input.height
 
