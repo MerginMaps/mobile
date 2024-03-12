@@ -19,7 +19,7 @@ Item {
   required property string fieldTitle
 
   property string fieldValue: ""
-  property var fieldConfig: ({})
+  property var fieldConfig: ({UseHtml: true})
   property bool fieldShouldShowTitle: checkboxTitle.checked
   property bool fieldIsReadOnly: !checkbox.checked
   property string fieldErrorMessage: checkboxError.checked ? "error" : ""
