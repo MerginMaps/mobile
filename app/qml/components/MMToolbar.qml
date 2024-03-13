@@ -70,12 +70,9 @@ MMBaseToolbar {
 
     let filteredbuttons = []
 
-    for ( var j = 0; j < buttonModel.count; j++ )
-    {
+    for ( var j = 0; j < buttonModel.count; j++ ) {
       if ( buttonModel.get(j) && buttonModel.get(j).visibilityMode === true )
-      {
-          filteredbuttons.push( buttonModel.get(j) )
-      }
+        filteredbuttons.push( buttonModel.get(j) )
     }
 
     var buttonsCount = filteredbuttons.length
