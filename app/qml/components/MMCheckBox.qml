@@ -10,49 +10,83 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../components"
 
 CheckBox {
   id: root
 
   property bool small: false
 
-  width: (root.small ? 16 : 24) * __dp
-  height: root.width
+  property bool hasError: false
+
+  implicitHeight: Math.max( textContent.implicitHeight, indicatorContent.height )
+
+  topPadding: __style.margin4
+  leftPadding: indicatorContent.width + __style.margin12
+  rightPadding: 0
+  bottomPadding: __style.margin4
 
   indicator: Rectangle {
-    width: root.width
-    height: root.height
+    id: indicatorContent
+
+    width: (root.small ? 16 : 24) * __dp
+    height: width
+
     y: root.height / 2 - height / 2
-    radius: 5 * __dp
-    color: (enabled && root.checked) ? __style.grassColor: __style.whiteColor
+
+    radius: __style.radius6
+
+    color: ( root.checked && root.enabled ) ? __style.grassColor: __style.transparentColor
+
     border.color: {
-      if(enabled) {
-        if(checked) {
+      if ( root.hasError ) {
+        return __style.negativeColor
+      }
+
+      if ( enabled ) {
+        if ( checked ) {
           return __style.grassColor
         }
         return __style.forestColor
       }
+
       return __style.mediumGreenColor
     }
-    border.width: (root.hovered ? 2.5 : 2) * __dp
+
+    border.width: ( root.hovered ? 2.5 : 2 ) * __dp
 
     MMIcon {
-      id: icon
+      id: checkIndicator
 
       anchors.centerIn: parent
+
       source: __style.checkmarkIcon
+
       color: root.enabled ? __style.forestColor : __style.mediumGreenColor
       visible: root.checked
       size: root.small ? __style.icon16 : __style.icon24
     }
   }
 
+  // Don't use MMText here, lineHeight does not work well with Text.RichText type
   contentItem: Text {
+    id: textContent
+
     text: root.text
+
     font: __style.p5
-    color: icon.color
+    color: __style.nightColor
+
+    textFormat: Text.RichText
+
+    width: root.width - root.leftPadding
+
     verticalAlignment: Text.AlignVCenter
-    leftPadding: root.indicator.width
+
+    lineHeight: 1.5 // mimic line height with factor
+    wrapMode: Text.WordWrap
+
+    onLinkActivated: function ( link ) {
+      Qt.openUrlExternally( link )
+    }
   }
 }
