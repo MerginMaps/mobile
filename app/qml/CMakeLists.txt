@@ -33,6 +33,7 @@ set(MM_QML
     components/MMListDrawer.qml
     components/MMListDrawerItem.qml
     components/MMListFooterSpacer.qml
+    components/MMListVerticalFillSpacer.qml
     components/MMListSpacer.qml
     components/MMBusyIndicator.qml
     components/MMMenuDrawer.qml
