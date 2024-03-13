@@ -352,7 +352,7 @@ ApplicationWindow {
         iconSource: __style.positionTrackingIcon
         menuButtonRightText: map.isTrackingPosition ? "Active" : ""
 
-        visible: true
+        visibilityMode: __activeProject.positionTrackingSupported
 
         onClicked: {
           trackingPanelLoader.active = true

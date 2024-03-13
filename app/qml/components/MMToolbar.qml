@@ -65,16 +65,18 @@ MMBaseToolbar {
 
   function setupBottomBar() {
     var m = root.model
-    var c = m.count
     var w = buttonView.width
     var button
 
-    for (var j = 0; j < c; j++)
+    for ( var j = m.count - 1 ; j >= 0 ; j-- )
     {
-      if (m.get(j).visible === false) {
-          m.remove(j);
+      if ( m.get(j).visibilityMode === false )
+      {
+          m.remove( j );
       }
     }
+
+    var c = m.count
 
     // add all buttons (max maxButtonsInToolbar) into toolbar
     visibleButtonModel.clear()
