@@ -17,7 +17,7 @@ Item {
   signal clicked
 
   required property var iconSource
-  property color iconColor: __style.whiteColor
+  property color iconColor: __style.polarColor
 
   required property string text
 

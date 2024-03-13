@@ -21,7 +21,7 @@ RoundButton {
   property url iconSource: __style.backIcon
   property color iconColor: __style.forestColor
 
-  property color bgndColor: __style.whiteColor
+  property color bgndColor: __style.polarColor
   property color bgndHoverColor: __style.mediumGreenColor
 
   property bool disabled: false

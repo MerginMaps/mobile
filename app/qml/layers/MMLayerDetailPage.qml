@@ -105,7 +105,7 @@ Page {
               width: parent.width
               height: __style.row49
 
-              color: __style.whiteColor
+              color: __style.polarColor
               radius: __style.radius12
 
               RowLayout {
@@ -172,7 +172,7 @@ Page {
               width: parent.width
               height: parent.height - symbologyTitle.height
 
-              color: __style.whiteColor
+              color: __style.polarColor
               radius: __style.radius12
 
               Item {
@@ -224,7 +224,7 @@ Page {
               width: parent.width
               height: 1.5 * __style.row63
 
-              color: __style.whiteColor
+              color: __style.polarColor
               radius: __style.radius12
 
               Item {

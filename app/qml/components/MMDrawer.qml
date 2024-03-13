@@ -35,7 +35,7 @@ Drawer {
 
   // rounded background
   background: Rectangle {
-    color: __style.whiteColor
+    color: __style.polarColor
     radius: internal.radius
 
     Rectangle {
@@ -54,7 +54,7 @@ Drawer {
     }
 
     Rectangle {
-      color: __style.whiteColor
+      color: __style.polarColor
       width: parent.width
       height: parent.height / 2
       y: parent.height / 2

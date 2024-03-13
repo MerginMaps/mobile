@@ -37,7 +37,7 @@ Item {
 
       radius: width
 
-      color: __style.whiteColor
+      color: __style.polarColor
 
       MMIcon {
         anchors.centerIn: parent
@@ -98,7 +98,7 @@ Item {
         text: root.notificationCount
 
         font: __style.t4
-        color: __style.whiteColor
+        color: __style.polarColor
 
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

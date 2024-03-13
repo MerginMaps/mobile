@@ -13,7 +13,7 @@ import QtQuick.Controls
 Switch {
   id: root
 
-  property color uncheckedBgColor: __style.whiteColor
+  property color uncheckedBgColor: __style.polarColor
   property color checkedBgColor: __style.grassColor
   property color disabledFgColor: __style.mediumGreenColor
   property color enabledFgColor: __style.forestColor

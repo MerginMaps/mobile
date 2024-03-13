@@ -14,7 +14,7 @@ import "."
 Rectangle {
   id: root
 
-  color: __style.whiteColor
+  color: __style.polarColor
   radius: 20 * __dp
 
   signal capturePhotoClicked()

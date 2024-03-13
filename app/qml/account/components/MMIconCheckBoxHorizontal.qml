@@ -28,7 +28,7 @@ CheckBox {
     x: 20 * __dp
     y: control.height / 2 - height / 2
     radius: width / 2
-    color: control.checked ? __style.whiteColor : __style.lightGreenColor
+    color: control.checked ? __style.polarColor : __style.lightGreenColor
 
     MMIcon {
       id: icon
@@ -42,7 +42,7 @@ CheckBox {
   contentItem: Text {
     text: control.text
     font: __style.t3
-    color: control.checked ? __style.whiteColor : __style.nightColor
+    color: control.checked ? __style.polarColor : __style.nightColor
     verticalAlignment: Text.AlignVCenter
     leftPadding: control.indicator.width + 30 * __dp
     rightPadding: 20 * __dp
@@ -50,6 +50,6 @@ CheckBox {
 
   background: Rectangle {
     radius: __style.radius12
-    color: control.checked ? __style.forestColor: __style.whiteColor
+    color: control.checked ? __style.forestColor: __style.polarColor
   }
 }

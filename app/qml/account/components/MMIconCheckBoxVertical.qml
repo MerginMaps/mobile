@@ -62,7 +62,7 @@ CheckBox {
 
       text: control.text
       font: __style.t3
-      color: control.checked ? __style.whiteColor : __style.nightColor
+      color: control.checked ? __style.polarColor : __style.nightColor
       verticalAlignment: Text.AlignVCenter
       horizontalAlignment: Text.AlignHCenter
       wrapMode: Text.WordWrap
@@ -72,6 +72,6 @@ CheckBox {
 
   background: Rectangle {
     radius: __style.radius12
-    color: control.checked ? __style.forestColor: __style.whiteColor
+    color: control.checked ? __style.forestColor: __style.polarColor
   }
 }

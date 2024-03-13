@@ -70,7 +70,7 @@ MMPage {
         imageSource: __style.warnLogoImage
 
         color: __style.nightColor
-        textColor: __style.whiteColor
+        textColor: __style.polarColor
       }
 
       MMListSpacer {

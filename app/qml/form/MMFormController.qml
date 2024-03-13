@@ -105,7 +105,7 @@ Item {
     }
 
     background: Rectangle { // rounded drawer
-      color: __style.whiteColor
+      color: __style.polarColor
       radius: 20 * __dp
 
       Rectangle {
@@ -122,7 +122,7 @@ Item {
       }
 
       Rectangle {
-        color: __style.whiteColor
+        color: __style.polarColor
         width: parent.width
         height: parent.height
         y: parent.height / 2

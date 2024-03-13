@@ -27,7 +27,7 @@ Item {
     height: parent.height
     anchors.horizontalCenter: parent.horizontalCenter
 
-    color: __style.whiteColor
+    color: __style.polarColor
     radius: 20 * __dp
 
     layer.enabled: true
