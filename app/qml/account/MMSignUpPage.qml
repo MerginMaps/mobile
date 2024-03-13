@@ -211,7 +211,7 @@ Page {
       MMButton {
         width: parent.width - 2 * root.hPadding
         text: qsTr("Sign up")
-        enabled: !pending
+        disabled: pending
         onClicked: {
           root.signUpClicked(
                 username.text,

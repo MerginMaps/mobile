@@ -117,16 +117,19 @@ Drawer {
         spacing: __style.pageMargins
         anchors.horizontalCenter: parent.horizontalCenter
 
-//        MMLinkButton {
-//          id: noButton
+        MMButton {
+          id: noButton
 
-//          width: parent.width / 2 - __style.pageMargins
-//          text: qsTr("No")
+          width: parent.width / 2 - __style.pageMargins
 
-//          onClicked: {
-//            close()
-//          }
-//        }
+          type: MMButton.Types.Secondary
+
+          text: qsTr("No")
+
+          onClicked: {
+            close()
+          }
+        }
 
         MMButton {
           id: yesButton
@@ -134,8 +137,10 @@ Drawer {
           width: noButton.width
           text: qsTr("Yes")
 
-          colorPrimary: __style.grapeColor
-          colorSecondary: __style.negativeColor
+          fontColor: __style.grapeColor
+          bgndColor: __style.negativeColor
+          fontColorHover: __style.negativeColor
+          bgndColorHover: __style.grapeColor
 
           onClicked: {
             if (usernameInput.text === root.username)

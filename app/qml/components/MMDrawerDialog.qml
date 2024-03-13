@@ -173,7 +173,9 @@ Drawer {
 
         width: parent.width - 2*20 * __dp
         visible: text.length > 0
-        transparent: true
+
+        type: MMButton.Types.Tertiary
+
         topPadding: 0
 
         onClicked: secondaryButtonClicked()
