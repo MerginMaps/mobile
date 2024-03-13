@@ -28,7 +28,7 @@ Item {
 
     radius: height / 2
 
-    color: __style.whiteColor
+    color: __style.polarColor
 
     layer.enabled: true
     layer.effect: MMShadow {}

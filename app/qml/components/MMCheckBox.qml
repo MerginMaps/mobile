@@ -25,7 +25,7 @@ CheckBox {
     height: root.height
     y: root.height / 2 - height / 2
     radius: 5 * __dp
-    color: (enabled && root.checked) ? __style.grassColor: __style.whiteColor
+    color: (enabled && root.checked) ? __style.grassColor: __style.polarColor
     border.color: {
       if(enabled) {
         if(checked) {

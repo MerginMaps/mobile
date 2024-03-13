@@ -216,7 +216,7 @@ Page {
           height: parent.height
           width: height
 
-          bgndColor: __style.whiteColor
+          bgndColor: __style.polarColor
           iconSource: __style.deleteIcon
           visible: model.ProviderType === "external"
 

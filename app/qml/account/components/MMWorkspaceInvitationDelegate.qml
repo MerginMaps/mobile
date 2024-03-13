@@ -23,7 +23,7 @@ Rectangle {
   implicitHeight: 80 * __dp
 
   radius: 12 * __dp
-  color: __style.whiteColor
+  color: __style.polarColor
 
   RowLayout {
 

@@ -67,7 +67,7 @@ Item {
     width: root.size
     height: width
     radius: width / 2
-    color: __style.whiteColor
+    color: __style.polarColor
   }
 
   Rectangle {

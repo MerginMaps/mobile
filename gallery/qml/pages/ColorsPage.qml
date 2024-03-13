@@ -53,8 +53,8 @@ ScrollView {
           color: __style.nightColor
         }
         ColorBox {
-          text: "whiteColor"
-          color: __style.whiteColor
+          text: "polarColor"
+          color: __style.polarColor
         }
         ColorBox {
           text: "transparentColor"
@@ -155,6 +155,10 @@ ScrollView {
           text: "informativeColor"
           color: __style.informativeColor
         }
+        ColorBox {
+          text: "snappingColor"
+          color: __style.snappingColor
+        }
       }
     }
 
@@ -199,8 +203,12 @@ ScrollView {
           color: __style.greyColor
         }
         ColorBox {
-          text: "snappingColor"
-          color: __style.snappingColor
+          text: "darkGrey"
+          color: __style.darkGreyColor
+        }
+        ColorBox {
+          text: "mediumGrey"
+          color: __style.mediumGreyColor
         }
       }
     }

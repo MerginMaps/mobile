@@ -68,7 +68,7 @@ Item {
     imageSource: __style.warnLogoImage
 
     color: __style.nightColor
-    textColor: __style.whiteColor
+    textColor: __style.polarColor
 
     onClicked: Qt.openUrlExternally( __inputHelp.merginDashboardLink )
   }
@@ -89,7 +89,7 @@ Item {
     imageSource: __style.noWorkspaceImage
 
     color: __style.nightColor
-    textColor: __style.whiteColor
+    textColor: __style.polarColor
 
     onClicked: root.createWorkspaceRequested()
   }

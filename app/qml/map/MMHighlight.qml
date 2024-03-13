@@ -32,7 +32,7 @@ Item {
   property int markerSize: MMHighlight.MarkerSizes.Normal
 
   property color markerColor: __style.grapeColor
-  property color markerBorderColor: __style.whiteColor
+  property color markerBorderColor: __style.polarColor
 
   property real markerWidth: 40 * __dp // based on marker image size
   property real markerHeight: 53 * __dp // based on marker image size
@@ -45,14 +45,14 @@ Item {
   property real lineBorderWidth: 4 * __dp // on top of width
 
   property color lineColor: __style.grapeColor
-  property color lineBorderColor: __style.whiteColor
+  property color lineBorderColor: __style.polarColor
 
   property int lineStrokeStyle: ShapePath.SolidLine // (solid line / dashed line)
 
   // polygon properties
   property color polygonFillColor: __style.grapeTransparentColor
   property color polygonRingColor: __style.grapeColor
-  property color polygonRingBorderColor: __style.whiteColor
+  property color polygonRingBorderColor: __style.polarColor
 
   property real polygonRingWidth: 8 * __dp
   property real polygonRingBorderWidth: 0 // on top of ring width

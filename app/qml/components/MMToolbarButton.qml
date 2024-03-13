@@ -17,7 +17,7 @@ Item {
   signal clicked
 
   required property var iconSource
-  property color iconColor: __style.whiteColor
+  property color iconColor: __style.polarColor
   required property string text
   property string menuButtonRightText: ""
 
@@ -52,7 +52,7 @@ Item {
       id: text
 
       text: control.text
-      color: __style.whiteColor
+      color: __style.polarColor
       font: __style.t4
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.top: icon.bottom

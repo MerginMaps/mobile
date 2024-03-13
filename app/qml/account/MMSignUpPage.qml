@@ -77,7 +77,7 @@ Page {
   // background as Drawer design
   Rectangle {
     anchors.fill: parent
-    color: __style.whiteColor
+    color: __style.polarColor
 
     Rectangle {
       width: parent.width
@@ -88,7 +88,7 @@ Page {
     Rectangle {
       width: parent.width
       height: 40 * __dp
-      color: __style.whiteColor
+      color: __style.polarColor
       radius: height / 2
     }
   }

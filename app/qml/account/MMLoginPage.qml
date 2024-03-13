@@ -41,7 +41,7 @@ Page {
   // background as Drawer design
   Rectangle {
     anchors.fill: parent
-    color: __style.whiteColor
+    color: __style.polarColor
 
     Rectangle {
       width: parent.width
@@ -52,7 +52,7 @@ Page {
     Rectangle {
       width: parent.width
       height: 40 * __dp
-      color: __style.whiteColor
+      color: __style.polarColor
       radius: height / 2
     }
   }
@@ -107,7 +107,7 @@ Page {
         imageSource: __style.warnLogoImage
 
         color: __style.nightColor
-        textColor: __style.whiteColor
+        textColor: __style.polarColor
 
         width: root.width - 2 * root.hPadding
       }
