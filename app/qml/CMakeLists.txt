@@ -30,8 +30,6 @@ set(MM_QML
     components/MMIcon.qml
     components/MMInfoBox.qml
     components/MMLine.qml
-    components/MMLink.qml
-    components/MMLinkButton.qml
     components/MMListDrawer.qml
     components/MMListDrawerItem.qml
     components/MMListFooterSpacer.qml
@@ -50,7 +48,6 @@ set(MM_QML
     components/MMProgressBar.qml
     components/MMRadioButton.qml
     components/MMRoundButton.qml
-    components/MMRoundLinkButton.qml
     components/MMScrollView.qml
     components/MMSelectableToolbar.qml
     components/MMSelectableToolbarButton.qml
