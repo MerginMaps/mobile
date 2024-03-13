@@ -32,7 +32,7 @@ concurrency:
 jobs:
   ios_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
@@ -78,23 +78,23 @@ jobs:
           # See https://github.com/actions/runner-images/issues/4020.
           # See https://github.com/actions/runner-images/issues/8838.
 
-          brew unlink python@3.12
-          brew uninstall --force azure-cli
-          brew uninstall --force aws-sam-cli 
-          brew uninstall --force pipx
-          brew uninstall --force python@3.11
-          brew uninstall --force python@3.12
-          rm -f '/usr/local/bin/2to3'
-          rm -f '/usr/local/bin/2to3-3.12'
-          rm -f '/usr/local/bin/idle3'
-          rm -f '/usr/local/bin/idle3.12'
-          rm -f '/usr/local/bin/pydoc3'
-          rm -f '/usr/local/bin/pydoc3.12'
-          rm -f '/usr/local/bin/python3'
-          rm -f '/usr/local/bin/python3-config'
-          rm -f '/usr/local/bin/python3.12'
-          rm -f '/usr/local/bin/python3.12-config'
-          brew install python@3 || brew link --overwrite python@3
+          # brew unlink python@3.12
+          # brew uninstall --force azure-cli
+          # brew uninstall --force aws-sam-cli 
+          # brew uninstall --force pipx
+          # brew uninstall --force python@3.11
+          # brew uninstall --force python@3.12
+          # rm -f '/usr/local/bin/2to3'
+          # rm -f '/usr/local/bin/2to3-3.12'
+          # rm -f '/usr/local/bin/idle3'
+          # rm -f '/usr/local/bin/idle3.12'
+          # rm -f '/usr/local/bin/pydoc3'
+          # rm -f '/usr/local/bin/pydoc3.12'
+          # rm -f '/usr/local/bin/python3'
+          # rm -f '/usr/local/bin/python3-config'
+          # rm -f '/usr/local/bin/python3.12'
+          # rm -f '/usr/local/bin/python3.12-config'
+          # brew install python@3 || brew link --overwrite python@3
 
           # ---- end hot fix
 
