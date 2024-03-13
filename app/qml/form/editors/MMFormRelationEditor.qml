@@ -47,7 +47,7 @@ MMBaseInput {
   content: Rectangle {
     width: root.width - 2 * root.spacing
     height: root.contentItemHeight
-    color: __style.whiteColor
+    color: __style.polarColor
 
     Flow {
       id: flow

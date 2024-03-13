@@ -24,7 +24,7 @@ Rectangle {
   implicitHeight: childrenRect.height
 
   radius: __style.radius12
-  color: root.isHighlighted ? __style.forestColor : __style.whiteColor
+  color: root.isHighlighted ? __style.forestColor : __style.polarColor
 
   Column {
     width: parent.width
@@ -43,7 +43,7 @@ Rectangle {
       bottomPadding: wsDesc.text ? 0 : __style.margin20
 
       font: __style.t3
-      color: root.isHighlighted ? __style.whiteColor : __style.nightColor
+      color: root.isHighlighted ? __style.polarColor : __style.nightColor
     }
 
     MMListSpacer { height: __style.margin12; visible: wsDesc.text }
@@ -65,7 +65,7 @@ Rectangle {
       lineHeight: 24 * __dp
 
       font: __style.p6
-      color: root.isHighlighted ? __style.whiteColor : __style.nightColor
+      color: root.isHighlighted ? __style.polarColor : __style.nightColor
 
       visible: root.workspaceDetails
     }

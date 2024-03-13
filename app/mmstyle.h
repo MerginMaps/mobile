@@ -50,13 +50,15 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor grassColor READ grassColor CONSTANT )
     Q_PROPERTY( QColor forestColor READ forestColor CONSTANT )
     Q_PROPERTY( QColor nightColor READ nightColor CONSTANT )
-    Q_PROPERTY( QColor whiteColor READ whiteColor CONSTANT )
+    Q_PROPERTY( QColor polarColor READ polarColor CONSTANT )
     Q_PROPERTY( QColor transparentColor READ transparentColor CONSTANT )
 
     // Colors - secondary palette
     Q_PROPERTY( QColor lightGreenColor READ lightGreenColor CONSTANT )
     Q_PROPERTY( QColor mediumGreenColor READ mediumGreenColor CONSTANT )
     Q_PROPERTY( QColor greyColor READ greyColor CONSTANT )
+    Q_PROPERTY( QColor darkGreyColor READ darkGreyColor CONSTANT )
+    Q_PROPERTY( QColor mediumGreyColor READ mediumGreyColor CONSTANT )
 
     // Colors - additional colors
     Q_PROPERTY( QColor sandColor READ sandColor CONSTANT )
@@ -324,12 +326,14 @@ class MMStyle: public QObject
     QColor grassColor() {return QColor::fromString( "#73D19C" );}
     QColor forestColor() {return QColor::fromString( "#004C45" );}
     QColor nightColor() {return QColor::fromString( "#12181F" );}
-    QColor whiteColor() {return QColor::fromString( "#FFFFFF" );}
+    QColor polarColor() {return QColor::fromString( "#FFFFFF" );}
     QColor transparentColor() {return QColor::fromString( "transparent" );}
 
     QColor lightGreenColor() {return QColor::fromString( "#EFF5F3" );}
     QColor mediumGreenColor() {return QColor::fromString( "#B7CDC4" );}
     QColor greyColor() {return QColor::fromString( "#E2E2E2" );}
+    QColor darkGreyColor() {return QColor::fromString( "#41464C" );}
+    QColor mediumGreyColor() {return QColor::fromString( "#A0A3A5" );}
 
     QColor sandColor() {return QColor::fromString( "#FFF4E2" );}
     QColor sunsetColor() {return QColor::fromString( "#FFB673" );}
@@ -347,11 +351,11 @@ class MMStyle: public QObject
     QColor warningColor() {return QColor::fromString( "#F7DDAF" );}
     QColor negativeColor() {return QColor::fromString( "#F0C4BC" );}
     QColor informativeColor() {return QColor::fromString( "#BEDAF0" );}
+    QColor snappingColor() {return QColor::fromString( "#BD74FF" );}
 
     QColor nightAlphaColor() {return QColor::fromString( "#AA12181F" );}
     QColor errorBgInputColor() {return QColor::fromString( "#FEFAF9" );}
     QColor shadowColor() {return QColor::fromString( "#66777777" );}
-    QColor snappingColor() {return QColor::fromString( "#BD74FF" );}
 
     QUrl splitGeometryIcon() {return QUrl( "qrc:/SplitGeometry.svg" );}
     QUrl streamingIcon() {return QUrl( "qrc:/Streaming.svg" );}

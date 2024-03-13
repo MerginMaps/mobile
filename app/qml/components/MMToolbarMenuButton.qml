@@ -70,7 +70,7 @@ Item {
       Text {
         id: rightText
         anchors.centerIn: parent
-        color: __style.whiteColor
+        color: __style.polarColor
         text: control.rightText
         font: __style.t4
       }

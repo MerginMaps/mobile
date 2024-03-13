@@ -52,7 +52,7 @@ Control {
   ]
 
   background: Rectangle {
-    color: root.projectIsOpened ? __style.forestColor : __style.whiteColor
+    color: root.projectIsOpened ? __style.forestColor : __style.polarColor
     radius: __style.radius12
   }
 
@@ -94,7 +94,7 @@ Control {
             text: root.projectDisplayName
 
             font: __style.t3
-            color: root.projectIsOpened ? __style.whiteColor : __style.nightColor
+            color: root.projectIsOpened ? __style.polarColor : __style.nightColor
           }
 
           Row {
@@ -134,14 +134,14 @@ Control {
               text: root.projectDescription
 
               font: __style.p6
-              color: root.projectIsOpened ? __style.whiteColor : __style.nightColor
+              color: root.projectIsOpened ? __style.polarColor : __style.nightColor
             }
           }
         }
 
         MMRoundButton {
           iconSource: root.state === "OnServer" ? __style.downloadIcon : __style.moreVerticalIcon
-          bgndColor: root.projectIsOpened ? __style.whiteColor : __style.lightGreenColor
+          bgndColor: root.projectIsOpened ? __style.polarColor : __style.lightGreenColor
 
           onClicked: {
             if ( internal.hasMoreMenu ) {
@@ -179,7 +179,7 @@ Control {
             width: parent.width - parent.spacing - stopSyncGroup.width
             text: qsTr( "Synchronising" ) + "..."
             font: __style.p6
-            color: root.projectIsOpened ? __style.whiteColor : __style.nightColor
+            color: root.projectIsOpened ? __style.polarColor : __style.nightColor
           }
 
           Item {
@@ -196,13 +196,13 @@ Control {
 
               MMIcon {
                 source: __style.stopIcon
-                color: root.projectIsOpened ? __style.whiteColor : __style.forestColor
+                color: root.projectIsOpened ? __style.polarColor : __style.forestColor
               }
 
               MMText {
                 text: qsTr( "Stop" )
                 font: __style.t4
-                color: root.projectIsOpened ? __style.whiteColor : __style.forestColor
+                color: root.projectIsOpened ? __style.polarColor : __style.forestColor
               }
             }
 

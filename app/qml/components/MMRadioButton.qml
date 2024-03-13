@@ -22,7 +22,7 @@ RadioButton {
     x: control.leftPadding
     y: parent.height / 2 - height / 2
     radius: 12
-    color: enabled ? ( control.checked ? __style.grassColor: __style.whiteColor ) : __style.whiteColor
+    color: enabled ? ( control.checked ? __style.grassColor: __style.polarColor ) : __style.polarColor
     border.color: enabled ? ( control.checked ? __style.grassColor: __style.forestColor ) : __style.mediumGreenColor
     border.width: control.hovered ? 2.5 : 2
 

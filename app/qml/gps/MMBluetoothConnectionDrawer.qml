@@ -207,7 +207,7 @@ Drawer {
     id: roundedRect
 
     anchors.fill: parent
-    color: __style.whiteColor
+    color: __style.polarColor
 
     MMPageHeader {
       id: header

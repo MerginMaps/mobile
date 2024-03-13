@@ -244,7 +244,7 @@ ScrollView {
           description: "Please wait for tomorrow"
 
           color: __style.nightColor
-          textColor: __style.whiteColor
+          textColor: __style.polarColor
 
           imageSource: __style.warnLogoImage
         }

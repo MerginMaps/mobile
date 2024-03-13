@@ -29,7 +29,7 @@ Rectangle {
 
   implicitHeight: dynamicContentGroup.height + 2 * __style.margin20
 
-  color: __style.whiteColor
+  color: __style.polarColor
   radius: __style.radius12
 
   RowLayout {

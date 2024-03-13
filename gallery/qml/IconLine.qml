@@ -23,7 +23,7 @@ Column {
   required property bool invertColors
   property bool isCircle: false
 
-  property color borderColor: invertColors ? __style.whiteColor : __style.forestColor
+  property color borderColor: invertColors ? __style.polarColor : __style.forestColor
 
   // Normal Icon
   property color iconColor: {
@@ -34,7 +34,7 @@ Column {
         return __style.forestColor
     } else {
       if (invertColors)
-        return __style.whiteColor
+        return __style.polarColor
       else
         return __style.forestColor
     }
@@ -50,7 +50,7 @@ Column {
       if (invertColors)
         return __style.forestColor
       else
-        return __style.whiteColor
+        return __style.polarColor
     }
   }
 

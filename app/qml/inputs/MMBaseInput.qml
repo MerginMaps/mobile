@@ -31,7 +31,7 @@ Item {
   property string warningMsg
   property string errorMsg
   property bool hasFocus: false
-  property color bgColor: __style.whiteColor
+  property color bgColor: __style.polarColor
   property bool hasCheckbox: false
   property alias checkboxChecked: checkbox.checked
 

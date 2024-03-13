@@ -27,7 +27,7 @@ Item {
     height: root.height
     border.width: 2 * __dp
     border.color: __style.transparentColor
-    color: __style.whiteColor
+    color: __style.polarColor
     radius: __style.radius12
   }
 

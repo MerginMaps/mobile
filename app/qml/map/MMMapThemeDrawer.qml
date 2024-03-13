@@ -52,7 +52,7 @@ Drawer {
     id: roundedRect
 
     anchors.fill: parent
-    color: __style.whiteColor
+    color: __style.polarColor
 
     MMPageHeader {
       id: header
@@ -97,7 +97,7 @@ Drawer {
         id: noMapThemesRectangle
 
         anchors.fill: parent
-        color: __style.whiteColor
+        color: __style.polarColor
         visible: parent.count === 0
 
         Column {

@@ -40,7 +40,7 @@ Image {
 
   Rectangle {
     anchors.fill: parent
-    color: __style.whiteColor
+    color: __style.polarColor
     z: -1
 
     MMIcon {

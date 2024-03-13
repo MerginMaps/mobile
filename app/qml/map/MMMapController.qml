@@ -151,7 +151,7 @@ Item {
 
       Rectangle {
         id: canvasBackground
-        color: __style.whiteColor
+        color: __style.polarColor
         anchors.fill: parent
       }
 

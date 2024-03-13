@@ -41,7 +41,7 @@ Item {
       anchors.topMargin: (container.height - (icon.height + text.height + 5 * __dp) ) / 2
 
       source: control.checked ? control.selectedIconSource : control.iconSource
-      color: control.checked ? __style.whiteColor : __style.mediumGreenColor
+      color: control.checked ? __style.polarColor : __style.mediumGreenColor
     }
 
     Text {
