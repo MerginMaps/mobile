@@ -26,11 +26,14 @@ Rectangle {
 
   property alias rightItemContent: rightButtonGroup.children
 
+  property real topSpacing: __style.safeAreaTop // offset size from top of the page, normally safeAreaTop, but can be overriden (e.g. login page)
+  property real baseHeaderHeight: __style.row60
+
   color: __style.transparentColor
 
   signal backClicked
 
-  implicitHeight: internal.baseHeaderHeight + __style.safeAreaTop
+  implicitHeight: root.baseHeaderHeight + root.topSpacing
   implicitWidth: ApplicationWindow.window?.width ?? 0
 
   Text {
@@ -48,7 +51,7 @@ Rectangle {
       fill: parent
       leftMargin: leftMarginShift
       rightMargin: rightMarginShift
-      topMargin: __style.safeAreaTop
+      topMargin: root.topSpacing
     }
 
     text: root.title
@@ -65,7 +68,7 @@ Rectangle {
     id: backBtn
 
     x: __style.pageMargins + __style.safeAreaLeft
-    y: ( internal.baseHeaderHeight / 2 - height / 2 ) + __style.safeAreaTop
+    y: ( root.baseHeaderHeight / 2 - height / 2 ) + root.topSpacing
 
     visible: root.backVisible
     onClicked: root.backClicked()
@@ -75,7 +78,7 @@ Rectangle {
     id: rightButtonGroup
 
     x: parent.width - __style.pageMargins - __style.safeAreaRight - width
-    y: ( internal.baseHeaderHeight / 2 - height / 2 ) + __style.safeAreaTop
+    y: ( root.baseHeaderHeight / 2 - height / 2 ) + root.topSpacing
 
     width: childrenRect.width
     height: parent.height
@@ -85,7 +88,6 @@ Rectangle {
     id: internal
 
     property real headerSpacing: 10 * __dp
-    property real baseHeaderHeight: __style.row60
     property real backBtnRealWidth: backBtn.visible ? backBtn.width : 0
   }
 }
