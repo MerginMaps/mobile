@@ -6,101 +6,66 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "./components" as MMAccountComponents
 import "../components"
 import "../inputs"
 
-Page {
+MMPage {
   id: root
 
-  width: parent.width
-
-  signal backClicked
-  signal signInClicked ( string username, string password )
-  signal signUpClicked
-  signal changeServerClicked ( string newServer )
-  signal forgotPasswordClicked
+  property string apiRoot
+  property bool canSignUp: true
 
   property string warningMsg
-  property bool canSignUp: true
-  property string apiRoot
 
   /**
   * Suppose to be true if auth request is pending. Then busy indicator is running and
   * the login button is disabled.
   */
-  property bool pending: false
+  property bool pending: false // ?
 
-  readonly property real hPadding: width < __style.maxPageWidth
-                                   ? 20 * __dp
-                                   : (20 + (width - __style.maxPageWidth) / 2) * __dp
+  signal signUpClicked
+  signal signInClicked( string username, string password )
+  signal changeServerClicked( string newServer )
+  signal forgotPasswordClicked
 
-  // background as Drawer design
-  Rectangle {
-    anchors.fill: parent
-    color: __style.whiteColor
+  pageHeader {
+    title: qsTr( "Log in" )
 
-    Rectangle {
-      width: parent.width
-      height: 20 * __dp
-      color: __style.forestColor
-    }
-
-    Rectangle {
-      width: parent.width
-      height: 40 * __dp
-      color: __style.whiteColor
-      radius: height / 2
-    }
-  }
-
-  MMPageHeader {
-    id: header
-
-    title: qsTr("Log In")
     titleFont: __style.h3
-
+    color: __style.transparentColor
+    topSpacing: Math.max( __style.safeAreaTop, __style.margin54 )
+    baseHeaderHeight: __style.row80
     backButton.bgndColor: __style.lightGreenColor
-
-    onBackClicked: root.backClicked()
   }
 
-  ScrollView {
-    width: parent.width
-    height: parent.height - changeServerButton.height - header.height - 60 * __dp
-    anchors.top: header.bottom
-    anchors.topMargin: 20 * __dp
+  pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
-    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+  background: MMAccountComponents.MMAuthPageBackground{}
+
+  pageContent: MMScrollView {
+    id: contentScroller
+
+    width: parent.width
+    height: parent.height
 
     Column {
-      id: mainColumn
+      id: maincol
 
-      width: root.width
-      spacing: 20 * __dp
-      leftPadding: root.hPadding
-      rightPadding: root.hPadding
-      topPadding: 20 * __dp
+      width: parent.width
 
-
-      Item { width: 1; height: 1 }
-
-      Text {
-        // !TODO - need graphic designer input!
-
-        width: parent.width - 2 * root.hPadding
-
-        font: __style.h2
-        color: __style.negativeColor
-        wrapMode: Text.WordWrap
-        horizontalAlignment: Text.AlignHCenter
-      }
+      spacing: __style.spacing20
 
       MMInfoBox {
+        id: errorInfoBox
+
+        width: parent.width
+
         visible: root.warningMsg
 
         title: root.warningMsg
@@ -108,102 +73,144 @@ Page {
 
         color: __style.nightColor
         textColor: __style.whiteColor
+      }
 
-        width: root.width - 2 * root.hPadding
+      MMListSpacer {
+        visible: !errorInfoBox.visible
+        height: __style.margin20
       }
 
       MMTextInput {
         id: username
-        width: parent.width - 2 * root.hPadding
-        title: qsTr("Email or username")
+
+        width: parent.width
+
+        title: qsTr( "Email or username" )
         bgColor: __style.lightGreenColor
       }
 
       MMPasswordInput {
         id: password
-        width: parent.width - 2 * root.hPadding
-        title: qsTr("Password")
+
+        width: parent.width
+
+        title: qsTr( "Password" )
         bgColor: __style.lightGreenColor
       }
 
-      MMLink {
-        width: parent.width - 2 * root.hPadding
-        height: 20 * __dp
-        text: qsTr("Forgot password?")
+      MMButton {
+        width: parent.width
+
+        text: qsTr( "Forgot password?" )
+        type: MMButton.Types.Tertiary
 
         onClicked: root.forgotPasswordClicked()
       }
 
-      Item { width: 1; height: 1 }
+      MMListSpacer { height: __style.margin20 }
 
       MMButton {
-        width: parent.width - 2 * root.hPadding
-        text: qsTr("Sign in")
-        enabled: !pending
-        onClicked: {
-          root.signInClicked(
-            username.text,
-            password.text
-          )
-        }
+        width: parent.width
+
+        text: qsTr( "Sign in" )
+
+        disabled: root.pending
+
+        onClicked: root.signInClicked( username.text, password.text )
       }
 
-      Item { width: 1; height: 1 }
+      MMListSpacer { height: __style.margin20 }
 
       MMHlineText {
-        width: parent.width - 2 * root.hPadding
+        width: parent.width
+
         title: qsTr("Don't have an account?")
         visible: root.canSignUp
       }
 
-      MMLinkButton {
-        width: parent.width - 2 * root.hPadding
-        text: qsTr("Sign up")
-        enabled: !pending
+      MMButton {
+        width: parent.width
+
+        text: qsTr( "Sign up" )
         visible: root.canSignUp
+
+        type: MMButton.Types.Secondary
+
+        disabled: root.pending
 
         onClicked: root.signUpClicked()
       }
+
+      MMListVerticalFillSpacer {
+        id: fillSpacer
+
+        availableVerticalSpace: contentScroller.height - parent.implicitHeight
+        listRootObject: root
+      }
+
+      MMButton {
+        width: parent.width
+
+        type: MMButton.Types.Tertiary
+
+        iconSourceLeft: __style.globeIcon
+        fontColor: __style.nightColor
+
+        hoverEnabled: false
+
+        text: root.apiRoot
+
+        onClicked: changeServerDrawerLoader.active = true
+      }
+
+      MMListFooterSpacer {}
     }
   }
 
-  MMLink {
-    id: changeServerButton
+  Loader {
+    id: changeServerDrawerLoader
 
-    width: parent.width
-    height: 50 * __dp
-    anchors.bottom: parent.bottom
-    enabled: !pending
-    text: root.apiRoot
-    leftIcon: __style.globeIcon
+    active: false
+    asynchronous: true
 
-    onClicked: {
-      changeServerDrawer.newServerUrl = root.apiRoot
-      changeServerDrawer.visible = true
-    }
-  }
+    sourceComponent: MMDrawer {
+      id: changeServerDrawer
 
-  MMDrawerDialog {
-    id: changeServerDrawer
+      drawerHeader.title: qsTr( "Change server" )
 
-    property string newServerUrl
+      onClosed: changeServerDrawerLoader.active = false
 
-    width: root.width < __style.maxPageWidth ? root.width : root.width - 2 * root.hPadding
-    x: root.width < __style.maxPageWidth ? 0 : root.hPadding
-    title: qsTr("Change server")
-    primaryButton: qsTr("Confirm")
-    visible: false
-    specialComponent: MMTextInput {
-      width: changeServerDrawer.width - 40 * __dp
-      title: qsTr("Server address")
-      bgColor: __style.lightGreenColor
-      text: changeServerDrawer.newServerUrl
-      onTextChanged: changeServerDrawer.newServerUrl = text
-    }
+      drawerContent: Column {
+        width: parent.width
+        spacing: 0
 
-    onPrimaryButtonClicked: {
-      root.changeServerClicked( newServerUrl )
-      visible = false
+        MMListSpacer { height: __style.spacing20 }
+
+        MMTextInput {
+          id: serverURLInput
+
+          title: qsTr( "Server address" )
+
+          bgColor: __style.lightGreenColor
+
+          text: root.apiRoot
+        }
+
+        MMListSpacer { height: __style.spacing40 }
+
+        MMButton {
+          width: parent.width
+
+          text: qsTr( "Confirm" )
+
+          onClicked: {
+            root.changeServerClicked( serverURLInput.text )
+            changeServerDrawer.close()
+          }
+        }
+      }
+
+      Component.onCompleted: open()
     }
   }
 }
