@@ -211,7 +211,7 @@ Page {
       MMButton {
         width: parent.width - 2 * root.hPadding
         text: qsTr("Sign up")
-        enabled: !pending
+        disabled: pending
         onClicked: {
           root.signUpClicked(
                 username.text,
@@ -231,13 +231,13 @@ Page {
         title: qsTr("Already have an account?")
       }
 
-      MMLinkButton {
-        width: parent.width - 2 * root.hPadding
-        text: qsTr("Sign in")
-        enabled: !pending
+//      MMLinkButton {
+//        width: parent.width - 2 * root.hPadding
+//        text: qsTr("Sign in")
+//        enabled: !pending
 
-        onClicked: root.signInClicked()
-      }
+//        onClicked: root.signInClicked()
+//      }
     }
   }
 }

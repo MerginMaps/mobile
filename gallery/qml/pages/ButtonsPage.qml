@@ -19,147 +19,197 @@ Column {
 
   GroupBox {
     title: "MMButton"
+
+    width: parent.width - 2 * parent.padding
+
     background: Rectangle {
       color: "white"
       border.color: "gray"
     }
+
     label: Label {
       color: "black"
       text: parent.title
       padding: 5
     }
 
-    Row {
-      spacing: 20
-      anchors.fill: parent
-      MMButton {
-        text: "Primary"
-        onClicked: text = (text === "Clicked" ? "Primary" : "Clicked")
-      }
-      MMButton {
-        text: "Disabled"
-        enabled: false
-      }
-    }
-  }
+    Column {
+      width: parent.width
 
-  GroupBox {
-    title: "MMLinkButton"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
-
-    Row {
-      spacing: 20
-      anchors.fill: parent
-      MMLinkButton {
-        text: "Secondary"
-        onClicked: text = (text === "Clicked" ? "Secondary" : "Clicked")
-      }
-      MMLinkButton {
-        text: "Disabled"
-        enabled: false
-      }
-    }
-  }
-
-  GroupBox {
-    title: "MMLink"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
-
-    Row {
-      spacing: 20
-      anchors.fill: parent
-      MMLink {
-        text: "Tertriary"
-        width: 150
-        rightIcon: __style.arrowLinkRightIcon
-        onClicked: text = (text === "Clicked" ? "Tertriary" : "Clicked")
-      }
-      MMLink {
-        text: "Disabled"
-        rightIcon: __style.arrowLinkRightIcon
-        width: 150
-        enabled: false
-      }
-    }
-  }
-
-  GroupBox {
-    title: "MMRoundButton"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
-
-    Row {
-      spacing: 20
-      anchors.fill: parent
-      MMRoundButton {
-      }
-      MMRoundButton {
-        enabled: false
-      }
-    }
-  }
-
-  GroupBox {
-    title: "MMRoundLinkButton"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
-
-    Row {
-      spacing: 20
-      anchors.fill: parent
-      MMRoundLinkButton {
-      }
-      MMRoundLinkButton {
-        enabled: false
-      }
-    }
-  }
-
-  GroupBox {
-    title: "MMRoundButton"
-    background: Rectangle {
-      color: "white"
-      border.color: "gray"
-    }
-    label: Label {
-      color: "black"
-      text: parent.title
-      padding: 5
-    }
-
-    Row {
       spacing: 10
+
+      MMText {
+        text: "1. Primary"
+        width: parent.width
+      }
+
+      Row {
+
+        width: parent.width
+        spacing: 20
+
+        MMButton {
+          text: "Primary"
+
+          width: parent.width / 2 - parent.spacing
+
+          onClicked: text = (text === "Clicked" ? "Primary" : "Clicked")
+        }
+
+        MMButton {
+          text: "Disabled"
+
+          width: parent.width / 2 - parent.spacing
+
+          disabled: true
+
+          onClicked: text = (text === "Clicked" ? "Primary" : "Clicked")
+        }
+      }
+
+      MMButton {
+
+        width: parent.width
+
+        fontColor: __style.grapeColor
+        bgndColor: __style.negativeColor
+        fontColorHover: __style.negativeColor
+        bgndColorHover: __style.grapeColor
+
+        text: "Primary custom color with icon"
+
+        iconSource: __style.arrowLinkRightIcon
+      }
+
+      MMButton {
+        text: "Primary flex width (no witdth set)"
+      }
+
+      MMListSpacer { height: __style.margin20 }
+
+      MMText {
+        text: "2. Secondary"
+        width: parent.width
+      }
+
+      Row {
+
+        width: parent.width
+        spacing: 20
+
+        MMButton {
+          text: "Secondary"
+
+          width: parent.width / 2 - parent.spacing
+
+          type: MMButton.Types.Secondary
+
+          onClicked: text = (text === "Clicked" ? "Secondary" : "Clicked")
+        }
+
+        MMButton {
+          text: "Disabled"
+
+          width: parent.width / 2 - parent.spacing
+
+          type: MMButton.Types.Secondary
+          disabled: true
+
+          onClicked: text = (text === "Clicked" ? "Secondary" : "Clicked")
+        }
+      }
+
+      MMButton {
+
+        width: parent.width
+
+        fontColor: __style.grapeColor
+        bgndColor: __style.negativeColor
+        fontColorHover: __style.negativeColor
+        bgndColorHover: __style.grapeColor
+
+        type: MMButton.Types.Secondary
+        text: "Secondary custom color with icon"
+
+        iconSource: __style.arrowLinkRightIcon
+      }
+
+      MMButton {
+        type: MMButton.Types.Secondary
+        text: "Secondary flex width (no witdth set)"
+      }
+
+      MMListSpacer { height: __style.margin20 }
+
+      MMText {
+        text: "3. Tertiary"
+        width: parent.width
+      }
+
+      Row {
+
+        width: parent.width
+        spacing: 20
+
+        MMButton {
+          text: "Tertiary"
+
+          width: parent.width / 2 - parent.spacing
+
+          type: MMButton.Types.Tertiary
+
+          onClicked: text = (text === "Clicked" ? "Tertiary" : "Clicked")
+        }
+
+        MMButton {
+          text: "Disabled"
+
+          width: parent.width / 2 - parent.spacing
+
+          type: MMButton.Types.Tertiary
+          disabled: true
+
+          onClicked: text = (text === "Clicked" ? "Tertiary" : "Clicked")
+        }
+      }
+
+      MMButton {
+
+        width: parent.width
+
+        fontColor: __style.grapeColor
+        fontColorHover: __style.negativeColor
+
+        type: MMButton.Types.Tertiary
+        text: "Tertiary custom color with icon"
+
+        iconSource: __style.arrowLinkRightIcon
+      }
+
+      MMButton {
+        type: MMButton.Types.Tertiary
+        text: "Tertiary flex width (no witdth set)"
+      }
+    }
+  }
+
+  GroupBox {
+    title: "MMRoundButton"
+    background: Rectangle {
+      color: "white"
+      border.color: "gray"
+    }
+    label: Label {
+      color: "black"
+      text: parent.title
+      padding: 5
+    }
+
+    Row {
+      spacing: 20
       anchors.fill: parent
+      MMRoundButton {
+      }
 
       MMRoundButton {
         enabled: false

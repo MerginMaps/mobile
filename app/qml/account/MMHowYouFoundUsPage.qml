@@ -176,7 +176,7 @@ Page {
     anchors.bottom: parent.bottom
     anchors.bottomMargin: 20 * __dp
     text: qsTr("Continue")
-    enabled: listView.currentIndex >= 0
+    disabled: listView.currentIndex < 0
 
     onClicked: {
       if (root.selectedText.length > 0 ) {

@@ -115,10 +115,13 @@ Item {
           }
         }
 
-        footer: MMLink {
-              text: qsTr("Add field")
-              anchors.centerIn: parent // TODO: fix anchor loop + button does not work
-              rightIcon: __style.addIcon
+        footer: MMButton {
+              text: qsTr( "Add field" )
+
+              type: MMButton.Types.Tertiary
+
+              iconSource: __style.addIcon
+
               onClicked: {
                 fieldsModel.addField("", "TextEdit")
                 if (fieldList.visible) {
