@@ -120,7 +120,7 @@ Item {
 
               type: MMButton.Types.Tertiary
 
-              iconSource: __style.addIcon
+              iconSourceRight: __style.addIcon
 
               onClicked: {
                 fieldsModel.addField("", "TextEdit")

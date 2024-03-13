@@ -72,13 +72,16 @@ Column {
         width: parent.width
 
         fontColor: __style.grapeColor
+        iconColor: __style.grapeColor
         bgndColor: __style.negativeColor
         fontColorHover: __style.negativeColor
+        iconColorHover: __style.negativeColor
         bgndColorHover: __style.grapeColor
 
         text: "Primary custom color with icon"
 
-        iconSource: __style.arrowLinkRightIcon
+        iconSourceRight: __style.arrowLinkRightIcon
+        iconSourceLeft: __style.uploadIcon
       }
 
       MMButton {
@@ -124,19 +127,23 @@ Column {
         width: parent.width
 
         fontColor: __style.grapeColor
+        iconColor: __style.grapeColor
         bgndColor: __style.negativeColor
         fontColorHover: __style.negativeColor
+        iconColorHover: __style.negativeColor
         bgndColorHover: __style.grapeColor
 
         type: MMButton.Types.Secondary
         text: "Secondary custom color with icon"
 
-        iconSource: __style.arrowLinkRightIcon
+        iconSourceRight: __style.arrowLinkRightIcon
       }
 
       MMButton {
         type: MMButton.Types.Secondary
         text: "Secondary flex width (no witdth set)"
+        iconSourceLeft: __style.uploadIcon
+        iconSourceRight: __style.uploadIcon
       }
 
       MMListSpacer { height: __style.margin20 }
@@ -169,6 +176,8 @@ Column {
           type: MMButton.Types.Tertiary
           disabled: true
 
+          iconSourceLeft: __style.uploadIcon
+
           onClicked: text = (text === "Clicked" ? "Tertiary" : "Clicked")
         }
       }
@@ -178,17 +187,21 @@ Column {
         width: parent.width
 
         fontColor: __style.grapeColor
+        iconColor: __style.grapeColor
         fontColorHover: __style.negativeColor
+        iconColorHover: __style.negativeColor
 
         type: MMButton.Types.Tertiary
         text: "Tertiary custom color with icon"
 
-        iconSource: __style.arrowLinkRightIcon
+        iconSourceRight: __style.arrowLinkRightIcon
       }
 
       MMButton {
         type: MMButton.Types.Tertiary
         text: "Tertiary flex width (no witdth set)"
+        fontColor: __style.nightColor
+        iconSourceLeft: __style.globeIcon
       }
     }
   }
