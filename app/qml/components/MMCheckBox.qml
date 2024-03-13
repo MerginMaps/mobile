@@ -38,14 +38,15 @@ CheckBox {
     color: ( root.checked && root.enabled ) ? __style.grassColor: __style.transparentColor
 
     border.color: {
-      if ( root.hasError ) {
-        return __style.negativeColor
-      }
-
       if ( enabled ) {
         if ( checked ) {
           return __style.grassColor
         }
+
+        if ( root.hasError ) {
+          return __style.negativeColor
+        }
+
         return __style.forestColor
       }
 

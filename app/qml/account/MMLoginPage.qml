@@ -55,8 +55,6 @@ MMPage {
     height: parent.height
 
     Column {
-      id: maincol
-
       width: parent.width
 
       spacing: __style.spacing20

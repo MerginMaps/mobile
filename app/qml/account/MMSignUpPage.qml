@@ -12,29 +12,156 @@ import QtQuick.Controls
 
 import mm 1.0 as MM
 
+import "./components" as MMAccountComponents
 import "../components"
 import "../inputs"
 
-Page {
-  id: root
+//
+// TODO: Change API root is missing here! - Do we need it?
+//
 
-  // width: parent.width
+MMPage {
+  id: root
 
   /**
   * Suppose to be true if register request is pending. Then busy indicator is running and
   * the sign up button is disabled.
   */
-  //TODO!!
   property bool pending: false
 
-  signal backClicked
-  signal signInClicked
-  signal signUpClicked ( string username, string email, string password, string passwordConfirm, bool tocAccept, bool newsletterSubscribe )
+  property string tocString
 
-  required property string tocString
-  readonly property real hPadding: width < __style.maxPageWidth
-                                   ? 20 * __dp
-                                   : (20 + (width - __style.maxPageWidth) / 2) * __dp
+  signal signInClicked
+  signal signUpClicked(
+    string username,
+    string email,
+    string password,
+    string passwordConfirm,
+    bool tocAccept,
+    bool newsletterSubscribe
+  )
+
+  pageHeader {
+    title: qsTr( "Sign up" )
+
+    titleFont: __style.h3
+    color: __style.transparentColor
+    topSpacing: Math.max( __style.safeAreaTop, __style.margin54 )
+    baseHeaderHeight: __style.row80
+    backButton.bgndColor: __style.lightGreenColor
+  }
+
+  background: MMAccountComponents.MMAuthPageBackground{}
+
+  pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
+
+  pageContent: MMScrollView {
+    id: contentScroller
+
+    width: parent.width
+    height: parent.height
+
+    Column {
+      id: maincol
+
+      width: parent.width
+
+      spacing: __style.spacing20
+
+      MMListSpacer {
+        height: __style.margin20
+      }
+
+      MMTextInput {
+        id: username
+
+        width: parent.width
+
+        title: qsTr( "Username" )
+        bgColor: __style.lightGreenColor
+      }
+
+      MMTextInput {
+        id: email
+
+        width: parent.width
+
+        title: qsTr( "Email" )
+        bgColor: __style.lightGreenColor
+      }
+
+      MMPasswordInput {
+        id: password
+
+        width: parent.width
+
+        title: qsTr( "Password" )
+        bgColor: __style.lightGreenColor
+      }
+
+      MMPasswordInput {
+        id: passwordConfirm
+
+        width: parent.width
+
+        title: qsTr( "Confirm password" )
+        bgColor: __style.lightGreenColor
+      }
+
+      MMCheckBox {
+        id: tocCheck
+
+        width: parent.width
+
+        text: root.tocString
+      }
+
+      MMCheckBox {
+        id: newsletterCheck
+
+        width: parent.width
+
+        text: qsTr( "I want to subscribe to the newsletter" )
+      }
+
+      MMButton {
+        width: parent.width
+
+        text: qsTr( "Sign up" )
+
+        disabled: root.pending
+
+        onClicked: {
+          root.signUpClicked(
+                username.text,
+                email.text,
+                password.text,
+                passwordConfirm.text,
+                tocCheck.checked,
+                newsletterCheck.checked
+                )
+        }
+      }
+
+      MMHlineText {
+        width: parent.width
+
+        title: qsTr("Already have an account?")
+      }
+
+      MMButton {
+        width: parent.width
+
+        text: qsTr( "Sign in" )
+
+        type: MMButton.Types.Secondary
+
+        onClicked: root.signInClicked()
+      }
+
+      MMListFooterSpacer {}
+    }
+  }
 
   // show error message under the respective field
   function showErrorMessage( msg, field ) {
@@ -44,8 +171,7 @@ Page {
     email.errorMsg = ""
     password.errorMsg = ""
     passwordConfirm.errorMsg = ""
-    // TODO tocAccept.errorMsg = ""
-    // TODO errorText.text = ""
+    tocCheck.hasError = false
 
     if( field === MM.RegistrationError.USERNAME ) {
       username.errorMsg = msg
@@ -64,180 +190,11 @@ Page {
       passwordConfirm.focus = true
     }
     else if( field === MM.RegistrationError.TOC ) {
-      // TODO where to show MMCheckBox missing errorMsg
-      // tocAccept.errorMsg = msg
-      // tocAccept.focus = true
+       tocCheck.hasError = true
       __notificationModel.addError( msg )
     }
     else if( field === MM.RegistrationError.OTHER ) {
       __notificationModel.addError( msg )
-    }
-  }
-
-  // background as Drawer design
-  Rectangle {
-    anchors.fill: parent
-    color: __style.whiteColor
-
-    Rectangle {
-      width: parent.width
-      height: 20 * __dp
-      color: __style.forestColor
-    }
-
-    Rectangle {
-      width: parent.width
-      height: 40 * __dp
-      color: __style.whiteColor
-      radius: height / 2
-    }
-  }
-
-  MMPageHeader {
-    id: header
-
-    title: qsTr("Sign Up")
-    titleFont: __style.h3
-
-    backButton.bgndColor: __style.lightGreenColor
-
-    onBackClicked: root.backClicked()
-  }
-
-  ScrollView {
-    width: parent.width + 40 * __dp
-    height: parent.height - header.height - 40 * __dp
-    anchors.top: header.bottom
-    anchors.topMargin: 20 * __dp
-    anchors.bottomMargin: 20 * __dp
-
-    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-
-    Column {
-      id: mainColumn
-
-      width: root.width
-      spacing: 20 * __dp
-      leftPadding: root.hPadding
-      rightPadding: root.hPadding
-      topPadding: 20 * __dp
-      bottomPadding: 20 * __dp
-
-      MMTextInput {
-        id: username
-        width: parent.width - 2 * root.hPadding
-        title: qsTr("Username")
-        bgColor: __style.lightGreenColor
-      }
-
-      MMTextInput {
-        id: email
-        width: parent.width - 2 * root.hPadding
-        title: qsTr("Email address")
-        bgColor: __style.lightGreenColor
-      }
-
-      MMPasswordInput {
-        id: password
-        width: parent.width - 2 * root.hPadding
-        title: qsTr("Password")
-        bgColor: __style.lightGreenColor
-      }
-
-      MMPasswordInput {
-        id: passwordConfirm
-        width: parent.width - 2 * root.hPadding
-        title: qsTr("Confirm password")
-        bgColor: __style.lightGreenColor
-      }
-
-      Row {
-        width: parent.width
-        spacing: 10 * __dp
-
-        MMCheckBox {
-          id: tocAccept
-
-          width: 24 * __dp
-          anchors.verticalCenter: parent.verticalCenter
-        }
-
-        Text {
-          // TODO replace with text in MMCheckBox
-          width: parent.width - tocAccept.width - parent.spacing - 2 * root.hPadding
-          anchors.verticalCenter: parent.verticalCenter
-
-          text: root.tocString
-          font: __style.p5
-          color: __style.nightColor
-          linkColor: __style.forestColor
-          wrapMode: Text.WordWrap
-          lineHeight: 1.5
-
-          onLinkActivated: function(link) {
-            Qt.openUrlExternally(link)
-          }
-        }
-      }
-
-      Row {
-        width: parent.width
-        spacing: 10 * __dp
-
-        MMCheckBox {
-          id: newsletterSubscribe
-
-          width: 24 * __dp
-          anchors.verticalCenter: parent.verticalCenter
-        }
-
-        Text {
-          // TODO replace with text in MMCheckBox
-          width: parent.width - newsletterSubscribe.width - parent.spacing - 2 * root.hPadding
-          anchors.verticalCenter: parent.verticalCenter
-
-          text: qsTr("I want to subscribe to the newsletter")
-          font: __style.p5
-          color: __style.nightColor
-          linkColor: __style.forestColor
-          wrapMode: Text.WordWrap
-          lineHeight: 1.5
-        }
-      }
-
-      Item { width: 1; height: 1 }
-
-      MMButton {
-        width: parent.width - 2 * root.hPadding
-        text: qsTr("Sign up")
-        disabled: pending
-        onClicked: {
-          root.signUpClicked(
-                username.text,
-                email.text,
-                password.text,
-                passwordConfirm.text,
-                tocAccept.checked,
-                newsletterSubscribe.checked
-          )
-        }
-      }
-
-      Item { width: 1; height: 1 }
-
-      MMHlineText {
-        width: parent.width - 2 * root.hPadding
-        title: qsTr("Already have an account?")
-      }
-
-//      MMLinkButton {
-//        width: parent.width - 2 * root.hPadding
-//        text: qsTr("Sign in")
-//        enabled: !pending
-
-//        onClicked: root.signInClicked()
-//      }
     }
   }
 }
