@@ -38,7 +38,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   // parse profile data
   mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
   mName = docObj.value( QStringLiteral( "name" ) ).toString();
-  mNameAbbr = CoreUtils::nameAbbr( mName );
+  mNameAbbr = CoreUtils::nameAbbr( mName, mEmail );
 
   int preferredWorkspace = -1;
   if ( docObj.contains( QStringLiteral( "preferred_workspace" ) ) )
