@@ -12,11 +12,12 @@ import QtQuick
 Row {
   id: root
 
-  required property string title
+  property string title
+
   property color lineColor: __style.greyColor
   property color textColor: __style.nightColor
 
-  spacing: 15
+  spacing: __style.spacing20
 
   Rectangle {
     id: leftLine
