@@ -117,16 +117,16 @@ Drawer {
         spacing: __style.pageMargins
         anchors.horizontalCenter: parent.horizontalCenter
 
-        MMLinkButton {
-          id: noButton
+//        MMLinkButton {
+//          id: noButton
 
-          width: parent.width / 2 - __style.pageMargins
-          text: qsTr("No")
+//          width: parent.width / 2 - __style.pageMargins
+//          text: qsTr("No")
 
-          onClicked: {
-            close()
-          }
-        }
+//          onClicked: {
+//            close()
+//          }
+//        }
 
         MMButton {
           id: yesButton
