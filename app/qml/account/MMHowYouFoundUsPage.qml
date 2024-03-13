@@ -56,7 +56,6 @@ Page {
       progressColor: __style.forestColor
 
       position: 2/3
-      visible: root.showProgress
     }
   }
 
@@ -68,6 +67,8 @@ Page {
 
     ListView {
       id: listView
+
+      property int socialMediaSubmenuPosition: -1
 
       width: parent.width - 2 * root.hPadding
       anchors.horizontalCenter: parent.horizontalCenter
@@ -87,12 +88,6 @@ Page {
           listView.model.append({name: qsTr("Teacher"), key: "teacher", icon: __style.teacherIcon, submenu: false})
           listView.model.append({name: qsTr("Conference"), key: "conference", icon: __style.briefcaseIcon, submenu: false})
           listView.model.append({name: qsTr("Social media"), key: "social", icon: __style.socialMediaIcon, submenu: false})
-          listView.model.append({name: qsTr("YouTube"), key: "youtube", icon: __style.youtubeIcon, submenu: true})
-          listView.model.append({name: qsTr("Twitter"), ikey: "twitter", icon: __style.xTwitterIcon, submenu: true})
-          listView.model.append({name: qsTr("Facebook"), key: "facebook", icon: __style.facebookIcon, submenu: true})
-          listView.model.append({name: qsTr("LinkedIn"), key: "linkedIn", icon: __style.linkedinIcon, submenu: true})
-          listView.model.append({name: qsTr("Mastodon"), key: "mastodon", icon: __style.mastodonIcon, submenu: true})
-          listView.model.append({name: qsTr("Reddit"), key: "reddit", icon: __style.redditIcon, submenu: true})
           listView.model.append({name: qsTr("Other"), key: "other", icon: __style.otherIcon, submenu: false})
         }
       }
@@ -119,19 +114,38 @@ Page {
         checked: listView.currentIndex === index
 
         onClicked: {
-
           listView.currentIndex = index
 
           if(listView.model.count === listView.currentIndex + 1)
           {
             root.selectedText = ""
             listView.positionViewAtEnd()
+            if( listView.socialMediaSubmenuPosition > -1 ) {
+              listView.model.remove( listView.socialMediaSubmenuPosition+1, 6 )
+              listView.socialMediaSubmenuPosition = -1
+            }
           }
           else {
             if ( model.key === "social" ) {
-              // need to select subcategory
+              if( listView.socialMediaSubmenuPosition === -1 ) {
+                let i = model.index
+                listView.socialMediaSubmenuPosition = i
+                listView.model.insert(++i, {name: qsTr("YouTube"), key: "youtube", icon: __style.youtubeIcon, submenu: true})
+                listView.model.insert(++i, {name: qsTr("Twitter"), key: "twitter", icon: __style.xTwitterIcon, submenu: true})
+                listView.model.insert(++i, {name: qsTr("Facebook"), key: "facebook", icon: __style.facebookIcon, submenu: true})
+                listView.model.insert(++i, {name: qsTr("LinkedIn"), key: "linkedIn", icon: __style.linkedinIcon, submenu: true})
+                listView.model.insert(++i, {name: qsTr("Mastodon"), key: "mastodon", icon: __style.mastodonIcon, submenu: true})
+                listView.model.insert(++i, {name: qsTr("Reddit"), key: "reddit", icon: __style.redditIcon, submenu: true})
+              }
+              listView.currentIndex = -1
               root.selectedText = ""
             } else {
+              if( listView.socialMediaSubmenuPosition > -1 ) {
+                if( model.key !== "youtube" && model.key !== "twitter" && model.key !== "facebook" && model.key !== "linkedIn" && model.key !== "mastodon" && model.key !== "reddit" ) {
+                  listView.model.remove( listView.socialMediaSubmenuPosition+1, 6 )
+                  listView.socialMediaSubmenuPosition = -1
+                }
+              }
               root.selectedText = model.key
             }
           }
@@ -162,6 +176,7 @@ Page {
     anchors.bottom: parent.bottom
     anchors.bottomMargin: 20 * __dp
     text: qsTr("Continue")
+    enabled: listView.currentIndex >= 0
 
     onClicked: {
       if (root.selectedText.length > 0 ) {
