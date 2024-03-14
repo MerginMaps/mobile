@@ -639,6 +639,7 @@ Item {
 
         if ( __merginApi.serverType === MM.MerginServerType.OLD || ( stackView.currentItem.objectName === "loginPage" ) ) {
           stackView.popPage( "loginPage" )
+          accountController.end()
         }
 
         root.refreshProjects()

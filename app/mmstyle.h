@@ -283,10 +283,14 @@ class MMStyle: public QObject
     Q_PROPERTY( double row67 READ row67 CONSTANT )
     Q_PROPERTY( double row80 READ row80 CONSTANT )
     Q_PROPERTY( double row114 READ row114 CONSTANT )
+    Q_PROPERTY( double radius6 READ margin6 CONSTANT )
     Q_PROPERTY( double radius12 READ margin12 CONSTANT )
     Q_PROPERTY( double radius20 READ margin20 CONSTANT )
     Q_PROPERTY( double radius30 READ margin30 CONSTANT )
     Q_PROPERTY( double scrollVelocityAndroid READ scrollVelocityAndroid CONSTANT ) // [px/s] scrolling on Android devices is too slow by default
+
+    // Breakpoint we use in some screens to differentiate mobile landscape
+    Q_PROPERTY( double heightBreakpointXS READ heightBreakpointXS CONSTANT )
 
   public:
     explicit MMStyle( QObject *parent,  qreal dp )
@@ -543,6 +547,8 @@ class MMStyle: public QObject
     double row114() {return 114 * mDp;}
 
     double scrollVelocityAndroid() { return 10000; }
+
+    double heightBreakpointXS() { return 250; }
 
     void setSafeAreaTop( double newSafeAreaTop )
     {

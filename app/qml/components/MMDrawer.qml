@@ -23,7 +23,9 @@ Drawer {
 
   property real maxHeight: ( ApplicationWindow.window?.height ?? 0 ) - __style.safeAreaTop
 
+  // Properties useful to determine if the content should scroll or not
   readonly property bool maxHeightHit: implicitHeight >= maxHeight
+  readonly property real drawerContentAvailableHeight: implicitHeight - mmDrawerHeader.height - root.drawerSpacing - bottomSpacer.height
 
   signal backClicked()
 
@@ -36,7 +38,7 @@ Drawer {
   // rounded background
   background: Rectangle {
     color: __style.polarColor
-    radius: internal.radius
+    radius: __style.radius20
 
     Rectangle {
       width: parent.width / 10
@@ -48,7 +50,7 @@ Drawer {
 
       visible: root.hasHandle
 
-      radius: internal.radius
+      radius: __style.radius20
 
       color: __style.lightGreenColor
     }
@@ -125,14 +127,10 @@ Drawer {
 
     // Bottom spacer
     Item {
+      id: bottomSpacer
+
       width: parent.width
       height: root.drawerBottomMargin > 0 ? __style.safeAreaBottom + root.drawerBottomMargin :0
     }
-  }
-
-  QtObject {
-    id: internal
-
-    property real radius: 20 * __dp
   }
 }

@@ -19,11 +19,9 @@ import "../components"
  *   Link (e.g. Learn More with link to merginmaps.com/docs)
  * all centered
  */
+
 Column {
   id: root
-
-  width: __style.maxPageWidth - 2 * __style.pageMargins
-  height: illustration.height + titleItem.height + descItem.height + linkItem.height + 7 * spacing
 
   property alias image: illustration.source
   property string title
@@ -32,12 +30,7 @@ Column {
   property string linkText: qsTr( "Learn more" )
   property string link
 
-  spacing: __style.margin12
-
-  Item {
-    width: root.width
-    height: root.spacing
-  }
+  spacing: 0
 
   Image {
     id: illustration
@@ -45,11 +38,13 @@ Column {
     sourceSize.width: 140 * __dp
   }
 
-  Text {
+  MMListSpacer { height: __style.margin20 }
+
+  MMText {
     id: titleItem
 
-    width: parent.width - 2 * __style.pageMargins
-    x: __style.pageMargins
+    width: parent.width
+
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignHCenter
 
@@ -61,11 +56,13 @@ Column {
     wrapMode: Text.Wrap
   }
 
-  Text {
+  MMListSpacer { height: __style.margin12 }
+
+  MMText {
     id: descItem
 
-    width: parent.width - 2 * __style.pageMargins
-    x: __style.pageMargins
+    width: parent.width
+
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignHCenter
 
@@ -82,11 +79,13 @@ Column {
     }
   }
 
-  Text {
+  MMListSpacer { height: __style.margin12 }
+
+  MMText {
     id: linkItem
 
-    width: parent.width - 2 * __style.pageMargins
-    x: __style.pageMargins
+    width: parent.width
+
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignHCenter
 
@@ -97,13 +96,9 @@ Column {
     text: "<a style=\"text-decoration: underline; color:" + __style.forestColor + ";\" href='" + root.link + "'>" + root.linkText + "</a>"
 
     textFormat: Text.RichText
+
     onLinkActivated: function( link ) {
       Qt.openUrlExternally( link )
     }
-  }
-
-  Item {
-    width: root.width
-    height: root.spacing
   }
 }

@@ -9,38 +9,41 @@
 
 import QtQuick
 
-Row {
+Item {
   id: root
 
-  property string title
+  property var listRootObject: null
 
-  property color lineColor: __style.greyColor
-  property color textColor: __style.nightColor
+  // Usually MMScrollView.heigh - parent.implicitHeight
+  // (parent is the main column of the scroll view)
+  property real availableVerticalSpace: 0
 
-  spacing: __style.spacing20
+  width: 1
+  height: 0
 
-  Rectangle {
-    id: leftLine
+  Connections {
+    target: listRootObject
 
-    width: (root.width - text.width) / 2 - root.spacing
-    height: 1
-    anchors.verticalCenter: parent.verticalCenter
-    color: root.lineColor
+    function onHeightChanged() {
+      root.recalculateHeight()
+    }
   }
 
-  Text {
-    id: text
+  Component.onCompleted: root.recalculateHeight()
 
-    text: root.title
-    font: __style.t3
-    color: root.textColor
-    wrapMode: Text.WordWrap
-  }
+  function recalculateHeight() {
 
-  Rectangle {
-    width: leftLine.width
-    height: leftLine.height
-    color: leftLine.color
-    anchors.verticalCenter: parent.verticalCenter
+    height = 0
+
+    parent.forceLayout()
+
+    let difference = availableVerticalSpace
+
+    if ( difference > __style.margin20 ) {
+      height = difference - parent.spacing
+    }
+    else {
+      height = __style.margin20
+    }
   }
 }

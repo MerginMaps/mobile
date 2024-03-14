@@ -2,6 +2,7 @@ set(MM_QML
     account/components/MMIconCheckBoxHorizontal.qml
     account/components/MMIconCheckBoxVertical.qml
     account/components/MMAccountPageItem.qml
+    account/components/MMAuthPageBackground.qml
     account/components/MMWorkspaceDelegate.qml
     account/components/MMWorkspaceInvitationDelegate.qml
     account/MMAcceptInvitationPage.qml
@@ -33,6 +34,7 @@ set(MM_QML
     components/MMListDrawer.qml
     components/MMListDrawerItem.qml
     components/MMListFooterSpacer.qml
+    components/MMListVerticalFillSpacer.qml
     components/MMListSpacer.qml
     components/MMBusyIndicator.qml
     components/MMMenuDrawer.qml

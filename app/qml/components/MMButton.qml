@@ -24,6 +24,12 @@ Button {
     if ( type === MMButton.Types.Tertiary ) return __style.forestColor
   }
 
+  property color iconColor: {
+    if ( type === MMButton.Types.Primary ) return __style.forestColor
+    if ( type === MMButton.Types.Secondary ) return __style.forestColor
+    if ( type === MMButton.Types.Tertiary ) return __style.forestColor
+  }
+
   property color bgndColor: {
     if ( type === MMButton.Types.Primary ) return __style.grassColor
     if ( type === MMButton.Types.Secondary ) return __style.forestColor
@@ -31,6 +37,12 @@ Button {
   }
 
   property color fontColorHover: {
+    if ( type === MMButton.Types.Primary ) return __style.grassColor
+    if ( type === MMButton.Types.Secondary ) return __style.forestColor
+    if ( type === MMButton.Types.Tertiary ) return __style.nightColor
+  }
+
+  property color iconColorHover: {
     if ( type === MMButton.Types.Primary ) return __style.grassColor
     if ( type === MMButton.Types.Secondary ) return __style.forestColor
     if ( type === MMButton.Types.Tertiary ) return __style.nightColor
@@ -48,6 +60,12 @@ Button {
     if ( type === MMButton.Types.Tertiary ) return __style.lightGreenColor
   }
 
+  property color iconColorDisabled: { // TODO: change with the new colors
+    if ( type === MMButton.Types.Primary ) return __style.greyColor
+    if ( type === MMButton.Types.Secondary ) return __style.lightGreenColor
+    if ( type === MMButton.Types.Tertiary ) return __style.lightGreenColor
+  }
+
   property color bgndColorDisabled: { // TODO: change with the new colors
     if ( type === MMButton.Types.Primary ) return __style.lightGreenColor
     if ( type === MMButton.Types.Secondary ) return __style.lightGreenColor
@@ -56,7 +74,8 @@ Button {
 
   property bool disabled: false
 
-  property string iconSource
+  property string iconSourceRight
+  property string iconSourceLeft
 
   states: [
     State {
@@ -76,8 +95,13 @@ Button {
       }
 
       PropertyChanges {
-        target: buttonIcon
-        color: root.fontColor
+        target: buttonIconRight
+        color: root.iconColor
+      }
+
+      PropertyChanges {
+        target: buttonIconLeft
+        color: root.iconColor
       }
     },
 
@@ -98,8 +122,13 @@ Button {
       }
 
       PropertyChanges {
-        target: buttonIcon
-        color: root.fontColorHover
+        target: buttonIconRight
+        color: root.iconColorHover
+      }
+
+      PropertyChanges {
+        target: buttonIconLeft
+        color: root.iconColorHover
       }
     },
 
@@ -120,8 +149,13 @@ Button {
       }
 
       PropertyChanges {
-        target: buttonIcon
-        color: root.fontColorDisabled
+        target: buttonIconRight
+        color: root.iconColorDisabled
+      }
+
+      PropertyChanges {
+        target: buttonIconLeft
+        color: root.iconColorDisabled
       }
     }
   ]
@@ -145,32 +179,44 @@ Button {
     Row {
       id: row
 
-      property real paintedChildrenWidth: buttonContent.implicitWidth + spacing + buttonIcon.width
+      property real paintedChildrenWidth: buttonIconLeft.paintedWidth + buttonContent.implicitWidth + buttonIconRight.paintedWidth + spacing
       property real maxWidth: parent.width - 2 * __style.margin32
 
       x: ( parent.width - width ) / 2
 
       width: Math.min( paintedChildrenWidth, maxWidth )
-      height: Math.max(buttonContent.paintedHeight, buttonIcon.height)
+      height: Math.max( buttonContent.paintedHeight, buttonIconRight.height )
 
-      spacing: buttonIcon.visible ? __style.spacing12 : 0
+      spacing: buttonIconRight.visible || buttonIconLeft.visible ? __style.spacing12 : 0
 
+      MMIcon {
+        id: buttonIconLeft
+
+        property real paintedWidth: visible ? ( width + parent.spacing ) : 0
+
+        source: root.iconSourceLeft
+
+        visible: root.iconSourceLeft
+        width: visible ? __style.icon24 : 0
+      }
 
       MMText {
         id: buttonContent
 
-        width: parent.width - parent.spacing - ( buttonIcon.visible ? buttonIcon.width : 0 )
+        width: parent.width - buttonIconLeft.paintedWidth - buttonIconRight.paintedWidth
 
         font: __style.t3
         text: root.text
       }
 
       MMIcon {
-        id: buttonIcon
+        id: buttonIconRight
 
-        source: root.iconSource
+        property real paintedWidth: visible ? ( width + parent.spacing ) : 0
 
-        visible: root.iconSource
+        source: root.iconSourceRight
+
+        visible: root.iconSourceRight
         width: visible ? __style.icon24 : 0
       }
     }
@@ -194,5 +240,7 @@ Button {
     id: buttonBackground
 
     radius: __style.radius30
+
+    border.width: 2 * __dp
   }
 }
