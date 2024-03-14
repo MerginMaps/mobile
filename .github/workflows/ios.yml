@@ -101,6 +101,9 @@ jobs:
           rm -f '/usr/local/bin/python3.12-config'
           # brew install python@3 || brew link --overwrite python@3
 
+          brew install pipx
+          pipx install aqtinstall
+
           # ---- end hot fix
 
           brew install gnupg
@@ -108,8 +111,8 @@ jobs:
           brew install ccache
           brew install ninja
           
-          pip3 install -U pip
-          pip3 install aqtinstall
+          #pip3 install -U pip
+          #pip3 install aqtinstall
           
       - name: Install ccache
         run: |
