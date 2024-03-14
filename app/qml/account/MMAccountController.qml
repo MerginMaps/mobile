@@ -215,8 +215,7 @@ Item {
 
     MMAcceptInvitationPage {
       objectName: "acceptInvitationsPanel"
-      haveBack: false
-      showCreate: true
+
       invitation: controller.invitation
 
       onJoinWorkspaceClicked: function (workspaceUuid) {

@@ -6,6 +6,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -13,7 +14,7 @@ import QtQuick.Controls
 import "../components"
 import "../inputs"
 
-Page {
+MMPage {
   id: root
 
   required property var invitation /* MM.MerginInvitation */
@@ -23,115 +24,110 @@ Page {
 
   signal joinWorkspaceClicked(string workspaceUuid)
   signal createWorkspaceClicked
-  signal backClicked
 
-  readonly property real hPadding: width < __style.maxPageWidth
-                                   ? 20 * __dp
-                                   : (20 + (width - __style.maxPageWidth) / 2) * __dp
-  Rectangle {
-    anchors.fill: parent
-    color: __style.lightGreenColor
-  }
+  header: null
 
-  MMPageHeader {
-    id: header
+  pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
-    backVisible: root.haveBack
+  pageContent: MMScrollView {
+    id: scrollContent
 
-    onBackClicked: root.backClicked()
-  }
-
-  ScrollView {
     width: parent.width
     height: parent.height
 
-    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-
     Column {
-      id: mainColumn
+      width: parent.width
 
-      width: root.width
-      spacing: 20 * __dp
-      leftPadding: root.hPadding
-      rightPadding: root.hPadding
-      topPadding: 100 * __dp
-      bottomPadding: 20 * __dp
+      MMListSpacer {
+        height: Math.max( ( scrollContent.height - contentMessage.height - footerSpacer.height - buttonsGroup.height ) / 2, __style.margin20 )
+      }
 
       Item {
-        width: parent.width - 2 * root.hPadding
-        height: bg.height
+        id: contentMessage
 
-        Image {
-          id: bg
+        height: childrenRect.height
+        width: parent.width
 
-          anchors.horizontalCenter: parent.horizontalCenter
-          source: __style.positiveMMSymbolImage
+        Column {
+          id: messageColumn
+          width: parent.width
+
+          spacing: __style.margin36
+
+          MMMessage {
+            width: parent.width
+
+            image: __style.positiveMMSymbolImage
+            title: qsTr("You have been invited to a workspace")
+            description: qsTr("It is better to work together, join the workspace and explore Mergin Maps!")
+          }
+
+          MMText {
+            width: parent.width
+            text: root.invitation.workspace
+            font: __style.t1
+            color: __style.nightColor
+            wrapMode: Text.Wrap
+            elide: Text.ElideRight
+            maximumLineCount: 2
+            horizontalAlignment: Text.AlignHCenter
+          }
         }
       }
 
-      Text {
-        width: parent.width - 2 * root.hPadding
-        text: qsTr("You have been invited to a workspace")
-        font: __style.h3
-        color: __style.forestColor
-        wrapMode: Text.WordWrap
-        horizontalAlignment: Text.AlignHCenter
-        lineHeight: 1.2
+      MMListSpacer {
+        height: Math.max( ( scrollContent.height - contentMessage.height - footerSpacer.height - buttonsGroup.height ) / 2, __style.margin20 )
       }
 
-      Text {
-        width: parent.width - 2 * root.hPadding
-        text: qsTr("It is better to work together, join the workspace and explore Mergin Maps together!")
-        font: __style.p5
-        color: __style.nightColor
-        wrapMode: Text.WordWrap
-        horizontalAlignment: Text.AlignHCenter
-        lineHeight: 1.5
-      }
+      Item {
+        id: buttonsGroup
 
-      Item { width: 1; height: 1 }
+        width: parent.width
+        height: childrenRect.height
 
-      Text {
-        width: parent.width - 2 * root.hPadding
-        text: root.invitation.workspace
-        font: __style.t1
-        color: __style.nightColor
-        wrapMode: Text.WordWrap
-        horizontalAlignment: Text.AlignHCenter
-        lineHeight: 1.5
-      }
+        Column {
 
-      Item { width: 1; height: 50 }
+          width: parent.width
+          spacing: __style.spacing20
 
-      MMButton {
-        width: parent.width - 2 * root.hPadding
-        text: qsTr("Join workspace")
+          MMButton {
+            width: parent.width
+            text: qsTr("Join workspace")
 
-        onClicked: root.joinWorkspaceClicked(root.invitation.uuid)
-      }
+            onClicked: {
+              console.log( buttonsGroup.height, buttonsGroup.implicitHeight, contentMessage.height, contentMessage.implicitHeight )
+              root.joinWorkspaceClicked( root.invitation.uuid )
+            }
+          }
 
-      MMHlineText {
-        width: parent.width - 2 * root.hPadding
-        title: qsTr("or")
-        visible: root.showCreate
-      }
+          MMHlineText {
+            width: parent.width
+            title: qsTr( "or" )
+            visible: root.showCreate
+          }
 
-      Text {
-        width: parent.width - 2 * root.hPadding
-        text: qsTr("Want to create a new workspace instead? %1Click here%2").arg("<a href='internal-signal' style='color:" + __style.forestColor + "'>").arg("</a>")
-        visible: root.showCreate
-        font: __style.t3
-        color: __style.nightColor
-        wrapMode: Text.WordWrap
-        horizontalAlignment: Text.AlignHCenter
-        lineHeight: 1.2
-        textFormat: Text.RichText
+          Text {
+            width: parent.width
 
-        onLinkActivated: function(link) {
-          root.createWorkspaceClicked()
+            text: qsTr("Want to create a new workspace instead? %1Click here%2").arg("<a href='internal-signal' style='color:" + __style.forestColor + "'>").arg("</a>")
+            visible: root.showCreate
+
+            font: __style.t3
+            color: __style.nightColor
+            wrapMode: Text.WordWrap
+            horizontalAlignment: Text.AlignHCenter
+
+            lineHeight: 1.2
+            textFormat: Text.RichText
+
+            onLinkActivated: function(link) {
+              root.createWorkspaceClicked()
+            }
+          }
         }
       }
+
+      MMListFooterSpacer { id: footerSpacer }
     }
   }
 }
