@@ -126,9 +126,10 @@ Page {
         bgColor: __style.lightGreenColor
       }
 
-      MMLink {
+      MMButton {
         width: parent.width - 2 * root.hPadding
         height: 20 * __dp
+        type: MMButton.Types.Tertiary
         text: qsTr("Forgot password?")
 
         onClicked: root.forgotPasswordClicked()
@@ -156,9 +157,10 @@ Page {
         visible: root.canSignUp
       }
 
-      MMLinkButton {
+      MMButton {
         width: parent.width - 2 * root.hPadding
         text: qsTr("Sign up")
+        type: MMButton.Types.Secondary
         enabled: !pending
         visible: root.canSignUp
 
@@ -167,15 +169,16 @@ Page {
     }
   }
 
-  MMLink {
+  MMButton {
     id: changeServerButton
 
     width: parent.width
     height: 50 * __dp
     anchors.bottom: parent.bottom
+    type: MMButton.Types.Tertiary
     enabled: !pending
     text: root.apiRoot
-    leftIcon: __style.globeIcon
+    iconSource: __style.globeIcon
 
     onClicked: {
       changeServerDrawer.newServerUrl = root.apiRoot
