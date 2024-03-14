@@ -96,6 +96,7 @@ Item {
         if ( !__merginApi.userAuth.hasAuthData() ) {
           root.resetView()
         }
+        controller.end()
       }
 
       onSignUpClicked: {
