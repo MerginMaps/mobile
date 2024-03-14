@@ -64,9 +64,8 @@ MMBaseToolbar {
   Loader { id: buttonMore; sourceComponent: componentMore; visible: false }
 
   function setupBottomBar() {
-    var buttonModel = root.model
-    var buttonWidth = buttonView.width
-    var button
+    let buttonModel = root.model
+    let buttonWidth = buttonView.width
 
     let filteredbuttons = []
 
@@ -75,13 +74,13 @@ MMBaseToolbar {
         filteredbuttons.push( buttonModel.get(j) )
     }
 
-    var buttonsCount = filteredbuttons.length
+    let buttonsCount = filteredbuttons.length
 
     // add all buttons (max maxButtonsInToolbar) into toolbar
     visibleButtonModel.clear()
     if(buttonsCount <= maxButtonsInToolbar || buttonWidth >= buttonsCount*root.minimumToolbarButtonWidth) {
       for( var i = 0; i < buttonsCount; i++ ) {
-        button = filteredbuttons[i]
+        let button = filteredbuttons[i]
         if(button.isMenuButton !== undefined)
           button.isMenuButton = false
         button.width = Math.floor(buttonWidth / buttonsCount)
@@ -97,14 +96,14 @@ MMBaseToolbar {
         maxVisible = maxButtonsInToolbar
       for( i = 0; i < maxVisible-1; i++ ) {
         if(maxVisible===maxButtonsInToolbar || buttonWidth >= i*root.minimumToolbarButtonWidth) {
-          button = filteredbuttons[i]
+          let button = filteredbuttons[i]
           button.isMenuButton = false
           button.width = Math.floor(buttonWidth / maxVisible)
           visibleButtonModel.append(button)
         }
       }
       // add More '...' button
-      button = buttonMore
+      let button = buttonMore
       button.visible = true
       button.width = maxVisible ? buttonWidth / maxVisible : buttonWidth
       visibleButtonModel.append( button )
@@ -115,7 +114,7 @@ MMBaseToolbar {
       for( i = maxVisible-1; i < buttonsCount; i++ ) {
         if(i<0)
           continue
-        button = filteredbuttons[i]
+        let button = filteredbuttons[i]
         button.isMenuButton = true
         button.width = Math.floor(buttonWidth)
         button.parentMenu = menu
