@@ -993,7 +993,7 @@ ApplicationWindow {
       projectErrorDialog.open()
     }
 
-    function onPositionTrackingSupportedChanged(){
+    function onPositionTrackingSupportedChanged() {
       positionTrackingButton.visibilityMode = __activeProject.positionTrackingSupported
       mapToolbar.setupBottomBar()
     }
