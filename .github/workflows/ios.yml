@@ -78,12 +78,6 @@ jobs:
           # See https://github.com/actions/runner-images/issues/4020.
           # See https://github.com/actions/runner-images/issues/8838.
 
-          # brew unlink python@3.12
-          # brew uninstall --force azure-cli
-          # brew uninstall --force aws-sam-cli 
-          # brew uninstall --force pipx
-          # brew uninstall --force python@3.11
-          # brew uninstall --force python@3.12
           rm -f '/usr/local/bin/2to3'
           rm -f '/usr/local/bin/2to3-3.11'
           rm -f '/usr/local/bin/2to3-3.12'
@@ -99,10 +93,12 @@ jobs:
           rm -f '/usr/local/bin/python3.12'
           rm -f '/usr/local/bin/python3.11-config'
           rm -f '/usr/local/bin/python3.12-config'
-          # brew install python@3 || brew link --overwrite python@3
 
           brew install pipx
           pipx install aqtinstall
+
+          #pip3 install -U pip
+          #pip3 install aqtinstall
 
           # ---- end hot fix
 
@@ -110,9 +106,6 @@ jobs:
           brew install openssl@1.1
           brew install ccache
           brew install ninja
-          
-          #pip3 install -U pip
-          #pip3 install aqtinstall
           
       - name: Install ccache
         run: |
