@@ -74,13 +74,38 @@ jobs:
 
       - name: Install brew deps
         run: |
+          # FIXME: We should not need to do this, but there are currently some complications with Github CI.
+          # See https://github.com/actions/runner-images/issues/4020.
+          # See https://github.com/actions/runner-images/issues/8838.
+
+          rm -f '/usr/local/bin/2to3'
+          rm -f '/usr/local/bin/2to3-3.11'
+          rm -f '/usr/local/bin/2to3-3.12'
+          rm -f '/usr/local/bin/idle3'
+          rm -f '/usr/local/bin/idle3.11'
+          rm -f '/usr/local/bin/idle3.12'
+          rm -f '/usr/local/bin/pydoc3'
+          rm -f '/usr/local/bin/pydoc3.11'
+          rm -f '/usr/local/bin/pydoc3.12'
+          rm -f '/usr/local/bin/python3'
+          rm -f '/usr/local/bin/python3-config'
+          rm -f '/usr/local/bin/python3.11'
+          rm -f '/usr/local/bin/python3.12'
+          rm -f '/usr/local/bin/python3.11-config'
+          rm -f '/usr/local/bin/python3.12-config'
+
+          brew install pipx
+          pipx install aqtinstall
+
+          #pip3 install -U pip
+          #pip3 install aqtinstall
+
+          # ---- end hot fix
+
           brew install gnupg
           brew install openssl@1.1
           brew install ccache
           brew install ninja
-          
-          pip3 install -U pip
-          pip3 install aqtinstall
           
       - name: Install ccache
         run: |
@@ -151,12 +176,12 @@ jobs:
       - name: Install Qt
         if: steps.cache-qt.outputs.cache-hit != 'true'
         run: |
-          python3 -m aqt install-qt \
+          aqt install-qt \
             mac ios ${{ env.QT_VERSION }} \
             -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
             -O ${{ github.workspace }}/Qt
             
-          python3 -m aqt install-qt \
+          aqt install-qt \
             mac desktop ${{ env.QT_VERSION }} \
             -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
             -O ${{ github.workspace }}/Qt
