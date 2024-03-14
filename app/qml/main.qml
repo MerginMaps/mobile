@@ -348,6 +348,8 @@ ApplicationWindow {
       }
 
       MMToolbarButton {
+        id: positionTrackingButton
+
         text: qsTr("Position tracking")
         iconSource: __style.positionTrackingIcon
         menuButtonRightText: map.isTrackingPosition ? "Active" : ""
@@ -357,7 +359,6 @@ ApplicationWindow {
         onClicked: {
           trackingPanelLoader.active = true
         }
-
       }
 
       MMToolbarButton {
@@ -990,6 +991,10 @@ ApplicationWindow {
     function onProjectReadingFailed( message ) {
       projectErrorDialog.informativeText = qsTr( "Could not read the project file:" ) + "\n" + message
       projectErrorDialog.open()
+    }
+
+    function onPositionTrackingSupportedChanged(){
+      positionTrackingButton.visibilityMode = __activeProject.positionTrackingSupported
     }
   }
 
