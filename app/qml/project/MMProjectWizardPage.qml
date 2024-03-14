@@ -9,8 +9,6 @@
 
 import QtQuick
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
-import QtQuick.Dialogs
 
 import mm 1.0 as MM
 
@@ -34,8 +32,6 @@ MMPage {
     true
   }
 
-  pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
-
   MM.FieldsModel {
     id: fieldsModel
     onNotifyError: function( message ) {
@@ -44,13 +40,7 @@ MMPage {
     Component.onCompleted: fieldsModel.initModel()
   }
 
-  pageHeader {
-    title: qsTr("Create Project")
-    color: __style.lightGreenColor
-
-    onBackClicked: root.backClicked()
-  }
-
+  pageHeader.title: qsTr("Create Project")
 
   pageContent: Item {
 
@@ -93,13 +83,13 @@ MMPage {
 
         model: fieldsModel
         width: parent.width
-        height: parent.height - projectNameField.height - projectNameField.height
+        height: parent.height - projectNameField.height - __style.margin20 - projectNameField.height
         clip: true
         spacing: __style.margin20
 
         delegate: MMProjectWizardDelegate {
           height: root.rowHeight
-          width: contentLayout.width
+          width: ListView.view.width
           widgetList: root.widgetsModel
           onRemoveClicked: function( index ) {
             fieldsModel.removeField(index)
@@ -109,7 +99,7 @@ MMPage {
         footer: MMButton {
           id: addButton
 
-          width: contentLayout.width
+          width: ListView.view.width
           height: root.rowHeight
           anchors.horizontalCenter: parent.horizontalCenter
 
