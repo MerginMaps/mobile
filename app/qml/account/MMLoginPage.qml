@@ -178,37 +178,43 @@ MMPage {
 
       onClosed: changeServerDrawerLoader.active = false
 
-      drawerContent: Column {
+      drawerContent: MMScrollView {
+
         width: parent.width
-        spacing: 0
+        height: changeServerDrawer.maxHeightHit ? changeServerDrawer.drawerContentAvailableHeight : contentHeight
 
-        MMListSpacer { height: __style.spacing20 }
-
-        MMTextInput {
-          id: serverURLInput
-
-          title: qsTr( "Server address" )
-
-          bgColor: __style.lightGreenColor
-
-          text: root.apiRoot
-        }
-
-        MMListSpacer { height: __style.spacing40 }
-
-        MMButton {
+        Column {
           width: parent.width
+          spacing: 0
 
-          text: qsTr( "Confirm" )
+          MMListSpacer { height: __style.spacing20 }
 
-          onClicked: {
-            root.changeServerClicked( serverURLInput.text )
-            changeServerDrawer.close()
+          MMTextInput {
+            id: serverURLInput
+
+            title: qsTr( "Server address" )
+
+            bgColor: __style.lightGreenColor
+
+            text: root.apiRoot
+          }
+
+          MMListSpacer { height: __style.spacing40 }
+
+          MMButton {
+            width: parent.width
+
+            text: qsTr( "Confirm" )
+
+            onClicked: {
+              root.changeServerClicked( serverURLInput.text )
+              changeServerDrawer.close()
+            }
           }
         }
-      }
 
-      Component.onCompleted: open()
+        Component.onCompleted: open()
+      }
     }
   }
 }
