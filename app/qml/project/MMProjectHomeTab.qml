@@ -216,8 +216,6 @@ Item {
     searchText: searchBar.text
     spacing: root.spacing
 
-    listHeader: root.activeProjectId ? activeProjectComponent : null
-
     anchors {
       left: parent.left
       right: parent.right
@@ -245,7 +243,10 @@ Item {
       function onModelReset() {
         // ugly ugly ugly #2
         projectlist.listHeader = null
-        projectlist.listHeader = activeProjectComponent
+
+        if ( root.activeProjectId ) {
+          projectlist.listHeader = activeProjectComponent
+        }
       }
     }
   }
@@ -258,8 +259,10 @@ Item {
         return
       }
 
-      if ( root.activeProjectId === relatedProjectId )
+      if ( root.activeProjectId === relatedProjectId ) {
         projectlist.activeProjectDeleted() // ugly, ugly, ugly
+        projectlist.listHeader = null
+      }
 
       __inputUtils.log(
             "Delete project",
