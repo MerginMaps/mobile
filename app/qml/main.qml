@@ -995,6 +995,7 @@ ApplicationWindow {
 
     function onPositionTrackingSupportedChanged(){
       positionTrackingButton.visibilityMode = __activeProject.positionTrackingSupported
+      mapToolbar.setupBottomBar()
     }
   }
 
