@@ -16,10 +16,10 @@ Rectangle {
     Rectangle {
       anchors {
         fill: parent
-        topMargin: Math.max( __style.safeAreaTop, __style.margin54 )
+        topMargin: parent.height > __style.heightBreakpointXS ? Math.max( __style.safeAreaTop, __style.margin54 ) : Math.min( __style.safeAreaTop, __style.margin54 )
       }
 
-      color: __style.whiteColor
+      color: __style.polarColor
       radius: __style.radius20
 
       Rectangle {
@@ -33,7 +33,7 @@ Rectangle {
 
         height: 2 * __style.margin54
 
-        color: __style.whiteColor
+        color: __style.polarColor
       }
     }
   }
