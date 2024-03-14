@@ -13,78 +13,43 @@ import QtQuick.Controls
 import "../components"
 import "../inputs"
 
-Drawer {
+MMDrawer {
   id: root
 
-  required property string username
+  property string username
 
   signal closeAccountClicked()
 
-  width: window.width // TODO maximum size
-  height: mainColumn.height
-  edge: Qt.BottomEdge
-  dim: true
-  interactive: false
-  dragMargin: 0
-  closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+  drawerContent: MMScrollView {
 
-  Rectangle {
-    color: roundedRect.color
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.right: parent.right
-    height: 2 * radius
-    anchors.topMargin: -radius
-    radius: 20 * __dp
-  }
-
-  Rectangle {
-    id: roundedRect
-
-    anchors.fill: parent
-    color: __style.polarColor
+    width: parent.width
+    height: root.maxHeightHit ? root.drawerContentAvailableHeight : contentHeight
 
     Column {
-      id: mainColumn
 
-      width: parent.width - 2* __style.pageMargins
-      anchors.horizontalCenter: parent.horizontalCenter
-      spacing: 20 * __dp
-      leftPadding: 20 * __dp
-      rightPadding: 20 * __dp
-      bottomPadding: 20 * __dp
+      width: parent.width
 
-      MMPageHeader {
-        width: parent.width
-        backVisible: false
-
-        MMRoundButton {
-          id: closeButton
-
-          anchors.right: parent.right
-          anchors.rightMargin: __style.pageMargins
-          bgndColor: __style.lightGreenColor
-          iconSource: __style.closeIcon
-          onClicked: root.close()
-        }
-      }
+      spacing: __style.spacing20
 
       MMMessage {
         width: parent.width
-        anchors.horizontalCenter: parent.horizontalCenter
+
         image: __style.closeAccountImage
+
         title: qsTr("Do you really wish to close your account?")
         description: qsTr("This action will delete your Mergin Maps account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.")
       }
 
-      Text {
-        id: usernameText
+      MMText {
+        width: parent.width
+        wrapMode: Text.Wrap
 
         text: root.username
-        anchors.horizontalCenter: parent.horizontalCenter
 
         font: __style.t1
         color: __style.nightColor
+
+        horizontalAlignment: Text.AlignHCenter
       }
 
       MMTextInput {
@@ -92,61 +57,55 @@ Drawer {
 
         width: parent.width
         bgColor: __style.lightGreenColor
-        anchors.horizontalCenter: parent.horizontalCenter
+
         title: qsTr("Username")
         placeholderText: qsTr("Enter your username")
       }
 
-      Item { width: 1; height: 1 }
-
       MMInfoBox {
-        id: noteBubble
-
         width: parent.width
-        anchors.horizontalCenter: parent.horizontalCenter
 
         title: qsTr("Please note")
         description: qsTr("Type in your username and click ‘Yes’ to delete your account.")
 
         color: __style.lightGreenColor
-        imageSource: __style.warnLogoImage
+        imageSource: __style.attentionImage
       }
+
+      MMListSpacer { height: 1 }
 
       Row {
         width: parent.width
-        spacing: __style.pageMargins
-        anchors.horizontalCenter: parent.horizontalCenter
+        spacing: __style.margin16
 
         MMButton {
-          id: noButton
-
-          width: parent.width / 2 - __style.pageMargins
-
+          width: ( parent.width - parent.spacing ) / 2
           type: MMButton.Types.Secondary
 
-          text: qsTr("No")
+          text: qsTr( "No" )
 
-          onClicked: {
-            close()
-          }
+          onClicked: close()
         }
 
         MMButton {
-          id: yesButton
+          width: ( parent.width - parent.spacing ) / 2
 
-          width: noButton.width
-          text: qsTr("Yes")
+          text: qsTr( "Yes" )
 
           fontColor: __style.grapeColor
           bgndColor: __style.negativeColor
           fontColorHover: __style.negativeColor
           bgndColorHover: __style.grapeColor
+          fontColorDisabled: __style.grapeColor // TODO: replace with new color
+          bgndColorDisabled: __style.negativeColor // TODO: replace with new color
 
           onClicked: {
-            if (usernameInput.text === root.username)
+            if ( usernameInput.text === root.username ) {
               root.closeAccountClicked()
-            else
+            }
+            else {
               usernameInput.errorMsg = qsTr("Usernames do not match.")
+            }
           }
         }
       }
