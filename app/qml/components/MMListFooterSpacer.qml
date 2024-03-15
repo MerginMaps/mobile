@@ -11,5 +11,5 @@ import QtQuick
 
 Item {
   width: 1
-  height: __style.margin6 + __style.safeAreaBottom
+  height: __style.safeAreaBottom + __style.margin6
 }

@@ -76,7 +76,7 @@ int main( int argc, char *argv[] )
   // Set some safe areas
   style->setSafeAreaTop( 25 );
   style->setSafeAreaRight( 10 );
-  style->setSafeAreaBottom( 20 );
+  style->setSafeAreaBottom( 10 );
   style->setSafeAreaLeft( 10 );
 
   NotificationModel notificationModel;
