@@ -9,9 +9,6 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
-import QtQuick.Dialogs
 
 import mm 1.0 as MM
 
@@ -19,20 +16,17 @@ import "./components"
 import "../components"
 import "../inputs"
 
-Item {
-  id: projectWizardPanel
-
-  signal backClicked
+MMPage {
+  id: root
 
   property real rowHeight: 50 * __dp
-
   property ListModel widgetsModel: ListModel {}
 
   //! Inits widgetsModel data just after its created, but before Component.complete is emitted (for both model or components where its used)
   property bool isWidgetModelReady: {
     var types = fieldsModel.supportedTypes()
     for (var prop in types) {
-      projectWizardPanel.widgetsModel.append({ "AttributeName": types[prop], "WidgetType": prop })
+      root.widgetsModel.append({ "AttributeName": types[prop], "WidgetType": prop })
     }
 
     true
@@ -46,102 +40,94 @@ Item {
     Component.onCompleted: fieldsModel.initModel()
   }
 
-  // background
-  Rectangle {
+  pageHeader.title: qsTr("Create Project")
+
+  pageContent: Item {
+
     width: parent.width
     height: parent.height
-    color: __style.lightGreenColor
-  }
 
-  MMPageHeader {
-    id: header
-    width: projectWizardPanel.width
-    color: __style.lightGreenColor
-    title: qsTr("Create Project")
-
-    onBackClicked: {
-      projectWizardPanel.backClicked()
-    }
-  }
-
-  Item {
-    height: projectWizardPanel.height - header.height - toolbar.height
-    width: projectWizardPanel.width
-    y: header.height
-
-    ColumnLayout {
+    Column {
       id: contentLayout
-      spacing: 10 * __dp
-      anchors.fill: parent
-      anchors.leftMargin: __style.pageMargins
-      anchors.rightMargin: __style.pageMargins
+
+      width: parent.width
+      height: parent.height
+
+      spacing: 0
+
+      MMListSpacer { height: __style.margin20 }
 
       MMTextInput {
         id: projectNameField
+
         title: qsTr("Project name")
-        height: projectWizardPanel.rowheight
         width: parent.width
-        Layout.fillWidth: true
-        Layout.preferredHeight: projectWizardPanel.rowHeight
       }
 
-      Label {
+      MMListSpacer { height: __style.margin20 }
+
+      MMText {
         id: attributesLabel
-        height: projectWizardPanel.rowheight
+
+        height: root.rowheight
         width: parent.width
         text: qsTr("Fields")
         color: __style.nightColor
         font: __style.p6
-        Layout.preferredHeight: projectWizardPanel.rowHeight
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
       }
 
       ListView {
         id: fieldList
+
         model: fieldsModel
         width: parent.width
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        height: parent.height - projectNameField.height - __style.margin20 - projectNameField.height
         clip: true
-        spacing: 10 * __dp
+        spacing: __style.margin20
 
         delegate: MMProjectWizardDelegate {
-          height: projectWizardPanel.rowHeight
-          width: contentLayout.width
-          widgetList: projectWizardPanel.widgetsModel
+          height: root.rowHeight
+          width: ListView.view.width
+          widgetList: root.widgetsModel
           onRemoveClicked: function( index ) {
             fieldsModel.removeField(index)
           }
         }
 
         footer: MMButton {
-              text: qsTr( "Add field" )
+          id: addButton
 
-              type: MMButton.Types.Tertiary
+          width: ListView.view.width
+          height: root.rowHeight
+          anchors.horizontalCenter: parent.horizontalCenter
 
-              iconSourceRight: __style.addIcon
+          text: qsTr( "Add field" )
 
-              onClicked: {
-                fieldsModel.addField("", "TextEdit")
-                if (fieldList.visible) {
-                  fieldList.positionViewAtEnd()
-                }
-              }
+          type: MMButton.Types.Tertiary
+
+          iconSourceRight: __style.addIcon
+          topPadding: __style.margin20
+
+          onClicked: {
+            fieldsModel.addField("", "TextEdit")
+            if (fieldList.visible) {
+              fieldList.positionViewAtEnd()
+            }
+          }
         }
       }
     }
   }
 
-  // footer toolbar
-  MMToolbar {
+  footer: MMToolbar {
     id: toolbar
-    anchors.bottom: parent.bottom
 
     model: ObjectModel {
       MMToolbarLongButton {
         text: qsTr("Create project");
-        iconSource: __style.doneCircleIcon;
+        iconSource: __style.doneCircleIcon
         iconColor: toolbar.color
         onClicked: {
           if (!projectNameField.text) {
