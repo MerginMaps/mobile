@@ -64,52 +64,59 @@ MMBaseToolbar {
   Loader { id: buttonMore; sourceComponent: componentMore; visible: false }
 
   function setupBottomBar() {
-    var m = root.model
-    var c = m.count
-    var w = buttonView.width
-    var button
+    let buttonModel = root.model
+    let buttonWidth = buttonView.width
+
+    let filteredbuttons = []
+
+    for ( var j = 0; j < buttonModel.count; j++ ) {
+      if ( buttonModel.get(j) && buttonModel.get(j).visibilityMode === true )
+        filteredbuttons.push( buttonModel.get(j) )
+    }
+
+    let buttonsCount = filteredbuttons.length
 
     // add all buttons (max maxButtonsInToolbar) into toolbar
     visibleButtonModel.clear()
-    if(c <= maxButtonsInToolbar || w >= c*root.minimumToolbarButtonWidth) {
-      for( var i = 0; i < c; i++ ) {
-        button = m.get(i)
+    if(buttonsCount <= maxButtonsInToolbar || buttonWidth >= buttonsCount*root.minimumToolbarButtonWidth) {
+      for( var i = 0; i < buttonsCount; i++ ) {
+        let button = filteredbuttons[i]
         if(button.isMenuButton !== undefined)
           button.isMenuButton = false
-        button.width = Math.floor(w / c)
+        button.width = Math.floor(buttonWidth / buttonsCount)
         visibleButtonModel.append(button)
       }
-      buttonView.cellWidth = Math.floor(w / c)
+      buttonView.cellWidth = Math.floor(buttonWidth / buttonsCount)
     }
     else {
       // not all buttons are visible in toolbar due to width
       // the past of them will apper in the menu inside '...' button
-      var maxVisible = Math.floor(w/root.minimumToolbarButtonWidth)
+      var maxVisible = Math.floor(buttonWidth/root.minimumToolbarButtonWidth)
       if(maxVisible<maxButtonsInToolbar)
         maxVisible = maxButtonsInToolbar
       for( i = 0; i < maxVisible-1; i++ ) {
-        if(maxVisible===maxButtonsInToolbar || w >= i*root.minimumToolbarButtonWidth) {
-          button = m.get(i)
+        if(maxVisible===maxButtonsInToolbar || buttonWidth >= i*root.minimumToolbarButtonWidth) {
+          let button = filteredbuttons[i]
           button.isMenuButton = false
-          button.width = Math.floor(w / maxVisible)
+          button.width = Math.floor(buttonWidth / maxVisible)
           visibleButtonModel.append(button)
         }
       }
       // add More '...' button
-      button = buttonMore
+      let button = buttonMore
       button.visible = true
-      button.width = maxVisible ? w / maxVisible : w
+      button.width = maxVisible ? buttonWidth / maxVisible : buttonWidth
       visibleButtonModel.append( button )
-      buttonView.cellWidth = Math.floor(maxVisible ? w / maxVisible : w)
+      buttonView.cellWidth = Math.floor(maxVisible ? buttonWidth / maxVisible : buttonWidth)
 
       // add all other buttons inside the '...' button
       invisibleButtonModel.clear()
-      for( i = maxVisible-1; i < c; i++ ) {
+      for( i = maxVisible-1; i < buttonsCount; i++ ) {
         if(i<0)
           continue
-        button = m.get(i)
+        let button = filteredbuttons[i]
         button.isMenuButton = true
-        button.width = Math.floor(w)
+        button.width = Math.floor(buttonWidth)
         button.parentMenu = menu
         invisibleButtonModel.append(button)
       }
