@@ -513,7 +513,7 @@ Item {
       storage: "%1/%2".arg(__inputUtils.bytesToHumanSize(__merginApi.workspaceInfo.diskUsage)).arg(__inputUtils.bytesToHumanSize(__merginApi.workspaceInfo.storageLimit))
       storageFill: {
         if (__merginApi.workspaceInfo.storageLimit > 0 )
-          return __merginApi.workspaceInfo.diskUsage / __merginApi.workspaceInfo.storageLimit
+          return Number( ( __merginApi.workspaceInfo.diskUsage / __merginApi.workspaceInfo.storageLimit ).toFixed( 2 ) );
         else
           return 0.0
       }
