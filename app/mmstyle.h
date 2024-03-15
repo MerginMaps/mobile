@@ -35,16 +35,16 @@ class MMStyle: public QObject
     Q_PROPERTY( QFont p5 READ p5 CONSTANT )
     Q_PROPERTY( QFont p6 READ p6 CONSTANT )
     Q_PROPERTY( QFont p7 READ p7 CONSTANT )
-    Q_PROPERTY( double fontLineHeight60 READ fontLineHeight60 CONSTANT )
-    Q_PROPERTY( double fontLineHeight48 READ fontLineHeight48 CONSTANT )
-    Q_PROPERTY( double fontLineHeight44 READ fontLineHeight44 CONSTANT )
-    Q_PROPERTY( double fontLineHeight36 READ fontLineHeight36 CONSTANT )
-    Q_PROPERTY( double fontLineHeight32 READ fontLineHeight32 CONSTANT )
-    Q_PROPERTY( double fontLineHeight30 READ fontLineHeight30 CONSTANT )
-    Q_PROPERTY( double fontLineHeight28 READ fontLineHeight28 CONSTANT )
-    Q_PROPERTY( double fontLineHeight26 READ fontLineHeight26 CONSTANT )
-    Q_PROPERTY( double fontLineHeight24 READ fontLineHeight24 CONSTANT )
-    Q_PROPERTY( double fontLineHeight22 READ fontLineHeight22 CONSTANT )
+    Q_PROPERTY( double fontLineHeight60 READ number60 CONSTANT )
+    Q_PROPERTY( double fontLineHeight48 READ number48 CONSTANT )
+    Q_PROPERTY( double fontLineHeight44 READ number44 CONSTANT )
+    Q_PROPERTY( double fontLineHeight36 READ number36 CONSTANT )
+    Q_PROPERTY( double fontLineHeight32 READ number32 CONSTANT )
+    Q_PROPERTY( double fontLineHeight30 READ number30 CONSTANT )
+    Q_PROPERTY( double fontLineHeight28 READ number28 CONSTANT )
+    Q_PROPERTY( double fontLineHeight26 READ number26 CONSTANT )
+    Q_PROPERTY( double fontLineHeight24 READ number24 CONSTANT )
+    Q_PROPERTY( double fontLineHeight22 READ number22 CONSTANT )
 
     // Colors - primary palette
     Q_PROPERTY( QColor grassColor READ grassColor CONSTANT )
@@ -233,17 +233,17 @@ class MMStyle: public QObject
      */
 
     // Icon sizes
-    Q_PROPERTY( double icon16 READ icon16 CONSTANT )
-    Q_PROPERTY( double icon24 READ icon24 CONSTANT )
-    Q_PROPERTY( double icon32 READ icon32 CONSTANT )
+    Q_PROPERTY( double icon16 READ number16 CONSTANT )
+    Q_PROPERTY( double icon24 READ number24 CONSTANT )
+    Q_PROPERTY( double icon32 READ number32 CONSTANT )
 
     // Map items
-    Q_PROPERTY( double mapItemHeight READ mapItemHeight CONSTANT )
-    Q_PROPERTY( double mapButtonsMargin READ margin20 CONSTANT )
+    Q_PROPERTY( double mapItemHeight READ number50 CONSTANT )
+    Q_PROPERTY( double mapButtonsMargin READ number20 CONSTANT )
 
     // Toolbar
     Q_PROPERTY( double toolbarHeight READ toolbarHeight NOTIFY safeAreaBottomChanged )
-    Q_PROPERTY( double menuDrawerHeight READ menuDrawerHeight CONSTANT )
+    Q_PROPERTY( double menuDrawerHeight READ number67 CONSTANT )
 
     // Safe area sizes - to not draw content over notch and system bars (used on mobile devices)
     Q_PROPERTY( double safeAreaTop READ safeAreaTop WRITE setSafeAreaTop NOTIFY safeAreaTopChanged )
@@ -252,42 +252,42 @@ class MMStyle: public QObject
     Q_PROPERTY( double safeAreaLeft READ safeAreaLeft WRITE setSafeAreaLeft NOTIFY safeAreaLeftChanged )
 
     // Margins
-    Q_PROPERTY( double margin2 READ margin2 CONSTANT )
-    Q_PROPERTY( double margin4 READ margin4 CONSTANT )
-    Q_PROPERTY( double margin6 READ margin6 CONSTANT )
-    Q_PROPERTY( double margin8 READ margin8 CONSTANT )
-    Q_PROPERTY( double margin10 READ margin10 CONSTANT )
-    Q_PROPERTY( double margin11 READ margin11 CONSTANT )
-    Q_PROPERTY( double margin12 READ margin12 CONSTANT )
-    Q_PROPERTY( double margin16 READ margin16 CONSTANT )
-    Q_PROPERTY( double margin20 READ margin20 CONSTANT )
-    Q_PROPERTY( double margin30 READ margin30 CONSTANT )
-    Q_PROPERTY( double margin32 READ margin32 CONSTANT )
-    Q_PROPERTY( double margin36 READ margin36 CONSTANT )
-    Q_PROPERTY( double margin40 READ margin40 CONSTANT )
-    Q_PROPERTY( double margin54 READ margin54 CONSTANT )
+    Q_PROPERTY( double margin2 READ number2 CONSTANT )
+    Q_PROPERTY( double margin4 READ number4 CONSTANT )
+    Q_PROPERTY( double margin6 READ number6 CONSTANT )
+    Q_PROPERTY( double margin8 READ number8 CONSTANT )
+    Q_PROPERTY( double margin10 READ number10 CONSTANT )
+    Q_PROPERTY( double margin11 READ number11 CONSTANT )
+    Q_PROPERTY( double margin12 READ number12 CONSTANT )
+    Q_PROPERTY( double margin16 READ number16 CONSTANT )
+    Q_PROPERTY( double margin20 READ number20 CONSTANT )
+    Q_PROPERTY( double margin30 READ number30 CONSTANT )
+    Q_PROPERTY( double margin32 READ number32 CONSTANT )
+    Q_PROPERTY( double margin36 READ number36 CONSTANT )
+    Q_PROPERTY( double margin40 READ number40 CONSTANT )
+    Q_PROPERTY( double margin54 READ number54 CONSTANT )
 
     // Page
-    Q_PROPERTY( double pageMargins READ margin20 CONSTANT ) // distance between screen edge and components
-    Q_PROPERTY( double spacing12 READ margin12 CONSTANT ) // distance between page header, page content and page footer
-    Q_PROPERTY( double spacing20 READ margin20 CONSTANT )
-    Q_PROPERTY( double spacing40 READ margin40 CONSTANT )
-    Q_PROPERTY( double maxPageWidth READ maxPageWidth CONSTANT ) // maximum page width (desktop, tablets, landscape)
+    Q_PROPERTY( double pageMargins READ number20 CONSTANT ) // distance between screen edge and components
+    Q_PROPERTY( double spacing12 READ number12 CONSTANT ) // distance between page header, page content and page footer
+    Q_PROPERTY( double spacing20 READ number20 CONSTANT )
+    Q_PROPERTY( double spacing40 READ number40 CONSTANT )
+    Q_PROPERTY( double maxPageWidth READ number720 CONSTANT ) // maximum page width (desktop, tablets, landscape)
 
     // Other
-    Q_PROPERTY( double row24 READ row24 CONSTANT )
-    Q_PROPERTY( double row36 READ row36 CONSTANT )
-    Q_PROPERTY( double row40 READ row40 CONSTANT )
-    Q_PROPERTY( double row49 READ row49 CONSTANT )
-    Q_PROPERTY( double row60 READ row60 CONSTANT )
-    Q_PROPERTY( double row63 READ row63 CONSTANT )
-    Q_PROPERTY( double row67 READ row67 CONSTANT )
-    Q_PROPERTY( double row80 READ row80 CONSTANT )
-    Q_PROPERTY( double row114 READ row114 CONSTANT )
-    Q_PROPERTY( double radius6 READ margin6 CONSTANT )
-    Q_PROPERTY( double radius12 READ margin12 CONSTANT )
-    Q_PROPERTY( double radius20 READ margin20 CONSTANT )
-    Q_PROPERTY( double radius30 READ margin30 CONSTANT )
+    Q_PROPERTY( double row24 READ number24 CONSTANT )
+    Q_PROPERTY( double row36 READ number36 CONSTANT )
+    Q_PROPERTY( double row40 READ number40 CONSTANT )
+    Q_PROPERTY( double row49 READ number49 CONSTANT )
+    Q_PROPERTY( double row60 READ number60 CONSTANT )
+    Q_PROPERTY( double row63 READ number63 CONSTANT )
+    Q_PROPERTY( double row67 READ number67 CONSTANT )
+    Q_PROPERTY( double row80 READ number80 CONSTANT )
+    Q_PROPERTY( double row114 READ number114 CONSTANT )
+    Q_PROPERTY( double radius6 READ number6 CONSTANT )
+    Q_PROPERTY( double radius12 READ number12 CONSTANT )
+    Q_PROPERTY( double radius20 READ number20 CONSTANT )
+    Q_PROPERTY( double radius30 READ number30 CONSTANT )
     Q_PROPERTY( double scrollVelocityAndroid READ scrollVelocityAndroid CONSTANT ) // [px/s] scrolling on Android devices is too slow by default
 
     // Breakpoint we use in some screens to differentiate mobile landscape
@@ -316,17 +316,6 @@ class MMStyle: public QObject
     QFont p5() {return fontFactory( 14, false );}
     QFont p6() {return fontFactory( 12, false );}
     QFont p7() {return fontFactory( 10, false );}
-
-    double fontLineHeight60() {return 60 * mDp;}
-    double fontLineHeight48() {return 48 * mDp;}
-    double fontLineHeight44() {return 44 * mDp;}
-    double fontLineHeight36() {return 36 * mDp;}
-    double fontLineHeight32() {return 32 * mDp;}
-    double fontLineHeight30() {return 30 * mDp;}
-    double fontLineHeight28() {return 28 * mDp;}
-    double fontLineHeight26() {return 26 * mDp;}
-    double fontLineHeight24() {return 24 * mDp;}
-    double fontLineHeight22() {return 22 * mDp;}
 
     QColor grassColor() {return QColor::fromString( "#73D19C" );}
     QColor forestColor() {return QColor::fromString( "#004C45" );}
@@ -499,11 +488,6 @@ class MMStyle: public QObject
     QUrl crosshairPlusImage() {return QUrl( "qrc:/images/CrosshairPlus.svg" );}
     QUrl noWorkspaceImage() {return QUrl( "qrc:/images/NoWorkspace.svg" );}
 
-    double icon16() {return 16 * mDp;}
-    double icon24() {return 24 * mDp;}
-    double icon32() {return 32 * mDp;}
-
-    double mapItemHeight() {return 50 * mDp;}
     double toolbarHeight()
     {
       if ( mSafeAreaBottom > 2 )
@@ -515,38 +499,164 @@ class MMStyle: public QObject
         return 58 * mDp;
       }
     }
-    double menuDrawerHeight() {return 67 * mDp;}
-    double maxPageWidth() {return 720 * mDp;}
 
     double safeAreaTop() const { return mSafeAreaTop; };
     double safeAreaRight() const { return mSafeAreaRight; };
     double safeAreaBottom() const { return mSafeAreaBottom; };
     double safeAreaLeft() const { return mSafeAreaLeft; };
 
-    double margin2() {return 2 * mDp;}
-    double margin4() {return 4 * mDp;}
-    double margin6() {return 6 * mDp;}
-    double margin8() {return 8 * mDp;}
-    double margin10() {return 10 * mDp;}
-    double margin11() {return 11 * mDp;}
-    double margin12() {return 12 * mDp;}
-    double margin16() {return 16 * mDp;}
-    double margin20() {return 20 * mDp;}
-    double margin30() {return 30 * mDp;}
-    double margin32() {return 32 * mDp;}
-    double margin36() {return 36 * mDp;}
-    double margin40() {return 40 * mDp;}
-    double margin54() {return 54 * mDp;}
-
-    double row24() {return 24 * mDp;}
-    double row36() {return 36 * mDp;}
-    double row40() {return 40 * mDp;}
-    double row49() {return 49 * mDp;}
-    double row60() {return 60 * mDp;}
-    double row63() {return 63 * mDp;}
-    double row67() {return 67 * mDp;}
-    double row80() {return 80 * mDp;}
-    double row114() {return 114 * mDp;}
+    //Numbers from 1 to 150 and number 720
+    double number1() {return 1 * mDp;}
+    double number2() {return 2 * mDp;}
+    double number3() {return 3 * mDp;}
+    double number4() {return 4 * mDp;}
+    double number5() {return 5 * mDp;}
+    double number6() {return 6 * mDp;}
+    double number7() {return 7 * mDp;}
+    double number8() {return 8 * mDp;}
+    double number9() {return 9 * mDp;}
+    double number10() {return 10 * mDp;}
+    double number11() {return 11 * mDp;}
+    double number12() {return 12 * mDp;}
+    double number13() {return 13 * mDp;}
+    double number14() {return 14 * mDp;}
+    double number15() {return 15 * mDp;}
+    double number16() {return 16 * mDp;}
+    double number17() {return 17 * mDp;}
+    double number18() {return 18 * mDp;}
+    double number19() {return 19 * mDp;}
+    double number20() {return 20 * mDp;}
+    double number21() {return 21 * mDp;}
+    double number22() {return 22 * mDp;}
+    double number23() {return 23 * mDp;}
+    double number24() {return 24 * mDp;}
+    double number25() {return 25 * mDp;}
+    double number26() {return 26 * mDp;}
+    double number27() {return 27 * mDp;}
+    double number28() {return 28 * mDp;}
+    double number29() {return 29 * mDp;}
+    double number30() {return 30 * mDp;}
+    double number31() {return 31 * mDp;}
+    double number32() {return 32 * mDp;}
+    double number33() {return 33 * mDp;}
+    double number34() {return 34 * mDp;}
+    double number35() {return 35 * mDp;}
+    double number36() {return 36 * mDp;}
+    double number37() {return 37 * mDp;}
+    double number38() {return 38 * mDp;}
+    double number39() {return 39 * mDp;}
+    double number40() {return 40 * mDp;}
+    double number41() {return 41 * mDp;}
+    double number42() {return 42 * mDp;}
+    double number43() {return 43 * mDp;}
+    double number44() {return 44 * mDp;}
+    double number45() {return 45 * mDp;}
+    double number46() {return 46 * mDp;}
+    double number47() {return 47 * mDp;}
+    double number48() {return 48 * mDp;}
+    double number49() {return 49 * mDp;}
+    double number50() {return 50 * mDp;}
+    double number51() {return 51 * mDp;}
+    double number52() {return 52 * mDp;}
+    double number53() {return 53 * mDp;}
+    double number54() {return 54 * mDp;}
+    double number55() {return 55 * mDp;}
+    double number56() {return 56 * mDp;}
+    double number57() {return 57 * mDp;}
+    double number58() {return 58 * mDp;}
+    double number59() {return 59 * mDp;}
+    double number60() {return 60 * mDp;}
+    double number61() {return 61 * mDp;}
+    double number62() {return 62 * mDp;}
+    double number63() {return 63 * mDp;}
+    double number64() {return 64 * mDp;}
+    double number65() {return 65 * mDp;}
+    double number66() {return 66 * mDp;}
+    double number67() {return 67 * mDp;}
+    double number68() {return 68 * mDp;}
+    double number69() {return 69 * mDp;}
+    double number70() {return 70 * mDp;}
+    double number71() {return 71 * mDp;}
+    double number72() {return 72 * mDp;}
+    double number73() {return 73 * mDp;}
+    double number74() {return 74 * mDp;}
+    double number75() {return 75 * mDp;}
+    double number76() {return 76 * mDp;}
+    double number77() {return 77 * mDp;}
+    double number78() {return 78 * mDp;}
+    double number79() {return 79 * mDp;}
+    double number80() {return 80 * mDp;}
+    double number81() {return 81 * mDp;}
+    double number82() {return 82 * mDp;}
+    double number83() {return 83 * mDp;}
+    double number84() {return 84 * mDp;}
+    double number85() {return 85 * mDp;}
+    double number86() {return 86 * mDp;}
+    double number87() {return 87 * mDp;}
+    double number88() {return 88 * mDp;}
+    double number89() {return 89 * mDp;}
+    double number90() {return 90 * mDp;}
+    double number91() {return 91 * mDp;}
+    double number92() {return 92 * mDp;}
+    double number93() {return 93 * mDp;}
+    double number94() {return 94 * mDp;}
+    double number95() {return 95 * mDp;}
+    double number96() {return 96 * mDp;}
+    double number97() {return 97 * mDp;}
+    double number98() {return 98 * mDp;}
+    double number99() {return 99 * mDp;}
+    double number100() {return 100 * mDp;}
+    double number101() {return 101 * mDp;}
+    double number102() {return 102 * mDp;}
+    double number103() {return 103 * mDp;}
+    double number104() {return 104 * mDp;}
+    double number105() {return 105 * mDp;}
+    double number106() {return 106 * mDp;}
+    double number107() {return 107 * mDp;}
+    double number108() {return 108 * mDp;}
+    double number109() {return 109 * mDp;}
+    double number110() {return 110 * mDp;}
+    double number111() {return 111 * mDp;}
+    double number112() {return 112 * mDp;}
+    double number113() {return 113 * mDp;}
+    double number114() {return 114 * mDp;}
+    double number115() {return 115 * mDp;}
+    double number116() {return 116 * mDp;}
+    double number117() {return 117 * mDp;}
+    double number118() {return 118 * mDp;}
+    double number119() {return 119 * mDp;}
+    double number120() {return 120 * mDp;}
+    double number121() {return 121 * mDp;}
+    double number122() {return 122 * mDp;}
+    double number123() {return 123 * mDp;}
+    double number124() {return 124 * mDp;}
+    double number125() {return 125 * mDp;}
+    double number126() {return 126 * mDp;}
+    double number127() {return 127 * mDp;}
+    double number128() {return 128 * mDp;}
+    double number129() {return 129 * mDp;}
+    double number130() {return 130 * mDp;}
+    double number131() {return 131 * mDp;}
+    double number132() {return 132 * mDp;}
+    double number133() {return 133 * mDp;}
+    double number134() {return 134 * mDp;}
+    double number135() {return 135 * mDp;}
+    double number136() {return 136 * mDp;}
+    double number137() {return 137 * mDp;}
+    double number138() {return 138 * mDp;}
+    double number139() {return 139 * mDp;}
+    double number140() {return 140 * mDp;}
+    double number141() {return 141 * mDp;}
+    double number142() {return 142 * mDp;}
+    double number143() {return 143 * mDp;}
+    double number144() {return 144 * mDp;}
+    double number145() {return 145 * mDp;}
+    double number146() {return 146 * mDp;}
+    double number147() {return 147 * mDp;}
+    double number148() {return 148 * mDp;}
+    double number149() {return 149 * mDp;}
+    double number150() {return 150 * mDp;}
+    double number720() {return 720 * mDp;}
 
     double scrollVelocityAndroid() { return 10000; }
 
