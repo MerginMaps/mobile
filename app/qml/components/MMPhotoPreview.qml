@@ -28,19 +28,19 @@ Popup {
   Item {
     id: photoFrame
 
-    width: root.width
-    height: root.height
+    x: (root.width - imagePreview.width) / 2
+    y: root.height / 4
+    width: imagePreview.width
+    height: imagePreview.height
 
     Image {
       id: imagePreview
 
-      width: root.width
       height: root.height / 2
-      anchors.centerIn: parent
 
       focus: true
       asynchronous: true
-      fillMode: Image.PreserveAspectCrop
+      fillMode: Image.PreserveAspectFit
     }
 
     PinchHandler {
