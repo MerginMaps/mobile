@@ -505,7 +505,7 @@ class MMStyle: public QObject
     double safeAreaBottom() const { return mSafeAreaBottom; };
     double safeAreaLeft() const { return mSafeAreaLeft; };
 
-    //Number from 1 to 150 + number 720
+    //Numbersfrom 1 to 150 and number 720
     double number1() {return 1 * mDp;}
     double number2() {return 2 * mDp;}
     double number3() {return 3 * mDp;}
