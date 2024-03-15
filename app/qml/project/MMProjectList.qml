@@ -107,7 +107,11 @@ Item {
       state: {
         let status = model.ProjectStatus ? model.ProjectStatus : MM.ProjectStatus.NoVersion
 
-        if ( status === MM.ProjectStatus.NeedsSync ) {
+        if ( !model.ProjectIsValid )
+        {
+          return "Error"
+        }
+        else if ( status === MM.ProjectStatus.NeedsSync ) {
           return "NeedsSync"
         }
         else if ( model.ProjectIsMergin && model.ProjectIsLocal )
@@ -121,10 +125,6 @@ Item {
         else if ( !model.ProjectIsMergin && !model.ProjectIsLocal )
         {
           return "NeedsSync" // TODO: what to do here? Locally created project!
-        }
-        else if ( !model.ProjectIsValid )
-        {
-          return "Error"
         }
 
         return "UpToDate" // fallback, should never happen
@@ -145,8 +145,12 @@ Item {
       }
 
       onOpenRequested: {
-        if ( model.ProjectIsLocal )
+        if ( !model.ProjectIsValid ) {
+          __notificationModel.addError( qsTr( "The project can not be opened" ) + ": " + model.ProjectDescription )
+        }
+        else if ( model.ProjectIsLocal ) {
           root.openProjectRequested( model.ProjectFilePath )
+        }
         else if ( !model.ProjectIsLocal && model.ProjectIsMergin && !model.ProjectSyncPending) {
           downloadProjectDialog.relatedProjectId = model.ProjectId
           downloadProjectDialog.open()

@@ -28,7 +28,6 @@ Control {
   property var projectActionButtons: [] // possible values: upload, changes, sync, download, remove
 
   property bool projectIsOpened: false
-//  property string projectRemoteError
 
   signal openRequested()
   signal syncRequested()
@@ -94,7 +93,11 @@ Control {
             text: root.projectDisplayName
 
             font: __style.t3
-            color: root.projectIsOpened ? __style.polarColor : __style.nightColor
+            color: {
+              if ( root.projectIsOpened ) return __style.polarColor
+              if ( root.state === "Error" ) return __style.nightAlphaColor
+              return __style.nightColor
+            }
           }
 
           Row {
