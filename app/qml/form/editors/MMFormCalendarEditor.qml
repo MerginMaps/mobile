@@ -48,7 +48,6 @@ MMBaseInput {
   property bool includesDate: typeFromFieldFormat.includes("Date")
   property bool showSeconds: true
 
-  property alias placeholderText: textField.placeholderText
   property alias text: textField.text
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
@@ -66,28 +65,17 @@ MMBaseInput {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  content: TextField {
+  content: MMText {
     id: textField
 
     anchors.fill: parent
 
     text: formatText( root._fieldValue )
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
-    placeholderTextColor: __style.nightAlphaColor
     font: __style.p5
-    hoverEnabled: true
-
-    // Not decided yet if we want to keep this editable or not... test and see!
-    inputMethodHints: Qt.ImhDate | Qt.ImhTime
-
-    onTextEdited: {
-      root.editorValueChanged( textField.text, textField.text === "" )
-    }
-
-    background: Rectangle {
-      color: __style.transparentColor
-    }
   }
+
+  onContentClicked: root.openCalendar()
 
   rightAction: MMIcon {
     id: rightIcon
@@ -99,14 +87,7 @@ MMBaseInput {
     color: root.enabled ? __style.forestColor : __style.mediumGreenColor
   }
 
-  onRightActionClicked: {
-    if (root._fieldValueIsNull) {
-      root.openPicker( new Date() )
-    }
-    else {
-      root.openPicker( dateTransformer.toJsDate(root._fieldValue) )
-    }
-  }
+  onRightActionClicked: root.openCalendar()
 
   Loader {
     id: dateTimeDrawerLoader
@@ -135,6 +116,15 @@ MMBaseInput {
       onClosed: dateTimeDrawerLoader.active = false
 
       Component.onCompleted: open()
+    }
+  }
+
+  function openCalendar() {
+    if (root._fieldValueIsNull) {
+      root.openPicker( new Date() )
+    }
+    else {
+      root.openPicker( dateTransformer.toJsDate(root._fieldValue) )
     }
   }
 

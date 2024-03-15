@@ -229,7 +229,7 @@ ScrollView {
             id: dateTimeCalendar
 
             title: "Date & Time"
-            placeholderText: "yyyy-MM-dd hh:mm"
+            text: "yyyy-MM-dd hh:mm"
             enabled: checkbox.checked
             width: parent.width
             warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
@@ -257,7 +257,7 @@ ScrollView {
             id: dateCalendar
 
             title: "Date"
-            placeholderText: "yyyy-MM-dd"
+            text: "yyyy-MM-dd"
             enabled: checkbox.checked
             width: parent.width
             warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
@@ -284,7 +284,7 @@ ScrollView {
           MMFormEditors.MMFormCalendarEditor {
             id: timeCalendar
             title: "Time"
-            placeholderText: "hh:mm"
+            text: "hh:mm"
             enabled: checkbox.checked
             width: parent.width
             warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
