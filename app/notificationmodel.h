@@ -114,7 +114,7 @@ class NotificationModel : public QAbstractListModel
     void timerFired();
 
   private:
-    uint DEFAULT_NOTIFICATION_EXPIRATION_SECS = 3;
+    uint DEFAULT_NOTIFICATION_EXPIRATION_SECS = 5;
     QList<Notification> mNotifications;
     QTimer *mTimer;
 };
