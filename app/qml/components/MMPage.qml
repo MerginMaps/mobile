@@ -37,7 +37,7 @@ Page {
   header: MMPageHeader {
     id: mmheader
 
-    width: parent.width
+    width: parent?.width ?? 0
     color: __style.lightGreenColor
 
     onBackClicked: root.backClicked()
