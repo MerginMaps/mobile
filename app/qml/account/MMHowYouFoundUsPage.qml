@@ -6,45 +6,27 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
 import mm 1.0 as MM
 
-import "./components"
+import "./components" as MMAccountComponents
 import "../components"
 import "../inputs"
 
-Page {
+MMPage {
   id: root
-
-  width: parent.width
 
   property string selectedText: ""
 
-  signal backClicked
-  signal howYouFoundUsSelected(var selectedText)
+  signal howYouFoundUsSelected( var selectedText )
 
-  readonly property string headerTitle: qsTr("How did you learn about us?")
-  readonly property real hPadding: width < __style.maxPageWidth
-                                   ? 20 * __dp
-                                   : (20 + (width - __style.maxPageWidth) / 2) * __dp
-
-  readonly property string specifySourceText: qsTr("Please specify the source")
-
-  Rectangle {
-    anchors.fill: parent
-    color: __style.lightGreenColor
-  }
-
-  MMPageHeader {
-    id: header
-
-    title: listView.contentY > -30 * __dp ? root.headerTitle : ""
+  pageHeader {
+    title: listView.contentY > -10 * __dp ? internal.pageTitle : ""
     backVisible: false
-
-    onBackClicked: root.backClicked()
 
     rightItemContent: MMProgressBar {
       anchors.verticalCenter: parent.verticalCenter
@@ -59,24 +41,27 @@ Page {
     }
   }
 
-  Item {
+  pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
+
+  pageContent: Item {
+
     width: parent.width
-    height: parent.height - (listView.model.count === listView.currentIndex + 1 ? header.height + 50 * __dp : 0)
-    anchors.top: header.bottom
-    anchors.topMargin: 20 * __dp
+    height: parent.height
 
     ListView {
       id: listView
 
-      property int socialMediaSubmenuPosition: -1
+      width: parent.width
+      height: parent.height
 
-      width: parent.width - 2 * root.hPadding
-      anchors.horizontalCenter: parent.horizontalCenter
-      height: parent.height - header.height
-      spacing: 10 * __dp
-      clip: true
+      spacing: __style.spacing12
 
-      Component.onCompleted: currentIndex = -1
+      topMargin: __style.margin40
+
+      // to reserve some space for the footer button
+      bottomMargin: footerButton.height + __style.safeAreaBottom + __style.margin8 + __style.margin20
+
+      currentIndex: -1
 
       model: ListModel {
         Component.onCompleted: {
@@ -92,97 +77,146 @@ Page {
         }
       }
 
-      header: Text {
-        id: listHeader
+      header: MMText {
+        width: ListView.view.width
 
-        width: root.width - 2 * root.hPadding
-        padding: 20 * __dp
-        text: root.headerTitle
+        text: internal.pageTitle
+
         font: __style.h3
         color: __style.forestColor
-        wrapMode: Text.WordWrap
+
+        wrapMode: Text.Wrap
+
+        maximumLineCount: 2
         horizontalAlignment: Text.AlignHCenter
-        lineHeight: 1.2
+
+        bottomPadding: __style.margin40
       }
 
-      delegate: MMIconCheckBoxHorizontal {
-        width: model.submenu ? listView.width - 20 * __dp : listView.width
-        x: model.submenu ? 20 * __dp : 0
+      add: Transition {
+               NumberAnimation { properties: "x"; from: 100; duration: 100 }
+           }
+
+      addDisplaced: Transition {
+               NumberAnimation { properties: "x,y"; duration: 100 }
+           }
+
+      delegate: MMAccountComponents.MMIconCheckBoxHorizontal {
+        x: model.submenu ? __style.margin20 : 0
+        width: model.submenu ? ListView.view.width - __style.margin20 : ListView.view.width
+
+        small: model.submenu
+
         sourceIcon: model.icon
         text: model.name
-        small: model.submenu
         checked: listView.currentIndex === index
 
-        onClicked: {
-          listView.currentIndex = index
+        onCheckedChanged: {
 
-          if(listView.model.count === listView.currentIndex + 1)
-          {
-            root.selectedText = ""
-            listView.positionViewAtEnd()
-            if( listView.socialMediaSubmenuPosition > -1 ) {
-              listView.model.remove( listView.socialMediaSubmenuPosition+1, 6 )
-              listView.socialMediaSubmenuPosition = -1
-            }
+        }
+
+        onClicked: {
+          let optionUnchecked = listView.currentIndex === index
+
+          if ( model.key === "social" && !internal.socialSubmenuOpened && !optionUnchecked ) {
+            // add social options
+            let i = model.index
+            listView.model.insert( ++i, { name: qsTr( "YouTube" ), key: "youtube", icon: __style.youtubeIcon, submenu: true } )
+            listView.model.insert( ++i, { name: qsTr( "Twitter" ), key: "twitter", icon: __style.xTwitterIcon, submenu: true } )
+            listView.model.insert( ++i, { name: qsTr( "Facebook" ), key: "facebook", icon: __style.facebookIcon, submenu: true } )
+            listView.model.insert( ++i, { name: qsTr( "LinkedIn" ), key: "linkedIn", icon: __style.linkedinIcon, submenu: true } )
+            listView.model.insert( ++i, { name: qsTr( "Mastodon" ), key: "mastodon", icon: __style.mastodonIcon, submenu: true } )
+            listView.model.insert( ++i, { name: qsTr( "Reddit" ), key: "reddit", icon: __style.redditIcon, submenu: true } )
+
+            listView.positionViewAtIndex( model.index, ListView.Beginning )
+
+            internal.socialSubmenuOpened = true
+          }
+          else if ( !model.submenu ) {
+            removeSocialSubitems()
+            internal.socialSubmenuOpened = false
+          }
+
+          if ( model.key === "other" ) {
+            listView.footer = specifySourceFooterComponent
           }
           else {
-            if ( model.key === "social" ) {
-              if( listView.socialMediaSubmenuPosition === -1 ) {
-                let i = model.index
-                listView.socialMediaSubmenuPosition = i
-                listView.model.insert(++i, {name: qsTr("YouTube"), key: "youtube", icon: __style.youtubeIcon, submenu: true})
-                listView.model.insert(++i, {name: qsTr("Twitter"), key: "twitter", icon: __style.xTwitterIcon, submenu: true})
-                listView.model.insert(++i, {name: qsTr("Facebook"), key: "facebook", icon: __style.facebookIcon, submenu: true})
-                listView.model.insert(++i, {name: qsTr("LinkedIn"), key: "linkedIn", icon: __style.linkedinIcon, submenu: true})
-                listView.model.insert(++i, {name: qsTr("Mastodon"), key: "mastodon", icon: __style.mastodonIcon, submenu: true})
-                listView.model.insert(++i, {name: qsTr("Reddit"), key: "reddit", icon: __style.redditIcon, submenu: true})
-              }
-              listView.currentIndex = -1
-              root.selectedText = ""
-            } else {
-              if( listView.socialMediaSubmenuPosition > -1 ) {
-                if( model.key !== "youtube" && model.key !== "twitter" && model.key !== "facebook" && model.key !== "linkedIn" && model.key !== "mastodon" && model.key !== "reddit" ) {
-                  listView.model.remove( listView.socialMediaSubmenuPosition+1, 6 )
-                  listView.socialMediaSubmenuPosition = -1
-                }
-              }
-              root.selectedText = model.key
-            }
+            listView.footer = null
+          }
+
+          if ( optionUnchecked ) {
+            listView.currentIndex = -1
+          }
+          else {
+            listView.currentIndex = index
           }
         }
       }
+    }
 
-      footer: Column {
-        width: root.width - 2 * root.hPadding
-        topPadding: 20 * __dp
-        visible: listView.model.count === listView.currentIndex + 1 // === Other
+    MMButton {
+      id: footerButton
 
-        MMTextInput {
-          id: otherSourceText
-          title: qsTr("Source")
-          placeholderText: root.specifySourceText
-          onTextChanged: root.selectedText = text
-          onVisibleChanged: if(visible) hasFocus = true
+      width: parent.width
+
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: __style.safeAreaBottom + __style.margin8
+
+      text: qsTr("Continue")
+
+      disabled: {
+        if ( listView.currentIndex < 0 ) return true
+        if ( listView.model.get(listView.currentIndex).key === "social" ) return true
+        if ( ( listView.model.get(listView.currentIndex).key === "other" ) && root.selectedText === "" ) return true
+        return false
+      }
+
+      onClicked: {
+        if ( root.selectedText.length > 0 ) {
+          root.howYouFoundUsSelected( root.selectedText )
         }
-
-        Item { width: 1; height: 60 * __dp }
+        else {
+          __notificationModel.addError( internal.specifySourceText )
+        }
       }
     }
   }
 
-  MMButton {
-    width: root.width - 2 * root.hPadding
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.bottom: parent.bottom
-    anchors.bottomMargin: 20 * __dp
-    text: qsTr("Continue")
-    disabled: listView.currentIndex < 0
+  function removeSocialSubitems() {
+    for ( let i = listView.model.count - 1; i >= 0; i-- ) {
+      if ( listView.model.get(i).submenu ) {
+        listView.model.remove(i, 1)
+      }
+    }
+  }
 
-    onClicked: {
-      if (root.selectedText.length > 0 ) {
-        root.howYouFoundUsSelected(root.selectedText)
-      } else {
-        __notificationModel.addError( root.specifySourceText )
+  QtObject {
+    id: internal
+
+    property bool socialSubmenuOpened: false
+
+    readonly property string pageTitle: qsTr("Where did you hear about us?")
+    readonly property string specifySourceText: qsTr("Please specify the source")
+  }
+
+  Component {
+    id: specifySourceFooterComponent
+
+    Column {
+
+      width: ListView.view.width
+
+      MMListSpacer { height: __style.margin20}
+
+      MMTextInput {
+        width: parent.width
+
+        title: qsTr( "Source" )
+        placeholderText: internal.specifySourceText
+
+        onTextChanged: root.selectedText = text
+
+        Component.onCompleted: textFieldComponent.forceActiveFocus()
       }
     }
   }

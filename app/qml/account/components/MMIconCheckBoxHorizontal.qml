@@ -43,6 +43,7 @@ CheckBox {
     text: control.text
     font: __style.t3
     color: control.checked ? __style.polarColor : __style.nightColor
+    elide: Text.ElideRight
     verticalAlignment: Text.AlignVCenter
     leftPadding: control.indicator.width + 30 * __dp
     rightPadding: 20 * __dp
