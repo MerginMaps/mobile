@@ -57,111 +57,124 @@ MMPage {
     Column {
       width: parent.width
 
-      spacing: __style.spacing20
+      spacing: 0
 
-      MMInfoBox {
-        id: errorInfoBox
+      Column {
+        id: contentColumn
 
         width: parent.width
 
-        visible: root.warningMsg
+        spacing: __style.spacing20
 
-        title: root.warningMsg
-        imageSource: __style.warnLogoImage
+        MMInfoBox {
+          id: errorInfoBox
 
-        color: __style.nightColor
-        textColor: __style.polarColor
+          width: parent.width
+
+          visible: root.warningMsg
+
+          title: root.warningMsg
+          imageSource: __style.warnLogoImage
+
+          color: __style.nightColor
+          textColor: __style.polarColor
+        }
+
+        MMListSpacer {
+          visible: !errorInfoBox.visible
+          height: __style.margin20
+        }
+
+        MMTextInput {
+          id: username
+
+          width: parent.width
+
+          title: qsTr( "Email or username" )
+          bgColor: __style.lightGreenColor
+        }
+
+        MMPasswordInput {
+          id: password
+
+          width: parent.width
+
+          title: qsTr( "Password" )
+          bgColor: __style.lightGreenColor
+        }
+
+        MMButton {
+          width: parent.width
+
+          text: qsTr( "Forgot password?" )
+          type: MMButton.Types.Tertiary
+
+          onClicked: root.forgotPasswordClicked()
+        }
+
+        MMListSpacer { height: __style.margin20 }
+
+        MMButton {
+          width: parent.width
+
+          text: qsTr( "Sign in" )
+
+          disabled: root.pending
+
+          onClicked: root.signInClicked( username.text, password.text )
+        }
+
+        MMListSpacer { height: __style.margin20 }
+
+        MMHlineText {
+          width: parent.width
+
+          title: qsTr("Don't have an account?")
+          visible: root.canSignUp
+        }
+
+        MMButton {
+          width: parent.width
+
+          text: qsTr( "Sign up" )
+          visible: root.canSignUp
+
+          type: MMButton.Types.Secondary
+
+          disabled: root.pending
+
+          onClicked: root.signUpClicked()
+        }
       }
 
       MMListSpacer {
-        visible: !errorInfoBox.visible
-        height: __style.margin20
+        height: Math.max( ( contentScroller.height - contentColumn.height - footerContent.height ), __style.margin40 )
       }
 
-      MMTextInput {
-        id: username
+      Column {
+        id: footerContent
 
         width: parent.width
 
-        title: qsTr( "Email or username" )
-        bgColor: __style.lightGreenColor
+        spacing: 0
+
+        MMButton {
+          width: parent.width
+
+          type: MMButton.Types.Tertiary
+
+          iconSourceLeft: __style.globeIcon
+          fontColor: __style.nightColor
+
+          hoverEnabled: false
+
+          text: root.apiRoot
+
+          onClicked: changeServerDrawerLoader.active = true
+        }
+
+        MMListFooterSpacer { height: __style.safeAreaBottom + __style.margin20 }
       }
-
-      MMPasswordInput {
-        id: password
-
-        width: parent.width
-
-        title: qsTr( "Password" )
-        bgColor: __style.lightGreenColor
-      }
-
-      MMButton {
-        width: parent.width
-
-        text: qsTr( "Forgot password?" )
-        type: MMButton.Types.Tertiary
-
-        onClicked: root.forgotPasswordClicked()
-      }
-
-      MMListSpacer { height: __style.margin20 }
-
-      MMButton {
-        width: parent.width
-
-        text: qsTr( "Sign in" )
-
-        disabled: root.pending
-
-        onClicked: root.signInClicked( username.text, password.text )
-      }
-
-      MMListSpacer { height: __style.margin20 }
-
-      MMHlineText {
-        width: parent.width
-
-        title: qsTr("Don't have an account?")
-        visible: root.canSignUp
-      }
-
-      MMButton {
-        width: parent.width
-
-        text: qsTr( "Sign up" )
-        visible: root.canSignUp
-
-        type: MMButton.Types.Secondary
-
-        disabled: root.pending
-
-        onClicked: root.signUpClicked()
-      }
-
-      MMListVerticalFillSpacer {
-        id: fillSpacer
-
-        availableVerticalSpace: contentScroller.height - parent.implicitHeight
-        listRootObject: root
-      }
-
-      MMButton {
-        width: parent.width
-
-        type: MMButton.Types.Tertiary
-
-        iconSourceLeft: __style.globeIcon
-        fontColor: __style.nightColor
-
-        hoverEnabled: false
-
-        text: root.apiRoot
-
-        onClicked: changeServerDrawerLoader.active = true
-      }
-
-      MMListFooterSpacer {}
     }
   }
 

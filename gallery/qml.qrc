@@ -58,7 +58,6 @@
         <file>../app/qml/components/MMListDrawer.qml</file>
         <file>../app/qml/components/MMListDrawerItem.qml</file>
         <file>../app/qml/components/MMListFooterSpacer.qml</file>
-        <file>../app/qml/components/MMListVerticalFillSpacer.qml</file>
         <file>../app/qml/components/MMListSpacer.qml</file>
         <file>../app/qml/components/MMMorePhoto.qml</file>
         <file>../app/qml/components/MMPhoto.qml</file>
