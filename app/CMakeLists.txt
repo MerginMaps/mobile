@@ -530,10 +530,6 @@ if (MACOS OR IOS)
   )
 endif ()
 
-if (LNX)
-  target_link_libraries(Input PUBLIC Glib2::Glib2)
-endif ()
-
 if (IOS)
   target_link_libraries(Input PUBLIC AppleFrameworks::CoreLocation)
 endif ()
