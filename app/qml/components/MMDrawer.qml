@@ -78,6 +78,8 @@ Drawer {
 
     height: mmDrawerHeader.height + contentGroup.height + root.drawerSpacing
 
+    MMListSpacer { height: __style.margin10 }
+
     MMDrawerHeader {
       id: mmDrawerHeader
 
