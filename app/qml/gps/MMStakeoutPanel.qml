@@ -43,9 +43,12 @@ MMDrawer {
   }
 
   function endStakeout() {
+    console.log("state: ", mapCanvas.state)
+
     if ( mapCanvas.state !== "stakeout" )
       return;
 
+    console.log("state: ", mapCanvas.state)
     root.close()
     stakeoutFinished()
   }
@@ -58,14 +61,25 @@ MMDrawer {
     root.open()
   }
 
+  Item {
+    focus: true
+
+    Keys.onPressed: {
+      console.log("reach 1")
+      if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
+        console.log("reach 2")
+        root.endStakeout()
+        event.accepted = true
+      }
+    }
+  }
+
   Behavior on height {
     SequentialAnimation {
       PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
       ScriptAction { script: root.panelHeightUpdated() }
     }
   }
-
-  onBackClicked: endStakeout()
 
   StateGroup {
     id: distanceState
@@ -83,6 +97,7 @@ MMDrawer {
   }
 
   drawerHeader.title: qsTr("Stake out")
+  drawerHeader.onCloseClicked: root.endStakeout()
 
   drawerContent: Column {
     id: mainColumn
