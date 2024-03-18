@@ -65,14 +65,14 @@ MMDrawer {
     focus: true
 
     Keys.onPressed: {
-      console.log("reach 1")
       if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
-        console.log("reach 2")
         root.endStakeout()
         event.accepted = true
       }
     }
   }
+
+  closePolicy: Popup.NoAutoClose
 
   Behavior on height {
     SequentialAnimation {
