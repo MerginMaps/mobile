@@ -13,7 +13,7 @@ import QtQuick.Layouts
 
 import "."
 
-//! Best to use MMPageHeader as the header component for the MMPage object
+//! Best to use MMDrawerHeader as the header component for the MMPage object
 
 Rectangle {
   id: root
