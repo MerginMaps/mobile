@@ -167,7 +167,7 @@ Item {
         }
       }
 
-      opacity: snapUtils.snapped && ( snapUtils.snapType === SnapUtils.Vertex || snapUtils.snapType === SnapUtils.Other ) ? 100 : 0
+      opacity: snapUtils.snapped && ( snapUtils.snapType === MM.SnapUtils.Vertex || snapUtils.snapType === MM.SnapUtils.Other ) ? 100 : 0
 
       Behavior on opacity {
         PropertyAnimation {
@@ -218,7 +218,7 @@ Item {
         }
       }
 
-      opacity: snapUtils.snapped && snapUtils.snapType === SnapUtils.Segment ? 100 : 0
+      opacity: snapUtils.snapped && snapUtils.snapType === MM.SnapUtils.Segment ? 100 : 0
 
       Behavior on opacity {
         PropertyAnimation {
