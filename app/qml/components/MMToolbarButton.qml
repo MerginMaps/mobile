@@ -12,22 +12,25 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 Item {
-  id: control
+  id: root
 
   signal clicked
 
   required property var iconSource
   property color iconColor: __style.polarColor
+  property color disabledIconColor: __style.mediumGreenColor
   required property string text
   property string menuButtonRightText: ""
 
   property var parentMenu // drawer to close
-  property alias buttonIcon: icon
-
+  property var parentToolbar
   property bool isMenuButton: false
+  property bool visibilityMode: true // set instead of "visibility" to show/hide from MMToolbar
+
+  property alias buttonIcon: icon
   property int buttonSpacing: 5 * __dp
 
-  property bool visibilityMode: true
+  onVisibilityModeChanged: if (root.parentToolbar !== undefined) root.parentToolbar.setupBottomBar()
 
   height: isMenuButton ? __style.menuDrawerHeight/2 : __style.toolbarHeight
 
@@ -37,36 +40,36 @@ Item {
     width: parent.width - 10 * __dp
     height: parent.height - 10 * __dp
     anchors.centerIn: parent
-    visible: !control.isMenuButton
+    visible: !root.isMenuButton
 
     MMIcon {
       id: icon
 
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.top: parent.top
-      anchors.topMargin: ( container.height - (icon.height + text.height + control.buttonSpacing) ) / 2
+      anchors.topMargin: ( container.height - (icon.height + text.height + root.buttonSpacing) ) / 2
 
-      source: control.iconSource
-      color: control.iconColor
+      source: root.iconSource
+      color: root.enabled ? root.iconColor : root.disabledIconColor
     }
 
     Text {
       id: text
 
-      text: control.text
-      color: __style.polarColor
+      text: root.text
+      color: root.enabled ? root.iconColor : root.disabledIconColor
       font: __style.t4
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.top: icon.bottom
-      anchors.topMargin: control.buttonSpacing
+      anchors.topMargin: root.buttonSpacing
       horizontalAlignment: Text.AlignHCenter
       elide: Text.ElideMiddle
     }
 
     MouseArea {
       anchors.fill: parent
-      enabled: !control.isMenuButton
-      onClicked: control.clicked()
+      enabled: !root.isMenuButton && root.enabled
+      onClicked: root.clicked()
     }
   }
 
@@ -74,15 +77,16 @@ Item {
   MMToolbarMenuButton {
     id: menuButton
 
-    width: control.width
+    width: root.width
     height: __style.menuDrawerHeight
-    visible: control.isMenuButton
-    iconSource: control.iconSource
-    text: control.text
-    rightText: control.menuButtonRightText
+    visible: root.isMenuButton
+    enabled: root.enabled
+    iconSource: root.iconSource
+    text: root.text
+    rightText: root.menuButtonRightText
     onClicked: {
       parentMenu.close()
-      control.clicked()
+      root.clicked()
     }
   }
 }

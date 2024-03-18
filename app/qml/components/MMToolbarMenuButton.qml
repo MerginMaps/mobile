@@ -12,7 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 Item {
-  id: control
+  id: root
 
   signal clicked
 
@@ -23,7 +23,7 @@ Item {
   Item {
     id: menuButton
 
-    width: control.width
+    width: root.width
     height: __style.menuDrawerHeight
 
     Rectangle {
@@ -41,14 +41,14 @@ Item {
 
       MMIcon {
         anchors.verticalCenter: parent.verticalCenter
-        color: __style.forestColor
-        source: control.iconSource
+        color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+        source: root.iconSource
         size: __style.icon24
       }
 
       Text {
-        text: control.text
-        color: __style.nightColor
+        text: root.text
+        color: root.enabled ? __style.nightColor : __style.mediumGreenColor
         font: __style.t3
         verticalAlignment: Text.AlignVCenter
         height: parent.height
@@ -57,12 +57,12 @@ Item {
 
     Rectangle {
       id: rightTextBg
-      visible: control.rightText && row.width > 100
+      visible: root.rightText && row.width > 100
       property real spacing: 5 * __dp
       anchors.right: menuButton.right
       anchors.rightMargin: row.spacing + 5 * spacing
       anchors.verticalCenter: parent.verticalCenter
-      color: __style.forestColor
+      color: root.enabled ? __style.forestColor : __style.mediumGreenColor
       height: rightText.height + spacing
       width: rightText.width + 3 * spacing
       radius: height / 2
@@ -71,14 +71,14 @@ Item {
         id: rightText
         anchors.centerIn: parent
         color: __style.polarColor
-        text: control.rightText
+        text: root.rightText
         font: __style.t4
       }
     }
 
     MouseArea {
       anchors.fill: parent
-      onClicked: control.clicked()
+      onClicked: root.clicked()
     }
   }
 }

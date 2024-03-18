@@ -197,16 +197,43 @@ Item {
         text: qsTr( "Undo" )
         iconSource: __style.undoIcon
         onClicked: mapTool.undo()
+        enabled: root.recordingMapTool.canUndo
       }
 
       MMToolbarButton {
         text: qsTr( "Remove" )
         iconSource: __style.minusIcon
         onClicked: mapTool.removePoint()
+
+        enabled: {
+           if ( root.recordingMapTool.recordingType !== MM.RecordingMapTool.Manual ) return false;
+           if ( root.recordingMapTool.state === MM.RecordingMapTool.View ) return false;
+           if ( __inputUtils.isEmptyGeometry( root.recordingMapTool.recordedGeometry ) ) return false;
+
+           return true;
+         }
       }
 
       MMToolbarButton {
-        text: mapTool.state === MM.RecordingMapTool.Grab ? qsTr( "Release" ) : qsTr( "Add" )
+        text: qsTr( "Release" )
+        visibilityMode: root.recordingMapTool.state === MM.RecordingMapTool.Grab
+        iconSource: __style.addIcon
+        onClicked: {
+          if ( mapTool.state === MM.RecordingMapTool.Grab ) {
+            mapTool.releaseVertex( crosshair.recordPoint )
+          }
+          else {
+            mapTool.addPoint( crosshair.recordPoint )
+          }
+        }
+      }
+
+      MMToolbarButton {
+        text: qsTr( "Add" )
+
+        visibilityMode: root.recordingMapTool.state === MM.RecordingMapTool.View || root.recordingMapTool.state === MM.RecordingMapTool.Record
+        enabled: root.recordingMapTool.recordingType === MM.RecordingMapTool.Manual && root.recordingMapTool.state !== MM.RecordingMapTool.View
+
         iconSource: __style.addIcon
         onClicked: {
           if ( mapTool.state === MM.RecordingMapTool.Grab ) {
