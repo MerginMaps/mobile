@@ -43,12 +43,9 @@ MMDrawer {
   }
 
   function endStakeout() {
-    console.log("state: ", mapCanvas.state)
-
     if ( mapCanvas.state !== "stakeout" )
       return;
 
-    console.log("state: ", mapCanvas.state)
     root.close()
     stakeoutFinished()
   }
