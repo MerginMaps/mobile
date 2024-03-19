@@ -58,19 +58,6 @@ MMDrawer {
     root.open()
   }
 
-  Item {
-    focus: true
-
-    Keys.onPressed: {
-      if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
-        root.endStakeout()
-        event.accepted = true
-      }
-    }
-  }
-
-  closePolicy: Popup.NoAutoClose
-
   Behavior on height {
     SequentialAnimation {
       PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
@@ -93,6 +80,7 @@ MMDrawer {
     ]
   }
 
+  onBackClicked: root.endStakeout()
   drawerHeader.title: qsTr("Stake out")
   drawerHeader.onCloseClicked: root.endStakeout()
 

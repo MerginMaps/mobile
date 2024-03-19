@@ -35,6 +35,8 @@ Drawer {
   edge: Qt.BottomEdge
   dragMargin: 0
 
+  onClosed: backClicked()
+
   // rounded background
   background: Rectangle {
     color: __style.polarColor
@@ -60,13 +62,6 @@ Drawer {
       width: parent.width
       height: parent.height / 2
       y: parent.height / 2
-    }
-
-    Keys.onReleased: function( event ) {
-      if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
-        root.backClicked()
-        event.accepted = true
-      }
     }
   }
 
