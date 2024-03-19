@@ -81,7 +81,7 @@ MMBaseInput {
 
     hoverEnabled: true
     placeholderTextColor: __style.nightAlphaColor
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+    color: __style.nightColor
 
     font: __style.p5
     wrapMode: Text.WordWrap

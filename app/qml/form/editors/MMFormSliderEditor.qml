@@ -80,7 +80,7 @@ MMBaseInput {
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignLeft
         font: __style.p5
-        color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+        color: __style.nightColor
       }
 
       Slider {

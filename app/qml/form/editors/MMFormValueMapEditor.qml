@@ -55,6 +55,8 @@ MMDropdownInput {
   multiSelect: false
   withSearchbar: false
 
+  textFieldComponent.color: __style.nightColor
+
   onCheckboxCheckedChanged: {
     root.rememberValueBoxClicked( checkboxChecked )
   }
