@@ -10,6 +10,7 @@
 #include "featuresmodel.h"
 #include "coreutils.h"
 
+#include "inpututils.h"
 #include "qgsproject.h"
 #include "qgsexpressioncontextutils.h"
 #include "qgsvectorlayerfeatureiterator.h"
@@ -137,6 +138,8 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
     case FeaturePair: return QVariant::fromValue<FeatureLayerPair>( pair );
     case Description: return QVariant( QString( "Feature ID %1" ).arg( pair.feature().id() ) );
     case SearchResult: return searchResultPair( pair );
+    case LayerName: return pair.layer() ? pair.layer()->name() : QString();
+    case LayerIcon: return pair.layer() ? InputUtils::loadIconFromLayer( pair.layer() ) : QString();
     case Qt::DisplayRole: return featureTitle( pair );
   }
 
@@ -269,6 +272,8 @@ QHash<int, QByteArray> FeaturesModel::roleNames() const
   roleNames[FeaturePair] = QStringLiteral( "FeaturePair" ).toLatin1();
   roleNames[Description] = QStringLiteral( "Description" ).toLatin1();
   roleNames[SearchResult] = QStringLiteral( "SearchResult" ).toLatin1();
+  roleNames[LayerName] = QStringLiteral( "LayerName" ).toLatin1();
+  roleNames[LayerIcon] = QStringLiteral( "LayerIcon" ).toLatin1();
   return roleNames;
 }
 
