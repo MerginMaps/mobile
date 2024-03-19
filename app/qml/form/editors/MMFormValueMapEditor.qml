@@ -72,7 +72,7 @@ MMDropdownInput {
 
   on_FieldValueChanged: {
 
-    if ( _fieldValueIsNull ) {
+    if ( _fieldValueIsNull || _fieldValue === undefined ) {
       text = ""
       preselectedFeatures = []
     }

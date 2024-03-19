@@ -38,7 +38,7 @@ MMBaseInput {
   property bool _fieldRememberValueState: parent.fieldRememberValueState
 
   property alias placeholderText: textArea.placeholderText
-  property alias text: textArea.text
+  property string text: _fieldValue === undefined || _fieldValueIsNull ? '' : _fieldValue
 
   property int minimumRows: 3
 
@@ -76,7 +76,7 @@ MMBaseInput {
     height: contentHeight + textArea.verticalPadding
     width: parent.width
 
-    text: root._fieldValue === undefined || root._fieldValueIsNull ? '' : root._fieldValue
+    text: root.text
     textFormat: root._fieldConfig['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
 
     hoverEnabled: true
@@ -92,8 +92,9 @@ MMBaseInput {
 
     onTextChanged: root.editorValueChanged( text, text === "" )
 
+    // Avoid Android's uncommited text
     // Could in theory be fixed with `inputMethodComposing` TextInput property instead
-    onPreeditTextChanged: Qt.inputMethod.commit() // to avoid Android's uncommited text
+    onPreeditTextChanged: if ( __androidUtils.isAndroid ) Qt.inputMethod.commit()
   }
 
   FontMetrics {
