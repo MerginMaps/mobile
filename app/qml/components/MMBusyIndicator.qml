@@ -14,6 +14,7 @@ Item {
 
   property real size: 60 * __dp
   property alias running: root.visible
+  property alias icon: iconComponent
   property int speed: 800
 
   width: root.size
@@ -21,7 +22,7 @@ Item {
   visible: false
 
   Image {
-    id: icon
+    id: iconComponent
     anchors.fill: parent
     source: __style.loadingIndicatorImage
     sourceSize.width: width
@@ -30,7 +31,7 @@ Item {
   }
 
   RotationAnimation {
-    target: root
+    target: iconComponent
 
     from: 0
     to: 360

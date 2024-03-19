@@ -71,4 +71,9 @@ MMBlurBox {
       verticalAlignment: Text.AlignVCenter
     }
   }
+
+  function show() {
+    root.visible = true
+    root.restartAnimation()
+  }
 }

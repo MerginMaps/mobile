@@ -14,7 +14,7 @@ import "."
 MMBlurBox {
   id: root
 
-  required property string text
+  property string text
 
   function show() {
     root.visible = true
