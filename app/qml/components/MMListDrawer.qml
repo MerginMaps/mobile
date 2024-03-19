@@ -52,7 +52,7 @@ MMDrawer {
       width: parent.width
       interactive: root.maxHeightHit ? true : false
 
-      height: root.listModel ? root.listModel.count * __style.menuDrawerHeight : 0
+      height: Math.min( root.drawerContentAvailableHeight, root.listModel ? root.listModel.count * __style.menuDrawerHeight : 0 )
       maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
 
       delegate: MMListDrawerItem {
