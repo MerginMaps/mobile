@@ -259,7 +259,7 @@ Item {
       leftMargin: __style.safeAreaLeft + __style.mapButtonsMargin
       topMargin: __style.safeAreaTop + __style.margin10
       rightMargin: __style.safeAreaRight + __style.mapButtonsMargin
-      bottomMargin: __style.safeAreaBottom + __style.mapButtonsMargin
+      bottomMargin: __style.mapButtonsMargin
     }
 
     Item {
@@ -370,7 +370,6 @@ Item {
     Item {
       // bottom buttons group
       width: parent.width
-      height: bottomContentLayout.implicitHeight
 
       anchors.bottom: parent.bottom
 
