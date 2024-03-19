@@ -17,7 +17,6 @@
 #include "inpututils.h"
 #include "coreutils.h"
 #include "qgsprojutils.h"
-#include "inputhelp.h"
 
 InputProjUtils::InputProjUtils( QObject *parent )
   : QObject( parent )
@@ -38,7 +37,7 @@ void InputProjUtils::logUser( const QString &message, bool &variable )
 {
   if ( !variable )
   {
-    CoreUtils::log( "InputPROJ", message );
+    CoreUtils::log( "MM-PROJ", message );
     variable = true;
   }
 }
@@ -48,7 +47,7 @@ void InputProjUtils::cleanCustomDir()
   QDir dir( mCurrentCustomProjDir );
   if ( !dir.isEmpty() )
   {
-    qDebug() << "InputPROJ: cleaning custom proj dir " << mCurrentCustomProjDir;
+    qDebug() << "MM-PROJ: cleaning custom proj dir " << mCurrentCustomProjDir;
     dir.removeRecursively();
   }
 }
@@ -75,7 +74,7 @@ void InputProjUtils::initCoordinateOperationHandlers()
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
     logUser( QStringLiteral( "missing required grid: %1" ).arg( grid.shortName ), mMissingRequiredGridReported );
-    warnUser( tr( "Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Input." ).arg( grid.shortName ) );
+    warnUser( tr( "Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Mergin Maps." ).arg( grid.shortName ) );
   } );
 
   QgsCoordinateTransform::setCustomMissingPreferredGridHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
@@ -96,7 +95,7 @@ void InputProjUtils::initCoordinateOperationHandlers()
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
     logUser( QStringLiteral( "coordinate operation creation error: %1" ).arg( error ), mCoordinateOperationCreationErrorReported );
-    warnUser( tr( "Error creating custom PROJ operation. For newly downloaded project please restart Input." ) );
+    warnUser( tr( "Error creating custom PROJ operation. For newly downloaded project please restart Mergin Maps." ) );
   } );
 
   QgsCoordinateTransform::setCustomMissingGridUsedByContextHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
@@ -106,7 +105,7 @@ void InputProjUtils::initCoordinateOperationHandlers()
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
     logUser( QStringLiteral( "custom missing grid used by context handler %1" ).arg( detailsToStr( desired ).join( ";" ) ), mMissingGridUsedByContextHandlerReported );
-    warnUser( tr( "Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Input." ).arg( detailsToStr( desired ).join( "<br>" ) ) );
+    warnUser( tr( "Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Mergin Maps." ).arg( detailsToStr( desired ).join( "<br>" ) ) );
   } );
 
   QgsCoordinateTransform::setFallbackOperationOccurredHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
@@ -152,7 +151,7 @@ void InputProjUtils::setProjDir( const QString &appBundleDir )
   QFile projdb( projFilePath );
   if ( !projdb.exists() )
   {
-    CoreUtils::log( QStringLiteral( "PROJ6 error" ), QStringLiteral( "The Input has failed to load PROJ6 database." ) + projFilePath );
+    CoreUtils::log( QStringLiteral( "MM-PROJ" ), QStringLiteral( "Mergin Maps has failed to load PROJ6 database." ) + projFilePath );
   }
 }
 
@@ -173,8 +172,8 @@ void InputProjUtils::initProjLib( const QString &appBundleDir, const QString &da
   setCurrentCustomProjDir( dataDir );
 
   QStringList paths = {mProjDir};
-  qDebug() << "InputPROJ: Input Search Paths" << paths;
-  qDebug() << "InputPROJ: Custom Search Path" << mCurrentCustomProjDir;
+  qDebug() << "MM-PROJ: Input Search Paths" << paths;
+  qDebug() << "MM-PROJ: Custom Search Path" << mCurrentCustomProjDir;
 
   cleanCustomDir();
   copyCustomProj( projectsPath );
@@ -205,12 +204,12 @@ void InputProjUtils::copyCustomProj( const QString &projectsPath )
     {
       bool success = InputUtils::cpDir( projDir.absolutePath(), mCurrentCustomProjDir );
       if ( success )
-        qDebug() << "InputPROJ: copied custom projections from" << projDir.absolutePath();
+        qDebug() << "MM-PROJ: copied custom projections from" << projDir.absolutePath();
       else
-        qDebug() << "InputPROJ: failed to copy custom proj dir from" << projDir.absolutePath();
+        qDebug() << "MM-PROJ: failed to copy custom proj dir from" << projDir.absolutePath();
 
       ++nProjects;
     }
   }
-  qDebug() << "InputPROJ: found" << nProjects << "projects with custom projections";
+  qDebug() << "MM-PROJ: found" << nProjects << "projects with custom projections";
 }
