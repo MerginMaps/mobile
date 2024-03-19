@@ -12,7 +12,7 @@ import QtQuick.Controls
 
 import mm 1.0 as MM
 
-import "./components" as  MMSettingsComponents
+import "./components" as MMSettingsComponents
 import "../components"
 
 MMPage {
@@ -111,7 +111,7 @@ MMPage {
 
         model: ListModel {
           ListElement {
-            value: 0//MM.StreamingIntervalType.Time
+            value: 0 //MM.StreamingIntervalType.Time
             text: qsTr("Time elapsed")
           }
           ListElement {
@@ -121,12 +121,7 @@ MMPage {
         }
 
         onValueWasChanged: function( newValue ) {
-          console.log("new valiue", newValue[0])
-          console.log(" M.StreamingIntervalType.Time, ", MM.StreamingIntervalType.Time)
-          console.log("  MM.StreamingIntervalType.Distance, ",  MM.StreamingIntervalType.Distance)
-          __appSettings.intervalType = newValue[0] //(newValue === MM.StreamingIntervalType.Distance ? MM.StreamingIntervalType.Distance : MM.StreamingIntervalType.Time)
-          //__appSettings.intervalType = MM.StreamingIntervalType.Distance
-          console.log(" app settings: ", __appSettings.intervalType)
+          __appSettings.intervalType = newValue[0]
         }
       }
 
