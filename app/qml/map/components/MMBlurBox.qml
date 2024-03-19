@@ -69,8 +69,12 @@ Item {
 
   onVisibleChanged: {
     if (root.visible) {
-      fadeOut.stop()
-      timer.restart()
+      restartAnimation()
     }
+  }
+
+  function restartAnimation() {
+    fadeOut.stop()
+    timer.restart()
   }
 }

@@ -16,12 +16,14 @@ import "../../components"
 Item {
   id: control
 
-  width: text.width
-  height: __style.mapItemHeight
+  implicitWidth: row.width
+  implicitHeight: __style.mapItemHeight
 
   signal clicked
 
   required property string text
+
+  property real maxWidth: implicitWidth
   property url iconSource: ""
   property color bgColor: __style.positiveColor
   property color textColor: __style.forestColor
@@ -64,10 +66,15 @@ Item {
 
         Text {
           id: text
+
+          property real textSurroundingItemsWidth: textBg.spacing + icon.width + row.spacing + 2 * row.leftPadding
+
+          width: ( implicitWidth + textSurroundingItemsWidth ) > control.maxWidth ? control.maxWidth - textSurroundingItemsWidth : implicitWidth
           anchors.centerIn: parent
           color: control.textBgColorInverted ? control.bgColor : control.textColor
           text: control.text
           font: __style.t3
+          elide: Text.ElideRight
         }
       }
     }
