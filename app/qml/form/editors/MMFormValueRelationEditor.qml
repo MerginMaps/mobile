@@ -75,7 +75,7 @@ MMDropdownInput {
 
       selectedFeatures: {
         if ( internal.allowMultivalue ) {
-          root.preselectedFeatures = vrModel.convertFromQgisType( root._fieldValue, FeaturesModel.FeatureId )
+          root.preselectedFeatures = vrModel.convertFromQgisType( root._fieldValue, MM.FeaturesModel.FeatureId )
         }
         else {
           root.preselectedFeatures = [root._fieldValue]
