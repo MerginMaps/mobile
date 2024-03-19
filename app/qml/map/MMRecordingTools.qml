@@ -246,14 +246,15 @@ Item {
       }
 
       MMToolbarButton {
-        text: qsTr( "Record" );
-        iconSource: __style.doneCircleIcon;
+        text: qsTr( "Record" )
+
+        iconSource: __style.doneCircleIcon
         iconColor: __style.grassColor
         onClicked: {
           if ( mapTool.hasValidGeometry() )
           {
             // If we currently grab a point
-            if ( mapTool.state == MM.RecordingMapTool.Grab )
+            if ( mapTool.state === MM.RecordingMapTool.Grab )
             {
               mapTool.releaseVertex( crosshair.recordPoint )
             }
@@ -277,7 +278,16 @@ Item {
         iconSource: __style.doneCircleIcon;
         iconColor: __style.forestColor
         onClicked: {
-          mapTool.addPoint( crosshair.recordPoint )
+          if ( mapTool.state === MM.RecordingMapTool.Grab )
+          {
+            // editing existing point geometry
+            mapTool.releaseVertex( crosshair.recordPoint )
+          } else
+          {
+            // recording new point
+            mapTool.addPoint( crosshair.recordPoint )
+          }
+
           let pair = mapTool.getFeatureLayerPair()
           root.done( pair )
         }
