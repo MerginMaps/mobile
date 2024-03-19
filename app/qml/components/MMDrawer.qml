@@ -27,8 +27,6 @@ Drawer {
   readonly property bool maxHeightHit: implicitHeight >= maxHeight
   readonly property real drawerContentAvailableHeight: implicitHeight - mmDrawerHeader.height - root.drawerSpacing - bottomSpacer.height
 
-  signal backClicked()
-
   implicitHeight: contentHeight > maxHeight ? maxHeight : contentHeight
   implicitWidth: ApplicationWindow.window?.width ?? 0
 
@@ -64,7 +62,7 @@ Drawer {
 
     Keys.onReleased: function( event ) {
       if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
-        root.backClicked()
+        root.close()
         event.accepted = true
       }
     }

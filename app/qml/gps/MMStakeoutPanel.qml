@@ -46,7 +46,6 @@ MMDrawer {
     if ( mapCanvas.state !== "stakeout" )
       return;
 
-    root.close()
     stakeoutFinished()
   }
 
@@ -65,8 +64,6 @@ MMDrawer {
     }
   }
 
-  onBackClicked: endStakeout()
-
   StateGroup {
     id: distanceState
 
@@ -81,6 +78,8 @@ MMDrawer {
       }
     ]
   }
+
+  onClosed: root.endStakeout()
 
   drawerHeader.title: qsTr("Stake out")
 
