@@ -288,7 +288,7 @@ Page {
         property var fieldFeatureLayerPair: root.controller.featureLayerPair
         property string fieldHomePath: root.project ? root.project.homePath : "" // for photo editor
 
-        property bool fieldRememberValueSupported: root.controller.rememberAttributesController.rememberValuesAllowed && root.state === "add" && model.EditorWidget !== "Hidden" && Type === FormItem.Field
+        property bool fieldRememberValueSupported: root.controller.rememberAttributesController.rememberValuesAllowed && root.state === "add" && model.EditorWidget !== "Hidden" && Type === MM.FormItem.Field
         property bool fieldRememberValueState: model.RememberValue ? true : false
 
         active: fieldWidget !== 'Hidden'
