@@ -48,6 +48,7 @@ MMTextInput {
   enabled: !_fieldIsReadOnly
   textFieldComponent.readOnly: _fieldIsReadOnly
   textFieldComponent.inputMethodHints: root._field.isNumeric ? Qt.ImhFormattedNumbersOnly : Qt.ImhNone
+  textFieldComponent.color: __style.nightColor
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 

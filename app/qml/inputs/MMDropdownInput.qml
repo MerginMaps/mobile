@@ -25,6 +25,7 @@ MMBaseInput {
 
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
+  property alias textFieldComponent: textField
 
   property alias dropdownLoader: drawerLoader
 

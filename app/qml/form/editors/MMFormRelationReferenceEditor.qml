@@ -50,7 +50,7 @@ MMBaseInput {
     anchors.fill: parent
     font: __style.p5
     text: root._fieldValue
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+    color: __style.nightColor
     verticalAlignment: Text.AlignVCenter
   }
 

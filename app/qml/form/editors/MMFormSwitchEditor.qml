@@ -64,7 +64,7 @@ MMBaseInput {
 
     text: rightSwitch.checked ? internal.checkedStateValue : internal.uncheckedStateValue
 
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+    color: __style.nightColor
     font: __style.p5
     elide: Text.ElideRight
   }

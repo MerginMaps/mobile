@@ -71,7 +71,7 @@ MMBaseInput {
     anchors.fill: parent
 
     text: formatText( root._fieldValue )
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+    color: __style.nightColor
     font: __style.p5
   }
 

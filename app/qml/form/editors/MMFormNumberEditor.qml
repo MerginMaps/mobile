@@ -95,7 +95,7 @@ MMBaseInput {
         text: root._fieldValue === undefined || root._fieldValueIsNull ? '' : root._fieldValue
 
         placeholderTextColor: __style.nightAlphaColor
-        color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+        color: __style.nightColor
 
         font: __style.p5
 

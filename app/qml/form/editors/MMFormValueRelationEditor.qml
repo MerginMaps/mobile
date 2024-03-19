@@ -53,6 +53,8 @@ MMDropdownInput {
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
 
+  textFieldComponent.color: __style.nightColor
+
   on_FieldValueChanged: {
     vrModel.pair = root._fieldFeatureLayerPair
   }
