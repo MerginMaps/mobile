@@ -46,7 +46,6 @@ MMDrawer {
     if ( mapCanvas.state !== "stakeout" )
       return;
 
-    root.close()
     stakeoutFinished()
   }
 
@@ -80,9 +79,9 @@ MMDrawer {
     ]
   }
 
-  onBackClicked: root.endStakeout()
+  onClosed: root.endStakeout()
+
   drawerHeader.title: qsTr("Stake out")
-  drawerHeader.onCloseClicked: root.endStakeout()
 
   drawerContent: Column {
     id: mainColumn

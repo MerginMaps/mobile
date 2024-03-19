@@ -27,15 +27,11 @@ Drawer {
   readonly property bool maxHeightHit: implicitHeight >= maxHeight
   readonly property real drawerContentAvailableHeight: implicitHeight - mmDrawerHeader.height - root.drawerSpacing - bottomSpacer.height
 
-  signal backClicked()
-
   implicitHeight: contentHeight > maxHeight ? maxHeight : contentHeight
   implicitWidth: ApplicationWindow.window?.width ?? 0
 
   edge: Qt.BottomEdge
   dragMargin: 0
-
-  onClosed: backClicked()
 
   // rounded background
   background: Rectangle {
@@ -62,6 +58,13 @@ Drawer {
       width: parent.width
       height: parent.height / 2
       y: parent.height / 2
+    }
+
+    Keys.onReleased: function( event ) {
+      if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
+        root.close()
+        event.accepted = true
+      }
     }
   }
 
