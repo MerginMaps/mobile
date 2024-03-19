@@ -99,6 +99,8 @@ MMBaseInput {
       height: root.contentItemHeight
       visible: root.state === "notSet"
 
+      hasCameraCapability: root.hasCameraCapability
+
       onCapturePhotoClicked: root.capturePhotoClicked()
       onChooseFromGalleryClicked: root.chooseFromGalleryClicked()
     }
