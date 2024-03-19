@@ -20,6 +20,7 @@ MMBaseToolbar {
 
   onModelChanged: root.setupBottomBar()
 
+
   toolbarContent: GridView {
     id: buttonView
 
@@ -28,6 +29,8 @@ MMBaseToolbar {
     anchors.fill: parent
     cellHeight: parent.height
     interactive: false
+
+    Component.onCompleted: root.setupBottomBar()
   }
 
   // buttons shown inside toolbar
@@ -70,10 +73,12 @@ MMBaseToolbar {
     let filteredbuttons = []
 
     for ( var j = 0; j < buttonModel.count; j++ ) {
-      if ( buttonModel.get(j).visibilityMode && buttonModel.get(j).visibilityMode === false  ) {
+      let btn = buttonModel.get(j)
+      if ( btn.hasOwnProperty('parentMenu') ) btn.parentMenu = menu
+      if ( btn.hasOwnProperty('parentToolbar') ) btn.parentToolbar = root
+      if ( btn.hasOwnProperty('visibilityMode') && !btn.visibilityMode ) {
         continue
       }
-
       filteredbuttons.push( buttonModel.get(j) )
     }
 
@@ -82,25 +87,26 @@ MMBaseToolbar {
     // add all buttons (max maxButtonsInToolbar) into toolbar
     visibleButtonModel.clear()
     if(buttonsCount <= maxButtonsInToolbar || buttonWidth >= buttonsCount*root.minimumToolbarButtonWidth) {
+      buttonView.cellWidth = Math.floor( buttonWidth / buttonsCount)
       for( var i = 0; i < buttonsCount; i++ ) {
         let button = filteredbuttons[i]
-        if(button.isMenuButton !== undefined)
-          button.isMenuButton = false
-        button.width = Math.floor(buttonWidth / buttonsCount)
+        if ( button.hasOwnProperty('isMenuButton') ) button.isMenuButton = false
+        button.width = buttonView.cellWidth
         visibleButtonModel.append(button)
       }
-      buttonView.cellWidth = Math.floor(buttonWidth / buttonsCount)
+
     }
     else {
       // not all buttons are visible in toolbar due to width
       // the past of them will apper in the menu inside '...' button
-      var maxVisible = Math.floor(buttonWidth/root.minimumToolbarButtonWidth)
-      if(maxVisible<maxButtonsInToolbar)
+      var maxVisible = Math.floor( buttonWidth / root.minimumToolbarButtonWidth)
+      if( maxVisible < maxButtonsInToolbar )
         maxVisible = maxButtonsInToolbar
-      for( i = 0; i < maxVisible-1; i++ ) {
-        if(maxVisible===maxButtonsInToolbar || buttonWidth >= i*root.minimumToolbarButtonWidth) {
+
+      for( i = 0; i < maxVisible - 1; i++ ) {
+        if( maxVisible === maxButtonsInToolbar || buttonWidth >= i*root.minimumToolbarButtonWidth) {
           let button = filteredbuttons[i]
-          button.isMenuButton = false
+          if ( button.hasOwnProperty('isMenuButton') ) button.isMenuButton = false
           button.width = Math.floor(buttonWidth / maxVisible)
           visibleButtonModel.append(button)
         }
@@ -120,7 +126,6 @@ MMBaseToolbar {
         let button = filteredbuttons[i]
         button.isMenuButton = true
         button.width = Math.floor(buttonWidth)
-        button.parentMenu = menu
         invisibleButtonModel.append(button)
       }
     }
