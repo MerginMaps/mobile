@@ -17,7 +17,7 @@ Rectangle {
   color: __style.polarColor
   radius: 20 * __dp
 
-  property bool canDeviceTakePictures: true
+  property bool hasCameraCapability: true
 
   signal capturePhotoClicked()
   signal chooseFromGalleryClicked()
@@ -31,11 +31,11 @@ Rectangle {
     Rectangle {
       id: takePictureBox
 
-      width: canDeviceTakePictures ? parent.width / 2 - parent.spacing / 2 : 0
+      width: hasCameraCapability ? parent.width / 2 - parent.spacing / 2 : 0
       height: parent.height
       color: __style.lightGreenColor
       radius: root.radius
-      visible: canDeviceTakePictures
+      visible: hasCameraCapability
 
       Column {
         width: parent.width
@@ -69,7 +69,7 @@ Rectangle {
     Rectangle {
       id: chooseFromGaleryBox
 
-      width: canDeviceTakePictures ? parent.width / 2 - parent.spacing / 2 : parent.width
+      width: hasCameraCapability ? parent.width / 2 - parent.spacing / 2 : parent.width
       height: parent.height
       color: __style.lightGreenColor
       radius: root.radius
