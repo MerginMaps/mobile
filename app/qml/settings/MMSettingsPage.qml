@@ -111,18 +111,22 @@ MMPage {
 
         model: ListModel {
           ListElement {
-            value: MM.StreamingIntervalType.Time
+            value: 0//MM.StreamingIntervalType.Time
             text: qsTr("Time elapsed")
           }
           ListElement {
-            value: MM.StreamingIntervalType.Distance
+            value: 1 //MM.StreamingIntervalType.Distance
             text: qsTr("Distance traveled")
           }
         }
 
         onValueWasChanged: function( newValue ) {
-          //  comparing enum with QJSValue
-          __appSettings.intervalType = (newValue == 1 ? MM.StreamingIntervalType.Distance : MM.StreamingIntervalType.Time)
+          console.log("new valiue", newValue[0])
+          console.log(" M.StreamingIntervalType.Time, ", MM.StreamingIntervalType.Time)
+          console.log("  MM.StreamingIntervalType.Distance, ",  MM.StreamingIntervalType.Distance)
+          __appSettings.intervalType = newValue[0] //(newValue === MM.StreamingIntervalType.Distance ? MM.StreamingIntervalType.Distance : MM.StreamingIntervalType.Time)
+          //__appSettings.intervalType = MM.StreamingIntervalType.Distance
+          console.log(" app settings: ", __appSettings.intervalType)
         }
       }
 
