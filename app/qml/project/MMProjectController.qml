@@ -588,7 +588,7 @@ Item {
         }
       }
 
-      onWorkspaceClicked: ( workspaceId ) => { __merginApi.userInfo.setActiveWorkspace( workspaceId ) }
+      onWorkspaceClicked: ( workspaceId ) => { __merginApi.userInfo.setActiveWorkspace( workspaceId ); stackView.popOnePageOrClose() }
 
       onInvitationClicked: ( uuid, accepted ) => { __merginApi.processInvitation( uuid, accepted ) }
 
