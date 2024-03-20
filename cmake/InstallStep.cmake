@@ -269,7 +269,6 @@ elseif (MACOS)
   set(assets_dir "Input.app/Contents/Resources/INPUT")
 endif ()
 
-install(DIRECTORY app/android/assets/demo-projects DESTINATION ${assets_dir})
 install(DIRECTORY app/android/assets/qgis-data DESTINATION ${assets_dir})
 
 # ########################################################################################
