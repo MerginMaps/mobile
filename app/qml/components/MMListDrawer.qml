@@ -12,7 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 /**
- * This is a white drawer with close button that shows items from model with icon + title
+ * This is a white drawer with close button that shows items from model with icon + title + optional description
  * You can specify element to show where there are no items (use MMMessage component)
  */
 MMDrawer {
@@ -24,13 +24,14 @@ MMDrawer {
 
   property string valueRole: "type"
   property string textRole: "name"
+  property string descriptionRole: "" //! optional description role
   property string imageRole: "iconSource"
 
   property var activeValue /* which value defined by valueRole should be highlighted */
 
   property bool modelIsEmpty: root.listModel ? root.listModel.count === 0 : true
 
-  signal clicked( string type )
+  signal clicked( var type )
 
   drawerContent: Item {
     width: parent.width
@@ -51,7 +52,7 @@ MMDrawer {
       width: parent.width
       interactive: root.maxHeightHit ? true : false
 
-      height: root.listModel ? root.listModel.count * __style.menuDrawerHeight : 0
+      height: Math.min( root.drawerContentAvailableHeight, root.listModel ? root.listModel.count * __style.menuDrawerHeight : 0 )
       maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
 
       delegate: MMListDrawerItem {
@@ -61,6 +62,7 @@ MMDrawer {
 
         type: model[root.valueRole]
         text: model[root.textRole]
+        description: descriptionRole !== "" ? model[root.descriptionRole] : ""
         iconSource: model[root.imageRole]
         isActive: root.activeValue ? root.activeValue === model[root.valueRole] : false
 

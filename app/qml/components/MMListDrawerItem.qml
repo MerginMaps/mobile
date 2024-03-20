@@ -15,10 +15,11 @@ import QtQuick.Layouts
 Item {
   id: control
 
-  signal clicked(type: string)
+  signal clicked(var type)
 
-  property string type
+  property var type
   property string text
+  property string description
   property var iconSource
 
   property bool isActive
@@ -45,14 +46,24 @@ Item {
       source: control.iconSource ?? ""
     }
 
-    Text {
-      Layout.fillWidth: true
+    Column {
       height: parent.height
-      Layout.alignment: Qt.AlignVCenter
+      width: parent.width
 
-      text: control.text
-      color: __style.nightColor
-      font: __style.t3
+      MMText {
+        width: parent.width
+        text: control.text
+        color: __style.nightColor
+        font: __style.t3
+      }
+
+      MMText {
+        width: parent.width
+        text: control.description
+        color: __style.nightColor
+        font: __style.p6
+        visible: control.description
+      }
     }
 
     MMIcon {

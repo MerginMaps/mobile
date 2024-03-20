@@ -774,17 +774,17 @@ ApplicationWindow {
   // Should be the top-most visual item
   MMNotificationView {}
 
-  MMDropdownDrawer {
+  MMListDrawer {
     id: featurePairSelection
 
-    title: qsTr( "Select feature" )
-    withSearchbar: false
-    model: MM.FeaturesModel {}
+    drawerHeader.title: qsTr( "Select feature" )
+    listModel: MM.FeaturesModel {}
     valueRole: "FeaturePair"
     textRole: "FeatureTitle"
+    imageRole: "LayerIcon"
+    descriptionRole: "LayerName"
 
-    onSelectionFinished: function( pairs ) {
-      var pair = pairs[0]
+    onClicked: function( pair ) {
       featurePairSelection.close()
       map.highlightPair( pair )
       formsStackManager.openForm( pair, "readOnly", "preview" );
@@ -793,7 +793,7 @@ ApplicationWindow {
     function showPairs( pairs ) {
       if ( pairs.length > 0 )
       {
-        model.populateStaticModel( pairs )
+        listModel.populateStaticModel( pairs )
         open()
       }
     }
