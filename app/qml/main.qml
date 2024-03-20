@@ -614,7 +614,7 @@ ApplicationWindow {
   Component {
     id: stakeoutPanelComponent
 
-    MMStakeoutPanel {
+    MMStakeoutDrawer {
       id: stakeoutPanel
 
       width: window.width
