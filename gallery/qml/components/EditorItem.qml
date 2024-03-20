@@ -11,9 +11,9 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-import "../app/qml/components"
-import "../app/qml/inputs"
-import "../app/qml/form/editors"
+import "../../app/qml/components"
+import "../../app/qml/inputs"
+import "../../app/qml/form/editors"
 
 Item {
   required property string fieldTitle

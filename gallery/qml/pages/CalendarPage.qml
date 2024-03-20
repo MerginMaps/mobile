@@ -13,7 +13,7 @@ import QtQuick.Controls.Basic
 
 import "../../app/qml/form/editors"
 import "../../app/qml/components"
-import "../"
+import "../components" as GalleryComponents
 
 ScrollView {
   Column {
@@ -42,67 +42,73 @@ ScrollView {
           checked: true
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: 100
           fieldTitle: "MMFormGalleryEditor"
+          fieldValue: "2013-09-17 11:22"
+          fieldConfig: ({
+            field_format: "yyyy-MM-dd hh:mm",
+            display_format: "hh:mm"
+          })
+          field: ""
 
           MMFormCalendarEditor {
             title: "Date & Time"
-            placeholderText: "YYYY/MM/DD HH:MM"
             enabled: checkbox.checked
             width: parent.width
             warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
 
-            dateTime: new Date()
             fieldIsDate: false
             includesTime: true
             includesDate: true
-
-            //onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "yyyy/MM/dd hh:mm") }
           }
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: 100
           fieldTitle: "MMFormGalleryEditor"
+          fieldValue: "2013-09-17 11:22"
+          fieldConfig: ({
+            field_format: "yyyy-MM-dd hh:mm",
+            display_format: "hh:mm"
+          })
+          field: ""
 
           MMFormCalendarEditor {
             title: "Date"
-            placeholderText: "YYYY/MM/DD"
             enabled: checkbox.checked
             width: parent.width
             warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
 
-            dateTime: new Date()
             fieldIsDate: false
             includesTime: false
             includesDate: true
-
-            //onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "yyyy/MM/dd") }
           }
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: 100
           fieldTitle: "MMFormGalleryEditor"
+          fieldValue: "2013-09-17 11:22"
+          fieldConfig: ({
+            field_format: "yyyy-MM-dd hh:mm",
+            display_format: "hh:mm"
+          })
+          field: ""
 
           MMFormCalendarEditor {
             title: "Time"
-            placeholderText: "HH:MM:SS"
             enabled: checkbox.checked
             width: parent.width
             warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
 
-            dateTime: new Date()
             fieldIsDate: false
             includesTime: true
             includesDate: false
             showSeconds: true
-
-            //onSelected: function(newDateTime) { dateTime = newDateTime; text = Qt.formatDateTime(newDateTime, "hh:mm:ss") }
           }
         }
       }
