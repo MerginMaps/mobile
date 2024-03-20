@@ -26,6 +26,15 @@ MMPage {
   signal diagnosticLogClicked()
   signal termsOfServiceClicked()
 
+  function createIntervalTypeModel() {
+    var model = Qt.createQmlObject('import QtQuick 2.0; ListModel {}', root);
+
+    model.append({ value: MM.StreamingIntervalType.Time, text: qsTr("Time elapsed") });
+    model.append({ value: MM.StreamingIntervalType.Distance, text: qsTr("Distance traveled") });
+
+    return model;
+  }
+
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
   pageContent: MMScrollView {
@@ -109,16 +118,7 @@ MMPage {
         value: __appSettings.intervalType === MM.StreamingIntervalType.Distance ? qsTr("Distance Traveled") : qsTr("Time elapsed")
         selected: [__appSettings.intervalType]
 
-        model: ListModel {
-          ListElement {
-            value: 0 //MM.StreamingIntervalType.Time
-            text: qsTr("Time elapsed")
-          }
-          ListElement {
-            value: 1 //MM.StreamingIntervalType.Distance
-            text: qsTr("Distance traveled")
-          }
-        }
+        model: root.createIntervalTypeModel()
 
         onValueWasChanged: function( newValue ) {
           __appSettings.intervalType = newValue[0]
