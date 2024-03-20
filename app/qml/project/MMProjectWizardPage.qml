@@ -20,15 +20,20 @@ MMPage {
   id: root
 
   property real rowHeight: 50 * __dp
-  property ListModel widgetsModel: {
-    var model = Qt.createQmlObject('import QtQuick; ListModel {}', root);
+
+  property ListModel widgetsModel: ListModel {}
+
+  //! Inits widgetsModel data just after its created, but before Component.complete is emitted (for both model or components where its used)
+  property bool isWidgetModelReady: {
     var types = fieldsModel.supportedTypes()
     for (var prop in types) {
-      model.append({ WidgetName: types[prop], WidgetType: prop });
+      root.widgetsModel.append({ "WidgetName": types[prop], "WidgetType": prop })
     }
-    return model;
+
+    true
   }
 
+  //! (Ugly) Workaround so MMDropdownInput shows actively selected item in "text"
   property var widgetType2WidgetName: {
     var ret = {}
     var types = fieldsModel.supportedTypes()
