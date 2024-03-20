@@ -24,7 +24,7 @@ MMDrawer {
 
   property string valueRole: "type"
   property string textRole: "name"
-  property string descriptionRole: "description"
+  property string descriptionRole: "" //! optional description role
   property string imageRole: "iconSource"
 
   property var activeValue /* which value defined by valueRole should be highlighted */
@@ -62,7 +62,7 @@ MMDrawer {
 
         type: model[root.valueRole]
         text: model[root.textRole]
-        description: model[root.descriptionRole] ?? ""
+        description: descriptionRole !== "" ? model[root.descriptionRole] : ""
         iconSource: model[root.imageRole]
         isActive: root.activeValue ? root.activeValue === model[root.valueRole] : false
 

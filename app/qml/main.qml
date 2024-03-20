@@ -778,7 +778,6 @@ ApplicationWindow {
     id: featurePairSelection
 
     drawerHeader.title: qsTr( "Select feature" )
-    maxHeight: ApplicationWindow.window?.height * 2 / 3 ?? 0
     listModel: MM.FeaturesModel {}
     valueRole: "FeaturePair"
     textRole: "FeatureTitle"

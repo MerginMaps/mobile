@@ -50,14 +50,14 @@ Item {
       height: parent.height
       width: parent.width
 
-      Text {
+      MMText {
         width: parent.width
         text: control.text
         color: __style.nightColor
         font: __style.t3
       }
 
-      Text {
+      MMText {
         width: parent.width
         text: control.description
         color: __style.nightColor
