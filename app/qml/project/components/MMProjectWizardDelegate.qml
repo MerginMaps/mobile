@@ -17,15 +17,16 @@ import "../../components"
 import "../../inputs"
 
 Item {
-  id: fieldDelegate
+  id: root
 
   signal removeClicked(var index)
-  property var widgetList: []
+  property var widgetList
+  property var widgetType2WidgetName
 
   RowLayout {
     id: row
-    height: fieldDelegate.height
-    width: fieldDelegate.width
+    height: root.height
+    width: root.width
     spacing: 13 * __dp
     property real itemSize: (parent.width - imageBtn.width - (2* row.spacing)) / 2
 
@@ -46,33 +47,28 @@ Item {
       Layout.fillWidth: true
       Layout.preferredWidth: row.itemSize
 
-      text: AttributeName
+      text: root.widgetType2WidgetName[WidgetType]
+
       dropDownTitle: qsTr("Widget")
       preselectedFeatures: [WidgetType]
       dataModel: widgetList
       valueRole: "WidgetType"
-      textRole: "AttributeName"
+      textRole: "WidgetName"
+
+      onSelectionFinished: function( newValue ) {
+        WidgetType = newValue[0]
+      }
     }
 
-    MouseArea {
+    MMRoundButton {
       id: imageBtn
-      width: 40 * __dp
-      height: width
 
-      Rectangle {
-        color: __style.negativeColor
-        anchors.fill: parent
-        radius: width / 2
+      iconSource: __style.deleteIcon
+      iconColor: __style.grapeColor
+      bgndColor: __style.negativeColor
+      bgndHoverColor: __style.negativeColor
 
-        MMIcon {
-          source: __style.deleteIcon
-          color: __style.grapeColor
-          anchors.verticalCenter: parent.verticalCenter
-          anchors.horizontalCenter: parent.horizontalCenter
-        }
-      }
-
-      onClicked: fieldDelegate.removeClicked(index)
+      onClicked: root.removeClicked(index)
     }
   }
 }

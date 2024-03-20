@@ -20,16 +20,22 @@ MMPage {
   id: root
 
   property real rowHeight: 50 * __dp
-  property ListModel widgetsModel: ListModel {}
-
-  //! Inits widgetsModel data just after its created, but before Component.complete is emitted (for both model or components where its used)
-  property bool isWidgetModelReady: {
+  property ListModel widgetsModel: {
+    var model = Qt.createQmlObject('import QtQuick; ListModel {}', root);
     var types = fieldsModel.supportedTypes()
     for (var prop in types) {
-      root.widgetsModel.append({ "AttributeName": types[prop], "WidgetType": prop })
+      model.append({ WidgetName: types[prop], WidgetType: prop });
     }
+    return model;
+  }
 
-    true
+  property var widgetType2WidgetName: {
+    var ret = {}
+    var types = fieldsModel.supportedTypes()
+    for (var prop in types) {
+      ret[prop] = types[prop]
+    }
+    return ret;
   }
 
   MM.FieldsModel {
@@ -91,6 +97,7 @@ MMPage {
           height: root.rowHeight
           width: ListView.view.width
           widgetList: root.widgetsModel
+          widgetType2WidgetName: root.widgetType2WidgetName
           onRemoveClicked: function( index ) {
             fieldsModel.removeField(index)
           }
