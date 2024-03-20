@@ -10,7 +10,9 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../../components"
+
+import "../../components" as MMComponents
+import "../components" as MMFormComponents
 import "../../inputs"
 
 /*
@@ -65,7 +67,7 @@ MMBaseInput {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  content: MMText {
+  content: MMComponents.MMText {
     id: textField
 
     anchors.fill: parent
@@ -77,7 +79,7 @@ MMBaseInput {
 
   onContentClicked: root.openCalendar()
 
-  rightAction: MMIcon {
+  rightAction: MMComponents.MMIcon {
     id: rightIcon
 
     anchors.verticalCenter: parent.verticalCenter
@@ -100,7 +102,7 @@ MMBaseInput {
   Component {
     id: dateTimeDrawerBlueprint
 
-    MMCalendarDrawer {
+    MMFormComponents.MMCalendarDrawer {
       id: dateTimeDrawer
 
       title: root._fieldTitle

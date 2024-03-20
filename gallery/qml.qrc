@@ -24,7 +24,6 @@
         <file>qml/pages/PhotosPage.qml</file>
         <file>qml/pages/EditorsPage.qml</file>
         <file>qml/pages/OnboardingPage.qml</file>
-        <file>qml/pages/CalendarPage.qml</file>
         <file>qml/pages/FormPage.qml</file>
         <file>qml/pages/InputsPage.qml</file>
         <file>../app/qml/dialogs/MMStreamingModeDialog.qml</file>
@@ -65,17 +64,9 @@
         <file>../app/qml/components/MMCheckBox.qml</file>
         <file>../app/qml/components/MMHlineText.qml</file>
         <file>../app/qml/components/MMInfoBox.qml</file>
-        <file>../app/qml/components/calendar/MMDateTimePicker.qml</file>
-        <file>../app/qml/components/calendar/MMDayOfWeekRow.qml</file>
-        <file>../app/qml/components/calendar/MMMonthGrid.qml</file>
-        <file>../app/qml/components/calendar/MMAmPmSwitch.qml</file>
-        <file>../app/qml/components/MMCalendarDrawer.qml</file>
         <file>../app/qml/components/MMScrollView.qml</file>
         <file>../app/qml/components/MMSelectableToolbar.qml</file>
         <file>../app/qml/components/MMSelectableToolbarButton.qml</file>
-        <file>../app/qml/components/MMTumbler.qml</file>
-        <file>../app/qml/components/calendar/MMTimeTumbler.qml</file>
-        <file>../app/qml/components/calendar/MMDateTumbler.qml</file>
         <file>../app/qml/components/MMDropdownDrawer.qml</file>
         <file>../app/qml/components/MMCodeScanner.qml</file>
         <file>../app/qml/components/MMFeaturesListDrawer.qml</file>
@@ -108,6 +99,14 @@
         <file>../app/qml/inputs/MMSearchInput.qml</file>
         <file>../app/qml/inputs/MMTextWithButtonInput.qml</file>
         <file>../app/qml/form/components/MMFormTabBar.qml</file>
+        <file>../app/qml/form/components/MMCalendarDrawer.qml</file>
+        <file>../app/qml/form/components/calendar/MMDateTimePicker.qml</file>
+        <file>../app/qml/form/components/calendar/MMDayOfWeekRow.qml</file>
+        <file>../app/qml/form/components/calendar/MMMonthGrid.qml</file>
+        <file>../app/qml/form/components/calendar/MMAmPmSwitch.qml</file>
+        <file>../app/qml/form/components/calendar/MMTumbler.qml</file>
+        <file>../app/qml/form/components/calendar/MMTimeTumbler.qml</file>
+        <file>../app/qml/form/components/calendar/MMDateTumbler.qml</file>
         <file>../app/qml/form/editors/MMFormCalendarEditor.qml</file>
         <file>../app/qml/form/editors/MMFormGalleryEditor.qml</file>
         <file>../app/qml/form/editors/MMFormNumberEditor.qml</file>

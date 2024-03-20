@@ -10,7 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import ".."
+
+import "../../../components" as MMComponents
 
 Item {
   id: root
@@ -73,7 +74,7 @@ Item {
             verticalAlignment: Text.AlignVCenter
           }
 
-          MMIcon {
+          MMComponents.MMIcon {
             source: __style.arrowDownIcon
             anchors.verticalCenter: parent.verticalCenter
           }
@@ -91,7 +92,7 @@ Item {
           x: parent.width - spacing - previousIcon.width - nextIcon.width - 10 * __dp
           spacing: 30 * __dp
 
-          MMIcon {
+          MMComponents.MMIcon {
             id: previousIcon
             source: __style.backIcon
             anchors.verticalCenter: parent.verticalCenter
@@ -109,7 +110,7 @@ Item {
             }
           }
 
-          MMIcon {
+          MMComponents.MMIcon {
             id: nextIcon
             source: __style.nextIcon
             anchors.verticalCenter: parent.verticalCenter
