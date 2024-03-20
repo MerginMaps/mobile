@@ -124,16 +124,6 @@ QString InputHelp::howToSetupThemesLink() const
   return helpRoot + "/gis/setup_themes/" + utmTagHelp;
 }
 
-QString InputHelp::howToCreateNewProjectLink() const
-{
-  return helpRoot + "/manage/create-project/" + utmTagHelp;
-}
-
-QString InputHelp::howToDownloadProjectLink() const
-{
-  return helpRoot + "/manage/data_sync/" + utmTagHelp;
-}
-
 QString InputHelp::howToSetupProj() const
 {
   return helpRoot + "/gis/proj/" + utmTagHelp;

@@ -29,9 +29,8 @@ MMBaseInput {
 
   property alias dropdownLoader: drawerLoader
 
-  // dataModel is used in the drawer. It must have these roles:
-  // - FeatureId
-  // - FeatureTitle
+  // dataModel is used in the drawer.
+  // It must have valueRole and textRole
   // and it must have `count` function to get the number of items
   // one can use qml's ListModel or our FeaturesModel.h
   property var dataModel
