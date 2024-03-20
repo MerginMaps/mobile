@@ -153,16 +153,6 @@ void AppSettings::setIntervalType( StreamingIntervalType::IntervalType intervalT
   }
 }
 
-bool AppSettings::demoProjectsCopied()
-{
-  return value( QStringLiteral( "demoProjectsCopied" ), QVariant( false ) ).toBool();
-}
-
-void AppSettings::setDemoProjectsCopied( const bool value )
-{
-  setValue( "demoProjectsCopied", value );
-}
-
 bool AppSettings::reuseLastEnteredValues() const
 {
   return mReuseLastEnteredValues;

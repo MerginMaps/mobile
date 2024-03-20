@@ -331,13 +331,6 @@ if (MACOS)
 endif ()
 
 if (IOS)
-  # demo projects
-  set(IOS_DEMO_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/assets/demo-projects)
-  target_sources(Input PRIVATE ${IOS_DEMO_DIR})
-  set_source_files_properties(
-    ${IOS_DEMO_DIR} PROPERTIES MACOSX_PACKAGE_LOCATION Resources
-  )
-
   # qgis resources
   set(IOS_CRS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/assets/qgis-data/resources)
   target_sources(Input PRIVATE ${IOS_CRS_DIR})
