@@ -230,6 +230,19 @@ ScrollView {
         MMRoundButton {
           iconSource: __style.closeIcon
         }
+
+        MMRoundButton {
+          iconSource: __style.checkmarkIcon
+          iconColor: __style.grapeColor
+          bgndColor: __style.negativeColor
+        }
+
+        MMRoundButton {
+          iconSource: __style.checkmarkIcon
+          iconColor: __style.forestColor
+          bgndColor: __style.grassColor
+        }
+
       }
     }
   }
