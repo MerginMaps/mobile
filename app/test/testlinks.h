@@ -74,16 +74,6 @@ class TestLinks: public QObject
       _run( mHelp.howToSetupThemesLink() );
     }
 
-    void testHowToCreateNewProject()
-    {
-      _run( mHelp.howToCreateNewProjectLink() );
-    }
-
-    void testHowToDownloadProject()
-    {
-      _run( mHelp.howToDownloadProjectLink() );
-    }
-
     void testHelpRootLink()
     {
       _run( mHelp.helpRootLink() );

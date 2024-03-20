@@ -32,8 +32,6 @@ class InputHelp: public QObject
     Q_PROPERTY( QString howToEnableDigitizingLink READ howToEnableDigitizingLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToEnableBrowsingDataLink READ howToEnableBrowsingDataLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToSetupThemesLink READ howToSetupThemesLink NOTIFY linkChanged )
-    Q_PROPERTY( QString howToCreateNewProjectLink READ howToCreateNewProjectLink NOTIFY linkChanged )
-    Q_PROPERTY( QString howToDownloadProjectLink READ howToDownloadProjectLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToSetupProj READ howToSetupProj NOTIFY linkChanged )
     Q_PROPERTY( QString gpsAccuracyHelpLink READ gpsAccuracyHelpLink NOTIFY linkChanged )
     Q_PROPERTY( QString howToConnectGPSLink READ howToConnectGPSLink NOTIFY linkChanged )
@@ -68,8 +66,6 @@ class InputHelp: public QObject
     QString howToEnableDigitizingLink() const;
     QString howToEnableBrowsingDataLink() const;
     QString howToSetupThemesLink() const;
-    QString howToCreateNewProjectLink() const;
-    QString howToDownloadProjectLink() const;
     QString howToSetupProj() const;
     QString gpsAccuracyHelpLink() const;
     QString howToConnectGPSLink() const;
