@@ -12,7 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qml/components"
-import "../"
+import "../components" as GalleryComponents
 
 ScrollView {
   Column {
@@ -40,23 +40,23 @@ ScrollView {
         columns: 3
         spacing: 20
         anchors.fill: parent
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "grassColor"
           color: __style.grassColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "forestColor"
           color: __style.forestColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "nightColor"
           color: __style.nightColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "polarColor"
           color: __style.polarColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "transparentColor"
           color: __style.transparentColor
         }
@@ -79,43 +79,43 @@ ScrollView {
         columns: 3
         spacing: 20
         anchors.fill: parent
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "sandColor"
           color: __style.sandColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "sunsetColor"
           color: __style.sunsetColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "sunColor"
           color: __style.sunColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "earthColor"
           color: __style.earthColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "roseColor"
           color: __style.roseColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "skyColor"
           color: __style.skyColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "grapeColor"
           color: __style.grapeColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "deepOceanColor"
           color: __style.deepOceanColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "purpleColor"
           color: __style.purpleColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "fieldColor"
           color: __style.fieldColor
         }
@@ -139,23 +139,23 @@ ScrollView {
         columns: 2
         spacing: 20
         anchors.fill: parent
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "positiveColor"
           color: __style.positiveColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "warningColor"
           color: __style.warningColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "negativeColor"
           color: __style.negativeColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "informativeColor"
           color: __style.informativeColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "snappingColor"
           color: __style.snappingColor
         }
@@ -178,35 +178,35 @@ ScrollView {
         columns: 3
         spacing: 20
         anchors.fill: parent
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "nightAlphaColor"
           color: __style.nightAlphaColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "errorBgInputColor"
           color: __style.errorBgInputColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "shadowColor"
           color: __style.shadowColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "lightGreenColor"
           color: __style.lightGreenColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "mediumGreenColor"
           color: __style.mediumGreenColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "greyColor"
           color: __style.greyColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "darkGrey"
           color: __style.darkGreyColor
         }
-        ColorBox {
+        GalleryComponents.ColorBox {
           text: "mediumGrey"
           color: __style.mediumGreyColor
         }

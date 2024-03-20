@@ -12,7 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qml/account/components" as MMAccountComponents
-import "../../app/qml/components"
+import "../../app/qml/components" as MMComponents
 import "../../app/qml/inputs"
 
 Column {
@@ -20,7 +20,7 @@ Column {
   spacing: 20
 
   GroupBox {
-    title: "MMCheckBox"
+    title: "MMComponents.MMCheckBox"
     width: 200
     background: Rectangle {
       color: "lightGray"
@@ -35,18 +35,18 @@ Column {
     Column {
       spacing: 20
       anchors.fill: parent
-      MMCheckBox {
+      MMComponents.MMCheckBox {
         checked: false
         text: checked ? "checked" : "unchecked"
       }
-      MMCheckBox {
+      MMComponents.MMCheckBox {
         checked: true
       }
-      MMCheckBox {
+      MMComponents.MMCheckBox {
         checked: false
         enabled: false
       }
-      MMCheckBox {
+      MMComponents.MMCheckBox {
         checked: true
         enabled: false
       }
@@ -130,7 +130,7 @@ Column {
   }
 
   GroupBox {
-    title: "MMRadioButton"
+    title: "MMComponents.MMRadioButton"
     background: Rectangle {
       color: "lightGray"
       border.color: "gray"
@@ -144,15 +144,15 @@ Column {
     Row {
       spacing: 20
       anchors.fill: parent
-      MMRadioButton {
+      MMComponents.MMRadioButton {
         text: "one"
         checked: false
       }
-      MMRadioButton {
+      MMComponents.MMRadioButton {
         text: "two"
         checked: true
       }
-      MMRadioButton {
+      MMComponents.MMRadioButton {
         text: "three"
         enabled: false
         checked: false
@@ -161,7 +161,7 @@ Column {
   }
 
   GroupBox {
-    title: "MMSwitch"
+    title: "MMComponents.MMSwitch"
     background: Rectangle {
       color: "lightGray"
       border.color: "gray"
@@ -175,15 +175,15 @@ Column {
     Row {
       spacing: 20
       anchors.fill: parent
-      MMSwitch {
+      MMComponents.MMSwitch {
         checked: false
         text: checked ? "ON" : "OFF"
       }
-      MMSwitch {
+      MMComponents.MMSwitch {
         text: "static"
         checked: true
       }
-      MMSwitch {
+      MMComponents.MMSwitch {
         text: "disabled"
         enabled: false
         checked: false

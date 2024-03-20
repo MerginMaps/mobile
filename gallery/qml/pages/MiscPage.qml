@@ -262,6 +262,32 @@ ScrollView {
     }
 
     GroupBox {
+      title: "MMAvatarLettersItem"
+      background: Rectangle {
+        color: "white"
+        border.color: "black"
+      }
+      label: Label {
+        color: "black"
+        text: parent.title
+        padding: 5
+      }
+
+      Row {
+        spacing: 20
+        anchors.fill: parent
+        MMAvatarLettersItem {
+          abbrv: "PP"
+        }
+
+        MMAvatarLettersItem {
+          abbrv: "JP"
+          hasNotification: true
+        }
+      }
+    }
+
+    GroupBox {
       width: page.width - 40
       title: "MMGpsDataText"
       background: Rectangle {

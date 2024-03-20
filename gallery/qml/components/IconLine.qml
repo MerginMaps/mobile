@@ -11,8 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-import "../app/qml/components"
-import "../"
+import "../../app/qml/components"
 
 Column {
   id: root
