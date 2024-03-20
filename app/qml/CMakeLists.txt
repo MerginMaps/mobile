@@ -19,7 +19,6 @@ set(MM_QML
     components/MMAvatarLettersItem.qml
     components/MMBaseToolbar.qml
     components/MMButton.qml
-    components/MMCalendarDrawer.qml
     components/MMCheckBox.qml
     components/MMCodeScanner.qml
     components/MMDrawer.qml
@@ -59,13 +58,6 @@ set(MM_QML
     components/MMToolbarButton.qml
     components/MMToolbarLongButton.qml
     components/MMToolbarMenuButton.qml
-    components/MMTumbler.qml
-    components/calendar/MMAmPmSwitch.qml
-    components/calendar/MMDateTimePicker.qml
-    components/calendar/MMDateTumbler.qml
-    components/calendar/MMDayOfWeekRow.qml
-    components/calendar/MMMonthGrid.qml
-    components/calendar/MMTimeTumbler.qml
     dialogs/MMCloseAccountDialog.qml
     dialogs/MMDownloadProjectDialog.qml
     dialogs/MMMigrateToMerginDialog.qml
@@ -93,6 +85,14 @@ set(MM_QML
     form/MMPreviewDrawer.qml
     form/components/MMFormTabBar.qml
     form/components/MMPreviewActionButton.qml
+    form/components/MMCalendarDrawer.qml
+    form/components/calendar/MMTumbler.qml
+    form/components/calendar/MMAmPmSwitch.qml
+    form/components/calendar/MMDateTimePicker.qml
+    form/components/calendar/MMDateTumbler.qml
+    form/components/calendar/MMDayOfWeekRow.qml
+    form/components/calendar/MMMonthGrid.qml
+    form/components/calendar/MMTimeTumbler.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormGalleryEditor.qml
     form/editors/MMFormNumberEditor.qml

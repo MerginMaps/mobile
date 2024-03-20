@@ -10,10 +10,11 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "."
-import "calendar"
 
-MMDrawer {
+import "../../components" as MMComponents
+import "./calendar"
+
+MMComponents.MMDrawer {
   id: root
 
   property alias title: title.text
@@ -61,7 +62,7 @@ MMDrawer {
         showSeconds: root.showSeconds
       }
 
-      MMButton {
+      MMComponents.MMButton {
         id: primaryButton
 
         width: parent.width - 2 * parent.spacing
