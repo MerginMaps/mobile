@@ -1071,11 +1071,11 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   }
   else if ( widgetName == QStringLiteral( "richtext" ) )
   {
-    return QUrl( path.arg( QLatin1String( "MMFormRichTextViewer.qml" ) ) );
+    return QUrl( path.arg( QLatin1String( "MMFormRichTextViewer" ) ) );
   }
   else if ( widgetName == QStringLiteral( "spacer" ) )
   {
-    return QUrl( path.arg( QLatin1String( "MMFormSpacer.qml" ) ) );
+    return QUrl( path.arg( QLatin1String( "MMFormSpacer" ) ) );
   }
   else if ( widgetName == QStringLiteral( "relation" ) )
   {
