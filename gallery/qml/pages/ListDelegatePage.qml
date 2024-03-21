@@ -61,6 +61,14 @@ Item {
     MMComponents.MMListDelegate {
       width: parent.width
 
+      text: "Selected item, a-ha!"
+
+      rightContent: MMComponents.MMIcon { source: __style.doneCircleIcon }
+    }
+
+    MMComponents.MMListDelegate {
+      width: parent.width
+
       text: "Title of this item"
 
       hasLine: false
