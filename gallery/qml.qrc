@@ -50,11 +50,10 @@
         <file>../app/qml/components/MMProgressBar.qml</file>
         <file>../app/qml/components/MMShadow.qml</file>
         <file>../app/qml/components/MMToolbarButton.qml</file>
-        <file>../app/qml/components/MMBaseToolbar.qml</file>
         <file>../app/qml/components/MMToolbar.qml</file>
+        <file>../app/qml/components/private/MMToolbarShortButton.qml</file>
+        <file>../app/qml/components/private/MMToolbarLongButton.qml</file>
         <file>../app/qml/components/MMMenuDrawer.qml</file>
-        <file>../app/qml/components/MMToolbarMenuButton.qml</file>
-        <file>../app/qml/components/MMToolbarLongButton.qml</file>
         <file>../app/qml/components/MMListDrawer.qml</file>
         <file>../app/qml/components/MMListDrawerItem.qml</file>
         <file>../app/qml/components/MMListFooterSpacer.qml</file>
@@ -65,8 +64,6 @@
         <file>../app/qml/components/MMHlineText.qml</file>
         <file>../app/qml/components/MMInfoBox.qml</file>
         <file>../app/qml/components/MMScrollView.qml</file>
-        <file>../app/qml/components/MMSelectableToolbar.qml</file>
-        <file>../app/qml/components/MMSelectableToolbarButton.qml</file>
         <file>../app/qml/components/MMDropdownDrawer.qml</file>
         <file>../app/qml/components/MMCodeScanner.qml</file>
         <file>../app/qml/components/MMFeaturesListDrawer.qml</file>

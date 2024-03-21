@@ -354,7 +354,7 @@ Item {
         }
       }
 
-      footer: MMSelectableToolbar {
+      footer: MMToolbar {
         id: pageFooter
 
         width: projectsPage.width
@@ -372,36 +372,29 @@ Item {
 
         model: ObjectModel {
 
-          MMSelectableToolbarButton {
+          MMToolbarButton {
             id: localProjectsBtn
-
-            width: pageFooter.buttonWidth
             text: qsTr("Home")
             iconSource: __style.homeIcon
-            selectedIconSource: __style.homeFilledIcon
-            checked: pageFooter.index === 0
+            iconSourceSelected: __style.homeFilledIcon
             onClicked: projectsPage.state = "home"
           }
 
-          MMSelectableToolbarButton {
+          MMToolbarButton {
             id: createdProjectsBtn
 
-            width: pageFooter.buttonWidth
             text: qsTr("Projects")
             iconSource: __style.projectsIcon
-            selectedIconSource: __style.projectsFilledIcon
-            checked: pageFooter.index === 1
+            iconSourceSelected: __style.projectsFilledIcon
             onClicked: projectsPage.state = "workspace"
           }
 
-          MMSelectableToolbarButton {
+          MMToolbarButton {
             id: publicProjectsBtn
 
-            width: pageFooter.buttonWidth
             text: qsTr("Explore")
             iconSource: __style.globalIcon
-            selectedIconSource: __style.globalFilledIcon
-            checked: pageFooter.index === 2
+            iconSourceSelected: __style.globalFilledIcon
             onClicked: projectsPage.state = "explore"
           }
         }
