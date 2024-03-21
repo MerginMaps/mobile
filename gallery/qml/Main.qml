@@ -128,6 +128,10 @@ ApplicationWindow {
           source: "ComponentsPage.qml"
         }
         ListElement {
+          title: "List delegate"
+          source: "ListDelegatePage.qml"
+        }
+        ListElement {
           title: "Colors"
           source: "ColorsPage.qml"
         }

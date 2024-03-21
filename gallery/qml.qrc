@@ -12,6 +12,7 @@
         <file>qml/pages/ColorsPage.qml</file>
         <file>qml/pages/TextsPage.qml</file>
         <file>qml/pages/MiscPage.qml</file>
+        <file>qml/pages/ListDelegatePage.qml</file>
         <file>qml/pages/InitialGalleryPage.qml</file>
         <file>qml/pages/ButtonsPage.qml</file>
         <file>qml/pages/NotificationPage.qml</file>

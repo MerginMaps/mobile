@@ -15,6 +15,8 @@ import QtQuick.Controls
 //
 
 Label {
+  text: "fix-me"
+
   font: __style.t4
   color: __style.polarColor
 
