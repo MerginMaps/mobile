@@ -17,6 +17,7 @@ set(MM_QML
     account/MMSwitchWorkspacePage.qml
     account/MMWhichIndustryPage.qml
     components/MMAvatarLettersItem.qml
+    components/MMBadge.qml
     components/MMButton.qml
     components/MMCheckBox.qml
     components/MMCodeScanner.qml
@@ -29,6 +30,7 @@ set(MM_QML
     components/MMIcon.qml
     components/MMInfoBox.qml
     components/MMLine.qml
+    components/MMListDelegate.qml
     components/MMListDrawer.qml
     components/MMListDrawerItem.qml
     components/MMListFooterSpacer.qml
@@ -147,10 +149,10 @@ set(MM_QML
     settings/MMSettingsController.qml
     settings/MMSettingsPage.qml
     settings/components/MMChangelogEntryDelegate.qml
-    settings/components/MMSettingDropdown.qml
-    settings/components/MMSettingInput.qml
-    settings/components/MMSettingItem.qml
-    settings/components/MMSettingSwitch.qml
+    settings/components/MMSettingsDropdown.qml
+    settings/components/MMSettingsInput.qml
+    settings/components/MMSettingsItem.qml
+    settings/components/MMSettingsSwitch.qml
     main.qml
     PARENT_SCOPE
 )

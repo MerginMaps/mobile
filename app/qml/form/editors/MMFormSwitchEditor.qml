@@ -59,7 +59,7 @@ MMBaseInput {
   content: Text {
     id: textField
 
-    width: parent.width + rightSwitch.x
+    width: parent.width
     anchors.verticalCenter: parent.verticalCenter
 
     text: rightSwitch.checked ? internal.checkedStateValue : internal.uncheckedStateValue
@@ -76,9 +76,8 @@ MMBaseInput {
   rightAction: MMSwitch {
     id: rightSwitch
 
-    width: 50 * __dp
     height: parent.height
-    x: -30 * __dp
+    x: -__style.margin20
 
     uncheckedBgColor: __style.lightGreenColor
     checked: root._fieldValue === internal.checkedStateValue

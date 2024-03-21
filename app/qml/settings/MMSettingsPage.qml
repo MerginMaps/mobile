@@ -58,7 +58,7 @@ MMPage {
 
       Item { width: 1; height: 1 }
 
-      MMSettingsComponents.MMSettingInput {
+      MMSettingsComponents.MMSettingsInput {
         width: parent.width
         title: qsTr("GPS accuracy treshold")
         description: qsTr("Determines when the accuracy indicator turns yellow")
@@ -73,7 +73,7 @@ MMPage {
 
       MMLine {}
 
-      MMSettingsComponents.MMSettingItem {
+      MMSettingsComponents.MMSettingsItem {
         width: parent.width
         title: qsTr("Manage GPS receivers")
         value: "Internal"
@@ -83,7 +83,7 @@ MMPage {
 
       MMLine {}
 
-      MMSettingsComponents.MMSettingInput {
+      MMSettingsComponents.MMSettingsInput {
         width: parent.width
         title: qsTr("GPS antenna height")
         description: qsTr("Includes pole height and GPS receiver’s antenna height")
@@ -108,7 +108,7 @@ MMPage {
 
       Item { width: 1; height: 1 }
 
-      MMSettingsComponents.MMSettingDropdown {
+      MMSettingsComponents.MMSettingsDropdown {
         width: parent.width
 
         title: qsTr("Interval threshold type")
@@ -130,7 +130,7 @@ MMPage {
 
       MMLine {}
 
-      MMSettingsComponents.MMSettingInput {
+      MMSettingsComponents.MMSettingsInput {
         width: parent.width
         title: qsTr("Threshold interval")
         description: qsTr("Streaming mode will add a point to the object at each interval")
@@ -155,7 +155,7 @@ MMPage {
 
       Item { width: 1; height: 1 }
 
-      MMSettingsComponents.MMSettingSwitch {
+      MMSettingsComponents.MMSettingsSwitch {
         width: parent.width
         title: qsTr("Reuse last entered value")
         description: qsTr("Each field offers an option to reuse its value on the next feature")
@@ -166,7 +166,7 @@ MMPage {
 
       MMLine {}
 
-      MMSettingsComponents.MMSettingSwitch {
+      MMSettingsComponents.MMSettingsSwitch {
         width: parent.width
         title: qsTr("Automatically sync changes")
         description: qsTr("Each time you save changes, the app will sync automatically")
@@ -187,7 +187,7 @@ MMPage {
 
       Item { width: 1; height: 1 }
 
-      MMSettingsComponents.MMSettingItem {
+      MMSettingsComponents.MMSettingsItem {
         width: parent.width
         title: qsTr("About")
         value: ""
@@ -197,7 +197,7 @@ MMPage {
 
       MMLine {}
 
-      MMSettingsComponents.MMSettingItem {
+      MMSettingsComponents.MMSettingsItem {
         width: parent.width
         title: qsTr("Changelog")
         value: ""
@@ -207,7 +207,7 @@ MMPage {
 
       MMLine {}
 
-      MMSettingsComponents.MMSettingItem {
+      MMSettingsComponents.MMSettingsItem {
         width: parent.width
         title: qsTr("Help")
         value: ""
@@ -217,7 +217,7 @@ MMPage {
 
       MMLine {}
 
-      MMSettingsComponents.MMSettingItem {
+      MMSettingsComponents.MMSettingsItem {
         width: parent.width
         title: qsTr("Privacy policy")
         value: ""
@@ -227,7 +227,7 @@ MMPage {
 
       MMLine {}
 
-      MMSettingsComponents.MMSettingItem {
+      MMSettingsComponents.MMSettingsItem {
         width: parent.width
         title: qsTr("Terms of service")
         value: ""
@@ -237,7 +237,7 @@ MMPage {
 
       MMLine {}
 
-      MMSettingsComponents.MMSettingItem {
+      MMSettingsComponents.MMSettingsItem {
         width: parent.width
         title: qsTr("Diagnostic log")
         value: ""

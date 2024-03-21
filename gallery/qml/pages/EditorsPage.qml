@@ -35,7 +35,7 @@ ScrollView {
 
       Column {
         spacing: 10
-        width: ApplicationWindow.window ? ApplicationWindow.window.width - 40 : 0
+        width: ApplicationWindow.window ? ApplicationWindow.window.width - 60 : 0
 
         MMCheckBox {
           id: checkbox

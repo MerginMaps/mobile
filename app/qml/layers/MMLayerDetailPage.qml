@@ -127,7 +127,7 @@ Page {
                   color: __style.nightColor
                 }
 
-                MMSwitch {
+                MMSwitch { // TODO: might need adjustments
                   id: visibleSwitch
 
                   uncheckedBgColor: __style.lightGreenColor
