@@ -19,7 +19,6 @@ set(MM_QML
     components/MMAvatarLettersItem.qml
     components/MMBaseToolbar.qml
     components/MMButton.qml
-    components/MMCalendarDrawer.qml
     components/MMCheckBox.qml
     components/MMCodeScanner.qml
     components/MMDrawer.qml
@@ -59,13 +58,6 @@ set(MM_QML
     components/MMToolbarButton.qml
     components/MMToolbarLongButton.qml
     components/MMToolbarMenuButton.qml
-    components/MMTumbler.qml
-    components/calendar/MMAmPmSwitch.qml
-    components/calendar/MMDateTimePicker.qml
-    components/calendar/MMDateTumbler.qml
-    components/calendar/MMDayOfWeekRow.qml
-    components/calendar/MMMonthGrid.qml
-    components/calendar/MMTimeTumbler.qml
     dialogs/MMCloseAccountDialog.qml
     dialogs/MMDownloadProjectDialog.qml
     dialogs/MMMigrateToMerginDialog.qml
@@ -113,7 +105,7 @@ set(MM_QML
     gps/MMGpsDataDrawer.qml
     gps/MMGpsDataText.qml
     gps/MMPositionProviderPage.qml
-    gps/MMStakeoutPanel.qml
+    gps/MMStakeoutDrawer.qml
     inputs/MMBaseInput.qml
     inputs/MMDropdownInput.qml
     inputs/MMPasswordInput.qml

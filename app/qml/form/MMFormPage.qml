@@ -16,8 +16,8 @@ import QtQuick.Dialogs
 import mm 1.0 as MM
 import qgs 1.0 as QGS
 
-import "../components"
-import "./components"
+import "../components" as MMComponents
+import "./components" as MMFormComponents
 import "../dialogs"
 
 
@@ -77,7 +77,7 @@ Page {
     color: __style.lightGreenColor
   }
 
-  header: MMPageHeader {
+  header: MMComponents.MMPageHeader {
 
     onBackClicked: root.rollbackAndClose()
 
@@ -87,16 +87,15 @@ Page {
       return __inputUtils.featureTitle( root.controller.featureLayerPair, __activeProject.qgsProject )
     }
 
-    rightItemContent: MMRoundButton {
+    rightItemContent: MMComponents.MMRoundButton {
 
       anchors.verticalCenter: parent.verticalCenter
 
       visible: root.state === "add" || root.state === "edit"
 
       iconSource: __style.checkmarkIcon
-      iconColor: __style.forestColor
-
-      bgndColor: __style.grassColor
+      iconColor: controller.hasValidationErrors ? __style.grapeColor : __style.forestColor
+      bgndColor: controller.hasValidationErrors ? __style.negativeColor : __style.grassColor
 
       onClicked: root.save()
     }
@@ -105,7 +104,7 @@ Page {
   ColumnLayout {
     anchors.fill: parent
 
-    MMFormTabBar {
+    MMFormComponents.MMFormTabBar {
       id: tabBar
 
       Layout.alignment: Qt.AlignHCenter
@@ -177,7 +176,7 @@ Page {
     }
   }
 
-  footer: MMToolbar {
+  footer: MMComponents.MMToolbar {
 
     visible: !root.layerIsReadOnly
 
@@ -186,7 +185,7 @@ Page {
     ObjectModel {
       id: readStateButtons
 
-      MMToolbarLongButton {
+      MMComponents.MMToolbarLongButton {
         text: qsTr( "Edit feature" );
 
         iconSource: __style.editCircleIcon
@@ -201,13 +200,13 @@ Page {
     ObjectModel {
       id: addStateButtons // edit buttons are the same
 
-      MMToolbarButton {
+      MMComponents.MMToolbarButton {
         text: qsTr( "Delete" )
         iconSource: __style.deleteIcon
         onClicked: deleteDialog.open()
       }
 
-      MMToolbarButton {
+      MMComponents.MMToolbarButton {
         text: qsTr( "Edit geometry" )
         iconSource: __style.editIcon
         onClicked: root.editGeometryRequested( root.controller.featureLayerPair )
@@ -443,7 +442,6 @@ Page {
   function save() {
     if ( controller.hasValidationErrors )
     {
-      console.log( qsTr( 'Can not save the form, there are validation errors' ) )
       __notificationModel.addError( qsTr( 'Feature could not be saved, please check all required fields' ) )
 
       // In future we could navigate user to a field that contains validation error

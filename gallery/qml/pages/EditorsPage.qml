@@ -14,7 +14,7 @@ import QtQuick.Controls.Basic
 import "../../app/qml/inputs"
 import "../../app/qml/form/editors" as MMFormEditors
 import "../../app/qml/components"
-import "../"
+import "../components" as GalleryComponents
 
 ScrollView {
   Column {
@@ -67,7 +67,7 @@ ScrollView {
           checked: false
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: relationEditor.height
           fieldTitle: "MMFormRelationEditor"
@@ -86,7 +86,7 @@ ScrollView {
           }
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: relationEditor.height
           fieldTitle: "MMFormRelationReferenceEditor"
@@ -102,7 +102,7 @@ ScrollView {
           }
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: galleryEditor.height
           fieldTitle: "MMFormGalleryEditor"
@@ -121,7 +121,7 @@ ScrollView {
           }
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: sliderEditor.height
 
@@ -138,7 +138,7 @@ ScrollView {
           }
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: numberEditor.height
 
@@ -155,7 +155,7 @@ ScrollView {
           }
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: scannerEditor.height
 
@@ -171,7 +171,7 @@ ScrollView {
           }
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: photoEditor.height
 
@@ -187,7 +187,7 @@ ScrollView {
           }
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: textMultilineEditor.height
 
@@ -201,7 +201,7 @@ ScrollView {
           }
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: switchEditor.height
 
@@ -214,7 +214,7 @@ ScrollView {
           }
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: dateTimeCalendar.height
           fieldTitle: "MMFormCalendarEditor (Date & Time)"
@@ -242,7 +242,7 @@ ScrollView {
           }
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: dateCalendar.height
           fieldTitle: "MMFormCalendarEditor (Date)"
@@ -270,7 +270,7 @@ ScrollView {
           }
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: timeCalendar.height
           fieldTitle: "MMFormCalendarEditor (Time)"
@@ -302,7 +302,7 @@ ScrollView {
           text: "MMFormSpacer - HLine"
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: spacer2.height
 
@@ -320,7 +320,7 @@ ScrollView {
           text: "MMFormRichTextViewer - Text"
         }
 
-        EditorItem {
+        GalleryComponents.EditorItem {
           width: parent.width
           height: richTextViewer.height
 

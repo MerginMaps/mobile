@@ -14,8 +14,8 @@ import QtQuick.Layouts
 
 import mm 1.0 as MM
 
-import "./components"
-import "../components"
+import "./components" as MMProjectComponents
+import "../components" as MMComponents
 import "../dialogs"
 
 Item {
@@ -89,7 +89,7 @@ Item {
     }
 
     // Project delegate
-    delegate: MMProjectDelegate {
+    delegate: MMProjectComponents.MMProjectDelegate {
       id: projectDelegate
 
       width: ListView.view.width
@@ -182,7 +182,7 @@ Item {
   Component {
     id: loadingSpinnerComponent
 
-    MMBusyIndicator {
+    MMComponents.MMBusyIndicator {
       x: parent.width / 2 - width / 2
       running: controllerModel.isLoading
     }
@@ -202,7 +202,7 @@ Item {
         height: root.spacing
       }
 
-      MMButton {
+      MMComponents.MMButton {
         width: parent.width
         text: qsTr("Create project")
         onClicked: stackView.push(projectWizardComp)
@@ -215,7 +215,7 @@ Item {
     }
   }
 
-  MMMessage {
+  MMComponents.MMMessage {
     id: noLocalProjectsMessageContainer
 
     visible: listview.count === 0 && // this check is getting longer and longer, would be good to replace with states
@@ -229,15 +229,11 @@ Item {
     }
 
     image: __style.positiveMMSymbolImage
-    title: qsTr( "No downloaded projects found")
-    description: "<style>a:link { color: " + __style.forestColor + "; }</style>" +
-                 qsTr( "Learn %1how to create projects%2 and %3download them%2 onto your device. You can also create new project by clicking button below." )
-    .arg("<a href='"+ __inputHelp.howToCreateNewProjectLink +"'>")
-    .arg("</a>")
-    .arg("<a href='"+ __inputHelp.howToDownloadProjectLink +"'>")
+    title: qsTr( "Get started with Mergin Maps")
+    description: qsTr( "First step is to create your brand new project." )
   }
 
-  MMMessage {
+  MMComponents.MMMessage {
     id: noMerginProjectsTexts
 
     anchors.centerIn: parent
@@ -267,7 +263,7 @@ Item {
       }
     }
 
-    MMButton {
+    MMComponents.MMButton {
       id: reloadBtn
 
       width: reloadList.width - 2* __style.pageMargins

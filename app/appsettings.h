@@ -58,9 +58,6 @@ class AppSettings: public QObject
     StreamingIntervalType::IntervalType intervalType() const;
     void setIntervalType( StreamingIntervalType::IntervalType intervalType );
 
-    bool demoProjectsCopied();
-    void setDemoProjectsCopied( const bool value );
-
     bool reuseLastEnteredValues() const;
 
     QString appVersion() const;

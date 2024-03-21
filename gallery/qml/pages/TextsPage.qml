@@ -12,7 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qml/components"
-import "../"
+import "../components" as GalleryComponents
 
 ScrollView {
   id: root
@@ -54,97 +54,97 @@ ScrollView {
       height: 10
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "custom font (no mm-font)"
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "h1"
       font: __style.h1
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "h2"
       font: __style.h2
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "h3"
       font: __style.h3
     }
 
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "t1"
       font: __style.t1
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "t2"
       font: __style.t2
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "t3"
       font: __style.t3
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "t4"
       font: __style.t4
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "t5"
       font: __style.t5
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "p1"
       font: __style.p1
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "p2"
       font: __style.p2
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "p3"
       font: __style.p3
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "p4"
       font: __style.p4
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "p5"
       font: __style.p5
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "p6"
       font: __style.p6
     }
 
-    TextItem {
+    GalleryComponents.TextItem {
       testText: root.testText
       text: "p7"
       font: __style.p7

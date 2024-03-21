@@ -9,7 +9,8 @@
 
 import QtQuick
 import QtQuick.Controls
-import ".."
+
+import "../../../components" as MMComponents
 
 Item {
   id: root
@@ -17,13 +18,10 @@ Item {
   width: row.width + 40 * __dp
   height: row.height
 
-  signal monthIndexChanged(var monthIndex)
-  signal yearChanged(var year)
-  property int initMonthIndex
-  property int initYear
-
-  readonly property int calendarYearFrom: 1900
-  readonly property int calendarYearTo: 2050
+  property alias hours: hoursTumbler.currentIndex
+  property alias minutes: minutesTumbler.currentIndex
+  property alias seconds: secondsTumbler.currentIndex
+  property bool showSeconds: false
 
   Rectangle {
     width: parent.width
@@ -34,7 +32,7 @@ Item {
     radius: 20 * __dp
 
     layer.enabled: true
-    layer.effect: MMShadow {
+    layer.effect: MMComponents.MMShadow {
       radius: 20 * __dp
     }
 
@@ -64,33 +62,19 @@ Item {
     anchors.horizontalCenter: parent.horizontalCenter
 
     MMTumbler {
-      id: monthsTumbler
-
-      model: root.monthList()
-      currentIndex: root.initMonthIndex
-      width: 120 * __dp
-      onCurrentIndexChanged: root.monthIndexChanged(currentIndex)
+      id: hoursTumbler
+      model: 24
     }
 
     MMTumbler {
-      id: yearsTumble
-
-      model: root.yearList()
-      currentIndex: root.initYear - root.calendarYearFrom
-      onCurrentItemChanged: root.yearChanged(parseInt(currentItem.text))
+      id: minutesTumbler
+      model: 60
     }
-  }
 
-  function monthList() {
-    const monthList = Array(12).keys();
-    const getMonthName = (monthIndex) => Qt.locale().monthName(monthIndex)
-    return Array.from(monthList, getMonthName)
-  }
-
-  function yearList() {
-    var years = []
-    for (var i = root.calendarYearFrom; i <= root.calendarYearTo; ++i)
-      years.push(i)
-    return years
+    MMTumbler {
+      id: secondsTumbler
+      model: 60
+      visible: root.showSeconds
+    }
   }
 }

@@ -219,19 +219,6 @@ static void setEnvironmentQgisPrefixPath()
   qDebug() << "QGIS_PREFIX_PATH: " << QString::fromLocal8Bit( qgetenv( "QGIS_PREFIX_PATH" ) );
 }
 
-
-static void copy_demo_projects( const QString &demoDir, const QString &projectDir )
-{
-  if ( !demoDir.isEmpty() )
-    InputUtils::cpDir( demoDir, projectDir );
-
-  QFile demoFile( projectDir + "/Start here!/qgis-project.qgz" );
-  if ( demoFile.exists() )
-    qDebug() << "DEMO projects initialized";
-  else
-    CoreUtils::log( QStringLiteral( "DEMO" ), QStringLiteral( "The Input has failed to initialize demo projects" ) );
-}
-
 static void init_qgis( const QString &pkgPath )
 {
   QgsApplication::init();
@@ -448,18 +435,14 @@ int main( int argc, char *argv[] )
   }
 
   QString appBundleDir;
-  QString demoDir;
 #ifdef ANDROID
   appBundleDir = dataDir + "/qgis-data";
-  demoDir = "assets:/demo-projects";
 #endif
 #ifdef Q_OS_IOS
   appBundleDir = QCoreApplication::applicationDirPath() + "/qgis-data";
-  demoDir = QCoreApplication::applicationDirPath() + "/demo-projects";
 #endif
 #ifdef Q_OS_WIN32
   appBundleDir = QCoreApplication::applicationDirPath() + "\\qgis-data";
-  //TODO win32 package demo projects
 #endif
 #ifdef Q_OS_LINUX
   appBundleDir = dataDir;
@@ -476,13 +459,6 @@ int main( int argc, char *argv[] )
 
   // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
   AppSettings as;
-
-  // copy demo projects when the app is launched for the first time
-  if ( !as.demoProjectsCopied() )
-  {
-    copy_demo_projects( demoDir, projectDir );
-    as.setDemoProjectsCopied( true );
-  }
 
   // there seem to be issues with HTTP/2 server support (QTBUG-111417)
   // so let's stick to HTTP/1 for the time being (Qt5 has HTTP/2 disabled by default)
