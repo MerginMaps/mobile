@@ -92,7 +92,6 @@ set(MM_QML
     form/MMFormController.qml
     form/MMPreviewDrawer.qml
     form/components/MMFormTabBar.qml
-    form/components/MMPreviewActionButton.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormGalleryEditor.qml
     form/editors/MMFormNumberEditor.qml

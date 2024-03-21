@@ -20,7 +20,6 @@ Item {
    */
 
   property var project
-  property real previewHeight
 
   property int activeFormIndex: formsStack.depth - 1
 
@@ -30,25 +29,23 @@ Item {
     if ( root.activeFormIndex < 0 || root.activeFormIndex >= formsStack.depth )
       return 0;
 
-    let highestOpened = "none"
+    let maxHeight = 0
 
     for ( let i = 0; i <= root.activeFormIndex; i++ ) {
       let form = formsStack.get( i )
       if ( form ) {
         if ( form.panelState === "form" ) {
-          return root.height
+          return root.height // form is the heighest always
         }
         else if ( form.panelState === "preview" ) {
-          highestOpened = "preview"
+          if ( form.drawerHeight > maxHeight ) {
+            maxHeight = form.drawerHeight
+          }
         }
       }
     }
 
-    if ( highestOpened === "preview" ) {
-      return root.previewHeight
-    }
-
-    return 0;
+    return maxHeight;
   }
 
   signal closed()
@@ -279,8 +276,6 @@ Item {
       id: wrapper
 
       project: root.project
-
-      previewHeight: root.previewHeight
 
       onClosed: {
         if ( panelState !== "hidden" ) {

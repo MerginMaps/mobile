@@ -164,7 +164,7 @@ Button {
   enabled: !disabled
 
   implicitHeight: root.type === MMButton.Types.Tertiary ? buttonContent.height : buttonContent.height + topPadding + bottomPadding
-  implicitWidth: row.paintedChildrenWidth + 2 * __style.margin32
+  implicitWidth: row.paintedChildrenWidth + 2 * __style.margin20
 
   topPadding: root.type === MMButton.Types.Tertiary ? 0 : 11 * __dp
   bottomPadding: root.type === MMButton.Types.Tertiary ? 0 : 11 * __dp
@@ -180,7 +180,7 @@ Button {
       id: row
 
       property real paintedChildrenWidth: buttonIconLeft.paintedWidth + buttonContent.implicitWidth + buttonIconRight.paintedWidth + spacing
-      property real maxWidth: parent.width - 2 * __style.margin32
+      property real maxWidth: parent.width - 2 * __style.margin20
 
       x: ( parent.width - width ) / 2
 

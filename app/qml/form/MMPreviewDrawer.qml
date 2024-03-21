@@ -13,8 +13,9 @@ import QtQuick.Controls
 
 import mm 1.0 as MM
 
-import "../components" as Components
-import "./components" as FormComponents
+import "../components" as MMComponents
+
+// Content of the preview drawer defined in MMFormController.qml
 
 Item {
   id: root
@@ -22,9 +23,13 @@ Item {
   property bool layerIsReadOnly: false
   property MM.AttributePreviewController controller
 
+  // binding to ApplicationWindow.window?.xyz can not be in QtObject, it will not get recalculated on change!
+  property bool windowHasEnoughHeightToShowContent: ApplicationWindow.window?.height > __style.heightBreakpointXS
+
   signal contentClicked()
   signal editClicked()
   signal stakeoutClicked( var feature )
+  signal closeClicked()
 
   MouseArea {
     anchors.fill: parent
@@ -34,37 +39,94 @@ Item {
     }
   }
 
-  // TODO: this needs to be revisited, the layout does not work very well
+  implicitHeight: contentLayout.height + contentLayout.topPadding
 
   Item {
-    x: parent.width / 2 - width / 2
-    width: parent.width > __style.maxPageWidth ? __style.maxPageWidth : parent.width
-    height: parent.height
+    id: contentLayout
 
-    ColumnLayout {
-      id: layout
+    property real minPaddingAroundContent: 2 * __style.pageMargins + __style.safeAreaLeft + __style.safeAreaRight
+    property real minRightPadding: __style.pageMargins + __style.safeAreaRight
+    property real topPadding: __style.pageMargins
+    property real rightMaxPagePadding: {
+      if ( parent.width > __style.maxPageWidth + minPaddingAroundContent ) {
+        return ( parent.width - minPaddingAroundContent - __style.maxPageWidth ) / 2
+      }
+      else {
+        return 0
+      }
+    }
 
-      anchors {
-        fill: parent
-        leftMargin: __style.pageMargins
-        topMargin: __style.pageMargins
-        rightMargin: __style.pageMargins
-        bottomMargin: __style.pageMargins
+    property real leftPadding: {
+      if ( parent.width > __style.maxPageWidth + minPaddingAroundContent ) {
+        return ( parent.width - minPaddingAroundContent - __style.maxPageWidth ) / 2  + __style.pageMargins + __style.safeAreaLeft
+      }
+      else {
+        return __style.pageMargins + __style.safeAreaLeft
+      }
+    }
+
+    width: parent.width - leftPadding - minRightPadding
+    height: contentRoot.implicitHeight
+    x: leftPadding
+    y: topPadding
+
+    Column {
+      id: contentRoot
+
+      width: parent.width
+      spacing: 0
+
+      // header
+      RowLayout {
+        width: parent.width
+        spacing: 0
+
+        MMComponents.MMText {
+          id: featureTitleText
+
+          Layout.fillWidth: true
+          Layout.maximumWidth: __style.maxPageWidth
+          Layout.preferredHeight: implicitHeight
+
+          text: root.controller.title
+
+          font: __style.t1
+          color: __style.forestColor
+
+          wrapMode: Text.Wrap
+          maximumLineCount: 2
+        }
+
+        Item {
+          Layout.fillWidth: true
+          Layout.minimumWidth: __style.margin16
+          height: 1
+        }
+
+        MMComponents.MMRoundButton {
+          id: closeBtn
+
+          iconSource: __style.closeIcon
+          bgndColor: __style.lightGreenColor
+
+          onClicked: root.closeClicked()
+        }
       }
 
-      spacing: 20 * __dp
+      // photo
+      MMComponents.MMListSpacer { height: __style.margin20; visible: internal.showPhoto }
 
       Item {
-        id: photoContainer
+        height: visible ? 160 * __dp : 0
+        width: parent.width - contentLayout.rightMaxPagePadding
 
-        Layout.fillWidth: true
-        Layout.preferredHeight: 160 * __dp
+        visible: internal.showPhoto
 
-        visible: root.controller.type === MM.AttributePreviewController.Photo
-
-        Components.MMPhoto {
+        MMComponents.MMPhoto {
           width: parent.width
           height: parent.height
+
+          visible: internal.showPhoto
 
           photoUrl: root.controller.photo
 
@@ -72,56 +134,71 @@ Item {
         }
       }
 
-      Text {
-        Layout.fillWidth: true
-        Layout.preferredHeight: paintedHeight
-
-        text: root.controller.title
-
-        font: __style.t1
-        color: __style.forestColor
-
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
-
-        maximumLineCount: 2
-        elide: Text.ElideRight
-        wrapMode: Text.WordWrap
-      }
-
-      Text {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-
-        text: controller.html
-        visible: root.controller.type === MM.AttributePreviewController.HTML
-
-        clip: true
-      }
-
-      Text {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-
-        text: qsTr("No map tip available.")
-        visible: root.controller.type === MM.AttributePreviewController.Empty
-
-        font: __style.p6
-        color: __style.nightColor
-      }
+      // buttons
+      MMComponents.MMListSpacer { height: __style.margin20; visible: internal.showButtons }
 
       Item {
-        id:  fieldsContainer
+        width: parent.width - contentLayout.rightMaxPagePadding
+        height: childrenRect.height
 
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        visible: internal.showButtons
 
-        visible: root.controller.type === MM.AttributePreviewController.Fields
+        ScrollView {
+          width: parent.width
+          height: scrollRow.height
+
+          ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+          ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+
+          contentHeight: availableHeight
+          contentWidth: scrollRow.width > parent.width ? scrollRow.width : availableWidth
+
+          Row {
+            id: scrollRow
+
+            height: stakeOutButton.height
+            spacing: 12 * __dp
+
+            MMComponents.MMButton {
+              id: editButton
+
+              text: qsTr( "Edit" )
+              iconSourceLeft: __style.editIcon
+
+              visible: internal.showEditButton
+
+              onClicked: root.editClicked()
+            }
+
+            MMComponents.MMButton {
+              id: stakeOutButton
+
+              text: qsTr( "Stake out" )
+              iconSourceLeft: __style.gpsAntennaHeightIcon
+              type: MMComponents.MMButton.Secondary
+
+              visible: internal.showStakeoutButton
+
+              onClicked: root.stakeoutClicked( controller.featureLayerPair )
+            }
+          }
+        }
+      }
+
+      // fields
+      MMComponents.MMListSpacer { height: __style.margin20; visible: internal.showFields }
+
+      Item {
+        width: parent.width - contentLayout.rightMaxPagePadding
+        height: childrenRect.height
+
+        visible: internal.showFields
 
         ListView {
-          anchors.fill: parent
+          width: parent.width
+          height: contentHeight
 
-          spacing: 20 * __dp
+          spacing: __style.margin8
           interactive: false
 
           model: root.controller.fieldModel
@@ -134,7 +211,7 @@ Item {
               width: parent.width
               spacing: 0
 
-              Text {
+              MMComponents.MMText {
                 width: parent.width
 
                 text: model.Name
@@ -145,64 +222,66 @@ Item {
                 wrapMode: Text.NoWrap
               }
 
-              Text {
+              MMComponents.MMText {
                 width: parent.width
 
                 text: model.Value
-                font: __style.p5
+                font: __style.t3
                 color: __style.nightColor
 
                 elide: Text.ElideRight
                 wrapMode: Text.NoWrap
               }
+
+              MMComponents.MMListSpacer { height: __style.margin8 }
+
+              MMComponents.MMLine { visible: model.index !== root.controller.fieldModel.rowCount() - 1 }
             }
           }
         }
       }
 
+      // HTML
+      MMComponents.MMListSpacer { height: __style.margin20; visible: internal.showHTML }
+
       Item {
-        // Vertical spacer to keep action buttons on the bottom with photo type
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        width: parent.width - contentLayout.rightMaxPagePadding
+        height: childrenRect.height
 
-        visible: root.controller.type === MM.AttributePreviewController.Photo
-      }
+        visible: internal.showHTML
 
-      ScrollView {
+        Text {
+          width: parent.width
+          height: 200 * __dp
 
-        Layout.fillWidth: true
-        Layout.preferredHeight: 40 * __dp
+          clip: true
+          textFormat: Text.RichText
 
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-        ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+          wrapMode: Text.Wrap
 
-        Row {
-          height: parent.height
-          spacing: 12 * __dp
-
-          FormComponents.MMPreviewActionButton {
-            height: parent.height
-
-            visible: !root.layerIsReadOnly
-
-            buttonText: qsTr( "Edit" )
-            iconSource: __style.editIcon
-
-            onClicked: root.editClicked()
-          }
-
-          FormComponents.MMPreviewActionButton {
-            height: parent.height
-
-            visible: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
-
-            buttonText: qsTr( "Stake out" )
-            iconSource: __style.stakeOutIcon
-
-            onClicked: root.stakeoutClicked( controller.featureLayerPair )
-          }
+          elide: Text.ElideRight
+          text: root.controller.html
         }
       }
+
+      MMComponents.MMListFooterSpacer { height: __style.safeAreaBottom + __style.margin20 }
     }
+  }
+
+  QtObject {
+    id: internal
+
+    property bool isPhotoType: root.controller.type === MM.AttributePreviewController.Photo
+    property bool isFieldsType: root.controller.type === MM.AttributePreviewController.Fields
+    property bool isHTMLType: root.controller.type === MM.AttributePreviewController.HTML
+    property bool isEmptyType: root.controller.type === MM.AttributePreviewController.Empty
+
+    property bool showEditButton: !root.layerIsReadOnly
+    property bool showStakeoutButton: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
+    property bool showButtons: showEditButton || showStakeoutButton
+
+    property bool showPhoto: isPhotoType && windowHasEnoughHeightToShowContent
+    property bool showFields: isFieldsType && windowHasEnoughHeightToShowContent
+    property bool showHTML: isHTMLType && windowHasEnoughHeightToShowContent
   }
 }
