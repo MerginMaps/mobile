@@ -79,6 +79,8 @@ MMDrawer {
     ]
   }
 
+  dropShadow: true
+
   onClosed: root.endStakeout()
 
   drawerHeader.title: qsTr("Stake out")
