@@ -136,10 +136,10 @@
         <file>../app/qml/settings/MMChangelogPage.qml</file>
         <file>../app/qml/settings/MMSettingsPage.qml</file>
         <file>../app/qml/settings/components/MMChangelogEntryDelegate.qml</file>
-        <file>../app/qml/settings/components/MMSettingItem.qml</file>
-        <file>../app/qml/settings/components/MMSettingInput.qml</file>
-        <file>../app/qml/settings/components/MMSettingDropdown.qml</file>
-        <file>../app/qml/settings/components/MMSettingSwitch.qml</file>
+        <file>../app/qml/settings/components/MMSettingsItem.qml</file>
+        <file>../app/qml/settings/components/MMSettingsInput.qml</file>
+        <file>../app/qml/settings/components/MMSettingsDropdown.qml</file>
+        <file>../app/qml/settings/components/MMSettingsSwitch.qml</file>
         <file>../app/qml/gps/MMBluetoothConnectionDrawer.qml</file>
         <file>../app/qml/dialogs/MMSyncFailedDialog.qml</file>
         <file>../app/qml/dialogs/MMNoPermissionsDialog.qml</file>

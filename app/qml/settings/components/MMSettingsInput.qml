@@ -13,34 +13,40 @@ import QtQuick.Controls
 import "../../inputs"
 import "../../components"
 
-MMSettingItem {
+MMSettingsItem {
   id: root
 
   property string valueDescription
-  property bool multiSelect: false
-  property var model
-  property var selected
 
   onClicked: {
-    if(root.model?.count > 0) {
-      dropdownDrawer.visible = true
-    }
+    inputDrawer.value = root.value
+    inputDrawer.visible = true
   }
 
-  MMDropdownDrawer {
-    id: dropdownDrawer
+  MMDrawerDialog {
+    id: inputDrawer
 
-    focus: true
-    model: root.model
-    title: root.valueDescription
-    multiSelect: root.multiSelect
-    selectedFeatures: root.selected
-    withSearchbar: false
-    valueRole: "value"
-    textRole: "text"
+    property string value
 
-    onSelectionFinished: function ( selectedFeatures ) {
-      root.valueWasChanged( selectedFeatures )
+    signal clicked ( string newValue )
+
+    width: ApplicationWindow.window.width
+    title: root.title
+    primaryButton: qsTr("Confirm")
+    visible: false
+    specialComponent: MMTextInput {
+      width: inputDrawer.width - 40 * __dp
+      title: root.valueDescription
+      bgColor: __style.lightGreenColor
+      text: inputDrawer.value
+      focus: true
+
+      onTextChanged: inputDrawer.value = text
+    }
+
+    onPrimaryButtonClicked: {
+      visible = false
+      root.valueWasChanged(inputDrawer.value)
     }
   }
 }
