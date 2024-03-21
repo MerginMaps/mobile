@@ -180,20 +180,16 @@ Page {
 
     visible: !root.layerIsReadOnly
 
-    maxButtonsInToolbar: 3
-
     ObjectModel {
       id: readStateButtons
 
-      MMComponents.MMToolbarLongButton {
+      MMComponents.MMToolbarButton {
         text: qsTr( "Edit feature" );
 
         iconSource: __style.editCircleIcon
         iconColor: __style.forestColor
 
-        onClicked: {
-          root.state = "edit"
-        }
+        onClicked: root.state = "edit"
       }
     }
 

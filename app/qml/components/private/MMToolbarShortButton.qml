@@ -11,57 +11,77 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
+import "../" as MMComponents
+
 Item {
-  id: control
+  id: root
 
   signal clicked
 
-  required property url iconSource
-  required property url selectedIconSource
-  required property string text
+  property int buttonSpacing: 5 * __dp
 
-  property bool checked: false
+  property bool rotating: false
+  property var iconSourceSelected
+  property var iconSource
+  property color iconColor
+  property color iconColorDisabled
+  property string text
+  property bool selected
 
-  height: __style.toolbarHeight
+  onRotatingChanged: {
+    if (rotating)
+      rotateAnimation.start()
+    else
+      rotateAnimation.stop()
+  }
 
-  Rectangle {
+  Item {
     id: container
     width: parent.width - 10 * __dp
     height: parent.height - 10 * __dp
     anchors.centerIn: parent
 
-    clip: true
-    color: __style.transparentColor
-
-    MMIcon {
+    MMComponents.MMIcon {
       id: icon
 
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.top: parent.top
-      anchors.topMargin: (container.height - (icon.height + text.height + 5 * __dp) ) / 2
+      anchors.topMargin: ( container.height - (icon.height + text.height + root.buttonSpacing) ) / 2
 
-      source: control.checked ? control.selectedIconSource : control.iconSource
-      color: control.checked ? __style.polarColor : __style.mediumGreenColor
+      source: root.selected ? root.iconSourceSelected : root.iconSource
+      color: root.enabled ? root.iconColor : root.iconColorDisabled
+    }
+
+    RotationAnimation {
+      id: rotateAnimation
+
+      target: icon
+
+      from: 0
+      to: 720
+      duration: 1000
+
+      alwaysRunToEnd: true
+      loops: Animation.Infinite
+      easing.type: Easing.InOutSine
     }
 
     Text {
       id: text
 
-      width: parent.width
+      text: root.text
+      color: root.enabled ? root.iconColor : root.iconColorDisabled
+      font: __style.t4
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.top: icon.bottom
-      anchors.topMargin: 5 * __dp
-
-      text: control.text
-      color: icon.color
-      font: __style.t4
+      anchors.topMargin: root.buttonSpacing
       horizontalAlignment: Text.AlignHCenter
       elide: Text.ElideMiddle
     }
 
     MouseArea {
       anchors.fill: parent
-      onClicked: control.clicked()
+      onClicked: root.clicked()
     }
   }
 }

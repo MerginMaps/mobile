@@ -11,17 +11,17 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
+import "../" as MMComponents
+
 Item {
   id: root
 
   signal clicked
 
-  required property var iconSource
-  property color iconColor: __style.polarColor
-
-  required property string text
-
-  height: __style.toolbarHeight
+  property var iconSource
+  property color iconColor
+  property color iconColorDisabled
+  property string text
 
   Button {
     id: button
@@ -44,11 +44,11 @@ Item {
         height: parent.height
         anchors.centerIn: parent
 
-        MMIcon {
+        MMComponents.MMIcon {
           id: icon
 
           source: root.iconSource
-          color: root.iconColor
+          color: root.enabled ? root.iconColor : root.iconColorDisabled
           anchors.verticalCenter: parent.verticalCenter
         }
 
