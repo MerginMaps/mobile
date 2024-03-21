@@ -118,7 +118,7 @@ Item {
             }
           }
 
-          MMSwitch {
+          MMSwitch { // TODO: might need adjustments
             id: visibleSwitch
 
             checked: model.nodeIsVisible === "yes"

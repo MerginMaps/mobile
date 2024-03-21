@@ -18,12 +18,17 @@ Switch {
   property color disabledFgColor: __style.mediumGreenColor
   property color enabledFgColor: __style.forestColor
 
+  topPadding: 0
+  rightPadding: 0
+  bottomPadding: 0
+  leftPadding: 0
+
   contentItem: Text {
     text: root.text
     font: __style.p5
     color: root.enabled ? root.enabledFgColor : root.disabledFgColor
     verticalAlignment: Text.AlignVCenter
-    leftPadding: root.indicator.width + root.spacing
+    leftPadding: root.indicator.width + ( text ? root.spacing : 0 )
   }
 
   indicator: Rectangle {
