@@ -74,14 +74,7 @@ ApplicationWindow {
         map.state = "view"
 
         // Stop/Start sync animation when user goes to map
-        if ( __syncManager.hasPendingSync( __activeProject.projectFullName() ) )
-        {
-          syncInProgressAnimation.start()
-        }
-        else
-        {
-          syncInProgressAnimation.stop()
-        }
+        syncButton.iconRotateAnimationRunning = ( __syncManager.hasPendingSync( __activeProject.projectFullName() ) )
       }
       else if ( stateManager.state === "projects" ) {
         projectController.openPanel()
@@ -283,20 +276,6 @@ ApplicationWindow {
         onClicked: {
           __activeProject.requestSync()
         }
-
-        RotationAnimation {
-          id: syncInProgressAnimation
-
-          target: syncButton.buttonIcon
-
-          from: 0
-          to: 720
-          duration: 1000
-
-          alwaysRunToEnd: true
-          loops: Animation.Infinite
-          easing.type: Easing.InOutSine
-        }
       }
 
       MMToolbarButton {
@@ -352,9 +331,8 @@ ApplicationWindow {
 
         text: qsTr("Position tracking")
         iconSource: __style.positionTrackingIcon
-        menuButtonRightText: map.isTrackingPosition ? "Active" : ""
-
-        visibilityMode: __activeProject.positionTrackingSupported
+        active: map.isTrackingPosition
+        visible: __activeProject.positionTrackingSupported
 
         onClicked: {
           trackingPanelLoader.active = true
@@ -806,7 +784,7 @@ ApplicationWindow {
     {
       if ( projectFullName === __activeProject.projectFullName() )
       {
-        syncInProgressAnimation.start()
+        syncButton.iconRotateAnimationRunning = true
       }
     }
 
@@ -814,7 +792,7 @@ ApplicationWindow {
     {
       if ( projectFullName === __activeProject.projectFullName() )
       {
-        syncInProgressAnimation.stop()
+        syncButton.iconRotateAnimationRunning = false
 
         if ( success )
         {
@@ -838,15 +816,15 @@ ApplicationWindow {
     {
       if ( projectFullName === __activeProject.projectFullName() )
       {
-        if ( errorType === SyncError.NotAMerginProject )
+        if ( errorType === MM.SyncError.NotAMerginProject )
         {
           migrateToMerginDialog.open()
         }
-        else if ( errorType === SyncError.NoPermissions )
+        else if ( errorType === MM.SyncError.NoPermissions )
         {
           noPermissionsDialog.open()
         }
-        else if ( errorType === SyncError.AnotherProcessIsRunning && willRetry )
+        else if ( errorType === MM.SyncError.AnotherProcessIsRunning && willRetry )
         {
           // just banner that we will try again
           __notificationModel.addInfo( qsTr( "Somebody else is syncing, we will try again later" ) )
@@ -993,8 +971,8 @@ ApplicationWindow {
     }
 
     function onPositionTrackingSupportedChanged() {
-      positionTrackingButton.visibilityMode = __activeProject.positionTrackingSupported
-      mapToolbar.setupBottomBar()
+      positionTrackingButton.visible = __activeProject.positionTrackingSupported
+      mapToolbar.recalculate()
     }
   }
 

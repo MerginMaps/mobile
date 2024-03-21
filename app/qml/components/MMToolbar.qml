@@ -9,129 +9,175 @@
 
 import QtQuick
 
-MMBaseToolbar {
+import "./private"
+
+/*
+  MMToolbar is sticky toolbar on bottom of pages that contains few buttons.
+  For buttons that cannot fit to screen, there are in more menu ("...")
+
+  To use, add few instances of MMToolbarButton to model. Width and height of
+  toolbar and buttons is calculated dynamically. If your model contains just
+  one button it is always long button
+*/
+Rectangle {
   id: root
 
-  required property var model
-  readonly property double minimumToolbarButtonWidth: 100 * __dp
-  property int maxButtonsInToolbar: 4
+  /* required */ property var model // ObjectModel containing MMToolbarButton
+  /* optional */ property int index: 0 // index of selected button for selectable toolbar
 
-  signal clicked
+  onIndexChanged: toolbar.currentIndex = index
+  onModelChanged: root.recalculate()
 
-  onModelChanged: root.setupBottomBar()
+  height: __style.toolbarHeight + __style.safeAreaBottom
+  width: window?.width ?? __style.safeAreaLeft + __style.safeAreaRight
+  color: __style.forestColor
 
+  Item {
+    id: contentGroup
 
-  toolbarContent: GridView {
-    id: buttonView
+    height: __style.toolbarHeight
+    width: parent.width - __style.safeAreaLeft - __style.safeAreaRight
 
-    onWidthChanged: root.setupBottomBar()
-    model: visibleButtonModel
-    anchors.fill: parent
-    cellHeight: parent.height
-    interactive: false
+    // center the content
+    x: __style.safeAreaLeft
 
-    Component.onCompleted: root.setupBottomBar()
+    ListView {
+      id: toolbar
+
+      onWidthChanged: root.recalculate()
+      model: toolbarModel
+      delegate: ( model.count === 1 ) && ( menuModel.count === 0 ) ?  longBtnComp : shortBtnComp
+      anchors.fill: parent
+      orientation: ListView.Horizontal
+      interactive: false
+      Component.onCompleted: root.recalculate()
+    }
   }
 
-  // buttons shown inside toolbar
-  ObjectModel {
-    id: visibleButtonModel
+  // buttons shown inside main toolbar
+  ListModel {
+    id: toolbarModel
   }
 
-  // buttons that are not shown inside toolbar, due to small space
-  ObjectModel {
-    id: invisibleButtonModel
+  // buttons that are shown in more menu (drawer)
+  ListModel {
+    id: menuModel
   }
 
-  MMMenuDrawer {
+  // More drawer menu
+  MMListDrawer {
     id: menu
 
-    title: qsTr("More options")
-    model: invisibleButtonModel
-    onClicked: function(button) {
-      menu.visible = false
-      buttonClicked(button)
+    drawerHeader.title: qsTr("More options")
+    listModel: menuModel
+
+    valueRole: "type"
+    textRole: "text"
+    imageRole: "iconSource"
+
+    onClicked: function( btnData ) {
+      menu.close()
+      btnData.clicked()
+    }
+  }
+
+  // Long button delegate
+  Component {
+    id: longBtnComp
+
+    MMToolbarLongButton {
+      width: ListView.view.width / ListView.view.model.count
+      height: ListView.view.height
+
+      enabled: model.btnData.enabled
+      iconSource: model.btnData.iconSource
+      iconColor: model.btnData.iconColor
+      iconColorDisabled: model.btnData.iconColorDisabled
+      text: model.btnData.text
+
+      onClicked: model.btnData.clicked()
+    }
+  }
+
+  // Short button delegate
+  Component {
+    id: shortBtnComp
+
+    MMToolbarShortButton {
+      width: ListView.view.width / ListView.view.model.count
+      height: ListView.view.height
+
+      selected: model.index === ListView.view.currentIndex
+
+      rotating: model.btnData.iconRotateAnimationRunning
+      enabled: model.btnData.enabled
+      iconSourceSelected: model.btnData.iconSourceSelected
+      iconSource: model.btnData.iconSource
+      iconColor: model.btnData.iconColor
+      iconColorDisabled: model.btnData.iconColorDisabled
+      text: model.btnData.text
+
+      onClicked: {
+        root.index = model.index
+        model.btnData.clicked()
+      }
     }
   }
 
   // Button More '...'
-  Component {
-    id: componentMore
+  MMToolbarButton {
+    id: moreButtonData
 
-    MMToolbarButton {
-      text: qsTr("More")
-      iconSource: __style.moreIcon
-      onClicked: menu.visible = true
-    }
-  }
-  Loader { id: buttonMore; sourceComponent: componentMore; visible: false }
-
-  function setupBottomBar() {
-    let buttonModel = root.model
-    let buttonWidth = buttonView.width
-
-    let filteredbuttons = []
-
-    for ( var j = 0; j < buttonModel.count; j++ ) {
-      let btn = buttonModel.get(j)
-      if ( btn.hasOwnProperty('parentMenu') ) btn.parentMenu = menu
-      if ( btn.hasOwnProperty('parentToolbar') ) btn.parentToolbar = root
-      if ( btn.hasOwnProperty('visibilityMode') && !btn.visibilityMode ) {
-        continue
-      }
-      filteredbuttons.push( buttonModel.get(j) )
-    }
-
-    let buttonsCount = filteredbuttons.length
-
-    // add all buttons (max maxButtonsInToolbar) into toolbar
-    visibleButtonModel.clear()
-    if(buttonsCount <= maxButtonsInToolbar || buttonWidth >= buttonsCount*root.minimumToolbarButtonWidth) {
-      buttonView.cellWidth = Math.floor( buttonWidth / buttonsCount)
-      for( var i = 0; i < buttonsCount; i++ ) {
-        let button = filteredbuttons[i]
-        if ( button.hasOwnProperty('isMenuButton') ) button.isMenuButton = false
-        button.width = buttonView.cellWidth
-        visibleButtonModel.append(button)
-      }
-
-    }
-    else {
-      // not all buttons are visible in toolbar due to width
-      // the past of them will apper in the menu inside '...' button
-      var maxVisible = Math.floor( buttonWidth / root.minimumToolbarButtonWidth)
-      if( maxVisible < maxButtonsInToolbar )
-        maxVisible = maxButtonsInToolbar
-
-      for( i = 0; i < maxVisible - 1; i++ ) {
-        if( maxVisible === maxButtonsInToolbar || buttonWidth >= i*root.minimumToolbarButtonWidth) {
-          let button = filteredbuttons[i]
-          if ( button.hasOwnProperty('isMenuButton') ) button.isMenuButton = false
-          button.width = Math.floor(buttonWidth / maxVisible)
-          visibleButtonModel.append(button)
-        }
-      }
-      // add More '...' button
-      let button = buttonMore
-      button.visible = true
-      button.width = maxVisible ? buttonWidth / maxVisible : buttonWidth
-      visibleButtonModel.append( button )
-      buttonView.cellWidth = Math.floor(maxVisible ? buttonWidth / maxVisible : buttonWidth)
-
-      // add all other buttons inside the '...' button
-      invisibleButtonModel.clear()
-      for( i = maxVisible-1; i < buttonsCount; i++ ) {
-        if(i<0)
-          continue
-        let button = filteredbuttons[i]
-        button.isMenuButton = true
-        button.width = Math.floor(buttonWidth)
-        invisibleButtonModel.append(button)
-      }
-    }
+    text: qsTr("More")
+    iconSource: __style.moreIcon
+    onClicked: menu.open()
   }
 
-  function closeMenu() {
-    menu.close()
+  function recalculate() {
+    toolbarModel.clear()
+    menuModel.clear()
+
+    // find how many visible buttons we need to place to toolbar or menu
+    var visibleButtonsCount = 0
+    for ( let i = 0; i < root.model.count; ++i ) {
+      let btnData = root.model.get(i)
+      if (btnData.visible) ++visibleButtonsCount
+    }
+
+    // find how many short buttons we can fit into toolbar and their width
+    var maxButtonsInToolbar = Math.floor( toolbar.width / internal.minimumToolbarButtonWidth )
+    var shouldHaveMoreButtonInToolbar = visibleButtonsCount > maxButtonsInToolbar
+    var numberOfButtonsInToolbar = Math.min(maxButtonsInToolbar, visibleButtonsCount) // including "..." (more button)
+    var numberOfButtonsInToolbarExcludingMoreButton = shouldHaveMoreButtonInToolbar ? numberOfButtonsInToolbar - 1 : numberOfButtonsInToolbar
+
+    // fill models
+    for ( var j = 0; j < root.model.count; ++j ) {
+      var btnData = root.model.get(j)
+
+      if (!btnData.visible) continue
+
+      if (toolbarModel.count < numberOfButtonsInToolbarExcludingMoreButton) {
+        // add to toolbar
+        toolbarModel.append({ btnData: btnData })
+      } else {
+        // add to more menu
+        menuModel.append({ iconSource: btnData.iconSource, text: btnData.text, type: btnData })
+      }
+    }
+
+    // add more button if needed to main toolbar
+    if (shouldHaveMoreButtonInToolbar)
+    {
+      toolbarModel.append({ btnData: moreButtonData })
+    }
+
+    // refrest selected button
+    toolbar.currentIndex = root.index
+  }
+
+  QtObject {
+    id: internal
+
+    property double minimumToolbarButtonWidth: 100 * __dp
   }
 }

@@ -17,7 +17,6 @@ set(MM_QML
     account/MMSwitchWorkspacePage.qml
     account/MMWhichIndustryPage.qml
     components/MMAvatarLettersItem.qml
-    components/MMBaseToolbar.qml
     components/MMButton.qml
     components/MMCheckBox.qml
     components/MMCodeScanner.qml
@@ -49,15 +48,13 @@ set(MM_QML
     components/MMRadioButton.qml
     components/MMRoundButton.qml
     components/MMScrollView.qml
-    components/MMSelectableToolbar.qml
-    components/MMSelectableToolbarButton.qml
     components/MMShadow.qml
     components/MMSwitch.qml
     components/MMText.qml
     components/MMToolbar.qml
     components/MMToolbarButton.qml
-    components/MMToolbarLongButton.qml
-    components/MMToolbarMenuButton.qml
+    components/private/MMToolbarLongButton.qml
+    components/private/MMToolbarShortButton.qml
     dialogs/MMCloseAccountDialog.qml
     dialogs/MMDownloadProjectDialog.qml
     dialogs/MMMigrateToMerginDialog.qml

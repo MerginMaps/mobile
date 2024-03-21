@@ -285,7 +285,7 @@ Page {
     }
   }
 
-  footer:  MMSelectableToolbar {
+  footer:  MMToolbar {
     id: selectableToolbar
 
     visible: featureButton.visible && layerInfoButton.visible
@@ -295,16 +295,14 @@ Page {
     }
 
     model: ObjectModel {
-      MMSelectableToolbarButton {
+      MMToolbarButton {
         id: featureButton
 
         visible: layerDetailData.isVectorLayer
 
-        width: Math.floor((root.width - 40 * __dp) / 2)
         text: qsTr( "Features" )
         iconSource: __style.featuresIcon
-        selectedIconSource: __style.featuresFilledIcon
-        checked: selectableToolbar.index === 0
+        iconSourceSelected: __style.featuresFilledIcon
         onClicked: {
           if ( layerDetailData.isVectorLayer ) {
             selectableToolbar.index = 0
@@ -312,16 +310,14 @@ Page {
           }
         }
       }
-      MMSelectableToolbarButton {
+      MMToolbarButton {
         id: layerInfoButton
 
         visible: !layerDetailData.isVectorLayer || layerDetailData.isSpatial
 
-        width: Math.floor((root.width - 40 * __dp) / 2)
         text: qsTr( "Layer info" )
         iconSource: __style.infoIcon
-        selectedIconSource: __style.infoFilledIcon
-        checked: selectableToolbar.index === 1
+        iconSourceSelected: __style.infoFilledIcon
         onClicked: {
           if ( layerDetailData.isVectorLayer ) {
             selectableToolbar.index = 1

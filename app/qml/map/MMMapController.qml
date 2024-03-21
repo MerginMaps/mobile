@@ -740,36 +740,36 @@ Item {
     title: qsTr("More options")
 
     model: ObjectModel {
-      MMToolbarMenuButton {
+      MMButton {
         height: visible ? __style.menuDrawerHeight/2 : 0
         width: window.width
 
         text: qsTr("Split geometry")
-        iconSource: __style.splitGeometryIcon
+        // iconSource: __style.splitGeometryIcon
         visible: !internal.isPointLayer && !root.isStreaming
 
         onClicked: root.toggleSplitting()
       }
 
-      MMToolbarMenuButton {
+      MMButton {
         height: __style.menuDrawerHeight/2
         width: window.width
 
         visible: !root.isStreaming
         text: qsTr("Redraw geometry")
-        iconSource: __style.redrawGeometryIcon
+        // iconSource: __style.redrawGeometryIcon
 
         onClicked: root.toggleRedraw()
       }
 
-      MMToolbarMenuButton {
+      MMButton {
         height: visible ? __style.menuDrawerHeight/2 : 0
         width: window.width
 
         text: qsTr("Streaming mode")
-        iconSource: __style.streamingIcon
+        // iconSource: __style.streamingIcon
         visible: !internal.isPointLayer
-        rightText: root.isStreaming ? qsTr("active") : ""
+        // rightText: root.isStreaming ? qsTr("active") : ""
 
         onClicked: root.openStreamingPanel()
       }

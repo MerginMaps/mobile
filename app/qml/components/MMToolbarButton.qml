@@ -11,82 +11,27 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-Item {
+/**
+  MMToolbarButton is button to use MMToolbar.
+  Buttons can be
+   - selectable (when using for switching tabs); to select the button, use MMToolbar.index property
+   - enabled/disabled (button not clickable and shaded)
+   - active/not active (text "active" on right of the more menu)
+   - visible/invisible
+*/
+QtObject {
   id: root
 
   signal clicked
 
-  required property var iconSource
-  property color iconColor: __style.polarColor
-  property color disabledIconColor: __style.mediumGreenColor
-  required property string text
-  property string menuButtonRightText: ""
+  /* required */ property var iconSource // The icon to be used in main toolbar for button
+  /* required */ property string text // Text of the button in main toolbar and drawer menu
 
-  property var parentMenu // drawer to close
-  property var parentToolbar
-  property bool isMenuButton: false
-  property bool visibilityMode: true // set instead of "visibility" to show/hide from MMToolbar
-
-  property alias buttonIcon: icon
-  property int buttonSpacing: 5 * __dp
-
-  onVisibilityModeChanged: if (root.parentToolbar !== undefined) root.parentToolbar.setupBottomBar()
-
-  height: isMenuButton ? __style.menuDrawerHeight/2 : __style.toolbarHeight
-
-  // Toolbar button
-  Item {
-    id: container
-    width: parent.width - 10 * __dp
-    height: parent.height - 10 * __dp
-    anchors.centerIn: parent
-    visible: !root.isMenuButton
-
-    MMIcon {
-      id: icon
-
-      anchors.horizontalCenter: parent.horizontalCenter
-      anchors.top: parent.top
-      anchors.topMargin: ( container.height - (icon.height + text.height + root.buttonSpacing) ) / 2
-
-      source: root.iconSource
-      color: root.enabled ? root.iconColor : root.disabledIconColor
-    }
-
-    Text {
-      id: text
-
-      text: root.text
-      color: root.enabled ? root.iconColor : root.disabledIconColor
-      font: __style.t4
-      anchors.horizontalCenter: parent.horizontalCenter
-      anchors.top: icon.bottom
-      anchors.topMargin: root.buttonSpacing
-      horizontalAlignment: Text.AlignHCenter
-      elide: Text.ElideMiddle
-    }
-
-    MouseArea {
-      anchors.fill: parent
-      enabled: !root.isMenuButton && root.enabled
-      onClicked: root.clicked()
-    }
-  }
-
-  // Menu button
-  MMToolbarMenuButton {
-    id: menuButton
-
-    width: root.width
-    height: __style.menuDrawerHeight
-    visible: root.isMenuButton
-    enabled: root.enabled
-    iconSource: root.iconSource
-    text: root.text
-    rightText: root.menuButtonRightText
-    onClicked: {
-      parentMenu.close()
-      root.clicked()
-    }
-  }
+  /* optional */ property color iconColor: __style.polarColor // Color of icon/text in enabled state
+  /* optional */ property color iconColorDisabled: __style.mediumGreenColor // Color of icon/text when button is disabled
+  /* optional */ property var iconSourceSelected: root.iconSource // The icon to be used in main toolbar when button is selected
+  /* optional */ property bool visible: true // Set when you want to show/hide button based on caller state or condition
+  /* optional */ property bool active: false // Set when the button is active (e.g. position tracking)
+  /* optional */ property bool enabled: true
+  /* optional */ property bool iconRotateAnimationRunning: false // When true, rotate the icon indifinetely
 }

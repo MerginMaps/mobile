@@ -16,7 +16,7 @@ import "../../app/qml/"
 Page {
   id: pane
 
-  property real offset: __style.toolbarHeight + __style.safeAreaBottom + 40
+  property real offset: __style.toolbarHeight + __style.safeAreaBottom + 70
 
   Rectangle {
     anchors.fill: parent
@@ -25,12 +25,14 @@ Page {
 
   Label {
     id: safeAreaLabel
+    x: __style.safeAreaLeft
     y: 20
     text: "safe bottom area: " + __style.safeAreaBottom
   }
 
   CheckBox {
     y: 35
+    x: __style.safeAreaLeft
     checked: true
     text: "use safe bottom area"
 
@@ -43,70 +45,47 @@ Page {
   }
 
   Label {
-    y: pane.offset  - 20
-    text: "MMSelectableToolbar"
+    x: __style.safeAreaLeft
+    y: 60
+    text: "MMToolbar"
+    font.pixelSize: 40
   }
 
-  MMSelectableToolbar {
+  MMToolbar {
     id: selectableToolbar
 
     y: pane.offset
 
-    Component.onCompleted: index = 1
+    Component.onCompleted: index = 2
 
     model: ObjectModel {
-      MMSelectableToolbarButton {
-        width: Math.floor((pane.width - 40 * __dp) / 3)
+      MMToolbarButton {
         text: "Home"
         iconSource: __style.homeIcon
-        selectedIconSource: __style.homeFilledIcon
-        checked: selectableToolbar.index === 0
-        onClicked: {
-          selectableToolbar.index = 0
-          console.log("tapped "+text)
-        }
+        iconSourceSelected: __style.homeFilledIcon
+        onClicked: console.log("tapped "+text)
       }
-      MMSelectableToolbarButton {
-        width: Math.floor((pane.width - 40 * __dp) / 3)
+      MMToolbarButton {
         text: "Projects"
         iconSource: __style.projectsIcon
-        selectedIconSource: __style.projectsFilledIcon
-        checked: selectableToolbar.index === 1
-        onClicked: {
-          selectableToolbar.index = 1
-          console.log("tapped "+text)
-        }
+        iconSourceSelected: __style.projectsFilledIcon
+        onClicked: console.log("tapped "+text)
       }
-      MMSelectableToolbarButton {
-        width: Math.floor((pane.width - 40 * __dp) / 3)
+      MMToolbarButton {
         text: "Explore"
         iconSource: __style.globalIcon
-        selectedIconSource: __style.globalFilledIcon
-        checked: selectableToolbar.index === 2
-        onClicked: {
-          selectableToolbar.index = 2
-          console.log("tapped "+text)
-        }
+        iconSourceSelected: __style.globalFilledIcon
+        onClicked: console.log("tapped "+text)
       }
     }
-  }
-
-  Label {
-    y: 2 * pane.offset  - 20
-    text: "MMToolbar"
   }
 
   MMToolbar {
     y: 2 * pane.offset
 
     model: ObjectModel {
-      MMToolbarLongButton { text: "Long button"; iconSource: __style.editCircleIcon; iconColor: __style.forestColor; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "Long button"; iconSource: __style.editCircleIcon; iconColor: __style.forestColor; onClicked: console.log("tapped "+text) }
     }
-  }
-
-  Label {
-    y: 3 * pane.offset  - 20
-    text: "MMToolbar"
   }
 
   MMToolbar {
@@ -114,14 +93,17 @@ Page {
     y: 3 * pane.offset
 
     model: ObjectModel {
-      MMToolbarButton { text: "Sync"; iconSource: __style.syncIcon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton {
+        text: "Sync"
+        iconSource: __style.syncIcon
+        iconRotateAnimationRunning: true
+        onClicked: {
+          iconRotateAnimationRunning = !iconRotateAnimationRunning
+          console.log("tapped "+text)
+        }
+      }
       MMToolbarButton { text: "Layers"; iconSource: __style.layersIcon; onClicked: console.log("tapped "+text) }
     }
-  }
-
-  Label {
-    y: 4 * pane.offset  - 20
-    text: "MMToolbar"
   }
 
   MMToolbar {
@@ -129,30 +111,26 @@ Page {
     y: 4 * pane.offset
 
     model: ObjectModel {
-      MMToolbarButton { text: "1/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
-      MMToolbarButton { text: "2/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text); enabled: false }
-      MMToolbarButton { text: "3/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
-      MMToolbarButton { text: "4/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
-      MMToolbarButton { text: "5/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text); visibilityMode: false }
-      MMToolbarButton { text: "6/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text); enabled: false }
-      MMToolbarButton { text: "7/8"; menuButtonRightText: "active"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
-      MMToolbarButton { text: "8/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
-    }
-  }
-
-  Label {
-    y: 5 * pane.offset  - 20
-    text: "MMToolbar"
-  }
-
-  MMToolbar {
-
-    y: 5 * pane.offset
-
-    model: ObjectModel {
       MMToolbarButton { text: "Delete"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "Edit Geometry"; iconSource: __style.editIcon; onClicked: console.log("tapped "+text) }
       MMToolbarButton { text: "Save"; iconSource: __style.doneCircleIcon; onClicked: console.log("tapped "+text) }
+    }
+  }
+
+  MMToolbar {
+    id: mainToolbar
+
+    anchors.bottom: parent.bottom
+
+    model: ObjectModel {
+      MMToolbarButton { text: "1/8"; iconSource: __style.addIcon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "2/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text); enabled: false }
+      MMToolbarButton { text: "3/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "4/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "5/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text); visible: false }
+      MMToolbarButton { text: "6/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text); enabled: false }
+      MMToolbarButton { text: "7/8"; active: true; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
+      MMToolbarButton { text: "8/8"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }
     }
   }
 }

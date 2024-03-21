@@ -137,7 +137,7 @@ MMPage {
     id: toolbar
 
     model: ObjectModel {
-      MMToolbarLongButton {
+      MMToolbarButton {
         text: qsTr("Create project");
         iconSource: __style.doneCircleIcon
         iconColor: toolbar.color

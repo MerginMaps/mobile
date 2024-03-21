@@ -216,7 +216,7 @@ Item {
 
       MMToolbarButton {
         text: qsTr( "Release" )
-        visibilityMode: root.recordingMapTool.state === MM.RecordingMapTool.Grab
+        visible: root.recordingMapTool.state === MM.RecordingMapTool.Grab
         iconSource: __style.addIcon
         onClicked: {
           if ( mapTool.state === MM.RecordingMapTool.Grab ) {
@@ -231,7 +231,7 @@ Item {
       MMToolbarButton {
         text: qsTr( "Add" )
 
-        visibilityMode: root.recordingMapTool.state === MM.RecordingMapTool.View || root.recordingMapTool.state === MM.RecordingMapTool.Record
+        visible: root.recordingMapTool.state === MM.RecordingMapTool.View || root.recordingMapTool.state === MM.RecordingMapTool.Record
         enabled: root.recordingMapTool.recordingType === MM.RecordingMapTool.Manual && root.recordingMapTool.state !== MM.RecordingMapTool.View
 
         iconSource: __style.addIcon
@@ -273,7 +273,7 @@ Item {
     ObjectModel {
       id: pointToolbarButtons
 
-      MMToolbarLongButton {
+      MMToolbarButton {
         text: qsTr( "Record" );
         iconSource: __style.doneCircleIcon;
         iconColor: __style.forestColor
