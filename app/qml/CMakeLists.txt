@@ -17,6 +17,7 @@ set(MM_QML
     account/MMSwitchWorkspacePage.qml
     account/MMWhichIndustryPage.qml
     components/MMAvatarLettersItem.qml
+    components/MMBadge.qml
     components/MMBaseToolbar.qml
     components/MMButton.qml
     components/MMCheckBox.qml

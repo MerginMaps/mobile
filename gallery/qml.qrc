@@ -50,6 +50,7 @@
         <file>../app/qml/components/MMProgressBar.qml</file>
         <file>../app/qml/components/MMShadow.qml</file>
         <file>../app/qml/components/MMToolbarButton.qml</file>
+        <file>../app/qml/components/MMBadge.qml</file>
         <file>../app/qml/components/MMBaseToolbar.qml</file>
         <file>../app/qml/components/MMToolbar.qml</file>
         <file>../app/qml/components/MMMenuDrawer.qml</file>

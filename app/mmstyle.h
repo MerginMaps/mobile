@@ -289,6 +289,7 @@ class MMStyle: public QObject
     Q_PROPERTY( double radius12 READ number12 CONSTANT )
     Q_PROPERTY( double radius20 READ number20 CONSTANT )
     Q_PROPERTY( double radius30 READ number30 CONSTANT )
+    Q_PROPERTY( double radius40 READ number40 CONSTANT )
     Q_PROPERTY( double scrollVelocityAndroid READ scrollVelocityAndroid CONSTANT ) // [px/s] scrolling on Android devices is too slow by default
 
     // Breakpoint we use in some screens to differentiate mobile landscape
