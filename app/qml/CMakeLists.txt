@@ -84,15 +84,6 @@ set(MM_QML
     form/MMFormController.qml
     form/MMPreviewDrawer.qml
     form/components/MMFormTabBar.qml
-    form/components/MMPreviewActionButton.qml
-    form/components/MMCalendarDrawer.qml
-    form/components/calendar/MMTumbler.qml
-    form/components/calendar/MMAmPmSwitch.qml
-    form/components/calendar/MMDateTimePicker.qml
-    form/components/calendar/MMDateTumbler.qml
-    form/components/calendar/MMDayOfWeekRow.qml
-    form/components/calendar/MMMonthGrid.qml
-    form/components/calendar/MMTimeTumbler.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormGalleryEditor.qml
     form/editors/MMFormNumberEditor.qml

@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import "../components" as MMComponents
+
 import mm 1.0 as MM
 
 // Wraps preview panel and feature form
@@ -31,10 +33,9 @@ Item {
   property alias formState: featureForm.state // add, edit or ReadOnly
   property alias panelState: statesManager.state
 
-  property real previewHeight
-  property real panelHeight
-
   property bool layerIsReadOnly: featureLayerPair?.layer?.readOnly ?? false
+
+  property real drawerHeight: drawer.height
 
   signal closed()
   signal editGeometry( var pair )
@@ -60,7 +61,7 @@ Item {
       states: [
         State {
           name: "preview"
-          PropertyChanges { target: drawer; height: root.previewHeight }
+          PropertyChanges { target: drawer; height: previewPanel.implicitHeight }
           PropertyChanges { target: drawer; interactive: true }
           PropertyChanges { target: featureForm; visible: false }
           PropertyChanges { target: previewPanel; visible: true }
@@ -108,18 +109,8 @@ Item {
       color: __style.polarColor
       radius: 20 * __dp
 
-      Rectangle {
-        width: parent.width / 10
-        height: 4 * __dp
-
-        anchors.top: parent.top
-        anchors.topMargin: 8 * __dp
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        radius: 20 * __dp
-
-        color: __style.lightGreenColor
-      }
+      layer.enabled: true
+      layer.effect: MMComponents.MMShadow {}
 
       Rectangle {
         color: __style.polarColor
@@ -148,7 +139,6 @@ Item {
       layerIsReadOnly: root.layerIsReadOnly
       controller: MM.AttributePreviewController { project: root.project; featureLayerPair: root.featureLayerPair }
 
-      height: root.previewHeight
       width: root.width
 
       onStakeoutClicked: function( feature ) {
@@ -161,6 +151,8 @@ Item {
         root.panelState = "form"
         featureForm.state = "edit"
       }
+
+      onCloseClicked: drawer.close()
     }
 
     MMFormPage {
@@ -184,8 +176,8 @@ Item {
 
       layerIsReadOnly: root.layerIsReadOnly
 
-      onSaved: root.panelState = "closed"
-      onCanceled: root.panelState = "closed"
+      onSaved: drawer.close()
+      onCanceled: drawer.close()
 
       onEditGeometryRequested: function( pair ) {
         root.panelState = "hidden"

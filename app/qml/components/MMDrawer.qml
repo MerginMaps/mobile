@@ -13,7 +13,7 @@ import QtQuick.Controls
 Drawer {
   id: root
 
-  property bool hasHandle: false
+  property bool dropShadow: false
 
   property alias drawerHeader: mmDrawerHeader
   property alias drawerContent: contentGroup.children
@@ -38,20 +38,9 @@ Drawer {
     color: __style.polarColor
     radius: __style.radius20
 
-    Rectangle {
-      width: parent.width / 10
-      height: 4 * __dp
 
-      anchors.top: parent.top
-      anchors.topMargin: 8 * __dp
-      anchors.horizontalCenter: parent.horizontalCenter
-
-      visible: root.hasHandle
-
-      radius: __style.radius20
-
-      color: __style.lightGreenColor
-    }
+    layer.enabled: root.dropShadow ? true : false
+    layer.effect: MMShadow {}
 
     Rectangle {
       color: __style.polarColor

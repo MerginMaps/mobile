@@ -292,7 +292,7 @@ class MMStyle: public QObject
     Q_PROPERTY( double scrollVelocityAndroid READ scrollVelocityAndroid CONSTANT ) // [px/s] scrolling on Android devices is too slow by default
 
     // Breakpoint we use in some screens to differentiate mobile landscape
-    Q_PROPERTY( double heightBreakpointXS READ heightBreakpointXS CONSTANT )
+    Q_PROPERTY( double heightBreakpointXS READ number400 CONSTANT )
 
   public:
     explicit MMStyle( QObject *parent,  qreal dp )
@@ -657,11 +657,11 @@ class MMStyle: public QObject
     double number148() {return 148 * mDp;}
     double number149() {return 149 * mDp;}
     double number150() {return 150 * mDp;}
+    double number250() {return 250 * mDp;}
+    double number400() {return 400 * mDp;}
     double number720() {return 720 * mDp;}
 
     double scrollVelocityAndroid() { return 10000; }
-
-    double heightBreakpointXS() { return 250; }
 
     void setSafeAreaTop( double newSafeAreaTop )
     {
