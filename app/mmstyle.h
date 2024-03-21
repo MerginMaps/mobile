@@ -275,6 +275,7 @@ class MMStyle: public QObject
     Q_PROPERTY( double maxPageWidth READ number720 CONSTANT ) // maximum page width (desktop, tablets, landscape)
 
     // Other
+    Q_PROPERTY( double row1 READ number1 CONSTANT )
     Q_PROPERTY( double row24 READ number24 CONSTANT )
     Q_PROPERTY( double row36 READ number36 CONSTANT )
     Q_PROPERTY( double row40 READ number40 CONSTANT )
@@ -508,8 +509,8 @@ class MMStyle: public QObject
     double safeAreaLeft() const { return mSafeAreaLeft; };
 
     //Numbers from 1 to 150 and number 720
-    double number1() {return 1 * mDp;}
-    double number2() {return 2 * mDp;}
+    double number1() {return qMax<double>( 1 * mDp, 1 ); } // make sure these sizes are visible if mDP < 1
+    double number2() {return qMax<double>( 2 * mDp, 1 ); } // make sure these sizes are visible if mDP < 1
     double number3() {return 3 * mDp;}
     double number4() {return 4 * mDp;}
     double number5() {return 5 * mDp;}

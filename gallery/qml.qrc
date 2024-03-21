@@ -56,6 +56,7 @@
         <file>../app/qml/components/MMMenuDrawer.qml</file>
         <file>../app/qml/components/MMToolbarMenuButton.qml</file>
         <file>../app/qml/components/MMToolbarLongButton.qml</file>
+        <file>../app/qml/components/MMListDelegate.qml</file>
         <file>../app/qml/components/MMListDrawer.qml</file>
         <file>../app/qml/components/MMListDrawerItem.qml</file>
         <file>../app/qml/components/MMListFooterSpacer.qml</file>
