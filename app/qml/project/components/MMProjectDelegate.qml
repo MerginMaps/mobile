@@ -134,7 +134,7 @@ Control {
             MMText {
               width: parent.width - projectStatusIcon.width - parent.spacing
 
-              text: root.projectDescription
+              text: projectIsInSync ? qsTr( "Synchronising project changes" ) : root.projectDescription
 
               font: __style.p6
               color: root.projectIsOpened ? __style.polarColor : __style.nightColor
