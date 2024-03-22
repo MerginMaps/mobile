@@ -416,7 +416,7 @@ int main( int argc, char *argv[] )
   }
 
   CoreUtils::setLogFilename( projectDir + "/.logs" );
-  CoreUtils::log( QStringLiteral( "Input" ), QStringLiteral( "Application has started: %1 (%2)" ).arg( version ).arg( CoreUtils::appVersionCode() ) );
+  CoreUtils::log( QStringLiteral( "AppState" ), QStringLiteral( "Application has started: %1 (%2)" ).arg( version ).arg( CoreUtils::appVersionCode() ) );
 
   setEnvironmentQgisPrefixPath();
 
@@ -516,12 +516,12 @@ int main( int argc, char *argv[] )
     QDebug logHelper( &msg );
 
     logHelper << QStringLiteral( "Application changed state to:" ) << state;
-    CoreUtils::log( QStringLiteral( "Input" ), msg );
+    CoreUtils::log( QStringLiteral( "AppState" ), msg );
   } );
 
   QObject::connect( &app, &QCoreApplication::aboutToQuit, &lambdaContext, []()
   {
-    CoreUtils::log( QStringLiteral( "Input" ), QStringLiteral( "Application has quit" ) );
+    CoreUtils::log( QStringLiteral( "AppState" ), QStringLiteral( "Application has quit" ) );
   } );
 
   QObject::connect( &help, &InputHelp::submitReportSuccessful, &lambdaContext, [&notificationModel]()
@@ -598,7 +598,7 @@ int main( int argc, char *argv[] )
     // Cleaning default project due to a project loading has crashed during the last run.
     as.setDefaultProject( QString() );
     projectLoadingFile.remove();
-    CoreUtils::log( QStringLiteral( "Loading project error" ), QStringLiteral( "The Input has been unexpectedly finished during the last run." ) );
+    CoreUtils::log( QStringLiteral( "Loading project error" ), QStringLiteral( "Application has been unexpectedly finished during the last run." ) );
   }
 
 #ifdef INPUT_TEST
@@ -784,15 +784,15 @@ int main( int argc, char *argv[] )
   }
   catch ( QgsException &e )
   {
-    CoreUtils::log( "Error", QStringLiteral( "Caught unhandled QgsException %1" ).arg( e.what() ) );
+    CoreUtils::log( "Main", QStringLiteral( "Caught unhandled QgsException %1" ).arg( e.what() ) );
   }
   catch ( std::exception &e )
   {
-    CoreUtils::log( "Error", QStringLiteral( "Caught unhandled std::exception %1" ).arg( e.what() ) );
+    CoreUtils::log( "Main", QStringLiteral( "Caught unhandled std::exception %1" ).arg( e.what() ) );
   }
   catch ( ... )
   {
-    CoreUtils::log( "Error", QStringLiteral( "Caught unhandled unknown exception" ) );
+    CoreUtils::log( "Main", QStringLiteral( "Caught unhandled unknown exception" ) );
   }
   return ret;
 }

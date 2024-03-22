@@ -3557,7 +3557,7 @@ void MerginApi::getServerConfigReplyFinished()
         setServerType( MerginServerType::EE );
         if ( validVersion )
         {
-          CoreUtils::log( QStringLiteral( "Server version:" ), QStringLiteral( "%1.%2 EE" ).arg( major ).arg( minor ) );
+          CoreUtils::log( QStringLiteral( "Server version" ), QStringLiteral( "%1.%2 EE" ).arg( major ).arg( minor ) );
         }
       }
       else if ( serverType == QStringLiteral( "ce" ) )
@@ -3565,7 +3565,7 @@ void MerginApi::getServerConfigReplyFinished()
         setServerType( MerginServerType::CE );
         if ( validVersion )
         {
-          CoreUtils::log( QStringLiteral( "Server version:" ), QStringLiteral( "%1.%2 CE" ).arg( major ).arg( minor ) );
+          CoreUtils::log( QStringLiteral( "Server version" ), QStringLiteral( "%1.%2 CE" ).arg( major ).arg( minor ) );
         }
       }
       else if ( serverType == QStringLiteral( "saas" ) )
@@ -3573,7 +3573,7 @@ void MerginApi::getServerConfigReplyFinished()
         setServerType( MerginServerType::SAAS );
         if ( validVersion )
         {
-          CoreUtils::log( QStringLiteral( "Server version:" ), QStringLiteral( "%1.%2 SAAS" ).arg( major ).arg( minor ) );
+          CoreUtils::log( QStringLiteral( "Server version" ), QStringLiteral( "%1.%2 SAAS" ).arg( major ).arg( minor ) );
         }
       }
 
