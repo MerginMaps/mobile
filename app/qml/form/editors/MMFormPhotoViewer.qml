@@ -72,6 +72,7 @@ MMBaseInput {
       photoUrl: root.photoUrl
 
       fillMode: Image.PreserveAspectCrop
+      autoTransform: true
 
       MouseArea {
         anchors.fill: parent
