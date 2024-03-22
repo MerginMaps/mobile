@@ -20,6 +20,7 @@ ChangelogModel::ChangelogModel( QObject *parent ) : QAbstractListModel{parent}
 
   connect( mNetworkManager, &QNetworkAccessManager::finished, this, &ChangelogModel::onFinished );
 
+  setModelIsLoading( true );
   mNetworkManager->get( QNetworkRequest( QUrl( InputHelp::changelogLink() ) ) );
 }
 
@@ -85,6 +86,14 @@ void ChangelogModel::onFinished( QNetworkReply *reply )
   {
     emit dataChanged( createIndex( 0, 0 ), createIndex( rowCount(), 0 ) );
   }
+
+  setModelIsLoading( false );
+}
+
+void ChangelogModel::setModelIsLoading( bool state )
+{
+  mModelIsLoading = state;
+  emit isLoadingChanged( mModelIsLoading );
 }
 
 QHash<int, QByteArray> ChangelogModel::roleNames() const
@@ -116,4 +125,9 @@ QVariant ChangelogModel::data( const QModelIndex &index, int role ) const
   if ( role == DateRole ) return log.date;
 
   return {};
+}
+
+bool ChangelogModel::isLoading() const
+{
+  return mModelIsLoading;
 }

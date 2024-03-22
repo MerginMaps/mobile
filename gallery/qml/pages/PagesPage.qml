@@ -171,11 +171,13 @@ Page {
 
   Component {
     id: changelogPanelComponent
+
     MMChangelogPage {
       id: changelogPanel
       width: root.width
       height: root.height
       onBackClicked: stackview.pop()
+      dataNotReady: false
 
       property date today: new Date()
 
