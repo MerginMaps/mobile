@@ -18,7 +18,7 @@ Drawer {
   property alias drawerHeader: mmDrawerHeader
   property alias drawerContent: contentGroup.children
 
-  property double drawerSpacing: __style.spacing20
+  property double drawerSpacing: __style.margin10
   property double drawerBottomMargin: __style.margin8 // set to 0 to draw behind navigation bar
 
   property real maxHeight: ( ApplicationWindow.window?.height ?? 0 ) - __style.safeAreaTop

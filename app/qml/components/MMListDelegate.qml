@@ -19,16 +19,28 @@ import QtQuick.Layouts
 Item {
   id: root
 
+  signal clicked()
+
   property string text
   property string secondaryText
 
   property alias leftContent: leftContentGroup.children
   property alias rightContent: rightContentGroup.children
 
-  property bool hasLine: true
+  property bool hasLine: {
+    // calculate automatically when this item is a delegate in list
+    if ( typeof index != "undefined" ) {
+      if ( ListView?.view ?? false ) {
+        return index < ListView.view.count - 1
+      }
+    }
+
+    return true
+  }
 
   property real verticalSpacing: root.secondaryText ? __style.margin8 : __style.margin20
 
+  implicitWidth: ListView?.view?.width ?? 0 // in case ListView is injected as attached property (usually it is)
   implicitHeight: contentLayout.implicitHeight
 
   Column {
@@ -97,6 +109,14 @@ Item {
 
       visible: root.hasLine
       color: __style.greyColor
+    }
+  }
+
+  MouseArea {
+    anchors.fill: contentLayout
+    onClicked: function( mouse ) {
+      mouse.accepted = true
+      root.clicked()
     }
   }
 }
