@@ -37,7 +37,7 @@ void InputProjUtils::logUser( const QString &message, bool &variable )
 {
   if ( !variable )
   {
-    CoreUtils::log( "MM-PROJ", message );
+    CoreUtils::log( "Proj", message );
     variable = true;
   }
 }
@@ -151,7 +151,7 @@ void InputProjUtils::setProjDir( const QString &appBundleDir )
   QFile projdb( projFilePath );
   if ( !projdb.exists() )
   {
-    CoreUtils::log( QStringLiteral( "MM-PROJ" ), QStringLiteral( "Mergin Maps has failed to load PROJ6 database." ) + projFilePath );
+    CoreUtils::log( QStringLiteral( "Proj" ), QStringLiteral( "Failed to load PROJ6 database." ) + projFilePath );
   }
 }
 
