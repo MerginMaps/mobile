@@ -31,6 +31,7 @@ Row {
 
     source: control.photoUrl
     asynchronous: true
+    autoTransform: true
     layer.enabled: true
     layer {
       effect: OpacityMask {
