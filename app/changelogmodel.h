@@ -28,6 +28,9 @@ struct Changelog
 class ChangelogModel : public QAbstractListModel
 {
     Q_OBJECT
+
+    Q_PROPERTY( bool isLoading READ isLoading NOTIFY isLoadingChanged )
+
     Q_ENUMS( MyRoles )
 
   public:
@@ -42,15 +45,21 @@ class ChangelogModel : public QAbstractListModel
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 
+    bool isLoading() const;
+
   private slots:
     void onFinished( QNetworkReply *reply );
 
   signals:
     void finished( const QString &title, const QString &link );
     void loadingFailure();
+    void isLoadingChanged( bool isLoading );
 
   private:
+    void setModelIsLoading( bool state );
+
     QList<Changelog> mLogs;
+    bool mModelIsLoading = false;
     QNetworkAccessManager *mNetworkManager;
 };
 

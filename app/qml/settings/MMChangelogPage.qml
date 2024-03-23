@@ -15,13 +15,13 @@ import "./components" as MMSettingsComponents
 MMPage {
   id: root
 
-  required property var model /* ChangelogModel */
+  property var model /* ChangelogModel */
+  property bool dataNotReady: root.model ? ( root.model.count === 0 || root.model.isLoading ) : true
 
   pageHeader.title: qsTr( "Changelog" )
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
   pageContent: ListView {
-
     width: parent.width
     height: parent.height
 
@@ -47,7 +47,26 @@ MMPage {
       onClicked: Qt.openUrlExternally( model.link )
     }
 
-    footer: MMListFooterSpacer {}
+    footer: root.dataNotReady ? noItemDelegate : spacer
+  }
+
+  Component {
+    id: spacer
+    MMListFooterSpacer {}
+  }
+
+  Component {
+    id: noItemDelegate
+    Item {
+      width: ListView.view.width
+      height: indicator.height + __style.spacing40
+
+      MMBusyIndicator {
+        id: indicator
+        anchors.centerIn: parent
+        running: true
+      }
+    }
   }
 
   function formatDate( d ) {
