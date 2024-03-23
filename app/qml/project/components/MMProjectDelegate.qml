@@ -134,7 +134,7 @@ Control {
             MMText {
               width: parent.width - projectStatusIcon.width - parent.spacing
 
-              text: root.projectDescription
+              text: projectIsInSync ? qsTr( "Synchronising project changes" ) : root.projectDescription
 
               font: __style.p6
               color: root.projectIsOpened ? __style.polarColor : __style.nightColor
@@ -180,7 +180,7 @@ Control {
 
           MMText {
             width: parent.width - parent.spacing - stopSyncGroup.width
-            text: qsTr( "Synchronising" ) + "..."
+            text: qsTr( "Please don't close the app." )
             font: __style.p6
             color: root.projectIsOpened ? __style.polarColor : __style.nightColor
           }
