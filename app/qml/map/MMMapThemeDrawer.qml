@@ -34,15 +34,12 @@ MMListDrawerv2 {
   }
 
   list.delegate: MMListDelegate {
-    id: delegate
-    property bool isSelected: __activeProject.mapTheme === model.display
+    text: model.display
 
     rightContent: MMIcon {
       source: __style.doneCircleIcon
-      visible: delegate.isSelected
+      visible: __activeProject.mapTheme === model.display
     }
-
-    text: model.display
 
     onClicked: {
       __activeProject.mapTheme = model.display
