@@ -231,12 +231,26 @@ Control {
     active: false
     asynchronous: true
 
-    sourceComponent: MMListDrawer {
+    sourceComponent: MMListDrawerv2 {
+      id: moreMenu
+
       drawerHeader.title: qsTr("More options")
 
-      listModel: ListModel { id: menuModel }
+      list.model: ListModel { id: menuModel }
 
-      onClicked: function( type ) { internal.moreMenuItems[type].callback() }
+      list.delegate: MMListDelegate {
+        text: model.name
+
+        leftContent: MMIcon {
+          source: model.iconSource
+        }
+
+        onClicked: {
+          let type = model.type
+          internal.moreMenuItems[type].callback()
+          moreMenu.close()
+        }
+      }
 
       onClosed: moreMenuLoader.active = false
 
