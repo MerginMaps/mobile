@@ -15,9 +15,11 @@ import "../inputs"
 MMDrawerDialog {
   id: root
 
+  property string helpLink: __inputHelp.projectLoadingErrorHelpLink
+
   picture: __style.negativeMMSymbolImage
   bigTitle: qsTr( "Failed to open the project" )
   description: qsTr("Learn more about <a href='%1' style='color: %2;'>loading errors</a>.")
-  .arg(__inputHelp.projectLoadingErrorHelpLink)
+  .arg( root.helpLink )
   .arg(__style.forestColor)
 }

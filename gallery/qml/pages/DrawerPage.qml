@@ -333,14 +333,20 @@ Page {
 
   MMProjErrorDialog {
     id: projErrorDialog
+
+    helpLink: "www.merginmaps.com"
   }
 
   MMOutOfDateCustomServerDialog {
     id: outOfDateServerDialog
+
+    helpLink: "www.merginmaps.com"
   }
 
   MMProjectLoadErrorDialog {
     id: projectLoadErrorDialog
+
+    helpLink: "www.merginmaps.com"
   }
 
   MMDiscardGeometryChangesDialog {

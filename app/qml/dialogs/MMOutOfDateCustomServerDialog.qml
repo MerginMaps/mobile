@@ -15,6 +15,8 @@ import "../inputs"
 MMDrawerDialog {
   id: root
 
+  property string helpLink: __inputHelp.migrationGuides
+
   signal ignoreClicked()
 
   picture: __style.positiveMMSymbolImage
@@ -22,7 +24,7 @@ MMDrawerDialog {
   description: qsTr("Please contact your server administrator to upgrade your server to the latest version. " +
                     "Subsequent releases of our mobile app may not be compatible with your current server version. \n" +
                     "Learn more about <a href='%1' style='color: %2;'>how to migrate</a>.")
-                    .arg( __inputHelp.migrationGuides )
+                    .arg( root.helpLink )
                     .arg( __style.forestColor )
 
   primaryButton: qsTr( "Ignore" )
