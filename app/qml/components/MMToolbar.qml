@@ -65,7 +65,7 @@ Rectangle {
   }
 
   // More drawer menu
-  MMListDrawerv2 {
+  MMListDrawer {
     id: menu
 
     drawerHeader.title: qsTr("More options")

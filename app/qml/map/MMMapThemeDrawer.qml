@@ -14,7 +14,7 @@ import mm 1.0 as MM
 
 import "../components"
 
-MMListDrawerv2 {
+MMListDrawer {
   id: root
 
   drawerHeader.title: qsTr("Map Themes")

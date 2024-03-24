@@ -751,7 +751,7 @@ ApplicationWindow {
   // Should be the top-most visual item
   MMNotificationView {}
 
-  MMListDrawerv2 {
+  MMListDrawer {
     id: featurePairSelection
 
     drawerHeader.title: qsTr( "Select feature" )

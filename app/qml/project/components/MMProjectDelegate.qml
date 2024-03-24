@@ -231,7 +231,7 @@ Control {
     active: false
     asynchronous: true
 
-    sourceComponent: MMListDrawerv2 {
+    sourceComponent: MMListDrawer {
       id: moreMenu
 
       drawerHeader.title: qsTr("More options")

@@ -710,7 +710,7 @@ Item {
     sourceComponent: splittingToolsComponent
   }
 
-  MMListDrawerv2 {
+  MMListDrawer {
     id: activeLayerPanel
 
     drawerHeader.title: qsTr( "Choose Active Layer" )
@@ -746,7 +746,7 @@ Item {
     }
   }
 
-  MMListDrawerv2 {
+  MMListDrawer {
     id: moreToolsMenu
 
     drawerHeader.title: qsTr("More options")
