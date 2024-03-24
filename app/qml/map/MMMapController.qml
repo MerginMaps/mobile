@@ -710,27 +710,39 @@ Item {
     sourceComponent: splittingToolsComponent
   }
 
-  MMListDrawer {
+  MMListDrawerv2 {
     id: activeLayerPanel
 
     drawerHeader.title: qsTr( "Choose Active Layer" )
 
-    listModel: __recordingLayersModel
-    activeValue: __activeLayer.layerId
+    list.model: __recordingLayersModel
 
-    valueRole: "layerId"
-    textRole: "layerName"
+    list.delegate: MMListDelegate {
+      text: model.layerName
 
-    noItemsDelegate: MMMessage {
+      // TODO: why we need to set hight here?
+      height: __style.menuDrawerHeight
+
+      leftContent: MMIcon {
+        source: model.iconSource
+      }
+
+      rightContent: MMIcon {
+        source: __style.doneCircleIcon
+        visible: __activeLayer.layerId === model.layerId
+      }
+
+      onClicked: {
+        __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( model.layerId ) )
+        activeLayerPanel.close()
+      }
+    }
+
+    emptyStateDelegate: MMMessage {
       image: __style.negativeMMSymbolImage
       description: qsTr( "Could not find any editable layers in the project." )
       linkText: qsTr( "See how to enable digitizing in your project." )
       link: __inputHelp.howToEnableDigitizingLink
-    }
-
-    onClicked: function ( layerId ) {
-      __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( layerId ) )
-      activeLayerPanel.close()
     }
   }
 
