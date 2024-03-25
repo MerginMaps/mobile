@@ -29,31 +29,30 @@ MMPage {
 
     Component.onCompleted: {
       var items = [
-        {name: qsTr("Search engine (Google, ...)"), key: "search_engine", icon: __style.searchIcon, submenu: false},
-        {name: qsTr("Blog"), key: "blog", icon: __style.termsIcon, submenu: false},
-        {name: qsTr("Mouth"), key: "mouth", icon: __style.mouthIcon, submenu: false},
-        {name: qsTr("QGIS website"), key: "qgis_website", icon: __style.qgisIcon, submenu: false},
-        {name: qsTr("Application store"), key: "app_store", icon: __style.subscriptionsIcon, submenu: false},
-        {name: qsTr("Teacher"), key: "teacher", icon: __style.teacherIcon, submenu: false},
-        {name: qsTr("Conference"), key: "conference", icon: __style.briefcaseIcon, submenu: false},
-        {name: qsTr("Social media"), key: "social", icon: __style.socialMediaIcon, submenu: false}
+        { name: qsTr( "Search engine (Google, ...)" ), key: "search_engine", icon: __style.searchIcon, submenu: false },
+        { name: qsTr( "Blog" ), key: "blog", icon: __style.termsIcon, submenu: false },
+        { name: qsTr( "Mouth" ), key: "mouth", icon: __style.mouthIcon, submenu: false },
+        { name: qsTr( "QGIS website" ), key: "qgis_website", icon: __style.qgisIcon, submenu: false },
+        { name: qsTr( "Application store" ), key: "app_store", icon: __style.subscriptionsIcon, submenu: false },
+        { name: qsTr( "Teacher" ), key: "teacher", icon: __style.teacherIcon, submenu: false },
+        { name: qsTr( "Conference" ), key: "conference", icon: __style.briefcaseIcon, submenu: false },
+        { name: qsTr( "Social media" ), key: "social", icon: __style.socialMediaIcon, submenu: false }
       ];
-      var otherItem = {name: qsTr("Other"), key: "other", icon: __style.otherIcon, submenu: false};
+      var otherItem = { name: qsTr( "Other" ), key: "other", icon: __style.otherIcon, submenu: false };
 
-      // Randomize items order
-      for (var i = items.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = items[i];
-        items[i] = items[j];
-        items[j] = temp;
+      for ( var i = items.length - 1; i > 0 ; i-- ) {
+        var j = Math.floor( Math.random() * (i + 1) );
+        var temp = items[ i ];
+        items[ i ] = items[ j ];
+        items[ j ] = temp;
       }
 
-      // Append randomized items and then the 'Other' item
-      items.forEach(function(item) {
-        sourceListModel.append(item);
+      items.forEach( function( item )
+      {
+        sourceListModel.append( item );
       });
 
-      sourceListModel.append(otherItem);
+      sourceListModel.append( otherItem );
     }
   }
 

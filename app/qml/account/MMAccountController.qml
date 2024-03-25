@@ -204,7 +204,7 @@ Item {
         enabled: stackView.currentItem.objectName === "createWorkspacePanel"
 
         function onWorkspaceCreated(workspace) {
-          stackView.push(howYouFoundUsComponent)
+          stackView.push( howYouFoundUsComponent )
         }
       }
     }
