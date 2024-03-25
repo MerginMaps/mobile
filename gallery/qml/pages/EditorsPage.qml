@@ -337,6 +337,29 @@ ScrollView {
             width: parent.width
           }
         }
+
+        Label {
+          text: "MMFormValueMapEditor - Value map"
+        }
+
+        GalleryComponents.EditorItem {
+          width: parent.width
+          height: valueMapEditor.height
+
+          fieldValue: "0"
+          fieldConfig: ({ map: [ {"First": 0}, {"Second": 1} ] })
+          fieldTitle: "Value map"
+
+          MMFormEditors.MMFormValueMapEditor {
+            id: valueMapEditor
+            width: parent.width
+
+            onEditorValueChanged: function(newValue, isNull) {
+              console.log("new value: " + newValue)
+              parent.fieldValue = newValue
+            }
+          }
+        }
       }
     }
   }

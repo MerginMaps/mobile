@@ -9,7 +9,7 @@
 
 import QtQuick
 
-import "../../inputs"
+import "../../components" as MMComponents
 
 /*
  * Dropdown (value map) editor for QGIS Attribute Form
@@ -17,9 +17,10 @@ import "../../inputs"
  * These properties are injected here via 'fieldXYZ' properties and captured with underscore `_`.
  *
  * Should be used only within feature form.
- * See MMDropdownInput for more info.
+ * See MMFormComboboxBaseEditor for more info.
  */
-MMDropdownInput {
+
+MMFormComboboxBaseEditor {
   id: root
 
   property var _fieldValue: parent.fieldValue
@@ -36,12 +37,12 @@ MMDropdownInput {
   property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
   property bool _fieldRememberValueState: parent.fieldRememberValueState
 
+  property var preselectedItems: []
+
   signal editorValueChanged( var newValue, bool isNull )
   signal rememberValueBoxClicked( bool state )
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
-
-  dropDownTitle: _fieldTitle
 
   errorMsg: _fieldErrorMessage
   warningMsg: _fieldWarningMessage
@@ -51,42 +52,57 @@ MMDropdownInput {
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
 
-  dataModel: listModel
-  multiSelect: false
-  withSearchbar: false
-
   textFieldComponent.color: __style.nightColor
 
   onCheckboxCheckedChanged: {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  onSelectionFinished: function ( selectedFeatures ) {
-
-    if ( !selectedFeatures || ( Array.isArray( selectedFeatures ) && selectedFeatures.length !== 1 ) ) {
-      // should not happen...
-      __inputUtils.log( "Value map", root._fieldTitle + " received unexpected values" )
-      return
-    }
-
-    root.editorValueChanged( selectedFeatures[0], selectedFeatures[0] === null )
-  }
-
   on_FieldValueChanged: {
 
     if ( _fieldValueIsNull || _fieldValue === undefined ) {
       text = ""
-      preselectedFeatures = []
+      preselectedItems = []
     }
 
     // let's find the new value in the model
     for ( let i = 0; i < listModel.count; i++ ) {
       let item_i = listModel.get( i )
 
-      if ( _fieldValue.toString() === item_i.FeatureId.toString() ) {
-        text = item_i.FeatureTitle
-        preselectedFeatures = [item_i.FeatureId]
+      if ( _fieldValue.toString() === item_i.value.toString() ) {
+        text = item_i.text
+        preselectedItems = [item_i.value]
       }
+    }
+  }
+
+  dropdownLoader.sourceComponent: Component {
+
+    MMComponents.MMListMultiselectDrawer {
+
+      drawerHeader.title: root._fieldTitle
+
+      list.model: listModel
+
+      selected: root.preselectedItems
+
+      showFullScreen: false
+      multiSelect: false
+      withSearch: false
+
+      onClosed: dropdownLoader.active = false
+
+      onSelectionFinished: function ( selectedItems ) {
+        if ( !selectedItems || ( Array.isArray( selectedItems ) && selectedItems.length !== 1 ) ) {
+          // should not happen...
+          __inputUtils.log( "Value map", root._fieldTitle + " received unexpected values" )
+          return
+        }
+
+        root.editorValueChanged( selectedItems[0], selectedItems[0] === null )
+      }
+
+      Component.onCompleted: open()
     }
   }
 
@@ -96,7 +112,7 @@ MMDropdownInput {
 
     //
     // Parses value map options from config into ListModel.
-    // This functionality should be moved to FeaturesListModel(?) in order to support search.
+    // This functionality should be moved to cpp model in order to support search.
     //
 
     if ( !root._fieldConfig['map'] ) {
@@ -110,20 +126,18 @@ MMDropdownInput {
       //it's a list (>=QGIS3.0)
       for ( var i = 0; i < config.length; i++ )
       {
-        // Intentionally using roles "FeatureXYZ" here so that it mimics
-        // the FeaturesListModel and can be used in the DropdownDrawer
         let modelItem = {
-          FeatureTitle: Object.keys( config[i] )[0],
-          FeatureId: Object.values( config[i] )[0]
+          text: Object.keys( config[i] )[0],
+          value: Object.values( config[i] )[0]
         }
 
         listModel.append( modelItem )
 
         // Is this the current item? If so, set the text
         if ( !root._fieldValueIsNull ) {
-          if ( root._fieldValue.toString() === modelItem.FeatureId.toString() ) {
-            root.text = modelItem.FeatureTitle
-            root.preselectedFeatures = [modelItem.FeatureId]
+          if ( root._fieldValue.toString() === modelItem.value.toString() ) {
+            root.text = modelItem.text
+            root.preselectedItems = [modelItem.value]
           }
         }
       }
@@ -131,7 +145,7 @@ MMDropdownInput {
     else
     {
       //it's a map (<=QGIS2.18) <--- sorry, dropped support for that in 2024.1.0
-      __inputUtils.log( "Value map", root._fieldTitle + " is using unsupported format (list, <=QGIS2.18)" )
+      __inputUtils.log( "Value map", root._fieldTitle + " is using unsupported format (map, <=QGIS2.18)" )
     }
   }
 }

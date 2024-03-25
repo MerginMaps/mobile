@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 import QtQuick
+import "../../app/qml/components" as C
 
 // Feel free to use this page to explore/draft new components.
 // Remove your work then :)

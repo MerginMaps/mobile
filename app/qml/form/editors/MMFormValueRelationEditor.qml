@@ -11,8 +11,7 @@ import QtQuick
 
 import mm 1.0 as MM
 
-import "../../components"
-import "../../inputs"
+import "../../components" as MMComponents
 
 /*
  * Dropdown (value relation) editor for QGIS Attribute Form
@@ -20,9 +19,10 @@ import "../../inputs"
  * These properties are injected here via 'fieldXYZ' properties and captured with underscore `_`.
  *
  * Should be used only within feature form.
- * See MMDropdownInput for more info.
+ * See MMFormComboboxBaseEditor for more info.
  */
-MMDropdownInput {
+
+MMFormComboboxBaseEditor {
   id: root
 
   property var _fieldValue: parent.fieldValue
@@ -64,57 +64,62 @@ MMDropdownInput {
   }
 
   dropdownLoader.sourceComponent: Component {
-    MMDropdownDrawer {
-      focus: true
 
-      title: root._fieldTitle
+    MMComponents.MMListMultiselectDrawer {
+
+      drawerHeader.title: root._fieldTitle
 
       multiSelect: internal.allowMultivalue
-      withSearchbar: vrModel.count > 5
+      withSearch: vrModel.count > 5
+      showFullScreen: multiSelect || withSearch
 
       valueRole: "FeatureId"
       textRole: "FeatureTitle"
 
-      selectedFeatures: {
+      selected: {
         if ( internal.allowMultivalue ) {
-          root.preselectedFeatures = vrModel.convertFromQgisType( root._fieldValue, MM.FeaturesModel.FeatureId )
+          return vrModel.convertFromQgisType( root._fieldValue, MM.FeaturesModel.FeatureId )
         }
         else {
-          root.preselectedFeatures = [root._fieldValue]
+          return [root._fieldValue]
         }
       }
 
-      model: MM.ValueRelationFeaturesModel {
+      list.model: MM.ValueRelationFeaturesModel {
         id: vrDropdownModel
 
         config: root._fieldConfig
         pair: root._fieldFeatureLayerPair
       }
 
+      onSearchTextChanged: ( searchText ) => vrDropdownModel.searchExpression = searchText
+
       onClosed: dropdownLoader.active = false
 
-      onSelectionFinished: function ( selectedFeatures ) {
+      onSelectionFinished: function ( selectedItems ) {
 
         if ( internal.allowMultivalue )
         {
-          let isNull = selectedFeatures.length === 0
+          let isNull = selectedItems.length === 0
 
           if ( !isNull )
           {
             // We need to convert feature id to string prior to sending it to C++ in order to
             // avoid conversion to scientific notation.
-            selectedFeatures = selectedFeatures.map( function(x) { return x.toString() } )
+            selectedItems = selectedItems.map( function(x) { return x.toString() } )
           }
-          root.editorValueChanged( vrModel.convertToQgisType( selectedFeatures ), isNull )
+          root.editorValueChanged( vrModel.convertToQgisType( selectedItems ), isNull )
         }
         else
         {
           // We need to convert feature id to string prior to sending it to C++ in order to
           // avoid conversion to scientific notation.
-          selectedFeatures = selectedFeatures.toString()
+          selectedItems = selectedItems.toString()
 
-          root.editorValueChanged( vrModel.convertToKey( selectedFeatures ), false )
+          root.editorValueChanged( vrModel.convertToKey( selectedItems ), false )
         }
+
+        close()
       }
 
       Component.onCompleted: open()

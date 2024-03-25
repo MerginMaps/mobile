@@ -92,6 +92,7 @@ set(MM_QML
     form/components/calendar/MMTimeTumbler.qml
     form/components/calendar/MMTumbler.qml
     form/editors/MMFormCalendarEditor.qml
+    form/editors/MMFormComboboxBaseEditor.qml
     form/editors/MMFormGalleryEditor.qml
     form/editors/MMFormNumberEditor.qml
     form/editors/MMFormPhotoEditor.qml
@@ -114,7 +115,6 @@ set(MM_QML
     gps/MMPositionProviderPage.qml
     gps/MMStakeoutDrawer.qml
     inputs/MMBaseInput.qml
-    inputs/MMDropdownInput.qml
     inputs/MMPasswordInput.qml
     inputs/MMSearchInput.qml
     inputs/MMTextInput.qml

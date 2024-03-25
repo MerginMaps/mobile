@@ -93,7 +93,6 @@
         <file>../app/qml/account/MMSignUpPage.qml</file>
         <file>../app/qml/account/MMWhichIndustryPage.qml</file>
         <file>../app/qml/inputs/MMBaseInput.qml</file>
-        <file>../app/qml/inputs/MMDropdownInput.qml</file>
         <file>../app/qml/inputs/MMPasswordInput.qml</file>
         <file>../app/qml/inputs/MMTextInput.qml</file>
         <file>../app/qml/inputs/MMSearchInput.qml</file>
@@ -109,6 +108,7 @@
         <file>../app/qml/form/components/calendar/MMTimeTumbler.qml</file>
         <file>../app/qml/form/components/calendar/MMDateTumbler.qml</file>
         <file>../app/qml/form/editors/MMFormCalendarEditor.qml</file>
+        <file>../app/qml/form/editors/MMFormComboboxBaseEditor.qml</file>
         <file>../app/qml/form/editors/MMFormGalleryEditor.qml</file>
         <file>../app/qml/form/editors/MMFormNumberEditor.qml</file>
         <file>../app/qml/form/editors/MMFormPhotoViewer.qml</file>
