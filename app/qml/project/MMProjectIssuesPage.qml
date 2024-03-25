@@ -12,9 +12,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
-import "../components"
+import "../components" as MMComponents
 
-Page {
+MMComponents.MMPage {
   id: root
 
   property var projectIssuesModel: ListModel {}
@@ -28,33 +28,18 @@ Page {
     projectIssuesModel.clear()
   }
 
-  Keys.onReleased: function (event) {
-    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true
-      root.visible = false
-    }
-  }
+  onBackClicked: root.visible = false
+  pageHeader.title: qsTr("Project issues")
 
-  header: MMPageHeader {
-    id: header
-
-    width: parent.width
-    onBackClicked: root.visible = false
-
-    title: qsTr("Project issues")
-    titleFont: __style.t3
-  }
-
-  background: Rectangle { color: __style.lightGreenColor }
-
-  ListView {
+  pageContent: ListView {
     id: mainList
 
     anchors.fill: parent
-    anchors.margins: __style.pageMargins
 
     model: root.projectIssuesModel
     spacing: __style.margin12
+
+    clip: true
 
     delegate: Rectangle {
       color: __style.lightGreenColor
@@ -65,61 +50,47 @@ Page {
         id: row
 
         width: parent.width
-        anchors.left: parent.left
-        anchors.top: parent.top
-
         spacing: __style.margin4
 
-        Text {
+        MMComponents.MMText {
           id: nameTextItem
+
           width: parent.width
           font: __style.t1
           text: title
-          color: __style.forestColor
           wrapMode: Text.Wrap
         }
 
-        Text {
+        MMComponents.MMText {
           id: messageTextItem
+
           width: parent.width
           text: message
           wrapMode: Text.Wrap
           font: __style.p5
-          color:  __style.nightColor
         }
       }
     }
 
-    footer: Item {
-      Item {
-        id: spacer
+    footer: Column {
+      width: ListView.view.width
+      spacing: 0
 
-        width: mainList.width
-        height: __style.margin40
-      }
+      MMComponents.MMListSpacer { height: __style.margin40 }
 
-      Text {
-        id: qgisLogTextHeader
-
-        anchors.top: spacer.bottom
-
+      MMComponents.MMText {
         width: mainList.width
         text: qsTr("QGIS log")
         font: __style.t1
-        color:  __style.forestColor
       }
 
-      Text {
-        id: qgisLogTextItem
+      MMComponents.MMListSpacer { height: __style.margin4 }
 
-        anchors.top: qgisLogTextHeader.bottom
-        anchors.topMargin: __style.margin4
-
+      MMComponents.MMText {
         width: mainList.width
         text: projectLoadingLog
         wrapMode: Text.Wrap
         font: __style.p5
-        color:  __style.nightColor
       }
     }
   }
