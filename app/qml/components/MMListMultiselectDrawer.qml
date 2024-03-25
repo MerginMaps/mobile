@@ -12,8 +12,6 @@ import QtQuick.Controls
 
 import "../inputs" as I
 
-// TODO: fix bottom margin (safe area) and when there is the confirm button
-
 MMDrawer {
   id: root
 
@@ -45,7 +43,7 @@ MMDrawer {
       width: parent.width
       height: showFullScreen ? parent.height : implicitHeight
 
-      spacing: __style.spacing20
+      spacing: 0
 
       I.MMSearchInput {
         id: searchBar
@@ -59,6 +57,8 @@ MMDrawer {
 
         onSearchTextChanged: ( text ) => root.searchTextChanged( text )
       }
+
+      MMListSpacer { height: __style.spacing20 }
 
       Item {
         width: parent.width
@@ -83,14 +83,12 @@ MMDrawer {
           id: listViewComponent
 
           width: parent.width
-          height: Math.min( root.drawerContentAvailableHeight - searchBar.height - contentLayout.spacing, contentHeight )
+          height: Math.min( root.drawerContentAvailableHeight - searchBar.height - __style.margin20, contentHeight )
 
-          interactive: ( contentHeight - bottomMargin ) > height
+          interactive: contentHeight > height
 
           clip: true
           maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
-
-          bottomMargin: root.multiSelect ? confirmButton.height + __style.margin8 + __style.margin20 : 0
 
           delegate: MMListDelegate {
             id: _delegate
@@ -118,6 +116,8 @@ MMDrawer {
               visible: _delegate.checked
             }
           }
+
+          footer: MMListSpacer { height: __style.safeAreaBottom + __style.margin8 + ( root.multiSelect ? confirmButton.height : 0 ) }
         }
       }
     }
@@ -131,7 +131,13 @@ MMDrawer {
         bottomMargin: __style.margin8 + __style.safeAreaBottom
       }
 
+      visible: root.multiSelect && listViewComponent.count > 0
+
       text: qsTr( "Confirm selection" )
+
+      onClicked: {
+        root.selectionFinished( root.selected )
+      }
     }
   }
 
