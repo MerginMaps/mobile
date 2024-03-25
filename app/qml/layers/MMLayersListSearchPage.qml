@@ -91,8 +91,4 @@ Page {
       root.nodeVisibilityClicked( node )
     }
   }
-
-  Component.onCompleted: {
-    searchbox.setActive()
-  }
 }
