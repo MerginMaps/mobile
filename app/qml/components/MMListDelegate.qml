@@ -44,6 +44,14 @@ Item {
   implicitHeight: contentLayout.implicitHeight
   height: visible ? implicitHeight : 0.1 // hide invisible items, for some reason setting 0 does not work ¯\_(ツ)_/¯
 
+  MouseArea {
+    anchors.fill: contentLayout
+    onClicked: function( mouse ) {
+      mouse.accepted = true
+      root.clicked()
+    }
+  }
+
   Column {
     id: contentLayout
 
@@ -110,14 +118,6 @@ Item {
 
       visible: root.hasLine
       color: __style.greyColor
-    }
-  }
-
-  MouseArea {
-    anchors.fill: contentLayout
-    onClicked: function( mouse ) {
-      mouse.accepted = true
-      root.clicked()
     }
   }
 }

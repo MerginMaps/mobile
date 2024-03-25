@@ -13,9 +13,10 @@ import QtQuick.Layouts
 
 import mm 1.0 as MM
 
-import "../components"
+import "../components" as MMComponents
 import "../inputs"
 
+// Do not use MMPage here
 Page {
   id: root
 
@@ -52,98 +53,41 @@ Page {
   Component {
     id: layerDetailPageComponent
 
-    Page {
+    MMComponents.MMPage {
       id: layerDetailPage
 
-      header: MMPageHeader {
-        width: parent.width
-        color: __style.lightGreenColor
+      pageHeader.title: layerDetailData.name
+      onBackClicked: root.closePage()
 
-        title: layerDetailData.name
-
-        onBackClicked: root.closePage()
-      }
-
-      background: Rectangle {
-        color: __style.lightGreenColor
-      }
-
-      ScrollView {
+      pageContent: ScrollView {
         id: scrollview
 
-        anchors {
-          left: parent.left
-          leftMargin: __style.pageMargins
-          right: parent.right
-          rightMargin: __style.pageMargins
-          top: parent.top
-          topMargin: __style.margin40
-          bottom: parent.bottom
-        }
-
+        width: parent.width
+        height: parent.height
         contentWidth: availableWidth // only scroll vertically
 
         ColumnLayout {
-
           width: scrollview.width
-          spacing: __style.margin20
+          spacing: __style.spacing20
+
+          MMComponents.MMListSpacer { height: __style.spacing40 }
 
           // visibility
-          Column {
-            Layout.fillWidth: true
-            Layout.preferredHeight: __style.row63
+          MMSwitchInput {
+            title: qsTr( "Settings" )
+            text: qsTr( "Visible on map" )
+            switchComponent.checked: layerDetailData.isVisible
 
-            spacing: __style.margin12
-
-            Text {
-              text: qsTr( "Settings" )
-              font: __style.p6
-              color: __style.nightColor
+            onContentClicked: {
+              toggleVisiblity()
             }
 
-            Rectangle {
-              width: parent.width
-              height: __style.row49
+            onRightActionClicked: {
+              toggleVisiblity()
+            }
 
-              color: __style.polarColor
-              radius: __style.radius12
-
-              RowLayout {
-                id: visibleSwitchContent
-
-                anchors {
-                  fill: parent
-                  leftMargin: __style.margin4
-                  rightMargin: __style.margin4
-                }
-
-                Text {
-                  Layout.fillWidth: true
-
-                  text: qsTr( "Visible on map" )
-
-                  elide: Text.ElideMiddle
-                  font: __style.p5
-                  color: __style.nightColor
-                }
-
-                MMSwitch { // TODO: might need adjustments
-                  id: visibleSwitch
-
-                  uncheckedBgColor: __style.lightGreenColor
-
-                  onReleased: function() {
-                    __activeProject.switchLayerTreeNodeVisibility( layerDetailData.layerTreeNode )
-                  }
-
-                  checked: layerDetailData.isVisible
-                }
-              }
-
-              MouseArea {
-                anchors.fill: parent
-                onClicked: visibleSwitch.released()
-              }
+            function toggleVisiblity() {
+              __activeProject.switchLayerTreeNodeVisibility( layerDetailData.layerTreeNode )
             }
           }
 
@@ -154,23 +98,22 @@ Page {
             property real border: __style.margin12
 
             Layout.fillWidth: true
-            Layout.preferredHeight: legend.height + symbologyTitle.height + 2 * legendWrapper.border
+            Layout.preferredHeight: legend.height + symbologyTitle.height + 2 * legendWrapper.border + legendWrapper.spacing
 
-            spacing: __style.margin8
+            spacing: __style.margin6
 
-            Text {
+            MMComponents.MMText {
               id: symbologyTitle
 
               text: qsTr( "Legend" )
               font: __style.p6
-              color: __style.nightColor
             }
 
             Rectangle {
               id: legendItem
 
               width: parent.width
-              height: parent.height - symbologyTitle.height
+              height: parent.height - symbologyTitle.height - legendWrapper.spacing
 
               color: __style.polarColor
               radius: __style.radius12
@@ -179,13 +122,13 @@ Page {
                 height: parent.height - 2 * legendWrapper.border
                 width: parent.width - 2 * legendWrapper.border
 
-                x: legendItem.x + legendWrapper.border
-                y: legendItem.y - legendWrapper.border
+                x: legendWrapper.border
+                y: legendWrapper.border
 
                 Image {
                   id: legend
 
-                  sourceSize: Qt.size( parent.width, parent.height)
+                  sourceSize: Qt.size( parent.width, parent.height )
 
                   source: {
                     __layerDetailLegendImageProvider.setData( layerDetailData )
@@ -208,14 +151,13 @@ Page {
             Layout.fillWidth: true
             Layout.preferredHeight: 1.5 * __style.row63 + attributionTitle.height + 2 * layerAttribution.border
 
-            spacing: __style.margin8
+            spacing: __style.margin6
 
-            Text {
+            MMComponents.MMText {
               id: attributionTitle
 
               text: qsTr( "Attribution" )
               font: __style.p6
-              color: __style.nightColor
             }
 
             Rectangle {
@@ -285,7 +227,7 @@ Page {
     }
   }
 
-  footer:  MMToolbar {
+  footer:  MMComponents.MMToolbar {
     id: selectableToolbar
 
     visible: featureButton.visible && layerInfoButton.visible
@@ -295,7 +237,7 @@ Page {
     }
 
     model: ObjectModel {
-      MMToolbarButton {
+      MMComponents.MMToolbarButton {
         id: featureButton
 
         visible: layerDetailData.isVectorLayer
@@ -310,7 +252,7 @@ Page {
           }
         }
       }
-      MMToolbarButton {
+      MMComponents.MMToolbarButton {
         id: layerInfoButton
 
         visible: !layerDetailData.isVectorLayer || layerDetailData.isSpatial
