@@ -14,7 +14,7 @@ import QtQuick.Layouts
 import mm 1.0 as MM
 
 import "../inputs"
-import "../components"
+import "../components" as MMComponents
 
 Page {
   id: root
@@ -25,7 +25,7 @@ Page {
   signal featureClicked( var featurePair )
   signal addFeatureClicked( var toLayer )
 
-  header: MMPageHeader {
+  header: MMComponents.MMPageHeader {
     width: parent.width
     color: __style.lightGreenColor
     title: root.selectedLayer ? root.selectedLayer.name + " (" + featuresModel.layerFeaturesCount + ")": ""
@@ -51,6 +51,14 @@ Page {
     onSearchTextChanged: searchDelay.restart()
   }
 
+  MMComponents.MMMessage {
+    anchors.fill: parent
+
+    image: __style.positiveMMSymbolImage
+    title: qsTr("No features found")
+    visible: listView.model.count === 0
+  }
+
   ListView {
     id: listView
 
@@ -72,54 +80,14 @@ Page {
 
     clip: true
 
-    delegate: Item {
-      height: __style.row63
+    delegate: MMComponents.MMListDelegate {
       width: ListView.view.width
+      height: __style.row63
 
-      ColumnLayout {
-        id: delegateContent
+      text: model.display?.toString()?.replace(/\n/g, ' ') ?? ''
+      secondaryText: model.Description + ( model.SearchResult ? ", " + model.SearchResult.replace(/\n/g, ' ') : "" )
 
-        anchors {
-          left: parent.left
-          leftMargin: __style.margin4
-          right: parent.right
-          rightMargin: __style.margin4
-          top: parent.top
-        }
-
-        height: parent.height * 0.9
-
-        spacing: 0
-
-        Text {
-          Layout.fillWidth: true
-
-          color: __style.nightColor
-          font: __style.t3
-          text: model.display?.toString()?.replace(/\n/g, ' ') ?? ''
-
-          elide: Text.ElideMiddle
-        }
-
-        Text {
-          Layout.fillWidth: true
-
-          text: model.Description + ( model.SearchResult ? ", " + model.SearchResult.replace(/\n/g, ' ') : "" )
-          color: __style.nightColor
-          font: __style.p6
-
-          elide: Text.ElideMiddle
-        }
-
-        MMLine {
-          Layout.fillWidth: true
-        }
-      }
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: root.featureClicked( model.FeaturePair )
-      }
+      onClicked: root.featureClicked( model.FeaturePair )
     }
   }
 
@@ -131,13 +99,13 @@ Page {
     onTriggered: featuresModel.searchExpression = searchbox.text
   }
 
-  MMBusyIndicator {
+  MMComponents.MMBusyIndicator {
     id: busyIndicator
     running: featuresModel.fetchingResults
     anchors.centerIn: parent
   }
 
-  MMButton {
+  MMComponents.MMButton {
     width: root.width - 2 * __style.pageMargins
     visible: __inputUtils.isNoGeometryLayer( root.selectedLayer )
     anchors {
