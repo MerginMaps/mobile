@@ -27,14 +27,6 @@ Item {
   signal nodeClicked( var node, string nodeType, string nodeName )
   signal nodeVisibilityClicked( var node )
 
-  MMComponents.MMMessage {
-    anchors.fill: parent
-
-    image: __style.positiveMMSymbolImage
-    title: qsTr("No layers found")
-    visible: layerslist.model.count === 0
-  }
-
   ListView {
     id: layerslist
 

@@ -13,9 +13,10 @@ import QtQuick.Layouts
 
 import mm 1.0 as MM
 
-import "../components"
+import "../components" as MMComponents
 import "../inputs"
 
+// Do not use MMPage here
 Page {
   id: root
 
@@ -52,56 +53,41 @@ Page {
   Component {
     id: layerDetailPageComponent
 
-    Page {
+    MMComponents.MMPage {
       id: layerDetailPage
 
-      header: MMPageHeader {
-        width: parent.width
-        color: __style.lightGreenColor
+      pageHeader.title: layerDetailData.name
+      onBackClicked: root.closePage()
+      pageSpacing: __style.spacing40
 
-        title: layerDetailData.name
-
-        onBackClicked: root.closePage()
-      }
-
-      background: Rectangle {
-        color: __style.lightGreenColor
-      }
-
-      ScrollView {
+      pageContent: ScrollView {
         id: scrollview
 
-        anchors {
-          left: parent.left
-          leftMargin: __style.pageMargins
-          right: parent.right
-          rightMargin: __style.pageMargins
-          top: parent.top
-          topMargin: __style.margin40
-          bottom: parent.bottom
-        }
-
+        width: parent.width
+        height: parent.height
         contentWidth: availableWidth // only scroll vertically
 
         ColumnLayout {
-
           width: scrollview.width
-          spacing: __style.margin20
+          spacing: __style.spacing20
 
           // visibility
           Column {
             Layout.fillWidth: true
-            Layout.preferredHeight: __style.row63
+            Layout.preferredHeight: settingsTitle.height + visibilityRect.height + spacing
 
             spacing: __style.margin12
 
-            Text {
+            MMComponents.MMText {
+              id: settingsTitle
+
               text: qsTr( "Settings" )
               font: __style.p6
-              color: __style.nightColor
             }
 
             Rectangle {
+              id: visibilityRect
+
               width: parent.width
               height: __style.row49
 
@@ -113,21 +99,18 @@ Page {
 
                 anchors {
                   fill: parent
-                  leftMargin: __style.margin4
-                  rightMargin: __style.margin4
+                  leftMargin: __style.margin20
+                  rightMargin: __style.margin20
                 }
 
-                Text {
+                MMComponents.MMText {
                   Layout.fillWidth: true
 
                   text: qsTr( "Visible on map" )
-
-                  elide: Text.ElideMiddle
                   font: __style.p5
-                  color: __style.nightColor
                 }
 
-                MMSwitch { // TODO: might need adjustments
+                MMComponents.MMSwitch {
                   id: visibleSwitch
 
                   uncheckedBgColor: __style.lightGreenColor
@@ -158,12 +141,11 @@ Page {
 
             spacing: __style.margin8
 
-            Text {
+            MMComponents.MMText {
               id: symbologyTitle
 
               text: qsTr( "Legend" )
               font: __style.p6
-              color: __style.nightColor
             }
 
             Rectangle {
@@ -210,12 +192,11 @@ Page {
 
             spacing: __style.margin8
 
-            Text {
+            MMComponents.MMText {
               id: attributionTitle
 
               text: qsTr( "Attribution" )
               font: __style.p6
-              color: __style.nightColor
             }
 
             Rectangle {
@@ -285,7 +266,7 @@ Page {
     }
   }
 
-  footer:  MMToolbar {
+  footer:  MMComponents.MMToolbar {
     id: selectableToolbar
 
     visible: featureButton.visible && layerInfoButton.visible
@@ -295,7 +276,7 @@ Page {
     }
 
     model: ObjectModel {
-      MMToolbarButton {
+      MMComponents.MMToolbarButton {
         id: featureButton
 
         visible: layerDetailData.isVectorLayer
@@ -310,7 +291,7 @@ Page {
           }
         }
       }
-      MMToolbarButton {
+      MMComponents.MMToolbarButton {
         id: layerInfoButton
 
         visible: !layerDetailData.isVectorLayer || layerDetailData.isSpatial
