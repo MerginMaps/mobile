@@ -25,7 +25,8 @@ Drawer {
 
   // Properties useful to determine if the content should scroll or not
   readonly property bool maxHeightHit: implicitHeight >= maxHeight
-  readonly property real drawerContentAvailableHeight: implicitHeight - __style.margin8 - mmDrawerHeader.height - root.drawerSpacing - bottomSpacer.height
+  readonly property real drawerReservedVerticalSpace: topSpacer.height + mmDrawerHeader.height + contentSpacer.height + bottomSpacer.height
+  readonly property real drawerContentAvailableHeight: maxHeight - drawerReservedVerticalSpace // max height for your custom content item
 
   implicitHeight: contentHeight > maxHeight ? maxHeight : contentHeight
   implicitWidth: ApplicationWindow.window?.width ?? 0
@@ -62,7 +63,10 @@ Drawer {
     anchors.fill: parent
     spacing: 0
 
-    MMListSpacer { height: __style.margin10 }
+    MMListSpacer {
+      id: topSpacer
+      height: __style.margin10
+    }
 
     MMDrawerHeader {
       id: mmDrawerHeader
@@ -75,6 +79,8 @@ Drawer {
     }
 
     Item {
+      id: contentSpacer
+
       width: parent.width
       height: root.drawerSpacing
     }
