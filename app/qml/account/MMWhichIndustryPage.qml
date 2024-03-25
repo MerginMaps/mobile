@@ -24,6 +24,31 @@ MMPage {
 
   signal industrySelected( var selectedText )
 
+  ListModel {
+    id: sourceListModel
+
+    Component.onCompleted: {
+      var items = [
+        { name: qsTr( "Agriculture" ), key: "agriculture", icon: __style.tractorIcon, colorx: __style.sunColor, color: "#F4CB46" },
+        { name: qsTr( "Archaeology" ), key: "archaeology", icon: __style.archaeologyIcon, colorx: __style.sandColor, color: "#FFF4E2" },
+        { name: qsTr( "Construction and engineering" ), key: "engineering", icon: __style.engineeringIcon, colorx: __style.roseColor, color: "#FFBABC" },
+        { name: qsTr( "Electric utilities" ), key: "electricity", icon: __style.electricityIcon, colorx: __style.nightColor, color: "#12181F" },
+        { name: qsTr( "Environmental protection" ), key: "environmental", icon: __style.environmentalIcon, colorx: __style.fieldColor, color: "#9BD1A9" },
+        { name: qsTr( "Local governments" ), key: "gov", icon: __style.stateAndLocalIcon, colorx: __style.purpleColor, color: "#CCBDF5" },
+        { name: qsTr( "Natural resources" ), key: "natural", icon: __style.naturalResourcesIcon, colorx: __style.earthColor, color: "#4D2A24" },
+        { name: qsTr( "Telecom" ), key: "telecom", icon: __style.telecommunicationIcon, colorx: __style.deepOceanColor, color: "#1C324A" },
+        { name: qsTr( "Transportation" ), key: "transportation", icon: __style.transportationIcon, colorx: __style.skyColor, color: "#A6CBF4" },
+        { name: qsTr( "Water utilities" ), key: "water", icon: __style.waterResourcesIcon, colorx: __style.lightGreenColor, color: "#EFF5F3" }
+      ];
+
+      var otherItem = { name: qsTr( "Other" ), key: "other", icon: __style.otherIcon, colorx: __style.sunsetColor, color: "#FFB673" };
+
+      shuffleAndAppend( sourceListModel, items );
+
+      sourceListModel.append( otherItem );
+    }
+  }
+
   pageHeader {
     title: gridView.contentY > -10 * __dp ? qsTr( "Specify your industry" ) : ""
     backVisible: false
@@ -79,21 +104,7 @@ MMPage {
 
       currentIndex: -1
 
-      model: ListModel {
-        Component.onCompleted: {
-          gridView.model.append({name: qsTr("Agriculture"), key: "agriculture", icon: __style.tractorIcon, colorx: __style.sunColor, color: "#F4CB46"})
-          gridView.model.append({name: qsTr("Archaeology"), key: "archaeology", icon: __style.archaeologyIcon, colorx: __style.sandColor, color: "#FFF4E2"})
-          gridView.model.append({name: qsTr("Construction and engineering"), key: "engineering", icon: __style.engineeringIcon, colorx: __style.roseColor, color: "#FFBABC"})
-          gridView.model.append({name: qsTr("Electric utilities"), key: "electricity", icon: __style.electricityIcon, colorx: __style.nightColor, color: "#12181F"})
-          gridView.model.append({name: qsTr("Environmental protection"), key: "environmental", icon: __style.environmentalIcon, colorx: __style.fieldColor, color: "#9BD1A9"})
-          gridView.model.append({name: qsTr("Local governments"), key: "gov", icon: __style.stateAndLocalIcon, colorx: __style.purpleColor, color: "#CCBDF5"})
-          gridView.model.append({name: qsTr("Natural resources"), key: "natural", icon: __style.naturalResourcesIcon, colorx: __style.earthColor, color: "#4D2A24"})
-          gridView.model.append({name: qsTr("Telecom"), key: "telecom", icon: __style.telecommunicationIcon, colorx: __style.deepOceanColor, color: "#1C324A"})
-          gridView.model.append({name: qsTr("Transportation"), key: "transportation", icon: __style.transportationIcon, colorx: __style.skyColor, color: "#A6CBF4"})
-          gridView.model.append({name: qsTr("Water utilities"), key: "water", icon: __style.waterResourcesIcon, colorx: __style.lightGreenColor, color: "#EFF5F3"})
-          gridView.model.append({name: qsTr("Other"), key: "other", icon: __style.otherIcon, colorx: __style.sunsetColor, color: "#FFB673"})
-        }
-      }
+      model: sourceListModel
 
       header: MMText {
         width: GridView.view.width

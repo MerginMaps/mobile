@@ -46,6 +46,24 @@ Item {
     stackView.pop(null);
   }
 
+  function shuffleAndAppend( listModel, items )
+  {
+    items = items
+        .map(function( item ) {
+            return { value: item, sort: Math.random() };
+        })
+        .sort(function( a, b ) {
+            return a.sort - b.sort;
+        })
+        .map(function( obj ) {
+            return obj.value;
+        });
+
+    items.forEach( function( item ) {
+        listModel.append( item );
+    });
+  }
+
   Connections {
     target: __merginApi
     enabled: controller.inProgress
@@ -204,7 +222,7 @@ Item {
         enabled: stackView.currentItem.objectName === "createWorkspacePanel"
 
         function onWorkspaceCreated(workspace) {
-          stackView.push(howYouFoundUsComponent)
+          stackView.push( howYouFoundUsComponent )
         }
       }
     }
