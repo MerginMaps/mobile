@@ -12,14 +12,13 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qml/inputs"
-import "../../app/qml/components"
 
 ScrollView {
   Column {
     padding: 20
     spacing: 20
 
-    MMCheckBox {
+    CheckBox {
       id: checkbox
       text: checked ? "enabled" : "disabled"
       checked: true
