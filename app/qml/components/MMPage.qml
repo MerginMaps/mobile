@@ -16,8 +16,6 @@ Page {
   property alias pageHeader: mmheader
   property alias pageContent: contentGroup.children
 
-  property double pageSpacing: __style.spacing20 // Change this to 20 if using searchbar
-
   property real pageBottomMargin: __style.margin20
   property int pageBottomMarginPolicy: MMPage.BottomMarginPolicy.UseMargin
 

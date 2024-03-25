@@ -119,6 +119,7 @@ set(MM_QML
     inputs/MMSearchInput.qml
     inputs/MMTextInput.qml
     inputs/MMTextWithButtonInput.qml
+    inputs/MMSwitchInput.qml
     layers/MMFeaturesListPage.qml
     layers/MMLayerDetailPage.qml
     layers/MMLayersList.qml

@@ -97,6 +97,7 @@
         <file>../app/qml/inputs/MMPasswordInput.qml</file>
         <file>../app/qml/inputs/MMTextInput.qml</file>
         <file>../app/qml/inputs/MMSearchInput.qml</file>
+        <file>../app/qml/inputs/MMSwitchInput.qml</file>
         <file>../app/qml/inputs/MMTextWithButtonInput.qml</file>
         <file>../app/qml/form/components/MMFormTabBar.qml</file>
         <file>../app/qml/form/components/MMCalendarDrawer.qml</file>

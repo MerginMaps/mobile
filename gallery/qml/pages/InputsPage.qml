@@ -47,6 +47,13 @@ ScrollView {
           onSearchTextChanged: function(text) { console.log("Searched string: " + text) }
         }
 
+        MMSwitchInput {
+          title: "MMSwitchInput"
+          text: "Visible?"
+          enabled: checkbox.checked
+          width: parent.width
+        }
+
         MMDropdownInput {
           title: "MMDropdownInput"
           placeholderText: "Select one"

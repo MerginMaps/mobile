@@ -14,10 +14,10 @@ import QtQuick.Layouts
 import mm 1.0 as MM
 
 import "../inputs"
-import "../components"
+import "../components" as MMComponents
 import "./components" as MMAccountComponents
 
-MMPage {
+MMComponents.MMPage {
   id: root
 
   required property var invitationsModel // MM.InvitationsProxyModel
@@ -33,10 +33,9 @@ MMPage {
 
   pageHeader.title: qsTr( "Select workspace" )
 
-  pageSpacing: __style.spacing20
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
-  pageHeader.rightItemContent: MMRoundButton {
+  pageHeader.rightItemContent: MMComponents.MMRoundButton {
 
     anchors.verticalCenter: parent.verticalCenter
 
@@ -50,13 +49,13 @@ MMPage {
   }
 
   pageContent: Item {
-
     width: parent.width
     height: parent.height
 
     MMSearchInput {
       id: searchBar
 
+      anchors.topMargin: __style.spacing20
       width: parent.width
 
       placeholderText: qsTr( "Search" ) + "..."
@@ -64,7 +63,7 @@ MMPage {
       onSearchTextChanged: function( searchText ) { root.searchTextChanged( searchText ) }
     }
 
-    MMScrollView {
+    MMComponents.MMScrollView {
 
       anchors {
         top: searchBar.bottom
@@ -80,7 +79,7 @@ MMPage {
 
         spacing: 0
 
-        MMListSpacer { height: __style.margin20 }
+        MMComponents.MMListSpacer { height: __style.margin20 }
 
         Column {
           id: invitationsGroup
@@ -101,11 +100,11 @@ MMPage {
             font: __style.p6
           }
 
-          MMListSpacer { height: __style.margin6 }
+          MMComponents.MMListSpacer { height: __style.margin6 }
 
-          MMLine {}
+          MMComponents.MMLine {}
 
-          MMListSpacer { height: __style.margin20 }
+          MMComponents.MMListSpacer { height: __style.margin20 }
 
           Column {
             width: parent.width
@@ -130,7 +129,7 @@ MMPage {
           }
         }
 
-        MMListSpacer { height: __style.margin20 }
+        MMComponents.MMListSpacer { height: __style.margin20 }
 
         Column {
           // workspace group
@@ -149,11 +148,11 @@ MMPage {
             font: __style.p6
           }
 
-          MMListSpacer { height: __style.margin6 }
+          MMComponents.MMListSpacer { height: __style.margin6 }
 
-          MMLine {}
+          MMComponents.MMLine {}
 
-          MMListSpacer { height: __style.margin20 }
+          MMComponents.MMListSpacer { height: __style.margin20 }
 
           Column {
             width: parent.width
@@ -176,7 +175,7 @@ MMPage {
           }
         }
 
-        MMListFooterSpacer {}
+        MMComponents.MMListFooterSpacer {}
       }
     }
   }
