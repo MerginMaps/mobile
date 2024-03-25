@@ -10,10 +10,10 @@
 import QtQuick
 import QtQuick.Controls
 
-import "../components"
+import "../components" as MMComponents
 import "../inputs"
 
-Page {
+MMComponents.MMPage {
   id: root
 
   property var model: null
@@ -25,74 +25,51 @@ Page {
   signal nodeVisibilityClicked( var node )
   signal searchTextChanged( string searchText )
 
-  Keys.onReleased: function( event ) {
-    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true
-      root.close()
-    }
-  }
+  onBackClicked: root.close()
+  pageHeader.title: root.pageTitle
 
-  header: MMPageHeader {
+  pageContent: Item {
     width: parent.width
-    title: root.pageTitle
-    color: __style.lightGreenColor
+    height: parent.height
 
-    onBackClicked: root.close()
-  }
+    MMSearchInput {
+      id: searchbox
 
-  Rectangle {
-    anchors.fill: parent
-    color: __style.lightGreenColor
-  }
+      anchors.top: parent.top
+      anchors.topMargin: __style.spacing20
+      width: parent.width
 
-  MMSearchInput {
-    id: searchbox
-
-    anchors {
-      left: parent.left
-      leftMargin: __style.pageMargins
-      right: parent.right
-      rightMargin: __style.pageMargins
-      top: parent.top
-      topMargin: __style.margin20
+      onSearchTextChanged: function( searchText ) {
+        root.searchTextChanged( searchText )
+      }
     }
 
-    onSearchTextChanged: function( searchText ) {
-      root.searchTextChanged( searchText )
+    MMLayersList {
+      id: layers
+
+      width: parent.width
+
+      anchors {
+        top: searchbox.bottom
+        topMargin: __style.spacing20
+        bottom: parent.bottom
+      }
+
+      clip: true
+
+      model: root.model
+      parentNodeIndex: root.parentNodeIndex
+
+      showNodePath: true
+      imageProviderPath: "image://LayerTreeFlatModelPixmapProvider/"
+
+      onNodeClicked: function( node, nodeType, nodeName ) {
+        root.nodeClicked( node, nodeType, nodeName )
+      }
+
+      onNodeVisibilityClicked: function( node ) {
+        root.nodeVisibilityClicked( node )
+      }
     }
-  }
-
-  MMLayersList {
-    id: layers
-
-    anchors {
-      top: searchbox.bottom
-      topMargin: __style.margin20
-      left: parent.left
-      leftMargin: __style.pageMargins
-      right: parent.right
-      rightMargin: __style.pageMargins
-      bottom: parent.bottom
-    }
-
-    clip: true
-
-    model: root.model
-    parentNodeIndex: root.parentNodeIndex
-
-    showNodePath: true
-    imageProviderPath: "image://LayerTreeFlatModelPixmapProvider/"
-
-    onNodeClicked: function( node, nodeType, nodeName ) {
-      root.nodeClicked( node, nodeType, nodeName )
-    }
-
-    onNodeVisibilityClicked: function( node ) {
-      root.nodeVisibilityClicked( node )
-    }
-  }
-
-  Component.onCompleted: {
-    searchbox.setActive()
   }
 }

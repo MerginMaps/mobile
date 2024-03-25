@@ -12,14 +12,13 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 import "../../app/qml/inputs"
-import "../../app/qml/components"
 
 ScrollView {
   Column {
     padding: 20
     spacing: 20
 
-    MMCheckBox {
+    CheckBox {
       id: checkbox
       text: checked ? "enabled" : "disabled"
       checked: true
@@ -45,6 +44,13 @@ ScrollView {
           title: "MMSearchInput"
           placeholderText: "Text value"
           onSearchTextChanged: function(text) { console.log("Searched string: " + text) }
+        }
+
+        MMSwitchInput {
+          title: "MMSwitchInput"
+          text: "Visible?"
+          enabled: checkbox.checked
+          width: parent.width
         }
 
         MMTextInput {

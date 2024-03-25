@@ -14,9 +14,9 @@ import QtQuick.Layouts
 import mm 1.0 as MM
 
 import "../inputs"
-import "../components"
+import "../components" as MMComponents
 
-Page {
+MMComponents.MMPage {
   id: root
 
   property var selectedLayer: null
@@ -25,132 +25,68 @@ Page {
   signal featureClicked( var featurePair )
   signal addFeatureClicked( var toLayer )
 
-  header: MMPageHeader {
+  pageHeader.title: root.selectedLayer ? root.selectedLayer.name + " (" + featuresModel.layerFeaturesCount + ")": ""
+  onBackClicked: root.close()
+
+  pageContent: Item {
     width: parent.width
-    color: __style.lightGreenColor
-    title: root.selectedLayer ? root.selectedLayer.name + " (" + featuresModel.layerFeaturesCount + ")": ""
-    onBackClicked: root.close()
-  }
+    height: parent.height
 
-  Rectangle {
-    anchors.fill: parent
-    color: __style.lightGreenColor
-  }
+    MMSearchInput {
+      id: searchbox
 
-  MMSearchInput {
-    id: searchbox
-    anchors {
-      left: parent.left
-      leftMargin: __style.pageMargins
-      right: parent.right
-      rightMargin: __style.pageMargins
-      top: parent.top
-      topMargin: __style.margin20
+      anchors.topMargin: __style.spacing20
+      width: parent.width
+      onSearchTextChanged: featuresModel.searchExpression = searchbox.text
+      allowTimer: true
     }
 
-    onSearchTextChanged: searchDelay.restart()
-  }
+    ListView {
+      id: listView
 
-  ListView {
-    id: listView
-
-    model: MM.FeaturesModel {
-      id: featuresModel
-
-      layer: root.selectedLayer
-    }
-
-    anchors {
-      top: searchbox.bottom
-      topMargin: __style.margin20
-      left: parent.left
-      leftMargin: __style.pageMargins
-      right: parent.right
-      rightMargin: __style.pageMargins
-      bottom: parent.bottom
-    }
-
-    clip: true
-
-    delegate: Item {
-      height: __style.row63
-      width: ListView.view.width
-
-      ColumnLayout {
-        id: delegateContent
-
-        anchors {
-          left: parent.left
-          leftMargin: __style.margin4
-          right: parent.right
-          rightMargin: __style.margin4
-          top: parent.top
-        }
-
-        height: parent.height * 0.9
-
-        spacing: 0
-
-        Text {
-          Layout.fillWidth: true
-
-          color: __style.nightColor
-          font: __style.t3
-          text: model.display?.toString()?.replace(/\n/g, ' ') ?? ''
-
-          elide: Text.ElideMiddle
-        }
-
-        Text {
-          Layout.fillWidth: true
-
-          text: model.Description + ( model.SearchResult ? ", " + model.SearchResult.replace(/\n/g, ' ') : "" )
-          color: __style.nightColor
-          font: __style.p6
-
-          elide: Text.ElideMiddle
-        }
-
-        MMLine {
-          Layout.fillWidth: true
-        }
+      width: parent.width
+      anchors {
+        top: searchbox.bottom
+        bottom: addButton.visible ? addButton.top : parent.bottom
+        bottomMargin: __style.spacing20
+        topMargin: __style.spacing20
       }
 
-      MouseArea {
-        anchors.fill: parent
+      model: MM.FeaturesModel {
+        id: featuresModel
+
+        layer: root.selectedLayer
+      }
+
+      clip: true
+
+      delegate: MMComponents.MMListDelegate {
+        text: model.display?.toString()?.replace(/\n/g, ' ') ?? ''
+        secondaryText: model.Description + ( model.SearchResult ? ", " + model.SearchResult.replace(/\n/g, ' ') : "" )
+
         onClicked: root.featureClicked( model.FeaturePair )
       }
     }
-  }
 
-  Timer {
-    id: searchDelay
-    interval: 500
-    running: false
-    repeat: false
-    onTriggered: featuresModel.searchExpression = searchbox.text
-  }
+    MMComponents.MMBusyIndicator {
+      id: busyIndicator
 
-  MMBusyIndicator {
-    id: busyIndicator
-    running: featuresModel.fetchingResults
-    anchors.centerIn: parent
-  }
-
-  MMButton {
-    width: root.width - 2 * __style.pageMargins
-    visible: __inputUtils.isNoGeometryLayer( root.selectedLayer )
-    anchors {
-      left: parent.left
-      leftMargin: __style.pageMargins
-      right: parent.right
-      rightMargin: __style.pageMargins
-      bottom: parent.bottom
-      bottomMargin: __style.margin20
+      anchors.centerIn: parent
+      running: featuresModel.fetchingResults
     }
 
-    text: qsTr("Add feature")
-    onClicked: root.addFeatureClicked( root.selectedLayer )
+    MMComponents.MMButton {
+      id: addButton
+
+      width: parent.width
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: __style.margin20
+      visible: __inputUtils.isNoGeometryLayer( root.selectedLayer )
+
+      text: qsTr("Add feature")
+
+      onClicked: root.addFeatureClicked( root.selectedLayer )
+    }
   }
 
   Component.onCompleted: {

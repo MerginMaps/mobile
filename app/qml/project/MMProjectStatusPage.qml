@@ -13,10 +13,10 @@ import QtQuick.Layouts
 
 import mm 1.0 as MM
 
-import "./components"
-import "../components"
+import "./components" as MMProjectComponents
+import "../components" as MMComponents
 
-Page {
+MMComponents.MMPage {
   id: statusPanel
 
   property real rowHeight: __style.row49
@@ -24,73 +24,39 @@ Page {
 
   signal back()
 
-  header: MMPageHeader {
-    id: header
+  pageHeader.title: statusPanel.hasChanges ? qsTr("Your local changes") : qsTr("Project Status")
+  onBackClicked: statusPanel.back()
 
+  pageContent: Item {
     width: parent.width
-    color: __style.lightGreenColor
-    title: statusPanel.hasChanges ? qsTr("Your local changes") : qsTr("Project Status")
-    z: contentLayout.z + 1
-    onBackClicked: {
-      statusPanel.back()
-    }
-  }
+    height: parent.height
 
-  background: Rectangle {
-    color: __style.lightGreenColor
-  }
+    // No changes content
+    MMComponents.MMMessage {
+      id: noChangesContent
 
-  // No changes content
-  Column {
-    id: noChangesContent
+      visible: !statusPanel.hasChanges
+      anchors.verticalCenter: parent.verticalCenter
+      width: parent.width
 
-    visible: !statusPanel.hasChanges
-    anchors.verticalCenter: parent.verticalCenter
-    width: statusPanel.width
-    spacing: __style.margin12
-
-    Image {
-      anchors.horizontalCenter: parent.horizontalCenter
-      source: __style.syncImage
+      image: __style.syncImage
+      title: qsTr("There are currently no local changes")
+      description: qsTr("Once you have made some changes, they will appear here.")
     }
 
-    Text {
-      anchors.horizontalCenter: parent.horizontalCenter
-      horizontalAlignment: Text.AlignHCenter
-      width: parent.width - 2 * __style.pageMargins
-      wrapMode: Text.WordWrap
-      text: qsTr("There are currently no local changes")
-      font: __style.t1
-      color: __style.forestColor
-    }
+    MMComponents.MMListSpacer { id: spacer; height: __style.spacing40 }
 
-    Text {
-      anchors.horizontalCenter: parent.horizontalCenter
-      horizontalAlignment: Text.AlignHCenter
-      width: parent.width - 2 * __style.pageMargins
-      wrapMode: Text.WordWrap
-      text: qsTr("Once you have made some changes, they will appear here.")
-      font: __style.p5
-      color: __style.nightColor
-    }
-  }
-
-  // With changes content
-  ColumnLayout {
-    id: contentLayout
-
-    visible: statusPanel.hasChanges
-    height: statusPanel.height - header.height
-    width: statusPanel.width - 2*__style.pageMargins
-    x: __style.pageMargins
-    spacing: 0
-
+    // With changes content
     ListView {
       id: statusList
 
+      anchors.top: spacer.bottom
+      anchors.bottom: parent.bottom
+      width: parent.width
+      visible: statusPanel.hasChanges
+
       model: __merginProjectStatusModel
-      Layout.fillWidth: true
-      Layout.fillHeight: true
+
       spacing: __style.margin8
 
       section.property: "section"
@@ -117,7 +83,7 @@ Page {
         width: ListView.view.width
 
         /* A/ Pending changes entries - File name */
-        MMProjectStatusItem {
+        MMProjectComponents.MMProjectStatusItem {
           id: fileLabel
 
           width: delegateItem.width
@@ -147,7 +113,7 @@ Page {
             elide: Text.ElideRight
           }
 
-          MMProjectStatusItem {
+          MMProjectComponents.MMProjectStatusItem {
             /* Added rows for table */
             id: addedItem
 
@@ -157,7 +123,7 @@ Page {
             type: MM.MerginProjectStatusModel.Added
           }
 
-          MMProjectStatusItem {
+          MMProjectComponents.MMProjectStatusItem {
             /* Edited rows for table */
             id: editedItem
             width: delegateItem.width
@@ -166,7 +132,7 @@ Page {
             type: MM.MerginProjectStatusModel.Updated
           }
 
-          MMProjectStatusItem {
+          MMProjectComponents.MMProjectStatusItem {
             /* Deleted rows for table */
             id: deletedItem
 
