@@ -755,22 +755,24 @@ ApplicationWindow {
     id: featurePairSelection
 
     drawerHeader.title: qsTr( "Select feature" )
-    listModel: MM.FeaturesModel {}
-    valueRole: "FeaturePair"
-    textRole: "FeatureTitle"
-    imageRole: "LayerIcon"
-    descriptionRole: "LayerName"
+    list.model: MM.FeaturesModel {}
 
-    onClicked: function( pair ) {
-      featurePairSelection.close()
-      map.highlightPair( pair )
-      formsStackManager.openForm( pair, "readOnly", "preview" );
+    list. delegate: MMListDelegate {
+      text: model.FeatureTitle
+      secondaryText: model.LayerName
+      leftContent: MMIcon { source: model.LayerIcon }
+      onClicked: {
+        let pair = model.FeaturePair
+        featurePairSelection.close()
+        map.highlightPair( pair )
+        formsStackManager.openForm( pair, "readOnly", "preview" );
+      }
     }
 
     function showPairs( pairs ) {
       if ( pairs.length > 0 )
       {
-        listModel.populateStaticModel( pairs )
+        list.model.populateStaticModel( pairs )
         open()
       }
     }

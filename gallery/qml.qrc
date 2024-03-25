@@ -58,8 +58,8 @@
         <file>../app/qml/components/MMMenuDrawer.qml</file>
         <file>../app/qml/components/MMListDelegate.qml</file>
         <file>../app/qml/components/MMListDrawer.qml</file>
-        <file>../app/qml/components/MMListDrawerItem.qml</file>
         <file>../app/qml/components/MMListFooterSpacer.qml</file>
+        <file>../app/qml/components/MMListMultiselectDrawer.qml</file>
         <file>../app/qml/components/MMListSpacer.qml</file>
         <file>../app/qml/components/MMMorePhoto.qml</file>
         <file>../app/qml/components/MMPhoto.qml</file>

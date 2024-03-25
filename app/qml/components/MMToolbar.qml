@@ -69,15 +69,15 @@ Rectangle {
     id: menu
 
     drawerHeader.title: qsTr("More options")
-    listModel: menuModel
+    list.model: menuModel
 
-    valueRole: "type"
-    textRole: "text"
-    imageRole: "iconSource"
-
-    onClicked: function( btnData ) {
-      menu.close()
-      btnData.clicked()
+    list. delegate: MMListDelegate {
+      text: model.text
+      leftContent: MMIcon { source: model.iconSource }
+      onClicked: {
+        menu.close()
+        model.btnData.clicked()
+      }
     }
   }
 
@@ -161,7 +161,7 @@ Rectangle {
         toolbarModel.append({ btnData: btnData })
       } else {
         // add to more menu
-        menuModel.append({ iconSource: btnData.iconSource, text: btnData.text, type: btnData })
+        menuModel.append({ iconSource: btnData.iconSource, text: btnData.text, btnData: btnData })
       }
     }
 

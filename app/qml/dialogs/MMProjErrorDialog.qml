@@ -15,9 +15,11 @@ import "../inputs"
 MMDrawerDialog {
   id: root
 
+  property string helpLink: __inputHelp.howToSetupProj
+
   picture: __style.negativeMMSymbolImage
   bigTitle: qsTr( "PROJ Error" )
   description: qsTr("Learn more about <a href='%1' style='color: %2;'>how to setup PROJ</a>.")
-  .arg(__inputHelp.howToSetupProj)
+  .arg( root.helpLink )
   .arg(__style.forestColor)
 }

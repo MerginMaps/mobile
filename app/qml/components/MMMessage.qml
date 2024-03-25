@@ -81,7 +81,7 @@ Column {
 
   MMListSpacer { height: __style.margin12 }
 
-  MMText {
+  Text {
     id: linkItem
 
     width: parent.width
