@@ -31,7 +31,7 @@ MMPage {
       var items = [
         { name: qsTr( "Search engine (Google, ...)" ), key: "search_engine", icon: __style.searchIcon, submenu: false },
         { name: qsTr( "Blog" ), key: "blog", icon: __style.termsIcon, submenu: false },
-        { name: qsTr( "Mouth" ), key: "mouth", icon: __style.mouthIcon, submenu: false },
+        { name: qsTr( "Word of Mouth" ), key: "mouth", icon: __style.mouthIcon, submenu: false },
         { name: qsTr( "QGIS website" ), key: "qgis_website", icon: __style.qgisIcon, submenu: false },
         { name: qsTr( "Application store" ), key: "app_store", icon: __style.subscriptionsIcon, submenu: false },
         { name: qsTr( "Teacher" ), key: "teacher", icon: __style.teacherIcon, submenu: false },
