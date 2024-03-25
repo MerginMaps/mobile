@@ -25,7 +25,7 @@ Drawer {
 
   // Properties useful to determine if the content should scroll or not
   readonly property bool maxHeightHit: implicitHeight >= maxHeight
-  readonly property real drawerContentAvailableHeight: implicitHeight - mmDrawerHeader.height - root.drawerSpacing - bottomSpacer.height
+  readonly property real drawerContentAvailableHeight: implicitHeight - __style.margin8 - mmDrawerHeader.height - root.drawerSpacing - bottomSpacer.height
 
   implicitHeight: contentHeight > maxHeight ? maxHeight : contentHeight
   implicitWidth: ApplicationWindow.window?.width ?? 0
@@ -37,7 +37,6 @@ Drawer {
   background: Rectangle {
     color: __style.polarColor
     radius: __style.radius20
-
 
     layer.enabled: root.dropShadow ? true : false
     layer.effect: MMShadow {}
@@ -62,8 +61,6 @@ Drawer {
 
     anchors.fill: parent
     spacing: 0
-
-    height: mmDrawerHeader.height + contentGroup.height + root.drawerSpacing
 
     MMListSpacer { height: __style.margin10 }
 

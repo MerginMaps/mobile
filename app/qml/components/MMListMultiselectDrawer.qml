@@ -58,7 +58,7 @@ MMDrawer {
         onSearchTextChanged: ( text ) => root.searchTextChanged( text )
       }
 
-      MMListSpacer { height: __style.spacing20 }
+      MMListSpacer { height: __style.spacing20; visible: root.withSearch }
 
       Item {
         width: parent.width
@@ -83,7 +83,7 @@ MMDrawer {
           id: listViewComponent
 
           width: parent.width
-          height: Math.min( root.drawerContentAvailableHeight - searchBar.height - __style.margin20, contentHeight )
+          height: Math.min( root.drawerContentAvailableHeight - ( root.withSearch ? searchBar.height + __style.margin20 : 0 ), contentHeight )
 
           interactive: contentHeight > height
 
