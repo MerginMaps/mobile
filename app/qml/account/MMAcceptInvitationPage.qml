@@ -94,10 +94,7 @@ MMPage {
             width: parent.width
             text: qsTr("Join workspace")
 
-            onClicked: {
-              console.log( buttonsGroup.height, buttonsGroup.implicitHeight, contentMessage.height, contentMessage.implicitHeight )
-              root.joinWorkspaceClicked( root.invitation.uuid )
-            }
+            onClicked: root.joinWorkspaceClicked( root.invitation.uuid )
           }
 
           MMHlineText {
