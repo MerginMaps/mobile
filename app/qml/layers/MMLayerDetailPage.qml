@@ -58,7 +58,6 @@ Page {
 
       pageHeader.title: layerDetailData.name
       onBackClicked: root.closePage()
-      pageSpacing: __style.spacing40
 
       pageContent: ScrollView {
         id: scrollview
@@ -71,62 +70,24 @@ Page {
           width: scrollview.width
           spacing: __style.spacing20
 
+          MMComponents.MMListSpacer { height: __style.spacing40 }
+
           // visibility
-          Column {
-            Layout.fillWidth: true
-            Layout.preferredHeight: settingsTitle.height + visibilityRect.height + spacing
+          MMSwitchInput {
+            title: qsTr( "Settings" )
+            text: qsTr( "Visible on map" )
+            switchComponent.checked: layerDetailData.isVisible
 
-            spacing: __style.margin12
-
-            MMComponents.MMText {
-              id: settingsTitle
-
-              text: qsTr( "Settings" )
-              font: __style.p6
+            onContentClicked: {
+              toggleVisiblity()
             }
 
-            Rectangle {
-              id: visibilityRect
+            onRightActionClicked: {
+              toggleVisiblity()
+            }
 
-              width: parent.width
-              height: __style.row49
-
-              color: __style.polarColor
-              radius: __style.radius12
-
-              RowLayout {
-                id: visibleSwitchContent
-
-                anchors {
-                  fill: parent
-                  leftMargin: __style.margin20
-                  rightMargin: __style.margin20
-                }
-
-                MMComponents.MMText {
-                  Layout.fillWidth: true
-
-                  text: qsTr( "Visible on map" )
-                  font: __style.p5
-                }
-
-                MMComponents.MMSwitch {
-                  id: visibleSwitch
-
-                  uncheckedBgColor: __style.lightGreenColor
-
-                  onReleased: function() {
-                    __activeProject.switchLayerTreeNodeVisibility( layerDetailData.layerTreeNode )
-                  }
-
-                  checked: layerDetailData.isVisible
-                }
-              }
-
-              MouseArea {
-                anchors.fill: parent
-                onClicked: visibleSwitch.released()
-              }
+            function toggleVisiblity() {
+              __activeProject.switchLayerTreeNodeVisibility( layerDetailData.layerTreeNode )
             }
           }
 
@@ -137,9 +98,9 @@ Page {
             property real border: __style.margin12
 
             Layout.fillWidth: true
-            Layout.preferredHeight: legend.height + symbologyTitle.height + 2 * legendWrapper.border
+            Layout.preferredHeight: legend.height + symbologyTitle.height + 2 * legendWrapper.border + legendWrapper.spacing
 
-            spacing: __style.margin8
+            spacing: __style.margin6
 
             MMComponents.MMText {
               id: symbologyTitle
@@ -152,7 +113,7 @@ Page {
               id: legendItem
 
               width: parent.width
-              height: parent.height - symbologyTitle.height
+              height: parent.height - symbologyTitle.height - legendWrapper.spacing
 
               color: __style.polarColor
               radius: __style.radius12
@@ -161,13 +122,13 @@ Page {
                 height: parent.height - 2 * legendWrapper.border
                 width: parent.width - 2 * legendWrapper.border
 
-                x: legendItem.x + legendWrapper.border
-                y: legendItem.y - legendWrapper.border
+                x: legendWrapper.border
+                y: legendWrapper.border
 
                 Image {
                   id: legend
 
-                  sourceSize: Qt.size( parent.width, parent.height)
+                  sourceSize: Qt.size( parent.width, parent.height )
 
                   source: {
                     __layerDetailLegendImageProvider.setData( layerDetailData )
@@ -190,7 +151,7 @@ Page {
             Layout.fillWidth: true
             Layout.preferredHeight: 1.5 * __style.row63 + attributionTitle.height + 2 * layerAttribution.border
 
-            spacing: __style.margin8
+            spacing: __style.margin6
 
             MMComponents.MMText {
               id: attributionTitle

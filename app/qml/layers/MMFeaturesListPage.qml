@@ -26,21 +26,7 @@ MMComponents.MMPage {
   signal addFeatureClicked( var toLayer )
 
   pageHeader.title: root.selectedLayer ? root.selectedLayer.name + " (" + featuresModel.layerFeaturesCount + ")": ""
-
-  Keys.onReleased: function( event ) {
-    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true
-      root.closePage()
-    }
-  }
-
-  Timer {
-    id: searchDelay
-    interval: 500
-    running: false
-    repeat: false
-    onTriggered: featuresModel.searchExpression = searchbox.text
-  }
+  onBackClicked: root.close()
 
   pageContent: Item {
     width: parent.width
@@ -49,8 +35,10 @@ MMComponents.MMPage {
     MMSearchInput {
       id: searchbox
 
+      anchors.topMargin: __style.spacing20
       width: parent.width
-      onSearchTextChanged: searchDelay.restart()
+      onSearchTextChanged: featuresModel.searchExpression = searchbox.text
+      allowTimer: true
     }
 
     ListView {

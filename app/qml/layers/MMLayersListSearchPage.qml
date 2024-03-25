@@ -35,12 +35,9 @@ MMComponents.MMPage {
     MMSearchInput {
       id: searchbox
 
+      anchors.top: parent.top
+      anchors.topMargin: __style.spacing20
       width: parent.width
-
-      anchors {
-        top: parent.top
-        topMargin: __style.margin20
-      }
 
       onSearchTextChanged: function( searchText ) {
         root.searchTextChanged( searchText )
