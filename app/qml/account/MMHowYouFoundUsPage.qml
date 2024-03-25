@@ -137,8 +137,6 @@ MMPage {
 
         onClicked: {
           let optionUnchecked = listView.currentIndex === index
-          console.log("key ", model.key)
-          console.log("option unchecked = ", optionUnchecked )
           if ( model.key === "social" && !internal.socialSubmenuOpened && !optionUnchecked ) {
             // add social options
             let i = model.index
