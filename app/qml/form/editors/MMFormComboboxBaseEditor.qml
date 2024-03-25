@@ -10,17 +10,21 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import "../components"
+
+import "../../components" as MMComponents
+import "../../inputs" as MMInputs
 
 /*
- * Common dropdown input to use in the app.
+ * Common dropdown (combobox) for forms (value relation and value map).
+ * The difference with MMComboboxInput is that here we need to set the text and drawer manually.
+ * Should not be used outside of the feature form!
+ *
  * Disabled state can be achieved by setting `enabled: false`.
  *
- * See MMDropdownDrawer to see required roles for dataModel.
  * See MMBaseInput for more properties.
  */
 
-MMBaseInput {
+MMInputs.MMBaseInput {
   id: root
 
   property alias placeholderText: textField.placeholderText
@@ -29,22 +33,7 @@ MMBaseInput {
 
   property alias dropdownLoader: drawerLoader
 
-  // dataModel is used in the drawer.
-  // It must have valueRole and textRole
-  // and it must have `count` function to get the number of items
-  // one can use qml's ListModel or our FeaturesModel.h
-  property var dataModel
-
-  property string dropDownTitle: ""
-  property bool multiSelect: false
-  property bool withSearchbar: false
-  property var preselectedFeatures: []
-  property string valueRole: "FeatureId"
-  property string textRole: "FeatureTitle"
-
   hasFocus: textField.activeFocus
-
-  signal selectionFinished( var selectedFeatures )
 
   content: TextField {
     id: textField
@@ -71,10 +60,9 @@ MMBaseInput {
         openDrawer()
       }
     }
-
   }
 
-  rightAction: MMIcon {
+  rightAction: MMComponents.MMIcon {
     property bool pressed: false
 
     anchors.verticalCenter: parent.verticalCenter
@@ -96,30 +84,6 @@ MMBaseInput {
 
     asynchronous: true
     active: false
-    sourceComponent: listComponent
-  }
-
-  Component {
-    id: listComponent
-
-    MMDropdownDrawer {
-      focus: true
-      model: root.dataModel
-      title: root.dropDownTitle
-      multiSelect: root.multiSelect
-      withSearchbar: root.withSearchbar
-      selectedFeatures: root.preselectedFeatures
-      valueRole: root.valueRole
-      textRole: root.textRole
-
-      onClosed: drawerLoader.active = false
-
-      onSelectionFinished: function ( selectedFeatures ) {
-        root.selectionFinished( selectedFeatures )
-      }
-
-      Component.onCompleted: open()
-    }
   }
 
   function openDrawer() {

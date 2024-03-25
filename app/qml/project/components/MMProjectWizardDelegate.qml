@@ -40,25 +40,27 @@ Item {
       onTextChanged: AttributeName = text
     }
 
-    MMDropdownInput {
-      id: comboBox
-      height: row.height
-      Layout.fillHeight: true
-      Layout.fillWidth: true
-      Layout.preferredWidth: row.itemSize
+    // TODO: replace with MMComboboxInput
 
-      text: root.widgetType2WidgetName[WidgetType]
+//    MMDropdownInput {
+//      id: comboBox
+//      height: row.height
+//      Layout.fillHeight: true
+//      Layout.fillWidth: true
+//      Layout.preferredWidth: row.itemSize
 
-      dropDownTitle: qsTr("Widget")
-      preselectedFeatures: [WidgetType]
-      dataModel: widgetList
-      valueRole: "WidgetType"
-      textRole: "WidgetName"
+//      text: root.widgetType2WidgetName[WidgetType]
 
-      onSelectionFinished: function( newValue ) {
-        WidgetType = newValue[0]
-      }
-    }
+//      dropDownTitle: qsTr("Widget")
+//      preselectedFeatures: [WidgetType]
+//      dataModel: widgetList
+//      valueRole: "WidgetType"
+//      textRole: "WidgetName"
+
+//      onSelectionFinished: function( newValue ) {
+//        WidgetType = newValue[0]
+//      }
+//    }
 
     MMRoundButton {
       id: imageBtn
