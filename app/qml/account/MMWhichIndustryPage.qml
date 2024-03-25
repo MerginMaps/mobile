@@ -51,10 +51,10 @@ MMPage {
       }
 
       items.forEach( function ( item ) {
-          gridView.model.append( item );
+          sourceListModel.append( item );
       } );
 
-      gridView.model.append( otherItem );
+      sourceListModel.append( otherItem );
     }
   }
 
