@@ -4,6 +4,10 @@
 FieldsModel::FieldsModel( QObject *parent )
   : QAbstractListModel( parent )
 {
+  // fill the model with initial data
+  addField( "Date", "DateTime" );
+  addField( "Notes", "TextEdit" );
+  addField( "Photo", "ExternalResource" );
 }
 
 bool FieldsModel::addField( const QString &name, const QString &widgetType )
@@ -41,18 +45,6 @@ bool FieldsModel::removeField( int row )
   mFields.removeAt( row );
   endResetModel();
   return true;
-}
-
-QVariantMap FieldsModel::supportedTypes()
-{
-  QVariantMap supportedTypes;
-  supportedTypes.insert( "TextEdit", "Text" );
-  supportedTypes.insert( "DateTime", "Date&time" );
-  supportedTypes.insert( "Range", "Number" );
-  supportedTypes.insert( "CheckBox", "Checkbox" );
-  supportedTypes.insert( "ExternalResource", "Photo" );
-
-  return supportedTypes;
 }
 
 QList<FieldConfiguration> FieldsModel::fields()
@@ -128,14 +120,6 @@ bool FieldsModel::setData( const QModelIndex &index, const QVariant &value, int 
   }
 
   return false;
-}
-
-void FieldsModel::initModel()
-{
-  mFields.clear();
-  addField( "Date", "DateTime" );
-  addField( "Notes", "TextEdit" );
-  addField( "Photo", "ExternalResource" );
 }
 
 bool FieldsModel::contains( const QString &name )

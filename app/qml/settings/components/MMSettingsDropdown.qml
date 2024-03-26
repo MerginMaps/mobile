@@ -27,7 +27,7 @@ MMSettingsItem {
     }
   }
 
-  MMDropdownDrawer {
+  MMDropdownDrawer { // TODO: replace
     id: dropdownDrawer
 
     focus: true

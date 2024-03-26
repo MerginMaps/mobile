@@ -8,61 +8,50 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
-import QtQuick.Dialogs
 
-import "../../components"
-import "../../inputs"
+import "../../components" as MMComponents
+import "../../inputs" as MMInputs
 
 Item {
   id: root
 
-  signal removeClicked(var index)
-  property var widgetList
-  property var widgetType2WidgetName
+  property string attrname
+
+  property alias comboboxField: combobox
+
+  signal removeClicked()
+  signal attrNameChanged( string attrname )
+
+  implicitHeight: __style.row50
 
   RowLayout {
     id: row
-    height: root.height
-    width: root.width
-    spacing: 13 * __dp
-    property real itemSize: (parent.width - imageBtn.width - (2* row.spacing)) / 2
 
-    MMTextInput {
+    height: parent.height
+    width: parent.width
+
+    spacing: __style.margin13
+
+    MMInputs.MMTextInput {
       id: textField
+
+      text: root.attrname
+
       Layout.fillHeight: true
       Layout.fillWidth: true
-      Layout.preferredWidth: row.itemSize
 
-      Component.onCompleted: text = AttributeName
-      onTextChanged: AttributeName = text
+      onTextChanged: root.attrNameChanged( text )
     }
 
-    // TODO: replace with MMComboboxInput
+    MMInputs.MMComboboxInput {
+      id: combobox
 
-//    MMDropdownInput {
-//      id: comboBox
-//      height: row.height
-//      Layout.fillHeight: true
-//      Layout.fillWidth: true
-//      Layout.preferredWidth: row.itemSize
+      Layout.fillHeight: true
+      Layout.fillWidth: true
+    }
 
-//      text: root.widgetType2WidgetName[WidgetType]
-
-//      dropDownTitle: qsTr("Widget")
-//      preselectedFeatures: [WidgetType]
-//      dataModel: widgetList
-//      valueRole: "WidgetType"
-//      textRole: "WidgetName"
-
-//      onSelectionFinished: function( newValue ) {
-//        WidgetType = newValue[0]
-//      }
-//    }
-
-    MMRoundButton {
+    MMComponents.MMRoundButton {
       id: imageBtn
 
       iconSource: __style.deleteIcon
@@ -70,7 +59,7 @@ Item {
       bgndColor: __style.negativeColor
       bgndHoverColor: __style.negativeColor
 
-      onClicked: root.removeClicked(index)
+      onClicked: root.removeClicked()
     }
   }
 }

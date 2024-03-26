@@ -12,44 +12,12 @@ import QtQuick.Controls
 
 import mm 1.0 as MM
 
-import "./components"
-import "../components"
-import "../inputs"
+import "./components" as MMProjectComponents
+import "../components" as MMComponents
+import "../inputs" as MMInputs
 
-MMPage {
+MMComponents.MMPage {
   id: root
-
-  property real rowHeight: 50 * __dp
-
-  property ListModel widgetsModel: ListModel {}
-
-  //! Inits widgetsModel data just after its created, but before Component.complete is emitted (for both model or components where its used)
-  property bool isWidgetModelReady: {
-    var types = fieldsModel.supportedTypes()
-    for (var prop in types) {
-      root.widgetsModel.append({ "WidgetName": types[prop], "WidgetType": prop })
-    }
-
-    true
-  }
-
-  //! (Ugly) Workaround so MMDropdownInput shows actively selected item in "text"
-  property var widgetType2WidgetName: {
-    var ret = {}
-    var types = fieldsModel.supportedTypes()
-    for (var prop in types) {
-      ret[prop] = types[prop]
-    }
-    return ret;
-  }
-
-  MM.FieldsModel {
-    id: fieldsModel
-    onNotifyError: function( message ) {
-      __notificationModel.addError( message )
-    }
-    Component.onCompleted: fieldsModel.initModel()
-  }
 
   pageHeader.title: qsTr("Create Project")
 
@@ -66,18 +34,18 @@ MMPage {
 
       spacing: 0
 
-      MMListSpacer { height: __style.margin20 }
+      MMComponents.MMListSpacer { height: __style.margin20 }
 
-      MMTextInput {
+      MMInputs.MMTextInput {
         id: projectNameField
 
         title: qsTr("Project name")
         width: parent.width
       }
 
-      MMListSpacer { height: __style.margin20 }
+      MMComponents.MMListSpacer { height: __style.margin20 }
 
-      MMText {
+      MMComponents.MMText {
         id: attributesLabel
 
         height: root.rowheight
@@ -98,33 +66,46 @@ MMPage {
         clip: true
         spacing: __style.margin20
 
-        delegate: MMProjectWizardDelegate {
-          height: root.rowHeight
+        delegate: MMProjectComponents.MMProjectWizardDelegate {
+          id: fieldDelegate
+
           width: ListView.view.width
-          widgetList: root.widgetsModel
-          widgetType2WidgetName: root.widgetType2WidgetName
-          onRemoveClicked: function( index ) {
-            fieldsModel.removeField(index)
+
+          // find current index in the model
+          comboboxField.comboboxModel: typesmodel
+
+          comboboxField.onCurrentIndexChanged: {
+            console.log(comboboxField.currentIndex, typesmodel.get(comboboxField.currentIndex), typesmodel.get(comboboxField.currentIndex)?.type ?? "")
+            WidgetType = typesmodel.get(comboboxField.currentIndex)?.type ?? ""
+          }
+
+          onAttrNameChanged: ( attrname ) => AttributeName = attrname
+          onRemoveClicked: () => fieldsModel.removeField( index )
+
+          Component.onCompleted: {
+            // assign initial values without binding
+            attrname = AttributeName
+            comboboxField.currentIndex = root.indexFromWidgetType( WidgetType )
           }
         }
 
-        footer: MMButton {
+        footer: MMComponents.MMButton {
           id: addButton
 
           width: ListView.view.width
           height: root.rowHeight
-          anchors.horizontalCenter: parent.horizontalCenter
 
           text: qsTr( "Add field" )
 
-          type: MMButton.Types.Tertiary
+          type: MMComponents.MMButton.Tertiary
 
           iconSourceRight: __style.addIcon
           topPadding: __style.margin20
 
           onClicked: {
             fieldsModel.addField("", "TextEdit")
-            if (fieldList.visible) {
+
+            if ( fieldList.visible ) {
               fieldList.positionViewAtEnd()
             }
           }
@@ -133,11 +114,11 @@ MMPage {
     }
   }
 
-  footer: MMToolbar {
+  footer: MMComponents.MMToolbar {
     id: toolbar
 
     model: ObjectModel {
-      MMToolbarButton {
+      MMComponents.MMToolbarButton {
         text: qsTr("Create project");
         iconSource: __style.doneCircleIcon
         iconColor: toolbar.color
@@ -150,5 +131,33 @@ MMPage {
         }
       }
     }
+  }
+
+  MM.FieldsModel {
+    id: fieldsModel
+
+    onNotifyError: function( message ) {
+      __notificationModel.addError( message )
+    }
+  }
+
+  ListModel {
+    id: typesmodel
+
+    ListElement { text: "Text"; type: "TextEdit" }
+    ListElement { text: "Date&time"; type: "DateTime" }
+    ListElement { text: "Number"; type: "Range" }
+    ListElement { text: "Checkbox"; type: "CheckBox" }
+    ListElement { text: "Photo"; type: "ExternalResource" }
+  }
+
+  function indexFromWidgetType( widgetType ) {
+    for ( let i = 0; i < typesmodel.count; i++ ) {
+      let item = typesmodel.get(i)
+      if ( widgetType === item.type ) {
+        return i
+      }
+    }
+    return -1
   }
 }
