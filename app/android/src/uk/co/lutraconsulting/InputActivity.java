@@ -59,7 +59,7 @@ public class InputActivity extends QtActivity
   void setCustomStatusAndNavBar() 
   {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-      Log.d( TAG, "Too old for that" );
+      Log.d( TAG, "Older android version." );
       return;
     }
     else {
@@ -91,7 +91,7 @@ public class InputActivity extends QtActivity
   public String getSafeArea() {
 
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-      Log.d( TAG, "Too old for that" );
+      Log.d( TAG, "Older android version." );
       return ( "0,0,0,0" );
     }
     else {
