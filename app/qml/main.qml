@@ -302,7 +302,7 @@ ApplicationWindow {
       }
 
       MMToolbarButton {
-        text: qsTr("Back home")
+        text: qsTr("Projects")
         iconSource: __style.homeIcon
         onClicked: {
           stateManager.state = "projects"
