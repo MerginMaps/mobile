@@ -24,7 +24,6 @@ set(MM_QML
     components/MMDrawer.qml
     components/MMDrawerDialog.qml
     components/MMDrawerHeader.qml
-    components/MMDropdownDrawer.qml
     components/MMFeaturesListDrawer.qml
     components/MMHlineText.qml
     components/MMIcon.qml
