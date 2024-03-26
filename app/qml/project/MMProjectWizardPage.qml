@@ -76,7 +76,6 @@ MMComponents.MMPage {
           comboboxField.valueRole: "type"
 
           comboboxField.onCurrentIndexChanged: {
-            console.log(comboboxField.currentIndex, typesmodel.get(comboboxField.currentIndex), typesmodel.get(comboboxField.currentIndex)?.type ?? "")
             WidgetType = typesmodel.get(comboboxField.currentIndex)?.type ?? ""
           }
 

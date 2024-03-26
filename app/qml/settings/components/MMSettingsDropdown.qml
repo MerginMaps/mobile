@@ -10,37 +10,56 @@
 import QtQuick
 import QtQuick.Controls
 
-import "../../inputs"
-import "../../components"
+import "../../components" as MMComponents
 
 MMSettingsItem {
   id: root
 
-  property string valueDescription
-  property bool multiSelect: false
   property var model
-  property var selected
+  property int currentIndex: -1
 
   onClicked: {
     if(root.model?.count > 0) {
-      dropdownDrawer.visible = true
+      drawerLoader.active = true
     }
   }
 
-  MMDropdownDrawer { // TODO: replace
-    id: dropdownDrawer
+  Loader {
+    id: drawerLoader
 
-    focus: true
-    model: root.model
-    title: root.valueDescription
-    multiSelect: root.multiSelect
-    selectedFeatures: root.selected
-    withSearchbar: false
-    valueRole: "value"
-    textRole: "text"
+    active: false
+    asynchronous: true
+    sourceComponent: listComponent
+  }
 
-    onSelectionFinished: function ( selectedFeatures ) {
-      root.valueWasChanged( selectedFeatures )
+  Component {
+    id: listComponent
+
+    MMComponents.MMListDrawer {
+
+      drawerHeader.title: root.title
+
+      list.model: root.model
+
+      list.delegate: MMComponents.MMListDelegate {
+        text: model.text
+
+        rightContent: MMComponents.MMIcon {
+          source: __style.doneCircleIcon
+          visible: index === root.currentIndex
+        }
+
+        onClicked: {
+          root.currentIndex = index
+          close()
+        }
+      }
+
+      onClosed: drawerLoader.active = false
+
+      Component.onCompleted: {
+        open()
+      }
     }
   }
 }
