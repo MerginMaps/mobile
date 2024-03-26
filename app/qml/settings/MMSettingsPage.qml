@@ -26,13 +26,13 @@ MMPage {
   signal diagnosticLogClicked()
   signal termsOfServiceClicked()
 
-  function createIntervalTypeModel() {
-    var model = Qt.createQmlObject('import QtQuick; ListModel {}', root);
+  ListModel {
+    id: intervalTypeModel
 
-    model.append({ value: MM.StreamingIntervalType.Time, text: qsTr("Time elapsed") });
-    model.append({ value: MM.StreamingIntervalType.Distance, text: qsTr("Distance traveled") });
-
-    return model;
+    Component.onCompleted: {
+      intervalTypeModel.append({ value: MM.StreamingIntervalType.Time, text: qsTr("Time elapsed") });
+      intervalTypeModel.append({ value: MM.StreamingIntervalType.Distance, text: qsTr("Distance traveled") });
+    }
   }
 
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
@@ -113,19 +113,16 @@ MMPage {
 
         title: qsTr("Interval threshold type")
         description: qsTr("Choose a type of threshold for streaming mode")
-        valueDescription: qsTr("Interval threshold type")
 
         value: __appSettings.intervalType === MM.StreamingIntervalType.Distance ? qsTr("Distance Traveled") : qsTr("Time elapsed")
-        selected: [__appSettings.intervalType]
+        currentIndex: __appSettings.intervalType
 
         // To dynamically assign values like "MM.StreamingIntervalType.Distance," derived from a C++ enum or even from if-else blocks,
         // to a ListElement field, you need to build the model using a function. This function should append the required data to the model
         // and then return the fully assembled model, ready for use.
-        model: root.createIntervalTypeModel()
+        model: intervalTypeModel
 
-        onValueWasChanged: function( newValue ) {
-          __appSettings.intervalType = newValue[0]
-        }
+        onCurrentIndexChanged: __appSettings.intervalType = currentIndex
       }
 
       MMLine {}
