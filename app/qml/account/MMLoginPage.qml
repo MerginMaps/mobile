@@ -92,6 +92,7 @@ MMPage {
 
           title: qsTr( "Email or username" )
           bgColor: __style.lightGreenColor
+          textFieldComponent.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
         }
 
         MMPasswordInput {
@@ -210,6 +211,7 @@ MMPage {
             bgColor: __style.lightGreenColor
 
             text: root.apiRoot
+            textFieldComponent.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
           }
 
           MMListSpacer { height: __style.spacing40 }

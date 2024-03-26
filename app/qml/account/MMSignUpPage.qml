@@ -79,6 +79,7 @@ MMPage {
 
         title: qsTr( "Username" )
         bgColor: __style.lightGreenColor
+        textFieldComponent.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
       }
 
       MMTextInput {
@@ -88,6 +89,7 @@ MMPage {
 
         title: qsTr( "Email" )
         bgColor: __style.lightGreenColor
+        textFieldComponent.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
       }
 
       MMPasswordInput {

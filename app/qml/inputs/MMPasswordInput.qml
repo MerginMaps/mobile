@@ -31,6 +31,7 @@ MMBaseInput {
     font: __style.p5
     hoverEnabled: true
     echoMode: eyeButton.pressed ? TextInput.Normal : TextInput.Password
+    inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
     background: Rectangle {
       color: __style.transparentColor
     }
