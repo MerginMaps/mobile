@@ -39,10 +39,6 @@ class FieldsModel: public QAbstractListModel
 
     Q_INVOKABLE bool addField( const QString &name, const QString &widgetType = QString( "TextEdit" ) );
     Q_INVOKABLE bool removeField( int rowIndex );
-    //! Returns map of supported widget's name (key) and string representation (value).
-    Q_INVOKABLE QVariantMap supportedTypes();
-    //! Inits model with default fields
-    Q_INVOKABLE void initModel();
 
     QHash<int, QByteArray> roleNames() const override;
     int rowCount( const QModelIndex &parent ) const override;

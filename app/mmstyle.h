@@ -259,6 +259,7 @@ class MMStyle: public QObject
     Q_PROPERTY( double margin10 READ number10 CONSTANT )
     Q_PROPERTY( double margin11 READ number11 CONSTANT )
     Q_PROPERTY( double margin12 READ number12 CONSTANT )
+    Q_PROPERTY( double margin13 READ number13 CONSTANT )
     Q_PROPERTY( double margin16 READ number16 CONSTANT )
     Q_PROPERTY( double margin20 READ number20 CONSTANT )
     Q_PROPERTY( double margin30 READ number30 CONSTANT )
