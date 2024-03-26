@@ -58,23 +58,26 @@ public class InputActivity extends QtActivity
 
   void setCustomStatusAndNavBar() 
   {
-    WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+      Log.d( TAG, "Too old for that" );
+      return;
+    }
+    else {
+      WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-    Window window = getWindow();
+      Window window = getWindow();
 
-    // draw app edge-to-edge
-    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-    
-    // make the status bar background color transparent
-    window.setStatusBarColor(Color.TRANSPARENT);
-    
-    // make the navigation button background color transparent
-    window.setNavigationBarColor(Color.TRANSPARENT);
+      // draw app edge-to-edge
+      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+      
+      // make the status bar background color transparent
+      window.setStatusBarColor(Color.TRANSPARENT);
+      
+      // make the navigation button background color transparent
+      window.setNavigationBarColor(Color.TRANSPARENT);
 
-    // do not show background dim for the navigation buttons
-    window.setNavigationBarContrastEnforced(false); 
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      // do not show background dim for the navigation buttons
+      window.setNavigationBarContrastEnforced(false); 
 
       // change the status bar text color to black
       WindowInsetsController insetsController = window.getDecorView().getWindowInsetsController();
@@ -87,18 +90,24 @@ public class InputActivity extends QtActivity
 
   public String getSafeArea() {
 
-    WindowInsets windowInsets = getWindow().getDecorView().getRootWindowInsets();
-
-    if ( windowInsets == null ) {
-      Log.d( TAG, "Try to ask for insets later" );
-      return null;
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+      Log.d( TAG, "Too old for that" );
+      return ( "0,0,0,0" );
     }
+    else {
+      WindowInsets windowInsets = getWindow().getDecorView().getRootWindowInsets();
 
-    Insets safeArea = windowInsets.getInsets( android.view.WindowInsets.Type.statusBars() | 
-                                              android.view.WindowInsets.Type.navigationBars() | 
-                                              android.view.WindowInsets.Type.displayCutout() );
-                                              
-    return ( "" + safeArea.top + "," + safeArea.right + "," + safeArea.bottom + "," + safeArea.left );
+      if ( windowInsets == null ) {
+        Log.d( TAG, "Try to ask for insets later" );
+        return null;
+      }
+
+      Insets safeArea = windowInsets.getInsets( android.view.WindowInsets.Type.statusBars() | 
+                                                android.view.WindowInsets.Type.navigationBars() | 
+                                                android.view.WindowInsets.Type.displayCutout() );
+                                                
+      return ( "" + safeArea.top + "," + safeArea.right + "," + safeArea.bottom + "," + safeArea.left );
+    }
   }
 
   public void hideSplashScreen()
