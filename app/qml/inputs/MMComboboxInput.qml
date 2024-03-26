@@ -28,6 +28,7 @@ MMBaseInput {
   property int currentIndex: -1
 
   property string textRole: "text"
+  property string valueRole: "value"
 
   onRightActionClicked: { drawerLoader.active = true; drawerLoader.focus = true }
   onContentClicked: { drawerLoader.active = true; drawerLoader.focus = true }
@@ -103,5 +104,15 @@ MMBaseInput {
         open()
       }
     }
+  }
+
+  function indexFromValue( value ) {
+    for ( let i = 0; i < comboboxModel.count; i++ ) {
+      let item = comboboxModel.get(i)
+      if ( value === item[root.valueRole] ) {
+        return i
+      }
+    }
+    return -1
   }
 }

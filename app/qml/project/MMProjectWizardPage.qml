@@ -73,6 +73,7 @@ MMComponents.MMPage {
 
           // find current index in the model
           comboboxField.comboboxModel: typesmodel
+          comboboxField.valueRole: "type"
 
           comboboxField.onCurrentIndexChanged: {
             console.log(comboboxField.currentIndex, typesmodel.get(comboboxField.currentIndex), typesmodel.get(comboboxField.currentIndex)?.type ?? "")
@@ -85,7 +86,7 @@ MMComponents.MMPage {
           Component.onCompleted: {
             // assign initial values without binding
             attrname = AttributeName
-            comboboxField.currentIndex = root.indexFromWidgetType( WidgetType )
+            comboboxField.currentIndex = comboboxField.indexFromValue( WidgetType )
           }
         }
 
@@ -149,15 +150,5 @@ MMComponents.MMPage {
     ListElement { text: "Number"; type: "Range" }
     ListElement { text: "Checkbox"; type: "CheckBox" }
     ListElement { text: "Photo"; type: "ExternalResource" }
-  }
-
-  function indexFromWidgetType( widgetType ) {
-    for ( let i = 0; i < typesmodel.count; i++ ) {
-      let item = typesmodel.get(i)
-      if ( widgetType === item.type ) {
-        return i
-      }
-    }
-    return -1
   }
 }
