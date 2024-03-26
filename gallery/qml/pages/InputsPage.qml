@@ -11,7 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-import "../../app/qml/inputs"
+import "../../app/qml/inputs" as MMInputs
+import "../../app/qml/components" as MMComponents
 
 ScrollView {
   Column {
@@ -40,20 +41,20 @@ ScrollView {
         spacing: 10
         width: ApplicationWindow.window ? ApplicationWindow.window.width - 40 : 0
 
-        MMSearchInput {
+        MMInputs.MMSearchInput {
           title: "MMSearchInput"
           placeholderText: "Text value"
           onSearchTextChanged: function(text) { console.log("Searched string: " + text) }
         }
 
-        MMSwitchInput {
+        MMInputs.MMSwitchInput {
           title: "MMSwitchInput"
           text: "Visible?"
           enabled: checkbox.checked
           width: parent.width
         }
 
-        MMTextInput {
+        MMInputs.MMTextInput {
           title: "MMTextInput"
           text: "Text"
           enabled: checkbox.checked
@@ -62,7 +63,26 @@ ScrollView {
           checkboxChecked: false
         }
 
-        MMTextInput {
+        MMInputs.MMComboboxInput {
+          width: parent.width
+
+          title: "MMComboboxInput"
+          enabled: checkbox.checked
+
+          currentIndex: 1
+          onCurrentIndexChanged: console.log( "->", currentIndex )
+
+          comboboxModel: ObjectModel {
+            QtObject {
+              property string text: "First"
+            }
+            QtObject {
+              property string text: "Second"
+            }
+          }
+        }
+
+        MMInputs.MMTextInput {
           title: "MMTextInput"
           placeholderText: "Placeholder"
           enabled: checkbox.checked
@@ -70,7 +90,7 @@ ScrollView {
           warningMsg: text.length > 0 ? "" : "Write something"
         }
 
-        MMTextWithButtonInput {
+        MMInputs.MMTextWithButtonInput {
           title: "MMTextWithButtonInput"
           placeholderText: "Write something"
           buttonText: "Copy"
@@ -79,7 +99,7 @@ ScrollView {
           buttonEnabled: text.length > 0
         }
 
-        MMPasswordInput {
+        MMInputs.MMPasswordInput {
           title: "MMPasswordInput"
           text: "Password"
           //regexp: '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,})'
