@@ -138,7 +138,7 @@ Rectangle {
     menuModel.clear()
 
     // find how many visible buttons we need to place to toolbar or menu
-    var visibleButtonsCount = 0
+    let visibleButtonsCount = 0
     for ( let i = 0; i < root.model.count; ++i ) {
       let btnData = root.model.get(i)
       if (btnData.visible) ++visibleButtonsCount
@@ -147,7 +147,7 @@ Rectangle {
     // Find how many short buttons we can fit into toolbar:
     // We want to show minimumToolbarButtonsInMainToolbar buttons
     // if possible, even at the cost that they will be shorter.
-    var maxButtonsInToolbar = Math.floor( toolbar.width / internal.preferredToolbarButtonWidth )
+    let maxButtonsInToolbar = Math.floor( toolbar.width / internal.preferredToolbarButtonWidth )
     if (maxButtonsInToolbar < internal.minimumToolbarButtonsInMainToolbar) {
       maxButtonsInToolbar = Math.floor( toolbar.width / internal.minimumToolbarButtonWidth )
       if (maxButtonsInToolbar > internal.minimumToolbarButtonsInMainToolbar) {
@@ -157,13 +157,13 @@ Rectangle {
     }
 
     // find how many short buttons we can fit into toolbar and their width
-    var shouldHaveMoreButtonInToolbar = visibleButtonsCount > maxButtonsInToolbar
-    var numberOfButtonsInToolbar = Math.min(maxButtonsInToolbar, visibleButtonsCount) // including "..." (more button)
-    var numberOfButtonsInToolbarExcludingMoreButton = shouldHaveMoreButtonInToolbar ? numberOfButtonsInToolbar - 1 : numberOfButtonsInToolbar
+    let shouldHaveMoreButtonInToolbar = visibleButtonsCount > maxButtonsInToolbar
+    let numberOfButtonsInToolbar = Math.min(maxButtonsInToolbar, visibleButtonsCount) // including "..." (more button)
+    let numberOfButtonsInToolbarExcludingMoreButton = shouldHaveMoreButtonInToolbar ? numberOfButtonsInToolbar - 1 : numberOfButtonsInToolbar
 
     // fill models
     for ( var j = 0; j < root.model.count; ++j ) {
-      var btnData = root.model.get(j)
+      let btnData = root.model.get(j)
 
       if (!btnData.visible) continue
 
