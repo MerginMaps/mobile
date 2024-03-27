@@ -11,9 +11,9 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "../components"
+import "../components" as MMComponents
 
-MMDrawerDialog {
+MMComponents.MMDrawerDialog {
   id: root
 
   property bool trackingActive: false
@@ -26,6 +26,7 @@ MMDrawerDialog {
   bigTitle: qsTr("Position tracking")
   description: root.trackingActive ? qsTr("Mergin Maps can track your position on this project."): qsTr("Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.")
   primaryButton: root.trackingActive ? qsTr("Stop tracking") : qsTr("Start tracking")
+  primaryButtonComponent.type: root.trackingActive ? MMComponents.MMButton.Types.Secondary : MMComponents.MMButton.Types.Primary
 
   specialComponent: trackingInfoPanel
 
