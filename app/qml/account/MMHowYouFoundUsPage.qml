@@ -112,7 +112,6 @@ MMPage {
                NumberAnimation { properties: "x,y"; duration: 100 }
            }
 
-
       delegate: MMAccountComponents.MMIconCheckBoxHorizontal {
         x: model.submenu ? __style.margin20 : 0
         width: model.submenu ? ListView.view.width - __style.margin20 : ListView.view.width
@@ -126,25 +125,38 @@ MMPage {
         onClicked: {
           let optionUnchecked = listView.currentIndex === index
 
-          if (!model.submenu && internal.socialSubmenuOpened) {
+          if ( model.key === "social" && !internal.socialSubmenuOpened && !optionUnchecked ) {
+            // add social options
+            let i = model.index
+            listView.model.insert( ++i, { name: qsTr( "YouTube" ), key: "youtube", icon: __style.youtubeIcon, submenu: true } )
+            listView.model.insert( ++i, { name: qsTr( "Twitter" ), key: "twitter", icon: __style.xTwitterIcon, submenu: true } )
+            listView.model.insert( ++i, { name: qsTr( "Facebook" ), key: "facebook", icon: __style.facebookIcon, submenu: true } )
+            listView.model.insert( ++i, { name: qsTr( "LinkedIn" ), key: "linkedIn", icon: __style.linkedinIcon, submenu: true } )
+            listView.model.insert( ++i, { name: qsTr( "Mastodon" ), key: "mastodon", icon: __style.mastodonIcon, submenu: true } )
+            listView.model.insert( ++i, { name: qsTr( "Reddit" ), key: "reddit", icon: __style.redditIcon, submenu: true } )
+
+            listView.positionViewAtIndex( model.index, ListView.Beginning )
+
+            internal.socialSubmenuOpened = true
+          }
+          else if ( !model.submenu ) {
             removeSocialSubitems()
             internal.socialSubmenuOpened = false
           }
 
-          if (!model.submenu) {
-            listView.currentIndex = optionUnchecked ? -1 : index
-            root.selectedText = optionUnchecked ? "" : model.key
+          if ( model.key === "other" ) {
+            listView.footer = specifySourceFooterComponent
+          }
+          else {
+            listView.footer = null
           }
 
-          if (model.key === "social" && !optionUnchecked) {
-            if (!internal.socialSubmenuOpened) {
-              addSocialSubitems(index)
-              internal.socialSubmenuOpened = true
-            }
-          } else if (model.key === "other" && !optionUnchecked) {
-            listView.footer = specifySourceFooterComponent
-          } else {
-            listView.footer = null
+          if ( optionUnchecked ) {
+            listView.currentIndex = -1
+          }
+          else {
+            root.selectedText = model.key
+            listView.currentIndex = index
           }
         }
       }
