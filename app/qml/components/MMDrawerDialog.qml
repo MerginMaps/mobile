@@ -19,6 +19,7 @@ Drawer {
   property alias bigTitle: bigTitle.text
   property alias description: description.text
   property alias boundedDescription: boundedDescription.text
+  property alias primaryButtonComponent: primaryButton
   property alias primaryButton: primaryButton.text
   property alias secondaryButton: secondaryButton.text
   property alias specialComponent: loader.sourceComponent

@@ -9,9 +9,9 @@
 
 import QtQuick
 
-import "../components"
+import "../components" as MMComponents
 
-MMDrawerDialog {
+MMComponents.MMDrawerDialog {
   id: root
 
   property bool streamingActive: false
@@ -22,6 +22,7 @@ MMDrawerDialog {
   bigTitle: qsTr("Streaming mode")
   description: qsTr("Move around your designated object to record its geometry. You can stop this anytime.")
   primaryButton: root.streamingActive ? qsTr("Stop streaming mode") : qsTr("Start streaming mode")
+  primaryButtonComponent.type: root.streamingActive ? MMComponents.MMButton.Types.Secondary : MMComponents.MMButton.Types.Primary
 
   onPrimaryButtonClicked: {
     close()
