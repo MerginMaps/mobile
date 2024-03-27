@@ -93,8 +93,10 @@ Column {
 
     font: __style.t3
     color: __style.forestColor
-    text: "<a style=\"text-decoration: underline; color:" + __style.forestColor + ";\" href='" + root.link + "'>" + root.linkText + "</a>"
-
+    text: __inputUtils.htmlLink(
+            root.linkText,
+            __style.forestColor,
+            root.link)
     textFormat: Text.RichText
 
     onLinkActivated: function( link ) {

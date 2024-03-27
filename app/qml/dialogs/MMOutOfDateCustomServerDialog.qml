@@ -21,11 +21,13 @@ MMDrawerDialog {
 
   picture: __style.positiveMMSymbolImage
   bigTitle: qsTr( "Your server will soon be out of date" )
-  description: qsTr("Please contact your server administrator to upgrade your server to the latest version. " +
-                    "Subsequent releases of our mobile app may not be compatible with your current server version. \n" +
-                    "Learn more about <a href='%1' style='color: %2;'>how to migrate</a>.")
-                    .arg( root.helpLink )
-                    .arg( __style.forestColor )
+  description: __inputUtils.htmlLink(
+                 qsTr("Please contact your server administrator to upgrade your server to the latest version. " +
+                      "Subsequent releases of our mobile app may not be compatible with your current server version. \n" +
+                      "Learn more about %1how to migrate%2."),
+                 __style.forestColor,
+                 root.helpLink
+    )
 
   primaryButton: qsTr( "Ignore" )
 

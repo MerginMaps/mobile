@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 #include "inpututils.h"
+#include "inpututils_p.h"
 
 #include <QWindow>
 #include <QScreen>
@@ -725,6 +726,19 @@ bool InputUtils::renameFile( const QString &srcPath, const QString &dstPath )
     return false;
   }
   return QFile::rename( srcPath, dstPath );
+}
+
+QString InputUtils::htmlLink(
+  const QString &text,
+  const QColor &color,
+  const QString &url,
+  const QString &url2,
+  bool underline,
+  bool bold )
+{
+  return InputUtilsPrivate::htmlLink(
+           text, color, url, url2, underline, bold
+         );
 }
 
 double InputUtils::ratherZeroThanNaN( double d )

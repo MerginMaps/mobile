@@ -7,21 +7,22 @@
  *                                                                         *
  ***************************************************************************/
 
-import QtQuick
+#ifndef INPUTUTILS_P_H
+#define INPUTUTILS_P_H
 
-import "../components"
-import "../inputs"
+#include <QColor>
+#include <QString>
 
-MMDrawerDialog {
-  id: root
+namespace InputUtilsPrivate
+{
+  QString htmlLink( const QString &text,
+                    const QColor &color,
+                    const QString &url = "internal-signal",
+                    const QString &url2 = "",
+                    bool underline = true,
+                    bool bold = true
+                  );
 
-  property string helpLink: __inputHelp.howToSetupProj
+};
 
-  picture: __style.negativeMMSymbolImage
-  bigTitle: qsTr( "PROJ Error" )
-  description: __inputUtils.htmlLink(
-      qsTr("Learn more about %1how to setup PROJ%2"),
-      __style.forestColor,
-      root.helpLink
-    )
-}
+#endif // INPUTUTILS_P_H

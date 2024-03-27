@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDebug>
 #include "enums.h"
+#include "inpututils_p.h"
 
 class InputUtils: public QObject
 {
@@ -20,6 +21,19 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString resolvePrefixForRelativePath( int relativeStorageMode, const QString &homePath, const QString &targetDir ) { return ""; }
     Q_INVOKABLE static QString imageGalleryLocation() { return ""; }
     Q_INVOKABLE static QString getAbsolutePath( const QString &path, const QString &prefixPath ) { return ""; }
+
+    Q_INVOKABLE QString htmlLink( const QString &text,
+                                  const QColor &color,
+                                  const QString &url = "internal-signal",
+                                  const QString &url2 = "",
+                                  bool underline = true,
+                                  bool bold = true
+                                )
+    {
+      return InputUtilsPrivate::htmlLink(
+               text, color, url, url2, underline, bold
+             );
+    }
 
     Q_PROPERTY( bool isIos READ isIos CONSTANT )
     Q_PROPERTY( bool isAndroid READ isAndroid CONSTANT )
