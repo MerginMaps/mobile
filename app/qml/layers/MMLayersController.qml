@@ -103,7 +103,7 @@ Item {
       }
 
       onSearchboxClicked: function() {
-        let item = pagesStackView.push( searchLayersPage, {}, StackView.PushTransition )
+        let item = pagesStackView.push( searchLayersPage, {}, StackView.Immediate )
         item.forceActiveFocus()
       }
     }
@@ -173,7 +173,7 @@ Item {
 
       onClose: function() {
         if (pagesStackView.depth > 1)  {
-          pagesStackView.pop( StackView.PopTransition )
+          pagesStackView.pop( StackView.Immediate )
         }
         else {
           root.close()
