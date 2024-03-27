@@ -144,8 +144,19 @@ Rectangle {
       if (btnData.visible) ++visibleButtonsCount
     }
 
+    // Find how many short buttons we can fit into toolbar:
+    // We want to show minimumToolbarButtonsInMainToolbar buttons
+    // if possible, even at the cost that they will be shorter.
+    var maxButtonsInToolbar = Math.floor( toolbar.width / internal.preferredToolbarButtonWidth )
+    if (maxButtonsInToolbar < internal.minimumToolbarButtonsInMainToolbar) {
+      maxButtonsInToolbar = Math.floor( toolbar.width / internal.minimumToolbarButtonWidth )
+      if (maxButtonsInToolbar > internal.minimumToolbarButtonsInMainToolbar) {
+        // we do not want to show more buttons than minimum even they would fit
+        maxButtonsInToolbar = internal.minimumToolbarButtonsInMainToolbar
+      }
+    }
+
     // find how many short buttons we can fit into toolbar and their width
-    var maxButtonsInToolbar = Math.floor( toolbar.width / internal.minimumToolbarButtonWidth )
     var shouldHaveMoreButtonInToolbar = visibleButtonsCount > maxButtonsInToolbar
     var numberOfButtonsInToolbar = Math.min(maxButtonsInToolbar, visibleButtonsCount) // including "..." (more button)
     var numberOfButtonsInToolbarExcludingMoreButton = shouldHaveMoreButtonInToolbar ? numberOfButtonsInToolbar - 1 : numberOfButtonsInToolbar
@@ -178,6 +189,8 @@ Rectangle {
   QtObject {
     id: internal
 
-    property double minimumToolbarButtonWidth: 100 * __dp
+    property int minimumToolbarButtonsInMainToolbar: 4
+    property double minimumToolbarButtonWidth: 60 * __dp
+    property double preferredToolbarButtonWidth: 100 * __dp
   }
 }
