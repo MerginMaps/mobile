@@ -131,6 +131,8 @@ Item {
           photoUrl: root.controller.photo
 
           fillMode: Image.PreserveAspectCrop
+
+          onClicked: root.contentClicked()
         }
       }
 
@@ -152,6 +154,15 @@ Item {
 
           contentHeight: availableHeight
           contentWidth: scrollRow.width > parent.width ? scrollRow.width : availableWidth
+
+          // Scrollview does not propagate clicks to items beneath
+          MouseArea {
+            anchors.fill: parent
+            onClicked: function( mouse ) {
+              mouse.accepted = true
+              root.contentClicked()
+            }
+          }
 
           Row {
             id: scrollRow
