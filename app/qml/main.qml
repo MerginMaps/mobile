@@ -917,7 +917,7 @@ ApplicationWindow {
 
   Connections {
     target: __notificationModel
-    function showProjectIssuesActionClicked() {
+    function onShowProjectIssuesActionClicked() {
       projectIssuesPage.projectLoadingLog = __activeProject.projectLoadingLog();
       projectIssuesPage.visible = true;
     }
@@ -944,7 +944,10 @@ ApplicationWindow {
     }
 
     function onLoadingErrorFound() {
-      __notificationModel.addError( qsTr( "There were issues loading the project." ) )
+      __notificationModel.addWarning(
+        __inputUtils.htmlLink(qsTr( "There were issues loading the project. %1View details%2" ), __style.forestColor),
+        MM.NotificationType.ShowProjectIssuesAction
+      )
     }
 
     function onReportIssue( title, message ) {

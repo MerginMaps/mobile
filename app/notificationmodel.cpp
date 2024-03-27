@@ -114,7 +114,7 @@ void NotificationModel::addInfo( const QString &message, NotificationType::Actio
 
 void NotificationModel::addWarning( const QString &message, NotificationType::ActionType action )
 {
-  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Warning, NotificationType::WaitingIcon, action );
+  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Warning, NotificationType::ExclamationIcon, action );
 }
 
 // check for auto removing notification
@@ -140,6 +140,7 @@ void NotificationModel::onNotificationClicked( uint id )
       {
         case NotificationType::ActionType::ShowProjectIssuesAction:
         {
+          remove( id );
           emit showProjectIssuesActionClicked();
           break;
         }

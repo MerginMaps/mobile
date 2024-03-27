@@ -23,9 +23,11 @@ MMListDrawer {
   emptyStateDelegate: MMMessage {
     image: __style.noMapThemesImage
     title: qsTr("There are currently no map themes")
-    description: qsTr("Learn more about <a href='%1' style='color: %2;'>how to setup themes</a>.")
-    .arg(__inputHelp.howToSetupThemesLink)
-    .arg(__style.forestColor)
+    description: __inputUtils.htmlLink(
+                   qsTr("Learn more about %1how to setup themes%3."),
+                   __style.forestColor,
+                   __inputHelp.howToSetupThemesLink
+                 )
   }
 
   list.model: MM.MapThemesModel {

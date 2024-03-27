@@ -66,9 +66,16 @@ Page {
     MMTextWithButtonInput {
       buttonText: "Send"
       anchors.horizontalCenter: parent.horizontalCenter
-      text: "Click on notification to invoke ShowProjectIssuesAction action"
+      text: "Click on notification to invoke action"
 
-      onButtonClicked: { __notificationModel.addInfo(text, MM.NotificationType.ShowProjectIssuesAction) }
+      onButtonClicked: { __notificationModel.addWarning(text, MM.NotificationType.ShowProjectIssuesAction) }
+    }
+  }
+
+  Connections {
+    target: __notificationModel
+    function onShowProjectIssuesActionClicked() {
+      console.log("showProjectIssuesActionClicked")
     }
   }
 

@@ -146,10 +146,12 @@ Item {
     MMSignUpPage {
 
       objectName: "signUpPanel"
-      tocString: qsTr("I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3")
-      .arg("<a href='"+ __inputHelp.merginTermsLink + "' style='color:" + __style.forestColor + "; font-weight: bold;'>")
-      .arg("<a href='"+ __inputHelp.privacyPolicyLink +"' style='color:" + __style.forestColor + "; font-weight: bold;'>")
-      .arg("</a>")
+      tocString: __inputUtils.htmlLink(
+          qsTr("I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3"),
+          __style.forestColor,
+          __inputHelp.merginTermsLink,
+          __inputHelp.privacyPolicyLink
+      )
 
       onBackClicked: {
         stackView.popOnePageOrClose()

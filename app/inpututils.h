@@ -137,6 +137,33 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool renameFile( const QString &srcPath, const QString &dstPath );
 
     /**
+     * Convinient way how to create text with html <a> tag for QML
+     *
+     * htmlLink("Learn more", __style.forestGreen, "www.merginmaps.com")
+     *
+     * You can use also QString formatting to include text before and after link, e.g.
+     * htmlLink("my text %1link%2", __style.forestGreen, "www.merginmaps.com")
+     *
+     * You can use also use 2 links, e.g.
+     * htmlLink("my text %1link_1%3 and %2link_2%3", __style.forestGreen, "www.merginmaps.com", false, true "www.merginmaps.com/login")
+     *
+     * \param text Text to insert html <a> tag
+     * \param color of the link
+     * \param url url of the first link
+     * \param url2 url of the second link; empty string means only single link is required
+     * \param underline whether the link is underlined
+     * \param bold whether the link is bold
+     * \result text with inserted html <a> link
+     */
+    Q_INVOKABLE static QString htmlLink( const QString &text,
+                                         const QColor &color,
+                                         const QString &url = "internal-signal",
+                                         const QString &url2 = "",
+                                         bool underline = true,
+                                         bool bold = true
+                                       );
+
+    /**
      * Converts bytes to human readable size (e.g. 1GB, 500MB)
      */
     Q_INVOKABLE static QString bytesToHumanSize( double bytes );

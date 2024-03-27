@@ -170,6 +170,36 @@ void TestUtilsFunctions::formatPoint()
   QCOMPARE( point2str, expected );
 }
 
+void TestUtilsFunctions::testHtmlLink()
+{
+  struct testcase
+  {
+    QString text;
+    QString url;
+    QString url2;
+    bool underline;
+    bool bold;
+    QColor color;
+    QString expectedResult;
+  };
+
+  QVector<testcase> testcases =
+  {
+    { "home page", "https://merginmaps.com", "", true, false, QColor( "red" ), "<a style='text-decoration:underline; color:#ff0000;' href='https://merginmaps.com'>home page</a>" },
+    { "home page", "https://merginmaps.com", "", false, false, QColor( "red" ), "<a style='text-decoration:none; color:#ff0000;' href='https://merginmaps.com'>home page</a>" },
+    { "this is my %1cool link%2 to show", "https://merginmaps.com", "", false, false, QColor( "red" ), "this is my <a style='text-decoration:none; color:#ff0000;' href='https://merginmaps.com'>cool link</a> to show" },
+    { "%1cool link%2 to show", "https://merginmaps.com", "", false, false, QColor( "red" ), "<a style='text-decoration:none; color:#ff0000;' href='https://merginmaps.com'>cool link</a> to show" },
+    { "this is my %1cool link%2", "https://merginmaps.com", "", false, false, QColor( "red" ), "this is my <a style='text-decoration:none; color:#ff0000;' href='https://merginmaps.com'>cool link</a>" },
+    { "this is my %1cool link 1%3 and %2cool link 2%3 wow!", "https://merginmaps.com", "https://merginmaps.com/login", false, true, QColor( "red" ), "this is my <a style='text-decoration:none; font-weight: bold; color:#ff0000;' href='https://merginmaps.com'>cool link 1</a> and <a style='text-decoration:none; font-weight: bold; color:#ff0000;' href='https://merginmaps.com/login'>cool link 2</a> wow!" }
+  };
+
+  for ( const auto &c : testcases )
+  {
+    QString ret = mUtils->htmlLink( c.text, c.color, c.url, c.url2, c.underline, c.bold );
+    QCOMPARE( ret, c.expectedResult );
+  }
+}
+
 void TestUtilsFunctions::formatDistance()
 {
   QString dist2str =  mUtils->formatDistance( 1222.234, Qgis::DistanceUnit::Meters,  2 );

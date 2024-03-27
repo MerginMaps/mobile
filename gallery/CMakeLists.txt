@@ -39,11 +39,17 @@ set(GALLERY_HDRS
     formfeaturesmodel.h
     enums.h
     ../app/notificationmodel.h
+    ../app/inpututils_p.h
     ../app/mmstyle.h
     ../core/merginerrortypes.h
 )
 
-set(GALLERY_SRCS helper.cpp ../app/notificationmodel.cpp main.cpp)
+set(GALLERY_SRCS
+    helper.cpp
+    ../app/notificationmodel.cpp
+    ../app/inpututils_p.cpp
+    main.cpp
+)
 
 if (IOS OR ANDROID)
   add_compile_definitions(MOBILE_OS)
@@ -53,6 +59,8 @@ else ()
   set(GALLERY_HDRS ${GALLERY_HDRS} hotreload.h)
   set(GALLERY_SRCS ${GALLERY_SRCS} hotreload.cpp)
 endif ()
+
+add_definitions(-DGALLERY_APP)
 
 qt_add_executable(
   MerginMapsGallery
@@ -87,9 +95,10 @@ set_target_properties(
 )
 
 target_link_libraries(MerginMapsGallery PRIVATE Qt6::Quick Qt6::Multimedia)
-target_include_directories(MerginMapsGallery PRIVATE ../app ../core)
+target_include_directories(MerginMapsGallery PRIVATE ${CMAKE_SOURCE_DIR} ../app ../core)
 target_compile_definitions(
-  MerginMapsGallery PRIVATE GALLERY_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
+  MerginMapsGallery
+  PRIVATE GALLERY_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
 )
 
 install(

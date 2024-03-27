@@ -43,7 +43,7 @@ Rectangle {
     anchors.leftMargin: 20 * __dp
     size: __style.icon24
     color: text.color
-    visible: model.icon !== MM.NotificationType.None
+    visible: model.icon !== MM.NotificationType.NoneIcon
     source: {
       switch( model.icon ) {
       case MM.NotificationType.NoneIcon: return ""
@@ -67,7 +67,7 @@ Rectangle {
     loops: Animation.Infinite
   }
 
-  MMText {
+  Text {
     id: text
 
     anchors.verticalCenter: parent.verticalCenter
@@ -83,6 +83,7 @@ Rectangle {
     clip: true
     maximumLineCount: 3
     wrapMode: Text.WordWrap
+    textFormat: Text.RichText
     elide: Text.ElideRight
     color: {
       switch( type ) {

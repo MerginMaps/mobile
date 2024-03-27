@@ -28,6 +28,7 @@ class TestUtilsFunctions: public QObject
     void transformedPointXY();
     void transformedPoint();
     void formatPoint();
+    void testHtmlLink();
     void formatDistance();
     void loadIcon();
     void fileExists();

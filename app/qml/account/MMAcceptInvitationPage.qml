@@ -106,7 +106,10 @@ MMPage {
           Text {
             width: parent.width
 
-            text: qsTr("Want to create a new workspace instead? %1Click here%2").arg("<a href='internal-signal' style='color:" + __style.forestColor + "'>").arg("</a>")
+            text: __inputUtils.htmlLink(
+                    qsTr("Want to create a new workspace instead? %1Click here%2"),
+                    __style.forestColor
+                  )
             visible: root.showCreate
 
             font: __style.t3
