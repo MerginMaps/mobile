@@ -39,6 +39,8 @@ MMComponents.MMPage {
       anchors.topMargin: __style.spacing20
       width: parent.width
 
+      placeholderText: qsTr( "Search" ) + "..."
+
       MouseArea {
         anchors.fill: parent
         onClicked: root.searchboxClicked()
