@@ -467,15 +467,15 @@ Item {
             }
             else if ( __positionKit.positionProvider.type() === "external" )
             {
-              if ( __positionKit.positionProvider.state === PositionProvider.Connecting )
+              if ( __positionKit.positionProvider.state === MM.PositionProvider.Connecting )
               {
                 return qsTr( "Connecting to %1" ).arg( __positionKit.positionProvider.name() )
               }
-              else if ( __positionKit.positionProvider.state === PositionProvider.WaitingToReconnect )
+              else if ( __positionKit.positionProvider.state === MM.PositionProvider.WaitingToReconnect )
               {
                 return __positionKit.positionProvider.stateMessage
               }
-              else if ( __positionKit.positionProvider.state === PositionProvider.NoConnection )
+              else if ( __positionKit.positionProvider.state === MM.PositionProvider.NoConnection )
               {
                 return __positionKit.positionProvider.stateMessage
               }

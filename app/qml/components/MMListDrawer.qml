@@ -15,11 +15,16 @@ MMDrawer {
 
   property alias list: listViewComponent
 
+  property bool showFullScreen: false
   property alias emptyStateDelegate: emptyStateDelegateLoader.sourceComponent
 
   drawerContent: Item {
     width: parent.width
-    height: listViewComponent.count === 0 ? emptyStateDelegateLoader.height : listViewComponent.height
+    height: {
+      if ( root.showFullScreen ) return root.drawerContentAvailableHeight
+      if ( listViewComponent.count === 0 ) return emptyStateDelegateLoader.height
+      return listViewComponent.height
+    }
 
     MMScrollView {
       width: parent.width

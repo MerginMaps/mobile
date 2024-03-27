@@ -25,7 +25,6 @@ MMDrawerDialog {
   secondaryButton: qsTr( "No, thanks" )
 
   onPrimaryButtonClicked: {
-    providerId = ""
     root.removeProvider()
     close()
   }

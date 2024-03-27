@@ -13,317 +13,248 @@ import QtQuick.Dialogs
 
 import mm 1.0 as MM
 
-import "../components"
-import "../dialogs"
+import "../components" as MMComponents
+import "../dialogs" as MMDialogs
 
-Page {
+MMComponents.MMPage {
   id: root
 
-  signal close
+  pageHeader.title: listview.showTopTitle ? internal.pageTitle : ""
 
-  function constructProvider( type, id, name )
-  {
-    if ( type === "external" )
-    {
+  pageBottomMarginPolicy: MMComponents.MMPage.PaintBehindSystemBar
+
+  pageContent: Item {
+    width: parent.width
+    height: parent.height
+
+    ListView {
+      id: listview
+
+      property bool showTopTitle: visibleArea.yPosition * height > ( headerItem.contentHeight / 2 )
+
+      width: parent.width
+      height: parent.height
+
+      clip: true
+
+      model: MM.PositionProvidersModel {
+        id: providersModel
+
+        appSettings: __appSettings
+      }
+
+      header: MMComponents.MMText {
+        id: headerText
+
+        width: ListView.view.width
+
+        text: internal.pageTitle
+
+        font: __style.h3
+        color: __style.forestColor
+
+        wrapMode: Text.Wrap
+        maximumLineCount: 2
+
+        bottomPadding: __style.margin40
+      }
+
+      delegate: MMComponents.MMListDelegate {
+        id: listdelegate
+
+        property bool isActive: __appSettings.activePositionProviderId === model.ProviderId
+
+        leftContent: MMComponents.MMRadioButton {
+          checked: listdelegate.isActive
+
+          // We need to duplicate mouse area here in order to not toggle the radio button immediately
+          MouseArea {
+            anchors.fill: parent
+            onClicked: function( mouse ) {
+              mouse.accepted = true
+              root.constructProvider( model.ProviderType, model.ProviderId, model.ProviderName )
+            }
+          }
+        }
+
+        text: model.ProviderName ? model.ProviderName : qsTr( "Unknown device" )
+        secondaryText: listdelegate.isActive ? __positionKit.positionProvider.stateMessage : model.ProviderDescription
+
+        rightContent: MMComponents.MMRoundButton {
+          iconSource: __style.deleteIcon
+          onClicked: removeDialog.openDialog( model.ProviderId )
+        }
+
+        hasLine: {
+          if ( index === ListView.view.count - 1 ) return false
+          if ( ListView.section === "internal" ) {
+            let ix = providersModel.index( index + 1, 0 )
+            let type = providersModel.data( ix, MM.PositionProvidersModel.ProviderType )
+            if ( type === "external" ) return false
+          }
+
+          return true
+        }
+
+        onClicked: root.constructProvider( model.ProviderType, model.ProviderId, model.ProviderName )
+      }
+
+      section {
+        property: "ProviderType"
+        delegate: MMComponents.MMText {
+          width: ListView.view.width
+
+          text: section === "internal" ? qsTr( "Internal receivers" ) : qsTr( "External receivers" )
+
+          font: __style.p6
+          color: __style.nightColor
+
+          MMComponents.MMLine { width: parent.width; y: parent.height }
+        }
+      }
+
+      footer: __haveBluetooth ? connectionPossibleFooterComponent : noConnectionPossibleFooterComponent
+    }
+
+    MMComponents.MMButton {
+      id: connectNewReceiverButton
+
+      width: parent.width
+      anchors {
+        bottom: parent.bottom
+        bottomMargin: __style.safeAreaBottom + __style.margin8
+      }
+
+      text: qsTr( "Connect new receiver" )
+
+      onClicked: bluetoothDiscoveryLoader.active = true
+    }
+
+    MMDialogs.MMProviderRemoveReceiverDialog {
+      id: removeDialog
+
+      function openDialog( positionProviderId ) {
+        removeDialog.providerId = positionProviderId
+        visible = true
+      }
+
+      onRemoveProvider: {
+        if (removeDialog.providerId === "") {
+          close()
+          return
+        }
+
+        if ( __appSettings.activePositionProviderId === removeDialog.providerId )
+        {
+          // we are removing an active provider, replace it with internal provider
+          root.constructProvider( "internal", "devicegps", qsTr( "Internal" ) )
+        }
+
+        providersModel.removeProvider( removeDialog.providerId )
+
+        removeDialog.providerId = ""
+      }
+    }
+
+    Loader {
+      id: bluetoothDiscoveryLoader
+
+      active: false
+      sourceComponent: bluetoothDiscoveryDrawerComponent
+    }
+
+    Loader {
+      id: connectingDialogLoader
+
+      active: false
+      asynchronous: true
+      sourceComponent: connectionToSavedProviderDialogComponent
+
+      function open() {
+        active = true
+        focus = true
+      }
+    }
+  }
+
+  Component {
+    id: noConnectionPossibleFooterComponent
+
+    MMComponents.MMMessage {
+      image: __style.externalGpsRedImage
+      title: qsTr( "Connecting to external receivers via bluetooth is not supported" )
+      description: qsTr( "This function is not available on iOS. " +
+                        "Your hardware vendor may provide a custom " +
+                        "app that connects to the receiver and sets position. " +
+                        "Mergin Maps will still think it is the internal GPS of " +
+                        "your phone/tablet." )
+      link: __inputHelp.howToConnectGPSLink
+    }
+  }
+
+  Component {
+    id: connectionPossibleFooterComponent
+
+    MMComponents.MMListSpacer {
+      height: __style.safeAreaBottom + __style.margin8 + connectNewReceiverButton.height
+    }
+  }
+
+  Component {
+    id: bluetoothDiscoveryDrawerComponent
+
+    MMAddPositionProviderDrawer {
+      onInitiatedConnectionTo: function ( deviceAddress, deviceName ) {
+        __positionKit.positionProvider = __positionKit.constructProvider( "external", deviceAddress, deviceName )
+
+        providersModel.addProvider( deviceName, deviceAddress )
+        list.model.discovering = false
+        close()
+
+        connectingDialogLoader.open()
+      }
+      onClosed: bluetoothDiscoveryLoader.active = false
+
+      Component.onCompleted: open()
+    }
+  }
+
+  Component {
+    id: connectionToSavedProviderDialogComponent
+
+    MMBluetoothConnectionDrawer {
+      onClosed: connectingDialogLoader.active = false
+
+      // revert position provider back to internal provider
+      onFailure: __positionKit.positionProvider = __positionKit.constructProvider( "internal", "devicegps", "" )
+
+      Component.onCompleted: open()
+    }
+  }
+
+  QtObject {
+    id: internal
+
+    property string pageTitle: qsTr( "Manage GPS receivers" )
+  }
+
+  function constructProvider( type, id, name ) {
+    if ( type === "external" ) {
       // Is bluetooth turned on?
-      if ( !__inputUtils.isBluetoothTurnedOn() )
-      {
+      if ( !__inputUtils.isBluetoothTurnedOn() ) {
         __inputUtils.turnBluetoothOn()
         return
       }
     }
 
-    if ( __appSettings.activePositionProviderId === id )
-    {
+    if ( __appSettings.activePositionProviderId === id ) {
       return // do not construct the same provider again
     }
 
      __positionKit.positionProvider = __positionKit.constructProvider( type, id, name )
 
-    if ( type === "external" )
-    {
-      dialogLoader.active = true
-      dialogLoader.focus = true
-    }
-  }
-
-  header: MMPageHeader {
-    id: header
-
-    width: parent.width
-    color: __style.lightGreenColor
-    onBackClicked: root.close()
-  }
-
-  background: Rectangle {color: __style.lightGreenColor}
-
-  focus: true
-
-  Keys.onReleased: function( event ) {
-    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true
-      close()
-    }
-  }
-
-  Text {
-    id: title
-
-    anchors.left: parent.left
-    anchors.leftMargin: __style.pageMargins
-    anchors.top: parent.top
-    anchors.topMargin: __style.margin40
-
-    text: qsTr( "Manage GPS receivers" )
-    font: __style.h3
-    color: __style.forestColor
-  }
-
-  MMButton {
-    id: connectNewReceiverButton
-
-    visible: false
-
-    anchors.bottom: parent.bottom
-    anchors.left: parent.left
-    anchors.leftMargin: __style.pageMargins
-    anchors.bottomMargin: __style.pageMargins
-
-    width: parent.width - 2 * __style.pageMargins
-    text: qsTr( "Connect new receiver" )
-
-    onClicked: {
-      bluetoothDiscoveryLoader.active = true
-    }
-  }
-
-  ListView {
-    id: view
-
-    anchors.left: parent.left
-    anchors.leftMargin: __style.pageMargins
-    anchors.top: title.bottom
-    anchors.topMargin: __style.margin40
-
-    width: root.width - 2 * __style.pageMargins
-
-    model: MM.PositionProvidersModel {
-      id: providersModel
-
-      appSettings: __appSettings
-    }
-
-    section {
-      property: "ProviderType"
-      delegate: Text {
-        property string sectionTitle: section === "internal" ? qsTr( "Internal receivers" ) : qsTr( "External receivers" )
-
-        text: sectionTitle
-        width: ListView.view.width
-        font: __style.p6
-        color: __style.nightColor
-        horizontalAlignment: Text.AlignLeft
-      }
-    }
-
-    delegate: Rectangle {
-      id: providerDelegate
-
-      property bool isActiveProvider: __appSettings.activePositionProviderId === model.ProviderId
-
-      width: ListView.view.width
-      height: __style.row49
-      color: __style.lightGreenColor
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: root.constructProvider( model.ProviderType, model.ProviderId, model.ProviderName )
-      }
-
-      Row {
-        id: row
-
-        anchors.fill: parent
-
-        RadioButton {
-          id: isActiveButton
-
-          width: parent.height
-          height: parent.height
-
-          checkable: false
-          checked: providerDelegate.isActiveProvider
-
-          indicator: Rectangle {
-            width: isActiveButton.height / 2.3
-            height: isActiveButton.height / 2.3
-
-            anchors.centerIn: isActiveButton
-
-            color: providerDelegate.isActiveProvider ? __style.forestColor : __style.lightGreenColor
-            radius: __style.margin12
-            border.color: __style.forestColor
-
-            MMIcon {
-              size: __style.icon24
-              source: __style.doneCircleIcon
-              x: parent.width / 2 - width / 2
-              y: parent.height / 2 - height / 2
-              visible: providerDelegate.isActiveProvider
-              color: __style.grassColor
-            }
-          }
-
-          // We need to duplicate mouse area here in order to handle clicks from RadioButton
-          MouseArea {
-            anchors.fill: parent
-            onClicked: root.constructProvider( model.ProviderType, model.ProviderId, model.ProviderName )
-          }
-        }
-
-        Column {
-          width: row.width - isActiveButton.width - removeIconContainer.width
-          height: providerDelegate.height
-
-          Text {
-            id: deviceName
-
-            text: model.ProviderName ? model.ProviderName : qsTr( "Unknown device" )
-
-            verticalAlignment: Text.AlignBottom
-            elide: Text.ElideRight
-            color: __style.nightColor
-            font: __style.t3
-          }
-
-          Text {
-            id: deviceSecondaryText
-
-            text: model.ProviderDescription
-
-            verticalAlignment: Text.AlignTop
-            elide: Text.ElideRight
-            color: __style.nightColor
-            font: __style.p6
-          }
-        }
-
-        MMRoundButton {
-          id: removeIconContainer
-
-          anchors.verticalCenter: parent.verticalCenter
-
-          height: parent.height
-          width: height
-
-          bgndColor: __style.polarColor
-          iconSource: __style.deleteIcon
-          visible: model.ProviderType === "external"
-
-          onClicked: removeDialog.open( model.ProviderId )
-        }
-      }
-    }
-
-    Component.onCompleted: {
-      // select appropriate footer, on iOS say that you can not connect via BT
-      if ( __haveBluetooth )
-      {
-        connectNewReceiverButton.visible = true
-      }
-      else
-      {
-        view.footer = btNotSupportedComponent
-      }
-    }
-  }
-
-  Component {
-    id: btNotSupportedComponent
-
-    MMMessage {
-      image: __style.externalGpsRedImage
-      title: qsTr( "Connecting to external receivers via bluetooth is not supported" )
-      description: qsTr( "This function is not available on iOS. " +
-                         "Your hardware vendor may provide a custom " +
-                         "app that connects to the receiver and sets position. " +
-                         "Mergin Maps will still think it is the internal GPS of " +
-                         "your phone/tablet." )
-      link: __inputHelp.howToConnectGPSLink
-    }
-  }
-
-  Loader {
-    id: bluetoothDiscoveryLoader
-
-    sourceComponent: bluetoothDiscoveryComponent
-    active: false
-    asynchronous: true
-    anchors.fill: parent
-    onActiveChanged: {
-      if ( active )
-      {
-        bluetoothDiscoveryLoader.item?.open()
-      }
-    }
-  }
-
-  Component {
-    id: bluetoothDiscoveryComponent
-
-    MMAddPositionProviderDrawer {
-      onInitiatedConnectionTo: function( deviceAddress, deviceName ) {
-        providersModel.addProvider( deviceName, deviceAddress )
-      }
-      onClose: bluetoothDiscoveryLoader.active = false
-    }
-  }
-
-  Loader {
-    id: dialogLoader
-
-    sourceComponent: connectionToSavedProviderDialogBlueprint
-    active: false
-    asynchronous: true
-    anchors.fill: parent
-    onActiveChanged: {
-      if ( active )
-      {
-        dialogLoader.item?.open()
-      }
-    }
-  }
-
-  Component {
-    id: connectionToSavedProviderDialogBlueprint
-
-    MMBluetoothConnectionDrawer {
-      id: connectionToSavedProviderDialog
-      onClosed: dialogLoader.active = false
-    }
-  }
-
-  MMProviderRemoveReceiverDialog {
-    id: removeDialog
-
-    function open( providerId ) {
-      this.providerId = providerId
-      visible = true
-    }
-
-    onRemoveProvider: {
-      if (providerId === "") {
-        close()
-        return
-      }
-
-      if ( __appSettings.activePositionProviderId === providerId )
-      {
-        // we are removing an active provider, replace it with internal provider
-        root.constructProvider( "internal", "devicegps", qsTr( "Internal" ) )
-      }
-
-      providersModel.removeProvider( providerId )
+    if ( type === "external" ) {
+      connectingDialogLoader.open()
     }
   }
 }
