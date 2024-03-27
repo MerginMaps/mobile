@@ -20,7 +20,7 @@ MMDrawerDialog {
   picture: __style.negativeMMSymbolImage
   bigTitle: qsTr( "Failed to open the project" )
   description: __inputUtils.htmlLink(
-                 qsTr("Learn more about %1loading errors%3."),
+                 qsTr("Learn more about %1loading errors%2."),
                  __style.forestColor,
                  root.helpLink
                )

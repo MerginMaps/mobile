@@ -24,7 +24,7 @@ MMListDrawer {
     image: __style.noMapThemesImage
     title: qsTr("There are currently no map themes")
     description: __inputUtils.htmlLink(
-                   qsTr("Learn more about %1how to setup themes%3."),
+                   qsTr("Learn more about %1how to setup themes%2."),
                    __style.forestColor,
                    __inputHelp.howToSetupThemesLink
                  )
