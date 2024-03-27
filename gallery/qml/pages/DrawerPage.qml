@@ -116,14 +116,6 @@ Page {
       }
 
       Button {
-        text: "codeScanner"
-
-        onClicked: {
-          codeScanner.open()
-        }
-      }
-
-      Button {
         text: "removePhotoDialog"
 
         onClicked: {
@@ -311,10 +303,6 @@ Page {
     id: migrateToMerginDialog
   }
 
-  MMCodeScanner {
-    id: codeScanner
-  }
-
   MMRemovePhotoDialog {
     id: removePhotoDialog
   }
@@ -334,19 +322,19 @@ Page {
   MMProjErrorDialog {
     id: projErrorDialog
 
-    helpLink: "www.merginmaps.com"
+    helpLink: "https://merginmaps.com"
   }
 
   MMOutOfDateCustomServerDialog {
     id: outOfDateServerDialog
 
-    helpLink: "www.merginmaps.com"
+    helpLink: "https://merginmaps.com"
   }
 
   MMProjectLoadErrorDialog {
     id: projectLoadErrorDialog
 
-    helpLink: "www.merginmaps.com"
+    helpLink: "https://merginmaps.com"
   }
 
   MMDiscardGeometryChangesDialog {
