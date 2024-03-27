@@ -59,21 +59,22 @@ Page {
       pageHeader.title: layerDetailData.name
       onBackClicked: root.closePage()
 
-      pageContent: ScrollView {
+      pageContent: MMComponents.MMScrollView {
         id: scrollview
 
         width: parent.width
         height: parent.height
-        contentWidth: availableWidth // only scroll vertically
 
-        ColumnLayout {
+        Column {
           width: scrollview.width
-          spacing: __style.spacing20
+          spacing: 0
 
-          MMComponents.MMListSpacer { height: __style.spacing40 }
+          MMComponents.MMListSpacer { height: __style.spacing20 }
 
           // visibility
           MMSwitchInput {
+            width: parent.width
+
             title: qsTr( "Settings" )
             text: qsTr( "Visible on map" )
             switchComponent.checked: layerDetailData.isVisible
@@ -91,16 +92,18 @@ Page {
             }
           }
 
+          MMComponents.MMListSpacer { height: __style.spacing20 }
+
           // legend
           Column {
             id: legendWrapper
 
             property real border: __style.margin12
 
-            Layout.fillWidth: true
-            Layout.preferredHeight: legend.height + symbologyTitle.height + 2 * legendWrapper.border + legendWrapper.spacing
+            width: parent.width
+            height: legend.height + symbologyTitle.height + 2 * legendWrapper.border + legendWrapper.spacing
 
-            spacing: __style.margin6
+            spacing: __style.margin4
 
             MMComponents.MMText {
               id: symbologyTitle
@@ -141,17 +144,19 @@ Page {
             }
           }
 
+          MMComponents.MMListSpacer { height: __style.spacing20 }
+
           Column {
             id: layerAttribution
 
-            visible: __inputUtils.layerAttribution(layerDetailData.mapLayer) !== ""
+            width: parent.width
+            height: 1.5 * __style.row63 + attributionTitle.height + 2 * layerAttribution.border
+
+            visible: __inputUtils.layerAttribution( layerDetailData.mapLayer ) !== ""
 
             property real border: __style.margin12
 
-            Layout.fillWidth: true
-            Layout.preferredHeight: 1.5 * __style.row63 + attributionTitle.height + 2 * layerAttribution.border
-
-            spacing: __style.margin6
+            spacing: __style.margin4
 
             MMComponents.MMText {
               id: attributionTitle
@@ -221,16 +226,16 @@ Page {
         root.addFeatureClicked( toLayer )
       }
 
-      onClose: function() {
+      onBackClicked: function() {
         root.closePage()
       }
     }
   }
 
-  footer:  MMComponents.MMToolbar {
+  footer: MMComponents.MMToolbar {
     id: selectableToolbar
 
-    visible: featureButton.visible && layerInfoButton.visible
+    visible: internal.withToolbar
 
     Component.onCompleted: {
       selectableToolbar.index = content.index ?? 0
@@ -238,13 +243,12 @@ Page {
 
     model: ObjectModel {
       MMComponents.MMToolbarButton {
-        id: featureButton
-
         visible: layerDetailData.isVectorLayer
 
         text: qsTr( "Features" )
         iconSource: __style.featuresIcon
         iconSourceSelected: __style.featuresFilledIcon
+
         onClicked: {
           if ( layerDetailData.isVectorLayer ) {
             selectableToolbar.index = 0
@@ -252,10 +256,9 @@ Page {
           }
         }
       }
+
       MMComponents.MMToolbarButton {
         id: layerInfoButton
-
-        visible: !layerDetailData.isVectorLayer || layerDetailData.isSpatial
 
         text: qsTr( "Layer info" )
         iconSource: __style.infoIcon
@@ -281,13 +284,19 @@ Page {
     //
 
     if ( layerDetailData.isVectorLayer ) {
-      content.addItem( featuresListPageComponent.createObject( content ) )
+      content.addItem( featuresListPageComponent.createObject( content, { hasToolbar: internal.withToolbar } ) )
     }
 
     if ( !layerDetailData.isVectorLayer || layerDetailData.isSpatial )
     {
       content.addItem( layerDetailPageComponent.createObject( content ) )
     }
+  }
+
+  QtObject {
+    id: internal
+
+    property bool withToolbar: layerDetailData.isVectorLayer && ( !layerDetailData.isVectorLayer || layerDetailData.isSpatial )
   }
 
   function closePage() {

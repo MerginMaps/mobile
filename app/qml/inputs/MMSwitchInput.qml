@@ -31,6 +31,7 @@ MMBaseInput {
 
     anchors.fill: parent
 
+    readOnly: true
     placeholderTextColor: __style.nightAlphaColor
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
 
@@ -46,8 +47,10 @@ MMBaseInput {
 
   rightAction: MMSwitch {
     id: switchComponent
-    x: -20 * __dp // TODO why is this needed?
-    uncheckedBgColor: __style.lightGreenColor
+
     anchors.verticalCenter: parent.verticalCenter
+    x: -20 * __dp // TODO why is this needed? bacause of how baseinput works :(
+
+    uncheckedBgColor: __style.lightGreenColor
   }
 }
