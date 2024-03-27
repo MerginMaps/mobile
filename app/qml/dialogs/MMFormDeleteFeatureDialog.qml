@@ -16,11 +16,11 @@ MMDrawerDialog {
 
   signal deleteFeature()
 
-  picture: __style.negativeMMSymbolImage
-  bigTitle: qsTr( "Delete feature" )
+  imageSource: __style.negativeMMSymbolImage
+  title: qsTr( "Delete feature" )
   description: qsTr( "Are you sure you want to delete this feature?" )
-  primaryButton: qsTr( "Yes, I want to delete" )
-  secondaryButton: qsTr( "No, thanks" )
+  primaryButton.text: qsTr( "Yes, I want to delete" )
+  secondaryButton.text: qsTr( "No, thanks" )
 
   onPrimaryButtonClicked: {
     root.deleteFeature()

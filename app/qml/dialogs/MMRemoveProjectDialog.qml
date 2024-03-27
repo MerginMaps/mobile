@@ -20,11 +20,11 @@ MMDrawerDialog {
 
   signal removeClicked()
 
-  picture: __style.negativeMMSymbolImage
-  bigTitle: qsTr( "Remove project" )
+  imageSource: __style.negativeMMSymbolImage
+  title: qsTr( "Remove project" )
   description: qsTr( "Any unsynchronized changes will be lost in project \n %1" ).arg( relatedProjectId )
-  primaryButton: qsTr("Remove")
-  secondaryButton: qsTr("Cancel")
+  primaryButton.text: qsTr("Remove")
+  secondaryButton.text: qsTr("Cancel")
 
   onPrimaryButtonClicked: {
     removeClicked()

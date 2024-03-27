@@ -16,11 +16,11 @@ MMDrawerDialog {
 
   signal migrationRequested()
 
-  picture: __style.positiveMMSymbolImage
-  bigTitle: qsTr( "Upload project?" )
+  imageSource: __style.positiveMMSymbolImage
+  title: qsTr( "Upload project?" )
   description: qsTr( "This project is currently not uploaded on cloud. Upload it in order to activate synchronization and collaboration." )
-  primaryButton: qsTr( "Yes, I want to upload it" )
-  secondaryButton: qsTr( "No, thanks" )
+  primaryButton.text: qsTr( "Yes, I want to upload it" )
+  secondaryButton.text: qsTr( "No, thanks" )
 
   onPrimaryButtonClicked: {
     root.migrationRequested()

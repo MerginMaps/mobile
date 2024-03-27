@@ -10,8 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
-import "../../inputs"
-import "../../components"
+import "../../inputs" as MMInputs
+import "../../components" as MMComponents
 
 MMSettingsItem {
   id: root
@@ -19,34 +19,63 @@ MMSettingsItem {
   property string valueDescription
 
   onClicked: {
-    inputDrawer.value = root.value
-    inputDrawer.visible = true
+    drawerLoader.active = true
   }
 
-  MMDrawerDialog {
-    id: inputDrawer
+  Loader {
+    id: drawerLoader
 
-    property string value
+    active: false
+    asynchronous: true
 
-    signal clicked ( string newValue )
+    sourceComponent: MMComponents.MMDrawer {
+      id: drawer
 
-    width: ApplicationWindow.window.width
-    title: root.title
-    primaryButton: qsTr("Confirm")
-    visible: false
-    specialComponent: MMTextInput {
-      width: inputDrawer.width - 40 * __dp
-      title: root.valueDescription
-      bgColor: __style.lightGreenColor
-      text: inputDrawer.value
-      focus: true
+      drawerHeader.title: root.title
 
-      onTextChanged: inputDrawer.value = text
-    }
+      onClosed: drawerLoader.active = false
 
-    onPrimaryButtonClicked: {
-      visible = false
-      root.valueWasChanged(inputDrawer.value)
+      drawerContent: MMComponents.MMScrollView {
+
+        width: parent.width
+        height: drawer.maxHeightHit ? drawer.drawerContentAvailableHeight : contentHeight
+
+        Column {
+          width: parent.width
+          spacing: 0
+
+          MMComponents.MMListSpacer { height: __style.spacing20 }
+
+          MMInputs.MMTextInput {
+            id: textInput
+
+            title: root.title
+
+            bgColor: __style.lightGreenColor
+
+            text: root.value
+            textFieldComponent.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
+          }
+
+          MMComponents.MMListSpacer { height: __style.spacing40 }
+
+          MMComponents.MMButton {
+            width: parent.width
+
+            text: qsTr( "Confirm" )
+
+            onClicked: {
+              root.valueWasChanged( textInput.text )
+              drawer.close()
+            }
+          }
+        }
+
+        Component.onCompleted: open()
+      }
     }
   }
 }
+
+
+

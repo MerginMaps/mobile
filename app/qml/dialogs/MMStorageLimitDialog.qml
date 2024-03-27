@@ -8,29 +8,28 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
 
-import "../components"
+import "../components" as MMComponents
 
 
-MMDrawerDialog {
+MMComponents.MMDrawerDialog {
   id: root
 
   property string dataToSync
   required property string dataUsing
   required property string plan
-  required property real usedData // [0 = 1]
+  required property real usedData // [0 - 1]
   required property bool apiSupportsSubscription
-
-  picture: __style.reachedDataLimitImage
-  bigTitle: qsTr("You have reached a data limit")
-  primaryButton: apiSupportsSubscription ? qsTr("Manage account") : ""
 
   signal manageAccountClicked()
 
-  specialComponent: Column {
-    width: root.width - 40 * __dp
+  title: qsTr("You have reached a data limit")
+  imageSource: __style.reachedDataLimitImage
+
+  primaryButton.text: apiSupportsSubscription ? qsTr("Manage account") : ""
+
+  additionalContent: Column {
+    width: parent.width
     spacing: 10 * __dp
     topPadding: 20 * __dp
 
@@ -38,7 +37,7 @@ MMDrawerDialog {
       width: parent.width
       height: dataToSyncText.height
 
-      Text {
+      MMComponents.MMText {
         width: parent.width
         text: qsTr("Data to sync")
         font: __style.p5
@@ -46,7 +45,8 @@ MMDrawerDialog {
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
       }
-      Text {
+
+      MMComponents.MMText {
         id: dataToSyncText
 
         width: parent.width
@@ -58,13 +58,13 @@ MMDrawerDialog {
       }
     }
 
-    MMLine { width: parent.width }
+    MMComponents.MMLine { width: parent.width }
 
     Item {
       width: parent.width
       height: dataUsingText.height
 
-      Text {
+      MMComponents.MMText {
         width: parent.width
         text: qsTr("Using")
         font: __style.p5
@@ -72,7 +72,8 @@ MMDrawerDialog {
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
       }
-      Text {
+
+      MMComponents.MMText {
         id: dataUsingText
 
         width: parent.width
@@ -84,17 +85,17 @@ MMDrawerDialog {
       }
     }
 
-    MMProgressBar {
+    MMComponents.MMProgressBar {
       position: root.usedData
     }
 
-    MMLine { width: parent.width }
+    MMComponents.MMLine { width: parent.width }
 
     Item {
       width: parent.width
       height: planText.height
 
-      Text {
+      MMComponents.MMText {
         width: parent.width
         text: qsTr("Plan")
         font: __style.p5
@@ -102,7 +103,8 @@ MMDrawerDialog {
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
       }
-      Text {
+
+      MMComponents.MMText {
         id: planText
 
         width: parent.width

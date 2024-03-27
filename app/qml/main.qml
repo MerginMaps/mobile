@@ -95,7 +95,7 @@ ApplicationWindow {
   }
 
   function showProjError(message) {
-    projDialog.boundedDescription = message
+    projDialog.detailedDescription = message
     projDialog.open()
   }
 

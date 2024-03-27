@@ -8,28 +8,27 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Dialogs
-import QtQuick.Layouts
 
-import "../components"
+import "../components" as MMComponents
 
-
-MMDrawerDialog {
+MMComponents.MMDrawerDialog {
   id: root
 
-  property int maxProjectNumber: -1
+  property int maxProjectNumber: 2
+
   required property string plan
   required property bool apiSupportsSubscription
 
-  picture: __style.reachedDataLimitImage
-  bigTitle: qsTr("You have reached project number limit")
-  primaryButton: apiSupportsSubscription ? qsTr("Manage account") : ""
-
   signal manageAccountClicked()
 
-  specialComponent: Column {
-    width: root.width - 2 * __style.pageMargins
+  imageSource: __style.reachedDataLimitImage
+
+  title: qsTr( "You have reached a maximum number of projects" )
+
+  primaryButton.text: apiSupportsSubscription ? qsTr( "Manage account" ) : ""
+
+  additionalContent: Column {
+    width: parent.width
     spacing: 10 * __dp
     topPadding: 20 * __dp
 
@@ -37,47 +36,55 @@ MMDrawerDialog {
       width: parent.width
       height: dataToSyncText.height
 
-      Text {
+      MMComponents.MMText {
         width: parent.width
-        text: qsTr("Maximum of projects")
+
+        text: qsTr( "Maximum number of projects" )
         font: __style.p5
-        color: __style.nightColor
+
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
       }
-      Text {
+
+      MMComponents.MMText {
         id: dataToSyncText
 
         width: parent.width
+
         text: root.maxProjectNumber
-        font: __style.t3
         color: __style.nightColor
+        font: __style.t3
+
         horizontalAlignment: Text.AlignRight
         verticalAlignment: Text.AlignVCenter
       }
     }
 
-    MMLine { width: parent.width }
+    MMComponents.MMLine { width: parent.width }
 
     Item {
       width: parent.width
       height: planText.height
 
-      Text {
+      MMComponents.MMText {
         width: parent.width
-        text: qsTr("Plan")
+
+        text: qsTr( "Plan" )
         font: __style.p5
-        color: __style.nightColor
+
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
       }
-      Text {
+
+      MMComponents.MMText {
         id: planText
 
         width: parent.width
+
         text: root.plan
-        font: __style.t3
         color: __style.nightColor
+        font: __style.t3
+
         horizontalAlignment: Text.AlignRight
         verticalAlignment: Text.AlignVCenter
       }

@@ -14,10 +14,10 @@ import "../components"
 MMDrawerDialog {
   id: root
 
-  picture: __style.noPermissionsImage
-  bigTitle: qsTr( "No rights to access the project" )
+  imageSource: __style.noPermissionsImage
+  title: qsTr( "No rights to access the project" )
   description: qsTr( "You are not allowed to synchronize your changes in this project. Contact the project owner to assign you the correct permission. If you are the project owner, log in to the dashboard." )
-  primaryButton: qsTr( "Ok, I understand" )
+  primaryButton.text: qsTr( "Ok, I understand" )
 
   onPrimaryButtonClicked: {
     close()

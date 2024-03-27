@@ -13,7 +13,7 @@ import QtMultimedia
 
 import mm 1.0 as MM
 
-Drawer {
+Drawer { // We can keep this one as Drawer - it could actually be Popup instead
   id: root
 
   signal scanFinished( var data )
