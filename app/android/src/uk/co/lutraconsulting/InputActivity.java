@@ -59,7 +59,7 @@ public class InputActivity extends QtActivity
   void setCustomStatusAndNavBar() 
   {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-      Log.d( TAG, "Older android version." );
+      Log.d( TAG, "Unsupported Android version for painting behind system bars." );
       return;
     }
     else {
@@ -91,7 +91,7 @@ public class InputActivity extends QtActivity
   public String getSafeArea() {
 
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-      Log.d( TAG, "Older android version." );
+      Log.d( TAG, "Unsupported Android version for painting behind system bars." );
       return ( "0,0,0,0" );
     }
     else {
