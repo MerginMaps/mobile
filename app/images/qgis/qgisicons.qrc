@@ -13,5 +13,7 @@
         <file>mIconRasterLayer.svg</file>
         <file>mIconTableLayer.svg</file>
         <file>mIconVectorTileLayer.svg</file>
+        <file>mIndicatorBadLayer.svg</file>
+        <file>mActionFolder.svg</file>
     </qresource>
 </RCC>
