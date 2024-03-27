@@ -39,7 +39,7 @@ MMComponents.MMPage {
       anchors.verticalCenter: parent.verticalCenter
       width: parent.width
 
-      image: __style.syncImage
+      image: __style.positiveMMSymbolImage
       title: qsTr("There are currently no local changes")
       description: qsTr("Once you have made some changes, they will appear here.")
     }
