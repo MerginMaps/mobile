@@ -16,6 +16,7 @@ import "../components"
 MMBaseInput {
   id: root
 
+  property alias textFieldComponent: textField
   property alias placeholderText: textField.placeholderText
   property alias text: textField.text
   property bool allowTimer: false

@@ -20,13 +20,13 @@ MMComponents.MMPage {
   id: root
 
   property var selectedLayer: null
+  property bool hasToolbar: false
 
-  signal close()
   signal featureClicked( var featurePair )
   signal addFeatureClicked( var toLayer )
 
   pageHeader.title: root.selectedLayer ? root.selectedLayer.name + " (" + featuresModel.layerFeaturesCount + ")": ""
-  onBackClicked: root.close()
+  pageBottomMargin: 0
 
   pageContent: Item {
     width: parent.width
@@ -35,20 +35,23 @@ MMComponents.MMPage {
     MMSearchInput {
       id: searchbox
 
+      anchors.top: parent.top
       anchors.topMargin: __style.spacing20
+
       width: parent.width
-      onSearchTextChanged: featuresModel.searchExpression = searchbox.text
+
       allowTimer: true
+      onSearchTextChanged: featuresModel.searchExpression = searchbox.text
     }
 
     ListView {
       id: listView
 
       width: parent.width
+
       anchors {
         top: searchbox.bottom
-        bottom: addButton.visible ? addButton.top : parent.bottom
-        bottomMargin: __style.spacing20
+        bottom: parent.bottom
         topMargin: __style.spacing20
       }
 
@@ -66,11 +69,13 @@ MMComponents.MMPage {
 
         onClicked: root.featureClicked( model.FeaturePair )
       }
+
+      footer: MMComponents.MMListSpacer {
+        height: __style.margin20 + ( root.hasToolbar ? 0 : __style.safeAreaBottom ) + ( addButton.visible ? addButton.height : 0 )
+      }
     }
 
     MMComponents.MMBusyIndicator {
-      id: busyIndicator
-
       anchors.centerIn: parent
       running: featuresModel.fetchingResults
     }
@@ -80,7 +85,8 @@ MMComponents.MMPage {
 
       width: parent.width
       anchors.bottom: parent.bottom
-      anchors.bottomMargin: __style.margin20
+      anchors.bottomMargin: root.hasToolbar ? __style.margin20 : ( __style.safeAreaBottom + __style.margin8 )
+
       visible: __inputUtils.isNoGeometryLayer( root.selectedLayer )
 
       text: qsTr("Add feature")

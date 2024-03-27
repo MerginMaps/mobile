@@ -15,10 +15,10 @@ import QtQuick.Layouts
 import "../components" as MMComponents
 import "../inputs"
 
-Item {
+ListView {
   id: root
 
-  property var model: null
+  property var basemodel: null
   property var parentNodeIndex: null
 
   property bool showNodePath: false // show path to node groupA/groupB under the item
@@ -27,42 +27,35 @@ Item {
   signal nodeClicked( var node, string nodeType, string nodeName )
   signal nodeVisibilityClicked( var node )
 
-  ListView {
-    id: layerslist
+  model: DelegateModel {
+    id: delegatemodel
 
-    anchors.fill: parent
+    model: root.basemodel
 
-    model: DelegateModel {
-      id: delegatemodel
+    delegate: MMComponents.MMListDelegate {
 
-      model: root.model
+      property bool secondaryTextVisible: root.showNodePath && model.nodePath
 
-      delegate: MMComponents.MMListDelegate {
-        width: ListView.view.width
+      text: model.display
+      secondaryText: secondaryTextVisible ? model.nodePath: ""
 
-        property bool secondaryTextVisible: root.showNodePath && model.nodePath
+      leftContent: Image {
+        width: __style.icon24
+        height: width
+        sourceSize: Qt.size( width, height)
+        cache: false // important! Otherwise pixmap providers would not be called for the same id again
 
-        text: model.display
-        secondaryText: secondaryTextVisible ? model.nodePath: ""
-
-        leftContent: Image {
-          width: __style.icon24
-          height: width
-          sourceSize: Qt.size( width, height)
-          cache: false // important! Otherwise pixmap providers would not be called for the same id again
-
-          source: root.imageProviderPath + model.serializedNode
-        }
-
-        rightContent: MMComponents.MMSwitch {
-          checked: model.nodeIsVisible === "yes"
-          onReleased: {
-            root.nodeVisibilityClicked( model.node )
-          }
-        }
-
-        onClicked: root.nodeClicked( model.node, model.nodeType, model.display )
+        source: root.imageProviderPath + model.serializedNode
       }
+
+      rightContent: MMComponents.MMSwitch {
+        checked: model.nodeIsVisible === "yes"
+        onReleased: {
+          root.nodeVisibilityClicked( model.node )
+        }
+      }
+
+      onClicked: root.nodeClicked( model.node, model.nodeType, model.display )
     }
   }
 
