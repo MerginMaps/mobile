@@ -13,23 +13,10 @@ import QtQuick.Layouts
 
 import mm 1.0 as MM
 
-import "../components"
+import "../components" as MMComponents
 
-Drawer {
+MMComponents.MMDrawer {
   id: root
-
-  height: mainColumn.height + header.height + borderRectangle.height
-  width: window.width
-  edge: Qt.BottomEdge
-  focus: true
-  dim: true
-  interactive: false
-  dragMargin: 0
-  closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-
-  Component.onCompleted: {
-    forceActiveFocus()
-  }
 
   property var positionProvider: __positionKit.positionProvider
   property string howToConnectGPSLink: __inputHelp.howToConnectGPSLink
@@ -37,7 +24,9 @@ Drawer {
   property string titleText: {
     if ( rootstate.state === "working" )
     {
-      return qsTr( "Connecting to" ) + " " + ( root.positionProvider ? root.positionProvider.name() : "" )
+      if ( !root.positionProvider ) return ""
+      if ( root.positionProvider.name() ) return qsTr( "Connecting to" ) + " " + root.positionProvider.name() + connectingSuffixAnimation
+      return qsTr( "Connecting" ) + connectingSuffixAnimation
     }
     else if ( rootstate.state === "success" )
     {
@@ -49,6 +38,8 @@ Drawer {
       return qsTr( "Failed to connect to" ) + " " + ( root.positionProvider ? root.positionProvider.name() : "" )
     }
   }
+
+  property string connectingSuffixAnimation: ""
 
   property string descriptionText: {
     if ( rootstate.state === "working" )
@@ -62,19 +53,12 @@ Drawer {
     else if ( rootstate.state === "waitingToReconnect" )
     {
       return __positionKit.positionProvider.stateMessage + "<br><br>" +
-          qsTr( "You can close this message, we will try to repeatedly connect to your device.%1 If you need more help, %2click here%3" )
-      .arg("<br>")
-      .arg("<a style=\"text-decoration: underline; color:" + __style.forestColor + ";\" href='" + root.howToConnectGPSLink + "'>")
-      .arg("</a>")
+          qsTr( "You can close this message, we will try to repeatedly connect to your device." )
     }
 
     else
     {
-      return qsTr( "We were not able to connect to the specified device.
-        Please make sure your device is powered on and can be connected to.%1 %2Learn more here%3." )
-      .arg("<br>")
-      .arg("<a style=\"text-decoration: underline; color:" + __style.forestColor + ";\" href='" + root.howToConnectGPSLink + "'>")
-      .arg("</a>")
+      return qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
     }
   }
 
@@ -91,14 +75,45 @@ Drawer {
   signal success()
   signal failure()
 
-  Item {
-    focus: true
-    // just close the popup, keep the connection running
-    Keys.onReleased: function( event ) {
-      if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-        event.accepted = true
-        close()
+  StateGroup {
+    id: rootstate
+
+    states: [
+      State {
+        name: "working"
+        when: root.positionProvider && root.positionProvider.state === MM.PositionProvider.Connecting
+      },
+      State {
+        name: "success"
+        when: root.positionProvider && root.positionProvider.state === MM.PositionProvider.Connected
+      },
+      State {
+        name: "fail"
+        when: !root.positionProvider || root.positionProvider.state === MM.PositionProvider.NoConnection
+      },
+      State {
+        name: "waitingToReconnect"
+        when: !root.positionProvider || root.positionProvider.state === MM.PositionProvider.WaitingToReconnect
       }
+    ]
+
+    state: "working"
+  }
+
+  drawerBottomMargin: __style.margin20
+  drawerContent: MMComponents.MMScrollView {
+
+    width: parent.width
+    height: root.maxHeightHit ? root.drawerContentAvailableHeight : contentHeight
+
+    MMComponents.MMMessage {
+      width: parent.width
+
+      image: root.imageSource
+      title: root.titleText
+      description: root.descriptionText
+      link: root.howToConnectGPSLink
+      linkText: ( rootstate.state === "working" || rootstate.state === "success" ) ? "" : qsTr( "Learn more" )
     }
   }
 
@@ -107,192 +122,25 @@ Drawer {
 
     interval: 1500
     repeat: false
-    running: false
+    running: rootstate.state === "success"
     onTriggered: {
-      if ( rootstate.state === "success" )
-      {
-        root.success()
-      }
-      else
-      {
-        root.failure()
-      }
       root.close()
     }
   }
 
-  StateGroup {
-    id: rootstate
+  Timer {
+    // connecting animator
+    interval: 400
 
-    states: [
-      State {
-        name: "working"
-        when: root.positionProvider && root.positionProvider.state === MM.PositionProvider.Connecting
-        PropertyChanges { target: loadingSpinner; opacity: 1.0 }
-      },
-      State {
-        name: "success"
-        when: root.positionProvider && root.positionProvider.state === MM.PositionProvider.Connected
-        PropertyChanges { target: loadingSpinner; opacity: 0.0 }
-      },
-      State {
-        name: "fail"
-        when: !root.positionProvider || root.positionProvider.state === MM.PositionProvider.NoConnection
-        PropertyChanges { target: loadingSpinner; opacity: 0.0 }
-      },
-      State {
-        name: "waitingToReconnect"
-        when: !root.positionProvider || root.positionProvider.state === MM.PositionProvider.WaitingToReconnect
-        PropertyChanges { target: loadingSpinner; opacity: 0.0 }
+    repeat: true
+    running: rootstate.state === "working"
+
+    onTriggered: {
+      if ( root.connectingSuffixAnimation.length > 2 ) {
+        root.connectingSuffixAnimation = ""
       }
-    ]
-
-    transitions: [
-      Transition {
-        from: "working"
-        to: "success"
-
-        SequentialAnimation {
-          NumberAnimation { target:loadingSpinner; property: "opacity"; duration: 200 }
-          ScriptAction {
-            script: {
-              closeTimer.start()
-            }
-          }
-        }
-      },
-      Transition {
-        from: "working"
-        to: "fail"
-
-        SequentialAnimation {
-          NumberAnimation { target:loadingSpinner; property: "opacity"; duration: 200 }
-        }
-      },
-      Transition {
-        from: "*"
-        to: "waitingToReconnect"
-
-        SequentialAnimation {
-          NumberAnimation { target:loadingSpinner; property: "opacity"; duration: 200 }
-        }
-      },
-      Transition {
-        from: "*"
-        to: "working"
-
-        SequentialAnimation {
-          NumberAnimation { target:loadingSpinner; property: "opacity"; from: 0.0; to: 1.0; duration: 200 }
-        }
-      }
-    ]
-
-    state: "working"
-  }
-
-
-  Rectangle {
-    id: borderRectangle
-
-    color: roundedRect.color
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.right: parent.right
-    height: 2 * radius
-    anchors.topMargin: -radius
-    radius: 20 * __dp
-  }
-
-  Rectangle {
-    id: roundedRect
-
-    anchors.fill: parent
-    color: __style.polarColor
-
-    MMPageHeader {
-      id: header
-
-      backVisible: false
-
-      MMRoundButton {
-        id: backBtn
-
-        anchors.right: parent.right
-        anchors.rightMargin: __style.pageMargins
-        anchors.verticalCenter: parent.verticalCenter
-
-        iconSource: __style.closeIcon
-        iconColor: __style.forestColor
-
-        bgndColor: __style.lightGreenColor
-        bgndHoverColor: __style.mediumGreenColor
-
-        onClicked: close()
-      }
-    }
-
-    Column {
-      id: mainColumn
-
-      width: parent.width
-      anchors.left: parent.left
-      anchors.leftMargin: __style.pageMargins
-      anchors.top: header.top
-      anchors.topMargin: __style.margin40
-
-      spacing: __style.margin12
-
-      Item {
-        id: statusIconContainer
-
-        width: parent.width
-        height: resultIcon.height
-
-        MMBusyIndicator {
-          id: loadingSpinner
-          anchors.centerIn: parent
-          running: rootstate.state === "working"
-        }
-
-        Image {
-          id: resultIcon
-          anchors.centerIn: parent
-          source: root.imageSource
-        }
-      }
-
-      Text {
-        text: root.titleText
-
-        width: parent.width
-
-        horizontalAlignment: Text.AlignHCenter
-
-        elide: Text.ElideRight
-        color: __style.forestColor
-        font: __style.t1
-      }
-
-      Text {
-        text: root.descriptionText
-
-        width: parent.width
-        horizontalAlignment: Text.AlignHCenter
-
-        elide: Text.ElideRight
-        wrapMode: Text.WordWrap
-        textFormat: Text.RichText
-        color: __style.nightColor
-        font: __style.p5
-
-        onLinkActivated: function( link ) {
-          Qt.openUrlExternally( link )
-        }
-      }
-
-      Item {
-        width: parent.width
-        height: __style.margin40
+      else {
+        root.connectingSuffixAnimation += "."
       }
     }
   }

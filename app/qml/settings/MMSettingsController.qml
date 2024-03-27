@@ -113,7 +113,7 @@ Item {
     id: positionProviderComponent
 
     MMPositionProviderPage {
-      onClose: root.back()
+      onBackClicked: root.back()
     }
   }
 }
