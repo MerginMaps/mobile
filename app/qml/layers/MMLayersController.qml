@@ -93,7 +93,7 @@ Item {
         __activeProject.switchLayerTreeNodeVisibility( node )
       }
 
-      onClose: function() {
+      onBackClicked: function() {
         if (pagesStackView.depth > 1)  {
           pagesStackView.pop( StackView.PopTransition )
         }
@@ -171,7 +171,7 @@ Item {
         __activeProject.switchLayerTreeNodeVisibility( node )
       }
 
-      onClose: function() {
+      onBackClicked: function() {
         if (pagesStackView.depth > 1)  {
           pagesStackView.pop( StackView.Immediate )
         }

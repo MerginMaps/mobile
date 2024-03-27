@@ -20,13 +20,13 @@ MMComponents.MMPage {
   property var parentNodeIndex: null
   property string pageTitle: qsTr("Layers")
 
-  signal close()
   signal nodeClicked( var node, string nodeType, string nodeName )
   signal nodeVisibilityClicked( var node )
   signal searchboxClicked()
 
-  onBackClicked: root.close()
   pageHeader.title: root.pageTitle
+
+  pageBottomMarginPolicy: MMComponents.MMPage.PaintBehindSystemBar
 
   pageContent: Item {
     width: parent.width
@@ -60,10 +60,12 @@ MMComponents.MMPage {
 
       clip: true
 
-      model: root.model
+      basemodel: root.model
       parentNodeIndex: root.parentNodeIndex
 
       imageProviderPath: "image://LayerTreeModelPixmapProvider/"
+
+      footer: MMComponents.MMListFooterSpacer {}
 
       onNodeClicked: function( node, nodeType, nodeName ) {
         root.nodeClicked( node, nodeType, nodeName )
