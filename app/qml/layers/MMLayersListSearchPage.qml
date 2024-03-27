@@ -72,4 +72,7 @@ MMComponents.MMPage {
       }
     }
   }
+
+  // open keyboard automatically
+  Component.onCompleted: searchbox.textFieldComponent.forceActiveFocus()
 }
