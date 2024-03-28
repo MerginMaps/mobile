@@ -903,7 +903,7 @@ ApplicationWindow {
     {
       if ( projectFullName === __activeProject.projectFullName() )
       {
-        __notificationModel.addInfo( qsTr( "Up to date" ) )
+        __notificationModel.addSuccess( qsTr( "Up to date" ) )
       }
     }
   }
