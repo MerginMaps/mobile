@@ -767,7 +767,7 @@ Item {
           text: qsTr( "Split geometry" )
           leftContent: MMIcon { source: __style.splitGeometryIcon }
 
-          visible: !internal.isPointLayer && !root.isStreaming
+          visible: !internal.isPointLayer && !root.isStreaming && root.state === "edit"
 
           onClicked: {
             root.toggleSplitting()
@@ -778,6 +778,8 @@ Item {
         MMListDelegate {
           text: qsTr( "Redraw geometry" )
           leftContent: MMIcon { source: __style.redrawGeometryIcon }
+
+          visible: root.state === "edit"
 
           onClicked: {
             root.toggleRedraw()
