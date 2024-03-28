@@ -190,7 +190,7 @@ void TestUtilsFunctions::testHtmlLink()
     { "this is my %1cool link%2 to show", "https://merginmaps.com", "", false, false, QColor( "red" ), "this is my <a style='text-decoration:none; color:#ff0000;' href='https://merginmaps.com'>cool link</a> to show" },
     { "%1cool link%2 to show", "https://merginmaps.com", "", false, false, QColor( "red" ), "<a style='text-decoration:none; color:#ff0000;' href='https://merginmaps.com'>cool link</a> to show" },
     { "this is my %1cool link%2", "https://merginmaps.com", "", false, false, QColor( "red" ), "this is my <a style='text-decoration:none; color:#ff0000;' href='https://merginmaps.com'>cool link</a>" },
-    { "this is my %1cool link 1%3 and %2cool link 2%3 wow!", "https://merginmaps.com", "https://merginmaps.com/login", false, true, QColor( "red" ), "this is my <a style='text-decoration:none; font-weight: bold; color:#ff0000;' href='https://merginmaps.com'>cool link 1</a> and <a style='text-decoration:none; font-weight: bold; color:#ff0000;' href='https://merginmaps.com/login'>cool link 2</a> wow!" }
+    { "this is my %1cool link 1%3 and %2cool link 2%3 wow!", "https://merginmaps.com", "https://merginmaps.com/login", false, true, QColor( "red" ), "this is my <a style='text-decoration:none; font-weight: 600; color:#ff0000;' href='https://merginmaps.com'>cool link 1</a> and <a style='text-decoration:none; font-weight: 600; color:#ff0000;' href='https://merginmaps.com/login'>cool link 2</a> wow!" }
   };
 
   for ( const auto &c : testcases )
