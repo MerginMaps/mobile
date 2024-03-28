@@ -571,11 +571,12 @@ Item {
         MMMapButton {
           id: moreToolsButton
 
-          visible: internal.isInRecordState
+          // Do not show more menu for SinglePart point layers
+          visible: internal.isInRecordState && (!internal.isPointLayer || internal.isMultiPartLayer)
 
           iconSource: __style.moreIcon
 
-          onClicked: moreToolsMenu.open()
+          onClicked: moreToolsMenuLoader.item.open()
         }
 
         MMMapButton {
@@ -746,50 +747,61 @@ Item {
     }
   }
 
-  MMListDrawer {
-    id: moreToolsMenu
+  Loader {
+    id: moreToolsMenuLoader
+    active: moreToolsButton.visible
+    sourceComponent: moreToolsMenuComponent
+  }
 
-    drawerHeader.title: qsTr("More options")
+  Component {
+    id: moreToolsMenuComponent
 
-    list.model: ObjectModel {
+    MMListDrawer {
+      id: moreToolsMenu
 
-      MMListDelegate {
-        text: qsTr( "Split geometry" )
-        leftContent: MMIcon { source: __style.splitGeometryIcon }
+      drawerHeader.title: qsTr("More options")
 
-        visible: !internal.isPointLayer && !root.isStreaming
+      list.model: ObjectModel {
 
-        onClicked: {
-          root.toggleSplitting()
-          moreToolsMenu.close()
-        }
-      }
+        MMListDelegate {
+          text: qsTr( "Split geometry" )
+          leftContent: MMIcon { source: __style.splitGeometryIcon }
 
-      MMListDelegate {
-        text: qsTr( "Redraw geometry" )
-        leftContent: MMIcon { source: __style.redrawGeometryIcon }
+          visible: !internal.isPointLayer && !root.isStreaming
 
-        onClicked: {
-          root.toggleRedraw()
-          moreToolsMenu.close()
-        }
-      }
-
-      MMListDelegate {
-        text: qsTr("Streaming mode")
-        visible: !internal.isPointLayer
-
-        leftContent: MMIcon { source: __style.streamingIcon }
-        rightContent: MMBadge {
-          text: qsTr( "Active" )
-          visible: root.isStreaming
+          onClicked: {
+            root.toggleSplitting()
+            moreToolsMenu.close()
+          }
         }
 
-        hasLine: false
+        MMListDelegate {
+          text: qsTr( "Redraw geometry" )
+          leftContent: MMIcon { source: __style.redrawGeometryIcon }
 
-        onClicked: {
-          root.openStreamingPanel()
-          moreToolsMenu.close()
+          onClicked: {
+            root.toggleRedraw()
+            moreToolsMenu.close()
+          }
+        }
+
+        MMListDelegate {
+          text: qsTr("Streaming mode")
+
+          visible: !internal.isPointLayer
+
+          leftContent: MMIcon { source: __style.streamingIcon }
+          rightContent: MMBadge {
+            text: qsTr( "Active" )
+            visible: root.isStreaming
+          }
+
+          hasLine: false
+
+          onClicked: {
+            root.openStreamingPanel()
+            moreToolsMenu.close()
+          }
         }
       }
     }
@@ -956,6 +968,7 @@ Item {
     property var featurePairToEdit // we are editing geometry of this feature layer pair
     property bool isSpatialLayer: internal.featurePairToEdit ? __inputUtils.isSpatialLayer( internal.featurePairToEdit.layer ) : false // featurePairToEdit is valid and contains layer with features with geometry
     property bool isPointLayer: internal.featurePairToEdit ? __inputUtils.isPointLayer( internal.featurePairToEdit.layer ) : false // featurePairToEdit is valid and contains layer with point geometry features
+    property bool isMultiPartLayer: internal.featurePairToEdit ? __inputUtils.isMultiPartLayer( internal.featurePairToEdit.layer ) : false
 
     property var extentBeforeStakeout // extent that we return to once stakeout finishes
     property var stakeoutTarget
@@ -1013,7 +1026,10 @@ Item {
     // clear feature geometry
     internal.featurePairToEdit = __inputUtils.changeFeaturePairGeometry( featurepair, __inputUtils.emptyGeometry() )
 
-    state = "edit"
+    // You should be already in state == "edit"
+    if ( recordingToolsLoader.active ) {
+      recordingToolsLoader.item.recordingMapTool.state = MM.RecordingMapTool.Record
+    }
   }
 
   function toggleSplitting() {
