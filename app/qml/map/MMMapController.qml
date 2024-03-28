@@ -759,14 +759,20 @@ Item {
 
         visible: !internal.isPointLayer && !root.isStreaming
 
-        onClicked: root.toggleSplitting()
+        onClicked: {
+          root.toggleSplitting()
+          moreToolsMenu.close()
+        }
       }
 
       MMListDelegate {
         text: qsTr( "Redraw geometry" )
         leftContent: MMIcon { source: __style.redrawGeometryIcon }
 
-        onClicked: root.toggleRedraw()
+        onClicked: {
+          root.toggleRedraw()
+          moreToolsMenu.close()
+        }
       }
 
       MMListDelegate {
@@ -781,7 +787,10 @@ Item {
 
         hasLine: false
 
-        onClicked: root.openStreamingPanel()
+        onClicked: {
+          root.openStreamingPanel()
+          moreToolsMenu.close()
+        }
       }
     }
   }
