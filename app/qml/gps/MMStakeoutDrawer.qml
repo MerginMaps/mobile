@@ -118,7 +118,7 @@ MMDrawer {
       ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
       ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
-      visible: root.state === "closeRange"
+      visible: distanceState.state === "closeRange"
 
       Column {
         width:parent.width
@@ -141,8 +141,6 @@ MMDrawer {
               when: state !== "atTarget"
             }
           ]
-
-          state: "notAtTarget"
 
           // enable antialiasing
           layer.enabled: true
