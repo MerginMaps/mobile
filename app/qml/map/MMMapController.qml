@@ -574,9 +574,52 @@ Item {
           // Do not show more menu for SinglePart point layers
           visible: internal.isInRecordState && (!internal.isPointLayer || internal.isMultiPartLayer)
 
-          iconSource: __style.moreIcon
+          property string actionState: {
+            if (!moreToolsButton.visible)
+              return "invisible"
 
-          onClicked: moreToolsMenuLoader.item.open()
+            if (internal.splitGeometryButtonVisible) {
+              if (!internal.redrawGeometryButtonVisible && !internal.streamingModeButtonVisible)
+                return "split"
+            }
+
+            if (internal.redrawGeometryButtonVisible) {
+              if (!internal.splitGeometryButtonVisible && !internal.streamingModeButtonVisible)
+                return "redraw"
+            }
+
+            if (internal.streamingModeButtonVisible) {
+              if (!internal.redrawGeometryButtonVisible && !internal.splitGeometryButtonVisible)
+                return "stream"
+            }
+            return "menu"
+          }
+
+          iconSource: {
+            if (actionState === "split")
+              return __style.splitGeometryIcon
+
+            if (actionState === "redraw")
+              return __style.redrawGeometryIcon
+
+            if (actionState === "stream")
+              return __style.streamingIcon
+
+            return __style.moreIcon
+          }
+
+          onClicked: {
+            if (actionState === "split")
+              return root.toggleSplitting()
+
+            if (actionState === "redraw")
+              return root.toggleRedraw()
+
+            if (actionState === "stream")
+              return root.openStreamingPanel()
+
+            moreToolsMenuLoader.item.open()
+          }
         }
 
         MMMapButton {
@@ -749,7 +792,7 @@ Item {
 
   Loader {
     id: moreToolsMenuLoader
-    active: moreToolsButton.visible
+    active: moreToolsButton.actionState === "menu"
     sourceComponent: moreToolsMenuComponent
   }
 
@@ -767,7 +810,7 @@ Item {
           text: qsTr( "Split geometry" )
           leftContent: MMIcon { source: __style.splitGeometryIcon }
 
-          visible: !internal.isPointLayer && !root.isStreaming && root.state === "edit"
+          visible: internal.splitGeometryButtonVisible
 
           onClicked: {
             root.toggleSplitting()
@@ -779,7 +822,7 @@ Item {
           text: qsTr( "Redraw geometry" )
           leftContent: MMIcon { source: __style.redrawGeometryIcon }
 
-          visible: root.state === "edit"
+          visible: internal.redrawGeometryButtonVisible
 
           onClicked: {
             root.toggleRedraw()
@@ -790,7 +833,7 @@ Item {
         MMListDelegate {
           text: qsTr("Streaming mode")
 
-          visible: !internal.isPointLayer
+          visible: internal.streamingModeButtonVisible
 
           leftContent: MMIcon { source: __style.streamingIcon }
           rightContent: MMBadge {
@@ -971,6 +1014,11 @@ Item {
     property bool isSpatialLayer: internal.featurePairToEdit ? __inputUtils.isSpatialLayer( internal.featurePairToEdit.layer ) : false // featurePairToEdit is valid and contains layer with features with geometry
     property bool isPointLayer: internal.featurePairToEdit ? __inputUtils.isPointLayer( internal.featurePairToEdit.layer ) : false // featurePairToEdit is valid and contains layer with point geometry features
     property bool isMultiPartLayer: internal.featurePairToEdit ? __inputUtils.isMultiPartLayer( internal.featurePairToEdit.layer ) : false
+
+    // visibility of buttons in "more" menu
+    property bool splitGeometryButtonVisible: !internal.isPointLayer && !root.isStreaming && root.state === "edit"
+    property bool redrawGeometryButtonVisible: root.state === "edit"
+    property bool streamingModeButtonVisible: !internal.isPointLayer
 
     property var extentBeforeStakeout // extent that we return to once stakeout finishes
     property var stakeoutTarget
