@@ -122,12 +122,9 @@ MMPage {
         text: model.name
         checked: listView.currentIndex === index
 
-        onCheckedChanged: {
-
-        }
-
         onClicked: {
           let optionUnchecked = listView.currentIndex === index
+
           if ( model.key === "social" && !internal.socialSubmenuOpened && !optionUnchecked ) {
             // add social options
             let i = model.index
@@ -158,6 +155,7 @@ MMPage {
             listView.currentIndex = -1
           }
           else {
+            root.selectedText = model.key
             listView.currentIndex = index
           }
         }
