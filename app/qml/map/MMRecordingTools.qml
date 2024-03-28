@@ -84,7 +84,7 @@ Item {
   MM.GuidelineController {
     id: guidelineController
 
-    allowed: mapTool.state !== MM.RecordingMapTool.View
+    allowed: mapTool.state !== MM.RecordingMapTool.View && mapTool.recordingType !== MM.RecordingMapTool.StreamMode
 
     mapSettings: root.map.mapSettings
     insertPolicy: mapTool.insertPolicy
@@ -180,7 +180,7 @@ Item {
 
     anchors.fill: parent
 
-    visible: mapTool.state !== MM.RecordingMapTool.View
+    visible: mapTool.state !== MM.RecordingMapTool.View && mapTool.recordingType !== MM.RecordingMapTool.StreamMode
 
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
