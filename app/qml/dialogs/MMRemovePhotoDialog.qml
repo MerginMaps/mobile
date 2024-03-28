@@ -19,11 +19,11 @@ MMDrawerDialog {
 
   property string imagePath
 
-  picture: __style.negativeMMSymbolImage
-  bigTitle: qsTr( "Remove photo reference" )
+  imageSource: __style.negativeMMSymbolImage
+  title: qsTr( "Remove photo reference" )
   description: qsTr( "Also permanently delete photo from device?" )
-  primaryButton: qsTr( "Yes, I want to delete" )
-  secondaryButton: qsTr( "No, thanks" )
+  primaryButton.text: qsTr( "Yes, I want to delete" )
+  secondaryButton.text: qsTr( "No, thanks" )
 
   onPrimaryButtonClicked: {
     root.deleteImage()

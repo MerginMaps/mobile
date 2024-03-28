@@ -19,17 +19,15 @@ MMDrawerDialog {
 
   signal ignoreClicked()
 
-  picture: __style.positiveMMSymbolImage
-  bigTitle: qsTr( "Your server will soon be out of date" )
-  description: __inputUtils.htmlLink(
-                 qsTr("Please contact your server administrator to upgrade your server to the latest version. " +
-                      "Subsequent releases of our mobile app may not be compatible with your current server version. \n" +
-                      "Learn more about %1how to migrate%2."),
-                 __style.forestColor,
-                 root.helpLink
-    )
+  imageSource: __style.positiveMMSymbolImage
+  title: qsTr( "Your server will soon be out of date" )
+  description: qsTr( "Please contact your server administrator to upgrade your server to the latest version. " +
+                     "Subsequent releases of our mobile app may not be compatible with your current server version." )
 
-  primaryButton: qsTr( "Ignore" )
+  link: helpLink
+  linkText: qsTr( "Learn more" )
+
+  primaryButton.text: qsTr( "Ignore" )
 
   onPrimaryButtonClicked: {
     root.ignoreClicked()

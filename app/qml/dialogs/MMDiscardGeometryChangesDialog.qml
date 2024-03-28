@@ -19,8 +19,8 @@ MMDrawerDialog {
 
   signal discardChanges()
 
-  picture: __style.positiveMMSymbolImage
-  bigTitle: qsTr( "Discard the changes?" )
+  imageSource: __style.positiveMMSymbolImage
+  title: qsTr( "Discard the changes?" )
   description: {
     if ( root.state === "edit" ) {
       return qsTr( "Clicking ‘Yes’ discards your changes to the geometry. If you would like " +
@@ -34,8 +34,8 @@ MMDrawerDialog {
     return ""
   }
 
-  primaryButton: qsTr ( "Yes, I want to discard" )
-  secondaryButton: qsTr ( "No, thanks" )
+  primaryButton.text: qsTr ( "Yes, I want to discard" )
+  secondaryButton.text: qsTr ( "No, thanks" )
 
   onPrimaryButtonClicked: {
     root.discardChanges()

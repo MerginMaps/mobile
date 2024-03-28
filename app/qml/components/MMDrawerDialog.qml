@@ -8,171 +8,74 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
 
-Drawer {
-  id: control
+MMDrawer {
+  id: root
 
-  property alias picture: picture.source
-  property alias title: title.text
-  property alias bigTitle: bigTitle.text
-  property alias description: description.text
-  property alias boundedDescription: boundedDescription.text
-  property alias primaryButtonComponent: primaryButton
-  property alias primaryButton: primaryButton.text
-  property alias secondaryButton: secondaryButton.text
-  property alias specialComponent: loader.sourceComponent
+  property alias title: mmmessage.title
+  property alias description: mmmessage.description
+  property alias imageSource: mmmessage.image
+  property alias link: mmmessage.link
+  property alias linkText: mmmessage.linkText
+
+  property alias additionalContent: additionalContentGroup.children
+
+  property alias primaryButton: primaryBtn
+  property alias secondaryButton: secondaryBtn
+
+  property real spaceBeforeAdditionalContent: __style.margin20
 
   signal primaryButtonClicked
   signal secondaryButtonClicked
 
-  width: window.width // TODO maximum size
-  height: mainColumn.height
-  edge: Qt.BottomEdge
   dim: true
   interactive: false
-  dragMargin: 0
-  closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
-  Rectangle {
-    color: roundedRect.color
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.right: parent.right
-    height: 2 * radius
-    anchors.topMargin: -radius
-    radius: 20 * __dp
-  }
-
-  Rectangle {
-    id: roundedRect
-
-    anchors.fill: parent
-    color: __style.polarColor
+  drawerContent: MMScrollView {
+    width: parent.width
+    height: root.maxHeightHit ? root.drawerContentAvailableHeight : contentHeight
 
     Column {
-      id: mainColumn
+      id: col
 
       width: parent.width
-      spacing: 20 * __dp
-      leftPadding: 20 * __dp
-      rightPadding: 20 * __dp
-      bottomPadding: 20 * __dp
 
-      // TODO replace with MMPageHeader?
-      Row {
+      spacing: 0
+
+      MMMessage {
+        id: mmmessage
+
         width: parent.width
-        spacing: 10 * __dp
-
-        Item {
-          id: emptyItem
-
-          width: closeButton.width
-          height: 1
-        }
-
-        Text {
-          id: title
-
-          anchors.verticalCenter: parent.verticalCenter
-          width: parent.width - emptyItem.width - closeButton.width - mainColumn.leftPadding - mainColumn.rightPadding - 2 * parent.spacing
-          horizontalAlignment: Text.AlignHCenter
-          wrapMode: Text.WordWrap
-          font: __style.t2
-          color: __style.forestColor
-        }
-
-        MMRoundButton {
-          id: closeButton
-          bgndColor: __style.lightGreenColor
-          iconSource: __style.closeIcon
-          onClicked: control.close()
-        }
       }
 
-      Image {
-        id: picture
+      MMListSpacer { height: root.spaceBeforeAdditionalContent; visible: internal.hasAdditionalContent }
 
-        anchors.horizontalCenter: parent.horizontalCenter
+      Item {
+        id: additionalContentGroup
+
+        width: parent.width
+        height: childrenRect.height
+
+        visible: children.length > 0
       }
 
-      Text {
-        id: bigTitle
-
-        anchors.horizontalCenter: parent.horizontalCenter
-        font: __style.t1
-        width: parent.width - 2*20 * __dp
-        color: __style.forestColor
-        visible: text.length > 0
-        horizontalAlignment: Text.AlignHCenter
-      }
-
-      Text {
-        id: description
-
-        anchors.horizontalCenter: parent.horizontalCenter
-        font: __style.p5
-        width: parent.width - 2*20 * __dp
-        color: __style.nightColor
-        visible: text.length > 0
-        horizontalAlignment: Text.AlignHCenter
-        wrapMode: Text.WordWrap
-        lineHeight: 1.6
-        textFormat: Text.RichText
-        onLinkActivated: function( link ) {
-          Qt.openUrlExternally( link )
-        }
-      }
-
-      Rectangle {
-        anchors.horizontalCenter: parent.horizontalCenter
-        visible: boundedDescription.text.length > 0
-        width: parent.width - 2*20 * __dp
-        height: boundedDescription.height
-        radius: 16 * __dp
-        color: __style.lightGreenColor
-
-        Text {
-          id: boundedDescription
-
-          anchors.horizontalCenter: parent.horizontalCenter
-          font: __style.p6
-          width: parent.width
-          color: __style.nightColor
-          visible: text.length > 0
-          horizontalAlignment: Text.AlignLeft
-          wrapMode: Text.WordWrap
-          lineHeight: 1.6
-          padding: 20 * __dp
-          textFormat: Text.RichText
-          onLinkActivated: function( link ) {
-            Qt.openUrlExternally( link )
-          }
-        }
-      }
-
-      Loader {
-        id: loader
-
-        anchors.horizontalCenter: parent.horizontalCenter
-      }
-
-      Item { width: 1; height: 1 }
+      MMListSpacer { height: __style.margin40; visible: primaryBtn.visible || secondaryBtn.visible }
 
       MMButton {
-        id: primaryButton
+        id: primaryBtn
 
-        width: parent.width - 2*20 * __dp
+        width: parent.width
         visible: text.length > 0
 
         onClicked: primaryButtonClicked()
       }
 
-      MMButton {
-        id: secondaryButton
+      MMListSpacer { height: __style.margin20; visible: primaryBtn.visible && secondaryBtn.visible }
 
-        width: parent.width - 2*20 * __dp
+      MMButton {
+        id: secondaryBtn
+
+        width: parent.width
         visible: text.length > 0
 
         type: MMButton.Types.Tertiary
@@ -182,5 +85,11 @@ Drawer {
         onClicked: secondaryButtonClicked()
       }
     }
+  }
+
+  QtObject {
+    id: internal
+
+    property bool hasAdditionalContent: additionalContentGroup.children.length > 0
   }
 }

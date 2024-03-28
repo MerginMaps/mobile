@@ -9,7 +9,8 @@
 
 import QtQuick
 
-import "../components"
+import "../components" as MMComponents
+import "./components" as MMDialogComponents
 
 /**
   * Dialog bearing information about synchronization failure.
@@ -18,16 +19,21 @@ import "../components"
   * the default text (based on platform).
   */
 
-MMDrawerDialog {
+MMComponents.MMDrawerDialog {
   id: root
 
   property string detailedText
 
-  picture: __style.syncFailedImage
-  bigTitle: qsTr( "Failed to synchronize your changes" )
+  title: qsTr( "Failed to synchronize your changes" )
+  imageSource: __style.syncFailedImage
+
   description: qsTr( "Your changes could not be sent to the server, make sure you have a data connection and have permission to edit this project." )
-  primaryButton: qsTr( "Ok, I understand" )
-  boundedDescription: root.detailedText
+  primaryButton.text: qsTr( "Ok, I understand" )
+
+  additionalContent: MMDialogComponents.MMDialogAdditionalText {
+    width: parent.width
+    text: root.detailedText
+  }
 
   onPrimaryButtonClicked: {
     close()

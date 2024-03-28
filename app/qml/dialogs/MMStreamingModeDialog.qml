@@ -18,11 +18,11 @@ MMComponents.MMDrawerDialog {
 
   signal streamingBtnClicked()
 
-  picture: root.streamingActive ? __style.streamingBootsOrangeImage : __style.streamingBootsImage
-  bigTitle: qsTr("Streaming mode")
+  imageSource: root.streamingActive ? __style.streamingBootsOrangeImage : __style.streamingBootsImage
+  title: qsTr("Streaming mode")
   description: qsTr("Move around your designated object to record its geometry. You can stop this anytime.")
-  primaryButton: root.streamingActive ? qsTr("Stop streaming mode") : qsTr("Start streaming mode")
-  primaryButtonComponent.type: root.streamingActive ? MMComponents.MMButton.Types.Secondary : MMComponents.MMButton.Types.Primary
+  primaryButton.text: root.streamingActive ? qsTr("Stop streaming mode") : qsTr("Start streaming mode")
+  primaryButton.type: root.streamingActive ? MMComponents.MMButton.Types.Secondary : MMComponents.MMButton.Types.Primary
 
   onPrimaryButtonClicked: {
     close()

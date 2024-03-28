@@ -14,10 +14,10 @@ import "../components"
 MMDrawerDialog {
   id: root
 
-  picture: __style.negativeMMSymbolImage
-  bigTitle: qsTr( "Saving failed" )
+  imageSource: __style.negativeMMSymbolImage
+  title: qsTr( "Saving failed" )
   description: qsTr( "Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support." )
-  primaryButton: qsTr( "Ok, I understand" )
+  primaryButton.text: qsTr( "Ok, I understand" )
 
   onPrimaryButtonClicked: {
     close()

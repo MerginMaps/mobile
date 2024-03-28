@@ -8,8 +8,6 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
 
 import "../components" as MMComponents
 
@@ -22,30 +20,34 @@ MMComponents.MMDrawerDialog {
 
   signal trackingBtnClicked()
 
-  picture: root.trackingActive ? __style.positionTrackingRunningImage : __style.positionTrackingStartImage
-  bigTitle: qsTr("Position tracking")
-  description: root.trackingActive ? qsTr("Mergin Maps can track your position on this project."): qsTr("Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.")
-  primaryButton: root.trackingActive ? qsTr("Stop tracking") : qsTr("Start tracking")
-  primaryButtonComponent.type: root.trackingActive ? MMComponents.MMButton.Types.Secondary : MMComponents.MMButton.Types.Primary
+  title: qsTr("Position tracking")
+  imageSource: root.trackingActive ? __style.positionTrackingRunningImage : __style.positionTrackingStartImage
+  description: root.trackingActive ? qsTr( "Mergin Maps can track your position on this project." ) : qsTr( "Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature." )
+  primaryButton.text: root.trackingActive ? qsTr( "Stop tracking" ) : qsTr( "Start tracking" )
+  primaryButton.type: root.trackingActive ? MMComponents.MMButton.Secondary : MMComponents.MMButton.Primary
 
-  specialComponent: trackingInfoPanel
+  additionalContent: Item {
+    width: parent.width
+    height: childrenRect.height
 
-  Component {
-    id: trackingInfoPanel
-    Item {
-      width: root.width - 2 * __style.pageMargins
-      height: 100 * __dp // TODO needs to be adjusted
+    Row {
+      width: parent.width
+      spacing: __style.margin10
 
       Column {
-        anchors.left: parent.left
-        anchors.leftMargin: __style.pageMargins
-        height: parent.height
-        Text {
+        width: parent.width / 2 - parent.spacing / 2
+
+        MMComponents.MMText {
+          width: parent.width
+
           text: qsTr("Tracked distance")
           font: __style.p6
           color: __style.nightColor
         }
-        Text {
+
+        MMComponents.MMText {
+          width: parent.width
+
           text: root.trackingActive ? root.distanceTraveled : "-"
           font: __style.t3
           color: __style.nightColor
@@ -53,17 +55,22 @@ MMComponents.MMDrawerDialog {
       }
 
       Column {
-        anchors.right: parent.right
-        anchors.rightMargin: __style.pageMargins
-        height: parent.height
+        width: parent.width / 2 - parent.spacing / 2
 
-        Text {
+        MMComponents.MMText {
+          width: parent.width
+
           text: qsTr("Started at")
+          horizontalAlignment: Text.AlignRight
           font: __style.p6
           color: __style.nightColor
         }
-        Text {
+
+        MMComponents.MMText {
+          width: parent.width
+
           text: root.trackingActive ? root.trackingStartedAt : "-"
+          horizontalAlignment: Text.AlignRight
           font: __style.t3
           color: __style.nightColor
         }

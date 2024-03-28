@@ -20,11 +20,11 @@ MMDrawerDialog {
 
   signal downloadClicked()
 
-  picture: __style.positiveMMSymbolImage
-  bigTitle: qsTr( "Download project" )
-  description: qsTr( "Would you like to download the project\n %1 ?" ).arg( relatedProjectId )
-  primaryButton: qsTr("Download")
-  secondaryButton: qsTr("Cancel")
+  imageSource: __style.positiveMMSymbolImage
+  title: qsTr( "Download project" )
+  description: qsTr( "Would you like to download project\n %1 ?" ).arg( relatedProjectId )
+  primaryButton.text: qsTr("Download")
+  secondaryButton.text: qsTr("Cancel")
 
   onPrimaryButtonClicked: {
     downloadClicked()

@@ -17,11 +17,11 @@ MMDrawerDialog {
 
   property string helpLink: __inputHelp.projectLoadingErrorHelpLink
 
-  picture: __style.negativeMMSymbolImage
-  bigTitle: qsTr( "Failed to open the project" )
-  description: __inputUtils.htmlLink(
-                 qsTr("Learn more about %1loading errors%2."),
-                 __style.forestColor,
-                 root.helpLink
-               )
+  title: qsTr( "Failed to open the project" )
+  imageSource: __style.negativeMMSymbolImage
+
+  description: qsTr( "Unfortunately, your project could not be opened, please refer to our documentation to understand common problems." )
+
+  link: root.helpLink
+  linkText: qsTr( "Learn more" )
 }

@@ -9,19 +9,25 @@
 
 import QtQuick
 
-import "../components"
-import "../inputs"
+import "../components" as MMComponents
+import "./components" as MMDialogComponents
 
-MMDrawerDialog {
+MMComponents.MMDrawerDialog {
   id: root
 
+  property string detailedDescription
   property string helpLink: __inputHelp.howToSetupProj
 
-  picture: __style.negativeMMSymbolImage
-  bigTitle: qsTr( "PROJ Error" )
-  description: __inputUtils.htmlLink(
-      qsTr("Learn more about %1how to setup PROJ%2"),
-      __style.forestColor,
-      root.helpLink
-    )
+  title: qsTr( "PROJ Error" )
+  imageSource: __style.negativeMMSymbolImage
+
+  description: qsTr( "There was an issue with loading your PROJ files. Please refer to our documentation to learn how to set up PROJ." )
+
+  link: helpLink
+  linkText: qsTr( "Learn more" )
+
+  additionalContent: MMDialogComponents.MMDialogAdditionalText {
+    width: parent.width
+    text: root.detailedDescription
+  }
 }

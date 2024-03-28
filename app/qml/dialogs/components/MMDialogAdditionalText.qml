@@ -9,17 +9,32 @@
 
 import QtQuick
 
-import "../components"
+import "../../components" as MMComponents
 
-MMDrawerDialog {
-  id: root
+//
+// MMDialogAdditionalText = use as additionalContent to MMDialogDrawer when needing advanced text
+//
 
-  imageSource: __style.noPermissionsImage
-  title: qsTr( "No rights to access the project" )
-  description: qsTr( "You are not allowed to synchronize your changes in this project. Contact the project owner to assign you the correct permission. If you are the project owner, log in to the dashboard." )
-  primaryButton.text: qsTr( "Ok, I understand" )
+Rectangle {
 
-  onPrimaryButtonClicked: {
-    close()
+  property alias text: txt.text
+
+  height: childrenRect.height
+  // set width (parent.width)
+
+  color: __style.lightGreenColor
+
+  radius: __style.radius16
+
+  MMComponents.MMText {
+    id: txt
+
+    width: parent.width
+
+    color: __style.nightColor
+    padding: __style.margin20
+    font: __style.p5
+
+    wrapMode: Text.Wrap
   }
 }

@@ -18,11 +18,11 @@ MMDrawerDialog {
 
   property string providerId
 
-  picture: __style.positiveMMSymbolImage
-  bigTitle: qsTr( "Remove receiver" )
+  imageSource: __style.positiveMMSymbolImage
+  title: qsTr( "Remove receiver" )
   description: qsTr( "Do you want to remove receiver from the list of recent receivers?" )
-  primaryButton: qsTr( "Yes, I want to remove" )
-  secondaryButton: qsTr( "No, thanks" )
+  primaryButton.text: qsTr( "Yes, I want to remove" )
+  secondaryButton.text: qsTr( "No, thanks" )
 
   onPrimaryButtonClicked: {
     root.removeProvider()
