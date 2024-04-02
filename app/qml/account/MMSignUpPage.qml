@@ -122,6 +122,7 @@ MMPage {
         id: newsletterCheck
 
         width: parent.width
+        checked: true
 
         text: qsTr( "I want to subscribe to the newsletter" )
       }

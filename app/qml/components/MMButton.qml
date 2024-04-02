@@ -54,21 +54,21 @@ Button {
     if ( type === MMButton.Types.Tertiary ) return __style.transparentColor
   }
 
-  property color fontColorDisabled: { // TODO: change with the new colors
-    if ( type === MMButton.Types.Primary ) return __style.greyColor
-    if ( type === MMButton.Types.Secondary ) return __style.lightGreenColor
-    if ( type === MMButton.Types.Tertiary ) return __style.lightGreenColor
+  property color fontColorDisabled: {
+    if ( type === MMButton.Types.Primary ) return __style.darkGreenColor
+    if ( type === MMButton.Types.Secondary ) return __style.darkGreenColor
+    if ( type === MMButton.Types.Tertiary ) return __style.darkGreenColor
   }
 
-  property color iconColorDisabled: { // TODO: change with the new colors
-    if ( type === MMButton.Types.Primary ) return __style.greyColor
-    if ( type === MMButton.Types.Secondary ) return __style.lightGreenColor
-    if ( type === MMButton.Types.Tertiary ) return __style.lightGreenColor
+  property color iconColorDisabled: {
+    if ( type === MMButton.Types.Primary ) return __style.darkGreenColor
+    if ( type === MMButton.Types.Secondary ) return __style.darkGreenColor
+    if ( type === MMButton.Types.Tertiary ) return __style.darkGreenColor
   }
 
-  property color bgndColorDisabled: { // TODO: change with the new colors
-    if ( type === MMButton.Types.Primary ) return __style.lightGreenColor
-    if ( type === MMButton.Types.Secondary ) return __style.lightGreenColor
+  property color bgndColorDisabled: {
+    if ( type === MMButton.Types.Primary ) return __style.mediumGreenColor
+    if ( type === MMButton.Types.Secondary ) return __style.mediumGreenColor
     if ( type === MMButton.Types.Tertiary ) return __style.transparentColor
   }
 

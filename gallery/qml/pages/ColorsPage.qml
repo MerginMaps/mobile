@@ -199,6 +199,10 @@ ScrollView {
           color: __style.mediumGreenColor
         }
         GalleryComponents.ColorBox {
+          text: "darkGreenColor"
+          color: __style.darkGreenColor
+        }
+        GalleryComponents.ColorBox {
           text: "greyColor"
           color: __style.greyColor
         }
