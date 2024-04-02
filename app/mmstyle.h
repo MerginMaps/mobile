@@ -711,8 +711,13 @@ class MMStyle: public QObject
     QFont fontFactory( int pixelSize, bool bold )
     {
       QFont f;
-      f.setBold( bold );
       f.setPixelSize( pixelSize * mDp );
+
+      if ( bold )
+      {
+        f.setWeight( QFont::DemiBold );
+      }
+
       return f;
     }
 
