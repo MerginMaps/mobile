@@ -99,6 +99,18 @@ QString InputHelp::merginDashboardLink() const
   return MerginApi::defaultApiRoot() + "dashboard" + queryParams;
 }
 
+QString InputHelp::merginSubscriptionLink() const
+{
+  if ( mMerginApi && mMerginApi->apiSupportsSubscriptions() )
+  {
+    return MerginApi::defaultApiRoot() + "subscription" + utmTagSubscription;
+  }
+  else
+  {
+    return merginDashboardLink();
+  }
+}
+
 QString InputHelp::privacyPolicyLink() const
 {
   return inputWeb + "/privacy-policy" + utmTagOther;
