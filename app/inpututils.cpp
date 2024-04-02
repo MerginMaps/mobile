@@ -1278,15 +1278,18 @@ qreal InputUtils::calculateScreenDpr()
 
 qreal InputUtils::calculateDpRatio()
 {
-  const QList<QScreen *> screens = QGuiApplication::screens();
+  //
+  // Keeping the previous implementation here in case we need it
+  // See https://github.com/MerginMaps/mobile/pull/3200
+  //
 
-  if ( !screens.isEmpty() )
-  {
-    QScreen *screen = screens.at( 0 );
-
-    qreal realDpr = calculateScreenDpr();
-    return realDpr / screen->devicePixelRatio();
-  }
+//  const QList<QScreen *> screens = QGuiApplication::screens();
+//  if ( !screens.isEmpty() )
+//  {
+//    QScreen *screen = screens.at( 0 );
+//    qreal realDpr = calculateScreenDpr();
+//    return realDpr / screen->devicePixelRatio();
+//  }
 
   return 1;
 }
