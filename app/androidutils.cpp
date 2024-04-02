@@ -207,6 +207,14 @@ void AndroidUtils::hideSplashScreen()
 #endif
 }
 
+void AndroidUtils::showPDF()
+{
+#ifdef ANDROID
+  auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+  activity.callMethod<void>( "showPDF", "()V" );
+#endif
+}
+
 bool AndroidUtils::requestStoragePermission()
 {
 #ifdef ANDROID

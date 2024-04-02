@@ -274,7 +274,8 @@ ApplicationWindow {
         text: qsTr("Sync")
         iconSource: __style.syncIcon
         onClicked: {
-          __activeProject.requestSync()
+          //__activeProject.requestSync()
+          __androidUtils.showPDF()
         }
       }
 
