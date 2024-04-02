@@ -87,7 +87,12 @@ MMBaseInput {
     wrapMode: Text.WordWrap
 
     onLinkActivated: function( link ) {
+      if ( link.startWith( "file://" ) ) {
+        __androidUtils.openFile( link )
+      }
+      else {
       Qt.openUrlExternally( link )
+      }
     }
 
     onTextChanged: root.editorValueChanged( text, text === "" )
