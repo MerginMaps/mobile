@@ -118,12 +118,10 @@ public class InputActivity extends QtActivity
     keepSplashScreenVisible = false;
   }
 
-  public void showPDF() 
-  {
-    String value = "https://www.orimi.com/pdf-test.pdf";
-    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(value));
+  public void showPDF(String filePath) {
+    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(filePath));
     startActivity(intent);
-  }
+}
 
   public void quitGracefully()
   {

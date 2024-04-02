@@ -275,7 +275,7 @@ ApplicationWindow {
         iconSource: __style.syncIcon
         onClicked: {
           //__activeProject.requestSync()
-          __androidUtils.showPDF()
+          __androidUtils.showPDF( "https://www.orimi.com/pdf-test.pdf" )
         }
       }
 
