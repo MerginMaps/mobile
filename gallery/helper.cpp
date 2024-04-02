@@ -12,6 +12,8 @@
 #include <QScreen>
 #include <QFontDatabase>
 
+#include "inpututils_p.h"
+
 Helper::Helper( QObject *parent ) : QObject{parent}
 {
 
@@ -37,36 +39,12 @@ QString Helper::installFonts()
 
 qreal Helper::calculateScreenDpr()
 {
-  const QList<QScreen *> screens = QGuiApplication::screens();
-
-  if ( !screens.isEmpty() )
-  {
-    QScreen *screen = screens.at( 0 );
-    double dpiX = screen->physicalDotsPerInchX();
-    double dpiY = screen->physicalDotsPerInchY();
-
-    qreal realDpi = dpiX < dpiY ? dpiX : dpiY;
-    realDpi = realDpi * screen->devicePixelRatio();
-
-    return realDpi / 160.;
-  }
-
-  return 1;
+  return InputUtilsPrivate::calculateScreenDpr();
 }
 
 qreal Helper::calculateDpRatio()
 {
-  const QList<QScreen *> screens = QGuiApplication::screens();
-
-  if ( !screens.isEmpty() )
-  {
-    QScreen *screen = screens.at( 0 );
-
-    qreal realDpr = calculateScreenDpr();
-    return realDpr / screen->devicePixelRatio();
-  }
-
-  return 1;
+  return InputUtilsPrivate::calculateDpRatio();
 }
 
 bool Helper::isMobile()

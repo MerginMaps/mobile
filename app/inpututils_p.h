@@ -23,6 +23,11 @@ namespace InputUtilsPrivate
                     bool bold = true
                   );
 
+  // Calculates ratio between real DPR calculated by us with DPR calculated by QT that is later used in qml sizing
+  qreal calculateDpRatio();
+
+  // Calculates real screen DPR based on DPI
+  qreal calculateScreenDpr();
 };
 
 #endif // INPUTUTILS_P_H

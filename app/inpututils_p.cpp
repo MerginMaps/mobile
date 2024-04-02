@@ -9,6 +9,9 @@
 
 #include "inpututils_p.h"
 
+#include <QGuiApplication>
+#include <QScreen>
+
 static QString htmlATag( const QColor &color, const QString &url, bool underline, bool bold )
 {
   QString atag;
@@ -65,4 +68,41 @@ QString InputUtilsPrivate::htmlLink(
   }
 
   return ret;
+}
+
+qreal InputUtilsPrivate::calculateDpRatio()
+{
+  //
+  // Keeping the previous implementation here in case we need it
+  // See https://github.com/MerginMaps/mobile/pull/3200
+  //
+
+  //  const QList<QScreen *> screens = QGuiApplication::screens();
+  //  if ( !screens.isEmpty() )
+  //  {
+  //    QScreen *screen = screens.at( 0 );
+  //    qreal realDpr = calculateScreenDpr();
+  //    return realDpr / screen->devicePixelRatio();
+  //  }
+
+  return 1;
+}
+
+qreal InputUtilsPrivate::calculateScreenDpr()
+{
+  const QList<QScreen *> screens = QGuiApplication::screens();
+
+  if ( !screens.isEmpty() )
+  {
+    QScreen *screen = screens.at( 0 );
+    double dpiX = screen->physicalDotsPerInchX();
+    double dpiY = screen->physicalDotsPerInchY();
+
+    qreal realDpi = dpiX < dpiY ? dpiX : dpiY;
+    realDpi = realDpi * screen->devicePixelRatio();
+
+    return realDpi / 160.;
+  }
+
+  return 1;
 }
