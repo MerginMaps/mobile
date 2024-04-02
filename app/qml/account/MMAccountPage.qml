@@ -129,53 +129,33 @@ MMPage {
       }
 
       Item {
-
         Layout.fillWidth: true
-        Layout.preferredHeight: progressBar.height + storageText.height + __style.margin6
+        Layout.preferredHeight: progressBar.height + storageTitleText.height + __style.margin6
         Layout.topMargin: __style.margin20
         Layout.rightMargin: __style.margin2
 
-        Row {
-          width: parent.width
-          height: 24 * __dp
+        MMText {
+          id: storageTitleText
 
-          spacing: __style.spacing20
-
-          Text {
-            id: storageTitleText
-
-            width: parent.width - parent.spacing - storageText.paintedWidth
-            height: parent.height
-
-            text: qsTr("Storage")
-            color: __style.nightColor
-            font: __style.p6
-
-            verticalAlignment: Text.AlignVCenter
-          }
-
-          Text {
-            id: storageText
-
-            width: paintedWidth
-            height: parent.height
-
-            text: root.storage
-
-
-            color: __style.forestColor
-            font: __style.t4
-
-            verticalAlignment: Text.AlignVCenter
-          }
+          anchors.left: parent.left
+          text: qsTr("Storage")
+          font: __style.p6
         }
+
+        MMText {
+          anchors.right: parent.right
+          text: root.storage
+          color: __style.forestColor
+          font: __style.t4
+        }
+
 
         MMProgressBar {
           id: progressBar
 
           anchors.bottom: parent.bottom
           anchors.left: parent.left
-          width: parent.width
+          anchors.right: parent.right
 
           position: root.storageFill
 
