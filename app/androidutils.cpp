@@ -210,9 +210,9 @@ void AndroidUtils::hideSplashScreen()
 void AndroidUtils::showPDF( const QString &filePath )
 {
 #ifdef ANDROID
-    auto activity = QJniObject(QNativeInterface::QAndroidApplication::context());
-    QJniObject jFilePath = QJniObject::fromString(filePath);
-    activity.callMethod<void>("showPDF", "(Ljava/lang/String;)V", jFilePath.object<jstring>());
+  auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+  QJniObject jFilePath = QJniObject::fromString( filePath );
+  activity.callMethod<void>( "showPDF", "(Ljava/lang/String;)V", jFilePath.object<jstring>() );
 #endif
 }
 
