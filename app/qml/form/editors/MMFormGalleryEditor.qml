@@ -84,7 +84,7 @@ Item {
 
       height: 120 * __dp
       width: parent.width
-      spacing: root.maxVisiblePhotos !== 0 ? 20 * __dp : 0
+      spacing: root.maxVisiblePhotos !== 0 ? __style.spacing12 : 0
       orientation: ListView.Horizontal
 
 //      model: {
