@@ -33,7 +33,7 @@ MMComponents.MMPage {
 
   pageHeader.title: qsTr( "Select workspace" )
 
-  pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
+  pageBottomMarginPolicy: MMComponents.MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
   pageHeader.rightItemContent: MMComponents.MMRoundButton {
 
