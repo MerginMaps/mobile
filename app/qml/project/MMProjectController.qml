@@ -57,10 +57,6 @@ Item {
     }
   }
 
-  function manageSubscriptionPlans() {
-    Qt.openUrlExternally(__inputHelp.merginDashboardLink);
-  }
-
   function getServiceInfo() {
     if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MM.MerginApiStatus.OK && __merginApi.apiSupportsSubscriptions) {
         __merginApi.getServiceInfo()
@@ -512,8 +508,7 @@ Item {
       }
 
       onBackClicked: stackView.popOnePageOrClose()
-
-      onManageAccountClicked: manageSubscriptionPlans()
+      onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
 
       onSignOutClicked: {
         __merginApi.signOut()

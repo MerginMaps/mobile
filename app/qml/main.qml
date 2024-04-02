@@ -682,11 +682,7 @@ ApplicationWindow {
     usedData: __merginApi.workspaceInfo.storageLimit > 0 ? __merginApi.workspaceInfo.diskUsage / __merginApi.workspaceInfo.storageLimit : 0
     apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
 
-    onManageAccountClicked: {
-      if (__merginApi.apiSupportsSubscriptions) {
-        projectController.manageSubscriptionPlans()
-      }
-    }
+    onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
   }
 
   MMProjectLimitDialog {
@@ -694,12 +690,7 @@ ApplicationWindow {
 
     plan: __merginApi.subscriptionInfo.planAlias
     apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
-
-    onManageAccountClicked: {
-      if (__merginApi.apiSupportsSubscriptions) {
-        projectController.manageSubscriptionPlans()
-      }
-    }
+    onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
   }
 
   MMProjErrorDialog {

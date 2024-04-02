@@ -89,6 +89,11 @@ class TestLinks: public QObject
       _run( mHelp.merginDashboardLink() );
     }
 
+    void testMerginSubscriptionLink()
+    {
+      _run( mHelp.merginSubscriptionLink() );
+    }
+
     void testMerginSubscriptionDetailsLink()
     {
       _run( mHelp.merginSubscriptionDetailsLink() );
