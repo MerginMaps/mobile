@@ -94,6 +94,7 @@ class InputHelp: public QObject
 
   private:
     QVector<QString> logHeader( bool isHtml );
+    QString merginLinkHelper( const QString &subpath, const QString &utmTag ) const;
 
   private:
     MerginApi *mMerginApi = nullptr;

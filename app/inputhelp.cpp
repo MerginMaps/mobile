@@ -61,7 +61,7 @@ QString InputHelp::merginWebLink() const
   return MerginApi::defaultApiRoot() + utmTagOther;
 }
 
-QString InputHelp::merginDashboardLink() const
+QString InputHelp::merginLinkHelper( const QString &subpath, const QString &utmTag ) const
 {
   QString activeWorkspacePathPart;
 
@@ -76,7 +76,7 @@ QString InputHelp::merginDashboardLink() const
 
   if ( mMerginApi && mMerginApi->apiRoot() != MerginApi::defaultApiRoot() )
   {
-    return mMerginApi->apiRoot() + "dashboard" + activeWorkspacePathPart;
+    return mMerginApi->apiRoot() + subpath + activeWorkspacePathPart;
   }
 
   // Let's include UTM tags for production server
@@ -87,23 +87,28 @@ QString InputHelp::merginDashboardLink() const
     queryParams = activeWorkspacePathPart;
 
     // URL can not have two question marks, merge the tags with &
-    QString utms( utmTagAttention );
+    QString utms( utmTag );
     utms.replace( "?", "&" );
     queryParams += utms;
   }
   else
   {
-    queryParams = utmTagAttention;
+    queryParams = utmTag;
   }
 
-  return MerginApi::defaultApiRoot() + "dashboard" + queryParams;
+  return MerginApi::defaultApiRoot() + subpath + queryParams;
+}
+
+QString InputHelp::merginDashboardLink() const
+{
+  return merginLinkHelper( "dashboard", utmTagAttention );
 }
 
 QString InputHelp::merginSubscriptionLink() const
 {
   if ( mMerginApi && mMerginApi->apiSupportsSubscriptions() )
   {
-    return MerginApi::defaultApiRoot() + "subscription" + utmTagSubscription;
+    return merginLinkHelper( "subscription", utmTagSubscription );
   }
   else
   {
