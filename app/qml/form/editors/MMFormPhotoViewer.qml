@@ -31,6 +31,9 @@ MMBaseInput {
   property url photoUrl: ""
   property bool hasCameraCapability: true
 
+  // Do not use "enabled" since we want to always be able to open image previews
+  property bool allowEditing: true
+
   property alias photoComponent: photo
 
   signal trashClicked()
@@ -56,7 +59,7 @@ MMBaseInput {
   state: "notSet"
 
   onContentClicked: {
-    if ( root.enabled && photo.status === Image.Ready ) {
+    if ( photo.status === Image.Ready ) {
       previewLoader.active = true
       previewLoader.focus = true
     }
@@ -89,7 +92,7 @@ MMBaseInput {
         bgndColor: __style.negativeColor
         iconSource: __style.deleteIcon
         iconColor: __style.grapeColor
-        visible: root.enabled && photo.status === Image.Ready
+        visible: root.allowEditing && photo.status === Image.Ready
         onClicked: root.trashClicked()
       }
     }
@@ -98,6 +101,7 @@ MMBaseInput {
       width: root.width
       height: root.contentItemHeight
       visible: root.state === "notSet"
+      enabled: root.allowEditing
 
       hasCameraCapability: root.hasCameraCapability
 
