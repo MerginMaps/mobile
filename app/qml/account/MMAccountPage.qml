@@ -133,6 +133,7 @@ MMPage {
         Layout.fillWidth: true
         Layout.preferredHeight: progressBar.height + storageText.height + __style.margin6
         Layout.topMargin: __style.margin20
+        Layout.rightMargin: __style.margin2
 
         Row {
           width: parent.width
@@ -148,7 +149,7 @@ MMPage {
 
             text: qsTr("Storage")
             color: __style.nightColor
-            font: __style.p4
+            font: __style.p6
 
             verticalAlignment: Text.AlignVCenter
           }
