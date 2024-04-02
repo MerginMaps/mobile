@@ -121,7 +121,7 @@ public class InputActivity extends QtActivity
   public void showPDF(String filePath) {
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(filePath));
     startActivity(intent);
-}
+  }
 
   public void quitGracefully()
   {

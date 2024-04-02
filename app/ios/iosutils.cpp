@@ -66,3 +66,8 @@ QVector<int> IosUtils::getSafeArea()
 #endif
   return QVector<int>();
 }
+
+void IosUtils::openPDF( const QString &filePath )
+{
+
+}
