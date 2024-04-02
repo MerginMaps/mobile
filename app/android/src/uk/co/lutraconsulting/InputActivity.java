@@ -28,6 +28,9 @@ import android.view.WindowInsetsController;
 import android.graphics.Insets;
 import android.graphics.Color;
 
+import android.content.Intent;
+import android.net.Uri;
+
 import androidx.core.view.WindowCompat;
 import androidx.core.splashscreen.SplashScreen;
 
@@ -113,6 +116,13 @@ public class InputActivity extends QtActivity
   public void hideSplashScreen()
   {
     keepSplashScreenVisible = false;
+  }
+
+  public void showPDF() 
+  {
+    String value = "https://www.orimi.com/pdf-test.pdf";
+    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(value));
+    startActivity(intent);
   }
 
   public void quitGracefully()
