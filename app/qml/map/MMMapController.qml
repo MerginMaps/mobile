@@ -252,6 +252,120 @@ Item {
     }
   }
 
+  MMHighlight {
+    id: identifyHighlight
+
+    visible: root.state === "view"
+    anchors.fill: mapCanvas
+
+    mapSettings: mapCanvas.mapSettings
+  }
+
+  MMPositionMarker {
+    id: positionMarker
+
+    xPos: mapPositionSource.screenPosition.x
+    yPos: mapPositionSource.screenPosition.y
+    hasDirection: positionDirectionSource.hasDirection
+
+    direction: positionDirectionSource.direction
+    hasPosition: __positionKit.hasPosition
+
+    horizontalAccuracy: __positionKit.horizontalAccuracy
+    accuracyRingSize: mapPositionSource.screenAccuracy
+
+    trackingMode: root.state !== "inactive" && tracking.active
+  }
+
+  Loader {
+    id: tracking
+
+    anchors.fill: mapCanvas
+    asynchronous: true
+    active: false
+
+    sourceComponent: Component {
+      Item {
+        property alias manager: trackingManager
+
+        MM.PositionTrackingManager {
+          id: trackingManager
+
+          variablesManager: __variablesManager
+          qgsProject: __activeProject.qgsProject
+
+          onAbort: () => root.setTracking( false )
+          onTrackingErrorOccured: ( message ) => __notificationModel.addError( message )
+        }
+
+        MM.PositionTrackingHighlight {
+          id: trackingHighlight
+
+          mapPosition: mapPositionSource.mapPosition
+          trackedGeometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
+        }
+
+        MMHighlight {
+          height: mapCanvas.height
+          width: mapCanvas.width
+
+          markerColor: __style.sunsetColor
+          lineColor: __style.sunsetColor
+          lineWidth: MMHighlight.LineWidths.Narrow
+
+          mapSettings: mapCanvas.mapSettings
+          geometry: trackingHighlight.highlightGeometry
+        }
+
+        Component.onCompleted: {
+          trackingManager.trackingBackend = trackingManager.constructTrackingBackend( __activeProject.qgsProject, __positionKit )
+        }
+
+        Connections {
+          target: __activeProject
+
+          function onProjectWillBeReloaded() {
+            // simply stop tracking
+            root.setTracking( false )
+          }
+        }
+      }
+    }
+  }
+
+  Loader {
+    id: stakeoutLoader
+
+    anchors.fill: mapCanvas
+
+    asynchronous: true
+    active: root.state === "stakeout"
+
+    sourceComponent: stakeoutToolsComponent
+  }
+
+  Loader {
+    id: recordingToolsLoader
+
+    anchors.fill: mapCanvas
+
+    asynchronous: true
+    active: internal.isInRecordState
+
+    sourceComponent: recordingToolsComponent
+  }
+
+  Loader {
+    id: splittingLoader
+
+    anchors.fill: mapCanvas
+
+    asynchronous: true
+    active: root.state === "split"
+
+    sourceComponent: splittingToolsComponent
+  }
+
   // map available content within safe area
   Item {
     anchors {
@@ -638,120 +752,6 @@ Item {
         }
       }
     }
-  }
-
-  MMHighlight {
-    id: identifyHighlight
-
-    visible: root.state === "view"
-    anchors.fill: mapCanvas
-
-    mapSettings: mapCanvas.mapSettings
-  }
-
-  MMPositionMarker {
-    id: positionMarker
-
-    xPos: mapPositionSource.screenPosition.x
-    yPos: mapPositionSource.screenPosition.y
-    hasDirection: positionDirectionSource.hasDirection
-
-    direction: positionDirectionSource.direction
-    hasPosition: __positionKit.hasPosition
-
-    horizontalAccuracy: __positionKit.horizontalAccuracy
-    accuracyRingSize: mapPositionSource.screenAccuracy
-
-    trackingMode: root.state !== "inactive" && tracking.active
-  }
-
-  Loader {
-    id: tracking
-
-    anchors.fill: mapCanvas
-    asynchronous: true
-    active: false
-
-    sourceComponent: Component {
-      Item {
-        property alias manager: trackingManager
-
-        MM.PositionTrackingManager {
-          id: trackingManager
-
-          variablesManager: __variablesManager
-          qgsProject: __activeProject.qgsProject
-
-          onAbort: () => root.setTracking( false )
-          onTrackingErrorOccured: ( message ) => __notificationModel.addError( message )
-        }
-
-        MM.PositionTrackingHighlight {
-          id: trackingHighlight
-
-          mapPosition: mapPositionSource.mapPosition
-          trackedGeometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
-        }
-
-        MMHighlight {
-          height: mapCanvas.height
-          width: mapCanvas.width
-
-          markerColor: __style.sunsetColor
-          lineColor: __style.sunsetColor
-          lineWidth: MMHighlight.LineWidths.Narrow
-
-          mapSettings: mapCanvas.mapSettings
-          geometry: trackingHighlight.highlightGeometry
-        }
-
-        Component.onCompleted: {
-          trackingManager.trackingBackend = trackingManager.constructTrackingBackend( __activeProject.qgsProject, __positionKit )
-        }
-
-        Connections {
-          target: __activeProject
-
-          function onProjectWillBeReloaded() {
-            // simply stop tracking
-            root.setTracking( false )
-          }
-        }
-      }
-    }
-  }
-
-  Loader {
-    id: stakeoutLoader
-
-    anchors.fill: mapCanvas
-
-    asynchronous: true
-    active: root.state === "stakeout"
-
-    sourceComponent: stakeoutToolsComponent
-  }
-
-  Loader {
-    id: recordingToolsLoader
-
-    anchors.fill: mapCanvas
-
-    asynchronous: true
-    active: internal.isInRecordState
-
-    sourceComponent: recordingToolsComponent
-  }
-
-  Loader {
-    id: splittingLoader
-
-    anchors.fill: mapCanvas
-
-    asynchronous: true
-    active: root.state === "split"
-
-    sourceComponent: splittingToolsComponent
   }
 
   MMListDrawer {
