@@ -30,7 +30,13 @@ class MerginUserAuth: public QObject
     void authChanged();
 
   public:
+    //! Returns true if username/password is set, but that does not
+    //! necessarily mean that we have managed to log in and get a token.
     Q_INVOKABLE bool hasAuthData();
+
+    //! Returns true if we have a token and it is not expired,
+    //! i.e. we should be good to do authenticated requests.
+    bool hasValidToken() const;
 
     void clear();
 
