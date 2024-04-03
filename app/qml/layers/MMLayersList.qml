@@ -49,6 +49,7 @@ ListView {
       }
 
       rightContent: MMComponents.MMSwitch {
+        visible: model.nodeIsVisible !== ""
         checked: model.nodeIsVisible === "yes"
         onReleased: {
           root.nodeVisibilityClicked( model.node )
