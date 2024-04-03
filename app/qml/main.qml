@@ -912,6 +912,10 @@ ApplicationWindow {
       projectIssuesPage.projectLoadingLog = __activeProject.projectLoadingLog();
       projectIssuesPage.visible = true;
     }
+    function onShowSwitchWorkspaceActionClicked() {
+      stateManager.state = "projects"
+      projectController.showSelectWorkspacePage()
+    }
   }
 
   Connections {

@@ -144,6 +144,12 @@ void NotificationModel::onNotificationClicked( uint id )
           emit showProjectIssuesActionClicked();
           break;
         }
+        case NotificationType::ActionType::ShowSwitchWorkspaceAction:
+        {
+          remove( id );
+          emit showSwitchWorkspaceActionClicked();
+          break;
+        }
         default: break;
       }
     }
