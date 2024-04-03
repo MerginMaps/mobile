@@ -77,6 +77,10 @@ Item {
     root.openChangesPanel( projectId )
   }
 
+  function showSelectWorkspacePage() {
+    stackView.push( workspaceListComponent )
+  }
+
   visible: false
   focus: true
 
@@ -468,9 +472,12 @@ Item {
 
   MMAcceptInvitationController {
     id: acceptInvitationController
-    // TODO enabled add controller.showInvitationsList
-    enabled: root.visible && __merginApi.apiSupportsWorkspaces
-    stackView: stackView
+    // Do not show accept invitation notification when
+    // - there is onboarding ongoing
+    // - account page is already opened
+    enabled: !accountController.inProgress &&
+             !stackView.containsPage("accountPage") &&
+             __merginApi.apiSupportsWorkspaces
   }
 
   Component {
@@ -488,6 +495,8 @@ Item {
 
     MMAccountPage {
       id: workspaceAccountPage
+
+      objectName: "accountPage"
 
       abbrName: __merginApi.userInfo.nameAbbr
       fullName: __merginApi.userInfo.name
@@ -522,9 +531,7 @@ Item {
         root.resetView()
       }
 
-      onSelectWorkspaceClicked: {
-        stackView.push( workspaceListComponent )
-      }
+      onSelectWorkspaceClicked: root.showSelectWorkspacePage()
     }
   }
 

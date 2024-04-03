@@ -40,7 +40,8 @@ class NotificationType
     enum ActionType
     {
       NoAction,
-      ShowProjectIssuesAction
+      ShowProjectIssuesAction,
+      ShowSwitchWorkspaceAction
     };
     Q_ENUM( ActionType )
 
@@ -107,6 +108,7 @@ class NotificationModel : public QAbstractListModel
   signals:
     void rowCountChanged();
     void showProjectIssuesActionClicked();
+    void showSwitchWorkspaceActionClicked();
 
   private:
     void add( const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information, NotificationType::IconType icon = NotificationType::NoneIcon, NotificationType::ActionType action = NotificationType::ActionType::NoAction );

@@ -16,32 +16,25 @@ import mm 1.0 as MM
  * e.g. on app start
  */
 Item {
-  id: controller
+  id: root
 
-  required property bool enabled
-  required property var stackView
-
+  property bool enabled: true
   property MM.MerginInvitation invitation
 
   Connections {
-    id: openInvitationsListener
-
     target: __merginApi
-    enabled: controller.enabled && !stackView.containsPage("signUpPanel")
+    enabled: root.enabled
 
     function onUserInfoReplyFinished() {
-      // let's not show invitations when registration finish page is opened
-      // this should be redundant - never reached
-      if ( stackView.containsPage("signUpPanel") ) {
-        return;
-      }
-
       if ( !__merginApi.userAuth.hasAuthData() ) {
         return;
       }
 
       if ( __merginApi.userInfo.hasInvitations ) {
-        __notificationModel.addWarning( qsTr( "You have pending workspace invitations! You may accept or reject them in your workspace selection page" ) )
+        __notificationModel.addWarning(
+              __inputUtils.htmlLink(qsTr( "You have pending workspace invitations.<br>Please %1accept or reject%2 them." ), __style.grapeColor),
+              MM.NotificationType.ShowSwitchWorkspaceAction
+        )
       }
     }
   }
