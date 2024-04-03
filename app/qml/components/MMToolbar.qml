@@ -71,7 +71,7 @@ Rectangle {
     drawerHeader.title: qsTr("More options")
     list.model: menuModel
 
-    list. delegate: MMListDelegate {
+    list.delegate: MMListDelegate {
       text: model.text
       leftContent: MMIcon { source: model.iconSource }
       onClicked: {
@@ -141,6 +141,7 @@ Rectangle {
     let visibleButtonsCount = 0
     for ( let i = 0; i < root.model.count; ++i ) {
       let btnData = root.model.get(i)
+      btnData.onVisibleChanged.connect(root.recalculate)
       if (btnData.visible) ++visibleButtonsCount
     }
 
