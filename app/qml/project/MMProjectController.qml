@@ -200,7 +200,7 @@ Item {
           return qsTr("Home")
         }
         else if ( projectsPage.state === "workspace" ) {
-          return __merginApi.userInfo.activeWorkspaceName
+          return __merginApi.userInfo.activeWorkspaceName ? __merginApi.userInfo.activeWorkspaceName : qsTr( "Projects" )
         }
         return qsTr("Explore")
       }
