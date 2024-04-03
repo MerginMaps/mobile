@@ -96,7 +96,6 @@ Item {
 
     case "record": {
       root.recordingStarted()
-      root.visibilityRecordState()
       break
     }
 
@@ -115,7 +114,6 @@ Item {
     case "split": {
       root.showInfoTextMessage( qsTr( "Create line to split the selected feature" ) )
       root.splittingStarted()
-      root.visibilitySplitState()
       break
     }
 
@@ -281,6 +279,93 @@ Item {
     sourceComponent: recordingToolsComponent
   }
 
+  MMHighlight {
+    id: identifyHighlight
+
+    visible: root.state === "view"
+    anchors.fill: mapCanvas
+
+    mapSettings: mapCanvas.mapSettings
+  }
+
+  Loader {
+    id: tracking
+
+    anchors.fill: mapCanvas
+    asynchronous: true
+    active: false
+
+    sourceComponent: Component {
+      Item {
+        property alias manager: trackingManager
+
+        MM.PositionTrackingManager {
+          id: trackingManager
+
+          variablesManager: __variablesManager
+          qgsProject: __activeProject.qgsProject
+
+          onAbort: () => root.setTracking( false )
+          onTrackingErrorOccured: ( message ) => __notificationModel.addError( message )
+        }
+
+        MM.PositionTrackingHighlight {
+          id: trackingHighlight
+
+          mapPosition: mapPositionSource.mapPosition
+          trackedGeometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
+        }
+
+        MMHighlight {
+          height: mapCanvas.height
+          width: mapCanvas.width
+
+          markerColor: __style.sunsetColor
+          lineColor: __style.sunsetColor
+          lineWidth: MMHighlight.LineWidths.Narrow
+
+          mapSettings: mapCanvas.mapSettings
+          geometry: trackingHighlight.highlightGeometry
+        }
+
+        Component.onCompleted: {
+          trackingManager.trackingBackend = trackingManager.constructTrackingBackend( __activeProject.qgsProject, __positionKit )
+        }
+
+        Connections {
+          target: __activeProject
+
+          function onProjectWillBeReloaded() {
+            // simply stop tracking
+            root.setTracking( false )
+          }
+        }
+      }
+    }
+  }
+
+  Loader {
+    id: stakeoutLoader
+
+    anchors.fill: mapCanvas
+
+    asynchronous: true
+    active: root.state === "stakeout"
+
+    sourceComponent: stakeoutToolsComponent
+  }
+
+  Loader {
+    id: splittingLoader
+
+    anchors.fill: mapCanvas
+
+    asynchronous: true
+    active: root.state === "split"
+
+    sourceComponent: splittingToolsComponent
+  }
+
   // map available content within safe area
   Item {
     anchors {
@@ -310,12 +395,12 @@ Item {
 
           spacing: __style.margin20
 
-          //visible: false //internal.isInRecordState || root.state === "split"
+          visible: internal.isInRecordState || root.state === "split"
 
           MMMapButton {
             id: backButton
 
-            //visible: false //internal.isInRecordState || root.state === "split"
+            visible: internal.isInRecordState || root.state === "split"
             iconSource: __style.backIcon
 
             onClicked: {
@@ -341,7 +426,7 @@ Item {
             Layout.preferredWidth: parent.width - parent.spacing - backButton.width
             Layout.maximumWidth: 500 * __dp
 
-            visible: false //root.state === "record"
+            visible: root.state === "record"
 
             text: __activeLayer.layerName
             leftIconSource: __inputUtils.loadIconFromLayer( __activeLayer.layer )
@@ -669,93 +754,6 @@ Item {
         }
       }
     }
-  }
-
-  MMHighlight {
-    id: identifyHighlight
-
-    visible: root.state === "view"
-    anchors.fill: mapCanvas
-
-    mapSettings: mapCanvas.mapSettings
-  }
-
-  Loader {
-    id: tracking
-
-    anchors.fill: mapCanvas
-    asynchronous: true
-    active: false
-
-    sourceComponent: Component {
-      Item {
-        property alias manager: trackingManager
-
-        MM.PositionTrackingManager {
-          id: trackingManager
-
-          variablesManager: __variablesManager
-          qgsProject: __activeProject.qgsProject
-
-          onAbort: () => root.setTracking( false )
-          onTrackingErrorOccured: ( message ) => __notificationModel.addError( message )
-        }
-
-        MM.PositionTrackingHighlight {
-          id: trackingHighlight
-
-          mapPosition: mapPositionSource.mapPosition
-          trackedGeometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
-        }
-
-        MMHighlight {
-          height: mapCanvas.height
-          width: mapCanvas.width
-
-          markerColor: __style.sunsetColor
-          lineColor: __style.sunsetColor
-          lineWidth: MMHighlight.LineWidths.Narrow
-
-          mapSettings: mapCanvas.mapSettings
-          geometry: trackingHighlight.highlightGeometry
-        }
-
-        Component.onCompleted: {
-          trackingManager.trackingBackend = trackingManager.constructTrackingBackend( __activeProject.qgsProject, __positionKit )
-        }
-
-        Connections {
-          target: __activeProject
-
-          function onProjectWillBeReloaded() {
-            // simply stop tracking
-            root.setTracking( false )
-          }
-        }
-      }
-    }
-  }
-
-  Loader {
-    id: stakeoutLoader
-
-    anchors.fill: mapCanvas
-
-    asynchronous: true
-    active: root.state === "stakeout"
-
-    sourceComponent: stakeoutToolsComponent
-  }
-
-  Loader {
-    id: splittingLoader
-
-    anchors.fill: mapCanvas
-
-    asynchronous: true
-    active: root.state === "split"
-
-    sourceComponent: splittingToolsComponent
   }
 
   MMListDrawer {
@@ -1215,16 +1213,5 @@ Item {
   function hideInfoTextMessage() {
     mapBlurInfoBoxVertical.hide()
     mapBlurInfoBoxHorizontal.hide()
-  }
-
-  function visibilityRecordState() {
-    chooseLayerLayout.visible = true
-    backButton.visible = true
-    mapPicker.visible = true
-  }
-
-  function visibilitySplitState() {
-    chooseLayerLayout.visible = true
-    backButton.visible = true
   }
 }
