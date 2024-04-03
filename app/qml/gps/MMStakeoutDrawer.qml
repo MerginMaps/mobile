@@ -79,6 +79,10 @@ MMDrawer {
     ]
   }
 
+  modal: false
+
+  closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
+
   dropShadow: true
 
   onClosed: root.endStakeout()
