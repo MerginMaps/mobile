@@ -28,6 +28,9 @@ Item {
   property string text
   property bool selected
 
+  // Show grayed out button if button is disabled or unselected button in selectable toolbar mode
+  property bool useEnabledVisual: root.enabled && (iconSource === iconSourceSelected || selected)
+
   onRotatingChanged: {
     if (rotating)
       rotateAnimation.start()
@@ -49,7 +52,7 @@ Item {
       anchors.topMargin: ( container.height - (icon.height + text.height + root.buttonSpacing) ) / 2
 
       source: root.selected ? root.iconSourceSelected : root.iconSource
-      color: root.enabled ? root.iconColor : root.iconColorDisabled
+      color: root.useEnabledVisual ? root.iconColor : root.iconColorDisabled
     }
 
     RotationAnimation {
@@ -70,7 +73,7 @@ Item {
       id: text
 
       text: root.text
-      color: root.enabled ? root.iconColor : root.iconColorDisabled
+      color: root.useEnabledVisual ? root.iconColor : root.iconColorDisabled
       font: __style.t4
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.top: icon.bottom
