@@ -252,6 +252,15 @@ Item {
     }
   }
 
+  MMHighlight {
+    id: identifyHighlight
+
+    visible: root.state === "view"
+    anchors.fill: mapCanvas
+
+    mapSettings: mapCanvas.mapSettings
+  }
+
   MMPositionMarker {
     id: positionMarker
 
@@ -266,26 +275,6 @@ Item {
     accuracyRingSize: mapPositionSource.screenAccuracy
 
     trackingMode: root.state !== "inactive" && tracking.active
-  }
-
-  Loader {
-    id: recordingToolsLoader
-
-    anchors.fill: mapCanvas
-
-    asynchronous: true
-    active: internal.isInRecordState
-
-    sourceComponent: recordingToolsComponent
-  }
-
-  MMHighlight {
-    id: identifyHighlight
-
-    visible: root.state === "view"
-    anchors.fill: mapCanvas
-
-    mapSettings: mapCanvas.mapSettings
   }
 
   Loader {
@@ -356,6 +345,17 @@ Item {
   }
 
   Loader {
+    id: recordingToolsLoader
+
+    anchors.fill: mapCanvas
+
+    asynchronous: true
+    active: internal.isInRecordState
+
+    sourceComponent: recordingToolsComponent
+  }
+
+  Loader {
     id: splittingLoader
 
     anchors.fill: mapCanvas
@@ -389,8 +389,6 @@ Item {
         spacing: __style.margin20
 
         RowLayout {
-          id: chooseLayerLayout
-
           width: parent.width
 
           spacing: __style.margin20
@@ -421,7 +419,7 @@ Item {
           }
 
           MMMapPicker {
-            id: mapPicker
+
             Layout.preferredHeight: __style.mapItemHeight
             Layout.preferredWidth: parent.width - parent.spacing - backButton.width
             Layout.maximumWidth: 500 * __dp
