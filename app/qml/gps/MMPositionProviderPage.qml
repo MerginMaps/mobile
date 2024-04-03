@@ -181,6 +181,7 @@ MMComponents.MMPage {
     id: noConnectionPossibleFooterComponent
 
     MMComponents.MMMessage {
+      width: ListView.view.width
       image: __style.externalGpsRedImage
       title: qsTr( "Connecting to external receivers via bluetooth is not supported" )
       description: qsTr( "This function is not available on iOS. " +
