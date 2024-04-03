@@ -129,3 +129,8 @@ void MerginUserAuth::setTokenExpiration( const QDateTime &tokenExpiration )
   mTokenExpiration = tokenExpiration;
   emit authChanged();
 }
+
+bool MerginUserAuth::hasValidToken() const
+{
+  return !mAuthToken.isEmpty() && mTokenExpiration >= QDateTime().currentDateTimeUtc();
+}
