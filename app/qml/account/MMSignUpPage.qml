@@ -43,15 +43,9 @@ MMPage {
 
   pageHeader {
     title: qsTr( "Sign up" )
-
     titleFont: __style.h3
-    color: __style.transparentColor
-    topSpacing: Math.max( __style.safeAreaTop, __style.margin54 )
     baseHeaderHeight: __style.row80
-    backButton.bgndColor: __style.lightGreenColor
   }
-
-  background: MMAccountComponents.MMAuthPageBackground{}
 
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
@@ -78,7 +72,6 @@ MMPage {
         width: parent.width
 
         title: qsTr( "Username" )
-        bgColor: __style.lightGreenColor
         textFieldComponent.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
       }
 
@@ -88,7 +81,6 @@ MMPage {
         width: parent.width
 
         title: qsTr( "Email" )
-        bgColor: __style.lightGreenColor
         textFieldComponent.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
       }
 
@@ -98,7 +90,6 @@ MMPage {
         width: parent.width
 
         title: qsTr( "Password" )
-        bgColor: __style.lightGreenColor
       }
 
       MMPasswordInput {
@@ -107,7 +98,6 @@ MMPage {
         width: parent.width
 
         title: qsTr( "Confirm password" )
-        bgColor: __style.lightGreenColor
       }
 
       MMCheckBox {

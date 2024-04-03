@@ -97,7 +97,7 @@ Item {
 
       visible: root.hideActiveProject ? !projectIsOpened : true
 
-      projectDisplayName: root.projectModelType === MM.ProjectsModel.CreatedProjectsModel ? model.ProjectName : model.ProjectFullName
+      projectDisplayName: root.projectModelType === MM.ProjectsModel.WorkspaceProjectsModel ? model.ProjectName : model.ProjectFullName
       projectId: model.ProjectId ? model.ProjectId : ""
       projectDescription: model.ProjectDescription ? model.ProjectDescription : ""
       projectIsInSync: model.ProjectSyncPending ? model.ProjectSyncPending : false
