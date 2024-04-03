@@ -101,6 +101,9 @@ MMDrawer {
 
           onClicked: {
             if ( usernameInput.text === root.username ) {
+              close()
+              usernameInput.text = ""
+              usernameInput.errorMsg = ""
               root.closeAccountClicked()
             }
             else {
