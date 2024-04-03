@@ -87,7 +87,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::authChanged );
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, [this]()
   {
-    if ( mUserAuth->hasAuthData() )
+    if ( !mUserAuth->authToken().isEmpty() && mUserAuth->tokenExpiration() >= QDateTime().currentDateTime().toUTC() )
     {
       // do not call /user/profile when user just logged out
       getUserInfo();
