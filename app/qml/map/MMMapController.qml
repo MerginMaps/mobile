@@ -96,6 +96,7 @@ Item {
 
     case "record": {
       root.recordingStarted()
+      root.visibilityRecordState()
       break
     }
 
@@ -114,6 +115,7 @@ Item {
     case "split": {
       root.showInfoTextMessage( qsTr( "Create line to split the selected feature" ) )
       root.splittingStarted()
+      root.visibilitySplitState()
       break
     }
 
@@ -252,6 +254,33 @@ Item {
     }
   }
 
+  MMPositionMarker {
+    id: positionMarker
+
+    xPos: mapPositionSource.screenPosition.x
+    yPos: mapPositionSource.screenPosition.y
+    hasDirection: positionDirectionSource.hasDirection
+
+    direction: positionDirectionSource.direction
+    hasPosition: __positionKit.hasPosition
+
+    horizontalAccuracy: __positionKit.horizontalAccuracy
+    accuracyRingSize: mapPositionSource.screenAccuracy
+
+    trackingMode: root.state !== "inactive" && tracking.active
+  }
+
+  Loader {
+    id: recordingToolsLoader
+
+    anchors.fill: mapCanvas
+
+    asynchronous: true
+    active: internal.isInRecordState
+
+    sourceComponent: recordingToolsComponent
+  }
+
   // map available content within safe area
   Item {
     anchors {
@@ -275,16 +304,18 @@ Item {
         spacing: __style.margin20
 
         RowLayout {
+          id: chooseLayerLayout
+
           width: parent.width
 
           spacing: __style.margin20
 
-          visible: internal.isInRecordState || root.state === "split"
+          //visible: false //internal.isInRecordState || root.state === "split"
 
           MMMapButton {
             id: backButton
 
-            visible: internal.isInRecordState || root.state === "split"
+            //visible: false //internal.isInRecordState || root.state === "split"
             iconSource: __style.backIcon
 
             onClicked: {
@@ -305,12 +336,12 @@ Item {
           }
 
           MMMapPicker {
-
+            id: mapPicker
             Layout.preferredHeight: __style.mapItemHeight
             Layout.preferredWidth: parent.width - parent.spacing - backButton.width
             Layout.maximumWidth: 500 * __dp
 
-            visible: root.state === "record"
+            visible: false //root.state === "record"
 
             text: __activeLayer.layerName
             leftIconSource: __inputUtils.loadIconFromLayer( __activeLayer.layer )
@@ -649,22 +680,6 @@ Item {
     mapSettings: mapCanvas.mapSettings
   }
 
-  MMPositionMarker {
-    id: positionMarker
-
-    xPos: mapPositionSource.screenPosition.x
-    yPos: mapPositionSource.screenPosition.y
-    hasDirection: positionDirectionSource.hasDirection
-
-    direction: positionDirectionSource.direction
-    hasPosition: __positionKit.hasPosition
-
-    horizontalAccuracy: __positionKit.horizontalAccuracy
-    accuracyRingSize: mapPositionSource.screenAccuracy
-
-    trackingMode: root.state !== "inactive" && tracking.active
-  }
-
   Loader {
     id: tracking
 
@@ -730,17 +745,6 @@ Item {
     active: root.state === "stakeout"
 
     sourceComponent: stakeoutToolsComponent
-  }
-
-  Loader {
-    id: recordingToolsLoader
-
-    anchors.fill: mapCanvas
-
-    asynchronous: true
-    active: internal.isInRecordState
-
-    sourceComponent: recordingToolsComponent
   }
 
   Loader {
@@ -1211,5 +1215,16 @@ Item {
   function hideInfoTextMessage() {
     mapBlurInfoBoxVertical.hide()
     mapBlurInfoBoxHorizontal.hide()
+  }
+
+  function visibilityRecordState() {
+    chooseLayerLayout.visible = true
+    backButton.visible = true
+    mapPicker.visible = true
+  }
+
+  function visibilitySplitState() {
+    chooseLayerLayout.visible = true
+    backButton.visible = true
   }
 }
