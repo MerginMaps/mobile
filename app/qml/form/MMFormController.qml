@@ -34,6 +34,7 @@ Item {
   property alias panelState: statesManager.state
 
   property bool layerIsReadOnly: featureLayerPair?.layer?.readOnly ?? false
+  property bool layerIsSpatial: featureLayerPair ? __inputUtils.isSpatialLayer( featureLayerPair.layer ) : false
 
   property real drawerHeight: drawer.height
 
@@ -175,6 +176,7 @@ Item {
       }
 
       layerIsReadOnly: root.layerIsReadOnly
+      layerIsSpatial: root.layerIsSpatial
 
       onSaved: drawer.close()
       onCanceled: drawer.close()

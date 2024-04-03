@@ -72,7 +72,7 @@ Page {
   ]
 
   property bool layerIsReadOnly: true
-  property bool isSpatialLayer: __inputUtils.isSpatialLayer( root.controller.featureLayerPair.layer )
+  property bool layerIsSpatial: true
 
   background: Rectangle {
     color: __style.lightGreenColor
@@ -200,14 +200,15 @@ Page {
       MMComponents.MMToolbarButton {
         text: qsTr( "Delete" )
         iconSource: __style.deleteIcon
-        iconColor: root.isSpatialLayer ? __style.polarColor : __style.forestColor
+        iconColor: root.layerIsSpatial ? __style.polarColor : __style.forestColor
         onClicked: deleteDialog.open()
       }
 
       MMComponents.MMToolbarButton {
+        id: editGeometry
         text: qsTr( "Edit geometry" )
         iconSource: __style.editIcon
-        visible: root.isSpatialLayer
+        visible: root.layerIsSpatial
         onClicked: root.editGeometryRequested( root.controller.featureLayerPair )
       }
     }
