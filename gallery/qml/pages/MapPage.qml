@@ -69,8 +69,7 @@ Page {
 
   MMMapScaleBar {
     anchors.horizontalCenter: parent.horizontalCenter
-    y: 120
-    sourceItem: map
+    y: 130
     preferredWidth: map.zoomLevel * 10
     visible: true
     onVisibleChanged: {
@@ -79,11 +78,10 @@ Page {
     }
   }
 
-  MMMapBlurLabel {
+  MMMapHidingLabel {
     x: 20
     y: 80
     width: parent.width - 40
-    sourceItem: map
     text: "Mark the geometry on the map and click record"
     visible: true
   }

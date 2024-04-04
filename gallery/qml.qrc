@@ -120,8 +120,8 @@
         <file>../app/qml/form/editors/MMFormRichTextViewer.qml</file>
         <file>../app/qml/form/editors/MMFormRelationReferenceEditor.qml</file>
         <file>../app/qml/map/components/MMPositionMarker.qml</file>
-        <file>../app/qml/map/components/MMBlurBox.qml</file>
-        <file>../app/qml/map/components/MMMapBlurLabel.qml</file>
+        <file>../app/qml/map/components/MMHidingBox.qml</file>
+        <file>../app/qml/map/components/MMMapHidingLabel.qml</file>
         <file>../app/qml/map/components/MMMapButton.qml</file>
         <file>../app/qml/map/components/MMMapLabel.qml</file>
         <file>../app/qml/map/components/MMMapPicker.qml</file>
