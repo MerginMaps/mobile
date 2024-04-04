@@ -19,6 +19,10 @@ ApplicationWindow {
   visible: true
   title: "Gallery"
 
+  property int sizeIndex: 0
+  property var mobileSizes: [ [375,667], [360,800] ]
+  property var tabletSizes: [ [768,1024], [601,962] ]
+
   property string currentPageSource: "InitialGalleryPage.qml"
 
   Connections {
@@ -57,6 +61,37 @@ ApplicationWindow {
     onTriggered: grid.toggle()
   }
 
+  Action {
+    id: switchMobileAction
+    onTriggered: {
+     sizeIndex++
+     let id = sizeIndex % mobileSizes.length
+     let size = mobileSizes[id]
+     window.width = size[0]
+     window.height = size[1]
+    }
+  }
+
+  Action {
+    id: switchTabletAction
+    onTriggered: {
+     sizeIndex++
+     let id = sizeIndex % tabletSizes.length
+     let size = tabletSizes[id]
+     window.width = size[0]
+     window.height = size[1]
+    }
+  }
+
+  Action {
+    id: switchOrientationAction
+    onTriggered: {
+     let s = window.width
+     window.width = window.height
+     window.height = s
+    }
+  }
+
   header: ToolBar {
     RowLayout {
       spacing: 20
@@ -75,6 +110,21 @@ ApplicationWindow {
         horizontalAlignment: Qt.AlignLeft
         verticalAlignment: Qt.AlignVCenter
         Layout.fillWidth: true
+      }
+
+      ToolButton {
+        action: switchOrientationAction
+        text: "O"
+      }
+
+      ToolButton {
+        action: switchMobileAction
+        text: "M"
+      }
+
+      ToolButton {
+        action: switchTabletAction
+        text: "T"
       }
 
       ToolButton {

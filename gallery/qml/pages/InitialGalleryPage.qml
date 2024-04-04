@@ -16,7 +16,9 @@ Page {
   Label {
     width: parent.width / 2
 
-    text: "DP ratio: " + __dp.toPrecision(6) + "\n" +
+    text: "Width: " + Window.width + "\n" +
+          "Height: " + Window.height + "\n" +
+          "DP ratio: " + __dp.toPrecision(6) + "\n" +
           "Used font: " + font.family + "\n" +
           "Safe area - top: " + __style.safeAreaTop + "\n" +
           "Safe area - right: " + __style.safeAreaRight + "\n" +
