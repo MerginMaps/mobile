@@ -134,8 +134,8 @@
 
 #include <QQuickStyle>
 
-#ifndef NDEBUG
-// #include <QQmlDebuggingEnabler>
+#ifdef QT_DEBUG
+#include <QQmlDebuggingEnabler>
 #endif
 
 #ifdef MOBILE_OS
@@ -390,6 +390,10 @@ int main( int argc, char *argv[] )
   QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
   QCoreApplication::setApplicationName( "Input" ); // used by QSettings
   QCoreApplication::setApplicationVersion( version );
+
+#ifdef QT_DEBUG
+  QQmlDebuggingEnabler enabler;
+#endif
 
 #ifdef INPUT_TEST
   InputTests tests;
