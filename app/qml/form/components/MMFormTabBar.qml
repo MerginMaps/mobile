@@ -16,7 +16,6 @@ TabBar {
   property alias tabButtonsModel: tabBarRepeater.model
 
   implicitHeight: 56 * __dp
-  implicitWidth: ApplicationWindow.window?.width ?? 0
 
   spacing: 20 * __dp
 
@@ -38,7 +37,7 @@ TabBar {
       property bool isSelected: TabBar.index === root.currentIndex
 
       height: 45 * __dp
-      width: implicitContentWidth + 2 * root.spacing
+      width: contentItem.implicitWidth
 
       anchors.verticalCenter: parent.verticalCenter
 
@@ -46,6 +45,10 @@ TabBar {
 
       contentItem: Text {
         text: model.Name
+
+        leftPadding: __style.margin20
+        rightPadding: __style.margin20
+
         font: __style.t4
         color: __style.forestColor
 
