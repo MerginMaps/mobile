@@ -36,6 +36,18 @@ MMInputs.MMBaseInput {
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
+  errorMsg: _fieldErrorMessage
+  warningMsg: _fieldWarningMessage
+
+  enabled: !_fieldIsReadOnly
+
+  hasCheckbox: _fieldRememberValueSupported
+  checkboxChecked: _fieldRememberValueState
+
+  onCheckboxCheckedChanged: {
+    root.rememberValueBoxClicked( checkboxChecked )
+  }
+
   MM.RelationReferenceFeaturesModel {
     id: rModel
 
@@ -70,7 +82,7 @@ MMInputs.MMBaseInput {
 
     size: __style.icon24
     source: __style.linkIcon
-    color: __style.forestColor
+    color: enabled ? __style.forestColor : __style.mediumGreenColor
   }
 
   onRightActionClicked: {
