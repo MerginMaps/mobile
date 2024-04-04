@@ -10,6 +10,9 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#ifdef QT_DEBUG
+#include <QQmlDebuggingEnabler>
+#endif
 #ifdef DESKTOP_OS
 #include "hotreload.h"
 #endif
@@ -41,6 +44,10 @@ int main( int argc, char *argv[] )
   InputUtils iu;
 
   QQmlApplicationEngine engine;
+
+#ifdef QT_DEBUG
+  QQmlDebuggingEnabler enabler;
+#endif
 
   // Register C++ enums
   qmlRegisterUncreatableType<RegistrationError>( "mm", 1, 0, "RegistrationError", "RegistrationError Enum" );
