@@ -1061,8 +1061,19 @@ bool AttributeController::deleteFeature()
     return false;
   }
 
-  bool isDeleted = mFeatureLayerPair.layer()->deleteFeature( mFeatureLayerPair.feature().id() );
-  bool rv = commit();
+  bool featureIsNotYetAdded = FID_IS_NULL( mFeatureLayerPair.feature().id() );
+  bool isDeleted = true;
+  bool rv = true;
+
+  if ( featureIsNotYetAdded )
+  {
+    rv = mFeatureLayerPair.layer()->rollBack();
+  }
+  else
+  {
+    isDeleted = mFeatureLayerPair.layer()->deleteFeature( mFeatureLayerPair.feature().id() );
+    rv = commit();
+  }
 
   if ( !isDeleted || !rv )
   {

@@ -21,6 +21,7 @@ Item {
   property var iconSource
   property color iconColor
   property color iconColorDisabled
+  property color bgColor
   property string text
 
   Button {
@@ -57,7 +58,7 @@ Item {
 
           visible: button.width > 130 * __dp
           text: root.text
-          color: __style.forestColor
+          color: root.enabled ? root.iconColor : root.iconColorDisabled
           font: __style.t3
           anchors.verticalCenter: parent.verticalCenter
         }
@@ -65,7 +66,7 @@ Item {
     }
 
     background: Rectangle {
-      color: __style.grassColor
+      color: root.bgColor
       radius: height / 2
     }
 
