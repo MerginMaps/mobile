@@ -16,7 +16,7 @@ import "../../app/qml/"
 Page {
   id: pane
 
-  property real offset: __style.toolbarHeight + __style.safeAreaBottom + 70
+  property real offset: __style.toolbarHeight + 30
 
   Rectangle {
     anchors.fill: parent
@@ -44,12 +44,6 @@ Page {
     }
   }
 
-  Label {
-    x: __style.safeAreaLeft
-    y: 60
-    text: "MMToolbar"
-    font.pixelSize: 40
-  }
 
   MMToolbar {
     id: selectableToolbar
@@ -89,8 +83,21 @@ Page {
   }
 
   MMToolbar {
+    y:  3 * pane.offset
 
-    y: 3 * pane.offset
+    model: ObjectModel {
+      MMToolbarButton {
+        text: "Delete";
+        iconColor: __style.grapeColor
+        bgColor: __style.negativeColor
+        iconSource: __style.deleteIcon
+        onClicked: console.log("tapped "+text) }
+    }
+  }
+
+  MMToolbar {
+
+    y: 4 * pane.offset
 
     model: ObjectModel {
       MMToolbarButton {
@@ -108,7 +115,7 @@ Page {
 
   MMToolbar {
 
-    y: 4 * pane.offset
+    y: 5 * pane.offset
 
     model: ObjectModel {
       MMToolbarButton { text: "Delete"; iconSource: __style.deleteIcon; onClicked: console.log("tapped "+text) }

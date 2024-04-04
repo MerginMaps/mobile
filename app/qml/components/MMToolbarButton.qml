@@ -27,6 +27,7 @@ QtObject {
   /* required */ property var iconSource // The icon to be used in main toolbar for button
   /* required */ property string text // Text of the button in main toolbar and drawer menu
 
+  /* optional */ property color bgColor: __style.grassColor // Background color - only used in long button, short button is transparent
   /* optional */ property color iconColor: __style.polarColor // Color of icon/text in enabled state
   /* optional */ property color iconColorDisabled: __style.mediumGreenColor // Color of icon/text when button is disabled
   /* optional */ property var iconSourceSelected: root.iconSource // The icon to be used in main toolbar when button is selected

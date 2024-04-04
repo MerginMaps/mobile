@@ -90,6 +90,7 @@ Rectangle {
       height: ListView.view.height
 
       enabled: model.btnData.enabled
+      bgColor: model.btnData.bgColor
       iconSource: model.btnData.iconSource
       iconColor: model.btnData.iconColor
       iconColorDisabled: model.btnData.iconColorDisabled

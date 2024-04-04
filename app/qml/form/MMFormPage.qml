@@ -200,7 +200,8 @@ Page {
       MMComponents.MMToolbarButton {
         text: qsTr( "Delete" )
         iconSource: __style.deleteIcon
-        iconColor: root.layerIsSpatial ? __style.polarColor : __style.forestColor
+        iconColor: root.layerIsSpatial ? __style.polarColor : __style.grapeColor
+        bgColor: root.layerIsSpatial ? __style.grassColor : __style.negativeColor
         onClicked: deleteDialog.open()
       }
 
