@@ -92,6 +92,10 @@ Item {
   ]
 
   onStateChanged: {
+    // We call this first because when previous state is 'view' and `centeredToGPS` is true
+    // the map may still not be centered. It's only centered after a certain threshold is exceeded.
+    updatePosition()
+
     switch ( state ) {
 
     case "record": {
@@ -261,6 +265,17 @@ Item {
     mapSettings: mapCanvas.mapSettings
   }
 
+  Loader {
+    id: stakeoutLoader
+
+    anchors.fill: mapCanvas
+
+    asynchronous: true
+    active: root.state === "stakeout"
+
+    sourceComponent: stakeoutToolsComponent
+  }
+
   MMPositionMarker {
     id: positionMarker
 
@@ -331,17 +346,6 @@ Item {
         }
       }
     }
-  }
-
-  Loader {
-    id: stakeoutLoader
-
-    anchors.fill: mapCanvas
-
-    asynchronous: true
-    active: root.state === "stakeout"
-
-    sourceComponent: stakeoutToolsComponent
   }
 
   Loader {
@@ -482,7 +486,14 @@ Item {
 
       anchors.bottom: parent.bottom
 
-      visible: root.mapExtentOffset > 0 ? false : true
+      anchors.bottomMargin: root.state === "stakeout" ? root.mapExtentOffset : 0
+
+      visible: {
+        if ( root.state === "stakeout" )
+          return true
+        else
+          return root.mapExtentOffset > 0 ? false : true
+      }
 
       Column {
 
@@ -552,7 +563,7 @@ Item {
           }
 
           visible: {
-            if ( root.mapExtentOffset > 0 ) return false
+            if ( root.mapExtentOffset > 0 && root.state !== "stakeout" ) return false
 
             if ( __positionKit.positionProvider && __positionKit.positionProvider.type() === "external" ) {
               // for external receivers we want to show gps panel and accuracy button
@@ -742,7 +753,8 @@ Item {
               return
             }
             root.centeredToGPS = true
-            mapSettings.setCenter( mapPositionSource.mapPosition )
+            let screenPt = mapCanvas.mapSettings.coordinateToScreen( mapPositionSource.mapPosition )
+            mapCanvas.jumpTo( screenPt )
           }
         }
       }
@@ -1016,6 +1028,7 @@ Item {
     property bool streamingModeButtonVisible: !internal.isPointLayer
 
     property var extentBeforeStakeout // extent that we return to once stakeout finishes
+    property bool centeredToGPSBeforeStakeout
     property var stakeoutTarget
 
     property bool isInRecordState: root.state === "record" || root.state === "recordInLayer" || root.state === "edit"
@@ -1090,6 +1103,8 @@ Item {
 
   function stakeout( featurepair ) {
     internal.extentBeforeStakeout = mapCanvas.mapSettings.extent
+    internal.centeredToGPSBeforeStakeout = root.centeredToGPS
+    root.centeredToGPS = true
     internal.stakeoutTarget = featurepair
     state = "stakeout"
   }
@@ -1101,19 +1116,13 @@ Item {
     }
   }
 
-  function autoFollowStakeoutPath() {
-    if ( state === "stakeout" )
-    {
-      stakeoutLoader.item.autoFollow()
-    }
-  }
-
   function stopStakeout() {
     state = "view"
 
     // go back to state before starting stakeout
     root.highlightPair( internal.stakeoutTarget )
     mapCanvas.mapSettings.extent = internal.extentBeforeStakeout
+    root.centeredToGPS = internal.centeredToGPSBeforeStakeout
   }
 
   function centerToPair( pair, considerMapExtentOffset = false ) {
@@ -1134,9 +1143,17 @@ Item {
     identifyHighlight.geometry = null
   }
 
-  function centerToPosition() {
+  function centerToPosition( animate = false ) {
     if ( __positionKit.hasPosition ) {
-      mapCanvas.mapSettings.setCenter( mapPositionSource.mapPosition )
+      if ( animate )
+      {
+        let screenPt = mapCanvas.mapSettings.coordinateToScreen( mapPositionSource.mapPosition )
+        mapCanvas.jumpTo( screenPt )
+      }
+      else
+      {
+        mapCanvas.mapSettings.setCenter( mapPositionSource.mapPosition )
+      }
     }
     else {
       __notificationModel.addWarning( qsTr( "GPS currently unavailable." ) )
@@ -1144,20 +1161,45 @@ Item {
   }
 
   function isPositionOutOfExtent() {
-    let minDistanceToScreenEdge = 64 * __dp
-    return ( ( mapPositionSource.screenPosition.x < minDistanceToScreenEdge ) ||
-            ( mapPositionSource.screenPosition.y < minDistanceToScreenEdge ) ||
-            ( mapPositionSource.screenPosition.x > mapCanvas.width - minDistanceToScreenEdge ) ||
-            ( mapPositionSource.screenPosition.y > mapCanvas.height - minDistanceToScreenEdge )
+    // allow cursor movement within the central 20% of the map canvas
+    return ( ( mapPositionSource.screenPosition.x < mapCanvas.width * 0.4 ) ||
+            ( mapPositionSource.screenPosition.y < mapCanvas.height * 0.4 ) ||
+            ( mapPositionSource.screenPosition.x > mapCanvas.width * 0.6 ) ||
+            ( mapPositionSource.screenPosition.y > mapCanvas.height * 0.6 )
             )
   }
 
   function updatePosition() {
-    if ( root.state === "view" )
-    {
-      if ( root.centeredToGPS && root.isPositionOutOfExtent() )
-      {
-        root.centerToPosition()
+    if ( ! root.centeredToGPS )
+      return
+
+    switch ( root.state ) {
+      case "record":
+      case "recordInLayer":
+      case "edit":
+      case "split": {
+        root.centerToPosition( false )
+        break
+      }
+
+      case "view": {
+        if ( root.isPositionOutOfExtent() )
+        {
+          root.centerToPosition( true )
+        }
+        break
+      }
+
+      case "stakeout": {
+        mapCanvas.mapSettings.extent = __inputUtils.stakeoutPathExtent( mapPositionSource,
+                                                                        internal.stakeoutTarget,
+                                                                        mapCanvas.mapSettings,
+                                                                        mapExtentOffset )
+        break
+      }
+
+      case "inactive": {
+        break
       }
     }
   }
