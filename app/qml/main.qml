@@ -682,14 +682,23 @@ ApplicationWindow {
     usedData: __merginApi.workspaceInfo.storageLimit > 0 ? __merginApi.workspaceInfo.diskUsage / __merginApi.workspaceInfo.storageLimit : 0
     apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
 
-    onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
+    onManageAccountClicked: {
+      if (__merginApi.apiSupportsSubscriptions) {
+        projectController.manageSubscriptionPlans()
+      }
+    }
   }
 
   MMProjectLimitDialog {
     id: projectLimitDialog
 
     apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
-    onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
+
+    onManageAccountClicked: {
+      if (__merginApi.apiSupportsSubscriptions) {
+        projectController.manageSubscriptionPlans()
+      }
+    }
   }
 
   MMProjErrorDialog {
@@ -910,10 +919,6 @@ ApplicationWindow {
     function onShowProjectIssuesActionClicked() {
       projectIssuesPage.projectLoadingLog = __activeProject.projectLoadingLog();
       projectIssuesPage.visible = true;
-    }
-    function onShowSwitchWorkspaceActionClicked() {
-      stateManager.state = "projects"
-      projectController.showSelectWorkspacePage()
     }
   }
 

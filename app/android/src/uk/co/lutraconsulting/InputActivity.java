@@ -33,6 +33,7 @@
  import android.content.ActivityNotFoundException;
  import java.io.File;
  import androidx.core.content.FileProvider;
+ import android.widget.Toast;
 
  import androidx.core.view.WindowCompat;
  import androidx.core.splashscreen.SplashScreen;
@@ -121,8 +122,8 @@
      keepSplashScreenVisible = false;
    }
 
-  public void showPDF(String filePath) {
-    String fileName = "/storage/emulated/0/Android/data/uk.co.lutraconsulting/files/projects/PDF Viewing Project/dummy.pdf";
+   public void showPDF(String filePath) {
+    String fileName = "/storage/emulated/0/Android/data/uk.co.lutraconsulting/files/projects/PDF Viewing Project/my test docx.docx";
 
     Log.d(TAG, "Expected file path: " + fileName);
 
@@ -130,32 +131,33 @@
 
     if (!file.exists()) {
         Log.d(TAG, "File does not exist: " + fileName);
+        runOnUiThread(() -> Toast.makeText(getApplicationContext(), "File not available", Toast.LENGTH_SHORT).show());
         return;
+    } else {
+        Log.d(TAG, "File exists: " + fileName);
     }
+
+    Intent showFileIntent = new Intent(Intent.ACTION_VIEW);
+    if (showFileIntent.resolveActivity(getPackageManager()) != null) {
+
+        try {
+            Uri fileUri = FileProvider.getUriForFile(this, "uk.co.lutraconsulting.fileprovider", file);
+            Log.d(TAG, "File URI: " + fileUri.toString());
+
+            showFileIntent.setData(fileUri);
+            showFileIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            showFileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            startActivity(showFileIntent);
+        } catch (IllegalArgumentException e) {
+            Log.d(TAG, "FileProvider URI issue", e);
+        }
+    } 
     else {
-      Log.d(TAG, "File does exist: " + fileName);
-    }
-
-    try {
-        Uri uri = FileProvider.getUriForFile(this, "uk.co.lutraconsulting.fileprovider", file);
-        Log.d(TAG, "File URI: " + uri.toString());
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        startActivity(intent);
-    } catch (ActivityNotFoundException e) {
-        Log.d(TAG, "No application available to view PDFs", e);
-    } catch (IllegalArgumentException e) {
-        Log.d(TAG, "FileProvider URI issue", e);
+      runOnUiThread(() -> Toast.makeText(getApplicationContext(), "No application for opening this file", Toast.LENGTH_SHORT).show());
     }
   }
 
-
- 
    public void quitGracefully()
    {
      String man = android.os.Build.MANUFACTURER.toUpperCase();
