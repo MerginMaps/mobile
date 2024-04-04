@@ -88,7 +88,7 @@ ScrollView {
 
         GalleryComponents.EditorItem {
           width: parent.width
-          height: relationEditor.height
+          height: relationReferenceEditor.height
           fieldTitle: "MMFormRelationReferenceEditor"
 
           MMFormEditors.MMFormRelationReferenceEditor {

@@ -23,7 +23,6 @@ set(MM_QML
     components/MMDrawer.qml
     components/MMDrawerDialog.qml
     components/MMDrawerHeader.qml
-    components/MMFeaturesListDrawer.qml
     components/MMHlineText.qml
     components/MMIcon.qml
     components/MMInfoBox.qml
@@ -82,6 +81,7 @@ set(MM_QML
     form/MMPreviewDrawer.qml
     form/components/MMFormTabBar.qml
     form/components/MMCalendarDrawer.qml
+    form/components/MMFeaturesListPageDrawer.qml
     form/components/calendar/MMAmPmSwitch.qml
     form/components/calendar/MMDateTimePicker.qml
     form/components/calendar/MMDateTumbler.qml

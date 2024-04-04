@@ -67,7 +67,6 @@
         <file>../app/qml/components/MMInfoBox.qml</file>
         <file>../app/qml/components/MMScrollView.qml</file>
         <file>../app/qml/components/MMCodeScanner.qml</file>
-        <file>../app/qml/components/MMFeaturesListDrawer.qml</file>
         <file>../app/qml/components/MMMessage.qml</file>
         <file>../app/qml/components/MMPage.qml</file>
         <file>../app/qml/components/MMPageHeader.qml</file>
@@ -97,6 +96,7 @@
         <file>../app/qml/inputs/MMTextWithButtonInput.qml</file>
         <file>../app/qml/form/components/MMFormTabBar.qml</file>
         <file>../app/qml/form/components/MMCalendarDrawer.qml</file>
+        <file>../app/qml/form/components/MMFeaturesListPageDrawer.qml</file>
         <file>../app/qml/form/components/calendar/MMDateTimePicker.qml</file>
         <file>../app/qml/form/components/calendar/MMDayOfWeekRow.qml</file>
         <file>../app/qml/form/components/calendar/MMMonthGrid.qml</file>

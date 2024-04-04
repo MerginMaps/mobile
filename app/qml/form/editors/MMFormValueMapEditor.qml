@@ -69,7 +69,7 @@ MMFormComboboxBaseEditor {
     for ( let i = 0; i < listModel.count; i++ ) {
       let item_i = listModel.get( i )
 
-      if ( _fieldValue.toString() === item_i.value.toString() ) {
+      if ( _fieldValue && _fieldValue.toString() === item_i.value.toString() ) {
         text = item_i.text
         preselectedItems = [item_i.value]
       }
