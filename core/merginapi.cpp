@@ -2953,7 +2953,7 @@ bool MerginApi::hasLocalChanges(
 
   for ( const MerginFile &localFile : localFiles )
   {
-    QFileInfo info ( localFile.path );
+    QFileInfo info( localFile.path );
     qDebug() << "HERE" << localFile.path << info.absoluteFilePath();
 
     QString filePath = localFile.path;
