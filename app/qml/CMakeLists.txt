@@ -132,9 +132,9 @@ set(MM_QML
     map/MMSplittingTools.qml
     map/MMStakeoutTools.qml
     map/MMRecordingTools.qml
-    map/components/MMBlurBox.qml
+    map/components/MMHidingBox.qml
     map/components/MMCrosshair.qml
-    map/components/MMMapBlurLabel.qml
+    map/components/MMMapHidingLabel.qml
     map/components/MMMapButton.qml
     map/components/MMMapLabel.qml
     map/components/MMMapPicker.qml

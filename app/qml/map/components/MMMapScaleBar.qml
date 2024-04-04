@@ -11,7 +11,7 @@ import QtQuick
 
 import mm 1.0 as MM
 
-MMBlurBox {
+MMHidingBox {
   id: root
 
   property alias mapSettings: scaleBarKit.mapSettings

@@ -8,41 +8,20 @@
  ***************************************************************************/
 
 import QtQuick
-import Qt5Compat.GraphicalEffects
 
 Item {
   id: root
-
-  // Item to blur (map)
-  property alias sourceItem: effect.sourceItem
 
   property alias fadeOutDuration: fadeOut.duration // in ms
   property alias timerInterval: timer.interval // in ms
 
   visible: false
 
-  // Blurred map
-  FastBlur {
-    id: fastBlur
-
-    width: parent.width
-    height: parent.height
-
-    radius: 32
-    opacity: 0.8
-
-    source: ShaderEffectSource {
-      id: effect
-
-      sourceRect: Qt.rect(root.x, root.y, fastBlur.width, fastBlur.height)
-    }
-   }
-
   // Colored background rectangle
   Rectangle {
     anchors.fill: parent
-    color: __style.forestColor
-    opacity: 0.1
+    color: __style.polarColor
+    opacity: 0.8
     radius: parent.height / 2
   }
 

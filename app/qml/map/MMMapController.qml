@@ -441,13 +441,11 @@ Item {
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
 
-            MMMapBlurLabel {
+            MMMapHidingLabel {
               id: mapBlurInfoBoxHorizontal
 
               width: Math.min( parent.width, 500 * __dp)
               anchors.right: parent.right
-
-              sourceItem: mapCanvas
             }
           }
         }
@@ -460,12 +458,10 @@ Item {
 
           visible: !mapBlurInfoBoxHorizontalGroup.useHorizontalInfoBox
 
-          MMMapBlurLabel {
+          MMMapHidingLabel {
             id: mapBlurInfoBoxVertical
 
             width: parent.width
-
-            sourceItem: mapCanvas
           }
         }
 
@@ -475,7 +471,6 @@ Item {
           x: parent.width / 2 - width / 2
 
           mapSettings: mapCanvas.mapSettings
-          sourceItem: mapCanvas
           preferredWidth: 100 * __dp
         }
       }

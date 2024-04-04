@@ -11,7 +11,7 @@ import QtQuick
 
 import "."
 
-MMBlurBox {
+MMHidingBox {
   id: root
 
   property string text
