@@ -120,41 +120,41 @@
    {
      keepSplashScreenVisible = false;
    }
- 
-   public void showPDF(String filePath) {
-    //  Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile("/data/data/uk.co.lutraconsulting/files/dummy.pdf"));
-    //  startActivity(intent);
-    File file = new File( getFilesDir(), "files/dummy.pdf" );
-    // replace /data/data/uk.co.lutraconsulting/ with java call to get android path to the files getFilesDir() 
-    // concat with files/dummy.pdf (/data/data/uk.co.lutraconsulting/files/dummy.pdf")
-    Uri uri = FileProvider.getUriForFile(this, "uk.co.lutraconsulting.fileprovider", file);
 
-    if (!file.exists()){
-      Log.d( TAG, String.format("Oh no, file invalid. ") );
+  public void showPDF(String filePath) {
+    String fileName = "/storage/emulated/0/Android/data/uk.co.lutraconsulting/files/projects/PDF Viewing Project/dummy.pdf";
+
+    Log.d(TAG, "Expected file path: " + fileName);
+
+    File file = new File(fileName);
+
+    if (!file.exists()) {
+        Log.d(TAG, "File does not exist: " + fileName);
+        return;
+    }
+    else {
+      Log.d(TAG, "File does exist: " + fileName);
     }
 
-    //  Intent target = new Intent(Intent.ACTION_VIEW);
-    //  target.setDataAndType(Uri.fromFile(file),"application/pdf");
-    //  target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+    try {
+        Uri uri = FileProvider.getUriForFile(this, "uk.co.lutraconsulting.fileprovider", file);
+        Log.d(TAG, "File URI: " + uri.toString());
 
-    //  Intent intent = Intent.createChooser(target, "Open File");
-    //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("file:///data/data/uk.co.lutraconsulting/files/dummy.pdf"));
-    Intent intent = new Intent(Intent.ACTION_VIEW);
-    intent.setDataAndType(uri, "application/pdf");
-    
-    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-    // if (intent.resolveActivity(getPackageManager()) == null) {
-    //   Log.d( TAG, String.format("no app that can handle pdfs! ") );
-    // } else {
-    //     startActivity(intent);
-    // }
-     try {
-      startActivity(intent);
-     } catch (ActivityNotFoundException e) {
-      Log.d( TAG, String.format("no app that can handle pdfs! ") );
-     }   
-   }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        startActivity(intent);
+    } catch (ActivityNotFoundException e) {
+        Log.d(TAG, "No application available to view PDFs", e);
+    } catch (IllegalArgumentException e) {
+        Log.d(TAG, "FileProvider URI issue", e);
+    }
+  }
+
+
  
    public void quitGracefully()
    {
