@@ -32,6 +32,8 @@ MMComponents.MMPage {
 
       property bool showTopTitle: visibleArea.yPosition * height > ( headerItem.contentHeight / 2 )
 
+      visible: __haveBluetooth
+
       width: parent.width
       height: parent.height
 
@@ -81,6 +83,7 @@ MMComponents.MMPage {
         secondaryText: listdelegate.isActive ? __positionKit.positionProvider.stateMessage : model.ProviderDescription
 
         rightContent: MMComponents.MMRoundButton {
+          visible: model.ProviderType !== "internal"
           iconSource: __style.deleteIcon
           onClicked: removeDialog.openDialog( model.ProviderId )
         }
@@ -113,11 +116,15 @@ MMComponents.MMPage {
         }
       }
 
-      footer: __haveBluetooth ? connectionPossibleFooterComponent : noConnectionPossibleFooterComponent
+      footer: MMComponents.MMListSpacer {
+        height: __style.safeAreaBottom + __style.margin8 + connectNewReceiverButton.height
+      }
     }
 
     MMComponents.MMButton {
       id: connectNewReceiverButton
+
+      visible: listview.visible
 
       width: parent.width
       anchors {
@@ -128,6 +135,21 @@ MMComponents.MMPage {
       text: qsTr( "Connect new receiver" )
 
       onClicked: bluetoothDiscoveryLoader.active = true
+    }
+
+    MMComponents.MMMessage {
+      visible: !listview.visible
+      width: parent.width
+      anchors.centerIn: parent
+
+      image: __style.externalGpsRedImage
+      title: qsTr( "Connecting to external receivers via bluetooth is not supported" )
+      description: qsTr( "This function is not available on iOS. " +
+                        "Your hardware vendor may provide a custom " +
+                        "app that connects to the receiver and sets position. " +
+                        "Mergin Maps will still think it is the internal GPS of " +
+                        "your phone/tablet." )
+      link: __inputHelp.howToConnectGPSLink
     }
 
     MMDialogs.MMProviderRemoveReceiverDialog {
@@ -174,30 +196,6 @@ MMComponents.MMPage {
         active = true
         focus = true
       }
-    }
-  }
-
-  Component {
-    id: noConnectionPossibleFooterComponent
-
-    MMComponents.MMMessage {
-      width: ListView.view.width
-      image: __style.externalGpsRedImage
-      title: qsTr( "Connecting to external receivers via bluetooth is not supported" )
-      description: qsTr( "This function is not available on iOS. " +
-                        "Your hardware vendor may provide a custom " +
-                        "app that connects to the receiver and sets position. " +
-                        "Mergin Maps will still think it is the internal GPS of " +
-                        "your phone/tablet." )
-      link: __inputHelp.howToConnectGPSLink
-    }
-  }
-
-  Component {
-    id: connectionPossibleFooterComponent
-
-    MMComponents.MMListSpacer {
-      height: __style.safeAreaBottom + __style.margin8 + connectNewReceiverButton.height
     }
   }
 
