@@ -12,10 +12,11 @@ import QtQuick.Controls
 
 import mm 1.0 as MM
 
-import "../../components"
-import "../../inputs"
+import "../../inputs" as MMInputs
+import "../../components" as MMComponents
+import "../components" as MMFormComponents
 
-MMBaseInput {
+MMInputs.MMBaseInput {
   id: root
 
   property var _fieldValue: parent.fieldValue
@@ -62,7 +63,7 @@ MMBaseInput {
     openLinkedFeature( featurePair )
   }
 
-  rightAction: MMIcon {
+  rightAction: MMComponents.MMIcon {
     id: rightIcon
 
     anchors.verticalCenter: parent.verticalCenter
@@ -91,29 +92,28 @@ MMBaseInput {
   Component {
     id: listComponent
 
-    MMFeaturesListDrawer {
-      id: featuresDrawer
-      focus: true
-      model: rModel
-      title: qsTr( "Change link" )
-      buttonText: qsTr( "Unlink feature" )
-      buttonVisible: rModel.allowNull
-      withSearch: false
-      Component.onCompleted: open()
+    MMFormComponents.MMFeaturesListPageDrawer {
+
+      pageHeader.title: qsTr( "Change link" )
+
+      list.model: rModel
+      button.text: qsTr( "Unlink feature" )
+      button.visible: rModel.allowNull
 
       onClosed: listLoader.active = false
-
-      onFeatureClicked: function(selectedFeatures) {
+      onSearchTextChanged: ( searchText ) => rModel.searchExpression = searchText
+      onFeatureClicked: function( selectedFeatures ) {
         let fk = rModel.foreignKeyFromAttribute( MM.FeaturesModel.FeatureId, selectedFeatures.feature.id )
         root.editorValueChanged( fk, false )
-        featuresDrawer.close()
-
+        close()
       }
 
       onButtonClicked: {
         root.editorValueChanged( undefined, true )
-        featuresDrawer.close()
+        close()
       }
+
+      Component.onCompleted: open()
     }
   }
 }

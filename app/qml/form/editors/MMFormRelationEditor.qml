@@ -13,8 +13,9 @@ import QtQuick.Controls.Basic
 
 import mm 1.0 as MM
 
-import "../../components"
-import "../../inputs"
+import "../../inputs" as MMInputs
+import "../../components" as MMComponents
+import "../components" as MMFormComponents
 
 /*
  * Relation editor (text mode ~~ bubbles/word cloud) for QGIS Attribute Form
@@ -24,7 +25,7 @@ import "../../inputs"
  * Should be used only within feature form.
  */
 
-MMBaseInput {
+MMInputs.MMBaseInput {
   id: root
 
   property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
@@ -63,7 +64,7 @@ MMBaseInput {
         radius: 8 * __dp
         color: __style.lightGreenColor
 
-        MMIcon {
+        MMComponents.MMIcon {
           anchors.centerIn: parent
           source: __style.plusIcon
           size: __style.icon16
@@ -177,19 +178,19 @@ MMBaseInput {
   Component {
     id: listComponent
 
-    MMFeaturesListDrawer {
-      focus: true
-      model: rmodel
-      title: root._fieldTitle
-      withSearch: false
+    MMFormComponents.MMFeaturesListPageDrawer {
+
+      pageHeader.title: root._fieldTitle
+
+      list.model: rmodel
+      button.text: qsTr( "Add feature" )
+
+      onClosed: listLoader.active = false
+      onFeatureClicked: ( featurePair ) => root.openLinkedFeature( featurePair )
+      onSearchTextChanged: ( searchText ) => rmodel.searchExpression = searchText
+      onButtonClicked: root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
 
       Component.onCompleted: open()
-      onClosed: listLoader.active = false
-      onFeatureClicked: function(selectedFeatures) {
-        root.openLinkedFeature( selectedFeatures )
-      }
-
-      onButtonClicked: root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
     }
   }
 
