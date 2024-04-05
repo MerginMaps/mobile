@@ -2151,6 +2151,8 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
   static QRegularExpression re( "^\\?|\\?$" );
   cleanedLink.remove( re );
 
+  qDebug() << "cleanedLink" << cleanedLink;
+
   if ( cleanedLink.startsWith( "project://" ) )
   {
     QString relativePath = cleanedLink.mid( QString( "project://" ).length() );
@@ -2161,14 +2163,14 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
 
 #ifdef Q_OS_ANDROID
     qDebug() << "openLink android";
-    mAndroidUtils->showPDF( absoluteLinkPath );
+    mAndroidUtils->openFile( absoluteLinkPath );
 #elif defined(Q_OS_IOS)
     qDebug() << "openLink ios";
 #endif
-
   }
   else
   {
-    QDesktopServices::openUrl( QUrl( link ) );
+    cleanedLink.chop( 1 ); //remove \ from cleanedLink
+    QDesktopServices::openUrl( QUrl( cleanedLink) );
   }
 }
