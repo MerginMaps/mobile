@@ -246,7 +246,6 @@ Page {
     id: projectLimitDialog
 
     maxProjectNumber: 2
-    plan: "Individual"
     apiSupportsSubscription: true
 
     onPrimaryButtonClicked: {
@@ -274,7 +273,6 @@ Page {
 
     dataToSync: "643.8 MB"
     dataUsing: "9.23 MB / 10.0 MB"
-    plan: "Individual"
     usedData: 0.923
     apiSupportsSubscription: true
 

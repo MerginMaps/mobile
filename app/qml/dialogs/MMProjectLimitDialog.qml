@@ -15,8 +15,6 @@ MMComponents.MMDrawerDialog {
   id: root
 
   property int maxProjectNumber: 2
-
-  required property string plan
   required property bool apiSupportsSubscription
 
   signal manageAccountClicked()
@@ -52,36 +50,6 @@ MMComponents.MMDrawerDialog {
         width: parent.width
 
         text: root.maxProjectNumber
-        color: __style.nightColor
-        font: __style.t3
-
-        horizontalAlignment: Text.AlignRight
-        verticalAlignment: Text.AlignVCenter
-      }
-    }
-
-    MMComponents.MMLine { width: parent.width }
-
-    Item {
-      width: parent.width
-      height: planText.height
-
-      MMComponents.MMText {
-        width: parent.width
-
-        text: qsTr( "Plan" )
-        font: __style.p5
-
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
-      }
-
-      MMComponents.MMText {
-        id: planText
-
-        width: parent.width
-
-        text: root.plan
         color: __style.nightColor
         font: __style.t3
 

@@ -16,6 +16,8 @@
 
 #include "merginsubscriptionstatus.h"
 
+// TODO: this whole class is for removal/refactoring
+// as we dropped in-app subscriptions it is not used
 class MerginSubscriptionInfo: public QObject
 {
     Q_OBJECT

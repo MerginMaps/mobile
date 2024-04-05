@@ -158,9 +158,8 @@ MMPage {
           anchors.right: parent.right
 
           position: root.storageFill
-
-          color: __style.grassColor
-          progressColor: __style.forestColor
+          color: position > 0.9 ? __style.negativeColor : __style.grassColor
+          progressColor: position > 0.9 ? __style.grapeColor : __style.forestColor
         }
       }
 
