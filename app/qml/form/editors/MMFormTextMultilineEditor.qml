@@ -27,6 +27,8 @@ MMBaseInput {
   property var _fieldConfig: parent.fieldConfig
   property bool _fieldValueIsNull: parent.fieldValueIsNull
 
+  property string _fieldHomePath: parent.fieldHomePath
+
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property bool _fieldIsReadOnly: parent.fieldIsReadOnly
 
@@ -87,12 +89,7 @@ MMBaseInput {
     wrapMode: Text.WordWrap
 
     onLinkActivated: function( link ) {
-      if ( link.startWith( "file://" ) ) {
-        __androidUtils.openFile( link )
-      }
-      else {
-      Qt.openUrlExternally( link )
-      }
+      __inputUtils.openLink( root._fieldHomePath, link )
     }
 
     onTextChanged: root.editorValueChanged( text, text === "" )
