@@ -122,40 +122,41 @@ public class InputActivity extends QtActivity
     keepSplashScreenVisible = false;
   }
 
-public void showPDF(String filePath) {
-  Log.d( TAG, "Expected file path: " + filePath );
+  public void openFile( String filePath ) {
+    Log.d( TAG, "Expected file path: " + filePath );
 
-  File file = new File( filePath );
+    File file = new File( filePath );
 
-  if ( !file.exists() ) {
-      Log.d( TAG, "File does not exist: " + filePath );
-      runOnUiThread(() -> Toast.makeText( getApplicationContext(), "File not available", Toast.LENGTH_SHORT).show() );
-      return;
-  } else {
-      Log.d( TAG, "File exists: " + filePath );
-  }
+    if ( !file.exists() ) {
+        Log.d( TAG, "File does not exist: " + filePath );
+        runOnUiThread( () -> Toast.makeText( getApplicationContext(), "File not available", Toast.LENGTH_SHORT ).show() );
+        return;
+    } else {
+        Log.d( TAG, "File exists: " + filePath );
+    }
 
-  Intent showFileIntent = new Intent( Intent.ACTION_VIEW );
-  if ( showFileIntent.resolveActivity( getPackageManager() ) != null ) {
+    Intent showFileIntent = new Intent( Intent.ACTION_VIEW );
 
-      try {
-          Uri fileUri = FileProvider.getUriForFile( this, "uk.co.lutraconsulting.fileprovider", file );
-          Log.d( TAG, "File URI: " + fileUri.toString() );
+    try {
+        Uri fileUri = FileProvider.getUriForFile( this, "uk.co.lutraconsulting.fileprovider", file );
+        Log.d( TAG, "File URI: " + fileUri.toString() );
 
-          showFileIntent.setData( fileUri );
-          showFileIntent.setFlags( Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION );
-          showFileIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK );
+        showFileIntent.setData( fileUri );
 
-          startActivity( showFileIntent );
+        // FLAG_GRANT_READ_URI_PERMISSION grants temporary read permission to the content URI.
+        // FLAG_ACTIVITY_NEW_TASK is used when starting an Activity from a non-Activity context.
+        showFileIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION );
       } catch ( IllegalArgumentException e ) {
-          Log.d(TAG, "FileProvider URI issue", e);
-      }
-  }
-  else {
-      runOnUiThread(() -> Toast.makeText( getApplicationContext(), "No application for opening this file", Toast.LENGTH_SHORT).show() );
-  }
-}
+        Log.d( TAG, "FileProvider URI issue", e );
+        return;
+    }
 
+    if ( showFileIntent.resolveActivity( getPackageManager() ) != null ) {
+        startActivity( showFileIntent );
+    } else {
+        runOnUiThread( () -> Toast.makeText( getApplicationContext(), "No application for opening this file", Toast.LENGTH_SHORT ).show() );
+    }
+  }
 
   public void quitGracefully()
   {
