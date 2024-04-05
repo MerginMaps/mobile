@@ -56,7 +56,6 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QRegExp>
 #include <QDesktopServices>
 #include <algorithm>
 #include <limits>
@@ -2164,7 +2163,7 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
     qDebug() << "openLink android";
     mAndroidUtils->showPDF( absoluteLinkPath );
 #elif defined(Q_OS_IOS)
-    qDebug() << "openLink IOS" << homePath;
+    qDebug() << "openLink ios";
 #endif
 
   }
