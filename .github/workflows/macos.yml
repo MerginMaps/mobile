@@ -17,7 +17,7 @@ on:
 
 env:
   QT_VERSION: '6.6.0' # use scripts/update_qt_version.bash to change
-  INPUT_SDK_VERSION: x64-osx-20240215-189
+  INPUT_SDK_VERSION: x64-osx-20240405-195
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 1 
   XC_VERSION: ${{ '15.2' }}
