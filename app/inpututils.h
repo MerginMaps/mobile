@@ -599,8 +599,6 @@ class InputUtils: public QObject
     //! Returns icon url from QgsWkbType geometry
     static QUrl iconFromGeometry( const Qgis::GeometryType &geometry );
 
-    static QString getAbsoluteProjectPath( const QString &projectLink );
-
     AndroidUtils *mAndroidUtils = nullptr; // not owned
 };
 

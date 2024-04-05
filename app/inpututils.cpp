@@ -2164,8 +2164,6 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
     qDebug() << "openLink android";
     mAndroidUtils->showPDF( absoluteLinkPath );
 #elif defined(Q_OS_IOS)
-    // Assuming mIOSUtils is the utility class for iOS, similar to mAndroidUtils for Android
-    //mIOSUtils->openDocument(absoluteLinkPath);
     qDebug() << "openLink IOS" << homePath;
 #endif
 

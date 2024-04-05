@@ -274,8 +274,7 @@ ApplicationWindow {
         text: qsTr("Sync")
         iconSource: __style.syncIcon
         onClicked: {
-          //__activeProject.requestSync()
-          __androidUtils.showPDF( "https://www.orimi.com/pdf-test.pdf" )
+          __activeProject.requestSync()
         }
       }
 
@@ -682,23 +681,14 @@ ApplicationWindow {
     usedData: __merginApi.workspaceInfo.storageLimit > 0 ? __merginApi.workspaceInfo.diskUsage / __merginApi.workspaceInfo.storageLimit : 0
     apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
 
-    onManageAccountClicked: {
-      if (__merginApi.apiSupportsSubscriptions) {
-        projectController.manageSubscriptionPlans()
-      }
-    }
+    onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
   }
 
   MMProjectLimitDialog {
     id: projectLimitDialog
 
     apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
-
-    onManageAccountClicked: {
-      if (__merginApi.apiSupportsSubscriptions) {
-        projectController.manageSubscriptionPlans()
-      }
-    }
+    onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
   }
 
   MMProjErrorDialog {
@@ -919,6 +909,10 @@ ApplicationWindow {
     function onShowProjectIssuesActionClicked() {
       projectIssuesPage.projectLoadingLog = __activeProject.projectLoadingLog();
       projectIssuesPage.visible = true;
+    }
+    function onShowSwitchWorkspaceActionClicked() {
+      stateManager.state = "projects"
+      projectController.showSelectWorkspacePage()
     }
   }
 
