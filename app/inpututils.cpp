@@ -56,7 +56,8 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QRegularExpression>
+#include <QRegExp>
+#include <QDesktopServices>
 #include <algorithm>
 #include <limits>
 #include <math.h>
@@ -2140,4 +2141,33 @@ QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
   }
 
   return parsedUpdates;
+}
+
+void InputUtils::openLink(const QString& homePath, const QString& link) {
+    qDebug() << "LINK" << link;
+    qDebug() << "HOMEPATH" << homePath;
+
+    QString cleanedLink = link.trimmed();
+    static QRegularExpression re("^\\?|\\?$");
+    cleanedLink.remove(re);
+
+    if (cleanedLink.startsWith("project://")) {
+        QString relativePath = cleanedLink.mid(QString("project://").length());
+        QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
+
+        qDebug() << "relativePath" << relativePath;
+        qDebug() << "absoluteLinkPath" << absoluteLinkPath;
+
+#ifdef Q_OS_ANDROID
+        qDebug() << "openLink android";
+        mAndroidUtils->showPDF(absoluteLinkPath);
+#elif defined(Q_OS_IOS)
+        // Assuming mIOSUtils is the utility class for iOS, similar to mAndroidUtils for Android
+        //mIOSUtils->openDocument(absoluteLinkPath);
+        qDebug() << "openLink IOS" << homePath;
+#endif
+
+    } else {
+        QDesktopServices::openUrl(QUrl(link));
+    }
 }

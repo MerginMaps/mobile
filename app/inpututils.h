@@ -168,6 +168,13 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QString bytesToHumanSize( double bytes );
 
+    /**
+     * Opens the specified link in an appropriate application. For "project://" links, it converts them to
+     * absolute paths and opens with default file handlers. Other links are opened in the default web browser.
+     * @param link The link to open, either a "project://" link or a standard URL.
+     */
+    Q_INVOKABLE void openLink(const QString& homePath, const QString& link);
+
     Q_INVOKABLE bool acquireCameraPermission();
 
     Q_INVOKABLE bool isBluetoothTurnedOn();
@@ -591,6 +598,8 @@ class InputUtils: public QObject
 
     //! Returns icon url from QgsWkbType geometry
     static QUrl iconFromGeometry( const Qgis::GeometryType &geometry );
+
+    static QString getAbsoluteProjectPath(const QString& projectLink);
 
     AndroidUtils *mAndroidUtils = nullptr; // not owned
 };
