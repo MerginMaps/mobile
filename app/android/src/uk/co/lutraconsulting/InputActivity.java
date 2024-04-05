@@ -125,7 +125,7 @@ public class InputActivity extends QtActivity
 public void showPDF(String filePath) {
   Log.d( TAG, "Expected file path: " + filePath );
 
-  File file = new File(filePath);
+  File file = new File( filePath );
 
   if ( !file.exists() ) {
       Log.d( TAG, "File does not exist: " + filePath );
@@ -140,13 +140,13 @@ public void showPDF(String filePath) {
 
       try {
           Uri fileUri = FileProvider.getUriForFile( this, "uk.co.lutraconsulting.fileprovider", file );
-          Log.d(TAG, "File URI: " + fileUri.toString());
+          Log.d( TAG, "File URI: " + fileUri.toString() );
 
           showFileIntent.setData( fileUri );
-          showFileIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-          showFileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          showFileIntent.setFlags( Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION );
+          showFileIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK );
 
-          startActivity(showFileIntent);
+          startActivity( showFileIntent );
       } catch ( IllegalArgumentException e ) {
           Log.d(TAG, "FileProvider URI issue", e);
       }
