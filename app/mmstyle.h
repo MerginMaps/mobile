@@ -253,6 +253,7 @@ class MMStyle: public QObject
     Q_PROPERTY( double safeAreaLeft READ safeAreaLeft WRITE setSafeAreaLeft NOTIFY safeAreaLeftChanged )
 
     // Margins
+    Q_PROPERTY( double margin1 READ number1 CONSTANT )
     Q_PROPERTY( double margin2 READ number2 CONSTANT )
     Q_PROPERTY( double margin4 READ number4 CONSTANT )
     Q_PROPERTY( double margin6 READ number6 CONSTANT )

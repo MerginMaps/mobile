@@ -109,9 +109,9 @@ set(MM_QML
     gps/MMAddPositionProviderDrawer.qml
     gps/MMBluetoothConnectionDrawer.qml
     gps/MMGpsDataDrawer.qml
-    gps/MMGpsDataText.qml
     gps/MMPositionProviderPage.qml
     gps/MMStakeoutDrawer.qml
+    gps/components/MMGpsDataText.qml
     inputs/MMBaseInput.qml
     inputs/MMComboboxInput.qml
     inputs/MMPasswordInput.qml
