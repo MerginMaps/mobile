@@ -35,7 +35,6 @@ MMDrawer {
   readonly property alias panelHeight: root.height
 
   signal panelHeightUpdated()
-  signal autoFollowClicked()
   signal stakeoutFinished()
 
   Component.onCompleted: {

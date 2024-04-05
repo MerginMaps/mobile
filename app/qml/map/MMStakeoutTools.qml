@@ -35,36 +35,12 @@ Item {
 
     mapSettings: map.mapSettings
     positionKit: __positionKit
-    onScreenPositionChanged: updateStakeout()
-  }
-
-  Connections {
-    target: map
-    function onUserInteractedWithMap() {
-      internal.shouldAutoFollowStakoutPath = false
-    }
+    onMapPositionChanged: updateStakeout()
   }
 
   Component.onCompleted: updateStakeout()
 
-  QtObject {
-    id: internal
-
-    // Determines if canvas is auto centered to stakeout line
-    property bool shouldAutoFollowStakoutPath: true
-
-    onShouldAutoFollowStakoutPathChanged: updateStakeout()
-  }
-
   function updateStakeout() {
-    if ( internal.shouldAutoFollowStakoutPath )
-    {
-      map.mapSettings.extent = __inputUtils.stakeoutPathExtent( mapPositioning, target, map.mapSettings, mapExtentOffset )
-    }
     highlight.geometry = __inputUtils.stakeoutGeometry( mapPositioning.mapPosition, target, map.mapSettings )
-  }
-
-  function autoFollow() {
-    internal.shouldAutoFollowStakoutPath = true
   }
 }

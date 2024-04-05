@@ -47,25 +47,30 @@ Item {
 
     // Disable animation until initial position is set
     jumpAnimator.enabled = false
+    jumpAnimator.startX = oldPosMapCRS.x
+    jumpAnimator.startY = oldPosMapCRS.y
+    jumpAnimator.endX = newPosMapCRS.x
+    jumpAnimator.endY = newPosMapCRS.y
 
-    jumpAnimator.px = oldPosMapCRS.x
-    jumpAnimator.py = oldPosMapCRS.y
-
+    jumpAnimator.percentage = 0
     jumpAnimator.enabled = true
-
-    jumpAnimator.px = newPosMapCRS.x
-    jumpAnimator.py = newPosMapCRS.y
-
+    jumpAnimator.percentage = 100
     rendererPrivate.unfreeze('jumpTo')
   }
 
   Item {
     id: jumpAnimator
 
-    property double px: 0
-    property double py: 0
+    property double startX
+    property double startY
+    property double endX
+    property double endY
+    property double percentage: 0
 
-    Behavior on py {
+    readonly property double azimuth: Math.atan2( startX - endX, startY - endY )
+    readonly property double distance: Math.sqrt( ( startX - endX ) * ( startX - endX ) + ( startY - endY ) * ( startY - endY ) )
+
+    Behavior on percentage {
       SmoothedAnimation {
         duration: 200
         reversingMode: SmoothedAnimation.Immediate
@@ -73,23 +78,11 @@ Item {
       enabled: jumpAnimator.enabled
     }
 
-    Behavior on px {
-      SmoothedAnimation {
-        duration: 200
-        reversingMode: SmoothedAnimation.Immediate
-      }
-      enabled: jumpAnimator.enabled
-    }
-
-    onPxChanged: {
+    onPercentageChanged: {
       if ( enabled ) {
-        mapRenderer.mapSettings.center = mapRenderer.mapSettings.toQgsPoint( Qt.point( px, py ) )
-      }
-    }
-
-    onPyChanged: {
-      if ( enabled ) {
-        mapRenderer.mapSettings.center = mapRenderer.mapSettings.toQgsPoint( Qt.point( px, py ) )
+        let tmpX = startX - percentage * 0.01 * distance * Math.sin( azimuth )
+        let tmpY = startY - percentage * 0.01 * distance * Math.cos( azimuth )
+        mapRenderer.mapSettings.center = mapRenderer.mapSettings.toQgsPoint( Qt.point( tmpX, tmpY ) )
       }
     }
   }
