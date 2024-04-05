@@ -17,7 +17,6 @@ MMComponents.MMDrawerDialog {
 
   property string dataToSync
   required property string dataUsing
-  required property string plan
   required property real usedData // [0 - 1]
   required property bool apiSupportsSubscription
 
@@ -89,33 +88,6 @@ MMComponents.MMDrawerDialog {
       position: root.usedData
       progressColor: position > 0.9 ? __style.grapeColor : __style.grassColor
       color: position > 0.9 ? __style.negativeColor : __style.lightGreenColor
-    }
-
-    MMComponents.MMLine { width: parent.width }
-
-    Item {
-      width: parent.width
-      height: planText.height
-
-      MMComponents.MMText {
-        width: parent.width
-        text: qsTr("Plan")
-        font: __style.p5
-        color: __style.nightColor
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
-      }
-
-      MMComponents.MMText {
-        id: planText
-
-        width: parent.width
-        text: root.plan
-        font: __style.t3
-        color: __style.nightColor
-        horizontalAlignment: Text.AlignRight
-        verticalAlignment: Text.AlignVCenter
-      }
     }
   }
 

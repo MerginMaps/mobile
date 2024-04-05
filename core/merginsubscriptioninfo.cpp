@@ -105,6 +105,8 @@ void MerginSubscriptionInfo::setFromJson( QJsonObject docObj )
     // parse service.plan data
     QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
     mOwnsActiveSubscription = planObj.value( QStringLiteral( "is_paid_plan" ) ).toBool();
+
+    // TODO: as of saas server 2023.6.0 alias was dropped (?)
     mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
 
     QString planProductId = planObj.value( QStringLiteral( "product_id" ) ).toString();

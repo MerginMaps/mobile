@@ -677,7 +677,6 @@ ApplicationWindow {
   MMStorageLimitDialog {
     id: storageLimitDialog
 
-    plan: __merginApi.subscriptionInfo.planAlias
     dataUsing: "%1 / %2".arg(__inputUtils.bytesToHumanSize(__merginApi.workspaceInfo.diskUsage)).arg(__inputUtils.bytesToHumanSize(__merginApi.workspaceInfo.storageLimit))
     usedData: __merginApi.workspaceInfo.storageLimit > 0 ? __merginApi.workspaceInfo.diskUsage / __merginApi.workspaceInfo.storageLimit : 0
     apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
@@ -688,7 +687,6 @@ ApplicationWindow {
   MMProjectLimitDialog {
     id: projectLimitDialog
 
-    plan: __merginApi.subscriptionInfo.planAlias
     apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
     onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
   }
