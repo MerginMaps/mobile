@@ -87,6 +87,8 @@ MMComponents.MMDrawerDialog {
 
     MMComponents.MMProgressBar {
       position: root.usedData
+      progressColor: position > 0.9 ? __style.grapeColor : __style.grassColor
+      color: position > 0.9 ? __style.negativeColor : __style.lightGreenColor
     }
 
     MMComponents.MMLine { width: parent.width }
