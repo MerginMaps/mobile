@@ -34,6 +34,7 @@ class AppSettings: public QObject
     Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
     Q_PROPERTY( double gpsAntennaHeight READ gpsAntennaHeight WRITE setGpsAntennaHeight NOTIFY gpsAntennaHeightChanged )
     Q_PROPERTY( QString ignoreMigrateVersion READ ignoreMigrateVersion WRITE setIgnoreMigrateVersion NOTIFY ignoreMigrateVersionChanged )
+    Q_PROPERTY( double zoomMultiplier READ zoomMultiplier WRITE setZoomMultiplier NOTIFY zoomMultiplierChanged )
 
   public:
     explicit AppSettings( QObject *parent = nullptr );
@@ -77,6 +78,9 @@ class AppSettings: public QObject
     double gpsAntennaHeight() const;
     void setGpsAntennaHeight( double gpsAntennaHeight );
 
+    double zoomMultiplier() const;
+    void setZoomMultiplier( double multiplier );
+
     QString ignoreMigrateVersion() const;
     void setIgnoreMigrateVersion( const QString &version );
 
@@ -103,6 +107,8 @@ class AppSettings: public QObject
 
     void ignoreMigrateVersionChanged();
 
+    void zoomMultiplierChanged( double multiplier );
+
   private:
     // Projects path
     QString mDefaultProject;
@@ -128,6 +134,9 @@ class AppSettings: public QObject
 
     // used to allow remembering values of last created feature to speed up digitizing for user
     bool mReuseLastEnteredValues;
+
+    // use to zoom in or out all the interface
+    double mZoomMultiplier = 1;
 
     void setValue( const QString &key, const QVariant &value );
     QVariant value( const QString &key, const QVariant &defaultValue = QVariant() );

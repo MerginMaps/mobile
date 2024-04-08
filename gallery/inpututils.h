@@ -45,6 +45,8 @@ class InputUtils: public QObject
     Q_PROPERTY( bool reuseLastEnteredValues READ reuseLastEnteredValues WRITE setReuseLastEnteredValues NOTIFY reuseLastEnteredValuesChanged )
     Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
 
+    Q_PROPERTY( double zoomMultiplier READ zoomMultiplier WRITE setZoomMultiplier NOTIFY zoomMultiplierChanged )
+
     bool isIos() { return false; }
     bool isAndroid() { return true; }
     double gpsAccuracyTolerance() { return mGpsAccuracy; }
@@ -61,6 +63,9 @@ class InputUtils: public QObject
     bool autosyncAllowed() { return mNewAutosyncAllowed; }
     void setAutosyncAllowed( bool newAutosyncAllowed ) { mNewAutosyncAllowed = newAutosyncAllowed; emit autosyncAllowedChanged( mNewAutosyncAllowed ); }
 
+    double zoomMultiplier() const { return mZoomMultiplier; }
+    void setZoomMultiplier( double multiplier ) { mZoomMultiplier = multiplier; emit zoomMultiplierChanged( multiplier ); }
+
   signals:
     void imageSelected( QString imagePath, QString code );
     void gpsAccuracyToleranceChanged();
@@ -70,8 +75,12 @@ class InputUtils: public QObject
     void reuseLastEnteredValuesChanged();
     void autosyncAllowedChanged( bool autosyncAllowed );
     void autoCenterMapCheckedChanged();
+    void zoomMultiplierChanged( double multiplier );
+
 
   private:
+    double mZoomMultiplier = 1;
+
     double mGpsAccuracy = 10;
     double mGpsAntennaHeightcy = 23;
     int mLineRecordingInterval = 3;

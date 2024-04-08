@@ -462,7 +462,7 @@ int main( int argc, char *argv[] )
   init_qgis( appBundleDir );
 
   // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
-  AppSettings as;
+  AppSettings appSettings;
 
   // there seem to be issues with HTTP/2 server support (QTBUG-111417)
   // so let's stick to HTTP/1 for the time being (Qt5 has HTTP/2 disabled by default)
@@ -488,7 +488,7 @@ int main( int argc, char *argv[] )
   LayersProxyModel recordingLpm( &lm, LayerModelTypes::ActiveLayerSelection );
 
   ActiveLayer al;
-  ActiveProject activeProject( as, al, recordingLpm, localProjectsManager );
+  ActiveProject activeProject( appSettings, al, recordingLpm, localProjectsManager );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
 
@@ -500,12 +500,12 @@ int main( int argc, char *argv[] )
 
   // build position kit, save active provider to QSettings and load previously active provider
   PositionKit pk;
-  QObject::connect( &pk, &PositionKit::positionProviderChanged, &as, [&as]( AbstractPositionProvider * provider )
+  QObject::connect( &pk, &PositionKit::positionProviderChanged, &appSettings, [&appSettings]( AbstractPositionProvider * provider )
   {
-    as.setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
+    appSettings.setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
-  pk.setPositionProvider( pk.constructActiveProvider( &as ) );
-  pk.setAppSettings( &as );
+  pk.setPositionProvider( pk.constructActiveProvider( &appSettings ) );
+  pk.setAppSettings( &appSettings );
 
   // Lambda context object can be used in all lambda functions defined here,
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
@@ -577,6 +577,7 @@ int main( int argc, char *argv[] )
   {
     notificationModel.addError( message );
   } );
+
   // Direct connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &pk, &PositionKit::appStateChanged );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
@@ -600,7 +601,7 @@ int main( int argc, char *argv[] )
   if ( projectLoadingFile.exists() )
   {
     // Cleaning default project due to a project loading has crashed during the last run.
-    as.setDefaultProject( QString() );
+    appSettings.setDefaultProject( QString() );
     projectLoadingFile.remove();
     CoreUtils::log( QStringLiteral( "Loading project error" ), QStringLiteral( "Application has been unexpectedly finished during the last run." ) );
   }
@@ -609,7 +610,7 @@ int main( int argc, char *argv[] )
   if ( tests.testingRequested() )
   {
     tests.initTestDeclarative();
-    tests.init( ma.get(), &iu, vm.get(), &pk, &as );
+    tests.init( ma.get(), &iu, vm.get(), &pk, &appSettings );
     return tests.runTest();
   }
 #endif
@@ -648,7 +649,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
   engine.rootContext()->setContextProperty( "__activeProject", &activeProject );
   engine.rootContext()->setContextProperty( "__syncManager", &syncManager );
-  engine.rootContext()->setContextProperty( "__appSettings", &as );
+  engine.rootContext()->setContextProperty( "__appSettings", &appSettings );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
   engine.rootContext()->setContextProperty( "__recordingLayersModel", &recordingLpm );
@@ -683,15 +684,15 @@ int main( int argc, char *argv[] )
 #endif
   engine.rootContext()->setContextProperty( "__version", version );
 
-  // Even though enabling QT's HighDPI scaling removes the need to multiply pixel values with dp,
-  // there are screens that need a "little help", because system DPR has different value than the
-  // one we calculated. In these scenarios we use a ratio between real (our) DPR and DPR reported by QT.
-  // Use `value * __dp` for each pixel value in QML
-  qreal dp = InputUtils::calculateDpRatio();
-  engine.rootContext()->setContextProperty( "__dp", dp );
-
-  MMStyle *style = new MMStyle( &engine, dp );
+  double zoom = appSettings.zoomMultiplier();
+  engine.rootContext()->setContextProperty( "__dp", zoom );
+  MMStyle *style = new MMStyle( &engine, zoom );
   engine.rootContext()->setContextProperty( "__style", style );
+  QObject::connect( &appSettings, &AppSettings::zoomMultiplierChanged, style, &MMStyle::setDp );
+  QObject::connect( &appSettings, &AppSettings::zoomMultiplierChanged, &lambdaContext, [&engine]( double multiplier )
+  {
+    engine.rootContext()->setContextProperty( "__dp", multiplier );
+  } );
 
   // Set safe areas for mobile devices
 #ifdef ANDROID
@@ -768,6 +769,7 @@ int main( int argc, char *argv[] )
 
   // Add some data for debugging
   qDebug() << iu.dumpScreenInfo();
+  qDebug() << "zoom multiplier: " << appSettings.zoomMultiplier();
   qDebug() << "data directory: " << dataDir;
   qDebug() <<  "All up and running";
 
@@ -776,7 +778,7 @@ int main( int argc, char *argv[] )
 #endif
 
   // save app version to settings
-  as.setAppVersion( version );
+  appSettings.setAppVersion( version );
 
   // Photos bigger that 512 MB (when uncompressed) will not load
   QImageReader::setAllocationLimit( 512 );

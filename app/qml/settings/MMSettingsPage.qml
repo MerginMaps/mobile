@@ -184,6 +184,21 @@ MMPage {
 
       Item { width: 1; height: 1 }
 
+      MMSettingsComponents.MMSettingsInput {
+        width: parent.width
+        title: qsTr("Zoom")
+        description: qsTr("Zoom multiplier of the app interface")
+        valueDescription: qsTr("Zoom multiplier of the app interface")
+        value: __appSettings.zoomMultiplier * 100
+        suffix: "%"
+
+        onValueWasChanged: function( newValue ) {
+          __appSettings.zoomMultiplier = newValue / 100
+        }
+      }
+
+      MMLine {}
+
       MMSettingsComponents.MMSettingsItem {
         width: parent.width
         title: qsTr("About")

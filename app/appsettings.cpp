@@ -32,6 +32,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
   double gpsHeight = settings.value( "gpsHeight", 0 ).toDouble();
   QString ignoreMigrateVersion = settings.value( QStringLiteral( "ignoreMigrateVersion" ) ).toString();
+  double zoomMultiplier = settings.value( "zoomMultiplier", 0 ).toDouble();
 
   settings.endGroup();
 
@@ -47,6 +48,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setAutosyncAllowed( autosync );
   setGpsAntennaHeight( gpsHeight );
   setIgnoreMigrateVersion( ignoreMigrateVersion );
+  setZoomMultiplier( zoomMultiplier );
 }
 
 QString AppSettings::defaultLayer() const
@@ -303,6 +305,37 @@ void AppSettings::setGpsAntennaHeight( double gpsAntennaHeight )
     setValue( "gpsHeight", height );
 
     emit gpsAntennaHeightChanged( gpsAntennaHeight );
+  }
+}
+
+double AppSettings::zoomMultiplier() const
+{
+  return mZoomMultiplier;
+}
+
+void AppSettings::setZoomMultiplier( double multiplier )
+{
+  const double minMultiplier = 0.4;
+  const double maxMultiplier = 4;
+
+  double m = multiplier;
+  if ( m < minMultiplier )
+  {
+    m = minMultiplier;
+  }
+  else if ( m > maxMultiplier )
+  {
+    m = maxMultiplier;
+  }
+
+  if ( mZoomMultiplier != m )
+  {
+    mZoomMultiplier = m;
+    setValue( "zoomMultiplier", mZoomMultiplier );
+
+    if ( mZoomMultiplier != 1 )
+      CoreUtils::log( QStringLiteral( "AppSettings" ), QStringLiteral( "Zoom multiplier is %1" ).arg( mZoomMultiplier ) );
+    emit zoomMultiplierChanged( m );
   }
 }
 

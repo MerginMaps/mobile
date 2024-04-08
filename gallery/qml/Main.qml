@@ -92,6 +92,20 @@ ApplicationWindow {
     }
   }
 
+  Action {
+    id: zoomPlusAction
+    onTriggered: {
+      __inputUtils.zoomMultiplier = __inputUtils.zoomMultiplier + 0.1
+    }
+  }
+
+  Action {
+    id: zoomMinusAction
+    onTriggered: {
+      __inputUtils.zoomMultiplier = __inputUtils.zoomMultiplier - 0.1
+    }
+  }
+
   header: ToolBar {
     RowLayout {
       spacing: 20
@@ -110,6 +124,16 @@ ApplicationWindow {
         horizontalAlignment: Qt.AlignLeft
         verticalAlignment: Qt.AlignVCenter
         Layout.fillWidth: true
+      }
+
+      ToolButton {
+        action: zoomPlusAction
+        text: "+"
+      }
+
+      ToolButton {
+        action: zoomMinusAction
+        text: "-"
       }
 
       ToolButton {

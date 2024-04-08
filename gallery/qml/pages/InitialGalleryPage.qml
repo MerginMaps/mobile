@@ -18,7 +18,8 @@ Page {
 
     text: "Width: " + Window.width + "\n" +
           "Height: " + Window.height + "\n" +
-          "DP ratio: " + __dp.toPrecision(6) + "\n" +
+          "DP ratio: " + __dpScreen.toPrecision(3) + "\n" +
+          "Zoom: " + __dp.toPrecision(3) + "\n" +
           "Used font: " + font.family + "\n" +
           "Safe area - top: " + __style.safeAreaTop + "\n" +
           "Safe area - right: " + __style.safeAreaRight + "\n" +

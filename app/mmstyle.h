@@ -20,31 +20,32 @@ class MMStyle: public QObject
     Q_OBJECT
 
     // Fonts
-    Q_PROPERTY( QFont h1 READ h1 CONSTANT )
-    Q_PROPERTY( QFont h2 READ h2 CONSTANT )
-    Q_PROPERTY( QFont h3 READ h3 CONSTANT )
-    Q_PROPERTY( QFont t1 READ t1 CONSTANT )
-    Q_PROPERTY( QFont t2 READ t2 CONSTANT )
-    Q_PROPERTY( QFont t3 READ t3 CONSTANT )
-    Q_PROPERTY( QFont t4 READ t4 CONSTANT )
-    Q_PROPERTY( QFont t5 READ t5 CONSTANT )
-    Q_PROPERTY( QFont p1 READ p1 CONSTANT )
-    Q_PROPERTY( QFont p2 READ p2 CONSTANT )
-    Q_PROPERTY( QFont p3 READ p3 CONSTANT )
-    Q_PROPERTY( QFont p4 READ p4 CONSTANT )
-    Q_PROPERTY( QFont p5 READ p5 CONSTANT )
-    Q_PROPERTY( QFont p6 READ p6 CONSTANT )
-    Q_PROPERTY( QFont p7 READ p7 CONSTANT )
-    Q_PROPERTY( double fontLineHeight60 READ number60 CONSTANT )
-    Q_PROPERTY( double fontLineHeight48 READ number48 CONSTANT )
-    Q_PROPERTY( double fontLineHeight44 READ number44 CONSTANT )
-    Q_PROPERTY( double fontLineHeight36 READ number36 CONSTANT )
-    Q_PROPERTY( double fontLineHeight32 READ number32 CONSTANT )
-    Q_PROPERTY( double fontLineHeight30 READ number30 CONSTANT )
-    Q_PROPERTY( double fontLineHeight28 READ number28 CONSTANT )
-    Q_PROPERTY( double fontLineHeight26 READ number26 CONSTANT )
-    Q_PROPERTY( double fontLineHeight24 READ number24 CONSTANT )
-    Q_PROPERTY( double fontLineHeight22 READ number22 CONSTANT )
+    Q_PROPERTY( QFont h1 READ h1 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont h2 READ h2 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont h3 READ h3 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont t1 READ t1 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont t2 READ t2 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont t3 READ t3 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont t4 READ t4 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont t5 READ t5 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont p1 READ p1 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont p2 READ p2 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont p3 READ p3 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont p4 READ p4 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont p5 READ p5 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont p6 READ p6 NOTIFY sizeChanged )
+    Q_PROPERTY( QFont p7 READ p7 NOTIFY sizeChanged )
+
+    Q_PROPERTY( double fontLineHeight60 READ number60 NOTIFY sizeChanged )
+    Q_PROPERTY( double fontLineHeight48 READ number48 NOTIFY sizeChanged )
+    Q_PROPERTY( double fontLineHeight44 READ number44 NOTIFY sizeChanged )
+    Q_PROPERTY( double fontLineHeight36 READ number36 NOTIFY sizeChanged )
+    Q_PROPERTY( double fontLineHeight32 READ number32 NOTIFY sizeChanged )
+    Q_PROPERTY( double fontLineHeight30 READ number30 NOTIFY sizeChanged )
+    Q_PROPERTY( double fontLineHeight28 READ number28 NOTIFY sizeChanged )
+    Q_PROPERTY( double fontLineHeight26 READ number26 NOTIFY sizeChanged )
+    Q_PROPERTY( double fontLineHeight24 READ number24 NOTIFY sizeChanged )
+    Q_PROPERTY( double fontLineHeight22 READ number22 NOTIFY sizeChanged )
 
     // Colors - primary palette
     Q_PROPERTY( QColor grassColor READ grassColor CONSTANT )
@@ -234,17 +235,17 @@ class MMStyle: public QObject
      */
 
     // Icon sizes
-    Q_PROPERTY( double icon16 READ number16 CONSTANT )
-    Q_PROPERTY( double icon24 READ number24 CONSTANT )
-    Q_PROPERTY( double icon32 READ number32 CONSTANT )
+    Q_PROPERTY( double icon16 READ number16 NOTIFY sizeChanged )
+    Q_PROPERTY( double icon24 READ number24 NOTIFY sizeChanged )
+    Q_PROPERTY( double icon32 READ number32 NOTIFY sizeChanged )
 
     // Map items
-    Q_PROPERTY( double mapItemHeight READ number50 CONSTANT )
-    Q_PROPERTY( double mapButtonsMargin READ number20 CONSTANT )
+    Q_PROPERTY( double mapItemHeight READ number50 NOTIFY sizeChanged )
+    Q_PROPERTY( double mapButtonsMargin READ number20 NOTIFY sizeChanged )
 
     // Toolbar
-    Q_PROPERTY( double toolbarHeight READ toolbarHeight NOTIFY safeAreaBottomChanged )
-    Q_PROPERTY( double menuDrawerHeight READ number67 CONSTANT )
+    Q_PROPERTY( double toolbarHeight READ toolbarHeight NOTIFY toolbarHeightChanged )
+    Q_PROPERTY( double menuDrawerHeight READ number67 NOTIFY sizeChanged )
 
     // Safe area sizes - to not draw content over notch and system bars (used on mobile devices)
     Q_PROPERTY( double safeAreaTop READ safeAreaTop WRITE setSafeAreaTop NOTIFY safeAreaTopChanged )
@@ -253,58 +254,71 @@ class MMStyle: public QObject
     Q_PROPERTY( double safeAreaLeft READ safeAreaLeft WRITE setSafeAreaLeft NOTIFY safeAreaLeftChanged )
 
     // Margins
-    Q_PROPERTY( double margin1 READ number1 CONSTANT )
-    Q_PROPERTY( double margin2 READ number2 CONSTANT )
-    Q_PROPERTY( double margin4 READ number4 CONSTANT )
-    Q_PROPERTY( double margin6 READ number6 CONSTANT )
-    Q_PROPERTY( double margin8 READ number8 CONSTANT )
-    Q_PROPERTY( double margin10 READ number10 CONSTANT )
-    Q_PROPERTY( double margin11 READ number11 CONSTANT )
-    Q_PROPERTY( double margin12 READ number12 CONSTANT )
-    Q_PROPERTY( double margin13 READ number13 CONSTANT )
-    Q_PROPERTY( double margin16 READ number16 CONSTANT )
-    Q_PROPERTY( double margin20 READ number20 CONSTANT )
-    Q_PROPERTY( double margin30 READ number30 CONSTANT )
-    Q_PROPERTY( double margin32 READ number32 CONSTANT )
-    Q_PROPERTY( double margin36 READ number36 CONSTANT )
-    Q_PROPERTY( double margin40 READ number40 CONSTANT )
-    Q_PROPERTY( double margin54 READ number54 CONSTANT )
+    Q_PROPERTY( double margin1 READ number1 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin2 READ number2 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin4 READ number4 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin6 READ number6 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin8 READ number8 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin10 READ number10 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin11 READ number11 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin12 READ number12 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin13 READ number13 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin16 READ number16 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin20 READ number20 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin30 READ number30 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin32 READ number32 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin36 READ number36 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin40 READ number40 NOTIFY sizeChanged )
+    Q_PROPERTY( double margin54 READ number54 NOTIFY sizeChanged )
 
     // Page
-    Q_PROPERTY( double pageMargins READ number20 CONSTANT ) // distance between screen edge and components
-    Q_PROPERTY( double spacing12 READ number12 CONSTANT ) // distance between page header, page content and page footer
-    Q_PROPERTY( double spacing20 READ number20 CONSTANT )
-    Q_PROPERTY( double spacing40 READ number40 CONSTANT )
-    Q_PROPERTY( double maxPageWidth READ number720 CONSTANT ) // maximum page width (desktop, tablets, landscape)
+    Q_PROPERTY( double pageMargins READ number20 NOTIFY sizeChanged ) // distance between screen edge and components
+    Q_PROPERTY( double spacing12 READ number12 NOTIFY sizeChanged ) // distance between page header, page content and page footer
+    Q_PROPERTY( double spacing20 READ number20 NOTIFY sizeChanged )
+    Q_PROPERTY( double spacing40 READ number40 NOTIFY sizeChanged )
+    Q_PROPERTY( double maxPageWidth READ number720 NOTIFY sizeChanged ) // maximum page width (desktop, tablets, landscape)
 
     // Other
-    Q_PROPERTY( double row1 READ number1 CONSTANT )
-    Q_PROPERTY( double row24 READ number24 CONSTANT )
-    Q_PROPERTY( double row36 READ number36 CONSTANT )
-    Q_PROPERTY( double row40 READ number40 CONSTANT )
-    Q_PROPERTY( double row49 READ number49 CONSTANT )
-    Q_PROPERTY( double row50 READ number50 CONSTANT )
-    Q_PROPERTY( double row60 READ number60 CONSTANT )
-    Q_PROPERTY( double row63 READ number63 CONSTANT )
-    Q_PROPERTY( double row67 READ number67 CONSTANT )
-    Q_PROPERTY( double row80 READ number80 CONSTANT )
-    Q_PROPERTY( double row114 READ number114 CONSTANT )
-    Q_PROPERTY( double radius6 READ number6 CONSTANT )
-    Q_PROPERTY( double radius12 READ number12 CONSTANT )
-    Q_PROPERTY( double radius16 READ number16 CONSTANT )
-    Q_PROPERTY( double radius20 READ number20 CONSTANT )
-    Q_PROPERTY( double radius30 READ number30 CONSTANT )
-    Q_PROPERTY( double radius40 READ number40 CONSTANT )
+    Q_PROPERTY( double row1 READ number1 NOTIFY sizeChanged )
+    Q_PROPERTY( double row24 READ number24 NOTIFY sizeChanged )
+    Q_PROPERTY( double row36 READ number36 NOTIFY sizeChanged )
+    Q_PROPERTY( double row40 READ number40 NOTIFY sizeChanged )
+    Q_PROPERTY( double row49 READ number49 NOTIFY sizeChanged )
+    Q_PROPERTY( double row50 READ number50 NOTIFY sizeChanged )
+    Q_PROPERTY( double row60 READ number60 NOTIFY sizeChanged )
+    Q_PROPERTY( double row63 READ number63 NOTIFY sizeChanged )
+    Q_PROPERTY( double row67 READ number67 NOTIFY sizeChanged )
+    Q_PROPERTY( double row80 READ number80 NOTIFY sizeChanged )
+    Q_PROPERTY( double row114 READ number114 NOTIFY sizeChanged )
+    Q_PROPERTY( double radius6 READ number6 NOTIFY sizeChanged )
+    Q_PROPERTY( double radius12 READ number12 NOTIFY sizeChanged )
+    Q_PROPERTY( double radius16 READ number16 NOTIFY sizeChanged )
+    Q_PROPERTY( double radius20 READ number20 NOTIFY sizeChanged )
+    Q_PROPERTY( double radius30 READ number30 NOTIFY sizeChanged )
+    Q_PROPERTY( double radius40 READ number40 NOTIFY sizeChanged )
+
     Q_PROPERTY( double scrollVelocityAndroid READ scrollVelocityAndroid CONSTANT ) // [px/s] scrolling on Android devices is too slow by default
 
     // Breakpoint we use in some screens to differentiate mobile landscape
-    Q_PROPERTY( double heightBreakpointXS READ number400 CONSTANT )
+    Q_PROPERTY( double heightBreakpointXS READ number400 NOTIFY sizeChanged )
 
   public:
     explicit MMStyle( QObject *parent,  qreal dp )
       : QObject( parent ), mDp( dp )
-    {}
+    {
+      connect( this, &MMStyle::safeAreaBottomChanged, this, &MMStyle::toolbarHeightChanged );
+      connect( this, &MMStyle::sizeChanged, this, &MMStyle::toolbarHeightChanged );
+    }
     ~MMStyle() = default;
+
+    void setDp( double dp )
+    {
+      if ( mDp != dp )
+      {
+        mDp = dp;
+        emit sizeChanged();
+      }
+    }
 
     QFont h1() {return fontFactory( 48, true );}
     QFont h2() {return fontFactory( 36, true );}
@@ -704,8 +718,8 @@ class MMStyle: public QObject
     }
 
   signals:
-    void styleChanged();
-
+    void sizeChanged();
+    void toolbarHeightChanged();
     void safeAreaTopChanged( double safeAreaTop );
     void safeAreaRightChanged( double safeAreaRight );
     void safeAreaBottomChanged( double safeAreaBottom );

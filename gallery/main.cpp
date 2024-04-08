@@ -74,11 +74,15 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__iosUtils", &iu );
   engine.rootContext()->setContextProperty( "__appSettings", &iu );
 
-  qreal dp = Helper::calculateDpRatio();
+  QObject lambdaContext;
 
-  // MMStyle must be destructed after engine
-  // see https://tobiasmarciszko.github.io/qml-binding-errors/
-  MMStyle *style = new MMStyle( &engine, dp );
+  qreal dp = Helper::calculateDpRatio();
+  MMStyle *style = new MMStyle( &engine, iu.zoomMultiplier() );
+  QObject::connect( &iu, &InputUtils::zoomMultiplierChanged, style, &MMStyle::setDp );
+  QObject::connect( &iu, &InputUtils::zoomMultiplierChanged, &lambdaContext, [&engine]( double multiplier )
+  {
+    engine.rootContext()->setContextProperty( "__dp", multiplier );
+  } );
 
   // Set some safe areas
   style->setSafeAreaTop( 25 );
@@ -94,7 +98,9 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__notificationModel", &notificationModel );
   // path to local wrapper pages
   engine.rootContext()->setContextProperty( "_qmlWrapperPath", QGuiApplication::applicationDirPath() + "/HotReload/qml/pages/" );
-  engine.rootContext()->setContextProperty( "__dp", dp );
+  engine.rootContext()->setContextProperty( "__dp", iu.zoomMultiplier() );
+  engine.rootContext()->setContextProperty( "__dpScreen", dp );
+
   engine.rootContext()->setContextProperty( "__style", style );
   engine.rootContext()->setContextProperty( "__isMobile", Helper::isMobile() );
   engine.rootContext()->setContextProperty( "__logText", Helper::logText() );
@@ -102,6 +108,7 @@ int main( int argc, char *argv[] )
 
   QObject::connect( &engine, &QQmlApplicationEngine::objectCreationFailed,
   &app, []() { QCoreApplication::exit( -1 ); }, Qt::QueuedConnection );
+
   engine.loadFromModule( "gallery", "Main" );
 
   return app.exec();
