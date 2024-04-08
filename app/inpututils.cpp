@@ -2149,11 +2149,6 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
   {
     QString relativePath = link.mid( QString( "project://" ).length() );
     QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
-
-    QString testPath = "/Users/vmstar/Documents/Lutra/MM/mobile/app/android/assets/qgis-data/projects/PDF Viewing Project/dummy.pdf";
-    qDebug() << "relativePath" << relativePath;
-    qDebug() << "absoluteLinkPath" << absoluteLinkPath;
-
 #ifdef Q_OS_ANDROID
     mAndroidUtils->openFile( absoluteLinkPath );
 #elif defined(Q_OS_IOS)
