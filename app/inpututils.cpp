@@ -57,6 +57,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDesktopServices>
+#include <QUrl>
 #include <algorithm>
 #include <limits>
 #include <math.h>
@@ -2144,33 +2145,42 @@ QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
 
 void InputUtils::openLink( const QString &homePath, const QString &link )
 {
-  qDebug() << "LINK" << link;
-  qDebug() << "HOMEPATH" << homePath;
+    qDebug() << "LINK" << link;
+    qDebug() << "HOMEPATH" << homePath;
 
-  QString cleanedLink = link.trimmed();
-  static QRegularExpression re( "^\\?|\\?$" );
-  cleanedLink.remove( re );
+    QString cleanedLink = link.trimmed();
+    static QRegularExpression re( "^\\?|\\?$" );
+    cleanedLink.remove( re );
+    cleanedLink.chop( 1 ); //remove \ from cleanedLink
 
-  qDebug() << "cleanedLink" << cleanedLink;
+    qDebug() << "cleanedLink" << cleanedLink;
 
-  if ( cleanedLink.startsWith( "project://" ) )
-  {
-    QString relativePath = cleanedLink.mid( QString( "project://" ).length() );
-    QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
+    if ( cleanedLink.startsWith( "project://" ) )
+    {
+        QString relativePath = cleanedLink.mid( QString( "project://" ).length() );
+        QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
 
-    qDebug() << "relativePath" << relativePath;
-    qDebug() << "absoluteLinkPath" << absoluteLinkPath;
+        QString testPath = "/Users/vmstar/Documents/Lutra/MM/mobile/app/android/assets/qgis-data/projects/PDF Viewing Project/dummy.pdf";
+        qDebug() << "relativePath" << relativePath;
+        qDebug() << "absoluteLinkPath" << absoluteLinkPath;
 
 #ifdef Q_OS_ANDROID
-    qDebug() << "openLink android";
-    mAndroidUtils->openFile( absoluteLinkPath );
+        qDebug() << "openLink android";
+        mAndroidUtils->openFile( absoluteLinkPath );
 #elif defined(Q_OS_IOS)
-    qDebug() << "openLink ios";
+        qDebug() << "openLink ios";
+        //IosUtils::openFile( )
+#else
+        // Desktop environments
+        QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
+        if ( !QDesktopServices::openUrl( fileUrl ) )
+        {
+            qDebug() << "Failed to open the file:" << absoluteLinkPath;
+        }
 #endif
-  }
-  else
-  {
-    cleanedLink.chop( 1 ); //remove \ from cleanedLink
-    QDesktopServices::openUrl( QUrl( cleanedLink ) );
-  }
+    }
+    else
+    {
+        QDesktopServices::openUrl( QUrl( cleanedLink ) );
+    }
 }
