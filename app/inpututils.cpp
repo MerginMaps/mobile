@@ -56,7 +56,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QRegularExpression>
+#include <QDesktopServices>
 #include <algorithm>
 #include <limits>
 #include <math.h>
@@ -2140,4 +2140,37 @@ QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
   }
 
   return parsedUpdates;
+}
+
+void InputUtils::openLink( const QString &homePath, const QString &link )
+{
+  qDebug() << "LINK" << link;
+  qDebug() << "HOMEPATH" << homePath;
+
+  QString cleanedLink = link.trimmed();
+  static QRegularExpression re( "^\\?|\\?$" );
+  cleanedLink.remove( re );
+
+  qDebug() << "cleanedLink" << cleanedLink;
+
+  if ( cleanedLink.startsWith( "project://" ) )
+  {
+    QString relativePath = cleanedLink.mid( QString( "project://" ).length() );
+    QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
+
+    qDebug() << "relativePath" << relativePath;
+    qDebug() << "absoluteLinkPath" << absoluteLinkPath;
+
+#ifdef Q_OS_ANDROID
+    qDebug() << "openLink android";
+    mAndroidUtils->openFile( absoluteLinkPath );
+#elif defined(Q_OS_IOS)
+    qDebug() << "openLink ios";
+#endif
+  }
+  else
+  {
+    cleanedLink.chop( 1 ); //remove \ from cleanedLink
+    QDesktopServices::openUrl( QUrl( cleanedLink ) );
+  }
 }
