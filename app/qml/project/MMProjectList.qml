@@ -248,7 +248,7 @@ Item {
     width: parent.width
     height: __style.row63
     visible: false
-    y: root.height/3 * 2
+    y: noMerginProjectsTexts.y + noMerginProjectsTexts.height
 
     Connections {
       target: __merginApi
@@ -267,7 +267,6 @@ Item {
       id: reloadBtn
 
       width: reloadList.width - 2* __style.pageMargins
-      height: reloadList.height
       text: qsTr("Retry")
 
       anchors.horizontalCenter: parent.horizontalCenter

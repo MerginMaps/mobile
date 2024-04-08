@@ -237,17 +237,21 @@ Item {
       root.showLocalChangesRequested( projectId )
     }
 
+    function updateListHeader() {
+      // ugly ugly ugly #2
+      projectlist.listHeader = null
+
+      if ( root.activeProjectId ) {
+        projectlist.listHeader = activeProjectComponent
+      }
+    }
+
+    onActiveProjectIdChanged: projectlist.updateListHeader()
+
     Connections {
       target: projectlist.projectsModel
 
-      function onModelReset() {
-        // ugly ugly ugly #2
-        projectlist.listHeader = null
-
-        if ( root.activeProjectId ) {
-          projectlist.listHeader = activeProjectComponent
-        }
-      }
+      function onModelReset() { projectlist.updateListHeader() }
     }
   }
 
