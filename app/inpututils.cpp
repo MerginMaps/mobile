@@ -277,6 +277,19 @@ void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, InputMapSetti
   mapSettings->setExtent( currentExtent );
 }
 
+QPointF InputUtils::geometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings )
+{
+  QPointF screenPoint;
+
+  if ( geom.isNull() || !geom.constGet() )
+    return screenPoint;
+
+  QgsRectangle bbox = geom.boundingBox();
+  screenPoint = mapSettings->coordinateToScreen( QgsPoint( bbox.center() ) );
+
+  return screenPoint;
+}
+
 double InputUtils::convertCoordinateString( const QString &rationalValue )
 {
   QStringList values = rationalValue.split( "," );

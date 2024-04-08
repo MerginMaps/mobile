@@ -71,9 +71,9 @@ Item {
     readonly property double distance: Math.sqrt( ( startX - endX ) * ( startX - endX ) + ( startY - endY ) * ( startY - endY ) )
 
     Behavior on percentage {
-      SmoothedAnimation {
-        duration: 200
-        reversingMode: SmoothedAnimation.Immediate
+      NumberAnimation {
+        easing.type: Easing.OutQuart
+        duration: 500
       }
       enabled: jumpAnimator.enabled
     }

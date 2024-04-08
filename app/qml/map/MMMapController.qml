@@ -202,7 +202,7 @@ Item {
 
         if ( pair.valid )
         {
-          root.select( pair )
+          root.highlightPair( pair )
           root.featureIdentified( pair )
         }
         else
@@ -1048,11 +1048,6 @@ Item {
     }
   }
 
-  function select( featurepair ) {
-    root.centerToPair( featurepair, true )
-    root.highlightPair( featurepair )
-  }
-
   function record() {
     state = "record"
   }
@@ -1134,6 +1129,15 @@ Item {
     __inputUtils.setExtentToFeature( pair, mapCanvas.mapSettings, mapExtentOffsetRatio )
   }
 
+  function jumpToHighlighted( mapOffset ) {
+    if ( identifyHighlight.geometry === null )
+      return
+
+    let screenPt = __inputUtils.geometryCenterToScreenCoordinates( identifyHighlight.geometry, mapCanvas.mapSettings )
+    screenPt.y += mapOffset / 2
+    mapCanvas.jumpTo( screenPt )
+  }
+
   function highlightPair( pair ) {
     let geometry = __inputUtils.extractGeometry( pair )
     identifyHighlight.geometry = __inputUtils.transformGeometryToMapWithLayer( geometry, pair.layer, mapCanvas.mapSettings )
@@ -1141,6 +1145,7 @@ Item {
 
   function hideHighlight() {
     identifyHighlight.geometry = null
+    updatePosition()
   }
 
   function centerToPosition( animate = false ) {
@@ -1183,6 +1188,11 @@ Item {
       }
 
       case "view": {
+        if ( identifyHighlight.geometry !== null )
+        {
+          break
+        }
+
         if ( root.isPositionOutOfExtent() )
         {
           root.centerToPosition( true )

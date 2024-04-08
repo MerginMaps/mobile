@@ -51,7 +51,8 @@ Item {
   signal closed()
   signal editGeometryRequested( var pair )
   signal createLinkedFeatureRequested( var targetLayer, var parentPair )
-  signal stakeoutFeature( var feature );
+  signal stakeoutFeature( var feature )
+  signal previewPanelChanged( var panelHeight )
 
   function openForm( pair, formState, panelState ) {
     if ( formsStack.depth === 0 )
@@ -282,6 +283,11 @@ Item {
           formsStack.popOneOrClose()
         }
       }
+
+      onPreviewPanelChanged: function( panelHeight ) {
+        root.previewPanelChanged( panelHeight )
+      }
+
       onEditGeometry: function( pair ) {
         root.editGeometryRequested( pair )
       }

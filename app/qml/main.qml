@@ -106,7 +106,7 @@ ApplicationWindow {
       formsStackManager.openForm( pair, "readOnly", "form" )
     }
     else if ( pair.valid ) {
-      map.select( pair )
+      map.highlightPair( pair )
       formsStackManager.openForm( pair, "readOnly", "preview")
     }
   }
@@ -663,6 +663,10 @@ ApplicationWindow {
 
       map.stakeout( feature )
       closeDrawer()
+    }
+
+    onPreviewPanelChanged: function( panelHeight ) {
+      map.jumpToHighlighted( panelHeight - mapToolbar.height )
     }
   }
 

@@ -78,6 +78,12 @@ class InputUtils: public QObject
     Q_INVOKABLE QString formatDistanceInProjectUnit( const double distanceInMeters, int precision = 1, Qgis::DistanceUnit destUnit = Qgis::DistanceUnit::Unknown );
     Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings, double panelOffsetRatio );
 
+    /**
+     * Returns the screen coordinates for a geometry's bounding box centroid
+     * Geometry must be in canvas CRS
+     */
+    Q_INVOKABLE QPointF geometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings );
+
     // utility functions to extract information from map settings
     // (in theory this data should be directly available from .MapTransform
     // but they are not currently, so this is a workaround we need for display of markers)

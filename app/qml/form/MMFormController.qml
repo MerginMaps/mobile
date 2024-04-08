@@ -43,6 +43,7 @@ Item {
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var targetLayer, var parentPair )
   signal stakeoutFeature( var feature )
+  signal previewPanelChanged( var panelHeight )
 
   function openDrawer() {
     root.panelState = "form"
@@ -102,6 +103,7 @@ Item {
       }
     }
 
+    // this animation handles the transition from preview to form and different preview sizes
     Behavior on height {
       PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
     }
@@ -129,6 +131,11 @@ Item {
     edge: Qt.BottomEdge
     closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
 
+    onOpened: {
+      if ( panelState === "preview" )
+        previewPanelChanged( previewPanel.implicitHeight )
+    }
+
     onClosed: {
       if ( statesManager.state !== "hidden" )
         statesManager.state = "closed"
@@ -154,6 +161,10 @@ Item {
       }
 
       onCloseClicked: drawer.close()
+
+      onImplicitHeightChanged: {
+        previewPanelChanged( previewPanel.implicitHeight )
+      }
     }
 
     MMFormPage {
@@ -210,5 +221,10 @@ Item {
         }
       }
     }
+  }
+
+  onFeatureLayerPairChanged: {
+    if ( panelState === "preview" )
+      previewPanelChanged( previewPanel.implicitHeight )
   }
 }
