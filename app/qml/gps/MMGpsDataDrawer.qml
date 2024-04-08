@@ -8,32 +8,325 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
 import QtQuick.Layouts
 
 import mm 1.0 as MM
 
-import "../components"
+import "../components" as MMComponents
+import "./components" as MMGpsComponents
 
-Drawer {
+MMComponents.MMDrawer {
   id: root
 
   property var mapSettings
-  property string coordinatesInDegrees: __inputUtils.degreesString( __positionKit.positionCoordinate )
-  property var title: qsTr("GPS info")
-  property real rowHeight: 67 * __dp
 
-  signal manageGpsClicked()
+  property bool showReceiversButton: true
 
-  width: ApplicationWindow.window.width
-  height: (mainColumn.height > ApplicationWindow.window.height ? ApplicationWindow.window.height : mainColumn.height)
-  edge: Qt.BottomEdge
+  signal manageReceiversClicked()
 
-  focus: true
+  drawerHeader.title: qsTr( "GPS info" )
 
-  Component.onCompleted: {
-    forceActiveFocus()
+  drawerContent: MMComponents.MMScrollView {
+
+    width: parent.width
+    height: root.maxHeightHit ? root.drawerContentAvailableHeight : contentHeight
+
+    Column {
+      width: parent.width
+
+      spacing: __style.spacing40
+
+      Item {
+        width: parent.width
+        height: datagrid.implicitHeight
+
+        Rectangle {
+          // horizontal line after each row in the grid
+          anchors {
+            fill: datagrid
+            bottomMargin: datagrid.children[0].height
+          }
+          color: __style.greyColor
+        }
+
+        Grid {
+          id: datagrid
+
+          width: parent.width
+          columns:  2
+
+          rowSpacing: __style.margin1
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "Source" )
+            value: __positionKit.positionProvider ? __positionKit.positionProvider.name() : qsTr( "No receiver" )
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            id: statusCell
+
+            width: parent.width / 2
+
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+
+            title: qsTr( "Status" )
+            value: __positionKit.positionProvider ? __positionKit.positionProvider.stateMessage : ""
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          Rectangle { // placeholder cell to keep long/lat in one line
+            width: parent.width
+            height: statusCell.height
+
+            color: __style.polarColor
+            visible: !statusCell.visible
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "Longitude")
+            value: {
+              if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.longitude ) ) {
+                return qsTr( "N/A" )
+              }
+
+              let coordParts = internal.coordinatesInDegrees.split(", ")
+              if ( coordParts.length > 1 )
+                return coordParts[1]
+
+              return qsTr( "N/A" )
+            }
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "Latitude" )
+            value: {
+              if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.latitude ) ) {
+                return qsTr( "N/A" )
+              }
+
+              let coordParts = internal.coordinatesInDegrees.split(", ")
+              if ( coordParts.length > 1 )
+                return coordParts[0]
+
+              return qsTr( "N/A" )
+            }
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "X" )
+            value: {
+              if ( !__positionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.x ) ) {
+                return qsTr( "N/A" )
+              }
+
+              __inputUtils.formatNumber( mapPositioning.mapPosition.x, 2 )
+            }
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "Y" )
+            value: {
+              if ( !__positionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.y ) ) {
+                return qsTr( "N/A" )
+              }
+
+              __inputUtils.formatNumber( mapPositioning.mapPosition.y, 2 )
+            }
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "Horizontal accuracy" )
+            value: {
+              if ( !__positionKit.hasPosition || __positionKit.horizontalAccuracy < 0 ) {
+                return qsTr( "N/A" )
+              }
+
+              __inputUtils.formatNumber( __positionKit.horizontalAccuracy, 2 ) + " m"
+            }
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "Vertical accuracy" )
+            value: {
+              if ( !__positionKit.hasPosition || __positionKit.verticalAccuracy < 0 ) {
+                return qsTr( "N/A" )
+              }
+
+              __inputUtils.formatNumber( __positionKit.verticalAccuracy, 2 ) + " m"
+            }
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "Altitude" )
+            value: {
+              if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.altitude ) ) {
+                return qsTr( "N/A" )
+              }
+              __inputUtils.formatNumber( __positionKit.altitude, 2 ) + " m"
+            }
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "Fix quality" )
+            value: {
+              if ( !__positionKit.hasPosition ) {
+                return qsTr( "N/A" )
+              }
+
+              __positionKit.fix
+            }
+
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "Satellites (in use/view)" )
+            value: {
+              if ( __positionKit.satellitesUsed < 0 || __positionKit.satellitesVisible < 0 )
+              {
+                return qsTr( "N/A" )
+              }
+
+              __positionKit.satellitesUsed + "/" + __positionKit.satellitesVisible
+            }
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "HDOP" )
+            value: {
+              if ( !__positionKit.hasPosition || __positionKit.hdop < 0 ) {
+                return qsTr( "N/A" )
+              }
+
+              __inputUtils.formatNumber( __positionKit.hdop, 2 )
+            }
+
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "VDOP" )
+            value: {
+              if ( !__positionKit.hasPosition || __positionKit.vdop < 0 ) {
+                return qsTr( "N/A" )
+              }
+
+              __inputUtils.formatNumber( __positionKit.vdop, 2 )
+            }
+
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "PDOP" )
+            value: {
+              if ( !__positionKit.hasPosition || __positionKit.pdop < 0 ) {
+                return qsTr( "N/A" )
+              }
+
+              __inputUtils.formatNumber( __positionKit.pdop, 2 )
+            }
+
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "Speed" )
+            value: {
+              if ( !__positionKit.hasPosition || __positionKit.speed < 0 ) {
+                return qsTr( "N/A" )
+              }
+
+              __inputUtils.formatNumber( __positionKit.speed, 2 ) + " km/h"
+            }
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "Last Fix" )
+            value: __positionKit.lastRead.toLocaleTimeString( Qt.locale() ) || qsTr( "N/A" )
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "GPS antenna height" )
+            value: __appSettings.gpsAntennaHeight > 0 ? __inputUtils.formatNumber(__appSettings.gpsAntennaHeight, 3) + " m" : qsTr( "Not set" )
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
+        }
+      }
+
+      MMComponents.MMButton {
+        width: parent.width
+
+        visible: root.showReceiversButton
+
+        text: qsTr( "Manage GPS receivers" )
+        onClicked: root.manageReceiversClicked()
+      }
+    }
   }
 
   MM.MapPosition {
@@ -43,263 +336,9 @@ Drawer {
     mapSettings: root.mapSettings
   }
 
-  Rectangle {
-    color: roundedRect.color
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.right: parent.right
-    height: 2 * radius
-    anchors.topMargin: -radius
-    radius: 20 * __dp
-  }
+  QtObject {
+    id: internal
 
-  Rectangle {
-    id: roundedRect
-
-    anchors.fill: parent
-    color: __style.polarColor
-
-    ColumnLayout {
-
-      id: mainColumn
-
-      width: parent.width
-      spacing: 40 * __dp
-
-      MMPageHeader {
-        id: header
-
-        backVisible: false
-
-        title: qsTr("GPS info")
-        titleFont: __style.t2
-
-        rightItemContent: MMRoundButton {
-
-          anchors.verticalCenter: parent.verticalCenter
-
-          iconSource: __style.closeIcon
-          iconColor: __style.forestColor
-
-          bgndColor: __style.lightGreenColor
-          bgndHoverColor: __style.mediumGreenColor
-
-          onClicked: root.visible = false
-        }
-      }
-
-      ScrollView {
-        id: scrollView
-
-        Layout.fillWidth: true
-        Layout.leftMargin: 20 * __dp
-        Layout.rightMargin: 20 * __dp
-        Layout.maximumWidth: __style.maxPageWidth
-        Layout.alignment: Qt.AlignHCenter
-        Layout.preferredHeight: window.height - header.height - primaryButton.height - mainColumn.spacing * 3
-        contentWidth: availableWidth
-        contentHeight: scrollColumn.childrenRect.height
-
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-        ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-
-        Column{
-          id: scrollColumn
-
-          width: parent.width
-          spacing: 0
-
-          Row {
-            width: parent.width
-            height: rowHeight
-
-            MMGpsDataText{
-              titleText: qsTr( "Source" )
-              descriptionText: __positionKit.positionProvider ? __positionKit.positionProvider.name() : qsTr( "No receiver" )
-            }
-
-            MMGpsDataText{
-              titleText: qsTr( "Status" )
-              descriptionText: __positionKit.positionProvider ? __positionKit.positionProvider.stateMessage : ""
-              alignmentRight: true
-              itemVisible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
-            }
-          }
-
-          MMLine {}
-
-          Row {
-            width: parent.width
-            height: rowHeight
-
-            MMGpsDataText{
-              titleText: qsTr( "Latitude" )
-              descriptionText: {
-                if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.latitude ) ) {
-                  return qsTr( "N/A" )
-                }
-
-                let coordParts = root.coordinatesInDegrees.split(", ")
-                if ( coordParts.length > 1 )
-                  return coordParts[0]
-
-                return qsTr( "N/A" )
-              }
-            }
-
-            MMGpsDataText{
-              titleText: qsTr( "Longitude")
-              descriptionText: {
-                if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.longitude ) ) {
-                  return qsTr( "N/A" )
-                }
-
-                let coordParts = root.coordinatesInDegrees.split(", ")
-                if ( coordParts.length > 1 )
-                  return coordParts[1]
-
-                return qsTr( "N/A" )
-              }
-              alignmentRight: true
-            }
-          }
-
-          MMLine {}
-
-          Row {
-            width: parent.width
-            height: rowHeight
-
-            MMGpsDataText{
-              titleText: qsTr( "X" )
-              descriptionText: {
-                if ( !__positionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.x ) ) {
-                  return qsTr( "N/A" )
-                }
-
-                __inputUtils.formatNumber( mapPositioning.mapPosition.x, 2 )
-              }
-            }
-
-            MMGpsDataText{
-              titleText: qsTr( "Y" )
-              descriptionText: {
-                if ( !__positionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.y ) ) {
-                  return qsTr( "N/A" )
-                }
-
-                __inputUtils.formatNumber( mapPositioning.mapPosition.y, 2 )
-              }
-              alignmentRight: true
-            }
-          }
-
-          MMLine {}
-
-          Row {
-            width: parent.width
-            height: rowHeight
-
-            MMGpsDataText{
-              titleText: qsTr( "Horizontal accuracy" )
-              descriptionText: {
-                if ( !__positionKit.hasPosition || __positionKit.horizontalAccuracy < 0 ) {
-                  return qsTr( "N/A" )
-                }
-
-                __inputUtils.formatNumber( __positionKit.horizontalAccuracy, 2 ) + " m"
-              }
-            }
-
-            MMGpsDataText{
-              titleText: qsTr( "Vertical accuracy" )
-              descriptionText: {
-                if ( !__positionKit.hasPosition || __positionKit.verticalAccuracy < 0 ) {
-                  return qsTr( "N/A" )
-                }
-
-                __inputUtils.formatNumber( __positionKit.verticalAccuracy, 2 ) + " m"
-              }
-              alignmentRight: true
-            }
-          }
-
-          MMLine {}
-
-          Row {
-            width: parent.width
-            height: rowHeight
-
-            MMGpsDataText{
-              titleText: qsTr( "Altitude" )
-              descriptionText: {
-                if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.altitude ) ) {
-                  return qsTr( "N/A" )
-                }
-                __inputUtils.formatNumber( __positionKit.altitude, 2 ) + " m"
-              }
-            }
-
-            MMGpsDataText{
-              titleText: qsTr( "Satellites (in use/view)" )
-              descriptionText: {
-                if ( __positionKit.satellitesUsed < 0 || __positionKit.satellitesVisible < 0 )
-                {
-                  return qsTr( "N/A" )
-                }
-
-                __positionKit.satellitesUsed + "/" + __positionKit.satellitesVisible
-              }
-              alignmentRight: true
-            }
-          }
-
-          MMLine {}
-
-          Row {
-            width: parent.width
-            height: rowHeight
-
-            MMGpsDataText{
-              titleText: qsTr( "Speed" )
-              descriptionText: {
-                if ( !__positionKit.hasPosition || __positionKit.speed < 0 ) {
-                  return qsTr( "N/A" )
-                }
-
-                __inputUtils.formatNumber( __positionKit.speed, 2 ) + " km/h"
-              }
-            }
-
-            MMGpsDataText{
-              titleText: qsTr( "Last Fix" )
-              descriptionText: __positionKit.lastRead.toLocaleTimeString( Qt.locale() ) || qsTr( "N/A" )
-              alignmentRight: true
-            }
-          }
-
-          MMLine {}
-
-          Row {
-            width: parent.width
-            height: rowHeight
-
-            MMGpsDataText{
-              titleText: qsTr( "GPS antenna height" )
-              descriptionText: __appSettings.gpsAntennaHeight > 0 ? __inputUtils.formatNumber(__appSettings.gpsAntennaHeight, 3) + " m" : qsTr( "Not set" )
-            }
-          }
-        }
-      }
-      MMButton {
-        id: primaryButton
-        text: qsTr("Manage GPS receivers")
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-        Layout.margins: ( mainColumn.spacing / 2 ) * __dp
-        width: parent.width - 2 * 20 * __dp
-        onClicked: root.manageGpsClicked()
-      }
-    }
+    property string coordinatesInDegrees: __inputUtils.degreesString( __positionKit.positionCoordinate )
   }
 }
-

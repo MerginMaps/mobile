@@ -459,10 +459,10 @@ ApplicationWindow {
 
     MMGpsDataDrawer {
       id: gpsDataDrawer
-      title: qsTr("GPS info")
+
       mapSettings: map.mapSettings
 
-      onManageGpsClicked: {
+      onManageReceiversClicked: {
         gpsDataDrawer.close()
         settingsController.open( MMSettingsController.Pages.GPSConnection )
       }

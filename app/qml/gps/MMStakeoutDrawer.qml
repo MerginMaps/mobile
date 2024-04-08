@@ -17,6 +17,7 @@ import mm 1.0 as MM
 
 import "../components"
 import "../map/components"
+import "./components" as MMGpsComponents
 
 MMDrawer {
   id: root
@@ -96,16 +97,20 @@ MMDrawer {
 
     Row {
       width: parent.width
-      height: __style.row67
+      spacing: __style.margi8
 
-      MMGpsDataText{
-        titleText: qsTr( "Feature" )
-        descriptionText: root.targetPair ? __inputUtils.featureTitle( root.targetPair, __activeProject.qgsProject ) : ""
+      MMGpsComponents.MMGpsDataText{
+        width: ( parent.width + parent.spacing ) / 2
+
+        title: qsTr( "Feature" )
+        value: root.targetPair ? __inputUtils.featureTitle( root.targetPair, __activeProject.qgsProject ) : ""
       }
 
-      MMGpsDataText{
-        titleText: qsTr( "Distance" )
-        descriptionText: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2 ) : qsTr( "N/A" )
+      MMGpsComponents.MMGpsDataText{
+        width: ( parent.width + parent.spacing ) / 2
+
+        title: qsTr( "Distance" )
+        value: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2 ) : qsTr( "N/A" )
         alignmentRight: true
       }
     }

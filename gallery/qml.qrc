@@ -139,6 +139,8 @@
         <file>../app/qml/settings/components/MMSettingsDropdown.qml</file>
         <file>../app/qml/settings/components/MMSettingsSwitch.qml</file>
         <file>../app/qml/gps/MMBluetoothConnectionDrawer.qml</file>
+        <file>../app/qml/gps/MMGpsDataDrawer.qml</file>
+        <file>../app/qml/gps/components/MMGpsDataText.qml</file>
         <file>../app/qml/dialogs/MMSyncFailedDialog.qml</file>
         <file>../app/qml/dialogs/MMNoPermissionsDialog.qml</file>
         <file>../app/qml/dialogs/MMMissingAuthDialog.qml</file>
