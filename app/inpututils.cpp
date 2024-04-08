@@ -2145,19 +2145,9 @@ QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
 
 void InputUtils::openLink( const QString &homePath, const QString &link )
 {
-    qDebug() << "LINK" << link;
-    qDebug() << "HOMEPATH" << homePath;
-
-    QString cleanedLink = link.trimmed();
-    static QRegularExpression re( "^\\?|\\?$" );
-    cleanedLink.remove( re );
-    cleanedLink.chop( 1 ); //remove \ from cleanedLink
-
-    qDebug() << "cleanedLink" << cleanedLink;
-
-    if ( cleanedLink.startsWith( "project://" ) )
+    if ( link.startsWith( "project://" ) )
     {
-        QString relativePath = cleanedLink.mid( QString( "project://" ).length() );
+        QString relativePath = link.mid( QString( "project://" ).length() );
         QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
 
         QString testPath = "/Users/vmstar/Documents/Lutra/MM/mobile/app/android/assets/qgis-data/projects/PDF Viewing Project/dummy.pdf";
@@ -2165,22 +2155,21 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
         qDebug() << "absoluteLinkPath" << absoluteLinkPath;
 
 #ifdef Q_OS_ANDROID
-        qDebug() << "openLink android";
         mAndroidUtils->openFile( absoluteLinkPath );
 #elif defined(Q_OS_IOS)
         qDebug() << "openLink ios";
-        //IosUtils::openFile( )
 #else
         // Desktop environments
         QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
         if ( !QDesktopServices::openUrl( fileUrl ) )
         {
-            qDebug() << "Failed to open the file:" << absoluteLinkPath;
+            QString errorMessage = "Failed to open the file:" + absoluteLinkPath;
+            CoreUtils::log( "File  error", errorMessage );
         }
 #endif
     }
     else
     {
-        QDesktopServices::openUrl( QUrl( cleanedLink ) );
+        QDesktopServices::openUrl( QUrl( link ) );
     }
 }
