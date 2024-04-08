@@ -2171,6 +2171,6 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
   else
   {
     cleanedLink.chop( 1 ); //remove \ from cleanedLink
-    QDesktopServices::openUrl( QUrl( cleanedLink) );
+    QDesktopServices::openUrl( QUrl( cleanedLink ) );
   }
 }
