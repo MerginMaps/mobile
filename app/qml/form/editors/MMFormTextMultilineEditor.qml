@@ -117,7 +117,7 @@ MMPrivateComponents.MMBaseInput {
       radius: __style.radius12
     }
 
-    onLinkActivated: ( link ) => Qt.openUrlExternally( link )
+    onLinkActivated: ( link ) => __inputUtils.openLink( root._fieldHomePath, link.toString() )
     onTextChanged: root.editorValueChanged( textArea.text, textArea.text === "" )
   }
 

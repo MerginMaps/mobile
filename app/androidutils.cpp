@@ -227,6 +227,15 @@ void AndroidUtils::hideSplashScreen()
 #endif
 }
 
+void AndroidUtils::openFile( const QString &filePath )
+{
+#ifdef ANDROID
+  auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+  QJniObject jFilePath = QJniObject::fromString( filePath );
+  activity.callMethod<void>( "openFile", "(Ljava/lang/String;)V", jFilePath.object<jstring>() );
+#endif
+}
+
 bool AndroidUtils::requestStoragePermission()
 {
 #ifdef ANDROID
