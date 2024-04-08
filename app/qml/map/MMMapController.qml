@@ -1018,14 +1018,14 @@ Item {
     // private properties - not accessible by other components
 
     property var featurePairToEdit // we are editing geometry of this feature layer pair
-    property bool isSpatialLayer: internal.featurePairToEdit ? __inputUtils.isSpatialLayer( internal.featurePairToEdit.layer ) : false // featurePairToEdit is valid and contains layer with features with geometry
-    property bool isPointLayer: internal.featurePairToEdit ? __inputUtils.isPointLayer( internal.featurePairToEdit.layer ) : false // featurePairToEdit is valid and contains layer with point geometry features
-    property bool isMultiPartLayer: internal.featurePairToEdit ? __inputUtils.isMultiPartLayer( internal.featurePairToEdit.layer ) : false
+    property bool isSpatialLayer: __inputUtils.isSpatialLayer( __activeLayer.vectorLayer )
+    property bool isPointLayer: __inputUtils.isPointLayer( __activeLayer.vectorLayer )
+    property bool isMultiPartLayer: __inputUtils.isMultiPartLayer( __activeLayer.vectorLayer )
 
     // visibility of buttons in "more" menu
     property bool splitGeometryButtonVisible: !internal.isPointLayer && !root.isStreaming && root.state === "edit"
     property bool redrawGeometryButtonVisible: root.state === "edit"
-    property bool streamingModeButtonVisible: !internal.isPointLayer
+    property bool streamingModeButtonVisible: !internal.isPointLayer || internal.isMultiPartLayer
 
     property var extentBeforeStakeout // extent that we return to once stakeout finishes
     property bool centeredToGPSBeforeStakeout
