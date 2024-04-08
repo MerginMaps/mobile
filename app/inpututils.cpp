@@ -57,6 +57,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDesktopServices>
+#include <QUrl>
 #include <algorithm>
 #include <limits>
 #include <math.h>
@@ -2150,6 +2151,7 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
   QString cleanedLink = link.trimmed();
   static QRegularExpression re( "^\\?|\\?$" );
   cleanedLink.remove( re );
+  cleanedLink.chop( 1 ); //remove \ from cleanedLink
 
   qDebug() << "cleanedLink" << cleanedLink;
 
@@ -2158,6 +2160,7 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
     QString relativePath = cleanedLink.mid( QString( "project://" ).length() );
     QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
 
+    QString testPath = "/Users/vmstar/Documents/Lutra/MM/mobile/app/android/assets/qgis-data/projects/PDF Viewing Project/dummy.pdf";
     qDebug() << "relativePath" << relativePath;
     qDebug() << "absoluteLinkPath" << absoluteLinkPath;
 
@@ -2166,11 +2169,18 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
     mAndroidUtils->openFile( absoluteLinkPath );
 #elif defined(Q_OS_IOS)
     qDebug() << "openLink ios";
+    //IosUtils::openFile( )
+#else
+    // Desktop environments
+    QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
+    if ( !QDesktopServices::openUrl( fileUrl ) )
+    {
+        qDebug() << "Failed to open the file:" << absoluteLinkPath;
+    }
 #endif
   }
   else
   {
-    cleanedLink.chop( 1 ); //remove \ from cleanedLink
     QDesktopServices::openUrl( QUrl( cleanedLink ) );
   }
 }
