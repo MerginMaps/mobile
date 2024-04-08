@@ -2145,31 +2145,31 @@ QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
 
 void InputUtils::openLink( const QString &homePath, const QString &link )
 {
-    if ( link.startsWith( "project://" ) )
-    {
-        QString relativePath = link.mid( QString( "project://" ).length() );
-        QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
+  if ( link.startsWith( "project://" ) )
+  {
+    QString relativePath = link.mid( QString( "project://" ).length() );
+    QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
 
-        QString testPath = "/Users/vmstar/Documents/Lutra/MM/mobile/app/android/assets/qgis-data/projects/PDF Viewing Project/dummy.pdf";
-        qDebug() << "relativePath" << relativePath;
-        qDebug() << "absoluteLinkPath" << absoluteLinkPath;
+    QString testPath = "/Users/vmstar/Documents/Lutra/MM/mobile/app/android/assets/qgis-data/projects/PDF Viewing Project/dummy.pdf";
+    qDebug() << "relativePath" << relativePath;
+    qDebug() << "absoluteLinkPath" << absoluteLinkPath;
 
 #ifdef Q_OS_ANDROID
-        mAndroidUtils->openFile( absoluteLinkPath );
+    mAndroidUtils->openFile( absoluteLinkPath );
 #elif defined(Q_OS_IOS)
-        qDebug() << "openLink ios";
+    qDebug() << "openLink ios";
 #else
-        // Desktop environments
-        QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
-        if ( !QDesktopServices::openUrl( fileUrl ) )
-        {
-            QString errorMessage = "Failed to open the file:" + absoluteLinkPath;
-            CoreUtils::log( "File  error", errorMessage );
-        }
-#endif
-    }
-    else
+    // Desktop environments
+    QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
+    if ( !QDesktopServices::openUrl( fileUrl ) )
     {
-        QDesktopServices::openUrl( QUrl( link ) );
+      QString errorMessage = "Failed to open the file:" + absoluteLinkPath;
+      CoreUtils::log( "File  error", errorMessage );
     }
+#endif
+  }
+  else
+  {
+    QDesktopServices::openUrl( QUrl( link ) );
+  }
 }
