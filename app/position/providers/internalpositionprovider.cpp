@@ -25,7 +25,16 @@ InternalPositionProvider::InternalPositionProvider( QObject *parent )
     connect( mGpsPositionSource.get(), &QGeoPositionInfoSource::positionUpdated, this, &InternalPositionProvider::parsePositionUpdate );
     connect( mGpsPositionSource.get(), &QGeoPositionInfoSource::errorOccurred, this, [ = ]( QGeoPositionInfoSource::Error positioningError )
     {
-      CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Error occured (position source), code: %1" ).arg( positioningError ) );
+      // Since Qt 6.2 we started to see this error type too often. That consumed the entire diagnostic log.
+      // Let's skip logging this error, see https://github.com/MerginMaps/mobile/issues/3029
+      if ( positioningError != QGeoPositionInfoSource::UpdateTimeoutError )
+      {
+        CoreUtils::log( QStringLiteral( "Internal GPS provider" ), QStringLiteral( "Error occured (position source), code: %1" ).arg( positioningError ) );
+      }
+      else
+      {
+        qDebug() << "Internal GPS provider error" << QGeoPositionInfoSource::UpdateTimeoutError;
+      }
     } );
 
     mPositionSourceValid = true;
