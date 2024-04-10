@@ -50,8 +50,6 @@ MMBaseInput {
   warningMsg: _fieldWarningMessage
   errorMsg: _fieldErrorMessage
 
-  enabled: !_fieldIsReadOnly
-
   hasFocus: textArea.activeFocus
 
   hasCheckbox: _fieldRememberValueSupported
@@ -75,6 +73,8 @@ MMBaseInput {
     y: textArea.verticalPadding
     height: contentHeight + textArea.verticalPadding
     width: parent.width
+
+    readOnly: root._fieldIsReadOnly
 
     text: root.text
     textFormat: root._fieldConfig['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
