@@ -26,7 +26,7 @@ Rectangle {
   /* optional */ property int index: 0 // index of selected button for selectable toolbar
 
   onIndexChanged: toolbar.currentIndex = index
-  onModelChanged: root.recalculate()
+  onModelChanged: root.initialize()
 
   height: __style.toolbarHeight + __style.safeAreaBottom
   width: window?.width ?? __style.safeAreaLeft + __style.safeAreaRight
@@ -50,7 +50,7 @@ Rectangle {
       anchors.fill: parent
       orientation: ListView.Horizontal
       interactive: false
-      Component.onCompleted: root.recalculate()
+      Component.onCompleted: root.initialize()
     }
   }
 
@@ -134,6 +134,16 @@ Rectangle {
     onClicked: menu.open()
   }
 
+  function initialize() {
+    for ( let i = 0; i < root.model.count; ++i ) {
+      let btnData = root.model.get(i)
+      btnData.onVisibleChanged.disconnect(root.recalculate)
+      btnData.onVisibleChanged.connect(root.recalculate)
+    }
+
+    root.recalculate()
+  }
+
   function recalculate() {
     toolbarModel.clear()
     menuModel.clear()
@@ -142,7 +152,6 @@ Rectangle {
     let visibleButtonsCount = 0
     for ( let i = 0; i < root.model.count; ++i ) {
       let btnData = root.model.get(i)
-      btnData.onVisibleChanged.connect(root.recalculate)
       if (btnData.visible) ++visibleButtonsCount
     }
 
