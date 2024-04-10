@@ -33,17 +33,17 @@ Item {
   signal done( var featureLayerPair )
 
   function toggleStreaming() {
-    if (  recordingMapTool.recordingType === MM.RecordingMapTool.Manual )
+    if (  mapTool.recordingType === MM.RecordingMapTool.Manual )
     {
-      recordingMapTool.recordingType = MM.RecordingMapTool.StreamMode
+      mapTool.recordingType = MM.RecordingMapTool.StreamMode
 
       // add first point immediately
-      recordingMapTool.addPoint( crosshair.recordPoint )
+      mapTool.addPoint( crosshair.recordPoint )
       root.map.mapSettings.setCenter( mapPositionSource.mapPosition )
     }
     else
     {
-      recordingMapTool.recordingType = MM.RecordingMapTool.Manual
+      mapTool.recordingType = MM.RecordingMapTool.Manual
     }
   }
 
@@ -197,7 +197,7 @@ Item {
         text: qsTr( "Undo" )
         iconSource: __style.undoIcon
         onClicked: mapTool.undo()
-        enabled: root.recordingMapTool.canUndo
+        enabled: mapTool.canUndo
       }
 
       MMToolbarButton {
@@ -206,9 +206,9 @@ Item {
         onClicked: mapTool.removePoint()
 
         enabled: {
-           if ( root.recordingMapTool.recordingType !== MM.RecordingMapTool.Manual ) return false;
-           if ( root.recordingMapTool.state === MM.RecordingMapTool.View ) return false;
-           if ( __inputUtils.isEmptyGeometry( root.recordingMapTool.recordedGeometry ) ) return false;
+           if ( mapTool.recordingType !== MM.RecordingMapTool.Manual ) return false;
+           if ( mapTool.state === MM.RecordingMapTool.View ) return false;
+           if ( __inputUtils.isEmptyGeometry( mapTool.recordedGeometry ) ) return false;
 
            return true;
          }
@@ -216,7 +216,7 @@ Item {
 
       MMToolbarButton {
         text: qsTr( "Release" )
-        visible: root.recordingMapTool.state === MM.RecordingMapTool.Grab
+        visible: mapTool.state === MM.RecordingMapTool.Grab
         iconSource: __style.addIcon
         onClicked: {
           if ( mapTool.state === MM.RecordingMapTool.Grab ) {
@@ -231,8 +231,8 @@ Item {
       MMToolbarButton {
         text: qsTr( "Add" )
 
-        visible: root.recordingMapTool.state === MM.RecordingMapTool.View || root.recordingMapTool.state === MM.RecordingMapTool.Record
-        enabled: root.recordingMapTool.recordingType === MM.RecordingMapTool.Manual && root.recordingMapTool.state !== MM.RecordingMapTool.View
+        visible: mapTool.state === MM.RecordingMapTool.View || mapTool.state === MM.RecordingMapTool.Record
+        enabled: mapTool.recordingType === MM.RecordingMapTool.Manual && mapTool.state !== MM.RecordingMapTool.View
 
         iconSource: __style.addIcon
         onClicked: {
