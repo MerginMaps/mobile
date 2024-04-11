@@ -246,7 +246,7 @@ QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &
   return INVALID_DATETIME_STR;
 }
 
-void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings, double panelOffsetRatio )
+void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings )
 {
 
   if ( !mapSettings )
@@ -267,13 +267,12 @@ void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, InputMapSetti
   QgsPointXY currentExtentCenter = currentExtent.center();
   QgsPointXY featureCenter = bbox.center();
 
-  double panelOffset = ( currentExtent.yMaximum() - currentExtent.yMinimum() ) * panelOffsetRatio / 2;
   double offsetX = currentExtentCenter.x() - featureCenter.x();
   double offsetY = currentExtentCenter.y() - featureCenter.y();
   currentExtent.setXMinimum( currentExtent.xMinimum() - offsetX );
   currentExtent.setXMaximum( currentExtent.xMaximum() - offsetX );
-  currentExtent.setYMinimum( currentExtent.yMinimum() - offsetY - panelOffset );
-  currentExtent.setYMaximum( currentExtent.yMaximum() - offsetY - panelOffset );
+  currentExtent.setYMinimum( currentExtent.yMinimum() - offsetY );
+  currentExtent.setYMaximum( currentExtent.yMaximum() - offsetY );
   mapSettings->setExtent( currentExtent );
 }
 

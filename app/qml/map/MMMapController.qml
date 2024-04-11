@@ -1120,13 +1120,8 @@ Item {
     root.centeredToGPS = internal.centeredToGPSBeforeStakeout
   }
 
-  function centerToPair( pair, considerMapExtentOffset = false ) {
-    if ( considerMapExtentOffset )
-      var mapExtentOffsetRatio = mapExtentOffset / mapCanvas.height
-    else
-      mapExtentOffsetRatio = 0
-
-    __inputUtils.setExtentToFeature( pair, mapCanvas.mapSettings, mapExtentOffsetRatio )
+  function centerToPair( pair ) {
+    __inputUtils.setExtentToFeature( pair, mapCanvas.mapSettings )
   }
 
   function jumpToHighlighted( mapOffset ) {
