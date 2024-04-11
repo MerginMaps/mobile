@@ -21,6 +21,8 @@ MMComponents.MMPage {
 
   pageHeader.title: qsTr("Create Project")
 
+  pageBottomMargin: 0
+
   pageContent: Item {
 
     width: parent.width
@@ -48,7 +50,6 @@ MMComponents.MMPage {
       MMComponents.MMText {
         id: attributesLabel
 
-        height: root.rowheight
         width: parent.width
         text: qsTr("Fields")
         color: __style.nightColor
@@ -62,7 +63,7 @@ MMComponents.MMPage {
 
         model: fieldsModel
         width: parent.width
-        height: parent.height - projectNameField.height - __style.margin20 - projectNameField.height
+        height: parent.height - __style.margin20 - projectNameField.height - __style.margin20 - attributesLabel.height
         clip: true
         spacing: __style.margin20
 
@@ -93,7 +94,7 @@ MMComponents.MMPage {
           id: addButton
 
           width: ListView.view.width
-          height: root.rowHeight
+          height: implicitHeight + topPadding
 
           text: qsTr( "Add field" )
 
