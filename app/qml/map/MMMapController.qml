@@ -1188,6 +1188,8 @@ Item {
       }
 
       case "view": {
+        // While a feature is highlighted we want to keep it visible in the map extent
+        // so in that case we skip centering to position
         if ( identifyHighlight.geometry !== null )
         {
           break

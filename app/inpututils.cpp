@@ -281,7 +281,7 @@ QPointF InputUtils::geometryCenterToScreenCoordinates( const QgsGeometry &geom, 
 {
   QPointF screenPoint;
 
-  if ( geom.isNull() || !geom.constGet() )
+  if ( !mapSettings || geom.isNull() || !geom.constGet() )
     return screenPoint;
 
   QgsRectangle bbox = geom.boundingBox();
