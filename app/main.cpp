@@ -134,10 +134,6 @@
 
 #include <QQuickStyle>
 
-#ifdef QT_DEBUG
-#include <QQmlDebuggingEnabler>
-#endif
-
 #ifdef MOBILE_OS
 #include <QFile>
 #include <QDir>
@@ -391,9 +387,6 @@ int main( int argc, char *argv[] )
   QCoreApplication::setApplicationName( "Input" ); // used by QSettings
   QCoreApplication::setApplicationVersion( version );
 
-#ifdef QT_DEBUG
-  QQmlDebuggingEnabler enabler;
-#endif
 
 #ifdef INPUT_TEST
   InputTests tests;
