@@ -537,6 +537,10 @@ endif ()
 # QML
 # ########################################################################################
 
+target_compile_definitions(
+  Input PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>
+)
+
 add_subdirectory(qml)
 
 # register Singleton TODO REMOVE!

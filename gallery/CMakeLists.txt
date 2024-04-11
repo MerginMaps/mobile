@@ -97,7 +97,9 @@ set_target_properties(
 target_link_libraries(MerginMapsGallery PRIVATE Qt6::Quick Qt6::Multimedia)
 target_include_directories(MerginMapsGallery PRIVATE ${CMAKE_SOURCE_DIR} ../app ../core)
 target_compile_definitions(
-  MerginMapsGallery PRIVATE GALLERY_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
+  MerginMapsGallery
+  PRIVATE GALLERY_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
+  PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>
 )
 
 install(
