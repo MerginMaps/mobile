@@ -146,6 +146,8 @@ Control {
           iconSource: root.state === "OnServer" ? __style.downloadIcon : __style.moreVerticalIcon
           bgndColor: root.projectIsOpened ? __style.polarColor : __style.lightGreenColor
 
+          visible: !(root.state === "OnServer" && root.projectIsInSync)
+
           onClicked: {
             if ( internal.hasMoreMenu ) {
               moreMenuLoader.active = true
