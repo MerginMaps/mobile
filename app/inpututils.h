@@ -76,7 +76,13 @@ class InputUtils: public QObject
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
     Q_INVOKABLE QString formatNumber( const double number, int precision = 1 );
     Q_INVOKABLE QString formatDistanceInProjectUnit( const double distanceInMeters, int precision = 1, Qgis::DistanceUnit destUnit = Qgis::DistanceUnit::Unknown );
-    Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings, double panelOffsetRatio );
+    Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings );
+
+    /**
+     * Returns the screen coordinates for a geometry's bounding box centroid
+     * Geometry must be in canvas CRS
+     */
+    Q_INVOKABLE QPointF geometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings );
 
     // utility functions to extract information from map settings
     // (in theory this data should be directly available from .MapTransform
