@@ -14,7 +14,9 @@ import "../components"
 
 /*
  * Common text input to use in the app.
- * Disabled state can be achieved by setting `enabled: false`.
+ *
+ * Disabled state can be achieved by setting `enabled: false`
+ * ReadOnly state can be achieved by setting `readOnly: true`
  *
  * See MMBaseInput for more properties.
  */
@@ -25,7 +27,7 @@ MMBaseInput {
   property bool showClearIcon: true
   property alias text: textField.text
   property alias placeholderText: textField.placeholderText
-
+  property alias readOnly: textField.readOnly
   property alias textFieldComponent: textField
 
   signal textEdited( string text )
@@ -38,7 +40,7 @@ MMBaseInput {
     anchors.fill: parent
 
     placeholderTextColor: __style.nightAlphaColor
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+    color: root.enabled && !readOnly ? __style.nightColor : __style.mediumGreenColor
 
     font: __style.p5
     hoverEnabled: true
@@ -57,7 +59,7 @@ MMBaseInput {
 
     size: __style.icon24
     source: __style.closeIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    color: root.enabled && !readOnly ? __style.forestColor : __style.mediumGreenColor
     visible: root.showClearIcon && textField.activeFocus && textField.text.length > 0
   }
 
