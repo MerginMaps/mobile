@@ -118,11 +118,18 @@ MMFormPhotoViewer {
     property string imagePath
 
     onDeleteImage: {
+      // schedule the image for deletion
       internal.imageSourceToDelete = imageDeleteDialog.imagePath
-      root.editorValueChanged( "", false ) // Shouldn't this be true?
+      resetValueAndClose()
     }
-    onKeepImage: {
-      root.editorValueChanged( "", false ) // Shouldn't this be true?
+
+    onUnlinkImage: resetValueAndClose()
+
+    function resetValueAndClose() {
+      root.editorValueChanged( "", true )
+
+      imagePath = ""
+      close()
     }
   }
 
@@ -146,6 +153,17 @@ MMFormPhotoViewer {
         internal.imageCaptured( imagePath )
       }
     }
+  }
+
+  function callbackOnFormSaved() {
+    if ( internal.imageSourceToDelete ) {
+      __inputUtils.removeFile( internal.imageSourceToDelete )
+      internal.imageSourceToDelete = ""
+    }
+  }
+
+  function callbackOnFormCanceled() {
+    internal.imageSourceToDelete = ""
   }
 
   QtObject {
@@ -182,19 +200,10 @@ MMFormPhotoViewer {
 
     property string imageSourceToDelete // used to postpone image deletion to when the form is saved
 
-    function callbackOnFormSaved() {
-      __inputUtils.removeFile( imageSourceToDelete )
-      imageSourceToDelete = ""
-    }
-
-    function callbackOnFormCanceled() {
-      imageSourceToDelete = ""
-    }
-
     function calculateAbsoluteImagePath() {
       let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
 
-      if ( root.photoComponent.status === Image.Error ) { // <--- this looks dodgy to calculate it from the image.status
+      if ( root.photoComponent.status === Image.Error ) {
         root.state = "notAvailable"
         absoluteImagePath = ""
         return
@@ -270,7 +279,7 @@ MMFormPhotoViewer {
         imageDeleteDialog.open()
       }
       else {
-        root.editorValueChanged( "", false )
+        root.editorValueChanged( "", true )
       }
     }
 

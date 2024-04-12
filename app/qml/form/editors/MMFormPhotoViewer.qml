@@ -23,11 +23,6 @@ import "../../inputs"
 MMBaseInput {
   id: root
 
-  // TODO:
-  // - handle "photo notAvailable" state
-  // - handle empty state - add "capture photo" and "choose from gallery" signals
-  // - scale images well - based on the root.size
-
   property url photoUrl: ""
   property bool hasCameraCapability: true
 
@@ -92,7 +87,7 @@ MMBaseInput {
         bgndColor: __style.negativeColor
         iconSource: __style.deleteIcon
         iconColor: __style.grapeColor
-        visible: root.allowEditing && photo.status === Image.Ready
+        visible: root.allowEditing && root.state !== "notSet"
         onClicked: root.trashClicked()
       }
     }
