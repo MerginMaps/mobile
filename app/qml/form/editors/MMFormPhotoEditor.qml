@@ -148,6 +148,17 @@ MMFormPhotoViewer {
     }
   }
 
+  function callbackOnFormSaved() {
+    if ( internal.imageSourceToDelete ) {
+      __inputUtils.removeFile( internal.imageSourceToDelete )
+      internal.imageSourceToDelete = ""
+    }
+  }
+
+  function callbackOnFormCanceled() {
+    internal.imageSourceToDelete = ""
+  }
+
   QtObject {
     id: internal
     //! This object is a combination of previous "ExternalResourceBundle" and some functions from "inputexternalresource" editor
@@ -181,15 +192,6 @@ MMFormPhotoViewer {
     property string absoluteImagePath
 
     property string imageSourceToDelete // used to postpone image deletion to when the form is saved
-
-    function callbackOnFormSaved() {
-      __inputUtils.removeFile( imageSourceToDelete )
-      imageSourceToDelete = ""
-    }
-
-    function callbackOnFormCanceled() {
-      imageSourceToDelete = ""
-    }
 
     function calculateAbsoluteImagePath() {
       let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
