@@ -23,7 +23,7 @@ jobs:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-13
     env:
-      QT_VERSION: '6.6.0' # use scripts/update_qt_version.bash to change
+      QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
       NDK_VERSION: r25
       NDK_VERSION_FULL: r25b
       JDK_VERSION: 11

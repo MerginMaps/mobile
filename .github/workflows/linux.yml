@@ -18,7 +18,7 @@ on:
 env:
   CCACHE_DIR: ~/.ccache
   INPUT_SDK_VERSION: x64-linux-20240405-176
-  QT_VERSION: '6.6.0' # use scripts/update_qt_version.bash to change
+  QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
   CACHE_VERSION: 3
       
 concurrency:
