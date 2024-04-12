@@ -118,11 +118,18 @@ MMFormPhotoViewer {
     property string imagePath
 
     onDeleteImage: {
+      // schedule the image for deletion
       internal.imageSourceToDelete = imageDeleteDialog.imagePath
-      root.editorValueChanged( "", false ) // Shouldn't this be true?
+      resetValueAndClose()
     }
-    onKeepImage: {
-      root.editorValueChanged( "", false ) // Shouldn't this be true?
+
+    onUnlinkImage: resetValueAndClose()
+
+    function resetValueAndClose() {
+      root.editorValueChanged( "", true )
+
+      imagePath = ""
+      close()
     }
   }
 

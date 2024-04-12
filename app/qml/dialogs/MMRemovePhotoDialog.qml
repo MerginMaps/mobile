@@ -15,23 +15,30 @@ MMDrawerDialog {
   id: root
 
   signal deleteImage()
-  signal keepImage()
+  signal unlinkImage()
 
   property string imagePath
 
   imageSource: __style.negativeMMSymbolImage
-  title: qsTr( "Remove photo reference" )
-  description: qsTr( "Also permanently delete photo from device?" )
-  primaryButton.text: qsTr( "Yes, I want to delete" )
-  secondaryButton.text: qsTr( "No, thanks" )
+  title: qsTr( "Delete photo?" )
+  description: qsTr( "Would you like to delete or unlink the photo? Deleting removes the photo from your project entirely, while unlinking keeps the photo in your project but removes it from this specific feature." )
 
-  onPrimaryButtonClicked: {
-    root.deleteImage()
-    close()
+  primaryButton {
+    text: qsTr( "Delete photo" )
+
+    fontColor: __style.grapeColor
+    bgndColor: __style.negativeColor
+    fontColorHover: __style.negativeColor
+    bgndColorHover: __style.grapeColor
   }
 
-  onSecondaryButtonClicked: {
-    root.keepImage()
-    close()
+  secondaryButton {
+    text: qsTr( "Unlink photo" )
+
+    fontColor: __style.grapeColor
+    fontColorHover: __style.negativeColor
   }
+
+  onPrimaryButtonClicked: root.deleteImage()
+  onSecondaryButtonClicked: root.unlinkImage()
 }
