@@ -496,7 +496,7 @@ ApplicationWindow {
   MMMapThemeDrawer {
     id: mapThemesPanel
 
-    height: ( window.height / 2 )
+    maxHeight: ( window.height / 2 )
     width: window.width
     edge: Qt.BottomEdge
 
