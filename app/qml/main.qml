@@ -221,7 +221,7 @@ ApplicationWindow {
 
     onLocalChangesPanelRequested: {
       stateManager.state = "projects"
-      projectController.openChangesPanel( __activeProject.projectFullName() )
+      projectController.openChangesPanel( __activeProject.projectFullName(), true )
     }
 
     onOpenTrackingPanel: {
@@ -344,7 +344,7 @@ ApplicationWindow {
         iconSource: __style.localChangesIcon
         onClicked: {
           stateManager.state = "projects"
-          projectController.openChangesPanel( __activeProject.projectFullName() )
+          projectController.openChangesPanel( __activeProject.projectFullName(), true )
         }
       }
 

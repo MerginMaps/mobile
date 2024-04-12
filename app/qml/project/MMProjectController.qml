@@ -68,13 +68,13 @@ Item {
     accountController.start()
   }
 
-  function openChangesPanel( projectId )
+  function openChangesPanel( projectId, closeOnBack )
   {
-    stackView.push( statusPageComp, {hasChanges: __merginProjectStatusModel.loadProjectInfo( projectId )} )
-  }
-
-  function showChanges( projectId ) {
-    root.openChangesPanel( projectId )
+    stackView.push( statusPageComp, {
+                     hasChanges: __merginProjectStatusModel.loadProjectInfo( projectId ),
+                     closeOnBack: closeOnBack
+                   }
+    )
   }
 
   function showSelectWorkspacePage() {
@@ -295,7 +295,7 @@ Item {
               setupProjectOpen( projectFilePath )
             }
             onShowLocalChangesRequested: function( projectId ) {
-              showChanges( projectId )
+              root.openChangesPanel( projectId, false )
             }
             list.onActiveProjectDeleted: setupProjectOpen( "" )
 
@@ -329,7 +329,7 @@ Item {
               setupProjectOpen( projectFilePath )
             }
             onShowLocalChangesRequested: function( projectId ) {
-              showChanges( projectId )
+              root.openChangesPanel( projectId, false )
             }
             list.onActiveProjectDeleted: setupProjectOpen( "" )
           }
@@ -345,7 +345,7 @@ Item {
               setupProjectOpen( projectFilePath )
             }
             onShowLocalChangesRequested: function( projectId ) {
-              showChanges( projectId )
+              root.openChangesPanel( projectId, false )
             }
             list.onActiveProjectDeleted: function() {
               setupProjectOpen( "" )
@@ -484,9 +484,21 @@ Item {
     id: statusPageComp
     MMProjectStatusPage {
       id: statusPage
+
+      // Close project controller when back is clicked
+      // e.g. when project changes are requested from
+      // map view
+      property bool closeOnBack: false
+
       height: root.height
       width: root.width
-      onBack: stackView.popOnePageOrClose()
+      onBack: {
+        if (closeOnBack) {
+          root.hidePanel()
+        } else {
+          stackView.popOnePageOrClose()
+        }
+      }
     }
   }
 

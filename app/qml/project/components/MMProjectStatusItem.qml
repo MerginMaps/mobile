@@ -51,6 +51,7 @@ Rectangle {
       text: internal.text
       font: __style.t4
       color: internal.fgColor
+      elide: Text.ElideMiddle
       Layout.fillWidth: true
     }
 
