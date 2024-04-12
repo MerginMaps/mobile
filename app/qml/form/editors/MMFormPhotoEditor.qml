@@ -203,7 +203,7 @@ MMFormPhotoViewer {
     function calculateAbsoluteImagePath() {
       let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
 
-      if ( root.photoComponent.status === Image.Error ) { // <--- this looks dodgy to calculate it from the image.status
+      if ( root.photoComponent.status === Image.Error ) {
         root.state = "notAvailable"
         absoluteImagePath = ""
         return
@@ -279,7 +279,7 @@ MMFormPhotoViewer {
         imageDeleteDialog.open()
       }
       else {
-        root.editorValueChanged( "", false )
+        root.editorValueChanged( "", true )
       }
     }
 
