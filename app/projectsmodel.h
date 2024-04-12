@@ -61,7 +61,8 @@ class ProjectsModel : public QAbstractListModel
       ProjectStatus,
       ProjectSyncPending,
       ProjectSyncProgress,
-      ProjectRemoteError
+      ProjectRemoteError,
+      ProjectIsActiveProject
     };
     Q_ENUM( Roles )
 
@@ -102,6 +103,9 @@ class ProjectsModel : public QAbstractListModel
     //! Indicates that model is currently processing projects, filling its storage.
     //! Models loading starts when listProjectsAPI is sent and finishes after endResetModel signal is emitted when projects are merged.
     Q_PROPERTY( bool isLoading READ isLoading NOTIFY isLoadingChanged )
+
+    //! Use to store the active project id in the model, so that Roles::ProjectIsActiveProject can be used
+    Q_PROPERTY( QString activeProjectId READ activeProjectId WRITE setActiveProjectId NOTIFY activeProjectIdChanged )
 
     // Needed methods from QAbstractListModel
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
@@ -144,6 +148,8 @@ class ProjectsModel : public QAbstractListModel
     LocalProjectsManager *localProjectsManager() const;
     ProjectsModel::ProjectModelTypes modelType() const;
 
+    QString activeProjectId() const;
+
     bool isLoading() const;
     bool hasMoreProjects() const;
 
@@ -173,6 +179,8 @@ class ProjectsModel : public QAbstractListModel
     void setSyncManager( SynchronizationManager *newSyncManager );
     void setLocalProjectsManager( LocalProjectsManager *localProjectsManager );
 
+    void setActiveProjectId( const QString &projectId );
+
   signals:
     void modelInitialized();
     void hasMoreProjectsChanged();
@@ -183,6 +191,8 @@ class ProjectsModel : public QAbstractListModel
     void modelTypeChanged( ProjectModelTypes type );
     void syncManagerChanged( SynchronizationManager *syncManager );
     void localProjectsManagerChanged( LocalProjectsManager *projectsManager );
+
+    void activeProjectIdChanged( QString projectId );
 
   private:
 
@@ -212,6 +222,8 @@ class ProjectsModel : public QAbstractListModel
     MerginApi *mBackend = nullptr; // not owned
     LocalProjectsManager *mLocalProjectsManager = nullptr; // not owned
     SynchronizationManager *mSyncManager = nullptr; // not owned
+
+    QString mActiveProjectId;
 };
 
 #endif // PROJECTSMODEL_H
