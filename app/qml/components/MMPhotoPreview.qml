@@ -38,7 +38,7 @@ Popup {
 
       height: root.height / 2
 
-      autoTransform: true;
+      autoTransform: true
       focus: true
       asynchronous: true
       fillMode: Image.PreserveAspectFit
