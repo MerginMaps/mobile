@@ -26,10 +26,11 @@ jobs:
     
     env:
       QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
-      INPUT_SDK_VERSION: x64-windows-20240405-223
+      INPUT_SDK_VERSION: x64-windows-20240415-228
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
-      CACHE_VERSION: 2
+      CACHE_VERSION: 0
       VS_VERSION: "2019"
+      CMAKE_VERSION: '3.29.0'
       QT_ARCH: "win64_msvc2019_64"
       
     steps:
@@ -45,7 +46,12 @@ jobs:
           WORKSPACE_DIR=$(cygpath -m "${{ github.workspace }}")
           echo "WORKSPACE_DIR=$WORKSPACE_DIR" >> $GITHUB_OUTPUT
           echo "WORKSPACE_DIR: $WORKSPACE_DIR"
-          
+
+      - name: Install CMake and Ninja
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: ${{ env.CMAKE_VERSION }}
+                    
       - name: Install ccache
         shell: cmd
         run: |

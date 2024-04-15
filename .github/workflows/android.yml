@@ -29,11 +29,12 @@ jobs:
       JDK_VERSION: 11
       SDK_PLATFORM: android-33
       SDK_BUILD_TOOLS: 33.0.1
-      INPUT_SDK_VERSION_ARM: arm-android-20240405-212
-      INPUT_SDK_VERSION_ARM64: arm64-android-20240405-212
+      INPUT_SDK_VERSION_ARM: arm-android-20240415-218
+      INPUT_SDK_VERSION_ARM64: arm64-android-20240415-218
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-      CACHE_VERSION: 4
+      CACHE_VERSION: 0
+      CMAKE_VERSION: '3.29.0'
       QT_ANDROID_KEYSTORE_ALIAS: input
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
@@ -80,32 +81,8 @@ jobs:
 
       - name: Install Build Dependencies
         run: |
-          # FIXME: We should not need to do this, but there are currently some complications with Github CI.
-          # See https://github.com/actions/runner-images/issues/4020.
-          # See https://github.com/actions/runner-images/issues/8838.
-
-          rm -f '/usr/local/bin/2to3'
-          rm -f '/usr/local/bin/2to3-3.11'
-          rm -f '/usr/local/bin/2to3-3.12'
-          rm -f '/usr/local/bin/idle3'
-          rm -f '/usr/local/bin/idle3.11'
-          rm -f '/usr/local/bin/idle3.12'
-          rm -f '/usr/local/bin/pydoc3'
-          rm -f '/usr/local/bin/pydoc3.11'
-          rm -f '/usr/local/bin/pydoc3.12'
-          rm -f '/usr/local/bin/python3'
-          rm -f '/usr/local/bin/python3-config'
-          rm -f '/usr/local/bin/python3.11'
-          rm -f '/usr/local/bin/python3.12'
-          rm -f '/usr/local/bin/python3.11-config'
-          rm -f '/usr/local/bin/python3.12-config'
-
-          brew install pipx
-          pipx install aqtinstall
-
-          #pip3 install -U pip
-          #pip3 install aqtinstall
-          # end of hotfix
+          pip3 install -U pip
+          pip3 install aqtinstall
           
           brew install gnupg
           brew install openssl@1.1
@@ -123,6 +100,12 @@ jobs:
           echo "GIT_BRANCH: $GIT_BRANCH"
           echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
           echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
+
+
+      - name: Install CMake and Ninja
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: ${{ env.CMAKE_VERSION }}
 
       - name: Cache Qt
         id: cache-qt
