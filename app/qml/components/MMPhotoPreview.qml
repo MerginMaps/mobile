@@ -22,7 +22,7 @@ Popup {
   closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
   background: Rectangle {
-    color: Qt.alpha(__style.nightAlphaColor, 0.9)
+    color: Qt.alpha(__style.darkGreyColor, 0.9)
   }
 
   Item {

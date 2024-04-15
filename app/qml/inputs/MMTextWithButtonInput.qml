@@ -39,7 +39,7 @@ MMBaseInput {
     width: parent.width + rightButton.x
 
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
-    placeholderTextColor: __style.nightAlphaColor
+    placeholderTextColor: __style.darkGreyColor
     font: __style.p5
     hoverEnabled: true
 

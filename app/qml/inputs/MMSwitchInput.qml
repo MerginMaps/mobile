@@ -32,7 +32,7 @@ MMBaseInput {
     anchors.fill: parent
 
     readOnly: true
-    placeholderTextColor: __style.nightAlphaColor
+    placeholderTextColor: __style.darkGreyColor
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
 
     font: __style.p5

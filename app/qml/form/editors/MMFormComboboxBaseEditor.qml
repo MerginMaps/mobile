@@ -44,7 +44,7 @@ MMInputs.MMBaseInput {
     readOnly: true
 
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
-    placeholderTextColor: __style.nightAlphaColor
+    placeholderTextColor: __style.darkGreyColor
 
     font: __style.p5
     hoverEnabled: true

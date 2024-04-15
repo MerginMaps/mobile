@@ -27,7 +27,7 @@ MMBaseInput {
     anchors.verticalCenter: parent.verticalCenter
 
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
-    placeholderTextColor: __style.nightAlphaColor
+    placeholderTextColor: __style.darkGreyColor
     font: __style.p5
     hoverEnabled: true
     echoMode: eyeButton.pressed ? TextInput.Normal : TextInput.Password

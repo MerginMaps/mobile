@@ -80,7 +80,7 @@ MMBaseInput {
     textFormat: root._fieldConfig['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
 
     hoverEnabled: true
-    placeholderTextColor: __style.nightAlphaColor
+    placeholderTextColor: __style.darkGreyColor
     color: __style.nightColor
 
     font: __style.p5

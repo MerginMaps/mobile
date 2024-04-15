@@ -78,11 +78,11 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor positiveColor READ positiveColor CONSTANT )
     Q_PROPERTY( QColor warningColor READ warningColor CONSTANT )
     Q_PROPERTY( QColor negativeColor READ negativeColor CONSTANT )
+    Q_PROPERTY( QColor negativeLightColor READ negativeLightColor CONSTANT )
+    Q_PROPERTY( QColor negativeUltraLightColor READ negativeUltraLightColor CONSTANT )
     Q_PROPERTY( QColor informativeColor READ informativeColor CONSTANT )
 
     // Colors - others
-    Q_PROPERTY( QColor nightAlphaColor READ nightAlphaColor CONSTANT ) // placeholder input color
-    Q_PROPERTY( QColor errorBgInputColor READ errorBgInputColor CONSTANT ) // error bg input color
     Q_PROPERTY( QColor shadowColor READ shadowColor CONSTANT )
     Q_PROPERTY( QColor snappingColor READ snappingColor CONSTANT )
 
@@ -295,6 +295,8 @@ class MMStyle: public QObject
     Q_PROPERTY( double radius20 READ number20 CONSTANT )
     Q_PROPERTY( double radius30 READ number30 CONSTANT )
     Q_PROPERTY( double radius40 READ number40 CONSTANT )
+    Q_PROPERTY( double width1 READ number1 CONSTANT )
+    Q_PROPERTY( double width2 READ number2 CONSTANT )
     Q_PROPERTY( double scrollVelocityAndroid READ scrollVelocityAndroid CONSTANT ) // [px/s] scrolling on Android devices is too slow by default
 
     // Breakpoint we use in some screens to differentiate mobile landscape
@@ -352,11 +354,11 @@ class MMStyle: public QObject
     QColor positiveColor() {return QColor::fromString( "#C0EBCF" );}
     QColor warningColor() {return QColor::fromString( "#F7DDAF" );}
     QColor negativeColor() {return QColor::fromString( "#F0C4BC" );}
+    QColor negativeLightColor() {return QColor::fromString( "#FFF0ED" );}
+    QColor negativeUltraLightColor() {return QColor::fromString( "#FEFAF9" );}
     QColor informativeColor() {return QColor::fromString( "#BEDAF0" );}
     QColor snappingColor() {return QColor::fromString( "#BD74FF" );}
 
-    QColor nightAlphaColor() {return QColor::fromString( "#AA12181F" );}
-    QColor errorBgInputColor() {return QColor::fromString( "#FEFAF9" );}
     QColor shadowColor() {return QColor::fromString( "#66777777" );}
 
     QUrl splitGeometryIcon() {return QUrl( "qrc:/SplitGeometry.svg" );}

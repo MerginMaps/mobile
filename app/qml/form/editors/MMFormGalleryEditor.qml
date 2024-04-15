@@ -131,7 +131,7 @@ Item {
           radius: 20 * __dp
           border.width: 2 * __dp
           border.color: root.errorMsg.length > 0 ? __style.negativeColor : root.warningMsg.length > 0 ? __style.warningColor : __style.polarColor
-          color: (root.errorMsg.length > 0 || root.warningMsg.length > 0) ? __style.errorBgInputColor : __style.polarColor
+          color: (root.errorMsg.length > 0 || root.warningMsg.length > 0) ? __style.negativeUltraLightColor : __style.polarColor
 
           MMIcon {
             anchors.centerIn: parent
