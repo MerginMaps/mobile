@@ -39,12 +39,12 @@ ProjectsModel *ProjectsProxyModel::projectSourceModel() const
 
 void ProjectsProxyModel::setactiveProjectAlwaysFirst( bool value )
 {
-  mactiveProjectAlwaysFirst = value;
+  mActiveProjectAlwaysFirst = value;
 }
 
 bool ProjectsProxyModel::activeProjectAlwaysFirst() const
 {
-  return mactiveProjectAlwaysFirst;
+  return mActiveProjectAlwaysFirst;
 }
 
 void ProjectsProxyModel::setSearchExpression( QString searchExpression )
@@ -70,7 +70,7 @@ bool ProjectsProxyModel::lessThan( const QModelIndex &left, const QModelIndex &r
 {
   if ( mModelType == ProjectsModel::LocalProjectsModel )
   {
-    if ( mactiveProjectAlwaysFirst )
+    if ( mActiveProjectAlwaysFirst )
     {
       bool lProjectIsActive = mModel->data( left, ProjectsModel::ProjectIsActiveProject ).toBool();
       bool rProjectIsActive = mModel->data( right, ProjectsModel::ProjectIsActiveProject ).toBool();

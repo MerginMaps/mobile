@@ -32,7 +32,7 @@ Item {
     projectlist.refreshProjectList( searchBar.text )
   }
 
-  property int spacing: 10 * __dp
+  property int spacing: __style.margin12
 
   MMSearchInput {
     id: searchBar
@@ -113,7 +113,7 @@ Item {
         return searchBar.bottom
       }
       bottom: parent.bottom
-      topMargin: root.spacing
+      topMargin: __style.margin20
     }
 
     activeProjectAlwaysFirst: true
@@ -124,10 +124,10 @@ Item {
       criteria: ViewSection.FullString
       delegate: Column {
         width: ListView.view.width
+        spacing: __style.margin6
 
-        Text {
+        MMText {
           width: parent.width
-          height: 31 * __dp
           text: section === "true" ? qsTr("Currently open") : qsTr("Downloaded projects")
           font: __style.p6
           color: __style.nightColor
@@ -138,7 +138,7 @@ Item {
 
         MMLine {}
 
-        Item { width: 1; height: 20 * __dp }
+        Item { width: 1; height: __style.margin14 }
 
         }
     }
