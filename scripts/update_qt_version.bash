@@ -45,7 +45,7 @@ for FNAME in \
 do
     echo "patching $FNAME"
     # e.g. QT_VERSION: '6.5.2'
-    sed -i.orig -E "s|QT_VERSION: \'[0-9]+.[0-9]+.[0-9]+\'|QT_VERSION: \'${VERSION}\'|g" $FNAME
+    sed -i.orig -E "s|QT_VERSION: '[0-9]+.[0-9]+.[0-9]+'|QT_VERSION: '${VERSION}'|g" $FNAME
     rm -f $FNAME.orig
 done
 
