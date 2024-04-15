@@ -186,6 +186,14 @@ Page {
           removeReceiverDialog.open( testModelItem.providerId )
         }
       }
+
+      Button {
+        text: "welcomeToNewDesignDialog"
+
+        onClicked: {
+          welcomeToNewDesignDialog.open()
+        }
+      }
     }
   }
 
@@ -354,5 +362,9 @@ Page {
       this.providerId = providerId
       visible = true
     }
+  }
+
+  MMWelcomeToNewDesignDialog {
+    id: welcomeToNewDesignDialog
   }
 }
