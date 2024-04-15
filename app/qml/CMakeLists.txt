@@ -51,6 +51,7 @@ set(MM_QML
     components/MMText.qml
     components/MMToolbar.qml
     components/MMToolbarButton.qml
+    components/private/MMBaseInput.qml
     components/private/MMToolbarLongButton.qml
     components/private/MMToolbarShortButton.qml
     dialogs/MMCloseAccountDialog.qml
