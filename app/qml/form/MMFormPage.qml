@@ -109,7 +109,7 @@ Page {
       id: tabBar
 
       Layout.alignment: Qt.AlignHCenter
-      Layout.maximumWidth: __style.maxPageWidth
+      Layout.maximumWidth: Math.min(__style.maxPageWidth, root.width)
 
       visible: root.controller.hasTabs
 
