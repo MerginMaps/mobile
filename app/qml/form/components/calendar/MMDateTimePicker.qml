@@ -39,7 +39,7 @@ Item {
   Column {
     id: mainColumn
 
-    width: root.width - 40 * __dp
+    width: root.width
     spacing: 20 * __dp
     topPadding: 10 * __dp
 

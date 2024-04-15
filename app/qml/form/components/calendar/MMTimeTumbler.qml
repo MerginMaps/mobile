@@ -12,7 +12,7 @@ import QtQuick.Controls
 
 import "../../../components" as MMComponents
 
-Item {
+MMComponents.MMPopup {
   id: root
 
   width: row.width + 40 * __dp
@@ -23,58 +23,40 @@ Item {
   property alias seconds: secondsTumbler.currentIndex
   property bool showSeconds: false
 
-  Rectangle {
+  contentItem: Item {
     width: parent.width
     height: parent.height
-    anchors.horizontalCenter: parent.horizontalCenter
 
-    color: __style.polarColor
-    radius: 20 * __dp
+    Rectangle {
+      anchors.centerIn: parent
 
-    layer.enabled: true
-    layer.effect: MMComponents.MMShadow {
-      radius: 20 * __dp
+      width: parent.width - 24 * __dp
+      height: 54 * __dp
+      radius: 8 * __dp
+
+      color: __style.lightGreenColor
     }
 
-    MouseArea {
-      anchors.fill: parent
-    }
-  }
+    Row {
+      id: row
 
-  Rectangle {
-    anchors {
-      left: parent.left
-      leftMargin: 12 * __dp
-      right: parent.right
-      rightMargin: 12 * __dp
-      verticalCenter: parent.verticalCenter
-    }
+      anchors.centerIn: parent
 
-    height: 54 * __dp
-    radius: 8 * __dp
+      MMTumbler {
+        id: hoursTumbler
+        model: 24
+      }
 
-    color: __style.lightGreenColor
-  }
+      MMTumbler {
+        id: minutesTumbler
+        model: 60
+      }
 
-  Row {
-    id: row
-
-    anchors.horizontalCenter: parent.horizontalCenter
-
-    MMTumbler {
-      id: hoursTumbler
-      model: 24
-    }
-
-    MMTumbler {
-      id: minutesTumbler
-      model: 60
-    }
-
-    MMTumbler {
-      id: secondsTumbler
-      model: 60
-      visible: root.showSeconds
+      MMTumbler {
+        id: secondsTumbler
+        model: 60
+        visible: root.showSeconds
+      }
     }
   }
 }

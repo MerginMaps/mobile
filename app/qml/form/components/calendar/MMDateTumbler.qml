@@ -12,7 +12,7 @@ import QtQuick.Controls
 
 import "../../../components" as MMComponents
 
-Item {
+MMComponents.MMPopup {
   id: root
 
   width: row.width + 40 * __dp
@@ -26,62 +26,6 @@ Item {
   readonly property int calendarYearFrom: 1900
   readonly property int calendarYearTo: 2050
 
-  Rectangle {
-    width: parent.width
-    height: parent.height
-    anchors.horizontalCenter: parent.horizontalCenter
-
-    color: __style.polarColor
-    radius: 20 * __dp
-
-    layer.enabled: true
-    layer.effect: MMComponents.MMShadow {
-      radius: 20 * __dp
-    }
-
-    MouseArea {
-      anchors.fill: parent
-    }
-  }
-
-  Rectangle {
-    anchors {
-      left: parent.left
-      leftMargin: 12 * __dp
-      right: parent.right
-      rightMargin: 12 * __dp
-      verticalCenter: parent.verticalCenter
-    }
-
-    height: 54 * __dp
-    radius: 8 * __dp
-
-    color: __style.lightGreenColor
-  }
-
-  Row {
-    id: row
-
-    anchors.horizontalCenter: parent.horizontalCenter
-
-    MMTumbler {
-      id: monthsTumbler
-
-      model: root.monthList()
-      currentIndex: root.initMonthIndex
-      width: 120 * __dp
-      onCurrentIndexChanged: root.monthIndexChanged(currentIndex)
-    }
-
-    MMTumbler {
-      id: yearsTumble
-
-      model: root.yearList()
-      currentIndex: root.initYear - root.calendarYearFrom
-      onCurrentItemChanged: root.yearChanged(parseInt(currentItem.text))
-    }
-  }
-
   function monthList() {
     const monthList = Array(12).keys();
     const getMonthName = (monthIndex) => Qt.locale().monthName(monthIndex)
@@ -93,5 +37,43 @@ Item {
     for (var i = root.calendarYearFrom; i <= root.calendarYearTo; ++i)
       years.push(i)
     return years
+  }
+
+  contentItem: Item {
+    width: parent.width
+    height: parent.height
+
+    Rectangle {
+      anchors.centerIn: parent
+
+      width: parent.width - 24 * __dp
+      height: 54 * __dp
+      radius: 8 * __dp
+
+      color: __style.lightGreenColor
+    }
+
+    Row {
+      id: row
+
+      anchors.centerIn: parent
+
+      MMTumbler {
+        id: monthsTumbler
+
+        model: root.monthList()
+        currentIndex: root.initMonthIndex
+        width: 120 * __dp
+        onCurrentIndexChanged: root.monthIndexChanged(currentIndex)
+      }
+
+      MMTumbler {
+        id: yearsTumble
+
+        model: root.yearList()
+        currentIndex: root.initYear - root.calendarYearFrom
+        onCurrentItemChanged: root.yearChanged(parseInt(currentItem.text))
+      }
+    }
   }
 }

@@ -17,7 +17,7 @@ import "./calendar"
 MMComponents.MMDrawer {
   id: root
 
-  property alias title: title.text
+  property string title
   property alias dateTime: dateTimePicker.dateToSelect
   property alias hasDatePicker: dateTimePicker.hasDatePicker
   property alias hasTimePicker: dateTimePicker.hasTimePicker
@@ -25,54 +25,43 @@ MMComponents.MMDrawer {
 
   signal primaryButtonClicked
 
-  height: mainColumn.height
   dim: true
 
-  drawerContent: Rectangle {
-    id: roundedRect
+  drawerHeader.title: root.title
 
-    anchors.fill: parent
-    color: __style.polarColor
+  drawerContent: Item {
+      width: parent.width
+      height: scrollView.height
 
-    Column {
-      id: mainColumn
+      MMComponents.MMScrollView {
+      id: scrollView
 
       width: parent.width
-      spacing: __style.spacing20
-      topPadding: __style.pageMargins
-      leftPadding: __style.pageMargins
-      rightPadding: __style.pageMargins
-      bottomPadding: __style.pageMargins
+      height: root.maxHeightHit ? root.drawerContentAvailableHeight : contentHeight
 
-      Text {
-        id: title
-
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.width - mainColumn.leftPadding - mainColumn.rightPadding - 2 * parent.spacing
-        horizontalAlignment: Text.AlignHCenter
-        wrapMode: Text.WordWrap
-        font: __style.t2
-        color: __style.forestColor
-      }
-
-      MMDateTimePicker {
-        id: dateTimePicker
-
+      Column {
         width: parent.width
-        showSeconds: root.showSeconds
-      }
+        spacing: __style.spacing20
 
-      MMComponents.MMButton {
-        id: primaryButton
+        MMDateTimePicker {
+          id: dateTimePicker
 
-        width: parent.width - 2 * parent.spacing
-        visible: text.length > 0
-        text: qsTr("Confirm")
+          width: parent.width
+          showSeconds: root.showSeconds
+        }
 
-        onClicked: {
-          dateTimePicker.visible = false
-          primaryButtonClicked()
-          close()
+        MMComponents.MMButton {
+          id: primaryButton
+
+          width: parent.width
+          visible: text.length > 0
+          text: qsTr("Confirm")
+
+          onClicked: {
+            dateTimePicker.visible = false
+            primaryButtonClicked()
+            close()
+          }
         }
       }
     }

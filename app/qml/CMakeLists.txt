@@ -39,6 +39,7 @@ set(MM_QML
     components/MMNotificationView.qml
     components/MMPage.qml
     components/MMPageHeader.qml
+    components/MMPopup.qml
     components/MMPhoto.qml
     components/MMPhotoAttachment.qml
     components/MMPhotoPreview.qml
