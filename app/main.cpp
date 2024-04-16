@@ -719,6 +719,20 @@ int main( int argc, char *argv[] )
 #endif
   engine.rootContext()->setContextProperty( "__use_simulated_position", use_simulated_position );
 
+  // show "new look and feel" welcome dialog on start?
+  QString lastAppVersion = as.appVersion();
+  bool showWelcomeToNewDesignDialog = false;
+  if ( !lastAppVersion.isEmpty() )  // this is not a first run?
+  {
+    int dotPos = lastAppVersion.indexOf( '.' );
+    if ( dotPos >= 0 && lastAppVersion.left( dotPos ).toInt() < 2024 )
+    {
+      // only show if previously we were on 2.x version, and now we're on 2024.x.y with the new design
+      showWelcomeToNewDesignDialog = true;
+    }
+  }
+  engine.rootContext()->setContextProperty( "__showWelcomeToNewDesignDialog", showWelcomeToNewDesignDialog );
+
   QQmlComponent component( &engine, QUrl( "qrc:/com.merginmaps/imports/MMInput/main.qml" ) );
   QObject *object = component.create();
 

@@ -773,6 +773,15 @@ ApplicationWindow {
     }
   }
 
+  MMWelcomeToNewDesignDialog {
+    id: welcomeToNewDesignDialog
+
+    Component.onCompleted: {
+      if ( __showWelcomeToNewDesignDialog )
+        open()
+    }
+  }
+
   Connections {
     target: __syncManager
     enabled: stateManager.state === "map"
