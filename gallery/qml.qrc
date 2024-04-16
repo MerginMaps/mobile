@@ -49,6 +49,7 @@
         <file>../app/qml/components/MMNotificationView.qml</file>
         <file>../app/qml/components/MMDrawerDialog.qml</file>
         <file>../app/qml/components/MMProgressBar.qml</file>
+        <file>../app/qml/components/MMPopup.qml</file>
         <file>../app/qml/components/MMShadow.qml</file>
         <file>../app/qml/components/MMToolbarButton.qml</file>
         <file>../app/qml/components/MMBadge.qml</file>

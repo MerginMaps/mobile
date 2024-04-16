@@ -272,8 +272,10 @@ class MMStyle: public QObject
 
     // Page
     Q_PROPERTY( double pageMargins READ number20 CONSTANT ) // distance between screen edge and components
+    Q_PROPERTY( double spacing5 READ number5 CONSTANT )
     Q_PROPERTY( double spacing12 READ number12 CONSTANT ) // distance between page header, page content and page footer
     Q_PROPERTY( double spacing20 READ number20 CONSTANT )
+    Q_PROPERTY( double spacing30 READ number30 CONSTANT )
     Q_PROPERTY( double spacing40 READ number40 CONSTANT )
     Q_PROPERTY( double maxPageWidth READ number720 CONSTANT ) // maximum page width (desktop, tablets, landscape)
 
@@ -284,12 +286,14 @@ class MMStyle: public QObject
     Q_PROPERTY( double row40 READ number40 CONSTANT )
     Q_PROPERTY( double row49 READ number49 CONSTANT )
     Q_PROPERTY( double row50 READ number50 CONSTANT )
+    Q_PROPERTY( double row54 READ number54 CONSTANT )
     Q_PROPERTY( double row60 READ number60 CONSTANT )
     Q_PROPERTY( double row63 READ number63 CONSTANT )
     Q_PROPERTY( double row67 READ number67 CONSTANT )
     Q_PROPERTY( double row80 READ number80 CONSTANT )
     Q_PROPERTY( double row114 READ number114 CONSTANT )
     Q_PROPERTY( double radius6 READ number6 CONSTANT )
+    Q_PROPERTY( double radius8 READ number8 CONSTANT )
     Q_PROPERTY( double radius12 READ number12 CONSTANT )
     Q_PROPERTY( double radius16 READ number16 CONSTANT )
     Q_PROPERTY( double radius20 READ number20 CONSTANT )
