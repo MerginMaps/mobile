@@ -106,7 +106,6 @@ MMDrawer {
           onClicked: {
             close()
             usernameInput.text = ""
-            usernameInput.errorMsg = ""
             root.closeAccountClicked()
           }
         }
