@@ -26,19 +26,6 @@ MMComponents.MMPopup {
   readonly property int calendarYearFrom: 1900
   readonly property int calendarYearTo: 2050
 
-  function monthList() {
-    const monthList = Array(12).keys();
-    const getMonthName = (monthIndex) => Qt.locale().monthName(monthIndex)
-    return Array.from(monthList, getMonthName)
-  }
-
-  function yearList() {
-    var years = []
-    for (var i = root.calendarYearFrom; i <= root.calendarYearTo; ++i)
-      years.push(i)
-    return years
-  }
-
   contentItem: Item {
     width: parent.width
     height: parent.height
@@ -75,5 +62,18 @@ MMComponents.MMPopup {
         onCurrentItemChanged: root.yearChanged(parseInt(currentItem.text))
       }
     }
+  }
+
+  function monthList() {
+    const monthList = Array(12).keys();
+    const getMonthName = (monthIndex) => Qt.locale().monthName(monthIndex)
+    return Array.from(monthList, getMonthName)
+  }
+
+  function yearList() {
+    var years = []
+    for (var i = root.calendarYearFrom; i <= root.calendarYearTo; ++i)
+      years.push(i)
+    return years
   }
 }
