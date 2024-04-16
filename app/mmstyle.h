@@ -288,7 +288,6 @@ class MMStyle: public QObject
     Q_PROPERTY( double row63 READ number63 CONSTANT )
     Q_PROPERTY( double row67 READ number67 CONSTANT )
     Q_PROPERTY( double row80 READ number80 CONSTANT )
-    Q_PROPERTY( double row92 READ number92 CONSTANT )
     Q_PROPERTY( double row114 READ number114 CONSTANT )
     Q_PROPERTY( double radius6 READ number6 CONSTANT )
     Q_PROPERTY( double radius12 READ number12 CONSTANT )

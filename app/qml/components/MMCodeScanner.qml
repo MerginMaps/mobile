@@ -76,7 +76,6 @@ Popup {
 
       MMInfoBox {
         width: Math.min(parent.width - 2 * __style.spacing20, 353 * __dp)
-        height: __style.row92
 
         anchors {
           horizontalCenter: parent.horizontalCenter
