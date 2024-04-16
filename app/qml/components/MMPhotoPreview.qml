@@ -17,8 +17,8 @@ Popup {
 
   parent: Overlay.overlay
   visible: true
-  width: ApplicationWindow.window.width
-  height: ApplicationWindow.window.height
+  height: ApplicationWindow.window?.height ?? 0
+  width: ApplicationWindow.window?.width ?? 0
   closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
   background: Rectangle {

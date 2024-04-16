@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
+/* ! caller si responsible for setting up bottom safe area */
+
 Page {
   id: root
 

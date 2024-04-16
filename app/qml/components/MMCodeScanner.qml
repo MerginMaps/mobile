@@ -13,18 +13,23 @@ import QtMultimedia
 
 import mm 1.0 as MM
 
-Drawer { // We can keep this one as Drawer - it could actually be Popup instead
+Popup {
   id: root
+
+  parent: Overlay.overlay
+  visible: true
+  height: ApplicationWindow.window?.height ?? 0
+  width: ApplicationWindow.window?.width ?? 0
+  closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
   signal scanFinished( var data )
 
-  width: ApplicationWindow.window.width
-  height: ApplicationWindow.window.height + 40 * __dp
-  edge: Qt.BottomEdge
-  dim: true
-  interactive: false
-  dragMargin: 0
-  closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+  function unload() {
+    qrcodeScanner.videoSink = null
+    camera.active = false
+    captureSession.videoOutput = null
+    captureSession.camera = null
+  }
 
   CaptureSession {
     id: captureSession
@@ -35,13 +40,6 @@ Drawer { // We can keep this one as Drawer - it could actually be Popup instead
       focusMode: Camera.FocusModeAutoNear
     }
     videoOutput: videoOutput
-  }
-
-  VideoOutput {
-    id: videoOutput
-
-    anchors.fill: parent
-    fillMode: VideoOutput.PreserveAspectCrop
   }
 
   MM.QrCodeDecoder {
@@ -55,39 +53,58 @@ Drawer { // We can keep this one as Drawer - it could actually be Popup instead
     }
   }
 
-  function unload() {
-    qrcodeScanner.videoSink = null
-    camera.active = false
-    captureSession.videoOutput = null
-    captureSession.camera = null
-  }
+  contentItem: Item {
+    anchors.fill: parent
 
-  Item {
-    id: scannerText
-    width: parent.width
-    height: (parent.width < parent.height) ? parent.height / 2 - parent.width / 4 : parent.height / 4
-    anchors.horizontalCenter: parent.horizontalCenter
-
-    MMInfoBox {
-      width: parent.width - 40 * __dp
-      title: qsTr( "Scan the QR code" )
-      description: qsTr( "Please make sure that the lense is clear." )
-      imageSource: __style.blueInfoImage
+    MMBusyIndicator {
       anchors.centerIn: parent
+      visible: true
     }
-  }
 
-  MMRoundButton {
-    id: closeButton
+    VideoOutput {
+      id: videoOutput
 
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.bottom: parent.bottom
-    anchors.bottomMargin: 2 * __style.pageMargins
-    bgndColor: __style.lightGreenColor
-    iconSource: __style.closeIcon
-    onClicked: {
-      root.unload()
-      close()
+      anchors.fill: parent
+      fillMode: VideoOutput.PreserveAspectCrop
+    }
+
+    Item {
+      x: __style.safeAreaLeft
+      y: __style.safeAreaTop
+      width: parent.width - __style.safeAreaLeft - __style.safeAreaRight
+      height: parent.height - __style.safeAreaBottom - __style.safeAreaTop
+
+      MMInfoBox {
+        width: Math.min(parent.width - 2 * __style.spacing20, 353 * __dp)
+        height: __style.row92
+
+        anchors {
+          horizontalCenter: parent.horizontalCenter
+          top: parent.top
+          topMargin: __style.spacing20
+        }
+
+        title: qsTr( "Scan the QR code" )
+        description: qsTr( "Please make sure that the lense is clear." )
+        imageSource: __style.blueInfoImage
+      }
+
+      MMRoundButton {
+        id: closeButton
+
+        anchors {
+          horizontalCenter: parent.horizontalCenter
+          bottom: parent.bottom
+          bottomMargin: __style.spacing20
+        }
+
+        bgndColor: __style.lightGreenColor
+        iconSource: __style.closeIcon
+        onClicked: {
+          root.unload()
+          close()
+        }
+      }
     }
   }
 }
