@@ -15,7 +15,7 @@ import "../../../components" as MMComponents
 MMComponents.MMPopup {
   id: root
 
-  width: row.width + 40 * __dp
+  width: row.width + 2 * __style.spacing20
   height: row.height
 
   property alias hours: hoursTumbler.currentIndex
@@ -30,9 +30,9 @@ MMComponents.MMPopup {
     Rectangle {
       anchors.centerIn: parent
 
-      width: parent.width - 24 * __dp
-      height: 54 * __dp
-      radius: 8 * __dp
+      width: parent.width - 2 * __style.margin12
+      height: __style.row54
+      radius: __style.radius8
 
       color: __style.lightGreenColor
     }
@@ -44,16 +44,19 @@ MMComponents.MMPopup {
 
       MMTumbler {
         id: hoursTumbler
+
         model: 24
       }
 
       MMTumbler {
         id: minutesTumbler
+
         model: 60
       }
 
       MMTumbler {
         id: secondsTumbler
+
         model: 60
         visible: root.showSeconds
       }

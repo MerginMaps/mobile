@@ -11,7 +11,7 @@ import QtQuick
 import QtQuick.Controls
 
 Tumbler {
-  id: control
+  id: root
 
   delegate: Text {
     id: text
@@ -20,7 +20,7 @@ Tumbler {
     font: Math.abs(Tumbler.displacement) < 0.4 ? __style.t1 : __style.p4
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
-    opacity: 1.0 - Math.abs(Tumbler.displacement) / (control.visibleItemCount / 2)
+    opacity: 1.0 - Math.abs(Tumbler.displacement) / (root.visibleItemCount / 2)
     color: Math.abs(Tumbler.displacement) < 0.4 ? __style.forestColor : __style.nightColor
   }
 }

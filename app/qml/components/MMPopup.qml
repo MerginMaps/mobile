@@ -18,11 +18,11 @@ Popup {
 
   background: Rectangle {
     color: __style.polarColor
-    radius: 20 * __dp
+    radius: __style.radius20
 
     layer.enabled: true
     layer.effect: MMShadow {
-      radius: 20 * __dp
+      radius: __style.radius20
     }
   }
 }
