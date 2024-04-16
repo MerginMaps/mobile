@@ -78,6 +78,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor positiveColor READ positiveColor CONSTANT )
     Q_PROPERTY( QColor warningColor READ warningColor CONSTANT )
     Q_PROPERTY( QColor negativeColor READ negativeColor CONSTANT )
+    Q_PROPERTY( QColor negativeLightColor READ negativeLightColor CONSTANT )
+    Q_PROPERTY( QColor negativeUltraLightColor READ negativeUltraLightColor CONSTANT )
     Q_PROPERTY( QColor informativeColor READ informativeColor CONSTANT )
 
     // Colors - others
@@ -356,6 +358,8 @@ class MMStyle: public QObject
     QColor positiveColor() {return QColor::fromString( "#C0EBCF" );}
     QColor warningColor() {return QColor::fromString( "#F7DDAF" );}
     QColor negativeColor() {return QColor::fromString( "#F0C4BC" );}
+    QColor negativeLightColor() {return QColor::fromString( "#FFF0ED" );}
+    QColor negativeUltraLightColor() {return QColor::fromString( "#FEFAF9" );}
     QColor informativeColor() {return QColor::fromString( "#BEDAF0" );}
     QColor snappingColor() {return QColor::fromString( "#BD74FF" );}
 
