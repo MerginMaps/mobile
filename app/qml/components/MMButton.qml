@@ -72,15 +72,13 @@ Button {
     if ( type === MMButton.Types.Tertiary ) return __style.transparentColor
   }
 
-  property bool disabled: false
-
   property string iconSourceRight
   property string iconSourceLeft
 
   states: [
     State {
       name: "default"
-      when: !root.hovered && !root.disabled
+      when: !root.hovered && root.enabled
 
       PropertyChanges {
         target: buttonContent
@@ -107,7 +105,7 @@ Button {
 
     State {
       name: "hovered"
-      when: root.hovered && !root.disabled
+      when: root.hovered && root.enabled
 
       PropertyChanges {
         target: buttonContent
@@ -134,7 +132,7 @@ Button {
 
     State {
       name: "disabled"
-      when: root.disabled
+      when: !root.enabled
 
       PropertyChanges {
         target: buttonContent
@@ -161,7 +159,6 @@ Button {
   ]
 
   state: "default"
-  enabled: !disabled
 
   implicitHeight: root.type === MMButton.Types.Tertiary ? buttonContent.height : buttonContent.height + topPadding + bottomPadding
   implicitWidth: row.paintedChildrenWidth + 2 * __style.margin20

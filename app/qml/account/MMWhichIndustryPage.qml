@@ -172,10 +172,10 @@ MMPage {
 
       text: qsTr("Continue")
 
-      disabled: {
-        if ( gridView.currentIndex < 0 ) return true
-        if ( ( gridView.model.get(gridView.currentIndex).key === "other" ) && root.selectedText === "" ) return true
-        return false
+      enabled: {
+        if ( gridView.currentIndex < 0 ) return false
+        if ( ( gridView.model.get(gridView.currentIndex).key === "other" ) && root.selectedText === "" ) return false
+        return true
       }
 
       onClicked: {
