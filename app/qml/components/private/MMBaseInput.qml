@@ -111,6 +111,21 @@ Item {
 
           emptyStateColor: __style.polarColor
           checked: root.checkboxChecked
+
+          MouseArea {
+            anchors {
+              fill: parent
+              margins: -__style.margin16
+            }
+
+            onClicked: function( mouse ) {
+              mouse.accepted = true
+              checkbox.toggle()
+            }
+
+            Rectangle { anchors.fill: parent; color: "green"; opacity: .3 }
+          }
+
         }
 
         MMComponents.MMText {
@@ -123,21 +138,22 @@ Item {
 
           wrapMode: Text.Wrap
           maximumLineCount: 10
-        }
-      }
 
-      MouseArea {
-        anchors {
-          leftMargin: -__style.margin12
-          rightMargin: -__style.margin12
-          fill: parent
-        }
+          MouseArea {
+            width: parent.contentWidth + 2 * __style.margin12
+            height: parent.contentHeight
 
-        onClicked: function( mouse ) {
-          mouse.accepted = true
+            x: -__style.margin12
 
-          if ( checkbox.visible ) {
-            checkbox.toggle()
+            Rectangle { anchors.fill: parent; color: "green"; opacity: .3 }
+
+            onClicked: function( mouse ) {
+              mouse.accepted = true
+
+              if ( checkbox.visible ) {
+                checkbox.toggle()
+              }
+            }
           }
         }
       }
