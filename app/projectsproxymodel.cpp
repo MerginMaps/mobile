@@ -37,9 +37,10 @@ ProjectsModel *ProjectsProxyModel::projectSourceModel() const
   return mModel;
 }
 
-void ProjectsProxyModel::setactiveProjectAlwaysFirst( bool value )
+void ProjectsProxyModel::setActiveProjectAlwaysFirst( bool value )
 {
   mActiveProjectAlwaysFirst = value;
+  invalidate();
 }
 
 bool ProjectsProxyModel::activeProjectAlwaysFirst() const

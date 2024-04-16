@@ -224,6 +224,8 @@ class ProjectsModel : public QAbstractListModel
     SynchronizationManager *mSyncManager = nullptr; // not owned
 
     QString mActiveProjectId;
+
+    friend class TestModels;
 };
 
 #endif // PROJECTSMODEL_H

@@ -30,7 +30,7 @@ class ProjectsProxyModel : public QSortFilterProxyModel
     Q_PROPERTY( ProjectsModel *projectSourceModel READ projectSourceModel WRITE setProjectSourceModel )
 
     //! When true, a project whose Roles::ProjectIsActiveProject is true is always sorted first
-    Q_PROPERTY( bool activeProjectAlwaysFirst READ activeProjectAlwaysFirst WRITE setactiveProjectAlwaysFirst )
+    Q_PROPERTY( bool activeProjectAlwaysFirst READ activeProjectAlwaysFirst WRITE setActiveProjectAlwaysFirst )
 
   public:
     explicit ProjectsProxyModel( QObject *parent = nullptr );
@@ -38,7 +38,7 @@ class ProjectsProxyModel : public QSortFilterProxyModel
 
     QString searchExpression() const;
     ProjectsModel *projectSourceModel() const;
-    void setactiveProjectAlwaysFirst( bool value );
+    void setActiveProjectAlwaysFirst( bool value );
     bool activeProjectAlwaysFirst() const;
 
   public slots:
@@ -58,6 +58,8 @@ class ProjectsProxyModel : public QSortFilterProxyModel
     ProjectsModel::ProjectModelTypes mModelType = ProjectsModel::EmptyProjectsModel;
     QString mSearchExpression;
     bool mActiveProjectAlwaysFirst = false;
+
+    friend class TestModels;
 };
 
 #endif // PROJECTSPROXYMODEL_H
