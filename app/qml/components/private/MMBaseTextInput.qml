@@ -29,6 +29,10 @@ MMBaseInput {
   property alias textField: textFieldControl
   property alias leftContent: leftContentGroup.children
   property alias rightContent: rightContentGroup.children
+  property alias rightContentMouseArea: rightContentMouseAreaGroup
+
+  signal leftContentClicked()
+  signal rightContentClicked()
 
   inputContent: Rectangle {
     width: parent.width
@@ -47,7 +51,6 @@ MMBaseInput {
       if ( root.validationState === "warning" ) return __style.width2
       if ( textFieldControl.activeFocus ) return __style.width2
       if ( textFieldControl.hovered ) return __style.width1
-//      if ( contentBgndMouseArea.containsMouse ) return __style.width1
       return 0
     }
 
@@ -57,46 +60,54 @@ MMBaseInput {
       if ( root.validationState === "warning" ) return __style.warningColor
       if ( textFieldControl.activeFocus ) return __style.forestColor
       if ( textFieldControl.hovered ) return __style.forestColor
-//      if ( contentBgndMouseArea.containsMouse ) return __style.width1
 
       return __style.polarColor
     }
 
     radius: __style.radius12
 
-//    MouseArea { //-----> convert to left and Right MouseArea
-//      id: contentBgndMouseArea
-
-//      anchors.fill: parent
-//      hoverEnabled: true
-
-//      onClicked: function( mouse ) {
-//        mouse.accepted = true
-//        textFieldControl.forceActiveFocus()
-//        textFieldControl.ensureVisible( textFieldControl.text.length )
-//      }
-//    }
-
     RowLayout {
       anchors {
         fill: parent
 
-//        leftMargin: __style.margin20
-//        rightMargin: __style.margin20
-
-//        topMargin: __style.margin12
-//        bottomMargin: __style.margin12
       }
 
       spacing: __style.margin12
 
       Item {
-        id: leftContentGroup
+        id: leftContentGroupContainer
 
-        Layout.preferredHeight: childrenRect.height
-        Layout.preferredWidth: childrenRect.width
+        Layout.preferredHeight: leftContentGroup.height
+        Layout.preferredWidth: leftContentGroup.width
+        Layout.leftMargin: __style.margin20
 
-        visible: children.length > 0
+        visible: leftContentGroup.children.length > 0
+
+        Item {
+          id: leftContentGroup
+
+          width: childrenRect.width
+          height: childrenRect.height
+
+        }
+
+        MouseArea {
+          anchors {
+            fill: parent
+
+            leftMargin: -__style.margin20
+            topMargin: -__style.margin16
+            rightMargin: -__style.margin12
+            bottomMargin: -__style.margin16
+          }
+
+          onClicked: function( mouse ) {
+            mouse.accepted = true
+            root.leftContentClicked()
+          }
+
+          Rectangle { anchors.fill: parent; color: "blue"; opacity: .3 }
+        }
       }
 
       TextField {
@@ -107,36 +118,66 @@ MMBaseInput {
 
         readOnly: root.editState === "readOnly" || root.editState === "disabled"
 
-        horizontalAlignment: TextInput.AlignLeft
-
-        // Ensure the text is scrolled to the begging
+        // Ensure the text is scrolled to the beginning
         Component.onCompleted: ensureVisible( 0 )
 
         color: {
           if ( root.editState === "readOnly" ) return __style.nightColor
           if ( root.editState === "enabled" ) return __style.nightColor
           if ( root.editState === "disabled" ) return __style.mediumGreyColor
+          return __style.nightColor
         }
 
-        leftPadding: 0
         topPadding: 0
-        rightPadding: 0
         bottomPadding: 0
+        leftPadding: leftContentGroupContainer.visible ? 0 : __style.margin20
+        rightPadding: rightContentGroupContainer.visible ? 0 : __style.margin20
+
+        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhSensitiveData // TODO: --> change sensitive data to the QT DEFINE
 
         placeholderTextColor: __style.darkGreyColor
 
         font: __style.p5
 
-        background: Rectangle { color: __style.negativeColor }
+        background: Rectangle { color: __style.warningColor }
       }
 
       Item {
-        id: rightContentGroup
+        id: rightContentGroupContainer
 
-        Layout.preferredHeight: childrenRect.height
-        Layout.preferredWidth: childrenRect.width
+        Layout.preferredHeight: rightContentGroup.height
+        Layout.preferredWidth: rightContentGroup.width
+        Layout.rightMargin: __style.margin20
 
-        visible: children.length > 0
+        visible: rightContentGroup.children.length > 0
+
+        Item {
+          id: rightContentGroup
+
+          width: childrenRect.width
+          height: childrenRect.height
+
+        }
+
+        MouseArea {
+          id: rightContentMouseAreaGroup
+
+          anchors {
+            fill: parent
+
+            leftMargin: -__style.margin12
+            topMargin: -__style.margin16
+            rightMargin: -__style.margin20
+            bottomMargin: -__style.margin16
+          }
+
+          onClicked: function( mouse ) {
+            mouse.accepted = true
+            root.rightContentClicked()
+          }
+
+          Rectangle { anchors.fill: parent; color: "brown"; opacity: .3 }
+        }
       }
     }
   }

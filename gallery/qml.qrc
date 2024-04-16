@@ -53,6 +53,8 @@
         <file>../app/qml/components/MMToolbarButton.qml</file>
         <file>../app/qml/components/MMBadge.qml</file>
         <file>../app/qml/components/MMToolbar.qml</file>
+        <file>../app/qml/components/private/MMBaseInput.qml</file>
+        <file>../app/qml/components/private/MMBaseTextInput.qml</file>
         <file>../app/qml/components/private/MMToolbarShortButton.qml</file>
         <file>../app/qml/components/private/MMToolbarLongButton.qml</file>
         <file>../app/qml/components/MMListDelegate.qml</file>
