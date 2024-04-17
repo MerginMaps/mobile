@@ -122,8 +122,6 @@ Item {
               mouse.accepted = true
               checkbox.toggle()
             }
-
-            Rectangle { anchors.fill: parent; color: "green"; opacity: .3 }
           }
 
         }
@@ -144,8 +142,6 @@ Item {
             height: parent.contentHeight
 
             x: -__style.margin12
-
-            Rectangle { anchors.fill: parent; color: "green"; opacity: .3 }
 
             onClicked: function( mouse ) {
               mouse.accepted = true

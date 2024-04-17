@@ -26,15 +26,23 @@ MMBaseInput {
   id: root
 
   property alias text: textFieldControl.text
+  property alias placeholderText: textFieldControl.placeholderText
+
   property alias textField: textFieldControl
+  property alias textFieldBackground: textFieldBackgroundGroup
+
   property alias leftContent: leftContentGroup.children
   property alias rightContent: rightContentGroup.children
+  property alias leftContentMouseArea: leftContentMouseAreaGroup
   property alias rightContentMouseArea: rightContentMouseAreaGroup
 
+  signal textEdited( string text )
   signal leftContentClicked()
   signal rightContentClicked()
 
   inputContent: Rectangle {
+    id: textFieldBackgroundGroup
+
     width: parent.width
     height: __style.row50
 
@@ -67,10 +75,7 @@ MMBaseInput {
     radius: __style.radius12
 
     RowLayout {
-      anchors {
-        fill: parent
-
-      }
+      anchors .fill: parent
 
       spacing: __style.margin12
 
@@ -81,7 +86,7 @@ MMBaseInput {
         Layout.preferredWidth: leftContentGroup.width
         Layout.leftMargin: __style.margin20
 
-        visible: leftContentGroup.children.length > 0
+        visible: leftContentGroup.children.length > 0 && leftContentGroup.children[0].visible
 
         Item {
           id: leftContentGroup
@@ -92,6 +97,8 @@ MMBaseInput {
         }
 
         MouseArea {
+          id: leftContentMouseAreaGroup
+
           anchors {
             fill: parent
 
@@ -103,10 +110,9 @@ MMBaseInput {
 
           onClicked: function( mouse ) {
             mouse.accepted = true
+            root.focus = true
             root.leftContentClicked()
           }
-
-          Rectangle { anchors.fill: parent; color: "blue"; opacity: .3 }
         }
       }
 
@@ -133,13 +139,15 @@ MMBaseInput {
         leftPadding: leftContentGroupContainer.visible ? 0 : __style.margin20
         rightPadding: rightContentGroupContainer.visible ? 0 : __style.margin20
 
-        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhSensitiveData // TODO: --> change sensitive data to the QT DEFINE
+        inputMethodHints: Qt.ImhNoPredictiveText
 
         placeholderTextColor: __style.darkGreyColor
 
         font: __style.p5
 
-        background: Rectangle { color: __style.warningColor }
+        background: Rectangle { color: __style.transparentColor }
+
+        onTextEdited: root.textEdited( text )
       }
 
       Item {
@@ -149,14 +157,13 @@ MMBaseInput {
         Layout.preferredWidth: rightContentGroup.width
         Layout.rightMargin: __style.margin20
 
-        visible: rightContentGroup.children.length > 0
+        visible: rightContentGroup.children.length > 0 && rightContentGroup.children[0].visible
 
         Item {
           id: rightContentGroup
 
           width: childrenRect.width
           height: childrenRect.height
-
         }
 
         MouseArea {
@@ -173,10 +180,9 @@ MMBaseInput {
 
           onClicked: function( mouse ) {
             mouse.accepted = true
+            root.focus = true
             root.rightContentClicked()
           }
-
-          Rectangle { anchors.fill: parent; color: "brown"; opacity: .3 }
         }
       }
     }

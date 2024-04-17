@@ -224,7 +224,7 @@ MMPage {
 
         onTextChanged: root.selectedText = text
 
-        Component.onCompleted: textFieldComponent.forceActiveFocus()
+        Component.onCompleted: textField.forceActiveFocus()
       }
     }
   }

@@ -8,66 +8,28 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
-import "../components"
+
+import "../components" as MMComponents
+import "../components/private" as MMPrivateComponents
 
 /*
  * Common text input to use in the app.
  * Disabled state can be achieved by setting `enabled: false`.
  *
- * See MMBaseInput for more properties.
+ * See MMBaseTextInput for more properties.
  */
 
-MMBaseInput {
+MMPrivateComponents.MMBaseTextInput {
   id: root
 
   property bool showClearIcon: true
-  property alias text: textField.text
-  property alias placeholderText: textField.placeholderText
 
-  property alias textFieldComponent: textField
-
-  signal textEdited( string text )
-
-  hasFocus: textField.activeFocus
-
-  content: TextField {
-    id: textField
-
-    anchors.fill: parent
-
-    placeholderTextColor: __style.darkGreyColor
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
-
-    font: __style.p5
-    hoverEnabled: true
-
-    background: Rectangle {
-      color: __style.transparentColor
-    }
-
-    onTextEdited: root.textEdited( textField.text )
-  }
-
-  rightAction: MMIcon {
-    id: rightIcon
-
-    anchors.verticalCenter: parent.verticalCenter
-
+  rightContent: MMComponents.MMIcon {
     size: __style.icon24
     source: __style.closeIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    color: root.editState === "enabled" ? __style.forestColor : __style.mediumGreenColor
     visible: root.showClearIcon && textField.activeFocus && textField.text.length > 0
   }
 
-  onRightActionClicked: {
-    if (root.showClearIcon) {
-      textField.clear()
-    }
-    else {
-      // if the clear button should not be there, let's open keyboard instead
-      textField.forceActiveFocus()
-    }
-  }
+  onRightContentClicked: textField.clear()
 }

@@ -56,7 +56,7 @@ MMDrawer {
         id: usernameInput
 
         width: parent.width
-        bgColor: __style.lightGreenColor
+        textFieldBackground.color: __style.lightGreenColor
 
         title: qsTr("Username")
         placeholderText: qsTr("Enter your username")
