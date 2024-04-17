@@ -36,7 +36,7 @@ class MerginUserAuth: public QObject
 
     //! Returns true if we have a token and it is not expired,
     //! i.e. we should be good to do authenticated requests.
-    bool hasValidToken() const;
+    Q_INVOKABLE bool hasValidToken() const;
 
     void clear();
 

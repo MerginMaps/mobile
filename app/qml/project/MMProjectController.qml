@@ -303,7 +303,7 @@ Item {
               if ( !__merginApi.apiSupportsWorkspaces ) {
                 return false;
               }
-              if ( !__merginApi.userAuth.hasAuthData() ) {
+              if ( !__merginApi.userAuth.hasValidToken() ) {
                 return false;
               }
               // do not show the banner in case of accepting invitation or creating a workspace
@@ -623,6 +623,10 @@ Item {
       stackView.pending = false
     }
 
+    function onListProjectsFailed() {
+      stackView.pending = false
+    }
+
     function onApiVersionStatusChanged() {
       stackView.pending = false
 
@@ -642,7 +646,7 @@ Item {
     function onAuthChanged() {
       stackView.pending = false
 
-      if ( __merginApi.userAuth.hasAuthData() ) {
+      if ( __merginApi.userAuth.hasValidToken() ) {
 
         if ( __merginApi.serverType === MM.MerginServerType.OLD || ( stackView.currentItem.objectName === "loginPage" ) ) {
           stackView.popPage( "loginPage" )
