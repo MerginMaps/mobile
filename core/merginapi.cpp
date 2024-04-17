@@ -2906,7 +2906,7 @@ void MerginApi::getUserInfoFinished()
     // flow of network requests.
     static bool firstTimeExpiredTokenAnd401 = true;
     if ( firstTimeExpiredTokenAnd401 && r->attribute( QNetworkRequest::HttpStatusCodeAttribute ) == 401 &&
-        !mUserAuth->authToken().isEmpty() && mUserAuth->tokenExpiration() < QDateTime().currentDateTimeUtc() )
+         !mUserAuth->authToken().isEmpty() && mUserAuth->tokenExpiration() < QDateTime().currentDateTimeUtc() )
     {
       firstTimeExpiredTokenAnd401 = false;
     }
