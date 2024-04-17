@@ -454,6 +454,11 @@ int main( int argc, char *argv[] )
 
   init_qgis( appBundleDir );
 
+#ifdef ANDROID
+  // See https://bugreports.qt.io/browse/QTBUG-86982 -> fix to make the predictive text disabled on Android
+  qputenv( "QT_ANDROID_ENABLE_WORKAROUND_TO_DISABLE_PREDICTIVE_TEXT", "1" );
+#endif
+
   // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
   AppSettings as;
 
