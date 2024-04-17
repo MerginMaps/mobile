@@ -2896,7 +2896,24 @@ void MerginApi::getUserInfoFinished()
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getUserInfo" ), r->errorString(), serverMsg );
     CoreUtils::log( "user info", QStringLiteral( "FAILED - %1" ).arg( message ) );
     mUserInfo->clear();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getUserInfo" ) );
+
+    // This is an ugly fix for #3261: if the user was logged in, but the token was already expired
+    // (e.g. when starting the app the next day), the flow of network requests and handlers gets
+    // confused because of mAuthLoopEvent involved when re-authenticating user to get new token.
+    // We end up requesting user info even with expired token, which of course fails with HTTP code 401
+    // and user gets "Authentication information is missing or invalid." notification - this code
+    // prevents that. The correct solution is to get rid of the QEventLoop and to have more rigorous
+    // flow of network requests.
+    static bool firstTimeExpiredTokenAnd401 = true;
+    if ( firstTimeExpiredTokenAnd401 && r->attribute( QNetworkRequest::HttpStatusCodeAttribute ) == 401 &&
+        !mUserAuth->authToken().isEmpty() && mUserAuth->tokenExpiration() < QDateTime().currentDateTimeUtc() )
+    {
+      firstTimeExpiredTokenAnd401 = false;
+    }
+    else
+    {
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getUserInfo" ) );
+    }
   }
 
   emit userInfoReplyFinished();
