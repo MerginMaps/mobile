@@ -430,7 +430,10 @@ void MerginApi::downloadItemReplyFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     if ( serverMsg.isEmpty() )
     {
-      serverMsg = r->errorString();
+      if ( r->error() == QNetworkReply::OperationCanceledError )
+        serverMsg = tr( "Synchronisation canceled" );
+      else
+        serverMsg = r->errorString();
     }
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
@@ -442,16 +445,9 @@ void MerginApi::downloadItemReplyFinished()
       // the first failed request will abort all the other pending requests too, and finish pull with error
       abortPullItems( projectFullName );
 
-      if ( r->error() == QNetworkReply::OperationCanceledError )
-      {
-        // user cancelled, do not emit
-      }
-      else
-      {
-        // signal a networking error - we may retry
-        int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-        emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName );
-      }
+      // signal a networking error - we may retry
+      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName );
     }
     else
     {
@@ -2109,6 +2105,9 @@ void MerginApi::pushStartReplyFinished()
   {
     QByteArray data = r->readAll();
     QString serverMsg = extractServerErrorMsg( data );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+      serverMsg = tr( "Synchronisation canceled" );
+
     QString code = extractServerErrorCode( data );
     bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::StorageLimitHit );
 
@@ -2136,10 +2135,6 @@ void MerginApi::pushStartReplyFinished()
         detachProjectFromMergin( projectNamespace, projectName, false );
         deleteProject( projectNamespace, projectName, false );
       }
-    }
-    else if ( r->error() == QNetworkReply::OperationCanceledError )
-    {
-      // user cancelled, do not emit
     }
     else
     {
@@ -2200,17 +2195,13 @@ void MerginApi::pushFileReplyFinished()
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+      serverMsg = tr( "Synchronisation canceled" );
+
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
-    if ( r->error() == QNetworkReply::OperationCanceledError )
-    {
-      // user cancelled, do not emit
-    }
-    else
-    {
-      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFile" ), httpCode, projectFullName );
-    }
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFile" ), httpCode, projectFullName );
 
     transaction.replyPushFile->deleteLater();
     transaction.replyPushFile = nullptr;
@@ -2243,18 +2234,14 @@ void MerginApi::pullInfoReplyFinished()
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+      serverMsg = tr( "Synchronisation canceled" );
+
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
-    if ( r->error() == QNetworkReply::OperationCanceledError )
-    {
-      // user cancelled, do not emit
-    }
-    else
-    {
-      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pullInfo" ), httpCode, projectFullName );
-    }
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pullInfo" ), httpCode, projectFullName );
 
     transaction.replyPullProjectInfo->deleteLater();
     transaction.replyPullProjectInfo = nullptr;
@@ -2771,18 +2758,14 @@ void MerginApi::pushInfoReplyFinished()
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+      serverMsg = tr( "Synchronisation canceled" );
+
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
-    if ( r->error() == QNetworkReply::OperationCanceledError )
-    {
-      // user cancelled, do not emit
-    }
-    else
-    {
-      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushInfo" ), httpCode, projectFullName );
-    }
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushInfo" ), httpCode, projectFullName );
 
     transaction.replyPushProjectInfo->deleteLater();
     transaction.replyPushProjectInfo = nullptr;
@@ -2858,18 +2841,14 @@ void MerginApi::pushFinishReplyFinished()
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+      serverMsg = tr( "Synchronisation canceled" );
+
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "pushFinish" ), r->errorString(), serverMsg );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
-    if ( r->error() == QNetworkReply::OperationCanceledError )
-    {
-      // user cancelled, do not emit
-    }
-    else
-    {
-      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFinish" ), httpCode, projectFullName );
-    }
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFinish" ), httpCode, projectFullName );
 
     // remove temporary diff files
     const auto diffFiles = transaction.pushDiffFiles;
