@@ -66,17 +66,24 @@ MMPrivateComponents.MMBaseSingleLineInput {
     text: root._fieldValue === undefined || root._fieldValueIsNull ? '' : root._fieldValue
 
     clip: true
-    horizontalAlignment: Qt.AlignHCenter
+
+    // AlignHCenter with optional suffix
+    leftPadding: Math.max( 0, ( textField.width / 2 - textField.contentWidth / 2 ) - ( internal.suffix ? suffixText.width / 2 : 0 ) )
 
     inputMethodHints: Qt.ImhFormattedNumbersOnly
 
     background: Rectangle {
       color: "transparent"
 
-      // add suffix
-      Text {
-        anchors.centerIn: parent
-        anchors.horizontalCenterOffset: textField.contentWidth / 2 + __style.margin10
+      // Suffix is added as a part of the background property in order to not block clicks to the textField
+      MMComponents.MMText {
+        id: suffixText
+
+        property real maxWidth: textField.width / 2
+
+        width: Math.min( implicitWidth + __style.margin4, maxWidth )
+        x: textField.leftPadding + textField.contentWidth + __style.margin4
+        anchors.verticalCenter: parent.verticalCenter
 
         color: __style.nightColor
         font: __style.p5
