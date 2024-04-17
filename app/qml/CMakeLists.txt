@@ -52,7 +52,7 @@ set(MM_QML
     components/MMToolbar.qml
     components/MMToolbarButton.qml
     components/private/MMBaseInput.qml
-    components/private/MMBaseTextInput.qml
+    components/private/MMBaseSingleLineInput.qml
     components/private/MMToolbarLongButton.qml
     components/private/MMToolbarShortButton.qml
     dialogs/MMCloseAccountDialog.qml

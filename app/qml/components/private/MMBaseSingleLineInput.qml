@@ -16,7 +16,7 @@ import QtQuick.Layouts
 import QtQuick.Controls.Basic
 
 /**
-  * MMBaseTextInput serves as a base class for all inputs that can benefit from
+  * MMBaseSingleLineInput serves as a base class for all inputs that can benefit from
   * predefined textfield and/or left/right icons (actions).
   *
   * Private class, do not use standalone in the app.

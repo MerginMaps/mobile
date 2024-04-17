@@ -16,10 +16,10 @@ import "../components/private" as MMPrivateComponents
  * Common text input to use in the app.
  * Disabled state can be achieved by setting `enabled: false`.
  *
- * See MMBaseTextInput for more properties.
+ * See MMBaseSingleLineInput for more properties.
  */
 
-MMPrivateComponents.MMBaseTextInput {
+MMPrivateComponents.MMBaseSingleLineInput {
   id: root
 
   property bool showClearIcon: true
