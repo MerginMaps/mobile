@@ -40,8 +40,11 @@ Control {
 
   topPadding: __style.margin20
   rightPadding: __style.margin20
-  bottomPadding: __style.margin20
   leftPadding: __style.margin20
+  // The last item in a section ('currently open' vs 'downloaded projects' in Home tab) gets an extra
+  // __style.margin28 padding, then the inset is also grown to keep the background at the correct size
+  bottomPadding: ListView.section !== ListView.nextSection ? __style.margin48: __style.margin20
+  bottomInset: ListView.section !== ListView.nextSection ? + __style.margin28: topInset
 
   states: [
     State { name: "OnServer" },

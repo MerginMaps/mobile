@@ -123,6 +123,10 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
       CoreUtils::log( "Project error", "Found project that is not downloaded nor remote" );
       return QVariant();
     }
+    case ProjectIsActiveProject:
+    {
+      return QVariant( project.id() == mActiveProjectId );
+    }
     default:
     {
       if ( !project.isMergin() ) return QVariant();
@@ -160,6 +164,7 @@ QHash<int, QByteArray> ProjectsModel::roleNames() const
   roles[Roles::ProjectSyncPending]  = QStringLiteral( "ProjectSyncPending" ).toLatin1();
   roles[Roles::ProjectSyncProgress] = QStringLiteral( "ProjectSyncProgress" ).toLatin1();
   roles[Roles::ProjectRemoteError]  = QStringLiteral( "ProjectRemoteError" ).toLatin1();
+  roles[Roles::ProjectIsActiveProject]  = QStringLiteral( "ProjectIsActiveProject" ).toLatin1();
   return roles;
 }
 
@@ -707,4 +712,12 @@ void ProjectsModel::setSyncManager( SynchronizationManager *newSyncManager )
 
   mSyncManager = newSyncManager;
   emit syncManagerChanged( mSyncManager );
+}
+
+QString ProjectsModel::activeProjectId() const { return mActiveProjectId; }
+
+void ProjectsModel::setActiveProjectId( const QString &projectId )
+{
+  mActiveProjectId = projectId;
+  emit activeProjectIdChanged( mActiveProjectId );
 }
