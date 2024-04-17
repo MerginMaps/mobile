@@ -38,6 +38,7 @@ const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm"
 const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
+const QString MerginApi::sSyncCanceledMessage = QObject::tr( "Synchronisation canceled" );
 
 
 MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
@@ -431,7 +432,7 @@ void MerginApi::downloadItemReplyFinished()
     if ( serverMsg.isEmpty() )
     {
       if ( r->error() == QNetworkReply::OperationCanceledError )
-        serverMsg = tr( "Synchronisation canceled" );
+        serverMsg = sSyncCanceledMessage;
       else
         serverMsg = r->errorString();
     }
@@ -2106,7 +2107,7 @@ void MerginApi::pushStartReplyFinished()
     QByteArray data = r->readAll();
     QString serverMsg = extractServerErrorMsg( data );
     if ( r->error() == QNetworkReply::OperationCanceledError )
-      serverMsg = tr( "Synchronisation canceled" );
+      serverMsg = sSyncCanceledMessage;
 
     QString code = extractServerErrorCode( data );
     bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::StorageLimitHit );
@@ -2196,7 +2197,7 @@ void MerginApi::pushFileReplyFinished()
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     if ( r->error() == QNetworkReply::OperationCanceledError )
-      serverMsg = tr( "Synchronisation canceled" );
+      serverMsg = sSyncCanceledMessage;
 
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
@@ -2235,7 +2236,7 @@ void MerginApi::pullInfoReplyFinished()
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     if ( r->error() == QNetworkReply::OperationCanceledError )
-      serverMsg = tr( "Synchronisation canceled" );
+      serverMsg = sSyncCanceledMessage;
 
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
@@ -2759,7 +2760,7 @@ void MerginApi::pushInfoReplyFinished()
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     if ( r->error() == QNetworkReply::OperationCanceledError )
-      serverMsg = tr( "Synchronisation canceled" );
+      serverMsg = sSyncCanceledMessage;
 
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
@@ -2842,7 +2843,7 @@ void MerginApi::pushFinishReplyFinished()
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     if ( r->error() == QNetworkReply::OperationCanceledError )
-      serverMsg = tr( "Synchronisation canceled" );
+      serverMsg = sSyncCanceledMessage;
 
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "pushFinish" ), r->errorString(), serverMsg );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
