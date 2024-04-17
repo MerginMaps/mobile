@@ -374,6 +374,7 @@ class MerginApi: public QObject
     static const QString sMerginConfigFile;
     static const QString sMarketingPageRoot;
     static const QString sDefaultApiRoot;
+    static const QString sSyncCanceledMessage;
 
     static QString defaultApiRoot() { return sDefaultApiRoot; }
 
