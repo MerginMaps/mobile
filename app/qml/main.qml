@@ -743,7 +743,6 @@ ApplicationWindow {
     }
   }
 
-  // Should be the top-most visual item
   MMNotificationView {}
 
   MMListDrawer {
