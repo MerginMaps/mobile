@@ -814,7 +814,7 @@ ApplicationWindow {
     {
       if ( projectFullName === __activeProject.projectFullName() )
       {
-        syncInProgressAnimation.stop()
+        syncButton.iconRotateAnimationRunning = false
       }
     }
 
@@ -898,7 +898,6 @@ ApplicationWindow {
     {
       if ( projectFullName === __activeProject.projectFullName() )
       {
-        syncInProgressAnimation.stop()
         missingAuthDialog.open()
       }
     }
