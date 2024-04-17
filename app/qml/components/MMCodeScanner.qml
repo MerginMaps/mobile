@@ -24,13 +24,6 @@ Popup {
 
   signal scanFinished( var data )
 
-  function unload() {
-    qrcodeScanner.videoSink = null
-    camera.active = false
-    captureSession.videoOutput = null
-    captureSession.camera = null
-  }
-
   CaptureSession {
     id: captureSession
 
@@ -105,5 +98,12 @@ Popup {
         }
       }
     }
+  }
+
+  function unload() {
+    qrcodeScanner.videoSink = null
+    camera.active = false
+    captureSession.videoOutput = null
+    captureSession.camera = null
   }
 }
