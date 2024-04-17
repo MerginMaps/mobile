@@ -134,7 +134,8 @@ void ProjectWizard::createProject( QString const &projectName, FieldsModel *fiel
   project.writePath( projectGpkgPath );
   project.write( projectFilepath );
 
-  emit notifySuccess( tr( "Project %1 created" ).arg( projectName ) );
+  const QString folderName = projectDir.mid( mDataDir.size() + 1 );
+  emit notifySuccess( tr( "Project %1 created" ).arg( folderName ) );
   emit projectCreated( projectDir, projectName );
 }
 
