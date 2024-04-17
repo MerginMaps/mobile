@@ -21,6 +21,8 @@ MMPage {
 
   signal createWorkspaceClicked( string name )
 
+  pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
+
   pageHeader.rightItemContent: MMProgressBar {
     anchors.verticalCenter: parent.verticalCenter
 
@@ -91,7 +93,9 @@ MMPage {
           placeholderText: qsTr( "Your Workspace" )
         }
 
-        MMListSpacer { height: createButton.height + __style.margin16 }
+        MMListSpacer {
+          id: scrollBarBottomSpacer
+          height: createButton.height + __style.margin16 + __style.safeAreaBottom }
       }
     }
 
@@ -99,10 +103,10 @@ MMPage {
       width: parent.width
 
       anchors.bottom: createButton.top
-      anchors.bottomMargin: __style.margin20
+      anchors.bottomMargin: __style.margin40
 
       // hide the bubble on small screens
-      visible: root.height - dynamicContent.height - root.pageHeader.height - 2 * height > 0
+      visible: root.height + scrollBarBottomSpacer.height - dynamicContent.height - root.pageHeader.height - 2 * height > 0
 
       title: qsTr( "Tip from Mergin Maps" )
       description: qsTr( "A good candidate for a workspace name is the name of your team or organisation" )
@@ -113,7 +117,7 @@ MMPage {
     MMButton {
       id: createButton
 
-      anchors.bottom: parent.bottom
+      anchors.bottom: safeAreaSpacer.top
       anchors.bottomMargin: __style.margin8
 
       width: parent.width
@@ -121,6 +125,12 @@ MMPage {
       text: qsTr( "Create workspace" )
 
       onClicked: root.createWorkspaceClicked( workspaceName.text )
+    }
+
+    MMListFooterSpacer {
+      id: safeAreaSpacer
+      height: __style.safeAreaBottom
+      anchors.bottom: parent.bottom
     }
   }
 

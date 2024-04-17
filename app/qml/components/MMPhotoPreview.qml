@@ -17,58 +17,72 @@ Popup {
 
   parent: Overlay.overlay
   visible: true
-  width: ApplicationWindow.window.width
-  height: ApplicationWindow.window.height
+  height: ApplicationWindow.window?.height ?? 0
+  width: ApplicationWindow.window?.width ?? 0
   closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
   background: Rectangle {
     color: Qt.alpha(__style.nightAlphaColor, 0.9)
   }
 
-  Item {
-    id: photoFrame
+  contentItem: Item {
+    anchors.fill: parent
 
-    x: (root.width - imagePreview.width) / 2
-    y: root.height / 4
-    width: imagePreview.width
-    height: imagePreview.height
-
-    Image {
-      id: imagePreview
-
-      height: root.height / 2
-
-      autoTransform: true
-      focus: true
-      asynchronous: true
-      fillMode: Image.PreserveAspectFit
+    MMBusyIndicator {
+      anchors.centerIn: parent
+      visible: true
     }
 
-    PinchHandler {
-      id: pinchHandler
+    Item {
+      id: photoFrame
 
-      minimumRotation: -180
-      maximumRotation: 180
-      minimumScale: 0.5
-      maximumScale: 10
+      anchors.centerIn: parent
+      width: Math.min(imagePreview.width, parent.width)
+      height: Math.min(imagePreview.height, parent.height)
+
+      Image {
+        id: imagePreview
+
+        height: root.height / 2
+
+        autoTransform: true
+        focus: true
+        asynchronous: true
+        fillMode: Image.PreserveAspectFit
+      }
+
+      PinchHandler {
+        minimumRotation: -180
+        maximumRotation: 180
+        minimumScale: 0.5
+        maximumScale: 10
+      }
+
+      DragHandler { }
     }
 
-    DragHandler { }
-  }
+    Item {
+      x: __style.safeAreaLeft
+      y: __style.safeAreaTop
+      width: parent.width - __style.safeAreaLeft - __style.safeAreaRight
+      height: parent.height - __style.safeAreaBottom - __style.safeAreaTop
 
-  MMRoundButton {
-    id: closeButton
+      MMRoundButton {
+        id: closeButton
 
-    anchors.top: parent.top
-    anchors.right: parent.right
-    anchors.topMargin: 2 * __style.pageMargins
-    anchors.rightMargin: 2 * __style.pageMargins
+        anchors {
+          horizontalCenter: parent.horizontalCenter
+          bottom: parent.bottom
+          bottomMargin: __style.spacing20
+        }
 
-    bgndColor: __style.lightGreenColor
-    iconSource: __style.closeIcon
+        bgndColor: __style.lightGreenColor
+        iconSource: __style.closeIcon
+        onClicked: {
+          previewLoader.active = false
+        }
+      }
 
-    onClicked: {
-      previewLoader.active = false
     }
   }
 }
