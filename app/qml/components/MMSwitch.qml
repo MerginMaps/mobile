@@ -37,7 +37,6 @@ Switch {
     implicitWidth: 48 * __dp
     implicitHeight: 28 * __dp
     x: root.leftPadding
-    y: parent.height / 2 - height / 2
     radius: implicitHeight / 2
     color: root.checked ? root.checkedBgColor : root.uncheckedBgColor
 

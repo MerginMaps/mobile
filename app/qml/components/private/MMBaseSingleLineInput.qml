@@ -36,7 +36,11 @@ MMBaseInput {
   property alias leftContentMouseArea: leftContentMouseAreaGroup
   property alias rightContentMouseArea: rightContentMouseAreaGroup
 
+  property bool rightContentVisible: rightContentGroup.children.length > 0
+  property bool leftContentVisible: leftContentGroup.children.length > 0
+
   signal textEdited( string text )
+  signal textClicked()
   signal leftContentClicked()
   signal rightContentClicked()
 
@@ -86,7 +90,7 @@ MMBaseInput {
         Layout.preferredWidth: leftContentGroup.width
         Layout.leftMargin: __style.margin20
 
-        visible: leftContentGroup.children.length > 0 && leftContentGroup.children[0].visible
+        visible: leftContentVisible
 
         Item {
           id: leftContentGroup
@@ -108,12 +112,12 @@ MMBaseInput {
             bottomMargin: -__style.margin16
           }
 
-          enabled: root.editState === "enabled"
-
           onClicked: function( mouse ) {
-            mouse.accepted = true
-            root.focus = true
-            root.leftContentClicked()
+            if ( root.editState === "enabled" ) {
+                mouse.accepted = true
+                root.focus = true
+                root.leftContentClicked()
+            }
           }
         }
       }
@@ -150,6 +154,12 @@ MMBaseInput {
         background: Rectangle { color: __style.transparentColor }
 
         onTextEdited: root.textEdited( text )
+
+        onReleased: {
+          if ( root.editState !== "readOnly" ) {
+            root.textClicked()
+          }
+        }
       }
 
       Item {
@@ -159,7 +169,7 @@ MMBaseInput {
         Layout.preferredWidth: rightContentGroup.width
         Layout.rightMargin: __style.margin20
 
-        visible: rightContentGroup.children.length > 0 && rightContentGroup.children[0].visible
+        visible: rightContentVisible
 
         Item {
           id: rightContentGroup
@@ -180,12 +190,12 @@ MMBaseInput {
             bottomMargin: -__style.margin16
           }
 
-          enabled: root.editState === "enabled"
-
           onClicked: function( mouse ) {
-            mouse.accepted = true
-            root.focus = true
-            root.rightContentClicked()
+            if ( root.editState === "enabled" ) {
+              mouse.accepted = true
+              root.focus = true
+              root.rightContentClicked()
+            }
           }
         }
       }

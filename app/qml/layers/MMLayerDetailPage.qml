@@ -77,17 +77,9 @@ Page {
 
             title: qsTr( "Settings" )
             text: qsTr( "Visible on map" )
-            switchComponent.checked: layerDetailData.isVisible
+            checked: layerDetailData.isVisible
 
-            onContentClicked: {
-              toggleVisiblity()
-            }
-
-            onRightActionClicked: {
-              toggleVisiblity()
-            }
-
-            function toggleVisiblity() {
+            onToggled: {
               __activeProject.switchLayerTreeNodeVisibility( layerDetailData.layerTreeNode )
             }
           }
