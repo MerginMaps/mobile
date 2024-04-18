@@ -9,12 +9,11 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.Basic
 
 import mm 1.0 as MM
 
-import "../../inputs" as MMInputs
 import "../../components" as MMComponents
+import "../../components/private" as MMPrivateComponents
 import "../components" as MMFormComponents
 
 /*
@@ -25,7 +24,7 @@ import "../components" as MMFormComponents
  * Should be used only within feature form.
  */
 
-MMInputs.MMBaseInput {
+MMPrivateComponents.MMBaseInput {
   id: root
 
   property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
@@ -38,24 +37,39 @@ MMInputs.MMBaseInput {
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentFeature, var relation )
 
-  contentItemHeight: privates.itemHeight * privates.rows + 2 * flow.spacing + 20 * __dp
-
   Component.onCompleted: root.recalculate()
   onWidthChanged: root.recalculate()
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
-  content: Rectangle {
-    width: root.width - 2 * root.spacing
-    height: root.contentItemHeight
+  inputContent: Rectangle {
+    width: parent.width
+    height: privates.itemHeight * privates.rows + 2 * flow.spacing + 2 * __style.margin12
+
+    radius: __style.radius12
     color: __style.polarColor
+
+    MouseArea {
+      anchors.fill: parent
+      onClicked: function( mouse ) {
+        mouse.accepted = true
+        listLoader.active = true
+        listLoader.focus = true
+      }
+    }
 
     Flow {
       id: flow
 
-      anchors.fill: parent
-      anchors.margins: 10 * __dp
-      spacing: 8 * __dp
+      anchors {
+        fill: parent
+        topMargin: __style.margin12
+        bottomMargin: __style.margin12
+        leftMargin: __style.margin20
+        rightMargin: __style.margin20
+      }
+
+      spacing: __style.margin8
       clip: true
 
       Rectangle {
@@ -151,8 +165,6 @@ MMInputs.MMBaseInput {
         MouseArea {
           anchors.fill: parent
           onClicked: {
-            if ( !root.enabled )
-              return
             listLoader.active = true
             listLoader.focus = true
           }
