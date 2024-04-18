@@ -192,12 +192,11 @@ ScrollView {
           height: textMultilineEditor.height
 
           fieldTitle: "MMFormTextMultilineEditor"
+          fieldValue: "See something powerfull <a href='https://merginmaps.com/docs/' style='color: green;'>Mergin Maps documentation</a>, for more information continue <a href='https://merginmaps.com/docs/'>here</a>."
 
           MMFormEditors.MMFormTextMultilineEditor {
             id: textMultilineEditor
-            placeholderText: "Place for multi row text"
             width: parent.width
-            text: "See something powerfull <a href='https://merginmaps.com/docs/' style='color: green;'>Mergin Maps documentation</a>, for more information continue <a href='https://merginmaps.com/docs/'>here</a>."
           }
         }
 
