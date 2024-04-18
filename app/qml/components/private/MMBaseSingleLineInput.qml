@@ -128,6 +128,9 @@ MMBaseInput {
         Layout.fillWidth: true
         Layout.preferredHeight: parent.height
 
+        // Do not let TextField calculate implicitWidth automatically based on background, it causes binding loops
+        implicitWidth: width
+
         readOnly: root.editState === "readOnly" || root.editState === "disabled"
 
         // Ensure the text is scrolled to the beginning
