@@ -143,7 +143,7 @@ ScrollView {
           height: numberEditor.height
 
           fieldValue: "2"
-          fieldConfig: ({Min: 1.0, Max: 3.0, Precition: 1, Suffix: "s.", Step: 0.1})
+          fieldConfig: ({Min: 1.0, Max: 3.0, Precision: 1, Suffix: "s.", Step: 0.1})
           fieldTitle: "MMFormNumberEditor"
 
           MMFormEditors.MMFormNumberEditor {
