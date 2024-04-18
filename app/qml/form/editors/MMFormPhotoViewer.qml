@@ -28,24 +28,30 @@ MMPrivateComponents.MMBaseInput {
   property bool hasCameraCapability: true
 
   property var photoComponent: photo
+  property alias photoState: photoStateGroup.state
 
   signal trashClicked()
   signal capturePhotoClicked()
   signal chooseFromGalleryClicked()
 
-  states: [
-    State {
-      name: "valid"
-    },
-    State {
-      name: "notSet"
-    },
-    State {
-      name: "notAvailable"
-    }
-  ]
+  StateGroup {
+    id: photoStateGroup
 
-  state: "notSet"
+    states: [
+      State {
+        name: "valid"
+      },
+      State {
+        name: "notSet"
+      },
+      State {
+        name: "notAvailable"
+      }
+    ]
+
+    state: "notSet"
+  }
+
 
   inputContent: Rectangle {
     width: parent.width
@@ -60,7 +66,7 @@ MMPrivateComponents.MMBaseInput {
       width: parent.width
       height: parent.height
 
-      visible: root.state !== "notSet"
+      visible: photoStateGroup.state !== "notSet"
 
       photoUrl: root.photoUrl
       fillMode: Image.PreserveAspectCrop
@@ -87,7 +93,7 @@ MMPrivateComponents.MMBaseInput {
         iconSource: __style.deleteIcon
         iconColor: __style.grapeColor
 
-        visible: root.editState === "enabled" && root.state !== "notSet"
+        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet"
 
         onClicked: root.trashClicked()
       }
@@ -97,7 +103,7 @@ MMPrivateComponents.MMBaseInput {
       width: parent.width
       height: parent.height
 
-      visible: root.state === "notSet"
+      visible: photoStateGroup.state === "notSet"
       enabled: root.editState === "enabled"
 
       hasCameraCapability: root.hasCameraCapability

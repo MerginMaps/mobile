@@ -42,20 +42,20 @@ Page {
       width: parent.width
 
       photoUrl: "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg"
-      state: "valid"
+      photoState: "valid"
     }
 
     MMFormPhotoViewer {
       width: 200
 
       photoUrl: "https://images.pexels.com/photos/615348/forest-fog-sunny-nature-615348.jpeg"
-      state: "valid"
+      photoState: "valid"
     }
 
     MMFormPhotoViewer {
       width: 200
 
-      state: "notAvailable"
+      photoState: "notAvailable"
     }
   }
 }

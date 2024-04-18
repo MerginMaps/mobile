@@ -51,10 +51,10 @@ Rectangle {
 
         MMComponents.MMText {
           width: parent.width
-          height: 24 * __dp
+
           font: __style.p6
           text: qsTr("Take a picture")
-          color: __style.nightColor
+
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
           elide: Text.ElideMiddle
@@ -88,10 +88,10 @@ Rectangle {
 
         MMComponents.MMText {
           width: parent.width
-          height: 24 * __dp
+
           font: __style.p6
           text: qsTr("From gallery")
-          color: __style.nightColor
+
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
           elide: Text.ElideMiddle
