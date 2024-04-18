@@ -52,7 +52,7 @@ MMDrawer {
 
         placeholderText: qsTr( "Search" )
 
-        textFieldBackground: __style.lightGreenColor
+        textFieldBackground.color: __style.lightGreenColor
 
         visible: root.withSearch
 
