@@ -8,30 +8,37 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
+//import QtQuick.Controls
 
 import mm 1.0 as MM
 
-import "../../inputs" as MMInputs
 import "../../components" as MMComponents
+import "../../components/private" as MMPrivateComponents
 import "../components" as MMFormComponents
 
-MMInputs.MMBaseInput {
+MMPrivateComponents.MMBaseSingleLineInput {
   id: root
 
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
   property var _fieldActiveProject: parent.fieldActiveProject
-  property bool _fieldValueIsNull: parent.fieldValueIsNull
+
   property bool _fieldIsReadOnly: parent.fieldIsReadOnly
-  property string _fieldTitle: parent.fieldTitle
+
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
+  property string _fieldTitle: parent.fieldTitle
+  property string _fieldErrorMessage: parent.fieldErrorMessage
+  property string _fieldWarningMessage: parent.fieldWarningMessage
+
+  property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
+  property bool _fieldRememberValueState: parent.fieldRememberValueState
 
   signal openLinkedFeature( /* FeaturePair */ var linkedFeature )
   signal editorValueChanged( var newValue, bool isNull )
+  signal rememberValueBoxClicked( bool state )
 
   on_FieldValueChanged: {
-    title.text = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeatureTitle ) || ""
+    textField.text = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeatureTitle ) || ""
   }
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
@@ -39,7 +46,7 @@ MMInputs.MMBaseInput {
   errorMsg: _fieldErrorMessage
   warningMsg: _fieldWarningMessage
 
-  enabled: !_fieldIsReadOnly
+  readOnly: _fieldIsReadOnly
 
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
@@ -48,49 +55,33 @@ MMInputs.MMBaseInput {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
+  textField.readOnly: true
+
+  textField.onReleased: { // can be opened when when the field is readonly
+    let featurePair = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeaturePair )
+    if ( featurePair === null || !featurePair.valid ) return
+
+    openLinkedFeature( featurePair )
+  }
+
+  rightContent: MMComponents.MMIcon {
+    size: __style.icon24
+    source: __style.linkIcon
+    color: root.editState === "enabled" ? __style.forestColor : __style.mediumGreyColor
+  }
+
+  onRightContentClicked: {
+    listLoader.active = true
+    listLoader.focus = true
+  }
+
   MM.RelationReferenceFeaturesModel {
     id: rModel
 
     config: root._fieldConfig
     project: root._fieldActiveProject
 
-    onModelReset: title.text = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeatureTitle ) || ""
-  }
-
-  content: Text {
-    id: title
-
-    anchors.fill: parent
-    font: __style.p5
-    text: root._fieldValue
-    color: __style.nightColor
-    verticalAlignment: Text.AlignVCenter
-  }
-
-  onContentClicked: {
-    let featurePair = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeaturePair )
-
-    if ( featurePair == null || !featurePair.valid ) return
-
-    openLinkedFeature( featurePair )
-  }
-
-  rightAction: MMComponents.MMIcon {
-    id: rightIcon
-
-    anchors.verticalCenter: parent.verticalCenter
-
-    size: __style.icon24
-    source: __style.linkIcon
-    color: enabled ? __style.forestColor : __style.mediumGreenColor
-  }
-
-  onRightActionClicked: {
-    if ( root._fieldIsReadOnly )
-      return
-
-    listLoader.active = true
-    listLoader.focus = true
+    onModelReset: textField.text = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeatureTitle ) || ""
   }
 
   Loader {
