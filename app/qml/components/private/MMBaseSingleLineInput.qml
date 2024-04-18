@@ -37,8 +37,10 @@ MMBaseInput {
   property alias rightContentMouseArea: rightContentMouseAreaGroup
 
   property bool rightContentVisible: rightContentGroup.children.length > 0
+  property bool leftContentVisible: leftContentGroup.children.length > 0
 
   signal textEdited( string text )
+  signal textClicked()
   signal leftContentClicked()
   signal rightContentClicked()
 
@@ -88,7 +90,7 @@ MMBaseInput {
         Layout.preferredWidth: leftContentGroup.width
         Layout.leftMargin: __style.margin20
 
-        visible: leftContentGroup.children.length > 0 && leftContentGroup.children[0].visible
+        visible: leftContentVisible
 
         Item {
           id: leftContentGroup
@@ -152,6 +154,12 @@ MMBaseInput {
         background: Rectangle { color: __style.transparentColor }
 
         onTextEdited: root.textEdited( text )
+
+        onReleased: {
+          if ( root.editState !== "readOnly" ) {
+            root.textClicked()
+          }
+        }
       }
 
       Item {

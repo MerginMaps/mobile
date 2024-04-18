@@ -33,14 +33,12 @@ MMPrivateComponents.MMBaseSingleLineInput {
     uncheckedBgColor: __style.lightGreenColor
   }
 
-  textField.onReleased: toggleSwitchComponent()
+  onTextClicked: toggleSwitchComponent()
 
   onRightContentClicked: toggleSwitchComponent()
 
   function toggleSwitchComponent() {
-    if ( !readOnly) {
-      switchComponent.toggle()
-      toggled()
-    }
+    switchComponent.toggle()
+    toggled()
   }
 }
