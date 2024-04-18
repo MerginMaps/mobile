@@ -8,7 +8,6 @@
  ***************************************************************************/
 
 import QtQuick
-//import QtQuick.Controls
 
 import mm 1.0 as MM
 
@@ -57,7 +56,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
   textField.readOnly: true
 
-  textField.onReleased: { // can be opened when when the field is readonly
+  textField.onReleased: { // can be opened even when the field is readonly
     let featurePair = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeaturePair )
     if ( featurePair === null || !featurePair.valid ) return
 
