@@ -183,7 +183,8 @@ ScrollView {
             width: parent.width
 
             onTrashClicked: console.log("Move to trash")
-            onContentClicked: console.log("Open photo")
+            onChooseFromGalleryClicked: console.log("Choose from gallery")
+            onCapturePhotoClicked: console.log("Capture photo")
           }
         }
 

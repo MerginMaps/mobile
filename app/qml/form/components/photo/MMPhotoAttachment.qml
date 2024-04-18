@@ -9,13 +9,14 @@
 
 import QtQuick
 import QtQuick.Controls
-import "."
+
+import "../../../components" as MMComponents
 
 Rectangle {
   id: root
 
   color: __style.polarColor
-  radius: 20 * __dp
+  radius: __style.radius20
 
   property bool hasCameraCapability: true
 
@@ -42,18 +43,18 @@ Rectangle {
         anchors.centerIn: parent
         spacing: 8 * __dp
 
-        MMIcon {
+        MMComponents.MMIcon {
           anchors.horizontalCenter: parent.horizontalCenter
           source: __style.addImageIcon
           color: __style.forestColor
         }
 
-        Text {
+        MMComponents.MMText {
           width: parent.width
-          height: 24 * __dp
+
           font: __style.p6
           text: qsTr("Take a picture")
-          color: __style.nightColor
+
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
           elide: Text.ElideMiddle
@@ -79,18 +80,18 @@ Rectangle {
         anchors.centerIn: parent
         spacing: 8 * __dp
 
-        MMIcon {
+        MMComponents.MMIcon {
           anchors.horizontalCenter: parent.horizontalCenter
           source: __style.morePhotosIcon
           color: __style.forestColor
         }
 
-        Text {
+        MMComponents.MMText {
           width: parent.width
-          height: 24 * __dp
+
           font: __style.p6
           text: qsTr("From gallery")
-          color: __style.nightColor
+
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
           elide: Text.ElideMiddle

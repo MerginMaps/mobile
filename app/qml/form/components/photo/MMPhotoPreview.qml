@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import "../../../components" as MMComponents
+
 Popup {
   id: root
 
@@ -56,7 +58,7 @@ Popup {
     DragHandler { }
   }
 
-  MMRoundButton {
+  MMComponents.MMRoundButton {
     id: closeButton
 
     anchors.top: parent.top
