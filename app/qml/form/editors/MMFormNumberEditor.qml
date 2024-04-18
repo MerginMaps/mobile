@@ -8,11 +8,9 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
 
-import "../../components"
-import "../../inputs"
+import "../../components" as MMComponents
+import "../../components/private" as MMPrivateComponents
 
 /*
  * Number (range editable) editor for QGIS Attribute Form
@@ -22,7 +20,7 @@ import "../../inputs"
  * Should be used only within feature form.
  */
 
-MMBaseInput {
+MMPrivateComponents.MMBaseSingleLineInput {
   id: root
 
   property var _fieldValue: parent.fieldValue
@@ -39,19 +37,14 @@ MMBaseInput {
   property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
   property bool _fieldRememberValueState: parent.fieldRememberValueState
 
-  property alias placeholderText: numberInput.placeholderText
-
   signal editorValueChanged( var newValue, var isNull )
   signal rememberValueBoxClicked( bool state )
 
-
   title: _fieldShouldShowTitle ? _fieldTitle : ""
+  readOnly: _fieldIsReadOnly
 
   errorMsg: _fieldErrorMessage
   warningMsg: _fieldWarningMessage
-
-  enabled: !_fieldIsReadOnly
-  hasFocus: numberInput.activeFocus
 
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
@@ -60,95 +53,72 @@ MMBaseInput {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  leftAction: MMIcon {
+  leftContentMouseArea.enabled: root.editState === "enabled" && internal.canSubtractStep
+  leftContent: MMComponents.MMIcon {
     id: leftIcon
-
-    anchors.verticalCenter: parent.verticalCenter
 
     size: __style.icon24
     source: __style.minusIcon
-    color: enabled ? __style.forestColor : __style.mediumGreenColor
-    enabled: Number( numberInput.text ) - internal.step >= internal.from
+    color: root.editState === "enabled" && internal.canSubtractStep ? __style.forestColor : __style.mediumGreenColor
   }
 
-  onLeftActionClicked: {
-    if ( leftIcon.enabled )
-    {
-      let decremented = Number( numberInput.text ) - internal.step
-      root.editorValueChanged( decremented.toFixed( internal.precision ), false )
-    }
-  }
+  textField {
+    text: root._fieldValue === undefined || root._fieldValueIsNull ? '' : root._fieldValue
 
-  content: Item {
-    anchors.fill: parent
+    clip: true
 
-    Row {
-      height: parent.height
-      anchors.horizontalCenter: parent.horizontalCenter
-      clip: true
+    // AlignHCenter with optional suffix
+    leftPadding: Math.max( 0, ( textField.width / 2 - textField.contentWidth / 2 ) - ( internal.suffix ? suffixText.width / 2 : 0 ) )
 
-      TextField {
-        id: numberInput
+    inputMethodHints: Qt.ImhFormattedNumbersOnly
 
-        height: parent.height
+    background: Rectangle {
+      color: "transparent"
 
-        text: root._fieldValue === undefined || root._fieldValueIsNull ? '' : root._fieldValue
+      // Suffix is added as a part of the background property in order to not block clicks to the textField
+      MMComponents.MMText {
+        id: suffixText
 
-        placeholderTextColor: __style.darkGreyColor
+        property real maxWidth: textField.width / 2
+
+        width: Math.min( implicitWidth + __style.margin4, maxWidth )
+        x: textField.leftPadding + textField.contentWidth + __style.margin4
+        anchors.verticalCenter: parent.verticalCenter
+
         color: __style.nightColor
-
         font: __style.p5
 
-        clip: true
-        hoverEnabled: true
+        text: internal.suffix
 
-        verticalAlignment: Qt.AlignVCenter
-        inputMethodHints: Qt.ImhFormattedNumbersOnly
-
-        onTextEdited: {
-          let val = text.replace( ",", "." ).replace( / /g, '' ) // replace comma with dot
-
-          root.editorValueChanged( val, val  === "" )
-        }
-
-        background: Rectangle {
-          color: __style.transparentColor
-        }
-      }
-
-      Text {
-        id: suffix
-
-        text: internal.suffix ? ' ' + internal.suffix : "" // to make sure there is a space between the number and the suffix
-
-        visible: internal.suffix !== "" && numberInput.text !== ""
-
-        height: parent.height
-        verticalAlignment: Qt.AlignVCenter
-
-        font: __style.p5
-        color: numberInput.color
+        visible: internal.suffix && textField.text.length > 0
       }
     }
   }
 
-  rightAction: MMIcon {
-    id: rightIcon
+  rightContentMouseArea.enabled: root.editState === "enabled" && internal.canAddStep
 
-    anchors.verticalCenter: parent.verticalCenter
+  rightContent: MMComponents.MMIcon {
+    id: rightIcon
 
     size: __style.icon24
     source: __style.plusIcon
-    color: enabled ? __style.forestColor : __style.mediumGreenColor
-    enabled: Number( numberInput.text ) + internal.step <= internal.to
+    color: root.editState === "enabled" && internal.canAddStep ? __style.forestColor : __style.mediumGreenColor
   }
 
-  onRightActionClicked: {
-    if ( rightIcon.enabled )
-    {
-      let incremented = Number( numberInput.text ) + internal.step
-      root.editorValueChanged( incremented.toFixed( internal.precision ), false )
-    }
+  onLeftContentClicked: {
+    let decremented = Number( textField.text ) - internal.step
+    root.editorValueChanged( decremented.toFixed( internal.precision ), false )
+  }
+
+  onTextEdited: ( text ) => {
+    let val = text.replace( ",", "." ).replace( / /g, '' ) // replace comma with dot
+
+    root.editorValueChanged( val, val  === "" )
+  }
+
+  onRightContentClicked: {
+    let incremented = Number( textField.text ) + internal.step
+    root.editorValueChanged( incremented.toFixed( internal.precision ), false )
   }
 
   QtObject {
@@ -164,6 +134,9 @@ MMBaseInput {
     // i.e. if showing 2 decimals, smallest increment will be 0.01
     // https://github.com/qgis/QGIS/blob/a038a79997fb560e797daf3903d94c7d68e25f42/src/gui/editorwidgets/qgsdoublespinbox.cpp#L83-L87
     property real step: Math.max(_fieldConfig["Step"], Math.pow( 10.0, 0.0 - precision ))
+
+    property bool canSubtractStep: Number( root.textField.text ) - internal.step >= internal.from
+    property bool canAddStep: Number( root.textField.text ) + internal.step <= internal.to
   }
 
   // on press and hold behavior can be used from here:
