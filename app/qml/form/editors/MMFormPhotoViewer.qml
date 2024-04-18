@@ -8,9 +8,10 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import "../../components"
-import "../../inputs"
+
+import "../../components" as MMComponents
+import "../../components/private" as MMPrivateComponents
+import "../components/photo" as MMPhotoComponents
 
 /*
  * Photo viewer for feature form.
@@ -20,24 +21,17 @@ import "../../inputs"
  * Serves as a base class for MMPhotoFormEditor.
  */
 
-MMBaseInput {
+MMPrivateComponents.MMBaseInput {
   id: root
 
   property url photoUrl: ""
   property bool hasCameraCapability: true
 
-  // Do not use "enabled" since we want to always be able to open image previews
-  property bool allowEditing: true
-
-  property alias photoComponent: photo
+  property var photoComponent: photo
 
   signal trashClicked()
   signal capturePhotoClicked()
   signal chooseFromGalleryClicked()
-
-  contentItemHeight: 160 * __dp
-  spacing: 0
-  radius: 20 * __dp
 
   states: [
     State {
@@ -53,50 +47,58 @@ MMBaseInput {
 
   state: "notSet"
 
-  onContentClicked: {
-    if ( photo.status === Image.Ready ) {
-      previewLoader.active = true
-      previewLoader.focus = true
-    }
-  }
+  inputContent: Rectangle {
+    width: parent.width
+    height: __style.row160
 
-  content: Item {
-    MMPhoto {
+    color: __style.polarColor
+    radius: __style.radius20
+
+    MMComponents.MMPhoto {
       id: photo
 
-      width: root.width
-      height: root.contentItemHeight
-      visible: root.state !== "notSet"
-      photoUrl: root.photoUrl
+      width: parent.width
+      height: parent.height
 
+      visible: root.state !== "notSet"
+
+      photoUrl: root.photoUrl
       fillMode: Image.PreserveAspectCrop
 
       MouseArea {
         anchors.fill: parent
-        onClicked: root.contentClicked()
+        onClicked: {
+          if ( photo.status === Image.Ready ) {
+            previewLoader.active = true
+            previewLoader.focus = true
+          }
+        }
       }
 
-      MMRoundButton {
+      MMComponents.MMRoundButton {
         anchors {
           right: parent.right
           bottom: parent.bottom
-          rightMargin: 10 * __dp
-          bottomMargin: 10 * __dp
+          rightMargin: __style.margin10
+          bottomMargin: __style.margin10
         }
 
         bgndColor: __style.negativeColor
         iconSource: __style.deleteIcon
         iconColor: __style.grapeColor
-        visible: root.allowEditing && root.state !== "notSet"
+
+        visible: root.editState === "enabled" && root.state !== "notSet"
+
         onClicked: root.trashClicked()
       }
     }
 
-    MMPhotoAttachment {
-      width: root.width
-      height: root.contentItemHeight
+    MMPhotoComponents.MMPhotoAttachment {
+      width: parent.width
+      height: parent.height
+
       visible: root.state === "notSet"
-      enabled: root.allowEditing
+      enabled: root.editState === "enabled"
 
       hasCameraCapability: root.hasCameraCapability
 
@@ -116,7 +118,7 @@ MMBaseInput {
   Component {
     id: previewComponent
 
-    MMPhotoPreview {
+    MMPhotoComponents.MMPhotoPreview {
       photoUrl: root.photoUrl
     }
   }

@@ -80,7 +80,7 @@ MMFormPhotoViewer {
   warningMsg: _fieldWarningMessage
   errorMsg: _fieldErrorMessage
 
-  allowEditing: !_fieldIsReadOnly
+  readOnly: _fieldIsReadOnly
 
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState

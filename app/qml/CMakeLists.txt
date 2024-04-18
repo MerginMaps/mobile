@@ -40,8 +40,6 @@ set(MM_QML
     components/MMPage.qml
     components/MMPageHeader.qml
     components/MMPhoto.qml
-    components/MMPhotoAttachment.qml
-    components/MMPhotoPreview.qml
     components/MMProgressBar.qml
     components/MMRadioButton.qml
     components/MMRoundButton.qml
@@ -91,6 +89,8 @@ set(MM_QML
     form/components/calendar/MMMonthGrid.qml
     form/components/calendar/MMTimeTumbler.qml
     form/components/calendar/MMTumbler.qml
+    form/components/photo/MMPhotoAttachment.qml
+    form/components/photo/MMPhotoPreview.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormComboboxBaseEditor.qml
     form/editors/MMFormGalleryEditor.qml
