@@ -62,15 +62,13 @@ Drawer {
         MMComponents.MMListSpacer { height: __style.spacing20 }
 
         MMInputs.MMSearchInput {
-          id: searchInput
+          id: searchBar
 
           width: parent.width
 
           placeholderText: qsTr("Search for features...")
 
-          onSearchTextChanged: function( text ) {
-            root.searchTextChanged( text )
-          }
+          onSearchTextChanged: root.searchTextChanged( searchBar.searchText )
         }
 
         MMComponents.MMListSpacer { height: __style.spacing20 }
@@ -79,7 +77,7 @@ Drawer {
           id: listView
 
           width: parent.width
-          height: parent.height - 2 * __style.spacing20 - searchInput.height
+          height: parent.height - 2 * __style.spacing20 - searchBar.height
 
           clip: true
 

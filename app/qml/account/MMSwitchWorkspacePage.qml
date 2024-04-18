@@ -60,7 +60,7 @@ MMComponents.MMPage {
 
       placeholderText: qsTr( "Search" ) + "..."
 
-      onSearchTextChanged: function( searchText ) { root.searchTextChanged( searchText ) }
+      onSearchTextChanged: root.searchTextChanged( searchBar.searchText )
     }
 
     MMComponents.MMScrollView {

@@ -43,7 +43,7 @@ Item {
       right: parent.right
     }
 
-    allowTimer: true
+    delayedSearch: true
   }
 
 
@@ -52,7 +52,7 @@ Item {
 
     projectModelType: root.projectModelType
     activeProjectId: root.activeProjectId
-    searchText: searchBar.text
+    searchText: searchBar.searchText
     spacing: root.spacing
 
     anchors {

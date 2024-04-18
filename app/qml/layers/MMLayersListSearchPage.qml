@@ -33,15 +33,13 @@ MMComponents.MMPage {
     height: parent.height
 
     MMSearchInput {
-      id: searchbox
+      id: searchBar
 
       anchors.top: parent.top
       anchors.topMargin: __style.spacing20
       width: parent.width
 
-      onSearchTextChanged: function( searchText ) {
-        root.searchTextChanged( searchText )
-      }
+      onSearchTextChanged: root.searchTextChanged( searchBar.searchText )
     }
 
     MMLayersList {
@@ -50,7 +48,7 @@ MMComponents.MMPage {
       width: parent.width
 
       anchors {
-        top: searchbox.bottom
+        top: searchBar.bottom
         topMargin: __style.spacing20
         bottom: parent.bottom
       }
@@ -76,5 +74,5 @@ MMComponents.MMPage {
   }
 
   // open keyboard automatically
-  Component.onCompleted: searchbox.textFieldComponent.forceActiveFocus()
+  Component.onCompleted: searchBar.textField.forceActiveFocus()
 }

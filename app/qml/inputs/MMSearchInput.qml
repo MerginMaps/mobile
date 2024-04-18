@@ -8,91 +8,60 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
 
-import "../components"
+import "../components" as MMComponents
+import "../components/private" as MMPrivateComponents
 
-MMBaseInput {
+MMPrivateComponents.MMBaseSingleLineInput {
   id: root
 
-  property alias textFieldComponent: textField
-  property alias placeholderText: textField.placeholderText
-  property alias text: textField.text
-  property bool allowTimer: false
+  property bool delayedSearch: false
   property int emitInterval: 200
   property bool showClearIcon: true
-
-  hasFocus: textField.activeFocus
-
-  signal searchTextChanged( string text )
+  property string searchText: ""
 
   /**
     * Used for deactivating focus on MMSearchInput when another component should have focus.
     * and the current element's forceActiveFocus() doesnt deactivates SearchBar focus.
     */
   function deactivate() {
-    textField.focus = false
-    if ( textField.length > 0 )
-      textField.clear()
-    searchTextChanged("")
+    root.textField.focus = false
+    if ( root.text.length > 0 )
+      root.textField.clear()
+    root.searchText = ""
   }
 
-  content: TextField {
-    id: textField
-
-    anchors.fill: parent
-    anchors.verticalCenter: parent.verticalCenter
-
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
-    placeholderTextColor: __style.darkGreyColor
-    font: __style.p5
-    hoverEnabled: true
-    background: Rectangle {
-      color: __style.transparentColor
+  onTextEdited: {
+    if ( root.delayedSearch ) {
+      searchTimer.restart()
     }
-
-    onDisplayTextChanged: {
-      if ( root.allowTimer ) {
-        if ( searchTimer.running )
-          searchTimer.restart()
-        else
-          searchTimer.start()
-      }
-      else
-      {
-        root.searchTextChanged( textField.displayText )
-      }
+    else
+    {
+      root.searchText = root.text
     }
   }
 
-  leftAction: MMIcon {
+  leftContent: MMComponents.MMIcon {
     id: searchIcon
-
-    property bool pressed: false
-
-    anchors.verticalCenter: parent.verticalCenter
 
     size: __style.icon24
     source: __style.searchIcon
     color: root.enabled ? __style.nightColor : __style.mediumGreenColor
   }
 
-  rightAction: MMIcon {
+  rightContent: MMComponents.MMIcon {
     id: rightIcon
-
-    anchors.verticalCenter: parent.verticalCenter
 
     size: __style.icon24
     source: __style.closeIcon
     color: root.enabled ? __style.forestColor : __style.mediumGreenColor
-    visible: root.showClearIcon && textField.activeFocus && textField.text.length > 0
+    visible: root.showClearIcon && textField.activeFocus && root.text.length > 0
   }
 
-  onRightActionClicked: {
-    if (root.showClearIcon) {
+  onRightContentClicked: {
+    if ( root.showClearIcon ) {
       textField.clear()
-      root.searchTextChanged("")
+      root.searchText = ""
     }
     else {
       // if the clear button should not be there, let's open keyboard instead
@@ -106,8 +75,6 @@ MMBaseInput {
     interval: root.emitInterval
     running: false
 
-    onTriggered: {
-      searchTextChanged( root.text )
-    }
+    onTriggered: root.searchText = root.text
   }
 }

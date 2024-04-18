@@ -55,7 +55,7 @@ MMDrawer {
         bgColor: __style.lightGreenColor
         visible: root.withSearch
 
-        onSearchTextChanged: ( text ) => root.searchTextChanged( text )
+        onSearchTextChanged: root.searchTextChanged( searchBar.searchText )
       }
 
       MMListSpacer { id: searchBarSpacer; height: __style.spacing20; visible: root.withSearch }
