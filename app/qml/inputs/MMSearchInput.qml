@@ -20,27 +20,6 @@ MMPrivateComponents.MMBaseSingleLineInput {
   property bool showClearIcon: true
   property string searchText: ""
 
-  /**
-    * Used for deactivating focus on MMSearchInput when another component should have focus.
-    * and the current element's forceActiveFocus() doesnt deactivates SearchBar focus.
-    */
-  function deactivate() {
-    root.textField.focus = false
-    if ( root.text.length > 0 )
-      root.textField.clear()
-    root.searchText = ""
-  }
-
-  onTextEdited: {
-    if ( root.delayedSearch ) {
-      searchTimer.restart()
-    }
-    else
-    {
-      root.searchText = root.text
-    }
-  }
-
   leftContent: MMComponents.MMIcon {
     id: searchIcon
 
@@ -55,8 +34,9 @@ MMPrivateComponents.MMBaseSingleLineInput {
     size: __style.icon24
     source: __style.closeIcon
     color: root.enabled ? __style.forestColor : __style.mediumGreenColor
-    visible: root.showClearIcon && textField.activeFocus && root.text.length > 0
   }
+
+  rightContentVisible: root.showClearIcon && textField.activeFocus && root.text.length > 0
 
   onRightContentClicked: {
     if ( root.showClearIcon ) {
@@ -69,6 +49,16 @@ MMPrivateComponents.MMBaseSingleLineInput {
     }
   }
 
+  onTextEdited: {
+    if ( root.delayedSearch ) {
+      searchTimer.restart()
+    }
+    else
+    {
+      root.searchText = root.text
+    }
+  }
+
   Timer {
     id: searchTimer
 
@@ -76,5 +66,16 @@ MMPrivateComponents.MMBaseSingleLineInput {
     running: false
 
     onTriggered: root.searchText = root.text
+  }
+
+  /**
+    * Used for deactivating focus on MMSearchInput when another component should have focus.
+    * and the current element's forceActiveFocus() doesnt deactivates SearchBar focus.
+    */
+  function deactivate() {
+    root.textField.focus = false
+    if ( root.text.length > 0 )
+      root.textField.clear()
+    root.searchText = ""
   }
 }
