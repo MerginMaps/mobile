@@ -112,12 +112,12 @@ MMBaseInput {
             bottomMargin: -__style.margin16
           }
 
-          enabled: root.editState === "enabled"
-
           onClicked: function( mouse ) {
-            mouse.accepted = true
-            root.focus = true
-            root.leftContentClicked()
+            if ( root.editState === "enabled" ) {
+                mouse.accepted = true
+                root.focus = true
+                root.leftContentClicked()
+            }
           }
         }
       }
@@ -190,12 +190,12 @@ MMBaseInput {
             bottomMargin: -__style.margin16
           }
 
-          enabled: root.editState === "enabled"
-
           onClicked: function( mouse ) {
-            mouse.accepted = true
-            root.focus = true
-            root.rightContentClicked()
+            if ( root.editState === "enabled" ) {
+              mouse.accepted = true
+              root.focus = true
+              root.rightContentClicked()
+            }
           }
         }
       }
