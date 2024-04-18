@@ -8,8 +8,7 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import "../../components"
+
 import "../../inputs"
 
 /*
@@ -18,9 +17,10 @@ import "../../inputs"
  * These properties are injected here via 'fieldXYZ' properties and captured with underscore `_`.
  *
  * Should be used only within feature form.
+ * See MMBaseSingleLineInput
  */
 
-MMBaseInput {
+MMSwitchInput {
   id: root
 
   property var _field: parent.field
@@ -45,47 +45,22 @@ MMBaseInput {
   warningMsg: _fieldWarningMessage
   errorMsg: _fieldErrorMessage
 
-  enabled: !_fieldIsReadOnly
-
-  hasFocus: rightSwitch.focus
+  readOnly: _fieldIsReadOnly
 
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
 
+  text: checked ? internal.checkedStateValue : internal.uncheckedStateValue
+
+  checked: _fieldValue === internal.checkedStateValue
+
+  onToggled: {
+    let newVal = checked ? internal.checkedStateValue : internal.uncheckedStateValue
+    editorValueChanged( newVal, false )
+  }
+
   onCheckboxCheckedChanged: {
-    root.rememberValueBoxClicked( checkboxChecked )
-  }
-
-  content: Text {
-    id: textField
-
-    width: parent.width
-    anchors.verticalCenter: parent.verticalCenter
-
-    text: rightSwitch.checked ? internal.checkedStateValue : internal.uncheckedStateValue
-
-    color: __style.nightColor
-    font: __style.p5
-    elide: Text.ElideRight
-  }
-
-  onContentClicked: {
-    rightSwitch.toggle()
-  }
-
-  rightAction: MMSwitch {
-    id: rightSwitch
-
-    height: parent.height
-    x: -__style.margin20
-
-    uncheckedBgColor: __style.lightGreenColor
-    checked: root._fieldValue === internal.checkedStateValue
-
-    onCheckedChanged: {
-      let newVal = rightSwitch.checked ? internal.checkedStateValue : internal.uncheckedStateValue
-      root.editorValueChanged( newVal, false )
-    }
+    rememberValueBoxClicked( checkboxChecked )
   }
 
   function getConfigValue( configValue, defaultValue ) {

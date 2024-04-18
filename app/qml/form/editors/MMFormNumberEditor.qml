@@ -53,7 +53,6 @@ MMPrivateComponents.MMBaseSingleLineInput {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  leftContentMouseArea.enabled: root.editState === "enabled" && internal.canSubtractStep
   leftContent: MMComponents.MMIcon {
     id: leftIcon
 
@@ -95,8 +94,6 @@ MMPrivateComponents.MMBaseSingleLineInput {
     }
   }
 
-  rightContentMouseArea.enabled: root.editState === "enabled" && internal.canAddStep
-
   rightContent: MMComponents.MMIcon {
     id: rightIcon
 
@@ -106,8 +103,10 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   onLeftContentClicked: {
-    let decremented = Number( textField.text ) - internal.step
-    root.editorValueChanged( decremented.toFixed( internal.precision ), false )
+    if ( internal.canSubtractStep ) {
+      let decremented = Number( textField.text ) - internal.step
+      root.editorValueChanged( decremented.toFixed( internal.precision ), false )
+    }
   }
 
   onTextEdited: ( text ) => {
@@ -117,8 +116,10 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   onRightContentClicked: {
-    let incremented = Number( textField.text ) + internal.step
-    root.editorValueChanged( incremented.toFixed( internal.precision ), false )
+    if ( internal.canAddStep ) {
+      let incremented = Number( textField.text ) + internal.step
+      root.editorValueChanged( incremented.toFixed( internal.precision ), false )
+    }
   }
 
   QtObject {
