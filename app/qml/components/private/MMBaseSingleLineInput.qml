@@ -108,6 +108,8 @@ MMBaseInput {
             bottomMargin: -__style.margin16
           }
 
+          enabled: root.editState === "enabled"
+
           onClicked: function( mouse ) {
             mouse.accepted = true
             root.focus = true
@@ -177,6 +179,8 @@ MMBaseInput {
             rightMargin: -__style.margin20
             bottomMargin: -__style.margin16
           }
+
+          enabled: root.editState === "enabled"
 
           onClicked: function( mouse ) {
             mouse.accepted = true
