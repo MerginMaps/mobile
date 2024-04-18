@@ -23,6 +23,14 @@ Switch {
   bottomPadding: 0
   leftPadding: 0
 
+  contentItem: Text {
+    text: root.text
+    font: __style.p5
+    color: root.enabled ? root.enabledFgColor : root.disabledFgColor
+    verticalAlignment: Text.AlignVCenter
+    leftPadding: root.indicator.width + ( text ? root.spacing : 0 )
+  }
+
   indicator: Rectangle {
     id: indicatorRectangle
 
