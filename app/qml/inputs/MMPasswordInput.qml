@@ -17,7 +17,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
   textField.echoMode: eyeButton.pressed ? TextInput.Normal : TextInput.Password
 
-  textField.inputMethodHints: textField.inputMethodHints | Qt.ImhNoAutoUppercase
+  textField.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData | Qt.ImhHiddenText
 
   rightContent: MMComponents.MMIcon {
     id: eyeButton
@@ -26,7 +26,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
     size: __style.icon24
     source: pressed ? __style.hideIcon : __style.showIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    color: root.editState === "enabled" ? __style.forestColor : __style.mediumGreenColor
   }
 
   onRightContentClicked: eyeButton.pressed = !eyeButton.pressed
