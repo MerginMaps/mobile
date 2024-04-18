@@ -52,7 +52,8 @@ MMDrawer {
 
         placeholderText: qsTr( "Search" )
 
-        bgColor: __style.lightGreenColor
+        textFieldBackground: __style.lightGreenColor
+
         visible: root.withSearch
 
         onSearchTextChanged: root.searchTextChanged( searchBar.searchText )
