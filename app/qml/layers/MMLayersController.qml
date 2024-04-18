@@ -102,7 +102,7 @@ Item {
         }
       }
 
-      onSearchboxClicked: function() {
+      onSearchBarClicked: function() {
         let item = pagesStackView.push( searchLayersPage, {}, StackView.Immediate )
         item.forceActiveFocus()
       }
