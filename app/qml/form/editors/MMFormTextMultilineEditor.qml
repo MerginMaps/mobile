@@ -10,6 +10,10 @@
 import QtQuick
 import QtQuick.Controls
 
+// To ignore the warning "The current style does not support customization"
+// see from https://stackoverflow.com/questions/76625756/the-current-style-does-not-support-customization-of-this-control
+import QtQuick.Controls.Basic
+
 import "../../components/private" as MMPrivateComponents
 
 /*
