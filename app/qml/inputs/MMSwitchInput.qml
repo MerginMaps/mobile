@@ -30,8 +30,6 @@ MMPrivateComponents.MMBaseSingleLineInput {
   rightContent: MMComponents.MMSwitch {
     id: switchComponent
 
-    anchors.verticalCenter: parent.verticalCenter
-
     uncheckedBgColor: __style.lightGreenColor
   }
 

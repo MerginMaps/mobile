@@ -36,6 +36,8 @@ MMBaseInput {
   property alias leftContentMouseArea: leftContentMouseAreaGroup
   property alias rightContentMouseArea: rightContentMouseAreaGroup
 
+  property bool rightContentVisible: rightContentGroup.children.length > 0
+
   signal textEdited( string text )
   signal leftContentClicked()
   signal rightContentClicked()
@@ -157,7 +159,7 @@ MMBaseInput {
         Layout.preferredWidth: rightContentGroup.width
         Layout.rightMargin: __style.margin20
 
-        visible: rightContentGroup.children.length > 0 && rightContentGroup.children[0].visible
+        visible: rightContentVisible
 
         Item {
           id: rightContentGroup
