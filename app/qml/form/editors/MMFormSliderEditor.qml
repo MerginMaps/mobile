@@ -10,9 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
-import QtQuick.Layouts
 
-import "../../inputs"
+import "../../components/private" as MMPrivateComponents
 
 /*
  * Number slider editor for QGIS Attribute Form
@@ -22,7 +21,7 @@ import "../../inputs"
  * Should be used only within feature form.
  */
 
-MMBaseInput {
+MMPrivateComponents.MMBaseSingleLineInput {
   id: root
 
   property var _fieldValue: parent.fieldValue
@@ -46,8 +45,7 @@ MMBaseInput {
   warningMsg: _fieldWarningMessage
   errorMsg: _fieldErrorMessage
 
-  hasFocus: slider.activeFocus
-  enabled: !_fieldIsReadOnly
+  readOnly: _fieldIsReadOnly
 
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
@@ -56,67 +54,57 @@ MMBaseInput {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  content: Item {
-    id: input
+  textField {
+    text: Number( slider.value ).toFixed( internal.precision ).toLocaleString( root.locale ) + ' ' + internal.suffix
+    readOnly: true
+  }
 
-    anchors.fill: parent
+  rightContentMouseArea.enabled: false
 
-    RowLayout {
-      id: rowLayout
+  rightContent: Slider {
+    id: slider
 
-      anchors.fill: parent
+    width: root.width / 2
 
-      Text {
-        id: valueLabel
+    to: internal.to
+    from: internal.from
+    stepSize: internal.step
 
-        Layout.preferredWidth: rowLayout.width / 2 - root.spacing
-        Layout.maximumWidth: rowLayout.width / 2 - root.spacing
-        Layout.preferredHeight: input.height
-        Layout.maximumHeight: input.height
+    enabled: root.editState === "enabled"
+    value: root._fieldValue ? root._fieldValue : 0
 
-        elide: Text.ElideRight
-        text: Number( slider.value ).toFixed( internal.precision ).toLocaleString( root.locale ) + ' ' + internal.suffix
+    onPressedChanged: textField.focus = true
+    onValueChanged: root.editorValueChanged( slider.value, false )
 
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignLeft
-        font: __style.p5
-        color: __style.nightColor
+    background: Rectangle {
+      x: slider.leftPadding
+      y: slider.topPadding + slider.availableHeight / 2 - height / 2
+      width: slider.availableWidth
+      height: __style.row4
+      radius: __style.radius2
+
+      color: __style.lightGreenColor
+
+      Rectangle {
+        // fill indicator
+        height: parent.height
+        width: slider.visualPosition * parent.width
+
+        color: internal.indicatorColor
+
+        radius: __style.radius2
       }
+    }
 
-      Slider {
-        id: slider
+    handle: Rectangle {
+      x: slider.leftPadding + slider.visualPosition * (slider.availableWidth - width)
+      y: slider.topPadding + slider.availableHeight / 2 - height / 2
+      width: 20 * __dp
+      height: width
 
-        Layout.fillWidth: true
-        Layout.maximumHeight: input.height
-        Layout.preferredHeight: input.height
+      radius: height / 2
 
-        to: internal.to
-        from: internal.from
-        stepSize: internal.step
-        value: root._fieldValue ? root._fieldValue : 0
-
-        onValueChanged: root.editorValueChanged( slider.value, false )
-
-        background: Rectangle {
-          x: slider.leftPadding
-          y: slider.topPadding + slider.availableHeight / 2 - height / 2
-          width: slider.availableWidth
-          height: 4 * __dp
-          radius: 2 * __dp
-
-          color: __style.lightGreenColor
-        }
-
-        handle: Rectangle {
-          x: slider.leftPadding + slider.visualPosition * (slider.availableWidth - width)
-          y: slider.topPadding + slider.availableHeight / 2 - height / 2
-          width: 20 * __dp
-          height: width
-          radius: height / 2
-
-          color: root.enabled ? __style.forestColor : __style.lightGreenColor
-        }
-      }
+      color: internal.indicatorColor
     }
   }
 
@@ -131,6 +119,13 @@ MMBaseInput {
     property int precision: _fieldConfig["Precision"]
     property real step: _fieldConfig["Step"] ? _fieldConfig["Step"] : 1
     property string suffix: _fieldConfig["Suffix"] ? _fieldConfig["Suffix"] : ""
+
+    property color indicatorColor: {
+      if ( root.editState !== "enabled" ) return __style.mediumGreyColor
+      if ( root.validationState === "error" ) return __style.grapeColor
+      if ( root.validationState === "warning" ) return __style.earthColor
+      return __style.forestColor
+    }
 
     readonly property int intMax: 2000000000 // https://doc.qt.io/qt-5/qml-int.html
 
