@@ -64,6 +64,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
+  textField.readOnly: true
+
   onTextClicked: root.openCalendar()
   onRightContentClicked: root.openCalendar()
 
