@@ -13,6 +13,7 @@
 #include <QObject>
 #include <qglobal.h>
 #include <QQmlEngine>
+#include <QTimer>
 
 #include "abstracttrackingbackend.h"
 
@@ -33,6 +34,7 @@ class PositionTrackingManager : public QObject
     Q_PROPERTY( QDateTime startTime READ startTime NOTIFY startTimeChanged )
     Q_PROPERTY( QgsGeometry trackedGeometry READ trackedGeometry NOTIFY trackedGeometryChanged )
     Q_PROPERTY( bool isTrackingPosition READ isTrackingPosition NOTIFY isTrackingPositionChanged )
+    Q_PROPERTY( QString elapsedTimeText READ elapsedTimeText NOTIFY elapsedTimeTextChanged )
 
     // properties to be set from QML
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
@@ -73,6 +75,9 @@ class PositionTrackingManager : public QObject
 
     QDateTime startTime() const;
 
+    //! How long we have been tracking, formatted as a text (empty if not tracking)
+    QString elapsedTimeText() const;
+
     bool isTrackingPosition() const;
 
   public slots:
@@ -99,6 +104,8 @@ class PositionTrackingManager : public QObject
 
     void abort();
 
+    void elapsedTimeTextChanged();
+
   private:
     void setLayerId( QString newLayerId );
     void setup();
@@ -114,6 +121,9 @@ class PositionTrackingManager : public QObject
     QDateTime mTrackingStartTime;
     QgsFeature mTrackedFeature;
     bool mIsTrackingPosition = false;
+
+    // timer to make sure we are periodically updating tracking elapsed time
+    QTimer mElapsedTimeTextTimer;
 };
 
 #endif // POSITIONTRACKINGMANAGER_H

@@ -550,10 +550,7 @@ ApplicationWindow {
           function getStartingTime() {
             if ( map.isTrackingPosition )
             {
-              let date = map.trackingManager?.startTime
-              if ( date ) {
-                return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
-              }
+              return map.trackingManager?.elapsedTimeText
             }
             return qsTr( "not tracking" )
           }

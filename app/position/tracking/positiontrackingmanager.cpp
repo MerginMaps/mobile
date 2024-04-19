@@ -30,6 +30,7 @@
 PositionTrackingManager::PositionTrackingManager( QObject *parent )
   : QObject( parent )
 {
+  connect( &mElapsedTimeTextTimer, &QTimer::timeout, this, &PositionTrackingManager::elapsedTimeTextChanged );
 }
 
 void PositionTrackingManager::addPoint( const QgsPoint &position )
@@ -208,6 +209,8 @@ void PositionTrackingManager::setup()
   {
     emit trackedGeometryChanged( mTrackedGeometry );
   }
+
+  mElapsedTimeTextTimer.start( 1000 );
 }
 
 AbstractTrackingBackend *PositionTrackingManager::constructTrackingBackend( QgsProject *project, PositionKit *positionKit )
@@ -346,6 +349,20 @@ void PositionTrackingManager::tryAgain()
 QDateTime PositionTrackingManager::startTime() const
 {
   return mTrackingStartTime;
+}
+
+QString PositionTrackingManager::elapsedTimeText() const
+{
+  if ( !mIsTrackingPosition )
+    return QString();
+
+  qint64 totalSecs = mTrackingStartTime.secsTo( QDateTime::currentDateTime() );
+  int hours = totalSecs / 3600;
+  totalSecs = totalSecs % 3600;
+  int minutes = totalSecs / 60;
+  int seconds = totalSecs % 60;
+
+  return QString( "%1:%2:%3" ).arg( hours, 2, 10, QChar( '0' ) ).arg( minutes, 2, 10, QChar( '0' ) ).arg( seconds, 2, 10, QChar( '0' ) );
 }
 
 bool PositionTrackingManager::isTrackingPosition() const

@@ -60,7 +60,7 @@ MMComponents.MMDrawerDialog {
         MMComponents.MMText {
           width: parent.width
 
-          text: qsTr("Started at")
+          text: qsTr("Tracking time")
           horizontalAlignment: Text.AlignRight
           font: __style.p6
           color: __style.nightColor

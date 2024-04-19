@@ -521,11 +521,7 @@ Item {
 
           text: {
             if (visible) {
-              // TODO make some merge with main.qml:trackingPrivate.getStartingTime()
-              let date = root.trackingManager?.startTime
-              if ( date ) {
-                return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
-              }
+              return root.trackingManager?.elapsedTimeText
             }
             else
               return ""
