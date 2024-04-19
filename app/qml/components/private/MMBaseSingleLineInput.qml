@@ -48,7 +48,11 @@ MMBaseInput {
     return __style.forestColor
   }
 
+  // Text edited signal is emitted when user edits the text manually,
+  // you won't receive it when text is changed programatically.
+  // Use textChanged if you need to listen to any text change.
   signal textEdited( string text )
+
   signal textClicked()
   signal leftContentClicked()
   signal rightContentClicked()
