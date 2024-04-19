@@ -18,7 +18,9 @@
 #include "qgsdatetimefieldformatter.h"
 #include "qgsmarkersymbollayer.h"
 #include "qgis.h"
+#include "qgslinesymbol.h"
 #include "qgssymbollayer.h"
+#include "qgssymbollayerutils.h"
 #include "qgssymbol.h"
 #include "qgsmarkersymbol.h"
 #include "qgssinglesymbolrenderer.h"
@@ -86,6 +88,72 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList
   return l;
 }
 
+static QgsVectorLayer *createTrackingLayer( const QString &trackingGpkgPath )
+{
+  // based on the code in https://github.com/MerginMaps/qgis-plugin/blob/master/Mergin/utils.py
+  // (create_tracking_layer(), setup_tracking_layer(), set_tracking_layer_flags())
+
+  QgsFields fields;
+  fields.append( QgsField( "tracking_start_time", QVariant::DateTime ) );
+  fields.append( QgsField( "tracking_end_time", QVariant::DateTime ) );
+  fields.append( QgsField( "total_distance", QVariant::Double ) );
+  fields.append( QgsField( "tracked_by", QVariant::String ) );
+
+  QgsVectorFileWriter::SaveVectorOptions options;
+  options.driverName = "GPKG";
+  options.layerName = "tracking_layer";
+
+  QgsVectorFileWriter *writer = QgsVectorFileWriter::create(
+                                  trackingGpkgPath,
+                                  fields,
+                                  Qgis::WkbType::LineStringZM,
+                                  QgsCoordinateReferenceSystem( "EPSG:4326" ),
+                                  QgsCoordinateTransformContext(),
+                                  options );
+  delete writer;
+
+  QgsVectorLayer *layer = new QgsVectorLayer( trackingGpkgPath, "tracking_layer", "ogr" );
+
+  int idx = layer->fields().indexFromName( "fid" );
+  QgsEditorWidgetSetup cfg( "Hidden", QVariantMap() );
+  layer->setEditorWidgetSetup( idx, cfg );
+
+  idx = layer->fields().indexFromName( "tracking_start_time" );
+  QgsDefaultValue start_time_default;
+  start_time_default.setExpression( "@tracking_start_time" );
+  layer->setDefaultValueDefinition( idx, start_time_default );
+
+  idx = layer->fields().indexFromName( "tracking_end_time" );
+  QgsDefaultValue end_time_default;
+  end_time_default.setExpression( "@tracking_end_time" );
+  layer->setDefaultValueDefinition( idx, end_time_default );
+
+  idx = layer->fields().indexFromName( "total_distance" );
+  QgsDefaultValue distance_default;
+  distance_default.setExpression( "round($length, 2)" );
+  layer->setDefaultValueDefinition( idx, distance_default );
+
+  idx = layer->fields().indexFromName( "tracked_by" );
+  QgsDefaultValue user_default;
+  user_default.setExpression( "@mergin_username" );
+  layer->setDefaultValueDefinition( idx, user_default );
+
+  QVariantMap symbolProps;
+  symbolProps["capstyle"] = "square";
+  symbolProps["joinstyle"] = "bevel";
+  symbolProps["line_style"] = "solid";
+  symbolProps["line_width"] = "0.35";
+  symbolProps["line_width_unit"] = "MM";
+  symbolProps["line_color"] = QgsSymbolLayerUtils::encodeColor( QColor( "#FFA500" ) );
+
+  layer->setRenderer( new QgsSingleSymbolRenderer( QgsLineSymbol::createSimple( symbolProps ) ) );
+
+  layer->setReadOnly( false );
+  layer->setFlags( QgsMapLayer::Identifiable | QgsMapLayer::Searchable | QgsMapLayer::Removable );
+
+  return layer;
+}
+
 void ProjectWizard::createProject( QString const &projectName, FieldsModel *fieldsModel )
 {
   if ( !CoreUtils::isValidName( projectName ) )
@@ -95,9 +163,9 @@ void ProjectWizard::createProject( QString const &projectName, FieldsModel *fiel
   }
 
   QString projectDir = CoreUtils::createUniqueProjectDirectory( mDataDir, projectName );
-  QString projectFilepath( QString( "%1/%2.%3" ).arg( projectDir ).arg( projectName ).arg( "qgz" ) );
-  QString gpkgName( QStringLiteral( "data" ) );
-  QString projectGpkgPath( QString( "%1/%2.%3" ).arg( projectDir ).arg( gpkgName ).arg( "gpkg" ) );
+  QString projectFilepath( QString( "%1/%2.qgz" ).arg( projectDir ).arg( projectName ) );
+  QString projectGpkgPath( QString( "%1/data.gpkg" ).arg( projectDir ) );
+  QString trackingGpkgPath( QString( "%1/tracking_layer.gpkg" ).arg( projectDir ) );
 
   QgsProject project;
 
@@ -115,8 +183,14 @@ void ProjectWizard::createProject( QString const &projectName, FieldsModel *fiel
   metadata.setRights( QStringList() << QStringLiteral( "© OpenMapTiles © OpenStreetMap contributors" ) );
   bgLayer->setMetadata( metadata );
   QgsVectorLayer *layer = createGpkgLayer( projectDir, fieldsModel->fields() );
+
+  QgsVectorLayer *trackingLayer = createTrackingLayer( trackingGpkgPath );
+  project.writeEntry( "Mergin", "PositionTracking/Enabled", true );
+  project.writeEntry( "Mergin", "PositionTracking/TrackingLayer", trackingLayer->id() );
+  project.writeEntry( "Mergin", "PositionTracking/UpdateFrequency", 0 );  // 0 means often (1 = normal, 2 = occasional)
+
   QList<QgsMapLayer *> layers;
-  layers << layer << bgLayer;
+  layers << layer << trackingLayer << bgLayer;
   project.addMapLayers( layers );
 
   // Configurate mapSettings
