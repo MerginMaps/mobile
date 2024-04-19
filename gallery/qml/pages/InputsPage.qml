@@ -90,15 +90,6 @@ ScrollView {
           warningMsg: text.length > 0 ? "" : "Write something"
         }
 
-        MMInputs.MMTextWithButtonInput {
-          title: "MMTextWithButtonInput"
-          placeholderText: "Write something"
-          buttonText: "Copy"
-          width: parent.width
-          onButtonClicked: console.log("Copy pressed")
-          buttonEnabled: text.length > 0
-        }
-
         MMInputs.MMPasswordInput {
           title: "MMPasswordInput"
           text: "Password"
