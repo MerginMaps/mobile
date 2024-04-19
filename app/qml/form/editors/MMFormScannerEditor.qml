@@ -8,10 +8,9 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
-import "../../components"
-import "../../inputs"
+
+import "../../components" as MMComponents
+import "../../components/private" as MMPrivateComponents
 
 /*
  * QR/Barcode scanner editor for QGIS Attribute Form
@@ -21,7 +20,7 @@ import "../../inputs"
  * Should be used only within feature form.
  */
 
-MMBaseInput {
+MMPrivateComponents.MMBaseSingleLineInput  {
   id: root
 
   property var _fieldValue: parent.fieldValue
@@ -38,9 +37,6 @@ MMBaseInput {
   property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
   property bool _fieldRememberValueState: parent.fieldRememberValueState
 
-  property alias placeholderText: textField.placeholderText
-  property alias text: textField.text
-
   signal editorValueChanged( var newValue, bool isNull )
   signal rememberValueBoxClicked( bool state )
 
@@ -49,8 +45,7 @@ MMBaseInput {
   warningMsg: _fieldWarningMessage
   errorMsg: _fieldErrorMessage
 
-  hasFocus: textField.activeFocus
-  enabled: !_fieldIsReadOnly
+  readOnly: _fieldIsReadOnly
 
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
@@ -59,39 +54,20 @@ MMBaseInput {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  content: TextField {
-    id: textField
+  text: root._fieldValue === undefined || root._fieldValueIsNull ? '' : root._fieldValue
 
-    anchors.fill: parent
-    anchors.verticalCenter: parent.verticalCenter
+  onTextEdited: root.editorValueChanged( root.text, root.text === "" )
 
-    readOnly: !root.enabled
-
-    text: root._fieldValue === undefined || root._fieldValueIsNull ? '' : root._fieldValue
-
-    color: __style.nightColor
-    placeholderTextColor: __style.darkGreyColor
-
-    font: __style.p5
-    hoverEnabled: true
-
-    background: Rectangle { color: __style.transparentColor }
-
-    onTextEdited: root.editorValueChanged( textField.text, textField.text === "" )
-  }
-
-  rightAction: MMIcon {
+  rightContent: MMComponents.MMIcon {
     property bool pressed: false
-
-    anchors.verticalCenter: parent.verticalCenter
 
     size: __style.icon24
     source: __style.qrCodeIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    color: root.editState === "enabled" ? __style.forestColor : __style.mediumGreenColor
   }
 
-  onRightActionClicked: {
-    if ( !root.enabled )
+  onRightContentClicked: {
+    if ( root.editState !== "enabled"  )
       return
 
     if (!__inputUtils.acquireCameraPermission())
@@ -112,7 +88,7 @@ MMBaseInput {
   Component {
     id: readerComponent
 
-    MMCodeScanner {
+    MMComponents.MMCodeScanner {
       focus: true
 
       onClosed: codeScannerLoader.active = false
