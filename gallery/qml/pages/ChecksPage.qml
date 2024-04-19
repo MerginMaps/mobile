@@ -188,6 +188,11 @@ Column {
         enabled: false
         checked: false
       }
+      MMComponents.MMSwitch {
+        text: "disabled"
+        enabled: false
+        checked: true
+      }
     }
   }
 }

@@ -29,7 +29,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   rightContent: MMComponents.MMIcon {
     size: __style.icon24
     source: __style.closeIcon
-    color: root.editState === "enabled" ? __style.forestColor : __style.mediumGreenColor
+    color: root.iconColor
   }
 
   rightContentVisible: root.showClearIcon && textField.activeFocus && textField.text.length > 0

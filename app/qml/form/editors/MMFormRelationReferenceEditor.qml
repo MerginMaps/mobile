@@ -66,7 +66,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   rightContent: MMComponents.MMIcon {
     size: __style.icon24
     source: __style.linkIcon
-    color: root.editState === "enabled" ? __style.forestColor : __style.mediumGreyColor
+    color: root.iconColor
   }
 
   onRightContentClicked: {
