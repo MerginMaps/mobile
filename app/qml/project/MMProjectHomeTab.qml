@@ -96,8 +96,6 @@ Item {
 
     projectModelType: MM.ProjectsModel.LocalProjectsModel
     activeProjectId: root.activeProjectId
-
-    hideActiveProject: true // TODO: do not hide when searching!
     searchText: searchBar.searchText
 
     spacing: root.spacing
