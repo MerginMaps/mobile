@@ -198,6 +198,7 @@ MMPage {
           MMTextInput {
             id: serverURLInput
 
+            width: parent.width
             title: qsTr( "Server address" )
 
             textFieldBackground.color: __style.lightGreenColor
