@@ -94,6 +94,8 @@ Item {
       width: parent.width
       implicitHeight: titleRowGroup.implicitHeight
 
+      visible: root.title
+
       RowLayout {
         id: titleRowGroup
 

@@ -34,6 +34,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
   onTextClicked: { drawerLoader.active = true; drawerLoader.focus = true }
   onRightContentClicked: { drawerLoader.active = true; drawerLoader.focus = true }
 
+  textField.readOnly: true
+
   text: {
     if ( !comboboxModel ) return "";
     if ( currentIndex < 0 || currentIndex >= comboboxModel.count ) return "";

@@ -49,6 +49,8 @@ MMSettingsItem {
           MMInputs.MMTextInput {
             id: textInput
 
+            width: parent.width
+
             title: root.title
 
             textFieldBackground.color: __style.lightGreenColor
