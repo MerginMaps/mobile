@@ -46,7 +46,7 @@ Rectangle {
         MMComponents.MMIcon {
           anchors.horizontalCenter: parent.horizontalCenter
           source: __style.addImageIcon
-          color: __style.forestColor
+          color: root.enabled ? __style.forestColor : __style.mediumGreyColor
         }
 
         MMComponents.MMText {
@@ -83,7 +83,7 @@ Rectangle {
         MMComponents.MMIcon {
           anchors.horizontalCenter: parent.horizontalCenter
           source: __style.morePhotosIcon
-          color: __style.forestColor
+          color: root.enabled ? __style.forestColor : __style.mediumGreyColor
         }
 
         MMComponents.MMText {
