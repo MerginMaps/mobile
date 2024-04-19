@@ -27,11 +27,9 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
   property alias dropdownLoader: drawerLoader
 
-  textField {
-    readOnly: true
+  textField.readOnly: true
 
-    onReleased: openDrawer()
-  }
+  onTextClicked: openDrawer()
 
   rightContent: MMComponents.MMIcon {
     size: __style.icon24
