@@ -33,15 +33,15 @@ MMComponents.MMPage {
     height: parent.height
 
     MMSearchInput {
-      id: searchbox
+      id: searchBar
 
       anchors.top: parent.top
       anchors.topMargin: __style.spacing20
 
       width: parent.width
 
-      allowTimer: true
-      onSearchTextChanged: featuresModel.searchExpression = searchbox.text
+      delayedSearch: true
+      onSearchTextChanged: featuresModel.searchExpression = searchBar.text
     }
 
     ListView {
@@ -50,7 +50,7 @@ MMComponents.MMPage {
       width: parent.width
 
       anchors {
-        top: searchbox.bottom
+        top: searchBar.bottom
         bottom: parent.bottom
         topMargin: __style.spacing20
       }

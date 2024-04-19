@@ -80,7 +80,7 @@ MMFormPhotoViewer {
   warningMsg: _fieldWarningMessage
   errorMsg: _fieldErrorMessage
 
-  allowEditing: !_fieldIsReadOnly
+  readOnly: _fieldIsReadOnly
 
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
@@ -204,22 +204,22 @@ MMFormPhotoViewer {
       let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
 
       if ( root.photoComponent.status === Image.Error ) {
-        root.state = "notAvailable"
+        root.photoState = "notAvailable"
         absoluteImagePath = ""
         return
       }
       else if ( root._fieldValue && __inputUtils.fileExists( absolutePath ) ) {
-        root.state = "valid"
+        root.photoState = "valid"
         absoluteImagePath = "file://" + absolutePath
         return
       }
       else if ( !root._fieldValue || root._fieldValueIsNullfield ) {
-        root.state = "notSet"
+        root.photoState = "notSet"
         absoluteImagePath = ""
         return
       }
 
-      root.state = "notAvailable"
+      root.photoState = "notAvailable"
       absoluteImagePath = "file://" + absolutePath
     }
 

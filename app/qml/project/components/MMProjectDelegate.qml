@@ -98,7 +98,7 @@ Control {
             font: __style.t3
             color: {
               if ( root.projectIsOpened ) return __style.polarColor
-              if ( root.state === "Error" ) return __style.nightAlphaColor
+              if ( root.state === "Error" ) return __style.darkGreyColor
               return __style.nightColor
             }
           }

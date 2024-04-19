@@ -8,12 +8,11 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
 
 import "../../components" as MMComponents
+import "../../components/private" as MMPrivateComponents
+
 import "../components" as MMFormComponents
-import "../../inputs"
 
 /*
  * Calendar (datetime) editor for QGIS Attribute Form
@@ -23,7 +22,7 @@ import "../../inputs"
  * Should be used only within feature form.
  */
 
-MMBaseInput {
+MMPrivateComponents.MMBaseSingleLineInput {
   id: root
 
   property var _field: parent.field
@@ -50,9 +49,8 @@ MMBaseInput {
   property bool includesDate: typeFromFieldFormat.includes("Date")
   property bool showSeconds: true
 
-  property alias text: textField.text
-
   title: _fieldShouldShowTitle ? _fieldTitle : ""
+  text: formatText( root._fieldValue )
 
   warningMsg: _fieldWarningMessage
   errorMsg: _fieldErrorMessage
@@ -60,36 +58,22 @@ MMBaseInput {
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
 
-  enabled: !_fieldIsReadOnly
-  hasFocus: textField.activeFocus
+  readOnly: _fieldIsReadOnly
 
   onCheckboxCheckedChanged: {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  content: MMComponents.MMText {
-    id: textField
+  onTextClicked: root.openCalendar()
+  onRightContentClicked: root.openCalendar()
 
-    anchors.fill: parent
-
-    text: formatText( root._fieldValue )
-    color: __style.nightColor
-    font: __style.p5
-  }
-
-  onContentClicked: root.openCalendar()
-
-  rightAction: MMComponents.MMIcon {
+  rightContent: MMComponents.MMIcon {
     id: rightIcon
-
-    anchors.verticalCenter: parent.verticalCenter
 
     size: __style.icon24
     source: __style.calendarIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    color: root.iconColor
   }
-
-  onRightActionClicked: root.openCalendar()
 
   Loader {
     id: dateTimeDrawerLoader

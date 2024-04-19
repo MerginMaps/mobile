@@ -8,48 +8,48 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import "../components"
 
-Item {
+import "../../components/private" as MMPrivateComponents
+
+MMPrivateComponents.MMBaseInput {
   id: root
 
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
 
-  property real padding: 11 * __dp
+  property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
 
-  height: textArea.height
-  width: parent.width
+  property string _fieldTitle: parent.fieldTitle
 
-  Rectangle { // background
-    width: root.width
-    height: root.height
-    border.width: 2 * __dp
-    border.color: __style.transparentColor
+  title: _fieldShouldShowTitle ? _fieldTitle : ""
+
+  inputContent: Rectangle { // background
+    width: parent.width
+    height: textArea.implicitHeight
     color: __style.polarColor
     radius: __style.radius12
-  }
 
-  Text {
-    id: textArea
+    Text { // intentionally not MMText to that bottom padding works correctly in rich text mode
+      id: textArea
 
-    wrapMode: Text.Wrap
-    font: __style.p5
-    color: __style.nightColor
+      width: parent.width
 
-    text: root._fieldValue !== undefined ? root._fieldValue : ''
-    textFormat: _fieldConfig['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
+      wrapMode: Text.Wrap
+      font: __style.p5
+      color: __style.nightColor
 
-    width: root.width
+      text: root._fieldValue !== undefined ? root._fieldValue : ''
+      textFormat: root._fieldConfig['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
 
-    topPadding: root.padding
-    bottomPadding: root.padding
-    leftPadding: root.padding
-    rightPadding: root.padding
 
-    onLinkActivated: function( link ) {
-      Qt.openUrlExternally( link )
+      topPadding: __style.margin12
+      bottomPadding: __style.margin12
+      leftPadding: __style.margin20
+      rightPadding: __style.margin20
+
+      onLinkActivated: function( link ) {
+        Qt.openUrlExternally( link )
+      }
     }
   }
 }

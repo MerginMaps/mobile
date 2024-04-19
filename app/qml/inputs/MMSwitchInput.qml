@@ -8,49 +8,51 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
-import "../components"
+
+import "../components" as MMComponents
+import "../components/private" as MMPrivateComponents
 
 /*
  * Common switch input to use in the app.
  *
- * See MMBaseInput for more properties.
+ * See MMBaseSingleLineInput for more properties.
  */
 
-MMBaseInput {
+MMPrivateComponents.MMBaseSingleLineInput {
   id: root
 
-  property alias text: textField.text
-  property alias switchComponent: switchComponent
+  property alias checked: switchComponent.checked
+  //! emitted when interactively toggled by the user via touch, mouse, or keyboard.
+  signal toggled()
 
-  hasFocus: textField.activeFocus
+  textField.readOnly: true
 
-  content: TextField {
-    id: textField
-
-    anchors.fill: parent
-
-    readOnly: true
-    placeholderTextColor: __style.nightAlphaColor
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
-
-    font: __style.p5
-    hoverEnabled: true
-
-    background: Rectangle {
-      color: __style.transparentColor
-    }
-
-    onTextEdited: root.textEdited( textField.text )
-  }
-
-  rightAction: MMSwitch {
+  rightContent: MMComponents.MMSwitch {
     id: switchComponent
 
-    anchors.verticalCenter: parent.verticalCenter
-    x: -20 * __dp // TODO why is this needed? bacause of how baseinput works :(
+    uncheckedBgColor: {
+      if ( root.editState !== "enabled" ) return __style.lightGreenColor
+      if ( root.validationState === "error" ) return __style.negativeLightColor
+      if ( root.validationState === "warning" ) return __style.sandColor
+      return __style.lightGreenColor
+    }
 
-    uncheckedBgColor: __style.lightGreenColor
+    checkedBgColor: {
+      if ( root.editState !== "enabled" ) return __style.mediumGreenColor
+      if ( root.validationState === "error" ) return __style.negativeColor
+      if ( root.validationState === "warning" ) return __style.warningColor
+      return __style.grassColor
+    }
+
+    handleColor: root.iconColor
+  }
+
+  onTextClicked: toggleSwitchComponent()
+
+  onRightContentClicked: toggleSwitchComponent()
+
+  function toggleSwitchComponent() {
+    switchComponent.toggle()
+    toggled()
   }
 }

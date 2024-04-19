@@ -8,46 +8,26 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.Basic
-import "../components"
 
-MMBaseInput {
+import "../components" as MMComponents
+import "../components/private" as MMPrivateComponents
+
+MMPrivateComponents.MMBaseSingleLineInput {
   id: root
 
-  property alias placeholderText: textField.placeholderText
-  property alias text: textField.text
+  textField.echoMode: eyeButton.pressed ? TextInput.Normal : TextInput.Password
 
-  hasFocus: textField.activeFocus
+  textField.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData | Qt.ImhHiddenText
 
-  content: TextField {
-    id: textField
-
-    anchors.fill: parent
-    anchors.verticalCenter: parent.verticalCenter
-
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
-    placeholderTextColor: __style.nightAlphaColor
-    font: __style.p5
-    hoverEnabled: true
-    echoMode: eyeButton.pressed ? TextInput.Normal : TextInput.Password
-    inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
-    background: Rectangle {
-      color: __style.transparentColor
-    }
-  }
-
-  rightAction: MMIcon {
+  rightContent: MMComponents.MMIcon {
     id: eyeButton
 
     property bool pressed: false
 
-    anchors.verticalCenter: parent.verticalCenter
-
     size: __style.icon24
     source: pressed ? __style.hideIcon : __style.showIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    color: root.iconColor
   }
 
-  onRightActionClicked: eyeButton.pressed = !eyeButton.pressed
+  onRightContentClicked: eyeButton.pressed = !eyeButton.pressed
 }

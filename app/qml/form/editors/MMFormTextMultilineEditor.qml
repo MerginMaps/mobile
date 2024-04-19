@@ -9,9 +9,12 @@
 
 import QtQuick
 import QtQuick.Controls
+
+// To ignore the warning "The current style does not support customization"
+// see from https://stackoverflow.com/questions/76625756/the-current-style-does-not-support-customization-of-this-control
 import QtQuick.Controls.Basic
-import "../../components"
-import "../../inputs"
+
+import "../../components/private" as MMPrivateComponents
 
 /*
  * Text multiline editor for QGIS Attribute Form
@@ -20,7 +23,7 @@ import "../../inputs"
  *
  * Should be used only within feature form.
  */
-MMBaseInput {
+MMPrivateComponents.MMBaseInput {
   id: root
 
   property var _fieldValue: parent.fieldValue
@@ -37,11 +40,6 @@ MMBaseInput {
   property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
   property bool _fieldRememberValueState: parent.fieldRememberValueState
 
-  property alias placeholderText: textArea.placeholderText
-  property string text: _fieldValue === undefined || _fieldValueIsNull ? '' : _fieldValue
-
-  property int minimumRows: 3
-
   signal editorValueChanged( var newValue, var isNull )
   signal rememberValueBoxClicked( bool state )
 
@@ -50,7 +48,7 @@ MMBaseInput {
   warningMsg: _fieldWarningMessage
   errorMsg: _fieldErrorMessage
 
-  hasFocus: textArea.activeFocus
+  readOnly: _fieldIsReadOnly
 
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
@@ -59,46 +57,79 @@ MMBaseInput {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  contentItemHeight: {
-    const minHeight = 34 * __dp + metrics.height * root.minimumRows
-    var realHeight = textArea.y + textArea.contentHeight + 2 * textArea.verticalPadding
-    return realHeight < minHeight ? minHeight : realHeight
-  }
-
-  content: TextArea {
+  inputContent: TextArea {
     id: textArea
 
-    property real verticalPadding: 11 * __dp
-
-    y: textArea.verticalPadding
-    height: contentHeight + textArea.verticalPadding
     width: parent.width
+    height: Math.max( implicitHeight, internal.minHeight )
 
-    readOnly: root._fieldIsReadOnly
-
-    text: root.text
+    text: _fieldValue === undefined || _fieldValueIsNull ? '' : _fieldValue
     textFormat: root._fieldConfig['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
 
-    hoverEnabled: true
-    placeholderTextColor: __style.nightAlphaColor
-    color: __style.nightColor
+    topPadding: __style.margin12
+    bottomPadding: __style.margin12
+    leftPadding: __style.margin20
+    rightPadding: __style.margin20
+
+    wrapMode: TextEdit.Wrap
 
     font: __style.p5
-    wrapMode: Text.WordWrap
+    color: {
+      if ( root.editState === "readOnly" ) return __style.nightColor
+      if ( root.editState === "enabled" ) return __style.nightColor
+      if ( root.editState === "disabled" ) return __style.mediumGreyColor
+      return __style.nightColor
+    }
+    placeholderTextColor: __style.darkGreyColor
 
-    onLinkActivated: function( link ) {
-      Qt.openUrlExternally( link )
+    inputMethodHints: Qt.ImhNoPredictiveText
+
+    readOnly: root.editState !== "enabled"
+
+    background: Rectangle {
+
+      color: {
+        if ( root.editState !== "enabled" ) return __style.polarColor
+        if ( root.validationState === "error" ) return __style.negativeUltraLightColor
+        if ( root.validationState === "warning" ) return __style.negativeUltraLightColor
+
+        return __style.polarColor
+      }
+
+      border.width: {
+        if ( root.validationState === "error" ) return __style.width2
+        if ( root.validationState === "warning" ) return __style.width2
+        if ( textArea.activeFocus ) return __style.width2
+        if ( textArea.hovered ) return __style.width1
+        return 0
+      }
+
+      border.color: {
+        if ( root.editState !== "enabled" ) return __style.polarColor
+        if ( root.validationState === "error" ) return __style.negativeColor
+        if ( root.validationState === "warning" ) return __style.warningColor
+        if ( textArea.activeFocus ) return __style.forestColor
+        if ( textArea.hovered ) return __style.forestColor
+
+        return __style.polarColor
+      }
+
+      radius: __style.radius12
     }
 
-    onTextChanged: root.editorValueChanged( text, text === "" )
-
-    // Avoid Android's uncommited text
-    // Could in theory be fixed with `inputMethodComposing` TextInput property instead
-    onPreeditTextChanged: if ( __androidUtils.isAndroid ) Qt.inputMethod.commit()
+    onLinkActivated: ( link ) => Qt.openUrlExternally( link )
+    onTextChanged: root.editorValueChanged( textArea.text, textArea.text === "" )
   }
 
   FontMetrics {
     id: metrics
     font: textArea.font
+  }
+
+  QtObject {
+    id: internal
+
+    // Minimum height for multiline is 3 lines + paddings
+    property real minHeight: metrics.height * 3 + textArea.topPadding + textArea.bottomPadding
   }
 }

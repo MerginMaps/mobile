@@ -41,7 +41,7 @@ Item {
       Layout.fillHeight: true
       Layout.fillWidth: true
 
-      onTextChanged: root.attrNameChanged( text )
+      onTextEdited: (text) => root.attrNameChanged( text )
     }
 
     MMInputs.MMComboboxInput {

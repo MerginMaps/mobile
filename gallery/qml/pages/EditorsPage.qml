@@ -143,7 +143,7 @@ ScrollView {
           height: numberEditor.height
 
           fieldValue: "2"
-          fieldConfig: ({Min: 1.0, Max: 3.0, Precition: 1, Suffix: "s.", Step: 0.1})
+          fieldConfig: ({Min: 1.0, Max: 3.0, Precision: 1, Suffix: "s.", Step: 0.1})
           fieldTitle: "MMFormNumberEditor"
 
           MMFormEditors.MMFormNumberEditor {
@@ -183,7 +183,8 @@ ScrollView {
             width: parent.width
 
             onTrashClicked: console.log("Move to trash")
-            onContentClicked: console.log("Open photo")
+            onChooseFromGalleryClicked: console.log("Choose from gallery")
+            onCapturePhotoClicked: console.log("Capture photo")
           }
         }
 
@@ -192,12 +193,11 @@ ScrollView {
           height: textMultilineEditor.height
 
           fieldTitle: "MMFormTextMultilineEditor"
+          fieldValue: "See something powerfull <a href='https://merginmaps.com/docs/' style='color: green;'>Mergin Maps documentation</a>, for more information continue <a href='https://merginmaps.com/docs/'>here</a>."
 
           MMFormEditors.MMFormTextMultilineEditor {
             id: textMultilineEditor
-            placeholderText: "Place for multi row text"
             width: parent.width
-            text: "See something powerfull <a href='https://merginmaps.com/docs/' style='color: green;'>Mergin Maps documentation</a>, for more information continue <a href='https://merginmaps.com/docs/'>here</a>."
           }
         }
 
@@ -228,11 +228,8 @@ ScrollView {
           MMFormEditors.MMFormCalendarEditor {
             id: dateTimeCalendar
 
-            title: "Date & Time"
             text: "yyyy-MM-dd hh:mm"
-            enabled: checkbox.checked
             width: parent.width
-            warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
 
             fieldIsDate: false
             includesTime: true
@@ -256,7 +253,6 @@ ScrollView {
           MMFormEditors.MMFormCalendarEditor {
             id: dateCalendar
 
-            title: "Date"
             text: "yyyy-MM-dd"
             enabled: checkbox.checked
             width: parent.width
@@ -283,7 +279,7 @@ ScrollView {
 
           MMFormEditors.MMFormCalendarEditor {
             id: timeCalendar
-            title: "Time"
+
             text: "hh:mm"
             enabled: checkbox.checked
             width: parent.width
@@ -315,22 +311,16 @@ ScrollView {
           }
         }
 
-
-        Label {
-          text: "MMFormRichTextViewer - Text"
-        }
-
         GalleryComponents.EditorItem {
           width: parent.width
           height: richTextViewer.height
 
-          fieldValue: "Lorem ipsum dolor sit amet, consectetur adipiscing elit," +
-                      " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n\n" +
-                      " Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris" +
-                      " nisi ut aliquip ex ea commodo consequat."
+          fieldValue: "<h3>Lorem ipsum</h3> dolor sit amet,        consectetur adipiscing elit,\n" +
+                      " sed do eiusmod tempor \n\nincididunt ut labore et dolore magna aliqua.<br><br><br>" +
+                      "See something powerfull <a href='https://merginmaps.com/docs/' style='color: green;'>Mergin Maps documentation</a>, for more information continue <a href='https://merginmaps.com/docs/'>here</a>."
 
           fieldConfig: ({UseHtml: false})
-          fieldTitle: ""
+          fieldTitle: "MMFormRichTextViewer - Text"
 
           MMFormEditors.MMFormRichTextViewer {
             id: richTextViewer
@@ -338,8 +328,21 @@ ScrollView {
           }
         }
 
-        Label {
-          text: "MMFormValueMapEditor - Value map"
+        GalleryComponents.EditorItem {
+          width: parent.width
+          height: richTextViewerHtml.height
+
+          fieldValue: "<h3>Lorem ipsum</h3> dolor sit amet,        consectetur adipiscing elit,\n" +
+                      " sed do eiusmod tempor \n\nincididunt ut labore et dolore magna aliqua.<br><br><br>" +
+                      "See something powerfull <a href='https://merginmaps.com/docs/' style='color: green;'>Mergin Maps documentation</a>, for more information continue <a href='https://merginmaps.com/docs/'>here</a>."
+
+          fieldConfig: ({UseHtml: true})
+          fieldTitle: "MMFormRichTextViewer - HTML"
+
+          MMFormEditors.MMFormRichTextViewer {
+            id: richTextViewerHtml
+            width: parent.width
+          }
         }
 
         GalleryComponents.EditorItem {
@@ -348,7 +351,7 @@ ScrollView {
 
           fieldValue: "0"
           fieldConfig: ({ map: [ {"First": 0}, {"Second": 1} ] })
-          fieldTitle: "Value map"
+          fieldTitle: "MMFormValueMapEditor - Value map"
 
           MMFormEditors.MMFormValueMapEditor {
             id: valueMapEditor

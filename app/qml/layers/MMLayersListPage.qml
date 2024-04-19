@@ -22,7 +22,7 @@ MMComponents.MMPage {
 
   signal nodeClicked( var node, string nodeType, string nodeName )
   signal nodeVisibilityClicked( var node )
-  signal searchboxClicked()
+  signal searchBarClicked()
 
   pageHeader.title: root.pageTitle
 
@@ -33,7 +33,7 @@ MMComponents.MMPage {
     height: parent.height
 
     MMSearchInput {
-      id: searchbox
+      id: searchBar
 
       anchors.top: parent.top
       anchors.topMargin: __style.spacing20
@@ -43,7 +43,7 @@ MMComponents.MMPage {
 
       MouseArea {
         anchors.fill: parent
-        onClicked: root.searchboxClicked()
+        onClicked: root.searchBarClicked()
       }
     }
 
@@ -53,7 +53,7 @@ MMComponents.MMPage {
       width: parent.width
 
       anchors {
-        top: searchbox.bottom
+        top: searchBar.bottom
         topMargin: __style.spacing20
         bottom: parent.bottom
       }

@@ -48,12 +48,10 @@ MMFormComboboxBaseEditor {
   errorMsg: _fieldErrorMessage
   warningMsg: _fieldWarningMessage
 
-  enabled: !_fieldIsReadOnly
+  readOnly: _fieldIsReadOnly
 
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
-
-  textFieldComponent.color: __style.nightColor
 
   on_FieldValueChanged: {
     vrModel.pair = root._fieldFeatureLayerPair

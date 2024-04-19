@@ -152,6 +152,14 @@ ScrollView {
           color: __style.negativeColor
         }
         GalleryComponents.ColorBox {
+          text: "negativeLightColor"
+          color: __style.negativeLightColor
+        }
+        GalleryComponents.ColorBox {
+          text: "negativeUltraLightColor"
+          color: __style.negativeUltraLightColor
+        }
+        GalleryComponents.ColorBox {
           text: "informativeColor"
           color: __style.informativeColor
         }
@@ -178,14 +186,6 @@ ScrollView {
         columns: 3
         spacing: 20
         anchors.fill: parent
-        GalleryComponents.ColorBox {
-          text: "nightAlphaColor"
-          color: __style.nightAlphaColor
-        }
-        GalleryComponents.ColorBox {
-          text: "errorBgInputColor"
-          color: __style.errorBgInputColor
-        }
         GalleryComponents.ColorBox {
           text: "shadowColor"
           color: __style.shadowColor

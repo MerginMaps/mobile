@@ -34,15 +34,12 @@ set(MM_QML
     components/MMListSpacer.qml
     components/MMBusyIndicator.qml
     components/MMMessage.qml
-    components/MMMorePhoto.qml
     components/MMNotification.qml
     components/MMNotificationView.qml
     components/MMPage.qml
     components/MMPageHeader.qml
     components/MMPopup.qml
     components/MMPhoto.qml
-    components/MMPhotoAttachment.qml
-    components/MMPhotoPreview.qml
     components/MMProgressBar.qml
     components/MMRadioButton.qml
     components/MMRoundButton.qml
@@ -52,6 +49,8 @@ set(MM_QML
     components/MMText.qml
     components/MMToolbar.qml
     components/MMToolbarButton.qml
+    components/private/MMBaseInput.qml
+    components/private/MMBaseSingleLineInput.qml
     components/private/MMToolbarLongButton.qml
     components/private/MMToolbarShortButton.qml
     dialogs/MMCloseAccountDialog.qml
@@ -91,6 +90,8 @@ set(MM_QML
     form/components/calendar/MMMonthGrid.qml
     form/components/calendar/MMTimeTumbler.qml
     form/components/calendar/MMTumbler.qml
+    form/components/photo/MMPhotoAttachment.qml
+    form/components/photo/MMPhotoPreview.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormComboboxBaseEditor.qml
     form/editors/MMFormGalleryEditor.qml
@@ -114,12 +115,10 @@ set(MM_QML
     gps/MMPositionProviderPage.qml
     gps/MMStakeoutDrawer.qml
     gps/components/MMGpsDataText.qml
-    inputs/MMBaseInput.qml
     inputs/MMComboboxInput.qml
     inputs/MMPasswordInput.qml
     inputs/MMSearchInput.qml
     inputs/MMTextInput.qml
-    inputs/MMTextWithButtonInput.qml
     inputs/MMSwitchInput.qml
     layers/MMFeaturesListPage.qml
     layers/MMLayerDetailPage.qml

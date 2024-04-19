@@ -18,6 +18,8 @@ CheckBox {
 
   property bool hasError: false
 
+  property color emptyStateColor: __style.transparentColor
+
   implicitHeight: Math.max( textContent.implicitHeight, indicatorContent.height )
 
   topPadding: __style.margin4
@@ -35,7 +37,7 @@ CheckBox {
 
     radius: __style.radius6
 
-    color: ( root.checked && root.enabled ) ? __style.grassColor: __style.transparentColor
+    color: ( root.checked && root.enabled ) ? __style.grassColor : emptyStateColor
 
     border.color: {
       if ( enabled ) {

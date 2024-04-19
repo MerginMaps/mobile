@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import "../../../components" as MMComponents
+
 Popup {
   id: root
 
@@ -22,13 +24,13 @@ Popup {
   closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
   background: Rectangle {
-    color: Qt.alpha(__style.nightAlphaColor, 0.9)
+    color: Qt.alpha(__style.darkGreyColor, 0.9)
   }
 
   contentItem: Item {
     anchors.fill: parent
 
-    MMBusyIndicator {
+    MMComponents.MMBusyIndicator {
       anchors.centerIn: parent
       visible: true
     }
@@ -67,7 +69,7 @@ Popup {
       width: parent.width - __style.safeAreaLeft - __style.safeAreaRight
       height: parent.height - __style.safeAreaBottom - __style.safeAreaTop
 
-      MMRoundButton {
+      MMComponents.MMRoundButton {
         id: closeButton
 
         anchors {
@@ -82,7 +84,6 @@ Popup {
           previewLoader.active = false
         }
       }
-
     }
   }
 }

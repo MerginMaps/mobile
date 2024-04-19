@@ -40,16 +40,13 @@ Item {
     width: parent.width - 2 * root.padding
     placeholderText: qsTr("Search for projects...")
 
-    onSearchTextChanged: function(text) {
-    }
-
     anchors {
       top: parent.top
       left: parent.left
       right: parent.right
     }
 
-    allowTimer: true
+    delayedSearch: true
   }
 
   MMInfoBox {
@@ -99,7 +96,10 @@ Item {
 
     projectModelType: MM.ProjectsModel.LocalProjectsModel
     activeProjectId: root.activeProjectId
-    searchText: searchBar.text
+
+    hideActiveProject: true // TODO: do not hide when searching!
+    searchText: searchBar.searchText
+
     spacing: root.spacing
 
     anchors {

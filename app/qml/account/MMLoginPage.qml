@@ -85,7 +85,7 @@ MMPage {
           width: parent.width
 
           title: qsTr( "Email or username" )
-          textFieldComponent.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
+          textField.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhEmailCharactersOnly
         }
 
         MMPasswordInput {
@@ -200,10 +200,10 @@ MMPage {
 
             title: qsTr( "Server address" )
 
-            bgColor: __style.lightGreenColor
+            textFieldBackground.color: __style.lightGreenColor
 
             text: root.apiRoot
-            textFieldComponent.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
+            textField.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhUrlCharactersOnly
           }
 
           MMListSpacer { height: __style.spacing40 }

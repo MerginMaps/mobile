@@ -10,15 +10,16 @@
 import QtQuick
 
 import "../components" as MMComponents
+import "../components/private" as MMPrivateComponents
 
 /*
  * Common text input to use in the app.
  * Disabled state can be achieved by setting `enabled: false`.
  *
- * See MMBaseInput for more properties.
+ * See MMBaseSingleLineInput for more properties.
  */
 
-MMBaseInput {
+MMPrivateComponents.MMBaseSingleLineInput {
   id: root
 
   property alias loader: drawerLoader
@@ -30,34 +31,22 @@ MMBaseInput {
   property string textRole: "text"
   property string valueRole: "value"
 
-  onRightActionClicked: { drawerLoader.active = true; drawerLoader.focus = true }
-  onContentClicked: { drawerLoader.active = true; drawerLoader.focus = true }
+  onTextClicked: { drawerLoader.active = true; drawerLoader.focus = true }
+  onRightContentClicked: { drawerLoader.active = true; drawerLoader.focus = true }
 
-  content: MMComponents.MMText {
-    id: textField
+  text: {
+    if ( !comboboxModel ) return "";
+    if ( currentIndex < 0 || currentIndex >= comboboxModel.count ) return "";
 
-    anchors.fill: parent
-
-    font: __style.p5
-
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
-
-    text: {
-      if ( !comboboxModel ) return "";
-      if ( currentIndex < 0 || currentIndex >= comboboxModel.count ) return "";
-
-      return comboboxModel.get( currentIndex )[textRole]
-    }
+    return comboboxModel.get( currentIndex )[textRole]
   }
 
-  rightAction: MMComponents.MMIcon {
+  rightContent: MMComponents.MMIcon {
     property bool pressed: false
 
-    anchors.verticalCenter: parent.verticalCenter
-
     size: __style.icon24
-    source: __style.arrowDownIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    source: drawerLoader.active ? __style.arrowUpIcon : __style.arrowDownIcon
+    color: root.iconColor
   }
 
   Loader {

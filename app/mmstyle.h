@@ -83,8 +83,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor informativeColor READ informativeColor CONSTANT )
 
     // Colors - others
-    Q_PROPERTY( QColor nightAlphaColor READ nightAlphaColor CONSTANT ) // placeholder input color
-    Q_PROPERTY( QColor errorBgInputColor READ errorBgInputColor CONSTANT ) // error bg input color
     Q_PROPERTY( QColor shadowColor READ shadowColor CONSTANT )
     Q_PROPERTY( QColor snappingColor READ snappingColor CONSTANT )
 
@@ -286,6 +284,7 @@ class MMStyle: public QObject
 
     // Other
     Q_PROPERTY( double row1 READ number1 CONSTANT )
+    Q_PROPERTY( double row4 READ number4 CONSTANT )
     Q_PROPERTY( double row24 READ number24 CONSTANT )
     Q_PROPERTY( double row36 READ number36 CONSTANT )
     Q_PROPERTY( double row40 READ number40 CONSTANT )
@@ -297,6 +296,9 @@ class MMStyle: public QObject
     Q_PROPERTY( double row67 READ number67 CONSTANT )
     Q_PROPERTY( double row80 READ number80 CONSTANT )
     Q_PROPERTY( double row114 READ number114 CONSTANT )
+    Q_PROPERTY( double row120 READ number120 CONSTANT )
+    Q_PROPERTY( double row160 READ number160 CONSTANT )
+    Q_PROPERTY( double radius2 READ number2 CONSTANT )
     Q_PROPERTY( double radius6 READ number6 CONSTANT )
     Q_PROPERTY( double radius8 READ number8 CONSTANT )
     Q_PROPERTY( double radius12 READ number12 CONSTANT )
@@ -304,6 +306,8 @@ class MMStyle: public QObject
     Q_PROPERTY( double radius20 READ number20 CONSTANT )
     Q_PROPERTY( double radius30 READ number30 CONSTANT )
     Q_PROPERTY( double radius40 READ number40 CONSTANT )
+    Q_PROPERTY( double width1 READ number1 CONSTANT )
+    Q_PROPERTY( double width2 READ number2 CONSTANT )
     Q_PROPERTY( double scrollVelocityAndroid READ scrollVelocityAndroid CONSTANT ) // [px/s] scrolling on Android devices is too slow by default
 
     // Breakpoint we use in some screens to differentiate mobile landscape
@@ -366,8 +370,6 @@ class MMStyle: public QObject
     QColor informativeColor() {return QColor::fromString( "#BEDAF0" );}
     QColor snappingColor() {return QColor::fromString( "#BD74FF" );}
 
-    QColor nightAlphaColor() {return QColor::fromString( "#AA12181F" );}
-    QColor errorBgInputColor() {return QColor::fromString( "#FEFAF9" );}
     QColor shadowColor() {return QColor::fromString( "#66777777" );}
 
     QUrl splitGeometryIcon() {return QUrl( "qrc:/SplitGeometry.svg" );}
@@ -675,6 +677,7 @@ class MMStyle: public QObject
     double number148() {return 148 * mDp;}
     double number149() {return 149 * mDp;}
     double number150() {return 150 * mDp;}
+    double number160() {return 160 * mDp;}
     double number250() {return 250 * mDp;}
     double number400() {return 400 * mDp;}
     double number720() {return 720 * mDp;}

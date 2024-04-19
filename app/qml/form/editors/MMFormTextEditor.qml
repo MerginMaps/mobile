@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 
-import "../../inputs"
+import "../../components/private" as MMPrivateComponents
 
 /*
  * Text Edit for QGIS Attribute Form
@@ -18,10 +18,10 @@ import "../../inputs"
  * These properties are injected here via 'fieldXYZ' properties and captured with underscore `_`.
  *
  * Should be used only within feature form.
- * See MMTextInput
+ * See MMBaseSingleLineInput
  */
 
-MMTextInput {
+MMPrivateComponents.MMBaseSingleLineInput {
   id: root
 
   property var _field: parent.field
@@ -43,12 +43,8 @@ MMTextInput {
 
   text: _fieldValue === undefined || _fieldValueIsNull ? '' : _fieldValue
 
-  showClearIcon: false
-
   readOnly: _fieldIsReadOnly
-  textFieldComponent.readOnly: _fieldIsReadOnly
-  textFieldComponent.inputMethodHints: root._field.isNumeric ? Qt.ImhFormattedNumbersOnly : Qt.ImhNone
-  textFieldComponent.color: __style.nightColor
+  textField.inputMethodHints: root._field.isNumeric ? Qt.ImhNoPredictiveText | Qt.ImhFormattedNumbersOnly : Qt.ImhNoPredictiveText
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
@@ -58,7 +54,7 @@ MMTextInput {
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
 
-  textFieldComponent.maximumLength: {
+  textField.maximumLength: {
     if ( ( !root._field.isNumeric ) && ( root._field.length > 0 ) ) {
       return root._field.length
     }
@@ -78,10 +74,6 @@ MMTextInput {
 
     root.editorValueChanged( val, val === "" )
   }
-
-  // Avoid Android's uncommited text
-  // Could in theory be fixed with `inputMethodComposing` TextInput property instead
-  textFieldComponent.onPreeditTextChanged: if ( __androidUtils.isAndroid ) Qt.inputMethod.commit()
 
   QtObject {
     id: internal
