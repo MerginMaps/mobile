@@ -34,7 +34,6 @@ set(MM_QML
     components/MMListSpacer.qml
     components/MMBusyIndicator.qml
     components/MMMessage.qml
-    components/MMMorePhoto.qml
     components/MMNotification.qml
     components/MMNotificationView.qml
     components/MMPage.qml
