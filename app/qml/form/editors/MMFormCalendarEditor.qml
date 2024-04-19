@@ -64,7 +64,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  textField.onReleased: root.openCalendar()
+  onTextClicked: root.openCalendar()
   onRightContentClicked: root.openCalendar()
 
   rightContent: MMComponents.MMIcon {
