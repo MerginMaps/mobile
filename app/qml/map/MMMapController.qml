@@ -276,22 +276,6 @@ Item {
     sourceComponent: stakeoutToolsComponent
   }
 
-  MMPositionMarker {
-    id: positionMarker
-
-    xPos: mapPositionSource.screenPosition.x
-    yPos: mapPositionSource.screenPosition.y
-    hasDirection: positionDirectionSource.hasDirection
-
-    direction: positionDirectionSource.direction
-    hasPosition: __positionKit.hasPosition
-
-    horizontalAccuracy: __positionKit.horizontalAccuracy
-    accuracyRingSize: mapPositionSource.screenAccuracy
-
-    trackingMode: root.state !== "inactive" && tracking.active
-  }
-
   Loader {
     id: tracking
 
@@ -346,6 +330,22 @@ Item {
         }
       }
     }
+  }
+
+  MMPositionMarker {
+    id: positionMarker
+
+    xPos: mapPositionSource.screenPosition.x
+    yPos: mapPositionSource.screenPosition.y
+    hasDirection: positionDirectionSource.hasDirection
+
+    direction: positionDirectionSource.direction
+    hasPosition: __positionKit.hasPosition
+
+    horizontalAccuracy: __positionKit.horizontalAccuracy
+    accuracyRingSize: mapPositionSource.screenAccuracy
+
+    trackingMode: root.state !== "inactive" && tracking.active
   }
 
   Loader {
@@ -521,7 +521,7 @@ Item {
 
           text: {
             if (visible) {
-              return root.trackingManager?.elapsedTimeText
+              return root.trackingManager?.elapsedTimeText ?? ""
             }
             else
               return ""
