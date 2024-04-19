@@ -23,7 +23,7 @@ Item {
   signal removeClicked()
   signal attrNameChanged( string attrname )
 
-  implicitHeight: __style.row50
+  implicitHeight: row.implicitHeight
 
   RowLayout {
     id: row
@@ -36,18 +36,16 @@ Item {
     MMInputs.MMTextInput {
       id: textField
 
-      text: root.attrname
-
-      Layout.fillHeight: true
       Layout.fillWidth: true
 
-      onTextEdited: (text) => root.attrNameChanged( text )
+      text: root.attrname
+
+      onTextChanged: () => root.attrNameChanged( text )
     }
 
     MMInputs.MMComboboxInput {
       id: combobox
 
-      Layout.fillHeight: true
       Layout.fillWidth: true
     }
 
