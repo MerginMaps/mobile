@@ -37,8 +37,8 @@ MMPrivateComponents.MMBaseInput {
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var parentFeature, var relation )
 
-  Component.onCompleted: root.recalculate()
-  onWidthChanged: root.recalculate()
+  Component.onCompleted: root.recalculateVisibleItems()
+  onWidthChanged: root.recalculateVisibleItems()
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 

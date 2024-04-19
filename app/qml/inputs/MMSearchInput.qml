@@ -25,7 +25,12 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
     size: __style.icon24
     source: __style.searchIcon
-    color: root.enabled ? __style.nightColor : __style.mediumGreenColor
+    color: {
+      if ( root.editState === "disabled" ) return __style.mediumGreyColor
+      if ( root.validationState === "error" ) return __style.grapeColor
+      if ( root.validationState === "warning" ) return __style.earthColor
+      return __style.nightColor
+    }
   }
 
   rightContent: MMComponents.MMIcon {
@@ -33,7 +38,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
     size: __style.icon24
     source: __style.closeIcon
-    color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+    color: root.iconColor
   }
 
   rightContentVisible: root.showClearIcon && textField.activeFocus && root.text.length > 0

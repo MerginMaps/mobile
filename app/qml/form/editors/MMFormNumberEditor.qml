@@ -58,7 +58,19 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
     size: __style.icon24
     source: __style.minusIcon
-    color: root.editState === "enabled" && internal.canSubtractStep ? __style.forestColor : __style.mediumGreenColor
+    color: {
+      if ( root.editState !== "enabled" ) return __style.mediumGreyColor
+      if ( internal.canSubtractStep ) {
+        if ( root.validationState === "error" ) return __style.grapeColor
+        if ( root.validationState === "warning" ) return __style.earthColor
+        return __style.forestColor
+      }
+      else {
+        if ( root.validationState === "error" ) return __style.negativeColor
+        if ( root.validationState === "warning" ) return __style.warningColor
+        return __style.mediumGreyColor
+      }
+    }
   }
 
   textField {
@@ -99,7 +111,19 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
     size: __style.icon24
     source: __style.plusIcon
-    color: root.editState === "enabled" && internal.canAddStep ? __style.forestColor : __style.mediumGreenColor
+    color: {
+      if ( root.editState !== "enabled" ) return __style.mediumGreyColor
+      if ( internal.canAddStep ) {
+        if ( root.validationState === "error" ) return __style.grapeColor
+        if ( root.validationState === "warning" ) return __style.earthColor
+        return __style.forestColor
+      }
+      else {
+        if ( root.validationState === "error" ) return __style.negativeColor
+        if ( root.validationState === "warning" ) return __style.warningColor
+        return __style.mediumGreyColor
+      }
+    }
   }
 
   onLeftContentClicked: {

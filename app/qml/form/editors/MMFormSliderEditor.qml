@@ -83,14 +83,18 @@ MMPrivateComponents.MMBaseSingleLineInput {
       height: __style.row4
       radius: __style.radius2
 
-      color: __style.lightGreenColor
+      color: {
+        if ( root.validationState === "error" ) return __style.negativeColor
+        if ( root.validationState === "warning" ) return __style.warningColor
+        return __style.lightGreenColor
+      }
 
       Rectangle {
         // fill indicator
         height: parent.height
         width: slider.visualPosition * parent.width
 
-        color: internal.indicatorColor
+        color: root.iconColor
 
         radius: __style.radius2
       }
@@ -104,7 +108,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
       radius: height / 2
 
-      color: internal.indicatorColor
+      color: root.iconColor
     }
   }
 
@@ -119,13 +123,6 @@ MMPrivateComponents.MMBaseSingleLineInput {
     property int precision: _fieldConfig["Precision"]
     property real step: _fieldConfig["Step"] ? _fieldConfig["Step"] : 1
     property string suffix: _fieldConfig["Suffix"] ? _fieldConfig["Suffix"] : ""
-
-    property color indicatorColor: {
-      if ( root.editState !== "enabled" ) return __style.mediumGreyColor
-      if ( root.validationState === "error" ) return __style.grapeColor
-      if ( root.validationState === "warning" ) return __style.earthColor
-      return __style.forestColor
-    }
 
     readonly property int intMax: 2000000000 // https://doc.qt.io/qt-5/qml-int.html
 

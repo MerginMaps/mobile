@@ -30,7 +30,7 @@ Popup {
   contentItem: Item {
     anchors.fill: parent
 
-    MMBusyIndicator {
+    MMComponents.MMBusyIndicator {
       anchors.centerIn: parent
       visible: true
     }

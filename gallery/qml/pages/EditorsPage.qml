@@ -229,9 +229,7 @@ ScrollView {
             id: dateTimeCalendar
 
             text: "yyyy-MM-dd hh:mm"
-            enabled: checkbox.checked
             width: parent.width
-            warningMsg: text.length > 0 ? "" : "Press button to open Calendar"
 
             fieldIsDate: false
             includesTime: true

@@ -39,6 +39,15 @@ MMBaseInput {
   property bool rightContentVisible: rightContentGroup.children.length > 0
   property bool leftContentVisible: leftContentGroup.children.length > 0
 
+  // IconColor is not used in this file directly, but derived components can use it
+  // as precalculated color for icons to avoid repeating the same text over and over.
+  property color iconColor: {
+    if ( root.editState !== "enabled" ) return __style.mediumGreyColor
+    if ( root.validationState === "error" ) return __style.grapeColor
+    if ( root.validationState === "warning" ) return __style.earthColor
+    return __style.forestColor
+  }
+
   signal textEdited( string text )
   signal textClicked()
   signal leftContentClicked()

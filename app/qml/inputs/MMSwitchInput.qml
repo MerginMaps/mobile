@@ -30,7 +30,21 @@ MMPrivateComponents.MMBaseSingleLineInput {
   rightContent: MMComponents.MMSwitch {
     id: switchComponent
 
-    uncheckedBgColor: __style.lightGreenColor
+    uncheckedBgColor: {
+      if ( root.editState !== "enabled" ) return __style.lightGreenColor
+      if ( root.validationState === "error" ) return __style.negativeLightColor
+      if ( root.validationState === "warning" ) return __style.sandColor
+      return __style.lightGreenColor
+    }
+
+    checkedBgColor: {
+      if ( root.editState !== "enabled" ) return __style.mediumGreenColor
+      if ( root.validationState === "error" ) return __style.negativeColor
+      if ( root.validationState === "warning" ) return __style.warningColor
+      return __style.grassColor
+    }
+
+    handleColor: root.iconColor
   }
 
   onTextClicked: toggleSwitchComponent()

@@ -63,7 +63,7 @@ MMPrivateComponents.MMBaseSingleLineInput  {
 
     size: __style.icon24
     source: __style.qrCodeIcon
-    color: root.editState === "enabled" ? __style.forestColor : __style.mediumGreenColor
+    color: root.iconColor
   }
 
   onRightContentClicked: {

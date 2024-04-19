@@ -46,7 +46,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
     size: __style.icon24
     source: drawerLoader.active ? __style.arrowUpIcon : __style.arrowDownIcon
-    color: root.editState === "enabled" ? __style.forestColor : __style.mediumGreenColor
+    color: root.iconColor
   }
 
   Loader {

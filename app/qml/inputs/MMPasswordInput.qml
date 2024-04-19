@@ -26,7 +26,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
     size: __style.icon24
     source: pressed ? __style.hideIcon : __style.showIcon
-    color: root.editState === "enabled" ? __style.forestColor : __style.mediumGreenColor
+    color: root.iconColor
   }
 
   onRightContentClicked: eyeButton.pressed = !eyeButton.pressed

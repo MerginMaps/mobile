@@ -13,10 +13,9 @@ import QtQuick.Controls
 Switch {
   id: root
 
+  property color checkedBgColor: enabled ? __style.grassColor : __style.mediumGreenColor
   property color uncheckedBgColor: __style.polarColor
-  property color checkedBgColor: __style.grassColor
-  property color disabledFgColor: __style.mediumGreenColor
-  property color enabledFgColor: __style.forestColor
+  property color handleColor: enabled ? __style.forestColor : __style.mediumGreyColor
 
   topPadding: 0
   rightPadding: 0
@@ -26,7 +25,7 @@ Switch {
   contentItem: Text {
     text: root.text
     font: __style.p5
-    color: root.enabled ? root.enabledFgColor : root.disabledFgColor
+    color: root.handleColor
     verticalAlignment: Text.AlignVCenter
     leftPadding: root.indicator.width + ( text ? root.spacing : 0 )
   }
@@ -45,7 +44,7 @@ Switch {
       width: 20 * __dp
       height: width
       radius: width / 2
-      color: root.enabled ? root.enabledFgColor : root.disabledFgColor
+      color: root.handleColor
       anchors.verticalCenter: parent.verticalCenter
     }
   }
