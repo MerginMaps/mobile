@@ -30,7 +30,7 @@ MMDrawer {
       width: parent.width
       height: Math.min( root.drawerContentAvailableHeight, contentHeight )
 
-      enabled: contentHeight > height
+      enabled: emptyStateDelegateLoader.visible
 
       Loader {
         id: emptyStateDelegateLoader

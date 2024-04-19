@@ -29,7 +29,7 @@ Item {
     projectlist.refreshProjectList( searchBar.text )
   }
 
-  property int spacing: 10 * __dp
+  property int spacing: __style.margin12
 
   MMSearchInput {
     id: searchBar
@@ -60,7 +60,7 @@ Item {
       right: parent.right
       top: searchBar.bottom
       bottom: parent.bottom
-      topMargin: root.spacing
+      topMargin: __style.margin20
     }
 
     onOpenProjectRequested: function( projectFilePath ) {

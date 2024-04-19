@@ -107,7 +107,10 @@ MMPrivateComponents.MMBaseInput {
             // Repeater does not necesarry clear delegates immediately if they are invisible,
             // we need to do hard reload in this case so that recalculateVisibleItems() is triggered
 
-            root.recalculate()
+            repeater.model = null
+            repeater.model = rmodel
+
+            root.recalculateVisibleItems()
           }
         }
 
@@ -134,11 +137,7 @@ MMPrivateComponents.MMBaseInput {
             onClicked: root.openLinkedFeature( model.FeaturePair )
           }
 
-          onVisibleChanged: {
-            if(!visible) {
-              repeater.invisibleIds++
-            }
-          }
+          onVisibleChanged: root.recalculateVisibleItems()
         }
       }
 
@@ -173,10 +172,17 @@ MMPrivateComponents.MMBaseInput {
     }
   }
 
-  function recalculate() {
-    repeater.invisibleIds = 0
-    repeater.model = null
-    repeater.model = rmodel
+  function recalculateVisibleItems() {
+    let invisibles_count = 0
+
+    for ( let i = 0; i < repeater.count; i++ ) {
+      let delegate_i = repeater.itemAt( i )
+      if ( delegate_i && !delegate_i.visible ) {
+        invisibles_count++
+      }
+    }
+
+    repeater.invisibleIds = invisibles_count
   }
 
   Loader {

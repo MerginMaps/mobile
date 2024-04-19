@@ -14,6 +14,10 @@ Item {
   implicitHeight: ApplicationWindow.window?.height ?? 0
   implicitWidth: ApplicationWindow.window?.width ?? 0
 
+  // Make sure it is always rendered in front of everything else in the scene, including popups
+  parent: Overlay.overlay
+  z: 1
+
   Repeater {
     id: repeater
 

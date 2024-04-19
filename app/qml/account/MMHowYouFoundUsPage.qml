@@ -172,11 +172,11 @@ MMPage {
 
       text: qsTr("Continue")
 
-      disabled: {
-        if ( listView.currentIndex < 0 ) return true
-        if ( listView.model.get(listView.currentIndex).key === "social" ) return true
-        if ( ( listView.model.get(listView.currentIndex).key === "other" ) && root.selectedText === "" ) return true
-        return false
+      enabled: {
+        if ( listView.currentIndex < 0 ) return false
+        if ( listView.model.get(listView.currentIndex).key === "social" ) return false
+        if ( ( listView.model.get(listView.currentIndex).key === "other" ) && root.selectedText === "" ) return false
+        return true
       }
 
       onClicked: {

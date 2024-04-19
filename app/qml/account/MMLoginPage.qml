@@ -112,7 +112,7 @@ MMPage {
 
           text: qsTr( "Sign in" )
 
-          disabled: root.pending
+          enabled: !root.pending
 
           onClicked: root.signInClicked( username.text, password.text )
         }
@@ -134,7 +134,7 @@ MMPage {
 
           type: MMButton.Types.Secondary
 
-          disabled: root.pending
+          enabled: !root.pending
 
           onClicked: root.signUpClicked()
         }

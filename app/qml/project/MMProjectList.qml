@@ -25,11 +25,12 @@ Item {
   property string activeProjectId: ""
   property string searchText: ""
   property int spacing: 0
-  property bool hideActiveProject: false
+  property bool activeProjectAlwaysFirst: false
   property alias projectsProxyModel: viewModel
   property alias projectsModel: controllerModel
   property alias listHeader: listview.header
   property alias listFooter: listview.footer
+  property alias list: listview
 
   signal openProjectRequested( string projectFilePath )
   signal showLocalChangesRequested( string projectId )
@@ -78,6 +79,7 @@ Item {
     model: MM.ProjectsProxyModel {
       id: viewModel
 
+      activeProjectAlwaysFirst: root.activeProjectAlwaysFirst
       projectSourceModel: MM.ProjectsModel {
         id: controllerModel
 
@@ -94,8 +96,6 @@ Item {
 
       width: ListView.view.width
       height: visible ? implicitHeight : 0
-
-      visible: root.hideActiveProject ? !projectIsOpened : true
 
       projectDisplayName: root.projectModelType === MM.ProjectsModel.WorkspaceProjectsModel ? model.ProjectName : model.ProjectFullName
       projectId: model.ProjectId ? model.ProjectId : ""

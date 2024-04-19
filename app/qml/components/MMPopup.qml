@@ -10,17 +10,19 @@
 import QtQuick
 import QtQuick.Controls
 
-Tumbler {
+Popup {
   id: root
 
-  delegate: Text {
-    id: text
+  modal: true
+  dim: false
 
-    text: modelData
-    font: Math.abs(Tumbler.displacement) < 0.4 ? __style.t1 : __style.p4
-    horizontalAlignment: Text.AlignHCenter
-    verticalAlignment: Text.AlignVCenter
-    opacity: 1.0 - Math.abs(Tumbler.displacement) / (root.visibleItemCount / 2)
-    color: Math.abs(Tumbler.displacement) < 0.4 ? __style.forestColor : __style.nightColor
+  background: Rectangle {
+    color: __style.polarColor
+    radius: __style.radius20
+
+    layer.enabled: true
+    layer.effect: MMShadow {
+      radius: __style.radius20
+    }
   }
 }

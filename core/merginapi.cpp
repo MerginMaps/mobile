@@ -38,6 +38,7 @@ const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm"
 const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
+const QString MerginApi::sSyncCanceledMessage = QObject::tr( "Synchronisation canceled" );
 
 
 MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
@@ -430,7 +431,10 @@ void MerginApi::downloadItemReplyFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     if ( serverMsg.isEmpty() )
     {
-      serverMsg = r->errorString();
+      if ( r->error() == QNetworkReply::OperationCanceledError )
+        serverMsg = sSyncCanceledMessage;
+      else
+        serverMsg = r->errorString();
     }
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
@@ -2102,6 +2106,9 @@ void MerginApi::pushStartReplyFinished()
   {
     QByteArray data = r->readAll();
     QString serverMsg = extractServerErrorMsg( data );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+      serverMsg = sSyncCanceledMessage;
+
     QString code = extractServerErrorCode( data );
     bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::StorageLimitHit );
 
@@ -2189,6 +2196,9 @@ void MerginApi::pushFileReplyFinished()
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+      serverMsg = sSyncCanceledMessage;
+
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
     int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
@@ -2225,6 +2235,9 @@ void MerginApi::pullInfoReplyFinished()
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+      serverMsg = sSyncCanceledMessage;
+
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
@@ -2746,6 +2759,9 @@ void MerginApi::pushInfoReplyFinished()
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+      serverMsg = sSyncCanceledMessage;
+
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
@@ -2826,6 +2842,9 @@ void MerginApi::pushFinishReplyFinished()
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+      serverMsg = sSyncCanceledMessage;
+
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "pushFinish" ), r->errorString(), serverMsg );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
@@ -2896,7 +2915,24 @@ void MerginApi::getUserInfoFinished()
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getUserInfo" ), r->errorString(), serverMsg );
     CoreUtils::log( "user info", QStringLiteral( "FAILED - %1" ).arg( message ) );
     mUserInfo->clear();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getUserInfo" ) );
+
+    // This is an ugly fix for #3261: if the user was logged in, but the token was already expired
+    // (e.g. when starting the app the next day), the flow of network requests and handlers gets
+    // confused because of mAuthLoopEvent involved when re-authenticating user to get new token.
+    // We end up requesting user info even with expired token, which of course fails with HTTP code 401
+    // and user gets "Authentication information is missing or invalid." notification - this code
+    // prevents that. The correct solution is to get rid of the QEventLoop and to have more rigorous
+    // flow of network requests.
+    static bool firstTimeExpiredTokenAnd401 = true;
+    if ( firstTimeExpiredTokenAnd401 && r->attribute( QNetworkRequest::HttpStatusCodeAttribute ) == 401 &&
+         !mUserAuth->authToken().isEmpty() && mUserAuth->tokenExpiration() < QDateTime().currentDateTimeUtc() )
+    {
+      firstTimeExpiredTokenAnd401 = false;
+    }
+    else
+    {
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getUserInfo" ) );
+    }
   }
 
   emit userInfoReplyFinished();

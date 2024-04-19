@@ -262,18 +262,23 @@ class MMStyle: public QObject
     Q_PROPERTY( double margin11 READ number11 CONSTANT )
     Q_PROPERTY( double margin12 READ number12 CONSTANT )
     Q_PROPERTY( double margin13 READ number13 CONSTANT )
+    Q_PROPERTY( double margin14 READ number14 CONSTANT )
     Q_PROPERTY( double margin16 READ number16 CONSTANT )
     Q_PROPERTY( double margin20 READ number20 CONSTANT )
+    Q_PROPERTY( double margin28 READ number28 CONSTANT )
     Q_PROPERTY( double margin30 READ number30 CONSTANT )
     Q_PROPERTY( double margin32 READ number32 CONSTANT )
     Q_PROPERTY( double margin36 READ number36 CONSTANT )
     Q_PROPERTY( double margin40 READ number40 CONSTANT )
+    Q_PROPERTY( double margin48 READ number48 CONSTANT )
     Q_PROPERTY( double margin54 READ number54 CONSTANT )
 
     // Page
     Q_PROPERTY( double pageMargins READ number20 CONSTANT ) // distance between screen edge and components
+    Q_PROPERTY( double spacing5 READ number5 CONSTANT )
     Q_PROPERTY( double spacing12 READ number12 CONSTANT ) // distance between page header, page content and page footer
     Q_PROPERTY( double spacing20 READ number20 CONSTANT )
+    Q_PROPERTY( double spacing30 READ number30 CONSTANT )
     Q_PROPERTY( double spacing40 READ number40 CONSTANT )
     Q_PROPERTY( double maxPageWidth READ number720 CONSTANT ) // maximum page width (desktop, tablets, landscape)
 
@@ -285,6 +290,7 @@ class MMStyle: public QObject
     Q_PROPERTY( double row40 READ number40 CONSTANT )
     Q_PROPERTY( double row49 READ number49 CONSTANT )
     Q_PROPERTY( double row50 READ number50 CONSTANT )
+    Q_PROPERTY( double row54 READ number54 CONSTANT )
     Q_PROPERTY( double row60 READ number60 CONSTANT )
     Q_PROPERTY( double row63 READ number63 CONSTANT )
     Q_PROPERTY( double row67 READ number67 CONSTANT )
@@ -294,6 +300,7 @@ class MMStyle: public QObject
     Q_PROPERTY( double row160 READ number160 CONSTANT )
     Q_PROPERTY( double radius2 READ number2 CONSTANT )
     Q_PROPERTY( double radius6 READ number6 CONSTANT )
+    Q_PROPERTY( double radius8 READ number8 CONSTANT )
     Q_PROPERTY( double radius12 READ number12 CONSTANT )
     Q_PROPERTY( double radius16 READ number16 CONSTANT )
     Q_PROPERTY( double radius20 READ number20 CONSTANT )

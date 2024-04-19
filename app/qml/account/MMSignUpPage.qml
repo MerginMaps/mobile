@@ -122,7 +122,7 @@ MMPage {
 
         text: qsTr( "Sign up" )
 
-        disabled: root.pending
+        enabled: !root.pending
 
         onClicked: {
           root.signUpClicked(

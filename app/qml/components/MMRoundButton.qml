@@ -24,10 +24,6 @@ RoundButton {
   property color bgndColor: __style.polarColor
   property color bgndHoverColor: __style.mediumGreenColor
 
-  property bool disabled: false
-
-  enabled: !disabled
-
   contentItem: MMIcon {
     color: root.iconColor
     source: root.iconSource

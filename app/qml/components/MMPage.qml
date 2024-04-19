@@ -10,6 +10,10 @@
 import QtQuick
 import QtQuick.Controls
 
+/*
+ * Caller si responsible for setting up bottom safe area in pageContent!
+ * Top, left and right safe areas are already handled by the component
+ */
 Page {
   id: root
 

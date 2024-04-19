@@ -10,17 +10,18 @@
 import QtQuick
 import QtQuick.Controls
 
-Tumbler {
+import "../components"
+import "../inputs"
+
+MMDrawerDialog {
   id: root
 
-  delegate: Text {
-    id: text
+  imageSource: __style.positiveMMSymbolImage
+  title: qsTr( "New Look & Feel" )
+  description: qsTr( "We've been busy making Mergin Maps even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!" )
+  primaryButton.text: qsTr("Let's start!")
 
-    text: modelData
-    font: Math.abs(Tumbler.displacement) < 0.4 ? __style.t1 : __style.p4
-    horizontalAlignment: Text.AlignHCenter
-    verticalAlignment: Text.AlignVCenter
-    opacity: 1.0 - Math.abs(Tumbler.displacement) / (root.visibleItemCount / 2)
-    color: Math.abs(Tumbler.displacement) < 0.4 ? __style.forestColor : __style.nightColor
+  onPrimaryButtonClicked: {
+    close()
   }
 }

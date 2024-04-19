@@ -60,6 +60,8 @@ MMDrawer {
 
         title: qsTr("Username")
         placeholderText: qsTr("Enter your username")
+
+        errorMsg: (text.length > 2) && ( usernameInput.text !== root.username ) ? qsTr("Usernames do not match.") : ""
       }
 
       MMInfoBox {
@@ -96,19 +98,15 @@ MMDrawer {
           bgndColor: __style.negativeColor
           fontColorHover: __style.negativeColor
           bgndColorHover: __style.grapeColor
-          fontColorDisabled: __style.grapeColor // TODO: replace with new color
-          bgndColorDisabled: __style.negativeColor // TODO: replace with new color
+          fontColorDisabled: __style.negativeColor
+          bgndColorDisabled: __style.negativeLightColor
+
+          enabled: usernameInput.text === root.username
 
           onClicked: {
-            if ( usernameInput.text === root.username ) {
-              close()
-              usernameInput.text = ""
-              usernameInput.errorMsg = ""
-              root.closeAccountClicked()
-            }
-            else {
-              usernameInput.errorMsg = qsTr("Usernames do not match.")
-            }
+            close()
+            usernameInput.text = ""
+            root.closeAccountClicked()
           }
         }
       }

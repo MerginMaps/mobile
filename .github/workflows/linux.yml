@@ -17,9 +17,10 @@ on:
 
 env:
   CCACHE_DIR: ~/.ccache
-  INPUT_SDK_VERSION: x64-linux-20240405-176
-  QT_VERSION: '6.6.0' # use scripts/update_qt_version.bash to change
-  CACHE_VERSION: 3
+  INPUT_SDK_VERSION: x64-linux-20240415-181
+  QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
+  CMAKE_VERSION: '3.29.0'
+  CACHE_VERSION: 0
       
 concurrency:
   group: ci-${{github.ref}}-linux
@@ -43,8 +44,13 @@ jobs:
             gperf autopoint '^libxcb.*-dev' libx11-xcb-dev libegl1-mesa libegl1-mesa-dev \
             libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev \
             autoconf-archive libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0 libfuse2 \
-            bison flex cmake ninja-build ccache lcov
+            bison flex ccache lcov
 
+      - name: Install CMake and Ninja
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: ${{ env.CMAKE_VERSION }}
+          
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:

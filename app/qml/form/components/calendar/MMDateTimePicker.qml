@@ -39,9 +39,9 @@ Item {
   Column {
     id: mainColumn
 
-    width: root.width - 40 * __dp
-    spacing: 20 * __dp
-    topPadding: 10 * __dp
+    width: root.width
+    spacing: __style.spacing20
+    topPadding: __style.margin10
 
     // Mount and Year
     Row {
@@ -56,7 +56,7 @@ Item {
         Row {
           id: monthYearRow
 
-          spacing: 5 * __dp
+          spacing: __style.spacing5
 
           Text {
             text: root.locale.standaloneMonthName( monthGrid.month, Locale.LongFormat )
@@ -90,7 +90,7 @@ Item {
         // Right icons for changing months
         Row {
           x: parent.width - spacing - previousIcon.width - nextIcon.width - 10 * __dp
-          spacing: 30 * __dp
+          spacing: __style.spacing30
 
           MMComponents.MMIcon {
             id: previousIcon

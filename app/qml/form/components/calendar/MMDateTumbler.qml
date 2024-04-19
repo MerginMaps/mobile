@@ -12,10 +12,10 @@ import QtQuick.Controls
 
 import "../../../components" as MMComponents
 
-Item {
+MMComponents.MMPopup {
   id: root
 
-  width: row.width + 40 * __dp
+  width: row.width + 2 * __style.spacing20
   height: row.height
 
   signal monthIndexChanged(var monthIndex)
@@ -26,59 +26,41 @@ Item {
   readonly property int calendarYearFrom: 1900
   readonly property int calendarYearTo: 2050
 
-  Rectangle {
+  contentItem: Item {
     width: parent.width
     height: parent.height
-    anchors.horizontalCenter: parent.horizontalCenter
 
-    color: __style.polarColor
-    radius: 20 * __dp
+    Rectangle {
+      anchors.centerIn: parent
 
-    layer.enabled: true
-    layer.effect: MMComponents.MMShadow {
-      radius: 20 * __dp
+      width: parent.width - 2 * __style.margin12
+      height: __style.row54
+      radius: __style.radius8
+
+      color: __style.lightGreenColor
     }
 
-    MouseArea {
-      anchors.fill: parent
-    }
-  }
+    Row {
+      id: row
 
-  Rectangle {
-    anchors {
-      left: parent.left
-      leftMargin: 12 * __dp
-      right: parent.right
-      rightMargin: 12 * __dp
-      verticalCenter: parent.verticalCenter
-    }
+      anchors.centerIn: parent
 
-    height: 54 * __dp
-    radius: 8 * __dp
+      MMTumbler {
+        id: monthsTumbler
 
-    color: __style.lightGreenColor
-  }
+        model: root.monthList()
+        currentIndex: root.initMonthIndex
+        width: 120 * __dp
+        onCurrentIndexChanged: root.monthIndexChanged(currentIndex)
+      }
 
-  Row {
-    id: row
+      MMTumbler {
+        id: yearsTumble
 
-    anchors.horizontalCenter: parent.horizontalCenter
-
-    MMTumbler {
-      id: monthsTumbler
-
-      model: root.monthList()
-      currentIndex: root.initMonthIndex
-      width: 120 * __dp
-      onCurrentIndexChanged: root.monthIndexChanged(currentIndex)
-    }
-
-    MMTumbler {
-      id: yearsTumble
-
-      model: root.yearList()
-      currentIndex: root.initYear - root.calendarYearFrom
-      onCurrentItemChanged: root.yearChanged(parseInt(currentItem.text))
+        model: root.yearList()
+        currentIndex: root.initYear - root.calendarYearFrom
+        onCurrentItemChanged: root.yearChanged(parseInt(currentItem.text))
+      }
     }
   }
 

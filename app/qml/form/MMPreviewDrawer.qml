@@ -242,6 +242,10 @@ Item {
 
                 elide: Text.ElideRight
                 wrapMode: Text.NoWrap
+
+                onLinkActivated: function ( link ) {
+                  Qt.openUrlExternally( link )
+                }
               }
 
               MMComponents.MMListSpacer { height: __style.margin8 }
@@ -272,6 +276,10 @@ Item {
 
           elide: Text.ElideRight
           text: root.controller.html
+
+          onLinkActivated: function ( link ) {
+            Qt.openUrlExternally( link )
+          }
         }
       }
 

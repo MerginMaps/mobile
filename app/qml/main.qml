@@ -221,7 +221,7 @@ ApplicationWindow {
 
     onLocalChangesPanelRequested: {
       stateManager.state = "projects"
-      projectController.openChangesPanel( __activeProject.projectFullName() )
+      projectController.openChangesPanel( __activeProject.projectFullName(), true )
     }
 
     onOpenTrackingPanel: {
@@ -344,7 +344,7 @@ ApplicationWindow {
         iconSource: __style.localChangesIcon
         onClicked: {
           stateManager.state = "projects"
-          projectController.openChangesPanel( __activeProject.projectFullName() )
+          projectController.openChangesPanel( __activeProject.projectFullName(), true )
         }
       }
 
@@ -496,7 +496,7 @@ ApplicationWindow {
   MMMapThemeDrawer {
     id: mapThemesPanel
 
-    height: ( window.height / 2 )
+    maxHeight: ( window.height / 2 )
     width: window.width
     edge: Qt.BottomEdge
 
@@ -743,7 +743,6 @@ ApplicationWindow {
     }
   }
 
-  // Should be the top-most visual item
   MMNotificationView {}
 
   MMListDrawer {
@@ -770,6 +769,15 @@ ApplicationWindow {
         list.model.populateStaticModel( pairs )
         open()
       }
+    }
+  }
+
+  MMWelcomeToNewDesignDialog {
+    id: welcomeToNewDesignDialog
+
+    Component.onCompleted: {
+      if ( __showWelcomeToNewDesignDialog )
+        open()
     }
   }
 
@@ -805,7 +813,7 @@ ApplicationWindow {
     {
       if ( projectFullName === __activeProject.projectFullName() )
       {
-        syncInProgressAnimation.stop()
+        syncButton.iconRotateAnimationRunning = false
       }
     }
 
@@ -889,7 +897,6 @@ ApplicationWindow {
     {
       if ( projectFullName === __activeProject.projectFullName() )
       {
-        syncInProgressAnimation.stop()
         missingAuthDialog.open()
       }
     }

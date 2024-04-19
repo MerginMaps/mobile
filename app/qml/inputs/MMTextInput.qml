@@ -14,7 +14,9 @@ import "../components/private" as MMPrivateComponents
 
 /*
  * Common text input to use in the app.
- * Disabled state can be achieved by setting `enabled: false`.
+ *
+ * Disabled state can be achieved by setting `enabled: false`
+ * ReadOnly state can be achieved by setting `readOnly: true`
  *
  * See MMBaseSingleLineInput for more properties.
  */

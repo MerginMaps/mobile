@@ -38,6 +38,7 @@ set(MM_QML
     components/MMNotificationView.qml
     components/MMPage.qml
     components/MMPageHeader.qml
+    components/MMPopup.qml
     components/MMPhoto.qml
     components/MMProgressBar.qml
     components/MMRadioButton.qml
@@ -60,6 +61,7 @@ set(MM_QML
     dialogs/MMPositionTrackingDialog.qml
     dialogs/MMProjectLimitDialog.qml
     dialogs/MMRemoveProjectDialog.qml
+    dialogs/MMWelcomeToNewDesignDialog.qml
     dialogs/MMSplittingFailedDialog.qml
     dialogs/MMStorageLimitDialog.qml
     dialogs/MMStreamingModeDialog.qml

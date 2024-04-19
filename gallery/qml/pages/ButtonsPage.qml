@@ -64,7 +64,7 @@ ScrollView {
 
             width: parent.width / 2 - parent.spacing
 
-            disabled: true
+            enabled: false
 
             onClicked: text = (text === "Clicked" ? "Primary" : "Clicked")
           }
@@ -119,7 +119,7 @@ ScrollView {
             width: parent.width / 2 - parent.spacing
 
             type: MMButton.Types.Secondary
-            disabled: true
+            enabled: false
 
             onClicked: text = (text === "Clicked" ? "Secondary" : "Clicked")
           }
@@ -177,7 +177,7 @@ ScrollView {
             width: parent.width / 2 - parent.spacing
 
             type: MMButton.Types.Tertiary
-            disabled: true
+            enabled: false
 
             iconSourceLeft: __style.uploadIcon
 

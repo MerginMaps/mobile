@@ -13,6 +13,7 @@ import QtQuick.Controls.Basic
 
 import "../../app/qml/components"
 import "../../app/qml/gps"
+import "../../app/qml/gps/components" as MMGpsComponents
 
 ScrollView {
   id: page
@@ -307,14 +308,14 @@ ScrollView {
           width: parent.width
           height: 67 * __dp
 
-          MMGpsDataText {
-            titleText: "Gps Data Title"
-            descriptionText: "Gps Data Description"
+          MMGpsComponents.MMGpsDataText {
+            title: "Gps Data Title"
+            value: "Gps Data Description"
           }
 
-          MMGpsDataText {
-            titleText: "Gps Data Right Title"
-            descriptionText: "Gps Data Right Description"
+          MMGpsComponents.MMGpsDataText {
+            title: "Gps Data Right Title"
+            value: "Gps Data Right Description"
             alignmentRight: true
           }
         }
