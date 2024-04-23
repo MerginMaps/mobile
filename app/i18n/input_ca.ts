@@ -1233,7 +1233,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="512"/>
         <source>streaming</source>
-        <translation>streaming</translation>
+        <translation>transmissió</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="588"/>
