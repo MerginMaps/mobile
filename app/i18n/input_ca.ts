@@ -2516,7 +2516,7 @@ només permet fins a %1 projectes baixats.</translation>
     <message>
         <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
         <source>Failed to determine changes</source>
-        <translation>No s&apos;ha pogut determinar canvis</translation>
+        <translation>No s&apos;ha pogut determinar els canvis</translation>
     </message>
 </context>
 <context>
