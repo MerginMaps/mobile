@@ -1067,7 +1067,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="206"/>
         <source>Where did you hear about us?</source>
-        <translation>Com es va assabentar de nosaltres?</translation>
+        <translation>Com heu sabut de nosaltres?</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="207"/>
