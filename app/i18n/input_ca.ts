@@ -1510,7 +1510,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
         <source>Start tracking</source>
-        <translation>Engega el seguiment</translation>
+        <translation>Inicia el seguiment</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="43"/>
