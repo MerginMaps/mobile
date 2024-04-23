@@ -1263,7 +1263,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="790"/>
         <source>Could not find any editable layers in the project.</source>
-        <translation>No hem pogut trobar cap capa editable en el projecte</translation>
+        <translation>No hem pogut trobar cap capa editable en el projecte.</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="791"/>
