@@ -1215,7 +1215,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="202"/>
         <source>Server address</source>
-        <translation>Adreça de servidor</translation>
+        <translation>Adreça del servidor</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="215"/>
