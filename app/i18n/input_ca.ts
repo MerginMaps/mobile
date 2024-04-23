@@ -2663,7 +2663,7 @@ només permet fins a %1 projectes baixats.</translation>
     <message>
         <location filename="../position/geoposition.cpp" line="135"/>
         <source>No fix</source>
-        <translation>Sense posició </translation>
+        <translation>Sense correcció</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="138"/>
