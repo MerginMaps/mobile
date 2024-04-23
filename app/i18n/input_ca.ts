@@ -2840,7 +2840,7 @@ només permet fins a %1 projectes baixats.</translation>
     <message>
         <location filename="../qml/main.qml" line="1002"/>
         <source>Press back again to quit the app</source>
-        <translation>Premeu enrere un altre cop per sortir de l&apos;aplicació</translation>
+        <translation>Premeu enrere de nou per sortir de l&apos;aplicació</translation>
     </message>
 </context>
 </TS>
