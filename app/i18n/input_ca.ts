@@ -2069,7 +2069,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="158"/>
         <source>Each field offers an option to reuse its value on the next feature</source>
-        <translation>Cada camp ofereix una opció per reutilitzar el seu valor a la funció següent</translation>
+        <translation>Cada camp ofereix una opció per reutilitzar el seu valor per a la següent característica</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="168"/>
