@@ -343,7 +343,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="61"/>
         <source>You have been invited to a workspace</source>
-        <translation>Has estat convidat a un espai de treball</translation>
+        <translation>Heu estat convidat a un espai de treball</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="62"/>
