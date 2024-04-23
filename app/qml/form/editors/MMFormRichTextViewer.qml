@@ -20,6 +20,7 @@ MMPrivateComponents.MMBaseInput {
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
 
   property string _fieldTitle: parent.fieldTitle
+  property string _fieldHomePath: parent.fieldHomePath
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
@@ -47,9 +48,8 @@ MMPrivateComponents.MMBaseInput {
       leftPadding: __style.margin20
       rightPadding: __style.margin20
 
-      onLinkActivated: function( link ) {
-        Qt.openUrlExternally( link )
-      }
+      //HERE
+      onLinkActivated: ( link ) => __inputUtils.openLink( root._fieldHomePath, link.toString() )
     }
   }
 }

@@ -36,6 +36,7 @@ MMPrivateComponents.MMBaseInput {
   property string _fieldTitle: parent.fieldTitle
   property string _fieldErrorMessage: parent.fieldErrorMessage
   property string _fieldWarningMessage: parent.fieldWarningMessage
+  property string _fieldHomePath: parent.fieldHomePath
 
   property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
   property bool _fieldRememberValueState: parent.fieldRememberValueState

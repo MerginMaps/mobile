@@ -2187,13 +2187,7 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
 #ifdef Q_OS_ANDROID
         mAndroidUtils->openFile( absoluteLinkPath );
 #elif defined(Q_OS_IOS)
-        qWarning() << "IOS HERE";
-        //QUrl fileUrl = QUrl::fromLocalFile(absoluteLinkPath);
-
-        // Open the file with the default application
-        //QDesktopServices::openUrl(fileUrl);
         IosUtils::openFile( absoluteLinkPath );
-        qDebug() << "openLink ios";
 #else
         // Desktop environments
         QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
