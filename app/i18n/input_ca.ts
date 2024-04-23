@@ -1347,7 +1347,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="20"/>
         <source>Upload project?</source>
-        <translation>Voleu pujar el projecte?</translation>
+        <translation>Pujar el projecte?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="21"/>
