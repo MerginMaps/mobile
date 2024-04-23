@@ -503,7 +503,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="116"/>
         <source>Learn more</source>
-        <translation>Saber-ne més</translation>
+        <translation>Més informació</translation>
     </message>
 </context>
 <context>
