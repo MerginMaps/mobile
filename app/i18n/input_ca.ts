@@ -846,7 +846,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="23"/>
         <source>Yes, I want to save</source>
-        <translation>Si, vull desar-ho</translation>
+        <translation>Si, vull desar</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="24"/>
