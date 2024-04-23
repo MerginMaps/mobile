@@ -2483,7 +2483,7 @@ només permet fins a %1 projectes baixats.</translation>
     <message>
         <location filename="../../core/merginapi.cpp" line="1323"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
-        <translation>No es permeten nous registres al servidor seleccionat. Si us plau, consulteu amb el vostre administrador.</translation>
+        <translation>No es permeten noves altes al servidor seleccionat. Si us plau, consulteu amb el vostre administrador.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1355"/>
