@@ -1910,7 +1910,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="24"/>
         <source>Would you like to delete or unlink the photo? Deleting removes the photo from your project entirely, while unlinking keeps the photo in your project but removes it from this specific feature.</source>
-        <translation>Voleu suprimir o desenllaçar la foto? Si suprimiu la foto del vostre projecte, s&apos;elimina completament, mentre que desenllaçar-la es manté al projecte, però s&apos;elimina d&apos;aquesta funció específica.</translation>
+        <translation>Voleu suprimir o desenllaçar la foto? Si suprimiu la foto del vostre projecte, s&apos;elimina completament, mentre que desenllaçar-la es manté al projecte, però s&apos;elimina d&apos;aquesta característica específica.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="27"/>
