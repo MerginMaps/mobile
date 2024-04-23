@@ -66,14 +66,10 @@ class IosUtils: public QObject
     void setIdleTimerDisabled();
 
     QVector<int> getSafeAreaImpl();
-<<<<<<< HEAD
+
     static QString getManufacturerImpl();
     static QString getDeviceModelImpl();
-
-=======
-
-    static void openFileImpl(const QString &filePath); //tesrtsasssaa
->>>>>>> 05801f46 (ios pdf viewing)
+    static void openFileImpl(const QString &filePath);
 };
 
 #endif // IOSUTILS_H

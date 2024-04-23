@@ -22,7 +22,6 @@
 #include <QString>
 >>>>>>> 05801f46 (ios pdf viewing)
 #include "iosutils.h"
-#include "coreutils.h"
 
 void IosUtils::setIdleTimerDisabled()
 {
@@ -77,7 +76,6 @@ void IosUtils::openFileImpl(const QString &filePath)
 {
   static FileOpener *viewer = nil;
   NSURL *resourceURL = [NSURL fileURLWithPath:filePath.toNSString()];
-  CoreUtils::log("PDF file encountered: ", [resourceURL path].UTF8String);
 
   UIDocumentInteractionController *interactionCtrl = [UIDocumentInteractionController interactionControllerWithURL:resourceURL];
   UIViewController *rootViewController = [[[[UIApplication sharedApplication] windows] firstObject] rootViewController];
