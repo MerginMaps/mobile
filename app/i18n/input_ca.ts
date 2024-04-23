@@ -2785,7 +2785,7 @@ només permet fins a %1 projectes baixats.</translation>
         <location filename="../qml/main.qml" line="547"/>
         <location filename="../qml/main.qml" line="555"/>
         <source>not tracking</source>
-        <translation>no seguiment</translation>
+        <translation>sense seguiment</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="748"/>
