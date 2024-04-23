@@ -53,10 +53,12 @@
 
 #include "imageutils.h"
 #include "variablesmanager.h"
+#include "notificationmodel.h"
 
 #include <Qt>
 #include <QDir>
 #include <QFile>
+#include <QMessageBox>
 #include <QFileInfo>
 #include <QDesktopServices>
 #include <QUrl>
@@ -2184,6 +2186,11 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
     {
         QString relativePath = link.mid( QString( "project://" ).length() );
         QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
+        if (!fileExists(absoluteLinkPath)){
+            QString errorMessage = tr("The specified file does not exist: %1").arg(relativePath);
+            QMessageBox::warning(nullptr, "File Not Found", errorMessage);
+            return;
+        }
 #ifdef Q_OS_ANDROID
         mAndroidUtils->openFile( absoluteLinkPath );
 #elif defined(Q_OS_IOS)
