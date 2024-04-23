@@ -48,7 +48,6 @@ MMPrivateComponents.MMBaseInput {
       leftPadding: __style.margin20
       rightPadding: __style.margin20
 
-      //HERE
       onLinkActivated: ( link ) => __inputUtils.openLink( root._fieldHomePath, link.toString() )
     }
   }
