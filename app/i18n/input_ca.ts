@@ -1663,7 +1663,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="129"/>
         <source>Downloaded projects</source>
-        <translation>Descarregar projectes</translation>
+        <translation>Projectes descarregats</translation>
     </message>
 </context>
 <context>
