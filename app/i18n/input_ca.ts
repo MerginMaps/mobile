@@ -1002,7 +1002,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="35"/>
         <source>QGIS website</source>
-        <translation>Looc web QGIS</translation>
+        <translation>Lloc web QGIS</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="36"/>
