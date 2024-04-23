@@ -1590,7 +1590,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="188"/>
         <source>Please don&apos;t close the app.</source>
-        <translation>Si us plau no tanqueu la app.</translation>
+        <translation>Si us plau no tanqueu la aplicació.</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="211"/>
