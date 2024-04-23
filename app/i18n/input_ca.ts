@@ -1370,7 +1370,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="20"/>
         <source>Sign in to your account</source>
-        <translation>Inicieu la sessió al vostre compte </translation>
+        <translation>Inicieu la sessió al vostre compte</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
