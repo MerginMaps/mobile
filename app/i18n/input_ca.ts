@@ -1288,7 +1288,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="837"/>
         <source>Streaming mode</source>
-        <translation>Mode transmissió</translation>
+        <translation>Mode de transmissió</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="843"/>
