@@ -1339,7 +1339,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/components/MMMessage.qml" line="30"/>
         <source>Learn more</source>
-        <translation>Més inforamació</translation>
+        <translation>Més informació</translation>
     </message>
 </context>
 <context>
