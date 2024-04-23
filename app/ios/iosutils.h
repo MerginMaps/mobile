@@ -42,6 +42,8 @@ class IosUtils: public QObject
     static QString readExif( const QString &filepath, const QString &tag );
 
     Q_INVOKABLE QVector<int> getSafeArea();
+    
+    Q_INVOKABLE static void openFile(const QString &filePath);
 
     static Q_INVOKABLE QString getManufacturer();
     static Q_INVOKABLE QString getDeviceModel();
@@ -64,9 +66,14 @@ class IosUtils: public QObject
     void setIdleTimerDisabled();
 
     QVector<int> getSafeAreaImpl();
+<<<<<<< HEAD
     static QString getManufacturerImpl();
     static QString getDeviceModelImpl();
 
+=======
+
+    static void openFileImpl(const QString &filePath); //tesrtsasssaa
+>>>>>>> 05801f46 (ios pdf viewing)
 };
 
 #endif // IOSUTILS_H

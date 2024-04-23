@@ -67,6 +67,7 @@ QVector<int> IosUtils::getSafeArea()
   return QVector<int>();
 }
 
+<<<<<<< HEAD
 QString IosUtils::getManufacturer()
 {
 #ifdef Q_OS_IOS
@@ -81,4 +82,10 @@ QString IosUtils::getDeviceModel()
   return getDeviceModelImpl();
 #endif
   return "";
+=======
+void IosUtils::openFile( const QString &filePath )
+{
+  //qWarning() << "test";
+  openFileImpl( filePath ); //
+>>>>>>> 05801f46 (ios pdf viewing)
 }

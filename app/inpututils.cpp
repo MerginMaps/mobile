@@ -2180,26 +2180,32 @@ QString InputUtils::getDeviceModel()
 
 void InputUtils::openLink( const QString &homePath, const QString &link )
 {
-  if ( link.startsWith( "project://" ) )
-  {
-    QString relativePath = link.mid( QString( "project://" ).length() );
-    QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
-#ifdef Q_OS_ANDROID
-    mAndroidUtils->openFile( absoluteLinkPath );
-#elif defined(Q_OS_IOS)
-    qDebug() << "openLink ios";
-#else
-    // Desktop environments
-    QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
-    if ( !QDesktopServices::openUrl( fileUrl ) )
+    if ( link.startsWith( "project://" ) )
     {
-      QString errorMessage = "Failed to open the file:" + absoluteLinkPath;
-      CoreUtils::log( "File  error", errorMessage );
-    }
+        QString relativePath = link.mid( QString( "project://" ).length() );
+        QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
+#ifdef Q_OS_ANDROID
+        mAndroidUtils->openFile( absoluteLinkPath );
+#elif defined(Q_OS_IOS)
+        qWarning() << "IOS HERE";
+        //QUrl fileUrl = QUrl::fromLocalFile(absoluteLinkPath);
+
+        // Open the file with the default application
+        //QDesktopServices::openUrl(fileUrl);
+        IosUtils::openFile( absoluteLinkPath );
+        qDebug() << "openLink ios";
+#else
+        // Desktop environments
+        QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
+        if ( !QDesktopServices::openUrl( fileUrl ) )
+        {
+            QString errorMessage = "Failed to open the file:" + absoluteLinkPath;
+            CoreUtils::log( "File  error", errorMessage );
+        }
 #endif
-  }
-  else
-  {
-    QDesktopServices::openUrl( QUrl( link ) );
-  }
+    }
+    else
+    {
+        QDesktopServices::openUrl( QUrl( link ) );
+    }
 }
