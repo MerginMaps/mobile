@@ -750,7 +750,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/dialogs/MMFormEditFailedDialog.qml" line="20"/>
         <source>Ok, I understand</source>
-        <translation>D&apos;acord, ho entenc</translation>
+        <translation>D&apos;acord, entesos</translation>
     </message>
 </context>
 <context>
