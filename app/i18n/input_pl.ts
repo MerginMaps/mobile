@@ -1038,7 +1038,7 @@ Nie będzie ono dodane do projektu.</translation>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="132"/>
         <source>Twitter</source>
-        <translation>X (Twitter)</translation>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="133"/>
