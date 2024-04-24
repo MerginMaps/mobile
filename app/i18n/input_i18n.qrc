@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="/"> 
+    <file>input_ca.qm</file> 
+    <file>input_sk.qm</file> 
+    <file>input_en.qm</file> 
+    <file>input_sk_SK.qm</file> 
+  </qresource> 
+</RCC>
