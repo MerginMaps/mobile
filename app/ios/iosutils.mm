@@ -66,13 +66,14 @@ QString IosUtils::getDeviceModelImpl()
 
 @implementation FileOpener
 
-- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)ctrl {
+- ( UIViewController * )documentInteractionControllerViewControllerForPreview:( UIDocumentInteractionController * )ctrl
+{
   return self;
 }
 
 @end
 
-void IosUtils::openFileImpl(const QString &filePath)
+void IosUtils::openFileImpl( const QString &filePath )
 {
   static FileOpener *viewer = nil;
   NSURL *resourceURL = [NSURL fileURLWithPath:filePath.toNSString()];
@@ -82,9 +83,10 @@ void IosUtils::openFileImpl(const QString &filePath)
 
   viewer = [[FileOpener alloc] init];
   [rootViewController addChildViewController: viewer];
-  interactionCtrl.delegate = (id<UIDocumentInteractionControllerDelegate>)viewer;
+  interactionCtrl.delegate = ( id<UIDocumentInteractionControllerDelegate> )viewer;
 
-  if (![interactionCtrl presentPreviewAnimated:NO]){
+  if ( ![interactionCtrl presentPreviewAnimated:NO] )
+  {
     [interactionCtrl presentOptionsMenuFromRect:CGRectZero inView:viewer.view animated:NO];
   }
 }

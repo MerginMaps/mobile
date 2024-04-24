@@ -53,7 +53,6 @@
 
 #include "imageutils.h"
 #include "variablesmanager.h"
-#include "notificationmodel.h"
 
 #include <Qt>
 #include <QDir>
@@ -2182,31 +2181,32 @@ QString InputUtils::getDeviceModel()
 
 void InputUtils::openLink( const QString &homePath, const QString &link )
 {
-    if ( link.startsWith( "project://" ) )
+  if ( link.startsWith( "project://" ) )
+  {
+    QString relativePath = link.mid( QString( "project://" ).length() );
+    QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
+    if ( !fileExists( absoluteLinkPath ) )
     {
-        QString relativePath = link.mid( QString( "project://" ).length() );
-        QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
-        if (!fileExists(absoluteLinkPath)){
-            QString errorMessage = tr("The specified file does not exist: %1").arg(relativePath);
-            QMessageBox::warning(nullptr, "File Not Found", errorMessage);
-            return;
-        }
+      QString errorMessage = tr( "The specified file does not exist: %1" ).arg( relativePath );
+      QMessageBox::warning( nullptr, "File Not Found", errorMessage );
+      return;
+    }
 #ifdef Q_OS_ANDROID
-        mAndroidUtils->openFile( absoluteLinkPath );
+    mAndroidUtils->openFile( absoluteLinkPath );
 #elif defined(Q_OS_IOS)
-        IosUtils::openFile( absoluteLinkPath );
+    IosUtils::openFile( absoluteLinkPath );
 #else
-        // Desktop environments
-        QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
-        if ( !QDesktopServices::openUrl( fileUrl ) )
-        {
-            QString errorMessage = "Failed to open the file:" + absoluteLinkPath;
-            CoreUtils::log( "File  error", errorMessage );
-        }
-#endif
-    }
-    else
+    // Desktop environments
+    QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
+    if ( !QDesktopServices::openUrl( fileUrl ) )
     {
-        QDesktopServices::openUrl( QUrl( link ) );
+      QString errorMessage = "Failed to open the file:" + absoluteLinkPath;
+      CoreUtils::log( "File  error", errorMessage );
     }
+#endif
+  }
+  else
+  {
+    QDesktopServices::openUrl( QUrl( link ) );
+  }
 }

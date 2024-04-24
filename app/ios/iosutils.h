@@ -42,8 +42,8 @@ class IosUtils: public QObject
     static QString readExif( const QString &filepath, const QString &tag );
 
     Q_INVOKABLE QVector<int> getSafeArea();
-    
-    Q_INVOKABLE static void openFile(const QString &filePath);
+
+    Q_INVOKABLE static void openFile( const QString &filePath );
 
     static Q_INVOKABLE QString getManufacturer();
     static Q_INVOKABLE QString getDeviceModel();
