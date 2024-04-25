@@ -133,7 +133,7 @@ class RecordingMapTool : public AbstractMapTool
     Q_ENUM( InsertPolicy );
 
     explicit RecordingMapTool( QObject *parent = nullptr );
-    virtual ~RecordingMapTool();
+    virtual ~RecordingMapTool() override;
 
     /**
      * Adds point to the end of the recorded geometry; updates recordedGeometry afterwards

@@ -35,7 +35,7 @@ class RelationReferenceFeaturesModel : public FeaturesModel
   public:
 
     explicit RelationReferenceFeaturesModel( QObject *parent = nullptr );
-    ~RelationReferenceFeaturesModel() {};
+    ~RelationReferenceFeaturesModel() override;
 
     //! Returns foreign key of feature that matches given role with attributeValue
     Q_INVOKABLE QVariant foreignKeyFromAttribute( FeaturesModel::ModelRoles fromAttribute, const QVariant &attributeValue );

@@ -27,7 +27,7 @@ class SplittingMapTool : public AbstractMapTool
 
   public:
     explicit SplittingMapTool( QObject *parent = nullptr );
-    virtual ~SplittingMapTool();
+    virtual ~SplittingMapTool() override;
 
     /**
      * Adds point to the end of the recorded geometry; updates recordedGeometry afterwards

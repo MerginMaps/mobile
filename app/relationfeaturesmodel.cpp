@@ -18,6 +18,8 @@ RelationFeaturesModel::RelationFeaturesModel( QObject *parent )
 {
 }
 
+RelationFeaturesModel::~RelationFeaturesModel() = default;
+
 QVariant RelationFeaturesModel::data( const QModelIndex &index, int role ) const
 {
   int row = index.row();

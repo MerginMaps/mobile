@@ -16,6 +16,8 @@ RelationReferenceFeaturesModel::RelationReferenceFeaturesModel( QObject *parent 
 {
 }
 
+RelationReferenceFeaturesModel::~RelationReferenceFeaturesModel() = default;
+
 QVariant RelationReferenceFeaturesModel::foreignKeyFromAttribute( FeaturesModel::ModelRoles fromAttribute, const QVariant &attributeValue )
 {
   if ( mPrimaryKeyField.isEmpty() )
