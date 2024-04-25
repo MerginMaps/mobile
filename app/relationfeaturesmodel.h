@@ -43,7 +43,7 @@ class RelationFeaturesModel : public FeaturesModel
     Q_ENUM( relationModelRoles );
 
     explicit RelationFeaturesModel( QObject *parent = nullptr );
-    ~RelationFeaturesModel() {};
+    ~RelationFeaturesModel() override;
 
     QVariant data( const QModelIndex &index, int role ) const override;
     QHash<int, QByteArray> roleNames() const override;
