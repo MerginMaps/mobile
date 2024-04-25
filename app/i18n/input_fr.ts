@@ -488,7 +488,7 @@ Ne sera pas ajouté au projet.</translation>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="47"/>
         <source>You might be asked to pair your device during this process.</source>
-        <translation>Vous pourriez être invité(e) à associer votre appareil pendant ce processus.</translation>
+        <translation>Vous pourriez être invité·e à associer votre appareil pendant ce processus.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="56"/>
