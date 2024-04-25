@@ -34,7 +34,7 @@ Item {
   property bool isTrackingPosition: trackingManager?.isTrackingPosition ?? false
   property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType === MM.RecordingMapTool.StreamMode : false
   property bool centeredToGPS: false
-  //HERE
+
   property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
   signal featureIdentified( var pair )
@@ -738,7 +738,6 @@ Item {
           }
         }
 
-        //HERE
         MMMapButton {
           id: gpsButton
 

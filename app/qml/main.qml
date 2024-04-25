@@ -142,7 +142,6 @@ ApplicationWindow {
     console.log("Application initialized!")
   }
 
-  //HERE
   MMMapController {
     id: map
 
@@ -314,8 +313,6 @@ ApplicationWindow {
         text: qsTr("Zoom to project")
         iconSource: __style.zoomToProjectIcon
         onClicked: {
-          //HERE
-          //If gps button is true then do someting
           map.centeredToGPS = false
           __inputUtils.zoomToProject( __activeProject.qgsProject, map.mapSettings )
         }
