@@ -363,7 +363,7 @@ Ne sera pas ajouté au projet.</translation>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="110"/>
         <source>Want to create a new workspace instead? %1Click here%2</source>
-        <translation>Vous préférez créer un nouvel espace de travail ?Cliquez ici</translation>
+        <translation>Vous préférez créer un nouvel espace de travail ? %1Cliquez ici%2</translation>
     </message>
 </context>
 <context>
