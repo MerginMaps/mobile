@@ -1834,8 +1834,6 @@ bool InputUtils::isPointLayerFeature( const FeatureLayerPair &feature )
 
 void InputUtils::zoomToProject( QgsProject *qgsProject, InputMapSettings *mapSettings )
 {
-  //change gps lock status
-
   if ( !qgsProject || !mapSettings )
   {
     qDebug() << "Cannot zoom to extent, MapSettings or QgsProject is not defined";
