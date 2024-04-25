@@ -55,8 +55,7 @@
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="198"/>
         <source>Enable notifications to see tracking in the notifications tray</source>
-        <translation>Activer les notifications pour voir le suivi dans la barre de notifications.
-</translation>
+        <translation>Activer les notifications pour voir le suivi dans la barre de notifications.</translation>
     </message>
 </context>
 <context>
