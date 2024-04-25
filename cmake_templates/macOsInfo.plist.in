@@ -50,6 +50,8 @@
         <string>hr_BA</string>
         <string>hr_HR</string>
         <string>pl</string>
+        <string>fr</string>
+        <string>fr_FR</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
