@@ -2010,7 +2010,7 @@ Ne sera pas ajouté au projet.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="89"/>
         <source>Includes pole height and GPS receiver’s antenna height</source>
-        <translation>Inclut la hauteur du poteau et la hauteur de l&apos;antenne du récepteur GPS</translation>
+        <translation>Inclut la hauteur de la canne et la hauteur de l&apos;antenne du récepteur GPS</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="90"/>
