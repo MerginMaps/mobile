@@ -152,7 +152,7 @@ Não será adicionado ao projeto.</translation>
     <message>
         <location filename="../inputprojutils.cpp" line="98"/>
         <source>Error creating custom PROJ operation. For newly downloaded project please restart Mergin Maps.</source>
-        <translation>Erros ao criar operação PROJ personalizada. Pera projetos recentemente, reinicie o Mergin maps.</translation>
+        <translation>Erros ao criar operação PROJ personalizada. Para projetos recentemente, reinicie o Mergin maps.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="108"/>
