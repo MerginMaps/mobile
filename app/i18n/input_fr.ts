@@ -1935,7 +1935,7 @@ Ne sera pas ajouté au projet.</translation>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="25"/>
         <source>Any unsynchronized changes will be lost in project 
  %1</source>
-        <translation>Toutes les modifications non-synchronisées seront perdues</translation>
+        <translation>Toutes les modifications non-synchronisées du projet %1 seront perdues</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="26"/>
