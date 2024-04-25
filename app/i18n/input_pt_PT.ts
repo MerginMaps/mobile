@@ -147,7 +147,7 @@ Não será adicionado ao projeto.</translation>
     <message>
         <location filename="../inputprojutils.cpp" line="77"/>
         <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Mergin Maps.</source>
-        <translation>Grelha de transformação PROJ necessária está ausente: %1. Para projetos recém-baixados, reinicie o Mergin Maps.</translation>
+        <translation>Grelha de deslocamento de datum PROJ necessária está em falta: %1. Para projetos baixados recentemente, reinicie o Mergin Maps.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="98"/>
