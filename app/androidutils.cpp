@@ -227,13 +227,16 @@ void AndroidUtils::hideSplashScreen()
 #endif
 }
 
-void AndroidUtils::openFile( const QString &filePath )
+bool AndroidUtils::openFile( const QString &filePath )
 {
+  bool result = false;
 #ifdef ANDROID
   auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
   QJniObject jFilePath = QJniObject::fromString( filePath );
-  activity.callMethod<void>( "openFile", "(Ljava/lang/String;)V", jFilePath.object<jstring>() );
+  // Ensure the method signature includes 'Z' to indicate a boolean return type.
+  result = activity.callMethod<jboolean>( "openFile", "(Ljava/lang/String;)Z", jFilePath.object<jstring>() );
 #endif
+  return result;
 }
 
 bool AndroidUtils::requestStoragePermission()

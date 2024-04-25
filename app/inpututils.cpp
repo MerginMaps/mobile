@@ -2159,6 +2159,7 @@ QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 QString InputUtils::getManufacturer()
 {
 #ifdef Q_OS_ANDROID
@@ -2180,6 +2181,9 @@ QString InputUtils::getDeviceModel()
 }
 
 void InputUtils::openLink( const QString &homePath, const QString &link )
+=======
+bool InputUtils::openLink( const QString &homePath, const QString &link )
+>>>>>>> 247d842d (first part of post review changes)
 {
   if ( link.startsWith( "project://" ) )
   {
@@ -2187,21 +2191,24 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
     QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
     if ( !fileExists( absoluteLinkPath ) )
     {
-      QString errorMessage = tr( "The specified file does not exist: %1" ).arg( relativePath );
-      QMessageBox::warning( nullptr, "File Not Found", errorMessage );
-      return;
+      return false;
     }
 #ifdef Q_OS_ANDROID
-    mAndroidUtils->openFile( absoluteLinkPath );
+    if ( !mAndroidUtils->openFile( absoluteLinkPath ) )
+    {
+      return false;
+    }
 #elif defined(Q_OS_IOS)
-    IosUtils::openFile( absoluteLinkPath );
+    if ( ! IosUtils::openFile( absoluteLinkPath ) )
+    {
+      return false;
+    }
 #else
     // Desktop environments
     QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
     if ( !QDesktopServices::openUrl( fileUrl ) )
     {
-      QString errorMessage = "Failed to open the file:" + absoluteLinkPath;
-      CoreUtils::log( "File  error", errorMessage );
+      return false;
     }
 #endif
   }
@@ -2209,4 +2216,6 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
   {
     QDesktopServices::openUrl( QUrl( link ) );
   }
+
+  return true;
 }

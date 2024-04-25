@@ -43,7 +43,7 @@ class IosUtils: public QObject
 
     Q_INVOKABLE QVector<int> getSafeArea();
 
-    Q_INVOKABLE static void openFile( const QString &filePath );
+    Q_INVOKABLE static bool openFile( const QString &filePath );
 
     static Q_INVOKABLE QString getManufacturer();
     static Q_INVOKABLE QString getDeviceModel();
@@ -69,7 +69,7 @@ class IosUtils: public QObject
 
     static QString getManufacturerImpl();
     static QString getDeviceModelImpl();
-    static void openFileImpl(const QString &filePath);
+    static bool openFileImpl( const QString &filePath );
 };
 
 #endif // IOSUTILS_H

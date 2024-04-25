@@ -179,7 +179,7 @@ class InputUtils: public QObject
      * absolute paths and opens with default file handlers. Other links are opened in the default web browser.
      * @param link The link to open, either a "project://" link or a standard URL.
      */
-    Q_INVOKABLE void openLink( const QString &homePath, const QString &link );
+    Q_INVOKABLE bool openLink( const QString &homePath, const QString &link );
 
     Q_INVOKABLE bool acquireCameraPermission();
 

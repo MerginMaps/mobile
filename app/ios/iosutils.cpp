@@ -67,6 +67,7 @@ QVector<int> IosUtils::getSafeArea()
   return QVector<int>();
 }
 
+<<<<<<< HEAD
 QString IosUtils::getManufacturer()
 {
 #ifdef Q_OS_IOS
@@ -89,5 +90,11 @@ bool IosUtils::openFile( const QString &filePath )
     return openFileImpl( filePath );
 #else
     return false;
+=======
+bool IosUtils::openFile( const QString &filePath )
+{
+#ifdef Q_OS_IOS
+  return openFileImpl( filePath );
+>>>>>>> 247d842d (first part of post review changes)
 #endif
 }

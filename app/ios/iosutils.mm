@@ -73,7 +73,7 @@ QString IosUtils::getDeviceModelImpl()
 
 @end
 
-void IosUtils::openFileImpl( const QString &filePath )
+bool IosUtils::openFileImpl( const QString &filePath )
 {
   static FileOpener *viewer = nil;
   NSURL *resourceURL = [NSURL fileURLWithPath:filePath.toNSString()];
@@ -87,6 +87,11 @@ void IosUtils::openFileImpl( const QString &filePath )
 
   if ( ![interactionCtrl presentPreviewAnimated:NO] )
   {
-    [interactionCtrl presentOptionsMenuFromRect:CGRectZero inView:viewer.view animated:NO];
+    if ( ![interactionCtrl presentOptionsMenuFromRect:CGRectZero inView:viewer.view animated:NO] )
+    {
+      return false;
+    }
   }
+
+  return true;
 }

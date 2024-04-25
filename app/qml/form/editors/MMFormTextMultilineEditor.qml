@@ -118,7 +118,13 @@ MMPrivateComponents.MMBaseInput {
       radius: __style.radius12
     }
 
-    onLinkActivated: ( link ) => __inputUtils.openLink( root._fieldHomePath, link.toString() )
+    onLinkActivated: function ( link ) {
+      if ( !__inputUtils.openLink( root._fieldHomePath, link.toString( ) ) )
+      {
+        __notificationModel.addError( "Could not open the file. It may not exist, could be invalid, or there might be no application available to open it." )
+      }
+    }
+
     onTextChanged: root.editorValueChanged( textArea.text, textArea.text === "" )
   }
 
