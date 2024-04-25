@@ -45,8 +45,7 @@
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="149"/>
         <source>Please enable location permission before starting tracking</source>
-        <translation>Veuillez activer l&apos;autorisation de localisation avant de commencer le suivi.
-</translation>
+        <translation>Veuillez activer l&apos;autorisation de localisation avant de commencer le suivi.</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="154"/>
