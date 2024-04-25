@@ -2185,9 +2185,11 @@ void InputUtils::openLink( const QString &homePath, const QString &link )
 bool InputUtils::openLink( const QString &homePath, const QString &link )
 >>>>>>> 247d842d (first part of post review changes)
 {
-  if ( link.startsWith( "project://" ) )
+  QString LOCAL_FILE_PREFIX = "project://";
+
+  if ( link.startsWith( LOCAL_FILE_PREFIX ) )
   {
-    QString relativePath = link.mid( QString( "project://" ).length() );
+    QString relativePath = link.mid( QString( LOCAL_FILE_PREFIX ).length() );
     QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
     if ( !fileExists( absoluteLinkPath ) )
     {
