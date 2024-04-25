@@ -233,7 +233,6 @@ bool AndroidUtils::openFile( const QString &filePath )
 #ifdef ANDROID
   auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
   QJniObject jFilePath = QJniObject::fromString( filePath );
-  // Ensure the method signature includes 'Z' to indicate a boolean return type.
   result = activity.callMethod<jboolean>( "openFile", "(Ljava/lang/String;)Z", jFilePath.object<jstring>() );
 #endif
   return result;
