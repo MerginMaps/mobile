@@ -316,7 +316,7 @@ ApplicationWindow {
         onClicked: {
           //HERE
           //If gps button is true then do someting
-
+          map.centeredToGPS = false
           __inputUtils.zoomToProject( __activeProject.qgsProject, map.mapSettings )
         }
       }
