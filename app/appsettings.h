@@ -80,7 +80,6 @@ class AppSettings: public QObject
     QString ignoreMigrateVersion() const;
     void setIgnoreMigrateVersion( const QString &version );
 
-    static const QString INPUTAPP_GROUP_NAME;
     static const QString POSITION_PROVIDERS_GROUP;
 
   public slots:

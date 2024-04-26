@@ -235,6 +235,7 @@ QVector<QString> InputHelp::logHeader( bool isHtml )
 {
   QVector<QString> retLines;
   retLines.push_back( QStringLiteral( "Input App: %1 - %2 (%3)" ).arg( CoreUtils::appVersion() ).arg( InputUtils::appPlatform() ).arg( CoreUtils::appVersionCode() ) );
+  retLines.push_back( QStringLiteral( "Device UUID: %1" ).arg( CoreUtils::deviceUuid() ) );
   retLines.push_back( QStringLiteral( "Data Dir: %1" ).arg( InputUtils::appDataDir() ) );
   retLines.push_back( QStringLiteral( "System: %1" ).arg( QSysInfo::prettyProductName() ) );
   retLines.push_back( QStringLiteral( "Mergin URL: %1" ).arg( mMerginApi->apiRoot() ) );

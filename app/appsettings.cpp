@@ -13,13 +13,12 @@
 #include <QSettings>
 #include <QFileInfo>
 
-const QString AppSettings::INPUTAPP_GROUP_NAME = QStringLiteral( "inputApp" );
 const QString AppSettings::POSITION_PROVIDERS_GROUP = QStringLiteral( "inputApp/positionProviders" );
 
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
   QSettings settings;
-  settings.beginGroup( INPUTAPP_GROUP_NAME );
+  settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
   QString path = settings.value( "defaultProject", "" ).toString();
   QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
   double gpsTolerance = settings.value( "gpsTolerance", 10 ).toDouble();
@@ -250,7 +249,7 @@ void AppSettings::savePositionProviders( const QVariantList &providers )
 void AppSettings::setValue( const QString &key, const QVariant &value )
 {
   QSettings settings;
-  settings.beginGroup( INPUTAPP_GROUP_NAME );
+  settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
   settings.setValue( key, value );
   settings.endGroup();
 }
@@ -258,7 +257,7 @@ void AppSettings::setValue( const QString &key, const QVariant &value )
 QVariant AppSettings::value( const QString &key, const QVariant &defaultValue )
 {
   QSettings settings;
-  settings.beginGroup( INPUTAPP_GROUP_NAME );
+  settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
   QVariant value = settings.value( key, defaultValue );
   settings.endGroup();
 
