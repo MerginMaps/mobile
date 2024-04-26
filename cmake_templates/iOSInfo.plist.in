@@ -52,6 +52,8 @@
         <string>pl</string>
         <string>fr</string>
         <string>fr_FR</string>
+        <string>pt_PT</string>
+        <string>pt_BR</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
