@@ -167,8 +167,9 @@ If you have "error: undefined reference to 'stdout'" or so, make sure that in BU
 
 1. Install some dependencies, see requirements in `.github/workflows/android.yml`
 
-   - android SDK + build tools to `~/android`
-   - android NDK to `~/android/ndk/<ver>`
+   - android SDK + build tools to `~/android`, android NDK to `~/android/ndk/<ver>`:
+      - Get [Android command line tools](https://developer.android.com/studio/index.html#command-line-tools-only) and extract to `~/android/cmdline-tools`
+      - `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;33.0.1" "ndk;25.2.9519653" "platforms;android-33" platform-tools tools`
    - JAVA
    - flex and bison
 
@@ -191,21 +192,21 @@ If you have "error: undefined reference to 'stdout'" or so, make sure that in BU
   cd build
 
   export ANDROID_SDK_ROOT=~/android;
-  export ANDROID_NDK_ROOT=~/android/ndk/25.1.8937393;
-  export ANDROID_NDK_PLATFORM=android-24;
-  export QT_BASE=/opt/Qt/6.5.2;
+  export ANDROID_NDK_ROOT=~/android/ndk/25.2.9519653;
+  export ANDROID_NDK_PLATFORM=android-25;
+  export QT_BASE=/opt/Qt/6.6.3;
   export INPUT_SDK_ANDROID_BASE=~/input-sdk;
   
   cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DQT_ANDROID_ABIS="arm64-v8a" \
-    -DQT_HOST_PATH=$QT_BASE/macos \
+    -DQT_HOST_PATH=$QT_BASE/gcc_64 \
     -DCMAKE_TOOLCHAIN_FILE=$QT_BASE/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
     -DUSE_SERVER_API_KEY=FALSE \
     -GNinja \
     ../input/
   
-    ninja apk
+  ninja apk
 ```
 
 ## 4.2. Android on macOS
