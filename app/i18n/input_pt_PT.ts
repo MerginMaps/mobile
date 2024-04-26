@@ -20,7 +20,7 @@
     <message>
         <location filename="../activeproject.cpp" line="275"/>
         <source>Unable to load source </source>
-        <translation>Não foi possível carregar a origem</translation>
+        <translation>Não foi possível carregar a fonte</translation>
     </message>
     <message>
         <location filename="../activeproject.cpp" line="284"/>
