@@ -42,18 +42,20 @@
     <string>Program requires access to gallery to attach pictures to features on map</string>
 	<key>CFBundleLocalizations</key>
 	<array>
-		<string>en</string>
+        <string>az_AZ</string>
+        <string>az</string>
         <string>ca</string>
-        <string>sk</string>
-        <string>sk_SK</string>
+        <string>en</string>
+        <string>fr</string>
+        <string>fr_FR</string>
         <string>hr</string>
         <string>hr_BA</string>
         <string>hr_HR</string>
         <string>pl</string>
-        <string>fr</string>
-        <string>fr_FR</string>
         <string>pt_PT</string>
         <string>pt_BR</string>
+        <string>sk</string>
+        <string>sk_SK</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
