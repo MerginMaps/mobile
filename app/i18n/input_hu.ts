@@ -1234,7 +1234,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="512"/>
         <source>streaming</source>
-        <translation>folyamatos</translation>
+        <translation>streaming</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="588"/>
