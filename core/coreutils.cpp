@@ -54,8 +54,8 @@ QString CoreUtils::deviceUuid()
 
 QString CoreUtils::appInfo()
 {
-  return QString( "%1/%2 (%3/%4) %5" ).arg( QCoreApplication::applicationName() ).arg( QCoreApplication::applicationVersion() )
-         .arg( QSysInfo::productType() ).arg( QSysInfo::productVersion() ).arg( deviceUuid() );
+  return QString( "%1/%2 (%3/%4)" ).arg( QCoreApplication::applicationName() ).arg( QCoreApplication::applicationVersion() )
+         .arg( QSysInfo::productType() ).arg( QSysInfo::productVersion() );
 }
 
 QString CoreUtils::appVersion()

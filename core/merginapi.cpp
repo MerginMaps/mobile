@@ -308,6 +308,8 @@ QNetworkRequest MerginApi::getDefaultRequest( bool withAuth )
   QNetworkRequest request;
   QString info = CoreUtils::appInfo();
   request.setRawHeader( "User-Agent", QByteArray( info.toUtf8() ) );
+  QString deviceId = CoreUtils::deviceUuid();
+  request.setRawHeader( "X-Device-Id", QByteArray( deviceId.toUtf8() ) );
   if ( withAuth )
     request.setRawHeader( "Authorization", QByteArray( "Bearer " + mUserAuth->authToken() ) );
 
