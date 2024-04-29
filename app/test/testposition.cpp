@@ -15,6 +15,7 @@
 
 #include "qgsapplication.h"
 #include "appsettings.h"
+#include "coreutils.h"
 #include "position/positionkit.h"
 #include "position/providers/simulatedpositionprovider.h"
 
@@ -261,11 +262,11 @@ void TestPosition::testPositionProviderKeysInSettings()
   QCOMPARE( positionKit->positionProvider()->name(), "testProviderA" );
   QCOMPARE( positionKit->positionProvider()->type(), "external" );
 
-  QCOMPARE( rawSettings.value( AppSettings::INPUTAPP_GROUP_NAME + "/activePositionProviderId" ).toString(), "AA:BB:CC:DD:EE:FF" );
+  QCOMPARE( rawSettings.value( CoreUtils::QSETTINGS_APP_GROUP_NAME + "/activePositionProviderId" ).toString(), "AA:BB:CC:DD:EE:FF" );
 
   positionKit->setPositionProvider( positionKit->constructProvider( "internal", "devicegps" ) );
 
-  QCOMPARE( rawSettings.value( AppSettings::INPUTAPP_GROUP_NAME + "/activePositionProviderId" ).toString(), "devicegps" );
+  QCOMPARE( rawSettings.value( CoreUtils::QSETTINGS_APP_GROUP_NAME + "/activePositionProviderId" ).toString(), "devicegps" );
 
   // even without appSettings provider model should have two items in desktop build: simulated and internal provider
   PositionProvidersModel providersModel;

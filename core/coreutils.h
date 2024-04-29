@@ -102,6 +102,13 @@ class CoreUtils
      */
     static QString nameAbbr( const QString &name, const QString &email );
 
+    /**
+     *  Returns unique identifier of the device
+     *  The UUID is stored in QSettings and is randomly generated on first app run.
+     */
+    static QString deviceUuid();
+
+    static const QString QSETTINGS_APP_GROUP_NAME;
   private:
     static QString sLogFile;
     static int CHECKSUM_CHUNK_SIZE;

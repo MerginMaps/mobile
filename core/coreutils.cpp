@@ -12,6 +12,8 @@
 
 #include <QDateTime>
 #include <QDebug>
+#include <QUuid>
+#include <QSettings>
 #include <QDir>
 #include <QFile>
 #include <QDirIterator>
@@ -21,10 +23,34 @@
 
 #include "qcoreapplication.h"
 
+const QString CoreUtils::QSETTINGS_APP_GROUP_NAME = QStringLiteral( "inputApp" );
 const QString CoreUtils::LOG_TO_DEVNULL = QStringLiteral();
 const QString CoreUtils::LOG_TO_STDOUT = QStringLiteral( "TO_STDOUT" );
 QString CoreUtils::sLogFile = CoreUtils::LOG_TO_DEVNULL;
 int CoreUtils::CHECKSUM_CHUNK_SIZE = 65536;
+
+QString CoreUtils::deviceUuid()
+{
+  QString uuid;
+
+  QSettings settings;
+  settings.beginGroup( QSETTINGS_APP_GROUP_NAME );
+  QVariant uuidEntry = settings.value( "deviceUuid" );
+  if ( uuidEntry.isNull() )
+  {
+    uuid = uuidWithoutBraces( QUuid::createUuid() );
+    CoreUtils::log( QStringLiteral( "Device" ), QStringLiteral( "deviceUuid generated: %1" ).arg( uuid ) );
+    settings.setValue( "deviceUuid", uuid );
+  }
+  else
+  {
+    uuid = uuidEntry.toString();
+  }
+  settings.endGroup();
+
+  Q_ASSERT( !uuid.isEmpty() );
+  return uuid;
+}
 
 QString CoreUtils::appInfo()
 {
