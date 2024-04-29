@@ -13,6 +13,7 @@
     <file>input_en.qm</file> 
     <file>input_fr.qm</file> 
     <file>input_az_AZ.qm</file> 
+    <file>input_hu.qm</file> 
     <file>input_sk_SK.qm</file> 
   </qresource> 
 </RCC>
