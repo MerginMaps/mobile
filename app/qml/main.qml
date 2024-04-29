@@ -313,6 +313,7 @@ ApplicationWindow {
         text: qsTr("Zoom to project")
         iconSource: __style.zoomToProjectIcon
         onClicked: {
+          map.centeredToGPS = false
           __inputUtils.zoomToProject( __activeProject.qgsProject, map.mapSettings )
         }
       }
