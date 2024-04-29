@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>Mergin Maps</string>
+	<key>CFBundleExecutable</key>
+	<string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Created by Qt/QMake</string>
+	<key>CFBundleIdentifier</key>
+	<string>${MACOSX_BUNDLE_GUI_IDENTIFIER}</string>
+	<key>CFBundleName</key>
+	<string>${MACOSX_BUNDLE_BUNDLE_NAME}</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
+	<key>CFBundleSignature</key>
+	<string>${QMAKE_PKGINFO_TYPEINFO}</string>
+	<key>CFBundleVersion</key>
+	<string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>MinimumOSVersion</key>
+	<string>${IPHONEOS_DEPLOYMENT_TARGET}</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Program requires access to camera to take pictures for features on map</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Program requires GPS to show you current position on map and capture spatial data for surveying</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Program requires GPS to show you current position on map and capture spatial data for surveying.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Program requires GPS to show you current position on map and capture spatial data for surveying</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Program requires GPS to show you current position on map and capture spatial data for surveying</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Program requires access to gallery to attach pictures to features on map</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>Program requires access to gallery to attach pictures to features on map</string>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>Program requires access to bluetooth to connect to external GPS receivers</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+        <string>az_AZ</string>
+        <string>az</string>
+        <string>ca</string>
+        <string>en</string>
+        <string>fr</string>
+        <string>fr_FR</string>
+        <string>hr</string>
+        <string>hr_BA</string>
+        <string>hr_HR</string>
+        <string>hu</string>
+        <string>it</string>
+        <string>pl</string>
+        <string>pt_PT</string>
+        <string>pt_BR</string>
+        <string>sk</string>
+        <string>sk_SK</string>
+	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>UILaunchStoryboardName</key>
+    <string>InputScreen</string>
+	<!-- Run the app when minimised while tracking position -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+</dict>
+</plist>
