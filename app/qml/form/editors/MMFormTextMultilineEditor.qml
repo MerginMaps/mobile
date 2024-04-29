@@ -63,7 +63,7 @@ MMPrivateComponents.MMBaseInput {
     width: parent.width
     height: Math.max( implicitHeight, internal.minHeight )
 
-    text: _fieldValue === undefined || _fieldValueIsNull ? '' : _fieldValue
+    text: _fieldValue === undefined ? '' : _fieldValue
     textFormat: root._fieldConfig['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
 
     topPadding: __style.margin12
