@@ -26,7 +26,7 @@ jobs:
     env:
       QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-      CACHE_VERSION: 0
+      CACHE_VERSION: 1
       XC_VERSION: ${{ '14.2' }} # macos-only
       VS_VERSION: "2019" # win-only
       QT_ARCH: "win64_msvc2019_64" # win-only
