@@ -46,6 +46,9 @@
         <string>az</string>
         <string>ca</string>
         <string>en</string>
+        <string>es</string>
+        <string>es_419</string>
+        <string>es_ES</string>
         <string>fr</string>
         <string>fr_FR</string>
         <string>hr</string>
