@@ -105,10 +105,10 @@ jobs:
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-win
  
-      - name: Install Input-SDK
+      - name: Debug
         shell: bash
         run: |
-            find ${{ github.workspace }}
+            find ${{ steps.vars.outputs.WORKSPACE_DIR }}
    
        # Input SDK
       - name: Cache Input-SDK
