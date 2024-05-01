@@ -203,6 +203,8 @@ set(qt_libs
     Quick
     Quick3DSpatialAudio
     QuickControls2
+    QuickControls2Basic
+    QuickControls2BasicStyleImpl
     QuickControls2Impl
     QuickDialogs2
     QuickDialogs2QuickImpl
