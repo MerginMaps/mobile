@@ -104,11 +104,6 @@ jobs:
           modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-win
- 
-      - name: Debug
-        shell: bash
-        run: |
-            find ${{ steps.vars.outputs.WORKSPACE_DIR }}
    
        # Input SDK
       - name: Cache Input-SDK
