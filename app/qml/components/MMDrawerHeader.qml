@@ -56,7 +56,7 @@ Rectangle {
 
     anchors {
       right: parent.right
-      rightMargin: __style.pageMargins
+      rightMargin: __style.pageMargins + __style.safeAreaRight
       verticalCenter: parent.verticalCenter
     }
 
