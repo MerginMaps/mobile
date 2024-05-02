@@ -159,7 +159,7 @@ Item {
 
       onSyncRequested: {
         if ( model.ProjectRemoteError ) {
-          __notificationModel.addError( qsTr( "Could not synchronize project, please make sure you are logged in and have sufficient rights." ) )
+          __notificationModel.addError( qsTr( "Could not synchronise project, please make sure you are logged in and have sufficient rights." ) )
         }
         else if ( !model.ProjectIsMergin ) {
           controllerModel.migrateProject( projectId )

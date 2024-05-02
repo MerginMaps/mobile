@@ -18,7 +18,7 @@ MMDrawerDialog {
 
   imageSource: __style.signInImage
   title: qsTr( "Sign in to your account" )
-  description: qsTr( "You need to be signed in to your Mergin Maps account in order to synchronize the project." )
+  description: qsTr( "You need to be signed in to your Mergin Maps account in order to synchronise the project." )
   primaryButton.text: qsTr( "Yes, I want to sign in" )
   secondaryButton.text: qsTr( "No, thanks" )
 

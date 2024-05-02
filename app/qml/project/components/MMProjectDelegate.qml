@@ -288,7 +288,7 @@ Control {
         "callback": () => root.syncRequested()
       },
       "sync": {
-        "name": qsTr("Synchronize project"),
+        "name": qsTr("Synchronise project"),
         "iconSource": __style.syncGreenIcon,
         "callback": () => root.syncRequested()
       },

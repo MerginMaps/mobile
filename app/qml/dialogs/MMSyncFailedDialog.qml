@@ -24,7 +24,7 @@ MMComponents.MMDrawerDialog {
 
   property string detailedText
 
-  title: qsTr( "Failed to synchronize your changes" )
+  title: qsTr( "Failed to synchronise your changes" )
   imageSource: __style.syncFailedImage
 
   description: qsTr( "Your changes could not be sent to the server, make sure you have a data connection and have permission to edit this project." )

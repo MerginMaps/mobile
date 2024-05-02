@@ -799,7 +799,7 @@ ApplicationWindow {
 
         if ( success )
         {
-          __notificationModel.addSuccess( qsTr( "Successfully synchronized" ) )
+          __notificationModel.addSuccess( qsTr( "Successfully synchronised" ) )
 
           // refresh canvas
           map.refreshMap()
@@ -838,7 +838,7 @@ ApplicationWindow {
           if ( willRetry )
           {
             // TODO: open sync failed dialogue when clicked on the notification
-            __notificationModel.addError( qsTr( "There was an issue during synchronization, we will try again. Click to learn more" ) )
+            __notificationModel.addError( qsTr( "There was an issue during synchronisation, we will try again. Click to learn more" ) )
           }
           else
           {

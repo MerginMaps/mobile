@@ -22,7 +22,7 @@ MMDrawerDialog {
 
   imageSource: __style.negativeMMSymbolImage
   title: qsTr( "Remove project" )
-  description: qsTr( "Any unsynchronized changes will be lost in project \n %1" ).arg( relatedProjectId )
+  description: qsTr( "Any unsynchronised changes will be lost in project \n %1" ).arg( relatedProjectId )
   primaryButton.text: qsTr("Remove")
   secondaryButton.text: qsTr("Cancel")
 
