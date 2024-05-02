@@ -55,7 +55,7 @@ Rectangle {
     id: closeBtn
 
     anchors {
-      right: parent.right //__style.safeAreaRight  //parent.right - __style.safeAreaRight //__style.pageMargins //ApplicationWindow.window.safeArea.left
+      right: parent.right
       rightMargin: __style.pageMargins + __style.safeAreaRight
       verticalCenter: parent.verticalCenter
     }
