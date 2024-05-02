@@ -961,11 +961,6 @@ ApplicationWindow {
     function onProjectReloaded( project ) {
       map.clear()
 
-      if ( __activeProject.isProjectLoaded() )
-      {
-        projectController.hidePanel()
-      }
-
       __appSettings.defaultProject = __activeProject.localProject.qgisProjectFilePath ?? ""
       __appSettings.activeProject = __activeProject.localProject.qgisProjectFilePath ?? ""
     }
