@@ -47,10 +47,10 @@ class SynchronizationManager : public QObject
 
     Q_INVOKABLE void migrateProjectToMergin( const QString &projectName );
 
-    //! Returns sync progress of specified project in range <0, 1>. Returns -1 if this project is not being synchronized.
+    //! Returns sync progress of specified project in range <0, 1>. Returns -1 if this project is not being synchronised.
     qreal syncProgress( const QString &projectFullName ) const;
 
-    //! Returns true if specified project is being synchronized, false otherwise.
+    //! Returns true if specified project is being synchronised, false otherwise.
     Q_INVOKABLE bool hasPendingSync( const QString &projectFullName ) const;
 
     QList<QString> pendingProjects() const;
