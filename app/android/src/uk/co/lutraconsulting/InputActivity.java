@@ -130,7 +130,7 @@ public class InputActivity extends QtActivity
     keepSplashScreenVisible = false;
   }
 
-  public bool openFile( String filePath ) {
+  public boolean openFile( String filePath ) {
     File file = new File( filePath );
 
     if ( !file.exists() ) {
