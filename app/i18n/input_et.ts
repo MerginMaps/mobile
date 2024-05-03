@@ -363,7 +363,7 @@ Seda ei lisata projektile.</translation>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="110"/>
         <source>Want to create a new workspace instead? %1Click here%2</source>
-        <translation>Tahad teha uue töölaua? %1Kliki siin%2</translation>
+        <translation>Tahad luua uue töölaua? %1Kliki siin%2</translation>
     </message>
 </context>
 <context>
@@ -628,7 +628,7 @@ Seda ei lisata projektile.</translation>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="125"/>
         <source>Create workspace</source>
-        <translation>Tekita töölaud</translation>
+        <translation>Loo töölaud</translation>
     </message>
 </context>
 <context>
