@@ -2842,7 +2842,7 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
     <message>
         <location filename="../qml/main.qml" line="1003"/>
         <source>Press back again to quit the app</source>
-        <translation>Vajuta veelkord tagasi et äpp kinni panna</translation>
+        <translation>Vajuta veelkord tagasi et rakendus kinni panna</translation>
     </message>
 </context>
 </TS>
