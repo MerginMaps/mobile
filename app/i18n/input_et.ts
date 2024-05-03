@@ -2572,7 +2572,7 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
     <message>
         <location filename="../projectwizard.cpp" line="212"/>
         <source>Project %1 created</source>
-        <translation>Projekt %1 tekitatud</translation>
+        <translation>Projekt %1 loodud</translation>
     </message>
 </context>
 <context>
