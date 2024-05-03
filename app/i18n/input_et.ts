@@ -1473,7 +1473,7 @@ Seda ei lisata projektile.</translation>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
         <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. Mergin Maps will still think it is the internal GPS of your phone/tablet.</source>
-        <translation>See funktsioon ei ole kättesaadav iOS seadmetel. Su riistvara pakkujal võib olla eraldi äpp mis ühendub vastuvõtjaga ja loeb asukohta. Mergin Maps arvab siis sellegipoolest et tegemist on su telefoni/tahvli sisemise GPS vastuvõtjaga.</translation>
+        <translation>See funktsioon ei ole kättesaadav iOS seadmetel. Su riistvara pakkujal võib olla eraldi rakendus mis ühendub vastuvõtjaga ja loeb asukohta. Mergin Maps arvab siis sellegipoolest et tegemist on su telefoni/tahvli sisemise GPS vastuvõtjaga.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="172"/>
