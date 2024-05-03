@@ -1821,7 +1821,7 @@ Seda ei lisata projektile.</translation>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="22"/>
         <source>Create Project</source>
-        <translation>Tekita projekt</translation>
+        <translation>Loo projekt</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="44"/>
@@ -1841,7 +1841,7 @@ Seda ei lisata projektile.</translation>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="123"/>
         <source>Create project</source>
-        <translation>Tekita projekt</translation>
+        <translation>Loo projekt</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="128"/>
