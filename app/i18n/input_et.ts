@@ -1713,7 +1713,7 @@ Seda ei lisata projektile.</translation>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="207"/>
         <source>Create project</source>
-        <translation>Tekita projekt</translation>
+        <translation>Loo projekt</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="232"/>
@@ -1723,7 +1723,7 @@ Seda ei lisata projektile.</translation>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="233"/>
         <source>First step is to create your brand new project.</source>
-        <translation>Esimene samm on tekitada oma uus projekt</translation>
+        <translation>Esimene samm on luua oma uus projekt</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="241"/>
