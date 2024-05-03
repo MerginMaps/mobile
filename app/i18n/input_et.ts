@@ -1591,7 +1591,7 @@ Seda ei lisata projektile.</translation>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="188"/>
         <source>Please don&apos;t close the app.</source>
-        <translation>Palun ära sulge äppi.</translation>
+        <translation>Palun ära sulge rakendust.</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="211"/>
