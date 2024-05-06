@@ -77,7 +77,7 @@ MMFormPhotoViewer {
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
-  warningMsg: _fieldWarningMessage
+  warningMsg: photoState === "notAvailable" ? qsTr( "Photo is missing" ): _fieldWarningMessage
   errorMsg: _fieldErrorMessage
 
   readOnly: _fieldIsReadOnly
@@ -203,12 +203,7 @@ MMFormPhotoViewer {
     function calculateAbsoluteImagePath() {
       let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
 
-      if ( !__inputUtils.fileExists( absolutePath ) ) {
-        root.photoState = "notSet"
-        absoluteImagePath = ""
-        return
-      }
-      else if ( root.photoComponent.status === Image.Error ) {
+      if ( root.photoComponent.status === Image.Error ) {
         root.photoState = "notAvailable"
         absoluteImagePath = ""
         return
@@ -284,6 +279,7 @@ MMFormPhotoViewer {
         imageDeleteDialog.open()
       }
       else {
+        internal.absoluteImagePath = ""
         root.editorValueChanged( "", true )
       }
     }
