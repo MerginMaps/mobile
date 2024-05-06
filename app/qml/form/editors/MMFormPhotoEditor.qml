@@ -203,7 +203,7 @@ MMFormPhotoViewer {
     function calculateAbsoluteImagePath() {
       let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
 
-      if ( ! __inputUtils.fileExists( absolutePath )) {
+      if ( !__inputUtils.fileExists( absolutePath ) ) {
         root.photoState = "notSet"
         absoluteImagePath = ""
         return
