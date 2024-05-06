@@ -167,10 +167,10 @@ If you have "error: undefined reference to 'stdout'" or so, make sure that in BU
 
 1. Install some dependencies, see requirements in `.github/workflows/android.yml`
 
+   - Java >= 17 (on Ubuntu 22.04 do `sudo apt install openjdk-17-jdk` and make sure it is the default by checking `java --version`)
    - android SDK + build tools to `~/android`, android NDK to `~/android/ndk/<ver>`:
       - Get [Android command line tools](https://developer.android.com/studio/index.html#command-line-tools-only) and extract to `~/android/cmdline-tools`
       - `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;33.0.1" "ndk;25.2.9519653" "platforms;android-33" platform-tools tools`
-   - JAVA
    - flex and bison
 
 2. Get Input SDK - it contains pre-built dependencies of libraries used by Input
@@ -194,7 +194,7 @@ If you have "error: undefined reference to 'stdout'" or so, make sure that in BU
   export ANDROID_SDK_ROOT=~/android;
   export ANDROID_NDK_ROOT=~/android/ndk/25.2.9519653;
   export ANDROID_NDK_PLATFORM=android-25;
-  export QT_BASE=/opt/Qt/6.6.3;
+  export QT_BASE=~/Qt/6.6.3;
   export INPUT_SDK_ANDROID_BASE=~/input-sdk;
   
   cmake \
@@ -202,7 +202,7 @@ If you have "error: undefined reference to 'stdout'" or so, make sure that in BU
     -DQT_ANDROID_ABIS="arm64-v8a" \
     -DQT_HOST_PATH=$QT_BASE/gcc_64 \
     -DCMAKE_TOOLCHAIN_FILE=$QT_BASE/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
-    -DUSE_SERVER_API_KEY=FALSE \
+    -DUSE_MM_SERVER_API_KEY=FALSE \
     -GNinja \
     ../input/
   
