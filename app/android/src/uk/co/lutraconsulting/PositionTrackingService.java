@@ -156,7 +156,8 @@ public class PositionTrackingService extends Service implements LocationListener
 
         Notification notification = new Notification.Builder( this, CHANNEL_ID )
             .setSmallIcon( R.drawable.ic_notification )
-            .setContentTitle( "Tracking" )
+            .setContentTitle( "Tracking in progress" )
+            .setColor( getResources().getColor( R.color.grassColor ) )
             .setForegroundServiceBehavior( Notification.FOREGROUND_SERVICE_IMMEDIATE )
             .setContentIntent( pendingIntent )
             .build();

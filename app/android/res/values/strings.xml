@@ -1,6 +1,3 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="notification_title">Mergin Maps is tracking position</string>
-    <string name="notification_message">Your position is being recorded</string>
-    <string name="ticker_text">Position tracking</string>
 </resources>
