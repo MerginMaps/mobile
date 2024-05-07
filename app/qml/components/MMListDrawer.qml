@@ -18,7 +18,7 @@ MMDrawer {
   property bool showFullScreen: false
   property alias emptyStateDelegate: emptyStateDelegateLoader.sourceComponent
 
-  interactive: false
+  interactive: !listViewComponent.interactive
 
   drawerContent: Item {
     width: parent.width
