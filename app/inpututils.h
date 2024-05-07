@@ -610,6 +610,8 @@ class InputUtils: public QObject
     static QUrl iconFromGeometry( const Qgis::GeometryType &geometry );
 
     AndroidUtils *mAndroidUtils = nullptr; // not owned
+
+    const QString LOCAL_FILE_PREFIX = QStringLiteral( "project://" );
 };
 
 #endif // INPUTUTILS_H
