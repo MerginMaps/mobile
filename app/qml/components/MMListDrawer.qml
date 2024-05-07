@@ -18,6 +18,8 @@ MMDrawer {
   property bool showFullScreen: false
   property alias emptyStateDelegate: emptyStateDelegateLoader.sourceComponent
 
+  interactive: false
+
   drawerContent: Item {
     width: parent.width
     height: {
