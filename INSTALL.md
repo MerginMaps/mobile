@@ -4,20 +4,21 @@ Building Mergin Maps mobile app from source - step by step
 # Table of Contents
 <!-- Table of contents generated with https://freelance-tech-writer.github.io/table-of-contents-generator/index.html -->
 
-* [1. Introduction](#1-introduction)
-* [2. Overview](#2-overview)
-   * [2.1 Secrets](#21-secrets)
-   * [2.2 Code formatting](#22-code-formatting)
-   * [2.3 Required Qt packages](#23-required-qt-packages)
-* [3. Building GNU/Ubuntu](#3-building-gnuubuntu)
-* [4. Building Android (on Ubuntu/macOS/Windows)](#4-building-android-on-ubuntumacoswindows)
-   * [4.1. Android on Ubuntu](#41-android-on-ubuntu)
-   * [4.2. Android on macOS](#42-android-on-macos)
-   * [4.3. Android on Windows](#43-android-on-windows)
-* [5. Building iOS](#5-building-ios)
-* [6. Building macOS](#6-building-macos)
-* [7. Building Windows](#7-building-windows)
-* [8. Auto Testing](#8-auto-testing)
+- [Table of Contents](#table-of-contents)
+- [1. Introduction](#1-introduction)
+- [2. Overview](#2-overview)
+  - [2.1 Secrets](#21-secrets)
+  - [2.2 Code formatting](#22-code-formatting)
+  - [2.3 Required Qt packages](#23-required-qt-packages)
+- [3. Building GNU/Ubuntu](#3-building-gnuubuntu)
+- [4. Building Android (on Ubuntu/macOS/Windows)](#4-building-android-on-ubuntumacoswindows)
+  - [4.1. Android on Ubuntu](#41-android-on-ubuntu)
+  - [4.2. Android on macOS](#42-android-on-macos)
+  - [4.3. Android on Windows](#43-android-on-windows)
+- [5. Building iOS](#5-building-ios)
+- [6. Building macOS](#6-building-macos)
+- [7. Building Windows](#7-building-windows)
+- [8. Auto Testing](#8-auto-testing)
 
 # 1. Introduction
 
@@ -211,43 +212,66 @@ If you have "error: undefined reference to 'stdout'" or so, make sure that in BU
 
 ## 4.2. Android on macOS
 
-1. Install some dependencies, see requirements in `.github/workflows/android.yml`
-
-   - android SDK + build tools to `~/android`
-   - android NDK to `~/android/ndk/<ver>`
-   - JAVA
-   - flex and bison (add to PATH)
-
-2. Get Input SDK - it contains pre-built dependencies of libraries used by Input
-
-   - Check what SDK version is currently in use - look for `INPUT_SDK_VERSION` in `.github/workflows/android.yml`
-   - Download TWO Input SDKs for android - go to https://github.com/merginmaps/input-sdk/releases and download the built SDK.
-   - Unpack the downloaded .tar.gz to `~/input-sdk/arm-android` and `~/input-sdk/arm64-android`
-   - WARNING!! It is super important to have both SDKs in same subfolder (e.g. `~/input-sdk`) and have folder name `arm64-android` and `arm-android`
-
-3. Get Qt libraries
+1. Get Qt libraries
  
    - You need both macos and android Qt installed!
    - Check what Qt version is currently in use - look for `QT_VERSION` in `.github/workflows/android.yml`
    - Download Qt online installer from https://www.qt.io/download-open-source
    - Use the online installer to install Qt to `~/Qt`
+   - Needed packages can be found in the [section 2.3](#23-required-qt-packages)
 
-4. Build Input (update CMake command with the correct Qt and Input SDK versions)
+2. Install Java
+
+   - `brew install openjdk@17`, then make this java version default ``export JAVA_HOME=`usr/libexec/java_home -v 17` ``. Check if it default by executing `java --version`
+
+3. Setup Android SDK & NDK [Automatic, via QtCreator]
+   - This step can now be performed via QtCreator, if it for some reason fails/does not work, skip this step and continue with manual setup
+
+   - Open QtCreator and navigate to `settings -> devices -> Android`, here:
+      - JDK location: Add Path to Java version, e.g. `/opt/homebrew/Cellar/openjdk@17/17.0.11/libexec/openjdk.jdk/Contents/Home`
+      - Android SDK location: set path to some empty writeable directory, e.g. `~/android`
+      - Hit `Set up SDK` and install the current SDK version (find the correct version in `.github/workflows/android.yml`)
+      - Let QtCreator install NDK
+      - Let QtCreator install openssl
+   - QtCreator should now say `Android settings are OK.`
+
+4. Setup Android SDK & NDK [Manual, via sdkmanager]
+   - Proceed with this step only if the previous automatic step did not work for you or you do not want to use QtCreator
+
+   - Get Android `sdkmanager` by following these steps https://developer.android.com/tools/sdkmanager
+   - Now perform `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;33.0.1" "ndk;25.2.9519653" "platforms;android-33" platform-tools tools` to install all needed Android tools, make sure to double-check if the version numbers are correct
+
+5. Get MM mobile SDK - it contains pre-built dependencies of used libraries (QGIS, etc..)
+
+   - Check what SDK version is currently in use - look for `INPUT_SDK_VERSION` in `.github/workflows/android.yml`
+   - Download TWO SDKs for android (arm and arm64) - go to https://github.com/merginmaps/mobile-sdk/releases and download the built SDK.
+   - Unpack the downloaded .tar.gz to `~/mobile-sdk/arm-android` and `~/mobile-sdk/arm64-android`
+   - WARNING!! It is super important to have both SDKs in same subfolder (e.g. `~/mobile-sdk`) and have folder name `arm64-android` and `arm-android`
+
+6. Build (update CMake command with the correct Qt and SDK versions)
+
 ```
-  export ANDROID_SDK_ROOT=/opt/Android/android-sdk;
-  export ANDROID_NDK_ROOT=/opt/Android/android-sdk/ndk/25.1.8937393;
-  export QT_BASE=/opt/Qt/6.5.2;
+  # Needed Android variables
+  export ANDROID_SDK_ROOT=~/android;
+  export ANDROID_NDK_ROOT=~/android/ndk/25.1.8937393;
   export ANDROID_NDK_PLATFORM=android-24;
-  export INPUT_SDK_ANDROID_BASE=~/Projects/quick/input-sdk/build/android/stage;
-  export PATH=/usr/local/Cellar/openjdk\@11/11.0.16.1_1/bin/:$PATH;
+
+  # INPUT_SDK_ANDROID_BASE is a path where you stored the two SDKs from the mobile-sdk repo
+  export INPUT_SDK_ANDROID_BASE=~/mobile-sdk;
+
+  # (optional, not needed often) add Java to PATH if you need to use other Java version than your default one
+  export PATH=/opt/homebrew/Cellar/openjdk@17/17.0.11/libexec/openjdk.jdk/Contents/Home/bin:$PATH;
+
   cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DQT_ANDROID_ABIS="arm64-v8a;armeabi-v7a" \
-    -DQT_HOST_PATH=$QT_BASE/macos \
-    -DCMAKE_TOOLCHAIN_FILE=$QT_BASE/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
+    -DCMAKE_BUILD_TYPE=Debug \
+    -DQT_ANDROID_ABIS=arm64-v8a \
+    -DQT_HOST_PATH=/opt/Qt/6.6.3/macos \
+    -DCMAKE_TOOLCHAIN_FILE=/opt/Qt/6.6.3/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
     -DUSE_MM_SERVER_API_KEY=FALSE \
     -GNinja \
     ../input/
+
+  # If you need to build both ABIS, use -DQT_ANDROID_ABIS="arm64-v8a;armeabi-v7a"
 ```
 
 ## 4.3. Android on Windows
