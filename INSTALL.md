@@ -335,40 +335,43 @@ Now you can create a build (either on commmand line or by setting these variable
 
 1. Install some dependencies, critically XCode, bison and flex. See "Install Build Dependencies" step in `.github/workflows/macos.yml`
 
-2. Get Input SDK - it contains pre-built dependencies of libraries used by Input
+2. Get MM mobile SDK - it contains pre-built dependencies of used libraries
 
    - Check what SDK version is currently in use - look for `INPUT_SDK_VERSION` in `.github/workflows/macos.yml`
-   - Download Input SDK for `osx` - go to https://github.com/merginmaps/input-sdk/releases and download the built SDK.
-   - Unpack the downloaded .tar.gz to `~/input-sdk/x64-osx`
 
-3. Get Qt libraries - Input SDK does not include Qt SDK
+   - 2.1. For Intel chips
+
+     - Download mobile SDK for `osx` - go to https://github.com/merginmaps/mobile-sdk/releases and download the built SDK.
+     - Unpack the downloaded .tar.gz to `~/mobile-sdk/x64-osx`
+
+   - 2.2. For Apple M chips
+     - You need to build SDK yourself, follow steps how to do it here https://github.com/merginmaps/mobile-sdk
+     - Your SDK will be installed in the `build folder/vcpkg_installed/arm64-osx/`
+
+3. Get Qt libraries - Mobile SDK does not include Qt SDK
 
    - Check what Qt version is currently in use - look for `QT_VERSION` in `.github/workflows/macos.yml`
    - Download Qt online installer from https://www.qt.io/download-open-source
    - Use the online installer to install Qt to `/opt/Qt`
 
-4. Build Input (update CMake command with the correct Qt and Input SDK versions)
- 
-```
-mkdir build-input-desktop
-cd build-input-desktop
+4. Build (update CMake command with the correct Qt and paths)
 
-export PATH=$(brew --prefix flex)/bin:$(brew --prefix bison)/bin:$(brew --prefix gettext)/bin:$PATH;\
-export BASE_DIR=~/Projects/quick;
+```
+mkdir build-desktop 
+cd build-desktop
 
 cmake \
   -DCMAKE_BUILD_TYPE=Debug \
   -DCMAKE_PREFIX_PATH=/opt/Qt/6.6.3/macos \
-  -DCMAKE_INSTALL_PREFIX:PATH=$BASE_DIR/install-macos \
-  -DINPUT_SDK_PATH=$BASE_DIR/sdk/x64-osx \
+  -DINPUT_SDK_PATH=<path_to_mobile_sdk_from_step_2> \
+  -DQGIS_QUICK_DATA_PATH=<path_to_mobile_repo>/app/android/assets/qgis-data \
   -GNinja \
-  -DQGIS_QUICK_DATA_PATH=$BASE_DIR/input/app/android/assets/qgis-data \
-  $BASE_DIR/input
+  ..
 
 ninja
 ```
 
-5. Run Input
+5. Run the app
 ```
 ./app/Input.app/Contents/MacOS/Input
 ```
