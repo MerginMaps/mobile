@@ -238,6 +238,7 @@ QVector<QString> InputHelp::logHeader( bool isHtml )
   retLines.push_back( QStringLiteral( "Device UUID: %1" ).arg( CoreUtils::deviceUuid() ) );
   retLines.push_back( QStringLiteral( "Data Dir: %1" ).arg( InputUtils::appDataDir() ) );
   retLines.push_back( QStringLiteral( "System: %1" ).arg( QSysInfo::prettyProductName() ) );
+  retLines.push_back( QStringLiteral( "CPU Architecture: %1" ).arg( QSysInfo::currentCpuArchitecture() ) );
   retLines.push_back( QStringLiteral( "Mergin URL: %1" ).arg( mMerginApi->apiRoot() ) );
   retLines.push_back( QStringLiteral( "Mergin User: %1" ).arg( mMerginApi->userAuth()->username() ) );
   if ( !mMerginApi->userInfo()->email().isEmpty() )
