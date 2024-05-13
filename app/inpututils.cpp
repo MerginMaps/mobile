@@ -2153,3 +2153,23 @@ QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
 
   return parsedUpdates;
 }
+
+QString InputUtils::getManufacturer()
+{
+#ifdef Q_OS_ANDROID
+    return AndroidUtils::getManufacturer();
+#elif defined(Q_OS_IOS)
+    return IosUtils::getManufacturer();
+#endif
+    return QStringLiteral( "Desktop" );
+}
+
+QString InputUtils::getDeviceModel()
+{
+#ifdef Q_OS_ANDROID
+    return AndroidUtils::getDeviceModel();
+#elif defined(Q_OS_IOS)
+    return IosUtils::getDeviceModel();
+#endif
+    return QStringLiteral( "Desktop" );
+}

@@ -43,6 +43,9 @@ class IosUtils: public QObject
 
     Q_INVOKABLE QVector<int> getSafeArea();
 
+    Q_INVOKABLE QString getManufacturer();
+    Q_INVOKABLE QString getDeviceModel();
+
   signals:
     void imageSelected( const QString &imagePath, const QString &code );
     void notifyError( const QString &message );

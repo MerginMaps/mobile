@@ -56,6 +56,8 @@ class AndroidUtils: public QObject
 
     static void quitApp();
 
+    static QString getManufacturer();
+    static QString getDeviceModel();
     Q_INVOKABLE QVector<int> getSafeArea();
 
     void hideSplashScreen();
