@@ -2256,7 +2256,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="22"/>
         <source>Streaming mode</source>
-        <translation>Aufzeichnungs-Modus</translation>
+        <translation>Fortlaufende Aufzeichnung</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="23"/>
