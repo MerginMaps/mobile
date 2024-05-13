@@ -27,21 +27,18 @@ jobs:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-latest
     steps:
-      - name: Install astyle
-        run: |
-          python3 -m venv ./venv
-          source ./venv/bin/activate
-          sudo pip3 install astyle===3.4.13
-          # brew update
-          # brew install astyle
 
       - name: Checkout input
         uses: actions/checkout@v3
         with:
           path: input
 
-      - name: Run astyle check
+      - name: Install astyle and run the check
         run: |
+          python3 -m venv ./venv
+          source ./venv/bin/activate
+          sudo pip3 install astyle===3.4.13
+          
           ./input/scripts/format_cpp.bash
 
   code_style_cmake:
