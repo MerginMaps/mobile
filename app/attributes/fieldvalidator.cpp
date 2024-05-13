@@ -195,7 +195,7 @@ QString FieldValidator::constructConstraintValidationMessage( const FormItem &it
   QgsFieldConstraints fldCons = field.constraints();
   QStringList validationMessages;
 
-  bool hasNotNullConstraint = fldCons.constraints() & QgsFieldConstraints::ConstraintNotNull;
+  bool hasNotNullConstraint = fldCons.constraints() &QgsFieldConstraints::ConstraintNotNull;
   bool notNullViolated = unmetConstraints.contains( QStringLiteral( "value is NULL" ) );
 
   if ( hasNotNullConstraint && notNullViolated )
@@ -212,7 +212,7 @@ QString FieldValidator::constructConstraintValidationMessage( const FormItem &it
     }
   }
 
-  bool hasUniqueConstraint = fldCons.constraints() & QgsFieldConstraints::ConstraintUnique;
+  bool hasUniqueConstraint = fldCons.constraints() &QgsFieldConstraints::ConstraintUnique;
   bool uniqueViolated = unmetConstraints.contains( QStringLiteral( "value is not unique" ) );
 
   if ( hasUniqueConstraint && uniqueViolated )
@@ -229,7 +229,7 @@ QString FieldValidator::constructConstraintValidationMessage( const FormItem &it
     }
   }
 
-  bool hasExpressionConstrain = fldCons.constraints() & QgsFieldConstraints::ConstraintExpression;
+  bool hasExpressionConstrain = fldCons.constraints() &QgsFieldConstraints::ConstraintExpression;
   bool expressionViolated = unmetConstraints.filter( QRegularExpression( "(parser error|evaluation error|check failed)" ) ).size() > 0;
 
   if ( hasExpressionConstrain && expressionViolated )

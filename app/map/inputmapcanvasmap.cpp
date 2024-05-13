@@ -71,8 +71,8 @@ void InputMapCanvasMap::zoom( QPointF center, qreal scale )
   QgsPoint oldCenter( extent.center() );
   QgsPoint mousePos( mMapSettings->screenToCoordinate( center ) );
 
-  QgsPointXY newCenter( mousePos.x() + ( ( oldCenter.x() - mousePos.x() ) * scale ),
-                        mousePos.y() + ( ( oldCenter.y() - mousePos.y() ) * scale ) );
+  QgsPointXY newCenter( mousePos.x() + ( ( oldCenter.x() - mousePos.x() ) *scale ),
+                        mousePos.y() + ( ( oldCenter.y() - mousePos.y() ) *scale ) );
 
   // same as zoomWithCenter (no coordinate transformations are needed)
   extent.scale( scale, &newCenter );
@@ -382,11 +382,11 @@ QSGNode *InputMapCanvasMap::updatePaintNode( QSGNode *oldNode, QQuickItem::Updat
   {
     if ( qgsDoubleNear( rect.height(), mImage.height() ) )
     {
-      rect.setHeight( rect.width() / size.width() * size.height() );
+      rect.setHeight( rect.width() / size.width() *size.height() );
     }
     else
     {
-      rect.setWidth( rect.height() / size.height() * size.width() );
+      rect.setWidth( rect.height() / size.height() *size.width() );
     }
   }
 
@@ -515,7 +515,7 @@ void InputMapCanvasMap::clearTemporalCache()
             invalidateLabels = true;
         }
 
-        if ( layer->temporalProperties()->flags() & QgsTemporalProperty::FlagDontInvalidateCachedRendersWhenRangeChanges )
+        if ( layer->temporalProperties()->flags() &QgsTemporalProperty::FlagDontInvalidateCachedRendersWhenRangeChanges )
           continue;
 
         mCache->invalidateCacheForLayer( layer );

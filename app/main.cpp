@@ -465,7 +465,7 @@ int main( int argc, char *argv[] )
 
   // there seem to be issues with HTTP/2 server support (QTBUG-111417)
   // so let's stick to HTTP/1 for the time being (Qt5 has HTTP/2 disabled by default)
-  QgsNetworkAccessManager::instance()->setRequestPreprocessor( []( QNetworkRequest * r )
+  QgsNetworkAccessManager::instance()->setRequestPreprocessor( []( QNetworkRequest *r )
   {
     r->setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
   } );
@@ -499,7 +499,7 @@ int main( int argc, char *argv[] )
 
   // build position kit, save active provider to QSettings and load previously active provider
   PositionKit pk;
-  QObject::connect( &pk, &PositionKit::positionProviderChanged, &as, [&as]( AbstractPositionProvider * provider )
+  QObject::connect( &pk, &PositionKit::positionProviderChanged, &as, [ &as]( AbstractPositionProvider *provider )
   {
     as.setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
@@ -527,52 +527,52 @@ int main( int argc, char *argv[] )
     CoreUtils::log( QStringLiteral( "AppState" ), QStringLiteral( "Application has quit" ) );
   } );
 
-  QObject::connect( &help, &InputHelp::submitReportSuccessful, &lambdaContext, [&notificationModel]()
+  QObject::connect( &help, &InputHelp::submitReportSuccessful, &lambdaContext, [ &notificationModel]()
   {
     notificationModel.addSuccess( QObject::tr( "Report submitted. Please contact us on %1" ).arg( InputHelp::helpdeskMail() ) );
   } );
 
-  QObject::connect( &help, &InputHelp::submitReportFailed, &lambdaContext, [&notificationModel]()
+  QObject::connect( &help, &InputHelp::submitReportFailed, &lambdaContext, [ &notificationModel]()
   {
     notificationModel.addError( QObject::tr( "Failed to submit report. Please check your internet connection." ) );
   } );
 
-  QObject::connect( &pw, &ProjectWizard::notifySuccess, &lambdaContext, [&notificationModel]( const QString & message )
+  QObject::connect( &pw, &ProjectWizard::notifySuccess, &lambdaContext, [ &notificationModel]( const QString &message )
   {
     notificationModel.addSuccess( message );
   } );
 
-  QObject::connect( &iosUtils, &IosUtils::notifyError, &lambdaContext, [&notificationModel]( const QString & message )
+  QObject::connect( &iosUtils, &IosUtils::notifyError, &lambdaContext, [ &notificationModel]( const QString &message )
   {
     notificationModel.addError( message );
   } );
 
-  QObject::connect( &androidUtils, &AndroidUtils::notifyInfo, &lambdaContext, [&notificationModel]( const QString & message )
+  QObject::connect( &androidUtils, &AndroidUtils::notifyInfo, &lambdaContext, [ &notificationModel]( const QString &message )
   {
     notificationModel.addInfo( message );
   } );
 
-  QObject::connect( &androidUtils, &AndroidUtils::notifyError, &lambdaContext, [&notificationModel]( const QString & message )
+  QObject::connect( &androidUtils, &AndroidUtils::notifyError, &lambdaContext, [ &notificationModel]( const QString &message )
   {
     notificationModel.addError( message );
   } );
 
-  QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project )
+  QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [ &syncManager]( const LocalProject &project )
   {
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry );
   } );
 
-  QObject::connect( ma.get(), &MerginApi::notifyInfo, &lambdaContext, [&notificationModel]( const QString & message )
+  QObject::connect( ma.get(), &MerginApi::notifyInfo, &lambdaContext, [ &notificationModel]( const QString &message )
   {
     notificationModel.addInfo( message );
   } );
 
-  QObject::connect( ma.get(), &MerginApi::notifySuccess, &lambdaContext, [&notificationModel]( const QString & message )
+  QObject::connect( ma.get(), &MerginApi::notifySuccess, &lambdaContext, [ &notificationModel]( const QString &message )
   {
     notificationModel.addSuccess( message );
   } );
 
-  QObject::connect( ma.get(), &MerginApi::notifyError, &lambdaContext, [&notificationModel]( const QString & message )
+  QObject::connect( ma.get(), &MerginApi::notifyError, &lambdaContext, [ &notificationModel]( const QString &message )
   {
     notificationModel.addError( message );
   } );
@@ -581,7 +581,7 @@ int main( int argc, char *argv[] )
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
-  QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]( const QString & projectFullName, bool successfully, int version, bool reloadNeeded )
+  QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [ &activeProject]( const QString &projectFullName, bool successfully, int version, bool reloadNeeded )
   {
     Q_UNUSED( successfully );
     Q_UNUSED( version );

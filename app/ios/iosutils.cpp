@@ -15,7 +15,7 @@ IosUtils::IosUtils( QObject *parent ): QObject( parent )
   setIdleTimerDisabled();
 #endif
   mImagePicker = new IOSImagePicker();
-  QObject::connect( mImagePicker, &IOSImagePicker::imageCaptured, this, [this]( const QString & absoluteImagePath )
+  QObject::connect( mImagePicker, &IOSImagePicker::imageCaptured, this, [this]( const QString &absoluteImagePath )
   {
     emit imageSelected( absoluteImagePath, mLastCode );
   } );

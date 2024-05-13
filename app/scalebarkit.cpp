@@ -107,8 +107,8 @@ void ScaleBarKit::updateScaleBar()
   else
     round_digit = 5;
 
-  mDistance = int( round_digit * base );
-  mWidth = int( mPreferredWidth * mDistance / dist );
+  mDistance = int( round_digit *base );
+  mWidth = int( mPreferredWidth *mDistance / dist );
 
   emit scaleBarChanged();
 }

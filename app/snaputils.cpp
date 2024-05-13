@@ -272,7 +272,7 @@ void SnapUtils::setupSnapping()
       QgsSnappingConfig config = mQgsProject->snappingConfig();
       if ( config.units() == Qgis::MapToolUnit::Pixels )
       {
-        config.setTolerance( config.tolerance() * InputUtils::calculateDpRatio() );
+        config.setTolerance( config.tolerance() *InputUtils::calculateDpRatio() );
       }
       mSnappingUtils.setConfig( config );
       break;

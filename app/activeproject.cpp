@@ -50,7 +50,7 @@ ActiveProject::ActiveProject( AppSettings &appSettings
   QObject::connect(
     &mLocalProjectsManager,
     &LocalProjectsManager::aboutToRemoveLocalProject,
-    this, [this]( const LocalProject & project )
+    this, [this]( const LocalProject &project )
   {
     if ( project.id() == mLocalProject.id() )
     {
@@ -62,7 +62,7 @@ ActiveProject::ActiveProject( AppSettings &appSettings
   QObject::connect(
     &mLocalProjectsManager,
     &LocalProjectsManager::localProjectDataChanged,
-    this, [this]( const LocalProject & project )
+    this, [this]( const LocalProject &project )
   {
     if ( project.projectDir == mLocalProject.projectDir )
     {

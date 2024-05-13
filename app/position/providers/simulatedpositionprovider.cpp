@@ -75,8 +75,8 @@ void SimulatedPositionProvider::generateNextPosition()
 void SimulatedPositionProvider::generateRadiusPosition()
 {
   double latitude = mLatitude, longitude = mLongitude;
-  latitude += sin( mAngle * M_PI / 180 ) * mFlightRadius;
-  longitude += cos( mAngle * M_PI / 180 ) * mFlightRadius;
+  latitude += sin( mAngle *M_PI / 180 ) * mFlightRadius;
+  longitude += cos( mAngle *M_PI / 180 ) * mFlightRadius;
   mAngle += 1;
 
   GeoPosition position;

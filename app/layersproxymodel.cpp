@@ -22,7 +22,7 @@ LayersProxyModel::LayersProxyModel( LayersModel *model, LayerModelTypes modelTyp
   switch ( mModelType )
   {
     case ActiveLayerSelection:
-      filterFunction = [this]( QgsMapLayer * layer ) { return recordingAllowed( layer ); };
+      filterFunction = [this]( QgsMapLayer *layer ) { return recordingAllowed( layer ); };
       break;
     default:
       filterFunction = []( QgsMapLayer * ) { return true; };

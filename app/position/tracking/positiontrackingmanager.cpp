@@ -195,7 +195,7 @@ void PositionTrackingManager::setup()
   }
   else
   {
-    mTrackingBackend->setNotifyFunction( [ = ]( const QgsPoint & p ) { this->addPoint( p ); } );
+    mTrackingBackend->setNotifyFunction( [ = ]( const QgsPoint &p ) { this->addPoint( p ); } );
   }
 
   connect( mTrackingBackend.get(), &AbstractTrackingBackend::errorOccured, this, &PositionTrackingManager::trackingErrorOccured );

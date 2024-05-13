@@ -67,9 +67,9 @@ static QStringList detailsToStr( const QgsDatumTransform::TransformDetails &deta
 
 void InputProjUtils::initCoordinateOperationHandlers()
 {
-  QgsCoordinateTransform::setCustomMissingRequiredGridHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-      const QgsCoordinateReferenceSystem & destinationCrs,
-      const QgsDatumTransform::GridDetails & grid )
+  QgsCoordinateTransform::setCustomMissingRequiredGridHandler( [ = ]( const QgsCoordinateReferenceSystem &sourceCrs,
+      const QgsCoordinateReferenceSystem &destinationCrs,
+      const QgsDatumTransform::GridDetails &grid )
   {
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
@@ -77,10 +77,10 @@ void InputProjUtils::initCoordinateOperationHandlers()
     warnUser( tr( "Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Mergin Maps." ).arg( grid.shortName ) );
   } );
 
-  QgsCoordinateTransform::setCustomMissingPreferredGridHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-      const QgsCoordinateReferenceSystem & destinationCrs,
-      const QgsDatumTransform::TransformDetails & preferredOperation,
-      const QgsDatumTransform::TransformDetails & availableOperation )
+  QgsCoordinateTransform::setCustomMissingPreferredGridHandler( [ = ]( const QgsCoordinateReferenceSystem &sourceCrs,
+      const QgsCoordinateReferenceSystem &destinationCrs,
+      const QgsDatumTransform::TransformDetails &preferredOperation,
+      const QgsDatumTransform::TransformDetails &availableOperation )
   {
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
@@ -88,9 +88,9 @@ void InputProjUtils::initCoordinateOperationHandlers()
     logUser( QStringLiteral( "missing preffered grid: %1" ).arg( detailsToStr( preferredOperation ).join( ";" ) ), mMissingPreferredGridReported );
   } );
 
-  QgsCoordinateTransform::setCustomCoordinateOperationCreationErrorHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-      const QgsCoordinateReferenceSystem & destinationCrs,
-      const QString & error )
+  QgsCoordinateTransform::setCustomCoordinateOperationCreationErrorHandler( [ = ]( const QgsCoordinateReferenceSystem &sourceCrs,
+      const QgsCoordinateReferenceSystem &destinationCrs,
+      const QString &error )
   {
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
@@ -98,9 +98,9 @@ void InputProjUtils::initCoordinateOperationHandlers()
     warnUser( tr( "Error creating custom PROJ operation. For newly downloaded project please restart Mergin Maps." ) );
   } );
 
-  QgsCoordinateTransform::setCustomMissingGridUsedByContextHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-      const QgsCoordinateReferenceSystem & destinationCrs,
-      const QgsDatumTransform::TransformDetails & desired )
+  QgsCoordinateTransform::setCustomMissingGridUsedByContextHandler( [ = ]( const QgsCoordinateReferenceSystem &sourceCrs,
+      const QgsCoordinateReferenceSystem &destinationCrs,
+      const QgsDatumTransform::TransformDetails &desired )
   {
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )
@@ -108,9 +108,9 @@ void InputProjUtils::initCoordinateOperationHandlers()
     warnUser( tr( "Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Mergin Maps." ).arg( detailsToStr( desired ).join( "<br>" ) ) );
   } );
 
-  QgsCoordinateTransform::setFallbackOperationOccurredHandler( [ = ]( const QgsCoordinateReferenceSystem & sourceCrs,
-      const QgsCoordinateReferenceSystem & destinationCrs,
-      const QString & desired )
+  QgsCoordinateTransform::setFallbackOperationOccurredHandler( [ = ]( const QgsCoordinateReferenceSystem &sourceCrs,
+      const QgsCoordinateReferenceSystem &destinationCrs,
+      const QString &desired )
   {
     Q_UNUSED( destinationCrs )
     Q_UNUSED( sourceCrs )

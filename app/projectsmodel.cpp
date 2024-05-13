@@ -277,7 +277,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Mer
       Project project;
       project.local = localProject;
 
-      const auto res = std::find_if( merginProjects.begin(), merginProjects.end(), [&project]( const MerginProject & me )
+      const auto res = std::find_if( merginProjects.begin(), merginProjects.end(), [ &project]( const MerginProject &me )
       {
         return ( project.id() == me.id() );
       } );
@@ -306,7 +306,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Mer
 
     for ( const QString &pendingProjectName : pendingProjects )
     {
-      const auto &match = std::find_if( mProjects.begin(), mProjects.end(), [&pendingProjectName]( const Project & mp )
+      const auto &match = std::find_if( mProjects.begin(), mProjects.end(), [ &pendingProjectName]( const Project &mp )
       {
         return ( mp.id() == pendingProjectName );
       } );
@@ -331,7 +331,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Mer
       Project project;
       project.mergin = remoteEntry;
 
-      const auto match = std::find_if( localProjects.begin(), localProjects.end(), [&project]( const LocalProject & le )
+      const auto match = std::find_if( localProjects.begin(), localProjects.end(), [ &project]( const LocalProject &le )
       {
         return ( project.id() == le.id() );
       } );

@@ -81,7 +81,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
   emit mapLayerChanged( nodeLayer->layer() );
 
   // listen on visibility change
-  connect( mLayerTreeNode, &QgsLayerTreeNode::visibilityChanged, this, [this]( QgsLayerTreeNode * node )
+  connect( mLayerTreeNode, &QgsLayerTreeNode::visibilityChanged, this, [this]( QgsLayerTreeNode *node )
   {
     if ( node && node == mLayerTreeNode && node->isVisible() != this->isVisible() )
     {

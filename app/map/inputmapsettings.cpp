@@ -165,8 +165,8 @@ QSize InputMapSettings::outputSize() const
 
 void InputMapSettings::setOutputSize( QSize outputSize )
 {
-  outputSize.setWidth( outputSize.width() * devicePixelRatio() );
-  outputSize.setHeight( outputSize.height() * devicePixelRatio() );
+  outputSize.setWidth( outputSize.width() *devicePixelRatio() );
+  outputSize.setHeight( outputSize.height() *devicePixelRatio() );
   if ( mMapSettings.outputSize() == outputSize )
     return;
 

@@ -214,11 +214,11 @@ QgsFeatureList IdentifyKit::identifyVectorLayer( QgsVectorLayer *layer, const Qg
   QgsRenderContext context( QgsRenderContext::fromMapSettings( mMapSettings->mapSettings() ) );
   context.expressionContext() << QgsExpressionContextUtils::layerScope( layer );
   QgsFeatureRenderer *renderer = layer->renderer();
-  if ( renderer && renderer->capabilities() & QgsFeatureRenderer::ScaleDependent )
+  if ( renderer && renderer->capabilities() &QgsFeatureRenderer::ScaleDependent )
   {
     // setup scale for scale dependent visibility (rule based)
     renderer->startRender( context, layer->fields() );
-    filter = renderer->capabilities() & QgsFeatureRenderer::Filter;
+    filter = renderer->capabilities() &QgsFeatureRenderer::Filter;
   }
 
   for ( const QgsFeature &feature : featureList )
@@ -231,7 +231,7 @@ QgsFeatureList IdentifyKit::identifyVectorLayer( QgsVectorLayer *layer, const Qg
     results.append( feature );
   }
 
-  if ( renderer && renderer->capabilities() & QgsFeatureRenderer::ScaleDependent )
+  if ( renderer && renderer->capabilities() &QgsFeatureRenderer::ScaleDependent )
   {
     renderer->stopRender( context );
   }
@@ -241,7 +241,7 @@ QgsFeatureList IdentifyKit::identifyVectorLayer( QgsVectorLayer *layer, const Qg
 
 double IdentifyKit::searchRadiusMU( const QgsRenderContext &context ) const
 {
-  return mSearchRadiusMm * context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
+  return mSearchRadiusMm *context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
 }
 
 double IdentifyKit::searchRadiusMU() const

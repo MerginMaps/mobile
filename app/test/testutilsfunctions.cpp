@@ -94,12 +94,12 @@ void TestUtilsFunctions::screenUnitsToMeters()
 void TestUtilsFunctions::transformedPointXY()
 {
   QgsPointXY pointXY = mUtils->pointXY( 49.9, 16.3 );
-  COMPARENEAR( pointXY.x(), 49.9, 1e-4 );
-  COMPARENEAR( pointXY.y(), 16.3, 1e-4 );
+  COMPARENEAR( pointXY.x(), 49.9, 1e - 4 );
+  COMPARENEAR( pointXY.y(), 16.3, 1e - 4 );
 
   QgsPoint point =  mUtils->point( 1.0, -1.0 );
-  COMPARENEAR( point.x(), 1.0, 1e-4 );
-  COMPARENEAR( point.y(), -1.0, 1e-4 );
+  COMPARENEAR( point.x(), 1.0, 1e - 4 );
+  COMPARENEAR( point.y(), -1.0, 1e - 4 );
 
   QgsCoordinateReferenceSystem crs3857 = QgsCoordinateReferenceSystem::fromEpsgId( 3857 );
   QVERIFY( crs3857.authid() == "EPSG:3857" );
@@ -123,15 +123,15 @@ void TestUtilsFunctions::transformedPointXY()
                      );
 
   QVERIFY( !transformedPoint.isEmpty() );
-  COMPARENEAR( transformedPoint.x(), 49.9, 1e-4 );
-  COMPARENEAR( transformedPoint.y(), 16.3, 1e-4 );
+  COMPARENEAR( transformedPoint.x(), 49.9, 1e - 4 );
+  COMPARENEAR( transformedPoint.y(), 16.3, 1e - 4 );
 }
 
 void TestUtilsFunctions::transformedPoint()
 {
   QgsPoint point = mUtils->point( 49.9, 16.3 );
-  COMPARENEAR( point.x(), 49.9, 1e-4 );
-  COMPARENEAR( point.y(), 16.3, 1e-4 );
+  COMPARENEAR( point.x(), 49.9, 1e - 4 );
+  COMPARENEAR( point.y(), 16.3, 1e - 4 );
 
   QgsCoordinateReferenceSystem crs3857 = QgsCoordinateReferenceSystem::fromEpsgId( 3857 );
   QVERIFY( crs3857.authid() == "EPSG:3857" );
@@ -155,8 +155,8 @@ void TestUtilsFunctions::transformedPoint()
                      );
 
   QVERIFY( !transformedPoint.isEmpty() );
-  COMPARENEAR( transformedPoint.x(), 49.9, 1e-4 );
-  COMPARENEAR( transformedPoint.y(), 16.3, 1e-4 );
+  COMPARENEAR( transformedPoint.x(), 49.9, 1e - 4 );
+  COMPARENEAR( transformedPoint.y(), 16.3, 1e - 4 );
 }
 
 void TestUtilsFunctions::formatPoint()

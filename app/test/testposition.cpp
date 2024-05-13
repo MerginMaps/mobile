@@ -67,7 +67,7 @@ void TestPosition::simulatedPosition()
   QVERIFY( hasPositionChanged );
   QVERIFY( positionKit->hasPosition() );
 
-  COMPARENEAR( positionKit->positionCoordinate().y(), 38.93, 1e-4 );
+  COMPARENEAR( positionKit->positionCoordinate().y(), 38.93, 1e - 4 );
   QVERIFY( positionKit->horizontalAccuracy() >= 0 );
   QVERIFY( positionKit->satellitesVisible() >= 0 );
   QVERIFY( positionKit->satellitesUsed() >= 0 );
@@ -83,7 +83,7 @@ void TestPosition::simulatedPosition()
 
   QVERIFY( hasPositionChanged );
   QVERIFY( positionKit->hasPosition() );
-  COMPARENEAR( positionKit->positionCoordinate().y(), 33.93, 1e-4 );
+  COMPARENEAR( positionKit->positionCoordinate().y(), 33.93, 1e - 4 );
 
   positionKit->stopUpdates();
 

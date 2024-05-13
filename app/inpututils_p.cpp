@@ -99,7 +99,7 @@ qreal InputUtilsPrivate::calculateScreenDpr()
     double dpiY = screen->physicalDotsPerInchY();
 
     qreal realDpi = dpiX < dpiY ? dpiX : dpiY;
-    realDpi = realDpi * screen->devicePixelRatio();
+    realDpi = realDpi *screen->devicePixelRatio();
 
     return realDpi / 160.;
   }

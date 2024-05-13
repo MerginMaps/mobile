@@ -729,7 +729,7 @@ class MMStyle: public QObject
     QFont fontFactory( int pixelSize, bool bold )
     {
       QFont f;
-      f.setPixelSize( pixelSize * mDp );
+      f.setPixelSize( pixelSize *mDp );
 
       if ( bold )
       {

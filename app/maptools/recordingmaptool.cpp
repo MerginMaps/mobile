@@ -572,7 +572,7 @@ void RecordingMapTool::onPositionChanged()
   {
     double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Degrees, Qgis::DistanceUnit::Meters );
     double distance = mLastRecordedPoint.distance( mPositionKit->positionCoordinate() );
-    if ( mLastRecordedPoint.isEmpty() || factor * distance >= mRecordingInterval )
+    if ( mLastRecordedPoint.isEmpty() || factor *distance >= mRecordingInterval )
     {
       addPoint( QgsPoint() ); // addPoint will take point from GPS
     }
@@ -1102,7 +1102,7 @@ void RecordingMapTool::updateVertex( const Vertex &vertex, const QgsPoint &point
     return;
   }
 
-  if ( vertex.isValid() && !InputUtils::equals( point, vertex.coordinates(), 1e-8 ) )
+  if ( vertex.isValid() && !InputUtils::equals( point, vertex.coordinates(), 1e - 8 ) )
   {
     mActiveLayer->beginEditCommand( QStringLiteral( "Move vertex" ) );
     if ( mRecordedGeometry.get()->moveVertex( vertex.vertexId(), point ) )
@@ -1138,12 +1138,12 @@ void RecordingMapTool::cancelGrab()
 double RecordingMapTool::pixelsToMapUnits( double numPixels )
 {
   QgsRenderContext context = QgsRenderContext::fromMapSettings( mapSettings()->mapSettings() );
-  return numPixels * context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
+  return numPixels *context.scaleFactor() * context.mapToPixel().mapUnitsPerPixel();
 }
 
 bool RecordingMapTool::shouldBeVisible( const QgsPoint point )
 {
-  return !mActiveVertex.isValid() || !InputUtils::equals( point, mActiveVertex.coordinates(), 1e-16 );
+  return !mActiveVertex.isValid() || !InputUtils::equals( point, mActiveVertex.coordinates(), 1e - 16 );
 }
 
 void RecordingMapTool::grabNextVertex()
@@ -1305,8 +1305,8 @@ QgsPoint RecordingMapTool::handlePoint( QgsPoint p1, QgsPoint p2 )
   da.setEllipsoid( QStringLiteral( "WGS84" ) );
   da.setSourceCrs( mActiveLayer->crs(), mapSettings()->transformContext() );
   double d = da.convertLengthMeasurement( da.measureLine( QgsPointXY( p1 ), QgsPointXY( p2 ) ), mActiveLayer->crs().mapUnits() );
-  double x = ( ( p2.x() - p1.x() ) * ( d + h * factor ) / d ) + p1.x();
-  double y = ( ( p2.y() - p1.y() ) * ( d + h * factor ) / d ) + p1.y();
+  double x = ( ( p2.x() - p1.x() ) * ( d + h *factor ) / d ) + p1.x();
+  double y = ( ( p2.y() - p1.y() ) * ( d + h *factor ) / d ) + p1.y();
   return QgsPoint( x, y );
 }
 

@@ -40,7 +40,7 @@ bool LayerTreeFlatSortFilterModel::filterAcceptsRow( int source_row, const QMode
 
           if ( layer )
           {
-            bool isPrivate = layer->flags() & QgsMapLayer::LayerFlag::Private;
+            bool isPrivate = layer->flags() &QgsMapLayer::LayerFlag::Private;
 
             if ( isPrivate )
             {

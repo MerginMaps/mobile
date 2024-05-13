@@ -179,7 +179,7 @@ QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, 
   }
 
   double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Meters, distUnit );
-  double distance = distanceInMeters * factor;
+  double distance = distanceInMeters *factor;
   QString abbreviation = QgsUnitTypes::toAbbreviatedString( distUnit );
 
   return QString( "%1 %2" ).arg( QString::number( distance, 'f', precision ), abbreviation );
@@ -532,7 +532,7 @@ QString InputUtils::filesToString( QList<MerginFile> files )
 QString InputUtils::bytesToHumanSize( double bytes )
 {
   const int precision = 1;
-  if ( bytes < 1e-5 )
+  if ( bytes < 1e - 5 )
   {
     return "0.0";
   }
@@ -567,7 +567,7 @@ bool InputUtils::acquireCameraPermission()
     if ( Qt::PermissionStatus::Undetermined == status )
     {
       // TODO this is async so it should be treated as such
-      qApp->requestPermission( QCameraPermission{}, []( const QPermission & permission ) {} );
+      qApp->requestPermission( QCameraPermission{}, []( const QPermission &permission ) {} );
       return false;
     }
 
@@ -1355,7 +1355,7 @@ void InputUtils::formatToMetricDistance( double srcDistance,
     double &destDistance,
     Qgis::DistanceUnit &destUnits )
 {
-  double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, Qgis::DistanceUnit::Millimeters );
+  double dist = srcDistance *QgsUnitTypes::fromUnitToUnitFactor( srcUnits, Qgis::DistanceUnit::Millimeters );
   if ( dist < 0 )
   {
     destDistance = 0;
@@ -1396,7 +1396,7 @@ void InputUtils::formatToImperialDistance( double srcDistance,
     double &destDistance,
     Qgis::DistanceUnit &destUnits )
 {
-  double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, Qgis::DistanceUnit::Feet );
+  double dist = srcDistance *QgsUnitTypes::fromUnitToUnitFactor( srcUnits, Qgis::DistanceUnit::Feet );
   if ( dist < 0 )
   {
     destDistance = 0;
@@ -1430,7 +1430,7 @@ void InputUtils::formatToUSCSDistance( double srcDistance,
                                        double &destDistance,
                                        Qgis::DistanceUnit &destUnits )
 {
-  double dist = srcDistance * QgsUnitTypes::fromUnitToUnitFactor( srcUnits, Qgis::DistanceUnit::Feet );
+  double dist = srcDistance *QgsUnitTypes::fromUnitToUnitFactor( srcUnits, Qgis::DistanceUnit::Feet );
   if ( dist < 0 )
   {
     destDistance = 0;

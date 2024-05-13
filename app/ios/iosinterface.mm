@@ -200,7 +200,7 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
     static IOSViewDelegate *delegate = nullptr;
     delegate = [[IOSViewDelegate alloc] initWithHandler:handler];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"_UIImagePickerControllerUserDidCaptureItem" object:nil queue:nil usingBlock: ^ ( NSNotification * _Nonnull notification )
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"_UIImagePickerControllerUserDidCaptureItem" object:nil queue:nil usingBlock: ^ ( NSNotification *_Nonnull notification )
     {
       Q_UNUSED( notification )
       // Fetch GPS data when an image is captured
@@ -208,7 +208,7 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
     }];
 
     // Confirm event
-    delegate->imagePickerControllerDidFinishPickingMediaWithInfo = ^( UIImagePickerController * picker, NSDictionary * info )
+    delegate->imagePickerControllerDidFinishPickingMediaWithInfo = ^( UIImagePickerController *picker, NSDictionary *info )
     {
       if ( delegate->processingPicture )
       {
@@ -253,7 +253,7 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
 
 
     // Cancel event
-    delegate->imagePickerControllerDidCancel = ^( UIImagePickerController * picker )
+    delegate->imagePickerControllerDidCancel = ^( UIImagePickerController *picker )
     {
       qWarning() << "Image Picker: Cancel event (imagePickerControllerDidCancel)";
       [picker dismissViewControllerAnimated:YES completion:nil];

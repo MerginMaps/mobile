@@ -86,7 +86,7 @@ void HotReload::startHotReload()
   _watcher->addPath( "HotReload/app/qml/settings/components" );
 
   // send signal for hot reloading
-  connect( _watcher, &QFileSystemWatcher::directoryChanged, this, [this]( const QString & path )
+  connect( _watcher, &QFileSystemWatcher::directoryChanged, this, [this]( const QString &path )
   {
     emit watchedSourceChanged();
   } );

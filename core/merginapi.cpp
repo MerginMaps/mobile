@@ -556,7 +556,7 @@ void MerginApi::pushFile( const QString &projectFullName, const QString &transac
 
   if ( f.open( QIODevice::ReadOnly ) )
   {
-    f.seek( chunkNo * UPLOAD_CHUNK_SIZE );
+    f.seek( chunkNo *UPLOAD_CHUNK_SIZE );
     data = f.read( UPLOAD_CHUNK_SIZE );
   }
 
@@ -2412,7 +2412,7 @@ void MerginApi::startProjectPull( const QString &projectFullName )
   // work with parallel downloads
   std::sort(
     transaction.downloadQueue.begin(), transaction.downloadQueue.end(),
-  []( const DownloadQueueItem & a, const DownloadQueueItem & b ) { return a.size > b.size; }
+  []( const DownloadQueueItem &a, const DownloadQueueItem &b ) { return a.size > b.size; }
   );
 
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "%1 update tasks, %2 items to download (total size %3 bytes)" )
@@ -2442,7 +2442,7 @@ void MerginApi::prepareDownloadConfig( const QString &projectFullName, bool down
 
   MerginProjectMetadata newServerVersion = MerginProjectMetadata::fromJson( transaction.projectMetadata );
 
-  const auto res = std::find_if( newServerVersion.files.begin(), newServerVersion.files.end(), []( const MerginFile & file )
+  const auto res = std::find_if( newServerVersion.files.begin(), newServerVersion.files.end(), []( const MerginFile &file )
   {
     return file.path == sMerginConfigFile;
   } );
@@ -2459,7 +2459,7 @@ void MerginApi::prepareDownloadConfig( const QString &projectFullName, bool down
 
   MerginProjectMetadata oldServerVersion = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
 
-  const auto resOld = std::find_if( oldServerVersion.files.begin(), oldServerVersion.files.end(), []( const MerginFile & file )
+  const auto resOld = std::find_if( oldServerVersion.files.begin(), oldServerVersion.files.end(), []( const MerginFile &file )
   {
     return file.path == sMerginConfigFile;
   } );
