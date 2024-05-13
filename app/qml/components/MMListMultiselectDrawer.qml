@@ -31,6 +31,8 @@ MMDrawer {
   signal searchTextChanged( string searchText )
   signal selectionFinished( var selectedItems )
 
+  interactive: !listViewComponent.interactive
+
   drawerBottomMargin: 0
 
   drawerContent: Item {
