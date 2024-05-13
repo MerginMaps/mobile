@@ -220,6 +220,13 @@ void MerginUserInfo::setActiveWorkspace( int newWorkspace )
   settings.beginGroup( "Input/" );
   settings.setValue( "lastUsedWorkspace", mActiveWorkspace );
   settings.endGroup();
+
+  QString logMessage = QStringLiteral( "Switched to workspace '%1' with ID %2" )
+                       .arg( activeWorkspaceName() )
+                       .arg( newWorkspace );
+
+  CoreUtils::log( QStringLiteral( "Workspace Switch" ), logMessage );
+
   emit activeWorkspaceChanged();
 }
 
