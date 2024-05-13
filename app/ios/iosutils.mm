@@ -44,12 +44,13 @@ QVector<int> IosUtils::getSafeAreaImpl()
 
 QString IosUtils::getManufacturerImpl()
 {
-  return "Apple Inc.";
+  return "APPLE INC.";
 }
 
 QString IosUtils::getDeviceModelImpl()
 {
   struct utsname systemInfo;
   uname( &systemInfo );
-  return QString::fromUtf8( systemInfo.machine );
+  QString deviceModel = QString::fromUtf8( systemInfo.machine );
+  return deviceModel.toUpper();
 }

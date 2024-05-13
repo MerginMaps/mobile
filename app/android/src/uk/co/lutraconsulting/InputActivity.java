@@ -115,7 +115,7 @@ public class InputActivity extends QtActivity
   }
 
   public String getDeviceModel() {
-      return android.os.Build.MODEL;
+      return android.os.Build.MODEL.toUpperCase();
   }
 
   public void hideSplashScreen()
