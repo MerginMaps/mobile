@@ -70,15 +70,15 @@ QVector<int> IosUtils::getSafeArea()
 QString IosUtils::getManufacturer()
 {
 #ifdef Q_OS_IOS
-    return getManufacturerImpl();
+  return getManufacturerImpl();
 #endif
-    return "";
+  return "";
 }
 
 QString IosUtils::getDeviceModel()
 {
 #ifdef Q_OS_IOS
-    return getDeviceModelImpl();
+  return getDeviceModelImpl();
 #endif
-    return "";
+  return "";
 }

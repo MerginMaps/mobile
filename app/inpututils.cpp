@@ -16,6 +16,8 @@
 #include <QCoreApplication>
 #include <QPermissions>
 
+#include "ios/iosutils.h"
+
 #include "qgsruntimeprofiler.h"
 #include "qcoreapplication.h"
 #include "qgsgeometrycollection.h"
@@ -2157,19 +2159,19 @@ QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
 QString InputUtils::getManufacturer()
 {
 #ifdef Q_OS_ANDROID
-    return AndroidUtils::getManufacturer();
+  return AndroidUtils::getManufacturer();
 #elif defined(Q_OS_IOS)
-    return IosUtils::getManufacturer();
+  return IosUtils::getManufacturer();
 #endif
-    return QStringLiteral( "Desktop" );
+  return QStringLiteral( "Desktop" );
 }
 
 QString InputUtils::getDeviceModel()
 {
 #ifdef Q_OS_ANDROID
-    return AndroidUtils::getDeviceModel();
+  return AndroidUtils::getDeviceModel();
 #elif defined(Q_OS_IOS)
-    return IosUtils::getDeviceModel();
+  return IosUtils::getDeviceModel();
 #endif
-    return QStringLiteral( "Desktop" );
+  return QStringLiteral( "Desktop" );
 }
