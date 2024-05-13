@@ -655,7 +655,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="30"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Wenn Sie auf &apos;Ja&apos; klicken, wird Ihre neuen Geometrien verworfen und kein Feature gespeichert. Wenn Sie die Geometrie stattdessen speichern möchten, klicken Sie auf &apos;Nein&apos; und dann auf &apos;Fertig&apos; in der Symbolleiste.</translation>
+        <translation>Wenn Sie auf &apos;Ja&apos; klicken, werden neuen Geometrien verworfen und kein Feature gespeichert. Wenn Sie die Geometrie stattdessen speichern möchten, klicken Sie auf &apos;Nein&apos; und dann auf &apos;Fertig&apos; in der Symbolleiste.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="37"/>
