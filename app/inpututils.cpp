@@ -2163,7 +2163,7 @@ QString InputUtils::getManufacturer()
 #elif defined(Q_OS_IOS)
   return IosUtils::getManufacturer();
 #endif
-  return QStringLiteral( "Desktop" );
+  return QStringLiteral( "N/A" );
 }
 
 QString InputUtils::getDeviceModel()
@@ -2173,5 +2173,5 @@ QString InputUtils::getDeviceModel()
 #elif defined(Q_OS_IOS)
   return IosUtils::getDeviceModel();
 #endif
-  return QStringLiteral( "Desktop" );
+  return QStringLiteral( "N/A" );
 }
