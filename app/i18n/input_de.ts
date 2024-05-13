@@ -389,7 +389,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="95"/>
         <source>Workspaces</source>
-        <translation>Arbeitsbereich</translation>
+        <translation>Arbeitsbereiche</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="124"/>
