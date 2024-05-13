@@ -520,7 +520,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMChangelogPage.qml" line="21"/>
         <source>Changelog</source>
-        <translation>Änderungen</translation>
+        <translation>Änderungsprotokoll</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMChangelogPage.qml" line="35"/>
