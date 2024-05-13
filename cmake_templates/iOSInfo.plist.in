@@ -45,10 +45,13 @@
         <string>az_AZ</string>
         <string>az</string>
         <string>ca</string>
+        <string>de</string>
         <string>en</string>
         <string>es</string>
         <string>es_419</string>
         <string>es_ES</string>
+        <string>et_EE</string>
+        <string>et</string>
         <string>fr</string>
         <string>fr_FR</string>
         <string>hr</string>
