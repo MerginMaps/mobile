@@ -77,7 +77,7 @@ MMFormPhotoViewer {
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
-  warningMsg: _fieldWarningMessage
+  warningMsg: photoState === "notAvailable" ? qsTr( "Photo is missing." ) : _fieldWarningMessage
   errorMsg: _fieldErrorMessage
 
   readOnly: _fieldIsReadOnly
