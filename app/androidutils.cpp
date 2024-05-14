@@ -163,6 +163,26 @@ void AndroidUtils::quitApp()
 #endif
 }
 
+QString AndroidUtils::getManufacturer()
+{
+  QString manufacturer = "";
+#ifdef ANDROID
+  QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+  manufacturer = activity.callObjectMethod( "getManufacturer", "()Ljava/lang/String;" ).toString().toUpper();
+#endif
+  return manufacturer;
+}
+
+QString AndroidUtils::getDeviceModel()
+{
+  QString deviceModel = "";
+#ifdef ANDROID
+  QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+  deviceModel = activity.callObjectMethod( "getDeviceModel", "()Ljava/lang/String;" ).toString();
+#endif
+  return deviceModel;
+}
+
 QVector<int> AndroidUtils::getSafeArea()
 {
   QVector<int> ret;

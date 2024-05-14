@@ -66,3 +66,19 @@ QVector<int> IosUtils::getSafeArea()
 #endif
   return QVector<int>();
 }
+
+QString IosUtils::getManufacturer()
+{
+#ifdef Q_OS_IOS
+  return getManufacturerImpl();
+#endif
+  return "";
+}
+
+QString IosUtils::getDeviceModel()
+{
+#ifdef Q_OS_IOS
+  return getDeviceModelImpl();
+#endif
+  return "";
+}

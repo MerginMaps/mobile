@@ -238,6 +238,9 @@ QVector<QString> InputHelp::logHeader( bool isHtml )
   retLines.push_back( QStringLiteral( "Device UUID: %1" ).arg( CoreUtils::deviceUuid() ) );
   retLines.push_back( QStringLiteral( "Data Dir: %1" ).arg( InputUtils::appDataDir() ) );
   retLines.push_back( QStringLiteral( "System: %1" ).arg( QSysInfo::prettyProductName() ) );
+  retLines.push_back( QStringLiteral( "CPU Architecture: %1" ).arg( QSysInfo::currentCpuArchitecture() ) );
+  retLines.push_back( QStringLiteral( "Device Model: %1" ).arg( InputUtils::getDeviceModel() ) );
+  retLines.push_back( QStringLiteral( "Device Manufacturer: %1" ).arg( InputUtils::getManufacturer() ) );
   retLines.push_back( QStringLiteral( "Mergin URL: %1" ).arg( mMerginApi->apiRoot() ) );
   retLines.push_back( QStringLiteral( "Mergin User: %1" ).arg( mMerginApi->userAuth()->username() ) );
   if ( !mMerginApi->userInfo()->email().isEmpty() )
@@ -245,8 +248,8 @@ QVector<QString> InputHelp::logHeader( bool isHtml )
     retLines.push_back( QStringLiteral( "Mergin Data: %1/%2 Bytes" )
                         .arg( InputUtils::bytesToHumanSize( mMerginApi->workspaceInfo()->diskUsage() ) )
                         .arg( InputUtils::bytesToHumanSize( mMerginApi->workspaceInfo()->storageLimit() ) ) );
-    retLines.push_back( QStringLiteral( "Subscription plan: %1" ).arg( mMerginApi->subscriptionInfo()->planAlias() ) );
-    retLines.push_back( QStringLiteral( "Subscription Status: %1" ).arg( MerginSubscriptionStatus::toString( static_cast<MerginSubscriptionStatus::SubscriptionStatus>( mMerginApi->subscriptionInfo()->subscriptionStatus() ) ) ) );
+    retLines.push_back( QStringLiteral( "Workspace Name: %1" ).arg( mMerginApi->userInfo()->activeWorkspaceName() ) );
+    retLines.push_back( QStringLiteral( "Workspace ID: %1" ).arg( mMerginApi->userInfo()->activeWorkspaceId() ) );
   }
   else
   {

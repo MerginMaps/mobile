@@ -14,6 +14,7 @@
  ***************************************************************************/
 
 #include <UIKit/UIKit.h>
+#include <sys/utsname.h>
 #include "iosutils.h"
 
 void IosUtils::setIdleTimerDisabled()
@@ -39,4 +40,17 @@ QVector<int> IosUtils::getSafeAreaImpl()
   }
 
   return ret;
+}
+
+QString IosUtils::getManufacturerImpl()
+{
+  return "APPLE INC.";
+}
+
+QString IosUtils::getDeviceModelImpl()
+{
+  struct utsname systemInfo;
+  uname( &systemInfo );
+  QString deviceModel = QString::fromUtf8( systemInfo.machine );
+  return deviceModel.toUpper();
 }

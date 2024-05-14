@@ -110,6 +110,14 @@ public class InputActivity extends QtActivity
     }
   }
 
+  public String getManufacturer() {
+    return android.os.Build.MANUFACTURER.toUpperCase();
+  }
+
+  public String getDeviceModel() {
+      return android.os.Build.MODEL.toUpperCase();
+  }
+
   public void hideSplashScreen()
   {
     keepSplashScreenVisible = false;

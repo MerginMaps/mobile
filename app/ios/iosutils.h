@@ -43,6 +43,9 @@ class IosUtils: public QObject
 
     Q_INVOKABLE QVector<int> getSafeArea();
 
+    static Q_INVOKABLE QString getManufacturer();
+    static Q_INVOKABLE QString getDeviceModel();
+
   signals:
     void imageSelected( const QString &imagePath, const QString &code );
     void notifyError( const QString &message );
@@ -61,6 +64,9 @@ class IosUtils: public QObject
     void setIdleTimerDisabled();
 
     QVector<int> getSafeAreaImpl();
+    static QString getManufacturerImpl();
+    static QString getDeviceModelImpl();
+
 };
 
 #endif // IOSUTILS_H
