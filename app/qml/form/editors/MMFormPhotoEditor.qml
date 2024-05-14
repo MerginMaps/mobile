@@ -279,7 +279,6 @@ MMFormPhotoViewer {
         imageDeleteDialog.open()
       }
       else {
-        internal.absoluteImagePath = ""
         root.editorValueChanged( "", true )
       }
     }
