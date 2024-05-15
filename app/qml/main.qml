@@ -938,6 +938,11 @@ ApplicationWindow {
     function onLoadingFinished() {
       projectLoadingPage.visible = false
 
+      if ( __activeProject.isProjectLoaded() )
+      {
+        projectController.hidePanel()
+      }
+
       // check location permission
       if ( locationPermission.status === Qt.Undetermined ) {
         locationPermission.request();
