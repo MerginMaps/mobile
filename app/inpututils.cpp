@@ -2180,37 +2180,37 @@ QString InputUtils::getDeviceModel()
 
 bool InputUtils::openLink( const QString &homePath, const QString &link )
 {
-    if ( link.startsWith( LOCAL_FILE_PREFIX ) )
+  if ( link.startsWith( LOCAL_FILE_PREFIX ) )
+  {
+    QString relativePath = link.mid( QString( LOCAL_FILE_PREFIX ).length() );
+    QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
+    if ( !fileExists( absoluteLinkPath ) )
     {
-        QString relativePath = link.mid( QString( LOCAL_FILE_PREFIX ).length() );
-        QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
-        if ( !fileExists( absoluteLinkPath ) )
-        {
-            return false;
-        }
+      return false;
+    }
 #ifdef Q_OS_ANDROID
-        if ( !mAndroidUtils->openFile( absoluteLinkPath ) )
-        {
-            return false;
-        }
-#elif defined(Q_OS_IOS)
-        if ( ! IosUtils::openFile( absoluteLinkPath ) )
-        {
-            return false;
-        }
-#else
-        // Desktop environments
-        QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
-        if ( !QDesktopServices::openUrl( fileUrl ) )
-        {
-            return false;
-        }
-#endif
-    }
-    else
+    if ( !mAndroidUtils->openFile( absoluteLinkPath ) )
     {
-        QDesktopServices::openUrl( QUrl( link ) );
+      return false;
     }
+#elif defined(Q_OS_IOS)
+    if ( ! IosUtils::openFile( absoluteLinkPath ) )
+    {
+      return false;
+    }
+#else
+    // Desktop environments
+    QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
+    if ( !QDesktopServices::openUrl( fileUrl ) )
+    {
+      return false;
+    }
+#endif
+  }
+  else
+  {
+    QDesktopServices::openUrl( QUrl( link ) );
+  }
 
-    return true;
+  return true;
 }

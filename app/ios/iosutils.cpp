@@ -86,7 +86,7 @@ QString IosUtils::getDeviceModel()
 bool IosUtils::openFile( const QString &filePath )
 {
 #ifdef Q_OS_IOS
-    return openFileImpl( filePath );
+  return openFileImpl( filePath );
 #else
   return false;
 #endif

@@ -100,10 +100,15 @@
         <service android:process=":trackingThread" android:name=".PositionTrackingService" android:foregroundServiceType="location" android:stopWithTask="true"/>
     </application>
 
-    <!-- Explicitly mention that we need to use external app for capturing an image -->
+    <!-- Explicitly mention that we need to use external app for capturing an image and open file-->
     <queries>
-      <intent>
+    <intent>
         <action android:name="android.media.action.IMAGE_CAPTURE" />
-      </intent>
+    </intent>
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="https" />
+    </intent>
     </queries>
 </manifest>
