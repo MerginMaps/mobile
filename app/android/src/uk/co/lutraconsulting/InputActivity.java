@@ -159,12 +159,12 @@ public class InputActivity extends QtActivity
 
     try 
     {
-      startActivityForResult( showFileIntent, OPEN_FILE_REQUEST_CODE );
-      return true;
+        startActivityForResult( showFileIntent, OPEN_FILE_REQUEST_CODE );
+        return true;
     } 
     catch ( ActivityNotFoundException ex ) 
     {
-      return false;
+        return false;
     }
   }
 
