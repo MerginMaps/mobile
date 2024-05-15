@@ -28,6 +28,7 @@ import android.view.WindowInsetsController;
 import android.graphics.Insets;
 import android.graphics.Color;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.content.ActivityNotFoundException;
@@ -41,6 +42,7 @@ import androidx.core.splashscreen.SplashScreen;
 public class InputActivity extends QtActivity
 {
   private static final String TAG = "Mergin Maps Input Activity";
+  private static final int OPEN_FILE_REQUEST_CODE = 1;
   private boolean keepSplashScreenVisible = true;
 
   @Override
@@ -133,13 +135,15 @@ public class InputActivity extends QtActivity
   public boolean openFile( String filePath ) {
     File file = new File( filePath );
 
-    if ( !file.exists() ) {
+    if ( !file.exists() ) 
+    {
         return false;
     }
 
     Intent showFileIntent = new Intent( Intent.ACTION_VIEW );
 
-    try {
+    try 
+    {
         Uri fileUri = FileProvider.getUriForFile( this, "uk.co.lutraconsulting.fileprovider", file );
 
         showFileIntent.setData( fileUri );
@@ -147,17 +151,21 @@ public class InputActivity extends QtActivity
         // FLAG_GRANT_READ_URI_PERMISSION grants temporary read permission to the content URI.
         // FLAG_ACTIVITY_NEW_TASK is used when starting an Activity from a non-Activity context.
         showFileIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION );
-      } catch ( IllegalArgumentException e ) {
+    } 
+    catch ( IllegalArgumentException e )
+    {
         return false;
     }
 
-    if ( showFileIntent.resolveActivity( getPackageManager() ) != null ) {
-        startActivity( showFileIntent );
-    } else {
-        return false;
+    try 
+    {
+      startActivityForResult( showFileIntent, OPEN_FILE_REQUEST_CODE );
+      return true;
+    } 
+    catch ( ActivityNotFoundException ex ) 
+    {
+      return false;
     }
-
-    return true;
   }
 
   public void quitGracefully()
