@@ -2158,8 +2158,6 @@ QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
   return parsedUpdates;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 QString InputUtils::getManufacturer()
 {
 #ifdef Q_OS_ANDROID
@@ -2180,42 +2178,39 @@ QString InputUtils::getDeviceModel()
   return QStringLiteral( "N/A" );
 }
 
-void InputUtils::openLink( const QString &homePath, const QString &link )
-=======
 bool InputUtils::openLink( const QString &homePath, const QString &link )
->>>>>>> 247d842d (first part of post review changes)
 {
-  if ( link.startsWith( LOCAL_FILE_PREFIX ) )
-  {
-    QString relativePath = link.mid( QString( LOCAL_FILE_PREFIX ).length() );
-    QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
-    if ( !fileExists( absoluteLinkPath ) )
+    if ( link.startsWith( LOCAL_FILE_PREFIX ) )
     {
-      return false;
-    }
+        QString relativePath = link.mid( QString( LOCAL_FILE_PREFIX ).length() );
+        QString absoluteLinkPath = homePath + QDir::separator() + relativePath;
+        if ( !fileExists( absoluteLinkPath ) )
+        {
+            return false;
+        }
 #ifdef Q_OS_ANDROID
-    if ( !mAndroidUtils->openFile( absoluteLinkPath ) )
-    {
-      return false;
-    }
+        if ( !mAndroidUtils->openFile( absoluteLinkPath ) )
+        {
+            return false;
+        }
 #elif defined(Q_OS_IOS)
-    if ( ! IosUtils::openFile( absoluteLinkPath ) )
-    {
-      return false;
-    }
+        if ( ! IosUtils::openFile( absoluteLinkPath ) )
+        {
+            return false;
+        }
 #else
-    // Desktop environments
-    QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
-    if ( !QDesktopServices::openUrl( fileUrl ) )
-    {
-      return false;
-    }
+        // Desktop environments
+        QUrl fileUrl = QUrl::fromLocalFile( absoluteLinkPath );
+        if ( !QDesktopServices::openUrl( fileUrl ) )
+        {
+            return false;
+        }
 #endif
-  }
-  else
-  {
-    QDesktopServices::openUrl( QUrl( link ) );
-  }
+    }
+    else
+    {
+        QDesktopServices::openUrl( QUrl( link ) );
+    }
 
-  return true;
+    return true;
 }
