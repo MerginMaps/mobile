@@ -42,7 +42,6 @@ import androidx.core.splashscreen.SplashScreen;
 public class InputActivity extends QtActivity
 {
   private static final String TAG = "Mergin Maps Input Activity";
-  private static final int OPEN_FILE_REQUEST_CODE = 1;
   private boolean keepSplashScreenVisible = true;
 
   @Override
@@ -157,15 +156,16 @@ public class InputActivity extends QtActivity
         return false;
     }
 
-    try 
+    if ( showFileIntent.resolveActivity( getPackageManager() ) != null ) 
     {
-        startActivityForResult( showFileIntent, OPEN_FILE_REQUEST_CODE );
-        return true;
+        startActivity( showFileIntent );
     } 
-    catch ( ActivityNotFoundException ex ) 
+    else 
     {
         return false;
     }
+    
+    return true;
   }
 
   public void quitGracefully()
