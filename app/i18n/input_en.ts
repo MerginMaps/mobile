@@ -63,22 +63,22 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="232"/>
+        <location filename="../androidutils.cpp" line="252"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="236"/>
+        <location filename="../androidutils.cpp" line="256"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="254"/>
+        <location filename="../androidutils.cpp" line="274"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="258"/>
+        <location filename="../androidutils.cpp" line="278"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -164,117 +164,117 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="209"/>
+        <location filename="../inpututils.cpp" line="211"/>
         <source>just now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="214"/>
+        <location filename="../inpututils.cpp" line="216"/>
         <source>%1 minutes ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="214"/>
+        <location filename="../inpututils.cpp" line="216"/>
         <source>%1 minute ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="219"/>
+        <location filename="../inpututils.cpp" line="221"/>
         <source>%1 hours ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="219"/>
+        <location filename="../inpututils.cpp" line="221"/>
         <source>%1 hour ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="223"/>
-        <location filename="../inpututils.cpp" line="228"/>
+        <location filename="../inpututils.cpp" line="225"/>
+        <location filename="../inpututils.cpp" line="230"/>
         <source>%1 days ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="223"/>
-        <location filename="../inpututils.cpp" line="228"/>
+        <location filename="../inpututils.cpp" line="225"/>
+        <location filename="../inpututils.cpp" line="230"/>
         <source>%1 day ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="233"/>
+        <location filename="../inpututils.cpp" line="235"/>
         <source>%1 weeks ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="233"/>
+        <location filename="../inpututils.cpp" line="235"/>
         <source>%1 week ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="238"/>
+        <location filename="../inpututils.cpp" line="240"/>
         <source>%1 months ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="238"/>
+        <location filename="../inpututils.cpp" line="240"/>
         <source>%1 month ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="243"/>
+        <location filename="../inpututils.cpp" line="245"/>
         <source>%1 years ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="243"/>
+        <location filename="../inpututils.cpp" line="245"/>
         <source>%1 year ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1477"/>
+        <location filename="../inpututils.cpp" line="1479"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation type="unfinished">screen resolution: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1478"/>
+        <location filename="../inpututils.cpp" line="1480"/>
         <source>screen DPI: %1x%2
 </source>
         <translation type="unfinished">screen DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1479"/>
+        <location filename="../inpututils.cpp" line="1481"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation type="unfinished">screen size: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1480"/>
+        <location filename="../inpututils.cpp" line="1482"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1481"/>
+        <location filename="../inpututils.cpp" line="1483"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1482"/>
+        <location filename="../inpututils.cpp" line="1484"/>
         <source>used dp scale: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2011"/>
+        <location filename="../inpututils.cpp" line="2013"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2015"/>
+        <location filename="../inpututils.cpp" line="2017"/>
         <source>You need to add at least %1 point(s).</source>
         <translation type="unfinished"></translation>
     </message>
@@ -761,28 +761,33 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="87"/>
-        <location filename="../qml/form/MMFormPage.qml" line="188"/>
+        <location filename="../qml/form/MMFormPage.qml" line="194"/>
         <source>Edit feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="201"/>
+        <location filename="../qml/form/MMFormPage.qml" line="207"/>
         <source>Delete</source>
         <translation type="unfinished">Delete</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="210"/>
+        <location filename="../qml/form/MMFormPage.qml" line="216"/>
         <source>Edit geometry</source>
         <translation type="unfinished">Edit geometry</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="446"/>
+        <location filename="../qml/form/MMFormPage.qml" line="452"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MMFormPhotoEditor</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="80"/>
+        <source>Photo is missing.</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="105"/>
         <source>Open Image</source>
@@ -1136,12 +1141,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="53"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="55"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="137"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="139"/>
         <source>Confirm selection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1373,7 +1378,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
-        <source>You need to be signed in to your Mergin Maps account in order to synchronize the project.</source>
+        <source>You need to be signed in to your Mergin Maps account in order to synchronise the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1396,7 +1401,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="19"/>
-        <source>You are not allowed to synchronize your changes in this project. Contact the project owner to assign you the correct permission. If you are the project owner, log in to the dashboard.</source>
+        <source>You are not allowed to synchronise your changes in this project. Contact the project owner to assign you the correct permission. If you are the project owner, log in to the dashboard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1608,7 +1613,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="291"/>
-        <source>Synchronize project</source>
+        <source>Synchronise project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1705,7 +1710,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="162"/>
-        <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
+        <source>Could not synchronise project, please make sure you are logged in and have sufficient rights.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1931,7 +1936,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="25"/>
-        <source>Any unsynchronized changes will be lost in project 
+        <source>Any unsynchronised changes will be lost in project 
  %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2297,7 +2302,7 @@ Won&apos;t be added to the project.</source>
     <name>MMSyncFailedDialog</name>
     <message>
         <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="27"/>
-        <source>Failed to synchronize your changes</source>
+        <source>Failed to synchronise your changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2791,11 +2796,6 @@ only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="802"/>
-        <source>Successfully synchronized</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qml/main.qml" line="833"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation type="unfinished"></translation>
@@ -2803,11 +2803,6 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../qml/main.qml" line="837"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="841"/>
-        <source>There was an issue during synchronization, we will try again. Click to learn more</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2821,13 +2816,23 @@ only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="952"/>
+        <location filename="../qml/main.qml" line="957"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="661"/>
         <source>Stake out is disabled because location is unavailable!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="802"/>
+        <source>Successfully synchronised</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="841"/>
+        <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
