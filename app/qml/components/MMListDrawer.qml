@@ -43,7 +43,7 @@ MMDrawer {
       }
     }
 
-    ListView {
+    MMListView {
       id: listViewComponent
 
       width: parent.width

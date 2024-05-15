@@ -73,7 +73,7 @@ Drawer {
 
         MMComponents.MMListSpacer { height: __style.spacing20 }
 
-        ListView {
+        MMComponents.MMListView {
           id: listView
 
           width: parent.width

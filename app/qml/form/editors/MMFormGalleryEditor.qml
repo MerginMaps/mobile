@@ -30,7 +30,7 @@ MMPrivateComponents.MMBaseInput {
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
-  inputContent: ListView {
+  inputContent: MMComponents.MMListView {
     id: rowView
 
     width: parent.width

@@ -44,7 +44,7 @@ MMComponents.MMPage {
       onSearchTextChanged: featuresModel.searchExpression = searchBar.text
     }
 
-    ListView {
+    MMComponents.MMListView {
       id: listView
 
       width: parent.width

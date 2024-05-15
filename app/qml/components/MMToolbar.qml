@@ -41,7 +41,7 @@ Rectangle {
     // center the content
     x: __style.safeAreaLeft
 
-    ListView {
+    MMListView {
       id: toolbar
 
       onWidthChanged: root.recalculate()
