@@ -14,16 +14,13 @@
  ***************************************************************************/
 
 #include <UIKit/UIKit.h>
-<<< <<< < HEAD
 #include <sys/utsname.h>
-== == == =
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #include <QString>
-  >>> >>> > 05801f46( ios pdf viewing )
 #include "iosutils.h"
 
-  void IosUtils::setIdleTimerDisabled()
+void IosUtils::setIdleTimerDisabled()
 {
   [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 }
