@@ -67,7 +67,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   textField.readOnly: true
 
   onTextClicked: root.openCalendar()
-  onRightContentClicked: root.openCalendar()
+  onRightContentClicked: root.newDateSelected( new Date() )
 
   rightContent: MMComponents.MMIcon {
     id: rightIcon
