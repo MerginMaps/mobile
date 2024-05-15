@@ -58,7 +58,7 @@ MMComponents.MMPage {
         verticalAlignment: Text.AlignVCenter
       }
 
-      ListView {
+      MMComponents.MMListView {
         id: fieldList
 
         model: fieldsModel

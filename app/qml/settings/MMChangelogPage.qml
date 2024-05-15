@@ -21,7 +21,7 @@ MMPage {
   pageHeader.title: qsTr( "Changelog" )
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
-  pageContent: ListView {
+  pageContent: MMListView {
     width: parent.width
     height: parent.height
 

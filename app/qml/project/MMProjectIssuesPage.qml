@@ -31,7 +31,7 @@ MMComponents.MMPage {
   onBackClicked: root.visible = false
   pageHeader.title: qsTr("Project issues")
 
-  pageContent: ListView {
+  pageContent: MMComponents.MMListView {
     id: mainList
 
     anchors.fill: parent

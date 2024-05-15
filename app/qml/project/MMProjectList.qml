@@ -47,7 +47,7 @@ Item {
     controllerModel.listProjects( searchText )
   }
 
-  ListView {
+  MMComponents.MMListView {
     id: listview
 
     Component.onCompleted: {

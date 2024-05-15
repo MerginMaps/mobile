@@ -71,7 +71,7 @@ MMPage {
     width: parent.width
     height: parent.height
 
-    ListView {
+    MMListView {
       id: listView
 
       width: parent.width

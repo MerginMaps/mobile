@@ -15,7 +15,7 @@ import QtQuick.Layouts
 import "../components" as MMComponents
 import "../inputs"
 
-ListView {
+MMComponents.MMListView {
   id: root
 
   property var basemodel: null

@@ -27,7 +27,7 @@ MMComponents.MMPage {
     width: parent.width
     height: parent.height
 
-    ListView {
+    MMComponents.MMListView {
       id: listview
 
       property bool showTopTitle: visibleArea.yPosition * height > ( headerItem.contentHeight / 2 )

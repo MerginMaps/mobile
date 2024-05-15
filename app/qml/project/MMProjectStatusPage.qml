@@ -47,7 +47,7 @@ MMComponents.MMPage {
     MMComponents.MMListSpacer { id: spacer; height: __style.spacing40 }
 
     // With changes content
-    ListView {
+    MMComponents.MMListView {
       id: statusList
 
       anchors.top: spacer.bottom

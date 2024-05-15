@@ -205,7 +205,7 @@ Item {
 
         visible: internal.showFields
 
-        ListView {
+        MMComponents.MMListView {
           width: parent.width
           height: contentHeight
 
