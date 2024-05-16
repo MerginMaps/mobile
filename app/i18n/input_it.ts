@@ -61,22 +61,22 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="232"/>
+        <location filename="../androidutils.cpp" line="252"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>L&apos;archiviazione non è consentita, si prega di autorizzarla nelle impostazioni per caricare le immagini dalla galleria</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="236"/>
+        <location filename="../androidutils.cpp" line="256"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
         <translation>Mergin Maps necessita dell&apos;autorizzazione all&apos;archiviazione per caricare le immagini dalla galleria</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="254"/>
+        <location filename="../androidutils.cpp" line="274"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>L&apos;utilizzo della fotocamera non è consentita, si prega di autorizzarne l&apos;utilizzo nelle impostazioni </translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="258"/>
+        <location filename="../androidutils.cpp" line="278"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Input necessita di utilizzare la fotocamera per scattare una fotografia</translation>
     </message>
@@ -163,119 +163,119 @@ Non verrà aggiunto al progetto.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="209"/>
+        <location filename="../inpututils.cpp" line="211"/>
         <source>just now</source>
         <translation>Proprio ora</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="214"/>
+        <location filename="../inpututils.cpp" line="216"/>
         <source>%1 minutes ago</source>
         <translation>%1 minuti fa</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="214"/>
+        <location filename="../inpututils.cpp" line="216"/>
         <source>%1 minute ago</source>
         <translation>%1 minuto fa</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="219"/>
+        <location filename="../inpututils.cpp" line="221"/>
         <source>%1 hours ago</source>
         <translation>%1 ore fa</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="219"/>
+        <location filename="../inpututils.cpp" line="221"/>
         <source>%1 hour ago</source>
         <translation>%1 ora fa</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="223"/>
-        <location filename="../inpututils.cpp" line="228"/>
+        <location filename="../inpututils.cpp" line="225"/>
+        <location filename="../inpututils.cpp" line="230"/>
         <source>%1 days ago</source>
         <translation>%1 giorni fa</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="223"/>
-        <location filename="../inpututils.cpp" line="228"/>
+        <location filename="../inpututils.cpp" line="225"/>
+        <location filename="../inpututils.cpp" line="230"/>
         <source>%1 day ago</source>
         <translation>%1 giorno fa</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="233"/>
+        <location filename="../inpututils.cpp" line="235"/>
         <source>%1 weeks ago</source>
         <translation>%1 settimane fa</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="233"/>
+        <location filename="../inpututils.cpp" line="235"/>
         <source>%1 week ago</source>
         <translation>%1 settimana fa</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="238"/>
+        <location filename="../inpututils.cpp" line="240"/>
         <source>%1 months ago</source>
         <translation>%1 mesi fa</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="238"/>
+        <location filename="../inpututils.cpp" line="240"/>
         <source>%1 month ago</source>
         <translation>%1 mese fa</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="243"/>
+        <location filename="../inpututils.cpp" line="245"/>
         <source>%1 years ago</source>
         <translation>%1 anni fa</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="243"/>
+        <location filename="../inpututils.cpp" line="245"/>
         <source>%1 year ago</source>
         <translation>%1 anno fa</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1477"/>
+        <location filename="../inpututils.cpp" line="1479"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>risoluzione dello schermo: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1478"/>
+        <location filename="../inpututils.cpp" line="1480"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI dello schermo: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1479"/>
+        <location filename="../inpututils.cpp" line="1481"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>dimensioni dello schermo: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1480"/>
+        <location filename="../inpututils.cpp" line="1482"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>pixel ratio del dispositivo riportato: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1481"/>
+        <location filename="../inpututils.cpp" line="1483"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>pixel ratio del dispositivo calcolato: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1482"/>
+        <location filename="../inpututils.cpp" line="1484"/>
         <source>used dp scale: %1</source>
         <translation>usa scala dp: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2011"/>
+        <location filename="../inpututils.cpp" line="2013"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>È necessario aggiungere almeno %1 punti per ciascuna parte.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2015"/>
+        <location filename="../inpututils.cpp" line="2017"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>È necessario aggiungere almeno %1 punti.</translation>
     </message>
@@ -763,28 +763,33 @@ Non verrà aggiunto al progetto.</translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="87"/>
-        <location filename="../qml/form/MMFormPage.qml" line="188"/>
+        <location filename="../qml/form/MMFormPage.qml" line="194"/>
         <source>Edit feature</source>
         <translation>Modifica elemento</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="201"/>
+        <location filename="../qml/form/MMFormPage.qml" line="207"/>
         <source>Delete</source>
         <translation>Cancella</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="210"/>
+        <location filename="../qml/form/MMFormPage.qml" line="216"/>
         <source>Edit geometry</source>
         <translation>Modifica geometria</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="446"/>
+        <location filename="../qml/form/MMFormPage.qml" line="452"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>L&apos;elemento non può essere salvato, controlla tutti i campi richiesti</translation>
     </message>
 </context>
 <context>
     <name>MMFormPhotoEditor</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="80"/>
+        <source>Photo is missing.</source>
+        <translation>La foto è mancante.</translation>
+    </message>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="105"/>
         <source>Open Image</source>
@@ -1138,12 +1143,12 @@ Non verrà aggiunto al progetto.</translation>
 <context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="53"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="55"/>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="137"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="139"/>
         <source>Confirm selection</source>
         <translation>Conferma la selezione</translation>
     </message>
@@ -1375,7 +1380,7 @@ Non verrà aggiunto al progetto.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
-        <source>You need to be signed in to your Mergin Maps account in order to synchronize the project.</source>
+        <source>You need to be signed in to your Mergin Maps account in order to synchronise the project.</source>
         <translation>Devi aver fatto l&apos;accesso al tuo account Mergin Maps per sincronizzare un progetto.</translation>
     </message>
     <message>
@@ -1398,7 +1403,7 @@ Non verrà aggiunto al progetto.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="19"/>
-        <source>You are not allowed to synchronize your changes in this project. Contact the project owner to assign you the correct permission. If you are the project owner, log in to the dashboard.</source>
+        <source>You are not allowed to synchronise your changes in this project. Contact the project owner to assign you the correct permission. If you are the project owner, log in to the dashboard.</source>
         <translation>Non sei abilitato a sincronizzare le modifiche. Contatta il proprietario del progetto per farti assegnare i permessi corretti. Se sei il proprietario del progetto, accedi alla dashboard.</translation>
     </message>
     <message>
@@ -1610,7 +1615,7 @@ Non verrà aggiunto al progetto.</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="291"/>
-        <source>Synchronize project</source>
+        <source>Synchronise project</source>
         <translation>Sincronizza progetto</translation>
     </message>
     <message>
@@ -1707,7 +1712,7 @@ Non verrà aggiunto al progetto.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="162"/>
-        <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
+        <source>Could not synchronise project, please make sure you are logged in and have sufficient rights.</source>
         <translation>Impossibile sincronizzare il progetto, assicurati di aver fatto l&apos;accesso e di avere permessi sufficienti.</translation>
     </message>
     <message>
@@ -1933,7 +1938,7 @@ Non verrà aggiunto al progetto.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="25"/>
-        <source>Any unsynchronized changes will be lost in project 
+        <source>Any unsynchronised changes will be lost in project 
  %1</source>
         <translation>Ogni modifica non sincronizzata sarà persa.
  %1</translation>
@@ -2300,7 +2305,7 @@ Non verrà aggiunto al progetto.</translation>
     <name>MMSyncFailedDialog</name>
     <message>
         <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="27"/>
-        <source>Failed to synchronize your changes</source>
+        <source>Failed to synchronise your changes</source>
         <translation>Sincronizzazione delle modifiche fallita</translation>
     </message>
     <message>
@@ -2438,72 +2443,72 @@ only allows up to %1 downloaded projects.</source>
 consente solo fino a %1 progetti scaricati.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="818"/>
+        <location filename="../../core/merginapi.cpp" line="820"/>
         <source>Username must have at least 4 characters</source>
         <translation>Il nome utente deve avere almeno 4 caratteri</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="825"/>
+        <location filename="../../core/merginapi.cpp" line="827"/>
         <source>Username contains invalid characters</source>
         <translation>Il nome utente contiene caratteri invalidi</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="832"/>
+        <location filename="../../core/merginapi.cpp" line="834"/>
         <source>Please enter a valid email</source>
         <translation>Per favore inserisci un indirizzo email valido</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="839"/>
+        <location filename="../../core/merginapi.cpp" line="841"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>La password non è abbastanza sicura. Deve avere%1 almeno 8 caratteri%1 con caratteri minuscoli%1 e caratteri maiuscoli1% e deve contenere cifre o caratteri speciali</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="852"/>
+        <location filename="../../core/merginapi.cpp" line="854"/>
         <source>Passwords do not match</source>
         <translation>Le password non coincidono</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="859"/>
+        <location filename="../../core/merginapi.cpp" line="861"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Si prega di accettare le Condizioni e l&apos;Informativa sulla privacy</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="889"/>
+        <location filename="../../core/merginapi.cpp" line="891"/>
         <source>Marketing source cannot be empty</source>
         <translation>La fonte dell&apos;informazione su Mergin Maps non può essere vuota</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="897"/>
+        <location filename="../../core/merginapi.cpp" line="899"/>
         <source>Industry cannot be empty</source>
         <translation>Il settore non può essere vuoto</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1301"/>
+        <location filename="../../core/merginapi.cpp" line="1303"/>
         <source>Registration successful</source>
         <translation>Registrazione avvenuta con successo</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1323"/>
+        <location filename="../../core/merginapi.cpp" line="1325"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>Non sono consentite nuove registrazioni sul server Mergin selezionato. Per favore controlla con il tuo amministratore.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1355"/>
+        <location filename="../../core/merginapi.cpp" line="1357"/>
         <source>Workspace created</source>
         <translation>Spazio di lavoro creato</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1683"/>
+        <location filename="../../core/merginapi.cpp" line="1685"/>
         <source>Project detached from the server</source>
         <translation>Il progetto non è collegato al server</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3843"/>
+        <location filename="../../core/merginapi.cpp" line="3845"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Il nome dello spazio di lavoro contiene caratteri invalidi</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3909"/>
+        <location filename="../../core/merginapi.cpp" line="3911"/>
         <source>Workspace %1 already exists</source>
         <translation>Lo spazio di lavoro %1 esiste già</translation>
     </message>
@@ -2703,12 +2708,12 @@ consente solo fino a %1 progetti scaricati.</translation>
         <translation>Fix sconosciuto</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="531"/>
+        <location filename="../main.cpp" line="532"/>
         <source>Report submitted. Please contact us on %1</source>
         <translation>Report inviato. Per favore contattaci su%1</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="536"/>
+        <location filename="../main.cpp" line="537"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Impossibile inviare il report. Per favore controlla la tua connessione a Internet.</translation>
     </message>
@@ -2764,83 +2769,83 @@ consente solo fino a %1 progetti scaricati.</translation>
         <translation>Ingrandisci il progetto</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="321"/>
+        <location filename="../qml/main.qml" line="322"/>
         <source>Map themes</source>
         <translation>Temi mappa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="332"/>
+        <location filename="../qml/main.qml" line="333"/>
         <source>Position tracking</source>
         <translation>Tracciamento posizione</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="343"/>
+        <location filename="../qml/main.qml" line="344"/>
         <source>Local changes</source>
         <translation>Modifiche locali</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="352"/>
+        <location filename="../qml/main.qml" line="353"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="547"/>
-        <location filename="../qml/main.qml" line="555"/>
+        <location filename="../qml/main.qml" line="548"/>
+        <location filename="../qml/main.qml" line="556"/>
         <source>not tracking</source>
         <translation>non in tracciamento</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="748"/>
+        <location filename="../qml/main.qml" line="749"/>
         <source>Select feature</source>
         <translation>Seleziona elemento</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="801"/>
-        <source>Successfully synchronized</source>
-        <translation>Sincronizzato con successo</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="832"/>
+        <location filename="../qml/main.qml" line="833"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Un altro utente sta sincronizzando, riproveremo più tardi</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="836"/>
+        <location filename="../qml/main.qml" line="837"/>
         <source>Details</source>
         <translation>Dettagli</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="840"/>
-        <source>There was an issue during synchronization, we will try again. Click to learn more</source>
-        <translation>Errore durante la sincronizzazione, riproveremo più tardi. Clicca per avere maggiori informazioni</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="856"/>
+        <location filename="../qml/main.qml" line="857"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Impossibile comunicare con Mergin. Prova a migliorare la qualità della tua connessione</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="905"/>
+        <location filename="../qml/main.qml" line="906"/>
         <source>Up to date</source>
         <translation>Aggiornato</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="951"/>
+        <location filename="../qml/main.qml" line="957"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Problemi durante il caricamento del progetto. %1Vedi i dettagli%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="660"/>
+        <location filename="../qml/main.qml" line="661"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Picchettamento disabilitato perché la posizione non è disponibile!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="977"/>
+        <location filename="../qml/main.qml" line="802"/>
+        <source>Successfully synchronised</source>
+        <translation>Sincronizzato con successo</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="841"/>
+        <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
+        <translation>Errore durante la sincronizzazione, riproveremo più tardi. Clicca per avere maggiori informazioni</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="978"/>
         <source>Could not read the project file:</source>
         <translation>Impossibile leggere il file del progetto:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1002"/>
+        <location filename="../qml/main.qml" line="1003"/>
         <source>Press back again to quit the app</source>
         <translation>Premi di nuovo indietro per uscire dall&apos;app</translation>
     </message>
