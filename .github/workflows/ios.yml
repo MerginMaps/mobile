@@ -230,7 +230,7 @@ jobs:
           INPUTAPP_BOT_APPLEID_PASS: ${{ secrets.INPUTAPP_BOT_APPLEID_PASS }}
           INPUTAPP_BOT_APPLEID_USER: ${{ secrets.INPUTAPP_BOT_APPLEID_USER }}
           INPUTAPP_BOT_GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-        if: ( github.ref == 'refs/heads/master' ) && ( success() )
+        if: success()
         run: |
           CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" build-INPUT/app/CMakeFiles/Input.dir/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
