@@ -503,6 +503,7 @@ target_link_libraries(
          Jpeg::Jpeg
          Geotiff::Geotiff
          Lzma::Lzma
+         Zstd::Zstd
          Bz2::Bz2
 )
 

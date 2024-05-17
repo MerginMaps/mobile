@@ -1,4 +1,4 @@
-name: macOS Build
+name: macOS arm64 Build
 on:
   push:
     paths:
@@ -9,7 +9,7 @@ on:
     - 'cmake_templates/**'
     - 'test/**'
     - 'CMakeLists.txt'
-    - '.github/workflows/macos.yml'
+    - '.github/workflows/macos_arm64.yml'
 
   release:
     types:
@@ -17,20 +17,20 @@ on:
 
 env:
   QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
-  INPUT_SDK_VERSION: x64-osx-20240517-205
+  INPUT_SDK_VERSION: arm64-osx-20240517-4
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 0
   CMAKE_VERSION: '3.29.0'
   XC_VERSION: ${{ '15.2' }}
 
 concurrency:
-  group: ci-${{github.ref}}-macos
+  group: ci-${{github.ref}}-macos-arm64
   cancel-in-progress: true
 
 jobs:
-  macos_build:
+  macos_arm64_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
       - name: Checkout Input
         uses: actions/checkout@v3
@@ -104,7 +104,7 @@ jobs:
           dir: ${{ github.workspace }}
           modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
           cache: true
-          cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-mac
+          cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-mac-arm64
 
       # Input SDK
       - name: Cache Input-SDK
@@ -120,8 +120,8 @@ jobs:
           wget -O \
             ${{ github.workspace }}/input-sdk.tar.gz \
             https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk/x64-osx
-          cd ${{ github.workspace }}/input-sdk/x64-osx
+          mkdir -p ${{ github.workspace }}/input-sdk/arm64-osx
+          cd ${{ github.workspace }}/input-sdk/arm64-osx
           tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
 
       # Build Input App
@@ -130,35 +130,6 @@ jobs:
             BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
             echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
             echo "Version code: ${BUILD_NUM}"
-
-      # Do Tests 
-      - name: build Input (Debug)
-        run: |
-          mkdir -p build-Input-db
-          cd build-Input-db
-          
-          cmake \
-             -DCMAKE_BUILD_TYPE=Debug \
-             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
-             -DUSE_SERVER_API_KEY=TRUE \
-             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-osx \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
-             -DCOVERAGE=TRUE \
-             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-             -DENABLE_TESTS=TRUE \
-             -GNinja \
-             -S ../input
-             
-          ninja
-
-      - name: run tests
-        env:
-          TEST_MERGIN_URL: https://test.dev.merginmaps.com/
-          TEST_API_USERNAME: test_mobileapp2
-          TEST_API_PASSWORD: ${{ secrets.TEST_API_PASSWORD }}
-        run: |
-          cd build-Input-db/
-          ctest --output-on-failure
 
       # Package
       - name: build Input (Release)
@@ -172,7 +143,7 @@ jobs:
              -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${QT_VERSION}/macos \
              -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
              -DUSE_SERVER_API_KEY=TRUE \
-             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-osx \
+             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64-osx \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
              -GNinja \
