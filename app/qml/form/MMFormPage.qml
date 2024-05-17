@@ -170,13 +170,6 @@ Page {
               opacity: 1 // invisible
               height: 20 * __dp
             }
-
-            // boundsBehavior: Flickable.StopAtBounds
-            // bottomMargin: 0
-
-            cacheBuffer: 0
-            // 320 on macOS
-            Component.onCompleted: console.log(" -> cache:", cacheBuffer)
           }
         }
       }
