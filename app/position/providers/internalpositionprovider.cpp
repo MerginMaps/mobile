@@ -13,7 +13,7 @@
 #include "qgis.h"
 
 InternalPositionProvider::InternalPositionProvider( QObject *parent )
-  : AbstractPositionProvider( QStringLiteral( "devicegps" ), QStringLiteral( "internal" ), QStringLiteral( "Internal" ), parent )
+  : AbstractPositionProvider( QStringLiteral( "devicegps" ), QStringLiteral( "internal" ), tr( "Internal" ), parent )
 {
   mGpsPositionSource = std::unique_ptr<QGeoPositionInfoSource>( QGeoPositionInfoSource::createDefaultSource( nullptr ) );
 

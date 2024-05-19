@@ -18,6 +18,10 @@
 
 #include "position/providers/internalpositionprovider.h"
 #include "position/providers/simulatedpositionprovider.h"
+#ifdef ANDROID
+#include "position/providers/androidpositionprovider.h"
+#include <android/log.h>
+#endif
 
 #include "appsettings.h"
 #include "inpututils.h"
@@ -105,6 +109,16 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
       QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
       return provider;
     }
+#ifdef ANDROID
+    else if ( id == QStringLiteral( "android_fused" ) || id == QStringLiteral( "android_gps" ) )
+    {
+      bool fused = ( id == QStringLiteral( "android_fused" ) );
+      __android_log_print( ANDROID_LOG_INFO, "CPP", "MAKE PROVIDER %d", fused );
+      AbstractPositionProvider *provider = new AndroidPositionProvider( fused );
+      QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
+      return provider;
+    }
+#endif
     else // id == devicegps
     {
       AbstractPositionProvider *provider = new InternalPositionProvider();
@@ -132,13 +146,10 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *app
       return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "simulated" ) );
     }
   }
-  else if ( providerId == QStringLiteral( "devicegps" ) )
+  else if ( providerId == QStringLiteral( "devicegps" ) || providerId == QStringLiteral( "simulated" ) ||
+            providerId == QStringLiteral( "android_fused" ) || providerId == QStringLiteral( "android_gps" ) )
   {
-    return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "devicegps" ) );
-  }
-  else if ( providerId == QStringLiteral( "simulated" ) )
-  {
-    return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "simulated" ) );
+    return constructProvider( QStringLiteral( "internal" ), providerId );
   }
   else
   {
