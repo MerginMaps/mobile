@@ -76,7 +76,7 @@ MMPage {
       MMSettingsComponents.MMSettingsItem {
         width: parent.width
         title: qsTr("Manage GPS receivers")
-        value: "Internal"
+        value: __positionKit.positionProvider.name()
 
         onClicked: root.manageGpsClicked()
       }

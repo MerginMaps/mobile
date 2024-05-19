@@ -20,6 +20,9 @@ PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractLis
     mProviders.push_front( simulated );
   }
 
+  // Keep the names of position providers in sync with names
+  // used in the constructors of the providers...
+
   PositionProvider internal;
   internal.name = tr( "Internal" );
   internal.description = tr( "GPS receiver of this device" );
@@ -27,6 +30,22 @@ PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractLis
   internal.providerId = "devicegps";
 
   mProviders.push_front( internal );
+
+#ifdef ANDROID
+  PositionProvider internalFused;
+  internalFused.name = tr( "Android (fused)" );
+  internalFused.description = tr( "Using GPS, Wifi and sensors" );
+  internalFused.providerType = "internal";
+  internalFused.providerId = "android_fused";
+  mProviders.push_front( internalFused );
+
+  PositionProvider internalGps;
+  internalGps.name = tr( "Android (gps)" );
+  internalGps.description = tr( "Using GPS only" );
+  internalGps.providerType = "internal";
+  internalGps.providerId = "android_gps";
+  mProviders.push_front( internalGps );
+#endif
 }
 
 PositionProvidersModel::~PositionProvidersModel() = default;
