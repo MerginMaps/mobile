@@ -245,6 +245,7 @@ find_package(Zip REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Geotiff REQUIRED)
 find_package(Lzma REQUIRED)
+find_package(Zstd REQUIRED)
 find_package(MiniZip REQUIRED)
 
 if (IOS OR MACOS)
