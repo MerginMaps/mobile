@@ -97,7 +97,6 @@ void AttributeFormModel::onFormDataChanged( const QUuid id, const QVector<int> r
   if ( rowIsValid( row ) )
   {
     const QModelIndex modelIndex = index( row, 0 );
-    qDebug() << "DEBUG " << roles << " " << data( modelIndex, 273 );
     emit dataChanged( modelIndex, modelIndex, roles );
   }
 }
