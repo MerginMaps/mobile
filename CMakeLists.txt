@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.22)
 # TODO automatically change with the scripts/update version script
 set(MM_VERSION_MAJOR "2024")
 set(MM_VERSION_MINOR "1")
-set(MM_VERSION_PATCH "1")
+set(MM_VERSION_PATCH "2")
 set(QT_VERSION_DEFAULT "6.6.3")
 
 # Note: we cannot set this for non-android build, since CMake will start looking for
@@ -245,6 +245,7 @@ find_package(Zip REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Geotiff REQUIRED)
 find_package(Lzma REQUIRED)
+find_package(Zstd REQUIRED)
 find_package(MiniZip REQUIRED)
 
 if (IOS OR MACOS)

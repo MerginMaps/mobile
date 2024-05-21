@@ -29,8 +29,8 @@ jobs:
       JDK_VERSION: 11
       SDK_PLATFORM: android-33
       SDK_BUILD_TOOLS: 33.0.1
-      INPUT_SDK_VERSION_ARM: arm-android-20240415-218
-      INPUT_SDK_VERSION_ARM64: arm64-android-20240415-218
+      INPUT_SDK_VERSION_ARM: arm-android-20240517-224
+      INPUT_SDK_VERSION_ARM64: arm64-android-20240517-224
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       CACHE_VERSION: 0
@@ -158,7 +158,7 @@ jobs:
         uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION_ARM }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         if: steps.cache-input-sdk.outputs.cache-hit != 'true'
