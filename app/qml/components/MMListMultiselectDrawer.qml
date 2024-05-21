@@ -147,7 +147,6 @@ MMDrawer {
   function addOrRemoveSelected( val ) {
     if ( root.selected.indexOf( val ) === -1 ) {
       root.selected.push( val )
-      root.selected = root.selected.slice()
     }
     else {
       root.selected = root.selected.filter( ( x ) => x !== val )
