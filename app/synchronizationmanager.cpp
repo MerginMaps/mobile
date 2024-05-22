@@ -231,22 +231,12 @@ void SynchronizationManager::onProjectSyncProgressChanged( const QString &projec
 
 }
 
-void SynchronizationManager::onProjectCreated(const QString &projectFullName, bool result)
+void SynchronizationManager::onProjectCreated( const QString &projectFullName, bool result )
 {
-    if (!result)
-    {
-        qDebug() << "Project creation result is false for:" << projectFullName; // Debug statement
-        //qDebug() << "mSyncProcesses" << mSyncProcesses;
-        if (mSyncProcesses.contains(projectFullName))
-        {
-            qDebug() << "Removing project from sync processes:" << projectFullName; // Debug statement
-            mSyncProcesses.remove(projectFullName);
-        }
-    }
-    else
-    {
-        qDebug() << "Project creation result is true for:" << projectFullName; // Debug statement
-    }
+  if ( !result && mSyncProcesses.contains( projectFullName ) )
+  {
+    mSyncProcesses.remove( projectFullName );
+  }
 }
 
 void SynchronizationManager::onProjectSyncFailure(

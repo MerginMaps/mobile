@@ -86,7 +86,7 @@ class SynchronizationManager : public QObject
     void onProjectSyncFailure( const QString &message, const QString &topic, int httpCode, const QString &projectFullName );
     void onProjectAttachedToMergin( const QString &projectFullName, const QString &previousName );
     void onProjectReloadNeededAfterSync( const QString &projectFullName );
-    void onProjectCreated(const QString &projectName, bool result);
+    void onProjectCreated( const QString &projectName, bool result );
 
   private:
 
