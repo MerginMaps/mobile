@@ -23,6 +23,7 @@ SynchronizationManager::SynchronizationManager(
     QObject::connect( mMerginApi, &MerginApi::pushCanceled, this, &SynchronizationManager::onProjectSyncCanceled );
     QObject::connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::onProjectSyncFinished );
     QObject::connect( mMerginApi, &MerginApi::networkErrorOccurred, this, &SynchronizationManager::onProjectSyncFailure );
+    QObject::connect( mMerginApi, &MerginApi::projectCreated, this, &SynchronizationManager::onProjectCreated );
     QObject::connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
     QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
     QObject::connect( mMerginApi, &MerginApi::projectReloadNeededAfterSync, this, &SynchronizationManager::onProjectReloadNeededAfterSync );
@@ -228,6 +229,24 @@ void SynchronizationManager::onProjectSyncProgressChanged( const QString &projec
     emit syncProgressChanged( projectFullName, progress );
   }
 
+}
+
+void SynchronizationManager::onProjectCreated(const QString &projectFullName, bool result)
+{
+    if (!result)
+    {
+        qDebug() << "Project creation result is false for:" << projectFullName; // Debug statement
+        //qDebug() << "mSyncProcesses" << mSyncProcesses;
+        if (mSyncProcesses.contains(projectFullName))
+        {
+            qDebug() << "Removing project from sync processes:" << projectFullName; // Debug statement
+            mSyncProcesses.remove(projectFullName);
+        }
+    }
+    else
+    {
+        qDebug() << "Project creation result is true for:" << projectFullName; // Debug statement
+    }
 }
 
 void SynchronizationManager::onProjectSyncFailure(
