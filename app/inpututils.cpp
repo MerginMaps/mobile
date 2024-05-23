@@ -1046,7 +1046,7 @@ const QUrl InputUtils::getThemeIcon( const QString &name )
   return QUrl( path );
 }
 
-const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVariantMap &config, const QgsField &field, const QgsRelation &relation )
+const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVariantMap &config, const QgsField &field, const QgsRelation &relation, const QString &fieldName )
 {
   QString widgetName = widgetNameIn.toLower();
 
@@ -1129,7 +1129,7 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
     }
 
     // Mind this hack - fields with `no-gallery-use` won't use gallery, but normal word tags instead
-    if ( field.name().contains( "nogallery", Qt::CaseInsensitive ) || field.alias().contains( "nogallery", Qt::CaseInsensitive ) )
+    if ( fieldName.contains( "nogallery", Qt::CaseInsensitive ) || field.alias().contains( "nogallery", Qt::CaseInsensitive ) )
     {
       useGallery = false;
     }
