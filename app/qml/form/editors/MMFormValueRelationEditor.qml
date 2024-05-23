@@ -74,15 +74,6 @@ MMFormComboboxBaseEditor {
       valueRole: "FeatureId"
       textRole: "FeatureTitle"
 
-      selected: {
-        if ( internal.allowMultivalue ) {
-          return vrModel.convertFromQgisType( root._fieldValue, MM.FeaturesModel.FeatureId )
-        }
-        else {
-          return [root._fieldValue]
-        }
-      }
-
       list.model: MM.ValueRelationFeaturesModel {
         id: vrDropdownModel
 
@@ -120,7 +111,16 @@ MMFormComboboxBaseEditor {
         close()
       }
 
-      Component.onCompleted: open()
+      Component.onCompleted: {
+        // We want to set the initial value of 'selected' property but not bind it so we avoid a binding loop
+        if ( internal.allowMultivalue ) {
+          selected = vrModel.convertFromQgisType( root._fieldValue, MM.FeaturesModel.FeatureId )
+        }
+        else {
+          selected = [root._fieldValue]
+        }
+        open()
+      }
     }
   }
 
