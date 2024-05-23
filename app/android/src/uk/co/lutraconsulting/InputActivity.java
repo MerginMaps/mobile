@@ -28,6 +28,14 @@ import android.view.WindowInsetsController;
 import android.graphics.Insets;
 import android.graphics.Color;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.content.ActivityNotFoundException;
+import java.io.File;
+import androidx.core.content.FileProvider;
+import android.widget.Toast;
+
 import androidx.core.view.WindowCompat;
 import androidx.core.splashscreen.SplashScreen;
 
@@ -121,6 +129,43 @@ public class InputActivity extends QtActivity
   public void hideSplashScreen()
   {
     keepSplashScreenVisible = false;
+  }
+
+  public boolean openFile( String filePath ) {
+    File file = new File( filePath );
+
+    if ( !file.exists() ) 
+    {
+        return false;
+    }
+
+    Intent showFileIntent = new Intent( Intent.ACTION_VIEW );
+
+    try 
+    {
+        Uri fileUri = FileProvider.getUriForFile( this, "uk.co.lutraconsulting.fileprovider", file );
+
+        showFileIntent.setData( fileUri );
+
+        // FLAG_GRANT_READ_URI_PERMISSION grants temporary read permission to the content URI.
+        // FLAG_ACTIVITY_NEW_TASK is used when starting an Activity from a non-Activity context.
+        showFileIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION );
+    } 
+    catch ( IllegalArgumentException e )
+    {
+        return false;
+    }
+
+    if ( showFileIntent.resolveActivity( getPackageManager() ) != null ) 
+    {
+        startActivity( showFileIntent );
+    } 
+    else 
+    {
+        return false;
+    }
+    
+    return true;
   }
 
   public void quitGracefully()

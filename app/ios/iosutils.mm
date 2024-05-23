@@ -15,6 +15,9 @@
 
 #include <UIKit/UIKit.h>
 #include <sys/utsname.h>
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#include <QString>
 #include "iosutils.h"
 
 void IosUtils::setIdleTimerDisabled()
@@ -53,4 +56,39 @@ QString IosUtils::getDeviceModelImpl()
   uname( &systemInfo );
   QString deviceModel = QString::fromUtf8( systemInfo.machine );
   return deviceModel.toUpper();
+}
+
+@interface FileOpener : UIViewController <UIDocumentInteractionControllerDelegate>
+@end
+
+@implementation FileOpener
+
+- ( UIViewController * )documentInteractionControllerViewControllerForPreview:( UIDocumentInteractionController * )ctrl
+{
+  return self;
+}
+
+@end
+
+bool IosUtils::openFileImpl( const QString &filePath )
+{
+  static FileOpener *viewer = nil;
+  NSURL *resourceURL = [NSURL fileURLWithPath:filePath.toNSString()];
+
+  UIDocumentInteractionController *interactionCtrl = [UIDocumentInteractionController interactionControllerWithURL:resourceURL];
+  UIViewController *rootViewController = [[[[UIApplication sharedApplication] windows] firstObject] rootViewController];
+
+  viewer = [[FileOpener alloc] init];
+  [rootViewController addChildViewController: viewer];
+  interactionCtrl.delegate = ( id<UIDocumentInteractionControllerDelegate> )viewer;
+
+  if ( ![interactionCtrl presentPreviewAnimated:NO] )
+  {
+    if ( ![interactionCtrl presentOptionsMenuFromRect:CGRectZero inView:viewer.view animated:NO] )
+    {
+      return false;
+    }
+  }
+
+  return true;
 }

@@ -69,6 +69,7 @@ class AndroidUtils: public QObject
       */
     Q_INVOKABLE void callImagePicker( const QString &code = "" );
     Q_INVOKABLE void callCamera( const QString &targetPath, const QString &code = "" );
+    Q_INVOKABLE bool openFile( const QString &filePath );
 
 #ifdef ANDROID
     const static int MEDIA_CODE = 101;

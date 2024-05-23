@@ -36,6 +36,7 @@ MMPrivateComponents.MMBaseInput {
   property string _fieldTitle: parent.fieldTitle
   property string _fieldErrorMessage: parent.fieldErrorMessage
   property string _fieldWarningMessage: parent.fieldWarningMessage
+  property string _fieldHomePath: parent.fieldHomePath
 
   property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
   property bool _fieldRememberValueState: parent.fieldRememberValueState
@@ -117,7 +118,13 @@ MMPrivateComponents.MMBaseInput {
       radius: __style.radius12
     }
 
-    onLinkActivated: ( link ) => Qt.openUrlExternally( link )
+    onLinkActivated: function ( link ) {
+      if ( !__inputUtils.openLink( root._fieldHomePath, link.toString( ) ) )
+      {
+        __notificationModel.addError( "Could not open the file. It may not exist, could be invalid, or there might be no application available to open it." )
+      }
+    }
+
     onTextChanged: root.editorValueChanged( textArea.text, textArea.text === "" )
   }
 

@@ -20,6 +20,7 @@ MMPrivateComponents.MMBaseInput {
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
 
   property string _fieldTitle: parent.fieldTitle
+  property string _fieldHomePath: parent.fieldHomePath
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
@@ -47,8 +48,11 @@ MMPrivateComponents.MMBaseInput {
       leftPadding: __style.margin20
       rightPadding: __style.margin20
 
-      onLinkActivated: function( link ) {
-        Qt.openUrlExternally( link )
+      onLinkActivated: function ( link ) {
+        if ( !__inputUtils.openLink( root._fieldHomePath, link.toString( ) ) )
+        {
+          __notificationModel.addError( "Could not open the file. It may not exist, could be invalid, or there might be no application available to open it." )
+        }
       }
     }
   }
