@@ -233,9 +233,11 @@ void SynchronizationManager::onProjectSyncProgressChanged( const QString &projec
 
 void SynchronizationManager::onProjectCreated( const QString &projectFullName, bool result )
 {
-  if ( !result && mSyncProcesses.contains( projectFullName ) )
+  QString projectName = projectFullName.section( '/', 1, 1 );
+
+  if ( !result && mSyncProcesses.contains( projectName ) )
   {
-    mSyncProcesses.remove( projectFullName );
+    mSyncProcesses.remove( projectName );
   }
 }
 
