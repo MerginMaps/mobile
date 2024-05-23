@@ -233,7 +233,8 @@ void SynchronizationManager::onProjectSyncProgressChanged( const QString &projec
 
 void SynchronizationManager::onProjectCreated( const QString &projectFullName, bool result )
 {
-  QString projectName = projectFullName.section( '/', 1, 1 );
+  QString projectNamespace, projectName;
+  MerginApi::extractProjectName( projectFullName, projectNamespace, projectName );
 
   if ( !result && mSyncProcesses.contains( projectName ) )
   {
