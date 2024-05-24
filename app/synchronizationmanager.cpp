@@ -23,6 +23,7 @@ SynchronizationManager::SynchronizationManager(
     QObject::connect( mMerginApi, &MerginApi::pushCanceled, this, &SynchronizationManager::onProjectSyncCanceled );
     QObject::connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::onProjectSyncFinished );
     QObject::connect( mMerginApi, &MerginApi::networkErrorOccurred, this, &SynchronizationManager::onProjectSyncFailure );
+    QObject::connect( mMerginApi, &MerginApi::projectCreated, this, &SynchronizationManager::onProjectCreated );
     QObject::connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
     QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
     QObject::connect( mMerginApi, &MerginApi::projectReloadNeededAfterSync, this, &SynchronizationManager::onProjectReloadNeededAfterSync );
@@ -228,6 +229,19 @@ void SynchronizationManager::onProjectSyncProgressChanged( const QString &projec
     emit syncProgressChanged( projectFullName, progress );
   }
 
+}
+
+void SynchronizationManager::onProjectCreated( const QString &projectFullName, bool result )
+{
+  // 'projectFullName' is in the format "namespace/projectName" and 'mSyncProcess' stores
+  // projects that were not previously uploaded to the server in the format "projectName".
+  QString projectNamespace, projectName;
+  MerginApi::extractProjectName( projectFullName, projectNamespace, projectName );
+
+  if ( !result && mSyncProcesses.contains( projectName ) )
+  {
+    mSyncProcesses.remove( projectName );
+  }
 }
 
 void SynchronizationManager::onProjectSyncFailure(
