@@ -233,6 +233,8 @@ void SynchronizationManager::onProjectSyncProgressChanged( const QString &projec
 
 void SynchronizationManager::onProjectCreated( const QString &projectFullName, bool result )
 {
+  // 'projectFullName' is in the format "namespace/projectName" and
+  // 'mSyncProcess' stores projects in the format "projectName" only
   QString projectNamespace, projectName;
   MerginApi::extractProjectName( projectFullName, projectNamespace, projectName );
 
