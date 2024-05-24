@@ -88,7 +88,8 @@ MMFormPhotoViewer {
   photoUrl: internal.absoluteImagePath
   hasCameraCapability: __androidUtils.isAndroid || __iosUtils.isIos
 
-  on_FieldValueChanged: internal.calculateAbsoluteImagePath()
+  on_FieldValueChanged: internal.setAbsoluteImagePath()
+  on_FieldValueIsNullChanged: internal.setAbsoluteImagePath()
 
   onCapturePhotoClicked: internal.capturePhoto()
   onChooseFromGalleryClicked: internal.chooseFromGallery()
@@ -200,27 +201,25 @@ MMFormPhotoViewer {
 
     property string imageSourceToDelete // used to postpone image deletion to when the form is saved
 
-    function calculateAbsoluteImagePath() {
+    //
+    // Sets path of the assigned photo to the absoluteImagePath.
+    //  - absoluteImagePath is the actual path on the device and is used by QML Image to show the image
+    //
+    function setAbsoluteImagePath() {
       let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
 
-      if ( root.photoComponent.status === Image.Error ) {
-        root.photoState = "notAvailable"
+      if ( !root._fieldValue || root._fieldValueIsNull ) {
+        root.photoState = "notSet"
         absoluteImagePath = ""
-        return
       }
       else if ( root._fieldValue && __inputUtils.fileExists( absolutePath ) ) {
         root.photoState = "valid"
         absoluteImagePath = "file://" + absolutePath
-        return
       }
-      else if ( !root._fieldValue || root._fieldValueIsNullfield ) {
-        root.photoState = "notSet"
+      else {
+        root.photoState = "notAvailable"
         absoluteImagePath = ""
-        return
       }
-
-      root.photoState = "notAvailable"
-      absoluteImagePath = "file://" + absolutePath
     }
 
     /**
