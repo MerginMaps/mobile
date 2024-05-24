@@ -205,7 +205,7 @@ Item {
 
 
           wrapMode: Text.Wrap
-          maximumLineCount: 2
+          maximumLineCount: 10
         }
       }
     }
