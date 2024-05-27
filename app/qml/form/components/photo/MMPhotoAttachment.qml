@@ -58,6 +58,8 @@ Rectangle {
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
           elide: Text.ElideMiddle
+
+          visible: root.enabled
         }
       }
 
@@ -95,6 +97,8 @@ Rectangle {
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
           elide: Text.ElideMiddle
+
+          visible: root.enabled
         }
       }
 
