@@ -161,8 +161,6 @@ MMBaseInput {
         leftPadding: leftContentGroupContainer.visible ? 0 : __style.margin20
         rightPadding: rightContentGroupContainer.visible ? 0 : __style.margin20
 
-        inputMethodHints: Qt.ImhNoPredictiveText
-
         placeholderTextColor: __style.darkGreyColor
 
         font: __style.p5

@@ -456,8 +456,6 @@ int main( int argc, char *argv[] )
   init_qgis( appBundleDir );
 
 #ifdef ANDROID
-  // See https://bugreports.qt.io/browse/QTBUG-86982 -> fix to make the predictive text disabled on Android
-  qputenv( "QT_ANDROID_ENABLE_WORKAROUND_TO_DISABLE_PREDICTIVE_TEXT", "1" );
   // See issue #3431 -> disable Android accessibility features to prevent ANRs
   qputenv( "QT_ANDROID_DISABLE_ACCESSIBILITY", "1" );
 #endif
