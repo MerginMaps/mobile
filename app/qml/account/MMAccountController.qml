@@ -130,6 +130,12 @@ Item {
       }
 
       onChangeServerClicked: function ( newServer ) {
+        // Ensure the newServer string ends with a '/'
+        // to format it as "https://my-server-app.com/"
+        if ( newServer && newServer.slice( -1 ) !== '/' ) {
+          newServer += '/';
+        }
+
         __merginApi.apiRoot = newServer
       }
 
