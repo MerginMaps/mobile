@@ -95,11 +95,11 @@ Item {
         } else
         {
           if (__merginApi.apiVersionStatus === MM.MerginApiStatus.INCOMPATIBLE) {
-            qsTr("Please update the app to use the latest features.")
+            qsTr( "Please update the app to use the latest features." )
           } else if (__merginApi.apiVersionStatus === MM.MerginApiStatus.PENDING) {
             ""
           } else {
-            qsTr("Server is currently unavailable - please try again later.")
+            qsTr( "Server is currently unavailable, check your connection or try again later." )
           }
         }
       }
