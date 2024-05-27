@@ -83,8 +83,6 @@ MMPrivateComponents.MMBaseInput {
     }
     placeholderTextColor: __style.darkGreyColor
 
-    inputMethodHints: Qt.ImhNoPredictiveText
-
     readOnly: root.editState !== "enabled"
 
     background: Rectangle {

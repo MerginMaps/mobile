@@ -72,7 +72,7 @@ MMPage {
         width: parent.width
 
         title: qsTr( "Username" )
-        textField.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
+        textField.inputMethodHints: Qt.ImhNoAutoUppercase
       }
 
       MMTextInput {
@@ -81,7 +81,7 @@ MMPage {
         width: parent.width
 
         title: qsTr( "Email" )
-        textField.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhEmailCharactersOnly
+        textField.inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhEmailCharactersOnly
       }
 
       MMPasswordInput {

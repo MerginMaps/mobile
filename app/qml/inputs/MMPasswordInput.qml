@@ -17,7 +17,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
   textField.echoMode: eyeButton.pressed ? TextInput.Normal : TextInput.Password
 
-  textField.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData | Qt.ImhHiddenText
+  // Qt.ImhNoPredictiveText must be accompanied by Qt.ImhSensitiveData, see https://bugreports.qt.io/browse/QTBUG-86982
+  textField.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhSensitiveData | Qt.ImhNoAutoUppercase | Qt.ImhHiddenText
 
   rightContent: MMComponents.MMIcon {
     id: eyeButton
