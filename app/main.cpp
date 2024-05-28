@@ -27,6 +27,7 @@
 #include "test/inputtests.h"
 #endif
 #include <qqml.h>
+#include "appcustomisation.h"
 #include <qgsmessagelog.h>
 #include "qgsconfig.h"
 #include "qgsproviderregistry.h"
@@ -380,9 +381,11 @@ int main( int argc, char *argv[] )
 {
   QgsApplication app( argc, argv, true );
 
+  AppCustomisation appCustomisation;
+
   const QString version = CoreUtils::appVersion();
   // Set up the QSettings environment must be done after qapp is created
-  QCoreApplication::setOrganizationName( "Lutra Consulting" );
+  QCoreApplication::setOrganizationName( appCustomisation.value(AC_ORG_NAME, "Lutra Consulting") );
   QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
   QCoreApplication::setApplicationName( "Input" ); // used by QSettings
   QCoreApplication::setApplicationVersion( version );

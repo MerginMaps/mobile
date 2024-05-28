@@ -10,6 +10,8 @@
 #ifndef MMSTYLE_H
 #define MMSTYLE_H
 
+#include "appcustomisation.h"
+
 #include <QObject>
 #include <QFont>
 #include <QColor>
@@ -337,7 +339,7 @@ class MMStyle: public QObject
     QFont p6() {return fontFactory( 12, false );}
     QFont p7() {return fontFactory( 10, false );}
 
-    QColor grassColor() {return QColor::fromString( "#73D19C" );}
+    QColor grassColor() {return colorFactory( "grass", "#73D19C" );}
     QColor forestColor() {return QColor::fromString( "#004C45" );}
     QColor nightColor() {return QColor::fromString( "#12181F" );}
     QColor polarColor() {return QColor::fromString( "#FFFFFF" );}
@@ -739,6 +741,13 @@ class MMStyle: public QObject
       return f;
     }
 
+    QColor colorFactory( const QString& name, const QString& color )
+    {
+      QColor defaultColor = QColor::fromString( color );
+      return mAppCustomisation.color(name, defaultColor);
+    }
+
+    AppCustomisation mAppCustomisation; // Add to constructor...
     qreal mDp;
 
     double mSafeAreaTop = 0;

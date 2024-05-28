@@ -41,6 +41,7 @@ set(MM_SRCS
     position/mapposition.cpp
     position/positiondirection.cpp
     position/positionkit.cpp
+    appcustomisation.cpp
     activelayer.cpp
     activeproject.cpp
     androidutils.cpp
@@ -123,6 +124,7 @@ set(MM_HDRS
     position/mapposition.h
     position/positiondirection.h
     position/positionkit.h
+    appcustomisation.h
     activelayer.h
     activeproject.h
     androidutils.h
