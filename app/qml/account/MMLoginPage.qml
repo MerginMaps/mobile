@@ -204,7 +204,7 @@ MMPage {
             textFieldBackground.color: __style.lightGreenColor
 
             text: root.apiRoot
-            placeholderText: qsTr( "https://my-server-app.com/" )
+            placeholderText: "https://my-server-app.com/"
             textField.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhUrlCharactersOnly
           }
 
