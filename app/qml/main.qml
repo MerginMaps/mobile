@@ -837,8 +837,8 @@ ApplicationWindow {
           syncFailedDialog.detailedText = qsTr( "Details" ) + ": " + errorMessage
           if ( willRetry )
           {
-            // TODO: open sync failed dialogue when clicked on the notification
-            __notificationModel.addError( qsTr( "There was an issue during synchronisation, we will try again. Click to learn more" ) )
+            __notificationModel.addError( qsTr( "There was an issue during synchronisation, we will try again. Click to learn more" ),
+            MM.NotificationType.ShowSyncFailedDialog )
           }
           else
           {
@@ -924,6 +924,9 @@ ApplicationWindow {
     function onShowSwitchWorkspaceActionClicked() {
       stateManager.state = "projects"
       projectController.showSelectWorkspacePage()
+    }
+    function onShowSyncFailedDialogClicked() {
+      syncFailedDialog.open()
     }
   }
 
