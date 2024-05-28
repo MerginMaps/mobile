@@ -44,7 +44,6 @@ MMPrivateComponents.MMBaseSingleLineInput {
   text: _fieldValue === undefined || _fieldValueIsNull ? '' : _fieldValue
 
   readOnly: _fieldIsReadOnly
-  textField.inputMethodHints: root._field.isNumeric ? Qt.ImhNoPredictiveText | Qt.ImhFormattedNumbersOnly : Qt.ImhNoPredictiveText
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
@@ -73,6 +72,13 @@ MMPrivateComponents.MMBaseSingleLineInput {
     }
 
     root.editorValueChanged( val, val === "" )
+  }
+
+  Component.onCompleted: {
+    // Use numerical keyboard for number fields configured as texts
+    if ( root._field.isNumeric ) {
+      textField.inputMethodHints |= Qt.ImhFormattedNumbersOnly
+    }
   }
 
   QtObject {

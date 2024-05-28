@@ -85,7 +85,7 @@ MMPage {
           width: parent.width
 
           title: qsTr( "Email or username" )
-          textField.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhEmailCharactersOnly
+          textField.inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhEmailCharactersOnly
         }
 
         MMPasswordInput {
@@ -205,7 +205,9 @@ MMPage {
 
             text: root.apiRoot
             placeholderText: "https://my-server-app.com/"
-            textField.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhUrlCharactersOnly
+
+            // Qt.ImhNoPredictiveText must be accompanied by Qt.ImhSensitiveData, see https://bugreports.qt.io/browse/QTBUG-86982
+            textField.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhSensitiveData | Qt.ImhNoAutoUppercase | Qt.ImhUrlCharactersOnly
           }
 
           MMListSpacer { height: __style.spacing40 }
