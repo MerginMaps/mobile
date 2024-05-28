@@ -64,6 +64,19 @@ Item {
     }
 
     onOpenProjectRequested: function( projectFilePath ) {
+
+      //
+      // There was an issue when closing the projects controller while having the searchbar textField focused
+      // (not neccessarily with keyboard opened). This is a kind-of workaround and hotfix.
+      // It might be related to https://bugreports.qt.io/browse/QTBUG-123876 as it started
+      // to occur more frequently when we upgraded to Qt 6.6.3
+      //
+      // See https://github.com/MerginMaps/mobile/issues/3027
+      //
+      if ( searchBar.textField.activeFocus ) {
+        searchBar.textField.focus = false
+      }
+
       root.openProjectRequested( projectFilePath )
     }
     onShowLocalChangesRequested: function( projectId ) {

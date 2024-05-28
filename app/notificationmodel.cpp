@@ -150,6 +150,12 @@ void NotificationModel::onNotificationClicked( uint id )
           emit showSwitchWorkspaceActionClicked();
           break;
         }
+        case NotificationType::ActionType::ShowSyncFailedDialog:
+        {
+          remove( id );
+          emit showSyncFailedDialogClicked();
+          break;
+        }
         default: break;
       }
     }

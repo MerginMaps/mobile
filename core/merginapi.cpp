@@ -1181,7 +1181,7 @@ void MerginApi::createProjectFinished()
 
     CoreUtils::log( "create " + projectFullName, message );
 
-    emit projectCreated( projectName, false );
+    emit projectCreated( projectFullName, false );
 
     if ( showLimitReachedDialog )
     {
