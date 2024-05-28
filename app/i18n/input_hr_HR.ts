@@ -61,22 +61,22 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="252"/>
+        <location filename="../androidutils.cpp" line="263"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>Dozvole za pristup uređaju za pohranu su trajno uklonjene, molimo omogućite ih u postavkama kako bi mogli učitavati slike iz galerije</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="256"/>
+        <location filename="../androidutils.cpp" line="267"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
         <translation>Mergin Maps aplikaciji su poxtrebne dozvole pristupa uređaju za pohranu kako bi se učitale slike iz galerije</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="274"/>
+        <location filename="../androidutils.cpp" line="285"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Dozvole za pristup kameri su onemogućene, molimo omogućite ih u postavkama</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="278"/>
+        <location filename="../androidutils.cpp" line="289"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Potrebne su dozvole za pristup kameri za dodavanje fotografija</translation>
     </message>
@@ -162,119 +162,119 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="213"/>
         <source>just now</source>
         <translation>upravo</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 minutes ago</source>
         <translation>prije %1 minuta</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 minute ago</source>
         <translation>prije %1 minute</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="221"/>
+        <location filename="../inpututils.cpp" line="223"/>
         <source>%1 hours ago</source>
         <translation>prije %1 sati</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="221"/>
+        <location filename="../inpututils.cpp" line="223"/>
         <source>%1 hour ago</source>
         <translation>prije %1 sata</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="225"/>
-        <location filename="../inpututils.cpp" line="230"/>
+        <location filename="../inpututils.cpp" line="227"/>
+        <location filename="../inpututils.cpp" line="232"/>
         <source>%1 days ago</source>
         <translation>prije %1 dana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="225"/>
-        <location filename="../inpututils.cpp" line="230"/>
+        <location filename="../inpututils.cpp" line="227"/>
+        <location filename="../inpututils.cpp" line="232"/>
         <source>%1 day ago</source>
         <translation>prije %1 dana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="235"/>
+        <location filename="../inpututils.cpp" line="237"/>
         <source>%1 weeks ago</source>
         <translation>prije %1 tjedana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="235"/>
+        <location filename="../inpututils.cpp" line="237"/>
         <source>%1 week ago</source>
         <translation>prije %1 tjedna</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="240"/>
+        <location filename="../inpututils.cpp" line="242"/>
         <source>%1 months ago</source>
         <translation>prije %1 mjeseci</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="240"/>
+        <location filename="../inpututils.cpp" line="242"/>
         <source>%1 month ago</source>
         <translation>prije %1 mjeseca</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="245"/>
+        <location filename="../inpututils.cpp" line="247"/>
         <source>%1 years ago</source>
         <translation>prije %1 godina</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="245"/>
+        <location filename="../inpututils.cpp" line="247"/>
         <source>%1 year ago</source>
         <translation>prije %1 godine</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1479"/>
+        <location filename="../inpututils.cpp" line="1481"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rezolucija zaslona: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1480"/>
+        <location filename="../inpututils.cpp" line="1482"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI zaslona: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1481"/>
+        <location filename="../inpututils.cpp" line="1483"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>veličina zaslona: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1482"/>
+        <location filename="../inpututils.cpp" line="1484"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>prijavljeni omjer piksela zaslona uređaja: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1483"/>
+        <location filename="../inpututils.cpp" line="1485"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>izračunati omjer piksela zaslona uređaja: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1484"/>
+        <location filename="../inpututils.cpp" line="1486"/>
         <source>used dp scale: %1</source>
         <translation>korišteno dp mjerilo: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2013"/>
+        <location filename="../inpututils.cpp" line="2015"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Morate dodati barem %1 točku(točaka) u svakom od segmenata.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2017"/>
+        <location filename="../inpututils.cpp" line="2019"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Morate dodati barem %1 točku(točaka).</translation>
     </message>
@@ -374,11 +374,11 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="102"/>
-        <source>Server is currently unavailable - please try again later.</source>
-        <translation>Poslužitelj je trenutno nedostupan - pokušajte kasnije.</translation>
+        <source>Server is currently unavailable, check your connection or try again later.</source>
+        <translation>Poslužitelj je trenutno nedostupan, provjerite Vašu vezu ili pokušajte kasnije.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="150"/>
+        <location filename="../qml/account/MMAccountController.qml" line="156"/>
         <source>I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Prihvaćam Mergin Maps %1uvjete korištenja%3 %2politiku privatnosti%3</translation>
     </message>
@@ -762,22 +762,22 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="87"/>
-        <location filename="../qml/form/MMFormPage.qml" line="194"/>
+        <location filename="../qml/form/MMFormPage.qml" line="187"/>
         <source>Edit feature</source>
         <translation>Uredi objekt</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="207"/>
+        <location filename="../qml/form/MMFormPage.qml" line="200"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="216"/>
+        <location filename="../qml/form/MMFormPage.qml" line="209"/>
         <source>Edit geometry</source>
         <translation>Uredi geometriju</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="452"/>
+        <location filename="../qml/form/MMFormPage.qml" line="445"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Objekt nije mogao biti spremljen, molimo provjerite sva obavezna polje</translation>
     </message>
@@ -790,22 +790,22 @@ Won&apos;t be added to the project.</source>
         <translation>Nedostaje fotografija.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="105"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="106"/>
         <source>Open Image</source>
         <translation>Otvori sliku</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="107"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="108"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Datoteke slika (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="233"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="232"/>
         <source>Could not create directory %1.</source>
         <translation>Nije moguće kreirati direktorij %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="305"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="304"/>
         <source>Failed to process the image</source>
         <translation>Neuspješna obrada slike</translation>
     </message>
@@ -1223,7 +1223,7 @@ Won&apos;t be added to the project.</source>
         <translation>Adresa poslužitelja</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="215"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="218"/>
         <source>Confirm</source>
         <translation>Potvrdi</translation>
     </message>
@@ -1442,7 +1442,7 @@ Won&apos;t be added to the project.</source>
         <translation>Slikaj</translation>
     </message>
     <message>
-        <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="93"/>
+        <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="95"/>
         <source>From gallery</source>
         <translation>Iz galerije</translation>
     </message>
@@ -2819,7 +2819,7 @@ dozvoljava samo %1 preuzetih projekata.</translation>
         <translation>Ažurno</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="957"/>
+        <location filename="../qml/main.qml" line="960"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Došlo je do problema prilikom učitavanja projekta. %1Pogledajte detalje%2</translation>
     </message>
@@ -2834,17 +2834,17 @@ dozvoljava samo %1 preuzetih projekata.</translation>
         <translation>Uspješno sinkronizirano</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="841"/>
+        <location filename="../qml/main.qml" line="840"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Došlo je do problema prilikom sinkronizacije, pokušati ćemo ponovno. Klikni za više</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="978"/>
+        <location filename="../qml/main.qml" line="981"/>
         <source>Could not read the project file:</source>
         <translation>Nije bilo moguće otvoriti datoteku projekta:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1003"/>
+        <location filename="../qml/main.qml" line="1006"/>
         <source>Press back again to quit the app</source>
         <translation>Odaberite &quot;nazad&quot; još jednom za izlaz iz aplikacije</translation>
     </message>
