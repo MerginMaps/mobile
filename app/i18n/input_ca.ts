@@ -61,22 +61,22 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="252"/>
+        <location filename="../androidutils.cpp" line="263"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>El permís d&apos;emmagatzematge està denegat permanentment. Permeteu-lo a la configuració per carregar imatges de la galeria</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="256"/>
+        <location filename="../androidutils.cpp" line="267"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
         <translation>Mergin Maps necessita permís d&apos;emmagatzematge per carregar imatges de la galeria</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="274"/>
+        <location filename="../androidutils.cpp" line="285"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>El permís per emprar la càmera s&apos;ha denegat permanentment, autoritzeu-lo a la configuració</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="278"/>
+        <location filename="../androidutils.cpp" line="289"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Necessitem permís per la càmera per tal de fer una foto</translation>
     </message>
@@ -163,119 +163,119 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="213"/>
         <source>just now</source>
         <translation>ara mateix</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 minutes ago</source>
         <translation>ara fa %1 minuts</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 minute ago</source>
         <translation>ara fa %1 minut</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="221"/>
+        <location filename="../inpututils.cpp" line="223"/>
         <source>%1 hours ago</source>
         <translation>ara fa %1 hores</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="221"/>
+        <location filename="../inpututils.cpp" line="223"/>
         <source>%1 hour ago</source>
         <translation>ara fa %1 hora</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="225"/>
-        <location filename="../inpututils.cpp" line="230"/>
+        <location filename="../inpututils.cpp" line="227"/>
+        <location filename="../inpututils.cpp" line="232"/>
         <source>%1 days ago</source>
         <translation>ara fa %1 dies</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="225"/>
-        <location filename="../inpututils.cpp" line="230"/>
+        <location filename="../inpututils.cpp" line="227"/>
+        <location filename="../inpututils.cpp" line="232"/>
         <source>%1 day ago</source>
         <translation>ara fa %1 dia</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="235"/>
+        <location filename="../inpututils.cpp" line="237"/>
         <source>%1 weeks ago</source>
         <translation>ara fa %1 setmanes</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="235"/>
+        <location filename="../inpututils.cpp" line="237"/>
         <source>%1 week ago</source>
         <translation>ara fa %1 setmana</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="240"/>
+        <location filename="../inpututils.cpp" line="242"/>
         <source>%1 months ago</source>
         <translation>ara fa %1 mesos</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="240"/>
+        <location filename="../inpututils.cpp" line="242"/>
         <source>%1 month ago</source>
         <translation>ara fa %1 mes</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="245"/>
+        <location filename="../inpututils.cpp" line="247"/>
         <source>%1 years ago</source>
         <translation>ara fa %1 anys</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="245"/>
+        <location filename="../inpututils.cpp" line="247"/>
         <source>%1 year ago</source>
         <translation>ara fa %1 any</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1479"/>
+        <location filename="../inpututils.cpp" line="1481"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>resolució de pantalla: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1480"/>
+        <location filename="../inpututils.cpp" line="1482"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI de pantalla: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1481"/>
+        <location filename="../inpututils.cpp" line="1483"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>mida de pantalla: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1482"/>
+        <location filename="../inpututils.cpp" line="1484"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>relació de píxels del dispositiu informada: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1483"/>
+        <location filename="../inpututils.cpp" line="1485"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>relació de píxels del dispositiu calculada: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1484"/>
+        <location filename="../inpututils.cpp" line="1486"/>
         <source>used dp scale: %1</source>
         <translation>escala dp utilitzada: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2013"/>
+        <location filename="../inpututils.cpp" line="2015"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Heu d&apos;afegir almenys %1 punt(s) a cada tros.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2017"/>
+        <location filename="../inpututils.cpp" line="2019"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Heu d&apos;afegir com a mínim %1 punt(s).</translation>
     </message>
@@ -375,11 +375,11 @@ No s&apos;afegirà al projecte.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="102"/>
-        <source>Server is currently unavailable - please try again later.</source>
-        <translation>El servidor no està disponible actualment; torneu-ho a provar més tard.</translation>
+        <source>Server is currently unavailable, check your connection or try again later.</source>
+        <translation>El servidor no està disponible actualment, comproveu la vostra connexió o torneu-ho a provar més tard.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="150"/>
+        <location filename="../qml/account/MMAccountController.qml" line="156"/>
         <source>I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Accepto els %1Termes i condicions%3 i %2Política de privadesa%3 de Mergin Maps</translation>
     </message>
@@ -762,22 +762,22 @@ No s&apos;afegirà al projecte.</translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="87"/>
-        <location filename="../qml/form/MMFormPage.qml" line="194"/>
+        <location filename="../qml/form/MMFormPage.qml" line="187"/>
         <source>Edit feature</source>
         <translation>Editar característica</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="207"/>
+        <location filename="../qml/form/MMFormPage.qml" line="200"/>
         <source>Delete</source>
         <translation>Esborrar</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="216"/>
+        <location filename="../qml/form/MMFormPage.qml" line="209"/>
         <source>Edit geometry</source>
         <translation>Editar geometria</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="452"/>
+        <location filename="../qml/form/MMFormPage.qml" line="445"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>No s&apos;ha pogut desar la característica, si us plau, comproveu tots els camps obligatoris</translation>
     </message>
@@ -790,22 +790,22 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Manca la foto</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="105"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="106"/>
         <source>Open Image</source>
         <translation>Obrir imatge</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="107"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="108"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Arxius d&apos;imatge (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="233"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="232"/>
         <source>Could not create directory %1.</source>
         <translation>No s&apos;ha pogut crear el directori %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="305"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="304"/>
         <source>Failed to process the image</source>
         <translation>No s&apos;ha pogut processar la imatge</translation>
     </message>
@@ -1223,7 +1223,7 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Adreça del servidor</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="215"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="218"/>
         <source>Confirm</source>
         <translation>Confirmar</translation>
     </message>
@@ -1442,7 +1442,7 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Fer una foto</translation>
     </message>
     <message>
-        <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="93"/>
+        <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="95"/>
         <source>From gallery</source>
         <translation>De la galeria</translation>
     </message>
@@ -2819,7 +2819,7 @@ només permet fins a %1 projectes baixats.</translation>
         <translation>Actualitzat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="957"/>
+        <location filename="../qml/main.qml" line="960"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Hi ha hagut problemes en carregar el projecte. %1Mostra els detalls%2</translation>
     </message>
@@ -2834,17 +2834,17 @@ només permet fins a %1 projectes baixats.</translation>
         <translation>S&apos;ha sincronitzat correctament</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="841"/>
+        <location filename="../qml/main.qml" line="840"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Hi ha hagut un problema durant la sincronització, ho tornarem a provar. Feu clic per obtenir més informació</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="978"/>
+        <location filename="../qml/main.qml" line="981"/>
         <source>Could not read the project file:</source>
         <translation>No s&apos;ha pogut llegir el fitxer del projecte:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1003"/>
+        <location filename="../qml/main.qml" line="1006"/>
         <source>Press back again to quit the app</source>
         <translation>Premeu enrere de nou per sortir de l&apos;aplicació</translation>
     </message>
