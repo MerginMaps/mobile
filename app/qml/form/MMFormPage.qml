@@ -224,7 +224,7 @@ Page {
 
       property string sectionTitle: section
 
-      height: section ? 76 * __dp : 0
+      height: section ? childrenRect.height : 0
       width: ListView.view.width
 
       // section bgnd
@@ -236,12 +236,18 @@ Page {
       Text {
         id: sectionTitle
 
-        text: section
+        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint oo"   //section
         font: __style.h3
         color: __style.forestColor
 
+        width: parent.width
+        wrapMode: Text.Wrap
+        elide: Text.ElideRight
+
         topPadding: internal.formSpacing
         bottomPadding: internal.formSpacing
+
+        maximumLineCount: 3
       }
     }
   }
