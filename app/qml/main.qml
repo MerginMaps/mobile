@@ -875,6 +875,8 @@ ApplicationWindow {
       }
       projectLimitDialog.maxProjectNumber = maxProjects
       projectLimitDialog.open()
+
+      syncButton.iconRotateAnimationRunning = false
     }
 
     function onProjectDataChanged( projectFullName ) {
