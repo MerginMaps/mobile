@@ -233,7 +233,7 @@ Page {
         color: __style.lightGreenColor;
       }
 
-      Text {
+      MMComponents.MMText {
         id: sectionTitle
 
         text: section
