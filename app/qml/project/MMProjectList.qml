@@ -182,9 +182,14 @@ Item {
   Component {
     id: loadingSpinnerComponent
 
-    MMComponents.MMBusyIndicator {
-      x: parent.width / 2 - width / 2
-      running: controllerModel.isLoading
+    Item {
+      width:listview.width
+      height: listview.height
+
+      MMComponents.MMBusyIndicator {
+        anchors.centerIn: parent
+        running: controllerModel.isLoading
+      }
     }
   }
 
