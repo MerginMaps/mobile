@@ -5,32 +5,38 @@
    viewBox="0 0 234 234"
    fill="none"
    version="1.1"
-   id="svg30"
+   id="svg24"
+   sodipodi:docname="android-foreground-service-notification-icon.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview5"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="1.8532258"
+     inkscape:cx="168.89469"
+     inkscape:cy="173.48129"
+     inkscape:window-width="1850"
+     inkscape:window-height="1009"
+     inkscape:window-x="70"
+     inkscape:window-y="34"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg24" />
   <defs
-     id="defs34" />
-  <g
-     id="g1335"
-     transform="matrix(1.3936329,0,0,1.3936329,-46.055045,-46.055045)">
-    <path
-       d="m 117,159.67 h 42.66 V 74.34 H 117 V 53 h 64 v 128 h -64 z"
-       fill="#73D19C"
-       id="path22"
-       style="fill:#ffffff" />
-    <path
-       d="m 82.4724,117 c 0,19.072 15.4555,34.517 34.5176,34.517 V 82.4819 C 97.9179,82.4819 82.4724,97.9374 82.4724,117 Z"
-       fill="#73D19C"
-       id="path24"
-       style="fill:#ffffff" />
-    <path
-       d="M 117,159.67 H 74.33 V 74.34 H 117 V 53 H 53 v 128 h 64 z"
-       fill="white"
-       id="path26"
-       style="fill:#ffffff" />
-    <path
-       d="m 151.518,117 c 0,19.072 -15.456,34.517 -34.518,34.517 V 82.4819 c 19.072,0 34.518,15.4555 34.518,34.5181 z"
-       fill="#ffffff"
-       id="path28" />
-  </g>
+     id="defs28" />
+  <path
+     fill-rule="evenodd"
+     clip-rule="evenodd"
+     d="m 121.00158,173.91574 v 28.45121 h 81.36537 V 31.633052 h -81.36537 v 28.464542 h 52.90083 V 173.91574 Z m 0,-11.04568 V 71.129138 c 23.56394,2.027331 42.04055,21.791647 42.04055,45.870862 0,24.09082 -18.48728,43.8426 -42.04055,45.87006 z m -8.00316,39.49689 V 173.91574 H 60.084255 V 60.097594 H 112.99842 V 31.633052 H 31.633052 V 202.36695 Z m 0,-39.49689 V 71.127937 C 89.428343,73.149 70.945065,92.91625 70.945065,117 c 0,24.09482 18.494216,43.8506 42.053355,45.87006 z"
+     fill="#12181f"
+     id="path22"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:1.33386" />
 </svg>
