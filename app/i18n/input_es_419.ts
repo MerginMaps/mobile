@@ -1985,7 +1985,7 @@ No se añadirá al proyecto.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
-        <source>GPS accuracy treshold</source>
+        <source>GPS accuracy threshold</source>
         <translation>Umbral de precisión del GPS</translation>
     </message>
     <message>
@@ -1995,7 +1995,7 @@ No se añadirá al proyecto.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
-        <source>GPS accuracy treshold, in meters</source>
+        <source>GPS accuracy threshold, in meters</source>
         <translation>Umbral de precisión del GPS, en metros</translation>
     </message>
     <message>

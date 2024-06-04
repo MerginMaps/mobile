@@ -1990,7 +1990,7 @@ Non verrà aggiunto al progetto.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
-        <source>GPS accuracy treshold</source>
+        <source>GPS accuracy threshold</source>
         <translation>Livello di soglia dell&apos;accuratezza GPS</translation>
     </message>
     <message>
@@ -2000,7 +2000,7 @@ Non verrà aggiunto al progetto.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
-        <source>GPS accuracy treshold, in meters</source>
+        <source>GPS accuracy threshold, in meters</source>
         <translation>Livello di soglia dell&apos;accuratezza GPS, in metri</translation>
     </message>
     <message>

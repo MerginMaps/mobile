@@ -60,9 +60,9 @@ MMPage {
 
       MMSettingsComponents.MMSettingsInput {
         width: parent.width
-        title: qsTr("GPS accuracy treshold")
+        title: qsTr("GPS accuracy threshold")
         description: qsTr("Determines when the accuracy indicator turns yellow")
-        valueDescription: qsTr("GPS accuracy treshold, in meters")
+        valueDescription: qsTr("GPS accuracy threshold, in meters")
         value: __appSettings.gpsAccuracyTolerance
         suffix: " m"
 

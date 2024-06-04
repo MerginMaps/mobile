@@ -1986,7 +1986,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
-        <source>GPS accuracy treshold</source>
+        <source>GPS accuracy threshold</source>
         <translation>GPS Genauigkeits-Limit</translation>
     </message>
     <message>
@@ -1996,7 +1996,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
-        <source>GPS accuracy treshold, in meters</source>
+        <source>GPS accuracy threshold, in meters</source>
         <translation>GPS Genauigkeits-Limit, in Metern</translation>
     </message>
     <message>
