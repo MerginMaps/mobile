@@ -11,6 +11,10 @@
 #include "inpututils.h"
 #include "coreutils.h"
 
+#ifdef ANDROID
+#include "position/providers/androidpositionprovider.h"
+#endif
+
 PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractListModel( parent )
 {
   if ( !InputUtils::isMobilePlatform() )
@@ -33,18 +37,26 @@ PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractLis
 
 #ifdef ANDROID
   PositionProvider internalFused;
-  internalFused.name = tr( "Android (fused)" );
-  internalFused.description = tr( "Using GPS, Wifi and sensors" );
+  internalFused.name = tr( "Internal (fused)" );
+  if ( AndroidPositionProvider::isFusedAvailable() )
+    internalFused.description = tr( "Using GPS, Wifi and sensors" );
+  else
+    internalFused.description = tr( "Not available (%1)" ).arg( AndroidPositionProvider::fusedErrorString() );
   internalFused.providerType = "internal";
   internalFused.providerId = "android_fused";
   mProviders.push_front( internalFused );
 
+  // This one should have pretty much the same behavior as the provider
+  // implemented using Qt Positioning, so let's skip it. When we ditch
+  // Qt's implementation on Android, this can be used as a fallback.
+#if 0
   PositionProvider internalGps;
-  internalGps.name = tr( "Android (gps)" );
+  internalGps.name = tr( "Internal (gps)" );
   internalGps.description = tr( "Using GPS only" );
   internalGps.providerType = "internal";
   internalGps.providerId = "android_gps";
   mProviders.push_front( internalGps );
+#endif
 #endif
 }
 

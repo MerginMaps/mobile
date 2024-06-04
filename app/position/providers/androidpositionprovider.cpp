@@ -136,7 +136,7 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
 AndroidPositionProvider::AndroidPositionProvider( bool fused, QObject *parent )
   : AbstractPositionProvider( fused ? QStringLiteral( "android_fused" ) : QStringLiteral( "android_gps" ),
                               QStringLiteral( "internal" ),
-                              fused ? tr( "Android (fused)" ) : tr( "Android (gps)" ), parent )
+                              fused ? tr( "Internal (fused)" ) : tr( "Internal (gps)" ), parent )
   , mFused( fused )
   , mInstanceId( ++sLastInstanceId )
 {
@@ -215,6 +215,25 @@ AndroidPositionProvider::~AndroidPositionProvider()
 
 }
 
+bool AndroidPositionProvider::isFusedAvailable()
+{
+  jobject context = QNativeInterface::QAndroidApplication::context();
+
+  return QJniObject::callStaticMethod<jboolean>( "uk/co/lutraconsulting/MMAndroidPosition", "isFusedLocationProviderAvailable",
+         "(Landroid/content/Context;)Z", context );
+}
+
+QString AndroidPositionProvider::fusedErrorString()
+{
+  jobject context = QNativeInterface::QAndroidApplication::context();
+
+  QJniObject str = QJniObject::callStaticObjectMethod( "uk/co/lutraconsulting/MMAndroidPosition", "fusedLocationProviderErrorString",
+                   "(Landroid/content/Context;)Ljava/lang/String;", context );
+
+  return str.toString();
+}
+
+
 void AndroidPositionProvider::startUpdates()
 {
   __android_log_print( ANDROID_LOG_INFO, "CPP", "[c++] start updates" );
@@ -237,7 +256,7 @@ void AndroidPositionProvider::startUpdates()
     return;
   }
 
-  setState( tr( "Waiting for fix..." ), State::Connected );
+  setState( tr( "Connected" ), State::Connected );
 }
 
 void AndroidPositionProvider::stopUpdates()

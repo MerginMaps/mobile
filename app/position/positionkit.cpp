@@ -113,6 +113,15 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
     else if ( id == QStringLiteral( "android_fused" ) || id == QStringLiteral( "android_gps" ) )
     {
       bool fused = ( id == QStringLiteral( "android_fused" ) );
+      if ( fused && !AndroidPositionProvider::isFusedAvailable() )
+      {
+        // TODO: inform user + use AndroidPositionProvider::fusedErrorString() output?
+
+        // fallback to the default - at this point the Qt Positioning implementation
+        AbstractPositionProvider *provider = new InternalPositionProvider();
+        QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
+        return provider;
+      }
       __android_log_print( ANDROID_LOG_INFO, "CPP", "MAKE PROVIDER %d", fused );
       AbstractPositionProvider *provider = new AndroidPositionProvider( fused );
       QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
