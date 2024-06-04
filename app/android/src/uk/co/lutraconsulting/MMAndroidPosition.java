@@ -34,6 +34,19 @@ public class MMAndroidPosition {
 
     private static native void jniOnPositionUpdated(int instanceId, Location location, GnssStatus gnssStatus);
 
+    // find out whether fused provider could be actually used
+    static public boolean isFusedLocationProviderAvailable(Context context) {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        return googleApiAvailability.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
+    }
+
+    // get more details why FLP is not available (e.g. play services missing, disabled, updating...)
+    static public String fusedLocationProviderErrorString(Context context) {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        return googleApiAvailability.getErrorString(googleApiAvailability.isGooglePlayServicesAvailable(context));
+    }
+
+    // called from C++ code
     static public MMAndroidPosition createWithJniCallback(Context context, boolean useFused, int instanceId) {
         Log.i("CPP", "[java] createWithJniCallback");
 
@@ -71,8 +84,7 @@ public class MMAndroidPosition {
         mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
         if (mUseFused) {
-            GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-            mFusedAvailable = googleApiAvailability.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
+            mFusedAvailable = isFusedLocationProviderAvailable(context);
             Log.i("CPP", "[java] fused available: " + mFusedAvailable);
             if (mFusedAvailable) {
                 mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
