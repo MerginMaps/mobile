@@ -109,7 +109,6 @@ public class MMAndroidPosition {
         mGnssStatusCallback = new GnssStatus.Callback() {
             @Override
             public void onSatelliteStatusChanged(@NonNull GnssStatus status) {
-                //Log.v("LOC", "GNSS Status: " + status.getSatelliteCount() + " satellites.");
 
                 // store the satellite info
                 mLastGnssStatus = status;
