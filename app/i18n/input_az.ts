@@ -1985,8 +1985,8 @@ Layihəyə əlavə edilməyəcək.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
-        <source>GPS accuracy treshold</source>
-        <translation>GPS accuracy treshold</translation>
+        <source>GPS accuracy threshold</source>
+        <translation>GPS accuracy threshold</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="64"/>
@@ -1995,8 +1995,8 @@ Layihəyə əlavə edilməyəcək.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
-        <source>GPS accuracy treshold, in meters</source>
-        <translation>GPS accuracy treshold, in meters</translation>
+        <source>GPS accuracy threshold, in meters</source>
+        <translation>GPS accuracy threshold, in meters</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="78"/>

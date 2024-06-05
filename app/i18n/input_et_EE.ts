@@ -1985,7 +1985,7 @@ Seda ei lisata projektile.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
-        <source>GPS accuracy treshold</source>
+        <source>GPS accuracy threshold</source>
         <translation>GPS täpsusklass</translation>
     </message>
     <message>
@@ -1995,7 +1995,7 @@ Seda ei lisata projektile.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
-        <source>GPS accuracy treshold, in meters</source>
+        <source>GPS accuracy threshold, in meters</source>
         <translation>GPS täpsusklass, meetrites</translation>
     </message>
     <message>

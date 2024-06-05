@@ -1985,7 +1985,7 @@ a preto nebude pridaný do projektu.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
-        <source>GPS accuracy treshold</source>
+        <source>GPS accuracy threshold</source>
         <translation>Hranica presnosti</translation>
     </message>
     <message>
@@ -1995,7 +1995,7 @@ a preto nebude pridaný do projektu.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
-        <source>GPS accuracy treshold, in meters</source>
+        <source>GPS accuracy threshold, in meters</source>
         <translation>Hranica presnosti, v metroch</translation>
     </message>
     <message>
