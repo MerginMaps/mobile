@@ -29,6 +29,7 @@ class TestAttributePreviewController: public QObject
     void cleanupTestCase();
 
     void testPreviewForms();
+    void testMultilineMapTips();
 
   private:
 };

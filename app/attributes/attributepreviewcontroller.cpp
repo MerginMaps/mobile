@@ -119,18 +119,8 @@ QString AttributePreviewController::mapTipImage()
 {
   QgsExpressionContext context( globalProjectLayerScopes( mFeatureLayerPair.layer() ) );
   context.setFeature( mFeatureLayerPair.feature() );
-  QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate();
-  QStringList lst = mapTip.split( '\n' ); // first line is "# image"
-
-  if ( lst.count() >= 2 )
-  {
-    QString expression = lst.mid( 1 ).join( '\n' );
-    return QgsExpression::replaceExpressionText( expression, &context );
-  }
-  else
-  {
-    return QString();
-  }
+  QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate().remove( "# image\n" ); // first line is "# image"
+  return QgsExpression::replaceExpressionText( mapTip, &context );
 }
 
 QString AttributePreviewController::mapTipHtml( )

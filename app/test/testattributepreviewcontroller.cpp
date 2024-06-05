@@ -33,6 +33,40 @@ void TestAttributePreviewController::cleanupTestCase()
 
 }
 
+void TestAttributePreviewController::testMultilineMapTips()
+{
+  // Layer creation
+  QgsVectorLayer *layerPhoto =
+    new QgsVectorLayer( QStringLiteral( "Point?field=fldtxt:string" ),
+                        QStringLiteral( "layer" ),
+                        QStringLiteral( "memory" )
+                      );
+  QVERIFY( layerPhoto && layerPhoto->isValid() );
+  layerPhoto->setMapTipTemplate( "# image\nfile:///my/path/to/image/[%\n  CASE WHEN x = 1 THEN\n    'hello.jpg'\n  ELSE\n    'world.jpg'\n  END\n%]" );
+  QgsFeature p1( layerPhoto->dataProvider()->fields(), 5 );
+  p1.setAttribute( QStringLiteral( "fldtxt" ), "myphoto" );
+  layerPhoto->dataProvider()->addFeatures( QgsFeatureList() << p1 );
+  QgsProject::instance()->addMapLayer( layerPhoto );
+
+  // Controller setup
+  AttributePreviewController controller;
+  controller.setProject( QgsProject::instance() );
+  QCOMPARE( controller.type(), AttributePreviewController::Empty );
+
+  // Assertion
+  FeatureLayerPair pair5( p1, layerPhoto );
+  controller.setFeatureLayerPair( pair5 );
+  QCOMPARE( controller.type(), AttributePreviewController::Photo );
+  QCOMPARE( controller.photo(), "file:///my/path/to/image/[%\n  CASE WHEN x = 1 THEN\n    'hello.jpg'\n  ELSE\n    'world.jpg'\n  END\n%]" );
+
+  // Reset
+  controller.reset();
+  QCOMPARE( controller.type(), AttributePreviewController::Empty );
+
+  // Cleanup
+  QgsProject::instance()->removeAllMapLayers();
+}
+
 void TestAttributePreviewController::testPreviewForms()
 {
   // Prepare Layers!
