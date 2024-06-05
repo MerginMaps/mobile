@@ -64,14 +64,16 @@ Popup {
         autoTransform: true
         fillMode: Image.PreserveAspectFit
 
-      PinchHandler {
-        minimumRotation: -180
-        maximumRotation: 180
-        minimumScale: 0.5
-        maximumScale: 10
-      }
+        PinchArea {
+          anchors.fill: parent
+          pinch.target: imagePreview
+          pinch.minimumRotation: -180
+          pinch.maximumRotation: 180
+          pinch.minimumScale: 0.5
+          pinch.maximumScale: 10
+        }
 
-      DragHandler { }
+        DragHandler { }
       }
     }
 
