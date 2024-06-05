@@ -224,7 +224,7 @@ Page {
 
       property string sectionTitle: section
 
-      height: section ? 76 * __dp : 0
+      height: section ? childrenRect.height : 0
       width: ListView.view.width
 
       // section bgnd
@@ -233,15 +233,21 @@ Page {
         color: __style.lightGreenColor;
       }
 
-      Text {
+      MMComponents.MMText {
         id: sectionTitle
 
         text: section
         font: __style.h3
         color: __style.forestColor
 
+        width: parent.width
+        wrapMode: Text.Wrap
+        elide: Text.ElideRight
+
         topPadding: internal.formSpacing
         bottomPadding: internal.formSpacing
+
+        maximumLineCount: 3
       }
     }
   }
