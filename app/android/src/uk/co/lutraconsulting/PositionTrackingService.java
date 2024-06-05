@@ -143,23 +143,28 @@ public class PositionTrackingService extends Service implements LocationListener
         NotificationChannel serviceChannel = new NotificationChannel(
             CHANNEL_ID,
             "Foreground Service Channel",
-            NotificationManager.IMPORTANCE_HIGH
+            NotificationManager.IMPORTANCE_LOW
         );
         
         NotificationManager manager = getSystemService( NotificationManager.class );
         manager.createNotificationChannel( serviceChannel );
 
         // Build notification for position tracking
-        Intent notificationIntent = new Intent( this, PositionTrackingService.class );
+        Intent notificationIntent = new Intent( this, InputActivity.class );
 
         PendingIntent pendingIntent = PendingIntent.getActivity( this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE );
 
-        Notification notification = new Notification.Builder( this, CHANNEL_ID )
-            .setContentTitle( getText( R.string.notification_title ) )
-            .setContentText( getText( R.string.notification_message ) )
-            .setContentIntent( pendingIntent )
-            .setTicker( getText( R.string.ticker_text ) )
-            .build();
+        Notification.Builder notificationBuilder = new Notification.Builder( this, CHANNEL_ID )
+            .setSmallIcon( R.drawable.ic_notification )
+            .setContentTitle( "Tracking in progress" )
+            .setColor( getResources().getColor( R.color.grassColor ) )
+            .setContentIntent( pendingIntent );
+
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ) {  // only Android >= 12
+            notificationBuilder.setForegroundServiceBehavior( Notification.FOREGROUND_SERVICE_IMMEDIATE );
+        }
+
+        Notification notification = notificationBuilder.build();
 
         startForeground( SERVICE_ID, notification );
 
