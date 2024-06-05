@@ -1,26 +1,26 @@
 <RCC>
   <qresource prefix="/"> 
-    <file>input_hr.qm</file> 
-    <file>input_hr_BA.qm</file> 
-    <file>input_pl.qm</file> 
-    <file>input_es_419.qm</file> 
-    <file>input_et.qm</file> 
-    <file>input_az.qm</file> 
-    <file>input_fr_FR.qm</file> 
-    <file>input_pt_BR.qm</file> 
-    <file>input_pt_PT.qm</file> 
-    <file>input_es_ES.qm</file> 
-    <file>input_hr_HR.qm</file> 
-    <file>input_de.qm</file> 
-    <file>input_et_EE.qm</file> 
-    <file>input_ca.qm</file> 
-    <file>input_sk.qm</file> 
-    <file>input_it.qm</file> 
-    <file>input_es.qm</file> 
-    <file>input_en.qm</file> 
     <file>input_fr.qm</file> 
-    <file>input_az_AZ.qm</file> 
-    <file>input_hu.qm</file> 
+    <file>input_en.qm</file> 
+    <file>input_hr_HR.qm</file> 
+    <file>input_pt_PT.qm</file> 
+    <file>input_hr_BA.qm</file> 
+    <file>input_it.qm</file> 
+    <file>input_fr_FR.qm</file> 
+    <file>input_et_EE.qm</file> 
+    <file>input_es_419.qm</file> 
+    <file>input_de.qm</file> 
     <file>input_sk_SK.qm</file> 
+    <file>input_es.qm</file> 
+    <file>input_az_AZ.qm</file> 
+    <file>input_pl.qm</file> 
+    <file>input_hu.qm</file> 
+    <file>input_et.qm</file> 
+    <file>input_sk.qm</file> 
+    <file>input_az.qm</file> 
+    <file>input_hr.qm</file> 
+    <file>input_pt_BR.qm</file> 
+    <file>input_ca.qm</file> 
+    <file>input_es_ES.qm</file> 
   </qresource> 
 </RCC>
