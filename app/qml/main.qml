@@ -244,20 +244,6 @@ ApplicationWindow {
   LocationPermission {
     id: locationPermission
     accuracy: LocationPermission.Precise
-
-    function requestPermissionAsync() {
-      if ( locationPermission.status === Qt.Granted ) {
-        return true;
-      }
-      else if ( locationPermission.status === Qt.Undetermined ) {
-        locationPermission.request()
-      }
-      else if ( locationPermission.status === Qt.Denied ) {
-        __inputUtils.log("Permissions", "Location permission is denied")
-        __notificationModel.addInfo( qsTr( "Location permission is required to show your location on map. Please enable it in system settings." ) );
-      }
-      return false;
-    }
   }
 
   MMToolbar {
@@ -950,6 +936,10 @@ ApplicationWindow {
 
       // check location permission
       if ( locationPermission.status === Qt.Undetermined ) {
+        // This is the place where we actually request permissions.
+        // When the system's request permissions dialog get closed,
+        // we get a notification that our application is active again,
+        // and PositionKit::appStateChanged() will try to start updates.
         locationPermission.request();
       }
       else if ( locationPermission.status === Qt.Denied ) {
