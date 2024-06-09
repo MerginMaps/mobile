@@ -169,40 +169,6 @@ AndroidPositionProvider::AndroidPositionProvider( bool fused, QObject *parent )
   mAndroidPos = QJniObject::callStaticObjectMethod( "uk/co/lutraconsulting/MMAndroidPosition", "createWithJniCallback",
                 "(Landroid/content/Context;ZI)Luk/co/lutraconsulting/MMAndroidPosition;", context, mFused, mInstanceId );
 
-  // Request permissions if needed
-
-  QLocationPermission perm;
-  perm.setAccuracy( QLocationPermission::Precise );
-  if ( qApp->checkPermission( perm ) != Qt::PermissionStatus::Granted )
-  {
-    // if user previously completely denied location, the permissions request dialog
-    // may not even show up and we get denied response again.
-    __android_log_print( ANDROID_LOG_INFO, "CPP", "[c++] going to request permissions" );
-    qApp->requestPermission( perm, [this]( const QPermission & p )
-    {
-      if ( p.status() == Qt::PermissionStatus::Granted )
-      {
-        __android_log_print( ANDROID_LOG_INFO, "CPP", "[c++] permissions granted!" );
-        this->startUpdates();
-      }
-      else
-      {
-        __android_log_print( ANDROID_LOG_INFO, "CPP", "[c++] permissions denied :-(" );
-        // User may have granted permission just for approximate location,
-        // so it would be good to detect that and warn about that: approximate
-        // location has intentionally only ~2km accuracy - too low for any data collection
-        QLocationPermission permApprox;
-        permApprox.setAccuracy( QLocationPermission::Approximate );
-        if ( qApp->checkPermission( permApprox ) == Qt::PermissionStatus::Granted )
-          this->setState( tr( "Approximate location only!" ), State::NoConnection );
-        else
-          this->setState( tr( "No location permissions" ), State::NoConnection );
-      }
-    } );
-    return;
-  }
-
-  // TODO: this should not be needed?
   AndroidPositionProvider::startUpdates();
 }
 
@@ -237,6 +203,17 @@ QString AndroidPositionProvider::fusedErrorString()
 void AndroidPositionProvider::startUpdates()
 {
   __android_log_print( ANDROID_LOG_INFO, "CPP", "[c++] start updates" );
+
+  // permissions are currently being requested in main.qml, so here
+  // we only check that we have the permissions we need.
+  QLocationPermission perm;
+  perm.setAccuracy( QLocationPermission::Precise );
+  if ( qApp->checkPermission( perm ) != Qt::PermissionStatus::Granted )
+  {
+    __android_log_print( ANDROID_LOG_ERROR, "CPP", "[c++] no location permissions - not starting!" );
+    setState( tr( "No location permissions" ), State::NoConnection );
+    return;
+  }
 
   jboolean res = mAndroidPos.callMethod<jboolean>( "start", "()Z" );
 

@@ -138,8 +138,6 @@ public class MMAndroidPosition {
         if (mIsStarted)
             return false;
 
-        Log.e("CPP", "[java] here 0");
-
         if (mUseFused && !mFusedAvailable) {
             mErrorMessage = "FUSED_NOT_AVAILABLE";
             Log.e("CPP", "[java] FUSED_NOT_AVAILABLE");
@@ -159,8 +157,6 @@ public class MMAndroidPosition {
             return false;
         }
 
-        Log.e("CPP", "[java] here 1");
-
         if (mUseFused) {
             LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000).build();
 
@@ -168,7 +164,6 @@ public class MMAndroidPosition {
         }
         else {
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 0.F, mLocationManagerCallback, Looper.getMainLooper());
-            Log.e("CPP", "[java] here 2");
         }
 
         mLocationManager.registerGnssStatusCallback(mGnssStatusCallback, new Handler(Looper.getMainLooper()));
