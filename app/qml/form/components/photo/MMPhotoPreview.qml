@@ -72,8 +72,6 @@ Popup {
           pinch.minimumScale: 0.5
           pinch.maximumScale: 10
         }
-
-        DragHandler { }
       }
     }
 
