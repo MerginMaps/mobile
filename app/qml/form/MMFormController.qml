@@ -91,6 +91,10 @@ Item {
       ]
 
       onStateChanged: {
+        // Prevent freezing by clearing focus from all elements
+        // See more: https://github.com/MerginMaps/mobile/issues/3483
+        root.forceActiveFocus()
+
         switch( state ) {
           case "form":
           case "preview":
