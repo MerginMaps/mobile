@@ -777,7 +777,7 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Editar geometria</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="445"/>
+        <location filename="../qml/form/MMFormPage.qml" line="451"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>No s&apos;ha pogut desar la característica, si us plau, comproveu tots els camps obligatoris</translation>
     </message>
@@ -1715,32 +1715,32 @@ No s&apos;afegirà al projecte.</translation>
         <translation>No s&apos;ha pogut sincronitzar el projecte, si us plau, assegureu-vos que heu iniciat sessió i teniu els permisos suficients.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="207"/>
+        <location filename="../qml/project/MMProjectList.qml" line="212"/>
         <source>Create project</source>
         <translation>Crear projecte</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="232"/>
+        <location filename="../qml/project/MMProjectList.qml" line="237"/>
         <source>Get started with Mergin Maps</source>
         <translation>Comenceu amb Mergin Maps</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="233"/>
+        <location filename="../qml/project/MMProjectList.qml" line="238"/>
         <source>First step is to create your brand new project.</source>
         <translation>El primer pas és crear el vostre nou projecte.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="241"/>
+        <location filename="../qml/project/MMProjectList.qml" line="246"/>
         <source>Unable to get the list of projects.</source>
         <translation>No es pot obtenir la llista de projectes.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="241"/>
+        <location filename="../qml/project/MMProjectList.qml" line="246"/>
         <source>No projects found</source>
         <translation>No s&apos;ha trobat cap projecte</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="270"/>
+        <location filename="../qml/project/MMProjectList.qml" line="275"/>
         <source>Retry</source>
         <translation>Tornar-ho a provar</translation>
     </message>
@@ -2814,12 +2814,12 @@ només permet fins a %1 projectes baixats.</translation>
         <translation>No s&apos;ha pogut comunicar amb el servidor. Proveu de millorar la vostra connexió de xarxa.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="906"/>
+        <location filename="../qml/main.qml" line="908"/>
         <source>Up to date</source>
         <translation>Actualitzat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="960"/>
+        <location filename="../qml/main.qml" line="962"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Hi ha hagut problemes en carregar el projecte. %1Mostra els detalls%2</translation>
     </message>
@@ -2839,12 +2839,12 @@ només permet fins a %1 projectes baixats.</translation>
         <translation>Hi ha hagut un problema durant la sincronització, ho tornarem a provar. Feu clic per obtenir més informació</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="981"/>
+        <location filename="../qml/main.qml" line="983"/>
         <source>Could not read the project file:</source>
         <translation>No s&apos;ha pogut llegir el fitxer del projecte:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1006"/>
+        <location filename="../qml/main.qml" line="1008"/>
         <source>Press back again to quit the app</source>
         <translation>Premeu enrere de nou per sortir de l&apos;aplicació</translation>
     </message>
