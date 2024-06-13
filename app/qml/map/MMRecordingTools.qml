@@ -26,6 +26,7 @@ Item {
   required property MMPositionMarker positionMarkerComponent
 
   property alias recordingMapTool: mapTool
+  property bool centerToGPSOnStartup: true
 
   property var activeFeature
 
@@ -311,6 +312,20 @@ Item {
       let screenPoint = Qt.point( point.x, point.y )
 
       mapTool.lookForVertex( screenPoint )
+    }
+  }
+
+  Component.onCompleted: {
+    if ( root.centerToGPSOnStartup )
+    {
+      // center to GPS
+      if ( root.gpsState.state === "unavailable" ) {
+        showMessage( qsTr( "GPS currently unavailable." ) )
+        return
+      }
+
+      mapTool.centeredToGPS = true
+      root.map.mapSettings.setCenter( mapPositioning.mapPosition )
     }
   }
 

@@ -34,6 +34,7 @@ class AppSettings: public QObject
     Q_PROPERTY( bool autosyncAllowed READ autosyncAllowed WRITE setAutosyncAllowed NOTIFY autosyncAllowedChanged )
     Q_PROPERTY( double gpsAntennaHeight READ gpsAntennaHeight WRITE setGpsAntennaHeight NOTIFY gpsAntennaHeightChanged )
     Q_PROPERTY( QString ignoreMigrateVersion READ ignoreMigrateVersion WRITE setIgnoreMigrateVersion NOTIFY ignoreMigrateVersionChanged )
+    Q_PROPERTY( bool autolockPosition READ autolockPosition WRITE setAutolockPosition NOTIFY autolockPositionChanged )
 
   public:
     explicit AppSettings( QObject *parent = nullptr );
@@ -82,6 +83,9 @@ class AppSettings: public QObject
 
     static const QString POSITION_PROVIDERS_GROUP;
 
+    bool autolockPosition() const;
+    void setAutolockPosition( bool autolockPosition );
+
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
 
@@ -99,6 +103,7 @@ class AppSettings: public QObject
     void activePositionProviderIdChanged( const QString & );
 
     void autosyncAllowedChanged( bool autosyncAllowed );
+    void autolockPositionChanged( bool autolockPosition );
 
     void ignoreMigrateVersionChanged();
 
@@ -132,6 +137,7 @@ class AppSettings: public QObject
     QVariant value( const QString &key, const QVariant &defaultValue = QVariant() );
     QString mActivePositionProviderId;
     bool mAutosyncAllowed = false;
+    bool mAutolockPosition = true;
     double mGpsAntennaHeight = 0;
     QString mIgnoreMigrateVersion;
 };

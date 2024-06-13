@@ -31,6 +31,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
   double gpsHeight = settings.value( "gpsHeight", 0 ).toDouble();
   QString ignoreMigrateVersion = settings.value( QStringLiteral( "ignoreMigrateVersion" ) ).toString();
+  bool autolockPosition = settings.value( QStringLiteral( "autolockPosition" ), true ).toBool();
 
   settings.endGroup();
 
@@ -46,6 +47,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setAutosyncAllowed( autosync );
   setGpsAntennaHeight( gpsHeight );
   setIgnoreMigrateVersion( ignoreMigrateVersion );
+  setAutolockPosition( autolockPosition );
 }
 
 QString AppSettings::defaultLayer() const
@@ -277,6 +279,21 @@ void AppSettings::setAutosyncAllowed( bool newAutosyncAllowed )
   mAutosyncAllowed = newAutosyncAllowed;
   setValue( QStringLiteral( "autosyncAllowed" ), newAutosyncAllowed );
   emit autosyncAllowedChanged( mAutosyncAllowed );
+}
+
+bool AppSettings::autolockPosition() const
+{
+    return mAutolockPosition;
+}
+
+void AppSettings::setAutolockPosition( bool autolockPosition )
+{
+    if ( mAutolockPosition == autolockPosition )
+        return;
+
+    mAutolockPosition = autolockPosition;
+    setValue( QStringLiteral( "autolockPosition" ), autolockPosition );
+    emit autolockPositionChanged( mAutolockPosition );
 }
 
 double AppSettings::gpsAntennaHeight() const

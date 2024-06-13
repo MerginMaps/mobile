@@ -895,6 +895,7 @@ Item {
       map: mapCanvas
       positionMarkerComponent: positionMarker
       recordingMapTool.centeredToGPS: root.centeredToGPS
+      centerToGPSOnStartup: __appSettings.autolockPosition
 
       activeFeature: root.state === "edit" ? internal.featurePairToEdit.feature : __inputUtils.emptyFeature()
 
