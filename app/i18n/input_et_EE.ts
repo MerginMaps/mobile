@@ -61,22 +61,22 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="232"/>
+        <location filename="../androidutils.cpp" line="263"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>Salvestamine on hetkel keelatud, palun luba see seadetes et laadida pilte albumist</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="236"/>
+        <location filename="../androidutils.cpp" line="267"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
         <translation>Mergin Maps vajab salvestamisõigusi et laadida pilte pildikaustast</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="254"/>
+        <location filename="../androidutils.cpp" line="285"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Kaameraõigused puuduvad, palun muuda seadistustes õigused</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="258"/>
+        <location filename="../androidutils.cpp" line="289"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Meil on vaja kaameraõigusi selleks et pildistada</translation>
     </message>
@@ -163,119 +163,119 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="209"/>
+        <location filename="../inpututils.cpp" line="213"/>
         <source>just now</source>
         <translation>äsja</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="214"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 minutes ago</source>
         <translation>%1 minutit tagasi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="214"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 minute ago</source>
         <translation>%1 minut tagasi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="219"/>
+        <location filename="../inpututils.cpp" line="223"/>
         <source>%1 hours ago</source>
         <translation>%1 tundi tagasi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="219"/>
+        <location filename="../inpututils.cpp" line="223"/>
         <source>%1 hour ago</source>
         <translation>%1 tund tagasi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="223"/>
-        <location filename="../inpututils.cpp" line="228"/>
+        <location filename="../inpututils.cpp" line="227"/>
+        <location filename="../inpututils.cpp" line="232"/>
         <source>%1 days ago</source>
         <translation>%1 päeva tagasi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="223"/>
-        <location filename="../inpututils.cpp" line="228"/>
+        <location filename="../inpututils.cpp" line="227"/>
+        <location filename="../inpututils.cpp" line="232"/>
         <source>%1 day ago</source>
         <translation>%1 päev tagasi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="233"/>
+        <location filename="../inpututils.cpp" line="237"/>
         <source>%1 weeks ago</source>
         <translation>%1 nädalat tagasi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="233"/>
+        <location filename="../inpututils.cpp" line="237"/>
         <source>%1 week ago</source>
         <translation>%1 nädal tagasi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="238"/>
+        <location filename="../inpututils.cpp" line="242"/>
         <source>%1 months ago</source>
         <translation>%1 kuud tagasi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="238"/>
+        <location filename="../inpututils.cpp" line="242"/>
         <source>%1 month ago</source>
         <translation>%1 kuu tagasi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="243"/>
+        <location filename="../inpututils.cpp" line="247"/>
         <source>%1 years ago</source>
         <translation>%1 aastat tagasi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="243"/>
+        <location filename="../inpututils.cpp" line="247"/>
         <source>%1 year ago</source>
         <translation>%1 aasta tagasi</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1477"/>
+        <location filename="../inpututils.cpp" line="1481"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>ekraani resolutsioon: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1478"/>
+        <location filename="../inpututils.cpp" line="1482"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>ekraani DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1479"/>
+        <location filename="../inpututils.cpp" line="1483"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>ekraani suurus: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1480"/>
+        <location filename="../inpututils.cpp" line="1484"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>deklareeritud seadme pikslisuhe: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1481"/>
+        <location filename="../inpututils.cpp" line="1485"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>arvutatud seadme pikslisuhe: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1482"/>
+        <location filename="../inpututils.cpp" line="1486"/>
         <source>used dp scale: %1</source>
         <translation>kasutatud seadme pikslite mõõtkava: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2011"/>
+        <location filename="../inpututils.cpp" line="2015"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Pead lisama vähemalt %1 punkti iga osa kohta.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2015"/>
+        <location filename="../inpututils.cpp" line="2019"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Pead lisama vähemalt %1 punkti.</translation>
     </message>
@@ -375,11 +375,11 @@ Seda ei lisata projektile.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="102"/>
-        <source>Server is currently unavailable - please try again later.</source>
-        <translation>Server ei ole hetkel kättesaadav- proovi hiljem uuesti.</translation>
+        <source>Server is currently unavailable, check your connection or try again later.</source>
+        <translation>Server ei ole hetkel kättesaadav- kontrolli võrguühendust või proovi hiljem uuesti.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="150"/>
+        <location filename="../qml/account/MMAccountController.qml" line="156"/>
         <source>I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Nõustun Mergin Maps&apos;i %1Tingimuste%3 ja %2Privaatsuspõhimõtetega%3</translation>
     </message>
@@ -763,22 +763,22 @@ Seda ei lisata projektile.</translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="87"/>
-        <location filename="../qml/form/MMFormPage.qml" line="188"/>
+        <location filename="../qml/form/MMFormPage.qml" line="187"/>
         <source>Edit feature</source>
         <translation>Muuda nähtust</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="201"/>
+        <location filename="../qml/form/MMFormPage.qml" line="200"/>
         <source>Delete</source>
         <translation>Kustuta</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="210"/>
+        <location filename="../qml/form/MMFormPage.qml" line="209"/>
         <source>Edit geometry</source>
         <translation>Muuda geomeetriat</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="446"/>
+        <location filename="../qml/form/MMFormPage.qml" line="451"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Nähtust ei õnnestunud salvestada, vaata üle kõik kohustuslikud väljad</translation>
     </message>
@@ -786,22 +786,27 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMFormPhotoEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="105"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="80"/>
+        <source>Photo is missing.</source>
+        <translation>Pilt on puudu.</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="106"/>
         <source>Open Image</source>
         <translation>Ava pilt</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="107"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="108"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Pildifailid (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="233"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="232"/>
         <source>Could not create directory %1.</source>
         <translation>Ei õnnestunud tekitada kausta %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="305"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="304"/>
         <source>Failed to process the image</source>
         <translation>Pilti ei õnnestunud töödelda</translation>
     </message>
@@ -1138,12 +1143,12 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="53"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="55"/>
         <source>Search</source>
         <translation>Otsi</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="137"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="139"/>
         <source>Confirm selection</source>
         <translation>Kinnita valik</translation>
     </message>
@@ -1219,7 +1224,7 @@ Seda ei lisata projektile.</translation>
         <translation>Serveri aadress</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="215"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="218"/>
         <source>Confirm</source>
         <translation>Kinnita</translation>
     </message>
@@ -1375,7 +1380,7 @@ Seda ei lisata projektile.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
-        <source>You need to be signed in to your Mergin Maps account in order to synchronize the project.</source>
+        <source>You need to be signed in to your Mergin Maps account in order to synchronise the project.</source>
         <translation>Pead olema sisse logitud oma Mergin Maps&apos;i kontole et sünkroniseerida projekti.</translation>
     </message>
     <message>
@@ -1398,7 +1403,7 @@ Seda ei lisata projektile.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="19"/>
-        <source>You are not allowed to synchronize your changes in this project. Contact the project owner to assign you the correct permission. If you are the project owner, log in to the dashboard.</source>
+        <source>You are not allowed to synchronise your changes in this project. Contact the project owner to assign you the correct permission. If you are the project owner, log in to the dashboard.</source>
         <translation>Sul pole õigusi muudatuste sünkroniseerimiseks. Võta ühendust selle projekti omanikuga et ta annaks sulle vajalikud ligipääsuõigused. Kui see on sinu projekt, logi sisse töölauale.</translation>
     </message>
     <message>
@@ -1438,7 +1443,7 @@ Seda ei lisata projektile.</translation>
         <translation>Pildista</translation>
     </message>
     <message>
-        <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="93"/>
+        <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="95"/>
         <source>From gallery</source>
         <translation>Pildigaleriist</translation>
     </message>
@@ -1610,7 +1615,7 @@ Seda ei lisata projektile.</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="291"/>
-        <source>Synchronize project</source>
+        <source>Synchronise project</source>
         <translation>Sünkroniseeri projekt</translation>
     </message>
     <message>
@@ -1707,36 +1712,36 @@ Seda ei lisata projektile.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="162"/>
-        <source>Could not synchronize project, please make sure you are logged in and have sufficient rights.</source>
+        <source>Could not synchronise project, please make sure you are logged in and have sufficient rights.</source>
         <translation>Projekti ei õnnestunud sünkroniseerida, palun vaata üle kas sul on piisavalt õigusi ja kas oled sisse logitud.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="207"/>
+        <location filename="../qml/project/MMProjectList.qml" line="212"/>
         <source>Create project</source>
         <translation>Tekita projekt</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="232"/>
+        <location filename="../qml/project/MMProjectList.qml" line="237"/>
         <source>Get started with Mergin Maps</source>
         <translation>Tee algust Mergin Maps&apos;iga</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="233"/>
+        <location filename="../qml/project/MMProjectList.qml" line="238"/>
         <source>First step is to create your brand new project.</source>
         <translation>Esimene samm on tekitada oma uus projekt</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="241"/>
+        <location filename="../qml/project/MMProjectList.qml" line="246"/>
         <source>Unable to get the list of projects.</source>
         <translation>Ei saa projektide loetelu.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="241"/>
+        <location filename="../qml/project/MMProjectList.qml" line="246"/>
         <source>No projects found</source>
         <translation>Ei leidnud projekte</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="270"/>
+        <location filename="../qml/project/MMProjectList.qml" line="275"/>
         <source>Retry</source>
         <translation>Proovi uuesti</translation>
     </message>
@@ -1933,7 +1938,7 @@ Seda ei lisata projektile.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="25"/>
-        <source>Any unsynchronized changes will be lost in project 
+        <source>Any unsynchronised changes will be lost in project 
  %1</source>
         <translation>Kaovad kõik sünkroniseerimata muudatused projektis
 %1</translation>
@@ -2300,7 +2305,7 @@ Seda ei lisata projektile.</translation>
     <name>MMSyncFailedDialog</name>
     <message>
         <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="27"/>
-        <source>Failed to synchronize your changes</source>
+        <source>Failed to synchronise your changes</source>
         <translation>Muudatusi ei õnnestunud sünkroniseerida</translation>
     </message>
     <message>
@@ -2795,11 +2800,6 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
         <translation>Vali nähtus</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="802"/>
-        <source>Successfully synchronized</source>
-        <translation>Edukalt uuendatud</translation>
-    </message>
-    <message>
         <location filename="../qml/main.qml" line="833"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Keegi teine sünkroniseerib, proovime mõne aja pärast uuesti</translation>
@@ -2810,22 +2810,17 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
         <translation>Täpsemalt</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="841"/>
-        <source>There was an issue during synchronization, we will try again. Click to learn more</source>
-        <translation>Sünkroniseerimise käigus tekkis probleem, proovime hiljem uuesti. Kliki siia et täpsemalt teada saada</translation>
-    </message>
-    <message>
         <location filename="../qml/main.qml" line="857"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Serveriga ei õnnestu ühendust saada. Püüa parandada võrguühendust.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="906"/>
+        <location filename="../qml/main.qml" line="908"/>
         <source>Up to date</source>
         <translation>Ajakohane</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="952"/>
+        <location filename="../qml/main.qml" line="962"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Projekti laadimisel tekkis tõrge. %1Vaata täpsemalt%2</translation>
     </message>
@@ -2835,12 +2830,22 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
         <translation>Markeerimine on välja lülitatud sest asukoht ei ole kättesaadav!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="978"/>
+        <location filename="../qml/main.qml" line="802"/>
+        <source>Successfully synchronised</source>
+        <translation>Edukalt uuendatud</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="840"/>
+        <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
+        <translation>Sünkroniseerimise käigus tekkis probleem, proovime hiljem uuesti. Kliki siia et täpsemalt teada saada</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="983"/>
         <source>Could not read the project file:</source>
         <translation>Ei õnnestunud avada projektifaili:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1003"/>
+        <location filename="../qml/main.qml" line="1008"/>
         <source>Press back again to quit the app</source>
         <translation>Vajuta veelkord tagasi et äpp kinni panna</translation>
     </message>
