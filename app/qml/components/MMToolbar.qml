@@ -119,6 +119,7 @@ Rectangle {
       text: model.btnData.text
 
       onClicked: {
+        root.forceActiveFocus()
         root.index = model.index
         model.btnData.clicked()
       }
