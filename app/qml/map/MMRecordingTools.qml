@@ -26,7 +26,7 @@ Item {
   required property MMPositionMarker positionMarkerComponent
 
   property alias recordingMapTool: mapTool
-  property bool centerToGPSOnStartup: true
+  property bool centerToGPSOnStartup: __appSettings.autolockPosition
 
   property var activeFeature
 
