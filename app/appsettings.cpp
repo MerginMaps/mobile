@@ -283,17 +283,17 @@ void AppSettings::setAutosyncAllowed( bool newAutosyncAllowed )
 
 bool AppSettings::autolockPosition() const
 {
-    return mAutolockPosition;
+  return mAutolockPosition;
 }
 
 void AppSettings::setAutolockPosition( bool autolockPosition )
 {
-    if ( mAutolockPosition == autolockPosition )
-        return;
+  if ( mAutolockPosition == autolockPosition )
+    return;
 
-    mAutolockPosition = autolockPosition;
-    setValue( QStringLiteral( "autolockPosition" ), autolockPosition );
-    emit autolockPositionChanged( mAutolockPosition );
+  mAutolockPosition = autolockPosition;
+  setValue( QStringLiteral( "autolockPosition" ), autolockPosition );
+  emit autolockPositionChanged( mAutolockPosition );
 }
 
 double AppSettings::gpsAntennaHeight() const

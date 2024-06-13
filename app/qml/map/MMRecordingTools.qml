@@ -316,16 +316,15 @@ Item {
   }
 
   Component.onCompleted: {
-    if ( root.centerToGPSOnStartup )
-    {
+    if ( root.centerToGPSOnStartup ) {
       // center to GPS
-      if ( root.gpsState.state === "unavailable" ) {
-        showMessage( qsTr( "GPS currently unavailable." ) )
-        return
+      if ( gpsStateGroup.state === "unavailable" ) {
+          __notificationModel.addError( "GPS currently unavailable." );
+          return;
       }
 
-      mapTool.centeredToGPS = true
-      root.map.mapSettings.setCenter( mapPositioning.mapPosition )
+      root.map.mapSettings.centeredToGPS = true;
+      root.map.mapSettings.setCenter( mapPositionSource.mapPosition );
     }
   }
 
