@@ -2832,7 +2832,7 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
     <message>
         <location filename="../qml/main.qml" line="802"/>
         <source>Successfully synchronised</source>
-        <translation>Edukalt uuendatud</translation>
+        <translation>Edukalt sünkroniseeritud</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="840"/>
