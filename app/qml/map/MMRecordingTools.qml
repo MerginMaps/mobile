@@ -31,6 +31,7 @@ Item {
 
   signal canceled()
   signal done( var featureLayerPair )
+  signal autoLockGps()
 
   function toggleStreaming() {
     if (  mapTool.recordingType === MM.RecordingMapTool.Manual )
@@ -322,7 +323,7 @@ Item {
           return;
       }
 
-      mapTool.centeredToGPS = true
+      root.autoLockGps()
       root.map.mapSettings.setCenter( mapPositionSource.mapPosition )
     }
   }

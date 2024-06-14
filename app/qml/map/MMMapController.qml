@@ -935,6 +935,8 @@ Item {
 
         root.state = "view"
       }
+
+      onAutoLockGps: root.centeredToGPS = true
     }
   }
 
