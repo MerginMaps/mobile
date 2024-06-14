@@ -26,7 +26,6 @@ Item {
   required property MMPositionMarker positionMarkerComponent
 
   property alias recordingMapTool: mapTool
-  property bool centerToGPSOnStartup: __appSettings.autolockPosition
 
   property var activeFeature
 
@@ -316,15 +315,15 @@ Item {
   }
 
   Component.onCompleted: {
-    if ( root.centerToGPSOnStartup ) {
+    if ( __appSettings.autolockPosition ) {
       // center to GPS
       if ( gpsStateGroup.state === "unavailable" ) {
-          __notificationModel.addError( "GPS currently unavailable." );
+          __notificationModel.addError( "GPS currently unavailable." )
           return;
       }
 
-      root.map.mapSettings.centeredToGPS = true;
-      root.map.mapSettings.setCenter( mapPositionSource.mapPosition );
+      mapTool.centeredToGPS = true
+      root.map.mapSettings.setCenter( mapPositionSource.mapPosition )
     }
   }
 
