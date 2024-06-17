@@ -31,7 +31,6 @@ Item {
 
   signal canceled()
   signal done( var featureLayerPair )
-  signal autoLockGps()
 
   function toggleStreaming() {
     if (  mapTool.recordingType === MM.RecordingMapTool.Manual )
