@@ -315,19 +315,6 @@ Item {
     }
   }
 
-  Component.onCompleted: {
-    if ( __appSettings.autolockPosition ) {
-      // center to GPS
-      if ( gpsStateGroup.state === "unavailable" ) {
-          __notificationModel.addError( "GPS currently unavailable." )
-          return;
-      }
-
-      root.autoLockGps()
-      root.map.mapSettings.setCenter( mapPositionSource.mapPosition )
-    }
-  }
-
   function discardChanges() {
     mapTool.discardChanges()
     root.canceled()

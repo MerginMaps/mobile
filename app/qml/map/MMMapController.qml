@@ -99,6 +99,15 @@ Item {
     switch ( state ) {
 
     case "record": {
+      if ( __appSettings.autolockPosition ) { // center to GPS
+        if ( gpsStateGroup.state === "unavailable" ) {
+            __notificationModel.addError( "GPS currently unavailable." )
+            return;
+        }
+
+        root.centeredToGPS = true
+      }
+
       root.recordingStarted()
       break
     }
@@ -935,8 +944,6 @@ Item {
 
         root.state = "view"
       }
-
-      onAutoLockGps: root.centeredToGPS = true
     }
   }
 
