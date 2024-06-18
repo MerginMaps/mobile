@@ -92,59 +92,58 @@ Item {
   ]
 
   onStateChanged: {
+    switch ( state ) {
+      case "record": {
+        if ( __appSettings.autolockPosition ) { // center to GPS
+          if ( gpsStateGroup.state === "unavailable" ) {
+              __notificationModel.addError( "GPS currently unavailable." )
+              return;
+          }
+
+          root.centeredToGPS = true
+        }
+
+        root.recordingStarted()
+        break
+      }
+
+      case "recordInLayer": {
+        root.recordInLayerFeatureStarted()
+        root.hideHighlight()
+        break
+      }
+
+      case "edit": {
+        root.editingGeometryStarted()
+        root.hideHighlight()
+        break
+      }
+
+      case "split": {
+        root.showInfoTextMessage( qsTr( "Create line to split the selected feature" ) )
+        root.splittingStarted()
+        break
+      }
+
+      case "view": {
+        root.hideHighlight()
+        break
+      }
+
+      case "stakeout": {
+        root.hideHighlight()
+        root.stakeoutStarted( internal.stakeoutTarget )
+        break
+      }
+
+      case "inactive": {
+        break
+      }
+    }
+
     // We call this first because when previous state is 'view' and `centeredToGPS` is true
     // the map may still not be centered. It's only centered after a certain threshold is exceeded.
     updatePosition()
-
-    switch ( state ) {
-
-    case "record": {
-      if ( __appSettings.autolockPosition ) { // center to GPS
-        if ( gpsStateGroup.state === "unavailable" ) {
-            __notificationModel.addError( "GPS currently unavailable." )
-            return;
-        }
-
-        root.centeredToGPS = true
-      }
-
-      root.recordingStarted()
-      break
-    }
-
-    case "recordInLayer": {
-      root.recordInLayerFeatureStarted()
-      root.hideHighlight()
-      break
-    }
-
-    case "edit": {
-      root.editingGeometryStarted()
-      root.hideHighlight()
-      break
-    }
-
-    case "split": {
-      root.showInfoTextMessage( qsTr( "Create line to split the selected feature" ) )
-      root.splittingStarted()
-      break
-    }
-
-    case "view": {
-      root.hideHighlight()
-      break
-    }
-
-    case "stakeout": {
-      root.hideHighlight()
-      root.stakeoutStarted( internal.stakeoutTarget )
-      break
-    }
-
-    case "inactive": {
-      break
-    }
-    }
   }
 
   state: "view"
