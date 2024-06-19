@@ -87,7 +87,10 @@ MMPrivateComponents.MMBaseInput {
 
         MouseArea {
           anchors.fill: parent
-          onClicked: root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
+          onClicked: {
+            root.forceActiveFocus()
+            root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
+          }
         }
       }
 
