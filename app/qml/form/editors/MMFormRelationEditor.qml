@@ -88,7 +88,7 @@ MMPrivateComponents.MMBaseInput {
         MouseArea {
           anchors.fill: parent
           onClicked: {
-            root.forceActiveFocus()
+            root.forceActiveFocus() // clear focus from all elements to prevent freezing #3483
             root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
           }
         }

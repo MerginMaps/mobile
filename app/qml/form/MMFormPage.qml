@@ -209,7 +209,10 @@ Page {
         text: qsTr( "Edit geometry" )
         iconSource: __style.editIcon
         visible: root.layerIsSpatial
-        onClicked: root.editGeometryRequested( root.controller.featureLayerPair )
+        onClicked: {
+          root.forceActiveFocus() // clear focus from all elements to prevent freezing #3483
+          root.editGeometryRequested( root.controller.featureLayerPair )
+        }
       }
     }
 
