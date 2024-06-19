@@ -92,15 +92,20 @@ Item {
   ]
 
   onStateChanged: {
+    // We call this first because when previous state is 'view' and `centeredToGPS` is true
+    // the map may still not be centered. It's only centered after a certain threshold is exceeded.
+    updatePosition()
+
     switch ( state ) {
       case "record": {
         if ( __appSettings.autolockPosition ) { // center to GPS
           if ( gpsStateGroup.state === "unavailable" ) {
-              __notificationModel.addError( "GPS currently unavailable." )
-              return;
+            __notificationModel.addError( "GPS currently unavailable." )
           }
-
-          root.centeredToGPS = true
+          else {
+            root.centeredToGPS = true
+            updatePosition()
+          }
         }
 
         root.recordingStarted()
@@ -140,10 +145,6 @@ Item {
         break
       }
     }
-
-    // We call this first because when previous state is 'view' and `centeredToGPS` is true
-    // the map may still not be centered. It's only centered after a certain threshold is exceeded.
-    updatePosition()
   }
 
   state: "view"
