@@ -97,44 +97,53 @@ Item {
     updatePosition()
 
     switch ( state ) {
+      case "record": {
+        if ( __appSettings.autolockPosition ) { // center to GPS
+          if ( gpsStateGroup.state === "unavailable" ) {
+            __notificationModel.addError( "GPS currently unavailable." )
+          }
+          else {
+            root.centeredToGPS = true
+            updatePosition()
+          }
+        }
 
-    case "record": {
-      root.recordingStarted()
-      break
-    }
+        root.recordingStarted()
+        break
+      }
 
-    case "recordInLayer": {
-      root.recordInLayerFeatureStarted()
-      root.hideHighlight()
-      break
-    }
+      case "recordInLayer": {
+        root.recordInLayerFeatureStarted()
+        root.hideHighlight()
+        break
+      }
 
-    case "edit": {
-      root.editingGeometryStarted()
-      root.hideHighlight()
-      break
-    }
+      case "edit": {
+        root.editingGeometryStarted()
+        root.hideHighlight()
+        break
+      }
 
-    case "split": {
-      root.showInfoTextMessage( qsTr( "Create line to split the selected feature" ) )
-      root.splittingStarted()
-      break
-    }
+      case "split": {
+        root.showInfoTextMessage( qsTr( "Create line to split the selected feature" ) )
+        root.splittingStarted()
+        break
+      }
 
-    case "view": {
-      root.hideHighlight()
-      break
-    }
+      case "view": {
+        root.hideHighlight()
+        break
+      }
 
-    case "stakeout": {
-      root.hideHighlight()
-      root.stakeoutStarted( internal.stakeoutTarget )
-      break
-    }
+      case "stakeout": {
+        root.hideHighlight()
+        root.stakeoutStarted( internal.stakeoutTarget )
+        break
+      }
 
-    case "inactive": {
-      break
-    }
+      case "inactive": {
+        break
+      }
     }
   }
 

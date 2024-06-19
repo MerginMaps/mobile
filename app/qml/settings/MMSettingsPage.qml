@@ -172,6 +172,17 @@ MMPage {
         onClicked: __appSettings.autosyncAllowed = !checked
       }
 
+      MMLine {}
+
+      MMSettingsComponents.MMSettingsSwitch {
+        width: parent.width
+        title: qsTr("Auto-lock position")
+        description: qsTr("Each time you start recording, the app centers to GPS")
+        checked: __appSettings.autolockPosition
+
+        onClicked: __appSettings.autolockPosition = !checked
+      }
+
       Item { width: 1; height: 1 }
 
       Text {
