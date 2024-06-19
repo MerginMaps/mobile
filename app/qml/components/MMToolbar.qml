@@ -120,7 +120,7 @@ Rectangle {
 
       onClicked: {
         // Prevent freezing by clearing focus from all elements
-        // See more at https://github.com/MerginMaps/mobile/issues/3389
+        // Issues #3389 and #3483
         root.forceActiveFocus()
         root.index = model.index
         model.btnData.clicked()
