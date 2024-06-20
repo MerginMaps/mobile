@@ -1511,6 +1511,11 @@ void AttributeController::renamePhotos()
         const QString src = InputUtils::getAbsolutePath( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString(), prefix );
         QFileInfo fi( src );
         QString newName = QStringLiteral( "%1.%2" ).arg( val.toString() ).arg( fi.completeSuffix() );
+
+        // Remove leading slashes from newName following issue #3415
+        static const QRegularExpression leadingSlashes( "^/+" );
+        newName.remove( leadingSlashes );
+
         const QString dst = InputUtils::getAbsolutePath( newName, prefix );
         if ( InputUtils::renameFile( src, dst ) )
         {
