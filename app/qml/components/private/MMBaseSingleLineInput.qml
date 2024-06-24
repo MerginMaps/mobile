@@ -144,7 +144,7 @@ MMBaseInput {
         // Do not let TextField calculate implicitWidth automatically based on background, it causes binding loops
         implicitWidth: width
 
-        readOnly: root.editState === "readOnly" || root.editState === "disabled" && root.isAttributeEditable
+        readOnly: root.editState === "readOnly" || root.editState === "disabled" && !root.isAttributeEditable
 
         // Ensure the text is scrolled to the beginning
         Component.onCompleted: ensureVisible( 0 )
