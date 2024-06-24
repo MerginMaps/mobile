@@ -29,7 +29,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
   property bool _fieldValueIsNull: parent.fieldValueIsNull
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
-  property bool _fieldIsReadOnly: parent.fieldIsReadOnly
+  property bool _fieldFormIsReadOnly: parent.fieldIsReadOnly
+  property bool _isAttributeEditable: parent.isAttributeEditable
 
   property string _fieldTitle: parent.fieldTitle
   property string _fieldErrorMessage: parent.fieldErrorMessage
@@ -43,7 +44,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
   text: _fieldValue === undefined || _fieldValueIsNull ? '' : _fieldValue
 
-  readOnly: _fieldIsReadOnly
+  readOnly: _fieldFormIsReadOnly
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 

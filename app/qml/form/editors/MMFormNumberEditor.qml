@@ -28,7 +28,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
   property bool _fieldValueIsNull: parent.fieldValueIsNull
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
-  property bool _fieldIsReadOnly: parent.fieldIsReadOnly
+  property bool _fieldFormIsReadOnly: parent.fieldIsReadOnly
+  property bool _isAttributeEditable: parent.isAttributeEditable
 
   property string _fieldTitle: parent.fieldTitle
   property string _fieldErrorMessage: parent.fieldErrorMessage
@@ -41,7 +42,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   signal rememberValueBoxClicked( bool state )
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
-  readOnly: _fieldIsReadOnly
+  readOnly: _fieldFormIsReadOnly
 
   errorMsg: _fieldErrorMessage
   warningMsg: _fieldWarningMessage

@@ -281,7 +281,9 @@ Page {
         property var fieldWidget: model.EditorWidget
         property var fieldConfig: model.EditorWidgetConfig
 
-        property bool fieldIsReadOnly: root.state === "readOnly" || !AttributeEditable
+        property bool fieldIsReadOnly: root.state === "readOnly"
+        property bool isAttributeEditable: AttributeEditable
+
         property bool fieldShouldShowTitle: model.ShowName
 
         property string fieldTitle: model.Name
