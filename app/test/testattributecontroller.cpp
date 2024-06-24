@@ -730,11 +730,14 @@ void TestAttributeController::testPhotoRenaming()
 
   controller.setFormValue( items.at( 2 ), QStringLiteral( "test" ) );
   controller.setFormValue( items.at( 3 ), QStringLiteral( "photo.jpg" ) );
+  controller.setFormValue( items.at( 4 ), QStringLiteral( "photo_with_slash.jpg" ) );
   controller.save();
 
   QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
   QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photo_default_value.jpg" ) ) );
   QCOMPARE( controller.featureLayerPair().feature().attribute( 3 ), QStringLiteral( "image_test.jpg" ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 4 ), QStringLiteral( "photo_default_value.jpg" ) );
 }
 
 void TestAttributeController::testHtmlAndTextWidgets()
