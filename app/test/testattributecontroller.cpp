@@ -697,56 +697,51 @@ void TestAttributeController::testFieldsOutsideForm()
 
 void TestAttributeController::testPhotoRenaming()
 {
-    QString projectName = QStringLiteral( "testPhotoRenaming" );
-    QString projectDir = QDir::tempPath() + "/" + projectName;
-    QString projectFileName = "project.qgz";
+  QString projectName = QStringLiteral( "testPhotoRenaming" );
+  QString projectDir = QDir::tempPath() + "/" + projectName;
+  QString projectFileName = "project.qgz";
 
-    QDir tempDir( projectDir );
-    tempDir.removeRecursively();
+  QDir tempDir( projectDir );
+  tempDir.removeRecursively();
 
-    InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir );
+  InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir );
 
-    QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
-    QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photo2.jpg" ) ) );
-    QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
-    QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/default_photo_naming.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photo2.jpg" ) ) );
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photos/Survey.jpg" ) ) );
 
-    QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
 
-    QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
-    QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
 
-    QVERIFY( surveyLayer && surveyLayer->isValid() );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
 
-    QgsFeature feat;
-    feat.setValid( true );
-    feat.setFields( surveyLayer->fields(), true );
-    FeatureLayerPair pair( feat, surveyLayer );
+  QgsFeature feat;
+  feat.setValid( true );
+  feat.setFields( surveyLayer->fields(), true );
+  FeatureLayerPair pair( feat, surveyLayer );
 
-    AttributeController controller;
-    controller.setFeatureLayerPair( pair );
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
 
-    const TabItem *tab = controller.tabItem( 0 );
-    const QVector<QUuid> items = tab->formItems();
-    QCOMPARE( items.size(), 5 );
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+  QCOMPARE( items.size(), 5 );
 
-    QgsFields fields = surveyLayer->fields();
-    for (int i = 0; i < fields.count(); ++i) {
-        qDebug() << "Field" << i << ":" << fields.at(i).name() << "Type:" << fields.at(i).typeName();
-    }
+  controller.setFormValue( items.at( 2 ), QStringLiteral( "test" ) );
+  controller.setFormValue( items.at( 3 ), QStringLiteral( "photo.jpg" ) );
+  controller.setFormValue( items.at( 4 ), QStringLiteral( "photo2.jpg" ) );
+  controller.save();
 
-    controller.setFormValue( items.at( 2 ), QStringLiteral( "test" ) );
-    controller.setFormValue( items.at( 3 ), QStringLiteral( "photo.jpg" ) );
-    controller.setFormValue( items.at( 4 ), QStringLiteral( "photo2.jpg" ) );
-    controller.save();
-    qDebug() << "PROJECT DIR: " << projectDir;
-    QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
-    QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
-    QCOMPARE( controller.featureLayerPair().feature().attribute( 3 ), QStringLiteral( "image_test.jpg" ) );
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 3 ), QStringLiteral( "image_test.jpg" ) );
 
-    QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photo2.jpg" ) ) );
-    QVERIFY( QFile::exists( projectDir + QStringLiteral( "/default_photo_naming.jpg" ) ) );
-    QCOMPARE( controller.featureLayerPair().feature().attribute( 4 ), QStringLiteral( "default_photo_naming.jpg" ) );
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photo2.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photos/Survey.jpg" ) ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 4 ), QVariant( "photos/Survey.jpg" ) );
 }
 
 void TestAttributeController::testHtmlAndTextWidgets()
