@@ -281,6 +281,8 @@ Page {
         property var fieldWidget: model.EditorWidget
         property var fieldConfig: model.EditorWidgetConfig
 
+        // Following issue #3457, error message can be displayed even for non-editable attributes
+        // Thus, we split attributes indicating edit mode for formPage and attribute editability
         property bool fieldIsReadOnly: root.state === "readOnly"
         property bool isAttributeEditable: AttributeEditable
 
