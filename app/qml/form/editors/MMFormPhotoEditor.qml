@@ -63,7 +63,8 @@ MMFormPhotoViewer {
   property var _fieldFeatureLayerPair: parent.fieldFeatureLayerPair
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
-  property bool _fieldIsReadOnly: parent.fieldIsReadOnly
+  property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
+  property bool _fieldIsEditable: parent.fieldIsEditable
 
   property string _fieldTitle: parent.fieldTitle
   property string _fieldErrorMessage: parent.fieldErrorMessage
@@ -80,7 +81,8 @@ MMFormPhotoViewer {
   warningMsg: photoState === "notAvailable" ? qsTr( "Photo is missing." ) : _fieldWarningMessage
   errorMsg: _fieldErrorMessage
 
-  readOnly: _fieldIsReadOnly
+  readOnly: _fieldFormIsReadOnly || !_fieldIsEditable
+  shouldShowValidationMsg: !_fieldFormIsReadOnly
 
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState

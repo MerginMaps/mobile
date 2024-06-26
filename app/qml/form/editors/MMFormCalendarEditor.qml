@@ -31,8 +31,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
   property bool _fieldValueIsNull: parent.fieldValueIsNull
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
-  property bool _fieldFormIsReadOnly: parent.fieldIsReadOnly
-  property bool _isAttributeEditable: parent.isAttributeEditable
+  property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
+  property bool _fieldIsEditable: parent.fieldIsEditable
 
   property string _fieldTitle: parent.fieldTitle
   property string _fieldErrorMessage: parent.fieldErrorMessage
@@ -59,7 +59,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
 
-  readOnly: _fieldFormIsReadOnly
+  readOnly: _fieldFormIsReadOnly || !_fieldIsEditable
+  shouldShowValidationMsg: !_fieldFormIsReadOnly
 
   onCheckboxCheckedChanged: {
     root.rememberValueBoxClicked( checkboxChecked )
