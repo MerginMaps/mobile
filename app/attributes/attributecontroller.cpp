@@ -1513,7 +1513,7 @@ void AttributeController::renamePhotos()
         QString newName = QStringLiteral( "%1.%2" ).arg( val.toString() ).arg( fi.completeSuffix() );
 
         // Remove leading slashes from newName following issue #3415
-        static const QRegularExpression leadingSlashes( "^/+" );
+        const QRegularExpression leadingSlashes( "^/+" );
         newName.remove( leadingSlashes );
 
         const QString dst = InputUtils::getAbsolutePath( newName, prefix );
