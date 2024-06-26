@@ -171,7 +171,7 @@ Item {
       width: parent.width
       height: validationMessagegroup.implicitHeight
 
-      visible: root.shouldShowValidationMsg
+      visible: root.validationState !== "valid" && root.shouldShowValidationMsg
 
       RowLayout {
         id: validationMessagegroup
