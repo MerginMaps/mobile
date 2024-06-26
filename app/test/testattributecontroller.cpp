@@ -707,7 +707,9 @@ void TestAttributeController::testPhotoRenaming()
   InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir );
 
   QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photo2.jpg" ) ) );
   QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photos/Survey.jpg" ) ) );
 
   QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
 
@@ -726,15 +728,20 @@ void TestAttributeController::testPhotoRenaming()
 
   const TabItem *tab = controller.tabItem( 0 );
   const QVector<QUuid> items = tab->formItems();
-  QCOMPARE( items.size(), 4 );
+  QCOMPARE( items.size(), 5 );
 
   controller.setFormValue( items.at( 2 ), QStringLiteral( "test" ) );
   controller.setFormValue( items.at( 3 ), QStringLiteral( "photo.jpg" ) );
+  controller.setFormValue( items.at( 4 ), QStringLiteral( "photo2.jpg" ) );
   controller.save();
 
   QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
   QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
   QCOMPARE( controller.featureLayerPair().feature().attribute( 3 ), QStringLiteral( "image_test.jpg" ) );
+
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photo2.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photos/Survey.jpg" ) ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( 4 ), QVariant( "photos/Survey.jpg" ) );
 }
 
 void TestAttributeController::testHtmlAndTextWidgets()
