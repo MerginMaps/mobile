@@ -65,7 +65,7 @@ Item {
     states: [
       State {
         name: "valid"
-        when: !warningMsg && !errorMsg
+        when: !shouldShowValidation || ( !warningMsg && !errorMsg )
       },
       State {
         name: "error"
