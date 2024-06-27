@@ -20,7 +20,7 @@
 
 class CoreUtils
 {
-public:
+  public:
     explicit CoreUtils( ) = default;
     ~CoreUtils() = default;
 
@@ -120,7 +120,7 @@ public:
     */
     static double getTotalDeviceStorage();
 
-private:
+  private:
     static QString sLogFile;
     static int CHECKSUM_CHUNK_SIZE;
 
