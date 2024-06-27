@@ -2415,7 +2415,7 @@ void MerginApi::startProjectPull( const QString &projectFullName )
   []( const DownloadQueueItem & a, const DownloadQueueItem & b ) { return a.size > b.size; }
   );
 
-  CoreUtils::log( "pull " + projectFullName, QStringLiteral( "%1 available device storage, %2 total device storage" )
+  CoreUtils::log( "pull " + projectFullName, QStringLiteral( "%1 of available device storage, %2 of total device storage" )
                   .arg( CoreUtils::getAvailableDeviceStorage() )
                   .arg( CoreUtils::getTotalDeviceStorage() ) );
 
