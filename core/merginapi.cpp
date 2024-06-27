@@ -25,7 +25,6 @@
 #include "geodiffutils.h"
 #include "localprojectsmanager.h"
 #include "../app/enumhelper.h"
-#include "../app/inpututils.h"
 #include "merginerrortypes.h"
 
 #include <geodiff.h>
@@ -2415,10 +2414,6 @@ void MerginApi::startProjectPull( const QString &projectFullName )
     transaction.downloadQueue.begin(), transaction.downloadQueue.end(),
   []( const DownloadQueueItem & a, const DownloadQueueItem & b ) { return a.size > b.size; }
   );
-
-  CoreUtils::log( "pull " + projectFullName, QStringLiteral( "%1 available device storage, %2 total device storage" )
-                                                .arg( InputUtils::getAvailableDeviceStorage() )
-                                                .arg( InputUtils::getTotalDeviceStorage() );
 
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "%1 update tasks, %2 items to download (total size %3 bytes)" )
                   .arg( transaction.pullTasks.count() )
