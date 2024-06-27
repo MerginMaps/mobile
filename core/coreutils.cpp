@@ -285,28 +285,53 @@ QString CoreUtils::nameAbbr( const QString &name, const QString &email )
   return email.left( 2 ).toUpper();
 }
 
-double CoreUtils::getAvailableDeviceStorage()
+QString CoreUtils::getAvailableDeviceStorage()
 {
   QString appDir = QCoreApplication::applicationDirPath();
   QStorageInfo storageInfo( appDir );
 
   if ( storageInfo.isValid() && storageInfo.isReady() )
   {
-    return static_cast<qreal>( storageInfo.bytesAvailable() );
+    return bytesToHumanSize( storageInfo.bytesAvailable() );
   }
 
-  return 0.0;
+  return "N/A";
 }
 
-double CoreUtils::getTotalDeviceStorage()
+QString CoreUtils::getTotalDeviceStorage()
 {
   QString appDir = QCoreApplication::applicationDirPath();
   QStorageInfo storageInfo( appDir );
 
   if ( storageInfo.isValid() && storageInfo.isReady() )
   {
-    return static_cast<qreal>( storageInfo.bytesTotal() );
+    return bytesToHumanSize( storageInfo.bytesTotal() );
   }
 
-  return 0.0;
+  return "N/A";
+}
+
+QString CoreUtils::bytesToHumanSize( double bytes )
+{
+  const int precision = 1;
+  if ( bytes < 1e-5 )
+  {
+    return "0.0";
+  }
+  else if ( bytes < 1024.0 * 1024.0 )
+  {
+    return QString::number( bytes / 1024.0, 'f', precision ) + " KB";
+  }
+  else if ( bytes < 1024.0 * 1024.0 * 1024.0 )
+  {
+    return QString::number( bytes / 1024.0 / 1024.0, 'f', precision ) + " MB";
+  }
+  else if ( bytes < 1024.0 * 1024.0 * 1024.0 * 1024.0 )
+  {
+    return QString::number( bytes / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " GB";
+  }
+  else
+  {
+    return QString::number( bytes / 1024.0 / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " TB";
+  }
 }

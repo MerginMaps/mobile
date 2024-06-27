@@ -113,12 +113,17 @@ class CoreUtils
     /**
      * Returns available device storage
     */
-    static double getAvailableDeviceStorage();
+    static QString getAvailableDeviceStorage();
 
     /**
      * Returns total device storage
     */
-    static double getTotalDeviceStorage();
+    static QString getTotalDeviceStorage();
+
+    /**
+     * Converts bytes to human readable size (e.g. 1GB, 500MB)
+     */
+    static QString bytesToHumanSize( double bytes );
 
   private:
     static QString sLogFile;
