@@ -43,7 +43,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
   readOnly: _fieldFormIsReadOnly || !_fieldIsEditable
-  shouldShowValidationMsg: !_fieldFormIsReadOnly
+  shouldShowValidation: !_fieldFormIsReadOnly
 
   errorMsg: _fieldErrorMessage
   warningMsg: _fieldWarningMessage

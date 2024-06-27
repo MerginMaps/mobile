@@ -47,7 +47,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   errorMsg: _fieldErrorMessage
 
   readOnly: _fieldFormIsReadOnly || !_fieldIsEditable
-  shouldShowValidationMsg: !_fieldFormIsReadOnly
+  shouldShowValidation: !_fieldFormIsReadOnly
 
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState

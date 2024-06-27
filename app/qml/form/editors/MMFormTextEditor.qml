@@ -45,7 +45,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   text: _fieldValue === undefined || _fieldValueIsNull ? '' : _fieldValue
 
   readOnly: _fieldFormIsReadOnly || !_fieldIsEditable
-  shouldShowValidationMsg: !_fieldFormIsReadOnly
+  shouldShowValidation: !_fieldFormIsReadOnly
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 

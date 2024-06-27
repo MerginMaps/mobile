@@ -60,7 +60,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   checkboxChecked: _fieldRememberValueState
 
   readOnly: _fieldFormIsReadOnly || !_fieldIsEditable
-  shouldShowValidationMsg: !_fieldFormIsReadOnly
+  shouldShowValidation: !_fieldFormIsReadOnly
 
   onCheckboxCheckedChanged: {
     root.rememberValueBoxClicked( checkboxChecked )
