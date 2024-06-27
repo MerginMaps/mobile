@@ -28,7 +28,7 @@ Item {
   property alias checkboxChecked: checkbox.checked
 
   property bool readOnly: false
-  property bool shouldShowValidationMsg: !readOnly
+  property bool shouldShowValidation: true
 
   property string errorMsg: ""
   property string warningMsg: ""
@@ -171,7 +171,7 @@ Item {
       width: parent.width
       height: validationMessagegroup.implicitHeight
 
-      visible: root.validationState !== "valid" && root.shouldShowValidationMsg
+      visible: root.validationState !== "valid" && root.shouldShowValidation
 
       RowLayout {
         id: validationMessagegroup
