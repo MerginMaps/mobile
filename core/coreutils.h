@@ -20,7 +20,7 @@
 
 class CoreUtils
 {
-  public:
+public:
     explicit CoreUtils( ) = default;
     ~CoreUtils() = default;
 
@@ -109,7 +109,18 @@ class CoreUtils
     static QString deviceUuid();
 
     static const QString QSETTINGS_APP_GROUP_NAME;
-  private:
+
+    /**
+     * Returns available device storage
+    */
+    static double getAvailableDeviceStorage();
+
+    /**
+     * Returns total device storage
+    */
+    static double getTotalDeviceStorage();
+
+private:
     static QString sLogFile;
     static int CHECKSUM_CHUNK_SIZE;
 
