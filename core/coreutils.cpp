@@ -282,7 +282,8 @@ QString CoreUtils::nameAbbr( const QString &name, const QString &email )
   if ( email.isEmpty() )
     return name.left( 2 ).toUpper();
 
-  return email.left( 2 ).toUpper();}
+  return email.left( 2 ).toUpper();
+}
 
 QString CoreUtils::getAvailableDeviceStorage()
 {
