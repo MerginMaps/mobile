@@ -294,7 +294,7 @@ QString CoreUtils::getAvailableDeviceStorage()
     return bytesToHumanSize( storageInfo.bytesAvailable() );
   }
 
-  return "N/A"; //
+  return "N/A";
 }
 
 QString CoreUtils::getTotalDeviceStorage()
