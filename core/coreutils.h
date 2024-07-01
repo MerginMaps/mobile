@@ -109,6 +109,22 @@ class CoreUtils
     static QString deviceUuid();
 
     static const QString QSETTINGS_APP_GROUP_NAME;
+
+    /**
+     * Returns available device storage
+    */
+    static QString getAvailableDeviceStorage();
+
+    /**
+     * Returns total device storage
+    */
+    static QString getTotalDeviceStorage();
+
+    /**
+     * Converts bytes to human readable size (e.g. 1GB, 500MB)
+     */
+    static QString bytesToHumanSize( double bytes );
+
   private:
     static QString sLogFile;
     static int CHECKSUM_CHUNK_SIZE;

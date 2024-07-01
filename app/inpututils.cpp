@@ -535,27 +535,7 @@ QString InputUtils::filesToString( QList<MerginFile> files )
 
 QString InputUtils::bytesToHumanSize( double bytes )
 {
-  const int precision = 1;
-  if ( bytes < 1e-5 )
-  {
-    return "0.0";
-  }
-  else if ( bytes < 1024.0 * 1024.0 )
-  {
-    return QString::number( bytes / 1024.0, 'f', precision ) + " KB";
-  }
-  else if ( bytes < 1024.0 * 1024.0 * 1024.0 )
-  {
-    return QString::number( bytes / 1024.0 / 1024.0, 'f', precision ) + " MB";
-  }
-  else if ( bytes < 1024.0 * 1024.0 * 1024.0 * 1024.0 )
-  {
-    return QString::number( bytes / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " GB";
-  }
-  else
-  {
-    return QString::number( bytes / 1024.0 / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " TB";
-  }
+  return CoreUtils::bytesToHumanSize( bytes );
 }
 
 bool InputUtils::acquireCameraPermission()
