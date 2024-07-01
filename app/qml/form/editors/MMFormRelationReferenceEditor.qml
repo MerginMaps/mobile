@@ -22,7 +22,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
   property var _fieldConfig: parent.fieldConfig
   property var _fieldActiveProject: parent.fieldActiveProject
 
-  property bool _fieldIsReadOnly: parent.fieldIsReadOnly
+  property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
+  property bool _fieldIsEditable: parent.fieldIsEditable
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property string _fieldTitle: parent.fieldTitle
@@ -45,7 +46,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
   errorMsg: _fieldErrorMessage
   warningMsg: _fieldWarningMessage
 
-  readOnly: _fieldIsReadOnly
+  readOnly: _fieldFormIsReadOnly || !_fieldIsEditable
+  shouldShowValidation: !_fieldFormIsReadOnly
 
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState

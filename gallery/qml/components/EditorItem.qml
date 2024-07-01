@@ -21,7 +21,8 @@ Item {
   property string fieldValue: ""
   property var fieldConfig: ({UseHtml: true})
   property bool fieldShouldShowTitle: checkboxTitle.checked
-  property bool fieldIsReadOnly: !checkbox.checked
+  property bool fieldFormIsReadOnly: !checkbox.checked
+  property bool fieldIsEditable: checkboxEditable.checked
   property string fieldErrorMessage: checkboxError.checked ? "error" : ""
   property string fieldWarningMessage: checkboxWarning.checked ? "warning" : ""
   property bool fieldRememberValueSupported: checkboxRemember.checked
