@@ -15,7 +15,10 @@ MouseArea {
   signal singleClicked()
 
   onClicked: {
-    if ( !root.enabled ) return;
+    if ( !root.enabled ) {
+      mouse.accepted = true;
+      return;
+    }
 
     root.enabled = false;
     singleClicked()
