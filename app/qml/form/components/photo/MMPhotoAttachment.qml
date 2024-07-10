@@ -63,9 +63,9 @@ Rectangle {
         }
       }
 
-      MouseArea {
+      MMComponents.MMSingleClickMouseArea{
         anchors.fill: parent
-        onClicked: root.capturePhotoClicked()
+        onSingleClicked: root.capturePhotoClicked()
       }
     }
 
@@ -102,9 +102,9 @@ Rectangle {
         }
       }
 
-      MouseArea {
+      MMComponents.MMSingleClickMouseArea{
         anchors.fill: parent
-        onClicked: root.chooseFromGalleryClicked()
+        onSingleClicked: root.chooseFromGalleryClicked()
       }
     }
   }
