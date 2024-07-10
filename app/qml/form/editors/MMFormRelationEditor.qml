@@ -88,7 +88,6 @@ MMPrivateComponents.MMBaseInput {
         MMComponents.MMSingleClickMouseArea{
           anchors.fill: parent
           onSingleClicked: {
-            console.log("Clicked")
             root.forceActiveFocus() // clear focus from all elements to prevent freezing #3483
             root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
           }
