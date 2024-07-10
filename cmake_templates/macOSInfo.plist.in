@@ -64,6 +64,7 @@
         <string>pt_BR</string>
         <string>sk</string>
         <string>sk_SK</string>
+		<string>ja_JP</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
