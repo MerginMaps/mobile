@@ -12,6 +12,7 @@ import QtQuick
 /**
   * MMSingleClickMouseArea enhances MouseArea by preventing multiple clicks within a
   * specified time frame, ensuring consistent behavior and avoiding unintended actions
+  * Similar to MouseArea, but it should be used with onSingleClicked signal handling instead of onClicked
 */
 
 MouseArea {
