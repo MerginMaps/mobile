@@ -9,6 +9,11 @@
 
 import QtQuick
 
+/**
+  * MMSingleClickMouseArea enhances MouseArea by preventing multiple clicks within a
+  * specified time frame, ensuring consistent behavior and avoiding unintended actions
+*/
+
 MouseArea {
   id: root
 
@@ -27,7 +32,7 @@ MouseArea {
 
   Timer {
     id: timer
-    interval: 500
+    interval: 2000
     repeat: false
     onTriggered: root.enabled = true
   }
