@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 cff-version: 2024.3.1
-=======
-cff-version: ..
->>>>>>> 45bf9773 (updating all versions after release)
 message: "If you use this software, please cite it as below."
 authors:
 - family-names: "Martin"
