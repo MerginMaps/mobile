@@ -135,9 +135,9 @@ MMPrivateComponents.MMBaseInput {
             verticalAlignment: Text.AlignVCenter
           }
 
-          MouseArea {
+          MMComponents.MMSingleClickMouseArea {
             anchors.fill: parent
-            onClicked: root.openLinkedFeature( model.FeaturePair )
+            onSingleClicked: root.openLinkedFeature( model.FeaturePair )
           }
 
           onVisibleChanged: root.recalculateVisibleItems()
