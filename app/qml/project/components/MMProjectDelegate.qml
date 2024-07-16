@@ -101,6 +101,8 @@ Control {
               if ( root.state === "Error" ) return __style.darkGreyColor
               return __style.nightColor
             }
+
+            elide: Text.ElideLeft
           }
 
           Row {
