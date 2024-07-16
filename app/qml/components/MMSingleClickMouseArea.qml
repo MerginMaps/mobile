@@ -21,12 +21,11 @@ MouseArea {
   signal singleClicked()
 
   onClicked: {
-    if ( !root.enabled ) {
+    if (timer.running) {
       mouse.accepted = true;
       return;
     }
 
-    root.enabled = false;
     singleClicked()
     timer.start()
   }
@@ -35,6 +34,5 @@ MouseArea {
     id: timer
     interval: 2000
     repeat: false
-    onTriggered: root.enabled = true
   }
 }
