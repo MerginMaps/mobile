@@ -21,7 +21,7 @@ MouseArea {
   signal singleClicked()
 
   onClicked: {
-    if (timer.running) {
+    if ( timer.running ) {
       mouse.accepted = true;
       return;
     }
