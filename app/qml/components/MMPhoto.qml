@@ -52,9 +52,9 @@ Image {
     }
   }
 
-  MouseArea {
+  MMSingleClickMouseArea {
     anchors.fill: parent
-    onClicked: root.clicked(root.photoUrl)
+    onSingleClicked: root.clicked(root.photoUrl)
   }
 
   onStatusChanged: {
