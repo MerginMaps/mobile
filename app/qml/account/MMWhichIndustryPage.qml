@@ -38,7 +38,8 @@ MMPage {
         { name: qsTr( "Natural resources" ), key: "natural", icon: __style.naturalResourcesIcon, colorx: __style.earthColor, color: "#4D2A24" },
         { name: qsTr( "Telecom" ), key: "telecom", icon: __style.telecommunicationIcon, colorx: __style.deepOceanColor, color: "#1C324A" },
         { name: qsTr( "Transportation" ), key: "transportation", icon: __style.transportationIcon, colorx: __style.skyColor, color: "#A6CBF4" },
-        { name: qsTr( "Water utilities" ), key: "water", icon: __style.waterResourcesIcon, colorx: __style.lightGreenColor, color: "#EFF5F3" }
+        { name: qsTr( "Water utilities" ), key: "water", icon: __style.waterResourcesIcon, colorx: __style.lightGreenColor, color: "#EFF5F3" },
+        { name: qsTr( "Student/University" ), key: "student", icon: __style.studentIcon, colorx: __style.grapeColor, color: "#5A2740" }
       ];
 
       var otherItem = { name: qsTr( "Other" ), key: "other", icon: __style.otherIcon, colorx: __style.sunsetColor, color: "#FFB673" };
@@ -217,4 +218,25 @@ MMPage {
       }
     }
   }
+
+  function shuffleAndAppend( listModel, items )
+  {
+    items = items
+        .map(function( item ) {
+            return { value: item, sort: Math.random() };
+        })
+        .sort(function( a, b ) {
+            return a.sort - b.sort;
+        })
+        .map(function( obj ) {
+            return obj.value;
+        });
+
+    items.forEach( function( item ) {
+        listModel.append( item );
+    });
+  }
 }
+
+
+

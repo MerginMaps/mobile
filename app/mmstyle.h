@@ -161,6 +161,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl undoIcon READ undoIcon CONSTANT )
     Q_PROPERTY( QUrl waitingIcon READ waitingIcon CONSTANT )
     Q_PROPERTY( QUrl waterResourcesIcon READ waterResourcesIcon CONSTANT )
+    Q_PROPERTY( QUrl studentIcon READ studentIcon CONSTANT )
     Q_PROPERTY( QUrl xTwitterIcon READ xTwitterIcon CONSTANT )
     Q_PROPERTY( QUrl youtubeIcon READ youtubeIcon CONSTANT )
     Q_PROPERTY( QUrl splitGeometryIcon READ splitGeometryIcon CONSTANT )
@@ -450,6 +451,7 @@ class MMStyle: public QObject
     QUrl undoIcon() {return QUrl( "qrc:/Undo.svg" );}
     QUrl waitingIcon() {return QUrl( "qrc:/Waiting.svg" );}
     QUrl waterResourcesIcon() {return QUrl( "qrc:/WaterResources.svg" );}
+    QUrl studentIcon() {return QUrl( "qrc:/Student.svg" );}
     QUrl xTwitterIcon() {return QUrl( "qrc:/XTwitter.svg" );}
     QUrl youtubeIcon() {return QUrl( "qrc:/Youtube.svg" );}
 
