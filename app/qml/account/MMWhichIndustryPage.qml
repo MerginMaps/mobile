@@ -39,7 +39,7 @@ MMPage {
         { name: qsTr( "Telecom" ), key: "telecom", icon: __style.telecommunicationIcon, color: __style.deepOceanColor },
         { name: qsTr( "Transportation" ), key: "transportation", icon: __style.transportationIcon, color: __style.skyColor },
         { name: qsTr( "Water utilities" ), key: "water", icon: __style.waterResourcesIcon, color: __style.lightGreenColor },
-        { name: qsTr( "Student/University" ), key: "student", icon: __style.studentIcon, color: __style.grapeColor }
+        { name: qsTr( "Student/University" ), key: "university", icon: __style.studentIcon, color: __style.grapeColor }
       ];
 
       var otherItem = { name: qsTr( "Other" ), key: "other", icon: __style.otherIcon, color: __style.sunsetColor };
