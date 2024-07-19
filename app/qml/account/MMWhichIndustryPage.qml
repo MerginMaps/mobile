@@ -29,20 +29,20 @@ MMPage {
 
     Component.onCompleted: {
       var items = [
-        { name: qsTr( "Agriculture" ), key: "agriculture", icon: __style.tractorIcon, colorx: __style.sunColor, color: "#F4CB46" },
-        { name: qsTr( "Archaeology" ), key: "archaeology", icon: __style.archaeologyIcon, colorx: __style.sandColor, color: "#FFF4E2" },
-        { name: qsTr( "Construction and engineering" ), key: "engineering", icon: __style.engineeringIcon, colorx: __style.roseColor, color: "#FFBABC" },
-        { name: qsTr( "Electric utilities" ), key: "electricity", icon: __style.electricityIcon, colorx: __style.nightColor, color: "#12181F" },
-        { name: qsTr( "Environmental protection" ), key: "environmental", icon: __style.environmentalIcon, colorx: __style.fieldColor, color: "#9BD1A9" },
-        { name: qsTr( "Local governments" ), key: "gov", icon: __style.stateAndLocalIcon, colorx: __style.purpleColor, color: "#CCBDF5" },
-        { name: qsTr( "Natural resources" ), key: "natural", icon: __style.naturalResourcesIcon, colorx: __style.earthColor, color: "#4D2A24" },
-        { name: qsTr( "Telecom" ), key: "telecom", icon: __style.telecommunicationIcon, colorx: __style.deepOceanColor, color: "#1C324A" },
-        { name: qsTr( "Transportation" ), key: "transportation", icon: __style.transportationIcon, colorx: __style.skyColor, color: "#A6CBF4" },
-        { name: qsTr( "Water utilities" ), key: "water", icon: __style.waterResourcesIcon, colorx: __style.lightGreenColor, color: "#EFF5F3" },
-        { name: qsTr( "Student/University" ), key: "student", icon: __style.studentIcon, colorx: __style.grapeColor, color: "#5A2740" }
+        { name: qsTr( "Agriculture" ), key: "agriculture", icon: __style.tractorIcon, color: __style.sunColor },
+        { name: qsTr( "Archaeology" ), key: "archaeology", icon: __style.archaeologyIcon, color: __style.sandColor },
+        { name: qsTr( "Construction and engineering" ), key: "engineering", icon: __style.engineeringIcon, color: __style.roseColor },
+        { name: qsTr( "Electric utilities" ), key: "electricity", icon: __style.electricityIcon, color: __style.nightColor },
+        { name: qsTr( "Environmental protection" ), key: "environmental", icon: __style.environmentalIcon, color: __style.fieldColor },
+        { name: qsTr( "Local governments" ), key: "gov", icon: __style.stateAndLocalIcon, color: __style.purpleColor },
+        { name: qsTr( "Natural resources" ), key: "natural", icon: __style.naturalResourcesIcon, color: __style.earthColor },
+        { name: qsTr( "Telecom" ), key: "telecom", icon: __style.telecommunicationIcon, color: __style.deepOceanColor },
+        { name: qsTr( "Transportation" ), key: "transportation", icon: __style.transportationIcon, color: __style.skyColor },
+        { name: qsTr( "Water utilities" ), key: "water", icon: __style.waterResourcesIcon, color: __style.lightGreenColor },
+        { name: qsTr( "Student/University" ), key: "student", icon: __style.studentIcon, color: __style.grapeColor }
       ];
 
-      var otherItem = { name: qsTr( "Other" ), key: "other", icon: __style.otherIcon, colorx: __style.sunsetColor, color: "#FFB673" };
+      var otherItem = { name: qsTr( "Other" ), key: "other", icon: __style.otherIcon, color: __style.sunsetColor };
 
       shuffleAndAppend( sourceListModel, items );
 
