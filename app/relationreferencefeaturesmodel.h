@@ -53,6 +53,8 @@ class RelationReferenceFeaturesModel : public FeaturesModel
     //! Reads config and with project instance queries all features from parent layer. Emits populated signal after loading features.
     void setup() override;
 
+    void setupSorting() override;
+
   signals:
     void configChanged( QVariantMap config );
     void projectChanged( QgsProject *project );

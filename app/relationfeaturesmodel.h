@@ -50,6 +50,7 @@ class RelationFeaturesModel : public FeaturesModel
 
     void setup() override;
     void setupFeatureRequest( QgsFeatureRequest &request ) override;
+    void setupSorting() override;
 
     void setParentFeatureLayerPair( FeatureLayerPair pair );
     void setRelation( QgsRelation relation );

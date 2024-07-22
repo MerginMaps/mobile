@@ -64,6 +64,7 @@ class FeaturesModel : public QAbstractListModel
       SearchResult, // pair of attribute and its value by which the feature was found, empty if search expression is empty
       LayerName,
       LayerIcon,
+      SortValue,
     };
     Q_ENUM( ModelRoles );
 
@@ -117,6 +118,12 @@ class FeaturesModel : public QAbstractListModel
 
     int layerFeaturesCount() const;
 
+    //! Returns true if there is a sort expression set for the model
+    bool sortingEnabled() const;
+
+    //! Returns the order in witch the model should be sorted
+    Qt::SortOrder sortOrder() const;
+
   signals:
 
     void featuresLimitChanged( int featuresLimit );
@@ -139,6 +146,12 @@ class FeaturesModel : public QAbstractListModel
 
     virtual QVariant featureTitle( const FeatureLayerPair &featurePair ) const;
 
+    //! Populates the sort expression and sort order for the model
+    virtual void setupSorting();
+
+    QString mSortExpression;
+    Qt::SortOrder mSortOrder = Qt::AscendingOrder;
+
   private slots:
     void onFutureFinished();
 
@@ -150,6 +163,9 @@ class FeaturesModel : public QAbstractListModel
 
     //! Returns found attribute and its value from search expression for feature
     QString searchResultPair( const FeatureLayerPair &feat ) const;
+
+    //! Evaluates the sort expression and returns the value used for this feature when sorting the model
+    QVariant sortValue( const FeatureLayerPair &featurePair ) const;
 
     const int FEATURES_LIMIT = 10000; //!< Number of maximum features loaded from layer
 

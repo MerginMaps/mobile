@@ -55,10 +55,14 @@ MMComponents.MMPage {
         topMargin: __style.spacing20
       }
 
-      model: MM.FeaturesModel {
-        id: featuresModel
+      model: MM.FeaturesProxyModel {
+        id: featuresProxyModel
 
-        layer: root.selectedLayer
+        featuresSourceModel: MM.FeaturesModel {
+          id: featuresModel
+
+          layer: root.selectedLayer
+        }
       }
 
       clip: true

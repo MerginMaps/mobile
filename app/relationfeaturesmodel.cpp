@@ -157,3 +157,8 @@ void RelationFeaturesModel::setHomePath( const QString &homePath )
     emit homePathChanged();
   }
 }
+
+void RelationFeaturesModel::setupSorting()
+{
+  mSortExpression.clear();
+}
