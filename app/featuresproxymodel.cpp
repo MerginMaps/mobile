@@ -16,6 +16,7 @@ FeaturesProxyModel::FeaturesProxyModel( QObject *parent ) : QSortFilterProxyMode
 void FeaturesProxyModel::initialize()
 {
   setSourceModel( mModel );
+  mModel->setupSorting();
 
   // don't sort if there is no sort expression for the layer
   if ( mModel->sortingEnabled() )
@@ -36,6 +37,8 @@ void FeaturesProxyModel::setFeaturesSourceModel( FeaturesModel *sourceModel )
   if ( mModel == sourceModel )
     return;
 
+  disconnect( mModel, nullptr, this, nullptr );
+
   mModel = sourceModel;
-  QObject::connect( mModel, &FeaturesModel::fetchingResultsChanged, this, [ = ]( bool pending ) { if ( !pending ) initialize(); } );
+  connect( mModel, &FeaturesModel::fetchingResultsChanged, this, [ = ]( bool pending ) { if ( !pending ) initialize(); } );
 }

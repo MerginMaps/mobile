@@ -370,7 +370,6 @@ void FeaturesModel::setLayer( QgsVectorLayer *newLayer )
     }
 
     emit layerFeaturesCountChanged( layerFeaturesCount() );
-    setupSorting();
   }
 }
 

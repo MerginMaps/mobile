@@ -118,6 +118,9 @@ class FeaturesModel : public QAbstractListModel
 
     int layerFeaturesCount() const;
 
+    //! Populates the sort expression and sort order for the model
+    virtual void setupSorting();
+
     //! Returns true if there is a sort expression set for the model
     bool sortingEnabled() const;
 
@@ -145,9 +148,6 @@ class FeaturesModel : public QAbstractListModel
     virtual void reset();
 
     virtual QVariant featureTitle( const FeatureLayerPair &featurePair ) const;
-
-    //! Populates the sort expression and sort order for the model
-    virtual void setupSorting();
 
     QString mSortExpression;
     Qt::SortOrder mSortOrder = Qt::AscendingOrder;

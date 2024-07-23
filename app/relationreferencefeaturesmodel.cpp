@@ -121,8 +121,3 @@ void RelationReferenceFeaturesModel::setProject( QgsProject *project )
     setup();
   }
 }
-
-void RelationReferenceFeaturesModel::setupSorting()
-{
-  mSortExpression.clear();
-}

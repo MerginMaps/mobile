@@ -20,7 +20,7 @@
  * \brief The FeaturesProxyModel class used as a proxy sort model for the \see FeaturesModel class.
  *
  * FeaturesProxyModel is a QML type with required property of FeatureSourceModel. Without source model, this model does nothing (is not initialized).
- * After setting source model, this model starts sorting and allows filtering (search) from view.
+ * After setting source model, this model starts sorting if sortingEnabled() returns true for the source model.
  */
 class FeaturesProxyModel : public QSortFilterProxyModel
 {
