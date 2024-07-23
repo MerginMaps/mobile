@@ -338,6 +338,7 @@ Page {
         }
 
         function onOpenLinkedFeature( linkedFeature ) {
+          root.forceActiveFocus() //prevent app freeze as mentioned in issue #3538
           root.openLinkedFeature( linkedFeature )
         }
       }
