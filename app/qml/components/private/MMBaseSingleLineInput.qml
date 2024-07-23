@@ -92,7 +92,7 @@ MMBaseInput {
     radius: __style.radius12
 
     RowLayout {
-      anchors .fill: parent
+      anchors.fill: parent
 
       spacing: __style.margin12
 

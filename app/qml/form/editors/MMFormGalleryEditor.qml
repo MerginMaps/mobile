@@ -91,9 +91,7 @@ MMPrivateComponents.MMBaseInput {
 
         MMComponents.MMSingleClickMouseArea {
           anchors.fill: parent
-          onSingleClicked: {
-            root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
-          }
+          onSingleClicked: root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
         }
       }
 
