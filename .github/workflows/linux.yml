@@ -22,6 +22,7 @@ env:
   CMAKE_VERSION: '3.29.0'
   CACHE_VERSION: 0
       
+# Execute only the latest CI run on a branch
 concurrency:
   group: ci-${{github.ref}}-linux
   cancel-in-progress: true
@@ -30,6 +31,8 @@ jobs:
   linux_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: ubuntu-22.04
+    concurrency: 
+      group: mobileapp-autotests # Avoid running autotests at the same time across multiple workflows, because the same user is used
     steps:
       - name: Checkout Input
         uses: actions/checkout@v3
