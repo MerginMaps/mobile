@@ -1591,13 +1591,22 @@ ProjectDiff MerginApi::localProjectChanges( const QString &projectDir )
 
 bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
 {
+  if ( version.isNull() || version.isEmpty() )
+    return false;
+
   QRegularExpression re;
-  re.setPattern( QStringLiteral( "(?<major>\\d+)[.](?<minor>\\d+)" ) );
+  re.setPattern( QStringLiteral( R"((?<major>\d+)\.(?<minor>\d+))" ) );
   QRegularExpressionMatch match = re.match( version );
+
   if ( match.hasMatch() )
   {
-    major = match.captured( "major" ).toInt();
-    minor = match.captured( "minor" ).toInt();
+    bool majorOk, minorOk;
+    major = match.captured( "major" ).toInt( &majorOk );
+    minor = match.captured( "minor" ).toInt( &minorOk );
+
+    if ( !majorOk || !minorOk )
+      return false;
+
     return true;
   }
 
