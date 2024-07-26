@@ -1594,23 +1594,19 @@ bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
   if ( version.isNull() || version.isEmpty() )
     return false;
 
-  QRegularExpression re;
-  re.setPattern( QStringLiteral( R"(^\s*(?<major>\d+)\.(?<minor>\d+)\.\d+\s*$)" ) );
-  QRegularExpressionMatch match = re.match( version );
+  QStringList versionParts = version.split( '.' );
 
-  if ( match.hasMatch() )
-  {
-    bool majorOk, minorOk;
-    major = match.captured( "major" ).toInt( &majorOk );
-    minor = match.captured( "minor" ).toInt( &minorOk );
+  if ( versionParts.size() != 3 )
+    return false;
 
-    if ( !majorOk || !minorOk )
-      return false;
+  bool majorOk, minorOk;
+  major = versionParts[0].toInt( &majorOk );
+  minor = versionParts[1].toInt( &minorOk );
 
-    return true;
-  }
+  if ( !majorOk || !minorOk )
+    return false;
 
-  return false;
+  return true;
 }
 
 bool MerginApi::hasLocalProjectChanges( const QString &projectDir )
