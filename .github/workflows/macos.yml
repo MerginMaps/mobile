@@ -33,7 +33,7 @@ jobs:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-13
     concurrency: 
-      group: mobileapp-autotests-macos # Avoid running autotests at the same time across multiple macos workflows, because the same user is used
+      group: mobileapp-autotests-macos # Avoid running autotests at the same time across multiple macos workflows
     steps:
       - name: Checkout Input
         uses: actions/checkout@v3
