@@ -42,9 +42,6 @@ class FeaturesProxyModel : public QSortFilterProxyModel
 
     FeaturesModel *mModel = nullptr; // not owned by this, needs to be set in order to proxy model to work
 
-    Qt::SortOrder mSortOrder = Qt::SortOrder::AscendingOrder;
-    QString mSortExpression;
-
     friend class TestModels;
 };
 

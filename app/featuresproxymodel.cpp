@@ -25,6 +25,10 @@ void FeaturesProxyModel::initialize()
     setSortCaseSensitivity( Qt::CaseInsensitive );
     sort( 0, mModel->sortOrder() );
   }
+  else
+  {
+    invalidate();
+  }
 }
 
 FeaturesModel *FeaturesProxyModel::featuresSourceModel() const
@@ -37,7 +41,8 @@ void FeaturesProxyModel::setFeaturesSourceModel( FeaturesModel *sourceModel )
   if ( mModel == sourceModel )
     return;
 
-  disconnect( mModel, nullptr, this, nullptr );
+  if ( mModel )
+    disconnect( mModel, nullptr, this, nullptr );
 
   mModel = sourceModel;
   connect( mModel, &FeaturesModel::fetchingResultsChanged, this, [ = ]( bool pending ) { if ( !pending ) initialize(); } );
