@@ -48,9 +48,10 @@ Page {
       id: tabBar
 
       Layout.alignment: Qt.AlignHCenter
+      Layout.fillWidth: true
       Layout.maximumWidth: Math.min(__style.maxPageWidth, root.width)
 
-      tabButtonsModel: ListModel {
+      model: ListModel {
         id: tabModel
 
         ListElement { Name: "Address of the object" }
@@ -73,7 +74,7 @@ Page {
 
       clip: true
 
-      onCurrentIndexChanged: tabBar.setCurrentIndex(formSwipe.currentIndex)
+      onCurrentIndexChanged: tabBar.currentIndex = formSwipe.currentIndex
 
       Repeater {
         model: tabModel

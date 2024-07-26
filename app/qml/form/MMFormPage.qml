@@ -108,12 +108,15 @@ Page {
     MMFormComponents.MMFormTabBar {
       id: tabBar
 
+      Layout.topMargin: __style.margin10
+      Layout.bottomMargin: __style.margin10
       Layout.alignment: Qt.AlignHCenter
+      Layout.fillWidth: true
       Layout.maximumWidth: Math.min(__style.maxPageWidth, root.width)
 
-      visible: root.controller.hasTabs
+      model: root.controller.attributeTabProxyModel
 
-      tabButtonsModel: root.controller.attributeTabProxyModel
+      visible: root.controller.hasTabs
 
       onCurrentIndexChanged: formSwipe.setCurrentIndex( tabBar.currentIndex )
     }
@@ -128,7 +131,7 @@ Page {
 
       clip: true
 
-      onCurrentIndexChanged: tabBar.setCurrentIndex( formSwipe.currentIndex )
+      onCurrentIndexChanged: tabBar.currentIndex = formSwipe.currentIndex
 
       Repeater {
         id: swipeViewRepeater
@@ -161,7 +164,7 @@ Page {
             section {
               property: "Group"
               delegate: sectionDelegate
-              labelPositioning: ViewSection.CurrentLabelAtStart | ViewSection.InlineLabels
+              labelPositioning: ViewSection.InlineLabels
             }
 
             delegate: editorDelegate
@@ -220,22 +223,14 @@ Page {
   Component {
     id: sectionDelegate
 
-    Item {
-
-      property string sectionTitle: section
+    Rectangle {
 
       height: section ? childrenRect.height : 0
       width: ListView.view.width
 
-      // section bgnd
-      Rectangle {
-        anchors.fill: parent;
-        color: __style.lightGreenColor;
-      }
+      color: __style.lightGreenColor
 
       MMComponents.MMText {
-        id: sectionTitle
-
         text: section
         font: __style.h3
         color: __style.forestColor
@@ -274,7 +269,7 @@ Page {
         width: parent.width
 
         property var fieldValue: model.RawValue
-        property bool fieldValueIsNull: model.RawValueIsNull
+        property bool fieldValueIsNull: model.RawValueIsNull ?? true
 
         property var field: model.Field
         property var fieldIndex: model.FieldIndex
