@@ -158,6 +158,12 @@ int FeaturesModel::rowCount( const QModelIndex &parent ) const
 
 QVariant FeaturesModel::featureTitle( const FeatureLayerPair &featurePair ) const
 {
+  if ( !featurePair.layer() || !featurePair.layer()->isValid() )
+  {
+    CoreUtils::log( QStringLiteral( "Features Model" ), QStringLiteral( "Received invalid feature layer pair!" ) );
+    return tr( "Unknown title" );
+  }
+
   QString title;
 
   QgsExpressionContext context( QgsExpressionContextUtils::globalProjectLayerScopes( featurePair.layer() ) );
