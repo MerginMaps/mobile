@@ -1595,7 +1595,7 @@ bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
     return false;
 
   QRegularExpression re;
-  re.setPattern( QStringLiteral( R"(^\s*(?<major>\d+)\.(?<minor>\d+)\s*$)" ) );
+  re.setPattern( QStringLiteral( R"(^\s*(?<major>\d+)\.(?<minor>\d+)\.\d+\s*$)" ) );
   QRegularExpressionMatch match = re.match( version );
 
   if ( match.hasMatch() )
