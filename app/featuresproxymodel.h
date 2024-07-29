@@ -13,7 +13,6 @@
 #include <QObject>
 #include <QSortFilterProxyModel>
 
-#include "inputconfig.h"
 #include "featuresmodel.h"
 
 /**
@@ -38,7 +37,7 @@ class FeaturesProxyModel : public QSortFilterProxyModel
     void setFeaturesSourceModel( FeaturesModel *sourceModel );
 
   private:
-    void initialize();
+    void updateSorting();
 
     FeaturesModel *mModel = nullptr; // not owned by this, needs to be set in order to proxy model to work
 

@@ -11,18 +11,17 @@
 
 FeaturesProxyModel::FeaturesProxyModel( QObject *parent ) : QSortFilterProxyModel( parent )
 {
+  setSortRole( FeaturesModel::SortValue );
+  setSortCaseSensitivity( Qt::CaseInsensitive );
 }
 
-void FeaturesProxyModel::initialize()
+void FeaturesProxyModel::updateSorting()
 {
-  setSourceModel( mModel );
   mModel->setupSorting();
 
   // don't sort if there is no sort expression for the layer
   if ( mModel->sortingEnabled() )
   {
-    setSortRole( FeaturesModel::SortValue );
-    setSortCaseSensitivity( Qt::CaseInsensitive );
     sort( 0, mModel->sortOrder() );
   }
   else
@@ -45,5 +44,6 @@ void FeaturesProxyModel::setFeaturesSourceModel( FeaturesModel *sourceModel )
     disconnect( mModel, nullptr, this, nullptr );
 
   mModel = sourceModel;
-  connect( mModel, &FeaturesModel::fetchingResultsChanged, this, [ = ]( bool pending ) { if ( !pending ) initialize(); } );
+  setSourceModel( mModel );
+  connect( mModel, &FeaturesModel::fetchingResultsChanged, this, [ = ]( bool pending ) { if ( !pending ) updateSorting(); } );
 }
