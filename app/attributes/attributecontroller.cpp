@@ -632,6 +632,15 @@ void AttributeController::acquireId()
     emit commitFailed();
   }
 
+  //
+  // We need to trigger the recalucation of the form because QgsVectorLayer::featureAdded
+  // is called before commit is finished. This can cause issues with evaluation of validations
+  // when old feature with FID_IS_NEW is not yet removed from the layer and the new feature
+  // with valid fid is already added (unique constraints are failing as it detects two features
+  // with the same values). We thus manually trigger the recalculation here.
+  //
+  recalculateDerivedItems();
+
   disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
 }
 
