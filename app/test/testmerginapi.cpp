@@ -2893,3 +2893,52 @@ void TestMerginApi::testRegistration()
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::TOC );
 }
+
+void TestMerginApi::testParseVersion()
+{
+  int major, minor;
+
+  // Valid version string
+  QVERIFY( mApi->parseVersion( "1.2.3", major, minor ) );
+  QCOMPARE( major, 1 );
+  QCOMPARE( minor, 2 );
+
+  // Valid version string with larger numbers
+  QVERIFY( mApi->parseVersion( "10.20.30", major, minor ) );
+  QCOMPARE( major, 10 );
+  QCOMPARE( minor, 20 );
+
+  // Invalid version string (missing patch version)
+  QVERIFY( !mApi->parseVersion( "1.2", major, minor ) );
+
+  // Invalid version string (missing minor version)
+  QVERIFY( !mApi->parseVersion( "1..3", major, minor ) );
+
+  // Invalid version string (non-numeric characters)
+  QVERIFY( !mApi->parseVersion( "a.b.c", major, minor ) );
+
+  // Invalid version string (additional characters)
+  QVERIFY( !mApi->parseVersion( "1.2.3.4", major, minor ) );
+
+  // Empty version string
+  QVERIFY( !mApi->parseVersion( "", major, minor ) );
+
+  // Null version string
+  QVERIFY( !mApi->parseVersion( QString(), major, minor ) );
+
+  // Valid version string with leading zeros
+  QVERIFY( mApi->parseVersion( "01.02.03", major, minor ) );
+  QCOMPARE( major, 1 );
+  QCOMPARE( minor, 2 );
+
+  // Valid version string with spaces in the last argument
+  QVERIFY( mApi->parseVersion( "1.2. 3", major, minor ) );
+
+  // Invalid version string with only minor version (should fail)
+  QVERIFY( !mApi->parseVersion( ".2.3", major, minor ) );
+
+  // Valid version string in expected format
+  QVERIFY( mApi->parseVersion( "2024.4.3", major, minor ) );
+  QCOMPARE( major, 2024 );
+  QCOMPARE( minor, 4 );
+}
