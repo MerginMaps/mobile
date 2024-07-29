@@ -80,7 +80,15 @@ Page {
 
   header: MMComponents.MMPageHeader {
 
-    onBackClicked: root.rollbackAndClose()
+    onBackClicked: {
+      if ( root.controller.hasAnyChanges )  {
+        saveChangesDialog.open()
+      }
+      else {
+        root.rollbackAndClose()
+      }
+    }
+
 
     title: {
       if ( root.state === "add" ) return qsTr( "New feature" )
