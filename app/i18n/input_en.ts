@@ -154,6 +154,14 @@
     </message>
 </context>
 <context>
+    <name>FeaturesModel</name>
+    <message>
+        <location filename="../featuresmodel.cpp" line="164"/>
+        <source>Unknown title</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FieldsModel</name>
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
@@ -402,17 +410,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMAccountController</name>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="98"/>
+        <location filename="../qml/account/MMAccountController.qml" line="80"/>
         <source>Please update the app to use the latest features.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="102"/>
+        <location filename="../qml/account/MMAccountController.qml" line="84"/>
         <source>Server is currently unavailable, check your connection or try again later.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="156"/>
+        <location filename="../qml/account/MMAccountController.qml" line="138"/>
         <source>I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -789,28 +797,28 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFormPage</name>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="86"/>
+        <location filename="../qml/form/MMFormPage.qml" line="94"/>
         <source>New feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="87"/>
-        <location filename="../qml/form/MMFormPage.qml" line="187"/>
+        <location filename="../qml/form/MMFormPage.qml" line="95"/>
+        <location filename="../qml/form/MMFormPage.qml" line="198"/>
         <source>Edit feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="200"/>
+        <location filename="../qml/form/MMFormPage.qml" line="211"/>
         <source>Delete</source>
         <translation type="unfinished">Delete</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="209"/>
+        <location filename="../qml/form/MMFormPage.qml" line="220"/>
         <source>Edit geometry</source>
         <translation type="unfinished">Edit geometry</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="453"/>
+        <location filename="../qml/form/MMFormPage.qml" line="456"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1621,47 +1629,47 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMProjectDelegate</name>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="140"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="142"/>
         <source>Synchronising project changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="188"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="190"/>
         <source>Please don&apos;t close the app.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="211"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="213"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="242"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="244"/>
         <source>More options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="286"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="288"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="291"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="293"/>
         <source>Synchronise project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="296"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="298"/>
         <source>Local changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="301"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="303"/>
         <source>Remove from device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="306"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="308"/>
         <source>Upload</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2444,32 +2452,37 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="44"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="42"/>
+        <source>Student/University</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="45"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="53"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="54"/>
         <source>Specify your industry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="173"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="174"/>
         <source>Continue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="195"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="196"/>
         <source>Crafting your workspace: let us know your industry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="196"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="197"/>
         <source>Please specify the industry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="211"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="212"/>
         <source>Industry</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2538,17 +2551,17 @@ only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1685"/>
+        <location filename="../../core/merginapi.cpp" line="1690"/>
         <source>Project detached from the server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3849"/>
+        <location filename="../../core/merginapi.cpp" line="3854"/>
         <source>Workspace name contains invalid characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3915"/>
+        <location filename="../../core/merginapi.cpp" line="3920"/>
         <source>Workspace %1 already exists</source>
         <translation type="unfinished"></translation>
     </message>
