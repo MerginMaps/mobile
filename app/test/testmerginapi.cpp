@@ -2931,7 +2931,7 @@ void TestMerginApi::testParseVersion()
   QCOMPARE( major, 1 );
   QCOMPARE( minor, 2 );
 
-  // Invalid version string with spaces in the last argument
+  // Valid version string with spaces in the last argument
   QVERIFY( mApi->parseVersion( "1.2. 3", major, minor ) );
 
   // Invalid version string with only minor version (should fail)
