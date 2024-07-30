@@ -21,24 +21,24 @@ static AndroidTrackingBackend *sBackend = nullptr;
 
 void servicePositionUpdated( JNIEnv *env, jclass clazz, jobject locationObj )
 {
-    __android_log_print( ANDROID_LOG_INFO, "CPP", "[service] [c++] new position" );
+  __android_log_print( ANDROID_LOG_INFO, "CPP", "[service] [c++] new position" );
 
-    QJniObject location( locationObj );
-    if ( !location.isValid() )
-    {
-        __android_log_print( ANDROID_LOG_ERROR, "CPP", "[service] [c++] invalid location obj" );
-        return;
-    }
+  QJniObject location( locationObj );
+  if ( !location.isValid() )
+  {
+    __android_log_print( ANDROID_LOG_ERROR, "CPP", "[service] [c++] invalid location obj" );
+    return;
+  }
 
-    const jdouble latitude = location.callMethod<jdouble>( "getLatitude" );
-    const jdouble longitude = location.callMethod<jdouble>( "getLongitude" );
-    const jlong timestamp = location.callMethod<jlong>( "getTime" );
+  const jdouble latitude = location.callMethod<jdouble>( "getLatitude" );
+  const jdouble longitude = location.callMethod<jdouble>( "getLongitude" );
+  const jlong timestamp = location.callMethod<jlong>( "getTime" );
 
-    // TODO: add time as well?
-    QgsPoint pt( longitude, latitude );
+  // TODO: add time as well?
+  QgsPoint pt( longitude, latitude );
 
-    QMetaObject::invokeMethod( sBackend, "positionChanged",
-                              Qt::AutoConnection, Q_ARG( QgsPoint, pt ) );
+  QMetaObject::invokeMethod( sBackend, "positionChanged",
+                             Qt::AutoConnection, Q_ARG( QgsPoint, pt ) );
 }
 
 
@@ -77,13 +77,13 @@ AndroidTrackingBackend::AndroidTrackingBackend(
   // register the native methods
 
   JNINativeMethod methods[]
+  {
     {
-      {
-        "servicePositionUpdated",
-        "(Landroid/location/Location;)V",
-        reinterpret_cast<void *>( servicePositionUpdated )
-      }
-    };
+      "servicePositionUpdated",
+      "(Landroid/location/Location;)V",
+      reinterpret_cast<void *>( servicePositionUpdated )
+    }
+  };
 
   QJniEnvironment javaenv;
   javaenv.registerNativeMethods( "uk/co/lutraconsulting/PositionTrackingService", methods, 1 );

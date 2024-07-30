@@ -215,30 +215,30 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   }
 
   // in case tracking is running, we want to show the UI
-/*
-#ifdef ANDROID
-  if ( positionTrackingSupported() )
-  {
-    connect(
-      &AndroidTrackingBroadcast::getInstance(),
-      &AndroidTrackingBroadcast::aliveResponse,
-      this,
-      [this]( bool isAlive )
+  /*
+  #ifdef ANDROID
+    if ( positionTrackingSupported() )
     {
-      if ( isAlive )
+      connect(
+        &AndroidTrackingBroadcast::getInstance(),
+        &AndroidTrackingBroadcast::aliveResponse,
+        this,
+        [this]( bool isAlive )
       {
-        emit startPositionTracking();
-      }
-    },
-    Qt::SingleShotConnection
-    );
+        if ( isAlive )
+        {
+          emit startPositionTracking();
+        }
+      },
+      Qt::SingleShotConnection
+      );
 
-    // note: order matters in the following calls
-    AndroidTrackingBroadcast::registerBroadcast();
-    AndroidTrackingBroadcast::sendAliveRequestAsync();
-  }
-#endif
-*/
+      // note: order matters in the following calls
+      AndroidTrackingBroadcast::registerBroadcast();
+      AndroidTrackingBroadcast::sendAliveRequestAsync();
+    }
+  #endif
+  */
 
   return res;
 }
