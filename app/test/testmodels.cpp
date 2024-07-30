@@ -97,8 +97,10 @@ void TestModels::testFeaturesProxyModel()
   // and reverse sort order
   conf.setSortOrder( Qt::DescendingOrder );
   layer->setAttributeTableConfig( conf );
+  model.setupSorting();
 
   model.setSearchExpression( QStringLiteral( "D" ) );
+
 
   spy.wait();
 
@@ -110,6 +112,7 @@ void TestModels::testFeaturesProxyModel()
   // should get all items with default ordering
   conf.setSortExpression( QString() );
   layer->setAttributeTableConfig( conf );
+  model.setupSorting();
 
   model.setSearchExpression( QString() );
 
@@ -183,6 +186,7 @@ void TestModels::testFeaturesProxyModelWithValueRelation()
   model.reset();
   config[ QStringLiteral( "OrderByValue" ) ] = true;
   model.setConfig( config );
+  model.setupSorting();
   model.setPair( pair );
 
   spy.wait();
@@ -210,6 +214,7 @@ void TestModels::testFeaturesProxyModelWithValueRelation()
   // add a filter expression to the base model
   config[ QStringLiteral( "FilterExpression" ) ] = "subFk = 1";
   model.setConfig( config );
+  model.setupSorting();
   model.setSearchExpression( QString() );
 
   spy.wait();
@@ -223,6 +228,7 @@ void TestModels::testFeaturesProxyModelWithValueRelation()
   config.remove( QStringLiteral( "OrderByValue" ) );
   config.remove( QStringLiteral( "FilterExpression" ) );
   model.setConfig( config );
+  model.setupSorting();
   model.setPair( pair );
 
   spy.wait();
