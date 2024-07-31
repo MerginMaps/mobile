@@ -72,14 +72,17 @@ Item {
     Text {
       id: text
 
+      width: parent.width
       text: root.text
       color: root.useDisabledVisual ? root.iconColorDisabled : root.iconColor
-      font: __style.t4
+      font: lineCount === 1 ? __style.t4 : __style.t5
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.top: icon.bottom
       anchors.topMargin: root.buttonSpacing
       horizontalAlignment: Text.AlignHCenter
-      elide: Text.ElideMiddle
+      elide: Text.ElideRight
+      wrapMode: Text.Wrap
+      maximumLineCount: 2
     }
 
     MouseArea {
