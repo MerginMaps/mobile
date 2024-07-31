@@ -39,6 +39,8 @@ Item {
   MM.GuidelineController {
     id: guidelineController
 
+    allowed: true
+
     mapSettings: root.map.mapSettings
     crosshairPosition: crosshair.screenPoint
     realGeometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
@@ -50,7 +52,10 @@ Item {
     height: root.map.height
     width: root.map.width
 
+    markerColor: __style.deepOceanColor
     lineColor: __style.deepOceanColor
+    lineStrokeStyle: ShapePath.DashLine
+    lineWidth: MMHighlight.LineWidths.Narrow
 
     mapSettings: root.map.mapSettings
     geometry: guidelineController.guidelineGeometry
@@ -62,9 +67,7 @@ Item {
     height: map.height
     width: map.width
 
-    markerColor: __style.deepOceanColor
     lineColor: __style.deepOceanColor
-    lineStrokeStyle: ShapePath.DashLine
 
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
