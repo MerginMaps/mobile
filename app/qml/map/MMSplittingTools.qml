@@ -65,6 +65,7 @@ Item {
     height: map.height
     width: map.width
 
+    markerColor: __style.deepOceanColor
     lineColor: __style.deepOceanColor
     lineWidth: MMHighlight.LineWidths.Narrow
 
