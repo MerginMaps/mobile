@@ -48,13 +48,6 @@ Drawer {
       height: parent.height / 2
       y: parent.height / 2
     }
-
-    Keys.onReleased: function( event ) {
-      if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
-        root.close()
-        event.accepted = true
-      }
-    }
   }
 
   contentItem: Column {
@@ -62,6 +55,14 @@ Drawer {
 
     anchors.fill: parent
     spacing: 0
+    focus : true
+
+    Keys.onReleased: function( event ) {
+      if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
+        root.close()
+        event.accepted = true
+      }
+    }
 
     MMListSpacer {
       id: topSpacer
