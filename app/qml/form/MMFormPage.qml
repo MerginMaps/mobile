@@ -71,6 +71,18 @@ Page {
     }
   ]
 
+  Keys.onReleased: function( event ) {
+    if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
+      if ( root.controller.hasAnyChanges )  {
+        saveChangesDialog.open()
+      }
+      else {
+        root.rollbackAndClose()
+      }
+      event.accepted = true;
+    }
+  }
+
   property bool layerIsReadOnly: true
   property bool layerIsSpatial: true
 
@@ -303,8 +315,6 @@ Page {
 
         active: fieldWidget !== 'Hidden'
 
-        Keys.forwardTo: backHandler
-
         source: {
           if ( model.EditorWidget !== undefined ) {
             return __inputUtils.getFormEditorType( model.EditorWidget, model.EditorWidgetConfig, model.Field, model.Relation, model.Name )
@@ -402,28 +412,6 @@ Page {
 
   MMFormEditFailedDialog {
     id: editingFailedDialog
-  }
-
-  Item {
-    id: backHandler
-
-    focus: true
-    Keys.onReleased: function( event ) {
-      if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
-        if ( root.controller.hasAnyChanges )  {
-          saveChangesDialog.open()
-        }
-        else {
-          root.rollbackAndClose()
-        }
-        event.accepted = true;
-      }
-    }
-
-    onVisibleChanged: function( visible ) {
-      if ( visible )
-        backHandler.forceActiveFocus()
-    }
   }
 
   Connections {
