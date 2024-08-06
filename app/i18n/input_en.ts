@@ -797,28 +797,28 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFormPage</name>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="94"/>
+        <location filename="../qml/form/MMFormPage.qml" line="106"/>
         <source>New feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="95"/>
-        <location filename="../qml/form/MMFormPage.qml" line="198"/>
+        <location filename="../qml/form/MMFormPage.qml" line="107"/>
+        <location filename="../qml/form/MMFormPage.qml" line="210"/>
         <source>Edit feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="211"/>
+        <location filename="../qml/form/MMFormPage.qml" line="223"/>
         <source>Delete</source>
         <translation type="unfinished">Delete</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="220"/>
+        <location filename="../qml/form/MMFormPage.qml" line="232"/>
         <source>Edit geometry</source>
         <translation type="unfinished">Edit geometry</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="456"/>
+        <location filename="../qml/form/MMFormPage.qml" line="444"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation type="unfinished"></translation>
     </message>
