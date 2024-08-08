@@ -460,6 +460,7 @@ int main( int argc, char *argv[] )
   qputenv( "QT_ANDROID_DISABLE_ACCESSIBILITY", "1" );
 #endif
 #ifdef Q_OS_IOS
+  // See issue #3561 -> WFS layers causing stress on iOS
   qputenv( "QGIS_USE_SHARED_MEMORY_KEEP_ALIVE", "1" );
   qDebug() <<  "Setting QGIS_USE_SHARED_MEMORY_KEEP_ALIVE environment variable TRUE";
 #endif
