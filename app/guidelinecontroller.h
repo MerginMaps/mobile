@@ -100,7 +100,7 @@ class GuidelineController : public QObject
     QgsGeometry mRealGeometry;
     InputMapSettings *mMapSettings = nullptr; // not owned
     Vertex mActiveVertex;
-    bool mAllowed;
+    bool mAllowed = true;
     RecordingMapTool::InsertPolicy mInsertPolicy;
     int mActivePart = 0;
     int mActiveRing = 0;
