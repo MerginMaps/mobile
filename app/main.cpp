@@ -459,6 +459,11 @@ int main( int argc, char *argv[] )
   // See issue #3431 -> disable Android accessibility features to prevent ANRs
   qputenv( "QT_ANDROID_DISABLE_ACCESSIBILITY", "1" );
 #endif
+#ifdef Q_OS_IOS
+  // See issue #3561 -> WFS layers causing stress on iOS
+  qputenv( "QGIS_USE_SHARED_MEMORY_KEEP_ALIVE", "1" );
+  qDebug() <<  "Setting QGIS_USE_SHARED_MEMORY_KEEP_ALIVE environment variable TRUE";
+#endif
 
   // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
   AppSettings as;
