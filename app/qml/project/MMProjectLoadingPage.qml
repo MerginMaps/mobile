@@ -32,7 +32,7 @@ Item {
   Text {
     text: qsTr("Opening project ...")
     anchors.bottom: root.bottom
-    anchors.bottomMargin: __style.safeAreaBottom + __style.safeAreaLeft + __style.safeAreaRight
+    anchors.bottomMargin: __style.safeAreaBottom + 32 * __dp
     anchors.horizontalCenter: parent.horizontalCenter
     font: __style.t1
     color: __style.forestColor
