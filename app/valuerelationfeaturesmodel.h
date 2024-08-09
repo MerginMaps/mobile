@@ -37,6 +37,7 @@ class ValueRelationFeaturesModel : public FeaturesModel
     void reset() override;
     void setupFeatureRequest( QgsFeatureRequest &request ) override;
     QVariant featureTitle( const FeatureLayerPair &pair ) const override;
+    void setupSorting() override;
 
     Q_INVOKABLE QVariant convertToKey( const QVariant &id );
     Q_INVOKABLE QVariant convertToQgisType( const QVariantList &featureIds ); // feature id -> key
