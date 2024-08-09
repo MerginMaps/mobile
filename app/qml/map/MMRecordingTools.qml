@@ -110,56 +110,91 @@ Item {
     lineBorderWidth: 0
   }
 
-  MMHighlight {
-    id: handlesHighlight
-
-    height: root.map.height
-    width: root.map.width
-
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
-
-    lineStrokeStyle: ShapePath.DashLine
-    lineWidth: MMHighlight.LineWidths.Narrow
+  Loader {
+    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "linestring" || __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "polygon"
+    sourceComponent: handlesHighlightComponent
   }
 
-  MMHighlight {
-    id: guideline
-
-    height: root.map.height
-    width: root.map.width
-
-    lineWidth: MMHighlight.LineWidths.Narrow
-    lineStrokeStyle: ShapePath.DashLine
-
-    mapSettings: root.map.mapSettings
-    geometry: guidelineController.guidelineGeometry
+  Loader {
+    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "linestring" || __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "polygon"
+    sourceComponent: guidelineHighlightComponent
   }
 
-  MMHighlight {
-    id: midSegmentsHighlight
-
-    height: root.map.height
-    width: root.map.width
-
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
-
-    markerType: MMHighlight.MarkerTypes.Circle
-    markerBorderColor: __style.grapeColor
+  Loader {
+    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "linestring" || __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "polygon"
+    sourceComponent: midSegmentsHighlightComponent
   }
 
-  MMHighlight {
-    id: existingVerticesHighlight
+  Loader {
+    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "point"
+    sourceComponent: existingVerticesHighlightComponent
+  }
 
-    height: root.map.height
-    width: root.map.width
+  Component {
+    id:  handlesHighlightComponent
 
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
+    MMHighlight {
+      id: handlesHighlight
 
-    markerType: MMHighlight.MarkerTypes.Circle
-    markerSize: MMHighlight.MarkerSizes.Bigger
+      height: root.map.height
+      width: root.map.width
+
+      mapSettings: root.map.mapSettings
+      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
+      lineStrokeStyle: ShapePath.DashLine
+      lineWidth: MMHighlight.LineWidths.Narrow
+    }
+  }
+
+  Component {
+    id: guidelineHighlightComponent
+
+    MMHighlight {
+      id: guideline
+
+      height: root.map.height
+      width: root.map.width
+
+      lineWidth: MMHighlight.LineWidths.Narrow
+      lineStrokeStyle: ShapePath.DashLine
+
+      mapSettings: root.map.mapSettings
+      geometry: guidelineController.guidelineGeometry
+    }
+  }
+
+  Component {
+    id: midSegmentsHighlightComponent
+
+    MMHighlight {
+      id: midSegmentsHighlight
+
+      height: root.map.height
+      width: root.map.width
+
+      mapSettings: root.map.mapSettings
+      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
+
+      markerType: MMHighlight.MarkerTypes.Circle
+      markerBorderColor: __style.grapeColor
+    }
+  }
+
+  Component {
+    id: existingVerticesHighlightComponent
+
+    MMHighlight {
+      id: existingVerticesHighlight
+
+      height: root.map.height
+      width: root.map.width
+
+      mapSettings: root.map.mapSettings
+      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
+
+      markerType: MMHighlight.MarkerTypes.Circle
+      markerSize: MMHighlight.MarkerSizes.Bigger
+    }
   }
 
   // Duplicate position marker to be painted on the top of highlights
