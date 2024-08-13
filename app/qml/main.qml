@@ -327,6 +327,14 @@ ApplicationWindow {
       }
 
       MMToolbarButton {
+        text: qsTr("Measure")
+        iconSource: __style.measurementToolIcon
+        onClicked: {
+          console.log(" Measurement tool")
+        }
+      }
+
+      MMToolbarButton {
         text: qsTr("Local changes")
         iconSource: __style.localChangesIcon
         onClicked: {
