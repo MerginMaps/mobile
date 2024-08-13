@@ -65,6 +65,9 @@
         <string>sk</string>
         <string>sk_SK</string>
 		<string>ja_JP</string>
+		<string>ar</string>
+		<string>ar_IQ</string>
+		<string>ar_EG</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
