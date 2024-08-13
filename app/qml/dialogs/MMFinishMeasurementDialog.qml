@@ -17,7 +17,7 @@ MMDrawerDialog {
   signal finishMeasurementRequested()
 
   imageSource: __style.neutralMMSymbolImage
-  title: qsTr( "Do you  wish to finish the measurement?" )
+  title: qsTr( "Do you wish to finish the measurement?" )
   description: qsTr( "Your measured segment will be lost." )
   primaryButton.text: qsTr( "Yes" )
   secondaryButton.text: qsTr( "No" )
