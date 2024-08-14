@@ -15,6 +15,11 @@ import mm 1.0 as MM
 Item {
     id: root
 
+    // Rectangle { //map
+    //     anchors.fill: parent
+    //     color: "lightblue"
+    // }
+
     /*required*/ property var qgsProject
     /*required*/ property var mapSettings
     property bool shouldUseSnapping: false
@@ -29,227 +34,282 @@ Item {
     property real innerDotSize: 10 * __dp
 
     MM.SnapUtils {
-      id: snapUtils
+        id: snapUtils
 
-      centerPosition: root.center
-      mapSettings: root.mapSettings
-      qgsProject: root.qgsProject
-      useSnapping: root.shouldUseSnapping
-      destinationLayer: __activeLayer.vectorLayer
+        centerPosition: root.center
+        mapSettings: root.mapSettings
+        qgsProject: root.qgsProject
+        useSnapping: root.shouldUseSnapping
+        destinationLayer: __activeLayer.vectorLayer
 
     }
 
     Image {
-      id: crosshairBackground // white background of the crosshair
+        id: crosshairBackground // white background of the crosshair
 
-      x: root.screenPoint.x - width / 2
-      y: root.screenPoint.y - height / 2
+        // Rectangle {
+        //     anchors.fill: parent
+        //     color: "lightcoral"
+        // }
 
-      Behavior on x {
-        PropertyAnimation {
-          properties: "x"
-          duration: 50
-          easing.type: Easing.InQuad
+        x: root.screenPoint.x - width / 2
+        y: root.screenPoint.y - height / 2
+
+        Behavior on x {
+            PropertyAnimation {
+                properties: "x"
+                duration: 50
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      Behavior on y {
-        PropertyAnimation {
-          properties: "y"
-          duration: 50
-          easing.type: Easing.InQuad
+        Behavior on y {
+            PropertyAnimation {
+                properties: "y"
+                duration: 50
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      height: root.outerSize
-      width: height
+        height: root.outerSize
+        width: height
 
-      source: __style.crosshairBackgroundImage
-      sourceSize.width: width
-      sourceSize.height: height
+        source: __style.crosshairBackgroundImage
+        sourceSize.width: width
+        sourceSize.height: height
     }
 
     Image {
-      id: crosshairForeground // green / purple outer circle of the crosshair
+        id: crosshairForeground // green / purple outer circle of the crosshair
 
-      x: root.screenPoint.x - width / 2
-      y: root.screenPoint.y - height / 2
+        // Rectangle {
+        //     anchors.fill: parent
+        //     color: "lightyellow"
+        // }
 
-      Behavior on x {
-        PropertyAnimation {
-          properties: "x"
-          duration: 50
-          easing.type: Easing.InQuad
+        x: root.screenPoint.x - width / 2
+        y: root.screenPoint.y - height / 2
+
+        Behavior on x {
+            PropertyAnimation {
+                properties: "x"
+                duration: 50
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      Behavior on y {
-        PropertyAnimation {
-          properties: "y"
-          duration: 50
-          easing.type: Easing.InQuad
+        Behavior on y {
+            PropertyAnimation {
+                properties: "y"
+                duration: 50
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      height: root.outerSize
-      width: height
+        height: root.outerSize
+        width: height
 
-      source: __style.crosshairForegroundImage
-      sourceSize.width: width
-      sourceSize.height: height
+        source: __style.crosshairForegroundImage
+        sourceSize.width: width
+        sourceSize.height: height
     }
 
     ColorOverlay {
-      anchors.fill: crosshairForeground
-      source: crosshairForeground
-      color: snapUtils.snapped ? __style.snappingColor : __style.forestColor
+        anchors.fill: crosshairForeground
+        source: crosshairForeground
+        color: snapUtils.snapped ? __style.snappingColor : __style.forestColor
+
+        // Rectangle {
+        //     anchors.fill: parent
+        //     color: "lightpink"
+        // }
     }
 
     Image {
-      id: crossCenterDot // Center dot - visible when not snapped (green)
+        id: crossCenterDot // Center dot - visible when not snapped (green)
 
-      x: root.screenPoint.x - width / 2
-      y: root.screenPoint.y - height / 2
+        // Rectangle {
+        //     anchors.fill: parent
+        //     color: "lightgrey"
+        // }
 
-      Behavior on x {
-        PropertyAnimation {
-          properties: "x"
-          duration: 50
-          easing.type: Easing.InQuad
+        x: root.screenPoint.x - width / 2
+        y: root.screenPoint.y - height / 2
+
+        Behavior on x {
+            PropertyAnimation {
+                properties: "x"
+                duration: 50
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      Behavior on y {
-        PropertyAnimation {
-          properties: "y"
-          duration: 50
-          easing.type: Easing.InQuad
+        Behavior on y {
+            PropertyAnimation {
+                properties: "y"
+                duration: 50
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      opacity: snapUtils.snapped ? 0 : 100
+        opacity: snapUtils.snapped ? 0 : 100
 
-      Behavior on opacity {
-        PropertyAnimation {
-          properties: "opacity"
-          duration: 100
-          easing.type: Easing.InQuad
+        Behavior on opacity {
+            PropertyAnimation {
+                properties: "opacity"
+                duration: 100
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      height: root.innerDotSize
-      width: height
-      sourceSize.width: width
-      sourceSize.height: height
+        height: root.innerDotSize
+        width: height
+        sourceSize.width: width
+        sourceSize.height: height
 
-      source: __style.crosshairCenterImage
+        source: __style.crosshairCenterImage
     }
 
     Image {
-      id: crossCenterPlus // Center plus - visible when not snapped (purple)
+        id: crossCenterPlus // Center plus - visible when not snapped (purple)
 
-      x: root.screenPoint.x - width / 2
-      y: root.screenPoint.y - height / 2
+        // Rectangle {
+        //     anchors.fill: parent
+        //     color: "lightseagreen"
+        // }
 
-      Behavior on x {
-        PropertyAnimation {
-          properties: "x"
-          duration: 50
-          easing.type: Easing.InQuad
+        x: root.screenPoint.x - width / 2
+        y: root.screenPoint.y - height / 2
+
+        Behavior on x {
+            PropertyAnimation {
+                properties: "x"
+                duration: 50
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      Behavior on y {
-        PropertyAnimation {
-          properties: "y"
-          duration: 50
-          easing.type: Easing.InQuad
+        Behavior on y {
+            PropertyAnimation {
+                properties: "y"
+                duration: 50
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      opacity: snapUtils.snapped && ( snapUtils.snapType === MM.SnapUtils.Vertex || snapUtils.snapType === MM.SnapUtils.Other ) ? 100 : 0
+        opacity: snapUtils.snapped && ( snapUtils.snapType === MM.SnapUtils.Vertex || snapUtils.snapType === MM.SnapUtils.Other ) ? 100 : 0
 
-      Behavior on opacity {
-        PropertyAnimation {
-          properties: "opacity"
-          duration: 100
-          easing.type: Easing.InQuad
+        Behavior on opacity {
+            PropertyAnimation {
+                properties: "opacity"
+                duration: 100
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      rotation: snapUtils.snapType === MM.SnapUtils.Other ? 0 : 45
+        rotation: snapUtils.snapType === MM.SnapUtils.Other ? 0 : 45
 
-      Behavior on rotation {
-        PropertyAnimation {
-          properties: "rotation"
-          duration: 50
-          easing.type: Easing.InQuad
+        Behavior on rotation {
+            PropertyAnimation {
+                properties: "rotation"
+                duration: 50
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      height: root.innerDotSize * 2
-      width: height
-      sourceSize.width: width
-      sourceSize.height: height
+        height: root.innerDotSize * 2
+        width: height
+        sourceSize.width: width
+        sourceSize.height: height
 
-      // Important: must be same color as __style.snappingColor
-      source: __style.crosshairPlusImage
+        // Important: must be same color as __style.snappingColor
+        source: __style.crosshairPlusImage
     }
 
     Image {
-      id: crossCenterCircle // Center circle - visible when snapped to segment (purple)
+        id: crossCenterCircle // Center circle - visible when snapped to segment (purple)
 
-      x: root.screenPoint.x - width / 2
-      y: root.screenPoint.y - height / 2
+        // Rectangle {
+        //     anchors.fill: parent
+        //     color: "lightsteelblue"
+        // }
 
-      Behavior on x {
-        PropertyAnimation {
-          properties: "x"
-          duration: 50
-          easing.type: Easing.InQuad
+        x: root.screenPoint.x - width / 2
+        y: root.screenPoint.y - height / 2
+
+        Behavior on x {
+            PropertyAnimation {
+                properties: "x"
+                duration: 50
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      Behavior on y {
-        PropertyAnimation {
-          properties: "y"
-          duration: 50
-          easing.type: Easing.InQuad
+        Behavior on y {
+            PropertyAnimation {
+                properties: "y"
+                duration: 50
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      opacity: snapUtils.snapped && snapUtils.snapType === MM.SnapUtils.Segment ? 100 : 0
+        opacity: snapUtils.snapped && snapUtils.snapType === MM.SnapUtils.Segment ? 100 : 0
 
-      Behavior on opacity {
-        PropertyAnimation {
-          properties: "opacity"
-          duration: 100
-          easing.type: Easing.InQuad
+        Behavior on opacity {
+            PropertyAnimation {
+                properties: "opacity"
+                duration: 100
+                easing.type: Easing.InQuad
+            }
         }
-      }
 
-      height: root.innerDotSize * 2
-      width: height
-      sourceSize.width: width
-      sourceSize.height: height
+        height: root.innerDotSize * 2
+        width: height
+        sourceSize.width: width
+        sourceSize.height: height
 
-      // Important: must be same color as __style.snappingColor
-      source: __style.crosshairCircleImage
+        // Important: must be same color as __style.snappingColor
+        source: __style.crosshairCircleImage
+    }
+
+    MMMapLabel {
+        // Rectangle {
+        //     anchors.fill: parent
+        //     color: "lightgoldenrodyellow"
+        // }
+
+        //height:50
+        //width: 70
+        visible: true //root.state !== "inactive" && root.isStreaming
+        //iconSource: __style.streamingIcon
+
+        maxWidth: crosshairForeground.width + 6 * __dp
+        bgColor: __style.forestColor
+        textColor: __style.polarColor
+        textBgColorInverted: false
+
+        text: qsTr( "Test" )
+
+        anchors.top: crosshairForeground.bottom
+        anchors.horizontalCenter: crosshairForeground.horizontalCenter
+
+        onClicked: console.log("MapLabel")
     }
 
     Connections {
-      target: __activeProject
 
-      function onProjectWillBeReloaded() {
-        snapUtils.clear()
-      }
+        target: __activeProject
 
-      function onProjectReloaded( project ) {
-        // We need to re-assign qgs project to snaputils, because
-        // even though we loaded a different project,
-        // internally we keep the same pointer for QgsProject.
-        snapUtils.qgsProject = __activeProject.qgsProject
-        snapUtils.mapSettings = root.mapSettings
-      }
+        function onProjectWillBeReloaded() {
+            snapUtils.clear()
+        }
+
+        function onProjectReloaded( project ) {
+            // We need to re-assign qgs project to snaputils, because
+            // even though we loaded a different project,
+            // internally we keep the same pointer for QgsProject.
+            snapUtils.qgsProject = __activeProject.qgsProject
+            snapUtils.mapSettings = root.mapSettings
+        }
     }
 }

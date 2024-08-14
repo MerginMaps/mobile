@@ -53,6 +53,7 @@ Item {
         source: control.iconSource ? control.iconSource : ""
         color: control.textColor
         size: __style.icon24
+        visible: control.iconSource ? true : false
       }
 
       Rectangle {

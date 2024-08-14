@@ -144,7 +144,7 @@ Item {
     accuracyRingSize: positionMarkerComponent.accuracyRingSize
   }
 
-  MMCrosshair {
+  MMDataCrosshair {
     id: crosshair
 
     anchors.fill: parent
