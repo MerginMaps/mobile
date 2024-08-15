@@ -28,6 +28,7 @@ Item {
   property color bgColor: __style.positiveColor
   property color textColor: __style.forestColor
   property bool textBgColorInverted: false
+  property bool hasIcon: true
 
   Rectangle {
     width: row.width
@@ -52,8 +53,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         source: control.iconSource ? control.iconSource : ""
         color: control.textColor
-        size: __style.icon24
-        visible: control.iconSource ? true : false
+        size: control.hasIcon ? __style.icon24 : 0
       }
 
       Rectangle {

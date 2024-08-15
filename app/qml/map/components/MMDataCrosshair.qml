@@ -273,21 +273,10 @@ Item {
     }
 
     MMMapLabel {
-        // Rectangle {
-        //     anchors.fill: parent
-        //     color: "lightgoldenrodyellow"
-        // }
-
-        //height:50
-        //width: 70
-        visible: true //root.state !== "inactive" && root.isStreaming
-        //iconSource: __style.streamingIcon
-
-        maxWidth: crosshairForeground.width + 6 * __dp
         bgColor: __style.forestColor
         textColor: __style.polarColor
         textBgColorInverted: false
-
+        hasIcon: false
         text: qsTr( "Test" )
 
         anchors.top: crosshairForeground.bottom

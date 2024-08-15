@@ -19,6 +19,9 @@ Item {
     /*required*/ property var mapSettings
     property bool shouldUseSnapping: false
 
+    property bool hasLabel: false
+    property string crosshairLabelText: ""
+
     property point center: Qt.point( root.width / 2, root.height / 2 )
 
     property var recordPoint: snapUtils.recordPoint
@@ -37,6 +40,14 @@ Item {
       useSnapping: root.shouldUseSnapping
       destinationLayer: __activeLayer.vectorLayer
 
+    }
+
+    Loader {
+      id: crosshairLabelLoader
+      active: root.hasLabel
+      sourceComponent: crosshairLabelComponent
+      anchors.top: crosshairForeground.bottom
+      anchors.horizontalCenter: crosshairForeground.horizontalCenter
     }
 
     Image {
@@ -235,6 +246,20 @@ Item {
 
       // Important: must be same color as __style.snappingColor
       source: __style.crosshairCircleImage
+    }
+
+    Component {
+      id: crosshairLabelComponent
+
+      MMMapLabel {
+        bgColor: __style.forestColor
+        textColor: __style.polarColor
+        textBgColorInverted: false
+        hasIcon: false
+        text: root.crosshairLabelText
+
+        onClicked: console.log( "MapLabel" )
+      }
     }
 
     Connections {

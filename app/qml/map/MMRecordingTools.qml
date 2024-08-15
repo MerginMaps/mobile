@@ -144,7 +144,7 @@ Item {
     accuracyRingSize: positionMarkerComponent.accuracyRingSize
   }
 
-  MMDataCrosshair {
+  MMCrosshair { //labeled crosshair
     id: crosshair
 
     anchors.fill: parent
@@ -154,6 +154,8 @@ Item {
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
     shouldUseSnapping: !mapTool.isUsingPosition
+    hasLabel: true
+    crosshairLabelText: "58.4 m"
   }
 
   MMHighlight {
