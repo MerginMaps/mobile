@@ -22,14 +22,52 @@ Rectangle {
   property font titleFont: __style.t3
 
   property bool hasCloseButton: true
+
+  property string leftButtonIcon: ""
+  property string leftButtonText: ""
+  property string leftButtonType: MMButton.Types.Primary
+
   property alias closeButton: closeBtn
+  property alias leftButton: leftBtn
 
   color: __style.transparentColor
 
   signal closeClicked
+  signal leftButtonClicked
 
   implicitHeight: 60 * __dp
   implicitWidth: ApplicationWindow.window?.width ?? 0
+
+  // MMRoundButton {
+  //   id: leftBtn
+
+  //   iconSource: __style.addIcon
+  //   iconColor: __style.forestColor
+
+  //   bgndColor: __style.grassColor
+  //   bgndHoverColor: __style.mediumGreenColor
+
+  //   onClicked: root.createWorkspaceRequested()
+  // }
+
+  MMButton {
+    id: leftBtn
+
+    type: root.leftButtonType
+    text: root.leftButtonText
+    iconSourceLeft: root.leftButtonIcon
+    bgndColor: __style.lightGreenColor
+
+    visible: true //root.leftButtonIcon
+
+    anchors {
+      left: parent.left
+      leftMargin: __style.pageMargins + __style.safeAreaLeft
+      verticalCenter: parent.verticalCenter
+    }
+
+    onClicked: root.leftButtonClicked()
+  }
 
   Text {
     // If the close button is visible, we need to properly center the text

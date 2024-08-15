@@ -97,7 +97,6 @@ MMDrawer {
 
     Row {
       width: parent.width
-      spacing: __style.margi8
 
       MMGpsComponents.MMGpsDataText{
         width: ( parent.width + parent.spacing ) / 2

@@ -219,6 +219,12 @@ ApplicationWindow {
       stakeoutPanelLoader.item.targetPair = pair
     }
 
+    onMeasureStarted: function( pair ) {
+      measurePanelLoader.active = true
+      measurePanelLoader.focus = true
+      measurePanelLoader.item.targetPair = pair
+    }
+
     onLocalChangesPanelRequested: {
       stateManager.state = "projects"
       projectController.openChangesPanel( __activeProject.projectFullName(), true )
@@ -330,7 +336,13 @@ ApplicationWindow {
         text: qsTr("Measure")
         iconSource: __style.measurementToolIcon
         onClicked: {
-          console.log(" Measurement tool")
+          if ( __recordingLayersModel.rowCount() > 0 ) {
+            stateManager.state = "map"
+            map.measure()
+          }
+          else {
+            __notificationModel.addInfo( qsTr( "No editable layers found." ) )
+          }
         }
       }
 
@@ -601,6 +613,29 @@ ApplicationWindow {
       }
 
       onPanelHeightUpdated: map.updatePosition()
+    }
+  }
+
+  Loader {
+    id: measurePanelLoader
+
+    focus: true
+    active: false
+    asynchronous: true
+
+    sourceComponent: measurePanelComponent
+  }
+
+  Component {
+    id: measurePanelComponent
+
+    MMMeasureDrawer {
+      id: measurePanel
+
+      width: window.width
+
+      mapCanvas: map
+
     }
   }
 

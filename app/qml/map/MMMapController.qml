@@ -60,6 +60,8 @@ Item {
   signal stakeoutStarted( var pair )
   signal accuracyButtonClicked()
 
+  signal measureStarted()
+
   signal localChangesPanelRequested()
 
   signal openTrackingPanel()
@@ -85,6 +87,9 @@ Item {
     },
     State {
       name: "stakeout"
+    },
+    State {
+      name: "measure"
     },
     State {
       name: "inactive" // ignores touch input
@@ -140,6 +145,12 @@ Item {
       case "stakeout": {
         root.hideHighlight()
         root.stakeoutStarted( internal.stakeoutTarget )
+        break
+      }
+
+      case "measure": {
+        root.hideHighlight()
+        root.measureStarted()
         break
       }
 
@@ -1243,6 +1254,10 @@ Item {
       trackingManager?.commitTrackedPath()
       tracking.active = false
     }
+  }
+
+  function measure() {
+    state = "measure"
   }
 
   function showInfoTextMessage( message ) {
