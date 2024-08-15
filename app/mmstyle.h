@@ -169,6 +169,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl redrawGeometryIcon READ redrawGeometryIcon CONSTANT )
     Q_PROPERTY( QUrl cloudIcon READ cloudIcon CONSTANT )
     Q_PROPERTY( QUrl measurementToolIcon READ measurementToolIcon CONSTANT )
+    Q_PROPERTY( QUrl closeShapeIcon READ closeShapeIcon CONSTANT )
 
     // Filled Icons - for visualizing of selected item in toolbar
     Q_PROPERTY( QUrl projectsFilledIcon READ projectsFilledIcon CONSTANT )
@@ -425,6 +426,7 @@ class MMStyle: public QObject
     QUrl morePhotosIcon() {return QUrl( "qrc:/MorePhotos.svg" );}
     QUrl mouthIcon() {return QUrl( "qrc:/Mouth.svg" );}
     QUrl measurementToolIcon() {return QUrl( "qrc:/Measure.svg" );}
+    QUrl closeShapeIcon() {return QUrl( "qrc:/CloseShape.svg" );}
     QUrl naturalResourcesIcon() {return QUrl( "qrc:/NaturalResources.svg" );}
     QUrl nextIcon() {return QUrl( "qrc:/Next.svg" );}
     QUrl otherIcon() {return QUrl( "qrc:/Other.svg" );}

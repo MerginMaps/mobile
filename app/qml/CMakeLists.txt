@@ -77,6 +77,7 @@ set(MM_QML
     dialogs/MMDiscardGeometryChangesDialog.qml
     dialogs/MMProjectLoadErrorDialog.qml
     dialogs/MMProviderRemoveReceiverDialog.qml
+    dialogs/MMFinishMeasurementDialog.qml
     dialogs/components/MMDialogAdditionalText.qml
     form/MMFormPage.qml
     form/MMFormStackController.qml

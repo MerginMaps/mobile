@@ -34,33 +34,27 @@ MMDrawer {
   readonly property alias panelHeight: root.height
 
   signal panelHeightUpdated()
-  signal stakeoutFinished()
+  signal measureFinished()
+  signal measureDone()
 
   Component.onCompleted: {
     root.open()
   }
 
-  // function endStakeout() {
-  //   if ( mapCanvas.state !== "stakeout" )
-  //     return;
+  function endMeasurement() {
+    if ( mapCanvas.state !== "measure" )
+      return;
 
-  //   stakeoutFinished()
-  // }
+    measureFinished()
+  }
 
-  // function hide() {
-  //   root.close()
-  // }
+  function hide() {
+    root.close()
+  }
 
-  // function restore() {
-  //   root.open()
-  // }
-
-  // Behavior on height {
-  //   SequentialAnimation {
-  //     PropertyAnimation { properties: "height"; easing.type: Easing.InOutQuad }
-  //     ScriptAction { script: root.panelHeightUpdated() }
-  //   }
-  // }
+  function restore() {
+    root.open()
+  }
 
   modal: false
 
@@ -80,7 +74,7 @@ MMDrawer {
     id: mainColumn
 
     width: parent.width
-    spacing: __style.margin12
+    spacing: __style.margin40
 
     Row {
       width: parent.width
@@ -99,6 +93,24 @@ MMDrawer {
         value: "0.00 m"
         alignmentRight: true
         visible: closeShapeActive
+      }
+    }
+
+    Row {
+      width: parent.width
+      spacing: __style.margin12
+
+      MMButton {
+        text: closeShapeActive ? qsTr( "Close shape" ) : qsTr( "Add point" )
+        iconSourceLeft: closeShapeActive ? __style.closeShapeIcon : __style.plusIcon
+        onClicked: console.log(" Add point or Close Shape")
+      }
+
+      MMButton {
+        type: MMButton.Types.Secondary
+        text: qsTr( "Done" )
+        iconSourceLeft: __style.doneCircleIcon
+        onClicked: root.measureDone()
       }
     }
   }

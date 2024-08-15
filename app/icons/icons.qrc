@@ -98,5 +98,6 @@
         <file>StakeOut.svg</file>
         <file>Student.svg</file>
         <file>Measure.svg</file>
+        <file>CloseShape.svg</file>
     </qresource>
 </RCC>

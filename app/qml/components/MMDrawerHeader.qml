@@ -58,7 +58,7 @@ Rectangle {
     iconSourceLeft: root.leftButtonIcon
     bgndColor: __style.lightGreenColor
 
-    visible: true //root.leftButtonIcon
+    visible: root.leftButtonIcon
 
     anchors {
       left: parent.left

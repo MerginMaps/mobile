@@ -77,6 +77,7 @@ ScrollView {
             GalleryComponents.IconLine { name: "plusIcon"; source: __style.plusIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "positionTrackingIcon"; source: __style.positionTrackingIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "measurementToolIcon"; source: __style.measurementToolIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            GalleryComponents.IconLine { name: "closeShapeIcon"; source: __style.closeShapeIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "qrCodeIcon"; source: __style.qrCodeIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "satelliteIcon"; source: __style.satelliteIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "searchIcon"; source: __style.searchIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }

@@ -636,6 +636,7 @@ ApplicationWindow {
 
       mapCanvas: map
 
+      onMeasureDone: finishMeasurementDialog.open()
     }
   }
 
@@ -768,6 +769,10 @@ ApplicationWindow {
       stateManager.state = "projects"
       projectController.showLogin()
     }
+  }
+
+  MMFinishMeasurementDialog {
+    id: finishMeasurementDialog
   }
 
   MMNotificationView {}
