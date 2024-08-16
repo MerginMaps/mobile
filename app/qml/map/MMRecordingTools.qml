@@ -111,17 +111,23 @@ Item {
   }
 
   Loader {
-    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "linestring" || __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "polygon"
+    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "linestring" ||
+            __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "polygon"
+
     sourceComponent: handlesHighlightComponent
   }
 
   Loader {
-    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "linestring" || __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "polygon"
+    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "linestring" ||
+            __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "polygon"
+
     sourceComponent: guidelineHighlightComponent
   }
 
   Loader {
-    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "linestring" || __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "polygon"
+    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "linestring" ||
+            __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "polygon"
+
     sourceComponent: midSegmentsHighlightComponent
   }
 
