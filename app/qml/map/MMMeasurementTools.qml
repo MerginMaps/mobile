@@ -14,79 +14,76 @@ import mm 1.0 as MM
 
 import "../components"
 import "./components"
+import "../gps"
 
-/**
-  * RecordingTools is a set of tools that are used during recording/editing of a geometry.
-  * These tools can be instantiated just for the time of recording and then destroyed.
-  */
 Item {
-  id: root
+    id: root
 
-  required property MMMapCanvas map
-  required property MMPositionMarker positionMarkerComponent
+    required property MMMapCanvas map
+    required property MMPositionMarker positionMarkerComponent
 
-  property alias recordingMapTool: mapTool
+    property alias recordingMapTool: mapTool
+    property var activeFeature
 
-  property var activeFeature
+    signal canceled()
+    signal addMeasurePoint()
+    signal done(var featureLayerPair)
 
-  signal canceled()
-  signal done( var featureLayerPair )
-
-  MM.RecordingMapTool {
-    id: mapTool
-
-    property bool isUsingPosition: mapTool.centeredToGPS || mapTool.recordingType == MM.RecordingMapTool.StreamMode
-
-    mapSettings: root.map.mapSettings
-
-    recordPoint: crosshair.recordPoint
-
-    recordingType: MM.RecordingMapTool.Manual
-    recordingInterval: __appSettings.lineRecordingInterval
-    recordingIntervalType: __appSettings.intervalType
-
-    positionKit: __positionKit
-    activeLayer: __activeLayer.vectorLayer
-    activeFeature: root.activeFeature
-
-    // Bind variables manager to know if we are centered to GPS or not when evaluating position variables
-    onIsUsingPositionChanged: __variablesManager.useGpsPoint = isUsingPosition
-
-    onActiveVertexChanged: function( activeVertex ) {
-      if ( activeVertex.isValid() )
-      {
-        // Center to clicked vertex
-        let newCenter = mapTool.vertexMapCoors( activeVertex )
-
-        if ( !isNaN( newCenter.x ) && !isNaN( newCenter.y ) )
-        {
-          root.map.jumpTo( /*crosshair.screenPoint,*/ root.map.mapSettings.coordinateToScreen( newCenter ) )
-        }
-      }
+    MM.MeasurementMapTool {
+        id: mapTool
     }
-  }
 
-  MMCrosshair { //labeled crosshair
-    id: crosshair
+    MM.GuidelineController {
+        id: guidelineController
 
-    anchors.fill: parent
+        allowed: true //mapTool.state !== MM.RecordingMapTool.View && mapTool.recordingType !== MM.RecordingMapTool.StreamMode
 
-    visible: true //mapTool.state !== MM.RecordingMapTool.View && mapTool.recordingType !== MM.RecordingMapTool.StreamMode
+        mapSettings: root.map.mapSettings
+        insertPolicy: mapTool.insertPolicy
+        crosshairPosition: crosshair.screenPoint
+        realGeometry: __inputUtils.transformGeometryToMapWithLayer(mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings)
 
-    qgsProject: __activeProject.qgsProject
-    mapSettings: root.map.mapSettings
-    shouldUseSnapping: !mapTool.isUsingPosition
-    hasLabel: true
-    crosshairLabelText: "58.4 m"
-  }
+        activeVertex: mapTool.activeVertex
+        activePart: mapTool.activePart
+        activeRing: mapTool.activeRing
+    }
+
+    MMCrosshair {
+        id: crosshair
+
+        anchors.fill: parent
+
+        visible: true //mapTool.state !== MM.RecordingMapTool.View && mapTool.recordingType !== MM.RecordingMapTool.StreamMode
+
+        qgsProject: __activeProject.qgsProject
+        mapSettings: root.map.mapSettings
+        shouldUseSnapping: !mapTool.isUsingPosition
+        hasLabel: true
+        crosshairLabelText: "58.4 m"
+    }
+
+    MMMeasureDrawer {
+      id: measurePanel
+
+      width: window.width
+
+      mapCanvas: map
+
+      onAddMeasurePoint: console.log(" Add measure ")
+      onMeasureDone: finishMeasurementDialog.open()
+    }
 
 
-  function discardChanges() {
-    mapTool.discardChanges()
-    root.canceled()
-  }
+    function discardChanges() {
+        mapTool.discardChanges()
+        root.canceled()
+    }
 
-  function hasChanges() {
-    return mapTool.hasChanges()
-  }
+    function hasChanges() {
+        return mapTool.hasChanges()
+    }
+
+    function onAddMeasurePoint() {
+      console.log("Ponto de medição adicionado")
+    }
 }

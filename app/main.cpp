@@ -115,6 +115,7 @@
 #include "maptools/abstractmaptool.h"
 #include "maptools/recordingmaptool.h"
 #include "maptools/splittingmaptool.h"
+#include "maptools/measurementmaptool.h"
 
 #include "layer/layertreemodel.h"
 #include "layer/layertreemodelpixmapprovider.h"
@@ -350,6 +351,7 @@ void initDeclarative()
   qmlRegisterUncreatableType< AbstractMapTool >( "mm", 1, 0, "AbstractMapTool", "Instantiate one of child map tools instead" );
   qmlRegisterType< RecordingMapTool >( "mm", 1, 0, "RecordingMapTool" );
   qmlRegisterType< SplittingMapTool >( "mm", 1, 0, "SplittingMapTool" );
+  qmlRegisterType< MeasurementMapTool >( "mm", 1, 0, "MeasurementMapTool" );
 }
 
 void addQmlImportPath( QQmlEngine &engine )

@@ -224,9 +224,7 @@ ApplicationWindow {
     }
 
     onMeasureStarted: function( pair ) {
-      measurePanelLoader.active = true
-      measurePanelLoader.focus = true
-      measurePanelLoader.item.targetPair = pair
+      console.log(" measure started")
     }
 
     onLocalChangesPanelRequested: {
@@ -635,6 +633,7 @@ ApplicationWindow {
 
       mapCanvas: map
 
+      onAddMeasurePoint: measurePanel.addMeasurePoint.connect(map.measurementTools.onAddMeasurePoint)
       onMeasureDone: finishMeasurementDialog.open()
     }
   }

@@ -35,6 +35,7 @@ MMDrawer {
   readonly property alias panelHeight: root.height
 
   signal panelHeightUpdated()
+  signal addMeasurePoint()
   signal measureFinished()
   signal measureDone()
 
@@ -65,6 +66,7 @@ MMDrawer {
 
   function addPoint()
   {
+    root.addMeasurePoint()
     console.log(" point added ")
   }
 
