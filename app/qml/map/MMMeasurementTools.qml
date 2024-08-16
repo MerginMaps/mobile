@@ -73,6 +73,7 @@ Item {
 
       onAddMeasurePoint: console.log(" Add measure ")
       onMeasureDone: finishMeasurementDialog.open()
+      onMeasureFinished:root.finishMeasurement()
     }
 
     MMFinishMeasurementDialog {

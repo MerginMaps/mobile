@@ -81,7 +81,7 @@ MMDrawer {
 
   dropShadow: true
 
-  //onClosed: root.endStakeout()
+  onClosed: root.measureFinished()
 
   leftButtonText: closeShapeDone ? qsTr( "Repeat" ) : qsTr( "Undo" )
   leftButtonIcon: closeShapeDone ? __style.syncIcon : __style.undoIcon
