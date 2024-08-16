@@ -32,21 +32,6 @@ Item {
   signal canceled()
   signal done( var featureLayerPair )
 
-  function toggleStreaming() {
-    if (  mapTool.recordingType === MM.RecordingMapTool.Manual )
-    {
-      mapTool.recordingType = MM.RecordingMapTool.StreamMode
-
-      // add first point immediately
-      mapTool.addPoint( crosshair.recordPoint )
-      root.map.mapSettings.setCenter( mapPositionSource.mapPosition )
-    }
-    else
-    {
-      mapTool.recordingType = MM.RecordingMapTool.Manual
-    }
-  }
-
   MM.RecordingMapTool {
     id: mapTool
 
@@ -81,106 +66,12 @@ Item {
     }
   }
 
-  MM.GuidelineController {
-    id: guidelineController
-
-    allowed: mapTool.state !== MM.RecordingMapTool.View && mapTool.recordingType !== MM.RecordingMapTool.StreamMode
-
-    mapSettings: root.map.mapSettings
-    insertPolicy: mapTool.insertPolicy
-    crosshairPosition: crosshair.screenPoint
-    realGeometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
-
-    activeVertex: mapTool.activeVertex
-    activePart: mapTool.activePart
-    activeRing: mapTool.activeRing
-  }
-
-  MMHighlight {
-    id: highlight
-
-    height: root.map.height
-    width: root.map.width
-
-    visible: !__inputUtils.isPointLayer(__activeLayer.vectorLayer)
-
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
-
-    lineBorderWidth: 0
-  }
-
-  MMHighlight {
-    id: handlesHighlight
-
-    height: root.map.height
-    width: root.map.width
-
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
-
-    lineStrokeStyle: ShapePath.DashLine
-    lineWidth: MMHighlight.LineWidths.Narrow
-  }
-
-  MMHighlight {
-    id: guideline
-
-    height: root.map.height
-    width: root.map.width
-
-    lineWidth: MMHighlight.LineWidths.Narrow
-    lineStrokeStyle: ShapePath.DashLine
-
-    mapSettings: root.map.mapSettings
-    geometry: guidelineController.guidelineGeometry
-  }
-
-  MMHighlight {
-    id: midSegmentsHighlight
-
-    height: root.map.height
-    width: root.map.width
-
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
-
-    markerType: MMHighlight.MarkerTypes.Circle
-    markerBorderColor: __style.grapeColor
-  }
-
-  MMHighlight {
-    id: existingVerticesHighlight
-
-    height: root.map.height
-    width: root.map.width
-
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
-
-    markerType: MMHighlight.MarkerTypes.Circle
-    markerSize: MMHighlight.MarkerSizes.Bigger
-  }
-
-  // Duplicate position marker to be painted on the top of highlights
-  MMPositionMarker {
-    xPos: positionMarkerComponent.xPos
-    yPos: positionMarkerComponent.yPos
-    hasDirection: positionMarkerComponent.hasDirection
-
-    direction: positionMarkerComponent.direction
-    hasPosition: positionMarkerComponent.hasPosition
-
-    horizontalAccuracy: positionMarkerComponent.horizontalAccuracy
-    accuracyRingSize: positionMarkerComponent.accuracyRingSize
-  }
-
   MMCrosshair { //labeled crosshair
     id: crosshair
 
     anchors.fill: parent
 
-    visible: mapTool.state !== MM.RecordingMapTool.View && mapTool.recordingType !== MM.RecordingMapTool.StreamMode
+    visible: true //mapTool.state !== MM.RecordingMapTool.View && mapTool.recordingType !== MM.RecordingMapTool.StreamMode
 
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
@@ -189,132 +80,6 @@ Item {
     crosshairLabelText: "58.4 m"
   }
 
-  MMToolbar {
-    y: parent.height
-
-    ObjectModel {
-      id: polygonToolbarButtons
-
-      MMToolbarButton {
-        text: qsTr( "Undo" )
-        iconSource: __style.undoIcon
-        onClicked: mapTool.undo()
-        enabled: mapTool.canUndo
-      }
-
-      MMToolbarButton {
-        text: qsTr( "Remove" )
-        iconSource: __style.minusIcon
-        onClicked: mapTool.removePoint()
-
-        enabled: {
-           if ( mapTool.recordingType !== MM.RecordingMapTool.Manual ) return false;
-           if ( mapTool.state === MM.RecordingMapTool.View ) return false;
-           if ( __inputUtils.isEmptyGeometry( mapTool.recordedGeometry ) ) return false;
-
-           return true;
-         }
-      }
-
-      MMToolbarButton {
-        text: qsTr( "Release" )
-        visible: mapTool.state === MM.RecordingMapTool.Grab
-        iconSource: __style.addIcon
-        onClicked: {
-          if ( mapTool.state === MM.RecordingMapTool.Grab ) {
-            mapTool.releaseVertex( crosshair.recordPoint )
-          }
-          else {
-            mapTool.addPoint( crosshair.recordPoint )
-          }
-        }
-      }
-
-      MMToolbarButton {
-        text: qsTr( "Add" )
-
-        visible: mapTool.state === MM.RecordingMapTool.View || mapTool.state === MM.RecordingMapTool.Record
-        enabled: mapTool.recordingType === MM.RecordingMapTool.Manual && mapTool.state !== MM.RecordingMapTool.View
-
-        iconSource: __style.addIcon
-        onClicked: {
-          if ( mapTool.state === MM.RecordingMapTool.Grab ) {
-            mapTool.releaseVertex( crosshair.recordPoint )
-          }
-          else {
-            mapTool.addPoint( crosshair.recordPoint )
-          }
-        }
-      }
-
-      MMToolbarButton {
-        text: qsTr( "Record" )
-
-        iconSource: __style.doneCircleIcon
-        iconColor: __style.grassColor
-        onClicked: {
-          if ( mapTool.hasValidGeometry() )
-          {
-            // If we currently grab a point
-            if ( mapTool.state === MM.RecordingMapTool.Grab )
-            {
-              mapTool.releaseVertex( crosshair.recordPoint )
-            }
-
-            let pair = mapTool.getFeatureLayerPair()
-            root.done( pair )
-          }
-          else
-          {
-            __notificationModel.addWarning( __inputUtils.invalidGeometryWarning( mapTool.activeLayer ) )
-          }
-        }
-      }
-    }
-
-    ObjectModel {
-      id: pointToolbarButtons
-
-      MMToolbarButton {
-        text: qsTr( "Record" );
-        iconSource: __style.doneCircleIcon;
-        iconColor: __style.forestColor
-        onClicked: {
-          if ( mapTool.state === MM.RecordingMapTool.Grab )
-          {
-            // editing existing point geometry
-            mapTool.releaseVertex( crosshair.recordPoint )
-          } else
-          {
-            // recording new point
-            mapTool.addPoint( crosshair.recordPoint )
-          }
-
-          let pair = mapTool.getFeatureLayerPair()
-          root.done( pair )
-        }
-      }
-    }
-
-    model: {
-      let pointLayerSelected = __inputUtils.isPointLayer( __activeLayer.vectorLayer )
-      let isMultiPartLayerSelected = __inputUtils.isMultiPartLayer( __activeLayer.vectorLayer )
-
-      if ( pointLayerSelected && !isMultiPartLayerSelected ) {
-        return pointToolbarButtons
-      }
-      return polygonToolbarButtons
-    }
-  }
-
-  Connections {
-    target: map
-    function onClicked( point ) {
-      let screenPoint = Qt.point( point.x, point.y )
-
-      mapTool.lookForVertex( screenPoint )
-    }
-  }
 
   function discardChanges() {
     mapTool.discardChanges()

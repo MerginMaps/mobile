@@ -30,6 +30,7 @@ MMDrawer {
   //                                                 targetPair,
   //                                                 mapCanvas.mapSettings ) : -1
   property bool closeShapeActive: true
+  property bool closeShapeDone: true
 
   readonly property alias panelHeight: root.height
 
@@ -56,6 +57,22 @@ MMDrawer {
     root.open()
   }
 
+  function closeShape()
+  {
+    console.log(" close shape clicked ")
+    root.closeShapeActive = false
+  }
+
+  function addPoint()
+  {
+    console.log(" point added ")
+  }
+
+  function repeatMeasure()
+  {
+    console.log(" repeat measure ")
+  }
+
   modal: false
 
   closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
@@ -64,11 +81,12 @@ MMDrawer {
 
   //onClosed: root.endStakeout()
 
-  leftButtonText: "Undo"
-  leftButtonIcon: __style.undoIcon
+  leftButtonText: closeShapeDone ? qsTr( "Repeat" ) : qsTr( "Undo" )
+  leftButtonIcon: closeShapeDone ? __style.syncIcon : __style.undoIcon
   leftButtonType: MMButton.Types.Primary
+  onLeftButtonClicked: console.log("onLeftButtonClicked")
 
-  drawerHeader.title: qsTr("Measure")
+  drawerHeader.title: qsTr( "Measure" )
 
   drawerContent: Column {
     id: mainColumn
@@ -103,7 +121,7 @@ MMDrawer {
       MMButton {
         text: closeShapeActive ? qsTr( "Close shape" ) : qsTr( "Add point" )
         iconSourceLeft: closeShapeActive ? __style.closeShapeIcon : __style.plusIcon
-        onClicked: console.log(" Add point or Close Shape")
+        onClicked: closeShapeActive ? root.closeShape() : root.addPoint()
       }
 
       MMButton {

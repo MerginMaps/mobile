@@ -299,6 +299,17 @@ Item {
   }
 
   Loader {
+    id: measureLoader
+
+    anchors.fill: mapCanvas
+
+    asynchronous: true
+    active: root.state === "measure"
+
+    sourceComponent: measurementToolsComponent
+  }
+
+  Loader {
     id: tracking
 
     anchors.fill: mapCanvas
@@ -508,10 +519,10 @@ Item {
 
       anchors.bottom: parent.bottom
 
-      anchors.bottomMargin: root.state === "stakeout" ? root.mapExtentOffset : 0
+      anchors.bottomMargin: root.state === "stakeout" || root.state === "measure" ? root.mapExtentOffset : 0
 
       visible: {
-        if ( root.state === "stakeout" )
+        if ( root.state === "stakeout" || root.state === "measure" )
           return true
         else
           return root.mapExtentOffset > 0 ? false : true
@@ -974,6 +985,17 @@ Item {
   }
 
   Component {
+    id: measurementToolsComponent
+
+    MMMeasurementTools {
+      anchors.fill: parent
+
+      map: mapCanvas
+      positionMarkerComponent: positionMarker
+    }
+  }
+
+  Component {
     id: splittingToolsComponent
 
     MMSplittingTools {
@@ -1122,6 +1144,12 @@ Item {
     state = "stakeout"
   }
 
+  function measure() {
+    internal.extentBeforeStakeout = mapCanvas.mapSettings.extent
+
+    state = "measure"
+  }
+
   function toggleStreaming() {
     // start/stop the streaming mode
     if ( recordingToolsLoader.active ) {
@@ -1136,6 +1164,12 @@ Item {
     root.highlightPair( internal.stakeoutTarget )
     mapCanvas.mapSettings.extent = internal.extentBeforeStakeout
     root.centeredToGPS = internal.centeredToGPSBeforeStakeout
+  }
+
+  function stopMeasure() {
+    state = "view"
+
+    mapCanvas.mapSettings.extent = internal.extentBeforeStakeout
   }
 
   function centerToPair( pair ) {
@@ -1254,10 +1288,6 @@ Item {
       trackingManager?.commitTrackedPath()
       tracking.active = false
     }
-  }
-
-  function measure() {
-    state = "measure"
   }
 
   function showInfoTextMessage( message ) {

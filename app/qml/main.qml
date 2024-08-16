@@ -158,6 +158,10 @@ ApplicationWindow {
         // if stakeout panel is opened
         return stakeoutPanelLoader.item.panelHeight - mapToolbar.height
       }
+      else if ( measurePanelLoader.active )
+      {
+        return measurePanelLoader.item.panelHeight - mapToolbar.height
+      }
       else if ( formsStackManager.takenVerticalSpace > 0 )
       {
         // if feature preview panel is opened
@@ -336,13 +340,8 @@ ApplicationWindow {
         text: qsTr("Measure")
         iconSource: __style.measurementToolIcon
         onClicked: {
-          if ( __recordingLayersModel.rowCount() > 0 ) {
-            stateManager.state = "map"
-            map.measure()
-          }
-          else {
-            __notificationModel.addInfo( qsTr( "No editable layers found." ) )
-          }
+          stateManager.state = "map"
+          map.measure()
         }
       }
 
@@ -773,6 +772,8 @@ ApplicationWindow {
 
   MMFinishMeasurementDialog {
     id: finishMeasurementDialog
+
+    onFinishMeasurementRequested: measurePanelLoader.active = false
   }
 
   MMNotificationView {}

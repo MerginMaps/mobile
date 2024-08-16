@@ -137,6 +137,7 @@ set(MM_QML
     map/MMSplittingTools.qml
     map/MMStakeoutTools.qml
     map/MMRecordingTools.qml
+    map/MMMeasurementTools.qml
     map/components/MMHidingBox.qml
     map/components/MMCrosshair.qml
     map/components/MMMapHidingLabel.qml

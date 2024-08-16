@@ -38,18 +38,6 @@ Rectangle {
   implicitHeight: 60 * __dp
   implicitWidth: ApplicationWindow.window?.width ?? 0
 
-  // MMRoundButton {
-  //   id: leftBtn
-
-  //   iconSource: __style.addIcon
-  //   iconColor: __style.forestColor
-
-  //   bgndColor: __style.grassColor
-  //   bgndHoverColor: __style.mediumGreenColor
-
-  //   onClicked: root.createWorkspaceRequested()
-  // }
-
   MMButton {
     id: leftBtn
 
