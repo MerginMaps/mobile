@@ -15,6 +15,7 @@ import mm 1.0 as MM
 import "../components"
 import "./components"
 import "../gps"
+import "../dialogs"
 
 Item {
     id: root
@@ -27,6 +28,7 @@ Item {
 
     signal canceled()
     signal addMeasurePoint()
+    signal finishMeasurement()
     signal done(var featureLayerPair)
 
     MM.MeasurementMapTool {
@@ -73,6 +75,11 @@ Item {
       onMeasureDone: finishMeasurementDialog.open()
     }
 
+    MMFinishMeasurementDialog {
+      id: finishMeasurementDialog
+
+      onFinishMeasurementRequested: root.finishMeasurement()
+    }
 
     function discardChanges() {
         mapTool.discardChanges()

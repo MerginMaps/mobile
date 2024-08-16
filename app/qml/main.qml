@@ -158,10 +158,6 @@ ApplicationWindow {
         // if stakeout panel is opened
         return stakeoutPanelLoader.item.panelHeight - mapToolbar.height
       }
-      else if ( measurePanelLoader.active )
-      {
-        return measurePanelLoader.item.panelHeight - mapToolbar.height
-      }
       else if ( formsStackManager.takenVerticalSpace > 0 )
       {
         // if feature preview panel is opened
@@ -613,31 +609,6 @@ ApplicationWindow {
     }
   }
 
-  Loader {
-    id: measurePanelLoader
-
-    focus: true
-    active: false
-    asynchronous: true
-
-    sourceComponent: measurePanelComponent
-  }
-
-  Component {
-    id: measurePanelComponent
-
-    MMMeasureDrawer {
-      id: measurePanel
-
-      width: window.width
-
-      mapCanvas: map
-
-      onAddMeasurePoint: measurePanel.addMeasurePoint.connect(map.measurementTools.onAddMeasurePoint)
-      onMeasureDone: finishMeasurementDialog.open()
-    }
-  }
-
   MMFormStackController {
     id: formsStackManager
 
@@ -767,12 +738,6 @@ ApplicationWindow {
       stateManager.state = "projects"
       projectController.showLogin()
     }
-  }
-
-  MMFinishMeasurementDialog {
-    id: finishMeasurementDialog
-
-    onFinishMeasurementRequested: measurePanelLoader.active = false
   }
 
   MMNotificationView {}

@@ -992,6 +992,7 @@ Item {
 
       map: mapCanvas
       positionMarkerComponent: positionMarker
+      onFinishMeasurement: root.finishMeasure()
     }
   }
 
@@ -1166,8 +1167,9 @@ Item {
     root.centeredToGPS = internal.centeredToGPSBeforeStakeout
   }
 
-  function stopMeasure() {
+  function finishMeasure() {
     state = "view"
+
 
     mapCanvas.mapSettings.extent = internal.extentBeforeStakeout
   }
