@@ -1,51 +1,61 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef MEASUREMENTMAPTOOL_H
 #define MEASUREMENTMAPTOOL_H
 
+#include "inputconfig.h"
 #include "abstractmaptool.h"
-
-#include <QObject>
 #include <qglobal.h>
-#include "qgspolygon.h"
-#include "qgsvectorlayerutils.h"
-#include "qgsmultipoint.h"
-#include "qgsmultilinestring.h"
-#include "qgspolygon.h"
-#include "qgsmultipolygon.h"
-#include "qgsrendercontext.h"
-#include "qgsvectorlayereditbuffer.h"
-
-#include "qgsvectorlayer.h"
+#include "qgsdistancearea.h"
+#include "qgsgeometry.h"
 
 class MeasurementMapTool : public AbstractMapTool
 {
     Q_OBJECT
-public:
+
+    Q_PROPERTY( QgsGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
+
+  public:
     explicit MeasurementMapTool( QObject *parent = nullptr );
     virtual ~MeasurementMapTool() override;
 
-//     Q_INVOKABLE void addPoint( const QgsPoint &point );
+    /**
+     * Adds point to the end of the recorded geometry; updates recordedGeometry afterwards
+     * Passed point needs to be in active vector layer CRS
+     */
+    Q_INVOKABLE void addPoint( const QgsPoint &point );
 
-//     Q_INVOKABLE double totalDistance() const;
+    /**
+     *  Removes last point from recorded geometry if there is at least one point
+     *  Updates recordedGeometry afterwards
+     */
+    Q_INVOKABLE void removePoint();
 
-//     Q_INVOKABLE double calculatePerimeter() const;
+    //! Returns true if the captured geometry has enought points for the specified layer
+    Q_INVOKABLE bool hasValidGeometry() const;
 
-//     Q_INVOKABLE double calculateArea() const;
+    const QgsGeometry &recordedGeometry() const;
+    void setRecordedGeometry( const QgsGeometry &newRecordedGeometry );
 
-//     Q_INVOKABLE void clearMeasurements();
+  signals:
+    void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
 
-//     Q_INVOKABLE QList<QgsPointXY> points() const;
+  protected:
+    void rebuildGeometry();
 
-//     Q_INVOKABLE bool isPolygon() const;
+  public slots:
+    double updateDistance( const QgsPoint &crosshairPoint ); // Slot to update distance
 
-
-// signals:
-//     void distanceMeasured(double distance);
-//     void polygonCanBeFormed(bool canForm);
-
-// private:
-//     QList<QgsPointXY> mPoints;
-//     QList<double> mDistances;
-//     bool mIsPolygon;
+  private:
+    QVector<QgsPoint> mPoints;
+    QgsGeometry mRecordedGeometry;
 };
 
 #endif // MEASUREMENTMAPTOOL_H

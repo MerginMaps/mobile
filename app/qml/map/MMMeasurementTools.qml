@@ -18,80 +18,91 @@ import "../gps"
 import "../dialogs"
 
 Item {
-    id: root
+  id: root
 
-    required property MMMapCanvas map
-    required property MMPositionMarker positionMarkerComponent
+  required property MMMapCanvas map
+  required property MMPositionMarker positionMarkerComponent
 
-    property alias recordingMapTool: mapTool
-    property var activeFeature
+  signal finishMeasurement()
 
-    signal canceled()
-    signal addMeasurePoint()
-    signal finishMeasurement()
-    signal done(var featureLayerPair)
+  MMCrosshair {
+    id: crosshair
+    anchors.fill: parent
+    qgsProject: __activeProject.qgsProject
+    mapSettings: root.map.mapSettings
+    hasLabel: true
+    crosshairLabelText: "N/A"
+  }
 
-    MM.MeasurementMapTool {
-        id: mapTool
+  MM.MeasurementMapTool {
+    id: mapTool
+    mapSettings: root.map.mapSettings
+  }
+
+  MM.GuidelineController {
+    id: guidelineController
+
+    mapSettings: root.map.mapSettings
+    crosshairPosition: crosshair.screenPoint
+    realGeometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+  }
+
+  MMHighlight {
+    id: guideline
+
+    height: root.map.height
+    width: root.map.width
+
+    markerColor: __style.deepOceanColor
+    lineColor: __style.deepOceanColor
+    lineStrokeStyle: ShapePath.DashLine
+    lineWidth: MMHighlight.LineWidths.Narrow
+
+    mapSettings: root.map.mapSettings
+    geometry: guidelineController.guidelineGeometry
+  }
+
+  MMHighlight {
+    id: highlight
+
+    height: map.height
+    width: map.width
+
+    markerColor: __style.deepOceanColor
+    lineColor: __style.deepOceanColor
+    lineWidth: MMHighlight.LineWidths.Narrow
+
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+  }
+
+  MMMeasureDrawer {
+    id: measurePanel
+
+    width: window.width
+    mapCanvas: map
+
+    onAddMeasurePoint: mapTool.addPoint( crosshair.recordPoint )
+    onMeasureDone: finishMeasurementDialog.open()
+    onMeasureFinished: root.finishMeasurement()
+  }
+
+  MMFinishMeasurementDialog {
+    id: finishMeasurementDialog
+    onFinishMeasurementRequested: root.finishMeasurement()
+  }
+
+  function onScreenPositionChanged() {
+    let distance = mapTool.updateDistance( crosshair.recordPoint );
+
+    if (distance === 0.0 ) {
+        measurePanel.length = "N/A";
+    } else {
+        measurePanel.length = distance.toFixed( 1 ) + " m";
     }
 
-    MM.GuidelineController {
-        id: guidelineController
+    crosshair.crosshairLabelText = measurePanel.length;
+  }
 
-        allowed: true //mapTool.state !== MM.RecordingMapTool.View && mapTool.recordingType !== MM.RecordingMapTool.StreamMode
-
-        mapSettings: root.map.mapSettings
-        insertPolicy: mapTool.insertPolicy
-        crosshairPosition: crosshair.screenPoint
-        realGeometry: __inputUtils.transformGeometryToMapWithLayer(mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings)
-
-        activeVertex: mapTool.activeVertex
-        activePart: mapTool.activePart
-        activeRing: mapTool.activeRing
-    }
-
-    MMCrosshair {
-        id: crosshair
-
-        anchors.fill: parent
-
-        visible: true //mapTool.state !== MM.RecordingMapTool.View && mapTool.recordingType !== MM.RecordingMapTool.StreamMode
-
-        qgsProject: __activeProject.qgsProject
-        mapSettings: root.map.mapSettings
-        shouldUseSnapping: !mapTool.isUsingPosition
-        hasLabel: true
-        crosshairLabelText: "58.4 m"
-    }
-
-    MMMeasureDrawer {
-      id: measurePanel
-
-      width: window.width
-
-      mapCanvas: map
-
-      onAddMeasurePoint: console.log(" Add measure ")
-      onMeasureDone: finishMeasurementDialog.open()
-      onMeasureFinished:root.finishMeasurement()
-    }
-
-    MMFinishMeasurementDialog {
-      id: finishMeasurementDialog
-
-      onFinishMeasurementRequested: root.finishMeasurement()
-    }
-
-    function discardChanges() {
-        mapTool.discardChanges()
-        root.canceled()
-    }
-
-    function hasChanges() {
-        return mapTool.hasChanges()
-    }
-
-    function onAddMeasurePoint() {
-      console.log("Ponto de medição adicionado")
-    }
+  Component.onCompleted: map.mapSettings.extentChanged.connect( onScreenPositionChanged )
 }

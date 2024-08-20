@@ -909,7 +909,10 @@ Item {
 
     mapSettings: mapCanvas.mapSettings
     positionKit: __positionKit
-    onScreenPositionChanged: root.updatePosition()
+    onScreenPositionChanged: {
+      //console.log("AA")
+      root.updatePosition()
+    }
   }
 
   MM.PositionDirection {
@@ -1169,8 +1172,6 @@ Item {
 
   function finishMeasure() {
     state = "view"
-
-
     mapCanvas.mapSettings.extent = internal.extentBeforeStakeout
   }
 

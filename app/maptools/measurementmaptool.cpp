@@ -1,86 +1,78 @@
-#include "measurementmaptool.h"
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
-#include <QObject>
-#include <QList>
-#include "qgspointxy.h"
-#include "qgsgeometryutils.h"
+#include "measurementmaptool.h"
 
 MeasurementMapTool::MeasurementMapTool( QObject *parent )
   : AbstractMapTool{parent}
 {
+  qDebug() << "MeasurementMapTool constructor called";
+}
 
+MeasurementMapTool::~MeasurementMapTool()
+{
+  qDebug() << "MeasurementMapTool destructor called";
+}
+
+void MeasurementMapTool::addPoint( const QgsPoint &point )
+{
+  mPoints.push_back( point );
+  rebuildGeometry();
+}
+
+void MeasurementMapTool::removePoint()
+{
+  if ( !mPoints.isEmpty() )
+  {
+    mPoints.pop_back();
+    rebuildGeometry();
+  }
+}
+
+bool MeasurementMapTool::hasValidGeometry() const
+{
+  return mPoints.count() >= 2;
+}
+
+void MeasurementMapTool::rebuildGeometry()
+{
+  QgsGeometry geometry;
+
+  if ( mPoints.count() > 0 )
+    geometry = QgsGeometry::fromPolyline( mPoints );
+
+  setRecordedGeometry( geometry );
 
 }
 
-MeasurementMapTool::~MeasurementMapTool() = default;
+const QgsGeometry &MeasurementMapTool::recordedGeometry() const
+{
+  return mRecordedGeometry;
+}
 
-// void MeasurementMapTool::addPoint( const QgsPointXY &point )
-// {
-//     if (mPoints.isEmpty()) {
-//         mPoints.append(point);
-//         return;
-//     }
+void MeasurementMapTool::setRecordedGeometry( const QgsGeometry &newRecordedGeometry )
+{
+  if ( mRecordedGeometry.equals( newRecordedGeometry ) )
+    return;
+  mRecordedGeometry = newRecordedGeometry;
+  emit recordedGeometryChanged( mRecordedGeometry );
+}
 
-//     // Calculate distance from the last point to the new one
-//     QgsPointXY lastPoint = mPoints.last();
-//     double distance = QgsGeometryUtils::sqrDistance2D(lastPoint, point);
-//     mDistances.append(distance);
+double MeasurementMapTool::updateDistance( const QgsPoint &crosshairPoint )
+{
+  if ( mPoints.isEmpty() )
+    return 0.0;
 
-//     mPoints.append(point);
+  QgsPoint lastPoint = mPoints.last();
 
-//     emit distanceMeasured(distance);
+  double distance = QgsDistanceArea().measureLine( crosshairPoint, lastPoint );
 
-//     // Check if a polygon can be formed
-//     if (mPoints.size() > 2) {
-//         mIsPolygon = true;
-//         emit polygonCanBeFormed(true);
-//     }
-// }
+  return distance;
+}
 
-// double MeasurementMapTool::totalDistance() const
-// {
-//     double total = 0.0;
-//     for (const double &d : mDistances) {
-//         total += d;
-//     }
-//     return total;
-// }
-
-// double MeasurementMapTool::calculatePerimeter() const
-// {
-//     if (mIsPolygon) {
-//         double perimeter = totalDistance();
-//         // Closing the polygon (last point to the first point)
-//         perimeter += QgsGeometryUtils::sqrDistance2D(mPoints.last(), mPoints.first());
-//         return perimeter;
-//     }
-//     return 0.0;
-// }
-
-// double MeasurementMapTool::calculateArea() const
-// {
-//     if (mIsPolygon) {
-//         QgsPolygonXY polygon;
-//         polygon.setExteriorRing(QgsLineString(mPoints));
-//         return polygon.area();
-//     }
-//     return 0.0;
-// }
-
-// void MeasurementMapTool::clearMeasurements()
-// {
-//     mPoints.clear();
-//     mDistances.clear();
-//     mIsPolygon = false;
-//     emit polygonCanBeFormed(false);
-// }
-
-// QList<QgsPointXY> MeasurementMapTool::points() const
-// {
-//     return mPoints;
-// }
-
-// bool MeasurementMapTool::isPolygon() const
-// {
-//     return mIsPolygon;
-// }
