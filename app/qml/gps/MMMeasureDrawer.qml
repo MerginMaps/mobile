@@ -34,6 +34,7 @@ MMDrawer {
   signal addMeasurePoint()
   signal measureFinished()
   signal measureDone()
+  signal closeShape()
   signal undo()
   signal repeat()
 
@@ -50,11 +51,6 @@ MMDrawer {
 
   function restore() {
     root.open()
-  }
-
-  function closeShape()
-  {
-    root.closeShapeActive = false
   }
 
   modal: false

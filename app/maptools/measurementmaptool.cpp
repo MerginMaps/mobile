@@ -23,6 +23,10 @@ MeasurementMapTool::~MeasurementMapTool()
 void MeasurementMapTool::addPoint( const QgsPoint &point )
 {
   mPoints.push_back( point );
+
+  if ( mPoints.count() >= 3 )
+    emit canCloseShape( true );
+
   rebuildGeometry();
 }
 
@@ -31,13 +35,12 @@ void MeasurementMapTool::removePoint()
   if ( !mPoints.isEmpty() )
   {
     mPoints.pop_back();
+
+    if ( mPoints.count() < 3 )
+      emit canCloseShape( false );
+
     rebuildGeometry();
   }
-}
-
-bool MeasurementMapTool::hasValidGeometry() const
-{
-  return mPoints.count() >= 2;
 }
 
 void MeasurementMapTool::rebuildGeometry()
@@ -74,5 +77,22 @@ double MeasurementMapTool::updateDistance( const QgsPoint &crosshairPoint )
   double distance = QgsDistanceArea().measureLine( crosshairPoint, lastPoint );
 
   return distance;
+}
+
+void MeasurementMapTool::closeShape()
+{
+  if ( mPoints.count() < 3 )
+    return;
+
+  QList<QgsPointXY> pointList;
+  for ( const QgsPoint &point : mPoints )
+  {
+    pointList.append( QgsPointXY( point.x(), point.y() ) );
+  }
+
+  QgsGeometry polygonGeometry = QgsGeometry::fromPolygonXY( QList<QList<QgsPointXY>>() << pointList );
+
+  setRecordedGeometry( polygonGeometry );
+
 }
 

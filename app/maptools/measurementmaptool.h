@@ -15,6 +15,9 @@
 #include <qglobal.h>
 #include "qgsdistancearea.h"
 #include "qgsgeometry.h"
+#include <QgsPolygon.h>
+#include <QgsLineString.h>
+#include <QgsGeometry.h>
 
 class MeasurementMapTool : public AbstractMapTool
 {
@@ -38,20 +41,20 @@ class MeasurementMapTool : public AbstractMapTool
      */
     Q_INVOKABLE void removePoint();
 
-    //! Returns true if the captured geometry has enought points for the specified layer
-    Q_INVOKABLE bool hasValidGeometry() const;
+    Q_INVOKABLE void closeShape();
 
     const QgsGeometry &recordedGeometry() const;
     void setRecordedGeometry( const QgsGeometry &newRecordedGeometry );
 
   signals:
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
+    void canCloseShape( bool canClose );
 
   protected:
     void rebuildGeometry();
 
   public slots:
-    double updateDistance( const QgsPoint &crosshairPoint ); // Slot to update distance
+    double updateDistance( const QgsPoint &crosshairPoint );
 
   private:
     QVector<QgsPoint> mPoints;

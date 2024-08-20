@@ -37,6 +37,8 @@ Item {
   MM.MeasurementMapTool {
     id: mapTool
     mapSettings: root.map.mapSettings
+
+    onCanCloseShape: measurePanel.closeShapeActive = canClose
   }
 
   MM.GuidelineController {
@@ -80,11 +82,13 @@ Item {
     id: measurePanel
 
     width: window.width
-    mapCanvas: map
+    mapCanvas: root.map
 
     onAddMeasurePoint: mapTool.addPoint( crosshair.recordPoint )
     onMeasureDone: finishMeasurementDialog.open()
     onMeasureFinished: root.finishMeasurement()
+    onCloseShape: mapTool.closeShape()
+
   }
 
   MMFinishMeasurementDialog {
