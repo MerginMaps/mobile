@@ -19,6 +19,8 @@
 #include <QgsLineString.h>
 #include <QgsGeometry.h>
 
+const double CLOSE_THRESHOLD = 100.0;
+
 class MeasurementMapTool : public AbstractMapTool
 {
     Q_OBJECT
@@ -42,13 +44,19 @@ class MeasurementMapTool : public AbstractMapTool
     Q_INVOKABLE void removePoint();
 
     Q_INVOKABLE void closeShape();
+    Q_INVOKABLE void  repeat();
 
     const QgsGeometry &recordedGeometry() const;
     void setRecordedGeometry( const QgsGeometry &newRecordedGeometry );
 
   signals:
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
+
     void canCloseShape( bool canClose );
+    void canUndo( bool canUndo );
+
+    void shapeArea( double area );
+    void shapePerimeter( double perimeter );
 
   protected:
     void rebuildGeometry();

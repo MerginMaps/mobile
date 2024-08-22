@@ -53,7 +53,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         source: control.iconSource ? control.iconSource : ""
         color: control.textColor
-        size: control.hasIcon ? __style.icon24 : 0
+        size: control.iconSource !== "" ? __style.icon24 : 0
       }
 
       Rectangle {

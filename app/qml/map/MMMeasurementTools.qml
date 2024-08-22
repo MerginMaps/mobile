@@ -25,20 +25,25 @@ Item {
 
   signal finishMeasurement()
 
-  MMCrosshair {
-    id: crosshair
-    anchors.fill: parent
-    qgsProject: __activeProject.qgsProject
-    mapSettings: root.map.mapSettings
-    hasLabel: true
-    crosshairLabelText: "N/A"
-  }
-
   MM.MeasurementMapTool {
     id: mapTool
     mapSettings: root.map.mapSettings
 
-    onCanCloseShape: measurePanel.closeShapeActive = canClose
+    onCanCloseShape: function( canClose ) {
+        measurePanel.canCloseShape = canClose;
+    }
+
+    onShapeArea: function( area ) {
+        measurePanel.area = area;
+    }
+
+    onShapePerimeter: function( perimeter ) {
+        measurePanel.perimeter = perimeter;
+    }
+
+    onCanUndo: function( canUndo ) {
+        measurePanel.canUndo = canUndo;
+    }
   }
 
   MM.GuidelineController {
@@ -87,8 +92,32 @@ Item {
     onAddMeasurePoint: mapTool.addPoint( crosshair.recordPoint )
     onMeasureDone: finishMeasurementDialog.open()
     onMeasureFinished: root.finishMeasurement()
-    onCloseShape: mapTool.closeShape()
+    onCloseShape: root.closeShape()
+    onRepeat: root.repeatMeasure()
+    onUndo: mapTool.removePoint()
+  }
 
+  MMCrosshair {
+    id: crosshair
+    anchors.fill: parent
+    qgsProject: __activeProject.qgsProject
+    mapSettings: root.map.mapSettings
+    //hasLabel: true
+    //crosshairLabelText: qsTr( "N/A")
+    //crosshairLabelIcon: measurePanel.canCloseShape ? __style.closeShapeIcon : ""
+  }
+
+  MMMapLabel {
+    id: mapLabel
+
+    anchors.top: crosshair.bottom
+    anchors.horizontalCenter: crosshair.horizontalCenter
+
+    text: qsTr( "0.0 m" )
+    bgColor: __style.forestColor
+    textColor: __style.polarColor
+    textBgColorInverted: false
+    onClicked: console.log( "MapLabel" )
   }
 
   MMFinishMeasurementDialog {
@@ -99,14 +128,35 @@ Item {
   function onScreenPositionChanged() {
     let distance = mapTool.updateDistance( crosshair.recordPoint );
 
-    if (distance === 0.0 ) {
-        measurePanel.length = "N/A";
-    } else {
-        measurePanel.length = distance.toFixed( 1 ) + " m";
-    }
+    measurePanel.length = distance.toFixed( 1 ) + " m";
 
-    crosshair.crosshairLabelText = measurePanel.length;
+    if ( measurePanel.canCloseShape ) {
+      mapLabel.text = qsTr( "Close shape" )
+      mapLabel.iconSource = __style.closeShapeIcon
+    }
+    else {
+      mapLabel.text = measurePanel.length;
+      mapLabel.iconSource = ""
+    }
   }
+
+  function closeShape()
+  {
+    guidelineController.allowed = false
+    crosshair.visible = false
+    measurePanel.closeShapeDone = true
+    mapTool.closeShape()
+  }
+
+  function repeatMeasure()
+  {
+    guidelineController.allowed = true
+    crosshair.visible = true
+    measurePanel.closeShapeDone = false
+    measurePanel.canCloseShape = false
+    mapTool.repeat()
+  }
+
 
   Component.onCompleted: map.mapSettings.extentChanged.connect( onScreenPositionChanged )
 }

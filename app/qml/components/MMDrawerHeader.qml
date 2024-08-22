@@ -26,6 +26,7 @@ Rectangle {
   property string leftButtonIcon: ""
   property string leftButtonText: ""
   property string leftButtonType: MMButton.Types.Primary
+  property bool leftButtonEnabled: true
 
   property alias closeButton: closeBtn
   property alias leftButton: leftBtn
@@ -47,6 +48,8 @@ Rectangle {
     bgndColor: __style.lightGreenColor
 
     visible: root.leftButtonIcon
+
+    enabled: root.leftButtonEnabled
 
     anchors {
       left: parent.left

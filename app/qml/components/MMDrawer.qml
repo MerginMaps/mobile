@@ -31,6 +31,7 @@ Drawer {
   property string leftButtonIcon: ""
   property string leftButtonText: ""
   property string leftButtonType: MMButton.Types.Primary
+  property bool leftButtonEnabled: true
   signal leftButtonClicked
 
   implicitHeight: contentHeight > maxHeight ? maxHeight : contentHeight
@@ -82,6 +83,7 @@ Drawer {
       leftButtonIcon: root.leftButtonIcon
       leftButtonText: root.leftButtonText
       leftButtonType: root.leftButtonType
+      leftButtonEnabled: root.leftButtonEnabled
       onLeftButtonClicked: root.leftButtonClicked()
 
       onCloseClicked: {

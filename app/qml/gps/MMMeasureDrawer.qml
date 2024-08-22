@@ -24,12 +24,13 @@ MMDrawer {
 
   property var mapCanvas
 
-  property bool closeShapeActive: false
+  property bool canCloseShape: false
   property bool closeShapeDone: false
+  property bool canUndo: false
 
-  property string length: qsTr( "N/A" )
-  property string perimeter: qsTr( "N/A" )
-  property string area: qsTr( "N/A" )
+  property string length: qsTr( "0.0 m" )
+  property string perimeter: qsTr( "0.0 m" )
+  property string area: qsTr( "0.0 m" )
 
   signal addMeasurePoint()
   signal measureFinished()
@@ -39,17 +40,6 @@ MMDrawer {
   signal repeat()
 
   Component.onCompleted: {
-    root.open()
-  }
-
-  function endMeasurement() {
-    if ( mapCanvas.state !== "measure" )
-      return;
-
-    measureFinished()
-  }
-
-  function restore() {
     root.open()
   }
 
@@ -64,9 +54,10 @@ MMDrawer {
   leftButtonText: closeShapeDone ? qsTr( "Repeat" ) : qsTr( "Undo" )
   leftButtonIcon: closeShapeDone ? __style.syncIcon : __style.undoIcon
   leftButtonType: MMButton.Types.Primary
-  onLeftButtonClicked: closeShapeDone ? root.repeat() : root.undo()
+  leftButtonEnabled: closeShapeDone || canUndo
+  onLeftButtonClicked: closeShapeDone ? root.repeatMeasure() : root.undo()
 
-  drawerHeader.title: qsTr( "Measure" )
+  drawerHeader.title: qsTr( "Measurement" )
 
   drawerContent: Column {
     id: mainColumn
@@ -80,8 +71,8 @@ MMDrawer {
       MMGpsComponents.MMGpsDataText{
         width: ( parent.width + parent.spacing ) / 2
 
-        title: closeShapeActive ? qsTr( "Perimeter" ) : qsTr( "Length" )
-        value: closeShapeActive ? root.perimeter : root.length
+        title: closeShapeDone ? qsTr( "Perimeter" ) : qsTr( "Length" )
+        value: closeShapeDone ? root.perimeter : root.length
       }
 
       MMGpsComponents.MMGpsDataText{
@@ -90,18 +81,19 @@ MMDrawer {
         title: qsTr( "Area" )
         value: root.area
         alignmentRight: true
-        visible: closeShapeActive
+        visible: closeShapeDone
       }
     }
 
     Row {
       width: parent.width
       spacing: __style.margin12
+      visible: !root.closeShapeDone
 
       MMButton {
-        text: closeShapeActive ? qsTr( "Close shape" ) : qsTr( "Add point" )
-        iconSourceLeft: closeShapeActive ? __style.closeShapeIcon : __style.plusIcon
-        onClicked: closeShapeActive ? root.closeShape() : root.addMeasurePoint()
+        text: root.canCloseShape ? qsTr( "Close shape" ) : qsTr( "Add point" )
+        iconSourceLeft: canCloseShape ? __style.closeShapeIcon : __style.plusIcon
+        onClicked: canCloseShape ? root.closeShape() : root.addMeasurePoint()
       }
 
       MMButton {
@@ -111,5 +103,25 @@ MMDrawer {
         onClicked: root.measureDone()
       }
     }
+  }
+
+  function endMeasurement()
+  {
+    if ( mapCanvas.state !== "measure" )
+      return;
+
+    measureFinished()
+  }
+
+  function restore()
+  {
+    root.open()
+  }
+
+  function repeatMeasure()
+  {
+    root.closeShapeDone = false
+    root.canCloseShape = false
+    root.repeat()
   }
 }

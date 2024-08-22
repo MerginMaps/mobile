@@ -23,10 +23,6 @@ MeasurementMapTool::~MeasurementMapTool()
 void MeasurementMapTool::addPoint( const QgsPoint &point )
 {
   mPoints.push_back( point );
-
-  if ( mPoints.count() >= 3 )
-    emit canCloseShape( true );
-
   rebuildGeometry();
 }
 
@@ -48,7 +44,12 @@ void MeasurementMapTool::rebuildGeometry()
   QgsGeometry geometry;
 
   if ( mPoints.count() > 0 )
+  {
     geometry = QgsGeometry::fromPolyline( mPoints );
+    emit canUndo( true );
+  }
+  else
+    emit canUndo( false );
 
   setRecordedGeometry( geometry );
 
@@ -72,6 +73,17 @@ double MeasurementMapTool::updateDistance( const QgsPoint &crosshairPoint )
   if ( mPoints.isEmpty() )
     return 0.0;
 
+  if ( mPoints.count() >= 3 )
+  {
+    QgsPoint firstPoint = mPoints.first();
+    double distanceToFirstPoint = QgsDistanceArea().measureLine( crosshairPoint, firstPoint );
+
+    if ( distanceToFirstPoint <= CLOSE_THRESHOLD )
+      emit canCloseShape( true );
+    else
+      emit canCloseShape( false );
+  }
+
   QgsPoint lastPoint = mPoints.last();
 
   double distance = QgsDistanceArea().measureLine( crosshairPoint, lastPoint );
@@ -94,5 +106,22 @@ void MeasurementMapTool::closeShape()
 
   setRecordedGeometry( polygonGeometry );
 
+  QgsDistanceArea distanceArea;
+  double area = distanceArea.measureArea( polygonGeometry );
+  double perimeter = distanceArea.measureLength( polygonGeometry );
+
+  emit shapeArea( area );
+  emit shapePerimeter( perimeter );
+  emit canCloseShape( false );
 }
+
+void MeasurementMapTool::repeat()
+{
+  mPoints.clear();
+
+  emit canCloseShape( false );
+
+  rebuildGeometry();
+}
+
 
