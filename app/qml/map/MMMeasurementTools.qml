@@ -36,7 +36,7 @@ Item {
     onCanUndo: function( canUndo ) { measurePanel.canUndo = canUndo; }
     onShapeAreaAndPerimeter: function( area, perimeter) {
       measurePanel.area = area.toFixed( 1 ) + " m²";
-      measurePanel.perimeter = perimeter.toFixed( 1 ) + " m";
+      measurePanel.perimeter = __inputUtils.formatDistanceInProjectUnit( perimeter, 1 ) //perimeter.toFixed( 1 ) + " m";
     }
   }
 
@@ -116,8 +116,7 @@ Item {
   function onScreenPositionChanged() {
     let distance = mapTool.updateDistance( crosshair.recordPoint );
 
-    measurePanel.length = distance.toFixed( 1 ) + " m";
-
+    measurePanel.length = __inputUtils.formatDistanceInProjectUnit( distance, 1 ); //distance.toFixed( 1 ) + " m";
     if ( measurePanel.canCloseShape ) {
       mapLabel.text = qsTr( "Close shape" )
       mapLabel.iconSource = __style.closeShapeIcon
