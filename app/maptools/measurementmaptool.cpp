@@ -108,10 +108,9 @@ void MeasurementMapTool::closeShape()
 
   QgsDistanceArea distanceArea;
   double area = distanceArea.measureArea( polygonGeometry );
-  double perimeter = distanceArea.measureLength( polygonGeometry );
+  double perimeter = distanceArea.measurePerimeter( polygonGeometry );
 
-  emit shapeArea( area );
-  emit shapePerimeter( perimeter );
+  emit shapeAreaAndPerimeter( area , perimeter );
   emit canCloseShape( false );
 }
 

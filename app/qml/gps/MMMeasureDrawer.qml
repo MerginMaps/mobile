@@ -30,7 +30,7 @@ MMDrawer {
 
   property string length: qsTr( "0.0 m" )
   property string perimeter: qsTr( "0.0 m" )
-  property string area: qsTr( "0.0 m" )
+  property string area: qsTr( "0.0 m²" )
 
   signal addMeasurePoint()
   signal measureFinished()

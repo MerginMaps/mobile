@@ -55,8 +55,7 @@ class MeasurementMapTool : public AbstractMapTool
     void canCloseShape( bool canClose );
     void canUndo( bool canUndo );
 
-    void shapeArea( double area );
-    void shapePerimeter( double perimeter );
+    void shapeAreaAndPerimeter( double area , double perimeter );
 
   protected:
     void rebuildGeometry();

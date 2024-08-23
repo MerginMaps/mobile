@@ -33,12 +33,9 @@ Item {
         measurePanel.canCloseShape = canClose;
     }
 
-    onShapeArea: function( area ) {
-        measurePanel.area = area;
-    }
-
-    onShapePerimeter: function( perimeter ) {
-        measurePanel.perimeter = perimeter;
+    onShapeAreaAndPerimeter: function( area, perimeter) {
+      measurePanel.area = area.toFixed( 1 ) + " m²";;
+      measurePanel.perimeter = perimeter.toFixed( 1 ) + " m";;
     }
 
     onCanUndo: function( canUndo ) {
@@ -102,16 +99,10 @@ Item {
     anchors.fill: parent
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
-    //hasLabel: true
-    //crosshairLabelText: qsTr( "N/A")
-    //crosshairLabelIcon: measurePanel.canCloseShape ? __style.closeShapeIcon : ""
   }
 
   MMMapLabel {
     id: mapLabel
-
-    anchors.top: crosshair.bottom
-    anchors.horizontalCenter: crosshair.horizontalCenter
 
     text: qsTr( "0.0 m" )
     bgColor: __style.forestColor
