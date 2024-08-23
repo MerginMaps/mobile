@@ -25,21 +25,18 @@ Item {
 
   signal finishMeasurement()
 
+  Component.onCompleted: map.mapSettings.extentChanged.connect( onScreenPositionChanged )
+  Component.onDestruction: map.mapSettings.extentChanged.disconnect( onScreenPositionChanged )
+
   MM.MeasurementMapTool {
     id: mapTool
     mapSettings: root.map.mapSettings
 
-    onCanCloseShape: function( canClose ) {
-        measurePanel.canCloseShape = canClose;
-    }
-
+    onCanCloseShape: function( canClose ) { measurePanel.canCloseShape = canClose; }
+    onCanUndo: function( canUndo ) { measurePanel.canUndo = canUndo; }
     onShapeAreaAndPerimeter: function( area, perimeter) {
-      measurePanel.area = area.toFixed( 1 ) + " m²";;
-      measurePanel.perimeter = perimeter.toFixed( 1 ) + " m";;
-    }
-
-    onCanUndo: function( canUndo ) {
-        measurePanel.canUndo = canUndo;
+      measurePanel.area = area.toFixed( 1 ) + " m²";
+      measurePanel.perimeter = perimeter.toFixed( 1 ) + " m";
     }
   }
 
@@ -147,7 +144,4 @@ Item {
     measurePanel.canCloseShape = false
     mapTool.repeat()
   }
-
-
-  Component.onCompleted: map.mapSettings.extentChanged.connect( onScreenPositionChanged )
 }

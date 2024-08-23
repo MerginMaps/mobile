@@ -86,9 +86,11 @@ double MeasurementMapTool::updateDistance( const QgsPoint &crosshairPoint )
 
   QgsPoint lastPoint = mPoints.last();
 
-  double distance = QgsDistanceArea().measureLine( crosshairPoint, lastPoint );
+  QgsDistanceArea mDistanceArea;
+  mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
+  mDistanceArea.setSourceCrs( mapSettings()->destinationCrs(), mapSettings()->transformContext() );
 
-  return distance;
+  return mDistanceArea.measureLine( crosshairPoint, lastPoint );
 }
 
 void MeasurementMapTool::closeShape()
@@ -106,9 +108,12 @@ void MeasurementMapTool::closeShape()
 
   setRecordedGeometry( polygonGeometry );
 
-  QgsDistanceArea distanceArea;
-  double area = distanceArea.measureArea( polygonGeometry );
-  double perimeter = distanceArea.measurePerimeter( polygonGeometry );
+  QgsDistanceArea mDistanceArea;
+  mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
+  mDistanceArea.setSourceCrs( mapSettings()->destinationCrs(), mapSettings()->transformContext() );
+
+  double area = mDistanceArea.measureArea( polygonGeometry );
+  double perimeter = mDistanceArea.measurePerimeter( polygonGeometry );
 
   emit shapeAreaAndPerimeter( area , perimeter );
   emit canCloseShape( false );

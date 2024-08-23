@@ -49,6 +49,9 @@ class MeasurementMapTool : public AbstractMapTool
     const QgsGeometry &recordedGeometry() const;
     void setRecordedGeometry( const QgsGeometry &newRecordedGeometry );
 
+    QgsVectorLayer *activeLayer() const;
+    void setActiveLayer( QgsVectorLayer *newActiveLayer );
+
   signals:
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
 
