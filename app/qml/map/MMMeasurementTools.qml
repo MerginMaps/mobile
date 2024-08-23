@@ -35,8 +35,8 @@ Item {
     onCanCloseShape: function( canClose ) { measurePanel.canCloseShape = canClose; }
     onCanUndo: function( canUndo ) { measurePanel.canUndo = canUndo; }
     onShapeAreaAndPerimeter: function( area, perimeter) {
-      measurePanel.area = area.toFixed( 1 ) + " m²";
-      measurePanel.perimeter = __inputUtils.formatDistanceInProjectUnit( perimeter, 1 ) //perimeter.toFixed( 1 ) + " m";
+      measurePanel.area = __inputUtils.formatAreaInProjectUnit( area, 1 )
+      measurePanel.perimeter = __inputUtils.formatDistanceInProjectUnit( perimeter, 1 )
     }
   }
 

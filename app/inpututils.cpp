@@ -189,6 +189,28 @@ QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, 
   return QString( "%1 %2" ).arg( QString::number( distance, 'f', precision ), abbreviation );
 }
 
+QString InputUtils::formatAreaInProjectUnit( const double areaInSquareMeters, int precision, Qgis::AreaUnit destUnit )
+{
+  Qgis::AreaUnit areaUnit = destUnit;
+
+  if ( areaUnit == Qgis::AreaUnit::Unknown )
+  {
+    areaUnit = QgsProject::instance()->areaUnits();
+  }
+
+  if ( areaUnit == Qgis::AreaUnit::Unknown )
+  {
+    return QString::number( areaInSquareMeters, 'f', precision );
+  }
+
+  double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::AreaUnit::SquareMeters, areaUnit );
+  double area = areaInSquareMeters * factor;
+
+  QString abbreviation = QgsUnitTypes::toAbbreviatedString( areaUnit );
+
+  return QString( "%1 %2" ).arg( QString::number( area, 'f', precision ), abbreviation );
+}
+
 QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax )
 {
   qint64 daysDiff = tMin.daysTo( tMax );

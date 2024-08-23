@@ -119,7 +119,7 @@ void MeasurementMapTool::closeShape()
   double area = mDistanceArea.measureArea( polygonGeometry );
   double perimeter = mDistanceArea.measurePerimeter( polygonGeometry );
 
-  emit shapeAreaAndPerimeter( area , perimeter );
+  emit shapeAreaAndPerimeter( area, perimeter );
   emit canCloseShape( false );
 }
 
