@@ -34,7 +34,7 @@ Item {
 
     onCanCloseShape: function( canClose ) { measurePanel.canCloseShape = canClose; }
     onCanUndo: function( canUndo ) { measurePanel.canUndo = canUndo; }
-    onShapeAreaAndPerimeter: function( area, perimeter) {
+    onShapeAreaAndPerimeter: function( area, perimeter ) {
       measurePanel.area = __inputUtils.formatAreaInProjectUnit( area, 1 )
       measurePanel.perimeter = __inputUtils.formatDistanceInProjectUnit( perimeter, 1 )
     }
@@ -77,36 +77,41 @@ Item {
     geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
   }
 
-  MMMeasureDrawer {
-    id: measurePanel
+  // MMMeasureDrawer {
+  //   id: measurePanel
 
-    width: window.width
-    mapCanvas: root.map
+  //   width: window.width
+  //   mapCanvas: root.map
 
-    onAddMeasurePoint: mapTool.addPoint( crosshair.recordPoint )
-    onMeasureDone: finishMeasurementDialog.open()
-    onMeasureFinished: root.finishMeasurement()
-    onCloseShape: root.closeShape()
-    onRepeat: root.repeatMeasure()
-    onUndo: mapTool.removePoint()
-  }
+  //   //bind length and area to mapTool.length and mapTool.area / iconSource ===  or closeShape
+  //   onAddMeasurePoint: mapTool.addPoint( crosshair.recordPoint )
+  //   onMeasureDone: finishMeasurementDialog.open()
+  //   onMeasureFinished: root.finishMeasurement()
+  //   onCloseShape: root.closeShape()
+  //   onRepeat: root.repeatMeasure()
+  //   onUndo: mapTool.removePoint()
+  // }
 
   MMCrosshair {
     id: crosshair
+
     anchors.fill: parent
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
   }
 
-  MMMapLabel {
-    id: mapLabel
+  // MMMapLabel {
+  //   id: mapLabel
 
-    text: qsTr( "0.0 m" )
-    bgColor: __style.forestColor
-    textColor: __style.polarColor
-    textBgColorInverted: false
-    onClicked: console.log( "MapLabel" )
-  }
+  //   text: qsTr( "0.0 m" )
+  //   bgColor: __style.forestColor
+  //   textColor: __style.polarColor
+  //   textBgColorInverted: false
+  //   onClicked: console.log( "MapLabel: ", crosshair.height )
+
+  //   y: crosshair.crosshairForeground.y
+  //   anchors.horizontalCenter: crosshair.horizontalCenter
+  // }
 
   MMFinishMeasurementDialog {
     id: finishMeasurementDialog
@@ -116,7 +121,7 @@ Item {
   function onScreenPositionChanged() {
     let distance = mapTool.updateDistance( crosshair.recordPoint );
 
-    measurePanel.length = __inputUtils.formatDistanceInProjectUnit( distance, 1 ); //distance.toFixed( 1 ) + " m";
+    measurePanel.length = __inputUtils.formatDistanceInProjectUnit( distance, 1 );
     if ( measurePanel.canCloseShape ) {
       mapLabel.text = qsTr( "Close shape" )
       mapLabel.iconSource = __style.closeShapeIcon

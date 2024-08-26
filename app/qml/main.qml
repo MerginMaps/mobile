@@ -158,6 +158,10 @@ ApplicationWindow {
         // if stakeout panel is opened
         return stakeoutPanelLoader.item.panelHeight - mapToolbar.height
       }
+      else if ( map.measureLoader.active )
+      {
+        return map.measureLoader.item.measurePanel.panelHeight - mapToolbar.height
+      }
       else if ( formsStackManager.takenVerticalSpace > 0 )
       {
         // if feature preview panel is opened
@@ -606,6 +610,35 @@ ApplicationWindow {
       }
 
       onPanelHeightUpdated: map.updatePosition()
+    }
+  }
+
+  Loader {
+    id: stakeoutPanelLoader
+
+    focus: true
+    active: false
+    asynchronous: true
+
+    sourceComponent: stakeoutPanelComponent
+  }
+
+  Component {
+    id: stakeoutPanelComponent
+
+    MMMeasureDrawer {
+      id: measurePanel
+
+      width: window.width
+      mapCanvas: root.map
+
+      //bind length and area to mapTool.length and mapTool.area / iconSource ===  or closeShape
+      onAddMeasurePoint: mapTool.addPoint( crosshair.recordPoint )
+      onMeasureDone: finishMeasurementDialog.open()
+      onMeasureFinished: root.finishMeasurement()
+      onCloseShape: root.closeShape()
+      onRepeat: root.repeatMeasure()
+      onUndo: mapTool.removePoint()
     }
   }
 

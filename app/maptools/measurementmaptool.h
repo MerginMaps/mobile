@@ -19,7 +19,7 @@
 #include <QgsLineString.h>
 #include <QgsGeometry.h>
 
-const double CLOSE_THRESHOLD = 100.0;
+const double CLOSE_THRESHOLD = 5.0; // in pixels
 
 class MeasurementMapTool : public AbstractMapTool
 {

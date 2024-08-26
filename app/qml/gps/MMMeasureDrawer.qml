@@ -24,6 +24,8 @@ MMDrawer {
 
   property var mapCanvas
 
+  readonly property alias panelHeight: root.height
+
   property bool canCloseShape: false
   property bool closeShapeDone: false
   property bool canUndo: false

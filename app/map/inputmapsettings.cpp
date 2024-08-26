@@ -135,11 +135,21 @@ QgsRectangle InputMapSettings::visibleExtent() const
 
 QPointF InputMapSettings::coordinateToScreen( const QgsPoint &point ) const
 {
-  QgsPointXY pt( point.x(), point.y() );
-  QgsPointXY pp = mMapSettings.mapToPixel().transform( pt );
-  pp.setX( pp.x() / devicePixelRatio() );
-  pp.setY( pp.y() / devicePixelRatio() );
-  return pp.toQPointF();
+    QgsPointXY pt( point.x(), point.y() );
+
+    QgsPointXY pp = mMapSettings.mapToPixel().transform( pt );
+
+    pp.setX( pp.x() / devicePixelRatio() );
+    qDebug() << "DEBUG: devicePixelRatio=" << devicePixelRatio();
+    qDebug() << "DEBUG: pp.setX =" << pp.x();
+
+    pp.setY( pp.y() / devicePixelRatio() );
+    qDebug() << "DEBUG: pp.setY =" << pp.y();
+
+    QPointF result = pp.toQPointF();
+    qDebug() << "DEBUG: Returning QPointF result =" << result;
+
+    return result;
 }
 
 QgsPoint InputMapSettings::screenToCoordinate( const QPointF &point ) const

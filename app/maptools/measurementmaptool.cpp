@@ -22,6 +22,7 @@ MeasurementMapTool::~MeasurementMapTool()
 
 void MeasurementMapTool::addPoint( const QgsPoint &point )
 {
+  //transforming crs to map crs
   mPoints.push_back( point );
   rebuildGeometry();
 }
@@ -75,24 +76,36 @@ double MeasurementMapTool::updateDistance( const QgsPoint &crosshairPoint )
 
   if ( mPoints.count() >= 3 )
   {
-    QgsPoint firstPoint = mPoints.first();
-    double distanceToFirstPoint = QgsDistanceArea().measureLine( crosshairPoint, firstPoint );
+      qDebug() << "DEBUG: mPoints.count() >= 3";
 
-    if ( distanceToFirstPoint <= CLOSE_THRESHOLD )
-      emit canCloseShape( true );
-    else
-      emit canCloseShape( false );
+      QgsPoint firstPoint = mPoints.first();
+      //qDebug() << "DEBUG: firstPoint =" << firstPoint;
+
+      QPointF firstPointScreen = mapSettings()->coordinateToScreen( firstPoint );
+      qDebug() << "DEBUG: firstPointScreen =" << firstPointScreen;
+
+      QPointF crosshairScreen = mapSettings()->coordinateToScreen( crosshairPoint );
+      qDebug() << "DEBUG: crosshairScreen =" << crosshairScreen;
+
+      double distanceToFirstPoint = std::hypot( crosshairScreen.x() - firstPointScreen.x(), crosshairScreen.y() - firstPointScreen.y() );
+      qDebug() << "DEBUG: distanceToFirstPoint =" << distanceToFirstPoint;
+
+      if ( distanceToFirstPoint <= CLOSE_THRESHOLD ) //points to map crs -> addPoint
+        emit canCloseShape( true );
+      else
+        emit canCloseShape( false );
   }
 
   QgsPoint lastPoint = mPoints.last();
 
   QgsDistanceArea mDistanceArea;
   mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
-  //mDistanceArea.setSourceCrs( mapSettings()->destinationCrs(), mapSettings()->transformContext() );
+  mDistanceArea.setSourceCrs( mapSettings()->destinationCrs(), mapSettings()->transformContext() );
 
-  mDistanceArea.setSourceCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ), QgsCoordinateTransformContext() );
+  //mDistanceArea.setSourceCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ), QgsCoordinateTransformContext() );
 
-  return mDistanceArea.measureLine( crosshairPoint, lastPoint );
+  //measureLength
+  return mDistanceArea.measureLine( crosshairPoint, lastPoint );//or transform points crs here
 }
 
 void MeasurementMapTool::closeShape()
