@@ -111,96 +111,29 @@ Item {
   }
 
   Loader {
-    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "linestring" ||
-            __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "polygon"
+    active: __inputUtils.isLineLayer( __activeLayer.vectorLayer ) ||
+            __inputUtils.isPolygonLayer( __activeLayer.vectorLayer )
 
     sourceComponent: handlesHighlightComponent
   }
 
   Loader {
-    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "linestring" ||
-            __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "polygon"
+    active: __inputUtils.isLineLayer( __activeLayer.vectorLayer ) ||
+            __inputUtils.isPolygonLayer( __activeLayer.vectorLayer )
 
     sourceComponent: guidelineHighlightComponent
   }
 
   Loader {
-    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "linestring" ||
-            __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "polygon"
+    active: __inputUtils.isLineLayer( __activeLayer.vectorLayer ) ||
+            __inputUtils.isPolygonLayer( __activeLayer.vectorLayer )
 
     sourceComponent: midSegmentsHighlightComponent
   }
 
   Loader {
-    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) !== "point"
+    active: true
     sourceComponent: existingVerticesHighlightComponent
-  }
-
-  Component {
-    id:  handlesHighlightComponent
-
-    MMHighlight {
-      id: handlesHighlight
-
-      height: root.map.height
-      width: root.map.width
-
-      mapSettings: root.map.mapSettings
-      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
-      lineStrokeStyle: ShapePath.DashLine
-      lineWidth: MMHighlight.LineWidths.Narrow
-    }
-  }
-
-  Component {
-    id: guidelineHighlightComponent
-
-    MMHighlight {
-      id: guideline
-
-      height: root.map.height
-      width: root.map.width
-
-      lineWidth: MMHighlight.LineWidths.Narrow
-      lineStrokeStyle: ShapePath.DashLine
-
-      mapSettings: root.map.mapSettings
-      geometry: guidelineController.guidelineGeometry
-    }
-  }
-
-  Component {
-    id: midSegmentsHighlightComponent
-
-    MMHighlight {
-      id: midSegmentsHighlight
-
-      height: root.map.height
-      width: root.map.width
-
-      mapSettings: root.map.mapSettings
-      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
-
-      markerType: MMHighlight.MarkerTypes.Circle
-      markerBorderColor: __style.grapeColor
-    }
-  }
-
-  Component {
-    id: existingVerticesHighlightComponent
-
-    MMHighlight {
-      id: existingVerticesHighlight
-
-      height: root.map.height
-      width: root.map.width
-
-      mapSettings: root.map.mapSettings
-      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
-
-      markerType: MMHighlight.MarkerTypes.Circle
-      markerSize: MMHighlight.MarkerSizes.Bigger
-    }
   }
 
   // Duplicate position marker to be painted on the top of highlights
@@ -343,6 +276,73 @@ Item {
         return pointToolbarButtons
       }
       return polygonToolbarButtons
+    }
+  }
+
+  Component {
+    id:  handlesHighlightComponent
+
+    MMHighlight {
+      id: handlesHighlight
+
+      height: root.map.height
+      width: root.map.width
+
+      mapSettings: root.map.mapSettings
+      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
+      lineStrokeStyle: ShapePath.DashLine
+      lineWidth: MMHighlight.LineWidths.Narrow
+    }
+  }
+
+  Component {
+    id: guidelineHighlightComponent
+
+    MMHighlight {
+      id: guideline
+
+      height: root.map.height
+      width: root.map.width
+
+      lineWidth: MMHighlight.LineWidths.Narrow
+      lineStrokeStyle: ShapePath.DashLine
+
+      mapSettings: root.map.mapSettings
+      geometry: guidelineController.guidelineGeometry
+    }
+  }
+
+  Component {
+    id: midSegmentsHighlightComponent
+
+    MMHighlight {
+      id: midSegmentsHighlight
+
+      height: root.map.height
+      width: root.map.width
+
+      mapSettings: root.map.mapSettings
+      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
+
+      markerType: MMHighlight.MarkerTypes.Circle
+      markerBorderColor: __style.grapeColor
+    }
+  }
+
+  Component {
+    id: existingVerticesHighlightComponent
+
+    MMHighlight {
+      id: existingVerticesHighlight
+
+      height: root.map.height
+      width: root.map.width
+
+      mapSettings: root.map.mapSettings
+      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
+
+      markerType: MMHighlight.MarkerTypes.Circle
+      markerSize: MMHighlight.MarkerSizes.Bigger
     }
   }
 
