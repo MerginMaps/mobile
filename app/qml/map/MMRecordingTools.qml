@@ -132,7 +132,7 @@ Item {
   }
 
   Loader {
-    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) === "point"
+    active: __inputUtils.geometryFromLayer( __activeLayer.vectorLayer ) !== "point"
     sourceComponent: existingVerticesHighlightComponent
   }
 
