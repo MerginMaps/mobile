@@ -613,34 +613,34 @@ ApplicationWindow {
     }
   }
 
-  Loader {
-    id: stakeoutPanelLoader
+  // Loader {
+  //   id: stakeoutPanelLoader
 
-    focus: true
-    active: false
-    asynchronous: true
+  //   focus: true
+  //   active: false
+  //   asynchronous: true
 
-    sourceComponent: stakeoutPanelComponent
-  }
+  //   sourceComponent: stakeoutPanelComponent
+  // }
 
-  Component {
-    id: stakeoutPanelComponent
+  // Component {
+  //   id: stakeoutPanelComponent
 
-    MMMeasureDrawer {
-      id: measurePanel
+  //   MMMeasureDrawer {
+  //     id: measurePanel
 
-      width: window.width
-      mapCanvas: root.map
+  //     width: window.width
+  //     mapCanvas: root.map
 
-      //bind length and area to mapTool.length and mapTool.area / iconSource ===  or closeShape
-      onAddMeasurePoint: mapTool.addPoint( crosshair.recordPoint )
-      onMeasureDone: finishMeasurementDialog.open()
-      onMeasureFinished: root.finishMeasurement()
-      onCloseShape: root.closeShape()
-      onRepeat: root.repeatMeasure()
-      onUndo: mapTool.removePoint()
-    }
-  }
+  //     //bind length and area to mapTool.length and mapTool.area / iconSource ===  or closeShape
+  //     onAddMeasurePoint: mapTool.addPoint( crosshair.recordPoint )
+  //     onMeasureDone: finishMeasurementDialog.open()
+  //     onMeasureFinished: root.finishMeasurement()
+  //     onCloseShape: root.closeShape()
+  //     onRepeat: root.repeatMeasure()
+  //     onUndo: mapTool.removePoint()
+  //   }
+  // }
 
   MMFormStackController {
     id: formsStackManager

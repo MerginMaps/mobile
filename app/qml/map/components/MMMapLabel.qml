@@ -24,7 +24,7 @@ Item {
   required property string text
 
   property real maxWidth: implicitWidth
-  property url iconSource: ""
+  property string iconSource
   property color bgColor: __style.positiveColor
   property color textColor: __style.forestColor
   property bool textBgColorInverted: false
@@ -43,7 +43,7 @@ Item {
       id: row
 
       anchors.centerIn: parent
-      leftPadding: 20 * __dp
+      leftPadding: 8 * __dp
       rightPadding: leftPadding
       spacing: 4 * __dp
       height: parent.height
@@ -53,7 +53,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         source: control.iconSource ? control.iconSource : ""
         color: control.textColor
-        size: control.iconSource !== "" ? __style.icon24 : 0
+        size: control.iconSource ? __style.icon24 : 0
       }
 
       Rectangle {
@@ -74,7 +74,7 @@ Item {
           anchors.centerIn: parent
           color: control.textBgColorInverted ? control.bgColor : control.textColor
           text: control.text
-          font: __style.t3
+          font: __style.t5
           elide: Text.ElideRight
         }
       }
