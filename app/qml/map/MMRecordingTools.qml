@@ -131,11 +131,6 @@ Item {
     sourceComponent: midSegmentsHighlightComponent
   }
 
-  Loader {
-    active: true
-    sourceComponent: existingVerticesHighlightComponent
-  }
-
   // Duplicate position marker to be painted on the top of highlights
   MMPositionMarker {
     xPos: positionMarkerComponent.xPos
@@ -159,6 +154,19 @@ Item {
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
     shouldUseSnapping: !mapTool.isUsingPosition
+  }
+
+  MMHighlight {
+    id: existingVerticesHighlight
+
+    height: root.map.height
+    width: root.map.width
+
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
+
+    markerType: MMHighlight.MarkerTypes.Circle
+    markerSize: MMHighlight.MarkerSizes.Bigger
   }
 
   MMToolbar {
@@ -326,23 +334,6 @@ Item {
 
       markerType: MMHighlight.MarkerTypes.Circle
       markerBorderColor: __style.grapeColor
-    }
-  }
-
-  Component {
-    id: existingVerticesHighlightComponent
-
-    MMHighlight {
-      id: existingVerticesHighlight
-
-      height: root.map.height
-      width: root.map.width
-
-      mapSettings: root.map.mapSettings
-      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
-
-      markerType: MMHighlight.MarkerTypes.Circle
-      markerSize: MMHighlight.MarkerSizes.Bigger
     }
   }
 
