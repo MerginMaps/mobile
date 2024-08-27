@@ -22,10 +22,10 @@ MeasurementMapTool::~MeasurementMapTool()
 
 void MeasurementMapTool::addPoint( const QgsPoint &point )
 {
-  //transforming crs to map crs
   mPoints.push_back( point );
   rebuildGeometry();
 }
+
 
 void MeasurementMapTool::removePoint()
 {
@@ -76,36 +76,30 @@ double MeasurementMapTool::updateDistance( const QgsPoint &crosshairPoint )
 
   if ( mPoints.count() >= 3 )
   {
-      qDebug() << "DEBUG: mPoints.count() >= 3";
+    QgsPoint firstPoint = mPoints.first();
+    QPointF firstPointScreen = mapSettings()->coordinateToScreen( firstPoint );
+    QPointF crosshairScreen = mapSettings()->coordinateToScreen( crosshairPoint );
 
-      QgsPoint firstPoint = mPoints.first();
-      //qDebug() << "DEBUG: firstPoint =" << firstPoint;
+    double distanceToFirstPoint = std::hypot( crosshairScreen.x() - firstPointScreen.x(), crosshairScreen.y() - firstPointScreen.y() );
 
-      QPointF firstPointScreen = mapSettings()->coordinateToScreen( firstPoint );
-      qDebug() << "DEBUG: firstPointScreen =" << firstPointScreen;
-
-      QPointF crosshairScreen = mapSettings()->coordinateToScreen( crosshairPoint );
-      qDebug() << "DEBUG: crosshairScreen =" << crosshairScreen;
-
-      double distanceToFirstPoint = std::hypot( crosshairScreen.x() - firstPointScreen.x(), crosshairScreen.y() - firstPointScreen.y() );
-      qDebug() << "DEBUG: distanceToFirstPoint =" << distanceToFirstPoint;
-
-      if ( distanceToFirstPoint <= CLOSE_THRESHOLD ) //points to map crs -> addPoint
-        emit canCloseShape( true );
-      else
-        emit canCloseShape( false );
+    if ( distanceToFirstPoint <= CLOSE_THRESHOLD )
+    {
+      emit canCloseShape( true );
+    }
+    else
+    {
+      emit canCloseShape( false );
+    }
   }
 
   QgsPoint lastPoint = mPoints.last();
 
   QgsDistanceArea mDistanceArea;
   mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
-  mDistanceArea.setSourceCrs( mapSettings()->destinationCrs(), mapSettings()->transformContext() );
+  mDistanceArea.setSourceCrs( mActiveLayer->crs(), QgsCoordinateTransformContext() );
+  //mDistanceArea.setSourceCrs(mapSettings()->destinationCrs(), QgsCoordinateTransformContext() );
 
-  //mDistanceArea.setSourceCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ), QgsCoordinateTransformContext() );
-
-  //measureLength
-  return mDistanceArea.measureLine( crosshairPoint, lastPoint );//or transform points crs here
+  return mDistanceArea.measureLength( mRecordedGeometry ) + mDistanceArea.measureLine( crosshairPoint, lastPoint );
 }
 
 void MeasurementMapTool::closeShape()
@@ -125,9 +119,7 @@ void MeasurementMapTool::closeShape()
 
   QgsDistanceArea mDistanceArea;
   mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
-  //mDistanceArea.setSourceCrs( mapSettings()->destinationCrs(), mapSettings()->transformContext() );
-
-  mDistanceArea.setSourceCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ), QgsCoordinateTransformContext() );
+  mDistanceArea.setSourceCrs( mActiveLayer->crs(), QgsCoordinateTransformContext() );
 
   double area = mDistanceArea.measureArea( polygonGeometry );
   double perimeter = mDistanceArea.measurePerimeter( polygonGeometry );
@@ -145,4 +137,23 @@ void MeasurementMapTool::repeat()
   rebuildGeometry();
 }
 
+void MeasurementMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
+{
+  if ( mActiveLayer == newActiveLayer )
+    return;
+
+  if ( mActiveLayer && mActiveLayer->isEditable() )
+  {
+    mActiveLayer->rollBack();
+    mActiveLayer->triggerRepaint();
+  }
+
+  mActiveLayer = newActiveLayer;
+  emit activeLayerChanged( mActiveLayer );
+}
+
+QgsVectorLayer *MeasurementMapTool::activeLayer() const
+{
+  return mActiveLayer;
+}
 

@@ -15,6 +15,7 @@
 #include <qglobal.h>
 #include "qgsdistancearea.h"
 #include "qgsgeometry.h"
+#include "inpututils.h"
 #include <QgsPolygon.h>
 #include <QgsLineString.h>
 #include <QgsGeometry.h>
@@ -26,6 +27,7 @@ class MeasurementMapTool : public AbstractMapTool
     Q_OBJECT
 
     Q_PROPERTY( QgsGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
+    Q_PROPERTY( QgsVectorLayer *activeLayer READ activeLayer WRITE setActiveLayer NOTIFY activeLayerChanged )
 
   public:
     explicit MeasurementMapTool( QObject *parent = nullptr );
@@ -51,6 +53,7 @@ class MeasurementMapTool : public AbstractMapTool
 
     QgsVectorLayer *activeLayer() const;
     void setActiveLayer( QgsVectorLayer *newActiveLayer );
+    void fixZM( QgsPoint &point ) const;
 
   signals:
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
@@ -59,6 +62,8 @@ class MeasurementMapTool : public AbstractMapTool
     void canUndo( bool canUndo );
 
     void shapeAreaAndPerimeter( double area, double perimeter );
+
+    void activeLayerChanged( QgsVectorLayer *activeLayer );
 
   protected:
     void rebuildGeometry();
@@ -69,6 +74,7 @@ class MeasurementMapTool : public AbstractMapTool
   private:
     QVector<QgsPoint> mPoints;
     QgsGeometry mRecordedGeometry;
+    QgsVectorLayer *mActiveLayer = nullptr; // not owned
 };
 
 #endif // MEASUREMENTMAPTOOL_H
