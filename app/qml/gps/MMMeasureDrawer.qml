@@ -26,15 +26,15 @@ MMDrawer {
 
   readonly property alias panelHeight: root.height
 
-  property bool canCloseShape: false
-  property bool closeShapeDone: false
-  property bool canUndo: false
+  property bool canCloseShape: mapCanvas.mapToolComponent.mapTool.canCloseShape
+  property bool closeShapeDone: mapCanvas.mapToolComponent.mapTool.closeShapeDone
+  property bool canUndo: mapCanvas.mapToolComponent.mapTool.canUndo
 
-  property string length: qsTr( "0.0 m" )
-  property string perimeter: qsTr( "0.0 m" )
-  property string area: qsTr( "0.0 m²" )
+  property string length: __inputUtils.formatDistanceInProjectUnit( mapCanvas.mapToolComponent.mapTool.length, 1 )
+  property string perimeter: __inputUtils.formatDistanceInProjectUnit( mapCanvas.mapToolComponent.mapTool.perimeter, 1 )
+  property string area: __inputUtils.formatAreaInProjectUnit( mapCanvas.mapToolComponent.mapTool.area, 1 )
 
-  signal addMeasurePoint()
+  //signal addMeasurePoint()
   signal measureFinished()
   signal measureDone()
   signal closeShape()
@@ -57,7 +57,7 @@ MMDrawer {
   leftButtonIcon: closeShapeDone ? __style.syncIcon : __style.undoIcon
   leftButtonType: MMButton.Types.Primary
   leftButtonEnabled: closeShapeDone || canUndo
-  onLeftButtonClicked: closeShapeDone ? root.repeatMeasure() : root.undo()
+  onLeftButtonClicked: closeShapeDone ? root.mapCanvas.mapToolComponent.repeatMeasure() : root.mapCanvas.mapToolComponent.removePoint()
 
   drawerHeader.title: qsTr( "Measurement" )
 
@@ -95,7 +95,7 @@ MMDrawer {
       MMButton {
         text: root.canCloseShape ? qsTr( "Close shape" ) : qsTr( "Add point" )
         iconSourceLeft: canCloseShape ? __style.closeShapeIcon : __style.plusIcon
-        onClicked: canCloseShape ? root.closeShape() : root.addMeasurePoint()
+        onClicked: canCloseShape ? root.mapCanvas.mapToolComponent.closeShape() : root.mapCanvas.mapToolComponent.addPoint()
       }
 
       MMButton {

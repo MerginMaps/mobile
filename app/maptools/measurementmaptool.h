@@ -28,6 +28,9 @@ class MeasurementMapTool : public AbstractMapTool
 
     Q_PROPERTY( QgsGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
     Q_PROPERTY( QgsVectorLayer *activeLayer READ activeLayer WRITE setActiveLayer NOTIFY activeLayerChanged )
+    Q_PROPERTY( double length READ length WRITE setLength NOTIFY lengthChanged)
+    Q_PROPERTY( double perimeter READ perimeter WRITE setPerimeter NOTIFY perimeterChanged)
+    Q_PROPERTY( double area READ area WRITE setArea NOTIFY areaChanged)
 
   public:
     explicit MeasurementMapTool( QObject *parent = nullptr );
@@ -46,7 +49,17 @@ class MeasurementMapTool : public AbstractMapTool
     Q_INVOKABLE void removePoint();
 
     Q_INVOKABLE void closeShape();
-    Q_INVOKABLE void  repeat();
+    Q_INVOKABLE void repeat();
+
+    double length() const;
+    void setLength(const double &length);
+
+    double perimeter() const;
+    void setPerimeter(const double &perimeter);
+
+    double area() const;
+    void setArea(const double &area);
+
 
     const QgsGeometry &recordedGeometry() const;
     void setRecordedGeometry( const QgsGeometry &newRecordedGeometry );
@@ -56,6 +69,11 @@ class MeasurementMapTool : public AbstractMapTool
     void fixZM( QgsPoint &point ) const;
 
   signals:
+    void lengthChanged(const double &length);
+    void perimeterChanged(const double &perimeter);
+    void areaChanged(const double &area);
+
+    void activeLayerChanged( QgsVectorLayer *activeLayer );
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
 
     void canCloseShape( bool canClose );
@@ -63,18 +81,19 @@ class MeasurementMapTool : public AbstractMapTool
 
     void shapeAreaAndPerimeter( double area, double perimeter );
 
-    void activeLayerChanged( QgsVectorLayer *activeLayer );
-
   protected:
     void rebuildGeometry();
 
   public slots:
-    double updateDistance( const QgsPoint &crosshairPoint );
+    void updateDistance( const QgsPoint &crosshairPoint );
 
   private:
     QVector<QgsPoint> mPoints;
     QgsGeometry mRecordedGeometry;
-    QgsVectorLayer *mActiveLayer = nullptr; // not owned
+    QgsVectorLayer *mActiveLayer = nullptr;
+    double mLength = 0;
+    double mPerimeter = 0;
+    double mArea = 0;
 };
 
 #endif // MEASUREMENTMAPTOOL_H

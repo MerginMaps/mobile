@@ -35,6 +35,10 @@ Item {
   property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType === MM.RecordingMapTool.StreamMode : false
   property bool centeredToGPS: false
 
+  property var mapToolComponent: {
+    state === "measure" ? measurementToolsLoader.item : null
+  }
+
   property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
   signal featureIdentified( var pair )
@@ -299,17 +303,6 @@ Item {
   }
 
   Loader {
-    id: measureLoader
-
-    anchors.fill: mapCanvas
-
-    asynchronous: true
-    active: root.state === "measure"
-
-    sourceComponent: measurementToolsComponent
-  }
-
-  Loader {
     id: tracking
 
     anchors.fill: mapCanvas
@@ -401,6 +394,17 @@ Item {
     active: root.state === "split"
 
     sourceComponent: splittingToolsComponent
+  }
+
+  Loader {
+    id: measurementToolsLoader
+
+    anchors.fill: mapCanvas
+
+    asynchronous: true
+    active: root.state === "measure"
+
+    sourceComponent: measurementToolsComponent
   }
 
   // map available content within safe area
@@ -1150,8 +1154,10 @@ Item {
 
   function measure() {
     internal.extentBeforeStakeout = mapCanvas.mapSettings.extent
-
     state = "measure"
+    console.log(" MAP TOOL: ", root.mapTool)
+    root.mapToolComponent = measurementToolsLoader.item
+    console.log(" MAP TOOL: ", root.mapTool)
   }
 
   function toggleStreaming() {

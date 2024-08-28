@@ -158,9 +158,9 @@ ApplicationWindow {
         // if stakeout panel is opened
         return stakeoutPanelLoader.item.panelHeight - mapToolbar.height
       }
-      else if ( map.measureLoader.active )
+      else if ( measurePanelLoader.active )
       {
-        return map.measureLoader.item.measurePanel.panelHeight - mapToolbar.height
+        return measurePanelLoader.item.panelHeight - mapToolbar.height
       }
       else if ( formsStackManager.takenVerticalSpace > 0 )
       {
@@ -224,7 +224,8 @@ ApplicationWindow {
     }
 
     onMeasureStarted: function( pair ) {
-      console.log(" measure started")
+      measurePanelLoader.active = true
+      measurePanelLoader.focus = true
     }
 
     onLocalChangesPanelRequested: {
@@ -467,7 +468,7 @@ ApplicationWindow {
       mapSettings: map.mapSettings
 
       // disable the receivers button when staking out
-      showReceiversButton: !stakeoutPanelLoader.active
+      showReceiversButton: !stakeoutPanelLoader.active || !measurePanelLoader.active
 
       onManageReceiversClicked: {
         gpsDataDrawer.close()
@@ -613,34 +614,33 @@ ApplicationWindow {
     }
   }
 
-  // Loader {
-  //   id: stakeoutPanelLoader
+  Loader {
+    id: measurePanelLoader
 
-  //   focus: true
-  //   active: false
-  //   asynchronous: true
+    focus: true
+    active: false
+    asynchronous: true
 
-  //   sourceComponent: stakeoutPanelComponent
-  // }
+    sourceComponent: measurePanelComponent
+  }
 
-  // Component {
-  //   id: stakeoutPanelComponent
+  Component {
+    id: measurePanelComponent
 
-  //   MMMeasureDrawer {
-  //     id: measurePanel
+    MMMeasureDrawer {
+      id: measurePanel
 
-  //     width: window.width
-  //     mapCanvas: root.map
+      width: window.width
+      mapCanvas: map
 
-  //     //bind length and area to mapTool.length and mapTool.area / iconSource ===  or closeShape
-  //     onAddMeasurePoint: mapTool.addPoint( crosshair.recordPoint )
-  //     onMeasureDone: finishMeasurementDialog.open()
-  //     onMeasureFinished: root.finishMeasurement()
-  //     onCloseShape: root.closeShape()
-  //     onRepeat: root.repeatMeasure()
-  //     onUndo: mapTool.removePoint()
-  //   }
-  // }
+      onMeasureDone: finishMeasurementDialog.open()
+
+      onMeasureFinished: {
+        measurePanelLoader.active = false
+        map.finishMeasure()
+      }
+    }
+  }
 
   MMFormStackController {
     id: formsStackManager
@@ -770,6 +770,15 @@ ApplicationWindow {
     onSingInRequested: {
       stateManager.state = "projects"
       projectController.showLogin()
+    }
+  }
+
+  MMFinishMeasurementDialog {
+    id: finishMeasurementDialog
+
+    onFinishMeasurementRequested: {
+      measurePanelLoader.active = false
+      map.finishMeasure()
     }
   }
 

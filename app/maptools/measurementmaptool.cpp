@@ -61,6 +61,21 @@ const QgsGeometry &MeasurementMapTool::recordedGeometry() const
   return mRecordedGeometry;
 }
 
+double MeasurementMapTool::area() const
+{
+    return mArea;
+}
+
+double MeasurementMapTool::perimeter() const
+{
+    return mPerimeter;
+}
+
+double MeasurementMapTool::length() const
+{
+    return mLength;
+}
+
 void MeasurementMapTool::setRecordedGeometry( const QgsGeometry &newRecordedGeometry )
 {
   if ( mRecordedGeometry.equals( newRecordedGeometry ) )
@@ -69,10 +84,10 @@ void MeasurementMapTool::setRecordedGeometry( const QgsGeometry &newRecordedGeom
   emit recordedGeometryChanged( mRecordedGeometry );
 }
 
-double MeasurementMapTool::updateDistance( const QgsPoint &crosshairPoint )
+void MeasurementMapTool::updateDistance( const QgsPoint &crosshairPoint )
 {
   if ( mPoints.isEmpty() )
-    return 0.0;
+    setLength(0.0);
 
   if ( mPoints.count() >= 3 )
   {
@@ -99,7 +114,9 @@ double MeasurementMapTool::updateDistance( const QgsPoint &crosshairPoint )
   mDistanceArea.setSourceCrs( mActiveLayer->crs(), QgsCoordinateTransformContext() );
   //mDistanceArea.setSourceCrs(mapSettings()->destinationCrs(), QgsCoordinateTransformContext() );
 
-  return mDistanceArea.measureLength( mRecordedGeometry ) + mDistanceArea.measureLine( crosshairPoint, lastPoint );
+  double calculatedLength = mDistanceArea.measureLength( mRecordedGeometry ) + mDistanceArea.measureLine( crosshairPoint, lastPoint );
+
+  setLength(calculatedLength);
 }
 
 void MeasurementMapTool::closeShape()
@@ -151,6 +168,32 @@ void MeasurementMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
   mActiveLayer = newActiveLayer;
   emit activeLayerChanged( mActiveLayer );
 }
+
+void MeasurementMapTool::setLength( const double &length ) {
+    if ( mLength == length )
+        return;
+
+    mLength = length;
+    emit lengthChanged( length );
+}
+
+void MeasurementMapTool::setArea( const double &area ) {
+    if ( mArea == area )
+        return;
+
+    mArea = area;
+    emit areaChanged( area );
+}
+
+void MeasurementMapTool::setPerimeter( const double &perimeter ) {
+    if ( mPerimeter == perimeter )
+        return;
+
+    mPerimeter = perimeter;
+    emit perimeterChanged( perimeter );
+}
+
+
 
 QgsVectorLayer *MeasurementMapTool::activeLayer() const
 {
