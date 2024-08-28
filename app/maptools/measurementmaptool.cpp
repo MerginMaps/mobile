@@ -126,38 +126,66 @@ void MeasurementMapTool::setRecordedGeometry( const QgsGeometry &newRecordedGeom
 
 void MeasurementMapTool::updateDistance( const QgsPoint &crosshairPoint )
 {
+  qDebug() << "Entered updateDistance function";
+  qDebug() << "Crosshair point:";
+
   if ( mPoints.isEmpty() )
+  {
+    qDebug() << "mPoints is empty, setting length to 0.0";
     setLength( 0.0 );
+    return;
+  }
+
+  qDebug() << "Number of points:" << mPoints.count();
 
   if ( mPoints.count() >= 3 )
   {
     QgsPoint firstPoint = mPoints.first();
+    qDebug() << "First point:";
+
     QPointF firstPointScreen = mapSettings()->coordinateToScreen( firstPoint );
+    qDebug() << "First point screen coordinates:" << firstPointScreen;
+
     QPointF crosshairScreen = mapSettings()->coordinateToScreen( crosshairPoint );
+    qDebug() << "Crosshair screen coordinates:" << crosshairScreen;
 
     double distanceToFirstPoint = std::hypot( crosshairScreen.x() - firstPointScreen.x(), crosshairScreen.y() - firstPointScreen.y() );
+    qDebug() << "Distance to first point:" << distanceToFirstPoint;
 
     if ( distanceToFirstPoint <= CLOSE_THRESHOLD )
     {
+      qDebug() << "Distance to first point is within threshold, setting canCloseShape to true";
       setCanCloseShape( true );
     }
     else
     {
+      qDebug() << "Distance to first point exceeds threshold, setting canCloseShape to false";
       setCanCloseShape( false );
     }
   }
 
   QgsPoint lastPoint = mPoints.last();
+  qDebug() << "Last point:";
 
   QgsDistanceArea mDistanceArea;
+  qDebug() << "Created QgsDistanceArea object";
+
   mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
+  qDebug() << "Ellipsoid set to WGS84";
+
   mDistanceArea.setSourceCrs( mActiveLayer->crs(), QgsCoordinateTransformContext() );
+  qDebug() << "Source CRS set with active layer CRS";
+
   //mDistanceArea.setSourceCrs(mapSettings()->destinationCrs(), QgsCoordinateTransformContext() );
+  //qDebug() << "Source CRS set with destination CRS";
 
   double calculatedLength = mDistanceArea.measureLength( mRecordedGeometry ) + mDistanceArea.measureLine( crosshairPoint, lastPoint );
+  qDebug() << "Calculated length:" << calculatedLength;
 
   setLength( calculatedLength );
+  qDebug() << "Length set to calculated value";
 }
+
 
 void MeasurementMapTool::closeShape()
 {

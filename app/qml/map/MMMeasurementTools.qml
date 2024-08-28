@@ -133,7 +133,7 @@ Item {
   }
 
   function onScreenPositionChanged() {
-    //mapTool.updateDistance( crosshair.recordPoint );
+    mapTool.updateDistance( crosshair.recordPoint );
   }
 
   function closeShape()
