@@ -28,9 +28,14 @@ class MeasurementMapTool : public AbstractMapTool
 
     Q_PROPERTY( QgsGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
     Q_PROPERTY( QgsVectorLayer *activeLayer READ activeLayer WRITE setActiveLayer NOTIFY activeLayerChanged )
-    Q_PROPERTY( double length READ length WRITE setLength NOTIFY lengthChanged)
-    Q_PROPERTY( double perimeter READ perimeter WRITE setPerimeter NOTIFY perimeterChanged)
-    Q_PROPERTY( double area READ area WRITE setArea NOTIFY areaChanged)
+
+    Q_PROPERTY( double length READ length WRITE setLength NOTIFY lengthChanged )
+    Q_PROPERTY( double perimeter READ perimeter WRITE setPerimeter NOTIFY perimeterChanged )
+    Q_PROPERTY( double area READ area WRITE setArea NOTIFY areaChanged )
+
+    Q_PROPERTY( bool canUndo READ canUndo WRITE setCanUndo NOTIFY canUndoChanged )
+    Q_PROPERTY( bool canCloseShape READ canCloseShape WRITE setCanCloseShape NOTIFY canCloseShapeChanged )
+    Q_PROPERTY( bool closeShapeDone READ closeShapeDone WRITE setCloseShapeDone NOTIFY closeShapeDoneChanged )
 
   public:
     explicit MeasurementMapTool( QObject *parent = nullptr );
@@ -51,27 +56,39 @@ class MeasurementMapTool : public AbstractMapTool
     Q_INVOKABLE void closeShape();
     Q_INVOKABLE void repeat();
 
+    // Getter and Setters
+
     double length() const;
-    void setLength(const double &length);
+    void setLength( const double &length );
 
     double perimeter() const;
-    void setPerimeter(const double &perimeter);
+    void setPerimeter( const double &perimeter );
 
     double area() const;
-    void setArea(const double &area);
-
+    void setArea( const double &area );
 
     const QgsGeometry &recordedGeometry() const;
     void setRecordedGeometry( const QgsGeometry &newRecordedGeometry );
 
     QgsVectorLayer *activeLayer() const;
     void setActiveLayer( QgsVectorLayer *newActiveLayer );
-    void fixZM( QgsPoint &point ) const;
+
+    bool canUndo() const;
+    void setCanUndo( bool newCanUndo );
+
+    bool canCloseShape() const;
+    void setCanCloseShape( bool newCanCloseShape );
+
+    bool closeShapeDone() const;
+    void setCloseShapeDone( bool newCloseShapeDone );
 
   signals:
-    void lengthChanged(const double &length);
-    void perimeterChanged(const double &perimeter);
-    void areaChanged(const double &area);
+    void lengthChanged( const double &length );
+    void perimeterChanged( const double &perimeter );
+    void areaChanged( const double &area );
+    void canUndoChanged( bool canUndo );
+    void canCloseShapeChanged( bool canUndo );
+    void closeShapeDoneChanged( bool canUndo );
 
     void activeLayerChanged( QgsVectorLayer *activeLayer );
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
@@ -94,6 +111,9 @@ class MeasurementMapTool : public AbstractMapTool
     double mLength = 0;
     double mPerimeter = 0;
     double mArea = 0;
+    bool mCanUndo = false;
+    bool mCanCloseShape = false;
+    bool mCloseShapeDone = false;
 };
 
 #endif // MEASUREMENTMAPTOOL_H

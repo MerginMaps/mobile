@@ -34,7 +34,7 @@ void MeasurementMapTool::removePoint()
     mPoints.pop_back();
 
     if ( mPoints.count() < 3 )
-      emit canCloseShape( false );
+      setCanCloseShape( false );
 
     rebuildGeometry();
   }
@@ -47,10 +47,10 @@ void MeasurementMapTool::rebuildGeometry()
   if ( mPoints.count() > 0 )
   {
     geometry = QgsGeometry::fromPolyline( mPoints );
-    emit canUndo( true );
+    setCanUndo( true );
   }
   else
-    emit canUndo( false );
+    setCanUndo( false );
 
   setRecordedGeometry( geometry );
 
@@ -63,17 +63,57 @@ const QgsGeometry &MeasurementMapTool::recordedGeometry() const
 
 double MeasurementMapTool::area() const
 {
-    return mArea;
+  return mArea;
 }
 
 double MeasurementMapTool::perimeter() const
 {
-    return mPerimeter;
+  return mPerimeter;
 }
 
 double MeasurementMapTool::length() const
 {
-    return mLength;
+  return mLength;
+}
+
+bool MeasurementMapTool::canUndo() const
+{
+  return mCanUndo;
+}
+
+void MeasurementMapTool::setCanUndo( bool newCanUndo )
+{
+  if ( mCanUndo == newCanUndo )
+    return;
+  mCanUndo = newCanUndo;
+  emit canUndoChanged( mCanUndo );
+}
+
+
+bool MeasurementMapTool::canCloseShape() const
+{
+  return mCanCloseShape;
+}
+
+void MeasurementMapTool::setCanCloseShape( bool newCanCloseShape )
+{
+  if ( mCanCloseShape == newCanCloseShape )
+    return;
+  mCanCloseShape = newCanCloseShape;
+  emit canCloseShapeChanged( mCanCloseShape );
+}
+
+bool MeasurementMapTool::closeShapeDone() const
+{
+  return mCloseShapeDone;
+}
+
+void MeasurementMapTool::setCloseShapeDone( bool newCloseShapeDone )
+{
+  if ( mCloseShapeDone == newCloseShapeDone )
+    return;
+  mCloseShapeDone = newCloseShapeDone;
+  emit closeShapeDoneChanged( mCloseShapeDone );
 }
 
 void MeasurementMapTool::setRecordedGeometry( const QgsGeometry &newRecordedGeometry )
@@ -87,7 +127,7 @@ void MeasurementMapTool::setRecordedGeometry( const QgsGeometry &newRecordedGeom
 void MeasurementMapTool::updateDistance( const QgsPoint &crosshairPoint )
 {
   if ( mPoints.isEmpty() )
-    setLength(0.0);
+    setLength( 0.0 );
 
   if ( mPoints.count() >= 3 )
   {
@@ -99,11 +139,11 @@ void MeasurementMapTool::updateDistance( const QgsPoint &crosshairPoint )
 
     if ( distanceToFirstPoint <= CLOSE_THRESHOLD )
     {
-      emit canCloseShape( true );
+      setCanCloseShape( true );
     }
     else
     {
-      emit canCloseShape( false );
+      setCanCloseShape( false );
     }
   }
 
@@ -116,7 +156,7 @@ void MeasurementMapTool::updateDistance( const QgsPoint &crosshairPoint )
 
   double calculatedLength = mDistanceArea.measureLength( mRecordedGeometry ) + mDistanceArea.measureLine( crosshairPoint, lastPoint );
 
-  setLength(calculatedLength);
+  setLength( calculatedLength );
 }
 
 void MeasurementMapTool::closeShape()
@@ -141,15 +181,18 @@ void MeasurementMapTool::closeShape()
   double area = mDistanceArea.measureArea( polygonGeometry );
   double perimeter = mDistanceArea.measurePerimeter( polygonGeometry );
 
-  emit shapeAreaAndPerimeter( area, perimeter );
-  emit canCloseShape( false );
+  setArea( area );
+  setPerimeter( perimeter );
+  setCanCloseShape( false );
+  setCloseShapeDone( true );
 }
 
 void MeasurementMapTool::repeat()
 {
   mPoints.clear();
 
-  emit canCloseShape( false );
+  setCanCloseShape( false );
+  setCloseShapeDone( false );
 
   rebuildGeometry();
 }
@@ -169,30 +212,32 @@ void MeasurementMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
   emit activeLayerChanged( mActiveLayer );
 }
 
-void MeasurementMapTool::setLength( const double &length ) {
-    if ( mLength == length )
-        return;
+void MeasurementMapTool::setLength( const double &length )
+{
+  if ( mLength == length )
+    return;
 
-    mLength = length;
-    emit lengthChanged( length );
+  mLength = length;
+  emit lengthChanged( length );
 }
 
-void MeasurementMapTool::setArea( const double &area ) {
-    if ( mArea == area )
-        return;
+void MeasurementMapTool::setArea( const double &area )
+{
+  if ( mArea == area )
+    return;
 
-    mArea = area;
-    emit areaChanged( area );
+  mArea = area;
+  emit areaChanged( area );
 }
 
-void MeasurementMapTool::setPerimeter( const double &perimeter ) {
-    if ( mPerimeter == perimeter )
-        return;
+void MeasurementMapTool::setPerimeter( const double &perimeter )
+{
+  if ( mPerimeter == perimeter )
+    return;
 
-    mPerimeter = perimeter;
-    emit perimeterChanged( perimeter );
+  mPerimeter = perimeter;
+  emit perimeterChanged( perimeter );
 }
-
 
 
 QgsVectorLayer *MeasurementMapTool::activeLayer() const

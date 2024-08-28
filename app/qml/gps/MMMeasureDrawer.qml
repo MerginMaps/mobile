@@ -57,7 +57,7 @@ MMDrawer {
   leftButtonIcon: closeShapeDone ? __style.syncIcon : __style.undoIcon
   leftButtonType: MMButton.Types.Primary
   leftButtonEnabled: closeShapeDone || canUndo
-  onLeftButtonClicked: closeShapeDone ? root.mapCanvas.mapToolComponent.repeatMeasure() : root.mapCanvas.mapToolComponent.removePoint()
+  onLeftButtonClicked: closeShapeDone ? root.mapCanvas.mapToolComponent.repeatMeasure() : root.mapCanvas.mapToolComponent.mapTool.removePoint()
 
   drawerHeader.title: qsTr( "Measurement" )
 
