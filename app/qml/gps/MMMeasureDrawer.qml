@@ -34,16 +34,10 @@ MMDrawer {
   property string perimeter: __inputUtils.formatDistanceInProjectUnit( mapCanvas.mapToolComponent.mapTool.perimeter, 1 )
   property string area: __inputUtils.formatAreaInProjectUnit( mapCanvas.mapToolComponent.mapTool.area, 1 )
 
-  //signal addMeasurePoint()
   signal measureFinished()
   signal measureDone()
-  signal closeShape()
-  signal undo()
-  signal repeat()
 
-  Component.onCompleted: {
-    root.open()
-  }
+  Component.onCompleted: root.open()
 
   modal: false
 
@@ -105,25 +99,5 @@ MMDrawer {
         onClicked: root.measureDone()
       }
     }
-  }
-
-  function endMeasurement()
-  {
-    if ( mapCanvas.state !== "measure" )
-      return;
-
-    measureFinished()
-  }
-
-  function restore()
-  {
-    root.open()
-  }
-
-  function repeatMeasure()
-  {
-    root.closeShapeDone = false
-    root.canCloseShape = false
-    root.repeat()
   }
 }

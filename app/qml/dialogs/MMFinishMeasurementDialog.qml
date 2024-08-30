@@ -23,13 +23,9 @@ MMDrawerDialog {
   secondaryButton.text: qsTr( "No" )
 
   onPrimaryButtonClicked: {
-    console.log(" Measurement : Finish YES")
     root.finishMeasurementRequested()
     close()
   }
 
-  onSecondaryButtonClicked: {
-    console.log(" Measurement : Finish NO")
-    close()
-  }
+  onSecondaryButtonClicked: close()
 }

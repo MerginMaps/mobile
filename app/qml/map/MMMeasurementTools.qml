@@ -35,14 +35,6 @@ Item {
 
     mapSettings: root.map.mapSettings
     activeLayer: __activeLayer.vectorLayer
-
-    onCanCloseShape: function( canClose ) { console.log("A") }//measurePanel.canCloseShape = canClose; }
-    onCanUndo: function( canUndo ) { console.log("A") } //measurePanel.canUndo = canUndo; }
-    onShapeAreaAndPerimeter: function( area, perimeter ) {
-      console.log("A")
-      //measurePanel.area = __inputUtils.formatAreaInProjectUnit( area, 1 )
-      //measurePanel.perimeter = __inputUtils.formatDistanceInProjectUnit( perimeter, 1 )
-    }
   }
 
   MM.GuidelineController {
@@ -82,49 +74,30 @@ Item {
     geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
   }
 
-  // MMMeasureDrawer {
-  //   id: measurePanel
+  MMHighlight {
+    id: existingVerticesHighlight
 
-  //   width: window.width
-  //   mapCanvas: root.map
+    height: root.map.height
+    width: root.map.width
 
-  //   //bind length and area to mapTool.length and mapTool.area / iconSource ===  or closeShape
-  //   onAddMeasurePoint: mapTool.addPoint( crosshair.recordPoint )
-  //   onMeasureDone: finishMeasurementDialog.open()
-  //   onMeasureFinished: root.finishMeasurement()
-  //   onCloseShape: root.closeShape()
-  //   onRepeat: root.repeatMeasure()
-  //   onUndo: mapTool.removePoint()
-  // }
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
 
-  MMCrosshair {
+    markerType: MMHighlight.MarkerTypes.Circle
+    markerSize: MMHighlight.MarkerSizes.Bigger
+  }
+
+  MMMeasureCrosshair {
     id: crosshair
 
     anchors.fill: parent
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
 
-  }
+    text: __inputUtils.formatDistanceInProjectUnit( mapTool.length )
+    canCloseShape: mapTool.canCloseShape
 
-  // MMMapLabel {
-  //   id: mapLabel
-
-  //   text: qsTr( "0.0 m" )
-
-  //   //implicitWidth: crosshair.width
-  //   //implicitHeight: crosshair.crosshairForeground.height - 10
-  //   bgColor: __style.forestColor
-  //   textColor: __style.polarColor
-  //   textBgColorInverted: false
-  //   onClicked: console.log( "MapLabel: ", crosshair.height )
-
-  //   y: crosshair.crosshairForeground.y + crosshair.crosshairForeground.height
-  //   anchors.horizontalCenter: crosshair.crosshairForeground.horizontalCenter
-  // }
-
-  MMFinishMeasurementDialog {
-    id: finishMeasurementDialog
-    onFinishMeasurementRequested: root.finishMeasurement()
+    onCloseShapeClicked: closeShape()
   }
 
   function addPoint()
@@ -140,7 +113,6 @@ Item {
   {
     guidelineController.allowed = false
     crosshair.visible = false
-    //measurePanel.closeShapeDone = true
     mapTool.closeShape()
   }
 
@@ -148,8 +120,6 @@ Item {
   {
     guidelineController.allowed = true
     crosshair.visible = true
-    // measurePanel.closeShapeDone = false
-    // measurePanel.canCloseShape = false
     mapTool.repeat()
   }
 }

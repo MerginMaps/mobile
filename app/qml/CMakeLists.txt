@@ -140,6 +140,7 @@ set(MM_QML
     map/MMMeasurementTools.qml
     map/components/MMHidingBox.qml
     map/components/MMCrosshair.qml
+    map/components/MMMeasureCrosshair.qml
     map/components/MMMapHidingLabel.qml
     map/components/MMMapButton.qml
     map/components/MMMapLabel.qml
