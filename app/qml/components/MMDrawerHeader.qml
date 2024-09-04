@@ -23,13 +23,8 @@ Rectangle {
 
   property bool hasCloseButton: true
 
-  property string leftButtonIcon: ""
-  property string leftButtonText: ""
-  property string leftButtonType: MMButton.Types.Primary
-  property bool leftButtonEnabled: true
-
   property alias closeButton: closeBtn
-  property alias leftButton: leftBtn
+  property alias topLeftItemContent: topLeftButtonGroup.children
 
   color: __style.transparentColor
 
@@ -39,25 +34,11 @@ Rectangle {
   implicitHeight: 60 * __dp
   implicitWidth: ApplicationWindow.window?.width ?? 0
 
-  MMButton {
-    id: leftBtn
+  Item {
+    id: topLeftButtonGroup
 
-    type: root.leftButtonType
-    text: root.leftButtonText
-    iconSourceLeft: root.leftButtonIcon
-    bgndColor: __style.lightGreenColor
-    size: MMButton.Sizes.Small
-    visible: root.leftButtonIcon
-
-    enabled: root.leftButtonEnabled
-
-    anchors {
-      left: parent.left
-      leftMargin: __style.pageMargins + __style.safeAreaLeft
-      verticalCenter: parent.verticalCenter
-    }
-
-    onClicked: root.leftButtonClicked()
+    width: childrenRect.width
+    height: parent.height
   }
 
   Text {

@@ -40,8 +40,6 @@ MMDrawer {
   Component.onCompleted: root.open()
 
   modal: false
-
-  //not interactive
   interactive: false
   closePolicy: Popup.CloseOnEscape
 
@@ -49,23 +47,34 @@ MMDrawer {
 
   onClosed: root.measureFinished()
 
-  leftButtonText: closeShapeDone ? qsTr( "Repeat" ) : qsTr( "Undo" )
-  leftButtonIcon: closeShapeDone ? __style.syncIcon : __style.undoIcon
-  leftButtonType: MMButton.Types.Primary
-  leftButtonEnabled: closeShapeDone || canUndo
-  onLeftButtonClicked: closeShapeDone ? root.mapCanvas.mapToolComponent.repeatMeasure() : root.mapCanvas.mapToolComponent.mapTool.removePoint()
-
   Behavior on implicitHeight {
     PropertyAnimation { properties: "implicitHeight"; easing.type: Easing.InOutQuad }
   }
 
   drawerHeader.title: qsTr( "Measurement" )
 
+  drawerHeader.topLeftItemContent: MMButton {
+    type: MMButton.Types.Primary
+    text: closeShapeDone ? qsTr( "Repeat" ) : qsTr( "Undo" )
+    iconSourceLeft: closeShapeDone ? __style.syncIcon : __style.undoIcon
+    bgndColor: __style.lightGreenColor
+    size: MMButton.Sizes.Small
+    enabled: closeShapeDone || canUndo
+
+    anchors {
+      left: parent.left
+      leftMargin: __style.pageMargins + __style.safeAreaLeft
+      verticalCenter: parent.verticalCenter
+    }
+
+    onClicked: closeShapeDone ? root.mapCanvas.mapToolComponent.repeatMeasure() : root.mapCanvas.mapToolComponent.mapTool.removePoint()
+  }
+
   drawerContent: Column {
     id: mainColumn
 
     width: parent.width
-    spacing: __style.margin40
+    spacing: __style.margin10
 
     Row {
       width: parent.width

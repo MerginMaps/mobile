@@ -28,12 +28,6 @@ Drawer {
   readonly property real drawerReservedVerticalSpace: topSpacer.height + mmDrawerHeader.height + contentSpacer.height + bottomSpacer.height
   readonly property real drawerContentAvailableHeight: maxHeight - drawerReservedVerticalSpace // max height for your custom content item
 
-  property string leftButtonIcon: ""
-  property string leftButtonText: ""
-  property string leftButtonType: MMButton.Types.Primary
-  property bool leftButtonEnabled: true
-  signal leftButtonClicked
-
   implicitHeight: contentHeight > maxHeight ? maxHeight : contentHeight
   implicitWidth: ApplicationWindow.window?.width ?? 0
 
@@ -79,12 +73,6 @@ Drawer {
       id: mmDrawerHeader
 
       width: parent.width
-
-      leftButtonIcon: root.leftButtonIcon
-      leftButtonText: root.leftButtonText
-      leftButtonType: root.leftButtonType
-      leftButtonEnabled: root.leftButtonEnabled
-      onLeftButtonClicked: root.leftButtonClicked()
 
       onCloseClicked: {
         root.close()
