@@ -418,14 +418,14 @@ nmake
 # 8. Auto Testing
 
 You need to add cmake define `-DENABLE_TESTING=TRUE` on your cmake configure line.
-Also you need to open Passbolt and check for password for user `test_mobileapp_dev` on `test.dev.merginmaps.com`, 
+Also you need to open Passbolt and check for password for user `test_mobileapp_dev` on `app.dev.merginmaps.com`, 
 or you need some user with unlimited projects limit. First workspace from list is taken.
 
 ! Note that the same user cannot run tests in paraller ! 
 
 now you need to set environment variables: 
 ```
-TEST_MERGIN_URL=https://test.dev.merginmaps.com/
+TEST_MERGIN_URL=https://app.dev.merginmaps.com/
 TEST_API_USERNAME=test_mobileapp_dev
 TEST_API_PASSWORD=<your_password>
 ```
