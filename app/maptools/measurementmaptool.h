@@ -10,20 +10,17 @@
 #ifndef MEASUREMENTMAPTOOL_H
 #define MEASUREMENTMAPTOOL_H
 
-#include "inputconfig.h"
 #include "abstractmaptool.h"
 #include <qglobal.h>
 #include "qgsdistancearea.h"
 #include "qgsgeometry.h"
 #include "inpututils.h"
 #include <QgsPolygon.h>
-#include <QgsLineString.h>
 #include <QgsGeometry.h>
-#include "qgsvertexid.h"
 #include "qgsvectorlayer.h"
 #include "qgsmultipoint.h"
 
-const double CLOSE_THRESHOLD = 5.0; // in pixels
+const double CLOSE_THRESHOLD = 10.0; // in pixels
 
 class MeasurementMapTool : public AbstractMapTool
 {
@@ -49,7 +46,7 @@ class MeasurementMapTool : public AbstractMapTool
      * Adds point to the end of the recorded geometry; updates recordedGeometry afterwards
      * Passed point needs to be in map CRS
      */
-    Q_INVOKABLE void addPoint( const QgsPoint &point );
+    Q_INVOKABLE void addPoint( const QPointF &point );
 
     /**
      *  Removes last point from recorded geometry if there is at least one point
@@ -112,7 +109,7 @@ class MeasurementMapTool : public AbstractMapTool
     void rebuildGeometry();
 
   public slots:
-    void updateDistance( const QgsPoint &crosshairPoint );
+    void updateDistance( const QPointF &crosshairPoint );
 
   private:
     QVector<QgsPoint> mPoints;

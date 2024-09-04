@@ -839,52 +839,40 @@ QgsPointXY InputUtils::transformPointXY( const QgsCoordinateReferenceSystem &src
 }
 
 QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
-                                     const QgsCoordinateReferenceSystem &destCrs,
-                                     const QgsCoordinateTransformContext &context,
-                                     const QgsPoint &srcPoint )
+                                    const QgsCoordinateReferenceSystem &destCrs,
+                                    const QgsCoordinateTransformContext &context,
+                                    const QgsPoint &srcPoint )
 {
+    // we do not want to transform empty points,
+    // QGIS would convert them to a valid (0, 0) points
+    if ( srcPoint.isEmpty() )
+    {
+        return QgsPoint();
+    }
 
-  // we do not want to transform empty points,
-  // QGIS would convert them to a valid (0, 0) points
-  if ( srcPoint.isEmpty() )
-  {
-    qDebug() << "Source point is empty, returning an empty QgsPoint.";
+    try
+    {
+        QgsCoordinateTransform ct( srcCrs, destCrs, context );
+        if ( ct.isValid() )
+        {
+            if ( !ct.isShortCircuited() )
+            {
+                const QgsPointXY transformed = ct.transform( srcPoint.x(), srcPoint.y() );
+                const QgsPoint pt( transformed.x(), transformed.y(), srcPoint.z(), srcPoint.m() );
+                return pt;
+            }
+            else
+            {
+                return srcPoint;
+            }
+        }
+    }
+    catch ( QgsCsException &cse )
+    {
+        Q_UNUSED( cse )
+    }
+
     return QgsPoint();
-  }
-
-  try
-  {
-    qDebug() << "Creating QgsCoordinateTransform with srcCrs, destCrs, and context.";
-    QgsCoordinateTransform ct( srcCrs, destCrs, context );
-    if ( ct.isValid() )
-    {
-      qDebug() << "CoordinateTransform is valid.";
-      if ( !ct.isShortCircuited() )
-      {
-        qDebug() << "Transform is not short-circuited, transforming point.";
-        const QgsPointXY transformed = ct.transform( srcPoint.x(), srcPoint.y() );
-        const QgsPoint pt( transformed.x(), transformed.y(), srcPoint.z(), srcPoint.m() );
-        return pt;
-      }
-      else
-      {
-        qDebug() << "Transform is short-circuited, returning source point.";
-        return srcPoint;
-      }
-    }
-    else
-    {
-      qDebug() << "CoordinateTransform is not valid.";
-    }
-  }
-  catch ( QgsCsException &cse )
-  {
-    qDebug() << "Caught QgsCsException during transformation:" << cse.what();
-    Q_UNUSED( cse )
-  }
-
-  qDebug() << "Returning an empty QgsPoint due to unsuccessful transformation.";
-  return QgsPoint();
 }
 
 QPointF InputUtils::transformPointToScreenCoordinates( const QgsCoordinateReferenceSystem &srcCrs, InputMapSettings *mapSettings, const QgsPoint &srcPoint )

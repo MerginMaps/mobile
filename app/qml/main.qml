@@ -468,7 +468,7 @@ ApplicationWindow {
       mapSettings: map.mapSettings
 
       // disable the receivers button when staking out
-      showReceiversButton: !stakeoutPanelLoader.active
+      showReceiversButton: !stakeoutPanelLoader.active //Here
 
       onManageReceiversClicked: {
         gpsDataDrawer.close()

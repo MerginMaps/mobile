@@ -28,8 +28,6 @@ Item {
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp
 
-    property alias crosshairForeground: crosshairForeground
-
     MM.SnapUtils {
       id: snapUtils
 
@@ -38,6 +36,7 @@ Item {
       qgsProject: root.qgsProject
       useSnapping: root.shouldUseSnapping
       destinationLayer: __activeLayer.vectorLayer
+
     }
 
     Image {

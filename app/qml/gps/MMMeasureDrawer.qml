@@ -41,6 +41,8 @@ MMDrawer {
 
   modal: false
 
+  //not interactive
+  interactive: false
   closePolicy: Popup.CloseOnEscape
 
   dropShadow: true
@@ -52,6 +54,10 @@ MMDrawer {
   leftButtonType: MMButton.Types.Primary
   leftButtonEnabled: closeShapeDone || canUndo
   onLeftButtonClicked: closeShapeDone ? root.mapCanvas.mapToolComponent.repeatMeasure() : root.mapCanvas.mapToolComponent.mapTool.removePoint()
+
+  Behavior on implicitHeight {
+    PropertyAnimation { properties: "implicitHeight"; easing.type: Easing.InOutQuad }
+  }
 
   drawerHeader.title: qsTr( "Measurement" )
 

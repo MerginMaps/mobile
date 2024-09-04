@@ -46,7 +46,7 @@ Rectangle {
     text: root.leftButtonText
     iconSourceLeft: root.leftButtonIcon
     bgndColor: __style.lightGreenColor
-
+    size: MMButton.Sizes.Small
     visible: root.leftButtonIcon
 
     enabled: root.leftButtonEnabled

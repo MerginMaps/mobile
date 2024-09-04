@@ -596,7 +596,7 @@ Item {
           }
 
           visible: {
-            if ( root.mapExtentOffset > 0 && ( root.state !== "stakeout" ) ) return false
+            if ( root.mapExtentOffset > 0 && (root.state === "stakeout") ) return false
 
             if ( __positionKit.positionProvider && __positionKit.positionProvider.type() === "external" ) {
               // for external receivers we want to show gps panel and accuracy button
@@ -913,10 +913,7 @@ Item {
 
     mapSettings: mapCanvas.mapSettings
     positionKit: __positionKit
-    onScreenPositionChanged: {
-      //console.log("AA")
-      root.updatePosition()
-    }
+    onScreenPositionChanged: root.updatePosition()
   }
 
   MM.PositionDirection {
@@ -1155,9 +1152,6 @@ Item {
   function measure() {
     internal.extentBeforeStakeout = mapCanvas.mapSettings.extent
     state = "measure"
-    console.log(" MAP TOOL: ", root.mapTool)
-    root.mapToolComponent = measurementToolsLoader.item
-    console.log(" MAP TOOL: ", root.mapTool)
   }
 
   function toggleStreaming() {

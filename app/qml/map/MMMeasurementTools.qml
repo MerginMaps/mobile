@@ -42,7 +42,7 @@ Item {
 
     mapSettings: root.map.mapSettings
     crosshairPosition: crosshair.screenPoint
-    realGeometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+    realGeometry: mapTool.recordedGeometry
   }
 
   MMHighlight {
@@ -71,7 +71,7 @@ Item {
     lineWidth: MMHighlight.LineWidths.Narrow
 
     mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+    geometry: mapTool.recordedGeometry
   }
 
   MMHighlight {
@@ -81,7 +81,7 @@ Item {
     width: root.map.width
 
     mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
+    geometry: mapTool.existingVertices
 
     markerType: MMHighlight.MarkerTypes.Circle
     markerSize: MMHighlight.MarkerSizes.Bigger
@@ -102,11 +102,11 @@ Item {
 
   function addPoint()
   {
-    mapTool.addPoint( crosshair.recordPoint )
+    mapTool.addPoint( crosshair.screenPoint )
   }
 
   function onScreenPositionChanged() {
-    mapTool.updateDistance( crosshair.recordPoint );
+    mapTool.updateDistance( crosshair.screenPoint );
   }
 
   function closeShape()

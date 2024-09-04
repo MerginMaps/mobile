@@ -136,16 +136,10 @@ QgsRectangle InputMapSettings::visibleExtent() const
 QPointF InputMapSettings::coordinateToScreen( const QgsPoint &point ) const
 {
   QgsPointXY pt( point.x(), point.y() );
-
   QgsPointXY pp = mMapSettings.mapToPixel().transform( pt );
-
   pp.setX( pp.x() / devicePixelRatio() );
-
   pp.setY( pp.y() / devicePixelRatio() );
-
-  QPointF result = pp.toQPointF();
-
-  return result;
+  return pp.toQPointF();
 }
 
 QgsPoint InputMapSettings::screenToCoordinate( const QPointF &point ) const
