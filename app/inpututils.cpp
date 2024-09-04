@@ -839,40 +839,40 @@ QgsPointXY InputUtils::transformPointXY( const QgsCoordinateReferenceSystem &src
 }
 
 QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
-                                    const QgsCoordinateReferenceSystem &destCrs,
-                                    const QgsCoordinateTransformContext &context,
-                                    const QgsPoint &srcPoint )
+                                     const QgsCoordinateReferenceSystem &destCrs,
+                                     const QgsCoordinateTransformContext &context,
+                                     const QgsPoint &srcPoint )
 {
-    // we do not want to transform empty points,
-    // QGIS would convert them to a valid (0, 0) points
-    if ( srcPoint.isEmpty() )
-    {
-        return QgsPoint();
-    }
-
-    try
-    {
-        QgsCoordinateTransform ct( srcCrs, destCrs, context );
-        if ( ct.isValid() )
-        {
-            if ( !ct.isShortCircuited() )
-            {
-                const QgsPointXY transformed = ct.transform( srcPoint.x(), srcPoint.y() );
-                const QgsPoint pt( transformed.x(), transformed.y(), srcPoint.z(), srcPoint.m() );
-                return pt;
-            }
-            else
-            {
-                return srcPoint;
-            }
-        }
-    }
-    catch ( QgsCsException &cse )
-    {
-        Q_UNUSED( cse )
-    }
-
+  // we do not want to transform empty points,
+  // QGIS would convert them to a valid (0, 0) points
+  if ( srcPoint.isEmpty() )
+  {
     return QgsPoint();
+  }
+
+  try
+  {
+    QgsCoordinateTransform ct( srcCrs, destCrs, context );
+    if ( ct.isValid() )
+    {
+      if ( !ct.isShortCircuited() )
+      {
+        const QgsPointXY transformed = ct.transform( srcPoint.x(), srcPoint.y() );
+        const QgsPoint pt( transformed.x(), transformed.y(), srcPoint.z(), srcPoint.m() );
+        return pt;
+      }
+      else
+      {
+        return srcPoint;
+      }
+    }
+  }
+  catch ( QgsCsException &cse )
+  {
+    Q_UNUSED( cse )
+  }
+
+  return QgsPoint();
 }
 
 QPointF InputUtils::transformPointToScreenCoordinates( const QgsCoordinateReferenceSystem &srcCrs, InputMapSettings *mapSettings, const QgsPoint &srcPoint )
