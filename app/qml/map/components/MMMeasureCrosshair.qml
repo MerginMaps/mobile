@@ -37,12 +37,6 @@ Item {
     property bool canCloseShape: false
     required property string text
 
-    property real maxWidth: implicitWidth
-    property url iconSource: ""
-    property color bgColor: __style.positiveColor
-    property color textColor: __style.forestColor
-    property bool textBgColorInverted: false
-
     MM.SnapUtils {
       id: snapUtils
 

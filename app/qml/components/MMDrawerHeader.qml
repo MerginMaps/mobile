@@ -29,7 +29,6 @@ Rectangle {
   color: __style.transparentColor
 
   signal closeClicked
-  signal leftButtonClicked
 
   implicitHeight: 60 * __dp
   implicitWidth: ApplicationWindow.window?.width ?? 0
