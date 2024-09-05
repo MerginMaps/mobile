@@ -1811,7 +1811,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/project/MMProjectLoadingPage.qml" line="33"/>
         <source>Opening project ...</source>
-        <translation>打开项目...</translation>
+        <translation>正在打开项目...</translation>
     </message>
 </context>
 <context>
@@ -2696,7 +2696,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Value must be higher than %1</source>
-        <translation>值必须高于 %1</translation>
+        <translation>值必须大于 %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="62"/>
