@@ -234,7 +234,7 @@ Won&apos;t be added to the project.</translation>
         <location filename="../inpututils.cpp" line="227"/>
         <location filename="../inpututils.cpp" line="232"/>
         <source>%1 day ago</source>
-        <translation>%1 day ago</translation>
+        <translation>%1 天前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="237"/>
