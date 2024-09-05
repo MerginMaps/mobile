@@ -277,7 +277,7 @@ Won&apos;t be added to the project.</source>
         <location filename="../inpututils.cpp" line="1462"/>
         <source>screen DPI: %1x%2
 </source>
-        <translation>屏幕DPI: %1x%2
+        <translation>屏幕 DPI: %1x%2
 </translation>
     </message>
     <message>
@@ -1811,7 +1811,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/project/MMProjectLoadingPage.qml" line="33"/>
         <source>Opening project ...</source>
-        <translation>打开项目...</translation>
+        <translation>正在打开项目...</translation>
     </message>
 </context>
 <context>
@@ -2828,7 +2828,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../qml/main.qml" line="276"/>
         <source>No editable layers found.</source>
-        <translation>找不到可编辑的图层。</translation>
+        <translation>未找到可编辑的图层。</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="282"/>
