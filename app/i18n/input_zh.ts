@@ -1811,7 +1811,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/project/MMProjectLoadingPage.qml" line="33"/>
         <source>Opening project ...</source>
-        <translation>打开项目...</translation>
+        <translation>正在打开项目...</translation>
     </message>
 </context>
 <context>
