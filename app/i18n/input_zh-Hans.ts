@@ -2701,7 +2701,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="62"/>
         <source>Value is too large</source>
-        <translation>Value is too large</translation>
+        <translation>值过大</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="63"/>
