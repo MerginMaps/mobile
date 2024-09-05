@@ -2828,7 +2828,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../qml/main.qml" line="276"/>
         <source>No editable layers found.</source>
-        <translation>找不到可编辑的图层。</translation>
+        <translation>未找到可编辑的图层。</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="282"/>
