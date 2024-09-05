@@ -234,7 +234,7 @@ Won&apos;t be added to the project.</translation>
         <location filename="../inpututils.cpp" line="227"/>
         <location filename="../inpututils.cpp" line="232"/>
         <source>%1 day ago</source>
-        <translation>%1 day ago</translation>
+        <translation>%1 天前</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="237"/>
@@ -277,7 +277,7 @@ Won&apos;t be added to the project.</translation>
         <location filename="../inpututils.cpp" line="1462"/>
         <source>screen DPI: %1x%2
 </source>
-        <translation>screen DPI: %1x%2
+        <translation>屏幕 DPI: %1x%2
 </translation>
     </message>
     <message>
@@ -1811,7 +1811,7 @@ Won&apos;t be added to the project.</translation>
     <message>
         <location filename="../qml/project/MMProjectLoadingPage.qml" line="33"/>
         <source>Opening project ...</source>
-        <translation>打开项目...</translation>
+        <translation>正在打开项目...</translation>
     </message>
 </context>
 <context>
@@ -2696,12 +2696,12 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Value must be higher than %1</source>
-        <translation>Value must be higher than %1</translation>
+        <translation>值必须大于 %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="62"/>
         <source>Value is too large</source>
-        <translation>Value is too large</translation>
+        <translation>值过大</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="63"/>
@@ -2828,7 +2828,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../qml/main.qml" line="276"/>
         <source>No editable layers found.</source>
-        <translation>No editable layers found.</translation>
+        <translation>未找到可编辑的图层。</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="282"/>
