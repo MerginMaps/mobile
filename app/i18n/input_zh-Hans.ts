@@ -2696,7 +2696,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Value must be higher than %1</source>
-        <translation>Value must be higher than %1</translation>
+        <translation>值必须大于 %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="62"/>
