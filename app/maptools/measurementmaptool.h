@@ -15,8 +15,8 @@
 #include "qgsdistancearea.h"
 #include "qgsgeometry.h"
 #include "inpututils.h"
-#include <QgsPolygon.h>
-#include <QgsGeometry.h>
+#include "qgspolygon.h"
+#include "qgsgeometry.h"
 #include "qgsvectorlayer.h"
 #include "qgsmultipoint.h"
 
