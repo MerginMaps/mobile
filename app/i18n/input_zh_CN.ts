@@ -277,7 +277,7 @@ Won&apos;t be added to the project.</source>
         <location filename="../inpututils.cpp" line="1462"/>
         <source>screen DPI: %1x%2
 </source>
-        <translation>屏幕DPI: %1x%2
+        <translation>屏幕 DPI: %1x%2
 </translation>
     </message>
     <message>
