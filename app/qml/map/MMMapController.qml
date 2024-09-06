@@ -153,6 +153,7 @@ Item {
       }
 
       case "measure": {
+        root.showInfoTextMessage( qsTr( "Add points to measure distance, close the shape to measure area" ) )
         root.hideHighlight()
         root.measureStarted()
         break
