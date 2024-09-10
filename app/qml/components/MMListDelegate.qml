@@ -42,7 +42,7 @@ Item {
 
   implicitWidth: ListView?.view?.width ?? 0 // in case ListView is injected as attached property (usually it is)
   implicitHeight: contentLayout.implicitHeight
-  height: visible ? implicitHeight : 0.1 // hide invisible items, for some reason setting 0 does not work ¯\_(ツ)_/¯
+  height: visible ? contentLayout.implicitHeight : 0.1 // hide invisible items, for some reason setting 0 does not work ¯\_(ツ)_/¯
 
   MouseArea {
     anchors.fill: contentLayout
@@ -119,5 +119,9 @@ Item {
       visible: root.hasLine
       color: __style.greyColor
     }
+  }
+
+  Component.onCompleted: {
+    root.height = contentLayout.implicitHeight
   }
 }
