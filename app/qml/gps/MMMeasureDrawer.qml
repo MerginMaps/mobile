@@ -26,13 +26,13 @@ MMDrawer {
 
   readonly property alias panelHeight: root.height
 
-  property bool canCloseShape: mapCanvas.mapToolComponent.mapTool.canCloseShape
-  property bool closeShapeDone: mapCanvas.mapToolComponent.mapTool.closeShapeDone
-  property bool canUndo: mapCanvas.mapToolComponent.mapTool.canUndo
+  property bool canCloseShape: mapCanvas.mapToolComponent?.mapTool?.canCloseShape ?? false
+  property bool closeShapeDone: mapCanvas.mapToolComponent?.mapTool?.closeShapeDone ?? false
+  property bool canUndo: mapCanvas.mapToolComponent?.mapTool?.canUndo ?? false
 
-  property string length: __inputUtils.formatDistanceInProjectUnit( mapCanvas.mapToolComponent.mapTool.length, 1 )
-  property string perimeter: __inputUtils.formatDistanceInProjectUnit( mapCanvas.mapToolComponent.mapTool.perimeter, 1 )
-  property string area: __inputUtils.formatAreaInProjectUnit( mapCanvas.mapToolComponent.mapTool.area, 1 )
+  property string length: __inputUtils.formatDistanceInProjectUnit( mapCanvas.mapToolComponent?.mapTool?.length ?? 0, 1 )
+  property string perimeter: __inputUtils.formatDistanceInProjectUnit( mapCanvas.mapToolComponent?.mapTool?.perimeter ?? 0, 1 )
+  property string area: __inputUtils.formatAreaInProjectUnit( mapCanvas.mapToolComponent?.mapTool?.area ?? 0, 1 )
 
   signal measureFinished()
   signal measureDone()
