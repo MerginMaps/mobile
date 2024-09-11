@@ -30,7 +30,6 @@ MMDrawer {
   property bool closeShapeDone: mapCanvas.mapToolComponent?.mapTool?.closeShapeDone ?? false
   property bool canUndo: mapCanvas.mapToolComponent?.mapTool?.canUndo ?? false
 
-  property string length: __inputUtils.formatDistanceInProjectUnit( mapCanvas.mapToolComponent?.mapTool?.length ?? 0, 1 )
   property string perimeter: __inputUtils.formatDistanceInProjectUnit( mapCanvas.mapToolComponent?.mapTool?.perimeter ?? 0, 1 )
   property string area: __inputUtils.formatAreaInProjectUnit( mapCanvas.mapToolComponent?.mapTool?.area ?? 0, 1 )
 
@@ -83,7 +82,7 @@ MMDrawer {
         width: ( parent.width + parent.spacing ) / 2
 
         title: closeShapeDone ? qsTr( "Perimeter" ) : qsTr( "Length" )
-        value: closeShapeDone ? root.perimeter : root.length
+        value: root.perimeter
       }
 
       MMGpsComponents.MMGpsDataText{

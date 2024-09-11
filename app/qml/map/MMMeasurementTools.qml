@@ -34,7 +34,6 @@ Item {
     id: mapTool
 
     mapSettings: root.map.mapSettings
-    activeLayer: __activeLayer.vectorLayer
   }
 
   MM.GuidelineController {
@@ -94,7 +93,7 @@ Item {
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
 
-    text: __inputUtils.formatDistanceInProjectUnit( mapTool.length )
+    text: __inputUtils.formatDistanceInProjectUnit( mapTool.lengthWithGuideline )
     canCloseShape: mapTool.canCloseShape
 
     onCloseShapeClicked: closeShape()
@@ -120,6 +119,6 @@ Item {
   {
     guidelineController.allowed = true
     crosshair.visible = true
-    mapTool.repeat()
+    mapTool.reset()
   }
 }

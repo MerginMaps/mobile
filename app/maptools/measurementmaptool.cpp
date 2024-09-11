@@ -12,7 +12,13 @@
 MeasurementMapTool::MeasurementMapTool( QObject *parent )
   : AbstractMapTool{ parent }
 {
+  if ( !mapSettings() )
+  {
+    return;
+  }
 
+  mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
+  mDistanceArea.setSourceCrs( mapSettings()->destinationCrs(), mapSettings()->transformContext() );
 }
 
 MeasurementMapTool::~MeasurementMapTool() = default;
@@ -41,7 +47,24 @@ void MeasurementMapTool::updateDistance( const QPointF &crosshairPoint )
 {
   if ( mPoints.isEmpty() )
   {
-    setLength( 0.0 );
+    setLengthWithGuideline( 0.0 );
+    return;
+  }
+
+  checkCanCloseShape( crosshairPoint ) ;
+
+  QgsPoint lastPoint = mPoints.last();
+  QgsPoint transformedCrosshairPoint = mapSettings()->screenToCoordinate( crosshairPoint );
+
+  double calculatedLength = mDistanceArea.measureLength( mRecordedGeometry ) + mDistanceArea.measureLine( transformedCrosshairPoint, lastPoint );
+  setLengthWithGuideline( calculatedLength );
+}
+
+void MeasurementMapTool::checkCanCloseShape( const QPointF &crosshairPoint )
+{
+  if ( mRecordedGeometry.isEmpty() || mPoints.count() < 3 )
+  {
+    setCanCloseShape( false );
     return;
   }
 
@@ -52,16 +75,6 @@ void MeasurementMapTool::updateDistance( const QPointF &crosshairPoint )
     double distanceToFirstPoint = std::hypot( crosshairPoint.x() - firstPointScreen.x(), crosshairPoint.y() - firstPointScreen.y() );
     setCanCloseShape( distanceToFirstPoint <= CLOSE_THRESHOLD );
   }
-
-  QgsPoint lastPoint = mPoints.last();
-  QgsPoint transformedCrosshairPoint = mapSettings()->screenToCoordinate( crosshairPoint );
-
-  QgsDistanceArea mDistanceArea;
-  mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
-  mDistanceArea.setSourceCrs( mapSettings()->destinationCrs(), mapSettings()->transformContext() );
-
-  double calculatedLength = mDistanceArea.measureLength( mRecordedGeometry ) + mDistanceArea.measureLine( transformedCrosshairPoint, lastPoint );
-  setLength( calculatedLength );
 }
 
 void MeasurementMapTool::closeShape()
@@ -76,25 +89,22 @@ void MeasurementMapTool::closeShape()
   QgsGeometry polygonGeometry = QgsGeometry::fromPolygonXY( QList<QList<QgsPointXY>>() << pointList );
   setRecordedGeometry( polygonGeometry );
 
-  QgsDistanceArea mDistanceArea;
-  mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
-  mDistanceArea.setSourceCrs( mapSettings()->destinationCrs(), mapSettings()->transformContext() );
-
   double area = mDistanceArea.measureArea( polygonGeometry );
   setArea( area );
 
   double perimeter = mDistanceArea.measurePerimeter( polygonGeometry );
   setPerimeter( perimeter );
 
-  setLength( 0.0 );
   setCanCloseShape( false );
   setCloseShapeDone( true );
 }
 
-void MeasurementMapTool::repeat()
+void MeasurementMapTool::reset()
 {
   mPoints.clear();
 
+  setPerimeter( 0.0 );
+  setLengthWithGuideline( 0.0 );
   setCanCloseShape( false );
   setCloseShapeDone( false );
 
@@ -108,7 +118,6 @@ void MeasurementMapTool::rebuildGeometry()
   QgsMultiPoint *existingVertices = new QgsMultiPoint();
   mExistingVertices.set( existingVertices );
 
-
   if ( mPoints.count() > 0 )
   {
     geometry = QgsGeometry::fromPolyline( mPoints );
@@ -118,6 +127,8 @@ void MeasurementMapTool::rebuildGeometry()
       existingVertices->addGeometry( point.clone() );
     }
 
+    double perimeter = mDistanceArea.measureLength( geometry );
+    setPerimeter( perimeter );
     setCanUndo( true );
   }
   else
@@ -158,9 +169,9 @@ double MeasurementMapTool::perimeter() const
   return mPerimeter;
 }
 
-double MeasurementMapTool::length() const
+double MeasurementMapTool::lengthWithGuideline() const
 {
-  return mLength;
+  return mLengthWithGuideline;
 }
 
 bool MeasurementMapTool::canUndo() const
@@ -214,28 +225,13 @@ void MeasurementMapTool::setRecordedGeometry( const QgsGeometry &newRecordedGeom
   emit recordedGeometryChanged( mRecordedGeometry );
 }
 
-void MeasurementMapTool::setActiveLayer( QgsVectorLayer *newActiveLayer )
+void MeasurementMapTool::setLengthWithGuideline( const double &lengthWithGuideline )
 {
-  if ( mActiveLayer == newActiveLayer )
+  if ( mLengthWithGuideline == lengthWithGuideline )
     return;
 
-  if ( mActiveLayer && mActiveLayer->isEditable() )
-  {
-    mActiveLayer->rollBack();
-    mActiveLayer->triggerRepaint();
-  }
-
-  mActiveLayer = newActiveLayer;
-  emit activeLayerChanged( mActiveLayer );
-}
-
-void MeasurementMapTool::setLength( const double &length )
-{
-  if ( mLength == length )
-    return;
-
-  mLength = length;
-  emit lengthChanged( length );
+  mLengthWithGuideline = lengthWithGuideline;
+  emit lengthWithGuidelineChanged( lengthWithGuideline );
 }
 
 void MeasurementMapTool::setArea( const double &area )
@@ -254,9 +250,4 @@ void MeasurementMapTool::setPerimeter( const double &perimeter )
 
   mPerimeter = perimeter;
   emit perimeterChanged( perimeter );
-}
-
-QgsVectorLayer *MeasurementMapTool::activeLayer() const
-{
-  return mActiveLayer;
 }

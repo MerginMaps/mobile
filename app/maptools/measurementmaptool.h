@@ -27,10 +27,9 @@ class MeasurementMapTool : public AbstractMapTool
     Q_OBJECT
 
     Q_PROPERTY( QgsGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
-    Q_PROPERTY( QgsVectorLayer *activeLayer READ activeLayer WRITE setActiveLayer NOTIFY activeLayerChanged )
     Q_PROPERTY( QgsGeometry existingVertices READ existingVertices WRITE setExistingVertices NOTIFY existingVerticesChanged )
 
-    Q_PROPERTY( double length READ length WRITE setLength NOTIFY lengthChanged )
+    Q_PROPERTY( double lengthWithGuideline READ lengthWithGuideline WRITE setLengthWithGuideline NOTIFY lengthWithGuidelineChanged )
     Q_PROPERTY( double perimeter READ perimeter WRITE setPerimeter NOTIFY perimeterChanged )
     Q_PROPERTY( double area READ area WRITE setArea NOTIFY areaChanged )
 
@@ -64,11 +63,11 @@ class MeasurementMapTool : public AbstractMapTool
      * Repeats measurement process.
      * Clears all recorded points and rebuilds the geometry.
      */
-    Q_INVOKABLE void repeat();
+    Q_INVOKABLE void reset();
 
     // Getter and Setters
-    double length() const;
-    void setLength( const double &length );
+    double lengthWithGuideline() const;
+    void setLengthWithGuideline( const double &length );
 
     double perimeter() const;
     void setPerimeter( const double &perimeter );
@@ -91,22 +90,19 @@ class MeasurementMapTool : public AbstractMapTool
     QgsGeometry existingVertices() const;
     void setExistingVertices( const QgsGeometry &vertices );
 
-    QgsVectorLayer *activeLayer() const;
-    void setActiveLayer( QgsVectorLayer *newActiveLayer );
-
   signals:
-    void lengthChanged( const double &length );
+    void lengthWithGuidelineChanged( const double &lengthWithGuideline );
     void perimeterChanged( const double &perimeter );
     void areaChanged( const double &area );
     void canUndoChanged( bool canUndo );
     void canCloseShapeChanged( bool canUndo );
     void closeShapeDoneChanged( bool canUndo );
-    void activeLayerChanged( QgsVectorLayer *activeLayer );
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
     void existingVerticesChanged( const QgsGeometry &vertices );
 
   protected:
     void rebuildGeometry();
+    void checkCanCloseShape( const QPointF &crosshairPoint );
 
   public slots:
     void updateDistance( const QPointF &crosshairPoint );
@@ -115,8 +111,8 @@ class MeasurementMapTool : public AbstractMapTool
     QVector<QgsPoint> mPoints;
     QgsGeometry mRecordedGeometry;
     QgsGeometry mExistingVertices;
-    QgsVectorLayer *mActiveLayer = nullptr;
-    double mLength = 0;
+    QgsDistanceArea mDistanceArea;
+    double mLengthWithGuideline = 0;
     double mPerimeter = 0;
     double mArea = 0;
     bool mCanUndo = false;

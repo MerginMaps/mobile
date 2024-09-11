@@ -16,8 +16,11 @@ import "../../components"
 Item {
     id: root
 
+    required property string text
     /*required*/ property var qgsProject
     /*required*/ property var mapSettings
+
+    property bool canCloseShape: false
     property bool shouldUseSnapping: false
 
     property point center: Qt.point( root.width / 2, root.height / 2 )
@@ -34,9 +37,6 @@ Item {
 
     signal closeShapeClicked
 
-    property bool canCloseShape: false
-    required property string text
-
     MM.SnapUtils {
       id: snapUtils
 
@@ -47,205 +47,18 @@ Item {
       destinationLayer: __activeLayer.vectorLayer
     }
 
-    Image {
-      id: crosshairBackground // white background of the crosshair
+    MMCrosshair {
+      id: crosshair
 
-      x: root.screenPoint.x - width / 2
-      y: root.screenPoint.y - height / 2
-
-      Behavior on x {
-        PropertyAnimation {
-          properties: "x"
-          duration: 50
-          easing.type: Easing.InQuad
-        }
-      }
-
-      Behavior on y {
-        PropertyAnimation {
-          properties: "y"
-          duration: 50
-          easing.type: Easing.InQuad
-        }
-      }
-
-      height: root.outerSize
-      width: height
-
-      source: __style.crosshairBackgroundImage
-      sourceSize.width: width
-      sourceSize.height: height
-    }
-
-    Image {
-      id: crosshairForeground // green / purple outer circle of the crosshair
-
-      x: root.screenPoint.x - width / 2
-      y: root.screenPoint.y - height / 2
-
-      Behavior on x {
-        PropertyAnimation {
-          properties: "x"
-          duration: 50
-          easing.type: Easing.InQuad
-        }
-      }
-
-      Behavior on y {
-        PropertyAnimation {
-          properties: "y"
-          duration: 50
-          easing.type: Easing.InQuad
-        }
-      }
-
-      height: root.outerSize
-      width: height
-
-      source: __style.crosshairForegroundImage
-      sourceSize.width: width
-      sourceSize.height: height
-    }
-
-    ColorOverlay {
-      anchors.fill: crosshairForeground
-      source: crosshairForeground
-      color: snapUtils.snapped ? __style.snappingColor : __style.forestColor
-    }
-
-    Image {
-      id: crossCenterDot // Center dot - visible when not snapped (green)
-
-      x: root.screenPoint.x - width / 2
-      y: root.screenPoint.y - height / 2
-
-      Behavior on x {
-        PropertyAnimation {
-          properties: "x"
-          duration: 50
-          easing.type: Easing.InQuad
-        }
-      }
-
-      Behavior on y {
-        PropertyAnimation {
-          properties: "y"
-          duration: 50
-          easing.type: Easing.InQuad
-        }
-      }
-
-      opacity: snapUtils.snapped ? 0 : 100
-
-      Behavior on opacity {
-        PropertyAnimation {
-          properties: "opacity"
-          duration: 100
-          easing.type: Easing.InQuad
-        }
-      }
-
-      height: root.innerDotSize
-      width: height
-      sourceSize.width: width
-      sourceSize.height: height
-
-      source: __style.crosshairCenterImage
-    }
-
-    Image {
-      id: crossCenterPlus // Center plus - visible when not snapped (purple)
-
-      x: root.screenPoint.x - width / 2
-      y: root.screenPoint.y - height / 2
-
-      Behavior on x {
-        PropertyAnimation {
-          properties: "x"
-          duration: 50
-          easing.type: Easing.InQuad
-        }
-      }
-
-      Behavior on y {
-        PropertyAnimation {
-          properties: "y"
-          duration: 50
-          easing.type: Easing.InQuad
-        }
-      }
-
-      opacity: snapUtils.snapped && ( snapUtils.snapType === MM.SnapUtils.Vertex || snapUtils.snapType === MM.SnapUtils.Other ) ? 100 : 0
-
-      Behavior on opacity {
-        PropertyAnimation {
-          properties: "opacity"
-          duration: 100
-          easing.type: Easing.InQuad
-        }
-      }
-
-      rotation: snapUtils.snapType === MM.SnapUtils.Other ? 0 : 45
-
-      Behavior on rotation {
-        PropertyAnimation {
-          properties: "rotation"
-          duration: 50
-          easing.type: Easing.InQuad
-        }
-      }
-
-      height: root.innerDotSize * 2
-      width: height
-      sourceSize.width: width
-      sourceSize.height: height
-
-      // Important: must be same color as __style.snappingColor
-      source: __style.crosshairPlusImage
-    }
-
-    Image {
-      id: crossCenterCircle // Center circle - visible when snapped to segment (purple)
-
-      x: root.screenPoint.x - width / 2
-      y: root.screenPoint.y - height / 2
-
-      Behavior on x {
-        PropertyAnimation {
-          properties: "x"
-          duration: 50
-          easing.type: Easing.InQuad
-        }
-      }
-
-      Behavior on y {
-        PropertyAnimation {
-          properties: "y"
-          duration: 50
-          easing.type: Easing.InQuad
-        }
-      }
-
-      opacity: snapUtils.snapped && snapUtils.snapType === MM.SnapUtils.Segment ? 100 : 0
-
-      Behavior on opacity {
-        PropertyAnimation {
-          properties: "opacity"
-          duration: 100
-          easing.type: Easing.InQuad
-        }
-      }
-
-      height: root.innerDotSize * 2
-      width: height
-      sourceSize.width: width
-      sourceSize.height: height
-
-      // Important: must be same color as __style.snappingColor
-      source: __style.crosshairCircleImage
+      anchors.fill: parent
+      qgsProject: __activeProject.qgsProject
+      mapSettings: root.mapSettings
     }
 
     Rectangle {
+      y: crosshair.crosshairForeground.y + crosshair.crosshairForeground.height
+      x: crosshair.crosshairForeground.x - ( ( width - crosshair.crosshairForeground.width ) / 2 )
+
       width: Math.max( root.outerSize - 10 * __dp , row.width )
       height: root.outerSize * 0.6
       radius: root.height / 2
@@ -253,9 +66,6 @@ Item {
 
       layer.enabled: true
       layer.effect: MMShadow {}
-
-      anchors.top: crosshairForeground.bottom
-      anchors.horizontalCenter: crosshairForeground.horizontalCenter
 
       Row {
         id: row
@@ -306,7 +116,7 @@ Item {
       }
     }
 
-    Connections {
+    Connections { // future snapping? _(ツ)_/¯
       target: __activeProject
 
       function onProjectWillBeReloaded() {
