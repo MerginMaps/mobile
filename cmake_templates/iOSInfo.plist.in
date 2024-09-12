@@ -68,6 +68,9 @@
 		<string>ar</string>
 		<string>ar_IQ</string>
 		<string>ar_EG</string>
+		<string>zh_CN</string>
+		<string>zh-Hans</string>
+		<string>zh</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
