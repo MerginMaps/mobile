@@ -1,226 +1,42 @@
-name: linux Build
+name: "CodeQL"
+
 on:
   push:
-    paths:
-    - 'app/**'
-    - 'core/**'
-    - 'scripts/**'
-    - 'cmake/**'
-    - 'cmake_templates/**'
-    - 'test/**'
-    - 'CMakeLists.txt'
-    - '.github/workflows/linux.yml'
-
-  release:
-    types:
-      - published
-
-env:
-  CCACHE_DIR: ~/.ccache
-  INPUT_SDK_VERSION: x64-linux-20240517-184
-  QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
-  CMAKE_VERSION: '3.29.0'
-  CACHE_VERSION: 0
-      
-concurrency:
-  group: ci-${{github.ref}}-linux
-  cancel-in-progress: true
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  schedule:
+    - cron: '45 16 * * 3'
 
 jobs:
-  linux_build:
-    if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: ubuntu-22.04
+  code-ql:
+    name: Analyze
+    runs-on: 'ubuntu-latest'
+    timeout-minutes: 360
+    permissions:
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language:
+#          - 'c-cpp' # Tested as part of the linux.yml
+          - 'python'
+          - 'ruby'
+
     steps:
-      - name: Checkout Input
-        uses: actions/checkout@v3
-        with:
-          path: input
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Install Build Dependencies
-        run: |
-            sudo apt-get update -y
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
 
-            sudo apt-get install -y \
-            gperf autopoint '^libxcb.*-dev' libx11-xcb-dev libegl1-mesa libegl1-mesa-dev \
-            libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev \
-            autoconf-archive libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0 libfuse2 \
-            bison flex ccache lcov
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
 
-      - name: Install CMake and Ninja
-        uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: ${{ env.CMAKE_VERSION }}
-          
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: ${{ env.QT_VERSION }}
-          setup-python: 'false'
-          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
-          dir: ${{ github.workspace }}
-          cache: true
-          cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-lnx
-
-      - name: Extract Mergin API_KEY
-        env:
-          MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
-        run: |
-          cd input/core/
-          openssl \
-            aes-256-cbc -d \
-            -in merginsecrets.cpp.enc \
-            -out merginsecrets.cpp \
-            -k "$MERGINSECRETS_DECRYPT_KEY" \
-            -md md5
-
-      # CCache
-      - name: Prepare build cache for pull request
-        uses: pat-s/always-upload-cache@v3.0.11
-        if: github.event_name == 'pull_request'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: build-linux-ccache-${{ github.actor }}-${{ github.head_ref }}-${{ github.sha }}
-          # The head_ref or source branch of the pull request in a workflow run.
-          # The base_ref or target branch of the pull request in a workflow run.
-          restore-keys: |
-            build-linux-ccache-${{ github.actor }}-${{ github.head_ref }}-
-            build-linux-ccache-refs/heads/${{ github.base_ref }}-
-            build-linux-ccache-refs/heads/master-
-
-      - name: Prepare build cache for branch/tag
-        # use a fork of actions/cache@v2 to upload cache even when the build or test failed
-        uses: pat-s/always-upload-cache@v3.0.11
-        if: github.event_name != 'pull_request'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # The branch or tag ref that triggered the workflow run. For branches this in the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
-          key: build-linux-ccache-${{ github.ref }}-${{ github.sha }}
-          restore-keys: |
-            build-linux-ccache-${{ github.ref }}-
-            build-linux-ccache-refs/heads/master-
-
-      - name: Install ccache
-        run: |
-          mkdir -p ${CCACHE_DIR}
-          ccache --set-config=max_size=2.0G
-          ccache -s
-
-      # Input SDK
-      - name: Cache Input-SDK
-        id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v3.0.11
-        with:
-          path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
-
-      - name: Install Input-SDK
-        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
-        run: |
-          wget -O \
-            ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk/x64-linux
-          cd ${{ github.workspace }}/input-sdk/x64-linux
-          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
-
-      # Build Input App
-      - name: Calculate build number
-        run: |
-            BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
-            echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
-
-            echo "Version code: ${BUILD_NUM}"
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: 'c-cpp'
-
-      # Do Tests
-      - name: build Input (Debug)
-        run: |
-          mkdir -p build-Input-db
-          cd build-Input-db
-
-          cmake \
-             -DCMAKE_BUILD_TYPE=Debug \
-             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/gcc_64 \
-             -DUSE_SERVER_API_KEY=TRUE \
-             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-linux \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
-             -DCOVERAGE=TRUE \
-             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-             -DENABLE_TESTS=TRUE \
-             -GNinja \
-             -S ../input
-
-          ninja
-
-      - name: run tests
-        env:
-          TEST_MERGIN_URL: https://app.dev.merginmaps.com/
-          TEST_API_USERNAME: test_mobileapp
-          TEST_API_PASSWORD: ${{ secrets.TEST_API_PASSWORD }}
-          QT_QPA_PLATFORM: "offscreen"
-        run: |
-          cd build-Input-db/
-          xvfb-run --server-args="-screen 0 640x480x24" ctest --output-on-failure
-
-      - name: build lcov summary
-        run: |
-          cd build-Input-db
-
-          lcov --directory . --capture --output-file coverage.info
-
-          lcov --remove coverage.info '*/input-sdk/*' '*Qt/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input-db/*' --output-file coverage.info
-          lcov --list coverage.info
-
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: build-Input-db/coverage.info
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:c-cpp"
-
-      - name: build Input
-        run: |
-          mkdir -p install-Input
-          mkdir -p build-Input
-          cd build-Input
-          
-          cmake \
-             -DCMAKE_BUILD_TYPE=Release \
-             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/gcc_64 \
-             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
-             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-linux \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
-             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-             -GNinja \
-             -S ../input
-             
-          ninja
-          ninja install          
-
-      - name: Get TimeStamp
-        id: time
-        uses: josStorer/get-current-time@v2.0.2
-        with:
-          format: 'YYYYMMDD'
-
-      - name: package Input
-        run: |
-          INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.tar.gz
-          echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
-          
-          cd ${{ github.workspace }}/install-Input
-          find .
-          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./
-
-      - name: Upload Sdk in Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          path: ${{ github.workspace }}/${{ env.INPUT_TAR }}
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"
