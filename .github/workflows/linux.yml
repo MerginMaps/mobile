@@ -131,6 +131,10 @@ jobs:
 
             echo "Version code: ${BUILD_NUM}"
 
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: 'c-cpp'
 
       # Do Tests
       - name: build Input (Debug)
@@ -176,6 +180,11 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: build-Input-db/coverage.info
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:c-cpp"
 
       - name: build Input
         run: |
