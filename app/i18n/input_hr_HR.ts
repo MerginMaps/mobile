@@ -154,7 +154,7 @@
 <context>
     <name>FeaturesModel</name>
     <message>
-        <location filename="../featuresmodel.cpp" line="164"/>
+        <location filename="../featuresmodel.cpp" line="165"/>
         <source>Unknown title</source>
         <translation>Nepoznati naslov</translation>
     </message>
@@ -736,7 +736,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="92"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="96"/>
         <source>Add feature</source>
         <translation>Dodaj objekt</translation>
     </message>
@@ -1273,92 +1273,97 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMMapController</name>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="128"/>
+        <location filename="../qml/map/MMMapController.qml" line="101"/>
+        <source>Mark the geometry on the map and click record</source>
+        <translation>Označi geometriju na karti i klikni</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMMapController.qml" line="130"/>
         <source>Create line to split the selected feature</source>
         <translation>Stvori liniju kako bi razdvojio odabrani objekt</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="521"/>
+        <location filename="../qml/map/MMMapController.qml" line="523"/>
         <source>streaming</source>
         <translation>kontinuirano snimanje</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="597"/>
+        <location filename="../qml/map/MMMapController.qml" line="599"/>
         <source>Connecting to %1</source>
         <translation>Povezivanje na %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="611"/>
+        <location filename="../qml/map/MMMapController.qml" line="613"/>
         <source>Connected, no position</source>
         <translation>Povezano, nema pozicije</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="615"/>
+        <location filename="../qml/map/MMMapController.qml" line="617"/>
         <source>Unknown accuracy</source>
         <translation>Nepoznata preciznost</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="757"/>
+        <location filename="../qml/map/MMMapController.qml" line="759"/>
         <source>GPS currently unavailable</source>
         <translation>GPS trenutno nije dostupan</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="772"/>
+        <location filename="../qml/map/MMMapController.qml" line="774"/>
         <source>Choose Active Layer</source>
         <translation>Odaberi aktivni sloj</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="799"/>
+        <location filename="../qml/map/MMMapController.qml" line="801"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>Nema slojeva predviđenih za snimanje u projektu!</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="800"/>
+        <location filename="../qml/map/MMMapController.qml" line="802"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Pogledajte kako omogućiti snimanje u projektu</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="817"/>
+        <location filename="../qml/map/MMMapController.qml" line="819"/>
         <source>More options</source>
         <translation>Više mogućnosti</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="822"/>
+        <location filename="../qml/map/MMMapController.qml" line="824"/>
         <source>Split geometry</source>
         <translation>Razdvoji geometriju</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="834"/>
+        <location filename="../qml/map/MMMapController.qml" line="836"/>
         <source>Redraw geometry</source>
         <translation>Ponovno iscrtaj geometriju</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="846"/>
+        <location filename="../qml/map/MMMapController.qml" line="848"/>
         <source>Streaming mode</source>
         <translation>Kontinuirano snimanje</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="852"/>
+        <location filename="../qml/map/MMMapController.qml" line="854"/>
         <source>Active</source>
         <translation>Aktivno</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="978"/>
+        <location filename="../qml/map/MMMapController.qml" line="980"/>
         <source>Splitting done successfully</source>
         <translation>Razdvajanje uspješno izvršeno</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1069"/>
+        <location filename="../qml/map/MMMapController.qml" line="1071"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Odaberite jednu od točaka za početak izmjene geometrije</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1082"/>
+        <location filename="../qml/map/MMMapController.qml" line="1084"/>
         <source>Record new geometry for the feature</source>
         <translation>Snimi novu geometriju za objekt</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1164"/>
+        <location filename="../qml/map/MMMapController.qml" line="1166"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS trenutno nije dostupan</translation>
     </message>
@@ -1921,28 +1926,28 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMRecordingTools</name>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="197"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="179"/>
         <source>Undo</source>
         <translation>Poništi</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="204"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="186"/>
         <source>Remove</source>
         <translation>Ukloni</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="218"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="200"/>
         <source>Release</source>
         <translation>Otpusti</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="232"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="214"/>
         <source>Add</source>
         <translation>Dodaj</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="249"/>
-        <location filename="../qml/map/MMRecordingTools.qml" line="277"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="231"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="259"/>
         <source>Record</source>
         <translation>Snimaj</translation>
     </message>
@@ -2240,22 +2245,22 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMSplittingTools</name>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="88"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="91"/>
         <source>Undo</source>
         <translation>Poništi</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="94"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="97"/>
         <source>Add point</source>
         <translation>Dodaj točku</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="100"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="103"/>
         <source>Done</source>
         <translation>Završeno</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="110"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="113"/>
         <source>You need to add at least 2 points.</source>
         <translation>Morate dodati barem 2 točke.</translation>
     </message>
@@ -2789,12 +2794,12 @@ dozvoljava samo %1 preuzetih projekata.</translation>
         <translation>Nepoznati fix</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="532"/>
+        <location filename="../main.cpp" line="539"/>
         <source>Report submitted. Please contact us on %1</source>
         <translation>Obavijest je poslana.%1Molimo kontaktirajte nas na%1%2</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="537"/>
+        <location filename="../main.cpp" line="544"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Obavijest nije poslana. Molimo provjerite Vašu internetsku vezu.</translation>
     </message>
