@@ -229,6 +229,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl crosshairPlusImage READ crosshairPlusImage CONSTANT )
     Q_PROPERTY( QUrl noWorkspaceImage READ noWorkspaceImage CONSTANT )
 
+    // Sounds
+    Q_PROPERTY( QUrl successSound READ successSound CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -511,6 +513,8 @@ class MMStyle: public QObject
     QUrl crosshairForegroundImage() {return QUrl( "qrc:/images/CrosshairForeground.svg" );}
     QUrl crosshairPlusImage() {return QUrl( "qrc:/images/CrosshairPlus.svg" );}
     QUrl noWorkspaceImage() {return QUrl( "qrc:/images/NoWorkspace.svg" );}
+
+    QUrl successSound() {return QUrl( "qrc:/freesound.org/171697__nenadsimic__menu-selection-click.wav" );}
 
     double toolbarHeight()
     {

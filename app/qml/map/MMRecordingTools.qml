@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Shapes
+import QtMultimedia
 
 import mm 1.0 as MM
 
@@ -45,6 +46,12 @@ Item {
     {
       mapTool.recordingType = MM.RecordingMapTool.Manual
     }
+  }
+
+  SoundEffect {
+      id: successSound
+      source: __style.successSound
+      muted: !__appSettings.playSounds
   }
 
   MM.RecordingMapTool {
@@ -224,6 +231,7 @@ Item {
           else {
             mapTool.addPoint( crosshair.recordPoint )
           }
+          successSound.play()
         }
       }
 
@@ -243,6 +251,7 @@ Item {
 
             let pair = mapTool.getFeatureLayerPair()
             root.done( pair )
+
           }
           else
           {
@@ -272,6 +281,7 @@ Item {
 
           let pair = mapTool.getFeatureLayerPair()
           root.done( pair )
+          successSound.play()
         }
       }
     }

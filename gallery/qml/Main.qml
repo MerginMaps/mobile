@@ -210,6 +210,10 @@ ApplicationWindow {
           source: "InputsPage.qml"
         }
         ListElement {
+          title: "Sounds"
+          source: "SoundsPage.qml"
+        }
+        ListElement {
           title: "Checks"
           source: "ChecksPage.qml"
         }

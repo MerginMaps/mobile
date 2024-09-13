@@ -35,6 +35,7 @@ class AppSettings: public QObject
     Q_PROPERTY( double gpsAntennaHeight READ gpsAntennaHeight WRITE setGpsAntennaHeight NOTIFY gpsAntennaHeightChanged )
     Q_PROPERTY( QString ignoreMigrateVersion READ ignoreMigrateVersion WRITE setIgnoreMigrateVersion NOTIFY ignoreMigrateVersionChanged )
     Q_PROPERTY( bool autolockPosition READ autolockPosition WRITE setAutolockPosition NOTIFY autolockPositionChanged )
+    Q_PROPERTY( double playSounds READ playSounds WRITE setPlaySounds NOTIFY playSoundsChanged )
 
   public:
     explicit AppSettings( QObject *parent = nullptr );
@@ -86,6 +87,9 @@ class AppSettings: public QObject
     bool autolockPosition() const;
     void setAutolockPosition( bool autolockPosition );
 
+    bool playSounds() const;
+    void setPlaySounds( bool play );
+
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
 
@@ -98,12 +102,14 @@ class AppSettings: public QObject
     void lineRecordingIntervalChanged();
     void intervalTypeChanged();
 
+
     void reuseLastEnteredValuesChanged( bool reuseLastEnteredValues );
     void appVersionChanged( const QString &version );
     void activePositionProviderIdChanged( const QString & );
 
     void autosyncAllowedChanged( bool autosyncAllowed );
     void autolockPositionChanged( bool autolockPosition );
+    void playSoundsChanged( bool play );
 
     void ignoreMigrateVersionChanged();
 
@@ -138,6 +144,7 @@ class AppSettings: public QObject
     QString mActivePositionProviderId;
     bool mAutosyncAllowed = false;
     bool mAutolockPosition = true;
+    bool mPlaySounds = true;
     double mGpsAntennaHeight = 0;
     QString mIgnoreMigrateVersion;
 };

@@ -6,6 +6,7 @@
         <file>qml/components/TextItem.qml</file>
         <file>qml/components/ColorBox.qml</file>
         <file>qml/pages/ComponentsPage.qml</file>
+        <file>qml/pages/SoundsPage.qml</file>
         <file>qml/pages/SandboxPage.qml</file>
         <file>qml/pages/IconsPage.qml</file>
         <file>qml/pages/ImagesPage.qml</file>

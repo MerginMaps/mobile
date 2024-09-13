@@ -32,6 +32,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   double gpsHeight = settings.value( "gpsHeight", 0 ).toDouble();
   QString ignoreMigrateVersion = settings.value( QStringLiteral( "ignoreMigrateVersion" ) ).toString();
   bool autolockPosition = settings.value( QStringLiteral( "autolockPosition" ), true ).toBool();
+  bool playSounds = settings.value( QStringLiteral( "playSounds" ), true ).toBool();
 
   settings.endGroup();
 
@@ -48,6 +49,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setGpsAntennaHeight( gpsHeight );
   setIgnoreMigrateVersion( ignoreMigrateVersion );
   setAutolockPosition( autolockPosition );
+  setPlaySounds( playSounds );
 }
 
 QString AppSettings::defaultLayer() const
@@ -294,6 +296,21 @@ void AppSettings::setAutolockPosition( bool autolockPosition )
   mAutolockPosition = autolockPosition;
   setValue( QStringLiteral( "autolockPosition" ), autolockPosition );
   emit autolockPositionChanged( mAutolockPosition );
+}
+
+bool AppSettings::playSounds() const
+{
+  return mPlaySounds;
+}
+
+void AppSettings::setPlaySounds( bool play )
+{
+  if ( mPlaySounds == play )
+    return;
+
+  mPlaySounds = play;
+  setValue( QStringLiteral( "playSounds" ), play );
+  emit playSoundsChanged( play );
 }
 
 double AppSettings::gpsAntennaHeight() const

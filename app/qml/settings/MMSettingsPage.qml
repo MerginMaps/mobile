@@ -183,6 +183,15 @@ MMPage {
         onClicked: __appSettings.autolockPosition = !checked
       }
 
+      MMSettingsComponents.MMSettingsSwitch {
+        width: parent.width
+        title: qsTr("Play sounds")
+        description: qsTr("Each time you add point, the app beeps")
+        checked: __appSettings.playSounds
+
+        onClicked: __appSettings.playSounds = !checked
+      }
+
       Item { width: 1; height: 1 }
 
       Text {
