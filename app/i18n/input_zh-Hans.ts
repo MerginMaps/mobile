@@ -1274,92 +1274,97 @@ Won&apos;t be added to the project.</translation>
 <context>
     <name>MMMapController</name>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="128"/>
+        <location filename="../qml/map/MMMapController.qml" line="101"/>
+        <source>Mark the geometry on the map and click record</source>
+        <translation>在地图上标记几何图形并点击记录</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMMapController.qml" line="130"/>
         <source>Create line to split the selected feature</source>
         <translation>划线分割选定的要素</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="521"/>
+        <location filename="../qml/map/MMMapController.qml" line="523"/>
         <source>streaming</source>
         <translation>串流</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="597"/>
+        <location filename="../qml/map/MMMapController.qml" line="599"/>
         <source>Connecting to %1</source>
         <translation>正在连接到 %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="611"/>
+        <location filename="../qml/map/MMMapController.qml" line="613"/>
         <source>Connected, no position</source>
         <translation>已连接，无位置</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="615"/>
+        <location filename="../qml/map/MMMapController.qml" line="617"/>
         <source>Unknown accuracy</source>
         <translation>精度未知</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="757"/>
+        <location filename="../qml/map/MMMapController.qml" line="759"/>
         <source>GPS currently unavailable</source>
         <translation>GPS 目前不可用</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="772"/>
+        <location filename="../qml/map/MMMapController.qml" line="774"/>
         <source>Choose Active Layer</source>
         <translation>选择活动图层</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="799"/>
+        <location filename="../qml/map/MMMapController.qml" line="801"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>在项目中找不到任何可编辑图层。</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="800"/>
+        <location filename="../qml/map/MMMapController.qml" line="802"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>了解如何在您的项目中启用数字化。</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="817"/>
+        <location filename="../qml/map/MMMapController.qml" line="819"/>
         <source>More options</source>
         <translation>更多选项</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="822"/>
+        <location filename="../qml/map/MMMapController.qml" line="824"/>
         <source>Split geometry</source>
         <translation>分割几何</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="834"/>
+        <location filename="../qml/map/MMMapController.qml" line="836"/>
         <source>Redraw geometry</source>
         <translation>重绘几何</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="846"/>
+        <location filename="../qml/map/MMMapController.qml" line="848"/>
         <source>Streaming mode</source>
         <translation>流式传输模式</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="852"/>
+        <location filename="../qml/map/MMMapController.qml" line="854"/>
         <source>Active</source>
         <translation>活动</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="978"/>
+        <location filename="../qml/map/MMMapController.qml" line="980"/>
         <source>Splitting done successfully</source>
         <translation>分割成功</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1069"/>
+        <location filename="../qml/map/MMMapController.qml" line="1071"/>
         <source>Select some point to start editing the geometry</source>
         <translation>选择一些点开始编辑几何图形</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1082"/>
+        <location filename="../qml/map/MMMapController.qml" line="1084"/>
         <source>Record new geometry for the feature</source>
         <translation>为要素记录新的几何形状</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1164"/>
+        <location filename="../qml/map/MMMapController.qml" line="1166"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS 目前不可用</translation>
     </message>
