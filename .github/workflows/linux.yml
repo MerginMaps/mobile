@@ -22,7 +22,6 @@ jobs:
         language:
 #          - 'c-cpp' # Tested as part of the linux.yml
           - 'python'
-          - 'ruby'
 
     steps:
     - name: Checkout repository
