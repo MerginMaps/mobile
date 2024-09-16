@@ -154,7 +154,7 @@
 <context>
     <name>FeaturesModel</name>
     <message>
-        <location filename="../featuresmodel.cpp" line="164"/>
+        <location filename="../featuresmodel.cpp" line="165"/>
         <source>Unknown title</source>
         <translation>Títol desconegut</translation>
     </message>
@@ -736,7 +736,7 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="92"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="96"/>
         <source>Add feature</source>
         <translation>Afegir una característica</translation>
     </message>
@@ -798,28 +798,28 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MMFormPage</name>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="94"/>
+        <location filename="../qml/form/MMFormPage.qml" line="106"/>
         <source>New feature</source>
         <translation>Nova característica</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="95"/>
-        <location filename="../qml/form/MMFormPage.qml" line="198"/>
+        <location filename="../qml/form/MMFormPage.qml" line="107"/>
+        <location filename="../qml/form/MMFormPage.qml" line="210"/>
         <source>Edit feature</source>
         <translation>Editar característica</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="211"/>
+        <location filename="../qml/form/MMFormPage.qml" line="223"/>
         <source>Delete</source>
         <translation>Esborrar</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="220"/>
+        <location filename="../qml/form/MMFormPage.qml" line="232"/>
         <source>Edit geometry</source>
         <translation>Editar geometria</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="456"/>
+        <location filename="../qml/form/MMFormPage.qml" line="444"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>No s&apos;ha pogut desar la característica, si us plau, comproveu tots els camps obligatoris</translation>
     </message>
@@ -1273,92 +1273,97 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MMMapController</name>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="128"/>
+        <location filename="../qml/map/MMMapController.qml" line="101"/>
+        <source>Mark the geometry on the map and click record</source>
+        <translation>Marqueu la geometria al mapa i feu clic a enregistrar</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMMapController.qml" line="130"/>
         <source>Create line to split the selected feature</source>
         <translation>Creeu una línia per dividir la característica seleccionada</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="521"/>
+        <location filename="../qml/map/MMMapController.qml" line="523"/>
         <source>streaming</source>
         <translation>transmissió</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="597"/>
+        <location filename="../qml/map/MMMapController.qml" line="599"/>
         <source>Connecting to %1</source>
         <translation>S&apos;està connectant a %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="611"/>
+        <location filename="../qml/map/MMMapController.qml" line="613"/>
         <source>Connected, no position</source>
         <translation>Connectat, sense posició</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="615"/>
+        <location filename="../qml/map/MMMapController.qml" line="617"/>
         <source>Unknown accuracy</source>
         <translation>Precisió desconeguda</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="757"/>
+        <location filename="../qml/map/MMMapController.qml" line="759"/>
         <source>GPS currently unavailable</source>
         <translation>GPS no disponible ara mateix</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="772"/>
+        <location filename="../qml/map/MMMapController.qml" line="774"/>
         <source>Choose Active Layer</source>
         <translation>Escolliu capa activa</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="799"/>
+        <location filename="../qml/map/MMMapController.qml" line="801"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>No hem pogut trobar cap capa editable en el projecte.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="800"/>
+        <location filename="../qml/map/MMMapController.qml" line="802"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Vegeu com activar la digitalització al vostre projecte.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="817"/>
+        <location filename="../qml/map/MMMapController.qml" line="819"/>
         <source>More options</source>
         <translation>Més opcions</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="822"/>
+        <location filename="../qml/map/MMMapController.qml" line="824"/>
         <source>Split geometry</source>
         <translation>Dividir la geometria</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="834"/>
+        <location filename="../qml/map/MMMapController.qml" line="836"/>
         <source>Redraw geometry</source>
         <translation>Redibuixar la geometria</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="846"/>
+        <location filename="../qml/map/MMMapController.qml" line="848"/>
         <source>Streaming mode</source>
         <translation>Mode de transmissió</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="852"/>
+        <location filename="../qml/map/MMMapController.qml" line="854"/>
         <source>Active</source>
         <translation>Activa</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="978"/>
+        <location filename="../qml/map/MMMapController.qml" line="980"/>
         <source>Splitting done successfully</source>
         <translation>Divisió realitzada amb èxit</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1069"/>
+        <location filename="../qml/map/MMMapController.qml" line="1071"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Seleccioneu algun punt per començar a editar la geometria</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1082"/>
+        <location filename="../qml/map/MMMapController.qml" line="1084"/>
         <source>Record new geometry for the feature</source>
         <translation>Enregistreu una geometria nova per a la característica</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1164"/>
+        <location filename="../qml/map/MMMapController.qml" line="1166"/>
         <source>GPS currently unavailable.</source>
         <translation>El GPS no està disponible ara mateix.</translation>
     </message>
@@ -1921,28 +1926,28 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MMRecordingTools</name>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="197"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="179"/>
         <source>Undo</source>
         <translation>Desfer</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="204"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="186"/>
         <source>Remove</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="218"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="200"/>
         <source>Release</source>
         <translation>Alliberar</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="232"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="214"/>
         <source>Add</source>
         <translation>Afegir</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="249"/>
-        <location filename="../qml/map/MMRecordingTools.qml" line="277"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="231"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="259"/>
         <source>Record</source>
         <translation>Enregistrar</translation>
     </message>
@@ -2240,22 +2245,22 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MMSplittingTools</name>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="88"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="91"/>
         <source>Undo</source>
         <translation>Desfer</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="94"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="97"/>
         <source>Add point</source>
         <translation>Afegir punt</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="100"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="103"/>
         <source>Done</source>
         <translation>Fet</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="110"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="113"/>
         <source>You need to add at least 2 points.</source>
         <translation>Heu d&apos;afegir almenys 2 punts.</translation>
     </message>
@@ -2789,12 +2794,12 @@ només permet fins a %1 projectes baixats.</translation>
         <translation>Posició desconeguda</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="532"/>
+        <location filename="../main.cpp" line="539"/>
         <source>Report submitted. Please contact us on %1</source>
         <translation>Informe enviat. Si us plau, poseu-vos en contacte amb nosaltres a %1</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="537"/>
+        <location filename="../main.cpp" line="544"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>No s&apos;ha pogut enviar l&apos;informe. Comproveu la vostra connexió a Internet.</translation>
     </message>
