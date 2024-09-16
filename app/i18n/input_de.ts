@@ -152,6 +152,14 @@
     </message>
 </context>
 <context>
+    <name>FeaturesModel</name>
+    <message>
+        <location filename="../featuresmodel.cpp" line="165"/>
+        <source>Unknown title</source>
+        <translation>Unbekannter Titel</translation>
+    </message>
+</context>
+<context>
     <name>FieldsModel</name>
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
@@ -403,17 +411,17 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMAccountController</name>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="98"/>
+        <location filename="../qml/account/MMAccountController.qml" line="80"/>
         <source>Please update the app to use the latest features.</source>
         <translation>Bitte aktualisieren Sie Mergin Maps, um die neuesten Funktionen nutzen zu können.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="102"/>
+        <location filename="../qml/account/MMAccountController.qml" line="84"/>
         <source>Server is currently unavailable, check your connection or try again later.</source>
         <translation>Der Server ist momentan nicht erreichbar. Überprüfen Sie Ihre Internetverbindung und versuchen Sie es später erneut.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="156"/>
+        <location filename="../qml/account/MMAccountController.qml" line="138"/>
         <source>I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Ich akzeptiere die %1Nutzungsbedingungen%3 und %2Datenschutzrichtlinien%3 von Mergin Maps.</translation>
     </message>
@@ -730,7 +738,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="92"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="96"/>
         <source>Add feature</source>
         <translation>Objekt hinzufügen</translation>
     </message>
@@ -792,28 +800,28 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMFormPage</name>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="86"/>
+        <location filename="../qml/form/MMFormPage.qml" line="106"/>
         <source>New feature</source>
         <translation>Neues Objekt</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="87"/>
-        <location filename="../qml/form/MMFormPage.qml" line="187"/>
+        <location filename="../qml/form/MMFormPage.qml" line="107"/>
+        <location filename="../qml/form/MMFormPage.qml" line="210"/>
         <source>Edit feature</source>
         <translation>Bearbeite Objekt</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="200"/>
+        <location filename="../qml/form/MMFormPage.qml" line="223"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="209"/>
+        <location filename="../qml/form/MMFormPage.qml" line="232"/>
         <source>Edit geometry</source>
         <translation>Geometrie bearbeiten</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="453"/>
+        <location filename="../qml/form/MMFormPage.qml" line="444"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Objekt konnte nicht gespeichert werden, bitte überprüfen Sie alle Pflichtfelder</translation>
     </message>
@@ -1267,92 +1275,97 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMMapController</name>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="128"/>
+        <location filename="../qml/map/MMMapController.qml" line="101"/>
+        <source>Mark the geometry on the map and click record</source>
+        <translation>Setzen Sie einen Punkt auf der Karte und klicken Sie danach auf &quot;Erfassen&quot;</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMMapController.qml" line="130"/>
         <source>Create line to split the selected feature</source>
         <translation>Linie erstellen, um das ausgewählte Feature zu teilen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="521"/>
+        <location filename="../qml/map/MMMapController.qml" line="523"/>
         <source>streaming</source>
         <translation>fortlaufende Aufzeichnung</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="597"/>
+        <location filename="../qml/map/MMMapController.qml" line="599"/>
         <source>Connecting to %1</source>
         <translation>Verbindet mit %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="611"/>
+        <location filename="../qml/map/MMMapController.qml" line="613"/>
         <source>Connected, no position</source>
         <translation>Verbunden, keine Position</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="615"/>
+        <location filename="../qml/map/MMMapController.qml" line="617"/>
         <source>Unknown accuracy</source>
         <translation>Unbekannte Genauigkeit</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="757"/>
+        <location filename="../qml/map/MMMapController.qml" line="759"/>
         <source>GPS currently unavailable</source>
         <translation>GPS derzeit nicht verfügbar.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="772"/>
+        <location filename="../qml/map/MMMapController.qml" line="774"/>
         <source>Choose Active Layer</source>
         <translation>Aktiven Layer wählen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="799"/>
+        <location filename="../qml/map/MMMapController.qml" line="801"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>Konnte keinen editierbaren Layer im Projekt finden.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="800"/>
+        <location filename="../qml/map/MMMapController.qml" line="802"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Sehen Sie, wie Sie das Digitalisieren in Ihrem Projekt aktivieren können.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="817"/>
+        <location filename="../qml/map/MMMapController.qml" line="819"/>
         <source>More options</source>
         <translation>Mehr Optionen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="822"/>
+        <location filename="../qml/map/MMMapController.qml" line="824"/>
         <source>Split geometry</source>
         <translation>Geometrie teilen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="834"/>
+        <location filename="../qml/map/MMMapController.qml" line="836"/>
         <source>Redraw geometry</source>
         <translation>Geometrie neu zeichnen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="846"/>
+        <location filename="../qml/map/MMMapController.qml" line="848"/>
         <source>Streaming mode</source>
         <translation>Fortlaufende Aufzeichnung</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="852"/>
+        <location filename="../qml/map/MMMapController.qml" line="854"/>
         <source>Active</source>
         <translation>Aktiv</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="978"/>
+        <location filename="../qml/map/MMMapController.qml" line="980"/>
         <source>Splitting done successfully</source>
         <translation>Aufteilung erfolgreich durchgeführt</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1069"/>
+        <location filename="../qml/map/MMMapController.qml" line="1071"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Wähle einen Punkt aus, um mit der Bearbeitung der Geometrie zu beginnen.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1082"/>
+        <location filename="../qml/map/MMMapController.qml" line="1084"/>
         <source>Record new geometry for the feature</source>
         <translation>Neue Geometrie für das Feature erfassen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1164"/>
+        <location filename="../qml/map/MMMapController.qml" line="1166"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS derzeit nicht verfügbar.</translation>
     </message>
@@ -1624,47 +1637,47 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMProjectDelegate</name>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="140"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="142"/>
         <source>Synchronising project changes</source>
         <translation>Synchronisiere Änderungen im Projekt</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="188"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="190"/>
         <source>Please don&apos;t close the app.</source>
         <translation>Bitte App nicht schließen</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="211"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="213"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="242"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="244"/>
         <source>More options</source>
         <translation>Mehr Optionen</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="286"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="288"/>
         <source>Download</source>
         <translation>Herunterladen</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="291"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="293"/>
         <source>Synchronise project</source>
         <translation>Projekt synchronisieren</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="296"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="298"/>
         <source>Local changes</source>
         <translation>Änderungen</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="301"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="303"/>
         <source>Remove from device</source>
         <translation>Vom Gerät entfernen</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="306"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="308"/>
         <source>Upload</source>
         <translation>Hochladen</translation>
     </message>
@@ -1915,28 +1928,28 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMRecordingTools</name>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="197"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="179"/>
         <source>Undo</source>
         <translation>Rückgängig</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="204"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="186"/>
         <source>Remove</source>
         <translation>Entfernen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="218"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="200"/>
         <source>Release</source>
         <translation>Freigeben</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="232"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="214"/>
         <source>Add</source>
         <translation>Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="249"/>
-        <location filename="../qml/map/MMRecordingTools.qml" line="277"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="231"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="259"/>
         <source>Record</source>
         <translation>Erfassen</translation>
     </message>
@@ -2233,22 +2246,22 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMSplittingTools</name>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="88"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="91"/>
         <source>Undo</source>
         <translation>Rückgängig</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="94"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="97"/>
         <source>Add point</source>
         <translation>Punkt hinzufügen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="100"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="103"/>
         <source>Done</source>
         <translation>Erledigt</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="110"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="113"/>
         <source>You need to add at least 2 points.</source>
         <translation>Sie müssen mindestens 2 Punkte hinzufügen.</translation>
     </message>
@@ -2447,32 +2460,37 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <translation>Wasserversorgung</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="44"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="42"/>
+        <source>Student/University</source>
+        <translation>Student/Universität</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="45"/>
         <source>Other</source>
         <translation>Andere</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="53"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="54"/>
         <source>Specify your industry</source>
         <translation>Bitte geben Sie Ihre Branche an</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="173"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="174"/>
         <source>Continue</source>
         <translation>Fortfahren</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="195"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="196"/>
         <source>Crafting your workspace: let us know your industry</source>
         <translation>Erstellen Ihres Arbeitsbereichs: Teilen Sie uns Ihre Branche mit.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="196"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="197"/>
         <source>Please specify the industry</source>
         <translation>Bitte geben Sie Ihre Branche an</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="211"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="212"/>
         <source>Industry</source>
         <translation>Branche</translation>
     </message>
@@ -2541,17 +2559,17 @@ only allows up to %1 downloaded projects.</source>
         <translation>Arbeitsbereich wurde erstellt</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1685"/>
+        <location filename="../../core/merginapi.cpp" line="1690"/>
         <source>Project detached from the server</source>
         <translation>Projekt vom Server getrennt</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3849"/>
+        <location filename="../../core/merginapi.cpp" line="3854"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Der Name des Arbeitsbereiches enthält ungültige Zeichen</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3915"/>
+        <location filename="../../core/merginapi.cpp" line="3920"/>
         <source>Workspace %1 already exists</source>
         <translation>Arbeitsbereich %1 ist bereits vorhanden</translation>
     </message>
@@ -2776,12 +2794,12 @@ only allows up to %1 downloaded projects.</source>
         <translation>Unbekannter Fix</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="532"/>
+        <location filename="../main.cpp" line="539"/>
         <source>Report submitted. Please contact us on %1</source>
         <translation>Bericht gesendet. Kontaktiere uns unter %1</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="537"/>
+        <location filename="../main.cpp" line="544"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Bericht konnte nicht gesendet werden. Bitte Internetverbindung überprüfen.</translation>
     </message>
