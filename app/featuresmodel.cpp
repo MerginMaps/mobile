@@ -363,6 +363,7 @@ void FeaturesModel::setLayer( QgsVectorLayer *newLayer )
     }
 
     mLayer = newLayer;
+    setupSorting();
     emit layerChanged( mLayer );
 
     if ( mLayer )
