@@ -28,6 +28,8 @@
     <file>input_fr.qm</file> 
     <file>input_az_AZ.qm</file> 
     <file>input_hu.qm</file> 
-    <file>input_sk_SK.qm</file> 
+    <file>input_sk_SK.qm</file>
+    <file>input_id_ID.qm</file>
+    <file>input_vi_VN.qm</file>
   </qresource> 
 </RCC>
