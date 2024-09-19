@@ -4,28 +4,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="288"/>
+        <location filename="../activeproject.cpp" line="263"/>
         <source>General</source>
         <translation>Umum</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="288"/>
+        <location filename="../activeproject.cpp" line="263"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>Proyek memiliki CRS yang tidak valid. Peta dan alat memiliki kegiatan yang tidak diketahui!</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="300"/>
-        <location filename="../activeproject.cpp" line="309"/>
+        <location filename="../activeproject.cpp" line="275"/>
+        <location filename="../activeproject.cpp" line="284"/>
         <source>Layer</source>
         <translation>Lapisan</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="300"/>
+        <location filename="../activeproject.cpp" line="275"/>
         <source>Unable to load source </source>
         <translation>Tidak dapat memuat sumber</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="309"/>
+        <location filename="../activeproject.cpp" line="284"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>Lapisan memiliki CRS yang tidak valid. Alat perekam memiliki kegiatan yang tidak diketahui.</translation>
     </message>
@@ -92,22 +92,22 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="252"/>
+        <location filename="../androidutils.cpp" line="263"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>Izin penyimpanan ditolak secara permanen, izinkan dalam pengaturan untuk memuat gambar dari galeri</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="256"/>
+        <location filename="../androidutils.cpp" line="267"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
         <translation>Mergin Maps memerlukan izin penyimpanan untuk memuat gambar dari galeri</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="274"/>
+        <location filename="../androidutils.cpp" line="285"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Izin kamera ditolak secara permanen, harap izinkan di pengaturan</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="278"/>
+        <location filename="../androidutils.cpp" line="289"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Kami memerlukan izin kamera untuk mengambil foto</translation>
     </message>
@@ -154,6 +154,14 @@
     </message>
 </context>
 <context>
+    <name>FeaturesModel</name>
+    <message>
+        <location filename="../featuresmodel.cpp" line="165"/>
+        <source>Unknown title</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FieldsModel</name>
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
@@ -193,119 +201,119 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="213"/>
         <source>just now</source>
         <translation>baru saja</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 minutes ago</source>
         <translation>%1 menit yang lalu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 minute ago</source>
         <translation>%1 menit yang lalu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="221"/>
+        <location filename="../inpututils.cpp" line="223"/>
         <source>%1 hours ago</source>
         <translation>%1 jam yang lalu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="221"/>
+        <location filename="../inpututils.cpp" line="223"/>
         <source>%1 hour ago</source>
         <translation>%1 jam yang lalu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="225"/>
-        <location filename="../inpututils.cpp" line="230"/>
+        <location filename="../inpututils.cpp" line="227"/>
+        <location filename="../inpututils.cpp" line="232"/>
         <source>%1 days ago</source>
         <translation>%1 hari yang lalu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="225"/>
-        <location filename="../inpututils.cpp" line="230"/>
+        <location filename="../inpututils.cpp" line="227"/>
+        <location filename="../inpututils.cpp" line="232"/>
         <source>%1 day ago</source>
         <translation>%1 hari yang lalu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="235"/>
+        <location filename="../inpututils.cpp" line="237"/>
         <source>%1 weeks ago</source>
         <translation>%1 minggu yang lalu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="235"/>
+        <location filename="../inpututils.cpp" line="237"/>
         <source>%1 week ago</source>
         <translation>%1 minggu yang lalu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="240"/>
+        <location filename="../inpututils.cpp" line="242"/>
         <source>%1 months ago</source>
         <translation>%1 bulan yang lalu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="240"/>
+        <location filename="../inpututils.cpp" line="242"/>
         <source>%1 month ago</source>
         <translation>%1 bulan yang lalu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="245"/>
+        <location filename="../inpututils.cpp" line="247"/>
         <source>%1 years ago</source>
         <translation>%1 tahun yang lalu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="245"/>
+        <location filename="../inpututils.cpp" line="247"/>
         <source>%1 year ago</source>
         <translation>%1 tahun yang lalu</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1479"/>
+        <location filename="../inpututils.cpp" line="1461"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>resolusi layar: %1x%2 piksel
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1480"/>
+        <location filename="../inpututils.cpp" line="1462"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI layar: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1481"/>
+        <location filename="../inpututils.cpp" line="1463"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>ukuran layar: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1482"/>
+        <location filename="../inpututils.cpp" line="1464"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>rasio piksel perangkat yang dilaporkan: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1483"/>
+        <location filename="../inpututils.cpp" line="1465"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>rasio piksel perangkat yang dihitung: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1484"/>
+        <location filename="../inpututils.cpp" line="1466"/>
         <source>used dp scale: %1</source>
         <translation>skala dp yang digunakan: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2040"/>
+        <location filename="../inpututils.cpp" line="1995"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Anda perlu menambahkan setidaknya %1 titik ke setiap bagian.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2044"/>
+        <location filename="../inpututils.cpp" line="1999"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Anda perlu menambahkan setidaknya %1 titik.</translation>
     </message>
@@ -404,17 +412,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMAccountController</name>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="98"/>
+        <location filename="../qml/account/MMAccountController.qml" line="80"/>
         <source>Please update the app to use the latest features.</source>
         <translation>Harap perbarui aplikasi untuk menggunakan fitur terbaru.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="102"/>
-        <source>Server is currently unavailable - please try again later.</source>
-        <translation>Server saat ini tidak tersedia - coba lagi nanti.</translation>
+        <location filename="../qml/account/MMAccountController.qml" line="84"/>
+        <source>Server is currently unavailable, check your connection or try again later.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="150"/>
+        <location filename="../qml/account/MMAccountController.qml" line="138"/>
         <source>I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Saya menyetujui Mergin Maps %1Syarat dan Ketentuan%3 dan %2Kebijakan Privasi%3</translation>
     </message>
@@ -445,6 +453,16 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/account/MMAccountPage.qml" line="185"/>
         <source>Sign out</source>
         <translation>Keluar</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMAccountPage.qml" line="197"/>
+        <source>Close account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMAccountPage.qml" line="198"/>
+        <source>This will delete all your data</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -719,42 +737,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="57"/>
-        <source>Filter...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="66"/>
-        <source>All</source>
-        <translation>Semua</translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="70"/>
-        <source>Not collected yet</source>
-        <translation>Belum dikumpulkan</translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="74"/>
-        <source>Review Pending</source>
-        <translation>Tinjauan Tertunda</translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="78"/>
-        <source>Review Accepted</source>
-        <translation>Tinjauan Diterima</translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="82"/>
-        <source>Review Rejected</source>
-        <translation>Tinjauan Ditolak</translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="91"/>
-        <source>Show:</source>
-        <translation>Menunjukkan:</translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="148"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="96"/>
         <source>Add feature</source>
         <translation>Tambahkan fitur</translation>
     </message>
@@ -770,14 +753,6 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="105"/>
         <source>Add feature</source>
         <translation>Tambahkan fitur</translation>
-    </message>
-</context>
-<context>
-    <name>MMFormController</name>
-    <message>
-        <location filename="../qml/form/MMFormController.qml" line="199"/>
-        <source>GPS accuracy is low</source>
-        <translation>Akurasi GPS rendah</translation>
     </message>
 </context>
 <context>
@@ -824,28 +799,28 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFormPage</name>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="86"/>
+        <location filename="../qml/form/MMFormPage.qml" line="106"/>
         <source>New feature</source>
         <translation>Fitur baru</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="87"/>
-        <location filename="../qml/form/MMFormPage.qml" line="187"/>
+        <location filename="../qml/form/MMFormPage.qml" line="107"/>
+        <location filename="../qml/form/MMFormPage.qml" line="210"/>
         <source>Edit feature</source>
         <translation>Edit fitur</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="201"/>
-        <source>Capture boundary</source>
-        <translation>Tangkap Poligon</translation>
+        <location filename="../qml/form/MMFormPage.qml" line="223"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="209"/>
+        <location filename="../qml/form/MMFormPage.qml" line="232"/>
         <source>Edit geometry</source>
         <translation>Edit geometri</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="445"/>
+        <location filename="../qml/form/MMFormPage.qml" line="444"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Fitur tidak dapat disimpan, harap periksa semua bidang yang wajib diisi</translation>
     </message>
@@ -853,27 +828,27 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFormPhotoEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="80"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="81"/>
         <source>Photo is missing.</source>
         <translation>Foto hilang.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="105"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="108"/>
         <source>Open Image</source>
         <translation>Buka Gambar</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="107"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="110"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>File gambar (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="233"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="234"/>
         <source>Could not create directory %1.</source>
         <translation>Tidak dapat membuat direktori %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="305"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="306"/>
         <source>Failed to process the image</source>
         <translation>Gagal memproses gambar</translation>
     </message>
@@ -881,12 +856,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFormRelationEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="161"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="164"/>
         <source> more</source>
         <translation> Pilihan Lainnya</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="204"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="207"/>
         <source>Add feature</source>
         <translation>Tambahkan fitur</translation>
     </message>
@@ -894,12 +869,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFormRelationReferenceEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="99"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="101"/>
         <source>Change link</source>
         <translation>Ubah tautan</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="102"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="104"/>
         <source>Unlink feature</source>
         <translation>Putuskan tautan fitur</translation>
     </message>
@@ -1271,29 +1246,27 @@ Won&apos;t be added to the project.</source>
         <translation>Masuk</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="144"/>
-        <location filename="../qml/account/MMLoginPage.qml" line="208"/>
-        <source>Production Server</source>
-        <translation>Server Produksi</translation>
+        <location filename="../qml/account/MMLoginPage.qml" line="125"/>
+        <source>Don&apos;t have an account?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="144"/>
-        <location filename="../qml/account/MMLoginPage.qml" line="221"/>
-        <source>Test Server</source>
-        <translation>Server Uji</translation>
+        <location filename="../qml/account/MMLoginPage.qml" line="132"/>
+        <source>Sign up</source>
+        <translation>Mendaftar</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMLoginPage.qml" line="202"/>
+        <source>Server address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMLoginPage.qml" line="218"/>
+        <source>Confirm</source>
+        <translation>Mengonfirmasi</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="183"/>
-        <source>WARNING!</source>
-        <translation>PERINGATAN!</translation>
-    </message>
-    <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="184"/>
-        <source>All local projects will be DELETED when changing between servers!</source>
-        <translation>Semua proyek lokal akan DIHAPUS saat berpindah antar server!</translation>
-    </message>
-    <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="163"/>
         <source>Change server</source>
         <translation>Ganti server</translation>
     </message>
@@ -1301,92 +1274,97 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMMapController</name>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="119"/>
+        <location filename="../qml/map/MMMapController.qml" line="101"/>
+        <source>Mark the geometry on the map and click record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMMapController.qml" line="130"/>
         <source>Create line to split the selected feature</source>
         <translation>Buat garis untuk membagi fitur yang dipilih</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="512"/>
+        <location filename="../qml/map/MMMapController.qml" line="523"/>
         <source>streaming</source>
         <translation>Penyiaran</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="588"/>
+        <location filename="../qml/map/MMMapController.qml" line="599"/>
         <source>Connecting to %1</source>
         <translation>Menghubungkan ke %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="602"/>
+        <location filename="../qml/map/MMMapController.qml" line="613"/>
         <source>Connected, no position</source>
         <translation>Terhubung, tidak ada posisi</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="606"/>
+        <location filename="../qml/map/MMMapController.qml" line="617"/>
         <source>Unknown accuracy</source>
         <translation>Akurasi tidak diketahui</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="750"/>
+        <location filename="../qml/map/MMMapController.qml" line="759"/>
         <source>GPS currently unavailable</source>
         <translation>GPS saat ini tidak tersedia</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="765"/>
+        <location filename="../qml/map/MMMapController.qml" line="774"/>
         <source>Choose Active Layer</source>
         <translation>Pilih Lapisan Aktif</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="792"/>
+        <location filename="../qml/map/MMMapController.qml" line="801"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>Tidak dapat menemukan lapisan apa pun yang dapat diedit dalam proyek.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="793"/>
+        <location filename="../qml/map/MMMapController.qml" line="802"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Lihat cara mengaktifkan digitalisasi di proyek Anda.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="810"/>
+        <location filename="../qml/map/MMMapController.qml" line="819"/>
         <source>More options</source>
         <translation>Opsi lainnya</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="815"/>
+        <location filename="../qml/map/MMMapController.qml" line="824"/>
         <source>Split geometry</source>
         <translation>Geometri terpisah</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="827"/>
+        <location filename="../qml/map/MMMapController.qml" line="836"/>
         <source>Redraw geometry</source>
         <translation>Gambar ulang geometri</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="839"/>
+        <location filename="../qml/map/MMMapController.qml" line="848"/>
         <source>Streaming mode</source>
         <translation>Mode siaran</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="845"/>
+        <location filename="../qml/map/MMMapController.qml" line="854"/>
         <source>Active</source>
         <translation>Aktif</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="971"/>
+        <location filename="../qml/map/MMMapController.qml" line="980"/>
         <source>Splitting done successfully</source>
         <translation>Pemisahan berhasil dilakukan</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1062"/>
+        <location filename="../qml/map/MMMapController.qml" line="1071"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Pilih beberapa titik untuk mulai mengedit geometri</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1080"/>
+        <location filename="../qml/map/MMMapController.qml" line="1084"/>
         <source>Record new geometry for the feature</source>
         <translation>Rekam geometri baru untuk fitur tersebut</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1162"/>
+        <location filename="../qml/map/MMMapController.qml" line="1166"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS saat ini tidak tersedia.</translation>
     </message>
@@ -1512,7 +1490,7 @@ Won&apos;t be added to the project.</source>
         <translation>Ambil gambar</translation>
     </message>
     <message>
-        <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="93"/>
+        <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="95"/>
         <source>From gallery</source>
         <translation>Dari galeri</translation>
     </message>
@@ -1632,24 +1610,25 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMProjectController</name>
     <message>
-        <location filename="../qml/project/MMProjectController.qml" line="207"/>
-        <location filename="../qml/project/MMProjectController.qml" line="380"/>
+        <location filename="../qml/project/MMProjectController.qml" line="204"/>
+        <location filename="../qml/project/MMProjectController.qml" line="377"/>
         <source>Home</source>
         <translation>Rumah</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectController.qml" line="210"/>
-        <location filename="../qml/project/MMProjectController.qml" line="389"/>
+        <location filename="../qml/project/MMProjectController.qml" line="207"/>
+        <location filename="../qml/project/MMProjectController.qml" line="386"/>
         <source>Projects</source>
         <translation>Proyek</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectController.qml" line="212"/>
+        <location filename="../qml/project/MMProjectController.qml" line="209"/>
+        <location filename="../qml/project/MMProjectController.qml" line="395"/>
         <source>Explore</source>
         <translation>Mengeksplorasi</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectController.qml" line="264"/>
+        <location filename="../qml/project/MMProjectController.qml" line="261"/>
         <source>Unsupported server, please contact your server administrator.</source>
         <translation>Server tidak didukung, harap hubungi administrator server Anda.</translation>
     </message>
@@ -1657,47 +1636,47 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMProjectDelegate</name>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="140"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="142"/>
         <source>Synchronising project changes</source>
         <translation>Menyinkronkan perubahan proyek</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="188"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="190"/>
         <source>Please don&apos;t close the app.</source>
         <translation>Tolong jangan tutup aplikasinya.</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="211"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="213"/>
         <source>Stop</source>
         <translation>Berhenti</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="242"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="244"/>
         <source>More options</source>
         <translation>Opsi lainnya</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="286"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="288"/>
         <source>Download</source>
         <translation>Unduh</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="291"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="293"/>
         <source>Synchronise project</source>
         <translation>Sinkronisasi proyek</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="296"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="298"/>
         <source>Local changes</source>
         <translation>Perubahan lokal</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="301"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="303"/>
         <source>Remove from device</source>
         <translation>Hapus dari perangkat</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="306"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="308"/>
         <source>Upload</source>
         <translation>Mengunggah</translation>
     </message>
@@ -1784,32 +1763,32 @@ Won&apos;t be added to the project.</source>
         <translation>Tidak dapat menyinkronkan proyek, pastikan Anda sudah masuk dan memiliki hak yang memadai.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="207"/>
+        <location filename="../qml/project/MMProjectList.qml" line="212"/>
         <source>Create project</source>
         <translation>Buat proyek</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="229"/>
+        <location filename="../qml/project/MMProjectList.qml" line="237"/>
         <source>Get started with Mergin Maps</source>
         <translation>Memulai dengan Mergin Maps</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="230"/>
+        <location filename="../qml/project/MMProjectList.qml" line="238"/>
         <source>First step is to create your brand new project.</source>
         <translation>Langkah pertama adalah membuat proyek baru Anda.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="238"/>
+        <location filename="../qml/project/MMProjectList.qml" line="246"/>
         <source>Unable to get the list of projects.</source>
         <translation>Tidak dapat memperoleh daftar proyek.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="238"/>
+        <location filename="../qml/project/MMProjectList.qml" line="246"/>
         <source>No projects found</source>
         <translation>Tidak ada proyek yang ditemukan</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="267"/>
+        <location filename="../qml/project/MMProjectList.qml" line="275"/>
         <source>Retry</source>
         <translation>Mencoba kembali</translation>
     </message>
@@ -1948,35 +1927,30 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMRecordingTools</name>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="197"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="179"/>
         <source>Undo</source>
         <translation>batalkan</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="204"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="186"/>
         <source>Remove</source>
         <translation>Menghapus</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="218"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="200"/>
         <source>Release</source>
         <translation>Melepaskan</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="232"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="214"/>
         <source>Add</source>
         <translation>Menambahkan</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="249"/>
-        <location filename="../qml/map/MMRecordingTools.qml" line="277"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="231"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="259"/>
         <source>Record</source>
         <translation>Catatan</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="322"/>
-        <source>GPS accuracy is low</source>
-        <translation>Akurasi GPS rendah</translation>
     </message>
 </context>
 <context>
@@ -2062,18 +2036,18 @@ Won&apos;t be added to the project.</source>
         <translation>GPS</translation>
     </message>
     <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
+        <source>GPS accuracy threshold</source>
+        <translation>Ambang batas akurasi GPS</translation>
+    </message>
+    <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="64"/>
         <source>Determines when the accuracy indicator turns yellow</source>
         <translation>Menentukan kapan indikator akurasi berubah menjadi kuning</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
-        <source>GPS accuracy treshold</source>
-        <translation>Ambang batas akurasi GPS</translation>
-    </message>
-    <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
-        <source>GPS accuracy treshold, in meters</source>
+        <source>GPS accuracy threshold, in meters</source>
         <translation>Ambang batas keakuratan GPS, dalam meter</translation>
     </message>
     <message>
@@ -2162,37 +2136,47 @@ Won&apos;t be added to the project.</source>
         <translation>Setiap kali Anda menyimpan perubahan, aplikasi akan melakukan sinkronisasi secara otomatis</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="178"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="179"/>
+        <source>Auto-lock position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="180"/>
+        <source>Each time you start recording, the app centers to GPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="189"/>
         <source>General</source>
         <translation>Umum</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="189"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="200"/>
         <source>About</source>
         <translation>Tentang</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="199"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="210"/>
         <source>Changelog</source>
         <translation>log perubahan</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="209"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="220"/>
         <source>Help</source>
         <translation>Bantuan</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="219"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="230"/>
         <source>Privacy policy</source>
         <translation>Kebijakan privasi</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="229"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="240"/>
         <source>Terms of service</source>
         <translation>Persyaratan layanan</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="239"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="250"/>
         <source>Diagnostic log</source>
         <translation>Catatan diagnostik</translation>
     </message>
@@ -2262,22 +2246,22 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMSplittingTools</name>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="88"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="91"/>
         <source>Undo</source>
         <translation>batalkan</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="94"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="97"/>
         <source>Add point</source>
         <translation>Tambahkan titik</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="100"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="103"/>
         <source>Done</source>
         <translation>Selesai</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="110"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="113"/>
         <source>You need to add at least 2 points.</source>
         <translation>Anda perlu menambahkan setidaknya 2 titik.</translation>
     </message>
@@ -2352,29 +2336,6 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
-    <name>MMStreamingModeTimerDialog</name>
-    <message>
-        <location filename="../qml/dialogs/MMStreamingModeTimerDialog.qml" line="20"/>
-        <source>Streaming mode</source>
-        <translation>Mode siaran</translation>
-    </message>
-    <message>
-        <location filename="../qml/dialogs/MMStreamingModeTimerDialog.qml" line="21"/>
-        <source>You have been capturing this polygon for too long. Do you want to continue?</source>
-        <translation>Anda sudah terlalu lama menangkap poligon ini. Apakah Anda ingin melanjutkan?</translation>
-    </message>
-    <message>
-        <location filename="../qml/dialogs/MMStreamingModeTimerDialog.qml" line="22"/>
-        <source>Continue streaming</source>
-        <translation>Lanjutkan streaming</translation>
-    </message>
-    <message>
-        <location filename="../qml/dialogs/MMStreamingModeTimerDialog.qml" line="23"/>
-        <source>Stop streaming mode</source>
-        <translation>Hentikan mode siaran</translation>
-    </message>
-</context>
-<context>
     <name>MMSwitchWorkspacePage</name>
     <message>
         <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="34"/>
@@ -2423,7 +2384,7 @@ Won&apos;t be added to the project.</source>
         <translation>Opsi lainnya</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMToolbar.qml" line="136"/>
+        <location filename="../qml/components/MMToolbar.qml" line="135"/>
         <source>More</source>
         <translation>Lainnya</translation>
     </message>
@@ -2499,32 +2460,37 @@ Won&apos;t be added to the project.</source>
         <translation>Penggunaan air</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="44"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="42"/>
+        <source>Student/University</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="45"/>
         <source>Other</source>
         <translation>Lainnya</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="53"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="54"/>
         <source>Specify your industry</source>
         <translation>Tentukan industri Anda</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="173"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="174"/>
         <source>Continue</source>
         <translation>Melanjutkan</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="195"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="196"/>
         <source>Crafting your workspace: let us know your industry</source>
         <translation>Merancang ruang kerja Anda: beri tahu kami industri Anda</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="196"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="197"/>
         <source>Please specify the industry</source>
         <translation>Silakan tentukan industrinya</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="211"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="212"/>
         <source>Industry</source>
         <translation>Industri</translation>
     </message>
@@ -2593,17 +2559,17 @@ only allows up to %1 downloaded projects.</source>
         <translation>Ruang kerja dibuat</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1685"/>
+        <location filename="../../core/merginapi.cpp" line="1690"/>
         <source>Project detached from the server</source>
         <translation>Proyek terlepas dari server</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3845"/>
+        <location filename="../../core/merginapi.cpp" line="3854"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Nama ruang kerja berisi karakter yang tidak valid</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3911"/>
+        <location filename="../../core/merginapi.cpp" line="3920"/>
         <source>Workspace %1 already exists</source>
         <translation>Ruang kerja %1 sudah ada</translation>
     </message>
@@ -2619,14 +2585,6 @@ only allows up to %1 downloaded projects.</source>
         <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
         <source>Failed to determine changes</source>
         <translation>Gagal menentukan perubahan</translation>
-    </message>
-</context>
-<context>
-    <name>NotificationModel</name>
-    <message>
-        <location filename="../notificationmodel.h" line="125"/>
-        <source>You are using the Test Server!</source>
-        <translation>Anda menggunakan Server Uji!</translation>
     </message>
 </context>
 <context>
@@ -2836,12 +2794,12 @@ only allows up to %1 downloaded projects.</source>
         <translation>Perbaikan tidak diketahui</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="546"/>
+        <location filename="../main.cpp" line="539"/>
         <source>Report submitted. Please contact us on %1</source>
         <translation>Laporan diserahkan. Silakan hubungi kami di %1</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="551"/>
+        <location filename="../main.cpp" line="544"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Gagal mengirimkan laporan. Silakan periksa koneksi internet Anda.</translation>
     </message>
@@ -2849,81 +2807,6 @@ only allows up to %1 downloaded projects.</source>
         <location filename="../../core/merginapi.cpp" line="41"/>
         <source>Synchronisation canceled</source>
         <translation>Sinkronisasi dibatalkan</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="58"/>
-        <source>Farm has no polygon</source>
-        <translation>Kebun tidak memiliki poligon</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="91"/>
-        <source>Polygon should not be outside of the country boundary</source>
-        <translation>Poligon tidak boleh berada di luar batas negara</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="114"/>
-        <source>Polygon is outside the cluster area</source>
-        <translation>Poligon berada di luar area cluster</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="138"/>
-        <source>Polygon should not overlap with another farm &gt;10%</source>
-        <translation>Poligon tidak boleh tumpang tindih dengan lahan lain &gt;10%</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="152"/>
-        <source>Polygon should not be less than 0.01 Ha</source>
-        <translation>Poligon tidak boleh kurang dari 0,01 Ha</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="157"/>
-        <source>Polygon should not be greater than 600 Ha</source>
-        <translation>Poligon tidak boleh lebih besar dari 600 Ha</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="165"/>
-        <source>Polygon can’t be accepted if it has 2 or 3 boundary points</source>
-        <translation>Poligon tidak dapat diterima jika mempunyai 2 atau 3 titik batas</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="174"/>
-        <source>Polygon should not have duplicate boundary points</source>
-        <translation>Poligon tidak boleh memiliki titik batas yang duplikat</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="179"/>
-        <source>Polygon should not be open</source>
-        <translation>Poligon tidak boleh terbuka</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="216"/>
-        <source>Polygon should have a mapping accuracy of 20 meters or less</source>
-        <translation>Poligon harus memiliki akurasi pemetaan 20 meter atau kurang</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="224"/>
-        <source>Polygon should not be a multi-polygon</source>
-        <translation>Poligon tidak boleh berupa multi-poligon</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="229"/>
-        <source>Polygon should not have self-intersecting boundary segments</source>
-        <translation>Poligon tidak boleh memiliki segmen batas yang berpotongan sendiri</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="279"/>
-        <source>Polygon is more than 50kms from the previous site of the farm ID</source>
-        <translation>Polygon berjarak lebih dari 50 km dari lokasi ID pertanian sebelumnya</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="295"/>
-        <source>No QC errors</source>
-        <translation>Tidak ada kesalahan dalam Pengecekkan kualitas</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="299"/>
-        <source>QC errors found:</source>
-        <translation>Kesalahan dalam pengecekkan kualitas ditemukan:</translation>
     </message>
 </context>
 <context>
@@ -2942,98 +2825,108 @@ only allows up to %1 downloaded projects.</source>
         <translation>Sinkronisasi</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="281"/>
+        <location filename="../qml/main.qml" line="268"/>
+        <source>Add</source>
+        <translation>Menambahkan</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="276"/>
+        <source>No editable layers found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="282"/>
+        <source>Layers</source>
+        <translation>Lapisan</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="291"/>
         <source>Projects</source>
         <translation>Proyek</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="289"/>
+        <location filename="../qml/main.qml" line="299"/>
         <source>Zoom to project</source>
         <translation>Perbesar untuk memproyeksikan</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="298"/>
+        <location filename="../qml/main.qml" line="308"/>
         <source>Map themes</source>
         <translation>Tema peta</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="309"/>
+        <location filename="../qml/main.qml" line="319"/>
         <source>Position tracking</source>
         <translation>Pelacakan posisi</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="320"/>
+        <location filename="../qml/main.qml" line="330"/>
         <source>Local changes</source>
         <translation>Perubahan lokal</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="329"/>
+        <location filename="../qml/main.qml" line="339"/>
         <source>Settings</source>
         <translation>Pengaturan</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="573"/>
-        <location filename="../qml/main.qml" line="581"/>
+        <location filename="../qml/main.qml" line="534"/>
+        <location filename="../qml/main.qml" line="542"/>
         <source>not tracking</source>
         <translation>tidak melacak</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="774"/>
+        <location filename="../qml/main.qml" line="735"/>
         <source>Select feature</source>
         <translation>Pilih fitur</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="859"/>
+        <location filename="../qml/main.qml" line="819"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Ada orang lain yang sedang menyinkronkan, kami akan coba lagi nanti</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="863"/>
+        <location filename="../qml/main.qml" line="823"/>
         <source>Details</source>
         <translation>Detail</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="883"/>
+        <location filename="../qml/main.qml" line="843"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Gagal berkomunikasi dengan server. Coba tingkatkan koneksi jaringan Anda.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="933"/>
+        <location filename="../qml/main.qml" line="894"/>
         <source>Up to date</source>
         <translation>Terkini</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="992"/>
+        <location filename="../qml/main.qml" line="952"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Ada masalah saat memuat proyek. %1Lihat detail%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="686"/>
+        <location filename="../qml/main.qml" line="647"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Pengintaian dinonaktifkan karena lokasi tidak tersedia!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="269"/>
-        <source>Farms</source>
-        <translation>Kebun</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="828"/>
+        <location filename="../qml/main.qml" line="788"/>
         <source>Successfully synchronised</source>
         <translation>Berhasil disinkronkan</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="867"/>
+        <location filename="../qml/main.qml" line="826"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Terjadi masalah selama sinkronisasi, kami akan mencoba lagi. Klik untuk mempelajari lebih lanjut</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1013"/>
+        <location filename="../qml/main.qml" line="973"/>
         <source>Could not read the project file:</source>
         <translation>Tidak dapat membaca file proyek:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1038"/>
+        <location filename="../qml/main.qml" line="998"/>
         <source>Press back again to quit the app</source>
         <translation>Tekan kembali lagi untuk keluar dari aplikasi</translation>
     </message>

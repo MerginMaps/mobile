@@ -4,28 +4,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="288"/>
+        <location filename="../activeproject.cpp" line="263"/>
         <source>General</source>
         <translation>Tổng quan</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="288"/>
+        <location filename="../activeproject.cpp" line="263"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>Dự án có CRS không hợp lệ được chỉ định. Bản đồ và các công cụ có hành vi không xác định!</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="300"/>
-        <location filename="../activeproject.cpp" line="309"/>
+        <location filename="../activeproject.cpp" line="275"/>
+        <location filename="../activeproject.cpp" line="284"/>
         <source>Layer</source>
         <translation>Lớp</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="300"/>
+        <location filename="../activeproject.cpp" line="275"/>
         <source>Unable to load source </source>
         <translation>Không thể tải nguồn</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="309"/>
+        <location filename="../activeproject.cpp" line="284"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>Lớp được chỉ định CRS không hợp lệ. Công cụ ghi có hành vi không xác định.</translation>
     </message>
@@ -92,22 +92,22 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="252"/>
+        <location filename="../androidutils.cpp" line="263"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>Quyền lưu trữ bị từ chối vĩnh viễn, vui lòng cho phép trong cài đặt để tải ảnh từ thư viện</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="256"/>
+        <location filename="../androidutils.cpp" line="267"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
         <translation>Mergin Maps cần quyền lưu trữ để tải ảnh từ thư viện</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="274"/>
+        <location filename="../androidutils.cpp" line="285"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Quyền máy ảnh bị từ chối vĩnh viễn, vui lòng cho phép trong cài đặt</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="278"/>
+        <location filename="../androidutils.cpp" line="289"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Chúng tôi cần quyền truy cập máy ảnh để chụp ảnh</translation>
     </message>
@@ -154,6 +154,14 @@
     </message>
 </context>
 <context>
+    <name>FeaturesModel</name>
+    <message>
+        <location filename="../featuresmodel.cpp" line="165"/>
+        <source>Unknown title</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FieldsModel</name>
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
@@ -193,119 +201,119 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="211"/>
+        <location filename="../inpututils.cpp" line="213"/>
         <source>just now</source>
         <translation>Ngay bây giờ</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 minutes ago</source>
         <translation>%1 phút trước</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="216"/>
+        <location filename="../inpututils.cpp" line="218"/>
         <source>%1 minute ago</source>
         <translation>%1 phút trước</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="221"/>
+        <location filename="../inpututils.cpp" line="223"/>
         <source>%1 hours ago</source>
         <translation>%1 giờ trước</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="221"/>
+        <location filename="../inpututils.cpp" line="223"/>
         <source>%1 hour ago</source>
         <translation>%1 giờ trước</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="225"/>
-        <location filename="../inpututils.cpp" line="230"/>
+        <location filename="../inpututils.cpp" line="227"/>
+        <location filename="../inpututils.cpp" line="232"/>
         <source>%1 days ago</source>
         <translation>%1 ngày trước</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="225"/>
-        <location filename="../inpututils.cpp" line="230"/>
+        <location filename="../inpututils.cpp" line="227"/>
+        <location filename="../inpututils.cpp" line="232"/>
         <source>%1 day ago</source>
         <translation>%1 ngày trước</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="235"/>
+        <location filename="../inpututils.cpp" line="237"/>
         <source>%1 weeks ago</source>
         <translation>%1 tuần trước</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="235"/>
+        <location filename="../inpututils.cpp" line="237"/>
         <source>%1 week ago</source>
         <translation>%1 tuần trước</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="240"/>
+        <location filename="../inpututils.cpp" line="242"/>
         <source>%1 months ago</source>
         <translation>%1 tháng trước</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="240"/>
+        <location filename="../inpututils.cpp" line="242"/>
         <source>%1 month ago</source>
         <translation>%1 tháng trước</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="245"/>
+        <location filename="../inpututils.cpp" line="247"/>
         <source>%1 years ago</source>
         <translation>%1 năm trước</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="245"/>
+        <location filename="../inpututils.cpp" line="247"/>
         <source>%1 year ago</source>
         <translation>%1 năm trước</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1479"/>
+        <location filename="../inpututils.cpp" line="1461"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>độ phân giải màn hình: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1480"/>
+        <location filename="../inpututils.cpp" line="1462"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>Độ phân giải: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1481"/>
+        <location filename="../inpututils.cpp" line="1463"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>kích thước màn hình: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1482"/>
+        <location filename="../inpututils.cpp" line="1464"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>Tỷ lệ pixel của thiết bị báo cáo: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1483"/>
+        <location filename="../inpututils.cpp" line="1465"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>Tỷ lệ pixel của thiết bị tính toán: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1484"/>
+        <location filename="../inpututils.cpp" line="1466"/>
         <source>used dp scale: %1</source>
         <translation>thang đo dp đã sử dụng: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2040"/>
+        <location filename="../inpututils.cpp" line="1995"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Bạn cần thêm ít nhất %1 điểm vào mỗi phần.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2044"/>
+        <location filename="../inpututils.cpp" line="1999"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Bạn cần thêm ít nhất %1 điểm.</translation>
     </message>
@@ -404,17 +412,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMAccountController</name>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="98"/>
+        <location filename="../qml/account/MMAccountController.qml" line="80"/>
         <source>Please update the app to use the latest features.</source>
         <translation>Vui lòng cập nhật ứng dụng để sử dụng các tính năng mới nhất.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="102"/>
-        <source>Server is currently unavailable - please try again later.</source>
-        <translation>Máy chủ hiện không khả dụng - vui lòng thử lại sau.</translation>
+        <location filename="../qml/account/MMAccountController.qml" line="84"/>
+        <source>Server is currently unavailable, check your connection or try again later.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="150"/>
+        <location filename="../qml/account/MMAccountController.qml" line="138"/>
         <source>I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Tôi chấp nhận %1Điều khoản và Điều kiện%3 và %2Chính sách quyền riêng tư%3 của Mergin Maps</translation>
     </message>
@@ -445,6 +453,16 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/account/MMAccountPage.qml" line="185"/>
         <source>Sign out</source>
         <translation>Đăng xuất</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMAccountPage.qml" line="197"/>
+        <source>Close account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMAccountPage.qml" line="198"/>
+        <source>This will delete all your data</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -719,42 +737,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="57"/>
-        <source>Filter...</source>
-        <translation>Bộ lọc...</translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="66"/>
-        <source>All</source>
-        <translation>Tất cả</translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="70"/>
-        <source>Not collected yet</source>
-        <translation>Chưa thu thập được</translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="74"/>
-        <source>Review Pending</source>
-        <translation>Đang chờ xem xét</translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="78"/>
-        <source>Review Accepted</source>
-        <translation>Đã chấp nhận xem xét</translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="82"/>
-        <source>Review Rejected</source>
-        <translation>Đánh giá bị từ chối</translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="91"/>
-        <source>Show:</source>
-        <translation>Hiển thị:</translation>
-    </message>
-    <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="148"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="96"/>
         <source>Add feature</source>
         <translation>Thêm tính năng</translation>
     </message>
@@ -770,14 +753,6 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="105"/>
         <source>Add feature</source>
         <translation>Thêm tính năng</translation>
-    </message>
-</context>
-<context>
-    <name>MMFormController</name>
-    <message>
-        <location filename="../qml/form/MMFormController.qml" line="199"/>
-        <source>GPS accuracy is low</source>
-        <translation>Độ chính xác của GPS thấp</translation>
     </message>
 </context>
 <context>
@@ -824,28 +799,28 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFormPage</name>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="86"/>
+        <location filename="../qml/form/MMFormPage.qml" line="106"/>
         <source>New feature</source>
         <translation>Tính năng mới</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="87"/>
-        <location filename="../qml/form/MMFormPage.qml" line="187"/>
+        <location filename="../qml/form/MMFormPage.qml" line="107"/>
+        <location filename="../qml/form/MMFormPage.qml" line="210"/>
         <source>Edit feature</source>
         <translation>Chỉnh sửa tính năng</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="201"/>
-        <source>Capture boundary</source>
-        <translation>Chụp đa giác</translation>
+        <location filename="../qml/form/MMFormPage.qml" line="223"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="209"/>
+        <location filename="../qml/form/MMFormPage.qml" line="232"/>
         <source>Edit geometry</source>
         <translation>Chỉnh sửa hình học</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="445"/>
+        <location filename="../qml/form/MMFormPage.qml" line="444"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Tính năng không thể lưu, vui lòng kiểm tra tất cả các trường bắt buộc</translation>
     </message>
@@ -853,27 +828,27 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFormPhotoEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="80"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="81"/>
         <source>Photo is missing.</source>
         <translation>Ảnh bị thiếu.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="105"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="108"/>
         <source>Open Image</source>
         <translation>Mở hình ảnh</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="107"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="110"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Tệp hình ảnh (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="233"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="234"/>
         <source>Could not create directory %1.</source>
         <translation>Không thể tạo thư mục %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="305"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="306"/>
         <source>Failed to process the image</source>
         <translation>Không thể xử lý hình ảnh</translation>
     </message>
@@ -881,12 +856,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFormRelationEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="161"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="164"/>
         <source> more</source>
         <translation> Thêm</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="204"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="207"/>
         <source>Add feature</source>
         <translation>Thêm tính năng</translation>
     </message>
@@ -894,12 +869,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFormRelationReferenceEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="99"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="101"/>
         <source>Change link</source>
         <translation>Thay đổi liên kết</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="102"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="104"/>
         <source>Unlink feature</source>
         <translation>Tính năng hủy liên kết</translation>
     </message>
@@ -1271,29 +1246,27 @@ Won&apos;t be added to the project.</source>
         <translation>Đăng nhập</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="144"/>
-        <location filename="../qml/account/MMLoginPage.qml" line="208"/>
-        <source>Production Server</source>
-        <translation>Máy chủ sản xuất</translation>
+        <location filename="../qml/account/MMLoginPage.qml" line="125"/>
+        <source>Don&apos;t have an account?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="144"/>
-        <location filename="../qml/account/MMLoginPage.qml" line="221"/>
-        <source>Test Server</source>
-        <translation>Máy chủ thử nghiệm</translation>
+        <location filename="../qml/account/MMLoginPage.qml" line="132"/>
+        <source>Sign up</source>
+        <translation>Đăng ký</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMLoginPage.qml" line="202"/>
+        <source>Server address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMLoginPage.qml" line="218"/>
+        <source>Confirm</source>
+        <translation>Xác nhận</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="183"/>
-        <source>WARNING!</source>
-        <translation>CẢNH BÁO!</translation>
-    </message>
-    <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="184"/>
-        <source>All local projects will be DELETED when changing between servers!</source>
-        <translation>Tất cả các dự án cục bộ sẽ bị XÓA khi thay đổi giữa các máy chủ!</translation>
-    </message>
-    <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="163"/>
         <source>Change server</source>
         <translation>Thay đổi máy chủ</translation>
     </message>
@@ -1301,92 +1274,97 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMMapController</name>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="119"/>
+        <location filename="../qml/map/MMMapController.qml" line="101"/>
+        <source>Mark the geometry on the map and click record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMMapController.qml" line="130"/>
         <source>Create line to split the selected feature</source>
         <translation>Tạo dòng để phân chia tính năng đã chọn</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="512"/>
+        <location filename="../qml/map/MMMapController.qml" line="523"/>
         <source>streaming</source>
         <translation>Trực tuyến</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="588"/>
+        <location filename="../qml/map/MMMapController.qml" line="599"/>
         <source>Connecting to %1</source>
         <translation>Đang kết nối với %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="602"/>
+        <location filename="../qml/map/MMMapController.qml" line="613"/>
         <source>Connected, no position</source>
         <translation>Đã kết nối, không có vị trí</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="606"/>
+        <location filename="../qml/map/MMMapController.qml" line="617"/>
         <source>Unknown accuracy</source>
         <translation>Độ chính xác không xác định</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="750"/>
+        <location filename="../qml/map/MMMapController.qml" line="759"/>
         <source>GPS currently unavailable</source>
         <translation>Không có tín hiệu GPS</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="765"/>
+        <location filename="../qml/map/MMMapController.qml" line="774"/>
         <source>Choose Active Layer</source>
         <translation>Chọn lớp hoạt động</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="792"/>
+        <location filename="../qml/map/MMMapController.qml" line="801"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>Không tìm thấy lớp có thể chỉnh sửa trong dự án.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="793"/>
+        <location filename="../qml/map/MMMapController.qml" line="802"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Xem cách kích hoạt số liệu trong dự án của bạn.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="810"/>
+        <location filename="../qml/map/MMMapController.qml" line="819"/>
         <source>More options</source>
         <translation>Thêm nhiều lựa chọn</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="815"/>
+        <location filename="../qml/map/MMMapController.qml" line="824"/>
         <source>Split geometry</source>
         <translation>Chia tách hình học</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="827"/>
+        <location filename="../qml/map/MMMapController.qml" line="836"/>
         <source>Redraw geometry</source>
         <translation>Vẽ lại hình học</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="839"/>
+        <location filename="../qml/map/MMMapController.qml" line="848"/>
         <source>Streaming mode</source>
         <translation>Các chế độ trực tuyến</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="845"/>
+        <location filename="../qml/map/MMMapController.qml" line="854"/>
         <source>Active</source>
         <translation>Hoạt động</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="971"/>
+        <location filename="../qml/map/MMMapController.qml" line="980"/>
         <source>Splitting done successfully</source>
         <translation>Chia tách thành công</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1062"/>
+        <location filename="../qml/map/MMMapController.qml" line="1071"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Chọn một điểm để bắt đầu chỉnh sửa</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1080"/>
+        <location filename="../qml/map/MMMapController.qml" line="1084"/>
         <source>Record new geometry for the feature</source>
         <translation>Ghi lại hình học mới cho đối tượng</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1162"/>
+        <location filename="../qml/map/MMMapController.qml" line="1166"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS hiện tại không khả dụng.</translation>
     </message>
@@ -1512,7 +1490,7 @@ Won&apos;t be added to the project.</source>
         <translation>Chụp ảnh</translation>
     </message>
     <message>
-        <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="93"/>
+        <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="95"/>
         <source>From gallery</source>
         <translation>Từ thư viện</translation>
     </message>
@@ -1632,24 +1610,25 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMProjectController</name>
     <message>
-        <location filename="../qml/project/MMProjectController.qml" line="207"/>
-        <location filename="../qml/project/MMProjectController.qml" line="380"/>
+        <location filename="../qml/project/MMProjectController.qml" line="204"/>
+        <location filename="../qml/project/MMProjectController.qml" line="377"/>
         <source>Home</source>
         <translation>Trang chủ</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectController.qml" line="210"/>
-        <location filename="../qml/project/MMProjectController.qml" line="389"/>
+        <location filename="../qml/project/MMProjectController.qml" line="207"/>
+        <location filename="../qml/project/MMProjectController.qml" line="386"/>
         <source>Projects</source>
         <translation>Dự án</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectController.qml" line="212"/>
+        <location filename="../qml/project/MMProjectController.qml" line="209"/>
+        <location filename="../qml/project/MMProjectController.qml" line="395"/>
         <source>Explore</source>
         <translation>Khám phá</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectController.qml" line="264"/>
+        <location filename="../qml/project/MMProjectController.qml" line="261"/>
         <source>Unsupported server, please contact your server administrator.</source>
         <translation>Máy chủ không được hỗ trợ, vui lòng liên hệ với quản trị viên máy chủ của bạn.</translation>
     </message>
@@ -1657,47 +1636,47 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMProjectDelegate</name>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="140"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="142"/>
         <source>Synchronising project changes</source>
         <translation>Đang đồng bộ hóa các thay đổi dự án</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="188"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="190"/>
         <source>Please don&apos;t close the app.</source>
         <translation>Vui lòng không đóng ứng dụng.</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="211"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="213"/>
         <source>Stop</source>
         <translation>Dừng</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="242"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="244"/>
         <source>More options</source>
         <translation>Tùy chọn khác</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="286"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="288"/>
         <source>Download</source>
         <translation>Tải xuống</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="291"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="293"/>
         <source>Synchronise project</source>
         <translation>Đồng bộ hóa dự án</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="296"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="298"/>
         <source>Local changes</source>
         <translation>Thay đổi cục bộ</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="301"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="303"/>
         <source>Remove from device</source>
         <translation>Xóa khỏi thiết bị</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="306"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="308"/>
         <source>Upload</source>
         <translation>Tải lên</translation>
     </message>
@@ -1784,32 +1763,32 @@ Won&apos;t be added to the project.</source>
         <translation>Không thể đồng bộ hóa dự án, vui lòng đảm bảo rằng bạn đã đăng nhập và có đủ quyền.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="207"/>
+        <location filename="../qml/project/MMProjectList.qml" line="212"/>
         <source>Create project</source>
         <translation>Tạo dự án</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="229"/>
+        <location filename="../qml/project/MMProjectList.qml" line="237"/>
         <source>Get started with Mergin Maps</source>
         <translation>Bắt đầu với Mergin Maps</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="230"/>
+        <location filename="../qml/project/MMProjectList.qml" line="238"/>
         <source>First step is to create your brand new project.</source>
         <translation>Tạo dự án mới</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="238"/>
+        <location filename="../qml/project/MMProjectList.qml" line="246"/>
         <source>Unable to get the list of projects.</source>
         <translation>Không thể lấy danh sách dự án.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="238"/>
+        <location filename="../qml/project/MMProjectList.qml" line="246"/>
         <source>No projects found</source>
         <translation>Không tìm thấy dự án</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="267"/>
+        <location filename="../qml/project/MMProjectList.qml" line="275"/>
         <source>Retry</source>
         <translation>Thử lại</translation>
     </message>
@@ -1948,35 +1927,30 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMRecordingTools</name>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="197"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="179"/>
         <source>Undo</source>
         <translation>Hoàn tác</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="204"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="186"/>
         <source>Remove</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="218"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="200"/>
         <source>Release</source>
         <translation>Phát hành</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="232"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="214"/>
         <source>Add</source>
         <translation>Thêm</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="249"/>
-        <location filename="../qml/map/MMRecordingTools.qml" line="277"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="231"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="259"/>
         <source>Record</source>
         <translation>Ghi lại</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="322"/>
-        <source>GPS accuracy is low</source>
-        <translation>Độ chính xác của GPS thấp</translation>
     </message>
 </context>
 <context>
@@ -2062,18 +2036,18 @@ Won&apos;t be added to the project.</source>
         <translation>GPS</translation>
     </message>
     <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
+        <source>GPS accuracy threshold</source>
+        <translation>Độ chính xác của GPS</translation>
+    </message>
+    <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="64"/>
         <source>Determines when the accuracy indicator turns yellow</source>
         <translation>Xác định khi nào chỉ báo độ chính xác chuyển sang màu vàng</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
-        <source>GPS accuracy treshold</source>
-        <translation>Độ chính xác của GPS</translation>
-    </message>
-    <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
-        <source>GPS accuracy treshold, in meters</source>
+        <source>GPS accuracy threshold, in meters</source>
         <translation>Độ chính xác của GPS, tính bằng mét</translation>
     </message>
     <message>
@@ -2144,7 +2118,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="157"/>
         <source>Reuse last entered value</source>
-        <translation>Sử dụng lại giá trị nhập gần nhất.</translation>
+        <translation>Sử dụng lại giá trị nhập gần nhất</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="158"/>
@@ -2162,37 +2136,47 @@ Won&apos;t be added to the project.</source>
         <translation>Mỗi lần bạn lưu thay đổi, ứng dụng sẽ tự động đồng bộ hóa</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="178"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="179"/>
+        <source>Auto-lock position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="180"/>
+        <source>Each time you start recording, the app centers to GPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="189"/>
         <source>General</source>
         <translation>Tổng quan</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="189"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="200"/>
         <source>About</source>
         <translation>Về</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="199"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="210"/>
         <source>Changelog</source>
         <translation>Nhật ký thay đổi</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="209"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="220"/>
         <source>Help</source>
         <translation>Trợ giúp</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="219"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="230"/>
         <source>Privacy policy</source>
         <translation>Chính sách bảo mật</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="229"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="240"/>
         <source>Terms of service</source>
         <translation>Điều khoản dịch vụ</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="239"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="250"/>
         <source>Diagnostic log</source>
         <translation>Nhật ký chẩn đoán</translation>
     </message>
@@ -2262,22 +2246,22 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMSplittingTools</name>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="88"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="91"/>
         <source>Undo</source>
         <translation>Hoàn tác</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="94"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="97"/>
         <source>Add point</source>
         <translation>Thêm điểm</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="100"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="103"/>
         <source>Done</source>
         <translation>Xong</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="110"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="113"/>
         <source>You need to add at least 2 points.</source>
         <translation>Bạn cần thêm ít nhất 2 điểm.</translation>
     </message>
@@ -2352,29 +2336,6 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
-    <name>MMStreamingModeTimerDialog</name>
-    <message>
-        <location filename="../qml/dialogs/MMStreamingModeTimerDialog.qml" line="20"/>
-        <source>Streaming mode</source>
-        <translation>Chế độ trực tuyến</translation>
-    </message>
-    <message>
-        <location filename="../qml/dialogs/MMStreamingModeTimerDialog.qml" line="21"/>
-        <source>You have been capturing this polygon for too long. Do you want to continue?</source>
-        <translation>Bạn đã chụp đa giác này quá lâu. Bạn có muốn tiếp tục không?</translation>
-    </message>
-    <message>
-        <location filename="../qml/dialogs/MMStreamingModeTimerDialog.qml" line="22"/>
-        <source>Continue streaming</source>
-        <translation>Tiếp tục truyền phát</translation>
-    </message>
-    <message>
-        <location filename="../qml/dialogs/MMStreamingModeTimerDialog.qml" line="23"/>
-        <source>Stop streaming mode</source>
-        <translation>Dừng chế độ trực tuyến</translation>
-    </message>
-</context>
-<context>
     <name>MMSwitchWorkspacePage</name>
     <message>
         <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="34"/>
@@ -2423,7 +2384,7 @@ Won&apos;t be added to the project.</source>
         <translation>Tùy chọn khác</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMToolbar.qml" line="136"/>
+        <location filename="../qml/components/MMToolbar.qml" line="135"/>
         <source>More</source>
         <translation>Thêm nhiều hơn</translation>
     </message>
@@ -2499,32 +2460,37 @@ Won&apos;t be added to the project.</source>
         <translation>Tiện ích nước</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="44"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="42"/>
+        <source>Student/University</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="45"/>
         <source>Other</source>
         <translation>Khác</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="53"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="54"/>
         <source>Specify your industry</source>
         <translation>Chỉ định ngành của bạn</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="173"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="174"/>
         <source>Continue</source>
         <translation>Tiếp tục</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="195"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="196"/>
         <source>Crafting your workspace: let us know your industry</source>
         <translation>Tạo không gian làm việc của bạn: cho chúng tôi biết ngành của bạn</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="196"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="197"/>
         <source>Please specify the industry</source>
         <translation>Hãy cho biết ngành</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMWhichIndustryPage.qml" line="211"/>
+        <location filename="../qml/account/MMWhichIndustryPage.qml" line="212"/>
         <source>Industry</source>
         <translation>Ngành công nghiệp</translation>
     </message>
@@ -2593,17 +2559,17 @@ only allows up to %1 downloaded projects.</source>
         <translation>Không gian làm việc đã được tạo</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1685"/>
+        <location filename="../../core/merginapi.cpp" line="1690"/>
         <source>Project detached from the server</source>
         <translation>Dự án đã tách khỏi máy chủ</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3845"/>
+        <location filename="../../core/merginapi.cpp" line="3854"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Tên không gian làm việc chứa ký tự không hợp lệ</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3911"/>
+        <location filename="../../core/merginapi.cpp" line="3920"/>
         <source>Workspace %1 already exists</source>
         <translation>Không gian làm việc %1 đã tồn tại</translation>
     </message>
@@ -2619,14 +2585,6 @@ only allows up to %1 downloaded projects.</source>
         <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
         <source>Failed to determine changes</source>
         <translation>Không thể xác định thay đổi</translation>
-    </message>
-</context>
-<context>
-    <name>NotificationModel</name>
-    <message>
-        <location filename="../notificationmodel.h" line="125"/>
-        <source>You are using the Test Server!</source>
-        <translation>Bạn đang sử dụng Máy chủ thử nghiệm!</translation>
     </message>
 </context>
 <context>
@@ -2836,12 +2794,12 @@ only allows up to %1 downloaded projects.</source>
         <translation>Khắc phục lỗi không xác định</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="546"/>
+        <location filename="../main.cpp" line="539"/>
         <source>Report submitted. Please contact us on %1</source>
         <translation>Báo cáo đã được gửi. Vui lòng liên hệ với chúng tôi tại %1</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="551"/>
+        <location filename="../main.cpp" line="544"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Không thể gửi báo cáo. Vui lòng kiểm tra kết nối internet của bạn.</translation>
     </message>
@@ -2849,81 +2807,6 @@ only allows up to %1 downloaded projects.</source>
         <location filename="../../core/merginapi.cpp" line="41"/>
         <source>Synchronisation canceled</source>
         <translation>Đồng bộ hóa bị hủy</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="58"/>
-        <source>Farm has no polygon</source>
-        <translation>Trang trại không có đa giác</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="91"/>
-        <source>Polygon should not be outside of the country boundary</source>
-        <translation>Đa giác không được nằm ngoài ranh giới quốc gia</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="114"/>
-        <source>Polygon is outside the cluster area</source>
-        <translation>Đa giác nằm ngoài khu vực cụm</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="138"/>
-        <source>Polygon should not overlap with another farm &gt;10%</source>
-        <translation>Đa giác không được chồng lấn với trang trại khác &gt;10%</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="152"/>
-        <source>Polygon should not be less than 0.01 Ha</source>
-        <translation>Đa giác không được nhỏ hơn 0,01 Ha</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="157"/>
-        <source>Polygon should not be greater than 600 Ha</source>
-        <translation>Đa giác không được lớn hơn 600 Ha</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="165"/>
-        <source>Polygon can’t be accepted if it has 2 or 3 boundary points</source>
-        <translation>Đa giác không được chấp nhận nếu nó có 2 hoặc 3 điểm ranh giới chòng chéo</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="174"/>
-        <source>Polygon should not have duplicate boundary points</source>
-        <translation>Đa giác không được có điểm ranh giới trùng lặp</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="179"/>
-        <source>Polygon should not be open</source>
-        <translation>Đa giác không nên mở</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="216"/>
-        <source>Polygon should have a mapping accuracy of 20 meters or less</source>
-        <translation>Đa giác phải có độ chính xác bản đồ là 20 mét hoặc ít hơn</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="224"/>
-        <source>Polygon should not be a multi-polygon</source>
-        <translation>Đa giác không được là đa đa giác&quot;trùng lặp&quot;</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="229"/>
-        <source>Polygon should not have self-intersecting boundary segments</source>
-        <translation>Đa giác không được có các đoạn ranh giới tự cắt nhau</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="279"/>
-        <source>Polygon is more than 50kms from the previous site of the farm ID</source>
-        <translation>Đa giác cách địa điểm trước đó của ID trang trại hơn 50 km</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="295"/>
-        <source>No QC errors</source>
-        <translation>Không có lỗi QC</translation>
-    </message>
-    <message>
-        <location filename="../ecomgeometryutils.cpp" line="299"/>
-        <source>QC errors found:</source>
-        <translation>Các lỗi QC được tìm thấy:</translation>
     </message>
 </context>
 <context>
@@ -2942,98 +2825,108 @@ only allows up to %1 downloaded projects.</source>
         <translation>Đồng bộ hóa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="281"/>
+        <location filename="../qml/main.qml" line="268"/>
+        <source>Add</source>
+        <translation>Thêm</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="276"/>
+        <source>No editable layers found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="282"/>
+        <source>Layers</source>
+        <translation>Các lớp</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="291"/>
         <source>Projects</source>
         <translation>Dự án</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="289"/>
+        <location filename="../qml/main.qml" line="299"/>
         <source>Zoom to project</source>
         <translation>Phóng to dự án</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="298"/>
+        <location filename="../qml/main.qml" line="308"/>
         <source>Map themes</source>
         <translation>Chủ đề bản đồ</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="309"/>
+        <location filename="../qml/main.qml" line="319"/>
         <source>Position tracking</source>
         <translation>Theo dõi vị trí</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="320"/>
+        <location filename="../qml/main.qml" line="330"/>
         <source>Local changes</source>
         <translation>Thay đổi cục bộ</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="329"/>
+        <location filename="../qml/main.qml" line="339"/>
         <source>Settings</source>
         <translation>Cài đặt</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="573"/>
-        <location filename="../qml/main.qml" line="581"/>
+        <location filename="../qml/main.qml" line="534"/>
+        <location filename="../qml/main.qml" line="542"/>
         <source>not tracking</source>
         <translation>không theo dõi</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="774"/>
+        <location filename="../qml/main.qml" line="735"/>
         <source>Select feature</source>
         <translation>Chọn đối tượng</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="859"/>
+        <location filename="../qml/main.qml" line="819"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Có người khác đang đồng bộ hóa, chúng tôi sẽ thử lại sau</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="863"/>
+        <location filename="../qml/main.qml" line="823"/>
         <source>Details</source>
         <translation>Chi tiết</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="883"/>
+        <location filename="../qml/main.qml" line="843"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Không thể liên lạc với máy chủ. Cố gắng cải thiện kết nối mạng của bạn.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="933"/>
+        <location filename="../qml/main.qml" line="894"/>
         <source>Up to date</source>
         <translation>Cập nhật</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="992"/>
+        <location filename="../qml/main.qml" line="952"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Có vấn đề khi tải dự án. %1Xem chi tiết%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="686"/>
+        <location filename="../qml/main.qml" line="647"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Bấm điểm bị vô hiệu hóa vì vị trí không khả dụng!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="269"/>
-        <source>Farms</source>
-        <translation>trang trại</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="828"/>
+        <location filename="../qml/main.qml" line="788"/>
         <source>Successfully synchronised</source>
         <translation>Đã đồng bộ hóa thành công</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="867"/>
+        <location filename="../qml/main.qml" line="826"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Có sự cố trong quá trình đồng bộ hóa, chúng tôi sẽ thử lại. Nhấp để tìm hiểu thêm</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1013"/>
+        <location filename="../qml/main.qml" line="973"/>
         <source>Could not read the project file:</source>
         <translation>Không thể đọc tệp dự án:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1038"/>
+        <location filename="../qml/main.qml" line="998"/>
         <source>Press back again to quit the app</source>
         <translation>Nhấn quay lại lần nữa để thoát ứng dụng</translation>
     </message>
