@@ -59,7 +59,7 @@ MMPage {
 
             image: __style.positiveMMSymbolImage
             title: qsTr("You have been invited to a workspace")
-            description: qsTr("It is better to work together, join the workspace and explore Mergin Maps!")
+            description: qsTr("It is better to work together, join the workspace and explore the app!")
           }
 
           MMText {

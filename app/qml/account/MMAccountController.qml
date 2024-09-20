@@ -135,7 +135,7 @@ Item {
 
       objectName: "signUpPanel"
       tocString: __inputUtils.htmlLink(
-          qsTr("I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3"),
+          qsTr("I accept the %1Terms and Conditions%3 and %2Privacy Policy%3"),
           __style.forestColor,
           __inputHelp.merginTermsLink,
           __inputHelp.privacyPolicyLink

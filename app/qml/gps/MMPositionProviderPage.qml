@@ -147,7 +147,7 @@ MMComponents.MMPage {
       description: qsTr( "This function is not available on iOS. " +
                         "Your hardware vendor may provide a custom " +
                         "app that connects to the receiver and sets position. " +
-                        "Mergin Maps will still think it is the internal GPS of " +
+                        "The app will still think it is the internal GPS of " +
                         "your phone/tablet." )
       link: __inputHelp.howToConnectGPSLink
     }

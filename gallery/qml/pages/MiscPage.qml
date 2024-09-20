@@ -234,7 +234,7 @@ ScrollView {
 
         MMInfoBox {
           width: page.width - 64
-          title: "Tip from Mergin Maps"
+          title: "Tip from us"
           description: "A good candidate for a workspace name is the name of your team or organisation"
           imageSource: __style.bubbleImage
         }
