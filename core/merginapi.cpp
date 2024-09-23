@@ -3944,3 +3944,4 @@ DownloadQueueItem::DownloadQueueItem( const QString &fp, qint64 s, int v, qint64
 {
   tempFileName = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
 }
+
