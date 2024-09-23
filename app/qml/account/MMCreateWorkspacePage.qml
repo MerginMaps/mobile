@@ -108,7 +108,7 @@ MMPage {
       // hide the bubble on small screens
       visible: root.height + scrollBarBottomSpacer.height - dynamicContent.height - root.pageHeader.height - 2 * height > 0
 
-      title: qsTr( "Tip from us" )
+      title: qsTr( "A tip from us" )
       description: qsTr( "A good candidate for a workspace name is the name of your team or organisation" )
 
       imageSource: __style.bubbleImage
