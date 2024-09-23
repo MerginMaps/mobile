@@ -1531,7 +1531,7 @@ void AttributeController::renamePhotos()
           mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), newName );
           expressionContext.setFeature( featureLayerPair().featureRef() );
         }
-        else 
+        else
         {
           CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Could not rename file from %1 to %2" ).arg( src ).arg( dst ) );
         }
