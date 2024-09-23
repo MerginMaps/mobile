@@ -888,3 +888,36 @@ void TestUtilsFunctions::testFormatDistanceInDistanceUnit()
   dist2str =  mUtils->formatDistanceInProjectUnit( 7000, 1, Qgis::DistanceUnit::Feet );
   QVERIFY( dist2str == "22965.9 ft" );
 }
+
+void TestUtilsFunctions::testFormatAreaInProjectUnit()
+{
+    QString area2str = mUtils->formatAreaInProjectUnit( 1500.234, 2, Qgis::AreaUnit::SquareMeters );
+    QVERIFY( area2str == "1500.23 m²" );
+
+    area2str = mUtils->formatAreaInProjectUnit( 1500.234, 1, Qgis::AreaUnit::SquareMeters );
+    QVERIFY( area2str == "1500.2 m²" );
+
+    area2str = mUtils->formatAreaInProjectUnit( 1500.234, 0, Qgis::AreaUnit::SquareMeters );
+    QVERIFY( area2str == "1500 m²" );
+
+    area2str = mUtils->formatAreaInProjectUnit( 500.22, 1, Qgis::AreaUnit::SquareMeters );
+    QVERIFY( area2str == "500.2 m²" );
+
+    area2str = mUtils->formatAreaInProjectUnit( 0.22, 0, Qgis::AreaUnit::SquareMeters );
+    QVERIFY( area2str == "0 m²" );
+
+    area2str = mUtils->formatAreaInProjectUnit( -0.22, 0, Qgis::AreaUnit::SquareMeters );
+    QVERIFY( area2str == "-0 m²" );
+
+    area2str = mUtils->formatAreaInProjectUnit( 1.222234, 2, Qgis::AreaUnit::SquareKilometers );
+    QVERIFY( area2str == "0.00 km²" );
+
+    area2str = mUtils->formatAreaInProjectUnit( 6000, 1, Qgis::AreaUnit::Acres );
+    QVERIFY( area2str == "1.5 ac" );
+
+    area2str = mUtils->formatAreaInProjectUnit( 5, 1, Qgis::AreaUnit::Acres );
+    QVERIFY( area2str == "0.0 ac" );
+
+    area2str = mUtils->formatAreaInProjectUnit( 7000, 1, Qgis::AreaUnit::Acres );
+    QVERIFY( area2str == "1.7 ac" );
+}

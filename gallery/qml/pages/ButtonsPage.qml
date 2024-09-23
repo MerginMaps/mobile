@@ -87,8 +87,24 @@ ScrollView {
           iconSourceLeft: __style.uploadIcon
         }
 
-        MMButton {
-          text: "Primary flex width (no witdth set)"
+        Row {
+          width: parent.width
+          spacing: 20
+
+          MMButton {
+            text: "Primary flex width (no witdth set)"
+          }
+
+          MMButton {
+            text: "Small Primary"
+            size: MMButton.Sizes.Small
+          }
+
+          MMButton {
+            text: "Small Primary with Icon"
+            iconSourceLeft: __style.syncIcon
+            size: MMButton.Sizes.Small
+          }
         }
 
         MMListSpacer { height: __style.margin20 }
@@ -142,11 +158,29 @@ ScrollView {
           iconSourceRight: __style.arrowLinkRightIcon
         }
 
-        MMButton {
-          type: MMButton.Types.Secondary
-          text: "Secondary flex width (no witdth set)"
-          iconSourceLeft: __style.uploadIcon
-          iconSourceRight: __style.uploadIcon
+        Row {
+          width: parent.width
+          spacing: 20
+
+          MMButton {
+            type: MMButton.Types.Secondary
+            text: "Secondary flex width (no witdth set)"
+            iconSourceLeft: __style.uploadIcon
+            iconSourceRight: __style.uploadIcon
+          }
+
+          MMButton {
+            text: "Small Secondary"
+            type: MMButton.Types.Secondary
+            size: MMButton.Sizes.Small
+          }
+
+          MMButton {
+            text: "Small Secondary with Icon"
+            type: MMButton.Types.Secondary
+            iconSourceLeft: __style.syncIcon
+            size: MMButton.Sizes.Small
+          }
         }
 
         MMListSpacer { height: __style.margin20 }
@@ -200,11 +234,29 @@ ScrollView {
           iconSourceRight: __style.arrowLinkRightIcon
         }
 
-        MMButton {
-          type: MMButton.Types.Tertiary
-          text: "Tertiary flex width (no witdth set)"
-          fontColor: __style.nightColor
-          iconSourceLeft: __style.globeIcon
+        Row {
+          width: parent.width
+          spacing: 20
+
+          MMButton {
+            type: MMButton.Types.Tertiary
+            text: "Tertiary flex width (no witdth set)"
+            fontColor: __style.nightColor
+            iconSourceLeft: __style.globeIcon
+          }
+
+          MMButton {
+            text: "Small Tertiary"
+            type: MMButton.Types.Tertiary
+            size: MMButton.Sizes.Small
+          }
+
+          MMButton {
+            text: "Small Tertiary with Icon"
+            type: MMButton.Types.Tertiary
+            iconSourceLeft: __style.syncIcon
+            size: MMButton.Sizes.Small
+          }
         }
       }
     }
