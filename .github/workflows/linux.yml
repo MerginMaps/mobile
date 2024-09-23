@@ -144,6 +144,7 @@ jobs:
              -DUSE_SERVER_API_KEY=TRUE \
              -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-linux \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
+             -DUSE_MM_SERVER_API_KEY=TRUE \
              -DCOVERAGE=TRUE \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
              -DENABLE_TESTS=TRUE \
