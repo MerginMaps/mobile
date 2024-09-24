@@ -461,7 +461,7 @@ Não será adicionado ao projeto.</translation>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="198"/>
         <source>This will delete all your data</source>
-        <translation>Istos eliminará todos os seus dados</translation>
+        <translation>Isto eliminará todos os seus dados</translation>
     </message>
 </context>
 <context>
