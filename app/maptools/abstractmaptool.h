@@ -33,7 +33,7 @@ class AbstractMapTool : public QObject
 
     void mapSettingsChanged( InputMapSettings *mapSettings );
 
-  protected:
+  private:
     InputMapSettings *mMapSettings = nullptr;
 };
 
