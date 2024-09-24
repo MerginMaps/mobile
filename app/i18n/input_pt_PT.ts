@@ -474,7 +474,7 @@ Não será adicionado ao projeto.</translation>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="48"/>
         <source>Bluetooth permission is required in order to connect to external receivers. Please enable it in system settings</source>
-        <translation>É necessário permissão Bluetooth para ligar-se a receptores externos. Ative-o nas configurações do sistema</translation>
+        <translation>É necessário permissão bluetooth para ligar-se a receptores externos. Ative-o nas configurações do sistema</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="58"/>
