@@ -73,6 +73,10 @@
 		<string>zh_CN</string>
 		<string>zh-Hans</string>
 		<string>zh</string>
+		<string>fi</string>
+		<string>sl</string>
+		<string>sl_SI</string>
+		<string>fi_FI</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>

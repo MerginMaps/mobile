@@ -352,8 +352,8 @@ Won&apos;t be added to the project.</source>
     <name>MMAboutPage</name>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="21"/>
-        <source>About Mergin Maps</source>
-        <translation type="unfinished"></translation>
+        <source>About</source>
+        <translation type="unfinished">About</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="70"/>
@@ -388,7 +388,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="62"/>
-        <source>It is better to work together, join the workspace and explore Mergin Maps!</source>
+        <source>Join the workspace and explore together!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -421,7 +421,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="138"/>
-        <source>I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3</source>
+        <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -582,7 +582,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="40"/>
-        <source>This action will delete your Mergin Maps account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
+        <source>This action will delete your account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -658,7 +658,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="111"/>
-        <source>Tip from Mergin Maps</source>
+        <source>A tip from us</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1425,7 +1425,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
-        <source>You need to be signed in to your Mergin Maps account in order to synchronise the project.</source>
+        <source>You need to be signed in to your account in order to synchronise the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1522,7 +1522,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
-        <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. Mergin Maps will still think it is the internal GPS of your phone/tablet.</source>
+        <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1545,12 +1545,12 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
-        <source>Mergin Maps can track your position on this project.</source>
+        <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
-        <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
+        <source>The app can track your position on this project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1693,7 +1693,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="64"/>
-        <source>Click here to visit Mergin Maps dashboard</source>
+        <source>Click here to access the dashboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1767,7 +1767,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="237"/>
-        <source>Get started with Mergin Maps</source>
+        <source>Let&apos;s get started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2395,7 +2395,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="21"/>
-        <source>We&apos;ve been busy making Mergin Maps even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
+        <source>We&apos;ve been busy making the app even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
