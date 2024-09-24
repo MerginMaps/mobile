@@ -27,13 +27,11 @@ Item {
 
   signal finishMeasurement()
 
-  Component.onCompleted: map.mapSettings.extentChanged.connect( onScreenPositionChanged )
-  Component.onDestruction: map.mapSettings.extentChanged.disconnect( onScreenPositionChanged )
-
   MM.MeasurementMapTool {
     id: mapTool
 
     mapSettings: root.map.mapSettings
+    crosshairPoint: crosshair.screenPoint
   }
 
   MM.GuidelineController {
@@ -97,15 +95,6 @@ Item {
     canCloseShape: mapTool.canCloseShape
 
     onCloseShapeClicked: closeShape()
-  }
-
-  function addPoint()
-  {
-    mapTool.addPoint( crosshair.screenPoint )
-  }
-
-  function onScreenPositionChanged() {
-    mapTool.updateDistance( crosshair.screenPoint );
   }
 
   function closeShape()

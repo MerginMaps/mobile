@@ -103,7 +103,7 @@ MMDrawer {
       MMButton {
         text: root.canCloseShape ? qsTr( "Close shape" ) : qsTr( "Add point" )
         iconSourceLeft: canCloseShape ? __style.closeShapeIcon : __style.plusIcon
-        onClicked: canCloseShape ? root.mapCanvas.mapToolComponent.closeShape() : root.mapCanvas.mapToolComponent.addPoint()
+        onClicked: canCloseShape ? root.mapCanvas.mapToolComponent.closeShape() : root.mapCanvas.mapToolComponent.mapTool.addPoint()
       }
 
       MMButton {

@@ -28,6 +28,7 @@ class MeasurementMapTool : public AbstractMapTool
 
     Q_PROPERTY( QgsGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
     Q_PROPERTY( QgsGeometry existingVertices READ existingVertices WRITE setExistingVertices NOTIFY existingVerticesChanged )
+    Q_PROPERTY( QPointF crosshairPoint READ crosshairPoint WRITE setCrosshairPoint NOTIFY crosshairPointChanged )
 
     Q_PROPERTY( double lengthWithGuideline READ lengthWithGuideline WRITE setLengthWithGuideline NOTIFY lengthWithGuidelineChanged )
     Q_PROPERTY( double perimeter READ perimeter WRITE setPerimeter NOTIFY perimeterChanged )
@@ -45,7 +46,7 @@ class MeasurementMapTool : public AbstractMapTool
      * Adds point to the end of the recorded geometry; updates recordedGeometry afterwards
      * Passed point needs to be in map CRS
      */
-    Q_INVOKABLE void addPoint( const QPointF &point );
+    Q_INVOKABLE void addPoint();
 
     /**
      *  Removes last point from recorded geometry if there is at least one point
@@ -75,6 +76,9 @@ class MeasurementMapTool : public AbstractMapTool
     double area() const;
     void setArea( const double &area );
 
+    QPointF crosshairPoint() const;
+    void setCrosshairPoint( const QPointF &point );
+
     bool canUndo() const;
     void setCanUndo( bool newCanUndo );
 
@@ -99,19 +103,24 @@ class MeasurementMapTool : public AbstractMapTool
     void closeShapeDoneChanged( bool canUndo );
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
     void existingVerticesChanged( const QgsGeometry &vertices );
+    void crosshairPointChanged( const QPointF &crosshairPoint );
 
   protected:
     void rebuildGeometry();
-    void checkCanCloseShape( const QPointF &crosshairPoint );
+    void checkCanCloseShape();
 
   public slots:
-    void updateDistance( const QPointF &crosshairPoint );
+    void updateDistance();
+
+  private slots:
+    void onMapSettingsChanged( InputMapSettings *newMapSettings );
 
   private:
     QVector<QgsPoint> mPoints;
     QgsGeometry mRecordedGeometry;
     QgsGeometry mExistingVertices;
     QgsDistanceArea mDistanceArea;
+    QPointF mCrosshairPoint;
     double mLengthWithGuideline = 0;
     double mPerimeter = 0;
     double mArea = 0;

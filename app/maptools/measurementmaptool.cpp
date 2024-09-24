@@ -12,20 +12,19 @@
 MeasurementMapTool::MeasurementMapTool( QObject *parent )
   : AbstractMapTool{ parent }
 {
-  if ( !mapSettings() )
-  {
-    return;
-  }
+  connect( this, &AbstractMapTool::mapSettingsChanged, this, &MeasurementMapTool::onMapSettingsChanged );
 
-  mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
-  mDistanceArea.setSourceCrs( mapSettings()->destinationCrs(), mapSettings()->transformContext() );
+  if ( mapSettings() )
+  {
+    onMapSettingsChanged( mapSettings() );
+  }
 }
 
 MeasurementMapTool::~MeasurementMapTool() = default;
 
-void MeasurementMapTool::addPoint( const QPointF &point )
+void MeasurementMapTool::addPoint()
 {
-  QgsPoint transformedPoint = mapSettings()->screenToCoordinate( point );
+  QgsPoint transformedPoint = mapSettings()->screenToCoordinate( mCrosshairPoint );
   mPoints.push_back( transformedPoint );
   rebuildGeometry();
 }
@@ -35,15 +34,12 @@ void MeasurementMapTool::removePoint()
   if ( !mPoints.isEmpty() )
   {
     mPoints.pop_back();
-
-    if ( mPoints.count() < 3 )
-      setCanCloseShape( false );
-
+    checkCanCloseShape();
     rebuildGeometry();
   }
 }
 
-void MeasurementMapTool::updateDistance( const QPointF &crosshairPoint )
+void MeasurementMapTool::updateDistance()
 {
   if ( mPoints.isEmpty() )
   {
@@ -51,16 +47,16 @@ void MeasurementMapTool::updateDistance( const QPointF &crosshairPoint )
     return;
   }
 
-  checkCanCloseShape( crosshairPoint ) ;
+  checkCanCloseShape();
 
   QgsPoint lastPoint = mPoints.last();
-  QgsPoint transformedCrosshairPoint = mapSettings()->screenToCoordinate( crosshairPoint );
+  QgsPoint transformedCrosshairPoint = mapSettings()->screenToCoordinate( mCrosshairPoint );
 
   double calculatedLength = mDistanceArea.measureLength( mRecordedGeometry ) + mDistanceArea.measureLine( transformedCrosshairPoint, lastPoint );
   setLengthWithGuideline( calculatedLength );
 }
 
-void MeasurementMapTool::checkCanCloseShape( const QPointF &crosshairPoint )
+void MeasurementMapTool::checkCanCloseShape()
 {
   if ( mRecordedGeometry.isEmpty() || mPoints.count() < 3 )
   {
@@ -72,7 +68,7 @@ void MeasurementMapTool::checkCanCloseShape( const QPointF &crosshairPoint )
   {
     QgsPoint firstPoint = mPoints.first();
     QPointF firstPointScreen = mapSettings()->coordinateToScreen( firstPoint );
-    double distanceToFirstPoint = std::hypot( crosshairPoint.x() - firstPointScreen.x(), crosshairPoint.y() - firstPointScreen.y() );
+    double distanceToFirstPoint = std::hypot( mCrosshairPoint.x() - firstPointScreen.x(), mCrosshairPoint.y() - firstPointScreen.y() );
     setCanCloseShape( distanceToFirstPoint <= CLOSE_THRESHOLD );
   }
 }
@@ -140,6 +136,19 @@ void MeasurementMapTool::rebuildGeometry()
   setRecordedGeometry( geometry );
 }
 
+void MeasurementMapTool::onMapSettingsChanged( InputMapSettings *newMapSettings )
+{
+  if ( newMapSettings )
+  {
+    // Connect to the extentChanged signal of mapSettings
+    connect( newMapSettings, &InputMapSettings::extentChanged, this, &MeasurementMapTool::updateDistance );
+
+    // Initialize mDistanceArea with the new map settings
+    mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
+    mDistanceArea.setSourceCrs( newMapSettings->destinationCrs(), newMapSettings->transformContext() );
+  }
+}
+
 const QgsGeometry &MeasurementMapTool::recordedGeometry() const
 {
   return mRecordedGeometry;
@@ -167,6 +176,11 @@ double MeasurementMapTool::area() const
 double MeasurementMapTool::perimeter() const
 {
   return mPerimeter;
+}
+
+QPointF MeasurementMapTool::crosshairPoint() const
+{
+  return mCrosshairPoint;
 }
 
 double MeasurementMapTool::lengthWithGuideline() const
@@ -250,4 +264,13 @@ void MeasurementMapTool::setPerimeter( const double &perimeter )
 
   mPerimeter = perimeter;
   emit perimeterChanged( perimeter );
+}
+
+void MeasurementMapTool::setCrosshairPoint( const QPointF &point )
+{
+  if ( mCrosshairPoint == point )
+    return;
+
+  mCrosshairPoint = point;
+  emit crosshairPointChanged( mCrosshairPoint );
 }
